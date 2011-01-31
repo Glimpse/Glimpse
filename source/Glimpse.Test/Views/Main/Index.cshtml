@@ -54,9 +54,10 @@
     .glimpse-panel table { border-collapse:collapse; border-spacing:0; }
     .glimpse-panel table td, .glimpse-panel table th { padding:3px 4px; text-align:left; vertical-align:top; }
     .glimpse-panel-holder .active { display:block; }
+    .glimpse-resizer { height:4px; cursor:n-resize; width:100%; position:absolute; top:-1px; }
 </style>
 
-    <script src="/Scripts/jquery-1.4.4.js" type="text/javascript"></script>
+    <script src="/Scripts/jquery-1.4.4.js" type="text/javascript"></script> 
 
 <script>
     var glimpse;
@@ -64,7 +65,7 @@
     $(document).ready(function () {
 
         $('body').append('<div class="glimpse-open"><div class="glimpse-icon"></div></div>');
-        $('body').append('<div class="glimpse-holder"><div class="glimpse-bar"><div class="glimpse-buttons"><a href="#" class="glimpse-close"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>');
+        $('body').append('<div class="glimpse-holder"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-buttons"><a href="#" class="glimpse-close"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>');
 
         $('.glimpse-open').live('click', function () {
             $(this).hide();
@@ -97,7 +98,7 @@
             var panelHolder = $('.glimpse-panel-holder');
             for (var tab in data) {
                 tabStrip.append('<li>' + tab + '</li>')
-                panelHolder.append(processDataRow(data[tab]));
+                panelHolder.append(processDataRow(data[tab])); 
             }
             $('li:first', tabStrip).addClass('active');
             $('.glimpse-panel:first', panelHolder).addClass('active');
@@ -109,13 +110,63 @@
             for (var key in content)
                 html += templateContentPanel.row.replace('{0}', key).replace('{1}', content[key]);
             html += templateContentPanel.footer;
-            return html;
+            return html; 
         }
+
+        $('.glimpse-resizer').resizer();
 
         processData(glimpse);
 
     });
 
+</script>
+
+<script> 
+(function($) { 
+	var anchor, staticOffset; 
+	var lastMousePos = 0;
+	var min = 32;
+	var grip; 
+	$.fn.resizer = function() {
+		return this.each(function() { 
+		    anchor = $(this).bind("mousedown", {el: $(this).parent()}, startDrag), staticOffset = null; 
+		});
+	}; 
+	function startDrag(e) { 
+		anchor = $(e.data.el); 
+		anchor.blur();
+		lastMousePos = mousePosition(e).y;
+		staticOffset = anchor.height() + lastMousePos;
+		anchor.css('opacity', 0.25);
+		$(document).mousemove(performDrag).mouseup(endDrag);
+		return false;
+	} 
+	function performDrag(e) {
+		var iThisMousePos = mousePosition(e).y;
+		var iMousePos = staticOffset - iThisMousePos;
+		if (lastMousePos >= (iThisMousePos)) {
+			iMousePos += 5;
+		}
+		lastMousePos = iThisMousePos;
+		iMousePos = Math.max(min, iMousePos);
+		anchor.height(iMousePos + 'px');
+		if (iMousePos < min) {
+			endDrag(e);
+		}
+		return false;
+	} 
+	function endDrag(e) {
+		$(document).unbind('mousemove', performDrag).unbind('mouseup', endDrag);
+		anchor.css('opacity', 1);
+		anchor.focus();
+		anchor = null;
+		staticOffset = null;
+		lastMousePos = 0;
+	} 
+	function mousePosition(e) {
+		return { x: e.clientX + document.documentElement.scrollLeft, y: e.clientY + document.documentElement.scrollTop };
+	};
+})(jQuery);
 </script>
 
 
