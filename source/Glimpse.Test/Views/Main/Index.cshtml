@@ -85,7 +85,7 @@
 
         $('.glimpse-tabs ul li').live('click', function () {
             var item = $(this);
-            $('.glimpse-tabs .active').removeClass('active');
+            $('.glimpse-tabs .active').removeClass('active').removeClass('hover');
             item.addClass('active');
 
             $('.glimpse-panel-holder .active').removeClass('active');
