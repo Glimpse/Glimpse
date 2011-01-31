@@ -1,0 +1,123 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Index</title>
+</head>
+<body>
+    <div>
+        This is a standard view which tells me that it is now @DateTime.Now.ToLongTimeString(). This data means nothing really, look at the X-Glimpse-Debuger HTTP header in FireBug/Fiddler.
+
+        <p>Config Info:</p>
+        <ul>
+            <li>On = @ViewBag.GlimpseOn</li>
+            <li>
+                Allowed IP's =
+                <ol>
+                @foreach (Glimpse.Net.Configuration.IpAddress ip in ViewBag.IpAddresses) { 
+                    <li>@ip.Address</li>
+                }
+                </ol>
+            </li>
+            <li>
+                Allowed ContentType's = 
+                <ol>
+                @foreach (Glimpse.Net.Configuration.ContentType ct in ViewBag.ContentTypes)
+                {
+                    <li>@ct.Content</li>
+                }
+                </ol>
+            </li>
+            <li>GlimpseMode = @ViewBag.GlimpseMode</li>
+        </ul>
+    </div>
+
+<style>
+    .glimpse-open { position:fixed; right:0; bottom:0; height:27px; width:28px; border-left: 1px solid #ACA899; border-top: 1px solid #ACA899; background:#EEE; background:-moz-linear-gradient(top, #FFFFFF 0%, #EEEEEE 4%, #F3F5F7 8%, #E9E8DD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(4%,#EEEEEE), color-stop(8%,#F3F5F7), color-stop(100%,#E9E8DD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFFFFF', endColorstr='#E9E8DD',GradientType=0 ); }
+    .glimpse-icon { background: url(/Scripts/sprite.png) 0 -135px; height:20px; width:20px; margin: 3px 4px 0; }
+    .glimpse-holder { display:none; height:0; position:fixed; bottom:0; left:0; width:100%; background-color:#fff; font-family:Lucida Grande,Tahoma,sans-serif; font-size:11px; }
+    .glimpse-bar { height:27px; border-top:1px solid #ACA899; background:#FFFFFF; background:-moz-linear-gradient(top, #FFFFFF 0%, #EEEEEE 4%, #F3F5F7 8%, #E9E8DD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(4%,#EEEEEE), color-stop(8%,#F3F5F7), color-stop(100%,#E9E8DD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFFFFF', endColorstr='#E9E8DD',GradientType=0 ); }
+    .glimpse-buttons { float:right; height:17px; width:16px; padding:6px; }
+    .glimpse-close { background:url(/Scripts/sprite.png) -1px -120px no-repeat; height:14px; width:14px; display:block; }
+    .glimpse-close:hover { background:url(/Scripts/sprite.png) -17px -120px no-repeat; }
+    .glimpse-tabs { height:24px; font-weight:bold; border-bottom:1px solid #ACA899; border-top:1px solid #CDCABB; background:#B9B7AF; background:-moz-linear-gradient(top, #B9B7AF 0%, #DAD8C8 4%, #D7D4C5 10%, #E9E6D5 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#B9B7AF), color-stop(4%,#DAD8C8), color-stop(10%,#D7D4C5), color-stop(100%,#E9E6D5)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#B9B7AF', endColorstr='#E9E6D5',GradientType=0 );  }
+    .glimpse-tabs ul { margin:4px 0px 0 0; padding:0px; }
+    .glimpse-tabs li { display:inline; margin:0 2px 3px 2px; height:22px; padding:4px 8px 3px; color:#565656; }
+    .glimpse-tabs li.active { color:#000; border-left:1px solid #A4A4A4; border-bottom:1px solid #A4A4A4; border-right:1px solid #A4A4A4; background:#F2F1EC; background:-moz-linear-gradient(top, #F2F1EC 0%, #F2F1EC 3%, #EFEEE9 7%, #E8E7E1 51%, #F7F6F1 92%, #F1F0EB 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#F2F1EC), color-stop(3%,#F2F1EC), color-stop(7%,#EFEEE9), color-stop(51%,#E8E7E1), color-stop(92%,#F7F6F1), color-stop(100%,#F1F0EB)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#F2F1EC', endColorstr='#F1F0EB',GradientType=0 ); }
+    .glimpse-tabs li.hover { border-left:1px solid #BFBDB1; border-bottom:1px solid #BFBDB1; border-right:1px solid #BFBDB1; background:#BFBDB1; background:-moz-linear-gradient(top, #BFBDB1 0%, #DAD9CB 4%, #D8D5C9 8%, #E8E7E1 51%, #F0EEE4 92%, #EDEBE1 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#BFBDB1), color-stop(4%,#DAD9CB), color-stop(8%,#D8D5C9), color-stop(51%,#E8E7E1), color-stop(92%,#F0EEE4), color-stop(100%,#EDEBE1)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#BFBDB1', endColorstr='#EDEBE1',GradientType=0 ); }
+    .glimpse-panel-holder {}
+    .glimpse-panel { display:none; }
+    .glimpse-panel table { border-collapse:collapse; border-spacing:0; }
+    .glimpse-panel table td, .glimpse-panel table th { padding:3px 4px; text-align:left; vertical-align:top; }
+    .glimpse-panel-holder .active { display:block; }
+</style>
+
+    <script src="/Scripts/jquery-1.4.4.js" type="text/javascript"></script>
+
+<script>
+    var glimpse;
+
+    $(document).ready(function () {
+
+        $('body').append('<div class="glimpse-open"><div class="glimpse-icon"></div></div>');
+        $('body').append('<div class="glimpse-holder"><div class="glimpse-bar"><div class="glimpse-buttons"><a href="#" class="glimpse-close"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>');
+
+        $('.glimpse-open').live('click', function () {
+            $(this).hide();
+            $('.glimpse-holder').show().animate({ 'height': '200' }, 'fast');
+        });
+
+        $('.glimpse-close').live('click', function () {
+            $('.glimpse-holder').animate({ 'height': '0' }, 'fast', function () { $(this).hide(); $('.glimpse-open').show(); });
+        });
+
+        $('.glimpse-tabs ul li:not(.active)').live('mouseover mouseout', function () {
+            var item = $(this);
+            if (event.type == 'mouseover')
+                item.addClass('hover');
+            else
+                item.removeClass('hover');
+        });
+
+        $('.glimpse-tabs ul li').live('click', function () {
+            var item = $(this);
+            $('.glimpse-tabs .active').removeClass('active');
+            item.addClass('active');
+
+            $('.glimpse-panel-holder .active').removeClass('active');
+            $('.glimpse-panel-holder .glimpse-panel:eq(' + $('.glimpse-tabs ul li').index(item) + ')').addClass('active');
+        });
+
+        var processData = function (data) {
+            var tabStrip = $('.glimpse-tabs ul');
+            var panelHolder = $('.glimpse-panel-holder');
+            for (var tab in data) {
+                tabStrip.append('<li>' + tab + '</li>')
+                panelHolder.append(processDataRow(data[tab]));
+            }
+            $('li:first', tabStrip).addClass('active');
+            $('.glimpse-panel:first', panelHolder).addClass('active');
+        }
+
+        var templateContentPanel = { header: '<div class="glimpse-panel"><table><thead><tr><th>Key</th><th>Value</th></tr></thead>', row: '<tr><th>{0}</th><td>{1}</td></tr>', footer: '</table></div>' };
+        var processDataRow = function (content) {
+            var html = templateContentPanel.header;
+            for (var key in content)
+                html += templateContentPanel.row.replace('{0}', key).replace('{1}', content[key]);
+            html += templateContentPanel.footer;
+            return html;
+        }
+
+        processData(glimpse);
+
+    });
+
+</script>
+
+
+</body>
+</html>

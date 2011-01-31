@@ -1,0 +1,9 @@
+C:\Users\nmolnar.CORP\Desktop\Glimpse\source\Glimpse.Test\bin\Glimpse.Test.dll
+C:\Users\nmolnar.CORP\Desktop\Glimpse\source\Glimpse.Test\bin\Glimpse.Test.pdb
+C:\Users\nmolnar.CORP\Desktop\Glimpse\source\Glimpse.Test\bin\Glimpse.Net.dll
+C:\Users\nmolnar.CORP\Desktop\Glimpse\source\Glimpse.Test\bin\Glimpse.Protocol.dll
+C:\Users\nmolnar.CORP\Desktop\Glimpse\source\Glimpse.Test\bin\Glimpse.Net.pdb
+C:\Users\nmolnar.CORP\Desktop\Glimpse\source\Glimpse.Test\bin\Glimpse.Protocol.pdb
+C:\Users\nmolnar.CORP\Desktop\Glimpse\source\Glimpse.Test\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\nmolnar.CORP\Desktop\Glimpse\source\Glimpse.Test\obj\Debug\Glimpse.Test.dll
+C:\Users\nmolnar.CORP\Desktop\Glimpse\source\Glimpse.Test\obj\Debug\Glimpse.Test.pdb

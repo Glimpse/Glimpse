@@ -1,0 +1,5 @@
+C:\Users\nmolnar.CORP\Desktop\Glimpse\source\Glimpse.Protocol\bin\Debug\Glimpse.Protocol.dll
+C:\Users\nmolnar.CORP\Desktop\Glimpse\source\Glimpse.Protocol\bin\Debug\Glimpse.Protocol.pdb
+C:\Users\nmolnar.CORP\Desktop\Glimpse\source\Glimpse.Protocol\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\nmolnar.CORP\Desktop\Glimpse\source\Glimpse.Protocol\obj\Debug\Glimpse.Protocol.dll
+C:\Users\nmolnar.CORP\Desktop\Glimpse\source\Glimpse.Protocol\obj\Debug\Glimpse.Protocol.pdb
