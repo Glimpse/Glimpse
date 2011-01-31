@@ -46,9 +46,9 @@
     .glimpse-close:hover { background:url(/Scripts/sprite.png) -17px -120px no-repeat; }
     .glimpse-tabs { height:24px; font-weight:bold; border-bottom:1px solid #ACA899; border-top:1px solid #CDCABB; background:#B9B7AF; background:-moz-linear-gradient(top, #B9B7AF 0%, #DAD8C8 4%, #D7D4C5 10%, #E9E6D5 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#B9B7AF), color-stop(4%,#DAD8C8), color-stop(10%,#D7D4C5), color-stop(100%,#E9E6D5)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#B9B7AF', endColorstr='#E9E6D5',GradientType=0 );  }
     .glimpse-tabs ul { margin:4px 0px 0 0; padding:0px; }
-    .glimpse-tabs li { display:inline; margin:0 2px 3px 2px; height:22px; padding:4px 8px 3px; color:#565656; }
-    .glimpse-tabs li.active { color:#000; border-left:1px solid #A4A4A4; border-bottom:1px solid #A4A4A4; border-right:1px solid #A4A4A4; background:#F2F1EC; background:-moz-linear-gradient(top, #F2F1EC 0%, #F2F1EC 3%, #EFEEE9 7%, #E8E7E1 51%, #F7F6F1 92%, #F1F0EB 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#F2F1EC), color-stop(3%,#F2F1EC), color-stop(7%,#EFEEE9), color-stop(51%,#E8E7E1), color-stop(92%,#F7F6F1), color-stop(100%,#F1F0EB)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#F2F1EC', endColorstr='#F1F0EB',GradientType=0 ); }
-    .glimpse-tabs li.hover { border-left:1px solid #BFBDB1; border-bottom:1px solid #BFBDB1; border-right:1px solid #BFBDB1; background:#BFBDB1; background:-moz-linear-gradient(top, #BFBDB1 0%, #DAD9CB 4%, #D8D5C9 8%, #E8E7E1 51%, #F0EEE4 92%, #EDEBE1 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#BFBDB1), color-stop(4%,#DAD9CB), color-stop(8%,#D8D5C9), color-stop(51%,#E8E7E1), color-stop(92%,#F0EEE4), color-stop(100%,#EDEBE1)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#BFBDB1', endColorstr='#EDEBE1',GradientType=0 ); }
+    .glimpse-tabs li { display:inline; margin:0 2px 3px 2px; height:22px; padding:4px 9px 3px; color:#565656; }
+    .glimpse-tabs li.active { padding:4px 8px 3px; color:#000; border-left:1px solid #A4A4A4; border-bottom:1px solid #A4A4A4; border-right:1px solid #A4A4A4; background:#F2F1EC; background:-moz-linear-gradient(top, #F2F1EC 0%, #F2F1EC 3%, #EFEEE9 7%, #E8E7E1 51%, #F7F6F1 92%, #F1F0EB 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#F2F1EC), color-stop(3%,#F2F1EC), color-stop(7%,#EFEEE9), color-stop(51%,#E8E7E1), color-stop(92%,#F7F6F1), color-stop(100%,#F1F0EB)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#F2F1EC', endColorstr='#F1F0EB',GradientType=0 ); }
+    .glimpse-tabs li.hover { padding:4px 8px 3px; border-left:1px solid #BFBDB1; border-bottom:1px solid #BFBDB1; border-right:1px solid #BFBDB1; background:#BFBDB1; background:-moz-linear-gradient(top, #BFBDB1 0%, #DAD9CB 4%, #D8D5C9 8%, #E8E7E1 51%, #F0EEE4 92%, #EDEBE1 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#BFBDB1), color-stop(4%,#DAD9CB), color-stop(8%,#D8D5C9), color-stop(51%,#E8E7E1), color-stop(92%,#F0EEE4), color-stop(100%,#EDEBE1)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#BFBDB1', endColorstr='#EDEBE1',GradientType=0 ); }
     .glimpse-panel-holder {}
     .glimpse-panel { display:none; }
     .glimpse-panel table { border-collapse:collapse; border-spacing:0; }
@@ -59,115 +59,171 @@
 
     <script src="/Scripts/jquery-1.4.4.js" type="text/javascript"></script> 
 
+
 <script>
-    var glimpse;
+var glimpse;
+if (window.jQuery) { (function ($) {
+ 
+    $.glimpse = {}; 
+    $.glimpseProcessor = {};
+    $.glimpseResize = {};
 
-    $(document).ready(function () {
-
-        $('body').append('<div class="glimpse-open"><div class="glimpse-icon"></div></div>');
-        $('body').append('<div class="glimpse-holder"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-buttons"><a href="#" class="glimpse-close"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>');
-
-        $('.glimpse-open').live('click', function () {
-            $(this).hide();
-            $('.glimpse-holder').show().animate({ 'height': '200' }, 'fast');
-        });
-
-        $('.glimpse-close').live('click', function () {
-            $('.glimpse-holder').animate({ 'height': '0' }, 'fast', function () { $(this).hide(); $('.glimpse-open').show(); });
-        });
-
-        $('.glimpse-tabs ul li:not(.active)').live('mouseover mouseout', function () {
-            var item = $(this);
-            if (event.type == 'mouseover')
-                item.addClass('hover');
-            else
-                item.removeClass('hover');
-        });
-
-        $('.glimpse-tabs ul li').live('click', function () {
-            var item = $(this);
-            $('.glimpse-tabs .active').removeClass('active').removeClass('hover');
-            item.addClass('active');
-
-            $('.glimpse-panel-holder .active').removeClass('active');
-            $('.glimpse-panel-holder .glimpse-panel:eq(' + $('.glimpse-tabs ul li').index(item) + ')').addClass('active');
-        });
-
-        var processData = function (data) {
-            var tabStrip = $('.glimpse-tabs ul');
-            var panelHolder = $('.glimpse-panel-holder');
-            for (var tab in data) {
-                tabStrip.append('<li>' + tab + '</li>')
-                panelHolder.append(processDataRow(data[tab])); 
-            }
-            $('li:first', tabStrip).addClass('active');
-            $('.glimpse-panel:first', panelHolder).addClass('active');
-        }
-
-        var templateContentPanel = { header: '<div class="glimpse-panel"><table><thead><tr><th>Key</th><th>Value</th></tr></thead>', row: '<tr><th>{0}</th><td>{1}</td></tr>', footer: '</table></div>' };
-        var processDataRow = function (content) {
-            var html = templateContentPanel.header;
-            for (var key in content)
-                html += templateContentPanel.row.replace('{0}', key).replace('{1}', content[key]);
-            html += templateContentPanel.footer;
-            return html; 
-        }
-
-        $('.glimpse-resizer').resizer();
-
-        processData(glimpse);
-
-    });
-
-</script>
-
-<script> 
-(function($) { 
-	var anchor, staticOffset; 
-	var lastMousePos = 0;
-	var min = 32;
-	var grip; 
 	$.fn.resizer = function() {
 		return this.each(function() { 
-		    anchor = $(this).bind("mousedown", {el: $(this).parent()}, startDrag), staticOffset = null; 
+            var gr = $.glimpseResize;
+		    gr.options.anchor = $(this).bind("mousedown", {el: $(this).parent()}, gr.startDrag); 
 		});
-	}; 
-	function startDrag(e) { 
-		anchor = $(e.data.el); 
-		anchor.blur();
-		lastMousePos = mousePosition(e).y;
-		staticOffset = anchor.height() + lastMousePos;
-		anchor.css('opacity', 0.25);
-		$(document).mousemove(performDrag).mouseup(endDrag);
-		return false;
-	} 
-	function performDrag(e) {
-		var iThisMousePos = mousePosition(e).y;
-		var iMousePos = staticOffset - iThisMousePos;
-		if (lastMousePos >= (iThisMousePos)) {
-			iMousePos += 5;
-		}
-		lastMousePos = iThisMousePos;
-		iMousePos = Math.max(min, iMousePos);
-		anchor.height(iMousePos + 'px');
-		if (iMousePos < min) {
-			endDrag(e);
-		}
-		return false;
-	} 
-	function endDrag(e) {
-		$(document).unbind('mousemove', performDrag).unbind('mouseup', endDrag);
-		anchor.css('opacity', 1);
-		anchor.focus();
-		anchor = null;
-		staticOffset = null;
-		lastMousePos = 0;
-	} 
-	function mousePosition(e) {
-		return { x: e.clientX + document.documentElement.scrollLeft, y: e.clientY + document.documentElement.scrollTop };
 	};
-})(jQuery);
+     
+    $.extend($.glimpseResize, {
+        options : {
+            anchor : null, 
+            staticOffset : null, 
+            lastMousePos : 0,
+            min : 50, 
+            endDragCallback : function(height) {} },
+        startDrag : function(e) { 
+            var gr = $.glimpseResize, o = gr.options; 
+		    o.anchor = $(e.data.el);
+	        o.lastMousePos = gr.mousePosition(e).y; 
+	        o.staticOffset = o.anchor.height() + o.lastMousePos;
+	        o.anchor.css('opacity', 0.25);
+	        $(document).mousemove(gr.performDrag).mouseup(gr.endDrag);
+	        return false;
+        },
+	    performDrag : function(e) {
+            var gr = $.glimpseResize, o = gr.options; 
+	        var mousePos = gr.mousePosition(e).y;
+	        var offsetMousePos = o.staticOffset - mousePos;
+	        if (o.lastMousePos >= mousePos) {
+		        offsetMousePos += 4;
+	        }
+	        offsetMousePos = Math.max(o.min, offsetMousePos);
+	        o.anchor.height(offsetMousePos + 'px');
+	        o.lastMousePos = mousePos;
+	        if (offsetMousePos < o.min) {
+		        gr.endDrag(e);
+	        }
+	        return false;
+        },
+        endDrag : function(e) {
+            var gr = $.glimpseResize, o = gr.options; 
+	        $(document).unbind('mousemove', gr.performDrag).unbind('mouseup', gr.endDrag);
+	        o.anchor.css('opacity', 1); 
+	        o.anchor = null;
+	        o.staticOffset = null;
+	        o.lastMousePos = 0;
+            o.endDragCallback();
+        },
+        mousePosition : function(e) {
+            var d = document.documentElement;
+	        return { x: e.clientX + d.scrollLeft, y: e.clientY + d.scrollTop };
+        }
+    });
+    
+    $.extend($.glimpseProcessor, { 
+        layout : function(g, options) {
+            var tabStrip = $('.glimpse-tabs ul');
+            var panelHolder = $('.glimpse-panel-holder');
+
+            //Build Dynamic HTML
+            for (var key in options.data) {
+                tabStrip.append('<li>' + key + '</li>')
+                panelHolder.append($.glimpseProcessor.layoutRow(g, options, options.data[key])); 
+            }
+
+            //Set Inital State
+            $('li:first', tabStrip).addClass('active');
+            $('.glimpse-panel:first', panelHolder).addClass('active');
+        },
+        layoutRow : function(g, options, content) {
+            var panel = options.html.panel;
+
+            //Build HTML
+            var html = panel.header;
+            for (var key in content)
+                html += panel.row.replace('{0}', key).replace('{1}', content[key]);
+            html += panel.footer;
+
+            return html; 
+        }
+    });
+
+    var _persistHeight = function(g, options) {
+        options.height = $('.glimpse-holder').height();
+    }
+    
+    $.extend($.glimpse, {
+        wireEvents : function(g, options) { 
+            //Open/Close Holder
+            $('.glimpse-open').live('click', function () {
+                $(this).hide();
+                $('.glimpse-holder').show().animate({ 'height': options.height }, 'fast');
+            }); 
+            $('.glimpse-close').live('click', function () {
+                $('.glimpse-holder').animate({ 'height': '0' }, 'fast', function () { 
+                        $(this).hide(); 
+                        $('.glimpse-open').show(); 
+                    });
+            });    
+
+            //Tab Switching 
+            $('.glimpse-tabs li:not(.active)').live('mouseover mouseout', function () {
+                var item = $(this);
+                if (event.type == 'mouseover') { item.addClass('hover'); } else { item.removeClass('hover'); }
+            }); 
+            $('.glimpse-tabs li').live('click', function () {
+                var item = $(this);
+                //Setup Tabs
+                item.addClass('active');
+                $('.glimpse-tabs .active').removeClass('active').removeClass('hover');
+                
+                //Setup Panels 
+                $('.glimpse-panel-holder .active').removeClass('active');
+                $('.glimpse-panel-holder .glimpse-panel:eq(' + $('.glimpse-tabs ul li').index(item) + ')').addClass('active');
+            });
+
+            //Resize
+            $('.glimpse-resizer').resizer(options.height); 
+        },
+        wireCallback : function(g, options) {
+            //Remember height 
+            $.glimpseResize.options.endDragCallback = function() {
+                _persistHeight(g, options);
+            }
+        },
+        init : function(data) {
+            if (!data) return;
+            
+            var g = $.glimpse, options = g.defaults;
+            options.data = data;
+
+            $('body').append(options.html.plugin); 
+
+            g.wireEvents(g, options);
+            g.wireCallback(g, options);
+
+            $.glimpseProcessor.layout(g, options)
+
+            $('body').append('<style>' + options.css + '</style>');
+        },
+        defaults : { 
+            data : null,
+            html : { plugin : '<div class="glimpse-open"><div class="glimpse-icon"></div></div><div class="glimpse-holder"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-buttons"><a href="#" class="glimpse-close"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>',
+                     panel : { header: '<div class="glimpse-panel"><table><thead><tr><th>Key</th><th>Value</th></tr></thead>', row: '<tr><th>{0}</th><td>{1}</td></tr>', footer: '</table></div>' } },
+            css : '',
+            height : 200
+        }
+    });
+      
+	$(document).ready(function() {
+		$.glimpse.init(glimpse);
+	});
+
+})(jQuery); }  
 </script>
+
+
 
 
 </body>
