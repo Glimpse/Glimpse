@@ -55,6 +55,8 @@
     .glimpse-panel table td, .glimpse-panel table th { padding:3px 4px; text-align:left; vertical-align:top; }
     .glimpse-panel-holder .active { display:block; }
     .glimpse-resizer { height:4px; cursor:n-resize; width:100%; position:absolute; top:-1px; }
+    .glimpse-longstring { color:#006400; } 
+    .glimpse-longstring span { font-weight:bold; color:#444; padding-left:5px; } 
 </style>
 
     <script src="/Scripts/jquery-1.4.4.js" type="text/javascript"></script> 
@@ -68,12 +70,23 @@ if (window.jQuery) { (function ($) {
     $.glimpseProcessor = {};
     $.glimpseResize = {};
 
-	$.fn.resizer = function() {
-		return this.each(function() { 
-            var gr = $.glimpseResize;
-		    gr.options.anchor = $(this).bind("mousedown", {el: $(this).parent()}, gr.startDrag); 
-		});
-	};
+	$.extend($.fn, {
+        resizer : function() {
+		    return this.each(function() { 
+                var gr = $.glimpseResize;
+		        gr.options.anchor = $(this).bind("mousedown", {el: $(this).parent()}, gr.startDrag); 
+		    });
+	    } 
+    });
+
+	$.extend({ 
+        htmlEncode : function(value){ 
+            return $('<div/>').text(value).html(); 
+        },
+        htmlDecode : function(value){ 
+            return $('<div/>').html(value).text(); 
+        }
+    });
      
     $.extend($.glimpseResize, {
         options : {
@@ -123,29 +136,53 @@ if (window.jQuery) { (function ($) {
     
     $.extend($.glimpseProcessor, { 
         layout : function(g, options) {
-            var tabStrip = $('.glimpse-tabs ul');
-            var panelHolder = $('.glimpse-panel-holder');
-
+            var _this = this, tabStrip = $('.glimpse-tabs ul'), panelHolder = $('.glimpse-panel-holder');
+             
             //Build Dynamic HTML
             for (var key in options.data) {
-                tabStrip.append('<li>' + key + '</li>')
-                panelHolder.append($.glimpseProcessor.layoutRow(g, options, options.data[key])); 
+                _this.addTab(tabStrip, key);
+                _this.addTabBody(panelHolder, _this.build(options.data[key])); 
             }
 
             //Set Inital State
             $('li:first', tabStrip).addClass('active');
             $('.glimpse-panel:first', panelHolder).addClass('active');
         },
-        layoutRow : function(g, options, content) {
-            var panel = options.html.panel;
-
-            //Build HTML
-            var html = panel.header;
-            for (var key in content)
-                html += panel.row.replace('{0}', key).replace('{1}', content[key]);
-            html += panel.footer;
-
+        addTab : function(container, name) {
+            container.append('<li>' + name + '</li>');
+        },
+        addTabBody : function(container, content) {
+            container.append('<div class="glimpse-panel">' + content + '</div>');
+        },
+        build : function(data) {
+            var _this = this;
+            if ($.isArray(data))
+                return _this.buildCustomTable(data);
+            if ($.isPlainObject(data))
+                return _this.buildKeyValueTable(data);
+            return _this.buildString(data);
+        },
+        buildKeyValueTable : function(data) {
+            var _this = this, html = '<table><thead><tr><th>Key</th><th>Value</th></tr></thead>';
+            for (var key in data)
+                html += '<tr><th>' + $.htmlEncode(key) + '</th><td> '+ _this.build(data[key]) + '</td></tr>';
+            html += '</table>';
             return html; 
+        },
+        buildString : function(data) {
+            var _this = this, i = 50;
+            if (data != null && data.length > i)
+                return _this.buildStringPreview(i, data);
+            return data;
+        },
+        buildCustomTable : function() {
+        },
+        buildKeyValuePreview : function() {
+        },
+        buildCustomPreview : function() {
+        },
+        buildStringPreview : function(i, data) {
+            return '<span class="glimpse-longstring" title="' + $.htmlEncode(data)  + '">' + $.htmlEncode(data.substr(0, i)) + '<span>...</span></span>';
         }
     });
 
@@ -210,7 +247,7 @@ if (window.jQuery) { (function ($) {
         defaults : { 
             data : null,
             html : { plugin : '<div class="glimpse-open"><div class="glimpse-icon"></div></div><div class="glimpse-holder"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-buttons"><a href="#" class="glimpse-close"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>',
-                     panel : { header: '<div class="glimpse-panel"><table><thead><tr><th>Key</th><th>Value</th></tr></thead>', row: '<tr><th>{0}</th><td>{1}</td></tr>', footer: '</table></div>' } },
+                     panel : { header: '<table><thead><tr><th>Key</th><th>Value</th></tr></thead>', row: '<tr><th>{0}</th><td>{1}</td></tr>', footer: '</table>' } },
             css : '',
             height : 200
         }
