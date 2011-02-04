@@ -385,7 +385,9 @@ if (window.jQuery) { (function ($) {
             if (allowSmartPreview && data.length > (limit + 1))
                 return _this.buildKeyValuePreview(data, limit);
                 
-            var html = '<table><thead><tr><th>Key</th><th>Value</th></tr></thead>';
+            var html = '<table>'
+            if (!allowSmartPreview) 
+                html += '<thead><tr><th>Key</th><th>Value</th></tr></thead>';
             for (var key in data)
                 html += '<tr><th>' + $.htmlEncode(key) + '</th><td> '+ _this.build(data[key], true) + '</td></tr>';
             html += '</table>';
