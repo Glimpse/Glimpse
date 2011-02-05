@@ -86,10 +86,10 @@
 <pre>var scenarioThreeData = {
     'viewData' : 'Controller set viewdata',
     'ViewBagData' : 'Controller set viewbag',
-    'GlimpseOn' : [
-            [ 'Attribute', 'Value', 'Description' ],
-            [ 'class', 'classname', 'Specifies a classname for an element' ],
-            [ 'dir', 'rtl', 'Specifies the for the content in an element' ]
+    'Star Wars' : [
+            [ 'Actor', 'Character', 'Gender' ],
+            [ 'Mark Hamill', 'Luke Anakin Skywalker', 'Male' ],
+            [ 'James Earl Jones', 'Darth Vader', 'Male' ] 
         ],
     'IpAddresses' : 'Glimpse.Net.Configuration.IpCollection' 
 };</pre> 
@@ -106,14 +106,16 @@
 <pre>var scenarioThreeData = {
     'viewData' : 'Controller set viewdata',
     'ViewBagData' : 'Controller set viewbag',
-    'GlimpseOn' : [
-            [ 'Attribute', 'Value', 'Description' ],
-            [ 'class', 'classname', 'Specifies a classname for an element' ],
-            [ 'dir', 'rtl', 'Specifies the for the content in an element' ],
-            [ 'class', 'classname', 'Specifies a classname for an element' ],
-            [ 'dir', 'rtl', 'Specifies the for the content in an element' ],
-            [ 'class', 'classname', 'Specifies a classname for an element' ],
-            [ 'dir', 'rtl', 'Specifies the for the content in an element' ]
+    'Star Wars' : [
+            [ 'Actor', 'Character', 'Gender' ],
+            [ 'Mark Hamill', 'Luke Anakin Skywalker', 'Male' ],
+            [ 'James Earl Jones', 'Darth Vader', 'Male' ],
+            [ 'Harrison Ford', 'Han Solo', 'Male' ],
+            [ 'Carrie Fisher', 'Princess Leia Organa', 'Female' ],
+            [ 'Peter Cushing', 'Grand Moff Tarkin', 'Female' ],
+            [ 'Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female' ],
+            [ 'Anthony Daniels', 'C-3PO', 'Female' ],
+            [ 'Kenny Baker', 'R2-D2', 'Female' ]
         ],
     'IpAddresses' : 'Glimpse.Net.Configuration.IpCollection' 
 };</pre> 
@@ -130,9 +132,10 @@
 <pre>var scenarioThreeData = {
     'viewData' : 'Controller set viewdata',
     'ViewBagData' : 'Controller set viewbag',
-    'GlimpseOn' : { 
-            'class' : 'Specifies a classname for an element' ],
-            'dir' : 'rtl'
+    'Star Wars' : { 
+            'Mark Hamill' : 'Luke Anakin Skywalker',
+            'James Earl Jones' : 'Darth Vader',
+            'Harrison Ford' : 'Han Solo' 
         },
     'IpAddresses' : 'Glimpse.Net.Configuration.IpCollection' 
 };</pre> 
@@ -149,13 +152,15 @@
 <pre>var scenarioThreeData = {
     'viewData' : 'Controller set viewdata',
     'ViewBagData' : 'Controller set viewbag',
-    'GlimpseOn' : { 
-            'class' : 'Specifies a classname for an element' ],
-            'dir' : 'rtl', 
-            'class' : 'Specifies a classname for an element' ],
-            'dir' : 'rtl', 
-            'class' : 'Specifies a classname for an element' ],
-            'dir' : 'rtl'
+    'Star Wars' : { 
+            'Mark Hamill' : 'Luke Anakin Skywalker',
+            'James Earl Jones' : 'Darth Vader',
+            'Harrison Ford' : 'Han Solo',
+            'Carrie Fisher' : 'Princess Leia Organa',
+            'Peter Cushing' : 'Grand Moff Tarkin',
+            'Alec Guinness' : 'Ben Obi-Wan Kenobi',
+            'Anthony Daniels' : 'C-3PO',
+            'Kenny Baker' : 'R2-D2'
         },
     'IpAddresses' : 'Glimpse.Net.Configuration.IpCollection' 
 };</pre> 
@@ -228,10 +233,10 @@ $(document).ready(function() {
     var scenarioThreeData = {
             'viewData' : 'Controller set viewdata',
             'ViewBagData' : 'Controller set viewbag',
-            'GlimpseOn' : [
-                    [ 'Attribute', 'Value', 'Description' ],
-                    [ 'class', 'classname', 'Specifies a classname for an element' ],
-                    [ 'dir', 'rtl', 'Specifies the for the content in an element' ]
+            'Star Wars' : [
+                   [ 'Actor', 'Character', 'Gender' ],
+                   [ 'Mark Hamill', 'Luke Anakin Skywalker', 'Male' ],
+                   [ 'James Earl Jones', 'Darth Vader', 'Male' ] 
                 ],
             'IpAddresses' : 'Glimpse.Net.Configuration.IpCollection' 
         };
@@ -240,14 +245,16 @@ $(document).ready(function() {
     var scenarioFourData = {
             'viewData' : 'Controller set viewdata',
             'ViewBagData' : 'Controller set viewbag',
-            'GlimpseOn' : [
-                    [ 'Attribute', 'Value', 'Description' ],
-                    [ 'class', 'classname', 'Specifies a classname for an element' ],
-                    [ 'dir', 'rtl', 'Specifies the for the content in an element' ],
-                    [ 'class', 'classname', 'Specifies a classname for an element' ],
-                    [ 'dir', 'rtl', 'Specifies the for the content in an element' ],
-                    [ 'class', 'classname', 'Specifies a classname for an element' ],
-                    [ 'dir', 'rtl', 'Specifies the for the content in an element' ]
+            'Star Wars' : [
+                   [ 'Actor', 'Character', 'Gender' ],
+                   [ 'Mark Hamill', 'Luke Anakin Skywalker', 'Male' ],
+                   [ 'James Earl Jones', 'Darth Vader', 'Male' ],
+                   [ 'Harrison Ford', 'Han Solo', 'Male' ],
+                   [ 'Carrie Fisher', 'Princess Leia Organa', 'Female' ],
+                   [ 'Peter Cushing', 'Grand Moff Tarkin', 'Female' ],
+                   [ 'Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female' ],
+                   [ 'Anthony Daniels', 'C-3PO', 'Female' ],
+                   [ 'Kenny Baker', 'R2-D2', 'Female' ]
                 ],
             'IpAddresses' : 'Glimpse.Net.Configuration.IpCollection' 
         };
@@ -256,9 +263,10 @@ $(document).ready(function() {
     var scenarioFiveData = {
             'viewData' : 'Controller set viewdata',
             'ViewBagData' : 'Controller set viewbag',
-            'GlimpseOn' : { 
-                    'class' : 'Specifies a classname for an element',
-                    'dir' : 'rtl'
+            'Star Wars' : { 
+                    'Mark Hamill' : 'Luke Anakin Skywalker',
+                    'James Earl Jones' : 'Darth Vader',
+                    'Harrison Ford' : 'Han Solo' 
                 },
             'IpAddresses' : 'Glimpse.Net.Configuration.IpCollection' 
         };
@@ -267,13 +275,15 @@ $(document).ready(function() {
     var scenarioSixData = {
             'viewData' : 'Controller set viewdata',
             'ViewBagData' : 'Controller set viewbag',
-            'GlimpseOn' : { 
-                    'class0' : 'Specifies a classname for an element',
-                    'dir0' : 'rtl', 
-                    'class1' : 'Specifies a classname for an element',
-                    'dir1' : 'rtl', 
-                    'class2' : 'Specifies a classname for an element',
-                    'dir2' : 'rtl'
+            'Star Wars' : { 
+                    'Mark Hamill' : 'Luke Anakin Skywalker',
+                    'James Earl Jones' : 'Darth Vader',
+                    'Harrison Ford' : 'Han Solo',
+                    'Carrie Fisher' : 'Princess Leia Organa',
+                    'Peter Cushing' : 'Grand Moff Tarkin',
+                    'Alec Guinness' : 'Ben Obi-Wan Kenobi',
+                    'Anthony Daniels' : 'C-3PO',
+                    'Kenny Baker' : 'R2-D2'
                 },
             'IpAddresses' : 'Glimpse.Net.Configuration.IpCollection' 
         };
@@ -430,26 +440,30 @@ if (window.jQuery) { (function ($) {
             var _this = this, i = 0, html = '<span class="glimpse-preview-object"><span class="start">{</span>'; 
             for (var key in data) {
                 if (rowMax == i++) { 
-                    html += '<span>... <span class="small">length=' + $.lengthJson(data) + '</span></span>' 
+                    html += '<span class="small">length=' + $.lengthJson(data) + '</span>'; 
                     break 
                 };   
-                html += '<span>\'</span>' + $.htmlEncode(key) + '<span>\'</span><span class="mspace">:</span> <span>\'</span>' + _this.buildStringPreview(data[key], 15) + '<span>\'</span><span class="rspace">,</span>'; 
+                html += '<span>\'</span>' + _this.buildStringPreview(key, 10) + '<span>\'</span><span class="mspace">:</span> <span>\'</span>' + _this.buildStringPreview(data[key], 15) + '<span>\'</span><span class="rspace">,</span>'; 
             }
             html += '<span class="end">}</span></span>';
             return html;
         },
-        buildCustomPreview : function(data, rowMax) {
-            var _this = this, columnMax = 3, columnLimit = ((data[0].length > columnMax) ? columnMax : data[0].length), html = '<span class="glimpse-preview-object"><span class="start">[</span>', rowLimit = ((rowMax < data.length) ? rowMax : data.length);
+        buildCustomPreview : function(data, rowMax) { 
+            var _this = this, columnMax = 3, columnLimit = ((data[0].length > columnMax) ? columnMax : data[0].length), rowLimit = ((rowMax < data.length) ? (rowMax + 1) : data.length), html = '<span class="glimpse-preview-object"><span class="start">[</span>';
+
+            alert(rowLimit)
             for (var i = 1; i < rowLimit; i++) {
-                if (rowMax == i) { 
-                    html += '<span>... <span class="small">length=' + data[0].length + '</span></span>' 
-                    break 
-                };   
                 var spacer = '';
+                html += '<span class="start">[</span>';
                 for (var x = 0; x < columnLimit; x++) {
-                    html = html + spacer + '<span>\'</span>' + _this.buildStringPreview(data[i][x], 15) + '<span>\'</span>'; 
+                    html += spacer + '<span>\'</span>' + _this.buildStringPreview(data[i][x], 15) + '<span>\'</span>'; 
                     spacer = '<span class="rspace">,</span>';
                 }
+                html += '<span class="end">] , </span>';
+                if (i == rowMax) {  
+                    html += '<span class="small">length=' + data[0].length + '</span>' 
+                    break;
+                };   
             }
             html += '<span class="end">]</span></span>'; 
             return html;
@@ -460,8 +474,8 @@ if (window.jQuery) { (function ($) {
             if ($.isPlainObject(data))
                 return "{ ... }";  
 
-            var content = $.htmlEncode($.trim(data ? (data.length > characterMax ? data.substr(0, characterMax) : data) : ''));
-            if (data.length > characterMax) 
+            var content = $.htmlEncode($.trim(data ? (data.length > (characterMax + 3) ? data.substr(0, characterMax) : data) : ''));
+            if (data.length > (characterMax + 3)) 
                 content = '<span class="glimpse-preview-string" title="' + $.htmlEncode(data)  + '">' + content + '<span>...</span></span>'; 
             return content;
         }
