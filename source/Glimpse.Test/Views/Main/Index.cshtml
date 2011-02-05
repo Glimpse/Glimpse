@@ -130,8 +130,7 @@
 <pre>var scenarioThreeData = {
     'viewData' : 'Controller set viewdata',
     'ViewBagData' : 'Controller set viewbag',
-    'GlimpseOn' : {
-            'Attribute' : 'Value',
+    'GlimpseOn' : { 
             'class' : 'Specifies a classname for an element' ],
             'dir' : 'rtl'
         },
@@ -150,8 +149,7 @@
 <pre>var scenarioThreeData = {
     'viewData' : 'Controller set viewdata',
     'ViewBagData' : 'Controller set viewbag',
-    'GlimpseOn' : {
-            'Attribute' : 'Value',
+    'GlimpseOn' : { 
             'class' : 'Specifies a classname for an element' ],
             'dir' : 'rtl', 
             'class' : 'Specifies a classname for an element' ],
@@ -185,9 +183,15 @@
     .glimpse-panel table td, .glimpse-panel table th { padding:3px 4px; text-align:left; vertical-align:top; }
     .glimpse-panel-holder .active { display:block; }
     .glimpse-resizer { height:4px; cursor:n-resize; width:100%; position:absolute; top:-1px; }
-    .glimpse-preview-string, .glimpse-preview-object { color:#006400; } 
-    .glimpse-preview-string span, .glimpse-preview-object span { font-weight:bold; color:#444; padding-left:5px; } 
-    
+    .glimpse-preview-object { color:#006400; } 
+    .glimpse-preview-string { color:#006400 !important; font-weight:normal !important; } 
+    .glimpse-preview-string span { padding-left:1px; }
+    .glimpse-preview-object span { font-weight:bold; color:#444; } 
+    .glimpse-preview-object span.start { margin-right:5px; } 
+    .glimpse-preview-object span.end { margin-left:5px; }
+    .glimpse-preview-object span.rspace { margin-right:4px; }
+    .glimpse-preview-object span.mspace { margin:0 4px; }
+    .glimpse-preview-object span.small { font-size:0.95em; } 
 </style>
 <style>
     h1, h2 { margin:0; padding:0; }
@@ -252,8 +256,7 @@ $(document).ready(function() {
     var scenarioFiveData = {
             'viewData' : 'Controller set viewdata',
             'ViewBagData' : 'Controller set viewbag',
-            'GlimpseOn' : {
-                    'Attribute' : 'Value',
+            'GlimpseOn' : { 
                     'class' : 'Specifies a classname for an element',
                     'dir' : 'rtl'
                 },
@@ -264,17 +267,17 @@ $(document).ready(function() {
     var scenarioSixData = {
             'viewData' : 'Controller set viewdata',
             'ViewBagData' : 'Controller set viewbag',
-            'GlimpseOn' : {
-                    'Attribute' : 'Value',
-                    'class' : 'Specifies a classname for an element',
-                    'dir' : 'rtl', 
-                    'class' : 'Specifies a classname for an element',
-                    'dir' : 'rtl', 
-                    'class' : 'Specifies a classname for an element',
-                    'dir' : 'rtl'
+            'GlimpseOn' : { 
+                    'class0' : 'Specifies a classname for an element',
+                    'dir0' : 'rtl', 
+                    'class1' : 'Specifies a classname for an element',
+                    'dir1' : 'rtl', 
+                    'class2' : 'Specifies a classname for an element',
+                    'dir2' : 'rtl'
                 },
             'IpAddresses' : 'Glimpse.Net.Configuration.IpCollection' 
         };
+         
     $('.glimpse-scenario-six').show().html($.glimpseProcessor.build(scenarioSixData));
 
 });
@@ -298,11 +301,17 @@ if (window.jQuery) { (function ($) {
     });
 
 	$.extend({ 
-        htmlEncode : function(value){ 
+        htmlEncode : function(value) { 
             return value ? $('<div/>').text(value).html() : ''; 
         },
-        htmlDecode : function(value){ 
+        htmlDecode : function(value) { 
             return value ? $('<div/>').html(value).text() : ''; 
+        },
+        lengthJson : function(data) {
+            var count = 0;
+            if ($.isPlainObject(data))
+                $.each(data, function(k, v) { count++; });
+            return count;
         }
     });
      
@@ -382,12 +391,12 @@ if (window.jQuery) { (function ($) {
         },
         buildKeyValueTable : function(data, allowSmartPreview) {
             var _this = this, limit = 2;
-            if (allowSmartPreview && data.length > (limit + 1))
-                return _this.buildKeyValuePreview(data, limit);
+            if (allowSmartPreview && $.lengthJson(data) > (limit + 1)) 
+                return _this.buildKeyValuePreview(data, limit); 
                 
             var html = '<table>'
-            if (!allowSmartPreview) 
-                html += '<thead><tr><th>Key</th><th>Value</th></tr></thead>';
+            if (!allowSmartPreview)  
+                html += '<thead><tr><th>Key</th><th>Value</th></tr></thead>';   
             for (var key in data)
                 html += '<tr><th>' + $.htmlEncode(key) + '</th><td> '+ _this.build(data[key], true) + '</td></tr>';
             html += '</table>';
@@ -413,30 +422,36 @@ if (window.jQuery) { (function ($) {
         },
         buildString : function(data) {
             var _this = this, characterMax = 50;
-            if (data != null && data.length > characterMax)
+            if (!data && data.length > characterMax)
                 return _this.buildStringPreview(data, characterMax);
             return data;
         },
-        buildKeyValuePreview : function(data, rowMax) {
-            var _this = this, i = 0, html = '<span class="glimpse-preview-object"><span>{</span>'; 
+        buildKeyValuePreview : function(data, rowMax) { 
+            var _this = this, i = 0, html = '<span class="glimpse-preview-object"><span class="start">{</span>'; 
             for (var key in data) {
-                if (rowMax == i++) break;
-                html += $.htmlEncode(key) + '<span>:</span>' + _this.buildString(data[key], 10); 
+                if (rowMax == i++) { 
+                    html += '<span>... <span class="small">length=' + $.lengthJson(data) + '</span></span>' 
+                    break 
+                };   
+                html += '<span>\'</span>' + $.htmlEncode(key) + '<span>\'</span><span class="mspace">:</span> <span>\'</span>' + _this.buildStringPreview(data[key], 15) + '<span>\'</span><span class="rspace">,</span>'; 
             }
-            html += '<span>}</span></span>';
+            html += '<span class="end">}</span></span>';
             return html;
         },
         buildCustomPreview : function(data, rowMax) {
-            var _this = this, columnMax = 3, columnLimit = ((data[0].length > columnMax) ? columnMax : data[0].length), html = '<span class="glimpse-preview-object"><span>[</span>', rowLimit = ((rowMax < data.length) ? rowMax : data.length);
+            var _this = this, columnMax = 3, columnLimit = ((data[0].length > columnMax) ? columnMax : data[0].length), html = '<span class="glimpse-preview-object"><span class="start">[</span>', rowLimit = ((rowMax < data.length) ? rowMax : data.length);
             for (var i = 1; i < rowLimit; i++) {
-                if (rowMax == i) break;   
+                if (rowMax == i) { 
+                    html += '<span>... <span class="small">length=' + data[0].length + '</span></span>' 
+                    break 
+                };   
                 var spacer = '';
                 for (var x = 0; x < columnLimit; x++) {
-                    html = html + spacer + _this.buildString(data[i][x], 10); 
-                    spacer = '<span>,</span>';
+                    html = html + spacer + '<span>\'</span>' + _this.buildStringPreview(data[i][x], 15) + '<span>\'</span>'; 
+                    spacer = '<span class="rspace">,</span>';
                 }
             }
-            html += '<span>]</span></span>'; 
+            html += '<span class="end">]</span></span>'; 
             return html;
         },
         buildStringPreview : function(data, characterMax) {
@@ -444,7 +459,11 @@ if (window.jQuery) { (function ($) {
                 return "[ ... ]";  
             if ($.isPlainObject(data))
                 return "{ ... }";  
-            return data ? '<span class="glimpse-preview-string" title="' + $.htmlEncode(data)  + '">' + $.htmlEncode(data.substr(0, characterMax)) + '<span>...</span></span>' : '';
+
+            var content = $.htmlEncode($.trim(data ? (data.length > characterMax ? data.substr(0, characterMax) : data) : ''));
+            if (data.length > characterMax) 
+                content = '<span class="glimpse-preview-string" title="' + $.htmlEncode(data)  + '">' + content + '<span>...</span></span>'; 
+            return content;
         }
     });
 
