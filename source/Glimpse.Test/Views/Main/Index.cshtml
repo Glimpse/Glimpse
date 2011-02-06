@@ -633,7 +633,7 @@ if (window.jQuery) { (function ($) {
 		    o.anchor = $(e.data.el);
 	        o.lastMousePos = gr.mousePosition(e).y; 
 	        o.staticOffset = o.anchor.height() + o.lastMousePos;
-	        o.anchor.css('opacity', 0.25);
+	        o.anchor.css('opacity', 0.50);
 	        $(document).mousemove(gr.performDrag).mouseup(gr.endDrag);
 	        return false;
         },
