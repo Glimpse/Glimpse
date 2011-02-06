@@ -14,7 +14,7 @@ namespace Glimpse.Net.Plugin.Mvc
             get { return "RouteData"; }
         }
 
-        public IDictionary<string, string> GetData(HttpApplication application)
+        public object GetData(HttpApplication application)
         {
             var routeData = new Dictionary<string, string>();
             var counter = 1;

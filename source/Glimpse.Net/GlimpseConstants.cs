@@ -5,6 +5,7 @@
         public const string HttpHeader = "X-Glimpse-Debugger";
         public const string ViewData = "Glimpse.ViewData";
         public const string TempData = "Glimpse.TempData";
+        public const string Filters = "Glimpse.Filters";
         public const string CookieKey = "glimpseMode";
     }
 }

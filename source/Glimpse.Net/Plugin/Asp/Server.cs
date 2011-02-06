@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Web;
+﻿using System.Web;
 using Glimpse.Protocol;
 
 namespace Glimpse.Net.Plugin.Asp
@@ -12,7 +11,7 @@ namespace Glimpse.Net.Plugin.Asp
             get { return "Server"; }
         }
 
-        public override IDictionary<string, string> GetData(HttpApplication application)
+        public override object GetData(HttpApplication application)
         {
             return Process(application.Request.ServerVariables, application);
         }

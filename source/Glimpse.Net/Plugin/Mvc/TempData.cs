@@ -13,7 +13,7 @@ namespace Glimpse.Net.Plugin.Mvc
             get { return "TempData"; }
         }
 
-        public override IDictionary<string, string> GetData(HttpApplication application)
+        public override object GetData(HttpApplication application)
         {
             return Process(application.Context.Items[GlimpseConstants.TempData] as IDictionary<string,object>, application);
         }

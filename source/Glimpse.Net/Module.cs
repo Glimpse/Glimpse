@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using Glimpse.Net.Configuration;
 using Glimpse.Net.Mvc;
+using Glimpse.Net.Plugin.Asp;
 using Glimpse.Protocol;
 
 namespace Glimpse.Net
@@ -18,7 +19,7 @@ namespace Glimpse.Net
         [ImportMany]
         private IList<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>> Plugins { get; set; }
 
-        private IDictionary<string, IDictionary<string, string>> Data { get; set; }
+        private IDictionary<string, object> Data { get; set; }
         private GlimpseConfiguration Configuration { get; set; }
         private bool ValidIp { get; set; }
         private GlimpseMode Mode { get; set; }
@@ -27,7 +28,8 @@ namespace Glimpse.Net
         public Module()
         {
             Plugins = new List<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>>();
-            Configuration = ConfigurationManager.GetSection("glimpse") as GlimpseConfiguration ?? new GlimpseConfiguration();
+            Configuration = ConfigurationManager.GetSection("glimpse") as GlimpseConfiguration ??
+                            new GlimpseConfiguration();
         }
 
         public void Init(HttpApplication context)
@@ -52,9 +54,9 @@ namespace Glimpse.Net
 
             SetMode(httpApplication);
             SetValidIp(httpApplication);
-            
+
             //TODO: MEF Plugin point to do something at the begining of every request
-            Data = new Dictionary<string, IDictionary<string, string>>();
+            Data = new Dictionary<string, object>();
         }
 
         private void PostRequestHandlerExecute(object sender, EventArgs e)
@@ -87,15 +89,15 @@ namespace Glimpse.Net
             var serializer = new JavaScriptSerializer();
             var output = serializer.Serialize(Data);
 
-            switch (Mode)
+            //if ajax request, render glimpse data to headers
+            if (new HttpRequestWrapper(httpApplication.Request).IsAjaxRequest())
             {
-                case GlimpseMode.Header:
-                    httpApplication.Response.AddHeader(GlimpseConstants.HttpHeader, output);
-                    return;
-                case GlimpseMode.Body:
-                    var html = string.Format(@"<script type='text/javascript'>var glimpse = {0};</script>", output);
-                    httpApplication.Response.Write(html);
-                    return;
+                httpApplication.Response.AddHeader(GlimpseConstants.HttpHeader, output);
+            }
+            else
+            {
+                var html = string.Format(@"<script type='text/javascript'>var glimpse = {0};</script>", output);
+                httpApplication.Response.Write(html);
             }
         }
 
@@ -108,10 +110,12 @@ namespace Glimpse.Net
         private void ComposePlugins()
         {
             var aggregateCatalog = new AggregateCatalog();
-            var assemblyCatalog = new AssemblyCatalog(Assembly.GetExecutingAssembly());
+            var typeCatlog = new TypeCatalog(typeof (Plugin.Mvc.GlobalFilters));
+            //var assemblyCatalog = new AssemblyCatalog(Assembly.GetExecutingAssembly());
             var directoryCatalog = new DirectoryCatalog(@"\");
 
-            aggregateCatalog.Catalogs.Add(assemblyCatalog);
+            aggregateCatalog.Catalogs.Add(typeCatlog);
+            //aggregateCatalog.Catalogs.Add(assemblyCatalog);
             aggregateCatalog.Catalogs.Add(directoryCatalog);
 
             Container = new CompositionContainer(aggregateCatalog);
