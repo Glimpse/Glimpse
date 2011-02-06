@@ -37,7 +37,7 @@ namespace Glimpse.Net
             if (Configuration.On == false) return;
 
             //TODO: MEF Plugin point to do something once as setup
-            GlobalFilters.Filters.Add(new GlimpseFilterAttribute(), int.MaxValue);
+            GlobalFilters.Filters.Add(new GlimpseFilterAttribute(), int.MinValue);
 
             ComposePlugins();
 
@@ -110,12 +110,12 @@ namespace Glimpse.Net
         private void ComposePlugins()
         {
             var aggregateCatalog = new AggregateCatalog();
-            var typeCatlog = new TypeCatalog(typeof (Plugin.Mvc.GlobalFilters));
-            //var assemblyCatalog = new AssemblyCatalog(Assembly.GetExecutingAssembly());
+            //var typeCatlog = new TypeCatalog(typeof (Plugin.Mvc.Filters));
+            var assemblyCatalog = new AssemblyCatalog(Assembly.GetExecutingAssembly());
             var directoryCatalog = new DirectoryCatalog(@"\");
 
-            aggregateCatalog.Catalogs.Add(typeCatlog);
-            //aggregateCatalog.Catalogs.Add(assemblyCatalog);
+            //aggregateCatalog.Catalogs.Add(typeCatlog);
+            aggregateCatalog.Catalogs.Add(assemblyCatalog);
             aggregateCatalog.Catalogs.Add(directoryCatalog);
 
             Container = new CompositionContainer(aggregateCatalog);

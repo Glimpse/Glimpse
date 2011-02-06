@@ -8,7 +8,7 @@ namespace Glimpse.Test.Controllers
 {
     public class MainController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Index(int? id)
         {
             ViewData["viewData"] = "controller set viewdata";
             TempData["tempData"] = "controller set tempdata";
