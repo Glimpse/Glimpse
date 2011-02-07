@@ -397,7 +397,7 @@
 </style>
 <style>
     h1, h2 { margin:0; padding:0; }
-    .glimpse-scenario { font-family:Lucida Grande,Tahoma,sans-serif; font-size:11px; }
+    .glimpse-scenario { font-family:Lucida Grande,Tahoma,sans-serif; font-size:11px; } 
 </style>
 
     <script src="/Scripts/jquery-1.4.4.js" type="text/javascript"></script> 
@@ -787,13 +787,15 @@ if (window.jQuery) { (function ($) {
             //Open/Close Holder
             $('.glimpse-open').live('click', function () {
                 $(this).hide();
-                $('.glimpse-holder').show().animate({ 'height': options.height }, 'fast');
+                $('.glimpse-holder').show().animate({ 'height': options.height }, 'fast'); 
+                $('.glimpse-spacer').height(options.height);
             }); 
             $('.glimpse-close').live('click', function () {
                 $('.glimpse-holder').animate({ 'height': '0' }, 'fast', function () { 
                         $(this).hide(); 
                         $('.glimpse-open').show(); 
                     });
+                $('.glimpse-spacer').height('0');
             });    
 
             //Tab Switching 
@@ -804,8 +806,8 @@ if (window.jQuery) { (function ($) {
             $('.glimpse-tabs li').live('click', function () {
                 var item = $(this);
                 //Setup Tabs
-                item.addClass('active');
                 $('.glimpse-tabs .active').removeClass('active').removeClass('hover');
+                item.addClass('active');
                 
                 //Setup Panels 
                 $('.glimpse-panel-holder .active').removeClass('active');
@@ -818,7 +820,8 @@ if (window.jQuery) { (function ($) {
         wireCallback : function(g, options) {
             //Remember height 
             $.glimpseResize.options.endDragCallback = function() {
-                _persistHeight(g, options);
+                _persistHeight(g, options);  
+                $('.glimpse-spacer').height(options.height);
             }
         },
         init : function(data) {
@@ -835,6 +838,7 @@ if (window.jQuery) { (function ($) {
             $.glimpseProcessor.layout(g, options)
 
             $('body').append('<style>' + options.css + '</style>');
+            $('body').append('<div class="glimpse-spacer"></div>');
         },
         defaults : { 
             data : null,

@@ -5,3 +5,10 @@ C:\Users\nmolnar.CORP\Desktop\Glimpse\source\Glimpse.Net\bin\Debug\Glimpse.Proto
 C:\Users\nmolnar.CORP\Desktop\Glimpse\source\Glimpse.Net\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\nmolnar.CORP\Desktop\Glimpse\source\Glimpse.Net\obj\Debug\Glimpse.Net.dll
 C:\Users\nmolnar.CORP\Desktop\Glimpse\source\Glimpse.Net\obj\Debug\Glimpse.Net.pdb
+C:\Users\avanderhoorn\Glimpse\source\Glimpse.Net\bin\Debug\Glimpse.Net.dll
+C:\Users\avanderhoorn\Glimpse\source\Glimpse.Net\bin\Debug\Glimpse.Net.pdb
+C:\Users\avanderhoorn\Glimpse\source\Glimpse.Net\bin\Debug\Glimpse.Protocol.dll
+C:\Users\avanderhoorn\Glimpse\source\Glimpse.Net\bin\Debug\Glimpse.Protocol.pdb
+C:\Users\avanderhoorn\Glimpse\source\Glimpse.Net\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\avanderhoorn\Glimpse\source\Glimpse.Net\obj\Debug\Glimpse.Net.dll
+C:\Users\avanderhoorn\Glimpse\source\Glimpse.Net\obj\Debug\Glimpse.Net.pdb

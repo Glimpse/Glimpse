@@ -19,7 +19,9 @@ namespace Glimpse.Net.Plugin.Mvc
             var globalFilters = new Dictionary<string, string>();
             foreach (Filter item in System.Web.Mvc.GlobalFilters.Filters)
             {
-                globalFilters.Add(item.Order.ToString(), item.Instance.ToString());
+                var key = item.Order.ToString();
+                if (!globalFilters.ContainsKey(key))
+                    globalFilters.Add(item.Order.ToString(), item.Instance.ToString());
             }
 
             if (globalFilters.Count == 0) return null;
