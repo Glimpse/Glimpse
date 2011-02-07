@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Web;
 using Glimpse.Protocol;
 
@@ -13,18 +12,26 @@ namespace Glimpse.Net.Plugin.Asp
             get { return "Session"; }
         }
 
-        public IDictionary<string, string> GetData(HttpApplication application)
+        public object GetData(HttpApplication application)
         {
-            var sessionData = new Dictionary<string, string>();
+            var result = new List<object[]>
+                             {
+                                 new[]{"Key", "Value", "Type"}
+                             };
+
             var session = application.Session;
+
             foreach (var key in session.Keys)
             {
-                sessionData.Add(key.ToString(), session[key.ToString()].ToString());
+                var value = session[key.ToString()];
+                var type = value.GetType();
+
+                result.Add(new[] { key.ToString(), value, type.ToString()});
             }
 
-            if (sessionData.Count == 0) return null;
+            if (result.Count == 0) return null;
 
-            return sessionData;
+            return result;
         }
     }
 }

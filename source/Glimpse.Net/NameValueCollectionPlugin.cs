@@ -7,7 +7,7 @@ namespace Glimpse.Net
 {
     public abstract class NameValueCollectionPlugin : IGlimpsePlugin
     {
-        public abstract IDictionary<string, string> GetData(HttpApplication application);
+        public abstract object GetData(HttpApplication application);
         public abstract string Name { get; }
 
         protected IDictionary<string, string> Process(NameValueCollection collection, HttpApplication application)

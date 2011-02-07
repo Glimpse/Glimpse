@@ -23,7 +23,7 @@ namespace Glimpse.Net
             return result;
         }
 
-        public abstract IDictionary<string, string> GetData(HttpApplication application);
+        public abstract object GetData(HttpApplication application);
         public abstract string Name { get; }
     }
 }

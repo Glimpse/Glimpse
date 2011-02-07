@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Web;
 using Glimpse.Protocol;
@@ -14,7 +13,7 @@ namespace Glimpse.Net.Plugin.Configuration
             get { return "ConnectionStrings"; }
         }
 
-        public IDictionary<string, string> GetData(HttpApplication application)
+        public object GetData(HttpApplication application)
         {
             var connStringsData = new Dictionary<string, string>();
             foreach (ConnectionStringSettings item in ConfigurationManager.ConnectionStrings)

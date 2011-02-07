@@ -2,8 +2,7 @@
 {
     public enum GlimpseMode
     {
-        Body,
-        Header,
+        On,
         Off
     }
 }

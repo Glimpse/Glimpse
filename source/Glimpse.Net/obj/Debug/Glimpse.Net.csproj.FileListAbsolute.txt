@@ -12,3 +12,10 @@ C:\Users\avanderhoorn\Glimpse\source\Glimpse.Net\bin\Debug\Glimpse.Protocol.pdb
 C:\Users\avanderhoorn\Glimpse\source\Glimpse.Net\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\avanderhoorn\Glimpse\source\Glimpse.Net\obj\Debug\Glimpse.Net.dll
 C:\Users\avanderhoorn\Glimpse\source\Glimpse.Net\obj\Debug\Glimpse.Net.pdb
+C:\Glimpse\source\Glimpse.Net\obj\Debug\ResolveAssemblyReference.cache
+C:\Glimpse\source\Glimpse.Net\obj\Debug\Glimpse.Net.dll
+C:\Glimpse\source\Glimpse.Net\obj\Debug\Glimpse.Net.pdb
+C:\Glimpse\source\Glimpse.Net\bin\Debug\Glimpse.Net.dll
+C:\Glimpse\source\Glimpse.Net\bin\Debug\Glimpse.Net.pdb
+C:\Glimpse\source\Glimpse.Net\bin\Debug\Glimpse.Protocol.dll
+C:\Glimpse\source\Glimpse.Net\bin\Debug\Glimpse.Protocol.pdb
