@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using Glimpse.Net.Configuration;
+using Glimpse.Net.Converter;
 using Glimpse.Net.Mvc;
 using Glimpse.Net.Plugin.Asp;
 using Glimpse.Protocol;
@@ -87,6 +88,14 @@ namespace Glimpse.Net
             if (InvalidRequest(httpApplication)) return;
 
             var serializer = new JavaScriptSerializer();
+            //TODO: MEFify this
+            var converters = new List<JavaScriptConverter>
+                                 {
+                                     new HandleErrorAttributeConverter(),
+                                     new OutputCacheAttributeConverter(),
+                                 };
+
+            serializer.RegisterConverters(converters);
             var output = serializer.Serialize(Data);
 
             //if ajax request, render glimpse data to headers

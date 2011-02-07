@@ -25,7 +25,7 @@ namespace Glimpse.Net.Plugin.Mvc
 
             var result = new List<object[]>
                                     {
-                                        new []{ "Ordinal", "Category", "Type", "Method", "Order", "Scope" }
+                                        new []{ "Ordinal", "Category", "Type", "Method", "Order", "Scope", "Properties" }
                                     };
 
             var count = 0;
@@ -38,7 +38,7 @@ namespace Glimpse.Net.Plugin.Mvc
             ProcessInfo(actionFilters, result, ref count, "Action", "OnActionExecuting()");
             
             //List Controller Action
-            result.Add(new object[] { count++, "", mvcActionDescriptor.ControllerDescriptor.ControllerType.Name, GetActionName(mvcActionDescriptor), "", "", "quite" });
+            result.Add(new object[] { count++, "", mvcActionDescriptor.ControllerDescriptor.ControllerType.Name, GetActionName(mvcActionDescriptor), "", "", "", "quite" });
             
             //List OnActionExecuted
             ProcessInfo(actionFilters.Reverse(), result, ref count, "Action", "OnActionExecuted()");
@@ -48,7 +48,7 @@ namespace Glimpse.Net.Plugin.Mvc
             ProcessInfo(responseFilters, result, ref count, "Result", "OnResultExecuting()");
 
             //List Result
-            result.Add(new object[] { count++, "", mvcResult.GetType().Name, "ExecuteResult()", "", "", "quite" });
+            result.Add(new object[] { count++, "", mvcResult.GetType().Name, "ExecuteResult()", "", "", "", "quite" });
             
             //List OnResultExecuted
             ProcessInfo(responseFilters.Reverse(), result, ref count, "Result", "OnResultExecuted()");
@@ -79,7 +79,11 @@ namespace Glimpse.Net.Plugin.Mvc
         {
             foreach (Filter item in filters)
             {
-                collection.Add(new object[] { count++, category, item.Instance.GetType().Name, method, item.Order, item.Scope.ToString() });
+
+                object obj = (item.Instance as HandleErrorAttribute) 
+                    ?? (object) (item.Instance as OutputCacheAttribute);
+
+                collection.Add(new[] { count++, category, item.Instance.GetType().Name, method, item.Order, item.Scope.ToString(), obj });
             }
         }
 

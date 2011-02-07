@@ -8,6 +8,7 @@ namespace Glimpse.Test.Controllers
 {
     public class MainController : Controller
     {
+        [OutputCache(Duration = 1)]
         public ActionResult Index(int? id)
         {
             ViewData["viewData"] = "controller set viewdata";

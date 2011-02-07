@@ -45,6 +45,8 @@
     <Compile Include="Configuration\IpAddress.cs" />
     <Compile Include="Configuration\IpCollection.cs" />
     <Compile Include="Configuration\GlimpseMode.cs" />
+    <Compile Include="Converter\HandleErrorAttributeConverter.cs" />
+    <Compile Include="Converter\OutputCacheAttributeConverter.cs" />
     <Compile Include="Plugin\Configuration\ApplicationSettings.cs" />
     <Compile Include="Plugin\Configuration\ConnectionStrings.cs" />
     <Compile Include="GlimpseConstants.cs" />
