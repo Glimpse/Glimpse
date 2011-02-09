@@ -394,6 +394,9 @@
     .glimpse-preview-object span.rspace { margin-right:4px; }
     .glimpse-preview-object span.mspace { margin:0 4px; }
     .glimpse-preview-object span.small { font-size:0.95em; } 
+    .glimpse-expand { height:11px; width:11px; display: inline-block; margin:0px 3px; background-image:url(/Scripts/expandsprite.gif); background-repeat:no-repeat; background-position:0 0; }
+    .glimpse-collapse { background-position:0 -11px; }
+    .glimpse-preview-show { display:none; font-weight:normal !important; }
 </style>
 <style>
     h1, h2 { margin:0; padding:0; }
@@ -410,7 +413,7 @@ $(document).ready(function() {
             'GlimpseOn' : 'True',
             'Plot & Description' : 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.'
         };
-    $('.glimpse-scenario-one').show().html($.glimpseProcessor.build(scenarioOneData));
+    $('.glimpse-scenario-one').show().html($.glimpseProcessor.build(scenarioOneData, 0));
 
     
     var scenarioTwoData = [
@@ -424,7 +427,7 @@ $(document).ready(function() {
             [ 'Anthony Daniels', 'C-3PO', 'Female', '101' ],
             [ 'Kenny Baker', 'R2-D2', 'Female', '150' ]
         ]; 
-    $('.glimpse-scenario-two').show().html($.glimpseProcessor.build(scenarioTwoData));
+    $('.glimpse-scenario-two').show().html($.glimpseProcessor.build(scenarioTwoData, 0));
     
     var scenarioThreeData = {
             'Movie' : 'Star Wars',
@@ -436,7 +439,7 @@ $(document).ready(function() {
                 ],
             'Plot & Description' : 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.' 
         };
-    $('.glimpse-scenario-three').show().html($.glimpseProcessor.build(scenarioThreeData));
+    $('.glimpse-scenario-three').show().html($.glimpseProcessor.build(scenarioThreeData, 0));
     
     var scenarioFourData = {
             'Movie' : 'Star Wars',
@@ -454,7 +457,7 @@ $(document).ready(function() {
                 ],
             'Plot & Description' : 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.' 
         };
-    $('.glimpse-scenario-four').show().html($.glimpseProcessor.build(scenarioFourData));
+    $('.glimpse-scenario-four').show().html($.glimpseProcessor.build(scenarioFourData, 0));
     
     var scenarioFiveData = {
             'Movie' : 'Star Wars',
@@ -466,7 +469,7 @@ $(document).ready(function() {
                 },
             'Plot & Description' : 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.' 
         };
-    $('.glimpse-scenario-five').show().html($.glimpseProcessor.build(scenarioFiveData));
+    $('.glimpse-scenario-five').show().html($.glimpseProcessor.build(scenarioFiveData, 0));
     
     var scenarioSixData = {
             'Movie' : 'Star Wars',
@@ -484,7 +487,7 @@ $(document).ready(function() {
             'Plot & Description' : 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.' 
         };
          
-    $('.glimpse-scenario-six').show().html($.glimpseProcessor.build(scenarioSixData));
+    $('.glimpse-scenario-six').show().html($.glimpseProcessor.build(scenarioSixData, 0));
      
     var scenarioSevenData = [
             [ 'Type', 'Name', 'Other' ],
@@ -498,7 +501,7 @@ $(document).ready(function() {
             [ 'Plot & Description', 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.',  ' Best movie of all time' ]
         ];
          
-    $('.glimpse-scenario-seven').show().html($.glimpseProcessor.build(scenarioSevenData));
+    $('.glimpse-scenario-seven').show().html($.glimpseProcessor.build(scenarioSevenData, 0));
      
     var scenarioEightData = [
             [ 'Type', 'Name', 'Other' ],
@@ -518,7 +521,7 @@ $(document).ready(function() {
             [ 'Plot & Description', 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.',  ' Best movie of all time' ]
         ];
          
-    $('.glimpse-scenario-eight').show().html($.glimpseProcessor.build(scenarioEightData));
+    $('.glimpse-scenario-eight').show().html($.glimpseProcessor.build(scenarioEightData, 0));
      
     var scenarioNineData = [
             [ 'Type', 'Name', 'Other' ],
@@ -532,7 +535,7 @@ $(document).ready(function() {
             [ 'Plot & Description', 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.',  ' Best movie of all time' ]
         ];
          
-    $('.glimpse-scenario-nine').show().html($.glimpseProcessor.build(scenarioNineData));
+    $('.glimpse-scenario-nine').show().html($.glimpseProcessor.build(scenarioNineData, 0));
     
     var scenarioTenData = [
             [ 'Type', 'Name', 'Other' ],
@@ -551,7 +554,7 @@ $(document).ready(function() {
             [ 'Plot & Description', 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.',  ' Best movie of all time' ]
         ];
          
-    $('.glimpse-scenario-ten').show().html($.glimpseProcessor.build(scenarioTenData));
+    $('.glimpse-scenario-ten').show().html($.glimpseProcessor.build(scenarioTenData, 0));
 
 
 
@@ -566,7 +569,7 @@ $(document).ready(function() {
                 ],
             'Plot & Description' : 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.' 
         };
-    $('.glimpse-scenario-eleven').show().html($.glimpseProcessor.build(scenarioElevenData));
+    $('.glimpse-scenario-eleven').show().html($.glimpseProcessor.build(scenarioElevenData, 0));
     
     var scenarioTwelveData = {
             'Movie' : 'Star Wars',
@@ -584,7 +587,7 @@ $(document).ready(function() {
                 ],
             'Plot & Description' : 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.' 
         };
-    $('.glimpse-scenario-twelve').show().html($.glimpseProcessor.build(scenarioTwelveData));
+    $('.glimpse-scenario-twelve').show().html($.glimpseProcessor.build(scenarioTwelveData, 0));
     
 });
 </script>
@@ -674,7 +677,7 @@ if (window.jQuery) { (function ($) {
             //Build Dynamic HTML
             for (var key in options.data) {
                 _this.addTab(tabStrip, key);
-                _this.addTabBody(panelHolder, _this.build(options.data[key])); 
+                _this.addTabBody(panelHolder, _this.build(options.data[key], 0)); 
             }
 
             //Set Inital State
@@ -687,71 +690,71 @@ if (window.jQuery) { (function ($) {
         addTabBody : function(container, content) {
             container.append('<div class="glimpse-panel">' + content + '</div>');
         },
-        build : function(data, allowSmartPreview) {
+        build : function(data, level) {
             var _this = this;
             if ($.isArray(data))
-                return _this.buildCustomTable(data, allowSmartPreview);
+                return _this.buildCustomTable(data, level);
             if ($.isPlainObject(data))
-                return _this.buildKeyValueTable(data, allowSmartPreview);
-            return _this.buildString(data);
+                return _this.buildKeyValueTable(data, level);
+            return _this.buildString(data, level);
         },
-        buildKeyValueTable : function(data, allowSmartPreview) {
+        buildKeyValueTable : function(data, level) {
             var _this = this, limit = 2;
-            if (allowSmartPreview && $.lengthJson(data) > (limit + 1)) 
+            if ((level > 0 && $.lengthJson(data) > (limit + 1)) || level > 1) 
                 return _this.buildKeyValuePreview(data, limit); 
                 
             var html = '<table>'
-            if (!allowSmartPreview)  
+           // if (level == 0)  
                 html += '<thead><tr><th>Key</th><th>Value</th></tr></thead>';   
             for (var key in data)
-                html += '<tr><th>' + $.htmlEncode(key) + '</th><td> '+ _this.build(data[key], true) + '</td></tr>';
+                html += '<tr><th>' + $.htmlEncode(key) + '</th><td> '+ _this.build(data[key], level + 1) + '</td></tr>';
             html += '</table>';
             return html; 
         },
-        buildCustomTable : function(data, allowSmartPreview) {
+        buildCustomTable : function(data, level) {
             var _this = this, limit = 2;
-            if (allowSmartPreview && data.length > (limit + 1))
+            if ((level > 0 && data.length > (limit + 1)) || level > 1)
                 return _this.buildCustomPreview(data, limit);
 
             var html = '<table><thead><tr>';
             for (var x = 0; x < data[0].length; x++)
-                html += '<th>' + data[0][x] + '</th>';
+                html += '<th>' + $.htmlEncode(data[0][x]) + '</th>';
             html += '</tr></thead>';
             for (var i = 1; i < data.length; i++) {
                 html += '<tr' + (data[i].length > data[0].length ? ' class="' + data[i][data[i].length - 1] + '"' : '') + '>';
                 for (var x = 0; x < data[0].length; x++)
-                    html += '<td>' + _this.build(data[i][x], true) + '</td>';
+                    html += '<td>' + _this.build(data[i][x], level + 1) + '</td>';
                 html += '</tr>';
             }
             html += '</table>';
             return html; 
         },
-        buildString : function(data) {
+        buildString : function(data, level) {
             var _this = this, characterMax = 50; 
             if (data && data.length > characterMax) {
-                return _this.buildStringPreview(data, characterMax);}
-            return data;
+                return _this.buildStringPreview(data, level);}
+            return $.htmlEncode(data);
         },
-        buildKeyValuePreview : function(data, rowMax) { 
-            var _this = this, i = 0, html = '<span class="glimpse-preview-object"><span class="start">{</span>'; 
+        buildKeyValuePreview : function(data, level) {  
+            var _this = this, rowMax = 2, i = 0, html = '<span class="glimpse-expand"></span><span class="glimpse-preview-object"><span class="start">{</span>'; 
             for (var key in data) {
                 if (rowMax == i++) { 
                     html += '<span class="small">length=' + $.lengthJson(data) + '</span>'; 
                     break 
                 };   
-                html += '<span>\'</span>' + _this.buildStringPreview(key, 10) + '<span>\'</span><span class="mspace">:</span> <span>\'</span>' + _this.buildStringPreview(data[key], 15) + '<span>\'</span><span class="rspace">,</span>'; 
+                html += '<span>\'</span>' + _this.buildStringPreview(key, level + 1) + '<span>\'</span><span class="mspace">:</span> <span>\'</span>' + _this.buildStringPreview(data[key], level + 1) + '<span>\'</span><span class="rspace">,</span>'; 
             }
-            html += '<span class="end">}</span></span>';
+            html += '<span class="end">}</span></span><span class="glimpse-preview-show">' + _this.buildKeyValueTable(data, 0) + '</span>';
             return html;
         },
-        buildCustomPreview : function(data, rowMax) { 
-            var _this = this, columnMax = 3, columnLimit = ((data[0].length > columnMax) ? columnMax : data[0].length), rowLimit = ((rowMax < data.length) ? (rowMax + 1) : data.length), html = '<span class="glimpse-preview-object"><span class="start">[</span>';
-             
+        buildCustomPreview : function(data, level) { 
+            var _this = this, rowMax = 2, columnMax = 3, columnLimit = ((data[0].length > columnMax) ? columnMax : data[0].length), rowLimit = ((rowMax < data.length) ? (rowMax + 1) : data.length), html = '<span class="glimpse-expand"></span><span class="glimpse-preview-object"><span class="start">[</span>';
+            
             for (var i = 1; i < rowLimit; i++) {
                 var spacer = '';
                 html += '<span class="start">[</span>';
                 for (var x = 0; x < columnLimit; x++) {
-                    html += spacer + '<span>\'</span>' + _this.buildStringPreview(data[i][x], 15) + '<span>\'</span>'; 
+                    html += spacer + '<span>\'</span>' + _this.buildStringPreview(data[i][x], level + 1) + '<span>\'</span>'; 
                     spacer = '<span class="rspace">,</span>';
                 }
                     if (x < data[0].length)
@@ -762,18 +765,18 @@ if (window.jQuery) { (function ($) {
                     break;
                 };   
             }
-            html += '<span class="end">]</span></span>'; 
+            html += '<span class="end">]</span></span><span class="glimpse-preview-show">' + _this.buildCustomTable(data, 0) + '</span>';
             return html;
         },
-        buildStringPreview : function(data, characterMax) {
+        buildStringPreview : function(data, level) {
             if ($.isArray(data))
                 return "[ ... ]";  
             if ($.isPlainObject(data))
                 return "{ ... }";  
                  
-            var content = $.htmlEncode($.trim(data ? (data.length > (characterMax + 3) ? data.substr(0, characterMax) : data) : ''));
+            var characterMax = 50, content = $.htmlEncode($.trim(data ? (data.length > (characterMax + 3) ? data.substr(0, characterMax) : data) : ''));
             if (data.length > (characterMax + 3)) 
-                content = '<span class="glimpse-preview-string" title="' + $.htmlEncode(data)  + '">' + content + '<span>...</span></span>'; 
+                content = '<span class="glimpse-expand"></span><span class="glimpse-preview-string" title="' + $.htmlEncode(data)  + '">' + content + '<span>...</span></span><span class="glimpse-preview-show">' + $.htmlEncode(data) + '</span>'; 
             return content;
         }
     });
@@ -797,9 +800,9 @@ if (window.jQuery) { (function ($) {
                     });
                 $('.glimpse-spacer').height('0');
             });    
-
+             
             //Tab Switching 
-            $('.glimpse-tabs li:not(.active)').live('mouseover mouseout', function () {
+            $('.glimpse-tabs li:not(.active)').live('mouseover mouseout', function () { 
                 var item = $(this);
                 if (event.type == 'mouseover') { item.addClass('hover'); } else { item.removeClass('hover'); }
             }); 
@@ -816,6 +819,12 @@ if (window.jQuery) { (function ($) {
 
             //Resize
             $('.glimpse-resizer').resizer(options.height); 
+
+            //Exspand/Collapse
+            $('.glimpse-expand').live('click', function() {
+                 
+                $(this).toggleClass('glimpse-collapse').next().toggle().next().toggle();  
+            });
         },
         wireCallback : function(g, options) {
             //Remember height 
@@ -842,8 +851,7 @@ if (window.jQuery) { (function ($) {
         },
         defaults : { 
             data : null,
-            html : { plugin : '<div class="glimpse-open"><div class="glimpse-icon"></div></div><div class="glimpse-holder"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-buttons"><a href="#" class="glimpse-close"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>',
-                     panel : { header: '<table><thead><tr><th>Key</th><th>Value</th></tr></thead>', row: '<tr><th>{0}</th><td>{1}</td></tr>', footer: '</table>' } },
+            html : { plugin : '<div class="glimpse-open"><div class="glimpse-icon"></div></div><div class="glimpse-holder"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-buttons"><a href="#" class="glimpse-close"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>' },
             css : '',
             height : 200
         }
