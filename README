@@ -1,4 +1,5 @@
---OVERVIEW--
+Overview
+--------
 At its core Glimpse allows you to debug your Web Service right in the browser. Glimpse allows you to "Glimpse" into what's going on in your web server. In other words what Firebug is to debugging your client side code, Glimpse is to debugging your server within the client.
 
 Fundamentally Glimpse is made up of 3 different parts, all of which are extensible and customizable for any platform:
@@ -7,8 +8,8 @@ Fundamentally Glimpse is made up of 3 different parts, all of which are extensib
 - Glimpse Protocol
 
 
---HOW IT WORKS--
-
+How it Works
+------------
 On the Server 
    1) Server collects all server side information that will aid in debugging (i.e. application settings, routes, session variables, trace data, etc)
    2) It does this by running through a pipeline of server side data providers that can be dynamically controlled and added to under plugin architecture
@@ -21,9 +22,9 @@ On the Client
 
 Glimpse can be turned on or off by a series of different mechanistic, but at its core if the Glimpse cookie is present the server will provide the "debug" data - as a security measure, the request for debug data is "authenticated". Via the plugin model, this authentication check can have any logic that is required by the site to ensure that unauthorized users don't have access to sensitive debug data.
 
-
---SERVER IMPLEMENTATIONS--
-
+ 
+Server Implementations 
+----------------------
 Given the scope of the project and what it can do, the concept isn't restricted to any one platform. Hence, once mature, Glimpse Server Module will be available on all major web platforms. 
 
 Platforms currently supported:
@@ -37,13 +38,13 @@ Platforms soon to be supported supported:
 NOTE - If you would like help develop a Glimpse Server Module for a given platform please let us know.
 
 
---CLIENT IMPLEMENTATIONS--
-
+Client Implementations 
+----------------------
 To start with the Glimpse Client Side Viewer is simply a light weight JavaScript "plugin" that understands the Glimpse Protocol and knows how to render the data. From a technology standpoint we currently use jQuery as the client side framework.
 
 Eventually, we would like to have actual browser plugins that provide richer functionality and experience, but the JavaScript version of the Glimpse Client Side Viewer is surprisingly well featured, intuitive and provides a high fidelity experience. We also hope to have a version for mobile ready soon which customizes the viewing/usage experience when using a mobile device.
 
 
---PROTOCOL--
-
+Protocol
+--------
 Details coming soon.
