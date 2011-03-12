@@ -14,3 +14,9 @@ _ReSharper.*
 Glimpse.5.1.ReSharper.user
 /source/Glimpse.Test/obj
 /source/Glimpse.Test/bin
+/source/Glimpse.Net/bin
+/source/Glimpse.Net/obj
+/source/Glimpse.Test/obj
+/source/Glimpse.Test/bin
+/source/Glimpse.Protocol/obj
+/source/Glimpse.Protocol/bin

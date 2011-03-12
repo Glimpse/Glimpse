@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿/*
+using System.Collections.Generic;
 using System.Configuration;
 using System.Web;
 using Glimpse.Protocol;
@@ -27,3 +28,4 @@ namespace Glimpse.Net.Plugin.Configuration
         }
     }
 }
+*/
