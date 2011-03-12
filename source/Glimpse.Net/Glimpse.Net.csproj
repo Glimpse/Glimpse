@@ -47,8 +47,7 @@
     <Compile Include="Configuration\GlimpseMode.cs" />
     <Compile Include="Converter\HandleErrorAttributeConverter.cs" />
     <Compile Include="Converter\OutputCacheAttributeConverter.cs" />
-    <Compile Include="Plugin\Configuration\ApplicationSettings.cs" />
-    <Compile Include="Plugin\Configuration\ConnectionStrings.cs" />
+    <Compile Include="Plugin\Configuration\Config.cs" />
     <Compile Include="GlimpseConstants.cs" />
     <Compile Include="DictionaryStringObjectPlugin.cs" />
     <Compile Include="Plugin\Mvc\GlimpseFilterAttribute.cs" />
