@@ -468,7 +468,7 @@
     .glimpse-preview-object span.rspace { margin-right:4px; }
     .glimpse-preview-object span.mspace { margin:0 4px; }
     .glimpse-preview-object span.small { font-size:0.95em; } 
-    .glimpse-expand { height:11px; width:11px; display: inline-block; margin:0px 3px; background-image:url(/Scripts/expandsprite.gif); background-repeat:no-repeat; background-position:0 0; }
+    .glimpse-expand { height:11px; width:11px; display: inline-block; float:left; margin:0px 3px; background-image:url(/Scripts/expandsprite.gif); background-repeat:no-repeat; background-position:0 0; }
     .glimpse-collapse { background-position:0 -11px; }
     .glimpse-preview-show { display:none; font-weight:normal !important; }
 </style>
@@ -864,9 +864,8 @@ if (window.jQuery) { (function ($) {
             var that = this, length = $.lengthJson(data), rowMax = 2, rowLimit = (rowMax < length ? rowMax : length), i = 1, html = '<span class="glimpse-expand"></span><span class="glimpse-preview-object"><span class="start">{</span>'; 
             for (var key in data) {
                 html += that.newItemSpacer(i, rowLimit, length);
-                if (i > length || i > rowLimit)
-                    break;
-                i++;
+                if (i > length || i++ > rowLimit)
+                    break; 
                 html += '<span>\'</span>' + that.buildStringPreview(key, level + 1) + '<span>\'</span><span class="mspace">:</span><span>\'</span>' + that.buildStringPreview(data[key], level + 99) + '<span>\'</span>'; 
             }
             html += '<span class="end">}</span></span><span class="glimpse-preview-show">' + that.buildKeyValueTable(data, 0) + '</span>';
