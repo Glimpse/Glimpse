@@ -387,7 +387,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                <h2>Scenario 11 (FAIL):</h2>
+                <h2>Scenario 11 (Pass):</h2>
                 
             </td>
         </tr>
@@ -824,9 +824,7 @@ if (window.jQuery) { (function ($) {
             if ((level > 0 && $.lengthJson(data) > (limit + 1)) || level > 1) 
                 return that.buildKeyValuePreview(data, limit); 
                 
-            var html = '<table>'
-           // if (level == 0)  
-                html += '<thead><tr><th>Key</th><th>Value</th></tr></thead>';   
+            var html = '<table><thead><tr class="glimpse-row-header-' + level + '"><th>Key</th><th>Value</th></tr></thead>';   
             for (var key in data)
                 html += '<tr><th>' + $.htmlEncode(key) + '</th><td> '+ that.build(data[key], level + 1) + '</td></tr>';
             html += '</table>';
@@ -839,7 +837,7 @@ if (window.jQuery) { (function ($) {
             if ((level > 0 && data.length > (limit + 1)) || level > 1)
                 return that.buildCustomPreview(data, limit);
 
-            var html = '<table><thead><tr>';
+            var html = '<table><thead><tr class="glimpse-row-header-' + level + '">';
             for (var x = 0; x < data[0].length; x++)
                 html += '<th>' + $.htmlEncode(data[0][x]) + '</th>';
             html += '</tr></thead>';
@@ -863,13 +861,13 @@ if (window.jQuery) { (function ($) {
         buildKeyValuePreview : function(data, level) {  
             //console.log('BuildKeyValuePreview - ' + level);
 
-            var that = this, rowMax = 2, i = 0, html = '<span class="glimpse-expand"></span><span class="glimpse-preview-object"><span class="start">{</span>'; 
+            var that = this, length = $.lengthJson(data), rowMax = 2, rowLimit = (rowMax < length ? rowMax : length), i = 1, html = '<span class="glimpse-expand"></span><span class="glimpse-preview-object"><span class="start">{</span>'; 
             for (var key in data) {
-                if (rowMax == i++) { 
-                    html += '<span class="small">length=' + $.lengthJson(data) + '</span>'; 
-                    break 
-                };   
-                html += '<span>\'</span>' + that.buildStringPreview(key, level + 1) + '<span>\'</span><span class="mspace">:</span> <span>\'</span>' + that.buildStringPreview(data[key], level + 99) + '<span>\'</span><span class="rspace">,</span>'; 
+                html += that.newItemSpacer(i, rowLimit, length);
+                if (i > length || i > rowLimit)
+                    break;
+                i++;
+                html += '<span>\'</span>' + that.buildStringPreview(key, level + 1) + '<span>\'</span><span class="mspace">:</span><span>\'</span>' + that.buildStringPreview(data[key], level + 99) + '<span>\'</span>'; 
             }
             html += '<span class="end">}</span></span><span class="glimpse-preview-show">' + that.buildKeyValueTable(data, 0) + '</span>';
             return html;
@@ -877,22 +875,22 @@ if (window.jQuery) { (function ($) {
         buildCustomPreview : function(data, level) { 
             //console.log('buildCustomPreview - ' + level);
 
-            var that = this, rowMax = 2, columnMax = 3, columnLimit = ((data[0].length > columnMax) ? columnMax : data[0].length), rowLimit = ((rowMax < data.length) ? (rowMax + 1) : data.length), html = '<span class="glimpse-expand"></span><span class="glimpse-preview-object"><span class="start">[</span>';
+            var that = this, length = data.length - 1, rowMax = 2, columnMax = 3, columnLimit = ((data[0].length > columnMax) ? columnMax : data[0].length), rowLimit = (rowMax < length ? rowMax : length), html = '<span class="glimpse-expand"></span><span class="glimpse-preview-object"><span class="start">[</span>';
             
-            for (var i = 1; i < rowLimit; i++) {
-                var spacer = '';
+            for (var i = 1; i <= rowLimit + 1; i++) {  
+                html += that.newItemSpacer(i, rowLimit, length);
+                if (i > length || i > rowLimit)
+                    break;
+
                 html += '<span class="start">[</span>';
+                var spacer = '';
                 for (var x = 0; x < columnLimit; x++) {
                     html += spacer + '<span>\'</span>' + that.buildStringPreview(data[i][x], level + 99) + '<span>\'</span>'; 
                     spacer = '<span class="rspace">,</span>';
                 }
                 if (x < data[0].length)
                     html += spacer + '<span>...</span>'
-                html += '<span class="end">], </span>';
-                if (i == rowMax) {  
-                    html += '<span class="small">length=' + (data.length - 1) + '</span>' 
-                    break;
-                };   
+                html += '<span class="end">]</span>';  
             }
             html += '<span class="end">]</span></span><span class="glimpse-preview-show">' + that.buildCustomTable(data, 0) + '</span>';
             return html;
@@ -912,6 +910,16 @@ if (window.jQuery) { (function ($) {
                     content = '<span class="glimpse-expand"></span>' + content + '<span class="glimpse-preview-show">' + $.htmlEncode(data) + '</span>'; 
             }
             return content;
+        },
+        newItemSpacer : function(currentRow, rowLimit, dataLength) {
+            var html = '';
+            if (rowLimit != dataLength) {
+                if (currentRow > 1) 
+                    html += '<span class="rspace">,</span>';
+                if (currentRow > rowLimit) 
+                    html += '<span class="small">length=' + dataLength + '</span>';
+            }
+            return html;
         },
         trimAndEncodeString : function(data, charMax, charOuterMax, wrapEllipsis) {
             if (!data)
