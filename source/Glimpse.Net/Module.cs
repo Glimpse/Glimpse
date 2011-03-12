@@ -92,6 +92,7 @@ namespace Glimpse.Net
                                  {
                                      new HandleErrorAttributeConverter(),
                                      new OutputCacheAttributeConverter(),
+                                     new RouteValueDictionaryConverter()
                                  };
 
             serializer.RegisterConverters(converters);
@@ -161,13 +162,14 @@ namespace Glimpse.Net
         private void ComposePlugins()
         {
             var aggregateCatalog = new AggregateCatalog();
-            //var typeCatlog = new TypeCatalog(typeof (Plugin.Mvc.Filters));
+            var typeCatlog = new TypeCatalog(typeof (Plugin.Mvc.Routes));
             var assemblyCatalog = new AssemblyCatalog(Assembly.GetExecutingAssembly());
             var directoryCatalog = new DirectoryCatalog(@"\");
 
-            //aggregateCatalog.Catalogs.Add(typeCatlog);
-            aggregateCatalog.Catalogs.Add(assemblyCatalog);
-            aggregateCatalog.Catalogs.Add(directoryCatalog);
+            aggregateCatalog.Catalogs.Add(typeCatlog);
+            aggregateCatalog.Catalogs.Add(new TypeCatalog(typeof(Plugin.Mvc.Filters)));
+            //aggregateCatalog.Catalogs.Add(assemblyCatalog);
+            //aggregateCatalog.Catalogs.Add(directoryCatalog);
 
             Container = new CompositionContainer(aggregateCatalog);
             Container.ComposeParts(this);

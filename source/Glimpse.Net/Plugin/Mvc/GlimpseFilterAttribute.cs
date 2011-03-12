@@ -20,6 +20,7 @@ namespace Glimpse.Net.Mvc
             store.Add(GlimpseConstants.TempData, filterContext.Controller.TempData);
             store.Add(GlimpseConstants.ViewData, filterContext.Controller.ViewData);
             store.Add(GlimpseConstants.ActionDescriptor, filterContext.ActionDescriptor);
+            store.Add(GlimpseConstants.RequestContext, filterContext.RequestContext);
 
             AddFilters(store, filterContext);
         }

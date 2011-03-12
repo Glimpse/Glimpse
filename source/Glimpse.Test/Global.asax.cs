@@ -18,11 +18,20 @@ namespace Glimpse.Test
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            var test = routes.MapRoute("Test", "Test/", new {controller = "Test", action = "Non"});
+            test.DataTokens["Name"] = "Test";
+
+
+            routes.MapRoute("Garbage", "Garbage/{action}/{thingy}/", new {controller = "Garbage", action = "Garbage"});
+
             routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}/{id}", // URL with parameters
                 new { controller = "Main", action = "Index", id = UrlParameter.Optional } // Parameter defaults
             );
+
+
+            routes.MapRoute("Weird", "Weird/{otherthing}", new { controller = "Weird", action = "Weird" }, new { otherthing = @"\d+" });
 
         }
 

@@ -20,3 +20,9 @@ Glimpse.5.1.ReSharper.user
 /source/Glimpse.Test/bin
 /source/Glimpse.Protocol/obj
 /source/Glimpse.Protocol/bin
+/source/Glimpse.Test/Bin/Glimpse.Net.dll
+/source/Glimpse.Test/Bin/Glimpse.Net.pdb
+/source/Glimpse.Test/Bin/Glimpse.Protocol.dll
+/source/Glimpse.Test/Bin/Glimpse.Protocol.pdb
+/source/Glimpse.Test/Bin/Glimpse.Test.dll
+/source/Glimpse.Test/Bin/Glimpse.Test.pdb

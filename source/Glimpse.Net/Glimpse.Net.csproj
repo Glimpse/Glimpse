@@ -47,12 +47,13 @@
     <Compile Include="Configuration\GlimpseMode.cs" />
     <Compile Include="Converter\HandleErrorAttributeConverter.cs" />
     <Compile Include="Converter\OutputCacheAttributeConverter.cs" />
+    <Compile Include="Converter\RouteValueDictionaryConverter.cs" />
     <Compile Include="Plugin\Configuration\Config.cs" />
     <Compile Include="GlimpseConstants.cs" />
     <Compile Include="DictionaryStringObjectPlugin.cs" />
     <Compile Include="Plugin\Mvc\GlimpseFilterAttribute.cs" />
     <Compile Include="Plugin\Mvc\Filters.cs" />
-    <Compile Include="Plugin\Mvc\RouteData.cs" />
+    <Compile Include="Plugin\Mvc\Routes.cs" />
     <Compile Include="Plugin\Mvc\TempData.cs" />
     <Compile Include="Plugin\Mvc\ViewData.cs" />
     <Compile Include="Plugin\Mvc\ViewEngine.cs" />
