@@ -1,0 +1,871 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Index</title>
+</head>
+<body>
+    <div>
+        This is a standard view which tells me that it is now @DateTime.Now.ToLongTimeString(). This data means nothing really, look at the X-Glimpse-Debuger HTTP header in FireBug/Fiddler.
+
+        <p>Config Info:</p>
+        <ul>
+            <li>On = @ViewBag.GlimpseOn</li>
+            <li>
+                Allowed IP's =
+                <ol>
+                @foreach (Glimpse.Net.Configuration.IpAddress ip in ViewBag.IpAddresses) { 
+                    <li>@ip.Address</li>
+                }
+                </ol>
+            </li>
+            <li>
+                Allowed ContentType's = 
+                <ol>
+                @foreach (Glimpse.Net.Configuration.ContentType ct in ViewBag.ContentTypes)
+                {
+                    <li>@ct.Content</li>
+                }
+                </ol>
+            </li>
+            <li>GlimpseMode = @ViewBag.GlimpseMode</li>
+        </ul>
+    </div>
+
+    <br /><br /><br /><br />
+    <h1>Test Cases</h1>
+    <table width="100%">
+        <tr>
+            <td colspan="2">
+                <h2>Scenario 1 (Pass):</h2>
+                Simple key value pair table based of the properties and values of json<br />
+                object. Note, strings that exceed the max string length are trimmed and summaried
+            </td>
+        </tr>
+        <tr width="50%">
+            <td class="glimpse-scenario-data">
+<pre>var scenarioOneData = {
+    'Movie' : 'Star Wars',
+    'Genera/Theme' : 'Science Fiction',
+    'GlimpseOn' : 'True',
+    'Plot & Description' : 'Luke Skywalker leaves his home planet, 
+                            teams up with other rebels, and tries to 
+                            save Princess Leia from the evil clutches 
+                            of Darth Vader.'
+};</pre> 
+            </td>
+            <td width="50%" class="glimpse-scenario glimpse-scenario-one glimpse-panel"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Scenario 2 (Pass):</h2>
+                More complex table based on the items in a matrix array (note that row<br /> 
+                0 is used as the title of the table)
+            </td>
+        </tr>
+        <tr>
+            <td class="glimpse-scenario-data">
+<pre>var scenarioTwoData = [
+    [ 'Actor', 'Character', 'Gender', 'Age' ],
+    [ 'Mark Hamill', 'Luke Anakin Skywalker', 'Male', '21' ],
+    [ 'James Earl Jones', 'Darth Vader', 'Male', '45' ],
+    [ 'Harrison Ford', 'Han Solo', 'Male', '25' ],
+    [ 'Carrie Fisher', 'Princess Leia Organa', 'Female', '21' ],
+    [ 'Peter Cushing', 'Grand Moff Tarkin', 'Female', '69' ],
+    [ 'Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70' ],
+    [ 'Anthony Daniels', 'C-3PO', 'Female', '101' ],
+    [ 'Kenny Baker', 'R2-D2', 'Female', '150' ]
+];</pre> 
+            </td>
+            <td class="glimpse-scenario glimpse-scenario-two glimpse-panel"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Scenario 3 (Pass):</h2>
+                When a complex child object of type matrix table is encountered,<br />
+                it is rendered as a complex table. Note, when a child listing has a<br />
+                string property or attribute that exceeds the max summary string length,<br />
+                it is trimmed and summaried 
+            </td>
+        </tr>
+        <tr>
+            <td class="glimpse-scenario-data">
+<pre>var scenarioThreeData = {
+    'Movie' : 'Star Wars',
+    'Genera/Theme' : 'Science Fiction',
+    'Actors/Cast' : [
+            [ 'Actor', 'Character', 'Gender', 'Age' ],
+            [ 'Mark Hamill', 'Luke Anakin Skywalker', 'Male', '21' ],
+            [ 'James Earl Jones', 'Darth Vader', 'Male', '45' ]
+        ],
+    'Plot & Description' : 'Luke Skywalker leaves his home planet, 
+                            teams up with other rebels, and tries to 
+                            save Princess Leia from the evil clutches 
+                            of Darth Vader.'
+};</pre> 
+            </td>
+            <td class="glimpse-scenario glimpse-scenario-three glimpse-panel"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Scenario 4 (Pass):</h2>
+                When a complex child object of type matrix table is encountered<br /> 
+                that exceeds the max of child items that can be rendered, it is<br /> 
+                rendered in an abbreviated form
+            </td>
+        </tr>
+        <tr>
+            <td class="glimpse-scenario-data">
+<pre>var scenarioThreeData = {
+    'Movie' : 'Star Wars',
+    'Genera/Theme' : 'Science Fiction',
+    'Actors/Cast' : [
+            [ 'Actor', 'Character', 'Gender', 'Age' ],
+            [ 'Mark Hamill', 'Luke Anakin Skywalker', 'Male', '21' ],
+            [ 'James Earl Jones', 'Darth Vader', 'Male', '45' ],
+            [ 'Harrison Ford', 'Han Solo', 'Male', '25' ],
+            [ 'Carrie Fisher', 'Princess Leia Organa', 'Female', '21' ],
+            [ 'Peter Cushing', 'Grand Moff Tarkin', 'Female', '69' ],
+            [ 'Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70' ],
+            [ 'Anthony Daniels', 'C-3PO', 'Female', '101' ],
+            [ 'Kenny Baker', 'R2-D2', 'Female', '150' ]
+        ],
+    'Plot & Description' : 'Luke Skywalker leaves his home planet, 
+                            teams up with other rebels, and tries to 
+                            save Princess Leia from the evil clutches 
+                            of Darth Vader.'
+};</pre> 
+            </td>
+            <td class="glimpse-scenario glimpse-scenario-four glimpse-panel"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Scenario 5 (Pass):</h2>
+                When a json child object is encountered, it is rendered as a<br /> 
+                simple key value pair table
+            </td>
+        </tr>
+        <tr>
+            <td class="glimpse-scenario-data">
+<pre>var scenarioThreeData = {
+    'Movie' : 'Star Wars',
+    'Genera/Theme' : 'Science Fiction',
+    'Actors/Cast' : { 
+            'Mark Hamill' : 'Luke Anakin Skywalker',
+            'James Earl Jones' : 'Darth Vader',
+            'Harrison Ford' : 'Han Solo' 
+        },
+    'Plot & Description' : 'Luke Skywalker leaves his home planet, 
+                            teams up with other rebels, and tries to 
+                            save Princess Leia from the evil clutches 
+                            of Darth Vader.'
+};</pre> 
+            </td>
+            <td class="glimpse-scenario glimpse-scenario-five glimpse-panel"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Scenario 6 (Pass):</h2>
+                When a json child object is encountered table that exceeds the max<br />
+                of child items that can be rendered, it is rendered in an abbreviated form
+            </td>
+        </tr>
+        <tr>
+            <td class="glimpse-scenario-data">
+<pre>var scenarioThreeData = {
+    'Movie' : 'Star Wars',
+    'Genera/Theme' : 'Science Fiction',
+    'Actors/Cast' : { 
+            'Mark Hamill' : 'Luke Anakin Skywalker',
+            'James Earl Jones' : 'Darth Vader',
+            'Harrison Ford' : 'Han Solo',
+            'Carrie Fisher' : 'Princess Leia Organa',
+            'Peter Cushing' : 'Grand Moff Tarkin',
+            'Alec Guinness' : 'Ben Obi-Wan Kenobi',
+            'Anthony Daniels' : 'C-3PO',
+            'Kenny Baker' : 'R2-D2'
+        },
+    'Plot & Description' : 'Luke Skywalker leaves his home planet, 
+                            teams up with other rebels, and tries to 
+                            save Princess Leia from the evil clutches 
+                            of Darth Vader.'
+};</pre> 
+            </td>
+            <td class="glimpse-scenario glimpse-scenario-six glimpse-panel"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Scenario 7 (Pass):</h2>
+                When a complex child object of type matrix table is encountered,<br />
+                it is rendered as a complex table. Note, when a child listing has a<br />
+                string property or attribute that exceeds the max summary string length,<br />
+                it is trimmed and summaried 
+            </td>
+        </tr>
+        <tr>
+            <td class="glimpse-scenario-data">
+<pre>var scenarioSevenData = {
+    'Movie' : 'Star Wars',
+    'Genera/Theme' : 'Science Fiction',
+    'Actors/Cast' : [
+            [ 'Actor', 'Character', 'Gender', 'Age' ],
+            [ 'Mark Hamill', 'Luke Anakin Skywalker', 'Male', '21' ],
+            [ 'James Earl Jones', 'Darth Vader', 'Male', '45' ]
+        ],
+    'Plot & Description' : 'Luke Skywalker leaves his home planet, 
+                            teams up with other rebels, and tries to 
+                            save Princess Leia from the evil clutches 
+                            of Darth Vader.'
+};</pre> 
+            </td>
+            <td class="glimpse-scenario glimpse-scenario-seven glimpse-panel"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Scenario 8 (Pass):</h2>
+                When a complex child object of type matrix table is encountered<br /> 
+                that exceeds the max of child items that can be rendered, it is<br /> 
+                rendered in an abbreviated form
+            </td>
+        </tr>
+        <tr>
+            <td class="glimpse-scenario-data">
+<pre>var scenarioEightData = {
+    'Movie' : 'Star Wars',
+    'Genera/Theme' : 'Science Fiction',
+    'Actors/Cast' : [
+            [ 'Actor', 'Character', 'Gender', 'Age' ],
+            [ 'Mark Hamill', 'Luke Anakin Skywalker', 'Male', '21' ],
+            [ 'James Earl Jones', 'Darth Vader', 'Male', '45' ],
+            [ 'Harrison Ford', 'Han Solo', 'Male', '25' ],
+            [ 'Carrie Fisher', 'Princess Leia Organa', 'Female', '21' ],
+            [ 'Peter Cushing', 'Grand Moff Tarkin', 'Female', '69' ],
+            [ 'Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70' ],
+            [ 'Anthony Daniels', 'C-3PO', 'Female', '101' ],
+            [ 'Kenny Baker', 'R2-D2', 'Female', '150' ]
+        ],
+    'Plot & Description' : 'Luke Skywalker leaves his home planet, 
+                            teams up with other rebels, and tries to 
+                            save Princess Leia from the evil clutches 
+                            of Darth Vader.'
+};</pre> 
+            </td>
+            <td class="glimpse-scenario glimpse-scenario-eight glimpse-panel"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Scenario 9 (Pass):</h2>
+                When a json child object is encountered, it is rendered as a<br /> 
+                simple key value pair table
+            </td>
+        </tr>
+        <tr>
+            <td class="glimpse-scenario-data">
+<pre>var scenarioNineData = {
+    'Movie' : 'Star Wars',
+    'Genera/Theme' : 'Science Fiction',
+    'Actors/Cast' : { 
+            'Mark Hamill' : 'Luke Anakin Skywalker',
+            'James Earl Jones' : 'Darth Vader',
+            'Harrison Ford' : 'Han Solo' 
+        },
+    'Plot & Description' : 'Luke Skywalker leaves his home planet, 
+                            teams up with other rebels, and tries to 
+                            save Princess Leia from the evil clutches 
+                            of Darth Vader.'
+};</pre> 
+            </td>
+            <td class="glimpse-scenario glimpse-scenario-nine glimpse-panel"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Scenario 10 (Pass):</h2>
+                When a json child object is encountered table that exceeds the max<br />
+                of child items that can be rendered, it is rendered in an abbreviated form
+            </td>
+        </tr>
+        <tr>
+            <td class="glimpse-scenario-data">
+<pre>var scenarioTenData = {
+    'Movie' : 'Star Wars',
+    'Genera/Theme' : 'Science Fiction',
+    'Actors/Cast' : { 
+            'Mark Hamill' : 'Luke Anakin Skywalker',
+            'James Earl Jones' : 'Darth Vader',
+            'Harrison Ford' : 'Han Solo',
+            'Carrie Fisher' : 'Princess Leia Organa',
+            'Peter Cushing' : 'Grand Moff Tarkin',
+            'Alec Guinness' : 'Ben Obi-Wan Kenobi',
+            'Anthony Daniels' : 'C-3PO',
+            'Kenny Baker' : 'R2-D2'
+        },
+    'Plot & Description' : 'Luke Skywalker leaves his home planet, 
+                            teams up with other rebels, and tries to 
+                            save Princess Leia from the evil clutches 
+                            of Darth Vader.'
+};</pre> 
+            </td>
+            <td class="glimpse-scenario glimpse-scenario-ten glimpse-panel"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Scenario 11 (FAIL):</h2>
+                
+            </td>
+        </tr>
+        <tr>
+            <td class="glimpse-scenario-data">
+<pre>var scenarioThreeData = {
+    'Movie' : 'Star Wars',
+    'Genera/Theme' : 'Science Fiction',
+    'Actors/Cast' : [
+            [ 'Actor', 'Character', 'Gender', 'Age' ],
+            [ 'Mark Hamill', 'Luke Anakin Skywalker', 'Male', '21' ],
+            [ 'James Earl Jones', 'Darth Vader', 'Male', '45' ]
+        ],
+    'Plot & Description' : 'Luke Skywalker leaves his home planet, 
+                            teams up with other rebels, and tries to 
+                            save Princess Leia from the evil clutches 
+                            of Darth Vader.'
+};</pre> 
+            </td>
+            <td class="glimpse-scenario glimpse-scenario-eleven glimpse-panel"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Scenario 12 (Pass):</h2> 
+            </td>
+        </tr>
+        <tr>
+            <td class="glimpse-scenario-data">
+<pre>var scenarioThreeData = {
+    'Movie' : 'Star Wars',
+    'Genera/Theme' : 'Science Fiction',
+    'Actors/Cast' : [
+            [ 'Actor', 'Character', 'Gender', 'Age' ],
+            [ 'Mark Hamill', 'Luke Anakin Skywalker', 'Male', '21' ],
+            [ 'James Earl Jones', 'Darth Vader', 'Male', '45' ],
+            [ 'Harrison Ford', 'Han Solo', 'Male', '25' ],
+            [ 'Carrie Fisher', 'Princess Leia Organa', 'Female', '21' ],
+            [ 'Peter Cushing', 'Grand Moff Tarkin', 'Female', '69' ],
+            [ 'Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70' ],
+            [ 'Anthony Daniels', 'C-3PO', 'Female', '101' ],
+            [ 'Kenny Baker', 'R2-D2', 'Female', '150' ]
+        ],
+    'Plot & Description' : 'Luke Skywalker leaves his home planet, 
+                            teams up with other rebels, and tries to 
+                            save Princess Leia from the evil clutches 
+                            of Darth Vader.'
+};</pre> 
+            </td>
+            <td class="glimpse-scenario glimpse-scenario-twelve glimpse-panel"></td>
+        </tr>
+    </table>
+     
+<style>
+    .glimpse-open { position:fixed; right:0; bottom:0; height:27px; width:28px; border-left: 1px solid #ACA899; border-top: 1px solid #ACA899; background:#EEE; background:-moz-linear-gradient(top, #FFFFFF 0%, #EEEEEE 4%, #F3F5F7 8%, #E9E8DD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(4%,#EEEEEE), color-stop(8%,#F3F5F7), color-stop(100%,#E9E8DD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFFFFF', endColorstr='#E9E8DD',GradientType=0 ); }
+    .glimpse-icon { background: url(/Scripts/sprite.png) 0 -135px; height:20px; width:20px; margin: 3px 4px 0; }
+    .glimpse-holder { display:none; height:0; position:fixed; bottom:0; left:0; width:100%; background-color:#fff; font-family:Lucida Grande,Tahoma,sans-serif; font-size:11px; }
+    .glimpse-bar { height:27px; border-top:1px solid #ACA899; background:#FFFFFF; background:-moz-linear-gradient(top, #FFFFFF 0%, #EEEEEE 4%, #F3F5F7 8%, #E9E8DD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(4%,#EEEEEE), color-stop(8%,#F3F5F7), color-stop(100%,#E9E8DD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFFFFF', endColorstr='#E9E8DD',GradientType=0 ); }
+    .glimpse-buttons { float:right; height:17px; width:16px; padding:6px; }
+    .glimpse-close { background:url(/Scripts/sprite.png) -1px -120px no-repeat; height:14px; width:14px; display:block; }
+    .glimpse-close:hover { background:url(/Scripts/sprite.png) -17px -120px no-repeat; }
+    .glimpse-tabs { height:24px; font-weight:bold; border-bottom:1px solid #ACA899; border-top:1px solid #CDCABB; background:#B9B7AF; background:-moz-linear-gradient(top, #B9B7AF 0%, #DAD8C8 4%, #D7D4C5 10%, #E9E6D5 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#B9B7AF), color-stop(4%,#DAD8C8), color-stop(10%,#D7D4C5), color-stop(100%,#E9E6D5)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#B9B7AF', endColorstr='#E9E6D5',GradientType=0 );  }
+    .glimpse-tabs ul { margin:4px 0px 0 0; padding:0px; }
+    .glimpse-tabs li { display:inline; margin:0 2px 3px 2px; height:22px; padding:4px 9px 3px; color:#565656; }
+    .glimpse-tabs li.active { padding:4px 8px 3px; color:#000; border-left:1px solid #A4A4A4; border-bottom:1px solid #A4A4A4; border-right:1px solid #A4A4A4; background:#F2F1EC; background:-moz-linear-gradient(top, #F2F1EC 0%, #F2F1EC 3%, #EFEEE9 7%, #E8E7E1 51%, #F7F6F1 92%, #F1F0EB 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#F2F1EC), color-stop(3%,#F2F1EC), color-stop(7%,#EFEEE9), color-stop(51%,#E8E7E1), color-stop(92%,#F7F6F1), color-stop(100%,#F1F0EB)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#F2F1EC', endColorstr='#F1F0EB',GradientType=0 ); }
+    .glimpse-tabs li.hover { padding:4px 8px 3px; border-left:1px solid #BFBDB1; border-bottom:1px solid #BFBDB1; border-right:1px solid #BFBDB1; background:#BFBDB1; background:-moz-linear-gradient(top, #BFBDB1 0%, #DAD9CB 4%, #D8D5C9 8%, #E8E7E1 51%, #F0EEE4 92%, #EDEBE1 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#BFBDB1), color-stop(4%,#DAD9CB), color-stop(8%,#D8D5C9), color-stop(51%,#E8E7E1), color-stop(92%,#F0EEE4), color-stop(100%,#EDEBE1)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#BFBDB1', endColorstr='#EDEBE1',GradientType=0 ); }
+    .glimpse-panel-holder {}
+    .glimpse-panel { display:none; overflow:auto; }
+    .glimpse-panel table { border-collapse:collapse; border-spacing:0; }
+    .glimpse-panel table td, .glimpse-panel table th { padding:3px 4px; text-align:left; vertical-align:top; }
+    .glimpse-panel-holder .active { display:block; }
+    .glimpse-resizer { height:4px; cursor:n-resize; width:100%; position:absolute; top:-1px; }
+    .glimpse-preview-object { color:#006400; } 
+    .glimpse-preview-string { color:#006400 !important; font-weight:normal !important; } 
+    .glimpse-preview-string span { padding-left:1px; }
+    .glimpse-preview-object span { font-weight:bold; color:#444; } 
+    .glimpse-preview-object span.start { margin-right:5px; } 
+    .glimpse-preview-object span.end { margin-left:5px; }
+    .glimpse-preview-object span.rspace { margin-right:4px; }
+    .glimpse-preview-object span.mspace { margin:0 4px; }
+    .glimpse-preview-object span.small { font-size:0.95em; } 
+    .glimpse-expand { height:11px; width:11px; display: inline-block; margin:0px 3px; background-image:url(/Scripts/expandsprite.gif); background-repeat:no-repeat; background-position:0 0; }
+    .glimpse-collapse { background-position:0 -11px; }
+    .glimpse-preview-show { display:none; font-weight:normal !important; }
+</style>
+<style>
+    h1, h2 { margin:0; padding:0; }
+    .glimpse-scenario { font-family:Lucida Grande,Tahoma,sans-serif; font-size:11px; } 
+</style>
+
+    <script src="/Scripts/jquery-1.4.4.js" type="text/javascript"></script> 
+
+<script>
+$(document).ready(function() {
+    var scenarioOneData = {
+            'Movie' : 'Star Wars',
+            'Genera/Theme' : 'Science Fiction',
+            'GlimpseOn' : 'True',
+            'Plot & Description' : 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.'
+        };
+    $('.glimpse-scenario-one').show().html($.glimpseProcessor.build(scenarioOneData, 0));
+
+    
+    var scenarioTwoData = [
+            [ 'Actor', 'Character', 'Gender', 'Age' ],
+            [ 'Mark Hamill', 'Luke Anakin Skywalker', 'Male', '21' ],
+            [ 'James Earl Jones', 'Darth Vader', 'Male', '45' ],
+            [ 'Harrison Ford', 'Han Solo', 'Male', '25' ],
+            [ 'Carrie Fisher', 'Princess Leia Organa', 'Female', '21' ],
+            [ 'Peter Cushing', 'Grand Moff Tarkin', 'Female', '69' ],
+            [ 'Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70' ],
+            [ 'Anthony Daniels', 'C-3PO', 'Female', '101' ],
+            [ 'Kenny Baker', 'R2-D2', 'Female', '150' ]
+        ]; 
+    $('.glimpse-scenario-two').show().html($.glimpseProcessor.build(scenarioTwoData, 0));
+    
+    var scenarioThreeData = {
+            'Movie' : 'Star Wars',
+            'Genera/Theme' : 'Science Fiction',
+            'Actors/Cast' : [
+                   [ 'Actor', 'Character', 'Gender', 'Age' ],
+                   [ 'Mark Hamill', 'Luke Anakin Skywalker', 'Male', '21' ],
+                   [ 'James Earl Jones', 'Darth Vader', 'Male', '45' ],
+                ],
+            'Plot & Description' : 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.' 
+        };
+    $('.glimpse-scenario-three').show().html($.glimpseProcessor.build(scenarioThreeData, 0));
+    
+    var scenarioFourData = {
+            'Movie' : 'Star Wars',
+            'Genera/Theme' : 'Science Fiction',
+            'Actors/Cast' : [
+                   [ 'Actor', 'Character', 'Gender', 'Age' ],
+                   [ 'Mark Hamill', 'Luke Anakin Skywalker', 'Male', '21' ],
+                   [ 'James Earl Jones', 'Darth Vader', 'Male', '45' ],
+                   [ 'Harrison Ford', 'Han Solo', 'Male', '25' ],
+                   [ 'Carrie Fisher', 'Princess Leia Organa', 'Female', '21' ],
+                   [ 'Peter Cushing', 'Grand Moff Tarkin', 'Female', '69' ],
+                   [ 'Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70' ],
+                   [ 'Anthony Daniels', 'C-3PO', 'Female', '101' ],
+                   [ 'Kenny Baker', 'R2-D2', 'Female', '150' ]
+                ],
+            'Plot & Description' : 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.' 
+        };
+    $('.glimpse-scenario-four').show().html($.glimpseProcessor.build(scenarioFourData, 0));
+    
+    var scenarioFiveData = {
+            'Movie' : 'Star Wars',
+            'Genera/Theme' : 'Science Fiction',
+            'Actors/Cast' : { 
+                    'Mark Hamill' : 'Luke Anakin Skywalker',
+                    'James Earl Jones' : 'Darth Vader',
+                    'Harrison Ford' : 'Han Solo' 
+                },
+            'Plot & Description' : 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.' 
+        };
+    $('.glimpse-scenario-five').show().html($.glimpseProcessor.build(scenarioFiveData, 0));
+    
+    var scenarioSixData = {
+            'Movie' : 'Star Wars',
+            'Genera/Theme' : 'Science Fiction',
+            'Actors/Cast' : { 
+                    'Mark Hamill' : 'Luke Anakin Skywalker',
+                    'James Earl Jones' : 'Darth Vader',
+                    'Harrison Ford' : 'Han Solo',
+                    'Carrie Fisher' : 'Princess Leia Organa',
+                    'Peter Cushing' : 'Grand Moff Tarkin',
+                    'Alec Guinness' : 'Ben Obi-Wan Kenobi',
+                    'Anthony Daniels' : 'C-3PO',
+                    'Kenny Baker' : 'R2-D2'
+                },
+            'Plot & Description' : 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.' 
+        };
+         
+    $('.glimpse-scenario-six').show().html($.glimpseProcessor.build(scenarioSixData, 0));
+     
+    var scenarioSevenData = [
+            [ 'Type', 'Name', 'Other' ],
+            [ 'Movie', 'Star Wars', 'Episode IV' ],
+            [ 'Genera/Theme', 'Science Fiction', 'Action' ],
+            [ 'Actors/Cast', [
+                   [ 'Actor', 'Character', 'Gender', 'Age' ],
+                   [ 'Mark Hamill', 'Luke Anakin Skywalker', 'Male', '21' ],
+                   [ 'James Earl Jones', 'Darth Vader', 'Male', '45' ],
+                ], 'Cast details pending' ],
+            [ 'Plot & Description', 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.',  ' Best movie of all time' ]
+        ];
+         
+    $('.glimpse-scenario-seven').show().html($.glimpseProcessor.build(scenarioSevenData, 0));
+     
+    var scenarioEightData = [
+            [ 'Type', 'Name', 'Other' ],
+            [ 'Movie', 'Star Wars', 'Episode IV' ],
+            [ 'Genera/Theme', 'Science Fiction', 'Action' ],
+            [ 'Actors/Cast', [
+                   [ 'Actor', 'Character', 'Gender', 'Age' ],
+                   [ 'Mark Hamill', 'Luke Anakin Skywalker', 'Male', '21' ],
+                   [ 'James Earl Jones', 'Darth Vader', 'Male', '45' ],
+                   [ 'Harrison Ford', 'Han Solo', 'Male', '25' ],
+                   [ 'Carrie Fisher', 'Princess Leia Organa', 'Female', '21' ],
+                   [ 'Peter Cushing', 'Grand Moff Tarkin', 'Female', '69' ],
+                   [ 'Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70' ],
+                   [ 'Anthony Daniels', 'C-3PO', 'Female', '101' ],
+                   [ 'Kenny Baker', 'R2-D2', 'Female', '150' ]
+                ], 'Cast details pending' ],
+            [ 'Plot & Description', 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.',  ' Best movie of all time' ]
+        ];
+         
+    $('.glimpse-scenario-eight').show().html($.glimpseProcessor.build(scenarioEightData, 0));
+     
+    var scenarioNineData = [
+            [ 'Type', 'Name', 'Other' ],
+            [ 'Movie', 'Star Wars', 'Episode IV' ],
+            [ 'Genera/Theme', 'Science Fiction', 'Action' ],
+            [ 'Actors/Cast', { 
+                    'Mark Hamill' : 'Luke Anakin Skywalker',
+                    'James Earl Jones' : 'Darth Vader',
+                    'Harrison Ford' : 'Han Solo' 
+                }, 'Cast details pending' ],
+            [ 'Plot & Description', 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.',  ' Best movie of all time' ]
+        ];
+         
+    $('.glimpse-scenario-nine').show().html($.glimpseProcessor.build(scenarioNineData, 0));
+    
+    var scenarioTenData = [
+            [ 'Type', 'Name', 'Other' ],
+            [ 'Movie', 'Star Wars', 'Episode IV' ],
+            [ 'Genera/Theme', 'Science Fiction', 'Action' ],
+            [ 'Actors/Cast', { 
+                    'Mark Hamill' : 'Luke Anakin Skywalker',
+                    'James Earl Jones' : 'Darth Vader',
+                    'Harrison Ford' : 'Han Solo',
+                    'Carrie Fisher' : 'Princess Leia Organa',
+                    'Peter Cushing' : 'Grand Moff Tarkin',
+                    'Alec Guinness' : 'Ben Obi-Wan Kenobi',
+                    'Anthony Daniels' : 'C-3PO',
+                    'Kenny Baker' : 'R2-D2' 
+                }, 'Cast details pending' ],
+            [ 'Plot & Description', 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.',  ' Best movie of all time' ]
+        ];
+         
+    $('.glimpse-scenario-ten').show().html($.glimpseProcessor.build(scenarioTenData, 0));
+
+
+
+
+    var scenarioElevenData = {
+            'Movie' : 'Star Wars',
+            'Genera/Theme' : 'Science Fiction',
+            'Actors/Cast' : [
+                   [ 'Actor', 'Character', 'Gender', 'Age' ],
+                   [ 'Mark Hamill', { 'Frist Name' : 'Luke Anakin Skywalker' }, 'Male', '21' ],
+                   [ 'James Earl Jones', 'Darth Vader', [ [ 'Height', 'Weight' ], [ '213', '433' ] ], 'Male' ],
+                ],
+            'Plot & Description' : 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.' 
+        };
+    $('.glimpse-scenario-eleven').show().html($.glimpseProcessor.build(scenarioElevenData, 0));
+    
+    var scenarioTwelveData = {
+            'Movie' : 'Star Wars',
+            'Genera/Theme' : 'Science Fiction',
+            'Actors/Cast' : [
+                   [ 'Actor', 'Character', 'Gender', 'Age' ],
+                   [ 'Mark Hamill', { 'Frist Name' : 'Luke Anakin Skywalker' }, 'Male', '21' ],
+                   [ 'James Earl Jones', 'Darth Vader', [ [ 'Height', 'Weight' ], [ '213', '433' ] ], 'Male' ],
+                   [ 'Harrison Ford', 'Han Solo', 'Male', '25' ],
+                   [ 'Carrie Fisher', 'Princess Leia Organa', 'Female', '21' ],
+                   [ 'Peter Cushing', 'Grand Moff Tarkin', 'Female', '69' ],
+                   [ 'Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70' ],
+                   [ 'Anthony Daniels', 'C-3PO', 'Female', '101' ],
+                   [ 'Kenny Baker', 'R2-D2', 'Female', '150' ]
+                ],
+            'Plot & Description' : 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.' 
+        };
+    $('.glimpse-scenario-twelve').show().html($.glimpseProcessor.build(scenarioTwelveData, 0));
+    
+});
+</script>
+
+<script>
+var glimpse;
+if (window.jQuery) { (function ($) {
+ 
+    $.glimpse = {}; 
+    $.glimpseProcessor = {};
+    $.glimpseResize = {};
+
+	$.extend($.fn, {
+        resizer : function() {
+		    return this.each(function() { 
+                var gr = $.glimpseResize;
+		        gr.options.anchor = $(this).bind("mousedown", {el: $(this).parent()}, gr.startDrag); 
+		    });
+	    } 
+    });
+
+	$.extend({ 
+        htmlEncode : function(value) { 
+            return value ? $('<div/>').text(value).html() : ''; 
+        },
+        htmlDecode : function(value) { 
+            return value ? $('<div/>').html(value).text() : ''; 
+        },
+        lengthJson : function(data) {
+            var count = 0;
+            if ($.isPlainObject(data))
+                $.each(data, function(k, v) { count++; });
+            return count;
+        }
+    });
+     
+    $.extend($.glimpseResize, {
+        options : {
+            anchor : null, 
+            staticOffset : null, 
+            lastMousePos : 0,
+            min : 50, 
+            endDragCallback : function(height) {} },
+        startDrag : function(e) { 
+            var gr = $.glimpseResize, o = gr.options; 
+		    o.anchor = $(e.data.el);
+	        o.lastMousePos = gr.mousePosition(e).y; 
+	        o.staticOffset = o.anchor.height() + o.lastMousePos;
+	        o.anchor.css('opacity', 0.50);
+	        $(document).mousemove(gr.performDrag).mouseup(gr.endDrag);
+	        return false;
+        },
+	    performDrag : function(e) {
+            var gr = $.glimpseResize, o = gr.options; 
+	        var mousePos = gr.mousePosition(e).y;
+	        var offsetMousePos = o.staticOffset - mousePos;
+	        if (o.lastMousePos >= mousePos) {
+		        offsetMousePos += 4;
+	        }
+	        offsetMousePos = Math.max(o.min, offsetMousePos);
+	        o.anchor.height(offsetMousePos + 'px');
+	        o.lastMousePos = mousePos;
+	        if (offsetMousePos < o.min) {
+		        gr.endDrag(e);
+	        }
+	        return false;
+        },
+        endDrag : function(e) {
+            var gr = $.glimpseResize, o = gr.options; 
+	        $(document).unbind('mousemove', gr.performDrag).unbind('mouseup', gr.endDrag);
+	        o.anchor.css('opacity', 1); 
+	        o.anchor = null;
+	        o.staticOffset = null;
+	        o.lastMousePos = 0;
+            o.endDragCallback();
+        },
+        mousePosition : function(e) {
+            var d = document.documentElement;
+	        return { x: e.clientX + d.scrollLeft, y: e.clientY + d.scrollTop };
+        }
+    });
+    
+    $.extend($.glimpseProcessor, { 
+        layout : function(g, options) {
+            var _this = this, tabStrip = $('.glimpse-tabs ul'), panelHolder = $('.glimpse-panel-holder');
+             
+            //Build Dynamic HTML
+            for (var key in options.data) {
+                _this.addTab(tabStrip, key);
+                _this.addTabBody(panelHolder, _this.build(options.data[key], 0)); 
+            }
+
+            //Set Inital State
+            $('li:first', tabStrip).addClass('active');
+            $('.glimpse-panel:first', panelHolder).addClass('active');
+        },
+        addTab : function(container, name) {
+            container.append('<li>' + name + '</li>');
+        },
+        addTabBody : function(container, content) {
+            container.append('<div class="glimpse-panel">' + content + '</div>');
+        },
+        build : function(data, level) {
+            var _this = this;
+            if ($.isArray(data))
+                return _this.buildCustomTable(data, level);
+            if ($.isPlainObject(data))
+                return _this.buildKeyValueTable(data, level);
+            return _this.buildString(data, level);
+        },
+        buildKeyValueTable : function(data, level) {
+            var _this = this, limit = 2;
+            if ((level > 0 && $.lengthJson(data) > (limit + 1)) || level > 1) 
+                return _this.buildKeyValuePreview(data, limit); 
+                
+            var html = '<table>'
+           // if (level == 0)  
+                html += '<thead><tr><th>Key</th><th>Value</th></tr></thead>';   
+            for (var key in data)
+                html += '<tr><th>' + $.htmlEncode(key) + '</th><td> '+ _this.build(data[key], level + 1) + '</td></tr>';
+            html += '</table>';
+            return html; 
+        },
+        buildCustomTable : function(data, level) {
+            var _this = this, limit = 2;
+            if ((level > 0 && data.length > (limit + 1)) || level > 1)
+                return _this.buildCustomPreview(data, limit);
+
+            var html = '<table><thead><tr>';
+            for (var x = 0; x < data[0].length; x++)
+                html += '<th>' + $.htmlEncode(data[0][x]) + '</th>';
+            html += '</tr></thead>';
+            for (var i = 1; i < data.length; i++) {
+                html += '<tr' + (data[i].length > data[0].length ? ' class="' + data[i][data[i].length - 1] + '"' : '') + '>';
+                for (var x = 0; x < data[0].length; x++)
+                    html += '<td>' + _this.build(data[i][x], level + 1) + '</td>';
+                html += '</tr>';
+            }
+            html += '</table>';
+            return html; 
+        },
+        buildString : function(data, level) {
+            var _this = this, characterMax = 50; 
+            if (data && data.length > characterMax) {
+                return _this.buildStringPreview(data, level);}
+            return $.htmlEncode(data);
+        },
+        buildKeyValuePreview : function(data, level) {  
+            var _this = this, rowMax = 2, i = 0, html = '<span class="glimpse-expand"></span><span class="glimpse-preview-object"><span class="start">{</span>'; 
+            for (var key in data) {
+                if (rowMax == i++) { 
+                    html += '<span class="small">length=' + $.lengthJson(data) + '</span>'; 
+                    break 
+                };   
+                html += '<span>\'</span>' + _this.buildStringPreview(key, level + 1) + '<span>\'</span><span class="mspace">:</span> <span>\'</span>' + _this.buildStringPreview(data[key], level + 1) + '<span>\'</span><span class="rspace">,</span>'; 
+            }
+            html += '<span class="end">}</span></span><span class="glimpse-preview-show">' + _this.buildKeyValueTable(data, 0) + '</span>';
+            return html;
+        },
+        buildCustomPreview : function(data, level) { 
+            var _this = this, rowMax = 2, columnMax = 3, columnLimit = ((data[0].length > columnMax) ? columnMax : data[0].length), rowLimit = ((rowMax < data.length) ? (rowMax + 1) : data.length), html = '<span class="glimpse-expand"></span><span class="glimpse-preview-object"><span class="start">[</span>';
+            
+            for (var i = 1; i < rowLimit; i++) {
+                var spacer = '';
+                html += '<span class="start">[</span>';
+                for (var x = 0; x < columnLimit; x++) {
+                    html += spacer + '<span>\'</span>' + _this.buildStringPreview(data[i][x], level + 1) + '<span>\'</span>'; 
+                    spacer = '<span class="rspace">,</span>';
+                }
+                    if (x < data[0].length)
+                        html += spacer + '<span>...</span>'
+                html += '<span class="end">] , </span>';
+                if (i == rowMax) {  
+                    html += '<span class="small">length=' + (data.length - 1) + '</span>' 
+                    break;
+                };   
+            }
+            html += '<span class="end">]</span></span><span class="glimpse-preview-show">' + _this.buildCustomTable(data, 0) + '</span>';
+            return html;
+        },
+        buildStringPreview : function(data, level) {
+            if ($.isArray(data))
+                return "[ ... ]";  
+            if ($.isPlainObject(data))
+                return "{ ... }";  
+                 
+            var characterMax = 50, content = $.htmlEncode($.trim(data ? (data.length > (characterMax + 3) ? data.substr(0, characterMax) : data) : ''));
+            if (data.length > (characterMax + 3)) 
+                content = '<span class="glimpse-expand"></span><span class="glimpse-preview-string" title="' + $.htmlEncode(data)  + '">' + content + '<span>...</span></span><span class="glimpse-preview-show">' + $.htmlEncode(data) + '</span>'; 
+            return content;
+        }
+    });
+
+    var _persistHeight = function(g, options) {
+        options.height = $('.glimpse-holder').height();
+    }
+    
+    $.extend($.glimpse, {
+        wireEvents : function(g, options) { 
+            //Open/Close Holder
+            $('.glimpse-open').live('click', function () {
+                $(this).hide();
+                $('.glimpse-holder').show().animate({ 'height': options.height }, 'fast'); 
+                $('.glimpse-spacer').height(options.height);
+            }); 
+            $('.glimpse-close').live('click', function () {
+                $('.glimpse-holder').animate({ 'height': '0' }, 'fast', function () { 
+                        $(this).hide(); 
+                        $('.glimpse-open').show(); 
+                    });
+                $('.glimpse-spacer').height('0');
+            });    
+             
+            //Tab Switching 
+            $('.glimpse-tabs li:not(.active)').live('mouseover mouseout', function () { 
+                var item = $(this);
+                if (event.type == 'mouseover') { item.addClass('hover'); } else { item.removeClass('hover'); }
+            }); 
+            $('.glimpse-tabs li').live('click', function () {
+                var item = $(this);
+                //Setup Tabs
+                $('.glimpse-tabs .active').removeClass('active').removeClass('hover');
+                item.addClass('active');
+                
+                //Setup Panels 
+                $('.glimpse-panel-holder .active').removeClass('active');
+                $('.glimpse-panel-holder .glimpse-panel:eq(' + $('.glimpse-tabs ul li').index(item) + ')').addClass('active');
+            });
+
+            //Resize
+            $('.glimpse-resizer').resizer(options.height); 
+
+            //Exspand/Collapse
+            $('.glimpse-expand').live('click', function() {
+                 
+                $(this).toggleClass('glimpse-collapse').next().toggle().next().toggle();  
+            });
+        },
+        wireCallback : function(g, options) {
+            //Remember height 
+            $.glimpseResize.options.endDragCallback = function() {
+                _persistHeight(g, options);  
+                $('.glimpse-spacer').height(options.height);
+            }
+        },
+        init : function(data) {
+            if (!data) return;
+            
+            var g = $.glimpse, options = g.defaults;
+            options.data = data;
+
+            $('body').append(options.html.plugin); 
+
+            g.wireEvents(g, options);
+            g.wireCallback(g, options);
+
+            $.glimpseProcessor.layout(g, options)
+
+            $('body').append('<style>' + options.css + '</style>');
+            $('body').append('<div class="glimpse-spacer"></div>');
+        },
+        defaults : { 
+            data : null,
+            html : { plugin : '<div class="glimpse-open"><div class="glimpse-icon"></div></div><div class="glimpse-holder"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-buttons"><a href="#" class="glimpse-close"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>' },
+            css : '',
+            height : 200
+        }
+    });
+      
+	$(document).ready(function() {
+		$.glimpse.init(glimpse);
+	});
+
+})(jQuery); }  
+</script>
+
+
+
+
+</body>
+</html>

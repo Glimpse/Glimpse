@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "source\Glimpse.Test\Glimpse.Test.csproj", "{1C2AE34B-E826-4510-92E9-28DE9B4AEB0C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Test", "source\Glimpse.Test\Glimpse.Test.csproj", "{1C2AE34B-E826-4510-92E9-28DE9B4AEB0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = ".Net", "source\Glimpse.Net\Glimpse.Net.csproj", "{21F99168-7D7B-49F2-A97C-5A983E0CA16F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Net", "source\Glimpse.Net\Glimpse.Net.csproj", "{21F99168-7D7B-49F2-A97C-5A983E0CA16F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Protocol", "source\Glimpse.Protocol\Glimpse.Protocol.csproj", "{A6AFEFD7-1602-4880-B001-E6E697BB8EC6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Protocol", "source\Glimpse.Protocol\Glimpse.Protocol.csproj", "{A6AFEFD7-1602-4880-B001-E6E697BB8EC6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
