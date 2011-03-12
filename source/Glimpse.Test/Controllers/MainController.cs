@@ -16,6 +16,7 @@ namespace Glimpse.Test.Controllers
             ViewBag.ViewBagData = "controller set viewbag";
             Session["SessionString"] = "controller set session";
             Session["SessionInt"] = 3;
+            Session["SessionBigInt"] = int.MaxValue;
             Session["SessionDate"] = DateTime.Now;
             Session["SessionComplex"] = new Dictionary<string, string> { { "prop1", "val1" }, { "prop2", "val2" }}; 
 

@@ -7,6 +7,7 @@ namespace Glimpse.Net.Configuration
         [ConfigurationProperty("on", DefaultValue = "true", IsRequired = false)]
         public bool On
         {
+            set { this["on"] = value; }
             get
             {
                 bool result;
@@ -18,6 +19,7 @@ namespace Glimpse.Net.Configuration
         [ConfigurationProperty("ipAddresses", IsRequired = true)] //TODO: Provide DefaultValue and make this not required
         public IpCollection IpAddresses
         {
+            set { this["ipAddresses"] = value; }
             get
             {
                 return this["ipAddresses"] as IpCollection;
@@ -27,6 +29,7 @@ namespace Glimpse.Net.Configuration
         [ConfigurationProperty("contentTypes", IsRequired = true)] //TODO: Provide DefaultValue and make this not required
         public ContentTypeCollection ContentTypes
         {
+            set { this["contentTypes"] = value; }
             get
             {
                 return this["contentTypes"] as ContentTypeCollection;
