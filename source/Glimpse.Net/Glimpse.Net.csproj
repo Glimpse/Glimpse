@@ -48,6 +48,8 @@
     <Compile Include="Converter\HandleErrorAttributeConverter.cs" />
     <Compile Include="Converter\OutputCacheAttributeConverter.cs" />
     <Compile Include="Converter\RouteValueDictionaryConverter.cs" />
+    <Compile Include="GlimpseTraceListener.cs" />
+    <Compile Include="Plugin\Asp\Trace.cs" />
     <Compile Include="Plugin\Configuration\Config.cs" />
     <Compile Include="GlimpseConstants.cs" />
     <Compile Include="DictionaryStringObjectPlugin.cs" />

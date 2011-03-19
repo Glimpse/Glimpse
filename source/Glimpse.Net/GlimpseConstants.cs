@@ -1,4 +1,6 @@
-﻿namespace Glimpse.Net
+﻿using System;
+
+namespace Glimpse.Net
 {
     public static class GlimpseConstants
     {
@@ -10,5 +12,6 @@
         public const string TempData = "Glimpse.TempData";
         public const string ViewData = "Glimpse.ViewData";
         public const string RequestContext = "Glimpse.RequestContext";
+        public const string TraceMessages = "Glimpse.TraceMessages";
     }
 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Configuration;
+using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -38,6 +40,12 @@ namespace Glimpse.Net
 
             //TODO: MEF Plugin point to do something once as setup
             GlobalFilters.Filters.Add(new GlimpseFilterAttribute(), int.MinValue);
+            
+            if (!Trace.Listeners.OfType<GlimpseTraceListener>().Any())
+            {
+                Trace.Listeners.Add(new GlimpseTraceListener(context.Context.Items));
+            }
+            //TODO: END MEF Plugin point to do something once as setup
 
             ComposePlugins();
 
@@ -111,6 +119,7 @@ namespace Glimpse.Net
             }
         }
 
+        //TODO : Refactor into "CleaningProvider"
         private string Clean(string json)
         {
             json = Regex.Replace(json, @"(?<=`[0-9]+\[.+)\](?=""| )", @">"); //Replace '>' for generics
@@ -162,14 +171,14 @@ namespace Glimpse.Net
         private void ComposePlugins()
         {
             var aggregateCatalog = new AggregateCatalog();
-            var typeCatlog = new TypeCatalog(typeof (Plugin.Mvc.Routes));
+            //var typeCatlog = new TypeCatalog(typeof (Plugin.Mvc.Routes));
             var assemblyCatalog = new AssemblyCatalog(Assembly.GetExecutingAssembly());
             var directoryCatalog = new DirectoryCatalog(@"\");
 
-            aggregateCatalog.Catalogs.Add(typeCatlog);
-            aggregateCatalog.Catalogs.Add(new TypeCatalog(typeof(Plugin.Mvc.Filters)));
-            //aggregateCatalog.Catalogs.Add(assemblyCatalog);
-            //aggregateCatalog.Catalogs.Add(directoryCatalog);
+            //aggregateCatalog.Catalogs.Add(typeCatlog);
+            //aggregateCatalog.Catalogs.Add(new TypeCatalog(typeof(Plugin.Mvc.Filters)));
+            aggregateCatalog.Catalogs.Add(assemblyCatalog);
+            aggregateCatalog.Catalogs.Add(directoryCatalog);
 
             Container = new CompositionContainer(aggregateCatalog);
             Container.ComposeParts(this);

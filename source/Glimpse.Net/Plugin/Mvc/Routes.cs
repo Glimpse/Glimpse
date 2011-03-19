@@ -26,10 +26,9 @@ namespace Glimpse.Net.Plugin.Mvc
                              };
 
             var routeData = requestContext.RouteData;
+            //TODO: Show these values somehow
             var routeValues = routeData.Values;
             var matchedRouteBase = routeData.Route;
-
-
 
             using (RouteTable.Routes.GetReadLock())
             {
@@ -54,33 +53,7 @@ namespace Glimpse.Net.Plugin.Mvc
                     }
                 }
             }
-
-            /*string matchedRouteUrl = "n/a";
-
-            string dataTokensRows = "";
-
-            if (!(matchedRouteBase is DebugRoute))
-            {
-                foreach (string key in routeValues.Keys)
-                {
-                    routeDataRows += string.Format("\t<tr><td>{0}</td><td>{1}&nbsp;</td></tr>", key, routeValues[key]);
-                }
-
-                foreach (string key in routeData.DataTokens.Keys)
-                {
-                    dataTokensRows += string.Format("\t<tr><td>{0}</td><td>{1}&nbsp;</td></tr>", key, routeData.DataTokens[key]);
-                }
-
-                Route matchedRoute = matchedRouteBase as Route;
-
-                if (matchedRoute != null)
-                    matchedRouteUrl = matchedRoute.Url;
-            }
-            else
-            {
-                matchedRouteUrl = "<strong class=\"false\">NO MATCH!</strong>";
-            }*/
-
+           
             return result;
         }
     }
