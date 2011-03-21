@@ -731,10 +731,10 @@ if (window.jQuery) { (function ($) {
 
 	$.extend({ 
         htmlEncode : function(value) { 
-            return value ? $('<div/>').text(value).html() : ''; 
+            return !(value == undefined || value == null) ? $('<div/>').text(value).html() : ''; 
         },
         htmlDecode : function(value) { 
-            return value ? $('<div/>').html(value).text() : ''; 
+            return !(value == undefined || value == null) ? $('<div/>').html(value).text() : ''; 
         },
         lengthJson : function(data) {
             var count = 0;
@@ -849,7 +849,7 @@ if (window.jQuery) { (function ($) {
         },
         buildString : function(data, level) { 
             var that = this, charMax = 50; 
-            if (data && data.length > charMax) {
+            if (!(data == undefined || data == null) && data.length > charMax) {
                 return that.buildStringPreview(data, level);}
             return $.htmlEncode(data);
         },
