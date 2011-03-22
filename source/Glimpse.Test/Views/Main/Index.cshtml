@@ -456,11 +456,17 @@
     .glimpse-panel-holder {}
     .glimpse-panel { display:none; overflow:auto; }
     .glimpse-panel table { border-spacing:0; width:100%; }
-    .glimpse-panel table td, .glimpse-panel table th { padding:3px 4px; text-align:left; vertical-align:top; }
+    .glimpse-panel table td, .glimpse-panel table th { padding:3px 4px; text-align:left; vertical-align:top; } 
     .glimpse-panel .glimpse-row-header-0 { height:19px; border-bottom:1px solid #9C9C9C; background:#C6C6C6; background:-moz-linear-gradient(top, #DEDEDE 0%, #BDBDBD 80%, #BBB 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#DEDEDE), color-stop(80%,#BDBDBD), color-stop(100%,#BBB)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#DEDEDE', endColorstr='#BBB',GradientType=0 ); }
     .glimpse-panel .glimpse-row-header-0 th { border-left:1px solid #D9D9D9; border-right:1px solid #9C9C9C; }
-    .glimpse-panel table table { border-collapse:collapse; }
+    .glimpse-panel table table { /*border-collapse:collapse;*/ border:1px solid #D9D9D9; } 
+    .glimpse-panel table table thead tr { height:17px; border-bottom:1px solid #9C9C9C; background:#C6C6C6; background:-moz-linear-gradient(top, #F1F1F1 0%, #DFDFDF 80%, #DDD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#F1F1F1), color-stop(80%,#DFDFDF), color-stop(100%,#DDD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#F1F1F1', endColorstr='#DDD',GradientType=0 ); }
+    .glimpse-panel table table thead tr th { border-left:1px solid #C6C6C6; border-right:1px solid #D9D9D9; padding:1px 4px 2px 4px; }
+    .glimpse-panel table table thead tr th:first-child { border-left:0px; }
+    .glimpse-panel table table thead tr th:last-child { border-right:0px; }
     /*.glimpse-panel table table thead th { border-left:1px solid #9C9C9C; border-right:1px solid #9C9C9C; border-bottom:1px solid #9C9C9C; }*/
+    .glimpse-panel tbody tr.even { background:#F4F4F4; }
+    .glimpse-panel tbody tr.odd { background:#F9F9F9; }
     .glimpse-panel table table tbody th { font-weight:normal; font-style:italic; }
     .glimpse-panel table table thead th { font-weight:bold; font-style:normal; }
     .glimpse-panel-holder .active { display:block; }
@@ -811,21 +817,25 @@ if (window.jQuery) { (function ($) {
             container.append('<div class="glimpse-panel">' + content + '</div>');
         },
         build : function(data, level) { 
-            var that = this;
+            var that = this, result = '';
+
             if ($.isArray(data))
-                return that.buildCustomTable(data, level);
-            if ($.isPlainObject(data))
-                return that.buildKeyValueTable(data, level);
-            return that.buildString(data, level);
+                result = that.buildCustomTable(data, level);
+            else if ($.isPlainObject(data))
+                result = that.buildKeyValueTable(data, level);
+            else 
+                result = that.buildString(data, level);
+                 
+            return result;
         },
         buildKeyValueTable : function(data, level, forceFull) { 
             var that = this, limit = 2;
             if (((level > 0 && $.lengthJson(data) > (limit + 1)) || level > 1) && !forceFull) 
                 return that.buildKeyValuePreview(data, limit); 
                 
-            var html = '<table><thead><tr class="glimpse-row-header-' + level + '"><th>Key</th><th>Value</th></tr></thead>';   
+            var i = 1, html = '<table><thead><tr class="glimpse-row-header-' + level + '"><th>Key</th><th>Value</th></tr></thead>';   
             for (var key in data)
-                html += '<tr><th width="30%">' + $.htmlEncode(key) + '</th><td width="70%"> '+ that.build(data[key], level + 1) + '</td></tr>';
+                html += '<tr class="' + (i++ % 2 ? 'odd' : 'even') + '"><th width="30%">' + $.htmlEncode(key) + '</th><td width="70%"> '+ that.build(data[key], level + 1) + '</td></tr>';
             html += '</table>';
             return html; 
         },
@@ -839,7 +849,7 @@ if (window.jQuery) { (function ($) {
                 html += '<th>' + $.htmlEncode(data[0][x]) + '</th>';
             html += '</tr></thead>';
             for (var i = 1; i < data.length; i++) {
-                html += '<tr' + (data[i].length > data[0].length ? ' class="' + data[i][data[i].length - 1] + '"' : '') + '>';
+                html += '<tr class="' + (i % 2 ? 'odd' : 'even') + (data[i].length > data[0].length ? ' ' + data[i][data[i].length - 1] : '') + '">';
                 for (var x = 0; x < data[0].length; x++)
                     html += '<td>' + that.build(data[i][x], level + 1) + '</td>';
                 html += '</tr>';
@@ -885,9 +895,7 @@ if (window.jQuery) { (function ($) {
             html += '<span class="end">]</span></span><span class="glimpse-preview-show">' + that.buildCustomTable(data, level, true) + '</span>';
             return html;
         },
-        buildStringPreview : function(data, level) {
-            console.log('BuildStringPreview - ' + level);
-
+        buildStringPreview : function(data, level) { 
             if ($.isArray(data))
                 return "[ ... ]";  
             if ($.isPlainObject(data))
@@ -997,7 +1005,8 @@ if (window.jQuery) { (function ($) {
     });
       
 	$(document).ready(function() {
-		$.glimpse.init(glimpse);
+		$.glimpse.init(glimpse); 
+
 	});
 
 })(jQuery); }  
