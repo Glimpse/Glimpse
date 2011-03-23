@@ -51,7 +51,8 @@ To start with the Glimpse Client Side Viewer is simply a light weight JavaScript
 
 Eventually, we would like to have actual browser plugins that provide richer functionality and experience, but the JavaScript version of the Glimpse Client Side Viewer is surprisingly well featured, intuitive and provides a high fidelity experience. We also hope to have a version for mobile ready soon which customizes the viewing/usage experience when using a mobile device.
 
+![Glimpse Client](/Doco/Glimpse.png "Glimpse Client")
 
 Protocol
---------
+-------- 
 Details coming soon.
