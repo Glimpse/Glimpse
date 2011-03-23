@@ -34,9 +34,9 @@ namespace Glimpse.Net.Plugin.Asp
 
 
 
-                    <% if (results.LoadedMvcCoreAssemblies.Length == 0) { %><p class="error">An ASP.NET MVC assembly has not been loaded into this application.</p><% } %>
+                    /*<% if (results.LoadedMvcCoreAssemblies.Length == 0) { %><p class="error">An ASP.NET MVC assembly has not been loaded into this application.</p><% } %>
         <% if (results.LoadedMvcCoreAssemblies.Length > 1) { %><p class="error">Multiple ASP.NET MVC assemblies have been loaded into this application.</p><% } %>
-        <% foreach (var info in results.LoadedMvcCoreAssemblies) { outputAssemblyInfo(info); } %>
+        <% foreach (var info in results.LoadedMvcCoreAssemblies) { outputAssemblyInfo(info); } %>*/
 
 
 
