@@ -49,7 +49,7 @@
     <Compile Include="Converter\OutputCacheAttributeConverter.cs" />
     <Compile Include="Converter\RouteValueDictionaryConverter.cs" />
     <Compile Include="GlimpseTraceListener.cs" />
-    <Compile Include="Plugin\Asp\Diagnostics.cs" />
+    <Compile Include="Plugin\Asp\Environment.cs" />
     <Compile Include="Plugin\Asp\Trace.cs" />
     <Compile Include="Plugin\Configuration\Config.cs" />
     <Compile Include="GlimpseConstants.cs" />
