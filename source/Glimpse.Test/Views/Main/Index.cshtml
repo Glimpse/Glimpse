@@ -484,21 +484,14 @@
     .glimpse-expand { height:11px; width:11px; display: inline-block; float:left; margin:0px 3px; background-image:url(/Scripts/expandsprite.gif); background-repeat:no-repeat; background-position:0 0; }
     .glimpse-collapse { background-position:0 -11px; }
     .glimpse-preview-show { display:none; font-weight:normal !important; }
-    .glimpse-panel tbody tr.Quiet { color:#AAA;  }
-    .glimpse-panel tbody tr.Selected { background-color:#FFFF99; color:#409B3B;  }
-    .glimpse-panel tbody tr.Info { background-color:#D4F2FC; color:#067CE5; }
-    .glimpse-panel tbody tr.Warn { background-color: #FFE596;
-background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, rgba(255, 255, 255, .2)), color-stop(.25, transparent), color-stop(.5, transparent), color-stop(.5, rgba(255, 255, 255, .2)), color-stop(.75, rgba(255, 255, 255, .2)), color-stop(.75, transparent), to(transparent));
-background-image: -moz-linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent);
-background-image: -o-linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent);
-background-image: linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent);
--webkit-background-size: 50px 50px;
--moz-background-size: 50px 50px;
-background-size: 50px 50px;
--moz-box-shadow: 1px 1px 8px gray;
--webkit-box-shadow: 1px 1px 8px gray; }
-    .glimpse-panel tbody tr.Error {  }
-    .glimpse-panel tbody tr.Fail { background-color:#FF8484; color:#490000; }
+    
+    .glimpse-panel tbody tr.Quiet { color:#AAA; }
+    .glimpse-panel tbody tr.Selected { background-color:#FFFF99; color:#409B3B; }
+    .glimpse-panel tbody tr.Info td:first-child, .glimpse-panel tbody tr.Warn td:first-child, .glimpse-panel tbody tr.Error td:first-child, .glimpse-panel tbody tr.Fail td:first-child { padding-left:18px; white-space:nowrap; }
+    .glimpse-panel tbody tr.Info { background-color:#C0E6F9; color:#067CE5; }
+    .glimpse-panel tbody tr.Warn { background-color: #FFE596; color:#FE850C; } /*background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, rgba(255, 255, 255, .2)), color-stop(.25, transparent), color-stop(.5, transparent), color-stop(.5, rgba(255, 255, 255, .2)), color-stop(.75, rgba(255, 255, 255, .2)), color-stop(.75, transparent), to(transparent)); background-image: -moz-linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent); background-image: -o-linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent); background-image: linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent); -webkit-background-size: 50px 50px; -moz-background-size: 50px 50px; background-size: 50px 50px;*/
+    .glimpse-panel tbody tr.Error { background-color:#FF8484; color:#490000; }
+    .glimpse-panel tbody tr.Fail { background-color:#B03631; font-weight:bold; }
 </style>
 <style>
     h1, h2 { margin:0; padding:0; }
