@@ -8,31 +8,31 @@ XHRSpy.prototype =
 {
     method: null,
     url: null,
+    href: null, 
     async: null, 
     xhrRequest: null, 
-    href: null, 
     loaded: false, 
-    logRow: null,  
+    success: false,
     status: null,
     statusText: null,
     responseText: null, 
     requestHeaders: null,
     responseHeaders: null, 
-    time: null,
-    sourceLink: null, // {href:"file.html", line: 22} 
-    getURL: function()
-    {
-        return this.href;
-    },
+    startTime: null,
+    duration: null, 
+    logRow: null,
     send: function() {
+        /*
         var row = Firebug.Console.log(spy, null, "spy", Firebug.Spy.XHR); 
         if (row)
         {
             setClass(row, "loading");
             spy.logRow = row;
         }
+        */
     },
     finish: function() { 
+        /*
         // update row information to avoid "ethernal spinning gif" bug in IE 
         row = row || spy.logRow;
                 
@@ -44,7 +44,9 @@ XHRSpy.prototype =
             $(row).addClass("error");
                 
         var item = $(".spyStatus", row).text(status); 
-        var item = $(".spyTime", row).text(time + "ms");
+        var item = $(".spyTime", row).text(duration + "ms");
+        */
+        console.log(this);
     }
 };
 
@@ -54,25 +56,23 @@ var XMLHttpRequestWrapper = function(activeXObject)
     // XMLHttpRequestWrapper internal variables
     
     var xhrRequest = (typeof activeXObject != "undefined" ? activeXObject : new _XMLHttpRequest()), 
-        spy = new XHRSpy(), that = this, reqType, reqUrl, reqStartTS, handler = new glimpseXhrHandler(spy);
+        spy = new XHRSpy(), that = this, startTime;
 
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
     // XMLHttpRequestWrapper internal methods
     
-    var finishXHR = function() 
-    {
-        var duration = new Date().getTime() - reqStartTS;
+    var finishXHR = function() {
+        var duration = new Date().getTime() - spy.startTime;
         var success = xhrRequest.status == 200;
         
+        //Pull out the header information
         var responseHeadersText = xhrRequest.getAllResponseHeaders();
         var responses = responseHeadersText ? responseHeadersText.split(/[\n\r]/) : [];
-        var reHeader = /^(\S+):\s*(.*)/;
-        
+        var reHeader = /^(\S+):\s*(.*)/; 
         for (var i = 0, l=responses.length; i<l; i++)
         {
             var text = responses[i];
             var match = text.match(reHeader);
-            
             if (match)
             {
                 spy.responseHeaders.push({
@@ -81,18 +81,20 @@ var XMLHttpRequestWrapper = function(activeXObject)
                 });
             }
         }
-       
+        
+        //Trigger the finish a bit latter
         setTimeout(function(){ spy.finish(); }, 200);
         
+        //Get the rest of the information
+        spy.success = success;
         spy.loaded = true;
         spy.status = xhrRequest.status;
         spy.statusText = xhrRequest.statusText;
         spy.responseText = xhrRequest.responseText; 
-        spy.time: duration;
+        spy.duration = duration;
     };
     
-    var handleStateChange = function()
-    {
+    var handleStateChange = function() {
         console.log("onreadystatechange");
         
         that.readyState = xhrRequest.readyState;
@@ -104,6 +106,7 @@ var XMLHttpRequestWrapper = function(activeXObject)
         }
         
         console.log(spy.url + ": " + xhrRequest.readyState);
+
         that.onreadystatechange();
     };
     
@@ -117,90 +120,67 @@ var XMLHttpRequestWrapper = function(activeXObject)
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
     // XMLHttpRequestWrapper public methods
     
-    this.open = function(method, url, async)
-    {
+    this.open = function(method, url, async) {
         console.log("xhrRequest open");
         
         if (spy.loaded)
-            spy = new XHRSpy();
-        
+            spy = new XHRSpy(); 
         spy.method = method;
         spy.url = url;
-        spy.async = async;
         spy.href = url;
+        spy.async = async;
         spy.xhrRequest = xhrRequest;
-        spy.urlParams = parseURLParamsArray(url);
+        //spy.urlParams = parseURLParamsArray(url);
         
-        if (!FBL.isIE && async)                                                 //TODO: Change over to jQuery
+        if (!$.browser.msie && async)                                                 //TODO: Change over to jQuery
             xhrRequest.onreadystatechange = handleStateChange;
         
         // xhr.open.apply not available in IE
         if (xhrRequest.open.apply)                                              //TODO: Need to see if this applies
             xhrRequest.open.apply(xhrRequest, arguments)
-        else
-            // TODO: xxxpedro user and pass parameters?
+        else 
             xhrRequest.open(method, url, async);
         
-        if (FBL.isIE && async)                                                 //TODO: Change over to jQuery
+        if ($.browser.msie && async)                                                 //TODO: Change over to jQuery
             xhrRequest.onreadystatechange = handleStateChange;
         
     };
-    
-    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-    
-    this.send = function(data)
-    {
-        //Firebug.Console.log("xhrRequest send");
+     
+    this.send = function(data) {
+        console.log("xhrRequest send");
         
-        spy.data = data;
+        spy.data = data; 
+        spy.startTime = new Date().getTime();
         
-        reqStartTS = new Date().getTime();
-        
-        try
-        {
+        try {
             xhrRequest.send(data);
         }
-        catch(e)
-        {
+        catch(e) {
             throw e;
         }
-        finally
-        {
+        finally {
             spy.send(); 
-            if (!spy.async)
-            {
+            if (!spy.async) {
                 that.readyState = xhrRequest.readyState; 
                 finishXHR();
             }
         }
     };
-    
-    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-    
-    this.setRequestHeader = function(header, value)
-    {
+     
+    this.setRequestHeader = function(header, value) {
         spy.requestHeaders.push({name: [header], value: [value]});
         xhrRequest.setRequestHeader(header, value);
     };
-    
-    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-    
-    this.getResponseHeader = function(header)
-    {
+     
+    this.getResponseHeader = function(header) {
         return xhrRequest.getResponseHeader(header);
     };
-    
-    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-    
-    this.getAllResponseHeaders = function()
-    {
+     
+    this.getAllResponseHeaders = function() {
         return xhrRequest.getAllResponseHeaders();
     };
-    
-    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-    
-    this.abort = function()
-    {
+     
+    this.abort = function() {
         return xhrRequest.abort();
     };
     
@@ -210,10 +190,8 @@ var XMLHttpRequestWrapper = function(activeXObject)
 // ************************************************************************************************
 // Reguster XMLHttpRequest Wrapper / ActiveXObject Wrapper (IE6 only)
 
-var _ActiveXObject;
-var isIE6 =  /msie 6/i.test(navigator.appVersion);
-
-if (isIE6) {
+var _ActiveXObject; 
+if ($.browser.msie && $.browser.version=="6.0") {
     window._ActiveXObject = window.ActiveXObject;
     
     var xhrObjects = " MSXML2.XMLHTTP.5.0 MSXML2.XMLHTTP.4.0 MSXML2.XMLHTTP.3.0 MSXML2.XMLHTTP Microsoft.XMLHTTP ";

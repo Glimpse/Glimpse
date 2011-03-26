@@ -11,7 +11,7 @@
 <body>
     <p>Page rendered at @DateTime.Now.ToLongTimeString().</p>
 
-    <p>For Config Info Go To <a href="/Glimpse/Config">Glimpse/Config</a></p>
+    <p>For Config info Go To <a href="/Glimpse/Config">Glimpse/Config</a></p>
 
     <hr />
 
@@ -25,12 +25,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="odd Quiet"><td>Quiet Style</td></tr>
-                <tr class="even Selected"><td>Selected Style</td></tr>
-                <tr class="odd Info"><td>Info Style</td></tr>
-                <tr class="even Warn"><td>Warn Style</td></tr>
-                <tr class="odd Error"><td>Error Style</td></tr>
-                <tr class="even Fail"><td>Fail Style</td></tr>
+                <tr class="odd quiet"><td>"quiet" Style</td></tr>
+                <tr class="even selected"><td>"selected" Style</td></tr>
+                <tr class="odd info"><td>"info" Style</td></tr>
+                <tr class="even warn"><td>"warn" Style</td></tr>
+                <tr class="odd error"><td>"error" Style</td></tr>
+                <tr class="even fail"><td>"fail" Style</td></tr>
             </tbody>
         </table>
     </div>
@@ -483,25 +483,25 @@
     .glimpse-expand { height:11px; width:11px; display: inline-block; float:left; margin:0px 3px; cursor:pointer; background-image:url(/Scripts/glimpse-sprite.png); background-repeat:no-repeat; background-position:-64px 0; }
     .glimpse-collapse { background-position:-64px -11px; }
     .glimpse-preview-show { display:none; font-weight:normal !important; }
-    
-    .glimpse-panel tbody tr.Quiet { color:#AAA; }
-    .glimpse-panel tbody tr.Selected { background-color:#FFFF99; color:#409B3B; }
-    .glimpse-panel tbody tr.Info .icon, .glimpse-panel tbody tr.Warn .icon, .glimpse-panel tbody tr.Error .icon, .glimpse-panel tbody tr.Fail .icon { width:14px; height:14px; background-image:url(/Scripts/glimpse-sprite.png); background-repeat:no-repeat; float:left; margin-right: 5px; } 
-    .glimpse-panel tbody tr.Info .icon { background-position: -22px -22px; }
-    .glimpse-panel tbody tr.Warn .icon { background-position:-36px -22px; }
-    .glimpse-panel tbody tr.Error .icon { background-position:-50px -22px; } 
-    .glimpse-panel tbody tr.Fail .icon { background-position:-64px -22px; }
-    .glimpse-panel tbody tr.Info { /* background-color:#C0E6F9; */ color:#067CE5; }
-    .glimpse-panel tbody tr.Warn { /* background-color: #FFE596; */ color:#FE850C; } /*background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, rgba(255, 255, 255, .2)), color-stop(.25, transparent), color-stop(.5, transparent), color-stop(.5, rgba(255, 255, 255, .2)), color-stop(.75, rgba(255, 255, 255, .2)), color-stop(.75, transparent), to(transparent)); background-image: -moz-linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent); background-image: -o-linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent); background-image: linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent); -webkit-background-size: 50px 50px; -moz-background-size: 50px 50px; background-size: 50px 50px;*/
-    .glimpse-panel tbody tr.Error { /* background-color:#FF8484; */ color:#490000; }
-    .glimpse-panel tbody tr.Fail { /* background-color:#B03631; */ color: #490000; font-weight:bold; }
+    .glimpse-panel tbody tr.quiet { color:#AAA; }
+    .glimpse-panel tbody tr.selected { background-color:#FFFF99; color:#409B3B; }
+    .glimpse-panel tbody tr.info .icon, .glimpse-panel tbody tr.warn .icon, .glimpse-panel tbody tr.error .icon, .glimpse-panel tbody tr.fail .icon { width:14px; height:14px; background-image:url(/Scripts/glimpse-sprite.png); background-repeat:no-repeat; float:left; margin-right: 5px; } 
+    .glimpse-panel tbody tr.info .icon { background-position: -22px -22px; }
+    .glimpse-panel tbody tr.warn .icon { background-position:-36px -22px; }
+    .glimpse-panel tbody tr.error .icon { background-position:-50px -22px; } 
+    .glimpse-panel tbody tr.fail .icon { background-position:-64px -22px; }
+    .glimpse-panel tbody tr.info { /* background-color:#C0E6F9; */ color:#067CE5; }
+    .glimpse-panel tbody tr.warn { /* background-color: #FFE596; */ color:#FE850C; } 
+    .glimpse-panel tbody tr.error { /* background-color:#FF8484; */ color:#490000; }
+    .glimpse-panel tbody tr.fail { /* background-color:#B03631; */ color: #490000; font-weight:bold; }
 </style>
 <style>
     h1, h2 { margin:0; padding:0; }
     .glimpse-scenario { font-family:Lucida Grande,Tahoma,sans-serif; font-size:11px; } 
 </style>
 
-    <script src="/Scripts/jquery-1.4.4.js" type="text/javascript"></script> 
+    <script src="/Scripts/jquery-1.4.4.js" type="text/javascript"></script>
+    <script src="/Scripts/XMLHttpRequestWrapper.js" type="text/javascript"></script> 
 
 <script>
 $(document).ready(function() {
@@ -516,11 +516,11 @@ $(document).ready(function() {
     var scenarioTwoData = [
             [ 'Actor', 'Character', 'Gender', 'Age' ],
             [ 'Mark Hamill', 'Luke Skywalker', 'Male', '21' ],
-            [ 'James Earl Jones', 'Darth Vader', 'Male', '45', 'Quiet' ],
+            [ 'James Earl Jones', 'Darth Vader', 'Male', '45', 'quiet' ],
             [ 'Harrison Ford', 'Han Solo', 'Male', '25' ],
             [ 'Carrie Fisher', 'Princess Leia Organa', 'Female', '21' ],
             [ 'Peter Cushing', 'Grand Moff Tarkin', 'Female', '69' ],
-            [ 'Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70', 'Selected' ],
+            [ 'Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70', 'selected' ],
             [ 'Anthony Daniels', 'C-3PO', 'Droid', '101' ],
             [ 'Kenny Baker', 'R2-D2', 'Droid', '150' ]
         ]; 
@@ -529,17 +529,17 @@ $(document).ready(function() {
     var scenarioTwoDataA = [
             [ 'Actor', 'Character', 'Gender', 'Age' ],
             [ 'Mark Hamill', 'Luke Skywalker', 'Male', '21' ],
-            [ 'James Earl Jones', 'Darth Vader', 'Male', '45', 'Info' ],
+            [ 'James Earl Jones', 'Darth Vader', 'Male', '45', 'info' ],
             [ 'Harrison Ford', 'Han Solo - Solo plays a central role in the various Star Wars set after Return of the Jedi. In The Courtship of Princess Leia (1995), he resigns his commission to pursue Leia, whom he eventually marries.', 'Male', '25' ],
             [ 'Carrie Fisher', 'Princess Leia Organa', 'Female', '21' ],
             [ 'Peter Cushing', 'Grand Moff Tarkin', 'Female', '69' ],
-            [ 'Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70', 'Warn' ],
+            [ 'Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70', 'warn' ],
             [ 'Anthony Daniels', 'C-3PO', 'Droid', '101' ],
             [ 'Kenny Baker', 'R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker. While Luke cleans the sand out of R2-D2\'s gears, he discovers a fragment of Leia\'s message, and removes the droid\'s restraining bolt to see more; once free of the bolt, R2 claims to have no knowledge of the message.', 'Droid', '150' ],
             [ 'Peter Mayhew', 'Chewbacca', 'Wookie', '45' ],
-            [ 'Phil Brown', 'Uncle Owen', 'Male', '32', 'Error' ],
+            [ 'Phil Brown', 'Uncle Owen', 'Male', '32', 'error' ],
             [ 'Shelagh Fraser', 'Aunt Beru', 'Female', '29' ],
-            [ 'Alex McCrindle', 'General Dodonna', 'Male', '43', 'Fail' ]
+            [ 'Alex McCrindle', 'General Dodonna', 'Male', '43', 'fail' ]
         ]; 
     $('.glimpse-scenario-two-a').show().html($.glimpseProcessor.build(scenarioTwoDataA, 0));
      
@@ -823,17 +823,29 @@ if (window.jQuery) { (function ($) {
             }
 
             //Adjust rows  
-            $('.Info td:first, .Warn td:first, .Error td:first, .Fail td:first', $('.glimpse-panel')).prepend('<div class="icon"></div>')
+            $('.info td:first-child, .warn td:first-child, tr.error td:first-child, .fail td:first-child', $('.glimpse-panel')).prepend('<div class="icon"></div>')
 
             //Set Inital State
             $('li:first', tabStrip).addClass('active');
             $('.glimpse-panel:first', panelHolder).addClass('active');
         },
         addTab : function(container, name) {
-            container.append('<li>' + name + '</li>');
+            container.prepend('<li>' + name + '</li>');
         },
         addTabBody : function(container, content) {
-            container.append('<div class="glimpse-panel">' + content + '</div>');
+            container.prepend('<div class="glimpse-panel">' + content + '</div>');
+        },
+        clearLayout : function(g, options) {
+            var that = this, tabStrip = $('.glimpse-tabs ul'), panelHolder = $('.glimpse-panel-holder');
+            
+            that.removeTabs(tabStrip);
+            that.removeTabBodies(panelHolder);
+        },
+        removeTabs : function(container) {
+            $('li:not(.permanent)', container).remove();
+        },
+        removeTabBodies : function(container) {
+            $('.glimpse-panel:not(.permanent)', container).remove();
         },
         build : function(data, level) { 
             var that = this, result = '';
@@ -960,7 +972,7 @@ if (window.jQuery) { (function ($) {
                 $(this).hide();
                 $('.glimpse-holder').show().animate({ 'height': options.height }, 'fast'); 
                 $('.glimpse-spacer').height(options.height); 
-                $('.glimpse-panel').height(options.height - 54); 
+                $('.glimpse-holder .glimpse-panel').height(options.height - 54); 
             }); 
             $('.glimpse-close').live('click', function () {
                 $('.glimpse-holder').animate({ 'height': '0' }, 'fast', function () { 
@@ -999,8 +1011,17 @@ if (window.jQuery) { (function ($) {
             $.glimpseResize.options.endDragCallback = function() {
                 _persistHeight(g, options);  
                 $('.glimpse-spacer').height(options.height);
-                $('.glimpse-panel').height(options.height - 54); 
+                $('.glimpse-holder .glimpse-panel').height(options.height - 54); 
             }
+        },
+        refresh : function(data) { 
+            if (!data) return;
+
+            var g = $.glimpse, options = g.defaults;
+            options.data = data;
+
+            $.glimpseProcessor.clearLayout(g, options);
+            $.glimpseProcessor.layout(g, options);
         },
         init : function(data) {
             if (!data) return;
@@ -1028,14 +1049,33 @@ if (window.jQuery) { (function ($) {
       
 	$(document).ready(function() {
 		$.glimpse.init(glimpse); 
+        
 
+//        setTimeout(function() { 
+//            $.glimpse.refresh(glimpse);
+//        }, 4000);
+         
 	});
 
 })(jQuery); }  
 </script>
 
-
-
+<script type="text/javascript">
+var xmlhttp;
+if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp=new XMLHttpRequest();
+}
+else {// code for IE6, IE5
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+}
+xmlhttp.onreadystatechange = function() {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+    document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+  }
+}
+xmlhttp.open("GET","/Glimpse/Config",true);
+xmlhttp.send();
+</script>
 
 </body>
 </html>
