@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Security;
 using System.Web;
 using System.Web.Compilation;
 using Glimpse.Protocol;
@@ -21,6 +20,9 @@ namespace Glimpse.Net.Plugin.Asp
 
         public object GetData(HttpApplication application)
         {
+            var result = application.Application[GlimpseConstants.PluginEnvironmentStore] as IDictionary<string, object>;
+            if (result != null) return result;
+
             var serverSoftware = application.Context.Request.ServerVariables["SERVER_SOFTWARE"];
             var processName = Process.GetCurrentProcess().MainModule.ModuleName;
 
@@ -44,18 +46,21 @@ namespace Glimpse.Net.Plugin.Asp
                 Add(assembly, to:appList);
             }
 
-            return new Dictionary<string, object>
+            result = new Dictionary<string, object>
                               {
                                   {"Machine Name", string.Format("{0} ({1} processors)", Enviro.MachineName, Enviro.ProcessorCount)},
                                   {"Booted", DateTime.Now.AddMilliseconds(Enviro.TickCount*-1)},
                                   {"Operating System", string.Format("{0} ({1} bit)", Enviro.OSVersion.VersionString, Enviro.Is64BitOperatingSystem ? "64" : "32")},
                                   {".NET Framework", string.Format(".NET {0} ({1} bit)", Enviro.Version, IntPtr.Size*8)},
                                   {"Web Server", !string.IsNullOrEmpty(serverSoftware) ? serverSoftware : processName.StartsWith("WebDev.WebServer", StringComparison.InvariantCultureIgnoreCase) ? "Visual Studio Web Development Server" : "Unknown"},
-                                  {"Integrated Pipeline", HttpRuntime.UsingIntegratedPipeline},
+                                  {"Integrated Pipeline", HttpRuntime.UsingIntegratedPipeline.ToString()},
                                   {"Worker Process", processName},
                                   {"Application Assemblies", appList},
                                   {"System Assemblies", sysList}
                               };
+
+            application.Application[GlimpseConstants.PluginEnvironmentStore] = result;
+            return result;
         }
 
         private void Add(Assembly assembly, List<object[]> to)
@@ -64,7 +69,7 @@ namespace Glimpse.Net.Plugin.Asp
             var version = assemblyName.Version.ToString();
             var culture = string.IsNullOrEmpty(assemblyName.CultureInfo.Name) ? "_neutral_":assemblyName.CultureInfo.Name;
 
-            to.Add(new object[] { assemblyName.Name, version, culture, assembly.GlobalAssemblyCache, assembly.IsFullyTrusted });
+            to.Add(new object[] { assemblyName.Name, version, culture, assembly.GlobalAssemblyCache.ToString(), assembly.IsFullyTrusted.ToString() });
         }
     }
 }

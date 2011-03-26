@@ -38,7 +38,7 @@ namespace Glimpse.Net.Plugin.Mvc
             ProcessInfo(actionFilters, result, ref count, "Action", "OnActionExecuting()");
             
             //List Controller Action
-            result.Add(new object[] { count++, "", mvcActionDescriptor.ControllerDescriptor.ControllerType.Name, GetActionName(mvcActionDescriptor), "", "", "", "Quiet" });
+            result.Add(new object[] { count++, "", mvcActionDescriptor.ControllerDescriptor.ControllerType.Name, GetActionName(mvcActionDescriptor), "", "", "", "quiet" });
             
             //List OnActionExecuted
             ProcessInfo(actionFilters.Reverse(), result, ref count, "Action", "OnActionExecuted()");
@@ -48,7 +48,7 @@ namespace Glimpse.Net.Plugin.Mvc
             ProcessInfo(responseFilters, result, ref count, "Result", "OnResultExecuting()");
 
             //List Result
-            result.Add(new object[] { count++, "", mvcResult.GetType().Name, "ExecuteResult()", "", "", "", "Quiet" });
+            result.Add(new object[] { count++, "", mvcResult.GetType().Name, "ExecuteResult()", "", "", "", "quiet" });
             
             //List OnResultExecuted
             ProcessInfo(responseFilters.Reverse(), result, ref count, "Result", "OnResultExecuted()");

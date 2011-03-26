@@ -19,7 +19,7 @@ namespace Glimpse.Net.Converter
                            {"CacheProfile", source.CacheProfile},
                            {"Duration", source.Duration},
                            {"Location", source.Location.ToString()},
-                           {"NoStore", source.NoStore},
+                           {"NoStore", source.NoStore.ToString()},
                            {"SqlDependency", source.SqlDependency},
                            {"VaryByContentEncoding", source.VaryByContentEncoding},
                            {"VaryByCustom", source.VaryByCustom},

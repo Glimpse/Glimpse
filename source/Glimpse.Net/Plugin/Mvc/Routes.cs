@@ -45,7 +45,7 @@ namespace Glimpse.Net.Plugin.Mvc
                                            route.Url, route.Defaults,
                                            (route.Constraints == null ||route.Constraints.Count == 0) ? null : route.Constraints,
                                            (route.DataTokens == null || route.DataTokens.Count == 0) ? null : route.DataTokens,
-                                           matchesCurrentRequest ? "Selected" : "Quiet"
+                                           matchesCurrentRequest ? "selected" : "quiet"
                                        });
                     }
                     else

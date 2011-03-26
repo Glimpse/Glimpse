@@ -71,6 +71,8 @@ namespace Glimpse.Net
             var httpApplication = sender as HttpApplication;
             if (httpApplication == null) return;
 
+            GlimpseRequest = false;
+
             SetMode(httpApplication); //Read cookie and persist value
             SetValidIp(httpApplication); //Check IP adress once per request and persist
 
@@ -114,11 +116,6 @@ namespace Glimpse.Net
             if (httpApplication == null) return;
 
             if (InvalidRequest(httpApplication)) return;
-
-            //TODO: Remove these, for testing only
-            Data.Add("Disabled", null);
-            Data.Add("Error", "There was an error, or this will be a simple message");
-            Data.Add("Empty", "");
 
             var json = JsSerializer.Serialize(Data); //serialize data to Json
             json = Sanitizer.Sanitize(json);
@@ -260,7 +257,45 @@ namespace Glimpse.Net
                 var queue = httpApplication.Application[GlimpseConstants.JsonQueue] as Queue<GlimpseRequestMetadata>;
                 if (queue != null)
                 {
-                    var data = JsSerializer.Serialize(queue);
+                    var clientName = httpApplication.Request.QueryString[GlimpseConstants.ClientName];
+                    string data;
+                    
+                    if (string.IsNullOrEmpty(clientName))
+                        data = JsSerializer.Serialize(queue);
+                    else
+                    {
+                        var filteredQueue = from request in queue where request.ClientName.Equals(clientName) select request;
+                        data = JsSerializer.Serialize(filteredQueue);
+                    }
+
+                    JsonResponse(httpApplication, data);
+                    return true;
+                }
+                else
+                {
+                    var data = JsSerializer.Serialize(new { Error = true, Message = "No history avalible." });
+                    JsonResponse(httpApplication, data);
+                    return true;
+                }
+            }
+
+            if (httpApplication.Request.Path.StartsWith("/Glimpse/Clients"))
+            {
+                if (InvalidRequest(httpApplication))
+                {
+                    var data = JsSerializer.Serialize(new { Error = true, Message = "You are not configured to access history." });
+                    JsonResponse(httpApplication, data);
+                    return true;
+                }
+
+                var queue = httpApplication.Application[GlimpseConstants.JsonQueue] as Queue<GlimpseRequestMetadata>;
+                if (queue != null)
+                {
+                    var filteredQueue = from request in queue
+                                        group request by request.ClientName
+                                        into clients select new {Client = clients.Key, RequestCount = clients.Count()};
+
+                    var data = JsSerializer.Serialize(filteredQueue);
                     JsonResponse(httpApplication, data);
                     return true;
                 }
