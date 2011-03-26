@@ -453,8 +453,9 @@
     .glimpse-tabs { height:24px; font-weight:bold; border-bottom:1px solid #ACA899; border-top:1px solid #CDCABB; background:#B9B7AF; background:-moz-linear-gradient(top, #B9B7AF 0%, #DAD8C8 4%, #D7D4C5 10%, #E9E6D5 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#B9B7AF), color-stop(4%,#DAD8C8), color-stop(10%,#D7D4C5), color-stop(100%,#E9E6D5)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#B9B7AF', endColorstr='#E9E6D5',GradientType=0 );  }
     .glimpse-tabs ul { margin:4px 0px 0 0; padding:0px; }
     .glimpse-tabs li { display:inline; margin:0 2px 3px 2px; height:22px; padding:4px 9px 3px; color:#565656; cursor:pointer; border-radius: 0px 0px 3px 3px; -moz-border-radius: 0px 0px 3px 3px; -webkit-border-bottom-right-radius: 3px; -webkit-border-bottom-left-radius: 3px; }
-    .glimpse-tabs li.active { padding:4px 8px 3px; color:#000; border-left:1px solid #A4A4A4; border-bottom:1px solid #A4A4A4; border-right:1px solid #A4A4A4; background:#F2F1EC; background:-moz-linear-gradient(top, #F2F1EC 0%, #F2F1EC 3%, #EFEEE9 7%, #E8E7E1 51%, #F7F6F1 92%, #F1F0EB 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#F2F1EC), color-stop(3%,#F2F1EC), color-stop(7%,#EFEEE9), color-stop(51%,#E8E7E1), color-stop(92%,#F7F6F1), color-stop(100%,#F1F0EB)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#F2F1EC', endColorstr='#F1F0EB',GradientType=0 ); }
-    .glimpse-tabs li.hover { padding:4px 8px 3px; border-left:1px solid #BFBDB1; border-bottom:1px solid #BFBDB1; border-right:1px solid #BFBDB1; background:#BFBDB1; background:-moz-linear-gradient(top, #BFBDB1 0%, #DAD9CB 4%, #D8D5C9 8%, #E8E7E1 51%, #F0EEE4 92%, #EDEBE1 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#BFBDB1), color-stop(4%,#DAD9CB), color-stop(8%,#D8D5C9), color-stop(51%,#E8E7E1), color-stop(92%,#F0EEE4), color-stop(100%,#EDEBE1)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#BFBDB1', endColorstr='#EDEBE1',GradientType=0 ); }
+    .glimpse-tabs li.glimpse-active { padding:4px 8px 3px; color:#000; border-left:1px solid #A4A4A4; border-bottom:1px solid #A4A4A4; border-right:1px solid #A4A4A4; background:#F2F1EC; background:-moz-linear-gradient(top, #F2F1EC 0%, #F2F1EC 3%, #EFEEE9 7%, #E8E7E1 51%, #F7F6F1 92%, #F1F0EB 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#F2F1EC), color-stop(3%,#F2F1EC), color-stop(7%,#EFEEE9), color-stop(51%,#E8E7E1), color-stop(92%,#F7F6F1), color-stop(100%,#F1F0EB)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#F2F1EC', endColorstr='#F1F0EB',GradientType=0 ); }
+    .glimpse-tabs li.glimpse-hover { padding:4px 8px 3px; border-left:1px solid #BFBDB1; border-bottom:1px solid #BFBDB1; border-right:1px solid #BFBDB1; background:#BFBDB1; background:-moz-linear-gradient(top, #BFBDB1 0%, #DAD9CB 4%, #D8D5C9 8%, #E8E7E1 51%, #F0EEE4 92%, #EDEBE1 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#BFBDB1), color-stop(4%,#DAD9CB), color-stop(8%,#D8D5C9), color-stop(51%,#E8E7E1), color-stop(92%,#F0EEE4), color-stop(100%,#EDEBE1)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#BFBDB1', endColorstr='#EDEBE1',GradientType=0 ); }
+    .glimpse-tabs li.glimpse-disabled { color:#AAA; cursor:default; }
     .glimpse-panel-holder {}
     .glimpse-panel { display:none; overflow:auto; } 
     .glimpse-panel-message { text-align:center; margin-top:40px; font-size:1.1em; color:#AAA; }
@@ -472,7 +473,7 @@
     .glimpse-panel tbody tr.odd { background:#F9F9F9; }
     .glimpse-panel table table tbody th { font-weight:normal; font-style:italic; }
     .glimpse-panel table table thead th { font-weight:bold; font-style:normal; }
-    .glimpse-panel-holder .active { display:block; }
+    .glimpse-panel-holder .glimpse-active { display:block; }
     .glimpse-resizer { height:4px; cursor:n-resize; width:100%; position:absolute; top:-1px; }
     .glimpse-preview-object { color:#006400; } 
     .glimpse-preview-string { color:#006400 !important; font-weight:normal !important; } 
@@ -822,7 +823,7 @@ if (window.jQuery) { (function ($) {
              
             //Build Dynamic HTML
             for (var key in options.data) {
-                that.addTab(tabStrip, key, key);
+                that.addTab(tabStrip, options.data[key], key);
                 that.addTabBody(panelHolder, that.build(options.data[key], 0), key); 
             }
 
@@ -830,11 +831,12 @@ if (window.jQuery) { (function ($) {
             $('.info td:first-child, .warn td:first-child, tr.error td:first-child, .fail td:first-child', $('.glimpse-panel')).prepend('<div class="icon"></div>')
 
             //Set Inital State
-            $('li:first', tabStrip).addClass('active');
-            $('.glimpse-panel:first', panelHolder).addClass('active');
+            $('li:first', tabStrip).addClass('glimpse-active');
+            $('.glimpse-panel:first', panelHolder).addClass('glimpse-active');
         },
-        addTab : function(container, name, key) {
-            container.append('<li class="glimpse-tabitem-' + key + '">' + name + '</li>');
+        addTab : function(container, data, key) {
+            var disabled = (data === undefined || data === null) ? ' glimpse-disabled' : '';
+            container.append('<li class="glimpse-tabitem-' + key + disabled + '">' + key + '</li>');
         },
         addTabBody : function(container, content, key) {
             container.append('<div class="glimpse-panel glimpse-panelitem-' + key + '">' + content + '</div>');
@@ -846,11 +848,11 @@ if (window.jQuery) { (function ($) {
             that.removeTabBodies(panelHolder);
         },
         removeTabs : function(container) {
-            $('li:not(.permanent)', container).remove();
+            $('li:not(.glimpse-permanent)', container).remove();
         },
         removeTabBodies : function(container) {
-            $('.glimpse-panel:not(.permanent)', container).remove();
-        },
+            $('.glimpse-panel:not(.glimpse-permanent)', container).remove();
+        }, 
         build : function(data, level) { 
             var that = this, result = '';
 
@@ -858,6 +860,12 @@ if (window.jQuery) { (function ($) {
                 result = that.buildCustomTable(data, level);
             else if ($.isPlainObject(data))
                 result = that.buildKeyValueTable(data, level);
+            else if (level == 0) {
+                if (data === undefined || data === null || data === '')
+                    result = '';
+                else 
+                    result = '<div class="glimpse-panel-message">' + data + '</div>';
+            }
             else 
                 result = that.buildString(data, level);
                  
@@ -969,7 +977,6 @@ if (window.jQuery) { (function ($) {
         //$.cookie('GlimpseSettings', true);
     }
     
-    
     $.extend($.glimpseAjax, { 
         init : function() { 
             var ga = $.glimpseAjax;
@@ -983,12 +990,11 @@ if (window.jQuery) { (function ($) {
         },
         adjustLayout : function(tabStrip, panelHolder) {
             var ga = $.glimpseAjax;
-            $('.glimpse-tabitem-' + ga.plugin, tabStrip).addClass('permanent').text(ga.plugin); 
-            $('.glimpse-panelitem-' + ga.plugin, panelHolder).addClass('permanent').html('<div class="glimpse-panel-message">No ajax calls have yet been detected</div>');
+            $('.glimpse-tabitem-' + ga.plugin, tabStrip).addClass('glimpse-permanent').text(ga.plugin); 
+            $('.glimpse-panelitem-' + ga.plugin, panelHolder).addClass('glimpse-permanent').html('<div class="glimpse-panel-message">No ajax calls have yet been detected</div>');
         } 
     });
 
-    
     $.extend($.glimpse, {
         addProtocolListener : function(callback, onInitOnly) {
             $.glimpse._context.protocolListeners.push({ 'callback' : callback, 'onInitOnly' : onInitOnly });
@@ -1029,19 +1035,19 @@ if (window.jQuery) { (function ($) {
             });    
              
             //Tab Switching 
-            $('.glimpse-tabs li:not(.active)').live('mouseover mouseout', function () { 
+            $('.glimpse-tabs li:not(.glimpse-active, .glimpse-disabled)').live('mouseover mouseout', function () { 
                 var item = $(this);
-                if (event.type == 'mouseover') { item.addClass('hover'); } else { item.removeClass('hover'); }
+                if (event.type == 'mouseover') { item.addClass('glimpse-hover'); } else { item.removeClass('glimpse-hover'); }
             }); 
-            $('.glimpse-tabs li').live('click', function () {
+            $('.glimpse-tabs li:not(.glimpse-active, .glimpse-disabled)').live('click', function () {
                 var item = $(this);
                 //Setup Tabs
-                $('.glimpse-tabs .active').removeClass('active').removeClass('hover');
-                item.addClass('active');
+                $('.glimpse-tabs .glimpse-active').removeClass('glimpse-active').removeClass('glimpse-hover');
+                item.addClass('glimpse-active');
                 
                 //Setup Panels 
-                $('.glimpse-panel-holder .active').removeClass('active');
-                $('.glimpse-panel-holder .glimpse-panel:eq(' + $('.glimpse-tabs ul li').index(item) + ')').addClass('active');
+                $('.glimpse-panel-holder .glimpse-active').removeClass('glimpse-active');
+                $('.glimpse-panel-holder .glimpse-panel:eq(' + $('.glimpse-tabs ul li').index(item) + ')').addClass('glimpse-active');
             });
 
             //Resize
