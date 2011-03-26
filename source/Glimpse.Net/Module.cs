@@ -115,6 +115,11 @@ namespace Glimpse.Net
 
             if (InvalidRequest(httpApplication)) return;
 
+            //TODO: Remove these, for testing only
+            Data.Add("Disabled", null);
+            Data.Add("Error", "There was an error, or this will be a simple message");
+            Data.Add("Empty", "");
+
             var json = JsSerializer.Serialize(Data); //serialize data to Json
             json = Sanitizer.Sanitize(json);
 
@@ -173,6 +178,14 @@ namespace Glimpse.Net
             return result;
         }
 
+        private static void JsonResponse(HttpApplication httpApplication, string data)
+        {
+            var response = httpApplication.Response;
+            response.Write(data);
+            response.AddHeader("Content-Type", "application/json");
+            httpApplication.CompleteRequest();
+        }
+
         private void Persist(string json, HttpApplication ctx)
         {
             if (Configuration.SaveRequestCount <= 0) return;
@@ -213,6 +226,7 @@ namespace Glimpse.Net
 
         private bool ProcessGlimpseRequest(HttpApplication httpApplication)
         {
+            //render config page
             if (httpApplication.Request.Path.StartsWith("/Glimpse/Config"))
             {
                 var response = httpApplication.Response;
@@ -233,11 +247,12 @@ namespace Glimpse.Net
                 return true;
             }
 
+            //render history json
             if (httpApplication.Request.Path.StartsWith("/Glimpse/History"))
             {
                 if (InvalidRequest(httpApplication))
                 {
-                    var data = JsSerializer.Serialize(new {Success = false, Message="You are not configured to access history."});
+                    var data = JsSerializer.Serialize(new {Error = true, Message="You are not configured to access history."});
                     JsonResponse(httpApplication, data);
                     return true;
                 }
@@ -251,21 +266,13 @@ namespace Glimpse.Net
                 }
                 else
                 {
-                    var data = JsSerializer.Serialize(new { Success = false, Message = "No history avalible." });
+                    var data = JsSerializer.Serialize(new { Error = true, Message = "No history avalible." });
                     JsonResponse(httpApplication, data);
                     return true;
                 }
             }
 
             return false;
-        }
-
-        private static void JsonResponse(HttpApplication httpApplication, string data)
-        {
-            var response = httpApplication.Response;
-            response.Write(data);
-            response.AddHeader("Content-Type", "application/json");
-            httpApplication.CompleteRequest();
         }
 
         /// <summary>

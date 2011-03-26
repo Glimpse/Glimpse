@@ -33,6 +33,8 @@ namespace Glimpse.Net.Plugin.Asp
             var allAssemblies = BuildManager.GetReferencedAssemblies().OfType<Assembly>().Concat(AppDomain.CurrentDomain.GetAssemblies()).Distinct().OrderBy(o => o.FullName);
             foreach (Assembly assembly in allAssemblies)
             {
+                //assembly.
+
                 assemblyList.Add(new object[] { assembly.FullName, assembly.GlobalAssemblyCache, assembly.IsFullyTrusted });
             }
 
