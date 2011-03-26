@@ -442,13 +442,13 @@
      
 <style>
     .glimpse-open { position:fixed; right:0; bottom:0; height:27px; width:28px; border-left: 1px solid #ACA899; border-top: 1px solid #ACA899; background:#EEE; background:-moz-linear-gradient(top, #FFFFFF 0%, #EEEEEE 4%, #F3F5F7 8%, #E9E8DD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(4%,#EEEEEE), color-stop(8%,#F3F5F7), color-stop(100%,#E9E8DD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFFFFF', endColorstr='#E9E8DD',GradientType=0 ); }
-    .glimpse-icon { background: url(/Scripts/sprite.png) 0 -135px; height:20px; width:20px; margin: 3px 4px 0; }
+    .glimpse-icon { background:url(/Scripts/glimpse-sprite.png) 0px -16px; height:20px; width:20px; margin: 3px 4px 0; cursor:pointer; }
     .glimpse-holder { display:none; height:0; position:fixed; bottom:0; left:0; width:100%; background-color:#fff; font-family:Lucida Grande,Tahoma,sans-serif; font-size:11px; }
     .glimpse-bar { height:27px; border-top:1px solid #ACA899; background:#FFFFFF; background:-moz-linear-gradient(top, #FFFFFF 0%, #EEEEEE 4%, #F3F5F7 8%, #E9E8DD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(4%,#EEEEEE), color-stop(8%,#F3F5F7), color-stop(100%,#E9E8DD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFFFFF', endColorstr='#E9E8DD',GradientType=0 ); }
-    .glimpse-bar .glimpse-icon { border:1px solid #AAA; float:left; }
+    .glimpse-bar .glimpse-icon { margin-top:4px; float:left; cursor:default; }
     .glimpse-buttons { float:right; height:17px; width:16px; padding:6px; }
-    .glimpse-close { background:url(/Scripts/sprite.png) -1px -120px no-repeat; height:14px; width:14px; display:block; }
-    .glimpse-close:hover { background:url(/Scripts/sprite.png) -17px -120px no-repeat; }
+    .glimpse-close { background:url(/Scripts/glimpse-sprite.png) -1px -1px no-repeat; height:14px; width:14px; display:block; }
+    .glimpse-close:hover { background:url(/Scripts/glimpse-sprite.png) -17px -1px no-repeat; }
     .glimpse-tabs { height:24px; font-weight:bold; border-bottom:1px solid #ACA899; border-top:1px solid #CDCABB; background:#B9B7AF; background:-moz-linear-gradient(top, #B9B7AF 0%, #DAD8C8 4%, #D7D4C5 10%, #E9E6D5 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#B9B7AF), color-stop(4%,#DAD8C8), color-stop(10%,#D7D4C5), color-stop(100%,#E9E6D5)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#B9B7AF', endColorstr='#E9E6D5',GradientType=0 );  }
     .glimpse-tabs ul { margin:4px 0px 0 0; padding:0px; }
     .glimpse-tabs li { display:inline; margin:0 2px 3px 2px; height:22px; padding:4px 9px 3px; color:#565656; cursor:pointer; border-radius: 0px 0px 3px 3px; -moz-border-radius: 0px 0px 3px 3px; -webkit-border-bottom-right-radius: 3px; -webkit-border-bottom-left-radius: 3px; }
@@ -481,17 +481,21 @@
     .glimpse-preview-object span.rspace { margin-right:4px; }
     .glimpse-preview-object span.mspace { margin:0 4px; }
     .glimpse-preview-object span.small { font-size:0.95em; } 
-    .glimpse-expand { height:11px; width:11px; display: inline-block; float:left; margin:0px 3px; background-image:url(/Scripts/expandsprite.gif); background-repeat:no-repeat; background-position:0 0; }
-    .glimpse-collapse { background-position:0 -11px; }
+    .glimpse-expand { height:11px; width:11px; display: inline-block; float:left; margin:0px 3px; cursor:pointer; background-image:url(/Scripts/glimpse-sprite.png); background-repeat:no-repeat; background-position:-64px 0; }
+    .glimpse-collapse { background-position:-64px -11px; }
     .glimpse-preview-show { display:none; font-weight:normal !important; }
     
     .glimpse-panel tbody tr.Quiet { color:#AAA; }
     .glimpse-panel tbody tr.Selected { background-color:#FFFF99; color:#409B3B; }
-    .glimpse-panel tbody tr.Info td:first-child, .glimpse-panel tbody tr.Warn td:first-child, .glimpse-panel tbody tr.Error td:first-child, .glimpse-panel tbody tr.Fail td:first-child { padding-left:18px; white-space:nowrap; }
-    .glimpse-panel tbody tr.Info { background-color:#C0E6F9; color:#067CE5; }
-    .glimpse-panel tbody tr.Warn { background-color: #FFE596; color:#FE850C; } /*background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, rgba(255, 255, 255, .2)), color-stop(.25, transparent), color-stop(.5, transparent), color-stop(.5, rgba(255, 255, 255, .2)), color-stop(.75, rgba(255, 255, 255, .2)), color-stop(.75, transparent), to(transparent)); background-image: -moz-linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent); background-image: -o-linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent); background-image: linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent); -webkit-background-size: 50px 50px; -moz-background-size: 50px 50px; background-size: 50px 50px;*/
-    .glimpse-panel tbody tr.Error { background-color:#FF8484; color:#490000; }
-    .glimpse-panel tbody tr.Fail { background-color:#B03631; font-weight:bold; }
+    .glimpse-panel tbody tr.Info .icon, .glimpse-panel tbody tr.Warn .icon, .glimpse-panel tbody tr.Error .icon, .glimpse-panel tbody tr.Fail .icon { width:14px; height:14px; background-image:url(/Scripts/glimpse-sprite.png); background-repeat:no-repeat; float:left; margin-right: 5px; } 
+    .glimpse-panel tbody tr.Info .icon { background-position: -22px -22px; }
+    .glimpse-panel tbody tr.Warn .icon { background-position:-36px -22px; }
+    .glimpse-panel tbody tr.Error .icon { background-position:-50px -22px; } 
+    .glimpse-panel tbody tr.Fail .icon { background-position:-64px -22px; }
+    .glimpse-panel tbody tr.Info { /* background-color:#C0E6F9; */ color:#067CE5; }
+    .glimpse-panel tbody tr.Warn { /* background-color: #FFE596; */ color:#FE850C; } /*background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, rgba(255, 255, 255, .2)), color-stop(.25, transparent), color-stop(.5, transparent), color-stop(.5, rgba(255, 255, 255, .2)), color-stop(.75, rgba(255, 255, 255, .2)), color-stop(.75, transparent), to(transparent)); background-image: -moz-linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent); background-image: -o-linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent); background-image: linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent); -webkit-background-size: 50px 50px; -moz-background-size: 50px 50px; background-size: 50px 50px;*/
+    .glimpse-panel tbody tr.Error { /* background-color:#FF8484; */ color:#490000; }
+    .glimpse-panel tbody tr.Fail { /* background-color:#B03631; */ color: #490000; font-weight:bold; }
 </style>
 <style>
     h1, h2 { margin:0; padding:0; }
@@ -819,6 +823,9 @@ if (window.jQuery) { (function ($) {
                 that.addTabBody(panelHolder, that.build(options.data[key], 0)); 
             }
 
+            //Adjust rows  
+            $('.Info td:first, .Warn td:first, .Error td:first, .Fail td:first', $('.glimpse-panel')).prepend('<div class="icon"></div>')
+
             //Set Inital State
             $('li:first', tabStrip).addClass('active');
             $('.glimpse-panel:first', panelHolder).addClass('active');
@@ -944,6 +951,7 @@ if (window.jQuery) { (function ($) {
 
     var _persistHeight = function(g, options) {
         options.height = $('.glimpse-holder').height();
+        //$.cookie('GlimpseSettings', true);
     }
     
     $.extend($.glimpse, {
