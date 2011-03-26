@@ -25,17 +25,23 @@ namespace Glimpse.Net.Plugin.Asp
             var processName = Process.GetCurrentProcess().MainModule.ModuleName;
 
             //build assemblies table
-            var assemblyList = new List<object[]>
-                                   {
-                                       new []{"Full Name", "From GAC", "Full Trust"}
-                                   };
+            var headers = new[] {"Name", "Version", "Culture", "From GAC", "Full Trust"};
+            var sysList = new List<object[]>{ headers };
+            var appList = new List<object[]>{ headers };
 
             var allAssemblies = BuildManager.GetReferencedAssemblies().OfType<Assembly>().Concat(AppDomain.CurrentDomain.GetAssemblies()).Distinct().OrderBy(o => o.FullName);
-            foreach (Assembly assembly in allAssemblies)
-            {
-                //assembly.
 
-                assemblyList.Add(new object[] { assembly.FullName, assembly.GlobalAssemblyCache, assembly.IsFullyTrusted });
+            var sysAssemblies = from a in allAssemblies where a.FullName.StartsWith("System") || a.FullName.StartsWith("Microsoft") select a;
+            var appAssemblies = from a in allAssemblies where !a.FullName.StartsWith("System") && !a.FullName.StartsWith("Microsoft") select a;
+
+            foreach (Assembly assembly in sysAssemblies)
+            {
+                Add(assembly, to:sysList);
+            }
+
+            foreach (Assembly assembly in appAssemblies)
+            {
+                Add(assembly, to:appList);
             }
 
             return new Dictionary<string, object>
@@ -47,8 +53,18 @@ namespace Glimpse.Net.Plugin.Asp
                                   {"Web Server", !string.IsNullOrEmpty(serverSoftware) ? serverSoftware : processName.StartsWith("WebDev.WebServer", StringComparison.InvariantCultureIgnoreCase) ? "Visual Studio Web Development Server" : "Unknown"},
                                   {"Integrated Pipeline", HttpRuntime.UsingIntegratedPipeline},
                                   {"Worker Process", processName},
-                                  {"Assemblies", assemblyList}
+                                  {"Application Assemblies", appList},
+                                  {"System Assemblies", sysList}
                               };
+        }
+
+        private void Add(Assembly assembly, List<object[]> to)
+        {
+            var assemblyName = assembly.GetName();
+            var version = assemblyName.Version.ToString();
+            var culture = string.IsNullOrEmpty(assemblyName.CultureInfo.Name) ? "_neutral_":assemblyName.CultureInfo.Name;
+
+            to.Add(new object[] { assemblyName.Name, version, culture, assembly.GlobalAssemblyCache, assembly.IsFullyTrusted });
         }
     }
 }
