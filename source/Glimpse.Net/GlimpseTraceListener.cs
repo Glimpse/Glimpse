@@ -8,26 +8,20 @@ namespace Glimpse.Net
 {
     public class GlimpseTraceListener : TraceListener
     {
-        private IList<IList<string>> messages;
         protected IList<IList<string>> Messages { 
             get
             {
-                if (messages != null) return messages;
-
                 var store = HttpContext.Current.Items;
+                var messages = store[GlimpseConstants.TraceMessages] as IList<IList<string>>;
 
-                var list = store[GlimpseConstants.TraceMessages] as IList<IList<string>>;
-
-                if (list != null)
-                    messages = list;
-                else
-                    store[GlimpseConstants.TraceMessages] = messages = new List<IList<string>>{
+                if (messages != null) return messages;
+                else store[GlimpseConstants.TraceMessages] = messages = new List<IList<string>>{
                                                                         new List<string> {"Message", "Category"}
                                                                     };
 
                 return messages;
             }
-            set { messages = value; }
+            set { HttpContext.Current.Items[GlimpseConstants.TraceMessages] = value; }
         }
         private const string DefaultCategory = "Info";
 
