@@ -37,7 +37,7 @@ namespace Glimpse.Test.Controllers
             Trace.TraceError("This is an error");
 
             Debug.Write("This is from debug");
-            
+
             var glimpseConfiguration = ConfigurationManager.GetSection("glimpse") as GlimpseConfiguration;
 
             ViewBag.GlimpseOn = glimpseConfiguration.On;

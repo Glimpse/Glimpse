@@ -158,7 +158,6 @@ namespace Glimpse.Net
                 }
             }
 
-
             return json;
         }
 
