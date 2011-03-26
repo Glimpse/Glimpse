@@ -31,6 +31,8 @@
                 <tr class="even warn"><td>"warn" Style</td></tr>
                 <tr class="odd error"><td>"error" Style</td></tr>
                 <tr class="even fail"><td>"fail" Style</td></tr>
+                <tr class="odd error"><td>"error" Style</td></tr>
+                <tr class="even fail"><td>"fail" Style</td></tr>
             </tbody>
         </table>
     </div>
@@ -455,6 +457,7 @@
     .glimpse-tabs li.hover { padding:4px 8px 3px; border-left:1px solid #BFBDB1; border-bottom:1px solid #BFBDB1; border-right:1px solid #BFBDB1; background:#BFBDB1; background:-moz-linear-gradient(top, #BFBDB1 0%, #DAD9CB 4%, #D8D5C9 8%, #E8E7E1 51%, #F0EEE4 92%, #EDEBE1 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#BFBDB1), color-stop(4%,#DAD9CB), color-stop(8%,#D8D5C9), color-stop(51%,#E8E7E1), color-stop(92%,#F0EEE4), color-stop(100%,#EDEBE1)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#BFBDB1', endColorstr='#EDEBE1',GradientType=0 ); }
     .glimpse-panel-holder {}
     .glimpse-panel { display:none; overflow:auto; } 
+    .glimpse-panel-message { text-align:center; margin-top:40px; font-size:1.1em; color:#AAA; }
     .glimpse-panel table { border-spacing:0; width:100%; }
     .glimpse-panel table td, .glimpse-panel table th { padding:3px 4px; text-align:left; vertical-align:top; } 
     .glimpse-panel .glimpse-row-header-0 { height:19px; border-bottom:1px solid #9C9C9C; background:#C6C6C6; background:-moz-linear-gradient(top, #DEDEDE 0%, #BDBDBD 80%, #BBB 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#DEDEDE), color-stop(80%,#BDBDBD), color-stop(100%,#BBB)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#DEDEDE', endColorstr='#BBB',GradientType=0 ); }
@@ -741,6 +744,7 @@ if (window.jQuery) { (function ($) {
     $.glimpse = {}; 
     $.glimpseProcessor = {};
     $.glimpseResize = {};
+    $.glimpseAjax = {};
 
 	$.extend($.fn, {
         resizer : function() {
@@ -814,12 +818,12 @@ if (window.jQuery) { (function ($) {
     
     $.extend($.glimpseProcessor, { 
         layout : function(g, options) {
-            var that = this, tabStrip = $('.glimpse-tabs ul'), panelHolder = $('.glimpse-panel-holder');
+            var that = this, tabStrip = options.tabStrip(), panelHolder = options.panelHolder();
              
             //Build Dynamic HTML
             for (var key in options.data) {
-                that.addTab(tabStrip, key);
-                that.addTabBody(panelHolder, that.build(options.data[key], 0)); 
+                that.addTab(tabStrip, key, key);
+                that.addTabBody(panelHolder, that.build(options.data[key], 0), key); 
             }
 
             //Adjust rows  
@@ -829,14 +833,14 @@ if (window.jQuery) { (function ($) {
             $('li:first', tabStrip).addClass('active');
             $('.glimpse-panel:first', panelHolder).addClass('active');
         },
-        addTab : function(container, name) {
-            container.prepend('<li>' + name + '</li>');
+        addTab : function(container, name, key) {
+            container.append('<li class="glimpse-tabitem-' + key + '">' + name + '</li>');
         },
-        addTabBody : function(container, content) {
-            container.prepend('<div class="glimpse-panel">' + content + '</div>');
+        addTabBody : function(container, content, key) {
+            container.append('<div class="glimpse-panel glimpse-panelitem-' + key + '">' + content + '</div>');
         },
         clearLayout : function(g, options) {
-            var that = this, tabStrip = $('.glimpse-tabs ul'), panelHolder = $('.glimpse-panel-holder');
+            var that = this, tabStrip = options.tabStrip(), panelHolder = options.panelHolder();
             
             that.removeTabs(tabStrip);
             that.removeTabBodies(panelHolder);
@@ -965,7 +969,49 @@ if (window.jQuery) { (function ($) {
         //$.cookie('GlimpseSettings', true);
     }
     
+    
+    $.extend($.glimpseAjax, { 
+        init : function() { 
+            var ga = $.glimpseAjax;
+            $.glimpse.addProtocolListener(ga.adjustProtocol, true);
+            $.glimpse.addLayoutListener(ga.adjustLayout, true);
+        },
+        plugin : 'Ajax',
+        adjustProtocol : function(data) {
+            var ga = $.glimpseAjax;
+            data[ga.plugin] = ''
+        },
+        adjustLayout : function(tabStrip, panelHolder) {
+            var ga = $.glimpseAjax;
+            $('.glimpse-tabitem-' + ga.plugin, tabStrip).addClass('permanent').text(ga.plugin); 
+            $('.glimpse-panelitem-' + ga.plugin, panelHolder).addClass('permanent').html('<div class="glimpse-panel-message">No ajax calls have yet been detected</div>');
+        } 
+    });
+
+    
     $.extend($.glimpse, {
+        addProtocolListener : function(callback, onInitOnly) {
+            $.glimpse._context.protocolListeners.push({ 'callback' : callback, 'onInitOnly' : onInitOnly });
+        },
+        _executeProtocolListeners : function(g, options, isInit) {
+            var i = 0, listeners = g._context.protocolListeners, data = options.data; 
+            for (; i < listeners.length; i++) {
+                var listener = listeners[i];
+                if (isInit || !listener.onInitOnly)
+                    listener.callback(data)
+            }
+        },
+        addLayoutListener : function(callback, onInitOnly) {
+            $.glimpse._context.layoutListeners.push({ 'callback' : callback, 'onInitOnly' : onInitOnly });
+        },
+        _executeLayoutListeners : function(g, options, isInit) {
+            var i = 0, listeners = g._context.layoutListeners, tabStrip = options.tabStrip(), panelHolder = options.panelHolder();
+            for (; i < listeners.length; i++) {
+                var listener = listeners[i];
+                if (isInit || !listener.onInitOnly)
+                    listener.callback(tabStrip, panelHolder)
+            }
+        },
         wireEvents : function(g, options) { 
             //Open/Close Holder
             $('.glimpse-open').live('click', function () {
@@ -1013,15 +1059,19 @@ if (window.jQuery) { (function ($) {
                 $('.glimpse-spacer').height(options.height);
                 $('.glimpse-holder .glimpse-panel').height(options.height - 54); 
             }
-        },
+        }, 
         refresh : function(data) { 
             if (!data) return;
 
             var g = $.glimpse, options = g.defaults;
             options.data = data;
+            
+            g._executeProtocolListeners(g, options, false);
 
             $.glimpseProcessor.clearLayout(g, options);
             $.glimpseProcessor.layout(g, options);
+
+            g._executeLayoutListeners(g, options, false);
         },
         init : function(data) {
             if (!data) return;
@@ -1029,33 +1079,41 @@ if (window.jQuery) { (function ($) {
             var g = $.glimpse, options = g.defaults;
             options.data = data;
 
+            g._executeProtocolListeners(g, options, true);
+
             $('body').append(options.html.plugin); 
 
             g.wireEvents(g, options);
             g.wireCallback(g, options);
 
-            $.glimpseProcessor.layout(g, options)
+            $.glimpseProcessor.layout(g, options);
+
+            g._executeLayoutListeners(g, options, true);
 
             $('body').append('<style>' + options.css + '</style>');
             $('body').append('<div class="glimpse-spacer"></div>');
+        },
+        _context : {
+            protocolListeners : [],
+            layoutListeners : []
         },
         defaults : { 
             data : null,
             html : { plugin : '<div class="glimpse-open"><div class="glimpse-icon"></div></div><div class="glimpse-holder"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon"></div><div class="glimpse-buttons"><a href="#" class="glimpse-close"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>' },
             css : '',
-            height : 200
+            height : 200,
+            tabStrip : function() { return $('.glimpse-tabs ul'); },
+            panelHolder : function() { return $('.glimpse-panel-holder'); }
         }
     });
       
-	$(document).ready(function() {
-		$.glimpse.init(glimpse); 
-        
+//Wireup glimpse offical plugins
+$.glimpseAjax.init();
 
-//        setTimeout(function() { 
-//            $.glimpse.refresh(glimpse);
-//        }, 4000);
-         
-	});
+//Run glimpse 
+$(document).ready(function() {
+	$.glimpse.init(glimpse); 
+});
 
 })(jQuery); }  
 </script>
