@@ -52,7 +52,7 @@ namespace Glimpse.Net
 
             var traceListeners = Trace.Listeners;
             if (!traceListeners.OfType<GlimpseTraceListener>().Any())
-                traceListeners.Add(new GlimpseTraceListener(context.Context.Items)); //Add trace listener if it isn't already configured
+                traceListeners.Add(new GlimpseTraceListener()); //Add trace listener if it isn't already configured
             //TODO: END MEF Plugin point to do something once as setup
 
             ComposePlugins(); //Have MEF satisfy our needs
@@ -70,7 +70,6 @@ namespace Glimpse.Net
         {
             var httpApplication = sender as HttpApplication;
             if (httpApplication == null) return;
-
 
             SetMode(httpApplication); //Read cookie and persist value
             SetValidIp(httpApplication); //Check IP adress once per request and persist

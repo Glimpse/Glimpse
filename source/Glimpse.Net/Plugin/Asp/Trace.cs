@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Web;
 using Glimpse.Protocol;
 
@@ -24,24 +22,25 @@ namespace Glimpse.Net.Plugin.Asp
                 switch (message[1])
                 {
                     case "Warning":
-                        message.Add("Warn");
+                    case "Warn":
+                        message.Add("warn");
                         break;
                     case "Information":
-                        message.Add("Info");
+                    case "Info":
+                        message.Add("info");
                         break;
                     case "Error":
-                        message.Add("Error");
+                        message.Add("error");
                         break;
                     case "Fail":
-                        message.Add("Fail");
+                        message.Add("fail");
                         break;
                     case "Quiet ":
-                        message.Add("Quiet");
+                        message.Add("quiet");
                         break;
                     case "Selected":
-                        message.Add("Selected");
+                        message.Add("selected");
                         break;
-
                 }
             }
 

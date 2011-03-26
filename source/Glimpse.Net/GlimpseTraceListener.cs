@@ -2,22 +2,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Web;
 
 namespace Glimpse.Net
 {
     public class GlimpseTraceListener : TraceListener
     {
-        protected IList<IList<string>> Messages { get; set; }
-        private const string DefaultCategory = "Info";
+        private IList<IList<string>> messages;
+        protected IList<IList<string>> Messages { 
+            get
+            {
+                if (messages != null) return messages;
 
-        public GlimpseTraceListener(IDictionary store)
-        {
-            Messages = new List<IList<string>>
-                           {
-                               new List<string> {"Message", "Category"}
-                           };
-            store.Add(GlimpseConstants.TraceMessages, Messages);
+                var store = HttpContext.Current.Items;
+
+                var list = store[GlimpseConstants.TraceMessages] as IList<IList<string>>;
+
+                if (list != null)
+                    messages = list;
+                else
+                    store[GlimpseConstants.TraceMessages] = messages = new List<IList<string>>{
+                                                                        new List<string> {"Message", "Category"}
+                                                                    };
+
+                return messages;
+            }
+            set { messages = value; }
         }
+        private const string DefaultCategory = "Info";
 
         public override void TraceTransfer(TraceEventCache eventCache, string source, int id, string message, Guid relatedActivityId)
         {

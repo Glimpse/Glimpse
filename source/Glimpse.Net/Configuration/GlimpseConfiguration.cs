@@ -4,14 +4,26 @@ namespace Glimpse.Net.Configuration
 {
     public class GlimpseConfiguration : ConfigurationSection
     {
-        [ConfigurationProperty("on", DefaultValue = "true", IsRequired = false)]
+        [ConfigurationProperty("on", DefaultValue = "false", IsRequired = false)]
         public bool On
         {
             set { this["on"] = value; }
             get
             {
-                bool result;
+                bool result = false; //matches the default above
                 bool.TryParse(this["on"].ToString(), out result);
+                return result;
+            }
+        }
+
+        [ConfigurationProperty("saveRequestCount", DefaultValue = "0", IsRequired = false)]
+        public int SaveRequestCount
+        {
+            set { this["saveRequestCount"] = value; }
+            get
+            {
+                int result = 0; //matches the default above
+                int.TryParse(this["saveRequestCount"].ToString(), out result);
                 return result;
             }
         }
