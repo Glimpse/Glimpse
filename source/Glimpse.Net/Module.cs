@@ -6,48 +6,56 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using Glimpse.Net.Configuration;
 using Glimpse.Net.Converter;
 using Glimpse.Net.Mvc;
+using Glimpse.Net.Sanitizer;
 using Glimpse.Protocol;
 
 namespace Glimpse.Net
 {
     public class Module : IHttpModule
     {
-        [ImportMany]
-        private IList<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>> Plugins { get; set; }
-
-        private IDictionary<string, object> Data { get; set; }
         private GlimpseConfiguration Configuration { get; set; }
-        private bool ValidIp { get; set; }
-        private GlimpseMode Mode { get; set; }
         private CompositionContainer Container { get; set; }
+        private IDictionary<string, object> Data { get; set; }
+        private bool GlimpseRequest { get; set; }
+        [ImportMany] private IList<IGlimpseConverter> JsConverters { get; set; }
+        private JavaScriptSerializer JsSerializer { get; set; }
+        private GlimpseMode Mode { get; set; }
+        [ImportMany] private IList<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>> Plugins { get; set; }
+        [Import] private IGlimpseSanitizer Sanitizer { get; set; }
+        private bool ValidIp { get; set; }
 
         public Module()
         {
-            Plugins = new List<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>>();
             Configuration = ConfigurationManager.GetSection("glimpse") as GlimpseConfiguration ?? new GlimpseConfiguration();
+            JsConverters = new List<IGlimpseConverter>();
+            JsSerializer = new JavaScriptSerializer();
+            Plugins = new List<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>>();
         }
 
+        /// <summary>
+        /// Init method runs only when the server is starting.
+        /// This method is use to configure Glimpse once.
+        /// This methos will be recalled on the next request if web.config is changed.
+        /// </summary>
         public void Init(HttpApplication context)
         {
-            if (Configuration.On == false) return;
+            if (Configuration.On == false) return; //Do nothing if Glimpse is off, events are not wired up
 
             //TODO: MEF Plugin point to do something once as setup
             GlobalFilters.Filters.Add(new GlimpseFilterAttribute(), int.MinValue);
-            
-            if (!Trace.Listeners.OfType<GlimpseTraceListener>().Any())
-            {
-                Trace.Listeners.Add(new GlimpseTraceListener(context.Context.Items));
-            }
+
+            var traceListeners = Trace.Listeners;
+            if (!traceListeners.OfType<GlimpseTraceListener>().Any())
+                traceListeners.Add(new GlimpseTraceListener(context.Context.Items)); //Add trace listener if it isn't already configured
             //TODO: END MEF Plugin point to do something once as setup
 
-            ComposePlugins();
+            ComposePlugins(); //Have MEF satisfy our needs
 
             context.BeginRequest += BeginRequest;
             context.EndRequest += EndRequest;
@@ -55,38 +63,77 @@ namespace Glimpse.Net
             context.PreSendRequestHeaders += PreSendRequestHeaders;
         }
 
+        /// <summary>
+        /// Runs at the begining of each requests, initializing Data (eventual return value) and parsing request params
+        /// </summary>
         private void BeginRequest(object sender, EventArgs e)
         {
             var httpApplication = sender as HttpApplication;
             if (httpApplication == null) return;
 
-            SetMode(httpApplication);
-            SetValidIp(httpApplication);
 
-            //TODO: MEF Plugin point to do something at the begining of every request
-            Data = new Dictionary<string, object>();
+            SetMode(httpApplication); //Read cookie and persist value
+            SetValidIp(httpApplication); //Check IP adress once per request and persist
+
+            if (GlimpseRequest = ProcessGlimpseRequest(httpApplication)) return;
+
+            Data = new Dictionary<string, object>(); //Init the return data object
         }
 
+        private bool ProcessGlimpseRequest(HttpApplication httpApplication)
+        {
+            if (httpApplication.Request.Path.StartsWith("/Glimpse/Config"))
+            {
+                var response = httpApplication.Response;
+
+                response.Write(string.Format("<html><head><title>Glimpse Config</title><script>function toggleCookie(){{var mode = document.getElementById('glimpseMode'); if (mode.innerHTML==='On'){{mode.innerHTML='Off';document.cookie='glimpseMode=Off; path=/;'}}else{{mode.innerHTML='On';document.cookie='glimpseMode=On; path=/;'}}}}</script><head><body><h1>Glimpse Config Settings:</h1><ul><li>On = {0}</li><li>Allowed IP's = <ol>", Configuration.On));
+                foreach (IpAddress ipAddress in Configuration.IpAddresses)
+                {
+                    response.Write(string.Format("<li>{0}</li>", ipAddress.Address));
+                }
+                response.Write("</ol></li><li>Allowed ContentType's = <ol>");
+                foreach (ContentType contentType in Configuration.ContentTypes)
+                {
+                    response.Write(string.Format("<li>{0}</li>", contentType.Content));
+                }
+                response.Write(string.Format("</ol></li></ul><h1>Your Settings:</h1><ol><li>IP = {0}</li><li>GlimpseMode = <input type='checkbox' id='gChk' onclick='toggleCookie();'{2}/> <label for='gChk' id='glimpseMode'>{1}</lable></li></ol></body></html>", httpApplication.Request.ServerVariables["REMOTE_ADDR"], Mode, Mode==GlimpseMode.On ? " checked" : ""));
+
+                httpApplication.CompleteRequest();
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// This method is only needed because its event is called before the session object is destroyed. Same as EndRequest
+        /// </summary>
         private void PostRequestHandlerExecute(object sender, EventArgs e)
         {
             var httpApplication = sender as HttpApplication;
             if (httpApplication == null) return;
 
-            if (InvalidRequest(httpApplication)) return;
+            if (InvalidRequest(httpApplication)) return; //ensure Glimpse should run
 
-            ProcessData(httpApplication, true);
+            ProcessData(httpApplication, true); //Run all plugins that DO need access to Session
         }
 
+        /// <summary>
+        /// Run all plugins that do nor require session access
+        /// </summary>
         private void EndRequest(object sender, EventArgs e)
         {
             var httpApplication = sender as HttpApplication;
             if (httpApplication == null) return;
 
-            if (InvalidRequest(httpApplication)) return;
+            if (InvalidRequest(httpApplication)) return; //ensure Glimpse should run
 
-            ProcessData(httpApplication, false);
+            ProcessData(httpApplication, false); //Run all plugins that DO NOT need access to Session
         }
 
+        /// <summary>
+        /// Convert Data payload into JSON and attach to response
+        /// </summary>
         private void PreSendRequestHeaders(object sender, EventArgs e)
         {
             var httpApplication = sender as HttpApplication;
@@ -94,77 +141,19 @@ namespace Glimpse.Net
 
             if (InvalidRequest(httpApplication)) return;
 
-            var serializer = new JavaScriptSerializer();
-            //TODO: MEFify this
-            var converters = new List<JavaScriptConverter>
-                                 {
-                                     new HandleErrorAttributeConverter(),
-                                     new OutputCacheAttributeConverter(),
-                                     new RouteValueDictionaryConverter(),
-                                 };
-
-            serializer.RegisterConverters(converters);
-            var output = serializer.Serialize(Data);
-            output = Clean(output);
+            var json = JsSerializer.Serialize(Data); //serialize data to Json
+            json = Sanitizer.Sanitize(json);
 
             //if ajax request, render glimpse data to headers
-            if (new HttpRequestWrapper(httpApplication.Request).IsAjaxRequest())
+            if (new HttpRequestWrapper(httpApplication.Request).IsAjaxRequest()) //Wrapped so we can borrow MVC's IsAjax
             {
-                httpApplication.Response.AddHeader(GlimpseConstants.HttpHeader, output);
+                httpApplication.Response.AddHeader(GlimpseConstants.HttpHeader, json);
             }
             else
             {
-                var html = string.Format(@"<script type='text/javascript' id='glimpseData'>var glimpse = {0};</script>", output);
+                var html = string.Format(@"<script type='text/javascript' id='glimpseData'>var glimpse = {0};</script>", json);
                 httpApplication.Response.Write(html);
             }
-        }
-
-        //TODO : Refactor into "CleaningProvider"
-        private string Clean(string json)
-        {
-            json = Regex.Replace(json, @"(?<=`[0-9]+\[.+)\](?=""| )", @">"); //Replace '>' for generics
-            json = Regex.Replace(json, @"`[0-9]\[", @"<"); //Replace '<' for generics
-            json = Regex.Replace(json, @"(?<=System\.Nullable<.+)>(?= )", @"?"); //Add '?' for nullable types
-            json = Regex.Replace(json, @"System.Nullable<", @""); //Add '?' for nullable types
-            json = json.Replace("System.Boolean", "bool"); //Convert CLR type names to c# keywords
-            json = json.Replace("System.Byte", "byte");
-            json = json.Replace("System.SByte", "sbyte");
-            json = json.Replace("System.Char", "char");
-            json = json.Replace("System.Decimal", "decimal");
-            json = json.Replace("System.Double", "double");
-            json = json.Replace("System.Single", "float");
-            json = json.Replace("System.Int32", "int");
-            json = json.Replace("System.UInt32", "uint");
-            json = json.Replace("System.Int64", "long");
-            json = json.Replace("System.UInt64", "ulong");
-            json = json.Replace("System.Object", "object");
-            json = json.Replace("System.Int16", "short");
-            json = json.Replace("System.UInt16", "ushort");
-            json = json.Replace("System.String", "string");
-            json = json.Replace("-2147483648", "\"int.MinValue\"");
-            json = json.Replace("2147483647", "\"int.MaxValue\"");
-
-            var matches = Regex.Matches(json, @"\\/Date\((?<ticks>(\d+))\)\\/");
-
-            long ticks;
-            var epoch = new DateTime(1970, 1, 1);
-
-            foreach (Match match in matches)
-            {
-                if (long.TryParse(match.Groups["ticks"].Value, out ticks))
-                {
-                    var dateTime = epoch.AddMilliseconds(ticks).ToLocalTime();
-                    json = json.Replace(match.Value, dateTime.ToString());
-                }
-            }
-
-            return json;
-        }
-
-        public void Dispose()
-        {
-            if (Container != null)
-                Container.Dispose();
         }
 
         private void ComposePlugins()
@@ -180,6 +169,26 @@ namespace Glimpse.Net
 
             Container = new CompositionContainer(aggregateCatalog);
             Container.ComposeParts(this);
+
+            //wireup converters into serializer
+            JsSerializer.RegisterConverters(JsConverters);
+        }
+
+        public void Dispose()
+        {
+            if (Container != null)
+                Container.Dispose();
+        }
+
+        private bool InvalidRequest(HttpApplication httpApplication)
+        {
+            var contentType = httpApplication.Response.ContentType;
+
+            var validContentType = Configuration.ContentTypes.Contains(contentType);
+
+            var result = (Mode == GlimpseMode.Off || !ValidIp || !validContentType || GlimpseRequest);
+
+            return result;
         }
 
         private void ProcessData(HttpApplication httpApplication, bool sessionRequired)
@@ -195,34 +204,33 @@ namespace Glimpse.Net
             }
         }
 
+        /// <summary>
+        /// Figure out if requestor is asking for glimpse to participate in this request based on cookie.
+        /// No cookie is the same as cookie with off value
+        /// </summary>
         private void SetMode(HttpApplication application)
         {
-            var result = GlimpseMode.Off;
+            var result = GlimpseMode.Off; //off by default
             var cookie = application.Request.Cookies[GlimpseConstants.CookieKey];
 
-            if (cookie == null)
+            if (cookie == null) //if the cookie does not exist, set the mode as off
             {
                 Mode = result;
                 return;
             }
 
+            //if cookie exists, try to parse it out to a valid value.  If the value is not valid, the result will be GlimpseMode.Off
             GlimpseMode.TryParse(cookie.Value, true, out result);
 
             Mode = result;
         }
 
+        /// <summary>
+        /// Figures out if request is coming from a valid IP
+        /// </summary>
         private void SetValidIp(HttpApplication httpApplication)
         {
             ValidIp = Configuration.IpAddresses.Contains(httpApplication.Request.ServerVariables["REMOTE_ADDR"]);
-        }
-
-        private bool InvalidRequest(HttpApplication httpApplication)
-        {
-            var contentType = httpApplication.Response.ContentType;
-
-            var validContentType = Configuration.ContentTypes.Contains(contentType);
-
-            return (Mode == GlimpseMode.Off || !ValidIp || !validContentType);
         }
     }
 }

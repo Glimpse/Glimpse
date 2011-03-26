@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Web;
+using System.Web.Configuration;
 using Glimpse.Protocol;
 
 namespace Glimpse.Net.Plugin.Configuration
@@ -22,6 +23,9 @@ namespace Glimpse.Net.Plugin.Configuration
             }
 
             if (ConnectionStrings.Count == 0) return null;
+
+            //TODO, add in other useful config sections like customErrors, authentication, compilation, 
+            //var customErrorsSection = ConfigurationManager.GetSection("system.web/customErrors") as CustomErrorsSection;
 
             return new
                        {

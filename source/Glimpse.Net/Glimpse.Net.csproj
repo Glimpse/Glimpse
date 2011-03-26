@@ -67,6 +67,7 @@
     <Compile Include="Plugin\Asp\QueryString.cs" />
     <Compile Include="Plugin\Asp\Server.cs" />
     <Compile Include="Plugin\Asp\Session.cs" />
+    <Compile Include="Sanitizer\CSharpSanitizer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Glimpse.Protocol\Glimpse.Protocol.csproj">

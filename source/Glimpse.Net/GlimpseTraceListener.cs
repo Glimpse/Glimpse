@@ -7,14 +7,14 @@ namespace Glimpse.Net
 {
     public class GlimpseTraceListener : TraceListener
     {
-        protected IList<object[]> Messages { get; set; }
+        protected IList<IList<string>> Messages { get; set; }
         private const string DefaultCategory = "Info";
 
         public GlimpseTraceListener(IDictionary store)
         {
-            Messages = new List<object[]>
+            Messages = new List<IList<string>>
                            {
-                               new object[] {"Message", "Category"}
+                               new List<string> {"Message", "Category"}
                            };
             store.Add(GlimpseConstants.TraceMessages, Messages);
         }
@@ -61,7 +61,7 @@ namespace Glimpse.Net
 
         public override void Write(string message, string category)
         {
-            Messages.Add(new object[]
+            Messages.Add(new List<string>
                              {
                                  message, category
                              }

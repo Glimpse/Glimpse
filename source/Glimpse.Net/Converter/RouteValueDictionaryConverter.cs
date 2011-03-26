@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Script.Serialization;
+using Glimpse.Protocol;
 
 namespace Glimpse.Net.Converter
 {
-    public class RouteValueDictionaryConverter : JavaScriptConverter
+    [GlimpseConverter]
+    public class RouteValueDictionaryConverter : IGlimpseConverter
     {
-        public override object Deserialize(IDictionary<string, object> dictionary, Type type, JavaScriptSerializer serializer)
-        {
-            throw new NotImplementedException();
-        }
-
         public override IDictionary<string, object> Serialize(object obj, JavaScriptSerializer serializer)
         {
             var source = obj as RouteValueDictionary;

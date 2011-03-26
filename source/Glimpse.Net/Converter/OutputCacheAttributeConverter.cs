@@ -1,21 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
-using System.Web.UI;
+using Glimpse.Protocol;
 
 namespace Glimpse.Net.Converter
 {
-    public class OutputCacheAttributeConverter : JavaScriptConverter
+    [GlimpseConverter]
+    public class OutputCacheAttributeConverter : IGlimpseConverter
     {
-        public override object Deserialize(IDictionary<string, object> dictionary, Type type,
-                                           JavaScriptSerializer serializer)
-        {
-            throw new NotImplementedException();
-        }
-
         public override IDictionary<string, object> Serialize(object obj, JavaScriptSerializer serializer)
         {
             var source = obj as OutputCacheAttribute;

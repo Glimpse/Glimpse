@@ -34,11 +34,16 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GlimpseConverterAttribute.cs" />
     <Compile Include="GlimpsePluginAttribute.cs" />
+    <Compile Include="GlimpseSanitizerAttribute.cs" />
+    <Compile Include="IGlimpseConverter.cs" />
     <Compile Include="IGlimpsePlugin.cs" />
     <Compile Include="IGlimpsePluginRequirements.cs" />
+    <Compile Include="IGlimpseSanitizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

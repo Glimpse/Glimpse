@@ -9,34 +9,26 @@
     <title>Index</title>
 </head>
 <body>
-    <div>
-        This is a standard view which tells me that it is now @DateTime.Now.ToLongTimeString(). This data means nothing really, look at the X-Glimpse-Debuger HTTP header in FireBug/Fiddler.
+    <p>Page rendered at @DateTime.Now.ToLongTimeString().</p>
 
-        <p>Config Info:</p>
-        <ul>
-            <li>On = @ViewBag.GlimpseOn</li>
-            <li>
-                Allowed IP's =
-                <ol>
-                @foreach (Glimpse.Net.Configuration.IpAddress ip in ViewBag.IpAddresses) { 
-                    <li>@ip.Address</li>
-                }
-                </ol>
-            </li>
-            <li>
-                Allowed ContentType's = 
-                <ol>
-                @foreach (Glimpse.Net.Configuration.ContentType ct in ViewBag.ContentTypes)
-                {
-                    <li>@ct.Content</li>
-                }
-                </ol>
-            </li>
-            <li>GlimpseMode = @ViewBag.GlimpseMode</li>
-        </ul>
-    </div>
+    <p>For Config Info Go To <a href="/Glimpse/Config">Glimpse/Config</a></p>
 
-    <br /><br /><br /><br />
+    <hr />
+
+    <h1>Style Options</h1><br />
+
+    <table class="glimpse-panel" style="display:table; border:thin solid black">
+        <tbody>
+            <th>Row Styles</th>
+            <tr class="Quiet"><td>Quiet Style</td></tr>
+            <tr class="Selected"><td>Selected Style</td></tr>
+            <tr class="Info"><td>Info Style</td></tr>
+            <tr class="Warn"><td>Warn Style</td></tr>
+            <tr class="Error"><td>Error Style</td></tr>
+            <tr class="Fail"><td>Fail Style</td></tr>
+        </tbody>
+    </table><br />
+
     <h1>Test Cases</h1>
     <table width="100%">
         <tr>
