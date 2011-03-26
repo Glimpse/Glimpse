@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Web;
+﻿using System.Web;
+using System.Web.Mvc;
 using Glimpse.Protocol;
 
 namespace Glimpse.Net.Plugin.Mvc
@@ -9,12 +9,24 @@ namespace Glimpse.Net.Plugin.Mvc
     {
         public override string Name
         {
-            get { return "ViewData"; }
+            get { return "View Data"; }
         }
 
         public override object GetData(HttpApplication application)
         {
-            return Process(application.Context.Items[GlimpseConstants.ViewData] as IDictionary<string, object>, application);
+            var store = application.Context.Items;
+
+            var data = store[GlimpseConstants.ViewData] as ViewDataDictionary;
+            if (data == null) return null;
+
+            var tempData = store[GlimpseConstants.TempData] as TempDataDictionary;
+
+            return new
+                       {
+                           ViewData = Process(data, application),
+                           data.Model,
+                           TempData = Process(tempData, application)
+        };
         }
     }
 }

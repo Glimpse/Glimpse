@@ -48,8 +48,7 @@ namespace Glimpse.Test.Controllers
             else
                 ViewBag.GlimpseMode = "off";
 
-
-            return View();
+            return View(new { RandomModel = true, OtherValue = "Test" });
         }
 
     }

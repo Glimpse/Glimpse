@@ -58,7 +58,6 @@
     <Compile Include="Plugin\Mvc\GlimpseFilterAttribute.cs" />
     <Compile Include="Plugin\Mvc\Filters.cs" />
     <Compile Include="Plugin\Mvc\Routes.cs" />
-    <Compile Include="Plugin\Mvc\TempData.cs" />
     <Compile Include="Plugin\Mvc\ViewData.cs" />
     <Compile Include="Plugin\Mvc\ViewEngine.cs" />
     <Compile Include="Plugin\Asp\Form.cs" />
