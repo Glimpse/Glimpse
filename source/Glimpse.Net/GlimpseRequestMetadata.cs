@@ -9,5 +9,6 @@ namespace Glimpse.Net
         public string ClientName { get; set; }
         public string RequestTime { get; set; }
         public Guid RequestId { get; set; }
+        public string IsAjax { get; set; }
     }
 }

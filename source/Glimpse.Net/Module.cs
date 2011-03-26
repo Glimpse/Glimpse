@@ -204,7 +204,8 @@ namespace Glimpse.Net
                                                         ClientName = GetClientName(ctx),
                                                         Json = json,
                                                         RequestTime = DateTime.Now.ToLongTimeString(),
-                                                        RequestId = Guid.NewGuid()
+                                                        RequestId = Guid.NewGuid(),
+                                                        IsAjax = new HttpRequestWrapper(ctx.Request).IsAjaxRequest().ToString()
                                                     });
         }
 
