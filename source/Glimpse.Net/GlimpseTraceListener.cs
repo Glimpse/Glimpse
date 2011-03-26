@@ -15,9 +15,10 @@ namespace Glimpse.Net
                 var messages = store[GlimpseConstants.TraceMessages] as IList<IList<string>>;
 
                 if (messages != null) return messages;
-                else store[GlimpseConstants.TraceMessages] = messages = new List<IList<string>>{
-                                                                        new List<string> {"Message", "Category"}
-                                                                    };
+                
+                store[GlimpseConstants.TraceMessages] = messages = new List<IList<string>>{
+                                                                                              new List<string> {"Message", "Category"}
+                                                                                          };
 
                 return messages;
             }

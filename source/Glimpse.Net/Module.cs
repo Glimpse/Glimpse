@@ -79,31 +79,6 @@ namespace Glimpse.Net
             Data = new Dictionary<string, object>(); //Init the return data object
         }
 
-        private bool ProcessGlimpseRequest(HttpApplication httpApplication)
-        {
-            if (httpApplication.Request.Path.StartsWith("/Glimpse/Config"))
-            {
-                var response = httpApplication.Response;
-
-                response.Write(string.Format("<html><head><title>Glimpse Config</title><script>function toggleCookie(){{var mode = document.getElementById('glimpseMode'); if (mode.innerHTML==='On'){{mode.innerHTML='Off';document.cookie='glimpseMode=Off; path=/;'}}else{{mode.innerHTML='On';document.cookie='glimpseMode=On; path=/;'}}}}</script><head><body><h1>Glimpse Config Settings:</h1><ul><li>On = {0}</li><li>Allowed IP's = <ol>", Configuration.On));
-                foreach (IpAddress ipAddress in Configuration.IpAddresses)
-                {
-                    response.Write(string.Format("<li>{0}</li>", ipAddress.Address));
-                }
-                response.Write("</ol></li><li>Allowed ContentType's = <ol>");
-                foreach (ContentType contentType in Configuration.ContentTypes)
-                {
-                    response.Write(string.Format("<li>{0}</li>", contentType.Content));
-                }
-                response.Write(string.Format("</ol></li></ul><h1>Your Settings:</h1><ol><li>IP = {0}</li><li>GlimpseMode = <input type='checkbox' id='gChk' onclick='toggleCookie();'{2}/> <label for='gChk' id='glimpseMode'>{1}</lable></li></ol></body></html>", httpApplication.Request.ServerVariables["REMOTE_ADDR"], Mode, Mode==GlimpseMode.On ? " checked" : ""));
-
-                httpApplication.CompleteRequest();
-                return true;
-            }
-
-            return false;
-        }
-
         /// <summary>
         /// This method is only needed because its event is called before the session object is destroyed. Same as EndRequest
         /// </summary>
@@ -143,6 +118,8 @@ namespace Glimpse.Net
             var json = JsSerializer.Serialize(Data); //serialize data to Json
             json = Sanitizer.Sanitize(json);
 
+            Persist(json, httpApplication);
+
             //if ajax request, render glimpse data to headers
             if (new HttpRequestWrapper(httpApplication.Request).IsAjaxRequest()) //Wrapped so we can borrow MVC's IsAjax
             {
@@ -179,6 +156,12 @@ namespace Glimpse.Net
                 Container.Dispose();
         }
 
+        private string GetClientName(HttpApplication ctx)
+        {
+            var cookie = ctx.Request.Cookies[GlimpseConstants.CookieClientNameKey];
+            return cookie != null ? cookie.Value : "";
+        }
+
         private bool InvalidRequest(HttpApplication httpApplication)
         {
             var contentType = httpApplication.Response.ContentType;
@@ -188,6 +171,31 @@ namespace Glimpse.Net
             var result = (Mode == GlimpseMode.Off || !ValidIp || !validContentType || GlimpseRequest);
 
             return result;
+        }
+
+        private void Persist(string json, HttpApplication ctx)
+        {
+            if (Configuration.SaveRequestCount <= 0) return;
+
+            var store = ctx.Application;
+            Queue<GlimpseRequestMetadata> queue = null;
+
+            //clientName, longtime, url, 
+            queue = store[GlimpseConstants.JsonQueue] as Queue<GlimpseRequestMetadata>;
+
+            if (queue == null) store[GlimpseConstants.JsonQueue] = queue = new Queue<GlimpseRequestMetadata>(Configuration.SaveRequestCount);
+
+            if (queue.Count == Configuration.SaveRequestCount) queue.Dequeue();
+
+
+            var browser = ctx.Request.Browser;
+            queue.Enqueue(new GlimpseRequestMetadata{
+                                                        Browser = string.Format("{0} {1}", browser.Browser, browser.Version),
+                                                        ClientName = GetClientName(ctx),
+                                                        Json = json,
+                                                        RequestTime = DateTime.Now.ToLongTimeString(),
+                                                        RequestId = Guid.NewGuid()
+                                                    });
         }
 
         private void ProcessData(HttpApplication httpApplication, bool sessionRequired)
@@ -203,6 +211,63 @@ namespace Glimpse.Net
             }
         }
 
+        private bool ProcessGlimpseRequest(HttpApplication httpApplication)
+        {
+            if (httpApplication.Request.Path.StartsWith("/Glimpse/Config"))
+            {
+                var response = httpApplication.Response;
+
+                response.Write(string.Format("<html><head><title>Glimpse Config</title><script>function toggleCookie(){{var mode = document.getElementById('glimpseMode'); if (mode.innerHTML==='On'){{mode.innerHTML='Off';document.cookie='glimpseMode=Off; path=/;'}}else{{mode.innerHTML='On';document.cookie='glimpseMode=On; path=/;'}}}}</script><head><body><h1>Glimpse Config Settings:</h1><ul><li>On = {0}</li><li>Allowed IP's = <ol>", Configuration.On));
+                foreach (IpAddress ipAddress in Configuration.IpAddresses)
+                {
+                    response.Write(string.Format("<li>{0}</li>", ipAddress.Address));
+                }
+                response.Write("</ol></li><li>Allowed ContentType's = <ol>");
+                foreach (ContentType contentType in Configuration.ContentTypes)
+                {
+                    response.Write(string.Format("<li>{0}</li>", contentType.Content));
+                }
+                response.Write(string.Format("</ol></li></ul><h1>Your Settings:</h1><ol><li>IP = {0}</li><li>GlimpseMode = <input type='checkbox' id='gChk' onclick='toggleCookie();'{2}/> <label for='gChk' id='glimpseMode'>{1}</lable></li></ol></body></html>", httpApplication.Request.ServerVariables["REMOTE_ADDR"], Mode, Mode==GlimpseMode.On ? " checked" : ""));
+
+                httpApplication.CompleteRequest();
+                return true;
+            }
+
+            if (httpApplication.Request.Path.StartsWith("/Glimpse/History"))
+            {
+                if (InvalidRequest(httpApplication))
+                {
+                    var data = JsSerializer.Serialize(new {Success = false, Message="You are not configured to access history."});
+                    JsonResponse(httpApplication, data);
+                    return true;
+                }
+
+                var queue = httpApplication.Application[GlimpseConstants.JsonQueue] as Queue<GlimpseRequestMetadata>;
+                if (queue != null)
+                {
+                    var data = JsSerializer.Serialize(queue);
+                    JsonResponse(httpApplication, data);
+                    return true;
+                }
+                else
+                {
+                    var data = JsSerializer.Serialize(new { Success = false, Message = "No history avalible." });
+                    JsonResponse(httpApplication, data);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static void JsonResponse(HttpApplication httpApplication, string data)
+        {
+            var response = httpApplication.Response;
+            response.Write(data);
+            response.AddHeader("Content-Type", "application/json");
+            httpApplication.CompleteRequest();
+        }
+
         /// <summary>
         /// Figure out if requestor is asking for glimpse to participate in this request based on cookie.
         /// No cookie is the same as cookie with off value
@@ -210,7 +275,7 @@ namespace Glimpse.Net
         private void SetMode(HttpApplication application)
         {
             var result = GlimpseMode.Off; //off by default
-            var cookie = application.Request.Cookies[GlimpseConstants.CookieKey];
+            var cookie = application.Request.Cookies[GlimpseConstants.CookieModeKey];
 
             if (cookie == null) //if the cookie does not exist, set the mode as off
             {
