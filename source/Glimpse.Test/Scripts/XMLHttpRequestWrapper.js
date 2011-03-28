@@ -22,31 +22,10 @@ XHRSpy.prototype =
     duration: null, 
     logRow: null,
     send: function() {
-        /*
-        var row = Firebug.Console.log(spy, null, "spy", Firebug.Spy.XHR); 
-        if (row)
-        {
-            setClass(row, "loading");
-            spy.logRow = row;
-        }
-        */
+        $.glimpseAjax.callStarted(this);
     },
     finish: function() { 
-        /*
-        // update row information to avoid "ethernal spinning gif" bug in IE 
-        row = row || spy.logRow;
-                
-        // if chrome document is not loaded, there will be no row yet, so just ignore
-        if (!row) return;
-                
-        $(row).removeClass("loading"); 
-        if (!success)
-            $(row).addClass("error");
-                
-        var item = $(".spyStatus", row).text(status); 
-        var item = $(".spyTime", row).text(duration + "ms");
-        */
-        console.log(this);
+        $.glimpseAjax.callFinished(this); 
     }
 };
 
@@ -56,7 +35,7 @@ var XMLHttpRequestWrapper = function(activeXObject)
     // XMLHttpRequestWrapper internal variables
     
     var xhrRequest = (typeof activeXObject != "undefined" ? activeXObject : new _XMLHttpRequest()), 
-        spy = new XHRSpy(), that = this, startTime;
+        spy = new XHRSpy(), that = this;
 
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
     // XMLHttpRequestWrapper internal methods
@@ -94,19 +73,14 @@ var XMLHttpRequestWrapper = function(activeXObject)
         spy.duration = duration;
     };
     
-    var handleStateChange = function() {
-        console.log("onreadystatechange");
-        
+    var handleStateChange = function() { 
         that.readyState = xhrRequest.readyState;
         
         if (xhrRequest.readyState == 4)
         {
             finishXHR(); 
             xhrRequest.onreadystatechange = function(){};
-        }
-        
-        console.log(spy.url + ": " + xhrRequest.readyState);
-
+        } 
         that.onreadystatechange();
     };
     
@@ -192,26 +166,20 @@ var XMLHttpRequestWrapper = function(activeXObject)
 
 var _ActiveXObject; 
 if ($.browser.msie && $.browser.version=="6.0") {
-    window._ActiveXObject = window.ActiveXObject;
-    
-    var xhrObjects = " MSXML2.XMLHTTP.5.0 MSXML2.XMLHTTP.4.0 MSXML2.XMLHTTP.3.0 MSXML2.XMLHTTP Microsoft.XMLHTTP ";
-    
+    window._ActiveXObject = window.ActiveXObject; 
     window.ActiveXObject = function(name)
     {
         var error = null;
         
-        try
-        {
+        try {
             var activeXObject = new window._ActiveXObject(name);
         }
-        catch(e)
-        {
+        catch(e) {
             error = e;
         }
-        finally
-        {
-            if (!error)
-            {
+        finally {
+            if (!error) {
+                var xhrObjects = " MSXML2.XMLHTTP.5.0 MSXML2.XMLHTTP.4.0 MSXML2.XMLHTTP.3.0 MSXML2.XMLHTTP Microsoft.XMLHTTP ";
                 if (xhrObjects.indexOf(" " + name + " ") != -1)
                     return new XMLHttpRequestWrapper(activeXObject);
                 else
@@ -224,8 +192,7 @@ if ($.browser.msie && $.browser.version=="6.0") {
 } 
 else {
     var _XMLHttpRequest = XMLHttpRequest;
-    window.XMLHttpRequest = function()
-    {
+    window.XMLHttpRequest = function() {
         return new XMLHttpRequestWrapper();
     }
 }

@@ -744,6 +744,7 @@ if (window.jQuery) { (function ($) {
  
     $.glimpse = {}; 
     $.glimpseProcessor = {};
+    $.glimpseContent = {};
     $.glimpseResize = {};
     $.glimpseAjax = {};
 
@@ -768,6 +769,12 @@ if (window.jQuery) { (function ($) {
             if ($.isPlainObject(data))
                 $.each(data, function(k, v) { count++; });
             return count;
+        },
+        formatTime : function(d) {
+            if (typeof d === 'number')
+                d = new Date(d);
+            var padding = function(t) { return t < 10 ? '0' + t : t; }
+            return d.getHours() + ':' + padding(d.getMinutes()) + ':' + padding(d.getSeconds()) + ' ' +d.getMilliseconds();
         }
     });
      
@@ -821,11 +828,15 @@ if (window.jQuery) { (function ($) {
         layout : function(g, options) {
             var that = this, tabStrip = options.tabStrip(), panelHolder = options.panelHolder();
              
+            var start = new Date().getTime();
+
             //Build Dynamic HTML
             for (var key in options.data) {
                 that.addTab(tabStrip, options.data[key], key);
                 that.addTabBody(panelHolder, that.build(options.data[key], 0), key); 
             }
+
+            console.log((new Date().getTime() - start) + ' ms render time');
 
             //Adjust rows  
             $('.info td:first-child, .warn td:first-child, tr.error td:first-child, .fail td:first-child', $('.glimpse-panel')).prepend('<div class="icon"></div>')
@@ -878,7 +889,7 @@ if (window.jQuery) { (function ($) {
                 
             var i = 1, html = '<table><thead><tr class="glimpse-row-header-' + level + '"><th>Key</th><th>Value</th></tr></thead>';   
             for (var key in data)
-                html += '<tr class="' + (i++ % 2 ? 'odd' : 'even') + '"><th width="30%">' + $.htmlEncode(key) + '</th><td width="70%"> '+ that.build(data[key], level + 1) + '</td></tr>';
+                html += '<tr class="' + (i++ % 2 ? 'odd' : 'even') + '"><th width="30%">' + $.glimpseContent.formatString(key) + '</th><td width="70%"> '+ that.build(data[key], level + 1) + '</td></tr>';
             html += '</table>';
             return html; 
         },
@@ -889,7 +900,7 @@ if (window.jQuery) { (function ($) {
 
             var html = '<table><thead><tr class="glimpse-row-header-' + level + '">';
             for (var x = 0; x < data[0].length; x++)
-                html += '<th>' + $.htmlEncode(data[0][x]) + '</th>';
+                html += '<th>' + $.glimpseContent.formatString(data[0][x]) + '</th>';
             html += '</tr></thead>';
             for (var i = 1; i < data.length; i++) {
                 html += '<tr class="' + (i % 2 ? 'odd' : 'even') + (data[i].length > data[0].length ? ' ' + data[i][data[i].length - 1] : '') + '">';
@@ -901,10 +912,13 @@ if (window.jQuery) { (function ($) {
             return html; 
         },
         buildString : function(data, level) { 
+            /*
             var that = this, charMax = 50; 
             if (!(data == undefined || data == null) && data.length > charMax) {
                 return that.buildStringPreview(data, level);}
             return $.htmlEncode(data);
+            */
+            return this.buildStringPreview(data, level);
         },
         buildKeyValuePreview : function(data, level) {    
             var that = this, length = $.lengthJson(data), rowMax = 2, rowLimit = (rowMax < length ? rowMax : length), i = 1, html = '<span class="glimpse-expand"></span><span class="glimpse-preview-object"><span class="start">{</span>'; 
@@ -939,16 +953,22 @@ if (window.jQuery) { (function ($) {
             return html;
         },
         buildStringPreview : function(data, level) { 
+            if (data == undefined || data == null)
+                return '--';
             if ($.isArray(data))
                 return "[ ... ]";  
             if ($.isPlainObject(data))
-                return "{ ... }";  
-                 
-            var that = this, charMax = (level > 100 ? 12 : level > 1 ? 50 : 100), charOuterMax = (charMax * 1.2), content = that.trimAndEncodeString(data, charMax, charOuterMax, true)
+                return "{ ... }";   
+
+            var that = this, 
+                charMax = (level > 100 ? 12 : level > 1 ? 80 : 150), 
+                charOuterMax = (charMax * 1.2), 
+                content = $.glimpseContent.trimFormatString(data, charMax, charOuterMax, true);
+
             if (data.length > charOuterMax) {
-                content = '<span class="glimpse-preview-string" title="' + that.trimAndEncodeString(data, charMax * 2, charMax * 2.1)  + '">' + content + '</span>';
+                content = '<span class="glimpse-preview-string" title="' + $.glimpseContent.trimFormatString(data, charMax * 2, charMax * 2.1, false, true)  + '">' + content + '</span>';
                 if (level < 100)
-                    content = '<span class="glimpse-expand"></span>' + content + '<span class="glimpse-preview-show">' + $.htmlEncode(data) + '</span>'; 
+                    content = '<span class="glimpse-expand"></span>' + content + '<span class="glimpse-preview-show">' + $.glimpseContent.formatString(data) + '</span>'; 
             }
             return content;
         },
@@ -961,14 +981,56 @@ if (window.jQuery) { (function ($) {
                     html += '<span class="small">length=' + dataLength + '</span>';
             }
             return html;
+        }
+    });
+
+    $.extend($.glimpseContent, {
+        formatStringTypes : {
+            italics : {
+                match : function(d) { return d.match(/^\_[\w\D]+\_$/) != null; },
+                replace : function(d) { return '<em>' + $.htmlEncode($.glimpseContent.scrub(d)) + '</em>'; },
+                trimmable : true },
+            underline : {
+                match : function(d) { return d.match(/^\\[\w\D]+\\$/) != null; },
+                replace : function(d) { return '<u>' + $.htmlEncode($.glimpseContent.scrub(d)) + '</u>'; },
+                trimmable : true },
+            strong : {
+                match : function(d) { return d.match(/^\*[\w\D]+\*$/) != null; },
+                replace : function(d) { return '<strong>' + $.htmlEncode($.glimpseContent.scrub(d)) + '</strong>'; },
+                trimmable : true },
+            raw : {
+                match : function(d) { return d.match(/^\![\w\D]+\!$/) != null; },
+                replace : function(d) { return $.glimpseContent.scrub(d); },
+                trimmable : false }
         },
-        trimAndEncodeString : function(data, charMax, charOuterMax, wrapEllipsis) {
+        scrub : function(d) {
+            return d.substr(1, d.length - 2);
+        },
+        formatString : function(data) {
+            var that = this;
+            return that.trimFormatString(data);
+        },
+        trimFormatString : function(data, charMax, charOuterMax, wrapEllipsis, skipEncoding) {
+            var that = this, trimmable = true, replace = function(d) { return $.htmlEncode(d); };
+            
             if (data == undefined || data == null)
                 return '--';
             data = $.trim(data);
-            if (data.length > charOuterMax)
-                return $.htmlEncode(data.substr(0, charMax)) + (wrapEllipsis ? '<span>...</span>' : '...');
-            return $.htmlEncode(data);
+
+            if (!skipEncoding) {
+                for (var typeKey in that.formatStringTypes) {
+                    var type = that.formatStringTypes[typeKey]; 
+                    if (type.match(data)) {
+                        replace = type.replace;
+                        trimmable = type.trimmable;
+                        break;
+                    }
+                }
+            }
+             
+            if (trimmable && charOuterMax && data.length > charOuterMax)
+                return replace(data.substr(0, charMax)) + (wrapEllipsis ? '<span>...</span>' : '...');
+            return replace(data);  
         }
     });
 
@@ -992,7 +1054,32 @@ if (window.jQuery) { (function ($) {
             var ga = $.glimpseAjax;
             $('.glimpse-tabitem-' + ga.plugin, tabStrip).addClass('glimpse-permanent').text(ga.plugin); 
             $('.glimpse-panelitem-' + ga.plugin, panelHolder).addClass('glimpse-permanent').html('<div class="glimpse-panel-message">No ajax calls have yet been detected</div>');
-        } 
+        },
+        callStarted : function(ajaxSpy) {
+            var g = $.glimpse, ga = $.glimpseAjax, panelHolder = g.defaults.panelHolder(), panelItem = $('.glimpse-panelitem-' + ga.plugin, panelHolder);
+
+            //First time round we need to set everything up
+            if ($('.glimpse-panel-message', panelItem).length > 0) 
+                panelItem.html($.glimpseProcessor.build([ 
+                    ['Request URL', 'Status', 'Date/Time', 'Druration', 'Is Async', 'Inspect'],
+                    [window.location.pathname, '200', $.formatTime(new Date()), 'N/A', 'N/A', '!<a href="#">Launch</a>!']
+                 ], 0));
+            
+            $('table', panelItem).append('<tr class="glimpse-ajax-loading"><th>' + ajaxSpy.url + '</th><td class="glimpse-ajax-status">Loading...</td><td>' + $.formatTime(ajaxSpy.startTime) + '</td><td class="glimpse-ajax-duration">--</td><td>' + ajaxSpy.async + '</td><td class="glimpse-ajax-inspect"></td></tr>');
+            
+            //In theory I wouldn't need to do this every time but wanting to make sure that all rows are kept in sync
+            $('table tbody tr:odd', panelItem).addClass('even');
+            $('table tbody tr:even', panelItem).addClass('odd');
+
+            ajaxSpy.logRow = $('tr:last', panelItem);
+        },
+        callFinished :function(ajaxSpy) {
+            ajaxSpy.logRow.removeClass('glimpse-ajax-loading').addClass('glimpse-ajax-' + (ajaxSpy.success ? 'loaded' : 'error'));
+
+            $('.glimpse-ajax-status', ajaxSpy.logRow).text(ajaxSpy.status);
+            $('.glimpse-ajax-duration', ajaxSpy.logRow).text(ajaxSpy.duration + 'ms');
+            $('.glimpse-ajax-inspect', ajaxSpy.logRow).html('<a href="#">Launch</a>'); 
+        }
     });
 
     $.extend($.glimpse, {
@@ -1120,6 +1207,60 @@ $.glimpseAjax.init();
 $(document).ready(function() {
 	$.glimpse.init(glimpse); 
 });
+
+setTimeout(function() {
+var xmlhttp;
+if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp = new XMLHttpRequest();
+}
+else {// code for IE6, IE5
+  xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+}
+xmlhttp.onreadystatechange=function() {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200){
+    document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+  }
+}
+xmlhttp.open("POST","/Glimpse/Config",true);
+xmlhttp.send();
+}, 6000);
+
+
+setTimeout(function() {
+var xmlhttp;
+if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp = new XMLHttpRequest();
+}
+else {// code for IE6, IE5
+  xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+}
+xmlhttp.onreadystatechange=function() {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200){
+    document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+  }
+}
+xmlhttp.open("POST","/Glimpse/Config?wqdeqsd",true);
+xmlhttp.send();
+}, 10000);
+
+
+
+setTimeout(function() {
+var xmlhttp;
+if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp = new XMLHttpRequest();
+}
+else {// code for IE6, IE5
+  xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+}
+xmlhttp.onreadystatechange=function() {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200){
+    document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+  }
+}
+xmlhttp.open("POST","/Glimpse/Config?23tew",true);
+xmlhttp.send();
+}, 11000);
 
 })(jQuery); }  
 </script>
