@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web;
 using Glimpse.Protocol;
 
@@ -32,6 +33,11 @@ namespace Glimpse.Net.Plugin.Asp
             if (result.Count == 0) return null;
 
             return result;
+        }
+
+        public void SetupInit()
+        {
+            throw new NotImplementedException();
         }
     }
 }

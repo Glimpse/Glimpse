@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Web;
 using Glimpse.Protocol;
@@ -8,6 +9,11 @@ namespace Glimpse.Net
     public abstract class NameValueCollectionPlugin : IGlimpsePlugin
     {
         public abstract object GetData(HttpApplication application);
+        public void SetupInit()
+        {
+            throw new NotImplementedException();
+        }
+
         public abstract string Name { get; }
 
         protected IDictionary<string, string> Process(NameValueCollection collection, HttpApplication application)

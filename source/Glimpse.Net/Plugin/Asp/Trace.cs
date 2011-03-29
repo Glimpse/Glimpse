@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using Glimpse.Protocol;
 
 namespace Glimpse.Net.Plugin.Asp
 {
-    [GlimpsePlugin]
+    [GlimpsePlugin(ShouldSetupInInit = true)]
     public class Trace : IGlimpsePlugin
     {
         public string Name
@@ -45,6 +47,13 @@ namespace Glimpse.Net.Plugin.Asp
             }
 
             return messages;
+        }
+
+        public void SetupInit()
+        {
+            var traceListeners = System.Diagnostics.Trace.Listeners;
+            if (!traceListeners.OfType<GlimpseTraceListener>().Any())
+                traceListeners.Add(new GlimpseTraceListener()); //Add trace listener if it isn't already configured
         }
     }
 }

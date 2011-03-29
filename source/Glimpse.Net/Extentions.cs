@@ -79,10 +79,18 @@ namespace Glimpse.Net
 
             var result = (path.StartsWith("/Glimpse/Config") ||
                     path.StartsWith("/Glimpse/History") ||
+                    path.StartsWith("/Glimpse/glimpseClient.js") ||
+                    path.StartsWith("/Glimpse/glimpseSprite.png") ||
                     path.StartsWith("/Glimpse/Clients"));
 
             application.Context.Items["__validPath"] = result;
             return result;
+        }
+
+        public static string GetClientName(this HttpApplication application)
+        {
+            var cookie = application.Request.Cookies[GlimpseConstants.CookieClientNameKey];
+            return cookie != null ? cookie.Value : "";
         }
 
         public static GlimpseMode GetGlimpseMode(this HttpApplication application)

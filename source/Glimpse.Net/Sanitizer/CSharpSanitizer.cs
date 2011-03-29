@@ -4,7 +4,6 @@ using Glimpse.Protocol;
 
 namespace Glimpse.Net.Sanitizer
 {
-    [GlimpseSanitizer]
     public class CSharpSanitizer:IGlimpseSanitizer
     {
         public string Sanitize(string json)

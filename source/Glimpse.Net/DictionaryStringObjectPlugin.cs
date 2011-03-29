@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web;
 using Glimpse.Protocol;
 
@@ -24,6 +25,7 @@ namespace Glimpse.Net
         }
 
         public abstract object GetData(HttpApplication application);
+        public abstract void SetupInit();
         public abstract string Name { get; }
     }
 }

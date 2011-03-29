@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Web;
+﻿using System.Web;
 
 namespace Glimpse.Protocol
 {
@@ -7,5 +6,6 @@ namespace Glimpse.Protocol
     {
         string Name { get; }
         object GetData(HttpApplication application);
+        void SetupInit();
     }
 }

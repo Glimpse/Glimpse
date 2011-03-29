@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 using System.Web.Routing;
+using Glimpse.Net.Mvc;
 using Glimpse.Protocol;
 
 namespace Glimpse.Net.Plugin.Mvc
 {
-    [GlimpsePlugin]
+    [GlimpsePlugin(ShouldSetupInInit = true)]
     public class Routes:IGlimpsePlugin
     {
         public string Name
@@ -56,6 +58,14 @@ namespace Glimpse.Net.Plugin.Mvc
             }
            
             return result;
+        }
+
+        public void SetupInit()
+        {
+            var filters = GlobalFilters.Filters;
+
+            if (!filters.OfType<GlimpseFilterAttribute>().Any())
+                filters.Add(new GlimpseFilterAttribute(), int.MinValue);
         }
     }
 }

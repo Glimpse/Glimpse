@@ -34,6 +34,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.configuration" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -51,6 +52,14 @@
     <Compile Include="Extentions.cs" />
     <Compile Include="GlimpseRequestMetadata.cs" />
     <Compile Include="GlimpseTraceListener.cs" />
+    <Compile Include="Responder\Clients.cs" />
+    <Compile Include="Responder\Config.cs" />
+    <Compile Include="Responder\GlimpseResponderAttribute.cs" />
+    <Compile Include="Responder\History.cs" />
+    <Compile Include="Responder\Javascript.cs" />
+    <Compile Include="Responder\GlimpseResponders.cs" />
+    <Compile Include="Responder\Sprite.cs" />
+    <Compile Include="Responder\GlimpseResponder.cs" />
     <Compile Include="Plugin\Asp\Environment.cs" />
     <Compile Include="Plugin\Asp\Trace.cs" />
     <Compile Include="Plugin\Configuration\Config.cs" />
@@ -76,7 +85,12 @@
       <Name>Glimpse.Protocol</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="glimpseClient.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="glimpseSprite.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

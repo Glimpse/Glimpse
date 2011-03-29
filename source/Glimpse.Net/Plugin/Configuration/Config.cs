@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Web;
-using System.Web.Configuration;
 using Glimpse.Protocol;
 
 namespace Glimpse.Net.Plugin.Configuration

@@ -16,6 +16,13 @@ namespace Glimpse.Net.Configuration
             }
         }
 
+        [ConfigurationProperty("pluginPath", DefaultValue = @"\", IsRequired = false)]
+        public string PluginPath
+        {
+            set { this["pluginPath"] = value; }
+            get { return this["pluginPath"].ToString(); }
+        }
+
         [ConfigurationProperty("saveRequestCount", DefaultValue = "0", IsRequired = false)]
         public int SaveRequestCount
         {

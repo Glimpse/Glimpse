@@ -63,6 +63,11 @@ namespace Glimpse.Net.Plugin.Asp
             return result;
         }
 
+        public void SetupInit()
+        {
+            throw new NotImplementedException();
+        }
+
         private void Add(Assembly assembly, List<object[]> to)
         {
             var assemblyName = assembly.GetName();
