@@ -28,7 +28,7 @@
                 <tr class="odd suppress"><td>"suppress" Style</td></tr>
                 <tr class="even quiet"><td>"quiet" Style</td></tr>
                 <tr class="odd selected"><td>"selected" Style</td></tr>
-                <tr class="even loading"><td>"selected" Style</td></tr>
+                <tr class="even loading"><td>"loading" Style</td></tr>
                 <tr class="odd info"><td>"info" Style</td></tr>
                 <tr class="even warn"><td>"warn" Style</td></tr>
                 <tr class="odd error"><td>"error" Style</td></tr>
@@ -73,11 +73,11 @@
 <pre>var scenarioTwoData = [
     [ 'Actor', 'Character', 'Gender', 'Age' ],
     [ 'Mark Hamill', 'Luke Skywalker', 'Male', '21' ],
-    [ 'James Earl Jones', 'Darth Vader', 'Male', '45' ],
+    [ 'James Earl Jones', 'Darth Vader', 'Male', '45', 'quiet' ],
     [ 'Harrison Ford', 'Han Solo', 'Male', '25' ],
     [ 'Carrie Fisher', 'Princess Leia Organa', 'Female', '21' ],
     [ 'Peter Cushing', 'Grand Moff Tarkin', 'Female', '69' ],
-    [ 'Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70' ],
+    [ 'Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70', 'selected' ],
     [ 'Anthony Daniels', 'C-3PO', 'Droid', '101' ],
     [ 'Kenny Baker', 'R2-D2', 'Droid', '150' ]
 ];</pre> 
@@ -89,21 +89,25 @@
 <pre>var scenarioTwoDataA = [
     [ 'Actor', 'Character', 'Gender', 'Age' ],
     [ 'Mark Hamill', 'Luke Skywalker', 'Male', '21' ],
-    [ 'James Earl Jones', 'Darth Vader', 'Male', '45' ],
+    [ 'James Earl Jones', 'Darth Vader', 'Male', '45', 'info' ],
     [ 'Harrison Ford', 'Han Solo - Solo plays a central role in the various Star 
                         Wars set after Return of the Jedi. In The Courtship of 
                         Princess Leia (1995), he resigns his commission to 
                         pursue Leia, whom he eventually marries.', 'Male', '25' ],
     [ 'Carrie Fisher', 'Princess Leia Organa', 'Female', '21' ],
     [ 'Peter Cushing', 'Grand Moff Tarkin', 'Female', '69' ],
-    [ 'Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70' ],
+    [ 'Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70', 'warn' ],
     [ 'Anthony Daniels', 'C-3PO', 'Droid', '101' ],
     [ 'Kenny Baker', 'R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought 
                         by Owen Lars, step-uncle of Luke Skywalker. While Luke 
                         cleans the sand out of R2-D2\'s gears, he discovers a 
                         fragment of Leia\'s message, and removes the droid's 
                         restraining bolt to see more; once free of the bolt, 
-                        R2 claims to have no knowledge of the message.', 'Droid', '150' ]
+                        R2 claims to have no knowledge of the message.', 'Droid', '150' ],
+    [ 'Peter Mayhew', 'Chewbacca', 'Wookie', '45' ],
+    [ 'Phil Brown', 'Uncle Owen', 'Male', '32', 'error' ],
+    [ 'Shelagh Fraser', 'Aunt Beru', 'Female', '29' ],
+    [ 'Alex McCrindle', 'General Dodonna', 'Male', '43', 'fail' ]
 ];</pre> 
             </td>
             <td class="glimpse-scenario glimpse-scenario-two-a glimpse-panel"></td>
@@ -501,7 +505,7 @@
     .glimpse-panel tbody tr.warn { color:#FE850C; } 
     .glimpse-panel tbody tr.error { color:#B40000; }
     .glimpse-panel tbody tr.fail { color:#D00; font-weight:bold; }
-    .glimpse-panelitem-Ajax tbody tr.loading .icon { float:right; }
+    .glimpse-panelitem-XHReqests tbody tr.loading .icon { float:right; }
 </style>
 <style>
     h1, h2 { margin:0; padding:0; }
@@ -758,7 +762,27 @@ if (window.jQuery) { (function ($) {
                 var gr = $.glimpseResize;
 		        gr.options.anchor = $(this).bind("mousedown", {el: $(this).parent()}, gr.startDrag); 
 		    });
-	    } 
+	    },
+        sortElements : (function() { 
+            var sort = [].sort; 
+            return function(comparator, getSortable) { 
+                getSortable = getSortable || function()  { return this; };
+                comparator = comparator || function(a, b) { return $(a).data('sort') > $(b).data('sort') ? 1 : -1; };
+                var placements = this.map(function() { 
+                    var sortElement = getSortable.call(this), parentNode = sortElement.parentNode, nextSibling = parentNode.insertBefore(document.createTextNode(''), sortElement.nextSibling);
+                    return function() { 
+                        if (parentNode === this) {
+                            throw new Error("You can't sort elements if any one is a descendant of another.");
+                        }
+                        parentNode.insertBefore(this, nextSibling); 
+                        parentNode.removeChild(nextSibling); 
+                    }; 
+                }); 
+                return sort.call(this, comparator).each(function(i) {
+                    placements[i].call(getSortable.call(this));
+                }); 
+            };
+        })()
     });
 
 	$.extend({ 
@@ -842,6 +866,9 @@ if (window.jQuery) { (function ($) {
                 }
             }
 
+            $('li', tabStrip).sortElements(); 
+            $('.glimpse-panel', panelHolder).sortElements(); 
+
             console.log((new Date().getTime() - start) + ' ms render time');
              
             //Set Inital State
@@ -849,13 +876,13 @@ if (window.jQuery) { (function ($) {
             $('li:first', tabStrip).addClass('glimpse-active');
             $('.glimpse-panel:first', panelHolder).addClass('glimpse-active'); 
             $('.glimpse-title').text(url);
-        },
+        }, 
         addTab : function(container, data, key) {
             var disabled = (data === undefined || data === null) ? ' glimpse-disabled' : '';
-            container.append('<li class="glimpse-tabitem-' + key + disabled + '">' + key + '</li>');
+            container.append('<li class="glimpse-tabitem-' + key + disabled + '" data-sort="' + key + '">' + key + '</li>');
         },
         addTabBody : function(container, content, key) {
-            container.append('<div class="glimpse-panel glimpse-panelitem-' + key + '">' + content + '</div>');
+            container.append('<div class="glimpse-panel glimpse-panelitem-' + key + '" data-sort="' + key + '">' + content + '</div>');
         },
         clearLayout : function(g, options) {
             var that = this, tabStrip = options.tabStrip(), panelHolder = options.panelHolder();
@@ -1063,9 +1090,7 @@ if (window.jQuery) { (function ($) {
             $('a', options.panel).live('click', function() {
                 $('.selected', options.panel).removeClass('selected');
                 $(this).parent().parent().addClass('selected');
-            });
-
-            selected
+            }); 
         },
         callStarted : function(ajaxSpy) {
             var g = $.glimpse, ga = $.glimpseAjax, options = ga.defaults, panelHolder = g.defaults.panelHolder(), panelItem = $('.glimpse-panelitem-' + options.key, panelHolder);
@@ -1106,7 +1131,7 @@ if (window.jQuery) { (function ($) {
             }
         },  
         defaults : {
-            key : 'Ajax',
+            key : 'XHReqests',
             tab : null,
             panel : null
         }
