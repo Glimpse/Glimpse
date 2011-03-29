@@ -25,14 +25,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="odd quiet"><td>"quiet" Style</td></tr>
-                <tr class="even selected"><td>"selected" Style</td></tr>
+                <tr class="odd suppress"><td>"suppress" Style</td></tr>
+                <tr class="even quiet"><td>"quiet" Style</td></tr>
+                <tr class="odd selected"><td>"selected" Style</td></tr>
+                <tr class="even loading"><td>"selected" Style</td></tr>
                 <tr class="odd info"><td>"info" Style</td></tr>
                 <tr class="even warn"><td>"warn" Style</td></tr>
                 <tr class="odd error"><td>"error" Style</td></tr>
-                <tr class="even fail"><td>"fail" Style</td></tr>
-                <tr class="odd error"><td>"error" Style</td></tr>
-                <tr class="even fail"><td>"fail" Style</td></tr>
+                <tr class="even fail"><td>"fail" Style</td></tr> 
             </tbody>
         </table>
     </div>
@@ -448,6 +448,7 @@
     .glimpse-bar { height:27px; border-top:1px solid #ACA899; background:#FFFFFF; background:-moz-linear-gradient(top, #FFFFFF 0%, #EEEEEE 4%, #F3F5F7 8%, #E9E8DD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(4%,#EEEEEE), color-stop(8%,#F3F5F7), color-stop(100%,#E9E8DD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFFFFF', endColorstr='#E9E8DD',GradientType=0 ); }
     .glimpse-bar .glimpse-icon { margin-top:4px; float:left; cursor:default; }
     .glimpse-buttons { float:right; height:17px; width:16px; padding:6px; }
+    .glimpse-title { margin:5px 0 0 15px; font-weight:bold; float:left; }
     .glimpse-close { background:url(/Scripts/glimpse-sprite.png) -1px -1px no-repeat; height:14px; width:14px; display:block; }
     .glimpse-close:hover { background:url(/Scripts/glimpse-sprite.png) -17px -1px no-repeat; }
     .glimpse-tabs { height:24px; font-weight:bold; border-bottom:1px solid #ACA899; border-top:1px solid #CDCABB; background:#B9B7AF; background:-moz-linear-gradient(top, #B9B7AF 0%, #DAD8C8 4%, #D7D4C5 10%, #E9E6D5 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#B9B7AF), color-stop(4%,#DAD8C8), color-stop(10%,#D7D4C5), color-stop(100%,#E9E6D5)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#B9B7AF', endColorstr='#E9E6D5',GradientType=0 );  }
@@ -493,13 +494,14 @@
     .glimpse-panel tbody tr.info .icon, .glimpse-panel tbody tr.warn .icon, .glimpse-panel tbody tr.loading .icon, .glimpse-panel tbody tr.error .icon, .glimpse-panel tbody tr.fail .icon { width:14px; height:14px; background-image:url(/Scripts/glimpse-sprite.png); background-repeat:no-repeat; float:left; margin-right: 5px; } 
     .glimpse-panel tbody tr.info .icon { background-position: -22px -22px; }
     .glimpse-panel tbody tr.warn .icon { background-position:-36px -22px; }
-    .glimpse-panel tbody tr.loading .icon { background-position:-36px -22px; }
+    .glimpse-panel tbody tr.loading .icon { background-position:-78px -22px; }
     .glimpse-panel tbody tr.error .icon { background-position:-50px -22px; } 
     .glimpse-panel tbody tr.fail .icon { background-position:-64px -22px; }
-    .glimpse-panel tbody tr.info { /* background-color:#C0E6F9; */ color:#067CE5; }
-    .glimpse-panel tbody tr.warn { /* background-color: #FFE596; */ color:#FE850C; } 
-    .glimpse-panel tbody tr.error { /* background-color:#FF8484; */ color:#490000; }
-    .glimpse-panel tbody tr.fail { /* background-color:#B03631; */ color: #490000; font-weight:bold; }
+    .glimpse-panel tbody tr.info { color:#067CE5; }
+    .glimpse-panel tbody tr.warn { color:#FE850C; } 
+    .glimpse-panel tbody tr.error { color:#B40000; }
+    .glimpse-panel tbody tr.fail { color:#D00; font-weight:bold; }
+    .glimpse-panelitem-Ajax tbody tr.loading .icon { float:right; }
 </style>
 <style>
     h1, h2 { margin:0; padding:0; }
@@ -743,7 +745,7 @@ $(document).ready(function() {
 <script>
 var glimpse;
 if (window.jQuery) { (function ($) {
- 
+
     $.glimpse = {}; 
     $.glimpseProcessor = {};
     $.glimpseContent = {};
@@ -827,25 +829,26 @@ if (window.jQuery) { (function ($) {
     });
     
     $.extend($.glimpseProcessor, { 
-        layout : function(g, options) {
+        layout : function(g, options, url) {
             var that = this, tabStrip = options.tabStrip(), panelHolder = options.panelHolder();
              
             var start = new Date().getTime();
 
             //Build Dynamic HTML
             for (var key in options.data) {
-                that.addTab(tabStrip, options.data[key], key);
-                that.addTabBody(panelHolder, that.build(options.data[key], 0), key); 
+                if ($('.glimpse-tabitem-' + key, tabStrip).length == 0) {
+                    that.addTab(tabStrip, options.data[key], key);
+                    that.addTabBody(panelHolder, that.build(options.data[key], 0), key); 
+                }
             }
 
             console.log((new Date().getTime() - start) + ' ms render time');
-
-            //Adjust rows  
-            $('.info td:first-child, .warn td:first-child, tr.error td:first-child, .fail td:first-child', $('.glimpse-panel')).not(':has(.icon)').prepend('<div class="icon"></div>')
-
+             
             //Set Inital State
+            $('.info td:first-child, .warn td:first-child, tr.error td:first-child, .fail td:first-child, .loading td:first-child', $('.glimpse-panel')).not(':has(.icon)').prepend('<div class="icon"></div>')
             $('li:first', tabStrip).addClass('glimpse-active');
-            $('.glimpse-panel:first', panelHolder).addClass('glimpse-active');
+            $('.glimpse-panel:first', panelHolder).addClass('glimpse-active'); 
+            $('.glimpse-title').text(url);
         },
         addTab : function(container, data, key) {
             var disabled = (data === undefined || data === null) ? ' glimpse-disabled' : '';
@@ -1075,7 +1078,7 @@ if (window.jQuery) { (function ($) {
                 ], 0));
 
                 $('a', options.panel).click(function(e) { 
-                    $.glimpse.refresh(glimpse); 
+                    $.glimpse.refresh(glimpse, window.location.pathname);  
                 });
                 $('tr:last', options.panel).addClass('selected');
             }
@@ -1098,7 +1101,7 @@ if (window.jQuery) { (function ($) {
             $('.glimpse-ajax-duration', row).text(ajaxSpy.duration + 'ms'); 
             if (glimpseResponse) {
                 $('.glimpse-ajax-inspect', row).html('<a href="#">Launch</a>').children('a').click(function() {
-                    $.glimpse.refresh(eval('(' + glimpseResponse + ')')); 
+                    $.glimpse.refresh(eval('(' + glimpseResponse + ')'), ajaxSpy.url); 
                 }); 
             }
         },  
@@ -1181,7 +1184,7 @@ if (window.jQuery) { (function ($) {
                 $('.glimpse-holder .glimpse-panel').height(options.height - 54); 
             }
         }, 
-        refresh : function(data) { 
+        refresh : function(data, url) { 
             if (!data) return;
 
             var g = $.glimpse, options = g.defaults;
@@ -1190,7 +1193,7 @@ if (window.jQuery) { (function ($) {
             g._executeProtocolListeners(g, options, false);
 
             $.glimpseProcessor.clearLayout(g, options);
-            $.glimpseProcessor.layout(g, options);
+            $.glimpseProcessor.layout(g, options, url);
 
             g._executeLayoutListeners(g, options, false);
         },
@@ -1207,7 +1210,7 @@ if (window.jQuery) { (function ($) {
             g.wireEvents(g, options);
             g.wireCallback(g, options);
 
-            $.glimpseProcessor.layout(g, options);
+            $.glimpseProcessor.layout(g, options, window.location.pathname);
 
             g._executeLayoutListeners(g, options, true);
 
@@ -1220,7 +1223,7 @@ if (window.jQuery) { (function ($) {
         },
         defaults : { 
             data : null,
-            html : { plugin : '<div class="glimpse-open"><div class="glimpse-icon"></div></div><div class="glimpse-holder"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon"></div><div class="glimpse-buttons"><a href="#" class="glimpse-close"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>' },
+            html : { plugin : '<div class="glimpse-open"><div class="glimpse-icon"></div></div><div class="glimpse-holder"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon"></div><div class="glimpse-title"></div><div class="glimpse-buttons"><a href="#" class="glimpse-close"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>' },
             css : '',
             height : 200,
             tabStrip : function() { return $('.glimpse-tabs ul'); },
@@ -1262,6 +1265,19 @@ xmlhttp.open("POST","/Glimpse/Config?wqdeqsd",true);
 xmlhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 xmlhttp.send();
 }, 10000);
+
+setTimeout(function() {
+var xmlhttp;
+if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp = new XMLHttpRequest(); 
+}
+else {// code for IE6, IE5
+  xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+} 
+xmlhttp.open("POST","/Glimpasdsadse/Config?wqdeqsd",true);
+xmlhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+xmlhttp.send();
+}, 10500);
 
 
 
