@@ -1,7 +1,7 @@
 ﻿var XHRSpy = function()
 {
-    this.requestHeaders = [];
-    this.responseHeaders = [];
+    this.requestHeaders = {};
+    this.responseHeaders = {};
 };
 
 XHRSpy.prototype = 
@@ -48,17 +48,11 @@ var XMLHttpRequestWrapper = function(activeXObject)
         var responseHeadersText = xhrRequest.getAllResponseHeaders();
         var responses = responseHeadersText ? responseHeadersText.split(/[\n\r]/) : [];
         var reHeader = /^(\S+):\s*(.*)/; 
-        for (var i = 0, l=responses.length; i<l; i++)
-        {
-            var text = responses[i];
-            var match = text.match(reHeader);
-            if (match)
-            {
-                spy.responseHeaders.push({
-                   name: [match[1]],
-                   value: [match[2]]
-                });
-            }
+        for (var i = 0, l = responses.length; i < l; i++)
+        { 
+            var match = responses[i].match(reHeader);
+            if (match)  
+                spy.responseHeaders[match[1]] = match[2];  
         }
         
         //Trigger the finish a bit latter
@@ -94,9 +88,7 @@ var XMLHttpRequestWrapper = function(activeXObject)
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
     // XMLHttpRequestWrapper public methods
     
-    this.open = function(method, url, async) {
-        console.log("xhrRequest open");
-        
+    this.open = function(method, url, async) { 
         if (spy.loaded)
             spy = new XHRSpy(); 
         spy.method = method;
@@ -120,9 +112,7 @@ var XMLHttpRequestWrapper = function(activeXObject)
         
     };
      
-    this.send = function(data) {
-        console.log("xhrRequest send");
-        
+    this.send = function(data) { 
         spy.data = data; 
         spy.startTime = new Date().getTime();
         
@@ -142,7 +132,7 @@ var XMLHttpRequestWrapper = function(activeXObject)
     };
      
     this.setRequestHeader = function(header, value) {
-        spy.requestHeaders.push({name: [header], value: [value]});
+        spy.requestHeaders[header] = value;
         xhrRequest.setRequestHeader(header, value);
     };
      

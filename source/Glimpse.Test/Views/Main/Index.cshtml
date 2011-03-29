@@ -488,10 +488,12 @@
     .glimpse-collapse { background-position:-64px -11px; }
     .glimpse-preview-show { display:none; font-weight:normal !important; }
     .glimpse-panel tbody tr.quiet { color:#AAA; }
+    .glimpse-panel tbody tr.suppress { color:#AAA; text-decoration:line-through; }
     .glimpse-panel tbody tr.selected { background-color:#FFFF99; color:#409B3B; }
-    .glimpse-panel tbody tr.info .icon, .glimpse-panel tbody tr.warn .icon, .glimpse-panel tbody tr.error .icon, .glimpse-panel tbody tr.fail .icon { width:14px; height:14px; background-image:url(/Scripts/glimpse-sprite.png); background-repeat:no-repeat; float:left; margin-right: 5px; } 
+    .glimpse-panel tbody tr.info .icon, .glimpse-panel tbody tr.warn .icon, .glimpse-panel tbody tr.loading .icon, .glimpse-panel tbody tr.error .icon, .glimpse-panel tbody tr.fail .icon { width:14px; height:14px; background-image:url(/Scripts/glimpse-sprite.png); background-repeat:no-repeat; float:left; margin-right: 5px; } 
     .glimpse-panel tbody tr.info .icon { background-position: -22px -22px; }
     .glimpse-panel tbody tr.warn .icon { background-position:-36px -22px; }
+    .glimpse-panel tbody tr.loading .icon { background-position:-36px -22px; }
     .glimpse-panel tbody tr.error .icon { background-position:-50px -22px; } 
     .glimpse-panel tbody tr.fail .icon { background-position:-64px -22px; }
     .glimpse-panel tbody tr.info { /* background-color:#C0E6F9; */ color:#067CE5; }
@@ -839,7 +841,7 @@ if (window.jQuery) { (function ($) {
             console.log((new Date().getTime() - start) + ' ms render time');
 
             //Adjust rows  
-            $('.info td:first-child, .warn td:first-child, tr.error td:first-child, .fail td:first-child', $('.glimpse-panel')).prepend('<div class="icon"></div>')
+            $('.info td:first-child, .warn td:first-child, tr.error td:first-child, .fail td:first-child', $('.glimpse-panel')).not(':has(.icon)').prepend('<div class="icon"></div>')
 
             //Set Inital State
             $('li:first', tabStrip).addClass('glimpse-active');
@@ -911,13 +913,7 @@ if (window.jQuery) { (function ($) {
             html += '</table>';
             return html; 
         },
-        buildString : function(data, level) { 
-            /*
-            var that = this, charMax = 50; 
-            if (!(data == undefined || data == null) && data.length > charMax) {
-                return that.buildStringPreview(data, level);}
-            return $.htmlEncode(data);
-            */
+        buildString : function(data, level) {  
             return this.buildStringPreview(data, level);
         },
         buildKeyValuePreview : function(data, level) {    
@@ -1041,31 +1037,51 @@ if (window.jQuery) { (function ($) {
     
     $.extend($.glimpseAjax, { 
         init : function() { 
-            var ga = $.glimpseAjax;
+            var ga = this;
+
+            //Wire up plugin
             $.glimpse.addProtocolListener(ga.adjustProtocol, true);
             $.glimpse.addLayoutListener(ga.adjustLayout, true);
         },
-        plugin : 'Ajax',
         adjustProtocol : function(data) {
-            var ga = $.glimpseAjax;
-            data[ga.plugin] = ''
+            var ga = $.glimpseAjax, options = ga.defaults; 
+            data[options.key] = ''
         },
         adjustLayout : function(tabStrip, panelHolder) {
-            var ga = $.glimpseAjax;
-            $('.glimpse-tabitem-' + ga.plugin, tabStrip).addClass('glimpse-permanent').text(ga.plugin); 
-            $('.glimpse-panelitem-' + ga.plugin, panelHolder).addClass('glimpse-permanent').html('<div class="glimpse-panel-message">No ajax calls have yet been detected</div>');
+            var ga = $.glimpseAjax, options = ga.defaults;
+            
+            //Setup layout
+            options.tab = $('.glimpse-tabitem-' + options.key, tabStrip);
+            options.panel = $('.glimpse-panelitem-' + options.key, panelHolder);
+            options.tab.addClass('glimpse-permanent').text(options.key); 
+            options.panel.addClass('glimpse-permanent').html('<div class="glimpse-panel-message">No ajax calls have yet been detected</div>');
+
+            //Wireevents 
+            $('a', options.panel).live('click', function() {
+                $('.selected', options.panel).removeClass('selected');
+                $(this).parent().parent().addClass('selected');
+            });
+
+            selected
         },
         callStarted : function(ajaxSpy) {
-            var g = $.glimpse, ga = $.glimpseAjax, panelHolder = g.defaults.panelHolder(), panelItem = $('.glimpse-panelitem-' + ga.plugin, panelHolder);
+            var g = $.glimpse, ga = $.glimpseAjax, options = ga.defaults, panelHolder = g.defaults.panelHolder(), panelItem = $('.glimpse-panelitem-' + options.key, panelHolder);
 
             //First time round we need to set everything up
-            if ($('.glimpse-panel-message', panelItem).length > 0) 
+            if ($('.glimpse-panel-message', panelItem).length > 0) {
                 panelItem.html($.glimpseProcessor.build([ 
                     ['Request URL', 'Status', 'Date/Time', 'Druration', 'Is Async', 'Inspect'],
                     [window.location.pathname, '200', $.formatTime(new Date()), 'N/A', 'N/A', '!<a href="#">Launch</a>!']
-                 ], 0));
+                ], 0));
+
+                $('a', options.panel).click(function(e) { 
+                    $.glimpse.refresh(glimpse); 
+                });
+                $('tr:last', options.panel).addClass('selected');
+            }
             
-            $('table', panelItem).append('<tr class="glimpse-ajax-loading"><th>' + ajaxSpy.url + '</th><td class="glimpse-ajax-status">Loading...</td><td>' + $.formatTime(ajaxSpy.startTime) + '</td><td class="glimpse-ajax-duration">--</td><td>' + ajaxSpy.async + '</td><td class="glimpse-ajax-inspect"></td></tr>');
+            //Add new row
+            $('table', panelItem).append('<tr class="loading"><th><div class="icon"></div>' + ajaxSpy.url + '</th><td class="glimpse-ajax-status">Loading...</td><td>' + $.formatTime(ajaxSpy.startTime) + '</td><td class="glimpse-ajax-duration">--</td><td>' + ajaxSpy.async + '</td><td class="glimpse-ajax-inspect">N/A</td></tr>');
             
             //In theory I wouldn't need to do this every time but wanting to make sure that all rows are kept in sync
             $('table tbody tr:odd', panelItem).addClass('even');
@@ -1073,12 +1089,23 @@ if (window.jQuery) { (function ($) {
 
             ajaxSpy.logRow = $('tr:last', panelItem);
         },
-        callFinished :function(ajaxSpy) {
-            ajaxSpy.logRow.removeClass('glimpse-ajax-loading').addClass('glimpse-ajax-' + (ajaxSpy.success ? 'loaded' : 'error'));
+        callFinished : function(ajaxSpy) {
+            var row = ajaxSpy.logRow, glimpseResponse = ajaxSpy.responseHeaders['X-Glimpse-Debugger'];
 
-            $('.glimpse-ajax-status', ajaxSpy.logRow).text(ajaxSpy.status);
-            $('.glimpse-ajax-duration', ajaxSpy.logRow).text(ajaxSpy.duration + 'ms');
-            $('.glimpse-ajax-inspect', ajaxSpy.logRow).html('<a href="#">Launch</a>'); 
+            //Adjust layout
+            row.removeClass('loading').addClass(!ajaxSpy.success ? 'error' : glimpseResponse ? 'ajax-loaded' : 'suppress');
+            $('.glimpse-ajax-status', row).text(ajaxSpy.status);
+            $('.glimpse-ajax-duration', row).text(ajaxSpy.duration + 'ms'); 
+            if (glimpseResponse) {
+                $('.glimpse-ajax-inspect', row).html('<a href="#">Launch</a>').children('a').click(function() {
+                    $.glimpse.refresh(eval('(' + glimpseResponse + ')')); 
+                }); 
+            }
+        },  
+        defaults : {
+            key : 'Ajax',
+            tab : null,
+            panel : null
         }
     });
 
@@ -1122,12 +1149,13 @@ if (window.jQuery) { (function ($) {
             });    
              
             //Tab Switching 
-            $('.glimpse-tabs li:not(.glimpse-active, .glimpse-disabled)').live('mouseover mouseout', function () { 
+            $('.glimpse-tabs li:not(.glimpse-active, .glimpse-disabled)').live('mouseover mouseout', function (e) { 
                 var item = $(this);
-                if (event.type == 'mouseover') { item.addClass('glimpse-hover'); } else { item.removeClass('glimpse-hover'); }
+                if (e.type == 'mouseover') { item.addClass('glimpse-hover'); } else { item.removeClass('glimpse-hover'); }
             }); 
             $('.glimpse-tabs li:not(.glimpse-active, .glimpse-disabled)').live('click', function () {
                 var item = $(this);
+
                 //Setup Tabs
                 $('.glimpse-tabs .glimpse-active').removeClass('glimpse-active').removeClass('glimpse-hover');
                 item.addClass('glimpse-active');
@@ -1215,13 +1243,9 @@ if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
 }
 else {// code for IE6, IE5
   xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-}
-xmlhttp.onreadystatechange=function() {
-  if (xmlhttp.readyState==4 && xmlhttp.status==200){
-    document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
-  }
-}
-xmlhttp.open("POST","/Glimpse/Config",true);
+} 
+xmlhttp.open("POST","/?jhkjhkjkj=j",true);
+xmlhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 xmlhttp.send();
 }, 6000);
 
@@ -1233,13 +1257,9 @@ if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
 }
 else {// code for IE6, IE5
   xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-}
-xmlhttp.onreadystatechange=function() {
-  if (xmlhttp.readyState==4 && xmlhttp.status==200){
-    document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
-  }
-}
+} 
 xmlhttp.open("POST","/Glimpse/Config?wqdeqsd",true);
+xmlhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 xmlhttp.send();
 }, 10000);
 
@@ -1253,33 +1273,12 @@ if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
 else {// code for IE6, IE5
   xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
 }
-xmlhttp.onreadystatechange=function() {
-  if (xmlhttp.readyState==4 && xmlhttp.status==200){
-    document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
-  }
-}
 xmlhttp.open("POST","/Glimpse/Config?23tew",true);
+xmlhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 xmlhttp.send();
 }, 11000);
 
 })(jQuery); }  
-</script>
-
-<script type="text/javascript">
-var xmlhttp;
-if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
-  xmlhttp=new XMLHttpRequest();
-}
-else {// code for IE6, IE5
-  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-}
-xmlhttp.onreadystatechange = function() {
-  if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-    document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
-  }
-}
-xmlhttp.open("GET","/Glimpse/Config",true);
-xmlhttp.send();
 </script>
 
 </body>
