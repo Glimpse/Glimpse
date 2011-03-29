@@ -1,8 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Web;
-using Glimpse.Net;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -39,4 +37,3 @@ using Glimpse.Net;
 
 [assembly: System.Web.UI.WebResource("Glimpse.Net.glimpseClient.js", "application/x-javascript")]
 [assembly: System.Web.UI.WebResource("Glimpse.Net.glimpseSprinte.png", "image/png")]
-[assembly: PreApplicationStartMethod(typeof(PreApplicationStartCode), "Start")]

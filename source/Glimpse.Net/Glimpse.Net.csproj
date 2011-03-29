@@ -31,7 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.configuration" />
@@ -79,7 +78,6 @@
     <Compile Include="Plugin\Asp\Server.cs" />
     <Compile Include="Plugin\Asp\Session.cs" />
     <Compile Include="Sanitizer\CSharpSanitizer.cs" />
-    <Compile Include="PreApplicationStartCode.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Glimpse.Protocol\Glimpse.Protocol.csproj">
