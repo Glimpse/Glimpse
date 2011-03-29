@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.configuration" />
@@ -52,6 +53,7 @@
     <Compile Include="Extentions.cs" />
     <Compile Include="GlimpseRequestMetadata.cs" />
     <Compile Include="GlimpseTraceListener.cs" />
+    <Compile Include="PreApplicationStartCode.cs" />
     <Compile Include="Responder\Clients.cs" />
     <Compile Include="Responder\Config.cs" />
     <Compile Include="Responder\GlimpseResponderAttribute.cs" />
