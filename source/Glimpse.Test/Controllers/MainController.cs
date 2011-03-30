@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Diagnostics;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using Glimpse.Net;
-using Glimpse.Net.Configuration;
 
 namespace Glimpse.Test.Controllers
 {
@@ -38,12 +33,6 @@ namespace Glimpse.Test.Controllers
 
             Debug.Write("This is from debug");
             
-            var glimpseConfiguration = ConfigurationManager.GetSection("glimpse") as GlimpseConfiguration;
-
-            ViewBag.GlimpseOn = glimpseConfiguration.On;
-            ViewBag.IpAddresses = glimpseConfiguration.IpAddresses;
-            ViewBag.ContentTypes = glimpseConfiguration.ContentTypes;
-
             var cookie = Request.Cookies["glimpseMode"];
 
             if (cookie != null)
