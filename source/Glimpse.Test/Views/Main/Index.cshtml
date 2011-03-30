@@ -753,8 +753,7 @@ if (window.jQuery) { (function ($) {
     $.glimpse = {}; 
     $.glimpseProcessor = {};
     $.glimpseContent = {};
-    $.glimpseResize = {};
-    $.glimpseAjax = {};
+    $.glimpseResize = {}; 
 
 	$.extend($.fn, {
         resizer : function() {
@@ -871,10 +870,15 @@ if (window.jQuery) { (function ($) {
 
             console.log((new Date().getTime() - start) + ' ms render time');
              
-            //Set Inital State
-            $('.info td:first-child, .warn td:first-child, tr.error td:first-child, .fail td:first-child, .loading td:first-child', $('.glimpse-panel')).not(':has(.icon)').prepend('<div class="icon"></div>')
+            //Set Inital State - TODO: don't like how this works... need to review
+            $('.info td:first-child, .warn td:first-child, tr.error td:first-child, .fail td:first-child, .loading td:first-child', $('.glimpse-panel')).not(':has(.icon)').prepend('<div class="icon"></div>');
+
+            $('.glimpse-active', tabStrip).removeClass('glimpse-active').removeClass('glimpse-hover');
             $('li:first', tabStrip).addClass('glimpse-active');
-            $('.glimpse-panel:first', panelHolder).addClass('glimpse-active'); 
+
+            $('.glimpse-active', panelHolder).removeClass('glimpse-active');
+            $('.glimpse-panel:first', panelHolder).addClass('glimpse-active');
+             
             $('.glimpse-title').text(url);
         }, 
         addTab : function(container, data, key) {
@@ -1064,79 +1068,7 @@ if (window.jQuery) { (function ($) {
         options.height = $('.glimpse-holder').height();
         //$.cookie('GlimpseSettings', true);
     }
-    
-    $.extend($.glimpseAjax, { 
-        init : function() { 
-            var ga = this;
-
-            //Wire up plugin
-            $.glimpse.addProtocolListener(ga.adjustProtocol, true);
-            $.glimpse.addLayoutListener(ga.adjustLayout, true);
-        },
-        adjustProtocol : function(data) {
-            var ga = $.glimpseAjax, options = ga.defaults; 
-            data[options.key] = ''
-        },
-        adjustLayout : function(tabStrip, panelHolder) {
-            var ga = $.glimpseAjax, options = ga.defaults;
-            
-            //Setup layout
-            options.tab = $('.glimpse-tabitem-' + options.key, tabStrip);
-            options.panel = $('.glimpse-panelitem-' + options.key, panelHolder);
-            options.tab.addClass('glimpse-permanent').text(options.key); 
-            options.panel.addClass('glimpse-permanent').html('<div class="glimpse-panel-message">No ajax calls have yet been detected</div>');
-
-            //Wireevents 
-            $('a', options.panel).live('click', function() {
-                $('.selected', options.panel).removeClass('selected');
-                $(this).parent().parent().addClass('selected');
-            }); 
-        },
-        callStarted : function(ajaxSpy) {
-            var g = $.glimpse, ga = $.glimpseAjax, options = ga.defaults, panelHolder = g.defaults.panelHolder(), panelItem = $('.glimpse-panelitem-' + options.key, panelHolder);
-
-            //First time round we need to set everything up
-            if ($('.glimpse-panel-message', panelItem).length > 0) {
-                panelItem.html($.glimpseProcessor.build([ 
-                    ['Request URL', 'Status', 'Date/Time', 'Druration', 'Is Async', 'Inspect'],
-                    [window.location.pathname, '200', $.formatTime(new Date()), 'N/A', 'N/A', '!<a href="#">Launch</a>!']
-                ], 0));
-
-                $('a', options.panel).click(function(e) { 
-                    $.glimpse.refresh(glimpse, window.location.pathname);  
-                });
-                $('tr:last', options.panel).addClass('selected');
-            }
-            
-            //Add new row
-            $('table', panelItem).append('<tr class="loading"><th><div class="icon"></div>' + ajaxSpy.url + '</th><td class="glimpse-ajax-status">Loading...</td><td>' + $.formatTime(ajaxSpy.startTime) + '</td><td class="glimpse-ajax-duration">--</td><td>' + ajaxSpy.async + '</td><td class="glimpse-ajax-inspect">N/A</td></tr>');
-            
-            //In theory I wouldn't need to do this every time but wanting to make sure that all rows are kept in sync
-            $('table tbody tr:odd', panelItem).addClass('even');
-            $('table tbody tr:even', panelItem).addClass('odd');
-
-            ajaxSpy.logRow = $('tr:last', panelItem);
-        },
-        callFinished : function(ajaxSpy) {
-            var row = ajaxSpy.logRow, glimpseResponse = ajaxSpy.responseHeaders['X-Glimpse-Debugger'];
-
-            //Adjust layout
-            row.removeClass('loading').addClass(!ajaxSpy.success ? 'error' : glimpseResponse ? 'ajax-loaded' : 'suppress');
-            $('.glimpse-ajax-status', row).text(ajaxSpy.status);
-            $('.glimpse-ajax-duration', row).text(ajaxSpy.duration + 'ms'); 
-            if (glimpseResponse) {
-                $('.glimpse-ajax-inspect', row).html('<a href="#">Launch</a>').children('a').click(function() {
-                    $.glimpse.refresh(eval('(' + glimpseResponse + ')'), ajaxSpy.url); 
-                }); 
-            }
-        },  
-        defaults : {
-            key : 'XHReqests',
-            tab : null,
-            panel : null
-        }
-    });
-
+   
     $.extend($.glimpse, {
         addProtocolListener : function(callback, onInitOnly) {
             $.glimpse._context.protocolListeners.push({ 'callback' : callback, 'onInitOnly' : onInitOnly });
@@ -1256,14 +1188,99 @@ if (window.jQuery) { (function ($) {
         }
     });
       
-//Wireup glimpse offical plugins
-$.glimpseAjax.init();
 
-//Run glimpse 
-$(document).ready(function() {
-	$.glimpse.init(glimpse); 
-});
+    //Run glimpse 
+    $(document).ready(function() {
+	    $.glimpse.init(glimpse); 
+    });
 
+})(jQuery); }  
+</script>
+
+<script type="text/javascript"> 
+if (window.jQuery) { (function ($) {
+ 
+    $.glimpseAjax = {};
+    $.extend($.glimpseAjax, { 
+        init : function() { 
+            var ga = this;
+
+            //Wire up plugin
+            $.glimpse.addProtocolListener(ga.adjustProtocol, true);
+            $.glimpse.addLayoutListener(ga.adjustLayout, true);
+        },
+        adjustProtocol : function(data) {
+            var ga = $.glimpseAjax, options = ga.defaults; 
+            data[options.key] = ''
+        },
+        adjustLayout : function(tabStrip, panelHolder) {
+            var ga = $.glimpseAjax, options = ga.defaults;
+            
+            //Setup layout
+            options.tab = $('.glimpse-tabitem-' + options.key, tabStrip);
+            options.panel = $('.glimpse-panelitem-' + options.key, panelHolder);
+            options.tab.addClass('glimpse-permanent').text(options.key); 
+            options.panel.addClass('glimpse-permanent').html('<div class="glimpse-panel-message">No ajax calls have yet been detected</div>');
+
+            //Wireevents 
+            $('a', options.panel).live('click', function() {
+                $('.selected', options.panel).removeClass('selected');
+                $(this).parent().parent().addClass('selected');
+            }); 
+        },
+        callStarted : function(ajaxSpy) {
+            var g = $.glimpse, ga = $.glimpseAjax, options = ga.defaults, panelHolder = g.defaults.panelHolder(), panelItem = $('.glimpse-panelitem-' + options.key, panelHolder);
+
+            //First time round we need to set everything up
+            if ($('.glimpse-panel-message', panelItem).length > 0) {
+                panelItem.html($.glimpseProcessor.build([ 
+                    ['Request URL', 'Status', 'Date/Time', 'Druration', 'Is Async', 'Inspect'],
+                    [window.location.pathname, '200', $.formatTime(new Date()), 'N/A', 'N/A', '!<a href="#">Launch</a>!']
+                ], 0));
+
+                $('a', options.panel).click(function(e) { 
+                    $.glimpse.refresh(glimpse, window.location.pathname);  
+                });
+                $('tr:last', options.panel).addClass('selected');
+            }
+            
+            //Add new row
+            $('table', panelItem).append('<tr class="loading"><th><div class="icon"></div>' + ajaxSpy.url + '</th><td class="glimpse-ajax-status">Loading...</td><td>' + $.formatTime(ajaxSpy.startTime) + '</td><td class="glimpse-ajax-duration">--</td><td>' + ajaxSpy.async + '</td><td class="glimpse-ajax-inspect">N/A</td></tr>');
+            
+            //In theory I wouldn't need to do this every time but wanting to make sure that all rows are kept in sync
+            $('table tbody tr:odd', panelItem).addClass('even');
+            $('table tbody tr:even', panelItem).addClass('odd');
+
+            ajaxSpy.logRow = $('tr:last', panelItem);
+        },
+        callFinished : function(ajaxSpy) {
+            var row = ajaxSpy.logRow, glimpseResponse = ajaxSpy.responseHeaders['X-Glimpse-Debugger'];
+
+            //Adjust layout
+            row.removeClass('loading').addClass(!ajaxSpy.success ? 'error' : glimpseResponse ? 'ajax-loaded' : 'suppress');
+            $('.glimpse-ajax-status', row).text(ajaxSpy.status);
+            $('.glimpse-ajax-duration', row).text(ajaxSpy.duration + 'ms'); 
+            if (glimpseResponse) {
+                $('.glimpse-ajax-inspect', row).html('<a href="#">Launch</a>').children('a').click(function() {
+                    $.glimpse.refresh(eval('(' + glimpseResponse + ')'), ajaxSpy.url); 
+                }); 
+            }
+        },  
+        defaults : {
+            key : 'XHReqests',
+            tab : null,
+            panel : null
+        }
+    });
+
+    //Wireup glimpse offical plugins
+    $.glimpseAjax.init();
+
+
+})(jQuery); }  
+</script>
+
+<script type="text/javascript">
 setTimeout(function() {
 var xmlhttp;
 if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -1318,8 +1335,6 @@ xmlhttp.open("POST","/Glimpse/Config?23tew",true);
 xmlhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 xmlhttp.send();
 }, 11000);
-
-})(jQuery); }  
 </script>
 
 </body>
