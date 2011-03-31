@@ -43,7 +43,7 @@ var XMLHttpRequestWrapper = function(activeXObject)
     var finishXHR = function() {
         var duration = new Date().getTime() - spy.startTime;
         var success = xhrRequest.status == 200;
-        
+         
         //Pull out the header information
         var responseHeadersText = xhrRequest.getAllResponseHeaders();
         var responses = responseHeadersText ? responseHeadersText.split(/[\n\r]/) : [];
@@ -65,13 +65,24 @@ var XMLHttpRequestWrapper = function(activeXObject)
         spy.statusText = xhrRequest.statusText;
         spy.responseText = xhrRequest.responseText; 
         spy.duration = duration;
+        
+        console.log(xhrRequest); 
+        console.log(that); 
+
     };
     
     var handleStateChange = function() { 
         that.readyState = xhrRequest.readyState;
         
         if (xhrRequest.readyState == 4)
-        {
+        { 
+            that.statusText = xhrRequest.statusText;
+            that.status = xhrRequest.status;
+            that.response = xhrRequest.response;
+            that.responseText = xhrRequest.responseText;
+            that.responseType = xhrRequest.responseType;
+            that.responseXML = xhrRequest.responseXML;
+
             finishXHR(); 
             xhrRequest.onreadystatechange = function(){};
         } 
@@ -83,8 +94,15 @@ var XMLHttpRequestWrapper = function(activeXObject)
     
     this.readyState = 0;
     
-    this.onreadystatechange = function(){};
+    this.onreadystatechange = function(){ };
     
+    this.response = null;
+    this.responseText = null;
+    this.responseType = null;
+    this.responseXML = null;
+    this.status = null;
+    this.statusText = null;
+
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
     // XMLHttpRequestWrapper public methods
     

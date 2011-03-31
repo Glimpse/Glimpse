@@ -507,7 +507,7 @@
     .glimpse-panel .error { color:#B40000; }
     .glimpse-panel .fail { color:#D00; font-weight:bold; }
     .glimpse-panelitem-XHReqests .loading .icon { float:right; }
-    .glimpse-panelitem-Remote .loading .glimpse-side-sub-panel { position:absolute; left:5px; top:5px; color:#AAA; } 
+    .glimpse-panelitem-Remote .glimpse-side-sub-panel .loading { position:absolute; bottom:5px; right:5px; color:#777; } 
 </style>
 <style>
     h1, h2 { margin:0; padding:0; }
@@ -1308,7 +1308,7 @@ if (window.jQuery) { (function ($) {
             //Make sure we stick round 
             options.tab.addClass('glimpse-permanent').text(options.key); 
             options.panel.addClass('glimpse-permanent'); 
-            options.panel.prepend('<div class="glimpse-side-sub-panel"><div class="loading" style="position: absolute; left: 5px; top: 5px;"><div class="icon"></div>Refreshing...</div></div><div><div class="glimpse-panel-message">No remote calls have yet been detected</div><div class="glimpse-loading loading"><div class="icon"></div>Trying to get new clients...</div>');
+            options.panel.prepend('<div class="glimpse-side-sub-panel"><div class="loading"><div class="icon"></div><span>Refreshing...</span></div><div class="glimpse-content">testhhhjhhjhjhghjghj</div></div><div><div class="glimpse-panel-message">No remote calls have yet been detected</div><div class="glimpse-loading loading"><div class="icon"></div>Trying to get new clients...</div>');
 
             options.subPanel = $('.glimpse-side-sub-panel', options.panel);
 
@@ -1331,27 +1331,38 @@ if (window.jQuery) { (function ($) {
             gr.getClientList();
         },
         getClientList : function() {
-            var gr = $.glimpseRemote, options = gr.defaults; 
+            var gr = $.glimpseRemote, options = gr.defaults, loading = $('.loading', options.subPanel); 
 
             $.ajax({
                 url: '/Glimpse/Clients',
-                type: 'GET',  
-                beforeSend: function () {
-                    $('.loading', options.subPanel).fadeIn();  
+                type: 'GET', 
+                contentType: 'application/json',  
+                beforeSend: function () { 
+                    $('span', loading).text('Refreshing...').parent().fadeIn(); 
                 },
-                success: function(result) { 
-                    $('.loading', options.subPanel).fadeOut(); 
+                success: function(result) {  
+                    $('span', loading).text('Loaded...').parent().delay(1500).fadeOut(); 
                     gr.processClientList(result);
                 }
             }); 
         },
         processClientList : function(result) {
             var gr = $.glimpseRemote, options = gr.defaults; 
-
-            console.log(result);
+            
+            //Adjusts the returned data
+            for (var i = 0; i < result.length; i++) {
+                var item = result[i];
+                if (i == 0)
+                    item.push('Inspect');
+                else 
+                    item.push('!<a href="#">Go</a>!')
+            }
+                
+            $('.glimpse-content', options.subPanel).html($.glimpseProcessor.build(result, 0));
 
             //Trigger new fetch
-            setTimeout(function() { gr.getClientList(); }, 5000);
+            if (options.tab.hasClass('glimpse-active'))
+                setTimeout(function() { gr.getClientList(); }, 7500);
         },
         defaults : {
             key : 'Remote',
