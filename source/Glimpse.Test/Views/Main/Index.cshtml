@@ -11,7 +11,7 @@
 <body>
     <p>Page rendered at @DateTime.Now.ToLongTimeString().</p>
 
-    <p>For Config info Go To <a href="/Glimpse/Config">Glimpse/Config</a> or drag the <a href="javascript:(function(){document.cookie='glimpseMode=On; path=/;'; window.location.reload();})();">Glimpse</a> bookmarklet to your favorites bar.</p>
+    <p>For Config info Go To <a href="/Glimpse/Config">Glimpse/Config</a> or drag either of the <a href="javascript:(function(){document.cookie='glimpseMode=On; path=/;'; window.location.reload();})();">Glimpse</a>/<a href="javascript:(function(){document.cookie='glimpseClientName='+ prompt('Client Name?') +'; path=/;'; window.location.reload();})();">Glimpse Client</a> following bookmarklets to your favorites bar.</p>
 
     <hr />
 
@@ -477,7 +477,7 @@
     .glimpse-panel tbody tr.odd { background:#F9F9F9; }
     .glimpse-panel table table tbody th { font-weight:normal; font-style:italic; }
     .glimpse-panel table table thead th { font-weight:bold; font-style:normal; }
-    .glimpse-panel .glimpse-side-sub-panel { float:right; background-color:#F5F5F5; height:100%; width:300px; border-left:1px solid #ACA899; }
+    .glimpse-panel .glimpse-side-sub-panel { float:right; background-color:#F5F5F5; height:100%; width:300px; border-left:1px solid #ACA899; position:relative; }
     .glimpse-panel .glimpse-loading { color:#AAA; text-align:center; margin-top:20px; }
     .glimpse-panel-holder .glimpse-active { display:block; }
     .glimpse-resizer { height:4px; cursor:n-resize; width:100%; position:absolute; top:-1px; }
@@ -507,6 +507,7 @@
     .glimpse-panel .error { color:#B40000; }
     .glimpse-panel .fail { color:#D00; font-weight:bold; }
     .glimpse-panelitem-XHReqests .loading .icon { float:right; }
+    .glimpse-panelitem-Remote .loading .glimpse-side-sub-panel { position:absolute; left:5px; top:5px; color:#AAA; } 
 </style>
 <style>
     h1, h2 { margin:0; padding:0; }
@@ -1307,7 +1308,7 @@ if (window.jQuery) { (function ($) {
             //Make sure we stick round 
             options.tab.addClass('glimpse-permanent').text(options.key); 
             options.panel.addClass('glimpse-permanent'); 
-            options.panel.prepend('<div class="glimpse-side-sub-panel"></div><div><div class="glimpse-panel-message">No remote calls have yet been detected</div><div class="glimpse-loading loading"><div class="icon"></div>Trying to get new clients...</div>');
+            options.panel.prepend('<div class="glimpse-side-sub-panel"><div class="loading" style="position: absolute; left: 5px; top: 5px;"><div class="icon"></div>Refreshing...</div></div><div><div class="glimpse-panel-message">No remote calls have yet been detected</div><div class="glimpse-loading loading"><div class="icon"></div>Trying to get new clients...</div>');
 
             options.subPanel = $('.glimpse-side-sub-panel', options.panel);
 
@@ -1321,7 +1322,36 @@ if (window.jQuery) { (function ($) {
             });
         },
         activate : function() {
+            var gr = $.glimpseRemote, options = gr.defaults; 
+         
 
+            ///Glimpse/History?ClientName=FF4
+            ///Glimpse/Clients
+
+            gr.getClientList();
+        },
+        getClientList : function() {
+            var gr = $.glimpseRemote, options = gr.defaults; 
+
+            $.ajax({
+                url: '/Glimpse/Clients',
+                type: 'GET',  
+                beforeSend: function () {
+                    $('.loading', options.subPanel).fadeIn();  
+                },
+                success: function(result) { 
+                    $('.loading', options.subPanel).fadeOut(); 
+                    gr.processClientList(result);
+                }
+            }); 
+        },
+        processClientList : function(result) {
+            var gr = $.glimpseRemote, options = gr.defaults; 
+
+            console.log(result);
+
+            //Trigger new fetch
+            setTimeout(function() { gr.getClientList(); }, 5000);
         },
         defaults : {
             key : 'Remote',
