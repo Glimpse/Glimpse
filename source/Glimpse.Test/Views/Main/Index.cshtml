@@ -496,7 +496,7 @@
     .glimpse-panel .quiet { color:#AAA; }
     .glimpse-panel .suppress { color:#AAA; text-decoration:line-through; }
     .glimpse-panel .selected { background-color:#FFFF99; color:#409B3B; }
-    .glimpse-panel .info .icon, .glimpse-panel .warn .icon, .glimpse-panel .loading .icon, .glimpse-panel .error .icon, .glimpse-panel .fail .icon { width:14px; height:14px; background-image:url(/Scripts/glimpse-sprite.png); background-repeat:no-repeat; float:left; margin-right: 5px; } 
+    .glimpse-panel .info .icon, .glimpse-panel .warn .icon, .glimpse-panel .loading .icon, .glimpse-panel .error .icon, .glimpse-panel .fail .icon { width:14px; height:14px; background-image:url(/Scripts/glimpse-sprite.png); background-repeat:no-repeat; display:inline-block; margin-right: 5px; } 
     .glimpse-panel .info .icon { background-position: -22px -22px; }
     .glimpse-panel .warn .icon { background-position:-36px -22px; }
     .glimpse-panel .loading .icon { background-position:-78px -22px; }
@@ -1303,11 +1303,13 @@ if (window.jQuery) { (function ($) {
             //Setup layout
             options.tab = $('.glimpse-tabitem-' + options.key, tabStrip);
             options.panel = $('.glimpse-panelitem-' + options.key, panelHolder);
-            options.subPanel = options.panel.prepend('<div class="glimpse-side-sub-panel"></div>');
-
+             
             //Make sure we stick round 
             options.tab.addClass('glimpse-permanent').text(options.key); 
-            options.panel.addClass('glimpse-permanent').html('<div class="glimpse-panel-message">No remote calls have yet been detected</div>');
+            options.panel.addClass('glimpse-permanent'); 
+            options.panel.prepend('<div class="glimpse-side-sub-panel"></div><div><div class="glimpse-panel-message">No remote calls have yet been detected</div><div class="glimpse-loading loading"><div class="icon"></div>Trying to get new clients...</div>');
+
+            options.subPanel = $('.glimpse-side-sub-panel', options.panel);
 
             //Wireevents 
             $('a', options.panel).live('click', function() {
@@ -1319,7 +1321,7 @@ if (window.jQuery) { (function ($) {
             });
         },
         activate : function() {
-            alert('activate');
+
         },
         defaults : {
             key : 'Remote',
