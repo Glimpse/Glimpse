@@ -36,7 +36,10 @@ namespace Glimpse.Net.Responder
                                         into clients
                                         select new { Client = clients.Key, RequestCount = clients.Count() };
 
-                var data = JsSerializer.Serialize(filteredQueue);
+                var response = new List<object[]>{new[]{"Client", "Count"}};
+                response.AddRange(filteredQueue.Select(client => new object[] {client.Client, client.RequestCount}));
+
+                var data = JsSerializer.Serialize(response);
                 JsonResponse(application, data);
                 return;
             }
