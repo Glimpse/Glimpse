@@ -64,11 +64,7 @@ var XMLHttpRequestWrapper = function(activeXObject)
         spy.status = xhrRequest.status;
         spy.statusText = xhrRequest.statusText;
         spy.responseText = xhrRequest.responseText; 
-        spy.duration = duration;
-        
-        console.log(xhrRequest); 
-        console.log(that); 
-
+        spy.duration = duration; 
     };
     
     var handleStateChange = function() { 

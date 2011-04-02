@@ -5955,7 +5955,7 @@ jQuery.extend({
 		}
 
 		// Wait for a response to come back
-		var onreadystatechange = xhr.onreadystatechange = function( isTimeout ) {
+		var onreadystatechange = xhr.onreadystatechange = function( isTimeout ) { 
 			// The request was aborted
 			if ( !xhr || xhr.readyState === 0 || isTimeout === "abort" ) {
 				// Opera doesn't call onreadystatechange before this point
@@ -6197,7 +6197,7 @@ jQuery.extend({
 
 	// Determines if an XMLHttpRequest was successful or not
 	httpSuccess: function( xhr ) {
-		try {
+		try { 
 			// IE error sometimes returns 1223 when it should be 204 so treat it as success, see #1450
 			return !xhr.status && location.protocol === "file:" ||
 				xhr.status >= 200 && xhr.status < 300 ||
