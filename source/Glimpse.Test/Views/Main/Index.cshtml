@@ -772,7 +772,7 @@ $(document).ready(function() {
         else {// code for IE6, IE5
           xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
         }
-        xmlhttp.open("POST","/Glimpse/Config?23tew",true);
+        xmlhttp.open("POST","/asdasd/Config?23tew",true);
         xmlhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
         xmlhttp.send();
     });
@@ -785,7 +785,7 @@ $(document).ready(function() {
         else {// code for IE6, IE5
           xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
         } 
-        xmlhttp.open("POST","/Glimpse/Config?wqdeqsd",true);
+        xmlhttp.open("POST","/?wqdeqsd=sad",true);
         xmlhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
         xmlhttp.send();
     });
@@ -1277,6 +1277,9 @@ if (window.jQuery) { (function ($) {
         callStarted : function(ajaxSpy) {
             var g = $.glimpse, ga = $.glimpseAjax, options = ga.defaults, panelHolder = g.defaults.panelHolder(), panelItem = $('.glimpse-panelitem-' + options.key, panelHolder);
 
+            if (ajaxSpy.url && ajaxSpy.url.length > 9 && ajaxSpy.url.substr(0, 9) == '/Glimpse/')
+                return;
+
             //First time round we need to set everything up
             if ($('.glimpse-panel-message', panelItem).length > 0) {
                 panelItem.html($.glimpseProcessor.build([ 
@@ -1301,6 +1304,9 @@ if (window.jQuery) { (function ($) {
         },
         callFinished : function(ajaxSpy) {
             var row = ajaxSpy.logRow, glimpseResponse = ajaxSpy.responseHeaders['X-Glimpse-Debugger'];
+            
+            if (ajaxSpy.url && ajaxSpy.url.length > 9 && ajaxSpy.url.substr(0, 9) == '/Glimpse/')
+                return;
 
             //Adjust layout
             row.removeClass('loading').addClass(!ajaxSpy.success ? 'error' : glimpseResponse ? 'ajax-loaded' : 'suppress');
@@ -1384,7 +1390,7 @@ if (window.jQuery) { (function ($) {
             var gr = $.glimpseRemote, options = gr.defaults, loading = $('.loading', options.mainPanel); 
              
             $.ajax({
-                url: 'Glimpse/History',
+                url: '/Glimpse/History',
                 type: 'GET', 
                 data : { 'ClientName' : clientId },
                 contentType: 'application/json',  
