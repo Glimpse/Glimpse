@@ -133,7 +133,8 @@ namespace Glimpse.Net
                                   Json = json,
                                   RequestTime = DateTime.Now.ToLongTimeString(),
                                   RequestId = Guid.NewGuid(),
-                                  IsAjax = ctx.IsAjax().ToString()
+                                  IsAjax = ctx.IsAjax().ToString(),
+                                  Url = ctx.Request.RawUrl
                               });
         }
 

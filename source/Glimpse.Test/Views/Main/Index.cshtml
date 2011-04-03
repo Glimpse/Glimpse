@@ -1358,23 +1358,27 @@ if (window.jQuery) { (function ($) {
 
             //Wireevents 
             $('a', options.panel).live('click', function() {
-                $('.selected', options.panel).removeClass('selected');
-                $(this).parent().parent().addClass('selected');
+                $('.selected', $(this).parents('table:first')).removeClass('selected');
+                $(this).parents('tr:first').addClass('selected');
             }); 
-            $('a', options.subPanel).live('click', function() { 
+            $('a', options.subPanel).live('click', function() {
                 gr.getClientHistoryList($(this).data('client')); 
+                return false;
             });
-            $('a', options.mainPanel).live('click', function() {
-
+            $('a', options.mainPanel).live('click', function() { 
+                gr.activate($(this).data('client'), $(this).data('request'))
+                return false;
             });
             options.tab.click(function() {
-                gr.activate();
+                gr.getClientList();
             });
         },
-        activate : function() {
+        activate : function(client, request) {
             var gr = $.glimpseRemote, options = gr.defaults; 
-            
-            gr.getClientList();
+
+            var request = options.result.Data[client][request];
+            if (request.Data) 
+                $.glimpse.refresh(eval('(' + request.Data + ')'), request.Url); 
         },
         getClientHistoryList : function(clientId) {
             var gr = $.glimpseRemote, options = gr.defaults, loading = $('.loading', options.mainPanel); 
@@ -1389,7 +1393,6 @@ if (window.jQuery) { (function ($) {
                 },
                 success: function(result) {  
                     $('span', loading).text('Loaded...').parent().delay(1500).fadeOut(); 
-                    result = $.glimpseRemote.fakeClientHisotryData(); //TODO this needs to be removed
                     gr.processClientHistoryList(result);
                 }
             });  
@@ -1405,8 +1408,7 @@ if (window.jQuery) { (function ($) {
                     $('span', loading).text('Refreshing...').parent().fadeIn(); 
                 },
                 success: function(result) {  
-                    $('span', loading).text('Loaded...').parent().delay(1500).fadeOut(); 
-                    result = $.glimpseRemote.fakeClientData(); //TODO this needs to be removed
+                    $('span', loading).text('Loaded...').parent().hide();//.delay(1500).fadeOut();  
                     gr.processClientList(result);
                 }
             });
@@ -1427,22 +1429,18 @@ if (window.jQuery) { (function ($) {
                 
                 //As long as the client  
                 if ($(".selected a[data-client='" + rclientToken + "']", options.subPanel).length > 0) {
-                    var lclient = ldata[rclientToken], data = [ [ 'Browser', 'Request Time', 'Is Ajax', 'Launch' ] ]; 
+                    var lclient = ldata[rclientToken], data = [ [ 'Client Name', 'Request Url', 'Browser', 'Date/Time', 'Is Ajax', 'Launch' ] ]; 
                     
                     for (var lclientRequestToken in lclient) {
                         var lclientRequest = lclient[lclientRequestToken];
                         if (lclientRequest.Data) 
-                            data.push([ lclientRequest.Browser, lclientRequest.RequestTime, lclientRequest.IsAjax, '!<a href="#" data-request="' + lclientRequestToken + '">Launch</a>!' ]);
+                            data.push([ rclientToken, lclientRequest.Url, lclientRequest.Browser, lclientRequest.RequestTime, lclientRequest.IsAjax, '!<a href="#" data-request="' + lclientRequestToken + '" data-client="' + rclientToken + '">Launch</a>!' ]);
                     }
 
                     $('.glimpse-initial', options.mainPanel).hide();
                     $('.glimpse-content', options.mainPanel).html($.glimpseProcessor.build(data, 0));
                 }
-            }
-
-            //Trigger new fetch
-            if (options.tab.hasClass('glimpse-active'))
-                setTimeout(function() { gr.getClientHistoryList(); }, 5000);
+            } 
         },
         processClientList : function(result) {
             var gr = $.glimpseRemote, options = gr.defaults; 
@@ -1452,6 +1450,8 @@ if (window.jQuery) { (function ($) {
                 $('.glimpse-content', options.subPanel).html($.glimpseProcessor.build([ [ 'Client', 'Count', 'Launch'] ], 0));
  
             if (options.result && result) {
+                var shouldTriggerHistoryRequest = false, selectedClientName = $(".selected a", options.subPanel).data('client');
+
                 //Adjusts the returned data
                 $.extend(true, options.result, result);
 
@@ -1460,13 +1460,20 @@ if (window.jQuery) { (function ($) {
                 for (var lclientToken in ldata) {
                     var lclient = ldata[lclientToken], rclient = rdata[lclientToken], count = 0;
                  
-                    //Lets remove items that are not on the server and are on the client that don't have any cached data 
+                    //Lets go through the client requests 
                     for (var lclientRequestToken in lclient) {
                         var lclientRequest = lclient[lclientRequestToken];   
+
+                        //Remove any tokens that we don't have cached locally and the server does't have 
                         if (!(lclientRequest.Data || (rclient && rclient[lclientRequestToken])))
                             delete lclient[lclientRequestToken];   
                         else 
                             count++;
+                        
+                        //Detect if any new requests new requests have arrived, since this client was selected
+                        if (selectedClientName == lclientToken && !lclientRequest.Detected) 
+                            shouldTriggerHistoryRequest = true;
+                        lclientRequest.Detected = true;
                     }
                  
                     //Lets update the UI, by updateing the counter, adding a now or removing a row
@@ -1484,6 +1491,10 @@ if (window.jQuery) { (function ($) {
                         $('table', options.subPanel).append('<tr><td>' + lclientToken + '</td><td>' + count + '</td><td><a href="#" data-client="' + lclientToken + '">Launch</a></td></tr>')
                 } 
 
+                //Trigger a history request if we need to 
+                if (shouldTriggerHistoryRequest)
+                    gr.getClientHistoryList(selectedClientName); 
+
                 //In theory I wouldn't need to do this every time but wanting to make sure that all rows are kept in sync
                 $('table tbody tr').removeClass('even').removeClass('odd');
                 $('table tbody tr:odd', options.subPanel).addClass('even');
@@ -1492,7 +1503,7 @@ if (window.jQuery) { (function ($) {
 
             //Trigger new fetch
             if (options.tab.hasClass('glimpse-active'))
-                setTimeout(function() { gr.getClientList(); }, 1000);
+                setTimeout(function() { gr.getClientList(); }, 5000);
         },
         defaults : {
             key : 'Remote',
@@ -1502,66 +1513,6 @@ if (window.jQuery) { (function ($) {
             mainPanel : null,
             result : {},
             _count : 0
-        },
-        fakeClientHisotryData : function() {
-            return { "Data" : {
-	                        "Anthony" : {
-			                        "6fc7307b-1224-4fbc-880d-c39fd196ac91" : { "Data":"True" },
-			                        "2324234a-3455-0998-3432-2343232432ab" : { "Data":"False" },
-			                        "11242143-4325-1234-2342-325151244212" : { "Data":"False" } 
-		                        } } };
-        },
-        fakeClientData : function() {
-            var count = $.glimpseRemote.defaults._count++;
-            if (count == 0) {
-                return { "Data" : {
-	                        "Anthony" : {
-			                        "6fc7307b-1224-4fbc-880d-c39fd196ac91" : { "Browser" : "Chrome 11.0", "RequestTime":"11:01:03 PM", "IsAjax":"True" },
-			                        "2324234a-3455-0998-3432-2343232432ab" : { "Browser" : "Chrome 11.0", "RequestTime":"11:02:23 PM", "IsAjax":"False" },
-			                        "11242143-4325-1234-2342-325151244212" : { "Browser" : "Chrome 11.0", "RequestTime":"11:04:34 PM", "IsAjax":"False" } 
-		                        },
-	                        "Mobile" : {
-			                        "6fc7307b-1224-4fbc-880d-c39fd196ac91" : { "Browser" : "IE 9.0", "RequestTime":"11:01:03 PM", "IsAjax":"True" }
-		                        }
-	                        }
-                        };
-            }
-            else if (count == 1) {
-                return { "Data" : {
-	                        "Anthony" : {
-                                    "11242143-4325-1234-2342-325151244212" : { "Browser" : "Chrome 11.0", "RequestTime":"11:04:34 PM", "IsAjax":"False" } 
-	                            },
-	                        "Mobile" : {
-			                        "6fc7307b-1224-4fbc-880d-c39fd196ac91" : { "Browser" : "IE 9.0", "RequestTime":"11:01:03 PM", "IsAjax":"True" },
-			                        "a2342352-1213-3241-3243-856567567567" : { "Browser" : "IE 9.0", "RequestTime":"12:23:45 PM", "IsAjax":"False" },
-			                        "abc32523-4366-7454-2344-345346346352" : { "Browser" : "IE 9.0", "RequestTime":"12:45:34 PM", "IsAjax":"False" } 
-		                        }
-	                        }
-                        };
-            }
-            else if (count == 2) {
-                return { "Data" : {
-	                        "Anthony" : {
-			                        "11242143-4325-1234-2342-325151244212" : { "Browser" : "Chrome 11.0", "RequestTime":"11:04:34 PM", "IsAjax":"False", "Data" : "This is a tests" } 
-		                        },
-	                        "Mobile" : {
-			                        "abc32523-4366-7454-2344-345346346352" : { "Browser" : "IE 9.0", "RequestTime":"12:45:34 PM", "IsAjax":"False" } 
-		                        },
-	                        "Teminator" : {
-			                        "123213sa-4325-1234-2342-325151244212" : { "Browser" : "Chrome 11.0", "RequestTime":"11:04:34 PM", "IsAjax":"False" } 
-		                        }
-	                        }
-                        };
-            }
-            else if (count == 3) {
-                return { "Data" : {
-	                        "Teminator" : {
-			                        "123213sa-4325-1234-2342-325151244212" : { "Browser" : "Chrome 11.0", "RequestTime":"11:04:34 PM", "IsAjax":"False" },
-			                        "98734jds-4366-7454-2344-345346346352" : { "Browser" : "IE 9.0", "RequestTime":"12:45:34 PM", "IsAjax":"False" } 
-		                        }
-	                        }
-                        };
-            } 
         }
     });
 
