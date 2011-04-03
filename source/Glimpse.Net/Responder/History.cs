@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Web;
 using System.Web.Script.Serialization;
 using Glimpse.Net.Configuration;
+using Glimpse.Net.Plumbing;
 
 namespace Glimpse.Net.Responder
 {
@@ -34,19 +36,33 @@ namespace Glimpse.Net.Responder
             if (queue != null)
             {
                 var clientName = application.Request.QueryString[GlimpseConstants.ClientName];
-                string data;
+                var result = new Dictionary<string, object>();
+                IEnumerable<GlimpseRequestMetadata> data;
 
                 if (string.IsNullOrEmpty(clientName))
-                    data = JsSerializer.Serialize(queue);
+                    data = queue;
                 else
                 {
-                    var filteredQueue = from request in queue
+                    data = from request in queue
                                         where request.ClientName.Equals(clientName)
                                         select request;
-                    data = JsSerializer.Serialize(filteredQueue);
                 }
 
-                JsonResponse(application, data);
+                var lastClient = Guid.NewGuid().ToString();
+                foreach (var request in data.OrderBy(d=> d.ClientName))
+                {
+                    if (!lastClient.Equals(request.ClientName))
+                        result.Add(request.ClientName, new Dictionary<string, object>());
+
+                    var dictionary = result[request.ClientName] as IDictionary<string, object>;
+                    dictionary.Add(request.RequestId.ToString(), new {Data = request.Json});
+
+                    lastClient = request.ClientName;
+                }
+
+
+                var json = JsSerializer.Serialize(new {Data = result});
+                JsonResponse(application, json);
                 return;
             }
             else

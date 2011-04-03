@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 
-namespace Glimpse.Net.Mvc
+namespace Glimpse.Net.Plumbing
 {
     public class GlimpseFilterAttribute: ActionFilterAttribute
     {

@@ -27,8 +27,16 @@ namespace Glimpse.Net.Responder
         public GlimpseResponder GetResponderFor(HttpApplication application)
         {
             var path = application.Request.Path;
+            var store = application.Context.Items;
 
-            return (from o in Outputs where path.StartsWith(RootPath + o.ResourceName) select o).SingleOrDefault();
+            var result = (from o in Outputs where path.StartsWith(RootPath + o.ResourceName) select o).SingleOrDefault();
+            
+            store["__validPath"] = true;
+
+            if (result == null) 
+                store["__validPath"] = false;
+
+            return result;
         }
 
         public void RegisterConverters()

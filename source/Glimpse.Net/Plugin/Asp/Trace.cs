@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Glimpse.Net.Plumbing;
 using Glimpse.Protocol;
 
 namespace Glimpse.Net.Plugin.Asp
@@ -49,7 +50,7 @@ namespace Glimpse.Net.Plugin.Asp
             return messages;
         }
 
-        public void SetupInit()
+        public void SetupInit(HttpApplication application)
         {
             var traceListeners = System.Diagnostics.Trace.Listeners;
             if (!traceListeners.OfType<GlimpseTraceListener>().Any())

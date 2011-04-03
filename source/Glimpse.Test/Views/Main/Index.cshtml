@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Glimpse.Test.Models.IndexViewModel
+@{
     Layout = null;
 }
 
@@ -9,7 +10,7 @@
     <title>Index</title>
 </head>
 <body>
-    <p>Page rendered at @DateTime.Now.ToLongTimeString().</p>
+    <p>Page rendered at @Html.DisplayFor(m => m.RenderTime).</p>
 
     <p>For Config info Go To <a href="/Glimpse/Config">Glimpse/Config</a> or drag either of the <a href="javascript:(function(){document.cookie='glimpseMode=On; path=/;'; window.location.reload();})();">Glimpse</a>/<a href="javascript:(function(){document.cookie='glimpseClientName='+ prompt('Client Name?') +'; path=/;'; window.location.reload();})();">Glimpse Client</a> following bookmarklets to your favorites bar.</p>
 

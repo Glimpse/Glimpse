@@ -1,19 +1,25 @@
-﻿using System.Web;
+﻿using System;
+using System.Web;
 using Glimpse.Protocol;
 
 namespace Glimpse.Net.Plugin.Asp
 {
     [GlimpsePlugin]
-    public class Server : NameValueCollectionPlugin
+    public class Server : IGlimpsePlugin
     {
-        public override string Name
+        public string Name
         {
             get { return "Server"; }
         }
 
-        public override object GetData(HttpApplication application)
+        public object GetData(HttpApplication application)
         {
-            return Process(application.Request.ServerVariables, application);
+            return application.Request.ServerVariables.Flatten();
+        }
+
+        public void SetupInit(HttpApplication application)
+        {
+            throw new NotImplementedException();
         }
     }
 }

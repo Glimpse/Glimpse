@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Web;
 using System.Web.Mvc;
 using Glimpse.Net.Configuration;
@@ -25,7 +26,6 @@ namespace Glimpse.Net
             var request = application.Request;
             var response = application.Response;
             var store = application.Context.Items;
-            var cookies = request.Cookies;
 
             //check IP address
             var validIp = store["__validIp"] as bool?;
@@ -73,20 +73,6 @@ namespace Glimpse.Net
             return new HttpRequestWrapper(application.Request).IsAjaxRequest();
         }
 
-        public static bool IsGlimpseRequest(this HttpApplication application)
-        {
-            var path = application.Request.Path;
-
-            var result = (path.StartsWith("/Glimpse/Config") ||
-                    path.StartsWith("/Glimpse/History") ||
-                    path.StartsWith("/Glimpse/glimpseClient.js") ||
-                    path.StartsWith("/Glimpse/glimpseSprite.png") ||
-                    path.StartsWith("/Glimpse/Clients"));
-
-            application.Context.Items["__validPath"] = result;
-            return result;
-        }
-
         public static string GetClientName(this HttpApplication application)
         {
             var cookie = application.Request.Cookies[GlimpseConstants.CookieClientNameKey];
@@ -117,5 +103,36 @@ namespace Glimpse.Net
 
             return (data != null);
         }
+
+        public static IDictionary<string, string> Flatten(this IDictionary<string, object> dictionary)
+        {
+            var result = new Dictionary<string, string>();
+
+            if (dictionary == null) return null;
+
+            foreach (var key in dictionary.Keys)
+            {
+                result.Add(key, dictionary[key].ToString());
+            }
+
+            if (result.Count == 0) return null;
+
+            return result;
+        }
+
+        public static IDictionary<string, string> Flatten(this NameValueCollection collection)
+        {
+            var result = new Dictionary<string, string>();
+            foreach (var key in collection.AllKeys)
+            {
+                var keyValue = string.IsNullOrEmpty(key) ? "*--*" : key;
+                result.Add(keyValue, collection[keyValue]);
+            }
+
+            if (result.Count == 0) return null;
+
+            return result;
+        }
+
     }
 }

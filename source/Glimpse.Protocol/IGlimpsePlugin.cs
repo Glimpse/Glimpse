@@ -6,6 +6,6 @@ namespace Glimpse.Protocol
     {
         string Name { get; }
         object GetData(HttpApplication application);
-        void SetupInit();
+        void SetupInit(HttpApplication application);
     }
 }

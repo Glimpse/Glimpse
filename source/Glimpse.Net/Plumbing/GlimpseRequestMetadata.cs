@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Glimpse.Net
+namespace Glimpse.Net.Plumbing
 {
     public class GlimpseRequestMetadata
     {
