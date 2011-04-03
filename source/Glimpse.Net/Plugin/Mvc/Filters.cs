@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using Glimpse.Net.Mvc;
+using Glimpse.Net.Plumbing;
 using Glimpse.Protocol;
 
 namespace Glimpse.Net.Plugin.Mvc
@@ -63,7 +63,7 @@ namespace Glimpse.Net.Plugin.Mvc
             return result;
         }
 
-        public void SetupInit()
+        public void SetupInit(HttpApplication application)
         {
             var filters = GlobalFilters.Filters;
 

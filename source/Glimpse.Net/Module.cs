@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using Glimpse.Net.Configuration;
+using Glimpse.Net.Plumbing;
 using Glimpse.Net.Responder;
 using Glimpse.Protocol;
 
@@ -14,9 +15,9 @@ namespace Glimpse.Net
 {
     public class Module : IHttpModule
     {
-        private static GlimpseConfiguration Configuration { get; set; }
-        private static CompositionContainer Container { get; set; }
-        private static GlimpseResponders Responders { get; set; }
+        private GlimpseConfiguration Configuration { get; set; }
+        private CompositionContainer Container { get; set; }
+        private GlimpseResponders Responders { get; set; }
         [ImportMany] private IList<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>> Plugins { get; set; }
 
         public Module()
@@ -35,7 +36,7 @@ namespace Glimpse.Net
             //Allow plugin's registered for Intialization to setup
             foreach (var plugin in Plugins.Where(plugin => plugin.Metadata.ShouldSetupInInit))
             {
-                plugin.Value.SetupInit();
+                plugin.Value.SetupInit(context);
             }
 
             context.BeginRequest += BeginRequest;
@@ -44,7 +45,7 @@ namespace Glimpse.Net
             context.PreSendRequestHeaders += PreSendRequestHeaders;
         }
 
-        private static void BeginRequest(object sender, EventArgs e)
+        private void BeginRequest(object sender, EventArgs e)
         {
             HttpApplication httpApplication;
             if (!sender.IsValidRequest(out httpApplication, Configuration, false, false)) return;
@@ -75,7 +76,7 @@ namespace Glimpse.Net
             ProcessData(httpApplication, false); //Run all plugins that DO NOT need access to Session
         }
 
-        private static void PreSendRequestHeaders(object sender, EventArgs e)
+        private void PreSendRequestHeaders(object sender, EventArgs e)
         {
             HttpApplication httpApplication;
             if (!sender.IsValidRequest(out httpApplication, Configuration, true)) return;
@@ -109,15 +110,14 @@ namespace Glimpse.Net
                 Container.Dispose();
         }
 
-        private static void Persist(string json, HttpApplication ctx)
+        private void Persist(string json, HttpApplication ctx)
         {
             if (Configuration.SaveRequestCount <= 0) return;
 
             var store = ctx.Application;
-            Queue<GlimpseRequestMetadata> queue = null;
 
             //clientName, longtime, url, 
-            queue = store[GlimpseConstants.JsonQueue] as Queue<GlimpseRequestMetadata>;
+            var queue = store[GlimpseConstants.JsonQueue] as Queue<GlimpseRequestMetadata>;
 
             if (queue == null)
                 store[GlimpseConstants.JsonQueue] =

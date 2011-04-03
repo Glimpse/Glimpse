@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Web;
 using System.Web.Script.Serialization;
 using Glimpse.Net.Configuration;
+using Glimpse.Net.Plumbing;
 
 namespace Glimpse.Net.Responder
 {
@@ -31,15 +33,22 @@ namespace Glimpse.Net.Responder
             var queue = application.Application[GlimpseConstants.JsonQueue] as Queue<GlimpseRequestMetadata>;
             if (queue != null)
             {
-                var filteredQueue = from request in queue
-                                    group request by request.ClientName
-                                        into clients
-                                        select new { Client = clients.Key, RequestCount = clients.Count() };
+                var result = new Dictionary<string, object>();
+                var sortedQueue = from request in queue orderby request.ClientName select request;
+                var lastClient = Guid.NewGuid().ToString();
 
-                var response = new List<object[]>{new[]{"Client", "Count"}};
-                response.AddRange(filteredQueue.Select(client => new object[] {client.Client, client.RequestCount}));
+                foreach (var request in sortedQueue)
+                {
+                    if (!lastClient.Equals(request.ClientName))
+                        result.Add(request.ClientName, new Dictionary<string, object>());
 
-                var data = JsSerializer.Serialize(response);
+                    var dictionary = result[request.ClientName] as IDictionary<string, object>;
+                    dictionary.Add(request.RequestId.ToString(), new {request.Browser, request.RequestTime, request.IsAjax});
+
+                    lastClient = request.ClientName;
+                }
+
+                var data = JsSerializer.Serialize(new {Data = result});
                 JsonResponse(application, data);
                 return;
             }

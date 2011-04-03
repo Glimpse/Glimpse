@@ -63,7 +63,7 @@ namespace Glimpse.Net.Plugin.Asp
             return result;
         }
 
-        public void SetupInit()
+        public void SetupInit(HttpApplication application)
         {
             throw new NotImplementedException();
         }

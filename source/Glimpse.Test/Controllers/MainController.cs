@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Web.Mvc;
+using Glimpse.Test.Models;
 
 namespace Glimpse.Test.Controllers
 {
@@ -41,7 +42,7 @@ namespace Glimpse.Test.Controllers
                 ViewBag.GlimpseMode = "off";
 
 
-            return View();
+            return View("index", "_layout", new IndexViewModel{Message = "Test VM", RenderTime = DateTime.Now});
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Web;
 using Glimpse.Protocol;
@@ -6,14 +7,14 @@ using Glimpse.Protocol;
 namespace Glimpse.Net.Plugin.Configuration
 {
     [GlimpsePlugin]
-    public class Config : NameValueCollectionPlugin
+    public class Config : IGlimpsePlugin
     {
-        public override string Name
+        public string Name
         {
             get { return "Config"; }
         }
 
-        public override object GetData(HttpApplication application)
+        public object GetData(HttpApplication application)
         {
             var ConnectionStrings = new Dictionary<string, string>();
             foreach (ConnectionStringSettings item in ConfigurationManager.ConnectionStrings)
@@ -28,9 +29,14 @@ namespace Glimpse.Net.Plugin.Configuration
 
             return new
                        {
-                           AppSettings = Process(ConfigurationManager.AppSettings, application),
+                           AppSettings = ConfigurationManager.AppSettings.Flatten(),
                            ConnectionStrings
                        };
+        }
+
+        public void SetupInit(HttpApplication application)
+        {
+            throw new NotImplementedException();
         }
     }
 }
