@@ -34,12 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Glimpse.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Glimpse.0.75\lib\Glimpse.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="Glimpse.Protocol, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Glimpse.0.75\lib\Glimpse.Protocol.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.WebPages" />
     <Reference Include="System.Web.Helpers" />
@@ -132,6 +126,16 @@
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Glimpse.Net\Glimpse.Net.csproj">
+      <Project>{21F99168-7D7B-49F2-A97C-5A983E0CA16F}</Project>
+      <Name>Glimpse.Net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Glimpse.Protocol\Glimpse.Protocol.csproj">
+      <Project>{A6AFEFD7-1602-4880-B001-E6E697BB8EC6}</Project>
+      <Name>Glimpse.Protocol</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -149,7 +153,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>54916</DevelopmentServerPort>
+          <DevelopmentServerPort>56319</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

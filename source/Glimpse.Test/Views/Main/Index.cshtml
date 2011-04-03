@@ -1372,11 +1372,7 @@ if (window.jQuery) { (function ($) {
         },
         activate : function() {
             var gr = $.glimpseRemote, options = gr.defaults; 
-         
-
-            ///Glimpse/History?ClientName=FF4
-            ///Glimpse/Clients
-
+            
             gr.getClientList();
         },
         getClientHistoryList : function(clientId) {
@@ -1435,7 +1431,7 @@ if (window.jQuery) { (function ($) {
                     for (var lclientRequestToken in lclient) {
                         var lclientRequest = lclient[lclientRequestToken];
                         if (lclientRequest.Data) 
-                            data.push([ lclientRequest.Browser, lclientRequest.RequestTime, lclientRequest.IsAjax, '!<a href="#" data-client="' + lclientRequestToken + '">Launch</a>!' ]);
+                            data.push([ lclientRequest.Browser, lclientRequest.RequestTime, lclientRequest.IsAjax, '!<a href="#" data-request="' + lclientRequestToken + '">Launch</a>!' ]);
                     }
 
                     $('.glimpse-initial', options.mainPanel).hide();
