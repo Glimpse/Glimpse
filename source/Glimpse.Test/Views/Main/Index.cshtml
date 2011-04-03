@@ -1351,7 +1351,7 @@ if (window.jQuery) { (function ($) {
             //Make sure we stick round 
             options.tab.addClass('glimpse-permanent').text(options.key); 
             options.panel.addClass('glimpse-permanent'); 
-            options.panel.prepend('<div class="glimpse-side-sub-panel"><div class="loading"><div class="icon"></div><span>Refreshing...</span></div><div class="glimpse-content"></div></div><div class="glimpse-side-main-panel"><div class="glimpse-initial glimpse-panel-message">No remote calls have yet been detected</div><div class="loading"><div class="icon"></div><span>Refreshing...</span></div><div class="glimpse-content"></div></div>');
+            options.panel.prepend('<div class="glimpse-side-sub-panel"><div class="loading"><div class="icon"></div><span>Refreshing...</span></div><div class="glimpse-content"></div></div><div class="glimpse-side-main-panel"><div class="glimpse-initial glimpse-panel-message">No remote calls have yet been detected</div><div class="loading" style="display:none"><div class="icon"></div><span>Refreshing...</span></div><div class="glimpse-content"></div></div>');
 
             options.subPanel = $('.glimpse-side-sub-panel', options.panel);
             options.mainPanel = $('.glimpse-side-main-panel', options.panel);
@@ -1408,7 +1408,7 @@ if (window.jQuery) { (function ($) {
                     $('span', loading).text('Refreshing...').parent().fadeIn(); 
                 },
                 success: function(result) {  
-                    $('span', loading).text('Loaded...').parent().hide();//.delay(1500).fadeOut();  
+                    $('span', loading).text('Loaded...').parent().delay(1500).fadeOut();  
                     gr.processClientList(result);
                 }
             });
@@ -1438,7 +1438,7 @@ if (window.jQuery) { (function ($) {
                     }
 
                     $('.glimpse-initial', options.mainPanel).hide();
-                    $('.glimpse-content', options.mainPanel).html($.glimpseProcessor.build(data, 0));
+                    $('.glimpse-content', options.mainPanel).html($.glimpseProcessor.build(data, 0)); 
                 }
             } 
         },
@@ -1496,7 +1496,7 @@ if (window.jQuery) { (function ($) {
                     gr.getClientHistoryList(selectedClientName); 
 
                 //In theory I wouldn't need to do this every time but wanting to make sure that all rows are kept in sync
-                $('table tbody tr').removeClass('even').removeClass('odd');
+                $('table tbody tr', options.subPanel).removeClass('even').removeClass('odd');
                 $('table tbody tr:odd', options.subPanel).addClass('even');
                 $('table tbody tr:even', options.subPanel).addClass('odd');
             }
