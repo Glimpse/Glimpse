@@ -499,7 +499,7 @@
     .glimpse-preview-object span.rspace { margin-right:4px; }
     .glimpse-preview-object span.mspace { margin:0 4px; }
     .glimpse-preview-object span.small { font-size:0.95em; } 
-    .glimpse-expand { height:11px; width:11px; display: inline-block; float:left; margin:0px 3px; cursor:pointer; background-image:url(/Scripts/glimpse-sprite.png); background-repeat:no-repeat; background-position:-96px 0; }
+    .glimpse-expand { height:11px; width:11px; display:inline-block; float:left; margin:1px 0 0 -13px; cursor:pointer; background-image:url(/Scripts/glimpse-sprite.png); background-repeat:no-repeat; background-position:-96px 0; }
     .glimpse-collapse { background-position:-96px -11px; }
     .glimpse-preview-show { display:none; font-weight:normal !important; }
     .glimpse-panel .quiet { color:#AAA; }
@@ -1067,11 +1067,11 @@ if (window.jQuery) { (function ($) {
         formatStringTypes : {
             italics : {
                 match : function(d) { return d.match(/^\_[\w\D]+\_$/) != null; },
-                replace : function(d) { return '<em>' + $.htmlEncode($.glimpseContent.scrub(d)) + '</em>'; },
+                replace : function(d) { return '<u>' + $.htmlEncode($.glimpseContent.scrub(d)) + '</u>'; },
                 trimmable : true },
             underline : {
                 match : function(d) { return d.match(/^\\[\w\D]+\\$/) != null; },
-                replace : function(d) { return '<u>' + $.htmlEncode($.glimpseContent.scrub(d)) + '</u>'; },
+                replace : function(d) { return '<em>' + $.htmlEncode($.glimpseContent.scrub(d)) + '</em>'; },
                 trimmable : true },
             strong : {
                 match : function(d) { return d.match(/^\*[\w\D]+\*$/) != null; },
@@ -1306,11 +1306,12 @@ if (window.jQuery) { (function ($) {
             if ($('.glimpse-panel-message', panelItem).length > 0) {
                 panelItem.html($.glimpseProcessor.build([ 
                     ['Request URL', 'Status', 'Date/Time', 'Druration', 'Is Async', 'Inspect'],
-                    [window.location.pathname, '200', $.formatTime(new Date()), 'N/A', 'N/A', '!<a href="#">Launch</a>!']
+                    [window.location.pathname, '200', $.formatTime(new Date()), 'N/A', 'N/A', '!<a href="#">Reset</a>!']
                 ], 0));
 
                 $('a', options.panel).click(function(e) { 
-                    $.glimpse.refresh(glimpse, window.location.pathname);  
+                    $.glimpse.refresh(glimpse, window.location.pathname);
+                    return false;  
                 });
                 $('tr:last', options.panel).addClass('selected');
             }
@@ -1337,6 +1338,7 @@ if (window.jQuery) { (function ($) {
             if (glimpseResponse) {
                 $('.glimpse-ajax-inspect', row).html('<a href="#">Launch</a>').children('a').click(function() {
                     $.glimpse.refresh(eval('(' + glimpseResponse + ')'), ajaxSpy.url); 
+                    return false;
                 }); 
             }
         },  
@@ -1389,17 +1391,29 @@ if (window.jQuery) { (function ($) {
                 $('.selected', $(this).parents('table:first')).removeClass('selected');
                 $(this).parents('tr:first').addClass('selected');
             }); 
-            $('a', options.subPanel).live('click', function() {
+            $('a.glimpse-trigger', options.subPanel).live('click', function() {
                 gr.getClientHistoryList($(this).data('client')); 
                 return false;
             });
+            $('a.glimpse-orignal', options.subPanel).live('click', function() {
+                gr.reset();
+                return false;
+            });
             $('a', options.mainPanel).live('click', function() { 
-                gr.activate($(this).data('client'), $(this).data('request'))
+                gr.activate($(this).data('client'), $(this).data('request'));
                 return false;
             });
             options.tab.click(function() {
                 gr.getClientList();
             });
+        },
+        reset : function() {
+            var gr = $.glimpseRemote, options = gr.defaults; 
+
+            $.glimpse.refresh(glimpse, window.location.pathname);  
+            $('.glimpse-initial', options.mainPanel).show(); 
+            $('.loading', options.mainPanel).hide(); 
+            $('.glimpse-content', options.mainPanel).empty(); 
         },
         activate : function(client, request) {
             var gr = $.glimpseRemote, options = gr.defaults; 
@@ -1475,7 +1489,7 @@ if (window.jQuery) { (function ($) {
             
             //Create the table we need first time round 
             if ($('table', options.subPanel).length == 0) 
-                $('.glimpse-content', options.subPanel).html($.glimpseProcessor.build([ [ 'Client', 'Count', 'Launch'] ], 0));
+                $('.glimpse-content', options.subPanel).html($.glimpseProcessor.build([ [ 'Client', 'Count', 'Launch'], [ '\\--this--\\', 1, '!<a href="#" class="glimpse-orignal">Reset</a>!', 'selected' ] ], 0));
  
             if (options.result && result) {
                 var shouldTriggerHistoryRequest = false, selectedClientName = $(".selected a", options.subPanel).data('client');
@@ -1516,7 +1530,7 @@ if (window.jQuery) { (function ($) {
                             $('td:nth-child(2)', clientRow).text(count);
                     }
                     else 
-                        $('table', options.subPanel).append('<tr><td>' + lclientToken + '</td><td>' + count + '</td><td><a href="#" data-client="' + lclientToken + '">Launch</a></td></tr>')
+                        $('table', options.subPanel).append('<tr><td>' + lclientToken + '</td><td>' + count + '</td><td><a href="#" class="glimpse-trigger" data-client="' + lclientToken + '">Launch</a></td></tr>')
                 } 
 
                 //Trigger a history request if we need to 
