@@ -471,7 +471,7 @@
     .glimpse-tabs li.glimpse-hover { padding:4px 8px 3px; border-left:1px solid #BFBDB1; border-bottom:1px solid #BFBDB1; border-right:1px solid #BFBDB1; background:#BFBDB1; background:-moz-linear-gradient(top, #BFBDB1 0%, #DAD9CB 4%, #D8D5C9 8%, #E8E7E1 51%, #F0EEE4 92%, #EDEBE1 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#BFBDB1), color-stop(4%,#DAD9CB), color-stop(8%,#D8D5C9), color-stop(51%,#E8E7E1), color-stop(92%,#F0EEE4), color-stop(100%,#EDEBE1)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#BFBDB1', endColorstr='#EDEBE1',GradientType=0 ); }
     .glimpse-tabs li.glimpse-disabled { color:#AAA; cursor:default; }
     .glimpse-panel-holder {}
-    .glimpse-panel { display:none; overflow:auto; } 
+    .glimpse-panel { display:none; overflow:auto; position:relative; } 
     .glimpse-panel-message { text-align:center; padding-top:40px; font-size:1.1em; color:#AAA; }
     .glimpse-panel table { border-spacing:0; width:100%; }
     .glimpse-panel table td, .glimpse-panel table th { padding:3px 4px; text-align:left; vertical-align:top; } 
@@ -486,7 +486,7 @@
     .glimpse-panel .odd { background:#F9F9F9; }
     .glimpse-panel table table tbody th { font-weight:normal; font-style:italic; }
     .glimpse-panel table table thead th { font-weight:bold; font-style:normal; }
-    .glimpse-panel .glimpse-side-sub-panel { float:right; background-color:#F5F5F5; height:100%; width:25%; border-left:1px solid #ACA899; position:relative; }
+    .glimpse-panel .glimpse-side-sub-panel { right:0; z-index:10; background-color:#F5F5F5; height:100%; width:25%; border-left:1px solid #ACA899; position:absolute; }
     .glimpse-panel .glimpse-side-main-panel { position:relative; height:100%; width:75%; float:left; } 
     .glimpse-panel-holder .glimpse-active { display:block; }
     .glimpse-resizer { height:4px; cursor:n-resize; width:100%; position:absolute; top:-1px; }
