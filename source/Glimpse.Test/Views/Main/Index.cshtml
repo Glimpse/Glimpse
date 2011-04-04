@@ -457,10 +457,13 @@
     .glimpse-holder { display:none; height:0; position:fixed; bottom:0; left:0; width:100%; background-color:#fff; font-family:Lucida Grande,Tahoma,sans-serif; font-size:11px; }
     .glimpse-bar { height:27px; border-top:1px solid #ACA899; background:#FFFFFF; background:-moz-linear-gradient(top, #FFFFFF 0%, #EEEEEE 4%, #F3F5F7 8%, #E9E8DD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(4%,#EEEEEE), color-stop(8%,#F3F5F7), color-stop(100%,#E9E8DD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFFFFF', endColorstr='#E9E8DD',GradientType=0 ); }
     .glimpse-bar .glimpse-icon { margin-top:4px; float:left; cursor:default; }
-    .glimpse-buttons { float:right; height:17px; width:16px; padding:6px; }
-    .glimpse-title { margin:5px 0 0 15px; font-weight:bold; float:left; }
-    .glimpse-close { background:url(/Scripts/glimpse-sprite.png) -1px -1px no-repeat; height:14px; width:14px; display:block; }
-    .glimpse-close:hover { background:url(/Scripts/glimpse-sprite.png) -17px -1px no-repeat; }
+    .glimpse-buttons { float:right; height:17px; width:33px; padding:6px; }
+    .glimpse-title { margin:5px 0 0 15px; font-weight:bold; float:left; } 
+    .glimpse-close, .glimpse-close:hover, .glimpse-terminate, .glimpse-terminate:hover { background-image:url(/Scripts/glimpse-sprite.png); background-repeat:no-repeat; height:14px; width:14px; margin-left:2px; display:inline-block; }
+    .glimpse-close { background-position:-1px -1px; }
+    .glimpse-close:hover { background-position:-17px -1px; }
+    .glimpse-terminate { background-position:-65px -1px; }
+    .glimpse-terminate:hover { background-position:-81px -1px; } 
     .glimpse-tabs { height:24px; font-weight:bold; border-bottom:1px solid #ACA899; border-top:1px solid #CDCABB; background:#B9B7AF; background:-moz-linear-gradient(top, #B9B7AF 0%, #DAD8C8 4%, #D7D4C5 10%, #E9E6D5 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#B9B7AF), color-stop(4%,#DAD8C8), color-stop(10%,#D7D4C5), color-stop(100%,#E9E6D5)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#B9B7AF', endColorstr='#E9E6D5',GradientType=0 );  }
     .glimpse-tabs ul { margin:4px 0px 0 0; padding:0px; }
     .glimpse-tabs li { display:inline; margin:0 2px 3px 2px; height:22px; padding:4px 9px 3px; color:#565656; cursor:pointer; border-radius: 0px 0px 3px 3px; -moz-border-radius: 0px 0px 3px 3px; -webkit-border-bottom-right-radius: 3px; -webkit-border-bottom-left-radius: 3px; }
@@ -496,8 +499,8 @@
     .glimpse-preview-object span.rspace { margin-right:4px; }
     .glimpse-preview-object span.mspace { margin:0 4px; }
     .glimpse-preview-object span.small { font-size:0.95em; } 
-    .glimpse-expand { height:11px; width:11px; display: inline-block; float:left; margin:0px 3px; cursor:pointer; background-image:url(/Scripts/glimpse-sprite.png); background-repeat:no-repeat; background-position:-64px 0; }
-    .glimpse-collapse { background-position:-64px -11px; }
+    .glimpse-expand { height:11px; width:11px; display: inline-block; float:left; margin:0px 3px; cursor:pointer; background-image:url(/Scripts/glimpse-sprite.png); background-repeat:no-repeat; background-position:-96px 0; }
+    .glimpse-collapse { background-position:-96px -11px; }
     .glimpse-preview-show { display:none; font-weight:normal !important; }
     .glimpse-panel .quiet { color:#AAA; }
     .glimpse-panel .suppress { color:#AAA; text-decoration:line-through; }
@@ -1138,6 +1141,26 @@ if (window.jQuery) { (function ($) {
                     listener.callback(tabStrip, panelHolder)
             }
         },
+        close : function() {
+            $('.glimpse-holder').animate({ 'height': '0' }, 'fast', function () { 
+                    $(this).hide(); 
+                    $('.glimpse-open').show(); 
+                });
+            $('.glimpse-spacer').height('0');
+        },
+        terminate : function() {
+            $('.glimpse-open, .glimpse-spacer').remove(); 
+            $('.glimpse-holder').animate({ 'height': '0' }, 'fast', function () { 
+                $(this).remove(); 
+            });
+
+            var t = new Date();
+            t.setDate(t.getDate() + -1)
+            var expires = t.toUTCString()
+            document.cookie = 'glimpseMode=; path=/; expires=' + expires + ';';
+            document.cookie = 'glimpseClientName=; path=/; expires=' + expires + ';';
+            document.cookie = 'glimpseOptions=; path=/; expires=' + expires + ';';
+        },
         wireEvents : function(g, options) { 
             //Open/Close Holder
             $('.glimpse-open').live('click', function () {
@@ -1147,12 +1170,11 @@ if (window.jQuery) { (function ($) {
                 $('.glimpse-holder .glimpse-panel').height(options.height - 54); 
             }); 
             $('.glimpse-close').live('click', function () {
-                $('.glimpse-holder').animate({ 'height': '0' }, 'fast', function () { 
-                        $(this).hide(); 
-                        $('.glimpse-open').show(); 
-                    });
-                $('.glimpse-spacer').height('0');
+                g.close();
             });    
+            $('.glimpse-terminate').live('click', function () {
+                g.terminate();
+            });
              
             //Tab Switching 
             $('.glimpse-tabs li:not(.glimpse-active, .glimpse-disabled)').live('mouseover mouseout', function (e) { 
@@ -1226,7 +1248,7 @@ if (window.jQuery) { (function ($) {
         },
         defaults : { 
             data : null,
-            html : { plugin : '<div class="glimpse-open"><div class="glimpse-icon"></div></div><div class="glimpse-holder"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon"></div><div class="glimpse-title"></div><div class="glimpse-buttons"><a href="#" class="glimpse-close"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>' },
+            html : { plugin : '<div class="glimpse-open"><div class="glimpse-icon"></div></div><div class="glimpse-holder"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon"></div><div class="glimpse-title"></div><div class="glimpse-buttons"><a href="#" title="Shutdown/Terminate" class="glimpse-terminate"></a><a href="#" title="Close/Minimize" class="glimpse-close"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>' },
             css : '',
             height : 200,
             tabStrip : function() { return $('.glimpse-tabs ul'); },
