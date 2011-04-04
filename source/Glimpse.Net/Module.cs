@@ -134,7 +134,7 @@ namespace Glimpse.Net
                                   RequestTime = DateTime.Now.ToLongTimeString(),
                                   RequestId = Guid.NewGuid(),
                                   IsAjax = ctx.IsAjax().ToString(),
-                                  Path = ctx.Request.Path
+                                  Url = ctx.Request.RawUrl
                               });
         }
 

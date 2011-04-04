@@ -27,43 +27,37 @@ namespace Glimpse.Net
             var response = application.Response;
             var store = application.Context.Items;
 
-            //check IP address
             var validIp = store["__validIp"] as bool?;
             if (!validIp.HasValue)
                 store["__validIp"] = validIp = config.IpAddresses.Contains(request.ServerVariables["REMOTE_ADDR"]);
 
             if (!validIp.Value) return false;
-            //end check
 
             if (checkMode)
             {
-                //check cookie
                 var validMode = store["__validMode"] as bool?;
                 if (!validMode.HasValue)
                     store["__validMode"] = validMode = application.GetGlimpseMode() == GlimpseMode.On;
 
                 if (!validMode.Value) return false;
-                //end check
             }
 
             if (checkContentType)
             {
-                //check contentType
                 var validContentType = store["__valueContentType"] as bool?;
                 if (!validContentType.HasValue)
                     store["__valueContentType"] = validContentType = config.ContentTypes.Contains(response.ContentType);
 
                 if (!validContentType.Value) return false;
-                //end check
             }
 
             if (checkPath)
             {
-                //check path
                 var validPath = store["__validPath"] as bool?;
                 if (validPath.HasValue && validPath.Value == true) return false;
-                //end check)
             }
+
+            if (response.StatusCode != 200) return false;
 
             return true;
         }

@@ -60,6 +60,8 @@ namespace Glimpse.Net.Responder
                     lastClient = request.ClientName;
                 }
 
+                if (!string.IsNullOrEmpty(clientName) && result.Count == 0)
+                    result.Add(clientName, new Dictionary<string, object>());
 
                 var json = JsSerializer.Serialize(new {Data = result});
                 JsonResponse(application, json);
