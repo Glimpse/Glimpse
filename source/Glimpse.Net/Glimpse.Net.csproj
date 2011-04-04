@@ -51,6 +51,7 @@
     <Compile Include="Converter\OutputCacheAttributeConverter.cs" />
     <Compile Include="Converter\RouteValueDictionaryConverter.cs" />
     <Compile Include="Extentions.cs" />
+    <Compile Include="Plugin\Mvc\ModelBinders.cs" />
     <Compile Include="Plumbing\GlimpseRequestMetadata.cs" />
     <Compile Include="Plumbing\GlimpseTraceListener.cs" />
     <Compile Include="Plumbing\GlimpseView.cs" />
