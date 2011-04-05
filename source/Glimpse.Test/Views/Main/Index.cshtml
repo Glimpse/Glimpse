@@ -1166,8 +1166,7 @@ if (window.jQuery) { (function ($) {
             $('.glimpse-open').live('click', function () {
                 $(this).hide();
                 $('.glimpse-holder').show().animate({ 'height': options.height }, 'fast'); 
-                $('.glimpse-spacer').height(options.height); 
-                $('.glimpse-holder .glimpse-panel').height(options.height - 54); 
+                g.setHeight(g, options);
             }); 
             $('.glimpse-close').live('click', function () {
                 g.close();
@@ -1209,6 +1208,10 @@ if (window.jQuery) { (function ($) {
                 $('.glimpse-holder .glimpse-panel').height(options.height - 54); 
             }
         }, 
+        setHeight : function(g, options) {
+            $('.glimpse-spacer').height(options.height); 
+            $('.glimpse-holder .glimpse-panel').height(options.height - 54); 
+        },
         refresh : function(data, url) { 
             if (!data) return;
 
@@ -1219,6 +1222,7 @@ if (window.jQuery) { (function ($) {
 
             $.glimpseProcessor.clearLayout(g, options);
             $.glimpseProcessor.layout(g, options, url);
+            g.setHeight(g, options);
 
             g._executeLayoutListeners(g, options, false);
         },
