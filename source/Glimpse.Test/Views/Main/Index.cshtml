@@ -12,7 +12,7 @@
 <body>
     <p>Page rendered at @Html.DisplayFor(m => m.RenderTime).</p>
 
-    <p>For Config info Go To <a href="/Glimpse/Config">Glimpse/Config</a> or drag either of the <a href="javascript:(function(){document.cookie='glimpseMode=On; path=/;'; window.location.reload();})();">Glimpse</a>/<a href="javascript:(function(){document.cookie='glimpseClientName='+ prompt('Client Name?') +'; path=/;'; window.location.reload();})();">Glimpse Client</a> following bookmarklets to your favorites bar.</p>
+    <p>For Config info Go To <a href="/Glimpse/Config">Glimpse/Config</a> or drag either of the <a href="javascript:(function(){document.cookie='glimpseState=On; path=/; expires=Sat, 01 Jan 2050 12:00:00 GMT;'; window.location.reload();})();">Glimpse</a> / <a href="javascript:(function(){document.cookie='glimpseClientName='+ prompt('Client Name?') +'; path=/; expires=Sat, 01 Jan 2050 12:00:00 GMT;'; window.location.reload();})();">Glimpse Client Name</a> following bookmarklets to your favorites bar.</p>
 
     <hr />
 
@@ -1141,39 +1141,11 @@ if (window.jQuery) { (function ($) {
                     listener.callback(tabStrip, panelHolder)
             }
         },
-        close : function() {
-            $('.glimpse-holder').animate({ 'height': '0' }, 'fast', function () { 
-                    $(this).hide(); 
-                    $('.glimpse-open').show(); 
-                });
-            $('.glimpse-spacer').height('0');
-        },
-        terminate : function() {
-            $('.glimpse-open, .glimpse-spacer').remove(); 
-            $('.glimpse-holder').animate({ 'height': '0' }, 'fast', function () { 
-                $(this).remove(); 
-            });
-
-            var t = new Date();
-            t.setDate(t.getDate() + -1)
-            var expires = t.toUTCString()
-            document.cookie = 'glimpseMode=; path=/; expires=' + expires + ';';
-            document.cookie = 'glimpseClientName=; path=/; expires=' + expires + ';';
-            document.cookie = 'glimpseOptions=; path=/; expires=' + expires + ';';
-        },
         wireEvents : function(g, options) { 
             //Open/Close Holder
-            $('.glimpse-open').live('click', function () {
-                $(this).hide();
-                $('.glimpse-holder').show().animate({ 'height': options.height }, 'fast'); 
-                g.setHeight(g, options);
-            }); 
-            $('.glimpse-close').live('click', function () {
-                g.close();
-            });    
-            $('.glimpse-terminate').live('click', function () {
-                g.terminate();
-            });
+            $('.glimpse-open').live('click', g.open); 
+            $('.glimpse-close').live('click', g.close);    
+            $('.glimpse-terminate').live('click', g.terminate);
              
             //Tab Switching 
             $('.glimpse-tabs li:not(.glimpse-active, .glimpse-disabled)').live('mouseover mouseout', function (e) { 
@@ -1208,6 +1180,33 @@ if (window.jQuery) { (function ($) {
                 $('.glimpse-holder .glimpse-panel').height(options.height - 54); 
             }
         }, 
+        open : function() {
+            var g = $.glimpse, options = g.defaults;
+
+            $('.glimpse-open').hide();
+            $('.glimpse-holder').show().animate({ 'height': options.height }, 'fast'); 
+            g.setHeight(g, options);
+        },
+        close : function() {
+            $('.glimpse-holder').animate({ 'height': '0' }, 'fast', function () { 
+                    $(this).hide(); 
+                    $('.glimpse-open').show(); 
+                });
+            $('.glimpse-spacer').height('0');
+        },
+        terminate : function() {
+            $('.glimpse-open, .glimpse-spacer').remove(); 
+            $('.glimpse-holder').animate({ 'height': '0' }, 'fast', function () { 
+                $(this).remove(); 
+            });
+
+            var t = new Date();
+            t.setDate(t.getDate() + -1)
+            var expires = t.toUTCString() 
+            document.cookie = 'glimpseState=; path=/; expires=' + expires + ';';
+            document.cookie = 'glimpseClientName=; path=/; expires=' + expires + ';';
+            document.cookie = 'glimpseOptions=; path=/; expires=' + expires + ';';
+        },
         setHeight : function(g, options) {
             $('.glimpse-spacer').height(options.height); 
             $('.glimpse-holder .glimpse-panel').height(options.height - 54); 

@@ -8,7 +8,7 @@
         public const string ClientName = "ClientName";
         public const string ActionDescriptor = "Glimpse.ActionDescriptor";
         public const string CookieClientNameKey = "glimpseClientName";
-        public const string CookieModeKey = "glimpseMode";
+        public const string CookieModeKey = "glimpseState";
         public const string Filters = "Glimpse.Filters";
         public const string HttpHeader = "X-Glimpse-Debugger";
         public const string Result = "Glimpse.Result";

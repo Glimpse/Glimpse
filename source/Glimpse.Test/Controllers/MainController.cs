@@ -34,7 +34,7 @@ namespace Glimpse.Test.Controllers
 
             Debug.Write("This is from debug");
             
-            var cookie = Request.Cookies["glimpseMode"];
+            var cookie = Request.Cookies["glimpseState"];
 
             if (cookie != null)
                 ViewBag.GlimpseMode = cookie.Value;

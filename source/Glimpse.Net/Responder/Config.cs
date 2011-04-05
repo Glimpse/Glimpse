@@ -25,7 +25,7 @@ namespace Glimpse.Net.Responder
 
             response.Write(
                 string.Format(
-                    "<html><head><title>Glimpse Config</title><script>function toggleCookie(){{var mode = document.getElementById('glimpseMode'); if (mode.innerHTML==='On'){{mode.innerHTML='Off';document.cookie='glimpseMode=Off; path=/;'}}else{{mode.innerHTML='On';document.cookie='glimpseMode=On; path=/;'}}}}</script><head><body><h1>Glimpse Config Settings:</h1><ul><li>On = {0}</li><li>Allowed IP's = <ol>",
+                    "<html><head><title>Glimpse Config</title><script>function toggleCookie(){{var mode = document.getElementById('glimpseState'); if (mode.innerHTML==='On'){{mode.innerHTML='Off';document.cookie='glimpseState=Off; path=/;'}}else{{mode.innerHTML='On';document.cookie='glimpseState=On; path=/;'}}}}</script><head><body><h1>Glimpse Config Settings:</h1><ul><li>On = {0}</li><li>Allowed IP's = <ol>",
                     configuration.On));
             foreach (IpAddress ipAddress in configuration.IpAddresses)
             {
@@ -38,7 +38,7 @@ namespace Glimpse.Net.Responder
             }
             response.Write(
                 string.Format(
-                    "</ol></li></ul><h1>Your Settings:</h1><ol><li>IP = {0}</li><li>GlimpseMode = <input type='checkbox' id='gChk' onclick='toggleCookie();'{2}/> <label for='gChk' id='glimpseMode'>{1}</lable></li></ol></body></html>",
+                    "</ol></li></ul><h1>Your Settings:</h1><ol><li>IP = {0}</li><li>glimpseState = <input type='checkbox' id='gChk' onclick='toggleCookie();'{2}/> <label for='gChk' id='glimpseState'>{1}</lable></li></ol></body></html>",
                     application.Request.ServerVariables["REMOTE_ADDR"], mode,
                     mode == GlimpseMode.On ? " checked" : ""));
 
