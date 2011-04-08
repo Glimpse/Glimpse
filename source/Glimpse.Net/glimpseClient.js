@@ -663,8 +663,8 @@ if (window.jQuery) { (function ($) {
             $.cookie('glimpseOptions', g.settings);
         },
         restoreState : function() {
-            var g = $.glimpse;
-            g.settings = $.cookie('glimpseOptions');
+            var g = $.glimpse, settings = $.cookie('glimpseOptions');
+            g.settings = $.extend(g.settings, settings);
             if (g.settings.open)
                 g.open(0);
         },
