@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using Glimpse.Net.Configuration;
@@ -126,6 +127,19 @@ namespace Glimpse.Net
             if (result.Count == 0) return null;
 
             return result;
+        }
+
+        public static string GetName(this ActionDescriptor mvcActionDescriptor)
+        {
+            var sb = new StringBuilder(mvcActionDescriptor.ActionName + "(");
+            foreach (var parameter in mvcActionDescriptor.GetParameters())
+            {
+                sb.Append(parameter.ParameterType + " ");
+                sb.Append(parameter.ParameterName + ", ");
+            }
+            sb.Remove(sb.Length - 2, 2);
+            sb.Append(")");
+            return sb.ToString();
         }
 
     }

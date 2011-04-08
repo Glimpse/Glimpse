@@ -9,7 +9,7 @@
         public const string ActionDescriptor = "Glimpse.ActionDescriptor";
         public const string CookieClientNameKey = "glimpseClientName";
         public const string CookieModeKey = "glimpseState";
-        public const string Filters = "Glimpse.Filters";
+        public const string CalledFilters = "Glimpse.CalledFilters";
         public const string HttpHeader = "X-Glimpse-Debugger";
         public const string Result = "Glimpse.Result";
         public const string TempData = "Glimpse.TempData";
@@ -18,5 +18,6 @@
         public const string RequestContext = "Glimpse.RequestContext";
         public const string TraceMessages = "Glimpse.TraceMessages";
         public const string JsonQueue = "Glimpse.JsonQueue";
+        public const string AllFilters = "Glimpse.AllFilters";
     }
 }

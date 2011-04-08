@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Linq;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace Glimpse.Net.Plumbing
 {
@@ -19,23 +17,7 @@ namespace Glimpse.Net.Plumbing
 
             store.Add(GlimpseConstants.TempData, filterContext.Controller.TempData);
             store.Add(GlimpseConstants.ViewData, filterContext.Controller.ViewData);
-            store.Add(GlimpseConstants.ActionDescriptor, filterContext.ActionDescriptor);
             store.Add(GlimpseConstants.RequestContext, filterContext.RequestContext);
-
-            AddFilters(store, filterContext);
-        }
-
-        private static void AddFilters(IDictionary store, ActionExecutedContext context)
-        {
-            //FilterProviders.Providers.GetFilters aggregates all filters from:
-            //- GloalFilters.Filters
-            //- FilterAttributeFilterProvider
-            //- ControllerInstanceFilterProvider
-            //- DependancyResolver
-
-            var filters = FilterProviders.Providers.GetFilters(context.Controller.ControllerContext, context.ActionDescriptor).ToList();
-
-            store.Add(GlimpseConstants.Filters, filters);
         }
     }
 }

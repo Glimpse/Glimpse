@@ -21,6 +21,7 @@ namespace Glimpse.Test
             var test = routes.MapRoute("Test", "Test/", new {controller = "Test", action = "Non"});
             test.DataTokens["Name"] = "Test";
 
+            routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" });
 
             routes.MapRoute("Garbage", "Garbage/{action}/{thingy}/", new {controller = "Garbage", action = "Garbage"});
 
