@@ -30,6 +30,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
@@ -101,13 +104,26 @@
     <EmbeddedResource Include="glimpseSprite.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="NuSpec\content\web.config.transform" />
+    <None Include="NuSpec\Glimpse.nuspec" />
     <None Include="web.config.transform" />
+    <Content Include="NuSpec\content\App_Readme\readme.txt" />
+    <Content Include="NuSpec\lib\Glimpse.Net.dll" />
+    <Content Include="NuSpec\lib\Glimpse.Protocol.dll" />
     <Content Include="readme.txt" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy $(TargetDir)Glimpse.Net.dll $(ProjectDir)NuSpec\lib\Glimpse.Net.dll
+copy $(TargetDir)Glimpse.Protocol.dll $(ProjectDir)NuSpec\lib\Glimpse.Protocol.dll
+
+$(SolutionDir)packages\NuGet.CommandLine.1.2.20401.11\Tools\NuGet.exe pack $(ProjectDir)\NuSpec\Glimpse.nuspec -OutputDirectory $(ProjectDir)
+</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

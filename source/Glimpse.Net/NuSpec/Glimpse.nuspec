@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Glimpse</id>
+    <version>0.75</version>
+    <title>Glimpse Web Debugger</title>
+    <authors>nmolnar,avanderhoorn</authors>
+    <owners>nmolnar,avanderhoorn</owners>
+    <licenseUrl>http://creativecommons.org/licenses/by/3.0/</licenseUrl>
+    <projectUrl>https://github.com/glimpse</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Glimpse is a web debugger used to gain a better understanding of whats happening inside of your webserver.</description>
+    <summary>A client side Glimpse into whats going on in your server.</summary>
+    <language>en-US</language>
+    <tags>MVC, ASP.NET, Web</tags>
+  </metadata>
+</package>
