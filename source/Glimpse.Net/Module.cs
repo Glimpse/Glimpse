@@ -88,16 +88,9 @@ namespace Glimpse.Net
 
         private void ComposePlugins()
         {
-            var aggregateCatalog = new AggregateCatalog();
-            var assemblyCatalog = new AssemblyCatalog(Assembly.GetExecutingAssembly());
-            var directoryCatalog = new DirectoryCatalog(@"\");
-            var configuredDirectoryCatalog = new DirectoryCatalog(Configuration.PluginPath);
+            var directoryCatalog = new DirectoryCatalog("bin");
 
-            aggregateCatalog.Catalogs.Add(assemblyCatalog);
-            aggregateCatalog.Catalogs.Add(directoryCatalog);
-            aggregateCatalog.Catalogs.Add(configuredDirectoryCatalog);
-
-            Container = new CompositionContainer(aggregateCatalog);
+            Container = new CompositionContainer(directoryCatalog);
             Container.ComposeParts(this, Responders);
 
             //wireup converters into serializer

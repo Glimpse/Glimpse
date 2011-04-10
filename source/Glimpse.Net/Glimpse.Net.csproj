@@ -105,7 +105,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="NuSpec\content\web.config.transform" />
-    <None Include="NuSpec\Glimpse.nuspec" />
+    <None Include="NuSpec\Glimpse.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="web.config.transform" />
     <Content Include="NuSpec\content\App_Readme\readme.txt" />
     <Content Include="NuSpec\lib\Glimpse.Net.dll" />

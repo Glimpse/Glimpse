@@ -30,7 +30,7 @@ namespace Glimpse.Net.Plugin.Mvc
 
             var executed = new List<object[]>
                                     {
-                                        new []{ "Ordinal", "Category", "Type", "Method", "Order", "Scope", "Details" }
+                                        new []{ "Ordinal", "Child", "Category", "Type", "Method", "Order", "Scope", "Details" }
                                     };
 
             var count = 0;
@@ -38,24 +38,24 @@ namespace Glimpse.Net.Plugin.Mvc
             {
                 if (metadata.InnerFilter == null)
                 {
-                    executed.Add(new object[] { count++, metadata.Category, metadata.Type.Name, metadata.Method, metadata.Order, metadata.Scope.ToString(), null, "selected" });
+                    executed.Add(new object[] { count++, metadata.IsChild.ToString(), metadata.Category, metadata.Type.Name, metadata.Method, metadata.Order, metadata.Scope.ToString(), null, "selected" });
                 }
                 else
                 {
                     var instance = metadata.InnerFilter.Instance;
-                    executed.Add(new[] { count++, metadata.Category, metadata.Type.Name, metadata.Method, metadata.Order, metadata.Scope.ToString(), instance is OutputCacheAttribute || instance is HandleErrorAttribute ? instance : null });
+                    executed.Add(new[] { count++, metadata.IsChild.ToString(), metadata.Category, metadata.Type.Name, metadata.Method, metadata.Order, metadata.Scope.ToString(), instance is OutputCacheAttribute || instance is HandleErrorAttribute ? instance : null });
                 }
             }
 
             var unexecuted = new List<object[]>
                                     {
-                                        new []{ "Category", "Type", "Method", "Order", "Scope", "Details" }
+                                        new []{ "Child", "Category", "Type", "Method", "Order", "Scope", "Details" }
                                     };
 
             foreach (var metadata in unCalledFilterMethods)
             {
                 var instance = metadata.InnerFilter.Instance;
-                unexecuted.Add(new[] { metadata.Category, metadata.Type.Name, metadata.Method, metadata.Order, metadata.Scope.ToString(), instance is OutputCacheAttribute || instance is HandleErrorAttribute ? instance : null, "quiet" });
+                unexecuted.Add(new[] { metadata.IsChild.ToString(), metadata.Category, metadata.Type.Name, metadata.Method, metadata.Order, metadata.Scope.ToString(), instance is OutputCacheAttribute || instance is HandleErrorAttribute ? instance : null, "quiet" });
             }
 
             if (executed.Count == 1) return null;

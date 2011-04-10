@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
 using System.Web;
@@ -132,14 +133,23 @@ namespace Glimpse.Net
         public static string GetName(this ActionDescriptor mvcActionDescriptor)
         {
             var sb = new StringBuilder(mvcActionDescriptor.ActionName + "(");
-            foreach (var parameter in mvcActionDescriptor.GetParameters())
+
+            var parameters = mvcActionDescriptor.GetParameters();
+            foreach (var parameter in parameters)
             {
                 sb.Append(parameter.ParameterType + " ");
                 sb.Append(parameter.ParameterName + ", ");
             }
-            sb.Remove(sb.Length - 2, 2);
+            if (parameters.Length > 0) sb.Remove(sb.Length - 2, 2);
             sb.Append(")");
             return sb.ToString();
+        }
+
+        public static void Save(this IDictionary dictionary, object key, object value)
+        {
+            if (dictionary.Contains(key)) return;
+
+            dictionary.Add(key, value);
         }
 
     }

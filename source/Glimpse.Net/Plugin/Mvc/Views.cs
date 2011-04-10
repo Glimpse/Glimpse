@@ -62,7 +62,9 @@ namespace Glimpse.Net.Plugin.Mvc
                     if (callMetadata.GlimpseView != null)
                     {
                         var vd = callMetadata.GlimpseView.ViewContext.ViewData;
-                        model = new {ModelType = vd.Model.GetType().Name, Value = vd.Model};
+                        vData = vd;
+                        tData = callMetadata.GlimpseView.ViewContext.TempData;
+                        if (vd.Model != null) model = new {ModelType = vd.Model.GetType().ToString(), Value = vd.Model};
                     }
 
                     result.Add(new[]
@@ -88,10 +90,10 @@ namespace Glimpse.Net.Plugin.Mvc
                     engines[i] = new GlimpseViewEngine(engines[i]);
             }
 
-            var filters = GlobalFilters.Filters;
+            /*var filters = GlobalFilters.Filters;
 
             if (!filters.OfType<GlimpseFilterAttribute>().Any())
-                filters.Add(new GlimpseFilterAttribute(), int.MinValue);
+                filters.Add(new GlimpseFilterAttribute(), int.MinValue);*/
         }
     }
 }

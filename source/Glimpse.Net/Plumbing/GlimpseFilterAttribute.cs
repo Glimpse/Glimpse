@@ -8,16 +8,16 @@ namespace Glimpse.Net.Plumbing
         {
             var store = filterContext.HttpContext.Items;
 
-            store.Add(GlimpseConstants.Result, filterContext.Result);
+            store.Save(GlimpseConstants.Result, filterContext.Result);
         }
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
             var store = filterContext.HttpContext.Items;
 
-            store.Add(GlimpseConstants.TempData, filterContext.Controller.TempData);
-            store.Add(GlimpseConstants.ViewData, filterContext.Controller.ViewData);
-            store.Add(GlimpseConstants.RequestContext, filterContext.RequestContext);
+            store.Save(GlimpseConstants.TempData, filterContext.Controller.TempData);
+            store.Save(GlimpseConstants.ViewData, filterContext.Controller.ViewData);
+            store.Save(GlimpseConstants.RequestContext, filterContext.RequestContext);
         }
     }
 }
