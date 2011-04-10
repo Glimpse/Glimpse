@@ -19,9 +19,6 @@ namespace Glimpse.Net.Plugin.Mvc
         {
             var store = application.Context.Items;
             var data = store[GlimpseConstants.ViewEngine] as IList<GlimpseViewEngineCallMetadata>;
-            var vData = store[GlimpseConstants.ViewData] as ViewDataDictionary;
-            var tData = store[GlimpseConstants.TempData] as TempDataDictionary;
-
             if (data == null) return null;
 
             var result = new List<object[]>
@@ -62,8 +59,7 @@ namespace Glimpse.Net.Plugin.Mvc
                     if (callMetadata.GlimpseView != null)
                     {
                         var vd = callMetadata.GlimpseView.ViewContext.ViewData;
-                        vData = vd;
-                        tData = callMetadata.GlimpseView.ViewContext.TempData;
+
                         if (vd.Model != null) model = new {ModelType = vd.Model.GetType().ToString(), Value = vd.Model};
                     }
 
@@ -75,7 +71,8 @@ namespace Glimpse.Net.Plugin.Mvc
                 }
             }
 
-            return new {RequestedViews = result, ViewData = vData.Flatten(), TempData= tData.Flatten()};
+            //TODO: Also show ViewData and TempData
+            return result;
         }
 
         

@@ -59,7 +59,8 @@ namespace Glimpse.Net
                 if (validPath.HasValue && validPath.Value == true) return false;
             }
 
-            if (response.StatusCode != 200) return false;
+            var validResponseCodes = new List<int> {200, 301, 302};
+            if (!validResponseCodes.Contains(response.StatusCode)) return false;
 
             return true;
         }

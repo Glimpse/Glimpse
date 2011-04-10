@@ -51,7 +51,6 @@ namespace MvcMusicStore.Controllers
                 storeDB.SaveChanges();
 
                 return RedirectToAction("Index");
-
             }
 
             // Invalid – redisplay with errors
