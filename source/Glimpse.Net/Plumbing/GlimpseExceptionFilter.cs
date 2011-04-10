@@ -14,7 +14,6 @@ namespace Glimpse.Net.Plumbing
 
         public void OnException(ExceptionContext filterContext)
         {
-            Debug.Write(string.Format("{0} for {1} result, {2} controller which is child:{3}", "OnException", filterContext.Result.GetType().Name, filterContext.Controller.GetType().Name, filterContext.IsChildAction));
             LogCall(Guid);
 
             ExceptionFilter.OnException(filterContext);

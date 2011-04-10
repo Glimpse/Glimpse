@@ -47,8 +47,6 @@ namespace Glimpse.Net.Plumbing
 
         protected override FilterInfo GetFilters(ControllerContext controllerContext, ActionDescriptor actionDescriptor)
         {
-            Debug.Write(string.Format("GlimpseActionInvoker.GetFilters() Controller:{0}({1}) Action:{2}", controllerContext.Controller.GetType().Name, controllerContext.IsChildAction ? "child":"parent", actionDescriptor.ActionName));
-
             var allFilters = FiltersStore(controllerContext);
 
             FieldInfo dynField = typeof (ControllerActionInvoker).GetField("_getFiltersThunk", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -164,8 +162,6 @@ namespace Glimpse.Net.Plumbing
             allFilters.Add(action);
             calledFilters.Add(action.Guid);
 
-            Debug.Write(string.Format("GlimpseActionInvoker.InvokeActionMethod() Controller:{0}({1}) Action:{2}", controllerContext.Controller.GetType().Name, controllerContext.IsChildAction ? "child" : "parent", actionDescriptor.ActionName));
-
             var invokeActionMethod = base.InvokeActionMethod(controllerContext, actionDescriptor, parameters);
             return invokeActionMethod;
         }
@@ -186,8 +182,6 @@ namespace Glimpse.Net.Plumbing
             var action = GlimpseFilterCallMetadata.ActionResult(actionResult, controllerContext.IsChildAction);
             allFilters.Add(action);
             calledFilters.Add(action.Guid);
-
-            Debug.Write(string.Format("GlimpseActionInvoker.InvokeActionResult() Controller:{0}({1}) ActionResult:{2}", controllerContext.Controller.GetType().Name, controllerContext.IsChildAction ? "child" : "parent", actionResult.GetType().Name));
 
             base.InvokeActionResult(controllerContext, actionResult);
         }
