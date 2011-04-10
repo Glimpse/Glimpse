@@ -3,14 +3,14 @@
   <metadata>
     <id>Glimpse</id>
     <version>0.75</version>
-    <title>Glimpse Web Debugger</title>
+    <title>Glimpse Web Debugger (Beta)</title>
     <authors>nmolnar, avanderhoorn</authors>
     <owners>nmolnar, avanderhoorn</owners>
     <licenseUrl>http://creativecommons.org/licenses/by/3.0/</licenseUrl>
     <projectUrl>https://github.com/glimpse</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://github.com/Glimpse/Glimpse/raw/master/hosted/glimpseLogo.png</iconUrl>
-    <description>Glimpse is a web debugger used to gain a better understanding of whats happening inside of your webserver.</description>
+    <description>Glimpse is a web debugger used to gain a better understanding of whats happening inside of your webserver. (Beta)</description>
     <summary>A client side Glimpse into whats going on in your server.</summary>
     <language>en-US</language>
     <tags>MVC ASP.NET Web</tags>

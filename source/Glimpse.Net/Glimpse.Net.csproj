@@ -50,6 +50,8 @@
     <Compile Include="Configuration\IpAddress.cs" />
     <Compile Include="Configuration\IpCollection.cs" />
     <Compile Include="Configuration\GlimpseMode.cs" />
+    <Compile Include="Converter\AuthenticationSectionConverter.cs" />
+    <Compile Include="Converter\CustomErrorsSectionConverter.cs" />
     <Compile Include="Converter\HandleErrorAttributeConverter.cs" />
     <Compile Include="Converter\OutputCacheAttributeConverter.cs" />
     <Compile Include="Converter\RouteValueDictionaryConverter.cs" />

@@ -25,13 +25,16 @@ namespace Glimpse.Net.Plugin.Configuration
 
             if (ConnectionStrings.Count == 0) return null;
 
-            //TODO, add in other useful config sections like customErrors, authentication, compilation, 
-            //var customErrorsSection = ConfigurationManager.GetSection("system.web/customErrors") as CustomErrorsSection;
+            //TODO, add in other useful config sections like compilation, 
+            var customErrorsSection = ConfigurationManager.GetSection("system.web/customErrors") as CustomErrorsSection;
+            var authenticationSection = ConfigurationManager.GetSection("system.web/authentication") as AuthenticationSection;
 
             return new
                        {
                            AppSettings = ConfigurationManager.AppSettings.Flatten(),
-                           ConnectionStrings
+                           ConnectionStrings,
+                           CustomErrors = customErrorsSection,
+                           Authentication = authenticationSection
                        };
         }
 

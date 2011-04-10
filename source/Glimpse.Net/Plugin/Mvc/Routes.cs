@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Glimpse.Net.Plumbing;
 using Glimpse.Protocol;
 
 namespace Glimpse.Net.Plugin.Mvc
 {
-    [GlimpsePlugin(ShouldSetupInInit = true)]
+    [GlimpsePlugin]
     public class Routes:IGlimpsePlugin
     {
         public string Name
@@ -18,34 +17,47 @@ namespace Glimpse.Net.Plugin.Mvc
 
         public object GetData(HttpApplication application)
         {
-            //var store = application.Context.Items;
-            //var requestContext = store[GlimpseConstants.RequestContext] as RequestContext;
-            //if (requestContext == null) return null;
-
             var result = new List<object[]>
                              {
-                                 new[] {"Match", "Url", "Defaults", "Constraints", "DataTokens"}
+                                 new[] {"Match", "Url", "Data", "Constraints", "DataTokens"}
                              };
-
-            //var routeData = requestContext.RouteData;
-            //TODO: Show these values somehow
-            //var routeValues = routeData.Values;
-            //var matchedRouteBase = routeData.Route;
 
             using (RouteTable.Routes.GetReadLock())
             {
                 var httpContext = new HttpContextWrapper(HttpContext.Current);
                 foreach (RouteBase routeBase in RouteTable.Routes)
                 {
-                    bool matchesCurrentRequest = (routeBase.GetRouteData(httpContext) != null);
+                    var routeData = routeBase.GetRouteData(httpContext);
+                    bool matchesCurrentRequest = (routeData != null);
 
                     var route = routeBase as Route;
+
                     if (route != null)
                     {
+                        RouteValueDictionary values = null;
+                        if (routeData != null) values = routeData.Values;
+
+                        var data = new List<object[]>
+                                       {
+                                           new []{"Placeholder", "Default Value", "Actual Value"}
+                                       };
+
+                        if (values != null && route.Defaults != null)
+                        {
+                            foreach (var item in route.Defaults)
+                            {
+                                var @default = item.Value == UrlParameter.Optional ? "_Optional_" : item.Value;
+                                var value = values[item.Key];
+                                if (value != null) value = value == UrlParameter.Optional ? "_Optional_" : value;
+                                data.Add(new []{item.Key, @default, value});
+                            }
+                        }
+
+
                         result.Add(new object[]
                                        {
                                            matchesCurrentRequest.ToString(), 
-                                           route.Url, route.Defaults,
+                                           route.Url, data.Count > 1 ? data : null,
                                            (route.Constraints == null ||route.Constraints.Count == 0) ? null : route.Constraints,
                                            (route.DataTokens == null || route.DataTokens.Count == 0) ? null : route.DataTokens,
                                            matchesCurrentRequest ? "selected" : "quiet"
@@ -63,10 +75,7 @@ namespace Glimpse.Net.Plugin.Mvc
 
         public void SetupInit(HttpApplication application)
         {
-            /*var filters = GlobalFilters.Filters;
-
-            if (!filters.OfType<GlimpseFilterAttribute>().Any())
-                filters.Add(new GlimpseFilterAttribute(), int.MinValue);*/
+            throw new NotImplementedException();
         }
     }
 }
