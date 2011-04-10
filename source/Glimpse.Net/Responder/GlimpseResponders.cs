@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Web;
@@ -44,7 +45,7 @@ namespace Glimpse.Net.Responder
             JsSerializer.RegisterConverters(JsConverters);
         }
 
-        public string StandardResponse(HttpApplication application)
+        public string StandardResponse(HttpApplication application, Guid requestId)
         {
             IDictionary<string, object> data;
             if (!application.TryGetData(out data)) return "Error: No Glimpse Data Found";
@@ -55,12 +56,12 @@ namespace Glimpse.Net.Responder
             //if ajax request, render glimpse data to headers
             if (application.IsAjax())
             {
-                application.Response.AddHeader(GlimpseConstants.HttpHeader, json);
+                application.Response.AddHeader(GlimpseConstants.HttpHeader, requestId.ToString());
             }
             else
             {
                 var html = string.Format(
-                    @"<script type='text/javascript' id='glimpseData'>var glimpse = {0};</script>", json);
+                    @"<script type='text/javascript' id='glimpseData' data-glimpse-requestID='{1}'>var glimpse = {0};</script>", json, requestId);
                 html += @"<script type='text/javascript' id='glimpseClient' src='/Glimpse/glimpseClient.js'></script>";
                 html += @"<!--<img src='/Glimpse/glimpseSprite.png'/>-->";
                 application.Response.Write(html);

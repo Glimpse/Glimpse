@@ -5,6 +5,12 @@
 <div id="promotion">
 </div>
 
+<div id="news">
+    <h2 class="musicHeadline">MJ still alive, Vegas romp with Elvis</h2>
+    <p class="musicArticle">"The King of Pop" and "The King" were spotted together gambling at the Mandalay Bay Resort & Casino this past weekend. The pair were in the high stakes room playing blackjack.<br /><br />The appearence of the stars left many confused, but when asked a spokesperson for Mr. Jackson said that "Michael just loves ASP.NET MVC" and that he was "In town to learn a bit more about HTML5 at the Microsoft Mix conference."<br /><br />THIS NEWS IS NOT REAL.  BUT KEEP YOUR EYES PEELED HERE AND WE WILL BE SURE TO BRING YOU NEWS OF A MORE 'ACCURATE' FASHION.</p>
+    <a href="#">Read More...</a>
+</div>
+
 <h3><em>Fresh</em> off the grill</h3>
 
 <ul id="album-list">
@@ -18,3 +24,17 @@
         </li>
     }
 </ul>
+
+@section JavaScript{
+<script type="text/javascript">
+    $(document).ready(function () {
+        setInterval(function () {
+            $.get('/Home/News', function (result) {
+                $('#news').fadeOut(function () { 
+                    $(this).html(result).fadeIn();
+                })
+            });
+        }, 15000);
+    });
+</script>
+}

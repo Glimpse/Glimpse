@@ -81,9 +81,11 @@ namespace Glimpse.Net
             HttpApplication httpApplication;
             if (!sender.IsValidRequest(out httpApplication, Configuration, true)) return;
 
-            var json = Responders.StandardResponse(httpApplication);
+            var requestId = Guid.NewGuid();
 
-            Persist(json, httpApplication);
+            var json = Responders.StandardResponse(httpApplication, requestId);
+
+            Persist(json, httpApplication, requestId);
         }
 
         private void ComposePlugins()
@@ -103,7 +105,7 @@ namespace Glimpse.Net
                 Container.Dispose();
         }
 
-        private void Persist(string json, HttpApplication ctx)
+        private void Persist(string json, HttpApplication ctx, Guid requestId)
         {
             if (Configuration.SaveRequestCount <= 0) return;
 
@@ -125,9 +127,10 @@ namespace Glimpse.Net
                                   ClientName = ctx.GetClientName(),
                                   Json = json,
                                   RequestTime = DateTime.Now.ToLongTimeString(),
-                                  RequestId = Guid.NewGuid(),
+                                  RequestId = requestId,
                                   IsAjax = ctx.IsAjax().ToString(),
-                                  Url = ctx.Request.RawUrl
+                                  Url = ctx.Request.RawUrl,
+                                  Method = ctx.Request.HttpMethod
                               });
         }
 

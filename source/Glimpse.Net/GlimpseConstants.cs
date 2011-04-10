@@ -10,7 +10,7 @@
         public const string CookieClientNameKey = "glimpseClientName";
         public const string CookieModeKey = "glimpseState";
         public const string CalledFilters = "Glimpse.CalledFilters";
-        public const string HttpHeader = "X-Glimpse-Debugger";
+        public const string HttpHeader = "X-Glimpse-RequestID";
         public const string Result = "Glimpse.Result";
         public const string TempData = "Glimpse.TempData";
         public const string ViewData = "Glimpse.ViewData";

@@ -4,6 +4,7 @@ namespace Glimpse.Net.Plumbing
 {
     public class GlimpseRequestMetadata
     {
+        public string Method { get; set; }
         public string Json { get; set; }
         public string Browser { get; set; }
         public string ClientName { get; set; }

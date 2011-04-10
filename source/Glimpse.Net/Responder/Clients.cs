@@ -44,7 +44,7 @@ namespace Glimpse.Net.Responder
 
                     var dictionary = result[request.ClientName] as IDictionary<string, object>;
 
-                    dictionary.Add(request.RequestId.ToString(), new {request.Url, request.Browser, request.RequestTime, request.IsAjax});
+                    dictionary.Add(request.RequestId.ToString(), new {request.Url, request.Browser, request.RequestTime, request.IsAjax, request.Method});
 
                     lastClient = request.ClientName;
                 }

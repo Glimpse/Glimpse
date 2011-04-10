@@ -39,6 +39,15 @@ body
 	height: 300px; 
 	width: 700px; 
 	background: url(/content/Images/home-showcase.png) no-repeat;
+	float: left;
+}
+
+#news
+{
+    height: 500px; 
+    width: 300px;
+    margin-left:10px;
+	float: right;
 }
 
 ul li a
@@ -336,4 +345,14 @@ tr:hover
 .validation-summary-valid
 {
     display: none;
+}
+
+.musicHeadline
+{
+    color:#FCAF2B;
+}
+
+.musicArticle
+{
+    color:Gray;
 }
