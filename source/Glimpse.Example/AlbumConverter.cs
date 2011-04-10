@@ -16,8 +16,8 @@ namespace MvcMusicStore
 
             return new Dictionary<string, object>
                        {
-                           {"Artist", source.Artist.Name},
-                           {"Genre", source.Genre.Name},
+                           {"Artist", source.Artist != null ? source.Artist.Name : null},
+                           {"Genre", source.Genre != null ? source.Genre.Name : null},
                            {"Price", source.Price.ToString("c")},
                            {"Title", source.Title},
                        };

@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlbumConverter.cs" />
+    <Compile Include="CartConverter.cs" />
     <Compile Include="ListAlbumConverter.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CheckoutController.cs" />
