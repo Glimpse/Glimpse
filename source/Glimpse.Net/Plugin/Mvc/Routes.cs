@@ -60,7 +60,7 @@ namespace Glimpse.Net.Plugin.Mvc
                                            route.Url, data.Count > 1 ? data : null,
                                            (route.Constraints == null ||route.Constraints.Count == 0) ? null : route.Constraints,
                                            (route.DataTokens == null || route.DataTokens.Count == 0) ? null : route.DataTokens,
-                                           matchesCurrentRequest ? "selected" : "quiet"
+                                           matchesCurrentRequest ? "selected" : ""
                                        });
                     }
                     else
