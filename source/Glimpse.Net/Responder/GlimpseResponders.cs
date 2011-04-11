@@ -63,7 +63,6 @@ namespace Glimpse.Net.Responder
                 var html = string.Format(
                     @"<script type='text/javascript' id='glimpseData' data-glimpse-requestID='{1}'>var glimpse = {0};</script>", json, requestId);
                 html += @"<script type='text/javascript' id='glimpseClient' src='/Glimpse/glimpseClient.js'></script>";
-                html += @"<!--<img src='/Glimpse/glimpseSprite.png'/>-->";
                 application.Response.Write(html);
             }
 
