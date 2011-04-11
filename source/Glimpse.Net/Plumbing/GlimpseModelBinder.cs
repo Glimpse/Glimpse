@@ -17,7 +17,7 @@ namespace Glimpse.Net.Plumbing
             var cc = controllerContext;
             var bc = bindingContext;
 
-            Debug.Write("BINDMODEL CALLED ON " + bindingContext.ModelName + bindingContext.FallbackToEmptyPrefix.ToString());
+            Trace.Write("BINDMODEL CALLED ON " + bindingContext.ModelName + bindingContext.FallbackToEmptyPrefix.ToString());
 
             var result = ModelBinder.BindModel(cc, bc);
 

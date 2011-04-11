@@ -16,7 +16,7 @@ namespace Glimpse.Net.Plumbing
         {
             var p = prefix;
             var containsPrefix = ValueProvider.ContainsPrefix(p);
-            Debug.Write(string.Format("{0}.ContainsPrefix('{1}') = {2}", ValueProvider.GetType().Name, prefix, containsPrefix));
+            Trace.Write(string.Format("{0}.ContainsPrefix('{1}') = {2}", ValueProvider.GetType().Name, prefix, containsPrefix));
             return containsPrefix;
         }
 
@@ -24,7 +24,7 @@ namespace Glimpse.Net.Plumbing
         {
             var k = key;
             var result = ValueProvider.GetValue(k);
-            Debug.Write(string.Format("{0}.GetValue('{1}') = {2}", ValueProvider.GetType().Name, key, result == null ? null : result.AttemptedValue));
+            Trace.Write(string.Format("{0}.GetValue('{1}') = {2}", ValueProvider.GetType().Name, key, result == null ? null : result.AttemptedValue));
             return result;
         }
     }
