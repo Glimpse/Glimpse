@@ -27,3 +27,6 @@ Glimpse.5.1.ReSharper.user
 /source/Glimpse.Test/Bin/Glimpse.Test.dll
 /source/Glimpse.Test/Bin/Glimpse.Test.pdb
 *.user
+/source/Glimpse.Net/NuSpec/lib/Glimpse.Protocol.dll
+/source/Glimpse.Net/NuSpec/lib/Glimpse.Net.dll
+/source/Glimpse.Net/Glimpse.0.75.nupkg
