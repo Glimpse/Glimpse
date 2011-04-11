@@ -982,12 +982,12 @@ if (window.jQuery) {
                 
                 //As long as the client  
                 if ($(".selected a[data-client='" + rclientToken + "']", static.subPanel).length > 0) {
-                    var lclient = ldata[rclientToken], data = [ [ 'Client Name', 'Request Url', 'Browser', 'Date/Time', 'Is Ajax', 'Launch' ] ]; 
+                    var lclient = ldata[rclientToken], data = [ [ 'Client Name', 'Method', 'Request Url', 'Browser', 'Date/Time', 'Is Ajax', 'Launch' ] ]; 
                     
                     for (var lclientRequestToken in lclient) {
                         var lclientRequest = lclient[lclientRequestToken];
                         if (lclientRequest.Data) 
-                            data.push([ rclientToken, lclientRequest.Url, lclientRequest.Browser, lclientRequest.RequestTime, lclientRequest.IsAjax, '!<a href="#" data-request="' + lclientRequestToken + '" data-client="' + rclientToken + '">Launch</a>!' ]);
+                            data.push([ rclientToken, lclientRequest.Method, lclientRequest.Url, lclientRequest.Browser, lclientRequest.RequestTime, lclientRequest.IsAjax, '!<a href="#" data-request="' + lclientRequestToken + '" data-client="' + rclientToken + '">Launch</a>!' ]);
                     }
 
                     $('.glimpse-initial', static.mainPanel).hide();
