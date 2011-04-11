@@ -1410,7 +1410,7 @@ if (window.jQuery) { (function($) {
             if (glimpseRequestId) {
                 var linkPlaceholder = $('.glimpse-ajax-inspect', row).html('<div class="icon"></div>Loading...').addClass('loading');
                 
-                $.ajax({
+                $.ajax({ 
                     url: static.historyLink,
                     type: 'GET', 
                     data : { 'ClientRequestID' : glimpseRequestId },
