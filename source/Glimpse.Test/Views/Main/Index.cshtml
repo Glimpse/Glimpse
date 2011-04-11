@@ -1415,7 +1415,7 @@ if (window.jQuery) { (function($) {
                     type: 'GET', 
                     data : { 'ClientRequestID' : glimpseRequestId },
                     contentType: 'application/json',
-                    success: function(result) {  
+                    success: function(result) {   
                         linkPlaceholder.html('<a href="#">Launch</a>').children('a').click(function() {
                             ga._handelClick($(this)); 
                             //$('.glimpse').trigger('ajax.refresh.glimpse');
