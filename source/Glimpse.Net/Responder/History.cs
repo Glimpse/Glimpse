@@ -35,37 +35,52 @@ namespace Glimpse.Net.Responder
             var queue = application.Application[GlimpseConstants.JsonQueue] as Queue<GlimpseRequestMetadata>;
             if (queue != null)
             {
-                var clientName = application.Request.QueryString[GlimpseConstants.ClientName];
                 var result = new Dictionary<string, object>();
                 IEnumerable<GlimpseRequestMetadata> data;
 
-                if (string.IsNullOrEmpty(clientName))
-                    data = queue;
+                var requestId = application.Request.QueryString[GlimpseConstants.ClientRequestId];
+                if (!string.IsNullOrEmpty(requestId))
+                { 
+                    data = from request in queue
+                           where request.RequestId.ToString().Equals(requestId)
+                           select request;
+
+                    var requestResult = data.FirstOrDefault(); 
+                    if (requestResult != null) 
+                        result.Add(requestResult.RequestId.ToString(), new { Data = requestResult.Json });  
+                }
                 else
                 {
-                    data = from request in queue
-                                        where request.ClientName.Equals(clientName)
-                                        select request;
+                    var clientName = application.Request.QueryString[GlimpseConstants.ClientName];
+
+                    if (string.IsNullOrEmpty(clientName))
+                        data = queue;
+                    else
+                    {
+                        data = from request in queue
+                               where request.ClientName.Equals(clientName)
+                               select request;
+                    }
+
+                    var lastClient = Guid.NewGuid().ToString();
+                    foreach (var request in data.OrderBy(d => d.ClientName))
+                    {
+                        if (!lastClient.Equals(request.ClientName))
+                            result.Add(request.ClientName, new Dictionary<string, object>());
+
+                        var dictionary = result[request.ClientName] as IDictionary<string, object>;
+                        dictionary.Add(request.RequestId.ToString(), new { Data = request.Json });
+
+                        lastClient = request.ClientName;
+                    }
+
+                    if (!string.IsNullOrEmpty(clientName) && result.Count == 0)
+                        result.Add(clientName, new Dictionary<string, object>()); 
                 }
 
-                var lastClient = Guid.NewGuid().ToString();
-                foreach (var request in data.OrderBy(d=> d.ClientName))
-                {
-                    if (!lastClient.Equals(request.ClientName))
-                        result.Add(request.ClientName, new Dictionary<string, object>());
-
-                    var dictionary = result[request.ClientName] as IDictionary<string, object>;
-                    dictionary.Add(request.RequestId.ToString(), new {Data = request.Json});
-
-                    lastClient = request.ClientName;
-                }
-
-                if (!string.IsNullOrEmpty(clientName) && result.Count == 0)
-                    result.Add(clientName, new Dictionary<string, object>());
-
-                var json = JsSerializer.Serialize(new {Data = result});
+                var json = JsSerializer.Serialize(new { Data = result });
                 JsonResponse(application, json);
-                return;
+                return; 
             }
             else
             {

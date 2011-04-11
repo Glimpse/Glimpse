@@ -6,6 +6,7 @@
         public const string ViewEngine = "Glimpse.ViewEngine";
         public const string Data = "__glimpseData";
         public const string ClientName = "ClientName";
+        public const string ClientRequestId = "ClientRequestID";
         public const string ActionDescriptor = "Glimpse.ActionDescriptor";
         public const string CookieClientNameKey = "glimpseClientName";
         public const string CookieModeKey = "glimpseState";

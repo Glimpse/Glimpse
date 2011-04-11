@@ -1,4 +1,4 @@
-﻿
+﻿/*
 var XHRSpy = function () {
     this.requestHeaders = {};
     this.responseHeaders = {};
@@ -1078,3 +1078,4 @@ if (window.jQuery) {
 
     })(jQuery);
 } 
+*/

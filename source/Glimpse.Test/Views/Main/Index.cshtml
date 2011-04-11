@@ -451,8 +451,7 @@
             <td class="glimpse-scenario glimpse glimpse-scenario-twelve glimpse-panel"></td>
         </tr>
     </table>
-
-<!--
+ 
 <style>
     .glimpse, .glimpse *, .glimpse a, .glimpse td, .glimpse th, .glimpse table { font-family:Lucida Grande,Tahoma,sans-serif; background-color:transparent; font-size:11px; line-height:14px; border:0px; color:#232323; }
     .glimpse a, .glimpse a:hover, .glimpse a:visited { color:#2200C1; text-decoration:underline; font-weight:normal; }
@@ -528,8 +527,7 @@
     .glimpse-panelitem-XHReqests .loading .icon { float:right; }
     .glimpse-panelitem-Remote .glimpse-side-sub-panel .loading, 
     .glimpse-panelitem-Remote .glimpse-side-main-panel .loading { position:absolute; bottom:5px; right:5px; color:#777; } 
-</style>
--->
+</style> 
 
 <style>
     h1, h2 { margin:0; padding:0; }
@@ -537,7 +535,7 @@
 </style>
 
     <script src="/Scripts/jquery-1.4.4.js" type="text/javascript"></script>
-    <!--<script src="/Scripts/XMLHttpRequestWrapper.js" type="text/javascript"></script>-->
+    <script src="/Scripts/XMLHttpRequestWrapper.js" type="text/javascript"></script>
 
 <script>
     $(document).ready(function () {
@@ -807,7 +805,7 @@
 
     });
 </script>
-<!--
+
 <script>
 var glimpse;
 if (window.jQuery) { (function($) {
@@ -1400,28 +1398,39 @@ if (window.jQuery) { (function($) {
             ajaxSpy.logRow = $('tr:last', panelItem);
         },
         callFinished: function(ajaxSpy) {
-            var ga = this, row = ajaxSpy.logRow, glimpseResponse = ajaxSpy.responseHeaders['X-Glimpse-Debugger'];
+            var ga = this, static = ga.static, row = ajaxSpy.logRow, glimpseRequestId = ajaxSpy.responseHeaders['X-Glimpse-RequestID'];
 
             if (ajaxSpy.url && ajaxSpy.url.length > 9 && ajaxSpy.url.substr(0, 9) == '/Glimpse/')
                 return;
 
             //Adjust layout
-            row.removeClass('loading').addClass(!ajaxSpy.success ? 'error' : glimpseResponse ? 'ajax-loaded' : 'suppress');
+            row.removeClass('loading').addClass(!ajaxSpy.success ? 'error' : glimpseRequestId ? 'ajax-loaded' : 'suppress');
             $('.glimpse-ajax-status', row).text(ajaxSpy.status);
             $('.glimpse-ajax-duration', row).text(ajaxSpy.duration + 'ms');
-            if (glimpseResponse) {
-                $('.glimpse-ajax-inspect', row).html('<a href="#">Launch</a>').children('a').click(function() {
-                    ga._handelClick($(this));
-                    //$('.glimpse').trigger('ajax.refresh.glimpse');
-                    $.glimpse.refresh(eval('(' + glimpseResponse + ')'), $.glimpseProcessor.buildHeading(ajaxSpy.url, ajaxSpy.clientName, ga.static.key));
-                    return false;
-                });
+            if (glimpseRequestId) {
+                var linkPlaceholder = $('.glimpse-ajax-inspect', row).html('<div class="icon"></div>Loading...').addClass('loading');
+                
+                $.ajax({
+                    url: static.historyLink,
+                    type: 'GET', 
+                    data : { 'ClientRequestID' : glimpseRequestId },
+                    contentType: 'application/json',
+                    success: function(result) {  
+                        linkPlaceholder.html('<a href="#">Launch</a>').children('a').click(function() {
+                            ga._handelClick($(this)); 
+                            //$('.glimpse').trigger('ajax.refresh.glimpse');
+                            $.glimpse.refresh(eval('(' + result.Data[glimpseRequestId].Data + ')'), $.glimpseProcessor.buildHeading(ajaxSpy.url, ajaxSpy.clientName, ga.static.key));
+                            return false;
+                        });
+                    }
+                });   
             }
         },
         static: {
-            key: 'XHReqests',
-            tab: null,
-            panel: null
+            key : 'XHReqests',
+            tab : null,
+            panel : null,
+            historyLink : '/Glimpse/History'
         },
         _handelClick: function(link) { 
             $('.selected', link.parents('table:first')).removeClass('selected');
@@ -1649,6 +1658,6 @@ if (window.jQuery) { (function($) {
 
 })(jQuery); }   
 </script> 
--->
+
 </body>
 </html>
