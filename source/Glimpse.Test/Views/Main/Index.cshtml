@@ -451,7 +451,8 @@
             <td class="glimpse-scenario glimpse glimpse-scenario-twelve glimpse-panel"></td>
         </tr>
     </table>
- 
+
+<!--
 <style>
     .glimpse, .glimpse *, .glimpse a, .glimpse td, .glimpse th, .glimpse table { font-family:Lucida Grande,Tahoma,sans-serif; background-color:transparent; font-size:11px; line-height:14px; border:0px; color:#232323; }
     .glimpse a, .glimpse a:hover, .glimpse a:visited { color:#2200C1; text-decoration:underline; font-weight:normal; }
@@ -511,31 +512,33 @@
     .glimpse-expand { height:11px; width:11px; display:inline-block; float:left; margin:1px 0 0 -13px; cursor:pointer; background-image:url(/Glimpse/glimpseSprite.png); background-repeat:no-repeat; background-position:-96px 0; }
     .glimpse-collapse { background-position:-96px -11px; }
     .glimpse-preview-show { display:none; font-weight:normal !important; }
-    .glimpse-panel .quiet { color:#AAA; }
-    .glimpse-panel .suppress { color:#AAA; text-decoration:line-through; }
-    .glimpse-panel .selected { background-color:#FFFF99; color:#409B3B; }
+    .glimpse-panel .quiet * { color:#AAA; }
+    .glimpse-panel .suppress { text-decoration:line-through; }
+    .glimpse-panel .suppress * { color:#AAA; }
+    .glimpse-panel .selected { background-color:#FFFF99; }
+    .glimpse-panel .selected * { color:#409B3B; }
     .glimpse-panel .info .icon, .glimpse-panel .warn .icon, .glimpse-panel .loading .icon, .glimpse-panel .error .icon, .glimpse-panel .fail .icon { width:14px; height:14px; background-image:url(/Glimpse/glimpseSprite.png); background-repeat:no-repeat; display:inline-block; margin-right: 5px; } 
     .glimpse-panel .info .icon { background-position: -22px -22px; }
     .glimpse-panel .warn .icon { background-position:-36px -22px; }
     .glimpse-panel .loading .icon { background-position:-78px -22px; }
     .glimpse-panel .error .icon { background-position:-50px -22px; } 
     .glimpse-panel .fail .icon { background-position:-64px -22px; }
-    .glimpse-panel .info { color:#067CE5; }
-    .glimpse-panel .warn { color:#FE850C; } 
-    .glimpse-panel .error { color:#B40000; }
-    .glimpse-panel .fail { color:#D00; font-weight:bold; }
+    .glimpse-panel .info * { color:#067CE5; }
+    .glimpse-panel .warn * { color:#FE850C; } 
+    .glimpse-panel .error * { color:#B40000; }
+    .glimpse-panel .fail * { color:#D00; font-weight:bold; }
     .glimpse-panelitem-XHReqests .loading .icon { float:right; }
     .glimpse-panelitem-Remote .glimpse-side-sub-panel .loading, 
     .glimpse-panelitem-Remote .glimpse-side-main-panel .loading { position:absolute; bottom:5px; right:5px; color:#777; } 
 </style> 
-
+-->
 <style>
     h1, h2 { margin:0; padding:0; }
     .glimpse-scenario { font-family:Lucida Grande,Tahoma,sans-serif; font-size:11px; } 
 </style>
 
     <script src="/Scripts/jquery-1.4.4.js" type="text/javascript"></script>
-    <script src="/Scripts/XMLHttpRequestWrapper.js" type="text/javascript"></script>
+    <!--<script src="/Scripts/XMLHttpRequestWrapper.js" type="text/javascript"></script>-->
 
 <script>
     $(document).ready(function () {
@@ -806,6 +809,7 @@
     });
 </script>
 
+<!--
 <script>
 var glimpse;
 if (window.jQuery) { (function($) {
@@ -1667,6 +1671,6 @@ if (window.jQuery) { (function($) {
 
 })(jQuery); }   
 </script> 
-
+-->
 </body>
 </html>
