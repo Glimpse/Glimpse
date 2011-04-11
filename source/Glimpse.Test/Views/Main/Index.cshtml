@@ -955,11 +955,8 @@ if (window.jQuery) { (function($) {
             //Set Inital State - TODO: don't like how this works... need to review
             $('.info td:first-child, .warn td:first-child, tr.error td:first-child, .fail td:first-child, .loading td:first-child', $('.glimpse-panel')).not(':has(.icon)').prepend('<div class="icon"></div>');
 
-            $('.glimpse-active', tabStrip).removeClass('glimpse-active').removeClass('glimpse-hover');
-            $('li:first', tabStrip).addClass('glimpse-active');
-
-            $('.glimpse-active', panelHolder).removeClass('glimpse-active');
-            $('.glimpse-panel:first', panelHolder).addClass('glimpse-active');
+            //Select tab
+            that.restoreTab(g);
 
             $('.glimpse-title').html(title);
         },
@@ -970,6 +967,15 @@ if (window.jQuery) { (function($) {
         addTabBody: function(container, content, key) {
             container.append('<div class="glimpse-panel glimpse-panelitem-' + key + '" data-sort="' + key + '">' + content + '</div>');
         },
+        restoreTab : function(g) {
+            var static = g.static, tabStrip = static.tabStrip(), panelHolder = static.panelHolder(), activeTab = g.settings.activeTab; 
+            
+            $('.glimpse-active', tabStrip).removeClass('glimpse-active').removeClass('glimpse-hover'); 
+            $((activeTab ? '.glimpse-tabitem-' + activeTab : 'li:first'), tabStrip).addClass('glimpse-active');
+
+            $('.glimpse-active', panelHolder).removeClass('glimpse-active'); 
+            $((activeTab ? '.glimpse-panelitem-' + activeTab : '.glimpse-panel:first'), panelHolder).addClass('glimpse-active'); 
+        }, 
         clearLayout: function(g) {
             var that = this, static = g.static, tabStrip = static.tabStrip(), panelHolder = static.panelHolder();
 
@@ -1269,8 +1275,7 @@ if (window.jQuery) { (function($) {
             $.cookie('glimpseOptions', g.settings);
         },
         restoreState: function() {
-            var g = $.glimpse, settings = $.cookie('glimpseOptions');
-            g.settings = $.extend(g.settings, settings);
+            var g = $.glimpse;
             if (g.settings.open)
                 g.open(0);
         },
@@ -1297,7 +1302,8 @@ if (window.jQuery) { (function($) {
             if (!data) return;
 
             var g = $.glimpse, static = g.static;
-            static.data = data;
+            g.static.data = data; 
+            g.settings = $.extend(g.settings, $.cookie('glimpseOptions'));
 
             g._executeProtocolListeners(g, true);
 
@@ -1498,6 +1504,9 @@ if (window.jQuery) { (function($) {
                 gr.getClientList();
             }); 
             //$('.glimpse').bind('reset.refresh.glimpse', function() { gr.reset(true); });
+
+            if ($.glimpse.settings.activeTab == static.key)
+                gr.getClientList(); 
         },
         reset : function() { 
             var gr = this, static = gr.static; 
