@@ -38,9 +38,11 @@ namespace Glimpse.Net.Responder
             }
             response.Write(
                 string.Format(
-                    "</ol></li></ul><h1>Your Settings:</h1><ol><li>IP = {0}</li><li>glimpseState = <input type='checkbox' id='gChk' onclick='toggleCookie();'{2}/> <label for='gChk' id='glimpseState'>{1}</lable></li></ol></body></html>",
+                    "</ol></li></ul><h1>Your Settings:</h1><ol><li>IP = {0}</li><li>glimpseState = <input type='checkbox' id='gChk' onclick='toggleCookie();'{2}/> <label for='gChk' id='glimpseState'>{1}</lable></li></ol>",
                     application.Request.ServerVariables["REMOTE_ADDR"], mode,
                     mode == GlimpseMode.On ? " checked" : ""));
+
+            response.Write("<h1>Bookmarklets:</h1><p>Drag the following bookmarklets to your favorites bar for quick and easy access to Glimpse.</p><ul><li><a href=\"javascript:(function(){document.cookie='glimpseState=On; path=/; expires=Sat, 01 Jan 2050 12:00:00 GMT;'; window.location.reload();})();\">Glimpse</a> - Used to turn Glimpse on.</li><li><a href=\"javascript:(function(){document.cookie='glimpseClientName='+ prompt('Client Name?') +'; path=/; expires=Sat, 01 Jan 2050 12:00:00 GMT;'; window.location.reload();})();\">Glimpse Name</a> - Used to set the client name in Glimpse requests.</li></ul></body></html>");
 
             application.CompleteRequest();
         }
