@@ -63,7 +63,10 @@
     <Content Include="Content\cs_leftImg.png" />
     <Content Include="Content\cs_rightImg.jpg" />
     <Content Include="Content\cs_rightImg.png" />
+    <Content Include="Content\glimpseLogo.png" />
+    <Content Include="Content\glimpseMedium.png" />
     <Content Include="Content\jquery.jscrollpane.css" />
+    <Content Include="Content\nugetlogo.png" />
     <Content Include="Content\open-quote.gif" />
     <Content Include="Scripts\jquery.easing.1.3.js" />
     <Content Include="Scripts\jquery.contentslider.js" />
