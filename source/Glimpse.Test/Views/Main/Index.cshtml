@@ -454,7 +454,7 @@
 
 <!--
 <style>
-    .glimpse, .glimpse *, .glimpse a, .glimpse td, .glimpse th, .glimpse table { font-family:Lucida Grande,Tahoma,sans-serif; background-color:transparent; font-size:11px; line-height:14px; border:0px; color:#232323; }
+    .glimpse, .glimpse *, .glimpse a, .glimpse td, .glimpse th, .glimpse table { font-family:Lucida Grande,Tahoma,sans-serif; background-color:transparent; font-size:11px; line-height:14px; border:0px; color:#232323; text-align:left; }
     .glimpse a, .glimpse a:hover, .glimpse a:visited { color:#2200C1; text-decoration:underline; font-weight:normal; }
     .glimpse a:active { color:#c11; text-decoration:underline; font-weight:normal; }
     .glimpse th { font-weight:bold; }
@@ -953,9 +953,7 @@ if (window.jQuery) { (function($) {
 
             $('li', tabStrip).sortElements();
             $('.glimpse-panel', panelHolder).sortElements();
-
-            console.log((new Date().getTime() - start) + ' ms render time');
-
+             
             //Set Inital State - TODO: don't like how this works... need to review
             $('.info td:first-child, .warn td:first-child, tr.error td:first-child, .fail td:first-child, .loading td:first-child', $('.glimpse-panel')).not(':has(.icon)').prepend('<div class="icon"></div>');
 
@@ -1334,7 +1332,7 @@ if (window.jQuery) { (function($) {
         },
         static: {
             data : null,
-            url : window.location.href.replace(window.location.origin, ''),
+            url : window.location.href.replace(window.location.protocol + '//' + window.location.host, ''),
             clientName : $.cookie('glimpseClientName'),
             html : { plugin: '<div class="glimpse-open"><div class="glimpse-icon"></div></div><div class="glimpse-holder glimpse"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon"></div><div class="glimpse-title"></div><div class="glimpse-buttons"><a href="#" title="Shutdown/Terminate" class="glimpse-terminate"></a><a href="#" title="Close/Minimize" class="glimpse-close"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>' },
             tabStrip : function() { return $('.glimpse-tabs ul'); },
@@ -1487,7 +1485,6 @@ if (window.jQuery) { (function($) {
 
             //Wireevents 
             $('a', static.panel).live('click', function() {
-                console.log('remote click')
                 $('.selected', $(this).parents('table:first')).removeClass('selected');
                 $(this).parents('tr:first').addClass('selected');
             }); 

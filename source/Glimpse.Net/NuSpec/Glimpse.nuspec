@@ -2,11 +2,11 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Glimpse</id>
-    <version>0.75</version>
+    <version>0.76</version>
     <title>Glimpse Web Debugger (Beta)</title>
     <authors>nmolnar, avanderhoorn</authors>
     <owners>nmolnar, avanderhoorn</owners>
-    <licenseUrl>http://creativecommons.org/licenses/by/3.0/</licenseUrl>
+    <licenseUrl>http://www.opensource.org/licenses/apache2.0</licenseUrl>
     <projectUrl>https://github.com/glimpse</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://github.com/Glimpse/Glimpse/raw/master/hosted/glimpseLogo.png</iconUrl>
