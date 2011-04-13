@@ -276,7 +276,7 @@ if (window.jQuery) {
             if (arguments.length > 1) {
                 var t = new Date();
                 t.setDate(t.getDate() + 1000);
-
+                
                 value = $.isPlainObject(value) ? JSON.stringify(value) : String(value);
                 return (document.cookie = key + '=' + encodeURIComponent(value) + '; expires=' + t.toUTCString() + '; path=/');
             }
@@ -356,9 +356,7 @@ if (window.jQuery) {
 
             $('li', tabStrip).sortElements();
             $('.glimpse-panel', panelHolder).sortElements();
-
-            console.log((new Date().getTime() - start) + ' ms render time');
-
+            
             //Set Inital State - TODO: don't like how this works... need to review
             $('.info td:first-child, .warn td:first-child, tr.error td:first-child, .fail td:first-child, .loading td:first-child', $('.glimpse-panel')).not(':has(.icon)').prepend('<div class="icon"></div>');
 
@@ -415,14 +413,14 @@ if (window.jQuery) {
         },
         buildHeading: function(url, clientName, type) {
             var clean = function(data) {
-                return (data === undefined || data === null) ? '' : data;
+                return (data === undefined || data === null || data === "null") ? '' : data;
             }
             type = clean(type);
             clientName = clean(clientName);
             return '<span>' + clientName + ((type.length > 0) ? ' (' + type + ')' : '') + '&nbsp;</span><span>' + url + '</span>';
         },
         buildKeyValueTable: function(data, level, forceFull) {
-            var that = this, limit = 2;
+            var that = this, limit = 3;
             if (((level > 0 && $.lengthJson(data) > (limit + 1)) || level > 1) && !forceFull)
                 return that.buildKeyValuePreview(data, limit);
 
@@ -433,7 +431,7 @@ if (window.jQuery) {
             return html;
         },
         buildCustomTable: function(data, level, forceFull) {
-            var that = this, limit = 2;
+            var that = this, limit = 3;
             if (((level > 0 && data.length > (limit + 1)) || level > 1) && !forceFull)
                 return that.buildCustomPreview(data, limit);
 
@@ -733,11 +731,11 @@ if (window.jQuery) {
         settings: {
             open: false,
             height: 300,
-            activeTab: ''
+            activeTab: 'Routes'
         },
         static: {
             data : null,
-            url : window.location.href.replace(window.location.origin, ''),
+            url : window.location.href.replace(window.location.protocol + '//' + window.location.host, ''),
             clientName : $.cookie('glimpseClientName'),
             html : { plugin: '<div class="glimpse-open"><div class="glimpse-icon"></div></div><div class="glimpse-holder glimpse"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon"></div><div class="glimpse-title"></div><div class="glimpse-buttons"><a href="#" title="Shutdown/Terminate" class="glimpse-terminate"></a><a href="#" title="Close/Minimize" class="glimpse-close"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>' },
             tabStrip : function() { return $('.glimpse-tabs ul'); },
@@ -891,8 +889,7 @@ if (window.jQuery) {
             static.mainPanel = $('.glimpse-side-main-panel', static.panel);
 
             //Wireevents 
-            $('a', static.panel).live('click', function() {
-                console.log('remote click')
+            $('a', static.panel).live('click', function() { 
                 $('.selected', $(this).parents('table:first')).removeClass('selected');
                 $(this).parents('tr:first').addClass('selected');
             }); 

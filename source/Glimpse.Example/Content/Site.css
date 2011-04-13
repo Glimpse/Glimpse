@@ -45,7 +45,7 @@ body
 #news
 {
     height: 500px; 
-    width: 300px;
+    width: 270px;
     margin-left:10px;
 	float: right;
 }
@@ -58,8 +58,9 @@ ul li a
 #main
 {
 	overflow: hidden;
-	padding: 0 0 15px 10px;
+	padding: 0 0 15px 5px;
 	float: left;
+	width:80%;
 }
 
 ul
