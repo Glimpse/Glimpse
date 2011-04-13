@@ -1,68 +1,29 @@
-body
-{
-    font-size: 75%;
-    font-family: Verdana, Tahoma, Arial, "Helvetica Neue", Helvetica, Sans-Serif;
-    color: #232323;
-    background-color: #fff;
-}
+/* reset */
+html{color:#000;background:#FFF;}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym{border:0;font-variant:normal;}sup{vertical-align:text-top;}sub{vertical-align:text-bottom;}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit;}input,textarea,select{*font-size:100%;}legend{color:#000;}
 
-/* Styles for basic forms
------------------------------------------------------------*/
-
-fieldset 
-{
-    border:1px solid #ddd;
-    padding:0 1.4em 1.4em 1.4em;
-    margin:0 0 1.5em 0;
-}
-
-legend 
-{
-    font-size:1.2em;
-    font-weight: bold;
-}
-
-textarea 
-{
-    min-height: 75px;
-}
-
-.editor-label 
-{
-    margin: 1em 0 0 0;
-}
-
-.editor-field 
-{
-    margin:0.5em 0 0 0;
-}
-
-
-/* Styles for validation helpers
------------------------------------------------------------*/
-.field-validation-error
-{
-    color: #ff0000;
-}
-
-.field-validation-valid
-{
-    display: none;
-}
-
-.input-validation-error
-{
-    border: 1px solid #ff0000;
-    background-color: #ffeeee;
-}
-
-.validation-summary-errors
-{
-    font-weight: bold;
-    color: #ff0000;
-}
-
-.validation-summary-valid
-{
-    display: none;
-}
+/* general */
+body { text-align:center; font-family:"avante garde", "Century Gothic", Serif; font-size:0.8em; line-height:1.4em; }
+strong { font-weight:bold; }
+ul.plain, ol.plain { margin-bottom:1em; }
+ul.plain li { list-style-type:disc; }
+ol.plain li { list-style-type:decimal; }
+ul.plain li, ol.plain li { margin:0.5em 0 0.5em 1.5em ; }
+.content { position:absolute; left:50%; margin-left:-450px; text-align:left; width:900px; }
+.navigation { position:absolute; right:0; }
+.navigation li { float:left; width:185px; height:70px; position:relative; }
+.navigation li a { display:block; font-size:1.5em; color:#333; text-decoration:none; margin:1em 0 0.5em; }
+.nagigation li span { display:block; padding:40px 8px 0 12px; font-size:0.85em; }
+.logo { font-family: "TitilliumMaps", helvetica, sans-serif; margin:100px 0 40px; position:relative; }
+.logo div { font-size:1.5em; }
+.logo blockquote { width:350px; position:absolute; right:0; top:10px; }
+.features { margin-top:20px; }
+.features h3 { margin:20px 0 15px; } 
+.features tr { vertical-align:top; } 
+.scroll-pane { overflow:hidden; outline:none; height:400px; width:820px; }
+h1, h2, h3, h4 { line-height:1.2em; } 
+h1 { font-size:4em; }
+h2 { font-size:3em; }
+h3 { font-size:2em; }
+h4 { font-size:1.2em; font-weight:bold; margin-bottom:0.5em; }
+blockquote { font: 1.2em/1.6em "avante garde", "Century Gothic", Serif; width: 400px; background: url(/Content/close-quote.gif) no-repeat right bottom; padding-left: 18px; text-indent: -18px; }
+blockquote:first-letter { background: url(/Content/open-quote.gif) no-repeat left top; padding-left: 18px; font: italic 1.4em "avante garde", "Century Gothic", Serif; }

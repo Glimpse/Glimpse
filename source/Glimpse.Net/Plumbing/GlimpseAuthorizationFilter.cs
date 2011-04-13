@@ -14,9 +14,14 @@ namespace Glimpse.Net.Plumbing
 
         public void OnAuthorization(AuthorizationContext filterContext)
         {
-            LogCall(Guid);
+            var watch = new Stopwatch();
+            watch.Start();
 
             AuthorizationFilter.OnAuthorization(filterContext);
+
+            watch.Stop();
+
+            LogCall(Guid, watch.Elapsed);
         }
     }
 }

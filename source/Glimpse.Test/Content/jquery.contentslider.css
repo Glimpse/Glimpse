@@ -1,0 +1,8 @@
+﻿.contentslider{position:relative;display:block;width:900px;height:450px;margin:0 auto;overflow:hidden}
+.cs_wrapper{position:relative;display:block;width:100%;height:100%;margin:0;padding:0;overflow:hidden}
+.cs_slider{position:absolute;width:10000px;height:100%;margin:0;padding:0}
+.cs_article{float:left;position:relative;top:0;left:0;display:block;width:900px;height:400px;margin:0 auto;padding:0}
+.cs_leftBtn,.cs_rightBtn{position:absolute;top:0;height:400px;padding:10px 0;z-index:10000;width:30px}
+.cs_leftBtn{left:0;outline:0}
+.cs_rightBtn{right:0;outline:0}
+.cs_leftBtn img,.cs_rightBtn img{border:0;position:relative;top:200px;margin:0}

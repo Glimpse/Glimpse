@@ -1,0 +1,167 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<div class="content">
+    <ul class="navigation"> 
+        <li><a href="/whatisfirebug">What is Glimpse?</a> <span>Introduction and Features</span></li> 
+        <li><a href="http://getfirebug.com/wiki/">Documentation</a> <span>FAQ and Wiki</span></li> 
+        <li><a href="/community">Community</a><span>Discussion forums and lists</span></li> 
+        <li><a href="/getinvolved">Get Involved</a><span>Hack the code, create extensions</span></li> 
+    </ul> 
+
+    <div class="logo">
+        <blockquote>What Firebug is for the client, Glimpse does for the server... in other words, a client side Glimpse into whats going on in your server.</blockquote>
+        <h1>Glimpse</h1>
+        <div>A client side Glimpse to your server</div>
+    </div>
+     
+    <div class="features">
+		<div id="contentslider" class="contentslider"> 
+			<div class="cs_wrapper"> 
+				<div class="cs_slider">  
+					<div class="cs_article"> 
+<div style="padding-right:35px;">
+    <h2>Getting Started</h2>
+    <div class="scroll-pane"> 
+        <ol class="plain">
+            <li>Add NuGet package to your project - http://nuget.org/List/Packages/Glimpse </li>
+            <li>Turn on Glimpse for your requests (see Bookmarklets in http://www.yoursite.com/Glimpse/Config or in dev http://127.0.0.1/Glimpse/Config)</li>
+            <li>Click on the Glimpse in the bottom right hand corner of your site</li>
+        </ol>
+
+        <h3>Features</h3>
+        <table> 
+            <tr>
+                <td width="50%">
+                    <h4>Async Code Made Easier</h4>
+                    Write 100% asynchronous code - chain calls to multiple web services, and handle retries, timeouts, caching, and throttling concurrency, while writing readable, testable code.
+                </td>
+                <td style="padding-bottom:1.5em;">
+                    <h4>Superpowered Bindings</h4>
+                    Create Observables from ViewModel properties and combine them together to model rich interactions directly in your ViewModels in a declarative way, without creating extra IValueConverter classes.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4>Testing with Time Travel</h4>
+                    Run normally asynchronous tests in "virtual time", making them deterministic and run at full speed. Simulate the result of delays caused by network or disk access without actually delaying your unit tests.
+                </td>
+                <td>
+                    <h4>Free as in Freedom</h4>
+                    ReactiveUI is licensed under the Microsoft Public License (MS-PL), so it is free to be used in production environments and for both commercial and non-commercial use without restrictions.
+                </td>
+            </tr>
+        </table> 
+    </div>
+</div>       
+                    </div>
+					<div class="cs_article">
+<div style="padding:0 35px;">
+    <h2>Getting Started</h2>
+    <div class="scroll-pane"> 
+        <table>
+            <tr>
+                <td>
+                    <h3>Overview</h3>
+                    At its core Glimpse allows you to debug your Web Service right in the browser. Glimpse allows you to "Glimpse" into what's going on in your web server. In other words what Firebug is to debugging your client side code, Glimpse is to debugging your server within the client.
+                    <br /><br />
+                    Fundamentally Glimpse is made up of 3 different parts, all of which are extensible and customizable for any platform:
+                    <ul class="plain">
+                        <li>Glimpse Server Module</li>
+                        <li>Glimpse Client Side Viewer</li>
+                        <li>Glimpse Protocol</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h3>How it Works</h3>
+                    <strong>On the Server:</strong>
+                    <ol class="plain">
+                        <li>Server collects all server side information that will aid in debugging (i.e. application settings, routes, session variables, trace data, etc)</li>
+                        <li>It does this by running through a pipeline of server side data providers that can be dynamically controlled and added to under plugin architecture</li>
+                        <li>Before the response is send, the server formats this data in accordance with the Glimpse Protocol and serializes it as JSON</li>
+                        <li>Depending on whether it is a Ajax request or not, the server embeds the JSON in the HTTP Header or in the content of the page</li>
+                    </ol>
+
+                    <strong>On the Client:</strong>
+                    <ol class="plain">
+                        <li>Depending on whether it is a Ajax request or not, the picks up the JSON data and to the data set by executing a pipeline of client side data providers that can be dynamically controlled and added to under plugin architecture</li>
+                        <li>The client side module then dynamically renders a client side UI (similar to Firebug Lite) that lets you view this data</li>
+                    </ol>
+
+                    Glimpse can be turned on or off by a series of different mechanistic, but at its core if the Glimpse cookie is present the server will provide the "debug" data - as a security measure, the request for debug data is "authenticated". Via the plugin model, this authentication check can have any logic that is required by the site to ensure that unauthorized users don't have access to sensitive debug data.
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+                    </div>
+					<div class="cs_article">
+<div style="padding:0 35px;">
+    <h2>Getting Started</h2>
+    <div class="scroll-pane"> 
+        <table>
+            <tr>
+                <td width="50%">
+                    <h3>Server Implementations</h3>
+                    Given the scope of the project and what it can do, the concept isn't restricted to any one platform. Hence, once mature, Glimpse Server Module will be available on all major web platforms.
+                    <br /><br />
+                    Platforms currently supported:
+                    <ul class="plain">
+                        <li>ASP.Net Web Forms</li>
+                        <li>ASP.Net MVC</li> 
+                    </ul>
+
+                    Platforms soon to be supported supported:
+                    <ul class="plain">
+                        <li>PHP</li> 
+                        <li>Ruby on Rails</li> 
+                        <li>Node.js</li> 
+                    </ul>
+                    NOTE - If you would like help develop a Glimpse Server Module for a given platform please let us know. 
+                </td>
+                <td>
+                    <h3>Client Implementations</h3>
+                    To start with the Glimpse Client Side Viewer is simply a light weight JavaScript "plugin" that understands the Glimpse Protocol and knows how to render the data. From a technology standpoint we currently use jQuery as the client side framework.
+                    <br /><br />
+                    Eventually, we would like to have actual browser plugins that provide richer functionality and experience, but the JavaScript version of the Glimpse Client Side Viewer is surprisingly well featured, intuitive and provides a high fidelity experience. We also hope to have a version for mobile ready soon which customizes the viewing/usage experience when using a mobile device.
+                </td>
+            </tr>
+        </table> 
+    </div>
+</div>
+                    </div>
+					<div class="cs_article">
+<div style="padding-left:35px;">
+    <h2>See in Action</h2>
+    Here is a demo of Glimpse, for those who couldn’t make it to Open Source Fest, or just want to see more!
+    <div style="margin-top:10px; text-align:center;">
+        <object width="620" height="380"><param name="movie" value="http://www.youtube.com/v/ke8Rw2BGPG0&rel=0&hl=en_US&feature=player_embedded&version=3"></param><param name="allowFullScreen" value="true"></param><param name="allowScriptAccess" value="always"></param><embed src="http://www.youtube.com/v/ke8Rw2BGPG0&rel=0&hl=en_US&feature=player_embedded&version=3" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="620" height="380"></embed></object>
+    </div>
+</div>
+                    </div>
+			    </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+    
+    </div>
+
+</div>
+
+@section scripts {
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#contentslider').ContentSlider({ 
+		speed : 800,
+		easing : 'easeInOutBack'
+	});
+    $('.scroll-pane').jScrollPane();
+});
+</script>
+}

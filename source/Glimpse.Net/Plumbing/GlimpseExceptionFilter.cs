@@ -14,9 +14,13 @@ namespace Glimpse.Net.Plumbing
 
         public void OnException(ExceptionContext filterContext)
         {
-            LogCall(Guid);
+            var watch = new Stopwatch();
+            watch.Start();
 
             ExceptionFilter.OnException(filterContext);
+
+            watch.Stop();
+            LogCall(Guid, watch.Elapsed);
         }
     }
 }

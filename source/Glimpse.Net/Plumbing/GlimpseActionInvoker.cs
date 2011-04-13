@@ -36,11 +36,11 @@ namespace Glimpse.Net.Plumbing
             return allFilters;
         }
 
-        private IList<Guid> CallStore(ControllerContext controllerContext)
+        private IList<GlimpseFilterCalledMetadata> CallStore(ControllerContext controllerContext)
         {
             var items = controllerContext.HttpContext.Items;
-            var store = items[GlimpseConstants.CalledFilters] as IList<Guid>;
-            if (store == null) items[GlimpseConstants.CalledFilters] = store = new List<Guid>();
+            var store = items[GlimpseConstants.CalledFilters] as IList<GlimpseFilterCalledMetadata>;
+            if (store == null) items[GlimpseConstants.CalledFilters] = store = new List<GlimpseFilterCalledMetadata>();
 
             return store;
         }
@@ -158,11 +158,17 @@ namespace Glimpse.Net.Plumbing
             var allFilters = FiltersStore(controllerContext);
             var calledFilters = CallStore(controllerContext);
 
-            var action = GlimpseFilterCallMetadata.ControllerAction(actionDescriptor, controllerContext.IsChildAction);
-            allFilters.Add(action);
-            calledFilters.Add(action.Guid);
+            var watch = new Stopwatch();
+            watch.Start();
 
             var invokeActionMethod = base.InvokeActionMethod(controllerContext, actionDescriptor, parameters);
+
+            watch.Stop();
+
+            var action = GlimpseFilterCallMetadata.ControllerAction(actionDescriptor, controllerContext.IsChildAction);
+            allFilters.Add(action);
+            calledFilters.Add(new GlimpseFilterCalledMetadata{Guid = action.Guid, ExecutionTime = watch.Elapsed});
+
             return invokeActionMethod;
         }
 
@@ -179,11 +185,16 @@ namespace Glimpse.Net.Plumbing
             var allFilters = FiltersStore(controllerContext);
             var calledFilters = CallStore(controllerContext);
 
-            var action = GlimpseFilterCallMetadata.ActionResult(actionResult, controllerContext.IsChildAction);
-            allFilters.Add(action);
-            calledFilters.Add(action.Guid);
+            var watch = new Stopwatch();
+            watch.Start();
 
             base.InvokeActionResult(controllerContext, actionResult);
+            
+            watch.Stop();
+
+            var action = GlimpseFilterCallMetadata.ActionResult(actionResult, controllerContext.IsChildAction);
+            allFilters.Add(action);
+            calledFilters.Add(new GlimpseFilterCalledMetadata { Guid = action.Guid, ExecutionTime = watch.Elapsed});
         }
 
         protected override ResultExecutedContext InvokeActionResultWithFilters(ControllerContext controllerContext, IList<IResultFilter> filters, ActionResult actionResult)

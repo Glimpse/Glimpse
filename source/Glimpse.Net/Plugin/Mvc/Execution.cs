@@ -20,30 +20,37 @@ namespace Glimpse.Net.Plugin.Mvc
         public object GetData(HttpApplication application)
         {
             var store = application.Context.Items;
-            var calledFiltersIds = store[GlimpseConstants.CalledFilters] as List<Guid>;
+            var calledFiltersIds = store[GlimpseConstants.CalledFilters] as List<GlimpseFilterCalledMetadata>;
             var allFilters = store[GlimpseConstants.AllFilters] as IList<GlimpseFilterCallMetadata>;
 
             if (calledFiltersIds == null || allFilters == null) return null;
 
-            var calledFilterMethods = calledFiltersIds.Select(guid => allFilters.Where(f => f.Guid == guid).Single());
-            var unCalledFilterMethods = allFilters.Where(f=>!calledFiltersIds.Contains(f.Guid));
+            var calledFilterMethods = calledFiltersIds.Select(called => allFilters.Where(f => f.Guid == called.Guid).Single());
+            var unCalledFilterMethods = allFilters.Where(f=>!calledFiltersIds.Select(cfi=>cfi.Guid).Contains(f.Guid));
 
             var executed = new List<object[]>
                                     {
-                                        new []{ "Ordinal", "Child", "Category", "Type", "Method", "Order", "Scope", "Details" }
+                                        new []{ "Ordinal", "Child", "Category", "Type", "Method", "Time Elapsed", "Order", "Scope", "Details" }
                                     };
 
             var count = 0;
             foreach (var metadata in calledFilterMethods)
             {
+                var timespan = (from calledMethod in calledFiltersIds
+                                    where calledMethod.Guid == metadata.Guid
+                                    select calledMethod.ExecutionTime).Single();
+
+                var timespanDisplay = timespan.Milliseconds == 0 ? "~ 0 ms" : timespan.Milliseconds + " ms";
+
+
                 if (metadata.InnerFilter == null)
                 {
-                    executed.Add(new object[] { count++, metadata.IsChild.ToString(), metadata.Category, metadata.Type.Name, metadata.Method, metadata.Order, metadata.Scope.ToString(), null, "selected" });
+                    executed.Add(new object[] { count++, metadata.IsChild.ToString(), metadata.Category, metadata.Type.Name, metadata.Method, timespanDisplay, metadata.Order, metadata.Scope.ToString(), null, "selected" });
                 }
                 else
                 {
                     var instance = metadata.InnerFilter.Instance;
-                    executed.Add(new[] { count++, metadata.IsChild.ToString(), metadata.Category, metadata.Type.Name, metadata.Method, metadata.Order, metadata.Scope.ToString(), instance is OutputCacheAttribute || instance is HandleErrorAttribute ? instance : null });
+                    executed.Add(new[] { count++, metadata.IsChild.ToString(), metadata.Category, metadata.Type.Name, metadata.Method, timespanDisplay, metadata.Order, metadata.Scope.ToString(), instance is OutputCacheAttribute || instance is HandleErrorAttribute ? instance : null });
                 }
             }
 

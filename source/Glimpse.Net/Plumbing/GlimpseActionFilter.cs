@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Web.Mvc;
 
 namespace Glimpse.Net.Plumbing
@@ -17,16 +18,26 @@ namespace Glimpse.Net.Plumbing
 
         public void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            LogCall(OnActionExecutingGuid);
+            var watch = new Stopwatch();
+            watch.Start();
 
             ActionFilter.OnActionExecuting(filterContext);
+
+            watch.Stop();
+
+            LogCall(OnActionExecutingGuid, watch.Elapsed);
         }
 
         public void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            LogCall(OnActionExecutedGuid);
+            var watch = new Stopwatch();
+            watch.Start();
 
             ActionFilter.OnActionExecuted(filterContext);
+
+            watch.Start();
+
+            LogCall(OnActionExecutedGuid, watch.Elapsed);
         }
     }
 }
