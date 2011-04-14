@@ -63,6 +63,7 @@
     <Compile Include="Plumbing\GlimpseControllerFactory.cs" />
     <Compile Include="Plumbing\GlimpseDefaultModelBinder.cs" />
     <Compile Include="Plumbing\GlimpseExceptionFilter.cs" />
+    <Compile Include="Plumbing\GlimpseFilterCalledMetadata.cs" />
     <Compile Include="Plumbing\GlimpseFilterCallMetadata.cs" />
     <Compile Include="Plumbing\GlimpseModelBinder.cs" />
     <Compile Include="Plumbing\GlimpseRequestMetadata.cs" />

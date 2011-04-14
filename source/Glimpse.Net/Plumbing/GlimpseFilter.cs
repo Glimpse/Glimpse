@@ -10,21 +10,21 @@ namespace Glimpse.Net.Plumbing
         public Filter Filter { get; set; }
         public Guid Guid { get; set; }
 
-        public IList<Guid> Store
+        public IList<GlimpseFilterCalledMetadata> Store
         {
             get
             {
                 var items = HttpContext.Current.Items;
-                var store = items[GlimpseConstants.CalledFilters] as IList<Guid>;
-                if (store == null) items[GlimpseConstants.CalledFilters] = store = new List<Guid>();
+                var store = items[GlimpseConstants.CalledFilters] as IList<GlimpseFilterCalledMetadata>;
+                if (store == null) items[GlimpseConstants.CalledFilters] = store = new List<GlimpseFilterCalledMetadata>();
 
                 return store;
             }
         }
 
-        public void LogCall(Guid guid)
+        public void LogCall(Guid guid, TimeSpan executionTime)
         {
-            Store.Add(guid);
+            Store.Add(new GlimpseFilterCalledMetadata{Guid = guid, ExecutionTime = executionTime});
         }
     }
 }

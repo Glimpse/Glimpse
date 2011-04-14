@@ -1,3 +1,11 @@
+Release Notes
+-------------
+04/13/2011 - 0.76
+- Added "Time Elapsed" column to the Execution tab.
+- Fixed 2 bugs with IE9 client rendering.
+- Fixed bug with CSS text-alignment.
+- Changed to Apache 2 license.
+
 Using Glimpse
 -------------
 
