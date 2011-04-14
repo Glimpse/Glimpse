@@ -30,3 +30,7 @@ Glimpse.5.1.ReSharper.user
 /source/Glimpse.Net/NuSpec/lib/Glimpse.Protocol.dll
 /source/Glimpse.Net/NuSpec/lib/Glimpse.Net.dll
 /source/Glimpse.Net/Glimpse.0.75.nupkg
+/source/Glimpse.Example/App_Data/aspnetdb_log.ldf
+/source/Glimpse.Example/App_Data/MvcMusicStore.mdf
+/source/Glimpse.Example/App_Data/MvcMusicStore_log.ldf
+/source/Glimpse.Example/App_Data/ASPNETDB.MDF
