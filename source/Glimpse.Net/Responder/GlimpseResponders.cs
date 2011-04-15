@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Script.Serialization;
 using Glimpse.Net.Sanitizer;
@@ -30,7 +31,7 @@ namespace Glimpse.Net.Responder
             var path = application.Request.Path;
             var store = application.Context.Items;
 
-            var result = (from o in Outputs where path.StartsWith(RootPath + o.ResourceName) select o).SingleOrDefault();
+            var result = (from o in Outputs where path.ToLower().Contains(RootPath.ToLower() + o.ResourceName.ToLower()) select o).SingleOrDefault();
             
             store["__validPath"] = true;
 
@@ -50,7 +51,30 @@ namespace Glimpse.Net.Responder
             IDictionary<string, object> data;
             if (!application.TryGetData(out data)) return "Error: No Glimpse Data Found";
 
-            var json = JsSerializer.Serialize(data); //serialize data to Json
+
+            var sb = new StringBuilder("{");
+            foreach (var item in data)
+            {
+                try
+                {
+                    var dataString = JsSerializer.Serialize(item.Value);
+                    sb.Append(string.Format("\"{0}\":{1},", item.Key, dataString));
+                }
+                catch(Exception ex)
+                {
+                    var message = ex.Message;
+
+                    if (ex is InvalidOperationException)
+                        sb.Append(string.Format("\"{0}\":\"{1} : {2}<br/><span style='color:red;'>Please implement an IGlimpseConverter for the type mentioned above, or one of its base types, to fix this problem. More info on a better experience for this coming soon, keep an eye on <a href='http://getGlimpse.com' target='main'>getGlimpse.com</a></span>\",", item.Key, ex.GetType().Name, message));
+                    else
+                        sb.Append(string.Format("\"{0}\":\"{1} : {2}\",", item.Key, ex.GetType().Name, message));
+                }
+            }
+            if (sb.Length > 0) sb.Remove(sb.Length - 1, 1);
+            sb.Append("}");
+
+            //var json = JsSerializer.Serialize(data); //serialize data to Json
+            var json = sb.ToString();
             json = Sanitizer.Sanitize(json);
 
             //if ajax request, render glimpse data to headers
@@ -62,7 +86,7 @@ namespace Glimpse.Net.Responder
             {
                 var html = string.Format(
                     @"<script type='text/javascript' id='glimpseData' data-glimpse-requestID='{1}'>var glimpse = {0};</script>", json, requestId);
-                html += @"<script type='text/javascript' id='glimpseClient' src='/Glimpse/glimpseClient.js'></script>";
+                html += @"<script type='text/javascript' id='glimpseClient' src='" + RootPath + "glimpseClient.js'></script>";
                 application.Response.Write(html);
             }
 

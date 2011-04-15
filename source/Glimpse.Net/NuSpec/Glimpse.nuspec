@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Glimpse</id>
-    <version>0.76</version>
+    <version>0.77</version>
     <title>Glimpse Web Debugger (Beta)</title>
     <authors>nmolnar, avanderhoorn</authors>
     <owners>nmolnar, avanderhoorn</owners>

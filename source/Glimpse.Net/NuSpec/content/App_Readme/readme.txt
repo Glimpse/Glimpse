@@ -1,5 +1,10 @@
 Release Notes
 -------------
+04/14/2011 - 0.77
+- Fixed issues with most InvalidOperationException's/Circular references. Now if there is an issue, handle it more gracefully, and it only affects one tab. (More complete fix coming soon!)
+- /Glimpse/Config is no longer case sensitive, and certain reports of 404’s to this page have been fixed. In addition, this page has been improved to be more understandable.
+- As of right now, Glimpse only supports MVC3.  We have identified the issues with MVC2, and are working to correct them. Special shout out to @rugvedvaidya for providing the (long!) workaround to get Glimpse running on MVC2.
+
 04/13/2011 - 0.76
 - Added "Time Elapsed" column to the Execution tab.
 - Fixed 2 bugs with IE9 client rendering.
