@@ -70,7 +70,8 @@ namespace Glimpse.Net.Responder
                         sb.Append(string.Format("\"{0}\":\"{1} : {2}\",", item.Key, ex.GetType().Name, message));
                 }
             }
-            if (sb.Length > 0) sb.Remove(sb.Length - 1, 1);
+            // Remove trailing comma
+            if (sb.Length > 1) sb.Remove(sb.Length - 1, 1);
             sb.Append("}");
 
             //var json = JsSerializer.Serialize(data); //serialize data to Json
