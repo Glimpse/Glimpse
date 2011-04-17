@@ -451,9 +451,10 @@
             <td class="glimpse-scenario glimpse glimpse-scenario-twelve glimpse-panel"></td>
         </tr>
     </table>
-
+     
 <!--
-<style>
+<style> 
+    /* http://www.htmlescape.net/stringescape_tool.html */
     .glimpse, .glimpse *, .glimpse a, .glimpse td, .glimpse th, .glimpse table { font-family:Lucida Grande,Tahoma,sans-serif; background-color:transparent; font-size:11px; line-height:14px; border:0px; color:#232323; text-align:left; }
     .glimpse a, .glimpse a:hover, .glimpse a:visited { color:#2200C1; text-decoration:underline; font-weight:normal; }
     .glimpse a:active { color:#c11; text-decoration:underline; font-weight:normal; }
@@ -463,15 +464,17 @@
     .glimpse-holder { display:none; z-index:10000; height:0; position:fixed; bottom:0; left:0; width:100%; background-color:#fff; }
     .glimpse-bar { height:27px; border-top:1px solid #ACA899; background:#FFFFFF; background:-moz-linear-gradient(top, #FFFFFF 0%, #EEEEEE 4%, #F3F5F7 8%, #E9E8DD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(4%,#EEEEEE), color-stop(8%,#F3F5F7), color-stop(100%,#E9E8DD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFFFFF', endColorstr='#E9E8DD',GradientType=0 ); }
     .glimpse-bar .glimpse-icon { margin-top:4px; float:left; cursor:default; }
-    .glimpse-buttons { float:right; height:17px; width:33px; padding:6px; }
+    .glimpse-buttons { float:right; height:17px; width:50px; padding:6px; }
     .glimpse-title { margin:5px 0 0 15px; font-weight:bold; display:inline-block; width:75%; overflow:hidden; }
     .glimpse-title span:first-child { display:inline-block; height:20px; }
     .glimpse-title span:last-child { font-weight:normal; font-style:italic; padding-left:10px; width:60%; white-space:nowrap; display:inline-block; height:20px; }
-    .glimpse-close, .glimpse-close:hover, .glimpse-terminate, .glimpse-terminate:hover { background-image:url(/Glimpse/glimpseSprite.png); background-repeat:no-repeat; height:14px; width:14px; margin-left:2px; display:inline-block; }
+    .glimpse-close, .glimpse-close:hover, .glimpse-terminate, .glimpse-terminate:hover, .glimpse-popout, .glimpse-popout:hover { background-image:url(/Glimpse/glimpseSprite.png); background-repeat:no-repeat; height:14px; width:14px; margin-left:2px; display:inline-block; }
     .glimpse-close { background-position:-1px -1px; }
     .glimpse-close:hover { background-position:-17px -1px; }
     .glimpse-terminate { background-position:-65px -1px; }
     .glimpse-terminate:hover { background-position:-81px -1px; } 
+    .glimpse-popout { background-position:-1px -1px; }
+    .glimpse-popout:hover { background-position:-17px -1px; } 
     .glimpse-tabs { height:24px; font-weight:bold; border-bottom:1px solid #ACA899; border-top:1px solid #CDCABB; background:#B9B7AF; background:-moz-linear-gradient(top, #B9B7AF 0%, #DAD8C8 4%, #D7D4C5 10%, #E9E6D5 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#B9B7AF), color-stop(4%,#DAD8C8), color-stop(10%,#D7D4C5), color-stop(100%,#E9E6D5)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#B9B7AF', endColorstr='#E9E6D5',GradientType=0 );  }
     .glimpse-tabs ul { margin:4px 0px 0 0; padding:0px; }
     .glimpse-tabs li { display:inline; margin:0 2px 3px 2px; height:22px; padding:4px 9px 3px; color:#565656; cursor:pointer; border-radius: 0px 0px 3px 3px; -moz-border-radius: 0px 0px 3px 3px; -webkit-border-bottom-right-radius: 3px; -webkit-border-bottom-left-radius: 3px; }
@@ -535,9 +538,11 @@
 <style>
     h1, h2 { margin:0; padding:0; }
     .glimpse-scenario { font-family:Lucida Grande,Tahoma,sans-serif; font-size:11px; } 
+    body { text-align:left; }     
 </style>
 
-    <script src="/Scripts/jquery-1.4.4.js" type="text/javascript"></script>
+
+@section scripts {
     <!--<script src="/Scripts/XMLHttpRequestWrapper.js" type="text/javascript"></script>-->
 
 <script>
@@ -1190,6 +1195,7 @@ if (window.jQuery) { (function($) {
             $('.glimpse-open').live('click', function() { g.open(); });
             $('.glimpse-close').live('click', function() { g.close(); });
             $('.glimpse-terminate').live('click', function() { g.terminate(); });
+            $('.glimpse-popout').live('click', function() { g.popout(); });
 
             //Tab Switching 
             $('.glimpse-tabs li:not(.glimpse-active, .glimpse-disabled)').live('mouseover mouseout', function(e) {
@@ -1272,6 +1278,14 @@ if (window.jQuery) { (function($) {
             $.cookie('glimpseClientName', null);
             $.cookie('glimpseOptions', null);
         },
+        popout: function() {
+            var g = this, static = g.static;
+
+            if (!static.popup || static.closed) {
+                var url = static.popupUrl + '?glimpseRequestID=' + $('#glimpseData').data('glimpse-requestID');
+                static.popup = window.open(url, 'GlimpsePopup', 'width=550,height=170,0,status=0,scrollbars=1');
+            } 
+        },
         persistState: function() {
             var g = $.glimpse;
             $.cookie('glimpseOptions', g.settings);
@@ -1301,7 +1315,14 @@ if (window.jQuery) { (function($) {
             this.refresh(glimpse, $.glimpseProcessor.buildHeading(static.url, static.clientName, ''));
         },
         init: function(data) {
-            if (!data) return;
+            if (!data) {
+                if (window.location.pathname.indexOf(this.static.popupUrl) > -1 && window.opener.glimpse) {
+                    $.glimpse.static.url = window.opener.$.glimpse.static.url;
+                    glimpse = data = window.opener.glimpse
+                }
+                else 
+                    return;
+            }
 
             var g = $.glimpse, static = g.static;
             g.static.data = data; 
@@ -1334,9 +1355,11 @@ if (window.jQuery) { (function($) {
             data : null,
             url : window.location.href.replace(window.location.protocol + '//' + window.location.host, ''),
             clientName : $.cookie('glimpseClientName'),
-            html : { plugin: '<div class="glimpse-open"><div class="glimpse-icon"></div></div><div class="glimpse-holder glimpse"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon"></div><div class="glimpse-title"></div><div class="glimpse-buttons"><a href="#" title="Shutdown/Terminate" class="glimpse-terminate"></a><a href="#" title="Close/Minimize" class="glimpse-close"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>' },
+            html : { plugin: '<div class="glimpse-open"><div class="glimpse-icon"></div></div><div class="glimpse-holder glimpse"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon"></div><div class="glimpse-title"></div><div class="glimpse-buttons"><a href="#" title="Pop Out" class="glimpse-popout"></a><a href="#" title="Shutdown/Terminate" class="glimpse-terminate"></a><a href="#" title="Close/Minimize" class="glimpse-close"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>' },
             tabStrip : function() { return $('.glimpse-tabs ul'); },
-            panelHolder : function() { return $('.glimpse-panel-holder'); }
+            panelHolder : function() { return $('.glimpse-panel-holder'); },
+            popupUrl : '/Glimpse/Popup',
+            popup : null
         }
     });
 
@@ -1669,5 +1692,4 @@ if (window.jQuery) { (function($) {
 })(jQuery); }   
 </script> 
 -->
-</body>
-</html>
+}
