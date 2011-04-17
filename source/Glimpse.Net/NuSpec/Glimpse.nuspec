@@ -7,12 +7,23 @@
     <authors>nmolnar, avanderhoorn</authors>
     <owners>nmolnar, avanderhoorn</owners>
     <licenseUrl>http://www.opensource.org/licenses/apache2.0</licenseUrl>
-    <projectUrl>https://github.com/glimpse</projectUrl>
+    <projectUrl>http://getglimpse.com</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <iconUrl>https://github.com/Glimpse/Glimpse/raw/master/hosted/glimpseLogo.png</iconUrl>
+    <iconUrl>http://getglimpse.com/content/glimpse32.png</iconUrl>
     <description>Glimpse is a web debugger used to gain a better understanding of whats happening inside of your webserver. (Beta)</description>
     <summary>A client side Glimpse into whats going on in your server.</summary>
     <language>en-US</language>
     <tags>MVC ASP.NET Web</tags>
+      <frameworkAssemblies>
+          <frameworkAssembly assemblyName="Microsoft.Web.Infrastructure" targetFramework=".NETFramework4.0" />
+          <frameworkAssembly assemblyName="System" targetFramework=".NETFramework4.0" />
+          <frameworkAssembly assemblyName="System.ComponentModel.Composition" targetFramework=".NETFramework4.0" />
+          <frameworkAssembly assemblyName="System.Configuration" targetFramework=".NETFramework4.0" />
+          <frameworkAssembly assemblyName="System.Drawing" targetFramework=".NETFramework4.0" />
+          <frameworkAssembly assemblyName="System.Web" targetFramework=".NETFramework4.0" />
+          <frameworkAssembly assemblyName="System.Web.Mvc" targetFramework=".NETFramework4.0" />
+          <frameworkAssembly assemblyName="System.Web.Extensions" targetFramework=".NETFramework3.5" />
+          <frameworkAssembly assemblyName="mscorlib" targetFramework=".NETFramework4.0" />
+      </frameworkAssemblies>
   </metadata>
 </package>

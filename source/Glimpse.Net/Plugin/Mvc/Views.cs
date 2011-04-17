@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Glimpse.Net.Extentions;
 using Glimpse.Net.Plumbing;
 using Glimpse.Protocol;
 
@@ -44,13 +45,15 @@ namespace Glimpse.Net.Plugin.Mvc
                     if (callMetadata.UseCache)
                         locations.Add(new object[] {"_" + viewEngineName + " cache_"});
                     else
-                        locations.AddRange(callMetadata.ViewEngineResult.SearchedLocations.Select(location => new object[] {location}));
+                        locations.AddRange(
+                            callMetadata.ViewEngineResult.SearchedLocations.Select(location => new object[] {location}));
 
                     result.Add(new object[]
-                                    {
-                                        result.Count, callMetadata.ViewName, callMetadata.MasterName, callMetadata.IsPartial.ToString(), viewEngineName,
-                                        callMetadata.UseCache.ToString(), isFound.ToString(), locations
-                                    });
+                                   {
+                                       result.Count, callMetadata.ViewName, callMetadata.MasterName,
+                                       callMetadata.IsPartial.ToString(), viewEngineName,
+                                       callMetadata.UseCache.ToString(), isFound.ToString(), locations
+                                   });
                 }
                 else
                 {
@@ -58,24 +61,34 @@ namespace Glimpse.Net.Plugin.Mvc
 
                     if (callMetadata.GlimpseView != null)
                     {
-                        var vd = callMetadata.GlimpseView.ViewContext.ViewData;
+                        var viewContext = callMetadata.GlimpseView.ViewContext;
+                        object modelResult = null;
+                        var vd = viewContext.ViewData.Flatten();
+                        var td = viewContext.TempData.Flatten();
+                        var vm = viewContext.ViewData.Model;
 
-                        if (vd.Model != null) model = new {ModelType = vd.Model.GetType().ToString(), Value = vd.Model};
+                        if (vm != null) modelResult = new {ModelType = vm.GetType().ToString(), Value = vm};
+
+                        model = new
+                                    {
+                                        ViewData = vd.Count > 0 ? vd : null,
+                                        Model = vm != null ? modelResult : null,
+                                        TempData = td.Count > 0 ? td : null,
+                                    };
                     }
 
                     result.Add(new[]
-                                    {
-                                        result.Count, callMetadata.ViewName, callMetadata.MasterName, callMetadata.IsPartial.ToString(), viewEngineName,
-                                        callMetadata.UseCache.ToString(), isFound.ToString(), model, "selected"
-                                    });
+                                   {
+                                       result.Count, callMetadata.ViewName, callMetadata.MasterName,
+                                       callMetadata.IsPartial.ToString(), viewEngineName,
+                                       callMetadata.UseCache.ToString(), isFound.ToString(), model, "selected"
+                                   });
                 }
             }
 
             //TODO: Also show ViewData and TempData
             return result;
         }
-
-        
 
         public void SetupInit(HttpApplication application)
         {
@@ -86,11 +99,6 @@ namespace Glimpse.Net.Plugin.Mvc
                 if (!(engines[i] is GlimpseViewEngine))
                     engines[i] = new GlimpseViewEngine(engines[i]);
             }
-
-            /*var filters = GlobalFilters.Filters;
-
-            if (!filters.OfType<GlimpseFilterAttribute>().Any())
-                filters.Add(new GlimpseFilterAttribute(), int.MinValue);*/
         }
     }
 }

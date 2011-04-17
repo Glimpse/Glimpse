@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.SessionState;
+using Glimpse.Net.Extentions;
 
 namespace Glimpse.Net.Plumbing
 {
@@ -17,25 +18,15 @@ namespace Glimpse.Net.Plumbing
         {
             var iController = ControllerFactory.CreateController(requestContext, controllerName);
 
-            //controller does not exist
-            if (iController == null) return iController;
+            iController.TryWrapActionInvoker();
 
-            var controller = iController as Controller;
-
-            //custom controller
-            if (controller == null) return iController;
-
-            //already swapped out the invoker
-            if (controller.ActionInvoker is GlimpseActionInvoker) return iController;
-
-            //swap out action invoker
-            if (controller.ActionInvoker is ControllerActionInvoker) controller.ActionInvoker = new GlimpseActionInvoker();
-            return controller;
+            return iController;
         }
 
         public SessionStateBehavior GetControllerSessionBehavior(RequestContext requestContext, string controllerName)
         {
             var controllerSessionBehavior = ControllerFactory.GetControllerSessionBehavior(requestContext, controllerName);
+            
             return controllerSessionBehavior;
         }
 

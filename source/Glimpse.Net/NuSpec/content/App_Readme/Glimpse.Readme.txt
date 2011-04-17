@@ -1,5 +1,10 @@
 Release Notes
 -------------
+04/16/2011 - 0.78
+- Fixed pathing issues experienced by users hosting from virtual directories.
+- Added Request tab to show form and query string as the server saw them.
+- Added ViewData/ViewBag and TempData info to the details column of the Views tab
+
 04/14/2011 - 0.77
 - Fixed issues with most InvalidOperationException's/Circular references. Now if there is an issue, handle it more gracefully, and it only affects one tab. (More complete fix coming soon!)
 - /Glimpse/Config is no longer case sensitive, and certain reports of 404’s to this page have been fixed. In addition, this page has been improved to be more understandable.

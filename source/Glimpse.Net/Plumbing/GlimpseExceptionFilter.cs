@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Web.Mvc;
 
 namespace Glimpse.Net.Plumbing
@@ -6,6 +7,7 @@ namespace Glimpse.Net.Plumbing
     public class GlimpseExceptionFilter : GlimpseFilter, IExceptionFilter
     {
         public IExceptionFilter ExceptionFilter { get; set; }
+        public Guid Guid { get; set; }
 
         public GlimpseExceptionFilter(IExceptionFilter exceptionFilter)
         {
@@ -14,13 +16,14 @@ namespace Glimpse.Net.Plumbing
 
         public void OnException(ExceptionContext filterContext)
         {
+            var metadata = LogCall(Guid);
             var watch = new Stopwatch();
             watch.Start();
 
             ExceptionFilter.OnException(filterContext);
 
             watch.Stop();
-            LogCall(Guid, watch.Elapsed);
+            metadata.ExecutionTime = watch.Elapsed;
         }
     }
 }

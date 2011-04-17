@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Glimpse.Net.Plumbing;
 using Glimpse.Protocol;
 
-namespace Glimpse.Net.Plugin.Asp
+namespace Glimpse.Net.Plugin.ASP
 {
     [GlimpsePlugin(ShouldSetupInInit = true)]
-    public class Trace : IGlimpsePlugin
+    internal class Trace : IGlimpsePlugin
     {
         public string Name
         {
@@ -22,26 +21,27 @@ namespace Glimpse.Net.Plugin.Asp
 
             foreach (var message in messages)
             {
-                switch (message[1])
+                //Add style if the category is recognized
+                switch (message[1].ToLower())
                 {
-                    case "Warning":
-                    case "Warn":
+                    case "warning":
+                    case "warn":
                         message.Add("warn");
                         break;
-                    case "Information":
-                    case "Info":
+                    case "information":
+                    case "info":
                         message.Add("info");
                         break;
-                    case "Error":
+                    case "error":
                         message.Add("error");
                         break;
-                    case "Fail":
+                    case "fail":
                         message.Add("fail");
                         break;
-                    case "Quiet ":
+                    case "quiet ":
                         message.Add("quiet");
                         break;
-                    case "Selected":
+                    case "selected":
                         message.Add("selected");
                         break;
                 }

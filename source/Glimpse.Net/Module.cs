@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using Glimpse.Net.Configuration;
+using Glimpse.Net.Extentions;
 using Glimpse.Net.Plumbing;
 using Glimpse.Net.Responder;
 using Glimpse.Protocol;
@@ -31,7 +32,7 @@ namespace Glimpse.Net
         {
             if (Configuration.On == false) return; //Do nothing if Glimpse is off, events are not wired up
 
-            ComposePlugins(); //Have MEF satisfy our needs
+            ComposePlugins(context); //Have MEF satisfy our needs
 
             //Allow plugin's registered for Intialization to setup
             foreach (var plugin in Plugins.Where(plugin => plugin.Metadata.ShouldSetupInInit))
@@ -57,7 +58,7 @@ namespace Glimpse.Net
                 return;
             }
 
-            httpApplication.SetData(new Dictionary<string, object>());
+            httpApplication.InitGlimpseContext();
         }
 
         private void PostRequestHandlerExecute(object sender, EventArgs e)
@@ -88,15 +89,35 @@ namespace Glimpse.Net
             Persist(json, httpApplication, requestId);
         }
 
-        private void ComposePlugins()
+        private void ComposePlugins(HttpApplication context)
         {
-            var directoryCatalog = new DirectoryCatalog("bin");
+            try
+            {
+                var directoryCatalog = new DirectoryCatalog("bin");
 
-            Container = new CompositionContainer(directoryCatalog);
-            Container.ComposeParts(this, Responders);
+                Container = new CompositionContainer(directoryCatalog);
+                Container.ComposeParts(this, Responders);
 
-            //wireup converters into serializer
-            Responders.RegisterConverters();
+                //wireup converters into serializer
+                Responders.RegisterConverters();
+            }
+            catch(ReflectionTypeLoadException ex)
+            {
+                var store = context.GetExceptionStore();
+
+                store.Add(ex.GetType().Name, ex.Message);
+
+                foreach (var exception in ex.LoaderExceptions)
+                {
+                    store.Add(exception.GetType().Name, exception.Message);
+                }
+
+            }
+            catch(Exception ex)
+            {
+                var store = context.GetExceptionStore();
+                store.Add(ex.GetType().Name, ex.Message);
+            }
         }
 
         public void Dispose()

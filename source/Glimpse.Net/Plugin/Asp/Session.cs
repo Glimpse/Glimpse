@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using Glimpse.Protocol;
 
-namespace Glimpse.Net.Plugin.Asp
+namespace Glimpse.Net.Plugin.ASP
 {
     [GlimpsePlugin(SessionRequired = true)]
-    public class Session:IGlimpsePlugin
+    internal class Session : IGlimpsePlugin
     {
         public string Name
         {
@@ -15,24 +16,21 @@ namespace Glimpse.Net.Plugin.Asp
 
         public object GetData(HttpApplication application)
         {
-            var result = new List<object[]>
-                             {
-                                 new[]{"Key", "Value", "Type"}
-                             };
-
             var session = application.Session;
 
-            foreach (var key in session.Keys)
-            {
-                var value = session[key.ToString()];
-                var type = value.GetType();
+            var result = new List<object[]>
+                             {
+                                 new[] {"Key", "Value", "Type"}
+                             };
 
-                result.Add(new[] { key.ToString(), value, type.ToString()});
-            }
+            result.AddRange(from object key in session.Keys
+                            let value = session[key.ToString()]
+                            let type = value.GetType()
+                            select new[] {key.ToString(), value, type.ToString()});
 
-            if (result.Count == 0) return null;
+            if (result.Count > 1) return result;
 
-            return result;
+            return null;
         }
 
         public void SetupInit(HttpApplication application)

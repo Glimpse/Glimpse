@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Web;
+using Glimpse.Net.Extentions;
 using Glimpse.Protocol;
 
-namespace Glimpse.Net.Plugin.Asp
+namespace Glimpse.Net.Plugin.ASP
 {
     [GlimpsePlugin]
-    public class Server : IGlimpsePlugin
+    internal class Server : IGlimpsePlugin
     {
         public string Name
         {

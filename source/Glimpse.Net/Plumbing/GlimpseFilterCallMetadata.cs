@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using Glimpse.Net.Extentions;
 
 namespace Glimpse.Net.Plumbing
 {
@@ -37,7 +38,7 @@ namespace Glimpse.Net.Plumbing
                            InnerFilter = null,
                            IsChild = isChild,
                            Order = null,
-                           Method = actionDescriptor.GetName(),
+                           Method = actionDescriptor.GetMethodNameWithParameters(),
                            Scope = null,
                            Type = actionDescriptor.ControllerDescriptor.ControllerType,
                        };

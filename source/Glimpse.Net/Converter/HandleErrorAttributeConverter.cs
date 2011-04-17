@@ -7,7 +7,7 @@ using Glimpse.Protocol;
 namespace Glimpse.Net.Converter
 {
     [GlimpseConverter]
-    public class HandleErrorAttributeConverter : IGlimpseConverter
+    internal class HandleErrorAttributeConverter : IGlimpseConverter
     {
         public override IDictionary<string, object> Serialize(object obj, JavaScriptSerializer serializer)
         {

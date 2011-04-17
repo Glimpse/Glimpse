@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Script.Serialization;
+using Glimpse.Net.Extentions;
 using Glimpse.Net.Sanitizer;
 using Glimpse.Protocol;
 
@@ -15,7 +16,7 @@ namespace Glimpse.Net.Responder
         [ImportMany] private IList<IGlimpseConverter> JsConverters { get; set; }
         [Export] public JavaScriptSerializer JsSerializer { get; set; }
         [ImportMany] public IList<GlimpseResponder> Outputs { get; set; }
-        public const string RootPath = "/Glimpse/";
+        public const string RootPath = "Glimpse/";
         private IGlimpseSanitizer Sanitizer { get; set; }
 
         public GlimpseResponders()
@@ -31,12 +32,12 @@ namespace Glimpse.Net.Responder
             var path = application.Request.Path;
             var store = application.Context.Items;
 
-            var result = (from o in Outputs where path.ToLower().Contains(RootPath.ToLower() + o.ResourceName.ToLower()) select o).SingleOrDefault();
+            var result = (from o in Outputs where path.EndsWith(RootPath + o.ResourceName, StringComparison.OrdinalIgnoreCase) select o).SingleOrDefault();
             
-            store["__validPath"] = true;
+            store[GlimpseConstants.ValidPath] = true;
 
             if (result == null) 
-                store["__validPath"] = false;
+                store[GlimpseConstants.ValidPath] = false;
 
             return result;
         }
@@ -70,7 +71,16 @@ namespace Glimpse.Net.Responder
                         sb.Append(string.Format("\"{0}\":\"{1} : {2}\",", item.Key, ex.GetType().Name, message));
                 }
             }
-            if (sb.Length > 0) sb.Remove(sb.Length - 1, 1);
+
+            //Add exceptions tab if needed
+            var exceptions = application.GetExceptionStore();
+            if (exceptions.Count > 0)
+            {
+                var dataString = JsSerializer.Serialize(exceptions);
+                sb.Append(string.Format("\"{0}\":{1},", "Exceptions", dataString));
+            }
+
+            if (sb.Length > 1) sb.Remove(sb.Length - 1, 1);
             sb.Append("}");
 
             //var json = JsSerializer.Serialize(data); //serialize data to Json
