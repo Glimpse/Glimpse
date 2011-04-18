@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
-    <!-- Values in $dollarSigns$ are automatically pulled from the AssemblyInfo.cs attributes by NuGet.exe -->
+    <!-- Values in dollar $igns are automatically pulled from the AssemblyInfo.cs attributes by NuGet.exe -->
     <metadata>
         <id>Glimpse</id>
         <version>$version$</version>
