@@ -20,10 +20,10 @@ XHRSpy.prototype =
     startTime: null,
     duration: null,
     logRow: null,
-    send: function () {
+    send: function () { 
         $.glimpseAjax.callStarted(this);
     },
-    finish: function () {
+    finish: function () { 
         $.glimpseAjax.callFinished(this);
     }
 };
@@ -716,6 +716,7 @@ if (window.jQuery) {
         closePopout: function() {
             var g = this;
 
+            g.static.popup = null;
             g.settings.popupOn = false;
             g.persistState();
         },
@@ -843,18 +844,25 @@ if (window.jQuery) {
             static.tab = $('.glimpse-tabitem-' + static.key, tabStrip);
             static.panel = $('.glimpse-panelitem-' + static.key, panelHolder);
             static.tab.addClass('glimpse-permanent').text(static.key);
-
-            //TEMP CODE!!!! TO BE REMOVED POST POPOUT RELEASE 
-            if ($.glimpse.static.isPopup)
-                static.panel.addClass('glimpse-permanent').html('<div class="glimpse-panel-message error">Ajax calls are currently not supported in popout mode. Should be supported with the next drop.</div>');
-            else 
-                static.panel.addClass('glimpse-permanent').html('<div class="glimpse-panel-message">No ajax calls have yet been detected</div>');
+            static.panel.addClass('glimpse-permanent').html('<div class="glimpse-panel-message">No ajax calls have yet been detected</div>');
+        },
+        _makePopoutCall : function() {
+            var g = $.glimpse;
+            return (!g.static.isPopup && g.settings.popupOn && g.static.popup && !g.static.popup.closed)
         },
         callStarted: function(ajaxSpy) {
             var g = $.glimpse, ga = this, static = ga.static, panelHolder = g.static.panelHolder(), panelItem = $('.glimpse-panelitem-' + static.key, panelHolder);
 
-            if (ajaxSpy.url && ajaxSpy.url.length > 9 && ajaxSpy.url.substr(0, 9) == '/Glimpse/')
+            if (ajaxSpy.url && ajaxSpy.url.length > 9 && ajaxSpy.url.indexOf('Glimpse/') != -1)
                 return;
+
+            //Make this exact same call in the popout window
+            if (!g.static.isPopup) 
+                ajaxSpy.logRow = ++static.index;
+            if (ga._makePopoutCall()) {
+                g.static.popup.$.glimpseAjax.static.index = ajaxSpy.logRow;
+                g.static.popup.$.glimpseAjax.callStarted(ajaxSpy);
+             }
 
             //First time round we need to set everything up
             if ($('.glimpse-panel-message', panelItem).length > 0) {
@@ -873,19 +881,24 @@ if (window.jQuery) {
             ajaxSpy.clientName = $.cookie('glimpseClientName');
 
             //Add new row
-            $('table', panelItem).append('<tr class="loading"><th><div class="icon"></div>' + ajaxSpy.url + '</th><td class="glimpse-ajax-status">Loading...</td><td>' + $.formatTime(ajaxSpy.startTime) + '</td><td class="glimpse-ajax-duration">--</td><td>' + ajaxSpy.async + '</td><td class="glimpse-ajax-inspect">N/A</td></tr>');
+            $('table', panelItem).append('<tr class="loading" data-index="' + static.index + '"><th><div class="icon"></div>' + ajaxSpy.url + '</th><td class="glimpse-ajax-status">Loading...</td><td>' + $.formatTime(ajaxSpy.startTime) + '</td><td class="glimpse-ajax-duration">--</td><td>' + ajaxSpy.async + '</td><td class="glimpse-ajax-inspect">N/A</td></tr>');
 
             //In theory I wouldn't need to do this every time but wanting to make sure that all rows are kept in sync
             $('table tbody tr:odd', panelItem).addClass('even');
             $('table tbody tr:even', panelItem).addClass('odd');
 
-            ajaxSpy.logRow = $('tr:last', panelItem);
+            //ajaxSpy.logRow = $('tr:last', panelItem);
         },
         callFinished: function(ajaxSpy) {
-            var ga = this, static = ga.static, row = ajaxSpy.logRow, glimpseRequestId = ajaxSpy.responseHeaders['X-Glimpse-RequestID'];
+            var g = $.glimpse, ga = this, static = ga.static, glimpseRequestId = ajaxSpy.responseHeaders['X-Glimpse-RequestID'],
+                    panelHolder = g.static.panelHolder(), panelItem = $('.glimpse-panelitem-' + static.key, panelHolder), row = $("tr[data-index='" + ajaxSpy.logRow + "']", panelItem);
 
-            if (ajaxSpy.url && ajaxSpy.url.length > 9 && ajaxSpy.url.substr(0, 9) == '/Glimpse/')
+            if (ajaxSpy.url && ajaxSpy.url.length > 9 && ajaxSpy.url.indexOf('Glimpse/') != -1)
                 return;
+                
+            //Make this exact same call in the popout window
+            if (ga._makePopoutCall())
+                g.static.popup.$.glimpseAjax.callFinished(ajaxSpy);
 
             //Adjust layout
             row.removeClass('loading').addClass(!ajaxSpy.success ? 'error' : glimpseRequestId ? 'ajax-loaded' : 'suppress');
@@ -914,7 +927,8 @@ if (window.jQuery) {
             key : 'XHReqests',
             tab : null,
             panel : null, 
-            historyLink : '/Glimpse/History' 
+            historyLink : '/Glimpse/History',
+            index : 0 
         },
         _handelClick: function(link) { 
             $('.selected', link.parents('table:first')).removeClass('selected');
