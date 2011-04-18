@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web;
+using Glimpse.Net.Extensibility;
 using Glimpse.Net.Extentions;
-using Glimpse.Protocol;
 
 namespace Glimpse.Net.Plugin.ASP
 {

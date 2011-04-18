@@ -98,10 +98,10 @@ namespace Glimpse.Net.Extentions
             return (data != null);
         }
 
-        internal static IDictionary<string, object> GetExceptionStore(this HttpApplication application)
+        internal static IList<object[]> GetWarningStore(this HttpApplication application)
         {
-            var result = application.Context.Items[GlimpseConstants.Errors] as IDictionary<string, object>;
-            if (result == null) application.Context.Items[GlimpseConstants.Errors] = result = new Dictionary<string, object>();
+            var result = application.Context.Items[GlimpseConstants.Errors] as IList<object[]>;
+            if (result == null) application.Context.Items[GlimpseConstants.Errors] = result = new List<object[]>{new []{"Type", "Message"}};
 
             return result;
         }

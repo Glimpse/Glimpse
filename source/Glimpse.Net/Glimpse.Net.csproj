@@ -55,6 +55,13 @@
     <Compile Include="Converter\HandleErrorAttributeConverter.cs" />
     <Compile Include="Converter\OutputCacheAttributeConverter.cs" />
     <Compile Include="Converter\RouteValueDictionaryConverter.cs" />
+    <Compile Include="Extensibility\GlimpseConverterAttribute.cs" />
+    <Compile Include="Extensibility\GlimpsePluginAttribute.cs" />
+    <Compile Include="Extensibility\GlimpseSanitizerAttribute.cs" />
+    <Compile Include="Extensibility\IGlimpseConverter.cs" />
+    <Compile Include="Extensibility\IGlimpsePlugin.cs" />
+    <Compile Include="Extensibility\IGlimpsePluginRequirements.cs" />
+    <Compile Include="Extensibility\IGlimpseSanitizer.cs" />
     <Compile Include="Extentions\ActionDescriptorExtentions.cs" />
     <Compile Include="Extentions\DictionaryExtentions.cs" />
     <Compile Include="Extentions\HttpApplicationExtentions.cs" />
@@ -82,6 +89,7 @@
     <Compile Include="Plumbing\GlimpseViewEngine.cs" />
     <Compile Include="Plumbing\GlimpseViewEngineCallMetadata.cs" />
     <Compile Include="Plumbing\GlimpseFilter.cs" />
+    <Compile Include="Plumbing\SafeDirectoryCatalog.cs" />
     <Compile Include="PreApplicationStartCode.cs" />
     <Compile Include="Responder\Clients.cs" />
     <Compile Include="Responder\Config.cs" />
@@ -107,25 +115,17 @@
     <Compile Include="Sanitizer\CSharpSanitizer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Glimpse.Protocol\Glimpse.Protocol.csproj">
-      <Project>{A6AFEFD7-1602-4880-B001-E6E697BB8EC6}</Project>
-      <Name>Glimpse.Protocol</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="glimpseClient.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="glimpseSprite.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="NuSpec\content\web.config.transform" />
-    <None Include="NuSpec\Glimpse.nuspec">
+    <Content Include="web.config.transform" />
+    <None Include="Glimpse.nuspec">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="NuSpec\content\App_Readme\Glimpse.Readme.txt" />
-    <Content Include="NuSpec\lib\Glimpse.Net.dll" />
-    <Content Include="NuSpec\lib\Glimpse.Protocol.dll" />
+    <Content Include="App_Readme\Glimpse.Readme.txt" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -133,11 +133,8 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetDir)Glimpse.Net.dll $(ProjectDir)NuSpec\lib\Glimpse.Net.dll
-copy $(TargetDir)Glimpse.Protocol.dll $(ProjectDir)NuSpec\lib\Glimpse.Protocol.dll
-
-$(SolutionDir)packages\NuGet.CommandLine.1.2.20401.11\Tools\NuGet.exe pack $(ProjectDir)\NuSpec\Glimpse.nuspec -OutputDirectory $(ProjectDir)
-</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

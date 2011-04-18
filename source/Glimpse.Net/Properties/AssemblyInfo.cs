@@ -7,12 +7,12 @@ using Glimpse.Net;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Glimpse")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Glimpse Web Debugger (Beta)")]
+[assembly: AssemblyDescription("Glimpse is a web debugger used to gain a better understanding of whats happening inside of your webserver. (Beta)")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("nmolnar, avanderhoorn")]
 [assembly: AssemblyProduct("Glimpse")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2011")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -34,8 +34,8 @@ using Glimpse.Net;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("0.78.0.0")]
+[assembly: AssemblyFileVersion("0.78.0.0")]
 
 [assembly: System.Web.UI.WebResource("Glimpse.Net.glimpseClient.js", "application/x-javascript")]
 [assembly: System.Web.UI.WebResource("Glimpse.Net.glimpseSprinte.png", "image/png")]

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using Glimpse.Protocol;
+using Glimpse.Net.Extensibility;
 
 namespace Glimpse.Net.Sanitizer
 {

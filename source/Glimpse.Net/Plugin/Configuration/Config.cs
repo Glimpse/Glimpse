@@ -3,8 +3,8 @@ using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Configuration;
+using Glimpse.Net.Extensibility;
 using Glimpse.Net.Extentions;
-using Glimpse.Protocol;
 
 namespace Glimpse.Net.Plugin.Configuration
 {

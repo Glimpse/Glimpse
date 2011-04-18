@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Script.Serialization;
+using Glimpse.Net.Extensibility;
 using Glimpse.Net.Extentions;
 using Glimpse.Net.Sanitizer;
-using Glimpse.Protocol;
 
 namespace Glimpse.Net.Responder
 {
@@ -73,11 +73,11 @@ namespace Glimpse.Net.Responder
             }
 
             //Add exceptions tab if needed
-            var exceptions = application.GetExceptionStore();
-            if (exceptions.Count > 0)
+            var exceptions = application.GetWarningStore();
+            if (exceptions.Count > 1)
             {
                 var dataString = JsSerializer.Serialize(exceptions);
-                sb.Append(string.Format("\"{0}\":{1},", "Exceptions", dataString));
+                sb.Append(string.Format("\"{0}\":{1},", "Glimpse Warnings", dataString));
             }
 
             if (sb.Length > 1) sb.Remove(sb.Length - 1, 1);

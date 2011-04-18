@@ -7,10 +7,10 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using Glimpse.Net.Configuration;
+using Glimpse.Net.Extensibility;
 using Glimpse.Net.Extentions;
 using Glimpse.Net.Plumbing;
 using Glimpse.Net.Responder;
-using Glimpse.Protocol;
 
 namespace Glimpse.Net
 {
@@ -19,11 +19,14 @@ namespace Glimpse.Net
         private GlimpseConfiguration Configuration { get; set; }
         private CompositionContainer Container { get; set; }
         private GlimpseResponders Responders { get; set; }
-        [ImportMany] private IList<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>> Plugins { get; set; }
+
+        [ImportMany]
+        private IList<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>> Plugins { get; set; }
 
         public Module()
         {
-            Configuration = ConfigurationManager.GetSection("glimpse") as GlimpseConfiguration ?? new GlimpseConfiguration();
+            Configuration = ConfigurationManager.GetSection("glimpse") as GlimpseConfiguration ??
+                            new GlimpseConfiguration();
             Responders = new GlimpseResponders();
             Plugins = new List<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>>();
         }
@@ -53,7 +56,7 @@ namespace Glimpse.Net
 
             var responder = Responders.GetResponderFor(httpApplication);
             if (responder != null)
-            { 
+            {
                 responder.Respond(httpApplication, Configuration);
                 return;
             }
@@ -91,33 +94,19 @@ namespace Glimpse.Net
 
         private void ComposePlugins(HttpApplication context)
         {
-            try
+            var directoryCatalog = new SafeDirectoryCatalog("bin");
+
+            Container = new CompositionContainer(directoryCatalog);
+            Container.ComposeParts(this, Responders);
+
+            var store = context.GetWarningStore();
+            foreach (var exception in directoryCatalog.Exceptions)
             {
-                var directoryCatalog = new DirectoryCatalog("bin");
-
-                Container = new CompositionContainer(directoryCatalog);
-                Container.ComposeParts(this, Responders);
-
-                //wireup converters into serializer
-                Responders.RegisterConverters();
+                store.Add(new[] {exception.GetType().Name, exception.Message});
             }
-            catch(ReflectionTypeLoadException ex)
-            {
-                var store = context.GetExceptionStore();
 
-                store.Add(ex.GetType().Name, ex.Message);
-
-                foreach (var exception in ex.LoaderExceptions)
-                {
-                    store.Add(exception.GetType().Name, exception.Message);
-                }
-
-            }
-            catch(Exception ex)
-            {
-                var store = context.GetExceptionStore();
-                store.Add(ex.GetType().Name, ex.Message);
-            }
+            //wireup converters into serializer
+            Responders.RegisterConverters();
         }
 
         public void Dispose()
@@ -160,7 +149,7 @@ namespace Glimpse.Net
             IDictionary<string, object> data;
             if (!httpApplication.TryGetData(out data)) return;
 
-            foreach (var plugin in Plugins.Where(p=>p.Metadata.SessionRequired == sessionRequired))
+            foreach (var plugin in Plugins.Where(p => p.Metadata.SessionRequired == sessionRequired))
             {
                 var p = plugin.Value;
                 try
@@ -168,7 +157,7 @@ namespace Glimpse.Net
                     var pluginData = p.GetData(httpApplication);
                     data.Add(p.Name, pluginData);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     data.Add(p.Name, ex.Message);
                 }

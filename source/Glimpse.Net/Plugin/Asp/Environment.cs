@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Compilation;
-using Glimpse.Protocol;
+using Glimpse.Net.Extensibility;
 using Enviro = System.Environment;
 
 namespace Glimpse.Net.Plugin.ASP

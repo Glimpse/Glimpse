@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Script.Serialization;
-using Glimpse.Protocol;
+using Glimpse.Net.Extensibility;
 using MvcMusicStore.Models;
 
 namespace MvcMusicStore

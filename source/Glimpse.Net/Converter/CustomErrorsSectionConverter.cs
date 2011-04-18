@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Configuration;
 using System.Web.Script.Serialization;
-using Glimpse.Protocol;
+using Glimpse.Net.Extensibility;
 
 namespace Glimpse.Net.Converter
 {

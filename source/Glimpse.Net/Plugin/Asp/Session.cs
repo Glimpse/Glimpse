@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Glimpse.Protocol;
+using Glimpse.Net.Extensibility;
 
 namespace Glimpse.Net.Plugin.ASP
 {

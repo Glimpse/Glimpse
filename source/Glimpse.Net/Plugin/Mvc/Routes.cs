@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Glimpse.Protocol;
+using Glimpse.Net.Extensibility;
 
 namespace Glimpse.Net.Plugin.Mvc
 {
