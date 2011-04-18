@@ -700,7 +700,7 @@ if (window.jQuery) {
                 g.persistState();
 
                 var url = static.popupUrl + '?glimpseRequestID=' + $('#glimpseData').data('glimpse-requestID');
-                static.popup = window.open(url, 'GlimpsePopup', 'width=1000,height=600,0,status=0,scrollbars=1');
+                static.popup = window.open(url, 'GlimpsePopup', 'width=1000,height=600,0,status=0,scrollbars=1,dialog=1');
 
                 if ($.popupExists(static.popup))
                     g.close(undefined, true); 

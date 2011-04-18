@@ -21,6 +21,8 @@ namespace MvcMusicStore.Controllers
 
             Trace.Write("Got top 5 albums");
 
+            TempData["Test"] = "A bit of temp";
+            
             return View(albums.ToList());
         }
 

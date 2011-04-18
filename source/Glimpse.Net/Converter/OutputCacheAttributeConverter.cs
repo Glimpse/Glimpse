@@ -7,7 +7,7 @@ using Glimpse.Protocol;
 namespace Glimpse.Net.Converter
 {
     [GlimpseConverter]
-    public class OutputCacheAttributeConverter : IGlimpseConverter
+    internal class OutputCacheAttributeConverter : IGlimpseConverter
     {
         public override IDictionary<string, object> Serialize(object obj, JavaScriptSerializer serializer)
         {

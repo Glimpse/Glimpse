@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Script.Serialization;
 using Glimpse.Net.Configuration;
+using Glimpse.Net.Extentions;
 using Glimpse.Net.Plumbing;
 
 namespace Glimpse.Net.Responder

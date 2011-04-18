@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Web.Mvc;
 
 namespace Glimpse.Net.Plumbing
@@ -6,6 +7,7 @@ namespace Glimpse.Net.Plumbing
     public class GlimpseAuthorizationFilter : GlimpseFilter, IAuthorizationFilter
     {
         public IAuthorizationFilter AuthorizationFilter { get; set; }
+        public Guid Guid { get; set; }
 
         public GlimpseAuthorizationFilter(IAuthorizationFilter authorizationFilter)
         {
@@ -14,6 +16,7 @@ namespace Glimpse.Net.Plumbing
 
         public void OnAuthorization(AuthorizationContext filterContext)
         {
+            var metadata = LogCall(Guid);
             var watch = new Stopwatch();
             watch.Start();
 
@@ -21,7 +24,7 @@ namespace Glimpse.Net.Plumbing
 
             watch.Stop();
 
-            LogCall(Guid, watch.Elapsed);
+            metadata.ExecutionTime = watch.Elapsed;
         }
     }
 }

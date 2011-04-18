@@ -8,7 +8,6 @@ namespace Glimpse.Net.Plumbing
     public class GlimpseFilter
     {
         public Filter Filter { get; set; }
-        public Guid Guid { get; set; }
 
         public IList<GlimpseFilterCalledMetadata> Store
         {
@@ -22,9 +21,11 @@ namespace Glimpse.Net.Plumbing
             }
         }
 
-        public void LogCall(Guid guid, TimeSpan executionTime)
+        public GlimpseFilterCalledMetadata LogCall(Guid guid)
         {
-            Store.Add(new GlimpseFilterCalledMetadata{Guid = guid, ExecutionTime = executionTime});
+            var metadata = new GlimpseFilterCalledMetadata{Guid = guid};
+            Store.Add(metadata);
+            return metadata;
         }
     }
 }

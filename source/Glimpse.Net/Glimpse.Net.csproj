@@ -55,13 +55,20 @@
     <Compile Include="Converter\HandleErrorAttributeConverter.cs" />
     <Compile Include="Converter\OutputCacheAttributeConverter.cs" />
     <Compile Include="Converter\RouteValueDictionaryConverter.cs" />
-    <Compile Include="Extentions.cs" />
+    <Compile Include="Extentions\ActionDescriptorExtentions.cs" />
+    <Compile Include="Extentions\DictionaryExtentions.cs" />
+    <Compile Include="Extentions\HttpApplicationExtentions.cs" />
+    <Compile Include="Extentions\ControllerExtentions.cs" />
+    <Compile Include="Extentions\KeyValuePairExtention.cs" />
+    <Compile Include="Extentions\NameValueCollectionExtentions.cs" />
+    <Compile Include="Plugin\ASP\Request.cs" />
     <Compile Include="Plugin\Mvc\Binders.cs" />
     <Compile Include="Plumbing\GlimpseActionFilter.cs" />
     <Compile Include="Plumbing\GlimpseActionInvoker.cs" />
     <Compile Include="Plumbing\GlimpseAuthorizationFilter.cs" />
     <Compile Include="Plumbing\GlimpseControllerFactory.cs" />
     <Compile Include="Plumbing\GlimpseDefaultModelBinder.cs" />
+    <Compile Include="Plumbing\GlimpseDependencyResolver.cs" />
     <Compile Include="Plumbing\GlimpseExceptionFilter.cs" />
     <Compile Include="Plumbing\GlimpseFilterCalledMetadata.cs" />
     <Compile Include="Plumbing\GlimpseFilterCallMetadata.cs" />
@@ -85,8 +92,8 @@
     <Compile Include="Responder\GlimpseResponders.cs" />
     <Compile Include="Responder\Sprite.cs" />
     <Compile Include="Responder\GlimpseResponder.cs" />
-    <Compile Include="Plugin\Asp\Environment.cs" />
-    <Compile Include="Plugin\Asp\Trace.cs" />
+    <Compile Include="Plugin\ASP\Environment.cs" />
+    <Compile Include="Plugin\ASP\Trace.cs" />
     <Compile Include="Plugin\Configuration\Config.cs" />
     <Compile Include="GlimpseConstants.cs" />
     <Compile Include="Plumbing\GlimpseFilterAttribute.cs" />
@@ -95,8 +102,8 @@
     <Compile Include="Plugin\Mvc\Views.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Plugin\Asp\Server.cs" />
-    <Compile Include="Plugin\Asp\Session.cs" />
+    <Compile Include="Plugin\ASP\Server.cs" />
+    <Compile Include="Plugin\ASP\Session.cs" />
     <Compile Include="Sanitizer\CSharpSanitizer.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -116,11 +123,9 @@
     <None Include="NuSpec\Glimpse.nuspec">
       <SubType>Designer</SubType>
     </None>
-    <None Include="web.config.transform" />
-    <Content Include="NuSpec\content\App_Readme\readme.txt" />
+    <Content Include="NuSpec\content\App_Readme\Glimpse.Readme.txt" />
     <Content Include="NuSpec\lib\Glimpse.Net.dll" />
     <Content Include="NuSpec\lib\Glimpse.Protocol.dll" />
-    <Content Include="readme.txt" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

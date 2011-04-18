@@ -7,13 +7,12 @@ using Glimpse.Protocol;
 namespace Glimpse.Net.Converter
 {
     [GlimpseConverter]
-    public class AuthenticationSectionConverter:IGlimpseConverter
+    internal class AuthenticationSectionConverter:IGlimpseConverter
     {
         public override IDictionary<string, object> Serialize(object obj, JavaScriptSerializer serializer)
         {
             var source = obj as AuthenticationSection;
             if (source == null) return null;
-
 
             var result = new Dictionary<string, object>
                              {

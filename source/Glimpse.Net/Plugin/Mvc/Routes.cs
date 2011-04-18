@@ -8,7 +8,7 @@ using Glimpse.Protocol;
 namespace Glimpse.Net.Plugin.Mvc
 {
     [GlimpsePlugin]
-    public class Routes:IGlimpsePlugin
+    internal class Routes:IGlimpsePlugin
     {
         public string Name
         {
@@ -19,9 +19,10 @@ namespace Glimpse.Net.Plugin.Mvc
         {
             var result = new List<object[]>
                              {
-                                 new[] {"Match", "Url", "Data", "Constraints", "DataTokens"}
+                                 new[] {"Match", "Area", "Url", "Data", "Constraints", "DataTokens"}
                              };
 
+            var hasEverMatched = false;
             using (RouteTable.Routes.GetReadLock())
             {
                 var httpContext = new HttpContextWrapper(HttpContext.Current);
@@ -53,20 +54,26 @@ namespace Glimpse.Net.Plugin.Mvc
                             }
                         }
 
+                        var area = "_Root_";
+
+                        if(route.DataTokens != null && route.DataTokens.ContainsKey("area"))
+                            area = route.DataTokens["area"].ToString();
 
                         result.Add(new object[]
                                        {
-                                           matchesCurrentRequest.ToString(), 
+                                           matchesCurrentRequest.ToString(), area,
                                            route.Url, data.Count > 1 ? data : null,
                                            (route.Constraints == null ||route.Constraints.Count == 0) ? null : route.Constraints,
                                            (route.DataTokens == null || route.DataTokens.Count == 0) ? null : route.DataTokens,
-                                           matchesCurrentRequest ? "selected" : ""
+                                           matchesCurrentRequest && !hasEverMatched ? "selected" : ""
                                        });
                     }
                     else
                     {
                         result.Add(new object[] {matchesCurrentRequest.ToString(), null, null, null, null});
                     }
+
+                    hasEverMatched = hasEverMatched || matchesCurrentRequest;
                 }
             }
            

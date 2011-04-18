@@ -17,24 +17,27 @@ namespace Glimpse.Net.Plumbing
 
         public void OnResultExecuting(ResultExecutingContext filterContext)
         {
+            var metadata = LogCall(OnResultExecutingGuid);
             var watch = new Stopwatch();
             watch.Start();
 
             ResultFilter.OnResultExecuting(filterContext);
 
             watch.Stop();
-            LogCall(OnResultExecutingGuid, watch.Elapsed);
+            metadata.ExecutionTime = watch.Elapsed;
         }
 
         public void OnResultExecuted(ResultExecutedContext filterContext)
         {
+            var metadata = LogCall(OnResultExecutedGuid);
             var watch = new Stopwatch();
             watch.Start();
 
             ResultFilter.OnResultExecuted(filterContext);
 
             watch.Stop();
-            LogCall(OnResultExecutedGuid, watch.Elapsed);
+
+            metadata.ExecutionTime = watch.Elapsed;
         }
     }
 }

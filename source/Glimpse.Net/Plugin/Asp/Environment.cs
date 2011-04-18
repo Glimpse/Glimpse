@@ -8,10 +8,10 @@ using System.Web.Compilation;
 using Glimpse.Protocol;
 using Enviro = System.Environment;
 
-namespace Glimpse.Net.Plugin.Asp
+namespace Glimpse.Net.Plugin.ASP
 {
     [GlimpsePlugin]
-    public class Environment : IGlimpsePlugin
+    internal class Environment : IGlimpsePlugin
     {
         public string Name
         {
@@ -20,6 +20,7 @@ namespace Glimpse.Net.Plugin.Asp
 
         public object GetData(HttpApplication application)
         {
+            //environment should not change from request to request on a given machine.  We can cache our results in the application store
             var result = application.Application[GlimpseConstants.PluginEnvironmentStore] as IDictionary<string, object>;
             if (result != null) return result;
 
@@ -36,12 +37,12 @@ namespace Glimpse.Net.Plugin.Asp
             var sysAssemblies = from a in allAssemblies where a.FullName.StartsWith("System") || a.FullName.StartsWith("Microsoft") select a;
             var appAssemblies = from a in allAssemblies where !a.FullName.StartsWith("System") && !a.FullName.StartsWith("Microsoft") select a;
 
-            foreach (Assembly assembly in sysAssemblies)
+            foreach (var assembly in sysAssemblies)
             {
                 Add(assembly, to:sysList);
             }
 
-            foreach (Assembly assembly in appAssemblies)
+            foreach (var assembly in appAssemblies)
             {
                 Add(assembly, to:appList);
             }
@@ -68,13 +69,13 @@ namespace Glimpse.Net.Plugin.Asp
             throw new NotImplementedException();
         }
 
-        private void Add(Assembly assembly, List<object[]> to)
+        private static void Add(Assembly assembly, ICollection<object[]> to)
         {
             var assemblyName = assembly.GetName();
             var version = assemblyName.Version.ToString();
             var culture = string.IsNullOrEmpty(assemblyName.CultureInfo.Name) ? "_neutral_":assemblyName.CultureInfo.Name;
 
-            to.Add(new object[] { assemblyName.Name, version, culture, assembly.GlobalAssemblyCache.ToString(), assembly.IsFullyTrusted.ToString() });
+            to.Add(new [] { assemblyName.Name, version, culture, assembly.GlobalAssemblyCache.ToString(), assembly.IsFullyTrusted.ToString() });
         }
     }
 }

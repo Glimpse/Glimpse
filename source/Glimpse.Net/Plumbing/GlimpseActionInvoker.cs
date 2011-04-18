@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Glimpse.Net.Plumbing
@@ -158,6 +157,12 @@ namespace Glimpse.Net.Plumbing
             var allFilters = FiltersStore(controllerContext);
             var calledFilters = CallStore(controllerContext);
 
+            var action = GlimpseFilterCallMetadata.ControllerAction(actionDescriptor, controllerContext.IsChildAction);
+            allFilters.Add(action);
+
+            var calledMetadata = new GlimpseFilterCalledMetadata { Guid = action.Guid};
+            calledFilters.Add(calledMetadata);
+
             var watch = new Stopwatch();
             watch.Start();
 
@@ -165,9 +170,7 @@ namespace Glimpse.Net.Plumbing
 
             watch.Stop();
 
-            var action = GlimpseFilterCallMetadata.ControllerAction(actionDescriptor, controllerContext.IsChildAction);
-            allFilters.Add(action);
-            calledFilters.Add(new GlimpseFilterCalledMetadata{Guid = action.Guid, ExecutionTime = watch.Elapsed});
+            calledMetadata.ExecutionTime = watch.Elapsed;
 
             return invokeActionMethod;
         }
@@ -185,6 +188,12 @@ namespace Glimpse.Net.Plumbing
             var allFilters = FiltersStore(controllerContext);
             var calledFilters = CallStore(controllerContext);
 
+            var action = GlimpseFilterCallMetadata.ActionResult(actionResult, controllerContext.IsChildAction);
+            allFilters.Add(action);
+
+            var calledMetadata = new GlimpseFilterCalledMetadata { Guid = action.Guid};
+            calledFilters.Add(calledMetadata);
+
             var watch = new Stopwatch();
             watch.Start();
 
@@ -192,9 +201,7 @@ namespace Glimpse.Net.Plumbing
             
             watch.Stop();
 
-            var action = GlimpseFilterCallMetadata.ActionResult(actionResult, controllerContext.IsChildAction);
-            allFilters.Add(action);
-            calledFilters.Add(new GlimpseFilterCalledMetadata { Guid = action.Guid, ExecutionTime = watch.Elapsed});
+            calledMetadata.ExecutionTime = watch.Elapsed;
         }
 
         protected override ResultExecutedContext InvokeActionResultWithFilters(ControllerContext controllerContext, IList<IResultFilter> filters, ActionResult actionResult)

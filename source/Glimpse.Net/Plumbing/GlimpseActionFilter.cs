@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Web.Mvc;
 
@@ -18,6 +17,8 @@ namespace Glimpse.Net.Plumbing
 
         public void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            var metadata = LogCall(OnActionExecutingGuid);
+
             var watch = new Stopwatch();
             watch.Start();
 
@@ -25,11 +26,13 @@ namespace Glimpse.Net.Plumbing
 
             watch.Stop();
 
-            LogCall(OnActionExecutingGuid, watch.Elapsed);
+            metadata.ExecutionTime = watch.Elapsed;
         }
 
         public void OnActionExecuted(ActionExecutedContext filterContext)
         {
+            var metadata = LogCall(OnActionExecutedGuid);
+
             var watch = new Stopwatch();
             watch.Start();
 
@@ -37,7 +40,7 @@ namespace Glimpse.Net.Plumbing
 
             watch.Start();
 
-            LogCall(OnActionExecutedGuid, watch.Elapsed);
+            metadata.ExecutionTime = watch.Elapsed;
         }
     }
 }

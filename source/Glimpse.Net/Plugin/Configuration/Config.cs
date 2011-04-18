@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Web;
 using System.Web.Configuration;
+using Glimpse.Net.Extentions;
 using Glimpse.Protocol;
 
 namespace Glimpse.Net.Plugin.Configuration
 {
     [GlimpsePlugin]
-    public class Config : IGlimpsePlugin
+    internal class Config : IGlimpsePlugin
     {
         public string Name
         {
@@ -17,22 +18,15 @@ namespace Glimpse.Net.Plugin.Configuration
 
         public object GetData(HttpApplication application)
         {
-            var ConnectionStrings = new Dictionary<string, string>();
-            foreach (ConnectionStringSettings item in ConfigurationManager.ConnectionStrings)
-            {
-                ConnectionStrings.Add(item.Name, item.ConnectionString);
-            }
-
-            if (ConnectionStrings.Count == 0) return null;
-
             //TODO, add in other useful config sections like compilation, 
+            var connectionStrings = ConfigurationManager.ConnectionStrings.Cast<ConnectionStringSettings>().ToDictionary(item => item.Name, item => item.ConnectionString);
             var customErrorsSection = ConfigurationManager.GetSection("system.web/customErrors") as CustomErrorsSection;
             var authenticationSection = ConfigurationManager.GetSection("system.web/authentication") as AuthenticationSection;
 
             return new
                        {
                            AppSettings = ConfigurationManager.AppSettings.Flatten(),
-                           ConnectionStrings,
+                           ConnectionStrings = connectionStrings,
                            CustomErrors = customErrorsSection,
                            Authentication = authenticationSection
                        };

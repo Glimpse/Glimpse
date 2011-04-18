@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Glimpse.Net.Plumbing;
@@ -8,7 +7,7 @@ using Glimpse.Protocol;
 namespace Glimpse.Net.Plugin.Mvc
 {
     [GlimpsePlugin(ShouldSetupInInit = true)]
-    public class Binders:IGlimpsePlugin
+    internal class Binders:IGlimpsePlugin
     {
         public string Name
         {
