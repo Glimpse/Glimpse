@@ -635,6 +635,9 @@ if (window.jQuery) {
             if (static.isPopup) { 
                 $(window).resize(function() { 
                     $('.glimpse-holder .glimpse-panel').height($(window).height() - 54);
+                })
+                .unload(function() { 
+                    g.closePopout();
                 });
             }
         },
@@ -696,6 +699,10 @@ if (window.jQuery) {
             var g = this, static = g.static;
 
             if (!static.popup || static.popup.closed) {
+                if (g.settings.firstPopup)
+                    alert('Glimpse Message: Glimpse may get blocked by your popup blocker, if this is the case make sure you see up and exception for this domain.')
+
+                g.settings.firstPopup = false;
                 g.settings.popupOn = true;
                 g.persistState();
 
@@ -705,6 +712,12 @@ if (window.jQuery) {
                 if ($.popupExists(static.popup))
                     g.close(undefined, true); 
             } 
+        },
+        closePopout: function() {
+            var g = this;
+
+            g.settings.popupOn = false;
+            g.persistState();
         },
         persistState: function() {
             var g = $.glimpse;
@@ -777,7 +790,8 @@ if (window.jQuery) {
             open : false,
             height : 300,
             activeTab : 'Routes',
-            popupOn : false
+            popupOn : false,
+            firstPopup : true
         },
         static: {
             data : null,
@@ -829,7 +843,12 @@ if (window.jQuery) {
             static.tab = $('.glimpse-tabitem-' + static.key, tabStrip);
             static.panel = $('.glimpse-panelitem-' + static.key, panelHolder);
             static.tab.addClass('glimpse-permanent').text(static.key);
-            static.panel.addClass('glimpse-permanent').html('<div class="glimpse-panel-message">No ajax calls have yet been detected</div>');
+
+            //TEMP CODE!!!! TO BE REMOVED POST POPOUT RELEASE 
+            if ($.glimpse.static.isPopup)
+                static.panel.addClass('glimpse-permanent').html('<div class="glimpse-panel-message error">Ajax calls are currently not supported in popout mode. Should be supported with the next drop.</div>');
+            else 
+                static.panel.addClass('glimpse-permanent').html('<div class="glimpse-panel-message">No ajax calls have yet been detected</div>');
         },
         callStarted: function(ajaxSpy) {
             var g = $.glimpse, ga = this, static = ga.static, panelHolder = g.static.panelHolder(), panelItem = $('.glimpse-panelitem-' + static.key, panelHolder);
