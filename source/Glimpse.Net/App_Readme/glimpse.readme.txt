@@ -86,7 +86,7 @@ Release Notes
 -------------
 04/16/2011 - 0.78
 - Breaking change is you created custom plugins.  Plugin interface moved from Glimpse.Protocol to Glimpse.Net.Extensibility namespace
-- Fixed bug which threw ReflectionTypeLoadExceptions by using custom SafeDirectoryCatalog
+- Fixed bug which threw ReflectionTypeLoadExceptions by using custom SafeDirectoryCatalog (Special thanks to Craig Wagner for helping us track this down!)
 - Fixed pathing issues experienced by users hosting from virtual directories
 - Added Request tab to show form, query string and cookies as the server saw them
 - Added ViewData/ViewBag and TempData info to the details column of the Views tab
