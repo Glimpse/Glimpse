@@ -442,14 +442,29 @@ if (window.jQuery) {
             if (((level > 0 && data.length > (limit + 1)) || level > 1) && !forceFull)
                 return that.buildCustomPreview(data, limit);
 
-            var html = '<table><thead><tr class="glimpse-row-header-' + level + '">';
-            for (var x = 0; x < data[0].length; x++)
-                html += '<th>' + $.glimpseContent.formatString(data[0][x]) + '</th>';
+            var isSimpleString = typeof data[0] == 'string'
+            if (isSimpleString && data.length == 1)  
+                return that.buildStringPreview(data[0], level + 1);   
+                
+            var html = '<table><thead><tr class="glimpse-row-header-' + level + '">', startingIndex = (isSimpleString ? 0 : 1), headerColumnCount = isSimpleString ? 1 : data[0].length;
+            if (!isSimpleString) {
+                for (var x = 0; x < headerColumnCount; x++)
+                    html += '<th>' + $.glimpseContent.formatString(data[0][x]) + '</th>'; 
+            }
+            else 
+                html += '<th>Values</th>'; 
             html += '</tr></thead>';
-            for (var i = 1; i < data.length; i++) {
-                html += '<tr class="' + (i % 2 ? 'odd' : 'even') + (data[i].length > data[0].length ? ' ' + data[i][data[i].length - 1] : '') + '">';
-                for (var x = 0; x < data[0].length; x++)
-                    html += '<td>' + that.build(data[i][x], level + 1) + '</td>';
+
+            for (var i = startingIndex; i < data.length; i++) {
+                var rowData = data[i];
+                html += '<tr class="' + (i % 2 ? 'odd' : 'even') + (!isSimpleString && rowData.length > headerColumnCount ? ' ' + rowData[rowData.length - 1] : '') + '">';
+                if (!isSimpleString) {
+                    for (var x = 0; x < headerColumnCount; x++)
+                        html += '<td>' + that.build(rowData[x], level + 1) + '</td>';
+                }
+                else
+                    html += '<td>' + that.buildString(rowData, level + 1) + '</td>'; 
+
                 html += '</tr>';
             }
             html += '</table>';
@@ -470,22 +485,31 @@ if (window.jQuery) {
             return html;
         },
         buildCustomPreview: function(data, level) {
-            var that = this, length = data.length - 1, rowMax = 2, columnMax = 3, columnLimit = ((data[0].length > columnMax) ? columnMax : data[0].length), rowLimit = (rowMax < length ? rowMax : length), html = '<span class="glimpse-expand"></span><span class="glimpse-preview-object"><span class="start">[</span>';
+            var that = this, isSimpleString = typeof data[0] == 'string', rowLength = (isSimpleString ? data.length : data.length - 1);
+            
+            if (isSimpleString && rowLength == 1)  
+                return that.buildStringPreview(data[0], level + 1);  
 
-            for (var i = 1; i <= rowLimit + 1; i++) {
-                html += that.newItemSpacer(i, rowLimit, length);
-                if (i > length || i > rowLimit)
+            var rowMax = 2, columnMax = 3, startingIndex = (isSimpleString ? 0 : 1), rowLimit = (rowMax < rowLength ? rowMax : rowLength), columnLimit = isSimpleString ? 1 : ((data[0].length > columnMax) ? columnMax : data[0].length), html = '<span class="glimpse-expand"></span><span class="glimpse-preview-object"><span class="start">[</span>'; 
+            for (var i = startingIndex; i <= rowLimit + 1; i++) {
+                html += that.newItemSpacer(i, rowLimit, rowLength);
+                if (i > rowLength || i > rowLimit)
                     break;
 
-                html += '<span class="start">[</span>';
-                var spacer = '';
-                for (var x = 0; x < columnLimit; x++) {
-                    html += spacer + '<span>\'</span>' + that.buildStringPreview(data[i][x], level + 99) + '<span>\'</span>';
-                    spacer = '<span class="rspace">,</span>';
+                if (!isSimpleString) {
+                    html += '<span class="start">[</span>';
+                    var spacer = '';
+                    for (var x = 0; x < columnLimit; x++) {
+                        html += spacer + '<span>\'</span>' + that.buildStringPreview(data[i][x], level + 99) + '<span>\'</span>';
+                        spacer = '<span class="rspace">,</span>';
+                    }
+                    if (x < data[0].length)
+                        html += spacer + '<span>...</span>'
+                    html += '<span class="end">]</span>';
                 }
-                if (x < data[0].length)
-                    html += spacer + '<span>...</span>'
-                html += '<span class="end">]</span>';
+                else {   
+                    html += '<span>\'</span>' + that.buildStringPreview(data[i], level + 99) + '<span>\'</span>'; 
+                }
             }
             html += '<span class="end">]</span></span><span class="glimpse-preview-show">' + that.buildCustomTable(data, level, true) + '</span>';
             return html;
@@ -700,14 +724,15 @@ if (window.jQuery) {
 
             if (!static.popup || static.popup.closed) {
                 if (g.settings.firstPopup)
-                    alert('Glimpse Message: Glimpse may get blocked by your popup blocker, if this is the case make sure you see up and exception for this domain.')
+                    alert('Glimpse Message: Glimpse may get blocked by your popup blocker, if this is the case make sure you set up and exception for this domain.')
 
                 g.settings.firstPopup = false;
                 g.settings.popupOn = true;
                 g.persistState();
+                //static.dataString = JSON.stringify(static.data);
 
                 var url = static.popupUrl + '?glimpseRequestID=' + $('#glimpseData').data('glimpse-requestID');
-                static.popup = window.open(url, 'GlimpsePopup', 'width=1000,height=600,0,status=0,scrollbars=1,dialog=1');
+                static.popup = window.open(url, 'GlimpsePopup', 'width=1000,height=600,status=no,toolbar=no,menubar=no,location=no,resizable=yes,scrollbars=yes');
 
                 if ($.popupExists(static.popup))
                     g.close(undefined, true); 
@@ -755,7 +780,7 @@ if (window.jQuery) {
             if (!data) {
                 if (static.isPopup && window.opener.glimpse) {
                     $.glimpse.static.url = window.opener.$.glimpse.static.url;
-                    glimpse = data = window.opener.glimpse
+                    glimpse = data = window.opener.glimpse;
                 }
                 else 
                     return;

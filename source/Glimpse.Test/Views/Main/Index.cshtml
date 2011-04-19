@@ -450,6 +450,37 @@
             </td>
             <td class="glimpse-scenario glimpse glimpse-scenario-twelve glimpse-panel"></td>
         </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Scenario 13 (Pass):</h2> 
+            </td>
+        </tr>
+        <tr>
+            <td class="glimpse-scenario-data">
+<pre>var scenarioThreeData = {
+    'Movie': [ 'Star Wars', 'Star Treck'],
+    'Genera/Theme': [ 'Science Fiction', 'Drama', 'Romance', 'Action', 'Family' ],
+    'Actors/Cast': [
+            ['Actor', 'Character', 'Gender', 'Age'],
+            ['Mark Hamill', [ 'Luke Skywalker', 'Mini Skywalker' ], 
+                        'Male', '21'],
+            ['James Earl Jones', 'Darth Vader', [['Height', 'Weight'], ['213', '433']], 'Male'],
+            ['Harrison Ford', 'Han Solo', 'Male', '25'],
+            ['Carrie Fisher', [ 'Princess Leia Organa' ], 'Female', '21'],
+            ['Peter Cushing', [ 'Grand Moff Tarkin', 'Grand Moff Tarkin Grand Moff Tarkin 
+                                Grand Moff Tarkin Grand Moff Tarkin Grand Moff Tarkin Grand 
+                                Moff Tarkin Grand Moff Tarkin' ], 'Female', '69'],
+            ['Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70'],
+            ['Anthony Daniels', 'C-3PO', 'Droid', '101'],
+            ['Kenny Baker', 'R2-D2', 'Droid', '150']
+        ],
+    'Plot & Description': [ 'Luke Skywalker leaves his home planet, teams up with 
+                            other rebels, and tries to save Princess Leia from the 
+                            evil clutches of Darth Vader.' ]
+};</pre> 
+            </td>
+            <td class="glimpse-scenario glimpse glimpse-scenario-thirteen glimpse-panel"></td>
+        </tr>
     </table>
      
 <!--
@@ -772,6 +803,24 @@
             'Plot & Description': 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.'
         };
         $('.glimpse-scenario-twelve').show().html($.glimpseProcessor.build(scenarioTwelveData, 0));
+
+        var scenarioThirteenData = {
+            'Movie': [ 'Star Wars', 'Star Treck'],
+            'Genera/Theme': [ 'Science Fiction', 'Drama', 'Romance', 'Action', 'Family' ],
+            'Actors/Cast': [
+                   ['Actor', 'Character', 'Gender', 'Age'],
+                   ['Mark Hamill', [ 'Luke Skywalker', 'Mini Skywalker' ], 'Male', '21'],
+                   ['James Earl Jones', 'Darth Vader', [['Height', 'Weight'], ['213', '433']], 'Male'],
+                   ['Harrison Ford', 'Han Solo', 'Male', '25'],
+                   ['Carrie Fisher', [ 'Princess Leia Organa' ], 'Female', '21'],
+                   ['Peter Cushing', [ 'Grand Moff Tarkin', 'Grand Moff Tarkin Grand Moff Tarkin Grand Moff Tarkin Grand Moff Tarkin Grand Moff Tarkin Grand Moff Tarkin Grand Moff Tarkin' ], 'Female', '69'],
+                   ['Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70'],
+                   ['Anthony Daniels', 'C-3PO', 'Droid', '101'],
+                   ['Kenny Baker', 'R2-D2', 'Droid', '150']
+                ],
+            'Plot & Description': [ 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.' ]
+        };
+        $('.glimpse-scenario-thirteen').show().html($.glimpseProcessor.build(scenarioThirteenData, 0));
 
         $('.glimpse-ajax-1').click(function () {
             var xmlhttp;
