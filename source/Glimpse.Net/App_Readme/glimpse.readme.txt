@@ -92,7 +92,7 @@ Release Notes
 - Added ViewData/ViewBag and TempData info to the details column of the Views tab
 - Added Area support to Routes tab
 - Added Glimpse Warnings tab, which will only appear when a MEF loading issue is thrown
-- Added ability to open Glimpse in popup mode
+- Added ability to open Glimpse in popup mode (alpha)
 - Added symbols package to symbolsource.org for simplified debugging by the community
 
 04/14/2011 - 0.77
