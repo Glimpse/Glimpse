@@ -659,11 +659,12 @@ if (window.jQuery) {
             if (static.isPopup) { 
                 $(window).resize(function() { 
                     $('.glimpse-holder .glimpse-panel').height($(window).height() - 54);
-                })
-                .unload(function() { 
-                    g.closePopout();
                 });
-            }
+            } 
+            $(window).unload(function() { 
+                g.closePopout();
+            })
+
         },
         _wireCallback: function(g) {
             //Remember height 
@@ -729,11 +730,12 @@ if (window.jQuery) {
                 g.settings.firstPopup = false;
                 g.settings.popupOn = true;
                 g.persistState();
-                //static.dataString = JSON.stringify(static.data);
+
+                //static.dataString = JSON.stringify(static.data); 
 
                 var url = static.popupUrl + '?glimpseRequestID=' + $('#glimpseData').data('glimpse-requestID');
                 static.popup = window.open(url, 'GlimpsePopup', 'width=1000,height=600,status=no,toolbar=no,menubar=no,location=no,resizable=yes,scrollbars=yes');
-
+                 
                 if ($.popupExists(static.popup))
                     g.close(undefined, true); 
             } 
@@ -741,9 +743,15 @@ if (window.jQuery) {
         closePopout: function() {
             var g = this;
 
-            g.static.popup = null;
-            g.settings.popupOn = false;
-            g.persistState();
+            if (g.settings.popupOn) {
+                if (g.static.isPopup && !$.cookie('glimpseKeepPopup')) {
+                    g.static.popup = null;
+                    g.settings.popupOn = false;
+                    g.persistState(); 
+                }
+                else 
+                    $.cookie('glimpseKeepPopup', '1');
+            }
         },
         persistState: function() {
             var g = $.glimpse;
@@ -778,7 +786,8 @@ if (window.jQuery) {
             static.isPopup = window.location.pathname.indexOf(this.static.popupUrl) > -1;
 
             if (!data) {
-                if (static.isPopup && window.opener.glimpse) {
+                if (static.isPopup && window.opener.glimpse) {  
+                    $.cookie('glimpseKeepPopup', ''); 
                     $.glimpse.static.url = window.opener.$.glimpse.static.url;
                     glimpse = data = window.opener.glimpse;
                 }
@@ -828,7 +837,7 @@ if (window.jQuery) {
             panelHolder : function() { return $('.glimpse-panel-holder'); },
             isPopup : false,
             popupUrl : '/Glimpse/Popup',
-            popup : null
+            popup : null 
         }
     });
 
