@@ -731,7 +731,7 @@ if (window.jQuery) {
                 g.settings.popupOn = true;
                 g.persistState();
 
-                //static.dataString = JSON.stringify(static.data); 
+                static.dataString = JSON.stringify(static.data); 
 
                 var url = static.popupUrl + '?glimpseRequestID=' + $('#glimpseData').data('glimpse-requestID');
                 static.popup = window.open(url, 'GlimpsePopup', 'width=1000,height=600,status=no,toolbar=no,menubar=no,location=no,resizable=yes,scrollbars=yes');
@@ -789,7 +789,11 @@ if (window.jQuery) {
                 if (static.isPopup && window.opener.glimpse) {  
                     $.cookie('glimpseKeepPopup', ''); 
                     $.glimpse.static.url = window.opener.$.glimpse.static.url;
-                    glimpse = data = window.opener.glimpse;
+                    //glimpse = data = window.opener.glimpse;
+                    
+                    glimpse = data = JSON.parse(window.opener.$.glimpse.static.dataString)
+
+                    //static.dataString = JSON.stringify(static.data); 
                 }
                 else 
                     return;
