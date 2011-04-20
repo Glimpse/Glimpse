@@ -489,6 +489,8 @@ if (window.jQuery) {
             
             if (isSimpleString && rowLength == 1)  
                 return that.buildStringPreview(data[0], level + 1);  
+            if (data[0] == undefined || data[0] == null || data[0] == '')
+                return '';
 
             var rowMax = 2, columnMax = 3, startingIndex = (isSimpleString ? 0 : 1), rowLimit = (rowMax < rowLength ? rowMax : rowLength), columnLimit = isSimpleString ? 1 : ((data[0].length > columnMax) ? columnMax : data[0].length), html = '<span class="glimpse-expand"></span><span class="glimpse-preview-object"><span class="start">[</span>'; 
             for (var i = startingIndex; i <= rowLimit + 1; i++) {
