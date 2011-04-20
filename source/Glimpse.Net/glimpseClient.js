@@ -442,7 +442,7 @@ if (window.jQuery) {
             if (((level > 0 && data.length > (limit + 1)) || level > 1) && !forceFull)
                 return that.buildCustomPreview(data, limit);
 
-            var isSimpleString = typeof data[0] == 'string'
+            var isSimpleString = typeof data[0] == 'string';
             if (isSimpleString && data.length == 1)  
                 return that.buildStringPreview(data[0], level + 1);   
                 
@@ -583,6 +583,8 @@ if (window.jQuery) {
 
             if (data == undefined || data == null)
                 return '--';
+            if (typeof data != 'string')
+                data = data + '';
             data = $.trim(data);
 
             if (!skipEncoding) {
