@@ -21,10 +21,10 @@ XHRSpy.prototype =
     duration: null,
     logRow: null,
     send: function () { 
-        $.glimpseAjax.callStarted(this);
+        jQuery.glimpseAjax.callStarted(this);
     },
     finish: function () { 
-        $.glimpseAjax.callFinished(this);
+        jQuery.glimpseAjax.callFinished(this);
     }
 };
 
@@ -844,7 +844,7 @@ if (window.jQuery) {
             tabStrip : function() { return $('.glimpse-tabs ul'); },
             panelHolder : function() { return $('.glimpse-panel-holder'); },
             isPopup : false,
-            popupUrl : '/Glimpse/Popup',
+            popupUrl : 'Glimpse/Popup',
             popup : null 
         }
     });
@@ -969,7 +969,7 @@ if (window.jQuery) {
             key : 'XHReqests',
             tab : null,
             panel : null, 
-            historyLink : '/Glimpse/History',
+            historyLink : 'Glimpse/History',
             index : 0 
         },
         _handelClick: function(link) { 
@@ -1194,8 +1194,8 @@ if (window.jQuery) {
             panel : null, 
             subPanel : null,
             mainPanel : null,
-            historyLink : '/Glimpse/History',
-            clientLink : '/Glimpse/Clients',
+            historyLink : 'Glimpse/History',
+            clientLink : 'Glimpse/Clients',
             result : {},
             _count : 0
         }
