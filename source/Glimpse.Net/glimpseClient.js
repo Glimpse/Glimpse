@@ -108,7 +108,7 @@ var XMLHttpRequestWrapper = function (activeXObject) {
         spy.xhrRequest = xhrRequest;
         //spy.urlParams = parseURLParamsArray(url);
 
-        if (!$.browser.msie && async)                                                 //TODO: Change over to jQuery
+        if (!jQuery.browser.msie && async)                                                 //TODO: Change over to jQuery
             xhrRequest.onreadystatechange = handleStateChange;
 
         // xhr.open.apply not available in IE
@@ -117,7 +117,7 @@ var XMLHttpRequestWrapper = function (activeXObject) {
         else
             xhrRequest.open(method, url, async);
 
-        if ($.browser.msie && async)                                                 //TODO: Change over to jQuery
+        if (jQuery.browser.msie && async)                                                 //TODO: Change over to jQuery
             xhrRequest.onreadystatechange = handleStateChange;
 
     };
@@ -165,7 +165,7 @@ var XMLHttpRequestWrapper = function (activeXObject) {
 // Reguster XMLHttpRequest Wrapper / ActiveXObject Wrapper (IE6 only)
 
 var _ActiveXObject;
-if ($.browser.msie && $.browser.version == "6.0") {
+if (jQuery.browser.msie && jQuery.browser.version == "6.0") {
     window._ActiveXObject = window.ActiveXObject;
     window.ActiveXObject = function (name) {
         var error = null;
