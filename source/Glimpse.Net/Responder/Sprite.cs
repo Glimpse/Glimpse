@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel.Composition;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Reflection;
 using System.Web;
 using System.Web.Script.Serialization;
@@ -28,10 +26,9 @@ namespace Glimpse.Net.Responder
             {
                 if (resourceStream != null)
                 {
-                    using (var bitmap = new Bitmap(resourceStream))
-                    {
-                        bitmap.Save(response.OutputStream, ImageFormat.Png);
-                    }
+                    var byteArray = new byte[resourceStream.Length];
+                    resourceStream.Read(byteArray, 0, byteArray.Length);
+                    response.OutputStream.Write(byteArray, 0, byteArray.Length);
                 }
             }
             response.AddHeader("Content-Type", "image/png");
