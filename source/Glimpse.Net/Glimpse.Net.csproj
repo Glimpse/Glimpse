@@ -34,7 +34,25 @@
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core">
+      <HintPath>..\..\packages\Castle.Core.1.2.0\lib\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.DynamicProxy2">
+      <HintPath>..\..\packages\Castle.DynamicProxy.2.2.0\lib\Castle.DynamicProxy2.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Services.Logging.log4netIntegration">
+      <HintPath>..\..\packages\Castle.Core.1.2.0\lib\Castle.Services.Logging.log4netIntegration.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Services.Logging.NLogIntegration">
+      <HintPath>..\..\packages\Castle.Core.1.2.0\lib\Castle.Services.Logging.NLogIntegration.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="NLog">
+      <HintPath>..\..\packages\NLog.1.0.0.505\lib\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.configuration" />
@@ -61,12 +79,11 @@
     <Compile Include="Extensibility\IGlimpsePlugin.cs" />
     <Compile Include="Extensibility\IGlimpsePluginRequirements.cs" />
     <Compile Include="Extensibility\IGlimpseSanitizer.cs" />
-    <Compile Include="Extentions\ActionDescriptorExtentions.cs" />
-    <Compile Include="Extentions\DictionaryExtentions.cs" />
-    <Compile Include="Extentions\HttpApplicationExtentions.cs" />
-    <Compile Include="Extentions\ControllerExtentions.cs" />
-    <Compile Include="Extentions\KeyValuePairExtention.cs" />
-    <Compile Include="Extentions\NameValueCollectionExtentions.cs" />
+    <Compile Include="Extensions\ActionDescriptorExtensions.cs" />
+    <Compile Include="Extensions\HttpApplicationExtensions.cs" />
+    <Compile Include="Extensions\ControllerExtensions.cs" />
+    <Compile Include="Extensions\KeyValuePairExtension.cs" />
+    <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
     <Compile Include="Plugin\ASP\Request.cs" />
     <Compile Include="Plugin\Mvc\Binders.cs" />
     <Compile Include="Plumbing\GlimpseActionFilter.cs" />
@@ -125,6 +142,7 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="App_Readme\glimpse.readme.txt" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

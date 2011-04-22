@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Configuration;
 using Glimpse.Net.Extensibility;
-using Glimpse.Net.Extentions;
+using Glimpse.Net.Extensions;
 
 namespace Glimpse.Net.Plugin.Configuration
 {

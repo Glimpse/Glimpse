@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Web;
 using Glimpse.Net.Configuration;
 using Glimpse.Net.Extensibility;
-using Glimpse.Net.Extentions;
+using Glimpse.Net.Extensions;
 using Glimpse.Net.Plumbing;
 using Glimpse.Net.Responder;
 

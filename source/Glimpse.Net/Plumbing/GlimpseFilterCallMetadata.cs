@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
-using Glimpse.Net.Extentions;
+using Glimpse.Net.Extensions;
 
 namespace Glimpse.Net.Plumbing
 {

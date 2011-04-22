@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using Glimpse.Net.Extentions;
+using Glimpse.Net.Extensions;
 
 namespace Glimpse.Net.Plumbing
 {

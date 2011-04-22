@@ -2,7 +2,7 @@
 using System.Web;
 using System.Web.Script.Serialization;
 using Glimpse.Net.Configuration;
-using Glimpse.Net.Extentions;
+using Glimpse.Net.Extensions;
 
 namespace Glimpse.Net.Responder
 {

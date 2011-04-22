@@ -1,9 +1,9 @@
 ﻿using System.Web.Mvc;
 using Glimpse.Net.Plumbing;
 
-namespace Glimpse.Net.Extentions
+namespace Glimpse.Net.Extensions
 {
-    public static class ControllerExtentions
+    public static class ControllerExtensions
     {
         internal static void TryWrapActionInvoker(this IController iController)
         {

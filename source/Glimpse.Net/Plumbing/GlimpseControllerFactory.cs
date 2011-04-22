@@ -1,7 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.SessionState;
-using Glimpse.Net.Extentions;
+using Glimpse.Net.Extensions;
 
 namespace Glimpse.Net.Plumbing
 {

@@ -3,9 +3,9 @@ using System.Web;
 using System.Web.Mvc;
 using Glimpse.Net.Configuration;
 
-namespace Glimpse.Net.Extentions
+namespace Glimpse.Net.Extensions
 {
-    public static class HttpApplicationExtentions
+    public static class HttpApplicationExtensions
     {
         internal static bool IsValidRequest(this HttpApplication application, GlimpseConfiguration config, bool checkContentType, bool checkMode = true, bool checkPath = true)
         {

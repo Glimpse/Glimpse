@@ -1,9 +1,9 @@
 ﻿using System.Text;
 using System.Web.Mvc;
 
-namespace Glimpse.Net.Extentions
+namespace Glimpse.Net.Extensions
 {
-    internal static class ActionDescriptorExtentions
+    internal static class ActionDescriptorExtensions
     {
         //returns a method name like "Index(int id)" instead of "Index"
         internal static string GetMethodNameWithParameters(this ActionDescriptor mvcActionDescriptor)
