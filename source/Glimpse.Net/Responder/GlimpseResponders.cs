@@ -6,7 +6,7 @@ using System.Text;
 using System.Web;
 using System.Web.Script.Serialization;
 using Glimpse.Net.Extensibility;
-using Glimpse.Net.Extentions;
+using Glimpse.Net.Extensions;
 using Glimpse.Net.Sanitizer;
 
 namespace Glimpse.Net.Responder

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Glimpse.Net.Extensibility;
-using Glimpse.Net.Extentions;
+using Glimpse.Net.Extensions;
 using Glimpse.Net.Plumbing;
 
 namespace Glimpse.Net.Plugin.Mvc

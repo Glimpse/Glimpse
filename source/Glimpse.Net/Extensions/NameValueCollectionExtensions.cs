@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 
-namespace Glimpse.Net.Extentions
+namespace Glimpse.Net.Extensions
 {
-    internal static class NameValueCollectionExtentions
+    internal static class NameValueCollectionExtensions
     {
         internal static IDictionary<string, string> Flatten(this NameValueCollection collection)
         {

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Glimpse.Net.Extentions
+namespace Glimpse.Net.Extensions
 {
-    internal static class KeyValuePairExtention
+    internal static class KeyValuePairExtension
     {
         internal static IDictionary<string, object> Flatten(this IEnumerable<KeyValuePair<string, object>> source)
         {
