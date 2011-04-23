@@ -18,6 +18,6 @@
         public const string ValidIp = "Glimpse.Validation.ValidIp";
         public const string ValidMode = "Glimpse.Validation.ValidMode";
         public const string ValidPath = "Glimpse.Validation.Path";
-        public const string ViewEngine = "Glimpse.ViewEngine";
+        public const string ViewEngine = "Glimpse.ViewEngine"; 
     }
 }
