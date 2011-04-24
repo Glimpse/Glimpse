@@ -368,6 +368,11 @@ if (window.jQuery) {
             //Set Inital State - TODO: don't like how this works... need to review
             $('.info td:first-child, .warn td:first-child, tr.error td:first-child, .fail td:first-child, .loading td:first-child', $('.glimpse-panel')).not(':has(.icon)').prepend('<div class="icon"></div>');
 
+            setTimeout(function() {
+                $('.glimpse-start-open .glimpse-expand', panelHolder).click();
+                }, 10);
+            
+
             //Select tab
             that.restoreTab(g);
 

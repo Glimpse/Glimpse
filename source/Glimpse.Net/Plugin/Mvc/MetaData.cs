@@ -74,7 +74,7 @@ namespace Glimpse.Net.Plugin.Mvc
 
                     result.Add(new[]
                                    {
-                                       "Primary View Model", meatDataType, detailResult
+                                       "Primary View Model", meatDataType, detailResult, "glimpse-start-open"
                                    });
 
                     break;
