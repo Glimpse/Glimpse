@@ -96,10 +96,6 @@
     <Compile Include="ViewModels\ShoppingCartViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\MvcMusicStore.mdf" />
-    <Content Include="App_Data\MvcMusicStore_log.ldf">
-      <DependentUpon>MvcMusicStore.mdf</DependentUpon>
-    </Content>
     <Content Include="Areas\Test\Views\Test\Index.aspx" />
     <Content Include="Content\Images\home-showcase.png" />
     <Content Include="Content\Images\logo.png" />
@@ -225,6 +221,7 @@
     <Content Include="Areas\Test\Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\" />
     <Folder Include="Areas\Test\Models\" />
     <Folder Include="Areas\Test\Views\Shared\" />
   </ItemGroup>
