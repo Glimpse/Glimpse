@@ -160,5 +160,9 @@ namespace MvcMusicStore.Controllers
             return View();
         }
 
+        public ActionResult Test()
+        {
+            return View(new ChangePasswordModel());
+        }
     }
 }
