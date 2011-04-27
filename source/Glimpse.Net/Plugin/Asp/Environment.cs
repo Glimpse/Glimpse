@@ -56,6 +56,7 @@ namespace Glimpse.Net.Plugin.ASP
                                   {"Web Server", !string.IsNullOrEmpty(serverSoftware) ? serverSoftware : processName.StartsWith("WebDev.WebServer", StringComparison.InvariantCultureIgnoreCase) ? "Visual Studio Web Development Server" : "Unknown"},
                                   {"Integrated Pipeline", HttpRuntime.UsingIntegratedPipeline.ToString()},
                                   {"Worker Process", processName},
+                                  {"Current Trust Level", GetCurrentTrustLevel().ToString()},
                                   {"Application Assemblies", appList},
                                   {"System Assemblies", sysList}
                               };
@@ -76,6 +77,33 @@ namespace Glimpse.Net.Plugin.ASP
             var culture = string.IsNullOrEmpty(assemblyName.CultureInfo.Name) ? "_neutral_":assemblyName.CultureInfo.Name;
 
             to.Add(new [] { assemblyName.Name, version, culture, assembly.GlobalAssemblyCache.ToString(), assembly.IsFullyTrusted.ToString() });
+        }
+         
+        private AspNetHostingPermissionLevel GetCurrentTrustLevel()
+        {
+            var levels = new [] {
+                                 AspNetHostingPermissionLevel.Unrestricted,
+                                 AspNetHostingPermissionLevel.High,
+                                 AspNetHostingPermissionLevel.Medium,
+                                 AspNetHostingPermissionLevel.Low,
+                                 AspNetHostingPermissionLevel.Minimal
+                             };
+
+            foreach (var trustLevel in levels)
+            {
+                try
+                {
+                    new AspNetHostingPermission(trustLevel).Demand();
+                }
+                catch (System.Security.SecurityException)
+                {
+                    continue;
+                }
+
+                return trustLevel;
+            }
+
+            return AspNetHostingPermissionLevel.None;
         }
     }
 }

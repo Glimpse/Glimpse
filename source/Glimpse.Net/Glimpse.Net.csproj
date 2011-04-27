@@ -98,6 +98,7 @@
     <Compile Include="Interceptor\ProxyGenerationHook.cs" />
     <Compile Include="Plugin\ASP\Request.cs" />
     <Compile Include="Plugin\Mvc\Binders.cs" />
+    <Compile Include="Plugin\Mvc\MetaData.cs" />
     <Compile Include="Plumbing\GlimpseActionFilter.cs" />
     <Compile Include="Plumbing\GlimpseAuthorizationFilter.cs" />
     <Compile Include="Plumbing\GlimpseControllerFactory.cs" />

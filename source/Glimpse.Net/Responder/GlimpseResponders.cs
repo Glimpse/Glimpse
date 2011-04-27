@@ -95,9 +95,9 @@ namespace Glimpse.Net.Responder
             }
             else
             {
-                var html = string.Format(
-                    @"<script type='text/javascript' id='glimpseData' data-glimpse-requestID='{1}'>var glimpse = {0};</script>", json, requestId);
-                html += @"<script type='text/javascript' id='glimpseClient' src='" + RootPath + "glimpseClient.js'></script>";
+                var path = VirtualPathUtility.ToAbsolute("~/", application.Context.Request.ApplicationPath);
+                var html = string.Format(@"<script type='text/javascript' id='glimpseData' data-glimpse-requestID='{1}'>var glimpse = {0}, glimpsePath = '{2}';</script>", json, requestId, path);
+                html += @"<script type='text/javascript' id='glimpseClient' src='" + path + RootPath + "glimpseClient.js'></script>";
                 application.Response.Write(html);
             }
 
