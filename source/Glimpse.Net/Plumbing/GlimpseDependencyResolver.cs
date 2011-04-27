@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using Glimpse.Net.Extensions;
 
@@ -17,29 +18,32 @@ namespace Glimpse.Net.Plumbing
 
         public object GetService(Type serviceType)
         {
-            var result = DependencyResolver.GetService(serviceType);
+            var st = serviceType;
 
-            var controller = result as Controller;
-            if (controller != null)
-            {
-                controller.TryWrapActionInvoker();
-                return result;
-            }
+            var service = DependencyResolver.GetService(st);
 
-            var controllerFactory = result as IControllerFactory;
-            if (controllerFactory != null)
-            {
-                if (!(controllerFactory is GlimpseControllerFactory))
-                    return new GlimpseControllerFactory(controllerFactory);
-            }
+            //Wrap up controller factory
+            var iControllerFactory = service as IControllerFactory;
+            if (iControllerFactory != null) return iControllerFactory.Wrap();
 
-            return result;
+            //Add action invoker to controller
+            var iController = service as IController;
+            if (iController != null) return iController.TrySetActionInvoker();
+
+            return service;
+
         }
 
         public IEnumerable<object> GetServices(Type serviceType)
         {
-            var result = DependencyResolver.GetServices(serviceType);
-            return result;
+            var results = DependencyResolver.GetServices(serviceType);
+
+            if (results.Count() > 0)
+            {
+                //TODO:Test the objects if needed here...
+            }
+
+            return results;
         }
     }
 }

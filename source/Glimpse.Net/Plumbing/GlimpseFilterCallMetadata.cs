@@ -6,17 +6,22 @@ namespace Glimpse.Net.Plumbing
 {
     public class GlimpseFilterCallMetadata
     {
-        public GlimpseFilterCallMetadata(){}
+        private GlimpseFilterCallMetadata()
+        {
+        }
 
-        public GlimpseFilterCallMetadata(string category, Guid guid, string method, Filter innerFilter, bool isChild)
+        public GlimpseFilterCallMetadata(string category, Guid guid, string method, Filter innerFilter, bool isChild, object obj)
         {
             Category = category;
             Guid = guid;
             InnerFilter = innerFilter;
+            if (innerFilter != null)
+            {
+                Order = innerFilter.Order;
+                Scope = innerFilter.Scope;
+            }
             Method = method;
-            Order = innerFilter.Order;
-            Scope = innerFilter.Scope;
-            Type = innerFilter.Instance.GetType();
+            Type = obj.GetType();
             IsChild = isChild;
         }
 
@@ -47,16 +52,16 @@ namespace Glimpse.Net.Plumbing
         public static GlimpseFilterCallMetadata ActionResult(ActionResult actionResult, bool isChild)
         {
             return new GlimpseFilterCallMetadata
-            {
-                Category = "",
-                Guid = Guid.NewGuid(),
-                InnerFilter = null,
-                IsChild = isChild,
-                Method = "ExecuteResult(ControllerContext context)",
-                Order = null,
-                Scope = null,
-                Type = actionResult.GetType(),
-            };
+                       {
+                           Category = "",
+                           Guid = Guid.NewGuid(),
+                           InnerFilter = null,
+                           IsChild = isChild,
+                           Method = "ExecuteResult(ControllerContext context)",
+                           Order = null,
+                           Scope = null,
+                           Type = actionResult.GetType(),
+                       };
         }
     }
 }

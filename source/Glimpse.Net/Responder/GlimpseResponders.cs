@@ -73,9 +73,10 @@ namespace Glimpse.Net.Responder
             }
 
             //Add exceptions tab if needed
-            var exceptions = application.GetWarningStore();
+            var exceptions = application.Context.GetWarnings();
             if (exceptions.Count > 1)
             {
+                //TODO: Build custom serializer for IList<Exception>
                 var dataString = JsSerializer.Serialize(exceptions);
                 sb.Append(string.Format("\"{0}\":{1},", "Glimpse Warnings", dataString));
             }

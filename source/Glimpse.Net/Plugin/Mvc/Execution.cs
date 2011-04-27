@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -48,7 +49,8 @@ namespace Glimpse.Net.Plugin.Mvc
                     calledFiltersMetadata.Where(cfm => cfm.Guid == metadata.Guid).Select(cfm => cfm.ExecutionTime).
                         Single();
 
-                var timespanDisplay = timespan.Milliseconds == 0 ? "~ 0 ms" : timespan.Milliseconds + " ms";
+                var milliseconds = Math.Round(timespan.TotalMilliseconds);
+                var timespanDisplay = milliseconds == 0 ? "~ 0 ms" : milliseconds + " ms";
 
 
                 if (metadata.InnerFilter == null)
@@ -104,17 +106,9 @@ namespace Glimpse.Net.Plugin.Mvc
 
         public void SetupInit(HttpApplication application)
         {
-            //TODO: Test dependency resolver implementation
-            var configuredResolver = DependencyResolver.Current;
-            if (configuredResolver != null)
-            {
-                if (!(configuredResolver is GlimpseDependencyResolver))
-                    DependencyResolver.SetResolver(new GlimpseDependencyResolver(configuredResolver));
-            }
+            GlimpsePipelineInitiation.ControllerFactory();
 
-            var setFactory = ControllerBuilder.Current.GetControllerFactory();
-            if (!(setFactory is GlimpseControllerFactory))
-                ControllerBuilder.Current.SetControllerFactory(new GlimpseControllerFactory(setFactory));
+            GlimpsePipelineInitiation.DependencyResolver();
         }
     }
 }

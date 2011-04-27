@@ -16,11 +16,15 @@ namespace Glimpse.Net.Plumbing
 
         public IController CreateController(RequestContext requestContext, string controllerName)
         {
-            var iController = ControllerFactory.CreateController(requestContext, controllerName);
+            var rq = requestContext;
+            var cn = controllerName;
 
-            iController.TryWrapActionInvoker();
+            IController controller = ControllerFactory.CreateController(rq, cn);
 
-            return iController;
+            if (controller != null)
+                return controller.TrySetActionInvoker();
+
+            return null;
         }
 
         public SessionStateBehavior GetControllerSessionBehavior(RequestContext requestContext, string controllerName)

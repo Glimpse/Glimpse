@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Web.Mvc;
 
 namespace Glimpse.Net.Plumbing

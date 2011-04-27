@@ -38,7 +38,7 @@ namespace Glimpse.Net.Plumbing
 
             ActionFilter.OnActionExecuted(filterContext);
 
-            watch.Start();
+            watch.Stop();
 
             metadata.ExecutionTime = watch.Elapsed;
         }

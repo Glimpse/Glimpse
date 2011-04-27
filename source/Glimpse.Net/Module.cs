@@ -4,13 +4,13 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Configuration;
 using System.Linq;
-using System.Reflection;
 using System.Web;
 using Glimpse.Net.Configuration;
 using Glimpse.Net.Extensibility;
 using Glimpse.Net.Extensions;
 using Glimpse.Net.Plumbing;
 using Glimpse.Net.Responder;
+using Glimpse.Net.Warning;
 
 namespace Glimpse.Net
 {
@@ -92,18 +92,15 @@ namespace Glimpse.Net
             Persist(json, httpApplication, requestId);
         }
 
-        private void ComposePlugins(HttpApplication context)
+        private void ComposePlugins(HttpApplication application)
         {
             var directoryCatalog = new SafeDirectoryCatalog("bin");
 
             Container = new CompositionContainer(directoryCatalog);
             Container.ComposeParts(this, Responders);
 
-            var store = context.GetWarningStore();
-            foreach (var exception in directoryCatalog.Exceptions)
-            {
-                store.Add(new[] {exception.GetType().Name, exception.Message});
-            }
+            var store = application.Context.GetWarnings();
+            store.AddRange(directoryCatalog.Exceptions.Select(exception => new ExceptionWarning(exception)));
 
             //wireup converters into serializer
             Responders.RegisterConverters();

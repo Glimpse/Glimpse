@@ -2,6 +2,7 @@
 using System.Web;
 using System.Web.Mvc;
 using Glimpse.Net.Configuration;
+using Glimpse.Net.Extensibility;
 
 namespace Glimpse.Net.Extensions
 {
@@ -98,10 +99,10 @@ namespace Glimpse.Net.Extensions
             return (data != null);
         }
 
-        internal static IList<object[]> GetWarningStore(this HttpApplication application)
+        internal static List<IGlimpseWarning> GetWarnings(this HttpContext context)
         {
-            var result = application.Context.Items[GlimpseConstants.Errors] as IList<object[]>;
-            if (result == null) application.Context.Items[GlimpseConstants.Errors] = result = new List<object[]>{new []{"Type", "Message"}};
+            var result = context.Items[GlimpseConstants.Warnings] as List<IGlimpseWarning>;
+            if (result == null) context.Items[GlimpseConstants.Warnings] = result = new List<IGlimpseWarning>();
 
             return result;
         }

@@ -9,7 +9,7 @@
         public const string ClientRequestId = "ClientRequestID";
         public const string Context = "Glimpse.DataContext";
         public const string CookieClientNameKey = "glimpseClientName";
-        public const string Errors = "Glimpse.Errors";
+        public const string Warnings = "Glimpse.Warnings";
         public const string HttpHeader = "X-Glimpse-RequestID";
         public const string JsonQueue = "Glimpse.JsonQueue";
         public const string PluginEnvironmentStore = "Glimpse.Plugin.Environment.Store";

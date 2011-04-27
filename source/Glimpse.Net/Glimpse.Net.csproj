@@ -72,6 +72,11 @@
     <Compile Include="Converter\HandleErrorAttributeConverter.cs" />
     <Compile Include="Converter\OutputCacheAttributeConverter.cs" />
     <Compile Include="Converter\RouteValueDictionaryConverter.cs" />
+    <Compile Include="Extensibility\IGlimpseWarning.cs" />
+    <Compile Include="Warning\ExceptionWarning.cs" />
+    <Compile Include="Warning\NonVirtualMemberWarning.cs" />
+    <Compile Include="Warning\NotAControllerActionInvokerWarning.cs" />
+    <Compile Include="Warning\NotAControllerWarning.cs" />
     <Compile Include="Extensibility\GlimpseConverterAttribute.cs" />
     <Compile Include="Extensibility\GlimpsePluginAttribute.cs" />
     <Compile Include="Extensibility\GlimpseSanitizerAttribute.cs" />
@@ -80,14 +85,20 @@
     <Compile Include="Extensibility\IGlimpsePluginRequirements.cs" />
     <Compile Include="Extensibility\IGlimpseSanitizer.cs" />
     <Compile Include="Extensions\ActionDescriptorExtensions.cs" />
+    <Compile Include="Extensions\ControllerContextExtensions.cs" />
+    <Compile Include="Interceptor\ActionInvokerInterceptorSelector.cs" />
+    <Compile Include="Interceptor\GetFiltersInterceptor.cs" />
     <Compile Include="Extensions\HttpApplicationExtensions.cs" />
-    <Compile Include="Extensions\ControllerExtensions.cs" />
+    <Compile Include="Extensions\IControllerExtensions.cs" />
+    <Compile Include="Extensions\IControllerFactoryExtensions.cs" />
     <Compile Include="Extensions\KeyValuePairExtension.cs" />
     <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
+    <Compile Include="Interceptor\InvokeActionMethodInterceptor.cs" />
+    <Compile Include="Interceptor\InvokeActionResultInterceptor.cs" />
+    <Compile Include="Interceptor\ProxyGenerationHook.cs" />
     <Compile Include="Plugin\ASP\Request.cs" />
     <Compile Include="Plugin\Mvc\Binders.cs" />
     <Compile Include="Plumbing\GlimpseActionFilter.cs" />
-    <Compile Include="Plumbing\GlimpseActionInvoker.cs" />
     <Compile Include="Plumbing\GlimpseAuthorizationFilter.cs" />
     <Compile Include="Plumbing\GlimpseControllerFactory.cs" />
     <Compile Include="Plumbing\GlimpseDefaultModelBinder.cs" />
@@ -96,6 +107,7 @@
     <Compile Include="Plumbing\GlimpseFilterCalledMetadata.cs" />
     <Compile Include="Plumbing\GlimpseFilterCallMetadata.cs" />
     <Compile Include="Plumbing\GlimpseModelBinder.cs" />
+    <Compile Include="Plumbing\GlimpsePipelineInitiation.cs" />
     <Compile Include="Plumbing\GlimpseRequestMetadata.cs" />
     <Compile Include="Plumbing\GlimpseResultFilter.cs" />
     <Compile Include="Plumbing\GlimpseTraceListener.cs" />
@@ -129,6 +141,8 @@
     <Compile Include="Plugin\ASP\Server.cs" />
     <Compile Include="Plugin\ASP\Session.cs" />
     <Compile Include="Sanitizer\CSharpSanitizer.cs" />
+    <Compile Include="Warning\NotProxyableWarning.cs" />
+    <Compile Include="Warning\Warning.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="glimpseClient.js" />
