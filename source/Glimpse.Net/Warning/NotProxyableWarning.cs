@@ -5,7 +5,7 @@
         public NotProxyableWarning(object obj)
         {
             Message = "Cannot create proxy of " + obj.GetType() +
-                      ". Object must have a parameterless constructor cannot be sealed.";
+                      ". Object must have a parameterless constructor, cannot be sealed, and cannot already be a proxy object.";
         }
     }
 }
