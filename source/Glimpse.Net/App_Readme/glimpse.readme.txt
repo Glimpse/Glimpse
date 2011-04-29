@@ -84,7 +84,11 @@ Details coming soon.
 
 Release Notes
 -------------
-04/28-2011 - 0.80
+05/??/2011 - 0.81
+- Changed plugin initialization so that SetupInit is only called once.
+- Added list of loaded plugins to Glimpse/Config
+
+04/28/2011 - 0.80
 - Removed dependency on System.Drawing
 - Fixed bugs related to projects that used custom ControllerActionInvokers
 - Fixed bugs related to projects using custom FilterProviders

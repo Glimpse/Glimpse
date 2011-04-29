@@ -5,7 +5,7 @@ using System.Web;
 using Glimpse.Net.Extensibility;
 using Glimpse.Net.Extensions;
 
-namespace Glimpse.Net.Plugin.ASP
+namespace Glimpse.Net.Plugin.Asp
 {
     [GlimpsePlugin]
     internal class Request : IGlimpsePlugin

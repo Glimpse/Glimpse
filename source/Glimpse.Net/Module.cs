@@ -16,31 +16,40 @@ namespace Glimpse.Net
 {
     public class Module : IHttpModule
     {
-        private GlimpseConfiguration Configuration { get; set; }
+        private static GlimpseConfiguration Configuration { get; set; }
         private CompositionContainer Container { get; set; }
-        private GlimpseResponders Responders { get; set; }
+        private static GlimpseResponders Responders { get; set; }
 
         [ImportMany]
-        private IList<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>> Plugins { get; set; }
+        internal static IEnumerable<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>> Plugins { get; set; }
 
-        public Module()
+        static Module()
         {
             Configuration = ConfigurationManager.GetSection("glimpse") as GlimpseConfiguration ??
                             new GlimpseConfiguration();
             Responders = new GlimpseResponders();
-            Plugins = new List<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>>();
+            Plugins = Enumerable.Empty<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>>();
         }
 
         public void Init(HttpApplication context)
         {
             if (Configuration.On == false) return; //Do nothing if Glimpse is off, events are not wired up
 
-            ComposePlugins(context); //Have MEF satisfy our needs
-
-            //Allow plugin's registered for Intialization to setup
-            foreach (var plugin in Plugins.Where(plugin => plugin.Metadata.ShouldSetupInInit))
+            if (Plugins.Count() == 0)
             {
-                plugin.Value.SetupInit(context);
+                lock (Plugins)
+                {
+                    if (Plugins.Count() == 0)
+                    {
+                        ComposePlugins(context); //Have MEF satisfy our needs
+
+                        //Allow plugin's registered for Intialization to setup
+                        foreach (var plugin in Plugins.Where(plugin => plugin.Metadata.ShouldSetupInInit))
+                        {
+                            plugin.Value.SetupInit(context);
+                        }
+                    }
+                }
             }
 
             context.BeginRequest += BeginRequest;
@@ -49,7 +58,7 @@ namespace Glimpse.Net
             context.PreSendRequestHeaders += PreSendRequestHeaders;
         }
 
-        private void BeginRequest(object sender, EventArgs e)
+        private static void BeginRequest(object sender, EventArgs e)
         {
             HttpApplication httpApplication;
             if (!sender.IsValidRequest(out httpApplication, Configuration, false, false)) return;
@@ -64,7 +73,7 @@ namespace Glimpse.Net
             httpApplication.InitGlimpseContext();
         }
 
-        private void PostRequestHandlerExecute(object sender, EventArgs e)
+        private static void PostRequestHandlerExecute(object sender, EventArgs e)
         {
             HttpApplication httpApplication;
             if (!sender.IsValidRequest(out httpApplication, Configuration, true)) return;
@@ -72,7 +81,7 @@ namespace Glimpse.Net
             ProcessData(httpApplication, true); //Run all plugins that DO need access to Session
         }
 
-        private void EndRequest(object sender, EventArgs e)
+        private static void EndRequest(object sender, EventArgs e)
         {
             HttpApplication httpApplication;
             if (!sender.IsValidRequest(out httpApplication, Configuration, true)) return;
@@ -80,7 +89,7 @@ namespace Glimpse.Net
             ProcessData(httpApplication, false); //Run all plugins that DO NOT need access to Session
         }
 
-        private void PreSendRequestHeaders(object sender, EventArgs e)
+        private static void PreSendRequestHeaders(object sender, EventArgs e)
         {
             HttpApplication httpApplication;
             if (!sender.IsValidRequest(out httpApplication, Configuration, true)) return;
@@ -94,10 +103,16 @@ namespace Glimpse.Net
 
         private void ComposePlugins(HttpApplication application)
         {
+            var batch = new CompositionBatch();
+
             var directoryCatalog = new SafeDirectoryCatalog("bin");
 
             Container = new CompositionContainer(directoryCatalog);
             Container.ComposeParts(this, Responders);
+
+            Container.Compose(batch);
+
+            Plugins = Container.GetExports<IGlimpsePlugin, IGlimpsePluginRequirements>();
 
             var store = application.Context.GetWarnings();
             store.AddRange(directoryCatalog.Exceptions.Select(exception => new ExceptionWarning(exception)));
@@ -112,7 +127,7 @@ namespace Glimpse.Net
                 Container.Dispose();
         }
 
-        private void Persist(string json, HttpApplication ctx, Guid requestId)
+        private static void Persist(string json, HttpApplication ctx, Guid requestId)
         {
             if (Configuration.SaveRequestCount <= 0) return;
 
@@ -141,22 +156,25 @@ namespace Glimpse.Net
                               });
         }
 
-        private void ProcessData(HttpApplication httpApplication, bool sessionRequired)
+        private static void ProcessData(HttpApplication httpApplication, bool sessionRequired)
         {
             IDictionary<string, object> data;
             if (!httpApplication.TryGetData(out data)) return;
 
-            foreach (var plugin in Plugins.Where(p => p.Metadata.SessionRequired == sessionRequired))
+            lock (Plugins)
             {
-                var p = plugin.Value;
-                try
+                foreach (var plugin in Plugins.Where(p => p.Metadata.SessionRequired == sessionRequired))
                 {
-                    var pluginData = p.GetData(httpApplication);
-                    data.Add(p.Name, pluginData);
-                }
-                catch (Exception ex)
-                {
-                    data.Add(p.Name, ex.Message);
+                    var p = plugin.Value;
+                    try
+                    {
+                        var pluginData = p.GetData(httpApplication);
+                        data.Add(p.Name, pluginData);
+                    }
+                    catch (Exception ex)
+                    {
+                        data.Add(p.Name, ex.Message);
+                    }
                 }
             }
         }

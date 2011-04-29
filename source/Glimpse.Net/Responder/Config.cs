@@ -2,6 +2,7 @@
 using System.Web;
 using System.Web.Script.Serialization;
 using Glimpse.Net.Configuration;
+using Glimpse.Net.Extensibility;
 using Glimpse.Net.Extensions;
 
 namespace Glimpse.Net.Responder
@@ -39,10 +40,16 @@ namespace Glimpse.Net.Responder
             response.Write(
                 string.Format(
                     "</ol></li></ul><h2>Your Settings:</h2><p>This section tells you how Glimpse sees your requests.</p><ul><li>IP = {0}</li><li>glimpseState = <label for='gChk' id='glimpseState'>{1}</label></li></ul>",
-                    application.Request.ServerVariables["REMOTE_ADDR"], mode,
-                    mode == GlimpseMode.On ? " checked" : ""));
+                    application.Request.ServerVariables["REMOTE_ADDR"], mode));
 
-            response.Write("<h2>More Info:</h2><p><em>For more info see <a href='http://getGlimpse.com'/>getGlimpse.com</a> or follow <a href='http://twitter.com/#!/search/%23glimpse'/>#glimpse</a> on Twitter</em></p></body></html>");
+            response.Write("<h2>Loaded Plugins:</h2><p>This is the list of Glimpse plugins loaded for this web application. Glimpse plugins show up as individual tabs in the Glimpse client.</p><ul>");
+
+            foreach (var plugin in Module.Plugins)
+            {
+                response.Write("<li>" + plugin.Value.GetType() + "</li>");
+            }
+
+            response.Write("</ul><h2>More Info:</h2><p><em>For more info see <a href='http://getGlimpse.com'/>getGlimpse.com</a> or follow <a href='http://twitter.com/#!/search/%23glimpse'/>#glimpse</a> on Twitter</em></p></body></html>");
 
             application.CompleteRequest();
         }

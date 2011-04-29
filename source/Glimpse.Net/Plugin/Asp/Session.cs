@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using Glimpse.Net.Extensibility;
 
-namespace Glimpse.Net.Plugin.ASP
+namespace Glimpse.Net.Plugin.Asp
 {
     [GlimpsePlugin(SessionRequired = true)]
     internal class Session : IGlimpsePlugin

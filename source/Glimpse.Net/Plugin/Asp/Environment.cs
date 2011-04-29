@@ -8,7 +8,7 @@ using System.Web.Compilation;
 using Glimpse.Net.Extensibility;
 using Enviro = System.Environment;
 
-namespace Glimpse.Net.Plugin.ASP
+namespace Glimpse.Net.Plugin.Asp
 {
     [GlimpsePlugin]
     internal class Environment : IGlimpsePlugin

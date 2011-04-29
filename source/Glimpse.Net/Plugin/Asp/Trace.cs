@@ -4,7 +4,7 @@ using System.Web;
 using Glimpse.Net.Extensibility;
 using Glimpse.Net.Plumbing;
 
-namespace Glimpse.Net.Plugin.ASP
+namespace Glimpse.Net.Plugin.Asp
 {
     [GlimpsePlugin(ShouldSetupInInit = true)]
     internal class Trace : IGlimpsePlugin

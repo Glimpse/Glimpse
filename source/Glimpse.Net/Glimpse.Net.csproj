@@ -31,7 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Castle.Core">
@@ -96,7 +96,7 @@
     <Compile Include="Interceptor\InvokeActionMethodInterceptor.cs" />
     <Compile Include="Interceptor\InvokeActionResultInterceptor.cs" />
     <Compile Include="Interceptor\ProxyGenerationHook.cs" />
-    <Compile Include="Plugin\ASP\Request.cs" />
+    <Compile Include="Plugin\Asp\Request.cs" />
     <Compile Include="Plugin\Mvc\Binders.cs" />
     <Compile Include="Plugin\Mvc\MetaData.cs" />
     <Compile Include="Plumbing\GlimpseActionFilter.cs" />
@@ -129,8 +129,8 @@
     <Compile Include="Responder\GlimpseResponders.cs" />
     <Compile Include="Responder\Sprite.cs" />
     <Compile Include="Responder\GlimpseResponder.cs" />
-    <Compile Include="Plugin\ASP\Environment.cs" />
-    <Compile Include="Plugin\ASP\Trace.cs" />
+    <Compile Include="Plugin\Asp\Environment.cs" />
+    <Compile Include="Plugin\Asp\Trace.cs" />
     <Compile Include="Plugin\Configuration\Config.cs" />
     <Compile Include="GlimpseConstants.cs" />
     <Compile Include="Plumbing\GlimpseFilterAttribute.cs" />
@@ -139,8 +139,8 @@
     <Compile Include="Plugin\Mvc\Views.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Plugin\ASP\Server.cs" />
-    <Compile Include="Plugin\ASP\Session.cs" />
+    <Compile Include="Plugin\Asp\Server.cs" />
+    <Compile Include="Plugin\Asp\Session.cs" />
     <Compile Include="Sanitizer\CSharpSanitizer.cs" />
     <Compile Include="Warning\NotProxyableWarning.cs" />
     <Compile Include="Warning\Warning.cs" />
@@ -165,7 +165,8 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>$(SolutionDir)tools\nuget.exe pack $(ProjectPath) -Symbols -OutputDirectory $(SolutionDir)builds\local -Configuration Release</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

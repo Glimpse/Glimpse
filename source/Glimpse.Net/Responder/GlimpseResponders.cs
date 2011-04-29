@@ -32,7 +32,7 @@ namespace Glimpse.Net.Responder
             var path = application.Request.Path;
             var store = application.Context.Items;
 
-            var result = (from o in Outputs where path.EndsWith(RootPath + o.ResourceName, StringComparison.OrdinalIgnoreCase) select o).SingleOrDefault();
+            var result = (from o in Outputs where path.ToLower().Contains((RootPath + o.ResourceName).ToLower()) select o).SingleOrDefault();
             
             store[GlimpseConstants.ValidPath] = true;
 
