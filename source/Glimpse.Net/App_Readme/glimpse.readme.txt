@@ -84,8 +84,15 @@ Details coming soon.
 
 Release Notes
 -------------
-04/??-2011 - 0.80
+04/28-2011 - 0.80
 - Removed dependency on System.Drawing
+- Fixed bugs related to projects that used custom ControllerActionInvokers
+- Fixed bugs related to projects using custom FilterProviders
+- Added MetaData tab which gives details of primary View Model and primary View Models properties (note this is not recursive at the moment)
+- Environment tab now shows site trust level
+- Performance improvments for supporting virtual directories
+- Glimpse should now work in jQuery noConflict mode 
+- Added Glimpse Warnings tab, used to help debug Glimpse problems going forward
 
 04/20/2011 - 0.79
 - Client bug fixes for popout window
