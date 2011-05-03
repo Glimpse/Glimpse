@@ -1,0 +1,48 @@
+﻿@section PageQuote {
+    One of  my favorite projects...
+    It adds a FireBug like experience for grabbing server-side diagnostics 
+    from an ASP.NET MVC application while looking at it in your browser -- Phil Haack
+}
+
+<div class="features questions"> 
+    <h2>Frequently Asked Questions</h2>
+    <ol class="plain">
+        <li>
+            <div class="question">What is glimpse?</div>
+            What Firebug is for the client, Glimpse does for the server. In other words, a client side Glimpse into what's going on in your server.
+        </li> 
+        <li>
+            <div class="question">What version of .NET does glimpse support?</div> 
+            Our current build is against .NET 4.0. That said, we are aware that many of you are still using .NET 3.5. Hence we are currently working on 
+            a build for 3.5. At the moment we have no plans to support anything pre .NET 3.5. If you feel we should target earlier versions of the 
+            framework just tweet us.
+        </li>
+        <li>
+            <div class="question">What versions of ASP.NET MVC are officially supported?</div> 
+            At the moment only MVC3 is "officially" supported. However, if the machine you are running Glimpse on has MVC3 installed (i.e. the MVC3 dll's 
+            are in the GAC), MVC2 projects will work - note this currently isn't officially supported as when you move to prod, you could have issues 
+            if the server doesn't have MVC3.
+        </li>
+        <li>
+            <div class="question">Is Glimpse only for ASP.NET MVC?</div> 
+            NO! The currently build has dependencies on MVC. That said, when we have another build that doesn't have these dependencies, we have something 
+            that works quite nicely for Web Forms projects. 
+        </li>
+        <li>
+            <div class="question">Is Glimpse just for .NET?</div> 
+            NO! If you have a look at the technology stack description, you will learn that only the server side components are currently tied to .NET. 
+            Glimpse has been specifically designed so that the client will work with any server technology and that the Glimpse Protocol 
+            has no dependency on .NET. It is our hope that in the future others will write Glimpse Server components for other frameworks which leverage 
+            the Glimpse Protocol and common Glimpse Client. Please contact us if this is something you would like to see sooner rather than later.
+        </li>
+        <li>
+            <div class="question">Who is responsible for Glimpse?</div> 
+            Glimpse was created by <strong>Anthony van der Hoorn</strong> (<a href="http://twitter.com/anthony_vdh">@@anthony_vdh</a>) and <strong>Nik Molnar</strong> (<a href="http://twitter.com/nikmd23">@@nikmd23</a>)
+        </li>
+        <li>
+            <div class="question">Can Glimpse help me with other .NET web technologies like SharePoint, Orchard, etc?</div> 
+            Developing plugins for these frameworks is on our roadmap. As soon as we get the core of Glimpse solidified, we will start on these pieces. If
+            however you can see value in having these plugins sooner rather than later please get in contact and fell free to contribute.
+        </li>
+    </ol> 
+</div>

@@ -1,0 +1,38 @@
+/* reset */
+html{color:#000;background:#FFF;}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym{border:0;font-variant:normal;}sup{vertical-align:text-top;}sub{vertical-align:text-bottom;}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit;}input,textarea,select{*font-size:100%;}legend{color:#000;}
+
+/* general */
+body { text-align:center; font-family:"avante garde", "Century Gothic", Serif; font-size:0.8em; line-height:1.4em; }
+strong { font-weight:bold; } em { font-style:italic; }
+ul.plain, ol.plain { margin-bottom:1em; }
+ul.plain li { list-style-type:disc; }
+ol.plain li { list-style-type:decimal; }
+ul.plain li, ol.plain li { margin:0.5em 0 0.5em 1.5em ; }
+.content { position:absolute; left:50%; margin-left:-450px; text-align:left; width:900px; }
+.navigation-back { border-left:1px solid #dcdcdc; border-botom:1px solid #dcdcdc; border-right:1px solid #dcdcdc; background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #FCFCFC), color-stop(1, #dfdfdf) ); background:-moz-linear-gradient( center top, #FCFCFC 5%, #dfdfdf 100% ); filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#FCFCFC', endColorstr='#dfdfdf'); background-color: #FAFAFA;position:absolute; right: -10px; height: 80px; width: 720px; border-radius: 0px 0px 10px 10px; -moz-border-radius: 0px 0px 10px 10px; -webkit-border-bottom-right-radius: 10px; -webkit-border-bottom-left-radius: 10px; }
+.navigation { position:absolute; right:0; right:-50px; }
+.navigation li { float:left; width:185px; height:70px; position:relative; }
+.navigation li a { display:block; font-size:1.5em; color:#333; text-decoration:none; margin:1em 0 0.5em; }
+.nagigation li span { display:block; padding:40px 8px 0 12px; font-size:0.85em; }
+.download { margin-top:3em; }
+.footer { margin:3em 0; text-align:center; }
+.logo { font-family: "TitilliumMaps", helvetica, sans-serif; margin:100px 0 10px; position:relative; background: url(glimpseLogo.png) -10px -15px no-repeat; padding: 0 0 0 140px; }
+.logo h1 { color:transparent; font-size:0px; height:65px; }
+.logo div { font-size:1.5em; margin: 25px 0 0 -10px; }
+.logo blockquote { width:350px; position:absolute; right:0; top:10px; }
+.features { margin-top:20px; }
+.features h3 { margin:20px 0 15px; } 
+.features tr { vertical-align:top; } 
+.scroll-pane { overflow:hidden; outline:none; height:400px; width:820px; }
+h1, h2, h3, h4 { line-height:1.2em; } 
+h1 { font-size:4em; }
+h2 { font-size:2.5em; }
+h3 { font-size:2em; }
+h4 { font-size:1.2em; font-weight:bold; margin-bottom:0.5em; }
+blockquote { font: 1.2em/1.6em "avante garde", "Century Gothic", Serif; width: 400px; background: url(/Content/close-quote.gif) no-repeat right bottom; padding-left: 18px; text-indent: -18px; }
+blockquote:first-letter { background: url(/Content/open-quote.gif) no-repeat left top; padding-left: 18px; font: italic 1.4em "avante garde", "Century Gothic", Serif; }
+.question {font-weight:bold; line-height:1.4em;}
+.myButton { -moz-box-shadow:inset 0px 1px 0px 0px #ffffff; -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff; box-shadow:inset 0px 1px 0px 0px #ffffff; background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) ); background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% ); filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf'); background-color:#ededed; -moz-border-radius:6px; -webkit-border-radius:6px; border-radius:6px; border:1px solid #dcdcdc; display:inline-block; color:#777777; font-family:arial; font-size:24px; padding:10px 41px; text-decoration:none; text-shadow:1px 1px 0px #ffffff; }
+.myButton:hover { background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed) ); background:-moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% ); filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed'); background-color:#dfdfdf; }
+.myButton:active { position:relative; top:1px; }
+.questions li { padding:0.5em 0; line-height:1.4em; }

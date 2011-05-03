@@ -1,0 +1,128 @@
+﻿<#+
+/*
+
+This file contains settings used by T4MVC.tt. The main goal is to avoid the need for users
+to fork the 'official' template in order to achieve what they want.
+ 
+*/
+
+
+// The prefix used for things like MVC.Dinners.Name and MVC.Dinners.Delete(Model.DinnerID)
+const string HelpersPrefix = "MVC";
+
+// Namespaces to be referenced by the generated code
+readonly string[] ReferencedNamespaces = new string[] {
+};
+
+// The folder under the project that contains the areas
+const string AreasFolder = "Areas";
+
+// Choose whether you want to include an 'Areas' token when referring to areas.
+// e.g. Assume the Area is called Blog and the Controller is Post:
+// - When false use MVC.Blog.Post.etc...
+// - When true use MVC.Areas.Blog.Post.etc...
+static bool IncludeAreasToken = false;
+
+// The folder under the project that contains the controllers
+const string ControllersFolder = "Controllers";
+
+// The folder under the project that contains the views
+const string ViewsRootFolder = "Views";
+
+// Views in DisplayTemplates and EditorTemplates folders shouldn't be fully qualifed as it breaks
+// the templated helper code
+readonly string[]  NonQualifiedViewFolders = new string[] {
+  "DisplayTemplates",
+  "EditorTemplates"
+};
+
+// Set this to true if you *never* want view names to be fully qualified paths
+// This may be needed if you are using Spark
+static bool UseNonQualifiedViewNames = false;
+
+// The name of the interface that all T4MVC action results will implement
+const string ActionResultInterfaceName = "IT4MVCActionResult";
+
+// This can be set to false to omit the generation of the System.Web.Mvc.T4Extensions class, which can be
+// useful if it is already defined in a referenced library
+// See http://stackoverflow.com/questions/5563163/t4mvc-use-extension-methods-in-control-library/5574227
+static bool GenerateMvcT4Extensions = true;
+
+// If true, the T4MVC action result interface will be generated
+// If false, the namespace of the interface must be referenced in the 'ReferencedNamespaces' setting
+static bool GenerateActionResultInterface = true;
+
+// If true, use lower case tokens in routes for the area, controller and action names
+static bool UseLowercaseRoutes = false;
+
+// The namespace that the links are generated in (e.g. "Links", as in Links.Content.nerd_jpg)
+const string LinksNamespace = "Links";
+
+// If true, links to static files include a query string containing the file's last change time. This way,
+// when the static file changes, the link changes and guarantees that the client will re-request the resource.
+// e.g. when true, the link looks like: "/Content/nerd.jpg?2009-09-04T12:25:48"
+static bool AddTimestampToStaticLinks = false;
+
+static bool AddTimestampToStaticLink(ProjectItem projectItem) {
+    // By default, this just returns the static flag, but you can add additional logic to make more complex
+    // decisions about which files should have the timestamp
+    // See http://mvccontrib.codeplex.com/workitem/7129 for details
+    return AddTimestampToStaticLinks;
+}
+
+// Folders containing static files for which links are generated (e.g. Links.Scripts.Map_js)
+readonly string[] StaticFilesFolders = new string[] {
+    "Scripts",
+    "Content",
+};
+
+// Static files to exclude from the generated links   
+readonly string[] ExcludedStaticFileExtensions = new string[] {   
+    ".cs"  
+};  
+
+//---------------------------------------------------------------------------
+//	Explicit HtmlHelpers
+//---------------------------------------------------------------------------
+//create explicit HtmlHelpers for rendering partials
+static bool ExplicitHtmlHelpersForPartials = false;
+const string ExplicitHtmlHelpersForPartialsFormat = "Render{0}";
+
+//---------------------------------------------------------------------------
+
+// If true, the template marks itself as unsaved as part of its execution.
+// This way it will be saved and update itself next time the project is built.
+// Basically, it keeps marking itself as unsaved to make the next build work.
+// Note: this is certainly hacky, but is the best I could come up with so far.
+static bool AlwaysKeepTemplateDirty = false;
+
+// If true,the template output will be split into multiple files.
+static bool SplitIntoMultipleFiles = true;
+
+void RenderAdditionalCode() {
+#>
+static class T4MVCHelpers {
+    // You can change the ProcessVirtualPath method to modify the path that gets returned to the client.
+    // e.g. you can prepend a domain, or append a query string:
+    //      return "http://localhost" + path + "?foo=bar";
+    private static string ProcessVirtualPathDefault(string virtualPath) {
+        // The path that comes in starts with ~/ and must first be made absolute
+        string path = VirtualPathUtility.ToAbsolute(virtualPath);
+        
+        // Add your own modifications here before returning the path
+        return path;
+    }
+
+    // Calling ProcessVirtualPath through delegate to allow it to be replaced for unit testing
+    public static Func<string, string> ProcessVirtualPath = ProcessVirtualPathDefault;
+
+
+    // Logic to determine if the app is running in production or dev environment
+    public static bool IsProduction() { 
+        return (HttpContext.Current != null && !HttpContext.Current.IsDebuggingEnabled); 
+    }
+}
+
+<#+
+}
+#>

@@ -1,4 +1,9 @@
-﻿var XHRSpy = function () {
+﻿if (!JSON || !jQuery) {
+    if (!JSON) { alert('Glimpse Message (JSON): Sorry but at the current time Glimpse doesn\'t support your browser. This is because it doesn\'t implement the JSON object, we are looking to help you out more soon. Try using a more modern browser in the short term.'); }
+    if (!jQuery) { alert('Glimpse Message (jQuery): Sorry but at the current time Glimpse doesn\'t support your site. This is because it doesn\'t include jQuery, we are looking to help you out more soon.'); }
+} else {
+
+var XHRSpy = function () {
     this.requestHeaders = {};
     this.responseHeaders = {};
 };
@@ -1211,3 +1216,4 @@ if (window.jQuery) {
     $.glimpseRemote.init();
 
 })(jQuery); }   
+}
