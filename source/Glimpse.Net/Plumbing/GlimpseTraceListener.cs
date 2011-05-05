@@ -27,17 +27,17 @@ namespace Glimpse.Net.Plumbing
 
         public override void TraceTransfer(TraceEventCache eventCache, string source, int id, string message, Guid relatedActivityId)
         {
-            throw new NotImplementedException();
+            Write(message);
         }
 
         public override void TraceData(TraceEventCache eventCache, string source, TraceEventType eventType, int id, params object[] data)
         {
-            throw new NotImplementedException();
+            Write(string.Format("Source: {0} Callstack: {1}", source, eventCache.Callstack), eventType.ToString());
         }
 
         public override void TraceData(TraceEventCache eventCache, string source, TraceEventType eventType, int id, object data)
         {
-            throw new NotImplementedException();
+            Write(string.Format("Source: {0} Callstack: {1}", source, eventCache.Callstack), eventType.ToString());
         }
 
         public override void Write(string message)
@@ -112,7 +112,7 @@ namespace Glimpse.Net.Plumbing
 
         public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id)
         {
-            //base.TraceEvent(eventCache, source, eventType, id);
+            Write(string.Format("Source: {0} Callstack: {1}", source, eventCache.Callstack), eventType.ToString());
         }
     }
 }

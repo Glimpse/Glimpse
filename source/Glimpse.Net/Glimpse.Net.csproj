@@ -73,6 +73,7 @@
     <Compile Include="Converter\OutputCacheAttributeConverter.cs" />
     <Compile Include="Converter\RouteValueDictionaryConverter.cs" />
     <Compile Include="Extensibility\IGlimpseWarning.cs" />
+    <Compile Include="Plumbing\GlimpseBinderMetadata.cs" />
     <Compile Include="Warning\ExceptionWarning.cs" />
     <Compile Include="Warning\NonVirtualMemberWarning.cs" />
     <Compile Include="Warning\NotAControllerActionInvokerWarning.cs" />
