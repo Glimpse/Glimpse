@@ -80,7 +80,7 @@ namespace Glimpse.Net.Responder
                 warningTable.AddRange(warnings.Select(warning => new[] {warning.GetType().Name, warning.Message}));
 
                 var dataString = JsSerializer.Serialize(warningTable);
-                sb.Append(string.Format("\"{0}\":{1},", "Glimpse Warnings", dataString));
+                sb.Append(string.Format("\"{0}\":{1},", "GlimpseWarnings", dataString));
             }
 
             if (sb.Length > 1) sb.Remove(sb.Length - 1, 1);

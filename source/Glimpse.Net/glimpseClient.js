@@ -3,223 +3,11 @@
     if (!jQuery) { alert('Glimpse Message (jQuery): Sorry but at the current time Glimpse doesn\'t support your site. This is because it doesn\'t include jQuery, we are looking to help you out more soon.'); }
 } else {
 
-var XHRSpy = function () {
-    this.requestHeaders = {};
-    this.responseHeaders = {};
-};
-
-XHRSpy.prototype =
-{
-    method: null,
-    url: null,
-    href: null,
-    async: null,
-    xhrRequest: null,
-    loaded: false,
-    success: false,
-    status: null,
-    statusText: null,
-    responseText: null,
-    requestHeaders: null,
-    responseHeaders: null,
-    startTime: null,
-    duration: null,
-    logRow: null,
-    send: function () { 
-        jQuery.glimpseAjax.callStarted(this);
-    },
-    finish: function () { 
-        jQuery.glimpseAjax.callFinished(this);
-    }
-};
-
-var XMLHttpRequestWrapper = function (activeXObject) {
-    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-    // XMLHttpRequestWrapper internal variables
-
-    var xhrRequest = (typeof activeXObject != "undefined" ? activeXObject : new _XMLHttpRequest()),
-        spy = new XHRSpy(), that = this;
-
-    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-    // XMLHttpRequestWrapper internal methods
-
-    var finishXHR = function () {
-        var duration = new Date().getTime() - spy.startTime;
-        var success = xhrRequest.status == 200;
-
-        //Pull out the header information
-        var responseHeadersText = xhrRequest.getAllResponseHeaders();
-        var responses = responseHeadersText ? responseHeadersText.split(/[\n\r]/) : [];
-        var reHeader = /^(\S+):\s*(.*)/;
-        for (var i = 0, l = responses.length; i < l; i++) {
-            var match = responses[i].match(reHeader);
-            if (match)
-                spy.responseHeaders[match[1]] = match[2];
-        }
-
-        //Trigger the finish a bit latter
-        setTimeout(function () { spy.finish(); }, 200);
-
-        //Get the rest of the information
-        spy.success = success;
-        spy.loaded = true;
-        spy.status = xhrRequest.status;
-        spy.statusText = xhrRequest.statusText;
-        spy.responseText = xhrRequest.responseText;
-        spy.duration = duration;
-    };
-
-    var handleStateChange = function () {
-        that.readyState = xhrRequest.readyState;
-
-        if (xhrRequest.readyState == 4) {
-            that.statusText = xhrRequest.statusText;
-            that.status = xhrRequest.status;
-            that.response = xhrRequest.response;
-            that.responseText = xhrRequest.responseText;
-            that.responseType = xhrRequest.responseType;
-            that.responseXML = xhrRequest.responseXML;
-
-            finishXHR();
-            xhrRequest.onreadystatechange = function () { };
-        }
-        that.onreadystatechange();
-    };
-
-    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-    // XMLHttpRequestWrapper public properties and handlers
-
-    this.readyState = 0;
-
-    this.onreadystatechange = function () { };
-
-    this.response = null;
-    this.responseText = null;
-    this.responseType = null;
-    this.responseXML = null;
-    this.status = null;
-    this.statusText = null;
-
-    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-    // XMLHttpRequestWrapper public methods
-
-    this.open = function (method, url, async) {
-        if (spy.loaded)
-            spy = new XHRSpy();
-        spy.method = method;
-        spy.url = url;
-        spy.href = url;
-        spy.async = async;
-        spy.xhrRequest = xhrRequest;
-        //spy.urlParams = parseURLParamsArray(url);
-
-        if (!jQuery.browser.msie && async)                                                 //TODO: Change over to jQuery
-            xhrRequest.onreadystatechange = handleStateChange;
-
-        // xhr.open.apply not available in IE
-        if (xhrRequest.open.apply)                                              //TODO: Need to see if this applies
-            xhrRequest.open.apply(xhrRequest, arguments)
-        else
-            xhrRequest.open(method, url, async);
-
-        if (jQuery.browser.msie && async)                                                 //TODO: Change over to jQuery
-            xhrRequest.onreadystatechange = handleStateChange;
-
-    };
-
-    this.send = function (data) {
-        spy.data = data;
-        spy.startTime = new Date().getTime();
-
-        try {
-            xhrRequest.send(data);
-        }
-        catch (e) {
-            throw e;
-        }
-        finally {
-            spy.send();
-            if (!spy.async) {
-                that.readyState = xhrRequest.readyState;
-                finishXHR();
-            }
-        }
-    };
-
-    this.setRequestHeader = function (header, value) {
-        spy.requestHeaders[header] = value;
-        xhrRequest.setRequestHeader(header, value);
-    };
-
-    this.getResponseHeader = function (header) {
-        return xhrRequest.getResponseHeader(header);
-    };
-
-    this.getAllResponseHeaders = function () {
-        return xhrRequest.getAllResponseHeaders();
-    };
-
-    this.abort = function () {
-        return xhrRequest.abort();
-    };
-
-    return this;
-};
-
-// ************************************************************************************************
-// Reguster XMLHttpRequest Wrapper / ActiveXObject Wrapper (IE6 only)
-
-var _ActiveXObject;
-if (jQuery.browser.msie && jQuery.browser.version == "6.0") {
-    window._ActiveXObject = window.ActiveXObject;
-    window.ActiveXObject = function (name) {
-        var error = null;
-
-        try {
-            var activeXObject = new window._ActiveXObject(name);
-        }
-        catch (e) {
-            error = e;
-        }
-        finally {
-            if (!error) {
-                var xhrObjects = " MSXML2.XMLHTTP.5.0 MSXML2.XMLHTTP.4.0 MSXML2.XMLHTTP.3.0 MSXML2.XMLHTTP Microsoft.XMLHTTP ";
-                if (xhrObjects.indexOf(" " + name + " ") != -1)
-                    return new XMLHttpRequestWrapper(activeXObject);
-                else
-                    return activeXObject;
-            }
-            else
-                throw error.message;
-        }
-    };
-}
-else {
-    var _XMLHttpRequest = XMLHttpRequest;
-    window.XMLHttpRequest = function () {
-        return new XMLHttpRequestWrapper();
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var glimpse;
+var glimpse, glimpsePath;
 if (window.jQuery) {
     (function ($) {
 
-    var glimpseCss = '.glimpse, .glimpse *, .glimpse a, .glimpse td, .glimpse th, .glimpse table { font-family:Lucida Grande,Tahoma,sans-serif; background-color:transparent; font-size:11px; line-height:14px; border:0px; color:#232323; text-align:left; }.glimpse a, .glimpse a:hover, .glimpse a:visited { color:#2200C1; text-decoration:underline; font-weight:normal; }.glimpse a:active { color:#c11; text-decoration:underline; font-weight:normal; }.glimpse th { font-weight:bold; }.glimpse-open { position:fixed; right:0; bottom:0; height:27px; width:28px; border-left: 1px solid #ACA899; border-top: 1px solid #ACA899; background:#EEE; background:-moz-linear-gradient(top, #FFFFFF 0%, #EEEEEE 4%, #F3F5F7 8%, #E9E8DD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(4%,#EEEEEE), color-stop(8%,#F3F5F7), color-stop(100%,#E9E8DD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#FFFFFF\', endColorstr=\'#E9E8DD\',GradientType=0 ); }.glimpse-icon { background:url(Glimpse\x2FglimpseSprite.png) 0px -16px; height:20px; width:20px; margin: 3px 4px 0; cursor:pointer; }.glimpse-holder { display:none; z-index:10000; height:0; position:fixed; bottom:0; left:0; width:100%; background-color:#fff; }.glimpse-bar { height:27px; border-top:1px solid #ACA899; background:#FFFFFF; background:-moz-linear-gradient(top, #FFFFFF 0%, #EEEEEE 4%, #F3F5F7 8%, #E9E8DD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(4%,#EEEEEE), color-stop(8%,#F3F5F7), color-stop(100%,#E9E8DD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#FFFFFF\', endColorstr=\'#E9E8DD\',GradientType=0 ); }.glimpse-bar .glimpse-icon { margin-top:4px; float:left; cursor:default; }.glimpse-buttons { float:right; height:17px; width:50px; padding:6px; }.glimpse-title { margin:5px 0 0 15px; font-weight:bold; display:inline-block; width:75%; overflow:hidden; }.glimpse-title span:first-child { display:inline-block; height:20px; }.glimpse-title span:last-child { font-weight:normal; font-style:italic; padding-left:10px; width:60%; white-space:nowrap; display:inline-block; height:20px; }.glimpse-close, .glimpse-close:hover, .glimpse-terminate, .glimpse-terminate:hover, .glimpse-popout, .glimpse-popout:hover { background-image:url(Glimpse\x2FglimpseSprite.png); background-repeat:no-repeat; height:14px; width:14px; margin-left:2px; display:inline-block; }.glimpse-close { background-position:-1px -1px; }.glimpse-close:hover { background-position:-17px -1px; }.glimpse-terminate { background-position:-65px -1px; }.glimpse-terminate:hover { background-position:-81px -1px; } .glimpse-popout { background-position:-96px -1px; }.glimpse-popout:hover { background-position: -111px -1px; } .glimpse-tabs { height:24px; font-weight:bold; border-bottom:1px solid #ACA899; border-top:1px solid #CDCABB; background:#B9B7AF; background:-moz-linear-gradient(top, #B9B7AF 0%, #DAD8C8 4%, #D7D4C5 10%, #E9E6D5 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#B9B7AF), color-stop(4%,#DAD8C8), color-stop(10%,#D7D4C5), color-stop(100%,#E9E6D5)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#B9B7AF\', endColorstr=\'#E9E6D5\',GradientType=0 );}.glimpse-tabs ul { margin:4px 0px 0 0; padding:0px; }.glimpse-tabs li { display:inline; margin:0 2px 3px 2px; height:22px; padding:4px 9px 3px; color:#565656; cursor:pointer; border-radius: 0px 0px 3px 3px; -moz-border-radius: 0px 0px 3px 3px; -webkit-border-bottom-right-radius: 3px; -webkit-border-bottom-left-radius: 3px; }.glimpse-tabs li.glimpse-active { padding:4px 8px 3px; color:#000; border-left:1px solid #A4A4A4; border-bottom:1px solid #A4A4A4; border-right:1px solid #A4A4A4; background:#F7F6F1; background:-moz-linear-gradient(top, #F2F1EC 0%, #F2F1EC 3%, #EFEEE9 7%, #E8E7E1 51%, #F7F6F1 92%, #F1F0EB 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#F2F1EC), color-stop(3%,#F2F1EC), color-stop(7%,#EFEEE9), color-stop(51%,#E8E7E1), color-stop(92%,#F7F6F1), color-stop(100%,#F1F0EB)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#EFEEE9\', endColorstr=\'#F7F6F1\',GradientType=0 ); } .glimpse-tabs li.glimpse-hover { padding:4px 8px 3px; border-left:1px solid #BFBDB1; border-bottom:1px solid #BFBDB1; border-right:1px solid #BFBDB1; background:#EEECE3; background:-moz-linear-gradient(top, #BFBDB1 0%, #DAD9CB 4%, #D8D5C9 8%, #E8E7E1 51%, #F0EEE4 92%, #EDEBE1 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#BFBDB1), color-stop(4%,#DAD9CB), color-stop(8%,#D8D5C9), color-stop(51%,#E8E7E1), color-stop(92%,#F0EEE4), color-stop(100%,#EDEBE1)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#D8D5C9\', endColorstr=\'#F0EEE4\',GradientType=0 ); }.glimpse-tabs li.glimpse-disabled { color:#AAA; cursor:default; }.glimpse-panel-holder {}.glimpse-panel { display:none; overflow:auto; position:relative; } .glimpse-panel-message { text-align:center; padding-top:40px; font-size:1.1em; color:#AAA; }.glimpse-panel table { border-spacing:0; width:100%; }.glimpse-panel table td, .glimpse-panel table th { padding:3px 4px; text-align:left; vertical-align:top; } .glimpse-panel .glimpse-row-header-0 { height:19px; border-bottom:1px solid #9C9C9C; background:#C6C6C6; background:-moz-linear-gradient(top, #DEDEDE 0%, #BDBDBD 80%, #BBB 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#DEDEDE), color-stop(80%,#BDBDBD), color-stop(100%,#BBB)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#DEDEDE\', endColorstr=\'#BBB\',GradientType=0 ); }.glimpse-panel .glimpse-row-header-0 th { border-left:1px solid #D9D9D9; border-right:1px solid #9C9C9C; }.glimpse-panel .glimpse-cell-key { width:30%; max-width:150px; }.glimpse-panel table table { border:1px solid #D9D9D9; } .glimpse-panel table table thead tr { height:17px; border-bottom:1px solid #9C9C9C; background:#C6C6C6; background:-moz-linear-gradient(top, #F1F1F1 0%, #DFDFDF 80%, #DDD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#F1F1F1), color-stop(80%,#DFDFDF), color-stop(100%,#DDD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#F1F1F1\', endColorstr=\'#DDD\',GradientType=0 ); }.glimpse-panel table table thead tr th { border-left:1px solid #C6C6C6; border-right:1px solid #D9D9D9; padding:1px 4px 2px 4px; }.glimpse-panel table table thead tr th:first-child { border-left:0px; }.glimpse-panel table table thead tr th:last-child { border-right:0px; }.glimpse-panel .even { background:#F4F4F4; }.glimpse-panel .odd { background:#F9F9F9; }.glimpse-panel table table tbody th { font-weight:normal; font-style:italic; }.glimpse-panel table table thead th { font-weight:bold; font-style:normal; }.glimpse-panel .glimpse-side-sub-panel { right:0; z-index:10; background-color:#F5F5F5; height:100%; width:25%; border-left:1px solid #ACA899; position:absolute; }.glimpse-panel .glimpse-side-main-panel { position:relative; height:100%; width:75%; float:left; } .glimpse-panel-holder .glimpse-active { display:block; }.glimpse-resizer { height:4px; cursor:n-resize; width:100%; position:absolute; top:-1px; }li.glimpse-permanent { font-style:italic; padding:4px 8px 3px; border-bottom:1px solid #ACA899; border-left:1px solid #CDCABB; border-right:1px solid #CDCABB; background:#B9B7AF; background:-moz-linear-gradient(top, #B9B7AF 0%, #DAD8C8 4%, #D7D4C5 10%, #E9E6D5 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#B9B7AF), color-stop(4%,#DAD8C8), color-stop(10%,#D7D4C5), color-stop(100%,#E9E6D5)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#B9B7AF\', endColorstr=\'#E9E6D5\',GradientType=0 ); }.glimpse-preview-object { color:#006400; } .glimpse-preview-string { color:#006400 !important; font-weight:normal !important; } .glimpse-preview-string span { padding-left:1px; }.glimpse-preview-object span { font-weight:bold; color:#444; } .glimpse-preview-object span.start { margin-right:5px; } .glimpse-preview-object span.end { margin-left:5px; }.glimpse-preview-object span.rspace { margin-right:4px; }.glimpse-preview-object span.mspace { margin:0 4px; }.glimpse-preview-object span.small { font-size:0.95em; } .glimpse-expand { height:11px; width:11px; display:inline-block; float:left; margin:1px 0 0 -13px; cursor:pointer; background-image:url(Glimpse\x2FglimpseSprite.png); background-repeat:no-repeat; background-position:-126px 0; }.glimpse-collapse { background-position:-126px -11px; }.glimpse-preview-show { display:none; font-weight:normal !important; }.glimpse-panel .quiet * { color:#AAA; }.glimpse-panel .suppress { text-decoration:line-through; }.glimpse-panel .suppress * { color:#AAA; }.glimpse-panel .selected { background-color:#FFFF99; }.glimpse-panel .selected * { color:#409B3B; }.glimpse-panel .info .icon, .glimpse-panel .warn .icon, .glimpse-panel .loading .icon, .glimpse-panel .error .icon, .glimpse-panel .fail .icon { width:14px; height:14px; background-image:url(Glimpse\x2FglimpseSprite.png); background-repeat:no-repeat; display:inline-block; margin-right: 5px; } .glimpse-panel .info .icon { background-position: -22px -22px; }.glimpse-panel .warn .icon { background-position:-36px -22px; }.glimpse-panel .loading .icon { background-position:-78px -22px; }.glimpse-panel .error .icon { background-position:-50px -22px; } .glimpse-panel .fail .icon { background-position:-64px -22px; }.glimpse-panel .info * { color:#067CE5; }.glimpse-panel .warn * { color:#FE850C; } .glimpse-panel .error * { color:#B40000; }.glimpse-panel .fail * { color:#D00; font-weight:bold; }.glimpse-panelitem-XHReqests .loading .icon { float:right; }.glimpse-panelitem-Remote .glimpse-side-sub-panel .loading, .glimpse-panelitem-Remote .glimpse-side-main-panel .loading { position:absolute; bottom:5px; right:5px; color:#777; }';
+    var glimpseCss = '.glimpse, .glimpse *, .glimpse a, .glimpse td, .glimpse th, .glimpse table { font-family:Lucida Grande,Tahoma,sans-serif; background-color:transparent; font-size:11px; line-height:14px; border:0px; color:#232323; text-align:left; }.glimpse a, .glimpse a:hover, .glimpse a:visited { color:#2200C1; text-decoration:underline; font-weight:normal; }.glimpse a:active { color:#c11; text-decoration:underline; font-weight:normal; }.glimpse th { font-weight:bold; }.glimpse-open { position:fixed; right:0; bottom:0; height:27px; width:28px; border-left: 1px solid #ACA899; border-top: 1px solid #ACA899; background:#EEE; background:-moz-linear-gradient(top, #FFFFFF 0%, #EEEEEE 4%, #F3F5F7 8%, #E9E8DD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(4%,#EEEEEE), color-stop(8%,#F3F5F7), color-stop(100%,#E9E8DD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#FFFFFF\', endColorstr=\'#E9E8DD\',GradientType=0 ); }.glimpse-icon { background:url(Glimpse\x2FglimpseSprite.png) 0px -16px; height:20px; width:20px; margin: 3px 4px 0; cursor:pointer; }.glimpse-holder { display:none; z-index:10000; height:0; position:fixed; bottom:0; left:0; width:100%; background-color:#fff; }.glimpse-bar { height:27px; border-top:1px solid #ACA899; background:#FFFFFF; background:-moz-linear-gradient(top, #FFFFFF 0%, #EEEEEE 4%, #F3F5F7 8%, #E9E8DD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(4%,#EEEEEE), color-stop(8%,#F3F5F7), color-stop(100%,#E9E8DD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#FFFFFF\', endColorstr=\'#E9E8DD\',GradientType=0 ); }.glimpse-bar .glimpse-icon { margin-top:4px; float:left; cursor:default; } .glimpse-meta-warning { cursor:pointer; float:right; width:22px; height:20px; margin:4px 5px 0 0; display:none; background-image:url(Glimpse\x2FglimpseSprite.png); background-repeat:no-repeat; background-position:0 -36px; } .glimpse-buttons { float:right; height:17px; width:50px; padding:6px; }.glimpse-title { margin:5px 0 0 15px; font-weight:bold; display:inline-block; width:75%; overflow:hidden; }.glimpse-title span:first-child { display:inline-block; height:20px; }.glimpse-title span:last-child { font-weight:normal; font-style:italic; padding-left:10px; width:60%; white-space:nowrap; display:inline-block; height:20px; }.glimpse-close, .glimpse-close:hover, .glimpse-terminate, .glimpse-terminate:hover, .glimpse-popout, .glimpse-popout:hover { background-image:url(Glimpse\x2FglimpseSprite.png); background-repeat:no-repeat; height:14px; width:14px; margin-left:2px; display:inline-block; }.glimpse-close { background-position:-1px -1px; }.glimpse-close:hover { background-position:-17px -1px; }.glimpse-terminate { background-position:-65px -1px; }.glimpse-terminate:hover { background-position:-81px -1px; } .glimpse-popout { background-position:-96px -1px; }.glimpse-popout:hover { background-position: -111px -1px; } .glimpse-tabs { height:24px; font-weight:bold; border-bottom:1px solid #ACA899; border-top:1px solid #CDCABB; background:#B9B7AF; background:-moz-linear-gradient(top, #B9B7AF 0%, #DAD8C8 4%, #D7D4C5 10%, #E9E6D5 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#B9B7AF), color-stop(4%,#DAD8C8), color-stop(10%,#D7D4C5), color-stop(100%,#E9E6D5)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#B9B7AF\', endColorstr=\'#E9E6D5\',GradientType=0 );}.glimpse-tabs ul { margin:4px 0px 0 0; padding:0px; }.glimpse-tabs li { display:inline; margin:0 2px 3px 2px; height:22px; padding:4px 9px 3px; color:#565656; cursor:pointer; border-radius: 0px 0px 3px 3px; -moz-border-radius: 0px 0px 3px 3px; -webkit-border-bottom-right-radius: 3px; -webkit-border-bottom-left-radius: 3px; }.glimpse-tabs li.glimpse-active { padding:4px 8px 3px; color:#000; border-left:1px solid #A4A4A4; border-bottom:1px solid #A4A4A4; border-right:1px solid #A4A4A4; background:#F7F6F1; background:-moz-linear-gradient(top, #F2F1EC 0%, #F2F1EC 3%, #EFEEE9 7%, #E8E7E1 51%, #F7F6F1 92%, #F1F0EB 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#F2F1EC), color-stop(3%,#F2F1EC), color-stop(7%,#EFEEE9), color-stop(51%,#E8E7E1), color-stop(92%,#F7F6F1), color-stop(100%,#F1F0EB)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#EFEEE9\', endColorstr=\'#F7F6F1\',GradientType=0 ); } .glimpse-tabs li.glimpse-hover { padding:4px 8px 3px; border-left:1px solid #BFBDB1; border-bottom:1px solid #BFBDB1; border-right:1px solid #BFBDB1; background:#EEECE3; background:-moz-linear-gradient(top, #BFBDB1 0%, #DAD9CB 4%, #D8D5C9 8%, #E8E7E1 51%, #F0EEE4 92%, #EDEBE1 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#BFBDB1), color-stop(4%,#DAD9CB), color-stop(8%,#D8D5C9), color-stop(51%,#E8E7E1), color-stop(92%,#F0EEE4), color-stop(100%,#EDEBE1)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#D8D5C9\', endColorstr=\'#F0EEE4\',GradientType=0 ); }.glimpse-tabs li.glimpse-disabled { color:#AAA; cursor:default; }.glimpse-panel-holder {}.glimpse-panel { display:none; overflow:auto; position:relative; } .glimpse-panel-message { text-align:center; padding-top:40px; font-size:1.1em; color:#AAA; }.glimpse-panel table { border-spacing:0; width:100%; }.glimpse-panel table td, .glimpse-panel table th { padding:3px 4px; text-align:left; vertical-align:top; } .glimpse-panel .glimpse-row-header-0 { height:19px; border-bottom:1px solid #9C9C9C; background:#C6C6C6; background:-moz-linear-gradient(top, #DEDEDE 0%, #BDBDBD 80%, #BBB 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#DEDEDE), color-stop(80%,#BDBDBD), color-stop(100%,#BBB)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#DEDEDE\', endColorstr=\'#BBB\',GradientType=0 ); }.glimpse-panel .glimpse-row-header-0 th { border-left:1px solid #D9D9D9; border-right:1px solid #9C9C9C; }.glimpse-panel .glimpse-cell-key { width:30%; max-width:150px; }.glimpse-panel table table { border:1px solid #D9D9D9; } .glimpse-panel table table thead tr { height:17px; border-bottom:1px solid #9C9C9C; background:#C6C6C6; background:-moz-linear-gradient(top, #F1F1F1 0%, #DFDFDF 80%, #DDD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#F1F1F1), color-stop(80%,#DFDFDF), color-stop(100%,#DDD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#F1F1F1\', endColorstr=\'#DDD\',GradientType=0 ); }.glimpse-panel table table thead tr th { border-left:1px solid #C6C6C6; border-right:1px solid #D9D9D9; padding:1px 4px 2px 4px; }.glimpse-panel table table thead tr th:first-child { border-left:0px; }.glimpse-panel table table thead tr th:last-child { border-right:0px; }.glimpse-panel .even { background:#F4F4F4; }.glimpse-panel .odd { background:#F9F9F9; }.glimpse-panel table table tbody th { font-weight:normal; font-style:italic; }.glimpse-panel table table thead th { font-weight:bold; font-style:normal; }.glimpse-panel .glimpse-side-sub-panel { right:0; z-index:10; background-color:#F5F5F5; height:100%; width:25%; border-left:1px solid #ACA899; position:absolute; }.glimpse-panel .glimpse-side-main-panel { position:relative; height:100%; width:75%; float:left; } .glimpse-panel-holder .glimpse-active { display:block; }.glimpse-resizer { height:4px; cursor:n-resize; width:100%; position:absolute; top:-1px; }li.glimpse-permanent { font-style:italic; padding:4px 8px 3px; border-bottom:1px solid #ACA899; border-left:1px solid #CDCABB; border-right:1px solid #CDCABB; background:#B9B7AF; background:-moz-linear-gradient(top, #B9B7AF 0%, #DAD8C8 4%, #D7D4C5 10%, #E9E6D5 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#B9B7AF), color-stop(4%,#DAD8C8), color-stop(10%,#D7D4C5), color-stop(100%,#E9E6D5)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#B9B7AF\', endColorstr=\'#E9E6D5\',GradientType=0 ); }.glimpse-preview-object { color:#006400; } .glimpse-preview-string { color:#006400 !important; font-weight:normal !important; } .glimpse-preview-string span { padding-left:1px; }.glimpse-preview-object span { font-weight:bold; color:#444; } .glimpse-preview-object span.start { margin-right:5px; } .glimpse-preview-object span.end { margin-left:5px; }.glimpse-preview-object span.rspace { margin-right:4px; }.glimpse-preview-object span.mspace { margin:0 4px; }.glimpse-preview-object span.small { font-size:0.95em; } .glimpse-expand { height:11px; width:11px; display:inline-block; float:left; margin:1px 0 0 -13px; cursor:pointer; background-image:url(Glimpse\x2FglimpseSprite.png); background-repeat:no-repeat; background-position:-126px 0; }.glimpse-collapse { background-position:-126px -11px; }.glimpse-preview-show { display:none; font-weight:normal !important; }.glimpse-panel .quiet * { color:#AAA; }.glimpse-panel .suppress { text-decoration:line-through; }.glimpse-panel .suppress * { color:#AAA; }.glimpse-panel .selected { background-color:#FFFF99; }.glimpse-panel .selected * { color:#409B3B; }.glimpse-panel .info .icon, .glimpse-panel .warn .icon, .glimpse-panel .loading .icon, .glimpse-panel .error .icon, .glimpse-panel .fail .icon { width:14px; height:14px; background-image:url(Glimpse\x2FglimpseSprite.png); background-repeat:no-repeat; display:inline-block; margin-right: 5px; } .glimpse-panel .info .icon { background-position: -22px -22px; }.glimpse-panel .warn .icon { background-position:-36px -22px; }.glimpse-panel .loading .icon { background-position:-78px -22px; }.glimpse-panel .error .icon { background-position:-50px -22px; } .glimpse-panel .fail .icon { background-position:-64px -22px; }.glimpse-panel .info * { color:#067CE5; }.glimpse-panel .warn * { color:#FE850C; } .glimpse-panel .error * { color:#B40000; }.glimpse-panel .fail * { color:#D00; font-weight:bold; }.glimpse-panelitem-XHReqests .loading .icon { float:right; }.glimpse-panelitem-Remote .glimpse-side-sub-panel .loading, .glimpse-panelitem-Remote .glimpse-side-main-panel .loading { position:absolute; bottom:5px; right:5px; color:#777; }';
     glimpseCss = glimpseCss.replace(/url\(Glimpse/gi, 'url(' + glimpsePath + 'Glimpse');
     $('<style type="text/css"> ' + glimpseCss + ' </style>').appendTo("head");      //http://stackoverflow.com/questions/1212500/jquery-create-css-rule-class-runtime
 
@@ -228,6 +16,7 @@ if (window.jQuery) {
     $.glimpseContent = {};
     $.glimpseResize = {};
 
+    //#region $.fn
     $.extend($.fn, {
         resizer: function() {
             return this.each(function() {
@@ -256,56 +45,9 @@ if (window.jQuery) {
             };
         })()
     });
+    //#endregion
 
-    $.extend({
-        htmlEncode: function(value) {
-            return !(value == undefined || value == null) ? $('<div/>').text(value).html() : '';
-        },
-        htmlDecode: function(value) {
-            return !(value == undefined || value == null) ? $('<div/>').html(value).text() : '';
-        },
-        lengthJson: function(data) {
-            var count = 0;
-            if ($.isPlainObject(data))
-                $.each(data, function(k, v) { count++; });
-            return count;
-        },
-        formatTime: function(d) {
-            if (typeof d === 'number')
-                d = new Date(d);
-            var padding = function(t) { return t < 10 ? '0' + t : t; }
-            return d.getHours() + ':' + padding(d.getMinutes()) + ':' + padding(d.getSeconds()) + ' ' + d.getMilliseconds();
-        },
-        cookie: function(key, value) {
-            key = encodeURIComponent(key)
-            //Set Cookie
-            if (arguments.length > 1) {
-                var t = new Date();
-                t.setDate(t.getDate() + 1000);
-
-                value = $.isPlainObject(value) ? JSON.stringify(value) : String(value);
-                return (document.cookie = key + '=' + encodeURIComponent(value) + '; expires=' + t.toUTCString() + '; path=/');
-            }
-
-            //Get cookie 
-            var result = new RegExp("(?:^|; )" + key + "=([^;]*)").exec(document.cookie);
-            if (result) {
-                result = decodeURIComponent(result[1]);
-                if (result.substr(0, 1) == '{')
-                    result = JSON.parse(result);
-                return result;
-            }
-            return null;
-        },
-        popupExists : function(popup) { 
-            var successfull = (popup && !popup.closed && typeof popup.closed != 'undefined');  
-            if (!successfull) 
-                alert("Glimpse Error: Glimpse popup was blocked.");  
-            return successfull
-        }
-    }); 
-
-
+    //#region $.glimpseResize
     $.extend($.glimpseResize, {
         static: {
             anchor: null,
@@ -352,7 +94,9 @@ if (window.jQuery) {
             return { x: e.clientX + d.scrollLeft, y: e.clientY + d.scrollTop };
         }
     });
+    //#endregion
 
+    //#region $.glimpseProcessor
     $.extend($.glimpseProcessor, {
         layout: function(g, title) {
             var that = this, static = g.static, tabStrip = static.tabStrip(), panelHolder = static.panelHolder();
@@ -439,7 +183,7 @@ if (window.jQuery) {
         },
         buildKeyValueTable: function(data, level, forceFull) {
             var that = this, limit = 3;
-            if (((level > 0 && $.lengthJson(data) > (limit + 1)) || level > 1) && !forceFull)
+            if (((level > 0 && $.glimpse.util.lengthJson(data) > (limit + 1)) || level > 1) && !forceFull)
                 return that.buildKeyValuePreview(data, limit);
 
             var i = 1, html = '<table><thead><tr class="glimpse-row-header-' + level + '"><th class="glimpse-cell-key">Key</th><th class="glimpse-cell-value">Value</th></tr></thead>';
@@ -485,7 +229,7 @@ if (window.jQuery) {
             return this.buildStringPreview(data, level);
         },
         buildKeyValuePreview: function(data, level) {
-            var that = this, length = $.lengthJson(data), rowMax = 2, rowLimit = (rowMax < length ? rowMax : length), i = 1, html = '<span class="glimpse-expand"></span><span class="glimpse-preview-object"><span class="start">{</span>';
+            var that = this, length = $.glimpse.util.lengthJson(data), rowMax = 2, rowLimit = (rowMax < length ? rowMax : length), i = 1, html = '<span class="glimpse-expand"></span><span class="glimpse-preview-object"><span class="start">{</span>';
             for (var key in data) {
                 html += that.newItemSpacer(i, rowLimit, length);
                 if (i > length || i++ > rowLimit)
@@ -558,22 +302,24 @@ if (window.jQuery) {
             return html;
         }
     });
+    //#endregion
 
+    //#region $.glimpseContent
     $.extend($.glimpseContent, {
         formatStringTypes: {
             italics: {
                 match: function(d) { return d.match(/^\_[\w\D]+\_$/) != null; },
-                replace: function(d) { return '<u>' + $.htmlEncode($.glimpseContent.scrub(d)) + '</u>'; },
+                replace: function(d) { return '<u>' + $.glimpse.util.htmlEncode($.glimpseContent.scrub(d)) + '</u>'; },
                 trimmable: true
             },
             underline: {
                 match: function(d) { return d.match(/^\\[\w\D]+\\$/) != null; },
-                replace: function(d) { return '<em>' + $.htmlEncode($.glimpseContent.scrub(d)) + '</em>'; },
+                replace: function(d) { return '<em>' + $.glimpse.util.htmlEncode($.glimpseContent.scrub(d)) + '</em>'; },
                 trimmable: true
             },
             strong: {
                 match: function(d) { return d.match(/^\*[\w\D]+\*$/) != null; },
-                replace: function(d) { return '<strong>' + $.htmlEncode($.glimpseContent.scrub(d)) + '</strong>'; },
+                replace: function(d) { return '<strong>' + $.glimpse.util.htmlEncode($.glimpseContent.scrub(d)) + '</strong>'; },
                 trimmable: true
             },
             raw: {
@@ -590,7 +336,7 @@ if (window.jQuery) {
             return that.trimFormatString(data);
         },
         trimFormatString: function(data, charMax, charOuterMax, wrapEllipsis, skipEncoding) {
-            var that = this, trimmable = true, replace = function(d) { return $.htmlEncode(d); };
+            var that = this, trimmable = true, replace = function(d) { return $.glimpse.util.htmlEncode(d); };
 
             if (data == undefined || data == null)
                 return '--';
@@ -614,9 +360,11 @@ if (window.jQuery) {
             return replace(data);
         }
     });
+    //#endregion
 
+    //#region $.glimpse
     $.extend($.glimpse, {
-        _executeProtocolListeners: function(g, isInit) {
+        _executeProtocolListeners : function(g, isInit) {
             var i = 0, listeners = g.plugins.protocolListeners, data = g.static.data;
             for (; i < listeners.length; i++) {
                 var listener = listeners[i];
@@ -624,14 +372,14 @@ if (window.jQuery) {
                     listener.callback(data)
             }
         },
-        _executeLayoutListeners: function(g, isInit) {
+        _executeLayoutListeners : function(g, isInit) {
             var i = 0, listeners = g.plugins.layoutListeners, static = g.static, tabStrip = static.tabStrip(), panelHolder = static.panelHolder();
             for (; i < listeners.length; i++) {
                 var listener = listeners[i];
                 if (isInit || !listener.onInitOnly)
                     listener.callback(tabStrip, panelHolder)
             }
-        },
+        }, 
         _wireEvents: function(g) {
             var static = g.static, settings = g.settings;
 
@@ -639,7 +387,7 @@ if (window.jQuery) {
             $('.glimpse-open').live('click', function() { g.open(); });
             $('.glimpse-close').live('click', function() { g.close(); });
             $('.glimpse-terminate').live('click', function() { g.terminate(); });
-            $('.glimpse-popout').live('click', function() { g.popout(); });
+            $('.glimpse-popout').live('click', function() { g.popup.open(); /*g.popout();*/ });
 
             //Tab Switching 
             $('.glimpse-tabs li:not(.glimpse-active, .glimpse-disabled)').live('mouseover mouseout', function(e) {
@@ -677,7 +425,7 @@ if (window.jQuery) {
                 });
             } 
             $(window).unload(function() { 
-                g.closePopout();
+                g.popup.close();
             })
 
         },
@@ -700,7 +448,7 @@ if (window.jQuery) {
         },
         addLayoutListener: function(callback, onInitOnly) {
             $.glimpse.plugins.layoutListeners.push({ 'callback': callback, 'onInitOnly': onInitOnly });
-        },
+        }, 
         open: function(speed, dontPersist) {
             var g = $.glimpse;
 
@@ -731,46 +479,13 @@ if (window.jQuery) {
                 $(this).remove();
             });
 
-            $.cookie('glimpseState', null);
-            $.cookie('glimpseClientName', null);
-            $.cookie('glimpseOptions', null);
-        },
-        popout: function() {
-            var g = this, static = g.static;
-
-            if (!static.popup || static.popup.closed) {
-                if (g.settings.firstPopup)
-                    alert('Glimpse Message: Glimpse may get blocked by your popup blocker, if this is the case make sure you set up and exception for this domain.')
-
-                g.settings.firstPopup = false;
-                g.settings.popupOn = true;
-                g.persistState();
-
-                static.dataString = JSON.stringify(static.data); 
-
-                var url = static.popupUrl + '?glimpseRequestID=' + $('#glimpseData').data('glimpse-requestID');
-                static.popup = window.open(url, 'GlimpsePopup', 'width=1000,height=600,status=no,toolbar=no,menubar=no,location=no,resizable=yes,scrollbars=yes');
-                 
-                if ($.popupExists(static.popup))
-                    g.close(undefined, true); 
-            } 
-        },
-        closePopout: function() {
-            var g = this;
-
-            if (g.settings.popupOn) {
-                if (g.static.isPopup && !$.cookie('glimpseKeepPopup')) {
-                    g.static.popup = null;
-                    g.settings.popupOn = false;
-                    g.persistState(); 
-                }
-                else 
-                    $.cookie('glimpseKeepPopup', '1');
-            }
+            $.glimpse.util.cookie('glimpseState', null);
+            $.glimpse.util.cookie('glimpseClientName', null);
+            $.glimpse.util.cookie('glimpseOptions', null);
         },
         persistState: function() {
             var g = $.glimpse;
-            $.cookie('glimpseOptions', g.settings);
+            $.glimpse.util.cookie('glimpseOptions', g.settings);
         },
         restoreState: function() {
             var g = $.glimpse;
@@ -797,25 +512,23 @@ if (window.jQuery) {
             this.refresh(glimpse, $.glimpseProcessor.buildHeading(static.url, static.clientName, ''));
         },
         init: function(data) {
-            var g = $.glimpse, static = g.static;
+            var g = $.glimpse, static = g.static; 
+            g.clientName = $.glimpse.util.cookie('glimpseClientName'); 
+             
             static.isPopup = window.location.pathname.indexOf(this.static.popupUrl) > -1;
 
             if (!data) {
                 if (static.isPopup && window.opener.glimpse) {  
-                    $.cookie('glimpseKeepPopup', ''); 
-                    $.glimpse.static.url = window.opener.$.glimpse.static.url;
-                    //glimpse = data = window.opener.glimpse;
-                    
-                    glimpse = data = JSON.parse(window.opener.$.glimpse.static.dataString)
-
-                    //static.dataString = JSON.stringify(static.data); 
+                    $.glimpse.util.cookie('glimpseKeepPopup', ''); 
+                    $.glimpse.static.url = window.opener.$.glimpse.static.url; 
+                    glimpse = data = JSON.parse(window.opener.$.glimpse.static.dataString) 
                 }
                 else 
                     return;
             }
 
             g.static.data = data; 
-            g.settings = $.extend(g.settings, $.cookie('glimpseOptions'));
+            g.settings = $.extend(g.settings, $.glimpse.util.cookie('glimpseOptions'));
 
             g._executeProtocolListeners(g, true);
 
@@ -826,7 +539,7 @@ if (window.jQuery) {
 
             $.glimpseProcessor.layout(g, $.glimpseProcessor.buildHeading(static.url, static.clientName, ''));
 
-            g._executeLayoutListeners(g, true);
+            g._executeLayoutListeners(g, true); 
 
             if (!static.isPopup)
                 $('body').append('<div class="glimpse-spacer"></div>');
@@ -834,11 +547,11 @@ if (window.jQuery) {
             g.restoreState();
 
             if (!static.isPopup && g.settings.popupOn)
-                g.popout(); 
+                g.popup.open(); 
         },
         plugins: {
             protocolListeners : [],
-            layoutListeners : []
+            layoutListeners : [] 
         },
         settings: {
             open : false,
@@ -850,31 +563,308 @@ if (window.jQuery) {
         static: {
             data : null,
             url : window.location.href.replace(window.location.protocol + '//' + window.location.host, ''),
-            clientName : $.cookie('glimpseClientName'),
-            html : { plugin: '<div class="glimpse-open"><div class="glimpse-icon"></div></div><div class="glimpse-holder glimpse"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon"></div><div class="glimpse-title"></div><div class="glimpse-buttons"><a href="#" title="Pop Out" class="glimpse-popout"></a><a href="#" title="Shutdown/Terminate" class="glimpse-terminate"></a><a href="#" title="Close/Minimize" class="glimpse-close"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>' },
+            clientName : '',
+            html : { plugin: '<div class="glimpse-open"><div class="glimpse-icon"></div></div><div class="glimpse-holder glimpse"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon"></div><div class="glimpse-title"></div><div class="glimpse-buttons"><a href="#" title="Pop Out" class="glimpse-popout"></a><a href="#" title="Shutdown/Terminate" class="glimpse-terminate"></a><a href="#" title="Close/Minimize" class="glimpse-close"></a></div><div class="glimpse-meta-warning" title="Glimpse has problems!"></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>' },
             tabStrip : function() { return $('.glimpse-tabs ul'); },
             panelHolder : function() { return $('.glimpse-panel-holder'); },
+            mainHolder : function() { return $('.glimpse-holder'); },
             isPopup : false,
             popupUrl : glimpsePath + 'Glimpse/Popup',
             popup : null 
+        },
+        popup : {},
+        util : {}
+    });
+    //#endregion
+
+    //Run glimpse 
+    $(document).ready(function() {
+        $.glimpse.init(glimpse); 
+    });
+     
+
+    $.extend($.glimpse.util, {  
+        htmlEncode : function(value) {
+            return !(value == undefined || value == null) ? $('<div/>').text(value).html() : '';
+        },
+        htmlDecode : function(value) {
+            return !(value == undefined || value == null) ? $('<div/>').html(value).text() : '';
+        },
+        lengthJson : function(data) {
+            var count = 0;
+            if ($.isPlainObject(data))
+                $.each(data, function(k, v) { count++; });
+            return count;
+        },
+        formatTime : function(d) {
+            if (typeof d === 'number')
+                d = new Date(d);
+            var padding = function(t) { return t < 10 ? '0' + t : t; }
+            return d.getHours() + ':' + padding(d.getMinutes()) + ':' + padding(d.getSeconds()) + ' ' + d.getMilliseconds();
+        },
+        cookie : function(key, value) {
+            key = encodeURIComponent(key)
+            //Set Cookie
+            if (arguments.length > 1) {
+                var t = new Date();
+                t.setDate(t.getDate() + 1000);
+
+                value = $.isPlainObject(value) ? JSON.stringify(value) : String(value);
+                return (document.cookie = key + '=' + encodeURIComponent(value) + '; expires=' + t.toUTCString() + '; path=/');
+            }
+
+            //Get cookie 
+            var result = new RegExp("(?:^|; )" + key + "=([^;]*)").exec(document.cookie);
+            if (result) {
+                result = decodeURIComponent(result[1]);
+                if (result.substr(0, 1) == '{')
+                    result = JSON.parse(result);
+                return result;
+            }
+            return null;
         }
     });
 
 
-    //Run glimpse 
-    $(document).ready(function() {
-        $.glimpse.init(glimpse);
+    //#region $.glimpse.popup
+    $.extend($.glimpse.popup, { 
+        open : function() {
+            var gp = this, g = $.glimpse, static = g.static;
+
+            if (!static.popup || static.popup.closed) {
+                if (g.settings.firstPopup)
+                    alert('Glimpse Message: Glimpse may get blocked by your popup blocker, if this is the case make sure you set up and exception for this domain.')
+
+                g.settings.firstPopup = false;
+                g.settings.popupOn = true;
+                g.persistState();
+
+                static.dataString = JSON.stringify(static.data); 
+
+                var url = static.popupUrl + '?glimpseRequestID=' + $('#glimpseData').data('glimpse-requestID');
+                static.popup = window.open(url, 'GlimpsePopup', 'width=1100,height=600,status=no,toolbar=no,menubar=no,location=no,resizable=yes,scrollbars=yes');
+                 
+                if (gp.popupWorked(static.popup))
+                    g.close(undefined, true); 
+            } 
+        },
+        close : function() {
+            var gp = this, g = $.glimpse;
+
+            if (g.settings.popupOn) {
+                if (g.static.isPopup && !$.glimpse.util.cookie('glimpseKeepPopup')) {
+                    g.static.popup = null;
+                    g.settings.popupOn = false;
+                    g.persistState(); 
+                }
+                else 
+                    $.glimpse.util.cookie('glimpseKeepPopup', '1');
+            }
+        },
+        popupWorked : function(popup) { 
+            var successfull = (popup && !popup.closed && typeof popup.closed != 'undefined');  
+            if (!successfull) 
+                alert("Glimpse Error: Glimpse popup was blocked.");  
+            return successfull
+        }
     });
+    //#endregion
 
+    //#region $.glimpseAjax
+    var XHRSpy = function () {
+        this.requestHeaders = {};
+        this.responseHeaders = {};
+    };
 
+    XHRSpy.prototype =
+    {
+        method: null,
+        url: null,
+        href: null,
+        async: null,
+        xhrRequest: null,
+        loaded: false,
+        success: false,
+        status: null,
+        statusText: null,
+        responseText: null,
+        requestHeaders: null,
+        responseHeaders: null,
+        startTime: null,
+        duration: null,
+        logRow: null,
+        send: function () { 
+            jQuery.glimpseAjax.callStarted(this);
+        },
+        finish: function () { 
+            jQuery.glimpseAjax.callFinished(this);
+        }
+    };
 
+    var XMLHttpRequestWrapper = function (activeXObject) {
+        // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+        // XMLHttpRequestWrapper internal variables
 
+        var xhrRequest = (typeof activeXObject != "undefined" ? activeXObject : new _XMLHttpRequest()),
+            spy = new XHRSpy(), that = this;
 
+        // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+        // XMLHttpRequestWrapper internal methods
 
+        var finishXHR = function () {
+            var duration = new Date().getTime() - spy.startTime;
+            var success = xhrRequest.status == 200;
 
+            //Pull out the header information
+            var responseHeadersText = xhrRequest.getAllResponseHeaders();
+            var responses = responseHeadersText ? responseHeadersText.split(/[\n\r]/) : [];
+            var reHeader = /^(\S+):\s*(.*)/;
+            for (var i = 0, l = responses.length; i < l; i++) {
+                var match = responses[i].match(reHeader);
+                if (match)
+                    spy.responseHeaders[match[1]] = match[2];
+            }
 
+            //Trigger the finish a bit latter
+            setTimeout(function () { spy.finish(); }, 200);
 
+            //Get the rest of the information
+            spy.success = success;
+            spy.loaded = true;
+            spy.status = xhrRequest.status;
+            spy.statusText = xhrRequest.statusText;
+            spy.responseText = xhrRequest.responseText;
+            spy.duration = duration;
+        };
 
+        var handleStateChange = function () {
+            that.readyState = xhrRequest.readyState;
+
+            if (xhrRequest.readyState == 4) {
+                that.statusText = xhrRequest.statusText;
+                that.status = xhrRequest.status;
+                that.response = xhrRequest.response;
+                that.responseText = xhrRequest.responseText;
+                that.responseType = xhrRequest.responseType;
+                that.responseXML = xhrRequest.responseXML;
+
+                finishXHR();
+                xhrRequest.onreadystatechange = function () { };
+            }
+            that.onreadystatechange();
+        };
+
+        // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+        // XMLHttpRequestWrapper public properties and handlers
+
+        this.readyState = 0;
+
+        this.onreadystatechange = function () { };
+
+        this.response = null;
+        this.responseText = null;
+        this.responseType = null;
+        this.responseXML = null;
+        this.status = null;
+        this.statusText = null;
+
+        // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+        // XMLHttpRequestWrapper public methods
+
+        this.open = function (method, url, async) {
+            if (spy.loaded)
+                spy = new XHRSpy();
+            spy.method = method;
+            spy.url = url;
+            spy.href = url;
+            spy.async = async;
+            spy.xhrRequest = xhrRequest;
+            //spy.urlParams = parseURLParamsArray(url);
+
+            if (!jQuery.browser.msie && async)                                                 //TODO: Change over to jQuery
+                xhrRequest.onreadystatechange = handleStateChange;
+
+            // xhr.open.apply not available in IE
+            if (xhrRequest.open.apply)                                              //TODO: Need to see if this applies
+                xhrRequest.open.apply(xhrRequest, arguments)
+            else
+                xhrRequest.open(method, url, async);
+
+            if (jQuery.browser.msie && async)                                                 //TODO: Change over to jQuery
+                xhrRequest.onreadystatechange = handleStateChange;
+
+        };
+
+        this.send = function (data) {
+            spy.data = data;
+            spy.startTime = new Date().getTime();
+
+            try {
+                xhrRequest.send(data);
+            }
+            catch (e) {
+                throw e;
+            }
+            finally {
+                spy.send();
+                if (!spy.async) {
+                    that.readyState = xhrRequest.readyState;
+                    finishXHR();
+                }
+            }
+        };
+
+        this.setRequestHeader = function (header, value) {
+            spy.requestHeaders[header] = value;
+            xhrRequest.setRequestHeader(header, value);
+        };
+
+        this.getResponseHeader = function (header) {
+            return xhrRequest.getResponseHeader(header);
+        };
+
+        this.getAllResponseHeaders = function () {
+            return xhrRequest.getAllResponseHeaders();
+        };
+
+        this.abort = function () {
+            return xhrRequest.abort();
+        };
+
+        return this;
+    };
+
+    var _ActiveXObject;
+    if (jQuery.browser.msie && jQuery.browser.version == "6.0") {
+        window._ActiveXObject = window.ActiveXObject;
+        window.ActiveXObject = function (name) {
+            var error = null;
+
+            try {
+                var activeXObject = new window._ActiveXObject(name);
+            }
+            catch (e) {
+                error = e;
+            }
+            finally {
+                if (!error) {
+                    var xhrObjects = " MSXML2.XMLHTTP.5.0 MSXML2.XMLHTTP.4.0 MSXML2.XMLHTTP.3.0 MSXML2.XMLHTTP Microsoft.XMLHTTP ";
+                    if (xhrObjects.indexOf(" " + name + " ") != -1)
+                        return new XMLHttpRequestWrapper(activeXObject);
+                    else
+                        return activeXObject;
+                }
+                else
+                    throw error.message;
+            }
+        };
+    }
+    else {
+        var _XMLHttpRequest = XMLHttpRequest;
+        window.XMLHttpRequest = function () {
+            return new XMLHttpRequestWrapper();
+        }
+    }
 
 
     $.glimpseAjax = {};
@@ -921,7 +911,7 @@ if (window.jQuery) {
             if ($('.glimpse-panel-message', panelItem).length > 0) {
                 panelItem.html($.glimpseProcessor.build([
                     ['Request URL', 'Status', 'Date/Time', 'Duration', 'Is Async', 'Inspect'],
-                    [window.location.pathname, '200', $.formatTime(new Date()), 'N/A', 'N/A', '!<a href="#">Reset</a>!']
+                    [window.location.pathname, '200', $.glimpse.util.formatTime(new Date()), 'N/A', 'N/A', '!<a href="#">Reset</a>!']
                 ], 0));
 
                 $('a', static.panel).click(function(e) {
@@ -931,10 +921,10 @@ if (window.jQuery) {
                 });
                 $('tr:last', static.panel).addClass('selected');
             }
-            ajaxSpy.clientName = $.cookie('glimpseClientName');
+            ajaxSpy.clientName = $.glimpse.util.cookie('glimpseClientName');
 
             //Add new row
-            $('table', panelItem).append('<tr class="loading" data-index="' + static.index + '"><th><div class="icon"></div>' + ajaxSpy.url + '</th><td class="glimpse-ajax-status">Loading...</td><td>' + $.formatTime(ajaxSpy.startTime) + '</td><td class="glimpse-ajax-duration">--</td><td>' + ajaxSpy.async + '</td><td class="glimpse-ajax-inspect">N/A</td></tr>');
+            $('table', panelItem).append('<tr class="loading" data-index="' + static.index + '"><th><div class="icon"></div>' + ajaxSpy.url + '</th><td class="glimpse-ajax-status">Loading...</td><td>' + $.glimpse.util.formatTime(ajaxSpy.startTime) + '</td><td class="glimpse-ajax-duration">--</td><td>' + ajaxSpy.async + '</td><td class="glimpse-ajax-inspect">N/A</td></tr>');
 
             //In theory I wouldn't need to do this every time but wanting to make sure that all rows are kept in sync
             $('table tbody tr:odd', panelItem).addClass('even');
@@ -992,17 +982,9 @@ if (window.jQuery) {
     //Wireup glimpse offical plugins
     $.glimpseAjax.init();
 
+    //#endregion
 
-
-
-
-
-
-
-
-
-
-
+    //#region $.glimpseRemote
 
     $.glimpseRemote = {};
     $.extend($.glimpseRemote, { 
@@ -1214,6 +1196,35 @@ if (window.jQuery) {
 
     //Wireup glimpse offical plugins
     $.glimpseRemote.init();
+
+    //#endregion
+
+    //#region $.glimpseMeta
+
+    $.glimpseMeta = {};
+    $.extend($.glimpseMeta, { 
+        init : function() { 
+            var gm = this;
+
+            //Wire up plugin 
+            $.glimpse.addLayoutListener(function(tabStrip, panelHolder) { gm.adjustLayout(tabStrip, panelHolder); }, true);  
+        }, 
+        adjustLayout : function(tabStrip, panelHolder) {
+            var gm = this, g = $.glimpse, mainHolder = g.static.mainHolder();
+
+            var warnTab = $('.glimpse-tabitem-GlimpseWarnings', tabStrip).hide();
+            if (warnTab.length > 0) {
+                $('.glimpse-meta-warning', mainHolder).show().click(function() {
+                    warnTab.click();
+                });
+            }
+        }
+    });
+
+    //Wireup glimpse offical plugins
+    $.glimpseMeta.init();
+
+    //#endregion
 
 })(jQuery); }   
 }

@@ -11,16 +11,6 @@ namespace Glimpse.Site.Controllers
         public virtual ActionResult Index()
         {
             return View();
-        }
-
-        public virtual ActionResult Talk()
-        {
-            return View();
-        }
-
-        public virtual ActionResult Questions()
-        {
-            return View();
-        }
+        } 
     }
 }
