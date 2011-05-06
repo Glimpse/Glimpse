@@ -564,7 +564,7 @@ if (window.jQuery) {
             data : null,
             url : window.location.href.replace(window.location.protocol + '//' + window.location.host, ''),
             clientName : '',
-            html : { plugin: '<div class="glimpse-open"><div class="glimpse-icon"></div></div><div class="glimpse-holder glimpse"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon"></div><div class="glimpse-title"></div><div class="glimpse-buttons"><a href="#" title="Pop Out" class="glimpse-popout"></a><a href="#" title="Shutdown/Terminate" class="glimpse-terminate"></a><a href="#" title="Close/Minimize" class="glimpse-close"></a></div><div class="glimpse-meta-warning" title="Glimpse has problems!"></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>' },
+            html : { plugin: '<div class="glimpse-open"><div class="glimpse-icon"></div></div><div class="glimpse-holder glimpse"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon"></div><div class="glimpse-title"></div><div class="glimpse-buttons"><a href="#" title="Pop Out" class="glimpse-popout"></a><a href="#" title="Shutdown/Terminate" class="glimpse-terminate"></a><a href="#" title="Close/Minimize" class="glimpse-close"></a></div><div class="glimpse-meta-warning" title="Glimpse has some warnings!"></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>' },
             tabStrip : function() { return $('.glimpse-tabs ul'); },
             panelHolder : function() { return $('.glimpse-panel-holder'); },
             mainHolder : function() { return $('.glimpse-holder'); },

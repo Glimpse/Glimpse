@@ -61,11 +61,11 @@ Given the scope of the project and what it can do, the concept isn't restricted 
 
 Platforms currently supported:
 
-* ASP.Net Web Forms 
 * ASP.Net MVC 
 
 Platforms target to be supported:
 
+* ASP.Net Web Forms 
 * PHP
 * Ruby on Rails 
 
@@ -89,6 +89,7 @@ Release Notes
 - Added list of loaded plugins to Glimpse/Config
 - Updated Binding plugin to have acctual view data
 - Fixed bugs with getting NotImplemented exceptions on trace tab
+- Fixed bugs with users who were extending DefaultModelBinder
 
 04/28/2011 - 0.80
 - Removed dependency on System.Drawing
@@ -126,3 +127,7 @@ Release Notes
 - Fixed 2 bugs with IE9 client rendering.
 - Fixed bug with CSS text-alignment.
 - Changed to Apache 2 license.
+
+Attribution
+-----------
+Some Icons are Copyright © Yusuke Kamiyamane. [http://p.yusukekamiyamane.com/]

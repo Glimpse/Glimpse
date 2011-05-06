@@ -73,7 +73,15 @@
     <Compile Include="Converter\OutputCacheAttributeConverter.cs" />
     <Compile Include="Converter\RouteValueDictionaryConverter.cs" />
     <Compile Include="Extensibility\IGlimpseWarning.cs" />
+    <Compile Include="Extensions\IModelBinderExtensions.cs" />
+    <Compile Include="Extensions\IActionInvokerExtensions.cs" />
+    <Compile Include="Interceptor\BindModelInterceptor.cs" />
+    <Compile Include="Interceptor\BindPropertyInterceptor.cs" />
+    <Compile Include="Interceptor\CreateModelInterceptor.cs" />
+    <Compile Include="Interceptor\ModelBinderInterceptorSelector.cs" />
+    <Compile Include="Interceptor\ModelBinderProxyGenerationHook.cs" />
     <Compile Include="Plumbing\GlimpseBinderMetadata.cs" />
+    <Compile Include="Plumbing\GlimpseBinderProvider.cs" />
     <Compile Include="Warning\ExceptionWarning.cs" />
     <Compile Include="Warning\NonVirtualMemberWarning.cs" />
     <Compile Include="Warning\NotAControllerActionInvokerWarning.cs" />
@@ -96,7 +104,7 @@
     <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
     <Compile Include="Interceptor\InvokeActionMethodInterceptor.cs" />
     <Compile Include="Interceptor\InvokeActionResultInterceptor.cs" />
-    <Compile Include="Interceptor\ProxyGenerationHook.cs" />
+    <Compile Include="Interceptor\ActionInvokerProxyGenerationHook.cs" />
     <Compile Include="Plugin\Asp\Request.cs" />
     <Compile Include="Plugin\Mvc\Binders.cs" />
     <Compile Include="Plugin\Mvc\MetaData.cs" />
@@ -143,6 +151,7 @@
     <Compile Include="Plugin\Asp\Server.cs" />
     <Compile Include="Plugin\Asp\Session.cs" />
     <Compile Include="Sanitizer\CSharpSanitizer.cs" />
+    <Compile Include="Warning\NotADefaultModelBinderWarning.cs" />
     <Compile Include="Warning\NotProxyableWarning.cs" />
     <Compile Include="Warning\Warning.cs" />
   </ItemGroup>
