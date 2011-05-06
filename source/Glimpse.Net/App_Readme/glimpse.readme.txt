@@ -87,6 +87,8 @@ Release Notes
 05/??/2011 - 0.81
 - Changed plugin initialization so that SetupInit is only called once.
 - Added list of loaded plugins to Glimpse/Config
+- Updated Binding plugin to have acctual view data
+- Fixed bugs with getting NotImplemented exceptions on trace tab
 
 04/28/2011 - 0.80
 - Removed dependency on System.Drawing

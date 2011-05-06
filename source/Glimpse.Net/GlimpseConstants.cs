@@ -2,6 +2,7 @@
 {
     public static class GlimpseConstants
     {
+        public const string BinderStore = "Glimpse.BinderStore";
         public const string AllFilters = "Glimpse.AllFilters";
         public const string CalledFilters = "Glimpse.CalledFilters";
         public const string ClientName = "ClientName";

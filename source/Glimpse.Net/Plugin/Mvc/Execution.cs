@@ -8,7 +8,6 @@ using Glimpse.Net.Plumbing;
 
 namespace Glimpse.Net.Plugin.Mvc
 {
-    //TODO: CLEAN ME! Very quickly haccked together!
     [GlimpsePlugin(ShouldSetupInInit = true)]
     internal class Execution : IGlimpsePlugin
     {

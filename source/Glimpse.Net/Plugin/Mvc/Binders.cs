@@ -1,8 +1,11 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Web;
-using System.Web.Mvc;
 using Glimpse.Net.Extensibility;
+using Glimpse.Net.Extensions;
 using Glimpse.Net.Plumbing;
+using System;
 
 namespace Glimpse.Net.Plugin.Mvc
 {
@@ -16,33 +19,36 @@ namespace Glimpse.Net.Plugin.Mvc
 
         public object GetData(HttpApplication application)
         {
-            return "Binding plugin still in development.  Check Trace tab for more info.";
+            var store = application.Context.BinderStore();
+
+            var table = new List<object[]> { new[] { "Property/Parameter", "Type", "Attempted Providers", "Raw Value", "Attempted Value", "Culture" } };
+
+            foreach (var boundProperty in store.Properties)
+            {
+                var providers = new List<object[]>{new []{"Provider", "Found"}};
+                providers.AddRange(boundProperty.NotFoundIn.Select(valueProvider => new[] {valueProvider.GetType().ToString(), "False"}));
+
+                if (boundProperty.FoundIn != null)
+                    providers.Add(new[]{boundProperty.FoundIn.GetType().ToString(), "True", "selected"});
+
+                table.Add(new [] {  string.IsNullOrEmpty(boundProperty.MemberOf) ? boundProperty.Name : boundProperty.MemberOf + "." + boundProperty.Name, 
+                                    boundProperty.Type.ToString(), 
+                                    providers, 
+                                    boundProperty.RawValue, 
+                                    boundProperty.AttemptedValue, 
+                                    boundProperty.Culture != null ? boundProperty.Culture.DisplayName:"",
+                                    boundProperty.FoundIn == null ? "error":""
+                });
+            }
+
+            return table;
         }
 
         public void SetupInit(HttpApplication application)
         {
-            //Wrap all binders
-            var binders = ModelBinders.Binders;
-            var keys = binders.Keys.ToList();
+            GlimpsePipelineInitiation.ModelBinders();
 
-            for (int i = 0; i < keys.Count; i++)
-            {
-                var type = keys[i];
-
-                if (!(binders[type] is GlimpseModelBinder))
-                    binders[type] = new GlimpseModelBinder(binders[type]);
-            }
-            if (!(ModelBinders.Binders.DefaultBinder is GlimpseDefaultModelBinder))
-                ModelBinders.Binders.DefaultBinder = new GlimpseDefaultModelBinder();
-
-            //Wrap all providers/provider factories
-            var factories = ValueProviderFactories.Factories;
-
-            for (int i = 0; i < factories.Count; i++)
-            {
-                if (!(factories[i] is GlimpseValueProviderFactory))
-                    factories[i] = new GlimpseValueProviderFactory(factories[i]);
-            }
+            GlimpsePipelineInitiation.ValueProviders();
         }
     }
 }

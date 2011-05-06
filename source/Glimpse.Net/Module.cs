@@ -17,7 +17,8 @@ namespace Glimpse.Net
     public class Module : IHttpModule
     {
         private static GlimpseConfiguration Configuration { get; set; }
-        private CompositionContainer Container { get; set; }
+        private static SafeDirectoryCatalog DirectoryCatalog { get; set; }
+        private static CompositionContainer Container { get; set; }
         private static GlimpseResponders Responders { get; set; }
 
         [ImportMany]
@@ -29,6 +30,10 @@ namespace Glimpse.Net
                             new GlimpseConfiguration();
             Responders = new GlimpseResponders();
             Plugins = Enumerable.Empty<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>>();
+
+            DirectoryCatalog = new SafeDirectoryCatalog("bin");
+
+            Container = new CompositionContainer(DirectoryCatalog);
         }
 
         public void Init(HttpApplication context)
@@ -105,9 +110,6 @@ namespace Glimpse.Net
         {
             var batch = new CompositionBatch();
 
-            var directoryCatalog = new SafeDirectoryCatalog("bin");
-
-            Container = new CompositionContainer(directoryCatalog);
             Container.ComposeParts(this, Responders);
 
             Container.Compose(batch);
@@ -115,7 +117,7 @@ namespace Glimpse.Net
             Plugins = Container.GetExports<IGlimpsePlugin, IGlimpsePluginRequirements>();
 
             var store = application.Context.GetWarnings();
-            store.AddRange(directoryCatalog.Exceptions.Select(exception => new ExceptionWarning(exception)));
+            store.AddRange(DirectoryCatalog.Exceptions.Select(exception => new ExceptionWarning(exception)));
 
             //wireup converters into serializer
             Responders.RegisterConverters();
@@ -123,8 +125,10 @@ namespace Glimpse.Net
 
         public void Dispose()
         {
+/*
             if (Container != null)
                 Container.Dispose();
+*/
         }
 
         private static void Persist(string json, HttpApplication ctx, Guid requestId)

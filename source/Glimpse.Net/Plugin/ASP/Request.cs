@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using Glimpse.Net.Extensibility;
 using Glimpse.Net.Extensions;
@@ -19,7 +18,6 @@ namespace Glimpse.Net.Plugin.Asp
         {
             var request = application.Request;
 
-            //TODO: Figure out why cookies have invalid domain, expires, HttpOnly properties
             var cookies = new List<object[]>
                               {
                                   new[]{"Name", "Path", "Secure", "Value"}
