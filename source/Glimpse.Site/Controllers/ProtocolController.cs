@@ -6,12 +6,12 @@ using System.Web.Mvc;
 
 namespace Glimpse.Site.Controllers
 {
-    public class ProtocolController : Controller
+    public partial class ProtocolController : Controller
     {
         //
         // GET: /Protocol/
 
-        public ActionResult Index()
+        public virtual ActionResult Index()
         {
             return View();
         }

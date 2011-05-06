@@ -24,6 +24,9 @@ using T4MVC;
 [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
 public static class MVC {
     public static Glimpse.Site.Controllers.HomeController Home = new Glimpse.Site.Controllers.T4MVC_HomeController();
+    public static Glimpse.Site.Controllers.ProtocolController Protocol = new Glimpse.Site.Controllers.T4MVC_ProtocolController();
+    public static Glimpse.Site.Controllers.QuestionsController Questions = new Glimpse.Site.Controllers.T4MVC_QuestionsController();
+    public static Glimpse.Site.Controllers.TalkController Talk = new Glimpse.Site.Controllers.T4MVC_TalkController();
     public static T4MVC.SharedController Shared = new T4MVC.SharedController();
 }
 

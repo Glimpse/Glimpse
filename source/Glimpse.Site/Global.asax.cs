@@ -22,9 +22,7 @@ namespace Glimpse.Site
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.IgnoreRoute("favicon.ico");
             routes.IgnoreRoute("Glimpse/{*pathInfo}");
-
-            routes.MapRoute("Home", "{action}", new { controller = "Home", action = "Index", id = UrlParameter.Optional });
-
+             
             routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}/{id}", // URL with parameters

@@ -17,11 +17,15 @@ namespace Glimpse.Net.Plumbing
             var cc = controllerContext;
             var bc = bindingContext;
 
-            Trace.Write("BINDMODEL CALLED ON " + bindingContext.ModelName + bindingContext.FallbackToEmptyPrefix.ToString());
+            Trace.Write("INTERFACE BINDMODEL CALLED ON " + bindingContext.ModelName + bindingContext.FallbackToEmptyPrefix.ToString());
 
             var result = ModelBinder.BindModel(cc, bc);
 
+            Trace.Write("INTERFACE BINDMODEL FINISHED ON " + bindingContext.ModelName + bindingContext.FallbackToEmptyPrefix.ToString());
+
+
             return result;
+
         }
     }
 }

@@ -48,8 +48,6 @@ namespace Glimpse.Site.Controllers {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNamesClass {
             public readonly string Index = "Index";
-            public readonly string Talk = "Talk";
-            public readonly string Questions = "Questions";
         }
 
 
@@ -59,8 +57,6 @@ namespace Glimpse.Site.Controllers {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewNames {
             public readonly string Index = "~/Views/Home/Index.cshtml";
-            public readonly string Questions = "~/Views/Home/Questions.cshtml";
-            public readonly string Talk = "~/Views/Home/Talk.cshtml";
         }
     }
 
@@ -70,16 +66,6 @@ namespace Glimpse.Site.Controllers {
 
         public override System.Web.Mvc.ActionResult Index() {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Index);
-            return callInfo;
-        }
-
-        public override System.Web.Mvc.ActionResult Talk() {
-            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Talk);
-            return callInfo;
-        }
-
-        public override System.Web.Mvc.ActionResult Questions() {
-            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Questions);
             return callInfo;
         }
 
