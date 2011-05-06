@@ -16,7 +16,7 @@ namespace Glimpse.Net
 {
     public class Module : IHttpModule
     {
-        private static GlimpseConfiguration Configuration { get; set; }
+        public static GlimpseConfiguration Configuration { get; set; }
         private CompositionContainer Container { get; set; }
         private static GlimpseResponders Responders { get; set; }
 
