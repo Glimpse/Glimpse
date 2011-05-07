@@ -38,5 +38,10 @@ namespace Glimpse.Net.Configuration
         {
             return ((ContentType)element);
         }
+
+        public void Add(ContentType contentType)
+        {
+            BaseAdd(contentType);
+        }
     }
 }
