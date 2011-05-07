@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using Glimpse.Net.Extensions;
+using Glimpse.Net.Warning;
 
 namespace Glimpse.Net.Plumbing
 {
@@ -21,20 +24,39 @@ namespace Glimpse.Net.Plumbing
 
         public static void ModelBinders()
         {
-            //TODO: Proxy DefaultModelBinder if I can
+            var warnings = HttpContext.Current.GetWarnings();
+
+            //handle static registered binders
             var binders = System.Web.Mvc.ModelBinders.Binders;
             var keys = binders.Keys.ToList();
-
             for (int i = 0; i < keys.Count; i++)
             {
                 var type = keys[i];
+                var binder = binders[type];
 
-                if (!(binders[type] is GlimpseModelBinder))
-                    binders[type] = new GlimpseModelBinder(binders[type]);
+                if (binder is DefaultModelBinder)
+                    if (binder.CanSupportDynamicProxy())
+                    {
+                        binders[type] = binder.CreateDynamicProxy();
+                        continue;
+                    }
+
+                warnings.Add(new NotADefaultModelBinderWarning(binder));
+                binders[type] = binder.Wrap();
             }
 
-            if (!(System.Web.Mvc.ModelBinders.Binders.DefaultBinder is GlimpseDefaultModelBinder))
-                System.Web.Mvc.ModelBinders.Binders.DefaultBinder = new GlimpseDefaultModelBinder();
+            //handle default binder
+            var defaultBinder = System.Web.Mvc.ModelBinders.Binders.DefaultBinder;
+            if (defaultBinder is DefaultModelBinder)
+                if (defaultBinder.CanSupportDynamicProxy())
+                {
+                    System.Web.Mvc.ModelBinders.Binders.DefaultBinder = defaultBinder.CreateDynamicProxy();
+                    return;
+                }
+
+
+            warnings.Add(new NotADefaultModelBinderWarning(defaultBinder));
+            System.Web.Mvc.ModelBinders.Binders.DefaultBinder = defaultBinder.Wrap();
         }
 
         public static void ValueProviders()
@@ -46,6 +68,16 @@ namespace Glimpse.Net.Plumbing
             {
                 if (!(factories[i] is GlimpseValueProviderFactory))
                     factories[i] = new GlimpseValueProviderFactory(factories[i]);
+            }
+        }
+
+        public static void ModelBinderProviders()
+        {
+            var binderProviders = System.Web.Mvc.ModelBinderProviders.BinderProviders;
+
+            for (int i = 0; i < binderProviders.Count; i++)
+            {
+                binderProviders[i] = new GlimpseBinderProvider(binderProviders[i]);
             }
         }
     }

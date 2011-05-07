@@ -1,5 +1,5 @@
-﻿using System.Diagnostics;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
+using Glimpse.Net.Extensions;
 
 namespace Glimpse.Net.Plumbing
 {
@@ -14,18 +14,23 @@ namespace Glimpse.Net.Plumbing
 
         public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {
-            var cc = controllerContext;
-            var bc = bindingContext;
 
-            Trace.Write("INTERFACE BINDMODEL CALLED ON " + bindingContext.ModelName + bindingContext.FallbackToEmptyPrefix.ToString());
+            var store = controllerContext.BinderStore();
+            var currentProp = store.CurrentProperty;
 
-            var result = ModelBinder.BindModel(cc, bc);
+            if (!currentProp.Name.Equals(bindingContext.ModelName))
+            {
+                store.MemberOf = "";
+                store.CurrentProperty = currentProp = new GlimpseModelBoundProperties { Name = bindingContext.ModelName, Type = bindingContext.ModelType };
+            }
+            currentProp.ModelBinderType = this.GetType().BaseType;
 
-            Trace.Write("INTERFACE BINDMODEL FINISHED ON " + bindingContext.ModelName + bindingContext.FallbackToEmptyPrefix.ToString());
+            //Trace.Write(string.Format("BINDMODEL ModelName:{0}, ModelType:{1}", bindingContext.ModelName, bindingContext.ModelType), "Selected");
+            var result = ModelBinder.BindModel(controllerContext, bindingContext);
 
+            currentProp.RawValue = result;
 
             return result;
-
         }
     }
 }

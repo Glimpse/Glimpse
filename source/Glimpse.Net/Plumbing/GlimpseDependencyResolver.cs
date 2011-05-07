@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Web.Mvc;
 using Glimpse.Net.Extensions;
 
@@ -30,6 +32,8 @@ namespace Glimpse.Net.Plumbing
             var iController = service as IController;
             if (iController != null) return iController.TrySetActionInvoker();
 
+
+            Trace.Write(string.Format("IDependencyResolver.GetService<{0}>() = {1}", serviceType, service == null ? "null" : service.GetType().ToString()));
             return service;
 
         }
@@ -43,6 +47,18 @@ namespace Glimpse.Net.Plumbing
                 //TODO:Test the objects if needed here...
             }
 
+            var resultString = "null";
+            if (results.Count()!=0)
+            {
+                var stringBuilder = new StringBuilder();
+                foreach (var result in results)
+                {
+                    stringBuilder.Append(result.GetType().ToString() + ",");
+                }
+                resultString = stringBuilder.ToString();
+            }
+
+            Trace.Write(string.Format("IDependencyResolver.GetServices<{0}>() = {1}", serviceType, resultString));
             return results;
         }
     }
