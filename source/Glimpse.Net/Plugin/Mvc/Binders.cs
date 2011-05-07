@@ -21,23 +21,27 @@ namespace Glimpse.Net.Plugin.Mvc
         {
             var store = application.Context.BinderStore();
 
-            var table = new List<object[]> { new[] { "Property/Parameter", "Type", "Attempted Providers", "Raw Value", "Attempted Value", "Culture" } };
+            var table = new List<object[]> { new[] { "Ordinal", "Model Binder", "Property/Parameter", "Type", "Attempted Value Providers", "Attempted Value", "Culture", "Raw Value" } };
+
+            var ordinal = 0;
 
             foreach (var boundProperty in store.Properties)
             {
-                var providers = new List<object[]>{new []{"Provider", "Found"}};
+                var providers = new List<object[]>{new []{"Provider", "Successful"}};
                 providers.AddRange(boundProperty.NotFoundIn.Select(valueProvider => new[] {valueProvider.GetType().ToString(), "False"}));
 
                 if (boundProperty.FoundIn != null)
                     providers.Add(new[]{boundProperty.FoundIn.GetType().ToString(), "True", "selected"});
 
-                table.Add(new [] {  string.IsNullOrEmpty(boundProperty.MemberOf) ? boundProperty.Name : boundProperty.MemberOf + "." + boundProperty.Name, 
+                table.Add(new [] {  ordinal++,
+                                    boundProperty.ModelBinderType.ToString(),
+                                    string.IsNullOrEmpty(boundProperty.MemberOf) ? boundProperty.Name : boundProperty.MemberOf + "." + boundProperty.Name, 
                                     boundProperty.Type.ToString(), 
                                     providers, 
-                                    boundProperty.RawValue, 
                                     boundProperty.AttemptedValue, 
-                                    boundProperty.Culture != null ? boundProperty.Culture.DisplayName:"",
-                                    boundProperty.FoundIn == null ? "error":""
+                                    boundProperty.Culture != null ? boundProperty.Culture.DisplayName:null,
+                                    boundProperty.RawValue,
+                                    string.IsNullOrEmpty(boundProperty.MemberOf) ? "":"quiet"
                 });
             }
 
@@ -46,6 +50,8 @@ namespace Glimpse.Net.Plugin.Mvc
 
         public void SetupInit(HttpApplication application)
         {
+            GlimpsePipelineInitiation.ModelBinderProviders();
+
             GlimpsePipelineInitiation.ModelBinders();
 
             GlimpsePipelineInitiation.ValueProviders();

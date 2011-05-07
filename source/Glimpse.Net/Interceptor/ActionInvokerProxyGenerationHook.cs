@@ -7,7 +7,7 @@ using Glimpse.Net.Warning;
 
 namespace Glimpse.Net.Interceptor
 {
-    public class ProxyGenerationHook : IProxyGenerationHook
+    public class ActionInvokerProxyGenerationHook : IProxyGenerationHook
     {
         public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
         {
