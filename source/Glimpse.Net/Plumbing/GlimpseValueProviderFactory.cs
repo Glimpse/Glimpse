@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Diagnostics;
+using System.Web.Mvc;
 
 namespace Glimpse.Net.Plumbing
 {
@@ -16,6 +17,8 @@ namespace Glimpse.Net.Plumbing
             var cc = controllerContext;
 
             var valueProvider = Factory.GetValueProvider(cc);
+
+            Trace.Write(string.Format("{0}.GetValueProvider(controllerContext) = {1}", Factory.GetType().Name, valueProvider == null ? "null" : valueProvider.GetType().ToString()));
 
             if (valueProvider != null && !(valueProvider is GlimpseValueProvider))
                 valueProvider = new GlimpseValueProvider(valueProvider);

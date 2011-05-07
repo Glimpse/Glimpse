@@ -54,5 +54,15 @@ namespace Glimpse.Net.Configuration
                 return this["contentTypes"] as ContentTypeCollection;
             }
         }
+
+        [ConfigurationProperty("pluginBlacklist", IsRequired = true)] //TODO: Provide DefaultValue and make this not required
+        public PluginBlacklistCollection PluginBlacklist
+        {
+            set { this["pluginBlacklist"] = value; }
+            get
+            {
+                return this["pluginBlacklist"] as PluginBlacklistCollection;
+            }
+        }
     }
 }
