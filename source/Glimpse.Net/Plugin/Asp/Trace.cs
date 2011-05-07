@@ -38,8 +38,11 @@ namespace Glimpse.Net.Plugin.Asp
                     case "fail":
                         message.Add("fail");
                         break;
-                    case "quiet ":
+                    case "quiet":
                         message.Add("quiet");
+                        break;
+                    case "timing":
+                        message.Add("loading");
                         break;
                     case "selected":
                         message.Add("selected");

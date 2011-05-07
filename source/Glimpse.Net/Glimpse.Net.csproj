@@ -74,6 +74,7 @@
     <Compile Include="Converter\HandleErrorAttributeConverter.cs" />
     <Compile Include="Converter\OutputCacheAttributeConverter.cs" />
     <Compile Include="Converter\RouteValueDictionaryConverter.cs" />
+    <Compile Include="Extensibility\GlimpseTrace.cs" />
     <Compile Include="Extensibility\IGlimpseWarning.cs" />
     <Compile Include="Extensions\IModelBinderExtensions.cs" />
     <Compile Include="Extensions\IActionInvokerExtensions.cs" />

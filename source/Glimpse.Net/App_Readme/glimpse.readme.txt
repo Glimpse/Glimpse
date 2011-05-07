@@ -92,6 +92,7 @@ Release Notes
 - Fixed bugs with getting NotImplemented exceptions on trace tab
 - Fixed bugs with users who were extending DefaultModelBinder
 - Added ability to set glimpseState (cookie) to Hidden, which allows Glimpse to record and track remote client requests without rendering UI/Data to their response. (Useful for use with the remote tab)
+- Added GlimpseTrace static facade to simplify tracing
 
 04/28/2011 - 0.80
 - Removed dependency on System.Drawing

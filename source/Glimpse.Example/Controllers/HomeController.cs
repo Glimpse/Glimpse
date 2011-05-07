@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
+using Glimpse.Net.Extensibility;
 using MvcMusicStore.Models;
 
 namespace MvcMusicStore.Controllers
@@ -20,6 +21,17 @@ namespace MvcMusicStore.Controllers
             var albums = GetTopSellingAlbums(5);
 
             Trace.Write("Got top 5 albums");
+
+            using (GlimpseTrace.Time("It takes {t:g} to trace (which is {t:ss} seconds)"))
+            {
+
+                GlimpseTrace.Info("This is info from Glimpse");
+                GlimpseTrace.Warn("This is warn from Glimpse at {0}", DateTime.Now);
+                GlimpseTrace.Error("This is error from {0}", GetType());
+                GlimpseTrace.Fail("This is Fail from Glimpse");
+
+            }
+
 
             TempData["Test"] = "A bit of temp";
             
