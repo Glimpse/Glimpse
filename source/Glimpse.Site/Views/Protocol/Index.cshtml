@@ -3,7 +3,7 @@
 
     <h2>Protocol Definition</h2>
 
-    <table width="100%">
+    <table style="margin-left:-250px; width:1400px;">
         <tr>
             <td colspan="2">
                 <h4>Scenario 1 (Pass):</h4>
@@ -23,7 +23,7 @@
                             of Darth Vader.'
 };</pre> 
             </td>
-            <td width="50%" class="glimpse-scenario glimpse glimpse-scenario-one glimpse-panel"></td>
+            <td width="850" class="glimpse-scenario glimpse glimpse-scenario-one glimpse-panel"></td>
         </tr>
         <tr>
             <td colspan="2">
@@ -731,6 +731,17 @@ var glimpse = '', glimpsePath = '/';
             xmlhttp.send();
         });
 
+
+
+        $('.info td:first-child, .warn td:first-child, tr.error td:first-child, .fail td:first-child, .loading td:first-child', $('.glimpse-panel')).not(':has(.icon)').prepend('<div class="icon"></div>');
+
+        setTimeout(function() {
+                $('.glimpse-start-open .glimpse-expand', panelHolder).click();
+            }, 10);
+
+        $('.glimpse-expand').live('click', function() {
+            $(this).toggleClass('glimpse-collapse').next().toggle().next().toggle();
+        });
     });
 </script>
 

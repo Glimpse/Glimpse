@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>@ViewBag.Title</title>
+    <title>Glimpse - A client side look at whats going on in your server @ViewBag.Title</title>
     <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Content/jquery.contentslider.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Content/jquery.jscrollpane.css")" rel="stylesheet" type="text/css" />
@@ -87,5 +87,29 @@
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
       })(); 
     </script> 
+    <script type="text/javascript">
+    var uservoiceOptions = {
+      /* required */
+      key: 'getglimpse',
+      host: 'getglimpse.uservoice.com', 
+      forum: '1',
+      showTab: true,  
+      /* optional */
+      alignment: 'right',
+      background_color:'#267A9D', 
+      text_color: 'white',
+      hover_color: '#1A4157',
+      lang: 'en'
+    };
+
+    function _loadUserVoice() {
+      var s = document.createElement('script');
+      s.setAttribute('type', 'text/javascript');
+      s.setAttribute('src', ("https:" == document.location.protocol ? "https://" : "http://") + "cdn.uservoice.com/javascripts/widgets/tab.js");
+      document.getElementsByTagName('head')[0].appendChild(s);
+    }
+    _loadSuper = window.onload;
+    window.onload = (typeof window.onload != 'function') ? _loadUserVoice : function() { _loadSuper(); _loadUserVoice(); };
+    </script>
 </body>
 </html>

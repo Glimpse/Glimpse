@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<publishData>
+  <publishProfile publishUrl="C:\Users\avanderhoorn\Desktop\GetGlimpse" deleteExistingFiles="True" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="Profile1" publishMethod="FileSystem" replaceMatchingFiles="False" userName="" savePWD="False" userPWD="" SelectedForPublish="True">
+    <file relUrl="Content/nugetlogo.png" publishTime="05/01/2011 16:24:20" />
+    <file relUrl="bin/System.Web.Routing.dll" publishTime="03/18/2010 20:31:26" />
+    <file relUrl="Global.asax" publishTime="05/01/2011 16:12:40" />
+    <file relUrl="Content/cs_rightImg.png" publishTime="05/01/2011 16:24:20" />
+    <file relUrl="Content/open-quote.gif" publishTime="05/01/2011 16:24:20" />
+    <file relUrl="Views/Questions/Index.cshtml" publishTime="05/01/2011 20:47:02" />
+    <file relUrl="Content/github.gif" publishTime="05/01/2011 16:24:20" />
+    <file relUrl="Scripts/jquery.jscrollpane.min.js" publishTime="05/01/2011 16:38:35" />
+    <file relUrl="Scripts/jquery.contentslider.js" publishTime="05/01/2011 16:38:35" />
+    <file relUrl="bin/System.Web.Abstractions.dll" publishTime="03/18/2010 20:31:26" />
+    <file relUrl="Views/Shared/Error.cshtml" publishTime="05/01/2011 16:12:40" />
+    <file relUrl="Scripts/jquery.jscrollpane.js" publishTime="05/01/2011 16:38:35" />
+    <file relUrl="Content/cs_leftImg.png" publishTime="05/01/2011 16:24:20" />
+    <file relUrl="Scripts/jquery-1.4.4.js" publishTime="05/01/2011 16:38:35" />
+    <file relUrl="Views/_ViewStart.cshtml" publishTime="05/01/2011 16:12:40" />
+    <file relUrl="Views/Talk/Index.cshtml" publishTime="05/04/2011 20:34:07" />
+    <file relUrl="Content/uservoice-icon.png" publishTime="05/01/2011 16:24:20" />
+    <file relUrl="packages.config" publishTime="05/01/2011 20:48:42" />
+    <file relUrl="bin/System.Web.WebPages.dll" publishTime="01/05/2011 15:45:38" />
+    <file relUrl="favicon.ico" publishTime="05/01/2011 17:25:12" />
+    <file relUrl="bin/System.Web.Mvc.xml" publishTime="02/09/2011 10:26:24" />
+    <file relUrl="Content/jquery.jscrollpane.css" publishTime="05/01/2011 16:24:20" />
+    <file relUrl="Views/Shared/_PageStart.cshtml" publishTime="05/01/2011 16:48:58" />
+    <file relUrl="bin/System.Web.WebPages.xml" publishTime="12/19/2010 23:59:38" />
+    <file relUrl="bin/System.Web.Mvc.dll" publishTime="01/05/2011 17:42:16" />
+    <file relUrl="bin/Glimpse.Site.dll" publishTime="05/05/2011 06:36:19" />
+    <file relUrl="Scripts/jquery-1.4.4.min.js" publishTime="05/01/2011 16:38:35" />
+    <file relUrl="Content/glimpseMedium.png" publishTime="05/01/2011 16:24:20" />
+    <file relUrl="Views/Shared/_Layout.cshtml" publishTime="05/07/2011 16:55:24" />
+    <file relUrl="bin/System.Web.Helpers.dll" publishTime="01/05/2011 15:45:38" />
+    <file relUrl="Scripts/jquery.mousewheel.js" publishTime="05/01/2011 16:38:35" />
+    <file relUrl="Content/jquery.contentslider.css" publishTime="05/01/2011 16:24:20" />
+    <file relUrl="Views/Home/Index.cshtml" publishTime="05/01/2011 17:26:31" />
+    <file relUrl="Views/Protocol/Index.cshtml" publishTime="05/02/2011 08:56:19" />
+    <file relUrl="Scripts/jquery.easing.1.3.js" publishTime="05/01/2011 16:38:35" />
+    <file relUrl="Content/close-quote.gif" publishTime="05/01/2011 16:24:20" />
+    <file relUrl="Web.config" publishTime="05/04/2011 21:16:05" />
+    <file relUrl="Content/Site.css" publishTime="05/01/2011 16:24:20" />
+    <file relUrl="Glimpse/glimpseClient.js" publishTime="05/02/2011 08:37:31" />
+    <file relUrl="Views/Web.config" publishTime="05/04/2011 21:16:05" />
+    <file relUrl="bin/Glimpse.Site.pdb" publishTime="05/05/2011 06:36:19" />
+    <file relUrl="Content/glimpseLogo.png" publishTime="05/01/2011 16:24:20" />
+    <file relUrl="Content/twitter.png" publishTime="05/01/2011 16:24:20" />
+    <file relUrl="Glimpse/glimpseSprite.png" publishTime="05/02/2011 08:37:31" />
+    <file relUrl="bin/System.Web.Helpers.xml" publishTime="12/19/2010 23:59:38" />
+  </publishProfile>
+</publishData>
