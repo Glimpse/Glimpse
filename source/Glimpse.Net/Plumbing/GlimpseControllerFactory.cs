@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Diagnostics;
+using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.SessionState;
 using Glimpse.Net.Extensions;
@@ -20,6 +21,8 @@ namespace Glimpse.Net.Plumbing
             var cn = controllerName;
 
             IController controller = ControllerFactory.CreateController(rq, cn);
+
+            Trace.Write(string.Format("{0}.CreateController(requestContext, \"{1}\") = {2}", ControllerFactory.GetType().Name, controllerName, controller == null ? "null" : controller.GetType().ToString()));
 
             if (controller != null)
                 return controller.TrySetActionInvoker();

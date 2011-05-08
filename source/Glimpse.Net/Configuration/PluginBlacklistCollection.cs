@@ -1,13 +1,13 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Configuration;
 
 namespace Glimpse.Net.Configuration
 {
-    public class ContentTypeCollection : ConfigurationElementCollection
+    public class PluginBlacklistCollection : ConfigurationElementCollection
     {
-        public ContentType this[int index]
+        public GlimpsePlugin this[int index]
         {
-            get { return BaseGet(index) as ContentType; }
+            get { return BaseGet(index) as GlimpsePlugin; }
             set
             {
                 if (BaseGet(index) != null)
@@ -18,24 +18,22 @@ namespace Glimpse.Net.Configuration
             }
         }
 
-        public bool Contains(string matchContentType)
+        public IEnumerable<string> TypeNames()
         {
-            foreach (ContentType ct in this)
+            foreach (GlimpsePlugin plugin in this)
             {
-                if (ct.Content.Equals(matchContentType, StringComparison.InvariantCultureIgnoreCase)) return true;
+                yield return plugin.TypeName;
             }
-
-            return false;
         }
 
         protected override ConfigurationElement CreateNewElement()
         {
-            return new ContentType();
+            return new GlimpsePlugin();
         }
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((ContentType)element);
+            return ((GlimpsePlugin)element);
         }
     }
 }

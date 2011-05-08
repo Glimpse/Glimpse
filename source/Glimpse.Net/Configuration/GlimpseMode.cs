@@ -3,6 +3,7 @@
     public enum GlimpseMode
     {
         On,
-        Off
+        Off,
+        Hidden
     }
 }

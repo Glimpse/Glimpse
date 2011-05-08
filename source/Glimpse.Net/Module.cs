@@ -17,7 +17,7 @@ namespace Glimpse.Net
     public class Module : IHttpModule
     {
         private static GlimpseConfiguration Configuration { get; set; }
-        private static SafeDirectoryCatalog DirectoryCatalog { get; set; }
+        private static BlacklistedSafeDirectoryCatalog DirectoryCatalog { get; set; }
         private static CompositionContainer Container { get; set; }
         private static GlimpseResponders Responders { get; set; }
 
@@ -26,12 +26,11 @@ namespace Glimpse.Net
 
         static Module()
         {
-            Configuration = ConfigurationManager.GetSection("glimpse") as GlimpseConfiguration ??
-                            new GlimpseConfiguration();
+            Configuration = ConfigurationManager.GetSection("glimpse") as GlimpseConfiguration ?? new GlimpseConfiguration();
             Responders = new GlimpseResponders();
             Plugins = Enumerable.Empty<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>>();
 
-            DirectoryCatalog = new SafeDirectoryCatalog("bin");
+            DirectoryCatalog = new BlacklistedSafeDirectoryCatalog("bin", Configuration.PluginBlacklist.TypeNames());
 
             Container = new CompositionContainer(DirectoryCatalog);
         }
