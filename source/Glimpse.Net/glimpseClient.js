@@ -577,13 +577,16 @@ if (window.jQuery) {
     });
     //#endregion
 
+    //#region $.glimpse.util
+    //#endregion
+
     //Run glimpse 
     $(document).ready(function() {
         $.glimpse.init(glimpse); 
     });
-     
+    
 
-    $.extend($.glimpse.util, {  
+    $.extend($.glimpse.util, { 
         htmlEncode : function(value) {
             return !(value == undefined || value == null) ? $('<div/>').text(value).html() : '';
         },
@@ -624,7 +627,6 @@ if (window.jQuery) {
             return null;
         }
     });
-
 
     //#region $.glimpse.popup
     $.extend($.glimpse.popup, { 
