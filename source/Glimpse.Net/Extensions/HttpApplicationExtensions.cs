@@ -37,7 +37,7 @@ namespace Glimpse.Net.Extensions
             {
                 var validMode = store[GlimpseConstants.ValidMode] as bool?;
                 if (!validMode.HasValue)
-                    store[GlimpseConstants.ValidMode] = validMode = application.GetGlimpseMode() == GlimpseMode.On;
+                    store[GlimpseConstants.ValidMode] = validMode = application.GetGlimpseMode() == GlimpseMode.On || application.GetGlimpseMode() == GlimpseMode.Hidden;
 
                 if (!validMode.Value) return false;
             }

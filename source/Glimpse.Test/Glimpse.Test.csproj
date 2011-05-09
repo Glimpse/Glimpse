@@ -151,10 +151,6 @@
       <Project>{21F99168-7D7B-49F2-A97C-5A983E0CA16F}</Project>
       <Name>Glimpse.Net</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Glimpse.Protocol\Glimpse.Protocol.csproj">
-      <Project>{A6AFEFD7-1602-4880-B001-E6E697BB8EC6}</Project>
-      <Name>Glimpse.Protocol</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Home\" />

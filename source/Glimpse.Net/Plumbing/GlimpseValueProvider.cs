@@ -25,7 +25,7 @@ namespace Glimpse.Net.Plumbing
                 store.CurrentProperty.NotFoundIn.Add(ValueProvider);
             }
 
-            Trace.Write(string.Format("{0}.ContainsPrefix('{1}') = {2}", ValueProvider.GetType().Name, prefix, containsPrefix));
+            //Trace.Write(string.Format("{0}.ContainsPrefix('{1}') = {2}", ValueProvider.GetType().Name, prefix, containsPrefix));
             return containsPrefix;
         }
 
@@ -38,12 +38,11 @@ namespace Glimpse.Net.Plumbing
             {
                 var store = HttpContext.Current.BinderStore();
                 store.CurrentProperty.FoundIn = ValueProvider;
-                store.CurrentProperty.RawValue = result.RawValue;
                 store.CurrentProperty.AttemptedValue = result.AttemptedValue;
                 store.CurrentProperty.Culture = result.Culture;
             }
 
-            Trace.Write(string.Format("{0}.GetValue('{1}') = {2}", ValueProvider.GetType().Name, key, result == null ? null : result.AttemptedValue));
+            //Trace.Write(string.Format("{0}.GetValue('{1}') = {2}", ValueProvider.GetType().Name, key, result == null ? null : result.AttemptedValue));
             return result;
         }
     }

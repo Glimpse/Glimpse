@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Script.Serialization;
+using Glimpse.Net.Configuration;
 using Glimpse.Net.Extensibility;
 using Glimpse.Net.Extensions;
 using Glimpse.Net.Sanitizer;
@@ -97,10 +98,13 @@ namespace Glimpse.Net.Responder
             }
             else
             {
-                var path = VirtualPathUtility.ToAbsolute("~/", application.Context.Request.ApplicationPath);
-                var html = string.Format(@"<script type='text/javascript' id='glimpseData' data-glimpse-requestID='{1}'>var glimpse = {0}, glimpsePath = '{2}';</script>", json, requestId, path);
-                html += @"<script type='text/javascript' id='glimpseClient' src='" + path + RootPath + "glimpseClient.js'></script>";
-                application.Response.Write(html);
+                if (application.GetGlimpseMode() == GlimpseMode.On)
+                {
+                    var path = VirtualPathUtility.ToAbsolute("~/", application.Context.Request.ApplicationPath);
+                    var html = string.Format(@"<script type='text/javascript' id='glimpseData' data-glimpse-requestID='{1}'>var glimpse = {0}, glimpsePath = '{2}';</script>", json, requestId, path);
+                    html += @"<script type='text/javascript' id='glimpseClient' src='" + path + RootPath + "glimpseClient.js'></script>";
+                    application.Response.Write(html);
+                }
             }
 
             return json;

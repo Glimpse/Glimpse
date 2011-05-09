@@ -35,46 +35,59 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Castle.Core">
-      <HintPath>..\..\packages\Castle.Core.1.2.0\lib\Castle.Core.dll</HintPath>
+      <HintPath>..\..\lib\Castle.Core.2.5.2\dotNet35\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.DynamicProxy2">
-      <HintPath>..\..\packages\Castle.DynamicProxy.2.2.0\lib\Castle.DynamicProxy2.dll</HintPath>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Castle.Services.Logging.log4netIntegration">
-      <HintPath>..\..\packages\Castle.Core.1.2.0\lib\Castle.Services.Logging.log4netIntegration.dll</HintPath>
+    <Reference Include="System">
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Castle.Services.Logging.NLogIntegration">
-      <HintPath>..\..\packages\Castle.Core.1.2.0\lib\Castle.Services.Logging.NLogIntegration.dll</HintPath>
+    <Reference Include="System.ComponentModel.Composition">
+      <Private>True</Private>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+    <Reference Include="System.configuration">
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="NLog">
-      <HintPath>..\..\packages\NLog.1.0.0.505\lib\NLog.dll</HintPath>
+    <Reference Include="System.Web">
+      <Private>True</Private>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.configuration" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Extensions">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\ContentTypeCollection.cs" />
     <Compile Include="Configuration\ContentType.cs" />
     <Compile Include="Configuration\GlimpseConfiguration.cs" />
+    <Compile Include="Configuration\GlimpsePlugin.cs" />
     <Compile Include="Configuration\IpAddress.cs" />
     <Compile Include="Configuration\IpCollection.cs" />
     <Compile Include="Configuration\GlimpseMode.cs" />
+    <Compile Include="Configuration\PluginBlacklistCollection.cs" />
     <Compile Include="Converter\AuthenticationSectionConverter.cs" />
     <Compile Include="Converter\CustomErrorsSectionConverter.cs" />
     <Compile Include="Converter\HandleErrorAttributeConverter.cs" />
     <Compile Include="Converter\OutputCacheAttributeConverter.cs" />
     <Compile Include="Converter\RouteValueDictionaryConverter.cs" />
+    <Compile Include="Extensibility\GlimpseTrace.cs" />
     <Compile Include="Extensibility\IGlimpseWarning.cs" />
+    <Compile Include="Extensions\IModelBinderExtensions.cs" />
+    <Compile Include="Extensions\IActionInvokerExtensions.cs" />
+    <Compile Include="Interceptor\BindModelInterceptor.cs" />
+    <Compile Include="Interceptor\BindPropertyInterceptor.cs" />
+    <Compile Include="Interceptor\CreateModelInterceptor.cs" />
+    <Compile Include="Interceptor\ModelBinderInterceptorSelector.cs" />
+    <Compile Include="Interceptor\ModelBinderProxyGenerationHook.cs" />
     <Compile Include="Plumbing\GlimpseBinderMetadata.cs" />
+    <Compile Include="Plumbing\GlimpseBinderProvider.cs" />
+    <Compile Include="Responder\BaseImageResonder.cs" />
+    <Compile Include="Responder\Logo.cs" />
     <Compile Include="Warning\ExceptionWarning.cs" />
+    <Compile Include="Warning\NonProxyableMemberWarning.cs" />
     <Compile Include="Warning\NonVirtualMemberWarning.cs" />
     <Compile Include="Warning\NotAControllerActionInvokerWarning.cs" />
     <Compile Include="Warning\NotAControllerWarning.cs" />
@@ -96,7 +109,7 @@
     <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
     <Compile Include="Interceptor\InvokeActionMethodInterceptor.cs" />
     <Compile Include="Interceptor\InvokeActionResultInterceptor.cs" />
-    <Compile Include="Interceptor\ProxyGenerationHook.cs" />
+    <Compile Include="Interceptor\ActionInvokerProxyGenerationHook.cs" />
     <Compile Include="Plugin\Asp\Request.cs" />
     <Compile Include="Plugin\Mvc\Binders.cs" />
     <Compile Include="Plugin\Mvc\MetaData.cs" />
@@ -119,7 +132,7 @@
     <Compile Include="Plumbing\GlimpseViewEngine.cs" />
     <Compile Include="Plumbing\GlimpseViewEngineCallMetadata.cs" />
     <Compile Include="Plumbing\GlimpseFilter.cs" />
-    <Compile Include="Plumbing\SafeDirectoryCatalog.cs" />
+    <Compile Include="Plumbing\BlacklistedSafeDirectoryCatalog.cs" />
     <Compile Include="PreApplicationStartCode.cs" />
     <Compile Include="Responder\Clients.cs" />
     <Compile Include="Responder\Config.cs" />
@@ -143,6 +156,7 @@
     <Compile Include="Plugin\Asp\Server.cs" />
     <Compile Include="Plugin\Asp\Session.cs" />
     <Compile Include="Sanitizer\CSharpSanitizer.cs" />
+    <Compile Include="Warning\NotADefaultModelBinderWarning.cs" />
     <Compile Include="Warning\NotProxyableWarning.cs" />
     <Compile Include="Warning\Warning.cs" />
   </ItemGroup>
@@ -153,17 +167,19 @@
     <EmbeddedResource Include="glimpseSprite.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="web.config.transform" />
-    <None Include="Glimpse.nuspec">
+    <EmbeddedResource Include="glimpseLogo.png" />
+    <Content Include="nuspec\Content\web.config.transform" />
+    <None Include="nuspec\Glimpse.nuspec">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="App_Readme\glimpse.readme.txt" />
-    <None Include="packages.config" />
+    <Content Include="nuspec\Content\App_Readme\glimpse.readme.txt" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="nuspec\lib\net40\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

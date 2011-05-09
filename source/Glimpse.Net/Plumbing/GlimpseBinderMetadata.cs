@@ -37,6 +37,7 @@ namespace Glimpse.Net.Plumbing
             NotFoundIn = new HashSet<IValueProvider>();
         }
 
+        public Type ModelBinderType { get; set; }
         public string Name { get; set; }
         public Type Type { get; set; }
         public HashSet<IValueProvider> NotFoundIn { get; set; }
