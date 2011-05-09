@@ -70,6 +70,8 @@
     <Compile Include="Interceptor\ModelBinderProxyGenerationHook.cs" />
     <Compile Include="Plumbing\GlimpseBinderMetadata.cs" />
     <Compile Include="Plumbing\GlimpseBinderProvider.cs" />
+    <Compile Include="Responder\BaseImageResonder.cs" />
+    <Compile Include="Responder\Logo.cs" />
     <Compile Include="Warning\ExceptionWarning.cs" />
     <Compile Include="Warning\NonProxyableMemberWarning.cs" />
     <Compile Include="Warning\NonVirtualMemberWarning.cs" />
@@ -151,6 +153,7 @@
     <EmbeddedResource Include="glimpseSprite.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="glimpseLogo.png" />
     <Content Include="web.config.transform" />
     <None Include="Glimpse.nuspec">
       <SubType>Designer</SubType>
