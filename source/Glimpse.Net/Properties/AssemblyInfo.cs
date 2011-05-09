@@ -39,4 +39,5 @@ using Glimpse.Net;
 
 [assembly: System.Web.UI.WebResource("Glimpse.Net.glimpseClient.js", "application/x-javascript")]
 [assembly: System.Web.UI.WebResource("Glimpse.Net.glimpseSprinte.png", "image/png")]
+
 [assembly: PreApplicationStartMethod(typeof(PreApplicationStartCode), "Start")]

@@ -21,6 +21,10 @@ The following configuration values are allowed for Glimpse in your web.config:
     <contentTypes>
         <add contentType="text/html"/>
     </contentTypes>
+    <pluginBlacklist>
+		<add plugin="Glimpse.Net.Plugin.Asp.Request"/>
+		<add plugin="Glimpse.Net.Plugin.Mvc.MetaData"/>
+	</pluginBlacklist>
 </glimpse>
 
 
@@ -84,7 +88,7 @@ Details coming soon.
 
 Release Notes
 -------------
-05/??/2011 - 0.81
+05/08/2011 - 0.81
 - Changed plugin initialization so that SetupInit is only called once.
 - Added list of loaded plugins to Glimpse/Config
 - Added node to configuration to allow for blacklisting unwanted plugins. Configuration takes the form <glimpse><pluginBlacklist><add plugin="[Type.Name.Including.Namespace]"/></pluginBlacklist></glimpse>

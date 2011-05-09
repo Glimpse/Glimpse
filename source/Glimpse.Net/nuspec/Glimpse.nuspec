@@ -3,15 +3,15 @@
     <!-- Values in dollar $igns are automatically pulled from the AssemblyInfo.cs attributes by NuGet.exe -->
     <metadata>
         <id>Glimpse</id>
-        <version>$version$</version>
+        <version>0.81</version>
         <title>Glimpse Web Debugger (Beta)</title>
-        <authors>$author$</authors>
-        <owners>$author$</owners>
+        <authors>nmolnar, avanderhoorn</authors>
+        <owners>nmolnar, avanderhoorn</owners>
         <licenseUrl>http://www.opensource.org/licenses/apache2.0</licenseUrl>
         <projectUrl>http://getglimpse.com</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <iconUrl>http://getglimpse.com/content/glimpse32.png</iconUrl>
-        <description>$description$</description>
+        <description>Glimpse is a web debugger used to gain a better understanding of whats happening inside of your webserver. (Beta)</description>
         <summary>A client side Glimpse into whats going on in your server.</summary>
         <tags>MVC ASP.NET Web</tags>
     </metadata>
