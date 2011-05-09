@@ -1,10 +1,7 @@
-﻿using System;
-using System.Web;
+﻿using System.Web;
 using System.Web.Mvc;
 using Castle.DynamicProxy;
 using Glimpse.Net.Interceptor;
-using Glimpse.Net.Plumbing;
-using Castle.Core.Interceptor;
 using Glimpse.Net.Warning;
 
 namespace Glimpse.Net.Extensions

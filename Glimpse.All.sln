@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Net", "source\Glimpse.Net\Glimpse.Net.csproj", "{21F99168-7D7B-49F2-A97C-5A983E0CA16F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9B91189D-5F8B-45F6-BF92-77DDDA28CEBA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Test", "source\Glimpse.Test\Glimpse.Test.csproj", "{1C2AE34B-E826-4510-92E9-28DE9B4AEB0C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Sample", "source\Glimpse.Example\Glimpse.Sample.csproj", "{A1DDF7DA-D1FB-4B52-A7B3-D2A2099482CE}"

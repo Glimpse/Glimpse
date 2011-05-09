@@ -1,5 +1,5 @@
 ﻿using System.Web.Mvc;
-using Castle.Core.Interceptor;
+using Castle.DynamicProxy;
 using Glimpse.Net.Extensions;
 
 namespace Glimpse.Net.Interceptor

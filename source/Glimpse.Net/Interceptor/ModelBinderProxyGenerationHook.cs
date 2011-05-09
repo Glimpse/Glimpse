@@ -21,6 +21,12 @@ namespace Glimpse.Net.Interceptor
             return result;
         }
 
+        public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)
+        {
+            var warnings = HttpContext.Current.GetWarnings();
+            warnings.Add(new NonProxyableMemberWarning(type, memberInfo));
+        }
+
         public void NonVirtualMemberNotification(Type type, MemberInfo memberInfo)
         {
             var warnings = HttpContext.Current.GetWarnings();
