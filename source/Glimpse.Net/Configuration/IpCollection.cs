@@ -1,6 +1,4 @@
 ﻿using System.Configuration;
-using System.Linq;
-using System.Net;
 
 namespace Glimpse.Net.Configuration
 {

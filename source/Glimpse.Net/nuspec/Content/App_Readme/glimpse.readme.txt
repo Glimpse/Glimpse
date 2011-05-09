@@ -17,6 +17,7 @@ The following configuration values are allowed for Glimpse in your web.config:
     <ipAddresses> <!-- List of IP addresses allowed to get Glimpse data.  localhost (IPv4 & IPv6) by default -->
         <add address="127.0.0.1" />
         <add address="::1" />
+        <add range="192\.168\.*" />
     </ipAddresses>
     <contentTypes>
         <add contentType="text/html"/>

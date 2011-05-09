@@ -50,9 +50,9 @@ namespace Glimpse.Net.Configuration
             return false;
         }
 
-        // there's not a good way to specify that "one of"
-        // a set of attributes is required, this will alert
-        // that address is not found unless a range exists
+        // there's not a good way to specify that at least
+        // one of many attributes is required; this will alert
+        // if Address is not found unless Range exists
         protected override object OnRequiredPropertyNotFound(string name)
         {
             if (HasRequiredFields()) return null;
