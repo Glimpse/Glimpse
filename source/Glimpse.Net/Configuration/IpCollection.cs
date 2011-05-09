@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using System.Linq;
 using System.Net;
 
 namespace Glimpse.Net.Configuration
@@ -20,16 +21,10 @@ namespace Glimpse.Net.Configuration
 
         public bool Contains(string matchIp)
         {
-            IPAddress parsedAddress;
-
-            if (!IPAddress.TryParse(matchIp, out parsedAddress))
-                return false;
-
-            foreach (IpAddress ip in this)
+            foreach (IpAddress address in this)
             {
-                if (ip.Address == parsedAddress.ToString()) return true;
+                if (address.Matches(matchIp)) return true;
             }
-
             return false;
         }
 

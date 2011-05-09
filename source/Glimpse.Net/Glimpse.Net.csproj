@@ -65,9 +65,11 @@
     <Compile Include="Configuration\GlimpseConfiguration.cs" />
     <Compile Include="Configuration\GlimpsePlugin.cs" />
     <Compile Include="Configuration\IpAddress.cs" />
+    <Compile Include="Configuration\IpAddressFormatValidator.cs" />
     <Compile Include="Configuration\IpCollection.cs" />
     <Compile Include="Configuration\GlimpseMode.cs" />
     <Compile Include="Configuration\PluginBlacklistCollection.cs" />
+    <Compile Include="Configuration\IpAddressValidity.cs" />
     <Compile Include="Converter\AuthenticationSectionConverter.cs" />
     <Compile Include="Converter\CustomErrorsSectionConverter.cs" />
     <Compile Include="Converter\HandleErrorAttributeConverter.cs" />
