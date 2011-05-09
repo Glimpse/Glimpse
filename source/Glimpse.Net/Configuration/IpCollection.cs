@@ -42,5 +42,10 @@ namespace Glimpse.Net.Configuration
         {
             return ((IpAddress) element);
         }
+
+        public void Add(IpAddress address)
+        {
+            BaseAdd(address);
+        }
     }
 }
