@@ -6,10 +6,12 @@ namespace Glimpse.Net.Sanitizer
 {
     public class CSharpSanitizer:IGlimpseSanitizer
     {
+        private static readonly Regex GenericRegex = new Regex(@"\`[0-9]+\[([^\s^,^:,^;^""]+)\]", RegexOptions.Compiled);
+
         public string Sanitize(string json)
         {
-            json = Regex.Replace(json, @"(?<=`[0-9]+\[.+)\](?=""| )", @">"); //Replace '>' for generics
-            json = Regex.Replace(json, @"`[0-9]\[", @"<"); //Replace '<' for generics
+            json = GenericRegex.Replace(json, @"<$1>"); //Replace '`1[]' for generics
+            json = GenericRegex.Replace(json, @"<$1>"); //Replace '`1[]' for generics (twice for nested)
             json = Regex.Replace(json, @"(?<=System\.Nullable<.+)>(?= )", @"?"); //Add '?' for nullable types
             json = Regex.Replace(json, @"System.Nullable<", @""); //Add '?' for nullable types
             json = json.Replace("System.Boolean", "bool"); //Convert CLR type names to c# keywords
