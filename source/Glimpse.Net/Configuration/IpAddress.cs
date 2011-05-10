@@ -64,5 +64,16 @@ namespace Glimpse.Net.Configuration
         {
             return !string.IsNullOrWhiteSpace(Address) || !string.IsNullOrWhiteSpace(Range);
         }
+
+        public override string ToString()
+        {
+            if (!string.IsNullOrWhiteSpace(Address))
+                return string.Format("Address: {0}", Address);
+
+            if (!string.IsNullOrWhiteSpace(Range))
+                return string.Format("Range: {0}", Range);
+            
+            return string.Empty;
+        }
     }
 }

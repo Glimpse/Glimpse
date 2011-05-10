@@ -36,7 +36,7 @@ namespace Glimpse.Net.Responder
 
             foreach (IpAddress ipAddress in configuration.IpAddresses)
             {
-                response.Write(string.Format("<li>{0}</li>", ipAddress.Address));
+                response.Write(string.Format("<li>{0}</li>", ipAddress));
             }
             response.Write("</ol></li><li>Allowed ContentType's = <ol>");
             foreach (ContentType contentType in configuration.ContentTypes)
