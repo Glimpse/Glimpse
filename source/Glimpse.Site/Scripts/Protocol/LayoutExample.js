@@ -5,8 +5,6 @@
 
     var scenarioOneData = {
         'Movie': 'Star Wars',
-        'Movie1': '[hi] [byte]',
-        'Movie2': '![hi] [byte]!',
         'Genera/Theme': 'Science Fiction',
         'GlimpseOn': 'True',
         'Plot & Description': 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.'
@@ -252,4 +250,28 @@
     if (glimpse == '') 
         $.glimpse._wireCommonPluginEvents($.glimpse); 
     $.glimpseProcessor.applyPostRenderTransforms($('.protocol'));
+
+
+    //Sample rendering
+    var sampleRender = function(data) {
+        $('.glimpse-scenario-example').show().html($.glimpseProcessor.build(data, 0));
+        $.glimpseProcessor.applyPostRenderTransforms($('.glimpse-scenario-example'));
+    }
+    sampleRender(scenarioOneData);
+
+    //Trigger new rendering
+    $('.glimpse-sample-trigger').click(function(e) {
+        e.preventDefault;
+        try
+        {
+            var data = jQuery.parseJSON($('.glimpse-sample').val()); 
+            sampleRender(data); 
+        }
+        catch(err)
+        {
+            alert(err);
+        }
+
+        return false;
+    });
 });

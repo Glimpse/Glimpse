@@ -1,6 +1,6 @@
-﻿if (!JSON || !jQuery) {
-    if (!JSON) { alert('Glimpse Message (JSON): Sorry but at the current time Glimpse doesn\'t support your browser. This is because it doesn\'t implement the JSON object, we are looking to help you out more soon. Try using a more modern browser in the short term.'); }
-    if (!jQuery) { alert('Glimpse Message (jQuery): Sorry but at the current time Glimpse doesn\'t support your site. This is because it doesn\'t include jQuery, we are looking to help you out more soon.'); }
+﻿if (!window.JSON || !window.jQuery) {
+    if (!window.JSON) { alert('Glimpse Message (JSON): Sorry but at the current time Glimpse doesn\'t support your browser. This is because it doesn\'t implement the JSON object, we are looking to help you out more soon. Try using a more modern browser in the short term.'); }
+    if (!window.jQuery) { alert('Glimpse Message (jQuery): Sorry but at the current time Glimpse doesn\'t support your site. This is because it doesn\'t include jQuery, we are looking to help you out more soon.'); }
 } else {
 
 var glimpse, glimpsePath;
@@ -111,17 +111,11 @@ if (window.jQuery) {
                 }
             }
 
+            //Sort Elemetns
             $('li', tabStrip).sortElements();
             $('.glimpse-panel', panelHolder).sortElements();
-             
-             /*
-            //Set Inital State - TODO: don't like how this works... need to review
-            $('.info td:first-child, .warn td:first-child, tr.error td:first-child, .fail td:first-child, .loading td:first-child', $('.glimpse-panel')).not(':has(.icon)').prepend('<div class="icon"></div>');
-
-            setTimeout(function() {
-                $('.glimpse-start-open .glimpse-expand', panelHolder).click();
-                }, 10);
-            */
+            
+            //Adjust render
             that.applyPostRenderTransforms(panelHolder);
 
             //Select tab
@@ -411,14 +405,7 @@ if (window.jQuery) {
 
             //Resize
             $('.glimpse-resizer').resizer(settings.height);
-
-            /*
-            //Exspand/Collapse
-            $('.glimpse-expand').live('click', function() {
-                $(this).toggleClass('glimpse-collapse').next().toggle().next().toggle();
-            });
-            */
-
+             
             g._wireCommonPluginEvents(g);
 
             //Resize panels if we are in popup

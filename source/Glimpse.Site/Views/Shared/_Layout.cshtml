@@ -3,8 +3,7 @@
 <head>
     <title>Glimpse - A client side look at whats going on in your server @ViewBag.Title</title>
     <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
-    <link href="@Url.Content("~/Content/jquery.contentslider.css")" rel="stylesheet" type="text/css" />
-    <link href="@Url.Content("~/Content/jquery.jscrollpane.css")" rel="stylesheet" type="text/css" />
+    @this.RenderSection("styles", false)
 </head> 
 <body>
 

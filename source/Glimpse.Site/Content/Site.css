@@ -37,4 +37,5 @@ blockquote:first-letter { background: url(/Content/open-quote.gif) no-repeat lef
 .myButton:active { position:relative; top:1px; }
 .questions li { padding:0.5em 0; line-height:1.4em; }
 
-.glimpse-scenario-data, .glimpse-scenario { padding-bottom:4em; }
+.glimpse-scenario { padding-bottom:4em; }
+.glimpse-scenario-data { padding-top:0.5em; }
