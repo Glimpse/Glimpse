@@ -63,6 +63,12 @@
     <Content Include="Content\cs_leftImg.png" />
     <Content Include="Content\cs_rightImg.jpg" />
     <Content Include="Content\cs_rightImg.png" />
+    <Content Include="Content\glimpse100.png" />
+    <Content Include="Content\Glimpse128.png" />
+    <Content Include="Content\Glimpse256.png" />
+    <Content Include="Content\Glimpse32.png" />
+    <Content Include="Content\Glimpse512.png" />
+    <Content Include="Content\Glimpse64.png" />
     <Content Include="Content\glimpseLogo.png" />
     <Content Include="Content\glimpseMedium.png" />
     <Content Include="Content\jquery.jscrollpane.css" />

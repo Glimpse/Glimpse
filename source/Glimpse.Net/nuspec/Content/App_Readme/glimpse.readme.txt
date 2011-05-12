@@ -97,6 +97,15 @@ Release Notes
 - Fixed bugs with users who were extending DefaultModelBinder
 - Added ability to set glimpseState (cookie) to Hidden, which allows Glimpse to record and track remote client requests without rendering UI/Data to their response. (Useful for use with the remote tab)
 - Added GlimpseTrace static facade to simplify tracing
+- Updated icons to be less pixelated
+- Added client side meta data plugin
+    - Glimpse warning and UI button added
+    - Glimpse information and UI button added
+- Client bug fixes for popout window
+- Glimpse close button added to conifg
+- Glimpse logo added as an embeded asset
+- Refactoring of Glimpse JS to avoid possibility of conflict with hosts code 
+- Warnings when you don't have jQuery or JSON avaibable 
 
 04/28/2011 - 0.80
 - Removed dependency on System.Drawing

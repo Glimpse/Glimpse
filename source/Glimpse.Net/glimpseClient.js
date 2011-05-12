@@ -114,18 +114,28 @@ if (window.jQuery) {
             $('li', tabStrip).sortElements();
             $('.glimpse-panel', panelHolder).sortElements();
              
+             /*
             //Set Inital State - TODO: don't like how this works... need to review
             $('.info td:first-child, .warn td:first-child, tr.error td:first-child, .fail td:first-child, .loading td:first-child', $('.glimpse-panel')).not(':has(.icon)').prepend('<div class="icon"></div>');
 
             setTimeout(function() {
                 $('.glimpse-start-open .glimpse-expand', panelHolder).click();
                 }, 10);
-            
+            */
+            that.applyPostRenderTransforms(panelHolder);
 
             //Select tab
             that.restoreTab(g);
 
             $('.glimpse-title').html(title);
+        },
+        applyPostRenderTransforms : function(scope) { 
+            //Set Inital State - TODO: don't like how this works... need to review
+            $('.info td:first-child, .warn td:first-child, tr.error td:first-child, .fail td:first-child, .loading td:first-child', scope).not(':has(.icon)').prepend('<div class="icon"></div>');
+
+            setTimeout(function() {
+                $('.glimpse-start-open .glimpse-expand', scope).click();
+                }, 10);
         },
         addTab: function(container, data, key) {
             var disabled = (data === undefined || data === null) ? ' glimpse-disabled' : '';
@@ -196,31 +206,23 @@ if (window.jQuery) {
             var that = this, limit = 3;
             if (((level > 0 && data.length > (limit + 1)) || level > 1) && !forceFull)
                 return that.buildCustomPreview(data, limit);
-
-            var isSimpleString = typeof data[0] == 'string';
-            if (isSimpleString && data.length == 1)  
-                return that.buildStringPreview(data[0], level + 1);   
                 
-            var html = '<table><thead><tr class="glimpse-row-header-' + level + '">', startingIndex = (isSimpleString ? 0 : 1), headerColumnCount = isSimpleString ? 1 : data[0].length;
-            if (!isSimpleString) {
-                for (var x = 0; x < headerColumnCount; x++)
-                    html += '<th>' + $.glimpseContent.formatString(data[0][x]) + '</th>'; 
-            }
-            else 
-                html += '<th>Values</th>'; 
-            html += '</tr></thead>';
-
-            for (var i = startingIndex; i < data.length; i++) {
-                var rowData = data[i];
-                html += '<tr class="' + (i % 2 ? 'odd' : 'even') + (!isSimpleString && rowData.length > headerColumnCount ? ' ' + rowData[rowData.length - 1] : '') + '">';
-                if (!isSimpleString) {
-                    for (var x = 0; x < headerColumnCount; x++)
-                        html += '<td>' + that.build(rowData[x], level + 1) + '</td>';
+            var html = '<table><thead><tr class="glimpse-row-header-' + level + '">';
+            if ($.isArray(data[0])) { 
+                for (var x = 0; x < data[0].length; x++)
+                    html += '<th>' + $.glimpseContent.formatString(data[0][x]) + '</th>';
+                html += '</tr></thead>';
+                for (var i = 1; i < data.length; i++) {
+                    html += '<tr class="' + (i % 2 ? 'odd' : 'even') + (data[i].length > data[0].length ? ' ' + data[i][data[i].length - 1] : '') + '">';
+                    for (var x = 0; x < data[0].length; x++)
+                        html += '<td>' + that.build(data[i][x], level + 1) + '</td>';
+                    html += '</tr>';
                 }
-                else
-                    html += '<td>' + that.buildString(rowData, level + 1) + '</td>'; 
-
-                html += '</tr>';
+            }
+            else { 
+                html += '<th>Values</th></tr></thead>';
+                for (var i = 0; i < data.length; i++) 
+                    html += '<tr class="' + (i % 2 ? 'odd' : 'even') + '"><td>' + that.build(data[i], level + 1) + '</td></tr>'; 
             }
             html += '</table>';
             return html;
@@ -240,20 +242,15 @@ if (window.jQuery) {
             return html;
         },
         buildCustomPreview: function(data, level) {
-            var that = this, isSimpleString = typeof data[0] == 'string', rowLength = (isSimpleString ? data.length : data.length - 1);
-            
-            if (isSimpleString && rowLength == 1)  
-                return that.buildStringPreview(data[0], level + 1);  
-            if (data[0] == undefined || data[0] == null || data[0] == '')
-                return '';
+            var that = this, isComplex = ($.isArray(data[0]) || $.isPlainObject(data[0])), length = (isComplex ? data.length - 1 : data.length), rowMax = 2, columnMax = 3, columnLimit = 1, rowLimit = (rowMax < length ? rowMax : length), html = '<span class="glimpse-expand"></span><span class="glimpse-preview-object"><span class="start">[</span>';
+             
+            if (isComplex) {
+                columnLimit = ((data[0].length > columnMax) ? columnMax : data[0].length);
+                for (var i = 1; i <= rowLimit + 1; i++) {
+                    html += that.newItemSpacer(i, rowLimit, length);
+                    if (i > length || i > rowLimit)
+                        break;
 
-            var rowMax = 2, columnMax = 3, startingIndex = (isSimpleString ? 0 : 1), rowLimit = (rowMax < rowLength ? rowMax : rowLength), columnLimit = isSimpleString ? 1 : ((data[0].length > columnMax) ? columnMax : data[0].length), html = '<span class="glimpse-expand"></span><span class="glimpse-preview-object"><span class="start">[</span>'; 
-            for (var i = startingIndex; i <= rowLimit + 1; i++) {
-                html += that.newItemSpacer(i, rowLimit, rowLength);
-                if (i > rowLength || i > rowLimit)
-                    break;
-
-                if (!isSimpleString) {
                     html += '<span class="start">[</span>';
                     var spacer = '';
                     for (var x = 0; x < columnLimit; x++) {
@@ -264,10 +261,16 @@ if (window.jQuery) {
                         html += spacer + '<span>...</span>'
                     html += '<span class="end">]</span>';
                 }
-                else {   
-                    html += '<span>\'</span>' + that.buildStringPreview(data[i], level + 99) + '<span>\'</span>'; 
+            }
+            else {   
+                for (var i = 0; i <= rowLimit; i++) {
+                    html += that.newItemSpacer(i + 1, rowLimit, length); 
+                    if (i >= length || i >= rowLimit)
+                        break; 
+                    html += '<span>\'</span>' + that.buildStringPreview(data[i], level + 99) + '<span>\'</span>';   
                 }
             }
+
             html += '<span class="end">]</span></span><span class="glimpse-preview-show">' + that.buildCustomTable(data, level, true) + '</span>';
             return html;
         },
@@ -292,13 +295,9 @@ if (window.jQuery) {
             return content;
         },
         newItemSpacer: function(currentRow, rowLimit, dataLength) {
-            var html = '';
-            if (rowLimit != dataLength) {
-                if (currentRow > 1)
-                    html += '<span class="rspace">,</span>';
-                if (currentRow > rowLimit)
-                    html += '<span class="small">length=' + dataLength + '</span>';
-            }
+            var html = '';   
+            if (currentRow > 1 && (currentRow <= rowLimit || dataLength > rowLimit)) { html += '<span class="rspace">,</span>'; }
+            if (currentRow > rowLimit && dataLength > rowLimit) { html += '<span class="small">length=' + dataLength + '</span>'; } 
             return html;
         }
     });
@@ -413,10 +412,14 @@ if (window.jQuery) {
             //Resize
             $('.glimpse-resizer').resizer(settings.height);
 
+            /*
             //Exspand/Collapse
             $('.glimpse-expand').live('click', function() {
                 $(this).toggleClass('glimpse-collapse').next().toggle().next().toggle();
             });
+            */
+
+            g._wireCommonPluginEvents(g);
 
             //Resize panels if we are in popup
             if (static.isPopup) { 
@@ -426,8 +429,13 @@ if (window.jQuery) {
             } 
             $(window).unload(function() { 
                 g.popup.close();
-            })
-
+            }) 
+        },
+        _wireCommonPluginEvents : function(g) {
+            //Exspand/Collapse
+            $('.glimpse-expand').live('click', function() {
+                $(this).toggleClass('glimpse-collapse').next().toggle().next().toggle();
+            });
         },
         _wireCallback: function(g) {
             //Remember height 

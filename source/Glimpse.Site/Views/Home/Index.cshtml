@@ -202,3 +202,24 @@
         </div>
     </div>
 </div>
+
+
+
+@section scripts {  
+    <script src="@Url.Content(Links.Scripts.jquery_easing_1_3_js)" type="text/javascript"></script>
+    <script src="@Url.Content(Links.Scripts.jquery_contentslider_js)" type="text/javascript"></script>
+    <script src="@Url.Content(Links.Scripts.jquery_mousewheel_js)" type="text/javascript"></script>
+    <script src="@Url.Content(Links.Scripts.jquery_jscrollpane_js)" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+	        $('#contentslider').ContentSlider({ 
+		        speed : 800,
+		        easing : 'easeInOutBack'
+	        });
+            $('.scroll-pane').jScrollPane();
+            $('.read-more').click(function() {
+                $('.cs_rightBtn').click();
+            });
+        });
+    </script>
+}

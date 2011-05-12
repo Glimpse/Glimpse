@@ -1,4 +1,4 @@
-﻿using System.Web.Mvc;
+﻿using System.Web.Mvc; 
 
 namespace MvcMusicStore.Helpers
 {
@@ -6,14 +6,9 @@ namespace MvcMusicStore.Helpers
     {
         public static string Truncate(this HtmlHelper helper, string input, int length)
         {
-            if (input.Length <= length)
-            {
-                return input;
-            }
-            else
-            {
-                return input.Substring(0, length) + "...";
-            }
+            if (input.Length <= length) 
+                return input; 
+            return input.Substring(0, length) + "..."; 
         }
     }
 }
