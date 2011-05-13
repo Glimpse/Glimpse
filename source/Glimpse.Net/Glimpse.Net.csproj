@@ -90,6 +90,7 @@
     <Compile Include="Plumbing\GlimpseBinderMetadata.cs" />
     <Compile Include="Plumbing\GlimpseBinderProvider.cs" />
     <Compile Include="Responder\BaseImageResonder.cs" />
+    <Compile Include="Responder\GlimpseContractResolver.cs" />
     <Compile Include="Responder\Logo.cs" />
     <Compile Include="Warning\ExceptionWarning.cs" />
     <Compile Include="Warning\NonProxyableMemberWarning.cs" />

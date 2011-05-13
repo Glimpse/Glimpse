@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Web;
 using System.Web.Script.Serialization;
@@ -12,7 +11,6 @@ using Glimpse.Net.Extensions;
 using Glimpse.Net.Sanitizer;
 using Glimpse.Net.Warning;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace Glimpse.Net.Responder
 {
@@ -75,12 +73,13 @@ namespace Glimpse.Net.Responder
                 }
                 catch(Exception ex)
                 {
-                    var message = ex.Message;
+                    var message = JsonConvert.SerializeObject(ex.Message, Formatting.None);
+                    message = message.Remove(message.Length-1).Remove(0, 1);
+                    var callstack = JsonConvert.SerializeObject(ex.StackTrace, Formatting.None);
+                    callstack = callstack.Remove(callstack.Length - 1).Remove(0, 1);
+                    const string helpMessage = "Please implement an IGlimpseConverter for the type mentioned above, or one of its base types, to fix this problem. More info on a better experience for this coming soon, keep an eye on <a href='http://getGlimpse.com' target='main'>getGlimpse.com</a></span>";
 
-                    if (ex is InvalidOperationException)
-                        sb.Append(string.Format("\"{0}\":\"{1} : {2}<br/><span style='color:red;'>Please implement an IGlimpseConverter for the type mentioned above, or one of its base types, to fix this problem. More info on a better experience for this coming soon, keep an eye on <a href='http://getGlimpse.com' target='main'>getGlimpse.com</a></span>\",", item.Key, ex.GetType().Name, message));
-                    else
-                        sb.Append(string.Format("\"{0}\":\"{1} : {2}\",", item.Key, ex.GetType().Name, message));
+                    sb.Append(string.Format("\"{0}\":\"<span style='color:red;font-weight:bold'>{1}</span><br/>{2}</br><span style='color:black;font-weight:bold'>{3}</span>\",", item.Key, message, callstack, helpMessage));
                 }
             }
 
@@ -118,18 +117,6 @@ namespace Glimpse.Net.Responder
             }
 
             return json;
-        }
-    }
-
-    public class GlimpseContractResolver : DefaultContractResolver
-    {
-        protected override List<MemberInfo> GetSerializableMembers(Type objectType)
-        {
-            var baseMembers = base.GetSerializableMembers(objectType);
-
-            //TODO: Make this provider or config based
-            baseMembers = (from m in baseMembers where !m.Name.Equals("_entityWrapper") select m).ToList();
-            return baseMembers;
         }
     }
 }
