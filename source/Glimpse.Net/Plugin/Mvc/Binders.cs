@@ -5,7 +5,6 @@ using System.Web;
 using Glimpse.Net.Extensibility;
 using Glimpse.Net.Extensions;
 using Glimpse.Net.Plumbing;
-using System;
 
 namespace Glimpse.Net.Plugin.Mvc
 {
@@ -20,6 +19,8 @@ namespace Glimpse.Net.Plugin.Mvc
         public object GetData(HttpApplication application)
         {
             var store = application.Context.BinderStore();
+
+            if (store.Properties.Count == 0) return null;
 
             var table = new List<object[]> { new[] { "Ordinal", "Model Binder", "Property/Parameter", "Type", "Attempted Value Providers", "Attempted Value", "Culture", "Raw Value" } };
 

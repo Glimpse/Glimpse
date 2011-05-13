@@ -34,11 +34,16 @@
     <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core">
+    <Reference Include="Castle.Core, Version=2.5.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Castle.Core.2.5.2\dotNet35\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json.Net35, Version=4.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Json40r2\Bin\Net35\Newtonsoft.Json.Net35.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Private>True</Private>
@@ -158,6 +163,7 @@
     <Compile Include="Sanitizer\CSharpSanitizer.cs" />
     <Compile Include="Warning\NotADefaultModelBinderWarning.cs" />
     <Compile Include="Warning\NotProxyableWarning.cs" />
+    <Compile Include="Warning\SerializationWarning.cs" />
     <Compile Include="Warning\Warning.cs" />
   </ItemGroup>
   <ItemGroup>

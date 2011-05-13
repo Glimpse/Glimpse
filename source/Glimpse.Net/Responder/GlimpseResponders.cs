@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Web;
 using System.Web.Script.Serialization;
@@ -9,6 +10,9 @@ using Glimpse.Net.Configuration;
 using Glimpse.Net.Extensibility;
 using Glimpse.Net.Extensions;
 using Glimpse.Net.Sanitizer;
+using Glimpse.Net.Warning;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Glimpse.Net.Responder
 {
@@ -52,14 +56,21 @@ namespace Glimpse.Net.Responder
         {
             IDictionary<string, object> data;
             if (!application.TryGetData(out data)) return "Error: No Glimpse Data Found";
-
+            var warnings = application.Context.GetWarnings();
 
             var sb = new StringBuilder("{");
             foreach (var item in data)
             {
                 try
                 {
-                    var dataString = JsSerializer.Serialize(item.Value);
+                    var jsonSerializerSettings = new JsonSerializerSettings{ ContractResolver = new GlimpseContractResolver() };
+                    jsonSerializerSettings.Error += (obj, args) =>
+                    {
+                        warnings.Add(new SerializationWarning(args.ErrorContext.Error));
+                        args.ErrorContext.Handled = true;
+                    };
+
+                    string dataString = JsonConvert.SerializeObject(item.Value, Formatting.None, jsonSerializerSettings);
                     sb.Append(string.Format("\"{0}\":{1},", item.Key, dataString));
                 }
                 catch(Exception ex)
@@ -74,7 +85,6 @@ namespace Glimpse.Net.Responder
             }
 
             //Add exceptions tab if needed
-            var warnings = application.Context.GetWarnings();
             if (warnings.Count > 0)
             {
                 var warningTable = new List<object[]>{new[]{"Type", "Message"}};
@@ -108,6 +118,18 @@ namespace Glimpse.Net.Responder
             }
 
             return json;
+        }
+    }
+
+    public class GlimpseContractResolver : DefaultContractResolver
+    {
+        protected override List<MemberInfo> GetSerializableMembers(Type objectType)
+        {
+            var baseMembers = base.GetSerializableMembers(objectType);
+
+            //TODO: Make this provider or config based
+            baseMembers = (from m in baseMembers where !m.Name.Equals("_entityWrapper") select m).ToList();
+            return baseMembers;
         }
     }
 }
