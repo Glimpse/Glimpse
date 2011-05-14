@@ -10,7 +10,7 @@ namespace Glimpse.Net.Converter
     [GlimpseConverter]
     internal class CustomErrorsSectionConverter:IGlimpseConverter
     {
-        public override IDictionary<string, object> Serialize(object obj, JavaScriptSerializer serializer)
+        public IDictionary<string, object> Serialize(object obj)
         {
             var source = obj as CustomErrorsSection;
             if (source == null) return null;
@@ -28,7 +28,7 @@ namespace Glimpse.Net.Converter
             return result;
         }
 
-        public override IEnumerable<Type> SupportedTypes
+        public IEnumerable<Type> SupportedTypes
         {
             get
             {

@@ -7,8 +7,6 @@ namespace Glimpse.Net.Responder
 {
     public abstract class BaseImageResonder : GlimpseResponder
     {
-        public BaseImageResonder(JavaScriptSerializer jsSerializer) : base(jsSerializer) { }
-
         public abstract string ContentType { get; } 
 
         public override void Respond(HttpApplication application, GlimpseConfiguration config)

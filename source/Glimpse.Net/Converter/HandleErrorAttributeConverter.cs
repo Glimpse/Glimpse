@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using System.Web.Script.Serialization;
 using Glimpse.Net.Extensibility;
 
 namespace Glimpse.Net.Converter
@@ -9,7 +8,7 @@ namespace Glimpse.Net.Converter
     [GlimpseConverter]
     internal class HandleErrorAttributeConverter : IGlimpseConverter
     {
-        public override IDictionary<string, object> Serialize(object obj, JavaScriptSerializer serializer)
+        public IDictionary<string, object> Serialize(object obj)
         {
             var source = obj as HandleErrorAttribute;
             if (source == null) return null;
@@ -22,7 +21,7 @@ namespace Glimpse.Net.Converter
                              };
         }
 
-        public override IEnumerable<Type> SupportedTypes
+        public IEnumerable<Type> SupportedTypes
         {
             get
             {

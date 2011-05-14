@@ -9,7 +9,7 @@ namespace MvcMusicStore
     [GlimpseConverter]
     public class GenreConverter:IGlimpseConverter
     {
-        public override IDictionary<string, object> Serialize(object obj, JavaScriptSerializer serializer)
+        public IDictionary<string, object> Serialize(object obj)
         {
             var source = obj as IList<Genre>;
             if (source == null) return null;
@@ -30,7 +30,7 @@ namespace MvcMusicStore
             return result;
         }
 
-        public override IEnumerable<Type> SupportedTypes
+        public IEnumerable<Type> SupportedTypes
         {
             get
             {
