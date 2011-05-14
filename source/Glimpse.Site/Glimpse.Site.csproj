@@ -71,6 +71,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProtocolController.cs" />
     <Compile Include="Controllers\QuestionsController.cs" />
@@ -79,6 +80,9 @@
     <Compile Include="Framework\ViewExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="HelpController.generated.cs">
+      <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
     <Compile Include="HomeController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
@@ -174,6 +178,7 @@
     </None>
     <None Include="T4MVC.tt.settings.t4" />
     <Content Include="Views\Protocol\Index.cshtml" />
+    <Content Include="Views\Help\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
