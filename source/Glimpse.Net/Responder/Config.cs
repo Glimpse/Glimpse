@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.Composition;
-using System.Web;
-using System.Web.Script.Serialization;
+﻿using System.Web;
 using Glimpse.Net.Configuration; 
 using Glimpse.Net.Extensions;
 
@@ -9,11 +7,6 @@ namespace Glimpse.Net.Responder
     [GlimpseResponder]
     public class Config : GlimpseResponder
     {
-        [ImportingConstructor]
-        public Config(JavaScriptSerializer jsSerializer) : base(jsSerializer)
-        {
-        }
-
         public override string ResourceName
         {
             get { return "Config"; }

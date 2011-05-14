@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Web.Script.Serialization;
 using Glimpse.Net.Extensibility;
 using MvcMusicStore.Models;
 
@@ -9,7 +8,7 @@ namespace MvcMusicStore
     [GlimpseConverter]
     public class AlbumConverter : IGlimpseConverter
     {
-        public override IDictionary<string, object> Serialize(object obj, JavaScriptSerializer serializer)
+        public IDictionary<string, object> Serialize(object obj)
         {
             var source = obj as Album;
             if (source == null) return null;
@@ -23,7 +22,7 @@ namespace MvcMusicStore
                        };
         }
 
-        public override IEnumerable<Type> SupportedTypes
+        public IEnumerable<Type> SupportedTypes
         {
             get
             {

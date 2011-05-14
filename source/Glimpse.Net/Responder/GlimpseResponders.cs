@@ -4,7 +4,6 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Web;
-using System.Web.Script.Serialization;
 using Glimpse.Net.Configuration;
 using Glimpse.Net.Extensibility;
 using Glimpse.Net.Extensions;
@@ -16,15 +15,25 @@ namespace Glimpse.Net.Responder
 {
     public class GlimpseResponders
     {
-        [ImportMany] private IList<IGlimpseConverter> JsConverters { get; set; }
-        [Export] public JavaScriptSerializer JsSerializer { get; set; }
+        [ImportMany] public IList<IGlimpseConverter> JsConverters { get; set; }
+        public static JsonSerializerSettings JsonSerializerSettings { get; set; }
         [ImportMany] public IList<GlimpseResponder> Outputs { get; set; }
         public const string RootPath = "Glimpse/";
+        private const Formatting DefaultFormatting = Formatting.None;
         private IGlimpseSanitizer Sanitizer { get; set; }
 
         public GlimpseResponders()
         {
-            JsSerializer = new JavaScriptSerializer();
+            //JsSerializer = new JavaScriptSerializer();
+            JsonSerializerSettings = new JsonSerializerSettings{ ContractResolver = new GlimpseContractResolver() };
+            JsonSerializerSettings.Error += (obj, args) =>
+            {
+                var warnings = HttpContext.Current.GetWarnings();
+                warnings.Add(new SerializationWarning(args.ErrorContext.Error));
+                args.ErrorContext.Handled = true;
+            };
+
+            //TODO: Make IGlimpseConverter useful for JSON.NET
             JsConverters = new List<IGlimpseConverter>();
             Outputs = new List<GlimpseResponder>();
             Sanitizer = new CSharpSanitizer();
@@ -47,7 +56,12 @@ namespace Glimpse.Net.Responder
 
         public void RegisterConverters()
         {
-            JsSerializer.RegisterConverters(JsConverters);
+            var converters = JsonSerializerSettings.Converters;
+            foreach (var jsConverter in JsConverters)
+            {
+                converters.Add(new JsonConverterToIGlimpseConverterAdapter(jsConverter));
+            }
+            //JsSerializer.RegisterConverters(JsConverters);
         }
 
         public string StandardResponse(HttpApplication application, Guid requestId)
@@ -61,21 +75,14 @@ namespace Glimpse.Net.Responder
             {
                 try
                 {
-                    var jsonSerializerSettings = new JsonSerializerSettings{ ContractResolver = new GlimpseContractResolver() };
-                    jsonSerializerSettings.Error += (obj, args) =>
-                    {
-                        warnings.Add(new SerializationWarning(args.ErrorContext.Error));
-                        args.ErrorContext.Handled = true;
-                    };
-
-                    string dataString = JsonConvert.SerializeObject(item.Value, Formatting.None, jsonSerializerSettings);
+                    string dataString = JsonConvert.SerializeObject(item.Value, DefaultFormatting, JsonSerializerSettings);
                     sb.Append(string.Format("\"{0}\":{1},", item.Key, dataString));
                 }
                 catch(Exception ex)
                 {
-                    var message = JsonConvert.SerializeObject(ex.Message, Formatting.None);
+                    var message = JsonConvert.SerializeObject(ex.Message, DefaultFormatting);
                     message = message.Remove(message.Length-1).Remove(0, 1);
-                    var callstack = JsonConvert.SerializeObject(ex.StackTrace, Formatting.None);
+                    var callstack = JsonConvert.SerializeObject(ex.StackTrace, DefaultFormatting);
                     callstack = callstack.Remove(callstack.Length - 1).Remove(0, 1);
                     const string helpMessage = "Please implement an IGlimpseConverter for the type mentioned above, or one of its base types, to fix this problem. More info on a better experience for this coming soon, keep an eye on <a href='http://getGlimpse.com' target='main'>getGlimpse.com</a></span>";
 
@@ -89,7 +96,7 @@ namespace Glimpse.Net.Responder
                 var warningTable = new List<object[]>{new[]{"Type", "Message"}};
                 warningTable.AddRange(warnings.Select(warning => new[] {warning.GetType().Name, warning.Message}));
 
-                var dataString = JsSerializer.Serialize(warningTable);
+                var dataString = JsonConvert.SerializeObject(warningTable, DefaultFormatting);
                 sb.Append(string.Format("\"{0}\":{1},", "GlimpseWarnings", dataString));
             }
 

@@ -7,17 +7,13 @@ using System.Web.Script.Serialization;
 using Glimpse.Net.Configuration;
 using Glimpse.Net.Extensions;
 using Glimpse.Net.Plumbing;
+using Newtonsoft.Json;
 
 namespace Glimpse.Net.Responder
 {
     [GlimpseResponder]
     public class History : GlimpseResponder
     {
-        [ImportingConstructor]
-        public History(JavaScriptSerializer jsSerializer) : base(jsSerializer)
-        {
-        }
-
         public override string ResourceName
         {
             get { return "History"; }
@@ -28,7 +24,7 @@ namespace Glimpse.Net.Responder
             if (!application.IsValidRequest(config, false, checkPath: false))
             {
                 var data =
-                    JsSerializer.Serialize(new {Error = true, Message = "You are not configured to access history."});
+                    JsonConvert.SerializeObject(new {Error = true, Message = "You are not configured to access history."}, Formatting.None);
                 JsonResponse(application, data);
                 return;
             }
@@ -79,13 +75,13 @@ namespace Glimpse.Net.Responder
                         result.Add(clientName, new Dictionary<string, object>()); 
                 }
 
-                var json = JsSerializer.Serialize(new { Data = result });
+                var json = JsonConvert.SerializeObject(new { Data = result }, Formatting.None);
                 JsonResponse(application, json);
                 return; 
             }
             else
             {
-                var data = JsSerializer.Serialize(new {Error = true, Message = "No history avalible."});
+                var data = JsonConvert.SerializeObject(new {Error = true, Message = "No history avalible."}, Formatting.None);
                 JsonResponse(application, data);
                 return;
             }

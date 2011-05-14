@@ -9,7 +9,7 @@ namespace MvcMusicStore
     [GlimpseConverter]
     public class CartConverter : IGlimpseConverter
     {
-        public override IDictionary<string, object> Serialize(object obj, JavaScriptSerializer serializer)
+        public IDictionary<string, object> Serialize(object obj)
         {
             var source = obj as Cart;
             if (source == null) return null;
@@ -31,7 +31,7 @@ namespace MvcMusicStore
                        };
         }
 
-        public override IEnumerable<Type> SupportedTypes
+        public IEnumerable<Type> SupportedTypes
         {
             get
             {

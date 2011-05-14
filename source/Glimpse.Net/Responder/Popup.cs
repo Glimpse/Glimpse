@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.Composition;
-using System.Web;
-using System.Web.Script.Serialization;
+﻿using System.Web;
 using Glimpse.Net.Configuration;
 
 namespace Glimpse.Net.Responder
@@ -8,11 +6,6 @@ namespace Glimpse.Net.Responder
     [GlimpseResponder]
     public class Popup : GlimpseResponder
     {
-        [ImportingConstructor]
-        public Popup(JavaScriptSerializer jsSerializer) : base(jsSerializer)
-        {
-        }
-
         public override string ResourceName
         {
             get { return "Popup"; }

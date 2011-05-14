@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Web;
-using System.Web.Script.Serialization;
 using Glimpse.Net.Configuration;
 using Glimpse.Net.Extensions;
 using Glimpse.Net.Plumbing;
+using Newtonsoft.Json;
 
 namespace Glimpse.Net.Responder
 {
     [GlimpseResponder]
     public class Clients:GlimpseResponder{
-
-        [ImportingConstructor]
-        public Clients(JavaScriptSerializer jsSerializer):base(jsSerializer){}
 
         public override string ResourceName
         {
@@ -26,7 +22,7 @@ namespace Glimpse.Net.Responder
             if (!application.IsValidRequest(config, false, checkPath: false))
             {
                 var data =
-                    JsSerializer.Serialize(new { Error = true, Message = "You are not configured to access history." });
+                    JsonConvert.SerializeObject(new { Error = true, Message = "You are not configured to access history." }, Formatting.None);
                 JsonResponse(application, data);
                 return;
             }
@@ -50,13 +46,13 @@ namespace Glimpse.Net.Responder
                     lastClient = request.ClientName;
                 }
 
-                var data = JsSerializer.Serialize(new {Data = result});
+                var data = JsonConvert.SerializeObject(new {Data = result}, Formatting.None);
                 JsonResponse(application, data);
                 return;
             }
             else
             {
-                var data = JsSerializer.Serialize(new { Error = true, Message = "No history avalible." });
+                var data = JsonConvert.SerializeObject(new { Error = true, Message = "No history avalible." }, Formatting.None);
                 JsonResponse(application, data);
                 return;
             }
