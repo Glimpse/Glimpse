@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Glimpse.Net.Extensibility;
+using Glimpse.WebForms.Extensibility;
 using MvcMusicStore.Models;
 
 namespace MvcMusicStore

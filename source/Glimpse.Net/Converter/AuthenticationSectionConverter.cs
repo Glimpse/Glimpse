@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Configuration;
-using Glimpse.Net.Extensibility;
+using Glimpse.WebForms.Extensibility;
 
-namespace Glimpse.Net.Converter
+namespace Glimpse.WebForms.Converter
 {
     [GlimpseConverter]
     internal class AuthenticationSectionConverter:IGlimpseConverter

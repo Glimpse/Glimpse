@@ -4,11 +4,11 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Web;
-using Glimpse.Net.Configuration;
-using Glimpse.Net.Extensibility;
-using Glimpse.Net.Extensions;
 using Glimpse.Net.Sanitizer;
 using Glimpse.Net.Warning;
+using Glimpse.WebForms.Configuration;
+using Glimpse.WebForms.Extensibility;
+using Glimpse.WebForms.Extensions;
 using Newtonsoft.Json;
 
 namespace Glimpse.Net.Responder

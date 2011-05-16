@@ -190,9 +190,9 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Glimpse.Net\Glimpse.Net.csproj">
+    <ProjectReference Include="..\Glimpse.Net\Glimpse.WebForms.csproj">
       <Project>{21F99168-7D7B-49F2-A97C-5A983E0CA16F}</Project>
-      <Name>Glimpse.Net</Name>
+      <Name>Glimpse.WebForms</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

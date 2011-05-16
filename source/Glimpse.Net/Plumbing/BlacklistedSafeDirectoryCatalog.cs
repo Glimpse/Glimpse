@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Glimpse.Net.Plumbing
+namespace Glimpse.WebForms.Plumbing
 {
     internal class BlacklistedSafeDirectoryCatalog : ComposablePartCatalog
     {
@@ -73,7 +73,7 @@ namespace Glimpse.Net.Plumbing
 
         private static string GetFullPath(string path)
         {
-            if (!Path.IsPathRooted(path) && AppDomain.CurrentDomain.BaseDirectory != null)
+            if (!Path.IsPathRooted(path))
             {
                 path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
             }

@@ -1,4 +1,4 @@
-﻿namespace Glimpse.Net.Configuration
+﻿namespace Glimpse.WebForms.Configuration
 {
     public enum GlimpseMode
     {

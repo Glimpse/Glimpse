@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Configuration;
-using System.Web.Script.Serialization;
-using Glimpse.Net.Extensibility;
+using Glimpse.WebForms.Extensibility;
 
-namespace Glimpse.Net.Converter
+namespace Glimpse.WebForms.Converter
 {
     [GlimpseConverter]
     internal class CustomErrorsSectionConverter:IGlimpseConverter

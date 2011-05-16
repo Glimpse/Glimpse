@@ -5,12 +5,12 @@ using System.ComponentModel.Composition.Hosting;
 using System.Configuration;
 using System.Linq;
 using System.Web;
-using Glimpse.Net.Configuration;
-using Glimpse.Net.Extensibility;
-using Glimpse.Net.Extensions;
-using Glimpse.Net.Plumbing;
 using Glimpse.Net.Responder;
 using Glimpse.Net.Warning;
+using Glimpse.WebForms.Configuration;
+using Glimpse.WebForms.Extensibility;
+using Glimpse.WebForms.Extensions;
+using Glimpse.WebForms.Plumbing;
 
 namespace Glimpse.Net
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
-using Glimpse.Net.Extensibility;
+using Glimpse.WebForms.Extensibility;
 using MvcMusicStore.Models;
 
 namespace MvcMusicStore.Controllers

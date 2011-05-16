@@ -1,4 +1,4 @@
-﻿namespace Glimpse.Net.Extensibility
+﻿namespace Glimpse.WebForms.Extensibility
 {
     public interface IGlimpseSanitizer
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Configuration;
 
-namespace Glimpse.Net.Configuration
+namespace Glimpse.WebForms.Configuration
 {
     public class ContentTypeCollection : ConfigurationElementCollection
     {
@@ -35,7 +35,7 @@ namespace Glimpse.Net.Configuration
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((ContentType)element);
+            return element;
         }
     }
 }

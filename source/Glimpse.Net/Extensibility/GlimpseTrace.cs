@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Glimpse.Net.Extensibility
+namespace Glimpse.WebForms.Extensibility
 {
+    //TODO: Move to another namespace : Glimpse.WebForms.Application?
     public static class GlimpseTrace
     {
         public static void Info(string format, params object[] args)

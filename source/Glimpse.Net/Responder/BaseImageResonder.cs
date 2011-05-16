@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using System.Web;
-using System.Web.Script.Serialization;
-using Glimpse.Net.Configuration;
+using Glimpse.WebForms.Configuration;
 
 namespace Glimpse.Net.Responder
 {

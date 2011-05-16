@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Web;
-using System.Web.Mvc;
-using Glimpse.Net.Configuration;
-using Glimpse.Net.Extensibility;
+using Glimpse.Net;
+using Glimpse.WebForms.Configuration;
+using Glimpse.WebForms.Extensibility;
 
-namespace Glimpse.Net.Extensions
+namespace Glimpse.WebForms.Extensions
 {
     public static class HttpApplicationExtensions
     {
@@ -65,7 +65,9 @@ namespace Glimpse.Net.Extensions
 
         internal static bool IsAjax(this HttpApplication application)
         {
-            return new HttpRequestWrapper(application.Request).IsAjaxRequest();
+            var request = application.Request;
+
+            return ((request["X-Requested-With"] == "XMLHttpRequest") || ((request.Headers != null) && (request.Headers["X-Requested-With"] == "XMLHttpRequest")));
         }
 
         internal static string GetClientName(this HttpApplication application)
@@ -99,7 +101,7 @@ namespace Glimpse.Net.Extensions
             return (data != null);
         }
 
-        internal static List<IGlimpseWarning> GetWarnings(this HttpContext context)
+        public static List<IGlimpseWarning> GetWarnings(this HttpContext context)
         {
             var result = context.Items[GlimpseConstants.Warnings] as List<IGlimpseWarning>;
             if (result == null) context.Items[GlimpseConstants.Warnings] = result = new List<IGlimpseWarning>();

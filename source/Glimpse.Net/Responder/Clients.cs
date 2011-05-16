@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Glimpse.Net.Configuration;
-using Glimpse.Net.Extensions;
-using Glimpse.Net.Plumbing;
+using Glimpse.WebForms.Configuration;
+using Glimpse.WebForms.Extensions;
+using Glimpse.WebForms.Plumbing;
 using Newtonsoft.Json;
 
 namespace Glimpse.Net.Responder

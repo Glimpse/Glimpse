@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Reflection;
 using System.Web;
-using Glimpse.Net.Configuration;
+using Glimpse.WebForms.Configuration;
 
 namespace Glimpse.Net.Responder
 {

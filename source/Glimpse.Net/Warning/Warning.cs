@@ -1,8 +1,8 @@
-﻿using Glimpse.Net.Extensibility;
+﻿using Glimpse.WebForms.Extensibility;
 
 namespace Glimpse.Net.Warning
 {
-    internal class Warning:IGlimpseWarning
+    public class Warning:IGlimpseWarning
     {
         public string Message { get; set; }
     }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 
-namespace Glimpse.Net.Extensions
+namespace Glimpse.WebForms.Extensions
 {
     internal static class NameValueCollectionExtensions
     {

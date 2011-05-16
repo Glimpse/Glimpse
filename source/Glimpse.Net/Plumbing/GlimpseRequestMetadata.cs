@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Glimpse.Net.Plumbing
+namespace Glimpse.WebForms.Plumbing
 {
-    public class GlimpseRequestMetadata
+    internal class GlimpseRequestMetadata
     {
         public string Method { get; set; }
         public string Json { get; set; }

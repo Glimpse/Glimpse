@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
 using System.Net;
 
-namespace Glimpse.Net.Configuration
+namespace Glimpse.WebForms.Configuration
 {
     public class IpCollection : ConfigurationElementCollection
     {
@@ -40,7 +40,7 @@ namespace Glimpse.Net.Configuration
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((IpAddress) element);
+            return element;
         }
     }
 }

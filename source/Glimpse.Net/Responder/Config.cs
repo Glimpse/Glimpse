@@ -1,6 +1,6 @@
 ﻿using System.Web;
-using Glimpse.Net.Configuration; 
-using Glimpse.Net.Extensions;
+using Glimpse.WebForms.Configuration;
+using Glimpse.WebForms.Extensions;
 
 namespace Glimpse.Net.Responder
 {

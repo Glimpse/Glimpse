@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Linq;
 
-namespace Glimpse.Net.Extensibility
+namespace Glimpse.WebForms.Extensibility
 {
     public interface IGlimpseConverter
     {

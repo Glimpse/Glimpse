@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Web;
+using Glimpse.Net;
 
-namespace Glimpse.Net.Plumbing
+namespace Glimpse.WebForms.Plumbing
 {
     public class GlimpseTraceListener : TraceListener
     {

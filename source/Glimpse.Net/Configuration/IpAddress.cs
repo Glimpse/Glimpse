@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
 using System.Net;
 
-namespace Glimpse.Net.Configuration
+namespace Glimpse.WebForms.Configuration
 {
     public class IpAddress : ConfigurationElement
     {
@@ -10,7 +10,7 @@ namespace Glimpse.Net.Configuration
         {
             get
             {
-                IPAddress result = null;
+                IPAddress result;
 
                 if (IPAddress.TryParse(this["address"].ToString(), out result))
                     return result.ToString();

@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 
-namespace Glimpse.Net.Configuration
+namespace Glimpse.WebForms.Configuration
 {
     public class GlimpseConfiguration : ConfigurationSection
     {

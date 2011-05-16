@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
 
-namespace Glimpse.Net.Configuration
+namespace Glimpse.WebForms.Configuration
 {
     public class PluginBlacklistCollection : ConfigurationElementCollection
     {
@@ -33,7 +33,7 @@ namespace Glimpse.Net.Configuration
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((GlimpsePlugin)element);
+            return element;
         }
     }
 }
