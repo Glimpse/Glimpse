@@ -16,8 +16,10 @@ namespace Glimpse.Site.Controllers
             return View();
         }
 
-        public virtual ActionResult Plugin(string name)
+        public virtual ActionResult Plugin(string id)
         {
+            ViewBag.PartialView = id;
+
             return View();
         }
     }

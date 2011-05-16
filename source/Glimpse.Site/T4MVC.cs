@@ -359,6 +359,14 @@ namespace Links {
         public static readonly string jquery_jscrollpane_css = Url("jquery.jscrollpane.css");
         public static readonly string nugetlogo_png = Url("nugetlogo.png");
         public static readonly string open_quote_gif = Url("open-quote.gif");
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public static class Plugin {
+            private const string URLPATH = "~/Content/Plugin";
+            public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
+            public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+            public static readonly string Remote_jpg = Url("Remote.jpg");
+        }
+    
         public static readonly string Site_css = Url("Site.css");
         public static readonly string twitter_png = Url("twitter.png");
         public static readonly string uservoice_icon_png = Url("uservoice-icon.png");

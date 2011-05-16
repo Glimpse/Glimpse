@@ -63,6 +63,7 @@ namespace Glimpse.Site.Controllers {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewNames {
             public readonly string Index = "~/Views/Help/Index.cshtml";
+            public readonly string Plugin = "~/Views/Help/Plugin.cshtml";
         }
     }
 
