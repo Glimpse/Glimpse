@@ -57,6 +57,7 @@ namespace Glimpse.WebForms.Plumbing
             }
         }
 
+        //3.5 Issue: Tuple
         public override IEnumerable<Tuple<ComposablePartDefinition, ExportDefinition>> GetExports(ImportDefinition definition)
         {
             return from export in base.GetExports(definition)

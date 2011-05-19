@@ -11,4 +11,7 @@
             <add contentType="text/html"/>
         </contentTypes>
     </glimpse>
+    <system.web>
+        <trace writeToDiagnosticsTrace="true" enabled="true" pageOutput="false"/>
+    </system.web>
 </configuration>

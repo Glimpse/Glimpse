@@ -9,7 +9,10 @@ namespace Glimpse.WebForms.Plugin
     [GlimpsePlugin(ShouldSetupInInit = true)]
     internal class Trace : IGlimpsePlugin
     {
-        public const string TraceMessageStoreKey = "Glimpse.TraceMessages";
+        public const string TraceMessageStoreKey = "Glimpse.Trace.Messages";
+        public const string FirstWatchStoreKey = "Glimpse.Trace.FirstWatch";
+        public const string LastWatchStoreKey = "Glimpse.Trace.LastWatch";
+
         public string Name
         {
             get { return "Trace"; }
@@ -47,6 +50,9 @@ namespace Glimpse.WebForms.Plugin
                         break;
                     case "selected":
                         message.Add("selected");
+                        break;
+                    case "aspx.page":
+                        message.Add("ms");
                         break;
                 }
             }
