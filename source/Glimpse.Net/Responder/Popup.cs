@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using Glimpse.WebForms.Configuration;
 
-namespace Glimpse.Net.Responder
+namespace Glimpse.WebForms.Responder
 {
     [GlimpseResponder]
     public class Popup : GlimpseResponder

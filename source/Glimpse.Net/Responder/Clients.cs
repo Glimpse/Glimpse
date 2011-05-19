@@ -5,26 +5,22 @@ using System.Web;
 using Glimpse.WebForms.Configuration;
 using Glimpse.WebForms.Extensions;
 using Glimpse.WebForms.Plumbing;
-using Newtonsoft.Json;
 
-namespace Glimpse.Net.Responder
+namespace Glimpse.WebForms.Responder
 {
     [GlimpseResponder]
-    public class Clients:GlimpseResponder{
+    public class Clients:JsonResponder{
 
         public override string ResourceName
         {
             get { return "Clients"; }
         }
 
-        public override void Respond(HttpApplication application, GlimpseConfiguration config)
+        protected override object GetData(HttpApplication application, GlimpseConfiguration config)
         {
             if (!application.IsValidRequest(config, false, checkPath: false))
             {
-                var data =
-                    JsonConvert.SerializeObject(new { Error = true, Message = "You are not configured to access history." }, Formatting.None);
-                JsonResponse(application, data);
-                return;
+                return new {Error = true, Message = "You are not configured to access history."};
             }
 
             var queue = application.Application[GlimpseConstants.JsonQueue] as Queue<GlimpseRequestMetadata>;
@@ -46,16 +42,10 @@ namespace Glimpse.Net.Responder
                     lastClient = request.ClientName;
                 }
 
-                var data = JsonConvert.SerializeObject(new {Data = result}, Formatting.None);
-                JsonResponse(application, data);
-                return;
+                return new {Data = result};
             }
-            else
-            {
-                var data = JsonConvert.SerializeObject(new { Error = true, Message = "No history avalible." }, Formatting.None);
-                JsonResponse(application, data);
-                return;
-            }
+            
+            return new {Error = true, Message = "No history avalible."};
         }
     }
 }

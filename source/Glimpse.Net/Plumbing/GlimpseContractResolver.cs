@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json.Serialization;
 
-namespace Glimpse.Net.Responder
+namespace Glimpse.WebForms.Plumbing
 {
     public class GlimpseContractResolver : DefaultContractResolver
     {

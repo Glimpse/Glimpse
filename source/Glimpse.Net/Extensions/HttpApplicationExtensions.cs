@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Web;
-using Glimpse.Net;
 using Glimpse.WebForms.Configuration;
 using Glimpse.WebForms.Extensibility;
 

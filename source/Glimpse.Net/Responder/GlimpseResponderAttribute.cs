@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 
-namespace Glimpse.Net.Responder
+namespace Glimpse.WebForms.Responder
 {
     [MetadataAttribute]
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]

@@ -1,6 +1,6 @@
 ﻿using Glimpse.WebForms.Extensibility;
 
-namespace Glimpse.Net.Warning
+namespace Glimpse.WebForms.Warning
 {
     public class Warning:IGlimpseWarning
     {

@@ -3,7 +3,6 @@ using System.Web;
 using System.Web.Mvc;
 using Castle.DynamicProxy;
 using Glimpse.Mvc3.Warning;
-using Glimpse.Net.Warning;
 using Glimpse.WebForms.Extensions;
 
 namespace Glimpse.Mvc3.Extensions

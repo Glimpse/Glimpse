@@ -12,6 +12,7 @@
     <AssemblyName>Glimpse.WebForms</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -67,8 +68,9 @@
     <Compile Include="Converter\CustomErrorsSectionConverter.cs" />
     <Compile Include="Extensibility\GlimpseTrace.cs" />
     <Compile Include="Extensibility\IGlimpseWarning.cs" />
-    <Compile Include="Responder\BaseImageResonder.cs" />
-    <Compile Include="Responder\GlimpseContractResolver.cs" />
+    <Compile Include="Responder\ImageResponder.cs" />
+    <Compile Include="Plumbing\GlimpseContractResolver.cs" />
+    <Compile Include="Responder\JsonResponder.cs" />
     <Compile Include="Responder\Logo.cs" />
     <Compile Include="Warning\ExceptionWarning.cs" />
     <Compile Include="Extensibility\GlimpseConverterAttribute.cs" />

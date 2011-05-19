@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Glimpse.Net;
 using Glimpse.WebForms.Extensibility;
 using Glimpse.WebForms.Plumbing;
 
@@ -10,6 +9,7 @@ namespace Glimpse.WebForms.Plugin
     [GlimpsePlugin(ShouldSetupInInit = true)]
     internal class Trace : IGlimpsePlugin
     {
+        public const string TraceMessageStoreKey = "Glimpse.TraceMessages";
         public string Name
         {
             get { return "Trace"; }
@@ -17,7 +17,7 @@ namespace Glimpse.WebForms.Plugin
 
         public object GetData(HttpApplication application)
         {
-            var messages = application.Context.Items[GlimpseConstants.TraceMessages] as IList<IList<string>>;
+            var messages = application.Context.Items[TraceMessageStoreKey] as IList<IList<string>>;
             if (messages == null) return null;
 
             foreach (var message in messages)

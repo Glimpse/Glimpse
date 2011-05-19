@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web;
+﻿using System.Web;
 using Glimpse.WebForms.Extensibility;
 using Glimpse.WebForms.Extensions;
 
@@ -20,7 +19,6 @@ namespace Glimpse.WebForms.Plugin
 
         public void SetupInit(HttpApplication application)
         {
-            throw new NotImplementedException();
         }
     }
 }

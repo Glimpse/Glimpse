@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Compilation;
-using Glimpse.Net;
 using Glimpse.WebForms.Extensibility;
 
 namespace Glimpse.WebForms.Plugin
@@ -13,6 +12,7 @@ namespace Glimpse.WebForms.Plugin
     [GlimpsePlugin]
     internal class Environment : IGlimpsePlugin
     {
+        public const string PluginEnvironmentStoreKey = "Glimpse.Plugin.Environment.Store";
         public string Name
         {
             get { return "Environment"; }
@@ -21,8 +21,8 @@ namespace Glimpse.WebForms.Plugin
         public object GetData(HttpApplication application)
         {
             //environment should not change from request to request on a given machine.  We can cache our results in the application store
-            var result = application.Application[(string) GlimpseConstants.PluginEnvironmentStore] as IDictionary<string, object>;
-            if (result != null) return result;
+            var cachedData = application.Application[PluginEnvironmentStoreKey] as IDictionary<string, object>;
+            if (cachedData != null) return cachedData;
 
             var serverSoftware = application.Context.Request.ServerVariables["SERVER_SOFTWARE"];
             var processName = Process.GetCurrentProcess().MainModule.ModuleName;
@@ -47,7 +47,7 @@ namespace Glimpse.WebForms.Plugin
                 Add(assembly, to:appList);
             }
 
-            result = new Dictionary<string, object>
+            cachedData = new Dictionary<string, object>
                               {
                                   {"Machine Name", string.Format("{0} ({1} processors)", System.Environment.MachineName, System.Environment.ProcessorCount)},
                                   {"Booted", DateTime.Now.AddMilliseconds(System.Environment.TickCount*-1)},
@@ -61,13 +61,12 @@ namespace Glimpse.WebForms.Plugin
                                   {"System Assemblies", sysList}
                               };
 
-            application.Application[(string) GlimpseConstants.PluginEnvironmentStore] = result;
-            return result;
+            application.Application[PluginEnvironmentStoreKey] = cachedData;
+            return cachedData;
         }
 
         public void SetupInit(HttpApplication application)
         {
-            throw new NotImplementedException();
         }
 
         private static void Add(Assembly assembly, ICollection<object[]> to)
@@ -79,7 +78,7 @@ namespace Glimpse.WebForms.Plugin
             to.Add(new [] { assemblyName.Name, version, culture, assembly.GlobalAssemblyCache.ToString(), assembly.IsFullyTrusted.ToString() });
         }
          
-        private AspNetHostingPermissionLevel GetCurrentTrustLevel()
+        private static AspNetHostingPermissionLevel GetCurrentTrustLevel()
         {
             var levels = new [] {
                                  AspNetHostingPermissionLevel.Unrestricted,

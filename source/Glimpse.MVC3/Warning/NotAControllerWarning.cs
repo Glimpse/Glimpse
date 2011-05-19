@@ -2,7 +2,7 @@
 
 namespace Glimpse.Mvc3.Warning
 {
-    internal class NotAControllerWarning:Net.Warning.Warning
+    internal class NotAControllerWarning:WebForms.Warning.Warning
     {
         public NotAControllerWarning(IController controller)
         {

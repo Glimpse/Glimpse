@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Glimpse.Mvc3.Warning
 {
-    internal class NonProxyableMemberWarning:Net.Warning.Warning
+    internal class NonProxyableMemberWarning:WebForms.Warning.Warning
     {
         public NonProxyableMemberWarning(Type type, MemberInfo memberInfo)
         {

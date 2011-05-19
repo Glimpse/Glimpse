@@ -1,4 +1,4 @@
-﻿namespace Glimpse.Net
+﻿namespace Glimpse.WebForms
 {
     public static class GlimpseConstants
     {
@@ -13,8 +13,6 @@
         public const string Warnings = "Glimpse.Warnings";
         public const string HttpHeader = "X-Glimpse-RequestID";
         public const string JsonQueue = "Glimpse.JsonQueue";
-        public const string PluginEnvironmentStore = "Glimpse.Plugin.Environment.Store";
-        public const string TraceMessages = "Glimpse.TraceMessages";
         public const string ValidContentType = "Glimpse.Validation.ValidContentType";
         public const string ValidIp = "Glimpse.Validation.ValidIp";
         public const string ValidMode = "Glimpse.Validation.ValidMode";

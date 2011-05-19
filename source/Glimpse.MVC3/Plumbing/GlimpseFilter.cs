@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
-using Glimpse.Net;
+using Glimpse.WebForms;
 
 namespace Glimpse.Mvc3.Plumbing
 {

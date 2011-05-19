@@ -34,7 +34,6 @@ namespace Glimpse.WebForms.Plugin
 
         public void SetupInit(HttpApplication application)
         {
-            throw new NotImplementedException();
         }
     }
 }

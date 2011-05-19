@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Web;
-using Glimpse.Net;
 
 namespace Glimpse.WebForms.Plumbing
 {
@@ -12,17 +11,17 @@ namespace Glimpse.WebForms.Plumbing
             get
             {
                 var store = HttpContext.Current.Items;
-                var messages = store[GlimpseConstants.TraceMessages] as IList<IList<string>>;
+                var messages = store[Plugin.Trace.TraceMessageStoreKey] as IList<IList<string>>;
 
                 if (messages != null) return messages;
-                
-                store[GlimpseConstants.TraceMessages] = messages = new List<IList<string>>{
+
+                store[Plugin.Trace.TraceMessageStoreKey] = messages = new List<IList<string>>{
                                                                                               new List<string> {"Message", "Category"}
                                                                                           };
 
                 return messages;
             }
-            set { HttpContext.Current.Items[GlimpseConstants.TraceMessages] = value; }
+            set { HttpContext.Current.Items[Plugin.Trace.TraceMessageStoreKey] = value; }
         }
         private const string DefaultCategory = "Info";
 

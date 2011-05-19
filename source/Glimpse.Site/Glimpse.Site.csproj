@@ -81,13 +81,32 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="HelpController.generated.cs">
+      <DependentUpon>T4MVC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="HomeController.generated.cs">
+      <DependentUpon>T4MVC.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProtocolController.generated.cs">
+      <DependentUpon>T4MVC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QuestionsController.generated.cs">
+      <DependentUpon>T4MVC.tt</DependentUpon>
+    </Compile>
+    <Content Include="Content\Plugin\Remote.jpg" />
+    <Content Include="Scripts\Protocol\LayoutExample.js" />
+    <Compile Include="SharedController.generated.cs">
+      <DependentUpon>T4MVC.tt</DependentUpon>
+    </Compile>
     <Compile Include="T4MVC.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
-    <Content Include="Scripts\Protocol\LayoutExample.js" />
+    <Compile Include="TalkController.generated.cs">
+      <DependentUpon>T4MVC.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\close-quote.gif" />
@@ -161,6 +180,8 @@
     <None Include="T4MVC.tt.settings.t4" />
     <Content Include="Views\Protocol\Index.cshtml" />
     <Content Include="Views\Help\Index.cshtml" />
+    <Content Include="Views\Help\Plugin.cshtml" />
+    <Content Include="Views\Help\Plugins\Remote.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

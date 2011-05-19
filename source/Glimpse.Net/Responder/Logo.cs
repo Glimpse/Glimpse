@@ -1,7 +1,7 @@
-﻿namespace Glimpse.Net.Responder
+﻿namespace Glimpse.WebForms.Responder
 {
     [GlimpseResponder]
-    public class Logo : BaseImageResonder
+    public class Logo : ImageResponder
     {
         public override string ResourceName
         {

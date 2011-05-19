@@ -5,14 +5,14 @@ using System.ComponentModel.Composition.Hosting;
 using System.Configuration;
 using System.Linq;
 using System.Web;
-using Glimpse.Net.Responder;
-using Glimpse.Net.Warning;
 using Glimpse.WebForms.Configuration;
 using Glimpse.WebForms.Extensibility;
 using Glimpse.WebForms.Extensions;
 using Glimpse.WebForms.Plumbing;
+using Glimpse.WebForms.Responder;
+using Glimpse.WebForms.Warning;
 
-namespace Glimpse.Net
+namespace Glimpse.WebForms
 {
     public class Module : IHttpModule
     {

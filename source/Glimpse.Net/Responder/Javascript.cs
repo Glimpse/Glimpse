@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Web;
 using Glimpse.WebForms.Configuration;
 
-namespace Glimpse.Net.Responder
+namespace Glimpse.WebForms.Responder
 {
     [GlimpseResponder]
     public class Javascript : GlimpseResponder
@@ -18,7 +18,7 @@ namespace Glimpse.Net.Responder
             var response = application.Response;
             var assembly = Assembly.GetExecutingAssembly();
 
-            using (var resourceStream = assembly.GetManifestResourceStream("Glimpse.Net.glimpseClient.js"))
+            using (var resourceStream = assembly.GetManifestResourceStream("Glimpse.WebForms.glimpseClient.js"))
             {
                 if (resourceStream != null)
                 {

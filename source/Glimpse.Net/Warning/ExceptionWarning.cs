@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Glimpse.Net.Warning
+namespace Glimpse.WebForms.Warning
 {
     internal class ExceptionWarning:Warning
     {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Web;
 using Glimpse.WebForms.Extensibility;
 using Glimpse.WebForms.Extensions;
@@ -23,20 +22,20 @@ namespace Glimpse.WebForms.Plugin
                                   new[]{"Name", "Path", "Secure", "Value"}
                               };
 
-            var cs = request.Cookies;
-            for (var i = 0; i < cs.Count; i++)
-                {
-                    var value = cs[i].Value;
-                    var secure = cs[i].Secure.ToString();
-                    var path = cs[i].Path;
-                    var name = cs[i].Name;
-                cookies.Add(new[] { name, path, secure, value });
-            }
+            var requestCookies = request.Cookies;
 
+            foreach (var key in request.Cookies.AllKeys)
+            {
+                var cookie = requestCookies[key];
+
+                if (cookie != null)
+                    cookies.Add(new[] { cookie.Name, cookie.Path, cookie.Secure.ToString(), application.Server.UrlDecode(cookie.Value) });
+            }
 
             var form = request.Form.Flatten();
             var querystring = request.QueryString.Flatten();
 
+            //make sure there is request data
             if (form == null && querystring == null && cookies.Count <= 1) return null;
             
             return new
@@ -49,7 +48,6 @@ namespace Glimpse.WebForms.Plugin
 
         public void SetupInit(HttpApplication application)
         {
-            throw new NotImplementedException();
         }
     }
 }

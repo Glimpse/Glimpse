@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Glimpse.Mvc3.Plumbing;
-using Glimpse.Net;
+using Glimpse.WebForms;
 using Glimpse.WebForms.Extensibility;
 
 namespace Glimpse.Mvc3.Plugin

@@ -5,7 +5,6 @@ using Castle.DynamicProxy;
 using Glimpse.Mvc3.Interceptor;
 using Glimpse.Mvc3.Plumbing;
 using Glimpse.Mvc3.Warning;
-using Glimpse.Net.Warning;
 using Glimpse.WebForms.Extensions;
 
 namespace Glimpse.Mvc3.Extensions

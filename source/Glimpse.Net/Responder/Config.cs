@@ -2,7 +2,7 @@
 using Glimpse.WebForms.Configuration;
 using Glimpse.WebForms.Extensions;
 
-namespace Glimpse.Net.Responder
+namespace Glimpse.WebForms.Responder
 {
     [GlimpseResponder]
     public class Config : GlimpseResponder

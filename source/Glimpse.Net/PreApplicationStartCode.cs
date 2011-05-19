@@ -1,6 +1,6 @@
 ﻿using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 
-namespace Glimpse.Net
+namespace Glimpse.WebForms
 {
     public class PreApplicationStartCode
     {

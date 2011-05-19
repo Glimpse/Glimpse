@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using Glimpse.WebForms.Extensibility;
 
-namespace Glimpse.Net.Sanitizer
+namespace Glimpse.WebForms.Sanitizer
 {
     public class CSharpSanitizer:IGlimpseSanitizer
     {

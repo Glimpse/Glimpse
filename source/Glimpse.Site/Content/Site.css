@@ -41,3 +41,7 @@ blockquote:first-letter { background: url(/Content/open-quote.gif) no-repeat lef
 
 .glimpse-scenario { padding-bottom:4em; }
 .glimpse-scenario-data { padding-top:0.5em; }
+
+.plugin-summary { padding:1em 0; }
+.plugin-video { padding-bottom:1em; text-align:center; }
+.plugin-layout ol span { font-style:italic; font-weight:bold; }
