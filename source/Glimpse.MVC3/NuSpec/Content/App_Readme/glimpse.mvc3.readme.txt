@@ -1,0 +1,12 @@
+Glimpse.Mvc3 adds the following Glimpse plugins:
+
+Binding
+Execution
+Model Metadata
+Routes
+Views
+
+Release Notes
+-------------
+05/??/2011 - 0.82
+- Glimpse.Mvc3 split from old Glimpse package to better support WebForms and Mvc

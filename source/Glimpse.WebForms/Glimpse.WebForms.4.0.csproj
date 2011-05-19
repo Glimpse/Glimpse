@@ -121,7 +121,7 @@
     <None Include="NuSpec\Glimpse.nuspec">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="NuSpec\Content\App_Readme\glimpse.readme.txt" />
+    <Content Include="NuSpec\Content\App_Readme\glimpse.webforms.readme.txt" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

@@ -4,7 +4,7 @@
     <metadata>
         <id>Glimpse</id>
         <version>0.81</version>
-        <title>Glimpse Web Debugger for ASP.NET WebForms (Beta)</title>
+        <title>Glimpse Web Debugger for ASP.NET MVC (Beta)</title>
         <authors>nmolnar, avanderhoorn</authors>
         <owners>nmolnar, avanderhoorn</owners>
         <licenseUrl>http://www.opensource.org/licenses/apache2.0</licenseUrl>

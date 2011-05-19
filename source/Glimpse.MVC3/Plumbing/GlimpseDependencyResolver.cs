@@ -8,7 +8,6 @@ using Glimpse.Mvc3.Extensions;
 
 namespace Glimpse.Mvc3.Plumbing
 {
-    //TODO:TEST ME
     internal class GlimpseDependencyResolver : IDependencyResolver
     {
         public GlimpseDependencyResolver(IDependencyResolver dependencyResolver)

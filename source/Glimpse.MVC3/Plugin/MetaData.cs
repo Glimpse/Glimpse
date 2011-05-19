@@ -113,7 +113,6 @@ namespace Glimpse.Mvc3.Plugin
 
         public void SetupInit(HttpApplication application)
         {
-            throw new NotImplementedException();
         }
     }
 }

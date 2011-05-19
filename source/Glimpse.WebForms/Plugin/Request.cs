@@ -43,6 +43,21 @@ namespace Glimpse.WebForms.Plugin
                            Cookies = cookies,
                            Form = form,
                            QueryString = querystring,
+                           request.ApplicationPath,
+                           request.AppRelativeCurrentExecutionFilePath,
+                           request.CurrentExecutionFilePath,
+                           request.CurrentExecutionFilePathExtension,
+                           request.FilePath,
+                           request.Path,
+                           request.PathInfo,
+                           request.PhysicalApplicationPath,
+                           request.PhysicalPath,
+                           request.RawUrl,
+                           Url = request.Url.ToString(),
+                           UrlReferrer = request.UrlReferrer == null ? null : request.UrlReferrer.ToString(),
+                           request.UserAgent,
+                           request.UserHostAddress,
+                           request.UserHostName,
                        };
         }
 

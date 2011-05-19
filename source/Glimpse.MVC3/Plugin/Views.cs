@@ -87,7 +87,6 @@ namespace Glimpse.Mvc3.Plugin
                 }
             }
 
-            //TODO: Also show ViewData and TempData
             return result;
         }
 

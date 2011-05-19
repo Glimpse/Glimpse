@@ -98,10 +98,20 @@
   <ItemGroup>
     <ProjectReference Include="..\Glimpse.WebForms\Glimpse.WebForms.4.0.csproj">
       <Project>{21F99168-7D7B-49F2-A97C-5A983E0CA16F}</Project>
-      <Name>Glimpse.WebForms</Name>
+      <Name>Glimpse.WebForms.4.0</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="NuSpec\Content\App_Readme\glimpse.mvc3.readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="NuSpec\Glimpse.nuspec">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NuSpec\lib\net40\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

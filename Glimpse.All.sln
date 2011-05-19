@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.WebForms.4.0", "source\Glimpse.WebForms\Glimpse.WebForms.4.0.csproj", "{21F99168-7D7B-49F2-A97C-5A983E0CA16F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Sample", "source\Glimpse.Sample\Glimpse.Sample.csproj", "{A1DDF7DA-D1FB-4B52-A7B3-D2A2099482CE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Sample.Mvc3", "source\Glimpse.Sample.MVC3\Glimpse.Sample.Mvc3.csproj", "{A1DDF7DA-D1FB-4B52-A7B3-D2A2099482CE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Site", "source\Glimpse.Site\Glimpse.Site.csproj", "{B0DF396D-7702-41B8-8744-CA87DC5F8244}"
 EndProject

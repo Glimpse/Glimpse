@@ -34,7 +34,6 @@ namespace Glimpse.WebForms.Responder
                 args.ErrorContext.Handled = true;
             };
 
-            //TODO: Make IGlimpseConverter useful for JSON.NET
             JsConverters = new List<IGlimpseConverter>();
             Outputs = new List<GlimpseResponder>();
             Sanitizer = new CSharpSanitizer();

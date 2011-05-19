@@ -7,6 +7,7 @@ namespace Glimpse.WebForms.Extensions
 {
     public static class HttpApplicationExtensions
     {
+        //TODO: Refactor into IGlimpseValidator plugin model
         internal static bool IsValidRequest(this HttpApplication application, GlimpseConfiguration config, bool checkContentType, bool checkMode = true, bool checkPath = true)
         {
             return IsValidRequestInternal(application, config, checkContentType, checkMode, checkPath);
