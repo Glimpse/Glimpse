@@ -1,21 +1,21 @@
 ﻿using System.Web;
-using Glimpse.WebForms.Configuration;
+using Glimpse.WebForms.Extensibility;
 
-namespace Glimpse.WebForms.Responder
+namespace Glimpse.WebForms.Handler
 {
-    [GlimpseResponder]
-    public class Popup : GlimpseResponder
+    [GlimpseHandler]
+    public class Popup : IGlimpseHandler
     {
-        public override string ResourceName
+        public string ResourceName
         {
             get { return "Popup"; }
         }
 
-        public override void Respond(HttpApplication application, GlimpseConfiguration configuration)
+        public void ProcessRequest(HttpContext context)
         {
-            var response = application.Response;
+            var response = context.Response;
 
-            var path = VirtualPathUtility.ToAbsolute("~/", application.Context.Request.ApplicationPath);  //TODO need to centralize logic 
+            var path = VirtualPathUtility.ToAbsolute("~/", context.Request.ApplicationPath);  //TODO need to centralize logic 
             var requestId = ""; //TODO need to get this id from somewhere
 
             response.Write("<!DOCTYPE html><html><head><title>Glimpse - Popup</title>");
@@ -24,8 +24,11 @@ namespace Glimpse.WebForms.Responder
             response.Write(string.Format(@"<script type='text/javascript' id='glimpseData' data-glimpse-requestID='{1}'>var glimpse, glimpsePath = '{0}'</script>", path, requestId));
             response.Write("<script src='/Scripts/jquery-1.4.4.min.js' type='text/javascript'></script><script type='text/javascript' id='glimpseClient' src='/Glimpse/glimpseClient.js'></script>");
             response.Write("</body></html>");
+        }
 
-            application.CompleteRequest();
+        public bool IsReusable
+        {
+            get { return true; }
         }
     }
 }

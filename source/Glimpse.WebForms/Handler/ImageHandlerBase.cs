@@ -1,16 +1,17 @@
 ﻿using System.Reflection;
 using System.Web;
-using Glimpse.WebForms.Configuration;
+using Glimpse.WebForms.Extensibility;
 
-namespace Glimpse.WebForms.Responder
+namespace Glimpse.WebForms.Handler
 {
-    public abstract class ImageResponder : GlimpseResponder
+    public abstract class ImageHandlerBase : IGlimpseHandler
     {
-        public abstract string ContentType { get; } 
+        public abstract string ContentType { get; }
+        public abstract string ResourceName { get; }
 
-        public override void Respond(HttpApplication application, GlimpseConfiguration config)
+        public void ProcessRequest(HttpContext context)
         {
-            var response = application.Response;
+            var response = context.Response;
             var assembly = Assembly.GetExecutingAssembly();
 
             using (var resourceStream = assembly.GetManifestResourceStream("Glimpse.WebForms." + ResourceName))
@@ -23,9 +24,11 @@ namespace Glimpse.WebForms.Responder
                 }
             }
             response.AddHeader("Content-Type", ContentType);
-            application.CompleteRequest();
+        }
 
-            return;
+        public bool IsReusable
+        {
+            get { return true; }
         }
     }
 }

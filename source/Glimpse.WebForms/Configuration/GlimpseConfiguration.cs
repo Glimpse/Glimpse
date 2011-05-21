@@ -4,33 +4,33 @@ namespace Glimpse.WebForms.Configuration
 {
     public class GlimpseConfiguration : ConfigurationSection
     {
-        [ConfigurationProperty("on", DefaultValue = "false", IsRequired = false)]
-        public bool On
+        [ConfigurationProperty("enabled", DefaultValue = "false", IsRequired = false)]
+        public bool Enabled
         {
-            set { this["on"] = value; }
+            set { this["enabled"] = value; }
             get
             {
                 bool result = false; //matches the default above
-                bool.TryParse(this["on"].ToString(), out result);
+                bool.TryParse(this["enabled"].ToString(), out result);
                 return result;
             }
         }
 
-        [ConfigurationProperty("pluginPath", DefaultValue = @"\", IsRequired = false)]
-        public string PluginPath
+        [ConfigurationProperty("rootUrlPath", DefaultValue = @"Glimpse", IsRequired = false)]
+        public string RootUrlPath
         {
-            set { this["pluginPath"] = value; }
-            get { return this["pluginPath"].ToString(); }
+            set { this["rootUrlPath"] = value; }
+            get { return this["rootUrlPath"].ToString(); }
         }
 
-        [ConfigurationProperty("saveRequestCount", DefaultValue = "0", IsRequired = false)]
-        public int SaveRequestCount
+        [ConfigurationProperty("requestLimit", DefaultValue = "15", IsRequired = false)]
+        public int RequestLimit
         {
-            set { this["saveRequestCount"] = value; }
+            set { this["requestLimit"] = value; }
             get
             {
                 int result = 0; //matches the default above
-                int.TryParse(this["saveRequestCount"].ToString(), out result);
+                int.TryParse(this["requestLimit"].ToString(), out result);
                 return result;
             }
         }

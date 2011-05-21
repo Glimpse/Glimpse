@@ -29,7 +29,7 @@ namespace Glimpse.WebForms.Extensions
 
             var validIp = store[GlimpseConstants.ValidIp] as bool?;
             if (!validIp.HasValue)
-                store[GlimpseConstants.ValidIp] = validIp = config.IpAddresses.Contains(request.ServerVariables["REMOTE_ADDR"]);
+                store[GlimpseConstants.ValidIp] = validIp = config.IpAddresses.Contains(request.UserHostAddress);
 
             if (!validIp.Value) return false;
 
@@ -78,7 +78,12 @@ namespace Glimpse.WebForms.Extensions
 
         internal static GlimpseMode GetGlimpseMode(this HttpApplication application)
         {
-            var cookies = application.Request.Cookies;
+            return application.Context.GetGlimpseMode();
+        }
+
+        internal static GlimpseMode GetGlimpseMode(this HttpContext context)
+        {
+            var cookies = context.Request.Cookies;
 
             var cookie = cookies[GlimpseConstants.CookieModeKey];
             if (cookie == null) return GlimpseMode.Off;

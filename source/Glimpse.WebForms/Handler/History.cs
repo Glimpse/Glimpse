@@ -1,35 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Web;
-using Glimpse.WebForms.Configuration;
-using Glimpse.WebForms.Extensions;
+using Glimpse.WebForms.Extensibility;
 using Glimpse.WebForms.Plumbing;
+using Newtonsoft.Json;
 
-namespace Glimpse.WebForms.Responder
+namespace Glimpse.WebForms.Handler
 {
-    [GlimpseResponder]
-    public class History : JsonResponder
+    [GlimpseHandler]
+    public class History : JsonHandlerBase
     {
+        [ImportingConstructor]
+        public History(JsonSerializerSettings jsonSerializerSettings) : base(jsonSerializerSettings){}
+
         public override string ResourceName
         {
             get { return "History"; }
         }
 
-        protected override object GetData(HttpApplication application, GlimpseConfiguration config)
+        protected override object GetData(HttpContext context)
         {
-            if (!application.IsValidRequest(config, false, checkPath: false))
-            {
-                return new {Error = true, Message = "You are not configured to access history."};
-            }
-
-            var queue = application.Application[GlimpseConstants.JsonQueue] as Queue<GlimpseRequestMetadata>;
+            var queue = context.Application[GlimpseConstants.JsonQueue] as Queue<GlimpseRequestMetadata>;
             if (queue != null)
             {
                 var result = new Dictionary<string, object>();
                 IEnumerable<GlimpseRequestMetadata> data;
 
-                var requestId = application.Request.QueryString[GlimpseConstants.ClientRequestId];
+                var requestId = context.Request.QueryString[GlimpseConstants.ClientRequestId];
                 if (!string.IsNullOrEmpty(requestId))
                 { 
                     data = from request in queue
@@ -42,7 +41,7 @@ namespace Glimpse.WebForms.Responder
                 }
                 else
                 {
-                    var clientName = application.Request.QueryString[GlimpseConstants.ClientName];
+                    var clientName = context.Request.QueryString[GlimpseConstants.ClientName];
 
                     if (string.IsNullOrEmpty(clientName))
                         data = queue;

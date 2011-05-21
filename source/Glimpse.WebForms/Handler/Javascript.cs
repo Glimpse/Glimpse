@@ -1,21 +1,21 @@
 ﻿using System.IO;
 using System.Reflection;
 using System.Web;
-using Glimpse.WebForms.Configuration;
+using Glimpse.WebForms.Extensibility;
 
-namespace Glimpse.WebForms.Responder
+namespace Glimpse.WebForms.Handler
 {
-    [GlimpseResponder]
-    public class Javascript : GlimpseResponder
+    [GlimpseHandler]
+    public class Javascript : IGlimpseHandler
     {
-        public override string ResourceName
+        public string ResourceName
         {
             get { return "glimpseClient.js"; }
         }
 
-        public override void Respond(HttpApplication application, GlimpseConfiguration config)
+        public void ProcessRequest(HttpContext context)
         {
-            var response = application.Response;
+            var response = context.Response;
             var assembly = Assembly.GetExecutingAssembly();
 
             using (var resourceStream = assembly.GetManifestResourceStream("Glimpse.WebForms.glimpseClient.js"))
@@ -29,7 +29,11 @@ namespace Glimpse.WebForms.Responder
                 }
             }
             response.AddHeader("Content-Type", "application/x-javascript");
-            application.CompleteRequest();
+        }
+
+        public bool IsReusable
+        {
+            get { return true; }
         }
     }
 }

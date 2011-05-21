@@ -1,7 +1,9 @@
-﻿namespace Glimpse.WebForms.Responder
+﻿using Glimpse.WebForms.Extensibility;
+
+namespace Glimpse.WebForms.Handler
 {
-    [GlimpseResponder]
-    public class Logo : ImageResponder
+    [GlimpseHandler]
+    public class Logo : ImageHandlerBase
     {
         public override string ResourceName
         {
