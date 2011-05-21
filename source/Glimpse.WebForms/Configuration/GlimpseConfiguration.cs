@@ -10,7 +10,7 @@ namespace Glimpse.WebForms.Configuration
             set { this["enabled"] = value; }
             get
             {
-                bool result = false; //matches the default above
+                bool result; //false which matches the default above
                 bool.TryParse(this["enabled"].ToString(), out result);
                 return result;
             }
@@ -29,13 +29,12 @@ namespace Glimpse.WebForms.Configuration
             set { this["requestLimit"] = value; }
             get
             {
-                int result = 0; //matches the default above
-                int.TryParse(this["requestLimit"].ToString(), out result);
-                return result;
+                int result;
+                return !int.TryParse(this["requestLimit"].ToString(), out result) ? 15 : result;
             }
         }
 
-        [ConfigurationProperty("ipAddresses", IsRequired = true)] //TODO: Provide DefaultValue and make this not required
+        [ConfigurationProperty("ipAddresses", IsRequired = false)]
         public IpCollection IpAddresses
         {
             set { this["ipAddresses"] = value; }
@@ -45,7 +44,7 @@ namespace Glimpse.WebForms.Configuration
             }
         }
 
-        [ConfigurationProperty("contentTypes", IsRequired = true)] //TODO: Provide DefaultValue and make this not required
+        [ConfigurationProperty("contentTypes", IsRequired = false)]
         public ContentTypeCollection ContentTypes
         {
             set { this["contentTypes"] = value; }
@@ -55,7 +54,7 @@ namespace Glimpse.WebForms.Configuration
             }
         }
 
-        [ConfigurationProperty("pluginBlacklist", IsRequired = true)] //TODO: Provide DefaultValue and make this not required
+        [ConfigurationProperty("pluginBlacklist", IsRequired = false)]
         public PluginBlacklistCollection PluginBlacklist
         {
             set { this["pluginBlacklist"] = value; }

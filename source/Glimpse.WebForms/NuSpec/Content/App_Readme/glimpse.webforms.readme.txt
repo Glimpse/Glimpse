@@ -13,7 +13,7 @@ To get started with Glimpse, visit [http://yoursite.com]/Glimpse/Config/ This pa
 
 The following configuration values are allowed for Glimpse in your web.config:
 
-<glimpse on="true" saveRequestCount="5"> <!-- set on to false to completly turn off Glimpse. saveRequestCount specifies the max number of requests Glimpse will save -->
+<glimpse enabled="true" requestLimit="5"> <!-- set on to false to completly turn off Glimpse. saveRequestCount specifies the max number of requests Glimpse will save -->
     <ipAddresses> <!-- List of IP addresses allowed to get Glimpse data.  localhost (IPv4 & IPv6) by default -->
         <add address="127.0.0.1" />
         <add address="::1" />
@@ -88,6 +88,15 @@ Details coming soon.
 
 Release Notes
 -------------
+05/??/2011 - 0.82
+- Added default values to all config elements to clean up web.config entries
+- Refactored "responder" framework to leverage IHttpHandlers
+- Seperated out MVC3 dependencies
+- Added timming info to Trace tab
+- Added support for WebForms tracing
+- Added additional request data to Request tab
+- Added RootUrlPath config option
+
 05/08/2011 - 0.81
 - Changed plugin initialization so that SetupInit is only called once.
 - Added list of loaded plugins to Glimpse/Config

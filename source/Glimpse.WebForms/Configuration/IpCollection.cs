@@ -5,6 +5,12 @@ namespace Glimpse.WebForms.Configuration
 {
     public class IpCollection : ConfigurationElementCollection
     {
+        public IpCollection()
+        {
+            BaseAdd(new IpAddress{Address = "127.0.0.1"});//IPv4
+            BaseAdd(new IpAddress{Address = "::1"});//IPv6
+        }
+
         public IpAddress this[int index]
         {
             get { return BaseGet(index) as IpAddress; }
@@ -16,6 +22,11 @@ namespace Glimpse.WebForms.Configuration
                 }
                 BaseAdd(index, value);
             }
+        }
+
+        public void Add(IpAddress address)
+        {
+            BaseAdd(address);
         }
 
         public bool Contains(string matchIp)

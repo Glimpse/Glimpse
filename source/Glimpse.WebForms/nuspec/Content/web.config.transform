@@ -2,15 +2,7 @@
     <configSections>
         <section name="glimpse" type="Glimpse.Net.Configuration.GlimpseConfiguration" />
     </configSections>
-    <glimpse enabled="true">
-        <ipAddresses>
-            <add address="127.0.0.1" /><!--IPv4-->
-            <add address="::1" /><!--IPv6-->
-        </ipAddresses>
-        <contentTypes>
-            <add contentType="text/html"/>
-        </contentTypes>
-    </glimpse>
+    <glimpse enabled="true"/>
     <system.web>
         <trace writeToDiagnosticsTrace="true" enabled="true" pageOutput="false"/>
     </system.web>

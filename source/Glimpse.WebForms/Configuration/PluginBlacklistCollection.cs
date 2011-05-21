@@ -18,6 +18,11 @@ namespace Glimpse.WebForms.Configuration
             }
         }
 
+        public void Add(GlimpsePlugin plugin)
+        {
+            BaseAdd(plugin);
+        }
+
         public IEnumerable<string> TypeNames()
         {
             foreach (GlimpsePlugin plugin in this)

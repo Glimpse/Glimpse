@@ -5,6 +5,16 @@ namespace Glimpse.WebForms.Configuration
 {
     public class ContentTypeCollection : ConfigurationElementCollection
     {
+        public ContentTypeCollection()
+        {
+            BaseAdd(new ContentType { Content = "text/html" });
+        }
+
+        public void Add(ContentType contentType)
+        {
+            BaseAdd(contentType);
+        }
+
         public ContentType this[int index]
         {
             get { return BaseGet(index) as ContentType; }
