@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Web.UI;
-using Glimpse.WebForms.Extensibility;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Sample.WebForms
 {

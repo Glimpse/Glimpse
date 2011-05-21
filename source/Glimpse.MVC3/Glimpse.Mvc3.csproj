@@ -96,9 +96,9 @@
     <Compile Include="Warning\NotProxyableWarning.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Glimpse.WebForms\Glimpse.WebForms.4.0.csproj">
+    <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">
       <Project>{21F99168-7D7B-49F2-A97C-5A983E0CA16F}</Project>
-      <Name>Glimpse.WebForms.4.0</Name>
+      <Name>Glimpse.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

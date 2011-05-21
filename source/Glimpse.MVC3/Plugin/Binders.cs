@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Glimpse.Core.Extensibility;
 using Glimpse.Mvc3.Extensions;
 using Glimpse.Mvc3.Plumbing;
-using Glimpse.WebForms.Extensibility;
 
 namespace Glimpse.Mvc3.Plugin
 {

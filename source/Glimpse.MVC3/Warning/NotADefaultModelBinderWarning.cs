@@ -2,7 +2,7 @@
 
 namespace Glimpse.Mvc3.Warning
 {
-    internal class NotADefaultModelBinderWarning : WebForms.Warning.Warning
+    internal class NotADefaultModelBinderWarning : Core.Warning.Warning
     {
         public NotADefaultModelBinderWarning(IModelBinder modelBinder)
         {

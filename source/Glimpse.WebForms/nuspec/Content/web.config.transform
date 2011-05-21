@@ -1,9 +1,0 @@
-﻿<configuration>
-    <configSections>
-        <section name="glimpse" type="Glimpse.Net.Configuration.GlimpseConfiguration" />
-    </configSections>
-    <glimpse enabled="true"/>
-    <system.web>
-        <trace writeToDiagnosticsTrace="true" enabled="true" pageOutput="false"/>
-    </system.web>
-</configuration>

@@ -2,10 +2,11 @@
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Glimpse.Core;
+using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
 using Glimpse.Mvc3.Plumbing;
 using Glimpse.WebForms;
-using Glimpse.WebForms.Extensibility;
-using Glimpse.WebForms.Extensions;
 
 namespace Glimpse.Mvc3.Plugin
 {

@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{21F99168-7D7B-49F2-A97C-5A983E0CA16F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Glimpse.Core</RootNamespace>
+    <AssemblyName>Glimpse.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json.Net35, Version=4.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Json40r2\Bin\Net35\Newtonsoft.Json.Net35.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.configuration">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web">
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Configuration\ContentTypeCollection.cs" />
+    <Compile Include="Configuration\ContentType.cs" />
+    <Compile Include="Configuration\GlimpseConfiguration.cs" />
+    <Compile Include="Configuration\GlimpsePlugin.cs" />
+    <Compile Include="Configuration\IpAddress.cs" />
+    <Compile Include="Configuration\IpCollection.cs" />
+    <Compile Include="Configuration\GlimpseMode.cs" />
+    <Compile Include="Configuration\PluginBlacklistCollection.cs" />
+    <Compile Include="Converter\AuthenticationSectionConverter.cs" />
+    <Compile Include="Converter\CustomErrorsSectionConverter.cs" />
+    <Compile Include="Extensibility\GlimpseTrace.cs" />
+    <Compile Include="Extensibility\GlimseHandlerAttribute.cs" />
+    <Compile Include="Extensibility\IGlimpseWarning.cs" />
+    <Compile Include="Extensibility\IGlimpseHandler.cs" />
+    <Compile Include="Handler\ImageHandlerBase.cs" />
+    <Compile Include="Plumbing\GlimpseContractResolver.cs" />
+    <Compile Include="Handler\JsonHandlerBase.cs" />
+    <Compile Include="Handler\Logo.cs" />
+    <Compile Include="Warning\ExceptionWarning.cs" />
+    <Compile Include="Extensibility\GlimpseConverterAttribute.cs" />
+    <Compile Include="Extensibility\GlimpsePluginAttribute.cs" />
+    <Compile Include="Extensibility\GlimpseSanitizerAttribute.cs" />
+    <Compile Include="Extensibility\IGlimpseConverter.cs" />
+    <Compile Include="Extensibility\IGlimpsePlugin.cs" />
+    <Compile Include="Extensibility\IGlimpsePluginRequirements.cs" />
+    <Compile Include="Extensibility\IGlimpseSanitizer.cs" />
+    <Compile Include="Extensions\HttpApplicationExtensions.cs" />
+    <Compile Include="Extensions\KeyValuePairExtension.cs" />
+    <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
+    <Compile Include="Plugin\Request.cs" />
+    <Compile Include="Plumbing\GlimpseRequestMetadata.cs" />
+    <Compile Include="Plumbing\GlimpseTraceListener.cs" />
+    <Compile Include="Plumbing\BlacklistedSafeDirectoryCatalog.cs" />
+    <Compile Include="PreApplicationStartCode.cs" />
+    <Compile Include="Handler\Clients.cs" />
+    <Compile Include="Handler\Config.cs" />
+    <Compile Include="Handler\Popup.cs" />
+    <Compile Include="Handler\History.cs" />
+    <Compile Include="Handler\Javascript.cs" />
+    <Compile Include="Handler\Sprite.cs" />
+    <Compile Include="Plugin\Environment.cs" />
+    <Compile Include="Plugin\Trace.cs" />
+    <Compile Include="Plugin\Config.cs" />
+    <Compile Include="GlimpseConstants.cs" />
+    <Compile Include="Module.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Plugin\Server.cs" />
+    <Compile Include="Plugin\Session.cs" />
+    <Compile Include="Sanitizer\CSharpSanitizer.cs" />
+    <Compile Include="Warning\SerializationWarning.cs" />
+    <Compile Include="Warning\Warning.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="glimpseClient.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="glimpseSprite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="glimpseLogo.png" />
+    <Content Include="NuSpec\Content\web.config.transform" />
+    <None Include="NuSpec\Glimpse.nuspec">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="NuSpec\Content\App_Readme\glimpse.webforms.readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NuSpec\lib\net40\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Glimpse.Mvc3.Warning
 {
-    internal class NonVirtualMemberWarning:WebForms.Warning.Warning
+    internal class NonVirtualMemberWarning:Core.Warning.Warning
     {
         public NonVirtualMemberWarning(Type type, MemberInfo memberInfo)
         {

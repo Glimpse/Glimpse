@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Glimpse.Core.Extensions;
 using Glimpse.Mvc3.Extensions;
 using Glimpse.Mvc3.Warning;
-using Glimpse.WebForms.Extensions;
 
 namespace Glimpse.Mvc3.Plumbing
 {

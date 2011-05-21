@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using Glimpse.WebForms.Extensibility;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Mvc3.Converter
 {

@@ -2,10 +2,10 @@
 using System.Web;
 using System.Web.Mvc;
 using Castle.DynamicProxy;
+using Glimpse.Core.Extensions;
 using Glimpse.Mvc3.Interceptor;
 using Glimpse.Mvc3.Plumbing;
 using Glimpse.Mvc3.Warning;
-using Glimpse.WebForms.Extensions;
 
 namespace Glimpse.Mvc3.Extensions
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Glimpse.WebForms.Extensibility;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Mvc3.Plugin
 {

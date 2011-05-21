@@ -1,6 +1,6 @@
 ﻿namespace Glimpse.Mvc3.Warning
 {
-    internal class NotProxyableWarning:WebForms.Warning.Warning
+    internal class NotProxyableWarning:Core.Warning.Warning
     {
         public NotProxyableWarning(object obj)
         {

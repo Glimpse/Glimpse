@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
+using Glimpse.Core;
 using Glimpse.Mvc3.Plumbing;
 using Glimpse.WebForms;
 

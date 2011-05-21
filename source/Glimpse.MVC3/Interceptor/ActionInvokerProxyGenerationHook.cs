@@ -2,8 +2,8 @@
 using System.Reflection;
 using System.Web;
 using Castle.DynamicProxy;
+using Glimpse.Core.Extensions;
 using Glimpse.Mvc3.Warning;
-using Glimpse.WebForms.Extensions;
 
 namespace Glimpse.Mvc3.Interceptor
 {
