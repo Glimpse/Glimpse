@@ -1,6 +1,6 @@
 ﻿using System.Web;
 using System.Web.Mvc;
-using Glimpse.Net;
+using Glimpse.Core;
 
 public static class HtmlExtensions
 {

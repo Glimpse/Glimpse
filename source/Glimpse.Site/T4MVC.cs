@@ -385,7 +385,7 @@ static class T4MVCHelpers {
         // Add your own modifications here before returning the path
         return path;
     }
-	 
+
     // Calling ProcessVirtualPath through delegate to allow it to be replaced for unit testing
     public static Func<string, string> ProcessVirtualPath = ProcessVirtualPathDefault;
 

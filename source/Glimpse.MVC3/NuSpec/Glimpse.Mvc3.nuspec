@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <!-- Values in dollar $igns are automatically pulled from the AssemblyInfo.cs attributes by NuGet.exe -->
     <metadata>
-        <id>Glimpse</id>
+        <id>Glimpse.Mvc3</id>
         <version>0.81</version>
         <title>Glimpse Web Debugger for ASP.NET MVC (Beta)</title>
         <authors>nmolnar, avanderhoorn</authors>

@@ -21,12 +21,12 @@ using System.Web.Mvc.Html;
 using System.Web.Routing;
 using T4MVC;
 namespace Glimpse.Site.Controllers {
-    public partial class HelpController {
+    public partial class ProtocolController {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public HelpController() { }
+        public ProtocolController() { }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        protected HelpController(Dummy d) { }
+        protected ProtocolController(Dummy d) { }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         protected RedirectToRouteResult RedirectToAction(ActionResult result) {
@@ -34,18 +34,13 @@ namespace Glimpse.Site.Controllers {
             return RedirectToRoute(callInfo.RouteValueDictionary);
         }
 
-        [NonAction]
-        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public System.Web.Mvc.ActionResult Plugin() {
-            return new T4MVC_ActionResult(Area, Name, ActionNames.Plugin);
-        }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public HelpController Actions { get { return MVC.Help; } }
+        public ProtocolController Actions { get { return MVC.Protocol; } }
         [GeneratedCode("T4MVC", "2.0")]
         public readonly string Area = "";
         [GeneratedCode("T4MVC", "2.0")]
-        public readonly string Name = "Help";
+        public readonly string Name = "Protocol";
 
         static readonly ActionNamesClass s_actions = new ActionNamesClass();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -53,7 +48,6 @@ namespace Glimpse.Site.Controllers {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNamesClass {
             public readonly string Index = "Index";
-            public readonly string Plugin = "Plugin";
         }
 
 
@@ -62,28 +56,16 @@ namespace Glimpse.Site.Controllers {
         public ViewNames Views { get { return s_views; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewNames {
-            public readonly string Index = "~/Views/Help/Index.cshtml";
-            public readonly string Plugin = "~/Views/Help/Plugin.cshtml";
-            static readonly _Plugins s_Plugins = new _Plugins();
-            public _Plugins Plugins { get { return s_Plugins; } }
-            public partial class _Plugins{
-                public readonly string Remote = "~/Views/Help/Plugins/Remote.cshtml";
-            }
+            public readonly string Index = "~/Views/Protocol/Index.cshtml";
         }
     }
 
     [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-    public class T4MVC_HelpController: Glimpse.Site.Controllers.HelpController {
-        public T4MVC_HelpController() : base(Dummy.Instance) { }
+    public class T4MVC_ProtocolController: Glimpse.Site.Controllers.ProtocolController {
+        public T4MVC_ProtocolController() : base(Dummy.Instance) { }
 
         public override System.Web.Mvc.ActionResult Index() {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Index);
-            return callInfo;
-        }
-
-        public override System.Web.Mvc.ActionResult Plugin(string id) {
-            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Plugin);
-            callInfo.RouteValueDictionary.Add("id", id);
             return callInfo;
         }
 
