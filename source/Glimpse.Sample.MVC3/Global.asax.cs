@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Routing;
+using System.Web.Routing; 
 
 namespace MvcMusicStore
 {
@@ -33,6 +33,9 @@ namespace MvcMusicStore
 
         protected void Application_Start()
         {
+            //var profiler = new ProviderWrapper();
+            //profiler.InjectProxyRegistrations();
+
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);

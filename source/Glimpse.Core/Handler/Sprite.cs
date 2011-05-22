@@ -14,5 +14,5 @@ namespace Glimpse.Core.Handler
         {
             get { return "image/png"; }
         }
-    }
+    } 
 }

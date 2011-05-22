@@ -94,6 +94,8 @@
     <Compile Include="QuestionsController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
+    <Content Include="Content\Plugin\Remote.jpg" />
+    <Content Include="Scripts\Protocol\LayoutExample.js" />
     <Compile Include="SharedController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
@@ -105,8 +107,6 @@
     <Compile Include="TalkController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
-    <Content Include="Content\Plugin\Remote.jpg" />
-    <Content Include="Scripts\Protocol\LayoutExample.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\close-quote.gif" />
@@ -172,6 +172,12 @@
     <Content Include="Views\Questions\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="packages.config" />
+    <None Include="T4MVC.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>T4MVC.cs</LastGenOutput>
+    </None>
+    <None Include="T4MVC.tt.settings.t4" />
     <Content Include="Views\Protocol\Index.cshtml" />
     <Content Include="Views\Help\Index.cshtml" />
     <Content Include="Views\Help\Plugin.cshtml" />
@@ -181,17 +187,13 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
-    <None Include="T4MVC.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>T4MVC.cs</LastGenOutput>
-    </None>
-    <None Include="T4MVC.tt.settings.t4" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">
       <Project>{21F99168-7D7B-49F2-A97C-5A983E0CA16F}</Project>
       <Name>Glimpse.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Glimpse.MVC3\Glimpse.Mvc3.csproj">
+      <Project>{523F20A6-3136-4034-B1DD-003F86BDB47A}</Project>
+      <Name>Glimpse.Mvc3</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

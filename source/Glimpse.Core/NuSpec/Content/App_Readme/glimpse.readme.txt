@@ -96,6 +96,8 @@ Release Notes
 - Added support for WebForms tracing
 - Added additional request data to Request tab
 - Added RootUrlPath config option
+- Added jQueryGlimpse
+- Fixed jQuery missing from popup for people who didn't have jQuery 1.4.4
 
 05/08/2011 - 0.81
 - Changed plugin initialization so that SetupInit is only called once.
