@@ -187,6 +187,8 @@
       <LastGenOutput>T4MVC.cs</LastGenOutput>
     </None>
     <None Include="T4MVC.tt.settings.t4" />
+    <Content Include="Views\Help\Plugins\Binding.cshtml" />
+    <Content Include="Views\Help\Plugins\Config.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">

@@ -27,14 +27,22 @@ namespace Glimpse.Core
         private static GlimpseRequestValidator RequestValidator { get; set; }
         private static IGlimpseSanitizer Sanitizer { get; set; }
 
-        [ImportMany] private static IEnumerable<IGlimpseHandler> Handlers { get; set; }
-        [ImportMany] private static IEnumerable<IGlimpseConverter> JsConverters { get; set; }
-        [Export] internal static JsonSerializerSettings JsonSerializerSettings { get; set; }
-        [ImportMany] internal static IEnumerable<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>> Plugins { get; set; }
+        [ImportMany]
+        private static IEnumerable<IGlimpseHandler> Handlers { get; set; }
+
+        [ImportMany]
+        private static IEnumerable<IGlimpseConverter> JsConverters { get; set; }
+
+        [Export]
+        internal static JsonSerializerSettings JsonSerializerSettings { get; set; }
+
+        [ImportMany]
+        internal static IEnumerable<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>> Plugins { get; set; }
 
         static Module()
         {
-            Configuration = ConfigurationManager.GetSection("glimpse") as GlimpseConfiguration ?? new GlimpseConfiguration();
+            Configuration = ConfigurationManager.GetSection("glimpse") as GlimpseConfiguration ??
+                            new GlimpseConfiguration();
 
             DirectoryCatalog = new BlacklistedSafeDirectoryCatalog("bin", Configuration.PluginBlacklist.TypeNames());
             Container = new CompositionContainer(DirectoryCatalog);
@@ -43,13 +51,13 @@ namespace Glimpse.Core
 
             Sanitizer = new CSharpSanitizer();
 
-            JsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new GlimpseContractResolver() };
+            JsonSerializerSettings = new JsonSerializerSettings {ContractResolver = new GlimpseContractResolver()};
             JsonSerializerSettings.Error += (obj, args) =>
-            {
-                var warnings = HttpContext.Current.GetWarnings();
-                warnings.Add(new SerializationWarning(args.ErrorContext.Error));
-                args.ErrorContext.Handled = true;
-            };
+                                                {
+                                                    var warnings = HttpContext.Current.GetWarnings();
+                                                    warnings.Add(new SerializationWarning(args.ErrorContext.Error));
+                                                    args.ErrorContext.Handled = true;
+                                                };
 
             Handlers = Enumerable.Empty<IGlimpseHandler>();
             JsConverters = Enumerable.Empty<IGlimpseConverter>();
@@ -103,19 +111,23 @@ namespace Glimpse.Core
             httpApplication.InitGlimpseContext();
         }
 
-        static void PostMapRequestHandler(object sender, EventArgs e)
+        private static void PostMapRequestHandler(object sender, EventArgs e)
         {
             var application = sender as HttpApplication;
             if (application == null) return;
 
             application.Context.Items[GlimpseConstants.ValidPath] = false;
-            
+
             var pathSegments = application.Request.Path.Split('/');
-            var i = Array.FindIndex(pathSegments, segment => segment.Equals(Configuration.RootUrlPath, StringComparison.CurrentCultureIgnoreCase));
-            if (i > -1 && i < pathSegments.Length-1)//Make sure key was found, and not the last element of segments
+            var i = Array.FindIndex(pathSegments,
+                                    segment =>
+                                    segment.Equals(Configuration.RootUrlPath, StringComparison.CurrentCultureIgnoreCase));
+            if (i > -1 && i < pathSegments.Length - 1) //Make sure key was found, and not the last element of segments
             {
-                var resourceName = pathSegments[i+1];
-                var handler = Handlers.Where(h=>h.ResourceName.Equals(resourceName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+                var resourceName = pathSegments[i + 1];
+                var handler =
+                    Handlers.Where(h => h.ResourceName.Equals(resourceName, StringComparison.CurrentCultureIgnoreCase)).
+                        FirstOrDefault();
 
                 if (handler != null)
                 {
@@ -144,12 +156,6 @@ namespace Glimpse.Core
 
             var httpApplication = sender as HttpApplication;
             if (!RequestValidator.IsValid(httpApplication, LifecycleEvent.EndRequest)) return;
-
-            foreach (Environment en in Configuration.Environments)
-            {
-
-                System.Diagnostics.Trace.Write(string.Format("!Switch to <a href='{0}'>{1}</a>: {0}!", en.Something(httpApplication.Request.Url), en.Name));
-            }
 
             ProcessData(httpApplication, false); //Run all plugins that DO NOT need access to Session
         }
@@ -256,9 +262,8 @@ namespace Glimpse.Core
         {
             IDictionary<string, object> data;
             if (!application.TryGetData(out data)) return "Error: No Glimpse Data Found";
-            var warnings = application.Context.GetWarnings();
 
-            string json = CreateJsonPayload(data, warnings);
+            string json = CreateJsonPayload(data, application);
 
             json = Sanitizer.Sanitize(json);
 
@@ -279,46 +284,92 @@ namespace Glimpse.Core
                 if (application.GetGlimpseMode() == GlimpseMode.On)
                 {
                     var path = VirtualPathUtility.ToAbsolute("~/", application.Context.Request.ApplicationPath);
-                    var html = string.Format(@"<script type='text/javascript' id='glimpseData' data-glimpse-requestID='{1}'>var glimpse = {0}, glimpsePath = '{2}';</script>", json, requestId, path);
-                    html += @"<script type='text/javascript' id='glimpseClient' src='" + UrlCombine(path, Configuration.RootUrlPath, "glimpseClient.js") + "'></script>";
+                    var html =
+                        string.Format(
+                            @"<script type='text/javascript' id='glimpseData' data-glimpse-requestID='{1}'>var glimpse = {0}, glimpsePath = '{2}';</script>",
+                            json, requestId, path);
+                    html += @"<script type='text/javascript' id='glimpseClient' src='" +
+                            UrlCombine(path, Configuration.RootUrlPath, "glimpseClient.js") + "'></script>";
                     application.Response.Write(html);
                 }
             }
         }
 
-        private static string CreateJsonPayload(IDictionary<string, object> data, List<IGlimpseWarning> warnings)
+        private static string CreateJsonPayload(IDictionary<string, object> data, HttpApplication application)
         {
+            var warnings = application.Context.GetWarnings();
+
             var sb = new StringBuilder("{");
             foreach (var item in data)
             {
                 try
                 {
-                    string dataString = JsonConvert.SerializeObject(item.Value, DefaultFormatting, JsonSerializerSettings);
+                    string dataString = JsonConvert.SerializeObject(item.Value, DefaultFormatting,
+                                                                    JsonSerializerSettings);
                     sb.Append(string.Format("\"{0}\":{1},", item.Key, dataString));
                 }
                 catch (Exception ex)
                 {
-                    var message = JsonConvert.SerializeObject(ex.Message, DefaultFormatting);
+                    var message = JsonConvert.SerializeObject(ex.Message, DefaultFormatting, JsonSerializerSettings);
                     message = message.Remove(message.Length - 1).Remove(0, 1);
-                    var callstack = JsonConvert.SerializeObject(ex.StackTrace, DefaultFormatting);
+                    var callstack = JsonConvert.SerializeObject(ex.StackTrace, DefaultFormatting, JsonSerializerSettings);
                     callstack = callstack.Remove(callstack.Length - 1).Remove(0, 1);
-                    const string helpMessage = "Please implement an IGlimpseConverter for the type mentioned above, or one of its base types, to fix this problem. More info on a better experience for this coming soon, keep an eye on <a href='http://getGlimpse.com' target='main'>getGlimpse.com</a></span>";
+                    const string helpMessage =
+                        "Please implement an IGlimpseConverter for the type mentioned above, or one of its base types, to fix this problem. More info on a better experience for this coming soon, keep an eye on <a href='http://getGlimpse.com' target='main'>getGlimpse.com</a></span>";
 
-                    sb.Append(string.Format("\"{0}\":\"<span style='color:red;font-weight:bold'>{1}</span><br/>{2}</br><span style='color:black;font-weight:bold'>{3}</span>\",", item.Key, message, callstack, helpMessage));
+                    sb.Append(
+                        string.Format(
+                            "\"{0}\":\"<span style='color:red;font-weight:bold'>{1}</span><br/>{2}</br><span style='color:black;font-weight:bold'>{3}</span>\",",
+                            item.Key, message, callstack, helpMessage));
                 }
             }
 
             //Add exceptions tab if needed
-            if (warnings.Count > 0)
+/*            if (warnings.Count > 0)
             {
-                var warningTable = new List<object[]> { new[] { "Type", "Message" } };
-                warningTable.AddRange(warnings.Select(warning => new[] { warning.GetType().Name, warning.Message }));
+                var warningTable = new List<object[]> {new[] {"Type", "Message"}};
+                warningTable.AddRange(warnings.Select(warning => new[] {warning.GetType().Name, warning.Message}));
 
                 var dataString = JsonConvert.SerializeObject(warningTable, DefaultFormatting);
                 sb.Append(string.Format("\"{0}\":{1},", "GlimpseWarnings", dataString));
-            }
+            }*/
 
             if (sb.Length > 1) sb.Remove(sb.Length - 1, 1);
+
+            var requestMetadata = new Dictionary<string, object>();
+            var pluginsMetadata = new Dictionary<string, object>();
+            var metadata = new Dictionary<string, object>
+                               {
+                                   {"request", requestMetadata},
+                                   {"plugins", pluginsMetadata},
+                               };
+            //request specific metadata
+            var environmentUrls = new Dictionary<string, string>();
+            foreach (Environment environment in Configuration.Environments)
+            {
+                environmentUrls.Add(environment.Name, environment.Something(application.Context.Request.Url).ToString());
+            }
+
+            requestMetadata.Add("environmentUrls", environmentUrls);
+
+            //plugin specific metadata);
+            foreach (var plugin in Plugins)
+            {
+                var pluginData = new Dictionary<string, object>();
+
+                var pluginValue = plugin.Value;
+
+                var helpPlugin = pluginValue as IProvideGlimpseHelp;
+                if (helpPlugin != null) pluginData.Add("helpUrl", helpPlugin.HelpUrl);
+
+                if (pluginData.Count > 0) pluginsMetadata.Add(pluginValue.Name, pluginData);
+            }
+
+            var metadataString = JsonConvert.SerializeObject(metadata, DefaultFormatting, JsonSerializerSettings);
+            sb.Append(string.Format(",\"{0}\":{1},", "_metadata", metadataString));
+            if (sb.Length > 1) sb.Remove(sb.Length - 1, 1);
+
+
             sb.Append("}");
 
             return sb.ToString();
