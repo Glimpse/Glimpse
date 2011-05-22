@@ -105,9 +105,7 @@
     <Content Include="NuSpec\Content\App_Readme\glimpse.mvc3.readme.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="NuSpec\Glimpse.nuspec">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="NuSpec\Glimpse.Mvc3.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="NuSpec\lib\net40\" />

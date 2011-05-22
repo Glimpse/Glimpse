@@ -1,5 +1,4 @@
-﻿using Glimpse.WebForms;
-using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+﻿using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 
 namespace Glimpse.Core
 {

@@ -3,7 +3,6 @@ using System.Web;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-using Glimpse.WebForms;
 
 namespace Glimpse.Core.Handler
 {

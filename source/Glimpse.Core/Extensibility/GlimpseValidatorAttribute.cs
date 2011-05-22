@@ -1,12 +1,14 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using Glimpse.Core.Plumbing;
+using Glimpse.Core.Validator;
 
 namespace Glimpse.Core.Extensibility
 {
     [MetadataAttribute]
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class GlimpseSanitizerAttribute : ExportAttribute
+    public class GlimpseValidatorAttribute : ExportAttribute
     {
-        public GlimpseSanitizerAttribute() : base(typeof(IGlimpseSanitizer)) { }
+        public GlimpseValidatorAttribute() : base(typeof(IGlimpseValidator)) { }
     }
 }

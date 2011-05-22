@@ -6,16 +6,16 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Web;
-using Glimpse.Core;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Plumbing;
 using Glimpse.Core.Sanitizer;
+using Glimpse.Core.Validator;
 using Glimpse.Core.Warning;
 using Newtonsoft.Json;
 
-namespace Glimpse.WebForms
+namespace Glimpse.Core
 {
     public class Module : IHttpModule
     {
@@ -23,10 +23,11 @@ namespace Glimpse.WebForms
         private static CompositionContainer Container { get; set; }
         private const Formatting DefaultFormatting = Formatting.None;
         private static BlacklistedSafeDirectoryCatalog DirectoryCatalog { get; set; }
+        private static GlimpseRequestValidator RequestValidator { get; set; }
         private static IGlimpseSanitizer Sanitizer { get; set; }
 
-        [ImportMany] internal static IEnumerable<IGlimpseHandler> Handlers { get; set; }
-        [ImportMany] internal static IEnumerable<IGlimpseConverter> JsConverters { get; set; }
+        [ImportMany] private static IEnumerable<IGlimpseHandler> Handlers { get; set; }
+        [ImportMany] private static IEnumerable<IGlimpseConverter> JsConverters { get; set; }
         [Export] internal static JsonSerializerSettings JsonSerializerSettings { get; set; }
         [ImportMany] internal static IEnumerable<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>> Plugins { get; set; }
 
@@ -36,6 +37,8 @@ namespace Glimpse.WebForms
 
             DirectoryCatalog = new BlacklistedSafeDirectoryCatalog("bin", Configuration.PluginBlacklist.TypeNames());
             Container = new CompositionContainer(DirectoryCatalog);
+
+            RequestValidator = new GlimpseRequestValidator(Configuration, Enumerable.Empty<IGlimpseValidator>());
 
             Sanitizer = new CSharpSanitizer();
 
@@ -54,7 +57,7 @@ namespace Glimpse.WebForms
 
         public void Init(HttpApplication context)
         {
-            if (Configuration.Enabled == false) return; //Do nothing if Glimpse is off, events are not wired up
+            if (!Configuration.Enabled) return; //Do nothing if Glimpse is off, events are not wired up
 
             if (Plugins.Count() == 0)
             {
@@ -82,9 +85,11 @@ namespace Glimpse.WebForms
 
         private static void BeginRequest(object sender, EventArgs e)
         {
-            HttpApplication httpApplication;
-            if (!sender.IsValidRequest(out httpApplication, Configuration, false, false)) return;
+            //HttpApplication httpApplication;
+            //if (!sender.IsValidRequest(out httpApplication, Configuration, false, false)) return;
 
+            var httpApplication = sender as HttpApplication;
+            if (!RequestValidator.IsValid(httpApplication, LifecycleEvent.BeginRequest)) return;
 /*
             var responder = Responders.GetResponderFor(httpApplication);
             if (responder != null)
@@ -121,24 +126,34 @@ namespace Glimpse.WebForms
 
         private static void PostRequestHandlerExecute(object sender, EventArgs e)
         {
-            HttpApplication httpApplication;
-            if (!sender.IsValidRequest(out httpApplication, Configuration, true)) return;
+            //HttpApplication httpApplication;
+            //if (!sender.IsValidRequest(out httpApplication, Configuration, true)) return;
+
+
+            var httpApplication = sender as HttpApplication;
+            if (!RequestValidator.IsValid(httpApplication, LifecycleEvent.PostRequestHandlerExecute)) return;
 
             ProcessData(httpApplication, true); //Run all plugins that DO need access to Session
         }
 
         private static void EndRequest(object sender, EventArgs e)
         {
-            HttpApplication httpApplication;
-            if (!sender.IsValidRequest(out httpApplication, Configuration, true)) return;
+            //HttpApplication httpApplication;
+            //if (!sender.IsValidRequest(out httpApplication, Configuration, true)) return;
+
+            var httpApplication = sender as HttpApplication;
+            if (!RequestValidator.IsValid(httpApplication, LifecycleEvent.EndRequest)) return;
 
             ProcessData(httpApplication, false); //Run all plugins that DO NOT need access to Session
         }
 
         private static void PreSendRequestHeaders(object sender, EventArgs e)
         {
-            HttpApplication httpApplication;
-            if (!sender.IsValidRequest(out httpApplication, Configuration, true)) return;
+            //HttpApplication httpApplication;
+            //if (!sender.IsValidRequest(out httpApplication, Configuration, true)) return;
+
+            var httpApplication = sender as HttpApplication;
+            if (!RequestValidator.IsValid(httpApplication, LifecycleEvent.PreSendRequestHeaders)) return;
 
             var requestId = Guid.NewGuid();
 
@@ -159,7 +174,7 @@ namespace Glimpse.WebForms
         {
             var batch = new CompositionBatch();
 
-            Container.ComposeParts(this);
+            Container.ComposeParts(this, RequestValidator);
 
             Container.Compose(batch);
 

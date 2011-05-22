@@ -193,16 +193,6 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Glimpse.MVC3\Glimpse.Mvc3.csproj">
-      <Project>{523F20A6-3136-4034-B1DD-003F86BDB47A}</Project>
-      <Name>Glimpse.Mvc3</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">
-      <Project>{21F99168-7D7B-49F2-A97C-5A983E0CA16F}</Project>
-      <Name>Glimpse.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Home\One.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -236,6 +226,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Account\Test.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">
+      <Project>{21F99168-7D7B-49F2-A97C-5A983E0CA16F}</Project>
+      <Name>Glimpse.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Glimpse.MVC3\Glimpse.Mvc3.csproj">
+      <Project>{523F20A6-3136-4034-B1DD-003F86BDB47A}</Project>
+      <Name>Glimpse.Mvc3</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

@@ -6,7 +6,6 @@ using System.Web.Mvc;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Mvc3.Plumbing;
-using Glimpse.WebForms;
 
 namespace Glimpse.Mvc3.Plugin
 {

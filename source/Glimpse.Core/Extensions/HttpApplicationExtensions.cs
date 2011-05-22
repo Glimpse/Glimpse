@@ -8,21 +8,11 @@ namespace Glimpse.Core.Extensions
     public static class HttpApplicationExtensions
     {
         //TODO: Refactor into IGlimpseValidator plugin model
-        internal static bool IsValidRequest(this HttpApplication application, GlimpseConfiguration config, bool checkContentType, bool checkMode = true, bool checkPath = true)
-        {
-            return IsValidRequestInternal(application, config, checkContentType, checkMode, checkPath);
-        }
-
         internal static bool IsValidRequest(this object obj, out HttpApplication application, GlimpseConfiguration config, bool checkContentType, bool checkMode = true, bool checkPath = true)
         {
             application = obj as HttpApplication;
             if (application == null) return false;
 
-            return IsValidRequestInternal(application, config, checkContentType, checkMode, checkPath);
-        }
-
-        private static bool IsValidRequestInternal(HttpApplication application, GlimpseConfiguration config, bool checkContentType, bool checkMode, bool checkPath = true)
-        {
             var request = application.Request;
             var response = application.Response;
             var store = application.Context.Items;

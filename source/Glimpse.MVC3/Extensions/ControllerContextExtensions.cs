@@ -4,7 +4,6 @@ using System.Web;
 using System.Web.Mvc;
 using Glimpse.Core;
 using Glimpse.Mvc3.Plumbing;
-using Glimpse.WebForms;
 
 namespace Glimpse.Mvc3.Extensions
 {

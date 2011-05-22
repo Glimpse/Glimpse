@@ -22,8 +22,8 @@ The following configuration values are allowed for Glimpse in your web.config:
         <add contentType="text/html"/>
     </contentTypes>
     <pluginBlacklist>
-		<add plugin="Glimpse.WebForms.Plugin.Request"/>
-		<add plugin="Glimpse.WebForms.Plugin.MetaData"/>
+		<add plugin="Glimpse.Core.Plugin.Request"/>
+		<add plugin="Glimpse.Core.Plugin.MetaData"/>
 	</pluginBlacklist>
 </glimpse>
 
@@ -66,7 +66,7 @@ Given the scope of the project and what it can do, the concept isn't restricted 
 Platforms currently supported:
 
 * ASP.Net MVC 3 (via Glimpse.Mvc3 package)
-* ASP.Net Web Forms 4 (via Glimpse.WebForms package)
+* ASP.Net Web Forms 4 (via Glimpse package)
 
 Platforms target to be supported:
 

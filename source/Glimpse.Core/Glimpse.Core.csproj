@@ -67,17 +67,25 @@
     <Compile Include="Converter\AuthenticationSectionConverter.cs" />
     <Compile Include="Converter\CustomErrorsSectionConverter.cs" />
     <Compile Include="Extensibility\GlimpseTrace.cs" />
-    <Compile Include="Extensibility\GlimseHandlerAttribute.cs" />
+    <Compile Include="Extensibility\GlimpseHandlerAttribute.cs" />
+    <Compile Include="Extensibility\GlimpseValidatorAttribute.cs" />
     <Compile Include="Extensibility\IGlimpseWarning.cs" />
     <Compile Include="Extensibility\IGlimpseHandler.cs" />
     <Compile Include="Handler\ImageHandlerBase.cs" />
     <Compile Include="Plumbing\GlimpseContractResolver.cs" />
     <Compile Include="Handler\JsonHandlerBase.cs" />
     <Compile Include="Handler\Logo.cs" />
+    <Compile Include="Validator\ContentTypeValidator.cs" />
+    <Compile Include="Validator\GlimpseModeValidator.cs" />
+    <Compile Include="Validator\GlimpseRequestValidator.cs" />
+    <Compile Include="Extensibility\IGlimpseValidator.cs" />
+    <Compile Include="Validator\HttpHandlerValidator.cs" />
+    <Compile Include="Validator\IpAddressValidator.cs" />
+    <Compile Include="Validator\LifecycleEvent.cs" />
+    <Compile Include="Validator\ResponseCodeValidator.cs" />
     <Compile Include="Warning\ExceptionWarning.cs" />
     <Compile Include="Extensibility\GlimpseConverterAttribute.cs" />
     <Compile Include="Extensibility\GlimpsePluginAttribute.cs" />
-    <Compile Include="Extensibility\GlimpseSanitizerAttribute.cs" />
     <Compile Include="Extensibility\IGlimpseConverter.cs" />
     <Compile Include="Extensibility\IGlimpsePlugin.cs" />
     <Compile Include="Extensibility\IGlimpsePluginRequirements.cs" />
@@ -120,7 +128,7 @@
     <None Include="NuSpec\Glimpse.nuspec">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="NuSpec\Content\App_Readme\glimpse.webforms.readme.txt" />
+    <Content Include="NuSpec\Content\App_Readme\glimpse.readme.txt" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

@@ -14,5 +14,8 @@
         <description>Glimpse is a web debugger used to gain a better understanding of whats happening inside of your webserver. (Beta)</description>
         <summary>A client side Glimpse into whats going on in your server.</summary>
         <tags>MVC ASP.NET Web</tags>
+        <dependencies>
+            <dependency id="Glimpse" version="0.81" />
+        </dependencies>
     </metadata>
 </package>
