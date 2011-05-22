@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Compilation;
+using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Plugin
@@ -12,7 +14,7 @@ namespace Glimpse.Core.Plugin
     [GlimpsePlugin]
     internal class Environment : IGlimpsePlugin
     {
-        public const string PluginEnvironmentStoreKey = "Glimpse.Plugin.Environment.Store";
+        private const string PluginEnvironmentStoreKey = "Glimpse.Plugin.Environment.Store";
         public string Name
         {
             get { return "Environment"; }
@@ -23,6 +25,15 @@ namespace Glimpse.Core.Plugin
             //environment should not change from request to request on a given machine.  We can cache our results in the application store
             var cachedData = application.Application[PluginEnvironmentStoreKey] as IDictionary<string, object>;
             if (cachedData != null) return cachedData;
+
+            var environmentName = "_Configure in web.config glimpse/environments_";
+            var config = ConfigurationManager.GetSection("glimpse") as GlimpseConfiguration ?? new GlimpseConfiguration();
+            var currentEnviro = config.Environments.GetCurrent(application.Request.Url);
+
+            if (currentEnviro != null)
+            {
+                environmentName = currentEnviro.Name;
+            }
 
             var serverSoftware = application.Context.Request.ServerVariables["SERVER_SOFTWARE"];
             var processName = Process.GetCurrentProcess().MainModule.ModuleName;
@@ -49,6 +60,7 @@ namespace Glimpse.Core.Plugin
 
             cachedData = new Dictionary<string, object>
                               {
+                                  {"Environment Name", environmentName},
                                   {"Machine Name", string.Format("{0} ({1} processors)", System.Environment.MachineName, System.Environment.ProcessorCount)},
                                   {"Booted", DateTime.Now.AddMilliseconds(System.Environment.TickCount*-1)},
                                   {"Operating System", string.Format("{0} ({1} bit)", System.Environment.OSVersion.VersionString, System.Environment.Is64BitOperatingSystem ? "64" : "32")},

@@ -14,6 +14,7 @@ using Glimpse.Core.Sanitizer;
 using Glimpse.Core.Validator;
 using Glimpse.Core.Warning;
 using Newtonsoft.Json;
+using Environment = Glimpse.Core.Configuration.Environment;
 
 namespace Glimpse.Core
 {
@@ -143,6 +144,11 @@ namespace Glimpse.Core
 
             var httpApplication = sender as HttpApplication;
             if (!RequestValidator.IsValid(httpApplication, LifecycleEvent.EndRequest)) return;
+
+            foreach (Environment en in Configuration.Environments)
+            {
+                System.Diagnostics.Trace.Write("Switch to " + en.Name + ": " + en.Something(httpApplication.Request.Url));
+            }
 
             ProcessData(httpApplication, false); //Run all plugins that DO NOT need access to Session
         }

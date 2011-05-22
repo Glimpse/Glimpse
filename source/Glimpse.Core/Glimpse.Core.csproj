@@ -58,6 +58,8 @@
   <ItemGroup>
     <Compile Include="Configuration\ContentTypeCollection.cs" />
     <Compile Include="Configuration\ContentType.cs" />
+    <Compile Include="Configuration\Environment.cs" />
+    <Compile Include="Configuration\EnvironmentsCollection.cs" />
     <Compile Include="Configuration\GlimpseConfiguration.cs" />
     <Compile Include="Configuration\GlimpsePlugin.cs" />
     <Compile Include="Configuration\IpAddress.cs" />

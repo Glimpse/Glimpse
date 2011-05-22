@@ -63,5 +63,15 @@ namespace Glimpse.Core.Configuration
                 return this["pluginBlacklist"] as PluginBlacklistCollection;
             }
         }
+
+        [ConfigurationProperty("environments", IsRequired = false)]
+        public EnvironmentsCollection Environments
+        {
+            set { this["environments"] = value; }
+            get
+            {
+                return this["environments"] as EnvironmentsCollection;
+            }
+        }
     }
 }
