@@ -187,6 +187,10 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Views\Help\Plugins\Binding.cshtml" />
+    <Content Include="Views\Help\Plugins\Config.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">
       <Project>{21F99168-7D7B-49F2-A97C-5A983E0CA16F}</Project>
       <Name>Glimpse.Core</Name>

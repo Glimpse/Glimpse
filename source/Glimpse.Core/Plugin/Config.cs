@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Configuration;
@@ -8,7 +9,7 @@ using Glimpse.Core.Extensions;
 namespace Glimpse.Core.Plugin
 {
     [GlimpsePlugin]
-    internal class Config : IGlimpsePlugin
+    internal class Config : IGlimpsePlugin, IProvideGlimpseHelp
     {
         public string Name
         {
@@ -33,6 +34,11 @@ namespace Glimpse.Core.Plugin
 
         public void SetupInit(HttpApplication application)
         {
+        }
+
+        public string HelpUrl
+        {
+            get { return "http://localhost:55555/Help/Plugin/Config"; }
         }
     }
 }
