@@ -147,7 +147,8 @@ namespace Glimpse.Core
 
             foreach (Environment en in Configuration.Environments)
             {
-                System.Diagnostics.Trace.Write("Switch to " + en.Name + ": " + en.Something(httpApplication.Request.Url));
+
+                System.Diagnostics.Trace.Write(string.Format("!Switch to <a href='{0}'>{1}</a>: {0}!", en.Something(httpApplication.Request.Url), en.Name));
             }
 
             ProcessData(httpApplication, false); //Run all plugins that DO NOT need access to Session
