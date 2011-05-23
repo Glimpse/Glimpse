@@ -9,7 +9,7 @@
         'GlimpseOn': 'True',
         'Plot & Description': 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.'
     };
-    $('.glimpse-scenario-one').show().html($.glimpseProcessor.build(scenarioOneData, 0));
+    $('.glimpse-scenario-one').show().html($Glimpse.glimpseProcessor.build(scenarioOneData, 0));
 
     var scenarioTwoData = [
         ['Actor', 'Character', 'Gender', 'Age'],
@@ -22,7 +22,7 @@
         ['Anthony Daniels', 'C-3PO', 'Droid', '101'],
         ['Kenny Baker', 'R2-D2', 'Droid', '150']
     ];
-    $('.glimpse-scenario-two').show().html($.glimpseProcessor.build(scenarioTwoData, 0));
+    $('.glimpse-scenario-two').show().html($Glimpse.glimpseProcessor.build(scenarioTwoData, 0));
 
     var scenarioTwoDataA = [
         ['Actor', 'Character', 'Gender', 'Age'],
@@ -39,7 +39,7 @@
         ['Shelagh Fraser', 'Aunt Beru', 'Female', '29'],
         ['Alex McCrindle', 'General Dodonna', 'Male', '43', 'fail']
     ];
-    $('.glimpse-scenario-two-a').show().html($.glimpseProcessor.build(scenarioTwoDataA, 0));
+    $('.glimpse-scenario-two-a').show().html($Glimpse.glimpseProcessor.build(scenarioTwoDataA, 0));
 
     var scenarioThreeData = {
         'Movie': 'Star Wars',
@@ -51,7 +51,7 @@
             ],
         'Plot & Description': 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.'
     };
-    $('.glimpse-scenario-three').show().html($.glimpseProcessor.build(scenarioThreeData, 0));
+    $('.glimpse-scenario-three').show().html($Glimpse.glimpseProcessor.build(scenarioThreeData, 0));
 
 
     var scenarioThreeDataA = {
@@ -64,7 +64,7 @@
             ],
         'Plot & Description': 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.'
     };
-    $('.glimpse-scenario-three-a').show().html($.glimpseProcessor.build(scenarioThreeDataA, 0));
+    $('.glimpse-scenario-three-a').show().html($Glimpse.glimpseProcessor.build(scenarioThreeDataA, 0));
 
     var scenarioFourData = {
         'Movie': 'Star Wars',
@@ -82,7 +82,7 @@
             ],
         'Plot & Description': 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.'
     };
-    $('.glimpse-scenario-four').show().html($.glimpseProcessor.build(scenarioFourData, 0));
+    $('.glimpse-scenario-four').show().html($Glimpse.glimpseProcessor.build(scenarioFourData, 0));
 
     var scenarioFourDataA = {
         'Movie': 'Star Wars',
@@ -100,7 +100,7 @@
             ],
         'Plot & Description': 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.'
     };
-    $('.glimpse-scenario-four-a').show().html($.glimpseProcessor.build(scenarioFourDataA, 0));
+    $('.glimpse-scenario-four-a').show().html($Glimpse.glimpseProcessor.build(scenarioFourDataA, 0));
 
     var scenarioFiveData = {
         'Movie': 'Star Wars',
@@ -112,7 +112,7 @@
         },
         'Plot & Description': 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.'
     };
-    $('.glimpse-scenario-five').show().html($.glimpseProcessor.build(scenarioFiveData, 0));
+    $('.glimpse-scenario-five').show().html($Glimpse.glimpseProcessor.build(scenarioFiveData, 0));
 
     var scenarioSixData = {
         'Movie': 'Star Wars',
@@ -130,7 +130,7 @@
         'Plot & Description': 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.'
     };
 
-    $('.glimpse-scenario-six').show().html($.glimpseProcessor.build(scenarioSixData, 0));
+    $('.glimpse-scenario-six').show().html($Glimpse.glimpseProcessor.build(scenarioSixData, 0));
 
     var scenarioSevenData = [
         ['Type', 'Name', 'Other'],
@@ -144,7 +144,7 @@
         ['Plot & Description', 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.', ' Best movie of all time']
     ];
 
-    $('.glimpse-scenario-seven').show().html($.glimpseProcessor.build(scenarioSevenData, 0));
+    $('.glimpse-scenario-seven').show().html($Glimpse.glimpseProcessor.build(scenarioSevenData, 0));
 
     var scenarioEightData = [
         ['Type', 'Name', 'Other'],
@@ -164,7 +164,7 @@
         ['Plot & Description', 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.', ' Best movie of all time']
     ];
 
-    $('.glimpse-scenario-eight').show().html($.glimpseProcessor.build(scenarioEightData, 0));
+    $('.glimpse-scenario-eight').show().html($Glimpse.glimpseProcessor.build(scenarioEightData, 0));
 
     var scenarioNineData = [
         ['Type', 'Name', 'Other'],
@@ -178,7 +178,7 @@
         ['Plot & Description', 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.', ' Best movie of all time']
     ];
 
-    $('.glimpse-scenario-nine').show().html($.glimpseProcessor.build(scenarioNineData, 0));
+    $('.glimpse-scenario-nine').show().html($Glimpse.glimpseProcessor.build(scenarioNineData, 0));
 
     var scenarioTenData = [
         ['Type', 'Name', 'Other'],
@@ -197,7 +197,7 @@
         ['Plot & Description', 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.', ' Best movie of all time']
     ];
 
-    $('.glimpse-scenario-ten').show().html($.glimpseProcessor.build(scenarioTenData, 0));
+    $('.glimpse-scenario-ten').show().html($Glimpse.glimpseProcessor.build(scenarioTenData, 0));
 
     var scenarioElevenData = {
         'Movie': 'Star Wars',
@@ -209,7 +209,7 @@
             ],
         'Plot & Description': 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.'
     };
-    $('.glimpse-scenario-eleven').show().html($.glimpseProcessor.build(scenarioElevenData, 0));
+    $('.glimpse-scenario-eleven').show().html($Glimpse.glimpseProcessor.build(scenarioElevenData, 0));
 
     var scenarioTwelveData = {
         'Movie': 'Star Wars',
@@ -227,7 +227,7 @@
             ],
         'Plot & Description': 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.'
     };
-    $('.glimpse-scenario-twelve').show().html($.glimpseProcessor.build(scenarioTwelveData, 0));
+    $('.glimpse-scenario-twelve').show().html($Glimpse.glimpseProcessor.build(scenarioTwelveData, 0));
 
     var scenarioThirteenData = {
         'Movie': [ 'Star Wars', 'Star Treck'],
@@ -245,17 +245,17 @@
             ],
         'Plot & Description': [ 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.' ]
     };
-    $('.glimpse-scenario-thirteen').show().html($.glimpseProcessor.build(scenarioThirteenData, 0));
+    $('.glimpse-scenario-thirteen').show().html($Glimpse.glimpseProcessor.build(scenarioThirteenData, 0));
      
     if (glimpse == '') 
         $.glimpse._wireCommonPluginEvents($.glimpse); 
-    $.glimpseProcessor.applyPostRenderTransforms($('.protocol'));
+    $Glimpse.glimpseProcessor.applyPostRenderTransforms($('.protocol'));
 
 
     //Sample rendering
     var sampleRender = function(data) {
-        $('.glimpse-scenario-example').show().html($.glimpseProcessor.build(data, 0));
-        $.glimpseProcessor.applyPostRenderTransforms($('.glimpse-scenario-example'));
+        $('.glimpse-scenario-example').show().html($Glimpse.glimpseProcessor.build(data, 0));
+        $Glimpse.glimpseProcessor.applyPostRenderTransforms($('.glimpse-scenario-example'));
     }
     sampleRender(scenarioOneData);
 
