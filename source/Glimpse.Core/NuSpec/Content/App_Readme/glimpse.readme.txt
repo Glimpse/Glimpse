@@ -98,6 +98,8 @@ Release Notes
 - Added RootUrlPath config option
 - Added jQueryGlimpse
 - Fixed jQuery missing from popup for people who didn't have jQuery 1.4.4
+- Fixed JSON missing from older browsers
+- Increased the z-index of glimpse to be a bit higher by default
 
 05/08/2011 - 0.81
 - Changed plugin initialization so that SetupInit is only called once.
