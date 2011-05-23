@@ -671,6 +671,7 @@ if (window.jQueryGlimpse) { (function ($) {
             $('.glimpse-spacer').height('0');
         },
         terminate: function() {
+            $('object').css('visibility', 'visible');
             $('.glimpse-open, .glimpse-spacer').remove();
             $('.glimpse-holder').animate({ 'height': '0' }, 'fast', function() {
                 $(this).remove();
