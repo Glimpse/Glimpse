@@ -651,8 +651,7 @@ if (window.jQueryGlimpse) { (function ($) {
                 g.settings.open = true;
                 g.persistState();
             }
-
-            $('object').css('visibility', 'hidden'); 
+             
             $('.glimpse-open').hide();
             $('.glimpse-holder').show().animate({ 'height': g.settings.height }, (speed === undefined ? 'fast' : speed));
             g._adjustLayout(g);
@@ -662,16 +661,14 @@ if (window.jQueryGlimpse) { (function ($) {
 
             g.settings.open = false;
             g.persistState();
-            
-            $('object').css('visibility', 'visible');
+             
             $('.glimpse-holder').animate({ 'height': '0' }, (speed === undefined ? 'fast' : speed), function() {
                 $(this).hide();
                 $('.glimpse-open').show();
             });
             $('.glimpse-spacer').height('0');
         },
-        terminate: function() {
-            $('object').css('visibility', 'visible');
+        terminate: function() { 
             $('.glimpse-open, .glimpse-spacer').remove();
             $('.glimpse-holder').animate({ 'height': '0' }, 'fast', function() {
                 $(this).remove();
