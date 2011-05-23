@@ -15,7 +15,7 @@ namespace Glimpse.Mvc3.Interceptor
             var propertyDescriptor = (PropertyDescriptor) invocation.Arguments[2];
 
             var store = controllerContext.BinderStore();
-            store.CurrentProperty = new GlimpseModelBoundProperties { Name = propertyDescriptor.Name, Type = propertyDescriptor.PropertyType };
+            store.CurrentProperty = new GlimpseModelBoundProperties { Name = propertyDescriptor.Name, Type = propertyDescriptor.PropertyType, ModelBinderType = invocation.TargetType};
 
             invocation.Proceed();
         }

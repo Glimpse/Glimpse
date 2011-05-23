@@ -34,7 +34,7 @@ namespace Glimpse.Mvc3.Plugin
                     providers.Add(new[]{boundProperty.FoundIn.GetType().ToString(), "True", "selected"});
 
                 table.Add(new [] {  ordinal++,
-                                    boundProperty.ModelBinderType.ToString(),
+                                    boundProperty.ModelBinderType == null ? null : boundProperty.ModelBinderType.ToString(),
                                     string.IsNullOrEmpty(boundProperty.MemberOf) ? boundProperty.Name : boundProperty.MemberOf + "." + boundProperty.Name, 
                                     boundProperty.Type.ToString(), 
                                     providers, 

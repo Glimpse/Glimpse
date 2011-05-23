@@ -18,7 +18,7 @@ namespace MvcMusicStore.Models
         public int      ArtistId   { get; set; }
 
         [Required(ErrorMessage = "An Album Title is required")]
-        [StringLength(160)]
+        [StringLength(160), AllowHtml]
         public string   Title      { get; set; }
 
         [Required(ErrorMessage = "Price is required")]

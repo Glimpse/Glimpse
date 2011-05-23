@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Web;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
+using Microsoft.Web.Infrastructure.DynamicValidationHelper;
 
 namespace Glimpse.Core.Plugin
 {
@@ -32,8 +35,13 @@ namespace Glimpse.Core.Plugin
                     cookies.Add(new[] { cookie.Name, cookie.Path, cookie.Secure.ToString(), application.Server.UrlDecode(cookie.Value) });
             }
 
-            var form = request.Form.Flatten();
-            var querystring = request.QueryString.Flatten();
+            //To avoid validation exceptions, input values are read like this
+            Func<NameValueCollection> formData;
+            Func<NameValueCollection> queryStringData;
+            ValidationUtility.GetUnvalidatedCollections(application.Context, out formData, out queryStringData);
+
+            var form = formData().Flatten();
+            var querystring = queryStringData().Flatten();
 
             //make sure there is request data
             if (form == null && querystring == null && cookies.Count <= 1) return null;
