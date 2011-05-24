@@ -94,7 +94,11 @@
     <Compile Include="QuestionsController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
+    <Content Include="Content\Plugin\config.png" />
+    <Content Include="Content\Plugin\environment.png" />
     <Content Include="Content\Plugin\Remote.jpg" />
+    <Content Include="Content\Plugin\request.png" />
+    <Content Include="Content\Plugin\server.png" />
     <Content Include="Scripts\Protocol\LayoutExample.js" />
     <Compile Include="SharedController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
@@ -182,6 +186,9 @@
     <Content Include="Views\Help\Index.cshtml" />
     <Content Include="Views\Help\Plugin.cshtml" />
     <Content Include="Views\Help\Plugins\Remote.cshtml" />
+    <Content Include="Views\Help\Plugins\Request.cshtml" />
+    <Content Include="Views\Help\Plugins\Environment.cshtml" />
+    <Content Include="Views\Help\Plugins\Server.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

@@ -14,6 +14,7 @@ using Glimpse.Core.Sanitizer;
 using Glimpse.Core.Validator;
 using Glimpse.Core.Warning;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Environment = Glimpse.Core.Configuration.Environment;
 
 namespace Glimpse.Core
@@ -204,6 +205,7 @@ namespace Glimpse.Core
             {
                 converters.Add(new JsonConverterToIGlimpseConverterAdapter(jsConverter));
             }
+            converters.Add(new JavaScriptDateTimeConverter());//adds a more human readable datetime format
         }
 
         private static void Persist(string json, HttpApplication ctx, Guid requestId)

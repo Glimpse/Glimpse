@@ -9,7 +9,7 @@ using Microsoft.Web.Infrastructure.DynamicValidationHelper;
 namespace Glimpse.Core.Plugin
 {
     [GlimpsePlugin]
-    internal class Request : IGlimpsePlugin
+    internal class Request : IGlimpsePlugin, IProvideGlimpseHelp
     {
         public string Name
         {
@@ -71,6 +71,11 @@ namespace Glimpse.Core.Plugin
 
         public void SetupInit(HttpApplication application)
         {
+        }
+
+        public string HelpUrl
+        {
+            get { return "http://getGlimpse.com/Help/Plugin/Request"; }
         }
     }
 }

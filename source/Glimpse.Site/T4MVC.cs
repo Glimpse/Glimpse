@@ -364,7 +364,11 @@ namespace Links {
             private const string URLPATH = "~/Content/Plugin";
             public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
             public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+            public static readonly string config_png = Url("config.png");
+            public static readonly string environment_png = Url("environment.png");
             public static readonly string Remote_jpg = Url("Remote.jpg");
+            public static readonly string request_png = Url("request.png");
+            public static readonly string server_png = Url("server.png");
         }
     
         public static readonly string Site_css = Url("Site.css");

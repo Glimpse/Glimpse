@@ -10,7 +10,7 @@ using Glimpse.Mvc3.Plumbing;
 namespace Glimpse.Mvc3.Plugin
 {
     [GlimpsePlugin(ShouldSetupInInit = true)]
-    internal class Views : IGlimpsePlugin
+    internal class Views : IGlimpsePlugin, IProvideGlimpseHelp
     {
         public string Name
         {
@@ -99,6 +99,11 @@ namespace Glimpse.Mvc3.Plugin
                 if (!(engines[i] is GlimpseViewEngine))
                     engines[i] = new GlimpseViewEngine(engines[i]);
             }
+        }
+
+        public string HelpUrl
+        {
+            get { return "http://getGlimpse.com/Help/Plugin/Views"; }
         }
     }
 }

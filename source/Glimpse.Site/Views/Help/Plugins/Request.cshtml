@@ -1,0 +1,19 @@
+﻿
+<h2>Request Tab</h2>
+
+<div class="plugin-summary">
+    <p>The Request tab shows very basic HTTP request information. Client-side web debuggers (such as FireBug) often show very similar data.</p>
+    <p>The difference between client-side web debuggers and Glimpse is that Glimpse shows you what the server received, while other tools show you what the client sent.</p>
+    <p>Use this tab to understand the values your server is receiving and to identify any changes made to the request. (By middle man servers such as a misbehaving proxy.)</p>
+</div>
+
+<div class="plugin-layout">
+    <h3>Layout</h3> 
+    <img src="@Links.Content.Plugin.request_png" />
+    <dl class="plain">
+        <dt>Key</dt>
+            <dd>The key column shows the name of a property from <a href="http://msdn.microsoft.com/en-us/library/system.web.httprequest.aspx">System.Web.HttpRequest</a></dd>
+        <dt>Value</dt>
+            <dd>The value for the given property as seen by the server. Collections are rendered as inline tables with appropriate values. Null values are displayed as "--".</dd>
+    </dl>
+</div>

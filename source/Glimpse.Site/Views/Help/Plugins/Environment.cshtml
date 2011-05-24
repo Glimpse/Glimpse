@@ -1,0 +1,38 @@
+﻿
+<h2>Environment Tab</h2>
+
+<div class="plugin-summary">
+    <p>The Environment tab provides information about the server that responded the the request. This tab is particularly useful in web farm/load balanced scenarios, when it can be difficult to know which server handled the request.</p>
+</div>
+
+<div class="plugin-layout">
+    <h3>Layout</h3> 
+    <img src="@Links.Content.Plugin.environment_png" />
+    <dl class="plain">
+        <dt>Key</dt>
+            <dd>The key column list the names of values pertinent to the server that responded to the request.</dd>
+        <dt>Value</dt>
+            <dd>
+                The value for the given key. Some values require additional explanation:
+                <dl>
+                    <dt>Environment Name</dt>
+                    <dd>
+                        <p>This value represents the name you/your team call the environment that responded to the request. Typically environments go by names such as "local", "qa", "test", "staging" or "production".</p>
+                        <p>The Environment Name will only be made available by providing Glimpse additional <environments> configuration data, as seen in this sample:</p>
+                        <pre>
+                              &lt;glimpse enabled="true"&gt;
+                                  &lt;environments>
+                                      &lt;add name="Dev" authority="localhost:55555"/&gt;
+                                      &lt;add name="Prod" authority="getglimpse.com"/&gt;
+                                  &lt;/environments&gt;
+                              &lt;/glimpse&gt;
+                        </pre>
+                    </dd>
+                    <dt>System Assemblies</dt>
+                    <dd>Lists assemblies loaded in memory that have names starting with System.* or Microsoft.*</dd>
+                    <dt>Application Assemblies</dt>
+                    <dd>Lists all other assemblies loaded in memory.</dd>
+                </dl>
+            </dd>
+    </dl>
+</div>

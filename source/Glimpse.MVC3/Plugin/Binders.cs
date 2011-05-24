@@ -8,7 +8,7 @@ using Glimpse.Mvc3.Plumbing;
 namespace Glimpse.Mvc3.Plugin
 {
     [GlimpsePlugin(ShouldSetupInInit = true)]
-    internal class Binders:IGlimpsePlugin
+    internal class Binders:IGlimpsePlugin, IProvideGlimpseHelp
     {
         public string Name
         {
@@ -55,6 +55,11 @@ namespace Glimpse.Mvc3.Plugin
             GlimpsePipelineInitiation.ModelBinders();
 
             GlimpsePipelineInitiation.ValueProviders();
+        }
+
+        public string HelpUrl
+        {
+            get { return "http://getGlimpse.com/Help/Plugin/Binders"; }
         }
     }
 }

@@ -5,7 +5,7 @@ using Glimpse.Core.Extensions;
 namespace Glimpse.Core.Plugin
 {
     [GlimpsePlugin]
-    internal class Server : IGlimpsePlugin
+    internal class Server : IGlimpsePlugin, IProvideGlimpseHelp
     {
         public string Name
         {
@@ -19,6 +19,11 @@ namespace Glimpse.Core.Plugin
 
         public void SetupInit(HttpApplication application)
         {
+        }
+
+        public string HelpUrl
+        {
+            get { return "http://getGlimpse.com/Help/Plugin/Server"; }
         }
     }
 }
