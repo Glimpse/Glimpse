@@ -15,6 +15,7 @@ ul.plain li, ol.plain li { margin:0.5em 0 0.5em 1.5em ; }
 .navigation li a { display:block; font-size:1.5em; color:#333; text-decoration:none; margin:1em 0 0.5em; }
 .nagigation li span { display:block; padding:40px 8px 0 12px; font-size:0.85em; }
 .download { margin-top:3em; }
+.download-abbrv { position:absolute; right:0; margin-top:-15px; }
 .footer { margin:3em 0; text-align:center; }
 .logo { font-family: "TitilliumMaps", helvetica, sans-serif; margin:100px 0 10px; position:relative; background: url(glimpseLogo.png) -10px -15px no-repeat; padding: 0 0 0 140px; }
 .logo h1 { color:transparent; font-size:0px; height:65px; }

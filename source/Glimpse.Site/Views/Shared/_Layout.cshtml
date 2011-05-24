@@ -5,8 +5,7 @@
     <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
     @this.RenderSection("styles", false)
 </head> 
-<body>
-
+<body> 
 <div class="content">
     <div class="navigation-back"> 
     </div>
@@ -22,35 +21,11 @@
         <h1>Glimpse</h1>
         <div>A client side Glimpse to your server</div>
     </div>
-    
-    <div class="download">
-        <table width="100%">
-            <tr>
-                <td  width="300">
-                    <h3>How to get Glimpse</h3>
-                    <div>Currently ASP.Net build only</div>
-                </td>
-                <td width="250">
-                    <a href="http://nuget.org/List/Packages/Glimpse" class="myButton">Download Now</a>
-                </td>
-                <td>
-                    <a href="http://nuget.org/List/Packages/Glimpse"><img src="@Url.Content("~/Content/nugetlogo.png")" /></a>
-                </td>
-                <td align="right"> 
-                    <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://getglimpse.com" data-text="Found #glimpse & think its amazing, what firebug is for the client, #glimpse is for the server" data-count="horizontal" data-via="anthony_vdh @@nikmd23" >Tweet</a>
-                    <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-                </td>
-            </tr>
-        </table>
-    </div>
 
     @RenderBody()
-     
-    <div class="footer">
-        <img src="@Url.Content(Links.Content.uservoice_icon_png)" width="16" /> Have a <em>feature</em> request? <a href="http://getglimpse.uservoice.com">Submit the idea</a>. &nbsp; &nbsp; 
-        <img src="@Url.Content(Links.Content.github_gif)" /> Found an <em>error</em>? <a href="https://github.com/glimpse/glimpse/issues">Help us improve</a>. &nbsp; &nbsp;
-        <img src="@Url.Content(Links.Content.twitter_png)" /> Have a <em>question</em>? <a href="http://twitter.com/#search?q=%23glimpse">Tweet us using #glimpse</a>.
-    </div> 
+  
+    @Html.GlimpseLinks()
+
     <div class="footer"> 
         Created by <strong>Anthony van der Hoorn</strong> (<a href="http://twitter.com/anthony_vdh">@@anthony_vdh</a>) and <strong>Nik Molnar</strong> (<a href="http://twitter.com/nikmd23">@@nikmd23</a>) <br />
         &copy; getglimpse.com 2011
