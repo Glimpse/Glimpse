@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -10,7 +9,7 @@ using Glimpse.Mvc3.Plumbing;
 namespace Glimpse.Mvc3.Plugin
 {
     [GlimpsePlugin(ShouldSetupInInit = false)]
-    internal class MetaData : IGlimpsePlugin
+    internal class MetaData : IGlimpsePlugin, IProvideGlimpseHelp
     {
         public string Name
         {
@@ -113,6 +112,11 @@ namespace Glimpse.Mvc3.Plugin
 
         public void SetupInit(HttpApplication application)
         {
+        }
+
+        public string HelpUrl
+        {
+            get { return "http://getGlimpse.com/Help/Plugin/MetaData"; }
         }
     }
 }

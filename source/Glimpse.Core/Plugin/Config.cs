@@ -1,5 +1,4 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Configuration;
@@ -38,7 +37,7 @@ namespace Glimpse.Core.Plugin
 
         public string HelpUrl
         {
-            get { return "http://localhost:55555/Help/Plugin/Config"; }
+            get { return "http://getGlimpse.com/Help/Plugin/Config"; }
         }
     }
 }

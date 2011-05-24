@@ -12,7 +12,7 @@ using Glimpse.Core.Extensibility;
 namespace Glimpse.Core.Plugin
 {
     [GlimpsePlugin]
-    internal class Environment : IGlimpsePlugin
+    internal class Environment : IGlimpsePlugin, IProvideGlimpseHelp
     {
         private const string PluginEnvironmentStoreKey = "Glimpse.Plugin.Environment.Store";
         public string Name
@@ -115,6 +115,11 @@ namespace Glimpse.Core.Plugin
             }
 
             return AspNetHostingPermissionLevel.None;
+        }
+
+        public string HelpUrl
+        {
+            get { return "http://getGlimpse.com/Help/Plugin/Environment"; }
         }
     }
 }

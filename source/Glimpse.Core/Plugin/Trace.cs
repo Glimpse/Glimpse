@@ -7,7 +7,7 @@ using Glimpse.Core.Plumbing;
 namespace Glimpse.Core.Plugin
 {
     [GlimpsePlugin(ShouldSetupInInit = true)]
-    internal class Trace : IGlimpsePlugin
+    internal class Trace : IGlimpsePlugin, IProvideGlimpseHelp
     {
         public const string TraceMessageStoreKey = "Glimpse.Trace.Messages";
         public const string FirstWatchStoreKey = "Glimpse.Trace.FirstWatch";
@@ -65,6 +65,11 @@ namespace Glimpse.Core.Plugin
             var traceListeners = System.Diagnostics.Trace.Listeners;
             if (!traceListeners.OfType<GlimpseTraceListener>().Any())
                 traceListeners.Add(new GlimpseTraceListener()); //Add trace listener if it isn't already configured
+        }
+
+        public string HelpUrl
+        {
+            get { return "http://getGlimpse.com/Help/Plugin/Trace"; }
         }
     }
 }

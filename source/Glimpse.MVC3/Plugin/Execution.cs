@@ -10,7 +10,7 @@ using Glimpse.Mvc3.Plumbing;
 namespace Glimpse.Mvc3.Plugin
 {
     [GlimpsePlugin(ShouldSetupInInit = true)]
-    internal class Execution : IGlimpsePlugin
+    internal class Execution : IGlimpsePlugin, IProvideGlimpseHelp
     {
         public string Name
         {
@@ -109,6 +109,11 @@ namespace Glimpse.Mvc3.Plugin
             GlimpsePipelineInitiation.ControllerFactory();
 
             GlimpsePipelineInitiation.DependencyResolver();
+        }
+
+        public string HelpUrl
+        {
+            get { return "http://getGlimpse.com/Help/Plugin/Execution"; }
         }
     }
 }

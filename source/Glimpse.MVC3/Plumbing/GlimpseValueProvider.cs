@@ -4,7 +4,7 @@ using Glimpse.Mvc3.Extensions;
 
 namespace Glimpse.Mvc3.Plumbing
 {
-    internal class GlimpseValueProvider : IValueProvider
+    internal class GlimpseValueProvider : IValueProvider //, IUnvalidatedValueProvider
     {
         public IValueProvider ValueProvider { get; set; }
 
@@ -30,9 +30,16 @@ namespace Glimpse.Mvc3.Plumbing
 
         public ValueProviderResult GetValue(string key)
         {
-            var k = key;
-            var result = ValueProvider.GetValue(k);
+            var result = ValueProvider.GetValue(key);
 
+            Log(result);
+
+            //Trace.Write(string.Format("{0}.GetValue('{1}') = {2}", ValueProvider.GetType().Name, key, result == null ? null : result.AttemptedValue));
+            return result;
+        }
+
+        protected void Log(ValueProviderResult result)
+        {
             if (result != null)
             {
                 var store = HttpContext.Current.BinderStore();
@@ -40,6 +47,23 @@ namespace Glimpse.Mvc3.Plumbing
                 store.CurrentProperty.AttemptedValue = result.AttemptedValue;
                 store.CurrentProperty.Culture = result.Culture;
             }
+        }
+    }
+
+    internal class GlimpseUnvalidatedValueProvider : GlimpseValueProvider, IUnvalidatedValueProvider
+    {
+        public GlimpseUnvalidatedValueProvider(IValueProvider valueProvider)
+            : base(valueProvider)
+        {
+        }
+
+        public ValueProviderResult GetValue(string key, bool skipValidation)
+        {
+            var unvalidatedValueProvider = (IUnvalidatedValueProvider) ValueProvider;
+
+            var result = unvalidatedValueProvider.GetValue(key, skipValidation);
+
+            Log(result);
 
             //Trace.Write(string.Format("{0}.GetValue('{1}') = {2}", ValueProvider.GetType().Name, key, result == null ? null : result.AttemptedValue));
             return result;

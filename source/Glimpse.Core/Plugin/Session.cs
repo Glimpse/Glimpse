@@ -6,7 +6,7 @@ using Glimpse.Core.Extensibility;
 namespace Glimpse.Core.Plugin
 {
     [GlimpsePlugin(SessionRequired = true)]
-    internal class Session : IGlimpsePlugin
+    internal class Session : IGlimpsePlugin, IProvideGlimpseHelp
     {
         public string Name
         {
@@ -34,6 +34,11 @@ namespace Glimpse.Core.Plugin
 
         public void SetupInit(HttpApplication application)
         {
+        }
+
+        public string HelpUrl
+        {
+            get { return "http://getGlimpse.com/Help/Plugin/Session"; }
         }
     }
 }

@@ -8,7 +8,7 @@ using Glimpse.Core.Extensibility;
 namespace Glimpse.Mvc3.Plugin
 {
     [GlimpsePlugin]
-    internal class Routes:IGlimpsePlugin
+    internal class Routes:IGlimpsePlugin, IProvideGlimpseHelp
     {
         public string Name
         {
@@ -83,6 +83,11 @@ namespace Glimpse.Mvc3.Plugin
         public void SetupInit(HttpApplication application)
         {
             throw new NotImplementedException();
+        }
+
+        public string HelpUrl
+        {
+            get { return "http://getGlimpse.com/Help/Plugin/Routes"; }
         }
     }
 }

@@ -21,7 +21,12 @@ namespace Glimpse.Mvc3.Plumbing
             Trace.Write(string.Format("{0}.GetValueProvider(controllerContext) = {1}", Factory.GetType().Name, valueProvider == null ? "null" : valueProvider.GetType().ToString()));
 
             if (valueProvider != null && !(valueProvider is GlimpseValueProvider))
-                valueProvider = new GlimpseValueProvider(valueProvider);
+            {
+                if (valueProvider is IUnvalidatedValueProvider)
+                    valueProvider = new GlimpseUnvalidatedValueProvider(valueProvider);
+                else
+                    valueProvider = new GlimpseValueProvider(valueProvider);
+            }
 
             return valueProvider;
         }
