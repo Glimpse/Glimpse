@@ -26,7 +26,7 @@
 
     var scenarioTwoDataA = [
         ['Actor', 'Character', 'Gender', 'Age'],
-        ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+        ['Mark Hamill', 'Luke Skywalker', 'Male', '21', 'ms'],
         ['James Earl Jones', 'Darth Vader', 'Male', '45', 'info'],
         ['Harrison Ford', 'Han Solo - Solo plays a central role in the various Star Wars set after Return of the Jedi. In The Courtship of Princess Leia (1995), he resigns his commission to pursue Leia, whom he eventually marries.', 'Male', '25'],
         ['Carrie Fisher', 'Princess Leia Organa', 'Female', '21'],
