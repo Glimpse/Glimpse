@@ -759,7 +759,7 @@ if (window.jQueryGlimpse) { (function ($) {
             data : null,
             url : window.location.href.replace(window.location.protocol + '//' + window.location.host, ''),
             clientName : '',
-            html : { plugin: '<div class="glimpse-open"><div class="glimpse-icon"></div></div><div class="glimpse-holder glimpse"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon" title="About Glimpse?"></div><div class="glimpse-title"></div><div class="glimpse-buttons"><a href="#" class="glimpse-meta-warning glimpse-button" title="Glimpse has some warnings!"></a><a href="#" class="glimpse-meta-help glimpse-button"></a><a href="#" title="Close/Minimize" class="glimpse-close glimpse-button"></a><a href="#" title="Pop Out" class="glimpse-popout glimpse-button"></a><a href="#" title="Shutdown/Terminate" class="glimpse-terminate glimpse-button"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>' },
+            html : { plugin: '<div class="glimpse-open"><div class="glimpse-icon"></div></div><div class="glimpse-holder glimpse"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon" title="About Glimpse?"></div><div class="glimpse-title"></div><div class="glimpse-buttons"><a href="#" class="glimpse-meta-warning glimpse-button" title="Glimpse has some warnings!"></a><a href="#" target="_blank" class="glimpse-meta-help glimpse-button"></a><a href="#" title="Close/Minimize" class="glimpse-close glimpse-button"></a><a href="#" title="Pop Out" class="glimpse-popout glimpse-button"></a><a href="#" title="Shutdown/Terminate" class="glimpse-terminate glimpse-button"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>' },
             tabStrip : function() { return $('.glimpse-tabs ul'); },
             panelHolder : function() { return $('.glimpse-panel-holder'); },
             mainHolder : function() { return $('.glimpse-holder'); },
@@ -1430,11 +1430,22 @@ if (window.jQueryGlimpse) { (function ($) {
             //Info tab
             var infoTab = $('.glimpse-tabitem-' + gm.static.key.info, tabStrip); //.hide();
             if (infoTab.length > 0) {
-                $('.glimpse-bar .glimpse-icon').click(function () {
+                $('.glimpse-bar .glimpse-icon', mainHolder).click(function () {
                     infoTab.click();
                     return false;
                 });
             } 
+
+            //Help setup
+            $('li', tabStrip).click(function() { gm.changeHelp($(this)); });
+            gm.changeHelp($('.glimpse-active', tabStrip));
+        },
+        changeHelp : function(item) {
+            var g = $.glimpse, mainHolder = g.static.mainHolder(), key = item.data('sort'), metaData = g.static.data._metadata, url = '', icon = $('.glimpse-meta-help', mainHolder);
+            if (metaData != undefined && (metaData = metaData.plugins[key]) != undefined && (url = metaData.helpUrl) != undefined && url.length > 0) 
+                icon.show().attr('href', url);
+            else 
+                icon.hide();
         },
         static : {
             key : {
