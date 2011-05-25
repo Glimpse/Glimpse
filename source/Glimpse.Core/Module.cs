@@ -26,7 +26,7 @@ namespace Glimpse.Core
         private const Formatting DefaultFormatting = Formatting.None;
         private static BlacklistedSafeDirectoryCatalog DirectoryCatalog { get; set; }
         private static GlimpseRequestValidator RequestValidator { get; set; }
-        private static IGlimpseSanitizer Sanitizer { get; set; }
+        private static IGlimpseSanitizer Sanitizer { get; set; }//TODO: new up via config
 
         [ImportMany]
         private static IEnumerable<IGlimpseHandler> Handlers { get; set; }
@@ -44,6 +44,8 @@ namespace Glimpse.Core
         {
             Configuration = ConfigurationManager.GetSection("glimpse") as GlimpseConfiguration ??
                             new GlimpseConfiguration();
+
+            //TODO: abort if config is off?
 
             DirectoryCatalog = new BlacklistedSafeDirectoryCatalog("bin", Configuration.PluginBlacklist.TypeNames());
             Container = new CompositionContainer(DirectoryCatalog);
@@ -95,19 +97,8 @@ namespace Glimpse.Core
 
         private static void BeginRequest(object sender, EventArgs e)
         {
-            //HttpApplication httpApplication;
-            //if (!sender.IsValidRequest(out httpApplication, Configuration, false, false)) return;
-
             var httpApplication = sender as HttpApplication;
             if (!RequestValidator.IsValid(httpApplication, LifecycleEvent.BeginRequest)) return;
-/*
-            var responder = Responders.GetResponderFor(httpApplication);
-            if (responder != null)
-            {
-                responder.Respond(httpApplication, Configuration);
-                return;
-            }
-*/
 
             httpApplication.InitGlimpseContext();
         }
@@ -140,10 +131,6 @@ namespace Glimpse.Core
 
         private static void PostRequestHandlerExecute(object sender, EventArgs e)
         {
-            //HttpApplication httpApplication;
-            //if (!sender.IsValidRequest(out httpApplication, Configuration, true)) return;
-
-
             var httpApplication = sender as HttpApplication;
             if (!RequestValidator.IsValid(httpApplication, LifecycleEvent.PostRequestHandlerExecute)) return;
 
@@ -152,9 +139,6 @@ namespace Glimpse.Core
 
         private static void EndRequest(object sender, EventArgs e)
         {
-            //HttpApplication httpApplication;
-            //if (!sender.IsValidRequest(out httpApplication, Configuration, true)) return;
-
             var httpApplication = sender as HttpApplication;
             if (!RequestValidator.IsValid(httpApplication, LifecycleEvent.EndRequest)) return;
 
@@ -163,9 +147,6 @@ namespace Glimpse.Core
 
         private static void PreSendRequestHeaders(object sender, EventArgs e)
         {
-            //HttpApplication httpApplication;
-            //if (!sender.IsValidRequest(out httpApplication, Configuration, true)) return;
-
             var httpApplication = sender as HttpApplication;
             if (!RequestValidator.IsValid(httpApplication, LifecycleEvent.PreSendRequestHeaders)) return;
 
@@ -276,7 +257,6 @@ namespace Glimpse.Core
 
         private static void AppendToResponse(HttpApplication application, string json, Guid requestId)
         {
-            //if ajax request, render glimpse data to headers
             if (application.IsAjax())
             {
                 application.Response.AddHeader(GlimpseConstants.HttpHeader, requestId.ToString());
@@ -286,17 +266,14 @@ namespace Glimpse.Core
                 if (application.GetGlimpseMode() == GlimpseMode.On)
                 {
                     var path = VirtualPathUtility.ToAbsolute("~/", application.Context.Request.ApplicationPath);
-                    var html =
-                        string.Format(
-                            @"<script type='text/javascript' id='glimpseData' data-glimpse-requestID='{1}'>var glimpse = {0}, glimpsePath = '{2}';</script>",
-                            json, requestId, path);
-                    html += @"<script type='text/javascript' id='glimpseClient' src='" +
-                            UrlCombine(path, Configuration.RootUrlPath, "glimpseClient.js") + "'></script>";
-                    application.Response.Write(html);
+                    var html = string.Format(@"<script type='text/javascript' id='glimpseData' data-glimpse-requestID='{1}'>var glimpse = {0}, glimpsePath = '{2}';</script>", json, requestId, path);
+                    html += @"<script type='text/javascript' id='glimpseClient' src='" + UrlCombine(path, Configuration.RootUrlPath, "glimpseClient.js") + "'></script>";
+                    application.Response.Write(html);//TODO: Use a filter and put this inside </body>
                 }
             }
         }
 
+        //TODO: clean up this massive method
         private static string CreateJsonPayload(IDictionary<string, object> data, HttpApplication application)
         {
             var warnings = application.Context.GetWarnings();
@@ -380,6 +357,7 @@ namespace Glimpse.Core
         private static string UrlCombine(params string[] segments)
         {
             if (segments.Length == 0) return string.Empty;
+            if (segments.Length == 1) return segments[0];
 
             var stringBuilder = new StringBuilder(segments[0]);
 

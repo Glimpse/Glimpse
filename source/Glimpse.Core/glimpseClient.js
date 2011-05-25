@@ -759,7 +759,7 @@ if (window.jQueryGlimpse) { (function ($) {
             data : null,
             url : window.location.href.replace(window.location.protocol + '//' + window.location.host, ''),
             clientName : '',
-            html : { plugin: '<div class="glimpse-open"><div class="glimpse-icon"></div></div><div class="glimpse-holder glimpse"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon" title="About Glimpse?"></div><div class="glimpse-title"></div><div class="glimpse-buttons"><a href="#" class="glimpse-meta-warning glimpse-button" title="Glimpse has some warnings!"></a><a href="#" target="_blank" class="glimpse-meta-help glimpse-button"></a><a href="#" title="Close/Minimize" class="glimpse-close glimpse-button"></a><a href="#" title="Pop Out" class="glimpse-popout glimpse-button"></a><a href="#" title="Shutdown/Terminate" class="glimpse-terminate glimpse-button"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>' },
+            html : { plugin: '<div class="glimpse-open"><div class="glimpse-icon"></div></div><div class="glimpse-holder glimpse"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon" title="About Glimpse?"></div><div class="glimpse-title"></div><div class="glimpse-buttons"><a href="#" class="glimpse-meta-warning glimpse-button" title="Glimpse has some warnings!"></a><a href="#" class="glimpse-meta-help glimpse-button"></a><a href="#" title="Close/Minimize" class="glimpse-close glimpse-button"></a><a href="#" title="Pop Out" class="glimpse-popout glimpse-button"></a><a href="#" title="Shutdown/Terminate" class="glimpse-terminate glimpse-button"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>' },
             tabStrip : function() { return $('.glimpse-tabs ul'); },
             panelHolder : function() { return $('.glimpse-panel-holder'); },
             mainHolder : function() { return $('.glimpse-holder'); },
@@ -1430,7 +1430,7 @@ if (window.jQueryGlimpse) { (function ($) {
             //Info tab
             var infoTab = $('.glimpse-tabitem-' + gm.static.key.info, tabStrip); //.hide();
             if (infoTab.length > 0) {
-                $('.glimpse-bar .glimpse-icon', mainHolder).click(function () {
+                $('.glimpse-bar .glimpse-icon').click(function () {
                     infoTab.click();
                     return false;
                 });
@@ -1462,8 +1462,8 @@ if (window.jQueryGlimpse) { (function ($) {
     //#endregion
 
     //#region $.glimpseServerSwitcher
-    
-    
+
+
 
     $.glimpseServerSwitcher = {};
     $.extend($.glimpseServerSwitcher, { 
@@ -1471,12 +1471,38 @@ if (window.jQueryGlimpse) { (function ($) {
             var gm = this;
 
             //Wire up plugin  
-            $.glimpse.addLayoutListener(function(tabStrip, panelHolder) { gm.adjustLayout(tabStrip, panelHolder); }, true);  
-        },  
-        adjustLayout : function(tabStrip, panelHolder) {
-            var gm = this, g = $.glimpse, mainHolder = g.static.mainHolder();
-             
+            $.glimpse.addLayoutListener(function (tabStrip, panelHolder) { gm.adjustLayout(tabStrip, panelHolder); }, true);
+        },
+        adjustLayout: function (tabStrip, panelHolder) {
+            var g = $.glimpse, mainHolder = g.static.mainHolder();
 
+            //TODO: don't reference glimpse like this
+            var environments = glimpse._metadata.request.environmentUrls
+
+            if (environments) {
+                var currentEnvironment;
+                var environmentsList = $('<ul/>');
+
+                for (name in environments) {
+                    if (environments[name] === unescape(window.location.href)) {
+                        currentEnvironment = name;
+                        environmentsList.append($('<li/>', {html:name}));
+                    }
+                    else {
+                        environmentsList.append($('<li/>').append($('<a/>', { title: environments[name], href: environments[name], html: name })));
+                    }
+                }
+
+                //TODO: this needs to be put in it's proper place, and styled nicely
+                $('body').prepend($('<div/>', {class:'enviroSwitch'}).append(environmentsList));
+
+                //TODO: don't hide with CSS but rather the class
+                $('.glimpse-title span:last', mainHolder).prepend($('<span/>', { html: currentEnvironment }).hover(function () {
+                                                                        $('.enviroSwitch').addClass('active').css('display', 'block'); 
+                                                                    }, function(){
+                                                                        $('.enviroSwitch').removeClass('active').css('display', 'none');
+                                                                    }));
+            }
         }
     });
 
