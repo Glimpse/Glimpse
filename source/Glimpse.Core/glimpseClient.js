@@ -1428,7 +1428,7 @@ if (window.jQueryGlimpse) { (function ($) {
             }
 
             //Info tab
-            var infoTab = $('.glimpse-tabitem-' + gm.static.key.info, tabStrip); //.hide();
+            var infoTab = $('.glimpse-tabitem-' + gm.static.key.info, tabStrip).hide();
             if (infoTab.length > 0) {
                 $('.glimpse-bar .glimpse-icon').click(function () {
                     infoTab.click();
@@ -1439,6 +1439,9 @@ if (window.jQueryGlimpse) { (function ($) {
             //Help setup
             $('li', tabStrip).click(function() { gm.changeHelp($(this)); });
             gm.changeHelp($('.glimpse-active', tabStrip));
+
+            //Metadata tab
+            var metaTab = $('.glimpse-tabitem-' + gm.static.key.meta, tabStrip).hide(); 
         },
         changeHelp : function(item) {
             var g = $.glimpse, mainHolder = g.static.mainHolder(), key = item.data('sort'), metaData = g.static.data._metadata, url = '', icon = $('.glimpse-meta-help', mainHolder);
@@ -1449,9 +1452,10 @@ if (window.jQueryGlimpse) { (function ($) {
         },
         static : {
             key : {
-                warn: 'GlimpseWarnings',
-                info: 'GlimpseInformation',
-                help: 'GlimpseHelp'
+                warn : 'GlimpseWarnings',
+                info : 'GlimpseInformation',
+                help : 'GlimpseHelp',
+                meta : '_metadata'
             }
         }
     });
@@ -1462,8 +1466,6 @@ if (window.jQueryGlimpse) { (function ($) {
     //#endregion
 
     //#region $.glimpseServerSwitcher
-
-
 
     $.glimpseServerSwitcher = {};
     $.extend($.glimpseServerSwitcher, { 
