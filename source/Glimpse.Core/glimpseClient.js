@@ -188,7 +188,7 @@ if (window.jQueryGlimpse) { (function ($) {
     
     //#region Setup
 
-    var glimpseCss = '.glimpse, .glimpse *, .glimpse a, .glimpse td, .glimpse th, .glimpse table { font-family:Lucida Grande,Tahoma,sans-serif; background-color:transparent; font-size:11px; line-height:14px; border:0px; color:#232323; text-align:left; }.glimpse a, .glimpse a:hover, .glimpse a:visited { color:#2200C1; text-decoration:underline; font-weight:normal; }.glimpse a:active { color:#c11; text-decoration:underline; font-weight:normal; }.glimpse th { font-weight:bold; }.glimpse-open { position:fixed; right:0; bottom:0; height:27px; width:28px; border-left: 1px solid #ACA899; border-top: 1px solid #ACA899; background:#EEE; background:-moz-linear-gradient(top, #FFFFFF 0%, #EEEEEE 4%, #F3F5F7 8%, #E9E8DD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(4%,#EEEEEE), color-stop(8%,#F3F5F7), color-stop(100%,#E9E8DD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#FFFFFF\', endColorstr=\'#E9E8DD\',GradientType=0 ); }.glimpse-icon { background:url(Glimpse\x2FglimpseSprite.png) 0px -16px; height:20px; width:20px; margin: 3px 4px 0; cursor:pointer; }.glimpse-holder { display:none; z-index:100010 !important; height:0; position:fixed; bottom:0; left:0; width:100%; background-color:#fff; }.glimpse-bar { height:27px; border-top:1px solid #ACA899; background:#FFFFFF; background:-moz-linear-gradient(top, #FFFFFF 0%, #EEEEEE 4%, #F3F5F7 8%, #E9E8DD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(4%,#EEEEEE), color-stop(8%,#F3F5F7), color-stop(100%,#E9E8DD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#FFFFFF\', endColorstr=\'#E9E8DD\',GradientType=0 ); }.glimpse-bar .glimpse-icon { margin-top:4px; float:left; } .glimpse-buttons { text-align:right; float:right; height:17px; width:100px; padding:6px; }.glimpse-title { margin:5px 0 0 15px; font-weight:bold; display:inline-block; width:75%; overflow:hidden; }.glimpse-title span:first-child { display:inline-block; height:20px; }.glimpse-title span:last-child { font-weight:normal; font-style:italic; padding-left:10px; width:60%; white-space:nowrap; display:inline-block; height:20px; }.glimpse-button, .glimpse-button:hover { cursor:pointer; background-image:url(Glimpse\x2FglimpseSprite.png); background-repeat:no-repeat; height:14px; width:14px; margin-left:2px; display:inline-block; }.glimpse-meta-warning { background-position:-168px -1px; display:none; }.glimpse-meta-warning:hover { background-position:-183px -1px; } .glimpse-meta-help { background-position:-138px -1px; margin-right:15px; }.glimpse-meta-help:hover { background-position:-153px -1px; margin-right:15px; }.glimpse-close { background-position:-1px -1px; }.glimpse-close:hover { background-position:-17px -1px; }.glimpse-terminate { background-position:-65px -1px; }.glimpse-terminate:hover { background-position:-81px -1px; } .glimpse-popout { background-position:-96px -1px; }.glimpse-popout:hover { background-position: -111px -1px; } .glimpse-tabs { height:24px; font-weight:bold; border-bottom:1px solid #ACA899; border-top:1px solid #CDCABB; background:#B9B7AF; background:-moz-linear-gradient(top, #B9B7AF 0%, #DAD8C8 4%, #D7D4C5 10%, #E9E6D5 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#B9B7AF), color-stop(4%,#DAD8C8), color-stop(10%,#D7D4C5), color-stop(100%,#E9E6D5)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#B9B7AF\', endColorstr=\'#E9E6D5\',GradientType=0 );}.glimpse-tabs ul { margin:4px 0px 0 0; padding:0px; }.glimpse-tabs li { display:inline; margin:0 2px 3px 2px; height:22px; padding:4px 9px 3px; color:#565656; cursor:pointer; border-radius: 0px 0px 3px 3px; -moz-border-radius: 0px 0px 3px 3px; -webkit-border-bottom-right-radius: 3px; -webkit-border-bottom-left-radius: 3px; }.glimpse-tabs li.glimpse-active { padding:4px 8px 3px; color:#000; border-left:1px solid #A4A4A4; border-bottom:1px solid #A4A4A4; border-right:1px solid #A4A4A4; background:#F7F6F1; background:-moz-linear-gradient(top, #F2F1EC 0%, #F2F1EC 3%, #EFEEE9 7%, #E8E7E1 51%, #F7F6F1 92%, #F1F0EB 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#F2F1EC), color-stop(3%,#F2F1EC), color-stop(7%,#EFEEE9), color-stop(51%,#E8E7E1), color-stop(92%,#F7F6F1), color-stop(100%,#F1F0EB)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#EFEEE9\', endColorstr=\'#F7F6F1\',GradientType=0 ); } .glimpse-tabs li.glimpse-hover { padding:4px 8px 3px; border-left:1px solid #BFBDB1; border-bottom:1px solid #BFBDB1; border-right:1px solid #BFBDB1; background:#EEECE3; background:-moz-linear-gradient(top, #BFBDB1 0%, #DAD9CB 4%, #D8D5C9 8%, #E8E7E1 51%, #F0EEE4 92%, #EDEBE1 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#BFBDB1), color-stop(4%,#DAD9CB), color-stop(8%,#D8D5C9), color-stop(51%,#E8E7E1), color-stop(92%,#F0EEE4), color-stop(100%,#EDEBE1)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#D8D5C9\', endColorstr=\'#F0EEE4\',GradientType=0 ); }.glimpse-tabs li.glimpse-disabled { color:#AAA; cursor:default; }.glimpse-panel-holder {}.glimpse-panel { display:none; overflow:auto; position:relative; } .glimpse-panel-message { text-align:center; padding-top:40px; font-size:1.1em; color:#AAA; }.glimpse-panel table { border-spacing:0; width:100%; }.glimpse-panel table td, .glimpse-panel table th { padding:3px 4px; text-align:left; vertical-align:top; } .glimpse-panel .glimpse-row-header-0 { height:19px; border-bottom:1px solid #9C9C9C; background:#C6C6C6; background:-moz-linear-gradient(top, #DEDEDE 0%, #BDBDBD 80%, #BBB 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#DEDEDE), color-stop(80%,#BDBDBD), color-stop(100%,#BBB)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#DEDEDE\', endColorstr=\'#BBB\',GradientType=0 ); }.glimpse-panel .glimpse-row-header-0 th { border-left:1px solid #D9D9D9; border-right:1px solid #9C9C9C; }.glimpse-panel .glimpse-cell-key { width:30%; max-width:150px; }.glimpse-panel table table { border:1px solid #D9D9D9; } .glimpse-panel table table thead tr { height:17px; border-bottom:1px solid #9C9C9C; background:#C6C6C6; background:-moz-linear-gradient(top, #F1F1F1 0%, #DFDFDF 80%, #DDD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#F1F1F1), color-stop(80%,#DFDFDF), color-stop(100%,#DDD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#F1F1F1\', endColorstr=\'#DDD\',GradientType=0 ); }.glimpse-panel table table thead tr th { border-left:1px solid #C6C6C6; border-right:1px solid #D9D9D9; padding:1px 4px 2px 4px; }.glimpse-panel table table thead tr th:first-child { border-left:0px; }.glimpse-panel table table thead tr th:last-child { border-right:0px; }.glimpse-panel .even { background:#F4F4F4; }.glimpse-panel .odd { background:#F9F9F9; }.glimpse-panel table table tbody th { font-weight:normal; font-style:italic; }.glimpse-panel table table thead th { font-weight:bold; font-style:normal; }.glimpse-panel .glimpse-side-sub-panel { right:0; z-index:10; background-color:#F5F5F5; height:100%; width:25%; border-left:1px solid #ACA899; position:absolute; }.glimpse-panel .glimpse-side-main-panel { position:relative; height:100%; width:75%; float:left; } .glimpse-panel-holder .glimpse-active { display:block; }.glimpse-resizer { height:4px; cursor:n-resize; width:100%; position:absolute; top:-1px; }li.glimpse-permanent { font-style:italic; padding:4px 8px 3px; border-bottom:1px solid #ACA899; border-left:1px solid #CDCABB; border-right:1px solid #CDCABB; background:#B9B7AF; background:-moz-linear-gradient(top, #B9B7AF 0%, #DAD8C8 4%, #D7D4C5 10%, #E9E6D5 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#B9B7AF), color-stop(4%,#DAD8C8), color-stop(10%,#D7D4C5), color-stop(100%,#E9E6D5)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#B9B7AF\', endColorstr=\'#E9E6D5\',GradientType=0 ); }.glimpse-preview-object { color:#006400; } .glimpse-preview-string { color:#006400 !important; font-weight:normal !important; } .glimpse-preview-string span { padding-left:1px; }.glimpse-preview-object span { font-weight:bold; color:#444; } .glimpse-preview-object span.start { margin-right:5px; } .glimpse-preview-object span.end { margin-left:5px; }.glimpse-preview-object span.rspace { margin-right:4px; }.glimpse-preview-object span.mspace { margin:0 4px; }.glimpse-preview-object span.small { font-size:0.95em; } .glimpse-expand { height:11px; width:11px; display:inline-block; float:left; margin:1px 0 0 -13px; cursor:pointer; background-image:url(Glimpse\x2FglimpseSprite.png); background-repeat:no-repeat; background-position:-126px 0; }.glimpse-collapse { background-position:-126px -11px; }.glimpse-preview-show { display:none; font-weight:normal !important; }.glimpse-panel .quiet *, .glimpse-panel .ms * { color:#AAA; }.glimpse-panel .suppress { text-decoration:line-through; }.glimpse-panel .suppress * { color:#AAA; }.glimpse-panel .selected { background-color:#FFFF99; }.glimpse-panel .selected * { color:#409B3B; }.glimpse-panel .info .icon, .glimpse-panel .warn .icon, .glimpse-panel .loading .icon, .glimpse-panel .error .icon, .glimpse-panel .fail .icon, .glimpse-panel .ms .icon { width:14px; height:14px; background-image:url(Glimpse\x2FglimpseSprite.png); background-repeat:no-repeat; display:inline-block; margin-right: 5px; } .glimpse-panel .info .icon { background-position: -22px -22px; }.glimpse-panel .warn .icon { background-position:-36px -22px; }.glimpse-panel .loading .icon { background-position:-78px -22px; }.glimpse-panel .error .icon { background-position:-50px -22px; }.glimpse-panel .ms .icon { background-position:-181px -22px; } .glimpse-panel .fail .icon { background-position:-64px -22px; }.glimpse-panel .info * { color:#067CE5; }.glimpse-panel .warn * { color:#FE850C; } .glimpse-panel .error * { color:#B40000; }.glimpse-panel .fail * { color:#D00; font-weight:bold; }.glimpse-panelitem-Ajax .loading .icon { float:right; }.glimpse-panelitem-Remote .glimpse-side-sub-panel .loading, .glimpse-panelitem-Remote .glimpse-side-main-panel .loading, .glimpse-clear { position:absolute; bottom:5px; right:5px; color:#777; } .glimpse-clear { background-color:white; padding:0.3em 1em 0.5em 1em; border:#CCC solid 1px; } .glimpse-panelitem-GlimpseInformation div { text-align:center; } .glimpse-panelitem-GlimpseInformation .glimpse-panel-message { padding-top:5px; } .glimpse-panelitem-GlimpseInformation strong { font-weight:bold; } .glimpse-panelitem-GlimpseInformation .glimpse-info-more { font-size:1.5em; margin:1em 0; } .glimpse-panelitem-GlimpseInformation .glimpse-info-quote { font-style:italic; margin:0.75em 0 3em; }';
+    var glimpseCss = '.glimpse, .glimpse *, .glimpse a, .glimpse td, .glimpse th, .glimpse table { font-family:Lucida Grande,Tahoma,sans-serif; background-color:transparent; font-size:11px; line-height:14px; border:0px; color:#232323; text-align:left; }.glimpse a, .glimpse a:hover, .glimpse a:visited { color:#2200C1; text-decoration:underline; font-weight:normal; }.glimpse a:active { color:#c11; text-decoration:underline; font-weight:normal; }.glimpse th { font-weight:bold; }.glimpse-open { position:fixed; right:0; bottom:0; height:27px; width:28px; border-left: 1px solid #ACA899; border-top: 1px solid #ACA899; background:#EEE; background:-moz-linear-gradient(top, #FFFFFF 0%, #EEEEEE 4%, #F3F5F7 8%, #E9E8DD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(4%,#EEEEEE), color-stop(8%,#F3F5F7), color-stop(100%,#E9E8DD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#FFFFFF\', endColorstr=\'#E9E8DD\',GradientType=0 ); }.glimpse-icon { background:url(Glimpse\x2FglimpseSprite.png) 0px -16px; height:20px; width:20px; margin: 3px 4px 0; cursor:pointer; }.glimpse-holder { display:none; z-index:100010 !important; height:0; position:fixed; bottom:0; left:0; width:100%; background-color:#fff; }.glimpse-bar { height:27px; border-top:1px solid #ACA899; background:#FFFFFF; background:-moz-linear-gradient(top, #FFFFFF 0%, #EEEEEE 4%, #F3F5F7 8%, #E9E8DD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(4%,#EEEEEE), color-stop(8%,#F3F5F7), color-stop(100%,#E9E8DD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#FFFFFF\', endColorstr=\'#E9E8DD\',GradientType=0 ); }.glimpse-bar .glimpse-icon { margin-top:4px; float:left; } .glimpse-buttons { text-align:right; float:right; height:17px; width:100px; padding:6px; }.glimpse-title { margin:5px 0 0 15px; font-weight:bold; display:inline-block; width:75%; overflow:hidden; }.glimpse-title span:first-child { display:inline-block; height:20px; }.glimpse-title span:last-child { font-weight:normal; font-style:italic; padding-left:10px; width:60%; white-space:nowrap; display:inline-block; height:20px; }.glimpse-button, .glimpse-button:hover { cursor:pointer; background-image:url(Glimpse\x2FglimpseSprite.png); background-repeat:no-repeat; height:14px; width:14px; margin-left:2px; display:inline-block; }.glimpse-meta-warning { background-position:-168px -1px; display:none; }.glimpse-meta-warning:hover { background-position:-183px -1px; } .glimpse-meta-help { background-position:-138px -1px; margin-right:15px; }.glimpse-meta-help:hover { background-position:-153px -1px; margin-right:15px; }.glimpse-close { background-position:-1px -1px; }.glimpse-close:hover { background-position:-17px -1px; }.glimpse-terminate { background-position:-65px -1px; }.glimpse-terminate:hover { background-position:-81px -1px; } .glimpse-popout { background-position:-96px -1px; }.glimpse-popout:hover { background-position: -111px -1px; } .glimpse-tabs { height:24px; font-weight:bold; border-bottom:1px solid #ACA899; border-top:1px solid #CDCABB; background:#B9B7AF; background:-moz-linear-gradient(top, #B9B7AF 0%, #DAD8C8 4%, #D7D4C5 10%, #E9E6D5 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#B9B7AF), color-stop(4%,#DAD8C8), color-stop(10%,#D7D4C5), color-stop(100%,#E9E6D5)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#B9B7AF\', endColorstr=\'#E9E6D5\',GradientType=0 );}.glimpse-tabs ul { margin:4px 0px 0 0; padding:0px; }.glimpse-tabs li { display:inline; margin:0 2px 3px 2px; height:22px; padding:4px 9px 3px; color:#565656; cursor:pointer; border-radius: 0px 0px 3px 3px; -moz-border-radius: 0px 0px 3px 3px; -webkit-border-bottom-right-radius: 3px; -webkit-border-bottom-left-radius: 3px; }.glimpse-tabs li.glimpse-active { padding:4px 8px 3px; color:#000; border-left:1px solid #A4A4A4; border-bottom:1px solid #A4A4A4; border-right:1px solid #A4A4A4; background:#F7F6F1; background:-moz-linear-gradient(top, #F2F1EC 0%, #F2F1EC 3%, #EFEEE9 7%, #E8E7E1 51%, #F7F6F1 92%, #F1F0EB 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#F2F1EC), color-stop(3%,#F2F1EC), color-stop(7%,#EFEEE9), color-stop(51%,#E8E7E1), color-stop(92%,#F7F6F1), color-stop(100%,#F1F0EB)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#EFEEE9\', endColorstr=\'#F7F6F1\',GradientType=0 ); } .glimpse-tabs li.glimpse-hover { padding:4px 8px 3px; border-left:1px solid #BFBDB1; border-bottom:1px solid #BFBDB1; border-right:1px solid #BFBDB1; background:#EEECE3; background:-moz-linear-gradient(top, #BFBDB1 0%, #DAD9CB 4%, #D8D5C9 8%, #E8E7E1 51%, #F0EEE4 92%, #EDEBE1 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#BFBDB1), color-stop(4%,#DAD9CB), color-stop(8%,#D8D5C9), color-stop(51%,#E8E7E1), color-stop(92%,#F0EEE4), color-stop(100%,#EDEBE1)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#D8D5C9\', endColorstr=\'#F0EEE4\',GradientType=0 ); }.glimpse-tabs li.glimpse-disabled { color:#AAA; cursor:default; }.glimpse-panel-holder {}.glimpse-panel { display:none; overflow:auto; position:relative; } .glimpse-panel-message { text-align:center; padding-top:40px; font-size:1.1em; color:#AAA; }.glimpse-panel table { border-spacing:0; width:100%; }.glimpse-panel table td, .glimpse-panel table th { padding:3px 4px; text-align:left; vertical-align:top; } .glimpse-panel .glimpse-row-header-0 { height:19px; border-bottom:1px solid #9C9C9C; background:#C6C6C6; background:-moz-linear-gradient(top, #DEDEDE 0%, #BDBDBD 80%, #BBB 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#DEDEDE), color-stop(80%,#BDBDBD), color-stop(100%,#BBB)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#DEDEDE\', endColorstr=\'#BBB\',GradientType=0 ); }.glimpse-panel .glimpse-row-header-0 th { border-left:1px solid #D9D9D9; border-right:1px solid #9C9C9C; }.glimpse-panel .glimpse-cell-key { width:30%; max-width:150px; }.glimpse-panel table table { border:1px solid #D9D9D9; } .glimpse-panel table table thead tr { height:17px; border-bottom:1px solid #9C9C9C; background:#C6C6C6; background:-moz-linear-gradient(top, #F1F1F1 0%, #DFDFDF 80%, #DDD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#F1F1F1), color-stop(80%,#DFDFDF), color-stop(100%,#DDD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#F1F1F1\', endColorstr=\'#DDD\',GradientType=0 ); }.glimpse-panel table table thead tr th { border-left:1px solid #C6C6C6; border-right:1px solid #D9D9D9; padding:1px 4px 2px 4px; }.glimpse-panel table table thead tr th:first-child { border-left:0px; }.glimpse-panel table table thead tr th:last-child { border-right:0px; }.glimpse-panel .even { background:#F4F4F4; }.glimpse-panel .odd { background:#F9F9F9; }.glimpse-panel table table tbody th { font-weight:normal; font-style:italic; }.glimpse-panel table table thead th { font-weight:bold; font-style:normal; }.glimpse-panel .glimpse-side-sub-panel { right:0; z-index:10; background-color:#F5F5F5; height:100%; width:25%; border-left:1px solid #ACA899; position:absolute; }.glimpse-panel .glimpse-side-main-panel { position:relative; height:100%; width:75%; float:left; } .glimpse-panel-holder .glimpse-active { display:block; }.glimpse-resizer { height:4px; cursor:n-resize; width:100%; position:absolute; top:-1px; }li.glimpse-permanent { font-style:italic; padding:4px 8px 3px; border-bottom:1px solid #ACA899; border-left:1px solid #CDCABB; border-right:1px solid #CDCABB; background:#B9B7AF; background:-moz-linear-gradient(top, #B9B7AF 0%, #DAD8C8 4%, #D7D4C5 10%, #E9E6D5 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#B9B7AF), color-stop(4%,#DAD8C8), color-stop(10%,#D7D4C5), color-stop(100%,#E9E6D5)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#B9B7AF\', endColorstr=\'#E9E6D5\',GradientType=0 ); }.glimpse-preview-object { color:#006400; } .glimpse-preview-string { color:#006400 !important; font-weight:normal !important; } .glimpse-preview-string span { padding-left:1px; }.glimpse-preview-object span { font-weight:bold; color:#444; } .glimpse-preview-object span.start { margin-right:5px; } .glimpse-preview-object span.end { margin-left:5px; }.glimpse-preview-object span.rspace { margin-right:4px; }.glimpse-preview-object span.mspace { margin:0 4px; }.glimpse-preview-object span.small { font-size:0.95em; } .glimpse-expand { height:11px; width:11px; display:inline-block; float:left; margin:1px 0 0 -13px; cursor:pointer; background-image:url(Glimpse\x2FglimpseSprite.png); background-repeat:no-repeat; background-position:-126px 0; }.glimpse-collapse { background-position:-126px -11px; }.glimpse-preview-show { display:none; font-weight:normal !important; }.glimpse-panel .quiet *, .glimpse-panel .ms * { color:#AAA; }.glimpse-panel .suppress { text-decoration:line-through; }.glimpse-panel .suppress * { color:#AAA; }.glimpse-panel .selected { background-color:#FFFF99; }.glimpse-panel .selected * { color:#409B3B; }.glimpse-panel .info .icon, .glimpse-panel .warn .icon, .glimpse-panel .loading .icon, .glimpse-panel .error .icon, .glimpse-panel .fail .icon, .glimpse-panel .ms .icon { width:14px; height:14px; background-image:url(Glimpse\x2FglimpseSprite.png); background-repeat:no-repeat; display:inline-block; margin-right: 5px; } .glimpse-panel .info .icon { background-position: -22px -22px; }.glimpse-panel .warn .icon { background-position:-36px -22px; }.glimpse-panel .loading .icon { background-position:-78px -22px; }.glimpse-panel .error .icon { background-position:-50px -22px; }.glimpse-panel .ms .icon { background-position:-181px -22px; } .glimpse-panel .fail .icon { background-position:-64px -22px; }.glimpse-panel .info * { color:#067CE5; }.glimpse-panel .warn * { color:#FE850C; } .glimpse-panel .error * { color:#B40000; }.glimpse-panel .fail * { color:#D00; font-weight:bold; }.glimpse-panelitem-Ajax .loading .icon { float:right; }.glimpse-panelitem-Remote .glimpse-side-sub-panel .loading, .glimpse-panelitem-Remote .glimpse-side-main-panel .loading, .glimpse-clear { position:fixed; bottom:5px; right:10px; color:#777; } .glimpse-panelitem-Remote .glimpse-side-main-panel .loading { right:27%; } .glimpse-clear { background-color:white; padding:0.3em 1em 0.5em 1em; border:#CCC solid 1px; bottom:25px; -webkit-border-radius:3px; -moz-border-radius:3px; border-radius:3px; } .glimpse-panel table .glimpse-head-message td { text-align:center; background-color:#DDD; } .glimpse-panelitem-GlimpseInformation div { text-align:center; } .glimpse-panelitem-GlimpseInformation .glimpse-panel-message { padding-top:5px; } .glimpse-panelitem-GlimpseInformation strong { font-weight:bold; } .glimpse-panelitem-GlimpseInformation .glimpse-info-more { font-size:1.5em; margin:1em 0; } .glimpse-panelitem-GlimpseInformation .glimpse-info-quote { font-style:italic; margin:0.75em 0 3em; }';
     glimpseCss = glimpseCss.replace(/url\(Glimpse/gi, 'url(' + glimpsePath + 'Glimpse');
     $('<style type="text/css"> ' + glimpseCss + ' </style>').appendTo("head");      //http://stackoverflow.com/questions/1212500/jquery-create-css-rule-class-runtime
 
@@ -702,9 +702,10 @@ if (window.jQueryGlimpse) { (function ($) {
             g._executeLayoutListeners(g, false);
         },
         reset: function() {
-            var g = this, static = g.static;
-            //$('.glimpse').trigger('reset.refresh.glimpse');
-            this.refresh(glimpse, $.glimpseProcessor.buildHeading(static.url, static.clientName, ''));
+            var g = this, static = g.static; 
+
+            this.refresh(glimpse, $.glimpseProcessor.buildHeading(static.url, static.clientName, '')); 
+            $('.glimpse').trigger('glimpse.request.refresh');
         },
         init: function(data) {
             var g = $.glimpse, static = g.static; 
@@ -1065,7 +1066,6 @@ if (window.jQueryGlimpse) { (function ($) {
     }
     //#endregion
 
-
     $.glimpseAjax = {};
     $.extend($.glimpseAjax, {
         init: function() {
@@ -1076,7 +1076,10 @@ if (window.jQueryGlimpse) { (function ($) {
             $.glimpse.addLayoutListener(function(tabStrip, panelHolder) { ga.adjustLayout(tabStrip, panelHolder); }, true);
 
             //Wire up events 
-            $('.glimpse-clear', static.panel).live('click', function() { ga.reset(); });
+            $('.glimpse-clear', static.panel).live('click', function(ev) { ga.removeRequests(); return false; });
+            $('thead .glimpse-head-message a', static.panel).live('click', function(ev) { ga.resetContext(); return false; });
+            $('.glimpse').live('glimpse.request.refresh', function() { ga.globalResetCallback(); })
+                         .live('glimpse.request.change', function(ev, type) { if (type != 'ajax') { ga.globalResetCallback(); } });
         },
         adjustProtocol: function(data) {
             var ga = this;
@@ -1092,20 +1095,41 @@ if (window.jQueryGlimpse) { (function ($) {
             static.panel.addClass('glimpse-permanent');
 
             //Reset to start things off 
-            ga.reset();
+            ga.removeRequests();
         },
-        _makePopoutCall : function() {
+        shouldMakePopoutCall : function() {
             var g = $.glimpse;
             return (!g.static.isPopup && g.settings.popupOn && g.static.popup && !g.static.popup.closed)
         },
-        reset : function() {
+        removeRequests : function() {
             var ga = this;
 
             //Clear out anything inside the panel
-            ga.static.panel.html('<div class="glimpse-panel-message">No ajax calls have yet been detected</div>')
+            ga.static.panel.html('<div class="glimpse-panel-message">No ajax calls have yet been detected</div>');
+            ga.resetContext();
+        },
+        resetContext : function() { 
+            $.glimpse.reset(); 
+        },
+        requestSelected: function(link) {  
+            var ga = this, panelHead = $('table thead', ga.static.panel);
+            
+            $('.glimpse').trigger('glimpse.request.change', [ 'ajax' ]);
+
+            //Adjust styles 
+            $('.glimpse-head-message', panelHead).fadeIn();
+            $('.selected', link.parents('table:first')).removeClass('selected');
+            link.parents('tr:first').addClass('selected');
+        },
+        globalResetCallback : function() {
+            var ga = this, panel = ga.static.panel;
+            
+            //Adjust styles
+            $('thead .glimpse-head-message', panel).fadeOut();
+            $('tbody .selected', panel).removeClass('selected');
         },
         callStarted: function(ajaxSpy) {
-            var g = $.glimpse, ga = this, static = ga.static, panelHolder = g.static.panelHolder(), panelItem = $('.glimpse-panelitem-' + static.key, panelHolder);
+            var g = $.glimpse, ga = this, static = ga.static, panelHolder = g.static.panelHolder(), panelItem = static.panel;
 
             if (ajaxSpy.url && ajaxSpy.url.length > 9 && ajaxSpy.url.indexOf('Glimpse/') != -1)
                 return;
@@ -1113,7 +1137,7 @@ if (window.jQueryGlimpse) { (function ($) {
             //Make this exact same call in the popout window
             if (!g.static.isPopup) 
                 ajaxSpy.logRow = ++static.index;
-            if (ga._makePopoutCall()) {
+            if (ga.shouldMakePopoutCall()) {
                 g.static.popup.jQueryGlimpse.glimpseAjax.static.index = ajaxSpy.logRow;
                 g.static.popup.jQueryGlimpse.glimpseAjax.callStarted(ajaxSpy);
              }
@@ -1121,27 +1145,21 @@ if (window.jQueryGlimpse) { (function ($) {
             //First time round we need to set everything up
             if ($('.glimpse-panel-message', panelItem).length > 0) {
                 panelItem.html($.glimpseProcessor.build([
-                    ['Request URL', 'Status', 'Date/Time', 'Duration', 'Is Async', 'Inspect']
-                    //[window.location.pathname, '200', $.glimpse.util.formatTime(new Date()), 'N/A', 'N/A', '!<a href="#">Reset</a>!']
+                    ['Request URL', 'Status', 'Date/Time', 'Duration', 'Is Async', 'Inspect'] 
                 ], 0)).append('<div class="glimpse-clear"><a href="#">Clear</a></div>');
 
-//                $('a', static.panel).click(function(e) {
-//                    ga._handelClick($(this));
-//                    $.glimpse.reset();
-//                    return false;
-//                });
-                //$('tr:last', static.panel).addClass('selected');
+                //Manually alter the render
+                $('table thead', panelItem).append('<tr class="glimpse-head-message" style="display:none"><td colspan="6"><a href="#">Reset context back to starting page</a></td></tr>');
+                $('table', panelItem).append('<tbody></tbody>');
             }
             ajaxSpy.clientName = $.glimpse.util.cookie('glimpseClientName');
 
             //Add new row
-            $('table', panelItem).append('<tr class="loading" data-index="' + static.index + '"><th><div class="icon"></div>' + ajaxSpy.url + '</th><td class="glimpse-ajax-status">Loading...</td><td>' + $.glimpse.util.formatTime(ajaxSpy.startTime) + '</td><td class="glimpse-ajax-duration">--</td><td>' + ajaxSpy.async + '</td><td class="glimpse-ajax-inspect">N/A</td></tr>');
+            $('table tbody', panelItem).prepend('<tr class="loading" data-index="' + static.index + '"><th><div class="icon"></div>' + ajaxSpy.url + '</th><td class="glimpse-ajax-status">Loading...</td><td>' + $.glimpse.util.formatTime(ajaxSpy.startTime) + '</td><td class="glimpse-ajax-duration">--</td><td>' + ajaxSpy.async + '</td><td class="glimpse-ajax-inspect">N/A</td></tr>');
 
-            //In theory I wouldn't need to do this every time but wanting to make sure that all rows are kept in sync
-            $('table tbody tr:odd', panelItem).addClass('even');
-            $('table tbody tr:even', panelItem).addClass('odd');
-
-            //ajaxSpy.logRow = $('tr:last', panelItem);
+            //In theory I wouldn't need to do this every time but wanting to make sure that all rows are kept in sync 
+            $('table tbody tr:odd', panelItem).removeClass('odd').addClass('even');
+            $('table tbody tr:even', panelItem).removeClass('even').addClass('odd'); 
         },
         callFinished: function(ajaxSpy) {
             var g = $.glimpse, ga = this, static = ga.static, glimpseRequestId = ajaxSpy.responseHeaders['X-Glimpse-RequestID'],
@@ -1151,7 +1169,7 @@ if (window.jQueryGlimpse) { (function ($) {
                 return;
                 
             //Make this exact same call in the popout window
-            if (ga._makePopoutCall())
+            if (ga.shouldMakePopoutCall())
                 g.static.popup.jQueryGlimpse.glimpseAjax.callFinished(ajaxSpy);
 
             //Adjust layout
@@ -1168,25 +1186,20 @@ if (window.jQueryGlimpse) { (function ($) {
                     contentType: 'application/json',
                     success: function(result) {   
                         linkPlaceholder.html('<a href="#">Launch</a>').children('a').click(function() {
-                            ga._handelClick($(this)); 
-                            //$('.glimpse').trigger('ajax.refresh.glimpse');
                             $.glimpse.refresh(eval('(' + result.Data[glimpseRequestId].Data + ')'), $.glimpseProcessor.buildHeading(ajaxSpy.url, ajaxSpy.clientName, ga.static.key));
+                            ga.requestSelected($(this));  
                             return false;
                         });
                     }
                 });   
             }
-        },
+        }, 
         static: {
             key : 'Ajax',
             tab : null,
             panel : null, 
             historyLink : glimpsePath + 'Glimpse/History',
             index : 0 
-        },
-        _handelClick: function(link) { 
-            $('.selected', link.parents('table:first')).removeClass('selected');
-            link.parents('tr:first').addClass('selected');
         }
     });
 
@@ -1230,28 +1243,28 @@ if (window.jQueryGlimpse) { (function ($) {
                 $('.selected', $(this).parents('table:first')).removeClass('selected');
                 $(this).parents('tr:first').addClass('selected');
             }); 
-            $('a.glimpse-trigger', static.subPanel).live('click', function() {
-                gr.getClientHistoryList($(this).data('client')); 
-                return false;
-            });
-            $('a.glimpse-orignal', static.subPanel).live('click', function() {
-                gr.reset();
-                return false;
-            });
-            $('a', static.mainPanel).live('click', function() { 
-                //$('.glimpse').trigger('remote.refresh.glimpse');
-                gr.activate($(this).data('client'), $(this).data('request'));
-                return false;
-            });
-            static.tab.click(function() {
-                gr.getClientList();
-            }); 
-            //$('.glimpse').bind('reset.refresh.glimpse', function() { gr.reset(true); }); 
+            $('a.glimpse-orignal', static.subPanel).live('click', function() { gr.resetContext(); return false; });
+            $('a.glimpse-trigger', static.subPanel).live('click', function() { gr.sessionSelected($(this).data('client')); return false; });
+            $('a', static.mainPanel).live('click', function() { gr.requestSelected($(this).data('client'), $(this).data('request')); return false; });
+            static.tab.click(function() { gr.refreshSessionList(); });   
+            $('.glimpse-clear', static.subPanel).live('click', function(ev) { gr.removeRequests(); return false; });
+            $('thead .glimpse-head-message a', static.subPanel).live('click', function(ev) { gr.resetContext(); return false; }); 
+            $('.glimpse').live('glimpse.request.refresh', function() { gr.globalResetCallback(); })
+                         .live('glimpse.request.change', function(ev, type) { if (type != 'remote') { gr.globalResetCallback(); } });
 
             if ($.glimpse.settings.activeTab == static.key)
-                gr.getClientList(); 
-        },
-        reset : function() { 
+                gr.refreshSessionList();
+        }, 
+        removeRequests : function() { 
+            var gr = this, static = gr.static; 
+ 
+            static.result = {};
+            $('.loading', static.subPanel).show().find('span').text('Loaded...'); 
+            $('.glimpse-content', static.subPanel).html(''); 
+
+            gr.resetContext();
+        }, 
+        resetContext : function() { 
             var gr = this, static = gr.static; 
 
             $.glimpse.reset();  
@@ -1260,14 +1273,44 @@ if (window.jQueryGlimpse) { (function ($) {
             $('.loading', static.mainPanel).hide(); 
             $('.glimpse-content', static.mainPanel).empty(); 
         },
-        activate : function(client, request) { 
-            var gr = this, static = gr.static; 
-
-            var request = static.result.Data[client][request];
-            if (request.Data) 
-                $.glimpse.refresh(eval('(' + request.Data + ')'), $.glimpseProcessor.buildHeading(request.Url, client, static.key)); 
+        globalResetCallback : function() {
+            var ga = this, static = ga.static;
+            
+            //Adjust styles
+            $('thead .glimpse-head-message', static.subPanel).fadeOut();
+            $('tbody .selected', static.mainPanel).removeClass('selected');
         },
-        getClientHistoryList : function(clientId) { 
+        sessionSelected : function(clientId) {
+            var gr = this; 
+            gr.refreshRequestList(clientId);
+        }, 
+        requestSelected : function(clientId, requestId) { 
+            var gr = this, static = gr.static, request = static.result.Data[clientId][requestId];
+            if (request.Data) {
+                $('.glimpse-head-message', static.subPanel).fadeIn();
+
+                $.glimpse.refresh(eval('(' + request.Data + ')'), $.glimpseProcessor.buildHeading(request.Url, clientId, static.key)); 
+
+                $('.glimpse').trigger('glimpse.request.change', [ 'remote' ]);
+            }
+        },
+        refreshSessionList : function() { 
+            var gr = this, static = gr.static, loading = $('.loading', static.subPanel); 
+
+            $.ajax({
+                url: static.clientLink,
+                type: 'GET', 
+                contentType: 'application/json',  
+                beforeSend: function() { 
+                    $('span', loading).text('Refreshing...').parent().fadeIn(); 
+                },
+                success: function(result) {  
+                    $('span', loading).text('Loaded...').parent().delay(1500).fadeOut();  
+                    gr.processSessionList(result);
+                }
+            });
+        },
+        refreshRequestList : function(clientId) { 
             var gr = this, static = gr.static, loading = $('.loading', static.mainPanel); 
      
             $.ajax({
@@ -1280,61 +1323,22 @@ if (window.jQueryGlimpse) { (function ($) {
                 },
                 success: function(result) {  
                     $('span', loading).text('Loaded...').parent().delay(1500).fadeOut(); 
-                    gr.processClientHistoryList(result);
+                    gr.processRequestList(result);
                 }
             });  
         },
-        getClientList : function() { 
-            var gr = this, static = gr.static, loading = $('.loading', static.subPanel); 
-
-            $.ajax({
-                url: static.clientLink,
-                type: 'GET', 
-                contentType: 'application/json',  
-                beforeSend: function() { 
-                    $('span', loading).text('Refreshing...').parent().fadeIn(); 
-                },
-                success: function(result) {  
-                    $('span', loading).text('Loaded...').parent().delay(1500).fadeOut();  
-                    gr.processClientList(result);
-                }
-            });
-        },
-        processClientHistoryList : function(result) {
-            var gr = this, static = gr.static; 
-
-            if (static.result && result) {
-            
-                $.extend(true, static.result, result);
-                 
-                //Pull out the name of the client
-                var ldata = static.result.Data || {}, rdata = result.Data || {}, rclientToken = ''; 
-                for (var key in rdata) {
-                    rclientToken = key;
-                    break;
-                }
-                
-                //As long as the client  
-                if ($(".selected a[data-client='" + rclientToken + "']", static.subPanel).length > 0) {
-                    var lclient = ldata[rclientToken], data = [ [ 'Client Name', 'Method', 'Request Url', 'Browser', 'Date/Time', 'Is Ajax', 'Launch' ] ]; 
-                    
-                    for (var lclientRequestToken in lclient) {
-                        var lclientRequest = lclient[lclientRequestToken];
-                        if (lclientRequest.Data) 
-                            data.push([ rclientToken, lclientRequest.Method, lclientRequest.Url, lclientRequest.Browser, lclientRequest.RequestTime, lclientRequest.IsAjax, '!<a href="#" data-request="' + lclientRequestToken + '" data-client="' + rclientToken + '">Launch</a>!' ]);
-                    }
-
-                    $('.glimpse-initial', static.mainPanel).hide();
-                    $('.glimpse-content', static.mainPanel).html($.glimpseProcessor.build(data, 0)); 
-                }
-            } 
-        },
-        processClientList : function(result) { 
+        processSessionList : function(result) { 
             var gr = this, static = gr.static; 
             
             //Create the table we need first time round 
-            if ($('table', static.subPanel).length == 0) 
-                $('.glimpse-content', static.subPanel).html($.glimpseProcessor.build([ [ 'Client', 'Count', 'Launch'], [ '\\--this--\\', 1, '!<a href="#" class="glimpse-orignal">Reset</a>!', 'selected' ] ], 0));
+            if ($('table', static.subPanel).length == 0) {
+                $('.glimpse-content', static.subPanel).html($.glimpseProcessor.build(
+                    [[ 'Client', 'Count', 'Launch']], 0)).append('<div class="glimpse-clear"><a href="#">Clear</a></div>');
+
+                //Manually alter the render
+                $('table thead', static.subPanel).append('<tr class="glimpse-head-message" style="display:none"><td colspan="3"><a href="#">Reset context back to starting page</a></td></tr>');
+                $('table', static.subPanel).append('<tbody></tbody>');
+            }
  
             if (static.result && result) {
                 var shouldTriggerHistoryRequest = false, selectedClientName = $(".selected a", static.subPanel).data('client');
@@ -1380,7 +1384,7 @@ if (window.jQueryGlimpse) { (function ($) {
 
                 //Trigger a history request if we need to 
                 if (shouldTriggerHistoryRequest)
-                    gr.getClientHistoryList(selectedClientName); 
+                    gr.sessionSelected(selectedClientName); 
 
                 //In theory I wouldn't need to do this every time but wanting to make sure that all rows are kept in sync
                 $('table tbody tr', static.subPanel).removeClass('even').removeClass('odd');
@@ -1390,7 +1394,36 @@ if (window.jQueryGlimpse) { (function ($) {
 
             //Trigger new fetch
             if (static.tab.hasClass('glimpse-active'))
-                setTimeout(function() { gr.getClientList(); }, 5000);
+                setTimeout(function() { gr.refreshSessionList(); }, 5000);
+        },
+        processRequestList : function(result) {
+            var gr = this, static = gr.static; 
+
+            if (static.result && result) {
+            
+                $.extend(true, static.result, result);
+                 
+                //Pull out the name of the client
+                var ldata = static.result.Data || {}, rdata = result.Data || {}, rclientToken = ''; 
+                for (var key in rdata) {
+                    rclientToken = key;
+                    break;
+                }
+                
+                //As long as the client  
+                if ($(".selected a[data-client='" + rclientToken + "']", static.subPanel).length > 0) {
+                    var lclient = ldata[rclientToken], data = [ [ 'Client Name', 'Method', 'Request Url', 'Browser', 'Date/Time', 'Is Ajax', 'Launch' ] ]; 
+                    
+                    for (var lclientRequestToken in lclient) {
+                        var lclientRequest = lclient[lclientRequestToken];
+                        if (lclientRequest.Data) 
+                            data.push([ rclientToken, lclientRequest.Method, lclientRequest.Url, lclientRequest.Browser, lclientRequest.RequestTime, lclientRequest.IsAjax, '!<a href="#" data-request="' + lclientRequestToken + '" data-client="' + rclientToken + '">Launch</a>!' ]);
+                    }
+
+                    $('.glimpse-initial', static.mainPanel).hide();
+                    $('.glimpse-content', static.mainPanel).html($.glimpseProcessor.build(data, 0)); 
+                }
+            } 
         },
         static : {
             key : 'Remote',
@@ -1420,6 +1453,8 @@ if (window.jQueryGlimpse) { (function ($) {
             //Wire up plugin 
             $.glimpse.addProtocolListener(function(data) { gm.adjustProtocol(data); }, true);
             $.glimpse.addLayoutListener(function(tabStrip, panelHolder) { gm.adjustLayout(tabStrip, panelHolder); }, true);  
+             
+            $('.glimpse').live('glimpse.request.refresh glimpse.request.change', function() { gm.globalResetCallback(); });
         }, 
         adjustProtocol : function(data) {
             var gm = this; 
@@ -1433,7 +1468,7 @@ if (window.jQueryGlimpse) { (function ($) {
             //Warn tab
             var warnTab = $('.glimpse-tabitem-' + gm.static.key.warn, tabStrip).hide();
             if (warnTab.length > 0) {
-                $('.glimpse-meta-warning', mainHolder).css('display', 'inline-block').click(function() {
+                $('.glimpse-meta-warning', mainHolder).css('display', 'inline-block').live('click', function() {
                     warnTab.click();
                     return false;
                 });
@@ -1442,18 +1477,24 @@ if (window.jQueryGlimpse) { (function ($) {
             //Info tab
             var infoTab = $('.glimpse-tabitem-' + gm.static.key.info, tabStrip).hide();
             if (infoTab.length > 0) {
-                $('.glimpse-bar .glimpse-icon').click(function () {
+                $('.glimpse-bar .glimpse-icon').live('click', function () {
                     infoTab.click();
+                    alert('test');
                     return false;
                 });
             } 
 
             //Help setup
-            $('li', tabStrip).click(function() { gm.changeHelp($(this)); });
+            $('li', tabStrip).live('click', function() { gm.changeHelp($(this)); });
             gm.changeHelp($('.glimpse-active', tabStrip));
 
             //Metadata tab
             var metaTab = $('.glimpse-tabitem-' + gm.static.key.meta, tabStrip).hide(); 
+        },
+        globalResetCallback : function() {
+            var gm = this;
+            for(var key in gm.static.key) 
+                var test = $('.glimpse-tabitem-' + gm.static.key[key]).hide();    
         },
         changeHelp : function(item) {
             var g = $.glimpse, mainHolder = g.static.mainHolder(), key = item.data('sort'), metaData = g.static.data._metadata, url = '', icon = $('.glimpse-meta-help', mainHolder);
