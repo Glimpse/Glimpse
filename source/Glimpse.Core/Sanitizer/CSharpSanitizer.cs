@@ -47,7 +47,7 @@ namespace Glimpse.Core.Sanitizer
             return json;
         }
 
-        private static readonly Regex GenericRegex = new Regex(@"\`[0-9]+\[([^\s^,^:,^;^""]+)\]", RegexOptions.Compiled);
+        private static readonly Regex GenericRegex = new Regex(@"\`[0-9]+\[([^\s^:^;^""]+)\]", RegexOptions.Compiled);
         private static string FixGenerics(string json)
         {
             var i = 0;
