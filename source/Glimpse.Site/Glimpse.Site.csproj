@@ -94,12 +94,6 @@
     <Compile Include="QuestionsController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
-    <Content Include="Content\Plugin\config.png" />
-    <Content Include="Content\Plugin\environment.png" />
-    <Content Include="Content\Plugin\Remote.jpg" />
-    <Content Include="Content\Plugin\request.png" />
-    <Content Include="Content\Plugin\server.png" />
-    <Content Include="Scripts\Protocol\LayoutExample.js" />
     <Compile Include="SharedController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
@@ -111,6 +105,12 @@
     <Compile Include="TalkController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
+    <Content Include="Content\Plugin\config.png" />
+    <Content Include="Content\Plugin\environment.png" />
+    <Content Include="Content\Plugin\Remote.jpg" />
+    <Content Include="Content\Plugin\request.png" />
+    <Content Include="Content\Plugin\server.png" />
+    <Content Include="Scripts\Protocol\LayoutExample.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\close-quote.gif" />
@@ -176,12 +176,6 @@
     <Content Include="Views\Questions\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
-    <Compile Include="T4MVC.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>T4MVC.cs</LastGenOutput>
-    </Compile>
-    <None Include="T4MVC.tt.settings.t4" />
     <Content Include="Views\Protocol\Index.cshtml" />
     <Content Include="Views\Help\Index.cshtml" />
     <Content Include="Views\Help\Plugin.cshtml" />
@@ -206,6 +200,14 @@
       <Project>{523F20A6-3136-4034-B1DD-003F86BDB47A}</Project>
       <Name>Glimpse.Mvc3</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+    <None Include="T4MVC.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>T4MVC.cs</LastGenOutput>
+    </None>
+    <None Include="T4MVC.tt.settings.t4" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
