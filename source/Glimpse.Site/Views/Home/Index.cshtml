@@ -1,4 +1,5 @@
-﻿
+﻿@Html.GlimpseDownload(true)
+
 <div class="features">
 	<div id="contentslider" class="contentslider"> 
 		<div class="cs_wrapper"> 
@@ -8,7 +9,7 @@
     <h2>See in Action</h2>
     Here is a demo of Glimpse, for those who couldn’t make it to Open Source Fest, or just want to see more!
     <div style="margin-top:10px; text-align:center;">
-        <object width="620" height="380"><param name="movie" value="http://www.youtube.com/v/ke8Rw2BGPG0&rel=0&hl=en_US&feature=player_embedded&version=3"></param><param name="allowFullScreen" value="true"></param><param name="allowScriptAccess" value="always"></param><embed src="http://www.youtube.com/v/ke8Rw2BGPG0&rel=0&hl=en_US&feature=player_embedded&version=3" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="620" height="380"></embed></object>
+        <object width="620" height="380"><param name="wmode" value="opaque" /><param name="movie" value="http://www.youtube.com/v/ke8Rw2BGPG0&rel=0&hl=en_US&feature=player_embedded&version=3"></param><param name="allowFullScreen" value="true"></param><param name="allowScriptAccess" value="always"></param><embed src="http://www.youtube.com/v/ke8Rw2BGPG0&rel=0&hl=en_US&feature=player_embedded&version=3" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="620" height="380" wmode="opaque"></embed></object>
     </div>
     <div style="position:absolute; right:1.5em; top:220px; font-size:2em; line-height:1em; cursor:pointer;" class="read-more">Read<br />More</div>
 </div>       
@@ -202,3 +203,27 @@
         </div>
     </div>
 </div>
+
+@section styles {
+    <link href="@Url.Content(Links.Content.jquery_contentslider_css)" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content(Links.Content.jquery_jscrollpane_css)" rel="stylesheet" type="text/css" />
+}
+
+@section scripts {  
+    <script src="@Url.Content(Links.Scripts.jquery_easing_1_3_js)" type="text/javascript"></script>
+    <script src="@Url.Content(Links.Scripts.jquery_contentslider_js)" type="text/javascript"></script>
+    <script src="@Url.Content(Links.Scripts.jquery_mousewheel_js)" type="text/javascript"></script>
+    <script src="@Url.Content(Links.Scripts.jquery_jscrollpane_js)" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+	        $('#contentslider').ContentSlider({ 
+		        speed : 800,
+		        easing : 'easeInOutBack'
+	        });
+            $('.scroll-pane').jScrollPane();
+            $('.read-more').click(function() {
+                $('.cs_rightBtn').click();
+            });
+        });
+    </script>
+}

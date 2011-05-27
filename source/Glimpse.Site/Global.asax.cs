@@ -21,7 +21,7 @@ namespace Glimpse.Site
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.IgnoreRoute("favicon.ico");
-            routes.IgnoreRoute("Glimpse/{*pathInfo}");
+            //routes.IgnoreRoute("Glimpse/{*pathInfo}");
              
             routes.MapRoute(
                 "Default", // Route name

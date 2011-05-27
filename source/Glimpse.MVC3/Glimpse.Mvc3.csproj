@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{523F20A6-3136-4034-B1DD-003F86BDB47A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Glimpse.Mvc3</RootNamespace>
+    <AssemblyName>Glimpse.Mvc3</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Castle.Core">
+      <HintPath>..\..\lib\Castle.Core.2.5.2\dotNet35\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Converter\HandleErrorAttributeConverter.cs" />
+    <Compile Include="Converter\OutputCacheAttributeConverter.cs" />
+    <Compile Include="Converter\RouteValueDictionaryConverter.cs" />
+    <Compile Include="Extensions\ActionDescriptorExtensions.cs" />
+    <Compile Include="Extensions\ControllerContextExtensions.cs" />
+    <Compile Include="Extensions\ActionInvokerExtensions.cs" />
+    <Compile Include="Extensions\ControllerExtensions.cs" />
+    <Compile Include="Extensions\ControllerFactoryExtensions.cs" />
+    <Compile Include="Extensions\ModelBinderExtensions.cs" />
+    <Compile Include="Interceptor\ActionInvokerInterceptorSelector.cs" />
+    <Compile Include="Interceptor\ActionInvokerProxyGenerationHook.cs" />
+    <Compile Include="Interceptor\BindModelInterceptor.cs" />
+    <Compile Include="Interceptor\BindPropertyInterceptor.cs" />
+    <Compile Include="Interceptor\CreateModelInterceptor.cs" />
+    <Compile Include="Interceptor\GetFiltersInterceptor.cs" />
+    <Compile Include="Interceptor\InvokeActionMethodInterceptor.cs" />
+    <Compile Include="Interceptor\InvokeActionResultInterceptor.cs" />
+    <Compile Include="Interceptor\ModelBinderInterceptorSelector.cs" />
+    <Compile Include="Interceptor\ModelBinderProxyGenerationHook.cs" />
+    <Compile Include="Plugin\Binders.cs" />
+    <Compile Include="Plugin\Execution.cs" />
+    <Compile Include="Plugin\MetaData.cs" />
+    <Compile Include="Plugin\Routes.cs" />
+    <Compile Include="Plugin\Views.cs" />
+    <Compile Include="Plumbing\GlimpseActionFilter.cs" />
+    <Compile Include="Plumbing\GlimpseAuthorizationFilter.cs" />
+    <Compile Include="Plumbing\GlimpseBinderMetadata.cs" />
+    <Compile Include="Plumbing\GlimpseBinderProvider.cs" />
+    <Compile Include="Plumbing\GlimpseControllerFactory.cs" />
+    <Compile Include="Plumbing\GlimpseDependencyResolver.cs" />
+    <Compile Include="Plumbing\GlimpseExceptionFilter.cs" />
+    <Compile Include="Plumbing\GlimpseFilter.cs" />
+    <Compile Include="Plumbing\GlimpseFilterCalledMetadata.cs" />
+    <Compile Include="Plumbing\GlimpseFilterCallMetadata.cs" />
+    <Compile Include="Plumbing\GlimpseModelBinder.cs" />
+    <Compile Include="Plumbing\GlimpsePipelineInitiation.cs" />
+    <Compile Include="Plumbing\GlimpseResultFilter.cs" />
+    <Compile Include="Plumbing\GlimpseValueProvider.cs" />
+    <Compile Include="Plumbing\GlimpseValueProviderFactory.cs" />
+    <Compile Include="Plumbing\GlimpseView.cs" />
+    <Compile Include="Plumbing\GlimpseViewEngine.cs" />
+    <Compile Include="Plumbing\GlimpseViewEngineCallMetadata.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Warning\NonProxyableMemberWarning.cs" />
+    <Compile Include="Warning\NonVirtualMemberWarning.cs" />
+    <Compile Include="Warning\NotAControllerActionInvokerWarning.cs" />
+    <Compile Include="Warning\NotAControllerWarning.cs" />
+    <Compile Include="Warning\NotADefaultModelBinderWarning.cs" />
+    <Compile Include="Warning\NotProxyableWarning.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">
+      <Project>{21F99168-7D7B-49F2-A97C-5A983E0CA16F}</Project>
+      <Name>Glimpse.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="NuSpec\Content\App_Readme\glimpse.mvc3.readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="NuSpec\Glimpse.Mvc3.nuspec" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NuSpec\lib\net40\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

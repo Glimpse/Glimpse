@@ -1,0 +1,126 @@
+﻿@Html.GlimpseDownload(false)
+   
+<div class="features help">
+
+    <h2>Help &amp; Documentation</h2>
+
+    <h3>Overview</h3> 
+    At its core Glimpse allows you to debug your Web Service right in the browser. Glimpse allows you to "Glimpse" into what's 
+    going on in your web server. In other words what Firebug is to debugging your client side code, Glimpse is to debugging 
+    your server within the client. <br /><br />
+     
+    <!--
+    <div style="padding:0.5em 0; text-align:center;">
+        <a href="#" class="myButton">How to Install</a>
+        <a href="#" class="myButton" style="margin:0 3em;">How to Run</a>
+        <a href="#" class="myButton">How its Configure</a>
+    </div>
+    -->
+    
+    <h3>Getting Started</h3> 
+    <table width="100%">
+        <tr>
+            <td width="35%"><h4><span class="header-number">1)</span> Install</h4></td> 
+            <td rowspan="2" width="4%"><img src="@Links.Content.cs_rightImg_png" style="margin:5em 0 0 0;" /></td>
+            <td width="40%"><h4><span class="header-number">2)</span> Run</h4></td> 
+            <td rowspan="2" width="4%"><img src="@Links.Content.cs_rightImg_png" style="margin:5em 0 0 0;" /></td>
+            <td width="17%"><h4><span class="header-number">3)</span> Configure</h4></td> 
+        </tr>
+        <tr>
+            <td align="center">
+                Add NuGet package to your project
+                <div style="padding:1.5em 0 0; text-align:center;">
+                    <a href="http://nuget.org/List/Packages/Glimpse" class="myButton">Download</a>
+                </div> 
+            </td>
+            <td style="padding-left:0.5em;"> 
+                <ul class="plain">
+                    <li>Turn on Glimpse for your requests, see Glimpse Config in:
+                        <ul class="plain">
+                            <li>http://yoursite.com/Glimpse/Config, or</li>
+                            <li>http://127.0.0.1/Glimpse/Config</li>
+                        </ul>
+                    </li>
+                    <li>Click on the Glimpse in the bottom right hand corner of your site</li>
+                </ul>
+            </td>
+            <td style="padding-left:0.5em;"> 
+                At any time you can:
+                <ul class="plain">
+                    <li>Turn Glimpse off</li>
+                    <li>Restruct IP's</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+
+    <h3>Plugins</h3> 
+    <table width="100%">
+        <tr align="center">
+            <td width="50%"><strong>WebForms</strong></td> 
+            <td width="50%"><strong>MVC</strong></td> 
+        </tr>
+        <tr>
+            <td>  
+                <li>
+                    <ul class="plain">
+                        <li>@Html.ActionLink("Config", MVC.Help.Plugin("Config")) - Short description about this plugin</li>
+                        <li>@Html.ActionLink("Environment", MVC.Help.Plugin("Environment")) - Short description about this plugin</li>
+                        <li>@Html.ActionLink("Request", MVC.Help.Plugin("Request")) - Short description about this plugin</li>
+                        <li>@Html.ActionLink("Server", MVC.Help.Plugin("Server")) - Short description about this plugin</li>
+                        <li>@Html.ActionLink("Session", MVC.Help.Plugin("Session")) - Short description about this plugin</li>
+                        <li>@Html.ActionLink("Trace", MVC.Help.Plugin("Trace")) - Short description about this plugin</li>
+                    </ul>
+                </li>
+            </td> 
+            <td>  
+                <ul class="plain">
+                    <li>@Html.ActionLink("Bindings", MVC.Help.Plugin("Bindings")) - Short description about this plugin</li>
+                    <li>@Html.ActionLink("Execution", MVC.Help.Plugin("Execution")) - Short description about this plugin</li>
+                    <li>@Html.ActionLink("MetaData", MVC.Help.Plugin("MetaData")) - Short description about this plugin</li>
+                    <li>@Html.ActionLink("Routes", MVC.Help.Plugin("Routes")) - Short description about this plugin</li>
+                    <li>@Html.ActionLink("Views", MVC.Help.Plugin("Views")) - Short description about this plugin</li> 
+                </ul> 
+            </td>
+        </tr>
+    </table>
+    <br />
+
+
+    <h3>Infrastructure</h3> 
+    <table width="100%">
+        <tr align="center">
+            <td width="33%"><h4>Client</h4></td> 
+            <td width="34%"><h4>Protocol</h4></td> 
+            <td width="33%"><h4>Server</h4></td> 
+        </tr>
+        <tr>
+            <td>
+                <ul class="plain">
+                    <li>@Html.ActionLink("Blacklisting", MVC.Help.Plugin("Config"))<br /> - Short description about this plugin</li>
+                    <li>@Html.ActionLink("Creating Plugins", MVC.Help.Plugin("Config"))<br /> - Short description about this plugin</li>
+                </ul> 
+            </td>
+            <td>
+                <ul class="plain">
+                    <li>@Html.ActionLink("Documentation", MVC.Help.Plugin("Config"))<br /> - Short description about this plugin</li> 
+                </ul> 
+            </td>
+            <td>
+                <ul class="plain">
+                    <li>@Html.ActionLink("Configuration", MVC.Help.Plugin("Config"))<br /> - Short description about this plugin</li>
+                    <li>@Html.ActionLink("Blacklisting", MVC.Help.Plugin("Config"))<br /> - Short description about this plugin</li>
+                    <li>@Html.ActionLink("Creating Plugins", MVC.Help.Plugin("Config"))<br /> - Short description about this plugin</li>
+                </ul> 
+            </td>
+        </tr>
+    </table>
+
+    <h3>Other Platforms</h3> 
+    <h4>PHP &amp; Ruby on Rails &amp; Node.js</h4>
+    <div style="text-align:center">
+        <em>More details here - <a href="#">Glimpse Multi-Platform Effort</a>.</em>
+    </div>
+</div>
+    

@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Net", "source\Glimpse.Net\Glimpse.Net.csproj", "{21F99168-7D7B-49F2-A97C-5A983E0CA16F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Core", "source\Glimpse.Core\Glimpse.Core.csproj", "{21F99168-7D7B-49F2-A97C-5A983E0CA16F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Test", "source\Glimpse.Test\Glimpse.Test.csproj", "{1C2AE34B-E826-4510-92E9-28DE9B4AEB0C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Sample", "source\Glimpse.Example\Glimpse.Sample.csproj", "{A1DDF7DA-D1FB-4B52-A7B3-D2A2099482CE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Sample.Mvc3", "source\Glimpse.Sample.MVC3\Glimpse.Sample.Mvc3.csproj", "{A1DDF7DA-D1FB-4B52-A7B3-D2A2099482CE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Site", "source\Glimpse.Site\Glimpse.Site.csproj", "{B0DF396D-7702-41B8-8744-CA87DC5F8244}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Mvc3", "source\Glimpse.MVC3\Glimpse.Mvc3.csproj", "{523F20A6-3136-4034-B1DD-003F86BDB47A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Sample.WebForms", "source\Glimpse.Sample.WebForms\Glimpse.Sample.WebForms.csproj", "{DA5BF75E-ACF4-4451-A5D0-722795C42719}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +21,6 @@ Global
 		{21F99168-7D7B-49F2-A97C-5A983E0CA16F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21F99168-7D7B-49F2-A97C-5A983E0CA16F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21F99168-7D7B-49F2-A97C-5A983E0CA16F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1C2AE34B-E826-4510-92E9-28DE9B4AEB0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1C2AE34B-E826-4510-92E9-28DE9B4AEB0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1C2AE34B-E826-4510-92E9-28DE9B4AEB0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1C2AE34B-E826-4510-92E9-28DE9B4AEB0C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A1DDF7DA-D1FB-4B52-A7B3-D2A2099482CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A1DDF7DA-D1FB-4B52-A7B3-D2A2099482CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1DDF7DA-D1FB-4B52-A7B3-D2A2099482CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -31,6 +29,14 @@ Global
 		{B0DF396D-7702-41B8-8744-CA87DC5F8244}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0DF396D-7702-41B8-8744-CA87DC5F8244}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0DF396D-7702-41B8-8744-CA87DC5F8244}.Release|Any CPU.Build.0 = Release|Any CPU
+		{523F20A6-3136-4034-B1DD-003F86BDB47A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{523F20A6-3136-4034-B1DD-003F86BDB47A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{523F20A6-3136-4034-B1DD-003F86BDB47A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{523F20A6-3136-4034-B1DD-003F86BDB47A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA5BF75E-ACF4-4451-A5D0-722795C42719}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA5BF75E-ACF4-4451-A5D0-722795C42719}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA5BF75E-ACF4-4451-A5D0-722795C42719}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA5BF75E-ACF4-4451-A5D0-722795C42719}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

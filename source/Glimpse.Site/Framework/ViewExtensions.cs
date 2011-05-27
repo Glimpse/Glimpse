@@ -1,6 +1,6 @@
-﻿using System; 
+﻿using System;
 using System.Web.WebPages;
- 
+
 public static class ViewExtensions
 {
     private static readonly object _o = new object();
@@ -11,4 +11,4 @@ public static class ViewExtensions
             return page.RenderSection(sectionName); 
         return defaultContent(_o); 
     }
-} 
+}
