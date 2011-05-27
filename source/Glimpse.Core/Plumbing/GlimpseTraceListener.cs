@@ -166,6 +166,8 @@ namespace Glimpse.Core.Plumbing
                 LastWatch = new Stopwatch();
             }
 
+            if (Messages == null) return;
+
             var count = Messages.Count;
             Messages.Add(new List<string>
                              {

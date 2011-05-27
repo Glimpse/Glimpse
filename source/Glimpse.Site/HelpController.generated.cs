@@ -72,6 +72,7 @@ namespace Glimpse.Site.Controllers {
                 public readonly string Environment = "~/Views/Help/Plugins/Environment.cshtml";
                 public readonly string Remote = "~/Views/Help/Plugins/Remote.cshtml";
                 public readonly string Request = "~/Views/Help/Plugins/Request.cshtml";
+                public readonly string Server = "~/Views/Help/Plugins/Server.cshtml";
             }
         }
     }
