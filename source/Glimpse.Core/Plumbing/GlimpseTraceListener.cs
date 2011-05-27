@@ -12,59 +12,91 @@ namespace Glimpse.Core.Plumbing
         {
             get
             {
-                var store = HttpContext.Current.Items;
-                var firstWatch = store[Trace.FirstWatchStoreKey] as Stopwatch;
+                var currentContext = HttpContext.Current;
+                Stopwatch firstWatch = null;
 
-                if (firstWatch != null) return firstWatch;
+                if (currentContext != null)
+                {
+                    var store = currentContext.Items;
+                    firstWatch = store[Trace.FirstWatchStoreKey] as Stopwatch;
 
-                store[Trace.FirstWatchStoreKey] = firstWatch = new Stopwatch();
-                firstWatch.Start();
+                    if (firstWatch != null) return firstWatch;
 
+                    store[Trace.FirstWatchStoreKey] = firstWatch = new Stopwatch();
+                    firstWatch.Start();
+                }
                 return firstWatch;
             }
-            set { HttpContext.Current.Items[Trace.FirstWatchStoreKey] = value; }
+            set
+            {
+                var currentContext = HttpContext.Current;
+
+                if (currentContext == null) return;
+
+                currentContext.Items[Trace.FirstWatchStoreKey] = value;
+                value.Start();
+            }
         }
 
         private static Stopwatch LastWatch
         {
             get
             {
-                var store = HttpContext.Current.Items;
-                var lastWatch = store[Trace.LastWatchStoreKey] as Stopwatch;
+                var currentContext = HttpContext.Current;
+                Stopwatch lastWatch = null;
 
-                if (lastWatch != null) return lastWatch;
+                if (currentContext != null)
+                {
+                    var store = currentContext.Items;
+                    lastWatch = store[Trace.LastWatchStoreKey] as Stopwatch;
 
-                store[Trace.LastWatchStoreKey] = lastWatch = new Stopwatch();
-                lastWatch.Start();
+                    if (lastWatch != null) return lastWatch;
+
+                    store[Trace.LastWatchStoreKey] = lastWatch = new Stopwatch();
+                    lastWatch.Start();
+                }
 
                 return lastWatch;
             }
-            set { HttpContext.Current.Items[Trace.LastWatchStoreKey] = value; }
+            set
+            {
+                var currentContext = HttpContext.Current;
+
+                if (currentContext == null) return;
+
+                currentContext.Items[Trace.LastWatchStoreKey] = value;
+                value.Start();
+            }
         }
 
-        protected IList<IList<string>> Messages
+        private static IList<IList<string>> Messages
         {
             get
             {
-                var store = HttpContext.Current.Items;
-                var messages = store[Trace.TraceMessageStoreKey] as IList<IList<string>>;
+                var currentContext = HttpContext.Current;
+                IList<IList<string>> messages = null;
 
-                if (messages != null) return messages;
+                if (currentContext != null)
+                {
+                    var store = currentContext.Items;
+                    messages = store[Trace.TraceMessageStoreKey] as IList<IList<string>>;
 
-                store[Trace.TraceMessageStoreKey] = messages = new List<IList<string>>
-                                                                          {
-                                                                              new List<string>
-                                                                                  {
-                                                                                      "Message",
-                                                                                      "Category",
-                                                                                      "From First",
-                                                                                      "From Last"
-                                                                                  }
-                                                                          };
+                    if (messages != null) return messages;
+
+                    store[Trace.TraceMessageStoreKey] = messages = new List<IList<string>>
+                                                                       {
+                                                                           new List<string>
+                                                                               {
+                                                                                   "Message",
+                                                                                   "Category",
+                                                                                   "From First",
+                                                                                   "From Last"
+                                                                               }
+                                                                       };
+                }
 
                 return messages;
             }
-            set { HttpContext.Current.Items[Trace.TraceMessageStoreKey] = value; }
         }
 
         private const string DefaultCategory = "Info";
@@ -122,7 +154,6 @@ namespace Glimpse.Core.Plumbing
             else
             {
                 FirstWatch = new Stopwatch();
-                FirstWatch.Start();
             }
 
             if (LastWatch != null)
@@ -133,7 +164,6 @@ namespace Glimpse.Core.Plumbing
             else
             {
                 LastWatch = new Stopwatch();
-                LastWatch.Start();
             }
 
             var count = Messages.Count;
