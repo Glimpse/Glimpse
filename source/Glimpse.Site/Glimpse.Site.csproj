@@ -208,10 +208,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <Compile Include="T4MVC.tt">
+    <None Include="T4MVC.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>T4MVC.cs</LastGenOutput>
-    </Compile>
+    </None>
     <None Include="T4MVC.tt.settings.t4" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
