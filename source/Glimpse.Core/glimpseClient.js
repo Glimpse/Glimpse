@@ -1549,15 +1549,17 @@ if (window.jQueryGlimpse) { (function ($) {
                     }
                 }
 
-                //TODO: this needs to be put in it's proper place, and styled nicely
-                $('body').prepend($('<div/>', { class: 'enviroSwitch' }).append(environmentsList));
+                if (currentEnvironment) {
+                    //TODO: this needs to be put in it's proper place, and styled nicely
+                    $('body').prepend($('<div/>', { 'class': 'enviroSwitch' }).append(environmentsList));
 
-                //TODO: don't hide with CSS but rather the class
-                $('.glimpse-title span:last', mainHolder).prepend($('<span/>', { html: currentEnvironment }).hover(function () {
-                    $('.enviroSwitch').addClass('active').css('display', 'block');
-                }, function () {
-                    $('.enviroSwitch').removeClass('active').css('display', 'none');
-                }));
+                    //TODO: don't hide with CSS but rather the class
+                    $('.glimpse-title span:last', mainHolder).prepend($('<span/>', { html: currentEnvironment }).hover(function () {
+                        $('.enviroSwitch').addClass('active').css('display', 'block');
+                    }, function () {
+                        $('.enviroSwitch').removeClass('active').css('display', 'none');
+                    }));
+                }
             }
         }
     });
