@@ -1479,7 +1479,6 @@ if (window.jQueryGlimpse) { (function ($) {
             if (infoTab.length > 0) {
                 $('.glimpse-bar .glimpse-icon').live('click', function () {
                     infoTab.click();
-                    alert('test');
                     return false;
                 });
             }
@@ -1589,7 +1588,7 @@ if (window.jQueryGlimpse) { (function ($) {
 
             $.ajax({
                 dataType: 'jsonp',
-                url: '//localhost:55555/Glimpse/CurrentVersion/',
+                url: 'http://getglimpse.com/Glimpse/CurrentVersion/',
                 success: function (data) {
                     $.glimpse.util.cookie('glimpseLatestVersion', data, 3);
                 }
