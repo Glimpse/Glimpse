@@ -1481,7 +1481,7 @@ if (window.jQueryGlimpse) { (function ($) {
                     infoTab.click();
                     return false;
                 });
-            }
+            } 
 
             //Help setup
             $('li', tabStrip).live('click', function () { gm.changeHelp($(this)); });
