@@ -15,7 +15,7 @@ using Glimpse.Core;
 [assembly: ComVisible(false)]
 [assembly: Guid("4e613cbe-2441-4dc4-a812-4e6bba03e25c")]
 
-[assembly: AssemblyVersion("0.80.0.0")]
-[assembly: AssemblyFileVersion("0.80.0.0")]
+[assembly: AssemblyVersion("0.83")]
+[assembly: AssemblyFileVersion("0.83")]
 
 [assembly: PreApplicationStartMethod(typeof(PreApplicationStartCode), "Start")]

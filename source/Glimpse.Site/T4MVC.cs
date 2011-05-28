@@ -23,6 +23,7 @@ using T4MVC;
 
 [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
 public static class MVC {
+    public static Glimpse.Site.Controllers.GlimpseController Glimpse = new Glimpse.Site.Controllers.T4MVC_GlimpseController();
     public static Glimpse.Site.Controllers.HelpController Help = new Glimpse.Site.Controllers.T4MVC_HelpController();
     public static Glimpse.Site.Controllers.HomeController Home = new Glimpse.Site.Controllers.T4MVC_HomeController();
     public static Glimpse.Site.Controllers.ProtocolController Protocol = new Glimpse.Site.Controllers.T4MVC_ProtocolController();

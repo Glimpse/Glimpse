@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Configuration;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Web;
 using Glimpse.Core.Configuration;
@@ -330,6 +331,8 @@ namespace Glimpse.Core
             }
 
             requestMetadata.Add("environmentUrls", environmentUrls);
+            requestMetadata.Add("runningVersion", decimal.Parse(Assembly.GetExecutingAssembly().GetName().Version.ToString(2)));
+            
 
             //plugin specific metadata);
             foreach (var plugin in Plugins)
