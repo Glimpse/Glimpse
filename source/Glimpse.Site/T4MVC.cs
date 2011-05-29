@@ -365,11 +365,17 @@ namespace Links {
             private const string URLPATH = "~/Content/Plugin";
             public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
             public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
-            public static readonly string config_png = Url("config.png");
-            public static readonly string environment_png = Url("environment.png");
+            public static readonly string Ajax_jpg = Url("Ajax.jpg");
+            public static readonly string Binding_jpg = Url("Binding.jpg");
+            public static readonly string Config_jpg = Url("Config.jpg");
+            public static readonly string Environment_jpg = Url("Environment.jpg");
+            public static readonly string Execution_jpg = Url("Execution.jpg");
+            public static readonly string Metadata_jpg = Url("Metadata.jpg");
             public static readonly string Remote_jpg = Url("Remote.jpg");
-            public static readonly string request_png = Url("request.png");
-            public static readonly string server_png = Url("server.png");
+            public static readonly string Request_jpg = Url("Request.jpg");
+            public static readonly string Routes_jpg = Url("Routes.jpg");
+            public static readonly string Server_jpg = Url("Server.jpg");
+            public static readonly string Session_jpg = Url("Session.jpg");
         }
     
         public static readonly string Site_css = Url("Site.css");

@@ -5,8 +5,8 @@ html{color:#000;background:#FFF;}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pr
 body { text-align:center; font-family:"avante garde", "Century Gothic", Serif; font-size:0.8em; line-height:1.4em; }
 strong { font-weight:bold; } em { font-style:italic; }
 ul.plain, ol.plain { margin-bottom:1em; }
-ul.plain li { list-style-type:disc; }
 ol.plain li { list-style-type:decimal; }
+ul.plain li { list-style-type:disc; }
 ul.plain li, ol.plain li { margin:0.5em 0 0.5em 1.5em ; }
 .content { position:absolute; left:50%; margin-left:-450px; text-align:left; width:900px; }
 .navigation-back { border-left:1px solid #dcdcdc; border-botom:1px solid #dcdcdc; border-right:1px solid #dcdcdc; background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #FCFCFC), color-stop(1, #dfdfdf) ); background:-moz-linear-gradient( center top, #FCFCFC 5%, #dfdfdf 100% ); filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#FCFCFC', endColorstr='#dfdfdf'); background-color: #FAFAFA;position:absolute; right: -10px; height: 80px; width: 720px; border-radius: 0px 0px 10px 10px; -moz-border-radius: 0px 0px 10px 10px; -webkit-border-bottom-right-radius: 10px; -webkit-border-bottom-left-radius: 10px; }
@@ -43,6 +43,9 @@ blockquote:first-letter { background: url(/Content/open-quote.gif) no-repeat lef
 .glimpse-scenario { padding-bottom:4em; }
 .glimpse-scenario-data { padding-top:0.5em; }
 
-.plugin-summary { padding:1em 0; }
+.plugin-summary { padding:1em 0 0 0; }
 .plugin-video { padding-bottom:1em; text-align:center; }
 .plugin-layout ol span { font-style:italic; font-weight:bold; }
+.plugin-faq ol div { font-weight:bold; }
+.plugin-faq li { margin-bottom:2em; }
+
