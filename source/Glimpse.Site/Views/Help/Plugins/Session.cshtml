@@ -7,34 +7,85 @@
 
 <div class="plugin-layout">
     <h3>Layout</h3> 
-    <img src="@Links.Content.Plugin.Session_jpg" />
-    <!--
+    <img src="@Links.Content.Plugin.Session_jpg" /> 
     <ol class="plain">
-        <li><span>Key</span>: The key column shows the name of an xml element found in the site's main web.config file</li>
-        <li><span>Value</span>: The value column displays selected information about the given element</li>
-        <li><span>AppSettings</span>: All the app settings that you currently have defined</li>
-        <li><span>ConnectionStrings</span>: Any connection strings that are present</li>
-        <li><span>CustomErrors</span>: How you have configurered custom errors to work within your site</li>
-        <li><span>Authentication</span>: How authentication is currently configurered</li>
-    </ol>
-    -->
+        <li><span>Key</span>: The key that is used to reference the in session data</li>
+        <li><span>Value</span>: The value that is stored in memory</li>
+        <li><span>Type</span>: The type of the value being stored</li>
+    </ol> 
 </div>
-
-<!--
+ 
 <div class="plugin-faq">
     <h3>Frequently Asked Questions</h3> 
     <ol class="plain">
         <li>
-            <div>I've got data in my config that I don't want to be included in the render output (i.e. passwords)?</div>
-            First of all, understand that having plain text passwords isn't remomended and various techniques can be used 
-            to encrypt them. But we understand that for what ever reason this may not be possible and hence have made the 
-            glimpse processing pipeline plugable, so you can remove this data. TODO@@nikmd23
-        </li>
-        <li>
-            <div>I want to add extra config data from my own external config sources?</div>
-            Again the Glimpse framework is extremly plugable and with the implementation of a simple class you can 
-            add data into the Glimpse Config Tab. TODO@@nikmd23
-        </li>
+            <div>I don't use session can I remove this tab?</div>
+            Glimpse allows you to blacklist plugins so that they are not executed within your site. Hence feel
+            free to blacklist the session plugin if you don;t have a use for it.
+        </li> 
     </ol>
 </div>
--->
+
+<div style="display:none" class="help-buttons">
+    <div class="help-links"> 
+        <h3>Plugins</h3> 
+        <table width="100%">
+            <tr align="center">
+                <td width="50%"><strong>WebForms</strong></td> 
+                <td width="50%"><strong>MVC</strong></td> 
+            </tr>
+            <tr>
+                <td>  
+                    <ul class="plain">
+                        <li>@Html.ActionLink("Config", MVC.Help.Plugin("Config")) - Short description about this plugin</li>
+                        <li>@Html.ActionLink("Environment", MVC.Help.Plugin("Environment")) - Short description about this plugin</li>
+                        <li>@Html.ActionLink("Request", MVC.Help.Plugin("Request")) - Short description about this plugin</li>
+                        <li>@Html.ActionLink("Server", MVC.Help.Plugin("Server")) - Short description about this plugin</li>
+                        <li>@Html.ActionLink("Session", MVC.Help.Plugin("Session")) - Short description about this plugin</li>
+                        <li>@Html.ActionLink("Trace", MVC.Help.Plugin("Trace")) - Short description about this plugin</li>
+                    </ul> 
+                </td> 
+                <td>  
+                    <ul class="plain">
+                        <li>@Html.ActionLink("Bindings", MVC.Help.Plugin("Binding")) - Short description about this plugin</li>
+                        <li>@Html.ActionLink("Execution", MVC.Help.Plugin("Execution")) - Short description about this plugin</li>
+                        <li>@Html.ActionLink("MetaData", MVC.Help.Plugin("MetaData")) - Short description about this plugin</li>
+                        <li>@Html.ActionLink("Routes", MVC.Help.Plugin("Routes")) - Short description about this plugin</li>
+                        <li>@Html.ActionLink("Views", MVC.Help.Plugin("Views")) - Short description about this plugin</li> 
+                    </ul> 
+                </td>
+            </tr>
+        </table>
+        <br />
+
+        <h3>Infrastructure</h3> 
+        <table width="100%">
+            <tr align="center">
+                <td width="33%"><h4>Client</h4></td> 
+                <td width="34%"><h4>Protocol</h4></td> 
+                <td width="33%"><h4>Server</h4></td> 
+            </tr>
+            <tr>
+                <td>
+                    <ul class="plain">
+                        <li>@Html.ActionLink("Blacklisting", MVC.Help.Plugin("Config"))<br /> - Short description about this plugin</li>
+                        <li>@Html.ActionLink("Creating Plugins", MVC.Help.Plugin("Config"))<br /> - Short description about this plugin</li>
+                    </ul> 
+                </td>
+                <td>
+                    <ul class="plain">
+                        <li>@Html.ActionLink("Documentation", MVC.Help.Plugin("Config"))<br /> - Short description about this plugin</li> 
+                    </ul> 
+                </td>
+                <td>
+                    <ul class="plain">
+                        <li>@Html.ActionLink("Configuration", MVC.Help.Plugin("Config"))<br /> - Short description about this plugin</li>
+                        <li>@Html.ActionLink("Blacklisting", MVC.Help.Plugin("Config"))<br /> - Short description about this plugin</li>
+                        <li>@Html.ActionLink("Creating Plugins", MVC.Help.Plugin("Config"))<br /> - Short description about this plugin</li>
+                    </ul> 
+                </td>
+            </tr>
+        </table>    
+    </div>
+    <a href="#" class="myButton">More Help</a>
+</div>

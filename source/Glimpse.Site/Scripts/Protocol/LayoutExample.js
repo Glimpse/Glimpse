@@ -248,7 +248,7 @@
     $('.glimpse-scenario-thirteen').show().html($Glimpse.glimpseProcessor.build(scenarioThirteenData, 0));
      
     if (glimpse == '') 
-        $.glimpse._wireCommonPluginEvents($.glimpse); 
+        $Glimpse.glimpse._wireCommonPluginEvents($.glimpse); 
     $Glimpse.glimpseProcessor.applyPostRenderTransforms($('.protocol'));
 
 

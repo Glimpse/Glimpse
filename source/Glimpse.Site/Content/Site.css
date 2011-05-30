@@ -48,4 +48,7 @@ blockquote:first-letter { background: url(/Content/open-quote.gif) no-repeat lef
 .plugin-layout ol span { font-style:italic; font-weight:bold; }
 .plugin-faq ol div { font-weight:bold; }
 .plugin-faq li { margin-bottom:2em; }
+.help-buttons { text-align:center; position:relative; }
+.help-links { border: 1px solid #AAA;-moz-border-radius:10px; -webkit-border-radius:10px; border-radius:10px; text-align: left; padding: 1em 2em; -moz-box-shadow: 0 0 5px 5px #888; -webkit-box-shadow: 0 0 5px 5px#888; box-shadow: 0 0 5px 5px #DDD; background-color: #FCFCFC; position: absolute; width: 100%; bottom: 0; }
 
+.soon { font-weight:bold; font-size:1.2em; text-align:center; margin:3em 0; }
