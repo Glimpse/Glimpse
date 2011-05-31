@@ -3,7 +3,7 @@
     <!-- Values in dollar $igns are automatically pulled from the AssemblyInfo.cs attributes by NuGet.exe -->
     <metadata>
         <id>Glimpse</id>
-        <version>0.81</version>
+        <version>0.82</version>
         <title>Glimpse Web Debugger for ASP.NET WebForms (Beta)</title>
         <authors>nmolnar, avanderhoorn</authors>
         <owners>nmolnar, avanderhoorn</owners>
@@ -13,6 +13,6 @@
         <iconUrl>http://getglimpse.com/content/glimpse32.png</iconUrl>
         <description>Glimpse is a web debugger used to gain a better understanding of whats happening inside of your webserver. (Beta)</description>
         <summary>A client side Glimpse into whats going on in your server.</summary>
-        <tags>MVC ASP.NET Web</tags>
+        <tags>ASP.NET Web Webforms</tags>
     </metadata>
 </package>

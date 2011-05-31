@@ -102,10 +102,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="NuSpec\Content\App_Readme\glimpse.mvc3.readme.txt" />
+    <Content Include="NuSpec\content\App_Readme\glimpse.mvc3.readme.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NuSpec\Glimpse.Mvc3.nuspec" />
+    <None Include="NuSpec\tools\install.ps1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="NuSpec\lib\net40\" />

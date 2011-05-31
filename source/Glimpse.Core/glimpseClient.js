@@ -1585,6 +1585,8 @@ if (window.jQueryGlimpse) { (function ($) {
                 return;
             }
 
+            $.glimpse.util.cookie('glimpseLatestVersion', -1, 1);
+
             $.ajax({
                 dataType: 'jsonp',
                 url: 'http://getglimpse.com/Glimpse/CurrentVersion/',
