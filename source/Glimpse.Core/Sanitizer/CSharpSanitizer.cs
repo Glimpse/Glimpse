@@ -8,8 +8,7 @@ namespace Glimpse.Core.Sanitizer
     {
         public string Sanitize(string json)
         {
-            json = Regex.Replace(json, @"(?<=`[0-9]+\[.+)\](?=""| )", @">"); //Replace '>' for generics
-            json = Regex.Replace(json, @"`[0-9]\[", @"<"); //Replace '<' for generics
+            json = FixGenerics(json); //Replace '`1[]' for generics    
             json = Regex.Replace(json, @"(?<=System\.Nullable<.+)>(?= )", @"?"); //Add '?' for nullable types
             json = Regex.Replace(json, @"System.Nullable<", @""); //Add '?' for nullable types
             json = json.Replace("System.Boolean", "bool"); //Convert CLR type names to c# keywords
@@ -45,6 +44,18 @@ namespace Glimpse.Core.Sanitizer
                 }
             }
 
+            return json;
+        }
+
+        private static readonly Regex GenericRegex = new Regex(@"\`[0-9]+\[([^\s^:^;^""]+)\]", RegexOptions.Compiled);
+        private static string FixGenerics(string json)
+        {
+            var i = 0;
+            while (GenericRegex.IsMatch(json) && i < 10)
+            {
+                json = GenericRegex.Replace(json, @"<$1>");
+                i++;
+            }
             return json;
         }
     }
