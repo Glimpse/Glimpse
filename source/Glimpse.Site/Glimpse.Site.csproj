@@ -13,7 +13,7 @@
     <RootNamespace>Glimpse.Site</RootNamespace>
     <AssemblyName>Glimpse.Site</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <MvcBuildViews>false</MvcBuildViews>
+    <MvcBuildViews>true</MvcBuildViews>
     <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -224,6 +224,8 @@
     <Content Include="Views\Help\Plugins\Metadata.cshtml" />
     <Content Include="Views\Help\Plugins\Routes.cshtml" />
     <Content Include="Views\Help\Plugins\Session.cshtml" />
+    <Content Include="Views\Help\Plugins\Trace.cshtml" />
+    <Content Include="Views\Help\Plugins\Views.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
