@@ -111,6 +111,7 @@ Release Notes
 - Extended plugin system to allow for per tab help
 - Added version checker, Glimpse will now tell you if it is out of date
 - Auto open readme file on install
+- Fixed bug in C# sanitizer, thanks @schotime!
 
 05/08/2011 - 0.81
 - Changed plugin initialization so that SetupInit is only called once.
