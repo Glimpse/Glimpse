@@ -6,7 +6,9 @@ Model Metadata
 Routes
 Views
 
+See glimpse.readme.txt or http://getglimpse.com for more info
+
 Release Notes
 -------------
-05/??/2011 - 0.82
+05/30/2011 - 0.82
 - Glimpse.Mvc3 split from old Glimpse package to better support WebForms and Mvc

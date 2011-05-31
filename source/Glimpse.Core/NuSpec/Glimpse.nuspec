@@ -4,7 +4,7 @@
     <metadata>
         <id>Glimpse</id>
         <version>0.82</version>
-        <title>Glimpse Web Debugger for ASP.NET WebForms (Beta)</title>
+        <title>Glimpse Web Debugger for ASP.NET (Beta)</title>
         <authors>nmolnar, avanderhoorn</authors>
         <owners>nmolnar, avanderhoorn</owners>
         <licenseUrl>http://www.opensource.org/licenses/apache2.0</licenseUrl>
@@ -13,6 +13,6 @@
         <iconUrl>http://getglimpse.com/content/glimpse32.png</iconUrl>
         <description>Glimpse is a web debugger used to gain a better understanding of whats happening inside of your webserver. (Beta)</description>
         <summary>A client side Glimpse into whats going on in your server.</summary>
-        <tags>ASP.NET Web Webforms</tags>
+        <tags>ASP.NET Web WebForms</tags>
     </metadata>
 </package>

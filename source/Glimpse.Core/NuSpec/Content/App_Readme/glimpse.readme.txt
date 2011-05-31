@@ -3,7 +3,7 @@ Release notes moved to bottom of file!
 
 Using Glimpse
 -------------
-Thank you for NuGetting Glimpse, A client side Glimpse into whats going on in your server.
+Thank you for NuGetting Glimpse, A client side Glimpse into what's going on in your server.
 
 Glimpse is currently in Beta.
 
@@ -13,18 +13,22 @@ To get started with Glimpse, visit [http://yoursite.com]/Glimpse/Config/ This pa
 
 The following configuration values are allowed for Glimpse in your web.config:
 
-<glimpse enabled="true" requestLimit="5"> <!-- set on to false to completly turn off Glimpse. saveRequestCount specifies the max number of requests Glimpse will save -->
-    <ipAddresses> <!-- List of IP addresses allowed to get Glimpse data.  localhost (IPv4 & IPv6) by default -->
+<glimpse enabled="true" requestLimit="5"> <!-- set enabled to false to completely turn off Glimpse. requestLimit specifies the max number of requests Glimpse will save -->
+    <ipAddresses> <!-- List of IP addresses allowed to get Glimpse data. Optional. localhost (IPv4 & IPv6) by default -->
         <add address="127.0.0.1" />
         <add address="::1" />
     </ipAddresses>
-    <contentTypes>
+    <contentTypes><!-- List of content types Glimpse will provide data for. Optional  text/html by default -->
         <add contentType="text/html"/>
     </contentTypes>
-    <pluginBlacklist>
+    <pluginBlacklist><!-- List of plugins for Glimpse to ignore. Optional. By default all plugins will load -->
 		<add plugin="Glimpse.Core.Plugin.Request"/>
 		<add plugin="Glimpse.Core.Plugin.MetaData"/>
 	</pluginBlacklist>
+	<environments><!-- List of environments your application runs in. Used for the new environment switcher feature. Optional. By default environment information will no be shown -->
+        <add name="Dev" authority="localhost:33333" />
+        <add name="Prod" authority="getglimpse.com" />
+    </environments>
 </glimpse>
 
 
@@ -88,11 +92,11 @@ Details coming soon.
 
 Release Notes
 -------------
-05/??/2011 - 0.82
+05/30/2011 - 0.82
 - Added default values to all config elements to clean up web.config entries
 - Refactored "responder" framework to leverage IHttpHandlers
-- Seperated out MVC3 dependencies
-- Added timming info to Trace tab
+- Separated out MVC3 dependencies, now in Glimpse.Mvc3 nupkg
+- Added timing info to Trace tab
 - Added support for WebForms tracing
 - Added additional request data to Request tab
 - Added RootUrlPath config option
@@ -103,12 +107,16 @@ Release Notes
 - Added ability to "clear" results from both Ajax and Remote tabs
 - Fixed problem where hidden tabs are added back into glimpse after a data change/refresh
 - Changed the ajax tab so new items are added from the top instead of the bottom
+- Added environment switcher for easier debugging across environments
+- Extended plugin system to allow for per tab help
+- Added version checker, Glimpse will now tell you if it is out of date
+- Auto open readme file on install
 
 05/08/2011 - 0.81
 - Changed plugin initialization so that SetupInit is only called once.
 - Added list of loaded plugins to Glimpse/Config
 - Added node to configuration to allow for blacklisting unwanted plugins. Configuration takes the form <glimpse><pluginBlacklist><add plugin="[Type.Name.Including.Namespace]"/></pluginBlacklist></glimpse>
-- Updated Binding plugin to have acctual view data
+- Updated Binding plugin to have actual view data
 - Fixed bugs with getting NotImplemented exceptions on trace tab
 - Fixed bugs with users who were extending DefaultModelBinder
 - Added ability to set glimpseState (cookie) to Hidden, which allows Glimpse to record and track remote client requests without rendering UI/Data to their response. (Useful for use with the remote tab)
@@ -119,9 +127,9 @@ Release Notes
     - Glimpse information and UI button added
 - Client bug fixes for popout window
 - Glimpse close button added to conifg
-- Glimpse logo added as an embeded asset
+- Glimpse logo added as an embedded asset
 - Refactoring of Glimpse JS to avoid possibility of conflict with hosts code 
-- Warnings when you don't have jQuery or JSON avaibable 
+- Warnings when you don't have jQuery or JSON available 
 
 04/28/2011 - 0.80
 - Removed dependency on System.Drawing
