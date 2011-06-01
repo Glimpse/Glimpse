@@ -9,7 +9,7 @@ ol.plain li { list-style-type:decimal; }
 ul.plain li { list-style-type:disc; }
 ul.plain li, ol.plain li { margin:0.5em 0 0.5em 1.5em ; }
 .content { position:absolute; left:50%; margin-left:-450px; text-align:left; width:900px; }
-.navigation-back { border-left:1px solid #dcdcdc; border-botom:1px solid #dcdcdc; border-right:1px solid #dcdcdc; background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #FCFCFC), color-stop(1, #dfdfdf) ); background:-moz-linear-gradient( center top, #FCFCFC 5%, #dfdfdf 100% ); filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#FCFCFC', endColorstr='#dfdfdf'); background-color: #FAFAFA;position:absolute; right: -10px; height: 80px; width: 720px; border-radius: 0px 0px 10px 10px; -moz-border-radius: 0px 0px 10px 10px; -webkit-border-bottom-right-radius: 10px; -webkit-border-bottom-left-radius: 10px; }
+.navigation-back { border-left:1px solid #dcdcdc; border-bottom:1px solid #dcdcdc; border-right:1px solid #dcdcdc; background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #FCFCFC), color-stop(1, #dfdfdf) ); background:-moz-linear-gradient( center top, #FCFCFC 5%, #dfdfdf 100% ); filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#FCFCFC', endColorstr='#dfdfdf'); background-color: #FAFAFA;position:absolute; right: -10px; height: 80px; width: 720px; border-radius: 0px 0px 10px 10px; -moz-border-radius: 0px 0px 10px 10px; -webkit-border-bottom-right-radius: 10px; -webkit-border-bottom-left-radius: 10px; }
 .navigation { position:absolute; right:0; right:-50px; }
 .navigation li { float:left; width:185px; height:70px; position:relative; }
 .navigation li a { display:block; font-size:1.5em; color:#333; text-decoration:none; margin:1em 0 0.5em; }
@@ -37,6 +37,7 @@ blockquote:first-letter { background: url(/Content/open-quote.gif) no-repeat lef
 .myButton:hover { background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed) ); background:-moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% ); filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed'); background-color:#dfdfdf; }
 .myButton:active { position:relative; top:1px; }
 .questions li { padding:0.5em 0; line-height:1.4em; }
+pre { border: 1px dashed #777; background-color: #EEE; padding: 1em; }
 
 .header-number { font-size:1.4em; font-weight:normal; }
 
@@ -45,10 +46,10 @@ blockquote:first-letter { background: url(/Content/open-quote.gif) no-repeat lef
 
 .plugin-summary { padding:1em 0 0 0; }
 .plugin-video { padding-bottom:1em; text-align:center; }
-.plugin-layout ol span { font-style:italic; font-weight:bold; }
+.plugin-layout ol span, .plugin ul span { font-style:italic; font-weight:bold; }
 .plugin-faq ol div { font-weight:bold; }
 .plugin-faq li { margin-bottom:2em; }
 .help-buttons { text-align:center; position:relative; }
-.help-links { border: 1px solid #AAA;-moz-border-radius:10px; -webkit-border-radius:10px; border-radius:10px; text-align: left; padding: 1em 2em; -moz-box-shadow: 0 0 5px 5px #888; -webkit-box-shadow: 0 0 5px 5px#888; box-shadow: 0 0 5px 5px #DDD; background-color: #FCFCFC; position: absolute; width: 100%; bottom: 0; }
+.help-links { display:none; border: 1px solid #AAA;-moz-border-radius:10px; -webkit-border-radius:10px; border-radius:10px; text-align: left; padding:0 2em 1em 2em; -moz-box-shadow: 0 0 5px 5px #888; -webkit-box-shadow: 0 0 5px 5px#888; box-shadow: 0 0 5px 5px #DDD; position: absolute; width:94%; bottom: 0; background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #EBEBEB), color-stop(1, #FCFCFC) ); background: -moz-linear-gradient( center top, #EBEBEB 5%, #FCFCFC 100% ); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#EBEBEB', endColorstr='#FCFCFC'); background-color: #FCFCFC; }
 
 .soon { font-weight:bold; font-size:1.2em; text-align:center; margin:3em 0; }

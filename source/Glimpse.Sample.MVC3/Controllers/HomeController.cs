@@ -30,6 +30,10 @@ namespace MvcMusicStore.Controllers
                 GlimpseTrace.Error("This is error from {0}", GetType());
                 GlimpseTrace.Fail("This is Fail from Glimpse");
 
+                Trace.TraceWarning("Test TraceWarning;");
+                Trace.TraceError("Test TraceError;");
+                Trace.TraceInformation("Test TraceInformation;"); 
+
             }
 
 

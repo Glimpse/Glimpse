@@ -8,10 +8,34 @@
 <div class="plugin-layout">
     <h3>Layout</h3> 
     <img src="@Links.Content.Plugin.Server_jpg" />
-    <dl class="plain">
-        <dt>Key</dt>
-            <dd>The key column shows the name of a variable from from the web server. Microsoft has full details of each variable from <a href="http://msdn.microsoft.com/en-us/library/ms524602.aspx">IIS on MSDN</a></dd>
-        <dt>Value</dt>
-            <dd>The value for the given variable.</dd>
-    </dl>
+    <ol class="plain">
+        <li><span>Key</span>: The key column shows the name of a variable from from the web server. Microsoft has full details of each variable from <a href="http://msdn.microsoft.com/en-us/library/ms524602.aspx">IIS on MSDN</a></li>
+        <li><span>Value</span>: The value for the given variable.</li>
+    </ol>
+</div>
+ 
+<div class="plugin-know">
+    <h3>Did you know</h3> 
+    <ul class="plain">
+        <li>
+            <span>Difference between what the client sent vs. what the server received</span>: Its important to 
+            note that most of us make the assumption that what the client sends is what the server receives.
+            Few people realize that this is not always the case. In some cases, third parties between the 
+            client can change payloads (i.e. proxies). Hence, being able to see what the client sent (in Firebug)
+            and then being able to see what the server received (in Glimpse) can be very useful.
+        </li>
+    </ul>
+</div>
+
+<div class="plugin-faq">
+    <h3>Frequently Asked Questions</h3> 
+    <ol class="plain">
+        <li>
+            <div>Why would I want to see things like HTTP_COOKIE, I can see my cookies in FireBug?</div>
+            Its important to remember that the data that you see in FireBug (or other such tools) in only 
+            a client perspective of the data that was sent. In some cases what the server actual receives  
+            can be very different. In some cases, proxies can adjust such values making some issues very 
+            difficult to diagnose. Glimpse shows these values to make these cases much easier to debug.
+        </li> 
+    </ol>
 </div>

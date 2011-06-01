@@ -121,6 +121,8 @@
     <Content Include="Content\Plugin\Routes.jpg" />
     <Content Include="Content\Plugin\Server.jpg" />
     <Content Include="Content\Plugin\Session.jpg" />
+    <Content Include="Content\Plugin\Trace.jpg" />
+    <Content Include="Content\Plugin\View.jpg" />
     <Content Include="Scripts\Protocol\LayoutExample.js" />
   </ItemGroup>
   <ItemGroup>

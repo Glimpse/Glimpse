@@ -1,9 +1,88 @@
-﻿
-<h2>Views Tab</h2>
+﻿<h2>Views Tab</h2>
 
 <div class="plugin-summary">
     <p>The Views tab shows all calls made to configured View Engine(s) and View(s).</p>
 </div>
 
+<div class="plugin-layout">
+    <h3>Layout</h3> 
+    <img src="@Links.Content.Plugin.View_jpg" /> 
+    <ol class="plain">
+        <li><span>Ordinal</span>: As views are evaluated in sequence, this lets you see the order that MVC is finding views</li>
+        <li><span>Requested View</span>: Name of view that is trying to be resolved</li>
+        <li><span>Master Override</span>: </li>
+        <li><span>Partial</span>: Weather its a partial view that is trying to be resolved</li>
+        <li><span>View Engine</span>: Which view engine is being asked to resolve the view</li>
+        <li><span>Check Cache</span>: Weather its trying to resolve the view from the cache</li>
+        <li><span>Found</span>: Weather a view match was found</li>
+        <li>
+            <span>Details</span>: The details of the match that tried to occur. In the case where a match failed it will show 
+            where it checked for matches. In a successful match, it will show the data passed to that view. 
+        </li> 
+    </ol> 
+</div>
+ 
+<div class="plugin-know">
+    <h3>Did you know</h3> 
+    <ul class="plain">
+        <li>
+            <span>Unused View Engines</span>: Most people don't know that by default, with the advent of MVC3 there are 
+            actually 2 View Engines registered by default (WebFormViewEngine and RazorViewEngine). In most cases, 
+            site only actively use one of these engines. 
+            <br /><br />
+            In the example shown, we can see that the RazorViewEngine is extensively being used, whereas WebFormViewEngine isn't be used. 
+            Knowing that in our site we only use RazorViewEngine, we can remove the WebFormViewEngine. 
+            <br /><br />
+            Once done we are actively reducing the number of lookups that are being performed. Here is how you would remove unused view engines:<br /><br />
+            <pre>
+public class Global : HttpApplication
+{
+    public void Application_Start()
+    {
+        // Clears all previously registered view engines.
+        ViewEngines.Engines.Clear();
 
-<div class="soon">More information coming soon...</div>
+        // Registers our Razor C# specific view engine.
+        // This can also be registered using dependency injection through the new IDependencyResolver interface.
+        ViewEngines.Engines.Add(new RazorCSharpViewEngine());
+    }
+}</pre>
+
+        </li>
+        <li>
+            <span>Different types of data passed to the view</span>: As of ASP.NET MVC3 there are 3 different ways, ViewData, 
+            TempData and Model. Glimpse shows you the data that is passed to all three of these so that you can compare 
+            the data being passed in vs. the data being rendered. 
+            <br /><br />
+            If you are using DisplayFor/EdititorFor, this information can also used in conjunction this the Metadata tab 
+            to determine why data on a page may not be rendering as exspected.
+    </ul>
+</div>
+ 
+<div class="plugin-faq">
+    <h3>Frequently Asked Questions</h3> 
+    <ol class="plain">
+        <li>
+            <div>What are the rows highlighted in yellow and why am I seeing more than one?</div>
+            These rows show you successful matches that a View Engine has made. Depending on your scenario you may have many 
+            matches as the View Engines may be searched not only to resolve the core view, but also any Partial Views that 
+            the page (or Layout / Master Page reference) and/or any DisplayFor/EdititorFor. 
+        </li>
+        <li>
+            <div>Why are you showing me non matches (i.e. rows that aren't yellow)?</div>
+            As this tab is trying to show you how MVC is searching View Egines within your site, its important to show 
+            the non matches that are made. This helps you make decisions as to whether any optimizations can be made in 
+            this area (i.e. removing unused View Engines) or where something is not behaving as exspected.
+        </li>
+<!--
+        <li>
+            <div>I don't want all of my View Model's properties to be serialized, how to I suppress properties being serialized?</div>
+            You may want to do this for any number of reasons. For instance, if you are sending your data models to the view and your 
+            data models lazy load propoerties (as your can do with Entity Frameowrk or other like frameworks), Glimpse will trigger these 
+            properties to load.
+
+            TODO@@nikmd23
+        </li> 
+-->
+    </ol>
+</div>

@@ -376,6 +376,8 @@ namespace Links {
             public static readonly string Routes_jpg = Url("Routes.jpg");
             public static readonly string Server_jpg = Url("Server.jpg");
             public static readonly string Session_jpg = Url("Session.jpg");
+            public static readonly string Trace_jpg = Url("Trace.jpg");
+            public static readonly string View_jpg = Url("View.jpg");
         }
     
         public static readonly string Site_css = Url("Site.css");

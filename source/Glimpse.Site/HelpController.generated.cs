@@ -67,12 +67,19 @@ namespace Glimpse.Site.Controllers {
             static readonly _Plugins s_Plugins = new _Plugins();
             public _Plugins Plugins { get { return s_Plugins; } }
             public partial class _Plugins{
+                public readonly string Ajax = "~/Views/Help/Plugins/Ajax.cshtml";
                 public readonly string Binding = "~/Views/Help/Plugins/Binding.cshtml";
                 public readonly string Config = "~/Views/Help/Plugins/Config.cshtml";
                 public readonly string Environment = "~/Views/Help/Plugins/Environment.cshtml";
+                public readonly string Execution = "~/Views/Help/Plugins/Execution.cshtml";
+                public readonly string Metadata = "~/Views/Help/Plugins/Metadata.cshtml";
                 public readonly string Remote = "~/Views/Help/Plugins/Remote.cshtml";
                 public readonly string Request = "~/Views/Help/Plugins/Request.cshtml";
+                public readonly string Routes = "~/Views/Help/Plugins/Routes.cshtml";
                 public readonly string Server = "~/Views/Help/Plugins/Server.cshtml";
+                public readonly string Session = "~/Views/Help/Plugins/Session.cshtml";
+                public readonly string Trace = "~/Views/Help/Plugins/Trace.cshtml";
+                public readonly string Views = "~/Views/Help/Plugins/Views.cshtml";
             }
         }
     }
