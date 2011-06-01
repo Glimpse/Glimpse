@@ -5,15 +5,14 @@ using System.Linq;
 using System.Web;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Plumbing;
-using Newtonsoft.Json;
 
 namespace Glimpse.Core.Handler
 {
     [GlimpseHandler]
     public class History : JsonHandlerBase
     {
-        [ImportingConstructor]//TODO: pull in seaializer
-        public History(JsonSerializerSettings jsonSerializerSettings) : base(jsonSerializerSettings){}
+        [ImportingConstructor]
+        public History(GlimpseSerializer serializer) : base(serializer){}
 
         public override string ResourceName
         {

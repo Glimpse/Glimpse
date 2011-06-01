@@ -14,8 +14,6 @@ using Glimpse.Core.Plumbing;
 using Glimpse.Core.Sanitizer;
 using Glimpse.Core.Validator;
 using Glimpse.Core.Warning;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Environment = Glimpse.Core.Configuration.Environment;
 
 namespace Glimpse.Core
@@ -24,7 +22,6 @@ namespace Glimpse.Core
     {
         private static GlimpseConfiguration Configuration { get; set; }
         private static CompositionContainer Container { get; set; }
-        private const Formatting DefaultFormatting = Formatting.None;
         private static BlacklistedSafeDirectoryCatalog DirectoryCatalog { get; set; }
         private static GlimpseRequestValidator RequestValidator { get; set; }
         private static IGlimpseSanitizer Sanitizer { get; set; }//TODO: new up via config
@@ -32,11 +29,8 @@ namespace Glimpse.Core
         [ImportMany]
         private static IEnumerable<IGlimpseHandler> Handlers { get; set; }
 
-        [ImportMany]
-        private static IEnumerable<IGlimpseConverter> JsConverters { get; set; }
-
         [Export]
-        internal static JsonSerializerSettings JsonSerializerSettings { get; set; }
+        internal static GlimpseSerializer Serializer { get; set; }
 
         [ImportMany]
         internal static IEnumerable<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>> Plugins { get; set; }
@@ -55,16 +49,9 @@ namespace Glimpse.Core
 
             Sanitizer = new CSharpSanitizer();
 
-            JsonSerializerSettings = new JsonSerializerSettings {ContractResolver = new GlimpseContractResolver()};
-            JsonSerializerSettings.Error += (obj, args) =>
-                                                {
-                                                    var warnings = new HttpContextWrapper(HttpContext.Current).GetWarnings();
-                                                    warnings.Add(new SerializationWarning(args.ErrorContext.Error));
-                                                    args.ErrorContext.Handled = true;
-                                                };
+            Serializer = new GlimpseSerializer();
 
             Handlers = Enumerable.Empty<IGlimpseHandler>();
-            JsConverters = Enumerable.Empty<IGlimpseConverter>();
             Plugins = Enumerable.Empty<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>>();
         }
 
@@ -99,7 +86,7 @@ namespace Glimpse.Core
         }
 
         #region Event Handlers
-        private void OnEndRequest(object sender, EventArgs e)
+        private static void OnEndRequest(object sender, EventArgs e)
         {
             var httpApplication = sender as HttpApplication;
 
@@ -213,18 +200,10 @@ namespace Glimpse.Core
 
             Plugins = Container.GetExports<IGlimpsePlugin, IGlimpsePluginRequirements>();
             Handlers = Container.GetExportedValues<IGlimpseHandler>();
-            JsConverters = Container.GetExportedValues<IGlimpseConverter>();
+            Serializer.AddConterers(Container.GetExportedValues<IGlimpseConverter>());
 
             var store = context.GetWarnings();
             store.AddRange(DirectoryCatalog.Exceptions.Select(exception => new ExceptionWarning(exception)));
-
-            //wireup converters into serializer
-            var converters = JsonSerializerSettings.Converters;
-            foreach (var jsConverter in JsConverters)
-            {
-                converters.Add(new JsonConverterToIGlimpseConverterAdapter(jsConverter));
-            }
-            converters.Add(new JavaScriptDateTimeConverter());//adds a more human readable datetime format
         }
 
         private static void Persist(string json, HttpContextBase context, Guid requestId)
@@ -321,15 +300,14 @@ namespace Glimpse.Core
             {
                 try
                 {
-                    string dataString = JsonConvert.SerializeObject(item.Value, DefaultFormatting,
-                                                                    JsonSerializerSettings);
+                    string dataString = Serializer.Serialize(item.Value);
                     sb.Append(string.Format("\"{0}\":{1},", item.Key, dataString));
                 }
                 catch (Exception ex)
                 {
-                    var message = JsonConvert.SerializeObject(ex.Message, DefaultFormatting, JsonSerializerSettings);
+                    var message = Serializer.Serialize(ex.Message);
                     message = message.Remove(message.Length - 1).Remove(0, 1);
-                    var callstack = JsonConvert.SerializeObject(ex.StackTrace, DefaultFormatting, JsonSerializerSettings);
+                    var callstack = Serializer.Serialize(ex.StackTrace);
                     callstack = callstack.Remove(callstack.Length - 1).Remove(0, 1);
                     const string helpMessage =
                         "Please implement an IGlimpseConverter for the type mentioned above, or one of its base types, to fix this problem. More info on a better experience for this coming soon, keep an eye on <a href='http://getGlimpse.com' target='main'>getGlimpse.com</a></span>";
@@ -384,7 +362,7 @@ namespace Glimpse.Core
                 if (pluginData.Count > 0) pluginsMetadata.Add(pluginValue.Name, pluginData);
             }
 
-            var metadataString = JsonConvert.SerializeObject(metadata, DefaultFormatting, JsonSerializerSettings);
+            var metadataString = Serializer.Serialize(metadata);
             sb.Append(string.Format(",\"{0}\":{1},", "_metadata", metadataString));
             if (sb.Length > 1) sb.Remove(sb.Length - 1, 1);
 

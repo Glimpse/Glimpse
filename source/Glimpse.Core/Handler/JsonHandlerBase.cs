@@ -1,15 +1,17 @@
-﻿using System.Web;
+﻿using System.ComponentModel.Composition;
+using System.Web;
+using Glimpse.Core.Plumbing;
 using Newtonsoft.Json;
 
 namespace Glimpse.Core.Handler
 {
     public abstract class JsonHandlerBase:HandlerBase
     {
-        public JsonSerializerSettings JsonSerializerSettings { get; set; }
+        private GlimpseSerializer Serializer { get; set; }
 
-        protected JsonHandlerBase(JsonSerializerSettings jsonSerializerSettings)
+        protected JsonHandlerBase(GlimpseSerializer serializer)
         {
-            JsonSerializerSettings = jsonSerializerSettings;
+            Serializer = serializer;
         }
 
         public override void Process(HttpContextBase context)
@@ -21,7 +23,7 @@ namespace Glimpse.Core.Handler
             }*/
 
             var data = GetData(context);
-            var dataString = JsonConvert.SerializeObject(data, Formatting.None, JsonSerializerSettings);
+            var dataString = Serializer.Serialize(data);
 
             var response = context.Response;
             response.Write(dataString);
