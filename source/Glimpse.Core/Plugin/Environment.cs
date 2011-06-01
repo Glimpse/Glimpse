@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
+using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -15,6 +15,14 @@ namespace Glimpse.Core.Plugin
     internal class Environment : IGlimpsePlugin, IProvideGlimpseHelp
     {
         private const string PluginEnvironmentStoreKey = "Glimpse.Plugin.Environment.Store";
+        private GlimpseConfiguration Configuration { get; set; }
+
+        [ImportingConstructor]
+        public Environment(GlimpseConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
         public string Name
         {
             get { return "Environment"; }
@@ -27,8 +35,7 @@ namespace Glimpse.Core.Plugin
             if (cachedData != null) return cachedData;
 
             var environmentName = "_Configure in web.config glimpse/environments_";
-            var config = ConfigurationManager.GetSection("glimpse") as GlimpseConfiguration ?? new GlimpseConfiguration();
-            var currentEnviro = config.Environments.GetCurrent(context.Request.Url);
+            var currentEnviro = Configuration.Environments.GetCurrent(context.Request.Url);
 
             if (currentEnviro != null)
             {

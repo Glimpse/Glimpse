@@ -11,7 +11,6 @@ namespace Glimpse.Core.Validator
         private GlimpseConfiguration Configuration { get; set; }
         [ImportMany] public IEnumerable<IGlimpseValidator> Validators { get; set; }
 
-
         public GlimpseRequestValidator(GlimpseConfiguration configuration, IEnumerable<IGlimpseValidator> validators)
         {
             Configuration = configuration;

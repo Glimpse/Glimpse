@@ -20,30 +20,18 @@ namespace Glimpse.Core
 {
     public class Module : IHttpModule
     {
-        private static GlimpseConfiguration Configuration { get; set; }
-        private static CompositionContainer Container { get; set; }
-        private static BlacklistedSafeDirectoryCatalog DirectoryCatalog { get; set; }
         private static GlimpseRequestValidator RequestValidator { get; set; }
         private static IGlimpseSanitizer Sanitizer { get; set; }//TODO: new up via config
 
-        [ImportMany]
+        [Export] public static GlimpseSerializer Serializer { get; set; }
+        [Export] private static GlimpseConfiguration Configuration { get; set; }
+
         private static IEnumerable<IGlimpseHandler> Handlers { get; set; }
-
-        [Export]
-        internal static GlimpseSerializer Serializer { get; set; }
-
-        [ImportMany]
         internal static IEnumerable<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>> Plugins { get; set; }
 
         static Module()
         {
-            Configuration = ConfigurationManager.GetSection("glimpse") as GlimpseConfiguration ??
-                            new GlimpseConfiguration();
-
-            //TODO: abort if config is off?
-
-            DirectoryCatalog = new BlacklistedSafeDirectoryCatalog("bin", Configuration.PluginBlacklist.TypeNames());
-            Container = new CompositionContainer(DirectoryCatalog);
+            Configuration = ConfigurationManager.GetSection("glimpse") as GlimpseConfiguration ?? new GlimpseConfiguration();
 
             RequestValidator = new GlimpseRequestValidator(Configuration, Enumerable.Empty<IGlimpseValidator>());
 
@@ -194,16 +182,19 @@ namespace Glimpse.Core
         {
             var batch = new CompositionBatch();
 
-            Container.ComposeParts(this, RequestValidator);
+            var directoryCatalog = new BlacklistedSafeDirectoryCatalog("bin", Configuration.PluginBlacklist.TypeNames());
+            var container = new CompositionContainer(directoryCatalog);
 
-            Container.Compose(batch);
+            container.ComposeParts(this, RequestValidator);
 
-            Plugins = Container.GetExports<IGlimpsePlugin, IGlimpsePluginRequirements>();
-            Handlers = Container.GetExportedValues<IGlimpseHandler>();
-            Serializer.AddConterers(Container.GetExportedValues<IGlimpseConverter>());
+            container.Compose(batch);
+
+            Plugins = container.GetExports<IGlimpsePlugin, IGlimpsePluginRequirements>();
+            Handlers = container.GetExportedValues<IGlimpseHandler>();
+            Serializer.AddConterers(container.GetExportedValues<IGlimpseConverter>());
 
             var store = context.GetWarnings();
-            store.AddRange(DirectoryCatalog.Exceptions.Select(exception => new ExceptionWarning(exception)));
+            store.AddRange(directoryCatalog.Exceptions.Select(exception => new ExceptionWarning(exception)));
         }
 
         private static void Persist(string json, HttpContextBase context, Guid requestId)

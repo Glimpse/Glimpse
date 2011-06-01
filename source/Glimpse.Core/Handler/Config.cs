@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System.ComponentModel.Composition;
+using System.Configuration;
 using System.Web;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
@@ -14,11 +15,18 @@ namespace Glimpse.Core.Handler
             get { return "Config"; }
         }
 
+        private GlimpseConfiguration Configuration { get; set; }
+
+        [ImportingConstructor]
+        public Config(GlimpseConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
         public override void Process(HttpContextBase context)
         {
             var response = context.Response;
             var mode = context.GetGlimpseMode();
-            var configuration = ConfigurationManager.GetSection("glimpse") as GlimpseConfiguration ?? new GlimpseConfiguration();
 
             response.Write("<!DOCTYPE html><html><head><link rel=\"shortcut icon\" href=\"http://getglimpse.com/favicon.ico\" />");
             response.Write("<style>body { text-align:center; font-family:\"avante garde\", \"Century Gothic\", Serif; font-size:0.8em; line-height:1.4em; } .important { font-size:1.4em; } .content { position:absolute; left:50%; margin-left:-450px; text-align:left; width:900px; } h1, h2, h3, h4 { line-height:1.2em; font-weight:normal; } h1 { font-size:4em; } h2 { font-size:2.5em; } h3 { font-size:2em; } .logo { font-family: \"TitilliumMaps\", helvetica, sans-serif; margin:0 0 40px; position:relative; background: url(glimpseLogo.png) -10px -15px no-repeat; padding: 0 0 0 140px; } .logo h1 { color:transparent; } .logo div { font-size:1.5em; margin: 25px 0 0 -10px; } .logo blockquote { width:350px; position:absolute; right:0; top:10px; } blockquote { font: 1.2em/1.6em \"avante garde\", \"Century Gothic\", Serif; width: 400px; background: url(http://getglimpse.com/Content/close-quote.gif) no-repeat right bottom; padding-left: 18px; text-indent: -18px; } .footer { text-align:center; margin-bottom:30px; } blockquote:first-letter { background: url(http://getglimpse.com/Content/open-quote.gif) no-repeat left top; padding-left: 18px; font: italic 1.4em \"avante garde\", \"Century Gothic\", Serif; } .myButton{width:175px; line-height: 1.2em; margin:0.25em 0; text-align:center; -moz-box-shadow:inset 0 1px 0 0 #fff;-webkit-box-shadow:inset 0 1px 0 0 #fff;box-shadow:inset 0 1px 0 0 #fff;background:-webkit-gradient(linear,left top,left bottom,color-stop(0.05,#ededed),color-stop(1,#dfdfdf));background:-moz-linear-gradient(center top,#ededed 5%,#dfdfdf 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed',endColorstr='#dfdfdf');background-color:#ededed;-moz-border-radius:6px;-webkit-border-radius:6px;border-radius:6px;border:1px solid #dcdcdc;display:inline-block;color:#777;font-family:arial;font-size:24px;padding:10px 41px;text-decoration:none;text-shadow:1px 1px 0 #fff}.myButton:hover{background:-webkit-gradient(linear,left top,left bottom,color-stop(0.05,#dfdfdf),color-stop(1,#ededed));background:-moz-linear-gradient(center top,#dfdfdf 5%,#ededed 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf',endColorstr='#ededed');background-color:#dfdfdf}.myButton:active{position:relative;top:1px}</style>");
@@ -28,19 +36,19 @@ namespace Glimpse.Core.Handler
             response.Write("<div class=\"content\"><div class=\"logo\"><blockquote>What Firebug is for the client, Glimpse does for the server... in other words, a client side Glimpse into whats going on in your server.</blockquote><h1>Glimpse</h1><div>A client side Glimpse to your server</div></div>");
             response.Write("<table width=\"100%\"><tr align=\"center\"><td width=\"33%\"><a class=\"myButton\" href=\"javascript:(function(){document.cookie='glimpseState=On; path=/; expires=Sat, 01 Jan 2050 12:00:00 GMT;'; window.location.reload();})();\">Turn Glimpse On</a></td><td width=\"34%\"><a class=\"myButton\" href=\"javascript:(function(){document.cookie='glimpseState=; path=/; expires=Sat, 01 Jan 2050 12:00:00 GMT;'; window.location.reload();})();\">Turn Glimpse Off</a></td><td><a class=\"myButton\" href=\"javascript:(function(){document.cookie='glimpseClientName='+ prompt('Client Name?') +'; path=/; expires=Sat, 01 Jan 2050 12:00:00 GMT;'; window.location.reload();})();\">Set Glimpse Session Name</a></td></tr></table>");
             response.Write("<p style=\"text-align:center\">Drag the above button to your favorites bar for quick and easy access to Glimpse.</p>");
-            response.Write(string.Format("<h2>Glimpse Config Settings:</h2><p>This section details the Glimpse settings in your web.config file.</p><ul><li>On = {0}</li><li>Allowed IP's = <ol>", configuration.Enabled));
+            response.Write(string.Format("<h2>Glimpse Config Settings:</h2><p>This section details the Glimpse settings in your web.config file.</p><ul><li>On = {0}</li><li>Allowed IP's = <ol>", Configuration.Enabled));
 
-            foreach (IpAddress ipAddress in configuration.IpAddresses)
+            foreach (IpAddress ipAddress in Configuration.IpAddresses)
             {
                 response.Write(string.Format("<li>{0}</li>", ipAddress.Address));
             }
             response.Write("</ol></li><li>Allowed ContentType's = <ol>");
-            foreach (ContentType contentType in configuration.ContentTypes)
+            foreach (ContentType contentType in Configuration.ContentTypes)
             {
                 response.Write(string.Format("<li>{0}</li>", contentType.Content));
             }
             response.Write("</ol></li><li>Blacklisted Plugins = <ol>");
-            foreach (var typeName in configuration.PluginBlacklist.TypeNames())
+            foreach (var typeName in Configuration.PluginBlacklist.TypeNames())
             {
                 response.Write("<li>" + typeName + "</li>");
             }
@@ -53,7 +61,7 @@ namespace Glimpse.Core.Handler
                 response.Write("<li>" + plugin.Value.GetType() + "</li>");
             }
 
-            foreach (var typeName in configuration.PluginBlacklist.TypeNames())
+            foreach (var typeName in Configuration.PluginBlacklist.TypeNames())
             {
                 response.Write("<li><s>" + typeName + "</s></li>");
             }
