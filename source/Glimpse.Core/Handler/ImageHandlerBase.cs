@@ -1,15 +1,13 @@
 ﻿using System.Reflection;
 using System.Web;
-using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Handler
 {
-    public abstract class ImageHandlerBase : IGlimpseHandler
+    public abstract class ImageHandlerBase : HandlerBase
     {
-        public abstract string ContentType { get; }
-        public abstract string ResourceName { get; }
+        protected abstract string ContentType { get; }
 
-        public void ProcessRequest(HttpContext context)
+        public override void Process(HttpContextBase context)
         {
             var response = context.Response;
             var assembly = Assembly.GetExecutingAssembly();
@@ -26,7 +24,7 @@ namespace Glimpse.Core.Handler
             response.AddHeader("Content-Type", ContentType);
         }
 
-        public bool IsReusable
+        public override bool IsReusable
         {
             get { return true; }
         }

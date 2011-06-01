@@ -4,14 +4,14 @@ using Glimpse.Core.Extensibility;
 namespace Glimpse.Core.Handler
 {
     [GlimpseHandler]
-    public class Popup : IGlimpseHandler
+    public class Popup : HandlerBase
     {
-        public string ResourceName
+        public override string ResourceName
         {
             get { return "Popup"; }
         }
 
-        public void ProcessRequest(HttpContext context)
+        public override void Process(HttpContextBase context)
         {
             var response = context.Response;
 
@@ -26,7 +26,7 @@ namespace Glimpse.Core.Handler
             response.Write("</body></html>");
         }
 
-        public bool IsReusable
+        public override bool IsReusable
         {
             get { return true; }
         }

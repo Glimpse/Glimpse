@@ -1,12 +1,9 @@
-﻿using System.Configuration;
-using System.Web;
-using Glimpse.Core.Configuration;
-using Glimpse.Core.Extensibility;
+﻿using System.Web;
 using Newtonsoft.Json;
 
 namespace Glimpse.Core.Handler
 {
-    public abstract class JsonHandlerBase:IGlimpseHandler
+    public abstract class JsonHandlerBase:HandlerBase
     {
         public JsonSerializerSettings JsonSerializerSettings { get; set; }
 
@@ -15,7 +12,7 @@ namespace Glimpse.Core.Handler
             JsonSerializerSettings = jsonSerializerSettings;
         }
 
-        public void ProcessRequest(HttpContext context)
+        public override void Process(HttpContextBase context)
         {
             //TODO: FIX ME, return 401 unauth
             /*if (!context.IsValidRequest(config, false, checkPath: false))
@@ -31,10 +28,9 @@ namespace Glimpse.Core.Handler
             response.AddHeader("Content-Type", "application/json");
         }
 
-        protected abstract object GetData(HttpContext context);
-        public abstract string ResourceName { get;}
-
-        public bool IsReusable
+        protected abstract object GetData(HttpContextBase context);
+        
+        public override bool IsReusable
         {
             get { return true; }
         }

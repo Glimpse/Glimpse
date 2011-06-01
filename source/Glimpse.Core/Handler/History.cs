@@ -12,7 +12,7 @@ namespace Glimpse.Core.Handler
     [GlimpseHandler]
     public class History : JsonHandlerBase
     {
-        [ImportingConstructor]
+        [ImportingConstructor]//TODO: pull in seaializer
         public History(JsonSerializerSettings jsonSerializerSettings) : base(jsonSerializerSettings){}
 
         public override string ResourceName
@@ -20,8 +20,9 @@ namespace Glimpse.Core.Handler
             get { return "History"; }
         }
 
-        protected override object GetData(HttpContext context)
+        protected override object GetData(HttpContextBase context)
         {
+            //TODO: implement IGlimpseMetadataStore
             var queue = context.Application[GlimpseConstants.JsonQueue] as Queue<GlimpseRequestMetadata>;
             if (queue != null)
             {
@@ -71,7 +72,7 @@ namespace Glimpse.Core.Handler
                 return new {Data = result};
             }
             
-            return new {Error = true, Message = "No history avalible."};
+            return new {Error = true, Message = "No history available."};
         }
     }
 }

@@ -17,6 +17,8 @@ namespace Glimpse.Core.Plugin
         {
             var session = context.Session;
 
+            if (session == null) return null;
+
             var result = new List<object[]>
                              {
                                  new[] {"Key", "Value", "Type"}

@@ -6,14 +6,14 @@ using Glimpse.Core.Extensibility;
 namespace Glimpse.Core.Handler
 {
     [GlimpseHandler]
-    public class Javascript : IGlimpseHandler
+    public class Javascript : HandlerBase
     {
-        public string ResourceName
+        public override string ResourceName
         {
             get { return "glimpseClient.js"; }
         }
 
-        public void ProcessRequest(HttpContext context)
+        public override void Process(HttpContextBase context)
         {
             var response = context.Response;
             var assembly = Assembly.GetExecutingAssembly();
@@ -31,7 +31,7 @@ namespace Glimpse.Core.Handler
             response.AddHeader("Content-Type", "application/x-javascript");
         }
 
-        public bool IsReusable
+        public override bool IsReusable
         {
             get { return true; }
         }

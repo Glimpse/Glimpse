@@ -7,14 +7,14 @@ using Glimpse.Core.Extensions;
 namespace Glimpse.Core.Handler
 {
     [GlimpseHandler]
-    public class Config : IGlimpseHandler
+    public class Config : HandlerBase
     {
-        public string ResourceName
+        public override string ResourceName
         {
             get { return "Config"; }
         }
 
-        public static void Process(HttpContextBase context)
+        public override void Process(HttpContextBase context)
         {
             var response = context.Response;
             var mode = context.GetGlimpseMode();
@@ -66,12 +66,7 @@ namespace Glimpse.Core.Handler
             response.Write("</body></html>");
         }
 
-        public void ProcessRequest(HttpContext context)
-        {
-            Process(new HttpContextWrapper(context));
-        }
-
-        public bool IsReusable
+        public override bool IsReusable
         {
             get { return true; }
         }

@@ -7,52 +7,6 @@ namespace Glimpse.Core.Extensions
 {
     public static class HttpApplicationExtensions
     {
-/*
-        internal static bool IsValidRequest(this object obj, out HttpApplication application, GlimpseConfiguration config, bool checkContentType, bool checkMode = true, bool checkPath = true)
-        {
-            application = obj as HttpApplication;
-            if (application == null) return false;
-
-            var request = application.Request;
-            var response = application.Response;
-            var store = application.Context.Items;
-
-            var validIp = store[GlimpseConstants.ValidIp] as bool?;
-            if (!validIp.HasValue)
-                store[GlimpseConstants.ValidIp] = validIp = config.IpAddresses.Contains(request.UserHostAddress);
-
-            if (!validIp.Value) return false;
-
-            if (checkMode)
-            {
-                var validMode = store[GlimpseConstants.ValidMode] as bool?;
-                if (!validMode.HasValue)
-                    store[GlimpseConstants.ValidMode] = validMode = application.GetGlimpseMode() == GlimpseMode.On || application.GetGlimpseMode() == GlimpseMode.Hidden;
-
-                if (!validMode.Value) return false;
-            }
-
-            if (checkContentType)
-            {
-                var validContentType = store[GlimpseConstants.ValidContentType] as bool?;
-                if (!validContentType.HasValue)
-                    store[GlimpseConstants.ValidContentType] = validContentType = config.ContentTypes.Contains(response.ContentType);
-
-                if (!validContentType.Value) return false;
-            }
-
-            if (checkPath)
-            {
-                var validPath = store[GlimpseConstants.ValidPath] as bool?;
-                if (validPath.HasValue && validPath.Value == true) return false;
-            }
-
-            var validResponseCodes = new List<int> {200, 301, 302};
-            if (!validResponseCodes.Contains(response.StatusCode)) return false;
-
-            return true;
-        }
-*/
         internal static bool IsAjax(this HttpContextBase context)
         {
             var request = context.Request;

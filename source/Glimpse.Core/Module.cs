@@ -98,6 +98,7 @@ namespace Glimpse.Core
             context.PostMapRequestHandler += OnPostMapRequestHandler;
         }
 
+        #region Event Handlers
         private void OnEndRequest(object sender, EventArgs e)
         {
             var httpApplication = sender as HttpApplication;
@@ -137,6 +138,7 @@ namespace Glimpse.Core
             if (httpApplication != null)
                 BeginRequest(new HttpContextWrapper(httpApplication.Context));
         }
+        #endregion Event Handlers
 
         private static void BeginRequest(HttpContextBase context)
         {
