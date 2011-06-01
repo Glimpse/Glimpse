@@ -14,7 +14,7 @@ namespace Glimpse.Core.Extensibility
 
     public class JsonConverterToIGlimpseConverterAdapter:JsonConverter
     {
-        public IGlimpseConverter Converter { get; set; }
+        private IGlimpseConverter Converter { get; set; }
 
         public JsonConverterToIGlimpseConverterAdapter(IGlimpseConverter converter)
         {

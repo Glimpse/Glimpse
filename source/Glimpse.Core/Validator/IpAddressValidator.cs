@@ -6,11 +6,11 @@ namespace Glimpse.Core.Validator
 {
     [GlimpseValidator]
     internal class IpAddressValidator:IGlimpseValidator{
-        public bool IsValid(HttpApplication application, GlimpseConfiguration configuration, LifecycleEvent lifecycleEvent)
+        public bool IsValid(HttpContextBase context, GlimpseConfiguration configuration, LifecycleEvent lifecycleEvent)
         {
             if (configuration.IpAddresses.Count == 0) return true; //no configured list, allow all IP's
 
-            return configuration.IpAddresses.Contains(application.Context.Request.UserHostAddress);
+            return configuration.IpAddresses.Contains(context.Request.UserHostAddress);
         }
     }
 }

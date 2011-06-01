@@ -15,7 +15,7 @@ namespace Glimpse.Mvc3.Plugin
             get { return "Routes"; }
         }
 
-        public object GetData(HttpApplication application)
+        public object GetData(HttpContextBase context)
         {
             var result = new List<object[]>
                              {
@@ -80,7 +80,7 @@ namespace Glimpse.Mvc3.Plugin
             return result;
         }
 
-        public void SetupInit(HttpApplication application)
+        public void SetupInit()
         {
             throw new NotImplementedException();
         }

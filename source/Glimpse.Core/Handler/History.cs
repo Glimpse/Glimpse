@@ -5,7 +5,6 @@ using System.Linq;
 using System.Web;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Plumbing;
-using Newtonsoft.Json;
 
 namespace Glimpse.Core.Handler
 {
@@ -13,15 +12,16 @@ namespace Glimpse.Core.Handler
     public class History : JsonHandlerBase
     {
         [ImportingConstructor]
-        public History(JsonSerializerSettings jsonSerializerSettings) : base(jsonSerializerSettings){}
+        public History(GlimpseSerializer serializer) : base(serializer){}
 
         public override string ResourceName
         {
             get { return "History"; }
         }
 
-        protected override object GetData(HttpContext context)
+        protected override object GetData(HttpContextBase context)
         {
+            //TODO: implement IGlimpseMetadataStore
             var queue = context.Application[GlimpseConstants.JsonQueue] as Queue<GlimpseRequestMetadata>;
             if (queue != null)
             {
@@ -71,7 +71,7 @@ namespace Glimpse.Core.Handler
                 return new {Data = result};
             }
             
-            return new {Error = true, Message = "No history avalible."};
+            return new {Error = true, Message = "No history available."};
         }
     }
 }

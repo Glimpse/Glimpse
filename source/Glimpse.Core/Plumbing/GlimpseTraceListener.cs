@@ -12,7 +12,7 @@ namespace Glimpse.Core.Plumbing
         {
             get
             {
-                var currentContext = HttpContext.Current;
+                var currentContext = HttpContext.Current; //Todo:Can we remove this somehow?
                 Stopwatch firstWatch = null;
 
                 if (currentContext != null)

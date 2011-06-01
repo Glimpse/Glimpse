@@ -10,7 +10,7 @@ namespace Glimpse.Core.Handler
             get { return "glimpseLogo.png"; }
         }
 
-        public override string ContentType
+        protected override string ContentType
         {
             get { return "image/png"; }
         } 

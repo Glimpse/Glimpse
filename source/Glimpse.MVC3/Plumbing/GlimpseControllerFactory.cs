@@ -17,10 +17,7 @@ namespace Glimpse.Mvc3.Plumbing
 
         public IController CreateController(RequestContext requestContext, string controllerName)
         {
-            var rq = requestContext;
-            var cn = controllerName;
-
-            IController controller = ControllerFactory.CreateController(rq, cn);
+            IController controller = ControllerFactory.CreateController(requestContext, controllerName);
 
             Trace.Write(string.Format("{0}.CreateController(requestContext, \"{1}\") = {2}", ControllerFactory.GetType().Name, controllerName, controller == null ? "null" : controller.GetType().ToString()));
 

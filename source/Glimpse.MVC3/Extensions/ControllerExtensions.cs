@@ -11,7 +11,7 @@ namespace Glimpse.Mvc3.Extensions
     {
         internal static IController TrySetActionInvoker(this IController iController)
         {
-            var warnings = HttpContext.Current.GetWarnings();
+            var warnings = new HttpContextWrapper(HttpContext.Current).GetWarnings();//HACK
 
             var controller = iController as Controller;
             if (controller == null)

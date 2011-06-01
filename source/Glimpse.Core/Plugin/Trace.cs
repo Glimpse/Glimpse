@@ -18,9 +18,9 @@ namespace Glimpse.Core.Plugin
             get { return "Trace"; }
         }
 
-        public object GetData(HttpApplication application)
+        public object GetData(HttpContextBase context)
         {
-            var messages = application.Context.Items[TraceMessageStoreKey] as IList<IList<string>>;
+            var messages = context.Items[TraceMessageStoreKey] as IList<IList<string>>;
             if (messages == null) return null;
 
             foreach (var message in messages)
@@ -60,7 +60,7 @@ namespace Glimpse.Core.Plugin
             return messages;
         }
 
-        public void SetupInit(HttpApplication application)
+        public void SetupInit()
         {
             var traceListeners = System.Diagnostics.Trace.Listeners;
             if (!traceListeners.OfType<GlimpseTraceListener>().Any())

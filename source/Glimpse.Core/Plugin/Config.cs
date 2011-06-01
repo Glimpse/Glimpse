@@ -15,7 +15,7 @@ namespace Glimpse.Core.Plugin
             get { return "Config"; }
         }
 
-        public object GetData(HttpApplication application)
+        public object GetData(HttpContextBase context)
         {
             //TODO, add in other useful config sections like compilation, 
             var connectionStrings = ConfigurationManager.ConnectionStrings.Cast<ConnectionStringSettings>().ToDictionary(item => item.Name, item => item.ConnectionString);
@@ -31,7 +31,7 @@ namespace Glimpse.Core.Plugin
                        };
         }
 
-        public void SetupInit(HttpApplication application)
+        public void SetupInit()
         {
         }
 

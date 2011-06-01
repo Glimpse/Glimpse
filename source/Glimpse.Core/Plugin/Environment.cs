@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
+using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -15,27 +15,34 @@ namespace Glimpse.Core.Plugin
     internal class Environment : IGlimpsePlugin, IProvideGlimpseHelp
     {
         private const string PluginEnvironmentStoreKey = "Glimpse.Plugin.Environment.Store";
+        private GlimpseConfiguration Configuration { get; set; }
+
+        [ImportingConstructor]
+        public Environment(GlimpseConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
         public string Name
         {
             get { return "Environment"; }
         }
 
-        public object GetData(HttpApplication application)
+        public object GetData(HttpContextBase context)
         {
             //environment should not change from request to request on a given machine.  We can cache our results in the application store
-            var cachedData = application.Application[PluginEnvironmentStoreKey] as IDictionary<string, object>;
+            var cachedData = context.Application[PluginEnvironmentStoreKey] as IDictionary<string, object>;
             if (cachedData != null) return cachedData;
 
             var environmentName = "_Configure in web.config glimpse/environments_";
-            var config = ConfigurationManager.GetSection("glimpse") as GlimpseConfiguration ?? new GlimpseConfiguration();
-            var currentEnviro = config.Environments.GetCurrent(application.Request.Url);
+            var currentEnviro = Configuration.Environments.GetCurrent(context.Request.Url);
 
             if (currentEnviro != null)
             {
                 environmentName = currentEnviro.Name;
             }
 
-            var serverSoftware = application.Context.Request.ServerVariables["SERVER_SOFTWARE"];
+            var serverSoftware = context.Request.ServerVariables["SERVER_SOFTWARE"];
             var processName = Process.GetCurrentProcess().MainModule.ModuleName;
 
             //build assemblies table
@@ -73,11 +80,11 @@ namespace Glimpse.Core.Plugin
                                   {"System Assemblies", sysList}
                               };
 
-            application.Application[PluginEnvironmentStoreKey] = cachedData;
+            context.Application[PluginEnvironmentStoreKey] = cachedData;
             return cachedData;
         }
 
-        public void SetupInit(HttpApplication application)
+        public void SetupInit()
         {
         }
 

@@ -11,20 +11,19 @@ namespace Glimpse.Core.Validator
         private GlimpseConfiguration Configuration { get; set; }
         [ImportMany] public IEnumerable<IGlimpseValidator> Validators { get; set; }
 
-
         public GlimpseRequestValidator(GlimpseConfiguration configuration, IEnumerable<IGlimpseValidator> validators)
         {
             Configuration = configuration;
             Validators = validators;
         }
 
-        public bool IsValid(HttpApplication application, LifecycleEvent lifecycleEvent)
+        public bool IsValid(HttpContextBase context, LifecycleEvent lifecycleEvent)
         {
-            if (application == null || application.Context == null) return false;
+            if (context == null) return false;
 
             foreach (var validator in Validators)
             {
-                if (!validator.IsValid(application, Configuration, lifecycleEvent))
+                if (!validator.IsValid(context, Configuration, lifecycleEvent))
                     return false;
             }
 

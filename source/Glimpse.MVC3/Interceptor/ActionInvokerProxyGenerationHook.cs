@@ -22,13 +22,13 @@ namespace Glimpse.Mvc3.Interceptor
 
         public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)
         {
-            var warnings = HttpContext.Current.GetWarnings();
+            var warnings = new HttpContextWrapper(HttpContext.Current).GetWarnings();//Hack
             warnings.Add(new NonProxyableMemberWarning(type, memberInfo));
         }
 
         public void NonVirtualMemberNotification(Type type, MemberInfo memberInfo)
         {
-            var warnings = HttpContext.Current.GetWarnings();
+            var warnings = new HttpContextWrapper(HttpContext.Current).GetWarnings();//Hack
             warnings.Add(new NonVirtualMemberWarning(type, memberInfo));
         }
 

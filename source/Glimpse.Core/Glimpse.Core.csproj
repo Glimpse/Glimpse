@@ -74,10 +74,12 @@
     <Compile Include="Extensibility\IGlimpseWarning.cs" />
     <Compile Include="Extensibility\IGlimpseHandler.cs" />
     <Compile Include="Extensibility\IProvideGlimpseHelp.cs" />
+    <Compile Include="Handler\HandlerBase.cs" />
     <Compile Include="Handler\ImageHandlerBase.cs" />
     <Compile Include="Plumbing\GlimpseContractResolver.cs" />
     <Compile Include="Handler\JsonHandlerBase.cs" />
     <Compile Include="Handler\Logo.cs" />
+    <Compile Include="Plumbing\GlimpseSerializer.cs" />
     <Compile Include="Validator\ContentTypeValidator.cs" />
     <Compile Include="Validator\GlimpseModeValidator.cs" />
     <Compile Include="Validator\GlimpseRequestValidator.cs" />

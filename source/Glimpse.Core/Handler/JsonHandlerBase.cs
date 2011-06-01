@@ -1,21 +1,20 @@
-﻿using System.Configuration;
+﻿using System.ComponentModel.Composition;
 using System.Web;
-using Glimpse.Core.Configuration;
-using Glimpse.Core.Extensibility;
+using Glimpse.Core.Plumbing;
 using Newtonsoft.Json;
 
 namespace Glimpse.Core.Handler
 {
-    public abstract class JsonHandlerBase:IGlimpseHandler
+    public abstract class JsonHandlerBase:HandlerBase
     {
-        public JsonSerializerSettings JsonSerializerSettings { get; set; }
+        private GlimpseSerializer Serializer { get; set; }
 
-        protected JsonHandlerBase(JsonSerializerSettings jsonSerializerSettings)
+        protected JsonHandlerBase(GlimpseSerializer serializer)
         {
-            JsonSerializerSettings = jsonSerializerSettings;
+            Serializer = serializer;
         }
 
-        public void ProcessRequest(HttpContext context)
+        public override void Process(HttpContextBase context)
         {
             //TODO: FIX ME, return 401 unauth
             /*if (!context.IsValidRequest(config, false, checkPath: false))
@@ -24,17 +23,16 @@ namespace Glimpse.Core.Handler
             }*/
 
             var data = GetData(context);
-            var dataString = JsonConvert.SerializeObject(data, Formatting.None, JsonSerializerSettings);
+            var dataString = Serializer.Serialize(data);
 
             var response = context.Response;
             response.Write(dataString);
             response.AddHeader("Content-Type", "application/json");
         }
 
-        protected abstract object GetData(HttpContext context);
-        public abstract string ResourceName { get;}
-
-        public bool IsReusable
+        protected abstract object GetData(HttpContextBase context);
+        
+        public override bool IsReusable
         {
             get { return true; }
         }

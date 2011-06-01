@@ -12,12 +12,12 @@ namespace Glimpse.Core.Plugin
             get { return "Server"; }
         }
 
-        public object GetData(HttpApplication application)
+        public object GetData(HttpContextBase context)
         {
-            return application.Request.ServerVariables.Flatten();
+            return context.Request.ServerVariables.Flatten();
         }
 
-        public void SetupInit(HttpApplication application)
+        public void SetupInit()
         {
         }
 
