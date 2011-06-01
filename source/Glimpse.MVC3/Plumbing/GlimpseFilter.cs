@@ -10,11 +10,18 @@ namespace Glimpse.Mvc3.Plumbing
     {
         public Filter Filter { get; set; }
 
+        private HttpContextBase context;
+        internal HttpContextBase Context
+        {
+            get { return context ?? new HttpContextWrapper(HttpContext.Current); }
+            set { context = value; }
+        }
+
         public IList<GlimpseFilterCalledMetadata> Store
         {
             get
             {
-                var items = HttpContext.Current.Items;
+                var items = Context.Items;
                 var store = items[GlimpseConstants.CalledFilters] as IList<GlimpseFilterCalledMetadata>;
                 if (store == null) items[GlimpseConstants.CalledFilters] = store = new List<GlimpseFilterCalledMetadata>();
 

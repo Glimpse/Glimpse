@@ -16,9 +16,9 @@ namespace Glimpse.Core.Plugin
             get { return "Request"; }
         }
 
-        public object GetData(HttpApplication application)
+        public object GetData(HttpContextBase context)
         {
-            var request = application.Request;
+            var request = context.Request;
 
             var cookies = new List<object[]>
                               {
@@ -32,13 +32,13 @@ namespace Glimpse.Core.Plugin
                 var cookie = requestCookies[key];
 
                 if (cookie != null)
-                    cookies.Add(new[] { cookie.Name, cookie.Path, cookie.Secure.ToString(), application.Server.UrlDecode(cookie.Value) });
+                    cookies.Add(new[] { cookie.Name, cookie.Path, cookie.Secure.ToString(), context.Server.UrlDecode(cookie.Value) });
             }
 
             //To avoid validation exceptions, input values are read like this
             Func<NameValueCollection> formData;
             Func<NameValueCollection> queryStringData;
-            ValidationUtility.GetUnvalidatedCollections(application.Context, out formData, out queryStringData);
+            ValidationUtility.GetUnvalidatedCollections(HttpContext.Current, out formData, out queryStringData);//HACK: ugly hack to use HttpContext.Current because GetUnvalidatedCollections does not take in an HttpContextBase
 
             var form = formData().Flatten();
             var querystring = queryStringData().Flatten();
@@ -54,7 +54,6 @@ namespace Glimpse.Core.Plugin
                            request.ApplicationPath,
                            request.AppRelativeCurrentExecutionFilePath,
                            request.CurrentExecutionFilePath,
-                           request.CurrentExecutionFilePathExtension,
                            request.FilePath,
                            request.Path,
                            request.PathInfo,
@@ -69,7 +68,7 @@ namespace Glimpse.Core.Plugin
                        };
         }
 
-        public void SetupInit(HttpApplication application)
+        public void SetupInit()
         {
         }
 

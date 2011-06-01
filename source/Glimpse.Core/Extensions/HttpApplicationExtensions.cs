@@ -7,7 +7,7 @@ namespace Glimpse.Core.Extensions
 {
     public static class HttpApplicationExtensions
     {
-        //TODO: Refactor into IGlimpseValidator plugin model
+/*
         internal static bool IsValidRequest(this object obj, out HttpApplication application, GlimpseConfiguration config, bool checkContentType, bool checkMode = true, bool checkPath = true)
         {
             application = obj as HttpApplication;
@@ -52,26 +52,21 @@ namespace Glimpse.Core.Extensions
 
             return true;
         }
-
-        internal static bool IsAjax(this HttpApplication application)
+*/
+        internal static bool IsAjax(this HttpContextBase context)
         {
-            var request = application.Request;
+            var request = context.Request;
 
             return ((request["X-Requested-With"] == "XMLHttpRequest") || ((request.Headers != null) && (request.Headers["X-Requested-With"] == "XMLHttpRequest")));
         }
 
-        internal static string GetClientName(this HttpApplication application)
+        internal static string GetClientName(this HttpContextBase context)
         {
-            var cookie = application.Request.Cookies[GlimpseConstants.CookieClientNameKey];
+            var cookie = context.Request.Cookies[GlimpseConstants.CookieClientNameKey];
             return cookie != null ? cookie.Value : "";
         }
 
-        internal static GlimpseMode GetGlimpseMode(this HttpApplication application)
-        {
-            return application.Context.GetGlimpseMode();
-        }
-
-        internal static GlimpseMode GetGlimpseMode(this HttpContext context)
+        internal static GlimpseMode GetGlimpseMode(this HttpContextBase context)
         {
             var cookies = context.Request.Cookies;
 
@@ -84,19 +79,19 @@ namespace Glimpse.Core.Extensions
             return mode;
         }
 
-        internal static void InitGlimpseContext(this HttpApplication application)
+        internal static void InitGlimpseContext(this HttpContextBase context)
         {
-            application.Context.Items[GlimpseConstants.Context] = new Dictionary<string, object>();
+            context.Items[GlimpseConstants.Context] = new Dictionary<string, object>();
         }
 
-        internal static bool TryGetData(this HttpApplication application, out IDictionary<string, object> data)
+        internal static bool TryGetData(this HttpContextBase context, out IDictionary<string, object> data)
         {
-            data = application.Context.Items[GlimpseConstants.Context] as IDictionary<string, object>;
+            data = context.Items[GlimpseConstants.Context] as IDictionary<string, object>;
 
             return (data != null);
         }
 
-        public static List<IGlimpseWarning> GetWarnings(this HttpContext context)
+        public static List<IGlimpseWarning> GetWarnings(this HttpContextBase context)
         {
             var result = context.Items[GlimpseConstants.Warnings] as List<IGlimpseWarning>;
             if (result == null) context.Items[GlimpseConstants.Warnings] = result = new List<IGlimpseWarning>();

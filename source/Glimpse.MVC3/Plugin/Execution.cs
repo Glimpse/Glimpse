@@ -17,9 +17,9 @@ namespace Glimpse.Mvc3.Plugin
             get { return "Execution"; }
         }
 
-        public object GetData(HttpApplication application)
+        public object GetData(HttpContextBase context)
         {
-            var store = application.Context.Items;
+            var store = context.Items;
             var calledFiltersMetadata = store[GlimpseConstants.CalledFilters] as List<GlimpseFilterCalledMetadata>;
             var allFiltersMetadata = store[GlimpseConstants.AllFilters] as IList<GlimpseFilterCallMetadata>;
 
@@ -104,7 +104,7 @@ namespace Glimpse.Mvc3.Plugin
             return null;
         }
 
-        public void SetupInit(HttpApplication application)
+        public void SetupInit()
         {
             GlimpsePipelineInitiation.ControllerFactory();
 

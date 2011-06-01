@@ -6,6 +6,6 @@ namespace Glimpse.Core.Extensibility
 {
     public interface IGlimpseValidator
     {
-        bool IsValid(HttpApplication application, GlimpseConfiguration configuration, LifecycleEvent lifecycleEvent);
+        bool IsValid(HttpContextBase context, GlimpseConfiguration configuration, LifecycleEvent lifecycleEvent);
     }
 }

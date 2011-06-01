@@ -11,7 +11,7 @@ namespace Glimpse.Mvc3.Extensions
     {
         internal static bool CanSupportDynamicProxy(this IActionInvoker actionInvoker)
         {
-            var warnings = HttpContext.Current.GetWarnings();
+            var warnings = new HttpContextWrapper(HttpContext.Current).GetWarnings();//Hack
 
             if (actionInvoker is ControllerActionInvoker)//TODO: What changes for AsyncControllerActionInvoker?
             {

@@ -18,13 +18,13 @@ namespace Glimpse.Core.Validator
             Validators = validators;
         }
 
-        public bool IsValid(HttpApplication application, LifecycleEvent lifecycleEvent)
+        public bool IsValid(HttpContextBase context, LifecycleEvent lifecycleEvent)
         {
-            if (application == null || application.Context == null) return false;
+            if (context == null) return false;
 
             foreach (var validator in Validators)
             {
-                if (!validator.IsValid(application, Configuration, lifecycleEvent))
+                if (!validator.IsValid(context, Configuration, lifecycleEvent))
                     return false;
             }
 

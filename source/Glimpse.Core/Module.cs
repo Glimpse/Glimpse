@@ -58,7 +58,7 @@ namespace Glimpse.Core
             JsonSerializerSettings = new JsonSerializerSettings {ContractResolver = new GlimpseContractResolver()};
             JsonSerializerSettings.Error += (obj, args) =>
                                                 {
-                                                    var warnings = HttpContext.Current.GetWarnings();
+                                                    var warnings = new HttpContextWrapper(HttpContext.Current).GetWarnings();
                                                     warnings.Add(new SerializationWarning(args.ErrorContext.Error));
                                                     args.ErrorContext.Handled = true;
                                                 };
@@ -78,40 +78,78 @@ namespace Glimpse.Core
                 {
                     if (Plugins.Count() == 0)
                     {
-                        ComposePlugins(context); //Have MEF satisfy our needs
+                        var contextBase = new HttpContextWrapper(context.Context);
+
+                        ComposePlugins(contextBase); //Have MEF satisfy our needs
 
                         //Allow plugin's registered for Intialization to setup
                         foreach (var plugin in Plugins.Where(plugin => plugin.Metadata.ShouldSetupInInit))
                         {
-                            plugin.Value.SetupInit(context);
+                            plugin.Value.SetupInit();
                         }
                     }
                 }
             }
 
-            context.BeginRequest += BeginRequest;
-            context.EndRequest += EndRequest;
-            context.PostRequestHandlerExecute += PostRequestHandlerExecute;
-            context.PreSendRequestHeaders += PreSendRequestHeaders;
-            context.PostMapRequestHandler += PostMapRequestHandler;
+            context.BeginRequest += OnBeginRequest;
+            context.EndRequest += OnEndRequest;
+            context.PostRequestHandlerExecute += OnPostRequestHandlerExecute;
+            context.PreSendRequestHeaders += OnPreSendRequestHeaders;
+            context.PostMapRequestHandler += OnPostMapRequestHandler;
         }
 
-        private static void BeginRequest(object sender, EventArgs e)
+        private void OnEndRequest(object sender, EventArgs e)
         {
             var httpApplication = sender as HttpApplication;
-            if (!RequestValidator.IsValid(httpApplication, LifecycleEvent.BeginRequest)) return;
 
-            httpApplication.InitGlimpseContext();
+            if (httpApplication != null)
+                EndRequest(new HttpContextWrapper(httpApplication.Context));
         }
 
-        private static void PostMapRequestHandler(object sender, EventArgs e)
+        private static void OnPostMapRequestHandler(object sender, EventArgs e)
         {
-            var application = sender as HttpApplication;
-            if (application == null) return;
+            var httpApplication = sender as HttpApplication;
 
-            application.Context.Items[GlimpseConstants.ValidPath] = false;
+            if (httpApplication != null)
+                PostMapRequestHandler(new HttpContextWrapper(httpApplication.Context));
+        }
 
-            var pathSegments = application.Request.Path.Split('/');
+        private static void OnPreSendRequestHeaders(object sender, EventArgs e)
+        {
+            var httpApplication = sender as HttpApplication;
+
+            if (httpApplication != null)
+                PreSendRequestHeaders(new HttpContextWrapper(httpApplication.Context));
+        }
+
+        private static void OnPostRequestHandlerExecute(object sender, EventArgs e)
+        {
+            var httpApplication = sender as HttpApplication;
+
+            if (httpApplication != null)
+                PostRequestHandlerExecute(new HttpContextWrapper(httpApplication.Context));
+        }
+
+        private static void OnBeginRequest(object sender, EventArgs e)
+        {
+            var httpApplication = sender as HttpApplication;
+
+            if (httpApplication != null)
+                BeginRequest(new HttpContextWrapper(httpApplication.Context));
+        }
+
+        private static void BeginRequest(HttpContextBase context)
+        {
+            if (!RequestValidator.IsValid(context, LifecycleEvent.BeginRequest)) return;
+
+            context.InitGlimpseContext();
+        }
+
+        private static void PostMapRequestHandler(HttpContextBase context)
+        {
+            context.Items[GlimpseConstants.ValidPath] = false;
+
+            var pathSegments = context.Request.Path.Split('/');
             var i = Array.FindIndex(pathSegments,
                                     segment =>
                                     segment.Equals(Configuration.RootUrlPath, StringComparison.CurrentCultureIgnoreCase));
@@ -124,38 +162,35 @@ namespace Glimpse.Core
 
                 if (handler != null)
                 {
-                    application.Context.Handler = handler;
-                    application.Context.Items[GlimpseConstants.ValidPath] = true;
+                    context.Handler = handler;
+                    context.Items[GlimpseConstants.ValidPath] = true;
                 }
             }
         }
 
-        private static void PostRequestHandlerExecute(object sender, EventArgs e)
+        private static void PostRequestHandlerExecute(HttpContextBase context)
         {
-            var httpApplication = sender as HttpApplication;
-            if (!RequestValidator.IsValid(httpApplication, LifecycleEvent.PostRequestHandlerExecute)) return;
+            if (!RequestValidator.IsValid(context, LifecycleEvent.PostRequestHandlerExecute)) return;
 
-            ProcessData(httpApplication, true); //Run all plugins that DO need access to Session
+            ProcessData(context, true); //Run all plugins that DO need access to Session
         }
 
-        private static void EndRequest(object sender, EventArgs e)
+        private static void EndRequest(HttpContextBase context)
         {
-            var httpApplication = sender as HttpApplication;
-            if (!RequestValidator.IsValid(httpApplication, LifecycleEvent.EndRequest)) return;
+            if (!RequestValidator.IsValid(context, LifecycleEvent.EndRequest)) return;
 
-            ProcessData(httpApplication, false); //Run all plugins that DO NOT need access to Session
+            ProcessData(context, false); //Run all plugins that DO NOT need access to Session
         }
 
-        private static void PreSendRequestHeaders(object sender, EventArgs e)
+        private static void PreSendRequestHeaders(HttpContextBase context)
         {
-            var httpApplication = sender as HttpApplication;
-            if (!RequestValidator.IsValid(httpApplication, LifecycleEvent.PreSendRequestHeaders)) return;
+            if (!RequestValidator.IsValid(context, LifecycleEvent.PreSendRequestHeaders)) return;
 
             var requestId = Guid.NewGuid();
 
-            var json = GenerateGlimpseOutput(httpApplication, requestId);
+            var json = GenerateGlimpseOutput(context, requestId);
 
-            Persist(json, httpApplication, requestId);
+            Persist(json, context, requestId);
         }
 
         public void Dispose()
@@ -166,7 +201,7 @@ namespace Glimpse.Core
 */
         }
 
-        private void ComposePlugins(HttpApplication application)
+        private void ComposePlugins(HttpContextBase context)
         {
             var batch = new CompositionBatch();
 
@@ -178,7 +213,7 @@ namespace Glimpse.Core
             Handlers = Container.GetExportedValues<IGlimpseHandler>();
             JsConverters = Container.GetExportedValues<IGlimpseConverter>();
 
-            var store = application.Context.GetWarnings();
+            var store = context.GetWarnings();
             store.AddRange(DirectoryCatalog.Exceptions.Select(exception => new ExceptionWarning(exception)));
 
             //wireup converters into serializer
@@ -190,11 +225,11 @@ namespace Glimpse.Core
             converters.Add(new JavaScriptDateTimeConverter());//adds a more human readable datetime format
         }
 
-        private static void Persist(string json, HttpApplication ctx, Guid requestId)
+        private static void Persist(string json, HttpContextBase context, Guid requestId)
         {
             if (Configuration.RequestLimit <= 0) return;
 
-            var store = ctx.Application;
+            var store = context.Application;
 
             //TODO: Turn Queue into provider model so it can be stored in SQL/Caching layer for farms
             var queue = store[GlimpseConstants.JsonQueue] as Queue<GlimpseRequestMetadata>;
@@ -205,24 +240,24 @@ namespace Glimpse.Core
 
             if (queue.Count == Configuration.RequestLimit) queue.Dequeue();
 
-            var browser = ctx.Request.Browser;
+            var browser = context.Request.Browser;
             queue.Enqueue(new GlimpseRequestMetadata
                               {
                                   Browser = string.Format("{0} {1}", browser.Browser, browser.Version),
-                                  ClientName = ctx.GetClientName(),
+                                  ClientName = context.GetClientName(),
                                   Json = json,
                                   RequestTime = DateTime.Now.ToLongTimeString(),
                                   RequestId = requestId,
-                                  IsAjax = ctx.IsAjax().ToString(),
-                                  Url = ctx.Request.RawUrl,
-                                  Method = ctx.Request.HttpMethod
+                                  IsAjax = context.IsAjax().ToString(),
+                                  Url = context.Request.RawUrl,
+                                  Method = context.Request.HttpMethod
                               });
         }
 
-        private static void ProcessData(HttpApplication httpApplication, bool sessionRequired)
+        private static void ProcessData(HttpContextBase context, bool sessionRequired)
         {
             IDictionary<string, object> data;
-            if (!httpApplication.TryGetData(out data)) return;
+            if (!context.TryGetData(out data)) return;
 
             lock (Plugins)
             {
@@ -231,7 +266,7 @@ namespace Glimpse.Core
                     var p = plugin.Value;
                     try
                     {
-                        var pluginData = p.GetData(httpApplication);
+                        var pluginData = p.GetData(context);
                         data.Add(p.Name, pluginData);
                     }
                     catch (Exception ex)
@@ -242,42 +277,42 @@ namespace Glimpse.Core
             }
         }
 
-        private static string GenerateGlimpseOutput(HttpApplication application, Guid requestId)
+        private static string GenerateGlimpseOutput(HttpContextBase context, Guid requestId)
         {
             IDictionary<string, object> data;
-            if (!application.TryGetData(out data)) return "Error: No Glimpse Data Found";
+            if (!context.TryGetData(out data)) return "Error: No Glimpse Data Found";
 
-            string json = CreateJsonPayload(data, application);
+            string json = CreateJsonPayload(data, context);
 
             json = Sanitizer.Sanitize(json);
 
-            AppendToResponse(application, json, requestId);
+            AppendToResponse(context, json, requestId);
 
             return json;
         }
 
-        private static void AppendToResponse(HttpApplication application, string json, Guid requestId)
+        private static void AppendToResponse(HttpContextBase context, string json, Guid requestId)
         {
-            if (application.IsAjax())
+            if (context.IsAjax())
             {
-                application.Response.AddHeader(GlimpseConstants.HttpHeader, requestId.ToString());
+                context.Response.AddHeader(GlimpseConstants.HttpHeader, requestId.ToString());
             }
             else
             {
-                if (application.GetGlimpseMode() == GlimpseMode.On)
+                if (context.GetGlimpseMode() == GlimpseMode.On)
                 {
-                    var path = VirtualPathUtility.ToAbsolute("~/", application.Context.Request.ApplicationPath);
+                    var path = VirtualPathUtility.ToAbsolute("~/", context.Request.ApplicationPath);
                     var html = string.Format(@"<script type='text/javascript' id='glimpseData' data-glimpse-requestID='{1}'>var glimpse = {0}, glimpsePath = '{2}';</script>", json, requestId, path);
                     html += @"<script type='text/javascript' id='glimpseClient' src='" + UrlCombine(path, Configuration.RootUrlPath, "glimpseClient.js") + "'></script>";
-                    application.Response.Write(html);//TODO: Use a filter and put this inside </body>
+                    context.Response.Write(html);//TODO: Use a filter and put this inside </body>
                 }
             }
         }
 
         //TODO: clean up this massive method
-        private static string CreateJsonPayload(IDictionary<string, object> data, HttpApplication application)
+        private static string CreateJsonPayload(IDictionary<string, object> data, HttpContextBase context)
         {
-            var warnings = application.Context.GetWarnings();
+            var warnings = context.GetWarnings();
 
             var sb = new StringBuilder("{");
             foreach (var item in data)
@@ -327,7 +362,7 @@ namespace Glimpse.Core
             var environmentUrls = new Dictionary<string, string>();
             foreach (Environment environment in Configuration.Environments)
             {
-                environmentUrls.Add(environment.Name, environment.Something(application.Context.Request.Url).ToString());
+                environmentUrls.Add(environment.Name, environment.Something(context.Request.Url).ToString());
             }
 
             requestMetadata.Add("environmentUrls", environmentUrls);

@@ -214,10 +214,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <None Include="T4MVC.tt">
+    <Compile Include="T4MVC.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>T4MVC.cs</LastGenOutput>
-    </None>
+    </Compile>
     <None Include="T4MVC.tt.settings.t4" />
     <Content Include="Views\Help\Plugins\Ajax.cshtml" />
     <Content Include="Views\Help\Plugins\Execution.cshtml" />

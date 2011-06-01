@@ -24,7 +24,7 @@ namespace Glimpse.Mvc3.Plumbing
 
         public static void ModelBinders()
         {
-            var warnings = HttpContext.Current.GetWarnings();
+            var warnings = new HttpContextWrapper(HttpContext.Current).GetWarnings();
 
             //handle static registered binders
             var binders = System.Web.Mvc.ModelBinders.Binders;

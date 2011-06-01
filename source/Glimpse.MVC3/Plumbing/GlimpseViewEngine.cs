@@ -37,7 +37,7 @@ namespace Glimpse.Mvc3.Plumbing
         private ViewEngineResult Process(ViewEngineResult viewEngineResult, bool isPartial, string viewName,
                                                 string masterName, bool useCache)
         {
-            var contextStore = HttpContext.Current.Items;
+            var contextStore = HttpContext.Current.Items;//Can this be removed?
             var vmStore = contextStore[GlimpseConstants.ViewEngine] as IList<GlimpseViewEngineCallMetadata>;
 
             if (vmStore == null)

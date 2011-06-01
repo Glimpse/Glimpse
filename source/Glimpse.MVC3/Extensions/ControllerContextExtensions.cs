@@ -31,7 +31,7 @@ namespace Glimpse.Mvc3.Extensions
             return BinderStore(controllerContext.HttpContext.Items);
         }
 
-        internal static GlimpseBinderMetadata BinderStore(this HttpContext context)
+        internal static GlimpseBinderMetadata BinderStore(this HttpContextBase context)
         {
             return BinderStore(context.Items);
         }

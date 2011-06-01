@@ -16,9 +16,9 @@ namespace Glimpse.Mvc3.Plugin
             get { return "MetaData"; }
         }
 
-        public object GetData(HttpApplication application)
+        public object GetData(HttpContextBase context)
         {
-            var store = application.Context.Items;
+            var store = context.Items;
             var data = store[GlimpseConstants.ViewEngine] as IList<GlimpseViewEngineCallMetadata>;
 
             if (data == null) 
@@ -110,7 +110,7 @@ namespace Glimpse.Mvc3.Plugin
             return cur;
         }
 
-        public void SetupInit(HttpApplication application)
+        public void SetupInit()
         {
         }
 

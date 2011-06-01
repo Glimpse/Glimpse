@@ -15,9 +15,9 @@ namespace Glimpse.Mvc3.Plugin
             get { return "Binding"; }
         }
 
-        public object GetData(HttpApplication application)
+        public object GetData(HttpContextBase context)
         {
-            var store = application.Context.BinderStore();
+            var store = context.BinderStore();
 
             if (store.Properties.Count == 0) return null;
 
@@ -48,7 +48,7 @@ namespace Glimpse.Mvc3.Plugin
             return table;
         }
 
-        public void SetupInit(HttpApplication application)
+        public void SetupInit()
         {
             GlimpsePipelineInitiation.ModelBinderProviders();
 

@@ -13,9 +13,9 @@ namespace Glimpse.Core.Plugin
             get { return "Session"; }
         }
 
-        public object GetData(HttpApplication application)
+        public object GetData(HttpContextBase context)
         {
-            var session = application.Session;
+            var session = context.Session;
 
             var result = new List<object[]>
                              {
@@ -32,7 +32,7 @@ namespace Glimpse.Core.Plugin
             return null;
         }
 
-        public void SetupInit(HttpApplication application)
+        public void SetupInit()
         {
         }
 

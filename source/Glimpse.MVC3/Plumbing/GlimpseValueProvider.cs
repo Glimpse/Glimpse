@@ -8,6 +8,13 @@ namespace Glimpse.Mvc3.Plumbing
     {
         public IValueProvider ValueProvider { get; set; }
 
+        private HttpContextBase context;
+        internal HttpContextBase Context
+        {
+            get { return context ?? new HttpContextWrapper(HttpContext.Current); }
+            set { context = value; }
+        }
+
         public GlimpseValueProvider(IValueProvider valueProvider)
         {
             ValueProvider = valueProvider;
@@ -20,7 +27,7 @@ namespace Glimpse.Mvc3.Plumbing
 
             if (!containsPrefix)
             {
-                var store = HttpContext.Current.BinderStore();
+                var store = Context.BinderStore();
                 store.CurrentProperty.NotFoundIn.Add(ValueProvider);
             }
 
@@ -42,7 +49,7 @@ namespace Glimpse.Mvc3.Plumbing
         {
             if (result != null)
             {
-                var store = HttpContext.Current.BinderStore();
+                var store = Context.BinderStore();
                 store.CurrentProperty.FoundIn = ValueProvider;
                 store.CurrentProperty.AttemptedValue = result.AttemptedValue;
                 store.CurrentProperty.Culture = result.Culture;

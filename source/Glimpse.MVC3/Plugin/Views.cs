@@ -17,9 +17,9 @@ namespace Glimpse.Mvc3.Plugin
             get { return "Views"; }
         }
 
-        public object GetData(HttpApplication application)
+        public object GetData(HttpContextBase context)
         {
-            var store = application.Context.Items;
+            var store = context.Items;
             var data = store[GlimpseConstants.ViewEngine] as IList<GlimpseViewEngineCallMetadata>;
             if (data == null) return null;
 
@@ -90,7 +90,7 @@ namespace Glimpse.Mvc3.Plugin
             return result;
         }
 
-        public void SetupInit(HttpApplication application)
+        public void SetupInit()
         {
             var engines = ViewEngines.Engines;
 

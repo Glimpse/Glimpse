@@ -13,7 +13,7 @@ namespace Glimpse.Mvc3.Extensions
     {
         internal static bool CanSupportDynamicProxy(this IModelBinder modelBinder)
         {
-            var warnings = HttpContext.Current.GetWarnings();
+            var warnings = new HttpContextWrapper(HttpContext.Current).GetWarnings();//Hack
 
             if (modelBinder is DefaultModelBinder)
             {
