@@ -8,14 +8,14 @@ using MvcMusicStore.Models;
 
 namespace MvcMusicStore.Controllers
 {
-    public class HomeController : Controller
+    public partial class HomeController : Controller
     {
         //
         // GET: /Home/
 
         MusicStoreEntities storeDB = new MusicStoreEntities();
 
-        public ActionResult Index()
+        public virtual ActionResult Index()
         {
             // Get most popular albums
             var albums = GetTopSellingAlbums(5);
@@ -53,7 +53,7 @@ namespace MvcMusicStore.Controllers
                 .ToList();
         }
 
-        public ActionResult News()
+        public virtual ActionResult News()
         {
             var views = new[]{"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight"};
 

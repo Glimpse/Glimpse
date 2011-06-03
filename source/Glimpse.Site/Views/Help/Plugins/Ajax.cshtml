@@ -8,36 +8,29 @@
 
 <div class="plugin-layout">
     <h3>Layout</h3> 
-    <img src="@Links.Content.Plugin.Ajax_jpg" />
-    <!--
+    <img src="@Links.Content.Plugin.Ajax_jpg" /> 
     <ol class="plain">
-        <li><span>Key</span>: The key column shows the name of an xml element found in the site's main web.config file</li>
-        <li><span>Value</span>: The value column displays selected information about the given element</li>
-        <li><span>AppSettings</span>: All the app settings that you currently have defined</li>
-        <li><span>ConnectionStrings</span>: Any connection strings that are present</li>
-        <li><span>CustomErrors</span>: How you have configurered custom errors to work within your site</li>
-        <li><span>Authentication</span>: How authentication is currently configurered</li>
-    </ol>
-    -->
+        <li><span>Request URL</span>: The URL that was accessed by the Ajax request</li>
+        <li><span>Status</span>: Status of the resulting response from the server</li>
+        <li><span>Date/Time</span>: Date time of the request</li>
+        <li><span>Duration</span>: Approximate duration of the request</li>
+        <li><span>Is Async</span>: Whether the request was async/sync</li>
+        <li><span>Inspect</span>: Allows you to select the request you wish to inspect</li>
+    </ol> 
 </div>
 
-<div class="soon">More information coming soon...</div>
-
-<!--
 <div class="plugin-faq">
     <h3>Frequently Asked Questions</h3> 
     <ol class="plain">
         <li>
-            <div>I've got data in my config that I don't want to be included in the render output (i.e. passwords)?</div>
-            First of all, understand that having plain text passwords isn't remomended and various techniques can be used 
-            to encrypt them. But we understand that for what ever reason this may not be possible and hence have made the 
-            glimpse processing pipeline plugable, so you can remove this data. TODO@@nikmd23
-        </li>
+            <div>What happen to my Ajax requests after I leave the page?</div>
+            Its important to remember that by default Glimpse remembers the last 15 requests that where made to the 
+            server. This goes for both non ajax requests and ajax requestions alike. Hence, even after you leave a 
+            page (when normally you may think your requests are lost) you can go to the remote tab to pull up these 
+            previous requests.
+        </li> 
         <li>
-            <div>I want to add extra config data from my own external config sources?</div>
-            Again the Glimpse framework is extremly plugable and with the implementation of a simple class you can 
-            add data into the Glimpse Config Tab. TODO@@nikmd23
-        </li>
+            <div>I'm seeing requests my requests crossed out, what does this mean?</div>
+        </li> 
     </ol>
-</div>
--->
+</div> 

@@ -2,12 +2,12 @@
 
 namespace MvcMusicStore.Areas.Test.Controllers
 {
-    public class TestController : Controller
+    public partial class TestController : Controller
     {
         //
         // GET: /Test/Test/
 
-        public ActionResult Index()
+        public virtual ActionResult Index()
         {
             return View();
         }
