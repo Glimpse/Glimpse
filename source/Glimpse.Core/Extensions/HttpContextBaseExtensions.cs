@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Extensions
 {
-    public static class HttpApplicationExtensions
+    public static class HttpContextBaseExtensions
     {
         internal static bool IsAjax(this HttpContextBase context)
         {
@@ -49,6 +50,21 @@ namespace Glimpse.Core.Extensions
         {
             var result = context.Items[GlimpseConstants.Warnings] as List<IGlimpseWarning>;
             if (result == null) context.Items[GlimpseConstants.Warnings] = result = new List<IGlimpseWarning>();
+
+            return result;
+        }
+
+        public static Guid GetRequestId(this HttpContextBase context)
+        {
+            Guid result;
+            try
+            {
+                result = (Guid) context.Items[GlimpseConstants.GlimpseRequestId];
+            }
+            catch
+            {
+                context.Items[GlimpseConstants.GlimpseRequestId] = result = Guid.NewGuid();
+            }
 
             return result;
         }

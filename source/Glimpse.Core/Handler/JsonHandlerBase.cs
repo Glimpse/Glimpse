@@ -1,7 +1,5 @@
-﻿using System.ComponentModel.Composition;
-using System.Web;
+﻿using System.Web;
 using Glimpse.Core.Plumbing;
-using Newtonsoft.Json;
 
 namespace Glimpse.Core.Handler
 {

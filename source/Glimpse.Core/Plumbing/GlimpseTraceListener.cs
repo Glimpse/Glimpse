@@ -169,14 +169,14 @@ namespace Glimpse.Core.Plumbing
             if (Messages == null) return;
 
             var count = Messages.Count;
-            Messages.Add(new List<string>
-                             {
-                                 message,
-                                 string.IsNullOrEmpty(category) ? "Info" : category,
-                                 count == 1 ? null : elapsedSinceFirst,
-                                 count == 1 ? null : elapsedSinceLast
-                             }
-                );
+
+            Messages.Add(ApplyStyle(new List<string>
+                                        {
+                                            message,
+                                            string.IsNullOrEmpty(category) ? "Info" : category,
+                                            count == 1 ? null : elapsedSinceFirst,
+                                            count == 1 ? null : elapsedSinceLast
+                                        }));
         }
 
         public override void Write(object o, string category)
@@ -218,6 +218,41 @@ namespace Glimpse.Core.Plumbing
         public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id)
         {
             Write(string.Format("Source: {0} Callstack: {1}", source, eventCache.Callstack), eventType.ToString());
+        }
+
+        private List<string> ApplyStyle(List<string> message)
+        {
+            switch (message[1].ToLower())
+            {
+                case "warning":
+                case "warn":
+                    message.Add("warn");
+                    break;
+                case "information":
+                case "info":
+                    message.Add("info");
+                    break;
+                case "error":
+                    message.Add("error");
+                    break;
+                case "fail":
+                    message.Add("fail");
+                    break;
+                case "quiet":
+                    message.Add("quiet");
+                    break;
+                case "timing":
+                    message.Add("loading");
+                    break;
+                case "selected":
+                    message.Add("selected");
+                    break;
+                case "aspx.page":
+                    message.Add("ms");
+                    break;
+            }
+
+            return message;
         }
     }
 }
