@@ -75,6 +75,5 @@ public static class HtmlExtensions
             </div> 
         ", Links.Content.uservoice_icon_png, Links.Content.github_gif, Links.Content.twitter_png);
         return MvcHtmlString.Create(result);
-
     }
 }

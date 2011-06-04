@@ -6,7 +6,7 @@ using MvcMusicStore.Models;
 namespace MvcMusicStore.Controllers
 {
     [Authorize]
-    public class CheckoutController : Controller
+    public partial class CheckoutController : Controller
     {
         MusicStoreEntities storeDB = new MusicStoreEntities();
         const string PromoCode = "FREE";
@@ -14,7 +14,7 @@ namespace MvcMusicStore.Controllers
         //
         // GET: /Checkout/AddressAndPayment
 
-        public ActionResult AddressAndPayment()
+        public virtual ActionResult AddressAndPayment()
         {
             return View();
         }
@@ -22,7 +22,7 @@ namespace MvcMusicStore.Controllers
         //
         // POST: /Checkout/AddressAndPayment
         [HttpPost]
-        public ActionResult AddressAndPayment(FormCollection values)
+        public virtual ActionResult AddressAndPayment(FormCollection values)
         {
             var order = new Order();
 
@@ -71,7 +71,7 @@ namespace MvcMusicStore.Controllers
         //
         // GET: /Checkout/Complete
 
-        public ActionResult Complete(int id)
+        public virtual ActionResult Complete(int id)
         {
             // Validate that the customer owns this order
             bool isValid = storeDB.Orders.Any(

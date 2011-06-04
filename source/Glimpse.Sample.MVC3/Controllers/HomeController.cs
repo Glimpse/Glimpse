@@ -8,14 +8,14 @@ using MvcMusicStore.Models;
 
 namespace MvcMusicStore.Controllers
 {
-    public class HomeController : Controller
+    public partial class HomeController : Controller
     {
         //
         // GET: /Home/
 
         MusicStoreEntities storeDB = new MusicStoreEntities();
 
-        public ActionResult Index()
+        public virtual ActionResult Index()
         {
             // Get most popular albums
             var albums = GetTopSellingAlbums(5);
@@ -29,6 +29,10 @@ namespace MvcMusicStore.Controllers
                 GlimpseTrace.Warn("This is warn from Glimpse at {0}", DateTime.Now);
                 GlimpseTrace.Error("This is error from {0}", GetType());
                 GlimpseTrace.Fail("This is Fail from Glimpse");
+
+                Trace.TraceWarning("Test TraceWarning;");
+                Trace.TraceError("Test TraceError;");
+                Trace.TraceInformation("Test TraceInformation;"); 
 
             }
 
@@ -49,7 +53,7 @@ namespace MvcMusicStore.Controllers
                 .ToList();
         }
 
-        public ActionResult News()
+        public virtual ActionResult News()
         {
             var views = new[]{"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight"};
 

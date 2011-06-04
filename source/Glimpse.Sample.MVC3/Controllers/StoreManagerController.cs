@@ -8,14 +8,14 @@ using MvcMusicStore.Models;
 namespace MvcMusicStore.Controllers
 {
     [Authorize(Roles = "Administrator")]
-    public class StoreManagerController : Controller
+    public partial class StoreManagerController : Controller
     {
         MusicStoreEntities storeDB = new MusicStoreEntities();
 
         //
         // GET: /StoreManager/
 
-        public ActionResult Index()
+        public virtual ActionResult Index()
         {
             var albums = storeDB.Albums
                 .Include("Genre").Include("Artist")
@@ -27,7 +27,7 @@ namespace MvcMusicStore.Controllers
         //
         // GET: /StoreManager/Create
 
-        public ActionResult Create()
+        public virtual ActionResult Create()
         {
             ViewBag.Genres = storeDB.Genres.OrderBy(g => g.Name).ToList();
             ViewBag.Artists = storeDB.Artists.OrderBy(a => a.Name).ToList();
@@ -41,7 +41,7 @@ namespace MvcMusicStore.Controllers
         // POST: /StoreManager/Create
 
         [HttpPost]
-        public ActionResult Create(Album album)
+        public virtual ActionResult Create(Album album)
         {
             if (ModelState.IsValid)
             {
@@ -63,7 +63,7 @@ namespace MvcMusicStore.Controllers
         //
         // GET: /StoreManager/Edit/5
 
-        public ActionResult Edit(int id)
+        public virtual ActionResult Edit(int id)
         {
             ViewBag.Genres = storeDB.Genres.OrderBy(g => g.Name).ToList();
             ViewBag.Artists = storeDB.Artists.OrderBy(a => a.Name).ToList();
@@ -77,7 +77,7 @@ namespace MvcMusicStore.Controllers
         // POST: /StoreManager/Edit/5
 
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public virtual ActionResult Edit(int id, FormCollection collection)
         {
             var album = storeDB.Albums.Find(id);
 
@@ -94,8 +94,8 @@ namespace MvcMusicStore.Controllers
 
         //
         // GET: /StoreManager/Delete/5
- 
-        public ActionResult Delete(int id)
+
+        public virtual ActionResult Delete(int id)
         {
             var album = storeDB.Albums.Find(id);
 
@@ -106,7 +106,7 @@ namespace MvcMusicStore.Controllers
         // POST: /StoreManager/Delete/5
 
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public virtual ActionResult Delete(int id, FormCollection collection)
         {
             var album = storeDB.Albums.Find(id);
 

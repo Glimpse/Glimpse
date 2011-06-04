@@ -3,8 +3,6 @@
 
 <div class="plugin-summary">
     <p>The Request tab shows very basic HTTP request information. Client-side web debuggers (such as FireBug) often show very similar data.</p>
-    <p>The difference between client-side web debuggers and Glimpse is that Glimpse shows you what the server received, while other tools show you what the client sent.</p>
-    <p>Use this tab to understand the values your server is receiving and to identify any changes made to the request. (By middle man servers such as a misbehaving proxy.)</p>
 </div>
 
 <div class="plugin-layout">
@@ -16,4 +14,29 @@
     </ol>
 </div>
 
-<div class="soon">More information coming soon...</div>
+<div class="plugin-know">
+    <h3>Did you know</h3> 
+    <ul class="plain">
+        <li>
+            <span>Difference between what the client sent vs. what the server received</span>:
+            The difference between client-side web debuggers and Glimpse is that Glimpse shows you what the server received, 
+            while other tools show you what the client sent.
+            <br /><br />
+            Use this tab to understand the values your server is receiving and to identify any changes made to the request. 
+            (By middle man servers such as a misbehaving proxy.)
+        </li>
+    </ul>
+</div>
+
+<div class="plugin-faq">
+    <h3>Frequently Asked Questions</h3> 
+    <ol class="plain">
+        <li>
+            <div>What is the difference between the Request and Server tabs?</div>
+            It is true that there is overlap between the data that the Request and Server tabs. When it comes to this overlap,
+            the primary difference between the tabs is that the Server tabs shows the values pre interpretation  
+            and the Request tab shows the data post interpretation. Hence if you have any type conversion errors
+            or anything similar, the problem may be discovered here.
+        </li> 
+    </ol>
+</div>

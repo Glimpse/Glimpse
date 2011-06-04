@@ -2,41 +2,48 @@
 <h2>Execution Tab</h2>
 
 <div class="plugin-summary">
-    <p>The Execution tab shows the execution pipeline that was run to build the current page.</p>
+    <p>The Execution tab shows the execution pipeline that was run to build the current page. The items one 
+    will typically see in this list are Actions and Filters. Its important to note that the effects Child 
+    actions are also shown in this context.</p>
 </div>
 
 <div class="plugin-layout">
     <h3>Layout</h3> 
     <img src="@Links.Content.Plugin.Execution_jpg" />
-    <!--
     <ol class="plain">
-        <li><span>Key</span>: The key column shows the name of an xml element found in the site's main web.config file</li>
-        <li><span>Value</span>: The value column displays selected information about the given element</li>
-        <li><span>AppSettings</span>: All the app settings that you currently have defined</li>
-        <li><span>ConnectionStrings</span>: Any connection strings that are present</li>
-        <li><span>CustomErrors</span>: How you have configurered custom errors to work within your site</li>
-        <li><span>Authentication</span>: How authentication is currently configurered</li>
-    </ol>
-    -->
-</div>
+        <li><span>Key</span>: Indicates which grouping the listed execution details belong to</li>
+        <li><span>Value</span>: The breakdown for the given key. Some values require additional explanation:
+            <div style="margin-top:0.5em;"><u>ExecutedMethods</u>:</div>
+            This shows the methods that make up the execution pipline for your request. This can be important 
+            as many factors can influence the items that make up this pipline.
+            <ul class="plain">
+                <li><span>Ordinal</span>: Indicates where in the execution pipeline this method occured</li>
+                <li><span>Child</span>: Whether this method was executed in the context of a child request</li>
+                <li><span>Category</span>: The Category type of the filter <!--TODO@@nikmd23 list and verify categories and their meaning--></li>
+                <li><span>Type</span>: Type that the executed method belongs to</li>
+                <li><span>Method</span>: The name of the method executed</li>
+                <li><span>Time Elapsed</span>: The amount of time elapsed since the last executed method</li>
+                <li><span>Order</span>: The order that has been defined that a filter should be executed</li>
+                <li><span>Scope</span>: Scope that the filter is restricted to <!--TODO@@nikmd23 list and verify scopes and their meaning--></li>
+                <li><span>Details</span>: Any avaiable data  <!--TODO@@nikmd23 verify --></li>
+            </ul>
 
-<div class="soon">More information coming soon...</div>
-
-<!--
-<div class="plugin-faq">
-    <h3>Frequently Asked Questions</h3> 
-    <ol class="plain">
-        <li>
-            <div>I've got data in my config that I don't want to be included in the render output (i.e. passwords)?</div>
-            First of all, understand that having plain text passwords isn't remomended and various techniques can be used 
-            to encrypt them. But we understand that for what ever reason this may not be possible and hence have made the 
-            glimpse processing pipeline plugable, so you can remove this data. TODO@@nikmd23
-        </li>
-        <li>
-            <div>I want to add extra config data from my own external config sources?</div>
-            Again the Glimpse framework is extremly plugable and with the implementation of a simple class you can 
-            add data into the Glimpse Config Tab. TODO@@nikmd23
+            <div><u>UnExecutedMethods</u>:</div>
+            This shows the methods that didn't run in the execution pipeline. This can be used to help you identify 
+            filters that you might have expected to run but didn't.
+            <ul class="plain">
+                <li><i>Details are the same as the above</i></li>
+            </ul>
         </li>
     </ol>
 </div>
--->
+
+<div class="plugin-know">
+    <h3>Did you know</h3> 
+    <ul class="plain">
+        <li>
+            <span>That keeping an eye on your Time Elapsed can make a big difference</span>: This may be obvious but 
+            by showning the Time Elapsed we can give you an indication as to where a given request is spending its time.
+        </li>
+    </ul>
+</div>

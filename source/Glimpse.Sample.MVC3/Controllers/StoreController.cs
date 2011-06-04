@@ -8,14 +8,14 @@ using MvcMusicStore.Models;
 
 namespace MvcMusicStore.Controllers
 {
-    public class StoreController : Controller
+    public partial class StoreController : Controller
     {
         MusicStoreEntities storeDB = new MusicStoreEntities();
 
         //
         // GET: /Store/
 
-        public ActionResult Index()
+        public virtual ActionResult Index()
         {
             var genres = storeDB.Genres.ToList();
 
@@ -27,7 +27,7 @@ namespace MvcMusicStore.Controllers
         //
         // GET: /Store/Browse?genre=?Disco
 
-        public ActionResult Browse(string genre)
+        public virtual ActionResult Browse(string genre)
         {
             // Retrieve Genre and its Associated Albums from database
             var genreModel = storeDB.Genres.Include("Albums")
@@ -42,7 +42,7 @@ namespace MvcMusicStore.Controllers
         //
         // GET: /Store/Details/5
 
-        public ActionResult Details(int id)
+        public virtual ActionResult Details(int id)
         {
             Album album = storeDB.Albums.Find(id);
 
@@ -53,7 +53,7 @@ namespace MvcMusicStore.Controllers
         // GET: /Store/GenreMenu
 
         [ChildActionOnly]
-        public ActionResult GenreMenu()
+        public virtual ActionResult GenreMenu()
         {
             var genres = storeDB.Genres.ToList();
 

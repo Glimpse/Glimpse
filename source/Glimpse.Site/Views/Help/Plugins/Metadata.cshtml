@@ -7,36 +7,42 @@
 
 <div class="plugin-layout">
     <h3>Layout</h3> 
-    <img src="@Links.Content.Plugin.Metadata_jpg" />
-    <!--
+    <img src="@Links.Content.Plugin.Metadata_jpg" /> 
     <ol class="plain">
-        <li><span>Key</span>: The key column shows the name of an xml element found in the site's main web.config file</li>
-        <li><span>Value</span>: The value column displays selected information about the given element</li>
-        <li><span>AppSettings</span>: All the app settings that you currently have defined</li>
-        <li><span>ConnectionStrings</span>: Any connection strings that are present</li>
-        <li><span>CustomErrors</span>: How you have configurered custom errors to work within your site</li>
-        <li><span>Authentication</span>: How authentication is currently configurered</li>
-    </ol>
-    -->
+        <li><span>Registration</span>: Where the metadata is coming from (see more information below)</li>
+        <li><span>Type</span>: Type of the model that the metadata is for</li>
+        <li><span>Details</span>: The various properties that make up the metadata</li>
+    </ol> 
 </div>
 
-<div class="soon">More information coming soon...</div>
+<div class="plugin-know">
+    <h3>Did you know</h3> 
+    <ul class="plain">
+        <li>
+            <span>That we don't show the metadata for properties of complex properties of the View Models</span>: We have 
+            purposefully not shown the metadata for the properties of complex properties not because of any technical 
+            limitations but because of lack of a meaningful way of showing the data. As the data can be recursive in nature 
+            ore could have many levels, its difficult to make the UI work. Hence for now we have chosen this approach. 
+            If you think you know of a way that we can get around this let us know. 
+        </li>
+    </ul>
+</div>
 
-<!--
 <div class="plugin-faq">
     <h3>Frequently Asked Questions</h3> 
     <ol class="plain">
         <li>
-            <div>I've got data in my config that I don't want to be included in the render output (i.e. passwords)?</div>
-            First of all, understand that having plain text passwords isn't remomended and various techniques can be used 
-            to encrypt them. But we understand that for what ever reason this may not be possible and hence have made the 
-            glimpse processing pipeline plugable, so you can remove this data. TODO@@nikmd23
+            <div>What are the "Primary View Model" and "View Model Properties" all about?</div>
+            In an effort to best try and represent the available metadata we have broken the data as follows:
+            <ul class="plain">
+                <li><span>Primary View Model</span>: Shows the metadata associated with the root View Model of the view.</li>
+                <li><span>View Model Properties</span>: Shows the metadata associated for each of the properties of the root View Model of the view.</li>
+            </ul>
         </li>
         <li>
-            <div>I want to add extra config data from my own external config sources?</div>
-            Again the Glimpse framework is extremly plugable and with the implementation of a simple class you can 
-            add data into the Glimpse Config Tab. TODO@@nikmd23
+            <div>What are the bolded properties?</div>
+            The bolded properties simply represent values that differ from the default. This is designed to help show you want metadata 
+            is being set.
         </li>
     </ol>
-</div>
--->
+</div> 

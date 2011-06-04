@@ -5,14 +5,14 @@ using MvcMusicStore.ViewModels;
 
 namespace MvcMusicStore.Controllers
 {
-    public class ShoppingCartController : Controller
+    public partial class ShoppingCartController : Controller
     {
         MusicStoreEntities storeDB = new MusicStoreEntities();
 
         //
         // GET: /ShoppingCart/
 
-        public ActionResult Index()
+        public virtual ActionResult Index()
         {
             var cart = ShoppingCart.GetCart(this.HttpContext);
 
@@ -30,7 +30,7 @@ namespace MvcMusicStore.Controllers
         //
         // GET: /Store/AddToCart/5
 
-        public ActionResult AddToCart(int id)
+        public virtual ActionResult AddToCart(int id)
         {
 
             // Retrieve the album from the database
@@ -50,7 +50,7 @@ namespace MvcMusicStore.Controllers
         // AJAX: /ShoppingCart/RemoveFromCart/5
 
         [HttpPost]
-        public ActionResult RemoveFromCart(int id)
+        public virtual ActionResult RemoveFromCart(int id)
         {
             // Remove the item from the cart
             var cart = ShoppingCart.GetCart(this.HttpContext);
@@ -80,7 +80,7 @@ namespace MvcMusicStore.Controllers
         // GET: /ShoppingCart/CartSummary
 
         [ChildActionOnly]
-        public ActionResult CartSummary()
+        public virtual ActionResult CartSummary()
         {
             var cart = ShoppingCart.GetCart(this.HttpContext);
 

@@ -1,9 +1,39 @@
-﻿
-<h2>Trace Tab</h2>
+﻿<h2>Trace Tab</h2>
 
 <div class="plugin-summary">
     <p>The Trace tab shows any messages traced to System.Diagnostics.Trace or Debug.</p>
 </div>
 
-
-<div class="soon">More information coming soon...</div>
+<div class="plugin-layout">
+    <h3>Layout</h3> 
+    <img src="@Links.Content.Plugin.Trace_jpg" /> 
+    <ol class="plain">
+        <li><span>Message</span>: The message that was dumped out by the Traced</li>
+        <li><span>Category</span>: The category level of message</li>
+        <li><span>From First</span>: The time in ms from when the request started</li>
+        <li><span>From Last</span>: The time in ms from when the last trace entry was recorded</li>
+    </ol> 
+</div>
+ 
+<div class="plugin-faq">
+    <h3>Frequently Asked Questions</h3> 
+    <ol class="plain">
+        <li>
+            <div>What type of Tracing does Glimpse support?</div>
+            To start with Glimpse supports the standard set of trace methods:
+            <ul class="plain">
+                <li>Trace.TraceWarning("...") : void</li>
+                <li>Trace.TraceError("...") : void</li>
+                <li>Trace.TraceInformation("...") : void</li>
+            </ul> 
+            In addition, we support several different methods off the GlimpseTrace class. It provide extended 
+            and wrapped up functionality. Some methods include:
+            <ul class="plain">
+                <li>GlimpseTrace.Info("...") : void</li>
+                <li>GlimpseTrace.Warn("...") : void</li>
+                <li>GlimpseTrace.Error("...") : void</li>
+                <li>GlimpseTrace.Fail("...") : void</li>
+            </ul>
+        </li> 
+    </ol>
+</div>
