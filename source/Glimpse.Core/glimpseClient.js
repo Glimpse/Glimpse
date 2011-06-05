@@ -322,8 +322,8 @@ if (window.jQueryGlimpse) { (function ($) {
             $('.info td:first-child, .warn td:first-child, tr.error td:first-child, .fail td:first-child, .loading td:first-child, .ms td:first-child', scope).not(':has(.icon)').prepend('<div class="icon"></div>');
 
             setTimeout(function () {
-                $('.glimpse-start-open .glimpse-expand', scope).click();
-            }, 10);
+                $('.glimpse-start-open .glimpse-expand:first', scope).click();
+            }, 500);
         },
         addTab: function (container, data, key) {
             var disabled = (data === undefined || data === null) ? ' glimpse-disabled' : '';
@@ -478,7 +478,7 @@ if (window.jQueryGlimpse) { (function ($) {
             if (data.length > charOuterMax) {
                 content = '<span class="glimpse-preview-string" title="' + $.glimpseContent.trimFormatString(data, charMax * 2, charMax * 2.1, false, true) + '">' + content + '</span>';
                 if (level < 100)
-                    content = '<span class="glimpse-expand"></span>' + content + '<span class="glimpse-preview-show">' + $.glimpseContent.formatString(data) + '</span>';
+                    content = '<span class="glimpse-expand"></span>' + content + '<span class="glimpse-preview-show">' + $.glimpse.util.preserveWhitespace($.glimpseContent.formatString(data)) + '</span>';
             }
             return content;
         },
@@ -782,6 +782,9 @@ if (window.jQueryGlimpse) { (function ($) {
         },
         htmlDecode: function (value) {
             return !(value == undefined || value == null) ? $('<div/>').html(value).text() : '';
+        },
+        preserveWhitespace : function (value) {
+            return value.replace(/\r\n/g, '<br />').replace(/\n/g, '<br />').replace(/\t/g, '&nbsp; &nbsp; ').replace(/  /g, '&nbsp; ');
         },
         lengthJson: function (data) {
             var count = 0;
@@ -1095,21 +1098,22 @@ if (window.jQueryGlimpse) { (function ($) {
             static.panel.addClass('glimpse-permanent');
 
             //Reset to start things off 
-            ga.removeRequests();
+            ga.removeRequests(true);
         },
         shouldMakePopoutCall: function () {
             var g = $.glimpse;
             return (!g.static.isPopup && g.settings.popupOn && g.static.popup && !g.static.popup.closed)
         },
-        removeRequests: function () {
+        removeRequests: function (isInit) {
             var ga = this;
 
             //Clear out anything inside the panel
             ga.static.panel.html('<div class="glimpse-panel-message">No ajax calls have yet been detected</div>');
-            ga.resetContext();
+            ga.resetContext(isInit);
         },
-        resetContext: function () {
-            $.glimpse.reset();
+        resetContext: function (isInit) {
+            if (!isInit)
+                $.glimpse.reset();
         },
         requestSelected: function (link) {
             var ga = this, panelHead = $('table thead', ga.static.panel);
