@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Configuration;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Web;
 using Glimpse.Core.Configuration;
@@ -24,7 +26,8 @@ namespace Glimpse.Core
         private static IGlimpseSanitizer Sanitizer { get; set; }//TODO: new up via config
 
         [Export] public static GlimpseSerializer Serializer { get; set; }
-        [Export] private static GlimpseConfiguration Configuration { get; set; }
+        [Export] public static GlimpseConfiguration Configuration { get; set; }
+        [Export] public static IGlimpseMetadataStore MetadataStore { get; set; }
 
         private static IEnumerable<IGlimpseHandler> Handlers { get; set; }
         internal static IEnumerable<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>> Plugins { get; set; }
@@ -38,6 +41,8 @@ namespace Glimpse.Core
             Sanitizer = new CSharpSanitizer();
 
             Serializer = new GlimpseSerializer();
+
+            MetadataStore = new InProcStackMetadataStore(Configuration);
 
             Handlers = Enumerable.Empty<IGlimpseHandler>();
             Plugins = Enumerable.Empty<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>>();
@@ -163,11 +168,9 @@ namespace Glimpse.Core
         {
             if (!RequestValidator.IsValid(context, LifecycleEvent.PreSendRequestHeaders)) return;
 
-            var requestId = Guid.NewGuid();
+            var json = GenerateGlimpseOutput(context);
 
-            var json = GenerateGlimpseOutput(context, requestId);
-
-            Persist(json, context, requestId);
+            MetadataStore.Persist(json, context);
         }
 
         public void Dispose()
@@ -197,34 +200,6 @@ namespace Glimpse.Core
             store.AddRange(directoryCatalog.Exceptions.Select(exception => new ExceptionWarning(exception)));
         }
 
-        private static void Persist(string json, HttpContextBase context, Guid requestId)
-        {
-            if (Configuration.RequestLimit <= 0) return;
-
-            var store = context.Application;
-
-            //TODO: Turn Queue into provider model so it can be stored in SQL/Caching layer for farms
-            var queue = store[GlimpseConstants.JsonQueue] as Queue<GlimpseRequestMetadata>;
-
-            if (queue == null)
-                store[GlimpseConstants.JsonQueue] =
-                    queue = new Queue<GlimpseRequestMetadata>(Configuration.RequestLimit);
-
-            if (queue.Count == Configuration.RequestLimit) queue.Dequeue();
-
-            var browser = context.Request.Browser;
-            queue.Enqueue(new GlimpseRequestMetadata
-                              {
-                                  Browser = string.Format("{0} {1}", browser.Browser, browser.Version),
-                                  ClientName = context.GetClientName(),
-                                  Json = json,
-                                  RequestTime = DateTime.Now.ToLongTimeString(),
-                                  RequestId = requestId,
-                                  IsAjax = context.IsAjax().ToString(),
-                                  Url = context.Request.RawUrl,
-                                  Method = context.Request.HttpMethod
-                              });
-        }
 
         private static void ProcessData(HttpContextBase context, bool sessionRequired)
         {
@@ -249,7 +224,7 @@ namespace Glimpse.Core
             }
         }
 
-        private static string GenerateGlimpseOutput(HttpContextBase context, Guid requestId)
+        private static string GenerateGlimpseOutput(HttpContextBase context)
         {
             IDictionary<string, object> data;
             if (!context.TryGetData(out data)) return "Error: No Glimpse Data Found";
@@ -258,16 +233,18 @@ namespace Glimpse.Core
 
             json = Sanitizer.Sanitize(json);
 
-            AppendToResponse(context, json, requestId);
+            AppendToResponse(context, json);
 
             return json;
         }
 
-        private static void AppendToResponse(HttpContextBase context, string json, Guid requestId)
+        private static void AppendToResponse(HttpContextBase context, string json)
         {
+            var requestId = context.GetRequestId().ToString();
+
             if (context.IsAjax())
             {
-                context.Response.AddHeader(GlimpseConstants.HttpHeader, requestId.ToString());
+                context.Response.AddHeader(GlimpseConstants.HttpHeader, requestId);
             }
             else
             {
@@ -337,10 +314,9 @@ namespace Glimpse.Core
             }
 
             requestMetadata.Add("environmentUrls", environmentUrls);
-            requestMetadata.Add("runningVersion", decimal.Parse(Assembly.GetExecutingAssembly().GetName().Version.ToString(2)));
+            requestMetadata.Add("runningVersion", decimal.Parse(Assembly.GetExecutingAssembly().GetName().Version.ToString(2), NumberFormatInfo.InvariantInfo));
             
-
-            //plugin specific metadata);
+            //plugin specific metadata);))
             foreach (var plugin in Plugins)
             {
                 var pluginData = new Dictionary<string, object>();

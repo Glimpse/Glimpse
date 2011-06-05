@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Web;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Microsoft.Web.Infrastructure.DynamicValidationHelper;
+using Newtonsoft.Json;
 
 namespace Glimpse.Core.Plugin
 {
@@ -45,12 +47,23 @@ namespace Glimpse.Core.Plugin
 
             //make sure there is request data
             if (form == null && querystring == null && cookies.Count <= 1) return null;
-            
+
+            //read input stream
+            var inputStream = context.Request.InputStream;
+            inputStream.Position = 0;
+            var inputString = new StreamReader(inputStream).ReadToEnd();
+            object inputStreamResult = string.IsNullOrEmpty(inputString) ? null : inputString;
+
+            //If input was json, deserialize to object so it can be rendered later.
+            if (context.Request.ContentType.StartsWith(@"application/json", StringComparison.OrdinalIgnoreCase))
+                inputStreamResult = JsonConvert.DeserializeObject(inputString);
+
             return new
                        {
                            Cookies = cookies,
                            Form = form,
                            QueryString = querystring,
+                           InputStream = inputStreamResult,
                            request.ApplicationPath,
                            request.AppRelativeCurrentExecutionFilePath,
                            request.CurrentExecutionFilePath,

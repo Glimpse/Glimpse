@@ -13,10 +13,8 @@
         public const string Warnings = "Glimpse.Warnings";
         public const string HttpHeader = "X-Glimpse-RequestID";
         public const string JsonQueue = "Glimpse.JsonQueue";
-        public const string ValidContentType = "Glimpse.Validation.ValidContentType";
-        public const string ValidIp = "Glimpse.Validation.ValidIp";
-        public const string ValidMode = "Glimpse.Validation.ValidMode";
         public const string ValidPath = "Glimpse.Validation.Path";
-        public const string ViewEngine = "Glimpse.ViewEngine"; 
+        public const string ViewEngine = "Glimpse.ViewEngine";
+        public const string GlimpseRequestId = "Glimpse.Request.Id";
     }
 }

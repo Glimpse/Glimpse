@@ -71,6 +71,7 @@
     <Compile Include="Extensibility\GlimpseTrace.cs" />
     <Compile Include="Extensibility\GlimpseHandlerAttribute.cs" />
     <Compile Include="Extensibility\GlimpseValidatorAttribute.cs" />
+    <Compile Include="Extensibility\IGlimpseMetadataStore.cs" />
     <Compile Include="Extensibility\IGlimpseWarning.cs" />
     <Compile Include="Extensibility\IGlimpseHandler.cs" />
     <Compile Include="Extensibility\IProvideGlimpseHelp.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Handler\JsonHandlerBase.cs" />
     <Compile Include="Handler\Logo.cs" />
     <Compile Include="Plumbing\GlimpseSerializer.cs" />
+    <Compile Include="Plumbing\InProcStackMetadataStore.cs" />
     <Compile Include="Validator\ContentTypeValidator.cs" />
     <Compile Include="Validator\GlimpseModeValidator.cs" />
     <Compile Include="Validator\GlimpseRequestValidator.cs" />
@@ -95,7 +97,7 @@
     <Compile Include="Extensibility\IGlimpsePlugin.cs" />
     <Compile Include="Extensibility\IGlimpsePluginRequirements.cs" />
     <Compile Include="Extensibility\IGlimpseSanitizer.cs" />
-    <Compile Include="Extensions\HttpApplicationExtensions.cs" />
+    <Compile Include="Extensions\HttpContextBaseExtensions.cs" />
     <Compile Include="Extensions\KeyValuePairExtension.cs" />
     <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
     <Compile Include="Plugin\Request.cs" />

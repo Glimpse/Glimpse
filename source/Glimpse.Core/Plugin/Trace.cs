@@ -23,40 +23,6 @@ namespace Glimpse.Core.Plugin
             var messages = context.Items[TraceMessageStoreKey] as IList<IList<string>>;
             if (messages == null) return null;
 
-            foreach (var message in messages)
-            {
-                //Add style if the category is recognized
-                switch (message[1].ToLower())
-                {
-                    case "warning":
-                    case "warn":
-                        message.Add("warn");
-                        break;
-                    case "information":
-                    case "info":
-                        message.Add("info");
-                        break;
-                    case "error":
-                        message.Add("error");
-                        break;
-                    case "fail":
-                        message.Add("fail");
-                        break;
-                    case "quiet":
-                        message.Add("quiet");
-                        break;
-                    case "timing":
-                        message.Add("loading");
-                        break;
-                    case "selected":
-                        message.Add("selected");
-                        break;
-                    case "aspx.page":
-                        message.Add("ms");
-                        break;
-                }
-            }
-
             return messages;
         }
 

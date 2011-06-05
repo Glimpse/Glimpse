@@ -8,6 +8,7 @@ namespace Glimpse.Core.Configuration
         public ContentTypeCollection()
         {
             BaseAdd(new ContentType { Content = "text/html" });
+            BaseAdd(new ContentType { Content = "application/json" });
         }
 
         public void Add(ContentType contentType)

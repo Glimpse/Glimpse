@@ -8,12 +8,23 @@ using MvcMusicStore.Models;
 
 namespace MvcMusicStore.Controllers
 {
+    public class Test
+    {
+        public string Name { get; set; }
+        public int Number { get; set; }
+    }
+
     public partial class HomeController : Controller
     {
         //
         // GET: /Home/
-
         MusicStoreEntities storeDB = new MusicStoreEntities();
+
+        [HttpPost]
+        public virtual ActionResult JsonTest(Test test)
+        {
+            return Json(new {Message = test.Name + " is number " + test.Number, Time = DateTime.Now});
+        }
 
         public virtual ActionResult Index()
         {
