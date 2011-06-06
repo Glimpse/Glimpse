@@ -6,7 +6,6 @@ using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Web;
 using Glimpse.Core.Configuration;
@@ -42,8 +41,6 @@ namespace Glimpse.Core
 
             Serializer = new GlimpseSerializer();
 
-            MetadataStore = new InProcStackMetadataStore(Configuration);
-
             Handlers = Enumerable.Empty<IGlimpseHandler>();
             Plugins = Enumerable.Empty<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>>();
         }
@@ -51,6 +48,8 @@ namespace Glimpse.Core
         public void Init(HttpApplication context)
         {
             if (!Configuration.Enabled) return; //Do nothing if Glimpse is off, events are not wired up
+
+            MetadataStore = new InProcStackMetadataStore(Configuration, new HttpApplicationStateWrapper(context.Application));
 
             if (Plugins.Count() == 0)
             {
@@ -168,9 +167,9 @@ namespace Glimpse.Core
         {
             if (!RequestValidator.IsValid(context, LifecycleEvent.PreSendRequestHeaders)) return;
 
-            var json = GenerateGlimpseOutput(context);
+            var jsonPayload = GenerateGlimpseOutput(context);
 
-            MetadataStore.Persist(json, context);
+            MetadataStore.Persist(context.GetRequestMetadata(jsonPayload));
         }
 
         public void Dispose()

@@ -2,7 +2,7 @@
 
 namespace Glimpse.Core.Plumbing
 {
-    internal class GlimpseRequestMetadata
+    public class GlimpseRequestMetadata
     {
         public string Method { get; set; }
         public string Json { get; set; }

@@ -45,10 +45,12 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ModuleTest.cs" />
     <Compile Include="Plugin\RequestTest.cs" />
+    <Compile Include="Plugin\TraceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -3,11 +3,28 @@ using System.Collections.Generic;
 using System.Web;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Plumbing;
 
 namespace Glimpse.Core.Extensions
 {
     public static class HttpContextBaseExtensions
     {
+        internal static GlimpseRequestMetadata GetRequestMetadata(this HttpContextBase context, string jsonPayload)
+        {
+            var browser = context.Request.Browser;
+            return new GlimpseRequestMetadata
+                       {
+                           Browser = string.Format("{0} {1}", browser.Browser, browser.Version),
+                           ClientName = context.GetClientName(),
+                           Json = jsonPayload,
+                           RequestTime = DateTime.Now.ToLongTimeString(),
+                           RequestId = context.GetRequestId(),
+                           IsAjax = context.IsAjax().ToString(),
+                           Url = context.Request.RawUrl,
+                           Method = context.Request.HttpMethod
+                       };
+        }
+
         internal static bool IsAjax(this HttpContextBase context)
         {
             var request = context.Request;

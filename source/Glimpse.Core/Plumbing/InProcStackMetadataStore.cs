@@ -3,46 +3,45 @@ using System.Collections.Generic;
 using System.Web;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions;
 
 namespace Glimpse.Core.Plumbing
 {
-    public class InProcStackMetadataStore:IGlimpseMetadataStore
+    public class InProcStackMetadataStore : IGlimpseMetadataStore
     {
+        public const string JsonQueue = "Glimpse.JsonQueue";
         private GlimpseConfiguration Configuration { get; set; }
-
-        public InProcStackMetadataStore(GlimpseConfiguration configuration)
+        private HttpApplicationStateBase ApplicationState { get; set; }
+        private Queue<GlimpseRequestMetadata> Queue
         {
-            Configuration = configuration;
+            get
+            {
+                var queue = ApplicationState[JsonQueue] as Queue<GlimpseRequestMetadata>;
+
+                if (queue == null)
+                    ApplicationState[JsonQueue] = queue = new Queue<GlimpseRequestMetadata>(Configuration.RequestLimit);
+
+                return queue;
+            }
         }
 
-        public void Persist(string json, HttpContextBase context)
+        public InProcStackMetadataStore(GlimpseConfiguration configuration, HttpApplicationStateBase applicationState)
         {
-            if (Configuration.RequestLimit <= 0) return;
+            Configuration = configuration;
+            ApplicationState = applicationState;
+        }
 
-            var store = context.Application;
+        public void Persist(GlimpseRequestMetadata metadata)
+        {
+            if (Configuration.RequestLimit == 0) return;
 
-            //TODO: Turn Queue into provider model so it can be stored in SQL/Caching layer for farms
-            var queue = store[GlimpseConstants.JsonQueue] as Queue<GlimpseRequestMetadata>;
+            if (Queue.Count == Configuration.RequestLimit && Configuration.RequestLimit != -1) Queue.Dequeue();
+            
+            Queue.Enqueue(metadata);
+        }
 
-            if (queue == null)
-                store[GlimpseConstants.JsonQueue] =
-                    queue = new Queue<GlimpseRequestMetadata>(Configuration.RequestLimit);
-
-            if (queue.Count == Configuration.RequestLimit) queue.Dequeue();
-
-            var browser = context.Request.Browser;
-            queue.Enqueue(new GlimpseRequestMetadata
-            {
-                Browser = string.Format("{0} {1}", browser.Browser, browser.Version),
-                ClientName = context.GetClientName(),
-                Json = json,
-                RequestTime = DateTime.Now.ToLongTimeString(),
-                RequestId = context.GetRequestId(),
-                IsAjax = context.IsAjax().ToString(),
-                Url = context.Request.RawUrl,
-                Method = context.Request.HttpMethod
-            });
+        public IEnumerable<GlimpseRequestMetadata> Requests
+        {
+            get { return Queue; }
         }
     }
 }
