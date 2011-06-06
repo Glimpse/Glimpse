@@ -48,8 +48,8 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ModuleTest.cs" />
     <Compile Include="Plugin\RequestTest.cs" />
+    <Compile Include="Plugin\SessionTest.cs" />
     <Compile Include="Plugin\TraceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

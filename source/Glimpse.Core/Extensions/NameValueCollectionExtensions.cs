@@ -7,6 +7,8 @@ namespace Glimpse.Core.Extensions
     {
         internal static IDictionary<string, string> Flatten(this NameValueCollection collection)
         {
+            if (collection == null) return null;
+
             var result = new Dictionary<string, string>();
             foreach (var key in collection.AllKeys)
             {

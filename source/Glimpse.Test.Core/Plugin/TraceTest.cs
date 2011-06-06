@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Plugin;
+using Glimpse.Core.Plumbing;
 using Moq;
 using NUnit.Framework;
 
@@ -11,9 +13,25 @@ namespace Glimpse.Test.Core.Plugin
     public class TraceTest
     {
         [Test]
-        public void Trace_SetupInit()
+        public void Trace_SetupInit_WithoutGlimpseTraceListner_ShouldAddListener()
         {
+            System.Diagnostics.Trace.Listeners.Clear();
+
             Plugin.SetupInit();
+
+            Assert.IsTrue(System.Diagnostics.Trace.Listeners.OfType<GlimpseTraceListener>().Any());
+        }
+
+        [Test]
+        public void Trace_SetupInit_WithExistingGlimpseTraceListner_ShouldNotAddAnotherListener()
+        {
+            var glimpseTraceListener = new GlimpseTraceListener();
+            System.Diagnostics.Trace.Listeners.Add(glimpseTraceListener);
+
+            Plugin.SetupInit();
+
+            CollectionAssert.Contains(System.Diagnostics.Trace.Listeners, glimpseTraceListener);
+            Assert.AreEqual(1, System.Diagnostics.Trace.Listeners.OfType<GlimpseTraceListener>().Count());
         }
 
         [Test]
