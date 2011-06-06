@@ -39,3 +39,6 @@ Glimpse.5.1.ReSharper.user
 /source/Glimpse.Example/Bin
 /source/Glimpse.Sample.MVC3/Bin
 /Glimpse.All.crunchsolution.local.xml
+/TestResult.xml
+/tools/nunit/GlimpseTests.VisualState.xml
+/tools/nunit/NUnitTests.VisualState.xml
