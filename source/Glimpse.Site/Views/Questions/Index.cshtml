@@ -1,13 +1,38 @@
-﻿@section PageQuote {
+﻿@*@section PageQuote {
     One of  my favorite projects...
     It adds a FireBug like experience for grabbing server-side diagnostics 
     from an ASP.NET MVC application while looking at it in your browser -- Phil Haack
-}
+}*@
 
-@Html.GlimpseDownload(true)
+@Html.GlimpseDownload(false)
 
-<div class="features questions"> 
-    <h2>Frequently Asked Questions</h2>
+<div class="features questions about"> 
+
+<table width="100%">
+    <tr>
+        <td width="50%" colspan="3">  
+            <h2>Frequently Asked Questions</h2>
+        </td>
+        <td rowspan="2" style="text-align:center; vertical-align:bottom"> 
+            <img src="@Links.Content.Support.GlimpseSupport_jpg" />
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <strong>Need to find an answer?</strong>
+            <p>In the below we have tried to answer some of your questions. Most likely we will have 
+            missed what you are specifically after. Make sure you checkout the @Html.ActionLink("Help", MVC.Help.Index()) 
+            section of the site as well.</p>
+            <p>If this doesn't answer your question tweet us using #Glimpse or hop on Stackoverflow 
+            and make sure you tag your question with "Glimpse".</p>
+            <br /><br />
+        </td> 
+    </tr>
+</table>
+
+ @Menu.AboutMenu(Html, false, 3) 
+
+    <h3>General</h3>
     <ol class="plain">
         <li>
             <div class="question">What is glimpse?</div>
@@ -45,6 +70,57 @@
             <div class="question">Can Glimpse help me with other .NET web technologies like SharePoint, Orchard, etc?</div> 
             Developing plugins for these frameworks is on our roadmap. As soon as we get the core of Glimpse solidified, we will start on these pieces. If
             however you can see value in having these plugins sooner rather than later please get in contact and fell free to contribute.
+        </li>
+        <li>
+            <div class="question">Can or should I use Glimpse in a production environment?</div>
+            <p>You certainly can and it may be helpful when debugging problems on a live server where you do not have the ability to run the Visual Studio debugger. However be aware that Glimpse sends a lot of potentially dangerous data to the client which should not be visible to a normal user.</p>
+            <p>Ideally you want to keep the Glimpse default settings whom only supports its usage on the local machine. This means you need to debug in a web browser on the server itself. This way no information does actually leave the server.</p>
+            <p>If you can't do that and need to use a remote browser, you need to configure Glimpse to allow your IP address:</p>
+<pre> &lt;glimpse enabled="true"&gt;
+    &lt;ipAddresses&gt;
+      &lt;add address="127.0.0.1" /&gt;
+      &lt;add address="10.10.10.50" /&gt;
+      &lt;add address="::1" /&gt;
+    &lt;/ipAddresses&gt;
+  &lt;/glimpse&gt;</pre>
+            <p>In more cases you only need to provide your IPv4 address as most live servers and the network equipment around them are still operating on IPv4.</p>
+            <p>Make sure to disable Glimpse in the web.config on the live server after you are done with the debugging.</p>
+        </li>
+        <li>
+            <div class="question">How to I uninstall Glimpse?</div>
+            Simply remove the Glimpse DLL(s) from your bin directory and the two Glimpse related nodes from you web.config file.
+        </li>
+        <li>
+            <div class="question">Does Glimpse work over SSL?</div>
+            Yes, we are just transferring additional data in the encrypted request.
+        </li>
+        <li>
+            <div class="question">What browsers does Glimpse work in?</div>
+            We devlop using: Chrome 12, Firefox 4 and IE9. We try and test using: IE8+, Firefox 3.5+, Chrome 8+. In IE6 you see the tabs and some data but it doesn't really work. We don't plan to fix this. Use a better browser.
+        </li>
+    </ol> 
+    
+    <hr class="line" />
+
+    <h3>Troubleshooting</h3>
+    <ol class="plain">
+        <li>
+            <div class="question">I can get to/glimpse/config but do not see the glimpse logo on my pages?</div>
+            On /glimpse/config check the "Your Settings" section and review your IP, if it says anything but 127.0.0.1 Glimpse will not work until you enabled that address. Check the configuration section in the reference part to learn how to do this.
+        </li>  
+        <li>
+            <div class="question">Why are some of the tabs greyed out?</div>
+            This is because no relevant data for this tab exists. For example the Session tab may be greyed out because there is either no data in session state or this feature is completely disabled on the server. <br /><br />
+            In other cases the tab is greyed out because no data exist for this particular request, but other requests may provide data for the tab.<br /><br />
+            If you are sure you never get data for a tab, you can remove the tab by blacklisting the plugin. See 'Blacklist for plugins' in the configuration section.
+        </li>  
+        <li>
+            <div class="question">I am tracing, but the Trace tab is still greyed out?</div>
+            Have a look at the trace settings in your web.config:   <br /><br />
+<pre>&lt;trace enabled="true" requestLimit="40" localOnly="true" pageOutput="false" 
+    writeToDiagnosticsTrace="true" /&lt;</pre><br />
+            Make sure writeToDiagnosticsTrace is set to true, and turn pageOutput is false. If you not local, also set localOnly="false"
+
         </li>
     </ol> 
 </div>

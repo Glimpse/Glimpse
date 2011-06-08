@@ -9,7 +9,9 @@ ol.plain li { list-style-type:decimal; }
 ul.plain li { list-style-type:disc; }
 ul.plain li, ol.plain li { margin:0.5em 0 0.5em 1.5em ; }
 .content { position:absolute; left:50%; margin-left:-450px; text-align:left; width:900px; }
-.navigation-back { border-left:1px solid #dcdcdc; border-bottom:1px solid #dcdcdc; border-right:1px solid #dcdcdc; background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #FCFCFC), color-stop(1, #dfdfdf) ); background:-moz-linear-gradient( center top, #FCFCFC 5%, #dfdfdf 100% ); filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#FCFCFC', endColorstr='#dfdfdf'); background-color: #FAFAFA;position:absolute; right: -10px; height: 80px; width: 720px; border-radius: 0px 0px 10px 10px; -moz-border-radius: 0px 0px 10px 10px; -webkit-border-bottom-right-radius: 10px; -webkit-border-bottom-left-radius: 10px; }
+.dark-grad-bg { border:1px solid #dcdcdc; background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #FCFCFC), color-stop(1, #dfdfdf) ); background:-moz-linear-gradient( center top, #FCFCFC 5%, #dfdfdf 100% ); filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#FCFCFC', endColorstr='#dfdfdf'); background-color: #FAFAFA; }
+.light-grad-bg { border: 1px solid #AAA;  background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #EBEBEB), color-stop(1, #FCFCFC) ); background: -moz-linear-gradient( center top, #EBEBEB 5%, #FCFCFC 100% ); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#EBEBEB', endColorstr='#FCFCFC'); background-color: #FCFCFC; }
+.navigation-back { border-top:0px; position:absolute; right: -10px; height: 80px; width: 720px; border-radius: 0px 0px 10px 10px; -moz-border-radius: 0px 0px 10px 10px; -webkit-border-bottom-right-radius: 10px; -webkit-border-bottom-left-radius: 10px; }
 .navigation { position:absolute; right:0; right:-50px; }
 .navigation li { float:left; width:185px; height:70px; position:relative; }
 .navigation li a { display:block; font-size:1.5em; color:#333; text-decoration:none; margin:1em 0 0.5em; }
@@ -24,12 +26,13 @@ ul.plain li, ol.plain li { margin:0.5em 0 0.5em 1.5em ; }
 .features { margin-top:20px; }
 .features h3 { margin:20px 0 15px; } 
 .features tr { vertical-align:top; } 
+.features p { padding: 0.5em 0; }
 .scroll-pane { overflow:hidden; outline:none; height:400px; width:820px; }
 h1, h2, h3, h4 { line-height:1.2em; } 
 h1 { font-size:4em; }
 h2 { font-size:2.5em; }
 h3 { font-size:2em; }
-h4 { font-size:1.2em; font-weight:bold; margin-bottom:0.5em; }
+h4 { font-size:1.4em;  margin-bottom:0.5em; }
 blockquote { font: 1.2em/1.6em "avante garde", "Century Gothic", Serif; width: 400px; background: url(/Content/close-quote.gif) no-repeat right bottom; padding-left: 18px; text-indent: -18px; }
 blockquote:first-letter { background: url(/Content/open-quote.gif) no-repeat left top; padding-left: 18px; font: italic 1.4em "avante garde", "Century Gothic", Serif; }
 .question {font-weight:bold; line-height:1.4em;}
@@ -53,3 +56,18 @@ pre { border: 1px dashed #777; background-color: #EEE; padding: 1em; }
 .help-links { display:none; border: 1px solid #AAA;-moz-border-radius:10px; -webkit-border-radius:10px; border-radius:10px; text-align: left; padding:0 2em 1em 2em; -moz-box-shadow: 0 0 5px 5px #888; -webkit-box-shadow: 0 0 5px 5px#888; box-shadow: 0 0 5px 5px #DDD; position: absolute; width:94%; bottom: 0; background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #EBEBEB), color-stop(1, #FCFCFC) ); background: -moz-linear-gradient( center top, #EBEBEB 5%, #FCFCFC 100% ); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#EBEBEB', endColorstr='#FCFCFC'); background-color: #FCFCFC; }
 
 .soon { font-weight:bold; font-size:1.2em; text-align:center; margin:3em 0; }
+
+.line { background:gainsboro; color:gainsboro; clear: both; float: none; width: 100%; height: 1px; margin: 2em 0; border: none; }
+
+.about .quotes .dark-grad-bg { padding:1em; font-size: 0.9em; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; height:100%; }
+.about .quotes .dark-grad-bg div { margin-top:1em; text-align:right; font-size:0.9em; }
+.about .button-holder { text-align:center; margin-top:1.5em; }
+.about .light-grad-bg { border-left:0px; border-right:0px; padding-left:0.5em; }
+.about h2 { margin-bottom:0.5em; }
+.about .light-grad-bg h2 { margin-bottom:0.3em; }
+
+
+.sub-menu-holder { padding:1.5em 0 2em 0; border-top:1px solid #dcdcdc; border-bottom:1px solid #dcdcdc; margin-top:1em; }
+.sub-menu-holder h2 { margin-bottom:0.3em; }
+.sub-menu-holder h3 { margin-top:0; }
+.sub-menu-holder li { display:inline-block; margin-right:1.5em; }

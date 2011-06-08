@@ -1,0 +1,23 @@
+﻿@using System.Web.Mvc
+@using System.Web.Mvc.Html
+
+@helper AboutMenu(System.Web.Mvc.HtmlHelper html, bool isMainUse, int currentIndex) {
+<div class="sub-menu-holder light-grad-bg">
+
+    @if (isMainUse) {
+        <h2>Glimpse "Debugger"</h2>
+    } else {
+        <h3>Glimpse "Debugger"</h3>
+    } 
+    <ul>
+        <li>@html.ActionLink("Details", MVC.About.Details())</li>
+        @*<li>@html.ActionLink("Features", MVC.About.Features())</li>*@
+        <li>@html.ActionLink("Quick Start", MVC.About.QuickStart())</li>
+        <li>@html.ActionLink("FAQ", MVC.Questions.Index())</li>
+        <li>@html.ActionLink("Talk", MVC.Talk.Index())</li>
+        <li>@html.ActionLink("Credits", MVC.About.Credits())</li>
+        <li>@html.ActionLink("Platforms", MVC.About.Platforms())</li>
+        @*<li>@html.ActionLink("Roadmap", MVC.About.Roadmap())</li>*@
+    </ul>
+</div>
+}

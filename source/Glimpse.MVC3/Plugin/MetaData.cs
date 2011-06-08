@@ -62,7 +62,7 @@ namespace Glimpse.Mvc3.Plugin
 
                     result.Add(new[] { "Primary View Model", meatDataType, detailResult, propertyResults == null ? "glimpse-start-open" : "" });
                     if (propertyResults != null)
-                        result.Add(new[] { "View Model Properties", null, propertyResults });
+                        result.Add(new[] { "View Model Properties", null, propertyResults, "glimpse-start-open" });
 
 
                     break;
