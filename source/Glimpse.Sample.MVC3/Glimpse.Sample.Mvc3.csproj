@@ -227,6 +227,10 @@
     <Content Include="Views\Account\Test.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Desktop\Sample\EntityFramework\EntityFrameworkProfiler\EntityFrameworkProfiler.csproj">
+      <Project>{1AEDC219-C2A4-422E-8DD8-A9ABAE1B4F3B}</Project>
+      <Name>EntityFrameworkProfiler</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">
       <Project>{21F99168-7D7B-49F2-A97C-5A983E0CA16F}</Project>
       <Name>Glimpse.Core</Name>

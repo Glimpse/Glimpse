@@ -1,0 +1,109 @@
+﻿@Html.GlimpseDownload(false)
+   
+<div class="features about">
+
+<table width="100%">
+    <tr>
+        <td width="50%">  
+<h2>Implementation Details</h2>
+        </td>
+        <td rowspan="2" style="text-align:center; vertical-align:bottom;">
+            <img src="@Links.Content.Support.GlimpseDetails_jpg" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+<p>Glimpse is an amazing product that allows you to see exactly what's going on in your web server.
+Currently, it works for any ASP.NET website and even has specific extentions for specific frameworks like 
+(ASP.NET MVC, etc).</p>
+<p>Besides just supporting frameworks such as these out of the box, Glimpse has an architecutre 
+that fundementally supports the future development of Server side implementations of Glimpse 
+for other non-ASP.NET based system in the future.</p>
+<br />
+        </td> 
+    </tr>
+</table>
+ 
+ @Menu.AboutMenu(Html, false, 0) 
+
+<table width="100%">
+    <tr>
+        <td width="49%">
+
+<h3>On the Server</h3>
+<p>Glimpse plugins, either built into Glimpse, or provided by third parties or yourself run on the server and collect all server side information that will aid in debugging (i.e. application settings, routes, session variables, trace data, etc.)</p>
+<p>Before the response is send, the Glimpse formats the data collected by the plugins in accordance with the Glimpse Protocol and serializes it as JSON</p>
+<p>Depending on whether it is an Ajax request or not, the server embeds the JSON in an HTTP Header or in the content of the page.</p>
+         
+        </td>
+        <td width="2%"></td>
+        <td width="49%">
+
+<h3>On the Client</h3>
+<p>JavaScript on the clients picks up the JSON data sent by the server components and displays and dynamically renders a client side UI (similar to Firebug Lite) that lets you view this data.</p>
+<p>Glimpse can be turned on or off by a series of different mechanistic, but at its core if the Glimpse cookie is present the server will provide the "debug" data - as a security measure, the request for debug data is "authenticated". Via the plugin model, this authentication check can have any logic that is required by the site to ensure that unauthorized users don't have access to sensitive debug data.</p>
+        
+        </td>
+    </tr>
+</table>
+
+<hr class="line" />
+
+<h3>Protocol</h3>
+<p>The Glimpse Protocol is the glue that brings the client and server together, but its also responsible for helping make 
+   Glimpse extensible. The protocol is simply data that is seralized into a JavaScript object (JSON), where the strucutre 
+   of the output is intelegently interprited.</p>
+<p>For example if we have the following structure couldn't we make some assumption about how to display it, couldn't we 
+say that this could be displayed as Key Value pair table:</p>
+<pre>var simpleData = { 
+        "Movie" : "Star Wars",
+        "Genera/Theme" : "Science Fiction",
+        "GlimpseOn" : "True"
+    }</pre><br />
+<p>Or if we have the following, using the about logic couldn't we make some further assumptions. Couldn't we say that this
+looks like a table of data with multiple columns, where the first row is the table header and the first column is the key 
+for that row:</p>
+<pre>var complexData = [
+        [ "Actor", "Character", "Gender", "Age" ],
+        [ "Mark Hamill", "Luke Skywalker", "Male", "21" ],
+        [ "James Earl Jones", "Darth Vader", "Male", "45", "quiet" ]
+    ];</pre><br />
+<p>This may seem like very obvious but its these basic assumptions that make Glimpse possible and help provide a total 
+disconnect between Server and Client, and whats makes it possible for Glimpse to to support multiple server platforms 
+using the same Client.</p>
+
+<div class="button-holder"><a href="@Url.Action(MVC.Protocol.Index())" class="myButton">More Protocol</a></div>
+
+<hr class="line" />
+
+<h3>Implementation Details</h3>
+<strong>Server</strong>
+<p>Given the scope of the project and what it can do, the concept isn't restricted to any one platform. Hence, once mature, Glimpse Server Module will be available on all major web platforms.</p>
+<table width="100%">
+    <tr>
+        <td width="40%"> 
+<p>Platforms currently supported:</p>
+<ul class="plain">
+    <li>ASP.Net Web Forms 4</li>
+    <li>ASP.Net MVC 3</li> 
+</ul> 
+        </td>
+        <td> 
+<p>Platforms soon to be supported:</p>
+<ul class="plain">
+    <li>PHP</li>
+    <li>Ruby on Rails</li>
+    <li>Node.js</li> 
+</ul> 
+        </td>
+    </tr>
+</table>
+<p>NOTE - If you would like help develop a Glimpse Server Module for a given platform please let us know.</p>
+
+<br />
+<strong>Client</strong>
+<p>To start with the Glimpse Client Side Viewer is simply a light weight JavaScript "plugin" that understands the Glimpse Protocol and knows how to render the data. From a technology standpoint we currently use jQuery as the client side framework.</p>
+<p>Eventually, we would like to have actual browser plugins that provide richer functionality and experience, but the JavaScript version of the Glimpse Client Side Viewer is surprisingly well featured, intuitive and provides a high fidelity experience. We also hope to have a version for mobile ready soon which customizes the viewing/usage experience when using a mobile device.</p>
+
+
+</div>

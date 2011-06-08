@@ -87,8 +87,8 @@ namespace Glimpse.Core.Plumbing
                                                                        {
                                                                            new List<string>
                                                                                {
-                                                                                   "Message",
                                                                                    "Category",
+                                                                                   "Message",
                                                                                    "From First",
                                                                                    "From Last"
                                                                                }
@@ -172,8 +172,8 @@ namespace Glimpse.Core.Plumbing
 
             Messages.Add(ApplyStyle(new List<string>
                                         {
-                                            message,
                                             string.IsNullOrEmpty(category) ? "Info" : category,
+                                            message,
                                             count == 1 ? null : elapsedSinceFirst,
                                             count == 1 ? null : elapsedSinceLast
                                         }));
@@ -222,7 +222,7 @@ namespace Glimpse.Core.Plumbing
 
         private List<string> ApplyStyle(List<string> message)
         {
-            switch (message[1].ToLower())
+            switch (message[0].ToLower())
             {
                 case "warning":
                 case "warn":

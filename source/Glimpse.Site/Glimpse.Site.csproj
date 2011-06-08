@@ -71,6 +71,10 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutController.generated.cs">
+      <DependentUpon>T4MVC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\GlimpseController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -123,6 +127,13 @@
     <Content Include="Content\Plugin\Session.jpg" />
     <Content Include="Content\Plugin\Trace.jpg" />
     <Content Include="Content\Plugin\View.jpg" />
+    <Content Include="Content\Support\GlimpseCredits.jpg" />
+    <Content Include="Content\Support\GlimpseDetails.jpg" />
+    <Content Include="Content\Support\GlimpseOverview.jpg" />
+    <Content Include="Content\Support\GlimpsePlatform.jpg" />
+    <Content Include="Content\Support\GlimpseQuickStart.jpg" />
+    <Content Include="Content\Support\GlimpseSupport.jpg" />
+    <Content Include="Content\Support\WhatIsGlimpse.jpg" />
     <Content Include="Scripts\Protocol\LayoutExample.js" />
   </ItemGroup>
   <ItemGroup>
@@ -230,6 +241,14 @@
       <LastGenOutput>T4MVC.cs</LastGenOutput>
     </None>
     <None Include="T4MVC.tt.settings.t4" />
+    <Content Include="Views\About\Index.cshtml" />
+    <Content Include="Views\About\Credits.cshtml" />
+    <Content Include="Views\About\Details.cshtml" />
+    <Content Include="Views\About\Platforms.cshtml" />
+    <Content Include="Views\About\Roadmap.cshtml" />
+    <Content Include="Views\About\QuickStart.cshtml" />
+    <Content Include="Views\About\Features.cshtml" />
+    <Content Include="App_Code\Menu.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
