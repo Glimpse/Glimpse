@@ -28,7 +28,7 @@ namespace Glimpse.Core
         [Export] public static GlimpseConfiguration Configuration { get; set; }
         [Export] public static IGlimpseMetadataStore MetadataStore { get; set; }
 
-        private static IEnumerable<IGlimpseHandler> Handlers { get; set; }
+        internal static IEnumerable<IGlimpseHandler> Handlers { get; set; }
         internal static IEnumerable<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>> Plugins { get; set; }
 
         static Module()
@@ -126,7 +126,7 @@ namespace Glimpse.Core
             context.InitGlimpseContext();
         }
 
-        private static void PostMapRequestHandler(HttpContextBase context)
+        internal static void PostMapRequestHandler(HttpContextBase context)
         {
             context.Items[GlimpseConstants.ValidPath] = false;
 
