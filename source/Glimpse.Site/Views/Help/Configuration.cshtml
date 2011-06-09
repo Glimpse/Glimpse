@@ -1,0 +1,124 @@
+﻿@Html.GlimpseDownload(false)
+   
+<div class="features help">
+
+    <table width="100%">
+        <tr>
+            <td width="50%">  
+                <h2>Configuration</h2>
+            </td>
+            <td rowspan="2" style="text-align:center; vertical-align:bottom"> 
+                @*<img src="@Links.Content.Support.GlimpsePlatform_jpg" />*@
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>On the server all configuration happens in web.config. When installing Glimpse 
+                using NuGet only a minimal configuration is set. There are defaults for all the 
+                optional settings which are described here. </p>
+                <br /> 
+            </td> 
+        </tr>
+    </table>
+ 
+    @Menu.HelpMenu(Html, false, 6) 
+     
+    <h3>ConfigSections</h3>
+    <p>The Glimpse configuration has to be registered with the ASP.NET configuration system. This is done by adding a node to the in the configSections at the very top of the file:</p>
+<pre>&lt;configuration&gt;
+  &lt;configSections&gt;
+    &lt;section name="glimpse" type="Glimpse.Core.Configuration.GlimpseConfiguration" /&gt;
+  &lt;/configSections&gt;
+  ...
+&lt;/configuration&gt;</pre>
+ 
+    <hr class="line" />
+     
+    <h3>Root</h3>
+    <p>The minimum configuration you need to get Glimpse working is as follows.</p>
+<pre>&lt;glimpse enabled="true" /&gt;</pre>
+    <p>All settings for Glimpse are within a Glimpse node under &lt;configuration&gt; The Glimpse node itself can have three optional attributes:</p>
+<pre>&lt;glimpse enabled="true" rootUrlPath="Glimpse" requestLimit="15"&gt;
+    ...
+&lt;/glimpse&gt;</pre>
+    <ul class="plain">
+        <li><strong>enabled</strong>: is a boolean with a default value of "false". It allows us to turn off Glimpse completely. </li>
+        <li><strong>rootUrlPath</strong>: is a string with a default value of "Glimpse". If you already have a folder or route named "Glimpse" in your site, it would conflict with the path to the Glimpse configuration page. By setting the rootUrlPath to for example "glp" you could now access the Glimpse configuration page with the url "mysite/glp/config".</li>
+        <li><strong>requestLimit</strong>: is an integer with a default value of 15. Glimpse "remembers" the debug information for a number of requests on the server.  This is important for the Ajax and Remote tabs to work. This number defines how many requests are stored.</li>
+    </ul>
+       
+    <hr class="line" />
+
+    The following sections all go within the Glimpse section: 
+    <table width="100%">
+        <tr>
+            <td width="49%">
+                <h3>IP addresses</h3>
+                <p>Our first section enables the IP address filtering:</p>
+<pre>&lt;ipAddresses&gt;
+      &lt;add address="127.0.0.1" /&gt;
+      &lt;!--IPv4--&gt;
+      &lt;add address="::1" /&gt;
+      &lt;!--IPv6--&gt;
+&lt;/ipAddresses&gt;</pre>
+                <p>Shown here are the defaults, meaning Glimpse only accepts requests from the local machine. If the browser is on a different machine from the server, the Glimpse server component will ignore the Glimpse cookie and will not send any data to the browser.</p>
+                <p>If you want to use Glimpse in a remote browser you need to add the IP address of that machine. This is straightforward when you are only using IPv4, however on Vista and Windows 7 you may be on IPv6 only. Use "ipconfig" in cmd.exe to find out the IPv6 address of the machine with the browser and then add it to the allowed addresses:</p>
+<pre>&lt;ipAddresses&gt;
+      &lt;add address="127.0.0.1" /&gt;
+      &lt;add address="192.168.100.59" /&gt;
+      &lt;add address="::1" /&gt;
+      &lt;add address="fe80::f17e:d177:359f:6cee%14" /&gt;
+    &lt;/ipAddresses&gt;</pre>
+         
+            </td>
+            <td width="2%" rowspan="3"></td>
+            <td width="49%">
+
+                <h3>Blacklist for plugins</h3>
+                <p>The next section is the blacklist for plugins, the default is empty:</p>
+<pre>&lt;pluginBlacklist/&gt;</pre> 
+
+                <p>Which means we don't blacklist any plugins are all available plugins send data down to the browser. You can remove certain plugins by adding them to the section like this:</p>
+<pre>&lt;pluginBlacklist&gt;
+      &lt;add plugin="Glimpse.Mvc3.Plugin.MetaData" /&gt;
+      &lt;add plugin="Glimpse.Mvc3.Plugin.Binders" /&gt;
+      &lt;add plugin="Foo.Bar.GlimpsPlugins.CurrentUser" /&gt;
+&lt;/pluginBlacklist&gt;</pre> 
+                <p>The string in the plugin attribute must be the class name of the plugin including the full namespace.</p>
+                <p>Why would you want to do this? Maybe there is a plugin that you never use and it just fills up the space in the tab bar. Or when in a production environment there are certain plugins that reveal too much information to a user. Other reasons may be that one of you own plugins is not stable, or that a plugin can cause performance issues in certain cases.</p>
+                <p>To see a list of the plugins that you can blacklist, simply go to your /Glimpse/Config page. This shows a list of all plugins that Glimpse has detected (both official Glimpse Plugins and 3rd Party plugins) and which ones are currently disabled (if you have disabled any).</p>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+            
+                <h3>Content Types</h3>
+                <p>Next up are the content types, the default is:</p>
+<pre>&lt;contentTypes&gt;
+      &lt;add contentType="text/html" /&gt;
+      &lt;add contentType="application/json" /&gt;
+&lt;/contentTypes&gt;</pre> 
+                <p>This means Glimpse is only attaching its data to responses with a content type or text/html and application/json which is the majority of web pages. </p>
+                <p>Note, application/json in this case a Glimpse identifier is added to the response header and the Glimpse data is then later retrieved. This is intended so that Glimpse doesn't affect the data in your Ajax response.</p>
+
+            </td>
+            <td>
+            
+                <h3>Environments</h3>
+                <p>Finally we have environments, again the default is empty:</p>
+<pre>&lt;environments/&gt;</pre> 
+
+                <p>But you may want something like this:</p>
+<pre>&lt;environments&gt;
+      &lt;add name="Dev" authority="localhost:33333" /&gt;
+      &lt;add name="Test" authority="test.getglimpse.com" /&gt;
+      &lt;add name="Prod" authority="getglimpse.com" /&gt;
+&lt;/environments&gt;</pre> 
+                 <p>Defining your environments like this allows glimpse to show you what environment you are currently in and allows you to switch to another one of the defined environments using the current context. At the moment this context only extends to the URL but it makes trying to compare environments when you notice something out of the ordinary much easier than it might other be normally.</p>
+            
+            </td>
+        </tr>
+    </table>
+</div>

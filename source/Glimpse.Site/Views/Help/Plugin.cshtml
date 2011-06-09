@@ -15,25 +15,26 @@
                 <tr>
                     <td>  
                         <ul class="plain">
-                            <li>@Html.ActionLink("Config", MVC.Help.Plugin("Config")) - Short description about this plugin</li>
-                            <li>@Html.ActionLink("Environment", MVC.Help.Plugin("Environment")) - Short description about this plugin</li>
-                            <li>@Html.ActionLink("Request", MVC.Help.Plugin("Request")) - Short description about this plugin</li>
-                            <li>@Html.ActionLink("Server", MVC.Help.Plugin("Server")) - Short description about this plugin</li>
-                            <li>@Html.ActionLink("Session", MVC.Help.Plugin("Session")) - Short description about this plugin</li>
-                            <li>@Html.ActionLink("Trace", MVC.Help.Plugin("Trace")) - Short description about this plugin</li>
+                            <li>@Html.ActionLink("Config", MVC.Help.Plugin("Config")) - Summary of important stuff in your web.config</li>
+                            <li>@Html.ActionLink("Environment", MVC.Help.Plugin("Environment")) - Details of the server environment</li>
+                            <li>@Html.ActionLink("Request", MVC.Help.Plugin("Request")) - What the server received in the request</li>
+                            <li>@Html.ActionLink("Server", MVC.Help.Plugin("Server")) - Web server variables available for the request</li>
+                            <li>@Html.ActionLink("Session", MVC.Help.Plugin("Session")) - Is using session, what is being stored</li>
+                            <li>@Html.ActionLink("Trace", MVC.Help.Plugin("Trace")) - Trace output for the request</li>
                         </ul> 
                     </td> 
                     <td>  
                         <ul class="plain">
-                            <li>@Html.ActionLink("Bindings", MVC.Help.Plugin("Binding")) - Short description about this plugin</li>
-                            <li>@Html.ActionLink("Execution", MVC.Help.Plugin("Execution")) - Short description about this plugin</li>
-                            <li>@Html.ActionLink("MetaData", MVC.Help.Plugin("MetaData")) - Short description about this plugin</li>
-                            <li>@Html.ActionLink("Routes", MVC.Help.Plugin("Routes")) - Short description about this plugin</li>
-                            <li>@Html.ActionLink("Views", MVC.Help.Plugin("Views")) - Short description about this plugin</li> 
+                            <li>@Html.ActionLink("Bindings", MVC.Help.Plugin("Binding")) - How MVC is binding the data</li>
+                            <li>@Html.ActionLink("Execution", MVC.Help.Plugin("Execution")) - What the execution pipeline looks like</li>
+                            <li>@Html.ActionLink("MetaData", MVC.Help.Plugin("MetaData")) - MetaData associated with your View Model </li>
+                            <li>@Html.ActionLink("Routes", MVC.Help.Plugin("Routes")) - How routes are being evaluated</li>
+                            <li>@Html.ActionLink("Views", MVC.Help.Plugin("Views")) - How MVC is finding the view that is being rendered</li> 
                         </ul> 
                     </td>
                 </tr>
             </table>
+@*
             <br />
 
             <h3>Infrastructure</h3> 
@@ -63,7 +64,7 @@
                         </ul> 
                     </td>
                 </tr>
-            </table>    
+            </table>    *@
         </div>
         <a href="#" class="myButton help-more">More Help Links</a>
     </div>

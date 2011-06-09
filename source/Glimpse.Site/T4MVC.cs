@@ -381,6 +381,7 @@ namespace Links {
             public static readonly string View_jpg = Url("View.jpg");
         }
     
+        public static readonly string rss_icon_gif = Url("rss_icon.gif");
         public static readonly string Site_css = Url("Site.css");
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public static class Support {

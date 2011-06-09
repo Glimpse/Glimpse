@@ -10,6 +10,7 @@
         <h3>Glimpse "Debugger"</h3>
     } 
     <ul>
+        <li>@html.ActionLink("About", MVC.About.Index())</li>
         <li>@html.ActionLink("Details", MVC.About.Details())</li>
         @*<li>@html.ActionLink("Features", MVC.About.Features())</li>*@
         <li>@html.ActionLink("Quick Start", MVC.About.QuickStart())</li>
@@ -18,6 +19,23 @@
         <li>@html.ActionLink("Credits", MVC.About.Credits())</li>
         <li>@html.ActionLink("Platforms", MVC.About.Platforms())</li>
         @*<li>@html.ActionLink("Roadmap", MVC.About.Roadmap())</li>*@
+    </ul>
+</div>
+}
+
+@helper HelpMenu(System.Web.Mvc.HtmlHelper html, bool isMainUse, int currentIndex) {
+<div class="sub-menu-holder light-grad-bg">
+
+    @if (isMainUse) {
+        <h2>Help &amp; Documentation</h2>
+    } else {
+        <h3>Help &amp; Documentation</h3>
+    } 
+    <ul>
+        <li>@html.ActionLink("Help", MVC.Help.Index())</li> 
+        <li>@html.ActionLink("Quick Start", MVC.About.QuickStart())</li>
+        <li>@html.ActionLink("Configuration", MVC.Help.Configuration())</li> 
+        <li>@html.ActionLink("Protocol", MVC.Protocol.Index())</li> 
     </ul>
 </div>
 }

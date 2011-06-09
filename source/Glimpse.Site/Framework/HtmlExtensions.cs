@@ -9,7 +9,7 @@ public static class HtmlExtensions
         var content = "";
         var cookie = helper.ViewContext.RequestContext.HttpContext.Request.Cookies[GlimpseConstants.CookieModeKey];
         if (cookie != null && cookie.Value != "On")
-            content = string.Format("<script src=\"{0}\" type=\"text/javascript\"></script>", VirtualPathUtility.ToAbsolute("~/Glimpse/glimpseClient.js"));
+            content = string.Format("<script src=\"{0}\" type=\"text/javascript\"></script>", VirtualPathUtility.ToAbsolute("~/Glimpse/glimpseClient"));
         return MvcHtmlString.Create(content);
     }
 

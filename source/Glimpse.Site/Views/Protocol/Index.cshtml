@@ -1,9 +1,29 @@
 ﻿@Html.GlimpseDownload(false)
    
-<div class="features protocol">
+<div class="features help protocol">
 
-    <h2>Protocol Definition</h2>
-    
+    <table width="100%">
+        <tr>
+            <td width="50%">  
+                <h2>Protocol Definition</h2>
+            </td>
+            <td rowspan="2" style="text-align:center; vertical-align:bottom"> 
+                @*<img src="@Links.Content.Support.GlimpsePlatform_jpg" />*@
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>The Glimpse Protocol is what makes Glimpse unique. It may soon like something complicated 
+                but in reality it's only a JavaScript object that is interpreted and rendered.</p>
+                <p>The interpretation that occurs simply makes certain assumptions about how data that is 
+                structured a particular way should be formatted. The bellow documents these assumptions.</p>
+                <br /> 
+            </td> 
+        </tr>
+    </table>
+ 
+    @Menu.HelpMenu(Html, false, 6) 
 
     <h3>Live Tester</h3>
     <div class="protocol-tester">

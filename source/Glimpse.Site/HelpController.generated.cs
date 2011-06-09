@@ -54,6 +54,7 @@ namespace Glimpse.Site.Controllers {
         public class ActionNamesClass {
             public readonly string Index = "Index";
             public readonly string Plugin = "Plugin";
+            public readonly string Configuration = "Configuration";
         }
 
 
@@ -62,6 +63,7 @@ namespace Glimpse.Site.Controllers {
         public ViewNames Views { get { return s_views; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewNames {
+            public readonly string Configuration = "~/Views/Help/Configuration.cshtml";
             public readonly string Index = "~/Views/Help/Index.cshtml";
             public readonly string Plugin = "~/Views/Help/Plugin.cshtml";
             static readonly _Plugins s_Plugins = new _Plugins();
@@ -96,6 +98,11 @@ namespace Glimpse.Site.Controllers {
         public override System.Web.Mvc.ActionResult Plugin(string id) {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Plugin);
             callInfo.RouteValueDictionary.Add("id", id);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult Configuration() {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Configuration);
             return callInfo;
         }
 

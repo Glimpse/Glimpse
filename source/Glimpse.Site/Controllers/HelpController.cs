@@ -22,5 +22,10 @@ namespace Glimpse.Site.Controllers
 
             return View();
         }
+
+        public virtual ActionResult Configuration()
+        {
+            return View();
+        }
     }
 }

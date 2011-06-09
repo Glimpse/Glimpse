@@ -1,95 +1,113 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <publishData>
-  <publishProfile publishUrl="C:\Users\avanderhoorn\Desktop\GetGlimpse4" deleteExistingFiles="True" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="Profile1" publishMethod="FileSystem" replaceMatchingFiles="False" userName="" savePWD="False" userPWD="" SelectedForPublish="True">
+  <publishProfile publishUrl="C:\Users\avanderhoorn\Desktop\GetGlimpse5" deleteExistingFiles="True" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="Profile1" publishMethod="FileSystem" replaceMatchingFiles="False" userName="" savePWD="False" userPWD="" SelectedForPublish="True">
     <file relUrl="Views/Shared/_PageStart.cshtml" publishTime="05/30/2011 22:30:36" />
     <file relUrl="Content/Plugin/Session.jpg" publishTime="05/29/2011 09:55:47" />
     <file relUrl="Content/jquery.contentslider.css" publishTime="05/01/2011 16:24:20" />
-    <file relUrl="bin/Glimpse.Mvc3.pdb" publishTime="06/01/2011 18:51:47" />
+    <file relUrl="bin/Glimpse.Mvc3.pdb" publishTime="06/09/2011 07:37:11" />
     <file relUrl="Scripts/jquery-1.4.4.js" publishTime="05/01/2011 16:38:35" />
     <file relUrl="Scripts/jquery.jscrollpane.js" publishTime="05/01/2011 16:38:35" />
+    <file relUrl="Content/Support/GlimpseSupport.jpg" publishTime="06/08/2011 19:19:04" />
+    <file relUrl="Content/Support/WhatIsGlimpse.jpg" publishTime="06/05/2011 17:07:05" />
+    <file relUrl="Views/About/QuickStart.cshtml" publishTime="06/08/2011 20:00:05" />
     <file relUrl="bin/Castle.Core.pdb" publishTime="05/09/2011 07:17:26" />
+    <file relUrl="Views/About/Features.cshtml" publishTime="06/08/2011 13:39:51" />
     <file relUrl="Content/Plugin/Metadata.jpg" publishTime="05/29/2011 09:55:47" />
-    <file relUrl="bin/System.Web.Mvc.dll" publishTime="01/05/2011 17:42:16" />
+    <file relUrl="Views/Help/Plugin.cshtml" publishTime="06/09/2011 08:25:17" />
     <file relUrl="Content/nugetlogo.png" publishTime="05/07/2011 23:16:23" />
-    <file relUrl="Web.config" publishTime="06/01/2011 19:07:17" />
+    <file relUrl="Web.config" publishTime="06/09/2011 10:41:52" />
     <file relUrl="Content/glimpse100.png" publishTime="05/07/2011 23:16:23" />
+    <file relUrl="Content/Support/GlimpseQuickStart.jpg" publishTime="06/08/2011 16:21:39" />
     <file relUrl="bin/Newtonsoft.Json.Net35.dll" publishTime="05/14/2011 05:19:30" />
     <file relUrl="bin/Castle.Core.dll" publishTime="05/09/2011 07:17:26" />
-    <file relUrl="bin/System.Web.WebPages.dll" publishTime="01/05/2011 15:45:38" />
+    <file relUrl="Views/Help/Plugins/Binding.cshtml" publishTime="05/29/2011 10:44:57" />
     <file relUrl="Content/Plugin/Environment.jpg" publishTime="05/29/2011 09:55:47" />
-    <file relUrl="bin/Glimpse.Core.pdb" publishTime="06/01/2011 18:51:45" />
+    <file relUrl="bin/Glimpse.Core.pdb" publishTime="06/09/2011 07:37:09" />
     <file relUrl="Views/Help/Plugins/Session.cshtml" publishTime="05/31/2011 17:52:21" />
+    <file relUrl="Content/Support/GlimpseOverview.jpg" publishTime="06/08/2011 18:18:44" />
     <file relUrl="Content/close-quote.gif" publishTime="05/01/2011 16:24:20" />
     <file relUrl="Global.asax" publishTime="05/01/2011 16:12:40" />
-    <file relUrl="Views/Help/Plugins/Execution.cshtml" publishTime="05/29/2011 22:19:17" />
+    <file relUrl="Views/Help/Plugins/Execution.cshtml" publishTime="06/03/2011 13:55:51" />
     <file relUrl="bin/Newtonsoft.Json.Net35.pdb" publishTime="05/14/2011 05:19:30" />
     <file relUrl="Scripts/jquery-1.4.4.min.js" publishTime="05/01/2011 16:38:35" />
     <file relUrl="Scripts/jquery.easing.1.3.js" publishTime="05/01/2011 16:38:35" />
-    <file relUrl="Content/glimpse64.png" publishTime="05/07/2011 23:16:23" />
-    <file relUrl="Views/Help/Plugins/Trace.cshtml" publishTime="05/31/2011 19:48:26" />
-    <file relUrl="Views/Protocol/Index.cshtml" publishTime="05/24/2011 08:16:12" />
-    <file relUrl="Scripts/jquery.jscrollpane.min.js" publishTime="05/01/2011 16:38:35" />
+    <file relUrl="Views/Protocol/Index.cshtml" publishTime="06/09/2011 08:57:26" />
+    <file relUrl="Content/GlimpseStackAd.png" publishTime="05/07/2011 23:16:23" />
+    <file relUrl="Content/Support/GlimpseTalk.jpg" publishTime="06/08/2011 19:54:59" />
+    <file relUrl="bin/System.Web.WebPages.dll" publishTime="01/05/2011 15:45:38" />
     <file relUrl="Views/_ViewStart.cshtml" publishTime="05/01/2011 16:12:40" />
-    <file relUrl="bin/System.Web.Mvc.xml" publishTime="02/09/2011 10:26:24" />
+    <file relUrl="Views/About/Details.cshtml" publishTime="06/08/2011 19:58:39" />
+    <file relUrl="Scripts/jquery.mousewheel.js" publishTime="05/01/2011 16:38:35" />
     <file relUrl="bin/System.Web.Helpers.xml" publishTime="12/19/2010 23:59:38" />
     <file relUrl="Content/glimpse128.png" publishTime="05/07/2011 23:16:23" />
-    <file relUrl="Views/Questions/Index.cshtml" publishTime="05/24/2011 08:10:36" />
+    <file relUrl="Views/Questions/Index.cshtml" publishTime="06/08/2011 19:57:00" />
     <file relUrl="Content/Plugin/Config.jpg" publishTime="05/29/2011 09:55:47" />
     <file relUrl="Content/glimpse64 - Copy.png" publishTime="05/07/2011 23:16:23" />
-    <file relUrl="bin/Glimpse.Site.pdb" publishTime="06/01/2011 19:01:43" />
-    <file relUrl="Views/Help/Plugins/Binding.cshtml" publishTime="05/29/2011 10:44:57" />
+    <file relUrl="bin/Glimpse.Site.pdb" publishTime="06/09/2011 10:41:52" />
     <file relUrl="bin/Newtonsoft.Json.Net35.xml" publishTime="05/14/2011 05:19:30" />
-    <file relUrl="Views/Help/Plugins/Metadata.cshtml" publishTime="05/29/2011 22:19:13" />
+    <file relUrl="Views/Help/Plugins/Metadata.cshtml" publishTime="06/02/2011 22:01:48" />
+    <file relUrl="App_Code/Menu.cshtml" publishTime="06/09/2011 10:06:40" />
+    <file relUrl="Content/Support/GlimpseCredits.jpg" publishTime="06/08/2011 17:27:59" />
     <file relUrl="Content/glimpseMedium.png" publishTime="05/07/2011 23:16:23" />
-    <file relUrl="Views/Help/Plugins/Request.cshtml" publishTime="05/29/2011 22:19:29" />
+    <file relUrl="Views/Help/Plugins/Request.cshtml" publishTime="06/02/2011 18:12:50" />
     <file relUrl="bin/System.Web.Helpers.dll" publishTime="01/05/2011 15:45:38" />
-    <file relUrl="Content/Plugin/Execution.jpg" publishTime="05/29/2011 09:55:47" />
-    <file relUrl="Scripts/jquery.mousewheel.js" publishTime="05/01/2011 16:38:35" />
-    <file relUrl="Views/Help/Plugin.cshtml" publishTime="05/31/2011 08:24:48" />
+    <file relUrl="Content/uservoice-icon.png" publishTime="05/07/2011 23:16:20" />
+    <file relUrl="Content/open-quote.gif" publishTime="05/01/2011 16:24:20" />
+    <file relUrl="Views/About/Roadmap.cshtml" publishTime="06/08/2011 13:40:54" />
+    <file relUrl="Views/Help/Plugins/Environment.cshtml" publishTime="06/02/2011 22:04:26" />
+    <file relUrl="Content/Support/GlimpseDetails.jpg" publishTime="06/08/2011 16:37:44" />
     <file relUrl="Content/Plugin/View.jpg" publishTime="05/31/2011 17:58:07" />
-    <file relUrl="bin/System.Web.Routing.dll" publishTime="03/18/2010 20:31:26" />
     <file relUrl="Content/jquery.jscrollpane.css" publishTime="05/01/2011 16:24:20" />
-    <file relUrl="Content/Plugin/Ajax.jpg" publishTime="05/29/2011 09:55:47" />
+    <file relUrl="Content/github.gif" publishTime="05/07/2011 23:16:23" />
+    <file relUrl="Content/rss_icon.gif" publishTime="06/09/2011 08:58:11" />
     <file relUrl="Content/Plugin/Remote.jpg" publishTime="05/15/2011 19:29:01" />
     <file relUrl="bin/Castle.Core.xml" publishTime="05/09/2011 07:17:26" />
     <file relUrl="packages.config" publishTime="06/01/2011 18:59:53" />
+    <file relUrl="Views/About/Platforms.cshtml" publishTime="06/08/2011 19:59:18" />
     <file relUrl="Content/cs_leftImg.png" publishTime="05/01/2011 16:24:20" />
-    <file relUrl="Views/Help/Plugins/Remote.cshtml" publishTime="05/29/2011 10:51:14" />
-    <file relUrl="Views/Help/Plugins/Server.cshtml" publishTime="06/01/2011 08:58:22" />
-    <file relUrl="bin/Glimpse.Mvc3.dll" publishTime="06/01/2011 18:51:47" />
+    <file relUrl="Views/Help/Plugins/Remote.cshtml" publishTime="06/02/2011 21:28:22" />
+    <file relUrl="bin/System.Web.Routing.dll" publishTime="03/18/2010 20:31:26" />
+    <file relUrl="bin/Glimpse.Mvc3.dll" publishTime="06/09/2011 07:37:11" />
     <file relUrl="Content/glimpseLogo.png" publishTime="05/07/2011 23:16:23" />
     <file relUrl="Views/Shared/Error.cshtml" publishTime="05/01/2011 16:12:40" />
-    <file relUrl="Views/Help/Index.cshtml" publishTime="05/30/2011 16:13:00" />
-    <file relUrl="Views/Help/Plugins/Environment.cshtml" publishTime="05/29/2011 16:13:22" />
+    <file relUrl="bin/System.Web.Mvc.dll" publishTime="01/05/2011 17:42:16" />
+    <file relUrl="Views/Help/Index.cshtml" publishTime="06/09/2011 08:25:45" />
     <file relUrl="Content/twitter.png" publishTime="05/07/2011 23:16:23" />
     <file relUrl="Content/glimpse32.png" publishTime="05/07/2011 23:16:23" />
     <file relUrl="Content/Plugin/Server.jpg" publishTime="05/29/2011 09:55:47" />
+    <file relUrl="bin/System.Web.Mvc.xml" publishTime="02/09/2011 10:26:24" />
+    <file relUrl="Scripts/jquery.jscrollpane.min.js" publishTime="05/01/2011 16:38:35" />
     <file relUrl="Content/glimpse100 - Copy.png" publishTime="05/07/2011 23:16:23" />
     <file relUrl="Content/Plugin/Trace.jpg" publishTime="05/31/2011 18:02:38" />
     <file relUrl="Content/glimpse150.png" publishTime="05/07/2011 23:16:23" />
-    <file relUrl="Views/Shared/_Layout.cshtml" publishTime="05/24/2011 08:06:15" />
+    <file relUrl="Views/Help/Plugins/Views.cshtml" publishTime="06/01/2011 08:14:04" />
+    <file relUrl="Views/Shared/_Layout.cshtml" publishTime="06/09/2011 07:39:04" />
     <file relUrl="Views/Help/Plugins/Config.cshtml" publishTime="05/30/2011 22:30:36" />
     <file relUrl="favicon.ico" publishTime="05/01/2011 17:25:12" />
     <file relUrl="Views/Web.config" publishTime="05/01/2011 16:12:40" />
     <file relUrl="Content/glimpse256.png" publishTime="05/07/2011 23:16:23" />
     <file relUrl="Content/glimpse512.png" publishTime="05/07/2011 23:16:23" />
-    <file relUrl="Content/Site.css" publishTime="06/01/2011 18:42:03" />
-    <file relUrl="Views/Help/Plugins/Ajax.cshtml" publishTime="05/29/2011 22:19:20" />
-    <file relUrl="Content/Plugin/Binding.jpg" publishTime="05/29/2011 09:55:47" />
+    <file relUrl="Content/Site.css" publishTime="06/09/2011 08:18:39" />
+    <file relUrl="Views/Help/Plugins/Ajax.cshtml" publishTime="06/03/2011 14:04:25" />
+    <file relUrl="Views/Help/Configuration.cshtml" publishTime="06/09/2011 10:15:12" />
     <file relUrl="bin/System.Web.Abstractions.dll" publishTime="03/18/2010 20:31:26" />
-    <file relUrl="Content/github.gif" publishTime="05/07/2011 23:16:23" />
-    <file relUrl="Content/GlimpseStackAd.png" publishTime="05/07/2011 23:16:23" />
-    <file relUrl="Content/uservoice-icon.png" publishTime="05/07/2011 23:16:20" />
-    <file relUrl="bin/Glimpse.Core.dll" publishTime="06/01/2011 18:51:45" />
-    <file relUrl="Views/Help/Plugins/Views.cshtml" publishTime="06/01/2011 08:14:04" />
+    <file relUrl="Views/Help/Plugins/Server.cshtml" publishTime="06/01/2011 08:58:22" />
+    <file relUrl="Content/Support/GlimpsePlatform.jpg" publishTime="06/08/2011 18:03:02" />
+    <file relUrl="Content/Plugin/Binding.jpg" publishTime="05/29/2011 09:55:47" />
+    <file relUrl="Content/glimpse64.png" publishTime="05/07/2011 23:16:23" />
+    <file relUrl="bin/Glimpse.Core.dll" publishTime="06/09/2011 07:37:09" />
+    <file relUrl="Scripts/jquery.contentslider.js" publishTime="05/01/2011 16:38:35" />
+    <file relUrl="Content/Plugin/Ajax.jpg" publishTime="05/29/2011 09:55:47" />
     <file relUrl="Scripts/Protocol/LayoutExample.js" publishTime="05/29/2011 23:24:21" />
     <file relUrl="Views/Help/Plugins/Routes.cshtml" publishTime="06/01/2011 18:29:48" />
-    <file relUrl="Content/open-quote.gif" publishTime="05/01/2011 16:24:20" />
+    <file relUrl="Views/Help/Plugins/Trace.cshtml" publishTime="05/31/2011 19:48:26" />
     <file relUrl="Content/favicon.gif" publishTime="05/07/2011 23:16:21" />
-    <file relUrl="Scripts/jquery.contentslider.js" publishTime="05/01/2011 16:38:35" />
+    <file relUrl="Content/Plugin/Execution.jpg" publishTime="05/29/2011 09:55:47" />
+    <file relUrl="Views/About/Credits.cshtml" publishTime="06/08/2011 19:57:36" />
     <file relUrl="bin/System.Web.WebPages.xml" publishTime="12/19/2010 23:59:38" />
-    <file relUrl="Views/Talk/Index.cshtml" publishTime="05/24/2011 08:10:32" />
-    <file relUrl="bin/Glimpse.Site.dll" publishTime="06/01/2011 19:01:43" />
+    <file relUrl="Views/Talk/Index.cshtml" publishTime="06/08/2011 19:56:08" />
+    <file relUrl="bin/Glimpse.Site.dll" publishTime="06/09/2011 10:41:52" />
+    <file relUrl="Views/About/Index.cshtml" publishTime="06/08/2011 19:56:47" />
     <file relUrl="Content/cs_rightImg.png" publishTime="05/01/2011 16:24:20" />
     <file relUrl="Content/glimpseLogoWhite.png" publishTime="05/07/2011 23:16:23" />
     <file relUrl="Views/Home/Index.cshtml" publishTime="05/24/2011 08:10:51" />

@@ -62,9 +62,9 @@ pre { border: 1px dashed #777; background-color: #EEE; padding: 1em; }
 .about .quotes .dark-grad-bg { padding:1em; font-size: 0.9em; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; height:100%; }
 .about .quotes .dark-grad-bg div { margin-top:1em; text-align:right; font-size:0.9em; }
 .about .button-holder { text-align:center; margin-top:1.5em; }
-.about .light-grad-bg { border-left:0px; border-right:0px; padding-left:0.5em; }
-.about h2 { margin-bottom:0.5em; }
-.about .light-grad-bg h2 { margin-bottom:0.3em; }
+.about .light-grad-bg, .help .light-grad-bg { border-left:0px; border-right:0px; padding-left:0.5em; }
+.about h2, .help h2 { margin-bottom:0.5em; }
+.about .light-grad-bg h2, .help .light-grad-bg h2 { margin-bottom:0.3em; }
 
 
 .sub-menu-holder { padding:1.5em 0 2em 0; border-top:1px solid #dcdcdc; border-bottom:1px solid #dcdcdc; margin-top:1em; }

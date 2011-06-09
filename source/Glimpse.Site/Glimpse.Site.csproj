@@ -127,6 +127,7 @@
     <Content Include="Content\Plugin\Session.jpg" />
     <Content Include="Content\Plugin\Trace.jpg" />
     <Content Include="Content\Plugin\View.jpg" />
+    <Content Include="Content\rss_icon.gif" />
     <Content Include="Content\Support\GlimpseCredits.jpg" />
     <Content Include="Content\Support\GlimpseDetails.jpg" />
     <Content Include="Content\Support\GlimpseOverview.jpg" />
@@ -250,6 +251,7 @@
     <Content Include="Views\About\QuickStart.cshtml" />
     <Content Include="Views\About\Features.cshtml" />
     <Content Include="App_Code\Menu.cshtml" />
+    <Content Include="Views\Help\Configuration.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
