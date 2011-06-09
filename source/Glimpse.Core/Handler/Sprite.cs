@@ -7,7 +7,7 @@ namespace Glimpse.Core.Handler
     {
         public override string ResourceName
         {
-            get { return "glimpseSprite.png"; }
+            get { return "glimpseSprite"; }
         }
 
         protected override string ContentType

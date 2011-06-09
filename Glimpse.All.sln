@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Sample.WebForms", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Test.Core", "source\Glimpse.Test.Core\Glimpse.Test.Core.csproj", "{706D27E5-BA18-4A61-8C00-5A5B95FC3EA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFrameworkProfiler", "..\Desktop\Sample\EntityFramework\EntityFrameworkProfiler\EntityFrameworkProfiler.csproj", "{1AEDC219-C2A4-422E-8DD8-A9ABAE1B4F3B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,10 +43,6 @@ Global
 		{706D27E5-BA18-4A61-8C00-5A5B95FC3EA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{706D27E5-BA18-4A61-8C00-5A5B95FC3EA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{706D27E5-BA18-4A61-8C00-5A5B95FC3EA3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1AEDC219-C2A4-422E-8DD8-A9ABAE1B4F3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1AEDC219-C2A4-422E-8DD8-A9ABAE1B4F3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1AEDC219-C2A4-422E-8DD8-A9ABAE1B4F3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1AEDC219-C2A4-422E-8DD8-A9ABAE1B4F3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

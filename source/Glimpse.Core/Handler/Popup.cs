@@ -16,7 +16,7 @@ namespace Glimpse.Core.Handler
             var response = context.Response;
 
             var path = VirtualPathUtility.ToAbsolute("~/", context.Request.ApplicationPath);  //TODO need to centralize logic 
-            var requestId = ""; //TODO need to get this id from somewhere
+            var requestId = ""; //TODO need to get this id from somewhere USE context.GetRequestId()
 
             response.Write("<!DOCTYPE html><html><head><title>Glimpse - Popup</title>");
             response.Write("<style type='text/css'>html{color:#000;background:#FFF;} body{margin:0;padding:0;} .glimpse-holder { position:relative !important; display: block !important; } .glimpse-popout, .glimpse-close, .glimpse-terminate, .glimpse-open { display:none !important; } .glimpse-panel { overflow:visible !important; }</style>");
