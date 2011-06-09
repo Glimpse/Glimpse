@@ -133,6 +133,7 @@
     <Content Include="Content\Support\GlimpsePlatform.jpg" />
     <Content Include="Content\Support\GlimpseQuickStart.jpg" />
     <Content Include="Content\Support\GlimpseSupport.jpg" />
+    <Content Include="Content\Support\GlimpseTalk.jpg" />
     <Content Include="Content\Support\WhatIsGlimpse.jpg" />
     <Content Include="Scripts\Protocol\LayoutExample.js" />
   </ItemGroup>
