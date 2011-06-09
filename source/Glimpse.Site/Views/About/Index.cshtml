@@ -2,146 +2,144 @@
    
 <div class="features about">
 
-<table width="100%">
-    <tr>
-        <td width="60%" colspan="3"> 
-<h3>Really freaking Amazing</h3> 
-        </td>
-        <td rowspan="2" style="text-align:center; vertical-align:bottom"> 
-            <img src="@Links.Content.Support.GlimpseOverview_jpg" />
-        </td>
-    </tr>
-    <tr>
-        <td width="29%">
-            <strong>Debug faster</strong>:<br />
-            See what your server is really doing under the hood<br /><br />
-            <strong>Be more productive</strong>:<br />
-            Stop setting endless breakpoints trying to catch a problem<br /><br /><br />
-        </td>
-        <td width="2%">
-        </td>
-        <td width="29%">
-            <strong>Just works</strong>:<br />
-            Once its included, Glimpse just works and doesn't get in your way<br /><br />
-            <strong>Rich array of plugins</strong>:<br />
-            Whether its ASP.NET or MVC, there is probably a plugin for what you want
-        </td> 
-    </tr>
-</table>
+    <table width="100%">
+        <tr>
+            <td width="60%" colspan="3"> 
+                <h3>Really freaking Amazing</h3> 
+            </td>
+            <td rowspan="2" style="text-align:center; vertical-align:bottom"> 
+                <img src="@Links.Content.Support.GlimpseOverview_jpg" />
+            </td>
+        </tr>
+        <tr>
+            <td width="29%">
+                <strong>Debug faster</strong>:<br />
+                See what your server is really doing under the hood<br /><br />
+                <strong>Be more productive</strong>:<br />
+                Stop setting endless breakpoints trying to catch a problem<br /><br /><br />
+            </td>
+            <td width="2%">
+            </td>
+            <td width="29%">
+                <strong>Just works</strong>:<br />
+                Once its included, Glimpse just works and doesn't get in your way<br /><br />
+                <strong>Rich array of plugins</strong>:<br />
+                Whether its ASP.NET or MVC, there is probably a plugin for what you want
+            </td> 
+        </tr>
+    </table>
  
-@Menu.AboutMenu(Html, true, -1)
+    @Menu.AboutMenu(Html, true, -1)
 
-<table width="100%">
-    <tr>
-        <td width="60%"> 
-            <h3>What is Glimpse</h3>
-            At its core Glimpse allows you to debug your web site or web service right in the browser. Glimpse 
-            allows you to "Glimpse" into what's going on in your web server. In other words what Firebug is to 
-            debugging your client side code, Glimpse is to debugging your server within the client.
-            <br /><br />
+    <table width="100%">
+        <tr>
+            <td width="60%"> 
+                <h3>What is Glimpse</h3>
+                At its core Glimpse allows you to debug your web site or web service right in the browser. Glimpse 
+                allows you to "Glimpse" into what's going on in your web server. In other words what Firebug is to 
+                debugging your client side code, Glimpse is to debugging your server within the client.
+                <br /><br />
 
-            Fundamentally Glimpse is made up of 3 different parts, all of which are extensible and customizable for any platform:
-            <ul class="plain">
-                <li><strong>Glimpse Server Modules</strong> – Code on the web server that collects meta data and sends it to the client.</li>
-                <li><strong>Glimpse Protocol</strong> – A specification of that meta data.</li> 
-                <li><strong>Glimpse Client Side Viewer</strong> – Code on the web page or in the browser that takes the meta data from the server and displays it to the user.</li>
-            </ul>
-        </td>
-        <td align="center">
-            <img src="@Links.Content.Support.WhatIsGlimpse_jpg" style="margin-top:1em;" />
-        </td>
-    </tr>
-</table>
-<div class="button-holder"><a href="@Url.Action(MVC.About.Details())" class="myButton">More Information</a></div>
+                Fundamentally Glimpse is made up of 3 different parts, all of which are extensible and customizable for any platform:
+                <ul class="plain">
+                    <li><strong>Glimpse Server Modules</strong> – Code on the web server that collects meta data and sends it to the client.</li>
+                    <li><strong>Glimpse Protocol</strong> – A specification of that meta data.</li> 
+                    <li><strong>Glimpse Client Side Viewer</strong> – Code on the web page or in the browser that takes the meta data from the server and displays it to the user.</li>
+                </ul>
+            </td>
+            <td align="center">
+                <img src="@Links.Content.Support.WhatIsGlimpse_jpg" style="margin-top:1em;" />
+            </td>
+        </tr>
+    </table>
+    <div class="button-holder"><a href="@Url.Action(MVC.About.Details())" class="myButton">More Information</a></div>
+     
+    <hr class="line" />
 
+    <h3>Features</h3>
+    <table width="100%">
+        <tr>
+            <td width="48%" colspan="3">
+                <h4>Always at your Fingertips</h4> 
+            </td>
+            <td width="4%" rowspan="2"></td>
+            <td width="48%" colspan="3">
+                <h4>Live Context Debugging</h4> 
+            </td> 
+        </tr>
+        <tr>
+            <td width="22%">   
+                <strong>Firebug Like</strong>:<br />
+                UI looks and feels the same as what we are all used to<br /><br />
+                <strong>Built on HTML5 &amp; CSS3</strong>:<br />
+                Seamlessly built into the HTML of your page 
+            </td>
+            <td width="4%"> 
+            </td>
+            <td width="22%">  
+                <strong>No Changes to your Code</strong>:<br />
+                To get up and running simple Nuget include<br /><br />
+                <strong>View Remote Request</strong>:<br />
+                See requests made by other browsers &amp; devices
+            </td>
+            <td width="22%">   
+                <strong>Trace Output</strong>:<br />
+                View trace output for each request<br /><br />
+                <strong>Ajax Support</strong>:<br />
+                Receive same detailed debug info for every requests
+            </td>
+            <td width="4%"> 
+            </td>
+            <td width="22%">  
+                <strong>Route Debugging</strong>:<br />
+                See how your MVC routes are resolving<br /><br />
+                <strong>Binding Results</strong>:<br />
+                Know that your data models are being bound correctly
+            </td>
+        </tr>
+    </table>
+    @*<div class="button-holder"><a href="@Url.Action(MVC.About.Features())" class="myButton">More Features</a></div>*@
 
-<hr class="line" />
+    <hr class="line" />
 
-<h3>Features</h3>
-<table width="100%">
-    <tr>
-        <td width="48%" colspan="3">
-            <h4>Always at your Fingertips</h4> 
-        </td>
-        <td width="4%" rowspan="2"></td>
-        <td width="48%" colspan="3">
-            <h4>Live Context Debugging</h4> 
-        </td> 
-    </tr>
-    <tr>
-        <td width="22%">   
-            <strong>Firebug Like</strong>:<br />
-            UI looks and feels the same as what we are all used to<br /><br />
-            <strong>Built on HTML5 &amp; CSS3</strong>:<br />
-            Seamlessly built into the HTML of your page 
-        </td>
-        <td width="4%"> 
-        </td>
-        <td width="22%">  
-            <strong>No Changes to your Code</strong>:<br />
-            To get up and running simple Nuget include<br /><br />
-            <strong>View Remote Request</strong>:<br />
-            See requests made by other browsers &amp; devices
-        </td>
-        <td width="22%">   
-            <strong>Trace Output</strong>:<br />
-            View trace output for each request<br /><br />
-            <strong>Ajax Support</strong>:<br />
-            Receive same detailed debug info for every requests
-        </td>
-        <td width="4%"> 
-        </td>
-        <td width="22%">  
-            <strong>Route Debugging</strong>:<br />
-            See how your MVC routes are resolving<br /><br />
-            <strong>Binding Results</strong>:<br />
-            Know that your data models are being bound correctly
-        </td>
-    </tr>
-</table>
-<div class="button-holder"><a href="@Url.Action(MVC.About.Features())" class="myButton">More Features</a></div>
+    <h3>Praise for Glimpse</h3>
+    <table style="margin-bottom:1em;"><tr>
+        <td width="48%">See what people are saying about Glimpse. Since going live at Mix11 we have received great feedback and fantastic support.</td>
+        <td width="4%"></td>
+        <td width="48%">Note, you don't have to talk our word for it, simple do a <a href="http://twitter.com/search/%23glimpse">Twitter</a> / <a href="http://www.google.com/search?sourceid=chrome&ie=UTF-8&q=glimpse+asp.net">Google</a> search and see what has been written.</td>
+    </tr></table>
+    <table width="100%" class="quotes">
+        <tr>
+            <td width="23%">
+                <div class="dark-grad-bg">
+                    "Great post by @@<a href="http://twitter.com/shanselman">shanselman</a> on Glimpse - must-have NuGet package for ASP.NET (both WebForms + MVC)"
+                    <div>&#8212; <a href="http://weblogs.asp.net/scottgu/">Scott Guthrie</a><br />@@<a href="http://twitter.com/scottgu">scottgu</a></div>
+                </div>
+            </td>
+            <td width="2%"></td>
+            <td width="24%">
+                <div class="dark-grad-bg">
+                    "Devs: This new ASP.NET MVC tool was the coolest OSS thing I've seen at #Mix11. I used it in my talk! <a href="http://getglimpse.com">http://getglimpse.com</a>"
+                    <div>&#8212; <a href="http://www.hanselman.com/blog/">Scott Hanselman</a><br />@@<a href="http://twitter.com/shanselman">shanselman</a></div>
+                </div>
+            </td>
+            <td width="2%"></td>
+            <td width="24%">
+                <div class="dark-grad-bg">
+                    "Wow, Glimpse for MVC is pretty bad ass! <a href="http://getglimpse.com">http://getglimpse.com</a> #aspnetmvc /via - @@<a href="http://twitter.com/shanselman">shanselman</a>"
+                    <div>&#8212;  <a href="http://bradwilson.typepad.com/">Brad Wilson</a><br />@@<a href="http://twitter.com/bradwilson">bradwilson</a></div>
+                </div>
+            </td>
+            <td width="2%"></td>
+            <td width="23%">
+                <div class="dark-grad-bg">
+                    "Glimpse is one of the first truly innovative NuGet packages and hopefully a sign of great things to come"
+                    <div>&#8212; <a href="http://blog.phatboyg.com/">Chris Patterson</a><br />@@<a href="http://twitter.com/PhatBoyG">PhatBoyG</a></div>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <div class="button-holder"><a href="@Url.Action(MVC.Talk.Index())" class="myButton">More Talk</a></div> 
 
-<hr class="line" />
-
-<h3>Praise for Glimpse</h3>
-<table style="margin-bottom:1em;"><tr>
-    <td width="48%">See what people are saying about Glimpse. Since going live at Mix11 we have received great feedback and fantastic support.</td>
-    <td width="4%"></td>
-    <td width="48%">Note, you don't have to talk our word for it, simple do a <a href="http://twitter.com/search/%23glimpse">Twitter</a> / <a href="http://www.google.com/search?sourceid=chrome&ie=UTF-8&q=glimpse+asp.net">Google</a> search and see what has been written.</td>
-</tr></table>
-<table width="100%" class="quotes">
-    <tr>
-        <td width="23%">
-            <div class="dark-grad-bg">
-                "Great post by @@<a href="http://twitter.com/shanselman">shanselman</a> on Glimpse - must-have NuGet package for ASP.NET (both WebForms + MVC)"
-                <div>&#8212; <a href="http://weblogs.asp.net/scottgu/">Scott Guthrie</a><br />@@<a href="http://twitter.com/scottgu">scottgu</a></div>
-            </div>
-        </td>
-        <td width="2%"></td>
-        <td width="24%">
-            <div class="dark-grad-bg">
-                "Devs: This new ASP.NET MVC tool was the coolest OSS thing I've seen at #Mix11. I used it in my talk! <a href="http://getglimpse.com">http://getglimpse.com</a>"
-                <div>&#8212; <a href="http://www.hanselman.com/blog/">Scott Hanselman</a><br />@@<a href="http://twitter.com/shanselman">shanselman</a></div>
-            </div>
-        </td>
-        <td width="2%"></td>
-        <td width="24%">
-            <div class="dark-grad-bg">
-                "Wow, Glimpse for MVC is pretty bad ass! <a href="http://getglimpse.com">http://getglimpse.com</a> #aspnetmvc /via - @@<a href="http://twitter.com/shanselman">shanselman</a>"
-                <div>&#8212;  <a href="http://bradwilson.typepad.com/">Brad Wilson</a><br />@@<a href="http://twitter.com/bradwilson">bradwilson</a></div>
-            </div>
-        </td>
-        <td width="2%"></td>
-        <td width="23%">
-            <div class="dark-grad-bg">
-                "Glimpse is one of the first truly innovative NuGet packages and hopefully a sign of great things to come"
-                <div>&#8212; <a href="http://blog.phatboyg.com/">Chris Patterson</a><br />@@<a href="http://twitter.com/PhatBoyG">PhatBoyG</a></div>
-            </div>
-        </td>
-    </tr>
-</table>
-<div class="button-holder"><a href="@Url.Action(MVC.Talk.Index())" class="myButton">More Talk</a></div> 
-
-   
 </div>
     

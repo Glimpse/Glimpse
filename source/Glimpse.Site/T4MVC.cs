@@ -393,6 +393,7 @@ namespace Links {
             public static readonly string GlimpsePlatform_jpg = Url("GlimpsePlatform.jpg");
             public static readonly string GlimpseQuickStart_jpg = Url("GlimpseQuickStart.jpg");
             public static readonly string GlimpseSupport_jpg = Url("GlimpseSupport.jpg");
+            public static readonly string GlimpseTalk_jpg = Url("GlimpseTalk.jpg");
             public static readonly string WhatIsGlimpse_jpg = Url("WhatIsGlimpse.jpg");
         }
     

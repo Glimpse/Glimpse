@@ -1,13 +1,35 @@
-﻿@section PageQuote {
+﻿@*@section PageQuote {
     Glimpse, you guys see this thing? Its spreading like Crack, its just like everyone is saying "have you seen it, have you got some" and everyone else is like "can i get some" -- Scott Hanselman
-}
+}*@
    
-@Html.GlimpseDownload(true)
+@Html.GlimpseDownload(false)
 
-<div class="features questions">
+<div class="features questions about">
+ 
+    <table width="100%">
+        <tr>
+            <td width="50%" colspan="3">  
+                <h2>What are People Saying</h2>
+            </td>
+            <td rowspan="2" style="text-align:center; vertical-align:bottom"> 
+                <img src="@Links.Content.Support.GlimpseTalk_jpg" />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <strong>No need to take out word for it</strong>
+                <p>Feel free to take a look at what people are saying about Glimpse. The feedback has been amazing and 
+                what it can do for you is even more amazing.</p>
+                <p>Checkout Twitter or simply checkout the any number of the blog entries that have been written. 
+                If you like Glimpse all we ask is that you tell others about it and if you can, tweet about it or 
+                even write a blog post about it.</p>
+                <br /><br />
+            </td> 
+        </tr>
+    </table>
 
-    <h2>What are People Saying</h2>
-
+    @Menu.AboutMenu(Html, false, 3) 
+     
     <table width="100%">
         <tr>
             <td width="50%">
