@@ -10,7 +10,7 @@ namespace Glimpse.Core.Handler
     {
         public override string ResourceName
         {
-            get { return "glimpseClient.js"; }
+            get { return "glimpseClient"; }
         }
 
         public override void Process(HttpContextBase context)

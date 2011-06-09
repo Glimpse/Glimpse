@@ -12,7 +12,7 @@ namespace Glimpse.Core.Handler
             var response = context.Response;
             var assembly = Assembly.GetExecutingAssembly();
 
-            using (var resourceStream = assembly.GetManifestResourceStream("Glimpse.Core." + ResourceName))
+            using (var resourceStream = assembly.GetManifestResourceStream("Glimpse.Core." + ResourceName + ".png"))
             {
                 if (resourceStream != null)
                 {
