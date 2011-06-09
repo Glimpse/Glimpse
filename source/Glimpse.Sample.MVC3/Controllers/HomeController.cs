@@ -35,7 +35,6 @@ namespace MvcMusicStore.Controllers
 
             using (GlimpseTrace.Time("It takes {t:g} to trace (which is {t:ss} seconds)"))
             {
-
                 GlimpseTrace.Info("This is info from Glimpse");
                 GlimpseTrace.Warn("This is warn from Glimpse at {0}", DateTime.Now);
                 GlimpseTrace.Error("This is error from {0}", GetType());
@@ -44,7 +43,6 @@ namespace MvcMusicStore.Controllers
                 Trace.TraceWarning("Test TraceWarning;");
                 Trace.TraceError("Test TraceError;");
                 Trace.TraceInformation("Test TraceInformation;"); 
-
             }
 
 

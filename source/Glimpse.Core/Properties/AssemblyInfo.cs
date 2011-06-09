@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Web;
 using Glimpse.Core;
@@ -19,3 +20,4 @@ using Glimpse.Core;
 [assembly: AssemblyFileVersion("0.83")]
 
 [assembly: PreApplicationStartMethod(typeof(PreApplicationStartCode), "Start")]
+[assembly: InternalsVisibleTo("Glimpse.Test.Core")]

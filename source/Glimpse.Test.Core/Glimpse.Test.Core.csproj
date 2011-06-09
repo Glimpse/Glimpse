@@ -45,13 +45,25 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ModuleTest.cs" />
+    <Compile Include="Plugin\RequestTest.cs" />
+    <Compile Include="Plugin\ServerTest.cs" />
+    <Compile Include="Plugin\SessionTest.cs" />
+    <Compile Include="Plugin\TraceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">
+      <Project>{21F99168-7D7B-49F2-A97C-5A983E0CA16F}</Project>
+      <Name>Glimpse.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

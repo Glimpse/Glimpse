@@ -11,8 +11,13 @@ namespace Glimpse.Core.Handler
     [GlimpseHandler]
     public class Clients:JsonHandlerBase{
 
+        public IGlimpseMetadataStore MetadataStore { get; set; }
+
         [ImportingConstructor]
-        public Clients(GlimpseSerializer serializer) : base(serializer){}
+        public Clients(GlimpseSerializer serializer, IGlimpseMetadataStore metadataStore) : base(serializer)
+        {
+            MetadataStore = metadataStore;
+        }
 
         public override string ResourceName
         {
@@ -21,15 +26,13 @@ namespace Glimpse.Core.Handler
 
         protected override object GetData(HttpContextBase context)
         {
-            //TODO:Create IGlimpseMetadata store, and user via ImportingConstructor
-            var queue = context.Application[GlimpseConstants.JsonQueue] as Queue<GlimpseRequestMetadata>;
-            if (queue != null)
+            if (MetadataStore.Requests.Count() != 0)
             {
                 var result = new Dictionary<string, object>();
-                var sortedQueue = from request in queue orderby request.ClientName select request;
+                var sortedRequests = from request in MetadataStore.Requests orderby request.ClientName select request;
                 var lastClient = Guid.NewGuid().ToString();
 
-                foreach (var request in sortedQueue)
+                foreach (var request in sortedRequests)
                 {
                     if (!lastClient.Equals(request.ClientName))
                         result.Add(request.ClientName, new Dictionary<string, object>());

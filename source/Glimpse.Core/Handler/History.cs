@@ -11,8 +11,15 @@ namespace Glimpse.Core.Handler
     [GlimpseHandler]
     public class History : JsonHandlerBase
     {
+        public const string ClientName = "ClientName";
+        public const string ClientRequestId = "ClientRequestID";
+        public IGlimpseMetadataStore MetadataStore { get; set; }
+
         [ImportingConstructor]
-        public History(GlimpseSerializer serializer) : base(serializer){}
+        public History(GlimpseSerializer serializer, IGlimpseMetadataStore metadataStore) : base(serializer)
+        {
+            MetadataStore = metadataStore;
+        }
 
         public override string ResourceName
         {
@@ -21,17 +28,15 @@ namespace Glimpse.Core.Handler
 
         protected override object GetData(HttpContextBase context)
         {
-            //TODO: implement IGlimpseMetadataStore
-            var queue = context.Application[GlimpseConstants.JsonQueue] as Queue<GlimpseRequestMetadata>;
-            if (queue != null)
+            if (MetadataStore.Requests.Count() != 0)
             {
                 var result = new Dictionary<string, object>();
                 IEnumerable<GlimpseRequestMetadata> data;
 
-                var requestId = context.Request.QueryString[GlimpseConstants.ClientRequestId];
+                var requestId = context.Request.QueryString[ClientRequestId];
                 if (!string.IsNullOrEmpty(requestId))
                 { 
-                    data = from request in queue
+                    data = from request in MetadataStore.Requests
                            where request.RequestId.ToString().Equals(requestId)
                            select request;
 
@@ -41,13 +46,13 @@ namespace Glimpse.Core.Handler
                 }
                 else
                 {
-                    var clientName = context.Request.QueryString[GlimpseConstants.ClientName];
+                    var clientName = context.Request.QueryString[ClientName];
 
                     if (string.IsNullOrEmpty(clientName))
-                        data = queue;
+                        data = MetadataStore.Requests;
                     else
                     {
-                        data = from request in queue
+                        data = from request in MetadataStore.Requests
                                where request.ClientName.Equals(clientName)
                                select request;
                     }

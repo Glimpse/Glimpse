@@ -49,6 +49,12 @@ task pack -depends merge {
     exec { & $tools_dir\nuget.exe pack $source_dir\Glimpse.Mvc3\nuspec\Glimpse.Mvc3.nuspec -OutputDirectory $build_dir\local }
 }
 
+task test -depends compile{
+    "Testing Glimpse.Test.Core"
+    
+    exec { & $tools_dir\nunit\nunit-console.exe $tools_dir\nunit\GlimpseTests.nunit /labels /nologo }
+}
+
 
 #functions ---------------------------------------------------------------------------------------------------------
 
