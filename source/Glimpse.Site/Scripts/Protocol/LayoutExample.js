@@ -1,7 +1,39 @@
-﻿$(document).ready(function () {
+﻿
 
-    if (!glimpse)
-        glimpse = '', glimpsePath = '/';
+if (!document.glimpse)
+    glimpse = '', glimpsePath = '/';
+
+$(document).ready(function () {
+
+
+    var scenarioFourteenData = [
+        ['Actor', 'Character', 'Gender', 'Age'],
+        ['Mark Hamill', 'Luke Skywalker', 'Male', '21' ],
+        ['James Earl Jones', 'Darth Vader', 'Male', '45' ],
+        ['Harrison Ford', 'Han Solo - Solo plays a central role in the various Star Wars set after Return of the Jedi. In The Courtship of Princess Leia (1995), he resigns his commission to pursue Leia, whom he eventually marries.', 'Male', '25'],
+        ['Carrie Fisher', 'Princess Leia Organa', 'Female', '21'],
+        ['Peter Cushing', 'Grand Moff Tarkin', 'Female', '69'],
+        ['Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70' ],
+        ['Anthony Daniels', 'C-3PO', 'Droid', '101'],
+        ['Kenny Baker', 'R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker. While Luke cleans the sand out of R2-D2\'s gears, he discovers a fragment of Leia\'s message, and removes the droid\'s restraining bolt to see more; once free of the bolt, R2 claims to have no knowledge of the message.', 'Droid', '150']
+    ];
+    var scenarioFourteenMetadata = [
+            [ { index : 0, width : '100px', key : true, align : 'right' }, { index : 1, rowspan : 3} ],
+            [ { index : 2, align : 'right' } ],
+            [ { index : 3, align : 'right' } ]
+        ];
+    $('.glimpse-scenario-fourteen').show().html($Glimpse.glimpseProcessor.build(scenarioFourteenData, 0, scenarioFourteenMetadata));
+
+
+
+
+
+
+
+
+
+
+
 
     var scenarioOneData = {
         'Movie': 'Star Wars',

@@ -1,4 +1,7 @@
 ﻿using System.Configuration;
+using System.Globalization;
+using System.IO;
+using System.Xml;
 
 namespace Glimpse.Core.Configuration
 {
@@ -12,6 +15,18 @@ namespace Glimpse.Core.Configuration
             {
                 bool result; //false which matches the default above
                 bool.TryParse(this["enabled"].ToString(), out result);
+                return result;
+            }
+        }
+
+        [ConfigurationProperty("loggingEnabled", DefaultValue = "false", IsRequired = false)]
+        public bool LoggingEnabled
+        {
+            set { this["loggingEnabled"] = value; }
+            get
+            {
+                bool result; //false which matches the default above
+                bool.TryParse(this["loggingEnabled"].ToString(), out result);
                 return result;
             }
         }
@@ -72,6 +87,14 @@ namespace Glimpse.Core.Configuration
             {
                 return this["environments"] as EnvironmentsCollection;
             }
+        }
+
+        public override string ToString()
+        {
+            var stringWriter = new StringWriter(CultureInfo.InvariantCulture);
+            using (var xmlWriter = new XmlTextWriter(stringWriter) { Formatting = Formatting.Indented, Indentation = 4, IndentChar = ' ' })
+                this.SerializeToXmlElement(xmlWriter, "glimpse");
+            return stringWriter.ToString();
         }
     }
 }

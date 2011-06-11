@@ -11,10 +11,12 @@ using System.Web;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
+using Glimpse.Core.Logging;
 using Glimpse.Core.Plumbing;
 using Glimpse.Core.Sanitizer;
 using Glimpse.Core.Validator;
 using Glimpse.Core.Warning;
+using NLog;
 using Environment = Glimpse.Core.Configuration.Environment;
 
 namespace Glimpse.Core
@@ -24,9 +26,12 @@ namespace Glimpse.Core
         private static GlimpseRequestValidator RequestValidator { get; set; }
         private static IGlimpseSanitizer Sanitizer { get; set; }//TODO: new up via config
 
+        [Export] public static GlimpseLoggerFactory LoggerFactory { get; set; }
         [Export] public static GlimpseSerializer Serializer { get; set; }
         [Export] public static GlimpseConfiguration Configuration { get; set; }
         [Export] public static IGlimpseMetadataStore MetadataStore { get; set; }
+
+        private static Logger Logger { get; set; }
 
         internal static IEnumerable<IGlimpseHandler> Handlers { get; set; }
         internal static IEnumerable<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>> Plugins { get; set; }
@@ -35,6 +40,11 @@ namespace Glimpse.Core
         {
             Configuration = ConfigurationManager.GetSection("glimpse") as GlimpseConfiguration ?? new GlimpseConfiguration();
 
+            LoggerFactory = new GlimpseLoggerFactory(Configuration.LoggingEnabled);
+            Logger = LoggerFactory.CreateLogger(typeof(Module).FullName);
+
+            Logger.Info(Configuration);
+
             RequestValidator = new GlimpseRequestValidator(Configuration, Enumerable.Empty<IGlimpseValidator>());
 
             Sanitizer = new CSharpSanitizer();
@@ -42,6 +52,7 @@ namespace Glimpse.Core
             Serializer = new GlimpseSerializer();
 
             Handlers = Enumerable.Empty<IGlimpseHandler>();
+
             Plugins = Enumerable.Empty<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>>();
         }
 
