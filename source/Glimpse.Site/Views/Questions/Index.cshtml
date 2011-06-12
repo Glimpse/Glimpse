@@ -76,13 +76,16 @@
             <p>You certainly can and it may be helpful when debugging problems on a live server where you do not have the ability to run the Visual Studio debugger. However be aware that Glimpse sends a lot of potentially dangerous data to the client which should not be visible to a normal user.</p>
             <p>Ideally you want to keep the Glimpse default settings whom only supports its usage on the local machine. This means you need to debug in a web browser on the server itself. This way no information does actually leave the server.</p>
             <p>If you can't do that and need to use a remote browser, you need to configure Glimpse to allow your IP address:</p>
-<pre> &lt;glimpse enabled="true"&gt;
-    &lt;ipAddresses&gt;
-      &lt;add address="127.0.0.1" /&gt;
-      &lt;add address="10.10.10.50" /&gt;
-      &lt;add address="::1" /&gt;
-    &lt;/ipAddresses&gt;
-  &lt;/glimpse&gt;</pre>
+
+<pre class="csharpcode">
+<span class="kwrd">&lt;</span><span class="html">glimpse</span> <span class="attr">enabled</span><span class="kwrd">="true"</span><span class="kwrd">&gt;</span>
+    <span class="kwrd">&lt;</span><span class="html">ipAddresses</span><span class="kwrd">&gt;</span>
+      <span class="kwrd">&lt;</span><span class="html">add</span> <span class="attr">address</span><span class="kwrd">="127.0.0.1"</span> <span class="kwrd">/&gt;</span>
+      <span class="kwrd">&lt;</span><span class="html">add</span> <span class="attr">address</span><span class="kwrd">="10.10.10.50"</span> <span class="kwrd">/&gt;</span>
+      <span class="kwrd">&lt;</span><span class="html">add</span> <span class="attr">address</span><span class="kwrd">="::1"</span> <span class="kwrd">/&gt;</span>
+    <span class="kwrd">&lt;/</span><span class="html">ipAddresses</span><span class="kwrd">&gt;</span>
+<span class="kwrd">&lt;/</span><span class="html">glimpse</span><span class="kwrd">&gt;</span></pre>
+
             <p>In more cases you only need to provide your IPv4 address as most live servers and the network equipment around them are still operating on IPv4.</p>
             <p>Make sure to disable Glimpse in the web.config on the live server after you are done with the debugging.</p>
         </li>
@@ -117,8 +120,13 @@
         <li>
             <div class="question">I am tracing, but the Trace tab is still greyed out?</div>
             Have a look at the trace settings in your web.config:   <br /><br />
-<pre>&lt;trace enabled="true" requestLimit="40" localOnly="true" pageOutput="false" 
-    writeToDiagnosticsTrace="true" /&lt;</pre><br />
+
+<pre class="csharpcode">
+<span class="kwrd">&lt;</span><span class="html">trace</span> <span class="attr">enabled</span><span class="kwrd">="true"</span> <span class="attr">requestLimit</span><span class="kwrd">="40"</span> <span class="attr">localOnly</span><span class="kwrd">="true"</span> <span class="attr">pageOutput</span><span class="kwrd">="false"</span> 
+    <span class="attr">writeToDiagnosticsTrace</span><span class="kwrd">="true"</span> <span class="kwrd">/&gt;</span></pre>
+    
+    
+    <br />
             Make sure writeToDiagnosticsTrace is set to true, and turn pageOutput is false. If you not local, also set localOnly="false"
 
         </li>
