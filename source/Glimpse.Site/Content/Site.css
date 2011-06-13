@@ -49,6 +49,7 @@ pre { border: 1px dashed #777; background-color: #EEE; padding: 1em; }
 
 .plugin-summary { padding:1em 0 0 0; }
 .plugin-video { padding-bottom:1em; text-align:center; }
+/* a bit to wide, any span becomes italic and bold!: */
 .plugin-layout ol span, .plugin ul span { font-style:italic; font-weight:bold; }
 .plugin-faq ol div { font-weight:bold; }
 .plugin-faq li { margin-bottom:2em; }
@@ -80,10 +81,25 @@ pre { border: 1px dashed #777; background-color: #EEE; padding: 1em; }
 	color: black;
 	font-family: Consolas, "Courier New", Courier, Monospace;
 	background-color: #EEE;
-	/*white-space: pre;*/
+	margin-top:0.7em;
+	padding: 0.7em;
 }
+
+/* to overwrite previous italic bold */
+.plugin-layout ul pre.csharpcode span
+{
+    font-style:normal;
+	font-weight:normal;
+}
+pre.csharpcode span
+{
+    font-style:normal;
+	font-weight:normal;
+}
+
+
 .csharpcode pre { margin: 0em; }
-.csharpcode .rem { color: #008000; }
+.csharpcode .rem { color: #008000; font-style:italic; }
 .csharpcode .kwrd { color: #0000ff; }
 .csharpcode .str { color: #006080; }
 .csharpcode .op { color: #0000c0; }
