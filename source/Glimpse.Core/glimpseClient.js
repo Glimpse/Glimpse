@@ -1128,12 +1128,6 @@ if (window.jQueryGlimpse) { (function ($) {
             //Wire up plugin
             $.glimpse.addProtocolListener(function (data) { ga.adjustProtocol(data); }, true);
             $.glimpse.addLayoutListener(function (tabStrip, panelHolder) { ga.adjustLayout(tabStrip, panelHolder); }, true);
-
-            //Wire up events 
-            $('.glimpse-clear', static.panel).live('click', function (ev) { ga.removeRequests(); return false; });
-            $('thead .glimpse-head-message a', static.panel).live('click', function (ev) { ga.resetContext(); return false; });
-            $('.glimpse').live('glimpse.request.refresh', function () { ga.globalResetCallback(); })
-                         .live('glimpse.request.change', function (ev, type) { if (type != 'ajax') { ga.globalResetCallback(); } });
         },
         adjustProtocol: function (data) {
             var ga = this;
@@ -1147,6 +1141,12 @@ if (window.jQueryGlimpse) { (function ($) {
             static.panel = $('.glimpse-panelitem-' + static.key, panelHolder);
             static.tab.addClass('glimpse-permanent').text(static.key);
             static.panel.addClass('glimpse-permanent');
+
+            //Wire up events 
+            $('.glimpse-clear', static.panel).live('click', function (ev) { ga.removeRequests(); return false; });
+            $('thead .glimpse-head-message a', static.panel).live('click', function (ev) { ga.resetContext(); return false; });
+            $('.glimpse').live('glimpse.request.refresh', function () { ga.globalResetCallback(); })
+                         .live('glimpse.request.change', function (ev, type) { if (type != 'ajax') { ga.globalResetCallback(); } });
 
             //Reset to start things off 
             ga.removeRequests(true);
