@@ -64,7 +64,7 @@ namespace Glimpse.Core.Plugin
             {
                 Add(assembly, to:appList);
             }
-
+             
             cachedData = new Dictionary<string, object>
                               {
                                   {"Environment Name", environmentName},
@@ -74,8 +74,10 @@ namespace Glimpse.Core.Plugin
                                   {".NET Framework", string.Format(".NET {0} ({1} bit)", System.Environment.Version, IntPtr.Size*8)},
                                   {"Web Server", !string.IsNullOrEmpty(serverSoftware) ? serverSoftware : processName.StartsWith("WebDev.WebServer", StringComparison.InvariantCultureIgnoreCase) ? "Visual Studio Web Development Server" : "Unknown"},
                                   {"Integrated Pipeline", HttpRuntime.UsingIntegratedPipeline.ToString()},
-                                  {"Worker Process", processName},
+                                  {"Debugging", IsInDebug(context)},
                                   {"Current Trust Level", GetCurrentTrustLevel().ToString()},
+                                  {"Process", ProcessDetails()},
+                                  {"Timezine", TimezineDetails()},
                                   {"Application Assemblies", appList},
                                   {"System Assemblies", sysList}
                               };
@@ -122,6 +124,61 @@ namespace Glimpse.Core.Plugin
             }
 
             return AspNetHostingPermissionLevel.None;
+        }
+
+        private static object IsInDebug(HttpContextBase context)
+        {
+            var url = context.Request.Url.ToString();
+            var isLocal = url.Contains("localhost") || url.Contains("127.0.0.1") || url.Contains("::1");
+            var isDebug = context.IsDebuggingEnabled;
+            if (!isLocal && context.IsDebuggingEnabled)
+                return String.Format("*{0}*", isDebug);
+            return isDebug;
+        }
+
+        private static object TimezineDetails()
+        { 
+            // get a local time zone info
+            var timeZoneInfo = TimeZoneInfo.Local;
+
+            // get it in hours
+            var offset = timeZoneInfo.BaseUtcOffset.Hours;
+
+            // add one hour if we are in daylight savings
+            var isDaylightSavingTime = false;
+            if (timeZoneInfo.IsDaylightSavingTime(DateTime.Now))
+            { 
+                offset++;
+                isDaylightSavingTime = true;
+            }
+
+            return new List<object[]>
+                           {
+                               new object[] { "Timezone", "Is Daylight Saving", "UtcOffset w/DLS" },
+                               new object[] { timeZoneInfo.DisplayName, isDaylightSavingTime, offset }
+                           }; 
+        }
+
+        private static object ProcessDetails()
+        {
+            var process = Process.GetCurrentProcess();
+             
+            var processName = process.MainModule.ModuleName;
+            var startTime = process.StartTime;
+            var uptimeSpan = DateTime.Now.Subtract(startTime);
+
+            var uptime = "";
+            if (uptimeSpan.Days > 0) 
+                uptime = uptimeSpan.Days + " days"; 
+            if (uptimeSpan.Hours > 0) 
+                uptime += uptimeSpan.Hours + " hrs"; 
+            uptime += uptimeSpan.Minutes + " min";	
+
+            return new List<object[]>
+                           {
+                               new object[] { "Worker Process", "Process ID", "Start Time", "Uptime" },
+                               new object[] { processName, process.Id, String.Format("{0} {1}", startTime.ToShortDateString(), startTime.ToLongTimeString()), uptime }
+                           }; 
         }
 
         public string HelpUrl

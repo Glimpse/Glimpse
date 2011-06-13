@@ -250,3 +250,101 @@
         <add name="Prod" authority="getglimpse.com" />
     </environments>
 </glimpse>
+2011-06-13 07:57:27.1363|INFO|Glimpse.Core.Module|<glimpse enabled="true" loggingEnabled="true">
+    <ipAddresses>
+        <add address="127.0.0.1" />
+        <add address="::1" />
+    </ipAddresses>
+    <contentTypes>
+        <add contentType="text/html" />
+        <add contentType="application/json" />
+    </contentTypes>
+    <environments>
+        <add name="Dev" authority="localhost:55555" />
+        <add name="Prod" authority="getglimpse.com" />
+    </environments>
+</glimpse>
+2011-06-13 08:04:44.1263|INFO|Glimpse.Core.Module|<glimpse enabled="true" loggingEnabled="true">
+    <ipAddresses>
+        <add address="127.0.0.1" />
+        <add address="::1" />
+    </ipAddresses>
+    <contentTypes>
+        <add contentType="text/html" />
+        <add contentType="application/json" />
+    </contentTypes>
+    <environments>
+        <add name="Dev" authority="localhost:55555" />
+        <add name="Prod" authority="getglimpse.com" />
+    </environments>
+</glimpse>
+2011-06-13 08:34:29.2993|INFO|Glimpse.Core.Module|<glimpse enabled="true" loggingEnabled="true">
+    <ipAddresses>
+        <add address="127.0.0.1" />
+        <add address="::1" />
+    </ipAddresses>
+    <contentTypes>
+        <add contentType="text/html" />
+        <add contentType="application/json" />
+    </contentTypes>
+    <environments>
+        <add name="Dev" authority="localhost:55555" />
+        <add name="Prod" authority="getglimpse.com" />
+    </environments>
+</glimpse>
+2011-06-13 08:37:57.8662|INFO|Glimpse.Core.Module|<glimpse enabled="true" loggingEnabled="true">
+    <ipAddresses>
+        <add address="127.0.0.1" />
+        <add address="::1" />
+    </ipAddresses>
+    <contentTypes>
+        <add contentType="text/html" />
+        <add contentType="application/json" />
+    </contentTypes>
+    <environments>
+        <add name="Dev" authority="localhost:55555" />
+        <add name="Prod" authority="getglimpse.com" />
+    </environments>
+</glimpse>
+2011-06-13 08:41:46.0552|INFO|Glimpse.Core.Module|<glimpse enabled="true" loggingEnabled="true">
+    <ipAddresses>
+        <add address="127.0.0.1" />
+        <add address="::1" />
+    </ipAddresses>
+    <contentTypes>
+        <add contentType="text/html" />
+        <add contentType="application/json" />
+    </contentTypes>
+    <environments>
+        <add name="Dev" authority="localhost:55555" />
+        <add name="Prod" authority="getglimpse.com" />
+    </environments>
+</glimpse>
+2011-06-13 09:09:30.1464|INFO|Glimpse.Core.Module|<glimpse enabled="true" loggingEnabled="true">
+    <ipAddresses>
+        <add address="127.0.0.1" />
+        <add address="::1" />
+    </ipAddresses>
+    <contentTypes>
+        <add contentType="text/html" />
+        <add contentType="application/json" />
+    </contentTypes>
+    <environments>
+        <add name="Dev" authority="localhost:55555" />
+        <add name="Prod" authority="getglimpse.com" />
+    </environments>
+</glimpse>
+2011-06-13 09:12:40.6423|INFO|Glimpse.Core.Module|<glimpse enabled="true" loggingEnabled="true">
+    <ipAddresses>
+        <add address="127.0.0.1" />
+        <add address="::1" />
+    </ipAddresses>
+    <contentTypes>
+        <add contentType="text/html" />
+        <add contentType="application/json" />
+    </contentTypes>
+    <environments>
+        <add name="Dev" authority="localhost:55555" />
+        <add name="Prod" authority="getglimpse.com" />
+    </environments>
+</glimpse>
