@@ -1186,7 +1186,7 @@ if (window.jQueryGlimpse) { (function ($) {
         callStarted: function (ajaxSpy) {
             var g = $.glimpse, ga = this, static = ga.static, panelHolder = g.static.panelHolder(), panelItem = static.panel;
 
-            if (ajaxSpy.url && ajaxSpy.url.length > 9 && ajaxSpy.url.indexOf('Glimpse/') != -1)
+            if ((ajaxSpy.url && ajaxSpy.url.length > 9 && ajaxSpy.url.indexOf('Glimpse/') != -1) || !panelItem || panelItem.length == 0)
                 return;
 
             //Make this exact same call in the popout window
@@ -1220,7 +1220,7 @@ if (window.jQueryGlimpse) { (function ($) {
             var g = $.glimpse, ga = this, static = ga.static, glimpseRequestId = ajaxSpy.responseHeaders['X-Glimpse-RequestID'],
                     panelHolder = g.static.panelHolder(), panelItem = $('.glimpse-panelitem-' + static.key, panelHolder), row = $("tr[data-index='" + ajaxSpy.logRow + "']", panelItem);
 
-            if (ajaxSpy.url && ajaxSpy.url.length > 9 && ajaxSpy.url.indexOf('Glimpse/') != -1)
+            if ((ajaxSpy.url && ajaxSpy.url.length > 9 && ajaxSpy.url.indexOf('Glimpse/') != -1) || !panelItem || panelItem.length == 0)
                 return;
 
             //Make this exact same call in the popout window
