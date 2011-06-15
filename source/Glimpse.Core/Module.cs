@@ -260,7 +260,8 @@ namespace Glimpse.Core
             {
                 if (context.GetGlimpseMode() == GlimpseMode.On)
                 {
-                    var path = VirtualPathUtility.ToAbsolute("~/", context.Request.ApplicationPath);
+                    //var path = VirtualPathUtility.ToAbsolute("~/", context.Request.ApplicationPath);
+                    var path = context.ResourcePath("");
                     var html = string.Format(@"<script type='text/javascript' id='glimpseData' data-glimpse-requestID='{1}'>var glimpse = {0}, glimpsePath = '{2}';</script>", json, requestId, path);
                     html += @"<script type='text/javascript' id='glimpseClient' src='" + context.ResourcePath("client.js") + "'></script>";
                     context.Response.Write(html);//TODO: Use a filter and put this inside </body>

@@ -7,14 +7,16 @@ namespace Glimpse.Core.Handlers
     public abstract class ImageHandlerBase : IGlimpseHandler
     {
         protected abstract string ContentType { get; }
+        protected abstract string EmbeddedResourceName { get; }
         public abstract string ResourceName { get;} 
+
 
         public void ProcessRequest(HttpContextBase context)
         {
             var response = context.Response;
             var assembly = Assembly.GetExecutingAssembly();
 
-            using (var resourceStream = assembly.GetManifestResourceStream("Glimpse.Core." + ResourceName))
+            using (var resourceStream = assembly.GetManifestResourceStream(EmbeddedResourceName))
             {
                 if (resourceStream != null)
                 {

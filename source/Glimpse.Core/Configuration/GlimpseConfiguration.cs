@@ -91,10 +91,14 @@ namespace Glimpse.Core.Configuration
 
         public override string ToString()
         {
-            var stringWriter = new StringWriter(CultureInfo.InvariantCulture);
-            using (var xmlWriter = new XmlTextWriter(stringWriter) { Formatting = Formatting.Indented, Indentation = 4, IndentChar = ' ' })
-                this.SerializeToXmlElement(xmlWriter, "glimpse");
-            return stringWriter.ToString();
+            var result = "";
+            using (var stringWriter = new StringWriter(CultureInfo.InvariantCulture))
+            {
+                using (var xmlWriter = new XmlTextWriter(stringWriter) { Formatting = Formatting.Indented, Indentation = 4, IndentChar = ' ' })
+                    this.SerializeToXmlElement(xmlWriter, "glimpse");
+                result = stringWriter.ToString(); 
+            }
+            return result;
         }
     }
 }

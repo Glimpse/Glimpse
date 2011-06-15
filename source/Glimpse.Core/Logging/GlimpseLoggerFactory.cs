@@ -1,4 +1,8 @@
-﻿using NLog;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using NLog;
 using NLog.Config;
 using NLog.Targets;
 
@@ -6,20 +10,21 @@ namespace Glimpse.Core.Logging
 {
     public class GlimpseLoggerFactory
     { 
-        private LogFactory factory;
-        private bool loggingEnabled;
+        private LogFactory _factory;
+        private bool _loggingEnabled;
 
         public GlimpseLoggerFactory(bool loggingEnabled)
         {
-            this.loggingEnabled = loggingEnabled;
-            factory = BuildFactory(); 
+            _loggingEnabled = loggingEnabled;
+            if (_loggingEnabled)
+                _factory = BuildFactory(); 
         }
 
         public Logger CreateLogger(string name)
         {
-            if (!loggingEnabled)
-                return LogManager.CreateNullLogger();
-            return factory.GetLogger(name);
+            if (_loggingEnabled)
+                return _factory.GetLogger(name);
+            return LogManager.CreateNullLogger();
         }
          
         private LogFactory BuildFactory()
@@ -32,7 +37,7 @@ namespace Glimpse.Core.Logging
             config.AddTarget("file", fileTarget);
 
             // Step 3. Set target properties  
-            fileTarget.FileName = "${basedir}/GlimpseLog.log";
+            fileTarget.FileName = "${basedir}/Glimpse.log";
             fileTarget.Layout = "${longdate}|${level:uppercase=true}|${logger}|${message}";
 
             // Step 4. Define rules 
