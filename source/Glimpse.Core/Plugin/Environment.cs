@@ -77,7 +77,7 @@ namespace Glimpse.Core.Plugin
                                   {"Debugging", IsInDebug(context)},
                                   {"Current Trust Level", GetCurrentTrustLevel().ToString()},
                                   {"Process", ProcessDetails()},
-                                  {"Timezine", TimezineDetails()},
+                                  {"Timezone", TimezineDetails()},
                                   {"Application Assemblies", appList},
                                   {"System Assemblies", sysList}
                               };
@@ -154,7 +154,7 @@ namespace Glimpse.Core.Plugin
 
             return new List<object[]>
                            {
-                               new object[] { "Timezone", "Is Daylight Saving", "UtcOffset w/DLS" },
+                               new object[] { "Current", "Is Daylight Saving", "UtcOffset w/DLS" },
                                new object[] { timeZoneInfo.DisplayName, isDaylightSavingTime, offset }
                            }; 
         }

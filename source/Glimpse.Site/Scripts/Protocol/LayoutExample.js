@@ -30,7 +30,7 @@ $(document).ready(function () {
         ['Kenny Baker', 'R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker. While Luke cleans the sand out of R2-D2\'s gears, he discovers a fragment of Leia\'s message, and removes the droid\'s restraining bolt to see more; once free of the bolt, R2 claims to have no knowledge of the message.', 'Droid', '150']
     ];
     var scenarioFourteenMetadata = [
-            [ { index : 0, width : '200px', key : true, align : 'right' }, { index : 1, rowspan : 3} ],
+            [ { index : 0, width : '150px', key : true, align : 'right' }, { index : 1, rowspan : 3} ],
             [ { index : 2, align : 'right' } ],
             [ { index : 3, align : 'right' } ]
         ];

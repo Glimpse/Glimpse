@@ -16,14 +16,15 @@ namespace Glimpse.Core.Logging
         public GlimpseLoggerFactory(bool loggingEnabled)
         {
             _loggingEnabled = loggingEnabled;
-            _factory = BuildFactory(); 
+            if (_loggingEnabled)
+                _factory = BuildFactory(); 
         }
 
         public Logger CreateLogger(string name)
         {
-            if (!_loggingEnabled)
-                return LogManager.CreateNullLogger();
-            return _factory.GetLogger(name);
+            if (_loggingEnabled)
+                return _factory.GetLogger(name);
+            return LogManager.CreateNullLogger();
         }
          
         private LogFactory BuildFactory()
@@ -36,7 +37,7 @@ namespace Glimpse.Core.Logging
             config.AddTarget("file", fileTarget);
 
             // Step 3. Set target properties  
-            fileTarget.FileName = "${basedir}/GlimpseLog.log";
+            fileTarget.FileName = "${basedir}/Glimpse.log";
             fileTarget.Layout = "${longdate}|${level:uppercase=true}|${logger}|${message}";
 
             // Step 4. Define rules 
