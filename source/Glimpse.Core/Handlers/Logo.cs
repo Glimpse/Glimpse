@@ -1,13 +1,13 @@
 ﻿using Glimpse.Core.Extensibility;
 
-namespace Glimpse.Core.Handler
+namespace Glimpse.Core.Handlers
 {
     [GlimpseHandler]
     public class Logo : ImageHandlerBase
     {
         public override string ResourceName
         {
-            get { return "glimpseLogo"; }
+            get { return "glimpseLogo.png"; }
         }
 
         protected override string ContentType

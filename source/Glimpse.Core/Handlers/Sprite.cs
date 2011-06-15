@@ -1,13 +1,13 @@
 ﻿using Glimpse.Core.Extensibility;
 
-namespace Glimpse.Core.Handler
+namespace Glimpse.Core.Handlers
 { 
     [GlimpseHandler]
     public class Sprite : ImageHandlerBase
     {
         public override string ResourceName
         {
-            get { return "glimpseSprite"; }
+            get { return "glimpseSprite.png"; }
         }
 
         protected override string ContentType

@@ -3,17 +3,17 @@ using System.Reflection;
 using System.Web;
 using Glimpse.Core.Extensibility;
 
-namespace Glimpse.Core.Handler
+namespace Glimpse.Core.Handlers
 {
     [GlimpseHandler]
-    public class Javascript : HandlerBase
+    public class Javascript : IGlimpseHandler
     {
-        public override string ResourceName
+        public string ResourceName
         {
-            get { return "glimpseClient"; }
+            get { return "client.js"; }
         }
 
-        public override void Process(HttpContextBase context)
+        public void ProcessRequest(HttpContextBase context)
         {
             var response = context.Response;
             var assembly = Assembly.GetExecutingAssembly();
@@ -29,11 +29,6 @@ namespace Glimpse.Core.Handler
                 }
             }
             response.AddHeader("Content-Type", "application/x-javascript");
-        }
-
-        public override bool IsReusable
-        {
-            get { return true; }
         }
     }
 }

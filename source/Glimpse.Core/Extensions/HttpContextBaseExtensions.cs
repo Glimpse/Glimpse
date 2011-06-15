@@ -63,6 +63,12 @@ namespace Glimpse.Core.Extensions
             return (data != null);
         }
 
+        public static string ResourcePath(this HttpContextBase context, string resource)
+        {
+            var root = VirtualPathUtility.ToAbsolute("~/", context.Request.ApplicationPath);
+            return string.Format("{0}Glimpse.axd?{2}={1}", root, resource, Handler.ResourceKey);
+        }
+
         public static List<IGlimpseWarning> GetWarnings(this HttpContextBase context)
         {
             var result = context.Items[GlimpseConstants.Warnings] as List<IGlimpseWarning>;

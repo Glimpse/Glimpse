@@ -1,17 +1,17 @@
 ﻿using System.Web;
 using Glimpse.Core.Extensibility;
 
-namespace Glimpse.Core.Handler
+namespace Glimpse.Core.Handlers
 {
     [GlimpseHandler]
-    public class Popup : HandlerBase
+    public class Popup : IGlimpseHandler
     {
-        public override string ResourceName
+        public string ResourceName
         {
             get { return "Popup"; }
         }
 
-        public override void Process(HttpContextBase context)
+        public void ProcessRequest(HttpContextBase context)
         {
             var response = context.Response;
 
@@ -24,11 +24,6 @@ namespace Glimpse.Core.Handler
             response.Write(string.Format(@"<script type='text/javascript' id='glimpseData' data-glimpse-requestID='{1}'>var glimpse, glimpsePath = '{0}'</script>", path, requestId));
             response.Write("<script type='text/javascript' id='glimpseClient' src='/Glimpse/glimpseClient.js'></script>");
             response.Write("</body></html>");
-        }
-
-        public override bool IsReusable
-        {
-            get { return true; }
         }
     }
 }

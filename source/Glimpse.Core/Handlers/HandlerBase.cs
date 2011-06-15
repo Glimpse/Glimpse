@@ -1,17 +1,18 @@
-﻿using System.Web;
+﻿/*
+using System.Web;
 using Glimpse.Core.Extensibility;
 
-namespace Glimpse.Core.Handler
+namespace Glimpse.Core.Handlers
 {
     public abstract class HandlerBase:IGlimpseHandler
     {
-        public void ProcessRequest(HttpContext context)
+        public void ProcessRequest(HttpContextBase context)
         {
-            Process(new HttpContextWrapper(context));
+            Process(context);
         }
 
-        public abstract bool IsReusable { get; }
         public abstract void Process(HttpContextBase context);
         public abstract string ResourceName { get; }
     }
 }
+*/

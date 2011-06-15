@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NLog;
+﻿using NLog;
 using NLog.Config;
 using NLog.Targets;
 
@@ -10,20 +6,20 @@ namespace Glimpse.Core.Logging
 {
     public class GlimpseLoggerFactory
     { 
-        private LogFactory _factory;
-        private bool _loggingEnabled;
+        private LogFactory factory;
+        private bool loggingEnabled;
 
         public GlimpseLoggerFactory(bool loggingEnabled)
         {
-            _loggingEnabled = loggingEnabled;
-            _factory = BuildFactory(); 
+            this.loggingEnabled = loggingEnabled;
+            factory = BuildFactory(); 
         }
 
         public Logger CreateLogger(string name)
         {
-            if (!_loggingEnabled)
+            if (!loggingEnabled)
                 return LogManager.CreateNullLogger();
-            return _factory.GetLogger(name);
+            return factory.GetLogger(name);
         }
          
         private LogFactory BuildFactory()

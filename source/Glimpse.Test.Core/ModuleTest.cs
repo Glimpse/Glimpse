@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Web;
 using Glimpse.Core;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Handler;
+using Glimpse.Core.Handlers;
 using Moq;
 using NUnit.Framework;
 
@@ -25,7 +21,7 @@ namespace Glimpse.Test.Core
 
             Module.Configuration = new GlimpseConfiguration {RootUrlPath = "glimpse"};
             Module.Handlers = new List<IGlimpseHandler> {new Javascript()};
-            Module.PostMapRequestHandler(Context.Object);
+            //Module.PostMapRequestHandler(Context.Object);
 
             Context.VerifySet(ctx => ctx.Items[GlimpseConstants.ValidPath] = true);
         }
