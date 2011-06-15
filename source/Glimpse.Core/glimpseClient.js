@@ -1134,8 +1134,12 @@ if (window.jQueryGlimpse) { (function ($) {
             $.glimpse.addLayoutListener(function (tabStrip, panelHolder) { ga.adjustLayout(tabStrip, panelHolder); }, true);
         },
         adjustProtocol: function (data) {
-            var ga = this;
+            var ga = this, metadata;
+
             data[ga.static.key] = ''
+
+            if ((metadata = data._metadata) && (metadata = metadata.plugins))
+                (metadata[ga.static.key] = {})['helpUrl'] = 'http://getglimpse.com/Help/Plugin/Ajax'; 
         },
         adjustLayout: function (tabStrip, panelHolder) {
             var ga = this, static = ga.static;
@@ -1279,8 +1283,12 @@ if (window.jQueryGlimpse) { (function ($) {
             $.glimpse.addLayoutListener(function (tabStrip, panelHolder) { gr.adjustLayout(tabStrip, panelHolder); }, true);
         },
         adjustProtocol: function (data) {
-            var gr = this;
+            var gr = this, metadata;
+
             data[gr.static.key] = ''
+
+            if ((metadata = data._metadata) && (metadata = metadata.plugins))
+                (metadata[gr.static.key] = {})['helpUrl'] = 'http://getglimpse.com/Help/Plugin/Remote'; 
         },
         adjustLayout: function (tabStrip, panelHolder) {
             var gr = this, static = gr.static;
@@ -1590,7 +1598,7 @@ if (window.jQueryGlimpse) { (function ($) {
             $('.glimpse').live('glimpse.request.change', function (ev, type) { if (type != 'ajax') { gs.adjustLayout(); } });
         },
         adjustLayout: function () {
-            var g = $.glimpse, mainHolder = g.static.mainHolder(), environments = g.static.data._metadata.request.environmentUrls
+            var g = $.glimpse, mainHolder = g.static.mainHolder(), environments = ((metadata = g.static.data._metadata) && (metadata = metadata.request) && (metadata = metadata.environmentUrls));
 
             if (environments) {
                 var currentEnvironment, environmentsList = '';
@@ -1633,12 +1641,11 @@ if (window.jQueryGlimpse) { (function ($) {
             $.glimpse.addLayoutListener(function (tabStrip, panelHolder) { gu.adjustLayout(tabStrip, panelHolder); }, true);
         },
         adjustLayout: function (tabStrip, panelHolder) {
-            var g = $.glimpse, mainHolder = g.static.mainHolder();
-
-            var newestVersion = $.glimpse.util.cookie('glimpseLatestVersion');
+            var g = $.glimpse, mainHolder = g.static.mainHolder(), newestVersion = $.glimpse.util.cookie('glimpseLatestVersion'), currentVersion = '';
 
             if (newestVersion) {
-                if ($.glimpse.static.data._metadata.request.runningVersion < newestVersion)
+                currentVersion = ((currentVersion = g.static.data._metadata) && (currentVersion = currentVersion.request) && (currentVersion = currentVersion.runningVersion));
+                if (currentVersion && currentVersion < newestVersion)
                     $('.glimpse-meta-update', mainHolder).attr('title', 'Update: Glimpse ' + parseFloat(newestVersion).toFixed(2) + ' now available on nuget.org').css('display', 'inline-block');
 
                 return;
