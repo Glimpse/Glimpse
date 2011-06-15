@@ -9,8 +9,7 @@ namespace Glimpse.Core.Validator
     internal class GlimpseModeValidator:IGlimpseValidator{
         public bool IsValid(HttpContextBase context, GlimpseConfiguration configuration, LifecycleEvent lifecycleEvent)
         {
-            //TODO: Test to see if this is needed
-            if (lifecycleEvent == LifecycleEvent.BeginRequest)
+            if (lifecycleEvent == LifecycleEvent.BeginRequest || lifecycleEvent == LifecycleEvent.Handler)
                 return true;
 
             return context.GetGlimpseMode() != GlimpseMode.Off;

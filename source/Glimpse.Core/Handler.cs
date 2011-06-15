@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Web;
+using System.Web.Util;
+using Glimpse.Core.Validator;
 
 namespace Glimpse.Core
 {
@@ -15,6 +17,13 @@ namespace Glimpse.Core
 
         internal static void ProcessRequest(HttpContextBase context)
         {
+            if (!Module.RequestValidator.IsValid(context, LifecycleEvent.Handler))
+            {
+                context.Response.StatusCode = 403;
+                context.Response.Write("<html><head><title>403 Forbidden</title></head><body><h1>403 Forbidden</h1>Ensure '<em>"+ context.Request.UserHostAddress+"</em>' is configured for Glimpse access.</body></html>");
+                return;
+            }
+
             //TODO: Validation/security check!
             var queryString = context.Request.QueryString;
 
@@ -25,7 +34,7 @@ namespace Glimpse.Core
             if (handler == null)
             {
                 context.Response.StatusCode = 404;
-                context.Response.End();
+                context.Response.Write("<html><head><title>404 Not Found</title></head><body><h1>404 Not Found</h1>Could not find Glimpse resource with name '<em>" + resource + "</em>'.</body></html>");
                 return;
             }
 
