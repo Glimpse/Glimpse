@@ -85,7 +85,7 @@ namespace Glimpse.Core
             context.EndRequest += OnEndRequest;
             context.PostRequestHandlerExecute += OnPostRequestHandlerExecute;
             context.PreSendRequestHeaders += OnPreSendRequestHeaders;
-            context.PostMapRequestHandler += OnPostMapRequestHandler;
+            //context.PostMapRequestHandler += OnPostMapRequestHandler;
         }
 
         #region Event Handlers
@@ -97,13 +97,13 @@ namespace Glimpse.Core
                 EndRequest(new HttpContextWrapper(httpApplication.Context));
         }
 
-        private static void OnPostMapRequestHandler(object sender, EventArgs e)
+        /*private static void OnPostMapRequestHandler(object sender, EventArgs e)
         {
             var httpApplication = sender as HttpApplication;
 
             if (httpApplication != null)
                 PostMapRequestHandler(new HttpContextWrapper(httpApplication.Context));
-        }
+        }*/
 
         private static void OnPreSendRequestHeaders(object sender, EventArgs e)
         {
@@ -137,7 +137,7 @@ namespace Glimpse.Core
             context.InitGlimpseContext();
         }
 
-        internal static void PostMapRequestHandler(HttpContextBase context)
+        /*internal static void PostMapRequestHandler(HttpContextBase context)
         {
             context.Items[GlimpseConstants.ValidPath] = false;
 
@@ -158,7 +158,7 @@ namespace Glimpse.Core
                     context.Items[GlimpseConstants.ValidPath] = true;
                 }
             }
-        }
+        }*/
 
         private static void PostRequestHandlerExecute(HttpContextBase context)
         {
@@ -204,7 +204,7 @@ namespace Glimpse.Core
 
             Plugins = container.GetExports<IGlimpsePlugin, IGlimpsePluginRequirements>();
             Handlers = container.GetExportedValues<IGlimpseHandler>();
-            Serializer.AddConterers(container.GetExportedValues<IGlimpseConverter>());
+            Serializer.AddConverters(container.GetExportedValues<IGlimpseConverter>());
 
             var store = context.GetWarnings();
             store.AddRange(directoryCatalog.Exceptions.Select(exception => new ExceptionWarning(exception)));
@@ -260,9 +260,10 @@ namespace Glimpse.Core
             {
                 if (context.GetGlimpseMode() == GlimpseMode.On)
                 {
-                    var path = VirtualPathUtility.ToAbsolute("~/", context.Request.ApplicationPath);
+                    //var path = VirtualPathUtility.ToAbsolute("~/", context.Request.ApplicationPath);
+                    var path = context.ResourcePath("");
                     var html = string.Format(@"<script type='text/javascript' id='glimpseData' data-glimpse-requestID='{1}'>var glimpse = {0}, glimpsePath = '{2}';</script>", json, requestId, path);
-                    html += @"<script type='text/javascript' id='glimpseClient' src='" + UrlCombine(path, Configuration.RootUrlPath, "glimpseClient") + "'></script>";
+                    html += @"<script type='text/javascript' id='glimpseClient' src='" + context.ResourcePath("client.js") + "'></script>";
                     context.Response.Write(html);//TODO: Use a filter and put this inside </body>
                 }
             }

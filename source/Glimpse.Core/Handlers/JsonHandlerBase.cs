@@ -1,9 +1,10 @@
 ﻿using System.Web;
+using Glimpse.Core.Extensibility;
 using Glimpse.Core.Plumbing;
 
-namespace Glimpse.Core.Handler
+namespace Glimpse.Core.Handlers
 {
-    public abstract class JsonHandlerBase:HandlerBase
+    public abstract class JsonHandlerBase:IGlimpseHandler
     {
         private GlimpseSerializer Serializer { get; set; }
 
@@ -12,7 +13,7 @@ namespace Glimpse.Core.Handler
             Serializer = serializer;
         }
 
-        public override void Process(HttpContextBase context)
+        public void ProcessRequest(HttpContextBase context)
         {
             //TODO: FIX ME, return 401 unauth
             /*if (!context.IsValidRequest(config, false, checkPath: false))
@@ -29,10 +30,6 @@ namespace Glimpse.Core.Handler
         }
 
         protected abstract object GetData(HttpContextBase context);
-        
-        public override bool IsReusable
-        {
-            get { return true; }
-        }
+        public abstract string ResourceName{get;}
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Web;
-using Glimpse.Core;
 
 [assembly: AssemblyTitle("Glimpse Web Debugger (Beta)")]
 [assembly: AssemblyDescription("Glimpse is a web debugger used to gain a better understanding of whats happening inside of your webserver. (Beta)")]

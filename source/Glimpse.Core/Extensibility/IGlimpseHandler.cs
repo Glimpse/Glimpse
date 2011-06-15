@@ -2,8 +2,9 @@
 
 namespace Glimpse.Core.Extensibility
 {
-    public interface IGlimpseHandler:IHttpHandler
+    public interface IGlimpseHandler
     {
         string ResourceName { get; }
+        void ProcessRequest(HttpContextBase context);
     }
 }

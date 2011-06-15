@@ -34,7 +34,7 @@ namespace Glimpse.Core.Plumbing
             return JsonConvert.SerializeObject(obj, DefaultFormatting, Settings);
         }
 
-        public void AddConterers(IEnumerable<IGlimpseConverter> glimpseConverters)
+        public void AddConverters(IEnumerable<IGlimpseConverter> glimpseConverters)
         {
             var converters = Settings.Converters;
             foreach (var converter in glimpseConverters)

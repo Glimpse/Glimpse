@@ -6,7 +6,7 @@ using System.Web;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Plumbing;
 
-namespace Glimpse.Core.Handler
+namespace Glimpse.Core.Handlers
 {
     [GlimpseHandler]
     public class History : JsonHandlerBase

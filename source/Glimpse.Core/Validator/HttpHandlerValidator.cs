@@ -12,7 +12,7 @@ namespace Glimpse.Core.Validator
             if (lifecycleEvent == LifecycleEvent.BeginRequest)
                 return true;
 
-            return !(context.Handler is IGlimpseHandler);
+            return !(context.Handler is Handler);
         }
     }
 }

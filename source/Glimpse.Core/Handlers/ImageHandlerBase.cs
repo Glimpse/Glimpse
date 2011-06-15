@@ -1,18 +1,22 @@
 ﻿using System.Reflection;
 using System.Web;
+using Glimpse.Core.Extensibility;
 
-namespace Glimpse.Core.Handler
+namespace Glimpse.Core.Handlers
 {
-    public abstract class ImageHandlerBase : HandlerBase
+    public abstract class ImageHandlerBase : IGlimpseHandler
     {
         protected abstract string ContentType { get; }
+        protected abstract string EmbeddedResourceName { get; }
+        public abstract string ResourceName { get;} 
 
-        public override void Process(HttpContextBase context)
+
+        public void ProcessRequest(HttpContextBase context)
         {
             var response = context.Response;
             var assembly = Assembly.GetExecutingAssembly();
 
-            using (var resourceStream = assembly.GetManifestResourceStream("Glimpse.Core." + ResourceName + ".png"))
+            using (var resourceStream = assembly.GetManifestResourceStream(EmbeddedResourceName))
             {
                 if (resourceStream != null)
                 {
@@ -24,9 +28,5 @@ namespace Glimpse.Core.Handler
             response.AddHeader("Content-Type", ContentType);
         }
 
-        public override bool IsReusable
-        {
-            get { return true; }
-        }
     }
 }
