@@ -23,7 +23,7 @@ namespace Glimpse.Core
 {
     public class Module : IHttpModule
     {
-        private static GlimpseRequestValidator RequestValidator { get; set; }
+        internal static GlimpseRequestValidator RequestValidator { get; set; }
         private static IGlimpseSanitizer Sanitizer { get; set; }//TODO: new up via config
 
         [Export] public static GlimpseLoggerFactory LoggerFactory { get; set; }
