@@ -6,7 +6,7 @@ namespace Glimpse.Core
     {
         public static void Start()
         {
-            DynamicModuleUtility.RegisterModule(typeof(Module));
+            //DynamicModuleUtility.RegisterModule(typeof(Module));
         }
     }
 }

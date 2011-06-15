@@ -19,5 +19,5 @@ using Glimpse.Core;
 [assembly: AssemblyVersion("0.83")]
 [assembly: AssemblyFileVersion("0.83")]
 
-[assembly: PreApplicationStartMethod(typeof(PreApplicationStartCode), "Start")]
+//[assembly: PreApplicationStartMethod(typeof(PreApplicationStartCode), "Start")]
 [assembly: InternalsVisibleTo("Glimpse.Test.Core")]
