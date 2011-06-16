@@ -188,7 +188,7 @@ if (window.jQueryGlimpse) { (function ($) {
 
     //#region Setup
     var spriteUrl = glimpsePath + 'sprite.png';
-    var glimpseCss = '.glimpse, .glimpse *, .glimpse a, .glimpse td, .glimpse th, .glimpse table { font-family:Lucida Grande,Tahoma,sans-serif; background-color:transparent; font-size:11px; line-height:14px; border:0px; color:#232323; text-align:left; }.glimpse a, .glimpse a:hover, .glimpse a:visited { color:#2200C1; text-decoration:underline; font-weight:normal; }.glimpse a:active { color:#c11; text-decoration:underline; font-weight:normal; }.glimpse th { font-weight:bold; }.glimpse-open { position:fixed; right:0; bottom:0; height:27px; width:28px; border-left: 1px solid #ACA899; border-top: 1px solid #ACA899; background:#EEE; background:-moz-linear-gradient(top, #FFFFFF 0%, #EEEEEE 4%, #F3F5F7 8%, #E9E8DD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(4%,#EEEEEE), color-stop(8%,#F3F5F7), color-stop(100%,#E9E8DD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#FFFFFF\', endColorstr=\'#E9E8DD\',GradientType=0 ); }.glimpse-icon { background:url('+spriteUrl+') 0px -16px; height:20px; width:20px; margin: 3px 4px 0; cursor:pointer; }.glimpse-holder { display:none; z-index:100010 !important; height:0; position:fixed; bottom:0; left:0; width:100%; background-color:#fff; }.glimpse-bar { height:27px; border-top:1px solid #ACA899; background:#FFFFFF; background:-moz-linear-gradient(top, #FFFFFF 0%, #EEEEEE 4%, #F3F5F7 8%, #E9E8DD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(4%,#EEEEEE), color-stop(8%,#F3F5F7), color-stop(100%,#E9E8DD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#FFFFFF\', endColorstr=\'#E9E8DD\',GradientType=0 ); }.glimpse-bar .glimpse-icon { margin-top:4px; float:left; } .glimpse-buttons { text-align:right; float:right; height:17px; width:150px; padding:6px; }.glimpse-title { margin:0 0 0 15px; padding-top:5px; font-weight:bold; display:inline-block; width:75%; overflow:hidden; }.glimpse-title span:first-child { display:inline-block; height:20px; }.glimpse-title span:last-child { font-weight:normal; font-style:italic; padding-left:10px; width:60%; white-space:nowrap; display:inline-block; height:20px; } .glimpse-title span:last-child .glimpse-switch { -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; border: 1px solid #CCC; padding: 1px 10px 4px 8px; margin: 0 5px 0 0; background:#FFFFFF; background:-moz-linear-gradient(top, #E9E8DD 0%, #F3F5F7 4%, #EEE 8%, #DDD 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#E9E8DD), color-stop(4%,#F3F5F7), color-stop(8%,#EEE), color-stop(100%,#DDD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#E9E8DD\', endColorstr=\'#FFFFFF\',GradientType=0 ) } .glimpse-title span:last-child .glimpse-switch-over { position:absolute; display:none; top:4px; padding-bottom:10px; z-index:100; } .glimpse-title span:last-child .glimpse-switch-over div { text-align:center; font-weight:bold; margin:5px 0; } .glimpse-button, .glimpse-button:hover { cursor:pointer; background-image:url('+spriteUrl+'); background-repeat:no-repeat; height:14px; width:14px; margin-left:2px; display:inline-block; }.glimpse-meta-warning { background-position:-168px -1px; display:none; }.glimpse-meta-warning:hover { background-position:-183px -1px; } .glimpse-meta-help { background-position:-138px -1px; margin-right:15px; }.glimpse-meta-help:hover { background-position:-153px -1px; margin-right:15px; }.glimpse-meta-update { background-position:-198px -1px; display:none; }.glimpse-meta-update:hover { background-position:-213px -1px; }.glimpse-close { background-position:-1px -1px; }.glimpse-close:hover { background-position:-17px -1px; }.glimpse-terminate { background-position:-65px -1px; }.glimpse-terminate:hover { background-position:-81px -1px; } .glimpse-popout { background-position:-96px -1px; }.glimpse-popout:hover { background-position: -111px -1px; } .glimpse-tabs { height:24px; font-weight:bold; border-bottom:1px solid #ACA899; border-top:1px solid #CDCABB; background:#B9B7AF; background:-moz-linear-gradient(top, #B9B7AF 0%, #DAD8C8 4%, #D7D4C5 10%, #E9E6D5 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#B9B7AF), color-stop(4%,#DAD8C8), color-stop(10%,#D7D4C5), color-stop(100%,#E9E6D5)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#B9B7AF\', endColorstr=\'#E9E6D5\',GradientType=0 );}.glimpse-tabs ul { margin:4px 0px 0 0; padding:0px; }.glimpse-tabs li { display:inline; margin:0 2px 3px 2px; height:22px; padding:4px 9px 3px; color:#565656; cursor:pointer; border-radius: 0px 0px 3px 3px; -moz-border-radius: 0px 0px 3px 3px; -webkit-border-bottom-right-radius: 3px; -webkit-border-bottom-left-radius: 3px; }.glimpse-tabs li.glimpse-active { padding:4px 8px 3px; color:#000; border-left:1px solid #A4A4A4; border-bottom:1px solid #A4A4A4; border-right:1px solid #A4A4A4; background:#F7F6F1; background:-moz-linear-gradient(top, #F2F1EC 0%, #F2F1EC 3%, #EFEEE9 7%, #E8E7E1 51%, #F7F6F1 92%, #F1F0EB 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#F2F1EC), color-stop(3%,#F2F1EC), color-stop(7%,#EFEEE9), color-stop(51%,#E8E7E1), color-stop(92%,#F7F6F1), color-stop(100%,#F1F0EB)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#EFEEE9\', endColorstr=\'#F7F6F1\',GradientType=0 ); } .glimpse-tabs li.glimpse-hover { padding:4px 8px 3px; border-left:1px solid #BFBDB1; border-bottom:1px solid #BFBDB1; border-right:1px solid #BFBDB1; background:#EEECE3; background:-moz-linear-gradient(top, #BFBDB1 0%, #DAD9CB 4%, #D8D5C9 8%, #E8E7E1 51%, #F0EEE4 92%, #EDEBE1 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#BFBDB1), color-stop(4%,#DAD9CB), color-stop(8%,#D8D5C9), color-stop(51%,#E8E7E1), color-stop(92%,#F0EEE4), color-stop(100%,#EDEBE1)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#D8D5C9\', endColorstr=\'#F0EEE4\',GradientType=0 ); }.glimpse-tabs li.glimpse-disabled { color:#AAA; cursor:default; }.glimpse-panel-holder {}.glimpse-panel { display:none; overflow:auto; position:relative; } .glimpse-panel-message { text-align:center; padding-top:40px; font-size:1.1em; color:#AAA; }.glimpse-panel table { border-spacing:0; width:100%; }.glimpse-panel table td, .glimpse-panel table th { padding:3px 4px; text-align:left; vertical-align:top; } .glimpse-panel tr.glimpse-row-header-0 { height:19px; } .glimpse-panel .glimpse-row-header-0 { font-weight:bold; border-bottom:1px solid #9C9C9C; background:#C6C6C6; background:-moz-linear-gradient(top, #DEDEDE 0%, #BDBDBD 80%, #BBB 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#DEDEDE), color-stop(80%,#BDBDBD), color-stop(100%,#BBB)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#DEDEDE\', endColorstr=\'#BBB\',GradientType=0 ); }.glimpse-panel .glimpse-row-header-0 th { border-left:1px solid #D9D9D9; border-right:1px solid #9C9C9C; } .glimpse-panel td.glimpse-cell-key { font-weight:bold; } .glimpse-panel th.glimpse-cell-key { width:30%; max-width:150px; } .glimpse-panel .glimpse-cell-structured-first { padding-bottom:0; height:17px; } .glimpse-panel .glimpse-cell-structured-any { padding-bottom:1px; padding-top:1px; height:17px; } .glimpse-panel .glimpse-cell-structured-last { padding-top:0px; } .glimpse-panel table table { border:1px solid #D9D9D9; } .glimpse-panel table table thead tr { height:17px; border-bottom:1px solid #9C9C9C; background:#C6C6C6; background:-moz-linear-gradient(top, #F1F1F1 0%, #DFDFDF 80%, #DDD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#F1F1F1), color-stop(80%,#DFDFDF), color-stop(100%,#DDD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#F1F1F1\', endColorstr=\'#DDD\',GradientType=0 ); }.glimpse-panel table table thead tr th { border-left:1px solid #C6C6C6; border-right:1px solid #D9D9D9; padding:1px 4px 2px 4px; }.glimpse-panel table table thead tr th:first-child { border-left:0px; }.glimpse-panel table table thead tr th:last-child { border-right:0px; }.glimpse-panel .even { background:#F4F4F4; }.glimpse-panel .odd { background:#F9F9F9; }.glimpse-panel table table tbody th { font-weight:normal; font-style:italic; }.glimpse-panel table table thead th { font-weight:bold; font-style:normal; }.glimpse-panel .glimpse-side-sub-panel { right:0; z-index:10; background-color:#F5F5F5; height:100%; width:25%; border-left:1px solid #ACA899; position:absolute; }.glimpse-panel .glimpse-side-main-panel { position:relative; height:100%; width:75%; float:left; } .glimpse-panel-holder .glimpse-active { display:block; }.glimpse-resizer { height:4px; cursor:n-resize; width:100%; position:absolute; top:-1px; }li.glimpse-permanent { font-style:italic; padding:4px 8px 3px; border-bottom:1px solid #ACA899; border-left:1px solid #CDCABB; border-right:1px solid #CDCABB; background:#B9B7AF; background:-moz-linear-gradient(top, #B9B7AF 0%, #DAD8C8 4%, #D7D4C5 10%, #E9E6D5 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#B9B7AF), color-stop(4%,#DAD8C8), color-stop(10%,#D7D4C5), color-stop(100%,#E9E6D5)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#B9B7AF\', endColorstr=\'#E9E6D5\',GradientType=0 ); }.glimpse-preview-object { color:#006400; } .glimpse-preview-string { color:#006400 !important; font-weight:normal !important; } .glimpse-preview-string span { padding-left:1px; }.glimpse-preview-object span { font-weight:bold; color:#444; } .glimpse-preview-object span.start { margin-right:5px; } .glimpse-preview-object span.end { margin-left:5px; }.glimpse-preview-object span.rspace { margin-right:4px; }.glimpse-preview-object span.mspace { margin:0 4px; }.glimpse-preview-object span.small { font-size:0.95em; } .glimpse-panel .glimpse-preview-table { border:0; } .glimpse-panel .glimpse-preview-table .glimpse-preview-cell { padding-left:0; padding-right:2px; width:11px; } .glimpse-expand { height:11px; width:11px; display:inline-block; float:left; margin:1px 0 0 0; cursor:pointer; background-image:url('+spriteUrl+'); background-repeat:no-repeat; background-position:-126px 0; }.glimpse-collapse { background-position:-126px -11px; }.glimpse-preview-show { display:none; font-weight:normal !important; }.glimpse-panel .quiet *, .glimpse-panel .ms * { color:#AAA; }.glimpse-panel .suppress { text-decoration:line-through; }.glimpse-panel .suppress * { color:#AAA; }.glimpse-panel .selected { background-color:#FFFF99; }.glimpse-panel .selected * { color:#409B3B; }.glimpse-panel .info .icon, .glimpse-panel .warn .icon, .glimpse-panel .loading .icon, .glimpse-panel .error .icon, .glimpse-panel .fail .icon, .glimpse-panel .ms .icon { width:14px; height:14px; background-image:url(' + spriteUrl + '); background-repeat:no-repeat; display:inline-block; margin-right: 5px; } .glimpse-panel .info .icon { background-position: -22px -22px; }.glimpse-panel .warn .icon { background-position:-36px -22px; }.glimpse-panel .loading .icon { background-position:-78px -22px; }.glimpse-panel .error .icon { background-position:-50px -22px; }.glimpse-panel .ms .icon { background-position:-181px -22px; } .glimpse-panel .fail .icon { background-position:-64px -22px; }.glimpse-panel .info * { color:#067CE5; }.glimpse-panel .warn * { color:#FE850C; } .glimpse-panel .error * { color:#B40000; }.glimpse-panel .fail * { color:#D00; font-weight:bold; }.glimpse-panelitem-Ajax .loading .icon { float:right; }.glimpse-panelitem-Remote .glimpse-side-sub-panel .loading, .glimpse-panelitem-Remote .glimpse-side-main-panel .loading, .glimpse-clear { position:fixed; bottom:5px; right:10px; color:#777; } .glimpse-panelitem-Remote .glimpse-side-main-panel .loading { right:27%; } .glimpse-clear { background-color:white; padding:0.3em 1em 0.5em 1em; border:#CCC solid 1px; bottom:25px; -webkit-border-radius:3px; -moz-border-radius:3px; border-radius:3px; } .glimpse-panel table .glimpse-head-message td { text-align:center; background-color:#DDD; } .glimpse-panelitem-GlimpseInformation div { text-align:center; } .glimpse-panelitem-GlimpseInformation .glimpse-panel-message { padding-top:5px; } .glimpse-panelitem-GlimpseInformation strong { font-weight:bold; } .glimpse-panelitem-GlimpseInformation .glimpse-info-more { font-size:1.5em; margin:1em 0; } .glimpse-panelitem-GlimpseInformation .glimpse-info-quote { font-style:italic; margin:0.75em 0 3em; }';
+    var glimpseCss = '.glimpse, .glimpse *, .glimpse a, .glimpse td, .glimpse th, .glimpse table { font-family:Lucida Grande,Tahoma,sans-serif; background-color:transparent; font-size:11px; line-height:14px; border:0px; color:#232323; text-align:left; }.glimpse a, .glimpse a:hover, .glimpse a:visited { color:#2200C1; text-decoration:underline; font-weight:normal; }.glimpse a:active { color:#c11; text-decoration:underline; font-weight:normal; }.glimpse th { font-weight:bold; }.glimpse-open { position:fixed; right:0; bottom:0; height:27px; width:28px; border-left: 1px solid #ACA899; border-top: 1px solid #ACA899; background:#EEE; background:-moz-linear-gradient(top, #FFFFFF 0%, #EEEEEE 4%, #F3F5F7 8%, #E9E8DD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(4%,#EEEEEE), color-stop(8%,#F3F5F7), color-stop(100%,#E9E8DD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#FFFFFF\', endColorstr=\'#E9E8DD\',GradientType=0 ); }.glimpse-icon { background:url('+spriteUrl+') 0px -16px; height:20px; width:20px; margin: 3px 4px 0; cursor:pointer; }.glimpse-holder { display:none; z-index:100010 !important; height:0; position:fixed; bottom:0; left:0; width:100%; background-color:#fff; }.glimpse-bar { height:27px; border-top:1px solid #ACA899; background:#FFFFFF; background:-moz-linear-gradient(top, #FFFFFF 0%, #EEEEEE 4%, #F3F5F7 8%, #E9E8DD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(4%,#EEEEEE), color-stop(8%,#F3F5F7), color-stop(100%,#E9E8DD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#FFFFFF\', endColorstr=\'#E9E8DD\',GradientType=0 ); }.glimpse-bar .glimpse-icon { margin-top:4px; float:left; } .glimpse-buttons { text-align:right; float:right; height:17px; width:150px; padding:6px; }.glimpse-title { margin:0 0 0 15px; padding-top:5px; font-weight:bold; display:inline-block; width:75%; overflow:hidden; }.glimpse-title span:first-child { display:inline-block; height:20px; }.glimpse-title span:last-child { font-weight:normal; font-style:italic; padding-left:10px; width:60%; white-space:nowrap; display:inline-block; height:20px; } .glimpse-title span:last-child .glimpse-switch { -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; border: 1px solid #CCC; padding: 1px 10px 4px 8px; margin: 0 5px 0 0; background:#FFFFFF; background:-moz-linear-gradient(top, #E9E8DD 0%, #F3F5F7 4%, #EEE 8%, #DDD 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#E9E8DD), color-stop(4%,#F3F5F7), color-stop(8%,#EEE), color-stop(100%,#DDD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#E9E8DD\', endColorstr=\'#FFFFFF\',GradientType=0 ) } .glimpse-title span:last-child .glimpse-switch-over { position:absolute; display:none; top:4px; padding-bottom:10px; z-index:100; } .glimpse-title span:last-child .glimpse-switch-over div { text-align:center; font-weight:bold; margin:5px 0; } .glimpse-button, .glimpse-button:hover { cursor:pointer; background-image:url('+spriteUrl+'); background-repeat:no-repeat; height:14px; width:14px; margin-left:2px; display:inline-block; }.glimpse-meta-warning { background-position:-168px -1px; display:none; }.glimpse-meta-warning:hover { background-position:-183px -1px; } .glimpse-meta-help { background-position:-138px -1px; margin-right:15px; }.glimpse-meta-help:hover { background-position:-153px -1px; margin-right:15px; }.glimpse-meta-update { background-position:-198px -1px; display:none; }.glimpse-meta-update:hover { background-position:-213px -1px; }.glimpse-close { background-position:-1px -1px; }.glimpse-close:hover { background-position:-17px -1px; }.glimpse-terminate { background-position:-65px -1px; }.glimpse-terminate:hover { background-position:-81px -1px; } .glimpse-popout { background-position:-96px -1px; }.glimpse-popout:hover { background-position: -111px -1px; } .glimpse-tabs { height:24px; font-weight:bold; border-bottom:1px solid #ACA899; border-top:1px solid #CDCABB; background:#B9B7AF; background:-moz-linear-gradient(top, #B9B7AF 0%, #DAD8C8 4%, #D7D4C5 10%, #E9E6D5 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#B9B7AF), color-stop(4%,#DAD8C8), color-stop(10%,#D7D4C5), color-stop(100%,#E9E6D5)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#B9B7AF\', endColorstr=\'#E9E6D5\',GradientType=0 );}.glimpse-tabs ul { margin:4px 0px 0 0; padding:0px; }.glimpse-tabs li { display:inline; margin:0 2px 3px 2px; height:22px; padding:4px 9px 3px; color:#565656; cursor:pointer; border-radius: 0px 0px 3px 3px; -moz-border-radius: 0px 0px 3px 3px; -webkit-border-bottom-right-radius: 3px; -webkit-border-bottom-left-radius: 3px; }.glimpse-tabs li.glimpse-active { padding:4px 8px 3px; color:#000; border-left:1px solid #A4A4A4; border-bottom:1px solid #A4A4A4; border-right:1px solid #A4A4A4; background:#F7F6F1; background:-moz-linear-gradient(top, #F2F1EC 0%, #F2F1EC 3%, #EFEEE9 7%, #E8E7E1 51%, #F7F6F1 92%, #F1F0EB 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#F2F1EC), color-stop(3%,#F2F1EC), color-stop(7%,#EFEEE9), color-stop(51%,#E8E7E1), color-stop(92%,#F7F6F1), color-stop(100%,#F1F0EB)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#EFEEE9\', endColorstr=\'#F7F6F1\',GradientType=0 ); } .glimpse-tabs li.glimpse-hover { padding:4px 8px 3px; border-left:1px solid #BFBDB1; border-bottom:1px solid #BFBDB1; border-right:1px solid #BFBDB1; background:#EEECE3; background:-moz-linear-gradient(top, #BFBDB1 0%, #DAD9CB 4%, #D8D5C9 8%, #E8E7E1 51%, #F0EEE4 92%, #EDEBE1 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#BFBDB1), color-stop(4%,#DAD9CB), color-stop(8%,#D8D5C9), color-stop(51%,#E8E7E1), color-stop(92%,#F0EEE4), color-stop(100%,#EDEBE1)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#D8D5C9\', endColorstr=\'#F0EEE4\',GradientType=0 ); }.glimpse-tabs li.glimpse-disabled { color:#AAA; cursor:default; }.glimpse-panel-holder {}.glimpse-panel { display:none; overflow:auto; position:relative; } .glimpse-panel-message { text-align:center; padding-top:40px; font-size:1.1em; color:#AAA; }.glimpse-panel table { border-spacing:0; width:100%; }.glimpse-panel table td, .glimpse-panel table th { padding:3px 4px; text-align:left; vertical-align:top; } .glimpse-panel tr.glimpse-row-header-0 { height:19px; } .glimpse-panel .glimpse-row-header-0 { font-weight:bold; border-bottom:1px solid #9C9C9C; background-repeat:no-repeat; background:#C6C6C6; background:-moz-linear-gradient(top, #DEDEDE 0%, #BDBDBD 80%, #BBB 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#DEDEDE), color-stop(80%,#BDBDBD), color-stop(100%,#BBB)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#DEDEDE\', endColorstr=\'#BBB\',GradientType=0 ); }.glimpse-panel .glimpse-row-header-0 th { border-left:1px solid #D9D9D9; border-right:1px solid #9C9C9C; } .glimpse-panel td.glimpse-cell-key { font-weight:bold; } .glimpse-panel th.glimpse-cell-key { width:30%; max-width:150px; } .glimpse-panel .glimpse-cell-structured-first { padding-bottom:0; height:17px; } .glimpse-panel .glimpse-cell-structured-any { padding-bottom:1px; padding-top:1px; height:17px; } .glimpse-panel .glimpse-cell-structured-last { padding-top:0px; } .glimpse-panel table table { border:1px solid #D9D9D9; } .glimpse-panel table table thead tr { height:17px; border-bottom:1px solid #9C9C9C; background:#C6C6C6; background:-moz-linear-gradient(top, #F1F1F1 0%, #DFDFDF 80%, #DDD 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#F1F1F1), color-stop(80%,#DFDFDF), color-stop(100%,#DDD)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#F1F1F1\', endColorstr=\'#DDD\',GradientType=0 ); }.glimpse-panel table table thead tr th { border-left:1px solid #C6C6C6; border-right:1px solid #D9D9D9; padding:1px 4px 2px 4px; }.glimpse-panel table table thead tr th:first-child { border-left:0px; }.glimpse-panel table table thead tr th:last-child { border-right:0px; }.glimpse-panel .even { background:#F4F4F4; }.glimpse-panel .odd { background:#F9F9F9; }.glimpse-panel table table tbody th { font-weight:normal; font-style:italic; }.glimpse-panel table table thead th { font-weight:bold; font-style:normal; }.glimpse-panel .glimpse-side-sub-panel { right:0; z-index:10; background-color:#F5F5F5; height:100%; width:25%; border-left:1px solid #ACA899; position:absolute; }.glimpse-panel .glimpse-side-main-panel { position:relative; height:100%; width:75%; float:left; } .glimpse-panel-holder .glimpse-active { display:block; }.glimpse-resizer { height:4px; cursor:n-resize; width:100%; position:absolute; top:-1px; }li.glimpse-permanent { font-style:italic; padding:4px 8px 3px; border-bottom:1px solid #ACA899; border-left:1px solid #CDCABB; border-right:1px solid #CDCABB; background:#B9B7AF; background:-moz-linear-gradient(top, #B9B7AF 0%, #DAD8C8 4%, #D7D4C5 10%, #E9E6D5 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#B9B7AF), color-stop(4%,#DAD8C8), color-stop(10%,#D7D4C5), color-stop(100%,#E9E6D5)); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#B9B7AF\', endColorstr=\'#E9E6D5\',GradientType=0 ); }.glimpse-preview-object { color:#006400; } .glimpse-preview-string { color:#006400 !important; font-weight:normal !important; } .glimpse-preview-string span { padding-left:1px; }.glimpse-preview-object span { font-weight:bold; color:#444; } .glimpse-preview-object span.start { margin-right:5px; } .glimpse-preview-object span.end { margin-left:5px; }.glimpse-preview-object span.rspace { margin-right:4px; }.glimpse-preview-object span.mspace { margin:0 4px; }.glimpse-preview-object span.small { font-size:0.95em; } .glimpse-panel .glimpse-preview-table { border:0; } .glimpse-panel .glimpse-preview-table .glimpse-preview-cell { padding-left:0; padding-right:2px; width:11px; } .glimpse-expand { height:11px; width:11px; display:inline-block; float:left; margin:1px 0 0 0; cursor:pointer; background-image:url('+spriteUrl+'); background-repeat:no-repeat; background-position:-126px 0; }.glimpse-collapse { background-position:-126px -11px; }.glimpse-preview-show { display:none; font-weight:normal !important; }.glimpse-panel .quiet *, .glimpse-panel .ms * { color:#AAA; }.glimpse-panel .suppress { text-decoration:line-through; }.glimpse-panel .suppress * { color:#AAA; }.glimpse-panel .selected { background-color:#FFFF99; }.glimpse-panel .selected * { color:#409B3B; }.glimpse-panel .info .icon, .glimpse-panel .warn .icon, .glimpse-panel .loading .icon, .glimpse-panel .error .icon, .glimpse-panel .fail .icon, .glimpse-panel .ms .icon { width:14px; height:14px; background-image:url(' + spriteUrl + '); background-repeat:no-repeat; display:inline-block; margin-right: 5px; } .glimpse-panel .info .icon { background-position: -22px -22px; }.glimpse-panel .warn .icon { background-position:-36px -22px; }.glimpse-panel .loading .icon { background-position:-78px -22px; }.glimpse-panel .error .icon { background-position:-50px -22px; }.glimpse-panel .ms .icon { background-position:-181px -22px; } .glimpse-panel .fail .icon { background-position:-64px -22px; }.glimpse-panel .info * { color:#067CE5; }.glimpse-panel .warn * { color:#FE850C; } .glimpse-panel .error * { color:#B40000; }.glimpse-panel .fail * { color:#D00; font-weight:bold; }.glimpse-panelitem-Ajax .loading .icon { float:right; }.glimpse-panelitem-Remote .glimpse-side-sub-panel .loading, .glimpse-panelitem-Remote .glimpse-side-main-panel .loading, .glimpse-clear { position:fixed; bottom:5px; right:10px; color:#777; } .glimpse-panelitem-Remote .glimpse-side-main-panel .loading { right:27%; } .glimpse-clear { background-color:white; padding:0.3em 1em 0.5em 1em; border:#CCC solid 1px; bottom:25px; -webkit-border-radius:3px; -moz-border-radius:3px; border-radius:3px; } .glimpse-panel table .glimpse-head-message td { text-align:center; background-color:#DDD; } .glimpse-panelitem-GlimpseInformation div { text-align:center; } .glimpse-panelitem-GlimpseInformation .glimpse-panel-message { padding-top:5px; } .glimpse-panelitem-GlimpseInformation strong { font-weight:bold; } .glimpse-panelitem-GlimpseInformation .glimpse-info-more { font-size:1.5em; margin:1em 0; } .glimpse-panelitem-GlimpseInformation .glimpse-info-quote { font-style:italic; margin:0.75em 0 3em; }';
     glimpseCss = glimpseCss.replace(/url\(Glimpse/gi, 'url(' + glimpsePath + 'Glimpse');
     $('<style type="text/css"> ' + glimpseCss + ' </style>').appendTo("head");      //http://stackoverflow.com/questions/1212500/jquery-create-css-rule-class-runtime
 
@@ -302,7 +302,7 @@ if (window.jQueryGlimpse) { (function ($) {
                     metadata = ((metadata = static.data._metadata) && (metadata = metadata.plugins[key]) && (metadata = metadata.structure));
 
                     that.addTab(tabStrip, data, key);
-                    that.addTabBody(panelHolder, that.build(data, 0, metadata), key);
+                    that.addTabBody(panelHolder, that.build(data, 0, metadata, 1), key);
                 }
             }
 
@@ -354,17 +354,17 @@ if (window.jQueryGlimpse) { (function ($) {
         removeTabBodies: function (container) {
             $('.glimpse-panel:not(.glimpse-permanent)', container).remove();
         },
-        build: function (data, level, metadata) {
+        build: function (data, level, metadata, tolerance) {
             var that = this, result = '';
 
             if ($.isArray(data)) {
                 if (metadata)
-                    result = that.buildStructuredTable(data, level, false, metadata);
+                    result = that.buildStructuredTable(data, level, false, metadata, tolerance);
                 else
-                    result = that.buildCustomTable(data, level, false);
+                    result = that.buildCustomTable(data, level, false, tolerance);
             }
             else if ($.isPlainObject(data))
-                result = that.buildKeyValueTable(data, level, false);
+                result = that.buildKeyValueTable(data, level, false, tolerance);
             else if (level == 0) {
                 if (data === undefined || data === null || data === '')
                     result = '';
@@ -372,7 +372,7 @@ if (window.jQueryGlimpse) { (function ($) {
                     result = '<div class="glimpse-panel-message">' + data + '</div>';
             }
             else
-                result = that.buildString(data, level);
+                result = that.buildString(data, level, tolerance);
 
             return result;
         },
@@ -384,21 +384,21 @@ if (window.jQueryGlimpse) { (function ($) {
             clientName = clean(clientName);
             return '<span>' + clientName + ((type.length > 0) ? ' (' + type + ')' : '') + '&nbsp;</span><span>' + url + '</span>';
         },
-        buildKeyValueTable: function (data, level, forceFull) {
-            var that = this, limit = 3;
+        buildKeyValueTable: function (data, level, forceFull, tolerance) {
+            var that = this, limit = 3 * tolerance; 
             if (((level > 0 && $.glimpse.util.lengthJson(data) > (limit + 1)) || level > 1) && !forceFull)
-                return that.buildKeyValuePreview(data, limit);
+                return that.buildKeyValuePreview(data, level, tolerance);
 
             var i = 1, html = '<table><thead><tr class="glimpse-row-header-' + level + '"><th class="glimpse-cell-key">Key</th><th class="glimpse-cell-value">Value</th></tr></thead>';
             for (var key in data)
-                html += '<tr class="' + (i++ % 2 ? 'odd' : 'even') + '"><th width="30%">' + $.glimpseContent.formatString(key) + '</th><td width="70%"> ' + that.build(data[key], level + 1) + '</td></tr>';
+                html += '<tr class="' + (i++ % 2 ? 'odd' : 'even') + '"><th width="30%">' + $.glimpseContent.formatString(key) + '</th><td width="70%"> ' + that.build(data[key], level + 1, undefined, 1) + '</td></tr>';
             html += '</table>';
             return html;
         },
-        buildCustomTable: function (data, level, forceFull) {
-            var that = this, limit = 3;
+        buildCustomTable: function (data, level, forceFull, tolerance) {
+            var that = this, limit = 3 * tolerance; 
             if (((level > 0 && data.length > (limit + 1)) || level > 1) && !forceFull)
-                return that.buildCustomPreview(data, limit);
+                return that.buildCustomPreview(data, level, tolerance);
 
             var html = '<table><thead><tr class="glimpse-row-header-' + level + '">';
             if ($.isArray(data[0])) {
@@ -408,7 +408,7 @@ if (window.jQueryGlimpse) { (function ($) {
                 for (var i = 1; i < data.length; i++) {
                     html += '<tr class="' + (i % 2 ? 'odd' : 'even') + (data[i].length > data[0].length ? ' ' + data[i][data[i].length - 1] : '') + '">';
                     for (var x = 0; x < data[0].length; x++)
-                        html += '<td>' + that.build(data[i][x], level + 1) + '</td>';
+                        html += '<td>' + that.build(data[i][x], level + 1, undefined, 1) + '</td>';
                     html += '</tr>';
                 }
                 html += '</table>';
@@ -417,18 +417,18 @@ if (window.jQueryGlimpse) { (function ($) {
                 if (data.length > 1) {
                     html += '<th>Values</th></tr></thead>';
                     for (var i = 0; i < data.length; i++)
-                        html += '<tr class="' + (i % 2 ? 'odd' : 'even') + '"><td>' + that.build(data[i], level + 1) + '</td></tr>';
+                        html += '<tr class="' + (i % 2 ? 'odd' : 'even') + '"><td>' + that.build(data[i], level + 1, undefined, 1) + '</td></tr>';
                     html += '</table>';
                 }
                 else
-                    html = that.build(data[0], level + 1)
+                    html = that.build(data[0], level + 1, undefined, 1)
             }
             return html;
         },
-        buildStructuredTable: function (data, level, forceFull, metadata) {
-            var that = this, limit = 3;
+        buildStructuredTable: function (data, level, forceFull, metadata, tolerance) {
+            var that = this, limit = 3 * tolerance; 
             if (((level > 0 && data.length > (limit + 1)) || level > 1) && !forceFull)
-                return that.buildCustomPreview(data, limit);
+                return that.buildCustomPreview(data, level, tolerance);
 
             var html = '<table>', isSingleRow = (metadata.length > 1), cellMasterClass = '', rowClass = '';
             for (var i = 0; i < data.length; i++) {
@@ -438,18 +438,21 @@ if (window.jQueryGlimpse) { (function ($) {
                     cellMasterClass = (!isSingleRow ? '' : (x === 0 ? 'glimpse-cell-structured-first' : (x === metadata.length - 1 ? 'glimpse-cell-structured-last' : 'glimpse-cell-structured-any')));
                     html += '<tr>';
                     for (var y = 0; y < metadata[x].length; y++) {
-                        var metadataItem = metadata[x][y], cellType = (i == 0 ? 'th' : 'td'), cellClass = cellMasterClass;
+                        var metadataItem = metadata[x][y], cellType = (i == 0 ? 'th' : 'td'), cellClass = cellMasterClass, newTolerance = 1;
                         if (i > 0) {
                             cellClass += metadataItem.key === true ? ' glimpse-cell-key' : '';
                             cellClass += metadataItem.className ? (' ' + metadataItem.className) : '';
                         }
                         html += '<' + cellType;
                         if (metadataItem.width) { html += ' width="' + metadataItem.width + '"' };
-                        if (metadataItem.rowspan) { html += ' rowspan="' + metadataItem.rowspan + '"' };
+                        if (metadataItem.rowspan) { 
+                            html += ' rowspan="' + metadataItem.rowspan + '"';
+                            newTolerance = metadataItem.rowspan;
+                        };
                         if (metadataItem.colspan) { html += ' colspan="' + metadataItem.colspan + '"' };
                         if (metadataItem.align) { html += ' style="text-align:' + metadataItem.align + ';"' };
                         if (cellClass) { html += ' class="' + cellClass + '"' };
-                        html += '>' + that.build(data[i][metadataItem.index], level + 1) + '</' + cellType + '>';
+                        html += '>' + that.build(data[i][metadataItem.index], level + 1, undefined, newTolerance) + '</' + cellType + '>';
                     }
                     html += '</tr>';
                 }
@@ -459,22 +462,22 @@ if (window.jQueryGlimpse) { (function ($) {
 
             return html;
         },
-        buildString: function (data, level) {
-            return this.buildStringPreview(data, level);
+        buildString: function (data, level, tolerance) {
+            return this.buildStringPreview(data, level, tolerance);
         },
-        buildKeyValuePreview: function (data, level) {
-            var that = this, length = $.glimpse.util.lengthJson(data), rowMax = 2, rowLimit = (rowMax < length ? rowMax : length), i = 1, html = '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object"><span class="start">{</span>';
+        buildKeyValuePreview: function (data, level, tolerance) {
+            var that = this, length = $.glimpse.util.lengthJson(data), rowMax = 2 * tolerance, rowLimit = (rowMax < length ? rowMax : length), i = 1, html = '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object"><span class="start">{</span>';
             for (var key in data) {
                 html += that.newItemSpacer(i, rowLimit, length);
                 if (i > length || i++ > rowLimit)
                     break;
-                html += '<span>\'</span>' + that.buildStringPreview(key, level + 1) + '<span>\'</span><span class="mspace">:</span><span>\'</span>' + that.buildStringPreview(data[key], level + 99) + '<span>\'</span>';
+                html += '<span>\'</span>' + that.buildStringPreview(key, level + 1, 1) + '<span>\'</span><span class="mspace">:</span><span>\'</span>' + that.buildStringPreview(data[key], level + 99, 1) + '<span>\'</span>';
             }
-            html += '<span class="end">}</span></div><div class="glimpse-preview-show">' + that.buildKeyValueTable(data, level, true) + '</div></td></tr></table>';
+            html += '<span class="end">}</span></div><div class="glimpse-preview-show">' + that.buildKeyValueTable(data, level, true, tolerance) + '</div></td></tr></table>';
             return html;
         },
-        buildCustomPreview: function (data, level) {
-            var that = this, appendTail = true, isComplex = ($.isArray(data[0]) || $.isPlainObject(data[0])), length = (isComplex ? data.length - 1 : data.length), rowMax = 2, columnMax = 3, columnLimit = 1, rowLimit = (rowMax < length ? rowMax : length), html = '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object"><span class="start">[</span>';
+        buildCustomPreview: function (data, level, tolerance) {
+            var that = this, appendTail = true, isComplex = ($.isArray(data[0]) || $.isPlainObject(data[0])), length = (isComplex ? data.length - 1 : data.length), rowMax = 2 * tolerance, columnMax = 3, columnLimit = 1, rowLimit = (rowMax < length ? rowMax : length), html = '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object"><span class="start">[</span>';
 
             if (isComplex) {
                 columnLimit = ((data[0].length > columnMax) ? columnMax : data[0].length);
@@ -486,7 +489,7 @@ if (window.jQueryGlimpse) { (function ($) {
                     html += '<span class="start">[</span>';
                     var spacer = '';
                     for (var x = 0; x < columnLimit; x++) {
-                        html += spacer + '<span>\'</span>' + that.buildStringPreview(data[i][x], level + 99) + '<span>\'</span>';
+                        html += spacer + '<span>\'</span>' + that.buildStringPreview(data[i][x], level + 99, 1) + '<span>\'</span>';
                         spacer = '<span class="rspace">,</span>';
                     }
                     if (x < data[0].length)
@@ -500,20 +503,20 @@ if (window.jQueryGlimpse) { (function ($) {
                         html += that.newItemSpacer(i + 1, rowLimit, length);
                         if (i >= length || i >= rowLimit)
                             break;
-                        html += '<span>\'</span>' + that.buildStringPreview(data[i], level + 99) + '<span>\'</span>';
+                        html += '<span>\'</span>' + that.buildStringPreview(data[i], level + 99, 1) + '<span>\'</span>';
                     }
                 }
                 else {
                     appendTail = false;
-                    html = that.buildStringPreview(data[0], level + 1);
+                    html = that.buildStringPreview(data[0], level + 1, 1);
                 }
             }
 
             if (appendTail)
-                html += '<span class="end">]</span></div><div class="glimpse-preview-show">' + that.buildCustomTable(data, level, true) + '</div></td></tr></table>';
+                html += '<span class="end">]</span></div><div class="glimpse-preview-show">' + that.buildCustomTable(data, level, true, tolerance) + '</div></td></tr></table>';
             return html;
         },
-        buildStringPreview: function (data, level) {
+        buildStringPreview: function (data, level, tolerance) {
             if (data == undefined || data == null)
                 return '--';
             if ($.isArray(data))
@@ -522,7 +525,7 @@ if (window.jQueryGlimpse) { (function ($) {
                 return "{ ... }";
 
             var that = this,
-                charMax = (level > 100 ? 12 : level > 1 ? 80 : 150),
+                charMax = (level > 100 ? 12 : ((level > 1 ? 80 : 150) * tolerance)),
                 charOuterMax = (charMax * 1.2),
                 content = $.glimpseContent.trimFormatString(data, charMax, charOuterMax, true);
 
