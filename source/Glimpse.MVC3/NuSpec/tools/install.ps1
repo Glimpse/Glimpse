@@ -2,4 +2,4 @@
 
 $path = [System.IO.Path]
 $readmefile = $path::Combine($path::GetDirectoryName($project.FileName), "App_Readme\glimpse.mvc3.readme.txt")
-$DTE.ExecuteCommand("File.OpenFile", $readmefile)
+$DTE.ItemOperations.OpenFile($readmefile)
