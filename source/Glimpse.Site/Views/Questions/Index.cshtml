@@ -130,5 +130,22 @@
             Make sure writeToDiagnosticsTrace is set to true, and turn pageOutput is false. If you not local, also set localOnly="false"
 
         </li>
+             <li>
+            <div class="question">The trace tab works on the very first request but not thereafter?</div>
+            The requestLimit attribute on the trace node specifies the number of trace requests 
+            to store on the server. If the limit is reached, trace is automatically disabled. 
+            By default this value is 10, so if you don't have a higher number and you have 
+            more than 10 requests related to a page, trace is disabled. 
+            With 40 as in the example above, you should be on the save side, 
+            you can also set the mostRecent attribute to true. 
+            This means even if there are more requests than the limit the most recent requests are 
+            used and trace is not disabled.
+            <br /><br />
+
+            <pre class="csharpcode">
+  <span class="kwrd">&lt;</span><span class="html">trace</span> <span class="attr">writeToDiagnosticsTrace</span><span class="kwrd">="true"</span> <span class="attr">enabled</span><span class="kwrd">="true"</span> <span class="attr">pageOutput</span><span class="kwrd">="false"</span> 
+     <span class="attr">localOnly</span><span class="kwrd">="true"</span> <span class="attr">requestLimit</span><span class="kwrd">="40"</span> <span class="attr">mostRecent</span><span class="kwrd">="true"</span> <span class="kwrd">/&gt;</span></pre>
+
+            </li>
     </ol> 
 </div>
