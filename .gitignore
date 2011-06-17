@@ -42,3 +42,4 @@ Glimpse.5.1.ReSharper.user
 /TestResult.xml
 /tools/nunit/GlimpseTests.VisualState.xml
 /tools/nunit/NUnitTests.VisualState.xml
+/source/Glimpse.Site/Glimpse.log
