@@ -438,21 +438,29 @@ if (window.jQueryGlimpse) { (function ($) {
                     cellMasterClass = (!isSingleRow ? '' : (x === 0 ? 'glimpse-cell-structured-first' : (x === metadata.length - 1 ? 'glimpse-cell-structured-last' : 'glimpse-cell-structured-any')));
                     html += '<tr>';
                     for (var y = 0; y < metadata[x].length; y++) {
-                        var metadataItem = metadata[x][y], cellType = (i == 0 ? 'th' : 'td'), cellClass = cellMasterClass, newTolerance = 1;
+                        var metadataItem = metadata[x][y], 
+                            cellType = (i == 0 ? 'th' : 'td'), 
+                            cellClass = cellMasterClass, 
+                            cellContent = '', 
+                            newTolerance = 1;
+
+                        html += '<' + cellType;
                         if (i > 0) {
                             cellClass += metadataItem.key === true ? ' glimpse-cell-key' : '';
                             cellClass += metadataItem.className ? (' ' + metadataItem.className) : '';
                         }
-                        html += '<' + cellType;
+                        if (cellClass) { html += ' class="' + cellClass + '"' }; 
                         if (metadataItem.width) { html += ' width="' + metadataItem.width + '"' };
-                        if (metadataItem.rowspan) { 
-                            html += ' rowspan="' + metadataItem.rowspan + '"';
-                            newTolerance = metadataItem.rowspan;
-                        };
-                        if (metadataItem.colspan) { html += ' colspan="' + metadataItem.colspan + '"' };
                         if (metadataItem.align) { html += ' style="text-align:' + metadataItem.align + ';"' };
-                        if (cellClass) { html += ' class="' + cellClass + '"' };
-                        html += '>' + that.build(data[i][metadataItem.index], level + 1, undefined, newTolerance) + '</' + cellType + '>';
+                        if (metadataItem.cspan) { html += ' colspan="' + metadataItem.cspan + '"' };
+                        if (metadataItem.rspan) { 
+                            html += ' rowspan="' + metadataItem.rspan + '"';
+                            newTolerance = metadataItem.rspan;
+                        };
+
+                        cellContent = $.isNaN(metadataItem.data) ? that.buildFormatString(metadataItem.data, data[i]) : that.build(data[i][metadataItem.data], level + 1, undefined, newTolerance);
+
+                        html += '>' + cellContent + '</' + cellType + '>';
                     }
                     html += '</tr>';
                 }
@@ -462,6 +470,44 @@ if (window.jQueryGlimpse) { (function ($) {
 
             return html;
         },
+        buildFormatString : function(formatString, data) {
+
+            var count = 0, working = '', result = [];
+            for (var i = 0; i < formatString.length; i++) {
+                var x = formatString[i];
+                
+                if (count <= 2) { 
+                    if (x == '{')
+                        count++;
+                    else if (x == '}' && count > 0)
+                        count--;
+                    else if (count == 2) {
+                        if ($.isNaN(x)) {
+                            count = 0;
+                            working = '';
+                        }
+                        else 
+                            working += '' + x;
+                    }
+                    else {
+                        count = 0;
+                        working = '';
+                    }
+
+                    if (count == 0 && working != '') {
+                        result.push(working);
+                        working = '';
+                    }
+                } 
+            }
+
+            for (var i = 0; i < result.length; i++) {
+                var pattern = "\\\{\\\{" + result[i] + "\\\}\\\}", regex = new RegExp(pattern, "g"); 
+                formatString = formatString.replace(regex, data[result[i]]);
+            }
+
+            return formatString;
+        }, 
         buildString: function (data, level, tolerance) {
             return this.buildStringPreview(data, level, tolerance);
         },
