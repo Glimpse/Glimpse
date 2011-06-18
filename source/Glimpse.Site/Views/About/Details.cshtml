@@ -14,10 +14,10 @@
         <tr>
             <td>
                 <p>Glimpse is an amazing product that allows you to see exactly what's going on in your web server.
-                Currently, it works for any ASP.NET website and even has specific extentions for specific frameworks like 
-                (ASP.NET MVC, etc).</p>
-                <p>Besides just supporting frameworks such as these out of the box, Glimpse has an architecutre 
-                that fundementally supports the future development of Server side implementations of Glimpse 
+                Currently, it works for any ASP.NET website and even has specific extensions for specific frameworks like 
+                (ASP.NET MVC, etc.).</p>
+                <p>Besides just supporting frameworks such as these out of the box, Glimpse has an architecture 
+                that fundamentally supports the future development of Server side implementations of Glimpse 
                 for other non-ASP.NET based system in the future.</p>
                 <br />
             </td> 
@@ -50,26 +50,34 @@
     <hr class="line" />
 
     <h3>Protocol</h3>
-    <p>The Glimpse Protocol is the glue that brings the client and server together, but its also responsible for helping make 
-       Glimpse extensible. The protocol is simply data that is seralized into a JavaScript object (JSON), where the strucutre 
-       of the output is intelegently interprited.</p>
+    <p>The Glimpse Protocol is the glue that brings the client and server together, but it's also responsible for helping make 
+       Glimpse extensible. The protocol is simply data that is serialized into a JavaScript object (JSON), where the structure  
+       of the output is intelligently interpreted.</p>
     <p>For example if we have the following structure couldn't we make some assumption about how to display it, couldn't we 
     say that this could be displayed as Key Value pair table:</p>
-<pre>var simpleData = { 
-        "Movie" : "Star Wars",
-        "Genera/Theme" : "Science Fiction",
-        "GlimpseOn" : "True"
-    }</pre><br />
+    
+    <pre class="csharpcode">
+<span class="kwrd">var</span> simpleData = { 
+        <span class="str">"Movie"</span> : <span class="str">"Star Wars"</span>,
+        <span class="str">"Genera/Theme"</span> : <span class="str">"Science Fiction"</span>,
+        <span class="str">"GlimpseOn"</span> : <span class="str">"True"</span>
+    }</pre>
+    
+    <br />
     <p>Or if we have the following, using the about logic couldn't we make some further assumptions. Couldn't we say that this
     looks like a table of data with multiple columns, where the first row is the table header and the first column is the key 
     for that row:</p>
-<pre>var complexData = [
-        [ "Actor", "Character", "Gender", "Age" ],
-        [ "Mark Hamill", "Luke Skywalker", "Male", "21" ],
-        [ "James Earl Jones", "Darth Vader", "Male", "45", "quiet" ]
-    ];</pre><br />
+
+<pre class="csharpcode">
+<span class="kwrd">var</span> complexData = [
+        [ <span class="str">"Actor"</span>, <span class="str">"Character"</span>, <span class="str">"Gender"</span>, <span class="str">"Age"</span> ],
+        [ <span class="str">"Mark Hamill"</span>, <span class="str">"Luke Skywalker"</span>, <span class="str">"Male"</span>, <span class="str">"21"</span> ],
+        [ <span class="str">"James Earl Jones"</span>, <span class="str">"Darth Vader"</span>, <span class="str">"Male"</span>, <span class="str">"45"</span>, <span class="str">"quiet"</span> ]
+    ];</pre>
+
+<br />
     <p>This may seem like very obvious but its these basic assumptions that make Glimpse possible and help provide a total 
-    disconnect between Server and Client, and whats makes it possible for Glimpse to to support multiple server platforms 
+    disconnect between Server and Client, and what makes it possible for Glimpse to support multiple server platforms 
     using the same Client.</p>
 
     <div class="button-holder"><a href="@Url.Action(MVC.Protocol.Index())" class="myButton">More Protocol</a></div>
