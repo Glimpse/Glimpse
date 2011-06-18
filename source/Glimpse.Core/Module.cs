@@ -11,7 +11,6 @@ using System.Web;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-using Glimpse.Core.Logging;
 using Glimpse.Core.Plumbing;
 using Glimpse.Core.Sanitizer;
 using Glimpse.Core.Validator;
@@ -26,12 +25,12 @@ namespace Glimpse.Core
         internal static GlimpseRequestValidator RequestValidator { get; set; }
         private static IGlimpseSanitizer Sanitizer { get; set; }//TODO: new up via config
 
-        [Export] public static GlimpseLoggerFactory LoggerFactory { get; set; }
+        [Export] public static IGlimpseFactory Factory { get; set; }
         [Export] public static GlimpseSerializer Serializer { get; set; }
         [Export] public static GlimpseConfiguration Configuration { get; set; }
         [Export] public static IGlimpseMetadataStore MetadataStore { get; set; }
 
-        private static Logger Logger { get; set; }
+        private static IGlimpseLogger Logger { get; set; }
 
         internal static IEnumerable<IGlimpseHandler> Handlers { get; set; }
         internal static IEnumerable<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>> Plugins { get; set; }
@@ -40,8 +39,8 @@ namespace Glimpse.Core
         {
             Configuration = ConfigurationManager.GetSection("glimpse") as GlimpseConfiguration ?? new GlimpseConfiguration();
 
-            LoggerFactory = new GlimpseLoggerFactory(Configuration.LoggingEnabled);
-            Logger = LoggerFactory.CreateLogger(typeof(Module).FullName);
+            Factory = new GlimpseFactory(Configuration);
+            Logger = Factory.CreateLogger();
 
             Logger.Info(Configuration);
 
@@ -275,97 +274,84 @@ namespace Glimpse.Core
             var warnings = context.GetWarnings();
 
             var sb = new StringBuilder("{");
-            foreach (var item in data)
+
+            if (data.Count > 0)
             {
-                try
+                foreach (var item in data)
                 {
-                    string dataString = Serializer.Serialize(item.Value);
-                    sb.Append(string.Format("\"{0}\":{1},", item.Key, dataString));
+                    try
+                    {
+                        string dataString = Serializer.Serialize(item.Value);
+                        sb.Append(string.Format("\"{0}\":{1},", item.Key, dataString));
+                    }
+                    catch (Exception ex)
+                    {
+                        var message = Serializer.Serialize(ex.Message);
+                        message = message.Remove(message.Length - 1).Remove(0, 1);
+                        var callstack = Serializer.Serialize(ex.StackTrace);
+                        callstack = callstack.Remove(callstack.Length - 1).Remove(0, 1);
+                        const string helpMessage =
+                            "Please implement an IGlimpseConverter for the type mentioned above, or one of its base types, to fix this problem. More info on a better experience for this coming soon, keep an eye on <a href='http://getGlimpse.com' target='main'>getGlimpse.com</a></span>";
+
+                        sb.Append(
+                            string.Format(
+                                "\"{0}\":\"<span style='color:red;font-weight:bold'>{1}</span><br/>{2}</br><span style='color:black;font-weight:bold'>{3}</span>\",",
+                                item.Key, message, callstack, helpMessage));
+                    }
                 }
-                catch (Exception ex)
+
+                //Add exceptions tab if needed
+                /*            if (warnings.Count > 0)
+                            {
+                                var warningTable = new List<object[]> {new[] {"Type", "Message"}};
+                                warningTable.AddRange(warnings.Select(warning => new[] {warning.GetType().Name, warning.Message}));
+
+                                var dataString = JsonConvert.SerializeObject(warningTable, DefaultFormatting);
+                                sb.Append(string.Format("\"{0}\":{1},", "GlimpseWarnings", dataString));
+                            }*/
+
+                if (sb.Length > 1) sb.Remove(sb.Length - 1, 1);
+
+                var requestMetadata = new Dictionary<string, object>();
+                var pluginsMetadata = new Dictionary<string, object>();
+                var metadata = new Dictionary<string, object>
+                                   {
+                                       {"request", requestMetadata},
+                                       {"plugins", pluginsMetadata},
+                                   };
+                //request specific metadata
+                var environmentUrls = new Dictionary<string, string>();
+                foreach (Environment environment in Configuration.Environments)
                 {
-                    var message = Serializer.Serialize(ex.Message);
-                    message = message.Remove(message.Length - 1).Remove(0, 1);
-                    var callstack = Serializer.Serialize(ex.StackTrace);
-                    callstack = callstack.Remove(callstack.Length - 1).Remove(0, 1);
-                    const string helpMessage =
-                        "Please implement an IGlimpseConverter for the type mentioned above, or one of its base types, to fix this problem. More info on a better experience for this coming soon, keep an eye on <a href='http://getGlimpse.com' target='main'>getGlimpse.com</a></span>";
-
-                    sb.Append(
-                        string.Format(
-                            "\"{0}\":\"<span style='color:red;font-weight:bold'>{1}</span><br/>{2}</br><span style='color:black;font-weight:bold'>{3}</span>\",",
-                            item.Key, message, callstack, helpMessage));
+                    environmentUrls.Add(environment.Name, environment.Something(context.Request.Url).ToString());
                 }
+
+                requestMetadata.Add("environmentUrls", environmentUrls);
+                requestMetadata.Add("runningVersion",
+                                    decimal.Parse(Assembly.GetExecutingAssembly().GetName().Version.ToString(2),
+                                                  NumberFormatInfo.InvariantInfo));
+
+                //plugin specific metadata);))
+                foreach (var plugin in Plugins)
+                {
+                    var pluginData = new Dictionary<string, object>();
+
+                    var pluginValue = plugin.Value;
+
+                    var helpPlugin = pluginValue as IProvideGlimpseHelp;
+                    if (helpPlugin != null) pluginData.Add("helpUrl", helpPlugin.HelpUrl);
+
+                    if (pluginData.Count > 0) pluginsMetadata.Add(pluginValue.Name, pluginData);
+                }
+
+                var metadataString = Serializer.Serialize(metadata);
+                sb.Append(string.Format(",\"{0}\":{1},", "_metadata", metadataString));
+                if (sb.Length > 1) sb.Remove(sb.Length - 1, 1);
+
             }
-
-            //Add exceptions tab if needed
-/*            if (warnings.Count > 0)
-            {
-                var warningTable = new List<object[]> {new[] {"Type", "Message"}};
-                warningTable.AddRange(warnings.Select(warning => new[] {warning.GetType().Name, warning.Message}));
-
-                var dataString = JsonConvert.SerializeObject(warningTable, DefaultFormatting);
-                sb.Append(string.Format("\"{0}\":{1},", "GlimpseWarnings", dataString));
-            }*/
-
-            if (sb.Length > 1) sb.Remove(sb.Length - 1, 1);
-
-            var requestMetadata = new Dictionary<string, object>();
-            var pluginsMetadata = new Dictionary<string, object>();
-            var metadata = new Dictionary<string, object>
-                               {
-                                   {"request", requestMetadata},
-                                   {"plugins", pluginsMetadata},
-                               };
-            //request specific metadata
-            var environmentUrls = new Dictionary<string, string>();
-            foreach (Environment environment in Configuration.Environments)
-            {
-                environmentUrls.Add(environment.Name, environment.Something(context.Request.Url).ToString());
-            }
-
-            requestMetadata.Add("environmentUrls", environmentUrls);
-            requestMetadata.Add("runningVersion", decimal.Parse(Assembly.GetExecutingAssembly().GetName().Version.ToString(2), NumberFormatInfo.InvariantInfo));
-            
-            //plugin specific metadata);))
-            foreach (var plugin in Plugins)
-            {
-                var pluginData = new Dictionary<string, object>();
-
-                var pluginValue = plugin.Value;
-
-                var helpPlugin = pluginValue as IProvideGlimpseHelp;
-                if (helpPlugin != null) pluginData.Add("helpUrl", helpPlugin.HelpUrl);
-
-                if (pluginData.Count > 0) pluginsMetadata.Add(pluginValue.Name, pluginData);
-            }
-
-            var metadataString = Serializer.Serialize(metadata);
-            sb.Append(string.Format(",\"{0}\":{1},", "_metadata", metadataString));
-            if (sb.Length > 1) sb.Remove(sb.Length - 1, 1);
-
-
             sb.Append("}");
 
             return sb.ToString();
-        }
-
-        private static string UrlCombine(params string[] segments)
-        {
-            if (segments.Length == 0) return string.Empty;
-            if (segments.Length == 1) return segments[0];
-
-            var stringBuilder = new StringBuilder(segments[0]);
-
-            for (int i = 1; i < segments.Length; i++)
-            {
-                if (!segments[i - 1].EndsWith("/") && !segments[i].StartsWith("/"))
-                    stringBuilder.Append("/");
-
-                stringBuilder.Append(segments[i]);
-            }
-
-            return stringBuilder.ToString().Replace("//", "/");
         }
     }
 }
