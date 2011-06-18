@@ -55,6 +55,7 @@ namespace Glimpse.Site.Controllers {
             public readonly string Index = "Index";
             public readonly string Plugin = "Plugin";
             public readonly string Configuration = "Configuration";
+            public readonly string CreatingPlugins = "CreatingPlugins";
         }
 
 
@@ -64,6 +65,7 @@ namespace Glimpse.Site.Controllers {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewNames {
             public readonly string Configuration = "~/Views/Help/Configuration.cshtml";
+            public readonly string CreatingPlugins = "~/Views/Help/CreatingPlugins.cshtml";
             public readonly string Index = "~/Views/Help/Index.cshtml";
             public readonly string Plugin = "~/Views/Help/Plugin.cshtml";
             static readonly _Plugins s_Plugins = new _Plugins();
@@ -74,6 +76,7 @@ namespace Glimpse.Site.Controllers {
                 public readonly string Config = "~/Views/Help/Plugins/Config.cshtml";
                 public readonly string Environment = "~/Views/Help/Plugins/Environment.cshtml";
                 public readonly string Execution = "~/Views/Help/Plugins/Execution.cshtml";
+                public readonly string Index = "~/Views/Help/Plugins/Index.cshtml";
                 public readonly string Metadata = "~/Views/Help/Plugins/Metadata.cshtml";
                 public readonly string Remote = "~/Views/Help/Plugins/Remote.cshtml";
                 public readonly string Request = "~/Views/Help/Plugins/Request.cshtml";
@@ -103,6 +106,11 @@ namespace Glimpse.Site.Controllers {
 
         public override System.Web.Mvc.ActionResult Configuration() {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Configuration);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult CreatingPlugins() {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.CreatingPlugins);
             return callInfo;
         }
 

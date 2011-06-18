@@ -26,7 +26,7 @@
                 Once target client appears, select it and select the target clients request you are after.
             </td>
             <td style="padding-left:0.5em;"> 
-                At any time a can change your clients name by going to the following an setting the name:
+                At any time a can change your clients name by going to the following url and setting the name:
                 <ul class="plain">
                     <li>http://yoursite.com/Glimpse/Remote, or</li>
                     <li>http://127.0.0.1/Glimpse/Remote</li>
@@ -54,14 +54,45 @@
 </div>
 
 <div class="plugin-know">
+    <h3>A case study</h3>
+    <ul class="plain"> 
+    <li>
+    <span>Scenario</span>
+<p>    So your site works fine and is in production when you get a call from a user reporting a problem on a certain page. The same page works fine on your machine though.</p>
+<p>Glimpse has a feature which allows you to look at the "debug information" for page requests made by other users and other machines. This is always helpful if you are debugging a site in a mobile browser where the Glimpse client panel is not usable.</p>
+</li>
+<li>
+<span>Setup</span>
+<ul class="plain"> 
+<li>First you need to make sure that Glimpse is installed on the production site and turned on.</li>
+<li>Next you need to enable the IP address for the user who reported the problem. You user could tell you her address, but that may not actually be the public address used for the request. Point the user to http://www.prodcutionsite.com/glimpse/config , under "Your Settings" is the IP address that server sees. Add that IP address to the allowed addresses in web.config.</li>
+<li>In the current version, nothing prevents the user from clicking the 'eye' and see the debug information. If you have any data you rather not share with the user, turn that particular plugin off by using plugin blacklisting.</li>
+<li>Tell the user to click the "Set Glimpse Session Name" button on the same page. The user is then asked to specify a name. Their own name or company name would be a good choice. This also enables Glimpse on the user's browser.</li>
+<li>Now ask the user to load the problematic page again, she does not have to click on the Eye icon to see the Glimpse panel. That would just be confusing for most users.</li>
+  </ul>
+  </li>
+<li>
+<span>Review remote requests</span>
+<p>Now return to your own browser and open the production site as well. Click on the 'Remote' tab. On the right hand side you should see a list of different clients and the number of request that were monitored by Glimpse. In the 'Client' column you should see the name that was specified by the user. Click on 'Launch' next to it to show the requests for the client.</p>
+<p>The remote tab behaves similar to the Ajax tab, you can 'Launch' one request to see the full data about that request. On the Request tab you can verify that the request was made by a remote client machine. You can further review the information to find out what may have caused the problem.</p>
+<p>The Remote tab can also be helpful for local development. You can use different browsers to access your site and then compare the requests in one place.</p>
+
+
+</li>
+    </ul>
+</div>
+
+<div class="plugin-know">
     <h3>Did you know</h3> 
     <ul class="plain">
         <li>
             <span>That you can configure how many requests your server will remember</span>: To configure how
             many requests your server will hang onto you can simply adjust config as follows (note 15 is the
             default amount that we keep):
-            <pre style="margin-top:1em;">
-&lt;glimpse enabled="true" requestLimit="5" /&gt;</pre>
+
+<pre class="csharpcode">
+<span class="kwrd">&lt;</span><span class="html">glimpse</span> <span class="attr">enabled</span><span class="kwrd">="true"</span> <span class="attr">requestLimit</span><span class="kwrd">="5"</span> <span class="kwrd">/&gt;</span></pre>
+
         </li>
     </ul>
 </div>

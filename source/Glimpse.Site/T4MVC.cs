@@ -357,6 +357,15 @@ namespace Links {
         public static readonly string glimpseLogoWhite_png = Url("glimpseLogoWhite.png");
         public static readonly string glimpseMedium_png = Url("glimpseMedium.png");
         public static readonly string GlimpseStackAd_png = Url("GlimpseStackAd.png");
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public static class Help {
+            private const string URLPATH = "~/Content/Help";
+            public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
+            public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+            public static readonly string FilesPlugin_jpg = Url("FilesPlugin.jpg");
+            public static readonly string HelloWorldPlugin_jpg = Url("HelloWorldPlugin.jpg");
+        }
+    
         public static readonly string jquery_contentslider_css = Url("jquery.contentslider.css");
         public static readonly string jquery_jscrollpane_css = Url("jquery.jscrollpane.css");
         public static readonly string nugetlogo_png = Url("nugetlogo.png");
@@ -378,6 +387,7 @@ namespace Links {
             public static readonly string Server_jpg = Url("Server.jpg");
             public static readonly string Session_jpg = Url("Session.jpg");
             public static readonly string Trace_jpg = Url("Trace.jpg");
+            public static readonly string TraceIcons_png = Url("TraceIcons.png");
             public static readonly string View_jpg = Url("View.jpg");
         }
     

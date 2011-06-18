@@ -34,7 +34,9 @@
     <ul>
         <li>@html.ActionLink("Help", MVC.Help.Index())</li> 
         <li>@html.ActionLink("Quick Start", MVC.About.QuickStart())</li>
-        <li>@html.ActionLink("Configuration", MVC.Help.Configuration())</li> 
+        <li>@html.ActionLink("Configuration", MVC.Help.Configuration())</li>
+        <li>@html.ActionLink("Plugins / Tabs", MVC.Help.Plugin("Index"))</li>
+        <li>@html.ActionLink("Creating Plugins", MVC.Help.CreatingPlugins())</li>
         <li>@html.ActionLink("Protocol", MVC.Protocol.Index())</li> 
     </ul>
 </div>

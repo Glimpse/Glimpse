@@ -114,6 +114,8 @@
     <Compile Include="TalkController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
+    <Content Include="Content\Help\FilesPlugin.jpg" />
+    <Content Include="Content\Help\HelloWorldPlugin.jpg" />
     <Content Include="Content\Plugin\Ajax.jpg" />
     <Content Include="Content\Plugin\Binding.jpg" />
     <Content Include="Content\Plugin\Config.jpg" />
@@ -126,6 +128,7 @@
     <Content Include="Content\Plugin\Server.jpg" />
     <Content Include="Content\Plugin\Session.jpg" />
     <Content Include="Content\Plugin\Trace.jpg" />
+    <Content Include="Content\Plugin\TraceIcons.png" />
     <Content Include="Content\Plugin\View.jpg" />
     <Content Include="Content\rss_icon.gif" />
     <Content Include="Content\Support\GlimpseCredits.jpg" />
@@ -254,6 +257,8 @@
     <Content Include="Views\About\Features.cshtml" />
     <Content Include="App_Code\Menu.cshtml" />
     <Content Include="Views\Help\Configuration.cshtml" />
+    <Content Include="Views\Help\Plugins\Index.cshtml" />
+    <Content Include="Views\Help\CreatingPlugins.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
