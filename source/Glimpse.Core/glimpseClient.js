@@ -457,8 +457,10 @@ if (window.jQueryGlimpse) { (function ($) {
                             html += ' rowspan="' + metadataItem.rspan + '"';
                             newTolerance = metadataItem.rspan;
                         };
+                        if (!metadataItem.indexs && $.isNaN(metadataItem.data)) { metadataItem.indexs = $.glimpse.util.getTokens(metadataItem.data, data[i]); }
 
-                        cellContent = $.isNaN(metadataItem.data) ? that.buildFormatString(metadataItem.data, data[i]) : that.build(data[i][metadataItem.data], level + 1, undefined, newTolerance);
+                        cellContent = metadataItem.indexs ? that.buildFormatString(metadataItem.data, data[i], metadataItem.indexs) : data[i][metadataItem.data];
+                        cellContent = that.build(cellContent, level + 1, undefined, newTolerance);
 
                         html += '>' + cellContent + '</' + cellType + '>';
                     }
@@ -470,42 +472,11 @@ if (window.jQueryGlimpse) { (function ($) {
 
             return html;
         },
-        buildFormatString : function(formatString, data) {
-
-            var count = 0, working = '', result = [];
-            for (var i = 0; i < formatString.length; i++) {
-                var x = formatString[i];
-                
-                if (count <= 2) { 
-                    if (x == '{')
-                        count++;
-                    else if (x == '}' && count > 0)
-                        count--;
-                    else if (count == 2) {
-                        if ($.isNaN(x)) {
-                            count = 0;
-                            working = '';
-                        }
-                        else 
-                            working += '' + x;
-                    }
-                    else {
-                        count = 0;
-                        working = '';
-                    }
-
-                    if (count == 0 && working != '') {
-                        result.push(working);
-                        working = '';
-                    }
-                } 
-            }
-
-            for (var i = 0; i < result.length; i++) {
-                var pattern = "\\\{\\\{" + result[i] + "\\\}\\\}", regex = new RegExp(pattern, "g"); 
-                formatString = formatString.replace(regex, data[result[i]]);
-            }
-
+        buildFormatString : function(formatString, data, indexs) { 
+            for (var i = 0; i < indexs.length; i++) {
+                var pattern = "\\\{\\\{" + indexs[i] + "\\\}\\\}", regex = new RegExp(pattern, "g"); 
+                formatString = formatString.replace(regex, data[indexs[i]]);
+            } 
             return formatString;
         }, 
         buildString: function (data, level, tolerance) {
@@ -923,6 +894,37 @@ if (window.jQueryGlimpse) { (function ($) {
                 return result;
             }
             return null;
+        },
+        getTokens: function(formatString, data) { 
+            var count = 0, working = '', result = [];
+            for (var i = 0; i < formatString.length; i++) {
+                var x = formatString[i];
+                
+                if (count <= 2) { 
+                    if (x == '{')
+                        count++;
+                    else if (x == '}' && count > 0)
+                        count--;
+                    else if (count == 2) {
+                        if ($.isNaN(x)) {
+                            count = 0;
+                            working = '';
+                        }
+                        else 
+                            working += '' + x;
+                    }
+                    else {
+                        count = 0;
+                        working = '';
+                    }
+
+                    if (count == 0 && working != '') {
+                        result.push(working);
+                        working = '';
+                    }
+                } 
+            }
+            return result;
         }
     });
 

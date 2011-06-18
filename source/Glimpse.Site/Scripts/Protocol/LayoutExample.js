@@ -54,7 +54,7 @@ $(document).ready(function () {
         ['Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70' ]
     ];
     var scenarioFifteenMetadata = [
-            [ { data : '{{0}} - {{1}}', width : '200px', key : true }, { data : 2, width : '20%' }, { data : 3, width : '20%' } ]
+            [ { data : '{{0}} - ({{1}})', key : true }, { data : 2, width : '20%' }, { data : 3, width : '20%' } ]
         ];
     $('.glimpse-scenario-fifteen').show().html($Glimpse.glimpseProcessor.build(scenarioFifteenData, 0, scenarioFifteenMetadata));
 
