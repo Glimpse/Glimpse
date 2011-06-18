@@ -14,14 +14,16 @@
             <ul class="plain">
                 <li><span>Environment Name</span>: 
                     <p>This value represents the name you/your team call the environment that responded to the request. Typically environments go by names such as "local", "qa", "test", "staging" or "production".</p>
-                    <p>The Environment Name will only be made available by providing Glimpse additional <environments> configuration data, as seen in this sample:</p>
-                    <pre>
-&lt;glimpse enabled="true"&gt;
-    &lt;environments>
-        &lt;add name="Dev" authority="localhost:55555"/&gt;
-        &lt;add name="Prod" authority="getglimpse.com"/&gt;
-    &lt;/environments&gt;
-&lt;/glimpse&gt;</pre>
+                    <p>The Environment Name will only be made available by providing Glimpse additional &lt;environments&gt; configuration data, as seen in this sample:</p>
+
+<pre class="csharpcode">
+<span class="kwrd">&lt;</span><span class="html">glimpse</span> <span class="attr">enabled</span><span class="kwrd">="true"</span><span class="kwrd">&gt;</span>
+    <span class="kwrd">&lt;</span><span class="html">environments</span><span class="kwrd">&gt;</span>
+        <span class="kwrd">&lt;</span><span class="html">add</span> <span class="attr">name</span><span class="kwrd">="Dev"</span> <span class="attr">authority</span><span class="kwrd">="localhost:55555"</span><span class="kwrd">/&gt;</span>
+        <span class="kwrd">&lt;</span><span class="html">add</span> <span class="attr">name</span><span class="kwrd">="Prod"</span> <span class="attr">authority</span><span class="kwrd">="getglimpse.com"</span><span class="kwrd">/&gt;</span>
+    <span class="kwrd">&lt;/</span><span class="html">environments</span><span class="kwrd">&gt;</span>
+<span class="kwrd">&lt;/</span><span class="html">glimpse</span><span class="kwrd">&gt;</span></pre>
+
                 </li>
                 <li><span>Machine Name</span>: Name of the machine that the site is running on</li>
                 <li><span>Booted</span>: When the machine was last booted</li>

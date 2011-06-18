@@ -25,15 +25,24 @@
                 <li>Trace.TraceWarning("...") : void</li>
                 <li>Trace.TraceError("...") : void</li>
                 <li>Trace.TraceInformation("...") : void</li>
+
             </ul> 
             In addition, we support several different methods off the GlimpseTrace class. It provide extended 
             and wrapped up functionality. Some methods include:
             <ul class="plain">
-                <li>GlimpseTrace.Info("...") : void</li>
-                <li>GlimpseTrace.Warn("...") : void</li>
-                <li>GlimpseTrace.Error("...") : void</li>
-                <li>GlimpseTrace.Fail("...") : void</li>
+                <li>Glimpse.Core.Extensibility.GlimpseTrace.Info("...") : void</li>
+                <li>Glimpse.Core.Extensibility.GlimpseTrace.Warn("...") : void</li>
+                <li>Glimpse.Core.Extensibility.GlimpseTrace.Error("...") : void</li>
+                <li>Glimpse.Core.Extensibility.GlimpseTrace.Fail("...") : void</li>
             </ul>
+            On the Trace tab you would get something like this: 
+            <p>
+            <img src="@Links.Content.Plugin.TraceIcons_png" /></p>
+
+            <p>This looks a bit nicer. You should remember though, that you are creating a dependency on Glimpse in your code, in most cases you want to avoid this. You want to be able to deploy a site to a production server without Glimpse.</p>
+            <p>We recommend not to create dependencies on Glimpse unless you are writing a server plugin. </p>
+
+
         </li> 
     </ol>
 </div>
