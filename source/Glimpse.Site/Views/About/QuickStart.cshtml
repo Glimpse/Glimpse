@@ -61,9 +61,11 @@
     <p>If you don't have NuGet yet, get it from <a href="http://nuget.codeplex.com">http://nuget.codeplex.com</a> and install it.</p>
     <p>Open the NuGet console: 'View -> Other Windows -> Package Manager Console'</p>
     <p>For a web site or web application project type:</p>
-    <pre>Install-Package Glimpse</pre>
+    
+    <pre class="csharpcode">Install-Package Glimpse</pre>
+
     <p>Or for a MVC3 project type:</p>
-    <pre>Install-Package Glimpse.MVC3</pre>
+    <pre class="csharpcode">Install-Package Glimpse.MVC3</pre>
     <p>The package manager will copy new DLLs into your bin directory, make changes to your web.config file and will add a readme file to the App_Readme folder.</p>
 
     <br />
@@ -83,14 +85,21 @@
     <p>If you installed Glimpse with NuGet you are already good to go, the default settings are meant for local development.</p>
     <p>You can manually configure Glimpse in the web.config file.</p>
     <p>First we have to tell the ASP.NET configuration system that we have a Glimpse section in web.config. This is done by adding a node to the in the configSections at the very top of the file: </p>
-<pre>&lt;configuration&gt;
-  &lt;configSections&gt;
-    &lt;section name="glimpse" type="Glimpse.Core.Configuration.GlimpseConfiguration" /&gt;
-  &lt;/configSections&gt;
+
+<pre class="csharpcode">
+<span class="kwrd">&lt;</span><span class="html">configuration</span><span class="kwrd">&gt;</span>
+  <span class="kwrd">&lt;</span><span class="html">configSections</span><span class="kwrd">&gt;</span>
+    <span class="kwrd">&lt;</span><span class="html">section</span> <span class="attr">name</span><span class="kwrd">="glimpse"</span> <span class="attr">type</span><span class="kwrd">="Glimpse.Core.Configuration.GlimpseConfiguration"</span> <span class="kwrd">/&gt;</span>
+  <span class="kwrd">&lt;/</span><span class="html">configSections</span><span class="kwrd">&gt;</span>
   ...
-&lt;/configuration&gt;</pre>
+<span class="kwrd">&lt;/</span><span class="html">configuration</span><span class="kwrd">&gt;</span></pre>
+
+
     <p>All the 'real' Glimpse configuration then happens in the node 'Glimpse' which can be anywhere under the root configuration node. By default there is only one setting which turns on Glimpse:</p>
-    <pre>&lt;glimpse enabled="true" /&gt;</pre>
+   
+   <pre class="csharpcode">
+<span class="kwrd">&lt;</span><span class="html">glimpse</span> <span class="attr">enabled</span><span class="kwrd">="true"</span> <span class="kwrd">/&gt;</span></pre>
+
     <p>You can turn off Glimpse by setting enable="false". By default Glimpse only works for requests that come from the local machine. To change this and find out about more advanced settings, please check the Configuration section in the Reference part.</p>
 
     <hr class="line" />
