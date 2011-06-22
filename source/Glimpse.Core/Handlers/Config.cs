@@ -36,7 +36,7 @@ namespace Glimpse.Core.Handlers
             //temporary measure to help users move from glimpse/config to glimpse.asx
             if (context.Request.QueryString["redirect"]=="1")
             {
-                response.Write("<div style='background-color: lightCoral; border: thin solid maroon; color: maroon; padding: 6px; font-size: 1.2em; position: fixed; width: 100%; z-index: 500;'><strong>Redirected!</strong> - Glimpse will no longer support the 'Glimpse/Config' url in the next version. Please use '/Glimpse.axd' instead.</div>");
+                response.Write("<div style='background-color: lightCoral; border: thin solid maroon; color: maroon; padding: 6px; font-size: 1.2em; position: fixed; width: 100%; z-index: 500;'><strong>Redirected!</strong> - Glimpse will no longer support the 'Glimpse/Config' url in the next version. Please use 'Glimpse.axd' instead.</div>");
             }
 
             response.Write("<div class=\"content\"><div class=\"logo\"><blockquote>What Firebug is for the client, Glimpse does for the server... in other words, a client side Glimpse into whats going on in your server.</blockquote><h1>Glimpse</h1><div>A client side Glimpse to your server</div></div>");
