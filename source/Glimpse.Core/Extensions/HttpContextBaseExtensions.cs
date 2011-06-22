@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Web;
 using Glimpse.Core.Configuration;
-using Glimpse.Core.Extensibility;
 using Glimpse.Core.Plumbing;
 
 namespace Glimpse.Core.Extensions
@@ -18,7 +17,7 @@ namespace Glimpse.Core.Extensions
                            ClientName = context.GetClientName(),
                            Json = jsonPayload,
                            RequestTime = DateTime.Now.ToLongTimeString(),
-                           RequestId = context.GetRequestId(),
+                           RequestId = context.GetGlimpseRequestId(),
                            IsAjax = context.IsAjax().ToString(),
                            Url = context.Request.RawUrl,
                            Method = context.Request.HttpMethod
@@ -63,7 +62,7 @@ namespace Glimpse.Core.Extensions
             return (data != null);
         }
 
-        public static string ResourcePath(this HttpContextBase context, string resource)
+        public static string GlimpseResourcePath(this HttpContextBase context, string resource)
         {
             var root = VirtualPathUtility.ToAbsolute("~/", context.Request.ApplicationPath);
 
@@ -72,15 +71,15 @@ namespace Glimpse.Core.Extensions
             return string.Format("{0}Glimpse.axd?{2}={1}", root, resource, Handler.ResourceKey);
         }
 
-        public static List<IGlimpseWarning> GetWarnings(this HttpContextBase context)
+/*        public static List<IGlimpseWarning> GetWarnings(this HttpContextBase context)
         {
             var result = context.Items[GlimpseConstants.Warnings] as List<IGlimpseWarning>;
             if (result == null) context.Items[GlimpseConstants.Warnings] = result = new List<IGlimpseWarning>();
 
             return result;
-        }
+        }*/
 
-        public static Guid GetRequestId(this HttpContextBase context)
+        public static Guid GetGlimpseRequestId(this HttpContextBase context)
         {
             Guid result;
             try

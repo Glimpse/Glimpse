@@ -28,8 +28,7 @@ namespace Glimpse.Mvc3.Plumbing
                     return binder.CreateDynamicProxy();
             }
 
-            var warnings = new HttpContextWrapper(HttpContext.Current).GetWarnings();//Hack
-            warnings.Add(new NotADefaultModelBinderWarning(binder));
+            //TODO:  add logging warnings.Add(new NotADefaultModelBinderWarning(binder));
             
             return binder.Wrap();
         }

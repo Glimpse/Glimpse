@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using System.Web;
 using Castle.DynamicProxy;
-using Glimpse.Core.Extensions;
-using Glimpse.Mvc3.Warning;
 
 namespace Glimpse.Mvc3.Interceptor
 {
@@ -23,14 +20,12 @@ namespace Glimpse.Mvc3.Interceptor
 
         public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)
         {
-            var warnings = new HttpContextWrapper(HttpContext.Current).GetWarnings();//Hack
-            warnings.Add(new NonProxyableMemberWarning(type, memberInfo));
+            //TODO:  add logging warnings.Add(new NonProxyableMemberWarning(type, memberInfo));
         }
 
         public void NonVirtualMemberNotification(Type type, MemberInfo memberInfo)
         {
-            var warnings = new HttpContextWrapper(HttpContext.Current).GetWarnings();//Hack
-            warnings.Add(new NonVirtualMemberWarning(type, memberInfo));
+            //TODO:  add logging warnings.Add(new NonVirtualMemberWarning(type, memberInfo));
         }
 
         public void MethodsInspected()

@@ -14,7 +14,6 @@ using Glimpse.Core.Extensions;
 using Glimpse.Core.Plumbing;
 using Glimpse.Core.Sanitizer;
 using Glimpse.Core.Validator;
-using Glimpse.Core.Warning;
 using Environment = Glimpse.Core.Configuration.Environment;
 
 namespace Glimpse.Core
@@ -47,11 +46,13 @@ namespace Glimpse.Core
 
             Sanitizer = new CSharpSanitizer();
 
-            Serializer = new GlimpseSerializer();
+            Serializer = new GlimpseSerializer(Factory);
 
             Handlers = Enumerable.Empty<IGlimpseHandler>();
 
             Plugins = Enumerable.Empty<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>>();
+
+            Logger.Info("Glimpse Module constructed");
         }
 
         public void Init(HttpApplication context)
@@ -73,6 +74,7 @@ namespace Glimpse.Core
                         //Allow plugin's registered for Intialization to setup
                         foreach (var plugin in Plugins.Where(plugin => plugin.Metadata.ShouldSetupInInit))
                         {
+                            Logger.Info("Calling SetupInit() on " + plugin.Value.GetType().FullName);
                             plugin.Value.SetupInit();
                         }
                     }
@@ -84,6 +86,8 @@ namespace Glimpse.Core
             context.PostRequestHandlerExecute += OnPostRequestHandlerExecute;
             context.PreSendRequestHeaders += OnPreSendRequestHeaders;
             context.PostMapRequestHandler += OnPostMapRequestHandler;
+
+            Logger.Info("Glimpse Module Init Complete");
         }
 
         #region Event Handlers
@@ -133,6 +137,8 @@ namespace Glimpse.Core
             if (!RequestValidator.IsValid(context, LifecycleEvent.BeginRequest)) return;
 
             context.InitGlimpseContext();
+
+            Logger.Info("BeginRequest handling complete for requestId " + context.GetGlimpseRequestId() + " (" + context.Request.Path+")");
         }
 
         internal static void PostMapRequestHandler(HttpContextBase context)
@@ -140,7 +146,8 @@ namespace Glimpse.Core
             //temporary measure to help users move from glimpse/config to glimpse.asx
             if (context.Request.Path.ToLower().Contains(@"glimpse/config"))
             {
-                context.Response.RedirectPermanent(context.ResourcePath(null)+"?redirect=1", true);
+                Logger.Info("Noticed request for glimpse/config, redirecting");
+                context.Response.RedirectPermanent(context.GlimpseResourcePath(null)+"?redirect=1", true);
             }
         }
 
@@ -149,6 +156,8 @@ namespace Glimpse.Core
             if (!RequestValidator.IsValid(context, LifecycleEvent.PostRequestHandlerExecute)) return;
 
             ProcessData(context, true); //Run all plugins that DO need access to Session
+
+            Logger.Info("PostRequestHandlerExecute handling complete for requestId " + context.GetGlimpseRequestId() + " (" + context.Request.Path + ")");
         }
 
         private static void EndRequest(HttpContextBase context)
@@ -156,6 +165,8 @@ namespace Glimpse.Core
             if (!RequestValidator.IsValid(context, LifecycleEvent.EndRequest)) return;
 
             ProcessData(context, false); //Run all plugins that DO NOT need access to Session
+
+            Logger.Info("EndRequest handling complete for requestId " + context.GetGlimpseRequestId() + " (" + context.Request.Path + ")");
         }
 
         private static void PreSendRequestHeaders(HttpContextBase context)
@@ -163,8 +174,10 @@ namespace Glimpse.Core
             if (!RequestValidator.IsValid(context, LifecycleEvent.PreSendRequestHeaders)) return;
 
             var jsonPayload = GenerateGlimpseOutput(context);
+            Logger.Info("Glimpse output generated for requestId " + context.GetGlimpseRequestId() + " (" + context.Request.Path + ")");
 
             MetadataStore.Persist(context.GetRequestMetadata(jsonPayload));
+            Logger.Info("RequestId " + context.GetGlimpseRequestId() + " (" + context.Request.Path + ")" + " persisted");
         }
 
         public void Dispose()
@@ -188,10 +201,15 @@ namespace Glimpse.Core
 
             Plugins = container.GetExports<IGlimpsePlugin, IGlimpsePluginRequirements>();
             Handlers = container.GetExportedValues<IGlimpseHandler>();
-            Serializer.AddConverters(container.GetExportedValues<IGlimpseConverter>());
+            var glimpseConverters = container.GetExportedValues<IGlimpseConverter>();
+            Serializer.AddConverters(glimpseConverters);
 
-            var store = context.GetWarnings();
-            store.AddRange(directoryCatalog.Exceptions.Select(exception => new ExceptionWarning(exception)));
+            Logger.Info("MEF Parts composed: " + Plugins.Count() + " IGlimpsePlugins, " + Handlers.Count() + " IGlimpseHandlers and " + glimpseConverters.Count() + " IGlimpseConverters configured");
+
+            foreach (var exception in directoryCatalog.Exceptions)
+            {
+                Logger.Warn("MEF Loading error", exception);
+            }
         }
 
 
@@ -224,6 +242,7 @@ namespace Glimpse.Core
             if (!context.TryGetData(out data)) return "Error: No Glimpse Data Found";
 
             string json = CreateJsonPayload(data, context);
+            Logger.Info("Glimpse JSON payload created for requestId " + context.GetGlimpseRequestId() + " (" + context.Request.Path + ")");
 
             json = Sanitizer.Sanitize(json);
 
@@ -234,10 +253,11 @@ namespace Glimpse.Core
 
         private static void AppendToResponse(HttpContextBase context, string json)
         {
-            var requestId = context.GetRequestId().ToString();
+            var requestId = context.GetGlimpseRequestId().ToString();
 
             if (context.IsAjax())
             {
+                Logger.Info("Ajax request, adding HTTP Header for requestId " + context.GetGlimpseRequestId() + " (" + context.Request.Path + ")");
                 context.Response.AddHeader(GlimpseConstants.HttpHeader, requestId);
             }
             else
@@ -245,9 +265,9 @@ namespace Glimpse.Core
                 if (context.GetGlimpseMode() == GlimpseMode.On)
                 {
                     //var path = VirtualPathUtility.ToAbsolute("~/", context.Request.ApplicationPath);
-                    var path = context.ResourcePath("");
+                    var path = context.GlimpseResourcePath("");
                     var html = string.Format(@"<script type='text/javascript' id='glimpseData' data-glimpse-requestID='{1}'>var glimpse = {0}, glimpsePath = '{2}';</script>", json, requestId, path);
-                    html += @"<script type='text/javascript' id='glimpseClient' src='" + context.ResourcePath("client.js") + "'></script>";
+                    html += @"<script type='text/javascript' id='glimpseClient' src='" + context.GlimpseResourcePath("client.js") + "'></script>";
                     context.Response.Write(html);//TODO: Use a filter and put this inside </body>
                 }
             }
@@ -256,8 +276,6 @@ namespace Glimpse.Core
         //TODO: clean up this massive method
         private static string CreateJsonPayload(IDictionary<string, object> data, HttpContextBase context)
         {
-            var warnings = context.GetWarnings();
-
             var sb = new StringBuilder("{");
 
             if (data.Count > 0)
@@ -271,6 +289,8 @@ namespace Glimpse.Core
                     }
                     catch (Exception ex)
                     {
+                        Logger.Warn("Problem serializing " + item.GetType().FullName, ex);
+
                         var message = Serializer.Serialize(ex.Message);
                         message = message.Remove(message.Length - 1).Remove(0, 1);
                         var callstack = Serializer.Serialize(ex.StackTrace);

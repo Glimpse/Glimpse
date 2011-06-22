@@ -1,9 +1,6 @@
 ﻿using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using Glimpse.Core.Extensions;
 using Glimpse.Mvc3.Extensions;
-using Glimpse.Mvc3.Warning;
 
 namespace Glimpse.Mvc3.Plumbing
 {
@@ -24,8 +21,6 @@ namespace Glimpse.Mvc3.Plumbing
 
         public static void ModelBinders()
         {
-            var warnings = new HttpContextWrapper(HttpContext.Current).GetWarnings();
-
             //handle static registered binders
             var binders = System.Web.Mvc.ModelBinders.Binders;
             var keys = binders.Keys.ToList();
@@ -41,7 +36,7 @@ namespace Glimpse.Mvc3.Plumbing
                         continue;
                     }
 
-                warnings.Add(new NotADefaultModelBinderWarning(binder));
+                //TODO:  add logging warnings.Add(new NotADefaultModelBinderWarning(binder));
                 binders[type] = binder.Wrap();
             }
 
@@ -55,7 +50,7 @@ namespace Glimpse.Mvc3.Plumbing
                 }
 
 
-            warnings.Add(new NotADefaultModelBinderWarning(defaultBinder));
+            //TODO:  add logging warnings.Add(new NotADefaultModelBinderWarning(defaultBinder));
             System.Web.Mvc.ModelBinders.Binders.DefaultBinder = defaultBinder.Wrap();
         }
 
