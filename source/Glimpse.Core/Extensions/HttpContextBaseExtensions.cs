@@ -66,6 +66,9 @@ namespace Glimpse.Core.Extensions
         public static string ResourcePath(this HttpContextBase context, string resource)
         {
             var root = VirtualPathUtility.ToAbsolute("~/", context.Request.ApplicationPath);
+
+            if (resource == null) return string.Format("{0}Glimpse.axd", root);
+
             return string.Format("{0}Glimpse.axd?{2}={1}", root, resource, Handler.ResourceKey);
         }
 

@@ -15,7 +15,6 @@ using Glimpse.Core.Plumbing;
 using Glimpse.Core.Sanitizer;
 using Glimpse.Core.Validator;
 using Glimpse.Core.Warning;
-using NLog;
 using Environment = Glimpse.Core.Configuration.Environment;
 
 namespace Glimpse.Core
@@ -84,7 +83,7 @@ namespace Glimpse.Core
             context.EndRequest += OnEndRequest;
             context.PostRequestHandlerExecute += OnPostRequestHandlerExecute;
             context.PreSendRequestHeaders += OnPreSendRequestHeaders;
-            //context.PostMapRequestHandler += OnPostMapRequestHandler;
+            context.PostMapRequestHandler += OnPostMapRequestHandler;
         }
 
         #region Event Handlers
@@ -96,13 +95,13 @@ namespace Glimpse.Core
                 EndRequest(new HttpContextWrapper(httpApplication.Context));
         }
 
-        /*private static void OnPostMapRequestHandler(object sender, EventArgs e)
+        private static void OnPostMapRequestHandler(object sender, EventArgs e)
         {
             var httpApplication = sender as HttpApplication;
 
             if (httpApplication != null)
                 PostMapRequestHandler(new HttpContextWrapper(httpApplication.Context));
-        }*/
+        }
 
         private static void OnPreSendRequestHeaders(object sender, EventArgs e)
         {
@@ -136,28 +135,14 @@ namespace Glimpse.Core
             context.InitGlimpseContext();
         }
 
-        /*internal static void PostMapRequestHandler(HttpContextBase context)
+        internal static void PostMapRequestHandler(HttpContextBase context)
         {
-            context.Items[GlimpseConstants.ValidPath] = false;
-
-            var pathSegments = context.Request.Path.Split('/');
-            var i = Array.FindIndex(pathSegments,
-                                    segment =>
-                                    segment.Equals(Configuration.RootUrlPath, StringComparison.CurrentCultureIgnoreCase));
-            if (i > -1 && i < pathSegments.Length - 1) //Make sure key was found, and not the last element of segments
+            //temporary measure to help users move from glimpse/config to glimpse.asx
+            if (context.Request.Path.ToLower().Contains(@"glimpse/config"))
             {
-                var resourceName = pathSegments[i + 1];
-                var handler =
-                    Handlers.Where(h => h.ResourceName.Equals(resourceName, StringComparison.CurrentCultureIgnoreCase)).
-                        FirstOrDefault();
-
-                if (handler != null)
-                {
-                    context.Handler = handler;
-                    context.Items[GlimpseConstants.ValidPath] = true;
-                }
+                context.Response.RedirectPermanent(context.ResourcePath(null)+"?redirect=1", true);
             }
-        }*/
+        }
 
         private static void PostRequestHandlerExecute(HttpContextBase context)
         {
