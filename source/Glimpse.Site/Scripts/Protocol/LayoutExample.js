@@ -1,7 +1,7 @@
 ﻿
 
 if (!document.glimpse)
-    glimpse = '', glimpsePath = '/';
+    glimpse = '', glimpsePath = '/Glimpse.axd?r=';
 
 $(document).ready(function () {
 
