@@ -1,9 +1,6 @@
-﻿using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Castle.DynamicProxy;
-using Glimpse.Core.Extensions;
 using Glimpse.Mvc3.Interceptor;
-using Glimpse.Mvc3.Warning;
 
 namespace Glimpse.Mvc3.Extensions
 {
@@ -11,12 +8,10 @@ namespace Glimpse.Mvc3.Extensions
     {
         internal static IController TrySetActionInvoker(this IController iController)
         {
-            var warnings = new HttpContextWrapper(HttpContext.Current).GetWarnings();//HACK
-
             var controller = iController as Controller;
             if (controller == null)
             {
-                warnings.Add(new NotAControllerWarning(iController));
+                //TODO: Add Logging
                 return iController;
             }
 

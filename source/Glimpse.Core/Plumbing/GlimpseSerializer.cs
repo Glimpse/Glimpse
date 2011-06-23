@@ -1,9 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions;
-using Glimpse.Core.Warning;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -13,14 +9,16 @@ namespace Glimpse.Core.Plumbing
     {
         public JsonSerializerSettings Settings { get; set; }
         public Formatting DefaultFormatting { get; set; }
+        public IGlimpseLogger Logger { get; set; }
 
-        public GlimpseSerializer()
+        public GlimpseSerializer(IGlimpseFactory factory)
         {
+            Logger = factory.CreateLogger();
+
             Settings = new JsonSerializerSettings { ContractResolver = new GlimpseContractResolver() };
             Settings.Error += (obj, args) =>
             {
-                var warnings = new HttpContextWrapper(HttpContext.Current).GetWarnings();
-                warnings.Add(new SerializationWarning(args.ErrorContext.Error));
+                Logger.Warn("Serializer error", args.ErrorContext.Error);
                 args.ErrorContext.Handled = true;
             };
 
