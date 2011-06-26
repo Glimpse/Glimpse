@@ -2,7 +2,7 @@
 html{color:#000;background:#FFF;}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym{border:0;font-variant:normal;}sup{vertical-align:text-top;}sub{vertical-align:text-bottom;}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit;}input,textarea,select{*font-size:100%;}legend{color:#000;}
 
 /* general */
-body { text-align:center; font-family:"trebuchet ms", helvetica, sans-serif; font-size:0.8em; line-height:1.4em; }
+body { text-align:center; font-family:Helvetica, Arial, sans-serif; font-size:0.8em; line-height:1.4em; }
 strong { font-weight:bold; } em { font-style:italic; }
 ul.plain, ol.plain { margin-bottom:1em; }
 ol.plain li { list-style-type:decimal; }
@@ -27,6 +27,7 @@ ul.plain li, ol.plain li { margin:0.5em 0 0.5em 1.5em ; }
 .features h3 { margin:20px 0 15px; } 
 .features tr { vertical-align:top; } 
 .features p { padding: 0.5em 0; }
+.features pre { font-family:Consolas, monospace, serif; font-size:11px; }
 .scroll-pane { overflow:hidden; outline:none; height:400px; width:820px; }
 h1, h2, h3, h4 { line-height:1.2em; font-family:"avante garde", "Century Gothic", Serif; } 
 h1 { font-size:4em; }
