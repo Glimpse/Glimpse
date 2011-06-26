@@ -49,13 +49,11 @@
         <li><strong>requestLimit</strong>: is an integer with a default value of 15. Glimpse "remembers" the debug information for a number of requests on the server.  This is important for the Ajax and Remote tabs to work. This number defines how many requests are stored.</li>
         <li><strong>loggingEnabled</strong>: another boolean with a default value of "false".</li>
     </ul>
-       
+
+    The following sections all go within the Glimpse section.
+     
     <hr class="line" />
 
-    The following sections all go within the Glimpse section: 
-    <table width="100%">
-        <tr>
-            <td width="49%">
                 <h3>IP addresses</h3>
                 <p>Our first section enables the IP address filtering:</p>
 
@@ -78,10 +76,10 @@
     <span class="kwrd">&lt;</span><span class="html">add</span> <span class="attr">address</span><span class="kwrd">="fe80::f17e:d177:359f:6cee%14"</span> <span class="kwrd">/&gt;</span>
 <span class="kwrd">&lt;/</span><span class="html">ipAddresses</span><span class="kwrd">&gt;</span>
 </pre>
-         
-            </td>
-            <td width="2%" rowspan="3"></td>
-            <td width="49%">
+
+
+    <hr class="line" />
+
 
                 <h3>Blacklist for plugins</h3>
                 <p>The next section is the blacklist for plugins, the default is empty:</p>
@@ -103,11 +101,10 @@
                 <p>Why would you want to do this? Maybe there is a plugin that you never use and it just fills up the space in the tab bar. Or when in a production environment there are certain plugins that reveal too much information to a user. Other reasons may be that one of you own plugins is not stable, or that a plugin can cause performance issues in certain cases.</p>
                 <p>To see a list of the plugins that you can blacklist, simply go to your /Glimpse/Config page. This shows a list of all plugins that Glimpse has detected (both official Glimpse Plugins and 3rd Party plugins) and which ones are currently disabled (if you have disabled any).</p>
 
-            </td>
-        </tr>
-        <tr>
-            <td>
-            
+
+    <hr class="line" />
+
+
                 <h3>Content Types</h3>
                 <p>Next up are the content types, the default is:</p>
 
@@ -120,9 +117,10 @@
                 <p>This means Glimpse is only attaching its data to responses with a content type or text/html and application/json which is the majority of web pages. </p>
                 <p>Note, application/json in this case a Glimpse identifier is added to the response header and the Glimpse data is then later retrieved. This is intended so that Glimpse doesn't affect the data in your Ajax response.</p>
 
-            </td>
-            <td>
-            
+
+    <hr class="line" />
+
+
                 <h3>Environments</h3>
                 <p>Finally we have environments, again the default is empty:</p>
 
@@ -139,10 +137,10 @@
 <span class="kwrd">&lt;/</span><span class="html">environments</span><span class="kwrd">&gt;</span></pre>
 
                  <p>Defining your environments like this allows glimpse to show you what environment you are currently in and allows you to switch to another one of the defined environments using the current context. At the moment this context only extends to the URL but it makes trying to compare environments when you notice something out of the ordinary much easier than it might other be normally.</p>
-            
-            </td>
-        </tr>
-    </table>
+ 
+
+    <hr class="line" />
+
 
     <h3>Handler and Module configuration</h3>
     <p>Glimpse is using an http handler and an http module to do its magic. If you've installed Glimpse via NuGet
