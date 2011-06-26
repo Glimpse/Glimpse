@@ -243,6 +243,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="App_Code\SharedHelp.cshtml" />
     <None Include="T4MVC.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>T4MVC.cs</LastGenOutput>
@@ -259,6 +260,7 @@
     <Content Include="Views\Help\Configuration.cshtml" />
     <Content Include="Views\Help\Plugins\Index.cshtml" />
     <Content Include="Views\Help\CreatingPlugins.cshtml" />
+    <Content Include="Views\Help\Setup.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

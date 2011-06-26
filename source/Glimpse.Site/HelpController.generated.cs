@@ -55,6 +55,7 @@ namespace Glimpse.Site.Controllers {
             public readonly string Index = "Index";
             public readonly string Plugin = "Plugin";
             public readonly string Configuration = "Configuration";
+            public readonly string Setup = "Setup";
             public readonly string CreatingPlugins = "CreatingPlugins";
         }
 
@@ -68,6 +69,7 @@ namespace Glimpse.Site.Controllers {
             public readonly string CreatingPlugins = "~/Views/Help/CreatingPlugins.cshtml";
             public readonly string Index = "~/Views/Help/Index.cshtml";
             public readonly string Plugin = "~/Views/Help/Plugin.cshtml";
+            public readonly string Setup = "~/Views/Help/Setup.cshtml";
             static readonly _Plugins s_Plugins = new _Plugins();
             public _Plugins Plugins { get { return s_Plugins; } }
             public partial class _Plugins{
@@ -106,6 +108,11 @@ namespace Glimpse.Site.Controllers {
 
         public override System.Web.Mvc.ActionResult Configuration() {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Configuration);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult Setup() {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Setup);
             return callInfo;
         }
 

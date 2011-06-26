@@ -34,7 +34,7 @@
                 Glimpse currently only supports Microsoft's ASP.NET 4, both the Web Forms and MVC variety.<br /><br />
                 So you need:
                 <ul class="plain">
-                    <li>Microsoft IIS7 or higher with ASP.NET 4 installed</li>
+                    <li>Microsoft IIS6 or higher with ASP.NET 4 installed</li>
                     <li>For MVC projects, you need MVC 3 installed.</li>
                 </ul>
 
@@ -42,7 +42,7 @@
             <td width="55%" valign="bottom"> 
                 As a side note:
                 <ul class="plain">
-                    <li>We have not yet tested IIS6 or Mono. </li>
+                    <li>We have not yet tested Mono or IIS 5.1 on Windows XP. </li>
                     <li>In the future we plan to support other platforms and web frameworks.</li>
                 </ul>  
             </td>
@@ -56,7 +56,7 @@
     changes outside of your project or web site directory.</p>
 
     <br />
-    <strong>Windows with Visual Studio 2010 and NuGet</strong>
+    <strong>Using Visual Studio 2010 and NuGet</strong>
     <p>This is the easiest way to add Glimpse to your project. </p>
     <p>If you don't have NuGet yet, get it from <a href="http://nuget.codeplex.com">http://nuget.codeplex.com</a> and install it.</p>
     <p>Open the NuGet console: 'View -> Other Windows -> Package Manager Console'</p>
@@ -69,10 +69,11 @@
     <p>The package manager will copy new DLLs into your bin directory, make changes to your web.config file and will add a readme file to the App_Readme folder.</p>
 
     <br />
-    <strong>Windows without Visual Studio</strong><br />
+    <strong>Without Visual Studio</strong><br />
     <p>If you don't have Visual Studio or can't use the NuGet package manager, you can add Glimpse manually to your site.</p>
-    <p>We will try to make the process easier in the future, for now you can follow the instructions at:
-    <a href="http://peter.hahndorf.eu/blog/2011/05/31/ManuallyInstallingGlimpse082ForWebForms.aspx">http://peter.hahndorf.eu/blog/2011/05/31/ManuallyInstallingGlimpse082ForWebForms.aspx</a></p>
+    <p>
+    Follow the instructions on the @Html.ActionLink("manual setup", MVC.Help.Setup()) page.
+    </p>
 
     <br />
     <strong>Deploying Glimpse</strong>
@@ -107,11 +108,14 @@
     <h3>Enable Glimpse on the client</h3>
     <p>Glimpse only kicks into life when it finds an http cookie 'glimpseState' with the value 'on' in the request from the browser. There are several ways to get this cookie:</p>
     <ul class="plain">
-        <li>Browse to http://yousite/glimpse/config and click on the 'Turn Glimpse On' button.</li>
+        <li>Browse to
+        <pre class="csharpcode">http://yoursite/glimpse.axd</pre>
+
+        and click on the 'Turn Glimpse On' button.</li>
         <li>If you browser supports bookmarklets you can create one to turn on Glimpse. In Firefox just drag the button onto your bookmarks toolbar or choose 'bookmark this link' in the context menu. In IE9 select the button and choose 'Add to favorites' from the context menu.</li>
         <li>You can manually set the cookie within your site by your own logic based on you own debug settings.</li>
     </ul>
-    <p>If you get a "Page not found" when browsing to "/glimpse/config" check the troubleshooting section in the FAQ.</p>
+    <p>If you get a "Page not found" when browsing to "/glimpse.axd" check the troubleshooting section in the FAQ.</p>
 
     <hr class="line" />
 
