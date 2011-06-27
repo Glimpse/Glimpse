@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
+using Glimpse.Core.Plumbing;
 using Glimpse.Mvc3.Extensions;
 
 namespace Glimpse.Mvc3.Plumbing
@@ -36,7 +37,8 @@ namespace Glimpse.Mvc3.Plumbing
                         continue;
                     }
 
-                //TODO:  add logging warnings.Add(new NotADefaultModelBinderWarning(binder));
+                GlimpseFactory.CreateLogger().Warn(binder.GetType() + " is not a System.Web.Mvc.DefaultModelBinder.");
+
                 binders[type] = binder.Wrap();
             }
 
@@ -49,8 +51,8 @@ namespace Glimpse.Mvc3.Plumbing
                     return;
                 }
 
+            GlimpseFactory.CreateLogger().Warn(defaultBinder.GetType() + " is not a System.Web.Mvc.DefaultModelBinder.");
 
-            //TODO:  add logging warnings.Add(new NotADefaultModelBinderWarning(defaultBinder));
             System.Web.Mvc.ModelBinders.Binders.DefaultBinder = defaultBinder.Wrap();
         }
 

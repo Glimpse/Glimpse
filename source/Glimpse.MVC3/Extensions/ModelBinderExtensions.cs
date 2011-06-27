@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using Castle.DynamicProxy;
+using Glimpse.Core.Plumbing;
 using Glimpse.Mvc3.Interceptor;
 using Glimpse.Mvc3.Plumbing;
 
@@ -22,12 +23,12 @@ namespace Glimpse.Mvc3.Extensions
                         proxy == null);
 
                 if (!result)
-                    //TODO:  add logging warnings.Add(new NotProxyableWarning(modelBinder));
+                    GlimpseFactory.CreateLogger().Warn("Cannot create proxy of " + modelBinder.GetType() +". Object must have a parameterless constructor, cannot be sealed, and cannot already be a proxy object.");
 
                 return result;
             }
 
-            //TODO:  add logging warnings.Add(new NotADefaultModelBinderWarning(modelBinder));
+            GlimpseFactory.CreateLogger().Warn(modelBinder.GetType() + " is not a System.Web.Mvc.DefaultModelBinder.");
             return false;
         }
 

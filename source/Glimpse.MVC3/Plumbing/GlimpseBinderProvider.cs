@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Web;
 using System.Web.Mvc;
-using Glimpse.Core.Extensions;
+using Glimpse.Core.Plumbing;
 using Glimpse.Mvc3.Extensions;
-using Glimpse.Mvc3.Warning;
 
 namespace Glimpse.Mvc3.Plumbing
 {
@@ -28,7 +26,7 @@ namespace Glimpse.Mvc3.Plumbing
                     return binder.CreateDynamicProxy();
             }
 
-            //TODO:  add logging warnings.Add(new NotADefaultModelBinderWarning(binder));
+            GlimpseFactory.CreateLogger().Warn(binder.GetType() + " is not a System.Web.Mvc.DefaultModelBinder.");
             
             return binder.Wrap();
         }

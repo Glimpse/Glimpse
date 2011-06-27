@@ -9,7 +9,7 @@ Glimpse is currently in Beta.
 
 If you experience any issues, or have feature requests, please report them to https://github.com/Glimpse/Glimpse/issues
 
-To get started with Glimpse, visit [http://yoursite.com]/Glimpse/Config/ This page hosts the Glimpse bookmarklets, useful for quickly turning on Glimpse.
+To get started with Glimpse, visit [http://yoursite.com]/Glimpse.axd This page hosts the Glimpse bookmarklets, useful for quickly turning on Glimpse.
 
 The following configuration values are allowed for Glimpse in your web.config:
 

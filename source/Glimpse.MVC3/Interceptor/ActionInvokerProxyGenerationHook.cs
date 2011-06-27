@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Castle.DynamicProxy;
+using Glimpse.Core.Plumbing;
 
 namespace Glimpse.Mvc3.Interceptor
 {
@@ -19,12 +20,12 @@ namespace Glimpse.Mvc3.Interceptor
 
         public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)
         {
-            //TODO:  add logging warnings.Add(new NonProxyableMemberWarning(type, memberInfo));
+            GlimpseFactory.CreateLogger().Warn(string.Format("{0} method of {1} type is not proxyable.", memberInfo.Name, type));
         }
 
         public void NonVirtualMemberNotification(Type type, MemberInfo memberInfo)
         {
-            //TODO:  add logging warnings.Add(new NonVirtualMemberWarning(type, memberInfo));
+            GlimpseFactory.CreateLogger().Warn(string.Format("{0} method of {1} type is not marked virtual.", memberInfo.Name, type));
         }
 
         public void MethodsInspected()

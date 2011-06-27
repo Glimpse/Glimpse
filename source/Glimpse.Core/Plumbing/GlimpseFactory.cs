@@ -7,18 +7,17 @@ using NLog.Targets;
 
 namespace Glimpse.Core.Plumbing
 {
-    public class GlimpseFactory:IGlimpseFactory
+    public static class GlimpseFactory
     {
-        internal LogFactory Factory { get; set; }
-        internal GlimpseConfiguration Configuration { get; set; }
+        internal static LogFactory Factory { get; set; }
+        internal static GlimpseConfiguration Configuration { get; set; }
 
-        public GlimpseFactory(GlimpseConfiguration configuration)
+        static GlimpseFactory()
         {
-            Configuration = configuration;
-            if (Configuration.LoggingEnabled) Factory = BuildFactory(); 
+            Factory = BuildFactory();
         }
 
-        public IGlimpseLogger CreateLogger()
+        public static IGlimpseLogger CreateLogger()
         {
             if (!Configuration.LoggingEnabled) return new GlimpseLogger(LogManager.CreateNullLogger());
 
@@ -28,7 +27,7 @@ namespace Glimpse.Core.Plumbing
 
             return new GlimpseLogger(Factory.GetLogger(name));
         }
-         
+
         private static LogFactory BuildFactory()
         {
             // Step 1. Create configuration object 
@@ -45,8 +44,8 @@ namespace Glimpse.Core.Plumbing
             // Step 4. Define rules 
             var rule2 = new LoggingRule("*", LogLevel.Debug, fileTarget);
             config.LoggingRules.Add(rule2);
-             
-            return new LogFactory(config);  
+
+            return new LogFactory(config);
         }
     }
 }

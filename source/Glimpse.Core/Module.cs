@@ -23,7 +23,6 @@ namespace Glimpse.Core
         internal static GlimpseRequestValidator RequestValidator { get; set; }
         private static IGlimpseSanitizer Sanitizer { get; set; }//TODO: new up via config
 
-        [Export] public static IGlimpseFactory Factory { get; set; }
         [Export] public static GlimpseSerializer Serializer { get; set; }
         [Export] public static GlimpseConfiguration Configuration { get; set; }
         [Export] public static IGlimpseMetadataStore MetadataStore { get; set; }
@@ -37,8 +36,8 @@ namespace Glimpse.Core
         {
             Configuration = ConfigurationManager.GetSection("glimpse") as GlimpseConfiguration ?? new GlimpseConfiguration();
 
-            Factory = new GlimpseFactory(Configuration);
-            Logger = Factory.CreateLogger();
+            GlimpseFactory.Configuration = Configuration;
+            Logger = GlimpseFactory.CreateLogger();
 
             Logger.Info(Configuration);
 
@@ -46,7 +45,7 @@ namespace Glimpse.Core
 
             Sanitizer = new CSharpSanitizer();
 
-            Serializer = new GlimpseSerializer(Factory);
+            Serializer = new GlimpseSerializer();
 
             Handlers = Enumerable.Empty<IGlimpseHandler>();
 
