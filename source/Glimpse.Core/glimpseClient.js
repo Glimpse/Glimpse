@@ -866,7 +866,7 @@ if (window.jQueryGlimpse) { (function ($) {
             var g = $.glimpse, static = g.static;
             g.clientName = $.glimpse.util.cookie('glimpseClientName');
 
-            static.isPopup = window.location.pathname.indexOf(static.popupUrl) > -1;
+            static.isPopup = window.location.href.indexOf(static.popupUrl) > -1;
 
             if (!data) {
                 if (static.isPopup && window.opener.glimpse) {
