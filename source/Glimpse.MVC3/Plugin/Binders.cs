@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Web;
 using Glimpse.Core.Extensibility;
@@ -10,6 +11,14 @@ namespace Glimpse.Mvc3.Plugin
     [GlimpsePlugin(ShouldSetupInInit = true)]
     internal class Binders:IGlimpsePlugin, IProvideGlimpseHelp
     {
+        internal IGlimpseLogger Logger { get; set; }
+
+        [ImportingConstructor]
+        public Binders(IGlimpseFactory factory)
+        {
+            Logger = factory.CreateLogger();
+        }
+
         public string Name
         {
             get { return "Binding"; }
@@ -50,11 +59,13 @@ namespace Glimpse.Mvc3.Plugin
 
         public void SetupInit()
         {
-            GlimpsePipelineInitiation.ModelBinderProviders();
+            var initiator = new GlimpsePipelineInitiator(Logger);
 
-            GlimpsePipelineInitiation.ModelBinders();
+            initiator.ModelBinderProviders();
 
-            GlimpsePipelineInitiation.ValueProviders();
+            initiator.ModelBinders();
+
+            initiator.ValueProviders();
         }
 
         public string HelpUrl

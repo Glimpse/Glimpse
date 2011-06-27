@@ -4,17 +4,20 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
+using Glimpse.Core.Extensibility;
 using Glimpse.Mvc3.Extensions;
 
 namespace Glimpse.Mvc3.Plumbing
 {
     internal class GlimpseDependencyResolver : IDependencyResolver
     {
-        public GlimpseDependencyResolver(IDependencyResolver dependencyResolver)
+        public GlimpseDependencyResolver(IDependencyResolver dependencyResolver, IGlimpseLogger logger)
         {
             DependencyResolver = dependencyResolver;
+            Logger = logger;
         }
 
+        public IGlimpseLogger Logger { get; set; }
         public IDependencyResolver DependencyResolver { get; set; }
 
         public object GetService(Type serviceType)
@@ -29,7 +32,7 @@ namespace Glimpse.Mvc3.Plumbing
 
             //Add action invoker to controller
             var iController = service as IController;
-            if (iController != null) return iController.TrySetActionInvoker();
+            if (iController != null) return iController.TrySetActionInvoker(Logger);
 
 
             Trace.Write(string.Format("IDependencyResolver.GetService<{0}>() = {1}", serviceType, service == null ? "null" : service.GetType().ToString()));

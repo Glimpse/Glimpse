@@ -24,7 +24,6 @@ namespace Glimpse.Core
                 return;
             }
 
-            //TODO: Validation/security check!
             var queryString = context.Request.QueryString;
 
             var resource = string.IsNullOrWhiteSpace(queryString[ResourceKey]) ? "Config" : queryString[ResourceKey];

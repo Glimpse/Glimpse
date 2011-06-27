@@ -7,23 +7,32 @@ using NLog.Targets;
 
 namespace Glimpse.Core.Plumbing
 {
-    public static class GlimpseFactory
+    public class GlimpseFactory:IGlimpseFactory
     {
-        internal static LogFactory Factory { get; set; }
-        internal static GlimpseConfiguration Configuration { get; set; }
+        internal LogFactory Factory { get; set; }
+        internal GlimpseConfiguration Configuration { get; set; }
 
-        static GlimpseFactory()
+        public GlimpseFactory(GlimpseConfiguration configuration)
         {
+            Configuration = configuration;
             Factory = BuildFactory();
         }
 
-        public static IGlimpseLogger CreateLogger()
+        public IGlimpseLogger CreateLogger()
         {
             if (!Configuration.LoggingEnabled) return new GlimpseLogger(LogManager.CreateNullLogger());
 
-            var stackTrace = new StackTrace();
-            var frame = stackTrace.GetFrame(1);
-            var name = frame.GetMethod().DeclaringType.FullName;
+            var name = "";
+            try
+            {
+                var stackTrace = new StackTrace();
+                var frame = stackTrace.GetFrame(1);
+                name = frame.GetMethod().DeclaringType.FullName;
+            }
+            catch
+            {
+                //leaving name as empty string if stackTrace fails
+            }
 
             return new GlimpseLogger(Factory.GetLogger(name));
         }

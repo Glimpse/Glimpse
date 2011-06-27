@@ -216,7 +216,7 @@ hashComments:3,cStyleComments:!0,multilineStrings:!0,tripleQuotedStrings:!0,rege
 PR_NOCODE:"nocode",PR_PLAIN:"pln",PR_PUNCTUATION:"pun",PR_SOURCE:"src",PR_STRING:"str",PR_TAG:"tag",PR_TYPE:"typ"}})();
 
 var prettifyCss = '.glimpse .pln{color:#000}.glimpse .str{color:#080}.glimpse .kwd{color:#008}.glimpse .com{color:#800}.glimpse .typ{color:#606}.glimpse .lit{color:#066}.glimpse .pun,.glimpse .opn,.glimpse .clo{color:#660}.glimpse .tag{color:#008}.glimpse .atn{color:#606}.glimpse .atv{color:#080}.glimpse .dec,.glimpse .var{color:#606}.glimpse .fun{color:red}.glimpse .prettyprint span{font-family:Consolas, monospace, serif; font-size:1.1em;}.glimpse ol.linenums{margin-top:0;margin-bottom:0}.glimpse li.L0,.glimpse li.L1,.glimpse li.L2,.glimpse li.L3,.glimpse li.L5,.glimpse li.L6,.glimpse li.L7,.glimpse li.L8{list-style-type:none}.glimpse li.L1,.glimpse li.L3,.glimpse li.L5,.glimpse li.L7,.glimpse li.L9{background:#eee}'
-$('<style type="text/css"> ' + prettifyCss + ' </style>').appendTo("head");
+$Glimpse('<style type="text/css"> ' + prettifyCss + ' </style>').appendTo("head");
  
 }
 
@@ -920,7 +920,7 @@ if (window.jQueryGlimpse) { (function ($) {
             panelHolder: function () { return $('.glimpse-panel-holder'); },
             mainHolder: function () { return $('.glimpse-holder'); },
             isPopup: false,
-            popupUrl: glimpsePath + 'Glimpse/Popup',
+            popupUrl: glimpsePath + 'popup',
             popup: null
         },
         popup: {},
@@ -1026,7 +1026,7 @@ if (window.jQueryGlimpse) { (function ($) {
 
                 static.dataString = JSON.stringify(static.data);
 
-                var url = static.popupUrl + '?glimpseRequestID=' + $('#glimpseData').data('glimpse-requestID');
+                var url = static.popupUrl + '&glimpseRequestID=' + $('#glimpseData').data('glimpse-requestID');
                 static.popup = window.open(url, 'GlimpsePopup', 'width=1100,height=600,status=no,toolbar=no,menubar=no,location=no,resizable=yes,scrollbars=yes');
 
                 if (gp.popupWorked(static.popup))

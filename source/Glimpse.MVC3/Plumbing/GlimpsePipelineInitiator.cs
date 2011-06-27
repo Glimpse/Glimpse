@@ -1,26 +1,33 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
-using Glimpse.Core.Plumbing;
+using Glimpse.Core.Extensibility;
 using Glimpse.Mvc3.Extensions;
 
 namespace Glimpse.Mvc3.Plumbing
 {
-    internal static class GlimpsePipelineInitiation
+    internal class GlimpsePipelineInitiator
     {
-        public static void ControllerFactory()
+        public IGlimpseLogger Logger { get; set; }
+
+        public GlimpsePipelineInitiator(IGlimpseLogger logger)
+        {
+            Logger = logger;
+        }
+
+        public void ControllerFactory()
         {
             var controllerBuilder = ControllerBuilder.Current.GetControllerFactory();
             if (controllerBuilder != null) ControllerBuilder.Current.SetControllerFactory(controllerBuilder.Wrap());
         }
 
-        public static void DependencyResolver()
+        public void DependencyResolver()
         {
             var dependencyResolver = System.Web.Mvc.DependencyResolver.Current;
             if (dependencyResolver != null && !(dependencyResolver is GlimpseDependencyResolver))
-                System.Web.Mvc.DependencyResolver.SetResolver(new GlimpseDependencyResolver(dependencyResolver));
+                System.Web.Mvc.DependencyResolver.SetResolver(new GlimpseDependencyResolver(dependencyResolver, Logger));
         }
 
-        public static void ModelBinders()
+        public void ModelBinders()
         {
             //handle static registered binders
             var binders = System.Web.Mvc.ModelBinders.Binders;
@@ -31,13 +38,13 @@ namespace Glimpse.Mvc3.Plumbing
                 var binder = binders[type];
 
                 if (binder is DefaultModelBinder)
-                    if (binder.CanSupportDynamicProxy())
+                    if (binder.CanSupportDynamicProxy(Logger))
                     {
                         binders[type] = binder.CreateDynamicProxy();
                         continue;
                     }
 
-                GlimpseFactory.CreateLogger().Warn(binder.GetType() + " is not a System.Web.Mvc.DefaultModelBinder.");
+                Logger.Warn(binder.GetType() + " is not a System.Web.Mvc.DefaultModelBinder.");
 
                 binders[type] = binder.Wrap();
             }
@@ -45,18 +52,18 @@ namespace Glimpse.Mvc3.Plumbing
             //handle default binder
             var defaultBinder = System.Web.Mvc.ModelBinders.Binders.DefaultBinder;
             if (defaultBinder is DefaultModelBinder)
-                if (defaultBinder.CanSupportDynamicProxy())
+                if (defaultBinder.CanSupportDynamicProxy(Logger))
                 {
                     System.Web.Mvc.ModelBinders.Binders.DefaultBinder = defaultBinder.CreateDynamicProxy();
                     return;
                 }
 
-            GlimpseFactory.CreateLogger().Warn(defaultBinder.GetType() + " is not a System.Web.Mvc.DefaultModelBinder.");
+            Logger.Warn(defaultBinder.GetType() + " is not a System.Web.Mvc.DefaultModelBinder.");
 
             System.Web.Mvc.ModelBinders.Binders.DefaultBinder = defaultBinder.Wrap();
         }
 
-        public static void ValueProviders()
+        public void ValueProviders()
         {
             //TODO: Need to proxy value providers?
             var factories = ValueProviderFactories.Factories;
@@ -68,13 +75,13 @@ namespace Glimpse.Mvc3.Plumbing
             }
         }
 
-        public static void ModelBinderProviders()
+        public void ModelBinderProviders()
         {
             var binderProviders = System.Web.Mvc.ModelBinderProviders.BinderProviders;
 
             for (int i = 0; i < binderProviders.Count; i++)
             {
-                binderProviders[i] = new GlimpseBinderProvider(binderProviders[i]);
+                binderProviders[i] = new GlimpseBinderProvider(binderProviders[i], Logger);
             }
         }
     }

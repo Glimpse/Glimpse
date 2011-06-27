@@ -11,9 +11,9 @@ namespace Glimpse.Core.Plumbing
         public Formatting DefaultFormatting { get; set; }
         public IGlimpseLogger Logger { get; set; }
 
-        public GlimpseSerializer()
+        public GlimpseSerializer(IGlimpseFactory factory)
         {
-            Logger = GlimpseFactory.CreateLogger();
+            Logger = factory.CreateLogger();
 
             Settings = new JsonSerializerSettings { ContractResolver = new GlimpseContractResolver() };
             Settings.Error += (obj, args) =>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using Castle.DynamicProxy;
+using Glimpse.Core.Extensibility;
 using Glimpse.Core.Plumbing;
 using Glimpse.Mvc3.Interceptor;
 using Glimpse.Mvc3.Plumbing;
@@ -9,7 +10,7 @@ namespace Glimpse.Mvc3.Extensions
 {
     internal static class ModelBinderExtensions
     {
-        internal static bool CanSupportDynamicProxy(this IModelBinder modelBinder)
+        internal static bool CanSupportDynamicProxy(this IModelBinder modelBinder, IGlimpseLogger logger)
         {
             if (modelBinder is DefaultModelBinder)
             {
@@ -23,12 +24,12 @@ namespace Glimpse.Mvc3.Extensions
                         proxy == null);
 
                 if (!result)
-                    GlimpseFactory.CreateLogger().Warn("Cannot create proxy of " + modelBinder.GetType() +". Object must have a parameterless constructor, cannot be sealed, and cannot already be a proxy object.");
+                    logger.Warn("Cannot create proxy of " + modelBinder.GetType() +". Object must have a parameterless constructor, cannot be sealed, and cannot already be a proxy object.");
 
                 return result;
             }
 
-            GlimpseFactory.CreateLogger().Warn(modelBinder.GetType() + " is not a System.Web.Mvc.DefaultModelBinder.");
+            logger.Warn(modelBinder.GetType() + " is not a System.Web.Mvc.DefaultModelBinder.");
             return false;
         }
 
