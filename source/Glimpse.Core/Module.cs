@@ -55,10 +55,92 @@ namespace Glimpse.Core
             Logger.Info("Glimpse Module constructed");
         }
 
+        #region Event Handlers
+        private static void OnEndRequest(object sender, EventArgs e)
+        {
+            try
+            {
+                var httpApplication = sender as HttpApplication;
+
+                if (httpApplication != null)
+                    EndRequest(new HttpContextWrapper(httpApplication.Context));
+            }
+            catch (Exception exception)
+            {
+                Logger.Error("Exception during EndRequest", exception);
+            }
+        }
+
+        private static void OnPostMapRequestHandler(object sender, EventArgs e)
+        {
+            try
+            {
+                var httpApplication = sender as HttpApplication;
+
+                if (httpApplication != null)
+                    PostMapRequestHandler(new HttpContextWrapper(httpApplication.Context));
+            }
+            catch (Exception exception)
+            {
+                Logger.Error("Exception during PostMapRequestHandler", exception);
+            }
+        }
+
+        private static void OnPreSendRequestHeaders(object sender, EventArgs e)
+        {
+            try
+            {
+                var httpApplication = sender as HttpApplication;
+
+                if (httpApplication != null)
+                    PreSendRequestHeaders(new HttpContextWrapper(httpApplication.Context));
+            }
+            catch (Exception exception)
+            {
+                Logger.Error("Exception during PreSendRequestHeaders", exception);
+            }
+        }
+
+        private static void OnPostRequestHandlerExecute(object sender, EventArgs e)
+        {
+            try
+            {
+                var httpApplication = sender as HttpApplication;
+
+                if (httpApplication != null)
+                    PostRequestHandlerExecute(new HttpContextWrapper(httpApplication.Context));
+            }
+            catch (Exception exception)
+            {
+                Logger.Error("Exception during PostRequestHandlerExecute", exception);
+            }
+        }
+
+        private static void OnBeginRequest(object sender, EventArgs e)
+        {
+            try
+            {
+                var httpApplication = sender as HttpApplication;
+
+                if (httpApplication != null)
+                    BeginRequest(new HttpContextWrapper(httpApplication.Context));
+            }
+            catch (Exception exception)
+            {
+                Logger.Error("Exception during BeginRequest", exception);
+            }
+        }
+        #endregion Event Handlers
+
         public void Init(HttpApplication context)
         {
-            if (!Configuration.Enabled) return; //Do nothing if Glimpse is off, events are not wired up
+            if (!Configuration.Enabled)
+            {
+                Logger.Info("Glimpse is not enabled and will not run. Change via the enable attribute on the glimpse element in web.config");
+                return; //Do nothing if Glimpse is off, events are not wired up
+            }
 
+            //TODO: MetadataStore should be set via a configurable setting in web.config to allow for other backing stores
             MetadataStore = new InProcStackMetadataStore(Configuration, new HttpApplicationStateWrapper(context.Application));
 
             if (Plugins.Count() == 0)
@@ -71,7 +153,7 @@ namespace Glimpse.Core
 
                         ComposePlugins(contextBase); //Have MEF satisfy our needs
 
-                        //Allow plugin's registered for Intialization to setup
+                        //Allow plugin's registered for Initialization to setup
                         foreach (var plugin in Plugins.Where(plugin => plugin.Metadata.ShouldSetupInInit))
                         {
                             Logger.Info("Calling SetupInit() on " + plugin.Value.GetType().FullName);
@@ -89,48 +171,6 @@ namespace Glimpse.Core
 
             Logger.Info("Glimpse Module Init Complete");
         }
-
-        #region Event Handlers
-        private static void OnEndRequest(object sender, EventArgs e)
-        {
-            var httpApplication = sender as HttpApplication;
-
-            if (httpApplication != null)
-                EndRequest(new HttpContextWrapper(httpApplication.Context));
-        }
-
-        private static void OnPostMapRequestHandler(object sender, EventArgs e)
-        {
-            var httpApplication = sender as HttpApplication;
-
-            if (httpApplication != null)
-                PostMapRequestHandler(new HttpContextWrapper(httpApplication.Context));
-        }
-
-        private static void OnPreSendRequestHeaders(object sender, EventArgs e)
-        {
-            var httpApplication = sender as HttpApplication;
-
-            if (httpApplication != null)
-                PreSendRequestHeaders(new HttpContextWrapper(httpApplication.Context));
-        }
-
-        private static void OnPostRequestHandlerExecute(object sender, EventArgs e)
-        {
-            var httpApplication = sender as HttpApplication;
-
-            if (httpApplication != null)
-                PostRequestHandlerExecute(new HttpContextWrapper(httpApplication.Context));
-        }
-
-        private static void OnBeginRequest(object sender, EventArgs e)
-        {
-            var httpApplication = sender as HttpApplication;
-
-            if (httpApplication != null)
-                BeginRequest(new HttpContextWrapper(httpApplication.Context));
-        }
-        #endregion Event Handlers
 
         private static void BeginRequest(HttpContextBase context)
         {
