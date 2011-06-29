@@ -38,6 +38,10 @@ namespace Glimpse.Core.Handlers
             {
                 response.Write("<div style='background-color: lightCoral; border: thin solid maroon; color: maroon; padding: 6px; font-size: 1.2em; position: fixed; width: 100%; z-index: 500;'><strong>Redirected!</strong> - Glimpse will no longer support the 'Glimpse/Config' url in the next version. Please use 'Glimpse.axd' instead.</div>");
             }
+            if (context.Request.Cookies["glimpseState"] != null && context.Request.Cookies["glimpseState"].Value == "On")
+            {
+                response.Write("<div style='background-color: #B5CDA4; border-bottom: thin solid #486E25; color: #486E25; padding: 6px; font-size: 1.2em; position: fixed; width: 100%; z-index: 499;'><strong>Glimpse is now ON</strong> - When you go back to your site you should see Glimpse at the bottom right of the page.</div>");
+            }
 
             response.Write("<div class=\"content\"><div class=\"logo\"><blockquote>What Firebug is for the client, Glimpse does for the server... in other words, a client side Glimpse into whats going on in your server.</blockquote><h1>Glimpse</h1><div>A client side Glimpse to your server</div></div>");
             response.Write("<table width=\"100%\"><tr align=\"center\"><td width=\"33%\"><a class=\"myButton\" href=\"javascript:(function(){document.cookie='glimpseState=On; path=/; expires=Sat, 01 Jan 2050 12:00:00 GMT;'; window.location.reload();})();\">Turn Glimpse On</a></td><td width=\"34%\"><a class=\"myButton\" href=\"javascript:(function(){document.cookie='glimpseState=; path=/; expires=Sat, 01 Jan 2050 12:00:00 GMT;'; window.location.reload();})();\">Turn Glimpse Off</a></td><td><a class=\"myButton\" href=\"javascript:(function(){document.cookie='glimpseClientName='+ prompt('Client Name?') +'; path=/; expires=Sat, 01 Jan 2050 12:00:00 GMT;'; window.location.reload();})();\">Set Glimpse Session Name</a></td></tr></table>");
