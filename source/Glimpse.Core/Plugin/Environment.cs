@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Web;
 using System.Web.Compilation;
 using Glimpse.Core.Configuration;
@@ -76,6 +77,8 @@ namespace Glimpse.Core.Plugin
                                   {"Integrated Pipeline", HttpRuntime.UsingIntegratedPipeline.ToString()},
                                   {"Debugging", IsInDebug(context)},
                                   {"Current Trust Level", GetCurrentTrustLevel().ToString()},
+                                  {"Server Culture", Thread.CurrentThread.CurrentCulture},
+                                  {"UI Culture", Thread.CurrentThread.CurrentUICulture},
                                   {"Process", ProcessDetails()},
                                   {"Timezone", TimezineDetails()},
                                   {"Application Assemblies", appList},
@@ -169,15 +172,15 @@ namespace Glimpse.Core.Plugin
 
             var uptime = "";
             if (uptimeSpan.Days > 0) 
-                uptime = uptimeSpan.Days + " days"; 
+                uptime = uptimeSpan.Days + " days "; 
             if (uptimeSpan.Hours > 0) 
-                uptime += uptimeSpan.Hours + " hrs"; 
+                uptime += uptimeSpan.Hours + " hrs "; 
             uptime += uptimeSpan.Minutes + " min";	
 
             return new List<object[]>
                            {
                                new object[] { "Worker Process", "Process ID", "Start Time", "Uptime" },
-                               new object[] { processName, process.Id, String.Format("{0} {1}", startTime.ToShortDateString(), startTime.ToLongTimeString()), uptime }
+                               new object[] { processName, process.Id, startTime, uptime }
                            }; 
         }
 
