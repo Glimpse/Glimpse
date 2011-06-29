@@ -78,7 +78,7 @@ namespace Glimpse.Core.Plugin
                                   {".NET Framework", string.Format(".NET {0} ({1} bit)", System.Environment.Version, IntPtr.Size*8)},
                                   {"Web Server", !string.IsNullOrEmpty(serverSoftware) ? serverSoftware : processName.StartsWith("WebDev.WebServer", StringComparison.InvariantCultureIgnoreCase) ? "Visual Studio Web Development Server" : "Unknown"},
                                   {"Integrated Pipeline", HttpRuntime.UsingIntegratedPipeline.ToString()},
-                                  {"Debugging", IsInDebug(context)},
+                                  {"Debugging", IsInDebug(context).ToString()},
                                   {"Current Trust Level", GetCurrentTrustLevel().ToString()},
                                   {"Server Culture", Thread.CurrentThread.CurrentCulture},
                                   {"UI Culture", Thread.CurrentThread.CurrentUICulture},
@@ -161,7 +161,7 @@ namespace Glimpse.Core.Plugin
             return new List<object[]>
                            {
                                new object[] { "Current", "Is Daylight Saving", "UtcOffset w/DLS" },
-                               new object[] { timeZoneInfo.DisplayName, isDaylightSavingTime, offset }
+                               new object[] { timeZoneInfo.DisplayName, isDaylightSavingTime.ToString(), offset }
                            }; 
         }
 
