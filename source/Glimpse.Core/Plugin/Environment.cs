@@ -77,7 +77,7 @@ namespace Glimpse.Core.Plugin
                                   {"Debugging", IsInDebug(context)},
                                   {"Current Trust Level", GetCurrentTrustLevel().ToString()},
                                   {"Process", ProcessDetails()},
-                                  {"Timezone", TimezineDetails()},
+                                  {"Timezone", TimezoneDetails()},
                                   {"Application Assemblies", appList},
                                   {"System Assemblies", sysList}
                               };
@@ -128,15 +128,14 @@ namespace Glimpse.Core.Plugin
 
         private static object IsInDebug(HttpContextBase context)
         {
-            var url = context.Request.Url.ToString();
-            var isLocal = url.Contains("localhost") || url.Contains("127.0.0.1") || url.Contains("::1");
+            var isLocal = context.Request.Url.IsLoopback;
             var isDebug = context.IsDebuggingEnabled;
             if (!isLocal && context.IsDebuggingEnabled)
-                return String.Format("*{0}*", isDebug);
-            return isDebug;
+                return String.Format("*{0}*", isDebug.ToString());
+            return isDebug.ToString();
         }
 
-        private static object TimezineDetails()
+        private static object TimezoneDetails()
         { 
             // get a local time zone info
             var timeZoneInfo = TimeZoneInfo.Local;
@@ -155,7 +154,7 @@ namespace Glimpse.Core.Plugin
             return new List<object[]>
                            {
                                new object[] { "Current", "Is Daylight Saving", "UtcOffset w/DLS" },
-                               new object[] { timeZoneInfo.DisplayName, isDaylightSavingTime, offset }
+                               new object[] { timeZoneInfo.DisplayName, isDaylightSavingTime.ToString(), offset }
                            }; 
         }
 

@@ -40,7 +40,7 @@ namespace Glimpse.Core.Handlers
             }
             if (context.Request.Cookies["glimpseState"] != null && context.Request.Cookies["glimpseState"].Value == "On")
             {
-                response.Write("<div style='background-color: #B5CDA4; border-bottom: thin solid #486E25; color: #486E25; padding: 6px; font-size: 1.2em; position: fixed; width: 100%; z-index: 499;'><strong>Glimpse is now ON</strong> - When you go back to your site you should see Glimpse at the bottom right of the page.</div>");
+                response.Write("<div style='background-color: #B5CDA4; border-bottom: thin solid #486E25; color: #486E25; padding: 6px; font-size: 1.2em; position: fixed; width: 100%; z-index: 499;'><strong>Glimpse is now ON</strong> - When you <a href='javascript:history.back(1);'>go back</a> to your site you should see Glimpse at the bottom right of the page.</div>");
             }
 
             response.Write("<div class=\"content\"><div class=\"logo\"><blockquote>What Firebug is for the client, Glimpse does for the server... in other words, a client side Glimpse into whats going on in your server.</blockquote><h1>Glimpse</h1><div>A client side Glimpse to your server</div></div>");
