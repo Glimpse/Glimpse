@@ -56,6 +56,8 @@ namespace Glimpse.Core.Plugin
             var sysAssemblies = from a in allAssemblies where a.FullName.StartsWith("System") || a.FullName.StartsWith("Microsoft") select a;
             var appAssemblies = from a in allAssemblies where !a.FullName.StartsWith("System") && !a.FullName.StartsWith("Microsoft") select a;
 
+            var machineStarttime = DateTime.Now.AddMilliseconds(System.Environment.TickCount*-1);
+
             foreach (var assembly in sysAssemblies)
             {
                 Add(assembly, to:sysList);
@@ -70,7 +72,8 @@ namespace Glimpse.Core.Plugin
                               {
                                   {"Environment Name", environmentName},
                                   {"Machine Name", string.Format("{0} ({1} processors)", System.Environment.MachineName, System.Environment.ProcessorCount)},
-                                  {"Booted", DateTime.Now.AddMilliseconds(System.Environment.TickCount*-1)},
+                                  {"Machine Start Time", machineStarttime},
+                                  {"Machine Uptime", GetUptime(machineStarttime)},
                                   {"Operating System", string.Format("{0} ({1} bit)", System.Environment.OSVersion.VersionString, System.Environment.Is64BitOperatingSystem ? "64" : "32")},
                                   {".NET Framework", string.Format(".NET {0} ({1} bit)", System.Environment.Version, IntPtr.Size*8)},
                                   {"Web Server", !string.IsNullOrEmpty(serverSoftware) ? serverSoftware : processName.StartsWith("WebDev.WebServer", StringComparison.InvariantCultureIgnoreCase) ? "Visual Studio Web Development Server" : "Unknown"},
@@ -167,21 +170,28 @@ namespace Glimpse.Core.Plugin
             var process = Process.GetCurrentProcess();
              
             var processName = process.MainModule.ModuleName;
-            var startTime = process.StartTime;
-            var uptimeSpan = DateTime.Now.Subtract(startTime);
-
-            var uptime = "";
-            if (uptimeSpan.Days > 0) 
-                uptime = uptimeSpan.Days + " days "; 
-            if (uptimeSpan.Hours > 0) 
-                uptime += uptimeSpan.Hours + " hrs "; 
-            uptime += uptimeSpan.Minutes + " min";	
+            var startTime = process.StartTime; 
+            var uptime = GetUptime(startTime); 
 
             return new List<object[]>
                            {
                                new object[] { "Worker Process", "Process ID", "Start Time", "Uptime" },
                                new object[] { processName, process.Id, startTime, uptime }
                            }; 
+        }
+
+        private static string GetUptime(DateTime startTime)
+        {
+            var uptimeSpan = DateTime.Now.Subtract(startTime);
+
+            var uptime = "";
+            if (uptimeSpan.Days > 0)
+                uptime = uptimeSpan.Days + " days ";
+            if (uptimeSpan.Hours > 0)
+                uptime += uptimeSpan.Hours + " hrs ";
+            uptime += uptimeSpan.Minutes + " min";
+
+            return uptime;
         }
 
         public string HelpUrl
