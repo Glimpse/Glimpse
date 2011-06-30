@@ -11,7 +11,7 @@
         <projectUrl>http://getglimpse.com</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <iconUrl>http://getglimpse.com/content/glimpse32.png</iconUrl>
-        <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET 4.0 application. (Beta)</description>
+        <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET 4.0 application. For ASP.NET MVC3 support, please NuGet Glimpse.MNC3. (Beta)</description>
         <summary>ASP.NET 4.0 web debugging and diagnostics tool.</summary>
         <tags>ASP.NET Web WebForms</tags>
     </metadata>

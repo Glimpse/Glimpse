@@ -1,4 +1,4 @@
-Release notes moved to bottom of file!
+NOTE: Glimpse/Config is now deprecated, use Glimpse.axd instead.
 --------------------------------------
 
 Using Glimpse
@@ -13,7 +13,7 @@ To get started with Glimpse, visit [http://yoursite.com]/Glimpse.axd This page h
 
 The following configuration values are allowed for Glimpse in your web.config:
 
-<glimpse enabled="true" requestLimit="5"> <!-- set enabled to false to completely turn off Glimpse. requestLimit specifies the max number of requests Glimpse will save -->
+<glimpse enabled="true" requestLimit="5" loggingEnabled="true"> <!-- set enabled to false to completely turn off Glimpse. requestLimit specifies the max number of requests Glimpse will save. enableLogging (false by default) if you experience problems with Glimpse -->
     <ipAddresses> <!-- List of IP addresses allowed to get Glimpse data. Optional. localhost (IPv4 & IPv6) by default -->
         <add address="127.0.0.1" />
         <add address="::1" />
@@ -37,7 +37,7 @@ For more info, visit the homepage at http://getGlimpse.com or follow #glimpse on
 
 Overview
 --------
-At its core Glimpse allows you to debug your web site right in the browser. Glimpse allows you to "Glimpse" into what's going on in your web server. In other words what Firebug is to debugging your client side code, Glimpse is to debugging your server within the client.
+At its core Glimpse allows you to debug your web site, and get diagnostics information right in the browser. Glimpse allows you to "Glimpse" into what's going on in your web server. In other words what Firebug is to debugging your client side code, Glimpse is to debugging your server within the client.
 
 Fundamentally Glimpse is made up of 3 different parts, all of which are extensible and customizable for any platform:
 
@@ -92,6 +92,23 @@ Details coming soon.
 
 Release Notes
 -------------
+06/29/2011 - 0.83
+- Switch from /Glimpse/Config to /glimpse.axd, including temporary automatic redirect and warning message
+- Notification on at top of screen when Glimpse is turned on
+- Glimpse/glimpseClient.js has been shifted to /Glimpse.axd?r=client.js to support certain server configurations
+- Glimpse/glimpseSprite has been shifted to /Glimpse.axd?r=sprite.png to support certain server configurations
+- Added a bunch of new fields to the Environment tab and re-arranged the layout
+- Added application/json as a default content type
+- Simple fix for a bug where ajax requests can occur before Glimpse is rendered
+- Shifting placement of expand/collapse data icon in the UI
+- Changed font of text in Glimpse panel to something more readable
+- Made IGlimpsePlugin implementations more testable by replacing HttpApplication with HttpContextBase
+- Introduction of logging - <glimpse enabled="true" loggingEnabled="true">...</glimpse> - used for debugging glimpse
+- Fixed bug with users in non en-Us cultures
+- Fixed issue some users were getting with PowerShell install file
+- Started the Glimpse blog: http://blog.getglimpse.com/
+- Vastly improved Glimpse documentation (with more on the way!), HUGE thanks @hahndorf
+
 05/30/2011 - 0.82
 - Added default values to all config elements to clean up web.config entries
 - Refactored "responder" framework to leverage IHttpHandlers

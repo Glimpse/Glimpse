@@ -11,7 +11,7 @@
         <projectUrl>http://getglimpse.com</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <iconUrl>http://getglimpse.com/content/glimpse32.png</iconUrl>
-        <description>ASP.NET MVC3 plugins for Glimpse web debugger. This package adds tabs for Routing, Binding, Views, Execution and Metadata diagnostics. (Beta)</description>
+        <description>ASP.NET MVC3 plugins for Glimpse. This package adds tabs for Routing, Binding, Views, Execution and Metadata diagnostics. (Beta)</description>
         <summary>Glimpse plugin pack providing features useful for working with MVC3 applications.</summary>
         <tags>MVC MVC3 ASP.NET Web</tags>
         <dependencies>
