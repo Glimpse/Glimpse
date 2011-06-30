@@ -10,5 +10,8 @@ See glimpse.readme.txt or http://getglimpse.com for more info
 
 Release Notes
 -------------
+06/29/2011 - 0.83
+- Swapped GlimpseView to be public rather than internal. This is a workaround for certain situations until further development.
+
 05/30/2011 - 0.82
 - Glimpse.Mvc3 split from old Glimpse package to better support WebForms and Mvc

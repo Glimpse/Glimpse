@@ -3,12 +3,12 @@ using System.Web.Mvc;
 
 namespace Glimpse.Mvc3.Plumbing
 {
-    internal class GlimpseView : IView
+    public class GlimpseView : IView
     {
         public IView View { get; set; }
-        public ViewContext ViewContext { get; set; }
+        internal ViewContext ViewContext { get; set; }
 
-        public GlimpseView(IView view)
+        internal GlimpseView(IView view)
         {
             View = view;
         }
