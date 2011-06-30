@@ -43,9 +43,6 @@ namespace Glimpse.Core.Plugin
                 environmentName = currentEnviro.Name;
             }
 
-            var serverSoftware = context.Request.ServerVariables["SERVER_SOFTWARE"];
-            var processName = Process.GetCurrentProcess().MainModule.ModuleName;
-
             //build assemblies table
             var headers = new[] {"Name", "Version", "Culture", "From GAC", "Full Trust"};
             var sysList = new List<object[]>{ headers };
@@ -55,8 +52,6 @@ namespace Glimpse.Core.Plugin
 
             var sysAssemblies = from a in allAssemblies where a.FullName.StartsWith("System") || a.FullName.StartsWith("Microsoft") select a;
             var appAssemblies = from a in allAssemblies where !a.FullName.StartsWith("System") && !a.FullName.StartsWith("Microsoft") select a;
-
-            var machineStarttime = DateTime.Now.AddMilliseconds(System.Environment.TickCount*-1);
 
             foreach (var assembly in sysAssemblies)
             {
@@ -71,17 +66,9 @@ namespace Glimpse.Core.Plugin
             cachedData = new Dictionary<string, object>
                               {
                                   {"Environment Name", environmentName},
-                                  {"Machine Name", string.Format("{0} ({1} processors)", System.Environment.MachineName, System.Environment.ProcessorCount)},
-                                  {"Machine Start Time", machineStarttime},
-                                  {"Machine Uptime", GetUptime(machineStarttime)},
-                                  {"Operating System", string.Format("{0} ({1} bit)", System.Environment.OSVersion.VersionString, System.Environment.Is64BitOperatingSystem ? "64" : "32")},
-                                  {".NET Framework", string.Format(".NET {0} ({1} bit)", System.Environment.Version, IntPtr.Size*8)},
-                                  {"Web Server", !string.IsNullOrEmpty(serverSoftware) ? serverSoftware : processName.StartsWith("WebDev.WebServer", StringComparison.InvariantCultureIgnoreCase) ? "Visual Studio Web Development Server" : "Unknown"},
-                                  {"Integrated Pipeline", HttpRuntime.UsingIntegratedPipeline.ToString()},
-                                  {"Debugging", IsInDebug(context).ToString()},
-                                  {"Current Trust Level", GetCurrentTrustLevel().ToString()},
-                                  {"Server Culture", Thread.CurrentThread.CurrentCulture},
-                                  {"UI Culture", Thread.CurrentThread.CurrentUICulture},
+                                  {"Machine", MachineDetails()},
+                                  {"Web Server", WebServerDetails(context)},
+                                  {"Framework", FrameworkDetails(context)},
                                   {"Process", ProcessDetails()},
                                   {"Timezone", TimezoneDetails()},
                                   {"Application Assemblies", appList},
@@ -141,6 +128,38 @@ namespace Glimpse.Core.Plugin
             return isDebug.ToString();
         }
 
+        private static object WebServerDetails(HttpContextBase context)
+        {
+            var serverSoftware = context.Request.ServerVariables["SERVER_SOFTWARE"];
+            var processName = Process.GetCurrentProcess().MainModule.ModuleName;
+
+            return new List<object[]>
+                           {
+                               new object[] { "Type", "Integrated Pipeline"},
+                               new object[] { (!string.IsNullOrEmpty(serverSoftware) ? serverSoftware : processName.StartsWith("WebDev.WebServer", StringComparison.InvariantCultureIgnoreCase) ? "Visual Studio Web Development Server" : "Unknown"), HttpRuntime.UsingIntegratedPipeline.ToString() }
+                           }; 
+        }
+
+        private static object FrameworkDetails(HttpContextBase context)
+        { 
+            return new List<object[]>
+                           {
+                               new object[] {".NET Framework", "Debugging", "Server Culture", "Current Trust Level"},
+                               new object[] {string.Format(".NET {0} ({1} bit)", System.Environment.Version, IntPtr.Size*8), IsInDebug(context).ToString(), Thread.CurrentThread.CurrentCulture, GetCurrentTrustLevel().ToString()}
+                           };
+        }
+
+        private static object MachineDetails()
+        {
+            var machineStarttime = DateTime.Now.AddMilliseconds(System.Environment.TickCount * -1);
+             
+            return new List<object[]>
+                           {
+                               new object[] {"Name", "Operating System", "Start Time", /*, "Uptime"*/},
+                               new object[] {string.Format("{0} ({1} processors)", System.Environment.MachineName, System.Environment.ProcessorCount), string.Format("{0} ({1} bit)", System.Environment.OSVersion.VersionString, System.Environment.Is64BitOperatingSystem ? "64" : "32"), machineStarttime/*, GetUptime(machineStarttime)*/}
+                           }; 
+        }
+
         private static object TimezoneDetails()
         { 
             // get a local time zone info
@@ -174,8 +193,8 @@ namespace Glimpse.Core.Plugin
 
             return new List<object[]>
                            {
-                               new object[] { "Worker Process", "Process ID", "Start Time", "Uptime" },
-                               new object[] { processName, process.Id, startTime, uptime }
+                               new object[] { "Worker Process", "Process ID", "Start Time"/*, "Uptime"*/ },
+                               new object[] { processName, process.Id, startTime/*, uptime*/ }
                            }; 
         }
 
