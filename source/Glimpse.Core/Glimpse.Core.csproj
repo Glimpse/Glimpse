@@ -66,10 +66,12 @@
     <Compile Include="Configuration\EnvironmentsCollection.cs" />
     <Compile Include="Configuration\GlimpseConfiguration.cs" />
     <Compile Include="Configuration\GlimpsePlugin.cs" />
+    <Compile Include="Configuration\GlimpseUrl.cs" />
     <Compile Include="Configuration\IpAddress.cs" />
     <Compile Include="Configuration\IpCollection.cs" />
     <Compile Include="Configuration\GlimpseMode.cs" />
     <Compile Include="Configuration\PluginBlacklistCollection.cs" />
+    <Compile Include="Configuration\UrlBlacklistCollection.cs" />
     <Compile Include="Converter\AuthenticationSectionConverter.cs" />
     <Compile Include="Converter\CustomErrorsSectionConverter.cs" />
     <Compile Include="Extensibility\GlimpseTrace.cs" />
@@ -99,6 +101,7 @@
     <Compile Include="Validator\IpAddressValidator.cs" />
     <Compile Include="Validator\LifecycleEvent.cs" />
     <Compile Include="Validator\ResponseCodeValidator.cs" />
+    <Compile Include="Validator\UrlValidator.cs" />
     <Compile Include="Warning\ExceptionWarning.cs" />
     <Compile Include="Extensibility\GlimpseConverterAttribute.cs" />
     <Compile Include="Extensibility\GlimpsePluginAttribute.cs" />

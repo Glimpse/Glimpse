@@ -79,6 +79,16 @@ namespace Glimpse.Core.Configuration
             }
         }
 
+        [ConfigurationProperty("urlBlacklist", IsRequired = false)]
+        public UrlBlacklistCollection UrlBlackList
+        {
+            set { this["urlBlacklist"] = value; }
+            get
+            {
+                return this["urlBlacklist"] as UrlBlacklistCollection;
+            }
+        }
+
         [ConfigurationProperty("environments", IsRequired = false)]
         public EnvironmentsCollection Environments
         {
