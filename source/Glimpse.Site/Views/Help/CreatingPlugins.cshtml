@@ -131,8 +131,8 @@
 <span class="kwrd">End</span> <span class="kwrd">Class</span>
 </pre>
 
-<p>All we need to do is implementing the IGlimpsePlugin interface. The name property will be used as the caption of the tab, so make sure you don't create a name that is already there. </p>
-<p>The meat of the class is in GetData, this is called by the Glimpse framework and the data it returns is serialized as JSON according to the Glimpse protocol and is then send to the browser.</p>
+<p>All we need to do is implement the IGlimpsePlugin interface. The name property will be used as the caption of the tab, so make sure you don't create a name that is already there. </p>
+<p>The meat of the class is in GetData, this is called by the Glimpse framework and the data it returns is serialized as JSON according to the Glimpse protocol and is then sent to the browser.</p>
 <p>To be super flexible we return a generic List of object arrays. The very first object array holds the headers. In our case: 'Key' and 'Value'. We then just add a few more object arrays with data which translate into rows under our Sample tab.</p>
 <p>Now compile the assembly and place it into the bin directory of your web site or your MVC application. Glimpse is using the Managed Extensibility Framework (MEF) in .NET 4 to automatically load and use your plugin. No further configuration is required.</p>
 

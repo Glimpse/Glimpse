@@ -14,7 +14,7 @@
         </tr>
         <tr>
             <td>
-                <p>On the server all configuration happens in web.config. When installing Glimpse 
+                <p>On the server all configuration happens in the glimpse section of your web.config. When installing Glimpse 
                 using NuGet only a minimal configuration is set. There are defaults for all the 
                 optional settings which are described here. </p>
                 <br /> 
@@ -39,18 +39,17 @@
     <p>All settings for Glimpse are within a Glimpse node under &lt;configuration&gt; The Glimpse node itself can have four optional attributes:</p>
 
 <pre class="csharpcode">
-<span class="kwrd">&lt;</span><span class="html">glimpse</span> <span class="attr">enabled</span><span class="kwrd">="false"</span> <span class="attr">loggingEnabled</span><span class="kwrd">="false"</span> <span class="attr">rootUrlPath</span><span class="kwrd">="Glimpse"</span> <span class="attr">requestLimit</span><span class="kwrd">="15"</span><span class="kwrd">&gt;</span>
+<span class="kwrd">&lt;</span><span class="html">glimpse</span> <span class="attr">enabled</span><span class="kwrd">="false"</span> <span class="attr">loggingEnabled</span><span class="kwrd">="false"</span> <span class="attr">requestLimit</span><span class="kwrd">="15"</span><span class="kwrd">&gt;</span>
     ...
 <span class="kwrd">&lt;/</span><span class="html">glimpse</span><span class="kwrd">&gt;</span></pre>
 
     <ul class="plain">
         <li><strong>enabled</strong>: is a boolean with a default value of "false". It allows us to turn off Glimpse completely. </li>
-        <li><strong>rootUrlPath</strong>: is a string with a default value of "Glimpse". If you already have a folder or route named "Glimpse" in your site, it would conflict with the path to the Glimpse configuration page. By setting the rootUrlPath to for example "glp" you could now access the Glimpse configuration page with the url "mysite/glp/config".</li>
         <li><strong>requestLimit</strong>: is an integer with a default value of 15. Glimpse "remembers" the debug information for a number of requests on the server.  This is important for the Ajax and Remote tabs to work. This number defines how many requests are stored.</li>
         <li><strong>loggingEnabled</strong>: another boolean with a default value of "false".</li>
     </ul>
 
-    The following sections all go within the Glimpse section.
+    The following sections are all sub-sections of the main Glimpse section.
      
     <hr class="line" />
 
@@ -87,7 +86,7 @@
 <pre class="csharpcode">
 <span class="kwrd">&lt;</span><span class="html">pluginBlacklist</span><span class="kwrd">/&gt;</span></pre>
 
-                <p>Which means we don't blacklist any plugins are all available plugins send data down to the browser. You can remove certain plugins by adding them to the section like this:</p>
+                <p>Which means we don't blacklist any plugins and all available plugins send data down to the browser. You can remove certain plugins by adding them to the section like this:</p>
 
 <pre class="csharpcode">
 <span class="kwrd">&lt;</span><span class="html">pluginBlacklist</span><span class="kwrd">&gt;</span>
@@ -99,7 +98,7 @@
 
                 <p>The string in the plugin attribute must be the class name of the plugin including the full namespace.</p>
                 <p>Why would you want to do this? Maybe there is a plugin that you never use and it just fills up the space in the tab bar. Or when in a production environment there are certain plugins that reveal too much information to a user. Other reasons may be that one of you own plugins is not stable, or that a plugin can cause performance issues in certain cases.</p>
-                <p>To see a list of the plugins that you can blacklist, simply go to your /Glimpse/Config page. This shows a list of all plugins that Glimpse has detected (both official Glimpse Plugins and 3rd Party plugins) and which ones are currently disabled (if you have disabled any).</p>
+                <p>To see a list of the plugins that you can blacklist, simply go to your /Glimpse.axd page. This shows a list of all plugins that Glimpse has detected (both official Glimpse Plugins and 3rd Party plugins) and which ones are currently disabled (if you have disabled any).</p>
 
 
     <hr class="line" />
@@ -115,7 +114,7 @@
 <span class="kwrd">&lt;/</span><span class="html">contentTypes</span><span class="kwrd">&gt;</span></pre>
 
                 <p>This means Glimpse is only attaching its data to responses with a content type or text/html and application/json which is the majority of web pages. </p>
-                <p>Note, application/json in this case a Glimpse identifier is added to the response header and the Glimpse data is then later retrieved. This is intended so that Glimpse doesn't affect the data in your Ajax response.</p>
+                <p>Note, for ajax requests a Glimpse identifier is added to the http response headers and the Glimpse data is then later retrieved. This is intended so that Glimpse doesn't affect the data in your Ajax response.</p>
 
 
     <hr class="line" />
@@ -136,15 +135,15 @@
       <span class="kwrd">&lt;</span><span class="html">add</span> <span class="attr">name</span><span class="kwrd">="Prod"</span> <span class="attr">authority</span><span class="kwrd">="getglimpse.com"</span> <span class="kwrd">/&gt;</span>
 <span class="kwrd">&lt;/</span><span class="html">environments</span><span class="kwrd">&gt;</span></pre>
 
-                 <p>Defining your environments like this allows glimpse to show you what environment you are currently in and allows you to switch to another one of the defined environments using the current context. At the moment this context only extends to the URL but it makes trying to compare environments when you notice something out of the ordinary much easier than it might other be normally.</p>
+                 <p>Defining your environments like this allows glimpse to show you what environment you are currently in and allows you to switch to another one of the defined environments using the current context. At the moment this context only extends to the URL but it makes trying to compare environments when you notice something out of the ordinary much easier than it might be normally.</p>
  
 
     <hr class="line" />
 
 
     <h3>Handler and Module configuration</h3>
-    <p>Glimpse is using an http handler and an http module to do its magic. If you've installed Glimpse via NuGet
-    all the required changes to your web.config have been made for you. If you've installed Glimpse manually here's
+    <p>Glimpse uses an http handler and an http module to do its magic. If you've install Glimpse via NuGet
+    all the required changes to your web.config are made for you. If you've installed Glimpse manually here's
     what you need to change.</p>
 
     @SharedHelp.ModuleHandlerConfig(Html) 

@@ -119,6 +119,7 @@
     <Content Include="Content\Plugin\Ajax.jpg" />
     <Content Include="Content\Plugin\Binding.jpg" />
     <Content Include="Content\Plugin\Config.jpg" />
+    <Content Include="Content\Plugin\enviro.png" />
     <Content Include="Content\Plugin\Environment.jpg" />
     <Content Include="Content\Plugin\Execution.jpg" />
     <Content Include="Content\Plugin\Metadata.jpg" />
@@ -127,6 +128,7 @@
     <Content Include="Content\Plugin\Routes.jpg" />
     <Content Include="Content\Plugin\Server.jpg" />
     <Content Include="Content\Plugin\Session.jpg" />
+    <Content Include="Content\Plugin\switchServers.png" />
     <Content Include="Content\Plugin\Trace.jpg" />
     <Content Include="Content\Plugin\TraceIcons.png" />
     <Content Include="Content\Plugin\View.jpg" />

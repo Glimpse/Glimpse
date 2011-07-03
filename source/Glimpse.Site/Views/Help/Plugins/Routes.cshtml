@@ -2,18 +2,18 @@
 <h2>Routes Tab</h2>
 
 <div class="plugin-summary">
-    <p>The Routes tab shows the Routes that are present in the system and which one was used to trigger the controller that created your view.</p>
+    <p>The Routes tab shows the Routes that are configured in the system and which one was used to trigger the controller that executed the request.</p>
 </div>
 
 <div class="plugin-layout">
     <h3>Layout</h3> 
     <img src="@Links.Content.Plugin.Routes_jpg" /> 
     <ol class="plain">
-        <li><span>Match</span>: Whether a match was successfully made</li>
+        <li><span>Match</span>: Whether the given route was successfully matched for this request</li>
         <li><span>Area</span>: Which area the route was defined in (<u>Root</u> being your main application)</li>
         <li><span>Url</span>: The pattern that has been setup for the match on this route</li>
         <li><span>Data</span>: The route values that have been defined for this entry</li>
-        <li><span>CustomErrors</span>: A set of expressions that specify the criteria which will be used to find matches</li>
+        <li><span>Constraints</span>: A set of expressions that specify the criteria which will be used to find matches</li>
         <li><span>DataTokens</span>: Additional metadata that is defined as part of the route entry (typically used for areas, etc)</li>
     </ol> 
 </div> 

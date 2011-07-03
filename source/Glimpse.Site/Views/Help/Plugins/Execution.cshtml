@@ -3,7 +3,7 @@
 
 <div class="plugin-summary">
     <p>The Execution tab shows the execution pipeline that was run to build the current page. The items one 
-    will typically see in this list are Actions and Filters. Its important to note that the effects Child 
+    would typically see in this list are Actions, Filters and ActionResults. Its important to note that Child 
     actions are also shown in this context.</p>
 </div>
 
@@ -19,13 +19,21 @@
             <ul class="plain">
                 <li><span>Ordinal</span>: Indicates where in the execution pipeline this method occurred</li>
                 <li><span>Child</span>: Whether this method was executed in the context of a child request</li>
-                <li><span>Category</span>: The Category type of the filter <!--TODO@@nikmd23 list and verify categories and their meaning--></li>
+                <li><span>Category</span>: The Category/type of the filter. Valid values include: Authorization, Action, Response, Exception</li>
                 <li><span>Type</span>: Type that the executed method belongs to</li>
                 <li><span>Method</span>: The name of the method executed</li>
-                <li><span>Time Elapsed</span>: The amount of time elapsed since the last executed method</li>
+                <li><span>Time Elapsed</span>: The amount of time it took to execute the method</li>
                 <li><span>Order</span>: The order that has been defined that a filter should be executed</li>
-                <li><span>Scope</span>: Scope that the filter is restricted to <!--TODO@@nikmd23 list and verify scopes and their meaning--></li>
-                <li><span>Details</span>: Any available data  <!--TODO@@nikmd23 verify --></li>
+                <li><span>Scope</span>: Scope is a third level sorting mechanism used by ASP.NET MVC to process filters in order. Scopes are executed in the following order: 
+                    <ol>
+                        <li>First</li>
+                        <li>Global</li>
+                        <li>Controller</li>
+                        <li>Action</li>
+                        <li>Last</li>
+                    </ol>
+                </li>
+                <li><span>Details</span>: Additional properties that may help to identify the instance of the given type</li>
             </ul>
 
             <div><u>UnExecutedMethods</u>:</div>
@@ -41,6 +49,10 @@
 <div class="plugin-know">
     <h3>Did you know</h3> 
     <ul class="plain">
+        <li>
+            <span>Understanding filter execution order can be difficult</span>: There is a complex series of rules to determine filter execution order,
+            and these rules have changed between versions of MVC. Glimpse will always show you the actual order of execution, but if you want a deeper understanding you can read the <a href="http://msdn.microsoft.com/en-us/library/gg416513%28v=VS.98%29.aspx">MSDN filters article</a>.
+        </li>
         <li>
             <span>That keeping an eye on your Time Elapsed can make a big difference</span>: This may be obvious but 
             by showing the Time Elapsed we can give you an indication as to where a given request is spending its time.
