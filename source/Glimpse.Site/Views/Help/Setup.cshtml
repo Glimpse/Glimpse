@@ -27,32 +27,18 @@
      
     <div class="plugin-faq">
 
-    <h3>External Dependencies</h3>
-    <p>In the current version of Glimpse, we have removed all external dependencies
-     so all you need are the Glimpse assemblies themselves.
-    </p>
-
-     <hr class="line" />
-
     <h3>Getting Glimpse</h3>
 
-            Download the NuGet package manually from:<br />
-            <p></p>
-           <a href="http://packages.nuget.org/v1/Package/Download/Glimpse/0.83"> packages.nuget.org/v1/Package/Download/Glimpse/0.83</a>
-           </p>
-            if you want to use Glimpse with MVC3 you also need this package:
+            Download the latest Glimpse assemblies from <a href="http://glimpse.codeplex.com">glimpse.codeplex.com</a><br />
             <p>
-<a href="http://packages.nuget.org/v1/Package/Download/Glimpse.mvc3/0.83">packages.nuget.org/v1/Package/Download/Glimpse.mvc3/0.83</a>
-</p>
-            Rename Glimpse-0.83.nupkg to Glimpse-0.83.zip and extract the 
-            file \lib\net40\Glimpse.Core.dll into your bin directory.
-            <br />
-For MVC do the same and copy \lib\net40\Glimpse.Mvc3.dll into you bin directory.
+            Copy the Glimpse.Core.dll into your bin directory. If you do MVC3, also
+            copy Glimpse.Mvc3.dll into your bin directory.
+            </p>
  
   <hr class="line" />
 
         <h3>Changing your web.config file</h3>
-        <p>Finally you need to add Glimpse to your web.config: </p>
+        <p>To activate Glimpse, you have to make changes to your web.config: </p>
 
          @SharedHelp.ConfigSections(Html)
 
