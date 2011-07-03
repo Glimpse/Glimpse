@@ -89,15 +89,58 @@
             the non matches that are made. This helps you make decisions as to whether any optimizations can be made in 
             this area (i.e. removing unused View Engines) or where something is not behaving as exspected.
         </li>
-<!--
+
         <li>
             <div>I don't want all of my View Model's properties to be serialized, how to I suppress properties being serialized?</div>
             You may want to do this for any number of reasons. For instance, if you are sending your data models to the view and your 
-            data models lazy load propoerties (as your can do with Entity Frameowrk or other like frameworks), Glimpse will trigger these 
+            data models lazy load from a database (as your can do with Entity Framework or other ORMs), Glimpse will trigger these 
             properties to load.
 
-            TODO@@nikmd23
+            To avoid this from happening, you can either annotate properties that you don't want serialized with a [ScriptIgnore] attribute, or you can implement an IGlimpseConverter.
+
+            IGlimpseConverters allow for explicit control over how an object is serialized.  In the following example a System.Web.Configuration.CustomErrorsSection object has man of its properties removed before serialization:
+<pre class="csharpcode">
+<span class="kwrd">using</span> System;
+<span class="kwrd">using</span> System.Collections.Generic;
+<span class="kwrd">using</span> System.Linq;
+<span class="kwrd">using</span> System.Web.Configuration;
+<span class="kwrd">using</span> Glimpse.Core.Extensibility;
+
+<span class="kwrd">namespace</span> Glimpse.Core.Converter
+{
+    [GlimpseConverter]
+    <span class="kwrd">internal class</span> CustomErrorsSectionConverter:IGlimpseConverter
+    {
+        <span class="kwrd">public</span> IDictionary<<span class="kwrd">string</span>, <span class="kwrd">object</span>> Serialize(<span class="kwrd">object</span> obj)
+        {
+            <span class="kwrd">var</span> source = obj <span class="kwrd">as</span> CustomErrorsSection;
+            <span class="kwrd">if</span> (source == <span class="kwrd">null</span>) <span class="kwrd">return null</span>;
+
+            <span class="kwrd">var</span> errors = source.Errors.Cast<CustomError>().ToDictionary(error => error.StatusCode.ToString(), error => error.Redirect);
+
+            <span class="kwrd">var</span> result = <span class="kwrd">new</span> Dictionary<<span class="kwrd">string</span>, <span class="kwrd">object</span>>
+                             {
+                                 {"Mode", source.Mode.ToString()},
+                                 {"RedirectMode", source.RedirectMode.ToString()},
+                                 {"DefaultRedirect", source.DefaultRedirect},
+                                 {"Errors", errors.Count > 0 ? errors : <span class="kwrd">null</span> },
+                             };
+
+            <span class="kwrd">return</span> result;
+        }
+
+        <span class="kwrd">public</span> IEnumerable<Type> SupportedTypes
+        {
+            <span class="kwrd">get</span>
+            {
+                <span class="kwrd">yield return typeof</span>(CustomErrorsSection);
+                <span class="kwrd">yield break</span>;
+            }
+        }
+    }
+}
+
+</pre>
         </li> 
--->
     </ol>
 </div>
