@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Web;
 using Glimpse.Core.Extensibility;
@@ -6,7 +7,7 @@ using Glimpse.Core.Extensibility;
 namespace Glimpse.Core.Handlers
 {
     [GlimpseHandler]
-    public class Javascript : IGlimpseHandler
+    public class JavascriptClient : IGlimpseHandler
     {
         public string ResourceName
         {
@@ -29,6 +30,7 @@ namespace Glimpse.Core.Handlers
                 }
             }
             response.AddHeader("Content-Type", "application/x-javascript");
+            response.ExpiresAbsolute = DateTime.Now.AddYears(1);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Web;
 using Glimpse.Core.Extensibility;
 
@@ -26,6 +27,7 @@ namespace Glimpse.Core.Handlers
                 }
             }
             response.AddHeader("Content-Type", ContentType);
+            response.ExpiresAbsolute = DateTime.Now.AddYears(1);
         }
 
     }

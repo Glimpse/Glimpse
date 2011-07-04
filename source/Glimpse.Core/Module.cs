@@ -20,6 +20,7 @@ namespace Glimpse.Core
 {
     public class Module : IHttpModule
     {
+        internal static readonly string RunningVersion;
         internal static GlimpseRequestValidator RequestValidator { get; set; }
         private static IGlimpseSanitizer Sanitizer { get; set; }//TODO: new up via config
 
@@ -35,6 +36,8 @@ namespace Glimpse.Core
 
         static Module()
         {
+            RunningVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString(2);
+
             Configuration = ConfigurationManager.GetSection("glimpse") as GlimpseConfiguration ?? new GlimpseConfiguration();
 
             Factory = new GlimpseFactory(Configuration);
@@ -55,23 +58,65 @@ namespace Glimpse.Core
             Logger.Info("Glimpse Module constructed");
         }
 
+        public void Init(HttpApplication application)
+        {
+            if (!Configuration.Enabled)
+            {
+                Logger.Info("Glimpse is not enabled and will not run. Change via the enable attribute on the glimpse element in web.config");
+                return; //Do nothing if Glimpse is off, events are not wired up
+            }
+
+            //TODO: MetadataStore should be set via a configurable setting in web.config to allow for other backing stores
+            MetadataStore = new InProcStackMetadataStore(Configuration, new HttpApplicationStateWrapper(application.Application));
+
+            if (Plugins.Count() == 0)
+            {
+                lock (Plugins)
+                {
+                    if (Plugins.Count() == 0)
+                    {
+                        var contextBase = new HttpContextWrapper(application.Context);
+
+                        ComposePlugins(); //Have MEF satisfy our needs
+
+                        //Allow plugin's registered for Initialization to setup
+                        foreach (var plugin in Plugins.Where(plugin => plugin.Metadata.ShouldSetupInInit))
+                        {
+                            Logger.Info("Calling SetupInit() on " + plugin.Value.GetType().FullName);
+                            plugin.Value.SetupInit();
+                        }
+                    }
+                }
+            }
+
+            application.BeginRequest += OnBeginRequest; //1
+            application.PostMapRequestHandler += OnPostMapRequestHandler;//8
+            application.PostRequestHandlerExecute += OnPostRequestHandlerExecute;//12
+            application.PostReleaseRequestState += OnPostReleaseRequestState;//14
+            application.EndRequest += OnEndRequest;//19
+            application.PreSendRequestHeaders += OnPreSendRequestHeaders;//20
+
+            Logger.Info("Glimpse Module Init Complete");
+        }
+
         #region Event Handlers
-        private static void OnEndRequest(object sender, EventArgs e)
+
+        private static void OnBeginRequest(object sender, EventArgs e)//1
         {
             try
             {
                 var httpApplication = sender as HttpApplication;
 
                 if (httpApplication != null)
-                    EndRequest(new HttpContextWrapper(httpApplication.Context));
+                    BeginRequest(new HttpContextWrapper(httpApplication.Context));
             }
             catch (Exception exception)
             {
-                Logger.Error("Exception during EndRequest", exception);
+                Logger.Error("Exception during BeginRequest", exception);
             }
         }
 
-        private static void OnPostMapRequestHandler(object sender, EventArgs e)
+        private static void OnPostMapRequestHandler(object sender, EventArgs e)//8
         {
             try
             {
@@ -86,22 +131,7 @@ namespace Glimpse.Core
             }
         }
 
-        private static void OnPreSendRequestHeaders(object sender, EventArgs e)
-        {
-            try
-            {
-                var httpApplication = sender as HttpApplication;
-
-                if (httpApplication != null)
-                    PreSendRequestHeaders(new HttpContextWrapper(httpApplication.Context));
-            }
-            catch (Exception exception)
-            {
-                Logger.Error("Exception during PreSendRequestHeaders", exception);
-            }
-        }
-
-        private static void OnPostRequestHandlerExecute(object sender, EventArgs e)
+        private static void OnPostRequestHandlerExecute(object sender, EventArgs e)//12
         {
             try
             {
@@ -116,63 +146,54 @@ namespace Glimpse.Core
             }
         }
 
-        private static void OnBeginRequest(object sender, EventArgs e)
+        private static void OnPostReleaseRequestState(object sender, EventArgs e)//14
         {
             try
             {
                 var httpApplication = sender as HttpApplication;
 
                 if (httpApplication != null)
-                    BeginRequest(new HttpContextWrapper(httpApplication.Context));
+                    PostReleaseRequestState(new HttpContextWrapper(httpApplication.Context));
             }
             catch (Exception exception)
             {
-                Logger.Error("Exception during BeginRequest", exception);
+                Logger.Error("Exception during PostReleaseRequestState", exception);
             }
         }
+
+        private static void OnEndRequest(object sender, EventArgs e)//19
+        {
+            try
+            {
+                var httpApplication = sender as HttpApplication;
+
+                if (httpApplication != null)
+                    EndRequest(new HttpContextWrapper(httpApplication.Context));
+            }
+            catch (Exception exception)
+            {
+                Logger.Error("Exception during EndRequest", exception);
+            }
+        }
+
+        private static void OnPreSendRequestHeaders(object sender, EventArgs e)//20
+        {
+            try
+            {
+                var httpApplication = sender as HttpApplication;
+
+                if (httpApplication != null)
+                    PreSendRequestHeaders(new HttpContextWrapper(httpApplication.Context));
+            }
+            catch (Exception exception)
+            {
+                Logger.Error("Exception during PreSendRequestHeaders", exception);
+            }
+        }
+
         #endregion Event Handlers
 
-        public void Init(HttpApplication context)
-        {
-            if (!Configuration.Enabled)
-            {
-                Logger.Info("Glimpse is not enabled and will not run. Change via the enable attribute on the glimpse element in web.config");
-                return; //Do nothing if Glimpse is off, events are not wired up
-            }
-
-            //TODO: MetadataStore should be set via a configurable setting in web.config to allow for other backing stores
-            MetadataStore = new InProcStackMetadataStore(Configuration, new HttpApplicationStateWrapper(context.Application));
-
-            if (Plugins.Count() == 0)
-            {
-                lock (Plugins)
-                {
-                    if (Plugins.Count() == 0)
-                    {
-                        var contextBase = new HttpContextWrapper(context.Context);
-
-                        ComposePlugins(contextBase); //Have MEF satisfy our needs
-
-                        //Allow plugin's registered for Initialization to setup
-                        foreach (var plugin in Plugins.Where(plugin => plugin.Metadata.ShouldSetupInInit))
-                        {
-                            Logger.Info("Calling SetupInit() on " + plugin.Value.GetType().FullName);
-                            plugin.Value.SetupInit();
-                        }
-                    }
-                }
-            }
-
-            context.BeginRequest += OnBeginRequest;
-            context.EndRequest += OnEndRequest;
-            context.PostRequestHandlerExecute += OnPostRequestHandlerExecute;
-            context.PreSendRequestHeaders += OnPreSendRequestHeaders;
-            context.PostMapRequestHandler += OnPostMapRequestHandler;
-
-            Logger.Info("Glimpse Module Init Complete");
-        }
-
-        private static void BeginRequest(HttpContextBase context)
+        private static void BeginRequest(HttpContextBase context)//1
         {
             if (!RequestValidator.IsValid(context, LifecycleEvent.BeginRequest)) return;
 
@@ -181,7 +202,7 @@ namespace Glimpse.Core
             Logger.Info("BeginRequest handling complete for requestId " + context.GetGlimpseRequestId() + " (" + context.Request.Path+")");
         }
 
-        internal static void PostMapRequestHandler(HttpContextBase context)
+        private static void PostMapRequestHandler(HttpContextBase context)//8
         {
             //temporary measure to help users move from glimpse/config to glimpse.asx
             if (context.Request.Path.ToLower().Contains(@"glimpse/config"))
@@ -191,7 +212,7 @@ namespace Glimpse.Core
             }
         }
 
-        private static void PostRequestHandlerExecute(HttpContextBase context)
+        private static void PostRequestHandlerExecute(HttpContextBase context)//12
         {
             if (!RequestValidator.IsValid(context, LifecycleEvent.PostRequestHandlerExecute)) return;
 
@@ -200,35 +221,46 @@ namespace Glimpse.Core
             Logger.Info("PostRequestHandlerExecute handling complete for requestId " + context.GetGlimpseRequestId() + " (" + context.Request.Path + ")");
         }
 
-        private static void EndRequest(HttpContextBase context)
+        private static void PostReleaseRequestState(HttpContextBase context)//14
+        {
+            if (!RequestValidator.IsValid(context, LifecycleEvent.PostReleaseRequestState)) return;
+
+            if (!context.IsAjax())
+                context.Response.Filter = new GlimpseResponseFilter(context.Response.Filter, context);
+
+            Logger.Info("PostReleaseRequestState handling complete for requestId " + context.GetGlimpseRequestId() + " (" + context.Request.Path + ")");
+        }
+
+        private static void EndRequest(HttpContextBase context)//19
         {
             if (!RequestValidator.IsValid(context, LifecycleEvent.EndRequest)) return;
 
             ProcessData(context, false); //Run all plugins that DO NOT need access to Session
 
+            var requestId = context.GetGlimpseRequestId().ToString();
+
+            var jsonPayload = GenerateGlimpseOutput(context);
+            Logger.Info("Glimpse output generated for requestId " + requestId + " (" + context.Request.Path + ")");
+
+            MetadataStore.Persist(context.GetRequestMetadata(jsonPayload));
+            Logger.Info("RequestId " + requestId + " (" + context.Request.Path + ")" + " persisted");
+
             Logger.Info("EndRequest handling complete for requestId " + context.GetGlimpseRequestId() + " (" + context.Request.Path + ")");
         }
 
-        private static void PreSendRequestHeaders(HttpContextBase context)
+        private static void PreSendRequestHeaders(HttpContextBase context)//20
         {
             if (!RequestValidator.IsValid(context, LifecycleEvent.PreSendRequestHeaders)) return;
 
-            var jsonPayload = GenerateGlimpseOutput(context);
-            Logger.Info("Glimpse output generated for requestId " + context.GetGlimpseRequestId() + " (" + context.Request.Path + ")");
+            var requestId = context.GetGlimpseRequestId().ToString();
 
-            MetadataStore.Persist(context.GetRequestMetadata(jsonPayload));
-            Logger.Info("RequestId " + context.GetGlimpseRequestId() + " (" + context.Request.Path + ")" + " persisted");
+            context.Response.AddHeader(GlimpseConstants.HttpHeader, requestId);
         }
 
-        public void Dispose()
-        {
-/*
-            if (Container != null)
-                Container.Dispose();
-*/
-        }
+        #region Private Methods
+        public void Dispose(){}
 
-        private void ComposePlugins(HttpContextBase context)
+        private void ComposePlugins()
         {
             var batch = new CompositionBatch();
 
@@ -286,31 +318,7 @@ namespace Glimpse.Core
 
             json = Sanitizer.Sanitize(json);
 
-            AppendToResponse(context, json);
-
             return json;
-        }
-
-        private static void AppendToResponse(HttpContextBase context, string json)
-        {
-            var requestId = context.GetGlimpseRequestId().ToString();
-
-            if (context.IsAjax())
-            {
-                Logger.Info("Ajax request, adding HTTP Header for requestId " + context.GetGlimpseRequestId() + " (" + context.Request.Path + ")");
-                context.Response.AddHeader(GlimpseConstants.HttpHeader, requestId);
-            }
-            else
-            {
-                if (context.GetGlimpseMode() == GlimpseMode.On)
-                {
-                    //var path = VirtualPathUtility.ToAbsolute("~/", context.Request.ApplicationPath);
-                    var path = context.GlimpseResourcePath("");
-                    var html = string.Format(@"<script type='text/javascript' id='glimpseData' data-glimpse-requestID='{1}'>var glimpse = {0}, glimpsePath = '{2}';</script>", json, requestId, path);
-                    html += @"<script type='text/javascript' id='glimpseClient' src='" + context.GlimpseResourcePath("client.js") + "'></script>";
-                    context.Response.Write(html);//TODO: Use a filter and put this inside </body>
-                }
-            }
         }
 
         //TODO: clean up this massive method
@@ -345,16 +353,6 @@ namespace Glimpse.Core
                     }
                 }
 
-                //Add exceptions tab if needed
-                /*            if (warnings.Count > 0)
-                            {
-                                var warningTable = new List<object[]> {new[] {"Type", "Message"}};
-                                warningTable.AddRange(warnings.Select(warning => new[] {warning.GetType().Name, warning.Message}));
-
-                                var dataString = JsonConvert.SerializeObject(warningTable, DefaultFormatting);
-                                sb.Append(string.Format("\"{0}\":{1},", "GlimpseWarnings", dataString));
-                            }*/
-
                 if (sb.Length > 1) sb.Remove(sb.Length - 1, 1);
 
                 var requestMetadata = new Dictionary<string, object>();
@@ -373,8 +371,7 @@ namespace Glimpse.Core
 
                 requestMetadata.Add("environmentUrls", environmentUrls);
                 requestMetadata.Add("runningVersion",
-                                    decimal.Parse(Assembly.GetExecutingAssembly().GetName().Version.ToString(2),
-                                                  NumberFormatInfo.InvariantInfo));
+                                    decimal.Parse(RunningVersion, NumberFormatInfo.InvariantInfo));
 
                 //plugin specific metadata);))
                 foreach (var plugin in Plugins)
@@ -398,5 +395,6 @@ namespace Glimpse.Core
 
             return sb.ToString();
         }
+        #endregion Private Methods
     }
 }

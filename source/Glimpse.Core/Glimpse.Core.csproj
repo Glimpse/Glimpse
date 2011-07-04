@@ -86,11 +86,13 @@
     <Compile Include="Handler.cs" />
     <Compile Include="Handlers\HandlerBase.cs" />
     <Compile Include="Handlers\ImageHandlerBase.cs" />
+    <Compile Include="Handlers\JavascriptData.cs" />
     <Compile Include="Plumbing\GlimpseFactory.cs" />
     <Compile Include="Plumbing\GlimpseContractResolver.cs" />
     <Compile Include="Handlers\JsonHandlerBase.cs" />
     <Compile Include="Handlers\Logo.cs" />
     <Compile Include="Plumbing\GlimpseLogger.cs" />
+    <Compile Include="Plumbing\GlimpseResponseFilter.cs" />
     <Compile Include="Plumbing\GlimpseSerializer.cs" />
     <Compile Include="Plumbing\InProcStackMetadataStore.cs" />
     <Compile Include="Validator\ContentTypeValidator.cs" />
@@ -121,7 +123,7 @@
     <Compile Include="Handlers\Config.cs" />
     <Compile Include="Handlers\Popup.cs" />
     <Compile Include="Handlers\History.cs" />
-    <Compile Include="Handlers\Javascript.cs" />
+    <Compile Include="Handlers\JavascriptClient.cs" />
     <Compile Include="Handlers\Sprite.cs" />
     <Compile Include="Plugin\Environment.cs" />
     <Compile Include="Plugin\Trace.cs" />

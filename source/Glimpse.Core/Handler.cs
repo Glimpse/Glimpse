@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Web;
-using System.Web.Util;
 using Glimpse.Core.Validator;
 
 namespace Glimpse.Core
@@ -9,6 +8,7 @@ namespace Glimpse.Core
     public class Handler:IHttpHandler
     {
         internal const string ResourceKey = "r";
+        internal const string VersionKey = "v";
 
         public void ProcessRequest(HttpContext context)
         {

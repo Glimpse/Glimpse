@@ -7,5 +7,6 @@
         Handler,
         PostRequestHandlerExecute,
         PreSendRequestHeaders,
+        PostReleaseRequestState
     }
 }
