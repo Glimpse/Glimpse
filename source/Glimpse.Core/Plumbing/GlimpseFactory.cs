@@ -38,9 +38,9 @@ namespace Glimpse.Core.Plumbing
         }
 
         private static LogFactory BuildFactory()
-        {
+        { 
             // Step 1. Create configuration object 
-            var config = new LoggingConfiguration();
+            var config = new LoggingConfiguration(); 
 
             // Step 2. Create targets and add them to the configuration  
             var fileTarget = new FileTarget();
@@ -48,12 +48,12 @@ namespace Glimpse.Core.Plumbing
 
             // Step 3. Set target properties  
             fileTarget.FileName = "${basedir}/Glimpse.log";
-            fileTarget.Layout = "${longdate}|${level:uppercase=true}|${logger}|${message}";
+            fileTarget.Layout = "${longdate}|${level:uppercase=true}|${logger}|${message}|${exception:maxInnerExceptionLevel=5:format=type,message,stacktrace:separator=--:innerFormat=shortType,message,method}";
 
             // Step 4. Define rules 
             var rule2 = new LoggingRule("*", LogLevel.Debug, fileTarget);
             config.LoggingRules.Add(rule2);
-
+             
             return new LogFactory(config);
         }
     }
