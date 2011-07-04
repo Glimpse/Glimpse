@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Web;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Plumbing;
@@ -68,7 +69,7 @@ namespace Glimpse.Core.Extensions
 
             if (resource == null) return string.Format("{0}Glimpse.axd", root);
 
-            return string.Format("{0}Glimpse.axd?{2}={1}", root, resource, Handler.ResourceKey);
+            return string.Format("{0}Glimpse.axd?{3}={4}&{2}={1}", root, resource, Handler.ResourceKey, Handler.VersionKey, Module.RunningVersion);
         }
 
 /*        public static List<IGlimpseWarning> GetWarnings(this HttpContextBase context)

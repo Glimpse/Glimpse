@@ -17,12 +17,19 @@ namespace MvcMusicStore.Controllers
 
         public virtual ActionResult Index()
         {
-            var genres = storeDB.Genres.ToList();
+            var genres = storeDB.Genres;
 
-            Trace.Write(string.Format("There are {0} genres in the store.", genres.Count));
+            Trace.Write(string.Format("There are {0} genres in the store.", genres.Count()));
 
             return View(genres);
         }
+
+        /*
+         * This method breaks JSON.NET
+         * protected override void Dispose(bool disposing)
+        {
+            storeDB.Dispose();
+        }*/
 
         //
         // GET: /Store/Browse?genre=?Disco
