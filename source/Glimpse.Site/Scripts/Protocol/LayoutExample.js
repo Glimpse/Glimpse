@@ -211,14 +211,14 @@ $(document).ready(function () {
 
     var scenarioSevenData = [
         ['Type', 'Name', 'Other'],
-        ['Movie', 'Star Wars', 'Episode IV'],
-        ['Genera/Theme', 'Science Fiction', 'Action'],
-        ['Actors/Cast', [
+        ['\tMovie', 'Star Wars', 'Episode IV'],
+        ['\t\tGenera/Theme', 'Science Fiction', 'Action'],
+        ['\t\tActors/Cast', [
                 ['Actor', 'Character', 'Gender', 'Age'],
                 ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
                 ['James Earl Jones', 'Darth Vader', 'Male', '45'],
             ], 'Cast details pending'],
-        ['Plot & Description', 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.', ' Best movie of all time']
+        ['\tPlot & Description', 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.', ' Best movie of all time']
     ];
 
     $('.glimpse-scenario-seven').show().html($Glimpse.glimpseProcessor.build(scenarioSevenData, 0));

@@ -629,8 +629,8 @@ if (window.jQueryGlimpse) { (function ($) {
                     content = '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td>' + content + '<span class="glimpse-preview-show">' + $.glimpse.util.preserveWhitespace($.glimpseContent.formatString(data)) + '</span></td></tr></table>';
             }
             else 
-                content = $.glimpse.util.preserveWhitespace(content);
-
+                content = $.glimpse.util.preserveWhitespace(content);  
+              
             return content;
         },
         newItemSpacer: function (currentRow, rowLimit, dataLength) {
@@ -684,7 +684,7 @@ if (window.jQueryGlimpse) { (function ($) {
                 return '--';
             if (typeof data != 'string')
                 data = data + '';
-            data = $.trim(data);
+            //data = $.trim(data);
 
             if (!skipEncoding) {
                 for (var typeKey in that.formatStringTypes) {
