@@ -73,6 +73,25 @@ $(document).ready(function () {
 
 
 
+    
+    var scenarioSeventeenData = [
+        ['Actor', 'Character', 'Gender', 'Age', 'Details' ],
+        ['Mark Hamill', 'Luke Skywalker', 'Male', '21', [] ],
+        ['James Earl Jones', 'Darth Vader', 'Male', '45', [] ],
+        ['Carrie Fisher', 'Princess Leia Organa', 'Female', '21', [
+                ['Actor', 'Character', 'Gender', 'Age'],
+                ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+            ]], 
+        ['Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70', [] ]
+    ];
+    var scenarioSeventeenMetadata = [
+            [ { data : [ { data : '{{0}} - ({{1}})', key : true }, { data : '\t{{2}}' }, { data : '\t{{3}}' } ], width : '250px' }, 
+                { data : 4, structure : [ [ { data : 0, width : '30%' }, { data : 1, width : '30%' }, { data : 2, width : '20%' }, { data : 3, width : '20%' } ] ] } 
+            ]
+        ]; 
+    $('.glimpse-scenario-seventeen').show().html($Glimpse.glimpseProcessor.build(scenarioSeventeenData, 0, scenarioSeventeenMetadata));
+
 
 
 

@@ -30,7 +30,8 @@ namespace Glimpse.Core.Handlers
                 }
             }
             response.AddHeader("Content-Type", "application/x-javascript");
-            response.ExpiresAbsolute = DateTime.Now.AddYears(1);
+            if (!context.IsDebuggingEnabled)
+                response.ExpiresAbsolute = DateTime.Now.AddYears(1);
         }
     }
 }
