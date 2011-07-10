@@ -399,24 +399,24 @@ namespace Glimpse.Core
             return sb.ToString();
         }
 
-        private static object BuildStructuredLayout(IEnumerable<List<GlimpseStructuredLayoutRow>> rows)
+        private static object BuildStructuredLayout(GlimpseStructuredLayout layout)
         {
-            if (rows == null)
+            if (layout == null)
                 return null;
 
             var result = new List<object>();
-            foreach (var row in rows)
-                result.Add(BuildStructuredLayoutRow(row));
+            foreach (var section in layout)
+                result.Add(BuildStructuredLayoutRow(section));
             return result;
         }
 
-        private static object BuildStructuredLayoutRow(IEnumerable<GlimpseStructuredLayoutRow> cells)
+        private static object BuildStructuredLayoutRow(GlimpseStructuredLayoutSection section)
         {
-            if (cells == null)
+            if (section == null)
                 return null;
 
             var result = new List<object>();
-            foreach (var cell in cells)
+            foreach (var cell in section)
             {
                 var item = new Dictionary<string, object>();
                 if (!String.IsNullOrEmpty(cell.Align))

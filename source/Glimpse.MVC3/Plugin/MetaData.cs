@@ -122,9 +122,9 @@ namespace Glimpse.Mvc3.Plugin
 
         #region IProvideGlimpseStructuredLayout
 
-        private readonly List<List<GlimpseStructuredLayoutRow>> _structuredLayout = new List<List<GlimpseStructuredLayoutRow>> { new List<GlimpseStructuredLayoutRow> { new GlimpseStructuredLayoutRow { Width = "150px", Data = 0 }, new GlimpseStructuredLayoutRow { Width = "25%", Data = 1 }, new GlimpseStructuredLayoutRow { Data = 2 } } };
+        private readonly GlimpseStructuredLayout _structuredLayout = new GlimpseStructuredLayout { new GlimpseStructuredLayoutSection { new GlimpseStructuredLayoutCell { Width = "150px", Data = 0 }, new GlimpseStructuredLayoutCell { Width = "25%", Data = 1 }, new GlimpseStructuredLayoutCell { Data = 2 } } };
 
-        public List<List<GlimpseStructuredLayoutRow>> StructuredLayout
+        public GlimpseStructuredLayout StructuredLayout
         {
             get { return _structuredLayout; }
         }
