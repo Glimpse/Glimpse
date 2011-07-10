@@ -383,6 +383,9 @@ namespace Glimpse.Core
                     var helpPlugin = pluginValue as IProvideGlimpseHelp;
                     if (helpPlugin != null) pluginData.Add("helpUrl", helpPlugin.HelpUrl);
 
+                    var structurePlugin = pluginValue as IProvideGlimpseStructuredLayout;
+                    if (structurePlugin != null) pluginData.Add("structure", BuildStructuredLayout(structurePlugin.StructuredLayout));
+
                     if (pluginData.Count > 0) pluginsMetadata.Add(pluginValue.Name, pluginData);
                 }
 
@@ -395,6 +398,54 @@ namespace Glimpse.Core
 
             return sb.ToString();
         }
+
+        private static object BuildStructuredLayout(IEnumerable<List<GlimpseStructuredLayoutRow>> rows)
+        {
+            if (rows == null)
+                return null;
+
+            var result = new List<object>();
+            foreach (var row in rows)
+                result.Add(BuildStructuredLayoutRow(row));
+            return result;
+        }
+
+        private static object BuildStructuredLayoutRow(IEnumerable<GlimpseStructuredLayoutRow> cells)
+        {
+            if (cells == null)
+                return null;
+
+            var result = new List<object>();
+            foreach (var cell in cells)
+            {
+                var item = new Dictionary<string, object>();
+                if (!String.IsNullOrEmpty(cell.Align))
+                    item.Add("align", cell.Align);
+                if (!String.IsNullOrEmpty(cell.Width))
+                    item.Add("width", cell.Width);
+                if (cell.Key.GetValueOrDefault())
+                    item.Add("key", cell.Key); 
+                if (!String.IsNullOrEmpty(cell.Prefix))
+                    item.Add("pre", cell.Prefix);
+                if (!String.IsNullOrEmpty(cell.Postfix))
+                    item.Add("post", cell.Postfix);
+                if (!String.IsNullOrEmpty(cell.ClassName))
+                    item.Add("className", cell.ClassName);
+                if (cell.IsCode.GetValueOrDefault())
+                    item.Add("isCode", cell.IsCode);
+                if (!String.IsNullOrEmpty(cell.CodeType))
+                    item.Add("codeType", cell.CodeType); 
+                if (cell.Data != null)
+                {
+                    //var typedData = cell.Data as IEnumerable<GlimpseStructuredLayoutRow>;
+                    //item.Add("data", typedData == null ? cell.Data : BuildStructuredLayoutRow(typedData));
+                    item.Add("data", cell.Data);
+                }
+                result.Add(item);
+            }
+            return result;
+        }
+
         #endregion Private Methods
     }
 }
