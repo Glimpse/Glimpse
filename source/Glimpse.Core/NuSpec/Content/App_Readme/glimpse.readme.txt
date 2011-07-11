@@ -52,7 +52,7 @@ On the Server:
 
 1. Server collects all server side information that will aid in debugging (i.e. application settings, routes, session variables, trace data, etc)
 2. It does this by running through a pipeline of server side data providers that can be dynamically controlled and added to under our plugin architecture
-3. Before the response is send, the server formats this data in accordance with the Glimpse Protocol and serializes it as JSON
+3. Before the response is sent, the server formats this data in accordance with the Glimpse Protocol and serializes it as JSON
 4. Depending on whether it is an Ajax request or not, the server embeds the JSON in the content of the page
 
 On the Client:
@@ -177,7 +177,7 @@ Release Notes
 
 04/14/2011 - 0.77
 - Fixed issues with most InvalidOperationException's/Circular references. Now if there is an issue, handle it more gracefully, and it only affects one tab. (More complete fix coming soon!)
-- /Glimpse/Config is no longer case sensitive, and certain reports of 404’s to this page have been fixed. In addition, this page has been improved to be more understandable.
+- /Glimpse/Config is no longer case sensitive, and certain reports of 404ï¿½s to this page have been fixed. In addition, this page has been improved to be more understandable.
 - As of right now, Glimpse only supports MVC3.  We have identified the issues with MVC2, and are working to correct them. Special shout out to @rugvedvaidya for providing the (long!) workaround to get Glimpse running on MVC2.
 
 04/13/2011 - 0.76
@@ -188,4 +188,4 @@ Release Notes
 
 Attribution
 -----------
-Some Icons are Copyright © Yusuke Kamiyamane. [http://p.yusukekamiyamane.com/]
+Some Icons are Copyright ï¿½ Yusuke Kamiyamane. [http://p.yusukekamiyamane.com/]
