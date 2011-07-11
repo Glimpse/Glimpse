@@ -344,7 +344,7 @@ if (window.jQueryGlimpse) { (function ($) {
 
                     for (var y = 0; y < metadata[x].length; y++) {
                         var metadataItem = metadata[x][y], cellType = (i == 0 ? 'th' : 'td'); 
-                        html += that.buildStructuredTableCell(data[i], metadataItem, level, newTolerance, cellType);
+                        html += that.buildStructuredTableCell(data[i], metadataItem, level, newTolerance, cellType, i);
                     }
 
                     html += '</tr>';
@@ -355,20 +355,25 @@ if (window.jQueryGlimpse) { (function ($) {
 
             return html;
         },
-        buildStructuredTableCell : function(data, metadataItem, level, tolerance, cellType) {
+        buildStructuredTableCell : function(data, metadataItem, level, tolerance, cellType, rowIndex) {
             var that = this, html = '', cellContent = '', cellClass = '', cellStyle = '', cellAttr = '';
                 
             //Cell Content
             if ($.isArray(metadataItem.data)) {
                 for (var i = 0; i < metadataItem.data.length; i++) 
-                    cellContent += that.buildStructuredTableCell(data, metadataItem.data[i], level, 1, 'div');
+                    cellContent += that.buildStructuredTableCell(data, metadataItem.data[i], level, 1, 'div', rowIndex);
             }
             else { 
                 if (!metadataItem.indexs && $.isNaN(metadataItem.data)) 
                     metadataItem.indexs = $.glimpse.util.getTokens(metadataItem.data, data); 
+                
+                //Get metadata for the new data 
+                var newMetadataItem = metadataItem.structure;
+                if ($.isPlainObject(newMetadataItem)) 
+                    newMetadataItem = newMetadataItem[rowIndex];
                     
                 cellContent = metadataItem.indexs ? that.buildFormatString(metadataItem.data, data, metadataItem.indexs) : data[metadataItem.data];
-                cellContent = that.build(cellContent, level + 1, metadataItem.structure, tolerance);
+                cellContent = that.build(cellContent, level + 1, newMetadataItem, tolerance);
 
                 //Content pre/post
                 if (metadataItem.pre) { cellContent = '<span class="glimpse-soft">' + metadataItem.pre + '</span>' + cellContent; }

@@ -437,9 +437,8 @@ namespace Glimpse.Core
                     item.Add("codeType", cell.CodeType); 
                 if (cell.Data != null)
                 {
-                    //var typedData = cell.Data as IEnumerable<GlimpseStructuredLayoutRow>;
-                    //item.Add("data", typedData == null ? cell.Data : BuildStructuredLayoutRow(typedData));
-                    item.Add("data", cell.Data);
+                    var typedData = cell.Data as GlimpseStructuredLayoutSection;
+                    item.Add("data", typedData == null ? cell.Data : BuildStructuredLayoutRow(typedData)); 
                 }
                 result.Add(item);
             }
