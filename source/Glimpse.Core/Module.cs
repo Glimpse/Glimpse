@@ -423,8 +423,8 @@ namespace Glimpse.Core
                     item.Add("align", cell.Align);
                 if (!String.IsNullOrEmpty(cell.Width))
                     item.Add("width", cell.Width);
-                if (cell.Key.GetValueOrDefault())
-                    item.Add("key", cell.Key); 
+                if (cell.IsKey.GetValueOrDefault())
+                    item.Add("key", cell.IsKey); 
                 if (!String.IsNullOrEmpty(cell.Prefix))
                     item.Add("pre", cell.Prefix);
                 if (!String.IsNullOrEmpty(cell.Postfix))
@@ -439,6 +439,13 @@ namespace Glimpse.Core
                 {
                     var typedData = cell.Data as GlimpseStructuredLayoutSection;
                     item.Add("data", typedData == null ? cell.Data : BuildStructuredLayoutRow(typedData)); 
+                }
+                if (cell.Structure != null)
+                {
+                    var collection = new Dictionary<int, object>();
+                    foreach (var sub in cell.Structure)
+                        collection.Add(sub.Key, BuildStructuredLayout(sub.Value));
+                    item.Add("structure", collection);
                 }
                 result.Add(item);
             }

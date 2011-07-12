@@ -7,11 +7,23 @@ namespace Glimpse.Core.Extensibility
         GlimpseStructuredLayout StructuredLayout { get; }
     }
 
+    public class GlimpseStructuredLayout : List<GlimpseStructuredLayoutSection>
+    {
+    }
+
+    public class GlimpseStructuredLayoutSection : List<GlimpseStructuredLayoutCell>
+    {
+    }
+
+    public class GlimpseStructuredLayoutSubStructure : Dictionary<int, GlimpseStructuredLayout>
+    {
+    }
+
     public class GlimpseStructuredLayoutCell
     {
         public object Data { get; set; }
 
-        public bool? Key { get; set; }
+        public bool? IsKey { get; set; }
 
         public string Align { get; set; }
 
@@ -26,13 +38,7 @@ namespace Glimpse.Core.Extensibility
         public bool? IsCode { get; set; }
 
         public string CodeType { get; set; }
-    }
 
-    public class GlimpseStructuredLayout : List<GlimpseStructuredLayoutSection>
-    {
-    }
-
-    public class GlimpseStructuredLayoutSection : List<GlimpseStructuredLayoutCell>
-    {
+        public GlimpseStructuredLayoutSubStructure Structure { get; set; }
     }
 }

@@ -327,7 +327,7 @@ if (window.jQueryGlimpse) { (function ($) {
         buildStructuredTable: function (data, level, forceFull, metadata, tolerance) {
             var that = this, limit = 3 * tolerance; 
             if (((level > 0 && data.length > (limit + 1)) || level > 1) && !forceFull)
-                return that.buildCustomPreview(data, level, tolerance);
+                return that.buildStructuredTablePreview(data, level, tolerance, metadata);
 
             var html = '<table>', rowClass = '', newTolerance = 1;
             for (var i = 0; i < data.length; i++) {
@@ -380,7 +380,7 @@ if (window.jQueryGlimpse) { (function ($) {
                 if (metadataItem.post) { cellContent = cellContent + '<span class="glimpse-soft">' + metadataItem.post + '</span>'; }
             }
 
-            if (cellType != 'th') {
+            if (rowIndex != 0) {
                 cellClass = 'glimpse-cell';
                 //Cell Class
                 if (metadataItem.key === true) { cellClass += ' glimpse-cell-key'; }
@@ -401,7 +401,7 @@ if (window.jQueryGlimpse) { (function ($) {
             
             return html;
         },
-        buildFormatString : function(formatString, data, indexs) { 
+        buildFormatString : function(formatString, data, indexs) { //TODO: this needs to be moved out 
             for (var i = 0; i < indexs.length; i++) {
                 var pattern = "\\\{\\\{" + indexs[i] + "\\\}\\\}", regex = new RegExp(pattern, "g"); 
                 formatString = formatString.replace(regex, data[indexs[i]]);
@@ -412,18 +412,31 @@ if (window.jQueryGlimpse) { (function ($) {
             return this.buildStringPreview(data, level, tolerance);
         },
         buildKeyValuePreview: function (data, level, tolerance) {
-            var that = this, length = $.glimpse.util.lengthJson(data), rowMax = 2 * tolerance, rowLimit = (rowMax < length ? rowMax : length), i = 1, html = '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object"><span class="start">{</span>';
+            var that = this;
+            return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + that.buildKeyValuePreviewOnly(data, level, tolerance) + '</div><div class="glimpse-preview-show">' + that.buildKeyValueTable(data, level, true, tolerance) + '</div></td></tr></table>';
+        },
+        buildKeyValuePreviewOnly: function (data, level, tolerance) {
+            var that = this, length = $.glimpse.util.lengthJson(data), rowMax = 2 * tolerance, rowLimit = (rowMax < length ? rowMax : length), i = 1, html = '<span class="start">{</span>';
+
             for (var key in data) {
                 html += that.newItemSpacer(i, rowLimit, length);
                 if (i > length || i++ > rowLimit)
                     break;
                 html += '<span>\'</span>' + that.buildStringPreview(key, level + 1, 1) + '<span>\'</span><span class="mspace">:</span><span>\'</span>' + that.buildStringPreview(data[key], level + 99, 1) + '<span>\'</span>';
             }
-            html += '<span class="end">}</span></div><div class="glimpse-preview-show">' + that.buildKeyValueTable(data, level, true, tolerance) + '</div></td></tr></table>';
+            html += '<span class="end">}</span>';
+
             return html;
         },
         buildCustomPreview: function (data, level, tolerance) {
-            var that = this, appendTail = true, isComplex = ($.isArray(data[0]) || $.isPlainObject(data[0])), length = (isComplex ? data.length - 1 : data.length), rowMax = 2 * tolerance, columnMax = 3, columnLimit = 1, rowLimit = (rowMax < length ? rowMax : length), html = '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object"><span class="start">[</span>';
+            var that = this, isComplex = ($.isArray(data[0]) || $.isPlainObject(data[0]));
+
+            if (isComplex || data.length > 1) 
+                return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + that.buildCustomPreviewOnly(data, level, tolerance) + '</div><div class="glimpse-preview-show">' + that.buildCustomTable(data, level, true, tolerance) + '</div></td></tr></table>';
+            return that.buildStringPreview(data[0], level + 1, 1); 
+        },
+        buildCustomPreviewOnly: function (data, level, tolerance) { 
+            var that = this, appendTail = true, isComplex = ($.isArray(data[0]) || $.isPlainObject(data[0])), length = (isComplex ? data.length - 1 : data.length), rowMax = 2 * tolerance, columnMax = 3, columnLimit = 1, rowLimit = (rowMax < length ? rowMax : length), html = '<span class="start">[</span>';
 
             if (isComplex) {
                 columnLimit = ((data[0].length > columnMax) ? columnMax : data[0].length);
@@ -443,24 +456,22 @@ if (window.jQueryGlimpse) { (function ($) {
                     html += '<span class="end">]</span>';
                 }
             }
-            else {
-                if (data.length > 1) {
-                    for (var i = 0; i <= rowLimit; i++) {
-                        html += that.newItemSpacer(i + 1, rowLimit, length);
-                        if (i >= length || i >= rowLimit)
-                            break;
-                        html += '<span>\'</span>' + that.buildStringPreview(data[i], level + 99, 1) + '<span>\'</span>';
-                    }
-                }
-                else {
-                    appendTail = false;
-                    html = that.buildStringPreview(data[0], level + 1, 1);
-                }
+            else { 
+                for (var i = 0; i <= rowLimit; i++) {
+                    html += that.newItemSpacer(i + 1, rowLimit, length);
+                    if (i >= length || i >= rowLimit)
+                        break;
+                    html += '<span>\'</span>' + that.buildStringPreview(data[i], level + 99, 1) + '<span>\'</span>';
+                } 
             }
 
-            if (appendTail)
-                html += '<span class="end">]</span></div><div class="glimpse-preview-show">' + that.buildCustomTable(data, level, true, tolerance) + '</div></td></tr></table>';
+            html += '<span class="end">]</span>';
+
             return html;
+        },
+        buildStructuredTablePreview : function(data, level, tolerance, metadata) {
+            var that = this;
+            return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + that.buildCustomPreviewOnly(data, level, tolerance) + '</div><div class="glimpse-preview-show">' + that.buildStructuredTable(data, level, true, metadata, tolerance) + '</div></td></tr></table>';
         },
         buildStringPreview: function (data, level, tolerance) {
             if (data == undefined || data == null)
