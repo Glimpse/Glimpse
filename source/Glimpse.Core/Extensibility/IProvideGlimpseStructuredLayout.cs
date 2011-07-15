@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Glimpse.Core.Extensibility
 {
@@ -39,6 +40,12 @@ namespace Glimpse.Core.Extensibility
 
         public string CodeType { get; set; }
 
-        public GlimpseStructuredLayoutSubStructure Structure { get; set; }
+        public int? Span { get; set; }
+
+        public object Structure { get; set; }
+
+        public bool? SuppressAutoPreview { get; set; }
+
+        public bool? MinimalDisplay { get; set; }
     }
 }

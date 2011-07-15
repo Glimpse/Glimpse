@@ -434,18 +434,37 @@ namespace Glimpse.Core
                 if (cell.IsCode.GetValueOrDefault())
                     item.Add("isCode", cell.IsCode);
                 if (!String.IsNullOrEmpty(cell.CodeType))
-                    item.Add("codeType", cell.CodeType); 
+                    item.Add("codeType", cell.CodeType);
+                if (cell.Span.HasValue)
+                    item.Add("span", cell.Span.Value);
+                if (cell.SuppressAutoPreview.GetValueOrDefault())
+                    item.Add("forceFull", cell.SuppressAutoPreview);
+                if (cell.MinimalDisplay.GetValueOrDefault())
+                    item.Add("minDisplay", cell.MinimalDisplay); 
                 if (cell.Data != null)
-                {
+                {   
                     var typedData = cell.Data as GlimpseStructuredLayoutSection;
                     item.Add("data", typedData == null ? cell.Data : BuildStructuredLayoutRow(typedData)); 
                 }
                 if (cell.Structure != null)
                 {
-                    var collection = new Dictionary<int, object>();
-                    foreach (var sub in cell.Structure)
-                        collection.Add(sub.Key, BuildStructuredLayout(sub.Value));
-                    item.Add("structure", collection);
+                    var structure = cell.Structure;
+
+                    var collectionStructure = structure as GlimpseStructuredLayoutSubStructure;
+                    if (collectionStructure != null)
+                    {
+                        var collection = new Dictionary<int, object>();
+                        foreach (var sub in collectionStructure)
+                            collection.Add(sub.Key, BuildStructuredLayout(sub.Value));
+                        structure = collection;
+
+                    }
+
+                    var itemStructure = structure as GlimpseStructuredLayout;
+                    if (itemStructure != null)
+                        structure = BuildStructuredLayout(itemStructure);
+
+                    item.Add("structure", structure);
                 }
                 result.Add(item);
             }
