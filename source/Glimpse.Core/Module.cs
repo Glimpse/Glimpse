@@ -440,7 +440,11 @@ namespace Glimpse.Core
                 if (cell.SuppressAutoPreview.GetValueOrDefault())
                     item.Add("forceFull", cell.SuppressAutoPreview);
                 if (cell.MinimalDisplay.GetValueOrDefault())
-                    item.Add("minDisplay", cell.MinimalDisplay); 
+                    item.Add("minDisplay", cell.MinimalDisplay);
+                if (cell.Limit.HasValue)
+                    item.Add("limit", cell.Limit.Value); 
+
+                
                 if (cell.Data != null)
                 {   
                     var typedData = cell.Data as GlimpseStructuredLayoutSection;

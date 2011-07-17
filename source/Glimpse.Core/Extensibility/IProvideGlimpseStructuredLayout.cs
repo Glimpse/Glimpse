@@ -47,5 +47,7 @@ namespace Glimpse.Core.Extensibility
         public bool? SuppressAutoPreview { get; set; }
 
         public bool? MinimalDisplay { get; set; }
+
+        public int? Limit { get; set; }
     }
 }

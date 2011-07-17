@@ -37,7 +37,7 @@ $(document).ready(function () {
     var scenarioFourteenMetadata = [
             [ { data : [{ data : 0, key : true, align : 'right' }, { data : 2, align : 'right' }, { data : '{{3}} - {{4}}', align : 'right' }, ], width : '200px' }, { data : 1 } ]
         ];
-    $('.glimpse-scenario-fourteen').show().html($Glimpse.glimpseProcessor.build(scenarioFourteenData, 0, scenarioFourteenMetadata));
+    $('.glimpse-scenario-fourteen').show().html($Glimpse.glimpseProcessor.build(scenarioFourteenData, 0, false, scenarioFourteenMetadata));
  
 
     
@@ -51,7 +51,7 @@ $(document).ready(function () {
     var scenarioFifteenMetadata = [
             [ { data : [ { data : 0, key : true, align : 'right' }, { data : 1, align : 'right' }, { data : 2, align : 'right', post : ' ms', className : 'mono' }, { data : 3, align : 'right', pre : 'T+ ', post : ' ms', className : 'mono' } ], width : '200px' }, { data : 4, isCode : true, codeType : 'sql' } ]
         ];
-    $('.glimpse-scenario-fifteen').show().html($Glimpse.glimpseProcessor.build(scenarioFifteenData, 0, scenarioFifteenMetadata));
+    $('.glimpse-scenario-fifteen').show().html($Glimpse.glimpseProcessor.build(scenarioFifteenData, 0, false, scenarioFifteenMetadata));
 
 
 
@@ -68,7 +68,7 @@ $(document).ready(function () {
     var scenarioSixteenMetadata = [
             [ { data : '{{0}} - ({{1}})', key : true }, { data : 2, width : '20%' }, { data : 3, width : '20%' } ]
         ];
-    $('.glimpse-scenario-sixteen').show().html($Glimpse.glimpseProcessor.build(scenarioSixteenData, 0, scenarioSixteenMetadata));
+    $('.glimpse-scenario-sixteen').show().html($Glimpse.glimpseProcessor.build(scenarioSixteenData, 0, false, scenarioSixteenMetadata));
 
 
 
@@ -90,7 +90,7 @@ $(document).ready(function () {
                 { data : 4, structure : [ [ { data : 0, width : '30%' }, { data : 1, width : '30%' }, { data : 2, width : '20%' }, { data : 3, width : '20%' } ] ] } 
             ]
         ]; 
-    $('.glimpse-scenario-seventeen').show().html($Glimpse.glimpseProcessor.build(scenarioSeventeenData, 0, scenarioSeventeenMetadata));
+    $('.glimpse-scenario-seventeen').show().html($Glimpse.glimpseProcessor.build(scenarioSeventeenData, 0, false, scenarioSeventeenMetadata));
 
 
 
@@ -135,7 +135,7 @@ $(document).ready(function () {
                          } }
             ]
         ];
-    $('.glimpse-scenario-eighteen').show().html($Glimpse.glimpseProcessor.build(scenarioEighteenData, 0, scenarioEighteenMetadata));
+    $('.glimpse-scenario-eighteen').show().html($Glimpse.glimpseProcessor.build(scenarioEighteenData, 0, false, scenarioEighteenMetadata));
 
 
 
