@@ -31,6 +31,18 @@ namespace Glimpse.Core.Configuration
             }
         }
 
+        [ConfigurationProperty("cacheDisabled", DefaultValue = "false", IsRequired = false)]
+        public bool CacheDisabled
+        {
+            set { this["cacheDisabled"] = value; }
+            get
+            {
+                bool result; //false which matches the default above
+                bool.TryParse(this["cacheDisabled"].ToString(), out result);
+                return result;
+            }
+        }
+
         [ConfigurationProperty("rootUrlPath", DefaultValue = @"Glimpse", IsRequired = false)]
         public string RootUrlPath
         {

@@ -1,17 +1,23 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Reflection;
 using System.Web;
+using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Handlers
 {
     public abstract class ImageHandlerBase : IGlimpseHandler
     {
+        [Import]
+        internal GlimpseConfiguration Configuration { get; set; }
+
         protected abstract string ContentType { get; }
+
         protected abstract string EmbeddedResourceName { get; }
+
         public abstract string ResourceName { get;} 
-
-
+         
         public void ProcessRequest(HttpContextBase context)
         {
             var response = context.Response;
@@ -27,7 +33,8 @@ namespace Glimpse.Core.Handlers
                 }
             }
             response.AddHeader("Content-Type", ContentType);
-            response.ExpiresAbsolute = DateTime.Now.AddYears(1);
+            if (!Configuration.CacheDisabled)
+                response.ExpiresAbsolute = DateTime.Now.AddMonths(6);
         }
 
     }

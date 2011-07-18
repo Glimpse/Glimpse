@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Reflection;
 using System.Web;
+using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Handlers
@@ -9,11 +11,14 @@ namespace Glimpse.Core.Handlers
     [GlimpseHandler]
     public class JavascriptClient : IGlimpseHandler
     {
+        [Import]
+        internal GlimpseConfiguration Configuration { get; set; }
+
         public string ResourceName
         {
             get { return "client.js"; }
         }
-
+         
         public void ProcessRequest(HttpContextBase context)
         {
             var response = context.Response;
@@ -30,8 +35,8 @@ namespace Glimpse.Core.Handlers
                 }
             }
             response.AddHeader("Content-Type", "application/x-javascript");
-            if (!context.IsDebuggingEnabled)
-                response.ExpiresAbsolute = DateTime.Now.AddYears(1);
+            if (!Configuration.CacheDisabled)
+                response.ExpiresAbsolute = DateTime.Now.AddMonths(6);
         }
     }
 }
