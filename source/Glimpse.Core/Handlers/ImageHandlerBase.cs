@@ -33,7 +33,7 @@ namespace Glimpse.Core.Handlers
                 }
             }
             response.AddHeader("Content-Type", ContentType);
-            if (!Configuration.CacheDisabled)
+            if (Configuration.CacheEnabled)
                 response.ExpiresAbsolute = DateTime.Now.AddMonths(6);
         }
 

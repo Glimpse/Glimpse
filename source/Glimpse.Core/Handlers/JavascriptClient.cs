@@ -35,7 +35,7 @@ namespace Glimpse.Core.Handlers
                 }
             }
             response.AddHeader("Content-Type", "application/x-javascript");
-            if (!Configuration.CacheDisabled)
+            if (Configuration.CacheEnabled)
                 response.ExpiresAbsolute = DateTime.Now.AddMonths(6);
         }
     }
