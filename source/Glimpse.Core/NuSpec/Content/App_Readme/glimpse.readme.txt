@@ -13,12 +13,23 @@ To get started with Glimpse, visit [http://yoursite.com]/Glimpse.axd This page h
 
 The following configuration values are allowed for Glimpse in your web.config:
 
-<glimpse enabled="true" requestLimit="5" loggingEnabled="true"> <!-- set enabled to false to completely turn off Glimpse. requestLimit specifies the max number of requests Glimpse will save. enableLogging (false by default) if you experience problems with Glimpse -->
+<glimpse enabled="true" 
+	requestLimit="5" 
+	loggingEnabled="false"
+	ipForwardingEnabled="false"
+	cacheEnabled="true"> 
+	<!-- 
+		set enabled to false to completely turn off Glimpse. 
+		requestLimit specifies the max number of requests Glimpse will save. 
+		enableLogging (false by default) if you experience problems with Glimpse 
+		ipForwardingEnabled (false by default) will force Glimpse to validate IP addresses based on the value in the HTTP_X_FORWARDED_FOR header. Useful if your server is behind a proxy or load balancer.
+		cacheEnabled (true by default) Glimpse will tell browsers to cache static files by default
+	-->
     <ipAddresses> <!-- List of IP addresses allowed to get Glimpse data. Optional. localhost (IPv4 & IPv6) by default -->
         <add address="127.0.0.1" />
         <add address="::1" />
     </ipAddresses>
-    <contentTypes><!-- List of content types Glimpse will provide data for. Optional  text/html by default -->
+    <contentTypes><!-- List of content types Glimpse will provide data for. Optional  text/html and application/json by default -->
         <add contentType="text/html"/>
     </contentTypes>
     <pluginBlacklist><!-- List of plugins for Glimpse to ignore. Optional. By default all plugins will load -->
@@ -29,6 +40,10 @@ The following configuration values are allowed for Glimpse in your web.config:
         <add name="Dev" authority="localhost:33333" />
         <add name="Prod" authority="getglimpse.com" />
     </environments>
+	<urlBlacklist><!-- Glimpse will ignore all requests made to URI's that match any regular expression in this list. Optional. By default all URI's will be considered for Glimpse inspection. -->
+		<add url="{regex}"/>
+		<add url="{regex}"/>
+	</urlBlacklist>
 </glimpse>
 
 
@@ -92,6 +107,17 @@ Details coming soon.
 
 Release Notes
 -------------
+07/22/2011 - 0.84
+- urlBlacklist validator contributed by hahndorf
+- Support for IP validation when server is behind a proxy/load balancer contributed by rho24
+- Glimpse <script> tags now render inside <body> tags
+- Glimpse no longer uses inline javascript, fixing bugs reported for developers with content security policy enabled in firefox
+- Added exception information to glimpseLog when enabled
+- UI facelift, including update to glimpse icon
+- Static glimpse files are now cached in browser, improving performance (can be disabled via web.config)
+- Fixed NullReferenceException problem on session tab
+- Javascript client performance improvements
+
 06/29/2011 - 0.83
 - Switch from /Glimpse/Config to /glimpse.axd, including temporary automatic redirect and warning message
 - Notification on at top of screen when Glimpse is turned on

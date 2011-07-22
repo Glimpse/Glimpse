@@ -18,15 +18,15 @@ namespace Glimpse.Core.Configuration
                 return result;
             }
         }
-        
-        [ConfigurationProperty("allowIPForwarding", DefaultValue = "false", IsRequired = false)]
-        public bool AllowIPForwarding
+
+        [ConfigurationProperty("ipForwardingEnabled", DefaultValue = "false", IsRequired = false)]
+        public bool IpForwardingEnabled
         {
-            set { this["allowIPForwarding"] = value; }
+            set { this["ipForwardingEnabled"] = value; }
             get
             {
                 bool result; //false which matches the default above
-                bool.TryParse(this["allowIPForwarding"].ToString(), out result);
+                bool.TryParse(this["ipForwardingEnabled"].ToString(), out result);
                 return result;
             }
         }
