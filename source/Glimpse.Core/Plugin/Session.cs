@@ -24,10 +24,13 @@ namespace Glimpse.Core.Plugin
                                  new[] {"Key", "Value", "Type"}
                              };
 
-            result.AddRange(from object key in session.Keys
-                            let value = session[key.ToString()]
-                            let type = value.GetType()
-                            select new[] {key.ToString(), value, type.ToString()});
+            foreach (var key in session.Keys)
+            {
+                var keyString = key.ToString();
+                var value = session[keyString];
+                var type = value != null ? value.GetType().ToString() : null;
+                result.Add(new[]{keyString, value, type});
+            }
 
             if (result.Count > 1) return result;
 

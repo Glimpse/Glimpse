@@ -21,7 +21,9 @@ namespace Glimpse.Mvc3.Extensions
                         proxy == null);
 
                 if (!result)
+                {
                     //TODO: Add logging
+                }
 
                 return result;
             }

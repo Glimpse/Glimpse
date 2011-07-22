@@ -31,14 +31,14 @@ namespace Glimpse.Core.Configuration
             }
         }
 
-        [ConfigurationProperty("cacheDisabled", DefaultValue = "false", IsRequired = false)]
-        public bool CacheDisabled
+        [ConfigurationProperty("cacheEnabled", DefaultValue = "true", IsRequired = false)]
+        public bool CacheEnabled
         {
-            set { this["cacheDisabled"] = value; }
+            set { this["cacheEnabled"] = value; }
             get
             {
-                bool result; //false which matches the default above
-                bool.TryParse(this["cacheDisabled"].ToString(), out result);
+                bool result = true; //true which matches the default above
+                bool.TryParse(this["cacheEnabled"].ToString(), out result);
                 return result;
             }
         }
