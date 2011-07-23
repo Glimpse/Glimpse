@@ -36,10 +36,15 @@
 <pre class="csharpcode">
 <span class="kwrd">&lt;</span><span class="html">glimpse</span> <span class="attr">enabled</span><span class="kwrd">="true"</span> <span class="kwrd">/&gt;</span></pre>
 
-    <p>All settings for Glimpse are within a Glimpse node under &lt;configuration&gt; The Glimpse node itself can have four optional attributes:</p>
+    <p>All settings for Glimpse are within a Glimpse node under &lt;configuration&gt; The Glimpse node itself can have optional attributes:</p>
 
 <pre class="csharpcode">
-<span class="kwrd">&lt;</span><span class="html">glimpse</span> <span class="attr">enabled</span><span class="kwrd">="false"</span> <span class="attr">loggingEnabled</span><span class="kwrd">="false"</span> <span class="attr">requestLimit</span><span class="kwrd">="15"</span><span class="kwrd">&gt;</span>
+<span class="kwrd">&lt;</span><span class="html">glimpse</span> 
+    <span class="attr">enabled</span><span class="kwrd">="false"</span> 
+    <span class="attr">requestLimit</span><span class="kwrd">="15"</span> 
+    <span class="attr">loggingEnabled</span><span class="kwrd">="false"</span> 
+    <span class="attr">cacheEnabled</span><span class="kwrd">="true"</span> 
+    <span class="attr">ipForwardingEnabled</span><span class="kwrd">="false"</span> <span class="kwrd">&gt;</span>
     ...
 <span class="kwrd">&lt;/</span><span class="html">glimpse</span><span class="kwrd">&gt;</span></pre>
 
@@ -47,6 +52,11 @@
         <li><strong>enabled</strong>: is a boolean with a default value of "false". It allows us to turn off Glimpse completely. </li>
         <li><strong>requestLimit</strong>: is an integer with a default value of 15. Glimpse "remembers" the debug information for a number of requests on the server.  This is important for the Ajax and Remote tabs to work. This number defines how many requests are stored.</li>
         <li><strong>loggingEnabled</strong>: another boolean with a default value of "false". This is used for internal debugging only and should not be changed. </li>
+        <li><strong>cacheEnabled</strong>: boolean with a default of "true". By default the Glimpse resources such as the JavaScript and the images are
+        cached by the browser. You can disable this caching by changing this setting to "false".</li>
+        <li><strong>ipForwardingEnabled</strong>: boolean with a default of "false". If you enable this, the IP address check (see below)
+        will support cases where the server is behind a proxy/load balancer.</li>
+        
     </ul>
 
     The following sections are all sub-sections of the main Glimpse section.
@@ -100,6 +110,38 @@
                 <p>Why would you want to do this? Maybe there is a plugin that you never use and it just fills up the space in the tab bar. Or when in a production environment there are certain plugins that reveal too much information to a user. Other reasons may be that one of you own plugins is not stable, or that a plugin can cause performance issues in certain cases.</p>
                 <p>To see a list of the plugins that you can blacklist, simply go to your /Glimpse.axd page. This shows a list of all plugins that Glimpse has detected (both official Glimpse Plugins and 3rd Party plugins) and which ones are currently disabled (if you have disabled any).</p>
 
+    <hr class="line" />
+
+                <h3>Blacklist for URLs</h3>
+                <p>Another optional blacklist, this is for Urls. It allows you to disable Glimpse for certain pages
+                on your site. There are several use cases for this feature:</p>
+                <ul class="plain">
+                <li>You may have static html files on your site, if you have set 'runAllManagedModulesForAllRequests'
+                to true in web.config, these files are processed by the ASP.NET runtime and the Glimpse data
+                is appended to them. This usually doesn't make any sense because it is not very helpful for static files.
+                So you can add a blacklist entry for '\.html?$' for exclude such files.</li>
+                <li>
+                You are using frames on your site. You want Glimpse for your main content frame but
+                not for the navigation frames because they are pretty static and also too small to display the 
+                Glimpse panel. Luckily the pages displaying the navigation always have the same name, so you can
+                add a blacklist entry like 'topmenu\.aspx'.
+                </li>
+                <li>
+                    You are using a control that makes Ajax requests, but does not use the 'XMLHttpRequest' http header.
+                    By adding debug information to this request, Glimpse is breaking that control. You can add a 
+                    blacklist entry to disable Glimpse for such cases: 'somecontrol[\d]+\.asdx$'
+                </li>
+                </ul>
+
+<pre class="csharpcode">
+<span class="kwrd">&lt;</span><span class="html">urlBlacklist</span><span class="kwrd">&gt;</span>
+    <span class="kwrd">&lt;</span><span class="html">add</span> <span class="attr">url</span><span class="kwrd">="\.html?$"</span><span class="kwrd">/&gt;</span>
+    <span class="kwrd">&lt;</span><span class="html">add</span> <span class="attr">url</span><span class="kwrd">="topframe\.aspx"</span> <span class="kwrd">/&gt;</span>
+    <span class="kwrd">&lt;</span><span class="html">add</span> <span class="attr">url</span><span class="kwrd">="navigation"</span> <span class="kwrd">/&gt;</span>
+<span class="kwrd">&lt;/</span><span class="html">urlBlacklist</span><span class="kwrd">&gt;</span></pre>
+             
+             <p>Within the urlBlacklist node you can add your entries. The url attribute takes a regular expression
+             to be matched against the url of the request. If any of your entries matches the url, Glimpse is not executed for the request.</p>
 
     <hr class="line" />
 
