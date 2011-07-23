@@ -10,6 +10,9 @@ See glimpse.readme.txt or http://getglimpse.com for more info
 
 Release Notes
 -------------
+07/22/2011 - 0.84
+- Fixed bug that caused the execution tab to always be disabled
+
 06/29/2011 - 0.83
 - Swapped GlimpseView to be public rather than internal. This is a workaround for certain situations until further development.
 

@@ -11,7 +11,7 @@ namespace Glimpse.Core.Validator
         {
             if (configuration.IpAddresses.Count == 0) return true; //no configured list, allow all IP's
 
-            var userIpAddress = GetUserIpAddress(context, configuration.AllowIPForwarding);
+            var userIpAddress = GetUserIpAddress(context, configuration.IpForwardingEnabled);
 
             return configuration.IpAddresses.Contains(userIpAddress);
         }
