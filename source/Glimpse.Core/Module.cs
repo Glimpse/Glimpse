@@ -337,6 +337,17 @@ namespace Glimpse.Core
                 var helpPlugin = pluginValue as IProvideGlimpseHelp;
                 if (helpPlugin != null) pluginData.Add("helpUrl", helpPlugin.HelpUrl);
 
+                var pagingPlugin = pluginValue as IProvideGlimpsePaging;
+                if (pagingPlugin != null)
+                    pluginData.Add("pagingInfo", new
+                                                     {
+                                                         pagerKey = pagingPlugin.PagerKey,
+                                                         pagerType = pagingPlugin.PagerType,
+                                                         pageSize = pagingPlugin.PageSize,
+                                                         pageIndex = pagingPlugin.PageIndex,
+                                                         totalNumberOfRecords = pagingPlugin.TotalNumberOfRecords
+                                                     });
+
                 if (pluginData.Count > 0) pluginsMetadata.Add(pluginValue.Name, pluginData);
             }
 
