@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Web;
 using System.Web.Compilation;
 using Glimpse.Core.Configuration;
@@ -42,9 +43,6 @@ namespace Glimpse.Core.Plugin
                 environmentName = currentEnviro.Name;
             }
 
-            var serverSoftware = context.Request.ServerVariables["SERVER_SOFTWARE"];
-            var processName = Process.GetCurrentProcess().MainModule.ModuleName;
-
             //build assemblies table
             var headers = new[] {"Name", "Version", "Culture", "From GAC", "Full Trust"};
             var sysList = new List<object[]>{ headers };
@@ -68,16 +66,11 @@ namespace Glimpse.Core.Plugin
             cachedData = new Dictionary<string, object>
                               {
                                   {"Environment Name", environmentName},
-                                  {"Machine Name", string.Format("{0} ({1} processors)", System.Environment.MachineName, System.Environment.ProcessorCount)},
-                                  {"Booted", DateTime.Now.AddMilliseconds(System.Environment.TickCount*-1)},
-                                  {"Operating System", string.Format("{0} ({1} bit)", System.Environment.OSVersion.VersionString, System.Environment.Is64BitOperatingSystem ? "64" : "32")},
-                                  {".NET Framework", string.Format(".NET {0} ({1} bit)", System.Environment.Version, IntPtr.Size*8)},
-                                  {"Web Server", !string.IsNullOrEmpty(serverSoftware) ? serverSoftware : processName.StartsWith("WebDev.WebServer", StringComparison.InvariantCultureIgnoreCase) ? "Visual Studio Web Development Server" : "Unknown"},
-                                  {"Integrated Pipeline", HttpRuntime.UsingIntegratedPipeline.ToString()},
-                                  {"Debugging", IsInDebug(context)},
-                                  {"Current Trust Level", GetCurrentTrustLevel().ToString()},
+                                  {"Machine", MachineDetails()},
+                                  {"Web Server", WebServerDetails(context)},
+                                  {"Framework", FrameworkDetails(context)},
                                   {"Process", ProcessDetails()},
-                                  {"Timezone", TimezineDetails()},
+                                  {"Timezone", TimezoneDetails()},
                                   {"Application Assemblies", appList},
                                   {"System Assemblies", sysList}
                               };
@@ -128,15 +121,46 @@ namespace Glimpse.Core.Plugin
 
         private static object IsInDebug(HttpContextBase context)
         {
-            var url = context.Request.Url.ToString();
-            var isLocal = url.Contains("localhost") || url.Contains("127.0.0.1") || url.Contains("::1");
+            var isLocal = context.Request.Url.IsLoopback;
             var isDebug = context.IsDebuggingEnabled;
             if (!isLocal && context.IsDebuggingEnabled)
-                return String.Format("*{0}*", isDebug);
-            return isDebug;
+                return String.Format("*{0}*", isDebug.ToString());
+            return isDebug.ToString();
         }
 
-        private static object TimezineDetails()
+        private static object WebServerDetails(HttpContextBase context)
+        {
+            var serverSoftware = context.Request.ServerVariables["SERVER_SOFTWARE"];
+            var processName = Process.GetCurrentProcess().MainModule.ModuleName;
+
+            return new List<object[]>
+                           {
+                               new object[] { "Type", "Integrated Pipeline"},
+                               new object[] { (!string.IsNullOrEmpty(serverSoftware) ? serverSoftware : processName.StartsWith("WebDev.WebServer", StringComparison.InvariantCultureIgnoreCase) ? "Visual Studio Web Development Server" : "Unknown"), HttpRuntime.UsingIntegratedPipeline.ToString() }
+                           }; 
+        }
+
+        private static object FrameworkDetails(HttpContextBase context)
+        { 
+            return new List<object[]>
+                           {
+                               new object[] {".NET Framework", "Debugging", "Server Culture", "Current Trust Level"},
+                               new object[] {string.Format(".NET {0} ({1} bit)", System.Environment.Version, IntPtr.Size*8), IsInDebug(context).ToString(), Thread.CurrentThread.CurrentCulture, GetCurrentTrustLevel().ToString()}
+                           };
+        }
+
+        private static object MachineDetails()
+        {
+            var machineStarttime = DateTime.Now.AddMilliseconds(System.Environment.TickCount * -1);
+             
+            return new List<object[]>
+                           {
+                               new object[] {"Name", "Operating System", "Start Time", /*, "Uptime"*/},
+                               new object[] {string.Format("{0} ({1} processors)", System.Environment.MachineName, System.Environment.ProcessorCount), string.Format("{0} ({1} bit)", System.Environment.OSVersion.VersionString, System.Environment.Is64BitOperatingSystem ? "64" : "32"), machineStarttime/*, GetUptime(machineStarttime)*/}
+                           }; 
+        }
+
+        private static object TimezoneDetails()
         { 
             // get a local time zone info
             var timeZoneInfo = TimeZoneInfo.Local;
@@ -155,7 +179,7 @@ namespace Glimpse.Core.Plugin
             return new List<object[]>
                            {
                                new object[] { "Current", "Is Daylight Saving", "UtcOffset w/DLS" },
-                               new object[] { timeZoneInfo.DisplayName, isDaylightSavingTime, offset }
+                               new object[] { timeZoneInfo.DisplayName, isDaylightSavingTime.ToString(), offset }
                            }; 
         }
 
@@ -164,21 +188,28 @@ namespace Glimpse.Core.Plugin
             var process = Process.GetCurrentProcess();
              
             var processName = process.MainModule.ModuleName;
-            var startTime = process.StartTime;
-            var uptimeSpan = DateTime.Now.Subtract(startTime);
-
-            var uptime = "";
-            if (uptimeSpan.Days > 0) 
-                uptime = uptimeSpan.Days + " days"; 
-            if (uptimeSpan.Hours > 0) 
-                uptime += uptimeSpan.Hours + " hrs"; 
-            uptime += uptimeSpan.Minutes + " min";	
+            var startTime = process.StartTime; 
+            var uptime = GetUptime(startTime); 
 
             return new List<object[]>
                            {
-                               new object[] { "Worker Process", "Process ID", "Start Time", "Uptime" },
-                               new object[] { processName, process.Id, String.Format("{0} {1}", startTime.ToShortDateString(), startTime.ToLongTimeString()), uptime }
+                               new object[] { "Worker Process", "Process ID", "Start Time"/*, "Uptime"*/ },
+                               new object[] { processName, process.Id, startTime/*, uptime*/ }
                            }; 
+        }
+
+        private static string GetUptime(DateTime startTime)
+        {
+            var uptimeSpan = DateTime.Now.Subtract(startTime);
+
+            var uptime = "";
+            if (uptimeSpan.Days > 0)
+                uptime = uptimeSpan.Days + " days ";
+            if (uptimeSpan.Hours > 0)
+                uptime += uptimeSpan.Hours + " hrs ";
+            uptime += uptimeSpan.Minutes + " min";
+
+            return uptime;
         }
 
         public string HelpUrl

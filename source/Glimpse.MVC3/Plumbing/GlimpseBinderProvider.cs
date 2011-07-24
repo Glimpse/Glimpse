@@ -1,19 +1,20 @@
 ﻿using System;
-using System.Web;
 using System.Web.Mvc;
-using Glimpse.Core.Extensions;
+using Glimpse.Core.Extensibility;
+using Glimpse.Core.Plumbing;
 using Glimpse.Mvc3.Extensions;
-using Glimpse.Mvc3.Warning;
 
 namespace Glimpse.Mvc3.Plumbing
 {
     internal class GlimpseBinderProvider:IModelBinderProvider
     {
         public IModelBinderProvider BinderProvider { get; set; }
+        public IGlimpseLogger Logger { get; set; }
 
-        public GlimpseBinderProvider(IModelBinderProvider binderProvider)
+        public GlimpseBinderProvider(IModelBinderProvider binderProvider, IGlimpseLogger logger)
         {
             BinderProvider = binderProvider;
+            Logger = logger;
         }
 
         public IModelBinder GetBinder(Type modelType)
@@ -24,12 +25,11 @@ namespace Glimpse.Mvc3.Plumbing
 
             if (binder is DefaultModelBinder)
             {
-                if (binder.CanSupportDynamicProxy())
+                if (binder.CanSupportDynamicProxy(Logger))
                     return binder.CreateDynamicProxy();
             }
 
-            var warnings = new HttpContextWrapper(HttpContext.Current).GetWarnings();//Hack
-            warnings.Add(new NotADefaultModelBinderWarning(binder));
+            Logger.Warn(binder.GetType() + " is not a System.Web.Mvc.DefaultModelBinder.");
             
             return binder.Wrap();
         }

@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Reflection;
-using System.Web;
 using Castle.DynamicProxy;
-using Glimpse.Core.Extensions;
-using Glimpse.Mvc3.Warning;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Mvc3.Interceptor
 {
     internal class ActionInvokerProxyGenerationHook : IProxyGenerationHook
     {
+        internal IGlimpseLogger Logger { get; set; }
+
+        public ActionInvokerProxyGenerationHook(IGlimpseLogger logger)
+        {
+            Logger = logger;
+        }
+
         public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
         {
             var methodName = methodInfo.Name;
@@ -22,14 +27,12 @@ namespace Glimpse.Mvc3.Interceptor
 
         public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)
         {
-            var warnings = new HttpContextWrapper(HttpContext.Current).GetWarnings();//Hack
-            warnings.Add(new NonProxyableMemberWarning(type, memberInfo));
+            Logger.Warn(string.Format("{0} method of {1} type is not proxyable.", memberInfo.Name, type));
         }
 
         public void NonVirtualMemberNotification(Type type, MemberInfo memberInfo)
         {
-            var warnings = new HttpContextWrapper(HttpContext.Current).GetWarnings();//Hack
-            warnings.Add(new NonVirtualMemberWarning(type, memberInfo));
+            Logger.Warn(string.Format("{0} method of {1} type is not marked virtual.", memberInfo.Name, type));
         }
 
         public void MethodsInspected()

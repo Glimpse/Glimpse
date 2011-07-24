@@ -8,10 +8,10 @@
     <h3>Layout</h3> 
     <img src="@Links.Content.Plugin.Trace_jpg" /> 
     <ol class="plain">
-        <li><span>Message</span>: The message that was dumped out by the Traced</li>
+        <li><span>Message</span>: The message that was traced</li>
         <li><span>Category</span>: The category level of message</li>
-        <li><span>From First</span>: The time in ms from when the request started</li>
-        <li><span>From Last</span>: The time in ms from when the last trace entry was recorded</li>
+        <li><span>From First</span>: The duration, in milliseconds, from when the first trace message</li>
+        <li><span>From Last</span>: The duration, in milliseconds, from when the previous trace message</li>
     </ol> 
 </div>
  
@@ -20,20 +20,47 @@
     <ol class="plain">
         <li>
             <div>What type of Tracing does Glimpse support?</div>
-            To start with Glimpse supports the standard set of trace methods:
+            Glimpse supports the standard set of System.Diagnostics Trace and Debug methods:
             <ul class="plain">
                 <li>Trace.TraceWarning("...") : void</li>
                 <li>Trace.TraceError("...") : void</li>
                 <li>Trace.TraceInformation("...") : void</li>
+                <li>See <a href="http://msdn.microsoft.com/en-us/library/system.diagnostics.trace.aspx" />full list of Trace methods on MSDN</a></li>
+                <li>Debug.TraceWarning("...") : void</li>
+                <li>Debug.TraceError("...") : void</li>
+                <li>Debug.TraceInformation("...") : void</li>
+                <li>See <a href="http://msdn.microsoft.com/en-us/library/system.diagnostics.debug.aspx" />full list of Debug methods on MSDN</a></li>
             </ul> 
-            In addition, we support several different methods off the GlimpseTrace class. It provide extended 
-            and wrapped up functionality. Some methods include:
+            
+            <p>In addition, we support several different methods off the static GlimpseTrace class. It provides extended 
+            and wrapped up functionality. Some methods include:</p>
+            
             <ul class="plain">
-                <li>GlimpseTrace.Info("...") : void</li>
-                <li>GlimpseTrace.Warn("...") : void</li>
-                <li>GlimpseTrace.Error("...") : void</li>
-                <li>GlimpseTrace.Fail("...") : void</li>
+                <li>Glimpse.Core.Extensibility.GlimpseTrace.Info("...") : void</li>
+                <li>Glimpse.Core.Extensibility.GlimpseTrace.Warn("...") : void</li>
+                <li>Glimpse.Core.Extensibility.GlimpseTrace.Error("...") : void</li>
+                <li>Glimpse.Core.Extensibility.GlimpseTrace.Fail("...") : void</li>
+                <li>Glimpse.Core.Extensibility.GlimpseTrace.Time("...") : IDisposable</li>
             </ul>
+
+            <p>Glimpse.Time allows developers to easily see how long it takes to complete certain operations. You can use the special token "{t}" to place duration information within your message, otherwise it will be appended to the end of your message automatically.</p>
+
+<pre class="csharpcode">
+<span class="kwrd">using</span>(<span class="kwrd">GlimpseTrace</span>.Time("It took {t} milliseconds to CreateFile"))
+{
+    CreateFile();
+}
+
+<span class="rem">
+//outputs:
+//It took 342 milliseconds to CreateFile
+</span>
+</pre>
+
+            <p>Messages on the Trace tab are automatically styled, based on Category, like this:</p>
+            <p>
+            <img src="@Links.Content.Plugin.TraceIcons_png" /></p>
+
         </li> 
     </ol>
 </div>

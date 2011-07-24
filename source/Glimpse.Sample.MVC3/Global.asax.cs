@@ -32,10 +32,7 @@ namespace MvcMusicStore
         }
 
         protected void Application_Start()
-        {
-            //var profiler = new ProviderWrapper();
-            //profiler.InjectProxyRegistrations();
-
+        { 
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);

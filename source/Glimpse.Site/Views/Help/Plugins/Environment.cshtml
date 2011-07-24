@@ -2,7 +2,7 @@
 <h2>Environment Tab</h2>
 
 <div class="plugin-summary">
-    <p>The Environment tab provides information about the server that responded the the request. This tab is particularly useful in web farm/load balanced scenarios, when it can be difficult to know which server handled the request.</p>
+    <p>The Environment tab provides information about the server that responded to the request. This tab is particularly useful in web farm/load balanced scenarios, when it can be difficult to know which server handled the request.</p>
 </div>
 
 <div class="plugin-layout">
@@ -14,23 +14,32 @@
             <ul class="plain">
                 <li><span>Environment Name</span>: 
                     <p>This value represents the name you/your team call the environment that responded to the request. Typically environments go by names such as "local", "qa", "test", "staging" or "production".</p>
-                    <p>The Environment Name will only be made available by providing Glimpse additional <environments> configuration data, as seen in this sample:</p>
-                    <pre>
-&lt;glimpse enabled="true"&gt;
-    &lt;environments>
-        &lt;add name="Dev" authority="localhost:55555"/&gt;
-        &lt;add name="Prod" authority="getglimpse.com"/&gt;
-    &lt;/environments&gt;
-&lt;/glimpse&gt;</pre>
+                    <p>The Environment Name will only be made available by providing Glimpse additional &lt;environments&gt; configuration data, as seen in this sample:</p>
+
+<pre class="csharpcode">
+<span class="kwrd">&lt;</span><span class="html">glimpse</span> <span class="attr">enabled</span><span class="kwrd">="true"</span><span class="kwrd">&gt;</span>
+    <span class="kwrd">&lt;</span><span class="html">environments</span><span class="kwrd">&gt;</span>
+        <span class="kwrd">&lt;</span><span class="html">add</span> <span class="attr">name</span><span class="kwrd">="Dev"</span> <span class="attr">authority</span><span class="kwrd">="localhost:55555"</span><span class="kwrd">/&gt;</span>
+        <span class="kwrd">&lt;</span><span class="html">add</span> <span class="attr">name</span><span class="kwrd">="Prod"</span> <span class="attr">authority</span><span class="kwrd">="getglimpse.com"</span><span class="kwrd">/&gt;</span>
+    <span class="kwrd">&lt;/</span><span class="html">environments</span><span class="kwrd">&gt;</span>
+<span class="kwrd">&lt;/</span><span class="html">glimpse</span><span class="kwrd">&gt;</span></pre>
+
+                <p>Once environments have been added to the Glimpse configuration section, Glimpse will automatically enable its Switch Server functionality which allows developers to easily view the same page in different environments for comparison.</p>
+
+                <img src="/Content/Plugin/enviro.png" />&nbsp;<img src="/Content/Plugin/switchServers.png" />
+
                 </li>
                 <li><span>Machine Name</span>: Name of the machine that the site is running on</li>
                 <li><span>Booted</span>: When the machine was last booted</li>
-                <li><span>Operating sysgtem</span>: Current running Operating System</li>
-                <li><span>.NET Framework</span>: Current version of the .NET Framework that is installed</li>
+                <li><span>Operating system</span>: Current running Operating System</li>
+                <li><span>.NET Framework</span>: The version of the .NET Framework that is running the site</li>
                 <li><span>Web Server</span>: What web server is running (in this case Visual Studio's Web Dev Server is running)</li>
                 <li><span>Intergrated Pipeline</span>: Whether the site is running in Intergrated Pipeline mode or not</li>
-                <li><span>Worker Process</span>: The name of the worker process that is running the site</li>
+                <li><span>Debugging</span>: Shows the value of &lt;system.web&gt;/&lt;compilation debug="... in web.config, 
+                on a production server this should be set to 'false'</li>
                 <li><span>Current Trust Level</span>: Trust level that the site is operated in</li>
+                <li><span>Process</span>: Information about the worker process that is running the site</li>
+                <li><span>Timezone</span>: Information about the timezone set on the server.</li>
                 <li><span>System Assemblies</span>: Lists assemblies loaded in memory that have names starting with System.* or Microsoft.*</li>
                 <li><span>Application Assemblies</span>: Lists all other assemblies loaded in memory</li>
             </ul>

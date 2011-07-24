@@ -80,7 +80,7 @@
     <Compile Include="Plumbing\GlimpseFilterCalledMetadata.cs" />
     <Compile Include="Plumbing\GlimpseFilterCallMetadata.cs" />
     <Compile Include="Plumbing\GlimpseModelBinder.cs" />
-    <Compile Include="Plumbing\GlimpsePipelineInitiation.cs" />
+    <Compile Include="Plumbing\GlimpsePipelineInitiator.cs" />
     <Compile Include="Plumbing\GlimpseResultFilter.cs" />
     <Compile Include="Plumbing\GlimpseValueProvider.cs" />
     <Compile Include="Plumbing\GlimpseValueProviderFactory.cs" />

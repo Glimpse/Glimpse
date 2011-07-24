@@ -48,7 +48,7 @@ namespace MvcMusicStore.Controllers
 
             TempData["Test"] = "A bit of temp";
             
-            return View(albums.ToList());
+            return View(albums);
         }
 
         private List<Album> GetTopSellingAlbums(int count)

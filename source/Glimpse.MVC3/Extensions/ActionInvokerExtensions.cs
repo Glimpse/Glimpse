@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Web;
 using System.Web.Mvc;
 using Castle.DynamicProxy;
-using Glimpse.Core.Extensions;
-using Glimpse.Mvc3.Warning;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Mvc3.Extensions
 {
     internal static class ActionInvokerExtensions
     {
-        internal static bool CanSupportDynamicProxy(this IActionInvoker actionInvoker)
+        internal static bool CanSupportDynamicProxy(this IActionInvoker actionInvoker, IGlimpseLogger logger)
         {
-            var warnings = new HttpContextWrapper(HttpContext.Current).GetWarnings();//Hack
-
             if (actionInvoker is ControllerActionInvoker)//TODO: What changes for AsyncControllerActionInvoker?
             {
                 //Make sure there is a parameterless constructor and the type is not sealed
@@ -25,12 +21,15 @@ namespace Glimpse.Mvc3.Extensions
                         proxy == null);
 
                 if (!result)
-                    warnings.Add(new NotProxyableWarning(actionInvoker));
+                {
+                    //TODO: Add logging
+                }
 
                 return result;
             }
 
-            warnings.Add(new NotAControllerActionInvokerWarning(actionInvoker));
+            //logger.Warn(actionInvoker.GetType() + " is not a System.Web.Mvc.ControllerActionInvoker.");
+            //TODO add logging warnings.Add(new NotAControllerActionInvokerWarning(actionInvoker));
             return false;
         }
     }

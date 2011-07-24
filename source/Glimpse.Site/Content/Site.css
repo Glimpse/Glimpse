@@ -2,7 +2,7 @@
 html{color:#000;background:#FFF;}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym{border:0;font-variant:normal;}sup{vertical-align:text-top;}sub{vertical-align:text-bottom;}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit;}input,textarea,select{*font-size:100%;}legend{color:#000;}
 
 /* general */
-body { text-align:center; font-family:"avante garde", "Century Gothic", Serif; font-size:0.8em; line-height:1.4em; }
+body { text-align:center; font-family:Helvetica, Arial, sans-serif; font-size:0.8em; line-height:1.4em; }
 strong { font-weight:bold; } em { font-style:italic; }
 ul.plain, ol.plain { margin-bottom:1em; }
 ol.plain li { list-style-type:decimal; }
@@ -12,7 +12,7 @@ ul.plain li, ol.plain li { margin:0.5em 0 0.5em 1.5em ; }
 .dark-grad-bg { border:1px solid #dcdcdc; background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #FCFCFC), color-stop(1, #dfdfdf) ); background:-moz-linear-gradient( center top, #FCFCFC 5%, #dfdfdf 100% ); filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#FCFCFC', endColorstr='#dfdfdf'); background-color: #FAFAFA; }
 .light-grad-bg { border: 1px solid #AAA;  background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #EBEBEB), color-stop(1, #FCFCFC) ); background: -moz-linear-gradient( center top, #EBEBEB 5%, #FCFCFC 100% ); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#EBEBEB', endColorstr='#FCFCFC'); background-color: #FCFCFC; }
 .navigation-back { border-top:0px; position:absolute; right: -10px; height: 80px; width: 720px; border-radius: 0px 0px 10px 10px; -moz-border-radius: 0px 0px 10px 10px; -webkit-border-bottom-right-radius: 10px; -webkit-border-bottom-left-radius: 10px; }
-.navigation { position:absolute; right:0; right:-50px; }
+.navigation { position:absolute; right:0; right:-50px; font-family:"avante garde", "Century Gothic", Serif; }
 .navigation li { float:left; width:185px; height:70px; position:relative; }
 .navigation li a { display:block; font-size:1.5em; color:#333; text-decoration:none; margin:1em 0 0.5em; }
 .nagigation li span { display:block; padding:40px 8px 0 12px; font-size:0.85em; }
@@ -23,12 +23,13 @@ ul.plain li, ol.plain li { margin:0.5em 0 0.5em 1.5em ; }
 .logo h1 { color:transparent; font-size:0px; height:65px; }
 .logo div { font-size:1.5em; margin: 25px 0 0 -10px; }
 .logo blockquote { width:350px; position:absolute; right:0; top:10px; }
-.features { margin-top:20px; }
+.features { margin-top:20px; font-size:14px; }
 .features h3 { margin:20px 0 15px; } 
 .features tr { vertical-align:top; } 
 .features p { padding: 0.5em 0; }
+.features pre { font-family:Consolas, monospace, serif; font-size:11px; }
 .scroll-pane { overflow:hidden; outline:none; height:400px; width:820px; }
-h1, h2, h3, h4 { line-height:1.2em; } 
+h1, h2, h3, h4 { line-height:1.2em; font-family:"avante garde", "Century Gothic", Serif; } 
 h1 { font-size:4em; }
 h2 { font-size:2.5em; }
 h3 { font-size:2em; }
@@ -49,6 +50,7 @@ pre { border: 1px dashed #777; background-color: #EEE; padding: 1em; }
 
 .plugin-summary { padding:1em 0 0 0; }
 .plugin-video { padding-bottom:1em; text-align:center; }
+/* a bit to wide, any span becomes italic and bold!: */
 .plugin-layout ol span, .plugin ul span { font-style:italic; font-weight:bold; }
 .plugin-faq ol div { font-weight:bold; }
 .plugin-faq li { margin-bottom:2em; }
@@ -67,7 +69,49 @@ pre { border: 1px dashed #777; background-color: #EEE; padding: 1em; }
 .about .light-grad-bg h2, .help .light-grad-bg h2 { margin-bottom:0.3em; }
 
 
-.sub-menu-holder { padding:1.5em 0 2em 0; border-top:1px solid #dcdcdc; border-bottom:1px solid #dcdcdc; margin-top:1em; }
+.sub-menu-holder { padding:1.5em 0 1.5em 0; border-top:1px solid #dcdcdc; border-bottom:1px solid #dcdcdc; margin-top:1em; font-family: "avante garde", "Century Gothic", Serif; }
 .sub-menu-holder h2 { margin-bottom:0.3em; }
-.sub-menu-holder h3 { margin-top:0; }
+.sub-menu-holder h3 { margin:0 0 0.3em; }
 .sub-menu-holder li { display:inline-block; margin-right:1.5em; }
+
+
+/* classes for code formatting */
+.csharpcode, .csharpcode pre
+{
+	font-size: small;
+	color: black;
+	font-family: Consolas, "Courier New", Courier, Monospace;
+	background-color: #EEE;
+	margin-top:0.7em;
+	padding: 0.7em;
+}
+
+/* to overwrite previous italic bold */
+.plugin-layout ul pre.csharpcode span
+{
+    font-style:normal;
+	font-weight:normal;
+}
+pre.csharpcode span
+{
+    font-style:normal;
+	font-weight:normal;
+}
+
+
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; font-style:italic; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+	background-color: #f4f4f4;
+	width: 100%;
+	margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }

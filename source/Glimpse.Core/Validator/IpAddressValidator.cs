@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System.Linq;
+using System.Web;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 
@@ -10,7 +11,25 @@ namespace Glimpse.Core.Validator
         {
             if (configuration.IpAddresses.Count == 0) return true; //no configured list, allow all IP's
 
-            return configuration.IpAddresses.Contains(context.Request.UserHostAddress);
+            var userIpAddress = GetUserIpAddress(context, configuration.IpForwardingEnabled);
+
+            return configuration.IpAddresses.Contains(userIpAddress);
+        }
+
+        static string GetUserIpAddress(HttpContextBase context, bool allowIPForwarding)
+        {
+            if (allowIPForwarding)
+            {
+                // Source http://support.appharbor.com/discussions/problems/681-requestuserhostaddress
+                var forwardedFor = context.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
+                if (!string.IsNullOrEmpty(forwardedFor))
+                {
+                    // sometimes HTTP_X_FORWARDED_FOR returns multiple IP's
+                    return forwardedFor.Split(',').Last();
+                }
+            }
+
+            return context.Request.UserHostAddress;
         }
     }
 }

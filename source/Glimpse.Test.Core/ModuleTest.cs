@@ -20,7 +20,7 @@ namespace Glimpse.Test.Core
             Context.SetupSet(ctx => ctx.Items[GlimpseConstants.ValidPath] = true);
 
             Module.Configuration = new GlimpseConfiguration {RootUrlPath = "glimpse"};
-            Module.Handlers = new List<IGlimpseHandler> {new Javascript()};
+            Module.Handlers = new List<IGlimpseHandler> {new JavascriptClient()};
             //Module.PostMapRequestHandler(Context.Object);
 
             Context.VerifySet(ctx => ctx.Items[GlimpseConstants.ValidPath] = true);

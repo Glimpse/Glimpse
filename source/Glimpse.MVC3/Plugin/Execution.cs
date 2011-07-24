@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -12,6 +13,14 @@ namespace Glimpse.Mvc3.Plugin
     [GlimpsePlugin(ShouldSetupInInit = true)]
     internal class Execution : IGlimpsePlugin, IProvideGlimpseHelp
     {
+        public IGlimpseLogger Logger { get; set; }
+
+        [ImportingConstructor]
+        public Execution(IGlimpseFactory factory)
+        {
+            Logger = factory.CreateLogger();
+        }
+
         public string Name
         {
             get { return "Execution"; }
@@ -106,9 +115,11 @@ namespace Glimpse.Mvc3.Plugin
 
         public void SetupInit()
         {
-            GlimpsePipelineInitiation.ControllerFactory();
+            var initiator = new GlimpsePipelineInitiator(Logger);
 
-            GlimpsePipelineInitiation.DependencyResolver();
+            initiator.ControllerFactory();
+
+            initiator.DependencyResolver();
         }
 
         public string HelpUrl

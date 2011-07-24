@@ -27,5 +27,15 @@ namespace Glimpse.Site.Controllers
         {
             return View();
         }
+
+        public virtual ActionResult Setup()
+        {
+            return View();
+        }
+
+        public virtual ActionResult CreatingPlugins()
+        {
+            return View();
+        }
     }
 }

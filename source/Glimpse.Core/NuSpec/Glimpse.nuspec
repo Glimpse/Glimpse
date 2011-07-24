@@ -3,16 +3,16 @@
     <!-- Values in dollar $igns are automatically pulled from the AssemblyInfo.cs attributes by NuGet.exe -->
     <metadata>
         <id>Glimpse</id>
-        <version>0.83</version>
-        <title>Glimpse Web Debugger for ASP.NET (Beta)</title>
+        <version>0.84</version>
+        <title>Glimpse for ASP.NET (Beta)</title>
         <authors>nmolnar, avanderhoorn</authors>
         <owners>nmolnar, avanderhoorn</owners>
         <licenseUrl>http://www.opensource.org/licenses/apache2.0</licenseUrl>
         <projectUrl>http://getglimpse.com</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <iconUrl>http://getglimpse.com/content/glimpse32.png</iconUrl>
-        <description>Glimpse is a web debugger used to gain a better understanding of whats happening inside of your webserver. (Beta)</description>
-        <summary>A client side Glimpse into whats going on in your server.</summary>
+        <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET 4.0 application. For ASP.NET MVC3 support, please NuGet Glimpse.MVC3. (Beta)</description>
+        <summary>ASP.NET 4.0 web debugging and diagnostics tool.</summary>
         <tags>ASP.NET Web WebForms</tags>
     </metadata>
 </package>

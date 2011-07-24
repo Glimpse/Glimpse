@@ -9,6 +9,11 @@ namespace Glimpse.Core.Plugin
     [GlimpsePlugin(ShouldSetupInInit = false)]
     internal class PagingTest : IGlimpsePlugin, IProvideGlimpsePaging
     {
+        public string Name
+        {
+            get { return "PagingTest"; }
+        }
+
         private readonly Guid _pagerKey = Guid.NewGuid();
         public Guid PagerKey
         {
@@ -17,12 +22,7 @@ namespace Glimpse.Core.Plugin
 
         public PagerType PagerType
         {
-            get { return PagerType.TraditionalPager; }
-        }
-
-        public string Name
-        {
-            get { return "PagingTest"; }
+            get { return PagerType.ContinuousPaging; }
         }
 
         public int PageSize

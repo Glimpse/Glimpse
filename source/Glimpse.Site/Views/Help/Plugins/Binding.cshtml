@@ -1,8 +1,7 @@
 ﻿<h2>Binding Tab</h2>
 
 <div class="plugin-summary">
- The Binding tab helps shows you the difference between what ASP.NET MVC received from the 
- client and how the Model Binders treat that data.
+ The Binding tab helps show you how the ASP.NET MVC model binding functionality creating objects and gathering information from the http request.
 </div>
 
 <!--
@@ -14,17 +13,17 @@
 <div class="plugin-layout">
     <h3>Layout</h3> 
     <img src="@Links.Content.Plugin.Binding_jpg" style="width:100%;" />
-    <strong>Senario:</strong> In this case we have attempted to submit a login form which has failed to authenticate. Despite this we 
+    <strong>Scenario:</strong> In this case we have attempted to submit a login form which has failed to authenticate. Despite this we 
     can still see how the DefaultModelBinder has pulled out the data from the Post and URL and mapped them to our model.<br /><br />
     <ol class="plain">
-        <li><span>Ordinal</span>: Order in which the MVC Model Beinding infrastructure attempted to bind the avaiable data</li>
-        <li><span>Model Binder</span>: Model Binder that was used in a given senario</li>
+        <li><span>Ordinal</span>: Order in which the MVC Model Binding infrastructure attempted to bind the available data</li>
+        <li><span>Model Binder</span>: Model Binder that was used in a given scenario</li>
         <li><span>Property/Parameter</span>: Name of the thing that the Binder was trying to bind</li>
         <li><span>Type</span>: Type of the thing that the Binder was trying to bind</li>
-        <li><span>Attempted Value Providers</span>: Providers that the Binder attempted to use to bind a given value (and whether it was successful)</li>
-        <li><span>Attempted Value</span>: The actual value that the provider has to work with (post type converstion, etc)</li>
-        <li><span>Culture</span>: The culture that was used during the actual binding</li>
-        <li><span>Raw Value</span>: The raw value that the provider has to work with (pre type converstion, etc) </li>
+        <li><span>Attempted Value Providers</span>: Providers that the Binder attempted to use to get a given value (and whether it was successful)</li>
+        <li><span>Attempted Value</span>: The actual value that the provider has to work with (post type conversation, etc.)</li>
+        <li><span>Culture</span>: The culture that was used to parse the raw value</li>
+        <li><span>Raw Value</span>: The raw value that the provider has to work with (pre type conversation, etc.) </li>
     </ol>
 </div>
 
@@ -36,8 +35,8 @@
             They represent matches that the model binder was able to successful make with the help of an associated model binder.
         </li>
         <li>
-            <div>What do some row appear greyed out?</div>
-            In the same way the successful matches with highlighed rows, unsuccessful matches are greyed out.
+            <div>Why do some rows appear grayed out?</div>
+            Grayed out rows represent property bindings on complex objects.
         </li>
         <li>
             <div>Why does my main model (in the screen shot above the first row) not show any matches?</div>
@@ -48,15 +47,15 @@
         <li>
             <div>What is the difference between Attempted Value and Raw Value?</div>
             Attempted Value is the value that the binder will attempt to use after type conversions, etc. Raw value 
-            is the value prior to this occuring.
+            is the value prior to this occurring.
         </li>
         <li>
             <div>Why can't I see my bindings after I successfully full out a form?</div>
-            As Glimpse shows you the data associated with the last request (whether that be a Post or Get) this can occur 
-            in <a href="http://en.wikipedia.org/wiki/Post/Redirect/Get">Post/Redirect/Get</a> sernarios - As the binding 
-            Information is assocated with the original Post but the then the following Get is what Glimpse will show.
-            In the near future (hopefully release 0.84-0.85 timeframe) we will make this exprerence better. In the mean time 
-            you can ou the Remote tab to pull out the original Post request.
+            As Glimpse shows you the data associated with the last request (whether that be a Post or Get), you may not see binding information 
+            in <a href="http://en.wikipedia.org/wiki/Post/Redirect/Get">Post/Redirect/Get</a> scenarios - As the binding 
+            Information is associated with the original Post but then the following Get is what Glimpse will show.
+            In the near future (hopefully release 0.84-0.85 timeframe) we will make this experience better. In the mean time 
+            you can use the Remote tab to pull out the original Post request.
         </li>
     </ol>
 </div>

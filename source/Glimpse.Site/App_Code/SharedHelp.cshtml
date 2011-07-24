@@ -1,0 +1,63 @@
+﻿@using System.Web.Mvc
+@using System.Web.Mvc.Html
+
+@helper ModuleHandlerConfig(System.Web.Mvc.HtmlHelper html){
+
+
+
+    <p><b>Using a site on IIS6, in IIS7.x classic pipeline mode or Visual Studio Development Server</b>
+    <br />
+    For this scenario you need to add the handler and the module in the &lt;system.web&gt; section of your web.config file:
+    </p>
+
+    <pre class="csharpcode">
+<span class="kwrd">&lt;</span><span class="html">system.web</span><span class="kwrd">&gt;</span>
+   <span class="kwrd">&lt;</span><span class="html">httpModules</span><span class="kwrd">&gt;</span>
+       <span class="kwrd">&lt;</span><span class="html">add</span> <span class="attr">name</span><span class="kwrd">="Glimpse"</span> <span class="attr">type</span><span class="kwrd">="Glimpse.Core.Module,Glimpse.Core"</span><span class="kwrd">/&gt;</span>
+   <span class="kwrd">&lt;/</span><span class="html">httpModules</span><span class="kwrd">&gt;</span>
+   <span class="kwrd">&lt;</span><span class="html">httpHandlers</span><span class="kwrd">&gt;</span>
+       <span class="kwrd">&lt;</span><span class="html">add</span> <span class="attr">path</span><span class="kwrd">="glimpse.axd"</span> <span class="attr">verb</span><span class="kwrd">="GET,POST"</span> <span class="attr">type</span><span class="kwrd">="Glimpse.Core.Handler,Glimpse.Core"</span><span class="kwrd">/&gt;</span>
+   <span class="kwrd">&lt;/</span><span class="html">httpHandlers</span><span class="kwrd">&gt;</span>
+    ...
+<span class="kwrd">&lt;/</span><span class="html">system.web</span><span class="kwrd">&gt;</span></pre>
+
+<p><b>For IIS 7.x in integrated pipeline mode and IIS Express</b></p>
+    <p>
+Here the settings have to go into the  &lt;system.webServer&gt; section:
+</p>
+<pre class="csharpcode">
+<span class="kwrd">&lt;</span><span class="html">system.webServer</span><span class="kwrd">&gt;</span>
+   <span class="kwrd">&lt;</span><span class="html">modules</span><span class="kwrd">&gt;</span>
+       <span class="kwrd">&lt;</span><span class="html">add</span> <span class="attr">name</span><span class="kwrd">="Glimpse"</span> <span class="attr">type</span><span class="kwrd">="Glimpse.Core.Module,Glimpse.Core"</span> <span class="attr">preCondition</span><span class="kwrd">="integratedMode"</span><span class="kwrd">/&gt;</span>
+   <span class="kwrd">&lt;/</span><span class="html">modules</span><span class="kwrd">&gt;</span>
+   <span class="kwrd">&lt;</span><span class="html">handlers</span><span class="kwrd">&gt;</span>
+       <span class="kwrd">&lt;</span><span class="html">add</span> <span class="attr">name</span><span class="kwrd">="Glimpse"</span> <span class="attr">path</span><span class="kwrd">="glimpse.axd"</span> <span class="attr">verb</span><span class="kwrd">="GET,POST"</span> <span class="attr">type</span><span class="kwrd">="Glimpse.Core.Handler,Glimpse.Core"</span> 
+          <span class="attr">preCondition</span><span class="kwrd">="integratedMode"</span> <span class="kwrd">/&gt;</span>
+   <span class="kwrd">&lt;/</span><span class="html">handlers</span><span class="kwrd">&gt;</span>
+   ...
+<span class="kwrd">&lt;/</span><span class="html">system.webServer</span><span class="kwrd">&gt;</span></pre>
+<p>
+If you are switching between the two server options you can have the settings in both places
+but need to add the following to the &lt;system.webServer&gt; section:
+</p>
+<pre class="csharpcode">
+<span class="kwrd">&lt;</span><span class="html">system.webServer</span><span class="kwrd">&gt;</span>
+   <span class="kwrd">&lt;</span><span class="html">validation</span> <span class="attr">validateIntegratedModeConfiguration</span><span class="kwrd">="false"</span><span class="kwrd">/&gt;</span>
+   ...
+<span class="kwrd">&lt;/</span><span class="html">system.webServer</span><span class="kwrd">&gt;</span></pre>
+    
+}
+
+@helper ConfigSections(System.Web.Mvc.HtmlHelper html){
+    
+<p>The Glimpse configuration has to be registered with the ASP.NET configuration system. This is done by adding a node in the configSections at the very top of the file:</p>
+
+<pre class="csharpcode">
+<span class="kwrd">&lt;</span><span class="html">configuration</span><span class="kwrd">&gt;</span>
+  <span class="kwrd">&lt;</span><span class="html">configSections</span><span class="kwrd">&gt;</span>
+    <span class="kwrd">&lt;</span><span class="html">section</span> <span class="attr">name</span><span class="kwrd">="glimpse"</span> <span class="attr">type</span><span class="kwrd">="Glimpse.Core.Configuration.GlimpseConfiguration"</span> <span class="kwrd">/&gt;</span>
+  <span class="kwrd">&lt;/</span><span class="html">configSections</span><span class="kwrd">&gt;</span>
+  ...
+<span class="kwrd">&lt;/</span><span class="html">configuration</span><span class="kwrd">&gt;</span></pre>
+ 
+}

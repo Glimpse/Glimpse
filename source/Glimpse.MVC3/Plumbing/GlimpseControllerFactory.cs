@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.SessionState;
+using Glimpse.Core.Extensibility;
 using Glimpse.Mvc3.Extensions;
 
 namespace Glimpse.Mvc3.Plumbing
@@ -9,6 +10,7 @@ namespace Glimpse.Mvc3.Plumbing
     internal class GlimpseControllerFactory : IControllerFactory
     {
         public IControllerFactory ControllerFactory { get; set; }
+        public IGlimpseLogger Logger { get; set; }
 
         public GlimpseControllerFactory(IControllerFactory controllerFactory)
         {
@@ -22,7 +24,7 @@ namespace Glimpse.Mvc3.Plumbing
             Trace.Write(string.Format("{0}.CreateController(requestContext, \"{1}\") = {2}", ControllerFactory.GetType().Name, controllerName, controller == null ? "null" : controller.GetType().ToString()));
 
             if (controller != null)
-                return controller.TrySetActionInvoker();
+                return controller.TrySetActionInvoker(Logger);
 
             return null;
         }

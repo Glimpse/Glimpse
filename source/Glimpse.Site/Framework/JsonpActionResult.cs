@@ -15,7 +15,7 @@ namespace Glimpse.Site.Framework
 
             HttpResponseBase response = context.HttpContext.Response;
 
-            response.ContentType = string.IsNullOrEmpty(ContentType) ? "application/json" : ContentType;
+            response.ContentType = string.IsNullOrEmpty(ContentType) ? "application/javascript" : ContentType;
 
             if (ContentEncoding != null) response.ContentEncoding = ContentEncoding;
 

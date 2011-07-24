@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -9,7 +10,7 @@ using Glimpse.Mvc3.Plumbing;
 namespace Glimpse.Mvc3.Plugin
 {
     [GlimpsePlugin(ShouldSetupInInit = false)]
-    internal class MetaData : IGlimpsePlugin, IProvideGlimpseHelp
+    internal class MetaData : IGlimpsePlugin, IProvideGlimpseHelp, IProvideGlimpseStructuredLayout
     {
         public string Name
         {
@@ -118,5 +119,16 @@ namespace Glimpse.Mvc3.Plugin
         {
             get { return "http://getGlimpse.com/Help/Plugin/MetaData"; }
         }
+
+        #region IProvideGlimpseStructuredLayout
+
+        private readonly GlimpseStructuredLayout _structuredLayout = new GlimpseStructuredLayout { new GlimpseStructuredLayoutSection { new GlimpseStructuredLayoutCell { Width = "150px", Data = 0 }, new GlimpseStructuredLayoutCell { Width = "25%", Data = 1 }, new GlimpseStructuredLayoutCell { Data = 2 } } };
+
+        public GlimpseStructuredLayout StructuredLayout
+        {
+            get { return _structuredLayout; }
+        }
+
+        #endregion
     }
 }

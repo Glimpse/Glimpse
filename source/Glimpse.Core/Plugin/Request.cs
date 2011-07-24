@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
+using System.Threading;
 using System.Web;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
@@ -64,6 +65,7 @@ namespace Glimpse.Core.Plugin
                            Form = form,
                            QueryString = querystring,
                            InputStream = inputStreamResult,
+                           Thread.CurrentThread.CurrentUICulture,
                            request.ApplicationPath,
                            request.AppRelativeCurrentExecutionFilePath,
                            request.CurrentExecutionFilePath,
@@ -77,7 +79,7 @@ namespace Glimpse.Core.Plugin
                            UrlReferrer = request.UrlReferrer == null ? null : request.UrlReferrer.ToString(),
                            request.UserAgent,
                            request.UserHostAddress,
-                           request.UserHostName,
+                           request.UserHostName
                        };
         }
 

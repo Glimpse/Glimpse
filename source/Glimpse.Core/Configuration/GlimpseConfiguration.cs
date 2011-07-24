@@ -19,6 +19,18 @@ namespace Glimpse.Core.Configuration
             }
         }
 
+        [ConfigurationProperty("ipForwardingEnabled", DefaultValue = "false", IsRequired = false)]
+        public bool IpForwardingEnabled
+        {
+            set { this["ipForwardingEnabled"] = value; }
+            get
+            {
+                bool result; //false which matches the default above
+                bool.TryParse(this["ipForwardingEnabled"].ToString(), out result);
+                return result;
+            }
+        }
+
         [ConfigurationProperty("loggingEnabled", DefaultValue = "false", IsRequired = false)]
         public bool LoggingEnabled
         {
@@ -27,6 +39,18 @@ namespace Glimpse.Core.Configuration
             {
                 bool result; //false which matches the default above
                 bool.TryParse(this["loggingEnabled"].ToString(), out result);
+                return result;
+            }
+        }
+
+        [ConfigurationProperty("cacheEnabled", DefaultValue = "true", IsRequired = false)]
+        public bool CacheEnabled
+        {
+            set { this["cacheEnabled"] = value; }
+            get
+            {
+                bool result = true; //true which matches the default above
+                bool.TryParse(this["cacheEnabled"].ToString(), out result);
                 return result;
             }
         }
@@ -76,6 +100,16 @@ namespace Glimpse.Core.Configuration
             get
             {
                 return this["pluginBlacklist"] as PluginBlacklistCollection;
+            }
+        }
+
+        [ConfigurationProperty("urlBlacklist", IsRequired = false)]
+        public UrlBlacklistCollection UrlBlackList
+        {
+            set { this["urlBlacklist"] = value; }
+            get
+            {
+                return this["urlBlacklist"] as UrlBlacklistCollection;
             }
         }
 

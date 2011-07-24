@@ -1,12 +1,11 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Glimpse Web Debugger (Beta)")]
-[assembly: AssemblyDescription("Glimpse is a web debugger used to gain a better understanding of whats happening inside of your webserver. (Beta)")]
+[assembly: AssemblyTitle("Glimpse for ASP.NET MVC3 (Beta)")]
+[assembly: AssemblyDescription("ASP.NET MVC3 plugins for Glimpse. This package adds tabs for Routing, Binding, Views, Execution and Metadata diagnostics. (Beta)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("nmolnar, avanderhoorn")]
 [assembly: AssemblyProduct("Glimpse.Mvc3")]
@@ -32,5 +31,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.80.0.0")]
-[assembly: AssemblyFileVersion("0.80.0.0")]
+[assembly: AssemblyVersion("0.84")]
+[assembly: AssemblyFileVersion("0.84")]

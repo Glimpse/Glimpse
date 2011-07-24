@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Web;
-using System.Web.Util;
 using Glimpse.Core.Validator;
 
 namespace Glimpse.Core
@@ -9,6 +8,7 @@ namespace Glimpse.Core
     public class Handler:IHttpHandler
     {
         internal const string ResourceKey = "r";
+        internal const string VersionKey = "v";
 
         public void ProcessRequest(HttpContext context)
         {
@@ -24,7 +24,6 @@ namespace Glimpse.Core
                 return;
             }
 
-            //TODO: Validation/security check!
             var queryString = context.Request.QueryString;
 
             var resource = string.IsNullOrWhiteSpace(queryString[ResourceKey]) ? "Config" : queryString[ResourceKey];
