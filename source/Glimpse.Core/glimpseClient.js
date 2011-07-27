@@ -1631,21 +1631,10 @@ if (window.jQueryGlimpse) { (function ($) {
                     dropFunction(envHolder);
                 }
             }
-             
-            correlation = { 
-	            title : 'PRG Request',
-	            legs : [ {
-		            method : 'POST',
-		            url : '/Help/Feature/Add',
-		            glimpseId : 'GUID' }, {
-		            method : 'GET',
-		            url : '/Help/Feature/',
-		            glimpseId : 'GUID' } ]
-	            };
             
             //Setup correlation
             if (correlation) { 
-                var urlHolder = $('.glimpse-title .glimpse-url', mainHolder), currentUrl = urlHolder.text(), currentLeg = correlation.legs[0], correlationList = '<div>' + correlation.title + '</div>';
+                var urlHolder = $('.glimpse-title .glimpse-url', mainHolder), currentUrl = urlHolder.text(), currentLeg, correlationList = '<div>' + correlation.title + '</div>';
                 for (var i = 0; i < correlation.legs.length; i++) {
                     var leg = correlation.legs[i];
                     if (leg.url == currentUrl) {
