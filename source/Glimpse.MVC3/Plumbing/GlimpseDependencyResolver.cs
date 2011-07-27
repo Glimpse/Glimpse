@@ -28,7 +28,7 @@ namespace Glimpse.Mvc3.Plumbing
 
             //Wrap up controller factory
             var iControllerFactory = service as IControllerFactory;
-            if (iControllerFactory != null) return iControllerFactory.Wrap();
+            if (iControllerFactory != null) return iControllerFactory.Wrap(Logger);
 
             //Add action invoker to controller
             var iController = service as IController;

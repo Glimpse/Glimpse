@@ -12,9 +12,10 @@ namespace Glimpse.Mvc3.Plumbing
         public IControllerFactory ControllerFactory { get; set; }
         public IGlimpseLogger Logger { get; set; }
 
-        public GlimpseControllerFactory(IControllerFactory controllerFactory)
+        public GlimpseControllerFactory(IControllerFactory controllerFactory, IGlimpseLogger logger)
         {
             ControllerFactory = controllerFactory;
+            Logger = logger;
         }
 
         public IController CreateController(RequestContext requestContext, string controllerName)
