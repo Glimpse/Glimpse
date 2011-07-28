@@ -286,7 +286,7 @@ if (window.jQueryGlimpse) { (function ($) {
         buildKeyValueTable: function (data, level, forceFull, forceLimit) {  
             var that = this, limit = $.isNaN(forceLimit) ? 3 : forceLimit;
             if (that.shouldUsePreview($.glimpse.util.lengthJson(data), level, forceFull, limit, forceLimit, 1))
-                return that.buildCustomPreview(data, level);
+                return that.buildKeyValuePreview(data, level);
                 
             var i = 1, html = '<table><thead><tr class="glimpse-row-header-' + level + '"><th class="glimpse-cell-key">Key</th><th class="glimpse-cell-value">Value</th></tr></thead>';
             for (var key in data)
