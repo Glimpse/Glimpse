@@ -424,13 +424,15 @@ if (window.jQueryGlimpse) { (function ($) {
         },
         buildCustomPreview: function (data, level) {
             var that = this, isComplex = ($.isArray(data[0]) || $.isPlainObject(data[0]));
-
+            
+            if (isComplex && data.length == 1)
+                return that.build(data[0], level);
             if (isComplex || data.length > 1) 
                 return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + that.buildCustomPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + that.buildCustomTable(data, level, true) + '</div></td></tr></table>';
             return that.buildStringPreview(data[0], level + 1); 
         },
         buildCustomPreviewOnly: function (data, level) { 
-            var that = this, isComplex = ($.isArray(data[0]) || $.isPlainObject(data[0])), length = (isComplex ? data.length - 1 : data.length), rowMax = 2, columnMax = 3, columnLimit = 1, rowLimit = (rowMax < length ? rowMax : length), html = '<span class="start">[</span>';
+            var that = this, isComplex = $.isArray(data[0]), length = (isComplex ? data.length - 1 : data.length), rowMax = 2, columnMax = 3, columnLimit = 1, rowLimit = (rowMax < length ? rowMax : length), html = '<span class="start">[</span>';
 
             if (isComplex) {
                 columnLimit = ((data[0].length > columnMax) ? columnMax : data[0].length);
