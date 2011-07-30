@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using Glimpse.Core;
 using Glimpse.Core.Configuration;
@@ -42,7 +43,7 @@ namespace Glimpse.Test.Core
         }
         
         [Test]
-        public void IpAddressValidator_ValidateIncorrectAddress_ReturnsFalse()
+        public void IpAddressValidator_ValidateIncorrectIp_ReturnsFalse()
         {
             Context.Setup(ctx => ctx.Request.UserHostAddress).Returns("127.0.0.2");
             
@@ -69,6 +70,42 @@ namespace Glimpse.Test.Core
             Configuration.IpAddresses.Add(new IpAddress{AddressRange = "127.0.0.1/24"});
             
             Assert.IsFalse(Validator.IsValid(Context.Object, Configuration, LifecycleEvent.BeginRequest));
+        }
+        
+        [Test]
+        public void IpAddressValidator_ValidateAgainstAddressAndRange_ReturnsTrue()
+        {
+            Context.Setup(ctx => ctx.Request.UserHostAddress).Returns("127.1.1.1");
+            
+            Configuration.IpAddresses.Add(new IpAddress{Address = "127.1.1.1"});
+            Configuration.IpAddresses.Add(new IpAddress{AddressRange = "127.0.0.1/24"});
+            
+            Assert.IsTrue(Validator.IsValid(Context.Object, Configuration, LifecycleEvent.BeginRequest));
+        }
+        
+        [Test]
+        public void IpAddressValidator_ValidateIncorrectIpAgainstAddressAndRange_ReturnsFalse()
+        {
+            Context.Setup(ctx => ctx.Request.UserHostAddress).Returns("127.1.1.2");
+            
+            Configuration.IpAddresses.Add(new IpAddress{Address = "127.1.1.1"});
+            Configuration.IpAddresses.Add(new IpAddress{AddressRange = "127.0.0.1/24"});
+            
+            Assert.IsFalse(Validator.IsValid(Context.Object, Configuration, LifecycleEvent.BeginRequest));
+        }
+        
+        [Test]
+        public void IpAddressValidator_BuildingIpFilters_OrdersAddressesBeforeRanges()
+        {   
+            Configuration.IpAddresses.Add(new IpAddress{Address = "127.1.1.1"});
+            Configuration.IpAddresses.Add(new IpAddress{AddressRange = "127.0.0.1/24"});
+            Configuration.IpAddresses.Add(new IpAddress{Address = "127.1.1.2"});
+
+            var filters = IpAddressValidator.BuildFilters(Configuration).ToList();
+            
+            Assert.IsInstanceOf<IpAddressValidator.IpFilter>(filters[0]);
+            Assert.IsInstanceOf<IpAddressValidator.IpFilter>(filters[1]);
+            Assert.IsInstanceOf<IpAddressValidator.IpRangeFilter>(filters[2]);
         }
 
         public IpAddressValidator Validator { get; set; }

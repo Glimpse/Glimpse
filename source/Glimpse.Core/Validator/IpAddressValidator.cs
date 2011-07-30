@@ -10,8 +10,8 @@ using LukeSkywalker.IPNetwork;
 namespace Glimpse.Core.Validator
 {
     [GlimpseValidator]
-    public class IpAddressValidator:IGlimpseValidator{
-        
+    public class IpAddressValidator : IGlimpseValidator
+    {
         public bool IsValid(HttpContextBase context, GlimpseConfiguration configuration, LifecycleEvent lifecycleEvent)
         {
             var ipFilters = BuildFilters(configuration).ToList();
@@ -23,23 +23,25 @@ namespace Glimpse.Core.Validator
             return ipFilters.Any(f => f.IsValid(userIpAddress));
         }
 
-        static IEnumerable<IIpFilter> BuildFilters(GlimpseConfiguration configuration)
+        public static IEnumerable<IIpFilter> BuildFilters(GlimpseConfiguration configuration)
         {
-            foreach (var ipAddress in configuration.IpAddresses.Cast<IpAddress>()
-                .OrderBy(i => i.Address).ThenBy(i => i.AddressRange)) //Order so address are validated against before ranges
+            var filters = configuration.IpAddresses.Cast<IpAddress>()
+                .OrderBy(i => i.Address == null ? 1 : 0).ToList(); //Order so address are validated against before ranges
+
+            foreach (var filter in filters)
             {
-                if((ipAddress.Address == null && ipAddress.AddressRange == null)
-                    || (ipAddress.Address != null && ipAddress.AddressRange != null))
+                if ((filter.Address == null && filter.AddressRange == null)
+                    || (filter.Address != null && filter.AddressRange != null))
                     throw new ConfigurationErrorsException("IpAddress element must have either an address or an address-range attribute");
 
-                if (ipAddress.Address != null)
-                    yield return new IpFilter(IPAddress.Parse(ipAddress.Address));
+                if (filter.Address != null)
+                    yield return new IpFilter(IPAddress.Parse(filter.Address));
                 else
-                    yield return new IpRangeFilter(ipAddress.AddressRange);
+                    yield return new IpRangeFilter(filter.AddressRange);
             }
         }
 
-        static IPAddress GetUserIpAddress(HttpContextBase context, bool allowIpForwarding)
+        public static IPAddress GetUserIpAddress(HttpContextBase context, bool allowIpForwarding)
         {
             if (allowIpForwarding)
             {
@@ -55,12 +57,12 @@ namespace Glimpse.Core.Validator
             return IPAddress.Parse(context.Request.UserHostAddress);
         }
 
-        private interface IIpFilter
+        public interface IIpFilter
         {
             bool IsValid(IPAddress ip);
         }
 
-        class IpFilter : IIpFilter
+        public class IpFilter : IIpFilter
         {
             IPAddress Ip { get; set; }
 
@@ -75,7 +77,7 @@ namespace Glimpse.Core.Validator
             }
         }
 
-        class IpRangeFilter : IIpFilter
+        public class IpRangeFilter : IIpFilter
         {
             IPNetwork Range { get; set; }
 
