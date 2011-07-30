@@ -55,7 +55,7 @@
     <Compile Include="Extensions\ControllerFactoryExtensions.cs" />
     <Compile Include="Extensions\ModelBinderExtensions.cs" />
     <Compile Include="Interceptor\ActionInvokerInterceptorSelector.cs" />
-    <Compile Include="Interceptor\ActionInvokerProxyGenerationHook.cs" />
+    <Compile Include="Interceptor\BaseProxyGenerationHook.cs" />
     <Compile Include="Interceptor\BindModelInterceptor.cs" />
     <Compile Include="Interceptor\BindPropertyInterceptor.cs" />
     <Compile Include="Interceptor\CreateModelInterceptor.cs" />
@@ -63,7 +63,7 @@
     <Compile Include="Interceptor\InvokeActionMethodInterceptor.cs" />
     <Compile Include="Interceptor\InvokeActionResultInterceptor.cs" />
     <Compile Include="Interceptor\ModelBinderInterceptorSelector.cs" />
-    <Compile Include="Interceptor\ModelBinderProxyGenerationHook.cs" />
+    <Compile Include="Interceptor\SimpleProxyGenerationHook.cs" />
     <Compile Include="Plugin\Binders.cs" />
     <Compile Include="Plugin\Execution.cs" />
     <Compile Include="Plugin\MetaData.cs" />

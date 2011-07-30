@@ -26,7 +26,7 @@ namespace Glimpse.Mvc3.Plumbing
             if (binder is DefaultModelBinder)
             {
                 if (binder.CanSupportDynamicProxy(Logger))
-                    return binder.CreateDynamicProxy();
+                    return binder.CreateDynamicProxy(Logger);
             }
 
             Logger.Warn(binder.GetType() + " is not a System.Web.Mvc.DefaultModelBinder.");

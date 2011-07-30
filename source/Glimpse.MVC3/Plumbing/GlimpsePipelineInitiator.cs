@@ -40,7 +40,7 @@ namespace Glimpse.Mvc3.Plumbing
                 if (binder is DefaultModelBinder)
                     if (binder.CanSupportDynamicProxy(Logger))
                     {
-                        binders[type] = binder.CreateDynamicProxy();
+                        binders[type] = binder.CreateDynamicProxy(Logger);
                         continue;
                     }
 
@@ -54,7 +54,7 @@ namespace Glimpse.Mvc3.Plumbing
             if (defaultBinder is DefaultModelBinder)
                 if (defaultBinder.CanSupportDynamicProxy(Logger))
                 {
-                    System.Web.Mvc.ModelBinders.Binders.DefaultBinder = defaultBinder.CreateDynamicProxy();
+                    System.Web.Mvc.ModelBinders.Binders.DefaultBinder = defaultBinder.CreateDynamicProxy(Logger);
                     return;
                 }
 

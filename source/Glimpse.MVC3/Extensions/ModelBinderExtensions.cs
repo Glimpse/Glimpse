@@ -33,10 +33,10 @@ namespace Glimpse.Mvc3.Extensions
             return false;
         }
 
-        internal static IModelBinder CreateDynamicProxy(this IModelBinder modelBinder)
+        internal static IModelBinder CreateDynamicProxy(this IModelBinder modelBinder, IGlimpseLogger logger)
         {
             var proxyGenerator = new ProxyGenerator();
-            var proxyGenOptions = new ProxyGenerationOptions(new ModelBinderProxyGenerationHook()) { Selector = new ModelBinderInterceptorSelector() };
+            var proxyGenOptions = new ProxyGenerationOptions(new SimpleProxyGenerationHook(logger, "BindModel", "BindProperty", "CreateModel")) { Selector = new ModelBinderInterceptorSelector() };
             return (IModelBinder)proxyGenerator.CreateClassProxy(modelBinder.GetType(), proxyGenOptions, new BindModelInterceptor(), new BindPropertyInterceptor(), new CreateModelInterceptor());
         }
 

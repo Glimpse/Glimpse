@@ -21,7 +21,7 @@ namespace Glimpse.Mvc3.Extensions
             if (actionInvoker.CanSupportDynamicProxy(logger))
             {
                 var proxyGenerator = new ProxyGenerator();
-                var proxyGenOptions = new ProxyGenerationOptions(new ActionInvokerProxyGenerationHook(logger)) { Selector = new ActionInvokerInterceptorSelector() };
+                var proxyGenOptions = new ProxyGenerationOptions(new SimpleProxyGenerationHook(logger, "GetFilters", "InvokeActionResult", "InvokeActionMethod")) { Selector = new ActionInvokerInterceptorSelector() };
                 var newInvoker = (ControllerActionInvoker)proxyGenerator.CreateClassProxy(actionInvoker.GetType(), proxyGenOptions, new InvokeActionMethodInterceptor(), new InvokeActionResultInterceptor(), new GetFiltersInterceptor());
                 controller.ActionInvoker = newInvoker;
             }
