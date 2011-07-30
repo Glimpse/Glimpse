@@ -29,19 +29,9 @@ namespace Glimpse.Core.Configuration
             BaseAdd(address);
         }
 
-        public bool Contains(string matchIp)
+        public void Clear()
         {
-            IPAddress parsedAddress;
-
-            if (!IPAddress.TryParse(matchIp, out parsedAddress))
-                return false;
-
-            foreach (IpAddress ip in this)
-            {
-                if (ip.Address == parsedAddress.ToString()) return true;
-            }
-
-            return false;
+            BaseClear();
         }
 
         protected override ConfigurationElement CreateNewElement()
