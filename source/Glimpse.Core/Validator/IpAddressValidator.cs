@@ -12,15 +12,18 @@ namespace Glimpse.Core.Validator
     [GlimpseValidator]
     public class IpAddressValidator : IGlimpseValidator
     {
+        ICollection<IIpFilter> IpFilters { get; set; }
+
         public bool IsValid(HttpContextBase context, GlimpseConfiguration configuration, LifecycleEvent lifecycleEvent)
         {
-            var ipFilters = BuildFilters(configuration).ToList();
+            if(IpFilters == null)
+                IpFilters = BuildFilters(configuration).ToList();
 
-            if (ipFilters.Count == 0) return true; //no configured list, allow all IP's
+            if (IpFilters.Count == 0) return true; //no configured list, allow all IP's
 
             var userIpAddress = GetUserIpAddress(context, configuration.IpForwardingEnabled);
 
-            return ipFilters.Any(f => f.IsValid(userIpAddress));
+            return IpFilters.Any(f => f.IsValid(userIpAddress));
         }
 
         public static IEnumerable<IIpFilter> BuildFilters(GlimpseConfiguration configuration)
