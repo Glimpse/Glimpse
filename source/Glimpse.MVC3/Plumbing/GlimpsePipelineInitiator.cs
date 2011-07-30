@@ -17,7 +17,7 @@ namespace Glimpse.Mvc3.Plumbing
         public void ControllerFactory()
         {
             var controllerBuilder = ControllerBuilder.Current.GetControllerFactory();
-            if (controllerBuilder != null) ControllerBuilder.Current.SetControllerFactory(controllerBuilder.Wrap(Logger));
+            if (controllerBuilder != null) ControllerBuilder.Current.SetControllerFactory(controllerBuilder.Proxy(Logger));
         }
 
         public void DependencyResolver()

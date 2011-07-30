@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Castle.DynamicProxy;
@@ -7,20 +6,20 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Mvc3.Interceptor
 {
-    internal abstract class BaseProxyGenerationHook:IProxyGenerationHook
+    internal class SimpleProxyGenerationHook:IProxyGenerationHook
     {
         internal IGlimpseLogger Logger { get; set; }
+        internal string[] Methods { get; set; }
 
-        public BaseProxyGenerationHook(IGlimpseLogger logger)
+        public SimpleProxyGenerationHook(IGlimpseLogger logger, string[] methods)
         {
             Logger = logger;
+            Methods = methods;
         }
-
-        public abstract IEnumerable<string> GetMethodNames();
 
         public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
         {
-            return GetMethodNames().Contains(methodInfo.Name);
+            return Methods.Contains(methodInfo.Name);
         }
 
         public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)

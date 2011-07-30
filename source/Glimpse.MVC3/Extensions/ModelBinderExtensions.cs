@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using Castle.DynamicProxy;
 using Glimpse.Core.Extensibility;
@@ -35,9 +37,16 @@ namespace Glimpse.Mvc3.Extensions
 
         internal static IModelBinder CreateDynamicProxy(this IModelBinder modelBinder, IGlimpseLogger logger)
         {
+            var proxyConfig = new Dictionary<string, IInterceptor>
+                                  {
+                                      {"BindModel", new BindModelInterceptor()},
+                                      {"BindProperty", new BindPropertyInterceptor()},
+                                      {"CreateModel", new CreateModelInterceptor()},
+                                  };
+            
             var proxyGenerator = new ProxyGenerator();
-            var proxyGenOptions = new ProxyGenerationOptions(new SimpleProxyGenerationHook(logger, "BindModel", "BindProperty", "CreateModel")) { Selector = new ModelBinderInterceptorSelector() };
-            return (IModelBinder)proxyGenerator.CreateClassProxy(modelBinder.GetType(), proxyGenOptions, new BindModelInterceptor(), new BindPropertyInterceptor(), new CreateModelInterceptor());
+            var proxyGenOptions = new ProxyGenerationOptions(new SimpleProxyGenerationHook(logger, proxyConfig.Keys.ToArray())) { Selector = new SimpleInterceptorSelector(proxyConfig) };
+            return (IModelBinder)proxyGenerator.CreateClassProxy(modelBinder.GetType(), proxyGenOptions, proxyConfig.Values.ToArray());
         }
 
         internal static IModelBinder Wrap(this IModelBinder modelBinder)
