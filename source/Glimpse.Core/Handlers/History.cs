@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Web;
+using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Plumbing;
 
@@ -11,6 +12,8 @@ namespace Glimpse.Core.Handlers
     [GlimpseHandler]
     public class History : JsonHandlerBase
     {
+        [Import]
+        internal GlimpseConfiguration Configuration { get; set; }
         public const string ClientName = "ClientName";
         public const string ClientRequestId = "ClientRequestID";
         public IGlimpseMetadataStore MetadataStore { get; set; }
@@ -28,6 +31,7 @@ namespace Glimpse.Core.Handlers
 
         protected override object GetData(HttpContextBase context)
         {
+            var response = context.Response;
             if (MetadataStore.Requests.Count() != 0)
             {
                 var result = new Dictionary<string, object>();
@@ -42,20 +46,25 @@ namespace Glimpse.Core.Handlers
 
                     var requestResult = data.FirstOrDefault(); 
                     if (requestResult != null) 
-                        result.Add(requestResult.RequestId.ToString(), new { Data = requestResult.Json });  
+                        result.Add(requestResult.RequestId.ToString(), new { Data = requestResult.Json });
+
+                    //We don't want to cache named requests as its results change over time, this one doesn't
+                    if (Configuration.CacheEnabled)
+                        response.ExpiresAbsolute = DateTime.Now.AddMonths(6);
                 }
                 else
                 {
                     var clientName = context.Request.QueryString[ClientName];
 
-                    if (string.IsNullOrEmpty(clientName))
-                        data = MetadataStore.Requests;
-                    else
-                    {
+                    //Removed as we don't want everything to be returned in the case where the user hasn't typed a name yet @nikmd23 to confirm
+                    //if (string.IsNullOrEmpty(clientName))
+                    //    data = MetadataStore.Requests;
+                    //else
+                    //{
                         data = from request in MetadataStore.Requests
                                where request.ClientName.Equals(clientName)
                                select request;
-                    }
+                    //}
 
                     var lastClient = Guid.NewGuid().ToString();
                     foreach (var request in data.OrderBy(d => d.ClientName))

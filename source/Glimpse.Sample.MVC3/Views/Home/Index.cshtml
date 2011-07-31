@@ -26,22 +26,21 @@
 </ul>
 
 @section JavaScript{
-<script type="text/javascript">
+<script type="text/javascript">   
     $(document).ready(function () {
         setInterval(function () {
             $.get('/Home/News', function (result) {
-                $('#news').fadeOut(function () {
+                $('#news').fadeOut(function() {
                     $(this).html(result).fadeIn();
-                })
+                });
             });
         }, 15000);
 
         setInterval(function () {
             var content = JSON.stringify({ name: "John", number: 3 });
-            var options = { url: '/Home/JsonTest', data: content, type: 'POST', dataType: 'html', contentType: 'application/json', processData: false };
+            var options = { async : false, url: '/Home/JsonTest', data: content, type: 'POST', dataType: 'html', contentType: 'application/json', processData: false };
 
-            $.ajax(options);
-
+            $.ajax(options); 
         }, 20000);
     });
 </script>

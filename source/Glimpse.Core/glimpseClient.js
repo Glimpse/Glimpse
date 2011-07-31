@@ -78,6 +78,7 @@ if (window.jQueryGlimpse) { (function ($) {
 
     //#region Setup
     var glimpseCss = '.glimpse, .glimpse *, .glimpse a, .glimpse td, .glimpse th, .glimpse table { font-family: Helvetica, Arial, sans-serif; background-color:transparent; font-size:11px; line-height:14px; border:0px; color:#232323; text-align:left; }.glimpse a, .glimpse a:hover, .glimpse a:visited { color:#2200C1; text-decoration:underline; font-weight:normal; }.glimpse a:active { color:#c11; text-decoration:underline; font-weight:normal; }.glimpse th { font-weight:bold; }.glimpse-open { z-index: 100010; position:fixed; right:0; bottom:0; height:27px; width:28px; background: #cfcfcf; background: -moz-linear-gradient(top, #cfcfcf 0%, #dddddd 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cfcfcf), color-stop(100%,#dddddd)); background: -webkit-linear-gradient(top, #cfcfcf 0%,#dddddd 100%); background: -o-linear-gradient(top, #cfcfcf 0%,#dddddd 100%); background: -ms-linear-gradient(top, #cfcfcf 0%,#dddddd 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#cfcfcf\', endColorstr=\'#dddddd\',GradientType=0 ); background: linear-gradient(top, #cfcfcf 0%,#dddddd 100%); -webkit-box-shadow: inset 0px 1px 0px 0px #E2E2E2; -moz-box-shadow: inset 0px 1px 0px 0px #E2E2E2; box-shadow: inset 0px 1px 0px 0px #E2E2E2; border-top: 1px solid #7A7A7A; border-left: 1px solid #7A7A7A; }.glimpse-icon { background:url() 0px -16px; height:20px; width:20px; margin: 3px 4px 0; cursor:pointer; }.glimpse-holder { display:none; z-index:100010 !important; height:0; position:fixed; bottom:0; left:0; width:100%; background-color:#fff; }.glimpse-bar { background: #cfcfcf; background: -moz-linear-gradient(top, #cfcfcf 0%, #dddddd 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cfcfcf), color-stop(100%,#dddddd)); background: -webkit-linear-gradient(top, #cfcfcf 0%,#dddddd 100%); background: -o-linear-gradient(top, #cfcfcf 0%,#dddddd 100%); background: -ms-linear-gradient(top, #cfcfcf 0%,#dddddd 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#cfcfcf\', endColorstr=\'#dddddd\',GradientType=0 ); background: linear-gradient(top, #cfcfcf 0%,#dddddd 100%); -webkit-box-shadow: inset 0px 1px 0px 0px #E2E2E2; -moz-box-shadow: inset 0px 1px 0px 0px #E2E2E2; box-shadow: inset 0px 1px 0px 0px #E2E2E2; border-top: 1px solid #7A7A7A; height: 27px; }.glimpse-bar .glimpse-icon { margin-top:4px; float:left; } .glimpse-buttons { text-align:right; float:right; height:17px; width:150px; padding:6px; }.glimpse-title { margin:0 0 0 15px; padding-top:5px; font-weight:bold; display:inline-block; width:75%; overflow:hidden; }.glimpse-title .glimpse-snapshot-type { display:inline-block; height:20px; }.glimpse-title .glimpse-enviro { padding-left:10px; white-space:nowrap; height:20px; } .glimpse-title .glimpse-url .glimpse-drop { padding-left:10px; } .glimpse-title .glimpse-url .glimpse-drop-over { padding-left:20px; padding-right:20px; } .glimpse .glimpse-drop { padding:1px 1px 1px 8px; height:14px; } .glimpse .glimpse-drop, .glimpse .glimpse-drop-over { font-weight:normal; font-weight:normal; font-size:0.9em; background: #f7f7f7; background: -moz-linear-gradient(top, #f7f7f7 0%, #e6e6e6 29%, #e2e2e2 31%, #c9c9c9 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f7f7f7), color-stop(29%,#e6e6e6), color-stop(31%,#e2e2e2), color-stop(100%,#c9c9c9));background: -webkit-linear-gradient(top, #f7f7f7 0%,#e6e6e6 29%,#e2e2e2 31%,#c9c9c9 100%);background: -o-linear-gradient(top, #f7f7f7 0%,#e6e6e6 29%,#e2e2e2 31%,#c9c9c9 100%);background: -ms-linear-gradient(top, #f7f7f7 0%,#e6e6e6 29%,#e2e2e2 31%,#c9c9c9 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#f7f7f7\', endColorstr=\'#c9c9c9\',GradientType=0 );background: linear-gradient(top, #f7f7f7 0%,#e6e6e6 29%,#e2e2e2 31%,#c9c9c9 100%); -webkit-box-shadow: inset 0px 1px 0px 0px #F9F9F9; -moz-box-shadow: inset 0px 1px 0px 0px #F9F9F9; box-shadow: inset 0px 1px 0px 0px #F9F9F9; border: 1px solid #A7A7A7; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; margin: 0 5px 0 0; } .glimpse .glimpse-drop-over { position:absolute; display:none; top:4px; padding: 1px 10px 10px 10px; z-index:100; -webkit-box-shadow: 0px 0px 8px 0px #696969; -moz-box-shadow: 0px 0px 8px 0px #696969; box-shadow: 0px 0px 8px 0px #696969; } .glimpse .glimpse-drop-over div { text-align:center; font-weight:bold; margin:5px 0; }  .glimpse .glimpse-drop-arrow-holder { margin: 3px 3px 3px 5px; padding-left: 3px; border-left: 1px solid #A7A7A7; font-size: 9px; height: 9px; width: 10px; } .glimpse .glimpse-drop-arrow { background: url() no-repeat -22px -18px; width: 7px;  height: 4px; display: inline-block; } .glimpse-button, .glimpse-button:hover { cursor:pointer; background-image:url(); background-repeat:no-repeat; height:14px; width:14px; margin-left:2px; display:inline-block; }.glimpse-meta-warning { background-position:-168px -1px; display:none; }.glimpse-meta-warning:hover { background-position:-183px -1px; } .glimpse-meta-help { background-position:-138px -1px; margin-right:15px; }.glimpse-meta-help:hover { background-position:-153px -1px; margin-right:15px; }.glimpse-meta-update { background-position:-198px -1px; display:none; }.glimpse-meta-update:hover { background-position:-213px -1px; }.glimpse-close { background-position:-1px -1px; }.glimpse-close:hover { background-position:-17px -1px; }.glimpse-terminate { background-position:-65px -1px; }.glimpse-terminate:hover { background-position:-81px -1px; } .glimpse-popout { background-position:-96px -1px; }.glimpse-popout:hover { background-position: -111px -1px; } .glimpse-tabs { background: #afafaf; background: -moz-linear-gradient(top, #afafaf 0%, #cfcfcf 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#afafaf), color-stop(100%,#cfcfcf)); background: -webkit-linear-gradient(top, #afafaf 0%,#cfcfcf 100%); background: -o-linear-gradient(top, #afafaf 0%,#cfcfcf 100%); background: -ms-linear-gradient(top, #afafaf 0%,#cfcfcf 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#afafaf\', endColorstr=\'#cfcfcf\',GradientType=0 ); background: linear-gradient(top, #afafaf 0%,#cfcfcf 100%); border-bottom: 1px solid #A4A4A4; border-top: 1px solid #F9F9F9; -webkit-box-shadow: inset 0px 1px 0px 0px #8b8b8b;-moz-box-shadow: inset 0px 1px 0px 0px #8b8b8b;box-shadow: inset 0px 1px 0px 0px #8b8b8b; font-weight: bold; height: 24px; }.glimpse-tabs ul { margin:4px 0px 0 0; padding:0px; }.glimpse-tabs li { display:inline; margin:0 2px 3px 2px; height:22px; padding:4px 9px 3px; color:#565656; cursor:pointer; border-radius: 0px 0px 3px 3px; -moz-border-radius: 0px 0px 3px 3px; -webkit-border-bottom-right-radius: 3px; -webkit-border-bottom-left-radius: 3px; -webkit-transition: color 0.3s ease;-moz-transition: color 0.3s ease;-o-transition: color 0.3s ease;transition: color 0.3s ease; } .glimpse-tabs li.glimpse-hover { padding:4px 8px 3px; background: #dddddd;background: -moz-linear-gradient(top, #dddddd 0%, #ffffff 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dddddd), color-stop(100%,#ffffff));background: -webkit-linear-gradient(top, #dddddd 0%,#ffffff 100%);background: -o-linear-gradient(top, #dddddd 0%,#ffffff 100%);background: -ms-linear-gradient(top, #dddddd 0%,#ffffff 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#dddddd\', endColorstr=\'#ffffff\',GradientType=0 );background: linear-gradient(top, #dddddd 0%,#ffffff 100%);-webkit-box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;-moz-box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9; border-bottom: 1px solid #8B8B8B; border-left: 1px solid #8B8B8B; border-right: 1px solid #8B8B8B; border-top: 2px solid #DDD; }.glimpse-tabs li.glimpse-active { background: #dddddd;background: -moz-linear-gradient(top, #dddddd 0%, #efefef 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dddddd), color-stop(100%,#efefef));background: -webkit-linear-gradient(top, #dddddd 0%,#efefef 100%);background: -o-linear-gradient(top, #dddddd 0%,#efefef 100%);background: -ms-linear-gradient(top, #dddddd 0%,#efefef 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#dddddd\', endColorstr=\'#efefef\',GradientType=0 );background: linear-gradient(top, #dddddd 0%,#efefef 100%);-webkit-box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;-moz-box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9; border-bottom: 1px solid #8b8b8b; border-left: 1px solid #8b8b8b; border-right: 1px solid #8b8b8b; border-top: 2px solid #DDD; color: #000; padding: 4px 8px 3px; }.glimpse-tabs li.glimpse-disabled { color:#AAA; cursor:default; }.glimpse-panel-holder {}.glimpse-panel { display:none; overflow:auto; position:relative; } .glimpse-panel-message { text-align:center; padding-top:40px; font-size:1.1em; color:#AAA; }.glimpse-panel table { border-spacing:0; width:100%; }.glimpse-panel table td, .glimpse-panel table th { padding:3px 4px; text-align:left; vertical-align:top; } .glimpse-panel table td .glimpse-cell { vertical-align:top; } .glimpse-panel tbody .mono { font-family:Consolas, monospace, serif; font-size: 1.1em; } .glimpse-panel tr.glimpse-row-header-0 { height:19px; } .glimpse-panel .glimpse-row-header-0 th { background: #DFDFDF; background: -moz-linear-gradient(top, #f3f3f3 0%, #f3f3f3 5%, #e6e6e6 6%, #d1d1d1 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f3f3f3), color-stop(5%,#f3f3f3), color-stop(6%,#e6e6e6), color-stop(100%,#d1d1d1)); background: -webkit-linear-gradient(top, #f3f3f3 0%,#f3f3f3 5%,#e6e6e6 6%,#d1d1d1 100%); background: -o-linear-gradient(top, #f3f3f3 0%,#f3f3f3 5%,#e6e6e6 6%,#d1d1d1 100%); background: -ms-linear-gradient(top, #f3f3f3 0%,#f3f3f3 5%,#e6e6e6 6%,#d1d1d1 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#f3f3f3\', endColorstr=\'#d1d1d1\',GradientType=0 ); background: linear-gradient(top, #f3f3f3 0%,#f3f3f3 5%,#e6e6e6 6%,#d1d1d1 100%); border-bottom: 1px solid #9C9C9C; font-weight: bold; } .glimpse-panel .glimpse-row-header-0 th { border-left:1px solid #D9D9D9; border-right:1px solid #9C9C9C; } .glimpse-panel .glimpse-soft { color:#999; } .glimpse-panel .glimpse-cell-key { font-weight:bold; } .glimpse-panel th.glimpse-cell-key { width:30%; max-width:150px; } .glimpse-panel table table { border:1px solid #D9D9D9; } .glimpse-panel table table thead th { background: #f3f3f3; background: -moz-linear-gradient(top, #f3f3f3 0%, #e6e6e6 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f3f3f3), color-stop(100%,#e6e6e6)); background: -webkit-linear-gradient(top, #f3f3f3 0%,#e6e6e6 100%); background: -o-linear-gradient(top, #f3f3f3 0%,#e6e6e6 100%); background: -ms-linear-gradient(top, #f3f3f3 0%,#e6e6e6 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#f3f3f3\', endColorstr=\'#e6e6e6\',GradientType=0 ); background: linear-gradient(top, #f3f3f3 0%,#e6e6e6 100%); border-bottom: 1px solid #9C9C9C; } .glimpse-panel table table thead tr th { border-left:1px solid #C6C6C6; border-right:1px solid #D9D9D9; padding:1px 4px 2px 4px; }.glimpse-panel table table thead tr th:first-child { border-left:0px; }.glimpse-panel table table thead tr th:last-child { border-right:0px; }.glimpse-panel .even, .glimpse-panel .even > td, .glimpse-panel .even > th, .glimpse-panel .even > tr > td, .glimpse-panel .even > tr > th, .even > td > .glimpse-preview-table > tbody > tr > td, .even > tr > td > .glimpse-preview-table > tbody > tr > td { background-color:#F2F5F9; } .glimpse-panel .odd, .glimpse-panel .odd > td, .glimpse-panel .odd > th, .glimpse-panel .odd > tr > td, .glimpse-panel .odd > tr > th, .odd > td > .glimpse-preview-table > tbody > tr > td, .odd > tr > td > .glimpse-preview-table > tbody > tr > td { background-color:#FEFFFF; }.glimpse-panel table table tbody th { font-weight:normal; font-style:italic; }.glimpse-panel table table thead th { font-weight:bold; font-style:normal; }.glimpse-panel .glimpse-side-sub-panel { right:0; z-index:10; background-color:#FAFCFC; height:100%; width:25%; border-left:1px solid #ACA899; position:absolute; }.glimpse-panel .glimpse-side-main-panel { position:relative; height:100%; width:75%; float:left; } .glimpse-panel-holder .glimpse-active { display:block; }.glimpse-resizer { height:4px; cursor:n-resize; width:100%; position:absolute; top:-1px; }li.glimpse-permanent { font-style:italic; }.glimpse-preview-object { color:#006400; } .glimpse-preview-string, .glimpse-preview-object .glimpse-preview-string { color:#006400; font-weight:normal !important; } .glimpse-preview-string span { padding-left:1px; }.glimpse-preview-object span { font-weight:bold; color:#444; } .glimpse-preview-object span.start { margin-right:5px; } .glimpse-preview-object span.end { margin-left:5px; }.glimpse-preview-object span.rspace { margin-right:4px; }.glimpse-preview-object span.mspace { margin:0 4px; }.glimpse-preview-object span.small { font-size:0.95em; } .glimpse-panel .glimpse-preview-table { border:0; } .glimpse-panel .glimpse-preview-table .glimpse-preview-cell { padding-left:0; padding-right:2px; width:11px; } .glimpse-expand { height:11px; width:11px; display:inline-block; float:left; margin:1px 0 0 0; cursor:pointer; background-image:url(); background-repeat:no-repeat; background-position:-126px 0; }.glimpse-collapse { background-position:-126px -11px; }.glimpse-preview-show { display:none; font-weight:normal !important; }.glimpse-panel .quiet *, .glimpse-panel .ms * { color:#AAA; }.glimpse-panel .suppress { text-decoration:line-through; }.glimpse-panel .suppress * { color:#AAA; } .glimpse-panel .selected, .glimpse-panel .selected > td, .glimpse-panel .selected > th, .glimpse-panel .selected > tr > td, .glimpse-panel .selected > tr > th, .selected > td > .glimpse-preview-table > tbody > tr > td, .selected > tr > td > .glimpse-preview-table > tbody > tr > td { background-color:#FFFF99; }.glimpse-panel .selected * { color:#409B3B; }.glimpse-panel .info .icon, .glimpse-panel .warn .icon, .glimpse-panel .loading .icon, .glimpse-panel .error .icon, .glimpse-panel .fail .icon, .glimpse-panel .ms .icon { width:14px; height:14px; background-image:url(); background-repeat:no-repeat; display:inline-block; margin-right: 5px; } .glimpse-panel .info .icon { background-position: -22px -22px; }.glimpse-panel .warn .icon { background-position:-36px -22px; }.glimpse-panel .loading .icon { background-position:-78px -22px; }.glimpse-panel .error .icon { background-position:-50px -22px; }.glimpse-panel .ms .icon { background-position:-181px -22px; } .glimpse-panel .fail .icon { background-position:-64px -22px; }.glimpse-panel .info * { color:#067CE5; }.glimpse-panel .warn * { color:#FE850C; } .glimpse-panel .error * { color:#B40000; }.glimpse-panel .fail * { color:#B40000; font-weight:bold; }.glimpse-panelitem-Ajax .loading .icon { float:right; }.glimpse-panelitem-Remote .glimpse-side-sub-panel .loading, .glimpse-panelitem-Remote .glimpse-side-main-panel .loading, .glimpse-clear { position:fixed; bottom:5px; right:10px; color:#777; } .glimpse-panelitem-Remote .glimpse-side-main-panel .loading { right:27%; } .glimpse-clear { background-color:white; padding:0.3em 1em 0.5em 1em; border:#CCC solid 1px; bottom:25px; -webkit-border-radius:3px; -moz-border-radius:3px; border-radius:3px; } .glimpse-panel table .glimpse-head-message td { text-align:center; background-color:#DDD; } .glimpse-panelitem-GlimpseInformation div { text-align:center; } .glimpse-panelitem-GlimpseInformation .glimpse-panel-message { padding-top:5px; } .glimpse-panelitem-GlimpseInformation strong { font-weight:bold; } .glimpse-panelitem-GlimpseInformation .glimpse-info-more { font-size:1.5em; margin:1em 0; } .glimpse-panelitem-GlimpseInformation .glimpse-info-quote { font-style:italic; margin:0.75em 0 3em; } .glimpse-pager { background: #C6C6C6; padding: 3px 4px; font-weight: bold; text-align: center; vertical-align: top; } .glimpse-pager .glimpse-pager-message { margin-left: 5px; margin-right: 5px; } .glimpse-pager .glimpse-button { margin-top: 0px; } .glimpse-pager .glimpse-pager-link, .glimpse-pager .glimpse-pager-link:hover { font-weight: bold; } .glimpse-pager .glimpse-pager-link-firstPage { background-position: -2px -38px; } .glimpse-pager .glimpse-pager-link-firstPage-disabled { background-position: -17px -38px; } .glimpse-pager .glimpse-pager-link-previousPage { background-position: -33px -38px; } .glimpse-pager .glimpse-pager-link-previousPage-disabled { background-position: -49px -38px; } .glimpse-pager .glimpse-pager-link-nextPage { background-position: -65px -38px; } .glimpse-pager .glimpse-pager-link-nextPage-disabled { background-position: -81px -38px; } .glimpse-pager .glimpse-pager-link-lastPage { background-position: -96px -38px; } .glimpse-pager .glimpse-pager-link-lastPage-disabled { background-position: -111px -38px; } .glimpse-panel table.glimpse-pager-separator { border-bottom: 3px solid #C6C6C6; } @media screen and (-webkit-min-device-pixel-ratio:0) { .glimpse-tabs li.glimpse-hover, .glimpse-tabs li.glimpse-active { border-top:1px solid #DDD; } }';
+    var glimpseCss = '.glimpse, .glimpse *, .glimpse a, .glimpse td, .glimpse th, .glimpse table { font-family: Helvetica, Arial, sans-serif; background-color:transparent; font-size:11px; line-height:14px; border:0px; color:#232323; text-align:left; }.glimpse a, .glimpse a:hover, .glimpse a:visited { color:#2200C1; text-decoration:underline; font-weight:normal; }.glimpse a:active { color:#c11; text-decoration:underline; font-weight:normal; }.glimpse th { font-weight:bold; }.glimpse-open { z-index: 100010; position:fixed; right:0; bottom:0; height:27px; width:28px; background: #cfcfcf; background: -moz-linear-gradient(top, #cfcfcf 0%, #dddddd 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cfcfcf), color-stop(100%,#dddddd)); background: -webkit-linear-gradient(top, #cfcfcf 0%,#dddddd 100%); background: -o-linear-gradient(top, #cfcfcf 0%,#dddddd 100%); background: -ms-linear-gradient(top, #cfcfcf 0%,#dddddd 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#cfcfcf\', endColorstr=\'#dddddd\',GradientType=0 ); background: linear-gradient(top, #cfcfcf 0%,#dddddd 100%); -webkit-box-shadow: inset 0px 1px 0px 0px #E2E2E2; -moz-box-shadow: inset 0px 1px 0px 0px #E2E2E2; box-shadow: inset 0px 1px 0px 0px #E2E2E2; border-top: 1px solid #7A7A7A; border-left: 1px solid #7A7A7A; }.glimpse-icon { background:url() 0px -16px; height:20px; width:20px; margin: 3px 4px 0; cursor:pointer; }.glimpse-holder { display:none; z-index:100010 !important; height:0; position:fixed; bottom:0; left:0; width:100%; background-color:#fff; }.glimpse-bar { background: #cfcfcf; background: -moz-linear-gradient(top, #cfcfcf 0%, #dddddd 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cfcfcf), color-stop(100%,#dddddd)); background: -webkit-linear-gradient(top, #cfcfcf 0%,#dddddd 100%); background: -o-linear-gradient(top, #cfcfcf 0%,#dddddd 100%); background: -ms-linear-gradient(top, #cfcfcf 0%,#dddddd 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#cfcfcf\', endColorstr=\'#dddddd\',GradientType=0 ); background: linear-gradient(top, #cfcfcf 0%,#dddddd 100%); -webkit-box-shadow: inset 0px 1px 0px 0px #E2E2E2; -moz-box-shadow: inset 0px 1px 0px 0px #E2E2E2; box-shadow: inset 0px 1px 0px 0px #E2E2E2; border-top: 1px solid #7A7A7A; height: 27px; }.glimpse-bar .glimpse-icon { margin-top:4px; float:left; } .glimpse-buttons { text-align:right; float:right; height:17px; width:150px; padding:6px; }.glimpse-title { margin:0 0 0 15px; padding-top:5px; font-weight:bold; display:inline-block; width:75%; overflow:hidden; }.glimpse-title .glimpse-snapshot-type { display:inline-block; height:20px; }.glimpse-title .glimpse-enviro { padding-left:10px; white-space:nowrap; height:20px; } .glimpse-title .glimpse-url .glimpse-drop { padding-left:10px; } .glimpse-title .glimpse-url .loading { margin:5px 0 0; font-weight:normal; display:none; } .glimpse-title .glimpse-url .glimpse-drop-over { padding-left:20px; padding-right:20px; text-align: center; } .glimpse .glimpse-drop { padding:1px 1px 1px 8px; height:14px; font-size:0.9em; } .glimpse .glimpse-drop, .glimpse .glimpse-drop-over { font-weight:normal; font-weight:normal; background: #f7f7f7; background: -moz-linear-gradient(top, #f7f7f7 0%, #e6e6e6 29%, #e2e2e2 31%, #c9c9c9 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f7f7f7), color-stop(29%,#e6e6e6), color-stop(31%,#e2e2e2), color-stop(100%,#c9c9c9));background: -webkit-linear-gradient(top, #f7f7f7 0%,#e6e6e6 29%,#e2e2e2 31%,#c9c9c9 100%);background: -o-linear-gradient(top, #f7f7f7 0%,#e6e6e6 29%,#e2e2e2 31%,#c9c9c9 100%);background: -ms-linear-gradient(top, #f7f7f7 0%,#e6e6e6 29%,#e2e2e2 31%,#c9c9c9 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#f7f7f7\', endColorstr=\'#c9c9c9\',GradientType=0 );background: linear-gradient(top, #f7f7f7 0%,#e6e6e6 29%,#e2e2e2 31%,#c9c9c9 100%); -webkit-box-shadow: inset 0px 1px 0px 0px #F9F9F9; -moz-box-shadow: inset 0px 1px 0px 0px #F9F9F9; box-shadow: inset 0px 1px 0px 0px #F9F9F9; border: 1px solid #A7A7A7; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; margin: 0 5px 0 0; } .glimpse .glimpse-drop-over { position:absolute; display:none; top:4px; padding: 1px 10px 10px 10px; z-index:100; -webkit-box-shadow: 0px 0px 8px 0px #696969; -moz-box-shadow: 0px 0px 8px 0px #696969; box-shadow: 0px 0px 8px 0px #696969; } .glimpse .glimpse-drop-over div { text-align:center; font-weight:bold; margin:5px 0; }  .glimpse .glimpse-drop-arrow-holder { margin: 3px 3px 3px 5px; padding-left: 3px; border-left: 1px solid #A7A7A7; font-size: 9px; height: 9px; width: 10px; } .glimpse .glimpse-drop-arrow { background: url() no-repeat -22px -18px; width: 7px;  height: 4px; display: inline-block; } .glimpse-button, .glimpse-button:hover { cursor:pointer; background-image:url(); background-repeat:no-repeat; height:14px; width:14px; margin-left:2px; display:inline-block; }.glimpse-meta-warning { background-position:-168px -1px; display:none; }.glimpse-meta-warning:hover { background-position:-183px -1px; } .glimpse-meta-help { background-position:-138px -1px; margin-right:15px; }.glimpse-meta-help:hover { background-position:-153px -1px; margin-right:15px; }.glimpse-meta-update { background-position:-198px -1px; display:none; }.glimpse-meta-update:hover { background-position:-213px -1px; }.glimpse-close { background-position:-1px -1px; }.glimpse-close:hover { background-position:-17px -1px; }.glimpse-terminate { background-position:-65px -1px; }.glimpse-terminate:hover { background-position:-81px -1px; } .glimpse-popout { background-position:-96px -1px; }.glimpse-popout:hover { background-position: -111px -1px; } .glimpse-tabs { background: #afafaf; background: -moz-linear-gradient(top, #afafaf 0%, #cfcfcf 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#afafaf), color-stop(100%,#cfcfcf)); background: -webkit-linear-gradient(top, #afafaf 0%,#cfcfcf 100%); background: -o-linear-gradient(top, #afafaf 0%,#cfcfcf 100%); background: -ms-linear-gradient(top, #afafaf 0%,#cfcfcf 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#afafaf\', endColorstr=\'#cfcfcf\',GradientType=0 ); background: linear-gradient(top, #afafaf 0%,#cfcfcf 100%); border-bottom: 1px solid #A4A4A4; border-top: 1px solid #F9F9F9; -webkit-box-shadow: inset 0px 1px 0px 0px #8b8b8b;-moz-box-shadow: inset 0px 1px 0px 0px #8b8b8b;box-shadow: inset 0px 1px 0px 0px #8b8b8b; font-weight: bold; height: 24px; }.glimpse-tabs ul { margin:4px 0px 0 0; padding:0px; }.glimpse-tabs li { display:inline; margin:0 2px 3px 2px; height:22px; padding:4px 9px 3px; color:#565656; cursor:pointer; border-radius: 0px 0px 3px 3px; -moz-border-radius: 0px 0px 3px 3px; -webkit-border-bottom-right-radius: 3px; -webkit-border-bottom-left-radius: 3px; -webkit-transition: color 0.3s ease;-moz-transition: color 0.3s ease;-o-transition: color 0.3s ease;transition: color 0.3s ease; } .glimpse-tabs li.glimpse-hover { padding:4px 8px 3px; background: #dddddd;background: -moz-linear-gradient(top, #dddddd 0%, #ffffff 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dddddd), color-stop(100%,#ffffff));background: -webkit-linear-gradient(top, #dddddd 0%,#ffffff 100%);background: -o-linear-gradient(top, #dddddd 0%,#ffffff 100%);background: -ms-linear-gradient(top, #dddddd 0%,#ffffff 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#dddddd\', endColorstr=\'#ffffff\',GradientType=0 );background: linear-gradient(top, #dddddd 0%,#ffffff 100%);-webkit-box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;-moz-box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9; border-bottom: 1px solid #8B8B8B; border-left: 1px solid #8B8B8B; border-right: 1px solid #8B8B8B; border-top: 2px solid #DDD; }.glimpse-tabs li.glimpse-active { background: #dddddd;background: -moz-linear-gradient(top, #dddddd 0%, #efefef 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dddddd), color-stop(100%,#efefef));background: -webkit-linear-gradient(top, #dddddd 0%,#efefef 100%);background: -o-linear-gradient(top, #dddddd 0%,#efefef 100%);background: -ms-linear-gradient(top, #dddddd 0%,#efefef 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#dddddd\', endColorstr=\'#efefef\',GradientType=0 );background: linear-gradient(top, #dddddd 0%,#efefef 100%);-webkit-box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;-moz-box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9; border-bottom: 1px solid #8b8b8b; border-left: 1px solid #8b8b8b; border-right: 1px solid #8b8b8b; border-top: 2px solid #DDD; color: #000; padding: 4px 8px 3px; }.glimpse-tabs li.glimpse-disabled { color:#AAA; cursor:default; }.glimpse-panel-holder {}.glimpse-panel { display:none; overflow:auto; position:relative; } .glimpse-panel-message { text-align:center; padding-top:40px; font-size:1.1em; color:#AAA; }.glimpse-panel table { border-spacing:0; width:100%; }.glimpse-panel table td, .glimpse-panel table th { padding:3px 4px; text-align:left; vertical-align:top; } .glimpse-panel table td .glimpse-cell { vertical-align:top; } .glimpse-panel tbody .mono { font-family:Consolas, monospace, serif; font-size: 1.1em; } .glimpse-panel tr.glimpse-row-header-0 { height:19px; } .glimpse-panel .glimpse-row-header-0 th { background: #DFDFDF; background: -moz-linear-gradient(top, #f3f3f3 0%, #f3f3f3 5%, #e6e6e6 6%, #d1d1d1 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f3f3f3), color-stop(5%,#f3f3f3), color-stop(6%,#e6e6e6), color-stop(100%,#d1d1d1)); background: -webkit-linear-gradient(top, #f3f3f3 0%,#f3f3f3 5%,#e6e6e6 6%,#d1d1d1 100%); background: -o-linear-gradient(top, #f3f3f3 0%,#f3f3f3 5%,#e6e6e6 6%,#d1d1d1 100%); background: -ms-linear-gradient(top, #f3f3f3 0%,#f3f3f3 5%,#e6e6e6 6%,#d1d1d1 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#f3f3f3\', endColorstr=\'#d1d1d1\',GradientType=0 ); background: linear-gradient(top, #f3f3f3 0%,#f3f3f3 5%,#e6e6e6 6%,#d1d1d1 100%); border-bottom: 1px solid #9C9C9C; font-weight: bold; } .glimpse-panel .glimpse-row-header-0 th { border-left:1px solid #D9D9D9; border-right:1px solid #9C9C9C; } .glimpse-panel .glimpse-soft { color:#999; } .glimpse-panel .glimpse-cell-key { font-weight:bold; } .glimpse-panel th.glimpse-cell-key { width:30%; max-width:150px; } .glimpse-panel table table { border:1px solid #D9D9D9; } .glimpse-panel table table thead th { background: #f3f3f3; background: -moz-linear-gradient(top, #f3f3f3 0%, #e6e6e6 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f3f3f3), color-stop(100%,#e6e6e6)); background: -webkit-linear-gradient(top, #f3f3f3 0%,#e6e6e6 100%); background: -o-linear-gradient(top, #f3f3f3 0%,#e6e6e6 100%); background: -ms-linear-gradient(top, #f3f3f3 0%,#e6e6e6 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#f3f3f3\', endColorstr=\'#e6e6e6\',GradientType=0 ); background: linear-gradient(top, #f3f3f3 0%,#e6e6e6 100%); border-bottom: 1px solid #9C9C9C; } .glimpse-panel table table thead tr th { border-left:1px solid #C6C6C6; border-right:1px solid #D9D9D9; padding:1px 4px 2px 4px; }.glimpse-panel table table thead tr th:first-child { border-left:0px; }.glimpse-panel table table thead tr th:last-child { border-right:0px; }.glimpse-panel .even, .glimpse-panel .even > td, .glimpse-panel .even > th, .glimpse-panel .even > tr > td, .glimpse-panel .even > tr > th, .even > td > .glimpse-preview-table > tbody > tr > td, .even > tr > td > .glimpse-preview-table > tbody > tr > td { background-color:#F2F5F9; } .glimpse-panel .odd, .glimpse-panel .odd > td, .glimpse-panel .odd > th, .glimpse-panel .odd > tr > td, .glimpse-panel .odd > tr > th, .odd > td > .glimpse-preview-table > tbody > tr > td, .odd > tr > td > .glimpse-preview-table > tbody > tr > td { background-color:#FEFFFF; }.glimpse-panel table table tbody th { font-weight:normal; font-style:italic; }.glimpse-panel table table thead th { font-weight:bold; font-style:normal; }.glimpse-panel .glimpse-side-sub-panel { right:0; z-index:10; background-color:#FAFCFC; height:100%; width:25%; border-left:1px solid #ACA899; position:absolute; }.glimpse-panel .glimpse-side-main-panel { position:relative; height:100%; width:75%; float:left; } .glimpse-panel-holder .glimpse-active { display:block; }.glimpse-resizer { height:4px; cursor:n-resize; width:100%; position:absolute; top:-1px; }li.glimpse-permanent { font-style:italic; }.glimpse-preview-object { color:#006400; } .glimpse-preview-string, .glimpse-preview-object .glimpse-preview-string { color:#006400; font-weight:normal !important; } .glimpse-preview-string span { padding-left:1px; }.glimpse-preview-object span { font-weight:bold; color:#444; } .glimpse-preview-object span.start { margin-right:5px; } .glimpse-preview-object span.end { margin-left:5px; }.glimpse-preview-object span.rspace { margin-right:4px; }.glimpse-preview-object span.mspace { margin:0 4px; }.glimpse-preview-object span.small { font-size:0.95em; } .glimpse-panel .glimpse-preview-table { border:0; } .glimpse-panel .glimpse-preview-table .glimpse-preview-cell { padding-left:0; padding-right:2px; width:11px; } .glimpse-expand { height:11px; width:11px; display:inline-block; float:left; margin:1px 0 0 0; cursor:pointer; background-image:url(); background-repeat:no-repeat; background-position:-126px 0; }.glimpse-collapse { background-position:-126px -11px; }.glimpse-preview-show { display:none; font-weight:normal !important; }.glimpse-panel .quiet *, .glimpse-panel .ms * { color:#AAA; }.glimpse-panel .suppress { text-decoration:line-through; }.glimpse-panel .suppress * { color:#AAA; } .glimpse-panel .selected, .glimpse-panel .selected > td, .glimpse-panel .selected > th, .glimpse-panel .selected > tr > td, .glimpse-panel .selected > tr > th, .selected > td > .glimpse-preview-table > tbody > tr > td, .selected > tr > td > .glimpse-preview-table > tbody > tr > td { background-color:#FFFF99; }.glimpse-panel .selected * { color:#409B3B; }.glimpse .info .icon, .glimpse .warn .icon, .glimpse .loading .icon, .glimpse .error .icon, .glimpse .fail .icon, .glimpse .ms .icon { width:14px; height:14px; background-image:url(); background-repeat:no-repeat; display:inline-block; margin-right: 5px; } .glimpse .info .icon { background-position: -22px -22px; }.glimpse .warn .icon { background-position:-36px -22px; }.glimpse .loading .icon { background-position:-78px -22px; }.glimpse .error .icon { background-position:-50px -22px; }.glimpse .ms .icon { background-position:-181px -22px; } .glimpse .fail .icon { background-position:-64px -22px; }.glimpse .info * { color:#067CE5; }.glimpse .warn * { color:#FE850C; } .glimpse .error * { color:#B40000; }.glimpse .fail * { color:#B40000; font-weight:bold; }.glimpse-panelitem-Ajax .loading .icon { float:right; }.glimpse-panelitem-Remote .glimpse-side-sub-panel .loading, .glimpse-panelitem-Remote .glimpse-side-main-panel .loading, .glimpse-clear { position:fixed; bottom:5px; right:10px; color:#777; } .glimpse-panelitem-Remote .glimpse-side-main-panel .loading { right:27%; } .glimpse-clear { background-color:white; padding:0.3em 1em 0.5em 1em; border:#CCC solid 1px; bottom:25px; -webkit-border-radius:3px; -moz-border-radius:3px; border-radius:3px; } .glimpse-panel table .glimpse-head-message td { text-align:center; background-color:#DDD; } .glimpse-panelitem-GlimpseInformation div { text-align:center; } .glimpse-panelitem-GlimpseInformation .glimpse-panel-message { padding-top:5px; } .glimpse-panelitem-GlimpseInformation strong { font-weight:bold; } .glimpse-panelitem-GlimpseInformation .glimpse-info-more { font-size:1.5em; margin:1em 0; } .glimpse-panelitem-GlimpseInformation .glimpse-info-quote { font-style:italic; margin:0.75em 0 3em; } @media screen and (-webkit-min-device-pixel-ratio:0) { .glimpse-tabs li.glimpse-hover, .glimpse-tabs li.glimpse-active { border-top:1px solid #DDD; } }';
     glimpseCss = glimpseCss.replace(/url\(\)/gi, 'url(' + glimpsePath + 'sprite.png)'); 
     $('<style type="text/css"> ' + glimpseCss + ' </style>').appendTo("head");      //http://stackoverflow.com/questions/1212500/jquery-create-css-rule-class-runtime
 
@@ -281,12 +282,12 @@ if (window.jQueryGlimpse) { (function ($) {
             };
             type = clean(type);
             clientName = clean(clientName);
-            return '<span class="glimpse-snapshot-type">' + clientName + ((type.length > 0) ? ' (' + type + ')' : '') + '&nbsp;</span><span><span class="glimpse-enviro"></span><span class="glimpse-url">' + url + '</span></span>';
+            return '<span class="glimpse-snapshot-type" data-clientName="' + clientName + '">' + clientName + ((type.length > 0) ? ' (' + type + ')' : '') + '&nbsp;</span><span><span class="glimpse-enviro"></span><span class="glimpse-url">' + url + '</span></span>';
         },
         buildKeyValueTable: function (data, level, forceFull, forceLimit) {  
             var that = this, limit = $.isNaN(forceLimit) ? 3 : forceLimit;
             if (that.shouldUsePreview($.glimpse.util.lengthJson(data), level, forceFull, limit, forceLimit, 1))
-                return that.buildCustomPreview(data, level);
+                return that.buildKeyValuePreview(data, level);
                 
             var i = 1, html = '<table><thead><tr class="glimpse-row-header-' + level + '"><th class="glimpse-cell-key">Key</th><th class="glimpse-cell-value">Value</th></tr></thead>';
             for (var key in data)
@@ -424,13 +425,15 @@ if (window.jQueryGlimpse) { (function ($) {
         },
         buildCustomPreview: function (data, level) {
             var that = this, isComplex = ($.isArray(data[0]) || $.isPlainObject(data[0]));
-
+            
+            if (isComplex && data.length == 1)
+                return that.build(data[0], level);
             if (isComplex || data.length > 1) 
                 return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + that.buildCustomPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + that.buildCustomTable(data, level, true) + '</div></td></tr></table>';
             return that.buildStringPreview(data[0], level + 1); 
         },
         buildCustomPreviewOnly: function (data, level) { 
-            var that = this, isComplex = ($.isArray(data[0]) || $.isPlainObject(data[0])), length = (isComplex ? data.length - 1 : data.length), rowMax = 2, columnMax = 3, columnLimit = 1, rowLimit = (rowMax < length ? rowMax : length), html = '<span class="start">[</span>';
+            var that = this, isComplex = $.isArray(data[0]), length = (isComplex ? data.length - 1 : data.length), rowMax = 2, columnMax = 3, columnLimit = 1, rowLimit = (rowMax < length ? rowMax : length), html = '<span class="start">[</span>';
 
             if (isComplex) {
                 columnLimit = ((data[0].length > columnMax) ? columnMax : data[0].length);
@@ -958,6 +961,7 @@ if (window.jQueryGlimpse) { (function ($) {
         startTime: null,
         duration: null,
         logRow: null,
+        mimeType: null,
         send: function () {
             $.glimpseAjax.callStarted(this);
         },
@@ -966,154 +970,241 @@ if (window.jQueryGlimpse) { (function ($) {
         }
     };
 
-    var XMLHttpRequestWrapper = function (activeXObject) {
-        // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+    var XMLHttpRequestWrapper = function(activeXObject) { 
         // XMLHttpRequestWrapper internal variables
 
         var xhrRequest = (typeof activeXObject != "undefined" ? activeXObject : new _XMLHttpRequest()),
-            spy = new XHRSpy(), that = this;
-
-        // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+            spy = new XHRSpy(), 
+            that = this,
+            isIE6 = $.browser.msie && $.browser.version == "6.0",
+            supportsApply = !isIE6 && xhrRequest && xhrRequest.open && typeof xhrRequest.open.apply != "undefined";
+            numberOfXHRProperties = 0;
+             
         // XMLHttpRequestWrapper internal methods
+        var updateSelfPropertiesIgnore = {
+            abort: 1,
+            channel: 1,
+            getAllResponseHeaders: 1,
+            getInterface: 1,
+            getResponseHeader: 1,
+            mozBackgroundRequest: 1,
+            multipart: 1,
+            onreadystatechange: 1,
+            open: 1,
+            send: 1,
+            setRequestHeader: 1
+        };
+         
+        var updateSelfProperties = function() {
+            if (supportsXHRIterator) {
+                for (var propName in xhrRequest) {
+                    if (propName in updateSelfPropertiesIgnore)
+                        continue; 
+                    try {
+                        var propValue = xhrRequest[propName]; 
+                        if (propValue && !$.isFunction(propValue))
+                            that[propName] = propValue;
+                    }
+                    catch(E) {  }
+                }
+            }
+            else { 
+                if (xhrRequest.readyState == 4) {
+                    that.status = xhrRequest.status;
+                    that.statusText = xhrRequest.statusText;
+                    that.response = xhrRequest.response;
+                    that.responseText = xhrRequest.responseText;
+                    that.responseType = xhrRequest.responseType;
+                    that.responseXML = xhrRequest.responseXML;  
+                }
+            }
+        };
+        
+        var updateXHRPropertiesIgnore = {
+            channel: 1,
+            onreadystatechange: 1,
+            readyState: 1,
+            responseBody: 1,
+            responseText: 1,
+            responseXML: 1,
+            status: 1,
+            statusText: 1,
+            upload: 1
+        };
+         
+        var updateXHRProperties = function() {
+            for (var propName in that) {
+                if (propName in updateXHRPropertiesIgnore)
+                    continue; 
+                try {
+                    var propValue = that[propName]; 
+                    if (propValue && !xhrRequest[propName]) 
+                        xhrRequest[propName] = propValue; 
+                }
+                catch(E) {  }
+            }
+        };
 
+        var finished = false;
         var finishXHR = function () {
-            var duration = new Date().getTime() - spy.startTime;
-            var success = xhrRequest.status == 200;
+            if (finished) { return; }
+            finished = true;
+            
+            var duration = new Date().getTime() - spy.startTime, 
+                success = xhrRequest.status == 200;
 
             //Pull out the header information
-            var responseHeadersText = xhrRequest.getAllResponseHeaders();
-            var responses = responseHeadersText ? responseHeadersText.split(/[\n\r]/) : [];
-            var reHeader = /^(\S+):\s*(.*)/;
-            for (var i = 0, l = responses.length; i < l; i++) {
-                var match = responses[i].match(reHeader);
+            var responseHeadersText = xhrRequest.getAllResponseHeaders(), 
+                responses = responseHeadersText ? responseHeadersText.split(/[\n\r]/) : [],
+                regHeader = /^(\S+):\s*(.*)/;
+            for (var i = 0, l = responses.length; i < l; i++) { 
+                var text = responses[i], match = text.match(regHeader); 
                 if (match)
-                    spy.responseHeaders[match[1]] = match[2];
+                {
+                    var name = match[1], value = match[2]; 
+                    if (name == "Content-Type")
+                        spy.mimeType = value; 
+                    spy.responseHeaders[name] = value;
+                }
             }
-
-            //Trigger the finish a bit latter
-            setTimeout(function () { spy.finish(); }, 200);
-
-            //Get the rest of the information
             spy.success = success;
             spy.loaded = true;
             spy.status = xhrRequest.status;
             spy.statusText = xhrRequest.statusText;
             spy.responseText = xhrRequest.responseText;
-            spy.duration = duration;
+            spy.duration = duration; 
+  
+            //Trigger the finish a bit latter
+            setTimeout(function () { spy.finish(); }, 200);
+             
+            updateSelfProperties();
         };
-
+         
         var handleStateChange = function () {
             that.readyState = xhrRequest.readyState;
 
-            if (xhrRequest.readyState == 4) {
-                that.statusText = xhrRequest.statusText;
-                that.status = xhrRequest.status;
-                that.response = xhrRequest.response;
-                that.responseText = xhrRequest.responseText;
-                that.responseType = xhrRequest.responseType;
-                that.responseXML = xhrRequest.responseXML;
-
+            if (xhrRequest.readyState == 4) { 
                 finishXHR();
                 xhrRequest.onreadystatechange = function () { };
             }
             that.onreadystatechange();
         };
 
-        // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-        // XMLHttpRequestWrapper public properties and handlers
-
-        this.readyState = 0;
-
+        // XMLHttpRequestWrapper public properties and handlers 
+        this.readyState = 0; 
         this.onreadystatechange = function () { };
-
-        this.response = null;
-        this.responseText = null;
-        this.responseType = null;
-        this.responseXML = null;
-        this.status = null;
-        this.statusText = null;
-
-        // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-        // XMLHttpRequestWrapper public methods
-
-        this.open = function (method, url, async) {
+ 
+        // XMLHttpRequestWrapper public methods 
+        this.open = function (method, url, async, user, password) { 
+            updateSelfProperties();
+            
             if (spy.loaded)
                 spy = new XHRSpy();
+            
             spy.method = method;
             spy.url = url;
             spy.href = url;
             spy.async = async;
-            spy.xhrRequest = xhrRequest;
-            //spy.urlParams = parseURLParamsArray(url);
+            spy.xhrRequest = xhrRequest; 
 
-            if (!$.browser.msie && async)
-                xhrRequest.onreadystatechange = handleStateChange;
-
-            // xhr.open.apply not available in IE
-            if (xhrRequest.open.apply)                                              //TODO: Need to see if this applies
-                xhrRequest.open.apply(xhrRequest, arguments)
-            else
-                xhrRequest.open(method, url, async);
-
-            if ($.browser.msie && async)
-                xhrRequest.onreadystatechange = handleStateChange;
-
+            try {
+                // xhrRequest.open.apply may not be available in IE
+                if (supportsApply)
+                    xhrRequest.open.apply(xhrRequest, arguments);
+                else
+                    xhrRequest.open(method, url, async, user, password);
+            }
+            catch(e) {
+                throw e;
+            }
+        
+            xhrRequest.onreadystatechange = handleStateChange;
         };
-
+         
         this.send = function (data) {
             spy.data = data;
             spy.startTime = new Date().getTime();
-
+            
+            updateXHRProperties();
+            
             try {
                 xhrRequest.send(data);
             }
-            catch (e) {
+            catch (e) { 
                 throw e;
             }
             finally {
                 spy.send();
                 if (!spy.async) {
                     that.readyState = xhrRequest.readyState;
-                    finishXHR();
+                    try { finishXHR(); } 
+                    catch(E) { } 
                 }
             }
         };
-
+         
         this.setRequestHeader = function (header, value) {
             spy.requestHeaders[header] = value;
             xhrRequest.setRequestHeader(header, value);
         };
-
+         
         this.getResponseHeader = function (header) {
             return xhrRequest.getResponseHeader(header);
         };
-
+         
         this.getAllResponseHeaders = function () {
             return xhrRequest.getAllResponseHeaders();
         };
-
+         
         this.abort = function () {
-            return xhrRequest.abort();
+            xhrRequest.abort();
+            updateSelfProperties();
         };
-
+         
+        //Clone XHR object
+        for (var propName in xhrRequest) {
+            numberOfXHRProperties++;
+        
+            if (propName in updateSelfPropertiesIgnore)
+                continue;
+        
+            try {
+                var propValue = xhrRequest[propName];  
+                if (isFunction(propValue)) {
+                    if (typeof that[propName] == "undefined") {
+                        this[propName] = (function(name, xhr) { 
+                            return supportsApply ? 
+                                function() { return xhr[name].apply(xhr, arguments); } :
+                                function(a,b,c,d,e) { return xhr[name](a,b,c,d,e); }; 
+                        })(propName, xhrRequest);
+                    } 
+                }
+                else
+                    this[propName] = propValue;
+            }
+            catch(E) { }
+        } 
+        var supportsXHRIterator = numberOfXHRProperties > 0;
+        
         return this;
     };
 
     var _ActiveXObject;
     if ($.browser.msie && $.browser.version == "6.0") {
-        window._ActiveXObject = window.ActiveXObject;
-        window.ActiveXObject = function (name) {
-            var error = null;
-
+        _ActiveXObject = window.ActiveXObject;
+    
+        var xhrObjects = " MSXML2.XMLHTTP.5.0 MSXML2.XMLHTTP.4.0 MSXML2.XMLHTTP.3.0 MSXML2.XMLHTTP Microsoft.XMLHTTP ";
+    
+        window.ActiveXObject = function(name) {
+            var error = null; 
             try {
-                var activeXObject = new window._ActiveXObject(name);
+                var activeXObject = new _ActiveXObject(name);
             }
-            catch (e) {
+            catch(e) {
                 error = e;
             }
             finally {
                 if (!error) {
-                    var xhrObjects = " MSXML2.XMLHTTP.5.0 MSXML2.XMLHTTP.4.0 MSXML2.XMLHTTP.3.0 MSXML2.XMLHTTP Microsoft.XMLHTTP ";
                     if (xhrObjects.indexOf(" " + name + " ") != -1)
                         return new XMLHttpRequestWrapper(activeXObject);
                     else
@@ -1126,9 +1217,9 @@ if (window.jQueryGlimpse) { (function ($) {
     }
     else {
         var _XMLHttpRequest = XMLHttpRequest;
-        window.XMLHttpRequest = function () {
+        window.XMLHttpRequest = function() {
             return new XMLHttpRequestWrapper();
-        }
+        };
     }
     //#endregion
 
@@ -1144,7 +1235,7 @@ if (window.jQueryGlimpse) { (function ($) {
         adjustProtocol: function (data) {
             var ga = this, metadata;
 
-            data[ga.static.key] = ''
+            data[ga.static.key] = '';
 
             if ((metadata = data._metadata) && (metadata = metadata.plugins))
                 (metadata[ga.static.key] = {})['helpUrl'] = 'http://getglimpse.com/Help/Plugin/Ajax'; 
@@ -1362,10 +1453,8 @@ if (window.jQueryGlimpse) { (function ($) {
         requestSelected: function (clientId, requestId) {
             var gr = this, static = gr.static, request = static.result.Data[clientId][requestId];
             if (request.Data) {
-                $('.glimpse-head-message', static.subPanel).fadeIn();
-
-                $.glimpse.refresh(eval('(' + request.Data + ')'), $.glimpseProcessor.buildHeading(request.Url, clientId, static.key));
-
+                $('.glimpse-head-message', static.subPanel).fadeIn(); 
+                $.glimpse.refresh(eval('(' + request.Data + ')'), $.glimpseProcessor.buildHeading(request.Url, clientId, static.key)); 
                 $('.glimpse').trigger('glimpse.request.change', ['remote']);
             }
         },
@@ -1775,6 +1864,12 @@ if (window.jQueryGlimpse) { (function ($) {
             $.glimpse.addLayoutListener(function(tabStrip, panelHolder) { gs.adjustLayout(); }, true);
             $('.glimpse').live('glimpse.request.change', function (ev, type) { if (type != 'ajax') { gs.adjustLayout(); } });
             $('.glimpse').live('glimpse.request.refresh', function (ev, type) { gs.adjustLayout(); });
+            
+            //Wireup click listeners
+            $('.glimpse-url .glimpse-drop-over a').live('click', function() {
+                gs.switchContext($(this).attr('data-requestId'), $(this).attr('data-url'), $('.glimpse .glimpse-snapshot-type').attr('data-clientName'));
+                return false;
+            });
         },
         adjustLayout: function () {
             var g = $.glimpse, mainHolder = g.static.mainHolder(), metadata = g.static.data._metadata, request = (metadata && metadata.request), environments = (request && request.environmentUrls), correlation = (request && request.correlation);
@@ -1802,20 +1897,9 @@ if (window.jQueryGlimpse) { (function ($) {
                 }
             }
              
-            correlation = { 
-	            title : 'PRG Request',
-	            legs : [ {
-		            method : 'POST',
-		            url : '/Help/Feature/Add',
-		            glimpseId : 'GUID' }, {
-		            method : 'GET',
-		            url : '/Help/Feature/',
-		            glimpseId : 'GUID' } ]
-	            };
-            
             //Setup correlation
             if (correlation) { 
-                var urlHolder = $('.glimpse-title .glimpse-url', mainHolder), currentUrl = urlHolder.text(), currentLeg = correlation.legs[0], correlationList = '<div>' + correlation.title + '</div>';
+                var urlHolder = $('.glimpse-title .glimpse-url', mainHolder), currentUrl = urlHolder.text(), currentLeg, correlationList = '<div>' + correlation.title + '</div>';
                 for (var i = 0; i < correlation.legs.length; i++) {
                     var leg = correlation.legs[i];
                     if (leg.url == currentUrl) {
@@ -1823,15 +1907,34 @@ if (window.jQueryGlimpse) { (function ($) {
                         correlationList += currentLeg.url;
                     }
                     else
-                        correlationList += '<a title="Go to ' + leg.url + '" href="#">' + leg.url + '</a>'; 
+                        correlationList += '<a title="Go to ' + leg.url + '" href="#" data-requestId="' + leg.glimpseId + '" data-url="' + leg.url + '">' + leg.url + '</a>'; 
                     correlationList += ' <strong>(' + leg.method + ')</strong><br />';
                 }
                 
                 if (currentLeg) {
-                    urlHolder.html($('<span class="glimpse-drop">' + currentLeg.url + ' <strong>(' + currentLeg.method + ')</strong><span class="glimpse-drop-arrow-holder"><span class="glimpse-drop-arrow"></span></span></span><div class="glimpse-drop-over">' + correlationList + '</div>'));
+                    urlHolder.html($('<span class="glimpse-drop">' + currentLeg.url + ' <strong>(' + currentLeg.method + ')</strong><span class="glimpse-drop-arrow-holder"><span class="glimpse-drop-arrow"></span></span></span><div class="glimpse-drop-over">' + correlationList + '<div class="loading"><span class="icon"></span><span>Loaded...</span></div></div>'));
                     dropFunction(urlHolder);
                 }
             }
+        },
+        switchContext: function(glimpseRequestId, glimpseRequestUrl, glimpseClientName) {
+            var gs = this, loading = $('.glimpse-url .glimpse-drop-over .loading').fadeIn();
+            
+            $.ajax({
+                url: gs.defaults.historyLink,
+                type: 'GET',
+                data: { 'ClientRequestID': glimpseRequestId },
+                contentType: 'application/json',
+                success: function (result) {
+                    loading.fadeOut();
+                    $.glimpse.refresh(eval('(' + result.Data[glimpseRequestId].Data + ')'), $.glimpseProcessor.buildHeading(glimpseRequestUrl, glimpseClientName, gs.defaults.key));
+                    $('.glimpse').trigger('glimpse.request.change', ['correlation']);
+                }
+            });
+        },
+        defaults: {
+            key: 'PRG',
+            historyLink: glimpsePath + 'History'
         }
     });
 
