@@ -1,4 +1,6 @@
-﻿using System.Web;
+﻿using System;
+using System.ComponentModel.Composition;
+using System.Web;
 using System.Text.RegularExpressions;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
@@ -7,11 +9,23 @@ namespace Glimpse.Core.Validator
 {
     [GlimpseValidator]
     internal class UrlValidator:IGlimpseValidator{
-        public bool IsValid(HttpContextBase context, GlimpseConfiguration configuration, LifecycleEvent lifecycleEvent)
+        
+        GlimpseConfiguration Configuration { get; set; }
+        
+        [ImportingConstructor]
+        public UrlValidator(GlimpseConfiguration configuration)
         {
-            if (configuration.UrlBlackList.Count == 0) return true; //no configured list, allow all URL's
+            if (configuration == null)
+                throw new ArgumentNullException("configuration");
 
-            foreach (GlimpseUrl url in configuration.UrlBlackList)
+            Configuration = configuration;
+        }
+
+        public bool IsValid(HttpContextBase context, LifecycleEvent lifecycleEvent)
+        {
+            if (Configuration.UrlBlackList.Count == 0) return true; //no configured list, allow all URL's
+
+            foreach (GlimpseUrl url in Configuration.UrlBlackList)
             {
                 if (Regex.IsMatch(context.Request.CurrentExecutionFilePath,url.Url,RegexOptions.IgnoreCase))
                 {

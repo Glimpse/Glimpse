@@ -19,7 +19,9 @@ namespace Glimpse.Test.Core
         {
             Context.Setup(ctx => ctx.Request.UserHostAddress).Returns("1.1.1.1");
             
-            Assert.IsTrue(Validator.IsValid(Context.Object, Configuration, LifecycleEvent.BeginRequest));
+            var result = ValidateIp();
+
+            Assert.IsTrue(result);
         }
         
         [Test]
@@ -29,19 +31,23 @@ namespace Glimpse.Test.Core
             
             Configuration.IpAddresses.Add(new IpAddress{Address = "127.0.0.1"});
 
-            Assert.IsTrue(Validator.IsValid(Context.Object, Configuration, LifecycleEvent.BeginRequest));
+            var result = ValidateIp();
+
+            Assert.IsTrue(result);
         }
-        
+
         [Test]
         public void IpAddressValidator_ValidateIP6Address_ReturnsTrue()
         {
             Context.Setup(ctx => ctx.Request.UserHostAddress).Returns("::1");
             
             Configuration.IpAddresses.Add(new IpAddress{Address = "::1"});
+            
+            var result = ValidateIp();
 
-            Assert.IsTrue(Validator.IsValid(Context.Object, Configuration, LifecycleEvent.BeginRequest));
+            Assert.IsTrue(result);
         }
-        
+
         [Test]
         public void IpAddressValidator_ValidateIncorrectIp_ReturnsFalse()
         {
@@ -49,9 +55,11 @@ namespace Glimpse.Test.Core
             
             Configuration.IpAddresses.Add(new IpAddress{Address = "127.0.0.1"});
             
-            Assert.IsFalse(Validator.IsValid(Context.Object, Configuration, LifecycleEvent.BeginRequest));
+            var result = ValidateIp();
+
+            Assert.IsFalse(result);
         }
-        
+
         [Test]
         public void IpAddressValidator_ValidateAddressInRange_ReturnsTrue()
         {
@@ -59,9 +67,11 @@ namespace Glimpse.Test.Core
             
             Configuration.IpAddresses.Add(new IpAddress{AddressRange = "127.0.0.1/24"});
             
-            Assert.IsTrue(Validator.IsValid(Context.Object, Configuration, LifecycleEvent.BeginRequest));
+            var result = ValidateIp();
+
+            Assert.IsTrue(result);
         }
-        
+
         [Test]
         public void IpAddressValidator_ValidateAddressOutOfRange_ReturnsFalse()
         {
@@ -69,9 +79,11 @@ namespace Glimpse.Test.Core
             
             Configuration.IpAddresses.Add(new IpAddress{AddressRange = "127.0.0.1/24"});
             
-            Assert.IsFalse(Validator.IsValid(Context.Object, Configuration, LifecycleEvent.BeginRequest));
+            var result = ValidateIp();
+
+            Assert.IsFalse(result);
         }
-        
+
         [Test]
         public void IpAddressValidator_ValidateAgainstAddressAndRange_ReturnsTrue()
         {
@@ -80,9 +92,11 @@ namespace Glimpse.Test.Core
             Configuration.IpAddresses.Add(new IpAddress{Address = "127.1.1.1"});
             Configuration.IpAddresses.Add(new IpAddress{AddressRange = "127.0.0.1/24"});
             
-            Assert.IsTrue(Validator.IsValid(Context.Object, Configuration, LifecycleEvent.BeginRequest));
+            var result = ValidateIp();
+
+            Assert.IsTrue(result);
         }
-        
+
         [Test]
         public void IpAddressValidator_ValidateIncorrectIpAgainstAddressAndRange_ReturnsFalse()
         {
@@ -91,9 +105,11 @@ namespace Glimpse.Test.Core
             Configuration.IpAddresses.Add(new IpAddress{Address = "127.1.1.1"});
             Configuration.IpAddresses.Add(new IpAddress{AddressRange = "127.0.0.1/24"});
             
-            Assert.IsFalse(Validator.IsValid(Context.Object, Configuration, LifecycleEvent.BeginRequest));
+            var result = ValidateIp();
+
+            Assert.IsFalse(result);
         }
-        
+
         [Test]
         public void IpAddressValidator_BuildingIpFilters_OrdersAddressesBeforeRanges()
         {   
@@ -108,14 +124,19 @@ namespace Glimpse.Test.Core
             Assert.IsInstanceOf<IpAddressValidator.IpRangeFilter>(filters[2]);
         }
 
-        public IpAddressValidator Validator { get; set; }
+        bool ValidateIp()
+        {
+            var validator = new IpAddressValidator(Configuration);
+            var result = validator.IsValid(Context.Object, LifecycleEvent.BeginRequest);
+            return result;
+        }
+
         public Mock<HttpContextBase> Context { get; set; }
         public GlimpseConfiguration Configuration { get; set; }
 
         [SetUp]
         public void Setup()
         {
-            Validator = new IpAddressValidator();
             Context = new Mock<HttpContextBase>();
             Configuration = new GlimpseConfiguration();
             Configuration.IpAddresses.Clear();

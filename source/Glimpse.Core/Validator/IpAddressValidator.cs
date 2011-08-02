@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Configuration;
 using System.Linq;
 using System.Net;
@@ -10,20 +12,34 @@ using LukeSkywalker.IPNetwork;
 namespace Glimpse.Core.Validator
 {
     [GlimpseValidator]
-    public class IpAddressValidator : IGlimpseValidator
+    public class IpAddressValidator : IGlimpseValidator, INotifiyGlimpseConfigChanged
     {
+        GlimpseConfiguration Configuration { get; set; }
         ICollection<IIpFilter> IpFilters { get; set; }
-
-        public bool IsValid(HttpContextBase context, GlimpseConfiguration configuration, LifecycleEvent lifecycleEvent)
+        
+        [ImportingConstructor]
+        public IpAddressValidator(GlimpseConfiguration configuration)
         {
-            if(IpFilters == null)
-                IpFilters = BuildFilters(configuration).ToList();
+            if (configuration == null)
+                throw new ArgumentNullException("configuration");
 
+            Configuration = configuration;
+            
+            IpFilters = BuildFilters(Configuration).ToList();
+        }
+
+        public bool IsValid(HttpContextBase context, LifecycleEvent lifecycleEvent)
+        {
             if (IpFilters.Count == 0) return true; //no configured list, allow all IP's
 
-            var userIpAddress = GetUserIpAddress(context, configuration.IpForwardingEnabled);
+            var userIpAddress = GetUserIpAddress(context);
 
             return IpFilters.Any(f => f.IsValid(userIpAddress));
+        }
+
+        public void ConfigChanged()
+        {
+            IpFilters = BuildFilters(Configuration).ToList();
         }
 
         public static IEnumerable<IIpFilter> BuildFilters(GlimpseConfiguration configuration)
@@ -44,9 +60,9 @@ namespace Glimpse.Core.Validator
             }
         }
 
-        public static IPAddress GetUserIpAddress(HttpContextBase context, bool allowIpForwarding)
+        public IPAddress GetUserIpAddress(HttpContextBase context)
         {
-            if (allowIpForwarding)
+            if (Configuration.IpForwardingEnabled)
             {
                 // Source http://support.appharbor.com/discussions/problems/681-requestuserhostaddress
                 var forwardedFor = context.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
