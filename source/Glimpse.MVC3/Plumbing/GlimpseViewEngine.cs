@@ -5,7 +5,7 @@ using Glimpse.Core;
 
 namespace Glimpse.Mvc3.Plumbing
 {
-    internal class GlimpseViewEngine : IViewEngine
+    public class GlimpseViewEngine : IViewEngine
     {
         public IViewEngine ViewEngine { get; set; }
 

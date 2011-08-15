@@ -63,6 +63,18 @@ namespace Glimpse.Mvc3.Plugin
                     if (callMetadata.GlimpseView != null)
                     {
                         var viewContext = callMetadata.GlimpseView.ViewContext;
+
+                        if (viewContext == null)
+                        {
+                            result.Add(new object[]
+                                {
+                                    result.Count, callMetadata.ViewName, callMetadata.MasterName,
+                                    callMetadata.IsPartial.ToString(), null,
+                                    callMetadata.UseCache.ToString(), null, null, "no ViewContext"
+                                });
+                            continue;
+                        }
+
                         object modelResult = null;
                         var vd = viewContext.ViewData.Flatten();
                         var td = viewContext.TempData.Flatten();

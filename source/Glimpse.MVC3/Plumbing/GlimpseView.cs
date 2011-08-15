@@ -6,9 +6,9 @@ namespace Glimpse.Mvc3.Plumbing
     public class GlimpseView : IView
     {
         public IView View { get; set; }
-        internal ViewContext ViewContext { get; set; }
+        public ViewContext ViewContext { get; set; }
 
-        internal GlimpseView(IView view)
+        public GlimpseView(IView view)
         {
             View = view;
         }

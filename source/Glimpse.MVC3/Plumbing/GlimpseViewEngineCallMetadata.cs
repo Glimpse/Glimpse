@@ -2,7 +2,7 @@
 
 namespace Glimpse.Mvc3.Plumbing
 {
-    internal class GlimpseViewEngineCallMetadata
+    public class GlimpseViewEngineCallMetadata
     {
         public ViewEngineResult ViewEngineResult { get; set; }
         public bool IsPartial { get; set; }
