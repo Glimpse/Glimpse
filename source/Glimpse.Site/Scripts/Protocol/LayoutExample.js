@@ -386,19 +386,19 @@ $(document).ready(function () {
     $('.glimpse-scenario-thirteen').show().html($Glimpse.glimpseProcessor.build(scenarioThirteenData, 0));
      
     if (glimpse == '') 
-        $Glimpse.glimpse._wireCommonPluginEvents($.glimpse); 
+        $Glimpse.glimpse._wireCommonPluginEvents($Glimpse.glimpse); 
     $Glimpse.glimpseProcessor.applyPostRenderTransforms($('.protocol'));
 
 
     //Sample rendering
     var sampleRender = function(data) {
         $('.glimpse-scenario-example').show().html($Glimpse.glimpseProcessor.build(data, 0));
-        $Glimpse.glimpseProcessor.applyPostRenderTransforms($('.glimpse-scenario-example'));
-    }
+        $Glimpse.glimpseProcessor.applyPostRenderTransforms($Glimpse('.glimpse-scenario-example'));
+    };
     sampleRender(scenarioOneData);
 
     //Trigger new rendering
-    $('.glimpse-sample-trigger').click(function(e) {
+    $Glimpse('.glimpse-sample-trigger').click(function(e) {
         e.preventDefault;
         try
         {

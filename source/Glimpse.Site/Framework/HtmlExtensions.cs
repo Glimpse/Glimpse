@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System;
+using System.Web;
 using System.Web.Mvc;
 using Glimpse.Core;
 
@@ -8,7 +9,7 @@ public static class HtmlExtensions
     {
         var content = "";
         var cookie = helper.ViewContext.RequestContext.HttpContext.Request.Cookies[GlimpseConstants.CookieModeKey];
-        if (cookie != null && cookie.Value != "On")
+        if (cookie == null || cookie.Value != "On")
             content = string.Format("<script src=\"{0}\" type=\"text/javascript\"></script>", VirtualPathUtility.ToAbsolute("~/Glimpse.axd?r=client.js"));
         return MvcHtmlString.Create(content);
     }
