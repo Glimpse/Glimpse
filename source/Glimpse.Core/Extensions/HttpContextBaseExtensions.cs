@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
+using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Plumbing;
 
@@ -65,12 +66,42 @@ namespace Glimpse.Core.Extensions
 
         public static string GlimpseResourcePath(this HttpContextBase context, string resource)
         {
-            var root = VirtualPathUtility.ToAbsolute("~/", context.Request.ApplicationPath);
+            var root = VirtualPathUtility.ToAbsolute(GlimpseResourceRoot(), context.Request.ApplicationPath);
 
             if (resource == null) return string.Format("{0}Glimpse.axd", root);
 
             return string.Format("{0}Glimpse.axd?{3}={4}&{2}={1}", root, resource, Handler.ResourceKey, Handler.VersionKey, Module.RunningVersion);
         }
+
+        internal static string GlimpseResourceRoot()
+        {
+            if (_resourceRoot == null)
+            {
+                var config = WebConfigurationManager.OpenWebConfiguration("~/web.config");
+                var httpHandlers = config.GetSection("system.web/httpHandlers") as HttpHandlersSection;
+                _resourceRoot = GetResourceRootFromHandler(httpHandlers);
+            }
+
+            return _resourceRoot;
+        }
+
+        internal static string GetResourceRootFromHandler(HttpHandlersSection httpHandlers)
+        {
+            string rootPath = "~/";
+            if (httpHandlers != null && httpHandlers.Handlers != null)
+            {
+                string glimpseHandlerName = typeof(Handler).FullName;
+                var handler = httpHandlers.Handlers.Cast<HttpHandlerAction>().FirstOrDefault(h => h.Type == glimpseHandlerName);
+                if (handler != null)
+                {
+                    rootPath += handler.Path.Substring(0, handler.Path.Length - "glimpse.axd".Length);
+                }
+            }
+
+            return rootPath.Replace("//", "/");
+        }
+
+        private static string _resourceRoot;
 
 /*        public static List<IGlimpseWarning> GetWarnings(this HttpContextBase context)
         {
