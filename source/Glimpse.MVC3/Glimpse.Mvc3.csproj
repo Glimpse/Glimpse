@@ -54,7 +54,7 @@
     <Compile Include="Extensions\ControllerExtensions.cs" />
     <Compile Include="Extensions\ControllerFactoryExtensions.cs" />
     <Compile Include="Extensions\ModelBinderExtensions.cs" />
-    <Compile Include="Interceptor\BaseProxyGenerationHook.cs" />
+    <Compile Include="Interceptor\SimpleProxyGenerationHook.cs" />
     <Compile Include="Interceptor\BindModelInterceptor.cs" />
     <Compile Include="Interceptor\BindPropertyInterceptor.cs" />
     <Compile Include="Interceptor\CreateControllerInterceptor.cs" />
@@ -72,7 +72,6 @@
     <Compile Include="Plumbing\GlimpseAuthorizationFilter.cs" />
     <Compile Include="Plumbing\GlimpseBinderMetadata.cs" />
     <Compile Include="Plumbing\GlimpseBinderProvider.cs" />
-    <Compile Include="Plumbing\GlimpseControllerFactory.cs" />
     <Compile Include="Plumbing\GlimpseDependencyResolver.cs" />
     <Compile Include="Plumbing\GlimpseExceptionFilter.cs" />
     <Compile Include="Plumbing\GlimpseFilter.cs" />

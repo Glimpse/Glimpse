@@ -39,7 +39,11 @@ namespace Glimpse.Core.Plumbing
                 {
                     //var path = Context.GlimpseResourcePath("");
                     //var html = string.Format(@"<script type='text/javascript' id='glimpseData' data-glimpse-requestID='{1}'>var glimpse = {0}, glimpsePath = '{2}';</script>", json, requestId, path);
-                    var html = @"<script type='text/javascript' id='glimpseData' src='" + Context.GlimpseResourcePath("data.js") + "&id=" + Context.GetGlimpseRequestId() + "'></script><script type='text/javascript' id='glimpseClient' src='" + Context.GlimpseResourcePath("client.js") + "'></script></body>";
+
+                    var dataPath = HttpUtility.HtmlAttributeEncode(Context.GlimpseResourcePath("data.js") + "&id=" + Context.GetGlimpseRequestId());
+                    var clientPath = HttpUtility.HtmlAttributeEncode(Context.GlimpseResourcePath("client.js"));
+
+                    var html = @"<script type='text/javascript' id='glimpseData' src='" + dataPath + "'></script><script type='text/javascript' id='glimpseClient' src='" + clientPath + "'></script></body>";
                 
                     // Add glimpse output notice
                     string contentWithCopyright = bodyEnd.Replace(ResponseContent.ToString(),html);
