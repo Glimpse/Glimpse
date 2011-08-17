@@ -37,9 +37,6 @@
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -74,6 +71,16 @@
       <Project>{21F99168-7D7B-49F2-A97C-5A983E0CA16F}</Project>
       <Name>Glimpse.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NuSpec\lib\net40\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="NuSpec\content\App_Readme\glimpse.ef.readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="NuSpec\Glimpse.Ef.nuspec" />
+    <None Include="NuSpec\tools\install.ps1" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
