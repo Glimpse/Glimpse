@@ -317,6 +317,8 @@ if (window.jQueryGlimpse) { (function ($) {
 
             $('.glimpse-active', panelHolder).removeClass('glimpse-active');
             $((activeTab ? '.glimpse-panelitem-' + activeTab : '.glimpse-panel:first'), panelHolder).addClass('glimpse-active');
+             
+            $('.glimpse').trigger('glimpse.tabchanged', tabStrip.find('.glimpse-active').attr('data-sort'));
         },
         clearLayout: function (g) {
             var that = this, static = g.static, tabStrip = static.tabStrip(), panelHolder = static.panelHolder();
@@ -697,16 +699,15 @@ if (window.jQueryGlimpse) { (function ($) {
                 $('.glimpse-panel-holder .glimpse-active').removeClass('glimpse-active');
                 $('.glimpse-panel-holder .glimpse-panel:eq(' + $('.glimpse-tabs ul li').index(item) + ')').addClass('glimpse-active');
 
+                //Trigger event
+                $('.glimpse').trigger('glimpse.tabchanged', item.attr('data-sort'));
+
                 //Save selection
                 settings.activeTab = item.data('sort');
                 g.persistState();
             });
 
-            //Resize 
-//            $('.glimpse-resizer').resizer(settings.height); 
-//            //Remember height 
-//            $.glimpseResize.static.endDragCallback = function() ;
-
+            //Resize  
             var parentScope = $('.glimpse-resizer').parent();
             $('.glimpse-resizer').resizer({
                 getValue : function(s) { return s.resizeScope.height(); },
@@ -721,11 +722,11 @@ if (window.jQueryGlimpse) { (function ($) {
 
                     $('.glimpse-spacer').height(g.settings.height);
                     $('.glimpse-holder .glimpse-panel').height(g.settings.height - 54);
+                    
+                    $('.glimpse').trigger('glimpse.resize', g.settings.height - 54);
                 }
             });
-            
-            
-
+              
             g._wireCommonPluginEvents(g);
 
             //Resize panels if we are in popup
@@ -751,6 +752,7 @@ if (window.jQueryGlimpse) { (function ($) {
         _adjustLayout: function (g) {
             $('.glimpse-spacer').height(g.settings.height);
             $('.glimpse-holder .glimpse-panel').height(g.settings.height - 54);
+            $('.glimpse').trigger('glimpse.resize', g.settings.height - 54);
         },
         addProtocolListener: function (callback, onInitOnly) {
             $.glimpse.plugins.protocolListeners.push({ 'callback': callback, 'onInitOnly': onInitOnly });
@@ -825,13 +827,15 @@ if (window.jQueryGlimpse) { (function ($) {
             var g = $.glimpse, static = g.static;
             g.clientName = $.glimpse.util.cookie('glimpseClientName');
 
+            var start = (new Date).getTime();
+
             static.isPopup = window.location.href.indexOf(static.popupUrl) > -1;
 
             if (!data) {
                 if (static.isPopup && window.opener.glimpse) {
                     $.glimpse.util.cookie('glimpseKeepPopup', '');
                     $.glimpse.static.url = window.opener.jQueryGlimpse.glimpse.static.url;
-                    glimpse = data = JSON.parse(window.opener.jQueryGlimpse.glimpse.static.dataString)
+                    glimpse = data = JSON.parse(window.opener.jQueryGlimpse.glimpse.static.dataString);
                 }
                 else
                     return;
@@ -860,6 +864,11 @@ if (window.jQueryGlimpse) { (function ($) {
 
             if (!static.isPopup && g.settings.popupOn)
                 g.popup.open();
+
+                
+            /* Run a test. */
+            var diff = (new Date).getTime() - start;
+            console.log(diff);
         },
         plugins: {
             protocolListeners: [],
@@ -1935,9 +1944,9 @@ var glimpseTimeline = function (scope, settings) {
             elements.summaryDividerHolder = elements.summaryRow.find('.glimpse-tl-divider-line-holder');
         },
         builder = function () {
-            var init = function () { 
+            var init = function() {
                 scope.html('<div class="glimpse-timeline"><div class="glimpse-tl-row-summary"><div class="glimpse-tl-content-scroll"><div class="glimpse-tl-band-holder glimpse-tl-col-main"><div class="glimpse-tl-band glimpse-tl-band-title"></div><div class="glimpse-tl-band-group"></div></div><div class="glimpse-tl-event-holder glimpse-tl-col-main"><div class="glimpse-tl-band glimpse-tl-band-title"></div><div class="glimpse-tl-event-group"></div></div></div><div class="glimpse-tl-event-desc-holder glimpse-tl-col-side"></div><div class="glimpse-tl-padding-holder glimpse-tl-col-main"><div class="glimpse-tl-padding glimpse-tl-padding-l glimpse-tl-summary-height"></div><div class="glimpse-tl-padding glimpse-tl-padding-r glimpse-tl-summary-height"></div></div><div class="glimpse-tl-divider-holder glimpse-tl-col-main"><div class="glimpse-tl-divider-title-bar"></div><div class="glimpse-tl-divider-line-holder"></div></div><div class="glimpse-tl-resizer-holder glimpse-tl-col-main"><div class="glimpse-tl-resizer glimpse-tl-resizer-l glimpse-tl-summary-height"><div class="glimpse-tl-resizer-bar"></div><div class="glimpse-tl-resizer-handle"></div></div><div class="glimpse-tl-resizer glimpse-tl-resizer-r glimpse-tl-summary-height"><div class="glimpse-tl-resizer-bar"></div><div class="glimpse-tl-resizer-handle"></div></div></div></div><div class="glimpse-tl-row-spacer"></div><div class="glimpse-tl-row-content"><div class="glimpse-tl-content-scroll"><div class="glimpse-tl-band-holder glimpse-tl-col-main"><div class="glimpse-tl-band glimpse-tl-band-title"></div><div class="glimpse-tl-band-group"></div></div><div class="glimpse-tl-divider-holder glimpse-tl-col-main"><div class="glimpse-tl-divider-zero-holder"><div class="glimpse-tl-divider"></div></div><div class="glimpse-tl-divider-line-holder"></div></div><div class="glimpse-tl-event-holder glimpse-tl-col-main"><div class="glimpse-tl-event-holder-inner"><div class="glimpse-tl-band glimpse-tl-band-title"></div><div class="glimpse-tl-event-group"></div></div></div><div class="glimpse-tl-event-desc-holder glimpse-tl-col-side"><div class="glimpse-tl-band glimpse-tl-band-title">Events</div><div class="glimpse-tl-event-desc-group"></div></div></div><div class="glimpse-tl-content-overlay"><div class="glimpse-tl-divider-holder glimpse-tl-col-main"><div class="glimpse-tl-divider-title-bar"></div><div class="glimpse-tl-divider-zero-holder"><div class="glimpse-tl-divider"><div>0</div></div></div><div class="glimpse-tl-divider-line-holder"></div></div></div><div class="glimpse-tl-resizer"><div></div></div></div><div class="glimpse-tl-event-info"></div></div>');
-            }
+            };
 
             return {
                 init : init
@@ -1949,10 +1958,8 @@ var glimpseTimeline = function (scope, settings) {
                     renderDiverders(elements.summaryDividerHolder, { startTime : 0, endTime : settings.duration}, force);
                     renderDiverders(elements.contentDividerHolder, { startTime : settings.startTime, endTime : settings.endTime }, force);
 
-                    //Deal with the diver heights 
-                    var innerHeight = Math.max(elements.contentDividerHolder.height(), elements.contentDividerHolder.find('.glimpse-tl-col-main').first().height());  
-                    elements.contentDividerHolder.find('.glimpse-tl-divider-holder').height(innerHeight); 
-                    elements.summaryRow.find('.glimpse-tl-summary-height').height(elements.summaryRow.height());
+                    //Fix height
+                    adjustHeight();
                 },
                 renderDiverders = function (scope, range, force) { 
                     var x;
@@ -1989,6 +1996,14 @@ var glimpseTimeline = function (scope, settings) {
                         }
                     }
                 },
+                adjustHeight = function () { 
+                    //Content row divider height
+                    var innerHeight = Math.max(elements.contentBandScroller.height(), elements.contentBandScroller.find('.glimpse-tl-band-holder').height());   
+                    elements.contentBandScroller.find('.glimpse-tl-divider-holder').height(innerHeight); 
+
+                    //Summary row divider height
+                    elements.summaryRow.find('.glimpse-tl-summary-height').height(elements.summaryRow.height());
+                },
                 wireEvents = function () {  
                     //Window resize event 
                     $(window).resize(function () { render(); }); 
@@ -1999,7 +2014,8 @@ var glimpseTimeline = function (scope, settings) {
                  
             return {
                 init : init,
-                render : render
+                render : render,
+                adjustHeight : adjustHeight
             }; 
         }(),
         eventBuilder = function () { 
@@ -2206,6 +2222,9 @@ var glimpseTimeline = function (scope, settings) {
 
                     //Recolourize rows 
                     eventBuilder.colorRows();
+
+                    //Fix height
+                    dividerBuilder.adjustHeight();
                 },
                 init = function () { 
                 };
@@ -2273,23 +2292,32 @@ var glimpseTimeline = function (scope, settings) {
             };
         }(),
         resize = function () {
-            var resize = function (position) {
+            var columnResize = function (position) {
                     scope.find('.glimpse-tl-col-side').width(position + 'px');
                     scope.find('.glimpse-tl-col-main').css('left', position + 'px');
                     
                     dividerBuilder.render(false);
                 },
+                containerResize = function (height) { 
+                    //Work out what heihgt we can work with
+                    var contentHeight = height - (elements.summaryRow.height() + scope.find('.glimpse-tl-row-spacer').height() + 1);  
+                    elements.contentRow.height(contentHeight + 'px');
+                    
+                    //Render Divers
+                    dividerBuilder.render();
+                },
                 wireEvents = function () { 
                     elements.contentRow.find('.glimpse-tl-resizer').resizer({
                         max: function () { return 300; },
-                        endDragCallback: function (position) { resize(position); }
+                        endDragCallback: function (position) { columnResize(position); }
                     });
                 },
                 init = function () {
-                    wireEvents();
+                    wireEvents(); 
                 };
                  
             return {
+                containerResize : containerResize,
                 init : init
             };
         }(),
@@ -2311,16 +2339,16 @@ var glimpseTimeline = function (scope, settings) {
             filter.init();
             info.init();
             resize.init();
-
-            //Render dividers
-            dividerBuilder.render();
-
+             
             //Render events 
-            eventBuilder.render();
+            eventBuilder.render(); 
         };
 
-    return { 
-        init : init 
+    return {  
+        init : init,
+        support : {
+            containerResize : resize.containerResize
+        }
     };
 };
 
@@ -2357,22 +2385,33 @@ var glimpseTimelineData = {
 };
 
 var glimpseTimelinePlugin = function () {
-    var defaults = {
-            key : 'Timeline'
+    var timeline,
+        defaults = {
+            key : 'Timeline',
+            hasRun : false
         }, 
         timelineData,
         init = function () {
-            $.glimpse.addProtocolListener(function (data) { adjustProtocol(data); });
-            $.glimpse.addLayoutListener(function (tabStrip, panelHolder) { adjustLayout(tabStrip, panelHolder); }); 
+            $.glimpse.addProtocolListener(function(data) { adjustProtocol(data); });
+            $.glimpse.addLayoutListener(function(tabStrip, panelHolder) { defaults.hasRun = false; });
+            
+            $('.glimpse').live('glimpse.tabchanged', function(ev, type) { if (defaults.key == type && !defaults.hasRun) { adjustLayout(); } });
+            $('.glimpse').live('glimpse.resize', function(ev, height) { if (timeline || defaults.hasRun) { timeline.support.containerResize(height); } defaults.height = height; });
         },
         adjustProtocol = function (data) {
             //Pull out data and store
             timelineData = data.timeline || glimpseTimelineData;
             //Clear out data
-            data[defaults.key] = '';
+            data[defaults.key] = 'Generating timeline, please wait...';
         },
-        adjustLayout = function (tabStrip, panelHolder) {  
-            glimpseTimeline(panelHolder.find('.glimpse-panelitem-' + defaults.key), timelineData).init();
+        adjustLayout = function () {   
+            console.log('test');
+            timeline = glimpseTimeline($('.glimpse-panelitem-' + defaults.key), timelineData);
+            timeline.init();
+            if (defaults.height) {
+                timeline.support.containerResize(defaults.height);
+            }
+            defaults.hasRun = true;
         };
 
     return { 
