@@ -15,7 +15,7 @@
         <summary>Glimpse plugin pack providing features useful for working with MVC3 applications.</summary>
         <tags>MVC MVC3 ASP.NET Web</tags>
         <dependencies>
-            <dependency id="Glimpse" version="0.85" />
+            <dependency id="Glimpse" version="[0.85]" />
         </dependencies>
     </metadata>
 </package>
