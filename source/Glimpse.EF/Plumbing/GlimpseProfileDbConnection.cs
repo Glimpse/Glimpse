@@ -8,129 +8,129 @@ namespace Glimpse.EF.Plumbing
 {
     internal class GlimpseProfileDbConnection : DbConnection
     {
-        private DbConnection Inner { get; set; }
-        private readonly DbProviderFactory _providerFactory;
-        private readonly ProviderStats _stats;
-        private readonly Guid _connectionId;
-
-
         public GlimpseProfileDbConnection(DbConnection inner, DbProviderFactory providerFactory, ProviderStats stats, Guid connectionId)
         {
-            Inner = inner;
-            _providerFactory = providerFactory;
-            _stats = stats;
-            _connectionId = connectionId;
+            InnerConnection = inner;
+            InnerProviderFactory = providerFactory;
+            Stats = stats;
+            ConnectionId = connectionId;
             
-            _stats.ConnectionStarted(_connectionId);
+            Stats.ConnectionStarted(ConnectionId);
         }
 
           
+        private DbProviderFactory InnerProviderFactory { get; set; }
+        private ProviderStats Stats { get; set; } 
+
+
         public override string ConnectionString
         {
-            get { return Inner.ConnectionString; }
-            set { Inner.ConnectionString = value; }
+            get { return InnerConnection.ConnectionString; }
+            set { InnerConnection.ConnectionString = value; }
         }
 
         public override int ConnectionTimeout
         {
-            get { return Inner.ConnectionTimeout; }
+            get { return InnerConnection.ConnectionTimeout; }
         }
 
         public override string Database
         {
-            get { return Inner.Database; }
+            get { return InnerConnection.Database; }
         }
 
         public override string DataSource
         {
-            get { return Inner.DataSource; }
+            get { return InnerConnection.DataSource; }
         }
 
         protected override DbProviderFactory DbProviderFactory
         {
-            get { return _providerFactory; }
+            get { return InnerProviderFactory; }
         }
 
         public override ConnectionState State
         {
-            get { return Inner.State; }
+            get { return InnerConnection.State; }
         }
 
         public override string ServerVersion
         {
-            get { return Inner.ServerVersion; }
+            get { return InnerConnection.ServerVersion; }
         }
 
         public override ISite Site
         {
-            get { return Inner.Site; }
-            set { Inner.Site = value; }
+            get { return InnerConnection.Site; }
+            set { InnerConnection.Site = value; }
         }
 
 
+#pragma warning disable 108,114
         public event StateChangeEventHandler StateChange
+#pragma warning restore 108,114
         {
-            add { Inner.StateChange += value; }
-            remove { Inner.StateChange -= value; }
+            add { InnerConnection.StateChange += value; }
+            remove { InnerConnection.StateChange -= value; }
         }
 
 
         protected override DbTransaction BeginDbTransaction(System.Data.IsolationLevel isolationLevel)
         {
             //return this._inner.BeginTransaction(isolationLevel);
-            return new GlimpseProfileDbTransaction(Inner.BeginTransaction(isolationLevel), _stats, this);
+            return new GlimpseProfileDbTransaction(InnerConnection.BeginTransaction(isolationLevel), Stats, this);
         }
 
         public override void ChangeDatabase(string databaseName)
         {
-            Inner.ChangeDatabase(databaseName);
+            InnerConnection.ChangeDatabase(databaseName);
         }
 
         protected override DbCommand CreateDbCommand()
         {
             //return this._inner.CreateCommand();
-            return new GlimpseProfileDbCommand(Inner.CreateCommand(), _stats);
+            return new GlimpseProfileDbCommand(InnerConnection.CreateCommand(), Stats);
         }
 
         public override void Close()
         {
-            Inner.Close();
+            InnerConnection.Close();
             NotifyClosing();
         }
 
         public override void Open()
         {
-            Inner.Open();
+            InnerConnection.Open();
         }
 
         public override void EnlistTransaction(Transaction transaction)
         {
-            Inner.EnlistTransaction(transaction);
+            InnerConnection.EnlistTransaction(transaction);
             if (transaction != null)
             {
                 transaction.TransactionCompleted += OnDtcTransactionCompleted;
-                _stats.DtcTransactionEnlisted(_connectionId, transaction.IsolationLevel);
+                Stats.DtcTransactionEnlisted(ConnectionId, transaction.IsolationLevel);
             }
         }
          
         public override DataTable GetSchema()
         {
-            return Inner.GetSchema();
+            return InnerConnection.GetSchema();
         }
 
         public override DataTable GetSchema(string collectionName)
         {
-            return Inner.GetSchema(collectionName);
+            return InnerConnection.GetSchema(collectionName);
         }
 
         public override DataTable GetSchema(string collectionName, string[] restrictionValues)
         {
-            return Inner.GetSchema(collectionName, restrictionValues);
+            return InnerConnection.GetSchema(collectionName, restrictionValues);
         }
 
         protected override object GetService(Type service)
         {
-            return ((IServiceProvider)Inner).GetService(service);
+            return ((IServiceProvider)InnerConnection).GetService(service);
         }
         
         protected override void Dispose(bool disposing)
@@ -138,27 +138,21 @@ namespace Glimpse.EF.Plumbing
             if (!disposing)
             {
                 //this.NotifyClosing();
-                Inner.Dispose();
+                InnerConnection.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private void NotifyClosing()
         {
-            _stats.ConnectionDisposed(_connectionId);
+            Stats.ConnectionDisposed(ConnectionId);
         }
 
 
 
-        public DbConnection InnerConnection
-        {
-            get { return Inner; }
-        }
+        public DbConnection InnerConnection { get; set; }
 
-        public Guid ConnectionId
-        {
-            get { return _connectionId; }
-        }
+        public Guid ConnectionId { get; set; }
 
         private void OnDtcTransactionCompleted(object sender, TransactionEventArgs args)
         {
@@ -171,7 +165,7 @@ namespace Glimpse.EF.Plumbing
             {
                 aborted = TransactionStatus.Aborted;
             }
-            _stats.DtcTransactionCompleted(_connectionId, aborted);
+            Stats.DtcTransactionCompleted(ConnectionId, aborted);
         }
     }
 }

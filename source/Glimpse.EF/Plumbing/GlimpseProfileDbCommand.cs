@@ -10,10 +10,6 @@ namespace Glimpse.EF.Plumbing
 {
     internal class GlimpseProfileDbCommand : DbCommand
     {
-        private DbCommand InnerCommand { get; set; }
-        private ProviderStats Stats { get; set; }
-        private GlimpseProfileDbConnection GlimpseConnection { get; set; }
-
         public GlimpseProfileDbCommand(DbCommand innerCommand, ProviderStats stats)
         {
             InnerCommand = innerCommand;
@@ -22,8 +18,14 @@ namespace Glimpse.EF.Plumbing
 
         public GlimpseProfileDbCommand(DbCommand innerCommand, ProviderStats stats, GlimpseProfileDbConnection connection):this(innerCommand, stats)
         {
-            GlimpseConnection = connection; 
+            InnerConnection = connection; 
         }
+
+
+        private DbCommand InnerCommand { get; set; }
+        private GlimpseProfileDbConnection InnerConnection { get; set; }
+        private ProviderStats Stats { get; set; }
+
 
 
         public override string CommandText
@@ -79,11 +81,11 @@ namespace Glimpse.EF.Plumbing
 
         protected override DbConnection DbConnection
         {
-            get { return GlimpseConnection; }
+            get { return InnerConnection; }
             set
             {
-                GlimpseConnection = value as GlimpseProfileDbConnection;
-                InnerCommand.Connection = (GlimpseConnection != null) ? GlimpseConnection.InnerConnection : null;
+                InnerConnection = value as GlimpseProfileDbConnection;
+                InnerCommand.Connection = (InnerConnection != null) ? InnerConnection.InnerConnection : null;
             }
         }
 
@@ -94,7 +96,7 @@ namespace Glimpse.EF.Plumbing
                 if (InnerCommand.Transaction == null)
                     return null;
 
-                return new GlimpseProfileDbTransaction(InnerCommand.Transaction, Stats, GlimpseConnection);
+                return new GlimpseProfileDbTransaction(InnerCommand.Transaction, Stats, InnerConnection);
             }
             set
             {
@@ -125,12 +127,12 @@ namespace Glimpse.EF.Plumbing
             }
             catch (Exception exception)
             {
-                Stats.CommandError(GlimpseConnection.ConnectionId, commandId, exception);
+                Stats.CommandError(InnerConnection.ConnectionId, commandId, exception);
                 throw;
             }
-            Stats.CommandDurationAndRowCount(GlimpseConnection.ConnectionId, commandId, stopwatch.ElapsedMilliseconds, reader.RecordsAffected);
+            Stats.CommandDurationAndRowCount(InnerConnection.ConnectionId, commandId, stopwatch.ElapsedMilliseconds, reader.RecordsAffected);
 
-            return new GlimpseProfileDbDataReader(reader, InnerCommand, GlimpseConnection.ConnectionId, commandId, Stats); 
+            return new GlimpseProfileDbDataReader(reader, InnerCommand, InnerConnection.ConnectionId, commandId, Stats); 
         }
 
         public override int ExecuteNonQuery()
@@ -145,10 +147,10 @@ namespace Glimpse.EF.Plumbing
             }
             catch (Exception exception)
             {
-                Stats.CommandError(GlimpseConnection.ConnectionId, commandId, exception);
+                Stats.CommandError(InnerConnection.ConnectionId, commandId, exception);
                 throw;
             }
-            Stats.CommandDurationAndRowCount(GlimpseConnection.ConnectionId, commandId, stopwatch.ElapsedMilliseconds, num);
+            Stats.CommandDurationAndRowCount(InnerConnection.ConnectionId, commandId, stopwatch.ElapsedMilliseconds, num);
 
             return num;
         }
@@ -165,10 +167,10 @@ namespace Glimpse.EF.Plumbing
             }
             catch (Exception exception)
             {
-                Stats.CommandError(GlimpseConnection.ConnectionId, commandId, exception);
+                Stats.CommandError(InnerConnection.ConnectionId, commandId, exception);
                 throw;
             }
-            Stats.CommandDurationAndRowCount(GlimpseConnection.ConnectionId, commandId, stopwatch.ElapsedMilliseconds, null);
+            Stats.CommandDurationAndRowCount(InnerConnection.ConnectionId, commandId, stopwatch.ElapsedMilliseconds, null);
 
             return result;
         }
@@ -207,7 +209,7 @@ namespace Glimpse.EF.Plumbing
                 }
             }
 
-            Stats.CommandExecuted(GlimpseConnection.ConnectionId, commandId, InnerCommand.CommandText, parameters);
+            Stats.CommandExecuted(InnerConnection.ConnectionId, commandId, InnerCommand.CommandText, parameters);
         }
     }
 }

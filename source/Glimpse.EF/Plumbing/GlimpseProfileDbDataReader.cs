@@ -8,227 +8,227 @@ namespace Glimpse.EF.Plumbing
 {
     internal class GlimpseProfileDbDataReader : DbDataReader
     {
-        private readonly DbDataReader _inner;
-        private readonly DbCommand _command;
-        private readonly ProviderStats _stats;
-        private readonly Guid _connectionId;
-        private readonly Guid _commandId;
-        private bool _disposed;
-        private int _rowCount;
-
-
-        public GlimpseProfileDbDataReader(DbDataReader inner, DbCommand command, Guid connectionId, Guid statementGuid, ProviderStats stats)
+        public GlimpseProfileDbDataReader(DbDataReader dataReader, DbCommand command, Guid connectionId, Guid statementGuid, ProviderStats stats)
         {
-            _inner = inner;
-            _command = command;
-            _connectionId = connectionId;
-            _commandId = statementGuid;
-            _stats = stats;
+            InnerDataReader = dataReader;
+            InnerCommand = command;
+            Stats = stats;
+            ConnectionId = connectionId;
+            CommandId = statementGuid;
         }
+
+
+        private DbDataReader InnerDataReader { get; set; }
+        private DbCommand InnerCommand { get; set; }
+        private ProviderStats Stats { get; set; }
+        private Guid ConnectionId { get; set; }
+        private Guid CommandId { get; set; }
+        private bool Disposed { get; set; }
+        private int RowCount { get; set; }
 
 
         public override int Depth
         {
-            get { return _inner.Depth; }
+            get { return InnerDataReader.Depth; }
         }
 
         public override int FieldCount
         {
-            get { return _inner.FieldCount; }
+            get { return InnerDataReader.FieldCount; }
         }
 
         public override bool HasRows
         {
-            get { return _inner.HasRows; }
+            get { return InnerDataReader.HasRows; }
         }
 
         public override bool IsClosed
         {
-            get { return _inner.IsClosed; }
+            get { return InnerDataReader.IsClosed; }
         }
 
         public override object this[int ordinal]
         {
-            get { return _inner[ordinal]; }
+            get { return InnerDataReader[ordinal]; }
         }
 
         public override object this[string name]
         {
-            get { return _inner[name]; }
+            get { return InnerDataReader[name]; }
         }
 
         public override int RecordsAffected
         {
-            get { return _inner.RecordsAffected; }
+            get { return InnerDataReader.RecordsAffected; }
         }
 
         public override int VisibleFieldCount
         {
-            get { return _inner.VisibleFieldCount; }
+            get { return InnerDataReader.VisibleFieldCount; }
         }
 
         public override void Close()
         {
-            _stats.CommandRowCount(_connectionId, _commandId, _rowCount);
+            Stats.CommandRowCount(ConnectionId, CommandId, RowCount);
 
-            var inner = _inner as SqlDataReader;
-            if (!_disposed && inner != null && _command.Transaction == null && inner.Read()) 
-                _command.Cancel(); 
+            var inner = this.InnerDataReader as SqlDataReader;
+            if (!Disposed && inner != null && InnerCommand.Transaction == null && inner.Read())
+                InnerCommand.Cancel(); 
 
-            _disposed = true;
-            _inner.Close();
+            Disposed = true;
+            this.InnerDataReader.Close();
         }
 
         protected override void Dispose(bool disposing)
         {
-            _disposed = true;
+            Disposed = true;
 
             if (disposing) 
-                _inner.Dispose();
+                InnerDataReader.Dispose();
 
             base.Dispose(disposing);
         }
 
         public override bool GetBoolean(int ordinal)
         {
-            return _inner.GetBoolean(ordinal);
+            return InnerDataReader.GetBoolean(ordinal);
         }
 
         public override byte GetByte(int ordinal)
         {
-            return _inner.GetByte(ordinal);
+            return InnerDataReader.GetByte(ordinal);
         }
 
         public override long GetBytes(int ordinal, long dataOffset, byte[] buffer, int bufferOffset, int length)
         {
-            return _inner.GetBytes(ordinal, dataOffset, buffer, bufferOffset, length);
+            return InnerDataReader.GetBytes(ordinal, dataOffset, buffer, bufferOffset, length);
         }
 
         public override char GetChar(int ordinal)
         {
-            return _inner.GetChar(ordinal);
+            return InnerDataReader.GetChar(ordinal);
         }
 
         public override long GetChars(int ordinal, long dataOffset, char[] buffer, int bufferOffset, int length)
         {
-            return _inner.GetChars(ordinal, dataOffset, buffer, bufferOffset, length);
+            return InnerDataReader.GetChars(ordinal, dataOffset, buffer, bufferOffset, length);
         }
 
         public override string GetDataTypeName(int ordinal)
         {
-            return _inner.GetDataTypeName(ordinal);
+            return InnerDataReader.GetDataTypeName(ordinal);
         }
 
         public override DateTime GetDateTime(int ordinal)
         {
-            return _inner.GetDateTime(ordinal);
+            return InnerDataReader.GetDateTime(ordinal);
         }
 
         public override decimal GetDecimal(int ordinal)
         {
-            return _inner.GetDecimal(ordinal);
+            return InnerDataReader.GetDecimal(ordinal);
         }
 
         public override double GetDouble(int ordinal)
         {
-            return _inner.GetDouble(ordinal);
+            return InnerDataReader.GetDouble(ordinal);
         }
 
         public override IEnumerator GetEnumerator()
         {
-            return _inner.GetEnumerator();
+            return InnerDataReader.GetEnumerator();
         }
 
         public override Type GetFieldType(int ordinal)
         {
-            return _inner.GetFieldType(ordinal);
+            return InnerDataReader.GetFieldType(ordinal);
         }
 
         public override float GetFloat(int ordinal)
         {
-            return _inner.GetFloat(ordinal);
+            return InnerDataReader.GetFloat(ordinal);
         }
 
         public override Guid GetGuid(int ordinal)
         {
-            return _inner.GetGuid(ordinal);
+            return InnerDataReader.GetGuid(ordinal);
         }
 
         public override short GetInt16(int ordinal)
         {
-            return _inner.GetInt16(ordinal);
+            return InnerDataReader.GetInt16(ordinal);
         }
 
         public override int GetInt32(int ordinal)
         {
-            return _inner.GetInt32(ordinal);
+            return InnerDataReader.GetInt32(ordinal);
         }
 
         public override long GetInt64(int ordinal)
         {
-            return _inner.GetInt64(ordinal);
+            return InnerDataReader.GetInt64(ordinal);
         }
 
         public override string GetName(int ordinal)
         {
-            return _inner.GetName(ordinal);
+            return InnerDataReader.GetName(ordinal);
         }
 
         public override int GetOrdinal(string name)
         {
-            return _inner.GetOrdinal(name);
+            return InnerDataReader.GetOrdinal(name);
         }
 
         public override Type GetProviderSpecificFieldType(int ordinal)
         {
-            return _inner.GetProviderSpecificFieldType(ordinal);
+            return InnerDataReader.GetProviderSpecificFieldType(ordinal);
         }
 
         public override object GetProviderSpecificValue(int ordinal)
         {
-            return _inner.GetProviderSpecificValue(ordinal);
+            return InnerDataReader.GetProviderSpecificValue(ordinal);
         }
 
         public override int GetProviderSpecificValues(object[] values)
         {
-            return _inner.GetProviderSpecificValues(values);
+            return InnerDataReader.GetProviderSpecificValues(values);
         }
 
         public override DataTable GetSchemaTable()
         {
-            return _inner.GetSchemaTable();
+            return InnerDataReader.GetSchemaTable();
         }
 
         public override string GetString(int ordinal)
         {
-            return _inner.GetString(ordinal);
+            return InnerDataReader.GetString(ordinal);
         }
 
         public override object GetValue(int ordinal)
         {
-            return _inner.GetValue(ordinal);
+            return InnerDataReader.GetValue(ordinal);
         }
 
         public override int GetValues(object[] values)
         {
-            return _inner.GetValues(values);
+            return InnerDataReader.GetValues(values);
         }
 
         public override bool IsDBNull(int ordinal)
         {
-            return _inner.IsDBNull(ordinal);
+            return InnerDataReader.IsDBNull(ordinal);
         }
 
         public override bool NextResult()
         {
-            return _inner.NextResult();
+            return InnerDataReader.NextResult();
         }
 
         public override bool Read()
         {
-            var flag = _inner.Read();
+            var flag = InnerDataReader.Read();
             if (flag) 
-                _rowCount++; 
+                RowCount++; 
             return flag;
         }
     }

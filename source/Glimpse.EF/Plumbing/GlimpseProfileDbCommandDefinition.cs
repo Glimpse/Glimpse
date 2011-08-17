@@ -4,14 +4,16 @@ namespace Glimpse.EF.Plumbing
 {
     internal class GlimpseProfileDbCommandDefinition : DbCommandDefinition
     {
-        private DbCommandDefinition InnerCommandDefinition { get; set; }
-        private ProviderStats Stats { get; set; }
-
         public GlimpseProfileDbCommandDefinition(DbCommandDefinition innerCommandDefinition, ProviderStats stats)
         {
             InnerCommandDefinition = innerCommandDefinition;
             Stats = stats;
         }
+
+
+        private DbCommandDefinition InnerCommandDefinition { get; set; }
+        private ProviderStats Stats { get; set; }
+
 
         public override DbCommand CreateCommand()
         {

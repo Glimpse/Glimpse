@@ -8,20 +8,20 @@ namespace Glimpse.EF.Plumbing
 {
     internal class GlimpseProfileDbProviderFactory : IDbConnectionFactory
     { 
-        private readonly IDbConnectionFactory _inner;
-        private readonly DbProviderFactory _factory;
-        private readonly ProviderStats _stats;
+        private readonly IDbConnectionFactory inner;
+        private readonly DbProviderFactory factory;
+        private readonly ProviderStats stats;
 
         public GlimpseProfileDbProviderFactory(IDbConnectionFactory inner, DbProviderFactory factory, ProviderStats stats)
         {
-            _inner = inner;
-            _factory = factory;
-            _stats = stats;
+            inner = inner;
+            factory = factory;
+            stats = stats;
         }
 
         public DbConnection CreateConnection(string nameOrConnectionString)
         {
-            return new GlimpseProfileDbConnection(this._inner.CreateConnection(nameOrConnectionString), _factory, _stats, Guid.NewGuid());
+            return new GlimpseProfileDbConnection(inner.CreateConnection(nameOrConnectionString), factory, stats, Guid.NewGuid());
         }
 
         public static void Initialize()

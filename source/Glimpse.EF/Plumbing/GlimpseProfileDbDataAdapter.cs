@@ -5,75 +5,76 @@ namespace Glimpse.EF.Plumbing
 {
     internal class GlimpseProfileDbDataAdapter : DbDataAdapter
     {
-        private readonly DbDataAdapter _inner;
-
-        public GlimpseProfileDbDataAdapter(DbDataAdapter inner)
+        public GlimpseProfileDbDataAdapter(DbDataAdapter innerDataAdapter)
         {
-            _inner = inner;
+            InnerDataAdapter = innerDataAdapter;
         }
+
+
+        private DbDataAdapter InnerDataAdapter { get; set; }
 
 
         public override bool ReturnProviderSpecificTypes
         {
-            get { return _inner.ReturnProviderSpecificTypes; }
-            set { _inner.ReturnProviderSpecificTypes = value; }
+            get { return InnerDataAdapter.ReturnProviderSpecificTypes; }
+            set { InnerDataAdapter.ReturnProviderSpecificTypes = value; }
         }
 
         public override int UpdateBatchSize
         {
-            get { return _inner.UpdateBatchSize; }
-            set { _inner.UpdateBatchSize = value; }
+            get { return InnerDataAdapter.UpdateBatchSize; }
+            set { InnerDataAdapter.UpdateBatchSize = value; }
         }
 
 
         protected override void Dispose(bool disposing)
         {
-            _inner.Dispose();
+            InnerDataAdapter.Dispose();
         }
 
         public override int Fill(DataSet dataSet)
         {
             if (SelectCommand != null) 
-                _inner.SelectCommand = ((GlimpseProfileDbCommand)SelectCommand).Inner; 
-            return _inner.Fill(dataSet);
+                InnerDataAdapter.SelectCommand = ((GlimpseProfileDbCommand)SelectCommand).Inner; 
+            return InnerDataAdapter.Fill(dataSet);
         }
 
         public override DataTable[] FillSchema(DataSet dataSet, SchemaType schemaType)
         {
             if (SelectCommand != null) 
-                _inner.SelectCommand = ((GlimpseProfileDbCommand)SelectCommand).Inner; 
-            return _inner.FillSchema(dataSet, schemaType);
+                InnerDataAdapter.SelectCommand = ((GlimpseProfileDbCommand)SelectCommand).Inner; 
+            return InnerDataAdapter.FillSchema(dataSet, schemaType);
         }
 
         public override IDataParameter[] GetFillParameters()
         {
-            return _inner.GetFillParameters();
+            return InnerDataAdapter.GetFillParameters();
         }
 
         public override bool ShouldSerializeAcceptChangesDuringFill()
         {
-            return _inner.ShouldSerializeAcceptChangesDuringFill();
+            return InnerDataAdapter.ShouldSerializeAcceptChangesDuringFill();
         }
 
         public override bool ShouldSerializeFillLoadOption()
         {
-            return _inner.ShouldSerializeFillLoadOption();
+            return InnerDataAdapter.ShouldSerializeFillLoadOption();
         }
 
         public override string ToString()
         {
-            return _inner.ToString();
+            return InnerDataAdapter.ToString();
         }
 
         public override int Update(DataSet dataSet)
         {
             if (UpdateCommand != null) 
-                _inner.UpdateCommand = ((GlimpseProfileDbCommand)UpdateCommand).Inner; 
+                InnerDataAdapter.UpdateCommand = ((GlimpseProfileDbCommand)UpdateCommand).Inner; 
             if (InsertCommand != null) 
-                _inner.InsertCommand = ((GlimpseProfileDbCommand)InsertCommand).Inner; 
+                InnerDataAdapter.InsertCommand = ((GlimpseProfileDbCommand)InsertCommand).Inner; 
             if (DeleteCommand != null) 
-                _inner.DeleteCommand = ((GlimpseProfileDbCommand)DeleteCommand).Inner; 
-            return _inner.Update(dataSet);
+                InnerDataAdapter.DeleteCommand = ((GlimpseProfileDbCommand)DeleteCommand).Inner; 
+            return InnerDataAdapter.Update(dataSet);
         }
     }
 }

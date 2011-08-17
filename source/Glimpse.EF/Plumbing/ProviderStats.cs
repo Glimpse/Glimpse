@@ -14,12 +14,7 @@ namespace Glimpse.EF.Plumbing
             {
                 var connection = PullConnection(connectionId.ToString());
                 connection.RegisterEnd(DateTime.Now);  
-            }
-            else
-            {
-                var test = 1;
-                test = 10;
-            }
+            } 
 
             //Trace.TraceInformation("ConnectionDisposed - connectionId = {0}", connectionId);
         }

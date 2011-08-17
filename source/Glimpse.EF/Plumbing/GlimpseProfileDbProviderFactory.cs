@@ -9,7 +9,7 @@ namespace Glimpse.EF.Plumbing
     {
         public static readonly GlimpseProfileDbProviderFactory<TProviderFactory> Instance;
         public static readonly ProviderStats Stats;
-        private readonly TProviderFactory _inner;
+        private readonly TProviderFactory inner;
 
         static GlimpseProfileDbProviderFactory()
         {
@@ -23,55 +23,55 @@ namespace Glimpse.EF.Plumbing
             var field = typeof(TProviderFactory).GetField("Instance", BindingFlags.Public | BindingFlags.Static);
             if (field == null)
                 throw new NotSupportedException("Provider doesn't have Instance property.");
-            _inner = (TProviderFactory)field.GetValue(null); 
+            inner = (TProviderFactory)field.GetValue(null); 
         } 
 
         public override bool CanCreateDataSourceEnumerator
         {
-            get { return _inner.CanCreateDataSourceEnumerator; }
+            get { return inner.CanCreateDataSourceEnumerator; }
         }
 
         public override DbCommand CreateCommand()
         { 
-            return new GlimpseProfileDbCommand(_inner.CreateCommand(), Stats);
+            return new GlimpseProfileDbCommand(inner.CreateCommand(), Stats);
         }
 
         public override DbCommandBuilder CreateCommandBuilder()
         {
-            return _inner.CreateCommandBuilder();
+            return inner.CreateCommandBuilder();
         }
 
         public override DbConnection CreateConnection()
         { 
-            return new GlimpseProfileDbConnection(_inner.CreateConnection(), this, Stats, Guid.NewGuid());
+            return new GlimpseProfileDbConnection(inner.CreateConnection(), this, Stats, Guid.NewGuid());
         }
 
         public override DbConnectionStringBuilder CreateConnectionStringBuilder()
         {
-            return _inner.CreateConnectionStringBuilder();
+            return inner.CreateConnectionStringBuilder();
         }
 
         public override DbDataAdapter CreateDataAdapter()
         {
-            return new GlimpseProfileDbDataAdapter(_inner.CreateDataAdapter()); 
+            return new GlimpseProfileDbDataAdapter(inner.CreateDataAdapter()); 
         }
 
         public override DbDataSourceEnumerator CreateDataSourceEnumerator()
         {
-            return _inner.CreateDataSourceEnumerator();
+            return inner.CreateDataSourceEnumerator();
         }
 
         public override DbParameter CreateParameter()
         {
-            return _inner.CreateParameter();
+            return inner.CreateParameter();
         }
          
         public object GetService(Type serviceType)
         {
             if (serviceType == GetType()) 
-                return _inner; 
+                return this.inner; 
 
-            var service = ((IServiceProvider)_inner).GetService(serviceType);
+            var service = ((IServiceProvider)this.inner).GetService(serviceType);
             var inner = service as DbProviderServices;
             if (inner != null)
                 return new GlimpseProfileDbProviderServices(inner, Stats); 
