@@ -135,11 +135,12 @@ namespace Glimpse.EF.Plumbing
         
         protected override void Dispose(bool disposing)
         {
-            if (!disposing)
-            {
-                //this.NotifyClosing();
+            if (disposing && InnerConnection != null)
+            { 
                 InnerConnection.Dispose();
             }
+            InnerConnection = null;
+            InnerProviderFactory = null;
             base.Dispose(disposing);
         }
 
@@ -153,6 +154,7 @@ namespace Glimpse.EF.Plumbing
         public DbConnection InnerConnection { get; set; }
 
         public Guid ConnectionId { get; set; }
+        
 
         private void OnDtcTransactionCompleted(object sender, TransactionEventArgs args)
         {

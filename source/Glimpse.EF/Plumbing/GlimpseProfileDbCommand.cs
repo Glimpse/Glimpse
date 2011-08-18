@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
+using System.Reflection;
 using System.Text;
 
 namespace Glimpse.EF.Plumbing
@@ -23,7 +24,7 @@ namespace Glimpse.EF.Plumbing
 
 
         private DbCommand InnerCommand { get; set; }
-        private GlimpseProfileDbConnection InnerConnection { get; set; }
+        private GlimpseProfileDbConnection InnerConnection { get; set; } 
         private ProviderStats Stats { get; set; }
 
 
@@ -77,7 +78,24 @@ namespace Glimpse.EF.Plumbing
         public override void Prepare()
         {
             InnerCommand.Prepare();
-        } 
+        }
+
+        public bool BindByName
+        {
+            get
+            {
+                var property = InnerCommand.GetType().GetProperty("BindByName");
+                if (property == null) 
+                    return false;
+                return (bool)property.GetValue(InnerCommand, null);
+            }
+            set
+            {
+                var property = InnerCommand.GetType().GetProperty("BindByName");
+                if (property != null)
+                    property.SetValue(InnerCommand, value, null); 
+            }
+        }
 
         protected override DbConnection DbConnection
         {
@@ -85,7 +103,15 @@ namespace Glimpse.EF.Plumbing
             set
             {
                 InnerConnection = value as GlimpseProfileDbConnection;
-                InnerCommand.Connection = (InnerConnection != null) ? InnerConnection.InnerConnection : null;
+                if (InnerConnection != null)
+                    InnerCommand.Connection = InnerConnection.InnerConnection;
+                else
+                {
+                    // Create a new GlimpseProfileDbConnection, this will happen when using a EntityConnection(and created with a SqlConnection for example) as a argument to ObjectContext constructor.
+                    var factory = (DbProviderFactory)typeof(GlimpseProfileDbProviderFactory<>).MakeGenericType(DbProviderServices.GetProviderFactory(value).GetType()).GetField("Instance", BindingFlags.Static | BindingFlags.Public).GetValue(null);
+                    InnerConnection = new GlimpseProfileDbConnection(value, factory, Stats, Guid.NewGuid());
+                    InnerCommand.Connection = InnerConnection.InnerConnection;
+                }
             }
         }
 
@@ -94,14 +120,13 @@ namespace Glimpse.EF.Plumbing
             get
             {
                 if (InnerCommand.Transaction == null)
-                    return null;
-
+                    return null; 
                 return new GlimpseProfileDbTransaction(InnerCommand.Transaction, Stats, InnerConnection);
             }
             set
             {
                 var transaction = value as GlimpseProfileDbTransaction;
-                InnerCommand.Transaction = (transaction != null) ? transaction.Inner : null;
+                InnerCommand.Transaction = (transaction != null) ? transaction.Inner : value;
             }
         }
 
@@ -117,9 +142,13 @@ namespace Glimpse.EF.Plumbing
 
         protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior)
         {
+            if (!Stats.IsEnabled)
+                return InnerCommand.ExecuteReader(behavior);
+
             DbDataReader reader;
             var commandId = Guid.NewGuid();
-            LogCommand(commandId);
+
+            LogCommandStart(commandId); 
             var stopwatch = Stopwatch.StartNew();
             try
             {
@@ -127,19 +156,24 @@ namespace Glimpse.EF.Plumbing
             }
             catch (Exception exception)
             {
-                Stats.CommandError(InnerConnection.ConnectionId, commandId, exception);
+                LogCommandError(commandId, exception);
                 throw;
             }
-            Stats.CommandDurationAndRowCount(InnerConnection.ConnectionId, commandId, stopwatch.ElapsedMilliseconds, reader.RecordsAffected);
+            stopwatch.Stop(); 
+            LogCommandEnd(commandId, stopwatch.ElapsedMilliseconds, reader.RecordsAffected);
 
             return new GlimpseProfileDbDataReader(reader, InnerCommand, InnerConnection.ConnectionId, commandId, Stats); 
         }
 
         public override int ExecuteNonQuery()
         {
+            if (!Stats.IsEnabled)
+                return InnerCommand.ExecuteNonQuery();
+
             int num;
             var commandId = Guid.NewGuid();
-            LogCommand(commandId);
+
+            LogCommandStart(commandId); 
             var stopwatch = Stopwatch.StartNew();
             try
             {
@@ -147,19 +181,24 @@ namespace Glimpse.EF.Plumbing
             }
             catch (Exception exception)
             {
-                Stats.CommandError(InnerConnection.ConnectionId, commandId, exception);
+                LogCommandError(commandId, exception);
                 throw;
             }
-            Stats.CommandDurationAndRowCount(InnerConnection.ConnectionId, commandId, stopwatch.ElapsedMilliseconds, num);
+            stopwatch.Stop(); 
+            LogCommandEnd(commandId, stopwatch.ElapsedMilliseconds, num);
 
             return num;
         }
 
         public override object ExecuteScalar()
         {
+            if (!Stats.IsEnabled)
+                return InnerCommand.ExecuteScalar();
+
             object result;
             var commandId = Guid.NewGuid();
-            LogCommand(commandId);
+
+            LogCommandStart(commandId); 
             var stopwatch = Stopwatch.StartNew();
             try
             {
@@ -167,18 +206,28 @@ namespace Glimpse.EF.Plumbing
             }
             catch (Exception exception)
             {
-                Stats.CommandError(InnerConnection.ConnectionId, commandId, exception);
+                LogCommandError(commandId, exception);
                 throw;
             }
-            Stats.CommandDurationAndRowCount(InnerConnection.ConnectionId, commandId, stopwatch.ElapsedMilliseconds, null);
+            stopwatch.Stop(); 
+            LogCommandEnd(commandId, stopwatch.ElapsedMilliseconds, null);
 
             return result;
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && InnerCommand != null)
+            {
+                InnerCommand.Dispose();
+            }
+            InnerCommand = null;
+            InnerConnection = null;
+            base.Dispose(disposing);
+        }
 
 
-
-
+        #region Support Methods
         private static object GetParameterValue(IDataParameter parameter)
         {
             if (parameter.Value == DBNull.Value) 
@@ -194,7 +243,7 @@ namespace Glimpse.EF.Plumbing
             return parameter.Value;
         }
 
-        private void LogCommand(Guid commandId)
+        private void LogCommandStart(Guid commandId)
         {
             IList<Tuple<string, object, string, int>> parameters = null;
             if (Parameters.Count > 0)
@@ -211,5 +260,16 @@ namespace Glimpse.EF.Plumbing
 
             Stats.CommandExecuted(InnerConnection.ConnectionId, commandId, InnerCommand.CommandText, parameters);
         }
+
+        private void LogCommandEnd(Guid commandId, long elapsedMilliseconds, int? recordsAffected)
+        { 
+            Stats.CommandDurationAndRowCount(InnerConnection.ConnectionId, commandId, elapsedMilliseconds, recordsAffected);
+        }
+
+        private void LogCommandError(Guid commandId, Exception exception)
+        {
+            Stats.CommandError(InnerConnection.ConnectionId, commandId, exception);
+        }
+        #endregion
     }
 }

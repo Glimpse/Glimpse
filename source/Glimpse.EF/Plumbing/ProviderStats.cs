@@ -7,7 +7,9 @@ using System.Web;
 namespace Glimpse.EF.Plumbing
 {
     internal class ProviderStats
-    { 
+    {
+        public bool IsEnabled { get { return true; } }
+
         public void ConnectionDisposed(Guid connectionId)
         {
             if (HttpContext.Current != null)
