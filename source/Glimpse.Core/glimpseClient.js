@@ -346,8 +346,14 @@ if (window.jQueryGlimpse) { (function ($) {
             else if (level == 0) {
                 if (data === undefined || data === null || data === '')
                     result = '';
-                else
-                    result = '<div class="glimpse-panel-message">' + data + '</div>';
+                else {
+                    var attr = '';
+                    if (data.indexOf('http://') == 0) {
+                        attr = ' data-glimpse-lazy-url="' + data + '"';
+                        data = 'Loading data, please wait...';
+                    } 
+                    result = '<div class="glimpse-panel-message"' + attr + '>' + data + '</div>';
+                }
             }
             else
                 result = that.buildString(data, level, forceLimit);
@@ -1910,6 +1916,39 @@ if (window.jQueryGlimpse) { (function ($) {
     $.glimpseUpdateNotification.init();
 
     //#endregion 
+
+//#region $.glimpseLazyLoad
+
+    $.glimpseLazyLoad = {};
+    $.extend($.glimpseLazyLoad, {
+        init: function () { 
+            var gll = this;
+
+            //Wire up plugin   
+            $('.glimpse').live('glimpse.tabchanged', function(ev, type) { gll.loadResource(type); });
+        },
+        loadResource: function (key) {
+            var g = $.glimpse, static = g.static, mainHolder = static.mainHolder(), panel = mainHolder.find('.glimpse-panelitem-' + key), subPanel = panel.find('.glimpse-panel-message[data-glimpse-lazy-url]');
+            
+            if (subPanel.length > 0) { 
+                var url = subPanel.attr('data-glimpse-lazy-url');
+                subPanel.attr('data-glimpse-lazy-url', '');
+
+                $.ajax({ 
+                    url: url,
+                    success: function (data) { 
+                        var metadata = ((metadata = static.data._metadata) && (metadata = metadata.plugins[key]) && (metadata = metadata.structure)); 
+                        panel.html($.glimpseProcessor.build(data, 0, true, metadata, 1));
+                    }
+                });
+            }
+        }
+    });
+
+    //Wireup glimpse offical plugins
+    $.glimpseLazyLoad.init();
+
+//#endregion
 
 //#region glimpseTimeline
 
