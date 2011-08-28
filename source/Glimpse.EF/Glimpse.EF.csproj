@@ -41,30 +41,37 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Plumbing\CommandSanitizer.cs" />
-    <Compile Include="Plumbing\GlimpseCommandParamaterParser.cs" />
-    <Compile Include="Plumbing\GlimpseDbQueryConnectionMetadata.cs" />
+    <Compile Include="Plugin\Support\CommandSanitizer.cs" />
+    <Compile Include="Plumbing\Models\GlimpseDbQueryCommandMetadata.cs" />
+    <Compile Include="Plumbing\Models\GlimpseDbQueryCommandParameterMetadata.cs" />
+    <Compile Include="Plumbing\Models\GlimpseDbQueryTransactionMetadata.cs" />
+    <Compile Include="Plugin\Support\GlimpseCommandParamaterParser.cs" />
+    <Compile Include="Plumbing\Models\GlimpseDbQueryConnectionMetadata.cs" />
     <Compile Include="Extensibility\ICommandParamaterParser.cs" />
     <Compile Include="Plugin\EF.cs" />
-    <Compile Include="Plumbing\GlimpseDbQueryMetadata.cs" />
-    <Compile Include="Plumbing\GlimpseProfileDbCommand.cs">
+    <Compile Include="Plumbing\Models\GlimpseDbQueryMetadata.cs" />
+    <Compile Include="Plumbing\Profiler\GlimpseProfileDbCommand.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Plumbing\GlimpseProfileDbCommandDefinition.cs" />
-    <Compile Include="Plumbing\GlimpseProfileDbConnection.cs">
+    <Compile Include="Plumbing\Profiler\GlimpseProfileDbCommandDefinition.cs" />
+    <Compile Include="Plumbing\Profiler\GlimpseProfileDbConnection.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Plumbing\GlimpseProfileDbDataAdapter.cs">
+    <Compile Include="Plumbing\Profiler\GlimpseProfileDbDataAdapter.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Plumbing\GlimpseProfileDbDataReader.cs" />
-    <Compile Include="Plumbing\GlimpseProfileDbProviderServices.cs" />
-    <Compile Include="Plumbing\GlimpseProfileDbTransaction.cs" />
+    <Compile Include="Plumbing\Profiler\GlimpseProfileDbDataReader.cs" />
+    <Compile Include="Plumbing\Profiler\GlimpseProfileDbProviderServices.cs" />
+    <Compile Include="Plumbing\Profiler\GlimpseProfileDbTransaction.cs" />
+    <Compile Include="Plumbing\Injectors\IWrapperInjectorProvider.cs" />
+    <Compile Include="Plumbing\Injectors\WrapCachedMetadata.cs" />
+    <Compile Include="Plumbing\Injectors\WrapDbConnectionFactories.cs" />
+    <Compile Include="Plumbing\Injectors\WrapDbProviderFactories.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Plumbing\ProviderStats.cs" />
     <Compile Include="Plumbing\AdoPipelineInitiator.cs" />
-    <Compile Include="Plumbing\GlimpseProfileDbProviderFactory.cs" />
-    <EmbeddedResource Include="Plumbing\GlimpseProfileDbConnectionFactory.cs" />
+    <Compile Include="Plumbing\Profiler\GlimpseProfileDbProviderFactory.cs" />
+    <EmbeddedResource Include="Plumbing\Profiler\GlimpseProfileDbConnectionFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">

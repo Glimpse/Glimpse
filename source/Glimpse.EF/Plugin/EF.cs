@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Web;
 using Glimpse.Core.Extensibility;
+using Glimpse.EF.Plugin.Support;
 using Glimpse.EF.Plumbing;
+using Glimpse.EF.Plumbing.Models;
 
 namespace Glimpse.EF.Plugin
 {
@@ -79,7 +81,7 @@ namespace Glimpse.EF.Plugin
             try
             {
                 var initiator = new AdoPipelineInitiator(Logger);
-                initiator.AdoProviders();
+                initiator.Initiate();
             }
             catch (Exception ex)
             {

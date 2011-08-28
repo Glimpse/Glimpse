@@ -31,23 +31,18 @@ namespace MvcMusicStore.Controllers
         // GET: /Store/AddToCart/5
 
         public virtual ActionResult AddToCart(int id)
-        { 
-            using (var scope = new System.Transactions.TransactionScope())
-            {
-                // Retrieve the album from the database
-                var addedAlbum = storeDB.Albums
-                    .Single(album => album.AlbumId == id);
+        {  
+            // Retrieve the album from the database
+            var addedAlbum = storeDB.Albums
+                .Single(album => album.AlbumId == id);
 
-                // Add it to the shopping cart
-                var cart = ShoppingCart.GetCart(this.HttpContext);
+            // Add it to the shopping cart
+            var cart = ShoppingCart.GetCart(this.HttpContext);
 
-                cart.AddToCart(addedAlbum);
-
-                scope.Complete();
-
-                // Go back to the main store page for more shopping
-                return RedirectToAction("Index");
-            }
+            cart.AddToCart(addedAlbum);
+            
+            // Go back to the main store page for more shopping
+            return RedirectToAction("Index"); 
         }
 
         //

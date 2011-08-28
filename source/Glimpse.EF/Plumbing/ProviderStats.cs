@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Transactions;
 using System.Web;
+using Glimpse.EF.Plumbing.Models;
 
 namespace Glimpse.EF.Plumbing
 {
