@@ -6,7 +6,7 @@ using Glimpse.EF.Plumbing.Models;
 
 namespace Glimpse.EF.Plumbing
 {
-    internal class ProviderStats
+    public class ProviderStats
     {
         public bool IsEnabled { get { return true; } }
 
