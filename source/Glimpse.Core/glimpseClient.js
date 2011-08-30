@@ -1723,19 +1723,27 @@ if (window.jQueryGlimpse) { (function ($) {
         loadPage: function (key, pagerKey, pagerType, pageIndex) {
             var that = this, static = that.static;
 
-            $.ajax({
-                url: static.link,
-                type: 'GET',
-                data: { 'key': pagerKey, 'pageIndex': pageIndex },
-                contentType: 'application/json',
-                cache: false,
-                beforeSend: function (jqXHR) {
-                    that.showLoadingMessage(key);
-                },
-                success: function (data, textStatus, jqXHR) {
-                    that.loadPageData(key, pageIndex, pagerType, data);
-                }
-            });
+            if (!static.isLoading) {
+                static.isLoading = true;
+
+                $.ajax({
+                    url: static.link,
+                    type: 'GET',
+                    data: { 'key': pagerKey, 'pageIndex': pageIndex },
+                    contentType: 'application/json',
+                    cache: false,
+                    beforeSend: function (jqXHR) {
+                        that.showLoadingMessage(key);
+                    },
+                    success: function (data, textStatus, jqXHR) {
+                        static.isLoading = false;
+                        that.loadPageData(key, pageIndex, pagerType, data);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        static.isLoading = false;
+                    }
+                });
+            }
         },
         loadPageData: function (key, pageIndex, pagerType, data) {
             var that = this;
@@ -1761,7 +1769,8 @@ if (window.jQueryGlimpse) { (function ($) {
             pager.append(pagerMessage);
         },
         static: {
-            link: glimpsePath + 'Pager'
+            link: glimpsePath + 'Pager',
+            isLoading: false
         }
     });
 
@@ -1846,13 +1855,50 @@ if (window.jQueryGlimpse) { (function ($) {
                         panelItem.animate({ scrollTop: '+=' + lastPageTop + 'px' }, 500);
                     }
                 }
+            },
+            continuousScrolling: {
+                match: function (pagerType) {
+                    return pagerType == 2;
+                },
+                render: function (key, pagerContainer, pagerKey, pagerType, pageIndex, pageIndexLast) {
+                    var pagerMessage = $('<span class="glimpse-pager-message"></span');
+                    pagerMessage.html('Showing page 1 until page ' + (pageIndex + 1) + ' from a total of ' + (pageIndexLast + 1) + ' pages.');
+                    pagerContainer.append(pagerMessage);
+                    
+                    if (pageIndex < pageIndexLast) {
+                        var g = $.glimpse, mainHolder = g.static.panelHolder();
+                        var panelItem = $('.glimpse-panelitem-' + key, mainHolder);
+                        if (panelItem.length > 0) {
+                            if (panelItem[0].clientHeight >= panelItem.find(':last').position().top) {
+                                $.glimpsePager.loadPage(key, pagerKey, pagerType, pageIndex + 1);
+                            } else {
+                                var scrollingCallback = function () {
+                                    if (panelItem[0].clientHeight >= panelItem.find(':last').position().top) {
+                                        $.glimpsePager.loadPage(key, pagerKey, pagerType, pageIndex + 1);
+                                        panelItem.unbind('scroll');
+                                    }
+                                };
+
+                                panelItem.bind('scroll', scrollingCallback);
+                            }
+                        }
+                    }
+                },
+                loadPageData: function (panelItem, data) {
+                    var content = $.glimpseProcessor.build(data, 0);
+                    panelItem.append(content);
+
+                    var pages = panelItem.find('table');
+                    pages.not(':first').find('thead').remove();
+                    pages.not(':last').addClass('glimpse-pager-separator');
+                }
             }
         }
     });
 
     //#endregion
 
-    //#region $.glimpseServerSwitcher
+    //#region $.glimpseSwitcher
 
     $.glimpseSwitcher = {}; 
     $.extend($.glimpseSwitcher, {

@@ -22,7 +22,7 @@ namespace Glimpse.Core.Plugin
 
         public PagerType PagerType
         {
-            get { return PagerType.ContinuousPaging; }
+            get { return PagerType.ContinuousScrolling; }
         }
 
         public int PageSize

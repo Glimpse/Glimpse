@@ -17,6 +17,6 @@ namespace Glimpse.Core.Extensibility
     {
         TraditionalPager = 0,
         ContinuousPaging = 1,
-        //ContinuousScrolling = 2 // TODO
+        ContinuousScrolling = 2 
     }
 }
