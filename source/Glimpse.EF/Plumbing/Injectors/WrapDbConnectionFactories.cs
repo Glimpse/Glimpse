@@ -32,7 +32,7 @@ namespace Glimpse.EF.Plumbing.Injectors
                 var assembliesToReference = new[] { type.Assembly, typeof(DbConnection).Assembly, typeof(AdoPipelineInitiator).Assembly, typeof(TypeConverter).Assembly };
 
                 var generatedAssembly = CreateAssembly(code, assembliesToReference);
-                var generatedType = generatedAssembly.GetType("Glimpse.EF.Plumbing.GlimpseProfileDbProviderFactory");
+                var generatedType = generatedAssembly.GetType("Glimpse.EF.Plumbing.Profiler.GlimpseProfileDbProviderFactory");
                 generatedType.GetMethod("Initialize").Invoke(null, null);
 
                 Logger.Info("AdoPipelineInitiator: Finished to inject ConnectionFactory");

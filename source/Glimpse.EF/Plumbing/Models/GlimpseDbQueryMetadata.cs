@@ -2,7 +2,7 @@
 
 namespace Glimpse.EF.Plumbing.Models
 {
-    internal class GlimpseDbQueryMetadata
+    public class GlimpseDbQueryMetadata
     {
         public GlimpseDbQueryMetadata()
         {

@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Glimpse.EF.Plumbing.Profiler
 {
-    internal class GlimpseProfileDbProviderFactory<TProviderFactory> : DbProviderFactory, IServiceProvider
+    public class GlimpseProfileDbProviderFactory<TProviderFactory> : DbProviderFactory, IServiceProvider
         where TProviderFactory : DbProviderFactory
     {
         public static readonly GlimpseProfileDbProviderFactory<TProviderFactory> Instance;
