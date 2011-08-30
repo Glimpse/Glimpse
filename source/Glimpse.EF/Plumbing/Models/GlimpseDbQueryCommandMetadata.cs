@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Glimpse.EF.Plumbing.Models
 {
-    internal class GlimpseDbQueryCommandMetadata
+    internal class GlimpseDbQueryCommandMetadata 
     {
         public GlimpseDbQueryCommandMetadata(string id, string connectionId)
         {
@@ -12,7 +12,7 @@ namespace Glimpse.EF.Plumbing.Models
             Parameters = new List<GlimpseDbQueryCommandParameterMetadata>(); 
         }
 
-        public string Id { get; private set; }
+        public string Id { get; private set; } 
         public string ConnectionId { get; private set; }
         public string Command { get; set; }
         public Exception Exception { get; set; }
@@ -21,5 +21,8 @@ namespace Glimpse.EF.Plumbing.Models
         public int? TotalRecords { get; set; }
         public long ElapsedMilliseconds { get; set; }
         public IList<GlimpseDbQueryCommandParameterMetadata> Parameters { get; private set; }
+        public int ExecutionIndex { get; set; }
+        public GlimpseDbQueryTransactionMetadata HeadTransaction { get; set; }
+        public GlimpseDbQueryTransactionMetadata TailTransaction { get; set; }
     }
 }

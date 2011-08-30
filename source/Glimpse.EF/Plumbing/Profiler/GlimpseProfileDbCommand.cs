@@ -126,7 +126,7 @@ namespace Glimpse.EF.Plumbing.Profiler
             set
             {
                 var transaction = value as GlimpseProfileDbTransaction;
-                InnerCommand.Transaction = (transaction != null) ? transaction.Inner : value;
+                InnerCommand.Transaction = (transaction != null) ? transaction.InnerTransaction : value;
             }
         }
 

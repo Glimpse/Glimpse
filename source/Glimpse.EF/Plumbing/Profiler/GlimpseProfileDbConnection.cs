@@ -19,8 +19,8 @@ namespace Glimpse.EF.Plumbing.Profiler
         }
 
           
-        private DbProviderFactory InnerProviderFactory { get; set; }
-        private ProviderStats Stats { get; set; } 
+        private DbProviderFactory InnerProviderFactory { get; set; } 
+        private ProviderStats Stats { get; set; }
 
 
         public override string ConnectionString
@@ -65,31 +65,15 @@ namespace Glimpse.EF.Plumbing.Profiler
             set { InnerConnection.Site = value; }
         }
 
-
-#pragma warning disable 108,114
-        public event StateChangeEventHandler StateChange
-#pragma warning restore 108,114
+        public event StateChangeEventHandler StateChange 
         {
             add { InnerConnection.StateChange += value; }
             remove { InnerConnection.StateChange -= value; }
         }
 
-
-        protected override DbTransaction BeginDbTransaction(System.Data.IsolationLevel isolationLevel)
-        {
-            //return this._inner.BeginTransaction(isolationLevel);
-            return new GlimpseProfileDbTransaction(InnerConnection.BeginTransaction(isolationLevel), Stats, this);
-        }
-
         public override void ChangeDatabase(string databaseName)
         {
             InnerConnection.ChangeDatabase(databaseName);
-        }
-
-        protected override DbCommand CreateDbCommand()
-        {
-            //return this._inner.CreateCommand();
-            return new GlimpseProfileDbCommand(InnerConnection.CreateCommand(), Stats);
         }
 
         public override void Close()
@@ -108,7 +92,7 @@ namespace Glimpse.EF.Plumbing.Profiler
             InnerConnection.EnlistTransaction(transaction);
             if (transaction != null)
             {
-                transaction.TransactionCompleted += OnDtcTransactionCompleted;
+                transaction.TransactionCompleted += OnDtcTransactionCompleted; 
                 Stats.DtcTransactionEnlisted(ConnectionId, transaction.IsolationLevel);
             }
         }
@@ -126,6 +110,18 @@ namespace Glimpse.EF.Plumbing.Profiler
         public override DataTable GetSchema(string collectionName, string[] restrictionValues)
         {
             return InnerConnection.GetSchema(collectionName, restrictionValues);
+        }
+
+
+
+        protected override DbTransaction BeginDbTransaction(System.Data.IsolationLevel isolationLevel)
+        {
+            return new GlimpseProfileDbTransaction(InnerConnection.BeginTransaction(isolationLevel), Stats, this);
+        }
+
+        protected override DbCommand CreateDbCommand()
+        {
+            return new GlimpseProfileDbCommand(InnerConnection.CreateCommand(), Stats);
         }
 
         protected override object GetService(Type service)
@@ -146,7 +142,7 @@ namespace Glimpse.EF.Plumbing.Profiler
 
         private void NotifyClosing()
         {
-            Stats.ConnectionDisposed(ConnectionId);
+            Stats.ConnectionClosed(ConnectionId);
         }
 
 
@@ -154,6 +150,7 @@ namespace Glimpse.EF.Plumbing.Profiler
         public DbConnection InnerConnection { get; set; }
 
         public Guid ConnectionId { get; set; }
+
         
 
         private void OnDtcTransactionCompleted(object sender, TransactionEventArgs args)

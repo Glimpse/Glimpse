@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+using System.Collections.Generic; 
 using System.Transactions;
 using System.Web;
-using Glimpse.EF.Plumbing.Models;
+using Glimpse.EF.Plumbing.Models; 
 
 namespace Glimpse.EF.Plumbing
 {
@@ -11,57 +10,66 @@ namespace Glimpse.EF.Plumbing
     {
         public bool IsEnabled { get { return true; } }
 
-        public void ConnectionDisposed(Guid connectionId)
-        {
-            if (HttpContext.Current != null)
-            {
-                var connection = PullConnection(connectionId.ToString());
-                connection.RegisterEnd(DateTime.Now);  
-            } 
-
-            //Trace.TraceInformation("ConnectionDisposed - connectionId = {0}", connectionId);
-        }
-
         public void ConnectionStarted(Guid connectionId)
         {
             if (HttpContext.Current != null)
             {
                 var connection = PullConnection(connectionId.ToString());
-                connection.RegisterStart(DateTime.Now);
+                connection.RegisterStart(DateTime.Now); 
+            } 
+        }
+
+        public void ConnectionClosed(Guid connectionId)
+        {
+            if (HttpContext.Current != null)
+            {
+                var connection = PullConnection(connectionId.ToString());
+                connection.RegisterEnd(DateTime.Now);
             }
-
-
-            //Trace.TraceInformation("ConnectionStarted - connectionId = {0}", connectionId);
         }
 
-        public void TransactionCommit(Guid connectionId)
+        public void TransactionBegan(Guid connectionId, Guid transactionId, System.Data.IsolationLevel isolationLevel)
         {
-            Trace.TraceInformation("TransactionCommit - connectionId = {0}", connectionId);
+            if (HttpContext.Current != null)
+            {
+                var transaction = PullTranasction(connectionId.ToString(), transactionId.ToString());
+                transaction.IsolationLevel = isolationLevel.ToString();
+
+                var connection = PullConnection(connectionId.ToString());
+                connection.RegiserTransactionStart(transaction);
+            }  
         }
 
-        public void TransactionBegan(Guid connectionId, System.Data.IsolationLevel isolationLevel)
+        public void TransactionCommit(Guid connectionId, Guid transactionId)
         {
-            Trace.TraceInformation("TransactionBegan - connectionId = {0}, isolationLevel = {1}", connectionId, isolationLevel);
+            TransactionComplete(connectionId, transactionId, true); 
         }
 
-        public void TransactionDisposed(Guid connectionId)
+        public void TransactionRolledBack(Guid connectionId, Guid transactionId)
         {
-            Trace.TraceInformation("TransactionDisposed - connectionId = {0}", connectionId);
+            TransactionComplete(connectionId, transactionId, false); 
         }
 
-        public void TransactionRolledBack(Guid connectionId)
+        private void TransactionComplete(Guid connectionId, Guid transactionId, bool committed)
         {
-            Trace.TraceInformation("TransactionRolledBack - connectionId = {0}", connectionId);
-        }
+            if (HttpContext.Current != null)
+            {
+                var transaction = PullTranasction(connectionId.ToString(), transactionId.ToString());
+                transaction.Committed = committed;
+
+                var connection = PullConnection(connectionId.ToString());
+                connection.RegiserTransactionEnd(transaction);
+            }
+        } 
 
         public void DtcTransactionEnlisted(Guid connectionId, System.Transactions.IsolationLevel isolationLevel)
         {
-            Trace.TraceInformation("DtcTransactionEnlisted - connectionId = {0}, isolationLevel = {1}", connectionId, isolationLevel);
+            //Trace.TraceInformation("DtcTransactionEnlisted - connectionId = {0}, isolationLevel = {1}", connectionId, isolationLevel);
         }
 
         public void DtcTransactionCompleted(Guid connectionId, TransactionStatus aborted)
         {
-            Trace.TraceInformation("DtcTransactionCompleted - connectionId = {0}, aborted = {1}", connectionId, aborted);
+            //Trace.TraceInformation("DtcTransactionCompleted - connectionId = {0}, aborted = {1}", connectionId, aborted);
         }
 
         public void CommandError(Guid connectionId, Guid commandId, Exception exception)
@@ -70,10 +78,7 @@ namespace Glimpse.EF.Plumbing
             {
                 var command = PullCommand(connectionId.ToString(), commandId.ToString());
                 command.Exception = exception;
-            }
-
-
-            //Trace.TraceInformation("CommandError - connectionId = {0}, exception = {1}", connectionId, exception);
+            } 
         }
 
         public void CommandDurationAndRowCount(Guid connectionId, Guid commandId, long elapsedMilliseconds, int? recordsAffected)
@@ -83,10 +88,7 @@ namespace Glimpse.EF.Plumbing
                 var command = PullCommand(connectionId.ToString(), commandId.ToString());
                 command.ElapsedMilliseconds = elapsedMilliseconds;
                 command.RecordsAffected = recordsAffected;
-            }
-
-
-            //Trace.TraceInformation("CommandDurationAndRowCount - connectionId = {0}, elapsedMilliseconds = {1}, recordsAffected = {2}", connectionId, elapsedMilliseconds, recordsAffected);
+            } 
         }
 
         public void CommandExecuted(Guid connectionId, Guid commandId, string commandString, IEnumerable<Tuple<string, object, string, int>> parameters)
@@ -108,26 +110,17 @@ namespace Glimpse.EF.Plumbing
                         command.Parameters.Add(par);
                     }
                 }
-                command.Command = commandString;
-            }
-
-
-            //Trace.TraceInformation("CommandExecuted - connectionId = {0}, commandId = {1}, toString = {2}", connectionId, commandId, commandString);
+                command.Command = commandString; 
+            } 
         }
-
-        /// <summary>
-        /// Used to register the amount of rows that are in a DataReader
-        /// </summary> 
+         
         public void CommandRowCount(Guid connectionId, Guid commandId, int rowCount)
         {
             if (HttpContext.Current != null)
             {
                 var command = PullCommand(connectionId.ToString(), commandId.ToString());
                 command.TotalRecords = rowCount;
-            }
-
-
-            //Trace.TraceInformation("CommandExecuted - connectionId = {0}, commandId = {1}, rowCount = {2}", connectionId, commandId, rowCount);
+            } 
         }
 
         #region Support Memebers
@@ -164,9 +157,20 @@ namespace Glimpse.EF.Plumbing
                 Metadata.Commands.Add(commandId, command);
 
                 var connection = PullConnection(connectionId);
-                connection.Commands.Add(commandId, command);
+                connection.RegiserCommand(command);
             }
             return command;
+        }
+
+        protected GlimpseDbQueryTransactionMetadata PullTranasction(string connectionId, string transactionId)
+        {
+            GlimpseDbQueryTransactionMetadata transaction;
+            if (!Metadata.Transactions.TryGetValue(transactionId, out transaction))
+            {
+                transaction = new GlimpseDbQueryTransactionMetadata(transactionId, connectionId);
+                Metadata.Transactions.Add(transactionId, transaction); 
+            }
+            return transaction; 
         }
 
         #endregion 

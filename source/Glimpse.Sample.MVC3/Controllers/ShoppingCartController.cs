@@ -51,8 +51,8 @@ namespace MvcMusicStore.Controllers
         [HttpPost]
         public virtual ActionResult RemoveFromCart(int id)
         {
-            using (var scope = new System.Transactions.TransactionScope())
-            {
+            //using (var scope = new System.Transactions.TransactionScope())
+            //{
                 // Remove the item from the cart
                 var cart = ShoppingCart.GetCart(this.HttpContext);
 
@@ -63,7 +63,7 @@ namespace MvcMusicStore.Controllers
                 // Remove from cart
                 int itemCount = cart.RemoveFromCart(id);
 
-                scope.Complete();
+                //scope.Complete();
 
                 // Display the confirmation message
                 var results = new ShoppingCartRemoveViewModel
@@ -77,7 +77,7 @@ namespace MvcMusicStore.Controllers
                                   };
 
                 return Json(results);
-            }
+            //}
         }
 
         //

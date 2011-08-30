@@ -29,8 +29,8 @@ namespace MvcMusicStore.Models
 
         public void AddToCart(Album album)
         {
-            using (var scope = new System.Transactions.TransactionScope())
-            {
+            //using (var scope = new System.Transactions.TransactionScope())
+            //{
                 // Get the matching cart and album instances
                 var cartItem = storeDB.Carts.SingleOrDefault(c => c.CartId == ShoppingCartId && c.AlbumId == album.AlbumId);
 
@@ -56,8 +56,8 @@ namespace MvcMusicStore.Models
                 // Save changes
                 storeDB.SaveChanges();
 
-                scope.Complete();
-            }
+            //    scope.Complete();
+            //}
         }
 
         public int RemoveFromCart(int id)

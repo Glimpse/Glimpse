@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.Common;
 
 namespace Glimpse.EF.Plumbing.Profiler
@@ -9,13 +10,13 @@ namespace Glimpse.EF.Plumbing.Profiler
         {
             InnerTransaction = transaction;
             InnerConnection = connection;
-            Stats = stats; 
+            Stats = stats;
+            TransactionId = Guid.NewGuid();
 
-            Stats.TransactionBegan(connection.ConnectionId, transaction.IsolationLevel);
+            Stats.TransactionBegan(connection.ConnectionId, TransactionId, transaction.IsolationLevel);
         }
 
 
-        private DbTransaction InnerTransaction { get; set; }
         private GlimpseProfileDbConnection InnerConnection { get; set; }
         private ProviderStats Stats { get; set; }
 
@@ -33,8 +34,8 @@ namespace Glimpse.EF.Plumbing.Profiler
 
         public override void Commit()
         {
-            InnerTransaction.Commit(); 
-            Stats.TransactionCommit(InnerConnection.ConnectionId);
+            InnerTransaction.Commit();
+            Stats.TransactionCommit(InnerConnection.ConnectionId, TransactionId);
         }
 
         protected override void Dispose(bool disposing)
@@ -42,21 +43,19 @@ namespace Glimpse.EF.Plumbing.Profiler
             if (disposing)
             {
                 InnerTransaction.Dispose(); 
-                Stats.TransactionDisposed(InnerConnection.ConnectionId);
             }
             base.Dispose(disposing);
         }
 
         public override void Rollback()
         {
-            InnerTransaction.Rollback(); 
-            Stats.TransactionRolledBack(InnerConnection.ConnectionId);
+            InnerTransaction.Rollback();
+            Stats.TransactionRolledBack(InnerConnection.ConnectionId, TransactionId);
         }
 
 
-        public DbTransaction Inner
-        {
-            get { return InnerTransaction; }
-        } 
+        public DbTransaction InnerTransaction { get; set; }
+
+        public Guid TransactionId { get; set; }
     }
 }
