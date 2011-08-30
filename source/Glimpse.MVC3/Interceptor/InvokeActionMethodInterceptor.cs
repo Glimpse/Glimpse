@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Web.Mvc;
 using Castle.DynamicProxy;
+using Glimpse.Core.Extensibility;
 using Glimpse.Mvc3.Extensions;
 using Glimpse.Mvc3.Plumbing;
 
@@ -27,7 +28,10 @@ namespace Glimpse.Mvc3.Interceptor
             var watch = new Stopwatch();
             watch.Start();
 
-            invocation.Proceed();
+            using (GlimpseTimer.Start(actionDescriptor.ActionName, "MVC", "MVC Action"))
+            {
+                invocation.Proceed();
+            }
 
             watch.Stop();
 

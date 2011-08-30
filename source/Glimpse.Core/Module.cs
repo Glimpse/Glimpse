@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Web;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
@@ -199,6 +200,8 @@ namespace Glimpse.Core
 
             context.InitGlimpseContext();
 
+            GlimpseTimer.Start("Request", "ASP.NET", "This is the start of something big");
+
             Logger.Info("BeginRequest handling complete for requestId " + context.GetGlimpseRequestId() + " (" + context.Request.Path+")");
         }
 
@@ -234,6 +237,8 @@ namespace Glimpse.Core
         private static void EndRequest(HttpContextBase context)//19
         {
             if (!RequestValidator.IsValid(context, LifecycleEvent.EndRequest)) return;
+
+            GlimpseTimer.Stop("Request");
 
             ProcessData(context, false); //Run all plugins that DO NOT need access to Session
 

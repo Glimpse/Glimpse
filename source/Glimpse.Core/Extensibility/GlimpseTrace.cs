@@ -46,13 +46,13 @@ namespace Glimpse.Core.Extensibility
             Trace.Write(message, "Fail");
         }
 
-        public static IDisposable Time(string format, params object[] args)
+        /*public static IDisposable Time(string format, params object[] args)
         {
             return new GlimpseTimer(format, args);
-        }
+        }*/
     }
 
-    public class GlimpseTimer:IDisposable{
+    /*public class GlimpseTimer:IDisposable{
 
         private string Format { get; set; }
         private object[] Arguments { get; set; }
@@ -85,5 +85,5 @@ namespace Glimpse.Core.Extensibility
 
             Trace.Write(message, "Timing");
         }
-    }
+    }*/
 }

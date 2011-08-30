@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using MvcMusicStore.Models;
@@ -33,8 +34,8 @@ namespace MvcMusicStore.Controllers
 
             Trace.Write("Got top 5 albums");
 
-            using (GlimpseTrace.Time("It takes {t:g} to trace (which is {t:ss} seconds)"))
-            {
+            //using (GlimpseTrace.Time("It takes {t:g} to trace (which is {t:ss} seconds)"))
+            //{
                 GlimpseTrace.Info("This is info from Glimpse");
                 GlimpseTrace.Warn("This is warn from Glimpse at {0}", DateTime.Now);
                 GlimpseTrace.Error("This is error from {0}", GetType());
@@ -43,7 +44,14 @@ namespace MvcMusicStore.Controllers
                 Trace.TraceWarning("Test TraceWarning;");
                 Trace.TraceError("Test TraceError;");
                 Trace.TraceInformation("Test TraceInformation;"); 
+
+            using(GlimpseTimer.Start("Waiting in controller", "Custom"))
+            {
+                Thread.Sleep(300);
             }
+
+            GlimpseTimer.Moment("A Moment", "Other", "This is just a moment in time.");
+            //}
 
 
             TempData["Test"] = "A bit of temp";

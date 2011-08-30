@@ -9,7 +9,7 @@ namespace Glimpse.Core.Validator
     {
         public bool IsValid(HttpContextBase context, LifecycleEvent lifecycleEvent)
         {
-            if (lifecycleEvent == LifecycleEvent.BeginRequest || lifecycleEvent == LifecycleEvent.Handler)
+            if (lifecycleEvent == LifecycleEvent.Handler)
                 return true;
 
             return !(context.Handler is Handler);
