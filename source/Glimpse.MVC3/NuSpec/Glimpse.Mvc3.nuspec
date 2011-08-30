@@ -3,7 +3,7 @@
     <!-- Values in dollar $igns are automatically pulled from the AssemblyInfo.cs attributes by NuGet.exe -->
     <metadata>
         <id>Glimpse.Mvc3</id>
-        <version>0.84</version>
+        <version>0.85</version>
         <title>Glimpse for ASP.NET MVC3 (Beta)</title>
         <authors>nmolnar, avanderhoorn</authors>
         <owners>nmolnar, avanderhoorn</owners>
@@ -15,7 +15,7 @@
         <summary>Glimpse plugin pack providing features useful for working with MVC3 applications.</summary>
         <tags>MVC MVC3 ASP.NET Web</tags>
         <dependencies>
-            <dependency id="Glimpse" version="0.84" />
+            <dependency id="Glimpse" version="[0.85]" />
         </dependencies>
     </metadata>
 </package>

@@ -145,10 +145,8 @@
     <EmbeddedResource Include="glimpseClient.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="glimpseSprite.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="glimpseLogo.png" />
+    <EmbeddedResource Include="glimpseSprite.png" />
     <Content Include="NuSpec\content\web.config.transform" />
     <None Include="NuSpec\Glimpse.nuspec">
       <SubType>Designer</SubType>

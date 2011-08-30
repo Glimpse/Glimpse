@@ -3,7 +3,7 @@
     <!-- Values in dollar $igns are automatically pulled from the AssemblyInfo.cs attributes by NuGet.exe -->
     <metadata>
         <id>Glimpse</id>
-        <version>0.84</version>
+        <version>0.85</version>
         <title>Glimpse for ASP.NET (Beta)</title>
         <authors>nmolnar, avanderhoorn</authors>
         <owners>nmolnar, avanderhoorn</owners>

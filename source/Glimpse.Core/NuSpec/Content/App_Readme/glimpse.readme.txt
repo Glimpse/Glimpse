@@ -107,6 +107,14 @@ Details coming soon.
 
 Release Notes
 -------------
+08/16/2011 - 0.85
+- Full overhaul of the AJAX hooks the glimpse uses, which fixes several bugs
+- Fixed issue in history handler that caused all results to be returned and added caching to single client history requests.
+- Small rendering bug when in preview mode array of arrays could be treated as array of objects
+- Small rendering bug when in full mode an object could be treated as array
+- Glimpse now only adds XHTML compliant markup to the response
+- Refactored proxy generation hooks
+
 07/22/2011 - 0.84
 - urlBlacklist validator contributed by hahndorf
 - Support for IP validation when server is behind a proxy/load balancer contributed by rho24

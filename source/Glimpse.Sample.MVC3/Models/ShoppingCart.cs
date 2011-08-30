@@ -29,30 +29,35 @@ namespace MvcMusicStore.Models
 
         public void AddToCart(Album album)
         {
-            // Get the matching cart and album instances
-            var cartItem = storeDB.Carts.SingleOrDefault(c => c.CartId == ShoppingCartId && c.AlbumId == album.AlbumId);
+            //using (var scope = new System.Transactions.TransactionScope())
+            //{
+                // Get the matching cart and album instances
+                var cartItem = storeDB.Carts.SingleOrDefault(c => c.CartId == ShoppingCartId && c.AlbumId == album.AlbumId);
 
-            if (cartItem == null)
-            {
-                // Create a new cart item if no cart item exists
-                cartItem = new Cart
+                if (cartItem == null)
                 {
-                    AlbumId = album.AlbumId,
-                    CartId = ShoppingCartId,
-                    Count = 1,
-                    DateCreated = DateTime.Now
-                };
+                    // Create a new cart item if no cart item exists
+                    cartItem = new Cart
+                    {
+                        AlbumId = album.AlbumId,
+                        CartId = ShoppingCartId,
+                        Count = 1,
+                        DateCreated = DateTime.Now
+                    };
 
-                storeDB.Carts.Add(cartItem);
-            }
-            else
-            {
-                // If the item does exist in the cart, then add one to the quantity
-                cartItem.Count++;
-            }
+                    storeDB.Carts.Add(cartItem);
+                }
+                else
+                {
+                    // If the item does exist in the cart, then add one to the quantity
+                    cartItem.Count++;
+                }
 
-            // Save changes
-            storeDB.SaveChanges();
+                // Save changes
+                storeDB.SaveChanges();
+
+            //    scope.Complete();
+            //}
         }
 
         public int RemoveFromCart(int id)

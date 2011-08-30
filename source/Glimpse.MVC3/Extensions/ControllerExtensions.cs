@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 using Castle.DynamicProxy;
 using Glimpse.Core.Extensibility;
 using Glimpse.Mvc3.Interceptor;
@@ -20,9 +22,16 @@ namespace Glimpse.Mvc3.Extensions
 
             if (actionInvoker.CanSupportDynamicProxy(logger))
             {
+                var proxyConfig = new Dictionary<string, IInterceptor>
+                                      {
+                                          {"GetFilters", new GetFiltersInterceptor()},
+                                          {"InvokeActionResult", new InvokeActionResultInterceptor()},
+                                          {"InvokeActionMethod",new InvokeActionMethodInterceptor()}
+                                      };
+
                 var proxyGenerator = new ProxyGenerator();
-                var proxyGenOptions = new ProxyGenerationOptions(new ActionInvokerProxyGenerationHook(logger)) { Selector = new ActionInvokerInterceptorSelector() };
-                var newInvoker = (ControllerActionInvoker)proxyGenerator.CreateClassProxy(actionInvoker.GetType(), proxyGenOptions, new InvokeActionMethodInterceptor(), new InvokeActionResultInterceptor(), new GetFiltersInterceptor());
+                var proxyGenOptions = new ProxyGenerationOptions(new SimpleProxyGenerationHook(logger, proxyConfig.Keys.ToArray())) { Selector = new SimpleInterceptorSelector(proxyConfig) };
+                var newInvoker = (ControllerActionInvoker)proxyGenerator.CreateClassProxy(actionInvoker.GetType(), proxyGenOptions, proxyConfig.Values.ToArray());
                 controller.ActionInvoker = newInvoker;
             }
 

@@ -37,8 +37,10 @@
     <Reference Include="EntityFramework">
       <HintPath>..\..\packages\EntityFramework.4.1.10331.0\lib\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="System.Activities" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>False</Private>
     </Reference>
@@ -69,6 +71,7 @@
     <Compile Include="Areas\Test\Controllers\TestController.cs" />
     <Compile Include="Areas\Test\TestAreaRegistration.cs" />
     <Compile Include="CartConverter.cs" />
+    <Compile Include="Glimpse\TestUrl.cs" />
     <Compile Include="ListAlbumConverter.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CheckoutController.cs" />
@@ -227,6 +230,10 @@
     <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">
       <Project>{21F99168-7D7B-49F2-A97C-5A983E0CA16F}</Project>
       <Name>Glimpse.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Glimpse.EF\Glimpse.EF.csproj">
+      <Project>{1AEDC219-C2A4-422E-8DD8-A9ABAE1B4F3B}</Project>
+      <Name>Glimpse.EF</Name>
     </ProjectReference>
     <ProjectReference Include="..\Glimpse.MVC3\Glimpse.Mvc3.csproj">
       <Project>{523F20A6-3136-4034-B1DD-003F86BDB47A}</Project>
