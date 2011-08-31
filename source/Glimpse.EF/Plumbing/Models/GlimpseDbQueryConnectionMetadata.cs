@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Glimpse.EF.Plumbing.Models
 {
-    internal class GlimpseDbQueryConnectionMetadata
+    public class GlimpseDbQueryConnectionMetadata
     {
         private static readonly KeyValuePair<string, GlimpseDbQueryCommandMetadata> DefaultCommandKey = default(KeyValuePair<string, GlimpseDbQueryCommandMetadata>);
         private GlimpseDbQueryTransactionMetadata TempTransaction { get; set; }

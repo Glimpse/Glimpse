@@ -6,7 +6,7 @@ using System.Transactions;
 
 namespace Glimpse.EF.Plumbing.Profiler
 {
-    internal class GlimpseProfileDbConnection : DbConnection
+    public class GlimpseProfileDbConnection : DbConnection
     {
         public GlimpseProfileDbConnection(DbConnection inner, DbProviderFactory providerFactory, ProviderStats stats, Guid connectionId)
         {

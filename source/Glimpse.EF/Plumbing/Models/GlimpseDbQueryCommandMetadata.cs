@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Glimpse.EF.Plumbing.Models
 {
-    internal class GlimpseDbQueryCommandMetadata 
+    public class GlimpseDbQueryCommandMetadata 
     {
         public GlimpseDbQueryCommandMetadata(string id, string connectionId)
         {
