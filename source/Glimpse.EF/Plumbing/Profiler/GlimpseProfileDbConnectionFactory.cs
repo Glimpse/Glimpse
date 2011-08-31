@@ -14,9 +14,9 @@ namespace Glimpse.EF.Plumbing.Profiler
 
         public GlimpseProfileDbProviderFactory(IDbConnectionFactory inner, DbProviderFactory factory, ProviderStats stats)
         {
-            inner = inner;
-            factory = factory;
-            stats = stats;
+            this.inner = inner;
+            this.factory = factory;
+            this.stats = stats;
         }
 
         public DbConnection CreateConnection(string nameOrConnectionString)

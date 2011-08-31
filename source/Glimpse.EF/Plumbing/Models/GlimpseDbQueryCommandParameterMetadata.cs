@@ -1,6 +1,6 @@
 namespace Glimpse.EF.Plumbing.Models
 {
-    internal class GlimpseDbQueryCommandParameterMetadata
+    public class GlimpseDbQueryCommandParameterMetadata
     {
         public string Name { get; set; }
         public object Value { get; set; }

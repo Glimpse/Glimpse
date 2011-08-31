@@ -2,7 +2,7 @@ using System;
 
 namespace Glimpse.EF.Plumbing.Models
 {
-    internal class GlimpseDbQueryTransactionMetadata 
+    public class GlimpseDbQueryTransactionMetadata 
     {
         public GlimpseDbQueryTransactionMetadata(string transactionId, string connectionId)
         {
