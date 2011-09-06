@@ -35,6 +35,9 @@
     <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LukeSkywalker.IPNetwork">
+      <HintPath>..\..\lib\IPNetwork\LukeSkywalker.IPNetwork.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
@@ -67,6 +70,7 @@
     <Compile Include="Configuration\GlimpseConfiguration.cs" />
     <Compile Include="Configuration\GlimpsePlugin.cs" />
     <Compile Include="Configuration\GlimpseUrl.cs" />
+    <Compile Include="Configuration\INotifiyGlimpseConfigChanged.cs" />
     <Compile Include="Configuration\IpAddress.cs" />
     <Compile Include="Configuration\IpCollection.cs" />
     <Compile Include="Configuration\GlimpseMode.cs" />

@@ -45,7 +45,7 @@ namespace Glimpse.Core
 
             Logger.Info(Configuration);
 
-            RequestValidator = new GlimpseRequestValidator(Configuration, Enumerable.Empty<IGlimpseValidator>(), Factory);
+            RequestValidator = new GlimpseRequestValidator(Enumerable.Empty<IGlimpseValidator>(), Factory);
 
             Sanitizer = new CSharpSanitizer();
 
