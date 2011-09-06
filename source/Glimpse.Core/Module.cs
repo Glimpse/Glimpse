@@ -434,13 +434,23 @@ namespace Glimpse.Core
                     var structurePlugin = pluginValue as IProvideGlimpseStructuredLayout;
                     if (structurePlugin != null) pluginData.Add("structure", BuildStructuredLayout(structurePlugin.StructuredLayout));
 
+                    var pagingPlugin = pluginValue as IProvideGlimpsePaging;
+                    if (pagingPlugin != null)
+                        pluginData.Add("pagingInfo", new
+                        {
+                            pagerKey = pagingPlugin.PagerKey,
+                            pagerType = pagingPlugin.PagerType,
+                            pageSize = pagingPlugin.PageSize,
+                            pageIndex = pagingPlugin.PageIndex,
+                            totalNumberOfRecords = pagingPlugin.TotalNumberOfRecords
+                        });
+
                     if (pluginData.Count > 0) pluginsMetadata.Add(pluginValue.Name, pluginData);
                 }
 
                 var metadataString = Serializer.Serialize(metadata);
                 sb.Append(string.Format(",\"{0}\":{1},", "_metadata", metadataString));
                 if (sb.Length > 1) sb.Remove(sb.Length - 1, 1);
-
             }
             sb.Append("}");
 
