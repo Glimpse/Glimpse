@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Web.Mvc;
 
 namespace Glimpse.Mvc3.Plumbing
@@ -7,6 +9,7 @@ namespace Glimpse.Mvc3.Plumbing
     {
         public IView View { get; set; }
         internal ViewContext ViewContext { get; set; }
+        public string  ViewName { get; set; }
 
         internal GlimpseView(IView view)
         {
@@ -17,7 +20,15 @@ namespace Glimpse.Mvc3.Plumbing
         {
             ViewContext = viewContext;
 
+            var id = Guid.NewGuid().ToString();
+
+
+            writer.Write("<!--VIEW("+ViewName+")-->");
+
             View.Render(viewContext, writer);
+
+            writer.Write("<!--/VIEW(" + ViewName + ")-->");
+
         }
     }
 }

@@ -49,6 +49,7 @@ namespace Glimpse.Mvc3.Plumbing
             {
                 //wrap up IView so we can get access to ViewContext
                 glimpseView = new GlimpseView(viewEngineResult.View);
+                glimpseView.ViewName = viewName;
                 viewEngineResult = new ViewEngineResult(glimpseView, viewEngineResult.ViewEngine);
             }
 

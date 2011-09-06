@@ -4,6 +4,20 @@
     <title>@ViewBag.Title</title>
     <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
     <script src="@Url.Content("~/Scripts/jquery-1.4.4.min.js")" type="text/javascript"></script>
+
+    <style>
+        .mvcView
+        {
+            
+        }
+            
+        .mvcView:hover
+        {
+            border:thin dashed lightskyblue;
+            }    
+            
+    </style>
+
 </head>
 <body>
     <div id="header">
@@ -27,5 +41,46 @@
     </div>
 
     @RenderSection("JavaScript", false)
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            var nodeDict = {};
+
+            function recurseNodes(node, nodeDict) {
+                for (var i = 0; i < node.childNodes.length; i++) {
+                    var selectedNode = node.childNodes[i];
+                    if (selectedNode.nodeType === 8) {
+                        var comment = node.childNodes[i];
+                        if (comment.nodeValue[0] === '/') {
+                            var sib = comment.previousSibling;
+                            if (sib.nodeType === 3) sib = sib.previousSibling;
+
+                            if (nodeDict[comment.nodeValue.substring(1)] === sib) {
+                                sib.classList.add('mvcView');
+                                sib.addEventListener('mouseover', function (evt) {
+                                    console.log(comment.nodeValue.substring(1));
+                                    evt.cancelBubble = true;
+                                    return false;
+                                });
+                            }
+                        }
+                        else {
+                            var sib = comment.nextSibling;
+                            if (sib.nodeType === 10) sib = sib.nextSibling;
+                            if (sib.nodeType === 3) sib = sib.nextSibling;
+                        }
+
+                        nodeDict[comment.nodeValue] = sib;
+                    }
+                    recurseNodes(selectedNode, nodeDict);
+                }
+            }
+
+            recurseNodes(document, nodeDict);
+
+            console.log(nodeDict);
+        });
+    </script>
 </body>
 </html>

@@ -149,6 +149,9 @@
     <EmbeddedResource Include="glimpseClient.js" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Scripts\glimpse.core.js" />
+    <Content Include="Scripts\glimpse.plugin.js" />
+    <Content Include="Scripts\glimpse.pubsub.js" />
     <EmbeddedResource Include="glimpseLogo.png" />
     <EmbeddedResource Include="glimpseSprite.png" />
     <Content Include="NuSpec\content\web.config.transform" />
@@ -157,6 +160,7 @@
     </None>
     <Content Include="NuSpec\content\App_Readme\glimpse.readme.txt" />
     <None Include="NuSpec\tools\install.ps1" />
+    <Content Include="Scripts\glimpse.state.js" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

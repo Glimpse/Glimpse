@@ -2686,7 +2686,7 @@ var glimpseTimelineData = {
         'Database' : { eventColor : '#AF78DD', eventColorHighlight : '#823BBE' }, //:{ event:'purple' },
         'MVC' : { eventColor : '#72A3E4', eventColorHighlight : '#5087CF' }, //{ event:'blue' },
         'Trace' : { eventColor : '#FDBF45', eventColorHighlight : '#DDA431' }, //{ event:'orange' },
-        'Routes' : { eventColor : '#10E309', eventColorHighlight : '#0EC41D' }, //{ event:'green' }
+        'Routes' : { eventColor : '#10E309', eventColorHighlight : '#0EC41D' } //{ event:'green' }
     },
     duration :'230'
 };
