@@ -78,7 +78,6 @@
     <Compile Include="Configuration\UrlBlacklistCollection.cs" />
     <Compile Include="Converter\AuthenticationSectionConverter.cs" />
     <Compile Include="Converter\CustomErrorsSectionConverter.cs" />
-    <Compile Include="Extensibility\IProvideGlimpsePaging.cs" />
     <Compile Include="Extensibility\GlimpseTrace.cs" />
     <Compile Include="Extensibility\GlimpseHandlerAttribute.cs" />
     <Compile Include="Extensibility\GlimpseValidatorAttribute.cs" />
@@ -88,14 +87,13 @@
     <Compile Include="Extensibility\IGlimpseWarning.cs" />
     <Compile Include="Extensibility\IGlimpseHandler.cs" />
     <Compile Include="Extensibility\IProvideGlimpseHelp.cs" />
+    <Compile Include="Extensibility\IProvideGlimpsePaging.cs" />
     <Compile Include="Extensibility\IProvideGlimpseStructuredLayout.cs" />
     <Compile Include="Handler.cs" />
-    <Compile Include="Handlers\Pager.cs" />
     <Compile Include="Handlers\HandlerBase.cs" />
     <Compile Include="Handlers\ImageHandlerBase.cs" />
     <Compile Include="Handlers\JavascriptData.cs" />
     <Compile Include="Plumbing\GlimpseFactory.cs" />
-    <Compile Include="Plugin\PagingTest.cs" />
     <Compile Include="Plumbing\GlimpseContractResolver.cs" />
     <Compile Include="Handlers\JsonHandlerBase.cs" />
     <Compile Include="Handlers\Logo.cs" />
@@ -149,6 +147,7 @@
     <EmbeddedResource Include="glimpseClient.js" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Scripts\glimpse.action.js" />
     <Content Include="Scripts\glimpse.core.js" />
     <Content Include="Scripts\glimpse.plugin.js" />
     <Content Include="Scripts\glimpse.pubsub.js" />

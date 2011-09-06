@@ -73,6 +73,8 @@ task test -depends compile{
     exec { & $tools_dir\nunit\nunit-console.exe $tools_dir\nunit\GlimpseTests.nunit /labels /nologo }
 }
 
+task buildjs {
+}
 
 #functions ---------------------------------------------------------------------------------------------------------
 
