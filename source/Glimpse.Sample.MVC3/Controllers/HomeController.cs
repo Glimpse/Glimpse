@@ -72,5 +72,10 @@ namespace MvcMusicStore.Controllers
 
             return PartialView(views[randomIndex]);
         }
+
+        public virtual ActionResult Test()
+        {
+            return View();
+        }
     }
 }

@@ -39,4 +39,37 @@ namespace Glimpse.Core.Handlers
                 response.ExpiresAbsolute = DateTime.Now.AddMonths(6);
         }
     }
+
+
+    [GlimpseHandler]
+    public class JavascriptClientTest : IGlimpseHandler
+    {
+        [Import]
+        internal GlimpseConfiguration Configuration { get; set; }
+
+        public string ResourceName
+        {
+            get { return "clientTest.js"; }
+        }
+
+        public void ProcessRequest(HttpContextBase context)
+        {
+            var response = context.Response;
+            var assembly = Assembly.GetExecutingAssembly();
+
+            using (var resourceStream = assembly.GetManifestResourceStream("Glimpse.Core.glimpseClient.js"))
+            {
+                if (resourceStream != null)
+                {
+                    using (var reader = new StreamReader(resourceStream))
+                    {
+                        response.Write(reader.ReadToEnd());
+                    }
+                }
+            }
+            response.AddHeader("Content-Type", "application/x-javascript");
+            if (Configuration.CacheEnabled)
+                response.ExpiresAbsolute = DateTime.Now.AddMonths(6);
+        }
+    }
 }

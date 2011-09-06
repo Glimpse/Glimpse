@@ -1,12 +1,17 @@
 ﻿var glimpse = (function () {
     var //Private
-
-/*(import:glimpse.pubsub.js)*/,
-/*(import:glimpse.plugin.js)*/,
+        elements = {},
+/*(import:glimpse.element.js)*/,
+/*(import:glimpse.util.js)*/,
 
         //Public
+/*(import:glimpse.pubsub.js)*/,
+/*(import:glimpse.plugin.js)*/,
         init = function () { 
-            glimpse.plugin.startAllPlugins();
+            //findElements();
+            //plugin.startAllPlugins();
+            
+            pubsub.publish('state.init'); 
         };
 
 /*(import:glimpse.state.js)*/
@@ -15,7 +20,8 @@
     return { 
         init : init,
         pubsub : pubsub,
-        plugin : plugin
+        plugin : plugin,
+        elements : elements
     };
 }());
 
