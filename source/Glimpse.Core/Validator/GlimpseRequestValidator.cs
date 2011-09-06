@@ -9,13 +9,11 @@ namespace Glimpse.Core.Validator
 {
     internal class GlimpseRequestValidator
     {
-        private GlimpseConfiguration Configuration { get; set; }
         [ImportMany] public IEnumerable<IGlimpseValidator> Validators { get; set; }
         public IGlimpseLogger Logger { get; set; }
 
-        public GlimpseRequestValidator(GlimpseConfiguration configuration, IEnumerable<IGlimpseValidator> validators, IGlimpseFactory factory)
+        public GlimpseRequestValidator(IEnumerable<IGlimpseValidator> validators, IGlimpseFactory factory)
         {
-            Configuration = configuration;
             Validators = validators;
             Logger = factory.CreateLogger();
         }
@@ -26,7 +24,7 @@ namespace Glimpse.Core.Validator
 
             foreach (var validator in Validators)
             {
-                if (!validator.IsValid(context, Configuration, lifecycleEvent))
+                if (!validator.IsValid(context, lifecycleEvent))
                 {
                     Logger.Warn(validator.GetType().FullName + " invalided request (it will now be ignored) with id " + context.GetGlimpseRequestId() + " (" + context.Request.Path + ")");
                     return false;

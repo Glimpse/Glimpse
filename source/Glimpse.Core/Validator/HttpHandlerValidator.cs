@@ -7,7 +7,7 @@ namespace Glimpse.Core.Validator
     [GlimpseValidator]
     internal class HttpHandlerValidator:IGlimpseValidator
     {
-        public bool IsValid(HttpContextBase context, GlimpseConfiguration configuration, LifecycleEvent lifecycleEvent)
+        public bool IsValid(HttpContextBase context, LifecycleEvent lifecycleEvent)
         {
             if (lifecycleEvent == LifecycleEvent.BeginRequest || lifecycleEvent == LifecycleEvent.Handler)
                 return true;

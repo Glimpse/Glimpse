@@ -49,6 +49,7 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IpAddressValidatorTest.cs" />
     <Compile Include="ModuleTest.cs" />
     <Compile Include="Plugin\RequestTest.cs" />
     <Compile Include="Plugin\ServerTest.cs" />
