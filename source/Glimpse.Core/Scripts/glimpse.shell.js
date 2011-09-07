@@ -9,7 +9,7 @@
         
             //Public
             build = function () {
-                pubsub.publish('state.buildPreview');  
+                pubsub.publish('state.renderPreview');  
 
                 //Add css to head
                 $('<style type="text/css"> ' + getCss() + ' </style>').appendTo("head");      //http://stackoverflow.com/questions/1212500/jquery-create-css-rule-class-runtime
@@ -17,7 +17,7 @@
                 //Add html to body
                 $('body').append(getHtml());
 
-                pubsub.publish('state.build'); 
+                pubsub.publish('state.render'); 
             },
         
             //Private

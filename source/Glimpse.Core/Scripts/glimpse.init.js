@@ -13,8 +13,8 @@
         
             //Private
             init = function () {
-                pubsub.subscribe('state.buildPreview', processData); 
-                pubsub.subscribe('state.build', findElements); 
+                pubsub.subscribe('state.renderPreview', processData); 
+                pubsub.subscribe('state.render', findElements); 
             };
     
         init(); 

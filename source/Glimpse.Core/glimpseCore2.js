@@ -154,8 +154,8 @@ var glimpse = (function () {
         
             //Private
             init = function () {
-                pubsub.subscribe('state.buildPreview', processData); 
-                pubsub.subscribe('state.build', findElements); 
+                pubsub.subscribe('state.renderPreview', processData); 
+                pubsub.subscribe('state.render', findElements); 
             };
     
         init(); 
@@ -238,7 +238,7 @@ var glimpse = (function () {
         
             //Public
             build = function () {
-                pubsub.publish('state.buildPreview');  
+                pubsub.publish('state.renderPreview');  
 
                 //Add css to head
                 $('<style type="text/css"> ' + getCss() + ' </style>').appendTo("head");      //http://stackoverflow.com/questions/1212500/jquery-create-css-rule-class-runtime
@@ -246,7 +246,7 @@ var glimpse = (function () {
                 //Add html to body
                 $('body').append(getHtml());
 
-                pubsub.publish('state.build'); 
+                pubsub.publish('state.render'); 
             },
         
             //Private
