@@ -14,18 +14,34 @@ namespace ManualBuild
             var assets = new Assets(args[0]);
 
             var coreContent = File.ReadAllText(assets.BuildScriptPath("glimpse.core.js"));
+            coreContent = ProcessFile(coreContent, assets);
 
-            var matches = Regex.Matches(coreContent, @"\/\*\(import:\S*\)\*\/", RegexOptions.Multiline); 
+            File.WriteAllText(assets.BuildPath("glimpseCore2.js"), coreContent); 
+        }
+
+        static string ProcessFile(string fileContent, Assets assets)
+        {
+            var matches = Regex.Matches(fileContent, @"\/\*\(import:\S*\)\*\/", RegexOptions.Multiline);
             foreach (Match match in matches)
             {
                 var matchFileName = match.Value.Substring(10, match.Value.Length - 13);
                 var matchContent = File.ReadAllText(assets.BuildScriptPath(matchFileName));
+                matchContent = ProcessFile(PostProcessContent(matchFileName, matchContent), assets);
 
-                coreContent = coreContent.Replace(String.Format("/*(import:{0})*/", matchFileName), matchContent); 
+                fileContent = fileContent.Replace(String.Format("/*(import:{0})*/", matchFileName), matchContent);
             }
 
-            File.WriteAllText(assets.BuildPath("glimpseCore2.js"), coreContent);
-            
+            return fileContent;
+        }
+
+        static string PostProcessContent(string fileName, string fileContent)
+        {
+            if (Regex.Match(fileName, @"(.htm|.css)").Success)
+            {
+                fileContent = Regex.Replace(fileContent, @"[\r|\n|\r\n|\t]", "");
+                fileContent = Regex.Replace(fileContent, @"\s{2,}", ""); 
+            }
+            return fileContent;
         }
     }
 

@@ -150,6 +150,7 @@
     <EmbeddedResource Include="glimpseCore2.js" />
     <Content Include="Scripts\glimpse.shell.css" />
     <Content Include="Scripts\glimpse.shell.html" />
+    <Content Include="Scripts\glimpse.shell.js" />
     <Content Include="Scripts\glimpse.util.js" />
     <Content Include="Scripts\glimpse.action.js" />
     <Content Include="Scripts\glimpse.core.js" />

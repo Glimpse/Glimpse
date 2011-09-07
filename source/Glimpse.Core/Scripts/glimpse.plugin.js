@@ -12,21 +12,22 @@
                         data.instance = null;
                     } 
                 },
-
-                //Public
-                registerPlugin = function (pluginId, creator) {
-                    plugins[pluginId] = { creator : creator, instance : null };
-                },
                 startAllPlugins = function () {
                     for (var pluginId in pluginData) { startPlugin(pluginId); }
                 },
                 stopAllPlugins = function () {
                     for (var pluginId in pluginData) { stopPlugin(pluginId); }
+                },
+                init = function() {
+                    pubsub.subscribe('state.init', startAllPlugins);  
+                },
+
+                //Public
+                registerPlugin = function (pluginId, creator) {
+                    plugins[pluginId] = { creator : creator, instance : null };
                 };
     
             return {
-                register : registerPlugin,
-                startAllPlugins : startAllPlugins,
-                stopAllPlugins : stopAllPlugins
+                register : registerPlugin
             };
         }())

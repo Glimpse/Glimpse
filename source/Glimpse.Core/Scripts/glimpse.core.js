@@ -1,21 +1,22 @@
 ﻿var glimpse = (function () {
     var //Private
         elements = {},
-/*(import:glimpse.element.js)*/,
+        data = {},
+        settings = {},
 /*(import:glimpse.util.js)*/,
 
         //Public
 /*(import:glimpse.pubsub.js)*/,
 /*(import:glimpse.plugin.js)*/,
-        init = function () { 
-            //findElements();
-            //plugin.startAllPlugins();
-            
-            pubsub.publish('state.init'); 
+        init = function () {
+            pubsub.publish('state.init');
+            pubsub.publish('state.build'); 
         };
-
+        
+/*(import:glimpse.init.js)*/
 /*(import:glimpse.state.js)*/
-/*(import:glimpse.action.js)*/
+/*(import:glimpse.action.js)*/ 
+/*(import:glimpse.shell.js)*/
 
     return { 
         init : init,
