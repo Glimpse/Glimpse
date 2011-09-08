@@ -16,11 +16,11 @@
                             };
                         }; 
                         for (var i = 0, j = subscribers.length; i < j; i++) {
-                            try {
+                            //try {
                                 subscribers[i].func(message, data);
-                            } catch(e) {
-                                setTimeout(throwException(e), 0);
-                            }
+                            //} catch(e) {
+                            //    setTimeout(throwException(e), 0);
+                            //}
                         }
                     };
         
@@ -34,10 +34,10 @@
         
                 //Public
                 publish = function (message, data) {
-                    return publishCore(message, data, false);
-                },
-                publishSync = function (message, data) {
                     return publishCore(message, data, true);
+                },
+                publishAsync = function (message, data) {
+                    return publishCore(message, data, false);
                 },
                 subscribe = function (message, func) { 
                     var token = (++lastUid).toString();
@@ -65,7 +65,7 @@
 
             return {
                 publish : publish,
-                publishSync : publishSync,
+                publishAsync : publishAsync,
                 subscribe : subscribe,
                 unsubscribe : unsubscribe
             };

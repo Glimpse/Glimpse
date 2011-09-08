@@ -16,7 +16,7 @@ namespace ManualBuild
             var coreContent = File.ReadAllText(assets.BuildScriptPath("glimpse.core.js"));
             coreContent = ProcessFile(coreContent, assets);
 
-            File.WriteAllText(assets.BuildPath("glimpseCore2.js"), coreContent); 
+            File.WriteAllText(assets.BuildPath("Scripts\\glimpse.js"), coreContent); 
         }
 
         static string ProcessFile(string fileContent, Assets assets)

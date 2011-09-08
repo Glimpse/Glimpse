@@ -147,6 +147,7 @@
     <EmbeddedResource Include="glimpseClient.js" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Scripts\jquery-1.6.3.min.js" />
     <EmbeddedResource Include="glimpseCore2.js" />
     <Content Include="Scripts\glimpse.init.js" />
     <Content Include="Scripts\glimpse.shell.css" />
