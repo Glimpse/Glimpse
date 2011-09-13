@@ -1,7 +1,7 @@
 ﻿        shell = function () {
             var //Private 
                 getCss = function() {
-                    return template.css.replace(/url\(\)/gi, 'url(' + settings.path + 'sprite.png)'); 
+                    return template.css.replace(/url\(\)/gi, 'url(' + config.path + 'sprite.png)'); 
                 },
                 getHtml = function() {
                     return template.html;

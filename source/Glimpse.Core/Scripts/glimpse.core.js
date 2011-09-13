@@ -4,8 +4,11 @@ var glimpse = (function ($, scope) {
     var //Private
         elements = {},
         template = {},
+        config = {
+            path : '' 
+        }
         settings = {
-            path : ''
+            height : '250px'
         },
 /*(import:glimpse.util.js)*/,
 /*(import:glimpse.pubsub.js)*/,
@@ -13,6 +16,7 @@ var glimpse = (function ($, scope) {
 /*(import:glimpse.init.js)*/,
 /*(import:glimpse.state.js)*/,
 /*(import:glimpse.action.js)*/,
+/*(import:glimpse.action.wire.js)*/,
 /*(import:glimpse.shell.js)*/, 
         init = function () {
             pubsub.publish('state.init');

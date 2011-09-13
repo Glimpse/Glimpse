@@ -1,11 +1,11 @@
-﻿        action = (function () {
+﻿        action = function () {
             var //Public 
                 open = function () {
                     settings.open = true;
                     pubsub.publish('state.persist');
 
                     elements.opener.hide(); 
-                    $.fn.add.call(elements.holder, elements.spacer).show().animate({ height : settings.height }, 'fast');  
+                    $.fn.add.call(elements.holder, elements.spacer).show().animate({ height : settings.height }, 'fast');   
                 },
                 close = function (remove) {
                     settings.open = false;
@@ -39,4 +39,4 @@
                 };
     
             init(); 
-        } ())
+        } ()

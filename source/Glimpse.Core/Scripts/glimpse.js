@@ -7,8 +7,11 @@ var glimpse = (function ($, scope) {
     var //Private
         elements = {},
         template = {},
+        config = {
+            path : '' 
+        }
         settings = {
-            path : ''
+            height : '250px'
         },
         util = { 
             cookie : function (key, value, expiresIn) {
@@ -160,7 +163,7 @@ var glimpse = (function ($, scope) {
     
             init(); 
         } (),
-        state = (function () {
+        state = function () {
             var //Public
                 persist = function () { 
                     util.cookie('glimpseOptions', settings);
@@ -180,15 +183,15 @@ var glimpse = (function ($, scope) {
                 };
     
             init();  
-        } ()),
-        action = (function () {
+        } (),
+        action = function () {
             var //Public 
                 open = function () {
                     settings.open = true;
                     pubsub.publish('state.persist');
 
                     elements.opener.hide(); 
-                    $.fn.add.call(elements.holder, elements.spacer).show().animate({ height : settings.height }, 'fast');  
+                    $.fn.add.call(elements.holder, elements.spacer).show().animate({ height : settings.height }, 'fast');   
                 },
                 close = function (remove) {
                     settings.open = false;
@@ -222,11 +225,28 @@ var glimpse = (function ($, scope) {
                 };
     
             init(); 
-        } ()),
+        } (),
+        actionWire = function () {
+            var //Public 
+                bind = function () {
+
+                    elements.scope.find('.glimpse-open').click(function () { pubsub.publish('action.open'); return false; });
+                    elements.scope.find('.glimpse-close').click(function () { pubsub.publish('action.close'); return false; });
+                    elements.scope.find('.glimpse-terminate').click(function () { pubsub.publish('action.terminate'); return false; });
+                    elements.scope.find('.glimpse-popout').click(function () {  return false; });
+                }, 
+         
+                //Private
+                init = function () {
+                    pubsub.subscribe('state.render', bind); 
+                };
+    
+            init(); 
+        } (),
         shell = function () {
             var //Private 
                 getCss = function() {
-                    return template.css.replace(/url\(\)/gi, 'url(' + settings.path + 'sprite.png)'); 
+                    return template.css.replace(/url\(\)/gi, 'url(' + config.path + 'sprite.png)'); 
                 },
                 getHtml = function() {
                     return template.html;
