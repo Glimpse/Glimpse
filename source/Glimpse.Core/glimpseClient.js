@@ -2489,7 +2489,7 @@ var glimpseTimeline = function (scope, settings) {
             var criteria = { 
                     persentLeft : 0, 
                     persentRightFromLeft : 100, 
-                    hiddenCategories : {}
+                    hiddenCategories : undefined
                 },
                 search = function (c) {
                     //Go through each event doing executing search
@@ -2497,7 +2497,8 @@ var glimpseTimeline = function (scope, settings) {
                         var event = settings.events[i],
                             show = !(c.persentLeft > event.endPersent 
                                     || c.persentRightFromLeft < event.startPersent)
-                                    && c.hiddenCategories[event.category] != undefined;
+                                    && (c.hiddenCategories == undefined || c.hiddenCategories[event.category] == true);
+
 
                         elements.contentBandHolder.find('.glimpse-tl-band').eq(i).toggle(show);
                         elements.contentEventHolder.find('.glimpse-tl-band').eq(i).toggle(show);

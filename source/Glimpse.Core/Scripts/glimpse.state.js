@@ -1,4 +1,4 @@
-﻿        state = (function () {
+﻿        state = function () {
             var //Public
                 persist = function () { 
                     util.cookie('glimpseOptions', settings);
@@ -18,4 +18,4 @@
                 };
     
             init();  
-        } ())
+        } ()
