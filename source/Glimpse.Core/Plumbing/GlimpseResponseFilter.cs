@@ -14,7 +14,6 @@ namespace Glimpse.Core.Plumbing
         internal Stream OutputStream { get; set; }
         internal HttpContextBase Context { get; set; }
 
-        private Regex htmlEnd = new Regex("</html>", RegexOptions.Compiled | RegexOptions.Multiline);
         private Regex bodyEnd = new Regex("</body>", RegexOptions.Compiled | RegexOptions.Multiline);
 
         public GlimpseResponseFilter(Stream output, HttpContextBase context)
@@ -32,27 +31,25 @@ namespace Glimpse.Core.Plumbing
             // Buffer content in responseContent until we reach the end of the page's markup
             ResponseContent.Append(contentInBuffer);
 
-            if (htmlEnd.IsMatch(ResponseContent.ToString()))
+            var contentString = ResponseContent.ToString();
+            if (bodyEnd.IsMatch(contentString) && Context.GetGlimpseMode() == GlimpseMode.On)
             {
+                var dataPath = HttpUtility.HtmlAttributeEncode(Context.GlimpseResourcePath("data.js") + "&id=" + Context.GetGlimpseRequestId());
+                var clientPath = HttpUtility.HtmlAttributeEncode(Context.GlimpseResourcePath("client.js"));
 
-                if (Context.GetGlimpseMode() == GlimpseMode.On)
-                {
-                    //var path = Context.GlimpseResourcePath("");
-                    //var html = string.Format(@"<script type='text/javascript' id='glimpseData' data-glimpse-requestID='{1}'>var glimpse = {0}, glimpsePath = '{2}';</script>", json, requestId, path);
-
-                    var dataPath = HttpUtility.HtmlAttributeEncode(Context.GlimpseResourcePath("data.js") + "&id=" + Context.GetGlimpseRequestId());
-                    var clientPath = HttpUtility.HtmlAttributeEncode(Context.GlimpseResourcePath("client.js"));
-
-                    var html = @"<script type='text/javascript' id='glimpseData' src='" + dataPath + "'></script><script type='text/javascript' id='glimpseClient' src='" + clientPath + "'></script></body>";
+                var html = string.Format(@"<script type='text/javascript' id='glimpseData' src='{0}'></script><script type='text/javascript' id='glimpseClient' src='{1}'></script></body>", dataPath, clientPath);
                 
-                    // Add glimpse output notice
-                    string contentWithCopyright = bodyEnd.Replace(ResponseContent.ToString(),html);
+                // Add glimpse output script
+                string bodyCloseWithScript = bodyEnd.Replace(contentString,html);
 
-                    // Write content to the outputStream
-                    byte[] outputBuffer = UTF8Encoding.UTF8.GetBytes(contentWithCopyright);
+                // Write content to the outputStream
+                byte[] outputBuffer = UTF8Encoding.UTF8.GetBytes(bodyCloseWithScript);
 
-                    OutputStream.Write(outputBuffer, 0, outputBuffer.Length);
-                }
+                OutputStream.Write(outputBuffer, 0, outputBuffer.Length);
+            }
+            else
+            {
+                OutputStream.Write(buffer, offset, count);
             }
         }
     }

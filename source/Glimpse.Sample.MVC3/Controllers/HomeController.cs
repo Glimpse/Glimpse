@@ -70,6 +70,12 @@ namespace MvcMusicStore.Controllers
                 .ToList();
         }
 
+        public string FilterTest()
+        {
+            return
+                "Simple Page to test Glimpse without html tags";
+        }
+
         public virtual ActionResult News()
         {
             var views = new[]{"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight"};
