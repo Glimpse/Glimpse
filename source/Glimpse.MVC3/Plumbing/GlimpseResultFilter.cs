@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Web.Mvc;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Mvc3.Plumbing
 {
@@ -21,7 +22,10 @@ namespace Glimpse.Mvc3.Plumbing
             var watch = new Stopwatch();
             watch.Start();
 
-            ResultFilter.OnResultExecuting(filterContext);
+            using (GlimpseTimer.Start("IResultFilter OnResultExecuting" + ResultFilter.GetType().Name, "MVC"))
+            {
+                ResultFilter.OnResultExecuting(filterContext);
+            }
 
             watch.Stop();
             metadata.ExecutionTime = watch.Elapsed;
@@ -33,7 +37,10 @@ namespace Glimpse.Mvc3.Plumbing
             var watch = new Stopwatch();
             watch.Start();
 
-            ResultFilter.OnResultExecuted(filterContext);
+            using (GlimpseTimer.Start("IResultFilter OnResultExecuted:" + ResultFilter.GetType().Name, "MVC"))
+            {
+                ResultFilter.OnResultExecuted(filterContext);
+            }
 
             watch.Stop();
 

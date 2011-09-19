@@ -2,6 +2,7 @@
 using System.Web;
 using System.Web.Mvc;
 using Glimpse.Core;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Mvc3.Plumbing
 {
@@ -17,7 +18,12 @@ namespace Glimpse.Mvc3.Plumbing
         public ViewEngineResult FindPartialView(ControllerContext controllerContext, string partialViewName,
                                                 bool useCache)
         {
-            var viewEngineResult = ViewEngine.FindPartialView(controllerContext, partialViewName, useCache);
+            ViewEngineResult viewEngineResult;
+
+            using (GlimpseTimer.Start("Find Partial View " + partialViewName, "MVC"))
+            {
+                viewEngineResult = ViewEngine.FindPartialView(controllerContext, partialViewName, useCache);
+            }
 
             viewEngineResult = Process(viewEngineResult, true, partialViewName, "", useCache);
 
@@ -27,7 +33,12 @@ namespace Glimpse.Mvc3.Plumbing
         public ViewEngineResult FindView(ControllerContext controllerContext, string viewName, string masterName,
                                          bool useCache)
         {
-            var viewEngineResult = ViewEngine.FindView(controllerContext, viewName, masterName, useCache);
+            ViewEngineResult viewEngineResult;
+
+            using (GlimpseTimer.Start("Finding View" + viewName, "MVC"))
+            {
+                viewEngineResult = ViewEngine.FindView(controllerContext, viewName, masterName, useCache);
+            }
 
             viewEngineResult = Process(viewEngineResult, false, viewName, masterName, useCache);
 

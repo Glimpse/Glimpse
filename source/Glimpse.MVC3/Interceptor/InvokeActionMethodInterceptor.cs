@@ -28,7 +28,7 @@ namespace Glimpse.Mvc3.Interceptor
             var watch = new Stopwatch();
             watch.Start();
 
-            using (GlimpseTimer.Start(actionDescriptor.ActionName, "MVC", "MVC Action"))
+            using (GlimpseTimer.Start(controllerContext.Controller.GetType().Name + "." + actionDescriptor.ActionName, "MVC", "MVC Action Method"))
             {
                 invocation.Proceed();
             }

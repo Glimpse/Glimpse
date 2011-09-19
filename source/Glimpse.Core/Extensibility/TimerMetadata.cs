@@ -16,7 +16,8 @@ namespace Glimpse.Core.Extensibility
             Categories = new Dictionary<string, TimerCategory>
                            {
                                {"ASP.NET", new TimerCategory{EventColor = "#FD4545", EventColorHighlight = "#DD3131"}},
-                               {"MVC", new TimerCategory{EventColor = "#72A3E4", EventColorHighlight = "#5087CF"}}
+                               {"MVC", new TimerCategory{EventColor = "#72A3E4", EventColorHighlight = "#5087CF"}},
+                               {"Database", new TimerCategory{EventColor = "#AF78DD", EventColorHighlight = "#823BBE"}}
                            };
 
             //'Database' : { eventColor : '#AF78DD', eventColorHighlight : '#823BBE' }, //:{ event:'purple' },

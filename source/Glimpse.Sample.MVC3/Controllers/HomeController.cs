@@ -45,10 +45,6 @@ namespace MvcMusicStore.Controllers
                 Trace.TraceError("Test TraceError;");
                 Trace.TraceInformation("Test TraceInformation;"); 
 
-            using(GlimpseTimer.Start("Waiting in controller", "Custom"))
-            {
-                Thread.Sleep(300);
-            }
 
             GlimpseTimer.Moment("A Moment", "Other", "This is just a moment in time.");
             //}

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Web.Mvc;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Mvc3.Plumbing
 {
@@ -20,7 +21,10 @@ namespace Glimpse.Mvc3.Plumbing
             var watch = new Stopwatch();
             watch.Start();
 
-            ExceptionFilter.OnException(filterContext);
+            using (GlimpseTimer.Start("Executing IExceptionFilter " + ExceptionFilter.GetType().Name, "MVC"))
+            {
+                ExceptionFilter.OnException(filterContext);
+            }
 
             watch.Stop();
             metadata.ExecutionTime = watch.Elapsed;
