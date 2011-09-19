@@ -1,5 +1,5 @@
 ﻿        pubsub = (function () {
-            var //Private
+            var //Support
                 registry = {},
                 lastUid = -1,
                 publishCore = function (message, data, sync) {
@@ -32,7 +32,7 @@
                     return true;
                 },
         
-                //Public
+                //Main
                 publish = function (message, data) {
                     return publishCore(message, data, true);
                 },

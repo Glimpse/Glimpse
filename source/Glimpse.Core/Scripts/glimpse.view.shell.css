@@ -202,16 +202,16 @@
 .glimpse-meta-update:hover {
     background-position: -213px -1px;
 }
-.glimpse-close {
+.glimpse-minimize {
     background-position: -1px -1px;
 }
-.glimpse-close:hover {
+.glimpse-minimize:hover {
     background-position: -17px -1px;
 }
-.glimpse-terminate {
+.glimpse-close {
     background-position: -65px -1px;
 }
-.glimpse-terminate:hover {
+.glimpse-close:hover {
     background-position: -81px -1px;
 }
 .glimpse-popout {

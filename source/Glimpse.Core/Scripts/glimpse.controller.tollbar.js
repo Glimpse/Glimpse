@@ -1,5 +1,13 @@
-﻿        action = function () {
-            var //Public 
+﻿        tollbarController = function () {
+            var //Support
+                wireListeners = function() {
+                    pubsub.subscribe('action.open', open);
+                    pubsub.subscribe('action.minimize', function() { close(false); });
+                    pubsub.subscribe('action.close', function() { close(true); });
+                    pubsub.subscribe('action.resize', function(message, data) { resize(data); });
+                },
+            
+                //Main 
                 open = function () {
                     settings.open = true;
                     pubsub.publish('state.persist');
@@ -28,14 +36,9 @@
              
                     elements.spacer.height(height);
                     elements.holder.find('.glimpse-panel').height(height - 54); 
-                },
-        
-                //Private
+                }, 
                 init = function () {
-                    pubsub.subscribe('action.open', open);
-                    pubsub.subscribe('action.close', close);
-                    pubsub.subscribe('action.terminate', function() { close(true); });
-                    pubsub.subscribe('action.resize', resize);
+                    wireListeners();
                 };
     
             init(); 

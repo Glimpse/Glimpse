@@ -10,14 +10,13 @@ var glimpse = (function ($, scope) {
         settings = {
             height : '250px'
         },
-/*(import:glimpse.util.js)*/,
-/*(import:glimpse.pubsub.js)*/,
-/*(import:glimpse.plugin.js)*/,
-/*(import:glimpse.init.js)*/,
-/*(import:glimpse.state.js)*/,
-/*(import:glimpse.action.js)*/,
-/*(import:glimpse.action.wire.js)*/,
-/*(import:glimpse.shell.js)*/, 
+/*(import:glimpse.core.util.js)*/,
+/*(import:glimpse.core.pubsub.js)*/,
+/*(import:glimpse.core.plugin.js)*/,
+/*(import:glimpse.core.data.js)*/,
+/*(import:glimpse.controller.state.js)*/, 
+/*(import:glimpse.controller.shell.js)*/,
+/*(import:glimpse.controller.tollbar.js)*/, 
         init = function () {
             pubsub.publish('state.init');
             pubsub.publish('state.build'); 

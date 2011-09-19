@@ -1,5 +1,12 @@
-﻿        state = function () {
-            var //Public
+﻿        stateController = function () {
+            var //Support
+                wireListeners = function() {
+                    pubsub.subscribe('state.persist', persist);
+                    pubsub.subscribe('state.restore', restore);
+                    pubsub.subscribe('state.terminate', terminate);
+                },
+            
+                //Main
                 persist = function () { 
                     util.cookie('glimpseOptions', settings);
                 },
@@ -8,13 +15,9 @@
                 },
                 terminate = function () {
                     util.cookie('glimpseState', null);
-                },
-        
-                //Private
+                }, 
                 init = function () {
-                    pubsub.subscribe('state.persist', persist);
-                    pubsub.subscribe('state.restore', restore);
-                    pubsub.subscribe('state.terminate', terminate);
+                    wireListeners();
                 };
     
             init();  

@@ -1,5 +1,5 @@
 ﻿        plugin = (function () {
-            var //Private
+            var //Support
                 plugins = {}, 
                 startPlugin = function (pluginId) {
                     pluginData[pluginId].instance = pluginData[pluginId].creator();   //TODO: What to pass the plugin 
@@ -22,7 +22,7 @@
                     pubsub.subscribe('state.init', startAllPlugins);  
                 },
 
-                //Public
+                //Main
                 registerPlugin = function (pluginId, creator) {
                     plugins[pluginId] = { creator : creator, instance : null };
                 };

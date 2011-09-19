@@ -150,19 +150,19 @@
     <EmbeddedResource Include="glimpseClient.js" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\glimpse.action.wire.js" />
     <Content Include="Scripts\glimpse.js" />
     <Content Include="Scripts\jquery-1.6.3.min.js" />
+    <Content Include="Scripts\sprite.png" />
     <Content Include="Scripts\test.html" />
-    <Content Include="Scripts\glimpse.init.js" />
-    <Content Include="Scripts\glimpse.shell.css" />
-    <Content Include="Scripts\glimpse.shell.html" />
-    <Content Include="Scripts\glimpse.shell.js" />
-    <Content Include="Scripts\glimpse.util.js" />
-    <Content Include="Scripts\glimpse.action.js" />
+    <Content Include="Scripts\glimpse.core.data.js" />
+    <Content Include="Scripts\glimpse.view.shell.css" />
+    <Content Include="Scripts\glimpse.view.shell.html" />
+    <Content Include="Scripts\glimpse.controller.shell.js" />
+    <Content Include="Scripts\glimpse.core.util.js" />
+    <Content Include="Scripts\glimpse.controller.tollbar.js" />
     <Content Include="Scripts\glimpse.core.js" />
-    <Content Include="Scripts\glimpse.plugin.js" />
-    <Content Include="Scripts\glimpse.pubsub.js" />
+    <Content Include="Scripts\glimpse.core.plugin.js" />
+    <Content Include="Scripts\glimpse.core.pubsub.js" />
     <EmbeddedResource Include="glimpseLogo.png" />
     <EmbeddedResource Include="glimpseSprite.png" />
     <Content Include="NuSpec\content\web.config.transform" />
@@ -171,7 +171,7 @@
     </None>
     <Content Include="NuSpec\content\App_Readme\glimpse.readme.txt" />
     <None Include="NuSpec\tools\install.ps1" />
-    <Content Include="Scripts\glimpse.state.js" />
+    <Content Include="Scripts\glimpse.controller.state.js" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
