@@ -1,91 +1,61 @@
 ﻿        shellController = function () {
             var //Support
+            
+                //Main
+                build = function (data, level, forceFull, forceLimit) {  
+                    if (data == undefined || data == null)
+                        return '--';
+                    if ($.isArray(data))
+                        return '[ ... ]';
+                    if ($.isPlainObject(data))
+                        return '{ ... }';
 
-        
-                //Main 
-                init = function () {
-                    wireListeners();
+                    var that = this, limit = $.isNaN(forceLimit) ? (level > 1 ? 80 : 150) : forceLimit;
+                    if (that.shouldUsePreview(data.length, level, forceFull, limit, forceLimit, 1))
+                        return buildPreview(data, level);
+                
+                    return $.glimpse.util.preserveWhitespace($.glimpseContent.formatString(data));
+                }, 
+                buildPreview = function (data, level, forceLimit) { 
+                    if (data == undefined || data == null)
+                        return '--';
+                    if ($.isArray(data))
+                        return '[ ... ]';
+                    if ($.isPlainObject(data))
+                        return '{ ... }';
+
+                    return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td>' + buildPreviewOnly(data, level) + '<span class="glimpse-preview-show">' + build(data, level, true) + '</span></td></tr></table>';
+                },
+                buildPreview = function (data, level, forceLimit) {
+                    if (data == undefined || data == null)
+                        return '--';
+                    if ($.isArray(data))
+                        return '[ ... ]';
+                    if ($.isPlainObject(data))
+                        return '{ ... }';
+                         
+                    var that = this,
+                        charMax = !$.isNaN(forceLimit) ? forceLimit : (level > 1 ? 80 : 150),
+                        charOuterMax = (charMax * 1.2),
+                        content = $.glimpseContent.trimFormatString(data, charMax, charOuterMax, true);
+
+                    if (data.length > charOuterMax) {
+                        content = '<span class="glimpse-preview-string" title="' + $.glimpseContent.trimFormatString(data, charMax * 2, charMax * 2.1, false, true) + '">' + content + '</span>';
+                        if (charMax >= 15)
+                            content = '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td>' + content + '<span class="glimpse-preview-show">' + $.glimpse.util.preserveWhitespace($.glimpseContent.formatString(data)) + '</span></td></tr></table>';
+                    }
+                    else 
+                        content = $.glimpse.util.preserveWhitespace(content);  
+              
+                    return content;
+                },
+                buildPreviewOnly = function (data, level) {
+                    return '<span class="glimpse-preview-string" title="' + $.glimpseContent.trimFormatString(data, charMax * 2, charMax * 2.1, false, true) + '">' + content + '</span>';
                 };
-    
-            init(); 
         } ()
 
 
     $.extend($.glimpseProcessor, {
-        layout: function (g, title) {
-            var that = this, static = g.static, tabStrip = static.tabStrip(), panelHolder = static.panelHolder(), data, metadata;
-            
-            //Build Dynamic HTML
-            for (var key in static.data) {
-                if ($('.glimpse-tabitem-' + key, tabStrip).length == 0) {
-                    data = static.data[key];
-                    metadata = ((metadata = static.data._metadata) && (metadata = metadata.plugins[key]) && (metadata = metadata.structure));
-
-                    that.addTab(tabStrip, data, key);
-                    that.addTabBody(panelHolder, that.build(data, 0, true, metadata, 1), key);
-                }
-            }
-             
-            //Sort Elemetns
-            $('li', tabStrip).sortElements();
-            $('.glimpse-panel', panelHolder).sortElements();
-
-            //Adjust render
-            that.applyPostRenderTransforms(panelHolder);
-
-            //Select tab
-            that.restoreTab(g);
-
-            $('.glimpse-title').html(title);
-        },
-        applyPostRenderTransforms: function (scope) {
-            //Alert state
-            $('.info, .warn, .error, .fail, .loading, .ms', scope).find('> td:first-child, > tr:first-child > td:first-child:not(:has(div.glimpse-cell)), > tr:first-child > td:first-child > div.glimpse-cell:first-child').not(':has(.icon)').prepend('<div class="icon"></div>');
-               
-            //Code formatting
-            var codeProcess = function(items) {
-                $.each(items, function() {
-                    var item = $(this).addClass('prettyprint'), codeType = item.hasClass('glimpse-code') ? item.attr('data-codeType') : item.closest('.glimpse-code').attr('data-codeType');  
-                    item.html(prettyPrintOne(item.html(), codeType));
-                });
-            };
-            codeProcess($('.glimpse-code:not(:has(table)), .glimpse-code > table:not(:has(thead)) .glimpse-preview-show', scope));
-            
-            //Open state
-            setTimeout(function () {
-                $('.glimpse-start-open > td > .glimpse-expand:first-child', scope).click();
-            }, 500);
-        },
-        addTab: function (container, data, key) {
-            var disabled = (data === undefined || data === null) ? ' glimpse-disabled' : '';
-            container.append('<li class="glimpse-tabitem-' + key + disabled + '" data-sort="' + key + '">' + key + '</li>');
-        },
-        addTabBody: function (container, content, key) {
-            container.append('<div class="glimpse-panel glimpse-panelitem-' + key + '" data-sort="' + key + '">' + content + '</div>');
-        },
-        restoreTab: function (g) {
-            var static = g.static, tabStrip = static.tabStrip(), panelHolder = static.panelHolder(), activeTab = g.settings.activeTab;
-
-            $('.glimpse-active', tabStrip).removeClass('glimpse-active').removeClass('glimpse-hover');
-            $((activeTab ? '.glimpse-tabitem-' + activeTab : 'li:first'), tabStrip).addClass('glimpse-active');
-
-            $('.glimpse-active', panelHolder).removeClass('glimpse-active');
-            $((activeTab ? '.glimpse-panelitem-' + activeTab : '.glimpse-panel:first'), panelHolder).addClass('glimpse-active');
-             
-            $('.glimpse').trigger('glimpse.tabchanged', tabStrip.find('.glimpse-active').attr('data-sort'));
-        },
-        clearLayout: function (g) {
-            var that = this, static = g.static, tabStrip = static.tabStrip(), panelHolder = static.panelHolder();
-
-            that.removeTabs(tabStrip);
-            that.removeTabBodies(panelHolder);
-        },
-        removeTabs: function (container) {
-            $('li:not(.glimpse-permanent)', container).remove();
-        },
-        removeTabBodies: function (container) {
-            $('.glimpse-panel:not(.glimpse-permanent)', container).remove();
-        },
         build: function (data, level, forceFull, metadata, forceLimit) {
             var that = this, result = '';
 
@@ -241,9 +211,6 @@
             
             return html;
         }, 
-        buildString: function (data, level, forceLimit) {
-            return this.buildStringPreview(data, level, forceLimit);
-        },
         buildKeyValuePreview: function (data, level) {
             var that = this;
             return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + that.buildKeyValuePreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + that.buildKeyValueTable(data, level, true) + '</div></td></tr></table>';
@@ -307,29 +274,6 @@
         buildStructuredTablePreview : function(data, level, metadata) {
             var that = this;
             return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + that.buildCustomPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + that.buildStructuredTable(data, level, true, metadata) + '</div></td></tr></table>';
-        },
-        buildStringPreview: function (data, level, forceLimit) {
-            if (data == undefined || data == null)
-                return '--';
-            if ($.isArray(data))
-                return '[ ... ]';
-            if ($.isPlainObject(data))
-                return '{ ... }';
-
-            var that = this,
-                charMax = !$.isNaN(forceLimit) ? forceLimit : (level > 1 ? 80 : 150),
-                charOuterMax = (charMax * 1.2),
-                content = $.glimpseContent.trimFormatString(data, charMax, charOuterMax, true);
-
-            if (data.length > charOuterMax) {
-                content = '<span class="glimpse-preview-string" title="' + $.glimpseContent.trimFormatString(data, charMax * 2, charMax * 2.1, false, true) + '">' + content + '</span>';
-                if (charMax >= 15)
-                    content = '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td>' + content + '<span class="glimpse-preview-show">' + $.glimpse.util.preserveWhitespace($.glimpseContent.formatString(data)) + '</span></td></tr></table>';
-            }
-            else 
-                content = $.glimpse.util.preserveWhitespace(content);  
-              
-            return content;
         },
         //TODO: these needs to be moved out 
         shouldUsePreview: function(length, level, forceFull, limit, forceLimit, tolerance) {

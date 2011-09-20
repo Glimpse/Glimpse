@@ -89,12 +89,10 @@
     <Compile Include="Extensibility\IProvideGlimpseHelp.cs" />
     <Compile Include="Extensibility\IProvideGlimpsePaging.cs" />
     <Compile Include="Extensibility\IProvideGlimpseStructuredLayout.cs" />
-    <Compile Include="Extensibility\TimerMetadata.cs" />
     <Compile Include="Handler.cs" />
     <Compile Include="Handlers\HandlerBase.cs" />
     <Compile Include="Handlers\ImageHandlerBase.cs" />
     <Compile Include="Handlers\JavascriptData.cs" />
-    <Compile Include="Plugin\Timing.cs" />
     <Compile Include="Plumbing\GlimpseFactory.cs" />
     <Compile Include="Plumbing\GlimpseContractResolver.cs" />
     <Compile Include="Handlers\JsonHandlerBase.cs" />
@@ -102,7 +100,6 @@
     <Compile Include="Plumbing\GlimpseLogger.cs" />
     <Compile Include="Plumbing\GlimpseResponseFilter.cs" />
     <Compile Include="Plumbing\GlimpseSerializer.cs" />
-    <Compile Include="Extensibility\GlimpseTimer.cs" />
     <Compile Include="Plumbing\InProcStackMetadataStore.cs" />
     <Compile Include="Validator\ContentTypeValidator.cs" />
     <Compile Include="Validator\GlimpseModeValidator.cs" />
@@ -150,7 +147,12 @@
     <EmbeddedResource Include="glimpseClient.js" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Scripts\glimpse.render.engine.string.js" />
     <Content Include="Scripts\glimpse.js" />
+    <Content Include="Scripts\glimpse.render.content.js" />
+    <Content Include="Scripts\glimpse.render.engine.custom.js" />
+    <Content Include="Scripts\glimpse.render.engine.js" />
+    <Content Include="Scripts\glimpse.render.engine.structed.js" />
     <Content Include="Scripts\jquery-1.6.3.min.js" />
     <Content Include="Scripts\sprite.png" />
     <Content Include="Scripts\test.html" />
@@ -172,6 +174,7 @@
     <Content Include="NuSpec\content\App_Readme\glimpse.readme.txt" />
     <None Include="NuSpec\tools\install.ps1" />
     <Content Include="Scripts\glimpse.controller.state.js" />
+    <Content Include="Scripts\glimpse.render.engine.keyvalue.js" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
