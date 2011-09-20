@@ -49,6 +49,7 @@
     <Compile Include="Extensibility\IContextStore.cs" />
     <Compile Include="Extensibility\IGlimpseHelp.cs" />
     <Compile Include="Extensibility\IGlimpsePluginOfT.cs" />
+    <Compile Include="Extensibility\IGlimpseRuntime.cs" />
     <Compile Include="Extensibility\IPipelineModifier.cs" />
     <Compile Include="Extensibility\IServiceLocatorOfT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
