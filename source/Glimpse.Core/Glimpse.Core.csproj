@@ -78,6 +78,7 @@
     <Compile Include="Configuration\UrlBlacklistCollection.cs" />
     <Compile Include="Converter\AuthenticationSectionConverter.cs" />
     <Compile Include="Converter\CustomErrorsSectionConverter.cs" />
+    <Compile Include="Extensibility\GlimpseTimer.cs" />
     <Compile Include="Extensibility\GlimpseTrace.cs" />
     <Compile Include="Extensibility\GlimpseHandlerAttribute.cs" />
     <Compile Include="Extensibility\GlimpseValidatorAttribute.cs" />
@@ -89,10 +90,12 @@
     <Compile Include="Extensibility\IProvideGlimpseHelp.cs" />
     <Compile Include="Extensibility\IProvideGlimpsePaging.cs" />
     <Compile Include="Extensibility\IProvideGlimpseStructuredLayout.cs" />
+    <Compile Include="Extensibility\TimerMetadata.cs" />
     <Compile Include="Handler.cs" />
     <Compile Include="Handlers\HandlerBase.cs" />
     <Compile Include="Handlers\ImageHandlerBase.cs" />
     <Compile Include="Handlers\JavascriptData.cs" />
+    <Compile Include="Plugin\Timing.cs" />
     <Compile Include="Plumbing\GlimpseFactory.cs" />
     <Compile Include="Plumbing\GlimpseContractResolver.cs" />
     <Compile Include="Handlers\JsonHandlerBase.cs" />
@@ -101,6 +104,7 @@
     <Compile Include="Plumbing\GlimpseResponseFilter.cs" />
     <Compile Include="Plumbing\GlimpseSerializer.cs" />
     <Compile Include="Plumbing\InProcStackMetadataStore.cs" />
+    <Content Include="Scripts\glimpse.render.engine.master.js" />
     <Compile Include="Validator\ContentTypeValidator.cs" />
     <Compile Include="Validator\GlimpseModeValidator.cs" />
     <Compile Include="Validator\GlimpseRequestValidator.cs" />
@@ -150,7 +154,7 @@
     <Content Include="Scripts\glimpse.render.engine.string.js" />
     <Content Include="Scripts\glimpse.js" />
     <Content Include="Scripts\glimpse.render.content.js" />
-    <Content Include="Scripts\glimpse.render.engine.custom.js" />
+    <Content Include="Scripts\glimpse.render.engine.table.js" />
     <Content Include="Scripts\glimpse.render.engine.js" />
     <Content Include="Scripts\glimpse.render.engine.structed.js" />
     <Content Include="Scripts\jquery-1.6.3.min.js" />

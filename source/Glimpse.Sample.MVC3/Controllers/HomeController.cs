@@ -45,7 +45,6 @@ namespace MvcMusicStore.Controllers
                 Trace.TraceError("Test TraceError;");
                 Trace.TraceInformation("Test TraceInformation;"); 
 
-
             GlimpseTimer.Moment("A Moment", "Other", "This is just a moment in time.");
             //}
 

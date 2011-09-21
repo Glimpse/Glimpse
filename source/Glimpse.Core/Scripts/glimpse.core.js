@@ -10,14 +10,14 @@ var glimpse = (function ($, scope) {
         settings = {
             height : '250px'
         },
-/*(import:glimpse.core.util.js)*/,
-/*(import:glimpse.core.pubsub.js)*/,
-/*(import:glimpse.core.plugin.js)*/,
-/*(import:glimpse.core.data.js)*/,
-/*(import:glimpse.controller.state.js)*/, 
-/*(import:glimpse.controller.shell.js)*/,
-/*(import:glimpse.controller.tollbar.js)*/, 
-        init = function () {
+/*(import:glimpse.core.util.js|2)*/,
+/*(import:glimpse.core.pubsub.js|2)*/,
+/*(import:glimpse.core.plugin.js|2)*/,
+/*(import:glimpse.core.data.js|2)*/,
+/*(import:glimpse.controller.state.js|2)*/, 
+/*(import:glimpse.controller.shell.js|2)*/,
+/*(import:glimpse.controller.tollbar.js|2)*/, 
+/*(import:glimpse.render.engine.js|2)*/, 
             pubsub.publish('state.init');
             pubsub.publish('state.build'); 
         };

@@ -24,11 +24,23 @@ namespace ManualBuild
             var matches = Regex.Matches(fileContent, @"\/\*\(import:\S*\)\*\/", RegexOptions.Multiline);
             foreach (Match match in matches)
             {
-                var matchFileName = match.Value.Substring(10, match.Value.Length - 13);
+                var matchIdentifier = match.Value.Substring(10, match.Value.Length - 13);
+                var matchFileName = matchIdentifier;
+                var tabIndex = 0;
+                if (matchFileName.IndexOf("|") > -1) 
+                {
+                    tabIndex = Convert.ToInt32(matchFileName.Substring(matchFileName.IndexOf("|") + 1, matchFileName.Length - matchFileName.IndexOf("|") - 1));
+                    matchFileName = matchFileName.Substring(0, matchFileName.IndexOf("|"));
+                }
+                var tabs = "";
+                for (var i = 0; i < tabIndex; i++)
+                    tabs += "    ";
                 var matchContent = File.ReadAllText(assets.BuildScriptPath(matchFileName));
                 matchContent = ProcessFile(PostProcessContent(matchFileName, matchContent), assets);
+                if (tabIndex > 0)
+                    matchContent = tabs + Regex.Replace(matchContent, "\n", "\n" + tabs); 
 
-                fileContent = fileContent.Replace(String.Format("/*(import:{0})*/", matchFileName), matchContent);
+                fileContent = fileContent.Replace(String.Format("/*(import:{0})*/", matchIdentifier), matchContent);
             }
 
             return fileContent;
@@ -42,7 +54,7 @@ namespace ManualBuild
                 fileContent = Regex.Replace(fileContent, @"\s{2,}", ""); 
             }
             return fileContent;
-        }
+        } 
     }
 
     public class Assets
