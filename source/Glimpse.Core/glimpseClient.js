@@ -2287,13 +2287,23 @@ var glimpseTimeline = function (scope, settings) {
                     var dataResult = [ [ "Category", "Title", "Description", "Start Point", "Duration" ] ],
                         metadata = [ [ { data : 0 }, { data : 1 }, { data : 2 }, { data : 3, align : "right", pre : "T+ ", post : " ms", className : "mono" }, { data : 4, align : "right", post : " ms", className : "mono" } ] ];
                     
+                    //Massage the data 
                     for (var i = 0; i < settings.events.length; i++) {
                         var event = settings.events[i];
                         dataResult.push([ event.category, event.title, event.subText, event.startPoint, event.duration ]);
                     } 
 
+                    //Insert it into the document
                     var result = $.glimpseProcessor.build(dataResult, 0, true, metadata, false); 
                     elements.contentTableHolder.append(result);
+
+                    //Update the output
+                    elements.contentTableHolder.find('tr td:first-child').prepend('<div class="glimpse-tl-event"></div>').each(function() {
+                        var cell = $(this), 
+                            category = settings.category[cell.text()];
+                        cell.find('div').css({ 'backgroundColor' : category.eventColor, 'border' : '1px solid ' + category.eventColorHighlight });
+                    });
+                    //console.log(elements.contentTableHolder.find('tr td:first-child'));
                 },
                 processCategories = function () {
                     for (var categoryName in settings.category) {
