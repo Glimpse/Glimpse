@@ -2395,22 +2395,16 @@ var glimpseTimeline = function (scope, settings) {
                 },
                 colorRows = function (applyAll) { 
                     var filter = applyAll ? '' : ':visible';
-                    //TODO: only do this logic for visable rows
-                    elements.contentBandHolder.find('> div').removeClass('odd').removeClass('even');
-                    elements.contentBandHolder.find('> div').filter(filter + ':even').addClass('even');
-                    elements.contentBandHolder.find('> div').filter(filter + ':odd').addClass('odd');
-                    elements.contentDescHolder.find('> div').removeClass('odd').removeClass('even');
-                    elements.contentDescHolder.find('> div').filter(filter + ':even').addClass('even');
-                    elements.contentDescHolder.find('> div').filter(filter + ':odd').addClass('odd');
-                    elements.summaryBandHolder.find('> div').removeClass('odd').removeClass('even');
-                    elements.summaryBandHolder.find('> div').filter(filter + ':even').addClass('even');
-                    elements.summaryBandHolder.find('> div').filter(filter + ':odd').addClass('odd');
-                    elements.summaryDescHolder.find('> div').removeClass('odd').removeClass('even');
-                    elements.summaryDescHolder.find('> div').filter(filter + ':even').addClass('even');
-                    elements.summaryDescHolder.find('> div').filter(filter + ':odd').addClass('odd'); 
-                    elements.contentTableHolder.find('tbody').removeClass('odd').removeClass('even');
-                    elements.contentTableHolder.find('tbody').filter(filter + ':even').addClass('even');
-                    elements.contentTableHolder.find('tbody').filter(filter + ':odd').addClass('odd');
+                    colorElement(elements.contentBandHolder.find('> div'), filter);
+                    colorElement(elements.contentDescHolder.find('> div'), filter);
+                    colorElement(elements.summaryBandHolder.find('> div'), filter);
+                    colorElement(elements.summaryDescHolder.find('> div'), filter);
+                    colorElement(elements.contentTableHolder.find('tbody'), filter); 
+                },
+                colorElement = function (scope, filter) {
+                    scope.removeClass('odd').removeClass('even');
+                    scope.filter(filter + ':even').addClass('even');
+                    scope.filter(filter + ':odd').addClass('odd');
                 },
                 categoryEvents = function (item) {
                     //Handel how the UI will look
