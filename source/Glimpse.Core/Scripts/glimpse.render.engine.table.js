@@ -4,7 +4,7 @@
             var that = this, 
                 limit = $.isNaN(forceLimit) ? 3 : forceLimit;
 
-            if (that.shouldUsePreview(data.length, level, forceFull, limit, forceLimit, 1))
+            if (shouldUsePreview(data.length, level, forceFull, limit, forceLimit, 1))
                 return buildPreview(data, level);
 
             var html = '<table><thead><tr class="glimpse-row-header-' + level + '">';
