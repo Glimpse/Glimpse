@@ -1,8 +1,14 @@
 ﻿structured = function () {
     var //Support
+        buildFormatString = function(content, data, indexs) {  
+            for (var i = 0; i < indexs.length; i++) {
+                var pattern = "\\\{\\\{" + indexs[i] + "\\\}\\\}", regex = new RegExp(pattern, "g"); 
+                content = content.replace(regex, data[indexs[i]]);
+            }
+            return content;
+        },
         buildCell = function(data, metadataItem, level, cellType, rowIndex) {
-            var that = this, 
-                html = '', 
+            var html = '', 
                 cellContent = '', 
                 cellClass = '', 
                 cellStyle = '', 
@@ -22,7 +28,7 @@
                 if ($.isPlainObject(newMetadataItem)) 
                     newMetadataItem = newMetadataItem[rowIndex];
                     
-                cellContent = metadataItem.indexs ? that.buildFormatString(metadataItem.data, data, metadataItem.indexs) : data[metadataItem.data];
+                cellContent = metadataItem.indexs ? buildFormatString(metadataItem.data, data, metadataItem.indexs) : data[metadataItem.data];
                 
                 //If minDisplay and we are in header or there is no data, we don't want to render anything 
                 if (metadataItem.minDisplay && (rowIndex == 0 || cellContent == undefined || cellContent == null))
@@ -61,8 +67,7 @@
 
         //Main
         build = function (data, level, forceFull, metadata, forceLimit) { 
-            var that = this, 
-                limit = $.isNaN(forceLimit) ? 3 : forceLimit;
+            var limit = $.isNaN(forceLimit) ? 3 : forceLimit;
 
             if (shouldUsePreview(data.length, level, forceFull, limit, forceLimit, 1))
                 return buildPreview(data, level, metadata);

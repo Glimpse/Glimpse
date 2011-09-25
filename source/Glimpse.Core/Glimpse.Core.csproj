@@ -107,7 +107,7 @@
     <Compile Include="Plumbing\GlimpseResponseFilter.cs" />
     <Compile Include="Plumbing\GlimpseSerializer.cs" />
     <Compile Include="Plumbing\InProcStackMetadataStore.cs" />
-    <Content Include="Scripts\glimpse.core.util.formatstring.js">
+    <Content Include="Scripts\glimpse.core.util.format.js">
       <SubType>UserControl</SubType>
     </Content>
     <Content Include="Scripts\glimpse.render.engine.master.js" />
@@ -159,7 +159,6 @@
   <ItemGroup>
     <Content Include="Scripts\glimpse.render.engine.string.js" />
     <Content Include="Scripts\glimpse.js" />
-    <Content Include="Scripts\glimpse.render.content.js" />
     <Content Include="Scripts\glimpse.render.engine.table.js" />
     <Content Include="Scripts\glimpse.render.engine.js" />
     <Content Include="Scripts\glimpse.render.engine.structed.js" />

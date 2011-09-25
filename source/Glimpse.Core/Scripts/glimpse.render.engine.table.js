@@ -1,8 +1,7 @@
 ﻿table = function () {
     var //Main
         build = function (data, level, forceFull, forceLimit) { 
-            var that = this, 
-                limit = $.isNaN(forceLimit) ? 3 : forceLimit;
+            var limit = $.isNaN(forceLimit) ? 3 : forceLimit;
 
             if (shouldUsePreview(data.length, level, forceFull, limit, forceLimit, 1))
                 return buildPreview(data, level);
@@ -10,7 +9,7 @@
             var html = '<table><thead><tr class="glimpse-row-header-' + level + '">';
             if ($.isArray(data[0])) {
                 for (var x = 0; x < data[0].length; x++)
-                    html += '<th>' + $.glimpseContent.formatString(data[0][x]) + '</th>';
+                    html += '<th>' + rawString.Format(data[0][x]) + '</th>';
                 html += '</tr></thead>';
                 for (var i = 1; i < data.length; i++) {
                     html += '<tr class="' + (i % 2 ? 'odd' : 'even') + (data[i].length > data[0].length ? ' ' + data[i][data[i].length - 1] : '') + '">';
@@ -33,8 +32,7 @@
             return html;
         },
         buildPreview = function (data, level) {
-            var that = this, 
-                isComplex = ($.isArray(data[0]) || $.isPlainObject(data[0]));
+            var isComplex = ($.isArray(data[0]) || $.isPlainObject(data[0]));
             
             if (isComplex && data.length == 1)
                 return master.build(data[0], level);
@@ -43,8 +41,7 @@
             return string.buildPreview(data[0], level + 1); 
         },
         buildPreviewOnly = function (data, level) { 
-            var that = this, 
-                isComplex = $.isArray(data[0]), 
+            var isComplex = $.isArray(data[0]), 
                 length = (isComplex ? data.length - 1 : data.length), 
                 rowMax = 2, 
                 columnMax = 3, 
@@ -55,7 +52,7 @@
             if (isComplex) {
                 columnLimit = ((data[0].length > columnMax) ? columnMax : data[0].length);
                 for (var i = 1; i <= rowLimit + 1; i++) {
-                    html += that.newItemSpacer(i, rowLimit, length);
+                    html += newItemSpacer(i, rowLimit, length);
                     if (i > length || i > rowLimit)
                         break;
 
@@ -72,7 +69,7 @@
             }
             else { 
                 for (var i = 0; i <= rowLimit; i++) {
-                    html += that.newItemSpacer(i + 1, rowLimit, length);
+                    html += newItemSpacer(i + 1, rowLimit, length);
                     if (i >= length || i >= rowLimit)
                         break;
                     html += '<span>\'</span>' + string.buildPreview(data[i], level, 12) + '<span>\'</span>';

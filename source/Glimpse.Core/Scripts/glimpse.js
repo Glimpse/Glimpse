@@ -291,6 +291,78 @@ var glimpse = (function ($, scope) {
                 wireListeners = function() {
                     pubsub.subscribe('render.data', function(message, data) { master.build(data.data, 0, true, data.metadata, 1); });
                 },
+                shouldUsePreview = function(length, level, forceFull, limit, forceLimit, tolerance) {
+                    if (!$.isNaN(forceLimit))  
+                        limit = forceLimit; 
+                    return !forceFull && ((level == 1 && length > (limit + tolerance)) || (level > 1 && (!forceLimit || length > (limit + tolerance))));
+                },
+                newItemSpacer = function (currentRow, rowLimit, dataLength) { 
+                    var html = '';
+                    if (currentRow > 1 && (currentRow <= rowLimit || dataLength > rowLimit)) 
+                        html += '<span class="rspace">,</span>'; 
+                    if (currentRow > rowLimit && dataLength > rowLimit) 
+                        html += '<span class="small">length=' + dataLength + '</span>'; 
+                    return html;
+                },
+                rawString = function () {
+                    var //Support 
+                        types = {
+                            italics : {
+                                match: function (d) { return d.match(/^\_[\w\D]+\_$/) != null; },
+                                replace: function (d) { return '<u>' + util.htmlEncode(scrub(d)) + '</u>'; },
+                                trimmable: true
+                            },
+                            underline : {
+                                match: function (d) { return d.match(/^\\[\w\D]+\\$/) != null; },
+                                replace: function (d) { return '<em>' + util.htmlEncode(scrub(d)) + '</em>'; },
+                                trimmable: true
+                            },
+                            strong : {
+                                match: function (d) { return d. match(/^\*[\w\D]+\*$/) != null; },
+                                replace: function (d) { return '<strong>' + util.htmlEncode(scrub(d)) + '</strong>'; },
+                                trimmable: true
+                            },
+                            raw : {
+                                match: function (d) { return d.match(/^\![\w\D]+\!$/) != null; },
+                                replace: function (d) { return scrub(d); },
+                                trimmable: false
+                            }
+                        }, 
+                        scrub = function (d) {
+                            return d.substr(1, d.length - 2);
+                        },
+                
+                        //Main 
+                        process = function (data, charMax, charOuterMax, wrapEllipsis, skipEncoding) {
+                            var trimmable = true, 
+                                replace = function (d) { return util.htmlEncode(d); };
+                
+                            if (data == undefined || data == null)
+                                return '--';
+                            if (typeof data != 'string')
+                                data = data + '';  
+                            if (!skipEncoding) {
+                                for (var typeKey in types) {
+                                    var type = types[typeKey];
+                                    if (type.match(data)) {
+                                        replace = type.replace;
+                                        trimmable = type.trimmable;
+                                        break;
+                                    }
+                                }
+                            } 
+                            if (trimmable && charOuterMax && data.length > charOuterMax)
+                                return replace(data.substr(0, charMax)) + (wrapEllipsis ? '<span>...</span>' : '...');
+                
+                            return replace(data);
+                        };
+                    
+                    return {
+                        process : process
+                        }; 
+                } (),
+        
+                //Main
                 master = function () {
                     var //Main 
                         build = function (data, level, forceFull, metadata, forceLimit) {
@@ -329,30 +401,30 @@ var glimpse = (function ($, scope) {
                 keyValue = function () {
                     var //Main
                         build = function (data, level, forceFull, forceLimit) {  
-                            var that = this, 
-                                limit = $.isNaN(forceLimit) ? 3 : forceLimit;
+                            var limit = $.isNaN(forceLimit) ? 3 : forceLimit;
                 
-                            if (that.shouldUsePreview(util.lengthJson(data), level, forceFull, limit, forceLimit, 1))
+                            if (shouldUsePreview(util.lengthJson(data), level, forceFull, limit, forceLimit, 1))
                                 return buildPreview(data, level);
                                 
-                            var i = 1, html = '<table><thead><tr class="glimpse-row-header-' + level + '"><th class="glimpse-cell-key">Key</th><th class="glimpse-cell-value">Value</th></tr></thead>';
+                            var i = 1, 
+                                html = '<table><thead><tr class="glimpse-row-header-' + level + '"><th class="glimpse-cell-key">Key</th><th class="glimpse-cell-value">Value</th></tr></thead>';
                             for (var key in data)
-                                html += '<tr class="' + (i++ % 2 ? 'odd' : 'even') + '"><th width="30%">' + $.glimpseContent.formatString(key) + '</th><td width="70%"> ' + master.build(data[key], level + 1) + '</td></tr>';
+                                html += '<tr class="' + (i++ % 2 ? 'odd' : 'even') + '"><th width="30%">' + rawString.Format(key) + '</th><td width="70%"> ' + master.build(data[key], level + 1) + '</td></tr>';
                             html += '</table>';
+                
                             return html;
                         }, 
                         buildPreview = function (data, level) { 
                             return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + buildPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + build(data, level, true) + '</div></td></tr></table>';
                         },
                         buildPreviewOnly = function (data, level) {
-                            var that = this, 
-                                length = util.lengthJson(data), 
+                            var length = util.lengthJson(data), 
                                 rowMax = 2, 
                                 rowLimit = (rowMax < length ? rowMax : length), i = 1, 
                                 html = '<span class="start">{</span>';
                 
                             for (var key in data) {
-                                html += that.newItemSpacer(i, rowLimit, length);
+                                html += newItemSpacer(i, rowLimit, length);
                                 if (i > length || i++ > rowLimit)
                                     break;
                                 html += '<span>\'</span>' + string.buildPreview(key, level + 1) + '<span>\'</span><span class="mspace">:</span><span>\'</span>' + string.buildPreview(data[key], level, 12) + '<span>\'</span>';
@@ -371,16 +443,15 @@ var glimpse = (function ($, scope) {
                 table = function () {
                     var //Main
                         build = function (data, level, forceFull, forceLimit) { 
-                            var that = this, 
-                                limit = $.isNaN(forceLimit) ? 3 : forceLimit;
+                            var limit = $.isNaN(forceLimit) ? 3 : forceLimit;
                 
-                            if (that.shouldUsePreview(data.length, level, forceFull, limit, forceLimit, 1))
+                            if (shouldUsePreview(data.length, level, forceFull, limit, forceLimit, 1))
                                 return buildPreview(data, level);
                 
                             var html = '<table><thead><tr class="glimpse-row-header-' + level + '">';
                             if ($.isArray(data[0])) {
                                 for (var x = 0; x < data[0].length; x++)
-                                    html += '<th>' + $.glimpseContent.formatString(data[0][x]) + '</th>';
+                                    html += '<th>' + rawString.Format(data[0][x]) + '</th>';
                                 html += '</tr></thead>';
                                 for (var i = 1; i < data.length; i++) {
                                     html += '<tr class="' + (i % 2 ? 'odd' : 'even') + (data[i].length > data[0].length ? ' ' + data[i][data[i].length - 1] : '') + '">';
@@ -403,8 +474,7 @@ var glimpse = (function ($, scope) {
                             return html;
                         },
                         buildPreview = function (data, level) {
-                            var that = this, 
-                                isComplex = ($.isArray(data[0]) || $.isPlainObject(data[0]));
+                            var isComplex = ($.isArray(data[0]) || $.isPlainObject(data[0]));
                             
                             if (isComplex && data.length == 1)
                                 return master.build(data[0], level);
@@ -413,8 +483,7 @@ var glimpse = (function ($, scope) {
                             return string.buildPreview(data[0], level + 1); 
                         },
                         buildPreviewOnly = function (data, level) { 
-                            var that = this, 
-                                isComplex = $.isArray(data[0]), 
+                            var isComplex = $.isArray(data[0]), 
                                 length = (isComplex ? data.length - 1 : data.length), 
                                 rowMax = 2, 
                                 columnMax = 3, 
@@ -425,7 +494,7 @@ var glimpse = (function ($, scope) {
                             if (isComplex) {
                                 columnLimit = ((data[0].length > columnMax) ? columnMax : data[0].length);
                                 for (var i = 1; i <= rowLimit + 1; i++) {
-                                    html += that.newItemSpacer(i, rowLimit, length);
+                                    html += newItemSpacer(i, rowLimit, length);
                                     if (i > length || i > rowLimit)
                                         break;
                 
@@ -442,7 +511,7 @@ var glimpse = (function ($, scope) {
                             }
                             else { 
                                 for (var i = 0; i <= rowLimit; i++) {
-                                    html += that.newItemSpacer(i + 1, rowLimit, length);
+                                    html += newItemSpacer(i + 1, rowLimit, length);
                                     if (i >= length || i >= rowLimit)
                                         break;
                                     html += '<span>\'</span>' + string.buildPreview(data[i], level, 12) + '<span>\'</span>';
@@ -462,9 +531,15 @@ var glimpse = (function ($, scope) {
                 } (),
                 structured = function () {
                     var //Support
+                        buildFormatString = function(content, data, indexs) {  
+                            for (var i = 0; i < indexs.length; i++) {
+                                var pattern = "\\\{\\\{" + indexs[i] + "\\\}\\\}", regex = new RegExp(pattern, "g"); 
+                                content = content.replace(regex, data[indexs[i]]);
+                            }
+                            return content;
+                        },
                         buildCell = function(data, metadataItem, level, cellType, rowIndex) {
-                            var that = this, 
-                                html = '', 
+                            var html = '', 
                                 cellContent = '', 
                                 cellClass = '', 
                                 cellStyle = '', 
@@ -484,7 +559,7 @@ var glimpse = (function ($, scope) {
                                 if ($.isPlainObject(newMetadataItem)) 
                                     newMetadataItem = newMetadataItem[rowIndex];
                                     
-                                cellContent = metadataItem.indexs ? that.buildFormatString(metadataItem.data, data, metadataItem.indexs) : data[metadataItem.data];
+                                cellContent = metadataItem.indexs ? buildFormatString(metadataItem.data, data, metadataItem.indexs) : data[metadataItem.data];
                                 
                                 //If minDisplay and we are in header or there is no data, we don't want to render anything 
                                 if (metadataItem.minDisplay && (rowIndex == 0 || cellContent == undefined || cellContent == null))
@@ -523,10 +598,9 @@ var glimpse = (function ($, scope) {
                 
                         //Main
                         build = function (data, level, forceFull, metadata, forceLimit) { 
-                            var that = this, 
-                                limit = $.isNaN(forceLimit) ? 3 : forceLimit;
+                            var limit = $.isNaN(forceLimit) ? 3 : forceLimit;
                 
-                            if (that.shouldUsePreview(data.length, level, forceFull, limit, forceLimit, 1))
+                            if (shouldUsePreview(data.length, level, forceFull, limit, forceLimit, 1))
                                 return buildPreview(data, level, metadata);
                             
                             var html = '<table>', rowClass = '';
@@ -564,10 +638,7 @@ var glimpse = (function ($, scope) {
                 } (),
                 string = function () {
                     var //Main
-                        build = function (data, level, forceLimit) {
-                            return this.buildStringPreview(data, level, forceLimit);
-                        }, 
-                        buildPreview = function (data, level, forceLimit) {
+                        build = function (data, level, forceLimit) { 
                             if (data == undefined || data == null)
                                 return '--';
                             if ($.isArray(data))
@@ -577,12 +648,12 @@ var glimpse = (function ($, scope) {
                 
                             var charMax = !$.isNaN(forceLimit) ? forceLimit : (level > 1 ? 80 : 150),
                                 charOuterMax = (charMax * 1.2),
-                                content = $.glimpseContent.trimFormatString(data, charMax, charOuterMax, true);
+                                content = rawString.process(data, charMax, charOuterMax, true);
                 
                             if (data.length > charOuterMax) {
-                                content = '<span class="glimpse-preview-string" title="' + $.glimpseContent.trimFormatString(data, charMax * 2, charMax * 2.1, false, true) + '">' + content + '</span>';
+                                content = '<span class="glimpse-preview-string" title="' + rawString.process(data, charMax * 2, charMax * 2.1, false, true) + '">' + content + '</span>';
                                 if (charMax >= 15)
-                                    content = '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td>' + content + '<span class="glimpse-preview-show">' + $.glimpse.util.preserveWhitespace($.glimpseContent.formatString(data)) + '</span></td></tr></table>';
+                                    content = '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td>' + content + '<span class="glimpse-preview-show">' + $.glimpse.util.preserveWhitespace(rawString.Format(data)) + '</span></td></tr></table>';
                             }
                             else 
                                 content = $.glimpse.util.preserveWhitespace(content);  
@@ -591,18 +662,16 @@ var glimpse = (function ($, scope) {
                         };
                 
                     return {
-                        build : build,
-                        buildPreview : buildPreview
+                        build : build
                     };
-                } (), 
-        
-                //Main 
+                } (),
                 init = function () {
                     wireListeners();
                 };
             
             init(); 
         } (), 
+        init = function () {
             pubsub.publish('state.init');
             pubsub.publish('state.build'); 
         };
