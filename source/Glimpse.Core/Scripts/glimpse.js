@@ -367,8 +367,7 @@ var glimpse = (function ($, scope) {
                             var result = '', attr;
                             
                             level = level === undefined ? 0 : level;
-                            forceFull = forceFull === undefined ? true : forceFull;
-                            //forceLimit = forceLimit === undefined ? 1 : forceLimit;
+                            forceFull = forceFull === undefined ? true : forceFull; 
                 
                             if ($.isArray(data)) {
                                 if (metadata)
@@ -674,7 +673,10 @@ var glimpse = (function ($, scope) {
                 },
                 register = function (name, engine) {
                     registeredEngnies[name] = engine;
-                }
+                },
+                build = function (data, metadata) {
+                    return master.build(data, 0, true, metadata, 1);
+                },
                 init = function () {
                     register('master', master);
                     register('keyvalue', keyValue);
@@ -686,6 +688,7 @@ var glimpse = (function ($, scope) {
             init();
              
             return {
+                build : build,
                 retrieve : retrieve,
                 register : register
             };

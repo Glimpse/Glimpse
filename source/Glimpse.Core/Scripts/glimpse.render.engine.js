@@ -29,7 +29,10 @@
         },
         register = function (name, engine) {
             registeredEngnies[name] = engine;
-        }
+        },
+        build = function (data, metadata) {
+            return master.build(data, 0, true, metadata, 1);
+        },
         init = function () {
             register('master', master);
             register('keyvalue', keyValue);
@@ -41,6 +44,7 @@
     init();
      
     return {
+        build : build,
         retrieve : retrieve,
         register : register
     };
