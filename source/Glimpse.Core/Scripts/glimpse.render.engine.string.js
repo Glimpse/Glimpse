@@ -15,10 +15,10 @@
             if (data.length > charOuterMax) {
                 content = '<span class="glimpse-preview-string" title="' + rawString.process(data, charMax * 2, charMax * 2.1, false, true) + '">' + content + '</span>';
                 if (charMax >= 15)
-                    content = '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td>' + content + '<span class="glimpse-preview-show">' + $.glimpse.util.preserveWhitespace(rawString.Format(data)) + '</span></td></tr></table>';
+                    content = '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td>' + content + '<span class="glimpse-preview-show">' + util.preserveWhitespace(rawString.process(data)) + '</span></td></tr></table>';
             }
             else 
-                content = $.glimpse.util.preserveWhitespace(content);  
+                content = util.preserveWhitespace(content);  
               
             return content;
         };

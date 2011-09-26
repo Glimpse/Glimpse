@@ -6,7 +6,21 @@
 </head>
 <body>
     <h1>Test</h1>
+    <div class="sample1 glimpse glimpse-panel">
+    
+    </div>
 
     <script src="glimpse.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var $ = $Glimpse;
+        var data1 = {
+                'Movie': 'Star Wars',
+                'Genera/Theme': 'Science Fiction',
+                'GlimpseOn': 'True',
+                'Plot & Description': 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.'
+            };
+        var html1 = glimpse.render.retrieve('master').build(data1);
+        $('.sample1').html(html1);
+    </script>
 </body>
 </html>

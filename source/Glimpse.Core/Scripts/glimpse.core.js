@@ -28,7 +28,8 @@ var glimpse = (function ($, scope) {
         init : init,
         pubsub : pubsub,
         plugin : plugin,
-        elements : elements
+        elements : elements,
+        render : renderEngine
     };
 }($Glimpse, $Glimpse(document)));
 

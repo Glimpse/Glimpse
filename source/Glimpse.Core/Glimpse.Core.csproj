@@ -161,7 +161,7 @@
     <Content Include="Scripts\glimpse.js" />
     <Content Include="Scripts\glimpse.render.engine.table.js" />
     <Content Include="Scripts\glimpse.render.engine.js" />
-    <Content Include="Scripts\glimpse.render.engine.structed.js" />
+    <Content Include="Scripts\glimpse.render.engine.structured.js" />
     <Content Include="Scripts\jquery-1.6.3.min.js" />
     <Content Include="Scripts\sprite.png" />
     <Content Include="Scripts\test.html" />
@@ -183,7 +183,7 @@
     <Content Include="NuSpec\content\App_Readme\glimpse.readme.txt" />
     <None Include="NuSpec\tools\install.ps1" />
     <Content Include="Scripts\glimpse.controller.state.js" />
-    <Content Include="Scripts\glimpse.render.engine.keyvalue.js" />
+    <Content Include="Scripts\glimpse.render.engine.keyValue.js" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

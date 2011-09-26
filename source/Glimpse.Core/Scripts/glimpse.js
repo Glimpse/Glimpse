@@ -287,11 +287,9 @@ var glimpse = (function ($, scope) {
             init(); 
         } (), 
         renderEngine = function () {
-            var //Support
-                wireListeners = function() {
-                    pubsub.subscribe('render.data', function(message, data) { master.build(data.data, 0, true, data.metadata, 1); });
-                },
-                shouldUsePreview = function(length, level, forceFull, limit, forceLimit, tolerance) {
+            var //Support 
+                registeredEngnies = {},
+                shouldUsePreview = function (length, level, forceFull, limit, forceLimit, tolerance) {
                     if (!$.isNaN(forceLimit))  
                         limit = forceLimit; 
                     return !forceFull && ((level == 1 && length > (limit + tolerance)) || (level > 1 && (!forceLimit || length > (limit + tolerance))));
@@ -362,11 +360,15 @@ var glimpse = (function ($, scope) {
                         }; 
                 } (),
         
-                //Main
+                //Engines 
                 master = function () {
                     var //Main 
                         build = function (data, level, forceFull, metadata, forceLimit) {
                             var result = '', attr;
+                            
+                            level = level === undefined ? 0 : level;
+                            forceFull = forceFull === undefined ? true : forceFull;
+                            //forceLimit = forceLimit === undefined ? 1 : forceLimit;
                 
                             if ($.isArray(data)) {
                                 if (metadata)
@@ -409,7 +411,7 @@ var glimpse = (function ($, scope) {
                             var i = 1, 
                                 html = '<table><thead><tr class="glimpse-row-header-' + level + '"><th class="glimpse-cell-key">Key</th><th class="glimpse-cell-value">Value</th></tr></thead>';
                             for (var key in data)
-                                html += '<tr class="' + (i++ % 2 ? 'odd' : 'even') + '"><th width="30%">' + rawString.Format(key) + '</th><td width="70%"> ' + master.build(data[key], level + 1) + '</td></tr>';
+                                html += '<tr class="' + (i++ % 2 ? 'odd' : 'even') + '"><th width="30%">' + rawString.process(key) + '</th><td width="70%"> ' + master.build(data[key], level + 1) + '</td></tr>';
                             html += '</table>';
                 
                             return html;
@@ -451,7 +453,7 @@ var glimpse = (function ($, scope) {
                             var html = '<table><thead><tr class="glimpse-row-header-' + level + '">';
                             if ($.isArray(data[0])) {
                                 for (var x = 0; x < data[0].length; x++)
-                                    html += '<th>' + rawString.Format(data[0][x]) + '</th>';
+                                    html += '<th>' + rawString.process(data[0][x]) + '</th>';
                                 html += '</tr></thead>';
                                 for (var i = 1; i < data.length; i++) {
                                     html += '<tr class="' + (i % 2 ? 'odd' : 'even') + (data[i].length > data[0].length ? ' ' + data[i][data[i].length - 1] : '') + '">';
@@ -653,10 +655,10 @@ var glimpse = (function ($, scope) {
                             if (data.length > charOuterMax) {
                                 content = '<span class="glimpse-preview-string" title="' + rawString.process(data, charMax * 2, charMax * 2.1, false, true) + '">' + content + '</span>';
                                 if (charMax >= 15)
-                                    content = '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td>' + content + '<span class="glimpse-preview-show">' + $.glimpse.util.preserveWhitespace(rawString.Format(data)) + '</span></td></tr></table>';
+                                    content = '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td>' + content + '<span class="glimpse-preview-show">' + util.preserveWhitespace(rawString.process(data)) + '</span></td></tr></table>';
                             }
                             else 
-                                content = $.glimpse.util.preserveWhitespace(content);  
+                                content = util.preserveWhitespace(content);  
                               
                             return content;
                         };
@@ -665,11 +667,28 @@ var glimpse = (function ($, scope) {
                         build : build
                     };
                 } (),
+        
+                //Main 
+                retrieve = function (name) {
+                    return registeredEngnies[name];
+                },
+                register = function (name, engine) {
+                    registeredEngnies[name] = engine;
+                }
                 init = function () {
-                    wireListeners();
+                    register('master', master);
+                    register('keyvalue', keyValue);
+                    register('table', table);
+                    register('structured', structured);
+                    register('string', string);
                 };
-            
-            init(); 
+        
+            init();
+             
+            return {
+                retrieve : retrieve,
+                register : register
+            };
         } (), 
         init = function () {
             pubsub.publish('state.init');
@@ -681,7 +700,8 @@ var glimpse = (function ($, scope) {
         init : init,
         pubsub : pubsub,
         plugin : plugin,
-        elements : elements
+        elements : elements,
+        render : renderEngine
     };
 }($Glimpse, $Glimpse(document)));
 

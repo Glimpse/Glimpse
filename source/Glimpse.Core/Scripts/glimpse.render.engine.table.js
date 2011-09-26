@@ -9,7 +9,7 @@
             var html = '<table><thead><tr class="glimpse-row-header-' + level + '">';
             if ($.isArray(data[0])) {
                 for (var x = 0; x < data[0].length; x++)
-                    html += '<th>' + rawString.Format(data[0][x]) + '</th>';
+                    html += '<th>' + rawString.process(data[0][x]) + '</th>';
                 html += '</tr></thead>';
                 for (var i = 1; i < data.length; i++) {
                     html += '<tr class="' + (i % 2 ? 'odd' : 'even') + (data[i].length > data[0].length ? ' ' + data[i][data[i].length - 1] : '') + '">';
