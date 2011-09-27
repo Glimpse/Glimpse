@@ -38,7 +38,7 @@
                 return master.build(data[0], level);
             if (isComplex || data.length > 1) 
                 return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + buildPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + build(data, level, true) + '</div></td></tr></table>';
-            return string.buildPreview(data[0], level + 1); 
+            return string.build(data[0], level + 1); 
         },
         buildPreviewOnly = function (data, level) { 
             var isComplex = $.isArray(data[0]), 
@@ -59,7 +59,7 @@
                     html += '<span class="start">[</span>';
                     var spacer = '';
                     for (var x = 0; x < columnLimit; x++) {
-                        html += spacer + '<span>\'</span>' + string.buildPreview(data[i][x], level, 12) + '<span>\'</span>';
+                        html += spacer + '<span>\'</span>' + string.build(data[i][x], level, 12) + '<span>\'</span>';
                         spacer = '<span class="rspace">,</span>';
                     }
                     if (x < data[0].length)
@@ -72,7 +72,7 @@
                     html += newItemSpacer(i + 1, rowLimit, length);
                     if (i >= length || i >= rowLimit)
                         break;
-                    html += '<span>\'</span>' + string.buildPreview(data[i], level, 12) + '<span>\'</span>';
+                    html += '<span>\'</span>' + string.build(data[i], level, 12) + '<span>\'</span>';
                 } 
             }
 

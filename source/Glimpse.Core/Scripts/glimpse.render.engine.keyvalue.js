@@ -27,7 +27,7 @@
                 html += newItemSpacer(i, rowLimit, length);
                 if (i > length || i++ > rowLimit)
                     break;
-                html += '<span>\'</span>' + string.buildPreview(key, level + 1) + '<span>\'</span><span class="mspace">:</span><span>\'</span>' + string.buildPreview(data[key], level, 12) + '<span>\'</span>';
+                html += '<span>\'</span>' + string.build(key, level + 1) + '<span>\'</span><span class="mspace">:</span><span>\'</span>' + string.build(data[key], level, 12) + '<span>\'</span>';
             }
             html += '<span class="end">}</span>';
 

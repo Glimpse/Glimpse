@@ -365,10 +365,7 @@ var glimpse = (function ($, scope) {
                     var //Main 
                         build = function (data, level, forceFull, metadata, forceLimit) {
                             var result = '', attr;
-                            
-                            level = level === undefined ? 0 : level;
-                            forceFull = forceFull === undefined ? true : forceFull; 
-                
+                             
                             if ($.isArray(data)) {
                                 if (metadata)
                                     result = structured.build(data, level, forceFull, metadata, forceLimit);
@@ -428,7 +425,7 @@ var glimpse = (function ($, scope) {
                                 html += newItemSpacer(i, rowLimit, length);
                                 if (i > length || i++ > rowLimit)
                                     break;
-                                html += '<span>\'</span>' + string.buildPreview(key, level + 1) + '<span>\'</span><span class="mspace">:</span><span>\'</span>' + string.buildPreview(data[key], level, 12) + '<span>\'</span>';
+                                html += '<span>\'</span>' + string.build(key, level + 1) + '<span>\'</span><span class="mspace">:</span><span>\'</span>' + string.build(data[key], level, 12) + '<span>\'</span>';
                             }
                             html += '<span class="end">}</span>';
                 
@@ -481,7 +478,7 @@ var glimpse = (function ($, scope) {
                                 return master.build(data[0], level);
                             if (isComplex || data.length > 1) 
                                 return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + buildPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + build(data, level, true) + '</div></td></tr></table>';
-                            return string.buildPreview(data[0], level + 1); 
+                            return string.build(data[0], level + 1); 
                         },
                         buildPreviewOnly = function (data, level) { 
                             var isComplex = $.isArray(data[0]), 
@@ -502,7 +499,7 @@ var glimpse = (function ($, scope) {
                                     html += '<span class="start">[</span>';
                                     var spacer = '';
                                     for (var x = 0; x < columnLimit; x++) {
-                                        html += spacer + '<span>\'</span>' + string.buildPreview(data[i][x], level, 12) + '<span>\'</span>';
+                                        html += spacer + '<span>\'</span>' + string.build(data[i][x], level, 12) + '<span>\'</span>';
                                         spacer = '<span class="rspace">,</span>';
                                     }
                                     if (x < data[0].length)
@@ -515,7 +512,7 @@ var glimpse = (function ($, scope) {
                                     html += newItemSpacer(i + 1, rowLimit, length);
                                     if (i >= length || i >= rowLimit)
                                         break;
-                                    html += '<span>\'</span>' + string.buildPreview(data[i], level, 12) + '<span>\'</span>';
+                                    html += '<span>\'</span>' + string.build(data[i], level, 12) + '<span>\'</span>';
                                 } 
                             }
                 

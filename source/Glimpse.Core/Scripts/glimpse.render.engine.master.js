@@ -2,10 +2,7 @@
     var //Main 
         build = function (data, level, forceFull, metadata, forceLimit) {
             var result = '', attr;
-            
-            level = level === undefined ? 0 : level;
-            forceFull = forceFull === undefined ? true : forceFull; 
-
+             
             if ($.isArray(data)) {
                 if (metadata)
                     result = structured.build(data, level, forceFull, metadata, forceLimit);
