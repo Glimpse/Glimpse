@@ -19,6 +19,17 @@
         <div class="sample7 glimpse-panel"></div>
         <div class="sample8 glimpse-panel"></div>
         <div class="sample9 glimpse-panel"></div>
+        
+        <div class="sample10 glimpse-panel"></div>
+        <div class="sample11 glimpse-panel"></div>
+        <div class="sample12 glimpse-panel"></div>
+        <div class="sample13 glimpse-panel"></div>
+        <div class="sample14 glimpse-panel"></div>
+        <div class="sample15 glimpse-panel"></div>
+        <div class="sample16 glimpse-panel"></div>
+        <div class="sample17 glimpse-panel"></div>
+        <div class="sample18 glimpse-panel"></div>
+        <div class="sample19 glimpse-panel"></div>
     </div>
 
     <script src="glimpse.js" type="text/javascript"></script>
@@ -167,6 +178,131 @@
     };
     var html9 = glimpse.render.build(data9);
     $('.sample9').html(html9);
+
+
+    var data10 = [
+        ['Type', 'Name', 'Other'],
+        ['\tMovie', 'Star Wars', 'Episode IV'],
+        ['\t\tGenera/Theme', 'Science Fiction', 'Action'],
+        ['\t\tActors/Cast', [
+                ['Actor', 'Character', 'Gender', 'Age'],
+                ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+            ], 'Cast details pending'],
+        ['\tPlot & Description', 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.', ' Best movie of all time']
+    ];
+    var html10 = glimpse.render.build(data10);
+    $('.sample10').html(html10);
+
+    
+    var data11 = [
+        ['Type', 'Name', 'Other'],
+        ['Movie', 'Star Wars', 'Episode IV'],
+        ['Genera/Theme', 'Science Fiction', 'Action'],
+        ['Actors/Cast', [
+                ['Actor', 'Character', 'Gender', 'Age'],
+                ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+                ['Harrison Ford', 'Han Solo', 'Male', '25'],
+                ['Carrie Fisher', 'Princess Leia Organa', 'Female', '21'],
+                ['Peter Cushing', 'Grand Moff Tarkin', 'Female', '69'],
+                ['Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70'],
+                ['Anthony Daniels', 'C-3PO', 'Droid', '101'],
+                ['Kenny Baker', 'R2-D2', 'Droid', '150']
+            ], 'Cast details pending'],
+        ['Plot & Description', 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.', ' Best movie of all time']
+    ];
+    var html11 = glimpse.render.build(data11);
+    $('.sample11').html(html11);
+
+    
+    var data12 = [
+        ['Type', 'Name', 'Other'],
+        ['Movie', 'Star Wars', 'Episode IV'],
+        ['Genera/Theme', 'Science Fiction', 'Action'],
+        ['Actors/Cast', {
+            'Mark Hamill': 'Luke Skywalker',
+            'James Earl Jones': 'Darth Vader',
+            'Harrison Ford': 'Han Solo'
+        }, 'Cast details pending'],
+        ['Plot & Description', 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.', ' Best movie of all time']
+    ];
+    var html12 = glimpse.render.build(data12);
+    $('.sample12').html(html12);
+    
+
+    var data13 = [
+        ['Type', 'Name', 'Other'],
+        ['Movie', 'Star Wars', 'Episode IV'],
+        ['Genera/Theme', 'Science Fiction', 'Action'],
+        ['Actors/Cast', {
+            'Mark Hamill': 'Luke Skywalker',
+            'James Earl Jones': 'Darth Vader',
+            'Harrison Ford': 'Han Solo',
+            'Carrie Fisher': 'Princess Leia Organa',
+            'Peter Cushing': 'Grand Moff Tarkin',
+            'Alec Guinness': 'Ben Obi-Wan Kenobi',
+            'Anthony Daniels': 'C-3PO',
+            'Kenny Baker': 'R2-D2'
+        }, 'Cast details pending'],
+        ['Plot & Description', 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.', ' Best movie of all time']
+    ];
+    var html13 = glimpse.render.build(data13);
+    $('.sample13').html(html13);
+
+    
+    var data14 = {
+        'Movie': 'Star Wars',
+        'Genera/Theme': 'Science Fiction',
+        'Actors/Cast': [
+                ['Actor', 'Character', 'Gender', 'Age'],
+                ['Mark Hamill', { 'Frist Name': 'Luke Skywalker' }, 'Male', '21'],
+                ['James Earl Jones', 'Darth Vader', [['Height', 'Weight'], ['213', '433']], 'Male'],
+            ],
+        'Plot & Description': 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.'
+    };
+    var html14 = glimpse.render.build(data14);
+    $('.sample14').html(html14);
+
+    
+    var data15 = {
+        'Movie': 'Star Wars',
+        'Genera/Theme': 'Science Fiction',
+        'Actors/Cast': [
+                ['Actor', 'Character', 'Gender', 'Age'],
+                ['Mark Hamill', { 'Frist Name': 'Luke Skywalker' }, 'Male', '21'],
+                ['James Earl Jones', 'Darth Vader', [['Height', 'Weight'], ['213', '433']], 'Male'],
+                ['Harrison Ford', 'Han Solo', 'Male', '25'],
+                ['Carrie Fisher', 'Princess Leia Organa', 'Female', '21'],
+                ['Peter Cushing', 'Grand Moff Tarkin', 'Female', '69'],
+                ['Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70'],
+                ['Anthony Daniels', 'C-3PO', 'Droid', '101'],
+                ['Kenny Baker', 'R2-D2', 'Droid', '150']
+            ],
+        'Plot & Description': 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.'
+    };
+    var html15 = glimpse.render.build(data15);
+    $('.sample15').html(html15);
+
+    
+    var data16 = {
+        'Movie': [ 'Star Wars', 'Star Treck'],
+        'Genera/Theme': [ 'Science Fiction', 'Drama', 'Romance', 'Action', 'Family' ],
+        'Actors/Cast': [
+                ['Actor', 'Character', 'Gender', 'Age'],
+                ['Mark Hamill', [ 'Luke Skywalker', 'Mini Skywalker' ], 'Male', '21'],
+                ['James Earl Jones', 'Darth Vader', [['Height', 'Weight'], ['213', '433'], ['123', '45']], 'Male'],
+                ['Harrison Ford', 'Han Solo', 'Male', '25'],
+                ['Carrie Fisher', [ 'Princess Leia Organa' ], 'Female', '21'],
+                ['Peter Cushing', [ 'Grand Moff Tarkin', 'Grand Moff Tarkin Grand Moff Tarkin Grand Moff Tarkin Grand Moff Tarkin Grand Moff Tarkin Grand Moff Tarkin Grand Moff Tarkin' ], 'Female', '69'],
+                ['Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70'],
+                ['Anthony Daniels', 'C-3PO', 'Droid', '101'],
+                ['Kenny Baker', 'R2-D2', 'Droid', '150']
+            ],
+        'Plot & Description': [ 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.' ]
+    };
+    var html16 = glimpse.render.build(data16);
+    $('.sample16').html(html16);
 })($Glimpse);
     </script>
 </body>
