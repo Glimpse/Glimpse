@@ -244,7 +244,7 @@ namespace Glimpse.Core
 
             var requestId = context.GetGlimpseRequestId().ToString();
 
-            //CheckForPRG(context);
+            CheckForPRG(context);
 
             var jsonPayload = GenerateGlimpseOutput(context);
             Logger.Info("Glimpse output generated for requestId " + requestId + " (" + context.Request.Path + ")");
@@ -254,8 +254,7 @@ namespace Glimpse.Core
 
             Logger.Info("EndRequest handling complete for requestId " + context.GetGlimpseRequestId() + " (" + context.Request.Path + ")");
         }
-
-/*
+         
         private static void CheckForPRG(HttpContextBase context)
         {
             //Check token
@@ -269,7 +268,7 @@ namespace Glimpse.Core
                                                            };
             Func<HttpContextBase, bool> IsCandidate = ctx =>
                                                           {
-                                                              var isPost = ctx.Request.HttpMethod.Equals("POST", StringComparison.InvariantCultureIgnoreCase);
+                                                              var isPost = true;// ctx.Request.HttpMethod.Equals("POST", StringComparison.InvariantCultureIgnoreCase);
                                                               var isRedirect = (ctx.Response.StatusCode == 301 || ctx.Response.StatusCode == 302);
                                                               return (isPost && isRedirect);
                                                           };
@@ -277,6 +276,7 @@ namespace Glimpse.Core
 
             string Key = "prgLocation";
             string KeyId = Key + "Id";
+            string KeyMethod = Key + "Method";
 
 
 
@@ -289,6 +289,7 @@ namespace Glimpse.Core
             {
                 context.Response.Cookies[Key].Expires = DateTime.Now.AddDays(-5);
                 context.Response.Cookies[KeyId].Expires = DateTime.Now.AddDays(-5);
+                context.Response.Cookies[KeyMethod].Expires = DateTime.Now.AddDays(-5);
             }
 
             //Set token
@@ -297,9 +298,9 @@ namespace Glimpse.Core
                 var value = CompareValue(context);
                 context.Response.AppendCookie(new HttpCookie(Key, value));
                 context.Response.AppendCookie(new HttpCookie(KeyId, context.GetGlimpseRequestId().ToString()));
+                context.Response.AppendCookie(new HttpCookie(KeyMethod, context.Request.HttpMethod));
             }
-        }
-*/
+        } 
 
         private static void PreSendRequestHeaders(HttpContextBase context)//20
         {
@@ -415,16 +416,44 @@ namespace Glimpse.Core
                                        {"request", requestMetadata},
                                        {"plugins", pluginsMetadata},
                                    };
-                //request specific metadata
+                //environment specific metadata
                 var environmentUrls = new Dictionary<string, string>();
                 foreach (Environment environment in Configuration.Environments)
                 {
                     environmentUrls.Add(environment.Name, environment.Something(context.Request.Url).ToString());
                 }
 
+                //prg specific metadata
+                string prgKey = "prgLocation";
+                string prgKeyId = prgKey + "Id";
+                string prgKeyMethod = prgKey + "Method";
+                if (context.Response.Cookies[prgKey] != null)
+                {
+                    var legs = new[] { 
+                            new { method = context.Response.Cookies[prgKeyMethod].Value, url = context.Response.Cookies[prgKey].Value, glimpseId = context.Response.Cookies[prgKeyId].Value }, 
+                            new { method = context.Request.HttpMethod, url = context.Request.RawUrl, glimpseId = context.GetGlimpseRequestId().ToString() } };
+                    var correlation = new { legs = legs, title = String.Format("{0}R{1}", legs[0].method[0], legs[1].method[0]) };
+
+                    requestMetadata.Add("correlation", correlation);
+
+                    context.Response.Cookies.Remove(prgKey);
+                    context.Response.Cookies.Remove(prgKeyId);
+                    context.Response.Cookies.Remove(prgKeyMethod);
+                }
+                /*
+            correlation = {  
+              title : 'PRG Request', 
+              legs : [ { 
+                method : 'POST', 
+                url : '/Help/Feature/Add', 
+                glimpseId : 'GUID' }, { 
+                method : 'GET', 
+                url : '/Help/Feature/', 
+                glimpseId : 'GUID' } ] 
+              };*/
+
                 requestMetadata.Add("environmentUrls", environmentUrls);
-                requestMetadata.Add("runningVersion",
-                                    decimal.Parse(RunningVersion, NumberFormatInfo.InvariantInfo));
+                requestMetadata.Add("runningVersion", decimal.Parse(RunningVersion, NumberFormatInfo.InvariantInfo));
 
                 //plugin specific metadata);))
                 foreach (var plugin in Plugins)
