@@ -71,6 +71,7 @@
     <Compile Include="Areas\Test\Controllers\TestController.cs" />
     <Compile Include="Areas\Test\TestAreaRegistration.cs" />
     <Compile Include="CartConverter.cs" />
+    <Compile Include="Glimpse\TestPaging.cs" />
     <Compile Include="Glimpse\TestUrl.cs" />
     <Compile Include="ListAlbumConverter.cs" />
     <Compile Include="Controllers\AccountController.cs" />

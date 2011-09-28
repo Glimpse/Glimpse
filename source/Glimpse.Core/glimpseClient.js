@@ -2091,12 +2091,12 @@ if (window.jQueryGlimpse) { (function ($) {
                 data: { 'ClientRequestID': glimpseRequestId },
                 contentType: 'application/json',
                 success: function (result) {
-                    var resultData = eval('(' + result.Data[glimpseRequestId].Data + ')'; 
+                    var resultData = eval('(' + result.Data[glimpseRequestId].Data + ')'); 
                     resultData._metadata.request.correlation = g.static.data._metadata.request.correlation;
 
                     loading.fadeOut();
 
-                    $.glimpse.refresh(resultData), $.glimpseProcessor.buildHeading(glimpseRequestUrl, glimpseClientName, gs.defaults.key));
+                    $.glimpse.refresh(resultData, $.glimpseProcessor.buildHeading(glimpseRequestUrl, glimpseClientName, gs.defaults.key));
                     $('.glimpse').trigger('glimpse.request.change', ['correlation']);
                 }
             });
