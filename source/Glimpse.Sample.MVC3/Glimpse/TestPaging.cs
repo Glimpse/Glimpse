@@ -4,14 +4,14 @@ using System.Threading;
 using System.Web;
 using Glimpse.Core.Extensibility;
 
-namespace Glimpse.Core.Plugin
+namespace MvcMusicStore.Glimpse
 {
     [GlimpsePlugin(ShouldSetupInInit = false)]
-    internal class PagingTest : IGlimpsePlugin, IProvideGlimpsePaging
+    internal class TestPaging : IGlimpsePlugin, IProvideGlimpsePaging
     {
         public string Name
         {
-            get { return "PagingTest"; }
+            get { return "TestPaging"; }
         }
 
         private readonly Guid _pagerKey = Guid.NewGuid();

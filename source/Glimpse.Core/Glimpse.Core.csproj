@@ -98,6 +98,7 @@
     <Compile Include="Handlers\HandlerBase.cs" />
     <Compile Include="Handlers\ImageHandlerBase.cs" />
     <Compile Include="Handlers\JavascriptData.cs" />
+    <Compile Include="Handlers\Pager.cs" />
     <Compile Include="Plugin\Timing.cs" />
     <Compile Include="Plumbing\GlimpseFactory.cs" />
     <Compile Include="Plumbing\GlimpseContractResolver.cs" />
