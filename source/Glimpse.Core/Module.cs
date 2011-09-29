@@ -257,12 +257,18 @@ namespace Glimpse.Core
          
         private static void CheckForPRG(HttpContextBase context)
         {
+            string Key = "prgLocation";
+            string KeyRedirect = Key + "Redirect";
+            string KeyId = Key + "Id";
+            string KeyMethod = Key + "Method";
+            string KeyCorrelated = Key + "IsCorrelated";
+
             //Check token
             Func<HttpContextBase, bool> IsCorrelated = ctx =>
                                                            {
                                                                var isGet = ctx.Request.HttpMethod.Equals("GET", StringComparison.InvariantCultureIgnoreCase);
-                                                               var hasCookie = ctx.Request.Cookies.AllKeys.Contains("prgLocation");
-                                                               var cookieValue = hasCookie ? ctx.Request.Cookies["prgLocation"].Value : "";
+                                                               var hasCookie = ctx.Request.Cookies.AllKeys.Contains(Key);
+                                                               var cookieValue = hasCookie ? ctx.Request.Cookies[KeyRedirect].Value : "";
                                                                var cookieEqualsPath = ctx.Request.Path.Equals(cookieValue);
                                                                return (isGet && hasCookie && cookieEqualsPath);
                                                            };
@@ -272,31 +278,27 @@ namespace Glimpse.Core
                                                               var isRedirect = (ctx.Response.StatusCode == 301 || ctx.Response.StatusCode == 302);
                                                               return (isPost && isRedirect);
                                                           };
-            Func<HttpContextBase, string> CompareValue = ctx => ctx.Response.RedirectLocation;
 
-            string Key = "prgLocation";
-            string KeyId = Key + "Id";
-            string KeyMethod = Key + "Method";
-
-
+             
 
             if(IsCorrelated(context))
-            {
-                var getCorrId = context.Request.Cookies[KeyId].Value;
-                context.Response.Write("<h1>Correlated to " + getCorrId + "</h1>");
-            }
+                context.Response.AppendCookie(new HttpCookie(KeyCorrelated, "true")); 
             else
             {
-                context.Response.Cookies[Key].Expires = DateTime.Now.AddDays(-5);
-                context.Response.Cookies[KeyId].Expires = DateTime.Now.AddDays(-5);
-                context.Response.Cookies[KeyMethod].Expires = DateTime.Now.AddDays(-5);
+                //context.Response.Cookies[Key].Expires = DateTime.Now.AddDays(-5);
+                //context.Response.Cookies[KeyId].Expires = DateTime.Now.AddDays(-5);
+                //context.Response.Cookies[KeyMethod].Expires = DateTime.Now.AddDays(-5);
+                context.Response.Cookies.Remove(Key);
+                context.Response.Cookies.Remove(KeyRedirect);
+                context.Response.Cookies.Remove(KeyId);
+                context.Response.Cookies.Remove(KeyMethod);
             }
 
             //Set token
             if (IsCandidate(context))
             {
-                var value = CompareValue(context);
-                context.Response.AppendCookie(new HttpCookie(Key, value));
+                context.Response.AppendCookie(new HttpCookie(Key, context.Request.RawUrl));
+                context.Response.AppendCookie(new HttpCookie(KeyRedirect, context.Response.RedirectLocation));
                 context.Response.AppendCookie(new HttpCookie(KeyId, context.GetGlimpseRequestId().ToString()));
                 context.Response.AppendCookie(new HttpCookie(KeyMethod, context.Request.HttpMethod));
             }
@@ -425,20 +427,24 @@ namespace Glimpse.Core
 
                 //prg specific metadata
                 string prgKey = "prgLocation";
+                string prgKeyRedirect = prgKey + "Redirect";
                 string prgKeyId = prgKey + "Id";
                 string prgKeyMethod = prgKey + "Method";
-                if (context.Response.Cookies[prgKey] != null)
+                string prgKeyCorrelated = prgKey + "IsCorrelated";
+                if (context.Response.Cookies.AllKeys.Where(x => x == prgKeyCorrelated).Count() > 0)
                 {
                     var legs = new[] { 
-                            new { method = context.Response.Cookies[prgKeyMethod].Value, url = context.Response.Cookies[prgKey].Value, glimpseId = context.Response.Cookies[prgKeyId].Value }, 
+                            new { method = context.Request.Cookies[prgKeyMethod].Value, url = context.Request.Cookies[prgKey].Value, glimpseId = context.Request.Cookies[prgKeyId].Value }, 
                             new { method = context.Request.HttpMethod, url = context.Request.RawUrl, glimpseId = context.GetGlimpseRequestId().ToString() } };
                     var correlation = new { legs = legs, title = String.Format("{0}R{1}", legs[0].method[0], legs[1].method[0]) };
 
                     requestMetadata.Add("correlation", correlation);
 
                     context.Response.Cookies.Remove(prgKey);
+                    context.Response.Cookies.Remove(prgKeyRedirect);
                     context.Response.Cookies.Remove(prgKeyId);
                     context.Response.Cookies.Remove(prgKeyMethod);
+                    context.Response.Cookies.Remove(prgKeyCorrelated);
                 }
                 /*
             correlation = {  

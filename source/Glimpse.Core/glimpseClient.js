@@ -2048,23 +2048,10 @@ if (window.jQueryGlimpse) { (function ($) {
                     dropFunction(envHolder);
                 }
             }
-             
-            /*
-            correlation = {  
-              title : 'PRG Request', 
-              legs : [ { 
-                method : 'POST', 
-                url : '/Help/Feature/Add', 
-                glimpseId : 'GUID' }, { 
-                method : 'GET', 
-                url : '/Help/Feature/', 
-                glimpseId : 'GUID' } ] 
-              };
-              */
-
+               
             //Setup correlation
             if (correlation) { 
-                var urlHolder = $('.glimpse-title .glimpse-url', mainHolder), currentUrl = /*'/Help/Feature/'*/ urlHolder.text(), currentLeg, correlationList = '<div>' + correlation.title + '</div>';
+                var urlHolder = $('.glimpse-title .glimpse-url', mainHolder), currentUrl = urlHolder.text(), currentLeg, correlationList = '<div>' + correlation.title + '</div>';
                 for (var i = 0; i < correlation.legs.length; i++) {
                     var leg = correlation.legs[i];
                     if (leg.url == currentUrl) {
@@ -2083,7 +2070,7 @@ if (window.jQueryGlimpse) { (function ($) {
             }
         },
         switchContext: function(glimpseRequestId, glimpseRequestUrl, glimpseClientName) {
-            var gs = this, loading = $('.glimpse-url .glimpse-drop-over .loading').fadeIn();
+            var gs = this, g = $.glimpse, loading = $('.glimpse-url .glimpse-drop-over .loading').fadeIn();
             
             $.ajax({
                 url: gs.defaults.historyLink,
