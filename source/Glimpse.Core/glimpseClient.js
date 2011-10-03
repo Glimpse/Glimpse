@@ -2288,13 +2288,13 @@ var glimpseTimeline = function (scope, settings) {
                     colorRows(true);
                 },
                 processTableData = function () {
-                    var dataResult = [ [ 'Category', 'Title', 'Description', 'Timing', 'Start Point', 'Duration' ] ],
-                        metadata = [ [ { data : 0, width : '191px' }, { data : 1, width : '12%' }, { data : 2, width : '13%' }, { data : 3 }, { data : 4, align : 'right', pre : 'T+ ', post : ' ms', className : 'mono', width : '100px' }, { data : 5, align : 'right', post : ' ms', className : 'mono', width : '100px' } ] ];
+                    var dataResult = [ [ 'Title', 'Description', 'Timing', 'Category', 'Start Point', 'Duration' ] ],
+                        metadata = [ [ { data : 0, width : '191px' }, { data : 1, width : '12%' }, { data : 2 }, { data : 3, width : '13%' }, { data : 4, align : 'right', pre : 'T+ ', post : ' ms', className : 'mono', width : '100px' }, { data : 5, align : 'right', post : ' ms', className : 'mono', width : '100px' } ] ];
                     
                     //Massage the data 
                     for (var i = 0; i < settings.events.length; i++) {
                         var event = settings.events[i];
-                        dataResult.push([ event.category, event.title, event.subText, '', event.startPoint, event.duration ]);
+                        dataResult.push([ event.title, event.subText, '', event.category, event.startPoint, event.duration ]);
                     } 
 
                     //Insert it into the document
@@ -2310,7 +2310,7 @@ var glimpseTimeline = function (scope, settings) {
                             width = (event.duration / settings.duration) * 100;
 
                         row.find('td:first-child').prepend($('<div class="glimpse-tl-event"></div>').css({ 'backgroundColor' : category.eventColor, 'border' : '1px solid ' + category.eventColorHighlight }));
-                        row.find('td:nth-child(4)').css('position', 'relative').prepend($('<div class="glimpse-tl-event"></div>').css({ 'backgroundColor' : category.eventColor, 'border' : '1px solid ' + category.eventColorHighlight, 'left' : left + '%', width : width + '%', position : 'absolute', top : '5px' }));
+                        row.find('td:nth-child(3)').css('position', 'relative').prepend($('<div class="glimpse-tl-event"></div>').css({ 'backgroundColor' : category.eventColor, 'border' : '1px solid ' + category.eventColorHighlight, 'left' : left + '%', width : width + '%', position : 'absolute', top : '5px' }));
                     });
                     //console.log(elements.contentTableHolder.find('tr td:first-child'));
                 },
