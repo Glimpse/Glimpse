@@ -303,6 +303,42 @@
     };
     var html16 = glimpse.render.build(data16);
     $('.sample16').html(html16);
+
+
+    var data17 = [
+        ['Actor', 'Character', 'Gender', 'Age', 'Height'],
+        ['Mark Hamill', 'Luke Skywalker', 'Male', '21', '1' ],
+        ['James Earl Jones', 'Darth Vader', 'Male', '45', '4', 'info' ],
+        ['Harrison Ford', 'Han Solo - Solo plays a central role in the various Star Wars set after Return of the Jedi. In The Courtship of Princess Leia (1995), he resigns his commission to pursue Leia, whom he eventually marries.', 'Male', '25', '9'],
+        ['Carrie Fisher', 'Princess Leia Organa', 'Female', '21', '8'],
+        ['Peter Cushing',  [
+                ['Actor', 'Character', 'Gender', 'Age'],
+                ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                ['James Earl Jones', 'Darth Vader', 'Male', '45']
+            ], 'Female', '69', '1'],
+        ['Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70', '9' ],
+        ['Anthony Daniels',  [
+                ['Actor', 'Character', 'Gender', 'Age'],
+                ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+                ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+                ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                ['James Earl Jones', 'Darth Vader. R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker. Darth Vader. R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker. Darth Vader. R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker.', 'Male', '45'],
+                ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+                ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+                ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                ['James Earl Jones', 'Darth Vader', 'Male', '45']
+            ], 'Droid', '101', '2'],
+        ['Kenny Baker', 'R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker. While Luke cleans the sand out of R2-D2\'s gears, he discovers a fragment of Leia\'s message, and removes the droid\'s restraining bolt to see more; once free of the bolt, R2 claims to have no knowledge of the message. R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker. While Luke cleans the sand out of R2-D2\'s gears, he discovers a fragment of Leia\'s message, and removes the droid\'s restraining bolt to see more; once free of the bolt, R2 claims to have no knowledge of the message. R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker. While Luke cleans the sand out of R2-D2\'s gears, he discovers a fragment of Leia\'s message, and removes the droid\'s restraining bolt to see more; once free of the bolt, R2 claims to have no knowledge of the message. R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker. While Luke cleans the sand out of R2-D2\'s gears, he discovers a fragment of Leia\'s message, and removes the droid\'s restraining bolt to see more; once free of the bolt, R2 claims to have no knowledge of the message. R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker. While Luke cleans the sand out of R2-D2\'s gears, he discovers a fragment of Leia\'s message, and removes the droid\'s restraining bolt to see more; once free of the bolt, R2 claims to have no knowledge of the message.R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker. While Luke cleans the sand out of R2-D2\'s gears, he discovers a fragment of Leia\'s message, and removes the droid\'s restraining bolt to see more; once free of the bolt, R2 claims to have no knowledge of the message.R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker. While Luke cleans the sand out of R2-D2\'s gears, he discovers a fragment of Leia\'s message, and removes the droid\'s restraining bolt to see more; once free of the bolt, R2 claims to have no knowledge of the message. R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker. While Luke cleans the sand out of R2-D2\'s gears, he discovers a fragment of Leia\'s message, and removes the droid\'s restraining bolt to see more; once free of the bolt, R2 claims to have no knowledge of the message. R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker. While Luke cleans the sand out of R2-D2\'s gears, he discovers a fragment of Leia\'s message, and removes the droid\'s restraining bolt to see more; once free of the bolt, R2 claims to have no knowledge of the message. R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker. While Luke cleans the sand out of R2-D2\'s gears, he discovers a fragment of Leia\'s message, and removes the droid\'s restraining bolt to see more; once free of the bolt, R2 claims to have no knowledge of the message.', 'Droid', '150', '6']
+    ]; 
+    var metaData17 = [
+            [ { data : [{ data : 0, key : true, align : 'right' }, { data : 2, align : 'right' }, { data : '{{3}} - {{4}}', align : 'right' }, ], width : '200px' }, { data : 1 } ]
+        ];
+    var html17 = glimpse.render.build(data17, metaData17);
+    $('.sample17').html(html17);
+
 })($Glimpse);
     </script>
 </body>
