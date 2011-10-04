@@ -623,3 +623,8 @@ li.glimpse-permanent {
         border-top: 1px solid #DDD;
     }
 }
+.glimpse-panel .glimpse-sub-text { 
+    color: #AAA; 
+    font-size: 0.9em; 
+    margin-left: 5px; 
+}
