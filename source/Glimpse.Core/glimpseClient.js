@@ -2290,16 +2290,17 @@ var glimpseTimeline = function (scope, settings) {
                     processEvents();
                     processEventSummary();
                     processTableData();
-                    colorRows(true);
+                    //colorRows(true);
+                    view.start();
                 },
                 processTableData = function () {
-                    var dataResult = [ [ 'Title', 'Description', 'Timing', 'Category', 'Start Point', 'Duration' ] ],
-                        metadata = [ [ { data : '{{0}} |({{1}})|' }, { data : 2, width : '9%' }, { data : 3, width : '18%' }, { data : 4, align : 'right', pre : 'T+ ', post : ' ms', className : 'mono', width : '100px' }, { data : 5, align : 'right', post : ' ms', className : 'mono', width : '100px' } ] ];
+                    var dataResult = [ [ 'Title', 'Description', 'Category', 'Timing', 'Start Point', 'Duration' ] ],
+                        metadata = [ [ { data : '{{0}} |({{1}})|' }, { data : 2, width : '18%' }, { data : 3, width : '9%' }, { data : 4, align : 'right', pre : 'T+ ', post : ' ms', className : 'mono', width : '100px' }, { data : 5, align : 'right', post : ' ms', className : 'mono', width : '100px' } ] ];
                     
                     //Massage the data 
                     for (var i = 0; i < settings.events.length; i++) {
                         var event = settings.events[i],
-                            data = [ event.title, event.subText, '', event.category, event.startPoint, event.duration ];
+                            data = [ event.title, event.subText, event.category, '', event.startPoint, event.duration ];
                         dataResult.push(data);
                     } 
 
@@ -2324,7 +2325,7 @@ var glimpseTimeline = function (scope, settings) {
                             stack.pop(); 
 
                         row.find('td:first-child').prepend($(space + '<div class="glimpse-tl-event"></div>').css({ 'backgroundColor' : category.eventColor, marginLeft : (15 * stack.length) + 'px', 'border' : '1px solid ' + category.eventColorHighlight }));
-                        row.find('td:nth-child(2)').css('position', 'relative').prepend($('<div class="glimpse-tl-event"></div>').css({ 'backgroundColor' : category.eventColor, 'border' : '1px solid ' + category.eventColorHighlight, 'left' : left + '%', width : width + '%', position : 'absolute', top : '5px' }));
+                        row.find('td:nth-child(3)').css('position', 'relative').prepend($('<div class="glimpse-tl-event"></div>').css({ 'backgroundColor' : category.eventColor, 'border' : '1px solid ' + category.eventColorHighlight, 'left' : left + '%', width : width + '%', position : 'absolute', top : '5px' }));
 
                         lastEvent = event;
                     });
@@ -2683,6 +2684,39 @@ var glimpseTimeline = function (scope, settings) {
                 init : init
             };
         }(),
+        view = function () {
+            var apply = function(showTimeline, isFirst) {
+                    elements.contentTableHolder.parent().toggle(!showTimeline); 
+                    elements.contentRow.find('.glimpse-tl-content-scroll:first-child').toggle(showTimeline);
+                    elements.contentRow.find('.glimpse-tl-resizer').toggle(showTimeline); 
+                    
+                    eventBuilder.colorRows(isFirst); 
+                    if (showTimeline) 
+                        dividerBuilder.render();
+                },
+                toggle = function() {
+                    var showTimeline = !($.glimpse.settings.timeView);
+
+                    apply(showTimeline);
+                 
+                    $.glimpse.settings.timeView = showTimeline;
+                    $.glimpse.persistState();
+                },
+                start = function() {
+                    apply($.glimpse.settings.timeView, true);
+                },
+                init = function() { 
+                    elements.summaryRow.find('.glimpse-tl-band-title span').click(function () {
+                        toggle(); 
+                    });
+                };
+
+            return { 
+                toggle : toggle,
+                start : start,
+                init : init
+            };
+        } (),
         init = function () { 
             //Set defaults
             settings.startTime = 0;
@@ -2701,18 +2735,10 @@ var glimpseTimeline = function (scope, settings) {
             filter.init();
             info.init();
             resize.init();
+            view.init();
              
             //Render events 
-            eventBuilder.render(); 
-
-            elements.summaryRow.find('.glimpse-tl-band-title span').click(function () {
-                elements.contentTableHolder.parent().toggle();
-
-                elements.contentRow.find('.glimpse-tl-content-scroll:first-child').toggle();
-                elements.contentRow.find('.glimpse-tl-resizer').toggle(); 
-                
-                eventBuilder.colorRows();
-            });
+            eventBuilder.render();  
         };
 
     return {  
