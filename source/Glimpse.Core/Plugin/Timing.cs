@@ -1,7 +1,5 @@
-﻿/*
-using System.Web;
+﻿using System.Web;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Plumbing;
 
 namespace Glimpse.Core.Plugin
 {
@@ -26,4 +24,3 @@ namespace Glimpse.Core.Plugin
         }
     }
 }
-*/

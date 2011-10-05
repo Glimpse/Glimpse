@@ -45,3 +45,5 @@ Glimpse.5.1.ReSharper.user
 /source/Glimpse.Site/Glimpse.log
 /source/Glimpse.Sample.MVC3/Glimpse.log
 /builds/local/Glimpse.zip
+/source/Glimpse.Sample.MVC3/App_Data/aspnetdb_log.LDF
+/source/Glimpse.Sample.MVC3/App_Data/MvcMusicStore.sdf

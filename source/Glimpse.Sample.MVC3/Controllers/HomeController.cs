@@ -34,19 +34,18 @@ namespace MvcMusicStore.Controllers
 
             Trace.Write("Got top 5 albums");
 
-            //using (GlimpseTrace.Time("It takes {t:g} to trace (which is {t:ss} seconds)"))
-            //{
-                GlimpseTrace.Info("This is info from Glimpse");
-                GlimpseTrace.Warn("This is warn from Glimpse at {0}", DateTime.Now);
-                GlimpseTrace.Error("This is error from {0}", GetType());
-                GlimpseTrace.Fail("This is Fail from Glimpse");
+            GlimpseTrace.Info("This is info from Glimpse");
+            GlimpseTrace.Warn("This is warn from Glimpse at {0}", DateTime.Now);
+            GlimpseTrace.Error("This is error from {0}", GetType());
+            GlimpseTrace.Fail("This is Fail from Glimpse");
 
-                Trace.TraceWarning("Test TraceWarning;");
-                Trace.TraceError("Test TraceError;");
-                Trace.TraceInformation("Test TraceInformation;"); 
+            Trace.TraceWarning("Test TraceWarning;");
+            Trace.TraceError("Test TraceError;");
+            Trace.TraceInformation("Test TraceInformation;"); 
 
-            GlimpseTimer.Moment("A Moment", "Other", "This is just a moment in time.");
-            //}
+
+
+            //GlimpseTimer.Moment("A Moment", "Other", "This is just a moment in time.");
 
 
             TempData["Test"] = "A bit of temp";
