@@ -837,9 +837,7 @@ if (window.jQueryGlimpse) { (function ($) {
         init: function (data) {
             var g = $.glimpse, static = g.static;
             g.clientName = $.glimpse.util.cookie('glimpseClientName');
-
-            var start = (new Date).getTime();
-
+            
             static.isPopup = window.location.href.indexOf(static.popupUrl) > -1;
 
             if (!data) {
@@ -874,12 +872,7 @@ if (window.jQueryGlimpse) { (function ($) {
             g.restoreState();
 
             if (!static.isPopup && g.settings.popupOn)
-                g.popup.open();
-
-                
-            /* Run a test. */
-            var diff = (new Date).getTime() - start;
-            console.log(diff);
+                g.popup.open(); 
         },
         plugins: {
             protocolListeners: [],
@@ -2314,22 +2307,18 @@ var glimpseTimeline = function (scope, settings) {
                         var row = $(this),
                             event = settings.events[i], 
                             topEvent = stack.length > 0 ? stack[stack.length - 1] : undefined,
-                            category = settings.category[event.category], 
-                            left = (event.startPoint / settings.duration) * 100,  
-                            width = (event.duration / settings.duration) * 100,
-                            space = '';
+                            category = settings.category[event.category];
 
                         if (event.startPoint > lastEvent.startPoint && (event.startPoint + event.duration) <= (lastEvent.startPoint + lastEvent.duration)) 
                             stack.push(lastEvent); //When we want to tab in
                         else if (topEvent != undefined && (topEvent.startPoint + topEvent.duration) < event.startPoint)
                             stack.pop(); 
 
-                        row.find('td:first-child').prepend($(space + '<div class="glimpse-tl-event"></div>').css({ 'backgroundColor' : category.eventColor, marginLeft : (15 * stack.length) + 'px', 'border' : '1px solid ' + category.eventColorHighlight }));
-                        row.find('td:nth-child(3)').css('position', 'relative').prepend($('<div class="glimpse-tl-event"></div>').css({ 'backgroundColor' : category.eventColor, 'border' : '1px solid ' + category.eventColorHighlight, 'left' : left + '%', width : width + '%', position : 'absolute', top : '5px' }));
+                        row.find('td:first-child').prepend($('<div class="glimpse-tl-event"></div>').css({ 'backgroundColor' : category.eventColor, marginLeft : (15 * stack.length) + 'px', 'border' : '1px solid ' + category.eventColorHighlight }));
+                        row.find('td:nth-child(3)').css('position', 'relative').prepend($('<div class="glimpse-tl-event"></div>').css({ 'backgroundColor' : category.eventColor, 'border' : '1px solid ' + category.eventColorHighlight, 'left' : event.startPersent + '%', width : event.widthPersent + '%', position : 'absolute', top : '5px' }));
 
                         lastEvent = event;
-                    });
-                    //console.log(elements.contentTableHolder.find('tr td:first-child'));
+                    }); 
                 },
                 processCategories = function () {
                     for (var categoryName in settings.category) {

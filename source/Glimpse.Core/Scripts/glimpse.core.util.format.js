@@ -16,6 +16,11 @@
                 replace: function (d) { return '<strong>' + util.htmlEncode(scrub(d)) + '</strong>'; },
                 trimmable: true
             },
+            sub: {
+                match: function (d) { return d.indexOf('|(') >= 0 && d.indexOf(')|') >= 0; },
+                replace: function (d) { return util.htmlEncode(d).replace('|()|', '').replace('|(', '<span class="glimpse-sub-text">(').replace(')|', ')</span>'); },
+                trimmable: true
+            },
             raw : {
                 match: function (d) { return d.match(/^\![\w\D]+\!$/) != null; },
                 replace: function (d) { return scrub(d); },
