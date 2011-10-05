@@ -2301,23 +2301,14 @@ var glimpseTimeline = function (scope, settings) {
                     var result = $.glimpseProcessor.build(dataResult, 0, true, metadata, false); 
                     elements.contentTableHolder.append(result);
 
-                    //Update the output
-                    var stack = [], lastEvent = { startPoint : 0, duration : 0 };
+                    //Update the output 
                     elements.contentTableHolder.find('tbody tr').each(function(i) {
                         var row = $(this),
-                            event = settings.events[i], 
-                            topEvent = stack.length > 0 ? stack[stack.length - 1] : undefined,
+                            event = settings.events[i],  
                             category = settings.category[event.category];
-
-                        if (event.startPoint > lastEvent.startPoint && (event.startPoint + event.duration) <= (lastEvent.startPoint + lastEvent.duration)) 
-                            stack.push(lastEvent); //When we want to tab in
-                        else if (topEvent != undefined && (topEvent.startPoint + topEvent.duration) < event.startPoint)
-                            stack.pop(); 
-
-                        row.find('td:first-child').prepend($('<div class="glimpse-tl-event"></div>').css({ 'backgroundColor' : category.eventColor, marginLeft : (15 * stack.length) + 'px', 'border' : '1px solid ' + category.eventColorHighlight }));
-                        row.find('td:nth-child(3)').css('position', 'relative').prepend($('<div class="glimpse-tl-event"></div>').css({ 'backgroundColor' : category.eventColor, 'border' : '1px solid ' + category.eventColorHighlight, 'left' : event.startPersent + '%', width : event.widthPersent + '%', position : 'absolute', top : '5px' }));
-
-                        lastEvent = event;
+                             
+                        row.find('td:first-child').prepend($('<div class="glimpse-tl-event"></div>').css({ 'backgroundColor' : category.eventColor, marginLeft : (15 * event.nesting) + 'px', 'border' : '1px solid ' + category.eventColorHighlight }));
+                        row.find('td:nth-child(3)').css('position', 'relative').prepend($('<div class="glimpse-tl-event"></div>').css({ 'backgroundColor' : category.eventColor, 'border' : '1px solid ' + category.eventColorHighlight, 'left' : event.startPersent + '%', width : event.widthPersent + '%', position : 'absolute', top : '5px' })); 
                     }); 
                 },
                 processCategories = function () {
@@ -2331,8 +2322,10 @@ var glimpseTimeline = function (scope, settings) {
                     }
                 },
                 processEvents = function () { 
+                    var eventStack = [], lastEvent = { startPoint : 0, duration : 0 };
                     for (var i = 0; i < settings.events.length; i += 1) {
                         var event = settings.events[i], 
+                            topEvent = eventStack.length > 0 ? eventStack[eventStack.length - 1] : undefined,
                             category = settings.category[event.category], 
                             left = (event.startPoint / settings.duration) * 100, 
                             rLeft = Math.round(left),
@@ -2343,10 +2336,17 @@ var glimpseTimeline = function (scope, settings) {
                             subTextPre = (event.subText ? '(' + event.subText + ')' : '')
                             subText = (subTextPre ? '<span class="glimpse-tl-event-desc-sub">' + subTextPre + '</span>' : '');
 
+                        //Derive event nesting  
+                        if (event.startPoint > lastEvent.startPoint && (event.startPoint + event.duration) <= (lastEvent.startPoint + lastEvent.duration)) 
+                            eventStack.push(lastEvent); //When we want to tab in
+                        else if (topEvent != undefined && (topEvent.startPoint + topEvent.duration) < event.startPoint)
+                            eventStack.pop(); 
+
                         //Save calc data
                         event.startPersent = left;
                         event.endPersent = left + width;
                         event.widthPersent = width;
+                        event.nesting = eventStack.length
 
                         //Build up the event decoration
                         var eventDecoration = '';
@@ -2362,7 +2362,9 @@ var glimpseTimeline = function (scope, settings) {
                         elements.contentDescHolder.append('<div class="glimpse-tl-band" title="' + event.title + ' ' + subTextPre + '"><div class="glimpse-tl-event" style="background-color:' + category.eventColor + ';border:1px solid ' + category.eventColorHighlight + '"></div>' + event.title + subText +'</div>');
                      
                         //Register events for summary  
-                        deriveEventSummary(category, left, rLeft, width, rWidth)
+                        deriveEventSummary(category, left, rLeft, width, rWidth);
+                        
+                        lastEvent = event;
                     }
                 },
                 deriveEventSummary = function (category, left, rLeft, width, rWidth) {
