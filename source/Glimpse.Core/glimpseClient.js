@@ -2287,13 +2287,13 @@ var glimpseTimeline = function (scope, settings) {
                     view.start();
                 },
                 processTableData = function () {
-                    var dataResult = [ [ 'Title', 'Description', 'Category', 'Timing', 'Start Point', 'Duration' ] ],
-                        metadata = [ [ { data : '{{0}} |({{1}})|' }, { data : 2, width : '18%' }, { data : 3, width : '9%' }, { data : 4, align : 'right', pre : 'T+ ', post : ' ms', className : 'mono', width : '100px' }, { data : 5, align : 'right', post : ' ms', className : 'mono', width : '100px' } ] ];
+                    var dataResult = [ [ 'Title', 'Description', 'Category', 'Timing', 'Start Point', 'Duration', 'w/out Children' ] ],
+                        metadata = [ [ { data : '{{0}} |({{1}})|' }, { data : 2, width : '18%' }, { data : 3, width : '9%' }, { data : 4, align : 'right', pre : 'T+ ', post : ' ms', className : 'mono', width : '100px' }, { data : 5, align : 'right', post : ' ms', className : 'mono', width : '100px' }, { data : 6, align : 'right', post : ' ms', className : 'mono', width : '100px' } ] ];
                     
                     //Massage the data 
                     for (var i = 0; i < settings.events.length; i++) {
                         var event = settings.events[i],
-                            data = [ event.title, event.subText, event.category, '', event.startPoint, event.duration ];
+                            data = [ event.title, event.subText, event.category, '', event.startPoint, event.duration, event.childlessDuration ];
                         dataResult.push(data);
                     } 
 
@@ -2322,31 +2322,35 @@ var glimpseTimeline = function (scope, settings) {
                     }
                 },
                 processEvents = function () { 
-                    var eventStack = [], lastEvent = { startPoint : 0, duration : 0 };
+                    var eventStack = [], lastEvent = { startPoint : 0, duration : 0, childlessDuration : 0 };
                     for (var i = 0; i < settings.events.length; i += 1) {
-                        var event = settings.events[i], 
+                        var event = settings.events[i],
                             topEvent = eventStack.length > 0 ? eventStack[eventStack.length - 1] : undefined,
-                            category = settings.category[event.category], 
-                            left = (event.startPoint / settings.duration) * 100, 
+                            category = settings.category[event.category],
+                            left = (event.startPoint / settings.duration) * 100,
                             rLeft = Math.round(left),
-                            width = (event.duration / settings.duration) * 100, 
+                            width = (event.duration / settings.duration) * 100,
                             rWidth = Math.round(width),
                             widthStyle = (width > 0 ? 'width:' + width + '%' : ''),
                             maxStyle = (width <= 0 ? 'max-width:7px;' : ''),
-                            subTextPre = (event.subText ? '(' + event.subText + ')' : '')
+                            subTextPre = (event.subText ? '(' + event.subText + ')' : ''),
                             subText = (subTextPre ? '<span class="glimpse-tl-event-desc-sub">' + subTextPre + '</span>' : '');
 
                         //Derive event nesting  
-                        if (event.startPoint > lastEvent.startPoint && (event.startPoint + event.duration) <= (lastEvent.startPoint + lastEvent.duration)) 
-                            eventStack.push(lastEvent); //When we want to tab in
+                        if (event.startPoint > lastEvent.startPoint && (event.startPoint + event.duration) <= (lastEvent.startPoint + lastEvent.duration))
+                            eventStack.push(lastEvent); //When we want to tab in 
                         else if (topEvent != undefined && (topEvent.startPoint + topEvent.duration) < event.startPoint)
                             eventStack.pop(); 
 
+                        var temp = eventStack.length > 0 ? eventStack[eventStack.length - 1] : undefined; 
+                        if (temp) { temp.childlessDuration -= event.duration; } 
+
                         //Save calc data
+                        event.childlessDuration = event.duration;
                         event.startPersent = left;
                         event.endPersent = left + width;
                         event.widthPersent = width;
-                        event.nesting = eventStack.length
+                        event.nesting = eventStack.length;
 
                         //Build up the event decoration
                         var eventDecoration = '';
@@ -2596,7 +2600,7 @@ var glimpseTimeline = function (scope, settings) {
                     for (detailKey in event.details) {
                         details += '<tr><th>' + detailKey + '</th><td>' + event.details[detailKey] + '</td></tr>';
                     }
-                    return '<table><tr><th colspan="2"><div class="glimpse-tl-event-info-title"><div class="glimpse-tl-event" style="background-color:' + category.eventColor + ';border:1px solid ' + category.eventColorHighlight + '"></div>' + event.title + ' - Details</div></th></tr><tr><th>Duration</th><td>' + event.duration + 'ms (at ' + event.startPoint + 'ms' + ( + event.duration > 1 ? (' to ' + (event.startPoint + event.duration) + 'ms') : '' ) +')</td></tr>' + (event.subText ? '<tr><th>Details</th><td>' + event.subText + '</td></tr>' : '' ) + details + '</table>';
+                    return '<table><tr><th colspan="2"><div class="glimpse-tl-event-info-title"><div class="glimpse-tl-event" style="background-color:' + category.eventColor + ';border:1px solid ' + category.eventColorHighlight + '"></div>' + event.title + ' - Details</div></th></tr><tr><th>Duration</th><td>' + event.duration + 'ms (at ' + event.startPoint + 'ms' + ( + event.duration > 1 ? (' to ' + (event.startPoint + event.duration) + 'ms') : '' ) +')</td></tr>' + (event.duration != event.childlessDuration ? '<tr><th>w/out Children</th><td>' + event.childlessDuration + 'ms</td></tr>' : '') + (event.subText ? '<tr><th>Details</th><td>' + event.subText + '</td></tr>' : '' ) + details + '</table>';
                 },
                 updateBubble = function (item) {
                     var eventOffset = item.offset(), 
@@ -2752,8 +2756,8 @@ var glimpseTimelineData = {
         { category :'MVC', startTime :'', startPoint :60, duration :20, title :'Filter', subText :'Authorization', pluginContextId :'', plugin :'', details :{} },
         { category :'MVC', startTime :'', startPoint :75, duration :55, title :'Filter', subText :'Validation', pluginContextId :'', plugin :'', details :{} },
         { category :'Database', startTime :'', startPoint :80, duration :45, title :'Transaction', subText :'', pluginContextId :'', plugin :'', details :{} },
-        { category :'Trace', startTime :'', startPoint :100, duration :0, title :'Logon', subText :'', pluginContextId :'', plugin :'', details :{} },
-        { category :'Routes', startTime :'', startPoint :134, duration :0, title :'Resolved Routes', subText :'', pluginContextId :'', plugin :'', details :{} },
+        { category :'Trace', startTime :'', startPoint :100, duration :6, title :'Logon', subText :'', pluginContextId :'', plugin :'', details :{} },
+        { category :'Routes', startTime :'', startPoint :134, duration :4, title :'Resolved Routes', subText :'', pluginContextId :'', plugin :'', details :{} },
         { category :'Trace', startTime :'', startPoint :138, duration :0, title :'Registered', subText :'', pluginContextId :'', plugin :'', details :{} },
         { category :'Trace', startTime :'', startPoint :142, duration :0, title :'Socket Open', subText :'', pluginContextId :'', plugin :'', details :{} },
         { category :'Routes', startTime :'', startPoint :143, duration :30, title :'Partial View', subText :'', pluginContextId :'', plugin :'', details :{} },
