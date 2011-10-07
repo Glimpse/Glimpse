@@ -2334,14 +2334,25 @@ var glimpseTimeline = function (scope, settings) {
                             widthStyle = (width > 0 ? 'width:' + width + '%' : ''),
                             maxStyle = (width <= 0 ? 'max-width:7px;' : ''),
                             subTextPre = (event.subText ? '(' + event.subText + ')' : ''),
-                            subText = (subTextPre ? '<span class="glimpse-tl-event-desc-sub">' + subTextPre + '</span>' : '');
-
+                            subText = (subTextPre ? '<span class="glimpse-tl-event-desc-sub">' + subTextPre + '</span>' : ''),
+                            stackParsed = false;
+                             
                         //Derive event nesting  
-                        if (event.startPoint > lastEvent.startPoint && (event.startPoint + event.duration) <= (lastEvent.startPoint + lastEvent.duration))
-                            eventStack.push(lastEvent); //When we want to tab in 
-                        else if (topEvent != undefined && (topEvent.startPoint + topEvent.duration) < event.startPoint)
-                            eventStack.pop(); 
-
+                        while (!stackParsed) {
+                            if (event.startPoint > lastEvent.startPoint && (event.startPoint + event.duration) <= (lastEvent.startPoint + lastEvent.duration)) {
+                                eventStack.push(lastEvent); 
+                                stackParsed = true;
+                            }
+                            else if (topEvent != undefined && (topEvent.startPoint + topEvent.duration) < (event.startPoint + event.duration)) {
+                                eventStack.pop(); 
+                                topEvent = eventStack.length > 0 ? eventStack[eventStack.length - 1] : undefined; 
+                                stackParsed = false;
+                            }
+                            else
+                                stackParsed = true;
+                        }
+                        
+                        //Work out childless timings 
                         var temp = eventStack.length > 0 ? eventStack[eventStack.length - 1] : undefined; 
                         if (temp) { temp.childlessDuration -= event.duration; } 
 
