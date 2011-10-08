@@ -26,7 +26,7 @@ namespace MvcMusicStore
                 "Default", // Route name
                 "{controller}/{action}/{id}", // URL with parameters
                 new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults
-            );
+            ).DataTokens.Add("CustomValue", true);
 
             routes.MapRoute("Never", "Never/Used/Route", new {controller = "NotThere", action = "DemoOnly"});
         }

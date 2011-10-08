@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C1289CE8-3259-41D9-893E-7A4E6F772D30}</ProjectGuid>
+    <ProjectGuid>{76714E46-AFE9-49F0-AEE8-C8A966195914}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Glimpse.Core2</RootNamespace>
-    <AssemblyName>Glimpse.Core2</AssemblyName>
+    <RootNamespace>Glimpse.Test.AspNet</RootNamespace>
+    <AssemblyName>Glimpse.Test.AspNet</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -22,7 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyPCU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -30,30 +30,40 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Moq">
+      <HintPath>..\..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="xunit">
+      <HintPath>..\..\packages\xunit.1.8.0.1549\lib\xunit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensibility\IDataStore.cs" />
-    <Compile Include="Extensibility\IGlimpseHelp.cs" />
-    <Compile Include="Extensibility\IGlimpsePluginOfT.cs" />
-    <Compile Include="Extensibility\IGlimpseRuntime.cs" />
-    <Compile Include="Extensibility\IPipelineModifier.cs" />
-    <Compile Include="Extensibility\IServiceLocatorOfT.cs" />
-    <Compile Include="Extensibility\IRuntimeService.cs" />
-    <Compile Include="GlimpseConfiguration.cs" />
-    <Compile Include="GlimpseRuntime.cs" />
-    <Compile Include="PluginCollection.cs" />
+    <Compile Include="AspNetRuntimeServiceShould.cs" />
+    <Compile Include="DictionaryDataStoreAdapterShould.cs" />
+    <Compile Include="HttpApplicationStateBaseDataAdapterShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Glimpse.AspNet\Glimpse.AspNet.csproj">
+      <Project>{FDDFC8A6-CDDF-4BC6-9F07-E76050E1EEE7}</Project>
+      <Name>Glimpse.AspNet</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Glimpse.Core2\Glimpse.Core2.csproj">
+      <Project>{C1289CE8-3259-41D9-893E-7A4E6F772D30}</Project>
+      <Name>Glimpse.Core2</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
