@@ -17,7 +17,7 @@ namespace Glimpse.AspNet.Plugin
             get { return "Request"; }
         }
 
-        public string Uri
+        public string HelpUri
         {
             get { return "http://localhost/someUrl"; }
         }

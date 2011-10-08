@@ -7,7 +7,6 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading;
 using System.Web;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;

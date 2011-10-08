@@ -1,12 +1,12 @@
 ﻿namespace Glimpse.Core2.Extensibility
 {
-    public interface IContextStore
+    public interface IDataStore
     {
         T Get<T>();
         T Get<T>(string key);
         object Get(string key);
 
-        void Set<T>();
-        void Set(string key);
+        void Set<T>(T value);
+        void Set(string key, object value);
     }
 }

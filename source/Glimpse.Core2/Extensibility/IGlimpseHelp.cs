@@ -2,6 +2,6 @@
 {
     public interface IGlimpseHelp
     {
-        string Uri { get; }
+        string HelpUri { get; }
     }
 }

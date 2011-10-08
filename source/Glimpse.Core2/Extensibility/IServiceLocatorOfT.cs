@@ -4,6 +4,6 @@
     {
         TRequestContext GetRequestContext();
         TModifier GetPipelineModifier<TModifier>() where TModifier:IPipelineModifier;
-        IContextStore GetContextStore();
+        IDataStore GetContextStore();
     }
 }
