@@ -7,23 +7,25 @@ namespace Glimpse.Test.Core2
 {
     public class GlimpseConfigurationShould
     {
-        [Fact]
-        public void ConstructWithRuntimeServicesFactory()
+        private GlimpseConfiguration Configuration { get; set; }
+
+        public GlimpseConfigurationShould()
         {
-            var runtimeServiceMock = new Mock<IRuntimeService>();
-            var runtimeService = runtimeServiceMock.Object;
-
-            var config = new GlimpseConfiguration(runtimeService);
-
-            Assert.Equal(runtimeService, config.RuntimeService);
+            var framworkProviderMock = new Mock<IFrameworkProvider>().Setup();
+            Configuration = new GlimpseConfiguration(framworkProviderMock.Object);
         }
 
-
-        [Fact(Skip="Come back to plugin discovery")]
-        public void DiscoverPlugins()
+        [Fact]
+        public void ConstructWithFrameworkProvider()
         {
-            //var glimpseConfiguration = new GlimpseConfiguration();
-            //glimpseConfiguration.Plugins.Discover();
+            var frameworkProviderMock = new Mock<IFrameworkProvider>();
+            var frameworkProviderObject = frameworkProviderMock.Object;
+
+            var config = new GlimpseConfiguration(frameworkProviderObject);
+
+            Assert.Equal(frameworkProviderObject, config.FrameworkProvider);
+            Assert.NotNull(config.Plugins);
+            Assert.NotNull(config.PipelineModifiers);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Glimpse.Core2.Extensibility
 {
-    public interface IPipelineModifier
+    public interface IGlimpsePipelineModifier
     {
         void Setup();
         void Teardown();

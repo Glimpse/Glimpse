@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Web;
+using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.AspNet
 {
-    public class AspNetRuntimeService:IRuntimeService
+    public class AspNetFrameworkProvider:IFrameworkProvider
     {
         /// <summary>
         /// Wrapper around HttpContext.Current for testing purposes. Not for public use.
@@ -23,7 +24,7 @@ namespace Glimpse.AspNet
 
         public IDataStore HttpServerStore
         {
-            get { throw new NotImplementedException(); }
+            get { return new HttpApplicationStateBaseDataStoreAdapter(Context.Application); }
         }
 
         public object RuntimeContext

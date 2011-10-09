@@ -35,6 +35,7 @@
       <HintPath>..\..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -46,9 +47,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DictionaryDataStoreAdapterShould.cs" />
+    <Compile Include="DiscoverabilityPolicyShould.cs" />
+    <Compile Include="GlimpseCollectionShould.cs" />
     <Compile Include="GlimpseConfigurationShould.cs" />
+    <Compile Include="GlimpseLazyCollectionShould.cs" />
     <Compile Include="GlimpseRuntimeShould.cs" />
+    <Compile Include="GlimpseServiceLocatorShould.cs" />
+    <Compile Include="MockExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestGlimpsePipelineModifier.cs" />
+    <Compile Include="TestPlugin.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
