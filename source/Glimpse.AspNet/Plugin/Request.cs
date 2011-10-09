@@ -1,18 +1,18 @@
-﻿using Glimpse.AspNet.Extensibility;
+﻿using System.Web;
 using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.AspNet.Plugin
 {
-    public class Request:AspNetGlimpsePlugin, IGlimpseHelp
+    public class Request:IGlimpsePlugin, IGlimpseHelp
     {
-        public override object GetData(IServiceLocator locator)
+        public object GetData(IServiceLocator locator)
         {
-            var httpContextBase = locator.GetRequestContext();
+            var httpContextBase = locator.RequestContext as HttpContextBase;
 
             return httpContextBase.Request;
         }
 
-        public override string Name
+        public string Name
         {
             get { return "Request"; }
         }

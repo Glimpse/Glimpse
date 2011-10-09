@@ -2,7 +2,7 @@
 
 namespace Glimpse.Core2.Extensibility
 {
-    public interface IRuntimeService
+    public interface IFrameworkProvider
     {
         IDataStore HttpRequestStore { get; }
         IDataStore HttpServerStore { get; }

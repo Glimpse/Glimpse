@@ -6,12 +6,12 @@ using Xunit;
 
 namespace Glimpse.Test.AspNet
 {
-    public class AspNetRuntimeServiceShould
+    public class AspNetFrameworkProviderShould
     {
         [Fact]
         public void HaveARuntimeContextTypeOfHttpContextBase()
         {
-            var service = new AspNetRuntimeService();
+            var service = new AspNetFrameworkProvider();
 
             Assert.Equal(typeof (HttpContextBase), service.RuntimeContextType);
         }
@@ -20,7 +20,7 @@ namespace Glimpse.Test.AspNet
         public void HaveARuntimeContext()
         {
             var contextMock = new Mock<HttpContextBase>();
-            var service = new AspNetRuntimeService {Context = contextMock.Object};
+            var service = new AspNetFrameworkProvider {Context = contextMock.Object};
 
             Assert.NotNull(service.RuntimeContext);
             Assert.True(service.RuntimeContext is HttpContextBase);
@@ -30,7 +30,7 @@ namespace Glimpse.Test.AspNet
         public void HaveMatchingContextAndContextTypes()
         {
             var contextMock = new Mock<HttpContextBase>();
-            var service = new AspNetRuntimeService {Context = contextMock.Object};
+            var service = new AspNetFrameworkProvider {Context = contextMock.Object};
 
             Assert.True(service.RuntimeContext.GetType().IsSubclassOf(service.RuntimeContextType));
             Assert.True(service.RuntimeContextType.IsInstanceOfType(service.RuntimeContext));
@@ -43,12 +43,12 @@ namespace Glimpse.Test.AspNet
             contextMock.Setup(ctx => ctx.Items)
                 .Returns(new Dictionary<object, object>
                                           {
-                                              {typeof (string), "TestString"}, 
-                                              {typeof (int), 5}
+                                              {typeof (string).FullName, "TestString"}, 
+                                              {typeof (int).FullName, 5}
                                           });
                                       
 
-            var service = new AspNetRuntimeService {Context = contextMock.Object};
+            var service = new AspNetFrameworkProvider {Context = contextMock.Object};
 
             Assert.NotNull(service.HttpRequestStore);
             Assert.Equal(5, service.HttpRequestStore.Get<int>());
@@ -58,7 +58,17 @@ namespace Glimpse.Test.AspNet
         [Fact]
         public void HaveHttpServerStore()
         {
-            Assert.False(true);
+            var contextMock = new Mock<HttpContextBase>();
+            var applicationStateMock = new Mock<HttpApplicationStateBase>();
+            applicationStateMock.Setup(st => st.Get("testKey")).Returns("testValue");
+            contextMock.Setup(ctx => ctx.Application).Returns(applicationStateMock.Object);
+
+            var provider = new AspNetFrameworkProvider {Context = contextMock.Object};
+
+            Assert.NotNull(provider.HttpServerStore);
+            Assert.Equal("testValue", provider.HttpServerStore.Get("testKey"));
+            
+            applicationStateMock.Verify(st=>st.Get("testKey"), Times.Once());
         }
     }
 }

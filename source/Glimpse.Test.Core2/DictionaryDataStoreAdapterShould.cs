@@ -1,9 +1,10 @@
-﻿using System.Collections;
+using System;
+using System.Collections;
 using System.Collections.Generic;
-using Glimpse.AspNet;
+using Glimpse.Core2;
 using Xunit;
 
-namespace Glimpse.Test.AspNet
+namespace Glimpse.Test.Core2
 {
     public class DictionaryDataStoreAdapterShould
     {
@@ -11,10 +12,10 @@ namespace Glimpse.Test.AspNet
 
         public DictionaryDataStoreAdapterShould()
         {
-            Dictionary = new Dictionary<object, object>
+            Dictionary = new Dictionary<string, object>
                              {
-                                 {typeof(string),"TestString"},
-                                 {typeof(int), 4},
+                                 {typeof(string).FullName,"TestString"},
+                                 {typeof(int).FullName, 4},
                                  {"intKey", 5}
                              };
         }
@@ -73,6 +74,26 @@ namespace Glimpse.Test.AspNet
             instance.Set("random", random);
 
             Assert.Equal(random, instance.Get("random"));
+        }
+
+        [Fact]
+        public void WorkWithStringBasedKeys()
+        {
+            var instance = new DictionaryDataStoreAdapter(new Dictionary<string,object>());
+
+            instance.Set<int>(5);
+
+            Assert.Equal(5, instance.Get<int>());
+        }
+
+        [Fact]
+        public void ThrowArgumentExceptionWithNonStringOrObjectKeyedDictionary()
+        {
+            Assert.Throws<ArgumentException>(()=>
+                                                 {
+                                                     new DictionaryDataStoreAdapter(new Dictionary<int, object>());
+                                                 }
+                );
         }
     }
 }

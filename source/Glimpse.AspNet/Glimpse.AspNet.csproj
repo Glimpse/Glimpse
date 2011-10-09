@@ -44,10 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AspNetRuntimeService.cs" />
-    <Compile Include="DictionaryDataStoreAdapter.cs" />
-    <Compile Include="Extensibility\AspNetGlimpsePlugin.cs" />
-    <Compile Include="Extensibility\IServiceLocator.cs" />
+    <Compile Include="AspNetFrameworkProvider.cs" />
     <Compile Include="HttpApplicationStateBaseDataStoreAdapter.cs" />
     <Compile Include="Plugin\Request.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

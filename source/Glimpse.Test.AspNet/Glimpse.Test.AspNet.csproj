@@ -47,8 +47,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AspNetRuntimeServiceShould.cs" />
-    <Compile Include="DictionaryDataStoreAdapterShould.cs" />
+    <Compile Include="AspNetFrameworkProviderShould.cs" />
     <Compile Include="HttpApplicationStateBaseDataAdapterShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
