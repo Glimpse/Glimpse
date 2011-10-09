@@ -627,4 +627,6 @@ li.glimpse-permanent {
     color: #AAA; 
     font-size: 0.9em; 
     margin-left: 5px; 
+    top:-1px;
+    position:relative;
 }

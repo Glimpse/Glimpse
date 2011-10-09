@@ -35,5 +35,36 @@
         if ($.isPlainObject(data))
             $.each(data, function (k, v) { count++; });
         return count;
-    },
+    }, 
+    getTokens: function(formatString, data) { 
+        var count = 0, working = '', result = [];
+        for (var i = 0; i < formatString.length; i++) {
+            var x = formatString[i];
+                
+            if (count <= 2) { 
+                if (x == '{')
+                    count++;
+                else if (x == '}' && count > 0)
+                    count--;
+                else if (count == 2) {
+                    if ($.isNaN(x)) {
+                        count = 0;
+                        working = '';
+                    }
+                    else 
+                        working += '' + x;
+                }
+                else {
+                    count = 0;
+                    working = '';
+                }
+
+                if (count == 0 && working != '') {
+                    result.push(working);
+                    working = '';
+                }
+            } 
+        }
+        return result;
+    }
 }

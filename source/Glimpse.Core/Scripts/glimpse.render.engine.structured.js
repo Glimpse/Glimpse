@@ -21,7 +21,7 @@
             }
             else { 
                 if (!metadataItem.indexs && $.isNaN(metadataItem.data)) 
-                    metadataItem.indexs = $.glimpse.util.getTokens(metadataItem.data, data); 
+                    metadataItem.indexs = util.getTokens(metadataItem.data, data); 
                 
                 //Get metadata for the new data 
                 var newMetadataItem = metadataItem.structure;
