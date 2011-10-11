@@ -7,6 +7,10 @@
         },
         wireDomListeners = function() {
             elements.tabHolder.find('li:not(.glimpse-active, .glimpse-disabled)').live('click', function () { pubsub.publish('action.tab.select', $(this)); return false; });
+            elements.tabHolder.find('li:not(.glimpse-active, .glimpse-disabled)').live('mouseover mouseout', function (e) {
+                var item = $(this);
+                if (e.type == 'mouseover') { item.addClass('glimpse-hover'); } else { item.removeClass('glimpse-hover'); }
+            });
         },
 
         constructTabs = function (items) {
