@@ -256,6 +256,10 @@
     -moz-transition: color 0.3s ease;
     -o-transition: color 0.3s ease;
     transition: color 0.3s ease;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 .glimpse-tabs li.glimpse-hover {
     padding: 4px 8px 3px;
