@@ -66,5 +66,13 @@
             } 
         }
         return result;
+    }, 
+    sortElements : function (container, containerItem) { 
+        containerItem.sort(function(a, b) {
+           var compA = $(a).text().toUpperCase();
+           var compB = $(b).text().toUpperCase();
+           return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
+        })
+        $.each(containerItem, function(idx, itm) { container.append(itm); });
     }
 }

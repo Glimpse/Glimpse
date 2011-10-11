@@ -14,7 +14,7 @@
                 html += '<span class="small">length=' + dataLength + '</span>'; 
             return html;
         },
-/*(import:glimpse.core.util.format.js|2)*/,
+/*(import:glimpse.render.util.rawString.js|2)*/,
 
         //Engines 
 /*(import:glimpse.render.engine.master.js|2)*/,

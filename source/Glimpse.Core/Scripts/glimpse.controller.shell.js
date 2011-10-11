@@ -18,12 +18,14 @@
         
         //Main
         build = function () {
-            pubsub.publish('state.renderPreview');  
+            pubsub.publish('state.build.template');  
+            pubsub.publish('state.build.template.modify');
                     
             $(getCss()).appendTo('head'); 
             $(getHtml()).appendTo('body');
 
-            pubsub.publish('state.render'); 
+            pubsub.publish('state.build.shell'); 
+            pubsub.publish('state.build.shell.modify');
 
             wireDomListeners();
         }, 

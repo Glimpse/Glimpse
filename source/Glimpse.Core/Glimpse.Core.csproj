@@ -108,9 +108,13 @@
     <Compile Include="Plumbing\GlimpseResponseFilter.cs" />
     <Compile Include="Plumbing\GlimpseSerializer.cs" />
     <Compile Include="Plumbing\InProcStackMetadataStore.cs" />
-    <Content Include="Scripts\glimpse.core.util.format.js">
+    <Content Include="Scripts\glimpse.controller.element.js" />
+    <Content Include="Scripts\glimpse.controller.render.js" />
+    <Content Include="Scripts\glimpse.core.data.js" />
+    <Content Include="Scripts\glimpse.render.util.rawString.js">
       <SubType>UserControl</SubType>
     </Content>
+    <Content Include="Scripts\glimpse.min.js" />
     <Content Include="Scripts\glimpse.render.engine.master.js" />
     <Compile Include="Validator\ContentTypeValidator.cs" />
     <Compile Include="Validator\GlimpseModeValidator.cs" />
@@ -166,7 +170,7 @@
     <Content Include="Scripts\jquery-1.6.3.min.js" />
     <Content Include="Scripts\sprite.png" />
     <Content Include="Scripts\test.html" />
-    <Content Include="Scripts\glimpse.core.data.js" />
+    <Content Include="Scripts\glimpse.controller.template.js" />
     <Content Include="Scripts\glimpse.view.shell.css" />
     <Content Include="Scripts\glimpse.view.shell.html" />
     <Content Include="Scripts\glimpse.controller.shell.js" />

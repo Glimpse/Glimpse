@@ -26,6 +26,8 @@
         registerPlugin = function (pluginId, creator) {
             plugins[pluginId] = { creator : creator, instance : null };
         };
+        
+    //init(); 
     
     return {
         register : registerPlugin

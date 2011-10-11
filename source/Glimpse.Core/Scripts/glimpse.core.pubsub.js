@@ -3,6 +3,7 @@
         registry = {},
         lastUid = -1,
         publishCore = function (message, data, sync) {
+            console.log('Publish', message, data, sync);
             // if there are no subscribers to this message, just return here
             if (!registry.hasOwnProperty(message)) {
                 return false;
