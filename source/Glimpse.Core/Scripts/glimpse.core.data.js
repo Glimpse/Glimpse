@@ -6,6 +6,9 @@
         getCurrent = function () {
             return current;
         },
+        getCurrentMeta = function () {
+            return current._metadata;
+        },
         init = function () {
             current = glimpseData; 
         };
@@ -13,6 +16,7 @@
     init(); 
     
     return {
-        getCurrent : getCurrent
+        getCurrent : getCurrent,
+        getCurrentMeta : getCurrentMeta
     };
 }())
