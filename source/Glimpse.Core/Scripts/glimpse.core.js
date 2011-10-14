@@ -19,6 +19,7 @@ var glimpse = (function ($, scope) {
 /*(import:glimpse.controller.template.js|2)*/,
 /*(import:glimpse.controller.state.js|2)*/, 
 /*(import:glimpse.controller.shell.js|2)*/,
+/*(import:glimpse.controller.sizer.js|2)*/,
 /*(import:glimpse.controller.tollbar.js|2)*/, 
 /*(import:glimpse.render.engine.js|2)*/, 
         init = function () {
