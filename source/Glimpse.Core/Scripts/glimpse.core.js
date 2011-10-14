@@ -8,7 +8,7 @@ var glimpse = (function ($, scope) {
             path : '' 
         }
         settings = {
-            height : '250px'
+            height : 250
         },
 /*(import:glimpse.core.util.js|2)*/,
 /*(import:glimpse.core.pubsub.js|2)*/,

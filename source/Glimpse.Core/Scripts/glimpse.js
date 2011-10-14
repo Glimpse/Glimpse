@@ -11,7 +11,7 @@ var glimpse = (function ($, scope) {
             path : '' 
         }
         settings = {
-            height : '250px'
+            height : 250
         },
         util = function () {
             var //Support
@@ -332,17 +332,19 @@ var glimpse = (function ($, scope) {
                     return html;
                 },
                  
-                renderPanel = function (key, pluginData, pluginMetadata) {
-                    elements.panelHolder.append(constuctPanel(key, pluginData, pluginMetadata)); 
-                },
-                constuctPanel = function (key, pluginData, pluginMetadata) {
+                renderPanel = function (key, pluginData, pluginMetadata) { 
                     var start = new Date().getTime();
                     
                     var metadata = pluginMetadata == undefined ? pluginMetadata.structure : undefined;
-                        html = '<div class="glimpse-panel glimpse-panelitem-' + key + '" data-glimpseKey="' + key + '">' + renderEngine.build(pluginData.data, metadata) + '</div>'
-                        
+                        html = '<div class="glimpse-panel glimpse-panelitem-' + key + '" data-glimpseKey="' + key + '"><div class="glimpse-panel-message">Loading data, please wait...</div></div>',
+                        panel = $(html).appendTo(elements.panelHolder);
+        
+                    setTimeout(function() {
+                            renderEngine.insert(panel, pluginData.data, metadata);
+                        }, 500);
+        
                     var end = new Date().getTime(); 
-                    console.log('Total render time for ' + key + ': ' + (end - start));
+                    console.log('Total render time for "' + key + '": ' + (end - start));
         
                     return html;
                 },
@@ -494,6 +496,7 @@ var glimpse = (function ($, scope) {
             var //Support    
                 wireListeners = function() {
                     pubsub.subscribe('state.build.shell', setup); 
+        
                     pubsub.subscribe('action.plugin.created', function(topic, payload) { pluginCreated(payload); }); 
                     pubsub.subscribe('action.resize', function(topic, payload) { shellResized(payload); }); 
                 },
@@ -645,6 +648,46 @@ var glimpse = (function ($, scope) {
                     return {
                         process : process
                         }; 
+                } (),
+                style = function () {
+                    var //Support 
+                        codeProcess = function(items) {
+                            $.each(items, function() {
+                                var item = $(this).addClass('prettyprint'), 
+                                    codeType = item.hasClass('glimpse-code') ? item.attr('data-codeType') : item.closest('.glimpse-code').attr('data-codeType');  
+                
+                                item.html(prettyPrintOne(item.html(), codeType));
+                            });
+                        },
+                
+                        //Main
+                        apply = function (scope) { 
+                            var start = new Date().getTime();
+                            //Expand collapse  
+                            scope.find('.glimpse-expand').click(function () {
+                                var toggle = $(this).toggleClass('glimpse-collapse'),
+                                    hasClass = toggle.hasClass('glimpse-collapse'); 
+                                toggle.parent().next().children().first().toggle(!hasClass).next().toggle(hasClass);
+                            });
+                
+                            //Alert state
+                            scope.find('.info, .warn, .error, .fail, .loading, .ms')
+                                .find('> td:first-child, > tr:first-child > td:first-child:not(:has(div.glimpse-cell)), > tr:first-child > td:first-child > div.glimpse-cell:first-child')
+                                .not(':has(.icon)').prepend('<div class="icon"></div>');
+                
+                            //Code formatting
+                            codeProcess(scope.find('.glimpse-code:not(:has(table)), .glimpse-code > table:not(:has(thead)) .glimpse-preview-show'));
+                            
+                            //Open state
+                            scope.find('.glimpse-start-open > td > .glimpse-expand:first-child').click();
+                
+                            var end = new Date().getTime(); 
+                            console.log('Total style time for "' + scope.attr('data-glimpseKey') + '": ' + (end - start));
+                        };
+                    
+                    return { 
+                            apply : apply
+                        };
                 } (),
         
                 //Engines 
@@ -961,6 +1004,10 @@ var glimpse = (function ($, scope) {
                 build = function (data, metadata) {
                     return master.build(data, 0, true, metadata, 1);
                 },
+                insert = function (scope, data, metadata) {
+                    scope.html(master.build(data, 0, true, metadata, 1));
+                    style.apply(scope);
+                },
                 init = function () {
                     register('master', master);
                     register('keyvalue', keyValue);
@@ -972,6 +1019,7 @@ var glimpse = (function ($, scope) {
             init();
              
             return {
+                insert : insert,
                 build : build,
                 retrieve : retrieve,
                 register : register

@@ -112,6 +112,7 @@
     <Content Include="Scripts\glimpse.controller.render.js" />
     <Content Include="Scripts\glimpse.controller.sizer.js" />
     <Content Include="Scripts\glimpse.core.data.js" />
+    <Content Include="Scripts\glimpse.render.style.js" />
     <Content Include="Scripts\glimpse.render.util.rawString.js">
       <SubType>UserControl</SubType>
     </Content>
@@ -170,6 +171,7 @@
     <Content Include="Scripts\glimpse.render.engine.structured.js" />
     <Content Include="Scripts\jquery-1.6.3.min.js" />
     <Content Include="Scripts\sprite.png" />
+    <Content Include="Scripts\temp-glimpseClient.js" />
     <Content Include="Scripts\test.html" />
     <Content Include="Scripts\glimpse.controller.template.js" />
     <Content Include="Scripts\glimpse.view.shell.css" />

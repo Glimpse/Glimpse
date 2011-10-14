@@ -36,17 +36,17 @@
             return html;
         },
          
-        renderPanel = function (key, pluginData, pluginMetadata) {
-            elements.panelHolder.append(constuctPanel(key, pluginData, pluginMetadata)); 
-        },
-        constuctPanel = function (key, pluginData, pluginMetadata) {
+        renderPanel = function (key, pluginData, pluginMetadata) { 
             var start = new Date().getTime();
             
             var metadata = pluginMetadata == undefined ? pluginMetadata.structure : undefined;
-                html = '<div class="glimpse-panel glimpse-panelitem-' + key + '" data-glimpseKey="' + key + '">' + renderEngine.build(pluginData.data, metadata) + '</div>'
-                
+                html = '<div class="glimpse-panel glimpse-panelitem-' + key + '" data-glimpseKey="' + key + '"><div class="glimpse-panel-message">Loading data, please wait...</div></div>',
+                panel = $(html).appendTo(elements.panelHolder);
+
+            renderEngine.insert(panel, pluginData.data, metadata); 
+
             var end = new Date().getTime(); 
-            console.log('Total render time for ' + key + ': ' + (end - start));
+            console.log('Total render time for "' + key + '": ' + (end - start));
 
             return html;
         },

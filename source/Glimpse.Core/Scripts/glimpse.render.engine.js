@@ -15,6 +15,7 @@
             return html;
         },
 /*(import:glimpse.render.util.rawString.js|2)*/,
+/*(import:glimpse.render.style.js|2)*/,
 
         //Engines 
 /*(import:glimpse.render.engine.master.js|2)*/,
@@ -33,6 +34,10 @@
         build = function (data, metadata) {
             return master.build(data, 0, true, metadata, 1);
         },
+        insert = function (scope, data, metadata) {
+            scope.html(master.build(data, 0, true, metadata, 1));
+            style.apply(scope);
+        },
         init = function () {
             register('master', master);
             register('keyvalue', keyValue);
@@ -44,6 +49,7 @@
     init();
      
     return {
+        insert : insert,
         build : build,
         retrieve : retrieve,
         register : register
