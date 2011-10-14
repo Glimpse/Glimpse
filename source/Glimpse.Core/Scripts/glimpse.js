@@ -372,6 +372,8 @@ var glimpse = (function ($, scope) {
                     if (panel.length == 0) {
                         renderPanel(key, data.getCurrent()[key], data.getCurrentMeta().plugins[key]);  
                         panel = elements.panelHolder.find('.glimpse-panel[data-glimpseKey="' + key + '"]');
+                        
+                        pubsub.publish('action.plugin.created', key); 
                     }
                     
                     //Switch style states
@@ -489,22 +491,25 @@ var glimpse = (function ($, scope) {
             init(); 
         } (),
         sizerController = function () {
-            var //Support  
+            var //Support    
                 wireListeners = function() {
                     pubsub.subscribe('state.build.shell', setup); 
+                    pubsub.subscribe('action.plugin.created', function(topic, payload) { pluginCreated(payload); }); 
+                    pubsub.subscribe('action.resize', function(topic, payload) { shellResized(payload); }); 
                 },
-                applyNewHeihgt = function () {
-                    var height = elements.holder.height();
-        
-                    //Persist height
+                shellResized = function (height) { 
+                    //Persist height 
                     settings.height = height;
                     pubsub.publish('state.persist');
         
                     //Apply the current height
                     elements.holder.find('.glimpse-spacer').height(height);
-                    elements.holder.find('.glimpse-panel').height(height - 52);
-                            
-                    pubsub.publish('action.resize', height - 52);
+                    elements.holder.find('.glimpse-panel').height(height - 52); 
+                },
+                pluginCreated = function (key) {
+                    var panel = elements.panelHolder.find('.glimpse-panel[data-glimpseKey="' + key + '"]'); 
+        
+                    panel.height(settings.height - 52); 
                 },
                 
                 //Main
@@ -517,7 +522,7 @@ var glimpse = (function ($, scope) {
                             opacityScope : elements.holder,
                             isUpDown : true, 
                             offset : -1,
-                            endDragCallback: function () { applyNewHeihgt(); }
+                            endDragCallback: function () { pubsub.publish('action.resize', elements.holder.height()); }
                         });
                 }, 
                 init = function () {
@@ -531,8 +536,7 @@ var glimpse = (function ($, scope) {
                 wireListeners = function() {
                     pubsub.subscribe('action.open', open);
                     pubsub.subscribe('action.minimize', function() { close(false); });
-                    pubsub.subscribe('action.close', function() { close(true); });
-                    pubsub.subscribe('action.resize', function(message, data) { resize(data); });
+                    pubsub.subscribe('action.close', function() { close(true); }); 
                 },
                     
                 //Main 
@@ -557,14 +561,7 @@ var glimpse = (function ($, scope) {
                             else
                                 elements.opener.show(); 
                         });
-                }, 
-                resize = function (height) {
-                    settings.height = height;
-                    pubsub.publish('state.persist');
-                     
-                    elements.spacer.height(height);
-                    elements.holder.find('.glimpse-panel').height(height - 54); 
-                }, 
+                },  
                 init = function () {
                     wireListeners();
                 };

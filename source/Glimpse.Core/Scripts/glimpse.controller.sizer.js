@@ -1,20 +1,24 @@
 ﻿sizerController = function () {
-    var //Support  
+    var //Support    
         wireListeners = function() {
             pubsub.subscribe('state.build.shell', setup); 
-        },
-        applyNewHeihgt = function () {
-            var height = elements.holder.height();
 
-            //Persist height
+            pubsub.subscribe('action.plugin.created', function(topic, payload) { pluginCreated(payload); }); 
+            pubsub.subscribe('action.resize', function(topic, payload) { shellResized(payload); }); 
+        },
+        shellResized = function (height) { 
+            //Persist height 
             settings.height = height;
             pubsub.publish('state.persist');
 
             //Apply the current height
             elements.holder.find('.glimpse-spacer').height(height);
-            elements.holder.find('.glimpse-panel').height(height - 52);
-                    
-            pubsub.publish('action.resize', height - 52);
+            elements.holder.find('.glimpse-panel').height(height - 52); 
+        },
+        pluginCreated = function (key) {
+            var panel = elements.panelHolder.find('.glimpse-panel[data-glimpseKey="' + key + '"]'); 
+
+            panel.height(settings.height - 52); 
         },
         
         //Main
@@ -27,7 +31,7 @@
                     opacityScope : elements.holder,
                     isUpDown : true, 
                     offset : -1,
-                    endDragCallback: function () { applyNewHeihgt(); }
+                    endDragCallback: function () { pubsub.publish('action.resize', elements.holder.height()); }
                 });
         }, 
         init = function () {

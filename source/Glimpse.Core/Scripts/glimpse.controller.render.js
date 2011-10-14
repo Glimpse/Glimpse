@@ -76,6 +76,8 @@
             if (panel.length == 0) {
                 renderPanel(key, data.getCurrent()[key], data.getCurrentMeta().plugins[key]);  
                 panel = elements.panelHolder.find('.glimpse-panel[data-glimpseKey="' + key + '"]');
+                
+                pubsub.publish('action.plugin.created', key); 
             }
             
             //Switch style states

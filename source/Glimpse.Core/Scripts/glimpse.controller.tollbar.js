@@ -3,8 +3,7 @@
         wireListeners = function() {
             pubsub.subscribe('action.open', open);
             pubsub.subscribe('action.minimize', function() { close(false); });
-            pubsub.subscribe('action.close', function() { close(true); });
-            pubsub.subscribe('action.resize', function(message, data) { resize(data); });
+            pubsub.subscribe('action.close', function() { close(true); }); 
         },
             
         //Main 
@@ -29,14 +28,7 @@
                     else
                         elements.opener.show(); 
                 });
-        }, 
-        resize = function (height) {
-            settings.height = height;
-            pubsub.publish('state.persist');
-             
-            elements.spacer.height(height);
-            elements.holder.find('.glimpse-panel').height(height - 54); 
-        }, 
+        },  
         init = function () {
             wireListeners();
         };
