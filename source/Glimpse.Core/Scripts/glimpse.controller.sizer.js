@@ -14,7 +14,7 @@
             elements.holder.find('.glimpse-spacer').height(height);
             elements.holder.find('.glimpse-panel').height(height - 52);
                     
-            pubsub.subscribe('action.resize', height - 52);
+            pubsub.publish('action.resize', height - 52);
         },
         
         //Main
