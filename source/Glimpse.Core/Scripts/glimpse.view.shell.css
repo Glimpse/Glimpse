@@ -74,10 +74,10 @@
     -moz-box-shadow: inset 0px 1px 0px 0px #E2E2E2;
     box-shadow: inset 0px 1px 0px 0px #E2E2E2;
     border-top: 1px solid #7A7A7A;
-    height: 27px;
+    height: 25px;
 }
 .glimpse-bar .glimpse-icon {
-    margin-top: 4px;
+    margin-top: 3px;
     float: left;
 }
 .glimpse-buttons {

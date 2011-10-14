@@ -110,6 +110,7 @@
     <Compile Include="Plumbing\InProcStackMetadataStore.cs" />
     <Content Include="Scripts\glimpse.controller.element.js" />
     <Content Include="Scripts\glimpse.controller.render.js" />
+    <Content Include="Scripts\glimpse.controller.sizer.js" />
     <Content Include="Scripts\glimpse.core.data.js" />
     <Content Include="Scripts\glimpse.render.util.rawString.js">
       <SubType>UserControl</SubType>
