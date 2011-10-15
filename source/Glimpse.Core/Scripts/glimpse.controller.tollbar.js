@@ -1,9 +1,12 @@
 ﻿tollbarController = function () {
     var //Support
+        isPopup = window.location.href.indexOf(config.popupUrl) > -1,
         wireListeners = function() {
             pubsub.subscribe('action.open', function(topic, payload) { open(payload); });
             pubsub.subscribe('action.minimize', function() { close(false); });
             pubsub.subscribe('action.close', function() { close(true); }); 
+            pubsub.subscribe('action.popout', popout); 
+            pubsub.subscribe('state.final', checkPopout); 
             pubsub.subscribe('state.build.shell.modify', wireDomListeners); 
             pubsub.subscribe('state.build.rendered', restore); 
         },
@@ -13,6 +16,10 @@
             elements.scope.find('.glimpse-close').click(function () { pubsub.publish('action.close'); return false; });
             elements.scope.find('.glimpse-popout').click(function () { pubsub.publish('action.popout'); return false; });
         }, 
+        openPopup = function () {
+            var url = 'test-popup.html'; //static.popupUrl + '&glimpseRequestID=' + $('#glimpseData').data('glimpse-requestID');
+            window.open(url, 'GlimpsePopup', 'width=1100,height=600,status=no,toolbar=no,menubar=no,location=no,resizable=yes,scrollbars=yes');
+        },
             
         //Main 
         open = function (shortCircuitSlide) {
@@ -22,24 +29,39 @@
             elements.opener.hide(); 
             $.fn.add.call(elements.holder, elements.spacer).show().animate({ height : settings.height }, (shortCircuitSlide ? 0 : 'fast'));   
         },
-        close = function (remove) {
-            settings.open = false;
-            pubsub.publish('state.persist');
+        close = function (remove, suppressPersist) {
+            if (!suppressPersist) {
+                settings.open = false;
+                pubsub.publish('state.persist');
+            }
 
             var panelElements = $.fn.add.call(elements.holder, elements.spacer).animate({ height : '0' }, 'fast', function() {
                     panelElements.hide();
 
                     if (remove) {
-                        elements.scope.remove();
-                        pubsub.publish('state.persist');
+                        elements.scope.remove(); 
+                        pubsub.publish('state.terminate');
                     }
                     else
                         elements.opener.show(); 
                 });
         },  
+        popout = function () {
+            settings.popupOn = true;
+            pubsub.publish('state.persist');
+
+            openPopup();
+
+            close(true, true);
+        },
+        checkPopout = function () { 
+            if (settings.open && settings.popupOn && !isPopup) 
+                openPopup();
+        },
         restore = function () {
             var key = settings.activeTab,
                 opened = settings.open,
+                popupOn = settings.popupOn,
                 tab = elements.tabHolder.find('.glimpse-tab[data-glimpseKey="' + key + '"]');
 
             if (tab.length == 0 || tab.hasClass('glimpse-disabled'))
@@ -47,7 +69,7 @@
 
             pubsub.publish('action.tab.select', key);
 
-            if (opened)
+            if (opened && !popupOn)
                 pubsub.publish('action.open', true);
         },
         init = function () {

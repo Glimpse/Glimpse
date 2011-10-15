@@ -1,12 +1,4 @@
 ﻿
-//#region JSON
-
-//TODO remove parse method as jquery already has it 
-
-var JSON; if (!JSON) { JSON = {}; } (function () { "use strict"; function f(n) { return n < 10 ? '0' + n : n; } if (typeof Date.prototype.toJSON !== 'function') { Date.prototype.toJSON = function (key) { return isFinite(this.valueOf()) ? this.getUTCFullYear() + '-' + f(this.getUTCMonth() + 1) + '-' + f(this.getUTCDate()) + 'T' + f(this.getUTCHours()) + ':' + f(this.getUTCMinutes()) + ':' + f(this.getUTCSeconds()) + 'Z' : null; }; String.prototype.toJSON = Number.prototype.toJSON = Boolean.prototype.toJSON = function (key) { return this.valueOf(); }; } var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g, escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g, gap, indent, meta = { '\b': '\\b', '\t': '\\t', '\n': '\\n', '\f': '\\f', '\r': '\\r', '"': '\\"', '\\': '\\\\' }, rep; function quote(string) { escapable.lastIndex = 0; return escapable.test(string) ? '"' + string.replace(escapable, function (a) { var c = meta[a]; return typeof c === 'string' ? c : '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4); }) + '"' : '"' + string + '"'; } function str(key, holder) { var i, k, v, length, mind = gap, partial, value = holder[key]; if (value && typeof value === 'object' && typeof value.toJSON === 'function') { value = value.toJSON(key); } if (typeof rep === 'function') { value = rep.call(holder, key, value); } switch (typeof value) { case 'string': return quote(value); case 'number': return isFinite(value) ? String(value) : 'null'; case 'boolean': case 'null': return String(value); case 'object': if (!value) { return 'null'; } gap += indent; partial = []; if (Object.prototype.toString.apply(value) === '[object Array]') { length = value.length; for (i = 0; i < length; i += 1) { partial[i] = str(i, value) || 'null'; } v = partial.length === 0 ? '[]' : gap ? '[\n' + gap + partial.join(',\n' + gap) + '\n' + mind + ']' : '[' + partial.join(',') + ']'; gap = mind; return v; } if (rep && typeof rep === 'object') { length = rep.length; for (i = 0; i < length; i += 1) { if (typeof rep[i] === 'string') { k = rep[i]; v = str(k, value); if (v) { partial.push(quote(k) + (gap ? ': ' : ':') + v); } } } } else { for (k in value) { if (Object.prototype.hasOwnProperty.call(value, k)) { v = str(k, value); if (v) { partial.push(quote(k) + (gap ? ': ' : ':') + v); } } } } v = partial.length === 0 ? '{}' : gap ? '{\n' + gap + partial.join(',\n' + gap) + '\n' + mind + '}' : '{' + partial.join(',') + '}'; gap = mind; return v; } } if (typeof JSON.stringify !== 'function') { JSON.stringify = function (value, replacer, space) { var i; gap = ''; indent = ''; if (typeof space === 'number') { for (i = 0; i < space; i += 1) { indent += ' '; } } else if (typeof space === 'string') { indent = space; } rep = replacer; if (replacer && typeof replacer !== 'function' && (typeof replacer !== 'object' || typeof replacer.length !== 'number')) { throw new Error('JSON.stringify'); } return str('', { '': value }); }; } if (typeof JSON.parse !== 'function') { JSON.parse = function (text, reviver) { var j; function walk(holder, key) { var k, v, value = holder[key]; if (value && typeof value === 'object') { for (k in value) { if (Object.prototype.hasOwnProperty.call(value, k)) { v = walk(value, k); if (v !== undefined) { value[k] = v; } else { delete value[k]; } } } } return reviver.call(holder, key, value); } text = String(text); cx.lastIndex = 0; if (cx.test(text)) { text = text.replace(cx, function (a) { return '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4); }); } if (/^[\],:{}\s]*$/.test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@').replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) { j = eval('(' + text + ')'); return typeof reviver === 'function' ? walk({ '': j }, '') : j; } throw new SyntaxError('JSON.parse'); }; } } ());
-
-//#endregion
-
 //#region google-code-prettify
  
 if (!window.PR_SHOULD_USE_CONTINUATION) {
@@ -83,24 +75,7 @@ if (window.jQueryGlimpse) { (function ($) {
             that.restoreTab(g);
 
             $('.glimpse-title').html(title);
-        },
-        restoreTab: function (g) {
-            var static = g.static, tabStrip = static.tabStrip(), panelHolder = static.panelHolder(), activeTab = g.settings.activeTab;
-
-            $('.glimpse-active', tabStrip).removeClass('glimpse-active').removeClass('glimpse-hover');
-            $((activeTab ? '.glimpse-tabitem-' + activeTab : 'li:first'), tabStrip).addClass('glimpse-active');
-
-            $('.glimpse-active', panelHolder).removeClass('glimpse-active');
-            $((activeTab ? '.glimpse-panelitem-' + activeTab : '.glimpse-panel:first'), panelHolder).addClass('glimpse-active');
-             
-            $('.glimpse').trigger('glimpse.tabchanged', tabStrip.find('.glimpse-active').attr('data-sort'));
-        },
-        clearLayout: function (g) {
-            var that = this, static = g.static, tabStrip = static.tabStrip(), panelHolder = static.panelHolder();
-
-            that.removeTabs(tabStrip);
-            that.removeTabBodies(panelHolder);
-        },
+        },  
         buildHeading: function (url, clientName, type) {
             var clean = function(data) {
                 return (data === undefined || data === null || data === "null") ? '' : data;
@@ -115,28 +90,10 @@ if (window.jQueryGlimpse) { (function ($) {
 
     //#region $.glimpse
 
-    $.extend($.glimpse, {
-        _executeProtocolListeners: function (g, isInit) {
-            var i = 0, listeners = g.plugins.protocolListeners, data = g.static.data;
-            for (; i < listeners.length; i++) {
-                var listener = listeners[i];
-                if (isInit || !listener.onInitOnly)
-                    listener.callback(data);
-            }
-        },
-        _executeLayoutListeners: function (g, isInit) {
-            var i = 0, listeners = g.plugins.layoutListeners, static = g.static, tabStrip = static.tabStrip(), panelHolder = static.panelHolder();
-            for (; i < listeners.length; i++) {
-                var listener = listeners[i];
-                if (isInit || !listener.onInitOnly)
-                    listener.callback(tabStrip, panelHolder);
-            }
-        },
+    $.extend($.glimpse, { 
         _wireEvents: function (g) {
             var static = g.static, settings = g.settings;
-
-            g._wireCommonPluginEvents(g);
-
+             
             //Resize panels if we are in popup
             if (static.isPopup) {
                 $(window).resize(function () {
@@ -146,37 +103,16 @@ if (window.jQueryGlimpse) { (function ($) {
             $(window).unload(function() {
                 g.popup.close();
             });
-        },
-        _wireCommonPluginEvents: function (g) {
-            //Exspand/Collapse
-            $('.glimpse-expand').live('click', function () {
-                var button = $(this).toggleClass('glimpse-collapse');
-                if (button.hasClass('glimpse-collapse'))
-                    button.parent().next().children().first().hide().next().show();
-                else
-                    button.parent().next().children().first().show().next().hide();
-            });
         }, 
         _adjustLayout: function (g) {
             $('.glimpse-spacer').height(g.settings.height);
             $('.glimpse-holder .glimpse-panel').height(g.settings.height - 54);
             $('.glimpse').trigger('glimpse.resize', g.settings.height - 54);
-        },
-        addProtocolListener: function (callback, onInitOnly) {
-            $.glimpse.plugins.protocolListeners.push({ 'callback': callback, 'onInitOnly': onInitOnly });
-        },
-        addLayoutListener: function (callback, onInitOnly) {
-            $.glimpse.plugins.layoutListeners.push({ 'callback': callback, 'onInitOnly': onInitOnly });
-        },
+        }, 
         persistState: function () {
             var g = $.glimpse;
             $.glimpse.util.cookie('glimpseOptions', g.settings);
-        },
-        restoreState: function () {
-            var g = $.glimpse;
-            if (g.settings.open)
-                g.open(0);
-        },
+        }, 
         refresh: function (data, title) {
             if (!data) return;
 
@@ -227,14 +163,7 @@ if (window.jQueryGlimpse) { (function ($) {
 
             $.glimpseProcessor.layout(g, $.glimpseProcessor.buildHeading(static.url, static.clientName, ''));
 
-            g._executeLayoutListeners(g, true);
-
-            if (!static.isPopup)
-                $('body').append('<div class="glimpse-spacer"></div>');
-
-            g.restoreState();
-
-            if (!static.isPopup && g.settings.popupOn)
+            g._executeLayoutListeners(g, true); 
                 g.popup.open(); 
         },
         plugins: {
@@ -288,53 +217,7 @@ if (window.jQueryGlimpse) { (function ($) {
     });
 
     //#endregion
-
-    //#region $.glimpse.popup
-
-    $.extend($.glimpse.popup, {
-        open: function () {
-            var gp = this, g = $.glimpse, static = g.static;
-
-            if (!static.popup || static.popup.closed) {
-                if (g.settings.firstPopup)
-                    alert('Glimpse Message: Glimpse may get blocked by your popup blocker, if this is the case make sure you set up and exception for this domain.')
-
-                g.settings.firstPopup = false;
-                g.settings.popupOn = true;
-                g.persistState();
-
-                static.dataString = JSON.stringify(static.data);
-
-                var url = static.popupUrl + '&glimpseRequestID=' + $('#glimpseData').data('glimpse-requestID');
-                static.popup = window.open(url, 'GlimpsePopup', 'width=1100,height=600,status=no,toolbar=no,menubar=no,location=no,resizable=yes,scrollbars=yes');
-
-                if (gp.popupWorked(static.popup))
-                    g.close(undefined, true);
-            }
-        },
-        close: function () {
-            var gp = this, g = $.glimpse;
-
-            if (g.settings.popupOn) {
-                if (g.static.isPopup && !$.glimpse.util.cookie('glimpseKeepPopup')) {
-                    g.static.popup = null;
-                    g.settings.popupOn = false;
-                    g.persistState();
-                }
-                else
-                    $.glimpse.util.cookie('glimpseKeepPopup', '1');
-            }
-        },
-        popupWorked: function (popup) {
-            var successfull = (popup && !popup.closed && typeof popup.closed != 'undefined');
-            if (!successfull)
-                alert("Glimpse Error: Glimpse popup was blocked.");
-            return successfull
-        }
-    });
-
-    //#endregion
-
+ 
     //#region $.glimpseAjax
 
     //#region XHRSpy

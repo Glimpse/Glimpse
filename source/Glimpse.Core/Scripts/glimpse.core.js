@@ -5,10 +5,12 @@ var glimpse = (function ($, scope) {
         elements = {},
         template = {},
         config = {
-            path : '' 
+            path : '',
+            popupUrl : 'test-popup.html'
         }
         settings = {
-            height : 250
+            height : 250,
+            activeTab: 'Routes',
         },
 /*(import:glimpse.core.util.js|2)*/,
 /*(import:glimpse.core.pubsub.js|2)*/,
@@ -26,6 +28,7 @@ var glimpse = (function ($, scope) {
             pubsub.publish('state.init'); 
             pubsub.publish('state.build');  
             pubsub.publish('state.render'); 
+            pubsub.publish('state.final'); 
         };
         
 

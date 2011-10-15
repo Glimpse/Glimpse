@@ -7,7 +7,7 @@
             return current;
         },
         getCurrentMeta = function () {
-            return current._metadata;
+            return current.data._metadata;
         },
         init = function () {
             current = glimpseData; 

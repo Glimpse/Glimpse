@@ -108,7 +108,7 @@
     <Compile Include="Plumbing\GlimpseResponseFilter.cs" />
     <Compile Include="Plumbing\GlimpseSerializer.cs" />
     <Compile Include="Plumbing\InProcStackMetadataStore.cs" />
-    <Content Include="Scripts\glimpse.controller.element.js" />
+    <Content Include="Scripts\glimpse.core.process.js" />
     <Content Include="Scripts\glimpse.controller.render.js" />
     <Content Include="Scripts\glimpse.controller.sizer.js" />
     <Content Include="Scripts\glimpse.core.data.js" />
@@ -173,7 +173,7 @@
     <Content Include="Scripts\sprite.png" />
     <Content Include="Scripts\temp-glimpseClient.js" />
     <Content Include="Scripts\test.html" />
-    <Content Include="Scripts\glimpse.controller.template.js" />
+    <Content Include="Scripts\glimpse.core.template.js" />
     <Content Include="Scripts\glimpse.view.shell.css" />
     <Content Include="Scripts\glimpse.view.shell.html" />
     <Content Include="Scripts\glimpse.controller.shell.js" />
@@ -190,7 +190,7 @@
     </None>
     <Content Include="NuSpec\content\App_Readme\glimpse.readme.txt" />
     <None Include="NuSpec\tools\install.ps1" />
-    <Content Include="Scripts\glimpse.controller.state.js" />
+    <Content Include="Scripts\glimpse.core.state.js" />
     <Content Include="Scripts\glimpse.render.engine.keyValue.js" />
   </ItemGroup>
   <ItemGroup>

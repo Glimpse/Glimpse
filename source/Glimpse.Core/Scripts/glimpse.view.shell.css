@@ -634,3 +634,21 @@ li.glimpse-permanent {
     top:-1px;
     position:relative;
 }
+
+
+.glimpse-popup {
+    color:#000;
+    background:#FFF;
+    margin:0;
+    padding:0;
+} 
+.glimpse-popup .glimpse-holder { 
+    position:relative !important; 
+    display: block !important; 
+} 
+.glimpse-popup .glimpse-popout, .glimpse-popup .glimpse-minimize, .glimpse-popup .glimpse-close, .glimpse-popup .glimpse-terminate, .glimpse-popup .glimpse-open { 
+    display:none !important; 
+} 
+.glimpse-popup .glimpse-panel { 
+    overflow:visible !important; 
+}
