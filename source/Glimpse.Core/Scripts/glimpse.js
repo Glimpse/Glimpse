@@ -339,9 +339,7 @@ var glimpse = (function ($, scope) {
                         html = '<div class="glimpse-panel glimpse-panelitem-' + key + '" data-glimpseKey="' + key + '"><div class="glimpse-panel-message">Loading data, please wait...</div></div>',
                         panel = $(html).appendTo(elements.panelHolder);
         
-                    setTimeout(function() {
-                            renderEngine.insert(panel, pluginData.data, metadata);
-                        }, 500);
+                    renderEngine.insert(panel, pluginData.data, metadata); 
         
                     var end = new Date().getTime(); 
                     console.log('Total render time for "' + key + '": ' + (end - start));
