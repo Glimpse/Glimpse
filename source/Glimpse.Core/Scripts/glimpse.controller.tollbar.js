@@ -4,7 +4,15 @@
             pubsub.subscribe('action.open', open);
             pubsub.subscribe('action.minimize', function() { close(false); });
             pubsub.subscribe('action.close', function() { close(true); }); 
+            pubsub.subscribe('state.build.shell.modify', wireDomListeners); 
+            pubsub.subscribe('state.build.rendered', restore); 
         },
+        wireDomListeners = function() {
+            elements.scope.find('.glimpse-open').click(function () { pubsub.publish('action.open'); return false; });
+            elements.scope.find('.glimpse-minimize').click(function () { pubsub.publish('action.minimize'); return false; });
+            elements.scope.find('.glimpse-close').click(function () { pubsub.publish('action.close'); return false; });
+            elements.scope.find('.glimpse-popout').click(function () { pubsub.publish('action.popout'); return false; });
+        }, 
             
         //Main 
         open = function () {
@@ -29,6 +37,15 @@
                         elements.opener.show(); 
                 });
         },  
+        restore = function () {
+            var key = settings.activeTab,
+                tab = elements.tabHolder.find('.glimpse-tab[data-glimpseKey="' + key + '"]');
+
+            if (tab.length == 0 || tab.hasClass('glimpse-disabled'))
+                key = elements.tabHolder.find('.glimpse-tab:not(.glimpse-disabled):first').attr('data-glimpseKey');
+
+            pubsub.publish('action.tab.select', key);
+        },
         init = function () {
             wireListeners();
         };

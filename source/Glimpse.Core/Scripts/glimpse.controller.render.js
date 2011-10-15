@@ -59,6 +59,9 @@
 
             selectedTab(key);
             selectedPanel(key);
+
+            settings.activeTab = key;
+            pubsub.publish('state.persist');
              
             pubsub.publish('action.plugin.active', key); 
         }, 
@@ -90,6 +93,8 @@
         renderLayout = function () { 
             clearPreviousLayout();
             buildNewLayout();
+            
+            pubsub.publish('state.build.rendered');
         },
         init = function () {
             wireListeners(); 

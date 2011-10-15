@@ -1,5 +1,8 @@
 ﻿templateController = function () {
     var //Support
+        wireListeners = function () {
+            pubsub.subscribe('state.build.template', processData);  
+        },
         processData = function () {  
             template.css = '/*(import:glimpse.view.shell.css)*/';
             template.html = '/*(import:glimpse.view.shell.html)*/';
@@ -9,7 +12,7 @@
         
         //Main
         init = function () {
-            pubsub.subscribe('state.build.template', processData);  
+            wireListeners();
         };
     
     init(); 

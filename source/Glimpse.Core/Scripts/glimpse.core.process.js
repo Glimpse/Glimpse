@@ -1,4 +1,4 @@
-﻿elementController = function () {
+﻿process = function () {
     var //Support 
         findElements = function () { 
             elements.scope = scope;
