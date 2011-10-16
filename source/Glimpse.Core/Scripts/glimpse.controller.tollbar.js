@@ -9,6 +9,15 @@
             pubsub.subscribe('state.final', checkPopout); 
             pubsub.subscribe('state.build.shell.modify', wireDomListeners); 
             pubsub.subscribe('state.build.rendered', restore); 
+
+            if (settings.popupOn) {
+                if (isPopup) {
+                    $(window).resize(function () {
+                        elements.holder.find('.glimpse-panel').height($(window).height() - 54);
+                    });
+                } 
+                $(window).unload(closePopup);
+            }
         },
         wireDomListeners = function() {
             elements.scope.find('.glimpse-open').click(function () { pubsub.publish('action.open', false); return false; });
@@ -16,7 +25,12 @@
             elements.scope.find('.glimpse-close').click(function () { pubsub.publish('action.close'); return false; });
             elements.scope.find('.glimpse-popout').click(function () { pubsub.publish('action.popout'); return false; });
         }, 
-        openPopup = function () {
+        openPopup = function () { 
+            settings.popupOn = true;
+            pubsub.publish('state.persist');
+
+            util.cookie('glimpseKeepPopup', '1');
+
             var url = 'test-popup.html'; //static.popupUrl + '&glimpseRequestID=' + $('#glimpseData').data('glimpse-requestID');
             window.open(url, 'GlimpsePopup', 'width=1100,height=600,status=no,toolbar=no,menubar=no,location=no,resizable=yes,scrollbars=yes');
         },
@@ -46,17 +60,25 @@
                         elements.opener.show(); 
                 });
         },  
-        popout = function () {
-            settings.popupOn = true;
-            pubsub.publish('state.persist');
-
+        popout = function () { 
             openPopup();
 
-            close(true, true);
+            close(false, true);
         },
         checkPopout = function () { 
-            if (settings.open && settings.popupOn && !isPopup) 
-                openPopup();
+            if (isPopup)
+                util.cookie('glimpseKeepPopup', '');
+
+            if (settings.open && settings.popupOn && !isPopup)
+                openPopup(); 
+        },
+        closePopup = function () {
+            if (isPopup && !util.cookie('glimpseKeepPopup')) { 
+                settings.popupOn = false;
+                pubsub.publish('state.persist');
+            }
+            else
+                util.cookie('glimpseKeepPopup', null);
         },
         restore = function () {
             var key = settings.activeTab,

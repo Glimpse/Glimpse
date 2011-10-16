@@ -172,6 +172,8 @@
     <Content Include="Scripts\jquery-1.6.3.min.js" />
     <Content Include="Scripts\sprite.png" />
     <Content Include="Scripts\temp-glimpseClient.js" />
+    <Content Include="Scripts\test-a.html" />
+    <Content Include="Scripts\test-popup.html" />
     <Content Include="Scripts\test.html" />
     <Content Include="Scripts\glimpse.core.template.js" />
     <Content Include="Scripts\glimpse.view.shell.css" />

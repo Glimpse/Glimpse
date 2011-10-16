@@ -19,6 +19,7 @@
         }, 
         init = function () {
             wireListeners();
+            restore();
         };
     
     init();  
