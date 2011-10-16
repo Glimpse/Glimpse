@@ -561,20 +561,20 @@ li.glimpse-permanent {
     text-align: center;
     background-color: #DDD;
 }
-.glimpse-panelitem-GlimpseInformation div {
+.glimpse-panelitem-GlimpseMetadata div {
     text-align: center;
 }
-.glimpse-panelitem-GlimpseInformation .glimpse-panel-message {
+.glimpse-panelitem-GlimpseMetadata .glimpse-panel-message {
     padding-top: 5px;
 }
-.glimpse-panelitem-GlimpseInformation strong {
+.glimpse-panelitem-GlimpseMetadata strong {
     font-weight: bold;
 }
-.glimpse-panelitem-GlimpseInformation .glimpse-info-more {
+.glimpse-panelitem-GlimpseMetadata .glimpse-info-more {
     font-size: 1.5em;
     margin: 1em 0;
 }
-.glimpse-panelitem-GlimpseInformation .glimpse-info-quote {
+.glimpse-panelitem-GlimpseMetadata .glimpse-info-quote {
     font-style: italic;
     margin: 0.75em 0 3em;
 }

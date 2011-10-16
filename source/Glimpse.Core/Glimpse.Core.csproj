@@ -108,6 +108,7 @@
     <Compile Include="Plumbing\GlimpseResponseFilter.cs" />
     <Compile Include="Plumbing\GlimpseSerializer.cs" />
     <Compile Include="Plumbing\InProcStackMetadataStore.cs" />
+    <Content Include="Scripts\glimpse.controller.metadata.js" />
     <Content Include="Scripts\glimpse.core.process.js" />
     <Content Include="Scripts\glimpse.controller.render.js" />
     <Content Include="Scripts\glimpse.controller.sizer.js" />
@@ -169,6 +170,7 @@
     <Content Include="Scripts\glimpse.render.engine.table.js" />
     <Content Include="Scripts\glimpse.render.engine.js" />
     <Content Include="Scripts\glimpse.render.engine.structured.js" />
+    <Content Include="Scripts\glimpse.view.metadata.html" />
     <Content Include="Scripts\jquery-1.6.3.min.js" />
     <Content Include="Scripts\sprite.png" />
     <Content Include="Scripts\temp-glimpseClient.js" />

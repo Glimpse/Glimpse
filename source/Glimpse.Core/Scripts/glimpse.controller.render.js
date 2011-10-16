@@ -48,7 +48,7 @@
             var end = new Date().getTime(); 
             console.log('Total render time for "' + key + '": ' + (end - start));
 
-            return html;
+            return panel;
         },
 
         
@@ -73,13 +73,9 @@
             tab.addClass('glimpse-active');
         },
         selectedPanel = function (key) {
-            var panel = elements.panelHolder.find('.glimpse-panel[data-glimpseKey="' + key + '"]'); 
-
-            //Create panel if needed
+            var panel = elements.panelHolder.find('.glimpse-panel[data-glimpseKey="' + key + '"]');  
             if (panel.length == 0) {
-                renderPanel(key, data.getCurrent().data[key], data.getCurrentMeta().plugins[key]);  
-                panel = elements.panelHolder.find('.glimpse-panel[data-glimpseKey="' + key + '"]');
-                
+                panel = renderPanel(key, data.getCurrent().data[key], data.getCurrentMeta().plugins[key]);   
                 pubsub.publish('action.plugin.created', key); 
             }
             

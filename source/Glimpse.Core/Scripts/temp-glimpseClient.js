@@ -90,29 +90,12 @@ if (window.jQueryGlimpse) { (function ($) {
 
     //#region $.glimpse
 
-    $.extend($.glimpse, { 
-        _wireEvents: function (g) {
-            var static = g.static, settings = g.settings;
-             
-            //Resize panels if we are in popup
-            if (static.isPopup) {
-                $(window).resize(function () {
-                    $('.glimpse-holder .glimpse-panel').height($(window).height() - 54);
-                });
-            }
-            $(window).unload(function() {
-                g.popup.close();
-            });
-        }, 
+    $.extend($.glimpse, {  
         _adjustLayout: function (g) {
             $('.glimpse-spacer').height(g.settings.height);
             $('.glimpse-holder .glimpse-panel').height(g.settings.height - 54);
             $('.glimpse').trigger('glimpse.resize', g.settings.height - 54);
-        }, 
-        persistState: function () {
-            var g = $.glimpse;
-            $.glimpse.util.cookie('glimpseOptions', g.settings);
-        }, 
+        },  
         refresh: function (data, title) {
             if (!data) return;
 
@@ -139,19 +122,6 @@ if (window.jQueryGlimpse) { (function ($) {
             
             static.isPopup = window.location.href.indexOf(static.popupUrl) > -1;
 
-            if (!data) {
-                if (static.isPopup && window.opener.glimpse) {
-                    $.glimpse.util.cookie('glimpseKeepPopup', '');
-                    $.glimpse.static.url = window.opener.jQueryGlimpse.glimpse.static.url;
-                    glimpse = data = JSON.parse(window.opener.jQueryGlimpse.glimpse.static.dataString);
-                }
-                else
-                    return;
-            }
-
-//            var urlTest = static.popupUrl + '&glimpseRequestID=' + $('#glimpseData').data('glimpse-requestID');
-//            static.popup = window.open(urlTest, 'GlimpsePopup', 'width=1100,height=600,status=no,toolbar=no,menubar=no,location=no,resizable=yes,scrollbars=yes');
-
             g.static.data = data;
             g.settings = $.extend(g.settings, $.glimpse.util.cookie('glimpseOptions'));
 
@@ -163,8 +133,7 @@ if (window.jQueryGlimpse) { (function ($) {
 
             $.glimpseProcessor.layout(g, $.glimpseProcessor.buildHeading(static.url, static.clientName, ''));
 
-            g._executeLayoutListeners(g, true); 
-                g.popup.open(); 
+            g._executeLayoutListeners(g, true);  
         },
         plugins: {
             protocolListeners: [],
@@ -901,13 +870,7 @@ if (window.jQueryGlimpse) { (function ($) {
             $.glimpse.addLayoutListener(function (tabStrip, panelHolder) { gm.adjustLayout(tabStrip, panelHolder); }, true);
 
             $('.glimpse').live('glimpse.request.refresh glimpse.request.change', function () { gm.globalResetCallback(); });
-        },
-        adjustProtocol: function (data) {
-            var gm = this, g = $.glimpse, metadata, version = ((metadata = g.static.data._metadata) && (metadata = metadata.request) && (metadata = metadata.runningVersion));
-            
-            //Info tab
-            data[gm.static.key.info] = '<div class="glimpse-info-title"><a href="http://getGlimpse.com/" target="_blank"><img border="0" src="' + glimpsePath + 'logo.png" /></a></div><div>v' + version + '</div><div class="glimpse-info-quote">"What Firebug is for the client, Glimpse is for the server"</div><div class="glimpse-info-more">Go to your Glimpse Config page <a href="' + glimpsePath + 'Config" target="_blank">Glimpse.axd</a></div><div class="glimpse-info-more">For more info see <a href="http://getGlimpse.com" target="_blank">http://getGlimpse.com</a></div><div style="margin:1.5em 0 0.5em;">Created by <strong>Anthony van der Hoorn</strong> (<a href="http://twitter.com/anthony_vdh" target="_blank">@anthony_vdh</a>) and <strong>Nik Molnar</strong> (<a href="http://twitter.com/nikmd23" target="_blank">@nikmd23</a>) - &copy; getglimpse.com 2011</div><div>Have a <em>feature</em> request? <a href="http://getglimpse.uservoice.com" target="_blank">Submit the idea</a>. &nbsp; &nbsp; Found an <em>error</em>? <a href="https://github.com/glimpse/glimpse/issues" target="_blank">Help us improve</a>. &nbsp; &nbsp; Have a <em>question</em>? <a href="http://twitter.com/#search?q=%23glimpse" target="_blank">Tweet us using #glimpse</a>.</div>';
-        },
+        }, 
         adjustLayout: function (tabStrip, panelHolder) {
             var gm = this, g = $.glimpse, mainHolder = g.static.mainHolder();
 
@@ -918,16 +881,7 @@ if (window.jQueryGlimpse) { (function ($) {
                     warnTab.click();
                     return false;
                 });
-            }
-
-            //Info tab
-            var infoTab = $('.glimpse-tabitem-' + gm.static.key.info, tabStrip).hide();
-            if (infoTab.length > 0) {
-                $('.glimpse-bar .glimpse-icon').live('click', function () {
-                    infoTab.click();
-                    return false;
-                });
-            }
+            } 
 
             //Help setup
             $('li', tabStrip).live('click', function () { gm.changeHelp($(this)); gm.changePager($(this)); });
