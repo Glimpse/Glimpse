@@ -3,6 +3,7 @@
         metadataKey = 'GlimpseMetadata',
         wireListeners = function() {
             pubsub.subscribe('state.build.shell.modify', wireDomListeners);
+            pubsub.subscribe('action.plugin.active', function(topic, payload) { activateHelp(payload); });
             pubsub.subscribe('action.metadata', metadata); 
         }, 
         wireDomListeners = function() {
@@ -24,7 +25,16 @@
             //Switch style states
             elements.panelHolder.find('.glimpse-active').removeClass('glimpse-active'); 
             panel.addClass('glimpse-active');
+            elements.tabHolder.find('.glimpse-active').removeClass('glimpse-active'); 
+            
+            pubsub.publish('action.plugin.active', metadataKey); 
         }, 
+        activateHelp = function (key) { 
+            var metaData = data.getCurrentMeta().plugins[key], 
+                url = metaData && metaData.helpUrl;
+
+            elements.holder.find('.glimpse-meta-help').toggle(url != undefined).attr('href', url); 
+        },
         init = function () {
             wireListeners();
         };

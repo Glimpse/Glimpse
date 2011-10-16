@@ -883,9 +883,7 @@ if (window.jQueryGlimpse) { (function ($) {
                 });
             } 
 
-            //Help setup
-            $('li', tabStrip).live('click', function () { gm.changeHelp($(this)); gm.changePager($(this)); });
-            gm.changeHelp($('.glimpse-active', tabStrip));
+            //Help setup 
             gm.changePager($('.glimpse-active', tabStrip));
 
             //Metadata tab
@@ -895,16 +893,7 @@ if (window.jQueryGlimpse) { (function ($) {
             var gm = this;
             for (var key in gm.static.key)
                 var test = $('.glimpse-tabitem-' + gm.static.key[key]).hide();
-        },
-        changeHelp: function (item) {
-            if (item.hasClass('glimpse-disabled')) return;
-
-            var g = $.glimpse, mainHolder = g.static.mainHolder(), key = item.data('sort'), metaData = g.static.data._metadata, url = '', icon = $('.glimpse-meta-help', mainHolder);
-            if (metaData != undefined && (metaData = metaData.plugins[key]) != undefined && (url = metaData.helpUrl) != undefined && url.length > 0)
-                icon.show().attr('href', url);
-            else
-                icon.hide();
-        },
+        }, 
         changePager: function (item) {
             if (item.hasClass('glimpse-disabled')) return;
 
