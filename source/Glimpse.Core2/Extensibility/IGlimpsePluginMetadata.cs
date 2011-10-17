@@ -4,7 +4,7 @@ namespace Glimpse.Core2.Extensibility
 {
     public interface IGlimpsePluginMetadata
     {
-        bool SessionAccessRequired { get; }
+        LifeCycleSupport LifeCycleSupport { get; }
         Type RequestContextType { get; }
     }
 }

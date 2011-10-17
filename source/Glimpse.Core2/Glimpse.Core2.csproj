@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationPersistanceStore.cs" />
     <Compile Include="DictionaryDataStoreAdapter.cs" />
     <Compile Include="DiscoverabilityPolicy-T1.cs" />
     <Compile Include="DiscoverabilityPolicy-T2.cs" />
@@ -54,18 +55,23 @@
     <Compile Include="Extensibility\IGlimpseHelp.cs" />
     <Compile Include="Extensibility\IGlimpsePlugin.cs" />
     <Compile Include="Extensibility\IGlimpsePluginMetadata.cs" />
+    <Compile Include="Extensibility\IGlimpsePluginSetup.cs" />
     <Compile Include="Extensibility\IGlimpseRuntime.cs" />
     <Compile Include="Extensibility\IGlimpsePipelineModifier.cs" />
     <Compile Include="Extensibility\IServiceLocator.cs" />
     <Compile Include="Extensibility\IFrameworkProvider.cs" />
+    <Compile Include="Extensibility\LifeCycleSupport.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="GlimpseCollection.cs" />
     <Compile Include="GlimpseConfiguration.cs" />
     <Compile Include="GlimpseLazyCollection.cs" />
+    <Compile Include="GlimpseMetadata.cs" />
     <Compile Include="GlimpseRuntime.cs" />
     <Compile Include="GlimpseServiceLocator.cs" />
+    <Compile Include="IGlimpsePersistanceStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FilteredSafeDirectoryCatalog.cs" />
+    <Compile Include="RequestMetadata.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Core2
@@ -25,6 +26,34 @@ namespace Glimpse.Core2
             Configuration = configuration;
         }
 
+        public void Initialize()
+        {
+            var pluginsThatRequireSetup = Configuration.Plugins.Where(p => p.Value is IGlimpsePluginSetup).Select(p=>p.Value);
+            foreach (IGlimpsePluginSetup plugin in pluginsThatRequireSetup)
+            {
+                try
+                {
+                    plugin.Setup();
+                }
+                catch (Exception exception)
+                {
+                    //TODO: Add logging
+                }
+            }
+
+            foreach (var pipelineModifier in Configuration.PipelineModifiers)
+            {
+                try
+                {
+                    pipelineModifier.Setup();
+                }
+                catch (Exception exception)
+                {
+                    //TODO: Add logging
+                }
+            }
+        }
+
         public void BeginRequest()
         {
             var runtimeContext = Configuration.FrameworkProvider.RuntimeContext;
@@ -46,6 +75,30 @@ namespace Glimpse.Core2
             requestStore.Set(stopwatch);
         }
 
+        public void ExecutePlugins()
+        {
+            ExecutePlugins(LifeCycleSupport.EndRequest);
+        }
+
+        public void ExecutePlugins(LifeCycleSupport support)
+        {
+            var runtimePlugins = Configuration.Plugins.Where(p=>p.Metadata.RequestContextType.IsInstanceOfType(ServiceLocator.RequestContext.GetType()));
+            var supportedRuntimePlugins = runtimePlugins.Where(p => p.Metadata.LifeCycleSupport.HasFlag(support));
+
+            foreach (var plugin in supportedRuntimePlugins)
+            {
+                try
+                {
+                    var key = plugin.Value.GetType().FullName;
+                    ResultsStore.Add(key, plugin.Value.GetData(ServiceLocator));
+                }
+                catch (Exception exception)
+                {
+                    //TODO: Add in logging
+                }
+            }
+        }
+
         public IServiceLocator ServiceLocator
         {
             get
@@ -54,6 +107,23 @@ namespace Glimpse.Core2
 
                 if (result == null)
                     throw new Exception("Must BeginRequest() first"); //TODO: User better exceptions
+
+                return result;
+            }
+        }
+
+        private IDictionary<string, object> ResultsStore
+        {
+            get
+            {
+                var requestStore = Configuration.FrameworkProvider.HttpRequestStore;
+                var result = requestStore.Get<IDictionary<string, object>>("__GlimpseResults");
+
+                if (result == null)
+                {
+                    result = new Dictionary<string, object>();
+                    requestStore.Set("__GlimpseResults", result);
+                }
 
                 return result;
             }

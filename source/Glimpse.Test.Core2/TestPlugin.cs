@@ -5,7 +5,7 @@ using Glimpse.Core2.Extensibility;
 namespace Glimpse.Test.Core2
 {
     [GlimpsePlugin(RequestContextType = typeof(string))]
-    public class TestPlugin : IGlimpsePlugin
+    public class TestPlugin : IGlimpsePlugin, IGlimpsePluginSetup
     {
         public object GetData(IServiceLocator locator)
         {
@@ -15,6 +15,11 @@ namespace Glimpse.Test.Core2
         public string Name
         {
             get { return "Test Plugin"; }
+        }
+
+        public void Setup()
+        {
+            throw new NotImplementedException();
         }
     }
 }

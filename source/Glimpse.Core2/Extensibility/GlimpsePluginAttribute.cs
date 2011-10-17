@@ -9,13 +9,13 @@ namespace Glimpse.Core2.Extensibility
     {
         public GlimpsePluginAttribute():base(typeof(IGlimpsePlugin)){}
 
-        public GlimpsePluginAttribute(Type requestContextType = null, bool sessionAccessRequired = false): base(typeof(IGlimpsePlugin))
+        public GlimpsePluginAttribute(Type requestContextType = null): base(typeof(IGlimpsePlugin))
         {
             RequestContextType = requestContextType;
-            SessionAccessRequired = sessionAccessRequired;
+            LifeCycleSupport = LifeCycleSupport.EndRequest;
         }
 
         public Type RequestContextType { get; set; }
-        public bool SessionAccessRequired { get; set; }
+        public LifeCycleSupport LifeCycleSupport { get; set; }
     }
 }
