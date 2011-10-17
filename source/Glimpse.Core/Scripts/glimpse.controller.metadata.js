@@ -30,7 +30,7 @@
             pubsub.publish('action.plugin.active', metadataKey); 
         }, 
         activateHelp = function (key) { 
-            var metaData = data.getCurrentMeta().plugins[key], 
+            var metaData = data.currentMetadata().plugins[key], 
                 url = metaData && metaData.helpUrl;
 
             elements.holder.find('.glimpse-meta-help').toggle(url != undefined).attr('href', url); 

@@ -18,7 +18,7 @@
             elements.panelHolder.find('.glimpse-panel:not(.glimpse-permanent)').remove(); 
         },
         buildNewLayout = function () {
-            renderTabs(data.getCurrent().data);
+            renderTabs(data.current().data);
         },
 
         renderTabs = function (pluginDataSet) {
@@ -75,7 +75,7 @@
         selectedPanel = function (key) {
             var panel = elements.panelHolder.find('.glimpse-panel[data-glimpseKey="' + key + '"]');  
             if (panel.length == 0) {
-                panel = renderPanel(key, data.getCurrent().data[key], data.getCurrentMeta().plugins[key]);   
+                panel = renderPanel(key, data.current().data[key], data.currentMetadata().plugins[key]);   
                 pubsub.publish('action.plugin.created', key); 
             }
             

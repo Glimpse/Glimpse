@@ -1,22 +1,27 @@
 ﻿data = (function () {
     var //Support
-        current = {},
+        inner = {},
     
         //Main
-        getCurrent = function () {
-            return current;
+        update = function (data) {
+            inner = data;
+            pubsub.subscribe('action.data.update', wireDomListeners);
         },
-        getCurrentMeta = function () {
-            return current.data._metadata;
+        current = function () {
+            return inner;
+        },
+        currentMetadata = function () {
+            return inner.data._metadata;
         },
         init = function () {
-            current = glimpseData; 
+            inner = glimpseData; 
         };
         
     init(); 
     
     return {
-        getCurrent : getCurrent,
-        getCurrentMeta : getCurrentMeta
+        current : current,
+        currentMetadata : currentMetadata,
+        update : update
     };
 }())
