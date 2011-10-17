@@ -307,7 +307,7 @@ var glimpse = (function ($, scope) {
                 //Main
                 update = function (data) {
                     inner = data;
-                    pubsub.subscribe('action.data.update', wireDomListeners);
+                    pubsub.publish('action.data.update');
                 },
                 current = function () {
                     return inner;
@@ -374,6 +374,7 @@ var glimpse = (function ($, scope) {
                     pubsub.subscribe('state.render', renderLayout); 
                     pubsub.subscribe('data.elements.processed', wireDomListeners); 
                     pubsub.subscribe('action.tab.select', function(subject, payload) { selectedItem(payload); }); 
+                    pubsub.subscribe('action.data.update', dataUpdate);
                 },
                 wireDomListeners = function() {
                     elements.tabHolder.find('li:not(.glimpse-active, .glimpse-disabled)').live('click', function () { pubsub.publish('action.tab.select', $(this).attr('data-glimpseKey')); return false; });
@@ -383,13 +384,6 @@ var glimpse = (function ($, scope) {
                     });
                 },
         
-                clearPreviousLayout = function () {
-                    elements.tabHolder.find('.glimpse-tab:not(.glimpse-permanent)').remove();
-                    elements.panelHolder.find('.glimpse-panel:not(.glimpse-permanent)').remove(); 
-                },
-                buildNewLayout = function () {
-                    renderTabs(data.current().data);
-                },
         
                 renderTabs = function (pluginDataSet) {
                     elements.tabHolder.append(constructTabs(pluginDataSet)); 
@@ -456,11 +450,21 @@ var glimpse = (function ($, scope) {
         
         
                 //Main
+                dataUpdate = function () {
+                    pubsub.publish('state.render');  
+                },
                 renderLayout = function () { 
                     clearPreviousLayout();
                     buildNewLayout();
                     
                     pubsub.publish('state.build.rendered');
+                }, 
+                clearPreviousLayout = function () {
+                    elements.tabHolder.find('.glimpse-tab:not(.glimpse-permanent)').remove();
+                    elements.panelHolder.find('.glimpse-panel:not(.glimpse-permanent)').remove(); 
+                },
+                buildNewLayout = function () {
+                    renderTabs(data.current().data);
                 },
                 init = function () {
                     wireListeners(); 
@@ -1151,7 +1155,8 @@ var glimpse = (function ($, scope) {
         pubsub : pubsub,
         plugin : plugin,
         elements : elements,
-        render : renderEngine
+        render : renderEngine,
+        data : data //I Think this should probably be removed after testing
     };
 }($Glimpse, $Glimpse(document)));
 

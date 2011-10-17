@@ -5,7 +5,7 @@
         //Main
         update = function (data) {
             inner = data;
-            pubsub.subscribe('action.data.update', wireDomListeners);
+            pubsub.publish('action.data.update');
         },
         current = function () {
             return inner;

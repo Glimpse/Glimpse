@@ -38,7 +38,8 @@ var glimpse = (function ($, scope) {
         pubsub : pubsub,
         plugin : plugin,
         elements : elements,
-        render : renderEngine
+        render : renderEngine,
+        data : data //I Think this should probably be removed after testing
     };
 }($Glimpse, $Glimpse(document)));
 

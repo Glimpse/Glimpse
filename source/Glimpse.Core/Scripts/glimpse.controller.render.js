@@ -4,6 +4,7 @@
             pubsub.subscribe('state.render', renderLayout); 
             pubsub.subscribe('data.elements.processed', wireDomListeners); 
             pubsub.subscribe('action.tab.select', function(subject, payload) { selectedItem(payload); }); 
+            pubsub.subscribe('action.data.update', dataUpdate);
         },
         wireDomListeners = function() {
             elements.tabHolder.find('li:not(.glimpse-active, .glimpse-disabled)').live('click', function () { pubsub.publish('action.tab.select', $(this).attr('data-glimpseKey')); return false; });
@@ -13,13 +14,6 @@
             });
         },
 
-        clearPreviousLayout = function () {
-            elements.tabHolder.find('.glimpse-tab:not(.glimpse-permanent)').remove();
-            elements.panelHolder.find('.glimpse-panel:not(.glimpse-permanent)').remove(); 
-        },
-        buildNewLayout = function () {
-            renderTabs(data.current().data);
-        },
 
         renderTabs = function (pluginDataSet) {
             elements.tabHolder.append(constructTabs(pluginDataSet)); 
@@ -86,11 +80,21 @@
 
 
         //Main
+        dataUpdate = function () {
+            pubsub.publish('state.render');  
+        },
         renderLayout = function () { 
             clearPreviousLayout();
             buildNewLayout();
             
             pubsub.publish('state.build.rendered');
+        }, 
+        clearPreviousLayout = function () {
+            elements.tabHolder.find('.glimpse-tab:not(.glimpse-permanent)').remove();
+            elements.panelHolder.find('.glimpse-panel:not(.glimpse-permanent)').remove(); 
+        },
+        buildNewLayout = function () {
+            renderTabs(data.current().data);
         },
         init = function () {
             wireListeners(); 
