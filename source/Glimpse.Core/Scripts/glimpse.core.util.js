@@ -97,7 +97,7 @@
             return !(value == undefined || value == null) ? $('<div/>').html(value).text() : '';
         },
         preserveWhitespace: function (value) {
-            return value.replace(/\r\n/g, '<br />').replace(/\n/g, '<br />').replace(/\t/g, '&nbsp; &nbsp; ').replace(/  /g, '&nbsp; ');
+            return value.replace(/\r\n/g, '<br />').replace(/\n/g, '<br />').replace(/\t/g, '&#160; &#160; ').replace(/  /g, '&#160; ');
         },
         lengthJson: function (data) {
             var count = 0;

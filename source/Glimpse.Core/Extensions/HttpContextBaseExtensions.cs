@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Web;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Plumbing;
@@ -69,23 +68,30 @@ namespace Glimpse.Core.Extensions
 
             if (resource == null) return string.Format("{0}Glimpse.axd", root);
 
-            return string.Format("{0}Glimpse.axd?{3}={4}&{2}={1}", root, resource, Handler.ResourceKey, Handler.VersionKey, Module.RunningVersion);
+            return string.Format(
+                "{0}Glimpse.axd?{3}={4}{5}{2}={1}",
+                root,
+                resource,
+                Handler.ResourceKey,
+                Handler.VersionKey,
+                Module.RunningVersion,
+                context.Response.ContentType == "application/xhtml+xml" ? "&amp;" : "&");
         }
 
-/*        public static List<IGlimpseWarning> GetWarnings(this HttpContextBase context)
-        {
-            var result = context.Items[GlimpseConstants.Warnings] as List<IGlimpseWarning>;
-            if (result == null) context.Items[GlimpseConstants.Warnings] = result = new List<IGlimpseWarning>();
+        /*        public static List<IGlimpseWarning> GetWarnings(this HttpContextBase context)
+                {
+                    var result = context.Items[GlimpseConstants.Warnings] as List<IGlimpseWarning>;
+                    if (result == null) context.Items[GlimpseConstants.Warnings] = result = new List<IGlimpseWarning>();
 
-            return result;
-        }*/
+                    return result;
+                }*/
 
         public static Guid GetGlimpseRequestId(this HttpContextBase context)
         {
             Guid result;
             try
             {
-                result = (Guid) context.Items[GlimpseConstants.GlimpseRequestId];
+                result = (Guid)context.Items[GlimpseConstants.GlimpseRequestId];
             }
             catch
             {

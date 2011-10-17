@@ -19,19 +19,18 @@
 shift(),i.sort());if(!!e&&!f.event.customEvent[h]||!!f.event.global[h]){c=typeof c=="object"?c[f.expando]?c:new f.Event(h,c):new f.Event(h),c.type=h,c.exclusive=j,c.namespace=i.join("."),c.namespace_re=new RegExp("(^|\\.)"+i.join("\\.(?:.*\\.)?")+"(\\.|$)");if(g||!e)c.preventDefault(),c.stopPropagation();if(!e){f.each(f.cache,function(){var a=f.expando,b=this[a];b&&b.events&&b.events[h]&&f.event.trigger(c,d,b.handle.elem)});return}if(e.nodeType===3||e.nodeType===8)return;c.result=b,c.target=e,d=d!=null?f.makeArray(d):[],d.unshift(c);var k=e,l=h.indexOf(":")<0?"on"+h:"";do{var m=f._data(k,"handle");c.currentTarget=k,m&&m.apply(k,d),l&&f.acceptData(k)&&k[l]&&k[l].apply(k,d)===!1&&(c.result=!1,c.preventDefault()),k=k.parentNode||k.ownerDocument||k===c.target.ownerDocument&&a}while(k&&!c.isPropagationStopped());if(!c.isDefaultPrevented()){var n,o=f.event.special[h]||{};if((!o._default||o._default.call(e.ownerDocument,c)===!1)&&(h!=="click"||!f.nodeName(e,"a"))&&f.acceptData(e)){try{l&&e[h]&&(n=e[l],n&&(e[l]=null),f.event.triggered=h,e[h]())}catch(p){}n&&(e[l]=n),f.event.triggered=b}}return c.result}},handle:function(c){c=f.event.fix(c||a.event);var d=((f._data(this,"events")||{})[c.type]||[]).slice(0),e=!c.exclusive&&!c.namespace,g=Array.prototype.slice.call(arguments,0);g[0]=c,c.currentTarget=this;for(var h=0,i=d.length;h<i;h++){var j=d[h];if(e||c.namespace_re.test(j.namespace)){c.handler=j.handler,c.data=j.data,c.handleObj=j;var k=j.handler.apply(this,g);k!==b&&(c.result=k,k===!1&&(c.preventDefault(),c.stopPropagation()));if(c.isImmediatePropagationStopped())break}}return c.result},props:"altKey attrChange attrName bubbles button cancelable charCode clientX clientY ctrlKey currentTarget data detail eventPhase fromElement handler keyCode layerX layerY metaKey newValue offsetX offsetY pageX pageY prevValue relatedNode relatedTarget screenX screenY shiftKey srcElement target toElement view wheelDelta which".split(" "),fix:function(a){if(a[f.expando])return a;var d=a;a=f.Event(d);for(var e=this.props.length,g;e;)g=this.props[--e],a[g]=d[g];a.target||(a.target=a.srcElement||c),a.target.nodeType===3&&(a.target=a.target.parentNode),!a.relatedTarget&&a.fromElement&&(a.relatedTarget=a.fromElement===a.target?a.toElement:a.fromElement);if(a.pageX==null&&a.clientX!=null){var h=a.target.ownerDocument||c,i=h.documentElement,j=h.body;a.pageX=a.clientX+(i&&i.scrollLeft||j&&j.scrollLeft||0)-(i&&i.clientLeft||j&&j.clientLeft||0),a.pageY=a.clientY+(i&&i.scrollTop||j&&j.scrollTop||0)-(i&&i.clientTop||j&&j.clientTop||0)}a.which==null&&(a.charCode!=null||a.keyCode!=null)&&(a.which=a.charCode!=null?a.charCode:a.keyCode),!a.metaKey&&a.ctrlKey&&(a.metaKey=a.ctrlKey),!a.which&&a.button!==b&&(a.which=a.button&1?1:a.button&2?3:a.button&4?2:0);return a},guid:1e8,proxy:f.proxy,special:{ready:{setup:f.bindReady,teardown:f.noop},live:{add:function(a){f.event.add(this,N(a.origType,a.selector),f.extend({},a,{handler:M,guid:a.handler.guid}))},remove:function(a){f.event.remove(this,N(a.origType,a.selector),a)}},beforeunload:{setup:function(a,b,c){f.isWindow(this)&&(this.onbeforeunload=c)},teardown:function(a,b){this.onbeforeunload===b&&(this.onbeforeunload=null)}}}},f.removeEvent=c.removeEventListener?function(a,b,c){a.removeEventListener&&a.removeEventListener(b,c,!1)}:function(a,b,c){a.detachEvent&&a.detachEvent("on"+b,c)},f.Event=function(a,b){if(!this.preventDefault)return new f.Event(a,b);a&&a.type?(this.originalEvent=a,this.type=a.type,this.isDefaultPrevented=a.defaultPrevented||a.returnValue===!1||a.getPreventDefault&&a.getPreventDefault()?E:D):this.type=a,b&&f.extend(this,b),this.timeStamp=f.now(),this[f.expando]=!0},f.Event.prototype={preventDefault:function(){this.isDefaultPrevented=E;var a=this.originalEvent;!a||(a.preventDefault?a.preventDefault():a.returnValue=!1)},stopPropagation:function(){this.isPropagationStopped=E;var a=this.originalEvent;!a||(a.stopPropagation&&a.stopPropagation(),a.cancelBubble=!0)},stopImmediatePropagation:function(){this.isImmediatePropagationStopped=E,this.stopPropagation()},isDefaultPrevented:D,isPropagationStopped:D,isImmediatePropagationStopped:D};var F=function(a){var b=a.relatedTarget,c=!1,d=a.type;a.type=a.data,b!==this&&(b&&(c=f.contains(this,b)),c||(f.event.handle.apply(this,arguments),a.type=d))},G=function(a){a.type=a.data,f.event.handle.apply(this,arguments)};f.each({mouseenter:"mouseover",mouseleave:"mouseout"},function(a,b){f.event.special[a]={setup:function(c){f.event.add(this,b,c&&c.selector?G:F,a)},teardown:function(a){f.event.remove(this,b,a&&a.selector?G:F)}}}),f.support.submitBubbles||(f.event.special.submit={setup:function(a,b){if(!f.nodeName(this,"form"))f.event.add(this,"click.specialSubmit",function(a){var b=a.target,c=b.type;(c==="submit"||c==="image")&&f(b).closest("form").length&&K("submit",this,arguments)}),f.event.add(this,"keypress.specialSubmit",function(a){var b=a.target,c=b.type;(c==="text"||c==="password")&&f(b).closest("form").length&&a.keyCode===13&&K("submit",this,arguments)});else return!1},teardown:function(a){f.event.remove(this,".specialSubmit")}});if(!f.support.changeBubbles){var H,I=function(a){var b=a.type,c=a.value;b==="radio"||b==="checkbox"?c=a.checked:b==="select-multiple"?c=a.selectedIndex>-1?f.map(a.options,function(a){return a.selected}).join("-"):"":f.nodeName(a,"select")&&(c=a.selectedIndex);return c},J=function(c){var d=c.target,e,g;if(!!y.test(d.nodeName)&&!d.readOnly){e=f._data(d,"_change_data"),g=I(d),(c.type!=="focusout"||d.type!=="radio")&&f._data(d,"_change_data",g);if(e===b||g===e)return;if(e!=null||g)c.type="change",c.liveFired=b,f.event.trigger(c,arguments[1],d)}};f.event.special.change={filters:{focusout:J,beforedeactivate:J,click:function(a){var b=a.target,c=f.nodeName(b,"input")?b.type:"";(c==="radio"||c==="checkbox"||f.nodeName(b,"select"))&&J.call(this,a)},keydown:function(a){var b=a.target,c=f.nodeName(b,"input")?b.type:"";(a.keyCode===13&&!f.nodeName(b,"textarea")||a.keyCode===32&&(c==="checkbox"||c==="radio")||c==="select-multiple")&&J.call(this,a)},beforeactivate:function(a){var b=a.target;f._data(b,"_change_data",I(b))}},setup:function(a,b){if(this.type==="file")return!1;for(var c in H)f.event.add(this,c+".specialChange",H[c]);return y.test(this.nodeName)},teardown:function(a){f.event.remove(this,".specialChange");return y.test(this.nodeName)}},H=f.event.special.change.filters,H.focus=H.beforeactivate}f.support.focusinBubbles||f.each({focus:"focusin",blur:"focusout"},function(a,b){function e(a){var c=f.event.fix(a);c.type=b,c.originalEvent={},f.event.trigger(c,null,c.target),c.isDefaultPrevented()&&a.preventDefault()}var d=0;f.event.special[b]={setup:function(){d++===0&&c.addEventListener(a,e,!0)},teardown:function(){--d===0&&c.removeEventListener(a,e,!0)}}}),f.each(["bind","one"],function(a,c){f.fn[c]=function(a,d,e){var g;if(typeof a=="object"){for(var h in a)this[c](h,d,a[h],e);return this}if(arguments.length===2||d===!1)e=d,d=b;c==="one"?(g=function(a){f(this).unbind(a,g);return e.apply(this,arguments)},g.guid=e.guid||f.guid++):g=e;if(a==="unload"&&c!=="one")this.one(a,d,e);else for(var i=0,j=this.length;i<j;i++)f.event.add(this[i],a,g,d);return this}}),f.fn.extend({unbind:function(a,b){if(typeof a=="object"&&!a.preventDefault)for(var c in a)this.unbind(c,a[c]);else for(var d=0,e=this.length;d<e;d++)f.event.remove(this[d],a,b);return this},delegate:function(a,b,c,d){return this.live(b,c,d,a)},undelegate:function(a,b,c){return arguments.length===0?this.unbind("live"):this.die(b,null,c,a)},trigger:function(a,b){return this.each(function(){f.event.trigger(a,b,this)})},triggerHandler:function(a,b){if(this[0])return f.event.trigger(a,b,this[0],!0)},toggle:function(a){var b=arguments,c=a.guid||f.guid++,d=0,e=function(c){var e=(f.data(this,"lastToggle"+a.guid)||0)%d;f.data(this,"lastToggle"+a.guid,e+1),c.preventDefault();return b[e].apply(this,arguments)||!1};e.guid=c;while(d<b.length)b[d++].guid=c;return this.click(e)},hover:function(a,b){return this.mouseenter(a).mouseleave(b||a)}});var L={focus:"focusin",blur:"focusout",mouseenter:"mouseover",mouseleave:"mouseout"};f.each(["live","die"],function(a,c){f.fn[c]=function(a,d,e,g){var h,i=0,j,k,l,m=g||this.selector,n=g?this:f(this.context);if(typeof a=="object"&&!a.preventDefault){for(var o in a)n[c](o,d,a[o],m);return this}if(c==="die"&&!a&&g&&g.charAt(0)==="."){n.unbind(g);return this}if(d===!1||f.isFunction(d))e=d||D,d=b;a=(a||"").split(" ");while((h=a[i++])!=null){j=x.exec(h),k="",j&&(k=j[0],h=h.replace(x,""));if(h==="hover"){a.push("mouseenter"+k,"mouseleave"+k);continue}l=h,L[h]?(a.push(L[h]+k),h=h+k):h=(L[h]||h)+k;if(c==="live")for(var p=0,q=n.length;p<q;p++)f.event.add(n[p],"live."+N(h,m),{data:d,selector:m,handler:e,origType:h,origHandler:e,preType:l});else n.unbind("live."+N(h,m),e)}return this}}),f.each("blur focus focusin focusout load resize scroll unload click dblclick mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave change select submit keydown keypress keyup error".split(" "),function(a,b){f.fn[b]=function(a,c){c==null&&(c=a,a=null);return arguments.length>0?this.bind(b,a,c):this.trigger(b)},f.attrFn&&(f.attrFn[b]=!0)}),function(){function u(a,b,c,d,e,f){for(var g=0,h=d.length;g<h;g++){var i=d[g];if(i){var j=!1;i=i[a];while(i){if(i.sizcache===c){j=d[i.sizset];break}if(i.nodeType===1){f||(i.sizcache=c,i.sizset=g);if(typeof b!="string"){if(i===b){j=!0;break}}else if(k.filter(b,[i]).length>0){j=i;break}}i=i[a]}d[g]=j}}}function t(a,b,c,d,e,f){for(var g=0,h=d.length;g<h;g++){var i=d[g];if(i){var j=!1;i=i[a];while(i){if(i.sizcache===c){j=d[i.sizset];break}i.nodeType===1&&!f&&(i.sizcache=c,i.sizset=g);if(i.nodeName.toLowerCase()===b){j=i;break}i=i[a]}d[g]=j}}}var a=/((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^\[\]]*\]|['"][^'"]*['"]|[^\[\]'"]+)+\]|\\.|[^ >+~,(\[\\]+)+|[>+~])(\s*,\s*)?((?:.|\r|\n)*)/g,d=0,e=Object.prototype.toString,g=!1,h=!0,i=/\\/g,j=/\W/;[0,0].sort(function(){h=!1;return 0});var k=function(b,d,f,g){f=f||[],d=d||c;var h=d;if(d.nodeType!==1&&d.nodeType!==9)return[];if(!b||typeof b!="string")return f;var i,j,n,o,q,r,s,t,u=!0,w=k.isXML(d),x=[],y=b;do{a.exec(""),i=a.exec(y);if(i){y=i[3],x.push(i[1]);if(i[2]){o=i[3];break}}}while(i);if(x.length>1&&m.exec(b))if(x.length===2&&l.relative[x[0]])j=v(x[0]+x[1],d);else{j=l.relative[x[0]]?[d]:k(x.shift(),d);while(x.length)b=x.shift(),l.relative[b]&&(b+=x.shift()),j=v(b,j)}else{!g&&x.length>1&&d.nodeType===9&&!w&&l.match.ID.test(x[0])&&!l.match.ID.test(x[x.length-1])&&(q=k.find(x.shift(),d,w),d=q.expr?k.filter(q.expr,q.set)[0]:q.set[0]);if(d){q=g?{expr:x.pop(),set:p(g)}:k.find(x.pop(),x.length===1&&(x[0]==="~"||x[0]==="+")&&d.parentNode?d.parentNode:d,w),j=q.expr?k.filter(q.expr,q.set):q.set,x.length>0?n=p(j):u=!1;while(x.length)r=x.pop(),s=r,l.relative[r]?s=x.pop():r="",s==null&&(s=d),l.relative[r](n,s,w)}else n=x=[]}n||(n=j),n||k.error(r||b);if(e.call(n)==="[object Array]")if(!u)f.push.apply(f,n);else if(d&&d.nodeType===1)for(t=0;n[t]!=null;t++)n[t]&&(n[t]===!0||n[t].nodeType===1&&k.contains(d,n[t]))&&f.push(j[t]);else for(t=0;n[t]!=null;t++)n[t]&&n[t].nodeType===1&&f.push(j[t]);else p(n,f);o&&(k(o,h,f,g),k.uniqueSort(f));return f};k.uniqueSort=function(a){if(r){g=h,a.sort(r);if(g)for(var b=1;b<a.length;b++)a[b]===a[b-1]&&a.splice(b--,1)}return a},k.matches=function(a,b){return k(a,null,null,b)},k.matchesSelector=function(a,b){return k(b,null,null,[a]).length>0},k.find=function(a,b,c){var d;if(!a)return[];for(var e=0,f=l.order.length;e<f;e++){var g,h=l.order[e];if(g=l.leftMatch[h].exec(a)){var j=g[1];g.splice(1,1);if(j.substr(j.length-1)!=="\\"){g[1]=(g[1]||"").replace(i,""),d=l.find[h](g,b,c);if(d!=null){a=a.replace(l.match[h],"");break}}}}d||(d=typeof b.getElementsByTagName!="undefined"?b.getElementsByTagName("*"):[]);return{set:d,expr:a}},k.filter=function(a,c,d,e){var f,g,h=a,i=[],j=c,m=c&&c[0]&&k.isXML(c[0]);while(a&&c.length){for(var n in l.filter)if((f=l.leftMatch[n].exec(a))!=null&&f[2]){var o,p,q=l.filter[n],r=f[1];g=!1,f.splice(1,1);if(r.substr(r.length-1)==="\\")continue;j===i&&(i=[]);if(l.preFilter[n]){f=l.preFilter[n](f,j,d,i,e,m);if(!f)g=o=!0;else if(f===!0)continue}if(f)for(var s=0;(p=j[s])!=null;s++)if(p){o=q(p,f,s,j);var t=e^!!o;d&&o!=null?t?g=!0:j[s]=!1:t&&(i.push(p),g=!0)}if(o!==b){d||(j=i),a=a.replace(l.match[n],"");if(!g)return[];break}}if(a===h)if(g==null)k.error(a);else break;h=a}return j},k.error=function(a){throw"Syntax error, unrecognized expression: "+a};var l=k.selectors={order:["ID","NAME","TAG"],match:{ID:/#((?:[\w\u00c0-\uFFFF\-]|\\.)+)/,CLASS:/\.((?:[\w\u00c0-\uFFFF\-]|\\.)+)/,NAME:/\[name=['"]*((?:[\w\u00c0-\uFFFF\-]|\\.)+)['"]*\]/,ATTR:/\[\s*((?:[\w\u00c0-\uFFFF\-]|\\.)+)\s*(?:(\S?=)\s*(?:(['"])(.*?)\3|(#?(?:[\w\u00c0-\uFFFF\-]|\\.)*)|)|)\s*\]/,TAG:/^((?:[\w\u00c0-\uFFFF\*\-]|\\.)+)/,CHILD:/:(only|nth|last|first)-child(?:\(\s*(even|odd|(?:[+\-]?\d+|(?:[+\-]?\d*)?n\s*(?:[+\-]\s*\d+)?))\s*\))?/,POS:/:(nth|eq|gt|lt|first|last|even|odd)(?:\((\d*)\))?(?=[^\-]|$)/,PSEUDO:/:((?:[\w\u00c0-\uFFFF\-]|\\.)+)(?:\((['"]?)((?:\([^\)]+\)|[^\(\)]*)+)\2\))?/},leftMatch:{},attrMap:{"class":"className","for":"htmlFor"},attrHandle:{href:function(a){return a.getAttribute("href")},type:function(a){return a.getAttribute("type")}},relative:{"+":function(a,b){var c=typeof b=="string",d=c&&!j.test(b),e=c&&!d;d&&(b=b.toLowerCase());for(var f=0,g=a.length,h;f<g;f++)if(h=a[f]){while((h=h.previousSibling)&&h.nodeType!==1);a[f]=e||h&&h.nodeName.toLowerCase()===b?h||!1:h===b}e&&k.filter(b,a,!0)},">":function(a,b){var c,d=typeof b=="string",e=0,f=a.length;if(d&&!j.test(b)){b=b.toLowerCase();for(;e<f;e++){c=a[e];if(c){var g=c.parentNode;a[e]=g.nodeName.toLowerCase()===b?g:!1}}}else{for(;e<f;e++)c=a[e],c&&(a[e]=d?c.parentNode:c.parentNode===b);d&&k.filter(b,a,!0)}},"":function(a,b,c){var e,f=d++,g=u;typeof b=="string"&&!j.test(b)&&(b=b.toLowerCase(),e=b,g=t),g("parentNode",b,f,a,e,c)},"~":function(a,b,c){var e,f=d++,g=u;typeof b=="string"&&!j.test(b)&&(b=b.toLowerCase(),e=b,g=t),g("previousSibling",b,f,a,e,c)}},find:{ID:function(a,b,c){if(typeof b.getElementById!="undefined"&&!c){var d=b.getElementById(a[1]);return d&&d.parentNode?[d]:[]}},NAME:function(a,b){if(typeof b.getElementsByName!="undefined"){var c=[],d=b.getElementsByName(a[1]);for(var e=0,f=d.length;e<f;e++)d[e].getAttribute("name")===a[1]&&c.push(d[e]);return c.length===0?null:c}},TAG:function(a,b){if(typeof b.getElementsByTagName!="undefined")return b.getElementsByTagName(a[1])}},preFilter:{CLASS:function(a,b,c,d,e,f){a=" "+a[1].replace(i,"")+" ";if(f)return a;for(var g=0,h;(h=b[g])!=null;g++)h&&(e^(h.className&&(" "+h.className+" ").replace(/[\t\n\r]/g," ").indexOf(a)>=0)?c||d.push(h):c&&(b[g]=!1));return!1},ID:function(a){return a[1].replace(i,"")},TAG:function(a,b){return a[1].replace(i,"").toLowerCase()},CHILD:function(a){if(a[1]==="nth"){a[2]||k.error(a[0]),a[2]=a[2].replace(/^\+|\s*/g,"");var b=/(-?)(\d*)(?:n([+\-]?\d*))?/.exec(a[2]==="even"&&"2n"||a[2]==="odd"&&"2n+1"||!/\D/.test(a[2])&&"0n+"+a[2]||a[2]);a[2]=b[1]+(b[2]||1)-0,a[3]=b[3]-0}else a[2]&&k.error(a[0]);a[0]=d++;return a},ATTR:function(a,b,c,d,e,f){var g=a[1]=a[1].replace(i,"");!f&&l.attrMap[g]&&(a[1]=l.attrMap[g]),a[4]=(a[4]||a[5]||"").replace(i,""),a[2]==="~="&&(a[4]=" "+a[4]+" ");return a},PSEUDO:function(b,c,d,e,f){if(b[1]==="not")if((a.exec(b[3])||"").length>1||/^\w/.test(b[3]))b[3]=k(b[3],null,null,c);else{var g=k.filter(b[3],c,d,!0^f);d||e.push.apply(e,g);return!1}else if(l.match.POS.test(b[0])||l.match.CHILD.test(b[0]))return!0;return b},POS:function(a){a.unshift(!0);return a}},filters:{enabled:function(a){return a.disabled===!1&&a.type!=="hidden"},disabled:function(a){return a.disabled===!0},checked:function(a){return a.checked===!0},selected:function(a){a.parentNode&&a.parentNode.selectedIndex;return a.selected===!0},parent:function(a){return!!a.firstChild},empty:function(a){return!a.firstChild},has:function(a,b,c){return!!k(c[3],a).length},header:function(a){return/h\d/i.test(a.nodeName)},text:function(a){var b=a.getAttribute("type"),c=a.type;return a.nodeName.toLowerCase()==="input"&&"text"===c&&(b===c||b===null)},radio:function(a){return a.nodeName.toLowerCase()==="input"&&"radio"===a.type},checkbox:function(a){return a.nodeName.toLowerCase()==="input"&&"checkbox"===a.type},file:function(a){return a.nodeName.toLowerCase()==="input"&&"file"===a.type},password:function(a){return a.nodeName.toLowerCase()==="input"&&"password"===a.type},submit:function(a){var b=a.nodeName.toLowerCase();return(b==="input"||b==="button")&&"submit"===a.type},image:function(a){return a.nodeName.toLowerCase()==="input"&&"image"===a.type},reset:function(a){var b=a.nodeName.toLowerCase();return(b==="input"||b==="button")&&"reset"===a.type},button:function(a){var b=a.nodeName.toLowerCase();return b==="input"&&"button"===a.type||b==="button"},input:function(a){return/input|select|textarea|button/i.test(a.nodeName)},focus:function(a){return a===a.ownerDocument.activeElement}},setFilters:{first:function(a,b){return b===0},last:function(a,b,c,d){return b===d.length-1},even:function(a,b){return b%2===0},odd:function(a,b){return b%2===1},lt:function(a,b,c){return b<c[3]-0},gt:function(a,b,c){return b>c[3]-0},nth:function(a,b,c){return c[3]-0===b},eq:function(a,b,c){return c[3]-0===b}},filter:{PSEUDO:function(a,b,c,d){var e=b[1],f=l.filters[e];if(f)return f(a,c,b,d);if(e==="contains")return(a.textContent||a.innerText||k.getText([a])||"").indexOf(b[3])>=0;if(e==="not"){var g=b[3];for(var h=0,i=g.length;h<i;h++)if(g[h]===a)return!1;return!0}k.error(e)},CHILD:function(a,b){var c=b[1],d=a;switch(c){case"only":case"first":while(d=d.previousSibling)if(d.nodeType===1)return!1;if(c==="first")return!0;d=a;case"last":while(d=d.nextSibling)if(d.nodeType===1)return!1;return!0;case"nth":var e=b[2],f=b[3];if(e===1&&f===0)return!0;var g=b[0],h=a.parentNode;if(h&&(h.sizcache!==g||!a.nodeIndex)){var i=0;for(d=h.firstChild;d;d=d.nextSibling)d.nodeType===1&&(d.nodeIndex=++i);h.sizcache=g}var j=a.nodeIndex-f;return e===0?j===0:j%e===0&&j/e>=0}},ID:function(a,b){return a.nodeType===1&&a.getAttribute("id")===b},TAG:function(a,b){return b==="*"&&a.nodeType===1||a.nodeName.toLowerCase()===b},CLASS:function(a,b){return(" "+(a.className||a.getAttribute("class"))+" ").indexOf(b)>-1},ATTR:function(a,b){var c=b[1],d=l.attrHandle[c]?l.attrHandle[c](a):a[c]!=null?a[c]:a.getAttribute(c),e=d+"",f=b[2],g=b[4];return d==null?f==="!=":f==="="?e===g:f==="*="?e.indexOf(g)>=0:f==="~="?(" "+e+" ").indexOf(g)>=0:g?f==="!="?e!==g:f==="^="?e.indexOf(g)===0:f==="$="?e.substr(e.length-g.length)===g:f==="|="?e===g||e.substr(0,g.length+1)===g+"-":!1:e&&d!==!1},POS:function(a,b,c,d){var e=b[2],f=l.setFilters[e];if(f)return f(a,c,b,d)}}},m=l.match.POS,n=function(a,b){return"\\"+(b-0+1)};for(var o in l.match)l.match[o]=new RegExp(l.match[o].source+/(?![^\[]*\])(?![^\(]*\))/.source),l.leftMatch[o]=new RegExp(/(^(?:.|\r|\n)*?)/.source+l.match[o].source.replace(/\\(\d+)/g,n));var p=function(a,b){a=Array.prototype.slice.call(a,0);if(b){b.push.apply(b,a);return b}return a};try{Array.prototype.slice.call(c.documentElement.childNodes,0)[0].nodeType}catch(q){p=function(a,b){var c=0,d=b||[];if(e.call(a)==="[object Array]")Array.prototype.push.apply(d,a);else if(typeof a.length=="number")for(var f=a.length;c<f;c++)d.push(a[c]);else for(;a[c];c++)d.push(a[c]);return d}}var r,s;c.documentElement.compareDocumentPosition?r=function(a,b){if(a===b){g=!0;return 0}if(!a.compareDocumentPosition||!b.compareDocumentPosition)return a.compareDocumentPosition?-1:1;return a.compareDocumentPosition(b)&4?-1:1}:(r=function(a,b){if(a===b){g=!0;return 0}if(a.sourceIndex&&b.sourceIndex)return a.sourceIndex-b.sourceIndex;var c,d,e=[],f=[],h=a.parentNode,i=b.parentNode,j=h;if(h===i)return s(a,b);if(!h)return-1;if(!i)return 1;while(j)e.unshift(j),j=j.parentNode;j=i;while(j)f.unshift(j),j=j.parentNode;c=e.length,d=f.length;for(var k=0;k<c&&k<d;k++)if(e[k]!==f[k])return s(e[k],f[k]);return k===c?s(a,f[k],-1):s(e[k],b,1)},s=function(a,b,c){if(a===b)return c;var d=a.nextSibling;while(d){if(d===b)return-1;d=d.nextSibling}return 1}),k.getText=function(a){var b="",c;for(var d=0;a[d];d++)c=a[d],c.nodeType===3||c.nodeType===4?b+=c.nodeValue:c.nodeType!==8&&(b+=k.getText(c.childNodes));return b},function(){var a=c.createElement("div"),d="script"+(new Date).getTime(),e=c.documentElement;a.innerHTML="<a name='"+d+"'/>",e.insertBefore(a,e.firstChild),c.getElementById(d)&&(l.find.ID=function(a,c,d){if(typeof c.getElementById!="undefined"&&!d){var e=c.getElementById(a[1]);return e?e.id===a[1]||typeof e.getAttributeNode!="undefined"&&e.getAttributeNode("id").nodeValue===a[1]?[e]:b:[]}},l.filter.ID=function(a,b){var c=typeof a.getAttributeNode!="undefined"&&a.getAttributeNode("id");return a.nodeType===1&&c&&c.nodeValue===b}),e.removeChild(a),e=a=null}(),function(){var a=c.createElement("div");a.appendChild(c.createComment("")),a.getElementsByTagName("*").length>0&&(l.find.TAG=function(a,b){var c=b.getElementsByTagName(a[1]);if(a[1]==="*"){var d=[];for(var e=0;c[e];e++)c[e].nodeType===1&&d.push(c[e]);c=d}return c}),a.innerHTML="<a href='#'></a>",a.firstChild&&typeof a.firstChild.getAttribute!="undefined"&&a.firstChild.getAttribute("href")!=="#"&&(l.attrHandle.href=function(a){return a.getAttribute("href",2)}),a=null}(),c.querySelectorAll&&function(){var a=k,b=c.createElement("div"),d="__sizzle__";b.innerHTML="<p class='TEST'></p>";if(!b.querySelectorAll||b.querySelectorAll(".TEST").length!==0){k=function(b,e,f,g){e=e||c;if(!g&&!k.isXML(e)){var h=/^(\w+$)|^\.([\w\-]+$)|^#([\w\-]+$)/.exec(b);if(h&&(e.nodeType===1||e.nodeType===9)){if(h[1])return p(e.getElementsByTagName(b),f);if(h[2]&&l.find.CLASS&&e.getElementsByClassName)return p(e.getElementsByClassName(h[2]),f)}if(e.nodeType===9){if(b==="body"&&e.body)return p([e.body],f);if(h&&h[3]){var i=e.getElementById(h[3]);if(!i||!i.parentNode)return p([],f);if(i.id===h[3])return p([i],f)}try{return p(e.querySelectorAll(b),f)}catch(j){}}else if(e.nodeType===1&&e.nodeName.toLowerCase()!=="object"){var m=e,n=e.getAttribute("id"),o=n||d,q=e.parentNode,r=/^\s*[+~]/.test(b);n?o=o.replace(/'/g,"\\$&"):e.setAttribute("id",o),r&&q&&(e=e.parentNode);try{if(!r||q)return p(e.querySelectorAll("[id='"+o+"'] "+b),f)}catch(s){}finally{n||m.removeAttribute("id")}}}return a(b,e,f,g)};for(var e in a)k[e]=a[e];b=null}}(),function(){var a=c.documentElement,b=a.matchesSelector||a.mozMatchesSelector||a.webkitMatchesSelector||a.msMatchesSelector;if(b){var d=!b.call(c.createElement("div"),"div"),e=!1;try{b.call(c.documentElement,"[test!='']:sizzle")}catch(f){e=!0}k.matchesSelector=function(a,c){c=c.replace(/\=\s*([^'"\]]*)\s*\]/g,"='$1']");if(!k.isXML(a))try{if(e||!l.match.PSEUDO.test(c)&&!/!=/.test(c)){var f=b.call(a,c);if(f||!d||a.document&&a.document.nodeType!==11)return f}}catch(g){}return k(c,null,null,[a]).length>0}}}(),function(){var a=c.createElement("div");a.innerHTML="<div class='test e'></div><div class='test'></div>";if(!!a.getElementsByClassName&&a.getElementsByClassName("e").length!==0){a.lastChild.className="e";if(a.getElementsByClassName("e").length===1)return;l.order.splice(1,0,"CLASS"),l.find.CLASS=function(a,b,c){if(typeof b.getElementsByClassName!="undefined"&&!c)return b.getElementsByClassName(a[1])},a=null}}(),c.documentElement.contains?k.contains=function(a,b){return a!==b&&(a.contains?a.contains(b):!0)}:c.documentElement.compareDocumentPosition?k.contains=function(a,b){return!!(a.compareDocumentPosition(b)&16)}:k.contains=function(){return!1},k.isXML=function(a){var b=(a?a.ownerDocument||a:0).documentElement;return b?b.nodeName!=="HTML":!1};var v=function(a,b){var c,d=[],e="",f=b.nodeType?[b]:b;while(c=l.match.PSEUDO.exec(a))e+=c[0],a=a.replace(l.match.PSEUDO,"");a=l.relative[a]?a+"*":a;for(var g=0,h=f.length;g<h;g++)k(a,f[g],d);return k.filter(e,d)};f.find=k,f.expr=k.selectors,f.expr[":"]=f.expr.filters,f.unique=k.uniqueSort,f.text=k.getText,f.isXMLDoc=k.isXML,f.contains=k.contains}();var O=/Until$/,P=/^(?:parents|prevUntil|prevAll)/,Q=/,/,R=/^.[^:#\[\.,]*$/,S=Array.prototype.slice,T=f.expr.match.POS,U={children:!0,contents:!0,next:!0,prev:!0};f.fn.extend({find:function(a){var b=this,c,d;if(typeof a!="string")return f(a).filter(function(){for(c=0,d=b.length;c<d;c++)if(f.contains(b[c],this))return!0});var e=this.pushStack("","find",a),g,h,i;for(c=0,d=this.length;c<d;c++){g=e.length,f.find(a,this[c],e);if(c>0)for(h=g;h<e.length;h++)for(i=0;i<g;i++)if(e[i]===e[h]){e.splice(h--,1);break}}return e},has:function(a){var b=f(a);return this.filter(function(){for(var a=0,c=b.length;a<c;a++)if(f.contains(this,b[a]))return!0})},not:function(a){return this.pushStack(W(this,a,!1),"not",a)},filter:function(a){return this.pushStack(W(this,a,!0),"filter",a)},is:function(a){return!!a&&(typeof a=="string"?f.filter(a,this).length>0:this.filter(a).length>0)},closest:function(a,b){var c=[],d,e,g=this[0];if(f.isArray(a)){var h,i,j={},k=1;if(g&&a.length){for(d=0,e=a.length;d<e;d++)i=a[d],j[i]||(j[i]=T.test(i)?f(i,b||this.context):i);while(g&&g.ownerDocument&&g!==b){for(i in j)h=j[i],(h.jquery?h.index(g)>-1:f(g).is(h))&&c.push({selector:i,elem:g,level:k});g=g.parentNode,k++}}return c}var l=T.test(a)||typeof a!="string"?f(a,b||this.context):0;for(d=0,e=this.length;d<e;d++){g=this[d];while(g){if(l?l.index(g)>-1:f.find.matchesSelector(g,a)){c.push(g);break}g=g.parentNode;if(!g||!g.ownerDocument||g===b||g.nodeType===11)break}}c=c.length>1?f.unique(c):c;return this.pushStack(c,"closest",a)},index:function(a){if(!a||typeof a=="string")return f.inArray(this[0],a?f(a):this.parent().children());return f.inArray(a.jquery?a[0]:a,this)},add:function(a,b){var c=typeof a=="string"?f(a,b):f.makeArray(a&&a.nodeType?[a]:a),d=f.merge(this.get(),c);return this.pushStack(V(c[0])||V(d[0])?d:f.unique(d))},andSelf:function(){return this.add(this.prevObject)}}),f.each({parent:function(a){var b=a.parentNode;return b&&b.nodeType!==11?b:null},parents:function(a){return f.dir(a,"parentNode")},parentsUntil:function(a,b,c){return f.dir(a,"parentNode",c)},next:function(a){return f.nth(a,2,"nextSibling")},prev:function(a){return f.nth(a,2,"previousSibling")},nextAll:function(a){return f.dir(a,"nextSibling")},prevAll:function(a){return f.dir(a,"previousSibling")},nextUntil:function(a,b,c){return f.dir(a,"nextSibling",c)},prevUntil:function(a,b,c){return f.dir(a,"previousSibling",c)},siblings:function(a){return f.sibling(a.parentNode.firstChild,a)},children:function(a){return f.sibling(a.firstChild)},contents:function(a){return f.nodeName(a,"iframe")?a.contentDocument||a.contentWindow.document:f.makeArray(a.childNodes)}},function(a,b){f.fn[a]=function(c,d){var e=f.map(this,b,c),g=S.call(arguments);O.test(a)||(d=c),d&&typeof d=="string"&&(e=f.filter(d,e)),e=this.length>1&&!U[a]?f.unique(e):e,(this.length>1||Q.test(d))&&P.test(a)&&(e=e.reverse());return this.pushStack(e,a,g.join(","))}}),f.extend({filter:function(a,b,c){c&&(a=":not("+a+")");return b.length===1?f.find.matchesSelector(b[0],a)?[b[0]]:[]:f.find.matches(a,b)},dir:function(a,c,d){var e=[],g=a[c];while(g&&g.nodeType!==9&&(d===b||g.nodeType!==1||!f(g).is(d)))g.nodeType===1&&e.push(g),g=g[c];return e},nth:function(a,b,c,d){b=b||1;var e=0;for(;a;a=a[c])if(a.nodeType===1&&++e===b)break;return a},sibling:function(a,b){var c=[];for(;a;a=a.nextSibling)a.nodeType===1&&a!==b&&c.push(a);return c}});var X=/ jQuery\d+="(?:\d+|null)"/g,Y=/^\s+/,Z=/<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/ig,$=/<([\w:]+)/,_=/<tbody/i,ba=/<|&#?\w+;/,bb=/<(?:script|object|embed|option|style)/i,bc=/checked\s*(?:[^=]|=\s*.checked.)/i,bd=/\/(java|ecma)script/i,be=/^\s*<!(?:\[CDATA\[|\-\-)/,bf={option:[1,"<select multiple='multiple'>","</select>"],legend:[1,"<fieldset>","</fieldset>"],thead:[1,"<table>","</table>"],tr:[2,"<table><tbody>","</tbody></table>"],td:[3,"<table><tbody><tr>","</tr></tbody></table>"],col:[2,"<table><tbody></tbody><colgroup>","</colgroup></table>"],area:[1,"<map>","</map>"],_default:[0,"",""]};bf.optgroup=bf.option,bf.tbody=bf.tfoot=bf.colgroup=bf.caption=bf.thead,bf.th=bf.td,f.support.htmlSerialize||(bf._default=[1,"div<div>","</div>"]),f.fn.extend({text:function(a){if(f.isFunction(a))return this.each(function(b){var c=f(this);c.text(a.call(this,b,c.text()))});if(typeof a!="object"&&a!==b)return this.empty().append((this[0]&&this[0].ownerDocument||c).createTextNode(a));return f.text(this)},wrapAll:function(a){if(f.isFunction(a))return this.each(function(b){f(this).wrapAll(a.call(this,b))});if(this[0]){var b=f(a,this[0].ownerDocument).eq(0).clone(!0);this[0].parentNode&&b.insertBefore(this[0]),b.map(function(){var a=this;while(a.firstChild&&a.firstChild.nodeType===1)a=a.firstChild;return a}).append(this)}return this},wrapInner:function(a){if(f.isFunction(a))return this.each(function(b){f(this).wrapInner(a.call(this,b))});return this.each(function(){var b=f(this),c=b.contents();c.length?c.wrapAll(a):b.append(a)})},wrap:function(a){return this.each(function(){f(this).wrapAll(a)})},unwrap:function(){return this.parent().each(function(){f.nodeName(this,"body")||f(this).replaceWith(this.childNodes)}).end()},append:function(){return this.domManip(arguments,!0,function(a){this.nodeType===1&&this.appendChild(a)})},prepend:function(){return this.domManip(arguments,!0,function(a){this.nodeType===1&&this.insertBefore(a,this.firstChild)})},before:function(){if(this[0]&&this[0].parentNode)return this.domManip(arguments,!1,function(a){this.parentNode.insertBefore(a,this)});if(arguments.length){var a=f(arguments[0]);a.push.apply(a,this.toArray());return this.pushStack(a,"before",arguments)}},after:function(){if(this[0]&&this[0].parentNode)return this.domManip(arguments,!1,function(a){this.parentNode.insertBefore(a,this.nextSibling)});if(arguments.length){var a=this.pushStack(this,"after",arguments);a.push.apply(a,f(arguments[0]).toArray());return a}},remove:function(a,b){for(var c=0,d;(d=this[c])!=null;c++)if(!a||f.filter(a,[d]).length)!b&&d.nodeType===1&&(f.cleanData(d.getElementsByTagName("*")),f.cleanData([d])),d.parentNode&&d.parentNode.removeChild(d);return this},empty:function(){for(var a=0,b;(b=this[a])!=null;a++){b.nodeType===1&&f.cleanData(b.getElementsByTagName("*"));while(b.firstChild)b.removeChild(b.firstChild)}return this},clone:function(a,b){a=a==null?!1:a,b=b==null?a:b;return this.map(function(){return f.clone(this,a,b)})},html:function(a){if(a===b)return this[0]&&this[0].nodeType===1?this[0].innerHTML.replace(X,""):null;if(typeof a=="string"&&!bb.test(a)&&(f.support.leadingWhitespace||!Y.test(a))&&!bf[($.exec(a)||["",""])[1].toLowerCase()]){a=a.replace(Z,"<$1></$2>");try{for(var c=0,d=this.length;c<d;c++)this[c].nodeType===1&&(f.cleanData(this[c].getElementsByTagName("*")),this[c].innerHTML=a)}catch(e){this.empty().append(a)}}else f.isFunction(a)?this.each(function(b){var c=f(this);c.html(a.call(this,b,c.html()))}):this.empty().append(a);return this},replaceWith:function(a){if(this[0]&&this[0].parentNode){if(f.isFunction(a))return this.each(function(b){var c=f(this),d=c.html();c.replaceWith(a.call(this,b,d))});typeof a!="string"&&(a=f(a).detach());return this.each(function(){var b=this.nextSibling,c=this.parentNode;f(this).remove(),b?f(b).before(a):f(c).append(a)})}return this.length?this.pushStack(f(f.isFunction(a)?a():a),"replaceWith",a):this},detach:function(a){return this.remove(a,!0)},domManip:function(a,c,d){var e,g,h,i,j=a[0],k=[];if(!f.support.checkClone&&arguments.length===3&&typeof j=="string"&&bc.test(j))return this.each(function(){f(this).domManip(a,c,d,!0)});if(f.isFunction(j))return this.each(function(e){var g=f(this);a[0]=j.call(this,e,c?g.html():b),g.domManip(a,c,d)});if(this[0]){i=j&&j.parentNode,f.support.parentNode&&i&&i.nodeType===11&&i.childNodes.length===this.length?e={fragment:i}:e=f.buildFragment(a,this,k),h=e.fragment,h.childNodes.length===1?g=h=h.firstChild:g=h.firstChild;if(g){c=c&&f.nodeName(g,"tr");for(var l=0,m=this.length,n=m-1;l<m;l++)d.call(c?bg(this[l],g):this[l],e.cacheable||m>1&&l<n?f.clone(h,!0,!0):h)}k.length&&f.each(k,bm)}return this}}),f.buildFragment=function(a,b,d){var e,g,h,i;b&&b[0]&&(i=b[0].ownerDocument||b[0]),i.createDocumentFragment||(i=c),a.length===1&&typeof a[0]=="string"&&a[0].length<512&&i===c&&a[0].charAt(0)==="<"&&!bb.test(a[0])&&(f.support.checkClone||!bc.test(a[0]))&&(g=!0,h=f.fragments[a[0]],h&&h!==1&&(e=h)),e||(e=i.createDocumentFragment(),f.clean(a,i,e,d)),g&&(f.fragments[a[0]]=h?e:1);return{fragment:e,cacheable:g}},f.fragments={},f.each({appendTo:"append",prependTo:"prepend",insertBefore:"before",insertAfter:"after",replaceAll:"replaceWith"},function(a,b){f.fn[a]=function(c){var d=[],e=f(c),g=this.length===1&&this[0].parentNode;if(g&&g.nodeType===11&&g.childNodes.length===1&&e.length===1){e[b](this[0]);return this}for(var h=0,i=e.length;h<i;h++){var j=(h>0?this.clone(!0):this).get();f(e[h])[b](j),d=d.concat(j
 )}return this.pushStack(d,a,e.selector)}}),f.extend({clone:function(a,b,c){var d=a.cloneNode(!0),e,g,h;if((!f.support.noCloneEvent||!f.support.noCloneChecked)&&(a.nodeType===1||a.nodeType===11)&&!f.isXMLDoc(a)){bi(a,d),e=bj(a),g=bj(d);for(h=0;e[h];++h)bi(e[h],g[h])}if(b){bh(a,d);if(c){e=bj(a),g=bj(d);for(h=0;e[h];++h)bh(e[h],g[h])}}e=g=null;return d},clean:function(a,b,d,e){var g;b=b||c,typeof b.createElement=="undefined"&&(b=b.ownerDocument||b[0]&&b[0].ownerDocument||c);var h=[],i;for(var j=0,k;(k=a[j])!=null;j++){typeof k=="number"&&(k+="");if(!k)continue;if(typeof k=="string")if(!ba.test(k))k=b.createTextNode(k);else{k=k.replace(Z,"<$1></$2>");var l=($.exec(k)||["",""])[1].toLowerCase(),m=bf[l]||bf._default,n=m[0],o=b.createElement("div");o.innerHTML=m[1]+k+m[2];while(n--)o=o.lastChild;if(!f.support.tbody){var p=_.test(k),q=l==="table"&&!p?o.firstChild&&o.firstChild.childNodes:m[1]==="<table>"&&!p?o.childNodes:[];for(i=q.length-1;i>=0;--i)f.nodeName(q[i],"tbody")&&!q[i].childNodes.length&&q[i].parentNode.removeChild(q[i])}!f.support.leadingWhitespace&&Y.test(k)&&o.insertBefore(b.createTextNode(Y.exec(k)[0]),o.firstChild),k=o.childNodes}var r;if(!f.support.appendChecked)if(k[0]&&typeof (r=k.length)=="number")for(i=0;i<r;i++)bl(k[i]);else bl(k);k.nodeType?h.push(k):h=f.merge(h,k)}if(d){g=function(a){return!a.type||bd.test(a.type)};for(j=0;h[j];j++)if(e&&f.nodeName(h[j],"script")&&(!h[j].type||h[j].type.toLowerCase()==="text/javascript"))e.push(h[j].parentNode?h[j].parentNode.removeChild(h[j]):h[j]);else{if(h[j].nodeType===1){var s=f.grep(h[j].getElementsByTagName("script"),g);h.splice.apply(h,[j+1,0].concat(s))}d.appendChild(h[j])}}return h},cleanData:function(a){var b,c,d=f.cache,e=f.expando,g=f.event.special,h=f.support.deleteExpando;for(var i=0,j;(j=a[i])!=null;i++){if(j.nodeName&&f.noData[j.nodeName.toLowerCase()])continue;c=j[f.expando];if(c){b=d[c]&&d[c][e];if(b&&b.events){for(var k in b.events)g[k]?f.event.remove(j,k):f.removeEvent(j,k,b.handle);b.handle&&(b.handle.elem=null)}h?delete j[f.expando]:j.removeAttribute&&j.removeAttribute(f.expando),delete d[c]}}}});var bn=/alpha\([^)]*\)/i,bo=/opacity=([^)]*)/,bp=/([A-Z]|^ms)/g,bq=/^-?\d+(?:px)?$/i,br=/^-?\d/,bs=/^[+\-]=/,bt=/[^+\-\.\de]+/g,bu={position:"absolute",visibility:"hidden",display:"block"},bv=["Left","Right"],bw=["Top","Bottom"],bx,by,bz;f.fn.css=function(a,c){if(arguments.length===2&&c===b)return this;return f.access(this,a,c,!0,function(a,c,d){return d!==b?f.style(a,c,d):f.css(a,c)})},f.extend({cssHooks:{opacity:{get:function(a,b){if(b){var c=bx(a,"opacity","opacity");return c===""?"1":c}return a.style.opacity}}},cssNumber:{fillOpacity:!0,fontWeight:!0,lineHeight:!0,opacity:!0,orphans:!0,widows:!0,zIndex:!0,zoom:!0},cssProps:{"float":f.support.cssFloat?"cssFloat":"styleFloat"},style:function(a,c,d,e){if(!!a&&a.nodeType!==3&&a.nodeType!==8&&!!a.style){var g,h,i=f.camelCase(c),j=a.style,k=f.cssHooks[i];c=f.cssProps[i]||i;if(d===b){if(k&&"get"in k&&(g=k.get(a,!1,e))!==b)return g;return j[c]}h=typeof d;if(h==="number"&&isNaN(d)||d==null)return;h==="string"&&bs.test(d)&&(d=+d.replace(bt,"")+parseFloat(f.css(a,c)),h="number"),h==="number"&&!f.cssNumber[i]&&(d+="px");if(!k||!("set"in k)||(d=k.set(a,d))!==b)try{j[c]=d}catch(l){}}},css:function(a,c,d){var e,g;c=f.camelCase(c),g=f.cssHooks[c],c=f.cssProps[c]||c,c==="cssFloat"&&(c="float");if(g&&"get"in g&&(e=g.get(a,!0,d))!==b)return e;if(bx)return bx(a,c)},swap:function(a,b,c){var d={};for(var e in b)d[e]=a.style[e],a.style[e]=b[e];c.call(a);for(e in b)a.style[e]=d[e]}}),f.curCSS=f.css,f.each(["height","width"],function(a,b){f.cssHooks[b]={get:function(a,c,d){var e;if(c){if(a.offsetWidth!==0)return bA(a,b,d);f.swap(a,bu,function(){e=bA(a,b,d)});return e}},set:function(a,b){if(!bq.test(b))return b;b=parseFloat(b);if(b>=0)return b+"px"}}}),f.support.opacity||(f.cssHooks.opacity={get:function(a,b){return bo.test((b&&a.currentStyle?a.currentStyle.filter:a.style.filter)||"")?parseFloat(RegExp.$1)/100+"":b?"1":""},set:function(a,b){var c=a.style,d=a.currentStyle;c.zoom=1;var e=f.isNaN(b)?"":"alpha(opacity="+b*100+")",g=d&&d.filter||c.filter||"";c.filter=bn.test(g)?g.replace(bn,e):g+" "+e}}),f(function(){f.support.reliableMarginRight||(f.cssHooks.marginRight={get:function(a,b){var c;f.swap(a,{display:"inline-block"},function(){b?c=bx(a,"margin-right","marginRight"):c=a.style.marginRight});return c}})}),c.defaultView&&c.defaultView.getComputedStyle&&(by=function(a,c){var d,e,g;c=c.replace(bp,"-$1").toLowerCase();if(!(e=a.ownerDocument.defaultView))return b;if(g=e.getComputedStyle(a,null))d=g.getPropertyValue(c),d===""&&!f.contains(a.ownerDocument.documentElement,a)&&(d=f.style(a,c));return d}),c.documentElement.currentStyle&&(bz=function(a,b){var c,d=a.currentStyle&&a.currentStyle[b],e=a.runtimeStyle&&a.runtimeStyle[b],f=a.style;!bq.test(d)&&br.test(d)&&(c=f.left,e&&(a.runtimeStyle.left=a.currentStyle.left),f.left=b==="fontSize"?"1em":d||0,d=f.pixelLeft+"px",f.left=c,e&&(a.runtimeStyle.left=e));return d===""?"auto":d}),bx=by||bz,f.expr&&f.expr.filters&&(f.expr.filters.hidden=function(a){var b=a.offsetWidth,c=a.offsetHeight;return b===0&&c===0||!f.support.reliableHiddenOffsets&&(a.style.display||f.css(a,"display"))==="none"},f.expr.filters.visible=function(a){return!f.expr.filters.hidden(a)});var bB=/%20/g,bC=/\[\]$/,bD=/\r?\n/g,bE=/#.*$/,bF=/^(.*?):[ \t]*([^\r\n]*)\r?$/mg,bG=/^(?:color|date|datetime|email|hidden|month|number|password|range|search|tel|text|time|url|week)$/i,bH=/^(?:about|app|app\-storage|.+\-extension|file|widget):$/,bI=/^(?:GET|HEAD)$/,bJ=/^\/\//,bK=/\?/,bL=/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,bM=/^(?:select|textarea)/i,bN=/\s+/,bO=/([?&])_=[^&]*/,bP=/^([\w\+\.\-]+:)(?:\/\/([^\/?#:]*)(?::(\d+))?)?/,bQ=f.fn.load,bR={},bS={},bT,bU;try{bT=e.href}catch(bV){bT=c.createElement("a"),bT.href="",bT=bT.href}bU=bP.exec(bT.toLowerCase())||[],f.fn.extend({load:function(a,c,d){if(typeof a!="string"&&bQ)return bQ.apply(this,arguments);if(!this.length)return this;var e=a.indexOf(" ");if(e>=0){var g=a.slice(e,a.length);a=a.slice(0,e)}var h="GET";c&&(f.isFunction(c)?(d=c,c=b):typeof c=="object"&&(c=f.param(c,f.ajaxSettings.traditional),h="POST"));var i=this;f.ajax({url:a,type:h,dataType:"html",data:c,complete:function(a,b,c){c=a.responseText,a.isResolved()&&(a.done(function(a){c=a}),i.html(g?f("<div>").append(c.replace(bL,"")).find(g):c)),d&&i.each(d,[c,b,a])}});return this},serialize:function(){return f.param(this.serializeArray())},serializeArray:function(){return this.map(function(){return this.elements?f.makeArray(this.elements):this}).filter(function(){return this.name&&!this.disabled&&(this.checked||bM.test(this.nodeName)||bG.test(this.type))}).map(function(a,b){var c=f(this).val();return c==null?null:f.isArray(c)?f.map(c,function(a,c){return{name:b.name,value:a.replace(bD,"\r\n")}}):{name:b.name,value:c.replace(bD,"\r\n")}}).get()}}),f.each("ajaxStart ajaxStop ajaxComplete ajaxError ajaxSuccess ajaxSend".split(" "),function(a,b){f.fn[b]=function(a){return this.bind(b,a)}}),f.each(["get","post"],function(a,c){f[c]=function(a,d,e,g){f.isFunction(d)&&(g=g||e,e=d,d=b);return f.ajax({type:c,url:a,data:d,success:e,dataType:g})}}),f.extend({getScript:function(a,c){return f.get(a,b,c,"script")},getJSON:function(a,b,c){return f.get(a,b,c,"json")},ajaxSetup:function(a,b){b?f.extend(!0,a,f.ajaxSettings,b):(b=a,a=f.extend(!0,f.ajaxSettings,b));for(var c in{context:1,url:1})c in b?a[c]=b[c]:c in f.ajaxSettings&&(a[c]=f.ajaxSettings[c]);return a},ajaxSettings:{url:bT,isLocal:bH.test(bU[1]),global:!0,type:"GET",contentType:"application/x-www-form-urlencoded",processData:!0,async:!0,accepts:{xml:"application/xml, text/xml",html:"text/html",text:"text/plain",json:"application/json, text/javascript","*":"*/*"},contents:{xml:/xml/,html:/html/,json:/json/},responseFields:{xml:"responseXML",text:"responseText"},converters:{"* text":a.String,"text html":!0,"text json":f.parseJSON,"text xml":f.parseXML}},ajaxPrefilter:bW(bR),ajaxTransport:bW(bS),ajax:function(a,c){function w(a,c,l,m){if(s!==2){s=2,q&&clearTimeout(q),p=b,n=m||"",v.readyState=a?4:0;var o,r,u,w=l?bZ(d,v,l):b,x,y;if(a>=200&&a<300||a===304){if(d.ifModified){if(x=v.getResponseHeader("Last-Modified"))f.lastModified[k]=x;if(y=v.getResponseHeader("Etag"))f.etag[k]=y}if(a===304)c="notmodified",o=!0;else try{r=b$(d,w),c="success",o=!0}catch(z){c="parsererror",u=z}}else{u=c;if(!c||a)c="error",a<0&&(a=0)}v.status=a,v.statusText=c,o?h.resolveWith(e,[r,c,v]):h.rejectWith(e,[v,c,u]),v.statusCode(j),j=b,t&&g.trigger("ajax"+(o?"Success":"Error"),[v,d,o?r:u]),i.resolveWith(e,[v,c]),t&&(g.trigger("ajaxComplete",[v,d]),--f.active||f.event.trigger("ajaxStop"))}}typeof a=="object"&&(c=a,a=b),c=c||{};var d=f.ajaxSetup({},c),e=d.context||d,g=e!==d&&(e.nodeType||e instanceof f)?f(e):f.event,h=f.Deferred(),i=f._Deferred(),j=d.statusCode||{},k,l={},m={},n,o,p,q,r,s=0,t,u,v={readyState:0,setRequestHeader:function(a,b){if(!s){var c=a.toLowerCase();a=m[c]=m[c]||a,l[a]=b}return this},getAllResponseHeaders:function(){return s===2?n:null},getResponseHeader:function(a){var c;if(s===2){if(!o){o={};while(c=bF.exec(n))o[c[1].toLowerCase()]=c[2]}c=o[a.toLowerCase()]}return c===b?null:c},overrideMimeType:function(a){s||(d.mimeType=a);return this},abort:function(a){a=a||"abort",p&&p.abort(a),w(0,a);return this}};h.promise(v),v.success=v.done,v.error=v.fail,v.complete=i.done,v.statusCode=function(a){if(a){var b;if(s<2)for(b in a)j[b]=[j[b],a[b]];else b=a[v.status],v.then(b,b)}return this},d.url=((a||d.url)+"").replace(bE,"").replace(bJ,bU[1]+"//"),d.dataTypes=f.trim(d.dataType||"*").toLowerCase().split(bN),d.crossDomain==null&&(r=bP.exec(d.url.toLowerCase()),d.crossDomain=!(!r||r[1]==bU[1]&&r[2]==bU[2]&&(r[3]||(r[1]==="http:"?80:443))==(bU[3]||(bU[1]==="http:"?80:443)))),d.data&&d.processData&&typeof d.data!="string"&&(d.data=f.param(d.data,d.traditional)),bX(bR,d,c,v);if(s===2)return!1;t=d.global,d.type=d.type.toUpperCase(),d.hasContent=!bI.test(d.type),t&&f.active++===0&&f.event.trigger("ajaxStart");if(!d.hasContent){d.data&&(d.url+=(bK.test(d.url)?"&":"?")+d.data),k=d.url;if(d.cache===!1){var x=f.now(),y=d.url.replace(bO,"$1_="+x);d.url=y+(y===d.url?(bK.test(d.url)?"&":"?")+"_="+x:"")}}(d.data&&d.hasContent&&d.contentType!==!1||c.contentType)&&v.setRequestHeader("Content-Type",d.contentType),d.ifModified&&(k=k||d.url,f.lastModified[k]&&v.setRequestHeader("If-Modified-Since",f.lastModified[k]),f.etag[k]&&v.setRequestHeader("If-None-Match",f.etag[k])),v.setRequestHeader("Accept",d.dataTypes[0]&&d.accepts[d.dataTypes[0]]?d.accepts[d.dataTypes[0]]+(d.dataTypes[0]!=="*"?", */*; q=0.01":""):d.accepts["*"]);for(u in d.headers)v.setRequestHeader(u,d.headers[u]);if(d.beforeSend&&(d.beforeSend.call(e,v,d)===!1||s===2)){v.abort();return!1}for(u in{success:1,error:1,complete:1})v[u](d[u]);p=bX(bS,d,c,v);if(!p)w(-1,"No Transport");else{v.readyState=1,t&&g.trigger("ajaxSend",[v,d]),d.async&&d.timeout>0&&(q=setTimeout(function(){v.abort("timeout")},d.timeout));try{s=1,p.send(l,w)}catch(z){status<2?w(-1,z):f.error(z)}}return v},param:function(a,c){var d=[],e=function(a,b){b=f.isFunction(b)?b():b,d[d.length]=encodeURIComponent(a)+"="+encodeURIComponent(b)};c===b&&(c=f.ajaxSettings.traditional);if(f.isArray(a)||a.jquery&&!f.isPlainObject(a))f.each(a,function(){e(this.name,this.value)});else for(var g in a)bY(g,a[g],c,e);return d.join("&").replace(bB,"+")}}),f.extend({active:0,lastModified:{},etag:{}});var b_=f.now(),ca=/(\=)\?(&|$)|\?\?/i;f.ajaxSetup({jsonp:"callback",jsonpCallback:function(){return f.expando+"_"+b_++}}),f.ajaxPrefilter("json jsonp",function(b,c,d){var e=b.contentType==="application/x-www-form-urlencoded"&&typeof b.data=="string";if(b.dataTypes[0]==="jsonp"||b.jsonp!==!1&&(ca.test(b.url)||e&&ca.test(b.data))){var g,h=b.jsonpCallback=f.isFunction(b.jsonpCallback)?b.jsonpCallback():b.jsonpCallback,i=a[h],j=b.url,k=b.data,l="$1"+h+"$2";b.jsonp!==!1&&(j=j.replace(ca,l),b.url===j&&(e&&(k=k.replace(ca,l)),b.data===k&&(j+=(/\?/.test(j)?"&":"?")+b.jsonp+"="+h))),b.url=j,b.data=k,a[h]=function(a){g=[a]},d.always(function(){a[h]=i,g&&f.isFunction(i)&&a[h](g[0])}),b.converters["script json"]=function(){g||f.error(h+" was not called");return g[0]},b.dataTypes[0]="json";return"script"}}),f.ajaxSetup({accepts:{script:"text/javascript, application/javascript, application/ecmascript, application/x-ecmascript"},contents:{script:/javascript|ecmascript/},converters:{"text script":function(a){f.globalEval(a);return a}}}),f.ajaxPrefilter("script",function(a){a.cache===b&&(a.cache=!1),a.crossDomain&&(a.type="GET",a.global=!1)}),f.ajaxTransport("script",function(a){if(a.crossDomain){var d,e=c.head||c.getElementsByTagName("head")[0]||c.documentElement;return{send:function(f,g){d=c.createElement("script"),d.async="async",a.scriptCharset&&(d.charset=a.scriptCharset),d.src=a.url,d.onload=d.onreadystatechange=function(a,c){if(c||!d.readyState||/loaded|complete/.test(d.readyState))d.onload=d.onreadystatechange=null,e&&d.parentNode&&e.removeChild(d),d=b,c||g(200,"success")},e.insertBefore(d,e.firstChild)},abort:function(){d&&d.onload(0,1)}}}});var cb=a.ActiveXObject?function(){for(var a in cd)cd[a](0,1)}:!1,cc=0,cd;f.ajaxSettings.xhr=a.ActiveXObject?function(){return!this.isLocal&&ce()||cf()}:ce,function(a){f.extend(f.support,{ajax:!!a,cors:!!a&&"withCredentials"in a})}(f.ajaxSettings.xhr()),f.support.ajax&&f.ajaxTransport(function(c){if(!c.crossDomain||f.support.cors){var d;return{send:function(e,g){var h=c.xhr(),i,j;c.username?h.open(c.type,c.url,c.async,c.username,c.password):h.open(c.type,c.url,c.async);if(c.xhrFields)for(j in c.xhrFields)h[j]=c.xhrFields[j];c.mimeType&&h.overrideMimeType&&h.overrideMimeType(c.mimeType),!c.crossDomain&&!e["X-Requested-With"]&&(e["X-Requested-With"]="XMLHttpRequest");try{for(j in e)h.setRequestHeader(j,e[j])}catch(k){}h.send(c.hasContent&&c.data||null),d=function(a,e){var j,k,l,m,n;try{if(d&&(e||h.readyState===4)){d=b,i&&(h.onreadystatechange=f.noop,cb&&delete cd[i]);if(e)h.readyState!==4&&h.abort();else{j=h.status,l=h.getAllResponseHeaders(),m={},n=h.responseXML,n&&n.documentElement&&(m.xml=n),m.text=h.responseText;try{k=h.statusText}catch(o){k=""}!j&&c.isLocal&&!c.crossDomain?j=m.text?200:404:j===1223&&(j=204)}}}catch(p){e||g(-1,p)}m&&g(j,k,m,l)},!c.async||h.readyState===4?d():(i=++cc,cb&&(cd||(cd={},f(a).unload(cb)),cd[i]=d),h.onreadystatechange=d)},abort:function(){d&&d(0,1)}}}});var cg={},ch,ci,cj=/^(?:toggle|show|hide)$/,ck=/^([+\-]=)?([\d+.\-]+)([a-z%]*)$/i,cl,cm=[["height","marginTop","marginBottom","paddingTop","paddingBottom"],["width","marginLeft","marginRight","paddingLeft","paddingRight"],["opacity"]],cn,co=a.webkitRequestAnimationFrame||a.mozRequestAnimationFrame||a.oRequestAnimationFrame;f.fn.extend({show:function(a,b,c){var d,e;if(a||a===0)return this.animate(cr("show",3),a,b,c);for(var g=0,h=this.length;g<h;g++)d=this[g],d.style&&(e=d.style.display,!f._data(d,"olddisplay")&&e==="none"&&(e=d.style.display=""),e===""&&f.css(d,"display")==="none"&&f._data(d,"olddisplay",cs(d.nodeName)));for(g=0;g<h;g++){d=this[g];if(d.style){e=d.style.display;if(e===""||e==="none")d.style.display=f._data(d,"olddisplay")||""}}return this},hide:function(a,b,c){if(a||a===0)return this.animate(cr("hide",3),a,b,c);for(var d=0,e=this.length;d<e;d++)if(this[d].style){var g=f.css(this[d],"display");g!=="none"&&!f._data(this[d],"olddisplay")&&f._data(this[d],"olddisplay",g)}for(d=0;d<e;d++)this[d].style&&(this[d].style.display="none");return this},_toggle:f.fn.toggle,toggle:function(a,b,c){var d=typeof a=="boolean";f.isFunction(a)&&f.isFunction(b)?this._toggle.apply(this,arguments):a==null||d?this.each(function(){var b=d?a:f(this).is(":hidden");f(this)[b?"show":"hide"]()}):this.animate(cr("toggle",3),a,b,c);return this},fadeTo:function(a,b,c,d){return this.filter(":hidden").css("opacity",0).show().end().animate({opacity:b},a,c,d)},animate:function(a,b,c,d){var e=f.speed(b,c,d);if(f.isEmptyObject(a))return this.each(e.complete,[!1]);a=f.extend({},a);return this[e.queue===!1?"each":"queue"](function(){e.queue===!1&&f._mark(this);var b=f.extend({},e),c=this.nodeType===1,d=c&&f(this).is(":hidden"),g,h,i,j,k,l,m,n,o;b.animatedProperties={};for(i in a){g=f.camelCase(i),i!==g&&(a[g]=a[i],delete a[i]),h=a[g],f.isArray(h)?(b.animatedProperties[g]=h[1],h=a[g]=h[0]):b.animatedProperties[g]=b.specialEasing&&b.specialEasing[g]||b.easing||"swing";if(h==="hide"&&d||h==="show"&&!d)return b.complete.call(this);c&&(g==="height"||g==="width")&&(b.overflow=[this.style.overflow,this.style.overflowX,this.style.overflowY],f.css(this,"display")==="inline"&&f.css(this,"float")==="none"&&(f.support.inlineBlockNeedsLayout?(j=cs(this.nodeName),j==="inline"?this.style.display="inline-block":(this.style.display="inline",this.style.zoom=1)):this.style.display="inline-block"))}b.overflow!=null&&(this.style.overflow="hidden");for(i in a)k=new f.fx(this,b,i),h=a[i],cj.test(h)?k[h==="toggle"?d?"show":"hide":h]():(l=ck.exec(h),m=k.cur(),l?(n=parseFloat(l[2]),o=l[3]||(f.cssNumber[i]?"":"px"),o!=="px"&&(f.style(this,i,(n||1)+o),m=(n||1)/k.cur()*m,f.style(this,i,m+o)),l[1]&&(n=(l[1]==="-="?-1:1)*n+m),k.custom(m,n,o)):k.custom(m,h,""));return!0})},stop:function(a,b){a&&this.queue([]),this.each(function(){var a=f.timers,c=a.length;b||f._unmark(!0,this);while(c--)a[c].elem===this&&(b&&a[c](!0),a.splice(c,1))}),b||this.dequeue();return this}}),f.each({slideDown:cr("show",1),slideUp:cr("hide",1),slideToggle:cr("toggle",1),fadeIn:{opacity:"show"},fadeOut:{opacity:"hide"},fadeToggle:{opacity:"toggle"}},function(a,b){f.fn[a]=function(a,c,d){return this.animate(b,a,c,d)}}),f.extend({speed:function(a,b,c){var d=a&&typeof a=="object"?f.extend({},a):{complete:c||!c&&b||f.isFunction(a)&&a,duration:a,easing:c&&b||b&&!f.isFunction(b)&&b};d.duration=f.fx.off?0:typeof d.duration=="number"?d.duration:d.duration in f.fx.speeds?f.fx.speeds[d.duration]:f.fx.speeds._default,d.old=d.complete,d.complete=function(a){f.isFunction(d.old)&&d.old.call(this),d.queue!==!1?f.dequeue(this):a!==!1&&f._unmark(this)};return d},easing:{linear:function(a,b,c,d){return c+d*a},swing:function(a,b,c,d){return(-Math.cos(a*Math.PI)/2+.5)*d+c}},timers:[],fx:function(a,b,c){this.options=b,this.elem=a,this.prop=c,b.orig=b.orig||{}}}),f.fx.prototype={update:function(){this.options.step&&this.options.step.call(this.elem,this.now,this),(f.fx.step[this.prop]||f.fx.step._default)(this)},cur:function(){if(this.elem[this.prop]!=null&&(!this.elem.style||this.elem.style[this.prop]==null))return this.elem[this.prop];var a,b=f.css(this.elem,this.prop);return isNaN(a=parseFloat(b))?!b||b==="auto"?0:b:a},custom:function(a,b,c){function h(a){return d.step(a)}var d=this,e=f.fx,g;this.startTime=cn||cp(),this.start=a,this.end=b,this.unit=c||this.unit||(f.cssNumber[this.prop]?"":"px"),this.now=this.start,this.pos=this.state=0,h.elem=this.elem,h()&&f.timers.push(h)&&!cl&&(co?(cl=!0,g=function(){cl&&(co(g),e.tick())},co(g)):cl=setInterval(e.tick,e.interval))},show:function(){this.options.orig[this.prop]=f.style(this.elem,this.prop),this.options.show=!0,this.custom(this.prop==="width"||this.prop==="height"?1:0,this.cur()),f(this.elem).show()},hide:function(){this.options.orig[this.prop]=f.style(this.elem,this.prop),this.options.hide=!0,this.custom(this.cur(),0)},step:function(a){var b=cn||cp(),c=!0,d=this.elem,e=this.options,g,h;if(a||b>=e.duration+this.startTime){this.now=this.end,this.pos=this.state=1,this.update(),e.animatedProperties[this.prop]=!0;for(g in e.animatedProperties)e.animatedProperties[g]!==!0&&(c=!1);if(c){e.overflow!=null&&!f.support.shrinkWrapBlocks&&f.each(["","X","Y"],function(a,b){d.style["overflow"+b]=e.overflow[a]}),e.hide&&f(d).hide();if(e.hide||e.show)for(var i in e.animatedProperties)f.style(d,i,e.orig[i]);e.complete.call(d)}return!1}e.duration==Infinity?this.now=b:(h=b-this.startTime,this.state=h/e.duration,this.pos=f.easing[e.animatedProperties[this.prop]](this.state,h,0,1,e.duration),this.now=this.start+(this.end-this.start)*this.pos),this.update();return!0}},f.extend(f.fx,{tick:function(){for(var a=f.timers,b=0;b<a.length;++b)a[b]()||a.splice(b--,1);a.length||f.fx.stop()},interval:13,stop:function(){clearInterval(cl),cl=null},speeds:{slow:600,fast:200,_default:400},step:{opacity:function(a){f.style(a.elem,"opacity",a.now)},_default:function(a){a.elem.style&&a.elem.style[a.prop]!=null?a.elem.style[a.prop]=(a.prop==="width"||a.prop==="height"?Math.max(0,a.now):a.now)+a.unit:a.elem[a.prop]=a.now}}}),f.expr&&f.expr.filters&&(f.expr.filters.animated=function(a){return f.grep(f.timers,function(b){return a===b.elem}).length});var ct=/^t(?:able|d|h)$/i,cu=/^(?:body|html)$/i;"getBoundingClientRect"in c.documentElement?f.fn.offset=function(a){var b=this[0],c;if(a)return this.each(function(b){f.offset.setOffset(this,a,b)});if(!b||!b.ownerDocument)return null;if(b===b.ownerDocument.body)return f.offset.bodyOffset(b);try{c=b.getBoundingClientRect()}catch(d){}var e=b.ownerDocument,g=e.documentElement;if(!c||!f.contains(g,b))return c?{top:c.top,left:c.left}:{top:0,left:0};var h=e.body,i=cv(e),j=g.clientTop||h.clientTop||0,k=g.clientLeft||h.clientLeft||0,l=i.pageYOffset||f.support.boxModel&&g.scrollTop||h.scrollTop,m=i.pageXOffset||f.support.boxModel&&g.scrollLeft||h.scrollLeft,n=c.top+l-j,o=c.left+m-k;return{top:n,left:o}}:f.fn.offset=function(a){var b=this[0];if(a)return this.each(function(b){f.offset.setOffset(this,a,b)});if(!b||!b.ownerDocument)return null;if(b===b.ownerDocument.body)return f.offset.bodyOffset(b);f.offset.initialize();var c,d=b.offsetParent,e=b,g=b.ownerDocument,h=g.documentElement,i=g.body,j=g.defaultView,k=j?j.getComputedStyle(b,null):b.currentStyle,l=b.offsetTop,m=b.offsetLeft;while((b=b.parentNode)&&b!==i&&b!==h){if(f.offset.supportsFixedPosition&&k.position==="fixed")break;c=j?j.getComputedStyle(b,null):b.currentStyle,l-=b.scrollTop,m-=b.scrollLeft,b===d&&(l+=b.offsetTop,m+=b.offsetLeft,f.offset.doesNotAddBorder&&(!f.offset.doesAddBorderForTableAndCells||!ct.test(b.nodeName))&&(l+=parseFloat(c.borderTopWidth)||0,m+=parseFloat(c.borderLeftWidth)||0),e=d,d=b.offsetParent),f.offset.subtractsBorderForOverflowNotVisible&&c.overflow!=="visible"&&(l+=parseFloat(c.borderTopWidth)||0,m+=parseFloat(c.borderLeftWidth)||0),k=c}if(k.position==="relative"||k.position==="static")l+=i.offsetTop,m+=i.offsetLeft;f.offset.supportsFixedPosition&&k.position==="fixed"&&(l+=Math.max(h.scrollTop,i.scrollTop),m+=Math.max(h.scrollLeft,i.scrollLeft));return{top:l,left:m}},f.offset={initialize:function(){var a=c.body,b=c.createElement("div"),d,e,g,h,i=parseFloat(f.css(a,"marginTop"))||0,j="<div style='position:absolute;top:0;left:0;margin:0;border:5px solid #000;padding:0;width:1px;height:1px;'><div></div></div><table style='position:absolute;top:0;left:0;margin:0;border:5px solid #000;padding:0;width:1px;height:1px;' cellpadding='0' cellspacing='0'><tr><td></td></tr></table>";f.extend(b.style,{position:"absolute",top:0,left:0,margin:0,border:0,width:"1px",height:"1px",visibility:"hidden"}),b.innerHTML=j,a.insertBefore(b,a.firstChild),d=b.firstChild,e=d.firstChild,h=d.nextSibling.firstChild.firstChild,this.doesNotAddBorder=e.offsetTop!==5,this.doesAddBorderForTableAndCells=h.offsetTop===5,e.style.position="fixed",e.style.top="20px",this.supportsFixedPosition=e.offsetTop===20||e.offsetTop===15,e.style.position=e.style.top="",d.style.overflow="hidden",d.style.position="relative",this.subtractsBorderForOverflowNotVisible=e.offsetTop===-5,this.doesNotIncludeMarginInBodyOffset=a.offsetTop!==i,a.removeChild(b),f.offset.initialize=f.noop},bodyOffset:function(a){var b=a.offsetTop,c=a.offsetLeft;f.offset.initialize(),f.offset.doesNotIncludeMarginInBodyOffset&&(b+=parseFloat(f.css(a,"marginTop"))||0,c+=parseFloat(f.css(a,"marginLeft"))||0);return{top:b,left:c}},setOffset:function(a,b,c){var d=f.css(a,"position");d==="static"&&(a.style.position="relative");var e=f(a),g=e.offset(),h=f.css(a,"top"),i=f.css(a,"left"),j=(d==="absolute"||d==="fixed")&&f.inArray("auto",[h,i])>-1,k={},l={},m,n;j?(l=e.position(),m=l.top,n=l.left):(m=parseFloat(h)||0,n=parseFloat(i)||0),f.isFunction(b)&&(b=b.call(a,c,g)),b.top!=null&&(k.top=b.top-g.top+m),b.left!=null&&(k.left=b.left-g.left+n),"using"in b?b.using.call(a,k):e.css(k)}},f.fn.extend({position:function(){if(!this[0])return null;var a=this[0],b=this.offsetParent(),c=this.offset(),d=cu.test(b[0].nodeName)?{top:0,left:0}:b.offset();c.top-=parseFloat(f.css(a,"marginTop"))||0,c.left-=parseFloat(f.css(a,"marginLeft"))||0,d.top+=parseFloat(f.css(b[0],"borderTopWidth"))||0,d.left+=parseFloat(f.css(b[0],"borderLeftWidth"))||0;return{top:c.top-d.top,left:c.left-d.left}},offsetParent:function(){return this.map(function(){var a=this.offsetParent||c.body;while(a&&!cu.test(a.nodeName)&&f.css(a,"position")==="static")a=a.offsetParent;return a})}}),f.each(["Left","Top"],function(a,c){var d="scroll"+c;f.fn[d]=function(c){var e,g;if(c===b){e=this[0];if(!e)return null;g=cv(e);return g?"pageXOffset"in g?g[a?"pageYOffset":"pageXOffset"]:f.support.boxModel&&g.document.documentElement[d]||g.document.body[d]:e[d]}return this.each(function(){g=cv(this),g?g.scrollTo(a?f(g).scrollLeft():c,a?c:f(g).scrollTop()):this[d]=c})}}),f.each(["Height","Width"],function(a,c){var d=c.toLowerCase();f.fn["inner"+c]=function(){var a=this[0];return a&&a.style?parseFloat(f.css(a,d,"padding")):null},f.fn["outer"+c]=function(a){var b=this[0];return b&&b.style?parseFloat(f.css(b,d,a?"margin":"border")):null},f.fn[d]=function(a){var e=this[0];if(!e)return a==null?null:this;if(f.isFunction(a))return this.each(function(b){var c=f(this);c[d](a.call(this,b,c[d]()))});if(f.isWindow(e)){var g=e.document.documentElement["client"+c];return e.document.compatMode==="CSS1Compat"&&g||e.document.body["client"+c]||g}if(e.nodeType===9)return Math.max(e.documentElement["client"+c],e.body["scroll"+c],e.documentElement["scroll"+c],e.body["offset"+c],e.documentElement["offset"+c]);if(a===b){var h=f.css(e,d),i=parseFloat(h);return f.isNaN(i)?h:i}return this.css(d,typeof a=="string"?a:a+"px")}}),a.jQueryGlimpse=a.$Glimpse=f})(window);
 
-
     //#endregion
 
 //#region JSON
 
-//TODO remove parse method as jquery already has it 
+//TODO remove parse method as jquery already has it
 
 var JSON; if (!JSON) { JSON = {}; } (function () { "use strict"; function f(n) { return n < 10 ? '0' + n : n; } if (typeof Date.prototype.toJSON !== 'function') { Date.prototype.toJSON = function (key) { return isFinite(this.valueOf()) ? this.getUTCFullYear() + '-' + f(this.getUTCMonth() + 1) + '-' + f(this.getUTCDate()) + 'T' + f(this.getUTCHours()) + ':' + f(this.getUTCMinutes()) + ':' + f(this.getUTCSeconds()) + 'Z' : null; }; String.prototype.toJSON = Number.prototype.toJSON = Boolean.prototype.toJSON = function (key) { return this.valueOf(); }; } var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g, escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g, gap, indent, meta = { '\b': '\\b', '\t': '\\t', '\n': '\\n', '\f': '\\f', '\r': '\\r', '"': '\\"', '\\': '\\\\' }, rep; function quote(string) { escapable.lastIndex = 0; return escapable.test(string) ? '"' + string.replace(escapable, function (a) { var c = meta[a]; return typeof c === 'string' ? c : '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4); }) + '"' : '"' + string + '"'; } function str(key, holder) { var i, k, v, length, mind = gap, partial, value = holder[key]; if (value && typeof value === 'object' && typeof value.toJSON === 'function') { value = value.toJSON(key); } if (typeof rep === 'function') { value = rep.call(holder, key, value); } switch (typeof value) { case 'string': return quote(value); case 'number': return isFinite(value) ? String(value) : 'null'; case 'boolean': case 'null': return String(value); case 'object': if (!value) { return 'null'; } gap += indent; partial = []; if (Object.prototype.toString.apply(value) === '[object Array]') { length = value.length; for (i = 0; i < length; i += 1) { partial[i] = str(i, value) || 'null'; } v = partial.length === 0 ? '[]' : gap ? '[\n' + gap + partial.join(',\n' + gap) + '\n' + mind + ']' : '[' + partial.join(',') + ']'; gap = mind; return v; } if (rep && typeof rep === 'object') { length = rep.length; for (i = 0; i < length; i += 1) { if (typeof rep[i] === 'string') { k = rep[i]; v = str(k, value); if (v) { partial.push(quote(k) + (gap ? ': ' : ':') + v); } } } } else { for (k in value) { if (Object.prototype.hasOwnProperty.call(value, k)) { v = str(k, value); if (v) { partial.push(quote(k) + (gap ? ': ' : ':') + v); } } } } v = partial.length === 0 ? '{}' : gap ? '{\n' + gap + partial.join(',\n' + gap) + '\n' + mind + '}' : '{' + partial.join(',') + '}'; gap = mind; return v; } } if (typeof JSON.stringify !== 'function') { JSON.stringify = function (value, replacer, space) { var i; gap = ''; indent = ''; if (typeof space === 'number') { for (i = 0; i < space; i += 1) { indent += ' '; } } else if (typeof space === 'string') { indent = space; } rep = replacer; if (replacer && typeof replacer !== 'function' && (typeof replacer !== 'object' || typeof replacer.length !== 'number')) { throw new Error('JSON.stringify'); } return str('', { '': value }); }; } if (typeof JSON.parse !== 'function') { JSON.parse = function (text, reviver) { var j; function walk(holder, key) { var k, v, value = holder[key]; if (value && typeof value === 'object') { for (k in value) { if (Object.prototype.hasOwnProperty.call(value, k)) { v = walk(value, k); if (v !== undefined) { value[k] = v; } else { delete value[k]; } } } } return reviver.call(holder, key, value); } text = String(text); cx.lastIndex = 0; if (cx.test(text)) { text = text.replace(cx, function (a) { return '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4); }); } if (/^[\],:{}\s]*$/.test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@').replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) { j = eval('(' + text + ')'); return typeof reviver === 'function' ? walk({ '': j }, '') : j; } throw new SyntaxError('JSON.parse'); }; } } ());
 
 //#endregion
 
 //#region google-code-prettify
- 
+
 if (!window.PR_SHOULD_USE_CONTINUATION) {
 var q=null;window.PR_SHOULD_USE_CONTINUATION=!0;
 (function(){function L(a){function m(a){var f=a.charCodeAt(0);if(f!==92)return f;var b=a.charAt(1);return(f=r[b])?f:"0"<=b&&b<="7"?parseInt(a.substring(1),8):b==="u"||b==="x"?parseInt(a.substring(2),16):a.charCodeAt(1)}function e(a){if(a<32)return(a<16?"\\x0":"\\x")+a.toString(16);a=String.fromCharCode(a);if(a==="\\"||a==="-"||a==="["||a==="]")a="\\"+a;return a}function h(a){for(var f=a.substring(1,a.length-1).match(/\\u[\dA-Fa-f]{4}|\\x[\dA-Fa-f]{2}|\\[0-3][0-7]{0,2}|\\[0-7]{1,2}|\\[\S\s]|[^\\]/g),a=
@@ -64,22 +63,19 @@ PR_NOCODE:"nocode",PR_PLAIN:"pln",PR_PUNCTUATION:"pun",PR_SOURCE:"src",PR_STRING
 
 var prettifyCss = '.glimpse .pln{color:#000}.glimpse .str{color:#080}.glimpse .kwd{color:#008}.glimpse .com{color:#800}.glimpse .typ{color:#606}.glimpse .lit{color:#066}.glimpse .pun,.glimpse .opn,.glimpse .clo{color:#660}.glimpse .tag{color:#008}.glimpse .atn{color:#606}.glimpse .atv{color:#080}.glimpse .dec,.glimpse .var{color:#606}.glimpse .fun{color:red}.glimpse .prettyprint span{font-family:Consolas, monospace, serif; font-size:1.1em;}.glimpse ol.linenums{margin-top:0;margin-bottom:0}.glimpse li.L0,.glimpse li.L1,.glimpse li.L2,.glimpse li.L3,.glimpse li.L5,.glimpse li.L6,.glimpse li.L7,.glimpse li.L8{list-style-type:none}.glimpse li.L1,.glimpse li.L3,.glimpse li.L5,.glimpse li.L7,.glimpse li.L9{background:#eee}'
 $Glimpse('<style type="text/css"> ' + prettifyCss + ' </style>').appendTo("head");
- 
 }
 
 PR.registerLangHandler(PR.createSimpleLexer([["pln",/^[\t\n\r \xa0]+/,null,"\t\n\r Â\xa0"],["str",/^(?:"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')/,null,"\"'"]],[["com",/^(?:--[^\n\r]*|\/\*[\S\s]*?(?:\*\/|$))/],["kwd",/^(?:add|all|alter|and|any|as|asc|authorization|backup|begin|between|break|browse|bulk|by|cascade|case|check|checkpoint|close|clustered|coalesce|collate|column|commit|compute|constraint|contains|containstable|continue|convert|create|cross|current|current_date|current_time|current_timestamp|current_user|cursor|database|dbcc|deallocate|declare|default|delete|deny|desc|disk|distinct|distributed|double|drop|dummy|dump|else|end|errlvl|escape|except|exec|execute|exists|exit|fetch|file|fillfactor|for|foreign|freetext|freetexttable|from|full|function|goto|grant|group|having|holdlock|identity|identitycol|identity_insert|if|in|index|inner|insert|intersect|into|is|join|key|kill|left|like|lineno|load|match|merge|national|nocheck|nonclustered|not|null|nullif|of|off|offsets|on|open|opendatasource|openquery|openrowset|openxml|option|or|order|outer|over|percent|plan|precision|primary|print|proc|procedure|public|raiserror|read|readtext|reconfigure|references|replication|restore|restrict|return|revoke|right|rollback|rowcount|rowguidcol|rule|save|schema|select|session_user|set|setuser|shutdown|some|statistics|system_user|table|textsize|then|to|top|tran|transaction|trigger|truncate|tsequal|union|unique|update|updatetext|use|user|using|values|varying|view|waitfor|when|where|while|with|writetext)(?=[^\w-]|$)/i,
 null],["lit",/^[+-]?(?:0x[\da-f]+|(?:\.\d+|\d+(?:\.\d*)?)(?:e[+-]?\d+)?)/i],["pln",/^[_a-z][\w-]*/i],["pun",/^[^\w\t\n\r "'\xa0][^\w\t\n\r "'+\xa0-]*/]]),["sql"]);
 
-
 //#endregion
 
 var glimpse, glimpsePath;
 if (window.jQueryGlimpse) { (function ($) {
-
     //#region Setup
     var glimpseCss = '.glimpse, .glimpse *, .glimpse a, .glimpse td, .glimpse th, .glimpse table { font-family: Helvetica, Arial, sans-serif; background-color:transparent; font-size:11px; line-height:14px; border:0px; color:#232323; text-align:left; } .glimpse table { min-width:0; } .glimpse a, .glimpse a:hover, .glimpse a:visited { color:#2200C1; text-decoration:underline; font-weight:normal; }.glimpse a:active { color:#c11; text-decoration:underline; font-weight:normal; }.glimpse th { font-weight:bold; }.glimpse-open { z-index: 100010; position:fixed; right:0; bottom:0; height:27px; width:28px; background: #cfcfcf; background: -moz-linear-gradient(top, #cfcfcf 0%, #dddddd 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cfcfcf), color-stop(100%,#dddddd)); background: -webkit-linear-gradient(top, #cfcfcf 0%,#dddddd 100%); background: -o-linear-gradient(top, #cfcfcf 0%,#dddddd 100%); background: -ms-linear-gradient(top, #cfcfcf 0%,#dddddd 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#cfcfcf\', endColorstr=\'#dddddd\',GradientType=0 ); background: linear-gradient(top, #cfcfcf 0%,#dddddd 100%); -webkit-box-shadow: inset 0px 1px 0px 0px #E2E2E2; -moz-box-shadow: inset 0px 1px 0px 0px #E2E2E2; box-shadow: inset 0px 1px 0px 0px #E2E2E2; border-top: 1px solid #7A7A7A; border-left: 1px solid #7A7A7A; }.glimpse-icon { background:url() 0px -16px; height:20px; width:20px; margin: 3px 4px 0; cursor:pointer; }.glimpse-holder { display:none; z-index:100010 !important; height:0; position:fixed; bottom:0; left:0; width:100%; background-color:#fff; }.glimpse-bar { background: #cfcfcf; background: -moz-linear-gradient(top, #cfcfcf 0%, #dddddd 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cfcfcf), color-stop(100%,#dddddd)); background: -webkit-linear-gradient(top, #cfcfcf 0%,#dddddd 100%); background: -o-linear-gradient(top, #cfcfcf 0%,#dddddd 100%); background: -ms-linear-gradient(top, #cfcfcf 0%,#dddddd 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#cfcfcf\', endColorstr=\'#dddddd\',GradientType=0 ); background: linear-gradient(top, #cfcfcf 0%,#dddddd 100%); -webkit-box-shadow: inset 0px 1px 0px 0px #E2E2E2; -moz-box-shadow: inset 0px 1px 0px 0px #E2E2E2; box-shadow: inset 0px 1px 0px 0px #E2E2E2; border-top: 1px solid #7A7A7A; height: 27px; }.glimpse-bar .glimpse-icon { margin-top:4px; float:left; } .glimpse-buttons { text-align:right; float:right; height:17px; width:150px; padding:6px; }.glimpse-title { margin:0 0 0 15px; padding-top:5px; font-weight:bold; display:inline-block; width:75%; overflow:hidden; }.glimpse-title .glimpse-snapshot-type { display:inline-block; height:20px; }.glimpse-title .glimpse-enviro { padding-left:10px; white-space:nowrap; height:20px; } .glimpse-title .glimpse-url .glimpse-drop { padding-left:10px; } .glimpse-title .glimpse-url .loading { margin:5px 0 0; font-weight:normal; display:none; } .glimpse-title .glimpse-url .glimpse-drop-over { padding-left:20px; padding-right:20px; text-align: center; } .glimpse .glimpse-drop { padding:1px 1px 1px 8px; height:14px; font-size:0.9em; } .glimpse .glimpse-drop, .glimpse .glimpse-drop-over { font-weight:normal; font-weight:normal; background: #f7f7f7; background: -moz-linear-gradient(top, #f7f7f7 0%, #e6e6e6 29%, #e2e2e2 31%, #c9c9c9 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f7f7f7), color-stop(29%,#e6e6e6), color-stop(31%,#e2e2e2), color-stop(100%,#c9c9c9));background: -webkit-linear-gradient(top, #f7f7f7 0%,#e6e6e6 29%,#e2e2e2 31%,#c9c9c9 100%);background: -o-linear-gradient(top, #f7f7f7 0%,#e6e6e6 29%,#e2e2e2 31%,#c9c9c9 100%);background: -ms-linear-gradient(top, #f7f7f7 0%,#e6e6e6 29%,#e2e2e2 31%,#c9c9c9 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#f7f7f7\', endColorstr=\'#c9c9c9\',GradientType=0 );background: linear-gradient(top, #f7f7f7 0%,#e6e6e6 29%,#e2e2e2 31%,#c9c9c9 100%); -webkit-box-shadow: inset 0px 1px 0px 0px #F9F9F9; -moz-box-shadow: inset 0px 1px 0px 0px #F9F9F9; box-shadow: inset 0px 1px 0px 0px #F9F9F9; border: 1px solid #A7A7A7; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; margin: 0 5px 0 0; } .glimpse .glimpse-drop-over { position:absolute; display:none; top:4px; padding: 1px 10px 10px 10px; z-index:100; -webkit-box-shadow: 0px 0px 8px 0px #696969; -moz-box-shadow: 0px 0px 8px 0px #696969; box-shadow: 0px 0px 8px 0px #696969; } .glimpse .glimpse-drop-over div { text-align:center; font-weight:bold; margin:5px 0; }  .glimpse .glimpse-drop-arrow-holder { margin: 3px 3px 3px 5px; padding-left: 3px; border-left: 1px solid #A7A7A7; font-size: 9px; height: 9px; width: 10px; } .glimpse .glimpse-drop-arrow { background: url() no-repeat -22px -18px; width: 7px;  height: 4px; display: inline-block; } .glimpse-button, .glimpse-button:hover { cursor:pointer; background-image:url(); background-repeat:no-repeat; height:14px; width:14px; margin-left:2px; display:inline-block; }.glimpse-meta-warning { background-position:-168px -1px; display:none; }.glimpse-meta-warning:hover { background-position:-183px -1px; } .glimpse-meta-help { background-position:-138px -1px; margin-right:15px; }.glimpse-meta-help:hover { background-position:-153px -1px; margin-right:15px; }.glimpse-meta-update { background-position:-198px -1px; display:none; }.glimpse-meta-update:hover { background-position:-213px -1px; }.glimpse-close { background-position:-1px -1px; }.glimpse-close:hover { background-position:-17px -1px; }.glimpse-terminate { background-position:-65px -1px; }.glimpse-terminate:hover { background-position:-81px -1px; } .glimpse-popout { background-position:-96px -1px; }.glimpse-popout:hover { background-position: -111px -1px; } .glimpse-tabs { background: #afafaf; background: -moz-linear-gradient(top, #afafaf 0%, #cfcfcf 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#afafaf), color-stop(100%,#cfcfcf)); background: -webkit-linear-gradient(top, #afafaf 0%,#cfcfcf 100%); background: -o-linear-gradient(top, #afafaf 0%,#cfcfcf 100%); background: -ms-linear-gradient(top, #afafaf 0%,#cfcfcf 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#afafaf\', endColorstr=\'#cfcfcf\',GradientType=0 ); background: linear-gradient(top, #afafaf 0%,#cfcfcf 100%); border-bottom: 1px solid #A4A4A4; border-top: 1px solid #F9F9F9; -webkit-box-shadow: inset 0px 1px 0px 0px #8b8b8b;-moz-box-shadow: inset 0px 1px 0px 0px #8b8b8b;box-shadow: inset 0px 1px 0px 0px #8b8b8b; font-weight: bold; height: 24px; }.glimpse-tabs ul { margin:4px 0px 0 0; padding:0px; }.glimpse-tabs li { display:inline; margin:0 2px 3px 2px; height:22px; padding:4px 9px 3px; color:#565656; cursor:pointer; border-radius: 0px 0px 3px 3px; -moz-border-radius: 0px 0px 3px 3px; -webkit-border-bottom-right-radius: 3px; -webkit-border-bottom-left-radius: 3px; -webkit-transition: color 0.3s ease;-moz-transition: color 0.3s ease;-o-transition: color 0.3s ease;transition: color 0.3s ease; } .glimpse-tabs li.glimpse-hover { padding:4px 8px 3px; background: #dddddd;background: -moz-linear-gradient(top, #dddddd 0%, #ffffff 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dddddd), color-stop(100%,#ffffff));background: -webkit-linear-gradient(top, #dddddd 0%,#ffffff 100%);background: -o-linear-gradient(top, #dddddd 0%,#ffffff 100%);background: -ms-linear-gradient(top, #dddddd 0%,#ffffff 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#dddddd\', endColorstr=\'#ffffff\',GradientType=0 );background: linear-gradient(top, #dddddd 0%,#ffffff 100%);-webkit-box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;-moz-box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9; border-bottom: 1px solid #8B8B8B; border-left: 1px solid #8B8B8B; border-right: 1px solid #8B8B8B; border-top: 2px solid #DDD; }.glimpse-tabs li.glimpse-active { background: #dddddd;background: -moz-linear-gradient(top, #dddddd 0%, #efefef 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dddddd), color-stop(100%,#efefef));background: -webkit-linear-gradient(top, #dddddd 0%,#efefef 100%);background: -o-linear-gradient(top, #dddddd 0%,#efefef 100%);background: -ms-linear-gradient(top, #dddddd 0%,#efefef 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#dddddd\', endColorstr=\'#efefef\',GradientType=0 );background: linear-gradient(top, #dddddd 0%,#efefef 100%);-webkit-box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;-moz-box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9; border-bottom: 1px solid #8b8b8b; border-left: 1px solid #8b8b8b; border-right: 1px solid #8b8b8b; border-top: 2px solid #DDD; color: #000; padding: 4px 8px 3px; }.glimpse-tabs li.glimpse-disabled { color:#AAA; cursor:default; }.glimpse-panel-holder {}.glimpse-panel { display:none; overflow:auto; position:relative; } .glimpse-panel-message { text-align:center; padding-top:40px; font-size:1.1em; color:#AAA; }.glimpse-panel table { border-spacing:0; width:100%; }.glimpse-panel table td, .glimpse-panel table th { padding:3px 4px; text-align:left; vertical-align:top; } .glimpse-panel table td .glimpse-cell { vertical-align:top; } .glimpse-panel tbody .mono { font-family:Consolas, monospace, serif; font-size: 1.1em; } .glimpse-panel tr.glimpse-row-header-0 { height:19px; } .glimpse-panel .glimpse-row-header-0 th { background: #DFDFDF; background: -moz-linear-gradient(top, #f3f3f3 0%, #f3f3f3 5%, #e6e6e6 6%, #d1d1d1 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f3f3f3), color-stop(5%,#f3f3f3), color-stop(6%,#e6e6e6), color-stop(100%,#d1d1d1)); background: -webkit-linear-gradient(top, #f3f3f3 0%,#f3f3f3 5%,#e6e6e6 6%,#d1d1d1 100%); background: -o-linear-gradient(top, #f3f3f3 0%,#f3f3f3 5%,#e6e6e6 6%,#d1d1d1 100%); background: -ms-linear-gradient(top, #f3f3f3 0%,#f3f3f3 5%,#e6e6e6 6%,#d1d1d1 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#f3f3f3\', endColorstr=\'#d1d1d1\',GradientType=0 ); background: linear-gradient(top, #f3f3f3 0%,#f3f3f3 5%,#e6e6e6 6%,#d1d1d1 100%); border-bottom: 1px solid #9C9C9C; font-weight: bold; } .glimpse-panel .glimpse-row-header-0 th { border-left:1px solid #D9D9D9; border-right:1px solid #9C9C9C; } .glimpse-panel .glimpse-soft { color:#999; } .glimpse-panel .glimpse-cell-key { font-weight:bold; } .glimpse-panel th.glimpse-cell-key { width:30%; max-width:150px; } .glimpse-panel table table { border:1px solid #D9D9D9; } .glimpse-panel table table thead th { background: #f3f3f3; background: -moz-linear-gradient(top, #f3f3f3 0%, #e6e6e6 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f3f3f3), color-stop(100%,#e6e6e6)); background: -webkit-linear-gradient(top, #f3f3f3 0%,#e6e6e6 100%); background: -o-linear-gradient(top, #f3f3f3 0%,#e6e6e6 100%); background: -ms-linear-gradient(top, #f3f3f3 0%,#e6e6e6 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#f3f3f3\', endColorstr=\'#e6e6e6\',GradientType=0 ); background: linear-gradient(top, #f3f3f3 0%,#e6e6e6 100%); border-bottom: 1px solid #9C9C9C; } .glimpse-panel table table thead tr th { border-left:1px solid #C6C6C6; border-right:1px solid #D9D9D9; padding:1px 4px 2px 4px; }.glimpse-panel table table thead tr th:first-child { border-left:0px; }.glimpse-panel table table thead tr th:last-child { border-right:0px; }.glimpse-panel .even, .glimpse-panel .even > td, .glimpse-panel .even > th, .glimpse-panel .even > tr > td, .glimpse-panel .even > tr > th, .even > td > .glimpse-preview-table > tbody > tr > td, .even > tr > td > .glimpse-preview-table > tbody > tr > td { background-color:#F2F5F9; } .glimpse-panel .odd, .glimpse-panel .odd > td, .glimpse-panel .odd > th, .glimpse-panel .odd > tr > td, .glimpse-panel .odd > tr > th, .odd > td > .glimpse-preview-table > tbody > tr > td, .odd > tr > td > .glimpse-preview-table > tbody > tr > td { background-color:#FEFFFF; }.glimpse-panel table table tbody th { font-weight:normal; font-style:italic; }.glimpse-panel table table thead th { font-weight:bold; font-style:normal; }.glimpse-panel .glimpse-side-sub-panel { right:0; z-index:10; background-color:#FAFCFC; height:100%; width:25%; border-left:1px solid #ACA899; position:absolute; }.glimpse-panel .glimpse-side-main-panel { position:relative; height:100%; width:75%; float:left; } .glimpse-panel-holder .glimpse-active { display:block; }.glimpse-resizer { height:4px; cursor:n-resize; width:100%; position:absolute; top:-1px; }li.glimpse-permanent { font-style:italic; }.glimpse-preview-object { color:#006400; } .glimpse-preview-string, .glimpse-preview-object .glimpse-preview-string { color:#006400; font-weight:normal !important; } .glimpse-preview-string span { padding-left:1px; }.glimpse-preview-object span { font-weight:bold; color:#444; } .glimpse-preview-object span.start { margin-right:5px; } .glimpse-preview-object span.end { margin-left:5px; }.glimpse-preview-object span.rspace { margin-right:4px; }.glimpse-preview-object span.mspace { margin:0 4px; }.glimpse-preview-object span.small { font-size:0.95em; } .glimpse-panel .glimpse-preview-table { border:0; } .glimpse-panel .glimpse-preview-table .glimpse-preview-cell { padding-left:0; padding-right:2px; width:11px; } .glimpse-expand { height:11px; width:11px; display:inline-block; float:left; margin:1px 0 0 0; cursor:pointer; background-image:url(); background-repeat:no-repeat; background-position:-126px 0; }.glimpse-collapse { background-position:-126px -11px; }.glimpse-preview-show { display:none; font-weight:normal !important; }.glimpse-panel .quiet *, .glimpse-panel .ms * { color:#AAA; }.glimpse-panel .suppress { text-decoration:line-through; }.glimpse-panel .suppress * { color:#AAA; } .glimpse-panel .selected, .glimpse-panel .selected > td, .glimpse-panel .selected > th, .glimpse-panel .selected > tr > td, .glimpse-panel .selected > tr > th, .selected > td > .glimpse-preview-table > tbody > tr > td, .selected > tr > td > .glimpse-preview-table > tbody > tr > td { background-color:#FFFF99; }.glimpse-panel .selected * { color:#409B3B; }.glimpse .info .icon, .glimpse .warn .icon, .glimpse .loading .icon, .glimpse .error .icon, .glimpse .fail .icon, .glimpse .ms .icon { width:14px; height:14px; background-image:url(); background-repeat:no-repeat; display:inline-block; margin-right: 5px; } .glimpse .info .icon { background-position: -22px -22px; }.glimpse .warn .icon { background-position:-36px -22px; }.glimpse .loading .icon { background-position:-78px -22px; }.glimpse .error .icon { background-position:-50px -22px; }.glimpse .ms .icon { background-position:-181px -22px; } .glimpse .fail .icon { background-position:-64px -22px; }.glimpse .info * { color:#067CE5; }.glimpse .warn * { color:#FE850C; } .glimpse .error * { color:#B40000; }.glimpse .fail * { color:#B40000; font-weight:bold; }.glimpse-panelitem-Ajax .loading .icon { float:right; }.glimpse-panelitem-Remote .glimpse-side-sub-panel .loading, .glimpse-panelitem-Remote .glimpse-side-main-panel .loading, .glimpse-clear { position:fixed; bottom:5px; right:10px; color:#777; } .glimpse-panelitem-Remote .glimpse-side-main-panel .loading { right:27%; } .glimpse-clear { background-color:white; padding:0.3em 1em 0.5em 1em; border:#CCC solid 1px; bottom:25px; -webkit-border-radius:3px; -moz-border-radius:3px; border-radius:3px; } .glimpse-panel table .glimpse-head-message td { text-align:center; background-color:#DDD; } .glimpse-panelitem-GlimpseInformation div { text-align:center; } .glimpse-panelitem-GlimpseInformation .glimpse-panel-message { padding-top:5px; } .glimpse-panelitem-GlimpseInformation strong { font-weight:bold; } .glimpse-panelitem-GlimpseInformation .glimpse-info-more { font-size:1.5em; margin:1em 0; } .glimpse-panelitem-GlimpseInformation .glimpse-info-quote { font-style:italic; margin:0.75em 0 3em; } .glimpse-pager { background: #C6C6C6; padding: 3px 4px; font-weight: bold; text-align: center; vertical-align: top; } .glimpse-pager .glimpse-pager-message { margin-left: 5px; margin-right: 5px; } .glimpse-pager .glimpse-button { margin-top: 0px; } .glimpse-pager .glimpse-pager-link, .glimpse-pager .glimpse-pager-link:hover { font-weight: bold; } .glimpse-pager .glimpse-pager-link-firstPage { background-position: -2px -38px; } .glimpse-pager .glimpse-pager-link-firstPage-disabled { background-position: -17px -38px; } .glimpse-pager .glimpse-pager-link-previousPage { background-position: -33px -38px; } .glimpse-pager .glimpse-pager-link-previousPage-disabled { background-position: -49px -38px; } .glimpse-pager .glimpse-pager-link-nextPage { background-position: -65px -38px; } .glimpse-pager .glimpse-pager-link-nextPage-disabled { background-position: -81px -38px; } .glimpse-pager .glimpse-pager-link-lastPage { background-position: -96px -38px; } .glimpse-pager .glimpse-pager-link-lastPage-disabled { background-position: -111px -38px; } .glimpse-panel .glimpse-sub-text { color: #AAA; font-size: 0.9em; margin-left: 5px; } .glimpse-panel table.glimpse-pager-separator { border-bottom: 3px solid #C6C6C6; } @media screen and (-webkit-min-device-pixel-ratio:0) { .glimpse-tabs li.glimpse-hover, .glimpse-tabs li.glimpse-active { border-top:1px solid #DDD; } }';
     glimpseCss += '.glimpse-panel .glimpse-tl-resizer { position:absolute; width:4px; height:100%; cursor:col-resize; } .glimpse-panel .glimpse-tl-row-summary { position:relative; height:100px; } .glimpse-panel .glimpse-tl-row-summary .glimpse-tl-resizer-bar { background-color:#404040; width:1px; height:100%; margin-left:2px; } .glimpse-panel .glimpse-tl-row-summary .glimpse-tl-resizer-handle { background-color:#404040; width:5px; height:20px; top:0; position:absolute; -webkit-border-radius:2px; -moz-border-radius:2px; border-radius:2px; } .glimpse-panel .glimpse-tl-row-spacer { background:#cfcfcf; background:-moz-linear-gradient(top, #cfcfcf 0%, #dddddd 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#cfcfcf), color-stop(100%,#dddddd)); background:-webkit-linear-gradient(top, #cfcfcf 0%,#dddddd 100%); background:-o-linear-gradient(top, #cfcfcf 0%,#dddddd 100%); background:-ms-linear-gradient(top, #cfcfcf 0%,#dddddd 100%); filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#cfcfcf\', endColorstr=\'#dddddd\',GradientType=0 ); background:linear-gradient(top, #cfcfcf 0%,#dddddd 100%); -webkit-box-shadow:inset 0px 1px 0px 0px #E2E2E2; -moz-box-shadow:inset 0px 1px 0px 0px #E2E2E2; box-shadow:inset 0px 1px 0px 0px #E2E2E2; border-top:1px solid #7A7A7A; border-bottom:1px solid #7A7A7A; height:5px; } .glimpse-panel .glimpse-tl-col-side { position:absolute;width:200px; height:100%; left:0px; } .glimpse-panel .glimpse-tl-col-main { position:absolute; left:200px; right:0px; top:0px; } .glimpse-panel .glimpse-tl-row-content .glimpse-tl-col-side { border-right:1px solid #404040; } .glimpse-panel .glimpse-tl-row-content { position:relative; height:400px; } .glimpse-panel .glimpse-tl-row-content .glimpse-tl-resizer { left:200px; } .glimpse-panel .glimpse-tl-row-content .glimpse-tl-resizer div { background-color:#404040; width:1px; height:100%; } .glimpse-panel .glimpse-tl-band{ padding-top:2px; padding-bottom:2px; } .glimpse-panel .glimpse-tl-col-side .glimpse-tl-band { padding-top:2px; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; box-sizing:border-box; padding-left:5px; white-space:nowrap; text-overflow:ellipsis; overflow:hidden; } .glimpse-panel .glimpse-tl-band { position:relative; height:18px; padding:0px; } .glimpse-panel .glimpse-tl-col-main .glimpse-tl-event { position:absolute; top:4px; margin-left:-2px; } .glimpse-panel .glimpse-tl-band-title { height:20px !important; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; box-sizing:border-box; font-weight:bold; padding-top:4px; } .glimpse-panel .glimpse-tl-event { border-radius:4px; width:7px; height:7px; display:inline-block; margin:0 5px 0 2px; background:-moz-linear-gradient(top, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 40%, rgba(255,255,255,0) 70%, rgba(0,0,0,0.5) 100%); background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0.7)), color-stop(40%,rgba(255,255,255,0)), color-stop(70%,rgba(255,255,255,0)), color-stop(100%,rgba(0,0,0,0.5))); background:-webkit-linear-gradient(top, rgba(255,255,255,0.7) 0%,rgba(255,255,255,0) 40%,rgba(255,255,255,0) 70%,rgba(0,0,0,0.5) 100%); background:-o-linear-gradient(top, rgba(255,255,255,0.7) 0%,rgba(255,255,255,0) 40%,rgba(255,255,255,0) 70%,rgba(0,0,0,0.5) 100%); background:-ms-linear-gradient(top, rgba(255,255,255,0.7) 0%,rgba(255,255,255,0) 40%,rgba(255,255,255,0) 70%,rgba(0,0,0,0.5) 100%); background:linear-gradient(top, rgba(255,255,255,0.7) 0%,rgba(255,255,255,0) 40%,rgba(255,255,255,0) 70%,rgba(0,0,0,0.5) 100%); } .glimpse-panel .glimpse-tl-col-main .glimpse-tl-event { width:1%; min-width:3px; } .glimpse-panel .glimpse-tl-event-info { position:absolute; top:1px; padding:0.75em; border:1px solid rgba(0, 0, 0, 0.3); background-color:#FCF7BD; display:none; -webkit-border-radius:15px; -moz-border-radius:15px; border-radius:15px; -webkit-box-shadow:0px 0px 8px 0px #696969; -moz-box-shadow:0px 0px 8px 0px #696969; box-shadow:0px 0px 8px 0px #696969; } .glimpse-panel .glimpse-tl-event-info th { font-weight:bold; text-align:right; } .glimpse-panel .glimpse-tl-event-info .glimpse-tl-event-info-title { text-align:left; border-bottom:1px solid rgba(0, 0, 0, 0.3); } .glimpse-panel .glimpse-tl-row-summary .glimpse-tl-event-holder { margin-left:3px; } .glimpse-panel .glimpse-tl-row-content .glimpse-tl-event-holder { margin-left:15px; } .glimpse-panel .glimpse-tl-event-holder-inner { position:absolute; left:0px; right:0px; margin-left:4px; } .glimpse-panel .glimpse-tl-event-desc-sub { color:#AAA; font-size:0.9em; margin-left:5px; } .glimpse-panel .glimpse-tl-event-overlay { display:none; position:absolute; height:18px; width:7px; } .glimpse-panel .glimpse-tl-event-overlay-lh { position:absolute; left:0; width:1px; } .glimpse-panel .glimpse-tl-event-overlay-li { position:absolute; right:-2px; font-size:0.8em; top:7px; background:url() no-repeat -31px -17px; width:11px; height:3px; } .glimpse-panel .glimpse-tl-event-overlay-lt { position:absolute; right:15px; font-size:0.8em; top:2px; color:rgba(0, 0, 0, 0.75); } .glimpse-panel .glimpse-tl-event-overlay-rh { position:absolute; right:0; width:1px; } .glimpse-panel .glimpse-tl-event-overlay-ri { position:absolute; left:-4px; font-size:0.8em; top:7px; background:url() no-repeat -44px -17px; width:11px; height:3px; } .glimpse-panel .glimpse-tl-event-overlay-rt { font-size:0.8em; position:absolute; top:2px; left:11px; color:rgba(0, 0, 0, 0.75); } .glimpse-panel .glimpse-tl-event-overlay-c { font-size:0.9em; text-align:center; padding-top:1px; color:rgba(0, 0, 0, 0.75); font-weight:bold; } .glimpse-panel .glimpse-tl-content-scroll { overflow-y:scroll; overflow-x:hidden; width:100%; position:absolute; height:100%; } .glimpse-panel .glimpse-tl-padding-holder { right:18px; } .glimpse-panel .glimpse-tl-padding { position:absolute; width:0; top:0; bottom:0; background-color:rgba(0, 0, 0, 0.3); } .glimpse-panel .glimpse-tl-padding-l { left:0; border-left:1px solid #555; } .glimpse-panel .glimpse-tl-padding-r { right:0; border-right:1px solid #555; } .glimpse-panel .glimpse-tl-divider-line-holder { position:absolute; height:100%; top:0; right:0; } .glimpse-panel .glimpse-tl-divider { position:absolute; width:1px; top:0; bottom:0; background-color:rgba(0, 0, 0, 0.1); } .glimpse-panel .glimpse-tl-divider div { position:absolute; top:4px; right:5px; font-size:9px; color:#323232; white-space:nowrap; } .glimpse-panel .glimpse-tl-divider-title-bar { width:100%; background-color:rgba(255, 255, 255, 0.8); border-bottom:1px solid rgba(0, 0, 0, 0.3); height:20px; } .glimpse-panel .glimpse-tl-divider-zero-holder { position:absolute; height:100%; top:0; right:0; left:0; } .glimpse-panel .glimpse-tl-divider-zero-holder .glimpse-tl-divider { left:15px } .glimpse-panel .glimpse-tl-content-scroll .glimpse-tl-divider div { display:none; }  .glimpse-panel .glimpse-tl-row-summary .glimpse-tl-divider-holder { right:19px; height:20px; } .glimpse-panel .glimpse-tl-row-content .glimpse-tl-content-scroll .glimpse-tl-divider-holder { right:-1px; margin-left:1px; height:100%; } .glimpse-panel .glimpse-tl-row-content .glimpse-tl-content-overlay .glimpse-tl-divider-holder { right:16px; height:20px; border-left:1px solid #404040; } .glimpse-panel .glimpse-tl-row-summary .glimpse-tl-divider-line-holder { left:0; } .glimpse-panel .glimpse-tl-row-content .glimpse-tl-divider-line-holder { left:15px; } .glimpse-panel .glimpse-tl-resizer-holder { right:17px; } .glimpse-panel .glimpse-tl-resizer-l { left:0px; margin-left:-2px; } .glimpse-panel .glimpse-tl-resizer-r { right:0px; } .glimpse-panel .glimpse-tl-col-side { background-color:#F2F5F7; } .glimpse-panel .glimpse-tl-col-side .odd, .glimpse-panel .glimpse-tl-col-side .odd > td { background-color:#F2F5F7; } .glimpse-panel .glimpse-tl-col-side .even, .glimpse-panel .glimpse-tl-col-side .even > td { background-color:#E1E7F0; } .glimpse-panel .glimpse-tl-row-summary .glimpse-tl-band-title { opacity:0.9; } .glimpse-panel .glimpse-tl-row-summary .glimpse-tl-event-desc-group .glimpse-tl-band { opacity:0.95; }  .glimpse-panel .glimpse-tl-row-summary .glimpse-tl-event-desc-group input { margin-right:5px; float:right; display:none; } .glimpse-panel .glimpse-tl-band-title span { font-weight: normal; font-size: 0.8em; margin-left: 1em; cursor: pointer; }';
-    glimpseCss = glimpseCss.replace(/url\(\)/gi, 'url(' + glimpsePath + 'sprite.png)'); 
+    glimpseCss = glimpseCss.replace(/url\(\)/gi, 'url(' + glimpsePath + 'sprite.png)');
     $('<style type="text/css"> ' + glimpseCss + ' </style>').appendTo("head");      //http://stackoverflow.com/questions/1212500/jquery-create-css-rule-class-runtime
 
     $.glimpse = {};
@@ -93,7 +89,7 @@ if (window.jQueryGlimpse) { (function ($) {
 
     //TODO: Shift to $.glimpse.util instead of $.fn
 
-    $.extend($.fn, { 
+    $.extend($.fn, {
         resizer : function (settings) {
             return this.each(function() {
                 $.glimpseResize.init($(this), settings);
@@ -129,37 +125,37 @@ if (window.jQueryGlimpse) { (function ($) {
 
     $.extend($.glimpseResize, {
         defaults : {
-            staticOffset : null, 
+            staticOffset : null,
             lastMousePos : 0,
-            min : function() { return 50; },  
+            min : function() { return 50; },
             max : undefined,
-            preDragCallback : function(postion) { }, 
+            preDragCallback : function(postion) { },
             endDragCallback : function(postion) { },
-            isUpDown : false, 
-            valueStyle : 'left', 
+            isUpDown : false,
+            valueStyle : 'left',
             offset : 1,
             getValue : function(s) { return parseInt(s.resizeScope.css(s.valueStyle)); },
             setValue : function(s, value) { return s.resizeScope.css(s.valueStyle, value + 'px'); }
-        }, 
-        init : function (scope, s) { 
-            var gr = $.glimpseResize,  
-                settings = $.extend(true, { opacityScope : scope, anchorScope : scope, resizeScope : scope }, gr.defaults, s);   
-                 
+        },
+        init : function (scope, s) {
+            var gr = $.glimpseResize,
+                settings = $.extend(true, { opacityScope : scope, anchorScope : scope, resizeScope : scope }, gr.defaults, s);
+
             settings.mousePosition = s.isUpDown ? function(e) { return e.clientY + document.documentElement.scrollTop; } : function(e) { return e.clientX + document.documentElement.scrollLeft; };
 
-            scope.bind("mousedown", { settings : settings }, gr.startDrag); 
+            scope.bind("mousedown", { settings : settings }, gr.startDrag);
         },
         startDrag : function (e) {
-            var gr = $.glimpseResize, 
-                s = e.data.settings;  
+            var gr = $.glimpseResize,
+                s = e.data.settings;
 
             gr.min = s.min();
             gr.max = s.max != undefined ? s.max() : undefined;
-             
+
             s.preDragCallback();
 
             s.lastMousePos = s.mousePosition(e);
-            s.staticOffset = s.getValue(s) + (s.lastMousePos * -1 * s.offset);  
+            s.staticOffset = s.getValue(s) + (s.lastMousePos * -1 * s.offset);
 
             s.opacityScope.css('opacity', 0.50);
 
@@ -168,12 +164,12 @@ if (window.jQueryGlimpse) { (function ($) {
             return false;
         },
         performDrag : function (e) {
-            var gr = $.glimpseResize, 
-                settings = e.data.settings, 
-                mousePos = settings.mousePosition(e), 
-                offsetMousePos = gr.calculateOffset(mousePos, settings); 
-                 
-            settings.setValue(settings, offsetMousePos);  
+            var gr = $.glimpseResize,
+                settings = e.data.settings,
+                mousePos = settings.mousePosition(e),
+                offsetMousePos = gr.calculateOffset(mousePos, settings);
+
+            settings.setValue(settings, offsetMousePos);
             settings.lastMousePos = mousePos;
 
             if (offsetMousePos < gr.min || (gr.max && offsetMousePos > gr.max)) { gr.endDrag(e); }
@@ -181,27 +177,27 @@ if (window.jQueryGlimpse) { (function ($) {
             return false;
         },
         endDrag : function (e) {
-            var gr = $.glimpseResize, 
+            var gr = $.glimpseResize,
                 settings = e.data.settings;
 
             $(document).unbind('mousemove', gr.performDrag).unbind('mouseup', gr.endDrag);
 
-            settings.opacityScope.css('opacity', 1);  
+            settings.opacityScope.css('opacity', 1);
 
             settings.endDragCallback(settings.getValue(settings));
         },
         calculateOffset : function (mousePos, settings) {
-            var gr = $.glimpseResize, 
-                offsetMousePos = settings.staticOffset + (mousePos * 1 * settings.offset); 
+            var gr = $.glimpseResize,
+                offsetMousePos = settings.staticOffset + (mousePos * 1 * settings.offset);
 
-            if (settings.lastMousePos >= mousePos) { offsetMousePos += 4; } 
+            if (settings.lastMousePos >= mousePos) { offsetMousePos += 4; }
             if (gr.min != undefined) { offsetMousePos = Math.max(gr.min, offsetMousePos); }
-            if (gr.max != undefined) { offsetMousePos = Math.min(gr.max, offsetMousePos); } 
+            if (gr.max != undefined) { offsetMousePos = Math.min(gr.max, offsetMousePos); }
 
             return offsetMousePos;
         }
     });
-    
+
     /*
     $.extend($.glimpseResize, {
         static: {
@@ -260,7 +256,7 @@ if (window.jQueryGlimpse) { (function ($) {
     $.extend($.glimpseProcessor, {
         layout: function (g, title) {
             var that = this, static = g.static, tabStrip = static.tabStrip(), panelHolder = static.panelHolder(), data, metadata;
-            
+
             //Build Dynamic HTML
             for (var key in static.data) {
                 if ($('.glimpse-tabitem-' + key, tabStrip).length == 0) {
@@ -271,7 +267,7 @@ if (window.jQueryGlimpse) { (function ($) {
                     that.addTabBody(panelHolder, that.build(data, 0, true, metadata, 1), key);
                 }
             }
-             
+
             //Sort Elemetns
             $('li', tabStrip).sortElements();
             $('.glimpse-panel', panelHolder).sortElements();
@@ -287,16 +283,16 @@ if (window.jQueryGlimpse) { (function ($) {
         applyPostRenderTransforms: function (scope) {
             //Alert state
             $('.info, .warn, .error, .fail, .loading, .ms', scope).find('> td:first-child, > tr:first-child > td:first-child:not(:has(div.glimpse-cell)), > tr:first-child > td:first-child > div.glimpse-cell:first-child').not(':has(.icon)').prepend('<div class="icon"></div>');
-               
+
             //Code formatting
             var codeProcess = function(items) {
                 $.each(items, function() {
-                    var item = $(this).addClass('prettyprint'), codeType = item.hasClass('glimpse-code') ? item.attr('data-codeType') : item.closest('.glimpse-code').attr('data-codeType');  
+                    var item = $(this).addClass('prettyprint'), codeType = item.hasClass('glimpse-code') ? item.attr('data-codeType') : item.closest('.glimpse-code').attr('data-codeType');
                     item.html(prettyPrintOne(item.html(), codeType));
                 });
             };
             codeProcess($('.glimpse-code:not(:has(table)), .glimpse-code > table:not(:has(thead)) .glimpse-preview-show', scope));
-            
+
             //Open state
             setTimeout(function () {
                 $('.glimpse-start-open > td > .glimpse-expand:first-child', scope).click();
@@ -317,7 +313,7 @@ if (window.jQueryGlimpse) { (function ($) {
 
             $('.glimpse-active', panelHolder).removeClass('glimpse-active');
             $((activeTab ? '.glimpse-panelitem-' + activeTab : '.glimpse-panel:first'), panelHolder).addClass('glimpse-active');
-             
+
             $('.glimpse').trigger('glimpse.tabchanged', tabStrip.find('.glimpse-active').attr('data-sort'));
         },
         clearLayout: function (g) {
@@ -351,7 +347,7 @@ if (window.jQueryGlimpse) { (function ($) {
                     if (data.indexOf('http://') == 0) {
                         attr = ' data-glimpse-lazy-url="' + data + '"';
                         data = 'Loading data, please wait...';
-                    } 
+                    }
                     result = '<div class="glimpse-panel-message"' + attr + '>' + data + '</div>';
                 }
             }
@@ -366,20 +362,20 @@ if (window.jQueryGlimpse) { (function ($) {
             };
             type = clean(type);
             clientName = clean(clientName);
-            return '<span class="glimpse-snapshot-type" data-clientName="' + clientName + '">' + clientName + ((type.length > 0) ? ' (' + type + ')' : '') + '&nbsp;</span><span><span class="glimpse-enviro"></span><span class="glimpse-url">' + url + '</span></span>';
+            return '<span class="glimpse-snapshot-type" data-clientName="' + clientName + '">' + clientName + ((type.length > 0) ? ' (' + type + ')' : '') + '&#160;</span><span><span class="glimpse-enviro"></span><span class="glimpse-url">' + url + '</span></span>';
         },
-        buildKeyValueTable: function (data, level, forceFull, forceLimit) {  
+        buildKeyValueTable: function (data, level, forceFull, forceLimit) {
             var that = this, limit = $.isNaN(forceLimit) ? 3 : forceLimit;
             if (that.shouldUsePreview($.glimpse.util.lengthJson(data), level, forceFull, limit, forceLimit, 1))
                 return that.buildKeyValuePreview(data, level);
-                
+
             var i = 1, html = '<table><thead><tr class="glimpse-row-header-' + level + '"><th class="glimpse-cell-key">Key</th><th class="glimpse-cell-value">Value</th></tr></thead>';
             for (var key in data)
                 html += '<tr class="' + (i++ % 2 ? 'odd' : 'even') + '"><th width="30%">' + $.glimpseContent.formatString(key) + '</th><td width="70%"> ' + that.build(data[key], level + 1) + '</td></tr>';
             html += '</table>';
             return html;
         },
-        buildCustomTable: function (data, level, forceFull, forceLimit) { 
+        buildCustomTable: function (data, level, forceFull, forceLimit) {
             var that = this, limit = $.isNaN(forceLimit) ? 3 : forceLimit;
             if (that.shouldUsePreview(data.length, level, forceFull, limit, forceLimit, 1))
                 return that.buildCustomPreview(data, level);
@@ -409,54 +405,54 @@ if (window.jQueryGlimpse) { (function ($) {
             }
             return html;
         },
-        buildStructuredTable: function (data, level, forceFull, metadata, forceLimit) { 
+        buildStructuredTable: function (data, level, forceFull, metadata, forceLimit) {
             var that = this, limit = $.isNaN(forceLimit) ? 3 : forceLimit;
             if (that.shouldUsePreview(data.length, level, forceFull, limit, forceLimit, 1))
                 return that.buildStructuredTablePreview(data, level, metadata);
-            
+
             var html = '<table>', rowClass = '';
             for (var i = 0; i < data.length; i++) {
                 rowClass = data[i].length > data[0].length ? (' ' + data[i][data[i].length - 1]) : '';
                 html += (i == 0) ? '<thead class="glimpse-row-header-' + level + '">' : '<tbody class="' + (i % 2 ? 'odd' : 'even') + rowClass + '">';
-                for (var x = 0; x < metadata.length; x++) { 
+                for (var x = 0; x < metadata.length; x++) {
                     var rowData = '';
-                     
+
                     for (var y = 0; y < metadata[x].length; y++) {
-                        var metadataItem = metadata[x][y], cellType = (i == 0 ? 'th' : 'td'); 
+                        var metadataItem = metadata[x][y], cellType = (i == 0 ? 'th' : 'td');
                         rowData += that.buildStructuredTableCell(data[i], metadataItem, level, cellType, i);
                     }
-                     
+
                     if (rowData != '') { html += '<tr>' + rowData + '</tr>'; };
                 }
                 html += (i == 0) ? '</thead>' : '</tbody>';
             }
-            html += '</table>'; 
+            html += '</table>';
 
             return html;
         },
         buildStructuredTableCell : function(data, metadataItem, level, cellType, rowIndex) {
             var that = this, html = '', cellContent = '', cellClass = '', cellStyle = '', cellAttr = '';
-                
+
             //Cell Content
             if ($.isArray(metadataItem.data)) {
-                for (var i = 0; i < metadataItem.data.length; i++) 
+                for (var i = 0; i < metadataItem.data.length; i++)
                     cellContent += that.buildStructuredTableCell(data, metadataItem.data[i], level, 'div', rowIndex);
             }
-            else { 
-                if (!metadataItem.indexs && $.isNaN(metadataItem.data)) 
-                    metadataItem.indexs = $.glimpse.util.getTokens(metadataItem.data, data); 
-                
-                //Get metadata for the new data 
+            else {
+                if (!metadataItem.indexs && $.isNaN(metadataItem.data))
+                    metadataItem.indexs = $.glimpse.util.getTokens(metadataItem.data, data);
+
+                //Get metadata for the new data
                 var newMetadataItem = metadataItem.structure;
-                if ($.isPlainObject(newMetadataItem)) 
+                if ($.isPlainObject(newMetadataItem))
                     newMetadataItem = newMetadataItem[rowIndex];
-                    
+
                 cellContent = metadataItem.indexs ? that.buildFormatString(metadataItem.data, data, metadataItem.indexs) : data[metadataItem.data];
-                
-                //If minDisplay and we are in header or there is no data, we don't want to render anything 
+
+                //If minDisplay and we are in header or there is no data, we don't want to render anything
                 if (metadataItem.minDisplay && (rowIndex == 0 || cellContent == undefined || cellContent == null))
-                    return ""; 
-                     
+                    return "";
+
                 cellContent = that.build(cellContent, level + 1, metadataItem.forceFull, newMetadataItem, rowIndex == 0 ? undefined : metadataItem.limit);
 
                 //Content pre/post
@@ -465,28 +461,28 @@ if (window.jQueryGlimpse) { (function ($) {
                     if (metadataItem.post) { cellContent = cellContent + '<span class="glimpse-soft">' + metadataItem.post + '</span>'; }
                 }
             }
-            
+
             if (rowIndex != 0) {
                 cellClass = 'glimpse-cell';
                 //Cell Class
                 if (metadataItem.key === true) { cellClass += ' glimpse-cell-key'; }
                 if (metadataItem.isCode === true) { cellClass += ' glimpse-code'; }
                 if (metadataItem.className) { cellClass += ' ' + metadataItem.className; }
-                //Cell Code 
+                //Cell Code
                 if (metadataItem.codeType) { cellAttr += ' data-codeType="' + metadataItem.codeType + '"'; };
             }
-            if (cellClass) { cellAttr += ' class="' + cellClass + '"'; }; 
-            //Cell Style  
+            if (cellClass) { cellAttr += ' class="' + cellClass + '"'; };
+            //Cell Style
             if (metadataItem.width) { cellStyle += 'width:' + metadataItem.width + ';'; };
             if (metadataItem.align) { cellStyle += 'text-align:' + metadataItem.align + ';'; };
             if (cellStyle) { cellAttr += ' style="' + cellStyle + '"'; };
             //Cell Span
             if (metadataItem.span) { cellAttr += ' colspan="' + metadataItem.span + '"'; };
-             
+
             html += '<' + cellType + cellAttr + '>' + cellContent + '</' + cellType + '>';
-            
+
             return html;
-        }, 
+        },
         buildString: function (data, level, forceLimit) {
             return this.buildStringPreview(data, level, forceLimit);
         },
@@ -509,14 +505,14 @@ if (window.jQueryGlimpse) { (function ($) {
         },
         buildCustomPreview: function (data, level) {
             var that = this, isComplex = ($.isArray(data[0]) || $.isPlainObject(data[0]));
-            
+
             if (isComplex && data.length == 1)
                 return that.build(data[0], level);
-            if (isComplex || data.length > 1) 
+            if (isComplex || data.length > 1)
                 return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + that.buildCustomPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + that.buildCustomTable(data, level, true) + '</div></td></tr></table>';
-            return that.buildStringPreview(data[0], level + 1); 
+            return that.buildStringPreview(data[0], level + 1);
         },
-        buildCustomPreviewOnly: function (data, level) { 
+        buildCustomPreviewOnly: function (data, level) {
             var that = this, isComplex = $.isArray(data[0]), length = (isComplex ? data.length - 1 : data.length), rowMax = 2, columnMax = 3, columnLimit = 1, rowLimit = (rowMax < length ? rowMax : length), html = '<span class="start">[</span>';
 
             if (isComplex) {
@@ -537,13 +533,13 @@ if (window.jQueryGlimpse) { (function ($) {
                     html += '<span class="end">]</span>';
                 }
             }
-            else { 
+            else {
                 for (var i = 0; i <= rowLimit; i++) {
                     html += that.newItemSpacer(i + 1, rowLimit, length);
                     if (i >= length || i >= rowLimit)
                         break;
                     html += '<span>\'</span>' + that.buildStringPreview(data[i], level, 12) + '<span>\'</span>';
-                } 
+                }
             }
 
             html += '<span class="end">]</span>';
@@ -572,24 +568,24 @@ if (window.jQueryGlimpse) { (function ($) {
                 if (charMax >= 15)
                     content = '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td>' + content + '<span class="glimpse-preview-show">' + $.glimpse.util.preserveWhitespace($.glimpseContent.formatString(data)) + '</span></td></tr></table>';
             }
-            else 
-                content = $.glimpse.util.preserveWhitespace(content);  
-              
+            else
+                content = $.glimpse.util.preserveWhitespace(content);
+
             return content;
         },
-        //TODO: these needs to be moved out 
+        //TODO: these needs to be moved out
         shouldUsePreview: function(length, level, forceFull, limit, forceLimit, tolerance) {
             if (!$.isNaN(forceLimit)) { limit = forceLimit;}
             return !forceFull && ((level == 1 && length > (limit + tolerance)) || (level > 1 && (!forceLimit || length > (limit + tolerance))));
-        }, 
-        buildFormatString : function(formatString, data, indexs) { //TODO: this needs to be moved out 
+        },
+        buildFormatString : function(formatString, data, indexs) { //TODO: this needs to be moved out
             for (var i = 0; i < indexs.length; i++) {
-                var pattern = "\\\{\\\{" + indexs[i] + "\\\}\\\}", regex = new RegExp(pattern, "g"); 
+                var pattern = "\\\{\\\{" + indexs[i] + "\\\}\\\}", regex = new RegExp(pattern, "g");
                 formatString = formatString.replace(regex, data[indexs[i]]);
             }
             return formatString;
         },
-        newItemSpacer: function (currentRow, rowLimit, dataLength) { 
+        newItemSpacer: function (currentRow, rowLimit, dataLength) {
             var html = '';
             if (currentRow > 1 && (currentRow <= rowLimit || dataLength > rowLimit)) { html += '<span class="rspace">,</span>'; }
             if (currentRow > rowLimit && dataLength > rowLimit) { html += '<span class="small">length=' + dataLength + '</span>'; }
@@ -694,7 +690,7 @@ if (window.jQueryGlimpse) { (function ($) {
             $('.glimpse-terminate').live('click', function (ev) { ev.preventDefault(); g.terminate(); return false; });
             $('.glimpse-popout').live('click', function (ev) { ev.preventDefault(); g.popup.open(); return false; });
 
-            //Tab Switching 
+            //Tab Switching
             $('.glimpse-tabs li:not(.glimpse-active, .glimpse-disabled)').live('mouseover mouseout', function (e) {
                 var item = $(this);
                 if (e.type == 'mouseover') { item.addClass('glimpse-hover'); } else { item.removeClass('glimpse-hover'); }
@@ -706,7 +702,7 @@ if (window.jQueryGlimpse) { (function ($) {
                 $('.glimpse-tabs .glimpse-active').removeClass('glimpse-active').removeClass('glimpse-hover');
                 item.addClass('glimpse-active');
 
-                //Setup Panels 
+                //Setup Panels
                 $('.glimpse-panel-holder .glimpse-active').removeClass('glimpse-active');
                 $('.glimpse-panel-holder .glimpse-panel:eq(' + $('.glimpse-tabs ul li').index(item) + ')').addClass('glimpse-active');
 
@@ -718,14 +714,14 @@ if (window.jQueryGlimpse) { (function ($) {
                 g.persistState();
             });
 
-            //Resize  
+            //Resize
             var parentScope = $('.glimpse-resizer').parent();
             $('.glimpse-resizer').resizer({
                 getValue : function(s) { return s.resizeScope.height(); },
                 setValue : function(s, value) { return s.resizeScope.height(value + 'px'); },
                 resizeScope : parentScope,
                 opacityScope : parentScope,
-                isUpDown : true, 
+                isUpDown : true,
                 offset : -1,
                 endDragCallback: function () {
                     g.settings.height = $('.glimpse-holder').height();
@@ -733,11 +729,11 @@ if (window.jQueryGlimpse) { (function ($) {
 
                     $('.glimpse-spacer').height(g.settings.height);
                     $('.glimpse-holder .glimpse-panel').height(g.settings.height - 54);
-                    
+
                     $('.glimpse').trigger('glimpse.resize', g.settings.height - 54);
                 }
             });
-              
+
             g._wireCommonPluginEvents(g);
 
             //Resize panels if we are in popup
@@ -759,7 +755,7 @@ if (window.jQueryGlimpse) { (function ($) {
                 else
                     button.parent().next().children().first().show().next().hide();
             });
-        }, 
+        },
         _adjustLayout: function (g) {
             $('.glimpse-spacer').height(g.settings.height);
             $('.glimpse-holder .glimpse-panel').height(g.settings.height - 54);
@@ -837,7 +833,7 @@ if (window.jQueryGlimpse) { (function ($) {
         init: function (data) {
             var g = $.glimpse, static = g.static;
             g.clientName = $.glimpse.util.cookie('glimpseClientName');
-            
+
             static.isPopup = window.location.href.indexOf(static.popupUrl) > -1;
 
             if (!data) {
@@ -860,7 +856,7 @@ if (window.jQueryGlimpse) { (function ($) {
 
             $('body').append(static.html.plugin);
 
-            g._wireEvents(g); 
+            g._wireEvents(g);
 
             $.glimpseProcessor.layout(g, $.glimpseProcessor.buildHeading(static.url, static.clientName, ''));
 
@@ -872,7 +868,7 @@ if (window.jQueryGlimpse) { (function ($) {
             g.restoreState();
 
             if (!static.isPopup && g.settings.popupOn)
-                g.popup.open(); 
+                g.popup.open();
         },
         plugins: {
             protocolListeners: [],
@@ -894,7 +890,7 @@ if (window.jQueryGlimpse) { (function ($) {
             panelHolder: function () { return $('.glimpse-panel-holder'); },
             mainHolder: function () { return $('.glimpse-holder'); },
             isPopup: false,
-            popupUrl: glimpsePath + 'popup',
+            popupUrl: glimpsePath.replace('&amp;', '&') + 'popup',
             popup: null
         },
         popup: {},
@@ -913,7 +909,7 @@ if (window.jQueryGlimpse) { (function ($) {
             return !(value == undefined || value == null) ? $('<div/>').html(value).text() : '';
         },
         preserveWhitespace: function (value) {
-            return value.replace(/\r\n/g, '<br />').replace(/\n/g, '<br />').replace(/\t/g, '&nbsp; &nbsp; ').replace(/  /g, '&nbsp; ');
+            return value.replace(/\r\n/g, '<br />').replace(/\n/g, '<br />').replace(/\t/g, '&#160; &#160; ').replace(/  /g, '&#160; ');
         },
         lengthJson: function (data) {
             var count = 0;
@@ -938,7 +934,7 @@ if (window.jQueryGlimpse) { (function ($) {
                 return (document.cookie = key + '=' + encodeURIComponent(value) + '; expires=' + t.toUTCString() + '; path=/');
             }
 
-            //Get cookie 
+            //Get cookie
             var result = new RegExp("(?:^|; )" + key + "=([^;]*)").exec(document.cookie);
             if (result) {
                 result = decodeURIComponent(result[1]);
@@ -949,12 +945,12 @@ if (window.jQueryGlimpse) { (function ($) {
             }
             return null;
         },
-        getTokens: function(formatString, data) { 
+        getTokens: function(formatString, data) {
             var count = 0, working = '', result = [];
             for (var i = 0; i < formatString.length; i++) {
                 var x = formatString[i];
-                
-                if (count <= 2) { 
+
+                if (count <= 2) {
                     if (x == '{')
                         count++;
                     else if (x == '}' && count > 0)
@@ -964,7 +960,7 @@ if (window.jQueryGlimpse) { (function ($) {
                             count = 0;
                             working = '';
                         }
-                        else 
+                        else
                             working += '' + x;
                     }
                     else {
@@ -976,7 +972,7 @@ if (window.jQueryGlimpse) { (function ($) {
                         result.push(working);
                         working = '';
                     }
-                } 
+                }
             }
             return result;
         },
@@ -1002,7 +998,7 @@ if (window.jQueryGlimpse) { (function ($) {
 
             if (!static.popup || static.popup.closed) {
                 if (g.settings.firstPopup)
-                    alert('Glimpse Message: Glimpse may get blocked by your popup blocker, if this is the case make sure you set up and exception for this domain.')
+                    alert('Glimpse Message: Glimpse may get blocked by your popup blocker, if this is the case make sure you set up and exception for this domain.');
 
                 g.settings.firstPopup = false;
                 g.settings.popupOn = true;
@@ -1010,7 +1006,7 @@ if (window.jQueryGlimpse) { (function ($) {
 
                 static.dataString = JSON.stringify(static.data);
 
-                var url = static.popupUrl + '&glimpseRequestID=' + $('#glimpseData').data('glimpse-requestID');
+                var url = static.popupUrl + '&glimpseRequestID=' + $('#glimpseData').attr('data-glimpse-requestID'); // Should be able to just call $.data()
                 static.popup = window.open(url, 'GlimpsePopup', 'width=1100,height=600,status=no,toolbar=no,menubar=no,location=no,resizable=yes,scrollbars=yes');
 
                 if (gp.popupWorked(static.popup))
@@ -1074,16 +1070,16 @@ if (window.jQueryGlimpse) { (function ($) {
         }
     };
 
-    var XMLHttpRequestWrapper = function(activeXObject) { 
+    var XMLHttpRequestWrapper = function(activeXObject) {
         // XMLHttpRequestWrapper internal variables
 
         var xhrRequest = (typeof activeXObject != "undefined" ? activeXObject : new _XMLHttpRequest()),
-            spy = new XHRSpy(), 
+            spy = new XHRSpy(),
             that = this,
             isIE6 = $.browser.msie && $.browser.version == "6.0",
             supportsApply = !isIE6 && xhrRequest && xhrRequest.open && typeof xhrRequest.open.apply != "undefined";
             numberOfXHRProperties = 0;
-             
+
         // XMLHttpRequestWrapper internal methods
         var updateSelfPropertiesIgnore = {
             abort: 1,
@@ -1098,32 +1094,32 @@ if (window.jQueryGlimpse) { (function ($) {
             send: 1,
             setRequestHeader: 1
         };
-         
+
         var updateSelfProperties = function() {
             if (supportsXHRIterator) {
                 for (var propName in xhrRequest) {
                     if (propName in updateSelfPropertiesIgnore)
-                        continue; 
+                        continue;
                     try {
-                        var propValue = xhrRequest[propName]; 
+                        var propValue = xhrRequest[propName];
                         if (propValue && !$.isFunction(propValue))
                             that[propName] = propValue;
                     }
                     catch(E) {  }
                 }
             }
-            else { 
+            else {
                 if (xhrRequest.readyState == 4) {
                     that.status = xhrRequest.status;
                     that.statusText = xhrRequest.statusText;
                     that.response = xhrRequest.response;
                     that.responseText = xhrRequest.responseText;
                     that.responseType = xhrRequest.responseType;
-                    that.responseXML = xhrRequest.responseXML;  
+                    that.responseXML = xhrRequest.responseXML;
                 }
             }
         };
-        
+
         var updateXHRPropertiesIgnore = {
             channel: 1,
             onreadystatechange: 1,
@@ -1135,15 +1131,15 @@ if (window.jQueryGlimpse) { (function ($) {
             statusText: 1,
             upload: 1
         };
-         
+
         var updateXHRProperties = function() {
             for (var propName in that) {
                 if (propName in updateXHRPropertiesIgnore)
-                    continue; 
+                    continue;
                 try {
-                    var propValue = that[propName]; 
-                    if (propValue && !xhrRequest[propName]) 
-                        xhrRequest[propName] = propValue; 
+                    var propValue = that[propName];
+                    if (propValue && !xhrRequest[propName])
+                        xhrRequest[propName] = propValue;
                 }
                 catch(E) {  }
             }
@@ -1153,21 +1149,21 @@ if (window.jQueryGlimpse) { (function ($) {
         var finishXHR = function () {
             if (finished) { return; }
             finished = true;
-            
-            var duration = new Date().getTime() - spy.startTime, 
+
+            var duration = new Date().getTime() - spy.startTime,
                 success = xhrRequest.status == 200;
 
             //Pull out the header information
-            var responseHeadersText = xhrRequest.getAllResponseHeaders(), 
+            var responseHeadersText = xhrRequest.getAllResponseHeaders(),
                 responses = responseHeadersText ? responseHeadersText.split(/[\n\r]/) : [],
                 regHeader = /^(\S+):\s*(.*)/;
-            for (var i = 0, l = responses.length; i < l; i++) { 
-                var text = responses[i], match = text.match(regHeader); 
+            for (var i = 0, l = responses.length; i < l; i++) {
+                var text = responses[i], match = text.match(regHeader);
                 if (match)
                 {
-                    var name = match[1], value = match[2]; 
+                    var name = match[1], value = match[2];
                     if (name == "Content-Type")
-                        spy.mimeType = value; 
+                        spy.mimeType = value;
                     spy.responseHeaders[name] = value;
                 }
             }
@@ -1176,40 +1172,40 @@ if (window.jQueryGlimpse) { (function ($) {
             spy.status = xhrRequest.status;
             spy.statusText = xhrRequest.statusText;
             spy.responseText = xhrRequest.responseText;
-            spy.duration = duration; 
-  
+            spy.duration = duration;
+
             //Trigger the finish a bit latter
             setTimeout(function () { spy.finish(); }, 200);
-             
+
             updateSelfProperties();
         };
-         
+
         var handleStateChange = function () {
             that.readyState = xhrRequest.readyState;
 
-            if (xhrRequest.readyState == 4) { 
+            if (xhrRequest.readyState == 4) {
                 finishXHR();
                 xhrRequest.onreadystatechange = function () { };
             }
             that.onreadystatechange();
         };
 
-        // XMLHttpRequestWrapper public properties and handlers 
-        this.readyState = 0; 
+        // XMLHttpRequestWrapper public properties and handlers
+        this.readyState = 0;
         this.onreadystatechange = function () { };
- 
-        // XMLHttpRequestWrapper public methods 
-        this.open = function (method, url, async, user, password) { 
+
+        // XMLHttpRequestWrapper public methods
+        this.open = function (method, url, async, user, password) {
             updateSelfProperties();
-            
+
             if (spy.loaded)
                 spy = new XHRSpy();
-            
+
             spy.method = method;
             spy.url = url;
             spy.href = url;
             spy.async = async;
-            spy.xhrRequest = xhrRequest; 
+            spy.xhrRequest = xhrRequest;
 
             try {
                 // xhrRequest.open.apply may not be available in IE
@@ -1221,86 +1217,86 @@ if (window.jQueryGlimpse) { (function ($) {
             catch(e) {
                 throw e;
             }
-        
+
             xhrRequest.onreadystatechange = handleStateChange;
         };
-         
+
         this.send = function (data) {
             spy.data = data;
             spy.startTime = new Date().getTime();
-            
+
             updateXHRProperties();
-            
+
             try {
                 xhrRequest.send(data);
             }
-            catch (e) { 
+            catch (e) {
                 throw e;
             }
             finally {
                 spy.send();
                 if (!spy.async) {
                     that.readyState = xhrRequest.readyState;
-                    try { finishXHR(); } 
-                    catch(E) { } 
+                    try { finishXHR(); }
+                    catch(E) { }
                 }
             }
         };
-         
+
         this.setRequestHeader = function (header, value) {
             spy.requestHeaders[header] = value;
             xhrRequest.setRequestHeader(header, value);
         };
-         
+
         this.getResponseHeader = function (header) {
             return xhrRequest.getResponseHeader(header);
         };
-         
+
         this.getAllResponseHeaders = function () {
             return xhrRequest.getAllResponseHeaders();
         };
-         
+
         this.abort = function () {
             xhrRequest.abort();
             updateSelfProperties();
         };
-         
+
         //Clone XHR object
         for (var propName in xhrRequest) {
             numberOfXHRProperties++;
-        
+
             if (propName in updateSelfPropertiesIgnore)
                 continue;
-        
+
             try {
-                var propValue = xhrRequest[propName];  
+                var propValue = xhrRequest[propName];
                 if (isFunction(propValue)) {
                     if (typeof that[propName] == "undefined") {
-                        this[propName] = (function(name, xhr) { 
-                            return supportsApply ? 
+                        this[propName] = (function(name, xhr) {
+                            return supportsApply ?
                                 function() { return xhr[name].apply(xhr, arguments); } :
-                                function(a,b,c,d,e) { return xhr[name](a,b,c,d,e); }; 
+                                function(a,b,c,d,e) { return xhr[name](a,b,c,d,e); };
                         })(propName, xhrRequest);
-                    } 
+                    }
                 }
                 else
                     this[propName] = propValue;
             }
             catch(E) { }
-        } 
+        }
         var supportsXHRIterator = numberOfXHRProperties > 0;
-        
+
         return this;
     };
 
     var _ActiveXObject;
     if ($.browser.msie && $.browser.version == "6.0") {
         _ActiveXObject = window.ActiveXObject;
-    
+
         var xhrObjects = " MSXML2.XMLHTTP.5.0 MSXML2.XMLHTTP.4.0 MSXML2.XMLHTTP.3.0 MSXML2.XMLHTTP Microsoft.XMLHTTP ";
-    
+
         window.ActiveXObject = function(name) {
-            var error = null; 
+            var error = null;
             try {
                 var activeXObject = new _ActiveXObject(name);
             }
@@ -1342,7 +1338,7 @@ if (window.jQueryGlimpse) { (function ($) {
             data[ga.static.key] = '';
 
             if ((metadata = data._metadata) && (metadata = metadata.plugins))
-                (metadata[ga.static.key] = {})['helpUrl'] = 'http://getglimpse.com/Help/Plugin/Ajax'; 
+                (metadata[ga.static.key] = {})['helpUrl'] = 'http://getglimpse.com/Help/Plugin/Ajax';
         },
         adjustLayout: function (tabStrip, panelHolder) {
             var ga = this, static = ga.static;
@@ -1353,13 +1349,13 @@ if (window.jQueryGlimpse) { (function ($) {
             static.tab.addClass('glimpse-permanent').text(static.key);
             static.panel.addClass('glimpse-permanent');
 
-            //Wire up events 
+            //Wire up events
             $('.glimpse-clear', static.panel).live('click', function (ev) { ga.removeRequests(); return false; });
             $('thead .glimpse-head-message a', static.panel).live('click', function (ev) { ga.resetContext(); return false; });
             $('.glimpse').live('glimpse.request.refresh', function () { ga.globalResetCallback(); })
                          .live('glimpse.request.change', function (ev, type) { if (type != 'ajax') { ga.globalResetCallback(); } });
 
-            //Reset to start things off 
+            //Reset to start things off
             ga.removeRequests(true);
         },
         shouldMakePopoutCall: function () {
@@ -1382,7 +1378,7 @@ if (window.jQueryGlimpse) { (function ($) {
 
             $('.glimpse').trigger('glimpse.request.change', ['ajax']);
 
-            //Adjust styles 
+            //Adjust styles
             $('.glimpse-head-message', panelHead).fadeIn();
             $('.selected', link.parents('table:first')).removeClass('selected');
             link.parents('tr:first').addClass('selected');
@@ -1423,7 +1419,7 @@ if (window.jQueryGlimpse) { (function ($) {
             //Add new row
             $('table tbody', panelItem).prepend('<tr class="loading" data-index="' + static.index + '"><th><div class="icon"></div>' + ajaxSpy.url + '</th><td class="glimpse-ajax-status">Loading...</td><td>' + $.glimpse.util.formatTime(ajaxSpy.startTime) + '</td><td class="glimpse-ajax-duration">--</td><td>' + ajaxSpy.async + '</td><td class="glimpse-ajax-inspect">N/A</td></tr>');
 
-            //In theory I wouldn't need to do this every time but wanting to make sure that all rows are kept in sync 
+            //In theory I wouldn't need to do this every time but wanting to make sure that all rows are kept in sync
             $('table tbody tr:odd', panelItem).removeClass('odd').addClass('even');
             $('table tbody tr:even', panelItem).removeClass('even').addClass('odd');
         },
@@ -1464,7 +1460,7 @@ if (window.jQueryGlimpse) { (function ($) {
             key: 'Ajax',
             tab: null,
             panel: null,
-            historyLink: glimpsePath + 'History',
+            historyLink: glimpsePath.replace('&amp;', '&') + 'History',
             index: 0
         }
     });
@@ -1491,7 +1487,7 @@ if (window.jQueryGlimpse) { (function ($) {
             data[gr.static.key] = ''
 
             if ((metadata = data._metadata) && (metadata = metadata.plugins))
-                (metadata[gr.static.key] = {})['helpUrl'] = 'http://getglimpse.com/Help/Plugin/Remote'; 
+                (metadata[gr.static.key] = {})['helpUrl'] = 'http://getglimpse.com/Help/Plugin/Remote';
         },
         adjustLayout: function (tabStrip, panelHolder) {
             var gr = this, static = gr.static;
@@ -1500,7 +1496,7 @@ if (window.jQueryGlimpse) { (function ($) {
             static.tab = $('.glimpse-tabitem-' + static.key, tabStrip);
             static.panel = $('.glimpse-panelitem-' + static.key, panelHolder);
 
-            //Make sure we stick round 
+            //Make sure we stick round
             static.tab.addClass('glimpse-permanent').text(static.key);
             static.panel.addClass('glimpse-permanent');
             static.panel.prepend('<div class="glimpse-side-sub-panel"><div class="loading"><div class="icon"></div><span>Refreshing...</span></div><div class="glimpse-content"></div></div><div class="glimpse-side-main-panel"><div class="glimpse-initial glimpse-panel-message">No remote calls have yet been detected</div><div class="loading" style="display:none"><div class="icon"></div><span>Refreshing...</span></div><div class="glimpse-content"></div></div>');
@@ -1508,7 +1504,7 @@ if (window.jQueryGlimpse) { (function ($) {
             static.subPanel = $('.glimpse-side-sub-panel', static.panel);
             static.mainPanel = $('.glimpse-side-main-panel', static.panel);
 
-            //Wireevents 
+            //Wireevents
             $('a', static.panel).live('click', function () {
                 $('.selected', $(this).parents('table:first')).removeClass('selected');
                 $(this).parents('tr:first').addClass('selected');
@@ -1557,8 +1553,8 @@ if (window.jQueryGlimpse) { (function ($) {
         requestSelected: function (clientId, requestId) {
             var gr = this, static = gr.static, request = static.result.Data[clientId][requestId];
             if (request.Data) {
-                $('.glimpse-head-message', static.subPanel).fadeIn(); 
-                $.glimpse.refresh(eval('(' + request.Data + ')'), $.glimpseProcessor.buildHeading(request.Url, clientId, static.key)); 
+                $('.glimpse-head-message', static.subPanel).fadeIn();
+                $.glimpse.refresh(eval('(' + request.Data + ')'), $.glimpseProcessor.buildHeading(request.Url, clientId, static.key));
                 $('.glimpse').trigger('glimpse.request.change', ['remote']);
             }
         },
@@ -1598,7 +1594,7 @@ if (window.jQueryGlimpse) { (function ($) {
         processSessionList: function (result) {
             var gr = this, static = gr.static;
 
-            //Create the table we need first time round 
+            //Create the table we need first time round
             if ($('table', static.subPanel).length == 0) {
                 $('.glimpse-content', static.subPanel).html($.glimpseProcessor.build(
                     [['Client', 'Count', 'Launch']], 0)).append('<div class="glimpse-clear"><a href="#">Clear</a></div>');
@@ -1614,16 +1610,16 @@ if (window.jQueryGlimpse) { (function ($) {
                 //Adjusts the returned data
                 $.extend(true, static.result, result);
 
-                //Need to do some work on this data 
+                //Need to do some work on this data
                 var ldata = static.result.Data || {}, rdata = result.Data || {};
                 for (var lclientToken in ldata) {
                     var lclient = ldata[lclientToken], rclient = rdata[lclientToken], count = 0;
 
-                    //Lets go through the client requests 
+                    //Lets go through the client requests
                     for (var lclientRequestToken in lclient) {
                         var lclientRequest = lclient[lclientRequestToken];
 
-                        //Remove any tokens that we don't have cached locally and the server does't have 
+                        //Remove any tokens that we don't have cached locally and the server does't have
                         if (!(lclientRequest.Data || (rclient && rclient[lclientRequestToken])))
                             delete lclient[lclientRequestToken];
                         else
@@ -1650,7 +1646,7 @@ if (window.jQueryGlimpse) { (function ($) {
                         $('table', static.subPanel).append('<tr><td>' + lclientToken + '</td><td>' + count + '</td><td><a href="#" class="glimpse-trigger" data-client="' + lclientToken + '">Launch</a></td></tr>')
                 }
 
-                //Trigger a history request if we need to 
+                //Trigger a history request if we need to
                 if (shouldTriggerHistoryRequest)
                     gr.sessionSelected(selectedClientName);
 
@@ -1668,7 +1664,6 @@ if (window.jQueryGlimpse) { (function ($) {
             var gr = this, static = gr.static;
 
             if (static.result && result) {
-
                 $.extend(true, static.result, result);
 
                 //Pull out the name of the client
@@ -1678,7 +1673,7 @@ if (window.jQueryGlimpse) { (function ($) {
                     break;
                 }
 
-                //As long as the client  
+                //As long as the client
                 if ($(".selected a[data-client='" + rclientToken + "']", static.subPanel).length > 0) {
                     var lclient = ldata[rclientToken], data = [['Client Name', 'Method', 'Request Url', 'Browser', 'Date/Time', 'Is Ajax', 'Launch']];
 
@@ -1699,8 +1694,8 @@ if (window.jQueryGlimpse) { (function ($) {
             panel: null,
             subPanel: null,
             mainPanel: null,
-            historyLink: glimpsePath + 'History',
-            clientLink: glimpsePath + 'Clients',
+            historyLink: glimpsePath.replace('&amp;', '&') + 'History',
+            clientLink: glimpsePath.replace('&amp;', '&') + 'Clients',
             result: {},
             _count: 0
         }
@@ -1718,7 +1713,7 @@ if (window.jQueryGlimpse) { (function ($) {
         init: function () {
             var gm = this;
 
-            //Wire up plugin 
+            //Wire up plugin
             $.glimpse.addProtocolListener(function (data) { gm.adjustProtocol(data); }, true);
             $.glimpse.addLayoutListener(function (tabStrip, panelHolder) { gm.adjustLayout(tabStrip, panelHolder); }, true);
 
@@ -1726,9 +1721,9 @@ if (window.jQueryGlimpse) { (function ($) {
         },
         adjustProtocol: function (data) {
             var gm = this, g = $.glimpse, metadata, version = ((metadata = g.static.data._metadata) && (metadata = metadata.request) && (metadata = metadata.runningVersion));
-            
+
             //Info tab
-            data[gm.static.key.info] = '<div class="glimpse-info-title"><a href="http://getGlimpse.com/" target="_blank"><img border="0" src="' + glimpsePath + 'logo.png" /></a></div><div>v' + version + '</div><div class="glimpse-info-quote">"What Firebug is for the client, Glimpse is for the server"</div><div class="glimpse-info-more">Go to your Glimpse Config page <a href="' + glimpsePath + 'Config" target="_blank">Glimpse.axd</a></div><div class="glimpse-info-more">For more info see <a href="http://getGlimpse.com" target="_blank">http://getGlimpse.com</a></div><div style="margin:1.5em 0 0.5em;">Created by <strong>Anthony van der Hoorn</strong> (<a href="http://twitter.com/anthony_vdh" target="_blank">@anthony_vdh</a>) and <strong>Nik Molnar</strong> (<a href="http://twitter.com/nikmd23" target="_blank">@nikmd23</a>) - &copy; getglimpse.com 2011</div><div>Have a <em>feature</em> request? <a href="http://getglimpse.uservoice.com" target="_blank">Submit the idea</a>. &nbsp; &nbsp; Found an <em>error</em>? <a href="https://github.com/glimpse/glimpse/issues" target="_blank">Help us improve</a>. &nbsp; &nbsp; Have a <em>question</em>? <a href="http://twitter.com/#search?q=%23glimpse" target="_blank">Tweet us using #glimpse</a>.</div>';
+            data[gm.static.key.info] = '<div class="glimpse-info-title"><a href="http://getGlimpse.com/" target="_blank"><img border="0" src="' + glimpsePath + 'logo.png" /></a></div><div>v' + version + '</div><div class="glimpse-info-quote">"What Firebug is for the client, Glimpse is for the server"</div><div class="glimpse-info-more">Go to your Glimpse Config page <a href="' + glimpsePath + 'Config" target="_blank">Glimpse.axd</a></div><div class="glimpse-info-more">For more info see <a href="http://getGlimpse.com" target="_blank">http://getGlimpse.com</a></div><div style="margin:1.5em 0 0.5em;">Created by <strong>Anthony van der Hoorn</strong> (<a href="http://twitter.com/anthony_vdh" target="_blank">@anthony_vdh</a>) and <strong>Nik Molnar</strong> (<a href="http://twitter.com/nikmd23" target="_blank">@nikmd23</a>) - &#169; getglimpse.com 2011</div><div>Have a <em>feature</em> request? <a href="http://getglimpse.uservoice.com" target="_blank">Submit the idea</a>. &#160; &#160; Found an <em>error</em>? <a href="https://github.com/glimpse/glimpse/issues" target="_blank">Help us improve</a>. &#160; &#160; Have a <em>question</em>? <a href="http://twitter.com/#search?q=%23glimpse" target="_blank">Tweet us using #glimpse</a>.</div>';
         },
         adjustLayout: function (tabStrip, panelHolder) {
             var gm = this, g = $.glimpse, mainHolder = g.static.mainHolder();
@@ -1874,7 +1869,7 @@ if (window.jQueryGlimpse) { (function ($) {
             pager.append(pagerMessage);
         },
         static: {
-            link: glimpsePath + 'Pager',
+            link: glimpsePath.replace('&amp;', '&') + 'Pager',
             isLoading: false
         }
     });
@@ -1969,7 +1964,7 @@ if (window.jQueryGlimpse) { (function ($) {
                     var pagerMessage = $('<span class="glimpse-pager-message"></span');
                     pagerMessage.html('Showing page 1 until page ' + (pageIndex + 1) + ' from a total of ' + (pageIndexLast + 1) + ' pages.');
                     pagerContainer.append(pagerMessage);
-                    
+
                     if (pageIndex < pageIndexLast) {
                         var g = $.glimpse, mainHolder = g.static.panelHolder();
                         var panelItem = $('.glimpse-panelitem-' + key, mainHolder);
@@ -2005,16 +2000,16 @@ if (window.jQueryGlimpse) { (function ($) {
 
     //#region $.glimpseSwitcher
 
-    $.glimpseSwitcher = {}; 
+    $.glimpseSwitcher = {};
     $.extend($.glimpseSwitcher, {
         init: function () {
             var gs = this;
 
-            //Wire up plugin  
+            //Wire up plugin
             $.glimpse.addLayoutListener(function(tabStrip, panelHolder) { gs.adjustLayout(); }, true);
             $('.glimpse').live('glimpse.request.change', function (ev, type) { if (type != 'ajax') { gs.adjustLayout(); } });
             $('.glimpse').live('glimpse.request.refresh', function (ev, type) { gs.adjustLayout(); });
-            
+
             //Wireup click listeners
             $('.glimpse-url .glimpse-drop-over a').live('click', function() {
                 gs.switchContext($(this).attr('data-requestId'), $(this).attr('data-url'), $('.glimpse .glimpse-snapshot-type').attr('data-clientName'));
@@ -2025,8 +2020,8 @@ if (window.jQueryGlimpse) { (function ($) {
             var g = $.glimpse, mainHolder = g.static.mainHolder(), metadata = g.static.data._metadata, request = (metadata && metadata.request), environments = (request && request.environmentUrls), correlation = (request && request.correlation);
 
             var dropFunction = function(scope) {
-                $('.glimpse-drop', scope).mouseover(function() { $('.glimpse-drop-over', scope).css('left', $(this).position().left).fadeIn('fast'); }); 
-                $('.glimpse-drop-over', scope).mouseleave(function() { $('.glimpse-drop-over', scope).fadeOut(100); }); 
+                $('.glimpse-drop', scope).mouseover(function() { $('.glimpse-drop-over', scope).css('left', $(this).position().left).fadeIn('fast'); });
+                $('.glimpse-drop-over', scope).mouseleave(function() { $('.glimpse-drop-over', scope).fadeOut(100); });
             };
             //Setup environements
             if (environments) {
@@ -2046,9 +2041,9 @@ if (window.jQueryGlimpse) { (function ($) {
                     dropFunction(envHolder);
                 }
             }
-               
+
             //Setup correlation
-            if (correlation) { 
+            if (correlation) {
                 var urlHolder = $('.glimpse-title .glimpse-url', mainHolder), currentUrl = urlHolder.text(), currentLeg, correlationList = '<div>' + correlation.title + '</div>';
                 for (var i = 0; i < correlation.legs.length; i++) {
                     var leg = correlation.legs[i];
@@ -2057,10 +2052,10 @@ if (window.jQueryGlimpse) { (function ($) {
                         correlationList += currentLeg.url;
                     }
                     else
-                        correlationList += '<a title="Go to ' + leg.url + '" href="#" data-requestId="' + leg.glimpseId + '" data-url="' + leg.url + '">' + leg.url + '</a>'; 
+                        correlationList += '<a title="Go to ' + leg.url + '" href="#" data-requestId="' + leg.glimpseId + '" data-url="' + leg.url + '">' + leg.url + '</a>';
                     correlationList += ' <strong>(' + leg.method + ')</strong><br />';
                 }
-                
+
                 if (currentLeg) {
                     urlHolder.html($('<span class="glimpse-drop">' + currentLeg.url + ' <strong>(' + currentLeg.method + ')</strong><span class="glimpse-drop-arrow-holder"><span class="glimpse-drop-arrow"></span></span></span><div class="glimpse-drop-over">' + correlationList + '<div class="loading"><span class="icon"></span><span>Loaded...</span></div></div>'));
                     dropFunction(urlHolder);
@@ -2069,14 +2064,14 @@ if (window.jQueryGlimpse) { (function ($) {
         },
         switchContext: function(glimpseRequestId, glimpseRequestUrl, glimpseClientName) {
             var gs = this, g = $.glimpse, loading = $('.glimpse-url .glimpse-drop-over .loading').fadeIn();
-            
+
             $.ajax({
                 url: gs.defaults.historyLink,
                 type: 'GET',
                 data: { 'ClientRequestID': glimpseRequestId },
                 contentType: 'application/json',
                 success: function (result) {
-                    var resultData = eval('(' + result.Data[glimpseRequestId].Data + ')'); 
+                    var resultData = eval('(' + result.Data[glimpseRequestId].Data + ')');
                     resultData._metadata.request.correlation = g.static.data._metadata.request.correlation;
 
                     loading.fadeOut();
@@ -2088,7 +2083,7 @@ if (window.jQueryGlimpse) { (function ($) {
         },
         defaults: {
             key: 'PRG',
-            historyLink: glimpsePath + 'History'
+            historyLink: glimpsePath.replace('&amp;', '&') + 'History'
         }
     });
 
@@ -2104,7 +2099,7 @@ if (window.jQueryGlimpse) { (function ($) {
         init: function () {
             var gu = this;
 
-            //Wire up plugin  
+            //Wire up plugin
             $.glimpse.addLayoutListener(function (tabStrip, panelHolder) { gu.adjustLayout(tabStrip, panelHolder); }, true);
         },
         adjustLayout: function (tabStrip, panelHolder) {
@@ -2133,29 +2128,29 @@ if (window.jQueryGlimpse) { (function ($) {
     //Wireup glimpse offical plugins
     $.glimpseUpdateNotification.init();
 
-    //#endregion 
+    //#endregion
 
 //#region $.glimpseLazyLoad
 
     $.glimpseLazyLoad = {};
     $.extend($.glimpseLazyLoad, {
-        init: function () { 
+        init: function () {
             var gll = this;
 
-            //Wire up plugin   
+            //Wire up plugin
             $('.glimpse').live('glimpse.tabchanged', function(ev, type) { gll.loadResource(type); });
         },
         loadResource: function (key) {
             var g = $.glimpse, static = g.static, mainHolder = static.mainHolder(), panel = mainHolder.find('.glimpse-panelitem-' + key), subPanel = panel.find('.glimpse-panel-message[data-glimpse-lazy-url]');
-            
-            if (subPanel.length > 0) { 
+
+            if (subPanel.length > 0) {
                 var url = subPanel.attr('data-glimpse-lazy-url');
                 subPanel.attr('data-glimpse-lazy-url', '');
 
-                $.ajax({ 
+                $.ajax({
                     url: url,
-                    success: function (data) { 
-                        var metadata = ((metadata = static.data._metadata) && (metadata = metadata.plugins[key]) && (metadata = metadata.structure)); 
+                    success: function (data) {
+                        var metadata = ((metadata = static.data._metadata) && (metadata = metadata.plugins[key]) && (metadata = metadata.structure));
                         panel.html($.glimpseProcessor.build(data, 0, true, metadata, 1));
                     }
                 });
@@ -2170,7 +2165,7 @@ if (window.jQueryGlimpse) { (function ($) {
 
 //#region glimpseTimeline
 
-var glimpseTimeline = function (scope, settings) { 
+var glimpseTimeline = function (scope, settings) {
     var elements = {},
         findElements = function () {
             //Main elements
@@ -2185,12 +2180,12 @@ var glimpseTimeline = function (scope, settings) {
             elements.contentTableHolder = elements.contentRow.find('.glimpse-tl-table-holder');
 
             elements.summaryBandHolder = elements.summaryRow.find('.glimpse-tl-band-group');
-            elements.summaryEventHolder = elements.summaryRow.find('.glimpse-tl-event-group'); 
+            elements.summaryEventHolder = elements.summaryRow.find('.glimpse-tl-event-group');
             elements.summaryDescHolder = elements.summaryRow.find('.glimpse-tl-event-desc-group');
 
-            //Event info element 
+            //Event info element
             elements.eventInfo = scope.find('.glimpse-tl-event-info');
-             
+
             //Zoom elements
             elements.zoomHolder = elements.summaryRow.find('.glimpse-tl-resizer-holder');
             elements.zoomLeftHandle = elements.summaryRow.find('.glimpse-tl-resizer:first-child');
@@ -2212,7 +2207,7 @@ var glimpseTimeline = function (scope, settings) {
             };
         }(),
         dividerBuilder = function () {
-            var render = function (force) {   
+            var render = function (force) {
                     //Setup the dividers
                     renderDiverders(elements.summaryDividerHolder, { startTime : 0, endTime : settings.duration}, force);
                     renderDiverders(elements.contentDividerHolder, { startTime : settings.startTime, endTime : settings.endTime }, force);
@@ -2220,7 +2215,7 @@ var glimpseTimeline = function (scope, settings) {
                     //Fix height
                     adjustHeight();
                 },
-                renderDiverders = function (scope, range, force) { 
+                renderDiverders = function (scope, range, force) {
                     var x;
                     for (x = 0; x < scope.length; x += 1) {
                         var holder = $(scope[x]),
@@ -2234,7 +2229,7 @@ var glimpseTimeline = function (scope, settings) {
                             divider = holder.find('.glimpse-tl-divider:first-child');
 
                         for (var i = 0; i < dividerCount; i += 1) {
-                            //Create divider if needed 
+                            //Create divider if needed
                             if (divider.length == 0) {
                                 divider = $('<div class="glimpse-tl-divider"><div></div></div>');
                                 holder.append(divider);
@@ -2242,7 +2237,7 @@ var glimpseTimeline = function (scope, settings) {
                             //Position divider
                             divider.css('left', (leftOffset * (i + 1)) + '%');
                             //Set label of divider
-                            var time = i == (dividerCount - 1) ? range.endTime : (timeSlice * (i + 1)) + range.startTime; 
+                            var time = i == (dividerCount - 1) ? range.endTime : (timeSlice * (i + 1)) + range.startTime;
                             divider.find('div').text($.glimpse.util.timeConvert(parseInt(time)));
                             //Move onto next
                             divider = divider.next();
@@ -2255,29 +2250,29 @@ var glimpseTimeline = function (scope, settings) {
                         }
                     }
                 },
-                adjustHeight = function () { 
+                adjustHeight = function () {
                     //Content row divider height
-                    var innerHeight = Math.max(elements.contentBandScroller.height(), elements.contentBandScroller.find('.glimpse-tl-band-holder').height());   
-                    elements.contentBandScroller.find('.glimpse-tl-divider-holder').height(innerHeight); 
+                    var innerHeight = Math.max(elements.contentBandScroller.height(), elements.contentBandScroller.find('.glimpse-tl-band-holder').height());
+                    elements.contentBandScroller.find('.glimpse-tl-divider-holder').height(innerHeight);
 
                     //Summary row divider height
                     elements.summaryRow.find('.glimpse-tl-summary-height').height(elements.summaryRow.height());
                 },
-                wireEvents = function () {  
-                    //Window resize event 
-                    $(window).resize(function () { render(); }); 
+                wireEvents = function () {
+                    //Window resize event
+                    $(window).resize(function () { render(); });
                 },
                 init = function () {
                     wireEvents();
                 };
-                 
+
             return {
                 init : init,
                 render : render,
                 adjustHeight : adjustHeight
-            }; 
+            };
         }(),
-        eventBuilder = function () { 
+        eventBuilder = function () {
             var render = function () {
                     processCategories();
                     processEvents();
@@ -2289,39 +2284,39 @@ var glimpseTimeline = function (scope, settings) {
                 processTableData = function () {
                     var dataResult = [ [ 'Title', 'Description', 'Category', 'Timing', 'Start Point', 'Duration', 'w/out Children' ] ],
                         metadata = [ [ { data : '{{0}} |({{1}})|' }, { data : 2, width : '18%' }, { data : 3, width : '9%' }, { data : 4, align : 'right', pre : 'T+ ', post : ' ms', className : 'mono', width : '100px' }, { data : 5, align : 'right', post : ' ms', className : 'mono', width : '100px' }, { data : 6, align : 'right', post : ' ms', className : 'mono', width : '100px' } ] ];
-                    
-                    //Massage the data 
+
+                    //Massage the data
                     for (var i = 0; i < settings.events.length; i++) {
                         var event = settings.events[i],
                             data = [ event.title, event.subText, event.category, '', event.startPoint, event.duration, event.childlessDuration ];
                         dataResult.push(data);
-                    } 
+                    }
 
                     //Insert it into the document
-                    var result = $.glimpseProcessor.build(dataResult, 0, true, metadata, false); 
+                    var result = $.glimpseProcessor.build(dataResult, 0, true, metadata, false);
                     elements.contentTableHolder.append(result);
 
-                    //Update the output 
+                    //Update the output
                     elements.contentTableHolder.find('tbody tr').each(function(i) {
                         var row = $(this),
-                            event = settings.events[i],  
+                            event = settings.events[i],
                             category = settings.category[event.category];
-                             
+
                         row.find('td:first-child').prepend($('<div class="glimpse-tl-event"></div>').css({ 'backgroundColor' : category.eventColor, marginLeft : (15 * event.nesting) + 'px', 'border' : '1px solid ' + category.eventColorHighlight }));
-                        row.find('td:nth-child(3)').css('position', 'relative').prepend($('<div class="glimpse-tl-event"></div>').css({ 'backgroundColor' : category.eventColor, 'border' : '1px solid ' + category.eventColorHighlight, 'left' : event.startPersent + '%', width : event.widthPersent + '%', position : 'absolute', top : '5px' })); 
-                    }); 
+                        row.find('td:nth-child(3)').css('position', 'relative').prepend($('<div class="glimpse-tl-event"></div>').css({ 'backgroundColor' : category.eventColor, 'border' : '1px solid ' + category.eventColorHighlight, 'left' : event.startPersent + '%', width : event.widthPersent + '%', position : 'absolute', top : '5px' }));
+                    });
                 },
                 processCategories = function () {
                     for (var categoryName in settings.category) {
                         var category = settings.category[categoryName];
 
-                        elements.summaryDescHolder.append('<div class="glimpse-tl-band glimpse-tl-category-selected"><input type="checkbox" value="' + categoryName +'" checked="checked" /><div class="glimpse-tl-event" style="background-color:' + category.eventColor + ';border:1px solid ' + category.eventColorHighlight + '"></div>' + categoryName +'</div>'); 
+                        elements.summaryDescHolder.append('<div class="glimpse-tl-band glimpse-tl-category-selected"><input type="checkbox" value="' + categoryName +'" checked="checked" /><div class="glimpse-tl-event" style="background-color:' + category.eventColor + ';border:1px solid ' + category.eventColorHighlight + '"></div>' + categoryName +'</div>');
                         elements.summaryBandHolder.append('<div class="glimpse-tl-band"></div>');
-                        category.holder = $('<div class="glimpse-tl-band"></div>').appendTo(elements.summaryEventHolder); 
+                        category.holder = $('<div class="glimpse-tl-band"></div>').appendTo(elements.summaryEventHolder);
                         category.events = {};
                     }
                 },
-                processEvents = function () { 
+                processEvents = function () {
                     var eventStack = [], lastEvent = { startPoint : 0, duration : 0, childlessDuration : 0 };
                     for (var i = 0; i < settings.events.length; i += 1) {
                         var event = settings.events[i],
@@ -2336,25 +2331,25 @@ var glimpseTimeline = function (scope, settings) {
                             subTextPre = (event.subText ? '(' + event.subText + ')' : ''),
                             subText = (subTextPre ? '<span class="glimpse-tl-event-desc-sub">' + subTextPre + '</span>' : ''),
                             stackParsed = false;
-                             
-                        //Derive event nesting  
+
+                        //Derive event nesting
                         while (!stackParsed) {
                             if (event.startPoint > lastEvent.startPoint && (event.startPoint + event.duration) <= (lastEvent.startPoint + lastEvent.duration)) {
-                                eventStack.push(lastEvent); 
+                                eventStack.push(lastEvent);
                                 stackParsed = true;
                             }
                             else if (topEvent != undefined && (topEvent.startPoint + topEvent.duration) < (event.startPoint + event.duration)) {
-                                eventStack.pop(); 
-                                topEvent = eventStack.length > 0 ? eventStack[eventStack.length - 1] : undefined; 
+                                eventStack.pop();
+                                topEvent = eventStack.length > 0 ? eventStack[eventStack.length - 1] : undefined;
                                 stackParsed = false;
                             }
                             else
                                 stackParsed = true;
                         }
-                        
-                        //Work out childless timings 
-                        var temp = eventStack.length > 0 ? eventStack[eventStack.length - 1] : undefined; 
-                        if (temp) { temp.childlessDuration -= event.duration; } 
+
+                        //Work out childless timings
+                        var temp = eventStack.length > 0 ? eventStack[eventStack.length - 1] : undefined;
+                        if (temp) { temp.childlessDuration -= event.duration; }
 
                         //Save calc data
                         event.childlessDuration = event.duration;
@@ -2375,63 +2370,63 @@ var glimpseTimeline = function (scope, settings) {
                         elements.contentBandHolder.append('<div class="glimpse-tl-band"></div>');
                         elements.contentEventHolder.append('<div class="glimpse-tl-band"><div class="glimpse-tl-event" style="background-color:' + category.eventColor + ';border:1px solid ' + category.eventColorHighlight + ';left:' + left + '%;' + widthStyle + maxStyle + '"></div>'+ eventDecoration +'</div>');
                         elements.contentDescHolder.append('<div class="glimpse-tl-band" title="' + event.title + ' ' + subTextPre + '"><div class="glimpse-tl-event" style="background-color:' + category.eventColor + ';border:1px solid ' + category.eventColorHighlight + '"></div>' + event.title + subText +'</div>');
-                     
-                        //Register events for summary  
+
+                        //Register events for summary
                         deriveEventSummary(category, left, rLeft, width, rWidth);
-                        
+
                         lastEvent = event;
                     }
                 },
                 deriveEventSummary = function (category, left, rLeft, width, rWidth) {
-                    for (var j = rLeft; j <= (rLeft + rWidth); ++j) { 
+                    for (var j = rLeft; j <= (rLeft + rWidth); ++j) {
                         var data = category.events[j], right = left + width;
                         if (data) {
                             data.left = Math.min(left, data.left);
                             data.right = Math.max(right, data.right);
                         }
-                        else 
-                            category.events[j] = { left : left, right : right } 
-                    } 
+                        else
+                            category.events[j] = { left : left, right : right }
+                    }
                 },
-                processEventSummary = function () { 
+                processEventSummary = function () {
                     var addCategoryEvent = function (category, start, finish) {
-                        var width = (finish - start), 
+                        var width = (finish - start),
                             widthStyle = (width > 0 ? 'width:' + width + '%' : ''),
-                            maxStyle = (width <= 0 ? 'max-width:7px;' : ''); 
+                            maxStyle = (width <= 0 ? 'max-width:7px;' : '');
                         category.holder.append('<div class="glimpse-tl-event" style="background-color:' + category.eventColor + ';border:1px solid ' + category.eventColorHighlight + '; left:' + start + '%;' + widthStyle + maxStyle + '"></div>');
                     };
 
                     for (var categoryName in settings.category) {
-                        var category = settings.category[categoryName], 
-                            events = category.events, 
-                            startData = null, 
-                            next = 0; 
+                        var category = settings.category[categoryName],
+                            events = category.events,
+                            startData = null,
+                            next = 0;
 
-                        for (var currentPoint in events) { 
+                        for (var currentPoint in events) {
                             var current = parseInt(currentPoint);
 
                             if (!startData) {  //TODO: this needs to be cleanned up, duplicate logic here
-                                startData = events[currentPoint]; 
-                                next = current + 1; 
+                                startData = events[currentPoint];
+                                next = current + 1;
                             }
-                            else if (current != next) {  
-                                addCategoryEvent(category, startData.left, events[next - 1].right); 
-                                startData = events[currentPoint]; 
-                                next = current + 1; 
+                            else if (current != next) {
+                                addCategoryEvent(category, startData.left, events[next - 1].right);
+                                startData = events[currentPoint];
+                                next = current + 1;
                             }
-                            else 
-                                next++; 
+                            else
+                                next++;
                         }
-                        if (startData) { addCategoryEvent(category, startData.left, events[next - 1].right); } 
+                        if (startData) { addCategoryEvent(category, startData.left, events[next - 1].right); }
                     }
                 },
-                colorRows = function (applyAll) { 
+                colorRows = function (applyAll) {
                     var filter = applyAll ? '' : ':visible';
                     colorElement(elements.contentBandHolder.find('> div'), filter);
                     colorElement(elements.contentDescHolder.find('> div'), filter);
                     colorElement(elements.summaryBandHolder.find('> div'), filter);
                     colorElement(elements.summaryDescHolder.find('> div'), filter);
-                    colorElement(elements.contentTableHolder.find('tbody'), filter); 
+                    colorElement(elements.contentTableHolder.find('tbody'), filter);
                 },
                 colorElement = function (scope, filter) {
                     scope.removeClass('odd').removeClass('even');
@@ -2456,71 +2451,71 @@ var glimpseTimeline = function (scope, settings) {
                         .live('mouseleave', function () { if ($(this).has('input:checked').length > 0) { $(this).find('input').stop(true, true).clearQueue().fadeOut(); } });
                     elements.summaryDescHolder.find('input').click(function() { filter.category(); });
                 },
-                init = function () { 
+                init = function () {
                     _wireEvents();
                 };
-                 
+
             return {
                 init : init,
                 colorRows : colorRows,
                 render : render
             };
-        }(),          
+        }(),
         zoom = function () {
             var positionLeft = function () {
-                    var persentLeft = (elements.zoomLeftHandle.position().left / elements.zoomHolder.width()) * 100, 
-                        persentRight = (elements.zoomRightPadding.width() / elements.zoomHolder.width()) * 100; 
-                 
+                    var persentLeft = (elements.zoomLeftHandle.position().left / elements.zoomHolder.width()) * 100,
+                        persentRight = (elements.zoomRightPadding.width() / elements.zoomHolder.width()) * 100;
+
                     //Set left slider
-                    elements.zoomLeftHandle.css('left', persentLeft + '%'); 
+                    elements.zoomLeftHandle.css('left', persentLeft + '%');
                     elements.zoomLeftPadding.css('width', persentLeft + '%');
-                
+
                     settings.startTime = settings.duration * (persentLeft / 100);
 
                     //Force render
                     dividerBuilder.render(true);
 
-                    //Zoom in on main line items 
+                    //Zoom in on main line items
                     zoomEvents(persentLeft, persentRight);
-                 
+
                     //Manage zero display
-                    toggleZeroLine(persentLeft == 0); 
-                 
+                    toggleZeroLine(persentLeft == 0);
+
                     //Hide events that aren't needed
-                    filter.zoom(persentLeft, persentRight); 
+                    filter.zoom(persentLeft, persentRight);
                 },
                 positionRight = function () {
-                    var persentRight = ((elements.zoomHolder.width() - 4 - elements.zoomRightHandle.position().left) / elements.zoomHolder.width()) * 100, 
-                        persentLeft = (elements.zoomLeftPadding.width() / elements.zoomHolder.width()) * 100; 
-                 
+                    var persentRight = ((elements.zoomHolder.width() - 4 - elements.zoomRightHandle.position().left) / elements.zoomHolder.width()) * 100,
+                        persentLeft = (elements.zoomLeftPadding.width() / elements.zoomHolder.width()) * 100;
+
                     //Set right slider
-                    elements.zoomRightHandle.css('right', persentRight + '%'); 
+                    elements.zoomRightHandle.css('right', persentRight + '%');
                     elements.zoomRightPadding.css('width', persentRight + '%');
 
                     settings.endTime = settings.duration - (settings.duration * (persentRight / 100));
-                
+
                     //Force render
                     dividerBuilder.render(true);
-                
-                    //Zoom in on main line items 
+
+                    //Zoom in on main line items
                     zoomEvents(persentLeft, persentRight);
-                    
+
                     //Hide events that aren't needed
-                    filter.zoom(persentLeft, persentRight);  
+                    filter.zoom(persentLeft, persentRight);
                 },
                 zoomEvents = function (persentLeft, persentRight) {
-                    var offset = (100 / (100 - persentLeft - persentRight)) * -1, 
-                        lOffset = offset * persentLeft, 
+                    var offset = (100 / (100 - persentLeft - persentRight)) * -1,
+                        lOffset = offset * persentLeft,
                         rOffset = offset * persentRight;
 
                     elements.contentRow.find('.glimpse-tl-event-holder-inner').css({ left : lOffset + '%', right : rOffset + '%' });
                 },
                 toggleZeroLine = function (show) {
-                    elements.contentRow.find('.glimpse-tl-divider-zero-holder').toggle(show);  
+                    elements.contentRow.find('.glimpse-tl-divider-zero-holder').toggle(show);
                     elements.contentRow.find('.glimpse-tl-divider-line-holder').css('left', (show ? '15' : '0') + 'px');
                     elements.contentRow.find('.glimpse-tl-event-holder').css('marginLeft', (show ? '15' : '0') + 'px');
-                }, 
-                wireEvents = function () {   
+                },
+                wireEvents = function () {
                     elements.zoomLeftHandle.resizer({
                         min: function () { return 0; },
                         max: function () { return (elements.zoomRightHandle.position().left - 20); },
@@ -2539,34 +2534,34 @@ var glimpseTimeline = function (scope, settings) {
                 init = function () {
                     wireEvents();
                 };
-                 
+
             return {
                 init : init
             };
         }(),
         filter = function () {
-            var criteria = { 
-                    persentLeft : 0, 
-                    persentRightFromLeft : 100, 
+            var criteria = {
+                    persentLeft : 0,
+                    persentRightFromLeft : 100,
                     hiddenCategories : undefined
                 },
                 search = function (c) {
                     //Go through each event doing executing search
                     for (var i = 0; i < settings.events.length; i += 1) {
                         var event = settings.events[i],
-                            show = !(c.persentLeft > event.endPersent 
+                            show = !(c.persentLeft > event.endPersent
                                     || c.persentRightFromLeft < event.startPersent)
                                     && (c.hiddenCategories == undefined || c.hiddenCategories[event.category] == true);
 
                         //Timeline elements
                         elements.contentBandHolder.find('.glimpse-tl-band').eq(i).toggle(show);
                         elements.contentEventHolder.find('.glimpse-tl-band').eq(i).toggle(show);
-                        elements.contentDescHolder.find('.glimpse-tl-band').eq(i).toggle(show); 
+                        elements.contentDescHolder.find('.glimpse-tl-band').eq(i).toggle(show);
                         //Table elements
-                        elements.contentTableHolder.find('tbody').eq(i).toggle(show); 
+                        elements.contentTableHolder.find('tbody').eq(i).toggle(show);
                     }
 
-                    //Recolourize rows 
+                    //Recolourize rows
                     eventBuilder.colorRows();
 
                     //Fix height
@@ -2575,8 +2570,8 @@ var glimpseTimeline = function (scope, settings) {
                 zoom = function (persentLeft, persentRight) {
                     //Pull out current search
                     criteria.persentLeft = persentLeft;
-                    criteria.persentRightFromLeft = 100 - persentRight; 
-                    
+                    criteria.persentRightFromLeft = 100 - persentRight;
+
                     //Execute search
                     search(criteria);
                 },
@@ -2586,13 +2581,13 @@ var glimpseTimeline = function (scope, settings) {
                     for (var i = 0; i < hiddenCategories.length; i++)
                         hiddenCategoriesObj[hiddenCategories[i]] = true;
                     criteria.hiddenCategories = hiddenCategoriesObj;
-                    
+
                     //Execute search
                     search(criteria);
                 },
-                init = function () { 
+                init = function () {
                 };
-                 
+
             return {
                 init : init,
                 zoom : zoom,
@@ -2601,10 +2596,10 @@ var glimpseTimeline = function (scope, settings) {
         }(),
         info = function () {
             var showTip = function (item) {
-                    item.find('.glimpse-tl-event-overlay').stop(true, true).fadeIn(); 
+                    item.find('.glimpse-tl-event-overlay').stop(true, true).fadeIn();
                 },
                 hideTip = function (item) {
-                    item.find('.glimpse-tl-event-overlay').stop(true, true).fadeOut(); 
+                    item.find('.glimpse-tl-event-overlay').stop(true, true).fadeOut();
                 },
                 buildBubbleDetails = function(event, category) {
                     var details = '', detailKey;
@@ -2614,30 +2609,30 @@ var glimpseTimeline = function (scope, settings) {
                     return '<table><tr><th colspan="2"><div class="glimpse-tl-event-info-title"><div class="glimpse-tl-event" style="background-color:' + category.eventColor + ';border:1px solid ' + category.eventColorHighlight + '"></div>' + event.title + ' - Details</div></th></tr><tr><th>Duration</th><td>' + event.duration + 'ms (at ' + event.startPoint + 'ms' + ( + event.duration > 1 ? (' to ' + (event.startPoint + event.duration) + 'ms') : '' ) +')</td></tr>' + (event.duration != event.childlessDuration ? '<tr><th>w/out Children</th><td>' + event.childlessDuration + 'ms</td></tr>' : '') + (event.subText ? '<tr><th>Details</th><td>' + event.subText + '</td></tr>' : '' ) + details + '</table>';
                 },
                 updateBubble = function (item) {
-                    var eventOffset = item.offset(), 
+                    var eventOffset = item.offset(),
                         containerOffset = elements.eventInfo.parent().offset(),
                         eventSize = { height : item.height(), width : item.width() },
                         event = settings.events[item.attr('data-timelineItemIndex')],
                         category = settings.category[event.category],
                         content = buildBubbleDetails(event, category);
-                     
+
                     eventOffset.top -= containerOffset.top;
                     eventOffset.left -= containerOffset.left;
 
                     elements.eventInfo.html(content)
-                     
-                    var detailSize = { height : elements.eventInfo.height(), width : elements.eventInfo.width() }, 
+
+                    var detailSize = { height : elements.eventInfo.height(), width : elements.eventInfo.width() },
                         newDetailLeft = Math.min(Math.max((eventOffset.left + ((eventSize.width - detailSize.width) / 2)) - 15, 5), $(document).width() - detailSize.width - 30),
-                        newDetailTop = eventOffset.top - detailSize.height - 20; 
-                         
+                        newDetailTop = eventOffset.top - detailSize.height - 20;
+
                     elements.eventInfo.css('left', newDetailLeft + 'px');
-                    elements.eventInfo.css('top', newDetailTop + 'px');   
+                    elements.eventInfo.css('top', newDetailTop + 'px');
                 },
-                showBubble = function (item) {  
-                    elements.eventInfo.stop(true, true).clearQueue().delay(500).queue(function () { updateBubble(item); elements.eventInfo.show(); }); 
+                showBubble = function (item) {
+                    elements.eventInfo.stop(true, true).clearQueue().delay(500).queue(function () { updateBubble(item); elements.eventInfo.show(); });
                 },
-                hideBubble = function () { 
-                    elements.eventInfo.stop(true, true).clearQueue().delay(500).fadeOut(); 
+                hideBubble = function () {
+                    elements.eventInfo.stop(true, true).clearQueue().delay(500).fadeOut();
                 },
                 wireEvents = function () {
                     elements.eventInfo
@@ -2655,7 +2650,7 @@ var glimpseTimeline = function (scope, settings) {
                 init = function () {
                     wireEvents();
                 };
-                 
+
             return {
                 init : init
             };
@@ -2664,27 +2659,27 @@ var glimpseTimeline = function (scope, settings) {
             var columnResize = function (position) {
                     scope.find('.glimpse-tl-col-side').width(position + 'px');
                     scope.find('.glimpse-tl-col-main').css('left', position + 'px');
-                    
+
                     dividerBuilder.render(false);
                 },
-                containerResize = function (height) { 
+                containerResize = function (height) {
                     //Work out what heihgt we can work with
-                    var contentHeight = height - (elements.summaryRow.height() + scope.find('.glimpse-tl-row-spacer').height() + 2);  
+                    var contentHeight = height - (elements.summaryRow.height() + scope.find('.glimpse-tl-row-spacer').height() + 2);
                     elements.contentRow.height(contentHeight + 'px');
-                    
+
                     //Render Divers
                     dividerBuilder.render();
                 },
-                wireEvents = function () { 
+                wireEvents = function () {
                     elements.contentRow.find('.glimpse-tl-resizer').resizer({
                         max: function () { return 300; },
                         endDragCallback: function (position) { columnResize(position); }
                     });
                 },
                 init = function () {
-                    wireEvents(); 
+                    wireEvents();
                 };
-                 
+
             return {
                 containerResize : containerResize,
                 init : init
@@ -2692,46 +2687,46 @@ var glimpseTimeline = function (scope, settings) {
         }(),
         view = function () {
             var apply = function(showTimeline, isFirst) {
-                    elements.contentTableHolder.parent().toggle(!showTimeline); 
+                    elements.contentTableHolder.parent().toggle(!showTimeline);
                     elements.contentRow.find('.glimpse-tl-content-scroll:first-child').toggle(showTimeline);
-                    elements.contentRow.find('.glimpse-tl-resizer').toggle(showTimeline); 
-                    
-                    eventBuilder.colorRows(isFirst); 
-                    if (showTimeline) 
+                    elements.contentRow.find('.glimpse-tl-resizer').toggle(showTimeline);
+
+                    eventBuilder.colorRows(isFirst);
+                    if (showTimeline)
                         dividerBuilder.render();
                 },
                 toggle = function() {
                     var showTimeline = !($.glimpse.settings.timeView);
 
                     apply(showTimeline);
-                 
+
                     $.glimpse.settings.timeView = showTimeline;
                     $.glimpse.persistState();
                 },
                 start = function() {
                     apply($.glimpse.settings.timeView, true);
                 },
-                init = function() { 
+                init = function() {
                     elements.summaryRow.find('.glimpse-tl-band-title span').click(function () {
-                        toggle(); 
+                        toggle();
                     });
                 };
 
-            return { 
+            return {
                 toggle : toggle,
                 start : start,
                 init : init
             };
         } (),
-        init = function () { 
+        init = function () {
             //Set defaults
             settings.startTime = 0;
             settings.endTime = settings.duration;
-            
+
             //Render main layout
             builder.init();
 
-            //Find rendered elements 
+            //Find rendered elements
             findElements();
 
             //Wire events
@@ -2742,12 +2737,12 @@ var glimpseTimeline = function (scope, settings) {
             info.init();
             resize.init();
             view.init();
-             
-            //Render events 
-            eventBuilder.render();  
+
+            //Render events
+            eventBuilder.render();
         };
 
-    return {  
+    return {
         init : init,
         support : {
             containerResize : resize.containerResize
@@ -2792,12 +2787,12 @@ var glimpseTimelinePlugin = function () {
         defaults = {
             key : 'Timeline',
             hasRun : false
-        }, 
+        },
         timelineData,
         init = function () {
             $.glimpse.addProtocolListener(function(data) { adjustProtocol(data); });
             $.glimpse.addLayoutListener(function(tabStrip, panelHolder) { defaults.hasRun = false; });
-            
+
             $('.glimpse').live('glimpse.tabchanged', function(ev, type) { if (defaults.key == type && !defaults.hasRun) { adjustLayout(); } });
             $('.glimpse').live('glimpse.resize', function(ev, height) { if (timeline || defaults.hasRun) { timeline.support.containerResize(height); } defaults.height = height; });
         },
@@ -2807,7 +2802,7 @@ var glimpseTimelinePlugin = function () {
             //Clear out data
             data[defaults.key] = 'Generating timeline, please wait...';
         },
-        adjustLayout = function () {    
+        adjustLayout = function () {
             timeline = glimpseTimeline($('.glimpse-panelitem-' + defaults.key), timelineData);
             timeline.init();
             if (defaults.height) {
@@ -2816,11 +2811,11 @@ var glimpseTimelinePlugin = function () {
             defaults.hasRun = true;
         };
 
-    return { 
-        init : init 
+    return {
+        init : init
     };
 } ();
-    
+
 glimpseTimelinePlugin.init();
 
 //#endregion
@@ -2833,5 +2828,4 @@ glimpseTimelinePlugin.init();
     });
 
     //#endregion
-
-})(jQueryGlimpse); }   
+})(jQueryGlimpse); }
