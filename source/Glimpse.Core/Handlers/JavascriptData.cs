@@ -29,6 +29,8 @@ namespace Glimpse.Core.Handlers
         {
             var response = context.Response;
             var id = context.Request.QueryString["id"];
+            var isXhtmlContentType = context.Request.QueryString["xhtml"] != null
+                                     && context.Request.QueryString["xhtml"] == "true";
 
             var data = from request in MetadataStore.Requests
                    where request.RequestId.ToString().Equals(id)
@@ -38,8 +40,12 @@ namespace Glimpse.Core.Handlers
             if (requestResult != null)
             {
                 var path = context.GlimpseResourcePath("");
-                var javascript = string.Format(@"var glimpse = {0}, glimpsePath = '{1}';", requestResult.Json, path);
+                if (isXhtmlContentType)
+                {
+                    path = path.Replace("&", "&amp;");
+                }
 
+                var javascript = string.Format(@"var glimpse = {0}, glimpsePath = '{1}';", requestResult.Json, path);
 
                 response.Write(javascript);
             
