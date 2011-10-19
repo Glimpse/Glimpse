@@ -1036,35 +1036,7 @@ if (window.jQueryGlimpse) { (function ($) {
                 gs.switchContext($(this).attr('data-requestId'), $(this).attr('data-url'), $('.glimpse .glimpse-snapshot-type').attr('data-clientName'));
                 return false;
             });
-        },
-        adjustLayout: function () {
-            var g = $.glimpse, mainHolder = g.static.mainHolder(), metadata = g.static.data._metadata, request = (metadata && metadata.request), environments = (request && request.environmentUrls), correlation = (request && request.correlation);
-
-            var dropFunction = function(scope) {
-                $('.glimpse-drop', scope).mouseover(function() { $('.glimpse-drop-over', scope).css('left', $(this).position().left).fadeIn('fast'); }); 
-                $('.glimpse-drop-over', scope).mouseleave(function() { $('.glimpse-drop-over', scope).fadeOut(100); }); 
-            }; 
-
-            //Setup correlation
-            if (correlation) { 
-                var urlHolder = $('.glimpse-title .glimpse-url', mainHolder), currentUrl = urlHolder.text(), currentLeg, correlationList = '<div>' + correlation.title + '</div>';
-                for (var i = 0; i < correlation.legs.length; i++) {
-                    var leg = correlation.legs[i];
-                    if (leg.url == currentUrl) {
-                        currentLeg = leg;
-                        correlationList += currentLeg.url;
-                    }
-                    else
-                        correlationList += '<a title="Go to ' + leg.url + '" href="#" data-requestId="' + leg.glimpseId + '" data-url="' + leg.url + '">' + leg.url + '</a>'; 
-                    correlationList += ' <strong>(' + leg.method + ')</strong><br />';
-                }
-                
-                if (currentLeg) {
-                    urlHolder.html($('<span class="glimpse-drop">' + currentLeg.url + ' <strong>(' + currentLeg.method + ')</strong><span class="glimpse-drop-arrow-holder"><span class="glimpse-drop-arrow"></span></span></span><div class="glimpse-drop-over">' + correlationList + '<div class="loading"><span class="icon"></span><span>Loaded...</span></div></div>'));
-                    dropFunction(urlHolder);
-                }
-            }
-        },
+        }, 
         switchContext: function(glimpseRequestId, glimpseRequestUrl, glimpseClientName) {
             var gs = this, g = $.glimpse, loading = $('.glimpse-url .glimpse-drop-over .loading').fadeIn();
             

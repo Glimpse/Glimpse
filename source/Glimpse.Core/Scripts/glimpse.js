@@ -712,7 +712,7 @@ var glimpse = (function ($, scope) {
                         html = ''; 
         
                     if (urls) {
-                        var currentName = '&nbsp;', 
+                        var currentName = 'Enviro', 
                             currentDomain = util.getDomain(unescape(window.location.href));
         
                         for (targetName in urls) {
@@ -723,9 +723,29 @@ var glimpse = (function ($, scope) {
                             else
                                 html += ' - <a title="Go to - ' + urls[targetName] + '" href="' + urls[targetName] + '">' + targetName + '</a><br />';
                         }
+                        html = '<span class="glimpse-drop">' + currentName + '<span class="glimpse-drop-arrow-holder"><span class="glimpse-drop-arrow"></span></span></span><div class="glimpse-drop-over"><div>Switch Servers</div>' + html + '</div>';
+                    }
+                    return html;
+                },
+                buildCorrelation = function (request, requestMetadata) {
+                    var correlation = requestMetadata.request.correlation, 
+                        html = ''; 
         
-                        if (currentName) 
-                            html = '<span class="glimpse-drop">' + currentName + '<span class="glimpse-drop-arrow-holder"><span class="glimpse-drop-arrow"></span></span></span><div class="glimpse-drop-over"><div>Switch Servers</div>' + html + '</div>';
+                    if (correlation) { 
+                        var currentUrl = request.url, 
+                            currentLeg; 
+        
+                        html = '<div>' + correlation.title + '</div>'; 
+                        for (var i = 0; i < correlation.legs.length; i++) {
+                            var leg = correlation.legs[i];
+                            if (leg.url == currentUrl) {
+                                currentLeg = leg.url;
+                                html += currentLeg + ' - <strong>' + leg.method + '</strong> (Current)';
+                            }
+                            else
+                                html += '<a title="Go to ' + leg.url + '" href="#" data-requestId="' + leg.glimpseId + '" data-url="' + leg.url + '">' + leg.url + '</a> - <strong>' + leg.method + '</strong><br />';
+                        }
+                        html = '<span class="glimpse-drop">' + currentLeg + '<span class="glimpse-drop-arrow-holder"><span class="glimpse-drop-arrow"></span></span></span><div class="glimpse-drop-over">' + html + '<div class="loading"><span class="icon"></span><span>Loaded...</span></div></div>'; 
                     }
                     return html;
                 },
@@ -738,7 +758,7 @@ var glimpse = (function ($, scope) {
                     
                     elements.title.find('.glimpse-snapshot-type').text(request.clientName + type).append('&nbsp;');
                     elements.title.find('.glimpse-enviro').html(buildEnvironment(requestMetadata));
-                    elements.title.find('.glimpse-url').text(request.url);
+                    elements.title.find('.glimpse-url').html(buildCorrelation(request, requestMetadata));
         
                     dropFunction(elements.title);
                 }, 
