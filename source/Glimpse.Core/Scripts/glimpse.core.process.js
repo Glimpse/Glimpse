@@ -7,6 +7,7 @@
             elements.spacer = elements.scope.find('.glimpse-spacer');  
             elements.tabHolder = elements.scope.find('.glimpse-tabs ul');
             elements.panelHolder = elements.scope.find('.glimpse-panel-holder');
+            elements.title = elements.holder.find('.glimpse-title');
 
             pubsub.publish('data.elements.processed'); 
         },

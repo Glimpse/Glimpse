@@ -23,7 +23,8 @@ var glimpse = (function ($, scope) {
 /*(import:glimpse.controller.shell.js|2)*/,
 /*(import:glimpse.controller.sizer.js|2)*/,
 /*(import:glimpse.controller.tollbar.js|2)*/, 
-/*(import:glimpse.controller.metadata.js|2)*/, 
+/*(import:glimpse.controller.metadata.js|2)*/,
+/*(import:glimpse.controller.title.js|2)*/, 
 /*(import:glimpse.render.engine.js|2)*/, 
         init = function () {
             pubsub.publish('state.init'); 

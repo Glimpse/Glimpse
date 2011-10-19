@@ -44,50 +44,7 @@ null],["lit",/^[+-]?(?:0x[\da-f]+|(?:\.\d+|\d+(?:\.\d*)?)(?:e[+-]?\d+)?)/i],["pl
 
 var glimpse, glimpsePath;
 if (window.jQueryGlimpse) { (function ($) {
-
-    //#region $.glimpseProcessor
-
-    //TODO: Shift to $.glimpse.processor instead of $.glimpseProcessor
-
-    $.extend($.glimpseProcessor, {
-        layout: function (g, title) {
-            var that = this, static = g.static, tabStrip = static.tabStrip(), panelHolder = static.panelHolder(), data, metadata;
-            
-            //Build Dynamic HTML
-            for (var key in static.data) {
-                if ($('.glimpse-tabitem-' + key, tabStrip).length == 0) {
-                    data = static.data[key];
-                    metadata = ((metadata = static.data._metadata) && (metadata = metadata.plugins[key]) && (metadata = metadata.structure));
-
-                    that.addTab(tabStrip, data, key);
-                    that.addTabBody(panelHolder, that.build(data, 0, true, metadata, 1), key);
-                }
-            }
-             
-            //Sort Elemetns
-            $('li', tabStrip).sortElements();
-            $('.glimpse-panel', panelHolder).sortElements();
-
-            //Adjust render
-            that.applyPostRenderTransforms(panelHolder);
-
-            //Select tab
-            that.restoreTab(g);
-
-            $('.glimpse-title').html(title);
-        },  
-        buildHeading: function (url, clientName, type) {
-            var clean = function(data) {
-                return (data === undefined || data === null || data === "null") ? '' : data;
-            };
-            type = clean(type);
-            clientName = clean(clientName);
-            return '<span class="glimpse-snapshot-type" data-clientName="' + clientName + '">' + clientName + ((type.length > 0) ? ' (' + type + ')' : '') + '&nbsp;</span><span><span class="glimpse-enviro"></span><span class="glimpse-url">' + url + '</span></span>';
-        }
-    });
-
-    //#endregion
-
+ 
     //#region $.glimpse
 
     $.extend($.glimpse, {  
@@ -172,12 +129,7 @@ if (window.jQueryGlimpse) { (function ($) {
                 d = new Date(d);
             var padding = function(t) { return t < 10 ? '0' + t : t; };
             return d.getHours() + ':' + padding(d.getMinutes()) + ':' + padding(d.getSeconds()) + ' ' + d.getMilliseconds();
-        }, 
-        getDomain: function(url) {
-            if (url.indexOf('://') > -1)
-                url = url.split('://')[1];
-            return url.split('/')[0];
-        },
+        },  
         timeConvert:function(value) {
             if (value < 1000)
                 return value + 'ms';
@@ -857,64 +809,7 @@ if (window.jQueryGlimpse) { (function ($) {
     $.glimpseRemote.init();
 
     //#endregion
-
-    //#region $.glimpseMeta
-
-    $.glimpseMeta = {};
-    $.extend($.glimpseMeta, {
-        init: function () {
-            var gm = this;
-
-            //Wire up plugin 
-            $.glimpse.addProtocolListener(function (data) { gm.adjustProtocol(data); }, true);
-            $.glimpse.addLayoutListener(function (tabStrip, panelHolder) { gm.adjustLayout(tabStrip, panelHolder); }, true);
-
-            $('.glimpse').live('glimpse.request.refresh glimpse.request.change', function () { gm.globalResetCallback(); });
-        }, 
-        adjustLayout: function (tabStrip, panelHolder) {
-            var gm = this, g = $.glimpse, mainHolder = g.static.mainHolder();
-
-            //Warn tab
-            var warnTab = $('.glimpse-tabitem-' + gm.static.key.warn, tabStrip).hide();
-            if (warnTab.length > 0) {
-                $('.glimpse-meta-warning', mainHolder).css('display', 'inline-block').live('click', function () {
-                    warnTab.click();
-                    return false;
-                });
-            } 
-
-            //Help setup 
-            gm.changePager($('.glimpse-active', tabStrip));
-
-            //Metadata tab
-            var metaTab = $('.glimpse-tabitem-' + gm.static.key.meta, tabStrip).hide();
-        },
-        globalResetCallback: function () {
-            var gm = this;
-            for (var key in gm.static.key)
-                var test = $('.glimpse-tabitem-' + gm.static.key[key]).hide();
-        }, 
-        changePager: function (item) {
-            if (item.hasClass('glimpse-disabled')) return;
-
-            var key = item.data('sort');
-            $.glimpsePager.refresh(key);
-        },
-        static: {
-            key: {
-                warn: 'GlimpseWarnings',
-                info: 'GlimpseInformation',
-                help: 'GlimpseHelp',
-                meta: '_metadata'
-            }
-        }
-    });
-
-    //Wireup glimpse offical plugins
-    $.glimpseMeta.init();
-
-    //#endregion
-
+     
     //#region $.glimpsePager
 
     $.glimpsePager = {};
@@ -1148,26 +1043,8 @@ if (window.jQueryGlimpse) { (function ($) {
             var dropFunction = function(scope) {
                 $('.glimpse-drop', scope).mouseover(function() { $('.glimpse-drop-over', scope).css('left', $(this).position().left).fadeIn('fast'); }); 
                 $('.glimpse-drop-over', scope).mouseleave(function() { $('.glimpse-drop-over', scope).fadeOut(100); }); 
-            };
-            //Setup environements
-            if (environments) {
-                var currentEnvironment, environmentsList = '', domain = $.glimpse.util.getDomain(unescape(window.location.href));
-                for (name in environments) {
-                    if ($.glimpse.util.getDomain(environments[name]) === domain) {
-                        currentEnvironment = name;
-                        environmentsList += ' - ' + name + ' (Current)<br />';
-                    }
-                    else
-                        environmentsList += ' - <a title="Go to - ' + environments[name] + '" href="' + environments[name] + '">' + name + '</a><br />';
-                }
+            }; 
 
-                if (currentEnvironment) {
-                    var envHolder = $('.glimpse-title .glimpse-enviro', mainHolder);
-                    envHolder.prepend('<span class="glimpse-drop">' + currentEnvironment + '<span class="glimpse-drop-arrow-holder"><span class="glimpse-drop-arrow"></span></span></span><div class="glimpse-drop-over"><div>Switch Servers</div>' + environmentsList + '</div>');
-                    dropFunction(envHolder);
-                }
-            }
-               
             //Setup correlation
             if (correlation) { 
                 var urlHolder = $('.glimpse-title .glimpse-url', mainHolder), currentUrl = urlHolder.text(), currentLeg, correlationList = '<div>' + correlation.title + '</div>';

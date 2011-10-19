@@ -11,7 +11,7 @@
             elements.tabHolder.find('li:not(.glimpse-active, .glimpse-disabled)').live('mouseover mouseout', function (e) {
                 var pluginData = $(this);
                 if (e.type == 'mouseover') { pluginData.addClass('glimpse-hover'); } else { pluginData.removeClass('glimpse-hover'); }
-            });
+            }); 
         },
 
 

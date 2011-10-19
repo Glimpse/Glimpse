@@ -109,6 +109,7 @@
     <Compile Include="Plumbing\GlimpseSerializer.cs" />
     <Compile Include="Plumbing\InProcStackMetadataStore.cs" />
     <Content Include="Scripts\glimpse.controller.metadata.js" />
+    <Content Include="Scripts\glimpse.controller.title.js" />
     <Content Include="Scripts\glimpse.core.process.js" />
     <Content Include="Scripts\glimpse.controller.render.js" />
     <Content Include="Scripts\glimpse.controller.sizer.js" />

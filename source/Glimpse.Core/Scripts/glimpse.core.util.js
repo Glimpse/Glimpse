@@ -146,6 +146,11 @@
         },
         resizer : function (scope, settings) {
             resizer.init(scope, settings);
+        }, 
+        getDomain: function(url) {
+            if (url.indexOf('://') > -1)
+                url = url.split('://')[1];
+            return url.split('/')[0];
         }
     }; 
 } ()
