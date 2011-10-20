@@ -1,7 +1,11 @@
 ﻿sizerController = function () {
     var //Support    
         wireListeners = function () {
-            pubsub.subscribe('state.render', setup); 
+            pubsub.subscribe('state.render', setup);  
+            pubsub.subscribe('data.elements.processed', wireDomListeners); 
+        },
+        wireDomListeners = function() {
+            elements.title.find('.glimpse-url a').live('click', function() { switchContext($(this).attr('data-requestId')); return false; });
         }, 
         dropFunction = function (scope) { 
             scope.find('.glimpse-drop').mouseenter(function() { 
@@ -10,6 +14,17 @@
             scope.find('.glimpse-drop-over').mouseleave(function() {
                 $(this).fadeOut(100);  
             }); 
+        },
+        switchContextFunc = {
+            start : function () {
+                elements.title.find('.glimpse-url .loading').fadeIn();
+            }, 
+            complete : function () {
+                elements.title.find('.glimpse-url .loading').fadeOut();
+            }
+        },
+        switchContext = function (requestId) {
+            data.retrieve(requestId, switchContextFunc);
         },
         buildEnvironment = function (requestMetadata) {
             var urls = requestMetadata.request.environmentUrls, 

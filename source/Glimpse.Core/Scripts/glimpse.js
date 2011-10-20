@@ -314,6 +314,30 @@ var glimpse = (function ($, scope) {
                     inner = data;
                     pubsub.publish('action.data.update');
                 },
+                retrieve = function(requestId, callback) { 
+                    if (callback.start)
+                        callback.start();
+        
+                    $.ajax({
+                        url : glimpsePath + 'History',
+                        type : 'GET',
+                        data : { 'ClientRequestID': requestId },
+                        contentType : 'application/json',
+                        success : function (data, textStatus, jqXHR) {   
+                            if (callback.success) 
+                                callback.success(data, current, textStatus, jqXHR);  
+                            update(data);
+                        },
+                        error : function (jqXHR, textStatus, errorThrown) { 
+                            if (callback.error) 
+                                callback.error(jqXHR, textStatus, errorThrown); 
+                        },
+                        complete : function (jqXHR, textStatus) {
+                            if (callback.complete) 
+                                callback.complete(jqXHR, textStatus); 
+                        }
+                    });
+                },
                 current = function () {
                     return inner;
                 },
@@ -329,7 +353,8 @@ var glimpse = (function ($, scope) {
             return {
                 current : current,
                 currentMetadata : currentMetadata,
-                update : update
+                update : update,
+                retrieve : retrieve
             };
         }()),
         process = function () {
@@ -697,7 +722,11 @@ var glimpse = (function ($, scope) {
         sizerController = function () {
             var //Support    
                 wireListeners = function () {
-                    pubsub.subscribe('state.render', setup); 
+                    pubsub.subscribe('state.render', setup);  
+                    pubsub.subscribe('data.elements.processed', wireDomListeners); 
+                },
+                wireDomListeners = function() {
+                    elements.title.find('.glimpse-url a').live('click', function() { switchContext($(this).attr('data-requestId')); return false; });
                 }, 
                 dropFunction = function (scope) { 
                     scope.find('.glimpse-drop').mouseenter(function() { 
@@ -706,6 +735,17 @@ var glimpse = (function ($, scope) {
                     scope.find('.glimpse-drop-over').mouseleave(function() {
                         $(this).fadeOut(100);  
                     }); 
+                },
+                switchContextFunc = {
+                    start : function () {
+                        elements.title.find('.glimpse-url .loading').fadeIn();
+                    }, 
+                    complete : function () {
+                        elements.title.find('.glimpse-url .loading').fadeOut();
+                    }
+                },
+                switchContext = function (requestId) {
+                    data.retrieve(requestId, switchContextFunc);
                 },
                 buildEnvironment = function (requestMetadata) {
                     var urls = requestMetadata.request.environmentUrls, 

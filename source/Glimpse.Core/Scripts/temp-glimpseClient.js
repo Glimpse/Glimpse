@@ -1019,54 +1019,6 @@ if (window.jQueryGlimpse) { (function ($) {
 
     //#endregion
 
-    //#region $.glimpseSwitcher
-
-    $.glimpseSwitcher = {}; 
-    $.extend($.glimpseSwitcher, {
-        init: function () {
-            var gs = this;
-
-            //Wire up plugin  
-            $.glimpse.addLayoutListener(function(tabStrip, panelHolder) { gs.adjustLayout(); }, true);
-            $('.glimpse').live('glimpse.request.change', function (ev, type) { if (type != 'ajax') { gs.adjustLayout(); } });
-            $('.glimpse').live('glimpse.request.refresh', function (ev, type) { gs.adjustLayout(); });
-            
-            //Wireup click listeners
-            $('.glimpse-url .glimpse-drop-over a').live('click', function() {
-                gs.switchContext($(this).attr('data-requestId'), $(this).attr('data-url'), $('.glimpse .glimpse-snapshot-type').attr('data-clientName'));
-                return false;
-            });
-        }, 
-        switchContext: function(glimpseRequestId, glimpseRequestUrl, glimpseClientName) {
-            var gs = this, g = $.glimpse, loading = $('.glimpse-url .glimpse-drop-over .loading').fadeIn();
-            
-            $.ajax({
-                url: gs.defaults.historyLink,
-                type: 'GET',
-                data: { 'ClientRequestID': glimpseRequestId },
-                contentType: 'application/json',
-                success: function (result) {
-                    var resultData = eval('(' + result.Data[glimpseRequestId].Data + ')'); 
-                    resultData._metadata.request.correlation = g.static.data._metadata.request.correlation;
-
-                    loading.fadeOut();
-
-                    $.glimpse.refresh(resultData, $.glimpseProcessor.buildHeading(glimpseRequestUrl, glimpseClientName, gs.defaults.key));
-                    $('.glimpse').trigger('glimpse.request.change', ['correlation']);
-                }
-            });
-        },
-        defaults: {
-            key: 'PRG',
-            historyLink: glimpsePath + 'History'
-        }
-    });
-
-    //Wireup glimpse offical plugins
-    $.glimpseSwitcher.init();
-
-    //#endregion
-
     //#region $.glimpseUpdateNotification
 
     $.glimpseUpdateNotification = {};
