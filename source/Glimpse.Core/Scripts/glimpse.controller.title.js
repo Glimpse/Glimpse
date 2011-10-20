@@ -16,12 +16,8 @@
             }); 
         },
         switchContextFunc = {
-            start : function () {
-                elements.title.find('.glimpse-url .loading').fadeIn();
-            }, 
-            complete : function () {
-                elements.title.find('.glimpse-url .loading').fadeOut();
-            }
+            start : function () { elements.title.find('.glimpse-url .loading').fadeIn(); }, 
+            complete : function () { elements.title.find('.glimpse-url .loading').fadeOut(); }
         },
         switchContext = function (requestId) {
             data.retrieve(requestId, switchContextFunc);

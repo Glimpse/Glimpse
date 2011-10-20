@@ -316,7 +316,7 @@ var glimpse = (function ($, scope) {
                 },
                 retrieve = function(requestId, callback) { 
                     if (callback.start)
-                        callback.start();
+                        callback.start(requestId);
         
                     $.ajax({
                         url : glimpsePath + 'History',
@@ -325,16 +325,32 @@ var glimpse = (function ($, scope) {
                         contentType : 'application/json',
                         success : function (data, textStatus, jqXHR) {   
                             if (callback.success) 
-                                callback.success(data, current, textStatus, jqXHR);  
+                                callback.success(requestId, data, current, textStatus, jqXHR);  
                             update(data);
-                        },
-                        error : function (jqXHR, textStatus, errorThrown) { 
-                            if (callback.error) 
-                                callback.error(jqXHR, textStatus, errorThrown); 
-                        },
+                        }, 
                         complete : function (jqXHR, textStatus) {
                             if (callback.complete) 
-                                callback.complete(jqXHR, textStatus); 
+                                callback.complete(requestId, jqXHR, textStatus); 
+                        }
+                    });
+                },
+                retrievePlugin = function(key, callback) { 
+                    if (callback.start)
+                        callback.start(key);
+        
+                    $.ajax({
+                        url : glimpsePath + 'History',
+                        type : 'GET',
+                        data : { 'ClientRequestID' : inner.requestId, 'PluginKey' : key },
+                        contentType : 'application/json',
+                        success : function (data, textStatus, jqXHR) { 
+                            inner.data[key].data = data;  
+                            if (callback.success) 
+                                callback.success(key, data, current, textStatus, jqXHR);
+                        }, 
+                        complete : function (jqXHR, textStatus) {
+                            if (callback.complete) 
+                                callback.complete(key, jqXHR, textStatus); 
                         }
                     });
                 },
@@ -354,7 +370,8 @@ var glimpse = (function ($, scope) {
                 current : current,
                 currentMetadata : currentMetadata,
                 update : update,
-                retrieve : retrieve
+                retrieve : retrieve,
+                retrievePlugin : retrievePlugin
             };
         }()),
         process = function () {
@@ -367,6 +384,9 @@ var glimpse = (function ($, scope) {
                     elements.tabHolder = elements.scope.find('.glimpse-tabs ul');
                     elements.panelHolder = elements.scope.find('.glimpse-panel-holder');
                     elements.title = elements.holder.find('.glimpse-title');
+                    elements.findPanel = function(key) {
+                        return elements.panelHolder.find('.glimpse-panel[data-glimpseKey="' + key + '"]');
+                    };
         
                     pubsub.publish('data.elements.processed'); 
                 },
@@ -415,7 +435,14 @@ var glimpse = (function ($, scope) {
                     }); 
                 },
         
+         
+                selectedTab = function (key) {
+                    var tab = elements.tabHolder.find('.glimpse-tab[data-glimpseKey="' + key + '"]');
         
+                    //Switch style states
+                    elements.tabHolder.find('.glimpse-active, .glimpse-hover').removeClass('glimpse-active').removeClass('glimpse-hover'); 
+                    tab.addClass('glimpse-active');
+                },
                 renderTabs = function (pluginDataSet) {
                     elements.tabHolder.append(constructTabs(pluginDataSet)); 
                     util.sortElements(elements.tabHolder, elements.tabHolder.find('li'));
@@ -431,6 +458,17 @@ var glimpse = (function ($, scope) {
                     return html;
                 },
                  
+                selectedPanel = function (key) {
+                    var panel = elements.panelHolder.find('.glimpse-panel[data-glimpseKey="' + key + '"]');  
+                    if (panel.length == 0) {
+                        panel = renderPanel(key, data.current().data[key], data.currentMetadata().plugins[key]);   
+                        pubsub.publish('action.plugin.created', key); 
+                    }
+                    
+                    //Switch style states
+                    elements.panelHolder.find('.glimpse-active').removeClass('glimpse-active'); 
+                    panel.addClass('glimpse-active');
+                },
                 renderPanel = function (key, pluginData, pluginMetadata) { 
                     var start = new Date().getTime();
                     
@@ -438,14 +476,16 @@ var glimpse = (function ($, scope) {
                         html = '<div class="glimpse-panel glimpse-panelitem-' + key + '" data-glimpseKey="' + key + '"><div class="glimpse-panel-message">Loading data, please wait...</div></div>',
                         panel = $(html).appendTo(elements.panelHolder);
         
-                    renderEngine.insert(panel, pluginData.data, metadata); 
+                    if (!pluginData.isLazy && pluginData.data)
+                        renderEngine.insert(panel, pluginData.data, metadata);
+                    else
+                        pubsub.publishAsync('action.plugin.lazyload', key);
         
                     var end = new Date().getTime(); 
                     console.log('Total render time for "' + key + '": ' + (end - start));
         
                     return panel;
                 },
-        
                 
                 selectedItem = function (key) {
                     var oldItem = elements.tabHolder.find('.glimpse-active');
@@ -459,24 +499,6 @@ var glimpse = (function ($, scope) {
                     pubsub.publish('state.persist');
                      
                     pubsub.publish('action.plugin.active', key); 
-                }, 
-                selectedTab = function (key) {
-                    var tab = elements.tabHolder.find('.glimpse-tab[data-glimpseKey="' + key + '"]');
-        
-                    //Switch style states
-                    elements.tabHolder.find('.glimpse-active, .glimpse-hover').removeClass('glimpse-active').removeClass('glimpse-hover'); 
-                    tab.addClass('glimpse-active');
-                },
-                selectedPanel = function (key) {
-                    var panel = elements.panelHolder.find('.glimpse-panel[data-glimpseKey="' + key + '"]');  
-                    if (panel.length == 0) {
-                        panel = renderPanel(key, data.current().data[key], data.currentMetadata().plugins[key]);   
-                        pubsub.publish('action.plugin.created', key); 
-                    }
-                    
-                    //Switch style states
-                    elements.panelHolder.find('.glimpse-active').removeClass('glimpse-active'); 
-                    panel.addClass('glimpse-active');
                 },
         
         
@@ -737,12 +759,8 @@ var glimpse = (function ($, scope) {
                     }); 
                 },
                 switchContextFunc = {
-                    start : function () {
-                        elements.title.find('.glimpse-url .loading').fadeIn();
-                    }, 
-                    complete : function () {
-                        elements.title.find('.glimpse-url .loading').fadeOut();
-                    }
+                    start : function () { elements.title.find('.glimpse-url .loading').fadeIn(); }, 
+                    complete : function () { elements.title.find('.glimpse-url .loading').fadeOut(); }
                 },
                 switchContext = function (requestId) {
                     data.retrieve(requestId, switchContextFunc);
@@ -801,6 +819,25 @@ var glimpse = (function ($, scope) {
                     elements.title.find('.glimpse-url').html(buildCorrelation(request, requestMetadata));
         
                     dropFunction(elements.title);
+                }, 
+                init = function () {
+                    wireListeners();
+                };
+            
+            init(); 
+        } (), 
+        lazyloaderController = function () {
+            var //Support  
+                wireListeners = function() {
+                    pubsub.subscribe('action.plugin.lazyload', function(subject, payload) { fetch(payload); }); 
+                },  
+                
+                //Main
+                fetchFunc = {
+                    complete : function (key) { pubsub.publishAsync('action.tab.select', key); }
+                },
+                fetch = function (key) {
+                    data.retrievePlugin(key, fetchFunc); 
                 }, 
                 init = function () {
                     wireListeners();

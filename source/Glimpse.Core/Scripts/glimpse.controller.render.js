@@ -14,7 +14,14 @@
             }); 
         },
 
+ 
+        selectedTab = function (key) {
+            var tab = elements.tabHolder.find('.glimpse-tab[data-glimpseKey="' + key + '"]');
 
+            //Switch style states
+            elements.tabHolder.find('.glimpse-active, .glimpse-hover').removeClass('glimpse-active').removeClass('glimpse-hover'); 
+            tab.addClass('glimpse-active');
+        },
         renderTabs = function (pluginDataSet) {
             elements.tabHolder.append(constructTabs(pluginDataSet)); 
             util.sortElements(elements.tabHolder, elements.tabHolder.find('li'));
@@ -30,6 +37,17 @@
             return html;
         },
          
+        selectedPanel = function (key) {
+            var panel = elements.panelHolder.find('.glimpse-panel[data-glimpseKey="' + key + '"]');  
+            if (panel.length == 0) {
+                panel = renderPanel(key, data.current().data[key], data.currentMetadata().plugins[key]);   
+                pubsub.publish('action.plugin.created', key); 
+            }
+            
+            //Switch style states
+            elements.panelHolder.find('.glimpse-active').removeClass('glimpse-active'); 
+            panel.addClass('glimpse-active');
+        },
         renderPanel = function (key, pluginData, pluginMetadata) { 
             var start = new Date().getTime();
             
@@ -37,14 +55,16 @@
                 html = '<div class="glimpse-panel glimpse-panelitem-' + key + '" data-glimpseKey="' + key + '"><div class="glimpse-panel-message">Loading data, please wait...</div></div>',
                 panel = $(html).appendTo(elements.panelHolder);
 
-            renderEngine.insert(panel, pluginData.data, metadata); 
+            if (!pluginData.isLazy && pluginData.data)
+                renderEngine.insert(panel, pluginData.data, metadata);
+            else
+                pubsub.publishAsync('action.plugin.lazyload', key);
 
             var end = new Date().getTime(); 
             console.log('Total render time for "' + key + '": ' + (end - start));
 
             return panel;
         },
-
         
         selectedItem = function (key) {
             var oldItem = elements.tabHolder.find('.glimpse-active');
@@ -58,24 +78,6 @@
             pubsub.publish('state.persist');
              
             pubsub.publish('action.plugin.active', key); 
-        }, 
-        selectedTab = function (key) {
-            var tab = elements.tabHolder.find('.glimpse-tab[data-glimpseKey="' + key + '"]');
-
-            //Switch style states
-            elements.tabHolder.find('.glimpse-active, .glimpse-hover').removeClass('glimpse-active').removeClass('glimpse-hover'); 
-            tab.addClass('glimpse-active');
-        },
-        selectedPanel = function (key) {
-            var panel = elements.panelHolder.find('.glimpse-panel[data-glimpseKey="' + key + '"]');  
-            if (panel.length == 0) {
-                panel = renderPanel(key, data.current().data[key], data.currentMetadata().plugins[key]);   
-                pubsub.publish('action.plugin.created', key); 
-            }
-            
-            //Switch style states
-            elements.panelHolder.find('.glimpse-active').removeClass('glimpse-active'); 
-            panel.addClass('glimpse-active');
         },
 
 

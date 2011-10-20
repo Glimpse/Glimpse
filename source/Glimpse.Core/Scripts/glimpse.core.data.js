@@ -9,7 +9,7 @@
         },
         retrieve = function(requestId, callback) { 
             if (callback.start)
-                callback.start();
+                callback.start(requestId);
 
             $.ajax({
                 url : glimpsePath + 'History',
@@ -18,16 +18,32 @@
                 contentType : 'application/json',
                 success : function (data, textStatus, jqXHR) {   
                     if (callback.success) 
-                        callback.success(data, current, textStatus, jqXHR);  
+                        callback.success(requestId, data, current, textStatus, jqXHR);  
                     update(data);
-                },
-                error : function (jqXHR, textStatus, errorThrown) { 
-                    if (callback.error) 
-                        callback.error(jqXHR, textStatus, errorThrown); 
-                },
+                }, 
                 complete : function (jqXHR, textStatus) {
                     if (callback.complete) 
-                        callback.complete(jqXHR, textStatus); 
+                        callback.complete(requestId, jqXHR, textStatus); 
+                }
+            });
+        },
+        retrievePlugin = function(key, callback) { 
+            if (callback.start)
+                callback.start(key);
+
+            $.ajax({
+                url : glimpsePath + 'History',
+                type : 'GET',
+                data : { 'ClientRequestID' : inner.requestId, 'PluginKey' : key },
+                contentType : 'application/json',
+                success : function (data, textStatus, jqXHR) { 
+                    inner.data[key].data = data;  
+                    if (callback.success) 
+                        callback.success(key, data, current, textStatus, jqXHR);
+                }, 
+                complete : function (jqXHR, textStatus) {
+                    if (callback.complete) 
+                        callback.complete(key, jqXHR, textStatus); 
                 }
             });
         },
@@ -47,6 +63,7 @@
         current : current,
         currentMetadata : currentMetadata,
         update : update,
-        retrieve : retrieve
+        retrieve : retrieve,
+        retrievePlugin : retrievePlugin
     };
 }())

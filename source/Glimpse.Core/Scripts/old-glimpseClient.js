@@ -45,82 +45,6 @@ null],["lit",/^[+-]?(?:0x[\da-f]+|(?:\.\d+|\d+(?:\.\d*)?)(?:e[+-]?\d+)?)/i],["pl
 var glimpse, glimpsePath;
 if (window.jQueryGlimpse) { (function ($) {
  
-    //#region $.glimpse
-
-    $.extend($.glimpse, {  
-        _adjustLayout: function (g) {
-            $('.glimpse-spacer').height(g.settings.height);
-            $('.glimpse-holder .glimpse-panel').height(g.settings.height - 54);
-            $('.glimpse').trigger('glimpse.resize', g.settings.height - 54);
-        },  
-        refresh: function (data, title) {
-            if (!data) return;
-
-            var g = $.glimpse, static = g.static;
-            static.data = data;
-
-            g._executeProtocolListeners(g, false);
-
-            $.glimpseProcessor.clearLayout(g);
-            $.glimpseProcessor.layout(g, title);
-            g._adjustLayout(g);
-
-            g._executeLayoutListeners(g, false);
-        },
-        reset: function () {
-            var g = this, static = g.static;
-
-            this.refresh(glimpse, $.glimpseProcessor.buildHeading(static.url, static.clientName, ''));
-            $('.glimpse').trigger('glimpse.request.refresh');
-        },
-        init: function (data) {
-            var g = $.glimpse, static = g.static;
-            g.clientName = $.glimpse.util.cookie('glimpseClientName');
-            
-            static.isPopup = window.location.href.indexOf(static.popupUrl) > -1;
-
-            g.static.data = data;
-            g.settings = $.extend(g.settings, $.glimpse.util.cookie('glimpseOptions'));
-
-            g._executeProtocolListeners(g, true);
-
-            $('body').append(static.html.plugin);
-
-            g._wireEvents(g); 
-
-            $.glimpseProcessor.layout(g, $.glimpseProcessor.buildHeading(static.url, static.clientName, ''));
-
-            g._executeLayoutListeners(g, true);  
-        },
-        plugins: {
-            protocolListeners: [],
-            layoutListeners: []
-        },
-        settings: {
-            open: false,
-            height: 300,
-            activeTab: 'Routes',
-            popupOn: false,
-            firstPopup: true
-        },
-        static: {
-            data: null,
-            url: window.location.href.replace(window.location.protocol + '//' + window.location.host, ''),
-            clientName: '',
-            html: { plugin: '<div class="glimpse-open"><div class="glimpse-icon"></div></div><div class="glimpse-holder glimpse"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon" title="About Glimpse?"></div><div class="glimpse-title"></div><div class="glimpse-buttons"><a href="#" class="glimpse-meta-warning glimpse-button" title="Glimpse has some warnings!"></a><a href="http://www.nuget.org/List/Packages/Glimpse" class="glimpse-meta-update glimpse-button" title="New version of Glimpse available" target="_blank"></a><a href="#" class="glimpse-meta-help glimpse-button"></a><a href="#" title="Close/Minimize" class="glimpse-close glimpse-button"></a><a href="#" title="Pop Out" class="glimpse-popout glimpse-button"></a><a href="#" title="Shutdown/Terminate" class="glimpse-terminate glimpse-button"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>' },
-            tabStrip: function () { return $('.glimpse-tabs ul'); },
-            panelHolder: function () { return $('.glimpse-panel-holder'); },
-            mainHolder: function () { return $('.glimpse-holder'); },
-            isPopup: false,
-            popupUrl: glimpsePath + 'popup',
-            popup: null
-        },
-        popup: {},
-        util: {}
-    });
-
-    //#endregion
-
     //#region $.glimpse.util
 
     $.extend($.glimpse.util, {
@@ -1056,39 +980,6 @@ if (window.jQueryGlimpse) { (function ($) {
     $.glimpseUpdateNotification.init();
 
     //#endregion 
-
-//#region $.glimpseLazyLoad
-
-    $.glimpseLazyLoad = {};
-    $.extend($.glimpseLazyLoad, {
-        init: function () { 
-            var gll = this;
-
-            //Wire up plugin   
-            $('.glimpse').live('glimpse.tabchanged', function(ev, type) { gll.loadResource(type); });
-        },
-        loadResource: function (key) {
-            var g = $.glimpse, static = g.static, mainHolder = static.mainHolder(), panel = mainHolder.find('.glimpse-panelitem-' + key), subPanel = panel.find('.glimpse-panel-message[data-glimpse-lazy-url]');
-            
-            if (subPanel.length > 0) { 
-                var url = subPanel.attr('data-glimpse-lazy-url');
-                subPanel.attr('data-glimpse-lazy-url', '');
-
-                $.ajax({ 
-                    url: url,
-                    success: function (data) { 
-                        var metadata = ((metadata = static.data._metadata) && (metadata = metadata.plugins[key]) && (metadata = metadata.structure)); 
-                        panel.html($.glimpseProcessor.build(data, 0, true, metadata, 1));
-                    }
-                });
-            }
-        }
-    });
-
-    //Wireup glimpse offical plugins
-    $.glimpseLazyLoad.init();
-
-//#endregion
 
 //#region glimpseTimeline
 
