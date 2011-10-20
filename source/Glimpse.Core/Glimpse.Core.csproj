@@ -121,7 +121,6 @@
     </Content>
     <Content Include="Scripts\glimpse.min.js" />
     <Content Include="Scripts\glimpse.render.engine.master.js" />
-    <None Include="Scripts\History" />
     <Compile Include="Validator\ContentTypeValidator.cs" />
     <Compile Include="Validator\GlimpseModeValidator.cs" />
     <Compile Include="Validator\GlimpseRequestValidator.cs" />
@@ -176,7 +175,7 @@
     <Content Include="Scripts\glimpse.view.metadata.html" />
     <Content Include="Scripts\jquery-1.6.3.min.js" />
     <Content Include="Scripts\sprite.png" />
-    <Content Include="Scripts\temp-glimpseClient.js" />
+    <Content Include="Scripts\old-glimpseClient.js" />
     <Content Include="Scripts\test-a.html" />
     <Content Include="Scripts\test-popup.html" />
     <Content Include="Scripts\test.html" />

@@ -44,7 +44,7 @@
         },
         buildCorrelation = function (request, requestMetadata) {
             var correlation = requestMetadata.request.correlation, 
-                html = ''; 
+                html = request.url; 
 
             if (correlation) { 
                 var currentUrl = request.url, 
