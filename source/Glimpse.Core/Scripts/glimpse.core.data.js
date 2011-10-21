@@ -27,26 +27,6 @@
                 }
             });
         },
-        retrievePlugin = function(key, callback) { 
-            if (callback.start)
-                callback.start(key);
-
-            $.ajax({
-                url : glimpsePath + 'History',
-                type : 'GET',
-                data : { 'ClientRequestID' : inner.requestId, 'PluginKey' : key },
-                contentType : 'application/json',
-                success : function (data, textStatus, jqXHR) { 
-                    inner.data[key].data = data;  
-                    if (callback.success) 
-                        callback.success(key, data, current, textStatus, jqXHR);
-                }, 
-                complete : function (jqXHR, textStatus) {
-                    if (callback.complete) 
-                        callback.complete(key, jqXHR, textStatus); 
-                }
-            });
-        },
         current = function () {
             return inner;
         },
