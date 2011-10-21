@@ -334,26 +334,6 @@ var glimpse = (function ($, scope) {
                         }
                     });
                 },
-                retrievePlugin = function(key, callback) { 
-                    if (callback.start)
-                        callback.start(key);
-        
-                    $.ajax({
-                        url : glimpsePath + 'History',
-                        type : 'GET',
-                        data : { 'ClientRequestID' : inner.requestId, 'PluginKey' : key },
-                        contentType : 'application/json',
-                        success : function (data, textStatus, jqXHR) { 
-                            inner.data[key].data = data;  
-                            if (callback.success) 
-                                callback.success(key, data, current, textStatus, jqXHR);
-                        }, 
-                        complete : function (jqXHR, textStatus) {
-                            if (callback.complete) 
-                                callback.complete(key, jqXHR, textStatus); 
-                        }
-                    });
-                },
                 current = function () {
                     return inner;
                 },
@@ -370,8 +350,7 @@ var glimpse = (function ($, scope) {
                 current : current,
                 currentMetadata : currentMetadata,
                 update : update,
-                retrieve : retrieve,
-                retrievePlugin : retrievePlugin
+                retrieve : retrieve
             };
         }()),
         process = function () {
@@ -830,14 +809,25 @@ var glimpse = (function ($, scope) {
             var //Support  
                 wireListeners = function() {
                     pubsub.subscribe('action.plugin.lazyload', function(subject, payload) { fetch(payload); }); 
-                },  
-                
-                //Main
-                fetchFunc = {
-                    complete : function (key) { pubsub.publishAsync('action.tab.select', key); }
+                },   
+                retrievePlugin = function(key, callback) {  
+                    $.ajax({
+                        url : glimpsePath + 'History',
+                        type : 'GET',
+                        data : { 'ClientRequestID' : inner.requestId, 'PluginKey' : key },
+                        contentType : 'application/json',
+                        success : function (result, textStatus, jqXHR) { 
+                            var currentData = data.current();
+                            currentData.data[key].data = data;  
+        
+                            pubsub.publishAsync('action.tab.select', key);
+                        }
+                    });
                 },
+                
+                //Main 
                 fetch = function (key) {
-                    data.retrievePlugin(key, fetchFunc); 
+                    retrievePlugin(key); 
                 }, 
                 init = function () {
                     wireListeners();
@@ -845,6 +835,40 @@ var glimpse = (function ($, scope) {
             
             init(); 
         } (), 
+        notificationrController = function () {
+            var //Support  
+                wireListeners = function() {
+                    pubsub.subscribe('state.final', check); 
+                },   
+        
+                //Main 
+                check = function () {
+                    var metadata = data.currentMetadata();
+                        newestVersion = util.cookie('glimpseLatestVersion'),
+                        currentVersion = '';
+        
+                    if (newestVersion) {
+                        currentVersion = metadata.request.runningVersion;
+                        if (currentVersion < newestVersion)
+                            elements.holder.find('.glimpse-meta-update').attr('title', 'Update: Glimpse ' + parseFloat(newestVersion).toFixed(2) + ' now available on nuget.org').css('display', 'inline-block');
+                        return;
+                    }
+        
+                    util.cookie('glimpseLatestVersion', -1, 1); 
+                    $.ajax({
+                        dataType: 'jsonp',
+                        url: 'http://getglimpse.com/Glimpse/CurrentVersion/',
+                        success: function (data) {
+                            util.cookie('glimpseLatestVersion', data, 1);
+                        }
+                    }); 
+                }, 
+                init = function () {
+                    wireListeners();
+                };
+            
+            init(); 
+        } (),
         renderEngine = function () {
             var //Support 
                 registeredEngnies = {},

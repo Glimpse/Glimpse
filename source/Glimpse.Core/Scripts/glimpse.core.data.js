@@ -43,7 +43,6 @@
         current : current,
         currentMetadata : currentMetadata,
         update : update,
-        retrieve : retrieve,
-        retrievePlugin : retrievePlugin
+        retrieve : retrieve
     };
 }())

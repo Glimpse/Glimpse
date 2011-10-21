@@ -26,6 +26,7 @@ var glimpse = (function ($, scope) {
 /*(import:glimpse.controller.metadata.js|2)*/,
 /*(import:glimpse.controller.title.js|2)*/, 
 /*(import:glimpse.controller.lazyloader.js|2)*/, 
+/*(import:glimpse.controller.notification.js|2)*/,
 /*(import:glimpse.render.engine.js|2)*/, 
         init = function () {
             pubsub.publish('state.init'); 

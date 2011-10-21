@@ -943,44 +943,6 @@ if (window.jQueryGlimpse) { (function ($) {
 
     //#endregion
 
-    //#region $.glimpseUpdateNotification
-
-    $.glimpseUpdateNotification = {};
-    $.extend($.glimpseUpdateNotification, {
-        init: function () {
-            var gu = this;
-
-            //Wire up plugin  
-            $.glimpse.addLayoutListener(function (tabStrip, panelHolder) { gu.adjustLayout(tabStrip, panelHolder); }, true);
-        },
-        adjustLayout: function (tabStrip, panelHolder) {
-            var g = $.glimpse, mainHolder = g.static.mainHolder(), newestVersion = $.glimpse.util.cookie('glimpseLatestVersion'), currentVersion = '';
-
-            if (newestVersion) {
-                currentVersion = ((currentVersion = g.static.data._metadata) && (currentVersion = currentVersion.request) && (currentVersion = currentVersion.runningVersion));
-                if (currentVersion && currentVersion < newestVersion)
-                    $('.glimpse-meta-update', mainHolder).attr('title', 'Update: Glimpse ' + parseFloat(newestVersion).toFixed(2) + ' now available on nuget.org').css('display', 'inline-block');
-
-                return;
-            }
-
-            $.glimpse.util.cookie('glimpseLatestVersion', -1, 1);
-
-            $.ajax({
-                dataType: 'jsonp',
-                url: 'http://getglimpse.com/Glimpse/CurrentVersion/',
-                success: function (data) {
-                    $.glimpse.util.cookie('glimpseLatestVersion', data, 3);
-                }
-            });
-        }
-    });
-
-    //Wireup glimpse offical plugins
-    $.glimpseUpdateNotification.init();
-
-    //#endregion 
-
 //#region glimpseTimeline
 
 var glimpseTimeline = function (scope, settings) { 
