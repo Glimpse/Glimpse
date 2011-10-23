@@ -869,6 +869,218 @@ var glimpse = (function ($, scope) {
             
             init(); 
         } (),
+        pagingController = function () {
+            var //Support 
+                isLoading = false,
+                wireListeners = function() { 
+                    pubsub.subscribe('action.plugin.active', function(subject, payload) { refresh(payload); }); 
+                },
+                pagingEngine = function () {
+                    var //Engines 
+                        registeredEngnies = {},
+                        traditional = function () {
+                            return {
+                                match: function (pagerType) {
+                                    return pagerType == 0;
+                                },
+                                render: function (key, pagerContainer, pagerKey, pagerType, pageIndex, pageIndexLast) {
+                                    var pagerFirstPageLink = $('<a href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-firstPage"></a>');
+                                    var pagerPreviousPageLink = $('<a href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-previousPage"></a>');
+                                    pagerContainer.append(pagerFirstPageLink);
+                                    pagerContainer.append(pagerPreviousPageLink);
+                        
+                                    var pagerMessage = $('<span class="glimpse-pager-message"></span');
+                                    pagerMessage.html((pageIndex + 1) + ' / ' + (pageIndexLast + 1));
+                                    pagerContainer.append(pagerMessage);
+                        
+                                    var pagerNextPageLink = $('<a href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-nextPage"></a>');
+                                    var pagerLastPageLink = $('<a href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-lastPage"></a>');
+                                    pagerContainer.append(pagerNextPageLink);
+                                    pagerContainer.append(pagerLastPageLink);
+                        
+                                    if (pageIndex > 0) {
+                                        pagerFirstPageLink.one('click', function () { loadPage(key, pagerKey, pagerType, 0); return false; });
+                                        pagerPreviousPageLink.one('click', function () { loadPage(key, pagerKey, pagerType, pageIndex - 1); return false; });
+                                    } else {
+                                        pagerFirstPageLink.addClass('glimpse-pager-link-firstPage-disabled');
+                                        pagerPreviousPageLink.addClass('glimpse-pager-link-previousPage-disabled');
+                                    }
+                        
+                                    if (pageIndex < pageIndexLast) {
+                                        pagerNextPageLink.one('click', function () { loadPage(key, pagerKey, pagerType, pageIndex + 1); return false; });
+                                        pagerLastPageLink.one('click', function () { loadPage(key, pagerKey, pagerType, pageIndexLast); return false; });
+                                    } else {
+                                        pagerNextPageLink.addClass('glimpse-pager-link-nextPage-disabled');
+                                        pagerLastPageLink.addClass('glimpse-pager-link-lastPage-disabled');
+                                    }
+                                },
+                                loadPageData: function (panelItem, data) {
+                                    var content = renderEngine.build(data, null);
+                                    panelItem.html(content);
+                                }
+                            };
+                        } (),
+                        continuous = function () {
+                            return {
+                                match: function (pagerType) {
+                                    return pagerType == 1;
+                                },
+                                render: function (key, pagerContainer, pagerKey, pagerType, pageIndex, pageIndexLast) {
+                                    var pagerMessage = $('<span class="glimpse-pager-message"></span');
+                                    pagerMessage.html('Showing page 1 until page ' + (pageIndex + 1) + ' from a total of ' + (pageIndexLast + 1) + ' pages.');
+                                    pagerContainer.append(pagerMessage);
+                        
+                                    if (pageIndex < pageIndexLast) {
+                                        var pagerNextPageLink = $('<a href="#" class="glimpse-pager-link">Load the next page</a>');
+                                        pagerNextPageLink.one('click', function () { loadPage(key, pagerKey, pagerType, pageIndex + 1); return false; });
+                                        pagerContainer.append(pagerNextPageLink);
+                                    }
+                                },
+                                loadPageData: function (panelItem, data) {
+                                    var content = renderEngine.build(data, null);
+                                    panelItem.append(content);
+                        
+                                    var pages = panelItem.find('table');
+                                    pages.not(':first').find('thead').remove();
+                                    pages.not(':last').addClass('glimpse-pager-separator');
+                        
+                                    var lastPage = panelItem.find('table:last');
+                                    if (lastPage.length > 0) {
+                                        var lastPageTop = lastPage.offset().top - panelItem.offset().top;
+                                        panelItem.animate({ scrollTop: '+=' + lastPageTop + 'px' }, 500);
+                                    }
+                                }
+                            };
+                        } (),
+                        scrolling = function () {
+                            return {
+                                match : function (pagerType) {
+                                    return pagerType == 2;
+                                },
+                                render : function (key, pagerContainer, pagerKey, pagerType, pageIndex, pageIndexLast) {
+                                    var pagerMessage = $('<span class="glimpse-pager-message"></span');
+                                    pagerMessage.html('Showing page 1 until page ' + (pageIndex + 1) + ' from a total of ' + (pageIndexLast + 1) + ' pages.');
+                                    pagerContainer.append(pagerMessage);
+                                            
+                                    if (pageIndex < pageIndexLast) { 
+                                        var panelItem = elements.findPanel(key);
+                                        if (panelItem.length > 0) {
+                                            if (panelItem[0].clientHeight >= panelItem.find(':last').position().top) {
+                                                loadPage(key, pagerKey, pagerType, pageIndex + 1);
+                                            } else {
+                                                var scrollingCallback = function () {
+                                                    if (panelItem[0].clientHeight >= panelItem.find(':last').position().top) {
+                                                        loadPage(key, pagerKey, pagerType, pageIndex + 1);
+                                                        panelItem.unbind('scroll');
+                                                    }
+                                                }; 
+                                                panelItem.bind('scroll', scrollingCallback);
+                                            }
+                                        }
+                                    }
+                                },
+                                loadPageData : function (panelItem, data) {
+                                    var content = renderEngine.build(data, null);
+                                    panelItem.append(content);
+                        
+                                    var pages = panelItem.find('table');
+                                    pages.not(':first').find('thead').remove();
+                                    pages.not(':last').addClass('glimpse-pager-separator');
+                                }
+                            };
+                        } (),
+                
+                        //Main  
+                        retrieve = function (name) {
+                            return registeredEngnies[name];
+                        },
+                        register = function (name, engine) {
+                            registeredEngnies[name] = engine;
+                        },
+                        init = function () {
+                            register('traditional', traditional);
+                            register('continuous', continuous);
+                            register('scrolling', scrolling);
+                        };
+                
+                    init();
+                     
+                    return { 
+                        retrieve : retrieve,
+                        register : register
+                    };
+                } (),
+                refresh = function (key) {  
+                    var pagingInfo = data.currentMetadata().plugins[key].pagingInfo; 
+                    if (pagingInfo) {
+                        var panelItem = elements.findPanel(key);
+                        removePreviousPager(key, panelItem); 
+                        renderPager(key, panelItem, pagingInfo);
+                    }
+                },
+                removePreviousPager = function (key, panelItem) {
+                    var previousPager = panelItem.find('.glimpse-pager-' + key);
+                    previousPager.remove();
+                },
+                renderPager = function (key, panelItem, pagingInfo) {
+                    var pageIndex = parseInt(pagingInfo.pageIndex),
+                        pageIndexLast = Math.floor((parseInt(pagingInfo.totalNumberOfRecords) - 1) / parseInt(pagingInfo.pageSize));
+        
+                    if (pageIndex <= pageIndexLast) { 
+                        var pagerContainer = $('<div class="glimpse-pager glimpse-pager-' + key + '"></div>'),
+                            pagerType = pagingInfo.pagerType,
+                            pagerEngine = pagingEngine.retrieve(pagerType);
+        
+                        panelItem.append(pagerContainer);
+                        pagerEngine.render(key, pagerContainer, pagingInfo.pagerKey, pagerType, pageIndex, pageIndexLast);
+                    }
+                }, 
+                loadPage = function (key, pagerKey, pagerType, pageIndex) { 
+                    if (!isLoading) {
+                        isLoading = true; 
+                        showLoadingMessage(key);
+                        $.ajax({
+                            url: glimpsePath + 'Pager',
+                            type: 'GET',
+                            data: { 'key': pagerKey, 'pageIndex': pageIndex },
+                            contentType: 'application/json',
+                            cache: false, 
+                            success: function (data, textStatus, jqXHR) { 
+                                loadPageData(key, pageIndex, pagerType, data);
+                            },
+                            complete: function (jqXHR, textStatus, errorThrown) {
+                                isLoading = false;
+                            }
+                        });
+                    }
+                }, 
+                loadPageData = function (key, pageIndex, pagerType, result) {
+                    var panelItem = elements.findPanel(key),
+                        pagerEngine = pagingEngine.retrieve(pagerType),
+                        pagingInfo = data.currentMetadata().plugins[key].pagingInfo;
+        
+                    if (pagingInfo) 
+                        pagingInfo.pageIndex = pageIndex; 
+        
+                    pagerEngine.loadPageData(panelItem, result);
+        
+                    refresh(key);
+                },
+                showLoadingMessage = function (key) {
+                    var panelItem = elements.findPanel(key),
+                        pager = panelItem.find('.glimpse-pager-' + key);
+        
+                    pager.empty();
+                    pager.append('<span class="glimpse-pager-message">Loading...</span>');
+                },
+                
+                //Main
+                init = function () {    
+                    wireListeners();
+                };
+        
+            init();
+        } (),
         renderEngine = function () {
             var //Support 
                 registeredEngnies = {},

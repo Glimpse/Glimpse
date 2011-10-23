@@ -111,11 +111,16 @@
     <Content Include="Scripts\glimpse.controller.lazyloader.js" />
     <Content Include="Scripts\glimpse.controller.metadata.js" />
     <Content Include="Scripts\glimpse.controller.notification.js" />
+    <Content Include="Scripts\glimpse.controller.paging.js" />
     <Content Include="Scripts\glimpse.controller.title.js" />
     <Content Include="Scripts\glimpse.core.process.js" />
     <Content Include="Scripts\glimpse.controller.render.js" />
     <Content Include="Scripts\glimpse.controller.sizer.js" />
     <Content Include="Scripts\glimpse.core.data.js" />
+    <Content Include="Scripts\glimpse.paging.engine.continuous.js" />
+    <Content Include="Scripts\glimpse.paging.engine.js" />
+    <Content Include="Scripts\glimpse.paging.engine.scrolling.js" />
+    <Content Include="Scripts\glimpse.paging.engine.traditional.js" />
     <Content Include="Scripts\glimpse.render.style.js" />
     <Content Include="Scripts\glimpse.render.util.rawString.js">
       <SubType>UserControl</SubType>
@@ -163,6 +168,8 @@
     <Compile Include="Sanitizer\CSharpSanitizer.cs" />
     <Compile Include="Warning\SerializationWarning.cs" />
     <Compile Include="Warning\Warning.cs" />
+    <Content Include="Scripts\Test\glimpseTest.js" />
+    <Content Include="Scripts\Test\test.glimpse.ajax.pager.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="glimpseClient.js" />
@@ -179,6 +186,7 @@
     <Content Include="Scripts\old-glimpseClient.js" />
     <Content Include="Scripts\test-a.html" />
     <Content Include="Scripts\test-popup.html" />
+    <Content Include="Scripts\Test\test.glimpse.ajax.js" />
     <Content Include="Scripts\test.html" />
     <Content Include="Scripts\glimpse.core.template.js" />
     <Content Include="Scripts\glimpse.view.shell.css" />

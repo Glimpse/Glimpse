@@ -11,12 +11,17 @@ namespace ManualBuild
     {
         static void Main(string[] args)
         {
-            var assets = new Assets(args[0]);
+            var assets = new Assets(args[0] + "\\Scripts");
+            var assetsTest = new Assets(args[0] + "\\Scripts\\Test");
 
-            var coreContent = File.ReadAllText(assets.BuildScriptPath("glimpse.core.js"));
+            var coreContent = File.ReadAllText(assets.BuildPath("glimpse.core.js"));
             coreContent = ProcessFile(coreContent, assets);
 
-            File.WriteAllText(assets.BuildPath("Scripts\\glimpse.js"), coreContent); 
+            var testContent = File.ReadAllText(assetsTest.BuildPath("test.glimpse.ajax.js"));
+            testContent = ProcessFile(testContent, assetsTest);
+
+            File.WriteAllText(assets.BuildPath("glimpse.js"), coreContent);
+            File.WriteAllText(assetsTest.BuildPath("glimpseTest.js"), testContent);
         }
 
         static string ProcessFile(string fileContent, Assets assets)
@@ -35,7 +40,7 @@ namespace ManualBuild
                 var tabs = "";
                 for (var i = 0; i < tabIndex; i++)
                     tabs += "    ";
-                var matchContent = File.ReadAllText(assets.BuildScriptPath(matchFileName));
+                var matchContent = File.ReadAllText(assets.BuildPath(matchFileName));
                 matchContent = ProcessFile(PostProcessContent(matchFileName, matchContent), assets);
                 if (tabIndex > 0)
                     matchContent = tabs + Regex.Replace(matchContent, "\n", "\n" + tabs); 
@@ -65,12 +70,7 @@ namespace ManualBuild
         }
 
         public string BasePath { get; set; }
-
-        public string BuildScriptPath(string relativeFilePath)
-        {
-            return Path.Combine(BasePath, "Scripts", relativeFilePath);
-        }
-
+         
         public string BuildPath(string relativeFilePath)
         {
             return Path.Combine(BasePath, relativeFilePath);
