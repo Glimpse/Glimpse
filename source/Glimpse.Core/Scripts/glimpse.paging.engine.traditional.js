@@ -34,8 +34,8 @@
                 pagerLastPageLink.addClass('glimpse-pager-link-lastPage-disabled');
             }
         },
-        loadPageData: function (panelItem, data) {
-            var content = renderEngine.build(data, null);
+        loadPageData: function (panelItem, data, structure) {
+            var content = renderEngine.build(data, structure);
             panelItem.html(content);
         }
     };

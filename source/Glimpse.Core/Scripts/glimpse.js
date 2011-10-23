@@ -914,8 +914,8 @@ var glimpse = (function ($, scope) {
                                         pagerLastPageLink.addClass('glimpse-pager-link-lastPage-disabled');
                                     }
                                 },
-                                loadPageData: function (panelItem, data) {
-                                    var content = renderEngine.build(data, null);
+                                loadPageData: function (panelItem, data, structure) {
+                                    var content = renderEngine.build(data, structure);
                                     panelItem.html(content);
                                 }
                             };
@@ -936,17 +936,24 @@ var glimpse = (function ($, scope) {
                                         pagerContainer.append(pagerNextPageLink);
                                     }
                                 },
-                                loadPageData: function (panelItem, data) {
-                                    var content = renderEngine.build(data, null);
+                                loadPageData: function (panelItem, data, structure) {
+                                    var content = renderEngine.build(data, structure);
                                     panelItem.append(content);
                         
-                                    var pages = panelItem.find('table');
-                                    pages.not(':first').find('thead').remove();
-                                    pages.not(':last').addClass('glimpse-pager-separator');
-                        
+                                    var firstPage = panelItem.find('table:first');
                                     var lastPage = panelItem.find('table:last');
-                                    if (lastPage.length > 0) {
-                                        var lastPageTop = lastPage.offset().top - panelItem.offset().top;
+                                    if (firstPage.length > 0 && lastPage.length > 0) {
+                                        var firstPageRowSeparator = firstPage.find('tr:last');
+                                        firstPageRowSeparator.addClass('glimpse-pager-separator');
+
+                                        var lastPageRows = lastPage.find('tbody tr');
+                                        $.each(lastPageRows, function (index, row) {
+                                            firstPage.append($(row).clone());
+                                        });
+
+                                        lastPage.remove();
+
+                                        var lastPageTop = firstPageRowSeparator.offset().top - panelItem.offset().top;
                                         panelItem.animate({ scrollTop: '+=' + lastPageTop + 'px' }, 500);
                                     }
                                 }
@@ -979,13 +986,23 @@ var glimpse = (function ($, scope) {
                                         }
                                     }
                                 },
-                                loadPageData : function (panelItem, data) {
-                                    var content = renderEngine.build(data, null);
+                                loadPageData : function (panelItem, data, structure) {
+                                    var content = renderEngine.build(data, structure);
                                     panelItem.append(content);
-                        
-                                    var pages = panelItem.find('table');
-                                    pages.not(':first').find('thead').remove();
-                                    pages.not(':last').addClass('glimpse-pager-separator');
+
+                                    var firstPage = panelItem.find('table:first');
+                                    var lastPage = panelItem.find('table:last');
+                                    if (firstPage.length > 0 && lastPage.length > 0) {
+                                        var firstPageRowSeparator = firstPage.find('tr:last');
+                                        firstPageRowSeparator.addClass('glimpse-pager-separator');
+
+                                        var lastPageRows = lastPage.find('tbody tr');
+                                        $.each(lastPageRows, function (index, row) {
+                                            firstPage.append($(row).clone());
+                                        });
+
+                                        lastPage.remove();
+                                    }
                                 }
                             };
                         } (),
@@ -1057,12 +1074,14 @@ var glimpse = (function ($, scope) {
                 loadPageData = function (key, pageIndex, pagerType, result) {
                     var panelItem = elements.findPanel(key),
                         pagerEngine = pagingEngine.retrieve(pagerType),
-                        pagingInfo = data.currentMetadata().plugins[key].pagingInfo;
+                        metadata = data.currentMetadata().plugins[key],
+                        structure = metadata.structure,
+                        pagingInfo = metadata.pagingInfo;
         
                     if (pagingInfo) 
                         pagingInfo.pageIndex = pageIndex; 
         
-                    pagerEngine.loadPageData(panelItem, result);
+                    pagerEngine.loadPageData(panelItem, result, structure);
         
                     refresh(key);
                 },

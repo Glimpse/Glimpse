@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Test.Core", "source
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.EF", "source\Glimpse.EF\Glimpse.EF.csproj", "{1AEDC219-C2A4-422E-8DD8-A9ABAE1B4F3B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Elmah", "source\Glimpse.Elmah\Glimpse.Elmah.csproj", "{3EF29139-06EC-4497-9EC6-A4C340E064EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{1AEDC219-C2A4-422E-8DD8-A9ABAE1B4F3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1AEDC219-C2A4-422E-8DD8-A9ABAE1B4F3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1AEDC219-C2A4-422E-8DD8-A9ABAE1B4F3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EF29139-06EC-4497-9EC6-A4C340E064EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EF29139-06EC-4497-9EC6-A4C340E064EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EF29139-06EC-4497-9EC6-A4C340E064EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EF29139-06EC-4497-9EC6-A4C340E064EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
