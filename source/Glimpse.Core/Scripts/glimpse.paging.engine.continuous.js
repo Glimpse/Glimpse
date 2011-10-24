@@ -4,20 +4,19 @@
             return pagerType == 1;
         },
         render: function (key, pagerContainer, pagerKey, pagerType, pageIndex, pageIndexLast) {
-            var pagerMessage = $('<span class="glimpse-pager-message"></span');
-            pagerMessage.html('Showing page 1 until page ' + (pageIndex + 1) + ' from a total of ' + (pageIndexLast + 1) + ' pages.');
+            var pagerMessage = $('<span class="glimpse-pager-message">Showing ' + (pageIndex + 1) + ' page(s) of ' + (pageIndexLast + 1) + ' pages(s).</span>');
             pagerContainer.append(pagerMessage);
 
             if (pageIndex < pageIndexLast) {
-                var pagerNextPageLink = $('<a href="#" class="glimpse-pager-link">Load the next page</a>');
+                var pagerNextPageLink = $('<a href="#" class="glimpse-pager-link">More</a>');
                 pagerNextPageLink.one('click', function () { loadPage(key, pagerKey, pagerType, pageIndex + 1); return false; });
                 pagerContainer.append(pagerNextPageLink);
             }
         },
-        loadPageData: function (panelItem, data) {
-            var content = renderEngine.build(data, null);
-            panelItem.append(content);
+        loadPageData: function (panelItem, data) { 
+            panelItem.append(renderEngine.build(data, null));
 
+            //TODO: Not sure if this will work with needed tables
             var pages = panelItem.find('table');
             pages.not(':first').find('thead').remove();
             pages.not(':last').addClass('glimpse-pager-separator');

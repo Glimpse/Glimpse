@@ -884,17 +884,15 @@ var glimpse = (function ($, scope) {
                                     return pagerType == 0;
                                 },
                                 render: function (key, pagerContainer, pagerKey, pagerType, pageIndex, pageIndexLast) {
-                                    var pagerFirstPageLink = $('<a href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-firstPage"></a>');
-                                    var pagerPreviousPageLink = $('<a href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-previousPage"></a>');
+                                    var pagerFirstPageLink = $('<a href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-firstPage"></a>'),
+                                        pagerPreviousPageLink = $('<a href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-previousPage"></a>'),
+                                        pagerMessage = $('<span class="glimpse-pager-message">' + (pageIndex + 1) + ' / ' + (pageIndexLast + 1) + '</span'),
+                                        pagerNextPageLink = $('<a href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-nextPage"></a>'),
+                                        pagerLastPageLink = $('<a href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-lastPage"></a>');
+                        
                                     pagerContainer.append(pagerFirstPageLink);
-                                    pagerContainer.append(pagerPreviousPageLink);
-                        
-                                    var pagerMessage = $('<span class="glimpse-pager-message"></span');
-                                    pagerMessage.html((pageIndex + 1) + ' / ' + (pageIndexLast + 1));
-                                    pagerContainer.append(pagerMessage);
-                        
-                                    var pagerNextPageLink = $('<a href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-nextPage"></a>');
-                                    var pagerLastPageLink = $('<a href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-lastPage"></a>');
+                                    pagerContainer.append(pagerPreviousPageLink); 
+                                    pagerContainer.append(pagerMessage); 
                                     pagerContainer.append(pagerNextPageLink);
                                     pagerContainer.append(pagerLastPageLink);
                         
@@ -915,8 +913,7 @@ var glimpse = (function ($, scope) {
                                     }
                                 },
                                 loadPageData: function (panelItem, data) {
-                                    var content = renderEngine.build(data, null);
-                                    panelItem.html(content);
+                                    panelItem.html(renderEngine.build(data, null));
                                 }
                             };
                         } (),
@@ -926,20 +923,19 @@ var glimpse = (function ($, scope) {
                                     return pagerType == 1;
                                 },
                                 render: function (key, pagerContainer, pagerKey, pagerType, pageIndex, pageIndexLast) {
-                                    var pagerMessage = $('<span class="glimpse-pager-message"></span');
-                                    pagerMessage.html('Showing page 1 until page ' + (pageIndex + 1) + ' from a total of ' + (pageIndexLast + 1) + ' pages.');
+                                    var pagerMessage = $('<span class="glimpse-pager-message">Showing ' + (pageIndex + 1) + ' page(s) of ' + (pageIndexLast + 1) + ' pages(s).</span>');
                                     pagerContainer.append(pagerMessage);
                         
                                     if (pageIndex < pageIndexLast) {
-                                        var pagerNextPageLink = $('<a href="#" class="glimpse-pager-link">Load the next page</a>');
+                                        var pagerNextPageLink = $('<a href="#" class="glimpse-pager-link">More</a>');
                                         pagerNextPageLink.one('click', function () { loadPage(key, pagerKey, pagerType, pageIndex + 1); return false; });
                                         pagerContainer.append(pagerNextPageLink);
                                     }
                                 },
-                                loadPageData: function (panelItem, data) {
-                                    var content = renderEngine.build(data, null);
-                                    panelItem.append(content);
+                                loadPageData: function (panelItem, data) { 
+                                    panelItem.append(renderEngine.build(data, null));
                         
+                                    //TODO: Not sure if this will work with needed tables
                                     var pages = panelItem.find('table');
                                     pages.not(':first').find('thead').remove();
                                     pages.not(':last').addClass('glimpse-pager-separator');
@@ -958,8 +954,7 @@ var glimpse = (function ($, scope) {
                                     return pagerType == 2;
                                 },
                                 render : function (key, pagerContainer, pagerKey, pagerType, pageIndex, pageIndexLast) {
-                                    var pagerMessage = $('<span class="glimpse-pager-message"></span');
-                                    pagerMessage.html('Showing page 1 until page ' + (pageIndex + 1) + ' from a total of ' + (pageIndexLast + 1) + ' pages.');
+                                    var pagerMessage = $('<span class="glimpse-pager-message">Showing ' + (pageIndex + 1) + ' page(s) of ' + (pageIndexLast + 1) + ' pages(s).</span');
                                     pagerContainer.append(pagerMessage);
                                             
                                     if (pageIndex < pageIndexLast) { 
