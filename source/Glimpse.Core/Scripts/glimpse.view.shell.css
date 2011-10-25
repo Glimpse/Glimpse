@@ -497,13 +497,17 @@ li.glimpse-permanent {
 .glimpse-panel .selected * {
     color: #409B3B;
 }
-.glimpse .info .icon, .glimpse .warn .icon, .glimpse .loading .icon, .glimpse .error .icon, .glimpse .fail .icon, .glimpse .ms .icon {
+.glimpse .info .icon, .glimpse .warn .icon, .glimpse .loading .icon, .glimpse .error .icon, .glimpse .fail .icon, .glimpse .ms .icon, .glimpse .gconnect .icon, .glimpse .gdisconnect .icon {
     width: 14px;
     height: 14px;
     background-image: url();
     background-repeat: no-repeat;
     display: inline-block;
     margin-right: 5px;
+}
+.glimpse .gconnect .icon, .glimpse .gdisconnect .icon {
+    width: 16px;
+    height: 16px;
 }
 .glimpse .info .icon {
     background-position: -22px -22px;
@@ -523,6 +527,12 @@ li.glimpse-permanent {
 .glimpse .fail .icon {
     background-position: -64px -22px;
 }
+.glimpse .gconnect .icon {
+    background-position: -64px -22px; /*TODO fix position*/
+}
+.glimpse .gdisconnect .icon {
+    background-position: -64px -22px; /*TODO fix position*/
+}
 .glimpse .info * {
     color: #067CE5;
 }
@@ -536,6 +546,12 @@ li.glimpse-permanent {
     color: #B40000;
     font-weight: bold;
 }
+.glimpse-notice {
+    position:absolute;
+    right: 10px;
+    color: #777;
+}
+/*
 .glimpse-panelitem-Ajax .loading .icon {
     float: right;
 }
@@ -548,6 +564,7 @@ li.glimpse-permanent {
 .glimpse-panelitem-Remote .glimpse-side-main-panel .loading {
     right: 27%;
 }
+*/
 .glimpse-clear {
     background-color: white;
     padding: 0.3em 1em 0.5em 1em;

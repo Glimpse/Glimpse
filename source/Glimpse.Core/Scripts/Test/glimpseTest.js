@@ -45,11 +45,12 @@ var glimpseTest = (function ($) {
                         result.push(possibleResults[Math.floor(Math.random() * 6)]);  
                     return result;
                 },
-                trigger = function (param) {
-                    param.complete();
-        
+                trigger = function (param) { 
                     setTimeout(function () {
-                        param.success(generate(param.data));
+                        var success = (Math.floor(Math.random() * 11) != 10);
+                        param.complete(null, (success ? 'Success' : 'Fail'))
+                        if (success)
+                            param.success(generate(param.data));
                     }, 300);
                 };
         
