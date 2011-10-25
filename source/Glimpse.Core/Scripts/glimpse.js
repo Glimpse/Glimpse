@@ -270,41 +270,6 @@ var glimpse = (function ($, scope) {
             
             init();  
         } (),
-        plugin = (function () {
-            var //Support
-                plugins = {}, 
-                startPlugin = function (pluginId) {
-                    pluginData[pluginId].instance = pluginData[pluginId].creator();   //TODO: What to pass the plugin 
-                    pluginData[pluginId].instance.init();
-                },
-                stopPlugin = function (pluginId) {
-                    var data = pluginData[pluginId];
-                    if (data.instance) {
-                        data.instance.destroy();
-                        data.instance = null;
-                    } 
-                },
-                startAllPlugins = function () {
-                    for (var pluginId in pluginData) { startPlugin(pluginId); }
-                },
-                stopAllPlugins = function () {
-                    for (var pluginId in pluginData) { stopPlugin(pluginId); }
-                },
-                init = function() {
-                    pubsub.subscribe('state.init', startAllPlugins);  
-                },
-        
-                //Main
-                registerPlugin = function (pluginId, creator) {
-                    plugins[pluginId] = { creator : creator, instance : null };
-                };
-                
-            //init(); 
-            
-            return {
-                register : registerPlugin
-            };
-        }()),
         data = (function () {
             var //Support
                 inner = {},
@@ -400,20 +365,19 @@ var glimpse = (function ($, scope) {
         } (),
         renderController = function () {
             var //Support
-                wireListeners = function() {
+                wireListeners = function () {
                     pubsub.subscribe('state.render', renderLayout); 
                     pubsub.subscribe('data.elements.processed', wireDomListeners); 
                     pubsub.subscribe('action.tab.select', function(subject, payload) { selectedItem(payload); }); 
                     pubsub.subscribe('action.data.update', dataUpdate);
                 },
-                wireDomListeners = function() {
+                wireDomListeners = function () {
                     elements.tabHolder.find('li:not(.glimpse-active, .glimpse-disabled)').live('click', function () { pubsub.publish('action.tab.select', $(this).attr('data-glimpseKey')); return false; });
                     elements.tabHolder.find('li:not(.glimpse-active, .glimpse-disabled)').live('mouseover mouseout', function (e) {
                         var pluginData = $(this);
                         if (e.type == 'mouseover') { pluginData.addClass('glimpse-hover'); } else { pluginData.removeClass('glimpse-hover'); }
                     }); 
                 },
-        
          
                 selectedTab = function (key) {
                     var tab = elements.tabHolder.find('.glimpse-tab[data-glimpseKey="' + key + '"]');
@@ -430,9 +394,11 @@ var glimpse = (function ($, scope) {
                     var html = '', key, disabled, pluginData;
                     for (key in pluginDataSet) {
                         pluginData = pluginDataSet[key];
-                        disabled = (pluginData.data === undefined || pluginData.data === null) ? ' glimpse-disabled' : '';
+                        disabled = (pluginData.data === undefined || pluginData.data === null) ? ' glimpse-disabled' : '',
+                        permanent = pluginData.isPermanent ? ' glimpse-permanent' : '';
         
-                        html += '<li class="glimpse-tab glimpse-tabitem-' + key + disabled + '" data-glimpseKey="' + key + '">' + pluginData.name + '</li>';
+                        if (!pluginData.isPermanent || (pluginData.isPermanent && elements.tabHolder.find('.glimpse-tab[data-glimpseKey="' + key + '"]').length == 0))
+                            html += '<li class="glimpse-tab glimpse-tabitem-' + key + disabled + permanent + '" data-glimpseKey="' + key + '">' + pluginData.name + '</li>';
                     }
                     return html;
                 },
@@ -451,7 +417,7 @@ var glimpse = (function ($, scope) {
                 renderPanel = function (key, pluginData, pluginMetadata) { 
                     var start = new Date().getTime();
                     
-                    var metadata = pluginMetadata == undefined ? pluginMetadata.structure : undefined;
+                    var metadata = pluginMetadata.structure,  
                         html = '<div class="glimpse-panel glimpse-panelitem-' + key + '" data-glimpseKey="' + key + '"><div class="glimpse-panel-message">Loading data, please wait...</div></div>',
                         panel = $(html).appendTo(elements.panelHolder);
         
@@ -499,7 +465,7 @@ var glimpse = (function ($, scope) {
                     renderTabs(data.current().data);
                 },
                 init = function () {
-                    wireListeners(); 
+                    wireListeners();  
                 };
             
             init();  
@@ -1506,11 +1472,11 @@ var glimpse = (function ($, scope) {
                 register = function (name, engine) {
                     registeredEngnies[name] = engine;
                 },
-                build = function (data, metadata) {
+                build = function (data, metadata) { 
                     return master.build(data, 0, true, metadata, 1);
                 },
                 insert = function (scope, data, metadata) {
-                    scope.html(master.build(data, 0, true, metadata, 1));
+                    scope.html(build(data, metadata));
                     style.apply(scope);
                 },
                 init = function () {
@@ -1519,6 +1485,7 @@ var glimpse = (function ($, scope) {
                     register('table', table);
                     register('structured', structured);
                     register('string', string);
+        
                 };
         
             init();
@@ -1540,8 +1507,7 @@ var glimpse = (function ($, scope) {
 
     return { 
         init : init,
-        pubsub : pubsub,
-        plugin : plugin,
+        pubsub : pubsub, 
         elements : elements,
         render : renderEngine,
         data : data //I Think this should probably be removed after testing
@@ -1556,3 +1522,71 @@ $Glimpse(document).ready(function() {
     var end = new Date().getTime(); 
     console.log('Total execution time: ' + (end - start));
 });
+
+var glimpseAjaxPlugin = (function ($, glimpse) {
+
+/*(im port:glimpse.ajax.spy.js|2)*/
+
+    var //Support
+        isActive = false, 
+        resultCount = 0;
+        wireListener = function () { 
+            //glimpse.pubsub.subscribe('hook.render.engine', function (topic, payload) { registerEngine(payload) }); 
+
+            glimpse.pubsub.subscribe('action.plugin.deactive', function (topic, payload) { if (payload == 'Ajax') { deactive(); } }); 
+            glimpse.pubsub.subscribe('action.plugin.active', function (topic, payload) {  if (payload == 'Ajax') { active(); } }); 
+        },
+        alterCurrent = function () {
+            var data = glimpse.data.current().data,
+                metadata = glimpse.data.currentMetadata().plugins;
+
+            data.Ajax = { name : 'Ajax', data : 'No requests currently detected...', isPermanent : true };
+            metadata.Ajax = { helpUrl : 'http://getglimpse.com/Help/Plugin/Ajax' };
+        },
+        active = function () {
+            isActive = true;
+            getData(); 
+        },
+        deactive = function () {
+            isActive = false; 
+        },
+
+        getData = function () { 
+            if (!isActive) { return; }
+
+            var panel = glimpse.elements.findPanel('Ajax'),
+                loading = panel.find('.loading');
+
+            if (loading.length == 0) 
+                panel.append('<div class="glimpse-clear"><a href="#">Clear</a></div><div class="loading"><div class="icon"></div><span>Refreshing...</span></div>');
+            loading.find('span').text('Refreshing...').parent().fadeIn();
+
+            $.ajax({
+                url: glimpsePath + 'Ajax',
+                data: { 'glimpseId' : glimpseData.requestId },
+                type: 'GET',
+                contentType: 'application/json',
+                complete : function() {
+                    loading.find('span').text('Loaded...').parent().delay(500).fadeOut();
+                },
+                success: function (result) {
+                    if (resultCount != result.length)
+                        processData(result, panel);
+                    resultCount = result.length;
+                    
+                    setTimeout(getData, 1000);
+                }
+            });
+        },
+        processData = function (result, panel) { 
+            panel.html(glimpse.render.build(result))
+        },
+
+        //Main 
+        init = function () {
+            wireListener();
+            alterCurrent();
+        };
+
+    init();
+}($Glimpse, glimpse));
