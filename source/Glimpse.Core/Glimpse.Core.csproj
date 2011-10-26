@@ -114,6 +114,7 @@
     <Content Include="Scripts\glimpse.controller.notification.js" />
     <Content Include="Scripts\glimpse.controller.paging.js" />
     <Content Include="Scripts\glimpse.controller.title.js" />
+    <Content Include="Scripts\glimpse.core.objects.js" />
     <Content Include="Scripts\glimpse.core.process.js" />
     <Content Include="Scripts\glimpse.controller.render.js" />
     <Content Include="Scripts\glimpse.controller.sizer.js" />
