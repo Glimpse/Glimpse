@@ -14,20 +14,20 @@
             var that = this;
             if (!that.connected) { 
                 that.text.text('Connecting...'); 
-                that.scope.removeClass('gconnect').removeClass('loading').addClass('gdisconnect');
+                that.scope.removeClass('gconnect').addClass('gdisconnect');
             }
         },
         complete : function (textStatus) {
             var that = this;
             if (textStatus != "Success") {
                 that.connected = false;
-                that.text.text('Error...');
-                that.scope.removeClass('gconnect').removeClass('loading').addClass('gdisconnect');
+                that.text.text('Disconnected...');
+                that.scope.removeClass('gconnect').addClass('gdisconnect');
             }
             else {
                 that.connected = true;
                 that.text.text('Connected...');
-                that.scope.removeClass('gdisconnect').removeClass('loading').addClass('gconnect');
+                that.scope.removeClass('gdisconnect').addClass('gconnect');
             }
         }
     };
@@ -37,9 +37,7 @@
         isActive = false, 
         resultCount = 0;
         notice = undefined,
-        wireListener = function () { 
-            //glimpse.pubsub.subscribe('hook.render.engine', function (topic, payload) { registerEngine(payload) }); 
-
+        wireListener = function () {  
             glimpse.pubsub.subscribe('action.plugin.deactive', function (topic, payload) { if (payload == 'Ajax') { deactive(); } }); 
             glimpse.pubsub.subscribe('action.plugin.active', function (topic, payload) {  if (payload == 'Ajax') { active(); } }); 
         },
@@ -52,23 +50,20 @@
         },
         active = function () {
             isActive = true;
+            glimpse.elements.options.html('<div class="glimpse-clear"><a href="#">Clear</a></div><div class="glimpse-notice gdisconnect"><div class="icon"></div><span>Disconnected...</span></div>');
+            
             getData(); 
         },
         deactive = function () {
             isActive = false; 
-        },
-
-
+            glimpse.elements.options.html('');
+        }, 
         getData = function () { 
-            if (!isActive) { return; }
-
-            var panel = glimpse.elements.findPanel('Ajax'); 
-            if (!notice) {
-                panel.html('<div class="glimpse-target"></div><div class="glimpse-clear"><a href="#">Clear</a></div><div class="glimpse-notice gdisconnect"><div class="icon"></div><span>Disconnected...</span></div>');
-                notice = new ConnectionNotice(panel.find('.glimpse-notice'));
-            }
-
+            if (!isActive) { return; } 
+            if (!notice) 
+                notice = new ConnectionNotice(glimpse.elements.options.find('.glimpse-notice')); 
             notice.prePoll();
+
             $.ajax({
                 url: glimpsePath + 'Ajax',
                 data: { 'glimpseId' : glimpseData.requestId },
@@ -80,13 +75,14 @@
                 },
                 success: function (result) {
                     if (resultCount != result.length)
-                        processData(result, panel);
+                        processData(result);
                     resultCount = result.length; 
                 }
             });
         },
-        processData = function (result, panel) { 
-            panel.find('.glimpse-target').html(glimpse.render.build(result))
+        processData = function (result) { 
+            var panel = glimpse.elements.findPanel('Ajax'); 
+            panel.html(glimpse.render.build(result));
         },
 
         //Main 

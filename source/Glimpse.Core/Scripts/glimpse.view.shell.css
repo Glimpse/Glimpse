@@ -506,8 +506,8 @@ li.glimpse-permanent {
     margin-right: 5px;
 }
 .glimpse .gconnect .icon, .glimpse .gdisconnect .icon {
-    width: 16px;
-    height: 16px;
+    width: 17px;
+    height: 17px;
 }
 .glimpse .info .icon {
     background-position: -22px -22px;
@@ -528,10 +528,10 @@ li.glimpse-permanent {
     background-position: -64px -22px;
 }
 .glimpse .gconnect .icon {
-    background-position: -64px -22px; /*TODO fix position*/
+    background-position: -213px -20px; /*TODO fix position*/
 }
 .glimpse .gdisconnect .icon {
-    background-position: -64px -22px; /*TODO fix position*/
+    background-position: -195px -20px; /*TODO fix position*/
 }
 .glimpse .info * {
     color: #067CE5;
@@ -548,7 +548,8 @@ li.glimpse-permanent {
 }
 .glimpse-notice {
     position:absolute;
-    right: 10px;
+    right: 20px;
+    bottom: 5px;
     color: #777;
 }
 /*
@@ -566,8 +567,11 @@ li.glimpse-permanent {
 }
 */
 .glimpse-clear {
+    bottom: 30px;
+    position: absolute;
+    right: 20px;
     background-color: white;
-    padding: 0.3em 1em 0.5em 1em;
+    padding: 0.2em 1em 0.3em 1em;
     border: #CCC solid 1px;
     bottom: 25px;
     -webkit-border-radius: 3px;
