@@ -12,7 +12,7 @@
             glimpse.pubsub.subscribe('action.plugin.active', function (topic, payload) {  if (payload == 'Ajax') { active(); } }); 
         },
         wireDomListeners = function () {
-            glimpse.elements.holder.find('.glimpse-clear-ajax').live('click', function () { return false; });
+            glimpse.elements.holder.find('.glimpse-clear-ajax').live('click', function () { clear(); return false; });
             glimpse.elements.findPanel('Ajax').find('a').live('click', function () { return false; });
         },
         alterCurrent = function () {
@@ -58,7 +58,7 @@
         },
         processData = function (result) { 
             var panel = glimpse.elements.findPanel('Ajax'); 
-            if (resultCount == 0)
+            if (panel.find('table').length == 0)
                 panel.html(glimpse.render.build([['Request URL', 'Method', 'Duration', 'Date/Time', 'View']])).find('table').append('<tbody></tbody>');
             
             for (var x = result.length; --x >= resultCount;) {
@@ -66,8 +66,11 @@
                 panel.find('tbody').prepend('<tr class="' + (x % 2 == 0 ? 'even' : 'odd') + '"><td>' + item.url + '</td><td>' + item.method + '</td><td>' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.requestTime + '</td><td><a href="#">Inspect</a></td></tr>');
             }
         },
+        clear = function () {
+            glimpse.elements.findPanel('Ajax').html('<div class="glimpse-panel-message">No requests currently detected...</div>'); 
+        },
 
-        //Main 
+    //Main 
         init = function () {
             wireListener();
             alterCurrent();
