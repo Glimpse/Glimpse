@@ -13,6 +13,7 @@ var glimpse = (function ($, scope) {
             activeTab: 'Routes',
         },
 /*(import:glimpse.core.util.js|2)*/,
+/*(import:glimpse.core.objects.js|2)*/,
 /*(import:glimpse.core.pubsub.js|2)*/,
 /*(import:glimpse.core.state.js|2)*/,
 /*(import:glimpse.core.data.js|2)*/,
@@ -41,7 +42,8 @@ var glimpse = (function ($, scope) {
         pubsub : pubsub, 
         elements : elements,
         render : renderEngine,
-        data : data //I Think this should probably be removed after testing
+        objects : objects,
+        data : data 
     };
 }($Glimpse, $Glimpse(document)));
 

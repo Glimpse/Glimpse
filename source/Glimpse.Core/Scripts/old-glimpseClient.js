@@ -67,21 +67,6 @@ if (window.jQueryGlimpse) { (function ($) {
  
     $.glimpseAjax = {};
     $.extend($.glimpseAjax, {
-        init: function () {
-            var ga = this, static = ga.static;
-
-            //Wire up plugin
-            $.glimpse.addProtocolListener(function (data) { ga.adjustProtocol(data); }, true);
-            $.glimpse.addLayoutListener(function (tabStrip, panelHolder) { ga.adjustLayout(tabStrip, panelHolder); }, true);
-        },
-        adjustProtocol: function (data) {
-            var ga = this, metadata;
-
-            data[ga.static.key] = '';
-
-            if ((metadata = data._metadata) && (metadata = metadata.plugins))
-                (metadata[ga.static.key] = {})['helpUrl'] = 'http://getglimpse.com/Help/Plugin/Ajax'; 
-        },
         adjustLayout: function (tabStrip, panelHolder) {
             var ga = this, static = ga.static;
 
@@ -99,11 +84,7 @@ if (window.jQueryGlimpse) { (function ($) {
 
             //Reset to start things off 
             ga.removeRequests(true);
-        },
-        shouldMakePopoutCall: function () {
-            var g = $.glimpse;
-            return (!g.static.isPopup && g.settings.popupOn && g.static.popup && !g.static.popup.closed)
-        },
+        }, 
         removeRequests: function (isInit) {
             var ga = this;
 
