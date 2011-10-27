@@ -15,26 +15,28 @@
             glimpse.elements.holder.find('.glimpse-clear-ajax').live('click', function () { clear(); return false; });
             glimpse.elements.findPanel('Ajax').find('a').live('click', function () { return false; });
         },
-        alterCurrent = function () {
+        setupData = function () {
             var data = glimpse.data.current().data,
                 metadata = glimpse.data.currentMetadata().plugins;
 
             data.Ajax = { name : 'Ajax', data : 'No requests currently detected...', isPermanent : true };
             metadata.Ajax = { helpUrl : 'http://getglimpse.com/Help/Plugin/Ajax' };
         },
+        
         active = function () {
             isActive = true;
             glimpse.elements.options.html('<div class="glimpse-clear"><a href="#" class="glimpse-clear-ajax">Clear</a></div><div class="glimpse-notice gdisconnect"><div class="icon"></div><span>Disconnected...</span></div>');
             notice = new glimpse.objects.ConnectionNotice(glimpse.elements.options.find('.glimpse-notice')); 
             
-            getData(); 
+            retreieveSummaryData(); 
         },
         deactive = function () {
             isActive = false; 
             glimpse.elements.options.html('');
             notice = null;
         }, 
-        getData = function () { 
+        
+        retreieveSummaryData = function () { 
             if (!isActive) { return; } 
  
             notice.prePoll(); 
@@ -44,19 +46,22 @@
                 type: 'GET',
                 contentType: 'application/json',
                 complete : function(jqXHR, textStatus) {
+                    if (!isActive) { return; }
+                    
                     notice.complete(textStatus);
-                    if (textStatus != "Success")
-                        setTimeout(getData, 1000);
+                    
+                    setTimeout(retreieveSummaryData, 1000);
                 },
                 success: function (result) {
+                    if (!isActive) { return; }
+                    
                     if (resultCount != result.length)
-                        processData(result);
+                        processSummaryData(result);
                     resultCount = result.length; 
-                    setTimeout(getData, 1000);
                 }
             });
         },
-        processData = function (result) { 
+        processSummaryData = function (result) { 
             var panel = glimpse.elements.findPanel('Ajax'); 
             if (panel.find('table').length == 0)
                 panel.html(glimpse.render.build([['Request URL', 'Method', 'Duration', 'Date/Time', 'View']])).find('table').append('<tbody></tbody>');
@@ -73,7 +78,7 @@
     //Main 
         init = function () {
             wireListener();
-            alterCurrent();
+            setupData();
         };
 
     init();

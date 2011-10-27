@@ -53,7 +53,8 @@
             var start = new Date().getTime();
             
             var metadata = pluginMetadata.structure,  
-                html = '<div class="glimpse-panel glimpse-panelitem-' + key + '" data-glimpseKey="' + key + '"><div class="glimpse-panel-message">Loading data, please wait...</div></div>',
+                permanent = pluginData.isPermanent ? ' glimpse-permanent' : '',
+                html = '<div class="glimpse-panel glimpse-panelitem-' + key + permanent + '" data-glimpseKey="' + key + '"><div class="glimpse-panel-message">Loading data, please wait...</div></div>',
                 panel = $(html).appendTo(elements.panelHolder);
 
             if (!pluginData.isLazy && pluginData.data)
@@ -68,9 +69,13 @@
         },
         
         selectedItem = function (key) {
-            var oldItem = elements.tabHolder.find('.glimpse-active');
-             
-            if (oldItem.length > 0) { pubsub.publish('action.plugin.deactive', oldItem.attr('data-glimpseKey')); } 
+            var oldItem = elements.tabHolder.find('.glimpse-active'),
+                oldKey = oldItem.attr('data-glimpseKey');
+            
+            //Don't touch permanent tabs 
+            if (oldKey == key && oldItem.hasClass('glimpse-permanent')) { return; }
+            
+            if (oldItem.length > 0) { pubsub.publish('action.plugin.deactive', oldKey); } 
 
             selectedTab(key);
             selectedPanel(key);
