@@ -640,7 +640,7 @@ li.glimpse-permanent {
 .glimpse-pager .glimpse-pager-link-lastPage-disabled {
     background-position: -111px -38px;
 }
-.glimpse-panel table.glimpse-pager-separator {
+.glimpse-panel table tr.glimpse-pager-separator td {
     border-bottom: 3px solid #C6C6C6;
 }
 @media screen and (-webkit-min-device-pixel-ratio:0) {

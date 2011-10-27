@@ -24,13 +24,23 @@
                 }
             }
         },
-        loadPageData : function (panelItem, data) {
-            var content = renderEngine.build(data, null);
+        loadPageData : function (panelItem, data, structure) {
+            var content = renderEngine.build(data, structure);
             panelItem.append(content);
 
-            var pages = panelItem.find('table');
-            pages.not(':first').find('thead').remove();
-            pages.not(':last').addClass('glimpse-pager-separator');
+            var firstPage = panelItem.find('table:first');
+            var lastPage = panelItem.find('table:last');
+            if (firstPage.length > 0 && lastPage.length > 0) {
+                var firstPageRowSeparator = firstPage.find('tr:last');
+                firstPageRowSeparator.addClass('glimpse-pager-separator');
+
+                var lastPageRows = lastPage.find('tbody tr');
+                $.each(lastPageRows, function (index, row) {
+                    firstPage.append($(row).clone());
+                });
+
+                lastPage.remove();
+            }
         }
     };
 } ()

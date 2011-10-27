@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Glimpse.Elmah</id>
+    <version>0.9.6</version>
+    <title>Glimpse for Elmah (Beta)</title>
+    <authors>Steven Lauwers</authors>
+    <owners>Steven Lauwers</owners>
+    <licenseUrl>http://elmah4glimpse.codeplex.com/license</licenseUrl>
+    <projectUrl>http://elmah4glimpse.codeplex.com/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Plugin for Glimpse to view exceptions recorded by Elmah.</description>
+    <tags>MVC MVC3 ASP.NET Web Elmah</tags>
+    <dependencies>
+      <dependency id="Glimpse" version="0.85" />
+      <dependency id="elmah" version="1.2.0.1" />
+    </dependencies>
+  </metadata>
+</package>
