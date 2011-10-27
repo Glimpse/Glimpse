@@ -1946,7 +1946,7 @@ if (window.jQueryGlimpse) { (function ($) {
                     pagerContainer.append(pagerMessage);
 
                     if (pageIndex < pageIndexLast) {
-                        var pagerNextPageLink = $('<a href="#" class="glimpse-pager-link">Load the next page</a>');
+                        var pagerNextPageLink = $('<a href="#" class="glimpse-pager-link">More</a>');
                         pagerNextPageLink.one('click', function () { $.glimpsePager.loadPage(key, pagerKey, pagerType, pageIndex + 1); return false; });
                         pagerContainer.append(pagerNextPageLink);
                     }

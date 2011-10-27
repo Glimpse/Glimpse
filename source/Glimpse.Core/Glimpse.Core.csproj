@@ -108,6 +108,7 @@
     <Compile Include="Plumbing\GlimpseResponseFilter.cs" />
     <Compile Include="Plumbing\GlimpseSerializer.cs" />
     <Compile Include="Plumbing\InProcStackMetadataStore.cs" />
+    <Content Include="Scripts\glimpse.ajax.plugin.js" />
     <Content Include="Scripts\glimpse.controller.lazyloader.js" />
     <Content Include="Scripts\glimpse.controller.metadata.js" />
     <Content Include="Scripts\glimpse.controller.notification.js" />
@@ -168,6 +169,7 @@
     <Compile Include="Sanitizer\CSharpSanitizer.cs" />
     <Compile Include="Warning\SerializationWarning.cs" />
     <Compile Include="Warning\Warning.cs" />
+    <Content Include="Scripts\Test\test.glimpse.ajax.ajax.js" />
     <Content Include="Scripts\Test\glimpseTest.js" />
     <Content Include="Scripts\Test\test.glimpse.ajax.pager.js" />
   </ItemGroup>
@@ -195,7 +197,6 @@
     <Content Include="Scripts\glimpse.core.util.js" />
     <Content Include="Scripts\glimpse.controller.tollbar.js" />
     <Content Include="Scripts\glimpse.core.js" />
-    <Content Include="Scripts\glimpse.core.plugin.js" />
     <Content Include="Scripts\glimpse.core.pubsub.js" />
     <EmbeddedResource Include="glimpseLogo.png" />
     <EmbeddedResource Include="glimpseSprite.png" />
@@ -207,6 +208,7 @@
     <None Include="NuSpec\tools\install.ps1" />
     <Content Include="Scripts\glimpse.core.state.js" />
     <Content Include="Scripts\glimpse.render.engine.keyValue.js" />
+    <Content Include="Scripts\glimpse.ajax.spy.js" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
