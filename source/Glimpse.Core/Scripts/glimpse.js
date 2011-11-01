@@ -171,6 +171,42 @@ var glimpse = (function ($, scope) {
                 }
             }; 
         } (),
+        objects = function () { 
+            var //Constructors
+                ConnectionNotice = function (scope) {
+                    var that = (this === window) ? {} : this;
+                    that.scope = scope;
+                    that.text = scope.find('span');
+                    return that;
+                };
+            ConnectionNotice.prototype = {
+                connected : false, 
+                prePoll : function () {
+                    var that = this;
+                    if (!that.connected) { 
+                        that.text.text('Connecting...'); 
+                        that.scope.removeClass('gconnect').addClass('gdisconnect');
+                    }
+                },
+                complete : function (textStatus) {
+                    var that = this;
+                    if (textStatus != "Success") {
+                        that.connected = false;
+                        that.text.text('Disconnected...');
+                        that.scope.removeClass('gconnect').addClass('gdisconnect');
+                    }
+                    else {
+                        that.connected = true;
+                        that.text.text('Connected...');
+                        that.scope.removeClass('gdisconnect').addClass('gconnect');
+                    }
+                }
+            };
+            
+            return {
+                ConnectionNotice : ConnectionNotice
+            }
+        } (),
         pubsub = (function () {
             var //Support
                 registry = {},
@@ -270,48 +306,13 @@ var glimpse = (function ($, scope) {
             
             init();  
         } (),
-        plugin = (function () {
-            var //Support
-                plugins = {}, 
-                startPlugin = function (pluginId) {
-                    pluginData[pluginId].instance = pluginData[pluginId].creator();   //TODO: What to pass the plugin 
-                    pluginData[pluginId].instance.init();
-                },
-                stopPlugin = function (pluginId) {
-                    var data = pluginData[pluginId];
-                    if (data.instance) {
-                        data.instance.destroy();
-                        data.instance = null;
-                    } 
-                },
-                startAllPlugins = function () {
-                    for (var pluginId in pluginData) { startPlugin(pluginId); }
-                },
-                stopAllPlugins = function () {
-                    for (var pluginId in pluginData) { stopPlugin(pluginId); }
-                },
-                init = function() {
-                    pubsub.subscribe('state.init', startAllPlugins);  
-                },
-        
-                //Main
-                registerPlugin = function (pluginId, creator) {
-                    plugins[pluginId] = { creator : creator, instance : null };
-                };
-                
-            //init(); 
-            
-            return {
-                register : registerPlugin
-            };
-        }()),
         data = (function () {
             var //Support
                 inner = {},
             
                 //Main
                 update = function (data) {
-                    inner = data;
+                    inner = data; 
                     pubsub.publish('action.data.update');
                 },
                 retrieve = function(requestId, callback) { 
@@ -326,7 +327,7 @@ var glimpse = (function ($, scope) {
                         success : function (data, textStatus, jqXHR) {   
                             if (callback.success) 
                                 callback.success(requestId, data, current, textStatus, jqXHR);  
-                            update(data);
+                            update(data); 
                         }, 
                         complete : function (jqXHR, textStatus) {
                             if (callback.complete) 
@@ -363,8 +364,12 @@ var glimpse = (function ($, scope) {
                     elements.tabHolder = elements.scope.find('.glimpse-tabs ul');
                     elements.panelHolder = elements.scope.find('.glimpse-panel-holder');
                     elements.title = elements.holder.find('.glimpse-title');
+                    elements.options = elements.scope.find('.glimpse-options');
                     elements.findPanel = function(key) {
                         return elements.panelHolder.find('.glimpse-panel[data-glimpseKey="' + key + '"]');
+                    };
+                    elements.findTab = function(key) {
+                        return elements.tabHolder.find('.glimpse-tab[data-glimpseKey="' + key + '"]');
                     };
         
                     pubsub.publish('data.elements.processed'); 
@@ -384,8 +389,8 @@ var glimpse = (function ($, scope) {
                 },
                 processData = function () {  
                     var version = data.currentMetadata().request.runningVersion
-                    template.css = '.glimpse, .glimpse *, .glimpse a, .glimpse td, .glimpse th, .glimpse table {font-family: Helvetica, Arial, sans-serif;background-color: transparent;font-size: 11px;line-height: 14px;border: 0px;color: #232323;text-align: left;}.glimpse table {min-width: 0;}.glimpse a, .glimpse a:hover, .glimpse a:visited {color: #2200C1;text-decoration: underline;font-weight: normal;}.glimpse a:active {color: #c11;text-decoration: underline;font-weight: normal;}.glimpse th {font-weight: bold;}.glimpse-open {z-index: 100010;position: fixed;right: 0;bottom: 0;height: 27px;width: 28px;background: #cfcfcf;background: -moz-linear-gradient(top, #cfcfcf 0%, #dddddd 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cfcfcf), color-stop(100%,#dddddd));background: -webkit-linear-gradient(top, #cfcfcf 0%,#dddddd 100%);background: -o-linear-gradient(top, #cfcfcf 0%,#dddddd 100%);background: -ms-linear-gradient(top, #cfcfcf 0%,#dddddd 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#cfcfcf\', endColorstr=\'#dddddd\',GradientType=0 );background: linear-gradient(top, #cfcfcf 0%,#dddddd 100%);-webkit-box-shadow: inset 0px 1px 0px 0px #E2E2E2;-moz-box-shadow: inset 0px 1px 0px 0px #E2E2E2;box-shadow: inset 0px 1px 0px 0px #E2E2E2;border-top: 1px solid #7A7A7A;border-left: 1px solid #7A7A7A;}.glimpse-icon {background: url() 0px -16px;height: 20px;width: 20px;margin: 3px 4px 0;cursor: pointer;}.glimpse-holder {display: none;z-index: 100010 !important;height: 0;position: fixed;bottom: 0;left: 0;width: 100%;background-color: #fff;}.glimpse-bar {background: #cfcfcf;background: -moz-linear-gradient(top, #cfcfcf 0%, #dddddd 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cfcfcf), color-stop(100%,#dddddd));background: -webkit-linear-gradient(top, #cfcfcf 0%,#dddddd 100%);background: -o-linear-gradient(top, #cfcfcf 0%,#dddddd 100%);background: -ms-linear-gradient(top, #cfcfcf 0%,#dddddd 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#cfcfcf\', endColorstr=\'#dddddd\',GradientType=0 );background: linear-gradient(top, #cfcfcf 0%,#dddddd 100%);-webkit-box-shadow: inset 0px 1px 0px 0px #E2E2E2;-moz-box-shadow: inset 0px 1px 0px 0px #E2E2E2;box-shadow: inset 0px 1px 0px 0px #E2E2E2;border-top: 1px solid #7A7A7A;height: 25px;}.glimpse-bar .glimpse-icon {margin-top: 3px;float: left;}.glimpse-buttons {text-align: right;float: right;height: 17px;width: 150px;padding: 6px;}.glimpse-title {margin: 0 0 0 15px;padding-top: 5px;font-weight: bold;display: inline-block;width: 75%;overflow: hidden;}.glimpse-title .glimpse-snapshot-type {display: inline-block;height: 20px;}.glimpse-title .glimpse-enviro {padding-left: 10px;white-space: nowrap;height: 20px;}.glimpse-title .glimpse-url .glimpse-drop {padding-left: 10px;}.glimpse-title .glimpse-url .loading {margin: 5px 0 0;font-weight: normal;display: none;}.glimpse-title .glimpse-url .glimpse-drop-over {padding-left: 20px;padding-right: 20px;text-align: center;}.glimpse .glimpse-drop {padding: 1px 1px 1px 8px;height: 14px;font-size: 0.9em;}.glimpse .glimpse-drop, .glimpse .glimpse-drop-over {font-weight: normal;font-weight: normal;background: #f7f7f7;background: -moz-linear-gradient(top, #f7f7f7 0%, #e6e6e6 29%, #e2e2e2 31%, #c9c9c9 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f7f7f7), color-stop(29%,#e6e6e6), color-stop(31%,#e2e2e2), color-stop(100%,#c9c9c9));background: -webkit-linear-gradient(top, #f7f7f7 0%,#e6e6e6 29%,#e2e2e2 31%,#c9c9c9 100%);background: -o-linear-gradient(top, #f7f7f7 0%,#e6e6e6 29%,#e2e2e2 31%,#c9c9c9 100%);background: -ms-linear-gradient(top, #f7f7f7 0%,#e6e6e6 29%,#e2e2e2 31%,#c9c9c9 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#f7f7f7\', endColorstr=\'#c9c9c9\',GradientType=0 );background: linear-gradient(top, #f7f7f7 0%,#e6e6e6 29%,#e2e2e2 31%,#c9c9c9 100%);-webkit-box-shadow: inset 0px 1px 0px 0px #F9F9F9;-moz-box-shadow: inset 0px 1px 0px 0px #F9F9F9;box-shadow: inset 0px 1px 0px 0px #F9F9F9;border: 1px solid #A7A7A7;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;margin: 0 5px 0 0;}.glimpse .glimpse-drop-over {position: absolute;display: none;top: 4px;padding: 1px 10px 10px 10px;z-index: 100;-webkit-box-shadow: 0px 0px 8px 0px #696969;-moz-box-shadow: 0px 0px 8px 0px #696969;box-shadow: 0px 0px 8px 0px #696969;}.glimpse .glimpse-drop-over div {text-align: center;font-weight: bold;margin: 5px 0;}.glimpse .glimpse-drop-arrow-holder {margin: 3px 3px 3px 5px;padding-left: 3px;border-left: 1px solid #A7A7A7;font-size: 9px;height: 9px;width: 10px;}.glimpse .glimpse-drop-arrow {background: url() no-repeat -22px -18px;width: 7px;height: 4px;display: inline-block;}.glimpse-button, .glimpse-button:hover {cursor: pointer;background-image: url();background-repeat: no-repeat;height: 14px;width: 14px;margin-left: 2px;display: inline-block;}.glimpse-meta-warning {background-position: -168px -1px;display: none;}.glimpse-meta-warning:hover {background-position: -183px -1px;}.glimpse-meta-help {background-position: -138px -1px;margin-right: 15px;}.glimpse-meta-help:hover {background-position: -153px -1px;margin-right: 15px;}.glimpse-meta-update {background-position: -198px -1px;display: none;}.glimpse-meta-update:hover {background-position: -213px -1px;}.glimpse-minimize {background-position: -1px -1px;}.glimpse-minimize:hover {background-position: -17px -1px;}.glimpse-close {background-position: -65px -1px;}.glimpse-close:hover {background-position: -81px -1px;}.glimpse-popout {background-position: -96px -1px;}.glimpse-popout:hover {background-position: -111px -1px;}.glimpse-tabs {background: #afafaf;background: -moz-linear-gradient(top, #afafaf 0%, #cfcfcf 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#afafaf), color-stop(100%,#cfcfcf));background: -webkit-linear-gradient(top, #afafaf 0%,#cfcfcf 100%);background: -o-linear-gradient(top, #afafaf 0%,#cfcfcf 100%);background: -ms-linear-gradient(top, #afafaf 0%,#cfcfcf 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#afafaf\', endColorstr=\'#cfcfcf\',GradientType=0 );background: linear-gradient(top, #afafaf 0%,#cfcfcf 100%);border-bottom: 1px solid #A4A4A4;border-top: 1px solid #F9F9F9;-webkit-box-shadow: inset 0px 1px 0px 0px #8b8b8b;-moz-box-shadow: inset 0px 1px 0px 0px #8b8b8b;box-shadow: inset 0px 1px 0px 0px #8b8b8b;font-weight: bold;height: 24px;}.glimpse-tabs ul {margin: 4px 0px 0 0;padding: 0px;}.glimpse-tabs li {display: inline;margin: 0 2px 3px 2px;height: 22px;padding: 4px 9px 3px;color: #565656;cursor: pointer;border-radius: 0px 0px 3px 3px;-moz-border-radius: 0px 0px 3px 3px;-webkit-border-bottom-right-radius: 3px;-webkit-border-bottom-left-radius: 3px;-webkit-transition: color 0.3s ease;-moz-transition: color 0.3s ease;-o-transition: color 0.3s ease;transition: color 0.3s ease;-moz-user-select: -moz-none;-khtml-user-select: none;-webkit-user-select: none;user-select: none;}.glimpse-tabs li.glimpse-hover {padding: 4px 8px 3px;background: #dddddd;background: -moz-linear-gradient(top, #dddddd 0%, #ffffff 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dddddd), color-stop(100%,#ffffff));background: -webkit-linear-gradient(top, #dddddd 0%,#ffffff 100%);background: -o-linear-gradient(top, #dddddd 0%,#ffffff 100%);background: -ms-linear-gradient(top, #dddddd 0%,#ffffff 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#dddddd\', endColorstr=\'#ffffff\',GradientType=0 );background: linear-gradient(top, #dddddd 0%,#ffffff 100%);-webkit-box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;-moz-box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;border-bottom: 1px solid #8B8B8B;border-left: 1px solid #8B8B8B;border-right: 1px solid #8B8B8B;border-top: 2px solid #DDD;}.glimpse-tabs li.glimpse-active {background: #dddddd;background: -moz-linear-gradient(top, #dddddd 0%, #efefef 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dddddd), color-stop(100%,#efefef));background: -webkit-linear-gradient(top, #dddddd 0%,#efefef 100%);background: -o-linear-gradient(top, #dddddd 0%,#efefef 100%);background: -ms-linear-gradient(top, #dddddd 0%,#efefef 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#dddddd\', endColorstr=\'#efefef\',GradientType=0 );background: linear-gradient(top, #dddddd 0%,#efefef 100%);-webkit-box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;-moz-box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;border-bottom: 1px solid #8b8b8b;border-left: 1px solid #8b8b8b;border-right: 1px solid #8b8b8b;border-top: 2px solid #DDD;color: #000;padding: 4px 8px 3px;}.glimpse-tabs li.glimpse-disabled {color: #AAA;cursor: default;}.glimpse-panel-holder {}.glimpse-panel {display: none;overflow: auto;position: relative;}.glimpse-panel-message {text-align: center;padding-top: 40px;font-size: 1.1em;color: #AAA;}.glimpse-panel table {border-spacing: 0;width: 100%;}.glimpse-panel table td, .glimpse-panel table th {padding: 3px 4px;text-align: left;vertical-align: top;}.glimpse-panel table td .glimpse-cell {vertical-align: top;}.glimpse-panel tbody .mono {font-family: Consolas, monospace, serif;font-size: 1.1em;}.glimpse-panel tr.glimpse-row-header-0 {height: 19px;}.glimpse-panel .glimpse-row-header-0 th {background: #DFDFDF;background: -moz-linear-gradient(top, #f3f3f3 0%, #f3f3f3 5%, #e6e6e6 6%, #d1d1d1 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f3f3f3), color-stop(5%,#f3f3f3), color-stop(6%,#e6e6e6), color-stop(100%,#d1d1d1));background: -webkit-linear-gradient(top, #f3f3f3 0%,#f3f3f3 5%,#e6e6e6 6%,#d1d1d1 100%);background: -o-linear-gradient(top, #f3f3f3 0%,#f3f3f3 5%,#e6e6e6 6%,#d1d1d1 100%);background: -ms-linear-gradient(top, #f3f3f3 0%,#f3f3f3 5%,#e6e6e6 6%,#d1d1d1 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#f3f3f3\', endColorstr=\'#d1d1d1\',GradientType=0 );background: linear-gradient(top, #f3f3f3 0%,#f3f3f3 5%,#e6e6e6 6%,#d1d1d1 100%);border-bottom: 1px solid #9C9C9C;font-weight: bold;}.glimpse-panel .glimpse-row-header-0 th {border-left: 1px solid #D9D9D9;border-right: 1px solid #9C9C9C;}.glimpse-panel .glimpse-soft {color: #999;}.glimpse-panel .glimpse-cell-key {font-weight: bold;}.glimpse-panel th.glimpse-cell-key {width: 30%;max-width: 150px;}.glimpse-panel table table {border: 1px solid #D9D9D9;}.glimpse-panel table table thead th {background: #f3f3f3;background: -moz-linear-gradient(top, #f3f3f3 0%, #e6e6e6 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f3f3f3), color-stop(100%,#e6e6e6));background: -webkit-linear-gradient(top, #f3f3f3 0%,#e6e6e6 100%);background: -o-linear-gradient(top, #f3f3f3 0%,#e6e6e6 100%);background: -ms-linear-gradient(top, #f3f3f3 0%,#e6e6e6 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#f3f3f3\', endColorstr=\'#e6e6e6\',GradientType=0 );background: linear-gradient(top, #f3f3f3 0%,#e6e6e6 100%);border-bottom: 1px solid #9C9C9C;}.glimpse-panel table table thead tr th {border-left: 1px solid #C6C6C6;border-right: 1px solid #D9D9D9;padding: 1px 4px 2px 4px;}.glimpse-panel table table thead tr th:first-child {border-left: 0px;}.glimpse-panel table table thead tr th:last-child {border-right: 0px;}.glimpse-panel .even, .glimpse-panel .even > td, .glimpse-panel .even > th, .glimpse-panel .even > tr > td, .glimpse-panel .even > tr > th, .even > td > .glimpse-preview-table > tbody > tr > td, .even > tr > td > .glimpse-preview-table > tbody > tr > td {background-color: #F2F5F9;}.glimpse-panel .odd, .glimpse-panel .odd > td, .glimpse-panel .odd > th, .glimpse-panel .odd > tr > td, .glimpse-panel .odd > tr > th, .odd > td > .glimpse-preview-table > tbody > tr > td, .odd > tr > td > .glimpse-preview-table > tbody > tr > td {background-color: #FEFFFF;}.glimpse-panel table table tbody th {font-weight: normal;font-style: italic;}.glimpse-panel table table thead th {font-weight: bold;font-style: normal;}.glimpse-panel .glimpse-side-sub-panel {right: 0;z-index: 10;background-color: #FAFCFC;height: 100%;width: 25%;border-left: 1px solid #ACA899;position: absolute;}.glimpse-panel .glimpse-side-main-panel {position: relative;height: 100%;width: 75%;float: left;}.glimpse-panel-holder .glimpse-active {display: block;}.glimpse-resizer {height: 4px;cursor: n-resize;width: 100%;position: absolute;top: -1px;}li.glimpse-permanent {font-style: italic;}.glimpse-preview-object {color: #006400;}.glimpse-preview-string, .glimpse-preview-object .glimpse-preview-string {color: #006400;font-weight: normal !important;}.glimpse-preview-string span {padding-left: 1px;}.glimpse-preview-object span {font-weight: bold;color: #444;}.glimpse-preview-object span.start {margin-right: 5px;}.glimpse-preview-object span.end {margin-left: 5px;}.glimpse-preview-object span.rspace {margin-right: 4px;}.glimpse-preview-object span.mspace {margin: 0 4px;}.glimpse-preview-object span.small {font-size: 0.95em;}.glimpse-panel .glimpse-preview-table {border: 0;}.glimpse-panel .glimpse-preview-table .glimpse-preview-cell {padding-left: 0;padding-right: 2px;width: 11px;}.glimpse-expand {height: 11px;width: 11px;display: inline-block;float: left;margin: 1px 0 0 0;cursor: pointer;background-image: url();background-repeat: no-repeat;background-position: -126px 0;}.glimpse-collapse {background-position: -126px -11px;}.glimpse-preview-show {display: none;font-weight: normal !important;}.glimpse-panel .quiet *, .glimpse-panel .ms * {color: #AAA;}.glimpse-panel .suppress {text-decoration: line-through;}.glimpse-panel .suppress * {color: #AAA;}.glimpse-panel .selected, .glimpse-panel .selected > td, .glimpse-panel .selected > th, .glimpse-panel .selected > tr > td, .glimpse-panel .selected > tr > th, .selected > td > .glimpse-preview-table > tbody > tr > td, .selected > tr > td > .glimpse-preview-table > tbody > tr > td {background-color: #FFFF99;}.glimpse-panel .selected * {color: #409B3B;}.glimpse .info .icon, .glimpse .warn .icon, .glimpse .loading .icon, .glimpse .error .icon, .glimpse .fail .icon, .glimpse .ms .icon {width: 14px;height: 14px;background-image: url();background-repeat: no-repeat;display: inline-block;margin-right: 5px;}.glimpse .info .icon {background-position: -22px -22px;}.glimpse .warn .icon {background-position: -36px -22px;}.glimpse .loading .icon {background-position: -78px -22px;}.glimpse .error .icon {background-position: -50px -22px;}.glimpse .ms .icon {background-position: -181px -22px;}.glimpse .fail .icon {background-position: -64px -22px;}.glimpse .info * {color: #067CE5;}.glimpse .warn * {color: #FE850C;}.glimpse .error * {color: #B40000;}.glimpse .fail * {color: #B40000;font-weight: bold;}.glimpse-panelitem-Ajax .loading .icon {float: right;}.glimpse-panelitem-Remote .glimpse-side-sub-panel .loading, .glimpse-panelitem-Remote .glimpse-side-main-panel .loading, .glimpse-clear {position: fixed;bottom: 5px;right: 10px;color: #777;}.glimpse-panelitem-Remote .glimpse-side-main-panel .loading {right: 27%;}.glimpse-clear {background-color: white;padding: 0.3em 1em 0.5em 1em;border: #CCC solid 1px;bottom: 25px;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;}.glimpse-panel table .glimpse-head-message td {text-align: center;background-color: #DDD;}.glimpse-panelitem-GlimpseMetadata div {text-align: center;}.glimpse-panelitem-GlimpseMetadata .glimpse-panel-message {padding-top: 5px;}.glimpse-panelitem-GlimpseMetadata strong {font-weight: bold;}.glimpse-panelitem-GlimpseMetadata .glimpse-info-more {font-size: 1.5em;margin: 1em 0;}.glimpse-panelitem-GlimpseMetadata .glimpse-info-quote {font-style: italic;margin: 0.75em 0 3em;}.glimpse-pager {background: #C6C6C6;padding: 3px 4px;font-weight: bold;text-align: center;vertical-align: top;}.glimpse-pager .glimpse-pager-message {margin-left: 5px;margin-right: 5px;}.glimpse-pager .glimpse-button {margin-top: 0px;}.glimpse-pager .glimpse-pager-link, .glimpse-pager .glimpse-pager-link:hover {font-weight: bold;}.glimpse-pager .glimpse-pager-link-firstPage {background-position: -2px -38px;}.glimpse-pager .glimpse-pager-link-firstPage-disabled {background-position: -17px -38px;}.glimpse-pager .glimpse-pager-link-previousPage {background-position: -33px -38px;}.glimpse-pager .glimpse-pager-link-previousPage-disabled {background-position: -49px -38px;}.glimpse-pager .glimpse-pager-link-nextPage {background-position: -65px -38px;}.glimpse-pager .glimpse-pager-link-nextPage-disabled {background-position: -81px -38px;}.glimpse-pager .glimpse-pager-link-lastPage {background-position: -96px -38px;}.glimpse-pager .glimpse-pager-link-lastPage-disabled {background-position: -111px -38px;}.glimpse-panel table.glimpse-pager-separator {border-bottom: 3px solid #C6C6C6;}@media screen and (-webkit-min-device-pixel-ratio:0) {.glimpse-tabs li.glimpse-hover, .glimpse-tabs li.glimpse-active {border-top: 1px solid #DDD;}}.glimpse-panel .glimpse-sub-text {color: #AAA;font-size: 0.9em;margin-left: 5px;top:-1px;position:relative;}.glimpse-popup {color:#000;background:#FFF;margin:0;padding:0;} .glimpse-popup .glimpse-holder {position:relative !important;display: block !important; } .glimpse-popup .glimpse-popout, .glimpse-popup .glimpse-minimize, .glimpse-popup .glimpse-close, .glimpse-popup .glimpse-terminate, .glimpse-popup .glimpse-open {display:none !important; } .glimpse-popup .glimpse-panel {overflow:visible !important; }';
-                    template.html = '<div class="glimpse-spacer"></div><div class="glimpse-open"><div class="glimpse-icon"></div></div><div class="glimpse-holder glimpse"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon" title="About Glimpse?"></div><div class="glimpse-title"><span class="glimpse-snapshot-type"></span><span><span class="glimpse-enviro"></span><span class="glimpse-url"></span></span></div><div class="glimpse-buttons"><a class="glimpse-meta-warning glimpse-button" href="#" title="Glimpse has some warnings!"></a><a class="glimpse-meta-update glimpse-button" href="http://www.nuget.org/List/Packages/Glimpse" title="New version of Glimpse available" target="_blank"></a><a class="glimpse-meta-help glimpse-button" href="#" title="Need some help?"></a><a class="glimpse-minimize glimpse-button" href="#" title="Close/Minimize"></a><a class="glimpse-popout glimpse-button" href="#" title="Pop Out"></a><a class="glimpse-close glimpse-button" href="#" title="Shutdown/Terminate"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div></div></div>';
+                    template.css = '.glimpse, .glimpse *, .glimpse a, .glimpse td, .glimpse th, .glimpse table {font-family: Helvetica, Arial, sans-serif;background-color: transparent;font-size: 11px;line-height: 14px;border: 0px;color: #232323;text-align: left;}.glimpse table {min-width: 0;}.glimpse a, .glimpse a:hover, .glimpse a:visited {color: #2200C1;text-decoration: underline;font-weight: normal;}.glimpse a:active {color: #c11;text-decoration: underline;font-weight: normal;}.glimpse th {font-weight: bold;}.glimpse-open {z-index: 100010;position: fixed;right: 0;bottom: 0;height: 27px;width: 28px;background: #cfcfcf;background: -moz-linear-gradient(top, #cfcfcf 0%, #dddddd 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cfcfcf), color-stop(100%,#dddddd));background: -webkit-linear-gradient(top, #cfcfcf 0%,#dddddd 100%);background: -o-linear-gradient(top, #cfcfcf 0%,#dddddd 100%);background: -ms-linear-gradient(top, #cfcfcf 0%,#dddddd 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#cfcfcf\', endColorstr=\'#dddddd\',GradientType=0 );background: linear-gradient(top, #cfcfcf 0%,#dddddd 100%);-webkit-box-shadow: inset 0px 1px 0px 0px #E2E2E2;-moz-box-shadow: inset 0px 1px 0px 0px #E2E2E2;box-shadow: inset 0px 1px 0px 0px #E2E2E2;border-top: 1px solid #7A7A7A;border-left: 1px solid #7A7A7A;}.glimpse-icon {background: url() 0px -16px;height: 20px;width: 20px;margin: 3px 4px 0;cursor: pointer;}.glimpse-holder {display: none;z-index: 100010 !important;height: 0;position: fixed;bottom: 0;left: 0;width: 100%;background-color: #fff;}.glimpse-bar {background: #cfcfcf;background: -moz-linear-gradient(top, #cfcfcf 0%, #dddddd 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cfcfcf), color-stop(100%,#dddddd));background: -webkit-linear-gradient(top, #cfcfcf 0%,#dddddd 100%);background: -o-linear-gradient(top, #cfcfcf 0%,#dddddd 100%);background: -ms-linear-gradient(top, #cfcfcf 0%,#dddddd 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#cfcfcf\', endColorstr=\'#dddddd\',GradientType=0 );background: linear-gradient(top, #cfcfcf 0%,#dddddd 100%);-webkit-box-shadow: inset 0px 1px 0px 0px #E2E2E2;-moz-box-shadow: inset 0px 1px 0px 0px #E2E2E2;box-shadow: inset 0px 1px 0px 0px #E2E2E2;border-top: 1px solid #7A7A7A;height: 25px;}.glimpse-bar .glimpse-icon {margin-top: 3px;float: left;}.glimpse-buttons {text-align: right;float: right;height: 17px;width: 150px;padding: 6px;}.glimpse-title {margin: 0 0 0 15px;padding-top: 5px;font-weight: bold;display: inline-block;width: 75%;overflow: hidden;}.glimpse-title .glimpse-snapshot-type {display: inline-block;height: 20px;}.glimpse-title .glimpse-enviro {padding-left: 10px;white-space: nowrap;height: 20px;}.glimpse-title .glimpse-url .glimpse-drop {padding-left: 10px;}.glimpse-title .glimpse-url .loading {margin: 5px 0 0;font-weight: normal;display: none;}.glimpse-title .glimpse-url .glimpse-drop-over {padding-left: 20px;padding-right: 20px;text-align: center;}.glimpse .glimpse-drop {padding: 1px 1px 1px 8px;height: 14px;font-size: 0.9em;}.glimpse .glimpse-drop, .glimpse .glimpse-drop-over {font-weight: normal;font-weight: normal;background: #f7f7f7;background: -moz-linear-gradient(top, #f7f7f7 0%, #e6e6e6 29%, #e2e2e2 31%, #c9c9c9 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f7f7f7), color-stop(29%,#e6e6e6), color-stop(31%,#e2e2e2), color-stop(100%,#c9c9c9));background: -webkit-linear-gradient(top, #f7f7f7 0%,#e6e6e6 29%,#e2e2e2 31%,#c9c9c9 100%);background: -o-linear-gradient(top, #f7f7f7 0%,#e6e6e6 29%,#e2e2e2 31%,#c9c9c9 100%);background: -ms-linear-gradient(top, #f7f7f7 0%,#e6e6e6 29%,#e2e2e2 31%,#c9c9c9 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#f7f7f7\', endColorstr=\'#c9c9c9\',GradientType=0 );background: linear-gradient(top, #f7f7f7 0%,#e6e6e6 29%,#e2e2e2 31%,#c9c9c9 100%);-webkit-box-shadow: inset 0px 1px 0px 0px #F9F9F9;-moz-box-shadow: inset 0px 1px 0px 0px #F9F9F9;box-shadow: inset 0px 1px 0px 0px #F9F9F9;border: 1px solid #A7A7A7;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;margin: 0 5px 0 0;}.glimpse .glimpse-drop-over {position: absolute;display: none;top: 4px;padding: 1px 10px 10px 10px;z-index: 100;-webkit-box-shadow: 0px 0px 8px 0px #696969;-moz-box-shadow: 0px 0px 8px 0px #696969;box-shadow: 0px 0px 8px 0px #696969;}.glimpse .glimpse-drop-over div {text-align: center;font-weight: bold;margin: 5px 0;}.glimpse .glimpse-drop-arrow-holder {margin: 3px 3px 3px 5px;padding-left: 3px;border-left: 1px solid #A7A7A7;font-size: 9px;height: 9px;width: 10px;}.glimpse .glimpse-drop-arrow {background: url() no-repeat -22px -18px;width: 7px;height: 4px;display: inline-block;}.glimpse-button, .glimpse-button:hover {cursor: pointer;background-image: url();background-repeat: no-repeat;height: 14px;width: 14px;margin-left: 2px;display: inline-block;}.glimpse-meta-warning {background-position: -168px -1px;display: none;}.glimpse-meta-warning:hover {background-position: -183px -1px;}.glimpse-meta-help {background-position: -138px -1px;margin-right: 15px;}.glimpse-meta-help:hover {background-position: -153px -1px;margin-right: 15px;}.glimpse-meta-update {background-position: -198px -1px;display: none;}.glimpse-meta-update:hover {background-position: -213px -1px;}.glimpse-minimize {background-position: -1px -1px;}.glimpse-minimize:hover {background-position: -17px -1px;}.glimpse-close {background-position: -65px -1px;}.glimpse-close:hover {background-position: -81px -1px;}.glimpse-popout {background-position: -96px -1px;}.glimpse-popout:hover {background-position: -111px -1px;}.glimpse-tabs {background: #afafaf;background: -moz-linear-gradient(top, #afafaf 0%, #cfcfcf 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#afafaf), color-stop(100%,#cfcfcf));background: -webkit-linear-gradient(top, #afafaf 0%,#cfcfcf 100%);background: -o-linear-gradient(top, #afafaf 0%,#cfcfcf 100%);background: -ms-linear-gradient(top, #afafaf 0%,#cfcfcf 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#afafaf\', endColorstr=\'#cfcfcf\',GradientType=0 );background: linear-gradient(top, #afafaf 0%,#cfcfcf 100%);border-bottom: 1px solid #A4A4A4;border-top: 1px solid #F9F9F9;-webkit-box-shadow: inset 0px 1px 0px 0px #8b8b8b;-moz-box-shadow: inset 0px 1px 0px 0px #8b8b8b;box-shadow: inset 0px 1px 0px 0px #8b8b8b;font-weight: bold;height: 24px;}.glimpse-tabs ul {margin: 4px 0px 0 0;padding: 0px;}.glimpse-tabs li {display: inline;margin: 0 2px 3px 2px;height: 22px;padding: 4px 9px 3px;color: #565656;cursor: pointer;border-radius: 0px 0px 3px 3px;-moz-border-radius: 0px 0px 3px 3px;-webkit-border-bottom-right-radius: 3px;-webkit-border-bottom-left-radius: 3px;-webkit-transition: color 0.3s ease;-moz-transition: color 0.3s ease;-o-transition: color 0.3s ease;transition: color 0.3s ease;-moz-user-select: -moz-none;-khtml-user-select: none;-webkit-user-select: none;user-select: none;}.glimpse-tabs li.glimpse-hover {padding: 4px 8px 3px;background: #dddddd;background: -moz-linear-gradient(top, #dddddd 0%, #ffffff 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dddddd), color-stop(100%,#ffffff));background: -webkit-linear-gradient(top, #dddddd 0%,#ffffff 100%);background: -o-linear-gradient(top, #dddddd 0%,#ffffff 100%);background: -ms-linear-gradient(top, #dddddd 0%,#ffffff 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#dddddd\', endColorstr=\'#ffffff\',GradientType=0 );background: linear-gradient(top, #dddddd 0%,#ffffff 100%);-webkit-box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;-moz-box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;border-bottom: 1px solid #8B8B8B;border-left: 1px solid #8B8B8B;border-right: 1px solid #8B8B8B;border-top: 2px solid #DDD;}.glimpse-tabs li.glimpse-active {background: #dddddd;background: -moz-linear-gradient(top, #dddddd 0%, #efefef 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dddddd), color-stop(100%,#efefef));background: -webkit-linear-gradient(top, #dddddd 0%,#efefef 100%);background: -o-linear-gradient(top, #dddddd 0%,#efefef 100%);background: -ms-linear-gradient(top, #dddddd 0%,#efefef 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#dddddd\', endColorstr=\'#efefef\',GradientType=0 );background: linear-gradient(top, #dddddd 0%,#efefef 100%);-webkit-box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;-moz-box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;border-bottom: 1px solid #8b8b8b;border-left: 1px solid #8b8b8b;border-right: 1px solid #8b8b8b;border-top: 2px solid #DDD;color: #000;padding: 4px 8px 3px;}.glimpse-tabs li.glimpse-disabled {color: #AAA;cursor: default;}.glimpse-panel-holder {}.glimpse-panel {display: none;overflow: auto;position: relative;}.glimpse-panel-message {text-align: center;padding-top: 40px;font-size: 1.1em;color: #AAA;}.glimpse-panel table {border-spacing: 0;width: 100%;}.glimpse-panel table td, .glimpse-panel table th {padding: 3px 4px;text-align: left;vertical-align: top;}.glimpse-panel table td .glimpse-cell {vertical-align: top;}.glimpse-panel tbody .mono {font-family: Consolas, monospace, serif;font-size: 1.1em;}.glimpse-panel tr.glimpse-row-header-0 {height: 19px;}.glimpse-panel .glimpse-row-header-0 th {background: #DFDFDF;background: -moz-linear-gradient(top, #f3f3f3 0%, #f3f3f3 5%, #e6e6e6 6%, #d1d1d1 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f3f3f3), color-stop(5%,#f3f3f3), color-stop(6%,#e6e6e6), color-stop(100%,#d1d1d1));background: -webkit-linear-gradient(top, #f3f3f3 0%,#f3f3f3 5%,#e6e6e6 6%,#d1d1d1 100%);background: -o-linear-gradient(top, #f3f3f3 0%,#f3f3f3 5%,#e6e6e6 6%,#d1d1d1 100%);background: -ms-linear-gradient(top, #f3f3f3 0%,#f3f3f3 5%,#e6e6e6 6%,#d1d1d1 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#f3f3f3\', endColorstr=\'#d1d1d1\',GradientType=0 );background: linear-gradient(top, #f3f3f3 0%,#f3f3f3 5%,#e6e6e6 6%,#d1d1d1 100%);border-bottom: 1px solid #9C9C9C;font-weight: bold;}.glimpse-panel .glimpse-row-header-0 th {border-left: 1px solid #D9D9D9;border-right: 1px solid #9C9C9C;}.glimpse-panel .glimpse-soft {color: #999;}.glimpse-panel .glimpse-cell-key {font-weight: bold;}.glimpse-panel th.glimpse-cell-key {width: 30%;max-width: 150px;}.glimpse-panel table table {border: 1px solid #D9D9D9;}.glimpse-panel table table thead th {background: #f3f3f3;background: -moz-linear-gradient(top, #f3f3f3 0%, #e6e6e6 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f3f3f3), color-stop(100%,#e6e6e6));background: -webkit-linear-gradient(top, #f3f3f3 0%,#e6e6e6 100%);background: -o-linear-gradient(top, #f3f3f3 0%,#e6e6e6 100%);background: -ms-linear-gradient(top, #f3f3f3 0%,#e6e6e6 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#f3f3f3\', endColorstr=\'#e6e6e6\',GradientType=0 );background: linear-gradient(top, #f3f3f3 0%,#e6e6e6 100%);border-bottom: 1px solid #9C9C9C;}.glimpse-panel table table thead tr th {border-left: 1px solid #C6C6C6;border-right: 1px solid #D9D9D9;padding: 1px 4px 2px 4px;}.glimpse-panel table table thead tr th:first-child {border-left: 0px;}.glimpse-panel table table thead tr th:last-child {border-right: 0px;}.glimpse-panel .even, .glimpse-panel .even > td, .glimpse-panel .even > th, .glimpse-panel .even > tr > td, .glimpse-panel .even > tr > th, .even > td > .glimpse-preview-table > tbody > tr > td, .even > tr > td > .glimpse-preview-table > tbody > tr > td {background-color: #F2F5F9;}.glimpse-panel .odd, .glimpse-panel .odd > td, .glimpse-panel .odd > th, .glimpse-panel .odd > tr > td, .glimpse-panel .odd > tr > th, .odd > td > .glimpse-preview-table > tbody > tr > td, .odd > tr > td > .glimpse-preview-table > tbody > tr > td {background-color: #FEFFFF;}.glimpse-panel table table tbody th {font-weight: normal;font-style: italic;}.glimpse-panel table table thead th {font-weight: bold;font-style: normal;}.glimpse-panel .glimpse-side-sub-panel {right: 0;z-index: 10;background-color: #FAFCFC;height: 100%;width: 25%;border-left: 1px solid #ACA899;position: absolute;}.glimpse-panel .glimpse-side-main-panel {position: relative;height: 100%;width: 75%;float: left;}.glimpse-panel-holder .glimpse-active {display: block;}.glimpse-resizer {height: 4px;cursor: n-resize;width: 100%;position: absolute;top: -1px;}li.glimpse-permanent {font-style: italic;}.glimpse-preview-object {color: #006400;}.glimpse-preview-string, .glimpse-preview-object .glimpse-preview-string {color: #006400;font-weight: normal !important;}.glimpse-preview-string span {padding-left: 1px;}.glimpse-preview-object span {font-weight: bold;color: #444;}.glimpse-preview-object span.start {margin-right: 5px;}.glimpse-preview-object span.end {margin-left: 5px;}.glimpse-preview-object span.rspace {margin-right: 4px;}.glimpse-preview-object span.mspace {margin: 0 4px;}.glimpse-preview-object span.small {font-size: 0.95em;}.glimpse-panel .glimpse-preview-table {border: 0;}.glimpse-panel .glimpse-preview-table .glimpse-preview-cell {padding-left: 0;padding-right: 2px;width: 11px;}.glimpse-expand {height: 11px;width: 11px;display: inline-block;float: left;margin: 1px 0 0 0;cursor: pointer;background-image: url();background-repeat: no-repeat;background-position: -126px 0;}.glimpse-collapse {background-position: -126px -11px;}.glimpse-preview-show {display: none;font-weight: normal !important;}.glimpse-panel .quiet *, .glimpse-panel .ms * {color: #AAA;}.glimpse-panel .suppress {text-decoration: line-through;}.glimpse-panel .suppress * {color: #AAA;}.glimpse-panel .selected, .glimpse-panel .selected > td, .glimpse-panel .selected > th, .glimpse-panel .selected > tr > td, .glimpse-panel .selected > tr > th, .selected > td > .glimpse-preview-table > tbody > tr > td, .selected > tr > td > .glimpse-preview-table > tbody > tr > td {background-color: #FFFF99;}.glimpse-panel .selected * {color: #409B3B;}.glimpse .info .icon, .glimpse .warn .icon, .glimpse .loading .icon, .glimpse .error .icon, .glimpse .fail .icon, .glimpse .ms .icon, .glimpse .gconnect .icon, .glimpse .gdisconnect .icon {width: 14px;height: 14px;background-image: url();background-repeat: no-repeat;display: inline-block;margin-right: 5px;}.glimpse .gconnect .icon, .glimpse .gdisconnect .icon {width: 17px;height: 17px;}.glimpse .info .icon {background-position: -22px -22px;}.glimpse .warn .icon {background-position: -36px -22px;}.glimpse .loading .icon {background-position: -78px -22px;}.glimpse .error .icon {background-position: -50px -22px;}.glimpse .ms .icon {background-position: -181px -22px;}.glimpse .fail .icon {background-position: -64px -22px;}.glimpse .gconnect .icon {background-position: -213px -20px; /*TODO fix position*/}.glimpse .gdisconnect .icon {background-position: -195px -20px; /*TODO fix position*/}.glimpse .info * {color: #067CE5;}.glimpse .warn * {color: #FE850C;}.glimpse .error * {color: #B40000;}.glimpse .fail * {color: #B40000;font-weight: bold;}.glimpse-notice {position:absolute;right: 20px;bottom: 5px;color: #777;}/*.glimpse-panelitem-Ajax .loading .icon {float: right;}.glimpse-panelitem-Remote .glimpse-side-sub-panel .loading, .glimpse-panelitem-Remote .glimpse-side-main-panel .loading, .glimpse-clear {position: fixed;bottom: 5px;right: 10px;color: #777;}.glimpse-panelitem-Remote .glimpse-side-main-panel .loading {right: 27%;}*/.glimpse-clear {bottom: 30px;position: absolute;right: 20px;background-color: white;padding: 0.2em 1em 0.3em 1em;border: #CCC solid 1px;bottom: 25px;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;}.glimpse-panel table .glimpse-head-message td {text-align: center;background-color: #DDD;}.glimpse-panelitem-GlimpseMetadata div {text-align: center;}.glimpse-panelitem-GlimpseMetadata .glimpse-panel-message {padding-top: 5px;}.glimpse-panelitem-GlimpseMetadata strong {font-weight: bold;}.glimpse-panelitem-GlimpseMetadata .glimpse-info-more {font-size: 1.5em;margin: 1em 0;}.glimpse-panelitem-GlimpseMetadata .glimpse-info-quote {font-style: italic;margin: 0.75em 0 3em;}.glimpse-pager {background: #C6C6C6;padding: 3px 4px;font-weight: bold;text-align: center;vertical-align: top;}.glimpse-pager .glimpse-pager-message {margin-left: 5px;margin-right: 5px;}.glimpse-pager .glimpse-button {margin-top: 0px;}.glimpse-pager .glimpse-pager-link, .glimpse-pager .glimpse-pager-link:hover {font-weight: bold;}.glimpse-pager .glimpse-pager-link-firstPage {background-position: -2px -38px;}.glimpse-pager .glimpse-pager-link-firstPage-disabled {background-position: -17px -38px;}.glimpse-pager .glimpse-pager-link-previousPage {background-position: -33px -38px;}.glimpse-pager .glimpse-pager-link-previousPage-disabled {background-position: -49px -38px;}.glimpse-pager .glimpse-pager-link-nextPage {background-position: -65px -38px;}.glimpse-pager .glimpse-pager-link-nextPage-disabled {background-position: -81px -38px;}.glimpse-pager .glimpse-pager-link-lastPage {background-position: -96px -38px;}.glimpse-pager .glimpse-pager-link-lastPage-disabled {background-position: -111px -38px;}.glimpse-panel table tr.glimpse-pager-separator td {border-bottom: 3px solid #C6C6C6;}@media screen and (-webkit-min-device-pixel-ratio:0) {.glimpse-tabs li.glimpse-hover, .glimpse-tabs li.glimpse-active {border-top: 1px solid #DDD;}}.glimpse-panel .glimpse-sub-text {color: #AAA;font-size: 0.9em;margin-left: 5px;top:-1px;position:relative;}.glimpse-popup {color:#000;background:#FFF;margin:0;padding:0;} .glimpse-popup .glimpse-holder {position:relative !important;display: block !important; } .glimpse-popup .glimpse-popout, .glimpse-popup .glimpse-minimize, .glimpse-popup .glimpse-close, .glimpse-popup .glimpse-terminate, .glimpse-popup .glimpse-open {display:none !important; } .glimpse-popup .glimpse-panel {overflow:visible !important; }';
+                    template.html = '<div class="glimpse-spacer"></div><div class="glimpse-open"><div class="glimpse-icon"></div></div><div class="glimpse-holder glimpse"><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon" title="About Glimpse?"></div><div class="glimpse-title"><span class="glimpse-snapshot-type"></span><span><span class="glimpse-enviro"></span><span class="glimpse-url"></span></span></div><div class="glimpse-buttons"><a class="glimpse-meta-warning glimpse-button" href="#" title="Glimpse has some warnings!"></a><a class="glimpse-meta-update glimpse-button" href="http://www.nuget.org/List/Packages/Glimpse" title="New version of Glimpse available" target="_blank"></a><a class="glimpse-meta-help glimpse-button" href="#" title="Need some help?"></a><a class="glimpse-minimize glimpse-button" href="#" title="Close/Minimize"></a><a class="glimpse-popout glimpse-button" href="#" title="Pop Out"></a><a class="glimpse-close glimpse-button" href="#" title="Shutdown/Terminate"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs"><ul></ul></div><div class="glimpse-panel-holder"></div><div class="glimpse-options"></div></div></div>';
                     template.metadata = '<div class="glimpse-info-title"><a href="http://getGlimpse.com/" target="_blank"><img border="0" src="' + glimpsePath + 'logo.png" /></a></div><div>v' + version + '</div><div class="glimpse-info-quote">"What Firebug is for the client, Glimpse is for the server"</div><div class="glimpse-info-more">Go to your Glimpse Config page <a href="' + glimpsePath + 'Config" target="_blank">Glimpse.axd</a></div><div class="glimpse-info-more">For more info see <a href="http://getGlimpse.com" target="_blank">http://getGlimpse.com</a></div><div style="margin:1.5em 0 0.5em;">Created by<strong>Anthony van der Hoorn</strong> (<a href="http://twitter.com/anthony_vdh" target="_blank">@anthony_vdh</a>) and<strong>Nik Molnar</strong> (<a href="http://twitter.com/nikmd23" target="_blank">@nikmd23</a>)&nbsp; - &copy; getglimpse.com 2011</div><div>Have a <em>feature</em> request? <a href="http://getglimpse.uservoice.com" target="_blank">Submit the idea</a>. &nbsp; &nbsp;Found an <em>error</em>? <a href="https://github.com/glimpse/glimpse/issues" target="_blank">Help us improve</a>. &nbsp; &nbsp;Have a <em>question</em>? <a href="http://twitter.com/#search?q=%23glimpse" target="_blank">Tweet us using #glimpse</a>. &nbsp; &nbsp;Want to <em>help</em>? <a href="groups.google.com/group/getglimpse-dev" target="_blank">Join our developer mailing list</a>.</div>';
         
                     pubsub.publish('data.template.processed'); 
@@ -400,20 +405,19 @@ var glimpse = (function ($, scope) {
         } (),
         renderController = function () {
             var //Support
-                wireListeners = function() {
+                wireListeners = function () {
                     pubsub.subscribe('state.render', renderLayout); 
                     pubsub.subscribe('data.elements.processed', wireDomListeners); 
                     pubsub.subscribe('action.tab.select', function(subject, payload) { selectedItem(payload); }); 
                     pubsub.subscribe('action.data.update', dataUpdate);
                 },
-                wireDomListeners = function() {
+                wireDomListeners = function () {
                     elements.tabHolder.find('li:not(.glimpse-active, .glimpse-disabled)').live('click', function () { pubsub.publish('action.tab.select', $(this).attr('data-glimpseKey')); return false; });
                     elements.tabHolder.find('li:not(.glimpse-active, .glimpse-disabled)').live('mouseover mouseout', function (e) {
                         var pluginData = $(this);
                         if (e.type == 'mouseover') { pluginData.addClass('glimpse-hover'); } else { pluginData.removeClass('glimpse-hover'); }
                     }); 
                 },
-        
          
                 selectedTab = function (key) {
                     var tab = elements.tabHolder.find('.glimpse-tab[data-glimpseKey="' + key + '"]');
@@ -430,9 +434,11 @@ var glimpse = (function ($, scope) {
                     var html = '', key, disabled, pluginData;
                     for (key in pluginDataSet) {
                         pluginData = pluginDataSet[key];
-                        disabled = (pluginData.data === undefined || pluginData.data === null) ? ' glimpse-disabled' : '';
+                        disabled = (pluginData.data === undefined || pluginData.data === null) ? ' glimpse-disabled' : '',
+                        permanent = pluginData.isPermanent ? ' glimpse-permanent' : '';
         
-                        html += '<li class="glimpse-tab glimpse-tabitem-' + key + disabled + '" data-glimpseKey="' + key + '">' + pluginData.name + '</li>';
+                        if (!pluginData.isPermanent || (pluginData.isPermanent && elements.tabHolder.find('.glimpse-tab[data-glimpseKey="' + key + '"]').length == 0))
+                            html += '<li class="glimpse-tab glimpse-tabitem-' + key + disabled + permanent + '" data-glimpseKey="' + key + '">' + pluginData.name + '</li>';
                     }
                     return html;
                 },
@@ -451,8 +457,9 @@ var glimpse = (function ($, scope) {
                 renderPanel = function (key, pluginData, pluginMetadata) { 
                     var start = new Date().getTime();
                     
-                    var metadata = pluginMetadata == undefined ? pluginMetadata.structure : undefined;
-                        html = '<div class="glimpse-panel glimpse-panelitem-' + key + '" data-glimpseKey="' + key + '"><div class="glimpse-panel-message">Loading data, please wait...</div></div>',
+                    var metadata = pluginMetadata.structure,  
+                        permanent = pluginData.isPermanent ? ' glimpse-permanent' : '',
+                        html = '<div class="glimpse-panel glimpse-panelitem-' + key + permanent + '" data-glimpseKey="' + key + '"><div class="glimpse-panel-message">Loading data, please wait...</div></div>',
                         panel = $(html).appendTo(elements.panelHolder);
         
                     if (!pluginData.isLazy && pluginData.data)
@@ -467,9 +474,13 @@ var glimpse = (function ($, scope) {
                 },
                 
                 selectedItem = function (key) {
-                    var oldItem = elements.tabHolder.find('.glimpse-active');
-                     
-                    if (oldItem.length > 0) { pubsub.publish('action.plugin.deactive', oldItem.attr('data-glimpseKey')); } 
+                    var oldItem = elements.tabHolder.find('.glimpse-active'),
+                        oldKey = oldItem.attr('data-glimpseKey');
+                    
+                    //Don't touch permanent tabs 
+                    if (oldKey == key && oldItem.hasClass('glimpse-permanent')) { return; }
+                    
+                    if (oldItem.length > 0) { pubsub.publish('action.plugin.deactive', oldKey); } 
         
                     selectedTab(key);
                     selectedPanel(key);
@@ -486,6 +497,8 @@ var glimpse = (function ($, scope) {
                     pubsub.publish('state.render');  
                 },
                 renderLayout = function () { 
+                    pubsub.publish('state.build.prerender');
+                    
                     clearPreviousLayout();
                     buildNewLayout();
                     
@@ -499,7 +512,7 @@ var glimpse = (function ($, scope) {
                     renderTabs(data.current().data);
                 },
                 init = function () {
-                    wireListeners(); 
+                    wireListeners();  
                 };
             
             init();  
@@ -886,7 +899,7 @@ var glimpse = (function ($, scope) {
                                 render: function (key, pagerContainer, pagerKey, pagerType, pageIndex, pageIndexLast) {
                                     var pagerFirstPageLink = $('<a href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-firstPage"></a>'),
                                         pagerPreviousPageLink = $('<a href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-previousPage"></a>'),
-                                        pagerMessage = $('<span class="glimpse-pager-message">' + (pageIndex + 1) + ' / ' + (pageIndexLast + 1) + '</span'),
+                                        pagerMessage = $('<span class="glimpse-pager-message">' + (pageIndex + 1) + ' / ' + (pageIndexLast + 1) + '</span>'),
                                         pagerNextPageLink = $('<a href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-nextPage"></a>'),
                                         pagerLastPageLink = $('<a href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-lastPage"></a>');
                         
@@ -912,8 +925,9 @@ var glimpse = (function ($, scope) {
                                         pagerLastPageLink.addClass('glimpse-pager-link-lastPage-disabled');
                                     }
                                 },
-                                loadPageData: function (panelItem, data) {
-                                    panelItem.html(renderEngine.build(data, null));
+                                loadPageData: function (panelItem, data, structure) {
+                                    var content = renderEngine.build(data, structure);
+                                    panelItem.html(content);
                                 }
                             };
                         } (),
@@ -932,17 +946,24 @@ var glimpse = (function ($, scope) {
                                         pagerContainer.append(pagerNextPageLink);
                                     }
                                 },
-                                loadPageData: function (panelItem, data) { 
-                                    panelItem.append(renderEngine.build(data, null));
+                                loadPageData: function (panelItem, data, structure) {
+                                    var content = renderEngine.build(data, structure);
+                                    panelItem.append(content);
                         
-                                    //TODO: Not sure if this will work with needed tables
-                                    var pages = panelItem.find('table');
-                                    pages.not(':first').find('thead').remove();
-                                    pages.not(':last').addClass('glimpse-pager-separator');
-                        
+                                    var firstPage = panelItem.find('table:first');
                                     var lastPage = panelItem.find('table:last');
-                                    if (lastPage.length > 0) {
-                                        var lastPageTop = lastPage.offset().top - panelItem.offset().top;
+                                    if (firstPage.length > 0 && lastPage.length > 0) {
+                                        var firstPageRowSeparator = firstPage.find('tr:last');
+                                        firstPageRowSeparator.addClass('glimpse-pager-separator');
+                        
+                                        var lastPageRows = lastPage.find('tbody tr');
+                                        $.each(lastPageRows, function (index, row) {
+                                            firstPage.append($(row).clone());
+                                        });
+                        
+                                        lastPage.remove();
+                        
+                                        var lastPageTop = firstPageRowSeparator.offset().top - panelItem.offset().top;
                                         panelItem.animate({ scrollTop: '+=' + lastPageTop + 'px' }, 500);
                                     }
                                 }
@@ -954,7 +975,7 @@ var glimpse = (function ($, scope) {
                                     return pagerType == 2;
                                 },
                                 render : function (key, pagerContainer, pagerKey, pagerType, pageIndex, pageIndexLast) {
-                                    var pagerMessage = $('<span class="glimpse-pager-message">Showing ' + (pageIndex + 1) + ' page(s) of ' + (pageIndexLast + 1) + ' pages(s).</span');
+                                    var pagerMessage = $('<span class="glimpse-pager-message">Showing ' + (pageIndex + 1) + ' page(s) of ' + (pageIndexLast + 1) + ' pages(s).</span>');
                                     pagerContainer.append(pagerMessage);
                                             
                                     if (pageIndex < pageIndexLast) { 
@@ -974,13 +995,23 @@ var glimpse = (function ($, scope) {
                                         }
                                     }
                                 },
-                                loadPageData : function (panelItem, data) {
-                                    var content = renderEngine.build(data, null);
+                                loadPageData : function (panelItem, data, structure) {
+                                    var content = renderEngine.build(data, structure);
                                     panelItem.append(content);
                         
-                                    var pages = panelItem.find('table');
-                                    pages.not(':first').find('thead').remove();
-                                    pages.not(':last').addClass('glimpse-pager-separator');
+                                    var firstPage = panelItem.find('table:first');
+                                    var lastPage = panelItem.find('table:last');
+                                    if (firstPage.length > 0 && lastPage.length > 0) {
+                                        var firstPageRowSeparator = firstPage.find('tr:last');
+                                        firstPageRowSeparator.addClass('glimpse-pager-separator');
+                        
+                                        var lastPageRows = lastPage.find('tbody tr');
+                                        $.each(lastPageRows, function (index, row) {
+                                            firstPage.append($(row).clone());
+                                        });
+                        
+                                        lastPage.remove();
+                                    }
                                 }
                             };
                         } (),
@@ -1052,12 +1083,14 @@ var glimpse = (function ($, scope) {
                 loadPageData = function (key, pageIndex, pagerType, result) {
                     var panelItem = elements.findPanel(key),
                         pagerEngine = pagingEngine.retrieve(pagerType),
-                        pagingInfo = data.currentMetadata().plugins[key].pagingInfo;
+                        metadata = data.currentMetadata().plugins[key],
+                        structure = metadata.structure,
+                        pagingInfo = metadata.pagingInfo;
         
                     if (pagingInfo) 
                         pagingInfo.pageIndex = pageIndex; 
         
-                    pagerEngine.loadPageData(panelItem, result);
+                    pagerEngine.loadPageData(panelItem, result, structure);
         
                     refresh(key);
                 },
@@ -1506,11 +1539,11 @@ var glimpse = (function ($, scope) {
                 register = function (name, engine) {
                     registeredEngnies[name] = engine;
                 },
-                build = function (data, metadata) {
+                build = function (data, metadata) { 
                     return master.build(data, 0, true, metadata, 1);
                 },
                 insert = function (scope, data, metadata) {
-                    scope.html(master.build(data, 0, true, metadata, 1));
+                    scope.html(build(data, metadata));
                     style.apply(scope);
                 },
                 init = function () {
@@ -1519,6 +1552,7 @@ var glimpse = (function ($, scope) {
                     register('table', table);
                     register('structured', structured);
                     register('string', string);
+        
                 };
         
             init();
@@ -1540,11 +1574,11 @@ var glimpse = (function ($, scope) {
 
     return { 
         init : init,
-        pubsub : pubsub,
-        plugin : plugin,
+        pubsub : pubsub, 
         elements : elements,
         render : renderEngine,
-        data : data //I Think this should probably be removed after testing
+        objects : objects,
+        data : data 
     };
 }($Glimpse, $Glimpse(document)));
 
@@ -1556,3 +1590,149 @@ $Glimpse(document).ready(function() {
     var end = new Date().getTime(); 
     console.log('Total execution time: ' + (end - start));
 });
+
+var glimpseAjaxPlugin = (function ($, glimpse) {
+
+/*(im port:glimpse.ajax.spy.js|2)*/ 
+    
+    var //Support
+        isActive = false, 
+        resultCount = 0,
+        notice = undefined,
+        wireListener = function () {  
+            glimpse.pubsub.subscribe('data.elements.processed', wireDomListeners); 
+            glimpse.pubsub.subscribe('state.build.prerender', setupData); 
+            glimpse.pubsub.subscribe('action.plugin.deactive', function (topic, payload) { if (payload == 'Ajax') { deactive(); } }); 
+            glimpse.pubsub.subscribe('action.plugin.active', function (topic, payload) {  if (payload == 'Ajax') { active(); } }); 
+        },
+        wireDomListeners = function () {
+            glimpse.elements.holder.find('.glimpse-clear-ajax').live('click', function () { clear(); return false; });
+            
+            var panel = glimpse.elements.findPanel('Ajax');
+            panel.find('tbody a').live('click', function () { selected($(this)); return false; });
+            panel.find('.glimpse-head-message a').live('click', function() { reset(); return false; });
+        },
+        setupData = function () {
+            var payload = glimpse.data.current(),
+                metadata = glimpse.data.currentMetadata().plugins;
+
+            //If we are looking at an ajax request we want to keep
+            if (!payload.isAjax) {
+                payload.data.Ajax = { name: 'Ajax', data: 'No requests currently detected...' };
+                metadata.Ajax = { helpUrl: 'http://getglimpse.com/Help/Plugin/Ajax' };
+                
+                togglePermanent(false);
+            }
+            else 
+                togglePermanent(true);
+        },
+        
+        togglePermanent = function (makePermanent) {
+            if (glimpse.elements.findPanel) {
+                if (makePermanent) {
+                    glimpse.elements.findPanel('Ajax').addClass('glimpse-permanent');
+                    glimpse.elements.findTab('Ajax').addClass('glimpse-permanent');
+                }
+                else {
+                    glimpse.elements.findPanel('Ajax').removeClass('glimpse-permanent');
+                    glimpse.elements.findTab('Ajax').removeClass('glimpse-permanent');
+                }
+            }
+        },
+        
+        active = function () {
+            isActive = true;
+            glimpse.elements.options.html('<div class="glimpse-clear"><a href="#" class="glimpse-clear-ajax">Clear</a></div><div class="glimpse-notice gdisconnect"><div class="icon"></div><span>Disconnected...</span></div>');
+            notice = new glimpse.objects.ConnectionNotice(glimpse.elements.options.find('.glimpse-notice')); 
+            
+            retreieveSummary(); 
+        },
+        deactive = function () {
+            isActive = false; 
+            glimpse.elements.options.html('');
+            notice = null;
+        }, 
+        
+        retreieveSummary = function () { 
+            if (!isActive) { return; }
+            var data = glimpse.data.current();
+ 
+            //Poll for updated summary data
+            notice.prePoll(); 
+            $.ajax({
+                url: glimpsePath + 'Ajax',
+                data: { 'glimpseId' : data.requestId },
+                type: 'GET',
+                contentType: 'application/json',
+                complete : function(jqXHR, textStatus) {
+                    if (!isActive) { return; } 
+                    notice.complete(textStatus); 
+                    setTimeout(retreieveSummary, 1000);
+                },
+                success: function (result) {
+                    if (!isActive) { return; } 
+                    if (resultCount != result.length)
+                        processSummary(result);
+                    resultCount = result.length; 
+                }
+            });
+        },
+        processSummary = function (result) { 
+            var panel = glimpse.elements.findPanel('Ajax');
+            
+            //Insert container table
+            if (panel.find('table').length == 0) {
+                var data = [['Request URL', 'Method', 'Duration', 'Date/Time', 'View']],
+                    metadata = [[ { data : 0, key : true, width : '40%' }, { data : 1 }, { data : 2, width : '10%' },  { data : 3, width : '20%' },  { data : 4, width : '100px' } ]];
+                panel.html(glimpse.render.build(data, metadata)).find('table').append('<tbody></tbody>');
+                panel.find('thead').append('<tr class="glimpse-head-message" style="display:none"><td colspan="6"><a href="#">Reset context back to starting page</a></td></tr>');
+            }
+            
+            //Prepend results as we go 
+            for (var x = result.length; --x >= resultCount;) {
+                var item = result[x];
+                panel.find('tbody').prepend('<tr class="' + (x % 2 == 0 ? 'even' : 'odd') + '"><td>' + item.url + '</td><td>' + item.method + '</td><td>' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.requestTime + '</td><td><a href="#" data-glimpseId="' + item.requestId + '">Inspect</a></td></tr>');
+            }
+        },
+        
+        clear = function () {
+            glimpse.elements.findPanel('Ajax').html('<div class="glimpse-panel-message">No requests currently detected...</div>'); 
+        },
+        
+        reset = function () {
+            var panel = glimpse.elements.findPanel('Ajax');
+            panel.find('.glimpse-head-message').fadeOut();
+            panel.find('.selected').removeClass('selected');
+            
+            //TODO: when clearning from ajax should go back to the parent request 
+        },
+        
+        selected = function (item) {
+            var requestId = item.attr('data-glimpseId');
+
+            item.hide().parent().append('<div class="loading"><div class="icon"></div>Loading...</div>');
+
+            request(requestId);
+        },
+        request = function (requestId) { 
+//            glimpse.data.retrieve(requestId, {
+//                successApplied : function () {
+//                    process();
+//                }
+//            });
+        },
+        process = function (link) {
+            var panel = glimpse.elements.findPanel('Ajax');
+            panel.find('.glimpse-head-message').fadeIn();
+            panel.find('.selected').removeClass('selected');
+            link.parents('tr:first').addClass('selected'); 
+        },
+
+        //Main 
+        init = function () {
+            wireListener();
+            setupData();
+        };
+
+    init();
+}($Glimpse, glimpse));

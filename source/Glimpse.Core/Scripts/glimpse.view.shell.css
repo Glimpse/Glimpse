@@ -497,13 +497,17 @@ li.glimpse-permanent {
 .glimpse-panel .selected * {
     color: #409B3B;
 }
-.glimpse .info .icon, .glimpse .warn .icon, .glimpse .loading .icon, .glimpse .error .icon, .glimpse .fail .icon, .glimpse .ms .icon {
+.glimpse .info .icon, .glimpse .warn .icon, .glimpse .loading .icon, .glimpse .error .icon, .glimpse .fail .icon, .glimpse .ms .icon, .glimpse .gconnect .icon, .glimpse .gdisconnect .icon {
     width: 14px;
     height: 14px;
     background-image: url();
     background-repeat: no-repeat;
     display: inline-block;
     margin-right: 5px;
+}
+.glimpse .gconnect .icon, .glimpse .gdisconnect .icon {
+    width: 17px;
+    height: 17px;
 }
 .glimpse .info .icon {
     background-position: -22px -22px;
@@ -523,6 +527,12 @@ li.glimpse-permanent {
 .glimpse .fail .icon {
     background-position: -64px -22px;
 }
+.glimpse .gconnect .icon {
+    background-position: -213px -20px; /*TODO fix position*/
+}
+.glimpse .gdisconnect .icon {
+    background-position: -195px -20px; /*TODO fix position*/
+}
 .glimpse .info * {
     color: #067CE5;
 }
@@ -536,6 +546,13 @@ li.glimpse-permanent {
     color: #B40000;
     font-weight: bold;
 }
+.glimpse-notice {
+    position:absolute;
+    right: 20px;
+    bottom: 5px;
+    color: #777;
+}
+/*
 .glimpse-panelitem-Ajax .loading .icon {
     float: right;
 }
@@ -548,9 +565,13 @@ li.glimpse-permanent {
 .glimpse-panelitem-Remote .glimpse-side-main-panel .loading {
     right: 27%;
 }
+*/
 .glimpse-clear {
+    bottom: 30px;
+    position: absolute;
+    right: 20px;
     background-color: white;
-    padding: 0.3em 1em 0.5em 1em;
+    padding: 0.2em 1em 0.3em 1em;
     border: #CCC solid 1px;
     bottom: 25px;
     -webkit-border-radius: 3px;
@@ -619,7 +640,7 @@ li.glimpse-permanent {
 .glimpse-pager .glimpse-pager-link-lastPage-disabled {
     background-position: -111px -38px;
 }
-.glimpse-panel table.glimpse-pager-separator {
+.glimpse-panel table tr.glimpse-pager-separator td {
     border-bottom: 3px solid #C6C6C6;
 }
 @media screen and (-webkit-min-device-pixel-ratio:0) {

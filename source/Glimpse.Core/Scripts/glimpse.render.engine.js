@@ -31,11 +31,11 @@
         register = function (name, engine) {
             registeredEngnies[name] = engine;
         },
-        build = function (data, metadata) {
+        build = function (data, metadata) { 
             return master.build(data, 0, true, metadata, 1);
         },
         insert = function (scope, data, metadata) {
-            scope.html(master.build(data, 0, true, metadata, 1));
+            scope.html(build(data, metadata));
             style.apply(scope);
         },
         init = function () {
@@ -44,6 +44,7 @@
             register('table', table);
             register('structured', structured);
             register('string', string);
+
         };
 
     init();

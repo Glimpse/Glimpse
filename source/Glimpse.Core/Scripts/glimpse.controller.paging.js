@@ -52,12 +52,14 @@
         loadPageData = function (key, pageIndex, pagerType, result) {
             var panelItem = elements.findPanel(key),
                 pagerEngine = pagingEngine.retrieve(pagerType),
-                pagingInfo = data.currentMetadata().plugins[key].pagingInfo;
+                metadata = data.currentMetadata().plugins[key],
+                structure = metadata.structure,
+                pagingInfo = metadata.pagingInfo;
 
             if (pagingInfo) 
                 pagingInfo.pageIndex = pageIndex; 
 
-            pagerEngine.loadPageData(panelItem, result);
+            pagerEngine.loadPageData(panelItem, result, structure);
 
             refresh(key);
         },
