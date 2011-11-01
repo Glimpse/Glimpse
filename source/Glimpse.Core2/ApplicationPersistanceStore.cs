@@ -37,5 +37,25 @@ namespace Glimpse.Core2
         {
             return GlimpseRequests.Where(r => r.RequestId == requestId).First();
         }
+
+        public GlimpseMetadata[] GetByClient(string clientName)
+        {
+            return GlimpseRequests.Where(r => r.GlimpseClientName.Equals(clientName, StringComparison.InvariantCultureIgnoreCase)).ToArray();
+        }
+
+        public IDictionary<string, int> GetClients()
+        {
+            var result = new Dictionary<string, int>();
+
+            foreach (var request in GlimpseRequests)
+            {
+                if (!result.ContainsKey(request.GlimpseClientName))
+                    result.Add(request.GlimpseClientName, 1);
+                else
+                    result[request.GlimpseClientName]++;
+            }
+
+            return result;
+        }
     }
 }

@@ -17,5 +17,9 @@ namespace Glimpse.Core2
         public DateTime DateTime { get; set; }
         public RequestMetadata RequestMetadata { get; set; }
         public IDictionary<string, string> PluginData { get; set; }
+        public string GlimpseClientName //TODO: This should not just be a pass through?
+        {
+            get { return RequestMetadata.GlimpseClientName; }
+        }
     }
 }
