@@ -150,10 +150,6 @@
       <Project>{21F99168-7D7B-49F2-A97C-5A983E0CA16F}</Project>
       <Name>Glimpse.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Glimpse.Elmah\Glimpse.Elmah.csproj">
-      <Project>{3EF29139-06EC-4497-9EC6-A4C340E064EB}</Project>
-      <Name>Glimpse.Elmah</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
