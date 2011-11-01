@@ -4,7 +4,7 @@
             return pagerType == 2;
         },
         render : function (key, pagerContainer, pagerKey, pagerType, pageIndex, pageIndexLast) {
-            var pagerMessage = $('<span class="glimpse-pager-message">Showing ' + (pageIndex + 1) + ' page(s) of ' + (pageIndexLast + 1) + ' pages(s).</span');
+            var pagerMessage = $('<span class="glimpse-pager-message">Showing ' + (pageIndex + 1) + ' page(s) of ' + (pageIndexLast + 1) + ' pages(s).</span>');
             pagerContainer.append(pagerMessage);
                     
             if (pageIndex < pageIndexLast) { 

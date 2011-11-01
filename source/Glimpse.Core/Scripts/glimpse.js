@@ -899,7 +899,7 @@ var glimpse = (function ($, scope) {
                                 render: function (key, pagerContainer, pagerKey, pagerType, pageIndex, pageIndexLast) {
                                     var pagerFirstPageLink = $('<a href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-firstPage"></a>'),
                                         pagerPreviousPageLink = $('<a href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-previousPage"></a>'),
-                                        pagerMessage = $('<span class="glimpse-pager-message">' + (pageIndex + 1) + ' / ' + (pageIndexLast + 1) + '</span'),
+                                        pagerMessage = $('<span class="glimpse-pager-message">' + (pageIndex + 1) + ' / ' + (pageIndexLast + 1) + '</span>'),
                                         pagerNextPageLink = $('<a href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-nextPage"></a>'),
                                         pagerLastPageLink = $('<a href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-lastPage"></a>');
                         
@@ -955,14 +955,14 @@ var glimpse = (function ($, scope) {
                                     if (firstPage.length > 0 && lastPage.length > 0) {
                                         var firstPageRowSeparator = firstPage.find('tr:last');
                                         firstPageRowSeparator.addClass('glimpse-pager-separator');
-
+                        
                                         var lastPageRows = lastPage.find('tbody tr');
                                         $.each(lastPageRows, function (index, row) {
                                             firstPage.append($(row).clone());
                                         });
-
+                        
                                         lastPage.remove();
-
+                        
                                         var lastPageTop = firstPageRowSeparator.offset().top - panelItem.offset().top;
                                         panelItem.animate({ scrollTop: '+=' + lastPageTop + 'px' }, 500);
                                     }
@@ -975,7 +975,7 @@ var glimpse = (function ($, scope) {
                                     return pagerType == 2;
                                 },
                                 render : function (key, pagerContainer, pagerKey, pagerType, pageIndex, pageIndexLast) {
-                                    var pagerMessage = $('<span class="glimpse-pager-message">Showing ' + (pageIndex + 1) + ' page(s) of ' + (pageIndexLast + 1) + ' pages(s).</span');
+                                    var pagerMessage = $('<span class="glimpse-pager-message">Showing ' + (pageIndex + 1) + ' page(s) of ' + (pageIndexLast + 1) + ' pages(s).</span>');
                                     pagerContainer.append(pagerMessage);
                                             
                                     if (pageIndex < pageIndexLast) { 
@@ -998,18 +998,18 @@ var glimpse = (function ($, scope) {
                                 loadPageData : function (panelItem, data, structure) {
                                     var content = renderEngine.build(data, structure);
                                     panelItem.append(content);
-
+                        
                                     var firstPage = panelItem.find('table:first');
                                     var lastPage = panelItem.find('table:last');
                                     if (firstPage.length > 0 && lastPage.length > 0) {
                                         var firstPageRowSeparator = firstPage.find('tr:last');
                                         firstPageRowSeparator.addClass('glimpse-pager-separator');
-
+                        
                                         var lastPageRows = lastPage.find('tbody tr');
                                         $.each(lastPageRows, function (index, row) {
                                             firstPage.append($(row).clone());
                                         });
-
+                        
                                         lastPage.remove();
                                     }
                                 }
