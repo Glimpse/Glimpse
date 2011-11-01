@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;

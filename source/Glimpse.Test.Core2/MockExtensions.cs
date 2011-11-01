@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
 using Moq;
