@@ -108,6 +108,7 @@
     <Compile Include="Plumbing\GlimpseResponseFilter.cs" />
     <Compile Include="Plumbing\GlimpseSerializer.cs" />
     <Compile Include="Plumbing\InProcStackMetadataStore.cs" />
+    <Content Include="Scripts\glimpse.remote.plugin.js" />
     <Content Include="Scripts\glimpse.ajax.plugin.js" />
     <Content Include="Scripts\glimpse.controller.lazyloader.js" />
     <Content Include="Scripts\glimpse.controller.metadata.js" />

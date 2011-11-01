@@ -92,6 +92,8 @@
             pubsub.publish('state.render');  
         },
         renderLayout = function () { 
+            pubsub.publish('state.build.prerender');
+            
             clearPreviousLayout();
             buildNewLayout();
             

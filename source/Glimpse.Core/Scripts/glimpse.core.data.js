@@ -4,7 +4,7 @@
     
         //Main
         update = function (data) {
-            inner = data;
+            inner = data; 
             pubsub.publish('action.data.update');
         },
         retrieve = function(requestId, callback) { 
@@ -19,7 +19,7 @@
                 success : function (data, textStatus, jqXHR) {   
                     if (callback.success) 
                         callback.success(requestId, data, current, textStatus, jqXHR);  
-                    update(data);
+                    update(data); 
                 }, 
                 complete : function (jqXHR, textStatus) {
                     if (callback.complete) 

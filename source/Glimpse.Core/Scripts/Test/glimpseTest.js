@@ -41,12 +41,18 @@ var glimpseTest = (function ($) {
                     { method : 'Post', duration : 242, browser : '', clientName : '', requestTime : '2011/11/09 12:27:23', requestId : 'sdf', isAjax : true, url : '/News/List'},
                     { method : 'Get', duration : 1234, browser : '', clientName : '', requestTime : '2011/11/09 12:29:14', requestId : 'zcxcv', isAjax : true, url : '/News'}],
                 index = 0,
+                lastId = 0,
                 generate = function (data) {  
-                    if (index < 6)
-                     result.push(possibleResults[index++]);
+                    if ((index < 6 && data.glimpseId == 1234) || index < 3)
+                        result.push(possibleResults[index++]);
                     return result;
                 },
                 trigger = function (param) { 
+                    if (param.data.glimpseId != lastId) {
+                        index = 0;
+                        lastId = param.data.glimpseId;
+                    }
+        
                     setTimeout(function () {
                         var success = (Math.floor(Math.random() * 11) != 10);
                         param.complete(null, (success ? 'Success' : 'Fail'));

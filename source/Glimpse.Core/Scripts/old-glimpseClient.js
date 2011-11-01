@@ -67,35 +67,6 @@ if (window.jQueryGlimpse) { (function ($) {
  
     $.glimpseAjax = {};
     $.extend($.glimpseAjax, {
-        adjustLayout: function (tabStrip, panelHolder) {
-            var ga = this, static = ga.static;
-
-            //Setup layout
-            static.tab = $('.glimpse-tabitem-' + static.key, tabStrip);
-            static.panel = $('.glimpse-panelitem-' + static.key, panelHolder);
-            static.tab.addClass('glimpse-permanent').text(static.key);
-            static.panel.addClass('glimpse-permanent');
-
-            //Wire up events 
-            $('.glimpse-clear', static.panel).live('click', function (ev) { ga.removeRequests(); return false; });
-            $('thead .glimpse-head-message a', static.panel).live('click', function (ev) { ga.resetContext(); return false; });
-            $('.glimpse').live('glimpse.request.refresh', function () { ga.globalResetCallback(); })
-                         .live('glimpse.request.change', function (ev, type) { if (type != 'ajax') { ga.globalResetCallback(); } });
-
-            //Reset to start things off 
-            ga.removeRequests(true);
-        }, 
-        removeRequests: function (isInit) {
-            var ga = this;
-
-            //Clear out anything inside the panel
-            ga.static.panel.html('<div class="glimpse-panel-message">No ajax calls have yet been detected</div>');
-            ga.resetContext(isInit);
-        },
-        resetContext: function (isInit) {
-            if (!isInit)
-                $.glimpse.reset();
-        },
         requestSelected: function (link) {
             var ga = this, panelHead = $('table thead', ga.static.panel);
 

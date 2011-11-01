@@ -12,6 +12,9 @@
             elements.findPanel = function(key) {
                 return elements.panelHolder.find('.glimpse-panel[data-glimpseKey="' + key + '"]');
             };
+            elements.findTab = function(key) {
+                return elements.tabHolder.find('.glimpse-tab[data-glimpseKey="' + key + '"]');
+            };
 
             pubsub.publish('data.elements.processed'); 
         },
