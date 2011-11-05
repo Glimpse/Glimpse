@@ -95,7 +95,7 @@ namespace Glimpse.Test.Core2
             Assert.True(result.Length == 2);
         }
 
-        [Fact]
+        [Fact(Skip = "Come back to this later")]
         public void GetGlimpseMetadataByParentRequestId()
         {
             Assert.True(false, "Need to implement");

@@ -257,5 +257,11 @@ namespace Glimpse.Test.Core2
 
             pluginMock.Verify(p => p.GetData(It.IsAny<IServiceLocator>()), Times.Once());   
         }
+
+        //End request
+        //serialize data
+        //persist data
+        //try to add headers
+        //try to add script tags
     }
 }
