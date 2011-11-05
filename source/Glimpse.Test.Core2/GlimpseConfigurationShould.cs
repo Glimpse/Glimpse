@@ -24,8 +24,15 @@ namespace Glimpse.Test.Core2
             var config = new GlimpseConfiguration(frameworkProviderObject);
 
             Assert.Equal(frameworkProviderObject, config.FrameworkProvider);
+            Assert.NotNull(config.Serializer as JsonNetSerializer);
             Assert.NotNull(config.Plugins);
             Assert.NotNull(config.PipelineModifiers);
+        }
+
+        [Fact(Skip = "This needs to be fixed - looking into code contracts")]
+        public void ThrowExceptionWhenConstructedWithoutFrameworkProvider()
+        {
+            new GlimpseConfiguration(null);
         }
     }
 }

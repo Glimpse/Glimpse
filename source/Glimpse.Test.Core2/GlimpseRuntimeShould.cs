@@ -153,7 +153,7 @@ namespace Glimpse.Test.Core2
         }
 
         [Fact]
-        public void ExecutePluginsWithoutMatchingRuntimeContextType()
+        public void NotExecutePluginsWithoutMatchingRuntimeContextType()
         {
             var metadataMock = new Mock<IGlimpsePluginMetadata>();
             metadataMock.Setup(m => m.RequestContextType).Returns(typeof(string));
@@ -256,6 +256,29 @@ namespace Glimpse.Test.Core2
             
 
             pluginMock.Verify(p => p.GetData(It.IsAny<IServiceLocator>()), Times.Once());   
+        }
+
+        [Fact]
+        public void SerializeDataDuringEndRequest()
+        {
+            var metadataMock = new Mock<IGlimpsePluginMetadata>();
+            metadataMock.Setup(m => m.RequestContextType).Returns(typeof(object));
+            metadataMock.Setup(m => m.LifeCycleSupport).Returns(LifeCycleSupport.EndRequest);
+            var pluginMock = new Mock<IGlimpsePlugin>();
+
+            Configuration.Plugins.Discoverability.AutoDiscover = false;
+            Configuration.Plugins.Add(new Lazy<IGlimpsePlugin, IGlimpsePluginMetadata>(() => pluginMock.Object, metadataMock.Object));
+
+
+            var serializerMock = new Mock<IGlimpseSerializer>();
+            Configuration.Serializer = serializerMock.Object;
+            var runtime = new GlimpseRuntime(Configuration);
+
+            runtime.BeginRequest();
+            runtime.ExecutePlugins();
+            runtime.EndRequest();
+
+            serializerMock.Verify(s=>s.Serialize(It.IsAny<object>()), Times.Exactly(Configuration.Plugins.Count));
         }
 
         //End request

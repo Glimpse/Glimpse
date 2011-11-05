@@ -36,5 +36,23 @@ namespace Glimpse.AspNet
         {
             get { return typeof (HttpContextBase); }
         }
+
+        public RequestMetadata RequestMetadata
+        {
+            get
+            {
+                var request = Context.Request;
+                var response = Context.Response;
+                return new RequestMetadata
+                             {
+                                 HttpMethod = request.HttpMethod,
+                                 GlimpseClientName = "ACCESS FROM COOKIE", //TODO: FIX ME
+                                 IpAddress = request.UserHostAddress, //TODO: FIX ME WHEN BEHIND PROXIES
+                                 ResponseContentType = response.ContentType,
+                                 ResponseStatusCode = response.StatusCode,
+                                 Uri = request.Url.AbsoluteUri,
+                             };
+            }
+        }
     }
 }

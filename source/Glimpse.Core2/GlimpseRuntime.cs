@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Core2
@@ -97,6 +98,19 @@ namespace Glimpse.Core2
                     //TODO: Add in logging
                 }
             }
+        }
+
+        public void EndRequest()
+        {
+            var serializer = Configuration.Serializer;
+            var frameworkProvider = Configuration.FrameworkProvider;
+            var requestStore = frameworkProvider.HttpRequestStore;
+            var requestMetadata = frameworkProvider.RequestMetadata;
+            var pluginData = ResultsStore.ToDictionary(item => item.Key, item => serializer.Serialize(item.Value));
+
+            var metadata = new GlimpseMetadata(requestStore.Get<Guid>(), requestMetadata, pluginData);
+
+            //TODO: persist metadata
         }
 
         public IServiceLocator ServiceLocator

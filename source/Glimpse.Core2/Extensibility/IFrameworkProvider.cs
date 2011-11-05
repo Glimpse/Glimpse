@@ -8,5 +8,6 @@ namespace Glimpse.Core2.Extensibility
         IDataStore HttpServerStore { get; }
         object RuntimeContext { get; }
         Type RuntimeContextType { get; }
+        RequestMetadata RequestMetadata { get; }
     }
 }

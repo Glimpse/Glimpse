@@ -70,5 +70,11 @@ namespace Glimpse.Test.AspNet
             
             applicationStateMock.Verify(st=>st.Get("testKey"), Times.Once());
         }
+
+        [Fact(Skip = "Finish me!")]
+        public void HaveRequestMetadata()
+        {
+            
+        }
     }
 }
