@@ -58,6 +58,7 @@
     <Compile Include="Plugin\ServerTest.cs" />
     <Compile Include="Plugin\SessionTest.cs" />
     <Compile Include="Plugin\TraceTest.cs" />
+    <Compile Include="Plumbing\GlimpseResponseFilterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
