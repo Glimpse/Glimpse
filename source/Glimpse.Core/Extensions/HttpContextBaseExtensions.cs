@@ -83,15 +83,10 @@ namespace Glimpse.Core.Extensions
         public static Guid GetGlimpseRequestId(this HttpContextBase context)
         {
             Guid result;
-            try
-            {
+            if (context.Items.Contains(GlimpseConstants.GlimpseRequestId))
                 result = (Guid) context.Items[GlimpseConstants.GlimpseRequestId];
-            }
-            catch
-            {
+            else
                 context.Items[GlimpseConstants.GlimpseRequestId] = result = Guid.NewGuid();
-            }
-
             return result;
         }
     }
