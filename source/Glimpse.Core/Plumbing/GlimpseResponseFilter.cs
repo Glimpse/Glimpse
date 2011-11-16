@@ -8,7 +8,7 @@ using Glimpse.Core.Extensions;
 namespace Glimpse.Core.Plumbing
 {
     //Heavily influenced by http://www.4guysfromrolla.com/articles/120308-1.aspx
-    public class GlimpseResponseFilter : MemoryStream
+    public class GlimpseResponseFilter : Stream
     {
         internal Stream OutputStream { get; set; }
         internal HttpContextBase Context { get; set; }
@@ -46,6 +46,57 @@ namespace Glimpse.Core.Plumbing
             {
                 OutputStream.Write(buffer, offset, count);
             }
+        }
+        
+        public override void Flush()
+        {
+            OutputStream.Flush();
+        }
+
+        public override bool CanRead
+        {
+            get { return OutputStream.CanRead; }
+        }
+
+        public override bool CanSeek
+        {
+            get { return OutputStream.CanSeek; }
+        }
+
+        public override bool CanWrite
+        {
+            get { return OutputStream.CanWrite; }
+        }
+
+        public override long Length
+        {
+            get { return OutputStream.Length; }
+        }
+
+        public override long Position
+        {
+            get { return OutputStream.Position; }
+            set { OutputStream.Position = value; }
+        }
+
+        public override int Read(byte[] buffer, int offset, int count)
+        {
+            return OutputStream.Read(buffer, offset, count);
+        }
+
+        public override long Seek(long offset, SeekOrigin origin)
+        {
+            return OutputStream.Seek(offset, origin);
+        }
+
+        public override void SetLength(long value)
+        {
+            OutputStream.SetLength(value);
+        }
+
+        public override void Close()
+        {
+            OutputStream.Close();
         }
     }
 }
