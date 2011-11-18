@@ -1,6 +1,6 @@
 ﻿namespace Glimpse.Core2.Extensibility
 {
-    public interface IGlimpsePlugin
+    public interface IGlimpseTab
     {
         object GetData(IServiceLocator locator);
         string Name { get; }

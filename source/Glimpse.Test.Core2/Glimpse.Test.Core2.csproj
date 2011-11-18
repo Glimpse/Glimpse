@@ -62,7 +62,7 @@
     <Compile Include="MockExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestGlimpsePipelineModifier.cs" />
-    <Compile Include="TestPlugin.cs" />
+    <Compile Include="TestTab.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -53,10 +53,10 @@
     <Compile Include="DiscoverabilityPolicy-T2.cs" />
     <Compile Include="DiscoverabilityPolicy.cs" />
     <Compile Include="Extensibility\GlimpsePipelineModifierAttribute.cs" />
-    <Compile Include="Extensibility\GlimpsePluginAttribute.cs" />
+    <Compile Include="Extensibility\GlimpseTabAttribute.cs" />
     <Compile Include="Extensibility\IDataStore.cs" />
     <Compile Include="Extensibility\IGlimpseHelp.cs" />
-    <Compile Include="Extensibility\IGlimpsePlugin.cs" />
+    <Compile Include="Extensibility\IGlimpseTab.cs" />
     <Compile Include="Extensibility\IGlimpsePluginMetadata.cs" />
     <Compile Include="Extensibility\IGlimpsePluginSetup.cs" />
     <Compile Include="Extensibility\IGlimpseRuntime.cs" />

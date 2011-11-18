@@ -5,11 +5,11 @@ namespace Glimpse.Core2.Extensibility
 {
     [MetadataAttribute]
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class GlimpsePluginAttribute:ExportAttribute, IGlimpsePluginMetadata
+    public class GlimpseTabAttribute:ExportAttribute, IGlimpsePluginMetadata
     {
-        public GlimpsePluginAttribute():base(typeof(IGlimpsePlugin)){}
+        public GlimpseTabAttribute():base(typeof(IGlimpseTab)){}
 
-        public GlimpsePluginAttribute(Type requestContextType = null): base(typeof(IGlimpsePlugin))
+        public GlimpseTabAttribute(Type requestContextType = null): base(typeof(IGlimpseTab))
         {
             RequestContextType = requestContextType;
             LifeCycleSupport = LifeCycleSupport.EndRequest;

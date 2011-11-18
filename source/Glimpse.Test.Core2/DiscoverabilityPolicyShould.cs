@@ -13,8 +13,8 @@ namespace Glimpse.Test.Core2
         {
             //Path implemented on base DiscoverabilityPolicy
 
-            var glimpseCollection1 = new List<IGlimpsePlugin>();
-            var discoverabilityPolicy1 = new DiscoverabilityPolicy<IGlimpsePlugin>(glimpseCollection1);
+            var glimpseCollection1 = new List<IGlimpseTab>();
+            var discoverabilityPolicy1 = new DiscoverabilityPolicy<IGlimpseTab>(glimpseCollection1);
 
             Assert.Equal(AppDomain.CurrentDomain.BaseDirectory, discoverabilityPolicy1.Path);
         }
@@ -24,8 +24,8 @@ namespace Glimpse.Test.Core2
         {
             //Path implemented on base DiscoverabilityPolicy
 
-            var glimpseCollection1 = new List<IGlimpsePlugin>();
-            var discoverabilityPolicy = new DiscoverabilityPolicy<IGlimpsePlugin>(glimpseCollection1);
+            var glimpseCollection1 = new List<IGlimpseTab>();
+            var discoverabilityPolicy = new DiscoverabilityPolicy<IGlimpseTab>(glimpseCollection1);
 
             var newValue = @"C:\something";
             discoverabilityPolicy.Path = newValue;
@@ -36,8 +36,8 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void SetNonRootedPath()
         {
-            var glimpseCollection = new List<IGlimpsePlugin>();
-            var discoverabilityPolicy = new DiscoverabilityPolicy<IGlimpsePlugin>(glimpseCollection);
+            var glimpseCollection = new List<IGlimpseTab>();
+            var discoverabilityPolicy = new DiscoverabilityPolicy<IGlimpseTab>(glimpseCollection);
 
             var newValue = @"plugins\glimpse";
             discoverabilityPolicy.Path = newValue;
@@ -48,8 +48,8 @@ namespace Glimpse.Test.Core2
         public void Discover()
         {
             //T`1
-            var glimpseCollection1 = new List<IGlimpsePlugin>();
-            var discoverabilityPolicy1 = new DiscoverabilityPolicy<IGlimpsePlugin>(glimpseCollection1);
+            var glimpseCollection1 = new List<IGlimpseTab>();
+            var discoverabilityPolicy1 = new DiscoverabilityPolicy<IGlimpseTab>(glimpseCollection1);
 
             discoverabilityPolicy1.Discover();
 
@@ -57,8 +57,8 @@ namespace Glimpse.Test.Core2
 
 
             //T`2
-            var glimpseCollection2 = new List<Lazy<IGlimpsePlugin, IGlimpsePluginMetadata>>();
-            var discoverabilityPolicy2 = new DiscoverabilityPolicy<IGlimpsePlugin, IGlimpsePluginMetadata>(glimpseCollection2);
+            var glimpseCollection2 = new List<Lazy<IGlimpseTab, IGlimpsePluginMetadata>>();
+            var discoverabilityPolicy2 = new DiscoverabilityPolicy<IGlimpseTab, IGlimpsePluginMetadata>(glimpseCollection2);
 
             discoverabilityPolicy2.Discover();
 
@@ -69,20 +69,20 @@ namespace Glimpse.Test.Core2
         public void DiscoverIgnoresDisabledTypes()
         {
             //T`1
-            var glimpseCollection1 = new List<IGlimpsePlugin>();
-            var discoverabilityPolicy1 = new DiscoverabilityPolicy<IGlimpsePlugin>(glimpseCollection1);
+            var glimpseCollection1 = new List<IGlimpseTab>();
+            var discoverabilityPolicy1 = new DiscoverabilityPolicy<IGlimpseTab>(glimpseCollection1);
 
-            discoverabilityPolicy1.IgnoreType(typeof(TestPlugin));
+            discoverabilityPolicy1.IgnoreType(typeof(TestTab));
 
             discoverabilityPolicy1.Discover();
 
             Assert.Equal(0, glimpseCollection1.Count);
 
             //T`2
-            var glimpseCollection2 = new List<Lazy<IGlimpsePlugin, IGlimpsePluginMetadata>>();
-            var discoverabilityPolicy2 = new DiscoverabilityPolicy<IGlimpsePlugin, IGlimpsePluginMetadata>(glimpseCollection2);
+            var glimpseCollection2 = new List<Lazy<IGlimpseTab, IGlimpsePluginMetadata>>();
+            var discoverabilityPolicy2 = new DiscoverabilityPolicy<IGlimpseTab, IGlimpsePluginMetadata>(glimpseCollection2);
 
-            discoverabilityPolicy2.IgnoreType(typeof(TestPlugin));
+            discoverabilityPolicy2.IgnoreType(typeof(TestTab));
 
             discoverabilityPolicy2.Discover();
 

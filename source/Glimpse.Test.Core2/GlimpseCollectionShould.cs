@@ -9,7 +9,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void Construct()
         {
-            var glimpseCollection = new GlimpseCollection<IGlimpsePlugin>();
+            var glimpseCollection = new GlimpseCollection<IGlimpseTab>();
 
             Assert.NotNull(glimpseCollection);
         }
@@ -17,9 +17,9 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void AddItems()
         {
-            var glimpseCollection = new GlimpseCollection<IGlimpsePlugin>();
+            var glimpseCollection = new GlimpseCollection<IGlimpseTab>();
 
-            glimpseCollection.Add(new TestPlugin());
+            glimpseCollection.Add(new TestTab());
 
             Assert.Equal(1, glimpseCollection.Count);
         }

@@ -5,7 +5,7 @@ namespace Glimpse.Core2
 {
     public class GlimpseConfiguration
     {
-        public GlimpseLazyCollection<IGlimpsePlugin, IGlimpsePluginMetadata> Plugins { get; set; }
+        public GlimpseLazyCollection<IGlimpseTab, IGlimpsePluginMetadata> Plugins { get; set; }
         public GlimpseCollection<IGlimpsePipelineModifier> PipelineModifiers { get; set; }
         public IFrameworkProvider FrameworkProvider { get; set; }
         public IGlimpseSerializer Serializer { get; set; }
@@ -16,7 +16,7 @@ namespace Glimpse.Core2
             //only use contracts if we can build them on teamcity AND the experience is nice for users that don't have the VS extension installed
 
             FrameworkProvider = frameworkProvider;
-            Plugins = new GlimpseLazyCollection<IGlimpsePlugin, IGlimpsePluginMetadata>();
+            Plugins = new GlimpseLazyCollection<IGlimpseTab, IGlimpsePluginMetadata>();
             PipelineModifiers = new GlimpseCollection<IGlimpsePipelineModifier>();
             Serializer = new JsonNetSerializer();
         }

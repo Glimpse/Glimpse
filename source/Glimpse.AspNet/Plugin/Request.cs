@@ -3,7 +3,7 @@ using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.AspNet.Plugin
 {
-    public class Request:IGlimpsePlugin, IGlimpseHelp
+    public class Request:IGlimpseTab, IGlimpseHelp
     {
         public object GetData(IServiceLocator locator)
         {
