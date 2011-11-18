@@ -24,14 +24,14 @@ namespace Glimpse.Mvc3.Plumbing
             var id = Guid.NewGuid().ToString();
 
 
-            //writer.Write("<!--VIEW("+ViewName+")-->");
+            writer.Write("<!--VIEW("+ViewName+")-->");
 
             using (GlimpseTimer.Start(string.Format("Render {0} View", ViewName), "MVC"))
             {
                 View.Render(viewContext, writer);
             }
 
-            //writer.Write("<!--/VIEW(" + ViewName + ")-->");
+            writer.Write("<!--/VIEW(" + ViewName + ")-->");
 
         }
     }

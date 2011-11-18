@@ -8,13 +8,54 @@
     <style>
         .mvcView
         {
-            
+            position:relative;
         }
             
         .mvcView:hover
         {
-            border:thin dashed lightskyblue;
-            }    
+            background-color: transparent;
+            background-color: rgba(180, 180, 144, 0.35);  /* FF3+, Saf3+, Opera 10.10+, Chrome, IE9 */
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#3FB4B490,endColorstr=#3FB4B490); /* IE6–IE9 */
+            zoom: 1;
+            -webkit-border-radius: 5px; /* Saf3-4, iOS 1-3.2, Android <e;1.6 */
+            -moz-border-radius: 5px; /* FF1-3.6 */
+            border-radius: 5px; /* Opera 10.5, IE9, Saf5, Chrome, FF4, iOS 4, Android 2.1+ */    
+            -webkit-transition: all 1s ease-out;  /* Saf3.2+, Chrome */
+            -moz-transition: all 1s ease-out;  /* FF4+ */
+            -ms-transition: all 1s ease-out;  /* IE10? */
+            -o-transition: all 1s ease-out;  /* Opera 10.5+ */
+            transition: all 1s ease-out; 
+        }
+        
+        .mvcView:hover:after  
+        {
+            content:"\2191 " attr(data-glimpse-viewName); 
+            display:block;
+            position:absolute;
+            bottom:-25px; 
+            left:0px;
+            text-align: center;
+            background-color: transparent;
+            background-color: rgba(180, 180, 144, 0.35);  /* FF3+, Saf3+, Opera 10.10+, Chrome, IE9 */
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#3FB4B490,endColorstr=#3FB4B490); /* IE6–IE9 */
+            zoom: 1;
+            -webkit-border-radius: 5px; /* Saf3-4, iOS 1-3.2, Android <e;1.6 */
+            -moz-border-radius: 5px; /* FF1-3.6 */
+            border-radius: 5px; /* Opera 10.5, IE9, Saf5, Chrome, FF4, iOS 4, Android 2.1+ */    
+            color:darkslateblue;
+            font-family:sans-serif;
+            font-size: 12px;
+            font-weight:bold;
+            padding:4px;
+            -webkit-transition: all 0.25s ease-out;  /* Saf3.2+, Chrome */
+            -moz-transition: all 0.25s ease-out;  /* FF4+ */
+            -ms-transition: all 0.25s ease-out;  /* IE10? */
+            -o-transition: all 0.25s ease-out;  /* Opera 10.5+ */
+            transition: all 0.25s ease-out; 
+            z-index:900;
+
+        }
+
             
     </style>
 
@@ -58,11 +99,13 @@
 
                             if (nodeDict[comment.nodeValue.substring(1)] === sib) {
                                 sib.classList.add('mvcView');
-                                sib.addEventListener('mouseover', function (evt) {
-                                    console.log(comment.nodeValue.substring(1));
-                                    evt.cancelBubble = true;
-                                    return false;
-                                });
+                                var viewName = comment.nodeValue.substring(1).slice(5, comment.nodeValue.substring(1).length-1);
+                                sib.setAttribute('data-glimpse-viewName', viewName);
+                                /*sib.addEventListener('mouseover', function (evt) {
+                                console.log(comment.nodeValue.substring(1));
+                                evt.cancelBubble = true;
+                                return false;
+                                });*/
                             }
                         }
                         else {
