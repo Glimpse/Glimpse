@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Glimpse.Log4Net</id>
+    <version>0.86.2</version>
+    <title>Glimpse for log4net</title>
+    <authors>Jess Chadwick</authors>
+    <owners>Jess Chadwick</owners>
+    <licenseUrl>https://raw.github.com/jchadwick/Glimpse.Log4Net/master/license.txt</licenseUrl>
+    <projectUrl>https://github.com/jchadwick/Glimpse.Log4Net</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Plugin for Glimpse to view log4net log entries.</description>
+    <tags>Glimpse log4net</tags>
+    <dependencies>
+      <dependency id="Glimpse" version="0.86" />
+      <dependency id="log4net" version="1.2.10" />
+    </dependencies>
+  </metadata>
+</package>

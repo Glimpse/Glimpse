@@ -37,6 +37,9 @@
     <Reference Include="EntityFramework">
       <HintPath>..\..\packages\EntityFramework.4.1.10331.0\lib\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System.Activities" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data.Entity" />
@@ -235,6 +238,10 @@
     <ProjectReference Include="..\Glimpse.EF\Glimpse.EF.csproj">
       <Project>{1AEDC219-C2A4-422E-8DD8-A9ABAE1B4F3B}</Project>
       <Name>Glimpse.EF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Glimpse.Log4Net\Glimpse.Log4Net.csproj">
+      <Project>{537974EB-E077-453D-AA51-3A0558DC2536}</Project>
+      <Name>Glimpse.Log4Net</Name>
     </ProjectReference>
     <ProjectReference Include="..\Glimpse.MVC3\Glimpse.Mvc3.csproj">
       <Project>{523F20A6-3136-4034-B1DD-003F86BDB47A}</Project>
