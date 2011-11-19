@@ -110,7 +110,7 @@ namespace Glimpse.Core2
 
             var metadata = new GlimpseMetadata(requestStore.Get<Guid>(), requestMetadata, pluginData);
 
-            //TODO: persist metadata
+            Configuration.PersistanceStore.Save(metadata);
         }
 
         public IServiceLocator ServiceLocator

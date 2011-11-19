@@ -9,6 +9,7 @@ namespace Glimpse.Core2
         public GlimpseCollection<IGlimpsePipelineModifier> PipelineModifiers { get; set; }
         public IFrameworkProvider FrameworkProvider { get; set; }
         public IGlimpseSerializer Serializer { get; set; }
+        public IGlimpsePersistanceStore PersistanceStore { get; set; }
 
         public GlimpseConfiguration(IFrameworkProvider frameworkProvider)
         {
@@ -19,6 +20,7 @@ namespace Glimpse.Core2
             Plugins = new GlimpseLazyCollection<IGlimpseTab, IGlimpsePluginMetadata>();
             PipelineModifiers = new GlimpseCollection<IGlimpsePipelineModifier>();
             Serializer = new JsonNetSerializer();
+            PersistanceStore = new ApplicationPersistanceStore(frameworkProvider.HttpServerStore);
         }
     }
 }

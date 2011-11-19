@@ -281,6 +281,33 @@ namespace Glimpse.Test.Core2
             serializerMock.Verify(s=>s.Serialize(It.IsAny<object>()), Times.Exactly(Configuration.Plugins.Count));
         }
 
+        [Fact]
+        public void PersistDataDuringEndRequest()
+        {
+            var metadataMock = new Mock<IGlimpsePluginMetadata>();
+            metadataMock.Setup(m => m.RequestContextType).Returns(typeof(object));
+            metadataMock.Setup(m => m.LifeCycleSupport).Returns(LifeCycleSupport.EndRequest);
+            var pluginMock = new Mock<IGlimpseTab>();
+
+            Configuration.Plugins.Discoverability.AutoDiscover = false;
+            Configuration.Plugins.Add(new Lazy<IGlimpseTab, IGlimpsePluginMetadata>(() => pluginMock.Object, metadataMock.Object));
+
+            var serializerMock = new Mock<IGlimpseSerializer>();
+            Configuration.Serializer = serializerMock.Object;
+
+            var persistanceStoreMock = new Mock<IGlimpsePersistanceStore>();
+            Configuration.PersistanceStore = persistanceStoreMock.Object;
+            
+            var runtime = new GlimpseRuntime(Configuration);
+
+            runtime.BeginRequest();
+            runtime.ExecutePlugins();
+            runtime.EndRequest();
+
+            serializerMock.Verify(s => s.Serialize(It.IsAny<object>()), Times.Exactly(Configuration.Plugins.Count));
+            persistanceStoreMock.Verify(ps=>ps.Save(It.IsAny<GlimpseMetadata>()));
+        }
+
         //End request
         //serialize data
         //persist data

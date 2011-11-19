@@ -13,6 +13,7 @@ namespace Glimpse.Test.Core2
             frameworkProvider.Setup(fp => fp.RuntimeContextType).Returns(typeof (object));
             frameworkProvider.Setup(fp => fp.HttpRequestStore).Returns(
                 new DictionaryDataStoreAdapter(new Dictionary<string, object>()));
+            frameworkProvider.Setup(fp => fp.HttpServerStore).Returns(new DictionaryDataStoreAdapter(new Dictionary<string, object>()));
 
             return frameworkProvider;
         }
