@@ -52,6 +52,12 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Plugin\Assist\AssistExtensionsTest.cs" />
+    <Compile Include="Plugin\Assist\StringFormattingExtensionsTest.cs" />
+    <Compile Include="Plugin\Assist\GlimpseRowFormattingExtensionsTest.cs" />
+    <Compile Include="Plugin\Assist\GlimpseColumnTest.cs" />
+    <Compile Include="Plugin\Assist\GlimpseRowTest.cs" />
+    <Compile Include="Plugin\Assist\GlimpseSectionTest.cs" />
     <Compile Include="IpAddressValidatorTest.cs" />
     <Compile Include="ModuleTest.cs" />
     <Compile Include="Plugin\RequestTest.cs" />

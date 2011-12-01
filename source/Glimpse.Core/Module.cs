@@ -12,6 +12,7 @@ using System.Web;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
+using Glimpse.Core.Plugin.Assist;
 using Glimpse.Core.Plumbing;
 using Glimpse.Core.Sanitizer;
 using Glimpse.Core.Validator;
@@ -354,6 +355,10 @@ namespace Glimpse.Core
                     try
                     {
                         var pluginData = p.GetData(context);
+                        if (pluginData is GlimpseSection)
+                        {
+                            pluginData = ((GlimpseSection) pluginData).Build();
+                        }
                         data.Add(p.Name, pluginData);
                     }
                     catch (Exception ex)

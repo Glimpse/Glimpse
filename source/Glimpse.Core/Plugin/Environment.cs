@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Linq;
@@ -9,6 +8,7 @@ using System.Web;
 using System.Web.Compilation;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Plugin.Assist;
 
 namespace Glimpse.Core.Plugin
 {
@@ -32,21 +32,22 @@ namespace Glimpse.Core.Plugin
         public object GetData(HttpContextBase context)
         {
             //environment should not change from request to request on a given machine.  We can cache our results in the application store
-            var cachedData = context.Application[PluginEnvironmentStoreKey] as IDictionary<string, object>;
+            var cachedData = context.Application[PluginEnvironmentStoreKey] as GlimpseSection;
             if (cachedData != null) return cachedData;
 
-            var environmentName = "_Configure in web.config glimpse/environments_";
-            var currentEnviro = Configuration.Environments.GetCurrent(context.Request.Url);
+            var root = new GlimpseSection("Key", "Value");
 
+            var environmentName = "Configure in web.config glimpse/environments";
+            var currentEnviro = Configuration.Environments.GetCurrent(context.Request.Url);
             if (currentEnviro != null)
             {
                 environmentName = currentEnviro.Name;
             }
 
             //build assemblies table
-            var headers = new[] {"Name", "Version", "Culture", "From GAC", "Full Trust"};
-            var sysList = new List<object[]>{ headers };
-            var appList = new List<object[]>{ headers };
+            var headers = new[] { "Name", "Version", "Culture", "From GAC", "Full Trust" };
+            var appList = new GlimpseSection(headers);
+            var sysList = new GlimpseSection(headers);
 
             var allAssemblies = BuildManager.GetReferencedAssemblies().OfType<Assembly>().Concat(AppDomain.CurrentDomain.GetAssemblies()).Distinct().OrderBy(o => o.FullName);
 
@@ -62,34 +63,36 @@ namespace Glimpse.Core.Plugin
             {
                 Add(assembly, to:appList);
             }
-             
-            cachedData = new Dictionary<string, object>
-                              {
-                                  {"Environment Name", environmentName},
-                                  {"Machine", MachineDetails()},
-                                  {"Web Server", WebServerDetails(context)},
-                                  {"Framework", FrameworkDetails(context)},
-                                  {"Process", ProcessDetails()},
-                                  {"Timezone", TimezoneDetails()},
-                                  {"Application Assemblies", appList},
-                                  {"System Assemblies", sysList}
-                              };
 
-            context.Application[PluginEnvironmentStoreKey] = cachedData;
-            return cachedData;
+            root.AddRow().Column("Environment Name").Column(environmentName).UnderlineIf(currentEnviro == null);
+            root.AddRow().Column("Machine").Column(MachineDetails());
+            root.AddRow().Column("Web Server").Column(WebServerDetails(context));
+            root.AddRow().Column("Framework").Column(FrameworkDetails(context));
+            root.AddRow().Column("Process").Column(ProcessDetails());
+            root.AddRow().Column("Timezone").Column(TimezoneDetails());
+            root.AddRow().Column("Application Assemblies").Column(appList);
+            root.AddRow().Column("Application Assemblies").Column(sysList);
+
+            context.Application[PluginEnvironmentStoreKey] = root;
+            return root;
         }
 
         public void SetupInit()
         {
         }
 
-        private static void Add(Assembly assembly, ICollection<object[]> to)
+        private static void Add(Assembly assembly, GlimpseSection to)
         {
             var assemblyName = assembly.GetName();
             var version = assemblyName.Version.ToString();
-            var culture = string.IsNullOrEmpty(assemblyName.CultureInfo.Name) ? "_neutral_":assemblyName.CultureInfo.Name;
+            var culture = string.IsNullOrEmpty(assemblyName.CultureInfo.Name) ? "neutral".Underline() : assemblyName.CultureInfo.Name;
 
-            to.Add(new [] { assemblyName.Name, version, culture, assembly.GlobalAssemblyCache.ToString(), assembly.IsFullyTrusted.ToString() });
+            to.AddRow()
+                .Column(assemblyName.Name)
+                .Column(version)
+                .Column(culture)
+                .Column(assembly.GlobalAssemblyCache.ToString())
+                .Column(assembly.IsFullyTrusted.ToString());
         }
          
         private static AspNetHostingPermissionLevel GetCurrentTrustLevel()
@@ -123,44 +126,53 @@ namespace Glimpse.Core.Plugin
         {
             var isLocal = context.Request.Url.IsLoopback;
             var isDebug = context.IsDebuggingEnabled;
-            if (!isLocal && context.IsDebuggingEnabled)
-                return String.Format("*{0}*", isDebug.ToString());
-            return isDebug.ToString();
+            
+            return isDebug.ToString()
+                .BoldIf(!isLocal && context.IsDebuggingEnabled);
         }
 
-        private static object WebServerDetails(HttpContextBase context)
+        private static GlimpseSection WebServerDetails(HttpContextBase context)
         {
             var serverSoftware = context.Request.ServerVariables["SERVER_SOFTWARE"];
             var processName = Process.GetCurrentProcess().MainModule.ModuleName;
 
-            return new List<object[]>
-                           {
-                               new object[] { "Type", "Integrated Pipeline"},
-                               new object[] { (!string.IsNullOrEmpty(serverSoftware) ? serverSoftware : processName.StartsWith("WebDev.WebServer", StringComparison.InvariantCultureIgnoreCase) ? "Visual Studio Web Development Server" : "Unknown"), HttpRuntime.UsingIntegratedPipeline.ToString() }
-                           }; 
+            var serverType = !string.IsNullOrEmpty(serverSoftware)
+                ? serverSoftware
+                : processName.StartsWith("WebDev.WebServer", StringComparison.InvariantCultureIgnoreCase) ? "Visual Studio Web Development Server" : "Unknown";
+
+            var integratedPipeline = HttpRuntime.UsingIntegratedPipeline.ToString();
+
+            var section = new GlimpseSection("Type", "Integrated Pipeline");
+            section.AddRow().Column(serverType).Column(integratedPipeline);
+            return section;
         }
 
-        private static object FrameworkDetails(HttpContextBase context)
-        { 
-            return new List<object[]>
-                           {
-                               new object[] {".NET Framework", "Debugging", "Server Culture", "Current Trust Level"},
-                               new object[] {string.Format(".NET {0} ({1} bit)", System.Environment.Version, IntPtr.Size*8), IsInDebug(context).ToString(), Thread.CurrentThread.CurrentCulture, GetCurrentTrustLevel().ToString()}
-                           };
-        }
-
-        private static object MachineDetails()
+        private static GlimpseSection FrameworkDetails(HttpContextBase context)
         {
-            var machineStarttime = DateTime.Now.AddMilliseconds(System.Environment.TickCount * -1);
-             
-            return new List<object[]>
-                           {
-                               new object[] {"Name", "Operating System", "Start Time", /*, "Uptime"*/},
-                               new object[] {string.Format("{0} ({1} processors)", System.Environment.MachineName, System.Environment.ProcessorCount), string.Format("{0} ({1} bit)", System.Environment.OSVersion.VersionString, System.Environment.Is64BitOperatingSystem ? "64" : "32"), machineStarttime/*, GetUptime(machineStarttime)*/}
-                           }; 
+            var dotnetFramework = string.Format(".NET {0} ({1} bit)", System.Environment.Version, IntPtr.Size * 8);
+            var debugging = IsInDebug(context).ToString();
+            var serverCulture = Thread.CurrentThread.CurrentCulture;
+            var currentTrustLevel = GetCurrentTrustLevel().ToString();
+
+            var section = new GlimpseSection(".NET Framework", "Debugging", "Server Culture", "Current Trust Level");
+            section.AddRow().Column(dotnetFramework).Column(debugging).Column(serverCulture).Column(currentTrustLevel);
+            return section;
         }
 
-        private static object TimezoneDetails()
+        private static GlimpseSection MachineDetails()
+        {
+            var name = string.Format("{0} ({1} processors)", System.Environment.MachineName, System.Environment.ProcessorCount);
+            var operatingSystem = string.Format("{0} ({1} bit)", System.Environment.OSVersion.VersionString, System.Environment.Is64BitOperatingSystem ? "64" : "32");
+            var machineStarttime = DateTime.Now.AddMilliseconds(System.Environment.TickCount * -1);
+            var uptime = GetUptime(machineStarttime);
+            
+            // TODO: Add uptime
+            var section = new GlimpseSection("Name", "Operating System", "Start Time");
+            section.AddRow().Column(name).Column(operatingSystem).Column(machineStarttime);
+            return section;
+        }
+
+        private static GlimpseSection TimezoneDetails()
         { 
             // get a local time zone info
             var timeZoneInfo = TimeZoneInfo.Local;
@@ -176,26 +188,23 @@ namespace Glimpse.Core.Plugin
                 isDaylightSavingTime = true;
             }
 
-            return new List<object[]>
-                           {
-                               new object[] { "Current", "Is Daylight Saving", "UtcOffset w/DLS" },
-                               new object[] { timeZoneInfo.DisplayName, isDaylightSavingTime.ToString(), offset }
-                           }; 
+            var section = new GlimpseSection("Current", "Is Daylight Saving", "UtcOffset w/DLS");
+            section.AddRow().Column(timeZoneInfo.DisplayName).Column(isDaylightSavingTime.ToString()).Column(offset);
+            return section;
         }
 
-        private static object ProcessDetails()
+        private static GlimpseSection ProcessDetails()
         {
             var process = Process.GetCurrentProcess();
              
             var processName = process.MainModule.ModuleName;
             var startTime = process.StartTime; 
-            var uptime = GetUptime(startTime); 
+            var uptime = GetUptime(startTime);
 
-            return new List<object[]>
-                           {
-                               new object[] { "Worker Process", "Process ID", "Start Time"/*, "Uptime"*/ },
-                               new object[] { processName, process.Id, startTime/*, uptime*/ }
-                           }; 
+            // TODO: Add uptime
+            var section = new GlimpseSection("Worker Process", "Process ID", "Start Time");
+            section.AddRow().Column(processName).Column(process.Id).Column(startTime);
+            return section;
         }
 
         private static string GetUptime(DateTime startTime)
