@@ -39,7 +39,28 @@ namespace Glimpse.EF.Plumbing.Injectors
                 }
             }
 
+            // if a query is made before we have injected our provider factory,
+            // ef 4.0 will cache the metadata workspace with original provider factory
+            // resulting in trying to use the original connection type.
+            ClearMetadataCache();
+
             Logger.Info("AdoPipelineInitiator: Finished trying to injecting WrapCachedMetadata");
+        }
+
+        private void ClearMetadataCache()
+        {
+            // this can be alot cleaner if we use System.Data.Metadata.Edm.MetadataWorkspace.ClearCache()(it's static public) directly.
+            // but it also clears cached view generation/assemblies(may take a performance hit for large models if regenerating this).
+            var type = typeof(System.Data.Metadata.Edm.MetadataWorkspace).Assembly.GetType("System.Data.Metadata.Edm.MetadataCache");
+
+            if (type != null)
+            {
+                var clearMethod = type.GetMethod("Clear", BindingFlags.Static | BindingFlags.NonPublic);
+                if (clearMethod != null)
+                {
+                    clearMethod.Invoke(null, null);
+                }
+            }
         }
 
 
