@@ -47,6 +47,7 @@
     <Compile Include="AspNetFrameworkProvider.cs" />
     <Compile Include="HttpApplicationStateBaseDataStoreAdapter.cs" />
     <Compile Include="Plugin\Request.cs" />
+    <Compile Include="PreBodyTagFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

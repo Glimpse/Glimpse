@@ -116,6 +116,15 @@ namespace Glimpse.Core2
 
             //TODO: Filter out requests that should not have the ID header
             frameworkProvider.SetHttpResponseHeader("X-Glimpse-RequestID", requestId.ToString());
+
+            //TODO: Finish ME
+            //var dataPath = HttpUtility.HtmlAttributeEncode(Context.GlimpseResourcePath("data.js") + "&id=" + Context.GetGlimpseRequestId());
+            //var clientPath = HttpUtility.HtmlAttributeEncode(Context.GlimpseResourcePath("client.js"));
+
+            //var html = string.Format(@"<script type='text/javascript' id='glimpseData' src='{0}'></script><script type='text/javascript' id='glimpseClient' src='{1}'></script></body>", dataPath, clientPath);
+
+            //frameworkProvider.InjectHttpResponseBody(html);
+
         }
 
         public IServiceLocator ServiceLocator

@@ -60,5 +60,12 @@ namespace Glimpse.AspNet
             var headers = Context.Response.Headers;
             headers.Set(name, value);
         }
+
+        public void InjectHttpResponseBody(string htmlSnippet)
+        {
+            var response = Context.Response;
+
+            response.Filter = new PreBodyTagFilter(htmlSnippet, response.Filter, Context.Response.ContentEncoding);
+        }
     }
 }

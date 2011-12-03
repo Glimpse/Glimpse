@@ -86,11 +86,6 @@ namespace Glimpse.Test.AspNet
             var responseMock = new Mock<HttpResponseBase>();
             var headerCollection = new NameValueCollection();
             responseMock.Setup(r => r.Headers).Returns(headerCollection);
-
-            var applicationStateMock = new Mock<HttpApplicationStateBase>();
-            applicationStateMock.Setup(st => st.Get("testKey")).Returns("testValue");
-            
-            contextMock.Setup(ctx => ctx.Application).Returns(applicationStateMock.Object);
             contextMock.Setup(ctx => ctx.Response).Returns(responseMock.Object);
 
             var provider = new AspNetFrameworkProvider { Context = contextMock.Object };
@@ -103,6 +98,26 @@ namespace Glimpse.Test.AspNet
             contextMock.VerifyGet(ctx=>ctx.Response);
             responseMock.VerifyGet(r=>r.Headers);
             Assert.Equal(headerValue, headerCollection[headerName]);
+        }
+
+        [Fact]
+        public void InjectHttpResponseBody()
+        {
+            var contextMock = new Mock<HttpContextBase>();
+
+            var responseMock = new Mock<HttpResponseBase>();
+
+            contextMock.Setup(ctx => ctx.Response).Returns(responseMock.Object);
+
+            var provider = new AspNetFrameworkProvider { Context = contextMock.Object };
+
+            var outputString = "<script src=\"test.js\"></script>";
+
+            provider.InjectHttpResponseBody(outputString);
+
+            contextMock.VerifyGet(ctx => ctx.Response);
+            responseMock.VerifyGet(r=>r.Filter);
+            responseMock.VerifySet(r=>r.Filter);
         }
     }
 }
