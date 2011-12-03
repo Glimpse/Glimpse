@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Web;
 using Glimpse.AspNet;
 using Moq;
@@ -75,6 +76,33 @@ namespace Glimpse.Test.AspNet
         public void HaveRequestMetadata()
         {
             
+        }
+
+        [Fact]
+        public void SetHttpResponseHeader()
+        {
+            var contextMock = new Mock<HttpContextBase>();
+            
+            var responseMock = new Mock<HttpResponseBase>();
+            var headerCollection = new NameValueCollection();
+            responseMock.Setup(r => r.Headers).Returns(headerCollection);
+
+            var applicationStateMock = new Mock<HttpApplicationStateBase>();
+            applicationStateMock.Setup(st => st.Get("testKey")).Returns("testValue");
+            
+            contextMock.Setup(ctx => ctx.Application).Returns(applicationStateMock.Object);
+            contextMock.Setup(ctx => ctx.Response).Returns(responseMock.Object);
+
+            var provider = new AspNetFrameworkProvider { Context = contextMock.Object };
+
+            var headerName = "testKey";
+            var headerValue = "testValue";
+
+            provider.SetHttpResponseHeader(headerName, headerValue);
+
+            contextMock.VerifyGet(ctx=>ctx.Response);
+            responseMock.VerifyGet(r=>r.Headers);
+            Assert.Equal(headerValue, headerCollection[headerName]);
         }
     }
 }

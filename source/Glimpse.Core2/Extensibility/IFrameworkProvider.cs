@@ -9,5 +9,6 @@ namespace Glimpse.Core2.Extensibility
         object RuntimeContext { get; }
         Type RuntimeContextType { get; }
         RequestMetadata RequestMetadata { get; }
+        void SetHttpResponseHeader(string name, string value);
     }
 }

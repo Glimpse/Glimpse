@@ -107,11 +107,15 @@ namespace Glimpse.Core2
             var requestStore = frameworkProvider.HttpRequestStore;
             var requestMetadata = frameworkProvider.RequestMetadata;
             var pluginData = ResultsStore.ToDictionary(item => item.Key, item => serializer.Serialize(item.Value));
+            var requestId = requestStore.Get<Guid>();
 
-            var metadata = new GlimpseMetadata(requestStore.Get<Guid>(), requestMetadata, pluginData);
+            var metadata = new GlimpseMetadata(requestId, requestMetadata, pluginData);
 
             //TODO: Handle exceptions
             Configuration.PersistanceStore.Save(metadata);
+
+            //TODO: Filter out requests that should not have the ID header
+            frameworkProvider.SetHttpResponseHeader("X-Glimpse-RequestID", requestId.ToString());
         }
 
         public IServiceLocator ServiceLocator
