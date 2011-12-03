@@ -110,6 +110,7 @@ namespace Glimpse.Core2
 
             var metadata = new GlimpseMetadata(requestStore.Get<Guid>(), requestMetadata, pluginData);
 
+            //TODO: Handle exceptions
             Configuration.PersistanceStore.Save(metadata);
         }
 
