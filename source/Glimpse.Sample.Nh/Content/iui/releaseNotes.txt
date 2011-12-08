@@ -1,0 +1,20 @@
+REL-0.13 (in process)
+
+* Changed releaseNotes.txt to reverse chronological order
+
+REL-0.12 2007-10-19
+
+* Google Code Release of v0.12
+
+v0.12 7/17/2007
+
+* Fix bug that caused back button to disappear
+
+v0.11 7/16/2007
+
+* Fixed bug where clicking a form background would make it disappear
+* Added support for <a type="cancel"> to cancel dialogs
+* Added leftButton class for placing toolbar buttons on the left
+* Added whiteButton and grayButton styles for large dialog buttons
+* Support axis="y" to animate pages in vertically
+

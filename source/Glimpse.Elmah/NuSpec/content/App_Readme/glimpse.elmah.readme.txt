@@ -1,0 +1,51 @@
+*****************
+Elmah for Glimpse
+*****************
+Thanks for using Elmah for Glimpse.
+
+Project Homepage
+----------------
+http://elmah4glimpse.codeplex.com/
+
+Using it
+--------
+To use Elmah for Glimpse, all you need to do is install the package through NuGet or manually reference the Glimpse.Elmah.dll and Glimpse.Core.dll.
+
+Author
+------
+Steven Lauwers
+
+Release Notes
+-------------
+11/09/2011 - 0.9.7.0
+- Updated to version 0.86 of Glimpse
+- Use build-in paging support of Glimpse
+- Removed the client helper
+
+10/23/2011 - 0.9.6.0
+- Fixed bug when parsing an invalid guid
+- Updated to version 0.85 of Glimpse
+- Change the way the client pager script is included
+
+07/24/2011 - 0.9.5.0
+- Updated to version 0.84 of Glimpse
+
+07/22/2011 - 0.9.4.0
+- Updated to version 0.83 of Glimpse
+- Errors are now sorted by descending date
+
+06/05/2011 - 0.9.3.0
+- Implemented the IProvideGlimpseHelp interface
+- Changed default page size to 10
+- Fixed bug in pager script
+
+06/03/2011 - 0.9.2.0
+- Updated to version 0.82 of Glimpse
+- Updated to version 1.2.0.1 of Elmah
+
+05/31/2011 - 0.9.1.0
+- Added details link
+- Added pager
+
+05/18/2011 - 0.9.0.0
+- Initial version

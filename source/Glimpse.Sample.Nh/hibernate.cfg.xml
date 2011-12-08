@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-configuration xmlns="urn:nhibernate-configuration-2.2">
+  <session-factory>
+    <property name="dialect">NHibernate.Dialect.MsSql2000Dialect</property>
+    <property name="connection.provider">NHibernate.Connection.DriverConnectionProvider</property>
+    <property name="connection.driver_class">NHibernate.Driver.SqlClientDriver, NHibernate</property>
+    <property name="connection.connection_string">
+			Data Source=.\SQLEXPRESS;AttachDbFilename=|DataDirectory|\NerdDinner.mdf;Integrated Security=True;User Instance=True
+		</property>
+		<property name='cache.provider_class'>NHibernate.Cache.HashtableCacheProvider</property>
+		<property name='cache.use_second_level_cache'>true</property>
+		<property name='cache.use_query_cache'>true</property>
+    <mapping assembly="NerdDinner" />
+  </session-factory>
+</hibernate-configuration>

@@ -16,6 +16,7 @@
         <tags>MVC MVC3 ASP.NET Web EntityFramework EF</tags>
         <dependencies>
             <dependency id="Glimpse" version="[0.87]" />
+            <dependency id="Glimpse.Ado" version="[0.87]" />
         </dependencies>
         <releaseNotes>Updated dependency to Glimpse 0.87</releaseNotes>
     </metadata>

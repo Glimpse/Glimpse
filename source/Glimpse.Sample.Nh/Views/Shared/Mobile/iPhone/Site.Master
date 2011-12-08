@@ -1,0 +1,17 @@
+<%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title><asp:ContentPlaceHolder ID="TitleContent" runat="server" ></asp:ContentPlaceHolder></title>
+    <meta name="description" content="Find Nerd Dinners on your iPhone." />
+    <meta name="keywords" content="dinner, nerd, technology, lunch, iphone" />
+    <meta name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+    <style type="text/css" media="screen">@import "/Content/iui/iui.css";</style>
+    <style type="text/css" media="screen">@import "/Content/iui/custom.css";</style>
+    <script type="application/x-javascript" src="/Content/iui/iui.js"></script>
+    <script type="application/x-javascript" src="/Content/iui/custom.js"></script>
+</head>
+<body>
+    <asp:ContentPlaceHolder ID="MainContent" runat="server" ></asp:ContentPlaceHolder>
+</body>
+</html>

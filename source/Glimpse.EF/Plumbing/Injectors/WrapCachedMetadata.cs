@@ -2,12 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using Glimpse.Ado.Plumbing.Profiler;
 using Glimpse.Core.Extensibility;
-using Glimpse.EF.Plumbing.Profiler;
 
 namespace Glimpse.EF.Plumbing.Injectors
 {
-    public class WrapCachedMetadata : IWrapperInjectorProvider
+    public class WrapCachedMetadata
     {
         private IGlimpseLogger Logger { get; set; }
 
@@ -39,7 +39,7 @@ namespace Glimpse.EF.Plumbing.Injectors
                 }
             }
 
-            Logger.Info("AdoPipelineInitiator: Finished trying to injecting WrapCachedMetadata");
+            Logger.Info("AdoPipelineInitiator for EF: Finished trying to injecting WrapCachedMetadata");
         }
 
 
@@ -47,7 +47,7 @@ namespace Glimpse.EF.Plumbing.Injectors
         /// Change the metadata workspace provider factory to ours for all cached models.
         /// </summary>
         /// <param name="lazyInternalContextType"></param>
-        private void InjectCachedMetadataWorkspaceProviderFactory(Type lazyInternalContextType)
+        private static void InjectCachedMetadataWorkspaceProviderFactory(Type lazyInternalContextType)
         {
             var locksAcquired = 0;
             // ConcurrentDictionary<Type, RetryLazy<LazyInternalContext, DbCompiledModel>>
@@ -65,7 +65,7 @@ namespace Glimpse.EF.Plumbing.Injectors
             }
         }
 
-        private void ChangeProviderFactory(DictionaryEntry i)
+        private static void ChangeProviderFactory(DictionaryEntry i)
         {
             var valueField = i.Value.GetType().GetField("_value", BindingFlags.NonPublic | BindingFlags.Instance); 
             if (valueField != null)
@@ -102,7 +102,7 @@ namespace Glimpse.EF.Plumbing.Injectors
         /// Change the connection key to ours for all initialized databases.
         /// </summary>
         /// <param name="lazyInternalContextType"></param>
-        private void InjectCachedInitializedDatabasesKeys(Type lazyInternalContextType)
+        private static void InjectCachedInitializedDatabasesKeys(Type lazyInternalContextType)
         {
             var locksAcquired = 0; 
 
@@ -119,8 +119,7 @@ namespace Glimpse.EF.Plumbing.Injectors
                     foreach (DictionaryEntry i in idictionary) 
                         keys.Add(i.Key); 
 
-                    string connectionTypeName = typeof(GlimpseProfileDbConnection).FullName;
-
+                    var connectionTypeName = typeof(GlimpseProfileDbConnection).FullName;
                     foreach (var i in keys)
                     {
                         var connectionKey = (string)tupleType.GetProperty("Item2").GetValue(i, null);
@@ -143,8 +142,7 @@ namespace Glimpse.EF.Plumbing.Injectors
             }
         }
 
-
-        private object GetDictionaryAndLock(Type type, string fieldName, ref int locksAcquired)
+        private static object GetDictionaryAndLock(Type type, string fieldName, ref int locksAcquired)
         {
             var field = type.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Static); 
             if (field != null)
@@ -169,7 +167,7 @@ namespace Glimpse.EF.Plumbing.Injectors
             return null;
         }
 
-        private void ReleaseDictionaryLock(object dictionary, int locksAcquired)
+        private static void ReleaseDictionaryLock(object dictionary, int locksAcquired)
         {
             var releaseLocksMethod = dictionary.GetType().GetMethod("ReleaseLocks", BindingFlags.NonPublic | BindingFlags.Instance); 
             if (releaseLocksMethod != null) 

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+									 assembly="NerdDinner"
+									 namespace="NerdDinner.Models">
+	<class name="Dinner" table="Dinners" lazy="false">
+		<id name="DinnerID">
+			<generator class="identity"/>
+		</id>
+		<property name="Title"/>
+		<property name="EventDate"/>
+		<property name="Description"/>
+		<property name="HostedBy"/>
+		<property name="ContactPhone"/>
+		<property name="Address"/>
+		<property name="Country"/>
+		<property name="Latitude"/>
+		<property name="Longitude"/>
+		<bag name="RSVPs" cascade="all-delete-orphan" inverse="true">
+			<key column="DinnerID"/>
+			<one-to-many class="RSVP"/>
+		</bag>
+		
+	</class>
+	<class name="RSVP" table="RSVP"  lazy="false">
+		<id name="RsvpID">
+			<generator class="identity"/>
+		</id>
+		<property name="AttendeeName"/>
+		<many-to-one name="Dinner"
+								 column="DinnerID"/>
+	</class>
+</hibernate-mapping>

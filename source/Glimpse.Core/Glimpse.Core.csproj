@@ -81,6 +81,7 @@
     <Compile Include="Configuration\UrlBlacklistCollection.cs" />
     <Compile Include="Converter\AuthenticationSectionConverter.cs" />
     <Compile Include="Converter\CustomErrorsSectionConverter.cs" />
+    <Compile Include="Extensibility\GlimpseServiceAttribute.cs" />
     <Compile Include="Extensibility\GlimpseTimer.cs" />
     <Compile Include="Extensibility\GlimpseTrace.cs" />
     <Compile Include="Extensibility\GlimpseHandlerAttribute.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Extensibility\IGlimpseFactory.cs" />
     <Compile Include="Extensibility\IGlimpseLogger.cs" />
     <Compile Include="Extensibility\IGlimpseMetadataStore.cs" />
+    <Compile Include="Extensibility\IGlimpseService.cs" />
     <Compile Include="Extensibility\IGlimpseWarning.cs" />
     <Compile Include="Extensibility\IGlimpseHandler.cs" />
     <Compile Include="Extensibility\IProvideGlimpseHelp.cs" />

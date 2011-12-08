@@ -1,0 +1,31 @@
+﻿body {font-family: Arial; font-size: medium; background-color: #f7f4e6;}
+h1 { margin-top: 5px; }
+h2 { margin-left: 5px; font-size: large; color: Gray; }
+ul { margin: 0px; padding: 0px; list-style-type: none; }
+#search img { border-width: 0px; width: 24px; height: 24px; }
+#dinnerList .item { height: 25px; padding: 5px; border-bottom: solid 1px lightblue;}
+
+#placeOrZip { width: 100%; }
+#search { width: 100%; }
+
+ul {
+ border-bottom: solid 1px black; }
+
+ul li {
+ display: block;
+ padding: 5px 3px 5px 5px;
+ border-left: solid 1px black; 
+ border-right: solid 1px black; 
+ border-top: solid 1px black; 
+}
+
+ul li ul {
+  border: none;
+}
+
+ul li ul li{
+  border: none;
+  font-weight: bold;
+}
+
+img { border: none; }

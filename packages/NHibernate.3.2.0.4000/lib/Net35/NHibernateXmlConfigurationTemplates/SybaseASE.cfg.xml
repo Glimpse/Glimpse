@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+This template was written to work with NHibernate.Test.
+Copy the template to your NHibernate.Test project folder and rename it hibernate.cfg.xml. Change it 
+for your own use before compiling tests in Visual Studio.
+-->
+<hibernate-configuration xmlns="urn:nhibernate-configuration-2.2">
+	<session-factory name="NHibernate.Test">
+		<property name="connection.driver_class">NHibernate.Driver.SybaseAseClientDriver</property>
+		<property name="connection.connection_string">
+			Data Source=10.0.0.1;Port=5000;Database=nhibernate;User ID=nhibernate;Password=password
+		</property>
+		<property name="dialect">NHibernate.Dialect.SybaseASE15Dialect</property>
+		<property name="query.substitutions">true=1;false=0</property>
+	</session-factory>
+</hibernate-configuration>

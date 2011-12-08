@@ -50,7 +50,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="NuSpec\content\glimpse.elmah.readme.txt" />
+    <Content Include="NuSpec\content\App_Readme\glimpse.elmah.readme.txt" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Elmah">

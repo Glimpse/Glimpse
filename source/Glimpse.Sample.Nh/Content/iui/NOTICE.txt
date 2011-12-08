@@ -1,0 +1,27 @@
+NOTICE.txt - iUI credits and copyright notices
+
+   Roller is Copyright (c) 2007 by the iUI project members: 
+           Joe  Hewitt
+           Christopher Allen 
+           M. Sean Gilligan 
+       Past members:  	 
+           (none) 
+
+THIRD PARTY COMPONENTS
+
+   * iUI includes software developed by the Mozilla Project
+        Copyright (c) 1997-2007, Netscape Communications Corporation and others.
+        All rights reserved.
+        http://www.mozilla.org/rhino/
+
+   * iUI includes software developed by the Dojo Foundation
+        http://dojotoolkit.org/docs/shrinksafe
+
+   * iUI includes software developed by LCA Soft  Ltd.
+        http://www.lcasoft.com/compress-js.html
+
+   * iUI includes software developed by the ant-googlcode Project
+        http://code.google.com/p/ant-googlecode/
+
+
+

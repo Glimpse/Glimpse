@@ -1,0 +1,23 @@
+.row > .toggle { width: 140px }
+.toggleOn { width: 100px }
+.toggleOff { width: 100px }
+.row > select { margin: 12px 6px 0 0; width: 140px }
+
+li a[href="#"] { background: #fff }
+
+/* Fix for box-sizing */
+body >.toolbar { -webkit-box-sizing: border-box; }
+a[target="_replace"] { -webkit-box-sizing: border-box; }
+.dialog >fieldset { -webkit-box-sizing: border-box; }
+input { -webkit-box-sizing: border-box; }
+body >.panel { -webkit-box-sizing: border-box; }
+.row >input { -webkit-box-sizing: border-box; }
+
+.logo {
+    display: block;
+    padding: 0;
+    width: 244px;
+    height: 87px;
+    border-width: 0 8px 0 14px;
+    background: url(iPhoneLogo.png) no-repeat center;
+}

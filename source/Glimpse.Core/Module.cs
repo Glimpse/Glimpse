@@ -7,7 +7,6 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading;
 using System.Web;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
@@ -34,6 +33,7 @@ namespace Glimpse.Core
         private static IGlimpseLogger Logger { get; set; }
 
         internal static IEnumerable<IGlimpseHandler> Handlers { get; set; }
+        internal static IEnumerable<IGlimpseService> Services { get; set; }
         internal static IEnumerable<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>> Plugins { get; set; }
 
         static Module()
@@ -54,6 +54,8 @@ namespace Glimpse.Core
             Serializer = new GlimpseSerializer(Factory);
 
             Handlers = Enumerable.Empty<IGlimpseHandler>();
+
+            Services = Enumerable.Empty<IGlimpseService>();
 
             Plugins = Enumerable.Empty<Lazy<IGlimpsePlugin, IGlimpsePluginRequirements>>();
 
@@ -80,6 +82,13 @@ namespace Glimpse.Core
                         var contextBase = new HttpContextWrapper(application.Context);
 
                         ComposePlugins(); //Have MEF satisfy our needs
+
+                        //Allow services to setup
+                        foreach (var service in Services)
+                        {
+                            Logger.Info("Calling SetupInit() on " + service.GetType().FullName);
+                            service.SetupInit();
+                        }
 
                         //Allow plugin's registered for Initialization to setup
                         foreach (var plugin in Plugins.Where(plugin => plugin.Metadata.ShouldSetupInInit))
@@ -327,13 +336,14 @@ namespace Glimpse.Core
             container.ComposeParts(this, RequestValidator);
 
             container.Compose(batch);
-
+            
+            Services = container.GetExportedValues<IGlimpseService>();
             Plugins = container.GetExports<IGlimpsePlugin, IGlimpsePluginRequirements>();
             Handlers = container.GetExportedValues<IGlimpseHandler>();
             var glimpseConverters = container.GetExportedValues<IGlimpseConverter>();
             Serializer.AddConverters(glimpseConverters);
 
-            Logger.Info("MEF Parts composed: " + Plugins.Count() + " IGlimpsePlugins, " + Handlers.Count() + " IGlimpseHandlers and " + glimpseConverters.Count() + " IGlimpseConverters configured");
+            Logger.Info("MEF Parts composed: " + Plugins.Count() + " IGlimpsePlugins, " + Services.Count() + " IGlimpseServices, " + Handlers.Count() + " IGlimpseHandlers and " + glimpseConverters.Count() + " IGlimpseConverters configured");
 
             foreach (var exception in directoryCatalog.Exceptions)
             {

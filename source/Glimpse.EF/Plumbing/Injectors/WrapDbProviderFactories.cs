@@ -4,13 +4,12 @@ using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Reflection;
-using System.Text;
+using Glimpse.Ado.Plumbing.Profiler;
 using Glimpse.Core.Extensibility;
-using Glimpse.EF.Plumbing.Profiler;
 
 namespace Glimpse.EF.Plumbing.Injectors
 {
-    public class WrapDbProviderFactories : IWrapperInjectorProvider
+    public class WrapDbProviderFactories
     {
         private IGlimpseLogger Logger { get; set; }
 
@@ -28,7 +27,7 @@ namespace Glimpse.EF.Plumbing.Injectors
             }
             catch (ArgumentException ex)
             {
-                Logger.Info("AdoPipelineInitiator: Expected DbProviderFactories exception due too the way the API works.", ex);
+                Logger.Info("AdoPipelineInitiator for EF: Expected DbProviderFactories exception due too the way the API works.", ex);
             } 
 
             var providers = GetRegisteredProviders();
@@ -41,7 +40,7 @@ namespace Glimpse.EF.Plumbing.Injectors
                 {
                     factory = DbProviderFactories.GetFactory(key);
 
-                    Logger.Info("AdoPipelineInitiator: Triggered ");
+                    Logger.Info("AdoPipelineInitiator for EF: Triggered");
 
                 }
                 catch (Exception)
@@ -54,7 +53,7 @@ namespace Glimpse.EF.Plumbing.Injectors
                 SwapAssemblyName(providers, key, proxyType);
             }
 
-            Logger.Info("AdoPipelineInitiator: Finished injecting DbProviderFactory");
+            Logger.Info("AdoPipelineInitiator for EF: Finished injecting DbProviderFactory");
         }
 
         private static DataTable GetRegisteredProviders()

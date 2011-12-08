@@ -16,16 +16,20 @@ properties {
 task default -depends compile
 
 task clean {
-    "Cleaning Glimpse.Core, Glimpse.Mvc3, Glimpse.Ef & Glimpse.Elmah bin and obj"
+    "Cleaning Glimpse.Core, Glimpse.Mvc3, Glimpse.Ado, Glimpse.Ef, Glimpse.Nh & Glimpse.Elmah bin and obj"
 
     delete_directory "$source_dir\Glimpse.Core\bin"
     delete_directory "$source_dir\Glimpse.Core\obj"
     delete_directory "$source_dir\Glimpse.Mvc3\bin"
     delete_directory "$source_dir\Glimpse.Mvc3\obj"
+    delete_directory "$source_dir\Glimpse.Ado\bin"
+    delete_directory "$source_dir\Glimpse.Ado\obj"
     delete_directory "$source_dir\Glimpse.Ef\bin"
     delete_directory "$source_dir\Glimpse.Ef\obj"
-    #delete_directory "$source_dir\Glimpse.Elmah\bin"
-    #delete_directory "$source_dir\Glimpse.Elmah\obj"
+    delete_directory "$source_dir\Glimpse.Nh\bin"
+    delete_directory "$source_dir\Glimpse.Nh\obj"
+    delete_directory "$source_dir\Glimpse.Elmah\bin"
+    delete_directory "$source_dir\Glimpse.Elmah\obj"
 }
 
 task compile -depends clean {
@@ -35,7 +39,7 @@ task compile -depends clean {
 }
 
 task merge -depends compile {
-    "Merging Glimpse.Core, Glimpse.Mvc3, Glimpse.Ef & Glimpse.Elmah to nuspec dir"
+    "Merging Glimpse.Core, Glimpse.Mvc3, Glimpse.Ado, Glimpse.Ef, Glimpse.Nh & Glimpse.Elmah to nuspec dir"
 
     exec { & $tools_dir\ilmerge.exe /targetplatform:"v4,$framework_dir" /log /out:"$source_dir\Glimpse.Core\nuspec\lib\net40\Glimpse.Core.dll" /internalize:$tools_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core\bin\Release\Glimpse.Core.dll" "$source_dir\Glimpse.Core\bin\Release\Newtonsoft.Json.Net35.dll" "$source_dir\Glimpse.Core\bin\Release\NLog.dll" "$source_dir\Glimpse.Core\bin\Release\LukeSkywalker.IPNetwork.dll" }
     del $source_dir\Glimpse.Core\nuspec\lib\net40\Glimpse.Core.pdb
@@ -43,29 +47,37 @@ task merge -depends compile {
     exec { & $tools_dir\ilmerge.exe /targetplatform:"v4,$framework_dir" /log /out:"$source_dir\Glimpse.Mvc3\nuspec\lib\net40\Glimpse.Mvc3.dll" /internalize:$tools_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Mvc3\bin\Release\Glimpse.Mvc3.dll" "$source_dir\Glimpse.Mvc3\bin\Release\Castle.Core.dll" }
     del $source_dir\Glimpse.Mvc3\nuspec\lib\net40\Glimpse.Mvc3.pdb
     
+    copy $source_dir\Glimpse.Ef\bin\Release\Glimpse.Ado.dll $source_dir\Glimpse.Ado\nuspec\lib\net40\Glimpse.Ado.dll
     copy $source_dir\Glimpse.Ef\bin\Release\Glimpse.Ef.dll $source_dir\Glimpse.Ef\nuspec\lib\net40\Glimpse.Ef.dll
-    #copy $source_dir\Glimpse.Elmah\bin\Release\Glimpse.Elmah.dll $source_dir\Glimpse.Elmah\nuspec\lib\net40\Glimpse.Elmah.dll
+    copy $source_dir\Glimpse.Nh\bin\Release\Glimpse.Nh.dll $source_dir\Glimpse.Nh\nuspec\lib\net40\Glimpse.Nh.dll
+    copy $source_dir\Glimpse.Elmah\bin\Release\Glimpse.Elmah.dll $source_dir\Glimpse.Elmah\nuspec\lib\net40\Glimpse.Elmah.dll
 
 }
 
 task pack -depends merge {
-    "Creating Glimpse.nupkg, Glimpse.Mvc3.nupkg, Glimpse.Ef.nupkg & Glimpse.Elmah.nupkg"
+    "Creating Glimpse.nupkg, Glimpse.Mvc3.nupkg, Glimpse.Ado.nupkg, Glimpse.Ef.nupkg, Glimpse.Nh.nupkg & Glimpse.Elmah.nupkg"
 
     exec { & $tools_dir\nuget.exe pack $source_dir\Glimpse.Core\nuspec\Glimpse.nuspec -OutputDirectory $build_dir\local }
     exec { & $tools_dir\nuget.exe pack $source_dir\Glimpse.Mvc3\nuspec\Glimpse.Mvc3.nuspec -OutputDirectory $build_dir\local }
+    exec { & $tools_dir\nuget.exe pack $source_dir\Glimpse.Ado\nuspec\Glimpse.Ado.nuspec -OutputDirectory $build_dir\local }
     exec { & $tools_dir\nuget.exe pack $source_dir\Glimpse.Ef\nuspec\Glimpse.Ef.nuspec -OutputDirectory $build_dir\local }
-    #exec { & $tools_dir\nuget.exe pack $source_dir\Glimpse.Elmah\nuspec\Glimpse.Elmah.nuspec -OutputDirectory $build_dir\local }
+    exec { & $tools_dir\nuget.exe pack $source_dir\Glimpse.Nh\nuspec\Glimpse.Nh.nuspec -OutputDirectory $build_dir\local }
+    exec { & $tools_dir\nuget.exe pack $source_dir\Glimpse.Elmah\nuspec\Glimpse.Elmah.nuspec -OutputDirectory $build_dir\local }
     
     mkdir $build_dir\local\zip
     copy $source_dir\Glimpse.Core\nuspec\lib\net40\Glimpse.Core.dll $build_dir\local\zip
     copy $source_dir\Glimpse.Mvc3\nuspec\lib\net40\Glimpse.Mvc3.dll $build_dir\local\zip
+    copy $source_dir\Glimpse.Ado\nuspec\lib\net40\Glimpse.Ado.dll $build_dir\local\zip
     copy $source_dir\Glimpse.Ef\nuspec\lib\net40\Glimpse.Ef.dll $build_dir\local\zip
-    #copy $source_dir\Glimpse.Elmah\nuspec\lib\net40\Glimpse.Elmah.dll $build_dir\local\zip
+    copy $source_dir\Glimpse.Nh\nuspec\lib\net40\Glimpse.Nh.dll $build_dir\local\zip
+    copy $source_dir\Glimpse.Elmah\nuspec\lib\net40\Glimpse.Elmah.dll $build_dir\local\zip
     
     copy $source_dir\Glimpse.Core\nuspec\content\App_Readme\glimpse.readme.txt $build_dir\local\zip
     copy $source_dir\Glimpse.Mvc3\nuspec\content\App_Readme\glimpse.mvc3.readme.txt $build_dir\local\zip
+    copy $source_dir\Glimpse.Ado\nuspec\content\App_Readme\glimpse.ado.readme.txt $build_dir\local\zip
     copy $source_dir\Glimpse.Ef\nuspec\content\App_Readme\glimpse.ef.readme.txt $build_dir\local\zip
-    #copy $source_dir\Glimpse.Elmah\nuspec\content\App_Readme\glimpse.elmah.readme.txt $build_dir\local\zip
+    copy $source_dir\Glimpse.Nh\nuspec\content\App_Readme\glimpse.nh.readme.txt $build_dir\local\zip
+    copy $source_dir\Glimpse.Elmah\nuspec\content\App_Readme\glimpse.elmah.readme.txt $build_dir\local\zip
     
     copy $base_dir\license.txt $build_dir\local\zip
     

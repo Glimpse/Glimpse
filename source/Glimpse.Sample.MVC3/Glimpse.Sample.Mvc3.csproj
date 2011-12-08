@@ -228,17 +228,25 @@
     <Content Include="Views\Account\Test.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Glimpse.Ado\Glimpse.Ado.csproj">
+      <Project>{4C993B73-D03A-4080-B31E-C04F23372997}</Project>
+      <Name>Glimpse.Ado</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">
       <Project>{21F99168-7D7B-49F2-A97C-5A983E0CA16F}</Project>
       <Name>Glimpse.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Glimpse.EF\Glimpse.EF.csproj">
+    <ProjectReference Include="..\Glimpse.EF\Glimpse.Ef.csproj">
       <Project>{1AEDC219-C2A4-422E-8DD8-A9ABAE1B4F3B}</Project>
-      <Name>Glimpse.EF</Name>
+      <Name>Glimpse.Ef</Name>
     </ProjectReference>
     <ProjectReference Include="..\Glimpse.MVC3\Glimpse.Mvc3.csproj">
       <Project>{523F20A6-3136-4034-B1DD-003F86BDB47A}</Project>
       <Name>Glimpse.Mvc3</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Glimpse.NH\Glimpse.Nh.csproj">
+      <Project>{9339BA0C-9735-4356-A309-0B0DFD58D0BF}</Project>
+      <Name>Glimpse.Nh</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

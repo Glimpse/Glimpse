@@ -3,16 +3,18 @@ using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Reflection;
+using Glimpse.Ado.Plumbing;
+using Glimpse.Ado.Plumbing.Profiler;
 
 namespace Glimpse.EF.Plumbing.Profiler
 {
-    internal class GlimpseProfileDbProviderFactory : IDbConnectionFactory
+    internal class GlimpseProfileDbConnectionFactory : IDbConnectionFactory
     { 
         private readonly IDbConnectionFactory inner;
         private readonly DbProviderFactory factory;
         private readonly ProviderStats stats;
 
-        public GlimpseProfileDbProviderFactory(IDbConnectionFactory inner, DbProviderFactory factory, ProviderStats stats)
+        public GlimpseProfileDbConnectionFactory(IDbConnectionFactory inner, DbProviderFactory factory, ProviderStats stats)
         {
             this.inner = inner;
             this.factory = factory;
@@ -32,7 +34,7 @@ namespace Glimpse.EF.Plumbing.Profiler
             var provider = dbConnection.GetType().GetProperty("ProviderFactory", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(dbConnection, null);
             var providerType = typeof(GlimpseProfileDbProviderFactory<>).MakeGenericType(provider.GetType());
 
-            Database.DefaultConnectionFactory = new GlimpseProfileDbProviderFactory(current, (DbProviderFactory)providerType.GetField("Instance").GetValue(null), (ProviderStats)providerType.GetField("Stats").GetValue(null));
+            Database.DefaultConnectionFactory = new GlimpseProfileDbConnectionFactory(current, (DbProviderFactory)providerType.GetField("Instance").GetValue(null), (ProviderStats)providerType.GetField("Stats").GetValue(null));
         } 
     }
 }

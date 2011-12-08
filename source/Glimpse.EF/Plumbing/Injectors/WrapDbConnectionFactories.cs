@@ -6,12 +6,13 @@ using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Glimpse.Ado.Plumbing;
 using Glimpse.Core.Extensibility;
 using Microsoft.CSharp;
 
 namespace Glimpse.EF.Plumbing.Injectors
 {
-    public class WrapDbConnectionFactories : IWrapperInjectorProvider
+    public class WrapDbConnectionFactories
     {
         private IGlimpseLogger Logger { get; set; }
 
@@ -26,19 +27,19 @@ namespace Glimpse.EF.Plumbing.Injectors
             var type = Type.GetType("System.Data.Entity.Database, EntityFramework", false);
             if (type != null && type.GetProperty("DefaultConnectionFactory") != null)
             {
-                Logger.Info("AdoPipelineInitiator: Starting to inject ConnectionFactory");
+                Logger.Info("AdoPipelineInitiator for EF: Starting to inject ConnectionFactory");
 
-                var code = GetEmbeddedResource("Glimpse.EF.Plumbing.Profiler.GlimpseProfileDbConnectionFactory.cs");
-                var assembliesToReference = new[] { type.Assembly, typeof(DbConnection).Assembly, typeof(AdoPipelineInitiator).Assembly, typeof(TypeConverter).Assembly };
+                var code = GetEmbeddedResource(GetType().Assembly, "Glimpse.EF.Plumbing.Profiler.GlimpseProfileDbConnectionFactory.cs");
+                var assembliesToReference = new[] { type.Assembly, typeof(DbConnection).Assembly, typeof(TypeConverter).Assembly, typeof(ProviderStats).Assembly };
 
                 var generatedAssembly = CreateAssembly(code, assembliesToReference);
-                var generatedType = generatedAssembly.GetType("Glimpse.EF.Plumbing.Profiler.GlimpseProfileDbProviderFactory");
+                var generatedType = generatedAssembly.GetType("Glimpse.EF.Plumbing.Profiler.GlimpseProfileDbConnectionFactory");
                 generatedType.GetMethod("Initialize").Invoke(null, null);
 
-                Logger.Info("AdoPipelineInitiator: Finished to inject ConnectionFactory");
+                Logger.Info("AdoPipelineInitiator for EF: Finished to inject ConnectionFactory");
             }
 
-            Logger.Info("AdoPipelineInitiator: Finished trying to injecting DbConnectionFactory");
+            Logger.Info("AdoPipelineInitiator for EF: Finished trying to injecting DbConnectionFactory");
         }
 
         public static Assembly CreateAssembly(string code, IEnumerable<Assembly> referenceAssemblies)
@@ -56,10 +57,10 @@ namespace Glimpse.EF.Plumbing.Injectors
             return results.CompiledAssembly;
         }
 
-        private static string GetEmbeddedResource(string resourceName)
+        private static string GetEmbeddedResource(Assembly assembly, string resourceName)
         {
             //See http://stackoverflow.com/questions/3314140/how-to-read-embedded-resource-text-file
-            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
             using (var reader = new StreamReader(stream))
             {
                 return reader.ReadToEnd();
