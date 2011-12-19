@@ -22,6 +22,7 @@ namespace Glimpse.Test.Core2
             Assert.NotNull(config.Plugins);
             Assert.NotNull(config.PipelineModifiers);
             Assert.NotNull(config.PersistanceStore);
+            Assert.NotNull(config.Resources);
         }
 
         [Fact(Skip = "This needs to be fixed - looking into code contracts")]

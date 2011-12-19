@@ -7,6 +7,7 @@ namespace Glimpse.Core2
     {
         public GlimpseLazyCollection<IGlimpseTab, IGlimpsePluginMetadata> Plugins { get; set; }
         public GlimpseCollection<IGlimpsePipelineModifier> PipelineModifiers { get; set; }
+        public GlimpseCollection<IGlimpseResource> Resources { get; set; }
         public IFrameworkProvider FrameworkProvider { get; set; }
         public IGlimpseSerializer Serializer { get; set; }
         public IGlimpsePersistanceStore PersistanceStore { get; set; }
@@ -19,6 +20,7 @@ namespace Glimpse.Core2
             FrameworkProvider = frameworkProvider;
             Plugins = new GlimpseLazyCollection<IGlimpseTab, IGlimpsePluginMetadata>();
             PipelineModifiers = new GlimpseCollection<IGlimpsePipelineModifier>();
+            Resources = new GlimpseCollection<IGlimpseResource>();
             Serializer = new JsonNetSerializer();
             PersistanceStore = new ApplicationPersistanceStore(frameworkProvider.HttpServerStore);
         }
