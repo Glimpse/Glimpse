@@ -15,8 +15,9 @@ namespace Glimpse.Test.Core2
         public GlimpseRuntimeShould()
         {
             var frameworkProviderMock = new Mock<IFrameworkProvider>().Setup();
+            var endpointConfiguration = new Mock<IGlimpseResourceEndpointConfiguration>();
 
-            Configuration = new GlimpseConfiguration(frameworkProviderMock.Object);
+            Configuration = new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfiguration.Object);
         }
 
         [Fact]
@@ -111,7 +112,9 @@ namespace Glimpse.Test.Core2
             var dataStoreMock = new Mock<IDataStore>();
             frameworkProviderMock.Setup(fp => fp.HttpRequestStore).Returns(dataStoreMock.Object);
 
-            var runtime = new GlimpseRuntime(new GlimpseConfiguration(frameworkProviderMock.Object));
+            var endpointConfig = new Mock<IGlimpseResourceEndpointConfiguration>();
+
+            var runtime = new GlimpseRuntime(new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfig.Object));
 
             runtime.BeginRequest();
 
@@ -317,7 +320,10 @@ namespace Glimpse.Test.Core2
             var pluginMock = new Mock<IGlimpseTab>();
 
             var frameworkProviderMock = new Mock<IFrameworkProvider>().Setup();
-            var configuration = new GlimpseConfiguration(frameworkProviderMock.Object);
+
+            var endpointConfig = new Mock<IGlimpseResourceEndpointConfiguration>();
+
+            var configuration = new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfig.Object);
 
             configuration.Plugins.Discoverability.AutoDiscover = false;
             configuration.Plugins.Add(new Lazy<IGlimpseTab, IGlimpsePluginMetadata>(() => pluginMock.Object, metadataMock.Object));
@@ -346,7 +352,10 @@ namespace Glimpse.Test.Core2
             var pluginMock = new Mock<IGlimpseTab>();
 
             var frameworkProviderMock = new Mock<IFrameworkProvider>().Setup();
-            var configuration = new GlimpseConfiguration(frameworkProviderMock.Object);
+
+            var endpointConfig = new Mock<IGlimpseResourceEndpointConfiguration>();
+
+            var configuration = new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfig.Object);
 
             configuration.Plugins.Discoverability.AutoDiscover = false;
             configuration.Plugins.Add(new Lazy<IGlimpseTab, IGlimpsePluginMetadata>(() => pluginMock.Object, metadataMock.Object));
@@ -366,11 +375,5 @@ namespace Glimpse.Test.Core2
             frameworkProviderMock.Verify(fp => fp.InjectHttpResponseBody(It.IsAny<string>()));
 
         }
-
-        //End request
-        //serialize data
-        //persist data
-        //try to add headers
-        //try to add script tags
     }
 }

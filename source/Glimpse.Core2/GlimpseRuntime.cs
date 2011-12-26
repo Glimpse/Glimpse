@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Core2
@@ -108,6 +107,8 @@ namespace Glimpse.Core2
             var requestMetadata = frameworkProvider.RequestMetadata;
             var pluginData = ResultsStore.ToDictionary(item => item.Key, item => serializer.Serialize(item.Value));
             var requestId = requestStore.Get<Guid>();
+            var encoder = Configuration.HtmlEncoder;
+            var resourceEndpoint = Configuration.ResourceEndpoint;
 
             var metadata = new GlimpseMetadata(requestId, requestMetadata, pluginData);
 
@@ -117,13 +118,15 @@ namespace Glimpse.Core2
             //TODO: Filter out requests that should not have the ID header
             frameworkProvider.SetHttpResponseHeader("X-Glimpse-RequestID", requestId.ToString());
 
-            //TODO: Finish ME
+            var dataPath = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUrl("data.js", "VERSION", new Dictionary<string, string>{{"id", requestId.ToString()}}));//TODO: Fix version
+            var clientPath = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUrl("client.js", "VERSION"));//TODO: Fix version
+            
             //var dataPath = HttpUtility.HtmlAttributeEncode(Context.GlimpseResourcePath("data.js") + "&id=" + Context.GetGlimpseRequestId());
             //var clientPath = HttpUtility.HtmlAttributeEncode(Context.GlimpseResourcePath("client.js"));
 
-            //var html = string.Format(@"<script type='text/javascript' id='glimpseData' src='{0}'></script><script type='text/javascript' id='glimpseClient' src='{1}'></script></body>", dataPath, clientPath);
+            var html = string.Format(@"<script type='text/javascript' id='glimpseData' src='{0}'></script><script type='text/javascript' id='glimpseClient' src='{1}'></script></body>", dataPath, clientPath);
 
-            //frameworkProvider.InjectHttpResponseBody(html);
+            frameworkProvider.InjectHttpResponseBody(html);
 
         }
 

@@ -34,6 +34,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AntiXSSLibrary">
+      <HintPath>..\..\..\Users\nmolnar\Desktop\lib\net35\AntiXSSLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.4.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -47,11 +50,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AntiXssEncoder.cs" />
     <Compile Include="ApplicationPersistanceStore.cs" />
     <Compile Include="DictionaryDataStoreAdapter.cs" />
     <Compile Include="DiscoverabilityPolicy-T1.cs" />
     <Compile Include="DiscoverabilityPolicy-T2.cs" />
     <Compile Include="DiscoverabilityPolicy.cs" />
+    <Compile Include="Extensibility\GlimpseValidatorAttribute.cs" />
+    <Compile Include="Extensibility\IGlimpseResourceEndpointConfiguration.cs" />
+    <Compile Include="Extensibility\IGlimpseValidator.cs" />
     <Compile Include="Extensibility\ResourceResult.cs" />
     <Compile Include="Extensibility\GlimpsePipelineModifierAttribute.cs" />
     <Compile Include="Extensibility\GlimpseTabAttribute.cs" />
@@ -72,8 +79,11 @@
     <Compile Include="GlimpseConfiguration.cs" />
     <Compile Include="GlimpseLazyCollection.cs" />
     <Compile Include="GlimpseMetadata.cs" />
+    <Compile Include="GlimpseMode.cs" />
     <Compile Include="GlimpseRuntime.cs" />
     <Compile Include="GlimpseServiceLocator.cs" />
+    <Compile Include="Extensibility\IGlimpseHtmlEncoder.cs" />
+    <Compile Include="GlimpseValidatorCollection.cs" />
     <Compile Include="IGlimpsePersistanceStore.cs" />
     <Compile Include="JsonNetSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

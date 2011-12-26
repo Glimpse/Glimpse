@@ -50,6 +50,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AntiXssEncoderShould.cs" />
     <Compile Include="ApplicationPersistanceStoreShould.cs" />
     <Compile Include="DictionaryDataStoreAdapterShould.cs" />
     <Compile Include="DiscoverabilityPolicyShould.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="GlimpseLazyCollectionShould.cs" />
     <Compile Include="GlimpseRuntimeShould.cs" />
     <Compile Include="GlimpseServiceLocatorShould.cs" />
+    <Compile Include="GlimpseValidatorCollectionShould.cs" />
     <Compile Include="JsonNetSerializerShould.cs" />
     <Compile Include="MockExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
