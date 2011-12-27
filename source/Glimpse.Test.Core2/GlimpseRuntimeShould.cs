@@ -373,7 +373,19 @@ namespace Glimpse.Test.Core2
             runtime.EndRequest();
 
             frameworkProviderMock.Verify(fp => fp.InjectHttpResponseBody(It.IsAny<string>()));
+        }
 
+        [Fact]
+        public void HaveASemanticVersion()
+        {
+            var runtime = new GlimpseRuntime(Configuration);
+
+            var version = new Version(runtime.Version);
+
+            Assert.NotNull(version.Major);
+            Assert.NotNull(version.Minor);
+            Assert.NotNull(version.Build);
+            Assert.Equal(-1, version.Revision);
         }
     }
 }

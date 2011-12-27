@@ -9,9 +9,12 @@ namespace Glimpse.Core2
     public class GlimpseRuntime
     {
         private GlimpseConfiguration Configuration { get; set; }
+        public string Version { get; private set; }
 
         public GlimpseRuntime(GlimpseConfiguration configuration)
         {
+            //Version is in major.minor.build format to support http://semver.org/
+            Version = GetType().Assembly.GetName().Version.ToString(3);
             UpdateConfiguration(configuration);
         }
 
@@ -118,8 +121,8 @@ namespace Glimpse.Core2
             //TODO: Filter out requests that should not have the ID header
             frameworkProvider.SetHttpResponseHeader("X-Glimpse-RequestID", requestId.ToString());
 
-            var dataPath = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUrl("data.js", "VERSION", new Dictionary<string, string>{{"id", requestId.ToString()}}));//TODO: Fix version
-            var clientPath = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUrl("client.js", "VERSION"));//TODO: Fix version
+            var dataPath = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUrl("data.js", Version, new Dictionary<string, string>{{"id", requestId.ToString()}}));
+            var clientPath = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUrl("client.js", Version));
             
             //var dataPath = HttpUtility.HtmlAttributeEncode(Context.GlimpseResourcePath("data.js") + "&id=" + Context.GetGlimpseRequestId());
             //var clientPath = HttpUtility.HtmlAttributeEncode(Context.GlimpseResourcePath("client.js"));

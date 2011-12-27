@@ -8,7 +8,7 @@ namespace Glimpse.AspNet
     {
         public string GenerateUrl(string resourceName, string version)
         {
-            return GenerateUrl(resourceName, version, null);
+            return GenerateUrl(resourceName, version, new Dictionary<string,string>());
         }
 
         public string GenerateUrl(string resourceName, string version, IDictionary<string, string> parameters)
