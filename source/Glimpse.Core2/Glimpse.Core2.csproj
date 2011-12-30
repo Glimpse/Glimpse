@@ -12,6 +12,7 @@
     <AssemblyName>Glimpse.Core2</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <CodeContractsAssemblyMode>0</CodeContractsAssemblyMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +22,31 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
+    <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>False</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>False</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
+    <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
+    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>False</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsBaseLineFile />
+    <CodeContractsCacheAnalysisResults>False</CodeContractsCacheAnalysisResults>
+    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>%28none%29</CodeContractsReferenceAssembly>
+    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyPCU' ">
     <DebugType>pdbonly</DebugType>
@@ -53,8 +79,8 @@
     <Compile Include="AntiXssEncoder.cs" />
     <Compile Include="ApplicationPersistanceStore.cs" />
     <Compile Include="DictionaryDataStoreAdapter.cs" />
-    <Compile Include="DiscoverabilityPolicy-T1.cs" />
-    <Compile Include="DiscoverabilityPolicy-T2.cs" />
+    <Compile Include="MefDiscoverabilityPolicy-T1.cs" />
+    <Compile Include="MefDiscoverabilityPolicy-T2.cs" />
     <Compile Include="DiscoverabilityPolicy.cs" />
     <Compile Include="Extensibility\GlimpseValidatorAttribute.cs" />
     <Compile Include="Extensibility\IGlimpseResourceEndpointConfiguration.cs" />
@@ -66,21 +92,21 @@
     <Compile Include="Extensibility\IGlimpseResource.cs" />
     <Compile Include="Extensibility\IGlimpseHelp.cs" />
     <Compile Include="Extensibility\IGlimpseTab.cs" />
-    <Compile Include="Extensibility\IGlimpsePluginMetadata.cs" />
-    <Compile Include="Extensibility\IGlimpsePluginSetup.cs" />
+    <Compile Include="Extensibility\IGlimpseTabMetadata.cs" />
+    <Compile Include="Extensibility\IGlimpseTabSetup.cs" />
     <Compile Include="Extensibility\IGlimpseRuntime.cs" />
-    <Compile Include="Extensibility\IGlimpsePipelineModifier.cs" />
+    <Compile Include="Extensibility\IGlimpsePipelineInspector.cs" />
     <Compile Include="Extensibility\IGlimpseSerializer.cs" />
     <Compile Include="Extensibility\IServiceLocator.cs" />
     <Compile Include="Extensibility\IFrameworkProvider.cs" />
     <Compile Include="Extensibility\LifeCycleSupport.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
+    <Compile Include="Framework\GlimpseConfiguration.cs" />
+    <Compile Include="Framework\GlimpseRuntime.cs" />
     <Compile Include="GlimpseCollection.cs" />
-    <Compile Include="GlimpseConfiguration.cs" />
     <Compile Include="GlimpseLazyCollection.cs" />
     <Compile Include="GlimpseMetadata.cs" />
     <Compile Include="GlimpseMode.cs" />
-    <Compile Include="GlimpseRuntime.cs" />
     <Compile Include="GlimpseServiceLocator.cs" />
     <Compile Include="Extensibility\IGlimpseHtmlEncoder.cs" />
     <Compile Include="GlimpseValidatorCollection.cs" />

@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
+using Glimpse.Core2.Framework;
 using Moq;
 using Xunit;
 using System.Collections.Generic;
@@ -31,17 +32,17 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void Initialize()
         {
-            var pipelineModifierMock = new Mock<IGlimpsePipelineModifier>();
+            var pipelineModifierMock = new Mock<IGlimpsePipelineInspector>();
             pipelineModifierMock.Setup(pm => pm.Setup()).Throws<Exception>();
 
             var pluginMock = new Mock<IGlimpseTab>();
-            var setupMock = pluginMock.As<IGlimpsePluginSetup>();
+            var setupMock = pluginMock.As<IGlimpseTabSetup>();
             setupMock.Setup(s => s.Setup()).Throws<Exception>();
 
-            Configuration.PipelineModifiers.Discoverability.AutoDiscover = false;
-            Configuration.Plugins.Discoverability.AutoDiscover = false;
-            Configuration.PipelineModifiers.Add(pipelineModifierMock.Object);
-            Configuration.Plugins.Add(new Lazy<IGlimpseTab, IGlimpsePluginMetadata>(()=>pluginMock.Object,new GlimpseTabAttribute()));
+            Configuration.PipelineInspectors.Discoverability.AutoDiscover = false;
+            Configuration.Tabs.Discoverability.AutoDiscover = false;
+            Configuration.PipelineInspectors.Add(pipelineModifierMock.Object);
+            Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(()=>pluginMock.Object,new GlimpseTabAttribute()));
 
             var runtime = new GlimpseRuntime(Configuration);
 
@@ -56,38 +57,38 @@ namespace Glimpse.Test.Core2
         {
             var runtime = new GlimpseRuntime(Configuration);
 
-            Assert.Equal(1, Configuration.Plugins.Count);
+            Assert.Equal(1, Configuration.Tabs.Count);
 
             runtime.UpdateConfiguration(Configuration);
 
-            Assert.Equal(1, Configuration.Plugins.Count);
+            Assert.Equal(1, Configuration.Tabs.Count);
         }
 
         [Fact]
         public void UpdateConfigurationWithoutAutoDiscovery()
         {
-            Configuration.Plugins.Discoverability.AutoDiscover = false;
+            Configuration.Tabs.Discoverability.AutoDiscover = false;
             var runtime = new GlimpseRuntime(Configuration);
 
-            Assert.Equal(0, Configuration.Plugins.Count);
+            Assert.Equal(0, Configuration.Tabs.Count);
 
             runtime.UpdateConfiguration(Configuration);
 
-            Assert.Equal(0, Configuration.Plugins.Count);
+            Assert.Equal(0, Configuration.Tabs.Count);
         }
 
         [Fact]
         public void UpdateConfigurationWithChangeToAutoDiscovery()
         {
-            Configuration.Plugins.Discoverability.AutoDiscover = false;
+            Configuration.Tabs.Discoverability.AutoDiscover = false;
             var runtime = new GlimpseRuntime(Configuration);
 
-            Assert.Equal(0, Configuration.Plugins.Count);
+            Assert.Equal(0, Configuration.Tabs.Count);
 
-            Configuration.Plugins.Discoverability.AutoDiscover = true;
+            Configuration.Tabs.Discoverability.AutoDiscover = true;
             runtime.UpdateConfiguration(Configuration);
 
-            Assert.Equal(1, Configuration.Plugins.Count);
+            Assert.Equal(1, Configuration.Tabs.Count);
         }
 
         [Fact]
@@ -102,7 +103,7 @@ namespace Glimpse.Test.Core2
             Assert.NotNull(locator);
             Assert.NotNull(locator.RequestContext);
             Assert.NotNull(locator.PluginStore);
-            Assert.NotNull(locator.GetPipelineModifier<TestGlimpsePipelineModifier>());
+            Assert.NotNull(locator.GetPipelineModifier<TestGlimpsePipelineInspector>());
         }
 
         [Fact]
@@ -139,13 +140,13 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void ExecutePluginsWithMatchingRuntimeContextType()
         {
-            var metadataMock = new Mock<IGlimpsePluginMetadata>();
+            var metadataMock = new Mock<IGlimpseTabMetadata>();
             metadataMock.Setup(m => m.RequestContextType).Returns(typeof (object));
             metadataMock.Setup(m => m.LifeCycleSupport).Returns(LifeCycleSupport.EndRequest);
             var pluginMock = new Mock<IGlimpseTab>();
 
-            Configuration.Plugins.Discoverability.AutoDiscover = false;
-            Configuration.Plugins.Add(new Lazy<IGlimpseTab, IGlimpsePluginMetadata>(()=>pluginMock.Object, metadataMock.Object));
+            Configuration.Tabs.Discoverability.AutoDiscover = false;
+            Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(()=>pluginMock.Object, metadataMock.Object));
 
             var runtime = new GlimpseRuntime(Configuration);
 
@@ -158,13 +159,13 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void NotExecutePluginsWithoutMatchingRuntimeContextType()
         {
-            var metadataMock = new Mock<IGlimpsePluginMetadata>();
+            var metadataMock = new Mock<IGlimpseTabMetadata>();
             metadataMock.Setup(m => m.RequestContextType).Returns(typeof(string));
             metadataMock.Setup(m => m.LifeCycleSupport).Returns(LifeCycleSupport.EndRequest);
             var pluginMock = new Mock<IGlimpseTab>();
 
-            Configuration.Plugins.Discoverability.AutoDiscover = false;
-            Configuration.Plugins.Add(new Lazy<IGlimpseTab, IGlimpsePluginMetadata>(() => pluginMock.Object, metadataMock.Object));
+            Configuration.Tabs.Discoverability.AutoDiscover = false;
+            Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => pluginMock.Object, metadataMock.Object));
 
             var runtime = new GlimpseRuntime(Configuration);
 
@@ -174,15 +175,15 @@ namespace Glimpse.Test.Core2
             pluginMock.Verify(p => p.GetData(It.IsAny<IServiceLocator>()), Times.Never());
         }
 
-        [Fact]
+        [Fact(Skip = "Is this test/logic needed?")]
         public void ExecutePluginsBeforeBeginRequestThrowsException()
         {
-            var metadataMock = new Mock<IGlimpsePluginMetadata>();
+            var metadataMock = new Mock<IGlimpseTabMetadata>();
             metadataMock.Setup(m => m.RequestContextType).Returns(typeof(string));
             var pluginMock = new Mock<IGlimpseTab>();
 
-            Configuration.Plugins.Discoverability.AutoDiscover = false;
-            Configuration.Plugins.Add(new Lazy<IGlimpseTab, IGlimpsePluginMetadata>(() => pluginMock.Object, metadataMock.Object));
+            Configuration.Tabs.Discoverability.AutoDiscover = false;
+            Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => pluginMock.Object, metadataMock.Object));
 
             var runtime = new GlimpseRuntime(Configuration);
 
@@ -194,14 +195,14 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void ExecutePluginsWithDefaultLifeCycle()
         {
-            var metadataMock = new Mock<IGlimpsePluginMetadata>();
+            var metadataMock = new Mock<IGlimpseTabMetadata>();
             metadataMock.Setup(m => m.RequestContextType).Returns(typeof(object));
             metadataMock.Setup(m => m.LifeCycleSupport).Returns(LifeCycleSupport.EndRequest);
             var pluginMock = new Mock<IGlimpseTab>();
             pluginMock.Setup(p => p.GetData(It.IsAny<IServiceLocator>())).Returns("a result");
 
-            Configuration.Plugins.Discoverability.AutoDiscover = false;
-            Configuration.Plugins.Add(new Lazy<IGlimpseTab, IGlimpsePluginMetadata>(() => pluginMock.Object, metadataMock.Object));
+            Configuration.Tabs.Discoverability.AutoDiscover = false;
+            Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => pluginMock.Object, metadataMock.Object));
 
             var runtime = new GlimpseRuntime(Configuration);
 
@@ -239,14 +240,14 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void ExecutePluginThatFails()
         {
-            var metadataMock = new Mock<IGlimpsePluginMetadata>();
+            var metadataMock = new Mock<IGlimpseTabMetadata>();
             metadataMock.Setup(m => m.RequestContextType).Returns(typeof(object));
             metadataMock.Setup(m => m.LifeCycleSupport).Returns(LifeCycleSupport.EndRequest);
             var pluginMock = new Mock<IGlimpseTab>();
             pluginMock.Setup(p => p.GetData(It.IsAny<IServiceLocator>())).Throws<Exception>();
 
-            Configuration.Plugins.Discoverability.AutoDiscover = false;
-            Configuration.Plugins.Add(new Lazy<IGlimpseTab, IGlimpsePluginMetadata>(() => pluginMock.Object, metadataMock.Object));
+            Configuration.Tabs.Discoverability.AutoDiscover = false;
+            Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => pluginMock.Object, metadataMock.Object));
 
             var runtime = new GlimpseRuntime(Configuration);
 
@@ -264,13 +265,13 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void SerializeDataDuringEndRequest()
         {
-            var metadataMock = new Mock<IGlimpsePluginMetadata>();
+            var metadataMock = new Mock<IGlimpseTabMetadata>();
             metadataMock.Setup(m => m.RequestContextType).Returns(typeof(object));
             metadataMock.Setup(m => m.LifeCycleSupport).Returns(LifeCycleSupport.EndRequest);
             var pluginMock = new Mock<IGlimpseTab>();
 
-            Configuration.Plugins.Discoverability.AutoDiscover = false;
-            Configuration.Plugins.Add(new Lazy<IGlimpseTab, IGlimpsePluginMetadata>(() => pluginMock.Object, metadataMock.Object));
+            Configuration.Tabs.Discoverability.AutoDiscover = false;
+            Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => pluginMock.Object, metadataMock.Object));
 
 
             var serializerMock = new Mock<IGlimpseSerializer>();
@@ -281,19 +282,19 @@ namespace Glimpse.Test.Core2
             runtime.ExecutePlugins();
             runtime.EndRequest();
 
-            serializerMock.Verify(s=>s.Serialize(It.IsAny<object>()), Times.Exactly(Configuration.Plugins.Count));
+            serializerMock.Verify(s=>s.Serialize(It.IsAny<object>()), Times.Exactly(Configuration.Tabs.Count));
         }
 
         [Fact]
         public void PersistDataDuringEndRequest()
         {
-            var metadataMock = new Mock<IGlimpsePluginMetadata>();
+            var metadataMock = new Mock<IGlimpseTabMetadata>();
             metadataMock.Setup(m => m.RequestContextType).Returns(typeof(object));
             metadataMock.Setup(m => m.LifeCycleSupport).Returns(LifeCycleSupport.EndRequest);
             var pluginMock = new Mock<IGlimpseTab>();
 
-            Configuration.Plugins.Discoverability.AutoDiscover = false;
-            Configuration.Plugins.Add(new Lazy<IGlimpseTab, IGlimpsePluginMetadata>(() => pluginMock.Object, metadataMock.Object));
+            Configuration.Tabs.Discoverability.AutoDiscover = false;
+            Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => pluginMock.Object, metadataMock.Object));
 
             var serializerMock = new Mock<IGlimpseSerializer>();
             Configuration.Serializer = serializerMock.Object;
@@ -307,14 +308,14 @@ namespace Glimpse.Test.Core2
             runtime.ExecutePlugins();
             runtime.EndRequest();
 
-            serializerMock.Verify(s => s.Serialize(It.IsAny<object>()), Times.Exactly(Configuration.Plugins.Count));
+            serializerMock.Verify(s => s.Serialize(It.IsAny<object>()), Times.Exactly(Configuration.Tabs.Count));
             persistanceStoreMock.Verify(ps=>ps.Save(It.IsAny<GlimpseMetadata>()));
         }
 
         [Fact]
         public void SetResponseHeaderDuringEndRequest()
         {
-            var metadataMock = new Mock<IGlimpsePluginMetadata>();
+            var metadataMock = new Mock<IGlimpseTabMetadata>();
             metadataMock.Setup(m => m.RequestContextType).Returns(typeof(object));
             metadataMock.Setup(m => m.LifeCycleSupport).Returns(LifeCycleSupport.EndRequest);
             var pluginMock = new Mock<IGlimpseTab>();
@@ -325,8 +326,8 @@ namespace Glimpse.Test.Core2
 
             var configuration = new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfig.Object);
 
-            configuration.Plugins.Discoverability.AutoDiscover = false;
-            configuration.Plugins.Add(new Lazy<IGlimpseTab, IGlimpsePluginMetadata>(() => pluginMock.Object, metadataMock.Object));
+            configuration.Tabs.Discoverability.AutoDiscover = false;
+            configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => pluginMock.Object, metadataMock.Object));
 
             var serializerMock = new Mock<IGlimpseSerializer>();
             configuration.Serializer = serializerMock.Object;
@@ -346,7 +347,7 @@ namespace Glimpse.Test.Core2
         [Fact(Skip = "Need to finish the GetResourcePath implementation first")]
         public void InjectHttpResponseBodyDuringEndRequest()
         {
-            var metadataMock = new Mock<IGlimpsePluginMetadata>();
+            var metadataMock = new Mock<IGlimpseTabMetadata>();
             metadataMock.Setup(m => m.RequestContextType).Returns(typeof(object));
             metadataMock.Setup(m => m.LifeCycleSupport).Returns(LifeCycleSupport.EndRequest);
             var pluginMock = new Mock<IGlimpseTab>();
@@ -357,8 +358,8 @@ namespace Glimpse.Test.Core2
 
             var configuration = new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfig.Object);
 
-            configuration.Plugins.Discoverability.AutoDiscover = false;
-            configuration.Plugins.Add(new Lazy<IGlimpseTab, IGlimpsePluginMetadata>(() => pluginMock.Object, metadataMock.Object));
+            configuration.Tabs.Discoverability.AutoDiscover = false;
+            configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => pluginMock.Object, metadataMock.Object));
 
             var serializerMock = new Mock<IGlimpseSerializer>();
             configuration.Serializer = serializerMock.Object;

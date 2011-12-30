@@ -63,7 +63,7 @@
     <Compile Include="JsonNetSerializerShould.cs" />
     <Compile Include="MockExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestGlimpsePipelineModifier.cs" />
+    <Compile Include="TestGlimpsePipelineInspector.cs" />
     <Compile Include="TestTab.cs" />
   </ItemGroup>
   <ItemGroup>

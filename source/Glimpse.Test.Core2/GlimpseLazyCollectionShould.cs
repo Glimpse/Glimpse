@@ -11,7 +11,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void Construct()
         {
-            var collection = new GlimpseLazyCollection<IGlimpseTab,IGlimpsePluginMetadata>();
+            var collection = new GlimpseLazyCollection<IGlimpseTab,IGlimpseTabMetadata>();
 
             Assert.NotNull(collection);
         }
@@ -19,9 +19,9 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void AddPlugin()
         {
-            var collection = new GlimpseLazyCollection<IGlimpseTab, IGlimpsePluginMetadata>();
+            var collection = new GlimpseLazyCollection<IGlimpseTab, IGlimpseTabMetadata>();
 
-            collection.Add(new Lazy<IGlimpseTab, IGlimpsePluginMetadata>(()=> new TestTab(), new GlimpseTabAttribute()));
+            collection.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(()=> new TestTab(), new GlimpseTabAttribute()));
 
             Assert.Equal(1, collection.Count);
         }
@@ -29,7 +29,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void RemovePlugin()
         {
-            var collection = new GlimpseLazyCollection<IGlimpseTab, IGlimpsePluginMetadata>();
+            var collection = new GlimpseLazyCollection<IGlimpseTab, IGlimpseTabMetadata>();
 
             collection.Discoverability.Discover();
 
@@ -43,7 +43,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void ReadPartMetadata()
         {
-            var collection = new GlimpseLazyCollection<IGlimpseTab, IGlimpsePluginMetadata>();
+            var collection = new GlimpseLazyCollection<IGlimpseTab, IGlimpseTabMetadata>();
 
             collection.Discoverability.Discover();
 

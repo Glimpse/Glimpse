@@ -228,6 +228,10 @@
     <Content Include="Views\Account\Test.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Glimpse.AspNet\Glimpse.AspNet.csproj">
+      <Project>{FDDFC8A6-CDDF-4BC6-9F07-E76050E1EEE7}</Project>
+      <Name>Glimpse.AspNet</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">
       <Project>{21F99168-7D7B-49F2-A97C-5A983E0CA16F}</Project>
       <Name>Glimpse.Core</Name>

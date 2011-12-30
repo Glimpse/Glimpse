@@ -14,7 +14,7 @@ namespace Glimpse.Core2
         {
             UserCollection = new List<Lazy<TPart, TPartMetadata>>();
             MefCollection = new List<Lazy<TPart, TPartMetadata>>();
-            Discoverability = new DiscoverabilityPolicy<TPart, TPartMetadata>(MefCollection);
+            Discoverability = new MefDiscoverabilityPolicy<TPart, TPartMetadata>(MefCollection);
         }
 
         public IEnumerator<Lazy<TPart, TPartMetadata>> GetEnumerator()

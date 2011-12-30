@@ -13,7 +13,7 @@ namespace Glimpse.Test.Core2
             var dataStoreMock = new Mock<IDataStore>();
             var anyObject = new {Any="object"};
             var pluginStore = dataStoreMock.Object;
-            var locator = new GlimpseServiceLocator(anyObject,pluginStore, new GlimpseCollection<IGlimpsePipelineModifier>());
+            var locator = new GlimpseServiceLocator(anyObject,pluginStore, new GlimpseCollection<IGlimpsePipelineInspector>());
 
             Assert.NotNull(locator);
             Assert.True(typeof(IServiceLocator).IsInstanceOfType(locator));
@@ -27,14 +27,14 @@ namespace Glimpse.Test.Core2
             var dataStoreMock = new Mock<IDataStore>();
             var anyObject = new { Any = "object" };
             var pluginStore = dataStoreMock.Object;
-            var locator = new GlimpseServiceLocator(anyObject, pluginStore, new GlimpseCollection<IGlimpsePipelineModifier>
+            var locator = new GlimpseServiceLocator(anyObject, pluginStore, new GlimpseCollection<IGlimpsePipelineInspector>
                                                                                 {
-                                                                                    new TestGlimpsePipelineModifier()
+                                                                                    new TestGlimpsePipelineInspector()
                                                                                 });
 
-            var testGlimpsePipelineModifier = locator.GetPipelineModifier<TestGlimpsePipelineModifier>();
+            var testGlimpsePipelineModifier = locator.GetPipelineModifier<TestGlimpsePipelineInspector>();
             Assert.NotNull(testGlimpsePipelineModifier);
-            Assert.IsType<TestGlimpsePipelineModifier>(testGlimpsePipelineModifier);
+            Assert.IsType<TestGlimpsePipelineInspector>(testGlimpsePipelineModifier);
 
 
         }

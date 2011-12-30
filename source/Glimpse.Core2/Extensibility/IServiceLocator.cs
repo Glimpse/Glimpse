@@ -3,7 +3,7 @@
     public interface IServiceLocator
     {
         object RequestContext { get; }
-        T GetPipelineModifier<T>() where T:class, IGlimpsePipelineModifier;
+        T GetPipelineModifier<T>() where T:class, IGlimpsePipelineInspector;
         IDataStore PluginStore { get; }
     }
 }

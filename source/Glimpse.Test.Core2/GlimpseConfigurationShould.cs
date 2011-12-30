@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
+using Glimpse.Core2.Framework;
 using Moq;
 using Xunit;
 
@@ -8,31 +10,130 @@ namespace Glimpse.Test.Core2
 {
     public class GlimpseConfigurationShould
     {
+
+        public GlimpseConfigurationShould()
+        {
+            FrameworkProviderMock = new Mock<IFrameworkProvider>();
+            FrameworkProviderMock.Setup(fp => fp.HttpServerStore).Returns(new DictionaryDataStoreAdapter(new Dictionary<string, object>()));
+
+            EndpointConfigMock = new Mock<IGlimpseResourceEndpointConfiguration>();
+        }
+
+
+
+        private GlimpseConfiguration Configuration
+        {
+            get { return new GlimpseConfiguration(FrameworkProviderMock.Object, EndpointConfigMock.Object); }
+        }
+
+        private Mock<IGlimpseResourceEndpointConfiguration> EndpointConfigMock { get; set; }
+
+        private Mock<IFrameworkProvider> FrameworkProviderMock { get; set; }
+
+
+
+
+        [Fact]
+        public void ConstructWithEndpointConfiguration()
+        {
+            var endpointConfigObj = EndpointConfigMock.Object;
+
+            var configuration = new GlimpseConfiguration(FrameworkProviderMock.Object, endpointConfigObj);
+
+            Assert.Equal(endpointConfigObj, configuration.ResourceEndpoint);
+        }
+
         [Fact]
         public void ConstructWithFrameworkProvider()
         {
-            var frameworkProviderMock = new Mock<IFrameworkProvider>();
-            frameworkProviderMock.Setup(fp => fp.HttpServerStore).Returns(new DictionaryDataStoreAdapter(new Dictionary<string,object>()));
-            var frameworkProviderObject = frameworkProviderMock.Object;
+            var frameworkProviderObj = FrameworkProviderMock.Object;
+            
+            var configuration = new GlimpseConfiguration(frameworkProviderObj, EndpointConfigMock.Object);
 
-            var endpointConfig = new Mock<IGlimpseResourceEndpointConfiguration>();
-
-            var config = new GlimpseConfiguration(frameworkProviderObject, endpointConfig.Object);
-
-            Assert.Equal(frameworkProviderObject, config.FrameworkProvider);
-            Assert.NotNull(config.Serializer as JsonNetSerializer);
-            Assert.NotNull(config.Plugins);
-            Assert.NotNull(config.PipelineModifiers);
-            Assert.NotNull(config.PersistanceStore);
-            Assert.NotNull(config.Resources);
-            Assert.NotNull(config.HtmlEncoder);
-            Assert.NotNull(config.Validators);
+            Assert.Equal(frameworkProviderObj, configuration.FrameworkProvider);
         }
 
-        [Fact(Skip = "This needs to be fixed - looking into code contracts")]
-        public void ThrowExceptionWhenConstructedWithoutFrameworkProvider()
+        [Fact]
+        public void CreateDefaultHtmlEncoder()
         {
-            new GlimpseConfiguration(null, null);
+            Assert.NotNull(Configuration.HtmlEncoder);
+        }
+
+        [Fact]
+        public void CreateDefaultPersistanceStore()
+        {
+            var frameworkProviderObj = FrameworkProviderMock.Object;
+
+            var configuration = new GlimpseConfiguration(frameworkProviderObj, EndpointConfigMock.Object);
+
+            Assert.NotNull(configuration.PersistanceStore);
+            FrameworkProviderMock.Verify(fp => fp.HttpServerStore, Times.AtLeastOnce());
+        }
+
+        [Fact]
+        public void CreateDefaultPiplineInspectorsCollection()
+        {
+            Assert.NotNull(Configuration.PipelineInspectors);
+        }
+
+        [Fact]
+        public void CreateDefaultResourcesCollection()
+        {
+            Assert.NotNull(Configuration.Resources);
+        }
+
+        [Fact]
+        public void CreateDefaultSerializer()
+        {
+            Assert.NotNull(Configuration.Serializer);
+        }
+
+        [Fact]
+        public void CreateDefaultTabsCollection()
+        {
+            Assert.NotNull(Configuration.Tabs);
+        }
+
+        [Fact]
+        public void CreateDefaultValidatorsCollection()
+        {
+            Assert.NotNull(Configuration.Validators);
+        }
+
+        [Fact]
+        public void NotDiscoverPipelineInspectors()
+        {
+            Assert.Equal(0, Configuration.PipelineInspectors.Count);
+        }
+
+        [Fact]
+        public void NotDiscoverResources()
+        {
+            Assert.Equal(0, Configuration.Resources.Count);
+        }
+
+        [Fact]
+        public void NotDiscoverTabs()
+        {
+            Assert.Equal(0, Configuration.Tabs.Count);
+        }
+
+        [Fact]
+        public void NotDiscoverValidators()
+        {
+            Assert.Equal(0, Configuration.Validators.Count);
+        }
+
+        [Fact]
+        public void ThrowExceptionWhenConstructedWithNullEndpointConfiguration()
+        {
+            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(FrameworkProviderMock.Object, null));
+        }
+
+        [Fact]
+        public void ThrowExceptionWhenConstructedWithNullFrameworkProvider()
+        {
+            Assert.Throws<ArgumentNullException>(()=>new GlimpseConfiguration(null, EndpointConfigMock.Object));
         }
     }
 }

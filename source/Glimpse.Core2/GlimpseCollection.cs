@@ -13,7 +13,7 @@ namespace Glimpse.Core2
         {
             UserCollection = new List<T>();
             MefCollection = new List<T>();
-            Discoverability = new DiscoverabilityPolicy<T>(MefCollection);
+            Discoverability = new MefDiscoverabilityPolicy<T>(MefCollection);
         }
 
         IEnumerator IEnumerable.GetEnumerator()

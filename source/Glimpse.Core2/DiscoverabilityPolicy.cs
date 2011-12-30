@@ -5,6 +5,7 @@ namespace Glimpse.Core2
 {
     public abstract class DiscoverabilityPolicy
     {
+        //TODO Remove MEF dependency
         protected DiscoverabilityPolicy()
         {
             IgnoredTypes = new List<string>();

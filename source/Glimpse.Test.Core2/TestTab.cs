@@ -5,7 +5,7 @@ using Glimpse.Core2.Extensibility;
 namespace Glimpse.Test.Core2
 {
     [GlimpseTab(RequestContextType = typeof(string))]
-    public class TestTab : IGlimpseTab, IGlimpsePluginSetup
+    public class TestTab : IGlimpseTab, IGlimpseTabSetup
     {
         public object GetData(IServiceLocator locator)
         {

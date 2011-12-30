@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 
 namespace Glimpse.Core2
 {
+    //TODO: Merge JSON.NET DLL - or remove dependency 
     public class JsonNetSerializer:IGlimpseSerializer
     {
         private JsonSerializerSettings Settings { get; set; }

@@ -1,5 +1,6 @@
 ﻿namespace Glimpse.Core2.Extensibility
 {
+    //TODO: This class might be deleted. Need to see if this is needed - no in use right noe.
     public interface IGlimpseRuntime
     {
         void BeginRequest();//Init Glimpse Context

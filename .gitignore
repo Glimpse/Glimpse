@@ -48,3 +48,4 @@ Glimpse.5.1.ReSharper.user
 /source/Glimpse.Sample.MVC3/App_Data/aspnetdb_log.LDF
 /source/Glimpse.Sample.MVC3/App_Data/MvcMusicStore.sdf
 /source/Glimpse.Elmah/NuSpec/lib/net40/Glimpse.Elmah.dll
+*.dotCover
