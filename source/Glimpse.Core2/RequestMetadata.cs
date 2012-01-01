@@ -1,5 +1,6 @@
 namespace Glimpse.Core2
 {
+    //TODO: Add contracts to ensure these values are never null
     public class RequestMetadata
     {
         public string Uri { get; set; }

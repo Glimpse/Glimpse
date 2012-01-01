@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Glimpse.Core2.Extensibility;
+using Glimpse.Core2.Resource;
 
 namespace Glimpse.Core2.Framework
 {
     public class GlimpseRuntime
     {
-        private GlimpseConfiguration Configuration { get; set; }
-        public string Version { get; private set; }
 
         public GlimpseRuntime(GlimpseConfiguration configuration)
         {
@@ -18,6 +17,171 @@ namespace Glimpse.Core2.Framework
             UpdateConfiguration(configuration);
         }
 
+
+
+        private GlimpseConfiguration Configuration { get; set; }
+
+        private IDictionary<string, object> PluginResultsStore
+        {
+            get
+            {
+                var requestStore = Configuration.FrameworkProvider.HttpRequestStore;
+                var result = requestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
+
+                if (result == null)
+                {
+                    result = new Dictionary<string, object>();
+                    requestStore.Set(Constants.PluginResultsDataStoreKey, result);
+                }
+
+                return result;
+            }
+        }
+
+        public IServiceLocator ServiceLocator
+        {
+            get
+            {
+                var result = Configuration.FrameworkProvider.HttpRequestStore.Get<GlimpseServiceLocator>(Constants.ServiceLocatorKey);
+
+                if (result == null)
+                    throw new MethodAccessException(Resources.OutOfOrderRuntimeMethodCall);
+
+                return result;
+            }
+        }
+
+        public string Version { get; private set; }
+
+
+
+        //TODO: Make sure runtime has been init'ed
+        public void BeginRequest()
+        {
+            var frameworkProvider = Configuration.FrameworkProvider;
+            var runtimeContext = frameworkProvider.RuntimeContext;
+            var requestStore = frameworkProvider.HttpRequestStore;
+            
+            //Create storage space for plugins to access
+            var pluginStore = new DictionaryDataStoreAdapter(new Dictionary<string, object>());
+            requestStore.Set(Constants.PluginsDataStoreKey, pluginStore);
+
+            //Create ServiceLocator valid for this request
+            requestStore.Set(Constants.ServiceLocatorKey, new GlimpseServiceLocator(runtimeContext, pluginStore, Configuration.PipelineInspectors));
+
+            //Give Request an ID
+            requestStore.Set(Constants.RequestIdKey, Guid.NewGuid());
+
+            //Create and start global stopwatch
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            requestStore.Set(Constants.GlobalStopwatchKey, stopwatch);
+        }
+
+        //Todo: Make sure request has begun?
+        public void EndRequest()
+        {
+            var encoder = Configuration.HtmlEncoder;
+            var frameworkProvider = Configuration.FrameworkProvider;
+            var serializer = Configuration.Serializer;
+            var pluginResults = PluginResultsStore.ToDictionary(item => item.Key, item => serializer.Serialize(item.Value));
+            var requestMetadata = frameworkProvider.RequestMetadata;
+            var requestStore = frameworkProvider.HttpRequestStore;
+            var resourceEndpoint = Configuration.ResourceEndpoint;
+            Guid requestId;
+
+            try
+            {
+                requestId = requestStore.Get<Guid>(Constants.RequestIdKey);
+            }
+            catch(NullReferenceException ex)
+            {
+                throw new MethodAccessException(Resources.OutOfOrderRuntimeMethodCall, ex);
+            }
+
+            var metadata = new GlimpseMetadata(requestId, requestMetadata, pluginResults);
+
+            //TODO: Handle exceptions
+            Configuration.PersistanceStore.Save(metadata);
+
+            //TODO: Filter out requests that should not have the ID header
+            frameworkProvider.SetHttpResponseHeader(Constants.HttpHeader, requestId.ToString());
+
+            var dataPath = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUrl("data.js", Version, new Dictionary<string, string>{{"id", requestId.ToString()}}));
+            var clientPath = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUrl("client.js", Version));
+            
+            //var dataPath = HttpUtility.HtmlAttributeEncode(Context.GlimpseResourcePath("data.js") + "&id=" + Context.GetGlimpseRequestId());
+            //var clientPath = HttpUtility.HtmlAttributeEncode(Context.GlimpseResourcePath("client.js"));
+
+            var html = string.Format(@"<script type='text/javascript' id='glimpseData' src='{0}'></script><script type='text/javascript' id='glimpseClient' src='{1}'></script></body>", dataPath, clientPath);
+
+            frameworkProvider.InjectHttpResponseBody(html);
+
+        }
+        
+        public void ExecutePlugins()
+        {
+            ExecutePlugins(LifeCycleSupport.EndRequest);
+        }
+
+        public void ExecutePlugins(LifeCycleSupport support)
+        {
+            //Only use tabs that either don't specify a specific context type, or have a context type that matches the current framework provider's.
+            var runtimePlugins = Configuration.Tabs.Where(p=>p.Metadata.RequestContextType == null || p.Metadata.RequestContextType == Configuration.FrameworkProvider.RuntimeContextType);
+            var supportedRuntimePlugins = runtimePlugins.Where(p => p.Metadata.LifeCycleSupport.HasFlag(support));
+            var pluginResultsStore = PluginResultsStore;
+
+            foreach (var plugin in supportedRuntimePlugins)
+            {
+                try
+                {
+                    var key = plugin.Value.GetType().FullName;
+                    if (pluginResultsStore.ContainsKey(key))
+                        pluginResultsStore[key] = plugin.Value.GetData(ServiceLocator);
+                    else
+                        pluginResultsStore.Add(key, plugin.Value.GetData(ServiceLocator));
+                }
+                catch (Exception exception)
+                {
+                    //TODO: Add in logging
+                    throw;
+                }
+            }
+        }
+
+        //Todo: Set an "Init'ed" bit
+        public void Initialize()
+        {
+            //TODO: Add in request validation checks
+            var pluginsThatRequireSetup = Configuration.Tabs.Where(p => p.Value is IGlimpseTabSetup).Select(p=>p.Value);
+            foreach (IGlimpseTabSetup plugin in pluginsThatRequireSetup)
+            {
+                try
+                {
+                    plugin.Setup();
+                }
+                catch (Exception exception)
+                {
+                    //TODO: Add logging
+                    throw;
+                }
+            }
+
+            foreach (var pipelineInspector in Configuration.PipelineInspectors)
+            {
+                try
+                {
+                    pipelineInspector.Setup();
+                }
+                catch (Exception exception)
+                {
+                    //TODO: Add logging
+                    throw;
+                }
+            }
+        }
+
+        //TODO: Test that these collections are auto populated
         public void UpdateConfiguration(GlimpseConfiguration configuration)
         {
             //TODO: destruct modifiers and plugins
@@ -34,143 +198,6 @@ namespace Glimpse.Core2.Framework
                 configuration.Validators.Discoverability.Discover();
 
             Configuration = configuration;
-        }
-
-        public void Initialize()
-        {
-            //TODO: Add in validation checks
-            var pluginsThatRequireSetup = Configuration.Tabs.Where(p => p.Value is IGlimpseTabSetup).Select(p=>p.Value);
-            foreach (IGlimpseTabSetup plugin in pluginsThatRequireSetup)
-            {
-                try
-                {
-                    plugin.Setup();
-                }
-                catch (Exception exception)
-                {
-                    //TODO: Add logging
-                }
-            }
-
-            foreach (var pipelineModifier in Configuration.PipelineInspectors)
-            {
-                try
-                {
-                    pipelineModifier.Setup();
-                }
-                catch (Exception exception)
-                {
-                    //TODO: Add logging
-                }
-            }
-        }
-
-        public void BeginRequest()
-        {
-            var frameworkProvider = Configuration.FrameworkProvider;
-            var runtimeContext = frameworkProvider.RuntimeContext;
-            var requestStore = frameworkProvider.HttpRequestStore;
-            
-            //Create storage space for plugins to access
-            var pluginStore = new DictionaryDataStoreAdapter(new Dictionary<string, object>());
-            requestStore.Set(pluginStore);
-
-            //Create ServiceLocator valid for this request
-            requestStore.Set(new GlimpseServiceLocator(runtimeContext, pluginStore, Configuration.PipelineInspectors));
-
-            //Give Request an ID
-            requestStore.Set(Guid.NewGuid());
-
-            //Create and start global stopwatch
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-            requestStore.Set(stopwatch);
-        }
-
-        public void ExecutePlugins()
-        {
-            ExecutePlugins(LifeCycleSupport.EndRequest);
-        }
-
-        public void ExecutePlugins(LifeCycleSupport support)
-        {
-            //Only use tabs that either don't specify a specific context type, or have a context type that matches the current framework provider's.
-            var runtimePlugins = Configuration.Tabs.Where(p=>p.Metadata.RequestContextType == null || p.Metadata.RequestContextType == Configuration.FrameworkProvider.RuntimeContextType);
-            var supportedRuntimePlugins = runtimePlugins.Where(p => p.Metadata.LifeCycleSupport.HasFlag(support));
-
-            foreach (var plugin in supportedRuntimePlugins)
-            {
-                try
-                {
-                    var key = plugin.Value.GetType().FullName;
-                    ResultsStore.Add(key, plugin.Value.GetData(ServiceLocator));
-                }
-                catch (Exception exception)
-                {
-                    //TODO: Add in logging
-                }
-            }
-        }
-
-        public void EndRequest()
-        {
-            var serializer = Configuration.Serializer;
-            var frameworkProvider = Configuration.FrameworkProvider;
-            var requestStore = frameworkProvider.HttpRequestStore;
-            var requestMetadata = frameworkProvider.RequestMetadata;
-            var pluginData = ResultsStore.ToDictionary(item => item.Key, item => serializer.Serialize(item.Value));
-            var requestId = requestStore.Get<Guid>();
-            var encoder = Configuration.HtmlEncoder;
-            var resourceEndpoint = Configuration.ResourceEndpoint;
-
-            var metadata = new GlimpseMetadata(requestId, requestMetadata, pluginData);
-
-            //TODO: Handle exceptions
-            Configuration.PersistanceStore.Save(metadata);
-
-            //TODO: Filter out requests that should not have the ID header
-            frameworkProvider.SetHttpResponseHeader("X-Glimpse-RequestID", requestId.ToString());
-
-            var dataPath = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUrl("data.js", Version, new Dictionary<string, string>{{"id", requestId.ToString()}}));
-            var clientPath = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUrl("client.js", Version));
-            
-            //var dataPath = HttpUtility.HtmlAttributeEncode(Context.GlimpseResourcePath("data.js") + "&id=" + Context.GetGlimpseRequestId());
-            //var clientPath = HttpUtility.HtmlAttributeEncode(Context.GlimpseResourcePath("client.js"));
-
-            var html = string.Format(@"<script type='text/javascript' id='glimpseData' src='{0}'></script><script type='text/javascript' id='glimpseClient' src='{1}'></script></body>", dataPath, clientPath);
-
-            frameworkProvider.InjectHttpResponseBody(html);
-
-        }
-
-        public IServiceLocator ServiceLocator
-        {
-            get
-            {
-                var result = Configuration.FrameworkProvider.HttpRequestStore.Get<GlimpseServiceLocator>();
-
-                if (result == null)
-                    throw new Exception("Must BeginRequest() first"); //TODO: User better exceptions
-
-                return result;
-            }
-        }
-
-        private IDictionary<string, object> ResultsStore
-        {
-            get
-            {
-                var requestStore = Configuration.FrameworkProvider.HttpRequestStore;
-                var result = requestStore.Get<IDictionary<string, object>>("__GlimpseResults");
-
-                if (result == null)
-                {
-                    result = new Dictionary<string, object>();
-                    requestStore.Set("__GlimpseResults", result);
-                }
-
-                return result;
-            }
         }
     }
 }

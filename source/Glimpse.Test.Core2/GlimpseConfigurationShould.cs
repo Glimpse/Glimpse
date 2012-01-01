@@ -1,29 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
+using Glimpse.Test.Core2.Extensions;
 using Moq;
 using Xunit;
 
 namespace Glimpse.Test.Core2
 {
-    public class GlimpseConfigurationShould
+    public class GlimpseConfigurationShould:IDisposable
     {
 
         public GlimpseConfigurationShould()
         {
-            FrameworkProviderMock = new Mock<IFrameworkProvider>();
-            FrameworkProviderMock.Setup(fp => fp.HttpServerStore).Returns(new DictionaryDataStoreAdapter(new Dictionary<string, object>()));
-
+            FrameworkProviderMock = new Mock<IFrameworkProvider>().Setup();
             EndpointConfigMock = new Mock<IGlimpseResourceEndpointConfiguration>();
         }
 
 
-
+        private GlimpseConfiguration configuration;
         private GlimpseConfiguration Configuration
         {
-            get { return new GlimpseConfiguration(FrameworkProviderMock.Object, EndpointConfigMock.Object); }
+            get { return configuration ?? (configuration = new GlimpseConfiguration(FrameworkProviderMock.Object, EndpointConfigMock.Object)); }
+            set { configuration = value; }
         }
 
         private Mock<IGlimpseResourceEndpointConfiguration> EndpointConfigMock { get; set; }
@@ -134,6 +132,13 @@ namespace Glimpse.Test.Core2
         public void ThrowExceptionWhenConstructedWithNullFrameworkProvider()
         {
             Assert.Throws<ArgumentNullException>(()=>new GlimpseConfiguration(null, EndpointConfigMock.Object));
+        }
+
+        public void Dispose()
+        {
+            EndpointConfigMock = null;
+            FrameworkProviderMock = null;
+            Configuration = null;
         }
     }
 }

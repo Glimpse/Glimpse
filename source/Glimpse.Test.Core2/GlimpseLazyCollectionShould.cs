@@ -2,6 +2,7 @@
 using System.Linq;
 using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
+using Glimpse.Test.Core2.TestDoubles;
 using Xunit;
 
 namespace Glimpse.Test.Core2
@@ -21,7 +22,7 @@ namespace Glimpse.Test.Core2
         {
             var collection = new GlimpseLazyCollection<IGlimpseTab, IGlimpseTabMetadata>();
 
-            collection.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(()=> new TestTab(), new GlimpseTabAttribute()));
+            collection.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(()=> new DummySetupTab(), new GlimpseTabAttribute()));
 
             Assert.Equal(1, collection.Count);
         }

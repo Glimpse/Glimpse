@@ -2,6 +2,7 @@
 
 namespace Glimpse.Core2.Extensibility
 {
+    //TODO: Add contracts to ensure these values are never null
     public interface IFrameworkProvider
     {
         IDataStore HttpRequestStore { get; }

@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 //TODO: Create/update this file as part of the build process
 [assembly: AssemblyTitle("Glimpse")]
@@ -14,3 +15,4 @@ using System.Runtime.InteropServices;
 //Version is in major.minor.build format to support http://semver.org/
 [assembly: AssemblyVersion("1.0.0")]
 [assembly: AssemblyFileVersion("1.0.0")]
+[assembly: InternalsVisibleTo("Glimpse.Test.Core2")]

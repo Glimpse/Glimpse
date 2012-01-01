@@ -1,5 +1,6 @@
 ﻿using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
+using Glimpse.Test.Core2.TestDoubles;
 using Xunit;
 
 namespace Glimpse.Test.Core2
@@ -19,7 +20,7 @@ namespace Glimpse.Test.Core2
         {
             var glimpseCollection = new GlimpseCollection<IGlimpseTab>();
 
-            glimpseCollection.Add(new TestTab());
+            glimpseCollection.Add(new DummySetupTab());
 
             Assert.Equal(1, glimpseCollection.Count);
         }

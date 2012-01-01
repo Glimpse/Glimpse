@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.Contracts;
 using Glimpse.Core2.Extensibility;
 
@@ -5,15 +6,16 @@ namespace Glimpse.Core2.Framework
 {
     public class GlimpseConfiguration
     {
-        //TODO Add Sanitizer?
-        //TODO Add Logger
+
+        //TODO: Add Sanitizer?
+        //TODO: Add Logger
+        //TODO: Add static FromWebConfig method to construct an instance of GlimpseConfiguration
         public GlimpseConfiguration(IFrameworkProvider frameworkProvider, IGlimpseResourceEndpointConfiguration endpointConfiguration)
         {
-            //TODO: Figure out proper code contracts settings on project
-            //TODO: Test building glimpse on clean VS install
-            Contract.Requires(frameworkProvider != null, "frameworkProvider must not be null.");
-            Contract.Requires(endpointConfiguration != null, "endpointConfiguration must not be null.");
-            //only use contracts if we can build them on teamcity AND the experience is nice for users that don't have the VS extension installed
+            //TODO: Test building glimpse on clean VS install with contracts
+            //TODO: Test building glimpse on teamcity with contracts
+            Contract.Requires<ArgumentNullException>(frameworkProvider != null, "frameworkProvider");
+            Contract.Requires<ArgumentNullException>(endpointConfiguration != null, "endpointConfiguration");
 
             Contract.Ensures(FrameworkProvider != null);
             Contract.Ensures(HtmlEncoder != null);
@@ -35,8 +37,6 @@ namespace Glimpse.Core2.Framework
             Tabs = new GlimpseLazyCollection<IGlimpseTab, IGlimpseTabMetadata>();
             Validators = new GlimpseValidatorCollection();
         }
-
-
 
         public IFrameworkProvider FrameworkProvider { get; set; }
 
