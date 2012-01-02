@@ -58,6 +58,12 @@ namespace Glimpse.Test.Core2
         }
 
         [Fact]
+        public void CreateDefaultLogger()
+        {
+            Assert.NotNull(Configuration.Logger);
+        }
+
+        [Fact]
         public void CreateDefaultPersistanceStore()
         {
             var frameworkProviderObj = FrameworkProviderMock.Object;

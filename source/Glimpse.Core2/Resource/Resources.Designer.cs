@@ -61,6 +61,33 @@ namespace Glimpse.Core2.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exception executing tab: {0}.
+        /// </summary>
+        internal static string ExecutePluginError {
+            get {
+                return ResourceManager.GetString("ExecutePluginError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exception initializing pipeline inspector: {0}.
+        /// </summary>
+        internal static string InitializePipelineInspectorError {
+            get {
+                return ResourceManager.GetString("InitializePipelineInspectorError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exception initializing tab: {0}.
+        /// </summary>
+        internal static string InitializeTabError {
+            get {
+                return ResourceManager.GetString("InitializeTabError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to BeginRequest has not been called in the context of the current HTTP request. Calls to EndRequest must be preceded by calls to BeginRequest..
         /// </summary>
         internal static string OutOfOrderRuntimeMethodCall {

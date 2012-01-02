@@ -62,11 +62,15 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AntiXSSLibrary">
-      <HintPath>..\..\..\Users\nmolnar\Desktop\lib\net35\AntiXSSLibrary.dll</HintPath>
+    <Reference Include="AntiXSSLibrary, Version=4.0.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Core2\AntiXSSLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.4.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\..\lib\Core2\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -82,7 +86,9 @@
     <Compile Include="ApplicationPersistanceStore.cs" />
     <Compile Include="DictionaryDataStoreAdapter.cs" />
     <Compile Include="Extensibility\GlimpseServiceLocator.cs" />
+    <Compile Include="Extensibility\IGlimpseLogger.cs" />
     <Compile Include="GlimpseConstants.cs" />
+    <Compile Include="NLogLogger.cs" />
     <Compile Include="MefDiscoverabilityPolicy-T1.cs" />
     <Compile Include="MefDiscoverabilityPolicy-T2.cs" />
     <Compile Include="DiscoverabilityPolicy.cs" />

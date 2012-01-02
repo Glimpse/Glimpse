@@ -130,12 +130,13 @@ namespace Glimpse.Core2.Framework
             var runtimePlugins = Configuration.Tabs.Where(p=>p.Metadata.RequestContextType == null || p.Metadata.RequestContextType == Configuration.FrameworkProvider.RuntimeContextType);
             var supportedRuntimePlugins = runtimePlugins.Where(p => p.Metadata.LifeCycleSupport.HasFlag(support));
             var pluginResultsStore = PluginResultsStore;
+            var logger = Configuration.Logger;
 
             foreach (var plugin in supportedRuntimePlugins)
             {
+                var key = plugin.Value.GetType().FullName;
                 try
                 {
-                    var key = plugin.Value.GetType().FullName;
                     if (pluginResultsStore.ContainsKey(key))
                         pluginResultsStore[key] = plugin.Value.GetData(ServiceLocator);
                     else
@@ -143,8 +144,7 @@ namespace Glimpse.Core2.Framework
                 }
                 catch (Exception exception)
                 {
-                    //TODO: Add in logging
-                    throw;
+                   logger.Error(string.Format(Resources.ExecutePluginError, key), exception);
                 }
             }
         }
@@ -152,18 +152,19 @@ namespace Glimpse.Core2.Framework
         //Todo: Set an "Init'ed" bit
         public void Initialize()
         {
+            var logger = Configuration.Logger;
+
             //TODO: Add in request validation checks
-            var pluginsThatRequireSetup = Configuration.Tabs.Where(p => p.Value is IGlimpseTabSetup).Select(p=>p.Value);
-            foreach (IGlimpseTabSetup plugin in pluginsThatRequireSetup)
+            var tabsThatRequireSetup = Configuration.Tabs.Where(p => p.Value is IGlimpseTabSetup).Select(p=>p.Value);
+            foreach (IGlimpseTabSetup tab in tabsThatRequireSetup)
             {
                 try
                 {
-                    plugin.Setup();
+                    tab.Setup();
                 }
                 catch (Exception exception)
                 {
-                    //TODO: Add logging
-                    throw;
+                    logger.Error(string.Format(Resources.InitializeTabError, tab.GetType().FullName), exception);
                 }
             }
 
@@ -175,8 +176,7 @@ namespace Glimpse.Core2.Framework
                 }
                 catch (Exception exception)
                 {
-                    //TODO: Add logging
-                    throw;
+                    logger.Error(string.Format(Resources.InitializePipelineInspectorError, pipelineInspector.GetType().FullName), exception);
                 }
             }
         }

@@ -23,6 +23,7 @@ namespace Glimpse.Test.Core2
             PipelineInspectorMock = new Mock<IGlimpsePipelineInspector>();
             SerializerMock = new Mock<IGlimpseSerializer>();
             PersistanceStoreMock = new Mock<IGlimpsePersistanceStore>();
+            LoggerMock = new Mock<IGlimpseLogger>();
         }
 
         private GlimpseConfiguration configuration;
@@ -37,6 +38,7 @@ namespace Glimpse.Test.Core2
                         TurnOffAutoDiscover();
                 configuration.Serializer = SerializerMock.Object;
                 configuration.PersistanceStore = PersistanceStoreMock.Object;
+                configuration.Logger = LoggerMock.Object;
 
                 return configuration;
             }
@@ -51,6 +53,7 @@ namespace Glimpse.Test.Core2
         private Mock<IGlimpsePipelineInspector> PipelineInspectorMock { get; set; }
         private Mock<IGlimpseSerializer> SerializerMock { get; set; }
         private Mock<IGlimpsePersistanceStore> PersistanceStoreMock { get; set;}
+        private Mock<IGlimpseLogger> LoggerMock { get; set; }
 
         private GlimpseRuntime runtime;
         private GlimpseRuntime Runtime
@@ -190,10 +193,10 @@ namespace Glimpse.Test.Core2
             TabMock.Verify(p => p.GetData(It.IsAny<IServiceLocator>()), Times.AtLeastOnce());
         }
 
-        [Fact(Skip = "Need to add logging, and verify the logger is called")]
+        [Fact]
         public void ExecutePluginThatFails()
         {
-            TabMock.Setup(p => p.GetData(It.IsAny<IServiceLocator>())).Throws<Exception>();
+            TabMock.Setup(p => p.GetData(It.IsAny<IServiceLocator>())).Throws<DummyException>();
 
             Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => TabMock.Object, TabMetadataMock.Object));
 
@@ -205,6 +208,8 @@ namespace Glimpse.Test.Core2
             Assert.Equal(0, results.Count);
 
             TabMock.Verify(p => p.GetData(It.IsAny<IServiceLocator>()), Times.Once());
+            //Make sure the excption type above is logged here.
+            LoggerMock.Verify(l=>l.Error(It.IsAny<string>(), It.IsAny<DummyException>()),Times.AtMost(Configuration.Tabs.Count));
         }
 
         [Fact]
@@ -267,11 +272,11 @@ namespace Glimpse.Test.Core2
             setupMock.Verify(pm => pm.Setup(), Times.Once());
         }
 
-        [Fact(Skip = "Need to add logging, and verify the logger is called")]
+        [Fact]
         public void InitializeWithSetupTabThatFails()
         {
             var setupMock = TabMock.As<IGlimpseTabSetup>();
-            setupMock.Setup(s => s.Setup()).Throws<Exception>();
+            setupMock.Setup(s => s.Setup()).Throws<DummyException>();
 
             //one tab needs setup, the other does not
             Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => TabMock.Object, TabMetadataMock.Object));
@@ -280,6 +285,7 @@ namespace Glimpse.Test.Core2
             Runtime.Initialize();
 
             setupMock.Verify(pm => pm.Setup(), Times.Once());
+            LoggerMock.Verify(l=>l.Error(It.IsAny<string>(), It.IsAny<DummyException>()), Times.AtMost(Configuration.Tabs.Count));
         }
 
         [Fact]
@@ -292,16 +298,17 @@ namespace Glimpse.Test.Core2
             PipelineInspectorMock.Verify(pi=>pi.Setup(), Times.Once());
         }
 
-        [Fact(Skip = "Need to add logging, and verify the logger is called")]
+        [Fact]
         public void InitializeWithPipelineInspectorThatFails()
         {
-            PipelineInspectorMock.Setup(pi => pi.Setup()).Throws<Exception>();
+            PipelineInspectorMock.Setup(pi => pi.Setup()).Throws<DummyException>();
 
             Configuration.PipelineInspectors.Add(PipelineInspectorMock.Object);
 
             Runtime.Initialize();
 
             PipelineInspectorMock.Verify(pi => pi.Setup(), Times.Once());
+            LoggerMock.Verify(l=>l.Error(It.IsAny<string>(), It.IsAny<DummyException>()), Times.AtMost(Configuration.PipelineInspectors.Count));
         }
 
         [Fact]
@@ -416,6 +423,7 @@ namespace Glimpse.Test.Core2
             PipelineInspectorMock = null;
             SerializerMock = null;
             PersistanceStoreMock = null;
+            LoggerMock = null;
         }
     }
 }

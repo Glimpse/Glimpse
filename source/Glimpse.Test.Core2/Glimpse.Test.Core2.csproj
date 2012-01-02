@@ -89,6 +89,7 @@
     <Compile Include="GlimpseValidatorCollectionShould.cs" />
     <Compile Include="JsonNetSerializerShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestDoubles\DummyException.cs" />
     <Compile Include="TestDoubles\DummyGlimpsePipelineInspector1.cs" />
     <Compile Include="TestDoubles\DummyObjectContext.cs" />
     <Compile Include="TestDoubles\DummyPipelineInspector2.cs" />
