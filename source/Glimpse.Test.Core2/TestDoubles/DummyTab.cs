@@ -2,7 +2,7 @@
 
 namespace Glimpse.Test.Core2.TestDoubles
 {
-    [GlimpseTab]
+    [GlimpseTab(RequestContextType = typeof(DummyObjectContext))]
     public class DummyTab:IGlimpseTab
     {
         public object GetData(IServiceLocator locator)
