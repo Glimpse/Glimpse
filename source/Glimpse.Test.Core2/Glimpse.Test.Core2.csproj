@@ -80,11 +80,12 @@
     <Compile Include="ApplicationPersistanceStoreShould.cs" />
     <Compile Include="DictionaryDataStoreAdapterShould.cs" />
     <Compile Include="DiscoverabilityPolicyShould.cs" />
+    <Compile Include="Extensibility\GlimpseTabAttributeShould.cs" />
     <Compile Include="Extensions\TestingExtensions.cs" />
     <Compile Include="GlimpseCollectionShould.cs" />
-    <Compile Include="GlimpseConfigurationShould.cs" />
+    <Compile Include="Framework\GlimpseConfigurationShould.cs" />
     <Compile Include="GlimpseLazyCollectionShould.cs" />
-    <Compile Include="GlimpseRuntimeShould.cs" />
+    <Compile Include="Framework\GlimpseRuntimeShould.cs" />
     <Compile Include="GlimpseServiceLocatorShould.cs" />
     <Compile Include="GlimpseValidatorCollectionShould.cs" />
     <Compile Include="JsonNetSerializerShould.cs" />

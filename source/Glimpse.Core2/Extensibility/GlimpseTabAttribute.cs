@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.Composition;
+using System.Diagnostics.Contracts;
 
 namespace Glimpse.Core2.Extensibility
 {
@@ -7,24 +8,33 @@ namespace Glimpse.Core2.Extensibility
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class GlimpseTabAttribute:ExportAttribute, IGlimpseTabMetadata
     {
+
+        public GlimpseTabAttribute(Type requestContextType, LifeCycleSupport lifeCycleSupport)
+            : base(typeof(IGlimpseTab))
+        {
+            Contract.Requires<ArgumentNullException>(requestContextType != null, "requestContextType");
+
+            RequestContextType = requestContextType;
+            LifeCycleSupport = lifeCycleSupport;
+        }
+
+        public GlimpseTabAttribute(Type requestContextType): base(typeof(IGlimpseTab))
+        {
+            Contract.Requires<ArgumentNullException>(requestContextType != null, "requestContextType");
+
+            RequestContextType = requestContextType;
+            LifeCycleSupport = LifeCycleSupport.EndRequest;
+        }
+
         public GlimpseTabAttribute():base(typeof(IGlimpseTab))
         {
             RequestContextType = null;
             LifeCycleSupport = LifeCycleSupport.EndRequest;
         }
 
-        public GlimpseTabAttribute(Type requestContextType): base(typeof(IGlimpseTab))
-        {
-            RequestContextType = requestContextType;
-            LifeCycleSupport = LifeCycleSupport.EndRequest;
-        }
 
-        public GlimpseTabAttribute(Type requestContextType, LifeCycleSupport lifeCycleSupport)
-            : base(typeof(IGlimpseTab))
-        {
-            RequestContextType = requestContextType;
-            LifeCycleSupport = lifeCycleSupport;
-        }
+
+        public LifeCycleSupport LifeCycleSupport { get; set; }
 
         /// <summary>
         /// Gets or sets the type of the request context.
@@ -36,6 +46,5 @@ namespace Glimpse.Core2.Extensibility
         /// The RequestContextType acts as a plugin filter. Glimpse will only execute plugins that have their RequestContextType specified if the current request's context type matches.
         /// </remarks>
         public Type RequestContextType { get; set; }
-        public LifeCycleSupport LifeCycleSupport { get; set; }
     }
 }
