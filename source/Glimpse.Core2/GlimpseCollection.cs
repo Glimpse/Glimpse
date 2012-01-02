@@ -5,15 +5,15 @@ namespace Glimpse.Core2
 {
     public class GlimpseCollection<T>:IEnumerable<T>
     {
-        private IList<T> UserCollection { get; set; }
-        private IList<T> MefCollection { get; set; }
+        private IList<T> ManualCollection { get; set; }
+        private IList<T> DiscoveredCollection { get; set; }
         public DiscoverabilityPolicy Discoverability { get; set; }
 
         public GlimpseCollection()
         {
-            UserCollection = new List<T>();
-            MefCollection = new List<T>();
-            Discoverability = new MefDiscoverabilityPolicy<T>(MefCollection);
+            ManualCollection = new List<T>();
+            DiscoveredCollection = new List<T>();
+            Discoverability = new MefDiscoverabilityPolicy<T>(DiscoveredCollection);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -23,10 +23,10 @@ namespace Glimpse.Core2
 
         public IEnumerator<T> GetEnumerator()
         {
-            foreach (var item in UserCollection)
+            foreach (var item in ManualCollection)
                 yield return item;
 
-            foreach (var item in MefCollection)
+            foreach (var item in DiscoveredCollection)
                 yield return item;
 
             yield break;
@@ -34,31 +34,31 @@ namespace Glimpse.Core2
 
         public void Add(T item)
         {
-            UserCollection.Add(item);
+            ManualCollection.Add(item);
         }
 
         public void Clear()
         {
-            UserCollection.Clear();
-            MefCollection.Clear();
+            ManualCollection.Clear();
+            DiscoveredCollection.Clear();
         }
 
         public bool Contains(T item)
         {
-            return UserCollection.Contains(item) || MefCollection.Contains(item);
+            return ManualCollection.Contains(item) || DiscoveredCollection.Contains(item);
         }
 
         public bool Remove(T item)
         {
-            if (UserCollection.Remove(item))
+            if (ManualCollection.Remove(item))
                 return true;
 
-            return MefCollection.Remove(item);
+            return DiscoveredCollection.Remove(item);
         }
 
         public int Count
         {
-            get { return UserCollection.Count + MefCollection.Count; }
+            get { return ManualCollection.Count + DiscoveredCollection.Count; }
         }
     }
 }

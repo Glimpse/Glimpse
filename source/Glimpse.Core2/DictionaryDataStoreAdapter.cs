@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Diagnostics.Contracts;
 using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Core2
@@ -8,9 +9,7 @@ namespace Glimpse.Core2
     {
         public DictionaryDataStoreAdapter(IDictionary dictionary)
         {
-            //TODO: Migrate to Contracts
-            if (!ValidDictionaryType(dictionary))
-                throw new ArgumentException();
+            Contract.Requires<ArgumentException>(IsValidDictionaryType(dictionary), "dictionary");
 
             Dictionary = dictionary;
         }
@@ -42,7 +41,8 @@ namespace Glimpse.Core2
             Dictionary[key] = value;
         }
 
-        private bool ValidDictionaryType(IDictionary dictionary)
+        [Pure]
+        public static bool IsValidDictionaryType(IDictionary dictionary)
         {
             Type[] genericParameters = dictionary.GetType().GetGenericArguments();
 

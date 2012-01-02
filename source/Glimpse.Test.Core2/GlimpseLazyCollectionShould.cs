@@ -28,7 +28,7 @@ namespace Glimpse.Test.Core2
         }
 
         [Fact]
-        public void RemovePlugin()
+        public void RemoveDiscoveredPlugin()
         {
             var collection = new GlimpseLazyCollection<IGlimpseTab, IGlimpseTabMetadata>();
 
@@ -42,6 +42,34 @@ namespace Glimpse.Test.Core2
 
             Assert.True(collection.Count < orignialCount);
             
+        }
+
+        [Fact]
+        public void RemoveManuallyAddedPlugin()
+        {
+            var collection = new GlimpseLazyCollection<IGlimpseTab, IGlimpseTabMetadata>();
+
+            var item = new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => new DummyTab(), new GlimpseTabAttribute());
+            collection.Add(item);
+
+            var orignialCount = collection.Count;
+            Assert.True(orignialCount > 0);
+
+
+            collection.Remove(item);
+
+            Assert.True(collection.Count < orignialCount);
+        }
+
+        [Fact]
+        public void Contains()
+        {
+            var collection = new GlimpseLazyCollection<IGlimpseTab, IGlimpseTabMetadata>();
+
+            var item = new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => new DummyTab(), new GlimpseTabAttribute());
+            collection.Add(item);
+
+            Assert.True(collection.Contains(item));
         }
 
         [Fact]

@@ -95,5 +95,22 @@ namespace Glimpse.Test.Core2
                                                  }
                 );
         }
+
+        [Fact]
+        public void ConstructWithNonGenericDictionary()
+        {
+            var dictionary = new Hashtable();
+            var instance = new DictionaryDataStoreAdapter(dictionary);
+
+            Assert.NotNull(instance);
+        }
+
+        [Fact]
+        public void ThrowWithImproperInternalDictionary()
+        {
+            var dictionary = new Dictionary<string, string>();
+
+            Assert.Throws<ArgumentException>(() => new DictionaryDataStoreAdapter(dictionary));
+        }
     }
 }

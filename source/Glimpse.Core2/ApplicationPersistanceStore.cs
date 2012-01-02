@@ -9,16 +9,17 @@ namespace Glimpse.Core2
     {
         private IDataStore DataStore { get; set; }
         private IList<GlimpseMetadata> GlimpseRequests { get; set; }
+        private const string PersistanceStoreKey = "__GlimpsePersistanceKey";
 
         public ApplicationPersistanceStore(IDataStore dataStore)
         {
             DataStore = dataStore;
 
-            var glimpseRequests = DataStore.Get<IList<GlimpseMetadata>>("__GlimpseRequests");
+            var glimpseRequests = DataStore.Get<IList<GlimpseMetadata>>(PersistanceStoreKey);
             if (glimpseRequests == null)
             {
                 glimpseRequests = new List<GlimpseMetadata>();
-                DataStore.Set("__GlimpseRequests", glimpseRequests);
+                DataStore.Set(PersistanceStoreKey, glimpseRequests);
             }
             GlimpseRequests = glimpseRequests;
         }
