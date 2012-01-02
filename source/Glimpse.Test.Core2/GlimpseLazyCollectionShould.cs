@@ -34,11 +34,14 @@ namespace Glimpse.Test.Core2
 
             collection.Discoverability.Discover();
 
-            Assert.Equal(1, collection.Count);
+            var orignialCount = collection.Count;
+            Assert.True(orignialCount > 0);
+            
             
             collection.Remove(collection.First());
 
-            Assert.Equal(0, collection.Count);
+            Assert.True(collection.Count < orignialCount);
+            
         }
 
         [Fact]
@@ -48,9 +51,9 @@ namespace Glimpse.Test.Core2
 
             collection.Discoverability.Discover();
 
-            Assert.Equal(1, collection.Count);
+            Assert.True(collection.Count > 0);
 
-            Assert.Equal(typeof(string), collection.First().Metadata.RequestContextType);
+            Assert.Equal(typeof(DummyObjectContext), collection.First().Metadata.RequestContextType);
         }
     }
 }

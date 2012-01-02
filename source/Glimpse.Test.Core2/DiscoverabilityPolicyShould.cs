@@ -74,6 +74,7 @@ namespace Glimpse.Test.Core2
             var discoverabilityPolicy1 = new MefDiscoverabilityPolicy<IGlimpseTab>(glimpseCollection1);
 
             discoverabilityPolicy1.IgnoreType(typeof(DummySetupTab));
+            discoverabilityPolicy1.IgnoreType(typeof(DummyTab));
 
             discoverabilityPolicy1.Discover();
 
@@ -84,6 +85,7 @@ namespace Glimpse.Test.Core2
             var discoverabilityPolicy2 = new MefDiscoverabilityPolicy<IGlimpseTab, IGlimpseTabMetadata>(glimpseCollection2);
 
             discoverabilityPolicy2.IgnoreType(typeof(DummySetupTab));
+            discoverabilityPolicy2.IgnoreType(typeof(DummyTab));
 
             discoverabilityPolicy2.Discover();
 
