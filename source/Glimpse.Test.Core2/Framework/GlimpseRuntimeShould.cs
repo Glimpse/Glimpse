@@ -9,7 +9,7 @@ using Moq;
 using Xunit;
 using System.Collections.Generic;
 
-namespace Glimpse.Test.Core2
+namespace Glimpse.Test.Core2.Framework
 {
     public class GlimpseRuntimeShould : IDisposable
     {

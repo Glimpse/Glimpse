@@ -5,7 +5,7 @@ using Glimpse.Test.Core2.Extensions;
 using Moq;
 using Xunit;
 
-namespace Glimpse.Test.Core2
+namespace Glimpse.Test.Core2.Framework
 {
     public class GlimpseConfigurationShould:IDisposable
     {
