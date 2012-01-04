@@ -140,6 +140,66 @@ namespace Glimpse.Test.Core2.Framework
             Assert.Throws<ArgumentNullException>(()=>new GlimpseConfiguration(null, EndpointConfigMock.Object));
         }
 
+        [Fact]
+        public void FrameworkProviderCannotBeNull()
+        {
+            Assert.Throws<ArgumentNullException>(()=>Configuration.FrameworkProvider = null);
+        }
+
+        [Fact]
+        public void HtmlEncoderCannotBeNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => Configuration.HtmlEncoder = null);
+        }
+
+        [Fact]
+        public void LogerCannotBeNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => Configuration.Logger = null);
+        }
+
+        [Fact]
+        public void PersistanceStoreCannotBeNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => Configuration.PersistanceStore = null);
+        }
+
+        [Fact]
+        public void PipeliseInspectorsCannotBeNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => Configuration.PipelineInspectors = null);
+        }
+
+        [Fact]
+        public void ResourceEndpointCannotBeNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => Configuration.ResourceEndpoint = null);
+        }
+
+        [Fact]
+        public void ResourcesCannotBeNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => Configuration.Resources = null);
+        }
+
+        [Fact]
+        public void SerializerCannotBeNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => Configuration.Serializer = null);
+        }
+
+        [Fact]
+        public void TabsCannotBeNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => Configuration.Tabs = null);
+        }
+
+        [Fact]
+        public void ValidatorsCannotBeNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => Configuration.Validators = null);
+        }
+
         public void Dispose()
         {
             EndpointConfigMock = null;

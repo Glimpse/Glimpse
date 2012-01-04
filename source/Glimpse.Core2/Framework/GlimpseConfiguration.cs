@@ -11,7 +11,6 @@ namespace Glimpse.Core2.Framework
     {
 
         //TODO: Add Sanitizer?
-        //TODO: Add Logger
         //TODO: Add static FromWebConfig method to construct an instance of GlimpseConfiguration
         public GlimpseConfiguration(IFrameworkProvider frameworkProvider, IGlimpseResourceEndpointConfiguration endpointConfiguration)
         {
@@ -20,17 +19,7 @@ namespace Glimpse.Core2.Framework
             Contract.Requires<ArgumentNullException>(frameworkProvider != null, "frameworkProvider");
             Contract.Requires<ArgumentNullException>(endpointConfiguration != null, "endpointConfiguration");
 
-            Contract.Ensures(FrameworkProvider != null);
-            Contract.Ensures(HtmlEncoder != null);
-            Contract.Ensures(PersistanceStore != null);
-            Contract.Ensures(PipelineInspectors != null);
-            Contract.Ensures(ResourceEndpoint != null);
-            Contract.Ensures(Resources != null);
-            Contract.Ensures(Serializer != null);
-            Contract.Ensures(Tabs != null);
-            Contract.Ensures(Validators != null);
-
-            //TODO: Refactor all these "new" calls to leverage a IOC container
+            //TODO: Refactor all these "new" calls to leverage a IOC container?
             FrameworkProvider = frameworkProvider;
             HtmlEncoder = new AntiXssEncoder();
             Logger = new NLogLogger(CreateLogger());
@@ -41,28 +30,157 @@ namespace Glimpse.Core2.Framework
             Serializer = new JsonNetSerializer();
             Tabs = new GlimpseLazyCollection<IGlimpseTab, IGlimpseTabMetadata>();
             Validators = new GlimpseValidatorCollection();
-
         }
 
-        public IFrameworkProvider FrameworkProvider { get; set; }
+        private IFrameworkProvider frameworkProvider;
+        public IFrameworkProvider FrameworkProvider
+        {
+            get
+            {
+                Contract.Ensures(Contract.Result<IFrameworkProvider>() != null);
+                return frameworkProvider;
+            }
+            set
+            {
+                Contract.Requires<ArgumentNullException>(value != null, "value");
+                frameworkProvider = value;
+            }
+        }
 
-        public IGlimpseHtmlEncoder HtmlEncoder { get; set; }
+        private IGlimpseHtmlEncoder htmlEncoder;
+        public IGlimpseHtmlEncoder HtmlEncoder
+        {
+            get
+            {
+                Contract.Ensures(Contract.Result<IGlimpseHtmlEncoder>()!=null);
+                return htmlEncoder;
+            }
+            set
+            {
+                Contract.Requires<ArgumentNullException>(value!=null, "value");
+                htmlEncoder = value;
+            }
+        }
 
-        public IGlimpseLogger Logger { get; set; }
+        private IGlimpseLogger logger;
+        public IGlimpseLogger Logger
+        {
+            get
+            {
+                Contract.Ensures(Contract.Result<IGlimpseLogger>()!=null);
+                return logger;
+            }
+            set
+            {
+                Contract.Requires<ArgumentNullException>(value!=null,"value");
+                logger = value;
+            }
+        }
 
-        public IGlimpsePersistanceStore PersistanceStore { get; set; }
+        private IGlimpsePersistanceStore persistanceStore;
+        public IGlimpsePersistanceStore PersistanceStore
+        {
+            get
+            {
+                Contract.Ensures(Contract.Result<IGlimpsePersistanceStore>()!=null);
+                return persistanceStore;
+            }
+            set
+            {
+                Contract.Requires<ArgumentNullException>(value!=null, "value");
+                persistanceStore = value;
+            }
+        }
 
-        public GlimpseCollection<IGlimpsePipelineInspector> PipelineInspectors { get; set; }
+        private GlimpseCollection<IGlimpsePipelineInspector> pipelineInspectors;
+        public GlimpseCollection<IGlimpsePipelineInspector> PipelineInspectors
+        {
+            get
+            {
+                Contract.Ensures(Contract.Result<GlimpseCollection<IGlimpsePipelineInspector>>()!=null);
+                return pipelineInspectors;
+            }
+            set
+            {
+                Contract.Requires<ArgumentNullException>(value!=null,"value");
+                pipelineInspectors = value;
+            }
+        }
 
-        public IGlimpseResourceEndpointConfiguration ResourceEndpoint { get; set; }
+        private IGlimpseResourceEndpointConfiguration resourceEndpoint;
+        public IGlimpseResourceEndpointConfiguration ResourceEndpoint
+        {
+            get
+            {
+                Contract.Ensures(Contract.Result<IGlimpseResourceEndpointConfiguration>()!=null);
+                return resourceEndpoint;
+            }
+            set
+            {
+                Contract.Requires<ArgumentNullException>(value!=null, "value");
+                resourceEndpoint = value;
+            }
+        }
 
-        public GlimpseCollection<IGlimpseResource> Resources { get; set; }
+        private GlimpseCollection<IGlimpseResource> resources;
+        public GlimpseCollection<IGlimpseResource> Resources
+        {
+            get
+            {
+                Contract.Ensures(Contract.Result<GlimpseCollection<IGlimpseResource>>()!=null);
+                return resources;
+            }
+            set
+            {
+                Contract.Requires<ArgumentNullException>(value!=null, "value");
+                resources = value;
+            }
+        }
 
-        public IGlimpseSerializer Serializer { get; set; }
+        private IGlimpseSerializer serializer;
+        public IGlimpseSerializer Serializer
+        {
+            get
+            {
+                Contract.Ensures(Contract.Result<IGlimpseSerializer>()!=null);
+                return serializer;
+            }
+            set
+            {
+                Contract.Requires<ArgumentNullException>(value!=null,"value");
+                serializer = value;
+            }
+        }
 
-        public GlimpseLazyCollection<IGlimpseTab, IGlimpseTabMetadata> Tabs { get; set; }
+        private GlimpseLazyCollection<IGlimpseTab, IGlimpseTabMetadata> tabs;
+        public GlimpseLazyCollection<IGlimpseTab, IGlimpseTabMetadata> Tabs
+        {
+            get
+            {
+                Contract.Ensures(Contract.Result<GlimpseLazyCollection<IGlimpseTab, IGlimpseTabMetadata>>()!=null);
+                return tabs;
+            }
+            set
+            {
+                Contract.Requires<ArgumentNullException>(value!=null,"value");
+                tabs = value;
+            }
+        }
 
-        public GlimpseValidatorCollection Validators { get; set; }
+        private GlimpseValidatorCollection validators;
+        public GlimpseValidatorCollection Validators
+        {
+            get
+            {
+                Contract.Ensures(Contract.Result<GlimpseValidatorCollection>()!=null);
+                return validators;
+            }
+            set
+            {
+                Contract.Requires<ArgumentNullException>(value!=null,"value");
+                validators = value;
+            }
+        }
 
         //TODO: Remove me! This does not belong here, allow for IOC pipeline config
         private Logger CreateLogger()

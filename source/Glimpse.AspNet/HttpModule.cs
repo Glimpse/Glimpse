@@ -38,14 +38,14 @@ namespace Glimpse.AspNet
         {
             var runtime = TryGetGlimpseRuntime(sender);
 
-            runtime.ExecutePlugins(LifeCycleSupport.SessionAccessBegin);
+            runtime.ExecuteTabs(LifeCycleSupport.SessionAccessBegin);
         }
 
         internal void ExecutePluginsWithoutSessionState(object sender, System.EventArgs e)
         {
             var runtime = TryGetGlimpseRuntime(sender);
 
-            runtime.ExecutePlugins();
+            runtime.ExecuteTabs();
         }
 
         internal void EndRequest(object sender, System.EventArgs e)

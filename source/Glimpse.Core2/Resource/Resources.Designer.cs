@@ -61,11 +61,29 @@ namespace Glimpse.Core2.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ambiguous resource with name &apos;{0}&apos; found..
+        /// </summary>
+        internal static string ExecuteResourceDuplicateError {
+            get {
+                return ResourceManager.GetString("ExecuteResourceDuplicateError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resource with name &apos;{0}&apos; could not be found..
+        /// </summary>
+        internal static string ExecuteResourceMissingError {
+            get {
+                return ResourceManager.GetString("ExecuteResourceMissingError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exception executing tab: {0}.
         /// </summary>
-        internal static string ExecutePluginError {
+        internal static string ExecuteTabError {
             get {
-                return ResourceManager.GetString("ExecutePluginError", resourceCulture);
+                return ResourceManager.GetString("ExecuteTabError", resourceCulture);
             }
         }
         

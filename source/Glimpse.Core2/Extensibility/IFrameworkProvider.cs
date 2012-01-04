@@ -13,6 +13,7 @@ namespace Glimpse.Core2.Extensibility
         Type RuntimeContextType { get; }
         RequestMetadata RequestMetadata { get; }
         void SetHttpResponseHeader(string name, string value);
+        void SetHttpResponseStatusCode(int statusCode);
         void InjectHttpResponseBody(string htmlSnippet);
     }
 }

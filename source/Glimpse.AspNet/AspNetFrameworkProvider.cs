@@ -61,6 +61,12 @@ namespace Glimpse.AspNet
             headers.Set(name, value);
         }
 
+        public void SetHttpResponseStatusCode(int statusCode)
+        {
+            Context.Response.StatusCode = statusCode;
+            Context.Response.StatusDescription = null;
+        }
+
         public void InjectHttpResponseBody(string htmlSnippet)
         {
             var response = Context.Response;

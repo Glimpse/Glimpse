@@ -24,6 +24,8 @@ namespace Glimpse.Test.Core2.Framework
             SerializerMock = new Mock<IGlimpseSerializer>();
             PersistanceStoreMock = new Mock<IGlimpsePersistanceStore>();
             LoggerMock = new Mock<IGlimpseLogger>();
+            ResourceMock = new Mock<IGlimpseResource>();
+            ResourceResultMock = new Mock<ResourceResult>();
         }
 
         private GlimpseConfiguration configuration;
@@ -54,6 +56,8 @@ namespace Glimpse.Test.Core2.Framework
         private Mock<IGlimpseSerializer> SerializerMock { get; set; }
         private Mock<IGlimpsePersistanceStore> PersistanceStoreMock { get; set;}
         private Mock<IGlimpseLogger> LoggerMock { get; set; }
+        private Mock<IGlimpseResource> ResourceMock { get; set; }
+        private Mock<ResourceResult> ResourceResultMock { get; set; }
 
         private GlimpseRuntime runtime;
         private GlimpseRuntime Runtime
@@ -117,7 +121,7 @@ namespace Glimpse.Test.Core2.Framework
             Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => TabMock.Object, TabMetadataMock.Object));
 
             Runtime.BeginRequest();
-            Runtime.ExecutePlugins();
+            Runtime.ExecuteTabs();
 
             var results = Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
@@ -134,7 +138,7 @@ namespace Glimpse.Test.Core2.Framework
             Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => TabMock.Object, TabMetadataMock.Object));
 
             Runtime.BeginRequest();
-            Runtime.ExecutePlugins(LifeCycleSupport.EndRequest);
+            Runtime.ExecuteTabs(LifeCycleSupport.EndRequest);
 
             var results = Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
@@ -149,7 +153,7 @@ namespace Glimpse.Test.Core2.Framework
             Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => TabMock.Object, TabMetadataMock.Object));
 
             Runtime.BeginRequest();
-            Runtime.ExecutePlugins();
+            Runtime.ExecuteTabs();
 
             var results = Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
@@ -166,7 +170,7 @@ namespace Glimpse.Test.Core2.Framework
             Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => TabMock.Object, TabMetadataMock.Object));
 
             Runtime.BeginRequest();
-            Runtime.ExecutePlugins();
+            Runtime.ExecuteTabs();
 
             var results = Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
@@ -184,7 +188,7 @@ namespace Glimpse.Test.Core2.Framework
             Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => TabMock.Object, TabMetadataMock.Object));
 
             Runtime.BeginRequest();
-            Runtime.ExecutePlugins();
+            Runtime.ExecuteTabs();
 
             var results = Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
@@ -201,7 +205,7 @@ namespace Glimpse.Test.Core2.Framework
             Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => TabMock.Object, TabMetadataMock.Object));
 
             Runtime.BeginRequest();
-            Runtime.ExecutePlugins();
+            Runtime.ExecuteTabs();
 
             var results = Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
@@ -218,7 +222,7 @@ namespace Glimpse.Test.Core2.Framework
             Configuration.Tabs.Clear();
 
             Runtime.BeginRequest();
-            Runtime.ExecutePlugins();
+            Runtime.ExecuteTabs();
 
             var results = Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
@@ -315,12 +319,11 @@ namespace Glimpse.Test.Core2.Framework
         public void InjectHttpResponseBodyDuringEndRequest()
         {
             Runtime.BeginRequest();
-            Runtime.ExecutePlugins();
+            Runtime.ExecuteTabs();
             Runtime.EndRequest();
 
             FrameworkProviderMock.Verify(fp => fp.InjectHttpResponseBody(It.IsAny<string>()));
         }
-
         
         [Fact]
         public void PersistDataDuringEndRequest()
@@ -328,7 +331,7 @@ namespace Glimpse.Test.Core2.Framework
             Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => TabMock.Object, TabMetadataMock.Object));
 
             Runtime.BeginRequest();
-            Runtime.ExecutePlugins();
+            Runtime.ExecuteTabs();
             Runtime.EndRequest();
 
             SerializerMock.Verify(s => s.Serialize(It.IsAny<object>()), Times.Exactly(Configuration.Tabs.Count));
@@ -341,7 +344,7 @@ namespace Glimpse.Test.Core2.Framework
             Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => TabMock.Object, TabMetadataMock.Object));
 
             Runtime.BeginRequest();
-            Runtime.ExecutePlugins();
+            Runtime.ExecuteTabs();
             Runtime.EndRequest();
 
             SerializerMock.Verify(s => s.Serialize(It.IsAny<object>()), Times.Exactly(Configuration.Tabs.Count));
@@ -362,7 +365,7 @@ namespace Glimpse.Test.Core2.Framework
             Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => TabMock.Object, TabMetadataMock.Object));
 
             Runtime.BeginRequest();
-            Runtime.ExecutePlugins();
+            Runtime.ExecuteTabs();
             Runtime.EndRequest();
 
             FrameworkProviderMock.Verify(fp => fp.SetHttpResponseHeader(Constants.HttpHeader, It.IsAny<string>()));
@@ -411,6 +414,95 @@ namespace Glimpse.Test.Core2.Framework
             Assert.Equal(0, Configuration.Tabs.Count);
         }
 
+        [Fact]
+        public void ExecuteResource()
+        {
+            var name = "TestResource";
+            ResourceMock.Setup(r => r.Name).Returns(name);
+            ResourceMock.Setup(r => r.Execute(It.IsAny<IDictionary<string, string>>())).Returns(ResourceResultMock.Object);
+            Configuration.Resources.Add(ResourceMock.Object);
+
+            Runtime.ExecuteResource(name.ToLower());
+
+            ResourceMock.Verify(r=>r.Execute(It.IsAny<IDictionary<string,string>>()), Times.Once());
+            ResourceResultMock.Verify(r=>r.Execute(FrameworkProviderMock.Object));
+        }
+
+        [Fact]
+        public void HandleUnknownResource()
+        {
+            Configuration.Resources.Clear();
+
+            Runtime.ExecuteResource("random name that doesn't exist");
+
+            FrameworkProviderMock.Verify(fp=>fp.SetHttpResponseStatusCode(404), Times.Once());
+        }
+
+        [Fact]
+        public void HandleDuplicateResources()
+        {
+            var name = "Duplicate";
+            ResourceMock.Setup(r => r.Name).Returns(name);
+
+            Configuration.Resources.Add(ResourceMock.Object);
+            Configuration.Resources.Add(ResourceMock.Object);
+
+            Runtime.ExecuteResource(name);
+
+            FrameworkProviderMock.Verify(fp=>fp.SetHttpResponseStatusCode(500), Times.Once());
+        }
+
+        [Fact]
+        public void ThrowExceptionWithEmptyResourceName()
+        {
+            Assert.Throws<ArgumentNullException>(()=>Runtime.ExecuteResource(""));
+        }
+
+        [Fact]
+        public void HandleResourcesThatThrowExceptions()
+        {
+            var name = "Anything";
+            ResourceMock.Setup(r => r.Name).Returns(name);
+            ResourceMock.Setup(r => r.Execute(It.IsAny<IDictionary<string, string>>())).Throws<Exception>();
+
+            Configuration.Resources.Add(ResourceMock.Object);
+
+            Runtime.ExecuteResource(name);
+
+            FrameworkProviderMock.Verify(fp => fp.SetHttpResponseStatusCode(500), Times.Once());
+        }
+
+        [Fact]
+        public void EnsureNullIsNotPassedToResourceExecute()
+        {
+            var name = "aName";
+            ResourceMock.Setup(r => r.Name).Returns(name);
+            ResourceMock.Setup(r => r.Execute(It.IsAny<IDictionary<string, string>>())).Returns(
+                ResourceResultMock.Object);
+
+            Configuration.Resources.Add(ResourceMock.Object);
+
+            Runtime.ExecuteResource(name, null);
+
+            ResourceMock.Verify(r=>r.Execute(null), Times.Never());
+        }
+
+        [Fact]
+        public void HandleResourceResultsThatThrowExceptions()
+        {
+            var name = "Anything";
+            ResourceMock.Setup(r => r.Name).Returns(name);
+            ResourceMock.Setup(r => r.Execute(It.IsAny<IDictionary<string, string>>())).Returns(ResourceResultMock.Object);
+
+            ResourceResultMock.Setup(rr => rr.Execute(It.IsAny<IFrameworkProvider>())).Throws<Exception>();
+
+            Configuration.Resources.Add(ResourceMock.Object);
+
+            Runtime.ExecuteResource(name);
+
+            LoggerMock.Verify(l=>l.Fatal(It.IsAny<string>(), It.IsAny<Exception>()), Times.Once());
+        }
+
         public void Dispose()
         {
             Configuration = null;
@@ -424,6 +516,8 @@ namespace Glimpse.Test.Core2.Framework
             SerializerMock = null;
             PersistanceStoreMock = null;
             LoggerMock = null;
+            ResourceMock = null;
+            ResourceResultMock = null;
         }
     }
 }

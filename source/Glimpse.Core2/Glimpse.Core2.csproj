@@ -36,7 +36,7 @@
     <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
     <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
     <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
-    <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
+    <CodeContractsEmitXMLDocs>True</CodeContractsEmitXMLDocs>
     <CodeContractsCustomRewriterAssembly />
     <CodeContractsCustomRewriterClass />
     <CodeContractsLibPaths />
@@ -47,8 +47,7 @@
     <CodeContractsRuntimeCheckingLevel>Pre and Post</CodeContractsRuntimeCheckingLevel>
     <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
-    <DocumentationFile>
-    </DocumentationFile>
+    <DocumentationFile>bin\Debug\Glimpse.Core2.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyPCU' ">
     <DebugType>pdbonly</DebugType>
@@ -83,10 +82,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AntiXssEncoder.cs" />
-    <Compile Include="ApplicationPersistanceStore.cs" />
     <Compile Include="DictionaryDataStoreAdapter.cs" />
+    <Compile Include="ExceptionResourceResult.cs" />
     <Compile Include="Extensibility\GlimpseServiceLocator.cs" />
     <Compile Include="Extensibility\IGlimpseLogger.cs" />
+    <Compile Include="Framework\ApplicationPersistanceStore.cs" />
+    <Compile Include="Framework\GlimpseMetadata.cs" />
+    <Compile Include="Framework\IGlimpsePersistanceStore.cs" />
     <Compile Include="GlimpseConstants.cs" />
     <Compile Include="NLogLogger.cs" />
     <Compile Include="MefDiscoverabilityPolicy-T1.cs" />
@@ -115,11 +117,9 @@
     <Compile Include="Framework\GlimpseRuntime.cs" />
     <Compile Include="GlimpseCollection.cs" />
     <Compile Include="GlimpseLazyCollection.cs" />
-    <Compile Include="GlimpseMetadata.cs" />
     <Compile Include="GlimpseMode.cs" />
     <Compile Include="Extensibility\IGlimpseHtmlEncoder.cs" />
     <Compile Include="GlimpseValidatorCollection.cs" />
-    <Compile Include="IGlimpsePersistanceStore.cs" />
     <Compile Include="JsonNetSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FilteredSafeDirectoryCatalog.cs" />
@@ -129,6 +129,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="StatusCodeResourceResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

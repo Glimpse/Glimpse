@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Resource;
@@ -9,14 +10,12 @@ namespace Glimpse.Core2.Framework
 {
     public class GlimpseRuntime
     {
-
         public GlimpseRuntime(GlimpseConfiguration configuration)
         {
             //Version is in major.minor.build format to support http://semver.org/
             Version = GetType().Assembly.GetName().Version.ToString(3);
             UpdateConfiguration(configuration);
         }
-
 
 
         private GlimpseConfiguration Configuration { get; set; }
@@ -42,7 +41,9 @@ namespace Glimpse.Core2.Framework
         {
             get
             {
-                var result = Configuration.FrameworkProvider.HttpRequestStore.Get<GlimpseServiceLocator>(Constants.ServiceLocatorKey);
+                var result =
+                    Configuration.FrameworkProvider.HttpRequestStore.Get<GlimpseServiceLocator>(
+                        Constants.ServiceLocatorKey);
 
                 if (result == null)
                     throw new MethodAccessException(Resources.OutOfOrderRuntimeMethodCall);
@@ -54,14 +55,13 @@ namespace Glimpse.Core2.Framework
         public string Version { get; private set; }
 
 
-
         //TODO: Make sure runtime has been init'ed
         public void BeginRequest()
         {
             var frameworkProvider = Configuration.FrameworkProvider;
             var runtimeContext = frameworkProvider.RuntimeContext;
             var requestStore = frameworkProvider.HttpRequestStore;
-            
+
             //Create storage space for plugins to access
             var pluginStore = new DictionaryDataStoreAdapter(new Dictionary<string, object>());
             requestStore.Set(Constants.PluginsDataStoreKey, pluginStore);
@@ -94,7 +94,7 @@ namespace Glimpse.Core2.Framework
             {
                 requestId = requestStore.Get<Guid>(Constants.RequestIdKey);
             }
-            catch(NullReferenceException ex)
+            catch (NullReferenceException ex)
             {
                 throw new MethodAccessException(Resources.OutOfOrderRuntimeMethodCall, ex);
             }
@@ -109,25 +109,77 @@ namespace Glimpse.Core2.Framework
 
             var dataPath = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUrl("data.js", Version, new Dictionary<string, string>{{"id", requestId.ToString()}}));
             var clientPath = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUrl("client.js", Version));
-            
+
             //var dataPath = HttpUtility.HtmlAttributeEncode(Context.GlimpseResourcePath("data.js") + "&id=" + Context.GetGlimpseRequestId());
             //var clientPath = HttpUtility.HtmlAttributeEncode(Context.GlimpseResourcePath("client.js"));
 
             var html = string.Format(@"<script type='text/javascript' id='glimpseData' src='{0}'></script><script type='text/javascript' id='glimpseClient' src='{1}'></script></body>", dataPath, clientPath);
 
             frameworkProvider.InjectHttpResponseBody(html);
-
         }
-        
-        public void ExecutePlugins()
+
+        public void ExecuteResource(string resourceName)
         {
-            ExecutePlugins(LifeCycleSupport.EndRequest);
+            ExecuteResource(resourceName, new Dictionary<string, string>());
         }
 
-        public void ExecutePlugins(LifeCycleSupport support)
+        public void ExecuteResource(string resourceName, IDictionary<string, string> parameters)
+        {
+            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(resourceName), "resourceName");
+
+            var logger = Configuration.Logger;
+            ResourceResult result;
+
+            var resources = Configuration.Resources.Where(r => r.Name.Equals(resourceName, StringComparison.InvariantCultureIgnoreCase));
+
+            switch (resources.Count())
+            {
+                case 1: //200 - OK
+                    try
+                    {
+                        var param = parameters ?? new Dictionary<string, string>();
+                        result = resources.First().Execute(param);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error(string.Format("Error executing resource '{0}'", resourceName), ex);
+                        result = new ExceptionResourceResult(ex);
+                    }
+                    break;
+                case 0: //404 - File Not Found
+                    logger.Warn(string.Format(Resources.ExecuteResourceMissingError, resourceName));
+                    result = new StatusCodeResourceResult(404);
+                    break;
+                default: //500 - Server Error
+                    logger.Warn(string.Format(Resources.ExecuteResourceDuplicateError, resourceName));
+                    result = new StatusCodeResourceResult(500);
+                    break;
+            }
+
+            try
+            {
+                result.Execute(Configuration.FrameworkProvider);
+            }
+            catch(Exception ex)
+            {
+                logger.Fatal(string.Format("Error executing resource result of type '{0}'", result.GetType()), ex);
+            }
+        }
+
+        public void ExecuteTabs()
+        {
+            ExecuteTabs(LifeCycleSupport.EndRequest);
+        }
+
+        public void ExecuteTabs(LifeCycleSupport support)
         {
             //Only use tabs that either don't specify a specific context type, or have a context type that matches the current framework provider's.
-            var runtimePlugins = Configuration.Tabs.Where(p=>p.Metadata.RequestContextType == null || p.Metadata.RequestContextType == Configuration.FrameworkProvider.RuntimeContextType);
+            var runtimePlugins =
+                Configuration.Tabs.Where(
+                    p =>
+                    p.Metadata.RequestContextType == null ||
+                    p.Metadata.RequestContextType == Configuration.FrameworkProvider.RuntimeContextType);
+
             var supportedRuntimePlugins = runtimePlugins.Where(p => p.Metadata.LifeCycleSupport.HasFlag(support));
             var pluginResultsStore = PluginResultsStore;
             var logger = Configuration.Logger;
@@ -144,7 +196,7 @@ namespace Glimpse.Core2.Framework
                 }
                 catch (Exception exception)
                 {
-                   logger.Error(string.Format(Resources.ExecutePluginError, key), exception);
+                    logger.Error(string.Format(Resources.ExecuteTabError, key), exception);
                 }
             }
         }
@@ -155,7 +207,7 @@ namespace Glimpse.Core2.Framework
             var logger = Configuration.Logger;
 
             //TODO: Add in request validation checks
-            var tabsThatRequireSetup = Configuration.Tabs.Where(p => p.Value is IGlimpseTabSetup).Select(p=>p.Value);
+            var tabsThatRequireSetup = Configuration.Tabs.Where(p => p.Value is IGlimpseTabSetup).Select(p => p.Value);
             foreach (IGlimpseTabSetup tab in tabsThatRequireSetup)
             {
                 try
@@ -176,7 +228,9 @@ namespace Glimpse.Core2.Framework
                 }
                 catch (Exception exception)
                 {
-                    logger.Error(string.Format(Resources.InitializePipelineInspectorError, pipelineInspector.GetType().FullName), exception);
+                    logger.Error(
+                        string.Format(Resources.InitializePipelineInspectorError, pipelineInspector.GetType().FullName),
+                        exception);
                 }
             }
         }
