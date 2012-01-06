@@ -3,8 +3,8 @@ using System.Diagnostics;
 using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
-using Glimpse.Test.Core2.Extensions;
 using Glimpse.Test.Core2.TestDoubles;
+using Glimpse.Test.Core2.Tester;
 using Moq;
 using Xunit;
 using System.Collections.Generic;
@@ -13,59 +13,17 @@ namespace Glimpse.Test.Core2.Framework
 {
     public class GlimpseRuntimeShould : IDisposable
     {
-        public GlimpseRuntimeShould()
+        private GlimpseRuntimeTester tester;
+        public GlimpseRuntimeTester Runtime
         {
-            FrameworkProviderMock = new Mock<IFrameworkProvider>().Setup();
-            EndpointConfigMock = new Mock<IGlimpseResourceEndpointConfiguration>();
-            HttpRequestStoreMock = new Mock<IDataStore>();
-            TabMetadataMock = new Mock<IGlimpseTabMetadata>().Setup();
-            TabMock = new Mock<IGlimpseTab>().Setup();
-            PipelineInspectorMock = new Mock<IGlimpsePipelineInspector>();
-            SerializerMock = new Mock<IGlimpseSerializer>();
-            PersistanceStoreMock = new Mock<IGlimpsePersistanceStore>();
-            LoggerMock = new Mock<IGlimpseLogger>();
-            ResourceMock = new Mock<IGlimpseResource>();
-            ResourceResultMock = new Mock<ResourceResult>();
+            get { return tester ?? (tester = GlimpseRuntimeTester.Create()); }
+            set { tester = value; }
         }
 
-        private GlimpseConfiguration configuration;
-        private GlimpseConfiguration Configuration
+        public void Dispose()
         {
-            get
-            {
-                if (configuration != null) return configuration;
-
-                configuration =
-                    new GlimpseConfiguration(FrameworkProviderMock.Object, EndpointConfigMock.Object).
-                        TurnOffAutoDiscover();
-                configuration.Serializer = SerializerMock.Object;
-                configuration.PersistanceStore = PersistanceStoreMock.Object;
-                configuration.Logger = LoggerMock.Object;
-
-                return configuration;
-            }
-            set { configuration = value; }
+            Runtime = null;
         }
-
-        private Mock<IFrameworkProvider> FrameworkProviderMock { get; set; }
-        private Mock<IGlimpseResourceEndpointConfiguration> EndpointConfigMock { get; set; }
-        private Mock<IDataStore> HttpRequestStoreMock { get; set; }
-        private Mock<IGlimpseTabMetadata> TabMetadataMock { get; set; }
-        private Mock<IGlimpseTab> TabMock { get; set; }
-        private Mock<IGlimpsePipelineInspector> PipelineInspectorMock { get; set; }
-        private Mock<IGlimpseSerializer> SerializerMock { get; set; }
-        private Mock<IGlimpsePersistanceStore> PersistanceStoreMock { get; set;}
-        private Mock<IGlimpseLogger> LoggerMock { get; set; }
-        private Mock<IGlimpseResource> ResourceMock { get; set; }
-        private Mock<ResourceResult> ResourceResultMock { get; set; }
-
-        private GlimpseRuntime runtime;
-        private GlimpseRuntime Runtime
-        {
-            get { return runtime ?? (runtime = new GlimpseRuntime(Configuration)); }
-            set { runtime = value; }
-        }
-
 
         [Fact]
         public void CreatesServiceLocatorOnBeginRequest()
@@ -78,27 +36,21 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void SetRequestIdOnBeginRequest()
         {
-            FrameworkProviderMock.Setup(fp => fp.HttpRequestStore).Returns(HttpRequestStoreMock.Object);
+            Runtime.FrameworkProviderMock.Setup(fp => fp.HttpRequestStore).Returns(Runtime.HttpRequestStoreMock.Object);
 
-            var runtime =
-                new GlimpseRuntime(new GlimpseConfiguration(FrameworkProviderMock.Object, EndpointConfigMock.Object));
+            Runtime.BeginRequest();
 
-            runtime.BeginRequest();
-
-            HttpRequestStoreMock.Verify(store => store.Set(Constants.RequestIdKey, It.IsAny<Guid>()));
+            Runtime.HttpRequestStoreMock.Verify(store => store.Set(Constants.RequestIdKey, It.IsAny<Guid>()));
         }
 
         [Fact]
         public void StartGlobalStopwatchOnBeginRequest()
         {
-            FrameworkProviderMock.Setup(fp => fp.HttpRequestStore).Returns(HttpRequestStoreMock.Object);
+            Runtime.FrameworkProviderMock.Setup(fp => fp.HttpRequestStore).Returns(Runtime.HttpRequestStoreMock.Object);
 
-            var runtime =
-                new GlimpseRuntime(new GlimpseConfiguration(FrameworkProviderMock.Object, EndpointConfigMock.Object));
+            Runtime.BeginRequest();
 
-            runtime.BeginRequest();
-
-            HttpRequestStoreMock.Verify(store => store.Set(Constants.GlobalStopwatchKey, It.IsAny<Stopwatch>()));
+            Runtime.HttpRequestStoreMock.Verify(store => store.Set(Constants.GlobalStopwatchKey, It.IsAny<Stopwatch>()));
         }
 
         [Fact]
@@ -118,113 +70,113 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void ExecutePluginsWithDefaultLifeCycle()
         {
-            Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => TabMock.Object, TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
 
-            var results = Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
+            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
             Assert.Equal(1, results.Count);
-            
-            TabMock.Verify(p => p.GetData(It.IsAny<IServiceLocator>()), Times.Once());
+
+            Runtime.TabMock.Verify(p => p.GetData(It.IsAny<IServiceLocator>()), Times.Once());
         }
 
         [Fact]
         public void ExecutePluginsWithLifeCycleMismatch()
         {
-            TabMetadataMock.Setup(m => m.LifeCycleSupport).Returns(LifeCycleSupport.BeginRequest);
+            Runtime.TabMetadataMock.Setup(m => m.LifeCycleSupport).Returns(LifeCycleSupport.BeginRequest);
 
-            Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => TabMock.Object, TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs(LifeCycleSupport.EndRequest);
 
-            var results = Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
+            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
             Assert.Equal(0, results.Count);
 
-            TabMock.Verify(p => p.GetData(It.IsAny<IServiceLocator>()), Times.Never());
+            Runtime.TabMock.Verify(p => p.GetData(It.IsAny<IServiceLocator>()), Times.Never());
         }
 
         [Fact]
         public void ExecutePluginsWithMatchingRuntimeContextType()
         {
-            Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => TabMock.Object, TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
 
-            var results = Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
+            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
             Assert.Equal(1, results.Count);
 
-            TabMock.Verify(p => p.GetData(It.IsAny<IServiceLocator>()), Times.Once());
+            Runtime.TabMock.Verify(p => p.GetData(It.IsAny<IServiceLocator>()), Times.Once());
         }
 
         [Fact]
         public void ExecutePluginsWithUnknownRuntimeContextType()
         {
-            TabMetadataMock.Setup(m => m.RequestContextType).Returns<Type>(null);
+            Runtime.TabMetadataMock.Setup(m => m.RequestContextType).Returns<Type>(null);
 
-            Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => TabMock.Object, TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
 
-            var results = Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
+            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
             Assert.Equal(1, results.Count);
 
-            TabMock.Verify(p => p.GetData(It.IsAny<IServiceLocator>()), Times.Once());
+            Runtime.TabMock.Verify(p => p.GetData(It.IsAny<IServiceLocator>()), Times.Once());
         }
 
         [Fact]
         public void ExecutePluginsWithDuplicateCollectionEntries()
         {
             //Insert the same plugin multiple times
-            Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => TabMock.Object, TabMetadataMock.Object));
-            Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => TabMock.Object, TabMetadataMock.Object));
-            Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => TabMock.Object, TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
 
-            var results = Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
+            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
             Assert.Equal(1, results.Count);
 
-            TabMock.Verify(p => p.GetData(It.IsAny<IServiceLocator>()), Times.AtLeastOnce());
+            Runtime.TabMock.Verify(p => p.GetData(It.IsAny<IServiceLocator>()), Times.AtLeastOnce());
         }
 
         [Fact]
         public void ExecutePluginThatFails()
         {
-            TabMock.Setup(p => p.GetData(It.IsAny<IServiceLocator>())).Throws<DummyException>();
+            Runtime.TabMock.Setup(p => p.GetData(It.IsAny<IServiceLocator>())).Throws<DummyException>();
 
-            Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => TabMock.Object, TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
 
-            var results = Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
+            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
             Assert.Equal(0, results.Count);
 
-            TabMock.Verify(p => p.GetData(It.IsAny<IServiceLocator>()), Times.Once());
+            Runtime.TabMock.Verify(p => p.GetData(It.IsAny<IServiceLocator>()), Times.Once());
             //Make sure the excption type above is logged here.
-            LoggerMock.Verify(l=>l.Error(It.IsAny<string>(), It.IsAny<DummyException>()),Times.AtMost(Configuration.Tabs.Count));
+            Runtime.LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<DummyException>()), Times.AtMost(Runtime.Configuration.Tabs.Count));
         }
 
         [Fact]
         public void ExecutePluginsWithEmptyCollection()
         {
-            Configuration.Tabs.Clear();
+            Runtime.Configuration.Tabs.Clear();
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
 
-            var results = Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
+            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
             Assert.Equal(0, results.Count);
         }
@@ -265,11 +217,11 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void InitializeWithSetupTabs()
         {
-            var setupMock = TabMock.As<IGlimpseTabSetup>();
+            var setupMock = Runtime.TabMock.As<IGlimpseTabSetup>();
 
             //one tab needs setup, the other does not
-            Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => TabMock.Object, TabMetadataMock.Object));
-            Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => new DummyTab(), TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => new DummyTab(), Runtime.TabMetadataMock.Object));
 
             Runtime.Initialize();
 
@@ -279,40 +231,40 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void InitializeWithSetupTabThatFails()
         {
-            var setupMock = TabMock.As<IGlimpseTabSetup>();
+            var setupMock = Runtime.TabMock.As<IGlimpseTabSetup>();
             setupMock.Setup(s => s.Setup()).Throws<DummyException>();
 
             //one tab needs setup, the other does not
-            Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => TabMock.Object, TabMetadataMock.Object));
-            Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => new DummyTab(), TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => new DummyTab(), Runtime.TabMetadataMock.Object));
 
             Runtime.Initialize();
 
             setupMock.Verify(pm => pm.Setup(), Times.Once());
-            LoggerMock.Verify(l=>l.Error(It.IsAny<string>(), It.IsAny<DummyException>()), Times.AtMost(Configuration.Tabs.Count));
+            Runtime.LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<DummyException>()), Times.AtMost(Runtime.Configuration.Tabs.Count));
         }
 
         [Fact]
         public void InitializeWithPipelineInspectors()
         {
-            Configuration.PipelineInspectors.Add(PipelineInspectorMock.Object);
+            Runtime.Configuration.PipelineInspectors.Add(Runtime.PipelineInspectorMock.Object);
 
             Runtime.Initialize();
 
-            PipelineInspectorMock.Verify(pi=>pi.Setup(), Times.Once());
+            Runtime.PipelineInspectorMock.Verify(pi => pi.Setup(), Times.Once());
         }
 
         [Fact]
         public void InitializeWithPipelineInspectorThatFails()
         {
-            PipelineInspectorMock.Setup(pi => pi.Setup()).Throws<DummyException>();
+            Runtime.PipelineInspectorMock.Setup(pi => pi.Setup()).Throws<DummyException>();
 
-            Configuration.PipelineInspectors.Add(PipelineInspectorMock.Object);
+            Runtime.Configuration.PipelineInspectors.Add(Runtime.PipelineInspectorMock.Object);
 
             Runtime.Initialize();
 
-            PipelineInspectorMock.Verify(pi => pi.Setup(), Times.Once());
-            LoggerMock.Verify(l=>l.Error(It.IsAny<string>(), It.IsAny<DummyException>()), Times.AtMost(Configuration.PipelineInspectors.Count));
+            Runtime.PipelineInspectorMock.Verify(pi => pi.Setup(), Times.Once());
+            Runtime.LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<DummyException>()), Times.AtMost(Runtime.Configuration.PipelineInspectors.Count));
         }
 
         [Fact]
@@ -322,32 +274,32 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.ExecuteTabs();
             Runtime.EndRequest();
 
-            FrameworkProviderMock.Verify(fp => fp.InjectHttpResponseBody(It.IsAny<string>()));
+            Runtime.FrameworkProviderMock.Verify(fp => fp.InjectHttpResponseBody(It.IsAny<string>()));
         }
         
         [Fact]
         public void PersistDataDuringEndRequest()
         {
-            Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => TabMock.Object, TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
             Runtime.EndRequest();
 
-            SerializerMock.Verify(s => s.Serialize(It.IsAny<object>()), Times.Exactly(Configuration.Tabs.Count));
-            PersistanceStoreMock.Verify(ps => ps.Save(It.IsAny<GlimpseMetadata>()));
+            Runtime.SerializerMock.Verify(s => s.Serialize(It.IsAny<object>()), Times.Exactly(Runtime.Configuration.Tabs.Count));
+            Runtime.PersistanceStoreMock.Verify(ps => ps.Save(It.IsAny<GlimpseMetadata>()));
         }
 
         [Fact]
         public void SerializeDataDuringEndRequest()
         {
-            Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => TabMock.Object, TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
             Runtime.EndRequest();
 
-            SerializerMock.Verify(s => s.Serialize(It.IsAny<object>()), Times.Exactly(Configuration.Tabs.Count));
+            Runtime.SerializerMock.Verify(s => s.Serialize(It.IsAny<object>()), Times.Exactly(Runtime.Configuration.Tabs.Count));
         }
 
         [Fact]
@@ -362,162 +314,192 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void SetResponseHeaderDuringEndRequest()
         {
-            Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => TabMock.Object, TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
             Runtime.EndRequest();
 
-            FrameworkProviderMock.Verify(fp => fp.SetHttpResponseHeader(Constants.HttpHeader, It.IsAny<string>()));
-        }
-
-        [Fact]
-        public void UpdateConfigurationWithAutoDiscovery()
-        {
-
-            Configuration.Tabs.Discoverability.AutoDiscover = true; //being explicit for testing sake
-
-            var runtime = Runtime; //force instantiation of Runtime property
-
-            var tabCount = Configuration.Tabs.Count;
-            Assert.True(tabCount > 0);
-
-            runtime.UpdateConfiguration(Configuration);
-
-            Assert.Equal(tabCount, Configuration.Tabs.Count);
+            Runtime.FrameworkProviderMock.Verify(fp => fp.SetHttpResponseHeader(Constants.HttpHeader, It.IsAny<string>()));
         }
 
         [Fact]
         public void UpdateConfigurationWithChangeToAutoDiscovery()
         {
-            Configuration.Tabs.Discoverability.AutoDiscover = false; //being explicit for testing sake
+            Runtime.Configuration.Tabs.Discoverability.AutoDiscover = false; //being explicit for testing sake
             var runtime = Runtime; //force instantiation of Runtime property
 
-            Assert.Equal(0, Configuration.Tabs.Count);
+            Assert.Equal(0, Runtime.Configuration.Tabs.Count);
 
-            Configuration.Tabs.Discoverability.AutoDiscover = true; //being explicit for testing sake
-            runtime.UpdateConfiguration(Configuration);
+            Runtime.Configuration.Tabs.Discoverability.AutoDiscover = true; //being explicit for testing sake
+            runtime.UpdateConfiguration(Runtime.Configuration);
 
-            Assert.True(Configuration.Tabs.Count > 0);
+            Assert.True(Runtime.Configuration.Tabs.Count > 0);
         }
 
         [Fact]
         public void UpdateConfigurationWithoutAutoDiscovery()
         {
-            Configuration.Tabs.Discoverability.AutoDiscover = false; //being explicit for testing sake
+            Runtime.Configuration.Tabs.Discoverability.AutoDiscover = false; //being explicit for testing sake
             var runtime = Runtime; //force instantiation of Runtime property
 
-            Assert.Equal(0, Configuration.Tabs.Count);
+            Assert.Equal(0, Runtime.Configuration.Tabs.Count);
 
-            runtime.UpdateConfiguration(Configuration);
+            runtime.UpdateConfiguration(Runtime.Configuration);
 
-            Assert.Equal(0, Configuration.Tabs.Count);
+            Assert.Equal(0, Runtime.Configuration.Tabs.Count);
         }
 
         [Fact]
         public void ExecuteResource()
         {
             var name = "TestResource";
-            ResourceMock.Setup(r => r.Name).Returns(name);
-            ResourceMock.Setup(r => r.Execute(It.IsAny<IDictionary<string, string>>())).Returns(ResourceResultMock.Object);
-            Configuration.Resources.Add(ResourceMock.Object);
+            Runtime.ResourceMock.Setup(r => r.Name).Returns(name);
+            Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IDictionary<string, string>>())).Returns(Runtime.ResourceResultMock.Object);
+            Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
 
             Runtime.ExecuteResource(name.ToLower());
 
-            ResourceMock.Verify(r=>r.Execute(It.IsAny<IDictionary<string,string>>()), Times.Once());
-            ResourceResultMock.Verify(r=>r.Execute(FrameworkProviderMock.Object));
+            Runtime.ResourceMock.Verify(r => r.Execute(It.IsAny<IDictionary<string, string>>()), Times.Once());
+            Runtime.ResourceResultMock.Verify(r => r.Execute(Runtime.FrameworkProviderMock.Object));
         }
 
         [Fact]
         public void HandleUnknownResource()
         {
-            Configuration.Resources.Clear();
+            Runtime.Configuration.Resources.Clear();
 
             Runtime.ExecuteResource("random name that doesn't exist");
 
-            FrameworkProviderMock.Verify(fp=>fp.SetHttpResponseStatusCode(404), Times.Once());
+            Runtime.FrameworkProviderMock.Verify(fp => fp.SetHttpResponseStatusCode(404), Times.Once());
         }
 
         [Fact]
         public void HandleDuplicateResources()
         {
             var name = "Duplicate";
-            ResourceMock.Setup(r => r.Name).Returns(name);
+            Runtime.ResourceMock.Setup(r => r.Name).Returns(name);
 
-            Configuration.Resources.Add(ResourceMock.Object);
-            Configuration.Resources.Add(ResourceMock.Object);
+            Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
+            Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
 
             Runtime.ExecuteResource(name);
 
-            FrameworkProviderMock.Verify(fp=>fp.SetHttpResponseStatusCode(500), Times.Once());
+            Runtime.FrameworkProviderMock.Verify(fp => fp.SetHttpResponseStatusCode(500), Times.Once());
         }
 
         [Fact]
         public void ThrowExceptionWithEmptyResourceName()
         {
-            Assert.Throws<ArgumentNullException>(()=>Runtime.ExecuteResource(""));
+            Assert.Throws<ArgumentNullException>(() => Runtime.ExecuteResource(""));
         }
 
         [Fact]
         public void HandleResourcesThatThrowExceptions()
         {
             var name = "Anything";
-            ResourceMock.Setup(r => r.Name).Returns(name);
-            ResourceMock.Setup(r => r.Execute(It.IsAny<IDictionary<string, string>>())).Throws<Exception>();
+            Runtime.ResourceMock.Setup(r => r.Name).Returns(name);
+            Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IDictionary<string, string>>())).Throws<Exception>();
 
-            Configuration.Resources.Add(ResourceMock.Object);
+            Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
 
             Runtime.ExecuteResource(name);
 
-            FrameworkProviderMock.Verify(fp => fp.SetHttpResponseStatusCode(500), Times.Once());
+            Runtime.FrameworkProviderMock.Verify(fp => fp.SetHttpResponseStatusCode(500), Times.Once());
         }
 
         [Fact]
         public void EnsureNullIsNotPassedToResourceExecute()
         {
             var name = "aName";
-            ResourceMock.Setup(r => r.Name).Returns(name);
-            ResourceMock.Setup(r => r.Execute(It.IsAny<IDictionary<string, string>>())).Returns(
-                ResourceResultMock.Object);
+            Runtime.ResourceMock.Setup(r => r.Name).Returns(name);
+            Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IDictionary<string, string>>())).Returns(
+                Runtime.ResourceResultMock.Object);
 
-            Configuration.Resources.Add(ResourceMock.Object);
+            Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
 
             Runtime.ExecuteResource(name, null);
 
-            ResourceMock.Verify(r=>r.Execute(null), Times.Never());
+            Runtime.ResourceMock.Verify(r => r.Execute(null), Times.Never());
         }
 
         [Fact]
         public void HandleResourceResultsThatThrowExceptions()
         {
             var name = "Anything";
-            ResourceMock.Setup(r => r.Name).Returns(name);
-            ResourceMock.Setup(r => r.Execute(It.IsAny<IDictionary<string, string>>())).Returns(ResourceResultMock.Object);
+            Runtime.ResourceMock.Setup(r => r.Name).Returns(name);
+            Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IDictionary<string, string>>())).Returns(Runtime.ResourceResultMock.Object);
 
-            ResourceResultMock.Setup(rr => rr.Execute(It.IsAny<IFrameworkProvider>())).Throws<Exception>();
+            Runtime.ResourceResultMock.Setup(rr => rr.Execute(It.IsAny<IFrameworkProvider>())).Throws<Exception>();
 
-            Configuration.Resources.Add(ResourceMock.Object);
+            Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
 
             Runtime.ExecuteResource(name);
 
-            LoggerMock.Verify(l=>l.Fatal(It.IsAny<string>(), It.IsAny<Exception>()), Times.Once());
+            Runtime.LoggerMock.Verify(l => l.Fatal(It.IsAny<string>(), It.IsAny<Exception>()), Times.Once());
         }
 
-        public void Dispose()
+        [Fact]
+        public void ProvideModeLevelOnInitializing()
         {
-            Configuration = null;
-            FrameworkProviderMock = null;
-            EndpointConfigMock = null;
-            HttpRequestStoreMock = null;
-            TabMetadataMock = null;
-            TabMock = null;
-            Runtime = null;
-            PipelineInspectorMock = null;
-            SerializerMock = null;
-            PersistanceStoreMock = null;
-            LoggerMock = null;
-            ResourceMock = null;
-            ResourceResultMock = null;
+            Runtime.Configuration.Validators.Add(Runtime.ValidatorMock.Object);
+
+            var result = Runtime.Initialize();
+
+            Assert.Equal(GlimpseMode.On, result);
+        }
+
+        [Fact]
+        public void ProvideLowestModeLevelOnInitializing()
+        {
+            var offValidatorMock = new Mock<IGlimpseValidator>();
+            offValidatorMock.Setup(v => v.GetMode(It.IsAny<RequestMetadata>())).Returns(GlimpseMode.Off);
+
+            Runtime.Configuration.Validators.Add(Runtime.ValidatorMock.Object);
+            Runtime.Configuration.Validators.Add(offValidatorMock.Object);
+
+            var result = Runtime.Initialize();
+
+            Assert.Equal(GlimpseMode.Off, result);
+        }
+
+        [Fact(Skip = "Still need to implement")]
+        public void NotIncreaseModeOverLifetimeOfRequest()
+        {
+/*
+            var offValidatorMock = new Mock<IGlimpseValidator>();
+            offValidatorMock.Setup(v => v.GetMode(It.IsAny<RequestMetadata>())).Returns(GlimpseMode.Off);
+
+            Tester.Configuration.Validators.Add(Tester.ValidatorMock.Object);
+            Tester.Configuration.Validators.Add(offValidatorMock.Object);
+
+            var result = Tester.Initialize();
+
+            Assert.Equal(GlimpseMode.Off, result);
+*/
+        }
+
+        [Fact]
+        public void RespectConfigurationSettingInValidators()
+        {
+            Runtime.Configuration.Mode = GlimpseMode.Off;
+
+            Runtime.ValidatorMock.Setup(v => v.GetMode(It.IsAny<RequestMetadata>())).Returns(GlimpseMode.On);
+            Runtime.Configuration.Validators.Add(Runtime.ValidatorMock.Object);
+
+            var result = Runtime.Initialize();
+
+            Assert.Equal(GlimpseMode.Off, result);
+        }
+
+        [Fact]
+        public void ValidateAtBeginRequest()
+        {
+            Runtime.Configuration.Validators.Add(Runtime.ValidatorMock.Object);
+
+            Runtime.BeginRequest();
+
+            Runtime.ValidatorMock.Verify(v=>v.GetMode(It.IsAny<RequestMetadata>()), Times.AtLeastOnce());
         }
     }
 }

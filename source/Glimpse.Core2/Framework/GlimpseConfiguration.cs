@@ -30,6 +30,7 @@ namespace Glimpse.Core2.Framework
             Serializer = new JsonNetSerializer();
             Tabs = new GlimpseLazyCollection<IGlimpseTab, IGlimpseTabMetadata>();
             Validators = new GlimpseValidatorCollection();
+            Mode = GlimpseMode.Off;
         }
 
         private IFrameworkProvider frameworkProvider;
@@ -181,6 +182,8 @@ namespace Glimpse.Core2.Framework
                 validators = value;
             }
         }
+
+        public GlimpseMode Mode { get; set; }
 
         //TODO: Remove me! This does not belong here, allow for IOC pipeline config
         private Logger CreateLogger()

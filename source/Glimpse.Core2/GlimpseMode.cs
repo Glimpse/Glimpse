@@ -2,9 +2,9 @@
 {
     public enum GlimpseMode
     {
-        Off,
-        Silent,
-        Body,
-        On
+        Off = 1,
+        Silent = 2,
+        Body = 3,
+        On = 4
     }
 }

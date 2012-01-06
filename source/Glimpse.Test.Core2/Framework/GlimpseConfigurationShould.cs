@@ -1,42 +1,28 @@
 ﻿using System;
-using Glimpse.Core2.Extensibility;
+using Glimpse.Core2;
 using Glimpse.Core2.Framework;
-using Glimpse.Test.Core2.Extensions;
+using Glimpse.Test.Core2.Tester;
 using Moq;
 using Xunit;
 
 namespace Glimpse.Test.Core2.Framework
 {
-    public class GlimpseConfigurationShould:IDisposable
+    public class GlimpseConfigurationShould : IDisposable
     {
+        private GlimpseConfigurationTester tester { get; set; }
 
-        public GlimpseConfigurationShould()
+        private GlimpseConfigurationTester Configuration
         {
-            FrameworkProviderMock = new Mock<IFrameworkProvider>().Setup();
-            EndpointConfigMock = new Mock<IGlimpseResourceEndpointConfiguration>();
+            get { return tester ?? (tester = GlimpseConfigurationTester.Create()); }
+            set { tester = value; }
         }
-
-
-        private GlimpseConfiguration configuration;
-        private GlimpseConfiguration Configuration
-        {
-            get { return configuration ?? (configuration = new GlimpseConfiguration(FrameworkProviderMock.Object, EndpointConfigMock.Object)); }
-            set { configuration = value; }
-        }
-
-        private Mock<IGlimpseResourceEndpointConfiguration> EndpointConfigMock { get; set; }
-
-        private Mock<IFrameworkProvider> FrameworkProviderMock { get; set; }
-
-
-
 
         [Fact]
         public void ConstructWithEndpointConfiguration()
         {
-            var endpointConfigObj = EndpointConfigMock.Object;
+            var endpointConfigObj = Configuration.EndpointConfigMock.Object;
 
-            var configuration = new GlimpseConfiguration(FrameworkProviderMock.Object, endpointConfigObj);
+            var configuration = new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, endpointConfigObj);
 
             Assert.Equal(endpointConfigObj, configuration.ResourceEndpoint);
         }
@@ -44,9 +30,9 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void ConstructWithFrameworkProvider()
         {
-            var frameworkProviderObj = FrameworkProviderMock.Object;
-            
-            var configuration = new GlimpseConfiguration(frameworkProviderObj, EndpointConfigMock.Object);
+            var frameworkProviderObj = Configuration.FrameworkProviderMock.Object;
+
+            var configuration = new GlimpseConfiguration(frameworkProviderObj, Configuration.EndpointConfigMock.Object);
 
             Assert.Equal(frameworkProviderObj, configuration.FrameworkProvider);
         }
@@ -66,12 +52,12 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void CreateDefaultPersistanceStore()
         {
-            var frameworkProviderObj = FrameworkProviderMock.Object;
+            var frameworkProviderObj = Configuration.FrameworkProviderMock.Object;
 
-            var configuration = new GlimpseConfiguration(frameworkProviderObj, EndpointConfigMock.Object);
+            var configuration = new GlimpseConfiguration(frameworkProviderObj, Configuration.EndpointConfigMock.Object);
 
             Assert.NotNull(configuration.PersistanceStore);
-            FrameworkProviderMock.Verify(fp => fp.HttpServerStore, Times.AtLeastOnce());
+            Configuration.FrameworkProviderMock.Verify(fp => fp.HttpServerStore, Times.AtLeastOnce());
         }
 
         [Fact]
@@ -131,19 +117,20 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void ThrowExceptionWhenConstructedWithNullEndpointConfiguration()
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(FrameworkProviderMock.Object, null));
+            Assert.Throws<ArgumentNullException>(
+                () => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, null));
         }
 
         [Fact]
         public void ThrowExceptionWhenConstructedWithNullFrameworkProvider()
         {
-            Assert.Throws<ArgumentNullException>(()=>new GlimpseConfiguration(null, EndpointConfigMock.Object));
+            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(null, Configuration.EndpointConfigMock.Object));
         }
 
         [Fact]
         public void FrameworkProviderCannotBeNull()
         {
-            Assert.Throws<ArgumentNullException>(()=>Configuration.FrameworkProvider = null);
+            Assert.Throws<ArgumentNullException>(() => Configuration.FrameworkProvider = null);
         }
 
         [Fact]
@@ -200,10 +187,25 @@ namespace Glimpse.Test.Core2.Framework
             Assert.Throws<ArgumentNullException>(() => Configuration.Validators = null);
         }
 
+        [Fact]
+        public void DefaultToGlimpseModeOff()
+        {
+            Assert.Equal(GlimpseMode.Off, Configuration.Mode);
+        }
+
+        [Fact]
+        public void ChangeGlimpseMode()
+        {
+            Configuration.Mode = GlimpseMode.Body;
+
+            Assert.Equal(GlimpseMode.Body, Configuration.Mode);
+        }
+
         public void Dispose()
         {
-            EndpointConfigMock = null;
+            /*EndpointConfigMock = null;
             FrameworkProviderMock = null;
+            Configuration = null;*/
             Configuration = null;
         }
     }

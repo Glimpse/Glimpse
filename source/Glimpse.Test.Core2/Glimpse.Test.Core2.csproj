@@ -97,6 +97,8 @@
     <Compile Include="TestDoubles\DummyPipelineInspector2.cs" />
     <Compile Include="TestDoubles\DummySetupTab.cs" />
     <Compile Include="TestDoubles\DummyTab.cs" />
+    <Compile Include="Tester\GlimpseConfigurationTester.cs" />
+    <Compile Include="Tester\GlimpseRuntimeTester.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

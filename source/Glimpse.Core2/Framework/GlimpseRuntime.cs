@@ -58,6 +58,9 @@ namespace Glimpse.Core2.Framework
         //TODO: Make sure runtime has been init'ed
         public void BeginRequest()
         {
+            var mode = GetGlimpseMode();
+            if (mode == GlimpseMode.Off) return;
+
             var frameworkProvider = Configuration.FrameworkProvider;
             var runtimeContext = frameworkProvider.RuntimeContext;
             var requestStore = frameworkProvider.HttpRequestStore;
@@ -84,6 +87,7 @@ namespace Glimpse.Core2.Framework
             var encoder = Configuration.HtmlEncoder;
             var frameworkProvider = Configuration.FrameworkProvider;
             var serializer = Configuration.Serializer;
+            //TODO: Store data and name
             var pluginResults = PluginResultsStore.ToDictionary(item => item.Key, item => serializer.Serialize(item.Value));
             var requestMetadata = frameworkProvider.RequestMetadata;
             var requestStore = frameworkProvider.HttpRequestStore;
@@ -202,9 +206,11 @@ namespace Glimpse.Core2.Framework
         }
 
         //Todo: Set an "Init'ed" bit
-        public void Initialize()
+        public GlimpseMode Initialize()
         {
             var logger = Configuration.Logger;
+            var mode = GetGlimpseMode();
+            if (mode == GlimpseMode.Off) return GlimpseMode.Off;
 
             //TODO: Add in request validation checks
             var tabsThatRequireSetup = Configuration.Tabs.Where(p => p.Value is IGlimpseTabSetup).Select(p => p.Value);
@@ -233,6 +239,8 @@ namespace Glimpse.Core2.Framework
                         exception);
                 }
             }
+
+            return mode;
         }
 
         //TODO: Test that these collections are auto populated
@@ -252,6 +260,25 @@ namespace Glimpse.Core2.Framework
                 configuration.Validators.Discoverability.Discover();
 
             Configuration = configuration;
+        }
+
+        private GlimpseMode GetGlimpseMode()
+        {
+            var validators = Configuration.Validators.GetEnumerator();
+            //TODO: store the mode in the request context
+            var result = Configuration.Mode;
+            var requestMetadata = Configuration.FrameworkProvider.RequestMetadata;
+
+            while(result != GlimpseMode.Off && validators.MoveNext())
+            {
+                //TODO: Handle exceptions from validator
+                var mode = validators.Current.GetMode(requestMetadata);
+
+                //Only use the lowest level allowed for the request
+                if (mode < result) result = mode;
+            }
+
+            return result;
         }
     }
 }
