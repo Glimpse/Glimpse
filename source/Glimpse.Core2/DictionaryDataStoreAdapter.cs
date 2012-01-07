@@ -41,6 +41,11 @@ namespace Glimpse.Core2
             Dictionary[key] = value;
         }
 
+        public bool Contains(string key)
+        {
+            return Dictionary.Contains(key);
+        }
+
         [Pure]
         public static bool IsValidDictionaryType(IDictionary dictionary)
         {

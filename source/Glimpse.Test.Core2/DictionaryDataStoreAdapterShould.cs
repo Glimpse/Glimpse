@@ -112,5 +112,19 @@ namespace Glimpse.Test.Core2
 
             Assert.Throws<ArgumentException>(() => new DictionaryDataStoreAdapter(dictionary));
         }
+
+        [Fact]
+        public void ContainItems()
+        {
+            var instance = new DictionaryDataStoreAdapter(Dictionary);
+            Assert.True(instance.Contains("intKey"));
+        }
+
+        [Fact]
+        public void NotContainItems()
+        {
+            var instance = new DictionaryDataStoreAdapter(Dictionary);
+            Assert.False(instance.Contains("random string"));
+        }
     }
 }

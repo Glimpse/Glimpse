@@ -18,6 +18,22 @@ namespace Glimpse.Test.AspNet
         }
 
         [Fact]
+        public void ContainItems()
+        {
+            var dataStore = new HttpApplicationStateBaseDataStoreAdapter(ApplicationStateMock.Object);
+
+            Assert.True(dataStore.Contains(typeof(int).FullName));
+        }
+
+        [Fact]
+        public void NotContainItems()
+        {
+            var dataStore = new HttpApplicationStateBaseDataStoreAdapter(ApplicationStateMock.Object);
+
+            Assert.False(dataStore.Contains("random key"));
+        }
+
+        [Fact]
         public void ConstructWithAnHttpApplicationStateBase()
         {
             var dataStore = new HttpApplicationStateBaseDataStoreAdapter(ApplicationStateMock.Object);

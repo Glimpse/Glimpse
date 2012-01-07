@@ -87,7 +87,6 @@
     <Compile Include="Framework\GlimpseConfigurationShould.cs" />
     <Compile Include="GlimpseLazyCollectionShould.cs" />
     <Compile Include="Framework\GlimpseRuntimeShould.cs" />
-    <Compile Include="GlimpseValidatorCollectionShould.cs" />
     <Compile Include="JsonNetSerializerShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatusCodeResourceResultShould.cs" />

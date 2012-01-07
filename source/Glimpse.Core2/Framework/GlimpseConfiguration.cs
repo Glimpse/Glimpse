@@ -29,7 +29,7 @@ namespace Glimpse.Core2.Framework
             Resources = new GlimpseCollection<IGlimpseResource>();
             Serializer = new JsonNetSerializer();
             Tabs = new GlimpseLazyCollection<IGlimpseTab, IGlimpseTabMetadata>();
-            Validators = new GlimpseValidatorCollection();
+            Validators = new GlimpseLazyCollection<IGlimpseValidator, IGlimpseValidatorMetadata>();
             Mode = GlimpseMode.Off;
         }
 
@@ -168,12 +168,12 @@ namespace Glimpse.Core2.Framework
             }
         }
 
-        private GlimpseValidatorCollection validators;
-        public GlimpseValidatorCollection Validators
+        private GlimpseLazyCollection<IGlimpseValidator,IGlimpseValidatorMetadata> validators;
+        public GlimpseLazyCollection<IGlimpseValidator, IGlimpseValidatorMetadata> Validators
         {
             get
             {
-                Contract.Ensures(Contract.Result<GlimpseValidatorCollection>()!=null);
+                Contract.Ensures(Contract.Result<GlimpseLazyCollection<IGlimpseValidator, IGlimpseValidatorMetadata>>() != null);
                 return validators;
             }
             set

@@ -36,5 +36,12 @@ namespace Glimpse.AspNet
         {
             ApplicationState.Set(key, value);
         }
+
+        public bool Contains(string key)
+        {
+            var result = ApplicationState.Get(key);
+
+            return (result != null);
+        }
     }
 }

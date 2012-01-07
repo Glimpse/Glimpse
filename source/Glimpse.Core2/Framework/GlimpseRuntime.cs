@@ -19,7 +19,7 @@ namespace Glimpse.Core2.Framework
 
 
         private GlimpseConfiguration Configuration { get; set; }
-
+        //Todo: wrap in an IDataStore
         private IDictionary<string, object> PluginResultsStore
         {
             get
@@ -58,7 +58,7 @@ namespace Glimpse.Core2.Framework
         //TODO: Make sure runtime has been init'ed
         public void BeginRequest()
         {
-            var mode = GetGlimpseMode();
+            var mode = GetGlimpseMode(RuntimePhase.BeginRequest);
             if (mode == GlimpseMode.Off) return;
 
             var frameworkProvider = Configuration.FrameworkProvider;
@@ -84,6 +84,9 @@ namespace Glimpse.Core2.Framework
         //Todo: Make sure request has begun?
         public void EndRequest()
         {
+            var mode = GetGlimpseMode(RuntimePhase.EndRequest);
+            if (mode == GlimpseMode.Off) return;
+
             var encoder = Configuration.HtmlEncoder;
             var frameworkProvider = Configuration.FrameworkProvider;
             var serializer = Configuration.Serializer;
@@ -130,6 +133,9 @@ namespace Glimpse.Core2.Framework
         public void ExecuteResource(string resourceName, IDictionary<string, string> parameters)
         {
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(resourceName), "resourceName");
+            
+            var mode = GetGlimpseMode(RuntimePhase.ExecuteResource);
+            if (mode == GlimpseMode.Off) return;
 
             var logger = Configuration.Logger;
             ResourceResult result;
@@ -177,6 +183,9 @@ namespace Glimpse.Core2.Framework
 
         public void ExecuteTabs(LifeCycleSupport support)
         {
+            var mode = GetGlimpseMode(RuntimePhase.ExecuteTabs);
+            if (mode == GlimpseMode.Off) return;
+
             //Only use tabs that either don't specify a specific context type, or have a context type that matches the current framework provider's.
             var runtimePlugins =
                 Configuration.Tabs.Where(
@@ -209,7 +218,7 @@ namespace Glimpse.Core2.Framework
         public GlimpseMode Initialize()
         {
             var logger = Configuration.Logger;
-            var mode = GetGlimpseMode();
+            var mode = GetGlimpseMode(RuntimePhase.Initialize);
             if (mode == GlimpseMode.Off) return GlimpseMode.Off;
 
             //TODO: Add in request validation checks
@@ -262,22 +271,27 @@ namespace Glimpse.Core2.Framework
             Configuration = configuration;
         }
 
-        private GlimpseMode GetGlimpseMode()
+        private GlimpseMode GetGlimpseMode(RuntimePhase runtimePhase)
         {
-            var validators = Configuration.Validators.GetEnumerator();
-            //TODO: store the mode in the request context
-            var result = Configuration.Mode;
-            var requestMetadata = Configuration.FrameworkProvider.RequestMetadata;
+            var requestStore = Configuration.FrameworkProvider.HttpRequestStore;
+            var result = requestStore.Contains(Constants.GlimpseModeKey) ? requestStore.Get<GlimpseMode>(Constants.GlimpseModeKey) : Configuration.Mode;
 
-            while(result != GlimpseMode.Off && validators.MoveNext())
+            if (result != GlimpseMode.Off)
             {
-                //TODO: Handle exceptions from validator
-                var mode = validators.Current.GetMode(requestMetadata);
+                var validators = Configuration.Validators.Where(v => !v.Metadata.RuntimePhase.HasValue || v.Metadata.RuntimePhase.Value.HasFlag(runtimePhase));
 
-                //Only use the lowest level allowed for the request
-                if (mode < result) result = mode;
+                var requestMetadata = Configuration.FrameworkProvider.RequestMetadata;
+                foreach (var validator in validators)
+                {
+                    //TODO: Handle exceptions from validator
+                    var mode = validator.Value.GetMode(requestMetadata);
+
+                    //Only use the lowest level allowed for the request
+                    if (mode < result) result = mode;
+                }
             }
 
+            requestStore.Set(Constants.GlimpseModeKey, result);
             return result;
         }
     }

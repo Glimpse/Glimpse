@@ -8,5 +8,7 @@
 
         void Set<T>(T value);
         void Set(string key, object value);
+
+        bool Contains(string key);
     }
 }
