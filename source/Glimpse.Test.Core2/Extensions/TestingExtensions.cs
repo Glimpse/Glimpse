@@ -12,7 +12,6 @@ namespace Glimpse.Test.Core2.Extensions
         public static Mock<IFrameworkProvider> Setup(this Mock<IFrameworkProvider> frameworkProvider)
         {
             frameworkProvider.Setup(fp => fp.RuntimeContext).Returns(new DummyObjectContext());
-            frameworkProvider.Setup(fp => fp.RuntimeContextType).Returns(typeof (DummyObjectContext));
             frameworkProvider.Setup(fp => fp.HttpRequestStore).Returns(
                 new DictionaryDataStoreAdapter(new Dictionary<string, object>()));
             frameworkProvider.Setup(fp => fp.HttpServerStore).Returns(new DictionaryDataStoreAdapter(new Dictionary<string, object>()));

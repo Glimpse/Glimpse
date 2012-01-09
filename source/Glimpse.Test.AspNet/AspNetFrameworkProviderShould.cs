@@ -1,123 +1,95 @@
-﻿using System.Collections.Generic;
-using System.Collections.Specialized;
+﻿using System;
+using System.IO;
 using System.Web;
-using Glimpse.AspNet;
+using Glimpse.Test.AspNet.Tester;
 using Moq;
 using Xunit;
 
 namespace Glimpse.Test.AspNet
 {
-    public class AspNetFrameworkProviderShould
+    public class AspNetFrameworkProviderShould : IDisposable
     {
+        private AspNetFrameworkProviderTester tester;
+
+        public AspNetFrameworkProviderTester FrameworkProvider
+        {
+            get { return tester ?? (tester = AspNetFrameworkProviderTester.Create()); }
+            set { tester = value; }
+        }
+
+        public void Dispose()
+        {
+            FrameworkProvider = null;
+        }
+
         [Fact]
         public void HaveARuntimeContextTypeOfHttpContextBase()
         {
-            var service = new AspNetFrameworkProvider();
-
-            Assert.Equal(typeof (HttpContextBase), service.RuntimeContextType);
+            Assert.True(FrameworkProvider.RuntimeContext.GetType().IsSubclassOf(typeof (HttpContextBase)));
         }
 
         [Fact]
         public void HaveARuntimeContext()
         {
-            var contextMock = new Mock<HttpContextBase>();
-            var service = new AspNetFrameworkProvider {Context = contextMock.Object};
-
-            Assert.NotNull(service.RuntimeContext);
-            Assert.True(service.RuntimeContext is HttpContextBase);
-        }
-
-        [Fact]
-        public void HaveMatchingContextAndContextTypes()
-        {
-            var contextMock = new Mock<HttpContextBase>();
-            var service = new AspNetFrameworkProvider {Context = contextMock.Object};
-
-            Assert.True(service.RuntimeContext.GetType().IsSubclassOf(service.RuntimeContextType));
-            Assert.True(service.RuntimeContextType.IsInstanceOfType(service.RuntimeContext));
+            Assert.NotNull(FrameworkProvider.RuntimeContext);
+            Assert.True(FrameworkProvider.RuntimeContext is HttpContextBase);
         }
 
         [Fact]
         public void HaveHttpRequestStore()
         {
-            var contextMock = new Mock<HttpContextBase>();
-            contextMock.Setup(ctx => ctx.Items)
-                .Returns(new Dictionary<object, object>
-                                          {
-                                              {typeof (string).FullName, "TestString"}, 
-                                              {typeof (int).FullName, 5}
-                                          });
-                                      
-
-            var service = new AspNetFrameworkProvider {Context = contextMock.Object};
-
-            Assert.NotNull(service.HttpRequestStore);
-            Assert.Equal(5, service.HttpRequestStore.Get<int>());
-            Assert.Equal("TestString", service.HttpRequestStore.Get<string>());
+            Assert.NotNull(FrameworkProvider.HttpRequestStore);
+            Assert.Equal(5, FrameworkProvider.HttpRequestStore.Get<int>());
+            Assert.Equal("TestString", FrameworkProvider.HttpRequestStore.Get<string>());
         }
 
         [Fact]
         public void HaveHttpServerStore()
         {
-            var contextMock = new Mock<HttpContextBase>();
-            var applicationStateMock = new Mock<HttpApplicationStateBase>();
-            applicationStateMock.Setup(st => st.Get("testKey")).Returns("testValue");
-            contextMock.Setup(ctx => ctx.Application).Returns(applicationStateMock.Object);
+            Assert.NotNull(FrameworkProvider.HttpServerStore);
+            Assert.Equal("testValue", FrameworkProvider.HttpServerStore.Get("testKey"));
 
-            var provider = new AspNetFrameworkProvider {Context = contextMock.Object};
-
-            Assert.NotNull(provider.HttpServerStore);
-            Assert.Equal("testValue", provider.HttpServerStore.Get("testKey"));
-            
-            applicationStateMock.Verify(st=>st.Get("testKey"), Times.Once());
+            FrameworkProvider.HttpApplicationStateMock.Verify(st => st.Get("testKey"), Times.Once());
         }
 
         [Fact(Skip = "Finish me!")]
         public void HaveRequestMetadata()
         {
-            
         }
 
         [Fact]
         public void SetHttpResponseHeader()
         {
-            var contextMock = new Mock<HttpContextBase>();
-            
-            var responseMock = new Mock<HttpResponseBase>();
-            var headerCollection = new NameValueCollection();
-            responseMock.Setup(r => r.Headers).Returns(headerCollection);
-            contextMock.Setup(ctx => ctx.Response).Returns(responseMock.Object);
-
-            var provider = new AspNetFrameworkProvider { Context = contextMock.Object };
-
             var headerName = "testKey";
             var headerValue = "testValue";
 
-            provider.SetHttpResponseHeader(headerName, headerValue);
+            FrameworkProvider.SetHttpResponseHeader(headerName, headerValue);
 
-            contextMock.VerifyGet(ctx=>ctx.Response);
-            responseMock.VerifyGet(r=>r.Headers);
-            Assert.Equal(headerValue, headerCollection[headerName]);
+            FrameworkProvider.HttpContextMock.VerifyGet(ctx => ctx.Response);
+            FrameworkProvider.HttpResponseMock.VerifyGet(r => r.Headers);
+            Assert.Equal(headerValue, FrameworkProvider.HeaderCollection[headerName]);
         }
 
         [Fact]
         public void InjectHttpResponseBody()
         {
-            var contextMock = new Mock<HttpContextBase>();
-
-            var responseMock = new Mock<HttpResponseBase>();
-
-            contextMock.Setup(ctx => ctx.Response).Returns(responseMock.Object);
-
-            var provider = new AspNetFrameworkProvider { Context = contextMock.Object };
-
             var outputString = "<script src=\"test.js\"></script>";
 
-            provider.InjectHttpResponseBody(outputString);
+            FrameworkProvider.InjectHttpResponseBody(outputString);
 
-            contextMock.VerifyGet(ctx => ctx.Response);
-            responseMock.VerifyGet(r=>r.Filter);
-            responseMock.VerifySet(r=>r.Filter);
+            FrameworkProvider.HttpContextMock.VerifyGet(ctx => ctx.Response);
+            FrameworkProvider.HttpResponseMock.VerifyGet(r => r.Filter);
+            FrameworkProvider.HttpResponseMock.VerifySet(r => r.Filter = It.IsAny<Stream>());
+        }
+
+        [Fact]
+        public void SetHttpResponseStatusCode()
+        {
+            var statusCode = 200;
+            FrameworkProvider.SetHttpResponseStatusCode(statusCode);
+
+            FrameworkProvider.HttpResponseMock.VerifySet(r => r.StatusCode = statusCode);
+            FrameworkProvider.HttpResponseMock.VerifySet(r => r.StatusDescription = null);
         }
     }
 }

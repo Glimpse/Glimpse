@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web;
+﻿using System.Web;
 using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
 
@@ -30,11 +29,6 @@ namespace Glimpse.AspNet
         public object RuntimeContext
         {
             get { return Context; }
-        }
-
-        public Type RuntimeContextType
-        {
-            get { return typeof (HttpContextBase); }
         }
 
         public RequestMetadata RequestMetadata

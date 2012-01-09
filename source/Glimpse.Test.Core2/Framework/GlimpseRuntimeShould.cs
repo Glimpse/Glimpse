@@ -440,7 +440,7 @@ namespace Glimpse.Test.Core2.Framework
         }
 
         [Fact]
-        public void ProvideModeLevelOnInitializing()
+        public void ProvideEnabledInfoOnInitializing()
         {
             Runtime.Configuration.Validators.Add(
                 new Lazy<IGlimpseValidator, IGlimpseValidatorMetadata>(() => Runtime.ValidatorMock.Object,
@@ -449,7 +449,7 @@ namespace Glimpse.Test.Core2.Framework
 
             var result = Runtime.Initialize();
 
-            Assert.Equal(GlimpseMode.On, result);
+            Assert.True(result);
         }
 
         [Fact]
@@ -463,7 +463,7 @@ namespace Glimpse.Test.Core2.Framework
 
             var result = Runtime.Initialize();
 
-            Assert.Equal(GlimpseMode.Off, result);
+            Assert.False(result);
         }
 
         [Fact]
@@ -474,7 +474,7 @@ namespace Glimpse.Test.Core2.Framework
 
             var firstMode = Runtime.Initialize();
 
-            Assert.Equal(glimpseMode, firstMode);
+            Assert.True(firstMode);
 
             Runtime.Configuration.Mode = GlimpseMode.On;
             Runtime.UpdateConfiguration(Runtime.Configuration);
@@ -494,7 +494,7 @@ namespace Glimpse.Test.Core2.Framework
 
             var result = Runtime.Initialize();
 
-            Assert.Equal(GlimpseMode.Off, result);
+            Assert.False(result);
         }
 
         [Fact]
@@ -517,7 +517,7 @@ namespace Glimpse.Test.Core2.Framework
             Assert.Equal(GlimpseMode.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.GlimpseModeKey));
         }
 
-        [Fact]
+        [Fact] //False result means GlimpseMode == Off
         public void WriteCurrentModeToRequestState()
         {
             Runtime.ValidatorMock.Setup(v => v.GetMode(It.IsAny<RequestMetadata>())).Returns(GlimpseMode.Body);
@@ -525,7 +525,7 @@ namespace Glimpse.Test.Core2.Framework
 
             var result = Runtime.Initialize();
 
-            Assert.Equal(GlimpseMode.Body, result);
+            Assert.True(result);
 
             Assert.Equal(GlimpseMode.Body, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.GlimpseModeKey));
         }
@@ -571,6 +571,14 @@ namespace Glimpse.Test.Core2.Framework
 
             Runtime.ValidatorMock.Verify(v=>v.GetMode(It.IsAny<RequestMetadata>()), Times.Once());
             validatorMock2.Verify(v=>v.GetMode(It.IsAny<RequestMetadata>()), Times.Never());
+        }
+
+        [Fact]
+        public void SetIsInitializedWhenInitialized()
+        {
+            Runtime.Initialize();
+
+            Assert.True(Runtime.IsInitialized);
         }
     }
 }

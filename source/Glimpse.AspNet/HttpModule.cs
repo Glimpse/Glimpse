@@ -6,51 +6,71 @@ namespace Glimpse.AspNet
 {
     public class HttpModule:IHttpModule
     {
-        private const string RuntimeKey = "__GlimpseRuntime";
+        internal const string RuntimeKey = "__GlimpseRuntime";
+        internal const string ConfigKey = "__GlimpseConfig";
 
         public void Init(HttpApplication httpApplication)
         {
-            //TODO: Check to see if runtime exists - think about difference between WebForms and MVC
-            var configuration = new GlimpseConfiguration(new AspNetFrameworkProvider(), new HttpHandlerEndpointConfiguration());
-            var runtime = new GlimpseRuntime(configuration);
+            var runtime = GetRuntime(new HttpApplicationStateWrapper(httpApplication.Application));
 
-            var appState = httpApplication.Application;
-
-            if (appState[RuntimeKey] == null)
-                    appState.Add(RuntimeKey, runtime);
-
-            runtime.Initialize();
-
-            httpApplication.BeginRequest += BeginRequest;
-            httpApplication.PostRequestHandlerExecute += ExecutePluginsWithSessionState;
-            httpApplication.PostReleaseRequestState += ExecutePluginsWithoutSessionState;
-            httpApplication.EndRequest += EndRequest;
+            if (runtime.IsInitialized || runtime.Initialize())
+            {
+                httpApplication.BeginRequest += (context, e) => BeginRequest(WithTestable(context));
+                httpApplication.PostRequestHandlerExecute += (context, e) => PostRequestHandlerExecute(WithTestable(context));
+                httpApplication.PostReleaseRequestState += (context, e) => PostReleaseRequestState(WithTestable(context));
+                httpApplication.EndRequest += (context, e) => EndRequest(WithTestable(context));
+            }
         }
 
-        internal void BeginRequest(object sender, System.EventArgs e)
+        internal IGlimpseRuntime GetRuntime(HttpApplicationStateBase applicationState)
         {
-            var runtime = TryGetGlimpseRuntime(sender);
+            var runtime = applicationState[RuntimeKey] as IGlimpseRuntime;
+
+            if (runtime == null)
+            {
+                var config = applicationState[ConfigKey] as GlimpseConfiguration ?? new GlimpseConfiguration(new AspNetFrameworkProvider(), new HttpHandlerEndpointConfiguration());
+
+                runtime = new GlimpseRuntime(config);
+
+                applicationState.Add(RuntimeKey, runtime);
+            }
+
+            return runtime;
+        }
+
+        private static HttpContextBase WithTestable(object sender)
+        {
+            var httpApplication = sender as HttpApplication;
+
+            return new HttpContextWrapper(httpApplication.Context);
+        }
+
+        internal void BeginRequest(HttpContextBase httpContext)
+        {
+            //TODO: Add Logging to either methods here or in Runtime
+            var runtime = GetRuntime(httpContext.Application);
 
             runtime.BeginRequest();
         }
 
-        internal void ExecutePluginsWithSessionState(object sender, System.EventArgs e)
+        //TODO: Figure out the proper SessionAccessEnd ASP.NET event
+        internal void PostRequestHandlerExecute(HttpContextBase httpContext)
         {
-            var runtime = TryGetGlimpseRuntime(sender);
+            var runtime = GetRuntime(httpContext.Application);
 
-            runtime.ExecuteTabs(LifeCycleSupport.SessionAccessBegin);
+            runtime.ExecuteTabs(LifeCycleSupport.SessionAccessEnd);
         }
 
-        internal void ExecutePluginsWithoutSessionState(object sender, System.EventArgs e)
+        internal void PostReleaseRequestState(HttpContextBase httpContext)
         {
-            var runtime = TryGetGlimpseRuntime(sender);
+            var runtime = GetRuntime(httpContext.Application);
 
             runtime.ExecuteTabs();
         }
 
-        internal void EndRequest(object sender, System.EventArgs e)
+        internal void EndRequest(HttpContextBase httpContext)
         {
-            var runtime = TryGetGlimpseRuntime(sender);
+            var runtime = GetRuntime(httpContext.Application);
 
             runtime.EndRequest();
         }
@@ -60,15 +80,5 @@ namespace Glimpse.AspNet
         {
             //Nothing to dispose
         }
-
-        private GlimpseRuntime TryGetGlimpseRuntime(object sender)
-        {
-            var httpApplication = sender as HttpApplication;
-
-            if (httpApplication == null) return null;
-
-            return httpApplication.Application[RuntimeKey] as GlimpseRuntime;
-        }
-
     }
 }

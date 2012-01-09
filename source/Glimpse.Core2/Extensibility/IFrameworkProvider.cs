@@ -10,7 +10,6 @@ namespace Glimpse.Core2.Extensibility
         IDataStore HttpServerStore { get; }
         object RuntimeContext { get; }
         //TODO: Do we really need this?
-        Type RuntimeContextType { get; }
         RequestMetadata RequestMetadata { get; }
         void SetHttpResponseHeader(string name, string value);
         void SetHttpResponseStatusCode(int statusCode);

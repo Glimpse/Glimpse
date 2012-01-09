@@ -8,7 +8,7 @@ using Glimpse.Core2.Resource;
 
 namespace Glimpse.Core2.Framework
 {
-    public class GlimpseRuntime
+    public class GlimpseRuntime:IGlimpseRuntime
     {
         public GlimpseRuntime(GlimpseConfiguration configuration)
         {
@@ -36,6 +36,8 @@ namespace Glimpse.Core2.Framework
                 return result;
             }
         }
+
+        public bool IsInitialized { get; private set; }
 
         public IServiceLocator ServiceLocator
         {
@@ -82,8 +84,13 @@ namespace Glimpse.Core2.Framework
         }
 
         //Todo: Make sure request has begun?
+        //Todo: Add PRG support
+        //Todo: Add Name to data protocol
+        //Todo: Process MetaData
         public void EndRequest()
         {
+            //TODO: stop glimpse timer (if needed?)
+
             var mode = GetGlimpseMode(RuntimePhase.EndRequest);
             if (mode == GlimpseMode.Off) return;
 
@@ -97,6 +104,9 @@ namespace Glimpse.Core2.Framework
             var resourceEndpoint = Configuration.ResourceEndpoint;
             Guid requestId;
 
+            //TODO: Sanitize JSON
+            //TODO: Structured layout support
+
             try
             {
                 requestId = requestStore.Get<Guid>(Constants.RequestIdKey);
@@ -109,9 +119,11 @@ namespace Glimpse.Core2.Framework
             var metadata = new GlimpseMetadata(requestId, requestMetadata, pluginResults);
 
             //TODO: Handle exceptions
+            //TODO: Finish implementing persistance store
             Configuration.PersistanceStore.Save(metadata);
 
             //TODO: Filter out requests that should not have the ID header
+            //TODO: Check glimpse mode first
             frameworkProvider.SetHttpResponseHeader(Constants.HttpHeader, requestId.ToString());
 
             var dataPath = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUrl("data.js", Version, new Dictionary<string, string>{{"id", requestId.ToString()}}));
@@ -122,6 +134,7 @@ namespace Glimpse.Core2.Framework
 
             var html = string.Format(@"<script type='text/javascript' id='glimpseData' src='{0}'></script><script type='text/javascript' id='glimpseClient' src='{1}'></script></body>", dataPath, clientPath);
 
+            //TODO: Only if this isn't an Ajax request/Body manipulation is allowed
             frameworkProvider.InjectHttpResponseBody(html);
         }
 
@@ -186,12 +199,15 @@ namespace Glimpse.Core2.Framework
             var mode = GetGlimpseMode(RuntimePhase.ExecuteTabs);
             if (mode == GlimpseMode.Off) return;
 
+            var frameworkProviderRuntimeContextType = Configuration.FrameworkProvider.RuntimeContext.GetType();
+
             //Only use tabs that either don't specify a specific context type, or have a context type that matches the current framework provider's.
             var runtimePlugins =
                 Configuration.Tabs.Where(
                     p =>
                     p.Metadata.RequestContextType == null ||
-                    p.Metadata.RequestContextType == Configuration.FrameworkProvider.RuntimeContextType);
+                    frameworkProviderRuntimeContextType.IsSubclassOf(p.Metadata.RequestContextType) || 
+                    p.Metadata.RequestContextType == frameworkProviderRuntimeContextType);
 
             var supportedRuntimePlugins = runtimePlugins.Where(p => p.Metadata.LifeCycleSupport.HasFlag(support));
             var pluginResultsStore = PluginResultsStore;
@@ -214,12 +230,11 @@ namespace Glimpse.Core2.Framework
             }
         }
 
-        //Todo: Set an "Init'ed" bit
-        public GlimpseMode Initialize()
+        public bool Initialize()
         {
             var logger = Configuration.Logger;
             var mode = GetGlimpseMode(RuntimePhase.Initialize);
-            if (mode == GlimpseMode.Off) return GlimpseMode.Off;
+            if (mode == GlimpseMode.Off) return false;
 
             //TODO: Add in request validation checks
             var tabsThatRequireSetup = Configuration.Tabs.Where(p => p.Value is IGlimpseTabSetup).Select(p => p.Value);
@@ -249,7 +264,9 @@ namespace Glimpse.Core2.Framework
                 }
             }
 
-            return mode;
+            IsInitialized = true;
+
+            return mode != GlimpseMode.Off;
         }
 
         //TODO: Test that these collections are auto populated

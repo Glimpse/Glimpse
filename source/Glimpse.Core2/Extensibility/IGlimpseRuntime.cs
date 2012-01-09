@@ -1,15 +1,21 @@
-﻿namespace Glimpse.Core2.Extensibility
+﻿using System.Collections.Generic;
+using Glimpse.Core2.Framework;
+
+namespace Glimpse.Core2.Extensibility
 {
-    //TODO: This class might be deleted. Need to see if this is needed - no in use right noe.
+    //TODO: Clean this up
     public interface IGlimpseRuntime
     {
-        void BeginRequest();//Init Glimpse Context
-        void EndRequest();//This might just be a high order method that contains others
-        void FilterRequest();//Test to see if Glimpse should be involved with this request or not
-        void GatherData();//Run the plugins
-        void Persist();//Save to DB, also serialize? Let DB provider serialize
-        void ModifyResponseBody();//Add the Glimpse script tags before the </body> tag
-        void ModifyResponseHeaders();//Add the Glimpse Request ID to the Http Header
-        void Initialize();//Run all the setup currently in the constructor - rerun when config changes?
+        IServiceLocator ServiceLocator { get; }
+        string Version { get; }
+        void BeginRequest();
+        void EndRequest();
+        void ExecuteResource(string resourceName);
+        void ExecuteResource(string resourceName, IDictionary<string, string> parameters);
+        void ExecuteTabs();
+        void ExecuteTabs(LifeCycleSupport support);
+        bool Initialize();
+        void UpdateConfiguration(GlimpseConfiguration configuration);
+        bool IsInitialized { get; }
     }
 }
