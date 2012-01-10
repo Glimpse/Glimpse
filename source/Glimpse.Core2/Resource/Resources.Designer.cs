@@ -61,6 +61,15 @@ namespace Glimpse.Core2.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exception executing policy of type &apos;{0}&apos;..
+        /// </summary>
+        internal static string ExecutePolicyWarning {
+            get {
+                return ResourceManager.GetString("ExecutePolicyWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ambiguous resource with name &apos;{0}&apos; found..
         /// </summary>
         internal static string ExecuteResourceDuplicateError {

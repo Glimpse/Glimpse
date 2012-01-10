@@ -47,7 +47,8 @@
     <CodeContractsRuntimeCheckingLevel>Pre and Post</CodeContractsRuntimeCheckingLevel>
     <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
-    <DocumentationFile>bin\Debug\Glimpse.Core2.XML</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyPCU' ">
     <DebugType>pdbonly</DebugType>
@@ -73,6 +74,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -86,8 +88,10 @@
     <Compile Include="ExceptionResourceResult.cs" />
     <Compile Include="Extensibility\GlimpseServiceLocator.cs" />
     <Compile Include="Extensibility\IGlimpseLogger.cs" />
-    <Compile Include="Extensibility\IGlimpseValidatorMetadata.cs" />
-    <Compile Include="Extensibility\RuntimePhase.cs" />
+    <Compile Include="Extensibility\IRuntimePolicyContext.cs" />
+    <Compile Include="Extensibility\IRuntimePolicyMetadata.cs" />
+    <Compile Include="Extensibility\RuntimeEvent.cs" />
+    <Compile Include="Extensibility\RuntimePolicyContext.cs" />
     <Compile Include="Framework\ApplicationPersistanceStore.cs" />
     <Compile Include="Framework\GlimpseMetadata.cs" />
     <Compile Include="Framework\IGlimpsePersistanceStore.cs" />
@@ -96,9 +100,9 @@
     <Compile Include="MefDiscoverabilityPolicy-T1.cs" />
     <Compile Include="MefDiscoverabilityPolicy-T2.cs" />
     <Compile Include="DiscoverabilityPolicy.cs" />
-    <Compile Include="Extensibility\GlimpseValidatorAttribute.cs" />
+    <Compile Include="Extensibility\RuntimePolicyAttribute.cs" />
     <Compile Include="Extensibility\IGlimpseResourceEndpointConfiguration.cs" />
-    <Compile Include="Extensibility\IGlimpseValidator.cs" />
+    <Compile Include="Extensibility\IRuntimePolicy.cs" />
     <Compile Include="Extensibility\ResourceResult.cs" />
     <Compile Include="Extensibility\GlimpsePipelineInspectorAttribute.cs" />
     <Compile Include="Extensibility\GlimpseTabAttribute.cs" />
@@ -112,19 +116,21 @@
     <Compile Include="Extensibility\IGlimpsePipelineInspector.cs" />
     <Compile Include="Extensibility\IGlimpseSerializer.cs" />
     <Compile Include="Extensibility\IServiceLocator.cs" />
-    <Compile Include="Extensibility\IFrameworkProvider.cs" />
+    <Compile Include="Framework\IFrameworkProvider.cs" />
     <Compile Include="Extensibility\LifeCycleSupport.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Framework\GlimpseConfiguration.cs" />
     <Compile Include="Framework\GlimpseRuntime.cs" />
     <Compile Include="GlimpseCollection.cs" />
     <Compile Include="GlimpseLazyCollection.cs" />
-    <Compile Include="GlimpseMode.cs" />
+    <Compile Include="Policy\AjaxPolicy.cs" />
+    <Compile Include="Policy\ContentTypePolicy.cs" />
+    <Compile Include="RuntimePolicy.cs" />
     <Compile Include="Extensibility\IGlimpseHtmlEncoder.cs" />
     <Compile Include="JsonNetSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FilteredSafeDirectoryCatalog.cs" />
-    <Compile Include="RequestMetadata.cs" />
+    <Compile Include="Framework\IRequestMetadata.cs" />
     <Compile Include="Resource\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -140,6 +146,7 @@
     <EmbeddedResource Include="Resource\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

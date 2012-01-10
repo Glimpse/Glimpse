@@ -8,7 +8,7 @@ using Glimpse.Core2.Resource;
 
 namespace Glimpse.Core2.Framework
 {
-    public class GlimpseRuntime:IGlimpseRuntime
+    public class GlimpseRuntime : IGlimpseRuntime
     {
         public GlimpseRuntime(GlimpseConfiguration configuration)
         {
@@ -60,8 +60,8 @@ namespace Glimpse.Core2.Framework
         //TODO: Make sure runtime has been init'ed
         public void BeginRequest()
         {
-            var mode = GetGlimpseMode(RuntimePhase.BeginRequest);
-            if (mode == GlimpseMode.Off) return;
+            var mode = GetRuntimePolicy(RuntimeEvent.BeginRequest);
+            if (mode == RuntimePolicy.Off) return;
 
             var frameworkProvider = Configuration.FrameworkProvider;
             var runtimeContext = frameworkProvider.RuntimeContext;
@@ -72,7 +72,8 @@ namespace Glimpse.Core2.Framework
             requestStore.Set(Constants.PluginsDataStoreKey, pluginStore);
 
             //Create ServiceLocator valid for this request
-            requestStore.Set(Constants.ServiceLocatorKey, new GlimpseServiceLocator(runtimeContext, pluginStore, Configuration.PipelineInspectors));
+            requestStore.Set(Constants.ServiceLocatorKey,
+                             new GlimpseServiceLocator(runtimeContext, pluginStore, Configuration.PipelineInspectors));
 
             //Give Request an ID
             requestStore.Set(Constants.RequestIdKey, Guid.NewGuid());
@@ -91,14 +92,15 @@ namespace Glimpse.Core2.Framework
         {
             //TODO: stop glimpse timer (if needed?)
 
-            var mode = GetGlimpseMode(RuntimePhase.EndRequest);
-            if (mode == GlimpseMode.Off) return;
+            var mode = GetRuntimePolicy(RuntimeEvent.EndRequest);
+            if (mode == RuntimePolicy.Off) return;
 
             var encoder = Configuration.HtmlEncoder;
             var frameworkProvider = Configuration.FrameworkProvider;
             var serializer = Configuration.Serializer;
             //TODO: Store data and name
-            var pluginResults = PluginResultsStore.ToDictionary(item => item.Key, item => serializer.Serialize(item.Value));
+            var pluginResults = PluginResultsStore.ToDictionary(item => item.Key,
+                                                                item => serializer.Serialize(item.Value));
             var requestMetadata = frameworkProvider.RequestMetadata;
             var requestStore = frameworkProvider.HttpRequestStore;
             var resourceEndpoint = Configuration.ResourceEndpoint;
@@ -126,13 +128,19 @@ namespace Glimpse.Core2.Framework
             //TODO: Check glimpse mode first
             frameworkProvider.SetHttpResponseHeader(Constants.HttpHeader, requestId.ToString());
 
-            var dataPath = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUrl("data.js", Version, new Dictionary<string, string>{{"id", requestId.ToString()}}));
+            var dataPath =
+                encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUrl("data.js", Version,
+                                                                         new Dictionary<string, string>
+                                                                             {{"id", requestId.ToString()}}));
             var clientPath = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUrl("client.js", Version));
 
             //var dataPath = HttpUtility.HtmlAttributeEncode(Context.GlimpseResourcePath("data.js") + "&id=" + Context.GetGlimpseRequestId());
             //var clientPath = HttpUtility.HtmlAttributeEncode(Context.GlimpseResourcePath("client.js"));
 
-            var html = string.Format(@"<script type='text/javascript' id='glimpseData' src='{0}'></script><script type='text/javascript' id='glimpseClient' src='{1}'></script></body>", dataPath, clientPath);
+            var html =
+                string.Format(
+                    @"<script type='text/javascript' id='glimpseData' src='{0}'></script><script type='text/javascript' id='glimpseClient' src='{1}'></script></body>",
+                    dataPath, clientPath);
 
             //TODO: Only if this isn't an Ajax request/Body manipulation is allowed
             frameworkProvider.InjectHttpResponseBody(html);
@@ -146,14 +154,16 @@ namespace Glimpse.Core2.Framework
         public void ExecuteResource(string resourceName, IDictionary<string, string> parameters)
         {
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(resourceName), "resourceName");
-            
-            var mode = GetGlimpseMode(RuntimePhase.ExecuteResource);
-            if (mode == GlimpseMode.Off) return;
+
+            var mode = GetRuntimePolicy(RuntimeEvent.ExecuteResource);
+            if (mode == RuntimePolicy.Off) return;
 
             var logger = Configuration.Logger;
             ResourceResult result;
 
-            var resources = Configuration.Resources.Where(r => r.Name.Equals(resourceName, StringComparison.InvariantCultureIgnoreCase));
+            var resources =
+                Configuration.Resources.Where(
+                    r => r.Name.Equals(resourceName, StringComparison.InvariantCultureIgnoreCase));
 
             switch (resources.Count())
             {
@@ -183,7 +193,7 @@ namespace Glimpse.Core2.Framework
             {
                 result.Execute(Configuration.FrameworkProvider);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.Fatal(string.Format("Error executing resource result of type '{0}'", result.GetType()), ex);
             }
@@ -196,8 +206,8 @@ namespace Glimpse.Core2.Framework
 
         public void ExecuteTabs(LifeCycleSupport support)
         {
-            var mode = GetGlimpseMode(RuntimePhase.ExecuteTabs);
-            if (mode == GlimpseMode.Off) return;
+            var mode = GetRuntimePolicy(RuntimeEvent.ExecuteTabs);
+            if (mode == RuntimePolicy.Off) return;
 
             var frameworkProviderRuntimeContextType = Configuration.FrameworkProvider.RuntimeContext.GetType();
 
@@ -206,7 +216,7 @@ namespace Glimpse.Core2.Framework
                 Configuration.Tabs.Where(
                     p =>
                     p.Metadata.RequestContextType == null ||
-                    frameworkProviderRuntimeContextType.IsSubclassOf(p.Metadata.RequestContextType) || 
+                    frameworkProviderRuntimeContextType.IsSubclassOf(p.Metadata.RequestContextType) ||
                     p.Metadata.RequestContextType == frameworkProviderRuntimeContextType);
 
             var supportedRuntimePlugins = runtimePlugins.Where(p => p.Metadata.LifeCycleSupport.HasFlag(support));
@@ -233,8 +243,8 @@ namespace Glimpse.Core2.Framework
         public bool Initialize()
         {
             var logger = Configuration.Logger;
-            var mode = GetGlimpseMode(RuntimePhase.Initialize);
-            if (mode == GlimpseMode.Off) return false;
+            var mode = GetRuntimePolicy(RuntimeEvent.Initialize);
+            if (mode == RuntimePolicy.Off) return false;
 
             //TODO: Add in request validation checks
             var tabsThatRequireSetup = Configuration.Tabs.Where(p => p.Value is IGlimpseTabSetup).Select(p => p.Value);
@@ -246,7 +256,7 @@ namespace Glimpse.Core2.Framework
                 }
                 catch (Exception exception)
                 {
-                    logger.Error(string.Format(Resources.InitializeTabError, tab.GetType().FullName), exception);
+                    logger.Error(string.Format(Resources.InitializeTabError, tab.GetType()), exception);
                 }
             }
 
@@ -259,14 +269,14 @@ namespace Glimpse.Core2.Framework
                 catch (Exception exception)
                 {
                     logger.Error(
-                        string.Format(Resources.InitializePipelineInspectorError, pipelineInspector.GetType().FullName),
+                        string.Format(Resources.InitializePipelineInspectorError, pipelineInspector.GetType()),
                         exception);
                 }
             }
 
             IsInitialized = true;
 
-            return mode != GlimpseMode.Off;
+            return mode != RuntimePolicy.Off;
         }
 
         //TODO: Test that these collections are auto populated
@@ -282,33 +292,38 @@ namespace Glimpse.Core2.Framework
             if (configuration.Resources.Discoverability.AutoDiscover)
                 configuration.Resources.Discoverability.Discover();
 
-            if (configuration.Validators.Discoverability.AutoDiscover)
-                configuration.Validators.Discoverability.Discover();
+            if (configuration.RuntimePolicies.Discoverability.AutoDiscover)
+                configuration.RuntimePolicies.Discoverability.Discover();
 
             Configuration = configuration;
         }
 
-        private GlimpseMode GetGlimpseMode(RuntimePhase runtimePhase)
+        //TODO: pass logger to policies
+        private RuntimePolicy GetRuntimePolicy(RuntimeEvent runtimeEvent)
         {
             var requestStore = Configuration.FrameworkProvider.HttpRequestStore;
-            var result = requestStore.Contains(Constants.GlimpseModeKey) ? requestStore.Get<GlimpseMode>(Constants.GlimpseModeKey) : Configuration.Mode;
+            var result = requestStore.Contains(Constants.RuntimePermissionsKey)
+                             ? requestStore.Get<RuntimePolicy>(Constants.RuntimePermissionsKey)
+                             : Configuration.BasePolicy;
 
-            if (result != GlimpseMode.Off)
+            if (result != RuntimePolicy.Off)
             {
-                var validators = Configuration.Validators.Where(v => !v.Metadata.RuntimePhase.HasValue || v.Metadata.RuntimePhase.Value.HasFlag(runtimePhase));
+                var validators =
+                    Configuration.RuntimePolicies.Where(
+                        v => !v.Metadata.RuntimeEvent.HasValue || v.Metadata.RuntimeEvent.Value.HasFlag(runtimeEvent));
 
-                var requestMetadata = Configuration.FrameworkProvider.RequestMetadata;
+                var policyContext = new RuntimePolicyContext(Configuration.FrameworkProvider.RequestMetadata, Configuration.Logger);
                 foreach (var validator in validators)
                 {
-                    //TODO: Handle exceptions from validator
-                    var mode = validator.Value.GetMode(requestMetadata);
+                    //TODO: Handle exceptions from policy
+                    var mode = validator.Value.Execute(policyContext);
 
                     //Only use the lowest level allowed for the request
                     if (mode < result) result = mode;
                 }
             }
 
-            requestStore.Set(Constants.GlimpseModeKey, result);
+            requestStore.Set(Constants.RuntimePermissionsKey, result);
             return result;
         }
     }

@@ -7,6 +7,5 @@
         object RequestContext { get; }
         T GetPipelineInspector<T>() where T:class, IGlimpsePipelineInspector;
         IDataStore PluginStore { get; }
-        //TODO: Do we say which kind of 
     }
 }

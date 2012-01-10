@@ -7,7 +7,7 @@
         internal const string ServiceLocatorKey = "__GlimpseServiceLocator";
         internal const string RequestIdKey = "__GlimpseRequestId";
         internal const string GlobalStopwatchKey = "__GlimpseGlobalStopwatch";
-        internal const string GlimpseModeKey = "__GlimpseRequestMode";
+        internal const string RuntimePermissionsKey = "__GlimpseRequestRuntimePermissions";
         internal const string HttpHeader = "X-Glimpse-RequestID";
     }
 }

@@ -87,7 +87,7 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void CreateDefaultValidatorsCollection()
         {
-            Assert.NotNull(Configuration.Validators);
+            Assert.NotNull(Configuration.RuntimePolicies);
         }
 
         [Fact]
@@ -111,7 +111,7 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void NotDiscoverValidators()
         {
-            Assert.Equal(0, Configuration.Validators.Count);
+            Assert.Equal(0, Configuration.RuntimePolicies.Count);
         }
 
         [Fact]
@@ -184,21 +184,21 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void ValidatorsCannotBeNull()
         {
-            Assert.Throws<ArgumentNullException>(() => Configuration.Validators = null);
+            Assert.Throws<ArgumentNullException>(() => Configuration.RuntimePolicies = null);
         }
 
         [Fact]
         public void DefaultToGlimpseModeOff()
         {
-            Assert.Equal(GlimpseMode.Off, Configuration.Mode);
+            Assert.Equal(RuntimePolicy.Off, Configuration.BasePolicy);
         }
 
         [Fact]
         public void ChangeGlimpseMode()
         {
-            Configuration.Mode = GlimpseMode.Body;
+            Configuration.BasePolicy = RuntimePolicy.ModifyResponseBody;
 
-            Assert.Equal(GlimpseMode.Body, Configuration.Mode);
+            Assert.Equal(RuntimePolicy.ModifyResponseBody, Configuration.BasePolicy);
         }
 
         public void Dispose()

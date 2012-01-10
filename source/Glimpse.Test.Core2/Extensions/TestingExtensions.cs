@@ -39,7 +39,7 @@ namespace Glimpse.Test.Core2.Extensions
             configuration.Tabs.Discoverability.AutoDiscover = false;
             configuration.PipelineInspectors.Discoverability.AutoDiscover = false;
             configuration.Resources.Discoverability.AutoDiscover = false;
-            configuration.Validators.Discoverability.AutoDiscover = false;
+            configuration.RuntimePolicies.Discoverability.AutoDiscover = false;
 
             return configuration;
         }

@@ -3,7 +3,7 @@
 namespace Glimpse.Core2.Extensibility
 {
     [Flags]
-    public enum RuntimePhase
+    public enum RuntimeEvent
     {
         Initialize = 1,
         BeginRequest = 2,

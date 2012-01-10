@@ -19,7 +19,7 @@ namespace Glimpse.Test.Core2.Tester
         public Mock<IGlimpseLogger> LoggerMock { get; set; }
         public Mock<IGlimpseResource> ResourceMock { get; set; }
         public Mock<ResourceResult> ResourceResultMock { get; set; }
-        public Mock<IGlimpseValidator> ValidatorMock { get; set; }
+        public Mock<IRuntimePolicy> ValidatorMock { get; set; }
         public GlimpseConfiguration Configuration { get; set; }
 
         private GlimpseRuntimeTester(GlimpseConfiguration configuration, Mock<IFrameworkProvider> frameworkProviderMock, Mock<IGlimpseResourceEndpointConfiguration> endpointConfigMock) : base(configuration)
@@ -35,13 +35,13 @@ namespace Glimpse.Test.Core2.Tester
             LoggerMock = new Mock<IGlimpseLogger>();
             ResourceMock = new Mock<IGlimpseResource>();
             ResourceResultMock = new Mock<ResourceResult>();
-            ValidatorMock = new Mock<IGlimpseValidator>();
-            ValidatorMock.Setup(v => v.GetMode(It.IsAny<RequestMetadata>())).Returns(GlimpseMode.On);
+            ValidatorMock = new Mock<IRuntimePolicy>();
+            ValidatorMock.Setup(v => v.Execute(It.IsAny<IRuntimePolicyContext>())).Returns(RuntimePolicy.On);
             
             configuration.Serializer = SerializerMock.Object;
             configuration.PersistanceStore = PersistanceStoreMock.Object;
             configuration.Logger = LoggerMock.Object;
-            configuration.Mode = GlimpseMode.On;
+            configuration.BasePolicy = RuntimePolicy.On;
             Configuration = configuration;
         }
 

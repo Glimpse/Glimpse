@@ -4,10 +4,12 @@ using System.Linq;
 using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
+using Moq;
 using Xunit;
 
 namespace Glimpse.Test.Core2
 {
+    //TODO: Refactor to use Tester pattern
     public class ApplicationPersistanceStoreShould
     {
         public IDataStore DataStore { get; set; }
@@ -33,14 +35,13 @@ namespace Glimpse.Test.Core2
 
             Assert.Equal(0, persistanceStore.Count());
 
-            var metadata = new RequestMetadata
-                              {
-                                  HttpMethod = "POST",
-                                  Uri = "http://localhost"
-                              };
+            var requestMetadataMock = new Mock<IRequestMetadata>();
+            requestMetadataMock.Setup(r => r.RequestHttpMethod).Returns("POST");
+            requestMetadataMock.Setup(r => r.RequestUri).Returns("http://localhost");
+
             var pluginData = new Dictionary<string, string>();
 
-            persistanceStore.Save(new GlimpseMetadata(Guid.NewGuid(), metadata, pluginData));
+            persistanceStore.Save(new GlimpseMetadata(Guid.NewGuid(), requestMetadataMock.Object, pluginData));
 
             Assert.Equal(1, persistanceStore.Count());
         }
@@ -51,7 +52,7 @@ namespace Glimpse.Test.Core2
             IGlimpsePersistanceStore persistanceStore = new ApplicationPersistanceStore(DataStore);
 
             var requestId = Guid.NewGuid();
-            var metadata = new GlimpseMetadata(requestId, new RequestMetadata(), new Dictionary<string, string>());
+            var metadata = new GlimpseMetadata(requestId, new Mock<IRequestMetadata>().Object, new Dictionary<string, string>());
 
             persistanceStore.Save(metadata);
 
@@ -67,7 +68,11 @@ namespace Glimpse.Test.Core2
 
             var clientName = Guid.NewGuid().ToString();
             var requestId = Guid.NewGuid();
-            var metadata = new GlimpseMetadata(requestId, new RequestMetadata{GlimpseClientName = clientName}, new Dictionary<string, string>());
+
+            var requestMetadataMock = new Mock<IRequestMetadata>();
+            requestMetadataMock.Setup(r => r.GlimpseClientName).Returns(clientName);
+
+            var metadata = new GlimpseMetadata(requestId, requestMetadataMock.Object, new Dictionary<string, string>());
 
             persistanceStore.Save(metadata);
 
@@ -85,8 +90,12 @@ namespace Glimpse.Test.Core2
             var clientName = Guid.NewGuid().ToString();
             var requestId1 = Guid.NewGuid();
             var requestId2 = Guid.NewGuid();
-            var metadata1 = new GlimpseMetadata(requestId1, new RequestMetadata { GlimpseClientName = clientName }, new Dictionary<string, string>());
-            var metadata2 = new GlimpseMetadata(requestId2, new RequestMetadata { GlimpseClientName = clientName }, new Dictionary<string, string>());
+
+            var requestMetadataMock = new Mock<IRequestMetadata>();
+            requestMetadataMock.Setup(r => r.GlimpseClientName).Returns(clientName);
+
+            var metadata1 = new GlimpseMetadata(requestId1, requestMetadataMock.Object, new Dictionary<string, string>());
+            var metadata2 = new GlimpseMetadata(requestId2, requestMetadataMock.Object, new Dictionary<string, string>());
 
             persistanceStore.Save(metadata1);
             persistanceStore.Save(metadata2);

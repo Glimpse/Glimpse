@@ -442,9 +442,9 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void ProvideEnabledInfoOnInitializing()
         {
-            Runtime.Configuration.Validators.Add(
-                new Lazy<IGlimpseValidator, IGlimpseValidatorMetadata>(() => Runtime.ValidatorMock.Object,
-                                                                       new GlimpseValidatorAttribute()));
+            Runtime.Configuration.RuntimePolicies.Add(
+                new Lazy<IRuntimePolicy, IRuntimePolicyMetadata>(() => Runtime.ValidatorMock.Object,
+                                                                       new RuntimePolicyAttribute()));
             ;
 
             var result = Runtime.Initialize();
@@ -455,11 +455,11 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void ProvideLowestModeLevelOnInitializing()
         {
-            var offValidatorMock = new Mock<IGlimpseValidator>();
-            offValidatorMock.Setup(v => v.GetMode(It.IsAny<RequestMetadata>())).Returns(GlimpseMode.Off);
+            var offValidatorMock = new Mock<IRuntimePolicy>();
+            offValidatorMock.Setup(v => v.Execute(It.IsAny<IRuntimePolicyContext>())).Returns(RuntimePolicy.Off);
 
-            Runtime.Configuration.Validators.Add(new Lazy<IGlimpseValidator, IGlimpseValidatorMetadata>(()=>Runtime.ValidatorMock.Object, new GlimpseValidatorAttribute()));
-            Runtime.Configuration.Validators.Add(new Lazy<IGlimpseValidator, IGlimpseValidatorMetadata>(()=>offValidatorMock.Object, new GlimpseValidatorAttribute()));
+            Runtime.Configuration.RuntimePolicies.Add(new Lazy<IRuntimePolicy, IRuntimePolicyMetadata>(()=>Runtime.ValidatorMock.Object, new RuntimePolicyAttribute()));
+            Runtime.Configuration.RuntimePolicies.Add(new Lazy<IRuntimePolicy, IRuntimePolicyMetadata>(()=>offValidatorMock.Object, new RuntimePolicyAttribute()));
 
             var result = Runtime.Initialize();
 
@@ -469,28 +469,28 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void NotIncreaseModeOverLifetimeOfRequest()
         {
-            var glimpseMode = GlimpseMode.Body;
-            Runtime.Configuration.Mode = glimpseMode;
+            var glimpseMode = RuntimePolicy.ModifyResponseBody;
+            Runtime.Configuration.BasePolicy = glimpseMode;
 
             var firstMode = Runtime.Initialize();
 
             Assert.True(firstMode);
 
-            Runtime.Configuration.Mode = GlimpseMode.On;
+            Runtime.Configuration.BasePolicy = RuntimePolicy.On;
             Runtime.UpdateConfiguration(Runtime.Configuration);
 
             Runtime.BeginRequest();
 
-            Assert.Equal(glimpseMode, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.GlimpseModeKey));
+            Assert.Equal(glimpseMode, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePermissionsKey));
         }
 
         [Fact]
         public void RespectConfigurationSettingInValidators()
         {
-            Runtime.Configuration.Mode = GlimpseMode.Off;
+            Runtime.Configuration.BasePolicy = RuntimePolicy.Off;
 
-            Runtime.ValidatorMock.Setup(v => v.GetMode(It.IsAny<RequestMetadata>())).Returns(GlimpseMode.On);
-            Runtime.Configuration.Validators.Add(new Lazy<IGlimpseValidator, IGlimpseValidatorMetadata>(()=>Runtime.ValidatorMock.Object,new GlimpseValidatorAttribute()));
+            Runtime.ValidatorMock.Setup(v => v.Execute(It.IsAny<IRuntimePolicyContext>())).Returns(RuntimePolicy.On);
+            Runtime.Configuration.RuntimePolicies.Add(new Lazy<IRuntimePolicy, IRuntimePolicyMetadata>(()=>Runtime.ValidatorMock.Object,new RuntimePolicyAttribute()));
 
             var result = Runtime.Initialize();
 
@@ -500,77 +500,77 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void ValidateAtBeginRequest()
         {
-            Runtime.Configuration.Validators.Add(new Lazy<IGlimpseValidator, IGlimpseValidatorMetadata>(()=>Runtime.ValidatorMock.Object,new GlimpseValidatorAttribute()));
+            Runtime.Configuration.RuntimePolicies.Add(new Lazy<IRuntimePolicy, IRuntimePolicyMetadata>(()=>Runtime.ValidatorMock.Object,new RuntimePolicyAttribute()));
 
             Runtime.BeginRequest();
 
-            Runtime.ValidatorMock.Verify(v=>v.GetMode(It.IsAny<RequestMetadata>()), Times.AtLeastOnce());
+            Runtime.ValidatorMock.Verify(v=>v.Execute(It.IsAny<IRuntimePolicyContext>()), Times.AtLeastOnce());
         }
 
         [Fact]
         public void SkipEecutingBeginRequestIfGlimpseModeIfOff()
         {
-            Runtime.Configuration.Mode = GlimpseMode.Off;
+            Runtime.Configuration.BasePolicy = RuntimePolicy.Off;
 
             Runtime.BeginRequest();
 
-            Assert.Equal(GlimpseMode.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.GlimpseModeKey));
+            Assert.Equal(RuntimePolicy.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePermissionsKey));
         }
 
         [Fact] //False result means GlimpseMode == Off
         public void WriteCurrentModeToRequestState()
         {
-            Runtime.ValidatorMock.Setup(v => v.GetMode(It.IsAny<RequestMetadata>())).Returns(GlimpseMode.Body);
-            Runtime.Configuration.Validators.Add(new Lazy<IGlimpseValidator, IGlimpseValidatorMetadata>(()=>Runtime.ValidatorMock.Object, new GlimpseValidatorAttribute()));
+            Runtime.ValidatorMock.Setup(v => v.Execute(It.IsAny<IRuntimePolicyContext>())).Returns(RuntimePolicy.ModifyResponseBody);
+            Runtime.Configuration.RuntimePolicies.Add(new Lazy<IRuntimePolicy, IRuntimePolicyMetadata>(()=>Runtime.ValidatorMock.Object, new RuntimePolicyAttribute()));
 
             var result = Runtime.Initialize();
 
             Assert.True(result);
 
-            Assert.Equal(GlimpseMode.Body, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.GlimpseModeKey));
+            Assert.Equal(RuntimePolicy.ModifyResponseBody, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePermissionsKey));
         }
 
         [Fact]
         public void SkipExecutingTabsIfGlipseModeIsOff()
         {
-            Runtime.Configuration.Mode = GlimpseMode.Off;
+            Runtime.Configuration.BasePolicy = RuntimePolicy.Off;
 
             Runtime.ExecuteTabs();
 
-            Assert.Equal(GlimpseMode.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.GlimpseModeKey));
+            Assert.Equal(RuntimePolicy.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePermissionsKey));
         }
 
         [Fact]
         public void SkipExecutingResourceIfGlipseModeIsOff()
         {
-            Runtime.Configuration.Mode = GlimpseMode.Off;
+            Runtime.Configuration.BasePolicy = RuntimePolicy.Off;
 
             Runtime.ExecuteResource("doesn't matter");
 
-            Assert.Equal(GlimpseMode.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.GlimpseModeKey));
+            Assert.Equal(RuntimePolicy.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePermissionsKey));
         }
 
         [Fact]
         public void ValidateAtEndRequest()
         {
-            Runtime.Configuration.Mode = GlimpseMode.Off;
+            Runtime.Configuration.BasePolicy = RuntimePolicy.Off;
 
             Runtime.EndRequest();
 
-            Assert.Equal(GlimpseMode.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.GlimpseModeKey));
+            Assert.Equal(RuntimePolicy.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePermissionsKey));
         }
 
         [Fact]
         public void ExecuteOnlyTheProperValidators()
         {
-            var validatorMock2 = new Mock<IGlimpseValidator>();
-            Runtime.Configuration.Validators.Add(new Lazy<IGlimpseValidator, IGlimpseValidatorMetadata>(()=>Runtime.ValidatorMock.Object, new GlimpseValidatorAttribute(RuntimePhase.Initialize)));
-            Runtime.Configuration.Validators.Add(new Lazy<IGlimpseValidator, IGlimpseValidatorMetadata>(()=>validatorMock2.Object, new GlimpseValidatorAttribute(RuntimePhase.EndRequest)));
+            var validatorMock2 = new Mock<IRuntimePolicy>();
+            Runtime.Configuration.RuntimePolicies.Add(new Lazy<IRuntimePolicy, IRuntimePolicyMetadata>(()=>Runtime.ValidatorMock.Object, new RuntimePolicyAttribute(RuntimeEvent.Initialize)));
+            Runtime.Configuration.RuntimePolicies.Add(new Lazy<IRuntimePolicy, IRuntimePolicyMetadata>(()=>validatorMock2.Object, new RuntimePolicyAttribute(RuntimeEvent.EndRequest)));
 
             Runtime.Initialize();
 
-            Runtime.ValidatorMock.Verify(v=>v.GetMode(It.IsAny<RequestMetadata>()), Times.Once());
-            validatorMock2.Verify(v=>v.GetMode(It.IsAny<RequestMetadata>()), Times.Never());
+            Runtime.ValidatorMock.Verify(v=>v.Execute(It.IsAny<IRuntimePolicyContext>()), Times.Once());
+            validatorMock2.Verify(v=>v.Execute(It.IsAny<IRuntimePolicyContext>()), Times.Never());
         }
 
         [Fact]

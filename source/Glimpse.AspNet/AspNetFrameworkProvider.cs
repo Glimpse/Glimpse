@@ -1,6 +1,7 @@
 ﻿using System.Web;
 using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
+using Glimpse.Core2.Framework;
 
 namespace Glimpse.AspNet
 {
@@ -31,7 +32,7 @@ namespace Glimpse.AspNet
             get { return Context; }
         }
 
-        public RequestMetadata RequestMetadata
+        public IRequestMetadata RequestMetadata
         {
             get
             {
@@ -39,12 +40,12 @@ namespace Glimpse.AspNet
                 var response = Context.Response;
                 return new RequestMetadata
                              {
-                                 HttpMethod = request.HttpMethod,
+                                 RequestHttpMethod = request.HttpMethod,
                                  GlimpseClientName = "ACCESS FROM COOKIE", //TODO: FIX ME
                                  IpAddress = request.UserHostAddress, //TODO: FIX ME WHEN BEHIND PROXIES
                                  ResponseContentType = response.ContentType,
                                  ResponseStatusCode = response.StatusCode,
-                                 Uri = request.Url.AbsoluteUri,
+                                 RequestUri = request.Url.AbsoluteUri,
                              };
             }
         }

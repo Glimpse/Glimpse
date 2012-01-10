@@ -29,8 +29,8 @@ namespace Glimpse.Core2.Framework
             Resources = new GlimpseCollection<IGlimpseResource>();
             Serializer = new JsonNetSerializer();
             Tabs = new GlimpseLazyCollection<IGlimpseTab, IGlimpseTabMetadata>();
-            Validators = new GlimpseLazyCollection<IGlimpseValidator, IGlimpseValidatorMetadata>();
-            Mode = GlimpseMode.Off;
+            RuntimePolicies = new GlimpseLazyCollection<IRuntimePolicy, IRuntimePolicyMetadata>();
+            BasePolicy = RuntimePolicy.Off;
         }
 
         private IFrameworkProvider frameworkProvider;
@@ -168,22 +168,22 @@ namespace Glimpse.Core2.Framework
             }
         }
 
-        private GlimpseLazyCollection<IGlimpseValidator,IGlimpseValidatorMetadata> validators;
-        public GlimpseLazyCollection<IGlimpseValidator, IGlimpseValidatorMetadata> Validators
+        private GlimpseLazyCollection<IRuntimePolicy,IRuntimePolicyMetadata> runtimePolicies;
+        public GlimpseLazyCollection<IRuntimePolicy, IRuntimePolicyMetadata> RuntimePolicies
         {
             get
             {
-                Contract.Ensures(Contract.Result<GlimpseLazyCollection<IGlimpseValidator, IGlimpseValidatorMetadata>>() != null);
-                return validators;
+                Contract.Ensures(Contract.Result<GlimpseLazyCollection<IRuntimePolicy, IRuntimePolicyMetadata>>() != null);
+                return runtimePolicies;
             }
             set
             {
                 Contract.Requires<ArgumentNullException>(value!=null,"value");
-                validators = value;
+                runtimePolicies = value;
             }
         }
 
-        public GlimpseMode Mode { get; set; }
+        public RuntimePolicy BasePolicy { get; set; }
 
         //TODO: Remove me! This does not belong here, allow for IOC pipeline config
         private Logger CreateLogger()

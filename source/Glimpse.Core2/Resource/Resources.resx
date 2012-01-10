@@ -126,11 +126,11 @@
   </data>
   <data name="InitializePipelineInspectorError" xml:space="preserve">
     <value>Exception initializing pipeline inspector: {0}</value>
-    <comment>{0} - GetType().FullName of offending pipelineInspector</comment>
+    <comment>{0} - GetType() of offending pipelineInspector</comment>
   </data>
   <data name="InitializeTabError" xml:space="preserve">
     <value>Exception initializing tab: {0}</value>
-    <comment>{0} - GetType().FullName of offending tab</comment>
+    <comment>{0} - GetType() of offending tab</comment>
   </data>
   <data name="ExecuteResourceMissingError" xml:space="preserve">
     <value>Resource with name '{0}' could not be found.</value>
@@ -139,5 +139,9 @@
   <data name="ExecuteResourceDuplicateError" xml:space="preserve">
     <value>Ambiguous resource with name '{0}' found.</value>
     <comment>{0} - Resource name</comment>
+  </data>
+  <data name="ExecutePolicyWarning" xml:space="preserve">
+    <value>Exception executing policy of type '{0}'.</value>
+    <comment>{0} - this.GetType() of offending policy</comment>
   </data>
 </root>

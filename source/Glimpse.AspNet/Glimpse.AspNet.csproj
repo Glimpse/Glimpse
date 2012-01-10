@@ -49,6 +49,7 @@
     <Compile Include="HttpApplicationStateBaseDataStoreAdapter.cs" />
     <Compile Include="HttpHandlerEndpointConfiguration.cs" />
     <Compile Include="HttpModule.cs" />
+    <Compile Include="RequestMetadata.cs" />
     <Compile Include="Tab\Request.cs" />
     <Compile Include="PreBodyTagFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
