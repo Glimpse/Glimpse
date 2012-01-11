@@ -27,9 +27,9 @@ namespace Glimpse.Test.Core2.Extensions
             return metadata;
         }
 
-        public static Mock<IGlimpseTab> Setup(this Mock<IGlimpseTab> tab)
+        public static Mock<ITab> Setup(this Mock<ITab> tab)
         {
-            tab.Setup(p => p.GetData(It.IsAny<IServiceLocator>())).Returns("a result");
+            tab.Setup(p => p.GetData(It.IsAny<ITabContext>())).Returns("a result");
 
             return tab;
         }

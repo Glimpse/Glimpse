@@ -33,7 +33,7 @@ namespace Glimpse.Test.Core2.Policy
         {
             Policy.RequestMetadataMock.Setup(r => r.ResponseContentType).Returns("Unsupported/Content+Type");
 
-            Assert.Equal(RuntimePolicy.ModifyResponseHeaders, Policy.Execute(Policy.ContextMock.Object));
+            Assert.Equal(RuntimePolicy.Off, Policy.Execute(Policy.ContextMock.Object));
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace Glimpse.Test.Core2.Policy
             var ex = new Exception("I am a problem.");
             Policy.RequestMetadataMock.Setup(r => r.ResponseContentType).Throws(ex);
 
-            Assert.Equal(RuntimePolicy.ModifyResponseHeaders, Policy.Execute(Policy.ContextMock.Object));
+            Assert.Equal(RuntimePolicy.Off, Policy.Execute(Policy.ContextMock.Object));
             Policy.LoggerMock.Verify(l=>l.Warn(It.IsAny<string>(), ex), Times.Once());
         }
 

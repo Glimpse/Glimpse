@@ -12,7 +12,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void Construct()
         {
-            var collection = new GlimpseLazyCollection<IGlimpseTab,IGlimpseTabMetadata>();
+            var collection = new GlimpseLazyCollection<ITab,IGlimpseTabMetadata>();
 
             Assert.NotNull(collection);
         }
@@ -20,9 +20,9 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void AddPlugin()
         {
-            var collection = new GlimpseLazyCollection<IGlimpseTab, IGlimpseTabMetadata>();
+            var collection = new GlimpseLazyCollection<ITab, IGlimpseTabMetadata>();
 
-            collection.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(()=> new DummySetupTab(), new GlimpseTabAttribute()));
+            collection.Add(new Lazy<ITab, IGlimpseTabMetadata>(()=> new DummySetupTab(), new GlimpseTabAttribute()));
 
             Assert.Equal(1, collection.Count);
         }
@@ -30,7 +30,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void RemoveDiscoveredPlugin()
         {
-            var collection = new GlimpseLazyCollection<IGlimpseTab, IGlimpseTabMetadata>();
+            var collection = new GlimpseLazyCollection<ITab, IGlimpseTabMetadata>();
 
             collection.Discoverability.Discover();
 
@@ -47,9 +47,9 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void RemoveManuallyAddedPlugin()
         {
-            var collection = new GlimpseLazyCollection<IGlimpseTab, IGlimpseTabMetadata>();
+            var collection = new GlimpseLazyCollection<ITab, IGlimpseTabMetadata>();
 
-            var item = new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => new DummyTab(), new GlimpseTabAttribute());
+            var item = new Lazy<ITab, IGlimpseTabMetadata>(() => new DummyTab(), new GlimpseTabAttribute());
             collection.Add(item);
 
             var orignialCount = collection.Count;
@@ -64,9 +64,9 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void Contains()
         {
-            var collection = new GlimpseLazyCollection<IGlimpseTab, IGlimpseTabMetadata>();
+            var collection = new GlimpseLazyCollection<ITab, IGlimpseTabMetadata>();
 
-            var item = new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => new DummyTab(), new GlimpseTabAttribute());
+            var item = new Lazy<ITab, IGlimpseTabMetadata>(() => new DummyTab(), new GlimpseTabAttribute());
             collection.Add(item);
 
             Assert.True(collection.Contains(item));
@@ -75,7 +75,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void ReadPartMetadata()
         {
-            var collection = new GlimpseLazyCollection<IGlimpseTab, IGlimpseTabMetadata>();
+            var collection = new GlimpseLazyCollection<ITab, IGlimpseTabMetadata>();
 
             collection.Discoverability.Discover();
 

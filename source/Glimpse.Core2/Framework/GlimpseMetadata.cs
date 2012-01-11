@@ -19,7 +19,7 @@ namespace Glimpse.Core2.Framework
         public IDictionary<string, string> PluginData { get; set; }
         public string GlimpseClientName //TODO: This should not just be a pass through?
         {
-            get { return RequestMetadata.GlimpseClientName; }
+            get { return RequestMetadata.GetCookie(Constants.ControlCookieName); }
         }
     }
 }

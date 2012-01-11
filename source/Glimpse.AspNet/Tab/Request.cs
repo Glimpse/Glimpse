@@ -4,11 +4,11 @@ using Glimpse.Core2.Extensibility;
 namespace Glimpse.AspNet.Tab
 {
     [GlimpseTab(RequestContextType=typeof(HttpContextBase))] //TODO: Remove System.ComponentModel.Composition reference
-    public class Request:IGlimpseTab, IGlimpseHelp
+    public class Request:ITab, IGlimpseHelp
     {
-        public object GetData(IServiceLocator locator)
+        public object GetData(ITabContext context)
         {
-            var httpContextBase = locator.RequestContext as HttpContextBase;
+            var httpContextBase = context.GetRequestContext<HttpContextBase>();
 
             return httpContextBase.Request;
         }

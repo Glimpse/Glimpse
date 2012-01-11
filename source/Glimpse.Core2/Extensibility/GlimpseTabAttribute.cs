@@ -10,7 +10,7 @@ namespace Glimpse.Core2.Extensibility
     {
 
         public GlimpseTabAttribute(Type requestContextType, LifeCycleSupport lifeCycleSupport)
-            : base(typeof(IGlimpseTab))
+            : base(typeof(ITab))
         {
             Contract.Requires<ArgumentNullException>(requestContextType != null, "requestContextType");
 
@@ -18,7 +18,7 @@ namespace Glimpse.Core2.Extensibility
             LifeCycleSupport = lifeCycleSupport;
         }
 
-        public GlimpseTabAttribute(Type requestContextType): base(typeof(IGlimpseTab))
+        public GlimpseTabAttribute(Type requestContextType): base(typeof(ITab))
         {
             Contract.Requires<ArgumentNullException>(requestContextType != null, "requestContextType");
 
@@ -26,7 +26,7 @@ namespace Glimpse.Core2.Extensibility
             LifeCycleSupport = LifeCycleSupport.EndRequest;
         }
 
-        public GlimpseTabAttribute():base(typeof(IGlimpseTab))
+        public GlimpseTabAttribute():base(typeof(ITab))
         {
             RequestContextType = null;
             LifeCycleSupport = LifeCycleSupport.EndRequest;

@@ -81,7 +81,7 @@
     <Compile Include="ApplicationPersistanceStoreShould.cs" />
     <Compile Include="DictionaryDataStoreAdapterShould.cs" />
     <Compile Include="DiscoverabilityPolicyShould.cs" />
-    <Compile Include="Extensibility\GlimpseServiceLocatorShould.cs" />
+    <Compile Include="Extensibility\TabContextShould.cs" />
     <Compile Include="Extensibility\GlimpseTabAttributeShould.cs" />
     <Compile Include="Extensions\TestingExtensions.cs" />
     <Compile Include="GlimpseCollectionShould.cs" />
@@ -91,6 +91,8 @@
     <Compile Include="JsonNetSerializerShould.cs" />
     <Compile Include="Policy\AjaxPolicyShould.cs" />
     <Compile Include="Policy\ContentTypePolicyShould.cs" />
+    <Compile Include="Policy\ControlCookiePolicyShould.cs" />
+    <Compile Include="Policy\GlimpseResourcePolicyShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatusCodeResourceResultShould.cs" />
     <Compile Include="TestDoubles\DummyException.cs" />

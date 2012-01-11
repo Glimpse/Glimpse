@@ -7,10 +7,10 @@ using Xunit;
 
 namespace Glimpse.Test.Core2.Extensibility
 {
-    public class GlimpseServiceLocatorShould:IDisposable
+    public class TabContextShould:IDisposable
     {
 
-        public GlimpseServiceLocatorShould()
+        public TabContextShould()
         {
             RequestContext = new DummyObjectContext();
             PluginStoreMock = new Mock<IDataStore>();
@@ -28,11 +28,11 @@ namespace Glimpse.Test.Core2.Extensibility
 
         private DummyObjectContext RequestContext { get; set; }
 
-        private GlimpseServiceLocator serviceLocator;
-        private GlimpseServiceLocator ServiceLocator
+        private TabContext tabContext;
+        private TabContext TabContext
         {
-            get { return serviceLocator ?? (serviceLocator = new GlimpseServiceLocator(RequestContext, PluginStoreMock.Object, PipelineInspectors)); }
-            set { serviceLocator = value; }
+            get { return tabContext ?? (tabContext = new TabContext(RequestContext, PluginStoreMock.Object, PipelineInspectors)); }
+            set { tabContext = value; }
         }
 
 
@@ -42,16 +42,16 @@ namespace Glimpse.Test.Core2.Extensibility
         public void Construct()
         {
             var pluginStoreObj = PluginStoreMock.Object;
-            var locator = new GlimpseServiceLocator(RequestContext, pluginStoreObj, PipelineInspectors);
+            var locator = new TabContext(RequestContext, pluginStoreObj, PipelineInspectors);
 
-            Assert.Equal(RequestContext, locator.RequestContext);
+            Assert.Equal(RequestContext, locator.GetRequestContext<DummyObjectContext>());
             Assert.Equal(pluginStoreObj, locator.PluginStore);
         }
 
         [Fact]
         public void GetPipelineModifier()
         {
-            var inspector = ServiceLocator.GetPipelineInspector<DummyGlimpsePipelineInspector1>();
+            var inspector = TabContext.GetPipelineInspector<DummyGlimpsePipelineInspector1>();
             Assert.NotNull(inspector);
             Assert.IsType<DummyGlimpsePipelineInspector1>(inspector);
         }
@@ -59,33 +59,33 @@ namespace Glimpse.Test.Core2.Extensibility
         [Fact]
         public void ReturnNullWithMissingPipelineModifier()
         {
-            var inspector = ServiceLocator.GetPipelineInspector<DummyPipelineInspector2>();
+            var inspector = TabContext.GetPipelineInspector<DummyPipelineInspector2>();
             Assert.Null(inspector);
         }
 
         [Fact]
         public void ThrowWithNullPipelineInspectors()
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseServiceLocator(RequestContext, PluginStoreMock.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new TabContext(RequestContext, PluginStoreMock.Object, null));
         }
 
         [Fact]
         public void ThrowWithNullPluginStore()
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseServiceLocator(RequestContext, null, PipelineInspectors));
+            Assert.Throws<ArgumentNullException>(() => new TabContext(RequestContext, null, PipelineInspectors));
         }
 
         [Fact]
         public void ThrowWithNullRequestContext()
         {
-            Assert.Throws<ArgumentNullException>(()=>new GlimpseServiceLocator(null, PluginStoreMock.Object, PipelineInspectors));
+            Assert.Throws<ArgumentNullException>(()=>new TabContext(null, PluginStoreMock.Object, PipelineInspectors));
         }
 
         public void Dispose()
         {
             RequestContext = null;
             PluginStoreMock = null;
-            ServiceLocator = null;
+            TabContext = null;
             PipelineInspectors = null;
         }
     }

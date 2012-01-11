@@ -86,7 +86,7 @@
     <Compile Include="AntiXssEncoder.cs" />
     <Compile Include="DictionaryDataStoreAdapter.cs" />
     <Compile Include="ExceptionResourceResult.cs" />
-    <Compile Include="Extensibility\GlimpseServiceLocator.cs" />
+    <Compile Include="Extensibility\TabContext.cs" />
     <Compile Include="Extensibility\IGlimpseLogger.cs" />
     <Compile Include="Extensibility\IRuntimePolicyContext.cs" />
     <Compile Include="Extensibility\IRuntimePolicyMetadata.cs" />
@@ -109,13 +109,13 @@
     <Compile Include="Extensibility\IDataStore.cs" />
     <Compile Include="Extensibility\IGlimpseResource.cs" />
     <Compile Include="Extensibility\IGlimpseHelp.cs" />
-    <Compile Include="Extensibility\IGlimpseTab.cs" />
+    <Compile Include="Extensibility\ITab.cs" />
     <Compile Include="Extensibility\IGlimpseTabMetadata.cs" />
     <Compile Include="Extensibility\IGlimpseTabSetup.cs" />
     <Compile Include="Extensibility\IGlimpseRuntime.cs" />
     <Compile Include="Extensibility\IGlimpsePipelineInspector.cs" />
     <Compile Include="Extensibility\IGlimpseSerializer.cs" />
-    <Compile Include="Extensibility\IServiceLocator.cs" />
+    <Compile Include="Extensibility\ITabContext.cs" />
     <Compile Include="Framework\IFrameworkProvider.cs" />
     <Compile Include="Extensibility\LifeCycleSupport.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
@@ -125,6 +125,8 @@
     <Compile Include="GlimpseLazyCollection.cs" />
     <Compile Include="Policy\AjaxPolicy.cs" />
     <Compile Include="Policy\ContentTypePolicy.cs" />
+    <Compile Include="Policy\ControlCookiePolicy.cs" />
+    <Compile Include="Policy\GlimpseResourcePolicy.cs" />
     <Compile Include="RuntimePolicy.cs" />
     <Compile Include="Extensibility\IGlimpseHtmlEncoder.cs" />
     <Compile Include="JsonNetSerializer.cs" />

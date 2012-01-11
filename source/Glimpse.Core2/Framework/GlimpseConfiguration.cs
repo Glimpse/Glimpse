@@ -28,7 +28,7 @@ namespace Glimpse.Core2.Framework
             ResourceEndpoint = endpointConfiguration;
             Resources = new GlimpseCollection<IGlimpseResource>();
             Serializer = new JsonNetSerializer();
-            Tabs = new GlimpseLazyCollection<IGlimpseTab, IGlimpseTabMetadata>();
+            Tabs = new GlimpseLazyCollection<ITab, IGlimpseTabMetadata>();
             RuntimePolicies = new GlimpseLazyCollection<IRuntimePolicy, IRuntimePolicyMetadata>();
             BasePolicy = RuntimePolicy.Off;
         }
@@ -153,12 +153,12 @@ namespace Glimpse.Core2.Framework
             }
         }
 
-        private GlimpseLazyCollection<IGlimpseTab, IGlimpseTabMetadata> tabs;
-        public GlimpseLazyCollection<IGlimpseTab, IGlimpseTabMetadata> Tabs
+        private GlimpseLazyCollection<ITab, IGlimpseTabMetadata> tabs;
+        public GlimpseLazyCollection<ITab, IGlimpseTabMetadata> Tabs
         {
             get
             {
-                Contract.Ensures(Contract.Result<GlimpseLazyCollection<IGlimpseTab, IGlimpseTabMetadata>>()!=null);
+                Contract.Ensures(Contract.Result<GlimpseLazyCollection<ITab, IGlimpseTabMetadata>>()!=null);
                 return tabs;
             }
             set

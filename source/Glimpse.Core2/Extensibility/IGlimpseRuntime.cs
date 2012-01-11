@@ -6,7 +6,7 @@ namespace Glimpse.Core2.Extensibility
     //TODO: Clean this up
     public interface IGlimpseRuntime
     {
-        IServiceLocator ServiceLocator { get; }
+        ITabContext TabContext { get; }
         string Version { get; }
         void BeginRequest();
         void EndRequest();

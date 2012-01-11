@@ -4,10 +4,10 @@ using System.Linq;
 
 namespace Glimpse.Core2.Extensibility
 {
-    public class GlimpseServiceLocator:IServiceLocator
+    public class TabContext:ITabContext
     {
 
-        public GlimpseServiceLocator(object requestContext, IDataStore pluginStore, GlimpseCollection<IGlimpsePipelineInspector> pipelineInspectors)
+        public TabContext(object requestContext, IDataStore pluginStore, GlimpseCollection<IGlimpsePipelineInspector> pipelineInspectors)
         {
             Contract.Requires<ArgumentNullException>(requestContext != null, "requestContext");
             Contract.Requires<ArgumentNullException>(pluginStore != null, "pluginStore");
@@ -18,15 +18,16 @@ namespace Glimpse.Core2.Extensibility
             PipelineInspectors = pipelineInspectors;
         }
 
-
-
         private GlimpseCollection<IGlimpsePipelineInspector> PipelineInspectors { get; set; }
 
         public IDataStore PluginStore { get; private set; }
 
-        public object RequestContext { get; private set; }
+        private object RequestContext { get; set; }
 
-
+        public T GetRequestContext<T>() where T : class
+        {
+            return RequestContext as T;
+        }
 
         //TODO: Provide a non generic implementation? GetPipelineInspector(Type type)?
         public T GetPipelineInspector<T>() where T : class, IGlimpsePipelineInspector

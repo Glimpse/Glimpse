@@ -4,9 +4,9 @@ using Glimpse.Core2.Extensibility;
 namespace Glimpse.Test.Core2.TestDoubles
 {
     [GlimpseTab(RequestContextType = typeof(DummyObjectContext))]
-    public class DummySetupTab : IGlimpseTab, IGlimpseTabSetup
+    public class DummySetupTab : ITab, IGlimpseTabSetup
     {
-        public object GetData(IServiceLocator locator)
+        public object GetData(ITabContext context)
         {
             throw new NotImplementedException("I am DummySetupTab");
         }

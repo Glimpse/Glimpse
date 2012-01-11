@@ -70,7 +70,7 @@ namespace Glimpse.Test.Core2
             var requestId = Guid.NewGuid();
 
             var requestMetadataMock = new Mock<IRequestMetadata>();
-            requestMetadataMock.Setup(r => r.GlimpseClientName).Returns(clientName);
+            requestMetadataMock.Setup(r => r.GetCookie(Constants.ControlCookieName)).Returns(clientName);
 
             var metadata = new GlimpseMetadata(requestId, requestMetadataMock.Object, new Dictionary<string, string>());
 
@@ -92,7 +92,7 @@ namespace Glimpse.Test.Core2
             var requestId2 = Guid.NewGuid();
 
             var requestMetadataMock = new Mock<IRequestMetadata>();
-            requestMetadataMock.Setup(r => r.GlimpseClientName).Returns(clientName);
+            requestMetadataMock.Setup(r => r.GetCookie(Constants.ControlCookieName)).Returns(clientName);
 
             var metadata1 = new GlimpseMetadata(requestId1, requestMetadataMock.Object, new Dictionary<string, string>());
             var metadata2 = new GlimpseMetadata(requestId2, requestMetadataMock.Object, new Dictionary<string, string>());

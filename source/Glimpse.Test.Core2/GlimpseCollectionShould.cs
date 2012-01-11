@@ -11,14 +11,14 @@ namespace Glimpse.Test.Core2
 {
     public class GlimpseCollectionShould : IDisposable
     {
-        private Mock<IGlimpseTab> TabMock { get; set; }
-        private GlimpseCollection<IGlimpseTab> Collection { get; set; }
+        private Mock<ITab> TabMock { get; set; }
+        private GlimpseCollection<ITab> Collection { get; set; }
 
         public GlimpseCollectionShould()
         {
-            TabMock = new Mock<IGlimpseTab>();
+            TabMock = new Mock<ITab>();
 
-            Collection = new GlimpseCollection<IGlimpseTab>
+            Collection = new GlimpseCollection<ITab>
                              {
                                  TabMock.Object
                              };
@@ -28,7 +28,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void Construct()
         {
-            var glimpseCollection = new GlimpseCollection<IGlimpseTab>();
+            var glimpseCollection = new GlimpseCollection<ITab>();
 
             Assert.NotNull(glimpseCollection);
         }
@@ -36,7 +36,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void AddItems()
         {
-            var glimpseCollection = new GlimpseCollection<IGlimpseTab>();
+            var glimpseCollection = new GlimpseCollection<ITab>();
 
             glimpseCollection.Add(new DummyTab());
 
@@ -46,7 +46,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void ClearManuallyAddedItems()
         {
-            var glimpseCollection = new GlimpseCollection<IGlimpseTab>
+            var glimpseCollection = new GlimpseCollection<ITab>
                                         {
                                             new DummyTab()
                                         };
@@ -61,7 +61,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void ClearDiscoveredItems()
         {
-            var glimpseCollection = new GlimpseCollection<IGlimpseTab>();
+            var glimpseCollection = new GlimpseCollection<ITab>();
 
             glimpseCollection.Discoverability.Discover();
 
@@ -75,7 +75,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void ClearManuallyAddedAndDiscoveredItems()
         {
-            var glimpseCollection = new GlimpseCollection<IGlimpseTab>
+            var glimpseCollection = new GlimpseCollection<ITab>
                                         {
                                             TabMock.Object
                                         };
@@ -95,7 +95,7 @@ namespace Glimpse.Test.Core2
         {
             var tab = TabMock.Object;
 
-            var glimpseCollection = new GlimpseCollection<IGlimpseTab>
+            var glimpseCollection = new GlimpseCollection<ITab>
                                         {
                                             tab
                                         };
@@ -112,7 +112,7 @@ namespace Glimpse.Test.Core2
         {
             var tab = TabMock.Object;
 
-            var glimpseCollection = new GlimpseCollection<IGlimpseTab>
+            var glimpseCollection = new GlimpseCollection<ITab>
                                         {
                                             tab
                                         };

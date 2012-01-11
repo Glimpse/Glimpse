@@ -39,12 +39,12 @@ namespace Glimpse.Core2.Framework
 
         public bool IsInitialized { get; private set; }
 
-        public IServiceLocator ServiceLocator
+        public ITabContext TabContext
         {
             get
             {
                 var result =
-                    Configuration.FrameworkProvider.HttpRequestStore.Get<GlimpseServiceLocator>(
+                    Configuration.FrameworkProvider.HttpRequestStore.Get<TabContext>(
                         Constants.ServiceLocatorKey);
 
                 if (result == null)
@@ -73,7 +73,7 @@ namespace Glimpse.Core2.Framework
 
             //Create ServiceLocator valid for this request
             requestStore.Set(Constants.ServiceLocatorKey,
-                             new GlimpseServiceLocator(runtimeContext, pluginStore, Configuration.PipelineInspectors));
+                             new TabContext(runtimeContext, pluginStore, Configuration.PipelineInspectors));
 
             //Give Request an ID
             requestStore.Set(Constants.RequestIdKey, Guid.NewGuid());
@@ -229,9 +229,9 @@ namespace Glimpse.Core2.Framework
                 try
                 {
                     if (pluginResultsStore.ContainsKey(key))
-                        pluginResultsStore[key] = plugin.Value.GetData(ServiceLocator);
+                        pluginResultsStore[key] = plugin.Value.GetData(TabContext);
                     else
-                        pluginResultsStore.Add(key, plugin.Value.GetData(ServiceLocator));
+                        pluginResultsStore.Add(key, plugin.Value.GetData(TabContext));
                 }
                 catch (Exception exception)
                 {
@@ -301,7 +301,8 @@ namespace Glimpse.Core2.Framework
         //TODO: pass logger to policies
         private RuntimePolicy GetRuntimePolicy(RuntimeEvent runtimeEvent)
         {
-            var requestStore = Configuration.FrameworkProvider.HttpRequestStore;
+            var frameworkProvider = Configuration.FrameworkProvider;
+            var requestStore = frameworkProvider.HttpRequestStore;
             var result = requestStore.Contains(Constants.RuntimePermissionsKey)
                              ? requestStore.Get<RuntimePolicy>(Constants.RuntimePermissionsKey)
                              : Configuration.BasePolicy;
@@ -312,7 +313,7 @@ namespace Glimpse.Core2.Framework
                     Configuration.RuntimePolicies.Where(
                         v => !v.Metadata.RuntimeEvent.HasValue || v.Metadata.RuntimeEvent.Value.HasFlag(runtimeEvent));
 
-                var policyContext = new RuntimePolicyContext(Configuration.FrameworkProvider.RequestMetadata, Configuration.Logger);
+                var policyContext = new RuntimePolicyContext(frameworkProvider.RequestMetadata, Configuration.Logger,frameworkProvider.RuntimeContext);
                 foreach (var validator in validators)
                 {
                     //TODO: Handle exceptions from policy

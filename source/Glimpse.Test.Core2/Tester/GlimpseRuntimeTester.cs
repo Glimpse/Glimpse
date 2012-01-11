@@ -12,7 +12,7 @@ namespace Glimpse.Test.Core2.Tester
         public Mock<IGlimpseResourceEndpointConfiguration> EndpointConfigMock { get; set; }
         public Mock<IDataStore> HttpRequestStoreMock { get; set; }
         public Mock<IGlimpseTabMetadata> TabMetadataMock { get; set; }
-        public Mock<IGlimpseTab> TabMock { get; set; }
+        public Mock<ITab> TabMock { get; set; }
         public Mock<IGlimpsePipelineInspector> PipelineInspectorMock { get; set; }
         public Mock<IGlimpseSerializer> SerializerMock { get; set; }
         public Mock<IGlimpsePersistanceStore> PersistanceStoreMock { get; set; }
@@ -28,7 +28,7 @@ namespace Glimpse.Test.Core2.Tester
             EndpointConfigMock = endpointConfigMock;
             HttpRequestStoreMock = new Mock<IDataStore>();
             TabMetadataMock = new Mock<IGlimpseTabMetadata>().Setup();
-            TabMock = new Mock<IGlimpseTab>().Setup();
+            TabMock = new Mock<ITab>().Setup();
             PipelineInspectorMock = new Mock<IGlimpsePipelineInspector>();
             SerializerMock = new Mock<IGlimpseSerializer>();
             PersistanceStoreMock = new Mock<IGlimpsePersistanceStore>();

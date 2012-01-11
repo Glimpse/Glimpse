@@ -1,0 +1,20 @@
+﻿using Glimpse.Core2;
+using Glimpse.Core2.Extensibility;
+using Glimpse.Core2.Policy;
+using Moq;
+using Xunit;
+
+namespace Glimpse.Test.Core2.Policy
+{
+    public class GlimpseResourcePolicyShould
+    {
+        [Fact]
+        public void SetRuntimePolicyToOff()
+        {
+            var policy = new GlimpseResourcePolicy();
+            var policyContextMock = new Mock<IRuntimePolicyContext>();
+
+            Assert.Equal(RuntimePolicy.Off, policy.Execute(policyContextMock.Object));
+        }
+    }
+}

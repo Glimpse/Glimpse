@@ -6,5 +6,6 @@ namespace Glimpse.Core2.Extensibility
     {
         IRequestMetadata RequestMetadata { get; }
         IGlimpseLogger Logger { get; }
+        T GetRequestContext<T>() where T : class;
     }
 }

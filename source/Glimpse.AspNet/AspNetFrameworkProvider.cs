@@ -34,20 +34,7 @@ namespace Glimpse.AspNet
 
         public IRequestMetadata RequestMetadata
         {
-            get
-            {
-                var request = Context.Request;
-                var response = Context.Response;
-                return new RequestMetadata
-                             {
-                                 RequestHttpMethod = request.HttpMethod,
-                                 GlimpseClientName = "ACCESS FROM COOKIE", //TODO: FIX ME
-                                 IpAddress = request.UserHostAddress, //TODO: FIX ME WHEN BEHIND PROXIES
-                                 ResponseContentType = response.ContentType,
-                                 ResponseStatusCode = response.StatusCode,
-                                 RequestUri = request.Url.AbsoluteUri,
-                             };
-            }
+            get{return new RequestMetadata(Context);}
         }
 
         public void SetHttpResponseHeader(string name, string value)

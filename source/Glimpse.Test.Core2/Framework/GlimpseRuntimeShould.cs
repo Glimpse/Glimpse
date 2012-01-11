@@ -30,7 +30,7 @@ namespace Glimpse.Test.Core2.Framework
         {
             Runtime.BeginRequest();
 
-            Assert.NotNull(Runtime.ServiceLocator);
+            Assert.NotNull(Runtime.TabContext);
         }
 
         [Fact]
@@ -70,7 +70,7 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void ExecutePluginsWithDefaultLifeCycle()
         {
-            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
@@ -79,7 +79,7 @@ namespace Glimpse.Test.Core2.Framework
             Assert.NotNull(results);
             Assert.Equal(1, results.Count);
 
-            Runtime.TabMock.Verify(p => p.GetData(It.IsAny<IServiceLocator>()), Times.Once());
+            Runtime.TabMock.Verify(p => p.GetData(It.IsAny<ITabContext>()), Times.Once());
         }
 
         [Fact]
@@ -87,7 +87,7 @@ namespace Glimpse.Test.Core2.Framework
         {
             Runtime.TabMetadataMock.Setup(m => m.LifeCycleSupport).Returns(LifeCycleSupport.BeginRequest);
 
-            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs(LifeCycleSupport.EndRequest);
@@ -96,13 +96,13 @@ namespace Glimpse.Test.Core2.Framework
             Assert.NotNull(results);
             Assert.Equal(0, results.Count);
 
-            Runtime.TabMock.Verify(p => p.GetData(It.IsAny<IServiceLocator>()), Times.Never());
+            Runtime.TabMock.Verify(p => p.GetData(It.IsAny<ITabContext>()), Times.Never());
         }
 
         [Fact]
         public void ExecutePluginsWithMatchingRuntimeContextType()
         {
-            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
@@ -111,7 +111,7 @@ namespace Glimpse.Test.Core2.Framework
             Assert.NotNull(results);
             Assert.Equal(1, results.Count);
 
-            Runtime.TabMock.Verify(p => p.GetData(It.IsAny<IServiceLocator>()), Times.Once());
+            Runtime.TabMock.Verify(p => p.GetData(It.IsAny<ITabContext>()), Times.Once());
         }
 
         [Fact]
@@ -119,7 +119,7 @@ namespace Glimpse.Test.Core2.Framework
         {
             Runtime.TabMetadataMock.Setup(m => m.RequestContextType).Returns<Type>(null);
 
-            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
@@ -128,16 +128,16 @@ namespace Glimpse.Test.Core2.Framework
             Assert.NotNull(results);
             Assert.Equal(1, results.Count);
 
-            Runtime.TabMock.Verify(p => p.GetData(It.IsAny<IServiceLocator>()), Times.Once());
+            Runtime.TabMock.Verify(p => p.GetData(It.IsAny<ITabContext>()), Times.Once());
         }
 
         [Fact]
         public void ExecutePluginsWithDuplicateCollectionEntries()
         {
             //Insert the same plugin multiple times
-            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
-            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
-            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
@@ -146,15 +146,15 @@ namespace Glimpse.Test.Core2.Framework
             Assert.NotNull(results);
             Assert.Equal(1, results.Count);
 
-            Runtime.TabMock.Verify(p => p.GetData(It.IsAny<IServiceLocator>()), Times.AtLeastOnce());
+            Runtime.TabMock.Verify(p => p.GetData(It.IsAny<ITabContext>()), Times.AtLeastOnce());
         }
 
         [Fact]
         public void ExecutePluginThatFails()
         {
-            Runtime.TabMock.Setup(p => p.GetData(It.IsAny<IServiceLocator>())).Throws<DummyException>();
+            Runtime.TabMock.Setup(p => p.GetData(It.IsAny<ITabContext>())).Throws<DummyException>();
 
-            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
@@ -163,7 +163,7 @@ namespace Glimpse.Test.Core2.Framework
             Assert.NotNull(results);
             Assert.Equal(0, results.Count);
 
-            Runtime.TabMock.Verify(p => p.GetData(It.IsAny<IServiceLocator>()), Times.Once());
+            Runtime.TabMock.Verify(p => p.GetData(It.IsAny<ITabContext>()), Times.Once());
             //Make sure the excption type above is logged here.
             Runtime.LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<DummyException>()), Times.AtMost(Runtime.Configuration.Tabs.Count));
         }
@@ -220,8 +220,8 @@ namespace Glimpse.Test.Core2.Framework
             var setupMock = Runtime.TabMock.As<IGlimpseTabSetup>();
 
             //one tab needs setup, the other does not
-            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
-            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => new DummyTab(), Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => new DummyTab(), Runtime.TabMetadataMock.Object));
 
             Runtime.Initialize();
 
@@ -235,8 +235,8 @@ namespace Glimpse.Test.Core2.Framework
             setupMock.Setup(s => s.Setup()).Throws<DummyException>();
 
             //one tab needs setup, the other does not
-            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
-            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => new DummyTab(), Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => new DummyTab(), Runtime.TabMetadataMock.Object));
 
             Runtime.Initialize();
 
@@ -280,7 +280,7 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void PersistDataDuringEndRequest()
         {
-            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
@@ -293,7 +293,7 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void SerializeDataDuringEndRequest()
         {
-            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
@@ -305,16 +305,16 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void ServiceLocatorShouldThrowIfRequestHasNotBegun()
         {
-            Assert.Throws<MethodAccessException>(() => { var serviceLocator = Runtime.ServiceLocator; });
+            Assert.Throws<MethodAccessException>(() => { var serviceLocator = Runtime.TabContext; });
 
             Runtime.BeginRequest();
-            Assert.NotNull(Runtime.ServiceLocator);
+            Assert.NotNull(Runtime.TabContext);
         }
 
         [Fact]
         public void SetResponseHeaderDuringEndRequest()
         {
-            Runtime.Configuration.Tabs.Add(new Lazy<IGlimpseTab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();

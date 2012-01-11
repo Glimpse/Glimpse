@@ -6,6 +6,7 @@ using Glimpse.Core2.Resource;
 
 namespace Glimpse.Core2.Policy
 {
+    [RuntimePolicy(RuntimeEvent.EndRequest)]
     public class ContentTypePolicy:ConfigurationSection, IRuntimePolicy
     {
         //TODO: Turn into a proper configuration class
@@ -30,12 +31,12 @@ namespace Glimpse.Core2.Policy
             try
             {
                 var contentType = policyContext.RequestMetadata.ResponseContentType;
-                return ContentTypeWhitelist.Contains(contentType) ? RuntimePolicy.On : RuntimePolicy.ModifyResponseHeaders;
+                return ContentTypeWhitelist.Contains(contentType) ? RuntimePolicy.On : RuntimePolicy.Off;
             }
             catch (Exception exception)
             {
                 policyContext.Logger.Warn(string.Format(Resources.ExecutePolicyWarning, GetType()), exception);
-                return RuntimePolicy.ModifyResponseHeaders;
+                return RuntimePolicy.Off;
             }
         }
     }
