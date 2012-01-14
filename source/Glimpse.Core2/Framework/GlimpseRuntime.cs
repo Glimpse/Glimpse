@@ -13,6 +13,7 @@ namespace Glimpse.Core2.Framework
         public GlimpseRuntime(GlimpseConfiguration configuration)
         {
             //Version is in major.minor.build format to support http://semver.org/
+            //TODO: Consider adding configuration hash to version
             Version = GetType().Assembly.GetName().Version.ToString(3);
             UpdateConfiguration(configuration);
         }

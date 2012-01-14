@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Glimpse.Core2.Framework
 {
-    public interface IGlimpsePersistanceStore
+    public interface IPersistanceStore
     {
         int Count();
         void Save(GlimpseMetadata data);

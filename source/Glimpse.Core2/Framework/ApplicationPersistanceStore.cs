@@ -5,7 +5,7 @@ using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Core2.Framework
 {
-    public class ApplicationPersistanceStore : IGlimpsePersistanceStore
+    public class ApplicationPersistanceStore : IPersistanceStore
     {
         private IDataStore DataStore { get; set; }
         private IList<GlimpseMetadata> GlimpseRequests { get; set; }

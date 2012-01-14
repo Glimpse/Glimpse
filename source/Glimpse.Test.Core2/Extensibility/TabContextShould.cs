@@ -14,7 +14,7 @@ namespace Glimpse.Test.Core2.Extensibility
         {
             RequestContext = new DummyObjectContext();
             PluginStoreMock = new Mock<IDataStore>();
-            PipelineInspectors = new GlimpseCollection<IPipelineInspector>
+            PipelineInspectors = new DiscoverableCollection<IPipelineInspector>
                                      {
                                          new DummyPipelineInspector1()
                                      };
@@ -22,7 +22,7 @@ namespace Glimpse.Test.Core2.Extensibility
 
 
 
-        private GlimpseCollection<IPipelineInspector> PipelineInspectors { get; set; }
+        private DiscoverableCollection<IPipelineInspector> PipelineInspectors { get; set; }
 
         private Mock<IDataStore> PluginStoreMock { get; set; }
 

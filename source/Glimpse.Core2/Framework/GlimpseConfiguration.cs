@@ -24,12 +24,12 @@ namespace Glimpse.Core2.Framework
             HtmlEncoder = new AntiXssEncoder();
             Logger = new NLogLogger(CreateLogger());
             PersistanceStore = new ApplicationPersistanceStore(frameworkProvider.HttpServerStore);
-            PipelineInspectors = new GlimpseCollection<IPipelineInspector>();
+            PipelineInspectors = new DiscoverableCollection<IPipelineInspector>();
             ResourceEndpoint = endpointConfiguration;
-            Resources = new GlimpseCollection<IResource>();
+            Resources = new DiscoverableCollection<IResource>();
             Serializer = new JsonNetSerializer();
-            Tabs = new GlimpseLazyCollection<ITab, ITabMetadata>();
-            RuntimePolicies = new GlimpseLazyCollection<IRuntimePolicy, IRuntimePolicyMetadata>();
+            Tabs = new DiscoverableLazyCollection<ITab, ITabMetadata>();
+            RuntimePolicies = new DiscoverableLazyCollection<IRuntimePolicy, IRuntimePolicyMetadata>();
             BasePolicy = RuntimePolicy.Off;
         }
 
@@ -78,12 +78,12 @@ namespace Glimpse.Core2.Framework
             }
         }
 
-        private IGlimpsePersistanceStore persistanceStore;
-        public IGlimpsePersistanceStore PersistanceStore
+        private IPersistanceStore persistanceStore;
+        public IPersistanceStore PersistanceStore
         {
             get
             {
-                Contract.Ensures(Contract.Result<IGlimpsePersistanceStore>()!=null);
+                Contract.Ensures(Contract.Result<IPersistanceStore>()!=null);
                 return persistanceStore;
             }
             set
@@ -93,12 +93,12 @@ namespace Glimpse.Core2.Framework
             }
         }
 
-        private GlimpseCollection<IPipelineInspector> pipelineInspectors;
-        public GlimpseCollection<IPipelineInspector> PipelineInspectors
+        private DiscoverableCollection<IPipelineInspector> pipelineInspectors;
+        public DiscoverableCollection<IPipelineInspector> PipelineInspectors
         {
             get
             {
-                Contract.Ensures(Contract.Result<GlimpseCollection<IPipelineInspector>>()!=null);
+                Contract.Ensures(Contract.Result<DiscoverableCollection<IPipelineInspector>>()!=null);
                 return pipelineInspectors;
             }
             set
@@ -123,12 +123,12 @@ namespace Glimpse.Core2.Framework
             }
         }
 
-        private GlimpseCollection<IResource> resources;
-        public GlimpseCollection<IResource> Resources
+        private DiscoverableCollection<IResource> resources;
+        public DiscoverableCollection<IResource> Resources
         {
             get
             {
-                Contract.Ensures(Contract.Result<GlimpseCollection<IResource>>()!=null);
+                Contract.Ensures(Contract.Result<DiscoverableCollection<IResource>>()!=null);
                 return resources;
             }
             set
@@ -153,12 +153,12 @@ namespace Glimpse.Core2.Framework
             }
         }
 
-        private GlimpseLazyCollection<ITab, ITabMetadata> tabs;
-        public GlimpseLazyCollection<ITab, ITabMetadata> Tabs
+        private DiscoverableLazyCollection<ITab, ITabMetadata> tabs;
+        public DiscoverableLazyCollection<ITab, ITabMetadata> Tabs
         {
             get
             {
-                Contract.Ensures(Contract.Result<GlimpseLazyCollection<ITab, ITabMetadata>>()!=null);
+                Contract.Ensures(Contract.Result<DiscoverableLazyCollection<ITab, ITabMetadata>>()!=null);
                 return tabs;
             }
             set
@@ -168,12 +168,12 @@ namespace Glimpse.Core2.Framework
             }
         }
 
-        private GlimpseLazyCollection<IRuntimePolicy,IRuntimePolicyMetadata> runtimePolicies;
-        public GlimpseLazyCollection<IRuntimePolicy, IRuntimePolicyMetadata> RuntimePolicies
+        private DiscoverableLazyCollection<IRuntimePolicy,IRuntimePolicyMetadata> runtimePolicies;
+        public DiscoverableLazyCollection<IRuntimePolicy, IRuntimePolicyMetadata> RuntimePolicies
         {
             get
             {
-                Contract.Ensures(Contract.Result<GlimpseLazyCollection<IRuntimePolicy, IRuntimePolicyMetadata>>() != null);
+                Contract.Ensures(Contract.Result<DiscoverableLazyCollection<IRuntimePolicy, IRuntimePolicyMetadata>>() != null);
                 return runtimePolicies;
             }
             set

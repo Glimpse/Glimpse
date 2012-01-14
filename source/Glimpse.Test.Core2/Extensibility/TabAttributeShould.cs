@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Glimpse.Test.Core2.Extensibility
 {
-    public class GlimpseTabAttributeShould
+    public class TabAttributeShould
     {
 
 

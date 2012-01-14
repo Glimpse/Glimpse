@@ -15,7 +15,7 @@ namespace Glimpse.Test.Core2.Tester
         public Mock<ITab> TabMock { get; set; }
         public Mock<IPipelineInspector> PipelineInspectorMock { get; set; }
         public Mock<ISerializer> SerializerMock { get; set; }
-        public Mock<IGlimpsePersistanceStore> PersistanceStoreMock { get; set; }
+        public Mock<IPersistanceStore> PersistanceStoreMock { get; set; }
         public Mock<ILogger> LoggerMock { get; set; }
         public Mock<IResource> ResourceMock { get; set; }
         public Mock<ResourceResult> ResourceResultMock { get; set; }
@@ -31,7 +31,7 @@ namespace Glimpse.Test.Core2.Tester
             TabMock = new Mock<ITab>().Setup();
             PipelineInspectorMock = new Mock<IPipelineInspector>();
             SerializerMock = new Mock<ISerializer>();
-            PersistanceStoreMock = new Mock<IGlimpsePersistanceStore>();
+            PersistanceStoreMock = new Mock<IPersistanceStore>();
             LoggerMock = new Mock<ILogger>();
             ResourceMock = new Mock<IResource>();
             ResourceResultMock = new Mock<ResourceResult>();

@@ -82,11 +82,11 @@
     <Compile Include="DictionaryDataStoreAdapterShould.cs" />
     <Compile Include="DiscoverabilityPolicyShould.cs" />
     <Compile Include="Extensibility\TabContextShould.cs" />
-    <Compile Include="Extensibility\GlimpseTabAttributeShould.cs" />
+    <Compile Include="Extensibility\TabAttributeShould.cs" />
     <Compile Include="Extensions\TestingExtensions.cs" />
-    <Compile Include="GlimpseCollectionShould.cs" />
+    <Compile Include="DiscoverableCollectionShould.cs" />
     <Compile Include="Framework\GlimpseConfigurationShould.cs" />
-    <Compile Include="GlimpseLazyCollectionShould.cs" />
+    <Compile Include="DiscoverableLazyCollectionShould.cs" />
     <Compile Include="Framework\GlimpseRuntimeShould.cs" />
     <Compile Include="JsonNetSerializerShould.cs" />
     <Compile Include="Policy\AjaxPolicyShould.cs" />

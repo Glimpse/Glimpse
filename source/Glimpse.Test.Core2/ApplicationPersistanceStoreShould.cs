@@ -22,7 +22,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void Construct()
         {
-            IGlimpsePersistanceStore persistanceStore = new ApplicationPersistanceStore(DataStore);
+            IPersistanceStore persistanceStore = new ApplicationPersistanceStore(DataStore);
 
             Assert.NotNull(persistanceStore);
             Assert.Equal(0, persistanceStore.Count());
@@ -49,7 +49,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void GetGlimpseMetadataById()
         {
-            IGlimpsePersistanceStore persistanceStore = new ApplicationPersistanceStore(DataStore);
+            IPersistanceStore persistanceStore = new ApplicationPersistanceStore(DataStore);
 
             var requestId = Guid.NewGuid();
             var metadata = new GlimpseMetadata(requestId, new Mock<IRequestMetadata>().Object, new Dictionary<string, string>());
@@ -64,7 +64,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void GetGlimpseClients()
         {
-            IGlimpsePersistanceStore persistanceStore = new ApplicationPersistanceStore(DataStore);
+            IPersistanceStore persistanceStore = new ApplicationPersistanceStore(DataStore);
 
             var clientName = Guid.NewGuid().ToString();
             var requestId = Guid.NewGuid();
@@ -85,7 +85,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void GetGlipseMetadataByClientName()
         {
-            IGlimpsePersistanceStore persistanceStore = new ApplicationPersistanceStore(DataStore);
+            IPersistanceStore persistanceStore = new ApplicationPersistanceStore(DataStore);
 
             var clientName = Guid.NewGuid().ToString();
             var requestId1 = Guid.NewGuid();

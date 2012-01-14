@@ -94,7 +94,7 @@
     <Compile Include="Extensibility\RuntimePolicyContext.cs" />
     <Compile Include="Framework\ApplicationPersistanceStore.cs" />
     <Compile Include="Framework\GlimpseMetadata.cs" />
-    <Compile Include="Framework\IGlimpsePersistanceStore.cs" />
+    <Compile Include="Framework\IPersistanceStore.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="NLogLogger.cs" />
     <Compile Include="MefDiscoverabilityPolicy-T1.cs" />
@@ -121,8 +121,8 @@
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Framework\GlimpseConfiguration.cs" />
     <Compile Include="Framework\GlimpseRuntime.cs" />
-    <Compile Include="GlimpseCollection.cs" />
-    <Compile Include="GlimpseLazyCollection.cs" />
+    <Compile Include="DiscoverableCollection.cs" />
+    <Compile Include="DiscoverableLazyCollection.cs" />
     <Compile Include="Policy\AjaxPolicy.cs" />
     <Compile Include="Policy\ContentTypePolicy.cs" />
     <Compile Include="Policy\ControlCookiePolicy.cs" />
