@@ -2,7 +2,7 @@
 
 namespace Glimpse.Core2.Extensibility
 {
-    public interface IGlimpseLogger
+    public interface ILogger
     {
         void Trace(string message);
         void Debug(string message);

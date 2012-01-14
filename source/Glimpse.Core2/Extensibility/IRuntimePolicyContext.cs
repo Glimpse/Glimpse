@@ -5,7 +5,7 @@ namespace Glimpse.Core2.Extensibility
     public interface IRuntimePolicyContext
     {
         IRequestMetadata RequestMetadata { get; }
-        IGlimpseLogger Logger { get; }
+        ILogger Logger { get; }
         T GetRequestContext<T>() where T : class;
     }
 }

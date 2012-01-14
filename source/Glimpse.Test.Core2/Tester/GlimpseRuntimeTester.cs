@@ -16,7 +16,7 @@ namespace Glimpse.Test.Core2.Tester
         public Mock<IGlimpsePipelineInspector> PipelineInspectorMock { get; set; }
         public Mock<IGlimpseSerializer> SerializerMock { get; set; }
         public Mock<IGlimpsePersistanceStore> PersistanceStoreMock { get; set; }
-        public Mock<IGlimpseLogger> LoggerMock { get; set; }
+        public Mock<ILogger> LoggerMock { get; set; }
         public Mock<IGlimpseResource> ResourceMock { get; set; }
         public Mock<ResourceResult> ResourceResultMock { get; set; }
         public Mock<IRuntimePolicy> ValidatorMock { get; set; }
@@ -32,7 +32,7 @@ namespace Glimpse.Test.Core2.Tester
             PipelineInspectorMock = new Mock<IGlimpsePipelineInspector>();
             SerializerMock = new Mock<IGlimpseSerializer>();
             PersistanceStoreMock = new Mock<IGlimpsePersistanceStore>();
-            LoggerMock = new Mock<IGlimpseLogger>();
+            LoggerMock = new Mock<ILogger>();
             ResourceMock = new Mock<IGlimpseResource>();
             ResourceResultMock = new Mock<ResourceResult>();
             ValidatorMock = new Mock<IRuntimePolicy>();

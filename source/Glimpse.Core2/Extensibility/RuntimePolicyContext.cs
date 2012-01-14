@@ -6,11 +6,11 @@ namespace Glimpse.Core2.Extensibility
     {
         public IRequestMetadata RequestMetadata { get; set; }
 
-        public IGlimpseLogger Logger { get; set; }
+        public ILogger Logger { get; set; }
 
         private object RequestContext { get; set; }
 
-        public RuntimePolicyContext(IRequestMetadata requestMetadata, IGlimpseLogger logger, object requestContext)
+        public RuntimePolicyContext(IRequestMetadata requestMetadata, ILogger logger, object requestContext)
         {
             RequestMetadata = requestMetadata;
             Logger = logger;

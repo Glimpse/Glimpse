@@ -4,7 +4,7 @@ using NLog;
 
 namespace Glimpse.Core2
 {
-    public class NLogLogger:IGlimpseLogger
+    public class NLogLogger:ILogger
     {
         private Logger Logger { get; set; }
 

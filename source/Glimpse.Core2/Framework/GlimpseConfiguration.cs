@@ -63,12 +63,12 @@ namespace Glimpse.Core2.Framework
             }
         }
 
-        private IGlimpseLogger logger;
-        public IGlimpseLogger Logger
+        private ILogger logger;
+        public ILogger Logger
         {
             get
             {
-                Contract.Ensures(Contract.Result<IGlimpseLogger>()!=null);
+                Contract.Ensures(Contract.Result<ILogger>()!=null);
                 return logger;
             }
             set

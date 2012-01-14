@@ -87,7 +87,7 @@
     <Compile Include="DictionaryDataStoreAdapter.cs" />
     <Compile Include="ExceptionResourceResult.cs" />
     <Compile Include="Extensibility\TabContext.cs" />
-    <Compile Include="Extensibility\IGlimpseLogger.cs" />
+    <Compile Include="Extensibility\ILogger.cs" />
     <Compile Include="Extensibility\IRuntimePolicyContext.cs" />
     <Compile Include="Extensibility\IRuntimePolicyMetadata.cs" />
     <Compile Include="Extensibility\RuntimeEvent.cs" />
