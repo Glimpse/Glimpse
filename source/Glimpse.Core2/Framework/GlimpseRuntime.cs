@@ -39,21 +39,6 @@ namespace Glimpse.Core2.Framework
 
         public bool IsInitialized { get; private set; }
 
-        public ITabContext TabContext
-        {
-            get
-            {
-                var result =
-                    Configuration.FrameworkProvider.HttpRequestStore.Get<TabContext>(
-                        Constants.ServiceLocatorKey);
-
-                if (result == null)
-                    throw new MethodAccessException(Resources.OutOfOrderRuntimeMethodCall);
-
-                return result;
-            }
-        }
-
         public string Version { get; private set; }
 
 
@@ -66,14 +51,6 @@ namespace Glimpse.Core2.Framework
             var frameworkProvider = Configuration.FrameworkProvider;
             var runtimeContext = frameworkProvider.RuntimeContext;
             var requestStore = frameworkProvider.HttpRequestStore;
-
-            //Create storage space for plugins to access
-            var pluginStore = new DictionaryDataStoreAdapter(new Dictionary<string, object>());
-            requestStore.Set(Constants.PluginsDataStoreKey, pluginStore);
-
-            //Create ServiceLocator valid for this request
-            requestStore.Set(Constants.ServiceLocatorKey,
-                             new TabContext(runtimeContext, pluginStore, Configuration.PipelineInspectors));
 
             //Give Request an ID
             requestStore.Set(Constants.RequestIdKey, Guid.NewGuid());
@@ -209,7 +186,8 @@ namespace Glimpse.Core2.Framework
             var mode = GetRuntimePolicy(RuntimeEvent.ExecuteTabs);
             if (mode == RuntimePolicy.Off) return;
 
-            var frameworkProviderRuntimeContextType = Configuration.FrameworkProvider.RuntimeContext.GetType();
+            var runtimeContext = Configuration.FrameworkProvider.RuntimeContext;
+            var frameworkProviderRuntimeContextType = runtimeContext.GetType();
 
             //Only use tabs that either don't specify a specific context type, or have a context type that matches the current framework provider's.
             var runtimePlugins =
@@ -223,15 +201,23 @@ namespace Glimpse.Core2.Framework
             var pluginResultsStore = PluginResultsStore;
             var logger = Configuration.Logger;
 
+
+            //Create storage space for plugins to access
+            var pluginStore = new DictionaryDataStoreAdapter(new Dictionary<string, object>());
+
+            //Create ServiceLocator valid for this request
+            var tabContext = new TabContext(runtimeContext, pluginStore, Configuration.PipelineInspectors);
+
+
             foreach (var plugin in supportedRuntimePlugins)
             {
                 var key = plugin.Value.GetType().FullName;
                 try
                 {
                     if (pluginResultsStore.ContainsKey(key))
-                        pluginResultsStore[key] = plugin.Value.GetData(TabContext);
+                        pluginResultsStore[key] = plugin.Value.GetData(tabContext);
                     else
-                        pluginResultsStore.Add(key, plugin.Value.GetData(TabContext));
+                        pluginResultsStore.Add(key, plugin.Value.GetData(tabContext));
                 }
                 catch (Exception exception)
                 {
@@ -246,7 +232,7 @@ namespace Glimpse.Core2.Framework
             var mode = GetRuntimePolicy(RuntimeEvent.Initialize);
             if (mode == RuntimePolicy.Off) return false;
 
-            //TODO: Add in request validation checks
+            //TODO: pass valid context into pipelineInspector
             var tabsThatRequireSetup = Configuration.Tabs.Where(p => p.Value is IGlimpseTabSetup).Select(p => p.Value);
             foreach (IGlimpseTabSetup tab in tabsThatRequireSetup)
             {
@@ -298,7 +284,6 @@ namespace Glimpse.Core2.Framework
             Configuration = configuration;
         }
 
-        //TODO: pass logger to policies
         private RuntimePolicy GetRuntimePolicy(RuntimeEvent runtimeEvent)
         {
             var frameworkProvider = Configuration.FrameworkProvider;

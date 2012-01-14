@@ -12,6 +12,7 @@ namespace Glimpse.Core2.Policy
     [RuntimePolicy(RuntimeEvent.BeginRequest)]
     public class UriPolicy: ConfigurationSection, IRuntimePolicy
     {
+        //TODO: Turn into a proper configuration class
         public IList<Regex> UriBlacklist { get; set; }
 
         public UriPolicy()

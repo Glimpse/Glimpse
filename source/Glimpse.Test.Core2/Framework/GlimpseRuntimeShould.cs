@@ -26,14 +26,6 @@ namespace Glimpse.Test.Core2.Framework
         }
 
         [Fact]
-        public void CreatesServiceLocatorOnBeginRequest()
-        {
-            Runtime.BeginRequest();
-
-            Assert.NotNull(Runtime.TabContext);
-        }
-
-        [Fact]
         public void SetRequestIdOnBeginRequest()
         {
             Runtime.FrameworkProviderMock.Setup(fp => fp.HttpRequestStore).Returns(Runtime.HttpRequestStoreMock.Object);
@@ -300,15 +292,6 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.EndRequest();
 
             Runtime.SerializerMock.Verify(s => s.Serialize(It.IsAny<object>()), Times.Exactly(Runtime.Configuration.Tabs.Count));
-        }
-
-        [Fact]
-        public void ServiceLocatorShouldThrowIfRequestHasNotBegun()
-        {
-            Assert.Throws<MethodAccessException>(() => { var serviceLocator = Runtime.TabContext; });
-
-            Runtime.BeginRequest();
-            Assert.NotNull(Runtime.TabContext);
         }
 
         [Fact]

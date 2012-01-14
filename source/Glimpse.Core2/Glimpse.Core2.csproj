@@ -129,6 +129,7 @@
     <Compile Include="Policy\GlimpseResourcePolicy.cs" />
     <Compile Include="Policy\StatusCodePolicy.cs" />
     <Compile Include="Policy\UriPolicy.cs" />
+    <Compile Include="Policy\UserHostAddressPolicy.cs" />
     <Compile Include="RuntimePolicy.cs" />
     <Compile Include="Extensibility\IGlimpseHtmlEncoder.cs" />
     <Compile Include="JsonNetSerializer.cs" />
