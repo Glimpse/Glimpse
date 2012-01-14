@@ -243,19 +243,19 @@ namespace Glimpse.Test.Core2.Framework
 
             Runtime.Initialize();
 
-            Runtime.PipelineInspectorMock.Verify(pi => pi.Setup(), Times.Once());
+            Runtime.PipelineInspectorMock.Verify(pi => pi.Setup(It.IsAny<IPipelineInspectorContext>()), Times.Once());
         }
 
         [Fact]
         public void InitializeWithPipelineInspectorThatFails()
         {
-            Runtime.PipelineInspectorMock.Setup(pi => pi.Setup()).Throws<DummyException>();
+            Runtime.PipelineInspectorMock.Setup(pi => pi.Setup(It.IsAny<IPipelineInspectorContext>())).Throws<DummyException>();
 
             Runtime.Configuration.PipelineInspectors.Add(Runtime.PipelineInspectorMock.Object);
 
             Runtime.Initialize();
 
-            Runtime.PipelineInspectorMock.Verify(pi => pi.Setup(), Times.Once());
+            Runtime.PipelineInspectorMock.Verify(pi => pi.Setup(It.IsAny<IPipelineInspectorContext>()), Times.Once());
             Runtime.LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<DummyException>()), Times.AtMost(Runtime.Configuration.PipelineInspectors.Count));
         }
 

@@ -86,6 +86,7 @@
     <Compile Include="AntiXssEncoder.cs" />
     <Compile Include="DictionaryDataStoreAdapter.cs" />
     <Compile Include="ExceptionResourceResult.cs" />
+    <Compile Include="Extensibility\IPipelineInspectorContext.cs" />
     <Compile Include="Extensibility\TabContext.cs" />
     <Compile Include="Extensibility\ILogger.cs" />
     <Compile Include="Extensibility\IRuntimePolicyContext.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Framework\GlimpseMetadata.cs" />
     <Compile Include="Framework\IPersistanceStore.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Framework\PipelineInspectorContext.cs" />
     <Compile Include="NLogLogger.cs" />
     <Compile Include="MefDiscoverabilityPolicy-T1.cs" />
     <Compile Include="MefDiscoverabilityPolicy-T2.cs" />

@@ -37,7 +37,7 @@ namespace Glimpse.Test.Core2.Tester
             ResourceResultMock = new Mock<ResourceResult>();
             ValidatorMock = new Mock<IRuntimePolicy>();
             ValidatorMock.Setup(v => v.Execute(It.IsAny<IRuntimePolicyContext>())).Returns(RuntimePolicy.On);
-            
+
             configuration.Serializer = SerializerMock.Object;
             configuration.PersistanceStore = PersistanceStoreMock.Object;
             configuration.Logger = LoggerMock.Object;

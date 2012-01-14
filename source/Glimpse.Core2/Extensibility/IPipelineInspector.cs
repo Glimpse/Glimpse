@@ -2,7 +2,7 @@
 {
     public interface IPipelineInspector
     {
-        void Setup();
-        void Teardown();
+        void Setup(IPipelineInspectorContext context);
+        void Teardown(IPipelineInspectorContext context);
     }
 }

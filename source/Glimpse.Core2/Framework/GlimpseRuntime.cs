@@ -227,7 +227,7 @@ namespace Glimpse.Core2.Framework
             var policy = GetRuntimePolicy(RuntimeEvent.Initialize);
             if (policy == RuntimePolicy.Off) return false;
 
-            //TODO: pass valid context into pipelineInspector
+
             var tabsThatRequireSetup = Configuration.Tabs.Where(p => p.Value is ISetup).Select(p => p.Value);
             foreach (ISetup tab in tabsThatRequireSetup)
             {
@@ -241,11 +241,13 @@ namespace Glimpse.Core2.Framework
                 }
             }
 
+            var pipelineInspectorContext = new PipelineInspectorContext(logger);
+
             foreach (var pipelineInspector in Configuration.PipelineInspectors)
             {
                 try
                 {
-                    pipelineInspector.Setup();
+                    pipelineInspector.Setup(pipelineInspectorContext);
                 }
                 catch (Exception exception)
                 {
