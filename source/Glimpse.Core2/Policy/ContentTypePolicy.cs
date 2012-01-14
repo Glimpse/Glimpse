@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics.Contracts;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Resource;
 
@@ -23,6 +24,8 @@ namespace Glimpse.Core2.Policy
 
         public ContentTypePolicy(IList<string> contentTypeWhitelist)
         {
+            Contract.Requires<ArgumentNullException>(contentTypeWhitelist != null, "contentTypeWhitelist");
+
             ContentTypeWhitelist = contentTypeWhitelist;
         }
 

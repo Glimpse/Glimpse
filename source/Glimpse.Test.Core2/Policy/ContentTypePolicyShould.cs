@@ -67,5 +67,11 @@ namespace Glimpse.Test.Core2.Policy
 
             Assert.Equal(list, policy.ContentTypeWhitelist);
         }
+
+        [Fact]
+        public void ThrowExceptionWhenConstructedWithNullParameter()
+        {
+            Assert.Throws<ArgumentNullException>(() => new ContentTypePolicy(null));
+        }
     }
 }

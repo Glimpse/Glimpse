@@ -94,6 +94,7 @@
     <Compile Include="Policy\ControlCookiePolicyShould.cs" />
     <Compile Include="Policy\GlimpseResourcePolicyShould.cs" />
     <Compile Include="Policy\StatusCodePolicyShould.cs" />
+    <Compile Include="Policy\UriPolicyShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatusCodeResourceResultShould.cs" />
     <Compile Include="TestDoubles\DummyException.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="Tester\GlimpseConfigurationTester.cs" />
     <Compile Include="Tester\GlimpseRuntimeTester.cs" />
     <Compile Include="Tester\StatusCodePolicyTester.cs" />
+    <Compile Include="Tester\UriPolicyTester.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

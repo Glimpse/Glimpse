@@ -64,5 +64,11 @@ namespace Glimpse.Test.Core2.Policy
             
             Policy.LoggerMock.Verify(l=>l.Warn(It.IsAny<string>(), exception), Times.Once());
         }
+
+        [Fact]
+        public void ThrowExceptionWhenConstructedWithNullParameter()
+        {
+            Assert.Throws<ArgumentNullException>(()=>new StatusCodePolicy(null));
+        }
     }
 }
