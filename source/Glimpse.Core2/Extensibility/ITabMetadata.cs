@@ -2,7 +2,7 @@ using System;
 
 namespace Glimpse.Core2.Extensibility
 {
-    public interface IGlimpseTabMetadata
+    public interface ITabMetadata
     {
         LifeCycleSupport LifeCycleSupport { get; }
         Type RequestContextType { get; }

@@ -1,7 +1,8 @@
 ﻿namespace Glimpse.Core2.Extensibility
 {
-    public interface IGlimpseTabSetup
+    public interface IPipelineInspector
     {
         void Setup();
+        void Teardown();
     }
 }

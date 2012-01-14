@@ -62,12 +62,12 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void ExecutePluginsWithDefaultLifeCycle()
         {
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
 
-            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
+            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
             Assert.Equal(1, results.Count);
 
@@ -79,12 +79,12 @@ namespace Glimpse.Test.Core2.Framework
         {
             Runtime.TabMetadataMock.Setup(m => m.LifeCycleSupport).Returns(LifeCycleSupport.BeginRequest);
 
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs(LifeCycleSupport.EndRequest);
 
-            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
+            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
             Assert.Equal(0, results.Count);
 
@@ -94,12 +94,12 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void ExecutePluginsWithMatchingRuntimeContextType()
         {
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
 
-            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
+            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
             Assert.Equal(1, results.Count);
 
@@ -111,12 +111,12 @@ namespace Glimpse.Test.Core2.Framework
         {
             Runtime.TabMetadataMock.Setup(m => m.RequestContextType).Returns<Type>(null);
 
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
 
-            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
+            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
             Assert.Equal(1, results.Count);
 
@@ -127,14 +127,14 @@ namespace Glimpse.Test.Core2.Framework
         public void ExecutePluginsWithDuplicateCollectionEntries()
         {
             //Insert the same plugin multiple times
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
 
-            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
+            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
             Assert.Equal(1, results.Count);
 
@@ -146,12 +146,12 @@ namespace Glimpse.Test.Core2.Framework
         {
             Runtime.TabMock.Setup(p => p.GetData(It.IsAny<ITabContext>())).Throws<DummyException>();
 
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
 
-            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
+            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
             Assert.Equal(0, results.Count);
 
@@ -168,7 +168,7 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
 
-            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, object>>(Constants.PluginResultsDataStoreKey);
+            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
             Assert.Equal(0, results.Count);
         }
@@ -209,11 +209,11 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void InitializeWithSetupTabs()
         {
-            var setupMock = Runtime.TabMock.As<IGlimpseTabSetup>();
+            var setupMock = Runtime.TabMock.As<ISetup>();
 
             //one tab needs setup, the other does not
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => new DummyTab(), Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => new DummyTab(), Runtime.TabMetadataMock.Object));
 
             Runtime.Initialize();
 
@@ -223,12 +223,12 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void InitializeWithSetupTabThatFails()
         {
-            var setupMock = Runtime.TabMock.As<IGlimpseTabSetup>();
+            var setupMock = Runtime.TabMock.As<ISetup>();
             setupMock.Setup(s => s.Setup()).Throws<DummyException>();
 
             //one tab needs setup, the other does not
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => new DummyTab(), Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => new DummyTab(), Runtime.TabMetadataMock.Object));
 
             Runtime.Initialize();
 
@@ -272,7 +272,7 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void PersistDataDuringEndRequest()
         {
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
@@ -285,7 +285,7 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void SerializeDataDuringEndRequest()
         {
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
@@ -297,7 +297,7 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void SetResponseHeaderDuringEndRequest()
         {
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, IGlimpseTabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();

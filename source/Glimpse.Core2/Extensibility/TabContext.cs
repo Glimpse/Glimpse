@@ -7,7 +7,7 @@ namespace Glimpse.Core2.Extensibility
     public class TabContext:ITabContext
     {
 
-        public TabContext(object requestContext, IDataStore pluginStore, GlimpseCollection<IGlimpsePipelineInspector> pipelineInspectors)
+        public TabContext(object requestContext, IDataStore pluginStore, GlimpseCollection<IPipelineInspector> pipelineInspectors)
         {
             Contract.Requires<ArgumentNullException>(requestContext != null, "requestContext");
             Contract.Requires<ArgumentNullException>(pluginStore != null, "pluginStore");
@@ -18,7 +18,7 @@ namespace Glimpse.Core2.Extensibility
             PipelineInspectors = pipelineInspectors;
         }
 
-        private GlimpseCollection<IGlimpsePipelineInspector> PipelineInspectors { get; set; }
+        private GlimpseCollection<IPipelineInspector> PipelineInspectors { get; set; }
 
         public IDataStore PluginStore { get; private set; }
 
@@ -30,7 +30,7 @@ namespace Glimpse.Core2.Extensibility
         }
 
         //TODO: Provide a non generic implementation? GetPipelineInspector(Type type)?
-        public T GetPipelineInspector<T>() where T : class, IGlimpsePipelineInspector
+        public T GetPipelineInspector<T>() where T : class, IPipelineInspector
         {
             return PipelineInspectors.FirstOrDefault(pm => pm.GetType() == typeof (T)) as T;
         }

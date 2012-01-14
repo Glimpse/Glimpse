@@ -3,7 +3,7 @@
     public interface ITabContext
     {
         T GetRequestContext<T>() where T:class;
-        T GetPipelineInspector<T>() where T:class, IGlimpsePipelineInspector;
+        T GetPipelineInspector<T>() where T:class, IPipelineInspector;
         IDataStore PluginStore { get; }
     }
 }

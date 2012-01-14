@@ -4,7 +4,7 @@ using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.AspNet
 {
-    public class HttpHandlerEndpointConfiguration:IGlimpseResourceEndpointConfiguration
+    public class HttpHandlerEndpointConfiguration:IResourceEndpointConfiguration
     {
         public string GenerateUrl(string resourceName, string version)
         {

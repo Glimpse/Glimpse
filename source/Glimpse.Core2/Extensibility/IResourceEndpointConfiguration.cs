@@ -2,7 +2,7 @@
 
 namespace Glimpse.Core2.Extensibility
 {
-    public interface IGlimpseResourceEndpointConfiguration
+    public interface IResourceEndpointConfiguration
     {
         string GenerateUrl(string resourceName, string version);
         string GenerateUrl(string resourceName, string version, IDictionary<string, string> parameters);

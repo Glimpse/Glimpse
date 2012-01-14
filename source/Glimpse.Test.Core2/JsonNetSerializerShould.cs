@@ -12,7 +12,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void Construct()
         {
-            IGlimpseSerializer serializer = new JsonNetSerializer();
+            ISerializer serializer = new JsonNetSerializer();
 
             Assert.NotNull(serializer);
         }
@@ -20,7 +20,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void SerializeObjects()
         {
-            IGlimpseSerializer serializer = new JsonNetSerializer();
+            ISerializer serializer = new JsonNetSerializer();
 
             var simpleObject = new {String = "A string", Integer = 5};
 
@@ -32,7 +32,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void IgnorePropertiesWithErrors()
         {
-            IGlimpseSerializer serializer = new JsonNetSerializer();
+            ISerializer serializer = new JsonNetSerializer();
 
             var badObject = new TestObjectWithException();
 
@@ -44,7 +44,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void RespectJsonPropertyOverrides()
         {
-            IGlimpseSerializer serializer = new JsonNetSerializer();
+            ISerializer serializer = new JsonNetSerializer();
 
             var overrideObject = new TestObjectWithJsonAttributes();
 
@@ -56,7 +56,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void RespectISerializableObjects()
         {
-            IGlimpseSerializer serializer = new JsonNetSerializer();
+            ISerializer serializer = new JsonNetSerializer();
 
             var iSerializableObj = new TestObjectAsISerializable();
 

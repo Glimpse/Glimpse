@@ -3,8 +3,8 @@ using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Test.Core2.TestDoubles
 {
-    [GlimpsePipelineInspector]
-    public class DummyPipelineInspector2 : IGlimpsePipelineInspector
+    [PipelineInspector]
+    public class DummyPipelineInspector2 : IPipelineInspector
     {
         public void Setup()
         {

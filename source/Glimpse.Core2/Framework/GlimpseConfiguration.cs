@@ -12,7 +12,7 @@ namespace Glimpse.Core2.Framework
 
         //TODO: Add Sanitizer?
         //TODO: Add static FromWebConfig method to construct an instance of GlimpseConfiguration
-        public GlimpseConfiguration(IFrameworkProvider frameworkProvider, IGlimpseResourceEndpointConfiguration endpointConfiguration)
+        public GlimpseConfiguration(IFrameworkProvider frameworkProvider, IResourceEndpointConfiguration endpointConfiguration)
         {
             //TODO: Test building glimpse on clean VS install with contracts
             //TODO: Test building glimpse on teamcity with contracts
@@ -24,11 +24,11 @@ namespace Glimpse.Core2.Framework
             HtmlEncoder = new AntiXssEncoder();
             Logger = new NLogLogger(CreateLogger());
             PersistanceStore = new ApplicationPersistanceStore(frameworkProvider.HttpServerStore);
-            PipelineInspectors = new GlimpseCollection<IGlimpsePipelineInspector>();
+            PipelineInspectors = new GlimpseCollection<IPipelineInspector>();
             ResourceEndpoint = endpointConfiguration;
-            Resources = new GlimpseCollection<IGlimpseResource>();
+            Resources = new GlimpseCollection<IResource>();
             Serializer = new JsonNetSerializer();
-            Tabs = new GlimpseLazyCollection<ITab, IGlimpseTabMetadata>();
+            Tabs = new GlimpseLazyCollection<ITab, ITabMetadata>();
             RuntimePolicies = new GlimpseLazyCollection<IRuntimePolicy, IRuntimePolicyMetadata>();
             BasePolicy = RuntimePolicy.Off;
         }
@@ -48,12 +48,12 @@ namespace Glimpse.Core2.Framework
             }
         }
 
-        private IGlimpseHtmlEncoder htmlEncoder;
-        public IGlimpseHtmlEncoder HtmlEncoder
+        private IHtmlEncoder htmlEncoder;
+        public IHtmlEncoder HtmlEncoder
         {
             get
             {
-                Contract.Ensures(Contract.Result<IGlimpseHtmlEncoder>()!=null);
+                Contract.Ensures(Contract.Result<IHtmlEncoder>()!=null);
                 return htmlEncoder;
             }
             set
@@ -93,12 +93,12 @@ namespace Glimpse.Core2.Framework
             }
         }
 
-        private GlimpseCollection<IGlimpsePipelineInspector> pipelineInspectors;
-        public GlimpseCollection<IGlimpsePipelineInspector> PipelineInspectors
+        private GlimpseCollection<IPipelineInspector> pipelineInspectors;
+        public GlimpseCollection<IPipelineInspector> PipelineInspectors
         {
             get
             {
-                Contract.Ensures(Contract.Result<GlimpseCollection<IGlimpsePipelineInspector>>()!=null);
+                Contract.Ensures(Contract.Result<GlimpseCollection<IPipelineInspector>>()!=null);
                 return pipelineInspectors;
             }
             set
@@ -108,12 +108,12 @@ namespace Glimpse.Core2.Framework
             }
         }
 
-        private IGlimpseResourceEndpointConfiguration resourceEndpoint;
-        public IGlimpseResourceEndpointConfiguration ResourceEndpoint
+        private IResourceEndpointConfiguration resourceEndpoint;
+        public IResourceEndpointConfiguration ResourceEndpoint
         {
             get
             {
-                Contract.Ensures(Contract.Result<IGlimpseResourceEndpointConfiguration>()!=null);
+                Contract.Ensures(Contract.Result<IResourceEndpointConfiguration>()!=null);
                 return resourceEndpoint;
             }
             set
@@ -123,12 +123,12 @@ namespace Glimpse.Core2.Framework
             }
         }
 
-        private GlimpseCollection<IGlimpseResource> resources;
-        public GlimpseCollection<IGlimpseResource> Resources
+        private GlimpseCollection<IResource> resources;
+        public GlimpseCollection<IResource> Resources
         {
             get
             {
-                Contract.Ensures(Contract.Result<GlimpseCollection<IGlimpseResource>>()!=null);
+                Contract.Ensures(Contract.Result<GlimpseCollection<IResource>>()!=null);
                 return resources;
             }
             set
@@ -138,12 +138,12 @@ namespace Glimpse.Core2.Framework
             }
         }
 
-        private IGlimpseSerializer serializer;
-        public IGlimpseSerializer Serializer
+        private ISerializer serializer;
+        public ISerializer Serializer
         {
             get
             {
-                Contract.Ensures(Contract.Result<IGlimpseSerializer>()!=null);
+                Contract.Ensures(Contract.Result<ISerializer>()!=null);
                 return serializer;
             }
             set
@@ -153,12 +153,12 @@ namespace Glimpse.Core2.Framework
             }
         }
 
-        private GlimpseLazyCollection<ITab, IGlimpseTabMetadata> tabs;
-        public GlimpseLazyCollection<ITab, IGlimpseTabMetadata> Tabs
+        private GlimpseLazyCollection<ITab, ITabMetadata> tabs;
+        public GlimpseLazyCollection<ITab, ITabMetadata> Tabs
         {
             get
             {
-                Contract.Ensures(Contract.Result<GlimpseLazyCollection<ITab, IGlimpseTabMetadata>>()!=null);
+                Contract.Ensures(Contract.Result<GlimpseLazyCollection<ITab, ITabMetadata>>()!=null);
                 return tabs;
             }
             set

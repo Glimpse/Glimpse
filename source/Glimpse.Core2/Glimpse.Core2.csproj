@@ -95,26 +95,26 @@
     <Compile Include="Framework\ApplicationPersistanceStore.cs" />
     <Compile Include="Framework\GlimpseMetadata.cs" />
     <Compile Include="Framework\IGlimpsePersistanceStore.cs" />
-    <Compile Include="GlimpseConstants.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="NLogLogger.cs" />
     <Compile Include="MefDiscoverabilityPolicy-T1.cs" />
     <Compile Include="MefDiscoverabilityPolicy-T2.cs" />
     <Compile Include="DiscoverabilityPolicy.cs" />
     <Compile Include="Extensibility\RuntimePolicyAttribute.cs" />
-    <Compile Include="Extensibility\IGlimpseResourceEndpointConfiguration.cs" />
+    <Compile Include="Extensibility\IResourceEndpointConfiguration.cs" />
     <Compile Include="Extensibility\IRuntimePolicy.cs" />
     <Compile Include="Extensibility\ResourceResult.cs" />
-    <Compile Include="Extensibility\GlimpsePipelineInspectorAttribute.cs" />
-    <Compile Include="Extensibility\GlimpseTabAttribute.cs" />
+    <Compile Include="Extensibility\PipelineInspectorAttribute.cs" />
+    <Compile Include="Extensibility\TabAttribute.cs" />
     <Compile Include="Extensibility\IDataStore.cs" />
-    <Compile Include="Extensibility\IGlimpseResource.cs" />
-    <Compile Include="Extensibility\IGlimpseHelp.cs" />
+    <Compile Include="Extensibility\IResource.cs" />
+    <Compile Include="Extensibility\IDocumentation.cs" />
     <Compile Include="Extensibility\ITab.cs" />
-    <Compile Include="Extensibility\IGlimpseTabMetadata.cs" />
-    <Compile Include="Extensibility\IGlimpseTabSetup.cs" />
+    <Compile Include="Extensibility\ITabMetadata.cs" />
+    <Compile Include="Extensibility\ISetup.cs" />
     <Compile Include="Extensibility\IGlimpseRuntime.cs" />
-    <Compile Include="Extensibility\IGlimpsePipelineInspector.cs" />
-    <Compile Include="Extensibility\IGlimpseSerializer.cs" />
+    <Compile Include="Extensibility\IPipelineInspector.cs" />
+    <Compile Include="Extensibility\ISerializer.cs" />
     <Compile Include="Extensibility\ITabContext.cs" />
     <Compile Include="Framework\IFrameworkProvider.cs" />
     <Compile Include="Extensibility\LifeCycleSupport.cs" />
@@ -131,7 +131,7 @@
     <Compile Include="Policy\UriPolicy.cs" />
     <Compile Include="Policy\UserHostAddressPolicy.cs" />
     <Compile Include="RuntimePolicy.cs" />
-    <Compile Include="Extensibility\IGlimpseHtmlEncoder.cs" />
+    <Compile Include="Extensibility\IHtmlEncoder.cs" />
     <Compile Include="JsonNetSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FilteredSafeDirectoryCatalog.cs" />
@@ -142,6 +142,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="StatusCodeResourceResult.cs" />
+    <Compile Include="TabResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

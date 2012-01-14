@@ -1,6 +1,6 @@
 namespace Glimpse.Core2.Extensibility
 {
-    public interface IGlimpseHtmlEncoder
+    public interface IHtmlEncoder
     {
         string HtmlAttributeEncode(string input);
     }

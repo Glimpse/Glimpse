@@ -3,8 +3,8 @@ using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Test.Core2.TestDoubles
 {
-    [GlimpseTab(RequestContextType = typeof(DummyObjectContext))]
-    public class DummySetupTab : ITab, IGlimpseTabSetup
+    [Tab(RequestContextType = typeof(DummyObjectContext))]
+    public class DummySetupTab : ITab, ISetup
     {
         public object GetData(ITabContext context)
         {

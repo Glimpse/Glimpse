@@ -2,7 +2,7 @@
 
 namespace Glimpse.Test.Core2.TestDoubles
 {
-    [GlimpseTab(RequestContextType = typeof(DummyObjectContext))]
+    [Tab(RequestContextType = typeof(DummyObjectContext))]
     public class DummyTab:ITab
     {
         public object GetData(ITabContext context)

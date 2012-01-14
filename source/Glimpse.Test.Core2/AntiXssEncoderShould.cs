@@ -9,7 +9,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void HtmlAttributeEncode()
         {
-            IGlimpseHtmlEncoder encoder = new AntiXssEncoder();
+            IHtmlEncoder encoder = new AntiXssEncoder();
 
             var input = "This is < an ? Html string";
 

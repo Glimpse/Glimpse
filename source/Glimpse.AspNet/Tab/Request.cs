@@ -3,8 +3,8 @@ using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.AspNet.Tab
 {
-    [GlimpseTab(RequestContextType=typeof(HttpContextBase))] //TODO: Remove System.ComponentModel.Composition reference
-    public class Request:ITab, IGlimpseHelp
+    [Tab(RequestContextType=typeof(HttpContextBase))] //TODO: Remove System.ComponentModel.Composition reference
+    public class Request:ITab, IDocumentation
     {
         public object GetData(ITabContext context)
         {
@@ -18,7 +18,7 @@ namespace Glimpse.AspNet.Tab
             get { return "Request"; }
         }
 
-        public string HelpUri
+        public string DocumentationUri
         {
             get { return "http://localhost/someUrl"; }
         }

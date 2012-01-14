@@ -58,8 +58,8 @@ namespace Glimpse.Test.Core2
 
 
             //T`2
-            var glimpseCollection2 = new List<Lazy<ITab, IGlimpseTabMetadata>>();
-            var discoverabilityPolicy2 = new MefDiscoverabilityPolicy<ITab, IGlimpseTabMetadata>(glimpseCollection2);
+            var glimpseCollection2 = new List<Lazy<ITab, ITabMetadata>>();
+            var discoverabilityPolicy2 = new MefDiscoverabilityPolicy<ITab, ITabMetadata>(glimpseCollection2);
 
             discoverabilityPolicy2.Discover();
 
@@ -81,8 +81,8 @@ namespace Glimpse.Test.Core2
             Assert.Equal(0, glimpseCollection1.Count);
 
             //T`2
-            var glimpseCollection2 = new List<Lazy<ITab, IGlimpseTabMetadata>>();
-            var discoverabilityPolicy2 = new MefDiscoverabilityPolicy<ITab, IGlimpseTabMetadata>(glimpseCollection2);
+            var glimpseCollection2 = new List<Lazy<ITab, ITabMetadata>>();
+            var discoverabilityPolicy2 = new MefDiscoverabilityPolicy<ITab, ITabMetadata>(glimpseCollection2);
 
             discoverabilityPolicy2.IgnoreType(typeof(DummySetupTab));
             discoverabilityPolicy2.IgnoreType(typeof(DummyTab));

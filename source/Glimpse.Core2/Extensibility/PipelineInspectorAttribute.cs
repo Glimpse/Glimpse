@@ -4,8 +4,8 @@ using System.ComponentModel.Composition;
 namespace Glimpse.Core2.Extensibility
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class GlimpsePipelineInspectorAttribute:ExportAttribute
+    public class PipelineInspectorAttribute:ExportAttribute
     {
-        public GlimpsePipelineInspectorAttribute():base(typeof(IGlimpsePipelineInspector)){}
+        public PipelineInspectorAttribute():base(typeof(IPipelineInspector)){}
     }
 }

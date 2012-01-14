@@ -14,15 +14,15 @@ namespace Glimpse.Test.Core2.Extensibility
         {
             RequestContext = new DummyObjectContext();
             PluginStoreMock = new Mock<IDataStore>();
-            PipelineInspectors = new GlimpseCollection<IGlimpsePipelineInspector>
+            PipelineInspectors = new GlimpseCollection<IPipelineInspector>
                                      {
-                                         new DummyGlimpsePipelineInspector1()
+                                         new DummyPipelineInspector1()
                                      };
         }
 
 
 
-        private GlimpseCollection<IGlimpsePipelineInspector> PipelineInspectors { get; set; }
+        private GlimpseCollection<IPipelineInspector> PipelineInspectors { get; set; }
 
         private Mock<IDataStore> PluginStoreMock { get; set; }
 
@@ -51,9 +51,9 @@ namespace Glimpse.Test.Core2.Extensibility
         [Fact]
         public void GetPipelineModifier()
         {
-            var inspector = TabContext.GetPipelineInspector<DummyGlimpsePipelineInspector1>();
+            var inspector = TabContext.GetPipelineInspector<DummyPipelineInspector1>();
             Assert.NotNull(inspector);
-            Assert.IsType<DummyGlimpsePipelineInspector1>(inspector);
+            Assert.IsType<DummyPipelineInspector1>(inspector);
         }
 
         [Fact]

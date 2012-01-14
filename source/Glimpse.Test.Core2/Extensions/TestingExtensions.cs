@@ -19,7 +19,7 @@ namespace Glimpse.Test.Core2.Extensions
             return frameworkProvider;
         }
 
-        public static Mock<IGlimpseTabMetadata> Setup(this Mock<IGlimpseTabMetadata> metadata)
+        public static Mock<ITabMetadata> Setup(this Mock<ITabMetadata> metadata)
         {
             metadata.Setup(m => m.RequestContextType).Returns(typeof(DummyObjectContext));
             metadata.Setup(m => m.LifeCycleSupport).Returns(LifeCycleSupport.EndRequest);
