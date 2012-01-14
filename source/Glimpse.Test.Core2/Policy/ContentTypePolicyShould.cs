@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Glimpse.Core2;
 using Glimpse.Core2.Policy;
+using Glimpse.Test.Core2.TestDoubles;
 using Glimpse.Test.Core2.Tester;
 using Moq;
 using Xunit;
@@ -39,7 +40,7 @@ namespace Glimpse.Test.Core2.Policy
         [Fact]
         public void ReducePolicyOnError()
         {
-            var ex = new Exception("I am a problem.");
+            var ex = new DummyException("I am a problem.");
             Policy.RequestMetadataMock.Setup(r => r.ResponseContentType).Throws(ex);
 
             Assert.Equal(RuntimePolicy.Off, Policy.Execute(Policy.ContextMock.Object));
