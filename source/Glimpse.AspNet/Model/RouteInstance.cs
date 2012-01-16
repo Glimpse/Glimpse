@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Routing;
-using Glimpse.AspNet.Tab;
 
 namespace Glimpse.AspNet.Model
 {
@@ -45,25 +44,28 @@ namespace Glimpse.AspNet.Model
 
         public bool IsMatch { get; private set; }
 
-        public Route Route { get; private set; }
+        internal Route Route { get; set; }
 
-        private RouteData RouteData { get; set; }
+        internal RouteData RouteData { get; set; }
 
         public Type RouteType { get; private set; }
 
-        private List<TokenInstance> tokens;
+        private List<UriTokenInstance> tokens;
 
-        public IList<TokenInstance> Tokens
+        public IList<UriTokenInstance> UriTokens
         {
             get
             {
-                var result = tokens ?? new List<TokenInstance>();
+                if (tokens != null) 
+                    return tokens;
+
+                var result = new List<UriTokenInstance>();
 
                 RouteValueDictionary values = RouteData != null ? RouteData.Values : null;
 
                 if (values != null && Route.Defaults != null)
                 {
-                    result.AddRange(Route.Defaults.Select(item => new TokenInstance
+                    result.AddRange(Route.Defaults.Select(item => new UriTokenInstance
                                                                       {
                                                                           DefaultValue = item.Value,
                                                                           Value = values[item.Key],

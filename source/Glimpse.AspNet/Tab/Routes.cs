@@ -18,6 +18,9 @@ namespace Glimpse.AspNet.Tab
             {
                 var requestContext = context.GetRequestContext<HttpContextBase>();
 
+                if (requestContext == null) 
+                    return null;
+
                 result.AddRange(RouteTable.Routes.Select(routeBase => new RouteInstance(routeBase, requestContext)));
             }
 

@@ -1,6 +1,6 @@
 namespace Glimpse.AspNet.Model
 {
-    public class TokenInstance
+    public class UriTokenInstance
     {
         public string TokenName { get; set; }
         public object DefaultValue { get; set; }
