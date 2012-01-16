@@ -13,6 +13,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Test.Core2", "sourc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Test.AspNet", "source\Glimpse.Test.AspNet\Glimpse.Test.AspNet.csproj", "{76714E46-AFE9-49F0-AEE8-C8A966195914}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Old Projects", "Old Projects", "{32232A09-6249-4868-A37A-E510684A0D73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Mvc", "source\Glimpse.Mvc\Glimpse.Mvc.csproj", "{0A68B072-7918-45AC-BB78-F05789D0BF44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Test.Mvc", "source\Glimpse.Test.Mvc\Glimpse.Test.Mvc.csproj", "{FE12BC0C-CD22-4D24-BFC7-13ED1C428BAD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,8 +89,32 @@ Global
 		{76714E46-AFE9-49F0-AEE8-C8A966195914}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{76714E46-AFE9-49F0-AEE8-C8A966195914}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{76714E46-AFE9-49F0-AEE8-C8A966195914}.Release|x86.ActiveCfg = Release|Any CPU
+		{0A68B072-7918-45AC-BB78-F05789D0BF44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A68B072-7918-45AC-BB78-F05789D0BF44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A68B072-7918-45AC-BB78-F05789D0BF44}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0A68B072-7918-45AC-BB78-F05789D0BF44}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0A68B072-7918-45AC-BB78-F05789D0BF44}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0A68B072-7918-45AC-BB78-F05789D0BF44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A68B072-7918-45AC-BB78-F05789D0BF44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A68B072-7918-45AC-BB78-F05789D0BF44}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0A68B072-7918-45AC-BB78-F05789D0BF44}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0A68B072-7918-45AC-BB78-F05789D0BF44}.Release|x86.ActiveCfg = Release|Any CPU
+		{FE12BC0C-CD22-4D24-BFC7-13ED1C428BAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE12BC0C-CD22-4D24-BFC7-13ED1C428BAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE12BC0C-CD22-4D24-BFC7-13ED1C428BAD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{FE12BC0C-CD22-4D24-BFC7-13ED1C428BAD}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{FE12BC0C-CD22-4D24-BFC7-13ED1C428BAD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FE12BC0C-CD22-4D24-BFC7-13ED1C428BAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE12BC0C-CD22-4D24-BFC7-13ED1C428BAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE12BC0C-CD22-4D24-BFC7-13ED1C428BAD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FE12BC0C-CD22-4D24-BFC7-13ED1C428BAD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{FE12BC0C-CD22-4D24-BFC7-13ED1C428BAD}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{21F99168-7D7B-49F2-A97C-5A983E0CA16F} = {32232A09-6249-4868-A37A-E510684A0D73}
+		{523F20A6-3136-4034-B1DD-003F86BDB47A} = {32232A09-6249-4868-A37A-E510684A0D73}
 	EndGlobalSection
 EndGlobal
