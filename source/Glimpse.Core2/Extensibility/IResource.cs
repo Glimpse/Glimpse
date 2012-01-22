@@ -8,6 +8,7 @@ namespace Glimpse.Core2.Extensibility
     public interface IResource
     {
         string Name { get; }
+        string[] Parameters { get; }
         ResourceResult Execute(IDictionary<string, string> parameters);
     }
 
@@ -21,6 +22,11 @@ namespace Glimpse.Core2.Extensibility
                 Contract.Ensures(!string.IsNullOrEmpty(Contract.Result<string>()));
                 return default(string);
             }
+        }
+
+        public string[] Parameters
+        {
+            get { return default(string[]); }
         }
 
         public ResourceResult Execute(IDictionary<string, string> parameters)

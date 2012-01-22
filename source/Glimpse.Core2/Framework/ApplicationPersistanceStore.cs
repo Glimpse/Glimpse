@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using Glimpse.Core2.Extensibility;
 
@@ -8,7 +9,7 @@ namespace Glimpse.Core2.Framework
     public class ApplicationPersistanceStore : IPersistanceStore
     {
         private IDataStore DataStore { get; set; }
-        private IList<GlimpseMetadata> GlimpseRequests { get; set; }
+        internal IList<GlimpseMetadata> GlimpseRequests { get; set; }
         private const string PersistanceStoreKey = "__GlimpsePersistanceKey";
 
         public ApplicationPersistanceStore(IDataStore dataStore)
@@ -24,39 +25,37 @@ namespace Glimpse.Core2.Framework
             GlimpseRequests = glimpseRequests;
         }
 
-        public int Count()
-        {
-            return GlimpseRequests.Count;
-        }
-
         public void Save(GlimpseMetadata data)
         {
             GlimpseRequests.Add(data);
         }
 
-        public GlimpseMetadata GetById(Guid requestId)
+        public GlimpseMetadata GetByRequestId(Guid requestId)
         {
-            return GlimpseRequests.Where(r => r.RequestId == requestId).First();
+            return GlimpseRequests.FirstOrDefault(r => r.RequestId == requestId);
         }
 
-        public GlimpseMetadata[] GetByClient(string clientName)
+        public string GetByRequestIdAndTabKey(Guid requestId, string tabKey)
         {
-            return GlimpseRequests.Where(r => r.GlimpseClientName.Equals(clientName, StringComparison.InvariantCultureIgnoreCase)).ToArray();
+            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(tabKey), "tabKey");
+
+            var request = GlimpseRequests.FirstOrDefault(r => r.RequestId == requestId);
+
+            if (request == null || !request.PluginData.ContainsKey(tabKey))
+                return null;
+
+            return request.PluginData[tabKey];
         }
 
-        public IDictionary<string, int> GetClients()
+        //TODO: Change to IEnumerable<GlimpseMetadata>??
+        public GlimpseMetadata[] GetByRequestParentId(Guid parentRequestId)
         {
-            var result = new Dictionary<string, int>();
+            return GlimpseRequests.Where(r => r.ParentRequestId == parentRequestId).ToArray();
+        }
 
-            foreach (var request in GlimpseRequests)
-            {
-                if (!result.ContainsKey(request.GlimpseClientName))
-                    result.Add(request.GlimpseClientName, 1);
-                else
-                    result[request.GlimpseClientName]++;
-            }
-
-            return result;
+        public GlimpseMetadata[] GetTop(int count)
+        {
+            return GlimpseRequests.Take(count).ToArray();
         }
     }
 }

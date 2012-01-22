@@ -55,9 +55,7 @@ namespace Glimpse.Core2.Framework
             requestStore.Set(Constants.RequestIdKey, Guid.NewGuid());
 
             //Create and start global stopwatch
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-            requestStore.Set(Constants.GlobalStopwatchKey, stopwatch);
+            requestStore.Set(Constants.GlobalStopwatchKey, Stopwatch.StartNew());
         }
 
         //TODO: Make sure request has begun?
@@ -73,6 +71,8 @@ namespace Glimpse.Core2.Framework
 
             var frameworkProvider = Configuration.FrameworkProvider;
             var requestStore = frameworkProvider.HttpRequestStore;
+            var stopwatch = requestStore.Get<Stopwatch>(Constants.GlobalStopwatchKey);
+            stopwatch.Stop();
             
             Guid requestId;
             try
@@ -92,13 +92,13 @@ namespace Glimpse.Core2.Framework
                 var pluginResults = TabResultsStore.ToDictionary(item => item.Key, item => serializer.Serialize(item.Value));
                 var requestMetadata = frameworkProvider.RequestMetadata;
 
-                var metadata = new GlimpseMetadata(requestId, requestMetadata, pluginResults);
+                var metadata = new GlimpseMetadata(requestId, requestMetadata, pluginResults, stopwatch.ElapsedMilliseconds);
 
                 Configuration.PersistanceStore.Save(metadata);
             }
 
             if (policy.HasFlag(RuntimePolicy.ModifyResponseHeaders))
-                frameworkProvider.SetHttpResponseHeader(Constants.HttpHeader, requestId.ToString());
+                frameworkProvider.SetHttpResponseHeader(Constants.HttpResponseHeader, requestId.ToString());
 
             if (policy.HasFlag(RuntimePolicy.DisplayGlimpseClient))
             {

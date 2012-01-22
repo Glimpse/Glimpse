@@ -98,6 +98,7 @@
     <Compile Include="Framework\IPersistanceStore.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Framework\PipelineInspectorContext.cs" />
+    <Compile Include="Framework\TabResult.cs" />
     <Compile Include="NLogLogger.cs" />
     <Compile Include="MefDiscoverabilityPolicy-T1.cs" />
     <Compile Include="MefDiscoverabilityPolicy-T2.cs" />
@@ -144,7 +145,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="StatusCodeResourceResult.cs" />
-    <Compile Include="TabResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

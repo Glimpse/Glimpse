@@ -104,6 +104,7 @@
     <Compile Include="TestDoubles\DummySetupTab.cs" />
     <Compile Include="TestDoubles\DummyTab.cs" />
     <Compile Include="Tester\AjaxPolicyTester.cs" />
+    <Compile Include="Tester\ApplicationPersistanceStoreTester.cs" />
     <Compile Include="Tester\ContentTypePolicyTester.cs" />
     <Compile Include="Tester\GlimpseConfigurationTester.cs" />
     <Compile Include="Tester\GlimpseRuntimeTester.cs" />

@@ -3,7 +3,10 @@
     public static class Constants
     {
         public const string ControlCookieName = "glimpsePolicy";
-        public const string HttpHeader = "X-Glimpse-RequestID";
+        public const string ClientIdCookieName = "glimpseId";
+        public const string HttpResponseHeader = "X-Glimpse-RequestID";
+        public const string UserAgentHeaderName = "User-Agent";
+        public const string HttpRequestHeader = "X-Glimpse-Parent-RequestID";
 
         internal const string PluginResultsDataStoreKey = "__GlimpsePluginResultsKey";
         internal const string RequestIdKey = "__GlimpseRequestId";

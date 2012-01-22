@@ -1,115 +1,213 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Glimpse.Core2;
-using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
-using Moq;
+using Glimpse.Test.Core2.Tester;
 using Xunit;
 
 namespace Glimpse.Test.Core2
 {
-    //TODO: Refactor to use Tester pattern
-    public class ApplicationPersistanceStoreShould
+    public class ApplicationPersistanceStoreShould:IDisposable
     {
-        public IDataStore DataStore { get; set; }
-
-        public ApplicationPersistanceStoreShould()
+        private ApplicationPersistanceStoreTester tester;
+        public ApplicationPersistanceStoreTester Store
         {
-            DataStore = new DictionaryDataStoreAdapter(new Dictionary<object, object>());
+            get { return tester ?? (tester = ApplicationPersistanceStoreTester.Create()); }
+            set { tester = value; }
+        }
+
+        public void Dispose()
+        {
+            Store = null;
         }
 
         [Fact]
         public void Construct()
         {
-            IPersistanceStore persistanceStore = new ApplicationPersistanceStore(DataStore);
-
-            Assert.NotNull(persistanceStore);
-            Assert.Equal(0, persistanceStore.Count());
+            Assert.NotNull(Store);
         }
 
         [Fact]
         public void Persist()
         {
-            var persistanceStore = new ApplicationPersistanceStore(DataStore);
-
-            Assert.Equal(0, persistanceStore.Count());
-
-            var requestMetadataMock = new Mock<IRequestMetadata>();
-            requestMetadataMock.Setup(r => r.RequestHttpMethod).Returns("POST");
-            requestMetadataMock.Setup(r => r.RequestUri).Returns("http://localhost");
+            Assert.Equal(0, Store.GlimpseRequests.Count());
 
             var pluginData = new Dictionary<string, string>();
 
-            persistanceStore.Save(new GlimpseMetadata(Guid.NewGuid(), requestMetadataMock.Object, pluginData));
+            Store.Save(new GlimpseMetadata(Guid.NewGuid(), Store.RequestMetadataMock.Object, pluginData, 0));
 
-            Assert.Equal(1, persistanceStore.Count());
+            Assert.Equal(1, Store.GlimpseRequests.Count());
         }
 
         [Fact]
         public void GetGlimpseMetadataById()
         {
-            IPersistanceStore persistanceStore = new ApplicationPersistanceStore(DataStore);
-
             var requestId = Guid.NewGuid();
-            var metadata = new GlimpseMetadata(requestId, new Mock<IRequestMetadata>().Object, new Dictionary<string, string>());
+            var metadata = new GlimpseMetadata(requestId, Store.RequestMetadataMock.Object, new Dictionary<string, string>(), 0);
 
-            persistanceStore.Save(metadata);
+            Store.Save(metadata);
 
-            var result = persistanceStore.GetById(requestId);
+            var result = Store.GetByRequestId(requestId);
 
             Assert.Equal(metadata, result);
         }
 
         [Fact]
-        public void GetGlimpseClients()
+        public void GetGlimpseMetadataByIdWithMisMatch()
         {
-            IPersistanceStore persistanceStore = new ApplicationPersistanceStore(DataStore);
+            var requestId = Guid.Parse("00000000-0000-0000-0000-000000000000");
 
-            var clientName = Guid.NewGuid().ToString();
-            var requestId = Guid.NewGuid();
+            Store.Save(new GlimpseMetadata(Guid.NewGuid(), Store.RequestMetadataMock.Object, new Dictionary<string, string>(), 0));
 
-            var requestMetadataMock = new Mock<IRequestMetadata>();
-            requestMetadataMock.Setup(r => r.GetCookie(Constants.ControlCookieName)).Returns(clientName);
-
-            var metadata = new GlimpseMetadata(requestId, requestMetadataMock.Object, new Dictionary<string, string>());
-
-            persistanceStore.Save(metadata);
-
-            var result = persistanceStore.GetClients();
-
-            Assert.Equal(clientName, result.Keys.First());
-            Assert.Equal(1, result[clientName]);
+            Assert.Null(Store.GetByRequestId(requestId));
         }
 
         [Fact]
-        public void GetGlipseMetadataByClientName()
-        {
-            IPersistanceStore persistanceStore = new ApplicationPersistanceStore(DataStore);
-
-            var clientName = Guid.NewGuid().ToString();
-            var requestId1 = Guid.NewGuid();
-            var requestId2 = Guid.NewGuid();
-
-            var requestMetadataMock = new Mock<IRequestMetadata>();
-            requestMetadataMock.Setup(r => r.GetCookie(Constants.ControlCookieName)).Returns(clientName);
-
-            var metadata1 = new GlimpseMetadata(requestId1, requestMetadataMock.Object, new Dictionary<string, string>());
-            var metadata2 = new GlimpseMetadata(requestId2, requestMetadataMock.Object, new Dictionary<string, string>());
-
-            persistanceStore.Save(metadata1);
-            persistanceStore.Save(metadata2);
-
-            var result = persistanceStore.GetByClient(clientName);
-
-            Assert.True(result.Length == 2);
-        }
-
-        [Fact(Skip = "Come back to this later")]
         public void GetGlimpseMetadataByParentRequestId()
         {
-            Assert.True(false, "Need to implement");
+            var pluginData = new Dictionary<string, string>();
+
+            Store.Save(new GlimpseMetadata(Guid.NewGuid(), Store.RequestMetadataMock.Object, pluginData, 0));
+
+            Assert.Equal(1, Store.GetByRequestParentId(Guid.Parse("936DA01F-9ABD-4d9d-80C7-02AF85C822A8")).Count());
         }
 
+        [Fact]
+        public void GetGlimpseMetadataByParentRequestIdWithMisMatch()
+        {
+            var pluginData = new Dictionary<string, string>();
+
+            Store.Save(new GlimpseMetadata(Guid.NewGuid(), Store.RequestMetadataMock.Object, pluginData, 0));
+
+            Assert.Equal(0,Store.GetByRequestParentId(Guid.Parse("00000000-0000-0000-0000-000000000000")).Count());
+        }
+
+        [Fact]
+        public void GetTopWithFewerThanRequested()
+        {
+            var pluginData = new Dictionary<string, string>();
+
+
+            var metadata1 = new GlimpseMetadata(Guid.NewGuid(), Store.RequestMetadataMock.Object, pluginData, 0);
+            var metadata2 = new GlimpseMetadata(Guid.NewGuid(), Store.RequestMetadataMock.Object, pluginData, 0);
+            var metadata3 = new GlimpseMetadata(Guid.NewGuid(), Store.RequestMetadataMock.Object, pluginData, 0);
+            var metadata4 = new GlimpseMetadata(Guid.NewGuid(), Store.RequestMetadataMock.Object, pluginData, 0);
+            var metadata5 = new GlimpseMetadata(Guid.NewGuid(), Store.RequestMetadataMock.Object, pluginData, 0);
+
+            Store.Save(metadata1);
+            Store.Save(metadata2);
+            Store.Save(metadata3);
+            Store.Save(metadata4);
+            Store.Save(metadata5);
+
+            var result = Store.GetTop(10);
+            Assert.Equal(5, result.Count());
+            Assert.Equal(metadata1, result[0]);
+            Assert.Equal(metadata2, result[1]);
+            Assert.Equal(metadata3, result[2]);
+            Assert.Equal(metadata4, result[3]);
+            Assert.Equal(metadata5, result[4]);
+        }
+
+        [Fact]
+        public void GetTopWithMoreThanRequested()
+        {
+            var pluginData = new Dictionary<string, string>();
+
+
+            var metadata1 = new GlimpseMetadata(Guid.NewGuid(), Store.RequestMetadataMock.Object, pluginData, 0);
+            var metadata2 = new GlimpseMetadata(Guid.NewGuid(), Store.RequestMetadataMock.Object, pluginData, 0);
+            var metadata3 = new GlimpseMetadata(Guid.NewGuid(), Store.RequestMetadataMock.Object, pluginData, 0);
+            var metadata4 = new GlimpseMetadata(Guid.NewGuid(), Store.RequestMetadataMock.Object, pluginData, 0);
+            var metadata5 = new GlimpseMetadata(Guid.NewGuid(), Store.RequestMetadataMock.Object, pluginData, 0);
+
+            Store.Save(metadata1);
+            Store.Save(metadata2);
+            Store.Save(metadata3);
+            Store.Save(metadata4);
+            Store.Save(metadata5);
+
+            var result = Store.GetTop(3);
+            Assert.Equal(3, result.Count());
+            Assert.Equal(metadata1, result[0]);
+            Assert.Equal(metadata2, result[1]);
+            Assert.Equal(metadata3, result[2]);
+        }
+
+        [Fact]
+        public void GetTopWithNoResults()
+        {
+            var result = Store.GetTop(3);
+            Assert.Equal(0, result.Count());
+        }
+
+        [Fact]
+        public void ThrowWithEmptyTabKey()
+        {
+            Assert.Throws<ArgumentNullException>(()=>Store.GetByRequestIdAndTabKey(Guid.NewGuid(), string.Empty));
+        }
+
+        [Fact]
+        public void GetOnePluginsData()
+        {
+
+            var key = "theKey";
+            var value = "theValue";
+            var pluginData = new Dictionary<string, string>
+                                 {
+                                     {key,value}
+                                 };
+
+
+            var id = Guid.NewGuid();
+            var metadata = new GlimpseMetadata(id, Store.RequestMetadataMock.Object, pluginData, 0);
+
+            Store.Save(metadata);
+
+            var result = Store.GetByRequestIdAndTabKey(id, key);
+            Assert.Equal(value, result);
+        }
+
+        [Fact]
+        public void GetOnePluginsDataReturnsNullWithMisMatchKey()
+        {
+
+            var key = "theKey";
+            var value = "theValue";
+            var pluginData = new Dictionary<string, string>
+                                 {
+                                     {key,value}
+                                 };
+
+
+            var id = Guid.NewGuid();
+            var metadata = new GlimpseMetadata(id, Store.RequestMetadataMock.Object, pluginData, 0);
+
+            Store.Save(metadata);
+
+            var result = Store.GetByRequestIdAndTabKey(id, "wrongKey");
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void GetOnePluginsDataReturnsNullWithMisMatchId()
+        {
+
+            var key = "theKey";
+            var value = "theValue";
+            var pluginData = new Dictionary<string, string>
+                                 {
+                                     {key,value}
+                                 };
+
+
+            var id = Guid.NewGuid();
+            var metadata = new GlimpseMetadata(id, Store.RequestMetadataMock.Object, pluginData, 0);
+
+            Store.Save(metadata);
+
+            var result = Store.GetByRequestIdAndTabKey(Guid.Parse("00000000-0000-0000-0000-000000000000"), key);
+            Assert.Null(result);
+        }
     }
 }

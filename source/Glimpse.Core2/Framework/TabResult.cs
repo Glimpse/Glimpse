@@ -1,6 +1,6 @@
-﻿namespace Glimpse.Core2
+namespace Glimpse.Core2.Framework
 {
-    internal class TabResult
+    public class TabResult
     {
         public object Data { get; set; }
         public string Name { get; set; }

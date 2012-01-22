@@ -303,7 +303,7 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.ExecuteTabs();
             Runtime.EndRequest();
 
-            Runtime.FrameworkProviderMock.Verify(fp => fp.SetHttpResponseHeader(Constants.HttpHeader, It.IsAny<string>()));
+            Runtime.FrameworkProviderMock.Verify(fp => fp.SetHttpResponseHeader(Constants.HttpResponseHeader, It.IsAny<string>()));
         }
 
         [Fact]

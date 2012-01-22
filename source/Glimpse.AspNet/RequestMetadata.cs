@@ -31,6 +31,11 @@ namespace Glimpse.AspNet
             return cookie == null ? null : cookie.Value;
         }
 
+        public string GetHttpHeader(string name)
+        {
+            return Context.Request.Headers.Get(name);
+        }
+
         public int ResponseStatusCode
         {
             get { return Context.Response.StatusCode; }

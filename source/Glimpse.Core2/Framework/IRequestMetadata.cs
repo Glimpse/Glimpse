@@ -7,6 +7,7 @@ namespace Glimpse.Core2.Framework
         string RequestUri { get; }
         string RequestHttpMethod { get; }
         string GetCookie(string name);
+        string GetHttpHeader(string name);
         int ResponseStatusCode { get; }
         string ResponseContentType { get; }
         string IpAddress { get; }
