@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Glimpse.Core2.Framework
 {
@@ -7,7 +8,7 @@ namespace Glimpse.Core2.Framework
         void Save(GlimpseMetadata data);
         GlimpseMetadata GetByRequestId(Guid requestId);
         string GetByRequestIdAndTabKey(Guid requestId, string tabKey);
-        GlimpseMetadata[] GetByRequestParentId(Guid parentRequestId);
-        GlimpseMetadata[] GetTop(int count);
+        IEnumerable<GlimpseMetadata> GetByRequestParentId(Guid parentRequestId);
+        IEnumerable<GlimpseMetadata> GetTop(int count);
     }
 }

@@ -48,14 +48,14 @@ namespace Glimpse.Core2.Framework
         }
 
         //TODO: Change to IEnumerable<GlimpseMetadata>??
-        public GlimpseMetadata[] GetByRequestParentId(Guid parentRequestId)
+        public IEnumerable<GlimpseMetadata> GetByRequestParentId(Guid parentRequestId)
         {
-            return GlimpseRequests.Where(r => r.ParentRequestId == parentRequestId).ToArray();
+            return GlimpseRequests.Where(r => r.ParentRequestId == parentRequestId).ToList();
         }
 
-        public GlimpseMetadata[] GetTop(int count)
+        public IEnumerable<GlimpseMetadata> GetTop(int count)
         {
-            return GlimpseRequests.Take(count).ToArray();
+            return GlimpseRequests.Take(count).ToList();
         }
     }
 }

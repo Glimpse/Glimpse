@@ -1,8 +1,10 @@
+using System.Diagnostics;
 using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
 using Glimpse.Test.Core2.Extensions;
 using Moq;
+using System;
 
 namespace Glimpse.Test.Core2.Tester
 {
@@ -17,6 +19,7 @@ namespace Glimpse.Test.Core2.Tester
         public Mock<ISerializer> SerializerMock { get; set; }
         public Mock<IPersistanceStore> PersistanceStoreMock { get; set; }
         public Mock<ILogger> LoggerMock { get; set; }
+        public Mock<IRequestMetadata> RequestMetadataMock { get; set; }
         public Mock<IResource> ResourceMock { get; set; }
         public Mock<ResourceResult> ResourceResultMock { get; set; }
         public Mock<IRuntimePolicy> ValidatorMock { get; set; }
@@ -37,6 +40,17 @@ namespace Glimpse.Test.Core2.Tester
             ResourceResultMock = new Mock<ResourceResult>();
             ValidatorMock = new Mock<IRuntimePolicy>();
             ValidatorMock.Setup(v => v.Execute(It.IsAny<IRuntimePolicyContext>())).Returns(RuntimePolicy.On);
+            RequestMetadataMock = new Mock<IRequestMetadata>();
+            RequestMetadataMock.Setup(r => r.RequestHttpMethod).Returns("GET");
+            RequestMetadataMock.Setup(r => r.RequestIsAjax).Returns(true);
+            RequestMetadataMock.Setup(r => r.RequestUri).Returns("http://localhost");
+            RequestMetadataMock.Setup(r => r.ResponseStatusCode).Returns(200);
+            RequestMetadataMock.Setup(r => r.ResponseContentType).Returns(@"text\html");
+            RequestMetadataMock.Setup(r => r.GetCookie(Constants.ClientIdCookieName)).Returns(@"Some Client");
+            RequestMetadataMock.Setup(r => r.GetCookie(Constants.UserAgentHeaderName)).Returns(@"FireFox");
+            RequestMetadataMock.Setup(r => r.GetHttpHeader(Constants.HttpRequestHeader)).Returns(Guid.NewGuid().ToString());
+
+            FrameworkProviderMock.Setup(fp => fp.RequestMetadata).Returns(RequestMetadataMock.Object);
 
             configuration.Serializer = SerializerMock.Object;
             configuration.PersistanceStore = PersistanceStoreMock.Object;
@@ -53,9 +67,7 @@ namespace Glimpse.Test.Core2.Tester
             var configuration =
                 new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfigMock.Object).
                     TurnOffAutoDiscover();
-            /*configuration.Serializer = SerializerMock.Object;
-            configuration.PersistanceStore = PersistanceStoreMock.Object;
-            configuration.Logger = LoggerMock.Object;*/
+
 
             return new GlimpseRuntimeTester(configuration, frameworkProviderMock, endpointConfigMock);
         }

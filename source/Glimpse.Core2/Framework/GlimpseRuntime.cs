@@ -71,13 +71,14 @@ namespace Glimpse.Core2.Framework
 
             var frameworkProvider = Configuration.FrameworkProvider;
             var requestStore = frameworkProvider.HttpRequestStore;
-            var stopwatch = requestStore.Get<Stopwatch>(Constants.GlobalStopwatchKey);
-            stopwatch.Stop();
             
             Guid requestId;
+            Stopwatch stopwatch;
             try
             {
                 requestId = requestStore.Get<Guid>(Constants.RequestIdKey);
+                stopwatch = requestStore.Get<Stopwatch>(Constants.GlobalStopwatchKey);
+                stopwatch.Stop();
             }
             catch (NullReferenceException ex)
             {
