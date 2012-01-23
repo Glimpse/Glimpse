@@ -4,17 +4,12 @@ using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.AspNet
 {
-    public class HttpHandlerEndpointConfiguration:IResourceEndpointConfiguration
+    public class HttpHandlerEndpointConfiguration:ResourceEndpointConfiguration
     {
-        public string GenerateUrl(string resourceName, string version)
-        {
-            return GenerateUrl(resourceName, version, new Dictionary<string,string>());
-        }
-
-        public string GenerateUrl(string resourceName, string version, IDictionary<string, string> parameters)
+        protected override string GenerateUri(string resourceName, IEnumerable<KeyValuePair<string, string>> parameters)
         {
             //TODO: Return properly rooted URL
-            var stringBuilder = new StringBuilder(string.Format("Glimpse.axd?n={0}&v={1}", resourceName, version));
+            var stringBuilder = new StringBuilder(string.Format(@"/Glimpse.axd?n={0}", resourceName));
 
             if (parameters != null)
             {

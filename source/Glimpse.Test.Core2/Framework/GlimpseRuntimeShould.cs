@@ -401,7 +401,7 @@ namespace Glimpse.Test.Core2.Framework
 
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
 
-            Runtime.ExecuteResource(name, null);
+            Runtime.ExecuteResource(name, new Dictionary<string, string>());
 
             Runtime.ResourceMock.Verify(r => r.Execute(null), Times.Never());
         }

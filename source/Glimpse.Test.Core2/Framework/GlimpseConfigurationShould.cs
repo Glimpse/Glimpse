@@ -91,6 +91,12 @@ namespace Glimpse.Test.Core2.Framework
         }
 
         [Fact]
+        public void CreateDefaultClientScripts()
+        {
+            Assert.NotNull(Configuration.ClientScripts);
+        }
+
+        [Fact]
         public void NotDiscoverPipelineInspectors()
         {
             Assert.Equal(0, Configuration.PipelineInspectors.Count);
@@ -188,6 +194,12 @@ namespace Glimpse.Test.Core2.Framework
         }
 
         [Fact]
+        public void ClientScriptsCannotBeNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => Configuration.ClientScripts = null);
+        }
+
+        [Fact]
         public void DefaultToGlimpseModeOff()
         {
             Assert.Equal(RuntimePolicy.Off, Configuration.BasePolicy);
@@ -203,9 +215,6 @@ namespace Glimpse.Test.Core2.Framework
 
         public void Dispose()
         {
-            /*EndpointConfigMock = null;
-            FrameworkProviderMock = null;
-            Configuration = null;*/
             Configuration = null;
         }
     }

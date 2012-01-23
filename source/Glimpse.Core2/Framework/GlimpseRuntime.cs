@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Text;
 using Glimpse.Core2.Extensibility;
-using Glimpse.Core2.Resource;
 
 namespace Glimpse.Core2.Framework
 {
@@ -58,10 +58,8 @@ namespace Glimpse.Core2.Framework
             requestStore.Set(Constants.GlobalStopwatchKey, Stopwatch.StartNew());
         }
 
-        //TODO: Make sure request has begun?
         //TODO: Add PRG support
         //TODO: Process MetaData
-        //TODO: stop glimpse timer (if needed?)
         //TODO: Sanitize JSON
         //TODO: Structured layout support
         public void EndRequest()
@@ -86,7 +84,6 @@ namespace Glimpse.Core2.Framework
             }
 
             //TODO: Handle exceptions
-            //TODO: Finish implementing persistence store
             if (policy.HasFlag(RuntimePolicy.PersistResults))
             {
                 var serializer = Configuration.Serializer;
@@ -103,25 +100,86 @@ namespace Glimpse.Core2.Framework
 
             if (policy.HasFlag(RuntimePolicy.DisplayGlimpseClient))
             {
-                var encoder = Configuration.HtmlEncoder;
-                var resourceEndpoint = Configuration.ResourceEndpoint;
+                //var encoder = Configuration.HtmlEncoder;
+                //var resourceEndpoint = Configuration.ResourceEndpoint;
 
-                //TODO: Consider using anonymous type syntax to simplify this new dictionary
-                var dataPath = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUrl("data.js", Version, new Dictionary<string, string> {{"id", requestId.ToString()}}));
-                var clientPath = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUrl("client.js", Version));
+                //var dataPath = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUrl("data.js", Version, new Dictionary<string, string> {{"id", requestId.ToString()}}));
+                //var clientPath = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUrl("client.js", Version));
 
-                var html = string.Format(@"<script type='text/javascript' id='glimpseData' src='{0}'></script><script type='text/javascript' id='glimpseClient' src='{1}'></script></body>", dataPath, clientPath);
+                //var html = string.Format(@"<script type='text/javascript' id='glimpseData' src='{0}'></script><script type='text/javascript' id='glimpseClient' src='{1}'></script></body>", dataPath, clientPath);
+
+                var html = GenerateScriptTags(requestId);
 
                 frameworkProvider.InjectHttpResponseBody(html);
             }
         }
 
-        public void ExecuteResource(string resourceName)
+        internal string GenerateScriptTags(Guid requestId)
         {
-            ExecuteResource(resourceName, new Dictionary<string, string>());
+            var encoder = Configuration.HtmlEncoder;
+            var resourceEndpoint = Configuration.ResourceEndpoint;
+            var clientScripts = Configuration.ClientScripts;
+            var logger = Configuration.Logger;
+            var resources = Configuration.Resources;
+
+            var requestTokenValues = new Dictionary<string, string>
+                                         {
+                                             {ResourceParameterKey.RequestId, requestId.ToString()},
+                                             {ResourceParameterKey.VersionNumber, Version}
+                                         };
+
+            var stringBuilder = new StringBuilder();
+
+            foreach (var clientScript in clientScripts.OrderBy(cs=>cs.Order))
+            {
+                var dynamicScript = clientScript as IDynamicClientScript;
+                if (dynamicScript != null)
+                {
+                    //TODO:Handle Exceptions
+                    var resourceName = dynamicScript.GetResourceName();
+                    var resource = resources.FirstOrDefault(r => r.Name.Equals(resourceName, StringComparison.InvariantCultureIgnoreCase));
+
+                    if (resource == null)
+                    {
+                        logger.Warn(string.Format(Resources.RenderClientScriptMissingResourceWarning, clientScript.GetType(), resourceName));
+                        continue;
+                    }
+
+                    var uri = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUri(resource, requestTokenValues));
+                    stringBuilder.AppendFormat(@"<script type='text/javascript' src='{0}'></script>", uri);
+                    continue;
+                }
+
+                var staticScript = clientScript as IStaticClientScript;
+                if (staticScript != null)
+                {
+                    var uri = staticScript.GetUri(Version);
+                    stringBuilder.AppendFormat(@"<script type='text/javascript' src='{0}'></script>", uri);
+                    continue;
+                }
+
+                logger.Warn(string.Format(Resources.RenderClientScriptImproperImplementationWarning, clientScript.GetType()));
+            }
+
+            return stringBuilder.ToString();
         }
 
-        public void ExecuteResource(string resourceName, IDictionary<string, string> parameters)
+        public void ExecuteResource(string resourceName)
+        {
+            ExecuteResource(resourceName, new ResourceParameters());
+        }
+
+        public void ExecuteResource(string resourceName, IDictionary<string, string> namedParameters)
+        {
+            ExecuteResource(resourceName, new ResourceParameters{NamedParameters = namedParameters});
+        }
+
+        public void ExecuteResource(string resourceName, string[] orderedParameters)
+        {
+            ExecuteResource(resourceName, new ResourceParameters{OrderedParameters = orderedParameters});
+        }
+
+        public void ExecuteResource(string resourceName, ResourceParameters parameters)
         {
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(resourceName), "resourceName");
 
@@ -140,8 +198,9 @@ namespace Glimpse.Core2.Framework
                 case 1: //200 - OK
                     try
                     {
-                        var param = parameters ?? new Dictionary<string, string>();
-                        result = resources.First().Execute(param);
+                        var resource = resources.First();
+                        var values = parameters.GetParametersFor(resource);
+                        result = resources.First().Execute(values);
                     }
                     catch (Exception ex)
                     {
@@ -278,6 +337,9 @@ namespace Glimpse.Core2.Framework
 
             if (configuration.RuntimePolicies.Discoverability.AutoDiscover)
                 configuration.RuntimePolicies.Discoverability.Discover();
+
+            if (configuration.ClientScripts.Discoverability.AutoDiscover)
+                configuration.ClientScripts.Discoverability.Discover();
 
             Configuration = configuration;
         }

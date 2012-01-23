@@ -12,7 +12,7 @@ namespace Glimpse.Core2.Framework
 
         //TODO: Add Sanitizer?
         //TODO: Add static FromWebConfig method to construct an instance of GlimpseConfiguration
-        public GlimpseConfiguration(IFrameworkProvider frameworkProvider, IResourceEndpointConfiguration endpointConfiguration)
+        public GlimpseConfiguration(IFrameworkProvider frameworkProvider, ResourceEndpointConfiguration endpointConfiguration)
         {
             //TODO: Test building glimpse on clean VS install with contracts
             //TODO: Test building glimpse on teamcity with contracts
@@ -20,6 +20,7 @@ namespace Glimpse.Core2.Framework
             Contract.Requires<ArgumentNullException>(endpointConfiguration != null, "endpointConfiguration");
 
             //TODO: Refactor all these "new" calls to leverage a IOC container?
+            ClientScripts = new DiscoverableCollection<IClientScript>();
             FrameworkProvider = frameworkProvider;
             HtmlEncoder = new AntiXssEncoder();
             Logger = new NLogLogger(CreateLogger());
@@ -31,6 +32,21 @@ namespace Glimpse.Core2.Framework
             Tabs = new DiscoverableLazyCollection<ITab, ITabMetadata>();
             RuntimePolicies = new DiscoverableLazyCollection<IRuntimePolicy, IRuntimePolicyMetadata>();
             BasePolicy = RuntimePolicy.Off;
+        }
+
+        private DiscoverableCollection<IClientScript> clientScripts;
+        public DiscoverableCollection<IClientScript> ClientScripts
+        {
+            get
+            {
+                Contract.Ensures(Contract.Result<DiscoverableCollection<IClientScript>>()!=null);
+                return clientScripts;
+            }
+            set
+            {
+                Contract.Requires<ArgumentNullException>(value!=null, "value");
+                clientScripts = value;
+            }
         }
 
         private IFrameworkProvider frameworkProvider;
@@ -108,12 +124,12 @@ namespace Glimpse.Core2.Framework
             }
         }
 
-        private IResourceEndpointConfiguration resourceEndpoint;
-        public IResourceEndpointConfiguration ResourceEndpoint
+        private ResourceEndpointConfiguration resourceEndpoint;
+        public ResourceEndpointConfiguration ResourceEndpoint
         {
             get
             {
-                Contract.Ensures(Contract.Result<IResourceEndpointConfiguration>()!=null);
+                Contract.Ensures(Contract.Result<ResourceEndpointConfiguration>()!=null);
                 return resourceEndpoint;
             }
             set

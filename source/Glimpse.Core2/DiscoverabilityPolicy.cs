@@ -5,7 +5,7 @@ namespace Glimpse.Core2
 {
     public abstract class DiscoverabilityPolicy
     {
-        //TODO Remove MEF dependency
+        //TODO Remove MEF dependency to support .NET35 and eliminate the need to reference System.ComponentModel.Composition when extending Glimpse
         protected DiscoverabilityPolicy()
         {
             IgnoredTypes = new List<string>();

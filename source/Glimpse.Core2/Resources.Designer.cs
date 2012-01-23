@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Glimpse.Core2.Resource {
+namespace Glimpse.Core2 {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Glimpse.Core2.Resource {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Glimpse.Core2.Resource.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Glimpse.Core2.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -120,6 +120,24 @@ namespace Glimpse.Core2.Resource {
         internal static string OutOfOrderRuntimeMethodCall {
             get {
                 return ResourceManager.GetString("OutOfOrderRuntimeMethodCall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to render IClientScript: &apos;{0}&apos;. All IClientScript implementations should also implement either IStaticClientScript or IDynamicClientScript..
+        /// </summary>
+        internal static string RenderClientScriptImproperImplementationWarning {
+            get {
+                return ResourceManager.GetString("RenderClientScriptImproperImplementationWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to render IClientScript: &apos;{0}&apos;. No IResource with the Name &apos;{1}&apos; could be found..
+        /// </summary>
+        internal static string RenderClientScriptMissingResourceWarning {
+            get {
+                return ResourceManager.GetString("RenderClientScriptMissingResourceWarning", resourceCulture);
             }
         }
     }

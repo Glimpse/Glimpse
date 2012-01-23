@@ -23,7 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
-    <CodeContractsRuntimeOnlyPublicSurface>True</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
     <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
     <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
     <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
@@ -84,9 +84,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AntiXssEncoder.cs" />
+    <Compile Include="ClientScript\Client.cs" />
+    <Compile Include="ClientScript\Data.cs" />
     <Compile Include="DictionaryDataStoreAdapter.cs" />
     <Compile Include="ExceptionResourceResult.cs" />
+    <Compile Include="Extensibility\ClientScriptAttribute.cs" />
+    <Compile Include="Extensibility\IClientScript.cs" />
+    <Compile Include="Extensibility\IDynamicClientScript.cs" />
     <Compile Include="Extensibility\IPipelineInspectorContext.cs" />
+    <Compile Include="Extensibility\IStaticClientScript.cs" />
+    <Compile Include="Extensibility\ResourceAttribute.cs" />
+    <Compile Include="Extensibility\ResourceParameterKey.cs" />
+    <Compile Include="Extensibility\ScriptOrder.cs" />
     <Compile Include="Extensibility\TabContext.cs" />
     <Compile Include="Extensibility\ILogger.cs" />
     <Compile Include="Extensibility\IRuntimePolicyContext.cs" />
@@ -98,13 +107,14 @@
     <Compile Include="Framework\IPersistanceStore.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Framework\PipelineInspectorContext.cs" />
+    <Compile Include="Framework\ResourceParameters.cs" />
     <Compile Include="Framework\TabResult.cs" />
     <Compile Include="NLogLogger.cs" />
     <Compile Include="MefDiscoverabilityPolicy-T1.cs" />
     <Compile Include="MefDiscoverabilityPolicy-T2.cs" />
     <Compile Include="DiscoverabilityPolicy.cs" />
     <Compile Include="Extensibility\RuntimePolicyAttribute.cs" />
-    <Compile Include="Extensibility\IResourceEndpointConfiguration.cs" />
+    <Compile Include="Extensibility\ResourceEndpointConfiguration.cs" />
     <Compile Include="Extensibility\IRuntimePolicy.cs" />
     <Compile Include="Extensibility\ResourceResult.cs" />
     <Compile Include="Extensibility\PipelineInspectorAttribute.cs" />
@@ -133,13 +143,15 @@
     <Compile Include="Policy\StatusCodePolicy.cs" />
     <Compile Include="Policy\UriPolicy.cs" />
     <Compile Include="Policy\UserHostAddressPolicy.cs" />
+    <Compile Include="Resource\Client.cs" />
+    <Compile Include="Resource\Data.cs" />
     <Compile Include="RuntimePolicy.cs" />
     <Compile Include="Extensibility\IHtmlEncoder.cs" />
     <Compile Include="JsonNetSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FilteredSafeDirectoryCatalog.cs" />
     <Compile Include="Framework\IRequestMetadata.cs" />
-    <Compile Include="Resource\Resources.Designer.cs">
+    <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
@@ -151,7 +163,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="Resource\Resources.resx">
+    <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>

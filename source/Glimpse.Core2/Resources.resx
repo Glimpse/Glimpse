@@ -144,4 +144,12 @@
     <value>Exception executing policy of type '{0}'.</value>
     <comment>{0} - this.GetType() of offending policy</comment>
   </data>
+  <data name="RenderClientScriptImproperImplementationWarning" xml:space="preserve">
+    <value>Unable to render IClientScript: '{0}'. All IClientScript implementations should also implement either IStaticClientScript or IDynamicClientScript.</value>
+    <comment>{0} - GetType() of IClientScript</comment>
+  </data>
+  <data name="RenderClientScriptMissingResourceWarning" xml:space="preserve">
+    <value>Unable to render IClientScript: '{0}'. No IResource with the Name '{1}' could be found.</value>
+    <comment>{0} - GetType() of IClientScript, {1} - Name of missing IResource</comment>
+  </data>
 </root>

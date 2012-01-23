@@ -8,7 +8,7 @@ namespace Glimpse.Test.Core2.Tester
     public class GlimpseConfigurationTester : GlimpseConfiguration
     {
         private GlimpseConfigurationTester(Mock<IFrameworkProvider> frameworkProviderMock,
-                                           Mock<IResourceEndpointConfiguration> endpointConfigurationMock)
+                                           Mock<ResourceEndpointConfiguration> endpointConfigurationMock)
             : base(frameworkProviderMock.Object, endpointConfigurationMock.Object)
         {
             FrameworkProviderMock = frameworkProviderMock;
@@ -18,10 +18,10 @@ namespace Glimpse.Test.Core2.Tester
         public static GlimpseConfigurationTester Create()
         {
             return new GlimpseConfigurationTester(new Mock<IFrameworkProvider>().Setup(),
-                                                  new Mock<IResourceEndpointConfiguration>());
+                                                  new Mock<ResourceEndpointConfiguration>());
         }
 
-        public Mock<IResourceEndpointConfiguration> EndpointConfigMock { get; set; }
+        public Mock<ResourceEndpointConfiguration> EndpointConfigMock { get; set; }
         public Mock<IFrameworkProvider> FrameworkProviderMock { get; set; }
     }
 }

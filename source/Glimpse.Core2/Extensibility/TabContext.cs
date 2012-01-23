@@ -29,7 +29,7 @@ namespace Glimpse.Core2.Extensibility
             return RequestContext as T;
         }
 
-        //TODO: Provide a non generic implementation? GetPipelineInspector(Type type)?
+        //TODO: Provide a non generic implementation? IE .GetPipelineInspector(Type type)?
         public T GetPipelineInspector<T>() where T : class, IPipelineInspector
         {
             return PipelineInspectors.FirstOrDefault(pm => pm.GetType() == typeof (T)) as T;

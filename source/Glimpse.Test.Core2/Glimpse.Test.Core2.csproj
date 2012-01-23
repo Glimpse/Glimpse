@@ -79,6 +79,8 @@
   <ItemGroup>
     <Compile Include="AntiXssEncoderShould.cs" />
     <Compile Include="ApplicationPersistanceStoreShould.cs" />
+    <Compile Include="ClientScript\ClientShould.cs" />
+    <Compile Include="ClientScript\DataShould.cs" />
     <Compile Include="DictionaryDataStoreAdapterShould.cs" />
     <Compile Include="DiscoverabilityPolicyShould.cs" />
     <Compile Include="Extensibility\TabContextShould.cs" />
@@ -88,6 +90,7 @@
     <Compile Include="Framework\GlimpseConfigurationShould.cs" />
     <Compile Include="DiscoverableLazyCollectionShould.cs" />
     <Compile Include="Framework\GlimpseRuntimeShould.cs" />
+    <Compile Include="Framework\ResourceParametersShould.cs" />
     <Compile Include="JsonNetSerializerShould.cs" />
     <Compile Include="Policy\AjaxPolicyShould.cs" />
     <Compile Include="Policy\ContentTypePolicyShould.cs" />
@@ -95,7 +98,11 @@
     <Compile Include="Policy\GlimpseResourcePolicyShould.cs" />
     <Compile Include="Policy\StatusCodePolicyShould.cs" />
     <Compile Include="Policy\UriPolicyShould.cs" />
+    <Compile Include="Policy\UserHostAddressPolicyShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResourcesShould.cs" />
+    <Compile Include="Resource\ClientShould.cs" />
+    <Compile Include="Resource\DataShould.cs" />
     <Compile Include="StatusCodeResourceResultShould.cs" />
     <Compile Include="TestDoubles\DummyException.cs" />
     <Compile Include="TestDoubles\DummyPipelineInspector1.cs" />
@@ -108,6 +115,7 @@
     <Compile Include="Tester\ContentTypePolicyTester.cs" />
     <Compile Include="Tester\GlimpseConfigurationTester.cs" />
     <Compile Include="Tester\GlimpseRuntimeTester.cs" />
+    <Compile Include="Tester\ResourceParametersTester.cs" />
     <Compile Include="Tester\StatusCodePolicyTester.cs" />
     <Compile Include="Tester\UriPolicyTester.cs" />
   </ItemGroup>

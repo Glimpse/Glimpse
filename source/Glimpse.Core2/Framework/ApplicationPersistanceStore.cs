@@ -47,7 +47,6 @@ namespace Glimpse.Core2.Framework
             return request.PluginData[tabKey];
         }
 
-        //TODO: Change to IEnumerable<GlimpseMetadata>??
         public IEnumerable<GlimpseMetadata> GetByRequestParentId(Guid parentRequestId)
         {
             return GlimpseRequests.Where(r => r.ParentRequestId == parentRequestId).ToList();

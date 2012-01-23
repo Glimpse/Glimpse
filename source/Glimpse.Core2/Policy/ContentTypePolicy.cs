@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics.Contracts;
 using Glimpse.Core2.Extensibility;
-using Glimpse.Core2.Resource;
 
 namespace Glimpse.Core2.Policy
 {

@@ -11,7 +11,7 @@ namespace Glimpse.Test.Core2.Tester
     public class GlimpseRuntimeTester : GlimpseRuntime
     {
         public Mock<IFrameworkProvider> FrameworkProviderMock { get; set; }
-        public Mock<IResourceEndpointConfiguration> EndpointConfigMock { get; set; }
+        public Mock<ResourceEndpointConfiguration> EndpointConfigMock { get; set; }
         public Mock<IDataStore> HttpRequestStoreMock { get; set; }
         public Mock<ITabMetadata> TabMetadataMock { get; set; }
         public Mock<ITab> TabMock { get; set; }
@@ -25,7 +25,7 @@ namespace Glimpse.Test.Core2.Tester
         public Mock<IRuntimePolicy> ValidatorMock { get; set; }
         public GlimpseConfiguration Configuration { get; set; }
 
-        private GlimpseRuntimeTester(GlimpseConfiguration configuration, Mock<IFrameworkProvider> frameworkProviderMock, Mock<IResourceEndpointConfiguration> endpointConfigMock) : base(configuration)
+        private GlimpseRuntimeTester(GlimpseConfiguration configuration, Mock<IFrameworkProvider> frameworkProviderMock, Mock<ResourceEndpointConfiguration> endpointConfigMock) : base(configuration)
         {
             FrameworkProviderMock = frameworkProviderMock;
             EndpointConfigMock = endpointConfigMock;
@@ -62,7 +62,7 @@ namespace Glimpse.Test.Core2.Tester
         public static GlimpseRuntimeTester Create()
         {
             var frameworkProviderMock = new Mock<IFrameworkProvider>().Setup();
-            var endpointConfigMock = new Mock<IResourceEndpointConfiguration>();
+            var endpointConfigMock = new Mock<ResourceEndpointConfiguration>();
 
             var configuration =
                 new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfigMock.Object).

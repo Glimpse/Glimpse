@@ -5,7 +5,6 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Glimpse.Core2.Extensibility;
-using Glimpse.Core2.Resource;
 
 namespace Glimpse.Core2.Policy
 {
