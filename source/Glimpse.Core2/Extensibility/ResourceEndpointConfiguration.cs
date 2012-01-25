@@ -1,25 +1,44 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
 namespace Glimpse.Core2.Extensibility
 {
     public abstract class ResourceEndpointConfiguration
     {
-        public string GenerateUri(IResource resource, IDictionary<string, string> requestTokenValues)
+        public string GenerateUri(IResource resource, ILogger logger, IDictionary<string, string> requestTokenValues)
         {
+            Contract.Requires<ArgumentNullException>(resource != null, "resource");
+            Contract.Requires<ArgumentNullException>(logger != null, "logger");
+            Contract.Requires<ArgumentNullException>(requestTokenValues != null, "requestTokenValues");
             Contract.Ensures(Contract.Result<string>() != null);
 
             var parmeters = new Dictionary<string, string>();
 
-            //TODO: Handle possible exceptions/null when calling .ParameterKeys
-            foreach (var key in resource.ParameterKeys)
+            try
             {
-                var value = requestTokenValues.ContainsKey(key) ? requestTokenValues[key] : string.Format("{{{0}}}", key);
-                parmeters.Add(key, value);
+                foreach (var key in resource.ParameterKeys)
+                {
+                    var value = requestTokenValues.ContainsKey(key)
+                                    ? requestTokenValues[key]
+                                    : string.Format("{{{0}}}", key);
+                    parmeters.Add(key, value);
+                }
+            }
+            catch(Exception exception)
+            {
+                logger.Warn(string.Format(Resources.GenerateUriParameterKeysWarning, resource.GetType()), exception);
             }
 
-            //TODO: Handle possible exception/null when calling .GenerateUri(...)
-            var result = GenerateUri(resource.Name, parmeters);
+            string result = null;
+            try
+            {
+                result = GenerateUri(resource.Name, parmeters, logger);
+            }
+            catch(Exception exception)
+            {
+                logger.Error(string.Format(Resources.GenerateUriExecutionError, GetType()), exception);
+            }
 
             if (result != null)
                 return result;
@@ -27,6 +46,6 @@ namespace Glimpse.Core2.Extensibility
             return string.Empty;
         }
 
-        protected abstract string GenerateUri(string resourceName, IEnumerable<KeyValuePair<string, string>> parameters);
+        protected abstract string GenerateUri(string resourceName, IEnumerable<KeyValuePair<string, string>> parameters, ILogger logger);
     }
 }

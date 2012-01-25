@@ -24,6 +24,9 @@ namespace Glimpse.Test.Core2.Tester
         public Mock<ResourceResult> ResourceResultMock { get; set; }
         public Mock<IRuntimePolicy> ValidatorMock { get; set; }
         public GlimpseConfiguration Configuration { get; set; }
+        public Mock<IStaticClientScript> StaticScriptMock { get; set; }
+        public Mock<IDynamicClientScript> DynamicScriptMock { get; set; }
+        public Mock<IHtmlEncoder> EncoderMock { get; set; }
 
         private GlimpseRuntimeTester(GlimpseConfiguration configuration, Mock<IFrameworkProvider> frameworkProviderMock, Mock<ResourceEndpointConfiguration> endpointConfigMock) : base(configuration)
         {
@@ -49,6 +52,14 @@ namespace Glimpse.Test.Core2.Tester
             RequestMetadataMock.Setup(r => r.GetCookie(Constants.ClientIdCookieName)).Returns(@"Some Client");
             RequestMetadataMock.Setup(r => r.GetCookie(Constants.UserAgentHeaderName)).Returns(@"FireFox");
             RequestMetadataMock.Setup(r => r.GetHttpHeader(Constants.HttpRequestHeader)).Returns(Guid.NewGuid().ToString());
+            StaticScriptMock = new Mock<IStaticClientScript>();
+            StaticScriptMock.Setup(ss => ss.Order).Returns(ScriptOrder.ClientInterfaceScript);
+            StaticScriptMock.Setup(ss => ss.GetUri(Version)).Returns("http://localhost/static");
+            DynamicScriptMock = new Mock<IDynamicClientScript>();
+            DynamicScriptMock.Setup(ds => ds.Order).Returns(ScriptOrder.RequestDataScript);
+            DynamicScriptMock.Setup(ds => ds.GetResourceName()).Returns("aResource");
+            EncoderMock = new Mock<IHtmlEncoder>();
+
 
             FrameworkProviderMock.Setup(fp => fp.RequestMetadata).Returns(RequestMetadataMock.Object);
 
@@ -56,6 +67,8 @@ namespace Glimpse.Test.Core2.Tester
             configuration.PersistanceStore = PersistanceStoreMock.Object;
             configuration.Logger = LoggerMock.Object;
             configuration.BasePolicy = RuntimePolicy.On;
+            configuration.HtmlEncoder = EncoderMock.Object;
+
             Configuration = configuration;
         }
 

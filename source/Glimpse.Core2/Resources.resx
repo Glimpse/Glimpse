@@ -122,7 +122,7 @@
   </data>
   <data name="ExecuteTabError" xml:space="preserve">
     <value>Exception executing tab: {0}</value>
-    <comment>{0} - GetType().FullName of offending tab</comment>
+    <comment>{0} - GetType() of offending tab</comment>
   </data>
   <data name="InitializePipelineInspectorError" xml:space="preserve">
     <value>Exception initializing pipeline inspector: {0}</value>
@@ -151,5 +151,13 @@
   <data name="RenderClientScriptMissingResourceWarning" xml:space="preserve">
     <value>Unable to render IClientScript: '{0}'. No IResource with the Name '{1}' could be found.</value>
     <comment>{0} - GetType() of IClientScript, {1} - Name of missing IResource</comment>
+  </data>
+  <data name="GenerateUriParameterKeysWarning" xml:space="preserve">
+    <value>Exception getting ParameterKeys for IResource of type '{0}'.</value>
+    <comment>{0} - GetType() of offending resource</comment>
+  </data>
+  <data name="GenerateUriExecutionError" xml:space="preserve">
+    <value>Exception generating uri with ResourceEndpointConfiguration of type '{0}'.</value>
+    <comment>{0} - GetType() of offending ResourceEndpointConfiguration</comment>
   </data>
 </root>

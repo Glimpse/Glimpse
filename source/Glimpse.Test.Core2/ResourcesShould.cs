@@ -39,6 +39,7 @@ namespace Glimpse.Test.Core2
             Assert.NotNull(Resources.OutOfOrderRuntimeMethodCall);
             Assert.NotNull(Resources.RenderClientScriptImproperImplementationWarning);
             Assert.NotNull(Resources.RenderClientScriptMissingResourceWarning);
+            Assert.NotNull(Resources.GenerateUriParameterKeysWarning);
         }
 
         [Fact]

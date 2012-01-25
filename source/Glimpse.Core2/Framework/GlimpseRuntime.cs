@@ -145,16 +145,21 @@ namespace Glimpse.Core2.Framework
                         continue;
                     }
 
-                    var uri = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUri(resource, requestTokenValues));
-                    stringBuilder.AppendFormat(@"<script type='text/javascript' src='{0}'></script>", uri);
+                    var uri = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUri(resource, logger, requestTokenValues));
+                    if(!string.IsNullOrWhiteSpace(uri))
+                        stringBuilder.AppendFormat(@"<script type='text/javascript' src='{0}'></script>", uri);
+
                     continue;
                 }
 
                 var staticScript = clientScript as IStaticClientScript;
                 if (staticScript != null)
                 {
-                    var uri = staticScript.GetUri(Version);
-                    stringBuilder.AppendFormat(@"<script type='text/javascript' src='{0}'></script>", uri);
+                    var uri = encoder.HtmlAttributeEncode(staticScript.GetUri(Version));
+
+                    if(!string.IsNullOrWhiteSpace(uri))
+                        stringBuilder.AppendFormat(@"<script type='text/javascript' src='{0}'></script>", uri);
+
                     continue;
                 }
 

@@ -6,7 +6,7 @@ namespace Glimpse.AspNet
 {
     public class HttpHandlerEndpointConfiguration:ResourceEndpointConfiguration
     {
-        protected override string GenerateUri(string resourceName, IEnumerable<KeyValuePair<string, string>> parameters)
+        protected override string GenerateUri(string resourceName, IEnumerable<KeyValuePair<string, string>> parameters, ILogger logger)
         {
             //TODO: Return properly rooted URL
             var stringBuilder = new StringBuilder(string.Format(@"/Glimpse.axd?n={0}", resourceName));

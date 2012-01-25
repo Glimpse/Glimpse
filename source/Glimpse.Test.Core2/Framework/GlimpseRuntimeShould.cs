@@ -6,6 +6,7 @@ using Glimpse.Core2.Framework;
 using Glimpse.Test.Core2.TestDoubles;
 using Glimpse.Test.Core2.Tester;
 using Moq;
+using Moq.Protected;
 using Xunit;
 using System.Collections.Generic;
 
@@ -562,6 +563,119 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.Initialize();
 
             Assert.True(Runtime.IsInitialized);
+        }
+
+        [Fact]
+        public void GenerateNoScriptTagsWithoutClientScripts()
+        {
+            Runtime.Configuration.ClientScripts.Clear();
+
+            Assert.Equal("", Runtime.GenerateScriptTags(Guid.NewGuid()));
+            
+            Runtime.LoggerMock.Verify(l=>l.Warn(It.IsAny<string>()), Times.Never());
+        }
+
+        [Fact]
+        public void GenerateNoScriptTagsAndWarnWithOnlyIClientScriptImplementations()
+        {
+            var clientScriptMock = new Mock<IClientScript>();
+            clientScriptMock.Setup(cs => cs.Order).Returns(ScriptOrder.ClientInterfaceScript);
+
+            Runtime.Configuration.ClientScripts.Add(clientScriptMock.Object);
+
+            Assert.Equal("", Runtime.GenerateScriptTags(Guid.NewGuid()));
+            
+            Runtime.LoggerMock.Verify(l => l.Warn(It.IsAny<string>()), Times.Once());
+        }
+
+        [Fact]
+        public void GenerateScriptTagWithOneStaticResource()
+        {
+            var uri = "http://localhost/static";
+            Runtime.StaticScriptMock.Setup(ss => ss.GetUri(Runtime.Version)).Returns(uri);
+            Runtime.EncoderMock.Setup(e => e.HtmlAttributeEncode(uri)).Returns(uri + "/encoded");
+
+            Runtime.Configuration.ClientScripts.Add(Runtime.StaticScriptMock.Object);
+
+            var result = Runtime.GenerateScriptTags(Guid.NewGuid());
+
+            Assert.Contains(uri, result);
+        }
+
+        [Fact]
+        public void GenerateScriptTagsInOrder()
+        {
+            var callCount = 0;
+            //Lightweight call sequence checking idea from http://dpwhelan.com/blog/software-development/moq-sequences/
+            Runtime.DynamicScriptMock.Setup(ds => ds.GetResourceName()).Returns("http://localhost/dynamic").Callback(()=>Assert.Equal(callCount++, 0));
+            Runtime.StaticScriptMock.Setup(ss => ss.GetUri(Runtime.Version)).Returns("http://localhost/static").Callback(()=>Assert.Equal(callCount++, 1));
+            Runtime.EncoderMock.Setup(e => e.HtmlAttributeEncode("http://localhost/static")).Returns("http://localhost/static/encoded");
+
+            Runtime.Configuration.ClientScripts.Add(Runtime.StaticScriptMock.Object);
+            Runtime.Configuration.ClientScripts.Add(Runtime.DynamicScriptMock.Object);
+
+            Assert.NotEmpty(Runtime.GenerateScriptTags(Guid.NewGuid()));
+        }
+
+        [Fact]
+        public void GenerateScriptTagsWithDynamicScriptAndMatchingResource()
+        {
+            var resourceName = "resourceName";
+            var uri = "http://somethingEncoded";
+            Runtime.ResourceMock.Setup(r => r.Name).Returns(resourceName);
+            Runtime.DynamicScriptMock.Setup(ds => ds.GetResourceName()).Returns(resourceName);
+            Runtime.EndpointConfigMock.Protected().Setup<string>("GenerateUri", resourceName, ItExpr.IsAny<IEnumerable<KeyValuePair<string,string>>>(), ItExpr.IsAny<ILogger>()).Returns("http://something");
+            Runtime.EncoderMock.Setup(e => e.HtmlAttributeEncode("http://something")).Returns(uri);
+
+            Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
+            Runtime.Configuration.ClientScripts.Add(Runtime.DynamicScriptMock.Object);
+
+            Assert.Contains(uri, Runtime.GenerateScriptTags(Guid.NewGuid()));
+
+            Runtime.ResourceMock.Verify(rm=>rm.Name, Times.AtLeastOnce());
+            Runtime.EndpointConfigMock.Protected().Verify<string>("GenerateUri", Times.Once(), resourceName, ItExpr.IsAny<IEnumerable<KeyValuePair<string, string>>>(), ItExpr.IsAny<ILogger>());
+            Runtime.EncoderMock.Verify(e => e.HtmlAttributeEncode("http://something"), Times.Once());
+        }
+
+        [Fact]
+        public void GenerateScriptTagsSkipsWhenEndpointConfigReturnsEmptyString()
+        {
+            var resourceName = "resourceName";
+            Runtime.ResourceMock.Setup(r => r.Name).Returns(resourceName);
+            Runtime.DynamicScriptMock.Setup(ds => ds.GetResourceName()).Returns(resourceName);
+            Runtime.EndpointConfigMock.Protected().Setup<string>("GenerateUri", resourceName, ItExpr.IsAny<IEnumerable<KeyValuePair<string, string>>>(), ItExpr.IsAny<ILogger>()).Returns("");
+            Runtime.EncoderMock.Setup(e => e.HtmlAttributeEncode("")).Returns("");
+
+            Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
+            Runtime.Configuration.ClientScripts.Add(Runtime.DynamicScriptMock.Object);
+
+            Assert.Empty(Runtime.GenerateScriptTags(Guid.NewGuid()));
+
+            Runtime.ResourceMock.Verify(rm => rm.Name, Times.AtLeastOnce());
+            Runtime.EndpointConfigMock.Protected().Verify<string>("GenerateUri", Times.Once(), resourceName, ItExpr.IsAny<IEnumerable<KeyValuePair<string, string>>>(), ItExpr.IsAny<ILogger>());
+            Runtime.EncoderMock.Verify(e => e.HtmlAttributeEncode(""), Times.Once());
+        }
+
+        [Fact]
+        public void GenerateScriptTagsSkipsWhenMatchingResourceNotFound()
+        {
+            Runtime.DynamicScriptMock.Setup(ds => ds.GetResourceName()).Returns("resourceName");
+
+            Runtime.Configuration.ClientScripts.Add(Runtime.DynamicScriptMock.Object);
+
+            Assert.Empty(Runtime.GenerateScriptTags(Guid.NewGuid()));
+
+            Runtime.LoggerMock.Verify(l=>l.Warn(It.IsAny<string>()));
+        }
+
+        [Fact]
+        public void GenerateScriptTagsSkipsWhenStaticScriptReturnsEmptyString()
+        {
+            Runtime.StaticScriptMock.Setup(ss => ss.GetUri(Runtime.Version)).Returns("");
+
+            Runtime.Configuration.ClientScripts.Add(Runtime.StaticScriptMock.Object);
+
+            Assert.Empty(Runtime.GenerateScriptTags(Guid.NewGuid()));
         }
     }
 }

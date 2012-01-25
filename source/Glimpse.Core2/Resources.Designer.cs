@@ -97,6 +97,24 @@ namespace Glimpse.Core2 {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exception generating uri with ResourceEndpointConfiguration of type &apos;{0}&apos;..
+        /// </summary>
+        internal static string GenerateUriExecutionError {
+            get {
+                return ResourceManager.GetString("GenerateUriExecutionError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exception getting ParameterKeys for IResource of type &apos;{0}&apos;..
+        /// </summary>
+        internal static string GenerateUriParameterKeysWarning {
+            get {
+                return ResourceManager.GetString("GenerateUriParameterKeysWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exception initializing pipeline inspector: {0}.
         /// </summary>
         internal static string InitializePipelineInspectorError {
