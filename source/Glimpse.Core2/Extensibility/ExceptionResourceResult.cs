@@ -1,10 +1,9 @@
-﻿using System;
-using Glimpse.Core2.Extensibility;
+using System;
 using Glimpse.Core2.Framework;
 
-namespace Glimpse.Core2
+namespace Glimpse.Core2.Extensibility
 {
-    public class ExceptionResourceResult:ResourceResult
+    public class ExceptionResourceResult:IResourceResult
     {
         public Exception Exception { get; set; }
 
@@ -13,7 +12,7 @@ namespace Glimpse.Core2
             Exception = exception;
         }
 
-        public override void Execute(IFrameworkProvider frameworkProvider)
+        public void Execute(IFrameworkProvider frameworkProvider)
         {
             frameworkProvider.SetHttpResponseStatusCode(500);
             //TODO: Add exception message to response

@@ -83,6 +83,7 @@
     <Compile Include="ClientScript\DataShould.cs" />
     <Compile Include="DictionaryDataStoreAdapterShould.cs" />
     <Compile Include="DiscoverabilityPolicyShould.cs" />
+    <Compile Include="Extensibility\FileResourceResultShould.cs" />
     <Compile Include="Extensibility\ResourceEndpointConfigurationShould.cs" />
     <Compile Include="Extensibility\RuntimePolicyContextShould.cs" />
     <Compile Include="Extensibility\TabContextShould.cs" />

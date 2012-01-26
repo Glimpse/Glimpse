@@ -187,12 +187,13 @@ namespace Glimpse.Core2.Framework
         public void ExecuteResource(string resourceName, ResourceParameters parameters)
         {
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(resourceName), "resourceName");
+            Contract.Requires<ArgumentNullException>(parameters != null, "parameters");
 
             var policy = GetRuntimePolicy(RuntimeEvent.ExecuteResource);
             if (policy == RuntimePolicy.Off) return;
 
             var logger = Configuration.Logger;
-            ResourceResult result;
+            IResourceResult result;
 
             var resources =
                 Configuration.Resources.Where(

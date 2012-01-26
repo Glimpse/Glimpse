@@ -18,7 +18,7 @@ namespace Glimpse.Core2.Resource
             get { return new[] {ResourceParameterKey.RequestId, ResourceParameterKey.VersionNumber}; }
         }
 
-        public ResourceResult Execute(IDictionary<string, string> parameters)
+        public IResourceResult Execute(IDictionary<string, string> parameters)
         {
             //TODO: Return data for one glimpse request
             throw new System.NotImplementedException();

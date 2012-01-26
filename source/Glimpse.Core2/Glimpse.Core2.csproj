@@ -87,8 +87,9 @@
     <Compile Include="ClientScript\Client.cs" />
     <Compile Include="ClientScript\Data.cs" />
     <Compile Include="DictionaryDataStoreAdapter.cs" />
-    <Compile Include="ExceptionResourceResult.cs" />
     <Compile Include="Extensibility\ClientScriptAttribute.cs" />
+    <Compile Include="Extensibility\ExceptionResourceResult.cs" />
+    <Compile Include="Extensibility\FileResourceResult.cs" />
     <Compile Include="Extensibility\IClientScript.cs" />
     <Compile Include="Extensibility\IDynamicClientScript.cs" />
     <Compile Include="Extensibility\IPipelineInspectorContext.cs" />
@@ -96,13 +97,16 @@
     <Compile Include="Extensibility\ResourceAttribute.cs" />
     <Compile Include="Extensibility\ResourceParameterKey.cs" />
     <Compile Include="Extensibility\ScriptOrder.cs" />
+    <Compile Include="Extensibility\StatusCodeResourceResult.cs" />
     <Compile Include="Extensibility\TabContext.cs" />
     <Compile Include="Extensibility\ILogger.cs" />
     <Compile Include="Extensibility\IRuntimePolicyContext.cs" />
     <Compile Include="Extensibility\IRuntimePolicyMetadata.cs" />
     <Compile Include="Extensibility\RuntimeEvent.cs" />
     <Compile Include="Extensibility\RuntimePolicyContext.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Framework\ApplicationPersistanceStore.cs" />
+    <Compile Include="Framework\CacheSetting.cs" />
     <Compile Include="Framework\GlimpseMetadata.cs" />
     <Compile Include="Framework\IPersistanceStore.cs" />
     <Compile Include="Constants.cs" />
@@ -116,7 +120,7 @@
     <Compile Include="Extensibility\RuntimePolicyAttribute.cs" />
     <Compile Include="Extensibility\ResourceEndpointConfiguration.cs" />
     <Compile Include="Extensibility\IRuntimePolicy.cs" />
-    <Compile Include="Extensibility\ResourceResult.cs" />
+    <Compile Include="Extensibility\IResourceResult.cs" />
     <Compile Include="Extensibility\PipelineInspectorAttribute.cs" />
     <Compile Include="Extensibility\TabAttribute.cs" />
     <Compile Include="Extensibility\IDataStore.cs" />
@@ -156,12 +160,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="StatusCodeResourceResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="glimpseClient.js" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -1,9 +1,8 @@
-using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
 
-namespace Glimpse.Core2
+namespace Glimpse.Core2.Extensibility
 {
-    public class StatusCodeResourceResult : ResourceResult
+    public class StatusCodeResourceResult : IResourceResult
     {
         public int StatusCode { get; set; }
         public StatusCodeResourceResult(int statusCode)
@@ -11,7 +10,7 @@ namespace Glimpse.Core2
             StatusCode = statusCode;
         }
 
-        public override void Execute(IFrameworkProvider frameworkProvider)
+        public void Execute(IFrameworkProvider frameworkProvider)
         {
             frameworkProvider.SetHttpResponseStatusCode(StatusCode);
         }

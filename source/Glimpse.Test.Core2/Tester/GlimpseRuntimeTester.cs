@@ -21,7 +21,7 @@ namespace Glimpse.Test.Core2.Tester
         public Mock<ILogger> LoggerMock { get; set; }
         public Mock<IRequestMetadata> RequestMetadataMock { get; set; }
         public Mock<IResource> ResourceMock { get; set; }
-        public Mock<ResourceResult> ResourceResultMock { get; set; }
+        public Mock<IResourceResult> ResourceResultMock { get; set; }
         public Mock<IRuntimePolicy> ValidatorMock { get; set; }
         public GlimpseConfiguration Configuration { get; set; }
         public Mock<IStaticClientScript> StaticScriptMock { get; set; }
@@ -40,7 +40,7 @@ namespace Glimpse.Test.Core2.Tester
             PersistanceStoreMock = new Mock<IPersistanceStore>();
             LoggerMock = new Mock<ILogger>();
             ResourceMock = new Mock<IResource>();
-            ResourceResultMock = new Mock<ResourceResult>();
+            ResourceResultMock = new Mock<IResourceResult>();
             ValidatorMock = new Mock<IRuntimePolicy>();
             ValidatorMock.Setup(v => v.Execute(It.IsAny<IRuntimePolicyContext>())).Returns(RuntimePolicy.On);
             RequestMetadataMock = new Mock<IRequestMetadata>();

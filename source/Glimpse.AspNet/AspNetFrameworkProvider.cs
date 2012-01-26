@@ -1,16 +1,18 @@
-﻿using System.Web;
+﻿using System;
+using System.Web;
 using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
 
 namespace Glimpse.AspNet
 {
-    public class AspNetFrameworkProvider:IFrameworkProvider
+    public class AspNetFrameworkProvider : IFrameworkProvider
     {
         /// <summary>
         /// Wrapper around HttpContext.Current for testing purposes. Not for public use.
         /// </summary>
         private HttpContextBase context;
+
         internal HttpContextBase Context
         {
             get { return context ?? new HttpContextWrapper(HttpContext.Current); }
@@ -19,7 +21,7 @@ namespace Glimpse.AspNet
 
         public IDataStore HttpRequestStore
         {
-            get { return new DictionaryDataStoreAdapter(Context.Items);}
+            get { return new DictionaryDataStoreAdapter(Context.Items); }
         }
 
         public IDataStore HttpServerStore
@@ -34,7 +36,7 @@ namespace Glimpse.AspNet
 
         public IRequestMetadata RequestMetadata
         {
-            get{return new RequestMetadata(Context);}
+            get { return new RequestMetadata(Context); }
         }
 
         public void SetHttpResponseHeader(string name, string value)
@@ -54,6 +56,11 @@ namespace Glimpse.AspNet
             var response = Context.Response;
 
             response.Filter = new PreBodyTagFilter(htmlSnippet, response.Filter, Context.Response.ContentEncoding);
+        }
+
+        public void WriteHttpResponse(byte[] content)
+        {
+            Context.Response.BinaryWrite(content);
         }
     }
 }
