@@ -24,6 +24,14 @@ namespace Glimpse.Test.Core2.Policy
         }
 
         [Fact]
+        public void RetainPolicyOnValidContentTypeWithCharset()
+        {
+            Policy.RequestMetadataMock.Setup(r => r.ResponseContentType).Returns("text/html; charset=utf-8");
+
+            Assert.Equal(RuntimePolicy.On, Policy.Execute(Policy.ContextMock.Object));
+        }
+
+        [Fact]
         public void RetainPolicyOnValidContentTypes()
         {
             Assert.Equal(RuntimePolicy.On, Policy.Execute(Policy.ContextMock.Object));

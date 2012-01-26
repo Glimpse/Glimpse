@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Core2.Policy
@@ -32,8 +33,9 @@ namespace Glimpse.Core2.Policy
         {
             try
             {
-                var contentType = policyContext.RequestMetadata.ResponseContentType;
-                return ContentTypeWhitelist.Contains(contentType) ? RuntimePolicy.On : RuntimePolicy.Off;
+                var contentType = policyContext.RequestMetadata.ResponseContentType.ToLowerInvariant();
+                //support for the following content type strings: "text/html" & "text/html; charset=utf-8"
+                return ContentTypeWhitelist.Any(ct => contentType.Contains(ct.ToLowerInvariant())) ? RuntimePolicy.On : RuntimePolicy.Off;
             }
             catch (Exception exception)
             {
