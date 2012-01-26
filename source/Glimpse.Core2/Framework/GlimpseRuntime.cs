@@ -205,8 +205,8 @@ namespace Glimpse.Core2.Framework
                     try
                     {
                         var resource = resources.First();
-                        var values = parameters.GetParametersFor(resource);
-                        result = resources.First().Execute(values);
+                        var resourceContext = new ResourceContext(parameters.GetParametersFor(resource), Configuration.PersistanceStore, logger);
+                        result = resources.First().Execute(resourceContext);
                     }
                     catch (Exception ex)
                     {
@@ -226,7 +226,8 @@ namespace Glimpse.Core2.Framework
 
             try
             {
-                result.Execute(Configuration.FrameworkProvider);
+                var context = new ResourceResultContext(logger, Configuration.FrameworkProvider, Configuration.Serializer);
+                result.Execute(context);
             }
             catch (Exception ex)
             {
@@ -264,7 +265,7 @@ namespace Glimpse.Core2.Framework
             var tabStore = new DictionaryDataStoreAdapter(new Dictionary<string, object>());
 
             //Create ServiceLocator valid for this request
-            var tabContext = new TabContext(runtimeContext, tabStore, Configuration.PipelineInspectors);
+            var tabContext = new TabContext(runtimeContext, tabStore, Configuration.PipelineInspectors, logger);
 
 
             foreach (var tab in supportedRuntimeTabs)

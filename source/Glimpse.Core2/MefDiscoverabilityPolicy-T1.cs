@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition.Hosting;
+using Glimpse.Core2.Extensions;
 
 namespace Glimpse.Core2
 {

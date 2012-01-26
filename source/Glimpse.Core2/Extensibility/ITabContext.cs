@@ -1,6 +1,6 @@
 ﻿namespace Glimpse.Core2.Extensibility
 {
-    public interface ITabContext
+    public interface ITabContext:IContext
     {
         T GetRequestContext<T>() where T:class;
         T GetPipelineInspector<T>() where T:class, IPipelineInspector;

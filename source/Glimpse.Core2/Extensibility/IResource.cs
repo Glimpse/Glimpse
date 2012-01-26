@@ -9,7 +9,7 @@ namespace Glimpse.Core2.Extensibility
     {
         string Name { get; }
         IEnumerable<string> ParameterKeys { get; }
-        IResourceResult Execute(IDictionary<string, string> parameters);
+        IResourceResult Execute(IResourceContext context);
     }
 
     [ContractClassFor(typeof(IResource))]
@@ -33,9 +33,9 @@ namespace Glimpse.Core2.Extensibility
             }
         }
 
-        public IResourceResult Execute(IDictionary<string, string> parameters)
+        public IResourceResult Execute(IResourceContext context)
         {
-            Contract.Requires<ArgumentNullException>(parameters != null, "parameters");
+            Contract.Requires<ArgumentNullException>(context != null, "context");
             return default(IResourceResult);
         }
     }

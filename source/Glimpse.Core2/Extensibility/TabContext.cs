@@ -7,15 +7,17 @@ namespace Glimpse.Core2.Extensibility
     public class TabContext:ITabContext
     {
 
-        public TabContext(object requestContext, IDataStore pluginStore, DiscoverableCollection<IPipelineInspector> pipelineInspectors)
+        public TabContext(object requestContext, IDataStore pluginStore, DiscoverableCollection<IPipelineInspector> pipelineInspectors, ILogger logger)
         {
             Contract.Requires<ArgumentNullException>(requestContext != null, "requestContext");
             Contract.Requires<ArgumentNullException>(pluginStore != null, "pluginStore");
             Contract.Requires<ArgumentNullException>(pipelineInspectors != null, "pipelineInspectors");
+            Contract.Requires<ArgumentNullException>(logger != null, "logger");
 
             RequestContext = requestContext;
             PluginStore = pluginStore;
             PipelineInspectors = pipelineInspectors;
+            Logger = logger;
         }
 
         private DiscoverableCollection<IPipelineInspector> PipelineInspectors { get; set; }
@@ -23,6 +25,8 @@ namespace Glimpse.Core2.Extensibility
         public IDataStore PluginStore { get; private set; }
 
         private object RequestContext { get; set; }
+
+        public ILogger Logger { get; set; }
 
         public T GetRequestContext<T>() where T : class
         {

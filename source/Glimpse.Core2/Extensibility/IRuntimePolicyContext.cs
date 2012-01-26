@@ -4,10 +4,9 @@ using Glimpse.Core2.Framework;
 namespace Glimpse.Core2.Extensibility
 {
     [ContractClass(typeof(RuntimePolicyContextContract))]
-    public interface IRuntimePolicyContext
+    public interface IRuntimePolicyContext:IContext
     {
         IRequestMetadata RequestMetadata { get; }
-        ILogger Logger { get; }
         T GetRequestContext<T>() where T : class;
     }
 

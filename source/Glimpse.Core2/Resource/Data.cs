@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using Glimpse.Core2.Extensibility;
+using Glimpse.Core2.Framework;
 
 namespace Glimpse.Core2.Resource
 {
@@ -18,10 +21,22 @@ namespace Glimpse.Core2.Resource
             get { return new[] {ResourceParameterKey.RequestId, ResourceParameterKey.VersionNumber}; }
         }
 
-        public IResourceResult Execute(IDictionary<string, string> parameters)
+        public IResourceResult Execute(IResourceContext context)
         {
-            //TODO: Return data for one glimpse request
-            throw new System.NotImplementedException();
+            Contract.Requires<ArgumentNullException>(context != null, "context");
+
+            Guid requestId;
+
+            if (!Guid.TryParse(context.Parameters[ResourceParameterKey.RequestId], out requestId))
+                return new StatusCodeResourceResult(404);
+            
+            var data = context.PersistanceStore.GetByRequestId(requestId);
+
+            if(data == null)
+                return new StatusCodeResourceResult(404);
+
+            var cacheDuration = 150*24*60*60; //150 days * hours * minutes * seconds
+            return new JsonResourceResult(data, @"application/json", cacheDuration, CacheSetting.Private);
         }
     }
 }

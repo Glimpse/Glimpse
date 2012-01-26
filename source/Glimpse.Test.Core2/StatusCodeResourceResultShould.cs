@@ -1,5 +1,4 @@
-﻿using Glimpse.Core2;
-using Glimpse.Core2.Extensibility;
+﻿using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
 using Moq;
 using Xunit;
@@ -19,10 +18,12 @@ namespace Glimpse.Test.Core2
         public void Execute()
         {
             var frameworkProviderMock = new Mock<IFrameworkProvider>();
+            var contextMock = new Mock<IResourceResultContext>();
+            contextMock.Setup(c => c.FrameworkProvider).Returns(frameworkProviderMock.Object);
 
             var result = new StatusCodeResourceResult(101);
 
-            result.Execute(frameworkProviderMock.Object);
+            result.Execute(contextMock.Object);
 
             frameworkProviderMock.Verify(fp=>fp.SetHttpResponseStatusCode(101), Times.Once());
         }

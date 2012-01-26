@@ -15,5 +15,6 @@ namespace Glimpse.Core2.Framework
         void SetHttpResponseStatusCode(int statusCode);
         void InjectHttpResponseBody(string htmlSnippet);
         void WriteHttpResponse(byte[] content);
+        void WriteHttpResponse(string content);
     }
 }

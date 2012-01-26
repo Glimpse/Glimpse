@@ -54,6 +54,8 @@ namespace Glimpse.Test.Core2.Extensibility
         public void ExecuteWithCacheSettings()
         {
             var frameworkProviderMock = new Mock<IFrameworkProvider>();
+            var contextMock = new Mock<IResourceResultContext>();
+            contextMock.Setup(c => c.FrameworkProvider).Returns(frameworkProviderMock.Object);
 
             var array = new byte[1];
             var contentType = "content/type";
@@ -62,7 +64,7 @@ namespace Glimpse.Test.Core2.Extensibility
 
             var result = new FileResourceResult(array, contentType, duration, setting);
 
-            result.Execute(frameworkProviderMock.Object);
+            result.Execute(contextMock.Object);
 
             frameworkProviderMock.Verify(fp => fp.SetHttpResponseHeader("Content-Type", contentType), Times.Once());
             frameworkProviderMock.Verify(fp => fp.SetHttpResponseHeader("Cache-Control", It.IsAny<string>()), Times.Once());
@@ -73,13 +75,15 @@ namespace Glimpse.Test.Core2.Extensibility
         public void ExecuteWithoutCacheSettings()
         {
             var frameworkProviderMock = new Mock<IFrameworkProvider>();
+            var contextMock = new Mock<IResourceResultContext>();
+            contextMock.Setup(c => c.FrameworkProvider).Returns(frameworkProviderMock.Object);
 
             var array = new byte[1];
             var contentType = "content/type";
 
             var result = new FileResourceResult(array, contentType);
 
-            result.Execute(frameworkProviderMock.Object);
+            result.Execute(contextMock.Object);
 
             frameworkProviderMock.Verify(fp => fp.SetHttpResponseHeader("Content-Type", contentType), Times.Once());
             frameworkProviderMock.Verify(fp => fp.SetHttpResponseHeader("Cache-Control", It.IsAny<string>()), Times.Never());

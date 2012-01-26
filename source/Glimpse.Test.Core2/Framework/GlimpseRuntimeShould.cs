@@ -339,13 +339,13 @@ namespace Glimpse.Test.Core2.Framework
         {
             var name = "TestResource";
             Runtime.ResourceMock.Setup(r => r.Name).Returns(name);
-            Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IDictionary<string, string>>())).Returns(Runtime.ResourceResultMock.Object);
+            Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IResourceContext>())).Returns(Runtime.ResourceResultMock.Object);
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
 
             Runtime.ExecuteResource(name.ToLower());
 
-            Runtime.ResourceMock.Verify(r => r.Execute(It.IsAny<IDictionary<string, string>>()), Times.Once());
-            Runtime.ResourceResultMock.Verify(r => r.Execute(Runtime.FrameworkProviderMock.Object));
+            Runtime.ResourceMock.Verify(r => r.Execute(It.IsAny<IResourceContext>()), Times.Once());
+            Runtime.ResourceResultMock.Verify(r => r.Execute(It.IsAny<IResourceResultContext>()));
         }
 
         [Fact]
@@ -383,7 +383,7 @@ namespace Glimpse.Test.Core2.Framework
         {
             var name = "Anything";
             Runtime.ResourceMock.Setup(r => r.Name).Returns(name);
-            Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IDictionary<string, string>>())).Throws<Exception>();
+            Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IResourceContext>())).Throws<Exception>();
 
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
 
@@ -397,7 +397,7 @@ namespace Glimpse.Test.Core2.Framework
         {
             var name = "aName";
             Runtime.ResourceMock.Setup(r => r.Name).Returns(name);
-            Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IDictionary<string, string>>())).Returns(
+            Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IResourceContext>())).Returns(
                 Runtime.ResourceResultMock.Object);
 
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
@@ -412,9 +412,9 @@ namespace Glimpse.Test.Core2.Framework
         {
             var name = "Anything";
             Runtime.ResourceMock.Setup(r => r.Name).Returns(name);
-            Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IDictionary<string, string>>())).Returns(Runtime.ResourceResultMock.Object);
+            Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IResourceContext>())).Returns(Runtime.ResourceResultMock.Object);
 
-            Runtime.ResourceResultMock.Setup(rr => rr.Execute(It.IsAny<IFrameworkProvider>())).Throws<Exception>();
+            Runtime.ResourceResultMock.Setup(rr => rr.Execute(It.IsAny<IResourceResultContext>())).Throws<Exception>();
 
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
 

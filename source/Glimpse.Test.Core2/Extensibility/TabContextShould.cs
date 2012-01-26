@@ -14,6 +14,7 @@ namespace Glimpse.Test.Core2.Extensibility
         {
             RequestContext = new DummyObjectContext();
             PluginStoreMock = new Mock<IDataStore>();
+            LoggerMock = new Mock<ILogger>();
             PipelineInspectors = new DiscoverableCollection<IPipelineInspector>
                                      {
                                          new DummyPipelineInspector1()
@@ -26,12 +27,14 @@ namespace Glimpse.Test.Core2.Extensibility
 
         private Mock<IDataStore> PluginStoreMock { get; set; }
 
+        private Mock<ILogger> LoggerMock { get; set; }
+
         private DummyObjectContext RequestContext { get; set; }
 
         private TabContext tabContext;
         private TabContext TabContext
         {
-            get { return tabContext ?? (tabContext = new TabContext(RequestContext, PluginStoreMock.Object, PipelineInspectors)); }
+            get { return tabContext ?? (tabContext = new TabContext(RequestContext, PluginStoreMock.Object, PipelineInspectors, LoggerMock.Object)); }
             set { tabContext = value; }
         }
 
@@ -42,7 +45,7 @@ namespace Glimpse.Test.Core2.Extensibility
         public void Construct()
         {
             var pluginStoreObj = PluginStoreMock.Object;
-            var locator = new TabContext(RequestContext, pluginStoreObj, PipelineInspectors);
+            var locator = new TabContext(RequestContext, pluginStoreObj, PipelineInspectors, LoggerMock.Object);
 
             Assert.Equal(RequestContext, locator.GetRequestContext<DummyObjectContext>());
             Assert.Equal(pluginStoreObj, locator.PluginStore);
@@ -66,19 +69,25 @@ namespace Glimpse.Test.Core2.Extensibility
         [Fact]
         public void ThrowWithNullPipelineInspectors()
         {
-            Assert.Throws<ArgumentNullException>(() => new TabContext(RequestContext, PluginStoreMock.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new TabContext(RequestContext, PluginStoreMock.Object, null, LoggerMock.Object));
         }
 
         [Fact]
         public void ThrowWithNullPluginStore()
         {
-            Assert.Throws<ArgumentNullException>(() => new TabContext(RequestContext, null, PipelineInspectors));
+            Assert.Throws<ArgumentNullException>(() => new TabContext(RequestContext, null, PipelineInspectors, LoggerMock.Object));
         }
 
         [Fact]
         public void ThrowWithNullRequestContext()
         {
-            Assert.Throws<ArgumentNullException>(()=>new TabContext(null, PluginStoreMock.Object, PipelineInspectors));
+            Assert.Throws<ArgumentNullException>(()=>new TabContext(null, PluginStoreMock.Object, PipelineInspectors, LoggerMock.Object));
+        }
+
+        [Fact]
+        public void ThrowWithNullLogger()
+        {
+            Assert.Throws<ArgumentNullException>(() => new TabContext(RequestContext, PluginStoreMock.Object, PipelineInspectors, null));
         }
 
         public void Dispose()
@@ -87,6 +96,7 @@ namespace Glimpse.Test.Core2.Extensibility
             PluginStoreMock = null;
             TabContext = null;
             PipelineInspectors = null;
+            LoggerMock = null;
         }
     }
 }

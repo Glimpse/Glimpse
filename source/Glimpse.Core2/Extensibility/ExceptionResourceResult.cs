@@ -1,5 +1,4 @@
 using System;
-using Glimpse.Core2.Framework;
 
 namespace Glimpse.Core2.Extensibility
 {
@@ -12,9 +11,9 @@ namespace Glimpse.Core2.Extensibility
             Exception = exception;
         }
 
-        public void Execute(IFrameworkProvider frameworkProvider)
+        public void Execute(IResourceResultContext context)
         {
-            frameworkProvider.SetHttpResponseStatusCode(500);
+            context.FrameworkProvider.SetHttpResponseStatusCode(500);
             //TODO: Add exception message to response
         }
     }

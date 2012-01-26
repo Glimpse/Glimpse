@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace Glimpse.Core2
+namespace Glimpse.Core2.Extensions
 {
     public static class ListExtensions
     {

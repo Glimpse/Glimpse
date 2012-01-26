@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Resource;
+using Moq;
 using Xunit;
 
 namespace Glimpse.Test.Core2.Resource
@@ -34,11 +34,12 @@ namespace Glimpse.Test.Core2.Resource
         [Fact]
         public void ReturnStatusCodeResourceResultWithMissingResource()
         {
-            var resource = new Client();
+            var contextMock = new Mock<IResourceContext>();
 
-            resource.ResourceName = "wrong";
+            var resource = new Client {ResourceName = "wrong"};
 
-            var result = resource.Execute(new Dictionary<string, string>());
+
+            var result = resource.Execute(contextMock.Object);
 
             Assert.NotNull(result as StatusCodeResourceResult);
         }
@@ -46,9 +47,11 @@ namespace Glimpse.Test.Core2.Resource
         [Fact]
         public void ReturnFileResourceResultWithResource()
         {
+            var contextMock = new Mock<IResourceContext>();
+
             var resource = new Client();
 
-            var result = resource.Execute(new Dictionary<string, string>());
+            var result = resource.Execute(contextMock.Object);
 
             Assert.NotNull(result as FileResourceResult);
         }

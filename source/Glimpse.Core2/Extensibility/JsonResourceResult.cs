@@ -5,23 +5,23 @@ using Glimpse.Core2.Framework;
 
 namespace Glimpse.Core2.Extensibility
 {
-    public class FileResourceResult:IResourceResult
+    public class JsonResourceResult:IResourceResult
     {
-        public byte[] Content { get; set; }
+        public object Data { get; set; }
         public string ContentType { get; set; }
         public long CacheDuration { get; set; }
         public CacheSetting? CacheSetting { get; set; }
 
-        public FileResourceResult(byte[] content, string contentType):this(content, contentType, -1, null)
+        public JsonResourceResult(object data, string contentType):this(data, contentType, -1, null)
         {
         }
 
-        public FileResourceResult(byte[] content, string contentType, long cacheDuration, CacheSetting? cacheSetting)
+        public JsonResourceResult(object data, string contentType, long cacheDuration, CacheSetting? cacheSetting)
         {
-            Contract.Requires<ArgumentNullException>(content != null, "content");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(contentType), "contentType");
+            Contract.Requires<ArgumentNullException>(data != null, "data");
+            Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(contentType), "contentType");
 
-            Content = content;
+            Data = data;
             ContentType = contentType;
             CacheDuration = cacheDuration;
             CacheSetting = cacheSetting;
@@ -30,13 +30,17 @@ namespace Glimpse.Core2.Extensibility
         public void Execute(IResourceResultContext context)
         {
             var frameworkProvider = context.FrameworkProvider;
+            var serializer = context.Serializer;
+
+            var result = serializer.Serialize(Data);
 
             frameworkProvider.SetHttpResponseHeader("Content-Type", ContentType);
 
+            //TODO: Refactor to leverage a CachableResourceResult?
             if (CacheSetting.HasValue)
                 frameworkProvider.SetHttpResponseHeader("Cache-Control", string.Format("{0}, max-age={1}", CacheSetting.Value.ToDescription(), CacheDuration));
 
-            frameworkProvider.WriteHttpResponse(Content);
+            frameworkProvider.WriteHttpResponse(result);
         }
     }
 }

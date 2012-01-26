@@ -62,5 +62,10 @@ namespace Glimpse.AspNet
         {
             Context.Response.BinaryWrite(content);
         }
+
+        public void WriteHttpResponse(string content)
+        {
+            Context.Response.Write(content);
+        }
     }
 }

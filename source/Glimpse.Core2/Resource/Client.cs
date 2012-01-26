@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
@@ -23,7 +21,7 @@ namespace Glimpse.Core2.Resource
             get { return new[]{ResourceParameterKey.VersionNumber }; }
         }
 
-        public IResourceResult Execute(IDictionary<string, string> parameters)
+        public IResourceResult Execute(IResourceContext context)
         {
             var assembly = Assembly.GetExecutingAssembly();
 
