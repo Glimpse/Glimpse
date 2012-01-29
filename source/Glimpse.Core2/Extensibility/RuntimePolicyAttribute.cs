@@ -3,6 +3,7 @@ using System.ComponentModel.Composition;
 
 namespace Glimpse.Core2.Extensibility
 {
+    [MetadataAttribute]
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class RuntimePolicyAttribute:ExportAttribute, IRuntimePolicyMetadata
     {

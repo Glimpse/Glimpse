@@ -335,7 +335,27 @@ namespace Glimpse.Test.Core2.Framework
         }
 
         [Fact]
-        public void ExecuteResource()
+        public void UpdateConfigurationWithAutoDiscovery()
+        {
+            var runtime = Runtime; //force instantiation of Runtime property
+
+            runtime.Configuration.Tabs.Discoverability.AutoDiscover = true;
+            runtime.Configuration.PipelineInspectors.Discoverability.AutoDiscover = true;
+            runtime.Configuration.Resources.Discoverability.AutoDiscover = true;
+            runtime.Configuration.RuntimePolicies.Discoverability.AutoDiscover = true;
+            runtime.Configuration.ClientScripts.Discoverability.AutoDiscover = true;
+
+            runtime.UpdateConfiguration(runtime.Configuration);
+
+            Assert.True(runtime.Configuration.Tabs.Count > 0);
+            Assert.True(runtime.Configuration.PipelineInspectors.Count > 0);
+            Assert.True(runtime.Configuration.Resources.Count > 0);
+            Assert.True(runtime.Configuration.RuntimePolicies.Count > 0);
+            Assert.True(runtime.Configuration.ClientScripts.Count > 0);
+        }
+
+        [Fact]
+        public void ExecuteResourceWithoutParameters()
         {
             var name = "TestResource";
             Runtime.ResourceMock.Setup(r => r.Name).Returns(name);
@@ -343,6 +363,34 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
 
             Runtime.ExecuteResource(name.ToLower());
+
+            Runtime.ResourceMock.Verify(r => r.Execute(It.IsAny<IResourceContext>()), Times.Once());
+            Runtime.ResourceResultMock.Verify(r => r.Execute(It.IsAny<IResourceResultContext>()));
+        }
+
+        [Fact]
+        public void ExecuteResourceWithOrderedParameters()
+        {
+            var name = "TestResource";
+            Runtime.ResourceMock.Setup(r => r.Name).Returns(name);
+            Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IResourceContext>())).Returns(Runtime.ResourceResultMock.Object);
+            Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
+
+            Runtime.ExecuteResource(name.ToLower(), new[]{"One","Two"});
+
+            Runtime.ResourceMock.Verify(r => r.Execute(It.IsAny<IResourceContext>()), Times.Once());
+            Runtime.ResourceResultMock.Verify(r => r.Execute(It.IsAny<IResourceResultContext>()));
+        }
+
+        [Fact]
+        public void ExecuteResourceWithNamedParameters()
+        {
+            var name = "TestResource";
+            Runtime.ResourceMock.Setup(r => r.Name).Returns(name);
+            Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IResourceContext>())).Returns(Runtime.ResourceResultMock.Object);
+            Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
+
+            Runtime.ExecuteResource(name.ToLower(), new Dictionary<string, string>{{"One", "1"}, {"Two","2"}});
 
             Runtime.ResourceMock.Verify(r => r.Execute(It.IsAny<IResourceContext>()), Times.Once());
             Runtime.ResourceResultMock.Verify(r => r.Execute(It.IsAny<IResourceResultContext>()));
