@@ -1,8 +1,7 @@
-﻿using System;
-using Glimpse.Core2.Extensibility;
+using System;
 using NLog;
 
-namespace Glimpse.Core2
+namespace Glimpse.Core2.Extensibility
 {
     public class NLogLogger:ILogger
     {

@@ -1,7 +1,6 @@
-﻿using Glimpse.Core2.Extensibility;
 using Microsoft.Security.Application;
 
-namespace Glimpse.Core2
+namespace Glimpse.Core2.Extensibility
 {
     //TODO: Merge AntiXssLibrary.dll into final Glimpse.Core2.dll
     public class AntiXssEncoder:IHtmlEncoder
