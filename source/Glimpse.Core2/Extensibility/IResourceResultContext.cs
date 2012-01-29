@@ -6,5 +6,6 @@ namespace Glimpse.Core2.Extensibility
     {
         IFrameworkProvider FrameworkProvider { get; }
         ISerializer Serializer { get; }
+        IHtmlEncoder HtmlEncoder { get; }
     }
 }

@@ -100,14 +100,6 @@ namespace Glimpse.Core2.Framework
 
             if (policy.HasFlag(RuntimePolicy.DisplayGlimpseClient))
             {
-                //var encoder = Configuration.HtmlEncoder;
-                //var resourceEndpoint = Configuration.ResourceEndpoint;
-
-                //var dataPath = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUrl("data.js", Version, new Dictionary<string, string> {{"id", requestId.ToString()}}));
-                //var clientPath = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUrl("client.js", Version));
-
-                //var html = string.Format(@"<script type='text/javascript' id='glimpseData' src='{0}'></script><script type='text/javascript' id='glimpseClient' src='{1}'></script></body>", dataPath, clientPath);
-
                 var html = GenerateScriptTags(requestId);
 
                 frameworkProvider.InjectHttpResponseBody(html);
@@ -226,7 +218,7 @@ namespace Glimpse.Core2.Framework
 
             try
             {
-                var context = new ResourceResultContext(logger, Configuration.FrameworkProvider, Configuration.Serializer);
+                var context = new ResourceResultContext(logger, Configuration.FrameworkProvider, Configuration.Serializer, Configuration.HtmlEncoder);
                 result.Execute(context);
             }
             catch (Exception ex)
