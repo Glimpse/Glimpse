@@ -161,9 +161,9 @@ namespace Glimpse.Core2.Framework
             return stringBuilder.ToString();
         }
 
-        public void ExecuteResource(string resourceName)
+        public void ExecuteDefaultResource()
         {
-            ExecuteResource(resourceName, new ResourceParameters());
+            ExecuteResource(Configuration.DefaultResourceName, new ResourceParameters());
         }
 
         public void ExecuteResource(string resourceName, IDictionary<string, string> namedParameters)

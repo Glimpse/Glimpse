@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics.Contracts;
 using Glimpse.Core2.Extensibility;
+using Glimpse.Core2.Resource;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
@@ -33,6 +34,7 @@ namespace Glimpse.Core2.Framework
             RuntimePolicies = new DiscoverableLazyCollection<IRuntimePolicy, IRuntimePolicyMetadata>();
             BasePolicy = RuntimePolicy.Off;
             SerializationConverters = new DiscoverableCollection<ISerializationConverter>();
+            DefaultResourceName = Configuration.InternalName;
         }
 
         private DiscoverableCollection<IClientScript> clientScripts;
@@ -212,6 +214,21 @@ namespace Glimpse.Core2.Framework
             {
                 Contract.Requires<ArgumentNullException>(value!=null, "value");
                 serializationConverters = value;
+            }
+        }
+
+        private string defaultResourceName;
+        public string DefaultResourceName
+        {
+            get
+            {
+                Contract.Ensures(!string.IsNullOrEmpty(Contract.Result<string>()));
+                return defaultResourceName;
+            }
+            set
+            {
+                Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(value), "value");
+                defaultResourceName = value;
             }
         }
 

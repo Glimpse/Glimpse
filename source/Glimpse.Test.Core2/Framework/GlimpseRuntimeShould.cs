@@ -369,14 +369,15 @@ namespace Glimpse.Test.Core2.Framework
         }
 
         [Fact]
-        public void ExecuteResourceWithoutParameters()
+        public void ExecuteDefaultResource()
         {
             var name = "TestResource";
             Runtime.ResourceMock.Setup(r => r.Name).Returns(name);
             Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IResourceContext>())).Returns(Runtime.ResourceResultMock.Object);
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
+            Runtime.Configuration.DefaultResourceName = name;
 
-            Runtime.ExecuteResource(name.ToLower());
+            Runtime.ExecuteDefaultResource();
 
             Runtime.ResourceMock.Verify(r => r.Execute(It.IsAny<IResourceContext>()), Times.Once());
             Runtime.ResourceResultMock.Verify(r => r.Execute(It.IsAny<IResourceResultContext>()));
@@ -415,7 +416,7 @@ namespace Glimpse.Test.Core2.Framework
         {
             Runtime.Configuration.Resources.Clear();
 
-            Runtime.ExecuteResource("random name that doesn't exist");
+            Runtime.ExecuteResource("random name that doesn't exist", new string[]{});
 
             Runtime.FrameworkProviderMock.Verify(fp => fp.SetHttpResponseStatusCode(404), Times.Once());
         }
@@ -429,7 +430,7 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
 
-            Runtime.ExecuteResource(name);
+            Runtime.ExecuteResource(name, new string[]{});
 
             Runtime.FrameworkProviderMock.Verify(fp => fp.SetHttpResponseStatusCode(500), Times.Once());
         }
@@ -437,7 +438,7 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void ThrowExceptionWithEmptyResourceName()
         {
-            Assert.Throws<ArgumentNullException>(() => Runtime.ExecuteResource(""));
+            Assert.Throws<ArgumentNullException>(() => Runtime.ExecuteResource("", new string[]{}));
         }
 
         [Fact]
@@ -449,7 +450,7 @@ namespace Glimpse.Test.Core2.Framework
 
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
 
-            Runtime.ExecuteResource(name);
+            Runtime.ExecuteResource(name, new string[]{});
 
             Runtime.FrameworkProviderMock.Verify(fp => fp.SetHttpResponseStatusCode(500), Times.Once());
         }
@@ -480,7 +481,7 @@ namespace Glimpse.Test.Core2.Framework
 
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
 
-            Runtime.ExecuteResource(name);
+            Runtime.ExecuteResource(name, new string[]{});
 
             Runtime.LoggerMock.Verify(l => l.Fatal(It.IsAny<string>(), It.IsAny<Exception>()), Times.Once());
         }
@@ -591,7 +592,7 @@ namespace Glimpse.Test.Core2.Framework
         {
             Runtime.Configuration.BasePolicy = RuntimePolicy.Off;
 
-            Runtime.ExecuteResource("doesn't matter");
+            Runtime.ExecuteResource("doesn't matter", new string[]{});
 
             Assert.Equal(RuntimePolicy.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePermissionsKey));
         }

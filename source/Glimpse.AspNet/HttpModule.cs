@@ -6,8 +6,6 @@ namespace Glimpse.AspNet
 {
     public class HttpModule:IHttpModule
     {
-        internal const string RuntimeKey = "__GlimpseRuntime";
-        internal const string ConfigKey = "__GlimpseConfig";
 
         public void Init(HttpApplication httpApplication)
         {
@@ -24,15 +22,15 @@ namespace Glimpse.AspNet
 
         internal IGlimpseRuntime GetRuntime(HttpApplicationStateBase applicationState)
         {
-            var runtime = applicationState[RuntimeKey] as IGlimpseRuntime;
+            var runtime = applicationState[Constants.RuntimeKey] as IGlimpseRuntime;
 
             if (runtime == null)
             {
-                var config = applicationState[ConfigKey] as GlimpseConfiguration ?? new GlimpseConfiguration(new AspNetFrameworkProvider(), new HttpHandlerEndpointConfiguration());
+                var config = applicationState[Constants.ConfigKey] as GlimpseConfiguration ?? new GlimpseConfiguration(new AspNetFrameworkProvider(), new HttpHandlerEndpointConfiguration());
 
                 runtime = new GlimpseRuntime(config);
 
-                applicationState.Add(RuntimeKey, runtime);
+                applicationState.Add(Constants.RuntimeKey, runtime);
             }
 
             return runtime;

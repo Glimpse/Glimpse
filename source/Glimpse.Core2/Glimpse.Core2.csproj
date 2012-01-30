@@ -108,6 +108,7 @@
     <Compile Include="Extensibility\ResourceResultContext.cs" />
     <Compile Include="Extensibility\ScriptOrder.cs" />
     <Compile Include="Extensibility\SerializationConverterAttribute.cs" />
+    <Compile Include="Extensibility\SerializationConverter.cs" />
     <Compile Include="Extensibility\StatusCodeResourceResult.cs" />
     <Compile Include="Extensibility\TabContext.cs" />
     <Compile Include="Extensibility\ILogger.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="Policy\UriPolicy.cs" />
     <Compile Include="Policy\UserHostAddressPolicy.cs" />
     <Compile Include="Resource\Client.cs" />
+    <Compile Include="Resource\Configuration.cs" />
     <Compile Include="Resource\Data.cs" />
     <Compile Include="RuntimePolicy.cs" />
     <Compile Include="Extensibility\IHtmlEncoder.cs" />

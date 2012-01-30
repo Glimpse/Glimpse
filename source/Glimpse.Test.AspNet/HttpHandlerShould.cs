@@ -1,0 +1,60 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using Glimpse.AspNet;
+using Glimpse.Core2.Extensibility;
+using Glimpse.Test.AspNet.Tester;
+using Moq;
+using Xunit;
+
+namespace Glimpse.Test.AspNet
+{
+    public class HttpHandlerShould:IDisposable
+    {
+        private HttpHandlerTester tester;
+        public HttpHandlerTester Handler
+        {
+            get { return tester ?? (tester = HttpHandlerTester.Create()); }
+            set { tester = value; }
+        }
+
+        public void Dispose()
+        {
+            Handler = null;
+        }
+
+        [Fact]
+        public void BeReusable()
+        {
+            Assert.True(Handler.IsReusable);
+        }
+
+        [Fact]
+        public void Return404WithoutGlimpseRuntime()
+        {
+            Handler.ApplicationStateMock.Setup(a => a.Get(Constants.RuntimeKey)).Returns<IGlimpseRuntime>(null);
+
+            Assert.Throws<HttpException>(()=>Handler.ProcessRequest(Handler.ContextMock.Object));
+        }
+
+        [Fact]
+        public void RunResourceWithNameMatch()
+        {
+            Handler.ProcessRequest(Handler.ContextMock.Object);
+
+            var queryString = Handler.QueryString.AllKeys.ToDictionary(key => key, key => Handler.QueryString[key]);
+            Handler.RuntimeMock.Verify(r=>r.ExecuteResource(Handler.ResourceName, queryString),Times.Once());
+        }
+
+        [Fact]
+        public void RunDefaultResourceWithoutNameMatch()
+        {
+            Handler.QueryString.Clear();
+
+            Handler.ProcessRequest(Handler.ContextMock.Object);
+
+            Handler.RuntimeMock.Verify(r => r.ExecuteDefaultResource(), Times.Once());
+        }
+    }
+}

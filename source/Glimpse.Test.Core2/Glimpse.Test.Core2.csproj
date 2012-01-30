@@ -88,6 +88,7 @@
     <Compile Include="Extensibility\JsonResourceResultShould.cs" />
     <Compile Include="Extensibility\ResourceEndpointConfigurationShould.cs" />
     <Compile Include="Extensibility\RuntimePolicyContextShould.cs" />
+    <Compile Include="Extensibility\SerializationConverterShould.cs" />
     <Compile Include="Extensibility\TabContextShould.cs" />
     <Compile Include="Extensibility\TabAttributeShould.cs" />
     <Compile Include="Extensions\EnumExtensionsShould.cs" />
@@ -108,6 +109,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourcesShould.cs" />
     <Compile Include="Resource\ClientShould.cs" />
+    <Compile Include="Resource\ConfigurationShould.cs" />
     <Compile Include="Resource\DataShould.cs" />
     <Compile Include="StatusCodeResourceResultShould.cs" />
     <Compile Include="TestDoubles\DummyEnum.cs" />
@@ -116,6 +118,7 @@
     <Compile Include="TestDoubles\DummyObjectContext.cs" />
     <Compile Include="TestDoubles\DummyPipelineInspector2.cs" />
     <Compile Include="TestDoubles\DummySerializationConverter.cs" />
+    <Compile Include="TestDoubles\DummySerializationConverterOfT.cs" />
     <Compile Include="TestDoubles\DummySetupTab.cs" />
     <Compile Include="TestDoubles\DummyTab.cs" />
     <Compile Include="Tester\AjaxPolicyTester.cs" />

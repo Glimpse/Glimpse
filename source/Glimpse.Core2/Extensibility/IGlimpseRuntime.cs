@@ -9,8 +9,9 @@ namespace Glimpse.Core2.Extensibility
         string Version { get; }
         void BeginRequest();
         void EndRequest();
-        void ExecuteResource(string resourceName);
+        void ExecuteDefaultResource();
         void ExecuteResource(string resourceName, IDictionary<string, string> parameters);
+        void ExecuteResource(string resourceName, string[] parameters);
         void ExecuteTabs();
         void ExecuteTabs(LifeCycleSupport support);
         bool Initialize();

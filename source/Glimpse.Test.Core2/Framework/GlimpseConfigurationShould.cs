@@ -103,6 +103,12 @@ namespace Glimpse.Test.Core2.Framework
         }
 
         [Fact]
+        public void CreateDefaultResourceName()
+        {
+            Assert.True(!string.IsNullOrEmpty(Configuration.DefaultResourceName));
+        }
+
+        [Fact]
         public void NotDiscoverPipelineInspectors()
         {
             Assert.Equal(0, Configuration.PipelineInspectors.Count);
@@ -215,6 +221,13 @@ namespace Glimpse.Test.Core2.Framework
         public void SerializationConvertersCannotBeNull()
         {
             Assert.Throws<ArgumentNullException>(() => Configuration.SerializationConverters = null);
+        }
+
+        [Fact]
+        public void DefaultResourceNameCannotBeNullOrEmpty()
+        {
+            Assert.Throws<ArgumentNullException>(() => Configuration.DefaultResourceName = null);
+            Assert.Throws<ArgumentNullException>(() => Configuration.DefaultResourceName = "");
         }
 
         [Fact]

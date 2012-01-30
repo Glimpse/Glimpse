@@ -49,12 +49,15 @@
   <ItemGroup>
     <Compile Include="AspNetFrameworkProviderShould.cs" />
     <Compile Include="HttpApplicationStateBaseDataAdapterShould.cs" />
+    <Compile Include="HttpHandlerShould.cs" />
     <Compile Include="HttpModuleShould.cs" />
+    <Compile Include="IResourceEndpointConfiguration.cs" />
     <Compile Include="Model\RouteInstanceShould.cs" />
     <Compile Include="Model\RouteInstanceTester.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tab\RoutesShould.cs" />
     <Compile Include="Tester\AspNetFrameworkProviderTester.cs" />
+    <Compile Include="Tester\HttpHandlerTester.cs" />
     <Compile Include="Tester\HttpModuleTester.cs" />
   </ItemGroup>
   <ItemGroup>
