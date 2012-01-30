@@ -84,6 +84,7 @@
     <Compile Include="DictionaryDataStoreAdapterShould.cs" />
     <Compile Include="DiscoverabilityPolicyShould.cs" />
     <Compile Include="Extensibility\FileResourceResultShould.cs" />
+    <Compile Include="Extensibility\JsonNetSerializationConverterShould.cs" />
     <Compile Include="Extensibility\JsonResourceResultShould.cs" />
     <Compile Include="Extensibility\ResourceEndpointConfigurationShould.cs" />
     <Compile Include="Extensibility\RuntimePolicyContextShould.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="TestDoubles\DummyPipelineInspector1.cs" />
     <Compile Include="TestDoubles\DummyObjectContext.cs" />
     <Compile Include="TestDoubles\DummyPipelineInspector2.cs" />
+    <Compile Include="TestDoubles\DummySerializationConverter.cs" />
     <Compile Include="TestDoubles\DummySetupTab.cs" />
     <Compile Include="TestDoubles\DummyTab.cs" />
     <Compile Include="Tester\AjaxPolicyTester.cs" />

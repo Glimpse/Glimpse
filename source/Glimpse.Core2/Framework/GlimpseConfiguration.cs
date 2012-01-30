@@ -32,6 +32,7 @@ namespace Glimpse.Core2.Framework
             Tabs = new DiscoverableLazyCollection<ITab, ITabMetadata>();
             RuntimePolicies = new DiscoverableLazyCollection<IRuntimePolicy, IRuntimePolicyMetadata>();
             BasePolicy = RuntimePolicy.Off;
+            SerializationConverters = new DiscoverableCollection<ISerializationConverter>();
         }
 
         private DiscoverableCollection<IClientScript> clientScripts;
@@ -196,6 +197,21 @@ namespace Glimpse.Core2.Framework
             {
                 Contract.Requires<ArgumentNullException>(value!=null,"value");
                 runtimePolicies = value;
+            }
+        }
+
+        private DiscoverableCollection<ISerializationConverter> serializationConverters;
+        public DiscoverableCollection<ISerializationConverter> SerializationConverters
+        {
+            get
+            {
+                Contract.Ensures(Contract.Result<DiscoverableCollection<ISerializationConverter>>()!=null);
+                return serializationConverters;
+            }
+            set
+            {
+                Contract.Requires<ArgumentNullException>(value!=null, "value");
+                serializationConverters = value;
             }
         }
 

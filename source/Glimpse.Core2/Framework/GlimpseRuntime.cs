@@ -253,7 +253,7 @@ namespace Glimpse.Core2.Framework
             var logger = Configuration.Logger;
 
 
-            //Create storage space for plugins to access
+            //Create storage space for tabs to access
             var tabStore = new DictionaryDataStoreAdapter(new Dictionary<string, object>());
 
             //Create ServiceLocator valid for this request
@@ -324,21 +324,33 @@ namespace Glimpse.Core2.Framework
         //TODO: Test that these collections are auto populated
         public void UpdateConfiguration(GlimpseConfiguration configuration)
         {
-            //TODO: destruct modifiers and plugins
-            if (configuration.Tabs.Discoverability.AutoDiscover)
-                configuration.Tabs.Discoverability.Discover();
+            //TODO: destruct pipelineInitializers and tabs
+            var tabs = configuration.Tabs;
+            if (tabs.Discoverability.AutoDiscover)
+                tabs.Discoverability.Discover();
 
-            if (configuration.PipelineInspectors.Discoverability.AutoDiscover)
-                configuration.PipelineInspectors.Discoverability.Discover();
+            var pipelineInspectors = configuration.PipelineInspectors;
+            if (pipelineInspectors.Discoverability.AutoDiscover)
+                pipelineInspectors.Discoverability.Discover();
 
-            if (configuration.Resources.Discoverability.AutoDiscover)
-                configuration.Resources.Discoverability.Discover();
+            var resources = configuration.Resources;
+            if (resources.Discoverability.AutoDiscover)
+                resources.Discoverability.Discover();
 
-            if (configuration.RuntimePolicies.Discoverability.AutoDiscover)
-                configuration.RuntimePolicies.Discoverability.Discover();
+            var runtimePolicies = configuration.RuntimePolicies;
+            if (runtimePolicies.Discoverability.AutoDiscover)
+                runtimePolicies.Discoverability.Discover();
 
-            if (configuration.ClientScripts.Discoverability.AutoDiscover)
-                configuration.ClientScripts.Discoverability.Discover();
+            var clientScripts = configuration.ClientScripts;
+            if (clientScripts.Discoverability.AutoDiscover)
+                clientScripts.Discoverability.Discover();
+
+            var serializationConverters = configuration.SerializationConverters;
+            if (serializationConverters.Discoverability.AutoDiscover)
+            {
+                serializationConverters.Discoverability.Discover();
+                configuration.Serializer.RegisterSerializationConverters(serializationConverters);
+            }
 
             Configuration = configuration;
         }

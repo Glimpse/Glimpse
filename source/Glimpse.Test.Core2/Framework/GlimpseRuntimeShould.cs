@@ -344,6 +344,7 @@ namespace Glimpse.Test.Core2.Framework
             runtime.Configuration.Resources.Discoverability.AutoDiscover = true;
             runtime.Configuration.RuntimePolicies.Discoverability.AutoDiscover = true;
             runtime.Configuration.ClientScripts.Discoverability.AutoDiscover = true;
+            runtime.Configuration.SerializationConverters.Discoverability.AutoDiscover = true;
 
             runtime.UpdateConfiguration(runtime.Configuration);
 
@@ -352,6 +353,19 @@ namespace Glimpse.Test.Core2.Framework
             Assert.True(runtime.Configuration.Resources.Count > 0);
             Assert.True(runtime.Configuration.RuntimePolicies.Count > 0);
             Assert.True(runtime.Configuration.ClientScripts.Count > 0);
+            Assert.True(runtime.Configuration.SerializationConverters.Count > 0);
+        }
+
+        [Fact]
+        public void UpdateConfigurationRegistersSerializerConverters()
+        {
+            var runtime = Runtime; //force instantiation of Runtime property
+
+            runtime.Configuration.SerializationConverters.Discoverability.AutoDiscover = true;
+
+            runtime.UpdateConfiguration(runtime.Configuration);
+
+            runtime.SerializerMock.Verify(s=>s.RegisterSerializationConverters(It.IsAny<IEnumerable<ISerializationConverter>>()), Times.Once());
         }
 
         [Fact]

@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.Serialization;
-using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
+using Moq;
 using Newtonsoft.Json;
 using Xunit;
 
@@ -63,6 +64,33 @@ namespace Glimpse.Test.Core2
             var result = serializer.Serialize(iSerializableObj);
 
             Assert.Equal("{\"otherKey\":\"otherValue\"}", result);
+        }
+
+        [Fact]
+        public void RegisterISerializationConverters()
+        {
+            var converter1 = new Mock<ISerializationConverter>();
+            var converter2 = new Mock<ISerializationConverter>();
+
+            ISerializer serializer = new JsonNetSerializer();
+
+            serializer.RegisterSerializationConverters(new[]{converter1.Object, converter2.Object});
+        }
+
+        [Fact]
+        public void RegisterEmptyCollectionOfISerializationConverters()
+        {
+            ISerializer serializer = new JsonNetSerializer();
+
+            serializer.RegisterSerializationConverters(Enumerable.Empty<ISerializationConverter>());
+        }
+
+        [Fact]
+        public void ThrowWhenRegisterNullCollectionOfISerializationConverters()
+        {
+            ISerializer serializer = new JsonNetSerializer();
+
+            Assert.Throws<ArgumentNullException>(()=>serializer.RegisterSerializationConverters(null));
         }
     }
 

@@ -97,6 +97,12 @@ namespace Glimpse.Test.Core2.Framework
         }
 
         [Fact]
+        public void CreateDefaultSerializationConverters()
+        {
+            Assert.NotNull(Configuration.SerializationConverters);
+        }
+
+        [Fact]
         public void NotDiscoverPipelineInspectors()
         {
             Assert.Equal(0, Configuration.PipelineInspectors.Count);
@@ -118,6 +124,12 @@ namespace Glimpse.Test.Core2.Framework
         public void NotDiscoverValidators()
         {
             Assert.Equal(0, Configuration.RuntimePolicies.Count);
+        }
+
+        [Fact]
+        public void NotDiscoverSerlizationConverters()
+        {
+            Assert.Equal(0, Configuration.SerializationConverters.Count);
         }
 
         [Fact]
@@ -158,7 +170,7 @@ namespace Glimpse.Test.Core2.Framework
         }
 
         [Fact]
-        public void PipeliseInspectorsCannotBeNull()
+        public void PipelineInspectorsCannotBeNull()
         {
             Assert.Throws<ArgumentNullException>(() => Configuration.PipelineInspectors = null);
         }
@@ -197,6 +209,12 @@ namespace Glimpse.Test.Core2.Framework
         public void ClientScriptsCannotBeNull()
         {
             Assert.Throws<ArgumentNullException>(() => Configuration.ClientScripts = null);
+        }
+
+        [Fact]
+        public void SerializationConvertersCannotBeNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => Configuration.SerializationConverters = null);
         }
 
         [Fact]

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using Newtonsoft.Json;
 
 namespace Glimpse.Core2.Extensibility
@@ -22,6 +25,20 @@ namespace Glimpse.Core2.Extensibility
         public string Serialize(object obj)
         {
             return JsonConvert.SerializeObject(obj, Formatting.None, Settings);
+        }
+
+        public void RegisterSerializationConverters(IEnumerable<ISerializationConverter> converters)
+        {
+            Contract.Requires<ArgumentNullException>(converters != null, "converters");
+
+            var jsonConverters = Settings.Converters;
+
+            jsonConverters.Clear();
+
+            foreach (var converter in converters)
+            {
+                jsonConverters.Add(new JsonNetSerializationConverterAdapter(converter));
+            }
         }
     }
 }
