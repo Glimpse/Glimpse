@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Mvc", "source\Glimp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Test.Mvc", "source\Glimpse.Test.Mvc\Glimpse.Test.Mvc.csproj", "{FE12BC0C-CD22-4D24-BFC7-13ED1C428BAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Sample.Mvc3.MusicStore", "source\Glimpse.Sample.Mvc3.MusicStore\Glimpse.Sample.Mvc3.MusicStore.csproj", "{32DCD27D-A84C-4250-B657-408B3620A9AC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Mvc3.MusicStore.Sample", "source\Glimpse.Mvc3.MusicStore.Sample\Glimpse.Mvc3.MusicStore.Sample.csproj", "{32DCD27D-A84C-4250-B657-408B3620A9AC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{CCFACE51-18FA-4C5D-9F89-EC58881786A9}"
 EndProject
