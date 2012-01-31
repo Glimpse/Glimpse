@@ -14,7 +14,7 @@ namespace Glimpse.Test.Core2.TestDoubles
 
         public IDictionary<string, object> Convert(object obj)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
     }
 }

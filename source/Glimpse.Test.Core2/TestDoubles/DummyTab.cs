@@ -7,7 +7,7 @@ namespace Glimpse.Test.Core2.TestDoubles
     {
         public object GetData(ITabContext context)
         {
-            throw new System.NotImplementedException("I am DummyTab");
+            throw new System.NotSupportedException("I am DummyTab");
         }
 
         public string Name

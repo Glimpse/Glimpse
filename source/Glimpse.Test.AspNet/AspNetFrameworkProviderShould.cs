@@ -53,11 +53,7 @@ namespace Glimpse.Test.AspNet
             FrameworkProvider.HttpApplicationStateMock.Verify(st => st.Get("testKey"), Times.Once());
         }
 
-        [Fact(Skip = "Finish me!")]
-        public void HaveRequestMetadata()
-        {
-        }
-
+ 
         [Fact]
         public void SetHttpResponseHeader()
         {

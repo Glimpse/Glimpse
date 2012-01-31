@@ -8,7 +8,7 @@ namespace Glimpse.Test.Core2.TestDoubles
     {
         public object GetData(ITabContext context)
         {
-            throw new NotImplementedException("I am DummySetupTab");
+            throw new NotSupportedException("I am DummySetupTab");
         }
 
         public string Name
@@ -18,7 +18,7 @@ namespace Glimpse.Test.Core2.TestDoubles
 
         public void Setup()
         {
-            throw new NotImplementedException("I am DummySetupTab");
+            throw new NotSupportedException("I am DummySetupTab");
         }
     }
 }

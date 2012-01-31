@@ -104,7 +104,7 @@ namespace Glimpse.Test.Core2
 
         public string Error
         {
-            get { throw new NotImplementedException(); }
+            get { throw new NotSupportedException(); }
         }
     }
 

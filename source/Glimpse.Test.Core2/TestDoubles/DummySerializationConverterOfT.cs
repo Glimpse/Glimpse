@@ -8,7 +8,7 @@ namespace Glimpse.Test.Core2.TestDoubles
     {
         public override IDictionary<string, object> Convert(object obj)
         {
-            throw new System.NotImplementedException();
+            throw new System.NotSupportedException();
         }
     }
 }

@@ -14,8 +14,8 @@ namespace Glimpse.Test.Core2.Policy
             var contextMock = new Mock<IRuntimePolicyContext>();
 
             var policy = new UserHostAddressPolicy();
-            
-            Assert.Throws<NotImplementedException>(()=>policy.Execute(contextMock.Object));
+
+            Assert.Throws<NotSupportedException>(() => policy.Execute(contextMock.Object));
         }
     }
 }
