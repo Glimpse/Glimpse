@@ -1,0 +1,327 @@
+﻿*
+{
+	margin: 0px;
+	padding: 0px;
+	border: none;
+}
+
+body
+{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	background-color: #FBF9EF;
+	padding: 0px 6%;
+}
+
+#container
+{
+	float: left;
+}
+
+#header
+{
+	float: left;
+	width: 100%;
+	border-bottom: 1px dotted #5D5A53;
+	margin-bottom: 10px;
+}
+
+#header h1
+{
+	font-size: 18px;
+	float: left;
+	background: url(/content/Images/logo.png) no-repeat;
+	padding: 45px 0px 5px 0px;
+}
+
+#promotion
+{
+	height: 300px; 
+	width: 700px; 
+	background: url(/content/Images/home-showcase.png) no-repeat;
+}
+
+ul li a
+{
+	font-size: 16px;
+}
+
+#main
+{
+	overflow: hidden;
+	padding: 0 0 15px 10px;
+	float: left;
+}
+
+ul
+{
+	list-style-type: square;
+	margin-left: 25px;
+	font-size: 14px;
+}
+
+ul#album-list
+{
+	list-style: none;
+	margin-left: 0px;
+}
+
+ul#album-list li
+{
+	height: 130px;
+	width: 100px;
+	float: left;
+	margin: 10px;
+	text-align: center;
+}
+
+ul#album-list li a, ul#album-list li .button
+{
+	font-size: 13px;
+	float: left;
+}
+
+ul#album-list li a span
+{
+	color: #9b9993;
+	text-decoration: underline;
+}
+
+#cart
+{
+	float: right;
+}
+
+#update-message
+{
+	color: #F6855E;
+	font-weight: bold;
+}
+
+.button, input[type=submit]
+{
+	clear: both;
+	display: inline-block;
+	padding: 5px;
+	margin-top: 10px; 
+	border: 1px;
+	background: #5e5b54;
+	color: #fff;
+	font-weight: bold;
+}
+
+.button a
+{
+	color: #fff !important;
+}
+
+#footer
+{
+	clear: both;
+	padding: 10px;
+	text-align: right;
+	border-top: 1px dotted #8A8575;
+	border-bottom: 1px dotted #8A8575;
+	font-family: Constantia, Georgia, serif;
+}
+
+/******************** Top Navigation ************************/
+ul#navlist
+{
+	float: right;
+}
+
+ul#navlist li
+{
+	display: inline;
+}
+
+ul#navlist li a
+{
+	border-left: 1px dotted #8A8575;
+	padding: 10px;
+	margin-top: 10px;
+	color: #8A8575;
+	text-decoration: none;
+	float: left;
+}
+
+ul#navlist li:first-child a
+{
+	border: none;
+}
+
+ul#navlist li a:hover
+{
+	color: #F6855E;
+}
+
+/********************* End top navigation ***************************/
+
+p
+{
+	margin-bottom: 15px;
+	margin-top: 0px;
+}
+
+h2
+{
+	color: #5e5b54;
+}
+
+h2, h3
+{
+	margin-bottom: 10px;
+	font-size: 16px;
+	font-style: italic;
+	font-weight: bold;
+}
+
+h3
+{
+	color: #9B9993;
+}
+
+#header h1 a, h3 em
+{
+	color: #5E5B54;
+}
+
+a:link, a:visited
+{
+	color: #F6855E;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+a:hover
+{
+	color: #333333;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+a:active
+{
+	color: #006633;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+/***************************** sidebar navigation ****************************/
+
+#categories
+{
+	font-family: Constantia, Georgia, serif;
+	list-style-type: none;
+	border-right: #5d5a53 1px dotted;
+	padding-right: 10px;
+	margin: 0 25px 0 0;
+	float: left;
+}
+
+#categories a:link, #categories a:visited
+{
+	color: #9B9993;
+	text-decoration: none;
+}
+
+#categories a:hover
+{
+	color: #F46739;
+}
+
+div#album-details p
+{
+	margin-bottom: 5px;
+	color: #5e5b54;
+	font-weight: bold;
+}
+
+p em
+{
+	color: #9b9993;
+}
+
+/* Form styles */
+legend
+{
+	padding: 10px;
+	font-weight: bold;
+}
+
+fieldset
+{
+	border: #9b9993 1px solid;
+	padding: 0 10px;
+	margin-bottom: 10px;
+	clear: left;
+}
+
+div.editor-field
+{
+	margin-bottom: 10px;
+}
+
+input[type=text], input[type=password], select
+{
+	border: 1px solid #8A8575;
+	width: 300px;
+}
+
+/* Styles for validation helpers */
+.field-validation-error {
+    color: #ff0000;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+.input-validation-error {
+    border: 1px solid #ff0000;
+    background-color: #ffeeee;
+}
+
+.validation-summary-errors {
+    font-weight: bold;
+    color: #ff0000;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+/* Tables */
+table
+{
+	border: 1px solid #000;
+	border-collapse: collapse;
+	color: #666666;
+	min-width: 500px;
+	width: 100%;
+}
+
+tr
+{
+	border: 1px solid #000;
+	line-height: 25px;
+}
+
+th
+{
+	background-color: #9b9993;
+	color: #000;
+	font-size: 13px;
+	text-align: left;
+}
+
+th, td
+{
+	padding-left: 5px;
+}
+
+tr:hover
+{
+	background-color: #fff;
+}
