@@ -2,7 +2,7 @@ Glimpse.EF adds one Glimpse plugin: SQL!
 
 The SQL tab shows every SQL statement ran by EF against your database, along with SQL connection, timings, records effected, and parameters.
 
-To get started using Glimpse.EF you simply need to add a reference to the Glimpse.Ef.dll and Glimpse.Core.dll to your project. There is no need to change your Ef code at all!
+To get started using Glimpse.EF you simply need to add a reference to the Glimpse.Ef.dll, Glimpse.Ado.dll and Glimpse.Core.dll to your project. There is no need to change your Ef code at all!
 
 See glimpse.readme.txt or http://getglimpse.com for more info
 

@@ -42,9 +42,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Plumbing\Injectors\INHibernateDriverInfo.cs" />
+    <Compile Include="Plumbing\Injectors\INHibernateInfoProvider.cs" />
+    <Compile Include="Plumbing\Injectors\NHibernateDriverInfo.cs" />
+    <Compile Include="Plumbing\Injectors\GlimpseProfileDbDriverActivator.cs" />
+    <Compile Include="Plumbing\Injectors\IGlimpseProfileDbDriverActivator.cs" />
+    <Compile Include="Plumbing\Injectors\NHibernateInfoProvider.cs" />
     <Compile Include="Plumbing\Injectors\WrapDbDriver.cs" />
     <EmbeddedResource Include="Plumbing\Profiler\GlimpseProfileDbDriverNh320.cs" />
     <EmbeddedResource Include="Plumbing\Profiler\GlimpseProfileDbDriverNh310.cs" />
+    <EmbeddedResource Include="Plumbing\Profiler\GlimpseProfileDbDriverNh300.cs" />
+    <EmbeddedResource Include="Plumbing\Profiler\GlimpseProfileDbDriverNh212.cs" />
+    <EmbeddedResource Include="Plumbing\Profiler\GlimpseProfileDbDriverNh210.cs" />
+    <EmbeddedResource Include="Plumbing\Profiler\GlimpseProfileDbDriverNh201.cs" />
+    <EmbeddedResource Include="Plumbing\Profiler\GlimpseProfileDbDriverNh121.cs" />
+    <Compile Include="Plumbing\Injectors\GlimpseProfileDbDriverFactory.cs" />
+    <Compile Include="Plumbing\Injectors\IGlimpseProfileDbDriverFactory.cs" />
+    <Compile Include="Plumbing\Profiler\IGlimpseProfileDbDriver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\NH.cs" />
   </ItemGroup>
@@ -66,7 +80,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="NuSpec\tools\install.ps1" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="NuSpec\lib\net40\" />

@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Common;
 using Glimpse.Ado.Plumbing;
 using Glimpse.Ado.Plumbing.Profiler;
+using Glimpse.NH.Plumbing.Profiler;
 using NHibernate.AdoNet;
 using NHibernate.Driver;
 using NHibernate.Engine;
@@ -12,22 +13,18 @@ using NHibernate.SqlTypes;
 
 namespace Glimpse.NH.Plumbing.Profiler
 {
-    public class GlimpseProfileDbDriverNh310<TInnerDriver> : IDriver, IEmbeddedBatcherFactoryProvider, ISqlParameterFormatter
-        where TInnerDriver : class, IDriver, new()
+    public class GlimpseProfileDbDriverNh310 : IGlimpseProfileDbDriver, IDriver, IEmbeddedBatcherFactoryProvider, ISqlParameterFormatter
     {
-        private readonly TInnerDriver _innerDriver;
+        private IDriver _innerDriver;
+        private ProviderStats _stats;
 
-        public GlimpseProfileDbDriverNh310()
-            : this(new TInnerDriver())
-        {
-        }
-
-        public GlimpseProfileDbDriverNh310(TInnerDriver innerDriver)
+        public void Wrap(object innerDriver)
         {
             if (innerDriver == null)
                 throw new ArgumentNullException("innerDriver");
 
-            _innerDriver = innerDriver;
+            _innerDriver = (IDriver)innerDriver;
+            _stats = new ProviderStats();
         }
 
         public void Configure(IDictionary<string, string> settings)
@@ -41,7 +38,7 @@ namespace Glimpse.NH.Plumbing.Profiler
             if (innerConnection is GlimpseProfileDbConnection)
                 return innerConnection;
 
-            var connection = new GlimpseProfileDbConnection(innerConnection as DbConnection, null, new ProviderStats(), Guid.NewGuid());
+            var connection = new GlimpseProfileDbConnection(innerConnection as DbConnection, null, _stats, Guid.NewGuid());
             return connection;
         }
 
@@ -51,7 +48,7 @@ namespace Glimpse.NH.Plumbing.Profiler
             if (innerCommand is GlimpseProfileDbCommand)
                 return innerCommand;
 
-            var command = new GlimpseProfileDbCommand(innerCommand as DbCommand, new ProviderStats());
+            var command = new GlimpseProfileDbCommand(innerCommand as DbCommand, _stats);
             return command;
         }
 

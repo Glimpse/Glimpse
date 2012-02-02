@@ -80,16 +80,13 @@ namespace Glimpse.EF.Plumbing.Injectors
                     {
                         var metadataWorkspace = metadataWorkspaceField.GetValue(workspace);
                         var itemsSSpaceField = metadataWorkspace.GetType().GetField("_itemsSSpace", BindingFlags.NonPublic | BindingFlags.Instance);
-
                         if (itemsSSpaceField != null)
                         {
                             var itemsSSpace = itemsSSpaceField.GetValue(metadataWorkspace);
                             var providerFactoryField = itemsSSpace.GetType().GetField("_providerFactory", BindingFlags.NonPublic | BindingFlags.Instance);
-
                             if (providerFactoryField != null)
                             {
                                 var providerFactory = providerFactoryField.GetValue(itemsSSpace);
-
                                 providerFactoryField.SetValue(itemsSSpace, Activator.CreateInstance(GetProxyTypeForProvider(providerFactory.GetType())));
                             }
                         }

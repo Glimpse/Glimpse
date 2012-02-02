@@ -125,7 +125,9 @@
     <Content Include="Views\Dinners\NotFound.aspx" />
     <Content Include="Views\Dinners\RSVPStatus.ascx" />
     <Content Include="Views\Dinners\Map.ascx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Scripts\MicrosoftAjax.js" />
     <Content Include="Scripts\MicrosoftAjax.debug.js" />
     <Content Include="Scripts\MicrosoftMvcAjax.js" />
