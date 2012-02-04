@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Resource;
@@ -13,7 +14,9 @@ namespace Glimpse.Core2.Framework
 
         //TODO: Add Sanitizer?
         //TODO: Add static FromWebConfig method to construct an instance of GlimpseConfiguration
-        public GlimpseConfiguration(IFrameworkProvider frameworkProvider, ResourceEndpointConfiguration endpointConfiguration)
+        public GlimpseConfiguration(IFrameworkProvider frameworkProvider, 
+            ResourceEndpointConfiguration endpointConfiguration,
+            IList<IClientScript> clientScripts)
         {
             //TODO: Test building glimpse on clean VS install with contracts
             //TODO: Test building glimpse on teamcity with contracts
@@ -21,7 +24,7 @@ namespace Glimpse.Core2.Framework
             Contract.Requires<ArgumentNullException>(endpointConfiguration != null, "endpointConfiguration");
 
             //TODO: Refactor all these "new" calls to leverage a IOC container?
-            ClientScripts = new DiscoverableCollection<IClientScript>();
+            ClientScripts = clientScripts ?? new List<IClientScript>();
             FrameworkProvider = frameworkProvider;
             HtmlEncoder = new AntiXssEncoder();
             Logger = new NLogLogger(CreateLogger());
@@ -37,12 +40,12 @@ namespace Glimpse.Core2.Framework
             DefaultResourceName = Configuration.InternalName;
         }
 
-        private DiscoverableCollection<IClientScript> clientScripts;
-        public DiscoverableCollection<IClientScript> ClientScripts
+        private IList<IClientScript> clientScripts;
+        public IList<IClientScript> ClientScripts
         {
             get
             {
-                Contract.Ensures(Contract.Result<DiscoverableCollection<IClientScript>>()!=null);
+                Contract.Ensures(Contract.Result<IList<IClientScript>>() != null);
                 return clientScripts;
             }
             set

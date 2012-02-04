@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using Glimpse.AspNet;
 using Glimpse.Core2.Extensibility;
+using Glimpse.Core2.Framework;
 using Glimpse.Test.AspNet.Tester;
 using Moq;
 using Xunit;

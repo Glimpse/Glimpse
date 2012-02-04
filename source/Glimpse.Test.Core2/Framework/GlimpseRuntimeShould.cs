@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
 using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
@@ -343,7 +344,6 @@ namespace Glimpse.Test.Core2.Framework
             runtime.Configuration.PipelineInspectors.Discoverability.AutoDiscover = true;
             runtime.Configuration.Resources.Discoverability.AutoDiscover = true;
             runtime.Configuration.RuntimePolicies.Discoverability.AutoDiscover = true;
-            runtime.Configuration.ClientScripts.Discoverability.AutoDiscover = true;
             runtime.Configuration.SerializationConverters.Discoverability.AutoDiscover = true;
 
             runtime.UpdateConfiguration(runtime.Configuration);
@@ -352,7 +352,6 @@ namespace Glimpse.Test.Core2.Framework
             Assert.True(runtime.Configuration.PipelineInspectors.Count > 0);
             Assert.True(runtime.Configuration.Resources.Count > 0);
             Assert.True(runtime.Configuration.RuntimePolicies.Count > 0);
-            Assert.True(runtime.Configuration.ClientScripts.Count > 0);
             Assert.True(runtime.Configuration.SerializationConverters.Count > 0);
         }
 
@@ -631,8 +630,6 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void GenerateNoScriptTagsWithoutClientScripts()
         {
-            Runtime.Configuration.ClientScripts.Clear();
-
             Assert.Equal("", Runtime.GenerateScriptTags(Guid.NewGuid()));
             
             Runtime.LoggerMock.Verify(l=>l.Warn(It.IsAny<string>()), Times.Never());

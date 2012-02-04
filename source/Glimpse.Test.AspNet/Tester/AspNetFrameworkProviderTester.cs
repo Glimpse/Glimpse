@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Web;
 using Glimpse.AspNet;
 using Moq;
@@ -11,14 +10,11 @@ namespace Glimpse.Test.AspNet.Tester
         public Mock<HttpContextBase> HttpContextMock { get; set; }
         public Mock<HttpApplicationStateBase> HttpApplicationStateMock { get; set; }
         public Mock<HttpResponseBase> HttpResponseMock { get; set; }
-        public NameValueCollection HeaderCollection { get; set; }
     
 
         private AspNetFrameworkProviderTester()
         {
             HttpResponseMock = new Mock<HttpResponseBase>();
-            HeaderCollection = new NameValueCollection();
-            HttpResponseMock.Setup(r => r.Headers).Returns(HeaderCollection);
 
             HttpApplicationStateMock = new Mock<HttpApplicationStateBase>();
             HttpApplicationStateMock.Setup(st => st.Get("testKey")).Returns("testValue");

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics;
 using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
@@ -76,9 +77,10 @@ namespace Glimpse.Test.Core2.Tester
         {
             var frameworkProviderMock = new Mock<IFrameworkProvider>().Setup();
             var endpointConfigMock = new Mock<ResourceEndpointConfiguration>();
+            var clientScripts = new List<IClientScript>();
 
             var configuration =
-                new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfigMock.Object).
+                new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfigMock.Object, clientScripts).
                     TurnOffAutoDiscover();
 
 

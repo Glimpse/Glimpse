@@ -27,11 +27,9 @@ namespace Glimpse.AspNet
 
             if (runtime == null)
             {
-                var config = applicationState[Constants.ConfigKey] as GlimpseConfiguration ?? new GlimpseConfiguration(new AspNetFrameworkProvider(), new HttpHandlerEndpointConfiguration());
+                var factory = new Factory(new AspNetServiceLocator());
 
-                config.BasePolicy = RuntimePolicy.On;
-
-                runtime = new GlimpseRuntime(config);
+                runtime = factory.InstantiateRuntime();
 
                 applicationState.Add(Constants.RuntimeKey, runtime);
             }

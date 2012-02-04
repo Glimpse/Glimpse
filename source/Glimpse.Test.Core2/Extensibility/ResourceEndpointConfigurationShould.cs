@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Glimpse.Core2.Extensibility;
+using Glimpse.Core2.Framework;
 using Glimpse.Test.Core2.TestDoubles;
 using Moq;
 using Moq.Protected;

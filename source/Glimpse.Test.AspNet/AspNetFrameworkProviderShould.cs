@@ -62,9 +62,7 @@ namespace Glimpse.Test.AspNet
 
             FrameworkProvider.SetHttpResponseHeader(headerName, headerValue);
 
-            FrameworkProvider.HttpContextMock.VerifyGet(ctx => ctx.Response);
-            FrameworkProvider.HttpResponseMock.VerifyGet(r => r.Headers);
-            Assert.Equal(headerValue, FrameworkProvider.HeaderCollection[headerName]);
+            FrameworkProvider.HttpResponseMock.Verify(r=>r.AppendHeader(headerName, headerValue));
         }
 
         [Fact]

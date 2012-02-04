@@ -22,7 +22,7 @@ namespace Glimpse.Test.Core2.Framework
         {
             var endpointConfigObj = Configuration.EndpointConfigMock.Object;
 
-            var configuration = new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, endpointConfigObj);
+            var configuration = new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, endpointConfigObj, Configuration.ClientScriptsStub);
 
             Assert.Equal(endpointConfigObj, configuration.ResourceEndpoint);
         }
@@ -32,7 +32,7 @@ namespace Glimpse.Test.Core2.Framework
         {
             var frameworkProviderObj = Configuration.FrameworkProviderMock.Object;
 
-            var configuration = new GlimpseConfiguration(frameworkProviderObj, Configuration.EndpointConfigMock.Object);
+            var configuration = new GlimpseConfiguration(frameworkProviderObj, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub);
 
             Assert.Equal(frameworkProviderObj, configuration.FrameworkProvider);
         }
@@ -54,7 +54,7 @@ namespace Glimpse.Test.Core2.Framework
         {
             var frameworkProviderObj = Configuration.FrameworkProviderMock.Object;
 
-            var configuration = new GlimpseConfiguration(frameworkProviderObj, Configuration.EndpointConfigMock.Object);
+            var configuration = new GlimpseConfiguration(frameworkProviderObj, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub);
 
             Assert.NotNull(configuration.PersistanceStore);
             Configuration.FrameworkProviderMock.Verify(fp => fp.HttpServerStore, Times.AtLeastOnce());
@@ -93,7 +93,7 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void CreateDefaultClientScripts()
         {
-            Assert.NotNull(Configuration.ClientScripts);
+            Assert.NotNull(Configuration.ClientScriptsStub);
         }
 
         [Fact]
@@ -142,13 +142,13 @@ namespace Glimpse.Test.Core2.Framework
         public void ThrowExceptionWhenConstructedWithNullEndpointConfiguration()
         {
             Assert.Throws<ArgumentNullException>(
-                () => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, null));
+                () => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, null, Configuration.ClientScriptsStub));
         }
 
         [Fact]
         public void ThrowExceptionWhenConstructedWithNullFrameworkProvider()
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(null, Configuration.EndpointConfigMock.Object));
+            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(null, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub));
         }
 
         [Fact]

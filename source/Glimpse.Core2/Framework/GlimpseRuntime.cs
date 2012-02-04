@@ -19,7 +19,7 @@ namespace Glimpse.Core2.Framework
         }
 
 
-        private GlimpseConfiguration Configuration { get; set; }
+        public GlimpseConfiguration Configuration { get; set; }
         
         private IDictionary<string, TabResult> TabResultsStore
         {
@@ -256,7 +256,7 @@ namespace Glimpse.Core2.Framework
             //Create storage space for tabs to access
             var tabStore = new DictionaryDataStoreAdapter(new Dictionary<string, object>());
 
-            //Create ServiceLocator valid for this request
+            //Create UserServiceLocator valid for this request
             var tabContext = new TabContext(runtimeContext, tabStore, Configuration.PipelineInspectors, logger);
 
 
@@ -321,7 +321,6 @@ namespace Glimpse.Core2.Framework
             return policy != RuntimePolicy.Off;
         }
 
-        //TODO: Test that these collections are auto populated
         public void UpdateConfiguration(GlimpseConfiguration configuration)
         {
             //TODO: destruct pipelineInitializers and tabs
@@ -341,9 +340,6 @@ namespace Glimpse.Core2.Framework
             if (runtimePolicies.Discoverability.AutoDiscover)
                 runtimePolicies.Discoverability.Discover();
 
-            var clientScripts = configuration.ClientScripts;
-            if (clientScripts.Discoverability.AutoDiscover)
-                clientScripts.Discoverability.Discover();
 
             var serializationConverters = configuration.SerializationConverters;
             if (serializationConverters.Discoverability.AutoDiscover)

@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using Glimpse.Core2.Extensibility;
 
-namespace Glimpse.Core2.Extensibility
+namespace Glimpse.Core2.Framework
 {
     public abstract class ResourceEndpointConfiguration
     {

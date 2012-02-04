@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using Glimpse.Core2.Extensibility;
+using Glimpse.Core2.Framework;
 
 namespace Glimpse.AspNet
 {

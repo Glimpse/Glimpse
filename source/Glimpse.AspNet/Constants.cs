@@ -3,6 +3,5 @@
     public static class Constants
     {
         internal const string RuntimeKey = "__GlimpseRuntime";
-        internal const string ConfigKey = "__GlimpseConfig";
     }
 }
