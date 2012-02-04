@@ -41,8 +41,7 @@ namespace Glimpse.AspNet
 
         public void SetHttpResponseHeader(string name, string value)
         {
-            var headers = Context.Response.Headers;
-            headers.Set(name, value);
+            Context.Response.AppendHeader(name, value);
         }
 
         public void SetHttpResponseStatusCode(int statusCode)

@@ -208,6 +208,12 @@
   <ItemGroup>
     <Content Include="Views\Store\GenreMenu.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Glimpse.AspNet\Glimpse.AspNet.csproj">
+      <Project>{FDDFC8A6-CDDF-4BC6-9F07-E76050E1EEE7}</Project>
+      <Name>Glimpse.AspNet</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
