@@ -1,4 +1,5 @@
 ﻿using System.Web;
+using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
 
@@ -27,6 +28,8 @@ namespace Glimpse.AspNet
             if (runtime == null)
             {
                 var config = applicationState[Constants.ConfigKey] as GlimpseConfiguration ?? new GlimpseConfiguration(new AspNetFrameworkProvider(), new HttpHandlerEndpointConfiguration());
+
+                config.BasePolicy = RuntimePolicy.On;
 
                 runtime = new GlimpseRuntime(config);
 
