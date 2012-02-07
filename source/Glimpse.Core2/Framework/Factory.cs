@@ -119,6 +119,11 @@ namespace Glimpse.Core2.Framework
             return Logger;
         }
 
+        public RuntimePolicy InstantiateBaseRuntimePolicy()
+        {
+            return Configuration.BaseRuntimePolicy;
+        }
+
         private bool TrySingleInstanceFromServiceLocators<T>(out T instance) where T: class
         {
             if (UserServiceLocator != null)

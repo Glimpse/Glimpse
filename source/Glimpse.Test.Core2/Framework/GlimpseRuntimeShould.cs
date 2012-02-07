@@ -516,13 +516,13 @@ namespace Glimpse.Test.Core2.Framework
         public void NotIncreaseModeOverLifetimeOfRequest()
         {
             var glimpseMode = RuntimePolicy.ModifyResponseBody;
-            Runtime.Configuration.BasePolicy = glimpseMode;
+            Runtime.Configuration.BaseRuntimePolicy = glimpseMode;
 
             var firstMode = Runtime.Initialize();
 
             Assert.True(firstMode);
 
-            Runtime.Configuration.BasePolicy = RuntimePolicy.On;
+            Runtime.Configuration.BaseRuntimePolicy = RuntimePolicy.On;
             Runtime.UpdateConfiguration(Runtime.Configuration);
 
             Runtime.BeginRequest();
@@ -533,7 +533,7 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void RespectConfigurationSettingInValidators()
         {
-            Runtime.Configuration.BasePolicy = RuntimePolicy.Off;
+            Runtime.Configuration.BaseRuntimePolicy = RuntimePolicy.Off;
 
             Runtime.ValidatorMock.Setup(v => v.Execute(It.IsAny<IRuntimePolicyContext>())).Returns(RuntimePolicy.On);
             Runtime.Configuration.RuntimePolicies.Add(new Lazy<IRuntimePolicy, IRuntimePolicyMetadata>(()=>Runtime.ValidatorMock.Object,new RuntimePolicyAttribute()));
@@ -556,7 +556,7 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void SkipEecutingBeginRequestIfGlimpseModeIfOff()
         {
-            Runtime.Configuration.BasePolicy = RuntimePolicy.Off;
+            Runtime.Configuration.BaseRuntimePolicy = RuntimePolicy.Off;
 
             Runtime.BeginRequest();
 
@@ -579,7 +579,7 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void SkipExecutingTabsIfGlipseModeIsOff()
         {
-            Runtime.Configuration.BasePolicy = RuntimePolicy.Off;
+            Runtime.Configuration.BaseRuntimePolicy = RuntimePolicy.Off;
 
             Runtime.ExecuteTabs();
 
@@ -589,7 +589,7 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void SkipExecutingResourceIfGlipseModeIsOff()
         {
-            Runtime.Configuration.BasePolicy = RuntimePolicy.Off;
+            Runtime.Configuration.BaseRuntimePolicy = RuntimePolicy.Off;
 
             Runtime.ExecuteResource("doesn't matter", new string[]{});
 
@@ -599,7 +599,7 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void ValidateAtEndRequest()
         {
-            Runtime.Configuration.BasePolicy = RuntimePolicy.Off;
+            Runtime.Configuration.BaseRuntimePolicy = RuntimePolicy.Off;
 
             Runtime.EndRequest();
 

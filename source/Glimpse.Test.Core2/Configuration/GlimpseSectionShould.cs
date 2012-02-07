@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using Glimpse.Core2;
 using Glimpse.Core2.Configuration;
 using Xunit;
 
@@ -70,6 +71,26 @@ namespace Glimpse.Test.Core2.Configuration
             section.ClientScripts = scripts;
 
             Assert.Equal(scripts, section.ClientScripts);
+        }
+
+        [Fact]
+        public void ReturnDefaultBasePolicy()
+        {
+            var section = new GlimpseSection();
+
+            Assert.Equal(RuntimePolicy.Off, section.BaseRuntimePolicy);
+        }
+
+        [Fact]
+        public void GetSetBasePolicy()
+        {
+            var basePolicy = RuntimePolicy.ModifyResponseBody;
+
+            var section = new GlimpseSection();
+
+            section.BaseRuntimePolicy = basePolicy;
+
+            Assert.Equal(basePolicy, section.BaseRuntimePolicy);
         }
     }
 }

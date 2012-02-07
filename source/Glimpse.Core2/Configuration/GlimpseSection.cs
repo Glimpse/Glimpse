@@ -17,5 +17,12 @@ namespace Glimpse.Core2.Configuration
             get { return (DiscoverableCollectionElement) base["clientScripts"]; }
             set { base["clientScripts"] = value; }
         }
+
+        [ConfigurationProperty("baseRuntimePolicy", DefaultValue = RuntimePolicy.Off)]
+        public RuntimePolicy BaseRuntimePolicy
+        {
+            get { return (RuntimePolicy)base["baseRuntimePolicy"]; }
+            set { base["baseRuntimePolicy"] = value; }
+        }
     }
 }

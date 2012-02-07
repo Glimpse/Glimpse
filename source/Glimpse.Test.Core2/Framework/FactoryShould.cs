@@ -262,5 +262,17 @@ namespace Glimpse.Test.Core2.Framework
 
             Assert.Equal(path, discoverableCollection.DiscoveryLocation);
         }
+
+        [Fact]
+        public void GetBasePolicyFromConfiguration()
+        {
+            var locatorMock = new Mock<IServiceLocator>();
+
+            var factory = new Factory(locatorMock.Object);
+
+            RuntimePolicy result = factory.InstantiateBaseRuntimePolicy();
+
+            Assert.Equal(RuntimePolicy.Off, result);
+        }
     }
 }

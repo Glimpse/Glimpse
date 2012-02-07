@@ -358,7 +358,7 @@ namespace Glimpse.Core2.Framework
             //Begin with the lowest policy for this request, or the lowest policy per config
             var result = requestStore.Contains(Constants.RuntimePermissionsKey)
                              ? requestStore.Get<RuntimePolicy>(Constants.RuntimePermissionsKey)
-                             : Configuration.BasePolicy;
+                             : Configuration.BaseRuntimePolicy;
 
             if (result != RuntimePolicy.Off)
             {

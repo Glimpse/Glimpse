@@ -1,3 +1,4 @@
+using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
 using Glimpse.Test.Core2.Extensions;
@@ -11,7 +12,7 @@ namespace Glimpse.Test.Core2.Tester
                                            Mock<ResourceEndpointConfiguration> endpointConfigurationMock,
                                            IDiscoverableCollection<IClientScript> clientScriptsStub,
             Mock<ILogger> loggerMock)
-            : base(frameworkProviderMock.Object, endpointConfigurationMock.Object, clientScriptsStub, loggerMock.Object)
+            : base(frameworkProviderMock.Object, endpointConfigurationMock.Object, clientScriptsStub, loggerMock.Object, RuntimePolicy.On)
         {
             FrameworkProviderMock = frameworkProviderMock;
             EndpointConfigMock = endpointConfigurationMock;

@@ -118,13 +118,13 @@ namespace Glimpse.Test.Core2.Framework
         public void ThrowExceptionWhenConstructedWithNullEndpointConfiguration()
         {
             Assert.Throws<ArgumentNullException>(
-                () => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, null, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object));
+                () => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, null, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.On));
         }
 
         [Fact]
         public void ThrowExceptionWhenConstructedWithNullFrameworkProvider()
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(null, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object));
+            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(null, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.On));
         }
 
         [Fact]
@@ -207,17 +207,11 @@ namespace Glimpse.Test.Core2.Framework
         }
 
         [Fact]
-        public void DefaultToGlimpseModeOff()
-        {
-            Assert.Equal(RuntimePolicy.Off, Configuration.BasePolicy);
-        }
-
-        [Fact]
         public void ChangeGlimpseMode()
         {
-            Configuration.BasePolicy = RuntimePolicy.ModifyResponseBody;
+            Configuration.BaseRuntimePolicy = RuntimePolicy.ModifyResponseBody;
 
-            Assert.Equal(RuntimePolicy.ModifyResponseBody, Configuration.BasePolicy);
+            Assert.Equal(RuntimePolicy.ModifyResponseBody, Configuration.BaseRuntimePolicy);
         }
 
         public void Dispose()

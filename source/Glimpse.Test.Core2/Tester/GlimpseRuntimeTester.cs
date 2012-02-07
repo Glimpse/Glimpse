@@ -67,7 +67,7 @@ namespace Glimpse.Test.Core2.Tester
             configuration.Serializer = SerializerMock.Object;
             configuration.PersistanceStore = PersistanceStoreMock.Object;
             configuration.Logger = LoggerMock.Object;
-            configuration.BasePolicy = RuntimePolicy.On;
+            configuration.BaseRuntimePolicy = RuntimePolicy.On;
             configuration.HtmlEncoder = EncoderMock.Object;
 
             Configuration = configuration;
@@ -81,7 +81,7 @@ namespace Glimpse.Test.Core2.Tester
             var clientScripts = new ReflectionDiscoverableCollection<IClientScript>(loggerMock.Object);
 
             var configuration =
-                new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfigMock.Object, clientScripts, loggerMock.Object).
+                new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfigMock.Object, clientScripts, loggerMock.Object, RuntimePolicy.On).
                     TurnOffAutoDiscover();
 
 

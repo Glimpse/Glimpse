@@ -12,7 +12,8 @@ namespace Glimpse.Core2.Framework
         public GlimpseConfiguration(IFrameworkProvider frameworkProvider, 
             ResourceEndpointConfiguration endpointConfiguration,
             ICollection<IClientScript> clientScripts,
-            ILogger logger)
+            ILogger logger,
+            RuntimePolicy baseRuntimePolicy)
         {
             //TODO: Test building glimpse on clean VS install with contracts
             //TODO: Test building glimpse on teamcity with contracts
@@ -32,7 +33,7 @@ namespace Glimpse.Core2.Framework
             Serializer = new JsonNetSerializer();
             Tabs = new DiscoverableLazyCollection<ITab, ITabMetadata>();
             RuntimePolicies = new DiscoverableLazyCollection<IRuntimePolicy, IRuntimePolicyMetadata>();
-            BasePolicy = RuntimePolicy.Off;
+            BaseRuntimePolicy = baseRuntimePolicy;
             SerializationConverters = new DiscoverableCollection<ISerializationConverter>();
             DefaultResourceName = Resource.Configuration.InternalName;
         }
@@ -232,6 +233,6 @@ namespace Glimpse.Core2.Framework
             }
         }
 
-        public RuntimePolicy BasePolicy { get; set; }
+        public RuntimePolicy BaseRuntimePolicy { get; set; }
     }
 }
