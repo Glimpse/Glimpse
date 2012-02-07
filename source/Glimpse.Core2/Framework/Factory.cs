@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics.Contracts;
-using System.Linq;
 using Glimpse.Core2.Configuration;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Extensions;
@@ -24,7 +23,6 @@ namespace Glimpse.Core2.Framework
 
         public Factory(IServiceLocator providerServiceLocator, IServiceLocator userServiceLocator)
         {
-            //TODO: load in config values
             //TODO: Try to lookup/load user service locator from config if null
             ProviderServiceLocator = providerServiceLocator;
             UserServiceLocator = userServiceLocator;
@@ -66,16 +64,19 @@ namespace Glimpse.Core2.Framework
             ICollection<IClientScript> result;
             if (TryAllInstancesFromServiceLocators(out result)) return result;
 
-            var discoverableCollection = new ReflectionDiscoverableCollection<IClientScript>(InstantiateLogger());
+            return CreateDiscoverableCollection<IClientScript>(Configuration.ClientScripts);
+        }
 
-            var clientScripts = Configuration.ClientScripts;
+        private IDiscoverableCollection<T> CreateDiscoverableCollection<T>(DiscoverableCollectionElement config)
+        {
+            var discoverableCollection = new ReflectionDiscoverableCollection<T>(InstantiateLogger());
 
-            discoverableCollection.IgnoredTypes.AddRange(clientScripts.IgnoredTypes.ToEnumerable());
+            discoverableCollection.IgnoredTypes.AddRange(config.IgnoredTypes.ToEnumerable());
 
-            if (clientScripts.DiscoveryLocation != DiscoverableCollectionElement.DefaultLocation)
-                discoverableCollection.DiscoveryLocation = clientScripts.DiscoveryLocation;
+            if (config.DiscoveryLocation != DiscoverableCollectionElement.DefaultLocation)
+                discoverableCollection.DiscoveryLocation = config.DiscoveryLocation;
 
-            discoverableCollection.AutoDiscover = clientScripts.AutoDiscover;
+            discoverableCollection.AutoDiscover = config.AutoDiscover;
             if (discoverableCollection.AutoDiscover) discoverableCollection.Discover();
 
             return discoverableCollection;

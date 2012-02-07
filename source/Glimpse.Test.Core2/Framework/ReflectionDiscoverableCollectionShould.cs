@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
 using Glimpse.Test.Core2.BadData;
@@ -191,15 +192,29 @@ namespace Glimpse.Test.Core2.Framework
         }
 
         [Fact]
-        public void SetDiscoveryLocation()
+        public void SetDiscoveryLocationWithRootedPath()
         {
-            var path = "anything";
-            Collection.DiscoveryLocation = path;
-            Assert.Contains(path, Collection.DiscoveryLocation);
-
-            path = @"\rooted";
+            var path = @"c:\Windows";
             Collection.DiscoveryLocation = path;
             Assert.Equal(path, Collection.DiscoveryLocation);
+        }
+
+        [Fact]
+        public void SetDiscoveryLocationWithNonRootedPath()
+        {
+            var path = @"..\..\";
+            Collection.DiscoveryLocation = path;
+            Assert.Contains(path, Collection.DiscoveryLocation);
+        }
+
+        [Fact]
+        public void ThrowArgumentExceptionWithBadPath()
+        {
+            var path = @"c:\I\dont\exist\";
+            Assert.Throws<DirectoryNotFoundException>(()=>Collection.DiscoveryLocation = path);
+
+            path = @"..\neither\do\I\";
+            Assert.Throws<DirectoryNotFoundException>(() => Collection.DiscoveryLocation = path);
         }
     }
 }

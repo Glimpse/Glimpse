@@ -78,6 +78,7 @@ namespace Glimpse.Core2.Framework
         {
             var results = new List<T>();
 
+
             foreach (var file in Directory.GetFiles(DiscoveryLocation, "*.dll", SearchOption.AllDirectories))
             {
                 Assembly assembly;
@@ -122,9 +123,14 @@ namespace Glimpse.Core2.Framework
             get { return discoveryLocation ?? (discoveryLocation = AppDomain.CurrentDomain.BaseDirectory); }
             set
             {
-                discoveryLocation = Path.IsPathRooted(value)
+                var result = Path.IsPathRooted(value)
                                         ? value
                                         : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, value);
+
+                if (!Directory.Exists(result))
+                    throw new DirectoryNotFoundException(string.Format(Resources.SetDiscoveryLocationDirectoryNotFoundMessage, value, result));
+                
+                discoveryLocation = result;
             }
         }
     }

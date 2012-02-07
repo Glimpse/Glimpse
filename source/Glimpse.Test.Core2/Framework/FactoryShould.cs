@@ -159,5 +159,108 @@ namespace Glimpse.Test.Core2.Framework
             var result = factory.InstantiateLogger();
             Assert.NotNull(result as NLogLogger);
         }
+
+        [Fact]
+        public void ReuseExistingLogger()
+        {
+            var logger = new NullLogger();
+            var locatorMock = new Mock<IServiceLocator>();
+            locatorMock.Setup(l => l.GetInstance<ILogger>()).Returns(logger);
+
+            var factory = new Factory(locatorMock.Object);
+
+            var first = factory.InstantiateLogger();
+            var second = factory.InstantiateLogger();
+
+            Assert.Equal(logger, first);
+            Assert.Equal(logger, second);
+            locatorMock.Verify(l=>l.GetInstance<ILogger>(), Times.AtMostOnce());
+        }
+
+        [Fact]
+        public void CascadeFromUserLocatorToProviderLocatorForSingleInstance()
+        {
+            var sequence = 0;
+            var loggerMock = new Mock<ILogger>();
+            var userLocatorMock = new Mock<IServiceLocator>();
+            userLocatorMock.Setup(ul => ul.GetInstance<ILogger>()).Returns<ILogger>(null).Callback(()=>Assert.Equal(0, sequence++));
+            var providerLocatorMock = new Mock<IServiceLocator>();
+            providerLocatorMock.Setup(pl => pl.GetInstance<ILogger>()).Returns(loggerMock.Object).Callback(()=>Assert.Equal(1, sequence++));
+
+            var factory = new Factory(providerLocatorMock.Object, userLocatorMock.Object);
+
+            factory.InstantiateLogger();
+
+            userLocatorMock.Verify(ul=>ul.GetInstance<ILogger>(), Times.Once());
+            providerLocatorMock.Verify(pl=>pl.GetInstance<ILogger>(), Times.Once());
+        }
+
+        [Fact]
+        public void CascadeFromUserLocatorToProviderLocatorForAllInstance()
+        {
+            var sequence = 0;
+            var scripts = new List<IClientScript>();
+            var userLocatorMock = new Mock<IServiceLocator>();
+            userLocatorMock.Setup(ul => ul.GetAllInstances<IClientScript>()).Returns<ICollection<IClientScript>>(null).Callback(() => Assert.Equal(0, sequence++));
+            var providerLocatorMock = new Mock<IServiceLocator>();
+            providerLocatorMock.Setup(pl => pl.GetAllInstances<IClientScript>()).Returns(scripts).Callback(() => Assert.Equal(1, sequence++));
+
+            var factory = new Factory(providerLocatorMock.Object, userLocatorMock.Object);
+
+            factory.InstantiateClientScripts();
+
+            userLocatorMock.Verify(ul => ul.GetAllInstances<IClientScript>(), Times.Once());
+            providerLocatorMock.Verify(pl => pl.GetAllInstances<IClientScript>(), Times.Once());
+        }
+
+        [Fact]
+        public void UseUserLocatorFirstForInstances()
+        {
+            var loggerMock = new Mock<ILogger>();
+            var userLocatorMock = new Mock<IServiceLocator>();
+            userLocatorMock.Setup(ul => ul.GetInstance<ILogger>()).Returns(loggerMock.Object);
+            var providerLocatorMock = new Mock<IServiceLocator>();
+
+            var factory = new Factory(providerLocatorMock.Object, userLocatorMock.Object);
+
+            factory.InstantiateLogger();
+
+            userLocatorMock.Verify(ul => ul.GetInstance<ILogger>(), Times.Once());
+            providerLocatorMock.Verify(pl => pl.GetInstance<ILogger>(), Times.Never());
+        }
+
+        [Fact]
+        public void UseUserLocatorFirstForAllInstances()
+        {
+            var scripts = new List<IClientScript>();
+            var userLocatorMock = new Mock<IServiceLocator>();
+            userLocatorMock.Setup(ul => ul.GetAllInstances<IClientScript>()).Returns(scripts);
+            var providerLocatorMock = new Mock<IServiceLocator>();
+
+            var factory = new Factory(providerLocatorMock.Object, userLocatorMock.Object);
+
+            factory.InstantiateClientScripts();
+
+            userLocatorMock.Verify(ul => ul.GetAllInstances<IClientScript>(), Times.Once());
+            providerLocatorMock.Verify(pl => pl.GetAllInstances<IClientScript>(), Times.Never());
+        }
+
+        [Fact]
+        public void LeverageConfigurationWhenCreatingDiscoverableCollection()
+        {
+            var path = @"c:\Windows";
+            var config = new GlimpseSection {ClientScripts = {DiscoveryLocation = path, AutoDiscover = false}};
+
+            var locatorMock = new Mock<IServiceLocator>();
+            locatorMock.Setup(l => l.GetAllInstances<IClientScript>()).Returns<ICollection<IClientScript>>(null);
+
+            var factory = new Factory(locatorMock.Object){Configuration = config};
+
+            var result = factory.InstantiateClientScripts();
+
+            var discoverableCollection = result as IDiscoverableCollection<IClientScript>;
+
+            Assert.Equal(path, discoverableCollection.DiscoveryLocation);
+        }
     }
 }

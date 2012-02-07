@@ -176,5 +176,14 @@ namespace Glimpse.Core2 {
                 return ResourceManager.GetString("RenderClientScriptMissingResourceWarning", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The input value &apos;{0}&apos; creates path &apos;{1}&apos;, which does not exist..
+        /// </summary>
+        internal static string SetDiscoveryLocationDirectoryNotFoundMessage {
+            get {
+                return ResourceManager.GetString("SetDiscoveryLocationDirectoryNotFoundMessage", resourceCulture);
+            }
+        }
     }
 }

@@ -168,4 +168,8 @@
     <value>Exception loading '{0}' of type '{1}'.</value>
     <comment>{0} - Interface type, {1} - InstanceType</comment>
   </data>
+  <data name="SetDiscoveryLocationDirectoryNotFoundMessage" xml:space="preserve">
+    <value>The input value '{0}' creates path '{1}', which does not exist.</value>
+    <comment>{0} - value input to setter, {1} - missing path</comment>
+  </data>
 </root>
