@@ -14,7 +14,8 @@ namespace Glimpse.Core2.Framework
             ILogger logger,
             RuntimePolicy baseRuntimePolicy,
             IHtmlEncoder htmlEncoder,
-            IPersistanceStore persistanceStore)
+            IPersistanceStore persistanceStore,
+            ICollection<IPipelineInspector> pipelineInspectors)
         {
             //TODO: Test building glimpse on clean VS install with contracts
             //TODO: Test building glimpse on teamcity with contracts
@@ -24,6 +25,7 @@ namespace Glimpse.Core2.Framework
             Contract.Requires<ArgumentNullException>(htmlEncoder != null, "htmlEncoder");
             Contract.Requires<ArgumentNullException>(persistanceStore != null, "persistanceStore");
             Contract.Requires<ArgumentNullException>(clientScripts != null, "clientScripts");
+            Contract.Requires<ArgumentNullException>(pipelineInspectors != null, "pipelineInspectors");
 
             //TODO: Refactor all these "new" calls to leverage a IOC container?
             Logger = logger;
@@ -31,7 +33,7 @@ namespace Glimpse.Core2.Framework
             FrameworkProvider = frameworkProvider;
             HtmlEncoder = htmlEncoder;
             PersistanceStore = persistanceStore;
-            PipelineInspectors = new DiscoverableCollection<IPipelineInspector>();
+            PipelineInspectors = pipelineInspectors;
             ResourceEndpoint = endpointConfiguration;
             Resources = new DiscoverableCollection<IResource>();
             Serializer = new JsonNetSerializer();
@@ -117,12 +119,12 @@ namespace Glimpse.Core2.Framework
             }
         }
 
-        private DiscoverableCollection<IPipelineInspector> pipelineInspectors;
-        public DiscoverableCollection<IPipelineInspector> PipelineInspectors
+        private ICollection<IPipelineInspector> pipelineInspectors;
+        public ICollection<IPipelineInspector> PipelineInspectors
         {
             get
             {
-                Contract.Ensures(Contract.Result<DiscoverableCollection<IPipelineInspector>>()!=null);
+                Contract.Ensures(Contract.Result<ICollection<IPipelineInspector>>()!=null);
                 return pipelineInspectors;
             }
             set

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
@@ -7,7 +8,7 @@ namespace Glimpse.Core2.Extensibility
     public class TabContext:ITabContext
     {
 
-        public TabContext(object requestContext, IDataStore pluginStore, DiscoverableCollection<IPipelineInspector> pipelineInspectors, ILogger logger)
+        public TabContext(object requestContext, IDataStore pluginStore, IEnumerable<IPipelineInspector> pipelineInspectors, ILogger logger)
         {
             Contract.Requires<ArgumentNullException>(requestContext != null, "requestContext");
             Contract.Requires<ArgumentNullException>(pluginStore != null, "pluginStore");
@@ -20,7 +21,7 @@ namespace Glimpse.Core2.Extensibility
             Logger = logger;
         }
 
-        private DiscoverableCollection<IPipelineInspector> PipelineInspectors { get; set; }
+        private IEnumerable<IPipelineInspector> PipelineInspectors { get; set; }
 
         public IDataStore PluginStore { get; private set; }
 

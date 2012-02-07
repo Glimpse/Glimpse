@@ -328,9 +328,6 @@ namespace Glimpse.Core2.Framework
             if (tabs.Discoverability.AutoDiscover)
                 tabs.Discoverability.Discover();
 
-            var pipelineInspectors = configuration.PipelineInspectors;
-            if (pipelineInspectors.Discoverability.AutoDiscover)
-                pipelineInspectors.Discoverability.Discover();
 
             var resources = configuration.Resources;
             if (resources.Discoverability.AutoDiscover)

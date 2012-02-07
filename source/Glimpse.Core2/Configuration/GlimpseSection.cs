@@ -18,6 +18,13 @@ namespace Glimpse.Core2.Configuration
             set { base["clientScripts"] = value; }
         }
 
+        [ConfigurationProperty("pipelineInspectors")]
+        public DiscoverableCollectionElement PipelineInspectors
+        {
+            get { return (DiscoverableCollectionElement)base["pipelineInspectors"]; }
+            set { base["pipelineInspectors"] = value; }
+        }
+
         [ConfigurationProperty("baseRuntimePolicy", DefaultValue = RuntimePolicy.Off)]
         public RuntimePolicy BaseRuntimePolicy
         {

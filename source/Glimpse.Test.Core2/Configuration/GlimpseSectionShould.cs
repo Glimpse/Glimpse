@@ -92,5 +92,30 @@ namespace Glimpse.Test.Core2.Configuration
 
             Assert.Equal(basePolicy, section.BaseRuntimePolicy);
         }
+
+        [Fact]
+        public void ReturnDefaultPipelineInspectors()
+        {
+            var section = new GlimpseSection();
+
+            var element = section.PipelineInspectors;
+
+            Assert.NotNull(element);
+            Assert.True(element.AutoDiscover);
+            Assert.Empty(element.IgnoredTypes);
+            Assert.Empty(element.DiscoveryLocation);
+        }
+
+        [Fact]
+        public void GetSetPipelineInspectors()
+        {
+            var section = new GlimpseSection();
+
+            var element = new DiscoverableCollectionElement();
+
+            section.PipelineInspectors = element;
+
+            Assert.Equal(element, section.PipelineInspectors);
+        }
     }
 }

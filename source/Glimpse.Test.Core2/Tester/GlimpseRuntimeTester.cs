@@ -79,9 +79,10 @@ namespace Glimpse.Test.Core2.Tester
             var clientScripts = new ReflectionDiscoverableCollection<IClientScript>(loggerMock.Object);
             var htmlEncoderMock = new Mock<IHtmlEncoder>();
             var persistanceStoreMock = new Mock<IPersistanceStore>();
+            var pipelineInspectors = new ReflectionDiscoverableCollection<IPipelineInspector>(loggerMock.Object);
 
             var configuration =
-                new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfigMock.Object, clientScripts, loggerMock.Object, RuntimePolicy.On, htmlEncoderMock.Object, persistanceStoreMock.Object).
+                new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfigMock.Object, clientScripts, loggerMock.Object, RuntimePolicy.On, htmlEncoderMock.Object, persistanceStoreMock.Object, pipelineInspectors).
                     TurnOffAutoDiscover();
 
 

@@ -341,7 +341,6 @@ namespace Glimpse.Test.Core2.Framework
             var runtime = Runtime; //force instantiation of Runtime property
 
             runtime.Configuration.Tabs.Discoverability.AutoDiscover = true;
-            runtime.Configuration.PipelineInspectors.Discoverability.AutoDiscover = true;
             runtime.Configuration.Resources.Discoverability.AutoDiscover = true;
             runtime.Configuration.RuntimePolicies.Discoverability.AutoDiscover = true;
             runtime.Configuration.SerializationConverters.Discoverability.AutoDiscover = true;
@@ -349,7 +348,6 @@ namespace Glimpse.Test.Core2.Framework
             runtime.UpdateConfiguration(runtime.Configuration);
 
             Assert.True(runtime.Configuration.Tabs.Count > 0);
-            Assert.True(runtime.Configuration.PipelineInspectors.Count > 0);
             Assert.True(runtime.Configuration.Resources.Count > 0);
             Assert.True(runtime.Configuration.RuntimePolicies.Count > 0);
             Assert.True(runtime.Configuration.SerializationConverters.Count > 0);

@@ -13,7 +13,8 @@ namespace Glimpse.Test.Core2.Tester
                                            IDiscoverableCollection<IClientScript> clientScriptsStub,
                                            Mock<ILogger> loggerMock,
                                            Mock<IHtmlEncoder> htmlEncoderMock,
-                                           Mock<IPersistanceStore> persistanceStoreMock)
+                                           Mock<IPersistanceStore> persistanceStoreMock,
+                                           IDiscoverableCollection<IPipelineInspector> pipelineInspectorsStub)
             : base(
                 frameworkProviderMock.Object,
                 endpointConfigurationMock.Object,
@@ -21,7 +22,8 @@ namespace Glimpse.Test.Core2.Tester
                 loggerMock.Object,
                 RuntimePolicy.On,
                 htmlEncoderMock.Object,
-                persistanceStoreMock.Object)
+                persistanceStoreMock.Object,
+                pipelineInspectorsStub)
         {
             FrameworkProviderMock = frameworkProviderMock;
             EndpointConfigMock = endpointConfigurationMock;
@@ -40,7 +42,9 @@ namespace Glimpse.Test.Core2.Tester
                                                   new ReflectionDiscoverableCollection<IClientScript>(loggerMock.Object),
                                                   loggerMock,
                                                   new Mock<IHtmlEncoder>(),
-                                                  new Mock<IPersistanceStore>());
+                                                  new Mock<IPersistanceStore>(),
+                                                  new ReflectionDiscoverableCollection<IPipelineInspector>(
+                                                      loggerMock.Object));
         }
 
         public Mock<ResourceEndpointConfiguration> EndpointConfigMock { get; set; }

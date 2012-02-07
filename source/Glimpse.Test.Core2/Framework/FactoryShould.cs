@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Glimpse.Core2;
@@ -356,6 +357,32 @@ namespace Glimpse.Test.Core2.Framework
 
             Assert.NotNull(store);
             Assert.Equal(persistanceStoreMock.Object, store);
+        }
+
+        [Fact]
+        public void InstantiatePipelineInspectorsWithReflectionDiscoverableCollection()
+        {
+            var locatorMock = new Mock<IServiceLocator>();
+            var factory = new Factory(locatorMock.Object);
+            ICollection<IPipelineInspector> inspectors = factory.InstantiatePipelineInspectors();
+
+            Assert.NotNull(inspectors);
+            Assert.NotNull(inspectors as ReflectionDiscoverableCollection<IPipelineInspector>);
+        }
+
+        [Fact]
+        public void LeverageServiceLocatorForPipelineInspectors()
+        {
+            ICollection<IPipelineInspector> inspectors = new List<IPipelineInspector>();
+
+            var locatorMock = new Mock<IServiceLocator>();
+            locatorMock.Setup(l => l.GetAllInstances<IPipelineInspector>()).Returns(inspectors);
+
+            var factory = new Factory(locatorMock.Object);
+
+            var result = factory.InstantiatePipelineInspectors();
+
+            Assert.Equal(inspectors, result);
         }
     }
 }
