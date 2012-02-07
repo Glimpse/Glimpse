@@ -329,10 +329,6 @@ namespace Glimpse.Core2.Framework
                 tabs.Discoverability.Discover();
 
 
-            var resources = configuration.Resources;
-            if (resources.Discoverability.AutoDiscover)
-                resources.Discoverability.Discover();
-
             var runtimePolicies = configuration.RuntimePolicies;
             if (runtimePolicies.Discoverability.AutoDiscover)
                 runtimePolicies.Discoverability.Discover();

@@ -117,5 +117,30 @@ namespace Glimpse.Test.Core2.Configuration
 
             Assert.Equal(element, section.PipelineInspectors);
         }
+
+        [Fact]
+        public void ReturnDefaultResources()
+        {
+            var section = new GlimpseSection();
+
+            var element = section.Resources;
+
+            Assert.NotNull(element);
+            Assert.True(element.AutoDiscover);
+            Assert.Empty(element.IgnoredTypes);
+            Assert.Empty(element.DiscoveryLocation);
+        }
+
+        [Fact]
+        public void GetSetResources()
+        {
+            var section = new GlimpseSection();
+
+            var element = new DiscoverableCollectionElement();
+
+            section.Resources = element;
+
+            Assert.Equal(element, section.PipelineInspectors);
+        }
     }
 }

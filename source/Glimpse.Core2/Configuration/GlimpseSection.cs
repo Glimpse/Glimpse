@@ -25,6 +25,13 @@ namespace Glimpse.Core2.Configuration
             set { base["pipelineInspectors"] = value; }
         }
 
+        [ConfigurationProperty("resources")]
+        public DiscoverableCollectionElement Resources
+        {
+            get { return (DiscoverableCollectionElement)base["resources"]; }
+            set { base["resources"] = value; }
+        }
+
         [ConfigurationProperty("baseRuntimePolicy", DefaultValue = RuntimePolicy.Off)]
         public RuntimePolicy BaseRuntimePolicy
         {

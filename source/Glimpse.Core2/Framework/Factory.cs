@@ -156,6 +156,16 @@ namespace Glimpse.Core2.Framework
             return CreateDiscoverableCollection<IPipelineInspector>(Configuration.PipelineInspectors);
         }
 
+        public ICollection<IResource> InstantiateResources()
+        {
+            Contract.Ensures(Contract.Result<ICollection<IResource>>() != null);
+
+            ICollection<IResource> resources;
+            if (TryAllInstancesFromServiceLocators(out resources)) return resources;
+
+            return CreateDiscoverableCollection<IResource>(Configuration.Resources);
+        }
+
         private IDiscoverableCollection<T> CreateDiscoverableCollection<T>(DiscoverableCollectionElement config)
         {
             var discoverableCollection = new ReflectionDiscoverableCollection<T>(InstantiateLogger());

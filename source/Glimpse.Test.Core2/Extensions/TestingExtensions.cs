@@ -37,7 +37,6 @@ namespace Glimpse.Test.Core2.Extensions
         public static GlimpseConfiguration TurnOffAutoDiscover(this GlimpseConfiguration configuration)
         {
             configuration.Tabs.Discoverability.AutoDiscover = false;
-            configuration.Resources.Discoverability.AutoDiscover = false;
             configuration.RuntimePolicies.Discoverability.AutoDiscover = false;
             configuration.SerializationConverters.Discoverability.AutoDiscover = false;
 

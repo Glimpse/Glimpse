@@ -15,7 +15,8 @@ namespace Glimpse.Core2.Framework
             RuntimePolicy baseRuntimePolicy,
             IHtmlEncoder htmlEncoder,
             IPersistanceStore persistanceStore,
-            ICollection<IPipelineInspector> pipelineInspectors)
+            ICollection<IPipelineInspector> pipelineInspectors,
+            ICollection<IResource> resources)
         {
             //TODO: Test building glimpse on clean VS install with contracts
             //TODO: Test building glimpse on teamcity with contracts
@@ -26,6 +27,7 @@ namespace Glimpse.Core2.Framework
             Contract.Requires<ArgumentNullException>(persistanceStore != null, "persistanceStore");
             Contract.Requires<ArgumentNullException>(clientScripts != null, "clientScripts");
             Contract.Requires<ArgumentNullException>(pipelineInspectors != null, "pipelineInspectors");
+            Contract.Requires<ArgumentNullException>(resources != null, "resources");
 
             //TODO: Refactor all these "new" calls to leverage a IOC container?
             Logger = logger;
@@ -35,7 +37,7 @@ namespace Glimpse.Core2.Framework
             PersistanceStore = persistanceStore;
             PipelineInspectors = pipelineInspectors;
             ResourceEndpoint = endpointConfiguration;
-            Resources = new DiscoverableCollection<IResource>();
+            Resources = resources;
             Serializer = new JsonNetSerializer();
             Tabs = new DiscoverableLazyCollection<ITab, ITabMetadata>();
             RuntimePolicies = new DiscoverableLazyCollection<IRuntimePolicy, IRuntimePolicyMetadata>();
@@ -149,12 +151,12 @@ namespace Glimpse.Core2.Framework
             }
         }
 
-        private DiscoverableCollection<IResource> resources;
-        public DiscoverableCollection<IResource> Resources
+        private ICollection<IResource> resources;
+        public ICollection<IResource> Resources
         {
             get
             {
-                Contract.Ensures(Contract.Result<DiscoverableCollection<IResource>>()!=null);
+                Contract.Ensures(Contract.Result<ICollection<IResource>>()!=null);
                 return resources;
             }
             set

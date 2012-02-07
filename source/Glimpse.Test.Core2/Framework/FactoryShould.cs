@@ -384,5 +384,32 @@ namespace Glimpse.Test.Core2.Framework
 
             Assert.Equal(inspectors, result);
         }
+
+        [Fact]
+        public void InstantiateResourcesWithReflectionDiscoverableCollection()
+        {
+            var locatorMock = new Mock<IServiceLocator>();
+            var factory = new Factory(locatorMock.Object);
+            ICollection<IResource> resources = factory.InstantiateResources();
+
+            Assert.NotNull(resources);
+            Assert.NotNull(resources as ReflectionDiscoverableCollection<IResource>);
+        }
+
+        [Fact]
+        public void LeverageServiceLocatorForResources()
+        {
+            ICollection<IResource> resources = new List<IResource>();
+
+            var locatorMock = new Mock<IServiceLocator>();
+            locatorMock.Setup(l => l.GetAllInstances<IResource>()).Returns(resources);
+
+            var factory = new Factory(locatorMock.Object);
+
+            var result = factory.InstantiateResources();
+
+            Assert.Equal(resources, result);
+        }
+
     }
 }
