@@ -7,25 +7,26 @@ namespace Glimpse.Core2.Framework
 {
     public class GlimpseConfiguration
     {
-
         //TODO: Add Sanitizer?
         public GlimpseConfiguration(IFrameworkProvider frameworkProvider, 
             ResourceEndpointConfiguration endpointConfiguration,
             ICollection<IClientScript> clientScripts,
             ILogger logger,
-            RuntimePolicy baseRuntimePolicy)
+            RuntimePolicy baseRuntimePolicy,
+            IHtmlEncoder htmlEncoder)
         {
             //TODO: Test building glimpse on clean VS install with contracts
             //TODO: Test building glimpse on teamcity with contracts
             Contract.Requires<ArgumentNullException>(frameworkProvider != null, "frameworkProvider");
             Contract.Requires<ArgumentNullException>(endpointConfiguration != null, "endpointConfiguration");
             Contract.Requires<ArgumentNullException>(logger != null, "logger");
+            Contract.Requires<ArgumentNullException>(htmlEncoder != null, "htmlEncoder");
 
             //TODO: Refactor all these "new" calls to leverage a IOC container?
             Logger = logger;
-            ClientScripts = clientScripts ?? new ReflectionDiscoverableCollection<IClientScript>(Logger);
+            ClientScripts = clientScripts;
             FrameworkProvider = frameworkProvider;
-            HtmlEncoder = new AntiXssEncoder();
+            HtmlEncoder = htmlEncoder;
             PersistanceStore = new ApplicationPersistanceStore(frameworkProvider.HttpServerStore);
             PipelineInspectors = new DiscoverableCollection<IPipelineInspector>();
             ResourceEndpoint = endpointConfiguration;

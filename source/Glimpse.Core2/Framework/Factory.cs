@@ -67,22 +67,8 @@ namespace Glimpse.Core2.Framework
             return CreateDiscoverableCollection<IClientScript>(Configuration.ClientScripts);
         }
 
-        private IDiscoverableCollection<T> CreateDiscoverableCollection<T>(DiscoverableCollectionElement config)
-        {
-            var discoverableCollection = new ReflectionDiscoverableCollection<T>(InstantiateLogger());
-
-            discoverableCollection.IgnoredTypes.AddRange(config.IgnoredTypes.ToEnumerable());
-
-            if (config.DiscoveryLocation != DiscoverableCollectionElement.DefaultLocation)
-                discoverableCollection.DiscoveryLocation = config.DiscoveryLocation;
-
-            discoverableCollection.AutoDiscover = config.AutoDiscover;
-            if (discoverableCollection.AutoDiscover) discoverableCollection.Discover();
-
-            return discoverableCollection;
-        }
-
         private ILogger Logger { get; set; }
+
         public ILogger InstantiateLogger()
         {
             //reuse logger if already created
@@ -122,6 +108,30 @@ namespace Glimpse.Core2.Framework
         public RuntimePolicy InstantiateBaseRuntimePolicy()
         {
             return Configuration.BaseRuntimePolicy;
+        }
+
+        public IHtmlEncoder InstantiateHtmlEncoder()
+        {
+            IHtmlEncoder encoder;
+
+            if (TrySingleInstanceFromServiceLocators(out encoder)) return encoder;
+
+            return new AntiXssEncoder();
+        }
+
+        private IDiscoverableCollection<T> CreateDiscoverableCollection<T>(DiscoverableCollectionElement config)
+        {
+            var discoverableCollection = new ReflectionDiscoverableCollection<T>(InstantiateLogger());
+
+            discoverableCollection.IgnoredTypes.AddRange(config.IgnoredTypes.ToEnumerable());
+
+            if (config.DiscoveryLocation != DiscoverableCollectionElement.DefaultLocation)
+                discoverableCollection.DiscoveryLocation = config.DiscoveryLocation;
+
+            discoverableCollection.AutoDiscover = config.AutoDiscover;
+            if (discoverableCollection.AutoDiscover) discoverableCollection.Discover();
+
+            return discoverableCollection;
         }
 
         private bool TrySingleInstanceFromServiceLocators<T>(out T instance) where T: class

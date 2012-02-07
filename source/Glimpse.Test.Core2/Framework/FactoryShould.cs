@@ -274,5 +274,49 @@ namespace Glimpse.Test.Core2.Framework
 
             Assert.Equal(RuntimePolicy.Off, result);
         }
+
+        [Fact]
+        public void InstantiateHtmlEncoderWithAntiXss()
+        {
+            var locatorMock = new Mock<IServiceLocator>();
+
+            var factory = new Factory(locatorMock.Object);
+
+            IHtmlEncoder encoder = factory.InstantiateHtmlEncoder();
+
+            Assert.NotNull(encoder);
+            Assert.NotNull(encoder as AntiXssEncoder);
+            locatorMock.Verify(l=>l.GetInstance<IHtmlEncoder>(), Times.Once());
+        }
+
+        [Fact]
+        public void LeverageServiceLocatorForHtmlEncoder()
+        {
+            var encoderMock = new Mock<IHtmlEncoder>();
+            var locatorMock = new Mock<IServiceLocator>();
+            locatorMock.Setup(l => l.GetInstance<IHtmlEncoder>()).Returns(encoderMock.Object);
+
+            var factory = new Factory(locatorMock.Object);
+
+            IHtmlEncoder encoder = factory.InstantiateHtmlEncoder();
+
+            Assert.NotNull(encoder);
+            Assert.Equal(encoderMock.Object, encoder);
+            
+            locatorMock.Verify(l => l.GetInstance<IHtmlEncoder>(), Times.Once());
+        }
+
+        [Fact]
+        public void InstantiatePersistanceStoreWithApplicationPersistanceStore()
+        {
+            var locatorMock = new Mock<IServiceLocator>();
+
+            var factory = new Factory(locatorMock.Object);
+
+            IPersistanceStore store = factory.InstantiatePersistanceStore();
+
+            Assert.NotNull(store);
+            Assert.NotNull(store as ApplicationPersistanceStore);
+        }
     }
 }
