@@ -1,0 +1,131 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using Glimpse.Core2.Extensibility;
+
+namespace Glimpse.Core2.Framework
+{
+    public class ReflectionDiscoverableCollection<T> : IDiscoverableCollection<T>
+    {
+        internal List<T> Items { get; set; }
+        internal List<Type> IgnoredTypes { get; set; }
+        internal ILogger Logger { get; set; }
+
+        public ReflectionDiscoverableCollection(ILogger logger)
+        {
+            Items = new List<T>();
+            IgnoredTypes = new List<Type>();
+            AutoDiscover = true;
+            Logger = logger;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return Items.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return Items.GetEnumerator();
+        }
+
+        public void Add(T item)
+        {
+            Items.Add(item);
+        }
+
+        public void Clear()
+        {
+            Items.Clear();
+        }
+
+        public bool Contains(T item)
+        {
+            return Items.Contains(item);
+        }
+
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            Items.CopyTo(array, arrayIndex);
+        }
+
+        public bool Remove(T item)
+        {
+            return Items.Remove(item);
+        }
+
+        public int Count
+        {
+            get { return Items.Count; }
+        }
+
+        public bool IsReadOnly
+        {
+            get { return false; }
+        }
+
+        public bool AutoDiscover { get; set; }
+
+        public void IgnoreType(Type type)
+        {
+            IgnoredTypes.Add(type);
+        }
+
+        public void Discover()
+        {
+            var results = new List<T>();
+
+            foreach (var file in Directory.GetFiles(DiscoveryLocation, "*.dll", SearchOption.AllDirectories))
+            {
+                Assembly assembly;
+                try
+                {
+                    assembly = Assembly.LoadFrom(file);
+
+                    var concreteTypes = assembly.GetTypes().Where(type => typeof (T).IsAssignableFrom(type) &&
+                                                                          !type.IsInterface &&
+                                                                          !type.IsAbstract &&
+                                                                          !IgnoredTypes.Contains(type));
+                    foreach (var type in concreteTypes)
+                    {
+                        try
+                        {
+                            var instance = (T) Activator.CreateInstance(type);
+                            results.Add(instance);
+                        }
+                        catch (Exception exception)
+                        {
+                            Logger.Error(string.Format(Resources.DiscoverCreateInstance, typeof (T), type), exception);
+                        }
+                    }
+                }
+                catch (Exception exception)
+                {
+                    Logger.Error(string.Format(Resources.DiscoverLoadAssembly, file), exception);
+                }
+            }
+
+            if (results.Count > 0)
+            {
+                Items.Clear();
+                Items.AddRange(results);
+            }
+        }
+
+        private string discoveryLocation;
+
+        public string DiscoveryLocation
+        {
+            get { return discoveryLocation ?? (discoveryLocation = AppDomain.CurrentDomain.BaseDirectory); }
+            set
+            {
+                discoveryLocation = Path.IsPathRooted(value)
+                                        ? value
+                                        : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, value);
+            }
+        }
+    }
+}

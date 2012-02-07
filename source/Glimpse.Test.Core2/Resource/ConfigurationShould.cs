@@ -1,6 +1,5 @@
 ﻿using System;
 using Glimpse.Core2.Extensibility;
-using Glimpse.Core2.Resource;
 using Moq;
 using Xunit;
 
@@ -13,16 +12,16 @@ namespace Glimpse.Test.Core2.Resource
         {
             var name = "config";
 
-            var resource = new Configuration();
+            var resource = new Glimpse.Core2.Resource.Configuration();
 
-            Assert.Equal(name, Configuration.InternalName);
+            Assert.Equal(name, Glimpse.Core2.Resource.Configuration.InternalName);
             Assert.Equal(name, resource.Name);
         }
 
         [Fact]
         public void ReturnNoParameterKeys()
         {
-            var resource = new Configuration();
+            var resource = new Glimpse.Core2.Resource.Configuration();
             Assert.Empty(resource.ParameterKeys);
         }
 
@@ -31,7 +30,7 @@ namespace Glimpse.Test.Core2.Resource
         {
             var contextMock = new Mock<IResourceContext>();
 
-            var resource = new Configuration();
+            var resource = new Glimpse.Core2.Resource.Configuration();
 
 
             Assert.Throws<NotImplementedException>(() => resource.Execute(contextMock.Object));

@@ -2,10 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using Glimpse.Core2.Extensibility;
-using Glimpse.Core2.Resource;
-using NLog;
-using NLog.Config;
-using NLog.Targets;
 
 namespace Glimpse.Core2.Framework
 {
@@ -13,21 +9,22 @@ namespace Glimpse.Core2.Framework
     {
 
         //TODO: Add Sanitizer?
-        //TODO: Add static FromWebConfig method to construct an instance of GlimpseConfiguration
         public GlimpseConfiguration(IFrameworkProvider frameworkProvider, 
             ResourceEndpointConfiguration endpointConfiguration,
-            IList<IClientScript> clientScripts)
+            ICollection<IClientScript> clientScripts,
+            ILogger logger)
         {
             //TODO: Test building glimpse on clean VS install with contracts
             //TODO: Test building glimpse on teamcity with contracts
             Contract.Requires<ArgumentNullException>(frameworkProvider != null, "frameworkProvider");
             Contract.Requires<ArgumentNullException>(endpointConfiguration != null, "endpointConfiguration");
+            Contract.Requires<ArgumentNullException>(logger != null, "logger");
 
             //TODO: Refactor all these "new" calls to leverage a IOC container?
-            ClientScripts = clientScripts ?? new List<IClientScript>();
+            Logger = logger;
+            ClientScripts = clientScripts ?? new ReflectionDiscoverableCollection<IClientScript>(Logger);
             FrameworkProvider = frameworkProvider;
             HtmlEncoder = new AntiXssEncoder();
-            Logger = new NLogLogger(CreateLogger());
             PersistanceStore = new ApplicationPersistanceStore(frameworkProvider.HttpServerStore);
             PipelineInspectors = new DiscoverableCollection<IPipelineInspector>();
             ResourceEndpoint = endpointConfiguration;
@@ -37,15 +34,15 @@ namespace Glimpse.Core2.Framework
             RuntimePolicies = new DiscoverableLazyCollection<IRuntimePolicy, IRuntimePolicyMetadata>();
             BasePolicy = RuntimePolicy.Off;
             SerializationConverters = new DiscoverableCollection<ISerializationConverter>();
-            DefaultResourceName = Configuration.InternalName;
+            DefaultResourceName = Resource.Configuration.InternalName;
         }
 
-        private IList<IClientScript> clientScripts;
-        public IList<IClientScript> ClientScripts
+        private ICollection<IClientScript> clientScripts;
+        public ICollection<IClientScript> ClientScripts
         {
             get
             {
-                Contract.Ensures(Contract.Result<IList<IClientScript>>() != null);
+                Contract.Ensures(Contract.Result<ICollection<IClientScript>>() != null);
                 return clientScripts;
             }
             set
@@ -236,25 +233,5 @@ namespace Glimpse.Core2.Framework
         }
 
         public RuntimePolicy BasePolicy { get; set; }
-
-        //TODO: Remove me! This does not belong here, allow for IOC pipeline config
-        private Logger CreateLogger()
-        {
-            var loggingConfiguration = new LoggingConfiguration();
-
-            // Step 2. Create targets and add them to the configuration  
-            var fileTarget = new FileTarget();
-            loggingConfiguration.AddTarget("file", fileTarget);
-
-            // Step 3. Set target properties  
-            fileTarget.FileName = "${basedir}/Glimpse.log";
-            fileTarget.Layout = "${longdate}|${level:uppercase=true}|${logger}|${message}|${exception:maxInnerExceptionLevel=5:format=type,message,stacktrace:separator=--:innerFormat=shortType,message,method}";
-
-            // Step 4. Define rules 
-            var rule2 = new LoggingRule("*", LogLevel.Debug, fileTarget);
-            loggingConfiguration.LoggingRules.Add(rule2);
-
-            return new LogFactory(loggingConfiguration).GetLogger("Glimpse");
-        }
     }
 }

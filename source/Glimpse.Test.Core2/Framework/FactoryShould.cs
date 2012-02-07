@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Glimpse.Core2;
+using Glimpse.Core2.Configuration;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
 using Moq;
@@ -106,22 +107,57 @@ namespace Glimpse.Test.Core2.Framework
         public void InstantiateClientScriptsLeveragesIServiceLocator()
         {
             var clientScripts = new List<IClientScript>();
-            var serviceLocatorMock = new Mock<IServiceLocator>();
 
-            serviceLocatorMock.Setup(sl => sl.GetInstance<IList<IClientScript>>()).Returns(clientScripts);
+            var serviceLocatorMock = new Mock<IServiceLocator>();
+            serviceLocatorMock.Setup(sl => sl.GetAllInstances<IClientScript>()).Returns(clientScripts);
 
             var factory = new Factory(serviceLocatorMock.Object);
             var result = factory.InstantiateClientScripts();
+
+
             Assert.Equal(clientScripts, result);
         }
 
         [Fact]
-        public void InstantiateClientScriptsWithoutIServiceLocator()
+        public void InstantiateClientScripts()
         {
             var factory = new Factory();
             var result = factory.InstantiateClientScripts();
-            Assert.False(result.Any());
+            Assert.True(result.Any());
         }
 
+        [Fact]
+        public void InstantiateLoggerWithIServiceLocator()
+        {
+            var loggerMock = new Mock<ILogger>();
+            var locatorMock = new Mock<IServiceLocator>();
+            locatorMock.Setup(lm => lm.GetInstance<ILogger>()).Returns(loggerMock.Object);
+
+            var factory = new Factory(locatorMock.Object);
+            var result = factory.InstantiateLogger();
+
+            locatorMock.Verify(lm=>lm.GetInstance<ILogger>(), Times.Once());
+            Assert.Equal(loggerMock.Object, result);
+        }
+
+        [Fact]
+        public void InstantiateNullLogger()
+        {
+            var factory = new Factory();
+            factory.Configuration = new GlimpseSection {Logging = {Level = LoggingLevel.Off}};
+
+            var result = factory.InstantiateLogger();
+            Assert.NotNull(result as NullLogger);
+        }
+
+        [Fact]
+        public void InstantiateNLogLogger()
+        {
+            var factory = new Factory();
+            factory.Configuration = new GlimpseSection { Logging = { Level = LoggingLevel.Warn } };
+
+            var result = factory.InstantiateLogger();
+            Assert.NotNull(result as NLogLogger);
+        }
     }
 }

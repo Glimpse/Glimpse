@@ -17,7 +17,7 @@ namespace Glimpse.AspNet
             return null;
         }
 
-        public IEnumerable<T> GetAllInstances<T>() where T : class
+        public ICollection<T> GetAllInstances<T>() where T : class
         {
             return null;
         }

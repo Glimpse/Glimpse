@@ -160,4 +160,12 @@
     <value>Exception generating uri with ResourceEndpointConfiguration of type '{0}'.</value>
     <comment>{0} - GetType() of offending ResourceEndpointConfiguration</comment>
   </data>
+  <data name="DiscoverLoadAssembly" xml:space="preserve">
+    <value>Exception loading assembly at path '{0}'.</value>
+    <comment>{0} - path of offending assembly</comment>
+  </data>
+  <data name="DiscoverCreateInstance" xml:space="preserve">
+    <value>Exception loading '{0}' of type '{1}'.</value>
+    <comment>{0} - Interface type, {1} - InstanceType</comment>
+  </data>
 </root>

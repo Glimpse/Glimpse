@@ -61,6 +61,24 @@ namespace Glimpse.Core2 {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exception loading &apos;{0}&apos; of type &apos;{1}&apos;..
+        /// </summary>
+        internal static string DiscoverCreateInstance {
+            get {
+                return ResourceManager.GetString("DiscoverCreateInstance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exception loading assembly at path &apos;{0}&apos;..
+        /// </summary>
+        internal static string DiscoverLoadAssembly {
+            get {
+                return ResourceManager.GetString("DiscoverLoadAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exception executing policy of type &apos;{0}&apos;..
         /// </summary>
         internal static string ExecutePolicyWarning {

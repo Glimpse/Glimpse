@@ -85,6 +85,10 @@
   <ItemGroup>
     <Compile Include="ClientScript\Client.cs" />
     <Compile Include="ClientScript\Data.cs" />
+    <Compile Include="Configuration\GlimpseSection.cs" />
+    <Compile Include="Configuration\LoggingElement.cs" />
+    <Compile Include="Configuration\LoggingLevel.cs" />
+    <Compile Include="Configuration\TypeConverter.cs" />
     <Compile Include="DictionaryDataStoreAdapter.cs" />
     <Compile Include="Extensibility\AntiXssEncoder.cs" />
     <Compile Include="Extensibility\ClientScriptAttribute.cs" />
@@ -102,6 +106,7 @@
     <Compile Include="Extensibility\JsonNetSerializer.cs" />
     <Compile Include="Extensibility\JsonResourceResult.cs" />
     <Compile Include="Extensibility\NLogLogger.cs" />
+    <Compile Include="Extensibility\NullLogger.cs" />
     <Compile Include="Extensibility\ResourceAttribute.cs" />
     <Compile Include="Extensibility\ResourceContext.cs" />
     <Compile Include="Extensibility\ResourceParameterKey.cs" />
@@ -118,16 +123,19 @@
     <Compile Include="Extensibility\RuntimePolicyContext.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
+    <Compile Include="Extensions\TypeElementCollectionExtensions.cs" />
     <Compile Include="Framework\ApplicationPersistanceStore.cs" />
     <Compile Include="Framework\CacheSetting.cs" />
     <Compile Include="Framework\Factory.cs" />
     <Compile Include="Framework\GlimpseMetadata.cs" />
+    <Compile Include="Framework\IDiscoverableCollection.cs" />
     <Compile Include="Framework\IGlimpseRuntime.cs" />
     <Compile Include="Framework\IPersistanceStore.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Framework\IReadOnlyPersistanceStore.cs" />
     <Compile Include="Framework\IServiceLocator.cs" />
     <Compile Include="Framework\PipelineInspectorContext.cs" />
+    <Compile Include="Framework\ReflectionDiscoverableCollection.cs" />
     <Compile Include="Framework\ResourceEndpointConfiguration.cs" />
     <Compile Include="Framework\ResourceParameters.cs" />
     <Compile Include="Framework\TabResult.cs" />
@@ -189,6 +197,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

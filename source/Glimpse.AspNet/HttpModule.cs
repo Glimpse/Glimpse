@@ -1,5 +1,4 @@
 ﻿using System.Web;
-using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
 

@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Configuration;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using Glimpse.Core2.Configuration;
 using Glimpse.Core2.Extensibility;
+using Glimpse.Core2.Extensions;
+using NLog;
+using NLog.Config;
+using NLog.Targets;
 
 namespace Glimpse.Core2.Framework
 {
@@ -12,6 +16,7 @@ namespace Glimpse.Core2.Framework
     {
         internal IServiceLocator UserServiceLocator { get; set; }
         internal IServiceLocator ProviderServiceLocator { get; set; }
+        internal GlimpseSection Configuration { get; set; }
 
         public Factory():this(null){}
 
@@ -23,6 +28,7 @@ namespace Glimpse.Core2.Framework
             //TODO: Try to lookup/load user service locator from config if null
             ProviderServiceLocator = providerServiceLocator;
             UserServiceLocator = userServiceLocator;
+            Configuration = ConfigurationManager.GetSection("glimpse") as GlimpseSection ?? new GlimpseSection();
         }
 
         public IGlimpseRuntime InstantiateRuntime()
@@ -31,6 +37,7 @@ namespace Glimpse.Core2.Framework
             if (TrySingleInstanceFromServiceLocators(out result)) return result;
 
             //TODO: Finish me!
+            //Create a GlimpseConfiguration()
             throw new NotImplementedException();
         }
 
@@ -43,6 +50,73 @@ namespace Glimpse.Core2.Framework
             throw new GlimpseException("Unable to create Framework Provider.");
         }
 
+        public ResourceEndpointConfiguration InstantiateEndpointConfiguration()
+        {
+            ResourceEndpointConfiguration result;
+            if (TrySingleInstanceFromServiceLocators(out result)) return result;
+
+            //TODO: Turn this string into a resource and provide better information
+            throw new GlimpseException("Unable to create Endpoint Configuration.");
+        }
+
+        public ICollection<IClientScript> InstantiateClientScripts()
+        {
+            Contract.Ensures(Contract.Result<ICollection<IClientScript>>()!=null);
+
+            ICollection<IClientScript> result;
+            if (TryAllInstancesFromServiceLocators(out result)) return result;
+
+            var discoverableCollection = new ReflectionDiscoverableCollection<IClientScript>(InstantiateLogger());
+
+            var clientScripts = Configuration.ClientScripts;
+
+            discoverableCollection.IgnoredTypes.AddRange(clientScripts.IgnoredTypes.ToEnumerable());
+
+            if (clientScripts.DiscoveryLocation != DiscoverableCollectionElement.DefaultLocation)
+                discoverableCollection.DiscoveryLocation = clientScripts.DiscoveryLocation;
+
+            discoverableCollection.AutoDiscover = clientScripts.AutoDiscover;
+            if (discoverableCollection.AutoDiscover) discoverableCollection.Discover();
+
+            return discoverableCollection;
+        }
+
+        private ILogger Logger { get; set; }
+        public ILogger InstantiateLogger()
+        {
+            //reuse logger if already created
+            if (Logger != null) return Logger;
+
+            ILogger result;
+            if (TrySingleInstanceFromServiceLocators(out result))
+            {
+                Logger = result;
+                return Logger;
+            }
+
+            //use null logger if logging is off
+            var logLevel = Configuration.Logging.Level;
+            if (logLevel == LoggingLevel.Off)
+            {
+                Logger = new NullLogger();
+                return Logger;
+            }
+
+            //use NLog logger otherwise
+            var fileTarget = new FileTarget
+                                 {
+                                     FileName = "${basedir}/Glimpse.log",
+                                     Layout = "${longdate}|${level:uppercase=true}|${logger}|${message}|${exception:maxInnerExceptionLevel=5:format=type,message,stacktrace:separator=--:innerFormat=shortType,message,method}"
+                                 };
+
+            var loggingConfiguration = new LoggingConfiguration();
+            loggingConfiguration.AddTarget("file", fileTarget);
+            loggingConfiguration.LoggingRules.Add(new LoggingRule("*", LogLevel.FromOrdinal((int)logLevel), fileTarget));
+
+
+            Logger = new NLogLogger(new LogFactory(loggingConfiguration).GetLogger("Glimpse"));
+            return Logger;
+        }
 
         private bool TrySingleInstanceFromServiceLocators<T>(out T instance) where T: class
         {
@@ -62,13 +136,13 @@ namespace Glimpse.Core2.Framework
             return false;
         }
 
-        private bool TryAllInstancesFromServiceLocators<T>(out IList<T> instance) where T : class
+        private bool TryAllInstancesFromServiceLocators<T>(out ICollection<T> instance) where T : class
         {
             IEnumerable<T> result;
             if (UserServiceLocator != null)
             {
                 result = UserServiceLocator.GetAllInstances<T>();
-                if (result != null && result.Any())
+                if (result != null)
                 {
                     instance = result as IList<T>;
                     return true;
@@ -78,7 +152,7 @@ namespace Glimpse.Core2.Framework
             if (ProviderServiceLocator != null)
             {
                 result = ProviderServiceLocator.GetAllInstances<T>();
-                if (result != null && result.Any())
+                if (result != null)
                 {
                     instance = result as IList<T>;
                     return true;
@@ -87,27 +161,6 @@ namespace Glimpse.Core2.Framework
 
             instance = null;
             return false;
-        }
-
-        public ResourceEndpointConfiguration InstantiateEndpointConfiguration()
-        {
-            ResourceEndpointConfiguration result;
-            if (TrySingleInstanceFromServiceLocators(out result)) return result;
-
-            //TODO: Turn this string into a resource and provide better information
-            throw new GlimpseException("Unable to create Endpoint Configuration.");
-        }
-
-        public IList<IClientScript> InstantiateClientScripts()
-        {
-            Contract.Ensures(Contract.Result<IList<IClientScript>>()!=null);
-
-            IList<IClientScript> result;
-            if (TryAllInstancesFromServiceLocators(out result)) return result;
-
-            //TODO: Load via reflection
-
-            return new List<IClientScript>();
         }
     }
 }
