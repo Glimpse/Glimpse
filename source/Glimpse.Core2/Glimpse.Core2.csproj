@@ -85,10 +85,13 @@
   <ItemGroup>
     <Compile Include="ClientScript\Client.cs" />
     <Compile Include="ClientScript\Data.cs" />
+    <Compile Include="Configuration\DiscoverableCollectionElement.cs" />
     <Compile Include="Configuration\GlimpseSection.cs" />
     <Compile Include="Configuration\LoggingElement.cs" />
     <Compile Include="Configuration\LoggingLevel.cs" />
     <Compile Include="Configuration\TypeConverter.cs" />
+    <Compile Include="Configuration\TypeElement.cs" />
+    <Compile Include="Configuration\TypeElementCollection.cs" />
     <Compile Include="DictionaryDataStoreAdapter.cs" />
     <Compile Include="Extensibility\AntiXssEncoder.cs" />
     <Compile Include="Extensibility\ClientScriptAttribute.cs" />

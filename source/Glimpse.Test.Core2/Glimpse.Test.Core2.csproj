@@ -83,12 +83,17 @@
     <Compile Include="BadData\IBlowup.cs" />
     <Compile Include="ClientScript\ClientShould.cs" />
     <Compile Include="ClientScript\DataShould.cs" />
+    <Compile Include="Configuration\DiscoverableCollectionElementShould.cs" />
     <Compile Include="Configuration\GlimpseSectionShould.cs" />
+    <Compile Include="Configuration\LoggingElementShould.cs" />
+    <Compile Include="Configuration\TypeConverterShould.cs" />
+    <Compile Include="Configuration\TypeElementShould.cs" />
     <Compile Include="DictionaryDataStoreAdapterShould.cs" />
     <Compile Include="DiscoverabilityPolicyShould.cs" />
     <Compile Include="Extensibility\FileResourceResultShould.cs" />
     <Compile Include="Extensibility\JsonNetSerializationConverterShould.cs" />
     <Compile Include="Extensibility\JsonResourceResultShould.cs" />
+    <Compile Include="Extensibility\NullLoggerShould.cs" />
     <Compile Include="Extensibility\ResourceEndpointConfigurationShould.cs" />
     <Compile Include="Extensibility\RuntimePolicyContextShould.cs" />
     <Compile Include="Extensibility\SerializationConverterShould.cs" />
@@ -103,6 +108,7 @@
     <Compile Include="Framework\GlimpseRuntimeShould.cs" />
     <Compile Include="Framework\ReflectionDiscoverableCollectionShould.cs" />
     <Compile Include="Framework\ResourceParametersShould.cs" />
+    <Compile Include="GlimpseExceptionShould.cs" />
     <Compile Include="JsonNetSerializerShould.cs" />
     <Compile Include="Policy\AjaxPolicyShould.cs" />
     <Compile Include="Policy\ContentTypePolicyShould.cs" />

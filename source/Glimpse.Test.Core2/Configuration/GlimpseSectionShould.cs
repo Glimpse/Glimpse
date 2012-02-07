@@ -47,5 +47,29 @@ namespace Glimpse.Test.Core2.Configuration
             Assert.Equal("", section.ClientScripts.DiscoveryLocation);
             Assert.True(section.ClientScripts.IgnoredTypes.Count == 1);
         }
+
+        [Fact]
+        public void SetLoggingElement()
+        {
+            var loggingElement = new LoggingElement();
+
+            var section = new GlimpseSection();
+
+            section.Logging = loggingElement;
+
+            Assert.Equal(loggingElement, section.Logging);
+        }
+
+        [Fact]
+        public void SetClientScriptsElement()
+        {
+            var scripts = new DiscoverableCollectionElement();
+
+            var section = new GlimpseSection();
+
+            section.ClientScripts = scripts;
+
+            Assert.Equal(scripts, section.ClientScripts);
+        }
     }
 }
