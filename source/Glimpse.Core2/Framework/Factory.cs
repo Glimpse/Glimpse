@@ -31,6 +31,8 @@ namespace Glimpse.Core2.Framework
 
         public IGlimpseRuntime InstantiateRuntime()
         {
+            Contract.Ensures(Contract.Result<IGlimpseRuntime>()!=null);
+
             IGlimpseRuntime result;
             if (TrySingleInstanceFromServiceLocators(out result)) return result;
 
@@ -39,10 +41,19 @@ namespace Glimpse.Core2.Framework
             throw new NotImplementedException();
         }
 
+        private IFrameworkProvider FrameworkProvider { get; set; }
         public IFrameworkProvider InstantiateFrameworkProvider()
         {
+            Contract.Ensures(Contract.Result<IFrameworkProvider>()!=null);
+
+            if (FrameworkProvider != null) return FrameworkProvider;
+
             IFrameworkProvider result;
-            if (TrySingleInstanceFromServiceLocators(out result)) return result;
+            if (TrySingleInstanceFromServiceLocators(out result))
+            {
+                FrameworkProvider = result;
+                return FrameworkProvider;
+            }
 
             //TODO: Turn this string into a resource and provide better information
             throw new GlimpseException("Unable to create Framework Provider.");
@@ -50,6 +61,8 @@ namespace Glimpse.Core2.Framework
 
         public ResourceEndpointConfiguration InstantiateEndpointConfiguration()
         {
+            Contract.Ensures(Contract.Result<ResourceEndpointConfiguration>()!=null);
+
             ResourceEndpointConfiguration result;
             if (TrySingleInstanceFromServiceLocators(out result)) return result;
 
@@ -71,6 +84,8 @@ namespace Glimpse.Core2.Framework
 
         public ILogger InstantiateLogger()
         {
+            Contract.Ensures(Contract.Result<ILogger>() != null);
+
             //reuse logger if already created
             if (Logger != null) return Logger;
 
@@ -112,11 +127,23 @@ namespace Glimpse.Core2.Framework
 
         public IHtmlEncoder InstantiateHtmlEncoder()
         {
+            Contract.Ensures(Contract.Result<IHtmlEncoder>() != null);
+
             IHtmlEncoder encoder;
 
             if (TrySingleInstanceFromServiceLocators(out encoder)) return encoder;
 
             return new AntiXssEncoder();
+        }
+
+        public IPersistanceStore InstantiatePersistanceStore()
+        {
+            Contract.Ensures(Contract.Result<IPersistanceStore>() != null);
+
+            IPersistanceStore store;
+            if (TrySingleInstanceFromServiceLocators(out store)) return store;
+
+            return new ApplicationPersistanceStore(InstantiateFrameworkProvider().HttpServerStore);
         }
 
         private IDiscoverableCollection<T> CreateDiscoverableCollection<T>(DiscoverableCollectionElement config)

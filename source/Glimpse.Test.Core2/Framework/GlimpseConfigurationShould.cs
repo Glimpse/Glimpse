@@ -118,13 +118,13 @@ namespace Glimpse.Test.Core2.Framework
         public void ThrowExceptionWhenConstructedWithNullEndpointConfiguration()
         {
             Assert.Throws<ArgumentNullException>(
-                () => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, null, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.On, Configuration.HtmlEncoderMock.Object));
+                () => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, null, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.On, Configuration.HtmlEncoderMock.Object, Configuration.PersistanceStoreMock.Object));
         }
 
         [Fact]
         public void ThrowExceptionWhenConstructedWithNullFrameworkProvider()
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(null, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.On, Configuration.HtmlEncoderMock.Object));
+            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(null, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.On, Configuration.HtmlEncoderMock.Object, Configuration.PersistanceStoreMock.Object));
         }
 
         [Fact]

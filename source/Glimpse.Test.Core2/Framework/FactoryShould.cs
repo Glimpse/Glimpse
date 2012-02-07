@@ -77,6 +77,22 @@ namespace Glimpse.Test.Core2.Framework
         }
 
         [Fact]
+        public void InstantiateFrameworkProviderCachesResults()
+        {
+            var providerMock = new Mock<IFrameworkProvider>();
+            var serviceLocatorMock = new Mock<IServiceLocator>();
+
+            serviceLocatorMock.Setup(sl => sl.GetInstance<IFrameworkProvider>()).Returns(providerMock.Object);
+
+            var factory = new Factory(serviceLocatorMock.Object);
+            var first = factory.InstantiateFrameworkProvider();
+            var second = factory.InstantiateFrameworkProvider();
+            Assert.Equal(providerMock.Object, first);
+            Assert.Equal(providerMock.Object, second);
+            serviceLocatorMock.Verify(sl=>sl.GetInstance<IFrameworkProvider>(), Times.AtMostOnce());
+        }
+
+        [Fact]
         public void InstantiateFrameworkProviderWithoutIServiceLocator()
         {
             var factory = new Factory();
@@ -309,7 +325,11 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void InstantiatePersistanceStoreWithApplicationPersistanceStore()
         {
+            var dataStoreMock = new Mock<IDataStore>();
+            var providerMock = new Mock<IFrameworkProvider>();
+            providerMock.Setup(pm => pm.HttpServerStore).Returns(dataStoreMock.Object);
             var locatorMock = new Mock<IServiceLocator>();
+            locatorMock.Setup(l => l.GetInstance<IFrameworkProvider>()).Returns(providerMock.Object);
 
             var factory = new Factory(locatorMock.Object);
 
@@ -317,6 +337,25 @@ namespace Glimpse.Test.Core2.Framework
 
             Assert.NotNull(store);
             Assert.NotNull(store as ApplicationPersistanceStore);
+        }
+
+        [Fact]
+        public void LeverageServiceLocatorForPersistanceStore()
+        {
+            var dataStoreMock = new Mock<IDataStore>();
+            var providerMock = new Mock<IFrameworkProvider>();
+            providerMock.Setup(pm => pm.HttpServerStore).Returns(dataStoreMock.Object);
+            var persistanceStoreMock = new Mock<IPersistanceStore>();
+            var locatorMock = new Mock<IServiceLocator>();
+            locatorMock.Setup(l => l.GetInstance<IFrameworkProvider>()).Returns(providerMock.Object);
+            locatorMock.Setup(l => l.GetInstance<IPersistanceStore>()).Returns(persistanceStoreMock.Object);
+
+            var factory = new Factory(locatorMock.Object);
+
+            IPersistanceStore store = factory.InstantiatePersistanceStore();
+
+            Assert.NotNull(store);
+            Assert.Equal(persistanceStoreMock.Object, store);
         }
     }
 }

@@ -12,20 +12,23 @@ namespace Glimpse.Test.Core2.Tester
                                            Mock<ResourceEndpointConfiguration> endpointConfigurationMock,
                                            IDiscoverableCollection<IClientScript> clientScriptsStub,
                                            Mock<ILogger> loggerMock,
-                                           Mock<IHtmlEncoder> htmlEncoderMock)
+                                           Mock<IHtmlEncoder> htmlEncoderMock,
+                                           Mock<IPersistanceStore> persistanceStoreMock)
             : base(
                 frameworkProviderMock.Object,
                 endpointConfigurationMock.Object,
                 clientScriptsStub,
                 loggerMock.Object,
                 RuntimePolicy.On,
-                htmlEncoderMock.Object)
+                htmlEncoderMock.Object,
+                persistanceStoreMock.Object)
         {
             FrameworkProviderMock = frameworkProviderMock;
             EndpointConfigMock = endpointConfigurationMock;
             ClientScriptsStub = clientScriptsStub;
             LoggerMock = loggerMock;
             HtmlEncoderMock = htmlEncoderMock;
+            PersistanceStoreMock = persistanceStoreMock;
         }
 
         public static GlimpseConfigurationTester Create()
@@ -36,7 +39,8 @@ namespace Glimpse.Test.Core2.Tester
                                                   new Mock<ResourceEndpointConfiguration>(),
                                                   new ReflectionDiscoverableCollection<IClientScript>(loggerMock.Object),
                                                   loggerMock,
-                                                  new Mock<IHtmlEncoder>());
+                                                  new Mock<IHtmlEncoder>(),
+                                                  new Mock<IPersistanceStore>());
         }
 
         public Mock<ResourceEndpointConfiguration> EndpointConfigMock { get; set; }
@@ -44,5 +48,6 @@ namespace Glimpse.Test.Core2.Tester
         public IDiscoverableCollection<IClientScript> ClientScriptsStub { get; set; }
         public Mock<ILogger> LoggerMock { get; set; }
         public Mock<IHtmlEncoder> HtmlEncoderMock { get; set; }
+        public Mock<IPersistanceStore> PersistanceStoreMock { get; set; }
     }
 }

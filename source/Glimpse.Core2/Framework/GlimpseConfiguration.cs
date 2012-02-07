@@ -13,7 +13,8 @@ namespace Glimpse.Core2.Framework
             ICollection<IClientScript> clientScripts,
             ILogger logger,
             RuntimePolicy baseRuntimePolicy,
-            IHtmlEncoder htmlEncoder)
+            IHtmlEncoder htmlEncoder,
+            IPersistanceStore persistanceStore)
         {
             //TODO: Test building glimpse on clean VS install with contracts
             //TODO: Test building glimpse on teamcity with contracts
@@ -21,13 +22,15 @@ namespace Glimpse.Core2.Framework
             Contract.Requires<ArgumentNullException>(endpointConfiguration != null, "endpointConfiguration");
             Contract.Requires<ArgumentNullException>(logger != null, "logger");
             Contract.Requires<ArgumentNullException>(htmlEncoder != null, "htmlEncoder");
+            Contract.Requires<ArgumentNullException>(persistanceStore != null, "persistanceStore");
+            Contract.Requires<ArgumentNullException>(clientScripts != null, "clientScripts");
 
             //TODO: Refactor all these "new" calls to leverage a IOC container?
             Logger = logger;
             ClientScripts = clientScripts;
             FrameworkProvider = frameworkProvider;
             HtmlEncoder = htmlEncoder;
-            PersistanceStore = new ApplicationPersistanceStore(frameworkProvider.HttpServerStore);
+            PersistanceStore = persistanceStore;
             PipelineInspectors = new DiscoverableCollection<IPipelineInspector>();
             ResourceEndpoint = endpointConfiguration;
             Resources = new DiscoverableCollection<IResource>();
