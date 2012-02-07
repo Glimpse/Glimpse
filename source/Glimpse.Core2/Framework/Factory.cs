@@ -166,6 +166,16 @@ namespace Glimpse.Core2.Framework
             return CreateDiscoverableCollection<IResource>(Configuration.Resources);
         }
 
+        public ISerializer InstantiateSerializer()
+        {
+            Contract.Ensures(Contract.Result<ISerializer>() != null);
+
+            ISerializer result;
+            if (TrySingleInstanceFromServiceLocators(out result)) return result;
+
+            return new JsonNetSerializer();
+        }
+
         private IDiscoverableCollection<T> CreateDiscoverableCollection<T>(DiscoverableCollectionElement config)
         {
             var discoverableCollection = new ReflectionDiscoverableCollection<T>(InstantiateLogger());

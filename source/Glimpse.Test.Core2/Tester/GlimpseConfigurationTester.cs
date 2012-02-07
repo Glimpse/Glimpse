@@ -15,7 +15,8 @@ namespace Glimpse.Test.Core2.Tester
                                            Mock<IHtmlEncoder> htmlEncoderMock,
                                            Mock<IPersistanceStore> persistanceStoreMock,
                                            IDiscoverableCollection<IPipelineInspector> pipelineInspectorsStub,
-                                           IDiscoverableCollection<IResource> resourcesStub)
+                                           IDiscoverableCollection<IResource> resourcesStub,
+                                           Mock<ISerializer> serializerMock)
             : base(
                 frameworkProviderMock.Object,
                 endpointConfigurationMock.Object,
@@ -25,7 +26,8 @@ namespace Glimpse.Test.Core2.Tester
                 htmlEncoderMock.Object,
                 persistanceStoreMock.Object,
                 pipelineInspectorsStub,
-                resourcesStub)
+                resourcesStub,
+                serializerMock.Object)
         {
             FrameworkProviderMock = frameworkProviderMock;
             EndpointConfigMock = endpointConfigurationMock;
@@ -33,6 +35,7 @@ namespace Glimpse.Test.Core2.Tester
             LoggerMock = loggerMock;
             HtmlEncoderMock = htmlEncoderMock;
             PersistanceStoreMock = persistanceStoreMock;
+            SerializerMock = serializerMock;
         }
 
         public static GlimpseConfigurationTester Create()
@@ -45,8 +48,10 @@ namespace Glimpse.Test.Core2.Tester
                                                   loggerMock,
                                                   new Mock<IHtmlEncoder>(),
                                                   new Mock<IPersistanceStore>(),
-                                                  new ReflectionDiscoverableCollection<IPipelineInspector>(loggerMock.Object),
-                                                  new ReflectionDiscoverableCollection<IResource>(loggerMock.Object));
+                                                  new ReflectionDiscoverableCollection<IPipelineInspector>(
+                                                      loggerMock.Object),
+                                                  new ReflectionDiscoverableCollection<IResource>(loggerMock.Object),
+                                                  new Mock<ISerializer>());
         }
 
         public Mock<ResourceEndpointConfiguration> EndpointConfigMock { get; set; }
@@ -55,5 +60,6 @@ namespace Glimpse.Test.Core2.Tester
         public Mock<ILogger> LoggerMock { get; set; }
         public Mock<IHtmlEncoder> HtmlEncoderMock { get; set; }
         public Mock<IPersistanceStore> PersistanceStoreMock { get; set; }
+        public Mock<ISerializer> SerializerMock { get; set; }
     }
 }

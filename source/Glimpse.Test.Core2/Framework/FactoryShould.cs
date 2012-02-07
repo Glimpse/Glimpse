@@ -411,5 +411,36 @@ namespace Glimpse.Test.Core2.Framework
             Assert.Equal(resources, result);
         }
 
+        [Fact]
+        public void InstantiateSerializerWithJsonNetSerializer()
+        {
+            var locatorMock = new Mock<IServiceLocator>();
+
+            var factory = new Factory(locatorMock.Object);
+
+            ISerializer serializer = factory.InstantiateSerializer();
+
+            Assert.NotNull(serializer);
+            Assert.NotNull(serializer as JsonNetSerializer);
+            locatorMock.Verify(l => l.GetInstance<ISerializer>(), Times.Once());
+        }
+
+        [Fact]
+        public void LeverageServiceLocatorForSerializer()
+        {
+            var serializerMock = new Mock<ISerializer>();
+            var locatorMock = new Mock<IServiceLocator>();
+            locatorMock.Setup(l => l.GetInstance<ISerializer>()).Returns(serializerMock.Object);
+
+            var factory = new Factory(locatorMock.Object);
+
+            ISerializer serializer = factory.InstantiateSerializer();
+
+            Assert.NotNull(serializer);
+            Assert.Equal(serializerMock.Object, serializer);
+
+            locatorMock.Verify(l => l.GetInstance<ISerializer>(), Times.Once());
+        }
+
     }
 }

@@ -16,7 +16,8 @@ namespace Glimpse.Core2.Framework
             IHtmlEncoder htmlEncoder,
             IPersistanceStore persistanceStore,
             ICollection<IPipelineInspector> pipelineInspectors,
-            ICollection<IResource> resources)
+            ICollection<IResource> resources,
+            ISerializer serializer)
         {
             //TODO: Test building glimpse on clean VS install with contracts
             //TODO: Test building glimpse on teamcity with contracts
@@ -28,6 +29,7 @@ namespace Glimpse.Core2.Framework
             Contract.Requires<ArgumentNullException>(clientScripts != null, "clientScripts");
             Contract.Requires<ArgumentNullException>(pipelineInspectors != null, "pipelineInspectors");
             Contract.Requires<ArgumentNullException>(resources != null, "resources");
+            Contract.Requires<ArgumentNullException>(serializer != null, "serializer");
 
             //TODO: Refactor all these "new" calls to leverage a IOC container?
             Logger = logger;
@@ -38,7 +40,7 @@ namespace Glimpse.Core2.Framework
             PipelineInspectors = pipelineInspectors;
             ResourceEndpoint = endpointConfiguration;
             Resources = resources;
-            Serializer = new JsonNetSerializer();
+            Serializer = serializer;
             Tabs = new DiscoverableLazyCollection<ITab, ITabMetadata>();
             RuntimePolicies = new DiscoverableLazyCollection<IRuntimePolicy, IRuntimePolicyMetadata>();
             BaseRuntimePolicy = baseRuntimePolicy;
