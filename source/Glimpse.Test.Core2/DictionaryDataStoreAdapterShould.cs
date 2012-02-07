@@ -14,8 +14,8 @@ namespace Glimpse.Test.Core2
         {
             Dictionary = new Dictionary<string, object>
                              {
-                                 {typeof(string).FullName,"TestString"},
-                                 {typeof(int).FullName, 4},
+                                 {typeof(string).AssemblyQualifiedName,"TestString"},
+                                 {typeof(int).AssemblyQualifiedName, 4},
                                  {"intKey", 5}
                              };
         }

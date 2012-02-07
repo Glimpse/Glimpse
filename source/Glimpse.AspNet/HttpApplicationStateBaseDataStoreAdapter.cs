@@ -14,7 +14,7 @@ namespace Glimpse.AspNet
 
         public T Get<T>()
         {
-            return Get<T>(typeof (T).FullName);
+            return Get<T>(typeof (T).AssemblyQualifiedName);
         }
 
         public T Get<T>(string key)
@@ -29,7 +29,7 @@ namespace Glimpse.AspNet
 
         public void Set<T>(T value)
         {
-            ApplicationState.Set(typeof(T).FullName, value);
+            ApplicationState.Set(typeof(T).AssemblyQualifiedName, value);
         }
 
         public void Set(string key, object value)

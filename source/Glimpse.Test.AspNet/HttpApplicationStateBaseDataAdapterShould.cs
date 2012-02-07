@@ -13,7 +13,7 @@ namespace Glimpse.Test.AspNet
         {
             var applicationStateMock = new Mock<HttpApplicationStateBase>();
             applicationStateMock.Setup(st => st.Set(It.IsAny<string>(), It.IsAny<object>()));
-            applicationStateMock.Setup(st => st.Get(typeof(int).FullName)).Returns(5);
+            applicationStateMock.Setup(st => st.Get(typeof(int).AssemblyQualifiedName)).Returns(5);
             ApplicationStateMock = applicationStateMock;
         }
 
@@ -22,7 +22,7 @@ namespace Glimpse.Test.AspNet
         {
             var dataStore = new HttpApplicationStateBaseDataStoreAdapter(ApplicationStateMock.Object);
 
-            Assert.True(dataStore.Contains(typeof(int).FullName));
+            Assert.True(dataStore.Contains(typeof(int).AssemblyQualifiedName));
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace Glimpse.Test.AspNet
             var dataStore = new HttpApplicationStateBaseDataStoreAdapter(ApplicationStateMock.Object);
 
             Assert.Equal(5, dataStore.Get<int>());
-            ApplicationStateMock.Verify(st => st.Get(typeof(int).FullName), Times.Once());
+            ApplicationStateMock.Verify(st => st.Get(typeof(int).AssemblyQualifiedName), Times.Once());
         }
 
         [Fact]
@@ -55,10 +55,10 @@ namespace Glimpse.Test.AspNet
         {
             var dataStore = new HttpApplicationStateBaseDataStoreAdapter(ApplicationStateMock.Object);
 
-            var result = dataStore.Get<int>(typeof(int).FullName);
+            var result = dataStore.Get<int>(typeof(int).AssemblyQualifiedName);
             Assert.Equal(5, result);
             Assert.IsType<int>(result);
-            ApplicationStateMock.Verify(st => st.Get(typeof(int).FullName), Times.Once());
+            ApplicationStateMock.Verify(st => st.Get(typeof(int).AssemblyQualifiedName), Times.Once());
         }
 
         [Fact]
@@ -66,8 +66,8 @@ namespace Glimpse.Test.AspNet
         {
             var dataStore = new HttpApplicationStateBaseDataStoreAdapter(ApplicationStateMock.Object);
 
-            Assert.Equal(5, dataStore.Get(typeof(int).FullName));
-            ApplicationStateMock.Verify(st => st.Get(typeof(int).FullName), Times.Once());
+            Assert.Equal(5, dataStore.Get(typeof(int).AssemblyQualifiedName));
+            ApplicationStateMock.Verify(st => st.Get(typeof(int).AssemblyQualifiedName), Times.Once());
         }
 
         [Fact]
@@ -78,7 +78,7 @@ namespace Glimpse.Test.AspNet
             dataStore.Set<int>(5);
 
             Assert.Equal(5, dataStore.Get<int>());
-            ApplicationStateMock.Verify(st => st.Set(typeof(int).FullName, 5), Times.Once());
+            ApplicationStateMock.Verify(st => st.Set(typeof(int).AssemblyQualifiedName, 5), Times.Once());
 
         }
 

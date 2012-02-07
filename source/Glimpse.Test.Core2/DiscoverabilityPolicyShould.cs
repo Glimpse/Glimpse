@@ -66,7 +66,7 @@ namespace Glimpse.Test.Core2
             Assert.True(glimpseCollection2.Count > 0);
         }
 
-        [Fact]
+        [Fact(Skip = "Discoverability policies should go away")]
         public void DiscoverIgnoresDisabledTypes()
         {
             //T`1

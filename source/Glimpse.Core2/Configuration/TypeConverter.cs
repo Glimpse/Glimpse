@@ -21,7 +21,7 @@ namespace Glimpse.Core2.Configuration
         {
             var t = value as Type;
 
-            return t.FullName;
+            return t.AssemblyQualifiedName;
         }
     }
 }

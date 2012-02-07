@@ -18,7 +18,7 @@ namespace Glimpse.Core2
 
         public T Get<T>()
         {
-            return (T) Dictionary[typeof (T).FullName];
+            return (T) Dictionary[typeof (T).AssemblyQualifiedName];
         }
 
         public T Get<T>(string key)
@@ -33,7 +33,7 @@ namespace Glimpse.Core2
 
         public void Set<T>(T value)
         {
-            Dictionary[typeof (T).FullName] = value;
+            Dictionary[typeof (T).AssemblyQualifiedName] = value;
         }
 
         public void Set(string key, object value)

@@ -14,12 +14,12 @@ namespace Glimpse.Core2
 
         public void IgnoreType(Type type)
         {
-            IgnoreType(type.FullName);
+            IgnoreType(type.AssemblyQualifiedName);
         }
 
-        public void IgnoreType(string fullName)
+        public void IgnoreType(string name)
         {
-            IgnoredTypes.Add(fullName);
+            IgnoredTypes.Add(name);
         }
 
         private string path;

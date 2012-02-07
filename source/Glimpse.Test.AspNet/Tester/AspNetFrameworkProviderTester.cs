@@ -25,8 +25,8 @@ namespace Glimpse.Test.AspNet.Tester
             HttpContextMock.Setup(ctx => ctx.Items)
                 .Returns(new Dictionary<object, object>
                              {
-                                 {typeof (string).FullName, "TestString"},
-                                 {typeof (int).FullName, 5}
+                                 {typeof (string).AssemblyQualifiedName, "TestString"},
+                                 {typeof (int).AssemblyQualifiedName, 5}
                              });
 
             Context = HttpContextMock.Object;
