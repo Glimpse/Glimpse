@@ -2,7 +2,6 @@
 
 namespace Glimpse.Core2.Policy
 {
-    [RuntimePolicy(RuntimeEvent.BeginRequest)]
     public class ControlCookiePolicy:IRuntimePolicy
     {
         public RuntimePolicy Execute(IRuntimePolicyContext policyContext)
@@ -18,6 +17,11 @@ namespace Glimpse.Core2.Policy
                 return RuntimePolicy.Off;
 
             return result;
+        }
+
+        public RuntimeEvent ExecuteOn
+        {
+            get { return RuntimeEvent.BeginRequest; }
         }
     }
 }

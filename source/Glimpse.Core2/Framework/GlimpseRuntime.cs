@@ -323,11 +323,6 @@ namespace Glimpse.Core2.Framework
         public void UpdateConfiguration(GlimpseConfiguration configuration)
         {
             //TODO: destruct pipelineInitializers and tabs
-            var runtimePolicies = configuration.RuntimePolicies;
-            if (runtimePolicies.Discoverability.AutoDiscover)
-                runtimePolicies.Discoverability.Discover();
-
-
             var serializationConverters = configuration.SerializationConverters;
             if (serializationConverters.Discoverability.AutoDiscover)
             {
@@ -352,13 +347,13 @@ namespace Glimpse.Core2.Framework
                 //only run policies for this runtimeEvent, or all runtime events
                 var policies =
                     Configuration.RuntimePolicies.Where(
-                        v => !v.Metadata.RuntimeEvent.HasValue || v.Metadata.RuntimeEvent.Value.HasFlag(runtimeEvent));
+                        policy => policy.ExecuteOn.HasFlag(runtimeEvent));
 
                 var policyContext = new RuntimePolicyContext(frameworkProvider.RequestMetadata, Configuration.Logger, frameworkProvider.RuntimeContext);
                 foreach (var policy in policies)
                 {
                     //TODO: Handle exceptions from policy
-                    var p = policy.Value.Execute(policyContext);
+                    var p = policy.Execute(policyContext);
 
                     //Only use the lowest policy allowed for the request
                     if (p < result) result = p;

@@ -20,7 +20,7 @@ namespace Glimpse.Test.Core2.Tester
         public Mock<IRequestMetadata> RequestMetadataMock { get; set; }
         public Mock<IResource> ResourceMock { get; set; }
         public Mock<IResourceResult> ResourceResultMock { get; set; }
-        public Mock<IRuntimePolicy> ValidatorMock { get; set; }
+        public Mock<IRuntimePolicy> RuntimePolicyMock { get; set; }
         public GlimpseConfiguration Configuration { get; set; }
         public Mock<IStaticClientScript> StaticScriptMock { get; set; }
         public Mock<IDynamicClientScript> DynamicScriptMock { get; set; }
@@ -38,8 +38,9 @@ namespace Glimpse.Test.Core2.Tester
             LoggerMock = new Mock<ILogger>();
             ResourceMock = new Mock<IResource>();
             ResourceResultMock = new Mock<IResourceResult>();
-            ValidatorMock = new Mock<IRuntimePolicy>();
-            ValidatorMock.Setup(v => v.Execute(It.IsAny<IRuntimePolicyContext>())).Returns(RuntimePolicy.On);
+            RuntimePolicyMock = new Mock<IRuntimePolicy>();
+            RuntimePolicyMock.Setup(v => v.Execute(It.IsAny<IRuntimePolicyContext>())).Returns(RuntimePolicy.On);
+            RuntimePolicyMock.Setup(v => v.ExecuteOn).Returns(RuntimeEvent.Initialize);
             RequestMetadataMock = new Mock<IRequestMetadata>();
             RequestMetadataMock.Setup(r => r.RequestHttpMethod).Returns("GET");
             RequestMetadataMock.Setup(r => r.RequestIsAjax).Returns(true);
@@ -81,9 +82,10 @@ namespace Glimpse.Test.Core2.Tester
             var resources = new ReflectionDiscoverableCollection<IResource>(loggerMock.Object);
             var serializerMock = new Mock<ISerializer>();
             var tabs = new ReflectionDiscoverableCollection<ITab>(loggerMock.Object);
+            var policies = new ReflectionDiscoverableCollection<IRuntimePolicy>(loggerMock.Object);
 
             var configuration =
-                new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfigMock.Object, clientScripts, loggerMock.Object, RuntimePolicy.On, htmlEncoderMock.Object, persistanceStoreMock.Object, pipelineInspectors, resources, serializerMock.Object, tabs).
+                new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfigMock.Object, clientScripts, loggerMock.Object, RuntimePolicy.On, htmlEncoderMock.Object, persistanceStoreMock.Object, pipelineInspectors, resources, serializerMock.Object, tabs, policies).
                     TurnOffAutoDiscover();
 
 

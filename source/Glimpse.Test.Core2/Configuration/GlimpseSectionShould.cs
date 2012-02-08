@@ -64,7 +64,7 @@ namespace Glimpse.Test.Core2.Configuration
         [Fact]
         public void SetClientScriptsElement()
         {
-            var scripts = new DiscoverableCollectionElement();
+            var scripts = new DiscoverableCollectionElement(){AutoDiscover = false};
 
             var section = new GlimpseSection();
 
@@ -111,7 +111,7 @@ namespace Glimpse.Test.Core2.Configuration
         {
             var section = new GlimpseSection();
 
-            var element = new DiscoverableCollectionElement();
+            var element = new DiscoverableCollectionElement(){AutoDiscover = false};
 
             section.PipelineInspectors = element;
 
@@ -136,7 +136,7 @@ namespace Glimpse.Test.Core2.Configuration
         {
             var section = new GlimpseSection();
 
-            var element = new DiscoverableCollectionElement();
+            var element = new DiscoverableCollectionElement(){AutoDiscover = false};
 
             section.Resources = element;
 
@@ -161,11 +161,36 @@ namespace Glimpse.Test.Core2.Configuration
         {
             var section = new GlimpseSection();
 
-            var element = new DiscoverableCollectionElement();
+            var element = new DiscoverableCollectionElement(){AutoDiscover = false};
 
             section.Tabs = element;
 
             Assert.Equal(element, section.Tabs);
+        }
+
+        [Fact]
+        public void ReturnDefaultRuntimePolicies()
+        {
+            var section = new GlimpseSection();
+
+            var element = section.RuntimePolicies;
+
+            Assert.NotNull(element);
+            Assert.True(element.AutoDiscover);
+            Assert.Empty(element.IgnoredTypes);
+            Assert.Empty(element.DiscoveryLocation);
+        }
+
+        [Fact]
+        public void GetSetRuntimePolicies()
+        {
+            var section = new GlimpseSection();
+
+            var element = new DiscoverableCollectionElement {AutoDiscover = false};
+
+            section.RuntimePolicies = element;
+
+            Assert.Equal(element, section.RuntimePolicies);
         }
     }
 }

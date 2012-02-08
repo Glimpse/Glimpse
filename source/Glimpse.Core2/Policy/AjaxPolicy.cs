@@ -4,7 +4,6 @@ using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Core2.Policy
 {
-    [RuntimePolicy(RuntimeEvent.BeginRequest)]
     public class AjaxPolicy:IRuntimePolicy
     {
         public RuntimePolicy Execute(IRuntimePolicyContext policyContext)
@@ -20,6 +19,11 @@ namespace Glimpse.Core2.Policy
                 policyContext.Logger.Warn(string.Format(Resources.ExecutePolicyWarning, GetType()), exception);
                 return RuntimePolicy.ModifyResponseHeaders;
             }
+        }
+
+        public RuntimeEvent ExecuteOn
+        {
+            get { return RuntimeEvent.BeginRequest; }
         }
     }
 }

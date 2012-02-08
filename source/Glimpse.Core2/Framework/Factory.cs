@@ -186,6 +186,16 @@ namespace Glimpse.Core2.Framework
             return CreateDiscoverableCollection<ITab>(Configuration.Tabs);
         }
 
+        public ICollection<IRuntimePolicy> InstantiateRuntimePolicies()
+        {
+            Contract.Ensures(Contract.Result<ICollection<IRuntimePolicy>>()!=null);
+
+            ICollection<IRuntimePolicy> policies;
+            if (TryAllInstancesFromServiceLocators(out policies)) return policies;
+
+            return CreateDiscoverableCollection<IRuntimePolicy>(Configuration.RuntimePolicies);
+        }
+
         private IDiscoverableCollection<T> CreateDiscoverableCollection<T>(DiscoverableCollectionElement config)
         {
             var discoverableCollection = new ReflectionDiscoverableCollection<T>(InstantiateLogger());

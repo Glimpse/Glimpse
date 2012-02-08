@@ -313,12 +313,10 @@ namespace Glimpse.Test.Core2.Framework
         {
             var runtime = Runtime; //force instantiation of Runtime property
 
-            runtime.Configuration.RuntimePolicies.Discoverability.AutoDiscover = true;
             runtime.Configuration.SerializationConverters.Discoverability.AutoDiscover = true;
 
             runtime.UpdateConfiguration(runtime.Configuration);
 
-            Assert.True(runtime.Configuration.RuntimePolicies.Count > 0);
             Assert.True(runtime.Configuration.SerializationConverters.Count > 0);
         }
 
@@ -455,10 +453,7 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void ProvideEnabledInfoOnInitializing()
         {
-            Runtime.Configuration.RuntimePolicies.Add(
-                new Lazy<IRuntimePolicy, IRuntimePolicyMetadata>(() => Runtime.ValidatorMock.Object,
-                                                                       new RuntimePolicyAttribute()));
-            ;
+            Runtime.Configuration.RuntimePolicies.Add(Runtime.RuntimePolicyMock.Object);
 
             var result = Runtime.Initialize();
 
@@ -470,9 +465,10 @@ namespace Glimpse.Test.Core2.Framework
         {
             var offValidatorMock = new Mock<IRuntimePolicy>();
             offValidatorMock.Setup(v => v.Execute(It.IsAny<IRuntimePolicyContext>())).Returns(RuntimePolicy.Off);
+            offValidatorMock.Setup(v => v.ExecuteOn).Returns(RuntimeEvent.All);
 
-            Runtime.Configuration.RuntimePolicies.Add(new Lazy<IRuntimePolicy, IRuntimePolicyMetadata>(()=>Runtime.ValidatorMock.Object, new RuntimePolicyAttribute()));
-            Runtime.Configuration.RuntimePolicies.Add(new Lazy<IRuntimePolicy, IRuntimePolicyMetadata>(()=>offValidatorMock.Object, new RuntimePolicyAttribute()));
+            Runtime.Configuration.RuntimePolicies.Add(Runtime.RuntimePolicyMock.Object);
+            Runtime.Configuration.RuntimePolicies.Add(offValidatorMock.Object);
 
             var result = Runtime.Initialize();
 
@@ -502,8 +498,8 @@ namespace Glimpse.Test.Core2.Framework
         {
             Runtime.Configuration.BaseRuntimePolicy = RuntimePolicy.Off;
 
-            Runtime.ValidatorMock.Setup(v => v.Execute(It.IsAny<IRuntimePolicyContext>())).Returns(RuntimePolicy.On);
-            Runtime.Configuration.RuntimePolicies.Add(new Lazy<IRuntimePolicy, IRuntimePolicyMetadata>(()=>Runtime.ValidatorMock.Object,new RuntimePolicyAttribute()));
+            Runtime.RuntimePolicyMock.Setup(v => v.Execute(It.IsAny<IRuntimePolicyContext>())).Returns(RuntimePolicy.On);
+            Runtime.Configuration.RuntimePolicies.Add(Runtime.RuntimePolicyMock.Object);
 
             var result = Runtime.Initialize();
 
@@ -513,11 +509,13 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void ValidateAtBeginRequest()
         {
-            Runtime.Configuration.RuntimePolicies.Add(new Lazy<IRuntimePolicy, IRuntimePolicyMetadata>(()=>Runtime.ValidatorMock.Object,new RuntimePolicyAttribute()));
+            Runtime.RuntimePolicyMock.Setup(rp => rp.ExecuteOn).Returns(RuntimeEvent.BeginRequest);
+
+            Runtime.Configuration.RuntimePolicies.Add(Runtime.RuntimePolicyMock.Object);
 
             Runtime.BeginRequest();
 
-            Runtime.ValidatorMock.Verify(v=>v.Execute(It.IsAny<IRuntimePolicyContext>()), Times.AtLeastOnce());
+            Runtime.RuntimePolicyMock.Verify(v=>v.Execute(It.IsAny<IRuntimePolicyContext>()), Times.AtLeastOnce());
         }
 
         [Fact]
@@ -533,8 +531,8 @@ namespace Glimpse.Test.Core2.Framework
         [Fact] //False result means GlimpseMode == Off
         public void WriteCurrentModeToRequestState()
         {
-            Runtime.ValidatorMock.Setup(v => v.Execute(It.IsAny<IRuntimePolicyContext>())).Returns(RuntimePolicy.ModifyResponseBody);
-            Runtime.Configuration.RuntimePolicies.Add(new Lazy<IRuntimePolicy, IRuntimePolicyMetadata>(()=>Runtime.ValidatorMock.Object, new RuntimePolicyAttribute()));
+            Runtime.RuntimePolicyMock.Setup(v => v.Execute(It.IsAny<IRuntimePolicyContext>())).Returns(RuntimePolicy.ModifyResponseBody);
+            Runtime.Configuration.RuntimePolicies.Add(Runtime.RuntimePolicyMock.Object);
 
             var result = Runtime.Initialize();
 
@@ -577,12 +575,12 @@ namespace Glimpse.Test.Core2.Framework
         public void ExecuteOnlyTheProperValidators()
         {
             var validatorMock2 = new Mock<IRuntimePolicy>();
-            Runtime.Configuration.RuntimePolicies.Add(new Lazy<IRuntimePolicy, IRuntimePolicyMetadata>(()=>Runtime.ValidatorMock.Object, new RuntimePolicyAttribute(RuntimeEvent.Initialize)));
-            Runtime.Configuration.RuntimePolicies.Add(new Lazy<IRuntimePolicy, IRuntimePolicyMetadata>(()=>validatorMock2.Object, new RuntimePolicyAttribute(RuntimeEvent.EndRequest)));
+            Runtime.Configuration.RuntimePolicies.Add(Runtime.RuntimePolicyMock.Object);
+            Runtime.Configuration.RuntimePolicies.Add(validatorMock2.Object);
 
             Runtime.Initialize();
 
-            Runtime.ValidatorMock.Verify(v=>v.Execute(It.IsAny<IRuntimePolicyContext>()), Times.Once());
+            Runtime.RuntimePolicyMock.Verify(v=>v.Execute(It.IsAny<IRuntimePolicyContext>()), Times.Once());
             validatorMock2.Verify(v=>v.Execute(It.IsAny<IRuntimePolicyContext>()), Times.Never());
         }
 

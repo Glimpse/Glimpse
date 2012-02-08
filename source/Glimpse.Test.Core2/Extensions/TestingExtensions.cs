@@ -30,7 +30,6 @@ namespace Glimpse.Test.Core2.Extensions
 
         public static GlimpseConfiguration TurnOffAutoDiscover(this GlimpseConfiguration configuration)
         {
-            configuration.RuntimePolicies.Discoverability.AutoDiscover = false;
             configuration.SerializationConverters.Discoverability.AutoDiscover = false;
 
             return configuration;

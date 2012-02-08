@@ -18,7 +18,8 @@ namespace Glimpse.Core2.Framework
             ICollection<IPipelineInspector> pipelineInspectors,
             ICollection<IResource> resources,
             ISerializer serializer,
-            ICollection<ITab> tabs)
+            ICollection<ITab> tabs,
+            ICollection<IRuntimePolicy> runtimePolicies)
         {
             //TODO: Test building glimpse on clean VS install with contracts
             //TODO: Test building glimpse on teamcity with contracts
@@ -32,6 +33,7 @@ namespace Glimpse.Core2.Framework
             Contract.Requires<ArgumentNullException>(resources != null, "resources");
             Contract.Requires<ArgumentNullException>(serializer != null, "serializer");
             Contract.Requires<ArgumentNullException>(tabs != null, "tabs");
+            Contract.Requires<ArgumentNullException>(runtimePolicies != null, "runtimePolicies");
 
             //TODO: Refactor all these "new" calls to leverage a IOC container?
             Logger = logger;
@@ -44,7 +46,7 @@ namespace Glimpse.Core2.Framework
             Resources = resources;
             Serializer = serializer;
             Tabs = tabs;
-            RuntimePolicies = new DiscoverableLazyCollection<IRuntimePolicy, IRuntimePolicyMetadata>();
+            RuntimePolicies = runtimePolicies;
             BaseRuntimePolicy = baseRuntimePolicy;
             SerializationConverters = new DiscoverableCollection<ISerializationConverter>();
             DefaultResourceName = Resource.Configuration.InternalName;
@@ -200,12 +202,12 @@ namespace Glimpse.Core2.Framework
             }
         }
 
-        private DiscoverableLazyCollection<IRuntimePolicy,IRuntimePolicyMetadata> runtimePolicies;
-        public DiscoverableLazyCollection<IRuntimePolicy, IRuntimePolicyMetadata> RuntimePolicies
+        private ICollection<IRuntimePolicy> runtimePolicies;
+        public ICollection<IRuntimePolicy> RuntimePolicies
         {
             get
             {
-                Contract.Ensures(Contract.Result<DiscoverableLazyCollection<IRuntimePolicy, IRuntimePolicyMetadata>>() != null);
+                Contract.Ensures(Contract.Result<ICollection<IRuntimePolicy>>() != null);
                 return runtimePolicies;
             }
             set

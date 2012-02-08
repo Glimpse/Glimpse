@@ -469,5 +469,31 @@ namespace Glimpse.Test.Core2.Framework
             locatorMock.Verify(l => l.GetAllInstances<ITab>(), Times.Once());
         }
 
+        [Fact]
+        public void InstantiateRuntimePoliciessWithReflectionDiscoverableCollection()
+        {
+            var locatorMock = new Mock<IServiceLocator>();
+            var factory = new Factory(locatorMock.Object);
+            ICollection<IRuntimePolicy> policies = factory.InstantiateRuntimePolicies();
+
+            Assert.NotNull(policies);
+            Assert.NotNull(policies as ReflectionDiscoverableCollection<IRuntimePolicy>);
+        }
+
+        [Fact]
+        public void LeverageServiceLocatorForRuntimePolicies()
+        {
+            ICollection<IRuntimePolicy> policies = new List<IRuntimePolicy>();
+
+            var locatorMock = new Mock<IServiceLocator>();
+            locatorMock.Setup(l => l.GetAllInstances<IRuntimePolicy>()).Returns(policies);
+
+            var factory = new Factory(locatorMock.Object);
+
+            var result = factory.InstantiateRuntimePolicies();
+
+            Assert.Equal(policies, result);
+            locatorMock.Verify(l => l.GetAllInstances<IRuntimePolicy>(), Times.Once());
+        }
     }
 }

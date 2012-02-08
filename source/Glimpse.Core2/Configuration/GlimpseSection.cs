@@ -39,6 +39,13 @@ namespace Glimpse.Core2.Configuration
             set { base["tabs"] = value; }
         }
 
+        [ConfigurationProperty("runtimePolicies")]
+        public DiscoverableCollectionElement RuntimePolicies
+        {
+            get { return (DiscoverableCollectionElement)base["runtimePolicies"]; }
+            set { base["runtimePolicies"] = value; }
+        }
+
         [ConfigurationProperty("baseRuntimePolicy", DefaultValue = RuntimePolicy.Off)]
         public RuntimePolicy BaseRuntimePolicy
         {

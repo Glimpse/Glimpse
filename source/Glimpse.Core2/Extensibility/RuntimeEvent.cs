@@ -9,6 +9,7 @@ namespace Glimpse.Core2.Extensibility
         BeginRequest = 2,
         ExecuteTabs = 4,
         ExecuteResource = 8,
-        EndRequest = 16
+        EndRequest = 16,
+        All = Initialize | BeginRequest | ExecuteTabs | ExecuteResource | EndRequest
     }
 }

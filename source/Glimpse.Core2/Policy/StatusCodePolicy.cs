@@ -6,7 +6,6 @@ using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Core2.Policy
 {
-    [RuntimePolicy(RuntimeEvent.EndRequest)]
     public class StatusCodePolicy:ConfigurationSection, IRuntimePolicy
     {
         //TODO: Turn into a proper configuration class
@@ -36,6 +35,11 @@ namespace Glimpse.Core2.Policy
                 policyContext.Logger.Warn(string.Format(Resources.ExecutePolicyWarning, GetType()), exception);
                 return RuntimePolicy.Off;
             }
+        }
+
+        public RuntimeEvent ExecuteOn
+        {
+            get { return RuntimeEvent.EndRequest; }
         }
     }
 }

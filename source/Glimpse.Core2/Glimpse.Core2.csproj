@@ -123,7 +123,6 @@
     <Compile Include="Extensibility\TabContext.cs" />
     <Compile Include="Extensibility\ILogger.cs" />
     <Compile Include="Extensibility\IRuntimePolicyContext.cs" />
-    <Compile Include="Extensibility\IRuntimePolicyMetadata.cs" />
     <Compile Include="Extensibility\RuntimeEvent.cs" />
     <Compile Include="Extensibility\RuntimePolicyContext.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
@@ -148,7 +147,6 @@
     <Compile Include="MefDiscoverabilityPolicy-T1.cs" />
     <Compile Include="MefDiscoverabilityPolicy-T2.cs" />
     <Compile Include="DiscoverabilityPolicy.cs" />
-    <Compile Include="Extensibility\RuntimePolicyAttribute.cs" />
     <Compile Include="Extensibility\IRuntimePolicy.cs" />
     <Compile Include="Extensibility\IResourceResult.cs" />
     <Compile Include="Extensibility\PipelineInspectorAttribute.cs" />
