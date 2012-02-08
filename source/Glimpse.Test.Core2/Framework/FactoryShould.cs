@@ -109,7 +109,7 @@ namespace Glimpse.Test.Core2.Framework
             serviceLocatorMock.Setup(sl => sl.GetInstance<ResourceEndpointConfiguration>()).Returns(endpointConfigMock.Object);
 
             var factory = new Factory(serviceLocatorMock.Object);
-            var result = factory.InstantiateEndpointConfiguration();
+            var result = factory.InstantiateResourceEndpointConfiguration();
             Assert.Equal(endpointConfigMock.Object, result);
         }
 
@@ -117,7 +117,7 @@ namespace Glimpse.Test.Core2.Framework
         public void InstantiateResourceEndpointConfigWithoutIServiceLocator()
         {
             var factory = new Factory();
-            Assert.Throws<GlimpseException>(() => factory.InstantiateEndpointConfiguration());
+            Assert.Throws<GlimpseException>(() => factory.InstantiateResourceEndpointConfiguration());
         }
 
         [Fact]
@@ -287,7 +287,7 @@ namespace Glimpse.Test.Core2.Framework
 
             var factory = new Factory(locatorMock.Object);
 
-            RuntimePolicy result = factory.InstantiateBaseRuntimePolicy();
+            RuntimePolicy result = factory.InstantiateDefaultRuntimePolicy();
 
             Assert.Equal(RuntimePolicy.Off, result);
         }
@@ -567,6 +567,54 @@ namespace Glimpse.Test.Core2.Framework
             Assert.Equal(resourceMock.Object, resource);
 
             locatorMock.Verify(l => l.GetInstance<IResource>(), Times.Once());
+        }
+
+        [Fact]
+        public void InstantiateGlimpseConfiguration()
+        {
+            var dataStoreMock = new Mock<IDataStore>();
+            var providerMock = new Mock<IFrameworkProvider>();
+            providerMock.Setup(p => p.HttpServerStore).Returns(dataStoreMock.Object);
+            var endpointConfigMock = new Mock<ResourceEndpointConfiguration>();
+
+            var locatorMock = new Mock<IServiceLocator>();
+            locatorMock.Setup(l => l.GetInstance<IFrameworkProvider>()).Returns(providerMock.Object);
+            locatorMock.Setup(l => l.GetInstance<ResourceEndpointConfiguration>()).Returns(endpointConfigMock.Object);
+
+            var factory = new Factory(locatorMock.Object);
+
+            IGlimpseConfiguration resource = factory.InstantiateConfiguration();
+
+            Assert.NotNull(resource);
+            locatorMock.Verify(l => l.GetInstance<IResource>(), Times.Once());
+            locatorMock.Verify(l => l.GetInstance<IFrameworkProvider>(), Times.Once());
+            locatorMock.Verify(l => l.GetInstance<ResourceEndpointConfiguration>(), Times.Once());
+            locatorMock.Verify(l => l.GetInstance<ILogger>(), Times.Once());
+            locatorMock.Verify(l => l.GetInstance<IHtmlEncoder>(), Times.Once());
+            locatorMock.Verify(l => l.GetInstance<IPersistanceStore>(), Times.Once());
+            locatorMock.Verify(l => l.GetInstance<ISerializer>(), Times.Once());
+            locatorMock.Verify(l => l.GetAllInstances<IClientScript>(), Times.Once());
+            locatorMock.Verify(l => l.GetAllInstances<IPipelineInspector>(), Times.Once());
+            locatorMock.Verify(l => l.GetAllInstances<IResource>(), Times.Once());
+            locatorMock.Verify(l => l.GetAllInstances<ITab>(), Times.Once());
+            locatorMock.Verify(l => l.GetAllInstances<IRuntimePolicy>(), Times.Once());
+        }
+
+        [Fact]
+        public void LeverageServiceLocatorForGlimpseConfiguration()
+        {
+            var configMock = new Mock<IGlimpseConfiguration>();
+            var locatorMock = new Mock<IServiceLocator>();
+            locatorMock.Setup(l => l.GetInstance<IGlimpseConfiguration>()).Returns(configMock.Object);
+
+            var factory = new Factory(locatorMock.Object);
+
+            IGlimpseConfiguration config = factory.InstantiateConfiguration();
+
+            Assert.NotNull(config);
+            Assert.Equal(configMock.Object, config);
+
+            locatorMock.Verify(l => l.GetInstance<IGlimpseConfiguration>(), Times.Once());
         }
     }
 }

@@ -5,7 +5,7 @@ using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Core2.Framework
 {
-    public class GlimpseConfiguration
+    public class GlimpseConfiguration : IGlimpseConfiguration
     {
         //TODO: Add Sanitizer?
         public GlimpseConfiguration(IFrameworkProvider frameworkProvider, 

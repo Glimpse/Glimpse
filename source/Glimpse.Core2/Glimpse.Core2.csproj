@@ -133,6 +133,7 @@
     <Compile Include="Framework\Factory.cs" />
     <Compile Include="Framework\GlimpseMetadata.cs" />
     <Compile Include="Framework\IDiscoverableCollection.cs" />
+    <Compile Include="Framework\IGlimpseConfiguration.cs" />
     <Compile Include="Framework\IGlimpseRuntime.cs" />
     <Compile Include="Framework\IPersistanceStore.cs" />
     <Compile Include="Constants.cs" />

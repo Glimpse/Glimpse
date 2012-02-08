@@ -59,7 +59,7 @@ namespace Glimpse.Core2.Framework
             throw new GlimpseException("Unable to create Framework Provider.");
         }
 
-        public ResourceEndpointConfiguration InstantiateEndpointConfiguration()
+        public ResourceEndpointConfiguration InstantiateResourceEndpointConfiguration()
         {
             Contract.Ensures(Contract.Result<ResourceEndpointConfiguration>()!=null);
 
@@ -120,7 +120,7 @@ namespace Glimpse.Core2.Framework
             return Logger;
         }
 
-        public RuntimePolicy InstantiateBaseRuntimePolicy()
+        public RuntimePolicy InstantiateDefaultRuntimePolicy()
         {
             return Configuration.BaseRuntimePolicy;
         }
@@ -217,6 +217,32 @@ namespace Glimpse.Core2.Framework
             if (TrySingleInstanceFromServiceLocators(out result)) return result;
 
             return new Resource.Configuration();
+        }
+
+        public IGlimpseConfiguration InstantiateConfiguration()
+        {
+            Contract.Ensures(Contract.Result<IGlimpseConfiguration>() != null);
+
+            IGlimpseConfiguration result;
+            if (TrySingleInstanceFromServiceLocators(out result)) return result;
+
+            var frameworkProvider = InstantiateFrameworkProvider();
+            var endpointConfiguration = InstantiateResourceEndpointConfiguration();
+            var clientScripts = InstantiateClientScripts();
+            var logger = InstantiateLogger();
+            var policy = InstantiateDefaultRuntimePolicy();
+            var htmlEncoder = InstantiateHtmlEncoder();
+            var persistanceStore = InstantiatePersistanceStore();
+            var pipelineInspectors = InstantiatePipelineInspectors();
+            var resources = InstantiateResources();
+            var serializer = InstantiateSerializer();
+            var tabs = InstantiateTabs();
+            var runtimePolicies = InstantiateRuntimePolicies();
+            var defaultResource = InstantiateDefaultResource();
+
+            return new GlimpseConfiguration(frameworkProvider, endpointConfiguration, clientScripts, logger, policy,
+                                     htmlEncoder, persistanceStore, pipelineInspectors, resources, serializer, tabs,
+                                     runtimePolicies, defaultResource);
         }
 
         private IDiscoverableCollection<T> CreateDiscoverableCollection<T>(DiscoverableCollectionElement config)

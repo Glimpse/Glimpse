@@ -10,7 +10,7 @@ namespace Glimpse.Core2.Framework
 {
     public class GlimpseRuntime : IGlimpseRuntime
     {
-        public GlimpseRuntime(GlimpseConfiguration configuration)
+        public GlimpseRuntime(IGlimpseConfiguration configuration)
         {
             //Version is in major.minor.build format to support http://semver.org/
             //TODO: Consider adding configuration hash to version
@@ -19,7 +19,7 @@ namespace Glimpse.Core2.Framework
         }
 
 
-        public GlimpseConfiguration Configuration { get; set; }
+        public IGlimpseConfiguration Configuration { get; set; }
         
         private IDictionary<string, TabResult> TabResultsStore
         {
