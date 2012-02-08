@@ -118,6 +118,8 @@
     <Compile Include="Extensibility\SerializationConverterAttribute.cs" />
     <Compile Include="Extensibility\SerializationConverter.cs" />
     <Compile Include="Extensibility\StatusCodeResourceResult.cs" />
+    <Compile Include="Extensibility\TabBase.cs" />
+    <Compile Include="Extensibility\TabBaseOfT.cs" />
     <Compile Include="Extensibility\TabContext.cs" />
     <Compile Include="Extensibility\ILogger.cs" />
     <Compile Include="Extensibility\IRuntimePolicyContext.cs" />
@@ -150,12 +152,10 @@
     <Compile Include="Extensibility\IRuntimePolicy.cs" />
     <Compile Include="Extensibility\IResourceResult.cs" />
     <Compile Include="Extensibility\PipelineInspectorAttribute.cs" />
-    <Compile Include="Extensibility\TabAttribute.cs" />
     <Compile Include="Extensibility\IDataStore.cs" />
     <Compile Include="Extensibility\IResource.cs" />
     <Compile Include="Extensibility\IDocumentation.cs" />
     <Compile Include="Extensibility\ITab.cs" />
-    <Compile Include="Extensibility\ITabMetadata.cs" />
     <Compile Include="Extensibility\ISetup.cs" />
     <Compile Include="Extensibility\IPipelineInspector.cs" />
     <Compile Include="Extensibility\ISerializer.cs" />

@@ -3,17 +3,17 @@ using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.AspNet.Tab
 {
-    [Tab(RequestContextType=typeof(HttpContextBase))] //TODO: Remove System.ComponentModel.Composition reference
-    public class Request:ITab, IDocumentation
+    //TODO: Create AspTab
+    public class Request:TabBase<HttpContextBase>, IDocumentation
     {
-        public object GetData(ITabContext context)
+        public override object GetData(ITabContext context)
         {
             var httpContextBase = context.GetRequestContext<HttpContextBase>();
 
             return httpContextBase.Request;
         }
 
-        public string Name
+        public override string Name
         {
             get { return "Request"; }
         }

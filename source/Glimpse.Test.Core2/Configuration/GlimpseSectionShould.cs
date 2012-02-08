@@ -140,7 +140,32 @@ namespace Glimpse.Test.Core2.Configuration
 
             section.Resources = element;
 
-            Assert.Equal(element, section.PipelineInspectors);
+            Assert.Equal(element, section.Resources);
+        }
+
+        [Fact]
+        public void ReturnDefaultTabs()
+        {
+            var section = new GlimpseSection();
+
+            var element = section.Tabs;
+
+            Assert.NotNull(element);
+            Assert.True(element.AutoDiscover);
+            Assert.Empty(element.IgnoredTypes);
+            Assert.Empty(element.DiscoveryLocation);
+        }
+
+        [Fact]
+        public void GetSetTabs()
+        {
+            var section = new GlimpseSection();
+
+            var element = new DiscoverableCollectionElement();
+
+            section.Tabs = element;
+
+            Assert.Equal(element, section.Tabs);
         }
     }
 }

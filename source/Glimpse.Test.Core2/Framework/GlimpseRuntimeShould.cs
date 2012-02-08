@@ -64,7 +64,7 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void ExecutePluginsWithDefaultLifeCycle()
         {
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
@@ -79,9 +79,9 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void ExecutePluginsWithLifeCycleMismatch()
         {
-            Runtime.TabMetadataMock.Setup(m => m.LifeCycleSupport).Returns(LifeCycleSupport.BeginRequest);
+            Runtime.TabMock.Setup(m => m.LifeCycleSupport).Returns(LifeCycleSupport.BeginRequest);
 
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs(LifeCycleSupport.EndRequest);
@@ -96,7 +96,7 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void ExecutePluginsWithMatchingRuntimeContextType()
         {
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
@@ -111,9 +111,9 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void ExecutePluginsWithUnknownRuntimeContextType()
         {
-            Runtime.TabMetadataMock.Setup(m => m.RequestContextType).Returns<Type>(null);
+            Runtime.TabMock.Setup(m => m.RequestContextType).Returns<Type>(null);
 
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
@@ -129,9 +129,9 @@ namespace Glimpse.Test.Core2.Framework
         public void ExecutePluginsWithDuplicateCollectionEntries()
         {
             //Insert the same plugin multiple times
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
+            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
+            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
@@ -148,7 +148,7 @@ namespace Glimpse.Test.Core2.Framework
         {
             Runtime.TabMock.Setup(p => p.GetData(It.IsAny<ITabContext>())).Throws<DummyException>();
 
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
@@ -214,8 +214,8 @@ namespace Glimpse.Test.Core2.Framework
             var setupMock = Runtime.TabMock.As<ISetup>();
 
             //one tab needs setup, the other does not
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => new DummyTab(), Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
+            Runtime.Configuration.Tabs.Add(new DummyTab());
 
             Runtime.Initialize();
 
@@ -229,8 +229,8 @@ namespace Glimpse.Test.Core2.Framework
             setupMock.Setup(s => s.Setup()).Throws<DummyException>();
 
             //one tab needs setup, the other does not
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => new DummyTab(), Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
+            Runtime.Configuration.Tabs.Add(new DummyTab());
 
             Runtime.Initialize();
 
@@ -274,7 +274,7 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void PersistDataDuringEndRequest()
         {
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
@@ -287,7 +287,7 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void SerializeDataDuringEndRequest()
         {
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
@@ -299,7 +299,7 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void SetResponseHeaderDuringEndRequest()
         {
-            Runtime.Configuration.Tabs.Add(new Lazy<ITab, ITabMetadata>(() => Runtime.TabMock.Object, Runtime.TabMetadataMock.Object));
+            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
@@ -309,44 +309,15 @@ namespace Glimpse.Test.Core2.Framework
         }
 
         [Fact]
-        public void UpdateConfigurationWithChangeToAutoDiscovery()
-        {
-            Runtime.Configuration.Tabs.Discoverability.AutoDiscover = false; //being explicit for testing sake
-            var runtime = Runtime; //force instantiation of Runtime property
-
-            Assert.Equal(0, Runtime.Configuration.Tabs.Count);
-
-            Runtime.Configuration.Tabs.Discoverability.AutoDiscover = true; //being explicit for testing sake
-            runtime.UpdateConfiguration(Runtime.Configuration);
-
-            Assert.True(Runtime.Configuration.Tabs.Count > 0);
-        }
-
-        [Fact]
-        public void UpdateConfigurationWithoutAutoDiscovery()
-        {
-            Runtime.Configuration.Tabs.Discoverability.AutoDiscover = false; //being explicit for testing sake
-            var runtime = Runtime; //force instantiation of Runtime property
-
-            Assert.Equal(0, Runtime.Configuration.Tabs.Count);
-
-            runtime.UpdateConfiguration(Runtime.Configuration);
-
-            Assert.Equal(0, Runtime.Configuration.Tabs.Count);
-        }
-
-        [Fact]
         public void UpdateConfigurationWithAutoDiscovery()
         {
             var runtime = Runtime; //force instantiation of Runtime property
 
-            runtime.Configuration.Tabs.Discoverability.AutoDiscover = true;
             runtime.Configuration.RuntimePolicies.Discoverability.AutoDiscover = true;
             runtime.Configuration.SerializationConverters.Discoverability.AutoDiscover = true;
 
             runtime.UpdateConfiguration(runtime.Configuration);
 
-            Assert.True(runtime.Configuration.Tabs.Count > 0);
             Assert.True(runtime.Configuration.RuntimePolicies.Count > 0);
             Assert.True(runtime.Configuration.SerializationConverters.Count > 0);
         }

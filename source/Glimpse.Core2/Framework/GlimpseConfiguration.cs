@@ -17,7 +17,8 @@ namespace Glimpse.Core2.Framework
             IPersistanceStore persistanceStore,
             ICollection<IPipelineInspector> pipelineInspectors,
             ICollection<IResource> resources,
-            ISerializer serializer)
+            ISerializer serializer,
+            ICollection<ITab> tabs)
         {
             //TODO: Test building glimpse on clean VS install with contracts
             //TODO: Test building glimpse on teamcity with contracts
@@ -30,6 +31,7 @@ namespace Glimpse.Core2.Framework
             Contract.Requires<ArgumentNullException>(pipelineInspectors != null, "pipelineInspectors");
             Contract.Requires<ArgumentNullException>(resources != null, "resources");
             Contract.Requires<ArgumentNullException>(serializer != null, "serializer");
+            Contract.Requires<ArgumentNullException>(tabs != null, "tabs");
 
             //TODO: Refactor all these "new" calls to leverage a IOC container?
             Logger = logger;
@@ -41,7 +43,7 @@ namespace Glimpse.Core2.Framework
             ResourceEndpoint = endpointConfiguration;
             Resources = resources;
             Serializer = serializer;
-            Tabs = new DiscoverableLazyCollection<ITab, ITabMetadata>();
+            Tabs = tabs;
             RuntimePolicies = new DiscoverableLazyCollection<IRuntimePolicy, IRuntimePolicyMetadata>();
             BaseRuntimePolicy = baseRuntimePolicy;
             SerializationConverters = new DiscoverableCollection<ISerializationConverter>();
@@ -183,12 +185,12 @@ namespace Glimpse.Core2.Framework
             }
         }
 
-        private DiscoverableLazyCollection<ITab, ITabMetadata> tabs;
-        public DiscoverableLazyCollection<ITab, ITabMetadata> Tabs
+        private ICollection<ITab> tabs;
+        public ICollection<ITab> Tabs
         {
             get
             {
-                Contract.Ensures(Contract.Result<DiscoverableLazyCollection<ITab, ITabMetadata>>()!=null);
+                Contract.Ensures(Contract.Result<ICollection<ITab>>()!=null);
                 return tabs;
             }
             set

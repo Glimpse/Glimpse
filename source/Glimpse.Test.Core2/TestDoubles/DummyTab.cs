@@ -2,15 +2,14 @@
 
 namespace Glimpse.Test.Core2.TestDoubles
 {
-    [Tab(RequestContextType = typeof(DummyObjectContext))]
-    public class DummyTab:ITab
+    public class DummyTab:TabBase<DummyObjectContext>
     {
-        public object GetData(ITabContext context)
+        public override object GetData(ITabContext context)
         {
             throw new System.NotSupportedException("I am DummyTab");
         }
 
-        public string Name
+        public override string Name
         {
             get { return "Dummy Tab"; }
         }

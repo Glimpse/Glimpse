@@ -89,7 +89,6 @@
     <Compile Include="Configuration\TypeConverterShould.cs" />
     <Compile Include="Configuration\TypeElementShould.cs" />
     <Compile Include="DictionaryDataStoreAdapterShould.cs" />
-    <Compile Include="DiscoverabilityPolicyShould.cs" />
     <Compile Include="Extensibility\FileResourceResultShould.cs" />
     <Compile Include="Extensibility\JsonNetSerializationConverterShould.cs" />
     <Compile Include="Extensibility\JsonResourceResultShould.cs" />
@@ -98,13 +97,10 @@
     <Compile Include="Extensibility\RuntimePolicyContextShould.cs" />
     <Compile Include="Extensibility\SerializationConverterShould.cs" />
     <Compile Include="Extensibility\TabContextShould.cs" />
-    <Compile Include="Extensibility\TabAttributeShould.cs" />
     <Compile Include="Extensions\EnumExtensionsShould.cs" />
     <Compile Include="Extensions\TestingExtensions.cs" />
-    <Compile Include="DiscoverableCollectionShould.cs" />
     <Compile Include="Framework\FactoryShould.cs" />
     <Compile Include="Framework\GlimpseConfigurationShould.cs" />
-    <Compile Include="DiscoverableLazyCollectionShould.cs" />
     <Compile Include="Framework\GlimpseRuntimeShould.cs" />
     <Compile Include="Framework\ReflectionDiscoverableCollectionShould.cs" />
     <Compile Include="Framework\ResourceParametersShould.cs" />

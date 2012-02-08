@@ -3,15 +3,14 @@ using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Test.Core2.TestDoubles
 {
-    [Tab(RequestContextType = typeof(DummyObjectContext))]
-    public class DummySetupTab : ITab, ISetup
+    public class DummySetupTab : TabBase<DummyObjectContext>, ISetup
     {
-        public object GetData(ITabContext context)
+        public override object GetData(ITabContext context)
         {
             throw new NotSupportedException("I am DummySetupTab");
         }
 
-        public string Name
+        public override string Name
         {
             get { return "Dummy Setup Tab"; }
         }

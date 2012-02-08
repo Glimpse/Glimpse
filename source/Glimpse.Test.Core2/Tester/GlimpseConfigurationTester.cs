@@ -16,7 +16,8 @@ namespace Glimpse.Test.Core2.Tester
                                            Mock<IPersistanceStore> persistanceStoreMock,
                                            IDiscoverableCollection<IPipelineInspector> pipelineInspectorsStub,
                                            IDiscoverableCollection<IResource> resourcesStub,
-                                           Mock<ISerializer> serializerMock)
+                                           Mock<ISerializer> serializerMock,
+                                           IDiscoverableCollection<ITab> tabsStub)
             : base(
                 frameworkProviderMock.Object,
                 endpointConfigurationMock.Object,
@@ -27,7 +28,8 @@ namespace Glimpse.Test.Core2.Tester
                 persistanceStoreMock.Object,
                 pipelineInspectorsStub,
                 resourcesStub,
-                serializerMock.Object)
+                serializerMock.Object,
+                tabsStub)
         {
             FrameworkProviderMock = frameworkProviderMock;
             EndpointConfigMock = endpointConfigurationMock;
@@ -51,7 +53,8 @@ namespace Glimpse.Test.Core2.Tester
                                                   new ReflectionDiscoverableCollection<IPipelineInspector>(
                                                       loggerMock.Object),
                                                   new ReflectionDiscoverableCollection<IResource>(loggerMock.Object),
-                                                  new Mock<ISerializer>());
+                                                  new Mock<ISerializer>(),
+                                                  new ReflectionDiscoverableCollection<ITab>(loggerMock.Object));
         }
 
         public Mock<ResourceEndpointConfiguration> EndpointConfigMock { get; set; }

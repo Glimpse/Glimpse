@@ -176,6 +176,16 @@ namespace Glimpse.Core2.Framework
             return new JsonNetSerializer();
         }
 
+        public ICollection<ITab> InstantiateTabs()
+        {
+            Contract.Ensures(Contract.Result<ICollection<ITab>>()!=null);
+
+            ICollection<ITab> tabs;
+            if (TryAllInstancesFromServiceLocators(out tabs)) return tabs;
+
+            return CreateDiscoverableCollection<ITab>(Configuration.Tabs);
+        }
+
         private IDiscoverableCollection<T> CreateDiscoverableCollection<T>(DiscoverableCollectionElement config)
         {
             var discoverableCollection = new ReflectionDiscoverableCollection<T>(InstantiateLogger());

@@ -12,7 +12,6 @@ namespace Glimpse.Test.Core2.Tester
         public Mock<IFrameworkProvider> FrameworkProviderMock { get; set; }
         public Mock<ResourceEndpointConfiguration> EndpointConfigMock { get; set; }
         public Mock<IDataStore> HttpRequestStoreMock { get; set; }
-        public Mock<ITabMetadata> TabMetadataMock { get; set; }
         public Mock<ITab> TabMock { get; set; }
         public Mock<IPipelineInspector> PipelineInspectorMock { get; set; }
         public Mock<ISerializer> SerializerMock { get; set; }
@@ -32,7 +31,6 @@ namespace Glimpse.Test.Core2.Tester
             FrameworkProviderMock = frameworkProviderMock;
             EndpointConfigMock = endpointConfigMock;
             HttpRequestStoreMock = new Mock<IDataStore>();
-            TabMetadataMock = new Mock<ITabMetadata>().Setup();
             TabMock = new Mock<ITab>().Setup();
             PipelineInspectorMock = new Mock<IPipelineInspector>();
             SerializerMock = new Mock<ISerializer>();
@@ -82,9 +80,10 @@ namespace Glimpse.Test.Core2.Tester
             var pipelineInspectors = new ReflectionDiscoverableCollection<IPipelineInspector>(loggerMock.Object);
             var resources = new ReflectionDiscoverableCollection<IResource>(loggerMock.Object);
             var serializerMock = new Mock<ISerializer>();
+            var tabs = new ReflectionDiscoverableCollection<ITab>(loggerMock.Object);
 
             var configuration =
-                new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfigMock.Object, clientScripts, loggerMock.Object, RuntimePolicy.On, htmlEncoderMock.Object, persistanceStoreMock.Object, pipelineInspectors, resources, serializerMock.Object).
+                new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfigMock.Object, clientScripts, loggerMock.Object, RuntimePolicy.On, htmlEncoderMock.Object, persistanceStoreMock.Object, pipelineInspectors, resources, serializerMock.Object, tabs).
                     TurnOffAutoDiscover();
 
 

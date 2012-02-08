@@ -7,10 +7,10 @@ using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.AspNet.Tab
 {
-    [Tab(RequestContextType = typeof (HttpContextBase))]
-    public class Routes : ITab, IDocumentation
+    //TODO: Use AspTab
+    public class Routes : TabBase<HttpContextBase>, IDocumentation
     {
-        public object GetData(ITabContext context)
+        public override object GetData(ITabContext context)
         {
             var result = new List<RouteInstance>();
 
@@ -27,7 +27,7 @@ namespace Glimpse.AspNet.Tab
             return result;
         }
 
-        public string Name
+        public override string Name
         {
             get { return "Routes"; }
         }

@@ -243,12 +243,12 @@ namespace Glimpse.Core2.Framework
             //Only use tabs that either don't specify a specific context type, or have a context type that matches the current framework provider's.
             var runtimeTabs =
                 Configuration.Tabs.Where(
-                    p =>
-                    p.Metadata.RequestContextType == null ||
-                    frameworkProviderRuntimeContextType.IsSubclassOf(p.Metadata.RequestContextType) ||
-                    p.Metadata.RequestContextType == frameworkProviderRuntimeContextType);
+                    tab =>
+                    tab.RequestContextType == null ||
+                    frameworkProviderRuntimeContextType.IsSubclassOf(tab.RequestContextType) ||
+                    tab.RequestContextType == frameworkProviderRuntimeContextType);
 
-            var supportedRuntimeTabs = runtimeTabs.Where(p => p.Metadata.LifeCycleSupport.HasFlag(support));
+            var supportedRuntimeTabs = runtimeTabs.Where(p => p.LifeCycleSupport.HasFlag(support));
             var tabResultsStore = TabResultsStore;
             var logger = Configuration.Logger;
 
@@ -262,11 +262,10 @@ namespace Glimpse.Core2.Framework
 
             foreach (var tab in supportedRuntimeTabs)
             {
-                var tabValue = tab.Value;
-                var key = tabValue.GetType().FullName;
+                var key = tab.GetType().FullName;
                 try
                 {
-                    var result = new TabResult(tabValue.Name, tabValue.GetData(tabContext));
+                    var result = new TabResult(tab.Name, tab.GetData(tabContext));
 
                     if (tabResultsStore.ContainsKey(key))
                         tabResultsStore[key] = result;
@@ -287,7 +286,7 @@ namespace Glimpse.Core2.Framework
             if (policy == RuntimePolicy.Off) return false;
 
 
-            var tabsThatRequireSetup = Configuration.Tabs.Where(p => p.Value is ISetup).Select(p => p.Value);
+            var tabsThatRequireSetup = Configuration.Tabs.Where(tab => tab is ISetup).Select(tab => tab);
             foreach (ISetup tab in tabsThatRequireSetup)
             {
                 try
@@ -324,11 +323,6 @@ namespace Glimpse.Core2.Framework
         public void UpdateConfiguration(GlimpseConfiguration configuration)
         {
             //TODO: destruct pipelineInitializers and tabs
-            var tabs = configuration.Tabs;
-            if (tabs.Discoverability.AutoDiscover)
-                tabs.Discoverability.Discover();
-
-
             var runtimePolicies = configuration.RuntimePolicies;
             if (runtimePolicies.Discoverability.AutoDiscover)
                 runtimePolicies.Discoverability.Discover();

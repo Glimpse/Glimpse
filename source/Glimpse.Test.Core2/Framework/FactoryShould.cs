@@ -442,5 +442,32 @@ namespace Glimpse.Test.Core2.Framework
             locatorMock.Verify(l => l.GetInstance<ISerializer>(), Times.Once());
         }
 
+        [Fact]
+        public void InstantiateTabsWithReflectionDiscoverableCollection()
+        {
+            var locatorMock = new Mock<IServiceLocator>();
+            var factory = new Factory(locatorMock.Object);
+            ICollection<ITab> tabs = factory.InstantiateTabs();
+
+            Assert.NotNull(tabs);
+            Assert.NotNull(tabs as ReflectionDiscoverableCollection<ITab>);
+        }
+
+        [Fact]
+        public void LeverageServiceLocatorForTabs()
+        {
+            ICollection<ITab> tabs = new List<ITab>();
+
+            var locatorMock = new Mock<IServiceLocator>();
+            locatorMock.Setup(l => l.GetAllInstances<ITab>()).Returns(tabs);
+
+            var factory = new Factory(locatorMock.Object);
+
+            var result = factory.InstantiateTabs();
+
+            Assert.Equal(tabs, result);
+            locatorMock.Verify(l => l.GetAllInstances<ITab>(), Times.Once());
+        }
+
     }
 }

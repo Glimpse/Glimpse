@@ -19,24 +19,17 @@ namespace Glimpse.Test.Core2.Extensions
             return frameworkProvider;
         }
 
-        public static Mock<ITabMetadata> Setup(this Mock<ITabMetadata> metadata)
-        {
-            metadata.Setup(m => m.RequestContextType).Returns(typeof(DummyObjectContext));
-            metadata.Setup(m => m.LifeCycleSupport).Returns(LifeCycleSupport.EndRequest);
-
-            return metadata;
-        }
-
         public static Mock<ITab> Setup(this Mock<ITab> tab)
         {
             tab.Setup(p => p.GetData(It.IsAny<ITabContext>())).Returns("a result");
+            tab.Setup(m => m.RequestContextType).Returns(typeof(DummyObjectContext));
+            tab.Setup(m => m.LifeCycleSupport).Returns(LifeCycleSupport.EndRequest);
 
             return tab;
         }
 
         public static GlimpseConfiguration TurnOffAutoDiscover(this GlimpseConfiguration configuration)
         {
-            configuration.Tabs.Discoverability.AutoDiscover = false;
             configuration.RuntimePolicies.Discoverability.AutoDiscover = false;
             configuration.SerializationConverters.Discoverability.AutoDiscover = false;
 

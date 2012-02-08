@@ -32,6 +32,13 @@ namespace Glimpse.Core2.Configuration
             set { base["resources"] = value; }
         }
 
+        [ConfigurationProperty("tabs")]
+        public DiscoverableCollectionElement Tabs
+        {
+            get { return (DiscoverableCollectionElement)base["tabs"]; }
+            set { base["tabs"] = value; }
+        }
+
         [ConfigurationProperty("baseRuntimePolicy", DefaultValue = RuntimePolicy.Off)]
         public RuntimePolicy BaseRuntimePolicy
         {
