@@ -27,12 +27,5 @@ namespace Glimpse.Test.Core2.Extensions
 
             return tab;
         }
-
-        public static GlimpseConfiguration TurnOffAutoDiscover(this GlimpseConfiguration configuration)
-        {
-            configuration.SerializationConverters.Discoverability.AutoDiscover = false;
-
-            return configuration;
-        }
     }
 }

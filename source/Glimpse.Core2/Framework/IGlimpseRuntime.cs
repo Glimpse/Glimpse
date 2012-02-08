@@ -15,7 +15,6 @@ namespace Glimpse.Core2.Framework
         void ExecuteTabs();
         void ExecuteTabs(LifeCycleSupport support);
         bool Initialize();
-        void UpdateConfiguration(GlimpseConfiguration configuration);
         bool IsInitialized { get; }
     }
 }

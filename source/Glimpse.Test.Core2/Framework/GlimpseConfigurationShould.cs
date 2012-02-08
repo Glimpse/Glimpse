@@ -73,12 +73,6 @@ namespace Glimpse.Test.Core2.Framework
         }
 
         [Fact]
-        public void CreateDefaultSerializationConverters()
-        {
-            Assert.NotNull(Configuration.SerializationConverters);
-        }
-
-        [Fact]
         public void CreateDefaultResourceName()
         {
             Assert.True(!string.IsNullOrEmpty(Configuration.DefaultResourceName));
@@ -106,12 +100,6 @@ namespace Glimpse.Test.Core2.Framework
         public void NotDiscoverValidators()
         {
             Assert.Equal(0, Configuration.RuntimePolicies.Count);
-        }
-
-        [Fact]
-        public void NotDiscoverSerlizationConverters()
-        {
-            Assert.Equal(0, Configuration.SerializationConverters.Count);
         }
 
         [Fact(Skip = "Test all Contract.Requires clauses in GlimpseConfiguration ctor")]
@@ -184,12 +172,6 @@ namespace Glimpse.Test.Core2.Framework
         public void ClientScriptsCannotBeNull()
         {
             Assert.Throws<ArgumentNullException>(() => Configuration.ClientScripts = null);
-        }
-
-        [Fact]
-        public void SerializationConvertersCannotBeNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => Configuration.SerializationConverters = null);
         }
 
         [Fact]

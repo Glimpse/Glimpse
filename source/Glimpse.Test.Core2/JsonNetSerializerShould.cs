@@ -72,7 +72,7 @@ namespace Glimpse.Test.Core2
             var converter1 = new Mock<ISerializationConverter>();
             var converter2 = new Mock<ISerializationConverter>();
 
-            ISerializer serializer = new JsonNetSerializer();
+            var serializer = new JsonNetSerializer();
 
             serializer.RegisterSerializationConverters(new[]{converter1.Object, converter2.Object});
         }
@@ -80,7 +80,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void RegisterEmptyCollectionOfISerializationConverters()
         {
-            ISerializer serializer = new JsonNetSerializer();
+            var serializer = new JsonNetSerializer();
 
             serializer.RegisterSerializationConverters(Enumerable.Empty<ISerializationConverter>());
         }
@@ -88,7 +88,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void ThrowWhenRegisterNullCollectionOfISerializationConverters()
         {
-            ISerializer serializer = new JsonNetSerializer();
+            var serializer = new JsonNetSerializer();
 
             Assert.Throws<ArgumentNullException>(()=>serializer.RegisterSerializationConverters(null));
         }

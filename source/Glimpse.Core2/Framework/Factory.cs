@@ -173,7 +173,10 @@ namespace Glimpse.Core2.Framework
             ISerializer result;
             if (TrySingleInstanceFromServiceLocators(out result)) return result;
 
-            return new JsonNetSerializer();
+            result = new JsonNetSerializer();
+            result.RegisterSerializationConverters(InstantiateSerializationConverters());
+
+            return result;
         }
 
         public ICollection<ITab> InstantiateTabs()
@@ -190,10 +193,20 @@ namespace Glimpse.Core2.Framework
         {
             Contract.Ensures(Contract.Result<ICollection<IRuntimePolicy>>()!=null);
 
-            ICollection<IRuntimePolicy> policies;
-            if (TryAllInstancesFromServiceLocators(out policies)) return policies;
+            ICollection<IRuntimePolicy> result;
+            if (TryAllInstancesFromServiceLocators(out result)) return result;
 
             return CreateDiscoverableCollection<IRuntimePolicy>(Configuration.RuntimePolicies);
+        }
+
+        public ICollection<ISerializationConverter> InstantiateSerializationConverters()
+        {
+            Contract.Ensures(Contract.Result<ICollection<ISerializationConverter>>()!=null);
+
+            ICollection<ISerializationConverter> result;
+            if (TryAllInstancesFromServiceLocators(out result)) return result;
+
+            return CreateDiscoverableCollection<ISerializationConverter>(Configuration.SerializationConverters);
         }
 
         private IDiscoverableCollection<T> CreateDiscoverableCollection<T>(DiscoverableCollectionElement config)
@@ -213,6 +226,8 @@ namespace Glimpse.Core2.Framework
 
         private bool TrySingleInstanceFromServiceLocators<T>(out T instance) where T: class
         {
+            Contract.Ensures(!Contract.Result<bool>() || Contract.ValueAtReturn(out instance) != null);
+
             if (UserServiceLocator != null)
             {
                 instance = UserServiceLocator.GetInstance<T>();
@@ -231,6 +246,8 @@ namespace Glimpse.Core2.Framework
 
         private bool TryAllInstancesFromServiceLocators<T>(out ICollection<T> instance) where T : class
         {
+            Contract.Ensures(!Contract.Result<bool>() || Contract.ValueAtReturn(out instance) != null);
+
             IEnumerable<T> result;
             if (UserServiceLocator != null)
             {

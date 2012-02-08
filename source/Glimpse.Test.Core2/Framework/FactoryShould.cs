@@ -443,6 +443,21 @@ namespace Glimpse.Test.Core2.Framework
         }
 
         [Fact]
+        public void RegisterConvertersWithSerializer()
+        {
+            var converters = new List<ISerializationConverter>();
+
+            var locatorMock = new Mock<IServiceLocator>();
+            locatorMock.Setup(l => l.GetAllInstances<ISerializationConverter>()).Returns(converters);
+
+            var factory = new Factory(locatorMock.Object);
+
+            factory.InstantiateSerializer();
+
+            locatorMock.Verify(l=>l.GetAllInstances<ISerializationConverter>(), Times.Once());
+        }
+
+        [Fact]
         public void InstantiateTabsWithReflectionDiscoverableCollection()
         {
             var locatorMock = new Mock<IServiceLocator>();
@@ -470,7 +485,7 @@ namespace Glimpse.Test.Core2.Framework
         }
 
         [Fact]
-        public void InstantiateRuntimePoliciessWithReflectionDiscoverableCollection()
+        public void InstantiateRuntimePoliciesWithReflectionDiscoverableCollection()
         {
             var locatorMock = new Mock<IServiceLocator>();
             var factory = new Factory(locatorMock.Object);
@@ -494,6 +509,33 @@ namespace Glimpse.Test.Core2.Framework
 
             Assert.Equal(policies, result);
             locatorMock.Verify(l => l.GetAllInstances<IRuntimePolicy>(), Times.Once());
+        }
+
+        [Fact]
+        public void InstantiateSerializationConvertersWithReflectionDiscoverableCollection()
+        {
+            var locatorMock = new Mock<IServiceLocator>();
+            var factory = new Factory(locatorMock.Object);
+            ICollection<ISerializationConverter> converters = factory.InstantiateSerializationConverters();
+
+            Assert.NotNull(converters);
+            Assert.NotNull(converters as ReflectionDiscoverableCollection<ISerializationConverter>);
+        }
+
+        [Fact]
+        public void LeverageServiceLocatorForSerializationConverters()
+        {
+            ICollection<ISerializationConverter> converters = new List<ISerializationConverter>();
+
+            var locatorMock = new Mock<IServiceLocator>();
+            locatorMock.Setup(l => l.GetAllInstances<ISerializationConverter>()).Returns(converters);
+
+            var factory = new Factory(locatorMock.Object);
+
+            var result = factory.InstantiateSerializationConverters();
+
+            Assert.Equal(converters, result);
+            locatorMock.Verify(l => l.GetAllInstances<ISerializationConverter>(), Times.Once());
         }
     }
 }

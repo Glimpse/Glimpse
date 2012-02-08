@@ -308,29 +308,6 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.FrameworkProviderMock.Verify(fp => fp.SetHttpResponseHeader(Constants.HttpResponseHeader, It.IsAny<string>()));
         }
 
-        [Fact]
-        public void UpdateConfigurationWithAutoDiscovery()
-        {
-            var runtime = Runtime; //force instantiation of Runtime property
-
-            runtime.Configuration.SerializationConverters.Discoverability.AutoDiscover = true;
-
-            runtime.UpdateConfiguration(runtime.Configuration);
-
-            Assert.True(runtime.Configuration.SerializationConverters.Count > 0);
-        }
-
-        [Fact]
-        public void UpdateConfigurationRegistersSerializerConverters()
-        {
-            var runtime = Runtime; //force instantiation of Runtime property
-
-            runtime.Configuration.SerializationConverters.Discoverability.AutoDiscover = true;
-
-            runtime.UpdateConfiguration(runtime.Configuration);
-
-            runtime.SerializerMock.Verify(s=>s.RegisterSerializationConverters(It.IsAny<IEnumerable<ISerializationConverter>>()), Times.Once());
-        }
 
         [Fact]
         public void ExecuteDefaultResource()
@@ -486,7 +463,6 @@ namespace Glimpse.Test.Core2.Framework
             Assert.True(firstMode);
 
             Runtime.Configuration.BaseRuntimePolicy = RuntimePolicy.On;
-            Runtime.UpdateConfiguration(Runtime.Configuration);
 
             Runtime.BeginRequest();
 

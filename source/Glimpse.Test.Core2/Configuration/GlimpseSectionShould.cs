@@ -192,5 +192,30 @@ namespace Glimpse.Test.Core2.Configuration
 
             Assert.Equal(element, section.RuntimePolicies);
         }
+
+        [Fact]
+        public void ReturnDefaultSerializationConverters()
+        {
+            var section = new GlimpseSection();
+
+            var element = section.SerializationConverters;
+
+            Assert.NotNull(element);
+            Assert.True(element.AutoDiscover);
+            Assert.Empty(element.IgnoredTypes);
+            Assert.Empty(element.DiscoveryLocation);
+        }
+
+        [Fact]
+        public void GetSetSerializationConverters()
+        {
+            var section = new GlimpseSection();
+
+            var element = new DiscoverableCollectionElement { AutoDiscover = false };
+
+            section.SerializationConverters = element;
+
+            Assert.Equal(element, section.SerializationConverters);
+        }
     }
 }

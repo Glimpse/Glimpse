@@ -15,7 +15,7 @@ namespace Glimpse.Core2.Framework
             //Version is in major.minor.build format to support http://semver.org/
             //TODO: Consider adding configuration hash to version
             Version = GetType().Assembly.GetName().Version.ToString(3);
-            UpdateConfiguration(configuration);
+            Configuration = configuration;
         }
 
 
@@ -318,19 +318,6 @@ namespace Glimpse.Core2.Framework
             IsInitialized = true;
 
             return policy != RuntimePolicy.Off;
-        }
-
-        public void UpdateConfiguration(GlimpseConfiguration configuration)
-        {
-            //TODO: destruct pipelineInitializers and tabs
-            var serializationConverters = configuration.SerializationConverters;
-            if (serializationConverters.Discoverability.AutoDiscover)
-            {
-                serializationConverters.Discoverability.Discover();
-                configuration.Serializer.RegisterSerializationConverters(serializationConverters);
-            }
-
-            Configuration = configuration;
         }
 
         private RuntimePolicy GetRuntimePolicy(RuntimeEvent runtimeEvent)

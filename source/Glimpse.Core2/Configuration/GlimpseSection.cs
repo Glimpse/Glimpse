@@ -21,35 +21,42 @@ namespace Glimpse.Core2.Configuration
         [ConfigurationProperty("pipelineInspectors")]
         public DiscoverableCollectionElement PipelineInspectors
         {
-            get { return (DiscoverableCollectionElement)base["pipelineInspectors"]; }
+            get { return (DiscoverableCollectionElement) base["pipelineInspectors"]; }
             set { base["pipelineInspectors"] = value; }
         }
 
         [ConfigurationProperty("resources")]
         public DiscoverableCollectionElement Resources
         {
-            get { return (DiscoverableCollectionElement)base["resources"]; }
+            get { return (DiscoverableCollectionElement) base["resources"]; }
             set { base["resources"] = value; }
         }
 
         [ConfigurationProperty("tabs")]
         public DiscoverableCollectionElement Tabs
         {
-            get { return (DiscoverableCollectionElement)base["tabs"]; }
+            get { return (DiscoverableCollectionElement) base["tabs"]; }
             set { base["tabs"] = value; }
         }
 
         [ConfigurationProperty("runtimePolicies")]
         public DiscoverableCollectionElement RuntimePolicies
         {
-            get { return (DiscoverableCollectionElement)base["runtimePolicies"]; }
+            get { return (DiscoverableCollectionElement) base["runtimePolicies"]; }
             set { base["runtimePolicies"] = value; }
+        }
+
+        [ConfigurationProperty("serializationConverters")]
+        public DiscoverableCollectionElement SerializationConverters
+        {
+            get { return (DiscoverableCollectionElement) base["serializationConverters"]; }
+            set { base["serializationConverters"] = value; }
         }
 
         [ConfigurationProperty("baseRuntimePolicy", DefaultValue = RuntimePolicy.Off)]
         public RuntimePolicy BaseRuntimePolicy
         {
-            get { return (RuntimePolicy)base["baseRuntimePolicy"]; }
+            get { return (RuntimePolicy) base["baseRuntimePolicy"]; }
             set { base["baseRuntimePolicy"] = value; }
         }
     }

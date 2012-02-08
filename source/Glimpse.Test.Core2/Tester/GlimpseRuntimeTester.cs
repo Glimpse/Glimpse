@@ -85,8 +85,7 @@ namespace Glimpse.Test.Core2.Tester
             var policies = new ReflectionDiscoverableCollection<IRuntimePolicy>(loggerMock.Object);
 
             var configuration =
-                new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfigMock.Object, clientScripts, loggerMock.Object, RuntimePolicy.On, htmlEncoderMock.Object, persistanceStoreMock.Object, pipelineInspectors, resources, serializerMock.Object, tabs, policies).
-                    TurnOffAutoDiscover();
+                new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfigMock.Object, clientScripts, loggerMock.Object, RuntimePolicy.On, htmlEncoderMock.Object, persistanceStoreMock.Object, pipelineInspectors, resources, serializerMock.Object, tabs, policies);
 
 
             return new GlimpseRuntimeTester(configuration, frameworkProviderMock, endpointConfigMock);

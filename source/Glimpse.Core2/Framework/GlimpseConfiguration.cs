@@ -48,7 +48,6 @@ namespace Glimpse.Core2.Framework
             Tabs = tabs;
             RuntimePolicies = runtimePolicies;
             BaseRuntimePolicy = baseRuntimePolicy;
-            SerializationConverters = new DiscoverableCollection<ISerializationConverter>();
             DefaultResourceName = Resource.Configuration.InternalName;
         }
 
@@ -214,21 +213,6 @@ namespace Glimpse.Core2.Framework
             {
                 Contract.Requires<ArgumentNullException>(value!=null,"value");
                 runtimePolicies = value;
-            }
-        }
-
-        private DiscoverableCollection<ISerializationConverter> serializationConverters;
-        public DiscoverableCollection<ISerializationConverter> SerializationConverters
-        {
-            get
-            {
-                Contract.Ensures(Contract.Result<DiscoverableCollection<ISerializationConverter>>()!=null);
-                return serializationConverters;
-            }
-            set
-            {
-                Contract.Requires<ArgumentNullException>(value!=null, "value");
-                serializationConverters = value;
             }
         }
 
