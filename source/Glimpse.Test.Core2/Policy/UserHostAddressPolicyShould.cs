@@ -17,5 +17,13 @@ namespace Glimpse.Test.Core2.Policy
 
             Assert.Throws<NotSupportedException>(() => policy.Execute(contextMock.Object));
         }
+
+        [Fact]
+        public void ExecuteOnBeginRequest()
+        {
+            var policy = new UserHostAddressPolicy();
+
+            Assert.Equal(RuntimeEvent.BeginRequest, policy.ExecuteOn);
+        }
     }
 }

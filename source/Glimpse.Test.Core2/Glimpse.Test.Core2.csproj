@@ -64,7 +64,6 @@
       <HintPath>..\..\packages\Newtonsoft.Json.4.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -96,6 +95,7 @@
     <Compile Include="Extensibility\ResourceEndpointConfigurationShould.cs" />
     <Compile Include="Extensibility\RuntimePolicyContextShould.cs" />
     <Compile Include="Extensibility\SerializationConverterShould.cs" />
+    <Compile Include="Extensibility\TabBaseShould.cs" />
     <Compile Include="Extensibility\TabContextShould.cs" />
     <Compile Include="Extensions\EnumExtensionsShould.cs" />
     <Compile Include="Extensions\TestingExtensions.cs" />
@@ -131,6 +131,7 @@
     <Compile Include="Tester\AjaxPolicyTester.cs" />
     <Compile Include="Tester\ApplicationPersistanceStoreTester.cs" />
     <Compile Include="Tester\ContentTypePolicyTester.cs" />
+    <Compile Include="Tester\ControlCookiePolicyTester.cs" />
     <Compile Include="Tester\GlimpseConfigurationTester.cs" />
     <Compile Include="Tester\GlimpseRuntimeTester.cs" />
     <Compile Include="Tester\ResourceParametersTester.cs" />

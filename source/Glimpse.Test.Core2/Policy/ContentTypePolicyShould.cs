@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Glimpse.Core2;
+using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Policy;
 using Glimpse.Test.Core2.TestDoubles;
 using Glimpse.Test.Core2.Tester;
@@ -80,6 +81,13 @@ namespace Glimpse.Test.Core2.Policy
         public void ThrowExceptionWhenConstructedWithNullParameter()
         {
             Assert.Throws<ArgumentNullException>(() => new ContentTypePolicy(null));
+        }
+
+        [Fact]
+        public void ExecuteOnEndRequest()
+        {
+            Assert.Equal(RuntimeEvent.EndRequest, Policy.ExecuteOn);
+            
         }
     }
 }

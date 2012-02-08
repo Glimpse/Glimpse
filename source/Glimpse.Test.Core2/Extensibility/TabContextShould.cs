@@ -1,6 +1,6 @@
 using System;
-using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
+using Glimpse.Core2.Framework;
 using Glimpse.Test.Core2.TestDoubles;
 using Moq;
 using Xunit;
@@ -15,7 +15,7 @@ namespace Glimpse.Test.Core2.Extensibility
             RequestContext = new DummyObjectContext();
             PluginStoreMock = new Mock<IDataStore>();
             LoggerMock = new Mock<ILogger>();
-            PipelineInspectors = new DiscoverableCollection<IPipelineInspector>
+            PipelineInspectors = new ReflectionDiscoverableCollection<IPipelineInspector>(LoggerMock.Object)
                                      {
                                          new DummyPipelineInspector1()
                                      };
@@ -23,7 +23,7 @@ namespace Glimpse.Test.Core2.Extensibility
 
 
 
-        private DiscoverableCollection<IPipelineInspector> PipelineInspectors { get; set; }
+        private IDiscoverableCollection<IPipelineInspector> PipelineInspectors { get; set; }
 
         private Mock<IDataStore> PluginStoreMock { get; set; }
 

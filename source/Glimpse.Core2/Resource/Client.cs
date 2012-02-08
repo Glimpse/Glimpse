@@ -5,7 +5,6 @@ using Glimpse.Core2.Framework;
 
 namespace Glimpse.Core2.Resource
 {
-    [Resource]
     public class Client:IResource
     {
         internal const string InternalName = "glimpse.js";

@@ -1,5 +1,6 @@
 ﻿using System;
 using Glimpse.Core2;
+using Glimpse.Core2.Extensibility;
 using Glimpse.Test.Core2.Tester;
 using Moq;
 using Xunit;
@@ -49,7 +50,12 @@ namespace Glimpse.Test.Core2.Policy
         public void ThrowArgumentNullExceptionWithMissingPolicyContext()
         {
             Assert.Throws<ArgumentNullException>(()=>Policy.Execute(null));
+        }
 
+        [Fact]
+        public void ExecuteOnBeginRequest()
+        {
+            Assert.Equal(RuntimeEvent.BeginRequest, Policy.ExecuteOn);
         }
     }
 }

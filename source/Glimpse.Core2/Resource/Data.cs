@@ -6,7 +6,6 @@ using Glimpse.Core2.Framework;
 
 namespace Glimpse.Core2.Resource
 {
-    [Resource]
     public class Data:IResource
     {
         internal const string InternalName = "data.js";

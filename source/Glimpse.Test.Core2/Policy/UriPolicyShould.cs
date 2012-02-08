@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Glimpse.Core2;
+using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Policy;
 using Glimpse.Test.Core2.TestDoubles;
 using Glimpse.Test.Core2.Tester;
@@ -75,6 +76,13 @@ namespace Glimpse.Test.Core2.Policy
             Assert.Equal(RuntimePolicy.Off, Policy.Execute(Policy.ContextMock.Object));
             
             Policy.LoggerMock.Verify(l=>l.Warn(It.IsAny<string>(), exception), Times.Once());
+        }
+
+        [Fact]
+        public void ExecuteOnBeginRequest()
+        {
+            Assert.Equal(RuntimeEvent.BeginRequest, Policy.ExecuteOn);
+            
         }
     }
 }

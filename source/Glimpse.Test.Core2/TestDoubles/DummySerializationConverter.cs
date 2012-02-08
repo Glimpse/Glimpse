@@ -4,7 +4,6 @@ using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Test.Core2.TestDoubles
 {
-    [SerializationConverter]
     public class DummySerializationConverter:ISerializationConverter
     {
         public IEnumerable<Type> SupportedTypes

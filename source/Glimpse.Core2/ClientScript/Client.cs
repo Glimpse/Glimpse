@@ -2,7 +2,6 @@
 
 namespace Glimpse.Core2.ClientScript
 {
-    [ClientScript]
     public class Client:IDynamicClientScript
     {
         public ScriptOrder Order
