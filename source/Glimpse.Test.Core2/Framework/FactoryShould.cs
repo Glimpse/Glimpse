@@ -58,13 +58,6 @@ namespace Glimpse.Test.Core2.Framework
         }
 
         [Fact]
-        public void InstantiateRuntimeReturnsDefaultInstance()
-        {
-            var factory = new Factory();
-            Assert.Throws<NotImplementedException>(() => factory.InstantiateRuntime());
-        }
-
-        [Fact]
         public void InstantiateFrameworkProviderLeveragesIServiceLocator()
         {
             var providerMock = new Mock<IFrameworkProvider>();
@@ -615,6 +608,41 @@ namespace Glimpse.Test.Core2.Framework
             Assert.Equal(configMock.Object, config);
 
             locatorMock.Verify(l => l.GetInstance<IGlimpseConfiguration>(), Times.Once());
+        }
+
+        [Fact]
+        public void InstantiateRuntimeReturnsDefaultRuntime()
+        {
+            var dataStoreMock = new Mock<IDataStore>();
+            var providerMock = new Mock<IFrameworkProvider>();
+            providerMock.Setup(p => p.HttpServerStore).Returns(dataStoreMock.Object);
+            var endpointConfigMock = new Mock<ResourceEndpointConfiguration>();
+
+            var locatorMock = new Mock<IServiceLocator>();
+            locatorMock.Setup(l => l.GetInstance<IFrameworkProvider>()).Returns(providerMock.Object);
+            locatorMock.Setup(l => l.GetInstance<ResourceEndpointConfiguration>()).Returns(endpointConfigMock.Object);
+
+            var factory = new Factory(locatorMock.Object);
+
+            var runtime = factory.InstantiateRuntime();
+
+            Assert.NotNull(runtime);
+            Assert.NotNull(runtime as GlimpseRuntime);
+        }
+
+        [Fact]
+        public void LeverageServiceLocatorForRuntime()
+        {
+            var runtimeMock = new Mock<IGlimpseRuntime>();
+            var locatorMock = new Mock<IServiceLocator>();
+            locatorMock.Setup(l => l.GetInstance<IGlimpseRuntime>()).Returns(runtimeMock.Object);
+
+            var factory = new Factory(locatorMock.Object);
+
+            var result = factory.InstantiateRuntime();
+
+            Assert.NotNull(result);
+            Assert.Equal(runtimeMock.Object, result);
         }
     }
 }

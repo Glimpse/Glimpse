@@ -36,9 +36,7 @@ namespace Glimpse.Core2.Framework
             IGlimpseRuntime result;
             if (TrySingleInstanceFromServiceLocators(out result)) return result;
 
-            //TODO: Finish me!
-            //Create a GlimpseConfiguration()
-            throw new NotImplementedException();
+            return new GlimpseRuntime(InstantiateConfiguration());
         }
 
         private IFrameworkProvider FrameworkProvider { get; set; }
