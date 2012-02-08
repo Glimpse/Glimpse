@@ -73,12 +73,6 @@ namespace Glimpse.Test.Core2.Framework
         }
 
         [Fact]
-        public void CreateDefaultResourceName()
-        {
-            Assert.True(!string.IsNullOrEmpty(Configuration.DefaultResourceName));
-        }
-
-        [Fact]
         public void NotDiscoverPipelineInspectors()
         {
             Assert.Equal(0, Configuration.PipelineInspectors.Count);
@@ -175,10 +169,9 @@ namespace Glimpse.Test.Core2.Framework
         }
 
         [Fact]
-        public void DefaultResourceNameCannotBeNullOrEmpty()
+        public void DefaultResourceNameCannotBeNull()
         {
-            Assert.Throws<ArgumentNullException>(() => Configuration.DefaultResourceName = null);
-            Assert.Throws<ArgumentNullException>(() => Configuration.DefaultResourceName = "");
+            Assert.Throws<ArgumentNullException>(() => Configuration.DefaultResource = null);
         }
 
         [Fact]

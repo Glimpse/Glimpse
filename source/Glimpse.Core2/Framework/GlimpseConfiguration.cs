@@ -19,7 +19,8 @@ namespace Glimpse.Core2.Framework
             ICollection<IResource> resources,
             ISerializer serializer,
             ICollection<ITab> tabs,
-            ICollection<IRuntimePolicy> runtimePolicies)
+            ICollection<IRuntimePolicy> runtimePolicies,
+            IResource defaultResource)
         {
             //TODO: Test building glimpse on clean VS install with contracts
             //TODO: Test building glimpse on teamcity with contracts
@@ -34,6 +35,7 @@ namespace Glimpse.Core2.Framework
             Contract.Requires<ArgumentNullException>(serializer != null, "serializer");
             Contract.Requires<ArgumentNullException>(tabs != null, "tabs");
             Contract.Requires<ArgumentNullException>(runtimePolicies != null, "runtimePolicies");
+            Contract.Requires<ArgumentNullException>(defaultResource != null, "defaultResource");
 
             //TODO: Refactor all these "new" calls to leverage a IOC container?
             Logger = logger;
@@ -48,7 +50,7 @@ namespace Glimpse.Core2.Framework
             Tabs = tabs;
             RuntimePolicies = runtimePolicies;
             BaseRuntimePolicy = baseRuntimePolicy;
-            DefaultResourceName = Resource.Configuration.InternalName;
+            DefaultResource = defaultResource;
         }
 
         private ICollection<IClientScript> clientScripts;
@@ -216,18 +218,18 @@ namespace Glimpse.Core2.Framework
             }
         }
 
-        private string defaultResourceName;
-        public string DefaultResourceName
+        private IResource defaultResource;
+        public IResource DefaultResource
         {
             get
             {
-                Contract.Ensures(!string.IsNullOrEmpty(Contract.Result<string>()));
-                return defaultResourceName;
+                Contract.Ensures(Contract.Result<IResource>()!=null);
+                return defaultResource;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(value), "value");
-                defaultResourceName = value;
+                Contract.Requires<ArgumentNullException>(value != null, "value");
+                defaultResource = value;
             }
         }
 

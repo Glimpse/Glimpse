@@ -537,5 +537,36 @@ namespace Glimpse.Test.Core2.Framework
             Assert.Equal(converters, result);
             locatorMock.Verify(l => l.GetAllInstances<ISerializationConverter>(), Times.Once());
         }
+
+        [Fact]
+        public void InstantiateDefaultResourceWithConfigurationResource()
+        {
+            var locatorMock = new Mock<IServiceLocator>();
+
+            var factory = new Factory(locatorMock.Object);
+
+            IResource resource = factory.InstantiateDefaultResource();
+
+            Assert.NotNull(resource);
+            Assert.NotNull(resource as Glimpse.Core2.Resource.Configuration);
+            locatorMock.Verify(l => l.GetInstance<IResource>(), Times.Once());
+        }
+
+        [Fact]
+        public void LeverageServiceLocatorForDefaultResource()
+        {
+            var resourceMock = new Mock<IResource>();
+            var locatorMock = new Mock<IServiceLocator>();
+            locatorMock.Setup(l => l.GetInstance<IResource>()).Returns(resourceMock.Object);
+
+            var factory = new Factory(locatorMock.Object);
+
+            IResource resource = factory.InstantiateDefaultResource();
+
+            Assert.NotNull(resource);
+            Assert.Equal(resourceMock.Object, resource);
+
+            locatorMock.Verify(l => l.GetInstance<IResource>(), Times.Once());
+        }
     }
 }

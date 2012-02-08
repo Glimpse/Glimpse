@@ -18,7 +18,8 @@ namespace Glimpse.Test.Core2.Tester
                                            IDiscoverableCollection<IResource> resourcesStub,
                                            Mock<ISerializer> serializerMock,
                                            IDiscoverableCollection<ITab> tabsStub,
-                                           IDiscoverableCollection<IRuntimePolicy> policiesStub)
+                                           IDiscoverableCollection<IRuntimePolicy> policiesStub,
+                                           Mock<IResource> defaultResourceMock)
             : base(
                 frameworkProviderMock.Object,
                 endpointConfigurationMock.Object,
@@ -31,7 +32,8 @@ namespace Glimpse.Test.Core2.Tester
                 resourcesStub,
                 serializerMock.Object,
                 tabsStub,
-                policiesStub)
+                policiesStub,
+                defaultResourceMock.Object)
         {
             FrameworkProviderMock = frameworkProviderMock;
             EndpointConfigMock = endpointConfigurationMock;
@@ -57,7 +59,8 @@ namespace Glimpse.Test.Core2.Tester
                                                   new ReflectionDiscoverableCollection<IResource>(loggerMock.Object),
                                                   new Mock<ISerializer>(),
                                                   new ReflectionDiscoverableCollection<ITab>(loggerMock.Object),
-                                                  new ReflectionDiscoverableCollection<IRuntimePolicy>(loggerMock.Object));
+                                                  new ReflectionDiscoverableCollection<IRuntimePolicy>(loggerMock.Object),
+                                                  new Mock<IResource>());
         }
 
         public Mock<ResourceEndpointConfiguration> EndpointConfigMock { get; set; }

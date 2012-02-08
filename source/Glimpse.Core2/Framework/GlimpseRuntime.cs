@@ -163,7 +163,7 @@ namespace Glimpse.Core2.Framework
 
         public void ExecuteDefaultResource()
         {
-            ExecuteResource(Configuration.DefaultResourceName, new ResourceParameters());
+            ExecuteResource(Configuration.DefaultResource.Name, new ResourceParameters());
         }
 
         public void ExecuteResource(string resourceName, IDictionary<string, string> namedParameters)

@@ -316,7 +316,7 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.ResourceMock.Setup(r => r.Name).Returns(name);
             Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IResourceContext>())).Returns(Runtime.ResourceResultMock.Object);
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
-            Runtime.Configuration.DefaultResourceName = name;
+            Runtime.Configuration.DefaultResource = Runtime.ResourceMock.Object;
 
             Runtime.ExecuteDefaultResource();
 
