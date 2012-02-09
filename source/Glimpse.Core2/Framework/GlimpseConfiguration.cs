@@ -12,7 +12,7 @@ namespace Glimpse.Core2.Framework
             ResourceEndpointConfiguration endpointConfiguration,
             ICollection<IClientScript> clientScripts,
             ILogger logger,
-            RuntimePolicy baseRuntimePolicy,
+            RuntimePolicy defaultRuntimePolicy,
             IHtmlEncoder htmlEncoder,
             IPersistanceStore persistanceStore,
             ICollection<IPipelineInspector> pipelineInspectors,
@@ -49,7 +49,7 @@ namespace Glimpse.Core2.Framework
             Serializer = serializer;
             Tabs = tabs;
             RuntimePolicies = runtimePolicies;
-            BaseRuntimePolicy = baseRuntimePolicy;
+            DefaultRuntimePolicy = defaultRuntimePolicy;
             DefaultResource = defaultResource;
         }
 
@@ -233,6 +233,6 @@ namespace Glimpse.Core2.Framework
             }
         }
 
-        public RuntimePolicy BaseRuntimePolicy { get; set; }
+        public RuntimePolicy DefaultRuntimePolicy { get; set; }
     }
 }

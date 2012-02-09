@@ -182,7 +182,7 @@ namespace Glimpse.Core2.Framework
             Contract.Requires<ArgumentNullException>(parameters != null, "parameters");
 
             var policy = GetRuntimePolicy(RuntimeEvent.ExecuteResource);
-            if (policy == RuntimePolicy.Off) return;
+            if (policy == RuntimePolicy.Off) return; //TODO: Display error message here.
 
             var logger = Configuration.Logger;
             IResourceResult result;
@@ -327,7 +327,7 @@ namespace Glimpse.Core2.Framework
             //Begin with the lowest policy for this request, or the lowest policy per config
             var result = requestStore.Contains(Constants.RuntimePermissionsKey)
                              ? requestStore.Get<RuntimePolicy>(Constants.RuntimePermissionsKey)
-                             : Configuration.BaseRuntimePolicy;
+                             : Configuration.DefaultRuntimePolicy;
 
             if (result != RuntimePolicy.Off)
             {

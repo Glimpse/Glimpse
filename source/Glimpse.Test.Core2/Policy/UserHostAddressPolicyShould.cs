@@ -1,4 +1,5 @@
 ﻿using System;
+using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Policy;
 using Moq;
@@ -15,7 +16,7 @@ namespace Glimpse.Test.Core2.Policy
 
             var policy = new UserHostAddressPolicy();
 
-            Assert.Throws<NotSupportedException>(() => policy.Execute(contextMock.Object));
+            Assert.Equal(RuntimePolicy.On, policy.Execute(contextMock.Object));
         }
 
         [Fact]

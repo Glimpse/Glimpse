@@ -280,7 +280,7 @@ namespace Glimpse.Test.Core2.Framework
 
             RuntimePolicy result = factory.InstantiateDefaultRuntimePolicy();
 
-            Assert.Equal(RuntimePolicy.Off, result);
+            Assert.Equal(RuntimePolicy.On, result);
         }
 
         [Fact]

@@ -1,19 +1,22 @@
-﻿using Glimpse.Core2.Extensibility;
+﻿using System;
+using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Core2.Policy
 {
     public class ControlCookiePolicy:IRuntimePolicy
     {
+        internal const string ControlCookieName = "glimpsePolicy";
+
         public RuntimePolicy Execute(IRuntimePolicyContext policyContext)
         {
-            var cookie = policyContext.RequestMetadata.GetCookie(Constants.ControlCookieName);
+            var cookie = policyContext.RequestMetadata.GetCookie(ControlCookieName);
 
-            if (string.IsNullOrEmpty(cookie))
+            if (String.IsNullOrEmpty(cookie))
                 return RuntimePolicy.Off;
                 
             RuntimePolicy result;
 
-            if (!RuntimePolicy.TryParse(cookie, true, out result)) 
+            if (!Enum.TryParse(cookie, true, out result)) 
                 return RuntimePolicy.Off;
 
             return result;

@@ -119,7 +119,7 @@ namespace Glimpse.Core2.Framework
 
         public RuntimePolicy InstantiateDefaultRuntimePolicy()
         {
-            return Configuration.BaseRuntimePolicy;
+            return Configuration.DefaultRuntimePolicy;
         }
 
         public IHtmlEncoder InstantiateHtmlEncoder()

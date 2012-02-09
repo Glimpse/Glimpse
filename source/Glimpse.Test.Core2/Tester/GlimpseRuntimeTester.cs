@@ -64,7 +64,7 @@ namespace Glimpse.Test.Core2.Tester
             configuration.Serializer = SerializerMock.Object;
             configuration.PersistanceStore = PersistanceStoreMock.Object;
             configuration.Logger = LoggerMock.Object;
-            configuration.BaseRuntimePolicy = RuntimePolicy.On;
+            configuration.DefaultRuntimePolicy = RuntimePolicy.On;
             configuration.HtmlEncoder = EncoderMock.Object;
 
             Configuration = configuration;

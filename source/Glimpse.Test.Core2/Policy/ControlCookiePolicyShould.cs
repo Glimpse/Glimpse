@@ -1,6 +1,7 @@
 ﻿using System;
 using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
+using Glimpse.Core2.Policy;
 using Glimpse.Test.Core2.Tester;
 using Xunit;
 
@@ -29,7 +30,7 @@ namespace Glimpse.Test.Core2.Policy
         [Fact]
         public void SetPolicyToOffWithInvalidCookieValue()
         {
-            Policy.RequestMetadataMock.Setup(r => r.GetCookie(Constants.ControlCookieName)).Returns("invalid");
+            Policy.RequestMetadataMock.Setup(r => r.GetCookie(ControlCookiePolicy.ControlCookieName)).Returns("invalid");
 
             Assert.Equal(RuntimePolicy.Off, Policy.Execute(Policy.PolicyContextMock.Object));
         }
@@ -37,7 +38,7 @@ namespace Glimpse.Test.Core2.Policy
         [Fact]
         public void SetPolicyToMatchCookieValue()
         {
-            Policy.RequestMetadataMock.Setup(r => r.GetCookie(Constants.ControlCookieName)).Returns("modifyresponseheaders");
+            Policy.RequestMetadataMock.Setup(r => r.GetCookie(ControlCookiePolicy.ControlCookieName)).Returns("modifyresponseheaders");
 
             Assert.Equal(RuntimePolicy.ModifyResponseHeaders, Policy.Execute(Policy.PolicyContextMock.Object));
         }

@@ -78,7 +78,14 @@ namespace Glimpse.Test.Core2.Configuration
         {
             var section = new GlimpseSection();
 
-            Assert.Equal(RuntimePolicy.Off, section.BaseRuntimePolicy);
+            Assert.Equal(RuntimePolicy.Off, section.DefaultRuntimePolicy);
+        }
+
+        [Fact]
+        public void ReadDefaultRuntimePolicyFromFile()
+        {
+            var section = ConfigurationManager.GetSection("glimpse") as GlimpseSection;
+            Assert.Equal(RuntimePolicy.On, section.DefaultRuntimePolicy);
         }
 
         [Fact]
@@ -88,9 +95,9 @@ namespace Glimpse.Test.Core2.Configuration
 
             var section = new GlimpseSection();
 
-            section.BaseRuntimePolicy = basePolicy;
+            section.DefaultRuntimePolicy = basePolicy;
 
-            Assert.Equal(basePolicy, section.BaseRuntimePolicy);
+            Assert.Equal(basePolicy, section.DefaultRuntimePolicy);
         }
 
         [Fact]

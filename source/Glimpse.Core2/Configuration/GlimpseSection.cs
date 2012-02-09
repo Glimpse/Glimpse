@@ -53,11 +53,11 @@ namespace Glimpse.Core2.Configuration
             set { base["serializationConverters"] = value; }
         }
 
-        [ConfigurationProperty("baseRuntimePolicy", DefaultValue = RuntimePolicy.Off)]
-        public RuntimePolicy BaseRuntimePolicy
+        [ConfigurationProperty("defaultRuntimePolicy", DefaultValue = RuntimePolicy.Off)]
+        public RuntimePolicy DefaultRuntimePolicy
         {
-            get { return (RuntimePolicy) base["baseRuntimePolicy"]; }
-            set { base["baseRuntimePolicy"] = value; }
+            get { return (RuntimePolicy)base["defaultRuntimePolicy"]; }
+            set { base["defaultRuntimePolicy"] = value; }
         }
     }
 }

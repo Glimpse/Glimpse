@@ -18,6 +18,6 @@ namespace Glimpse.Core2.Framework
         ICollection<ITab> Tabs { get; set; }
         ICollection<IRuntimePolicy> RuntimePolicies { get; set; }
         IResource DefaultResource { get; set; }
-        RuntimePolicy BaseRuntimePolicy { get; set; }
+        RuntimePolicy DefaultRuntimePolicy { get; set; }
     }
 }

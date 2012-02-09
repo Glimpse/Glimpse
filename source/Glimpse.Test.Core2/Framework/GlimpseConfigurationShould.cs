@@ -177,9 +177,9 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void ChangeGlimpseMode()
         {
-            Configuration.BaseRuntimePolicy = RuntimePolicy.ModifyResponseBody;
+            Configuration.DefaultRuntimePolicy = RuntimePolicy.ModifyResponseBody;
 
-            Assert.Equal(RuntimePolicy.ModifyResponseBody, Configuration.BaseRuntimePolicy);
+            Assert.Equal(RuntimePolicy.ModifyResponseBody, Configuration.DefaultRuntimePolicy);
         }
 
         public void Dispose()

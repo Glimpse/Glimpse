@@ -1,5 +1,4 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Core2.Policy
@@ -9,7 +8,7 @@ namespace Glimpse.Core2.Policy
         public RuntimePolicy Execute(IRuntimePolicyContext policyContext)
         {
             //TODO: Should we keep this policy, or leverage a simple "isLocal" policy similar to customErrorMode?
-            throw new NotSupportedException("Have not yet implemented UserHostAddessPolicy");
+            return RuntimePolicy.On;
         }
 
         public RuntimeEvent ExecuteOn

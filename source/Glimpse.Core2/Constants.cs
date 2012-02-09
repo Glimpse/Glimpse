@@ -2,7 +2,6 @@
 {
     public static class Constants
     {
-        public const string ControlCookieName = "glimpsePolicy";
         public const string ClientIdCookieName = "glimpseId";
         public const string HttpResponseHeader = "X-Glimpse-RequestID";
         public const string UserAgentHeaderName = "User-Agent";
