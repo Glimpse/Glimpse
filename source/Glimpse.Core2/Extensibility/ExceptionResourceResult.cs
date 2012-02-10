@@ -13,8 +13,8 @@ namespace Glimpse.Core2.Extensibility
 
         public void Execute(IResourceResultContext context)
         {
+            context.FrameworkProvider.WriteHttpResponse(Exception.ToString());
             context.FrameworkProvider.SetHttpResponseStatusCode(500);
-            //TODO: Add exception message to response
         }
     }
 }

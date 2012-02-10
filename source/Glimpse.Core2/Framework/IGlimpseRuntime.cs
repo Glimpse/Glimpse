@@ -3,7 +3,7 @@ using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Core2.Framework
 {
-    //TODO: Clean this up. Mostly used for testability and mocking Glimpse
+    //TODO: Add contracts here?
     public interface IGlimpseRuntime
     {
         string Version { get; }

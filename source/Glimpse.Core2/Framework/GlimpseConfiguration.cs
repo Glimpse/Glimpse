@@ -37,7 +37,6 @@ namespace Glimpse.Core2.Framework
             Contract.Requires<ArgumentNullException>(runtimePolicies != null, "runtimePolicies");
             Contract.Requires<ArgumentNullException>(defaultResource != null, "defaultResource");
 
-            //TODO: Refactor all these "new" calls to leverage a IOC container?
             Logger = logger;
             ClientScripts = clientScripts;
             FrameworkProvider = frameworkProvider;

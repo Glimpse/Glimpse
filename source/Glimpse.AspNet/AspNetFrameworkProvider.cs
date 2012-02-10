@@ -53,7 +53,7 @@ namespace Glimpse.AspNet
         public void InjectHttpResponseBody(string htmlSnippet)
         {
             var response = Context.Response;
-
+            //TODO: Add strategy pattern to enable setting PreBodyTagFilter earlier and enable lookup of html
             response.Filter = new PreBodyTagFilter(htmlSnippet, response.Filter, Context.Response.ContentEncoding);
         }
 

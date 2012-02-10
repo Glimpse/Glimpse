@@ -9,15 +9,17 @@ namespace Glimpse.Core2.Extensibility
     public class JsonNetSerializer:ISerializer
     {
         private JsonSerializerSettings Settings { get; set; }
+        private ILogger Logger { get; set; }
 
-        public JsonNetSerializer()
+        public JsonNetSerializer(ILogger logger)
         {
+            Logger = logger;
+
             Settings = new JsonSerializerSettings();
                            
             Settings.Error += (obj, args) =>
                                   {
-                                      //Ignore errors
-                                      //TODO: add logging here (args.ErrorContext.Error)
+                                      Logger.Error(string.Format("Error serializing object."), args.ErrorContext.Error);
                                       args.ErrorContext.Handled = true;
                                   };
         }

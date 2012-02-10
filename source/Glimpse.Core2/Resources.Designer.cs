@@ -61,6 +61,15 @@ namespace Glimpse.Core2 {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Initialize method has not been called in the context on the current Glimpse runtime instance. Calls to BeginRequest must be preceded by calls to Initialize..
+        /// </summary>
+        internal static string BeginRequestOutOfOrderRuntimeMethodCall {
+            get {
+                return ResourceManager.GetString("BeginRequestOutOfOrderRuntimeMethodCall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exception loading &apos;{0}&apos; of type &apos;{1}&apos;..
         /// </summary>
         internal static string DiscoverCreateInstance {
@@ -75,6 +84,15 @@ namespace Glimpse.Core2 {
         internal static string DiscoverLoadAssembly {
             get {
                 return ResourceManager.GetString("DiscoverLoadAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BeginRequest method has not been called in the context of the current HTTP request. Calls to EndRequest must be preceded by calls to BeginRequest..
+        /// </summary>
+        internal static string EndRequestOutOfOrderRuntimeMethodCall {
+            get {
+                return ResourceManager.GetString("EndRequestOutOfOrderRuntimeMethodCall", resourceCulture);
             }
         }
         
@@ -115,6 +133,24 @@ namespace Glimpse.Core2 {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exception generating script tag for dynamic IClientScript of type &apos;{0}&apos;..
+        /// </summary>
+        internal static string GenerateScriptTagsDynamicException {
+            get {
+                return ResourceManager.GetString("GenerateScriptTagsDynamicException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exception generating script tag for static IClientScript of type &apos;{0}&apos;..
+        /// </summary>
+        internal static string GenerateScriptTagsStaticException {
+            get {
+                return ResourceManager.GetString("GenerateScriptTagsStaticException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exception generating uri with ResourceEndpointConfiguration of type &apos;{0}&apos;..
         /// </summary>
         internal static string GenerateUriExecutionError {
@@ -151,11 +187,20 @@ namespace Glimpse.Core2 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to BeginRequest has not been called in the context of the current HTTP request. Calls to EndRequest must be preceded by calls to BeginRequest..
+        ///   Looks up a localized string similar to Unable to instantiate Framework Provider from IServiceLocator: &apos;{0}&apos; or &apos;{1}&apos;.
         /// </summary>
-        internal static string OutOfOrderRuntimeMethodCall {
+        internal static string InstantiateFrameworkProviderException {
             get {
-                return ResourceManager.GetString("OutOfOrderRuntimeMethodCall", resourceCulture);
+                return ResourceManager.GetString("InstantiateFrameworkProviderException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to instantiate Resource Endpoint Configuration from IServiceLocator: &apos;{0}&apos; or &apos;{1}&apos;.
+        /// </summary>
+        internal static string InstantiateResourceEndpointConfigurationException {
+            get {
+                return ResourceManager.GetString("InstantiateResourceEndpointConfigurationException", resourceCulture);
             }
         }
         

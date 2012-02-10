@@ -4,6 +4,7 @@ using Glimpse.Core2;
 using Glimpse.Core2.Configuration;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
+using Glimpse.Test.Core2.TestDoubles;
 using Moq;
 using Xunit;
 
@@ -38,7 +39,6 @@ namespace Glimpse.Test.Core2.Framework
         {
             var factory = new Factory();
             Assert.NotNull(factory);
-            Assert.Null(factory.UserServiceLocator);
             Assert.Null(factory.ProviderServiceLocator);
         }
 
@@ -641,6 +641,23 @@ namespace Glimpse.Test.Core2.Framework
 
             Assert.NotNull(result);
             Assert.Equal(runtimeMock.Object, result);
+        }
+
+        [Fact]
+        public void SetUserServiceLocatorWhenConfigured()
+        {
+            var factory = new Factory();
+
+            Assert.NotNull(factory.UserServiceLocator);
+            Assert.True(factory.UserServiceLocator.GetType() == typeof(DummyServiceLocator));
+        }
+
+        [Fact]
+        public void LeaveUserServiceLocatorAsBlankWhenNotConfigured()
+        {
+            var factory = new Factory(null, null, new GlimpseSection());
+
+            Assert.Null(factory.UserServiceLocator);
         }
     }
 }

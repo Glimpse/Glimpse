@@ -43,9 +43,10 @@ namespace Glimpse.Core2.Framework
         public string Version { get; private set; }
 
 
-        //TODO: Make sure runtime has been init'ed
         public void BeginRequest()
         {
+            if (!IsInitialized) throw new GlimpseException(Resources.BeginRequestOutOfOrderRuntimeMethodCall);
+
             var policy = GetRuntimePolicy(RuntimeEvent.BeginRequest);
             if (policy == RuntimePolicy.Off) return;
 
@@ -59,7 +60,7 @@ namespace Glimpse.Core2.Framework
         }
 
         //TODO: Add PRG support
-        //TODO: Process MetaData
+        //TODO: Process MetaData, including: HelpUri's
         //TODO: Sanitize JSON
         //TODO: Structured layout support
         public void EndRequest()
@@ -80,19 +81,26 @@ namespace Glimpse.Core2.Framework
             }
             catch (NullReferenceException ex)
             {
-                throw new MethodAccessException(Resources.OutOfOrderRuntimeMethodCall, ex);
+                throw new GlimpseException(Resources.EndRequestOutOfOrderRuntimeMethodCall, ex);
             }
 
-            //TODO: Handle exceptions
             if (policy.HasFlag(RuntimePolicy.PersistResults))
             {
                 var serializer = Configuration.Serializer;
+                var persistanceStore = Configuration.PersistanceStore;
                 var pluginResults = TabResultsStore.ToDictionary(item => item.Key, item => serializer.Serialize(item.Value));
                 var requestMetadata = frameworkProvider.RequestMetadata;
 
                 var metadata = new GlimpseMetadata(requestId, requestMetadata, pluginResults, stopwatch.ElapsedMilliseconds);
 
-                Configuration.PersistanceStore.Save(metadata);
+                try
+                {
+                    persistanceStore.Save(metadata);
+                }
+                catch(Exception exception)
+                {
+                    Configuration.Logger.Error(string.Format("Could not persist metadata with IPersistanceStore of type '{0}'.", persistanceStore.GetType()), exception);
+                }
             }
 
             if (policy.HasFlag(RuntimePolicy.ModifyResponseHeaders))
@@ -127,32 +135,45 @@ namespace Glimpse.Core2.Framework
                 var dynamicScript = clientScript as IDynamicClientScript;
                 if (dynamicScript != null)
                 {
-                    //TODO:Handle Exceptions
-                    var resourceName = dynamicScript.GetResourceName();
-                    var resource = resources.FirstOrDefault(r => r.Name.Equals(resourceName, StringComparison.InvariantCultureIgnoreCase));
-
-                    if (resource == null)
+                    try
                     {
-                        logger.Warn(string.Format(Resources.RenderClientScriptMissingResourceWarning, clientScript.GetType(), resourceName));
+                        var resourceName = dynamicScript.GetResourceName();
+                        var resource = resources.FirstOrDefault(r => r.Name.Equals(resourceName, StringComparison.InvariantCultureIgnoreCase));
+
+                        if (resource == null)
+                        {
+                            logger.Warn(string.Format(Resources.RenderClientScriptMissingResourceWarning,clientScript.GetType(), resourceName));
+                            continue;
+                        }
+
+                        var uri = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUri(resource, logger, requestTokenValues));
+                        if (!string.IsNullOrWhiteSpace(uri))
+                            stringBuilder.AppendFormat(@"<script type='text/javascript' src='{0}'></script>", uri);
+
                         continue;
                     }
-
-                    var uri = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUri(resource, logger, requestTokenValues));
-                    if(!string.IsNullOrWhiteSpace(uri))
-                        stringBuilder.AppendFormat(@"<script type='text/javascript' src='{0}'></script>", uri);
-
-                    continue;
+                    catch(Exception exception)
+                    {
+                        logger.Error(string.Format(Resources.GenerateScriptTagsDynamicException, dynamicScript.GetType()), exception);
+                    }
                 }
 
                 var staticScript = clientScript as IStaticClientScript;
                 if (staticScript != null)
                 {
-                    var uri = encoder.HtmlAttributeEncode(staticScript.GetUri(Version));
+                    try
+                    {
+                        var uri = encoder.HtmlAttributeEncode(staticScript.GetUri(Version));
 
-                    if(!string.IsNullOrWhiteSpace(uri))
-                        stringBuilder.AppendFormat(@"<script type='text/javascript' src='{0}'></script>", uri);
+                        if (!string.IsNullOrWhiteSpace(uri))
+                            stringBuilder.AppendFormat(@"<script type='text/javascript' src='{0}'></script>", uri);
 
-                    continue;
+                        continue;
+                    }
+                    catch(Exception exception)
+                    {
+                        logger.Error(string.Format(Resources.GenerateScriptTagsStaticException, staticScript.GetType()), exception);
+                    }
                 }
 
                 logger.Warn(string.Format(Resources.RenderClientScriptImproperImplementationWarning, clientScript.GetType()));
@@ -325,11 +346,11 @@ namespace Glimpse.Core2.Framework
             var frameworkProvider = Configuration.FrameworkProvider;
             var requestStore = frameworkProvider.HttpRequestStore;
             //Begin with the lowest policy for this request, or the lowest policy per config
-            var result = requestStore.Contains(Constants.RuntimePermissionsKey)
+            var finalResult = requestStore.Contains(Constants.RuntimePermissionsKey)
                              ? requestStore.Get<RuntimePolicy>(Constants.RuntimePermissionsKey)
                              : Configuration.DefaultRuntimePolicy;
 
-            if (result != RuntimePolicy.Off)
+            if (finalResult != RuntimePolicy.Off)
             {
                 //only run policies for this runtimeEvent, or all runtime events
                 var policies =
@@ -339,17 +360,24 @@ namespace Glimpse.Core2.Framework
                 var policyContext = new RuntimePolicyContext(frameworkProvider.RequestMetadata, Configuration.Logger, frameworkProvider.RuntimeContext);
                 foreach (var policy in policies)
                 {
-                    //TODO: Handle exceptions from policy
-                    var p = policy.Execute(policyContext);
+                    var policyResult = RuntimePolicy.Off;
+                    try
+                    {
+                        policyResult = policy.Execute(policyContext);
+                    }
+                    catch (Exception exception)
+                    {
+                        Configuration.Logger.Warn(string.Format("Exception when executing IRuntimePolicy of type '{0}'. RuntimePolicy is now set to 'Off'.", policy.GetType()), exception);
+                    }
 
                     //Only use the lowest policy allowed for the request
-                    if (p < result) result = p;
+                    if (policyResult < finalResult) finalResult = policyResult;
                 }
             }
 
             //store result for request
-            requestStore.Set(Constants.RuntimePermissionsKey, result);
-            return result;
+            requestStore.Set(Constants.RuntimePermissionsKey, finalResult);
+            return finalResult;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using Glimpse.Core2;
 using Glimpse.Core2.Configuration;
+using Glimpse.Test.Core2.TestDoubles;
 using Xunit;
 
 namespace Glimpse.Test.Core2.Configuration
@@ -223,6 +224,35 @@ namespace Glimpse.Test.Core2.Configuration
             section.SerializationConverters = element;
 
             Assert.Equal(element, section.SerializationConverters);
+        }
+
+        [Fact]
+        public void LoadUserServiceLocatorWhenConfigured()
+        {
+            var section = ConfigurationManager.GetSection("glimpse") as GlimpseSection;
+            
+            Assert.NotNull(section.ServiceLocatorType);
+            Assert.True(section.ServiceLocatorType == typeof(DummyServiceLocator));
+        }
+
+        [Fact]
+        public void ReturnDefaultServiceLocatorType()
+        {
+            var section = new GlimpseSection();
+
+            Assert.Null(section.ServiceLocatorType);
+        }
+
+        [Fact]
+        public void GetSetDefaultServiceLocatorType()
+        {
+            var section = new GlimpseSection();
+            var type = typeof (GlimpseSectionShould);
+
+            section.ServiceLocatorType = type;
+
+            Assert.Equal(type, section.ServiceLocatorType);
+            
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Configuration;
+﻿using System;
+using System.ComponentModel;
+using System.Configuration;
 
 namespace Glimpse.Core2.Configuration
 {
@@ -58,6 +60,14 @@ namespace Glimpse.Core2.Configuration
         {
             get { return (RuntimePolicy)base["defaultRuntimePolicy"]; }
             set { base["defaultRuntimePolicy"] = value; }
+        }
+
+        [ConfigurationProperty("serviceLocatorType", DefaultValue = null)]
+        [TypeConverter(typeof(TypeConverter))]
+        public Type ServiceLocatorType
+        {
+            get { return (Type) base["serviceLocatorType"]; }
+            set { base["serviceLocatorType"] = value; }
         }
     }
 }

@@ -36,7 +36,6 @@ namespace Glimpse.Core2.Extensibility
 
             frameworkProvider.SetHttpResponseHeader("Content-Type", ContentType);
 
-            //TODO: Refactor to leverage a CachableResourceResult?
             if (CacheSetting.HasValue)
                 frameworkProvider.SetHttpResponseHeader("Cache-Control", string.Format("{0}, max-age={1}", CacheSetting.Value.ToDescription(), CacheDuration));
 

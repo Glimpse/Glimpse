@@ -3,7 +3,9 @@ using System.Collections.Generic;
 
 namespace Glimpse.Core2.Extensibility
 {
-    //TODO: Create ISerializationConverter<T> to simplify?
+    /// <summary>
+    /// Can leverage SerializationConverter<T>
+    /// </summary>
     public interface ISerializationConverter
     {
         IEnumerable<Type> SupportedTypes { get; }

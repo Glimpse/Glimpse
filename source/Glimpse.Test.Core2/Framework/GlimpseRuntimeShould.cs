@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Linq;
 using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
@@ -32,6 +31,7 @@ namespace Glimpse.Test.Core2.Framework
         {
             Runtime.FrameworkProviderMock.Setup(fp => fp.HttpRequestStore).Returns(Runtime.HttpRequestStoreMock.Object);
 
+            Runtime.Initialize();
             Runtime.BeginRequest();
 
             Runtime.HttpRequestStoreMock.Verify(store => store.Set(Constants.RequestIdKey, It.IsAny<Guid>()));
@@ -41,7 +41,7 @@ namespace Glimpse.Test.Core2.Framework
         public void StartGlobalStopwatchOnBeginRequest()
         {
             Runtime.FrameworkProviderMock.Setup(fp => fp.HttpRequestStore).Returns(Runtime.HttpRequestStoreMock.Object);
-
+            Runtime.Initialize();
             Runtime.BeginRequest();
 
             Runtime.HttpRequestStoreMock.Verify(store => store.Set(Constants.GlobalStopwatchKey, It.IsAny<Stopwatch>()));
@@ -56,15 +56,25 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void ThrowsExceptionIfEndRequestIsCalledBeforeBeginRequest()
         {
+            Runtime.Initialize();
             //runtime.BeginRequest(); commented out on purpose for this test
 
-            Assert.Throws<MethodAccessException>(() => Runtime.EndRequest());
+            Assert.Throws<GlimpseException>(() => Runtime.EndRequest());
+        }
+
+        [Fact]
+        public void ThrowsExceptionIfBeginRequestIsCalledBeforeInittialize()
+        {
+            //Runtime.Initialize();commented out on purpose for this test
+            
+            Assert.Throws<GlimpseException>(() => Runtime.BeginRequest());
         }
 
         [Fact]
         public void ExecutePluginsWithDefaultLifeCycle()
         {
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
+            Runtime.Initialize();
 
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
@@ -82,7 +92,7 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.TabMock.Setup(m => m.LifeCycleSupport).Returns(LifeCycleSupport.BeginRequest);
 
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
-
+            Runtime.Initialize();
             Runtime.BeginRequest();
             Runtime.ExecuteTabs(LifeCycleSupport.EndRequest);
 
@@ -97,7 +107,7 @@ namespace Glimpse.Test.Core2.Framework
         public void ExecutePluginsWithMatchingRuntimeContextType()
         {
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
-
+            Runtime.Initialize();
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
 
@@ -114,7 +124,7 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.TabMock.Setup(m => m.RequestContextType).Returns<Type>(null);
 
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
-
+            Runtime.Initialize();
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
 
@@ -132,7 +142,7 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
-
+            Runtime.Initialize();
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
 
@@ -149,7 +159,7 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.TabMock.Setup(p => p.GetData(It.IsAny<ITabContext>())).Throws<DummyException>();
 
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
-
+            Runtime.Initialize();
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
 
@@ -166,7 +176,7 @@ namespace Glimpse.Test.Core2.Framework
         public void ExecutePluginsWithEmptyCollection()
         {
             Runtime.Configuration.Tabs.Clear();
-
+            Runtime.Initialize();
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
 
@@ -264,6 +274,7 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void InjectHttpResponseBodyDuringEndRequest()
         {
+            Runtime.Initialize();
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
             Runtime.EndRequest();
@@ -275,7 +286,7 @@ namespace Glimpse.Test.Core2.Framework
         public void PersistDataDuringEndRequest()
         {
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
-
+            Runtime.Initialize();
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
             Runtime.EndRequest();
@@ -288,7 +299,7 @@ namespace Glimpse.Test.Core2.Framework
         public void SerializeDataDuringEndRequest()
         {
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
-
+            Runtime.Initialize();
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
             Runtime.EndRequest();
@@ -300,7 +311,7 @@ namespace Glimpse.Test.Core2.Framework
         public void SetResponseHeaderDuringEndRequest()
         {
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
-
+            Runtime.Initialize();
             Runtime.BeginRequest();
             Runtime.ExecuteTabs();
             Runtime.EndRequest();
@@ -488,19 +499,19 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.RuntimePolicyMock.Setup(rp => rp.ExecuteOn).Returns(RuntimeEvent.BeginRequest);
 
             Runtime.Configuration.RuntimePolicies.Add(Runtime.RuntimePolicyMock.Object);
-
+            Runtime.Initialize();
             Runtime.BeginRequest();
 
             Runtime.RuntimePolicyMock.Verify(v=>v.Execute(It.IsAny<IRuntimePolicyContext>()), Times.AtLeastOnce());
         }
 
         [Fact]
-        public void SkipEecutingBeginRequestIfGlimpseModeIfOff()
+        public void SkipEecutingInitializeIfGlimpseModeIfOff()
         {
             Runtime.Configuration.DefaultRuntimePolicy = RuntimePolicy.Off;
-
-            Runtime.BeginRequest();
-
+            
+            Runtime.Initialize();
+            
             Assert.Equal(RuntimePolicy.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePermissionsKey));
         }
 
@@ -677,6 +688,76 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.Configuration.ClientScripts.Add(Runtime.StaticScriptMock.Object);
 
             Assert.Empty(Runtime.GenerateScriptTags(Guid.NewGuid()));
+        }
+
+        [Fact]
+        public void LogErrorOnPersistanceStoreException()
+        {
+            Runtime.PersistanceStoreMock.Setup(ps => ps.Save(It.IsAny<GlimpseMetadata>())).Throws<DummyException>();
+
+            Runtime.Initialize();
+            Runtime.BeginRequest();
+            Runtime.EndRequest();
+
+            Runtime.LoggerMock.Verify(l=>l.Error(It.IsAny<string>(), It.IsAny<DummyException>()));
+        }
+
+        [Fact]
+        public void LogWarningWhenRuntimePolicyThrowsException()
+        {
+            Runtime.RuntimePolicyMock.Setup(pm => pm.Execute(It.IsAny<IRuntimePolicyContext>())).Throws<DummyException>();
+
+            Runtime.Configuration.RuntimePolicies.Add(Runtime.RuntimePolicyMock.Object);
+
+            Assert.False(Runtime.Initialize());
+
+            Runtime.LoggerMock.Verify(l=>l.Warn(It.IsAny<string>(), It.IsAny<DummyException>()));
+        }
+
+        [Fact]
+        public void LogErrorWhenDynamicScriptTagThrowsException()
+        {
+            Runtime.DynamicScriptMock.Setup(ds => ds.GetResourceName()).Throws<DummyException>();
+
+            Runtime.Configuration.ClientScripts.Add(Runtime.DynamicScriptMock.Object);
+
+            Runtime.Initialize();
+            Runtime.BeginRequest();
+            Runtime.EndRequest();
+
+            Runtime.LoggerMock.Verify(l=>l.Error(It.IsAny<string>(), It.IsAny<DummyException>()));
+        }
+
+
+        [Fact]
+        public void LogErrorWhenStaticScriptTagThrowsException()
+        {
+            Runtime.StaticScriptMock.Setup(ds => ds.GetUri(It.IsAny<string>())).Throws<DummyException>();
+
+            Runtime.Configuration.ClientScripts.Add(Runtime.StaticScriptMock.Object);
+
+            Runtime.Initialize();
+            Runtime.BeginRequest();
+            Runtime.EndRequest();
+
+            Runtime.LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<DummyException>()));
+        }
+
+        [Fact]
+        public void BeginRuntimeReturnsEarlyIfRuntimePolicyIsOff()
+        {
+            Runtime.FrameworkProviderMock.Setup(fp => fp.HttpRequestStore).Returns(Runtime.HttpRequestStoreMock.Object);
+
+            Runtime.Initialize();
+
+            Runtime.RuntimePolicyMock.Setup(p => p.Execute(It.IsAny<IRuntimePolicyContext>())).Returns(RuntimePolicy.Off);
+            Runtime.RuntimePolicyMock.Setup(p => p.ExecuteOn).Returns(RuntimeEvent.BeginRequest);
+            Runtime.Configuration.RuntimePolicies.Add(Runtime.RuntimePolicyMock.Object);
+
+            Runtime.BeginRequest();
+
+            Runtime.HttpRequestStoreMock.Verify(fp=>fp.Set(Constants.RequestIdKey, It.IsAny<Guid>()), Times.Never());
+            Runtime.HttpRequestStoreMock.Verify(fp=>fp.Set(Constants.GlobalStopwatchKey, It.IsAny<Stopwatch>()), Times.Never());
         }
     }
 }

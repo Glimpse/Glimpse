@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics.Contracts;
@@ -16,21 +17,36 @@ namespace Glimpse.Core2.Framework
         internal IServiceLocator ProviderServiceLocator { get; set; }
         internal GlimpseSection Configuration { get; set; }
 
-        public Factory():this(null){}
+        public Factory() : this(null)
+        {
+        }
 
-        public Factory(IServiceLocator providerServiceLocator):this(providerServiceLocator, null){}
+        public Factory(IServiceLocator providerServiceLocator) : this(providerServiceLocator, null)
+        {
+        }
 
         public Factory(IServiceLocator providerServiceLocator, IServiceLocator userServiceLocator)
+            : this(providerServiceLocator, userServiceLocator, null)
         {
-            //TODO: Try to lookup/load user service locator from config if null
+        }
+
+        public Factory(IServiceLocator providerServiceLocator, IServiceLocator userServiceLocator,
+                       GlimpseSection configuration)
+        {
+            Configuration = configuration ??
+                            ConfigurationManager.GetSection("glimpse") as GlimpseSection ?? new GlimpseSection();
+
+            IServiceLocator loadedServiceLocator = null;
+            if (userServiceLocator == null && Configuration.ServiceLocatorType != null)
+                loadedServiceLocator = Activator.CreateInstance(Configuration.ServiceLocatorType) as IServiceLocator;
+
             ProviderServiceLocator = providerServiceLocator;
-            UserServiceLocator = userServiceLocator;
-            Configuration = ConfigurationManager.GetSection("glimpse") as GlimpseSection ?? new GlimpseSection();
+            UserServiceLocator = userServiceLocator ?? loadedServiceLocator;
         }
 
         public IGlimpseRuntime InstantiateRuntime()
         {
-            Contract.Ensures(Contract.Result<IGlimpseRuntime>()!=null);
+            Contract.Ensures(Contract.Result<IGlimpseRuntime>() != null);
 
             IGlimpseRuntime result;
             if (TrySingleInstanceFromServiceLocators(out result)) return result;
@@ -39,9 +55,10 @@ namespace Glimpse.Core2.Framework
         }
 
         private IFrameworkProvider FrameworkProvider { get; set; }
+
         public IFrameworkProvider InstantiateFrameworkProvider()
         {
-            Contract.Ensures(Contract.Result<IFrameworkProvider>()!=null);
+            Contract.Ensures(Contract.Result<IFrameworkProvider>() != null);
 
             if (FrameworkProvider != null) return FrameworkProvider;
 
@@ -52,24 +69,36 @@ namespace Glimpse.Core2.Framework
                 return FrameworkProvider;
             }
 
-            //TODO: Turn this string into a resource and provide better information
-            throw new GlimpseException("Unable to create Framework Provider.");
+            throw new GlimpseException(string.Format(Resources.InstantiateFrameworkProviderException,
+                                                     UserServiceLocator == null
+                                                         ? "UserServiceLocator not configured"
+                                                         : UserServiceLocator.GetType().AssemblyQualifiedName,
+                                                     ProviderServiceLocator == null
+                                                         ? "ProviderServiceLocator not configured"
+                                                         : ProviderServiceLocator.GetType().AssemblyQualifiedName));
         }
 
         public ResourceEndpointConfiguration InstantiateResourceEndpointConfiguration()
         {
-            Contract.Ensures(Contract.Result<ResourceEndpointConfiguration>()!=null);
+            Contract.Ensures(Contract.Result<ResourceEndpointConfiguration>() != null);
 
             ResourceEndpointConfiguration result;
             if (TrySingleInstanceFromServiceLocators(out result)) return result;
 
-            //TODO: Turn this string into a resource and provide better information
-            throw new GlimpseException("Unable to create Endpoint Configuration.");
+
+            throw new GlimpseException(
+                string.Format(Resources.InstantiateResourceEndpointConfigurationException,
+                              UserServiceLocator == null
+                                  ? "UserServiceLocator not configured"
+                                  : UserServiceLocator.GetType().AssemblyQualifiedName,
+                              ProviderServiceLocator == null
+                                  ? "ProviderServiceLocator not configured"
+                                  : ProviderServiceLocator.GetType().AssemblyQualifiedName));
         }
 
         public ICollection<IClientScript> InstantiateClientScripts()
         {
-            Contract.Ensures(Contract.Result<ICollection<IClientScript>>()!=null);
+            Contract.Ensures(Contract.Result<ICollection<IClientScript>>() != null);
 
             ICollection<IClientScript> result;
             if (TryAllInstancesFromServiceLocators(out result)) return result;
@@ -105,12 +134,13 @@ namespace Glimpse.Core2.Framework
             var fileTarget = new FileTarget
                                  {
                                      FileName = "${basedir}/Glimpse.log",
-                                     Layout = "${longdate}|${level:uppercase=true}|${logger}|${message}|${exception:maxInnerExceptionLevel=5:format=type,message,stacktrace:separator=--:innerFormat=shortType,message,method}"
+                                     Layout =
+                                         "${longdate}|${level:uppercase=true}|${logger}|${message}|${exception:maxInnerExceptionLevel=5:format=type,message,stacktrace:separator=--:innerFormat=shortType,message,method}"
                                  };
 
             var loggingConfiguration = new LoggingConfiguration();
             loggingConfiguration.AddTarget("file", fileTarget);
-            loggingConfiguration.LoggingRules.Add(new LoggingRule("*", LogLevel.FromOrdinal((int)logLevel), fileTarget));
+            loggingConfiguration.LoggingRules.Add(new LoggingRule("*", LogLevel.FromOrdinal((int) logLevel), fileTarget));
 
 
             Logger = new NLogLogger(new LogFactory(loggingConfiguration).GetLogger("Glimpse"));
@@ -145,7 +175,7 @@ namespace Glimpse.Core2.Framework
 
         public ICollection<IPipelineInspector> InstantiatePipelineInspectors()
         {
-            Contract.Ensures(Contract.Result<ICollection<IPipelineInspector>>()!=null);
+            Contract.Ensures(Contract.Result<ICollection<IPipelineInspector>>() != null);
 
             ICollection<IPipelineInspector> result;
             if (TryAllInstancesFromServiceLocators(out result)) return result;
@@ -170,7 +200,7 @@ namespace Glimpse.Core2.Framework
             ISerializer result;
             if (TrySingleInstanceFromServiceLocators(out result)) return result;
 
-            result = new JsonNetSerializer();
+            result = new JsonNetSerializer(InstantiateLogger());
             result.RegisterSerializationConverters(InstantiateSerializationConverters());
 
             return result;
@@ -178,7 +208,7 @@ namespace Glimpse.Core2.Framework
 
         public ICollection<ITab> InstantiateTabs()
         {
-            Contract.Ensures(Contract.Result<ICollection<ITab>>()!=null);
+            Contract.Ensures(Contract.Result<ICollection<ITab>>() != null);
 
             ICollection<ITab> tabs;
             if (TryAllInstancesFromServiceLocators(out tabs)) return tabs;
@@ -188,17 +218,18 @@ namespace Glimpse.Core2.Framework
 
         public ICollection<IRuntimePolicy> InstantiateRuntimePolicies()
         {
-            Contract.Ensures(Contract.Result<ICollection<IRuntimePolicy>>()!=null);
+            Contract.Ensures(Contract.Result<ICollection<IRuntimePolicy>>() != null);
 
             ICollection<IRuntimePolicy> result;
             if (TryAllInstancesFromServiceLocators(out result)) return result;
 
             return CreateDiscoverableCollection<IRuntimePolicy>(Configuration.RuntimePolicies);
+            //TODO: Special configuration for Uri, StatusCode and ContentType policies
         }
 
         public ICollection<ISerializationConverter> InstantiateSerializationConverters()
         {
-            Contract.Ensures(Contract.Result<ICollection<ISerializationConverter>>()!=null);
+            Contract.Ensures(Contract.Result<ICollection<ISerializationConverter>>() != null);
 
             ICollection<ISerializationConverter> result;
             if (TryAllInstancesFromServiceLocators(out result)) return result;
@@ -208,7 +239,7 @@ namespace Glimpse.Core2.Framework
 
         public IResource InstantiateDefaultResource()
         {
-            Contract.Ensures(Contract.Result<IResource>()!=null);
+            Contract.Ensures(Contract.Result<IResource>() != null);
 
             IResource result;
             if (TrySingleInstanceFromServiceLocators(out result)) return result;
@@ -238,8 +269,9 @@ namespace Glimpse.Core2.Framework
             var defaultResource = InstantiateDefaultResource();
 
             return new GlimpseConfiguration(frameworkProvider, endpointConfiguration, clientScripts, logger, policy,
-                                     htmlEncoder, persistanceStore, pipelineInspectors, resources, serializer, tabs,
-                                     runtimePolicies, defaultResource);
+                                            htmlEncoder, persistanceStore, pipelineInspectors, resources, serializer,
+                                            tabs,
+                                            runtimePolicies, defaultResource);
         }
 
         private IDiscoverableCollection<T> CreateDiscoverableCollection<T>(DiscoverableCollectionElement config)
@@ -257,7 +289,7 @@ namespace Glimpse.Core2.Framework
             return discoverableCollection;
         }
 
-        private bool TrySingleInstanceFromServiceLocators<T>(out T instance) where T: class
+        private bool TrySingleInstanceFromServiceLocators<T>(out T instance) where T : class
         {
             Contract.Ensures(!Contract.Result<bool>() || Contract.ValueAtReturn(out instance) != null);
 

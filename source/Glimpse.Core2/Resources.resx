@@ -117,8 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="OutOfOrderRuntimeMethodCall" xml:space="preserve">
-    <value>BeginRequest has not been called in the context of the current HTTP request. Calls to EndRequest must be preceded by calls to BeginRequest.</value>
+  <data name="EndRequestOutOfOrderRuntimeMethodCall" xml:space="preserve">
+    <value>BeginRequest method has not been called in the context of the current HTTP request. Calls to EndRequest must be preceded by calls to BeginRequest.</value>
   </data>
   <data name="ExecuteTabError" xml:space="preserve">
     <value>Exception executing tab: {0}</value>
@@ -172,4 +172,22 @@
     <value>The input value '{0}' creates path '{1}', which does not exist.</value>
     <comment>{0} - value input to setter, {1} - missing path</comment>
   </data>
+  <data name="InstantiateFrameworkProviderException" xml:space="preserve">
+    <value>Unable to instantiate Framework Provider from IServiceLocator: '{0}' or '{1}'</value>
+    <comment>{0} - GetType() of UserServiceLocator, or friendly message if null, {1} - GetType() of ProviderServiceLocator, or friendly message if null</comment>
+  </data>
+  <data name="InstantiateResourceEndpointConfigurationException" xml:space="preserve">
+    <value>Unable to instantiate Resource Endpoint Configuration from IServiceLocator: '{0}' or '{1}'</value>
+    <comment>{0} - GetType() of UserServiceLocator, or friendly message if null, {1} - GetType() of ProviderServiceLocator, or friendly message if null</comment>
+  </data>
+  <data name="BeginRequestOutOfOrderRuntimeMethodCall" xml:space="preserve">
+    <value>Initialize method has not been called in the context on the current Glimpse runtime instance. Calls to BeginRequest must be preceded by calls to Initialize.</value>
+  </data>
+  <data name="GenerateScriptTagsDynamicException" xml:space="preserve">
+    <value>Exception generating script tag for dynamic IClientScript of type '{0}'.</value>
+    <comment>{0} - GetType() of offending IClientScript</comment>
+  </data>
+    <data name="GenerateScriptTagsStaticException">
+        <value xml:space="preserve">Exception generating script tag for static IClientScript of type '{0}'.</value>
+    </data>
 </root>
