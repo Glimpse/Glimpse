@@ -120,6 +120,7 @@
     <Compile Include="Resource\ClientShould.cs" />
     <Compile Include="Resource\ConfigurationShould.cs" />
     <Compile Include="Resource\DataShould.cs" />
+    <Compile Include="SerializationConverter\GlimpseMetadataConverterShould.cs" />
     <Compile Include="StatusCodeResourceResultShould.cs" />
     <Compile Include="TestDoubles\DummyEnum.cs" />
     <Compile Include="TestDoubles\DummyException.cs" />
