@@ -151,6 +151,15 @@ namespace Glimpse.Core2 {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Runtime policy does not allow execution of resource named &apos;{0}&apos;..
+        /// </summary>
+        internal static string ExecuteResourceInsufficientPolicy {
+            get {
+                return ResourceManager.GetString("ExecuteResourceInsufficientPolicy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Resource with name &apos;{0}&apos; could not be found..
         /// </summary>
         internal static string ExecuteResourceMissingError {

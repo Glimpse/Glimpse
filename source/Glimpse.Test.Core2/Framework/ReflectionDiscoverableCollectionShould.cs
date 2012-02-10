@@ -172,7 +172,7 @@ namespace Glimpse.Test.Core2.Framework
 
             Collection.Discover();
 
-            Collection.LoggerMock.Verify(l=>l.Error(It.IsAny<string>(), It.IsAny<Exception>()));
+            Collection.LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<Exception>(), It.IsAny<object[]>()));
         }
 
         [Fact]
@@ -182,7 +182,7 @@ namespace Glimpse.Test.Core2.Framework
             collection.Discover();
 
             Assert.Equal(0, collection.Count);
-            Collection.LoggerMock.Verify(l=>l.Error(It.IsAny<string>(), It.IsAny<Exception>()));
+            Collection.LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<Exception>(), It.IsAny<object[]>()));
         }
 
         [Fact]

@@ -16,7 +16,7 @@ namespace Glimpse.Core2.Policy
             }
             catch (Exception exception)
             {
-                policyContext.Logger.Warn(string.Format(Resources.ExecutePolicyWarning, GetType()), exception);
+                policyContext.Logger.Warn(Resources.ExecutePolicyWarning, exception, GetType());
                 return RuntimePolicy.ModifyResponseHeaders;
             }
         }

@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Runtime.Serialization;
 
-namespace Glimpse.Core2
+namespace Glimpse.Core2.Framework
 {
     public class GlimpseException:Exception
     {

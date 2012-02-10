@@ -74,8 +74,8 @@ namespace Glimpse.Test.Core2.Policy
             Policy.RequestMetadataMock.Setup(r => r.RequestUri).Throws(exception);
 
             Assert.Equal(RuntimePolicy.Off, Policy.Execute(Policy.ContextMock.Object));
-            
-            Policy.LoggerMock.Verify(l=>l.Warn(It.IsAny<string>(), exception), Times.Once());
+
+            Policy.LoggerMock.Verify(l => l.Warn(It.IsAny<string>(), exception, It.IsAny<object[]>()), Times.Once());
         }
 
         [Fact]

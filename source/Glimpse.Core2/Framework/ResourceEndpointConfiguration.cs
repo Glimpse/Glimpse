@@ -28,7 +28,7 @@ namespace Glimpse.Core2.Framework
             }
             catch(Exception exception)
             {
-                logger.Warn(string.Format(Resources.GenerateUriParameterKeysWarning, resource.GetType()), exception);
+                logger.Warn(Resources.GenerateUriParameterKeysWarning, exception, resource.GetType());
             }
 
             string result = null;
@@ -38,7 +38,7 @@ namespace Glimpse.Core2.Framework
             }
             catch(Exception exception)
             {
-                logger.Error(string.Format(Resources.GenerateUriExecutionError, GetType()), exception);
+                logger.Error(Resources.GenerateUriExecutionError, exception, GetType());
             }
 
             if (result != null)

@@ -435,7 +435,7 @@ namespace Glimpse.Test.Core2.Framework
 
             Runtime.ExecuteResource(name, new string[]{});
 
-            Runtime.LoggerMock.Verify(l => l.Fatal(It.IsAny<string>(), It.IsAny<Exception>()), Times.Once());
+            Runtime.LoggerMock.Verify(l => l.Fatal(It.IsAny<string>(), It.IsAny<Exception>(), It.IsAny<object[]>()), Times.Once());
         }
 
         [Fact]
@@ -597,7 +597,7 @@ namespace Glimpse.Test.Core2.Framework
 
             Assert.Equal("", Runtime.GenerateScriptTags(Guid.NewGuid()));
             
-            Runtime.LoggerMock.Verify(l => l.Warn(It.IsAny<string>()), Times.Once());
+            Runtime.LoggerMock.Verify(l => l.Warn(It.IsAny<string>(), It.IsAny<object[]>()), Times.Once());
         }
 
         [Fact]
@@ -677,7 +677,7 @@ namespace Glimpse.Test.Core2.Framework
 
             Assert.Empty(Runtime.GenerateScriptTags(Guid.NewGuid()));
 
-            Runtime.LoggerMock.Verify(l=>l.Warn(It.IsAny<string>()));
+            Runtime.LoggerMock.Verify(l => l.Warn(It.IsAny<string>(), It.IsAny<object[]>()));
         }
 
         [Fact]
@@ -699,7 +699,7 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.BeginRequest();
             Runtime.EndRequest();
 
-            Runtime.LoggerMock.Verify(l=>l.Error(It.IsAny<string>(), It.IsAny<DummyException>()));
+            Runtime.LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<DummyException>(), It.IsAny<object[]>()));
         }
 
         [Fact]
@@ -711,7 +711,7 @@ namespace Glimpse.Test.Core2.Framework
 
             Assert.False(Runtime.Initialize());
 
-            Runtime.LoggerMock.Verify(l=>l.Warn(It.IsAny<string>(), It.IsAny<DummyException>()));
+            Runtime.LoggerMock.Verify(l => l.Warn(It.IsAny<string>(), It.IsAny<DummyException>(), It.IsAny<object[]>()));
         }
 
         [Fact]
@@ -725,7 +725,7 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.BeginRequest();
             Runtime.EndRequest();
 
-            Runtime.LoggerMock.Verify(l=>l.Error(It.IsAny<string>(), It.IsAny<DummyException>()));
+            Runtime.LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<DummyException>(), It.IsAny<object[]>()));
         }
 
 
@@ -740,7 +740,7 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.BeginRequest();
             Runtime.EndRequest();
 
-            Runtime.LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<DummyException>()));
+            Runtime.LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<DummyException>(), It.IsAny<object[]>()));
         }
 
         [Fact]

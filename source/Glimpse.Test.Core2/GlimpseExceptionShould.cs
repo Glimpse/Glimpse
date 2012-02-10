@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using Glimpse.Core2;
+using Glimpse.Core2.Framework;
 using Glimpse.Test.Core2.TestDoubles;
 using Xunit;
 

@@ -51,5 +51,53 @@ namespace Glimpse.Core2.Extensibility
         public void Fatal(string message, Exception exception)
         {
         }
+
+        public void Trace(string messageFormat, params object[] args)
+        {
+        }
+
+        public void Debug(string messageFormat, params object[] args)
+        {
+        }
+
+        public void Info(string messageFormat, params object[] args)
+        {
+        }
+
+        public void Warn(string messageFormat, params object[] args)
+        {
+        }
+
+        public void Error(string messageFormat, params object[] args)
+        {
+        }
+
+        public void Fatal(string messageFormat, params object[] args)
+        {
+        }
+
+        public void Trace(string messageFormat, Exception exception, params object[] args)
+        {
+        }
+
+        public void Debug(string messageFormat, Exception exception, params object[] args)
+        {
+        }
+
+        public void Info(string messageFormat, Exception exception, params object[] args)
+        {
+        }
+
+        public void Warn(string messageFormat, Exception exception, params object[] args)
+        {
+        }
+
+        public void Error(string messageFormat, Exception exception, params object[] args)
+        {
+        }
+
+        public void Fatal(string messageFormat, Exception exception, params object[] args)
+        {
+        }
     }
 }

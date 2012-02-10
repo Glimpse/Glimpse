@@ -99,7 +99,8 @@ namespace Glimpse.Core2.Framework
                 }
                 catch(Exception exception)
                 {
-                    Configuration.Logger.Error(string.Format("Could not persist metadata with IPersistanceStore of type '{0}'.", persistanceStore.GetType()), exception);
+                    //TODO: Use resource
+                    Configuration.Logger.Error("Could not persist metadata with IPersistanceStore of type '{0}'.", exception, persistanceStore.GetType());
                 }
             }
 
@@ -142,7 +143,7 @@ namespace Glimpse.Core2.Framework
 
                         if (resource == null)
                         {
-                            logger.Warn(string.Format(Resources.RenderClientScriptMissingResourceWarning,clientScript.GetType(), resourceName));
+                            logger.Warn(Resources.RenderClientScriptMissingResourceWarning,clientScript.GetType(), resourceName);
                             continue;
                         }
 
@@ -154,7 +155,7 @@ namespace Glimpse.Core2.Framework
                     }
                     catch(Exception exception)
                     {
-                        logger.Error(string.Format(Resources.GenerateScriptTagsDynamicException, dynamicScript.GetType()), exception);
+                        logger.Error(Resources.GenerateScriptTagsDynamicException, exception, dynamicScript.GetType());
                     }
                 }
 
@@ -172,11 +173,11 @@ namespace Glimpse.Core2.Framework
                     }
                     catch(Exception exception)
                     {
-                        logger.Error(string.Format(Resources.GenerateScriptTagsStaticException, staticScript.GetType()), exception);
+                        logger.Error(Resources.GenerateScriptTagsStaticException, exception, staticScript.GetType());
                     }
                 }
 
-                logger.Warn(string.Format(Resources.RenderClientScriptImproperImplementationWarning, clientScript.GetType()));
+                logger.Warn(Resources.RenderClientScriptImproperImplementationWarning, clientScript.GetType());
             }
 
             return stringBuilder.ToString();
@@ -202,11 +203,18 @@ namespace Glimpse.Core2.Framework
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(resourceName), "resourceName");
             Contract.Requires<ArgumentNullException>(parameters != null, "parameters");
 
-            var policy = GetRuntimePolicy(RuntimeEvent.ExecuteResource);
-            if (policy == RuntimePolicy.Off) return; //TODO: Display error message here.
-
             var logger = Configuration.Logger;
+            var context = new ResourceResultContext(logger, Configuration.FrameworkProvider, Configuration.Serializer, Configuration.HtmlEncoder);
             IResourceResult result;
+
+            var policy = GetRuntimePolicy(RuntimeEvent.ExecuteResource);
+            if (policy == RuntimePolicy.Off)
+            {
+                var message = string.Format(Resources.ExecuteResourceInsufficientPolicy, resourceName);
+                logger.Info(message);
+                new StatusCodeResourceResult(403, message).Execute(context);
+                return;
+            }
 
             var resources =
                 Configuration.Resources.Where(
@@ -223,28 +231,28 @@ namespace Glimpse.Core2.Framework
                     }
                     catch (Exception ex)
                     {
-                        logger.Error(string.Format("Error executing resource '{0}'", resourceName), ex);
+                        //TODO: Use resource
+                        logger.Error("Error executing resource '{0}'", ex, resourceName);
                         result = new ExceptionResourceResult(ex);
                     }
                     break;
                 case 0: //404 - File Not Found
-                    logger.Warn(string.Format(Resources.ExecuteResourceMissingError, resourceName));
+                    logger.Warn(Resources.ExecuteResourceMissingError, resourceName);
                     result = new StatusCodeResourceResult(404);
                     break;
                 default: //500 - Server Error
-                    logger.Warn(string.Format(Resources.ExecuteResourceDuplicateError, resourceName));
+                    logger.Warn(Resources.ExecuteResourceDuplicateError, resourceName);
                     result = new StatusCodeResourceResult(500);
                     break;
             }
 
             try
             {
-                var context = new ResourceResultContext(logger, Configuration.FrameworkProvider, Configuration.Serializer, Configuration.HtmlEncoder);
                 result.Execute(context);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                logger.Fatal(string.Format("Error executing resource result of type '{0}'", result.GetType()), ex);
+                logger.Fatal("Error executing resource result of type '{0}'", exception, result.GetType());
             }
         }
 
@@ -295,7 +303,7 @@ namespace Glimpse.Core2.Framework
                 }
                 catch (Exception exception)
                 {
-                    logger.Error(string.Format(Resources.ExecuteTabError, key), exception);
+                    logger.Error(Resources.ExecuteTabError, exception, key);
                 }
             }
         }
@@ -316,7 +324,7 @@ namespace Glimpse.Core2.Framework
                 }
                 catch (Exception exception)
                 {
-                    logger.Error(string.Format(Resources.InitializeTabError, tab.GetType()), exception);
+                    logger.Error(Resources.InitializeTabError, exception, tab.GetType());
                 }
             }
 
@@ -330,9 +338,7 @@ namespace Glimpse.Core2.Framework
                 }
                 catch (Exception exception)
                 {
-                    logger.Error(
-                        string.Format(Resources.InitializePipelineInspectorError, pipelineInspector.GetType()),
-                        exception);
+                    logger.Error(Resources.InitializePipelineInspectorError, exception, pipelineInspector.GetType());
                 }
             }
 
@@ -367,7 +373,7 @@ namespace Glimpse.Core2.Framework
                     }
                     catch (Exception exception)
                     {
-                        Configuration.Logger.Warn(string.Format("Exception when executing IRuntimePolicy of type '{0}'. RuntimePolicy is now set to 'Off'.", policy.GetType()), exception);
+                        Configuration.Logger.Warn("Exception when executing IRuntimePolicy of type '{0}'. RuntimePolicy is now set to 'Off'.", exception, policy.GetType());
                     }
 
                     //Only use the lowest policy allowed for the request

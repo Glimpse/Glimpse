@@ -19,7 +19,7 @@ namespace Glimpse.Core2.Extensibility
                            
             Settings.Error += (obj, args) =>
                                   {
-                                      Logger.Error(string.Format("Error serializing object."), args.ErrorContext.Error);
+                                      Logger.Error("Error serializing object.", args.ErrorContext.Error);
                                       args.ErrorContext.Handled = true;
                                   };
         }

@@ -135,7 +135,7 @@ namespace Glimpse.Test.Core2.Extensibility
             EndpointConfigMock.Protected().Verify<string>("GenerateUri", Times.Once(), "resourceName",
                                                           new Dictionary<string, string>(),
                                                           ItExpr.IsAny<ILogger>());
-            LoggerMock.Verify(l => l.Warn(It.IsAny<string>(), It.IsAny<DummyException>()));
+            LoggerMock.Verify(l => l.Warn(It.IsAny<string>(), It.IsAny<DummyException>(), It.IsAny<object[]>()));
         }
 
         [Fact]
@@ -151,7 +151,7 @@ namespace Glimpse.Test.Core2.Extensibility
             EndpointConfigMock.Protected().Verify<string>("GenerateUri", Times.Once(), "resourceName",
                                                           ItExpr.IsAny<IEnumerable<KeyValuePair<string, string>>>(),
                                                           ItExpr.IsAny<ILogger>());
-            LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<DummyException>()));
+            LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<DummyException>(), It.IsAny<object[]>()));
             Assert.Equal("", result);
         }
 

@@ -15,7 +15,7 @@ namespace Glimpse.Test.Core2.Extensibility
 
             var resourceResult = new ExceptionResourceResult(exception);
 
-            Assert.Equal(exception, resourceResult.Exception);
+            Assert.Equal(exception.ToString(), resourceResult.Message);
         }
 
         [Fact]

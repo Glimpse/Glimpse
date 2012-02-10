@@ -92,8 +92,8 @@
     <Compile Include="Configuration\TypeConverter.cs" />
     <Compile Include="Configuration\TypeElement.cs" />
     <Compile Include="Configuration\TypeElementCollection.cs" />
-    <Compile Include="DictionaryDataStoreAdapter.cs" />
     <Compile Include="Extensibility\AntiXssEncoder.cs" />
+    <Compile Include="Extensibility\DictionaryDataStoreAdapter.cs" />
     <Compile Include="Extensibility\ExceptionResourceResult.cs" />
     <Compile Include="Extensibility\FileResourceResult.cs" />
     <Compile Include="Extensibility\IClientScript.cs" />
@@ -107,6 +107,7 @@
     <Compile Include="Extensibility\JsonNetSerializationConverterAdapter.cs" />
     <Compile Include="Extensibility\JsonNetSerializer.cs" />
     <Compile Include="Extensibility\JsonResourceResult.cs" />
+    <Compile Include="Extensibility\LoggerBase.cs" />
     <Compile Include="Extensibility\NLogLogger.cs" />
     <Compile Include="Extensibility\NullLogger.cs" />
     <Compile Include="Extensibility\ResourceContext.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="Framework\ApplicationPersistanceStore.cs" />
     <Compile Include="Framework\CacheSetting.cs" />
     <Compile Include="Framework\Factory.cs" />
+    <Compile Include="Framework\GlimpseException.cs" />
     <Compile Include="Framework\GlimpseMetadata.cs" />
     <Compile Include="Framework\IDiscoverableCollection.cs" />
     <Compile Include="Framework\IGlimpseConfiguration.cs" />
@@ -140,7 +142,6 @@
     <Compile Include="Framework\ResourceEndpointConfiguration.cs" />
     <Compile Include="Framework\ResourceParameters.cs" />
     <Compile Include="Framework\TabResult.cs" />
-    <Compile Include="GlimpseException.cs" />
     <Compile Include="Extensibility\IRuntimePolicy.cs" />
     <Compile Include="Extensibility\IResourceResult.cs" />
     <Compile Include="Extensibility\IDataStore.cs" />
@@ -174,6 +175,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SerializationConverter\GlimpseMetadataConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

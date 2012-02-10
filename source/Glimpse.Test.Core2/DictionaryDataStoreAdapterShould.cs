@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Glimpse.Core2;
+using Glimpse.Core2.Extensibility;
 using Xunit;
 
 namespace Glimpse.Test.Core2

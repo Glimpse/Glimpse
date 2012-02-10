@@ -25,16 +25,16 @@ namespace Glimpse.Core2.Framework
                 ParentRequestId = parentRequestId;
         }
 
-        string ClientId { get; set; }
+        public string ClientId { get; set; }
         public DateTime DateTime { get; set; }
         public long Duration { get; set; }
         public Guid ParentRequestId { get; set; }
         public Guid RequestId { get; set; }
-        bool RequestIsAjax { get; set; }
-        string RequestHttpMethod { get; set; }
-        string RequestUri { get; set; }
-        string ResponseContentType { get; set; }
-        int ResponseStatusCode { get; set; }
+        public bool RequestIsAjax { get; set; }
+        public string RequestHttpMethod { get; set; }
+        public string RequestUri { get; set; }
+        public string ResponseContentType { get; set; }
+        public int ResponseStatusCode { get; set; }
         public IDictionary<string, string> PluginData { get; set; }
         public string UserAgent { get; set; }
     }
