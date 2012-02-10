@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web;
+﻿using System.Web;
 using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
@@ -53,8 +52,7 @@ namespace Glimpse.AspNet
         public void InjectHttpResponseBody(string htmlSnippet)
         {
             var response = Context.Response;
-            //TODO: Add strategy pattern to enable setting PreBodyTagFilter earlier and enable lookup of html
-            response.Filter = new PreBodyTagFilter(htmlSnippet, response.Filter, Context.Response.ContentEncoding);
+            response.Filter = new PreBodyTagFilter(htmlSnippet, response.Filter, response.ContentEncoding);
         }
 
         public void WriteHttpResponse(byte[] content)

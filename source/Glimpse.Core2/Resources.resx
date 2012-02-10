@@ -121,15 +121,15 @@
     <value>BeginRequest method has not been called in the context of the current HTTP request. Calls to EndRequest must be preceded by calls to BeginRequest.</value>
   </data>
   <data name="ExecuteTabError" xml:space="preserve">
-    <value>Exception executing tab: {0}</value>
+    <value>Exception executing tab of type '{0}'.</value>
     <comment>{0} - GetType() of offending tab</comment>
   </data>
   <data name="InitializePipelineInspectorError" xml:space="preserve">
-    <value>Exception initializing pipeline inspector: {0}</value>
+    <value>Exception initializing pipeline inspector of type '{0}'.</value>
     <comment>{0} - GetType() of offending pipelineInspector</comment>
   </data>
   <data name="InitializeTabError" xml:space="preserve">
-    <value>Exception initializing tab: {0}</value>
+    <value>Exception initializing tab of type '{0}'.</value>
     <comment>{0} - GetType() of offending tab</comment>
   </data>
   <data name="ExecuteResourceMissingError" xml:space="preserve">
@@ -173,11 +173,11 @@
     <comment>{0} - value input to setter, {1} - missing path</comment>
   </data>
   <data name="InstantiateFrameworkProviderException" xml:space="preserve">
-    <value>Unable to instantiate Framework Provider from IServiceLocator: '{0}' or '{1}'</value>
+    <value>Unable to instantiate Framework Provider from IServiceLocator: '{0}' or '{1}'.</value>
     <comment>{0} - GetType() of UserServiceLocator, or friendly message if null, {1} - GetType() of ProviderServiceLocator, or friendly message if null</comment>
   </data>
   <data name="InstantiateResourceEndpointConfigurationException" xml:space="preserve">
-    <value>Unable to instantiate Resource Endpoint Configuration from IServiceLocator: '{0}' or '{1}'</value>
+    <value>Unable to instantiate Resource Endpoint Configuration from IServiceLocator: '{0}' or '{1}'.</value>
     <comment>{0} - GetType() of UserServiceLocator, or friendly message if null, {1} - GetType() of ProviderServiceLocator, or friendly message if null</comment>
   </data>
   <data name="BeginRequestOutOfOrderRuntimeMethodCall" xml:space="preserve">
@@ -187,7 +187,22 @@
     <value>Exception generating script tag for dynamic IClientScript of type '{0}'.</value>
     <comment>{0} - GetType() of offending IClientScript</comment>
   </data>
-    <data name="GenerateScriptTagsStaticException">
-        <value xml:space="preserve">Exception generating script tag for static IClientScript of type '{0}'.</value>
+  <data name="GenerateScriptTagsStaticException" xml:space="preserve">
+    <value>Exception generating script tag for static IClientScript of type '{0}'.</value>
+  </data>
+  <data name="DiscoverableCollectionAdd" xml:space="preserve">
+    <value>Added {0} of type '{1}' to collection.</value>
+    <comment>{0} - typeof(T).Name of collection generic argument, {1} = GetType() of item added to collection.</comment>
+  </data>
+  <data name="DiscoverableCollectionClear" xml:space="preserve">
+    <value>Cleared {0} collection.</value>
+    <comment>{0} - typeof(T).Name of collection generic argument</comment>
+  </data>
+  <data name="DiscoverableCollectionRemove" xml:space="preserve">
+    <value>Removed {0} of type '{1}' from collection.</value>
+    <comment>{0} - typeof(T).Name of collection generic argument, {1} = GetType() of item removed from collection.</comment>
+  </data>
+    <data name="DiscoverableCollectionDiscover">
+        <value xml:space="preserve">Discovered {0} of type '{1}' and added it to collection.</value>
     </data>
 </root>

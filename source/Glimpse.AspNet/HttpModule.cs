@@ -16,7 +16,6 @@ namespace Glimpse.AspNet
                 httpApplication.BeginRequest += (context, e) => BeginRequest(WithTestable(context));
                 httpApplication.PostRequestHandlerExecute += (context, e) => PostRequestHandlerExecute(WithTestable(context));
                 httpApplication.PostReleaseRequestState += (context, e) => PostReleaseRequestState(WithTestable(context));
-                httpApplication.EndRequest += (context, e) => EndRequest(WithTestable(context));
             }
         }
 
@@ -64,15 +63,8 @@ namespace Glimpse.AspNet
             var runtime = GetRuntime(httpContext.Application);
 
             runtime.ExecuteTabs();
-        }
-
-        internal void EndRequest(HttpContextBase httpContext)
-        {
-            var runtime = GetRuntime(httpContext.Application);
-
             runtime.EndRequest();
         }
-
 
         public void Dispose()
         {

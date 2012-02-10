@@ -70,6 +70,42 @@ namespace Glimpse.Core2 {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Added {0} of type &apos;{1}&apos; to collection..
+        /// </summary>
+        internal static string DiscoverableCollectionAdd {
+            get {
+                return ResourceManager.GetString("DiscoverableCollectionAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cleared {0} collection..
+        /// </summary>
+        internal static string DiscoverableCollectionClear {
+            get {
+                return ResourceManager.GetString("DiscoverableCollectionClear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Discovered {0} of type &apos;{1}&apos; and added it to collection..
+        /// </summary>
+        internal static string DiscoverableCollectionDiscover {
+            get {
+                return ResourceManager.GetString("DiscoverableCollectionDiscover", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removed {0} of type &apos;{1}&apos; from collection..
+        /// </summary>
+        internal static string DiscoverableCollectionRemove {
+            get {
+                return ResourceManager.GetString("DiscoverableCollectionRemove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exception loading &apos;{0}&apos; of type &apos;{1}&apos;..
         /// </summary>
         internal static string DiscoverCreateInstance {
@@ -124,7 +160,7 @@ namespace Glimpse.Core2 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Exception executing tab: {0}.
+        ///   Looks up a localized string similar to Exception executing tab of type &apos;{0}&apos;..
         /// </summary>
         internal static string ExecuteTabError {
             get {
@@ -169,7 +205,7 @@ namespace Glimpse.Core2 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Exception initializing pipeline inspector: {0}.
+        ///   Looks up a localized string similar to Exception initializing pipeline inspector of type &apos;{0}&apos;..
         /// </summary>
         internal static string InitializePipelineInspectorError {
             get {
@@ -178,7 +214,7 @@ namespace Glimpse.Core2 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Exception initializing tab: {0}.
+        ///   Looks up a localized string similar to Exception initializing tab of type &apos;{0}&apos;..
         /// </summary>
         internal static string InitializeTabError {
             get {
@@ -187,7 +223,7 @@ namespace Glimpse.Core2 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to instantiate Framework Provider from IServiceLocator: &apos;{0}&apos; or &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Unable to instantiate Framework Provider from IServiceLocator: &apos;{0}&apos; or &apos;{1}&apos;..
         /// </summary>
         internal static string InstantiateFrameworkProviderException {
             get {
@@ -196,7 +232,7 @@ namespace Glimpse.Core2 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to instantiate Resource Endpoint Configuration from IServiceLocator: &apos;{0}&apos; or &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Unable to instantiate Resource Endpoint Configuration from IServiceLocator: &apos;{0}&apos; or &apos;{1}&apos;..
         /// </summary>
         internal static string InstantiateResourceEndpointConfigurationException {
             get {

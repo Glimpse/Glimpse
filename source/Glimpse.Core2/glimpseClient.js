@@ -1,1 +1,1 @@
-﻿alert('Need to put the real Glimpse client here!');
+﻿console.log('Need to put the real Glimpse client here!');

@@ -6,10 +6,11 @@ namespace Glimpse.Core2
     public enum RuntimePolicy
     {
         Off = 1,
-        PersistResults = 2,
-        ModifyResponseHeaders = 4 | PersistResults,
-        ModifyResponseBody = 8 | ModifyResponseHeaders,
-        DisplayGlimpseClient = 16 | ModifyResponseBody,
+        Ignore = 2,
+        PersistResults = 4,
+        ModifyResponseHeaders = 8 | PersistResults,
+        ModifyResponseBody = 16 | ModifyResponseHeaders,
+        DisplayGlimpseClient = 32 | ModifyResponseBody,
         On = DisplayGlimpseClient
     }
 }

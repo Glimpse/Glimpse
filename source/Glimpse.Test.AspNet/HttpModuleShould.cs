@@ -53,13 +53,6 @@ namespace Glimpse.Test.AspNet
             HttpModule.RuntimeMock.Verify(r => r.ExecuteTabs(), Times.Once());
         }
 
-        [Fact]
-        public void CallGlimpseRuntimeEndRequestOnEndRequest()
-        {
-            HttpModule.EndRequest(HttpModule.ContextMock.Object);
-
-            HttpModule.RuntimeMock.Verify(r => r.EndRequest(), Times.Once());
-        }
 
         [Fact]
         public void DisposeNothing()

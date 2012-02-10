@@ -13,7 +13,7 @@ namespace Glimpse.AspNet
 
         public PreBodyTagFilter(string htmlSnippet, Stream outputStream, Encoding contentEncoding)
         {
-            HtmlSnippet = htmlSnippet += "</body>";
+            HtmlSnippet = string.IsNullOrWhiteSpace(htmlSnippet) ? string.Empty : htmlSnippet + "</body>";
             OutputStream = outputStream;
             ContentEncoding = contentEncoding;
             BodyEnd = new Regex("</body>", RegexOptions.Compiled | RegexOptions.Multiline);

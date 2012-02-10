@@ -9,12 +9,12 @@ namespace Glimpse.Test.Core2.Policy
     public class GlimpseResourcePolicyShould
     {
         [Fact]
-        public void SetRuntimePolicyToOff()
+        public void SetRuntimePolicyToIgnore()
         {
             var policy = new GlimpseResourcePolicy();
             var policyContextMock = new Mock<IRuntimePolicyContext>();
 
-            Assert.Equal(RuntimePolicy.Off, policy.Execute(policyContextMock.Object));
+            Assert.Equal(RuntimePolicy.Ignore, policy.Execute(policyContextMock.Object));
         }
 
         [Fact]

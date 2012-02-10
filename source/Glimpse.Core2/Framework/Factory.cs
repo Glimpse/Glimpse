@@ -135,7 +135,7 @@ namespace Glimpse.Core2.Framework
                                  {
                                      FileName = "${basedir}/Glimpse.log",
                                      Layout =
-                                         "${longdate}|${level:uppercase=true}|${logger}|${message}|${exception:maxInnerExceptionLevel=5:format=type,message,stacktrace:separator=--:innerFormat=shortType,message,method}"
+                                         "${longdate} | ${level:uppercase=true} | ${message} | ${exception:maxInnerExceptionLevel=5:format=type,message,stacktrace:separator=--:innerFormat=shortType,message,method:innerExceptionSeparator=>>}"
                                  };
 
             var loggingConfiguration = new LoggingConfiguration();

@@ -44,32 +44,32 @@ namespace Glimpse.Core2.Extensibility
 
         public void Trace(string message, Exception exception)
         {
-            Logger.Trace(message, exception);
+            Logger.TraceException(message, exception);
         }
 
         public void Debug(string message, Exception exception)
         {
-            Logger.Debug(message, exception);
+            Logger.DebugException(message, exception);
         }
 
         public void Info(string message, Exception exception)
         {
-            Logger.Info(message, exception);
+            Logger.InfoException(message, exception);
         }
 
         public void Warn(string message, Exception exception)
         {
-            Logger.Warn(message, exception);
+            Logger.WarnException(message, exception);
         }
 
         public void Error(string message, Exception exception)
         {
-            Logger.Error(message, exception);
+            Logger.ErrorException(message, exception);
         }
 
         public void Fatal(string message, Exception exception)
         {
-            Logger.Fatal(message, exception);
+            Logger.FatalException(message, exception);
         }
     }
 }

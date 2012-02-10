@@ -35,11 +35,13 @@ namespace Glimpse.Core2.Framework
         public void Add(T item)
         {
             Items.Add(item);
+            Logger.Debug(string.Format(Resources.DiscoverableCollectionAdd, typeof(T).Name, item.GetType()));
         }
 
         public void Clear()
         {
             Items.Clear();
+            Logger.Debug(string.Format(Resources.DiscoverableCollectionClear, typeof(T).Name));
         }
 
         public bool Contains(T item)
@@ -54,7 +56,12 @@ namespace Glimpse.Core2.Framework
 
         public bool Remove(T item)
         {
-            return Items.Remove(item);
+            var result = Items.Remove(item);
+
+            if (result)
+                Logger.Debug(string.Format(Resources.DiscoverableCollectionRemove, typeof(T).Name, item.GetType()));
+
+            return result;
         }
 
         public int Count
@@ -112,6 +119,12 @@ namespace Glimpse.Core2.Framework
             if (results.Count > 0)
             {
                 Items.Clear();
+
+                foreach (var result in results)
+                {
+                    Logger.Trace(string.Format(Resources.DiscoverableCollectionDiscover, typeof(T).Name, result.GetType()));
+                }
+
                 Items.AddRange(results);
             }
         }

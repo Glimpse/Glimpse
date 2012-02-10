@@ -6,7 +6,7 @@ namespace Glimpse.Core2.Policy
     {
         public RuntimePolicy Execute(IRuntimePolicyContext policyContext)
         {
-            return RuntimePolicy.Off; //Never run Glimpse on requests for its own resources
+            return RuntimePolicy.Ignore; //Allow Glimpse to run, but don't change the response at all
         }
 
         public RuntimeEvent ExecuteOn
