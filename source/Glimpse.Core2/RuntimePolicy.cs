@@ -6,7 +6,7 @@ namespace Glimpse.Core2
     public enum RuntimePolicy
     {
         Off = 1,
-        Ignore = 2,
+        ExecuteResourceOnly = 2 | Off,
         PersistResults = 4,
         ModifyResponseHeaders = 8 | PersistResults,
         ModifyResponseBody = 16 | ModifyResponseHeaders,

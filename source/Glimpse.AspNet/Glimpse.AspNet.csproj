@@ -74,6 +74,8 @@
     <Compile Include="AspNetFrameworkProvider.cs" />
     <Compile Include="AspNetServiceLocator.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Extensibility\AspNetTab.cs" />
+    <Compile Include="Extensions\TabContextExtensions.cs" />
     <Compile Include="HttpApplicationStateBaseDataStoreAdapter.cs" />
     <Compile Include="HttpHandler.cs" />
     <Compile Include="HttpHandlerEndpointConfiguration.cs" />
@@ -87,6 +89,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SerializationConverter\RequestModelConverter.cs" />
     <Compile Include="Tab\Request.cs" />
     <Compile Include="PreBodyTagFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -104,6 +107,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

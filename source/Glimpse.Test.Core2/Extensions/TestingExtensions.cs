@@ -23,7 +23,7 @@ namespace Glimpse.Test.Core2.Extensions
         {
             tab.Setup(p => p.GetData(It.IsAny<ITabContext>())).Returns("a result");
             tab.Setup(m => m.RequestContextType).Returns(typeof(DummyObjectContext));
-            tab.Setup(m => m.LifeCycleSupport).Returns(LifeCycleSupport.EndRequest);
+            tab.Setup(m => m.ExecuteOn).Returns(RuntimeEvent.EndRequest);
 
             return tab;
         }

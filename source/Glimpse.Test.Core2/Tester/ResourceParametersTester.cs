@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
 using Moq;
@@ -8,7 +9,7 @@ namespace Glimpse.Test.Core2.Tester
     {
         public Mock<IResource> ResourceMock { get; set; }
         
-        private ResourceParametersTester()
+        private ResourceParametersTester(IDictionary<string,string> namedParams):base(namedParams)
         {
             ResourceMock = new Mock<IResource>();
             ResourceMock.Setup(r => r.ParameterKeys).Returns(new[] {"One", "Two", "Three"});
@@ -16,7 +17,8 @@ namespace Glimpse.Test.Core2.Tester
 
         public static ResourceParametersTester Create()
         {
-            return new ResourceParametersTester();
+            IDictionary<string, string> none = null;
+            return new ResourceParametersTester(none);
         }
     }
 }

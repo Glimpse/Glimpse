@@ -8,11 +8,11 @@ namespace Glimpse.Core2.Extensibility
 
         public abstract string Name{get; }
 
-        public virtual LifeCycleSupport LifeCycleSupport
+        public virtual RuntimeEvent ExecuteOn
         {
             get
             {
-                return LifeCycleSupport.EndRequest;
+                return RuntimeEvent.EndRequest;
             }
         }
 

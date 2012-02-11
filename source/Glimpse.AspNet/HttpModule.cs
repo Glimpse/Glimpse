@@ -1,5 +1,4 @@
 ﻿using System.Web;
-using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
 
 namespace Glimpse.AspNet
@@ -14,9 +13,24 @@ namespace Glimpse.AspNet
             if (runtime.IsInitialized || runtime.Initialize())
             {
                 httpApplication.BeginRequest += (context, e) => BeginRequest(WithTestable(context));
-                httpApplication.PostRequestHandlerExecute += (context, e) => PostRequestHandlerExecute(WithTestable(context));
-                httpApplication.PostReleaseRequestState += (context, e) => PostReleaseRequestState(WithTestable(context));
+                httpApplication.PostAcquireRequestState += (context, e) => BeginSessionAccess(WithTestable(context));
+                httpApplication.ReleaseRequestState += (context, e) => EndSessionAccess(WithTestable(context));
+                httpApplication.PostReleaseRequestState += (context, e) => EndRequest(WithTestable(context));
             }
+        }
+
+        private void EndSessionAccess(HttpContextBase httpContext)
+        {
+            var runtime = GetRuntime(httpContext.Application);
+
+            runtime.EndSessionAccess();
+        }
+
+        private void BeginSessionAccess(HttpContextBase httpContext)
+        {
+            var runtime = GetRuntime(httpContext.Application);
+
+            runtime.BeginSessionAccess();
         }
 
         internal IGlimpseRuntime GetRuntime(HttpApplicationStateBase applicationState)
@@ -50,19 +64,11 @@ namespace Glimpse.AspNet
             runtime.BeginRequest();
         }
 
-        //TODO: Figure out the proper SessionAccessEnd ASP.NET event
-        internal void PostRequestHandlerExecute(HttpContextBase httpContext)
+
+        internal void EndRequest(HttpContextBase httpContext)
         {
             var runtime = GetRuntime(httpContext.Application);
 
-            runtime.ExecuteTabs(LifeCycleSupport.SessionAccessEnd);
-        }
-
-        internal void PostReleaseRequestState(HttpContextBase httpContext)
-        {
-            var runtime = GetRuntime(httpContext.Application);
-
-            runtime.ExecuteTabs();
             runtime.EndRequest();
         }
 

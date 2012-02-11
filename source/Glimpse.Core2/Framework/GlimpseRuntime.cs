@@ -48,7 +48,9 @@ namespace Glimpse.Core2.Framework
             if (!IsInitialized) throw new GlimpseException(Resources.BeginRequestOutOfOrderRuntimeMethodCall);
 
             var policy = GetRuntimePolicy(RuntimeEvent.BeginRequest);
-            if (policy == RuntimePolicy.Off) return;
+            if (policy.HasFlag(RuntimePolicy.Off)) return;
+
+            ExecuteTabs(RuntimeEvent.BeginRequest);
 
             var requestStore = Configuration.FrameworkProvider.HttpRequestStore;
 
@@ -66,7 +68,9 @@ namespace Glimpse.Core2.Framework
         public void EndRequest()
         {
             var policy = GetRuntimePolicy(RuntimeEvent.EndRequest);
-            if (policy == RuntimePolicy.Off) return;
+            if (policy.HasFlag(RuntimePolicy.Off)) return;
+
+            ExecuteTabs(RuntimeEvent.EndRequest);
 
             var frameworkProvider = Configuration.FrameworkProvider;
             var requestStore = frameworkProvider.HttpRequestStore;
@@ -185,17 +189,23 @@ namespace Glimpse.Core2.Framework
 
         public void ExecuteDefaultResource()
         {
-            ExecuteResource(Configuration.DefaultResource.Name, new ResourceParameters());
+            ExecuteResource(Configuration.DefaultResource.Name, ResourceParameters.None());
         }
 
-        public void ExecuteResource(string resourceName, IDictionary<string, string> namedParameters)
+        public void BeginSessionAccess()
         {
-            ExecuteResource(resourceName, new ResourceParameters{NamedParameters = namedParameters});
+            var policy = GetRuntimePolicy(RuntimeEvent.BeginSessionAccess);
+            if (policy.HasFlag(RuntimePolicy.Off)) return;
+
+            ExecuteTabs(RuntimeEvent.BeginSessionAccess);
         }
 
-        public void ExecuteResource(string resourceName, string[] orderedParameters)
+        public void EndSessionAccess()
         {
-            ExecuteResource(resourceName, new ResourceParameters{OrderedParameters = orderedParameters});
+            var policy = GetRuntimePolicy(RuntimeEvent.EndSessionAccess);
+            if (policy.HasFlag(RuntimePolicy.Off)) return;
+
+            ExecuteTabs(RuntimeEvent.EndSessionAccess);
         }
 
         public void ExecuteResource(string resourceName, ResourceParameters parameters)
@@ -256,16 +266,8 @@ namespace Glimpse.Core2.Framework
             }
         }
 
-        public void ExecuteTabs()
+        private void ExecuteTabs(RuntimeEvent runtimeEvent)
         {
-            ExecuteTabs(LifeCycleSupport.EndRequest);
-        }
-
-        public void ExecuteTabs(LifeCycleSupport support)
-        {
-            var policy = GetRuntimePolicy(RuntimeEvent.ExecuteTabs);
-            if (policy == RuntimePolicy.Off) return;
-
             var runtimeContext = Configuration.FrameworkProvider.RuntimeContext;
             var frameworkProviderRuntimeContextType = runtimeContext.GetType();
 
@@ -277,7 +279,7 @@ namespace Glimpse.Core2.Framework
                     frameworkProviderRuntimeContextType.IsSubclassOf(tab.RequestContextType) ||
                     tab.RequestContextType == frameworkProviderRuntimeContextType);
 
-            var supportedRuntimeTabs = runtimeTabs.Where(p => p.LifeCycleSupport.HasFlag(support));
+            var supportedRuntimeTabs = runtimeTabs.Where(p => p.ExecuteOn.HasFlag(runtimeEvent));
             var tabResultsStore = TabResultsStore;
             var logger = Configuration.Logger;
 
@@ -356,7 +358,7 @@ namespace Glimpse.Core2.Framework
                              ? requestStore.Get<RuntimePolicy>(Constants.RuntimePermissionsKey)
                              : Configuration.DefaultRuntimePolicy;
 
-            if (finalResult != RuntimePolicy.Off)
+            if (!finalResult.HasFlag(RuntimePolicy.Off))
             {
                 //only run policies for this runtimeEvent, or all runtime events
                 var policies =

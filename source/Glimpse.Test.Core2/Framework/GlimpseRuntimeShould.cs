@@ -77,7 +77,7 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.Initialize();
 
             Runtime.BeginRequest();
-            Runtime.ExecuteTabs();
+            Runtime.EndRequest();
 
             var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
@@ -89,12 +89,11 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void ExecutePluginsWithLifeCycleMismatch()
         {
-            Runtime.TabMock.Setup(m => m.LifeCycleSupport).Returns(LifeCycleSupport.BeginRequest);
+            Runtime.TabMock.Setup(m => m.ExecuteOn).Returns(RuntimeEvent.EndRequest);
 
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
             Runtime.Initialize();
             Runtime.BeginRequest();
-            Runtime.ExecuteTabs(LifeCycleSupport.EndRequest);
 
             var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
@@ -109,7 +108,7 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
             Runtime.Initialize();
             Runtime.BeginRequest();
-            Runtime.ExecuteTabs();
+            Runtime.EndRequest();
 
             var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
@@ -126,7 +125,7 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
             Runtime.Initialize();
             Runtime.BeginRequest();
-            Runtime.ExecuteTabs();
+            Runtime.EndRequest();
 
             var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
@@ -144,7 +143,7 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
             Runtime.Initialize();
             Runtime.BeginRequest();
-            Runtime.ExecuteTabs();
+            Runtime.EndRequest();
 
             var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
@@ -161,7 +160,7 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
             Runtime.Initialize();
             Runtime.BeginRequest();
-            Runtime.ExecuteTabs();
+            Runtime.EndRequest();
 
             var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
@@ -178,7 +177,7 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.Configuration.Tabs.Clear();
             Runtime.Initialize();
             Runtime.BeginRequest();
-            Runtime.ExecuteTabs();
+            Runtime.EndRequest();
 
             var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
@@ -189,22 +188,22 @@ namespace Glimpse.Test.Core2.Framework
         public void FlagsTest()
         {
             //This test is just to help me keep my sanity with bitwise operators
-            var support = LifeCycleSupport.EndRequest;
+            var support = RuntimeEvent.EndRequest;
 
-            Assert.True(support.HasFlag(LifeCycleSupport.EndRequest), "End is End");
+            Assert.True(support.HasFlag(RuntimeEvent.EndRequest), "End is End");
 
-            support = LifeCycleSupport.EndRequest | LifeCycleSupport.SessionAccessEnd;
+            support = RuntimeEvent.EndRequest | RuntimeEvent.EndSessionAccess;
 
-            Assert.True(support.HasFlag(LifeCycleSupport.EndRequest), "End in End|SessionEnd");
-            Assert.True(support.HasFlag(LifeCycleSupport.SessionAccessEnd), "SessionEnd in End|SessionEnd");
+            Assert.True(support.HasFlag(RuntimeEvent.EndRequest), "End in End|SessionEnd");
+            Assert.True(support.HasFlag(RuntimeEvent.EndSessionAccess), "SessionEnd in End|SessionEnd");
             //support End OR Begin
-            Assert.True(support.HasFlag(LifeCycleSupport.EndRequest & LifeCycleSupport.BeginRequest), "End|Begin in End|SessionEnd");
+            Assert.True(support.HasFlag(RuntimeEvent.EndRequest & RuntimeEvent.BeginRequest), "End|Begin in End|SessionEnd");
             //support End AND SessionEnd
-            Assert.True(support.HasFlag(LifeCycleSupport.EndRequest | LifeCycleSupport.SessionAccessEnd), "End|SessionEnd in End|SessionEnd");
-            Assert.False(support.HasFlag(LifeCycleSupport.EndRequest | LifeCycleSupport.BeginRequest), "End|Begin NOT in End|SessionEnd");
-            Assert.False(support.HasFlag(LifeCycleSupport.BeginRequest), "Begin NOT in End|SessionEnd");
-            Assert.False(support.HasFlag(LifeCycleSupport.SessionAccessBegin), "SessionBegin NOT in End|SessionEnd");
-            Assert.False(support.HasFlag(LifeCycleSupport.BeginRequest | LifeCycleSupport.SessionAccessBegin), "Begin|SessionBegin NOT in End|SessionEnd");
+            Assert.True(support.HasFlag(RuntimeEvent.EndRequest | RuntimeEvent.EndSessionAccess), "End|SessionEnd in End|SessionEnd");
+            Assert.False(support.HasFlag(RuntimeEvent.EndRequest | RuntimeEvent.BeginRequest), "End|Begin NOT in End|SessionEnd");
+            Assert.False(support.HasFlag(RuntimeEvent.BeginRequest), "Begin NOT in End|SessionEnd");
+            Assert.False(support.HasFlag(RuntimeEvent.BeginSessionAccess), "SessionBegin NOT in End|SessionEnd");
+            Assert.False(support.HasFlag(RuntimeEvent.BeginRequest | RuntimeEvent.BeginSessionAccess), "Begin|SessionBegin NOT in End|SessionEnd");
         }
 
         [Fact]
@@ -276,7 +275,6 @@ namespace Glimpse.Test.Core2.Framework
         {
             Runtime.Initialize();
             Runtime.BeginRequest();
-            Runtime.ExecuteTabs();
             Runtime.EndRequest();
 
             Runtime.FrameworkProviderMock.Verify(fp => fp.InjectHttpResponseBody(It.IsAny<string>()));
@@ -288,7 +286,6 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
             Runtime.Initialize();
             Runtime.BeginRequest();
-            Runtime.ExecuteTabs();
             Runtime.EndRequest();
 
             Runtime.SerializerMock.Verify(s => s.Serialize(It.IsAny<object>()), Times.Exactly(Runtime.Configuration.Tabs.Count));
@@ -301,7 +298,6 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
             Runtime.Initialize();
             Runtime.BeginRequest();
-            Runtime.ExecuteTabs();
             Runtime.EndRequest();
 
             Runtime.SerializerMock.Verify(s => s.Serialize(It.IsAny<object>()), Times.Exactly(Runtime.Configuration.Tabs.Count));
@@ -313,7 +309,6 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
             Runtime.Initialize();
             Runtime.BeginRequest();
-            Runtime.ExecuteTabs();
             Runtime.EndRequest();
 
             Runtime.FrameworkProviderMock.Verify(fp => fp.SetHttpResponseHeader(Constants.HttpResponseHeader, It.IsAny<string>()));
@@ -343,7 +338,7 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IResourceContext>())).Returns(Runtime.ResourceResultMock.Object);
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
 
-            Runtime.ExecuteResource(name.ToLower(), new[]{"One","Two"});
+            Runtime.ExecuteResource(name.ToLower(), new ResourceParameters(new[]{"One","Two"}));
 
             Runtime.ResourceMock.Verify(r => r.Execute(It.IsAny<IResourceContext>()), Times.Once());
             Runtime.ResourceResultMock.Verify(r => r.Execute(It.IsAny<IResourceResultContext>()));
@@ -357,7 +352,7 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IResourceContext>())).Returns(Runtime.ResourceResultMock.Object);
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
 
-            Runtime.ExecuteResource(name.ToLower(), new Dictionary<string, string>{{"One", "1"}, {"Two","2"}});
+            Runtime.ExecuteResource(name.ToLower(), new ResourceParameters(new Dictionary<string, string>{{"One", "1"}, {"Two","2"}}));
 
             Runtime.ResourceMock.Verify(r => r.Execute(It.IsAny<IResourceContext>()), Times.Once());
             Runtime.ResourceResultMock.Verify(r => r.Execute(It.IsAny<IResourceResultContext>()));
@@ -368,7 +363,7 @@ namespace Glimpse.Test.Core2.Framework
         {
             Runtime.Configuration.Resources.Clear();
 
-            Runtime.ExecuteResource("random name that doesn't exist", new string[]{});
+            Runtime.ExecuteResource("random name that doesn't exist", new ResourceParameters(new string[]{}));
 
             Runtime.FrameworkProviderMock.Verify(fp => fp.SetHttpResponseStatusCode(404), Times.Once());
         }
@@ -382,7 +377,7 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
 
-            Runtime.ExecuteResource(name, new string[]{});
+            Runtime.ExecuteResource(name, new ResourceParameters(new string[]{}));
 
             Runtime.FrameworkProviderMock.Verify(fp => fp.SetHttpResponseStatusCode(500), Times.Once());
         }
@@ -390,7 +385,7 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void ThrowExceptionWithEmptyResourceName()
         {
-            Assert.Throws<ArgumentNullException>(() => Runtime.ExecuteResource("", new string[]{}));
+            Assert.Throws<ArgumentNullException>(() => Runtime.ExecuteResource("", new ResourceParameters(new string[]{})));
         }
 
         [Fact]
@@ -402,7 +397,7 @@ namespace Glimpse.Test.Core2.Framework
 
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
 
-            Runtime.ExecuteResource(name, new string[]{});
+            Runtime.ExecuteResource(name, new ResourceParameters(new string[]{}));
 
             Runtime.FrameworkProviderMock.Verify(fp => fp.SetHttpResponseStatusCode(500), Times.Once());
         }
@@ -417,7 +412,7 @@ namespace Glimpse.Test.Core2.Framework
 
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
 
-            Runtime.ExecuteResource(name, new Dictionary<string, string>());
+            Runtime.ExecuteResource(name, new ResourceParameters(new Dictionary<string, string>()));
 
             Runtime.ResourceMock.Verify(r => r.Execute(null), Times.Never());
         }
@@ -433,7 +428,7 @@ namespace Glimpse.Test.Core2.Framework
 
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
 
-            Runtime.ExecuteResource(name, new string[]{});
+            Runtime.ExecuteResource(name, new ResourceParameters(new string[]{}));
 
             Runtime.LoggerMock.Verify(l => l.Fatal(It.IsAny<string>(), It.IsAny<Exception>(), It.IsAny<object[]>()), Times.Once());
         }
@@ -451,12 +446,12 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void ProvideLowestModeLevelOnInitializing()
         {
-            var offValidatorMock = new Mock<IRuntimePolicy>();
-            offValidatorMock.Setup(v => v.Execute(It.IsAny<IRuntimePolicyContext>())).Returns(RuntimePolicy.Off);
-            offValidatorMock.Setup(v => v.ExecuteOn).Returns(RuntimeEvent.All);
+            var offPolicyMock = new Mock<IRuntimePolicy>();
+            offPolicyMock.Setup(v => v.Execute(It.IsAny<IRuntimePolicyContext>())).Returns(RuntimePolicy.Off);
+            offPolicyMock.Setup(v => v.ExecuteOn).Returns(RuntimeEvent.Initialize);
 
             Runtime.Configuration.RuntimePolicies.Add(Runtime.RuntimePolicyMock.Object);
-            Runtime.Configuration.RuntimePolicies.Add(offValidatorMock.Object);
+            Runtime.Configuration.RuntimePolicies.Add(offPolicyMock.Object);
 
             var result = Runtime.Initialize();
 
@@ -529,11 +524,11 @@ namespace Glimpse.Test.Core2.Framework
         }
 
         [Fact]
-        public void SkipExecutingTabsIfGlipseModeIsOff()
+        public void SkipInitializeIfGlipseModeIsOff()
         {
             Runtime.Configuration.DefaultRuntimePolicy = RuntimePolicy.Off;
 
-            Runtime.ExecuteTabs();
+            Runtime.Initialize();
 
             Assert.Equal(RuntimePolicy.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePermissionsKey));
         }
@@ -543,7 +538,7 @@ namespace Glimpse.Test.Core2.Framework
         {
             Runtime.Configuration.DefaultRuntimePolicy = RuntimePolicy.Off;
 
-            Runtime.ExecuteResource("doesn't matter", new string[]{});
+            Runtime.ExecuteResource("doesn't matter", new ResourceParameters(new string[]{}));
 
             Assert.Equal(RuntimePolicy.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePermissionsKey));
         }
@@ -758,6 +753,32 @@ namespace Glimpse.Test.Core2.Framework
 
             Runtime.HttpRequestStoreMock.Verify(fp=>fp.Set(Constants.RequestIdKey, It.IsAny<Guid>()), Times.Never());
             Runtime.HttpRequestStoreMock.Verify(fp=>fp.Set(Constants.GlobalStopwatchKey, It.IsAny<Stopwatch>()), Times.Never());
+        }
+
+        [Fact]
+        public void ExecuteTabsOnBeginSessionAccess()
+        {
+            Runtime.TabMock.Setup(t => t.ExecuteOn).Returns(RuntimeEvent.BeginSessionAccess);
+            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
+
+            Runtime.Initialize();
+            Runtime.BeginRequest();
+            Runtime.BeginSessionAccess();
+
+            Runtime.TabMock.Verify(t=>t.GetData(It.IsAny<ITabContext>()), Times.Once());
+        }
+
+        [Fact]
+        public void ExecuteTabsOnEndSessionAccess()
+        {
+            Runtime.TabMock.Setup(t => t.ExecuteOn).Returns(RuntimeEvent.EndSessionAccess);
+            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
+
+            Runtime.Initialize();
+            Runtime.BeginRequest();
+            Runtime.EndSessionAccess();
+
+            Runtime.TabMock.Verify(t => t.GetData(It.IsAny<ITabContext>()), Times.Once());
         }
     }
 }

@@ -6,9 +6,25 @@ namespace Glimpse.Core2.Framework
 {
     public class ResourceParameters
     {
-        public IDictionary<string, string> NamedParameters { private get; set; }
+        public static ResourceParameters None()
+        {
+            IDictionary<string, string> none = null;
+            return new ResourceParameters(none);
+        }
 
-        public string[] OrderedParameters { private get; set; }
+        public ResourceParameters(IDictionary<string, string> namedParameters)
+        {
+            NamedParameters = namedParameters;
+        }
+
+        public ResourceParameters(string[] orderedParameters)
+        {
+            OrderedParameters = orderedParameters;
+        }
+
+        internal IDictionary<string, string> NamedParameters { get; set; }
+
+        internal string[] OrderedParameters { get; set; }
 
         public IDictionary<string,string> GetParametersFor(IResource resource)
         {

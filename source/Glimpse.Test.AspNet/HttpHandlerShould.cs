@@ -44,8 +44,7 @@ namespace Glimpse.Test.AspNet
         {
             Handler.ProcessRequest(Handler.ContextMock.Object);
 
-            var queryString = Handler.QueryString.AllKeys.ToDictionary(key => key, key => Handler.QueryString[key]);
-            Handler.RuntimeMock.Verify(r=>r.ExecuteResource(Handler.ResourceName, queryString),Times.Once());
+            Handler.RuntimeMock.Verify(r=>r.ExecuteResource(Handler.ResourceName, It.IsAny<ResourceParameters>()),Times.Once());
         }
 
         [Fact]

@@ -5,7 +5,7 @@ namespace Glimpse.Test.Core2.TestDoubles
 {
     public class DummySerializationConverterOfT:SerializationConverter<DummyObjectContext>
     {
-        public override IDictionary<string, object> Convert(object obj)
+        public override IDictionary<string, object> Convert(DummyObjectContext obj)
         {
             throw new System.NotSupportedException();
         }

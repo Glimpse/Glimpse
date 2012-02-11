@@ -10,6 +10,11 @@ namespace Glimpse.Core2.Extensibility
             get { return new[] {typeof (T)}; }
         }
 
-        public abstract IDictionary<string, object> Convert(object obj);
+        public IDictionary<string, object> Convert(object obj)
+        {
+            return Convert((T) obj);
+        }
+
+        public abstract IDictionary<string, object> Convert(T obj);
     }
 }

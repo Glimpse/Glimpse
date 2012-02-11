@@ -6,10 +6,8 @@ namespace Glimpse.Core2.SerializationConverter
 {
     public class GlimpseMetadataConverter:SerializationConverter<GlimpseMetadata>
     {
-        public override IDictionary<string, object> Convert(object obj)
+        public override IDictionary<string, object> Convert(GlimpseMetadata metadata)
         {
-            var metadata = (GlimpseMetadata) obj;
-
             return new Dictionary<string, object>
                        {
                            {"clientId", metadata.ClientId},

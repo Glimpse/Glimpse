@@ -7,9 +7,9 @@ namespace Glimpse.Core2.Extensibility
     {
         Initialize = 1,
         BeginRequest = 2,
-        ExecuteTabs = 4,
+        BeginSessionAccess = 4,
         ExecuteResource = 8,
-        EndRequest = 16,
-        All = Initialize | BeginRequest | ExecuteTabs | ExecuteResource | EndRequest
+        EndSessionAccess = 16,
+        EndRequest = 32
     }
 }

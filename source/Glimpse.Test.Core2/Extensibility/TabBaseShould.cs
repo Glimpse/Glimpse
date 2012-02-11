@@ -1,6 +1,5 @@
 ﻿using Glimpse.Core2.Extensibility;
 using Glimpse.Test.Core2.TestDoubles;
-using Moq;
 using Xunit;
 
 namespace Glimpse.Test.Core2.Extensibility
@@ -20,7 +19,7 @@ namespace Glimpse.Test.Core2.Extensibility
         {
             var tab = new TestingTab();
 
-            Assert.Equal(LifeCycleSupport.EndRequest, tab.LifeCycleSupport);
+            Assert.Equal(RuntimeEvent.EndRequest, tab.ExecuteOn);
         }
 
         [Fact]
@@ -36,7 +35,7 @@ namespace Glimpse.Test.Core2.Extensibility
         {
             var tab = new GenericTab();
 
-            Assert.Equal(LifeCycleSupport.EndRequest, tab.LifeCycleSupport);
+            Assert.Equal(RuntimeEvent.EndRequest, tab.ExecuteOn);
         }
 
         private class GenericTab : TabBase<DummyObjectContext>

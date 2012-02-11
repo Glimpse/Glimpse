@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using Glimpse.Core2.Extensibility;
-
 namespace Glimpse.Core2.Framework
 {
     //TODO: Add contracts here?
@@ -10,10 +7,9 @@ namespace Glimpse.Core2.Framework
         void BeginRequest();
         void EndRequest();
         void ExecuteDefaultResource();
-        void ExecuteResource(string resourceName, IDictionary<string, string> parameters);
-        void ExecuteResource(string resourceName, string[] parameters);
-        void ExecuteTabs();
-        void ExecuteTabs(LifeCycleSupport support);
+        void ExecuteResource(string resourceName, ResourceParameters parameters);
+        void BeginSessionAccess();
+        void EndSessionAccess();
         bool Initialize();
         bool IsInitialized { get; }
     }

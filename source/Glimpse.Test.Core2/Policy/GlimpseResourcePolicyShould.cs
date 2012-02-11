@@ -14,7 +14,7 @@ namespace Glimpse.Test.Core2.Policy
             var policy = new GlimpseResourcePolicy();
             var policyContextMock = new Mock<IRuntimePolicyContext>();
 
-            Assert.Equal(RuntimePolicy.Ignore, policy.Execute(policyContextMock.Object));
+            Assert.Equal(RuntimePolicy.ExecuteResourceOnly, policy.Execute(policyContextMock.Object));
         }
 
         [Fact]

@@ -93,6 +93,7 @@
     <Compile Include="Extensibility\FileResourceResultShould.cs" />
     <Compile Include="Extensibility\JsonNetSerializationConverterShould.cs" />
     <Compile Include="Extensibility\JsonResourceResultShould.cs" />
+    <Compile Include="Extensibility\LoggerBaseShould.cs" />
     <Compile Include="Extensibility\NullLoggerShould.cs" />
     <Compile Include="Extensibility\ResourceEndpointConfigurationShould.cs" />
     <Compile Include="Extensibility\RuntimePolicyContextShould.cs" />

@@ -6,7 +6,7 @@ namespace Glimpse.Core2.Extensibility
     {
         object GetData(ITabContext context);
         string Name { get; }
-        LifeCycleSupport LifeCycleSupport { get; }
+        RuntimeEvent ExecuteOn { get; }
         Type RequestContextType { get; }
     }
 }

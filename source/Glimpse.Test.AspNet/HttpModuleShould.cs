@@ -38,23 +38,6 @@ namespace Glimpse.Test.AspNet
         }
 
         [Fact]
-        public void CallGlimpseExecuteTabsRequestOnPostRequestHandlerExecute()
-        {
-            HttpModule.PostRequestHandlerExecute(HttpModule.ContextMock.Object);
-
-            HttpModule.RuntimeMock.Verify(r => r.ExecuteTabs(LifeCycleSupport.SessionAccessEnd), Times.Once());
-        }
-
-        [Fact]
-        public void CallGlimpseExecuteTabsRequestOnPostReleaseRequestState()
-        {
-            HttpModule.PostReleaseRequestState(HttpModule.ContextMock.Object);
-
-            HttpModule.RuntimeMock.Verify(r => r.ExecuteTabs(), Times.Once());
-        }
-
-
-        [Fact]
         public void DisposeNothing()
         {
             HttpModule.Dispose();

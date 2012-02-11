@@ -25,7 +25,7 @@ namespace Glimpse.AspNet
             if (string.IsNullOrEmpty(resourceName))
                 runtime.ExecuteDefaultResource();
             else
-                runtime.ExecuteResource(resourceName, queryString.AllKeys.ToDictionary(key => key, key => queryString[key]));
+                runtime.ExecuteResource(resourceName, new ResourceParameters(queryString.AllKeys.ToDictionary(key => key, key => queryString[key])));
         }
 
         public bool IsReusable
