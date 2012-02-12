@@ -32,7 +32,7 @@ namespace Glimpse.Test.Core2
         {
             Assert.Equal(0, Store.GlimpseRequests.Count());
 
-            var pluginData = new Dictionary<string, string>();
+            var pluginData = new Dictionary<string, TabResult>();
 
             Store.Save(new GlimpseMetadata(Guid.NewGuid(), Store.RequestMetadataMock.Object, pluginData, 0));
 
@@ -43,7 +43,7 @@ namespace Glimpse.Test.Core2
         public void GetGlimpseMetadataById()
         {
             var requestId = Guid.NewGuid();
-            var metadata = new GlimpseMetadata(requestId, Store.RequestMetadataMock.Object, new Dictionary<string, string>(), 0);
+            var metadata = new GlimpseMetadata(requestId, Store.RequestMetadataMock.Object, new Dictionary<string, TabResult>(), 0);
 
             Store.Save(metadata);
 
@@ -57,7 +57,7 @@ namespace Glimpse.Test.Core2
         {
             var requestId = Guid.Parse("00000000-0000-0000-0000-000000000000");
 
-            Store.Save(new GlimpseMetadata(Guid.NewGuid(), Store.RequestMetadataMock.Object, new Dictionary<string, string>(), 0));
+            Store.Save(new GlimpseMetadata(Guid.NewGuid(), Store.RequestMetadataMock.Object, new Dictionary<string, TabResult>(), 0));
 
             Assert.Null(Store.GetByRequestId(requestId));
         }
@@ -65,7 +65,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void GetGlimpseMetadataByParentRequestId()
         {
-            var pluginData = new Dictionary<string, string>();
+            var pluginData = new Dictionary<string, TabResult>();
 
             Store.Save(new GlimpseMetadata(Guid.NewGuid(), Store.RequestMetadataMock.Object, pluginData, 0));
 
@@ -75,7 +75,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void GetGlimpseMetadataByParentRequestIdWithMisMatch()
         {
-            var pluginData = new Dictionary<string, string>();
+            var pluginData = new Dictionary<string, TabResult>();
 
             Store.Save(new GlimpseMetadata(Guid.NewGuid(), Store.RequestMetadataMock.Object, pluginData, 0));
 
@@ -85,7 +85,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void GetTopWithFewerThanRequested()
         {
-            var pluginData = new Dictionary<string, string>();
+            var pluginData = new Dictionary<string, TabResult>();
 
 
             var metadata1 = new GlimpseMetadata(Guid.NewGuid(), Store.RequestMetadataMock.Object, pluginData, 0);
@@ -108,7 +108,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void GetTopWithMoreThanRequested()
         {
-            var pluginData = new Dictionary<string, string>();
+            var pluginData = new Dictionary<string, TabResult>();
 
 
             var metadata1 = new GlimpseMetadata(Guid.NewGuid(), Store.RequestMetadataMock.Object, pluginData, 0);
@@ -146,10 +146,10 @@ namespace Glimpse.Test.Core2
         {
 
             var key = "theKey";
-            var value = "theValue";
-            var pluginData = new Dictionary<string, string>
+            var value = new TabResult("A Name", 5);
+            var pluginData = new Dictionary<string, TabResult>
                                  {
-                                     {key,value}
+                                     {key, value}
                                  };
 
 
@@ -167,8 +167,8 @@ namespace Glimpse.Test.Core2
         {
 
             var key = "theKey";
-            var value = "theValue";
-            var pluginData = new Dictionary<string, string>
+            var value = new TabResult("A Name", 5);
+            var pluginData = new Dictionary<string, TabResult>
                                  {
                                      {key,value}
                                  };
@@ -188,8 +188,8 @@ namespace Glimpse.Test.Core2
         {
 
             var key = "theKey";
-            var value = "theValue";
-            var pluginData = new Dictionary<string, string>
+            var value = new TabResult("A Name", 5);
+            var pluginData = new Dictionary<string, TabResult>
                                  {
                                      {key,value}
                                  };

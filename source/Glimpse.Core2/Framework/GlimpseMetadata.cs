@@ -5,7 +5,7 @@ namespace Glimpse.Core2.Framework
 {
     public class GlimpseMetadata
     {
-        public GlimpseMetadata(Guid requestId, IRequestMetadata requestMetadata, IDictionary<string, string> pluginData, long duration)
+        public GlimpseMetadata(Guid requestId, IRequestMetadata requestMetadata, IDictionary<string, TabResult> pluginData, long duration)
         {
             RequestId = requestId;
             PluginData = pluginData;
@@ -35,7 +35,7 @@ namespace Glimpse.Core2.Framework
         public string RequestUri { get; set; }
         public string ResponseContentType { get; set; }
         public int ResponseStatusCode { get; set; }
-        public IDictionary<string, string> PluginData { get; set; }
+        public IDictionary<string, TabResult> PluginData { get; set; }
         public string UserAgent { get; set; }
     }
 }

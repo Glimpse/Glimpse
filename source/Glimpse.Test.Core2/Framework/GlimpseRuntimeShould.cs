@@ -288,19 +288,7 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.BeginRequest();
             Runtime.EndRequest();
 
-            Runtime.SerializerMock.Verify(s => s.Serialize(It.IsAny<object>()), Times.Exactly(Runtime.Configuration.Tabs.Count));
             Runtime.PersistanceStoreMock.Verify(ps => ps.Save(It.IsAny<GlimpseMetadata>()));
-        }
-
-        [Fact]
-        public void SerializeDataDuringEndRequest()
-        {
-            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
-            Runtime.Initialize();
-            Runtime.BeginRequest();
-            Runtime.EndRequest();
-
-            Runtime.SerializerMock.Verify(s => s.Serialize(It.IsAny<object>()), Times.Exactly(Runtime.Configuration.Tabs.Count));
         }
 
         [Fact]

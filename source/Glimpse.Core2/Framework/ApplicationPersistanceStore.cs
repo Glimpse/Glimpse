@@ -35,7 +35,7 @@ namespace Glimpse.Core2.Framework
             return GlimpseRequests.FirstOrDefault(r => r.RequestId == requestId);
         }
 
-        public string GetByRequestIdAndTabKey(Guid requestId, string tabKey)
+        public TabResult GetByRequestIdAndTabKey(Guid requestId, string tabKey)
         {
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(tabKey), "tabKey");
 

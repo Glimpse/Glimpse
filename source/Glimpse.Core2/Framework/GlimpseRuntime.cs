@@ -90,12 +90,10 @@ namespace Glimpse.Core2.Framework
 
             if (policy.HasFlag(RuntimePolicy.PersistResults))
             {
-                var serializer = Configuration.Serializer;
                 var persistanceStore = Configuration.PersistanceStore;
-                var pluginResults = TabResultsStore.ToDictionary(item => item.Key, item => serializer.Serialize(item.Value));
                 var requestMetadata = frameworkProvider.RequestMetadata;
 
-                var metadata = new GlimpseMetadata(requestId, requestMetadata, pluginResults, stopwatch.ElapsedMilliseconds);
+                var metadata = new GlimpseMetadata(requestId, requestMetadata, TabResultsStore, stopwatch.ElapsedMilliseconds);
 
                 try
                 {

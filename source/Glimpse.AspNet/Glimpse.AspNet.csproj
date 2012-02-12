@@ -80,6 +80,7 @@
     <Compile Include="HttpHandler.cs" />
     <Compile Include="HttpHandlerEndpointConfiguration.cs" />
     <Compile Include="HttpModule.cs" />
+    <Compile Include="Model\RequestModel.cs" />
     <Compile Include="Model\RouteInstance.cs" />
     <Compile Include="Model\UriTokenInstance.cs" />
     <Compile Include="PipelineInspector\Routes.cs" />
