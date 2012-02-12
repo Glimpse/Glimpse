@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
+using Glimpse.Core2.ResourceResult;
 
 namespace Glimpse.Core2.Resource
 {
     public class Data:IResource
     {
         internal const string InternalName = "data.js";
+        private const int CacheDuration = 12960000; //150 days
 
         public string Name
         {
@@ -17,7 +19,7 @@ namespace Glimpse.Core2.Resource
 
         public IEnumerable<string> ParameterKeys
         {
-            get { return new[] {ResourceParameterKey.RequestId, ResourceParameterKey.VersionNumber}; }
+            get { return new[] {ResourceParameterKey.RequestId, ResourceParameterKey.VersionNumber, ResourceParameterKey.Callback}; }
         }
 
         public IResourceResult Execute(IResourceContext context)
@@ -34,8 +36,8 @@ namespace Glimpse.Core2.Resource
             if(data == null)
                 return new StatusCodeResourceResult(404);
 
-            var cacheDuration = 150*24*60*60; //150 days * hours * minutes * seconds
-            return new JsonResourceResult(data, @"application/json", cacheDuration, CacheSetting.Private);
+            return new JsonResourceResult(data, context.Parameters[ResourceParameterKey.Callback], CacheDuration, CacheSetting.Private);
+            
         }
     }
 }

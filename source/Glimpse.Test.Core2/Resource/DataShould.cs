@@ -4,6 +4,7 @@ using System.Linq;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
 using Glimpse.Core2.Resource;
+using Glimpse.Core2.ResourceResult;
 using Moq;
 using Xunit;
 
@@ -19,10 +20,10 @@ namespace Glimpse.Test.Core2.Resource
         }
 
         [Fact]
-        public void ReturnTwoParameterKeys()
+        public void ReturnThreeParameterKeys()
         {
             var resource = new Data();
-            Assert.Equal(2, resource.ParameterKeys.Count());
+            Assert.Equal(3, resource.ParameterKeys.Count());
         }
 
         [Fact]
@@ -41,7 +42,7 @@ namespace Glimpse.Test.Core2.Resource
             var persistanceStoreMock = new Mock<IReadOnlyPersistanceStore>();
             persistanceStoreMock.Setup(ps => ps.GetByRequestId(guid)).Returns(new GlimpseMetadata(guid, metadataMock.Object, new Dictionary<string, TabResult>(), 0));
             var contextMock = new Mock<IResourceContext>();
-            contextMock.Setup(c => c.Parameters).Returns(new Dictionary<string, string> { {ResourceParameterKey.RequestId, guid.ToString()} });
+            contextMock.Setup(c => c.Parameters).Returns(new Dictionary<string, string> { {ResourceParameterKey.RequestId, guid.ToString()}, {ResourceParameterKey.Callback, "console.log"} });
             contextMock.Setup(c => c.PersistanceStore).Returns(persistanceStoreMock.Object);
 
             var resource = new Data();

@@ -5,6 +5,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using Glimpse.Core2.Extensibility;
+using Glimpse.Core2.ResourceResult;
 
 namespace Glimpse.Core2.Framework
 {
@@ -63,7 +64,6 @@ namespace Glimpse.Core2.Framework
 
         //TODO: Add PRG support
         //TODO: Process MetaData, including: HelpUri's
-        //TODO: Sanitize JSON
         //TODO: Structured layout support
         public void EndRequest()
         {
@@ -128,7 +128,8 @@ namespace Glimpse.Core2.Framework
             var requestTokenValues = new Dictionary<string, string>
                                          {
                                              {ResourceParameterKey.RequestId, requestId.ToString()},
-                                             {ResourceParameterKey.VersionNumber, Version}
+                                             {ResourceParameterKey.VersionNumber, Version},
+                                             {ResourceParameterKey.Callback, "console.log"} //TODO: This should not be hard coded
                                          };
 
             var stringBuilder = new StringBuilder();

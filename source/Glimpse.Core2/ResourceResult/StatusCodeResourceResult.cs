@@ -1,4 +1,6 @@
-namespace Glimpse.Core2.Extensibility
+using Glimpse.Core2.Extensibility;
+
+namespace Glimpse.Core2.ResourceResult
 {
     public class StatusCodeResourceResult : IResourceResult
     {

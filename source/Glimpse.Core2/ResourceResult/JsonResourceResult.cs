@@ -1,28 +1,33 @@
-﻿using System;
+using System;
 using System.Diagnostics.Contracts;
+using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Extensions;
 using Glimpse.Core2.Framework;
 
-namespace Glimpse.Core2.Extensibility
+namespace Glimpse.Core2.ResourceResult
 {
     public class JsonResourceResult:IResourceResult
     {
         public object Data { get; set; }
+        public string Callback { get; set; }
         public string ContentType { get; set; }
         public long CacheDuration { get; set; }
         public CacheSetting? CacheSetting { get; set; }
+        private const long NoCaching = -1;
 
-        public JsonResourceResult(object data, string contentType):this(data, contentType, -1, null)
-        {
-        }
+        public JsonResourceResult(object data):this(data, null, NoCaching, null){}
 
-        public JsonResourceResult(object data, string contentType, long cacheDuration, CacheSetting? cacheSetting)
+        public JsonResourceResult(object data, string callback): this(data, callback, NoCaching, null){}
+
+        public JsonResourceResult(object data, long cacheDuration, CacheSetting? cacheSetting):this(data, null, cacheDuration, cacheSetting){}
+
+        public JsonResourceResult(object data, string callback, long cacheDuration, CacheSetting? cacheSetting)
         {
             Contract.Requires<ArgumentNullException>(data != null, "data");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(contentType), "contentType");
 
             Data = data;
-            ContentType = contentType;
+            Callback = callback;
+            ContentType = string.IsNullOrEmpty(callback) ? @"application/json" : @"application/x-javascript";
             CacheDuration = cacheDuration;
             CacheSetting = cacheSetting;
         }
@@ -39,7 +44,9 @@ namespace Glimpse.Core2.Extensibility
             if (CacheSetting.HasValue)
                 frameworkProvider.SetHttpResponseHeader("Cache-Control", string.Format("{0}, max-age={1}", CacheSetting.Value.ToDescription(), CacheDuration));
 
-            frameworkProvider.WriteHttpResponse(result);
+            var toWrite = string.IsNullOrEmpty(Callback) ? result : string.Format("{0}({1});", Callback, result);
+
+            frameworkProvider.WriteHttpResponse(toWrite);
         }
     }
 }

@@ -94,8 +94,6 @@
     <Compile Include="Configuration\TypeElementCollection.cs" />
     <Compile Include="Extensibility\AntiXssEncoder.cs" />
     <Compile Include="Extensibility\DictionaryDataStoreAdapter.cs" />
-    <Compile Include="Extensibility\ExceptionResourceResult.cs" />
-    <Compile Include="Extensibility\FileResourceResult.cs" />
     <Compile Include="Extensibility\IClientScript.cs" />
     <Compile Include="Extensibility\IContext.cs" />
     <Compile Include="Extensibility\IDynamicClientScript.cs" />
@@ -106,7 +104,6 @@
     <Compile Include="Extensibility\IStaticClientScript.cs" />
     <Compile Include="Extensibility\JsonNetSerializationConverterAdapter.cs" />
     <Compile Include="Extensibility\JsonNetSerializer.cs" />
-    <Compile Include="Extensibility\JsonResourceResult.cs" />
     <Compile Include="Extensibility\LoggerBase.cs" />
     <Compile Include="Extensibility\NLogLogger.cs" />
     <Compile Include="Extensibility\NullLogger.cs" />
@@ -115,7 +112,6 @@
     <Compile Include="Extensibility\ResourceResultContext.cs" />
     <Compile Include="Extensibility\ScriptOrder.cs" />
     <Compile Include="Extensibility\SerializationConverter.cs" />
-    <Compile Include="Extensibility\StatusCodeResourceResult.cs" />
     <Compile Include="Extensibility\TabBase.cs" />
     <Compile Include="Extensibility\TabBaseOfT.cs" />
     <Compile Include="Extensibility\TabContext.cs" />
@@ -162,6 +158,10 @@
     <Compile Include="Policy\StatusCodePolicy.cs" />
     <Compile Include="Policy\UriPolicy.cs" />
     <Compile Include="Policy\UserHostAddressPolicy.cs" />
+    <Compile Include="ResourceResult\ExceptionResourceResult.cs" />
+    <Compile Include="ResourceResult\FileResourceResult.cs" />
+    <Compile Include="ResourceResult\JsonResourceResult.cs" />
+    <Compile Include="ResourceResult\StatusCodeResourceResult.cs" />
     <Compile Include="Resource\Client.cs" />
     <Compile Include="Resource\Configuration.cs" />
     <Compile Include="Resource\Data.cs" />

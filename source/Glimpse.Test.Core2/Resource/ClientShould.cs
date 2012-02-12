@@ -2,6 +2,7 @@
 using System.Linq;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Resource;
+using Glimpse.Core2.ResourceResult;
 using Moq;
 using Xunit;
 

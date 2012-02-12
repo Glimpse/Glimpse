@@ -2,6 +2,7 @@
 using System.Reflection;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
+using Glimpse.Core2.ResourceResult;
 
 namespace Glimpse.Core2.Resource
 {
@@ -9,6 +10,7 @@ namespace Glimpse.Core2.Resource
     {
         internal const string InternalName = "glimpse.js";
         internal string ResourceName = "Glimpse.Core2.glimpseClient.js";
+        private const int CacheDuration = 12960000; //150 days
 
         public string Name
         {
@@ -31,8 +33,7 @@ namespace Glimpse.Core2.Resource
                 {
                     var content = new byte[resourceStream.Length];
                     resourceStream.Read(content, 0, content.Length);
-                    var cacheDuration = 150*24*60*60; //150 days * hours * minutes * seconds
-                    return new FileResourceResult(content, @"application/x-javascript", cacheDuration, CacheSetting.Public);
+                    return new FileResourceResult(content, @"application/x-javascript", CacheDuration, CacheSetting.Public);
                 }
             }
 
