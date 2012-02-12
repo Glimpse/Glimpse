@@ -200,7 +200,70 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Scripts\FunctionalTests\glimpse.js" />
+    <Content Include="Scripts\FunctionalTests\glimpseSprite.png" />
+    <Content Include="Scripts\FunctionalTests\glimpse_.js" />
+    <Content Include="Scripts\FunctionalTests\Mock\glimpseTest.js" />
+    <Content Include="Scripts\FunctionalTests\Mock\test.glimpse.ajax.ajax.js" />
+    <Content Include="Scripts\FunctionalTests\Mock\test.glimpse.ajax.history.js" />
+    <Content Include="Scripts\FunctionalTests\Mock\test.glimpse.ajax.js" />
+    <Content Include="Scripts\FunctionalTests\Mock\test.glimpse.ajax.pager.js" />
+    <Content Include="Scripts\FunctionalTests\sprite.png" />
+    <Content Include="Scripts\FunctionalTests\test-a.html" />
+    <Content Include="Scripts\FunctionalTests\test-popup.html" />
+    <Content Include="Scripts\FunctionalTests\test.html" />
+    <Content Include="Scripts\glimpse.controller.lazyloader.js" />
+    <Content Include="Scripts\glimpse.controller.metadata.js" />
+    <Content Include="Scripts\glimpse.controller.notification.js" />
+    <Content Include="Scripts\glimpse.controller.paging.js" />
+    <Content Include="Scripts\glimpse.controller.render.js" />
+    <Content Include="Scripts\glimpse.controller.shell.js" />
+    <Content Include="Scripts\glimpse.controller.sizer.js" />
+    <Content Include="Scripts\glimpse.controller.title.js" />
+    <Content Include="Scripts\glimpse.controller.toolbar.js" />
+    <Content Include="Scripts\glimpse.core.data.js" />
+    <Content Include="Scripts\glimpse.core.js" />
+    <Content Include="Scripts\glimpse.core.pubsub.js" />
+    <Content Include="Scripts\glimpse.core.state.js" />
+    <Content Include="Scripts\glimpse.core.util.js" />
+    <Content Include="Scripts\glimpse.js" />
+    <Content Include="Scripts\glimpse.min.js" />
+    <Content Include="Scripts\glimpse.paging.engine.continuous.js" />
+    <Content Include="Scripts\glimpse.paging.engine.js" />
+    <Content Include="Scripts\glimpse.paging.engine.scrolling.js" />
+    <Content Include="Scripts\glimpse.paging.engine.traditional.js" />
+    <Content Include="Scripts\glimpse.plugin.ajax.js" />
+    <Content Include="Scripts\glimpse.plugin.ajax.spy.js" />
+    <Content Include="Scripts\glimpse.plugin.history.js" />
+    <Content Include="Scripts\glimpse.plugin.timeline.core.js" />
+    <Content Include="Scripts\glimpse.plugin.timeline.js" />
+    <Content Include="Scripts\glimpse.plugin.timeline.shell.css" />
+    <Content Include="Scripts\glimpse.plugin.timeline.shell.html" />
+    <Content Include="Scripts\glimpse.process.elements.js" />
+    <Content Include="Scripts\glimpse.process.template.js" />
+    <Content Include="Scripts\glimpse.remote.plugin.js" />
+    <Content Include="Scripts\glimpse.render.engine.js" />
+    <Content Include="Scripts\glimpse.render.engine.keyvalue.js" />
+    <Content Include="Scripts\glimpse.render.engine.master.js" />
+    <Content Include="Scripts\glimpse.render.engine.string.js" />
+    <Content Include="Scripts\glimpse.render.engine.structured.js" />
+    <Content Include="Scripts\glimpse.render.engine.table.js" />
+    <Content Include="Scripts\glimpse.render.style.js" />
+    <Content Include="Scripts\glimpse.render.util.rawString.js" />
+    <Content Include="Scripts\glimpse.view.metadata.html" />
+    <Content Include="Scripts\glimpse.view.shell.code.css" />
+    <Content Include="Scripts\glimpse.view.shell.css" />
+    <Content Include="Scripts\glimpse.view.shell.html" />
+    <Content Include="Scripts\google-code-prettify.js" />
+    <Content Include="Scripts\jquery-1.6.3.min.js" />
+    <Content Include="Scripts\UnitTests\index.html" />
+    <Content Include="Scripts\UnitTests\Lib\qunit.css" />
+    <Content Include="Scripts\UnitTests\Lib\qunit.js" />
+    <Content Include="Scripts\UnitTests\Unit\glimpse.core.process.js" />
+    <Content Include="Scripts\UnitTests\Unit\mock-glimpse.core.element.js" />
+    <Content Include="Scripts\UnitTests\Unit\mock-glimpse.core.pubsub.js" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
