@@ -66,6 +66,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Core2\AntiXSSLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="Castle.Core">
+      <HintPath>..\..\packages\Castle.Core.3.0.0.4001\lib\net40-client\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.4.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -93,11 +96,15 @@
     <Compile Include="Configuration\TypeElement.cs" />
     <Compile Include="Configuration\TypeElementCollection.cs" />
     <Compile Include="Extensibility\AntiXssEncoder.cs" />
+    <Compile Include="Extensibility\CastleInvocationToAlternateMethodImplementationContextAdapter.cs" />
     <Compile Include="Extensibility\DictionaryDataStoreAdapter.cs" />
+    <Compile Include="Extensibility\IAlternateMethodImplementation.cs" />
+    <Compile Include="Extensibility\IAlternateMethodImplementationContext.cs" />
     <Compile Include="Extensibility\IClientScript.cs" />
     <Compile Include="Extensibility\IContext.cs" />
     <Compile Include="Extensibility\IDynamicClientScript.cs" />
     <Compile Include="Extensibility\IPipelineInspectorContext.cs" />
+    <Compile Include="Extensibility\AlternateMethodImplementationToCastleInterceptorAdapter.cs" />
     <Compile Include="Extensibility\IResourceContext.cs" />
     <Compile Include="Extensibility\IResourceResultContext.cs" />
     <Compile Include="Extensibility\ISerializationConverter.cs" />
@@ -121,8 +128,11 @@
     <Compile Include="Extensibility\RuntimePolicyContext.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\TypeElementCollectionExtensions.cs" />
+    <Compile Include="Framework\AlternateMethodImplementationGenerationHook.cs" />
+    <Compile Include="Framework\AlternateMethodImplementationSelector.cs" />
     <Compile Include="Framework\ApplicationPersistanceStore.cs" />
     <Compile Include="Framework\CacheSetting.cs" />
+    <Compile Include="Framework\CastleDynamicProxyFactory.cs" />
     <Compile Include="Framework\Factory.cs" />
     <Compile Include="Framework\GlimpseException.cs" />
     <Compile Include="Framework\GlimpseMetadata.cs" />
@@ -131,6 +141,7 @@
     <Compile Include="Framework\IGlimpseRuntime.cs" />
     <Compile Include="Framework\IPersistanceStore.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Framework\IProxyFactory.cs" />
     <Compile Include="Framework\IReadOnlyPersistanceStore.cs" />
     <Compile Include="Framework\IServiceLocator.cs" />
     <Compile Include="Framework\PipelineInspectorContext.cs" />
