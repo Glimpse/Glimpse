@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>Contract.Invariant</Title>
+      <Shortcut>cinvn</Shortcut>
+      <Description>Emits a 'Contract.Invariant' IsNot Nothing clause</Description>
+      <Author>MaF</Author>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>System.Diagnostics.Contracts</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Object Editable="true">
+          <ID>expression</ID>
+          <ToolTip>expression that is not nothing</ToolTip>
+          <Default>m_X</Default>
+          <Function>
+          </Function>
+        </Object>
+      </Declarations>
+      <Code Language="VB" Kind="method body"><![CDATA[Contract.Invariant($expression$ IsNot Nothing)]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

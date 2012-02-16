@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>Contracted Interface</Title>
+      <Shortcut>cintf</Shortcut>
+      <Description>Boiler plate interface and contract</Description>
+      <Author>Maf</Author>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>System.Diagnostics.Contracts</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Object Editable="true">
+          <ID>interface</ID>
+          <ToolTip>Interface name</ToolTip>
+          <Default>IFoo</Default>
+          <Function>
+          </Function>
+        </Object>
+      </Declarations>
+      <Code Language="VB" Kind="type decl"><![CDATA[<ContractClass(GetType($interface$Contract))> _
+Public Interface $interface$ 
+End Interface
+
+<ContractClassFor(GetType($interface$))> _
+MustInherit Class $interface$Contract 
+  Implements $interface$ 
+End Class
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

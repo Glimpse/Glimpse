@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>Contract.Ensures(!String.IsNullOrEmpty(Contract.Result()))</Title>
+      <Shortcut>cesn</Shortcut>
+      <Description>Emits an 'ensures' clause specifying result not null or empty</Description>
+      <Author>Jonathan de Halleux</Author>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>System.Diagnostics.Contracts</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+      </Declarations>
+      <Code Language="CSharp" Kind="method body"><![CDATA[Contract.Ensures(!String.IsNullOrEmpty(Contract.Result<string>()));
+$end$]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

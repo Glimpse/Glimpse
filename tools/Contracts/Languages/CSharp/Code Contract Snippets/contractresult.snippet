@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Contract.Result</Title>
+      <Shortcut>crr</Shortcut>
+      <Description>Emits a 'Contract.Result' expression</Description>
+      <Author>Manuel Fahndrich</Author>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>System.Diagnostics.Contracts</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Object Editable="true">
+          <ID>type</ID>
+          <ToolTip>method return type</ToolTip>
+          <Default>int</Default>
+          <Function>
+          </Function>
+        </Object>
+      </Declarations>
+      <Code Language="CSharp" Kind="any"><![CDATA[Contract.Result<$type$>()$end$]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

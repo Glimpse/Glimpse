@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>Contract Invariant Method</Title>
+      <Shortcut>cim</Shortcut>
+      <Description>Boiler plate invariant method</Description>
+      <Author>Jonathan de Halleux</Author>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>System.Diagnostics.Contracts</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Literal>
+          <ID>condition</ID>
+          <ToolTip>boolean precondition</ToolTip>
+          <Default>False</Default>
+          <Function>
+          </Function>
+        </Literal>
+      </Declarations>
+      <Code Language="VB" Kind="method decl"><![CDATA[<ContractInvariantMethod()> _
+Private Sub ObjectInvariant() 
+    Contract.Invariant($condition$)
+End Sub
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>Contract.Requires&lt;E&gt;</Title>
+      <Shortcut>cre</Shortcut>
+      <Description>Emits a 'Contract.Requires&lt;Exc&gt;' clause</Description>
+      <Author>Jonathan de Halleux</Author>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>System.Diagnostics.Contracts</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Object Editable="true">
+          <ID>exception</ID>
+          <ToolTip>Exception type</ToolTip>
+          <Default>ArgumentException</Default>
+          <Function>
+          </Function>
+        </Object>
+        <Object Editable="true">
+          <ID>condition</ID>
+          <ToolTip>precondition expression</ToolTip>
+          <Default>false</Default>
+          <Function>
+          </Function>
+        </Object>
+      </Declarations>
+      <Code Language="CSharp" Kind="method body"><![CDATA[Contract.Requires<$exception$>($condition$);$end$]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

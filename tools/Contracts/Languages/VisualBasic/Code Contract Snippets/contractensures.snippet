@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>Contract.Ensures</Title>
+      <Shortcut>cens</Shortcut>
+      <Description>Emits a 'ensures' clause</Description>
+      <Author>Jonathan de Halleux</Author>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>System.Diagnostics.Contracts</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Literal>
+          <ID>condition</ID>
+          <ToolTip>boolean invariant condition</ToolTip>
+          <Default>false</Default>
+          <ID>condition</ID>
+        </Literal>
+      </Declarations>
+      <Code Language="VB" Kind="method body"><![CDATA[Contract.Ensures($condition$)]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

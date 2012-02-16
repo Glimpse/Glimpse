@@ -1,0 +1,620 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Multiple Import Guard -->
+  <PropertyGroup>
+    <CodeContractsImported>True</CodeContractsImported>
+  </PropertyGroup>
+
+  <!--=====================================================================
+      Begin Microsoft Code Contracts 
+  ======================================================================-->
+
+  <PropertyGroup>
+    <CodeContractsDeclDir>$(IntermediateOutputPath)Decl\</CodeContractsDeclDir>
+    <CodeContractsContractSubDir>CodeContracts\</CodeContractsContractSubDir>
+    <CodeContractsCCRefgenCommand>"$(CodeContractsInstallDir)Bin\ccrefgen"</CodeContractsCCRefgenCommand>
+  </PropertyGroup>
+
+  <Choose>
+    <When Condition="'$(TargetFrameworkIdentifier)' == 'Silverlight'">
+      <Choose>
+        <When Condition="'$(TargetFrameworkVersion)' == 'v4.0'">
+          <Choose>
+            <When Condition="'$(TargetFrameworkProfile)' == 'WindowsPhone'">
+              <PropertyGroup>
+                <CodeContractsReferenceAssemblyLibPath>$(CodeContractsInstallDir)Contracts\Silverlight\v4.0\Profile\WindowsPhone</CodeContractsReferenceAssemblyLibPath>
+              </PropertyGroup>
+            </When>
+            <Otherwise>
+              <PropertyGroup>
+                <CodeContractsReferenceAssemblyLibPath>$(CodeContractsInstallDir)Contracts\Silverlight\v4.0</CodeContractsReferenceAssemblyLibPath>
+              </PropertyGroup>
+            </Otherwise>
+          </Choose>
+        </When>
+        <Otherwise>
+          <PropertyGroup>
+            <CodeContractsReferenceAssemblyLibPath>$(CodeContractsInstallDir)Contracts\Silverlight\v3.0</CodeContractsReferenceAssemblyLibPath>
+          </PropertyGroup>
+        </Otherwise>
+      </Choose>
+    </When>
+    <Otherwise>
+      <Choose>
+        <When Condition="'$(TargetFrameworkVersion)' == 'v4.0'">
+          <PropertyGroup>
+            <CodeContractsReferenceAssemblyLibPath>$(CodeContractsInstallDir)Contracts\.NETFramework\v4.0</CodeContractsReferenceAssemblyLibPath>
+          </PropertyGroup>
+        </When>
+        <Otherwise>
+          <PropertyGroup>
+            <CodeContractsReferenceAssemblyLibPath>$(CodeContractsInstallDir)Contracts\v3.5</CodeContractsReferenceAssemblyLibPath>
+          </PropertyGroup>
+        </Otherwise>
+      </Choose>
+    </Otherwise>
+  </Choose>
+
+  <!--=====================================================================
+      Build Contract reference assemblies on all builds.
+      (rather than recursively on demand)
+
+      Also define CONTRACTS_FULL and CODE_ANALYSIS dynamically, otherwise
+      VS property build pane picks it up and may persist it into the project
+      settings!
+    =====================================================================-->
+  
+  <PropertyGroup>
+    <CompileDependsOn>CodeContractsSlipInDefineSymbolDynamically;$(CompileDependsOn);CodeContractReferenceAssembly</CompileDependsOn>
+  </PropertyGroup>
+
+  <Target
+     Name="CodeContractsSlipInDefineSymbolDynamically"
+     Condition="'$(CodeContractsEnableRuntimeChecking)' == 'true'"
+     >
+
+    <CreateProperty
+       Condition="'$(Language)'=='C#'"
+       Value="CONTRACTS_FULL;CODE_ANALYSIS;$(DefineConstants)">
+      <Output
+         TaskParameter="Value"
+         PropertyName="DefineConstants" />
+    </CreateProperty>
+    <CreateProperty
+       Condition="'$(Language)'=='VB'"
+       Value="CONTRACTS_FULL=-1,CODE_ANALYSIS=-1,$(FinalDefineConstants)">
+      <Output
+         TaskParameter="Value"
+         PropertyName="FinalDefineConstants" />
+    </CreateProperty>
+
+  </Target>
+
+  <!--=====================================================================
+        Determine level of runtime checking
+    ======================================================================-->
+  <Choose>
+    <When Condition="'$(CodeContractsRuntimeCheckingLevel)'=='Full'">
+      <PropertyGroup>
+        <CodeContractsRuntimeLevel>4</CodeContractsRuntimeLevel>
+      </PropertyGroup>
+    </When>
+    <!-- default -->
+    <When Condition="'$(CodeContractsRuntimeCheckingLevel)'==''">
+      <PropertyGroup>
+        <CodeContractsRuntimeLevel>4</CodeContractsRuntimeLevel>
+      </PropertyGroup>
+    </When>
+    <When Condition="'$(CodeContractsRuntimeCheckingLevel)'=='Pre and Post'">
+      <PropertyGroup>
+        <CodeContractsRuntimeLevel>3</CodeContractsRuntimeLevel>
+      </PropertyGroup>
+    </When>
+    <When Condition="'$(CodeContractsRuntimeCheckingLevel)'=='Preconditions'">
+      <PropertyGroup>
+        <CodeContractsRuntimeLevel>2</CodeContractsRuntimeLevel>
+      </PropertyGroup>
+    </When>
+    <!-- for backward compatibility -->
+    <When Condition="'$(CodeContractsRuntimeCheckingLevel)'=='RequiresAlways'">
+      <PropertyGroup>
+        <CodeContractsRuntimeLevel>1</CodeContractsRuntimeLevel>
+      </PropertyGroup>
+    </When>
+    <When Condition="'$(CodeContractsRuntimeCheckingLevel)'=='ReleaseRequires'">
+      <PropertyGroup>
+        <CodeContractsRuntimeLevel>1</CodeContractsRuntimeLevel>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <CodeContractsRuntimeLevel>0</CodeContractsRuntimeLevel>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
+
+  <PropertyGroup
+    Condition="'$(CodeContractsEnableRuntimeChecking)' == 'true'">
+
+    <!--=====================================================================
+      C# and VB specific extra defined constants and rewrite post
+      build step
+
+      Must run prior to other PrepareForRunDependsOn steps
+      (Silverlight XAP).
+    ======================================================================-->
+    
+    <PrepareForRunDependsOn>CodeContractInstrument; $(PrepareForRunDependsOn)</PrepareForRunDependsOn>
+  </PropertyGroup>
+
+  <!--=====================================================================
+        Add post build step for contract XML documentation generation
+    ======================================================================-->
+  <PropertyGroup
+      Condition="'$(CodeContractsEmitXMLDocs)' == 'true'">
+    <PrepareForRunDependsOn>$(PrepareForRunDependsOn);ContractXmlDocumentation</PrepareForRunDependsOn>
+  </PropertyGroup>
+
+  <!--=====================================================================
+        Define tool options
+    ======================================================================-->
+
+  <PropertyGroup
+      Condition="'$(CodeContractsEnableRuntimeChecking)' == 'true'">
+    <CodeContractsRewriteLibPaths>@(CodeContractsBuildLibPaths,';')</CodeContractsRewriteLibPaths>
+    <CodeContractsRewriteLibPaths
+       Condition="'$(CodeContractsLibPaths)' != ''">$(CodeContractsRewriteLibPaths);$(CodeContractsLibPaths)</CodeContractsRewriteLibPaths>
+    <CodeContractsRewriteLibPaths>$(CodeContractsRewriteLibPaths);$(CodeContractsReferenceAssemblyLibPath)</CodeContractsRewriteLibPaths>
+    <CodeContractRewriteOptions
+       Condition="'$(CodeContractsPlatformPath)' != ''"
+       >$(CodeContractRewriteOptions) "/targetplatform:$(CodeContractsPlatformPath)"</CodeContractRewriteOptions>
+    <CodeContractRewriteOptions
+       Condition="'$(CodeContractsClassLibrary)' != ''"
+       >$(CodeContractRewriteOptions) "/contractLibrary:$(CodeContractsClassLibrary)"</CodeContractRewriteOptions>
+    <CodeContractRewriteOptions
+       Condition="'$(CodeContractsAssemblyMode)' == '1'"
+       >$(CodeContractRewriteOptions) "/assemblyMode=standard"</CodeContractRewriteOptions>
+    <CodeContractRewriteOptions
+       Condition="'$(CodeContractsRuntimeOnlyPublicSurface)' == 'true'"
+       >$(CodeContractRewriteOptions) /publicsurface</CodeContractRewriteOptions>
+    <CodeContractRewriteOptions
+       Condition="'$(CodeContractsRuntimeThrowOnFailure)' != 'false'"
+       >$(CodeContractRewriteOptions) /throwonfailure</CodeContractRewriteOptions>
+    <CodeContractRewriteOptions
+       Condition="'$(CodeContractsRuntimeCallSiteRequires)' == 'true'"
+       >$(CodeContractRewriteOptions) /callsiterequires</CodeContractRewriteOptions>
+    <CodeContractRewriteOptions
+       Condition="'$(CodeContractsRuntimeSkipQuantifiers)' == 'true'"
+       >$(CodeContractRewriteOptions) /skipQuantifiers</CodeContractRewriteOptions>
+    <CodeContractRewriteOptions
+       Condition="'$(CodeContractsCustomRewriterAssembly)' != '' and '$(CodeContractsCustomRewriterClass)' != ''"
+       >$(CodeContractRewriteOptions) "/rewriterMethods:$(CodeContractsCustomRewriterAssembly),$(CodeContractsCustomRewriterClass)"</CodeContractRewriteOptions>
+    <CodeContractRewriteOptions
+       Condition="'$(CodeContractsExtraRewriteOptions)' != ''"
+       >$(CodeContractRewriteOptions) $(CodeContractsExtraRewriteOptions)</CodeContractRewriteOptions>
+    <CodeContractRewriteOptions>/level:$(CodeContractsRuntimeLevel) /nologo /rewrite $(CodeContractRewriteOptions) "/resolvedPaths:@(ReferencePath,';')" "/libpaths:$(CodeContractsRewriteLibPaths) " "$(TargetName)$(TargetExt)"</CodeContractRewriteOptions>
+    <CodeContractRewriteCommand>"$(CodeContractsInstallDir)Bin\ccrewrite"</CodeContractRewriteCommand>
+
+    <CodeContractsRewriterOutput>$(IntermediateOutputPath)$(TargetName).rewritten</CodeContractsRewriterOutput>
+
+  </PropertyGroup>
+
+  <ItemGroup
+     Condition="'$(CodeContractsEnableRuntimeChecking)' == 'true'">
+    <CodeContractsRewriterInputs
+       Include="@(ReferencePath)"/>
+    <CodeContractsRewriterInputs
+       Include="@(IntermediateAssembly)"/>
+    <CodeContractsRewriterInputs
+       Include="$(IntermediateOutputPath)$(TargetName).pdb"/>
+  </ItemGroup>
+
+
+  <!--=====================================================================
+        Runtime check instrumentation
+    ======================================================================-->
+
+  <Target
+     Name="CodeContractRewrite"
+     Condition="'$(CodeContractsEnableRuntimeChecking)' == 'true'"
+     DependsOnTargets="CodeContractsComputeReferencedLibPaths;EnsureContractReferenceAssemblyOfDependeeProjects;$(CodeContractRewriteDependsOn)"
+     Inputs="@(CodeContractsRewriterInputs)"
+     Outputs="$(CodeContractsRewriterOutput)"
+     >
+
+    <PropertyGroup>
+      <_CodeContractsCCRewriteArguments>$(CodeContractRewriteOptions)</_CodeContractsCCRewriteArguments>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <_CodeContractsCCRewriteArgumentLines
+         Include="$(_CodeContractsCCRewriteArguments)"
+         />
+    </ItemGroup>
+
+    <WriteLinesToFile
+      File="$(IntermediateOutputPath)$(ProjectName)ccrewrite.rsp"
+      Lines="@(_CodeContractsCCRewriteArgumentLines, ';')"
+      Overwrite="true"
+      />
+
+    <Exec
+       WorkingDirectory="$(IntermediateOutputPath)"
+       Command='$(CodeContractRewriteCommand) "@$(ProjectName)ccrewrite.rsp"'
+       />
+
+    <CallTarget Targets="CodeContractReSign"/>
+
+    <WriteLinesToFile
+       File="$(CodeContractsRewriterOutput)"
+       />
+    <Touch Files="$(CodeContractsRewriterOutput)"/>
+    <ItemGroup>
+      <FileWrites
+         Include="$(CodeContractsRewriterOutput)"/>
+    </ItemGroup>
+  </Target>
+
+  <Target
+     Name="CodeContractReSign"
+     Condition="'$(DelaySign)' != 'true'"   
+     >
+    <GetFrameworkSdkPath>
+      <Output
+         TaskParameter="Path"
+         PropertyName="CodeContractsSdkPath" />
+    </GetFrameworkSdkPath>
+    <PropertyGroup>
+      <CodeContractsSnExe>"$(CodeContractsSdkPath)Bin\sn.exe"</CodeContractsSnExe>
+    </PropertyGroup>
+    <Exec
+       Condition="'$(KeyOriginatorFile)' != ''"   
+       Command='$(CodeContractsSnExe) /R "@(IntermediateAssembly)" "$(KeyOriginatorFile)"' />
+    <Exec
+       Condition="'$(KeyContainerName)' != ''"   
+       Command='$(CodeContractsSnExe) /Rc "@(IntermediateAssembly)" "$(KeyContainerName)"' />
+  </Target>
+  
+  <Target
+     Name="CodeContractInstrument"
+     Condition="'$(CodeContractsEnableRuntimeChecking)' == 'true'"
+     DependsOnTargets="CodeContractRewrite"
+     >
+  </Target>
+
+  <!--=====================================================================
+      Building Contract Reference Assemblies
+   ======================================================================-->
+  <ItemGroup>
+    <_CodeContractOutputDirectory Include="$(OutDir)$(CodeContractsContractSubDir)"/>
+    <_ContractDummyReferenceAssembly Include="$(OutDir)$(CodeContractsContractSubDir)$(TargetName).noReferenceAssembly"/>
+    <ContractReferenceAssembly Include="$(OutDir)$(CodeContractsContractSubDir)$(TargetName).Contracts.dll"/>
+    <ContractReferenceAssemblyAbsolute Include="@(ContractReferenceAssembly->'%(FullPath)')"/>
+    <ContractReferenceAssemblyPDB Include="$(OutDir)$(CodeContractsContractSubDir)$(TargetName).Contracts.pdb"/>
+    <ContractDeclarativeAssembly Include="$(CodeContractsDeclDir)$(TargetName)$(TargetExt)"/>
+    <ContractDeclarativeAssemblyPDB Include="$(CodeContractsDeclDir)$(TargetName).pdb"/>
+    <ContractReferenceAssemblies Include="@(ContractReferenceAssembly);@(ContractReferenceAssemblyPDB)"/>
+    <ContractDeclarativeAssemblies Include="@(ContractDeclarativeAssembly);@(ContractDeclarativeAssemblyPDB)"/>
+    <CodeContractOutputDirectory Include="@(_CodeContractOutputDirectory->'%(RootDir)%(Directory)')"/>
+    <ContractDummyReferenceAssembly Include="@(_ContractDummyReferenceAssembly->'%(FullPath)')"/>
+  </ItemGroup>
+  <Target
+     Name="CodeContractReferenceAssembly"
+     DependsOnTargets="CreateCodeContractReferenceAssembly;CodeContractDummyReferenceAssembly"
+     />
+
+  <PropertyGroup>
+    <CodeContractsCCRefgenLibPaths>$(CodeContractsReferenceAssemblyLibPath);@(CodeContractsBuildLibPaths,';')</CodeContractsCCRefgenLibPaths>
+    <CodeContractsCCRefgenLibPaths
+       Condition="'$(CodeContractsLibPaths)' != ''">$(CodeContractsCCRefgenLibPaths);$(CodeContractsLibPaths)</CodeContractsCCRefgenLibPaths>
+  </PropertyGroup>
+
+  <Target
+     Name="CreateCodeContractReferenceAssembly"
+     Condition="'$(TargetName)' != 'Microsoft.Contracts' and '$(CodeContractsReferenceAssembly)' == 'build'"
+     DependsOnTargets="ContractDeclarativeAssembly;$(CodeContractReferenceAssemblyDependsOn);MakeCodeContractOutputDirectory;CodeContractsComputeReferencedLibPaths"
+     Inputs="@(ContractDeclarativeAssemblies)"
+     Outputs="@(ContractReferenceAssemblyAbsolute)">
+
+    <PropertyGroup>
+      <_CodeContractsCCRefGenArguments>"/resolvedPaths:@(ReferencePath,';')" "/libPaths:$(CodeContractsCCRefgenLibPaths) " /pdb "/out:@(ContractReferenceAssembly)" "@(ContractDeclarativeAssembly)"</_CodeContractsCCRefGenArguments>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <_CodeContractsCCRefGenArgumentLines
+         Include="$(_CodeContractsCCRefGenArguments)"
+         />
+    </ItemGroup>
+
+    <WriteLinesToFile
+      File="$(IntermediateOutputPath)$(ProjectName)ccrefgen.rsp"
+      Lines="@(_CodeContractsCCRefGenArgumentLines, ';')"
+      Overwrite="true"
+      />
+
+    <Exec
+       Condition="Exists('@(ContractDeclarativeAssembly)')"
+       Command='$(CodeContractsCCRefgenCommand) "@$(IntermediateOutputPath)$(ProjectName)ccrefgen.rsp"'
+       />
+    <ItemGroup
+       Condition="Exists('@(ContractReferenceAssemblyAbsolute)')">
+      <FileWrites
+         Include="@(ContractReferenceAssemblies);$(IntermediateOutputPath)$(ProjectName)ccrefgen.rsp"/>
+    </ItemGroup>
+
+  </Target>
+
+  <Target
+     Name="CodeContractDummyReferenceAssembly"
+     Condition="'$(CodeContractsReferenceAssembly)' == 'doNotBuild'"
+     DependsOnTargets="MakeCodeContractOutputDirectory"
+     Outputs="@(ContractDummyReferenceAssembly)">
+
+    <Touch
+       Condition="!Exists(@(ContractDummyReferenceAssembly))"
+       AlwaysCreate="true"
+       Files="@(ContractDummyReferenceAssembly)"
+       />
+    <ItemGroup>
+      <FileWrites
+         Include="@(ContractDummyReferenceAssembly)"/>
+    </ItemGroup>
+  </Target>
+
+  <Target
+     Name="MakeCodeContractOutputDirectory"
+     Condition="!Exists(@(CodeContractOutputDirectory))"
+     >
+    <Message 
+       Text="Making directory @(CodeContractOutputDirectory)"
+       />
+    <MakeDir
+       Directories="@(CodeContractOutputDirectory)"/>
+  </Target>
+
+  <Target
+     Name="EnsureContractReferenceAssemblyOfDependeeProjects"
+     Condition="'@(_ResolvedProjectReferencePaths)' != ''"
+     >
+
+    <Message
+       Text="EnsureContractReferenceAssemblies: @(_ResolvedProjectReferencePaths)"
+       Importance="high"
+       />
+
+    <Warning
+       Condition="!Exists('%(RootDir)%(Directory)CodeContracts\%(Filename).Contracts.dll') and !Exists('%(RootDir)%(Directory)\CodeContracts\%(Filename).noReferenceAssembly')"
+       Text="Contract reference assembly for project '%(Filename)' not found. Select 'Build' or 'DoNotBuild' for Contract Reference in project settings."
+       HelpKeyword="@(_ResolvedProjectReferencePaths)"
+       />
+  </Target>
+
+  <!--=====================================================================
+      Building Contract Declarative Assemblies
+    ======================================================================-->
+  <Target
+     Name="ContractDeclarativeAssembly"
+     DependsOnTargets="ContractsMakeDeclDir;ResolveReferences;ResolveKeySource;ContractDeclarativeAssemblyCS;ContractDeclarativeAssemblyVB"
+     />
+
+  <Target Name="ContractsMakeDeclDir">
+    <MakeDir
+       Condition="!Exists('$(CodeContractsDeclDir)')"
+       Directories="$(CodeContractsDeclDir)"/>
+  </Target>
+  
+  <Target
+     Name="ContractDeclarativeAssemblyVB"
+     Condition="'$(Language)'=='VB'"
+     DependsOnTargets=""
+     Inputs="$(MSBuildAllProjects);
+             @(Compile)"
+     Outputs="@(ContractDeclarativeAssembly->'%(FullPath)')"
+     >
+    <ItemGroup>
+      <ContractDeclarativeSources Include="@(Compile);$(CodeContractsInstallDir)Languages\VisualBasic\ContractDeclarativeAssemblyAttribute.vb"/>
+    </ItemGroup>
+    <Message Text="Build Declarative Contract Assembly for VB $(TargetPath)"/>
+    <Vbc  Condition=" '%(_CoreCompileResourceInputs.WithCulture)' != 'true' "
+          AdditionalLibPaths="$(AdditionalLibPaths)"
+          AddModules="@(AddModules)"
+          BaseAddress="$(BaseAddress)"          
+          CodePage="$(CodePage)"
+          DebugType="$(DebugType)"
+          DefineConstants="$(FinalDefineConstants),CONTRACTS_FULL=-1,CODE_ANALYSIS=-1"
+          DelaySign="$(DelaySign)"
+          DisabledWarnings="$(NoWarn)"
+          DocumentationFile=""
+          EmitDebugInformation="$(DebugSymbols)"
+          ErrorReport="$(ErrorReport)"
+          FileAlignment="$(FileAlignment)"
+          GenerateDocumentation=""
+          Imports="@(Import)"
+          KeyContainer="$(KeyContainerName)"
+          KeyFile="$(KeyOriginatorFile)"
+          LangVersion="$(LangVersion)"
+          MainEntryPoint="$(StartupObject)"
+          ModuleAssemblyName="$(ModuleAssemblyName)"
+          NoConfig="true"
+          NoStandardLib="$(NoCompilerStandardLib)"
+          NoVBRuntimeReference="$(NoVBRuntimeReference)"
+          NoWarnings="$(_NoWarnings)"
+          NoWin32Manifest="$(NoWin32Manifest)"
+          Optimize="true"
+          OptionCompare="$(OptionCompare)"
+          OptionExplicit="$(OptionExplicit)"
+          OptionInfer="$(OptionInfer)"
+          OptionStrict="$(OptionStrict)"
+          OptionStrictType="$(OptionStrictType)" 
+          OutputAssembly="@(ContractDeclarativeAssembly)"
+          Platform="$(PlatformTarget)"
+          References="@(ReferencePath)"
+          RemoveIntegerChecks="$(RemoveIntegerChecks)"
+          Resources="@(_CoreCompileResourceInputs);@(CompiledLicenseFile)"
+          ResponseFiles="$(CompilerResponseFile)"
+          RootNamespace="$(RootNamespace)"
+          SdkPath="$(FrameworkPathOverride)"
+          Sources="@(ContractDeclarativeSources)"
+          TargetCompactFramework="$(TargetCompactFramework)"
+          TargetType="$(OutputType)"
+          ToolExe="$(VbcToolExe)"
+          ToolPath="$(VbcToolPath)"
+          TreatWarningsAsErrors="false"
+          UseHostCompilerIfAvailable="$(UseHostCompilerIfAvailable)"
+          Utf8Output="$(Utf8Output)"
+          Verbosity="$(VbcVerbosity)"
+          WarningsAsErrors=""
+          WarningsNotAsErrors="$(WarningsNotAsErrors)"
+          Win32Icon="$(ApplicationIcon)"
+          Win32Manifest="$(Win32Manifest)"              
+          Win32Resource="$(Win32Resource)"
+          />
+    
+    <ItemGroup>
+      <FileWrites
+         Include="@(ContractDeclarativeAssemblies)"/>
+    </ItemGroup>
+  </Target>
+
+  <Target
+     Name="ContractDeclarativeAssemblyCS"
+     Condition="'$(Language)'=='C#'"
+     DependsOnTargets=""
+     Inputs="$(MSBuildAllProjects);
+             @(Compile)"
+     Outputs="@(ContractDeclarativeAssembly->'%(FullPath)')"
+     >
+    <ItemGroup>
+      <ContractDeclarativeSources Include="@(Compile);$(CodeContractsInstallDir)Languages\CSharp\ContractDeclarativeAssemblyAttribute.cs"/>
+    </ItemGroup>
+    <Message Text="Build Declarative Contract Assembly for C# $(TargetPath)"/>
+    <Csc
+       AdditionalLibPaths="$(AdditionalLibPaths)"
+       AddModules="@(AddModules)"
+       AllowUnsafeBlocks="$(AllowUnsafeBlocks)"
+       BaseAddress="$(BaseAddress)"
+       CheckForOverflowUnderflow="$(CheckForOverflowUnderflow)"
+       CodePage="$(CodePage)"
+       DebugType="full"
+       DefineConstants="$(DefineConstants);CONTRACTS_FULL;CODE_ANALYSIS"
+       DelaySign="$(DelaySign)"
+       DisabledWarnings="$(NoWarn)"
+       DocumentationFile=""
+       EmitDebugInformation="true"
+       ErrorReport="$(ErrorReport)"
+       FileAlignment="$(FileAlignment)"
+       GenerateFullPaths="$(GenerateFullPaths)"
+       KeyContainer="$(KeyContainerName)"
+       KeyFile="$(KeyOriginatorFile)"
+       LangVersion="$(LangVersion)"
+       MainEntryPoint="$(StartupObject)"
+       ModuleAssemblyName="$(ModuleAssemblyName)"
+       NoConfig="true"
+       NoLogo="$(NoLogo)"
+       NoStandardLib="$(NoCompilerStandardLib)"
+       NoWin32Manifest="$(NoWin32Manifest)"
+       Optimize="true"
+       OutputAssembly="@(ContractDeclarativeAssembly)"
+       PdbFile="@(ContractDeclarativeAssemblyPDB)" 
+       Platform="$(PlatformTarget)"
+       References="@(ReferencePath)"
+       Resources=""
+       ResponseFiles="$(CompilerResponseFile)"
+       Sources="@(ContractDeclarativeSources)"
+       TargetType="$(OutputType)"
+       ToolExe="$(CscToolExe)"
+       ToolPath="$(CscToolPath)"
+       TreatWarningsAsErrors="false"
+       UseHostCompilerIfAvailable="$(UseHostCompilerIfAvailable)"
+       Utf8Output="$(Utf8Output)"
+       WarningLevel="0"
+       WarningsAsErrors=""
+       WarningsNotAsErrors="$(WarningsNotAsErrors)"
+       Win32Icon=""
+       Win32Manifest="$(Win32Manifest)"
+       Win32Resource="$(Win32Resource)"
+       />            
+    
+    <ItemGroup>
+      <FileWrites
+         Include="@(ContractDeclarativeAssemblies)"/>
+    </ItemGroup>
+  </Target>
+
+
+  <Target
+     Name="CodeContractsComputeReferencedLibPaths">
+    <ItemGroup>
+      <_CodeContractsBuildReferences
+         Include="@(ReferencePath->'%(RootDir)%(Directory)')"/>
+      <_CodeContractsBuildReferences
+         Include="@(ReferencePath->'%(RootDir)%(Directory)CodeContracts')"/>
+    </ItemGroup>
+    <RemoveDuplicates
+       Inputs="@(_CodeContractsBuildReferences)">
+      <Output
+         TaskParameter="Filtered"
+         ItemName="CodeContractsBuildLibPaths"/>
+    </RemoveDuplicates>
+  </Target>
+
+  <!--=====================================================================
+      Building XML Documentation for Contracts
+    ======================================================================-->
+
+  <Target
+    Name="CompensateForVBSettingOfDocFileItem">
+     <!--
+     ** VB sets DocFileItem to the obj/x86/Debug (or whatever configuration) directory for some reason.
+     ** Updating the value of that variable has to be done in a task prior to the ContractXmlDocumentation target.
+     -->
+    <ItemGroup Condition="'$(Language)' == 'VB'"> <!-- see this defined at the top of m.visualbasic.targets -->
+        <DocFileItem Remove="@(DocFileItem)"/>  <!-- empty out existing value -->
+        <DocFileItem Include="$(OutputPath)$(DocumentationFile)"  Condition="'$(DocumentationFile)'!=''"/> <!-- use path into final bin dir instead -->
+    </ItemGroup>
+  </Target>
+
+  <PropertyGroup>
+    <CodeContractsCCDocgenCommand>"$(CodeContractsInstallDir)Bin\ccdocgen"</CodeContractsCCDocgenCommand>
+    <CodeContractsCCDocLibPaths>$(CodeContractsReferenceAssemblyLibPath);@(CodeContractsBuildLibPaths)</CodeContractsCCDocLibPaths>
+    <CodeContractsCCDocLibPaths
+       Condition="'$(CodeContractsLibPaths)' != ''">$(CodeContractsCCDocLibPaths);$(CodeContractsLibPaths)</CodeContractsCCDocLibPaths>
+  </PropertyGroup>
+
+  <Target
+     Name="ContractXmlDocumentation"
+     Condition="Exists('@(DocFileItem)') and Exists('@(ContractReferenceAssemblyAbsolute)')"
+     DependsOnTargets="CodeContractReferenceAssembly;CodeContractsComputeReferencedLibPaths;CompensateForVBSettingOfDocFileItem"
+     Inputs="@(ContractReferenceAssembly);@(DocFileItem)"
+     Outputs="@(DocFileItem)">
+
+    <PropertyGroup>
+      <_CodeContractsCCDocGenArguments>-assembly "@(ContractReferenceAssembly)" -xmlFile "@(DocFileItem)" "-resolvedPaths:@(ReferencePath)" -libpaths "$(CodeContractsCCDocLibPaths) "</_CodeContractsCCDocGenArguments>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <_CodeContractsCCDocGenArgumentLines
+         Include="$(_CodeContractsCCDocGenArguments)"
+         />
+    </ItemGroup>
+
+    <WriteLinesToFile
+      File="$(IntermediateOutputPath)$(ProjectName)ccdocgen.rsp"
+      Lines="@(_CodeContractsCCDocGenArgumentLines, ';')"
+      Overwrite="true"
+      />
+
+    <Exec
+       Command='$(CodeContractsCCdocgenCommand) "@$(IntermediateOutputPath)$(ProjectName)ccdocgen.rsp"' 
+       />
+  </Target>
+
+  <!--=====================================================================
+      Include Code Analysis target if present
+    ======================================================================-->
+  <PropertyGroup>
+    <CodeContractAnalysisTargets>$(CodeContractsInstallDir)MsBuild\v4.0\Microsoft.CodeContractAnalysis.targets</CodeContractAnalysisTargets>
+  </PropertyGroup>
+  <Import Project="$(CodeContractAnalysisTargets)" Condition="Exists('$(CodeContractAnalysisTargets)')"/>
+
+  <!-- End Microsoft Code Contracts -->
+</Project>
