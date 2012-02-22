@@ -35,6 +35,11 @@ namespace Glimpse.Test.Core2.Framework
             
         }
 
+        [Fact]
+        public void CreateDefaultProxyFactory()
+        {
+            Assert.NotNull(Configuration.ProxyFactory);
+        }
 
         [Fact]
         public void CreateDefaultPiplineInspectorsCollection()
@@ -145,6 +150,12 @@ namespace Glimpse.Test.Core2.Framework
         }
 
         [Fact]
+        public void ProxyFactoryCannotBeNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => Configuration.ProxyFactory = null);
+        }
+
+        [Fact]
         public void SerializerCannotBeNull()
         {
             Assert.Throws<ArgumentNullException>(() => Configuration.Serializer = null);
@@ -181,6 +192,8 @@ namespace Glimpse.Test.Core2.Framework
 
             Assert.Equal(RuntimePolicy.ModifyResponseBody, Configuration.DefaultRuntimePolicy);
         }
+
+        
 
         public void Dispose()
         {

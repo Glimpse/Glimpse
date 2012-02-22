@@ -1,7 +1,7 @@
 namespace Glimpse.Core2.Extensibility
 {
-    public interface IPipelineInspectorContext
+    public interface IPipelineInspectorContext:IContext
     {
-        ILogger Logger { get; }
+        IProxyFactory ProxyFactory { get; }
     }
 }

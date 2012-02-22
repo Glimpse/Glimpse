@@ -22,11 +22,11 @@ namespace Glimpse.Core2.Framework
             ProxyGenerator = new ProxyGenerator();
         }
 
-        public T CreateProxy<T>(T instance, IEnumerable<IAlternateMethodImplementation<T>> methodImplementations) where T : class
+        public T CreateProxy<T>(T instance, IEnumerable<IAlternateImplementation<T>> methodImplementations) where T : class
         {
-            var interceptorArray = (from implementaion in methodImplementations select new AlternateMethodImplementationToCastleInterceptorAdapter<T>(implementaion, Logger)).ToArray();
-            var generationHook = new AlternateMethodImplementationGenerationHook<T>(methodImplementations, Logger);
-            var selector = new AlternateMethodImplementationSelector<T>(interceptorArray);
+            var interceptorArray = (from implementaion in methodImplementations select new AlternateImplementationToCastleInterceptorAdapter<T>(implementaion, Logger)).ToArray();
+            var generationHook = new AlternateImplementationGenerationHook<T>(methodImplementations, Logger);
+            var selector = new AlternateImplementationSelector<T>(interceptorArray);
             var options = new ProxyGenerationOptions(generationHook) {Selector = selector};
 
             return ProxyGenerator.CreateInterfaceProxyWithTarget(instance, options, interceptorArray);

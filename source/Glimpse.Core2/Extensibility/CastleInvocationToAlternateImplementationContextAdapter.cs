@@ -5,9 +5,9 @@ using Castle.DynamicProxy;
 
 namespace Glimpse.Core2.Extensibility
 {
-    public class CastleInvocationToAlternateMethodImplementationContextAdapter : IAlternateMethodImplementationContext
+    public class CastleInvocationToAlternateImplementationContextAdapter : IAlternateImplementationContext
     {
-        public CastleInvocationToAlternateMethodImplementationContextAdapter(IInvocation invocation, ILogger logger)
+        public CastleInvocationToAlternateImplementationContextAdapter(IInvocation invocation, ILogger logger)
         {
             Contract.Requires<ArgumentNullException>(invocation != null, "invocation");
             Contract.Requires<ArgumentNullException>(logger != null, "logger");

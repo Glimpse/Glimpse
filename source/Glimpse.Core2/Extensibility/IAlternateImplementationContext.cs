@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Glimpse.Core2.Extensibility
 {
-    public interface IAlternateMethodImplementationContext : IContext
+    public interface IAlternateImplementationContext : IContext
     {
         //TODO: Rename any of these items if there is a better name
         object Proxy { get; }

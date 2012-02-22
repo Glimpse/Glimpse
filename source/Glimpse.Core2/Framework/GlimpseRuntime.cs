@@ -329,7 +329,7 @@ namespace Glimpse.Core2.Framework
                 }
             }
 
-            var pipelineInspectorContext = new PipelineInspectorContext(logger);
+            var pipelineInspectorContext = new PipelineInspectorContext(logger, Configuration.ProxyFactory);
 
             foreach (var pipelineInspector in Configuration.PipelineInspectors)
             {

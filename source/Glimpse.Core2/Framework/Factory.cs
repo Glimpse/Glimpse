@@ -267,11 +267,22 @@ namespace Glimpse.Core2.Framework
             var tabs = InstantiateTabs();
             var runtimePolicies = InstantiateRuntimePolicies();
             var defaultResource = InstantiateDefaultResource();
+            var proxyFactory = InstantiateProxyFactory();
 
             return new GlimpseConfiguration(frameworkProvider, endpointConfiguration, clientScripts, logger, policy,
                                             htmlEncoder, persistanceStore, pipelineInspectors, resources, serializer,
                                             tabs,
-                                            runtimePolicies, defaultResource);
+                                            runtimePolicies, defaultResource, proxyFactory);
+        }
+
+        public IProxyFactory InstantiateProxyFactory()
+        {
+            Contract.Ensures(Contract.Result<IProxyFactory>() != null);
+
+            IProxyFactory result;
+            if (TrySingleInstanceFromServiceLocators(out result)) return result;
+
+            return new CastleDynamicProxyFactory(InstantiateLogger());
         }
 
         private IDiscoverableCollection<T> CreateDiscoverableCollection<T>(DiscoverableCollectionElement config)

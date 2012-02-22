@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
 using Castle.DynamicProxy;
 using Glimpse.Core2.Extensibility;
 using Moq;
@@ -8,7 +7,7 @@ using Xunit;
 
 namespace Glimpse.Test.Core2.Extensibility
 {
-    public class CastleInvocationToAlternateMethodImplementationContextAdapterShould
+    public class CastleInvocationToAlternateImplementationContextAdapterShould
     {
         [Fact]
         public void Construct()
@@ -16,7 +15,7 @@ namespace Glimpse.Test.Core2.Extensibility
             var invocationMock = new Mock<IInvocation>();
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateMethodImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
 
             Assert.Equal(invocationMock.Object, adapter.Invocation);
             Assert.Equal(loggerMock.Object, adapter.Logger);
@@ -28,8 +27,8 @@ namespace Glimpse.Test.Core2.Extensibility
             var invocationMock = new Mock<IInvocation>();
             var loggerMock = new Mock<ILogger>();
 
-            Assert.Throws<ArgumentNullException>(()=>new CastleInvocationToAlternateMethodImplementationContextAdapter(null, loggerMock.Object));
-            Assert.Throws<ArgumentNullException>(()=>new CastleInvocationToAlternateMethodImplementationContextAdapter(invocationMock.Object, null));
+            Assert.Throws<ArgumentNullException>(()=>new CastleInvocationToAlternateImplementationContextAdapter(null, loggerMock.Object));
+            Assert.Throws<ArgumentNullException>(()=>new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, null));
         }
 
         [Fact]
@@ -40,7 +39,7 @@ namespace Glimpse.Test.Core2.Extensibility
             invocationMock.Setup(i => i.Proxy).Returns(expected);
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateMethodImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
 
             Assert.Equal(expected, adapter.Proxy);
             invocationMock.Verify(i=>i.Proxy, Times.Once());
@@ -54,7 +53,7 @@ namespace Glimpse.Test.Core2.Extensibility
             invocationMock.Setup(i => i.ReturnValue).Returns(expected);
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateMethodImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
 
             Assert.Equal(expected, adapter.ReturnValue);
             invocationMock.Verify(i => i.ReturnValue, Times.Once());
@@ -67,7 +66,7 @@ namespace Glimpse.Test.Core2.Extensibility
             var invocationMock = new Mock<IInvocation>();
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateMethodImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
 
             adapter.ReturnValue = expected;
             
@@ -82,7 +81,7 @@ namespace Glimpse.Test.Core2.Extensibility
             invocationMock.Setup(i => i.InvocationTarget).Returns(expected);
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateMethodImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
 
             Assert.Equal(expected, adapter.InvocationTarget);
             invocationMock.Verify(i => i.InvocationTarget, Times.Once());
@@ -96,7 +95,7 @@ namespace Glimpse.Test.Core2.Extensibility
             invocationMock.Setup(i => i.Method).Returns(expected);
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateMethodImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
 
             Assert.Equal(expected, adapter.Method);
             invocationMock.Verify(i => i.Method, Times.Once());
@@ -110,7 +109,7 @@ namespace Glimpse.Test.Core2.Extensibility
             invocationMock.Setup(i => i.MethodInvocationTarget).Returns(expected);
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateMethodImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
 
             Assert.Equal(expected, adapter.MethodInvocationTarget);
             invocationMock.Verify(i => i.MethodInvocationTarget, Times.Once());
@@ -124,7 +123,7 @@ namespace Glimpse.Test.Core2.Extensibility
             invocationMock.Setup(i => i.TargetType).Returns(expected);
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateMethodImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
 
             Assert.Equal(expected, adapter.TargetType);
             invocationMock.Verify(i => i.TargetType, Times.Once());
@@ -138,7 +137,7 @@ namespace Glimpse.Test.Core2.Extensibility
             invocationMock.Setup(i => i.Arguments).Returns(expected);
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateMethodImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
 
             Assert.Equal(expected, adapter.Arguments);
             invocationMock.Verify(i => i.Arguments, Times.Once());
@@ -152,7 +151,7 @@ namespace Glimpse.Test.Core2.Extensibility
             invocationMock.Setup(i => i.GenericArguments).Returns(expected);
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateMethodImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
 
             Assert.Equal(expected, adapter.GenericArguments);
             invocationMock.Verify(i => i.GenericArguments, Times.Once());
@@ -164,7 +163,7 @@ namespace Glimpse.Test.Core2.Extensibility
             var invocationMock = new Mock<IInvocation>();
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateMethodImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
             adapter.SetArgumentValue(0, "thing");
 
             invocationMock.Verify(i => i.SetArgumentValue(0,"thing"), Times.Once());
@@ -178,7 +177,7 @@ namespace Glimpse.Test.Core2.Extensibility
             invocationMock.Setup(i => i.GetArgumentValue(0)).Returns(expected);
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateMethodImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
 
             Assert.Equal(expected, adapter.GetArgumentValue(0));
             invocationMock.Verify(i => i.GetArgumentValue(0), Times.Once());
@@ -192,7 +191,7 @@ namespace Glimpse.Test.Core2.Extensibility
             invocationMock.Setup(i => i.GetConcreteMethod()).Returns(expected);
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateMethodImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
 
             Assert.Equal(expected, adapter.GetConcreteMethod());
             invocationMock.Verify(i => i.GetConcreteMethod(), Times.Once());
@@ -206,7 +205,7 @@ namespace Glimpse.Test.Core2.Extensibility
             invocationMock.Setup(i => i.GetConcreteMethodInvocationTarget()).Returns(expected);
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateMethodImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
 
             Assert.Equal(expected, adapter.GetConcreteMethodInvocationTarget());
             invocationMock.Verify(i => i.GetConcreteMethodInvocationTarget(), Times.Once());
@@ -218,7 +217,7 @@ namespace Glimpse.Test.Core2.Extensibility
             var invocationMock = new Mock<IInvocation>();
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateMethodImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
 
             adapter.Proceed();
             invocationMock.Verify(i => i.Proceed(), Times.Once());

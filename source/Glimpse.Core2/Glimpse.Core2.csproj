@@ -98,16 +98,19 @@
     <Compile Include="Configuration\TypeConverter.cs" />
     <Compile Include="Configuration\TypeElement.cs" />
     <Compile Include="Configuration\TypeElementCollection.cs" />
+    <Compile Include="Extensibility\AlternateImplementationGenerationHook.cs" />
+    <Compile Include="Extensibility\AlternateImplementationSelector.cs" />
     <Compile Include="Extensibility\AntiXssEncoder.cs" />
-    <Compile Include="Extensibility\CastleInvocationToAlternateMethodImplementationContextAdapter.cs" />
+    <Compile Include="Extensibility\CastleInvocationToAlternateImplementationContextAdapter.cs" />
     <Compile Include="Extensibility\DictionaryDataStoreAdapter.cs" />
-    <Compile Include="Extensibility\IAlternateMethodImplementation.cs" />
-    <Compile Include="Extensibility\IAlternateMethodImplementationContext.cs" />
+    <Compile Include="Extensibility\IAlternateImplementation.cs" />
+    <Compile Include="Extensibility\IAlternateImplementationContext.cs" />
     <Compile Include="Extensibility\IClientScript.cs" />
     <Compile Include="Extensibility\IContext.cs" />
     <Compile Include="Extensibility\IDynamicClientScript.cs" />
     <Compile Include="Extensibility\IPipelineInspectorContext.cs" />
-    <Compile Include="Extensibility\AlternateMethodImplementationToCastleInterceptorAdapter.cs" />
+    <Compile Include="Extensibility\AlternateImplementationToCastleInterceptorAdapter.cs" />
+    <Compile Include="Extensibility\IProxyFactory.cs" />
     <Compile Include="Extensibility\IResourceContext.cs" />
     <Compile Include="Extensibility\IResourceResultContext.cs" />
     <Compile Include="Extensibility\ISerializationConverter.cs" />
@@ -131,8 +134,6 @@
     <Compile Include="Extensibility\RuntimePolicyContext.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\TypeElementCollectionExtensions.cs" />
-    <Compile Include="Framework\AlternateMethodImplementationGenerationHook.cs" />
-    <Compile Include="Framework\AlternateMethodImplementationSelector.cs" />
     <Compile Include="Framework\ApplicationPersistanceStore.cs" />
     <Compile Include="Framework\CacheSetting.cs" />
     <Compile Include="Framework\CastleDynamicProxyFactory.cs" />
@@ -144,7 +145,6 @@
     <Compile Include="Framework\IGlimpseRuntime.cs" />
     <Compile Include="Framework\IPersistanceStore.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Framework\IProxyFactory.cs" />
     <Compile Include="Framework\IReadOnlyPersistanceStore.cs" />
     <Compile Include="Framework\IServiceLocator.cs" />
     <Compile Include="Framework\PipelineInspectorContext.cs" />
@@ -269,7 +269,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(CodeContractsInstallDir)\MsBuild\v4.0\Microsoft.CodeContracts.targets" Condition="$(CodeContractsInstalled) == 'False'" />
-    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

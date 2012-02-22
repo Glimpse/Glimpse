@@ -24,8 +24,6 @@ namespace Glimpse.Core2.Resource
 
         public IResourceResult Execute(IResourceContext context)
         {
-            Contract.Requires<ArgumentNullException>(context != null, "context");
-
             Guid requestId;
 
             if (!Guid.TryParse(context.Parameters[ResourceParameterKey.RequestId], out requestId))

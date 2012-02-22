@@ -93,9 +93,10 @@
     <Compile Include="Configuration\TypeConverterShould.cs" />
     <Compile Include="Configuration\TypeElementShould.cs" />
     <Compile Include="DictionaryDataStoreAdapterShould.cs" />
-    <Compile Include="Extensibility\AlternateMethodImplementationToCastleInterceptorAdapterShould.cs" />
-    <Compile Include="Extensibility\CastleDynamicProxyFactoryShould.cs" />
-    <Compile Include="Extensibility\CastleInvocationToAlternateMethodImplementationContextAdapterShould.cs" />
+    <Compile Include="Extensibility\AlternateImplementationGenerationHookShould.cs" />
+    <Compile Include="Extensibility\AlternateImplementationSelectorShould.cs" />
+    <Compile Include="Extensibility\AlternateImplementationToCastleInterceptorAdapterShould.cs" />
+    <Compile Include="Extensibility\CastleInvocationToAlternateImplementationContextAdapterShould.cs" />
     <Compile Include="Extensibility\ExceptionResourceResultShould.cs" />
     <Compile Include="Extensibility\FileResourceResultShould.cs" />
     <Compile Include="Extensibility\JsonNetSerializationConverterShould.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Extensibility\TabContextShould.cs" />
     <Compile Include="Extensions\EnumExtensionsShould.cs" />
     <Compile Include="Extensions\TestingExtensions.cs" />
+    <Compile Include="Framework\CastleDynamicProxyFactoryShould.cs" />
     <Compile Include="Framework\FactoryShould.cs" />
     <Compile Include="Framework\GlimpseConfigurationShould.cs" />
     <Compile Include="Framework\GlimpseRuntimeShould.cs" />

@@ -84,9 +84,10 @@ namespace Glimpse.Test.Core2.Tester
             var tabs = new ReflectionDiscoverableCollection<ITab>(loggerMock.Object);
             var policies = new ReflectionDiscoverableCollection<IRuntimePolicy>(loggerMock.Object);
             var resourceMock = new Mock<IResource>();
+            var proxyFactoryMock = new Mock<IProxyFactory>();
 
             var configuration =
-                new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfigMock.Object, clientScripts, loggerMock.Object, RuntimePolicy.On, htmlEncoderMock.Object, persistanceStoreMock.Object, pipelineInspectors, resources, serializerMock.Object, tabs, policies, resourceMock.Object);
+                new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfigMock.Object, clientScripts, loggerMock.Object, RuntimePolicy.On, htmlEncoderMock.Object, persistanceStoreMock.Object, pipelineInspectors, resources, serializerMock.Object, tabs, policies, resourceMock.Object, proxyFactoryMock.Object);
 
 
             return new GlimpseRuntimeTester(configuration, frameworkProviderMock, endpointConfigMock);

@@ -659,5 +659,40 @@ namespace Glimpse.Test.Core2.Framework
 
             Assert.Null(factory.UserServiceLocator);
         }
+
+        [Fact]
+        public void InstantiateProxyFactoryReturnsCastleDynamicProxyFactory()
+        {
+            var dataStoreMock = new Mock<IDataStore>();
+            var providerMock = new Mock<IFrameworkProvider>();
+            providerMock.Setup(p => p.HttpServerStore).Returns(dataStoreMock.Object);
+            var endpointConfigMock = new Mock<ResourceEndpointConfiguration>();
+
+            var locatorMock = new Mock<IServiceLocator>();
+            locatorMock.Setup(l => l.GetInstance<IFrameworkProvider>()).Returns(providerMock.Object);
+            locatorMock.Setup(l => l.GetInstance<ResourceEndpointConfiguration>()).Returns(endpointConfigMock.Object);
+
+            var factory = new Factory(locatorMock.Object);
+
+            var proxyFactory = factory.InstantiateProxyFactory();
+
+            Assert.NotNull(proxyFactory);
+            Assert.NotNull(proxyFactory as CastleDynamicProxyFactory);
+        }
+
+        [Fact]
+        public void LeverageServiceLocatorForProxyFactory()
+        {
+            var proxyFactoryMock = new Mock<IProxyFactory>();
+            var locatorMock = new Mock<IServiceLocator>();
+            locatorMock.Setup(l => l.GetInstance<IProxyFactory>()).Returns(proxyFactoryMock.Object);
+
+            var factory = new Factory(locatorMock.Object);
+
+            var result = factory.InstantiateProxyFactory();
+
+            Assert.NotNull(result);
+            Assert.Equal(proxyFactoryMock.Object, result);
+        }
     }
 }

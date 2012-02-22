@@ -6,18 +6,19 @@ namespace Glimpse.Core2.Framework
     public interface IGlimpseConfiguration
     {
         //TODO: Move contracts here
-        ICollection<IClientScript> ClientScripts { get; set; }
-        IFrameworkProvider FrameworkProvider { get; set; }
-        IHtmlEncoder HtmlEncoder { get; set; }
-        ILogger Logger { get; set; }
-        IPersistanceStore PersistanceStore { get; set; }
-        ICollection<IPipelineInspector> PipelineInspectors { get; set; }
-        ResourceEndpointConfiguration ResourceEndpoint { get; set; }
-        ICollection<IResource> Resources { get; set; }
-        ISerializer Serializer { get; set; }
-        ICollection<ITab> Tabs { get; set; }
-        ICollection<IRuntimePolicy> RuntimePolicies { get; set; }
-        IResource DefaultResource { get; set; }
-        RuntimePolicy DefaultRuntimePolicy { get; set; }
+        ICollection<IClientScript> ClientScripts { get; }
+        IFrameworkProvider FrameworkProvider { get; }
+        IHtmlEncoder HtmlEncoder { get; }
+        ILogger Logger { get; }
+        IPersistanceStore PersistanceStore { get; }
+        ICollection<IPipelineInspector> PipelineInspectors { get; }
+        ResourceEndpointConfiguration ResourceEndpoint { get; }
+        ICollection<IResource> Resources { get; }
+        ISerializer Serializer { get; }
+        ICollection<ITab> Tabs { get; }
+        ICollection<IRuntimePolicy> RuntimePolicies { get; }
+        IResource DefaultResource { get; }
+        RuntimePolicy DefaultRuntimePolicy { get; }
+        IProxyFactory ProxyFactory { get; }
     }
 }
