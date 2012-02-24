@@ -1,7 +1,10 @@
-﻿using System;
+﻿using System.Linq;
+using Castle.DynamicProxy;
+using System;
 using System.Collections.Generic;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
+using Glimpse.Test.Core2.TestDoubles;
 using Moq;
 using Xunit;
 
@@ -50,6 +53,57 @@ namespace Glimpse.Test.Core2.Framework
             proxy.GetData(null);
 
             implementationMock.Verify(i=>i.NewImplementation(It.IsAny<IAlternateImplementationContext>()));
+        }
+
+        [Fact]
+        public void ReturnFalseForSealedOnIsProxyable()
+        {
+            var loggerMock = new Mock<ILogger>();
+
+            var factory = new CastleDynamicProxyFactory(loggerMock.Object);
+
+            Assert.False(factory.IsProxyable("any string"));
+        }
+
+        [Fact]
+        public void ReturnFalseForNoDefaultConstructorOnIsProxyable()
+        {
+            var loggerMock = new Mock<ILogger>();
+
+            var factory = new CastleDynamicProxyFactory(loggerMock.Object);
+
+            Assert.False(factory.IsProxyable(new JsonNetSerializer(loggerMock.Object)));
+        }
+
+        [Fact]
+        public void ReturnTrueForOnIsProxyable()
+        {
+            var loggerMock = new Mock<ILogger>();
+
+            var factory = new CastleDynamicProxyFactory(loggerMock.Object);
+
+            var dummyTab = new DummyTab();
+
+            Assert.True(factory.IsProxyable(dummyTab));
+        }
+
+        [Fact]
+        public void ReturnFalseForAlreadyProxiedObjectsOnIsProxyable()
+        {
+            var loggerMock = new Mock<ILogger>();
+
+            var factory = new CastleDynamicProxyFactory(loggerMock.Object);
+
+            var dummyTab = new DummyTab();
+
+            var proxy = factory.CreateProxy(dummyTab, Enumerable.Empty<IAlternateImplementation<ITab>>());
+
+            Assert.NotNull(proxy);
+            Assert.NotNull(proxy as ITab);
+
+            var isProxyable = factory.IsProxyable(proxy);
+
+            Assert.False(isProxyable);
         }
     }
 }

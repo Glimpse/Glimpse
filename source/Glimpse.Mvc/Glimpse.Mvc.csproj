@@ -43,6 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlternateImplementation\IViewMixin.cs" />
+    <Compile Include="AlternateImplementation\View.cs" />
+    <Compile Include="AlternateImplementation\ViewEngine.cs" />
+    <Compile Include="AlternateImplementation\ViewMixin.cs" />
+    <Compile Include="Message\ViewEngineFindCall.cs" />
+    <Compile Include="Message\ViewRenderCall.cs" />
+    <Compile Include="PipelineInspector\ViewEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -55,6 +62,7 @@
       <Name>Glimpse.Core2</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

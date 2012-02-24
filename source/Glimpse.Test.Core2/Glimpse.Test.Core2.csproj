@@ -75,8 +75,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="xunit">
-      <HintPath>..\..\packages\xunit.1.8.0.1549\lib\xunit.dll</HintPath>
+    <Reference Include="xunit, Version=1.9.0.1566, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\xunit.1.9.0.1566\lib\xunit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -111,11 +112,13 @@
     <Compile Include="Extensions\EnumExtensionsShould.cs" />
     <Compile Include="Extensions\TestingExtensions.cs" />
     <Compile Include="Framework\CastleDynamicProxyFactoryShould.cs" />
+    <Compile Include="Framework\EventBrokerShould.cs" />
     <Compile Include="Framework\FactoryShould.cs" />
     <Compile Include="Framework\GlimpseConfigurationShould.cs" />
     <Compile Include="Framework\GlimpseRuntimeShould.cs" />
     <Compile Include="Framework\ReflectionDiscoverableCollectionShould.cs" />
     <Compile Include="Framework\ResourceParametersShould.cs" />
+    <Compile Include="Framework\TimerShould.cs" />
     <Compile Include="GlimpseExceptionShould.cs" />
     <Compile Include="JsonNetSerializerShould.cs" />
     <Compile Include="Policy\AjaxPolicyShould.cs" />
@@ -133,6 +136,7 @@
     <Compile Include="SerializationConverter\GlimpseMetadataConverterShould.cs" />
     <Compile Include="StatusCodeResourceResultShould.cs" />
     <Compile Include="TestDoubles\DummyEnum.cs" />
+    <Compile Include="TestDoubles\DummyMessage.cs" />
     <Compile Include="TestDoubles\DummyException.cs" />
     <Compile Include="TestDoubles\DummyPipelineInspector1.cs" />
     <Compile Include="TestDoubles\DummyObjectContext.cs" />

@@ -59,7 +59,9 @@ namespace Glimpse.Core2.Framework
             requestStore.Set(Constants.RequestIdKey, Guid.NewGuid());
 
             //Create and start global stopwatch
-            requestStore.Set(Constants.GlobalStopwatchKey, Stopwatch.StartNew());
+            var stopwatch = Stopwatch.StartNew();
+            requestStore.Set(Constants.GlobalStopwatchKey, stopwatch);
+            requestStore.Set(Constants.GlobalTimerKey, new ExecutionTimer(stopwatch));
         }
 
         //TODO: Add PRG support
@@ -329,7 +331,7 @@ namespace Glimpse.Core2.Framework
                 }
             }
 
-            var pipelineInspectorContext = new PipelineInspectorContext(logger, Configuration.ProxyFactory);
+            var pipelineInspectorContext = new PipelineInspectorContext(logger, Configuration.ProxyFactory, Configuration.MessageBroker, () => Configuration.FrameworkProvider.HttpRequestStore.Get<ExecutionTimer>(Constants.GlobalTimerKey));
 
             foreach (var pipelineInspector in Configuration.PipelineInspectors)
             {

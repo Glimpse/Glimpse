@@ -21,7 +21,8 @@ namespace Glimpse.Core2.Framework
             ICollection<ITab> tabs,
             ICollection<IRuntimePolicy> runtimePolicies,
             IResource defaultResource,
-            IProxyFactory proxyFactory)
+            IProxyFactory proxyFactory,
+            IMessageBroker messageBroker)
         {
             //TODO: Test building glimpse on clean VS install with contracts
             //TODO: Test building glimpse on teamcity with contracts
@@ -38,6 +39,7 @@ namespace Glimpse.Core2.Framework
             Contract.Requires<ArgumentNullException>(runtimePolicies != null, "runtimePolicies");
             Contract.Requires<ArgumentNullException>(defaultResource != null, "defaultResource");
             Contract.Requires<ArgumentNullException>(proxyFactory != null, "proxyFactory");
+            Contract.Requires<ArgumentNullException>(messageBroker != null, "messageBroker");
 
             Logger = logger;
             ClientScripts = clientScripts;
@@ -53,6 +55,7 @@ namespace Glimpse.Core2.Framework
             DefaultRuntimePolicy = defaultRuntimePolicy;
             DefaultResource = defaultResource;
             ProxyFactory = proxyFactory;
+            MessageBroker = messageBroker;
         }
 
         private ICollection<IClientScript> clientScripts;
@@ -247,6 +250,21 @@ namespace Glimpse.Core2.Framework
             {
                 Contract.Requires<ArgumentNullException>(value != null, "value");
                 proxyFactory = value;
+            }
+        }
+
+        private IMessageBroker messageBroker;
+        public IMessageBroker MessageBroker
+        {
+            get
+            {
+                Contract.Ensures(Contract.Result<IMessageBroker>()!=null);
+                return messageBroker;
+            }
+            set
+            {
+                Contract.Requires<ArgumentNullException>(value!=null, "value");
+                messageBroker = value;
             }
         }
 

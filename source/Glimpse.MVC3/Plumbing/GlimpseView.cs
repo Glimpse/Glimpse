@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;

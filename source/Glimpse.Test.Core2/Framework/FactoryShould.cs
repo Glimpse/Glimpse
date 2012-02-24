@@ -694,5 +694,37 @@ namespace Glimpse.Test.Core2.Framework
             Assert.NotNull(result);
             Assert.Equal(proxyFactoryMock.Object, result);
         }
+
+
+        [Fact]
+        public void InstantiateMessageBrokerWithDefault()
+        {
+            var locatorMock = new Mock<IServiceLocator>();
+
+            var factory = new Factory(locatorMock.Object);
+
+            IMessageBroker broker = factory.InstantiateMessageBroker();
+
+            Assert.NotNull(broker);
+            Assert.NotNull(broker as MessageBroker);
+            locatorMock.Verify(l => l.GetInstance<IMessageBroker>(), Times.Once());
+        }
+
+        [Fact]
+        public void LeverageServiceLocatorForMessageBroker()
+        {
+            var brokerMock = new Mock<IMessageBroker>();
+            var locatorMock = new Mock<IServiceLocator>();
+            locatorMock.Setup(l => l.GetInstance<IMessageBroker>()).Returns(brokerMock.Object);
+
+            var factory = new Factory(locatorMock.Object);
+
+            IMessageBroker broker = factory.InstantiateMessageBroker();
+
+            Assert.NotNull(broker);
+            Assert.Equal(brokerMock.Object, broker);
+
+            locatorMock.Verify(l => l.GetInstance<IMessageBroker>(), Times.Once());
+        }
     }
 }

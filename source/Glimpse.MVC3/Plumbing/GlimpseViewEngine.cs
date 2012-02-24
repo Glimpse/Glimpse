@@ -30,6 +30,16 @@ namespace Glimpse.Mvc3.Plumbing
             return viewEngineResult;
         }
 
+        /// <summary>
+        /// Finds the specified view by using the specified controller context.
+        /// </summary>
+        /// <param name="controllerContext">The controller context.</param>
+        /// <param name="viewName">The name of the view.</param>
+        /// <param name="masterName">The name of the master.</param>
+        /// <param name="useCache">true to specify that the view engine returns the cached view, if a cached view exists; otherwise, false.</param>
+        /// <returns>
+        /// The page view.
+        /// </returns>
         public ViewEngineResult FindView(ControllerContext controllerContext, string viewName, string masterName,
                                          bool useCache)
         {

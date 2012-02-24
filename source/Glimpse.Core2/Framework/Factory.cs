@@ -268,11 +268,22 @@ namespace Glimpse.Core2.Framework
             var runtimePolicies = InstantiateRuntimePolicies();
             var defaultResource = InstantiateDefaultResource();
             var proxyFactory = InstantiateProxyFactory();
+            var messageBroker = InstantiateMessageBroker();
 
             return new GlimpseConfiguration(frameworkProvider, endpointConfiguration, clientScripts, logger, policy,
                                             htmlEncoder, persistanceStore, pipelineInspectors, resources, serializer,
                                             tabs,
-                                            runtimePolicies, defaultResource, proxyFactory);
+                                            runtimePolicies, defaultResource, proxyFactory, messageBroker);
+        }
+
+        public IMessageBroker InstantiateMessageBroker()
+        {
+            Contract.Ensures(Contract.Result<IMessageBroker>()!=null);
+
+            IMessageBroker result;
+            if (TrySingleInstanceFromServiceLocators(out result)) return result;
+
+            return new MessageBroker(InstantiateLogger());
         }
 
         public IProxyFactory InstantiateProxyFactory()

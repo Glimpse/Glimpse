@@ -11,5 +11,6 @@
         internal const string RequestIdKey = "__GlimpseRequestId";
         internal const string GlobalStopwatchKey = "__GlimpseGlobalStopwatch";
         internal const string RuntimePermissionsKey = "__GlimpseRequestRuntimePermissions";
+        internal const string GlobalTimerKey = "__GlimpseTimer";
     }
 }
