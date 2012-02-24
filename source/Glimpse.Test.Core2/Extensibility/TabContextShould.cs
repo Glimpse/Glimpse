@@ -15,6 +15,7 @@ namespace Glimpse.Test.Core2.Extensibility
             RequestContext = new DummyObjectContext();
             PluginStoreMock = new Mock<IDataStore>();
             LoggerMock = new Mock<ILogger>();
+            MessageBroker = new Mock<IMessageBroker>();
             PipelineInspectors = new ReflectionDiscoverableCollection<IPipelineInspector>(LoggerMock.Object)
                                      {
                                          new DummyPipelineInspector1()
@@ -29,12 +30,14 @@ namespace Glimpse.Test.Core2.Extensibility
 
         private Mock<ILogger> LoggerMock { get; set; }
 
+        private Mock<IMessageBroker> MessageBroker { get; set; }
+
         private DummyObjectContext RequestContext { get; set; }
 
         private TabContext tabContext;
         private TabContext TabContext
         {
-            get { return tabContext ?? (tabContext = new TabContext(RequestContext, PluginStoreMock.Object, PipelineInspectors, LoggerMock.Object)); }
+            get { return tabContext ?? (tabContext = new TabContext(RequestContext, PluginStoreMock.Object, LoggerMock.Object, MessageBroker.Object)); }
             set { tabContext = value; }
         }
 
@@ -45,49 +48,34 @@ namespace Glimpse.Test.Core2.Extensibility
         public void Construct()
         {
             var pluginStoreObj = PluginStoreMock.Object;
-            var locator = new TabContext(RequestContext, pluginStoreObj, PipelineInspectors, LoggerMock.Object);
+            var locator = new TabContext(RequestContext, pluginStoreObj, LoggerMock.Object, MessageBroker.Object);
 
             Assert.Equal(RequestContext, locator.GetRequestContext<DummyObjectContext>());
             Assert.Equal(pluginStoreObj, locator.PluginStore);
         }
 
         [Fact]
-        public void GetPipelineModifier()
+        public void ThrowWithNullMessageBroker()
         {
-            var inspector = TabContext.GetPipelineInspector<DummyPipelineInspector1>();
-            Assert.NotNull(inspector);
-            Assert.IsType<DummyPipelineInspector1>(inspector);
-        }
-
-        [Fact]
-        public void ReturnNullWithMissingPipelineModifier()
-        {
-            var inspector = TabContext.GetPipelineInspector<DummyPipelineInspector2>();
-            Assert.Null(inspector);
-        }
-
-        [Fact]
-        public void ThrowWithNullPipelineInspectors()
-        {
-            Assert.Throws<ArgumentNullException>(() => new TabContext(RequestContext, PluginStoreMock.Object, null, LoggerMock.Object));
+            Assert.Throws<ArgumentNullException>(() => new TabContext(RequestContext, PluginStoreMock.Object, LoggerMock.Object, null));
         }
 
         [Fact]
         public void ThrowWithNullPluginStore()
         {
-            Assert.Throws<ArgumentNullException>(() => new TabContext(RequestContext, null, PipelineInspectors, LoggerMock.Object));
+            Assert.Throws<ArgumentNullException>(() => new TabContext(RequestContext, null, LoggerMock.Object, MessageBroker.Object));
         }
 
         [Fact]
         public void ThrowWithNullRequestContext()
         {
-            Assert.Throws<ArgumentNullException>(()=>new TabContext(null, PluginStoreMock.Object, PipelineInspectors, LoggerMock.Object));
+            Assert.Throws<ArgumentNullException>(()=>new TabContext(null, PluginStoreMock.Object, LoggerMock.Object, MessageBroker.Object));
         }
 
         [Fact]
         public void ThrowWithNullLogger()
         {
-            Assert.Throws<ArgumentNullException>(() => new TabContext(RequestContext, PluginStoreMock.Object, PipelineInspectors, null));
+            Assert.Throws<ArgumentNullException>(() => new TabContext(RequestContext, PluginStoreMock.Object, null, MessageBroker.Object));
         }
 
         public void Dispose()

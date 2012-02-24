@@ -289,7 +289,7 @@ namespace Glimpse.Core2.Framework
             var tabStore = new DictionaryDataStoreAdapter(new Dictionary<string, object>());
 
             //Create UserServiceLocator valid for this request
-            var tabContext = new TabContext(runtimeContext, tabStore, Configuration.PipelineInspectors, logger);
+            var tabContext = new TabContext(runtimeContext, tabStore, logger, Configuration.MessageBroker);
 
 
             foreach (var tab in supportedRuntimeTabs)
