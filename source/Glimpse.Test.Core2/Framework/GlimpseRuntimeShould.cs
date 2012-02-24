@@ -768,5 +768,29 @@ namespace Glimpse.Test.Core2.Framework
 
             Runtime.TabMock.Verify(t => t.GetData(It.IsAny<ITabContext>()), Times.Once());
         }
+
+        [Fact]
+        public void StopBeginSessionAccessWithRuntimePolicyOff()
+        {
+            Runtime.Configuration.DefaultRuntimePolicy = RuntimePolicy.Off;
+            Runtime.TabMock.Setup(t => t.ExecuteOn).Returns(RuntimeEvent.BeginSessionAccess);
+            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
+
+            Runtime.BeginSessionAccess();
+
+            Runtime.TabMock.Verify(t=>t.GetData(It.IsAny<ITabContext>()), Times.Never());
+        }
+
+        [Fact]
+        public void StopEndSessionAccessWithRuntimePolicyOff()
+        {
+            Runtime.Configuration.DefaultRuntimePolicy = RuntimePolicy.Off;
+            Runtime.TabMock.Setup(t => t.ExecuteOn).Returns(RuntimeEvent.EndSessionAccess);
+            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
+
+            Runtime.EndSessionAccess();
+
+            Runtime.TabMock.Verify(t => t.GetData(It.IsAny<ITabContext>()), Times.Never());
+        }
     }
 }
