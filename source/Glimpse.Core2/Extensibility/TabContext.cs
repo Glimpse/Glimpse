@@ -14,12 +14,12 @@ namespace Glimpse.Core2.Extensibility
             Contract.Requires<ArgumentNullException>(messageBroker != null, "messageBroker");
 
             RequestContext = requestContext;
-            PluginStore = pluginStore;
+            TabStore = pluginStore;
             Logger = logger;
             MessageBroker = messageBroker;
         }
 
-        public IDataStore PluginStore { get; private set; }
+        public IDataStore TabStore { get; private set; }
 
         public IMessageBroker MessageBroker { get; set; }
 

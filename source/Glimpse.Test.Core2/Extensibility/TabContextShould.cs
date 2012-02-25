@@ -51,7 +51,7 @@ namespace Glimpse.Test.Core2.Extensibility
             var locator = new TabContext(RequestContext, pluginStoreObj, LoggerMock.Object, MessageBroker.Object);
 
             Assert.Equal(RequestContext, locator.GetRequestContext<DummyObjectContext>());
-            Assert.Equal(pluginStoreObj, locator.PluginStore);
+            Assert.Equal(pluginStoreObj, locator.TabStore);
         }
 
         [Fact]

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core2.Extensibility;
@@ -9,96 +10,122 @@ namespace Glimpse.Mvc.AlternateImplementation
 {
     public class ViewEngine
     {
-        protected internal Func<IExecutionTimer> TimerStrategy { get; set; }
-        protected internal IMessageBroker MessageBroker { get; set; }
-        protected internal IProxyFactory ProxyFactory { get; set; }
-
-        protected ViewEngine(IMessageBroker messageBroker, IProxyFactory proxyFactory, Func<IExecutionTimer> timerStrategy)
+        private ViewEngine()
         {
-            TimerStrategy = timerStrategy;
-            MessageBroker = messageBroker;
-            ProxyFactory = proxyFactory;
         }
 
-        public static IEnumerable<IAlternateImplementation<IViewEngine>> All(IMessageBroker messageBroker, IProxyFactory proxyFactory, Func<IExecutionTimer> timerStrategy)
+        public static IEnumerable<IAlternateImplementation<IViewEngine>> AllMethods(IMessageBroker messageBroker, IProxyFactory proxyFactory, ILogger logger, Func<IExecutionTimer> timerStrategy)
         {
-            yield return new FindViews(messageBroker, proxyFactory, timerStrategy, false);
-            yield return new FindViews(messageBroker, proxyFactory, timerStrategy, true);
+            yield return new FindViews(messageBroker, proxyFactory, logger, timerStrategy, false);
+            yield return new FindViews(messageBroker, proxyFactory, logger, timerStrategy, true);
         }
 
-        public class FindViews : ViewEngine, IAlternateImplementation<IViewEngine>
+        //This class is the alternate implementation for both .FindView() AND .FindPartialView()
+        public class FindViews : IAlternateImplementation<IViewEngine>
         {
+            public IMessageBroker MessageBroker { get; set; }
+            public IProxyFactory ProxyFactory { get; set; }
+            public ILogger Logger { get; set; }
+            public Func<IExecutionTimer> TimerStrategy { get; set; }
             public bool IsPartial { get; set; }
+            public MethodInfo MethodToImplement { get; private set; }
 
-            public FindViews(IMessageBroker messageBroker, IProxyFactory proxyFactory, Func<IExecutionTimer> timerStrategy, bool isPartial) : base(messageBroker, proxyFactory, timerStrategy)
+            public FindViews(IMessageBroker messageBroker, IProxyFactory proxyFactory, ILogger logger, Func<IExecutionTimer> timerStrategy, bool isPartial)
             {
+                MessageBroker = messageBroker;
+                ProxyFactory = proxyFactory;
+                Logger = logger;
+                TimerStrategy = timerStrategy;
                 IsPartial = isPartial;
-
-                methodToImplement = typeof (IViewEngine).GetMethod(IsPartial ? "FindPartialView" : "FindView");
-            }
-
-            private readonly MethodInfo methodToImplement = typeof (IViewEngine).GetMethod("FindView");
-
-            public MethodInfo MethodToImplement
-            {
-                get { return methodToImplement; }
+                MethodToImplement = typeof (IViewEngine).GetMethod(IsPartial ? "FindPartialView" : "FindView");
             }
 
             public void NewImplementation(IAlternateImplementationContext context)
             {
                 var timer = TimerStrategy();
 
-                var timerResult = timer.Time(context.Proceed);
+                var timing = timer.Time(context.Proceed);
 
-                var arguments = context.Arguments;
-                var viewName = (string)arguments[1];
+                var input = new Arguments(context.Arguments, IsPartial);
 
-                string masterName;
-                bool useCache;
+                var id = Guid.NewGuid();
 
-                if (IsPartial) //slightly different parameters between FindPartialView & FindView
-                {
-                    masterName = "";
-                    useCache = (bool)arguments[2];
-                }
-                else
-                {
-                    masterName = (string)arguments[2];
-                    useCache = (bool)arguments[3];
-                }
+                var output = context.ReturnValue as ViewEngineResult;
 
-                var viewEngineResult = context.ReturnValue as ViewEngineResult;
-                IView newView = ConfigureView(viewEngineResult, context, viewName, IsPartial);
+                output = ProxyOutput(output, context, input.ViewName, IsPartial, id);
 
-                var message = new ViewEngineFindCall(timerResult,
-                                                 viewEngineResult,
-                                                 newView,
-                                                 IsPartial,//isPartial
-                                                 viewName,
-                                                 masterName,
-                                                 useCache,
-                                                 context.TargetType);//viewEngineType
-
-                MessageBroker.Publish(message);
+                MessageBroker.Publish(new Message(input, output, timing, context.TargetType, IsPartial, id));
+                MessageBroker.Publish(new TimerResultMessage(timing, "Find View " + input.ViewName, "ASP.NET MVC"));//TODO: Clean this up
             }
 
-            private IView ConfigureView(ViewEngineResult viewEngineResult, IAlternateImplementationContext context, string viewName, bool isPartial)
+            private ViewEngineResult ProxyOutput(ViewEngineResult viewEngineResult, IAlternateImplementationContext context, string viewName, bool isPartial, Guid id)
             {
-                if (viewEngineResult != null && viewEngineResult.View != null)
+                if (viewEngineResult.View != null)
                 {
                     var originalView = viewEngineResult.View;
 
                     if (ProxyFactory.IsProxyable(originalView))
                     {
                         var newView = ProxyFactory.CreateProxy(originalView,
-                                                           AlternateImplementation.View.All(MessageBroker, TimerStrategy),
-                                                           new ViewMixin{ViewName = viewName, IsPartial = isPartial});
+                                                               AlternateImplementation.View.AllMethods(MessageBroker, TimerStrategy),
+                                                               new View.Render.Mixin(viewName, isPartial, id));
 
-                        context.ReturnValue = new ViewEngineResult(newView, viewEngineResult.ViewEngine);
-                        return newView;
+                        Logger.Info(Resources.FindViewsProxyOutputReplacedIView, originalView.GetType(), viewName);
+
+                        var result = new ViewEngineResult(newView, viewEngineResult.ViewEngine);
+                        context.ReturnValue = result;
+                        return result;
                     }
                 }
-                return null;
+                return viewEngineResult;
+            }
+
+            public class Message
+            {
+                public Message(Arguments input, ViewEngineResult output, TimerResult timing, Type baseType,
+                               bool isPartial, Guid id)
+                {
+                    Contract.Requires<ArgumentNullException>(input != null, "input");
+                    Contract.Requires<ArgumentNullException>(output != null, "output");
+                    Contract.Requires<ArgumentNullException>(timing != null, "timerResult");
+
+                    Input = input;
+                    Output = output;
+                    Timing = timing;
+
+                    IsPartial = isPartial;
+                    BaseType = baseType;
+                    Id = id;
+                }
+
+                public Arguments Input { get; set; }
+                public ViewEngineResult Output { get; set; }
+                public TimerResult Timing { get; set; }
+                public Type BaseType { get; set; }
+
+                public bool IsPartial { get; set; }
+                public Guid Id { get; set; }
+
+                public bool IsFound
+                {
+                    get { return Output.View != null; }
+                }
+            }
+
+            public class Arguments
+            {
+                public Arguments(object[] arguments, bool isPartial)
+                {
+                    ControllerContext = (ControllerContext) arguments[0];
+                    ViewName = (string) arguments[1];
+                    UseCache = isPartial ? (bool) arguments[2] : (bool) arguments[3];
+                    MasterName = isPartial ? string.Empty : (string) arguments[2];
+                }
+
+                public ControllerContext ControllerContext { get; set; }
+                public string ViewName { get; set; }
+                public string MasterName { get; set; }
+                public bool UseCache { get; set; }
             }
         }
     }

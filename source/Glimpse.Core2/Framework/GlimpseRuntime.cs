@@ -267,10 +267,26 @@ namespace Glimpse.Core2.Framework
             }
         }
 
+        private IDataStore GetTabStore(string tabName)
+        {
+            var requestStore = Configuration.FrameworkProvider.HttpRequestStore;
+
+            if (!requestStore.Contains(Constants.TabStorageKey))
+                requestStore.Set(Constants.TabStorageKey, new Dictionary<string,IDataStore>());
+
+            var tabStorage = requestStore.Get<IDictionary<string, IDataStore>>(Constants.TabStorageKey);
+
+            if (!tabStorage.ContainsKey(tabName))
+                tabStorage.Add(tabName, new DictionaryDataStoreAdapter(new Dictionary<string, object>()));
+
+            return tabStorage[tabName];
+        }
+
         private void ExecuteTabs(RuntimeEvent runtimeEvent)
         {
             var runtimeContext = Configuration.FrameworkProvider.RuntimeContext;
             var frameworkProviderRuntimeContextType = runtimeContext.GetType();
+            var messageBroker = Configuration.MessageBroker;
 
             //Only use tabs that either don't specify a specific context type, or have a context type that matches the current framework provider's.
             var runtimeTabs =
@@ -286,17 +302,16 @@ namespace Glimpse.Core2.Framework
 
 
             //Create storage space for tabs to access
-            var tabStore = new DictionaryDataStoreAdapter(new Dictionary<string, object>());
+            //var tabStore = new DictionaryDataStoreAdapter(new Dictionary<string, object>());
 
             //Create UserServiceLocator valid for this request
-            var tabContext = new TabContext(runtimeContext, tabStore, logger, Configuration.MessageBroker);
-
 
             foreach (var tab in supportedRuntimeTabs)
             {
                 var key = tab.GetType().FullName;
                 try
                 {
+                    var tabContext = new TabContext(runtimeContext, GetTabStore(key), logger, messageBroker);
                     var result = new TabResult(tab.Name, tab.GetData(tabContext));
 
                     if (tabResultsStore.ContainsKey(key))
@@ -317,27 +332,31 @@ namespace Glimpse.Core2.Framework
             var policy = GetRuntimePolicy(RuntimeEvent.Initialize);
             if (policy == RuntimePolicy.Off) return false;
 
+            var messageBroker = Configuration.MessageBroker;
 
-            var tabsThatRequireSetup = Configuration.Tabs.Where(tab => tab is ISetup).Select(tab => tab);
-            foreach (ISetup tab in tabsThatRequireSetup)
+            var tabsThatRequireSetup = Configuration.Tabs.Where(tab => tab is ITabSetup).Select(tab => tab);
+            foreach (ITabSetup tab in tabsThatRequireSetup)
             {
+                var key = tab.GetType().FullName;
                 try
                 {
-                    tab.Setup();
+                    var setupContext = new TabSetupContext(logger, messageBroker, () => GetTabStore(key));
+                    tab.Setup(setupContext);
                 }
                 catch (Exception exception)
                 {
-                    logger.Error(Resources.InitializeTabError, exception, tab.GetType());
+                    logger.Error(Resources.InitializeTabError, exception, key);
                 }
             }
 
-            var pipelineInspectorContext = new PipelineInspectorContext(logger, Configuration.ProxyFactory, Configuration.MessageBroker, () => Configuration.FrameworkProvider.HttpRequestStore.Get<ExecutionTimer>(Constants.GlobalTimerKey));
+            var pipelineInspectorContext = new PipelineInspectorContext(logger, Configuration.ProxyFactory, messageBroker, () => Configuration.FrameworkProvider.HttpRequestStore.Get<ExecutionTimer>(Constants.GlobalTimerKey));
 
             foreach (var pipelineInspector in Configuration.PipelineInspectors)
             {
                 try
                 {
                     pipelineInspector.Setup(pipelineInspectorContext);
+                    logger.Debug(Resources.GlimpseRuntimeInitializeSetupPipelineInspector, pipelineInspector.GetType());
                 }
                 catch (Exception exception)
                 {

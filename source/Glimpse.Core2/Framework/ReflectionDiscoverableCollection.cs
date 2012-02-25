@@ -122,7 +122,7 @@ namespace Glimpse.Core2.Framework
 
                 foreach (var result in results)
                 {
-                    Logger.Trace(string.Format(Resources.DiscoverableCollectionDiscover, typeof(T).Name, result.GetType()));
+                    Logger.Debug(string.Format(Resources.DiscoverableCollectionDiscover, typeof(T).Name, result.GetType()));
                 }
 
                 Items.AddRange(results);

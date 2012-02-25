@@ -208,4 +208,8 @@
     <data name="ExecuteResourceInsufficientPolicy">
         <value xml:space="preserve">Runtime policy does not allow execution of resource named '{0}'.</value>
     </data>
+    <data name="GlimpseRuntimeInitializeSetupPipelineInspector">
+        <value xml:space="preserve">Setup IPipelineInspector of type '{0}'.</value>
+        <comment>{0} - GetType() of IPipelineInspector</comment>
+    </data>
 </root>

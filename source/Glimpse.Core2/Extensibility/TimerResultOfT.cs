@@ -1,6 +1,6 @@
 namespace Glimpse.Core2.Extensibility
 {
-    public class MethodTimerResult<T> : FunctionTimerResult
+    public class TimerResult<T> : TimerResult
     {
         public T Result { get; set; }
     }

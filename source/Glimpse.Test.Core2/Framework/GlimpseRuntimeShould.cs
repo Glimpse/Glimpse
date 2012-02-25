@@ -220,7 +220,7 @@ namespace Glimpse.Test.Core2.Framework
         [Fact]
         public void InitializeWithSetupTabs()
         {
-            var setupMock = Runtime.TabMock.As<ISetup>();
+            var setupMock = Runtime.TabMock.As<ITabSetup>();
 
             //one tab needs setup, the other does not
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
@@ -228,14 +228,14 @@ namespace Glimpse.Test.Core2.Framework
 
             Runtime.Initialize();
 
-            setupMock.Verify(pm => pm.Setup(), Times.Once());
+            setupMock.Verify(pm => pm.Setup(It.IsAny<ITabSetupContext>()), Times.Once());
         }
 
         [Fact]
         public void InitializeWithSetupTabThatFails()
         {
-            var setupMock = Runtime.TabMock.As<ISetup>();
-            setupMock.Setup(s => s.Setup()).Throws<DummyException>();
+            var setupMock = Runtime.TabMock.As<ITabSetup>();
+            setupMock.Setup(s => s.Setup(new Mock<ITabSetupContext>().Object)).Throws<DummyException>();
 
             //one tab needs setup, the other does not
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
@@ -243,7 +243,7 @@ namespace Glimpse.Test.Core2.Framework
 
             Runtime.Initialize();
 
-            setupMock.Verify(pm => pm.Setup(), Times.Once());
+            setupMock.Verify(pm => pm.Setup(It.IsAny<ITabSetupContext>()), Times.Once());
             Runtime.LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<DummyException>()), Times.AtMost(Runtime.Configuration.Tabs.Count));
         }
 

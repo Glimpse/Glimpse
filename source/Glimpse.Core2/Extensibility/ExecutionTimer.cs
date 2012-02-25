@@ -5,8 +5,8 @@ namespace Glimpse.Core2.Extensibility
 {
     public interface IExecutionTimer
     {
-        MethodTimerResult<T> Time<T>(Func<T> func);
-        FunctionTimerResult Time(Action action);
+        TimerResult<T> Time<T>(Func<T> func);
+        TimerResult Time(Action action);
     }
 
     public class ExecutionTimer : IExecutionTimer
@@ -21,10 +21,10 @@ namespace Glimpse.Core2.Extensibility
             Stopwatch = stopwatch;
         }
 
-        public MethodTimerResult<T> Time<T>(Func<T> func)
+        public TimerResult<T> Time<T>(Func<T> func)
         {
             var offset = Stopwatch.ElapsedMilliseconds;
-            return new MethodTimerResult<T>
+            return new TimerResult<T>
                        {
                            Offset = offset,
                            Result = func(),
@@ -32,13 +32,13 @@ namespace Glimpse.Core2.Extensibility
                        };
         }
 
-        public FunctionTimerResult Time(Action action)
+        public TimerResult Time(Action action)
         {
             var offset = Stopwatch.ElapsedMilliseconds;
 
             action();
             
-            return new FunctionTimerResult
+            return new TimerResult
                        {
                            Offset = offset,
                            Duration = TimeSpan.FromMilliseconds(Stopwatch.ElapsedMilliseconds - offset)

@@ -3,7 +3,7 @@
     public interface ITabContext:IContext
     {
         T GetRequestContext<T>() where T:class;
-        IDataStore PluginStore { get; }
+        IDataStore TabStore { get; }
         IMessageBroker MessageBroker { get; }
     }
 }

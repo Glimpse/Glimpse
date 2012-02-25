@@ -12,5 +12,6 @@
         internal const string GlobalStopwatchKey = "__GlimpseGlobalStopwatch";
         internal const string RuntimePermissionsKey = "__GlimpseRequestRuntimePermissions";
         internal const string GlobalTimerKey = "__GlimpseTimer";
+        internal const string TabStorageKey = "__GlimpseTabStorage";
     }
 }

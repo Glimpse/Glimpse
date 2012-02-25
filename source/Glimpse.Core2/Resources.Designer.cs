@@ -214,6 +214,15 @@ namespace Glimpse.Core2 {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Setup IPipelineInspector of type &apos;{0}&apos;..
+        /// </summary>
+        internal static string GlimpseRuntimeInitializeSetupPipelineInspector {
+            get {
+                return ResourceManager.GetString("GlimpseRuntimeInitializeSetupPipelineInspector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exception initializing pipeline inspector of type &apos;{0}&apos;..
         /// </summary>
         internal static string InitializePipelineInspectorError {
