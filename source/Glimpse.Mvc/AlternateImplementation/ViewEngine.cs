@@ -85,9 +85,9 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public Message(Arguments input, ViewEngineResult output, TimerResult timing, Type baseType,
                                bool isPartial, Guid id)
                 {
-                    Contract.Requires<ArgumentNullException>(input != null, "input");
-                    Contract.Requires<ArgumentNullException>(output != null, "output");
-                    Contract.Requires<ArgumentNullException>(timing != null, "timerResult");
+                    if (input == null) throw new ArgumentNullException("input");
+                    if (output == null) throw new ArgumentNullException("output");
+                    if (timing == null) throw new ArgumentNullException("timing");
 
                     Input = input;
                     Output = output;
