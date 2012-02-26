@@ -792,5 +792,11 @@ namespace Glimpse.Test.Core2.Framework
 
             Runtime.TabMock.Verify(t => t.GetData(It.IsAny<ITabContext>()), Times.Never());
         }
+
+        [Fact]
+        public void ThrowExceptionWhenExecutingResourceWithNullParameters()
+        {
+            Assert.Throws<ArgumentNullException>(() => Runtime.ExecuteResource("any", null));
+        }
     }
 }

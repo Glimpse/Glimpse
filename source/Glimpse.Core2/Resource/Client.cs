@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
@@ -24,6 +25,8 @@ namespace Glimpse.Core2.Resource
 
         public IResourceResult Execute(IResourceContext context)
         {
+            if (context == null) throw new ArgumentNullException("context");
+
             var assembly = Assembly.GetExecutingAssembly();
 
             //TODO: Rename from Core2 to Core

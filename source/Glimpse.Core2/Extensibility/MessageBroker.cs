@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using Glimpse.Core2.Framework;
 
 namespace Glimpse.Core2.Extensibility
@@ -12,7 +11,7 @@ namespace Glimpse.Core2.Extensibility
 
         public MessageBroker(ILogger logger)
         {
-            Contract.Requires<ArgumentNullException>(logger != null, "logger");
+            if (logger == null) throw new ArgumentNullException("logger");
 
             Subscriptions = new Dictionary<Type, List<Subscriber>>();
             Logger = logger;
@@ -35,7 +34,7 @@ namespace Glimpse.Core2.Extensibility
 
         public Guid Subscribe<T>(Action<T> action)
         {
-            Contract.Requires<ArgumentNullException>(action!=null, "action");
+            if (action == null) throw new ArgumentNullException("action");
 
             var subscriptions = GetSubscriptions(typeof (T));
 

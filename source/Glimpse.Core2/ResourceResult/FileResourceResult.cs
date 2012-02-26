@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.Contracts;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Extensions;
 using Glimpse.Core2.Framework;
@@ -19,8 +18,8 @@ namespace Glimpse.Core2.ResourceResult
 
         public FileResourceResult(byte[] content, string contentType, long cacheDuration, CacheSetting? cacheSetting)
         {
-            Contract.Requires<ArgumentNullException>(content != null, "content");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(contentType), "contentType");
+            if (content == null) throw new ArgumentNullException("content");
+            if (string.IsNullOrEmpty(contentType)) throw new ArgumentNullException("contentType");
 
             Content = content;
             ContentType = contentType;

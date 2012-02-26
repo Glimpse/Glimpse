@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using Glimpse.Core2.Extensibility;
 
@@ -37,8 +36,8 @@ namespace Glimpse.Core2.Framework
 
         public TabResult GetByRequestIdAndTabKey(Guid requestId, string tabKey)
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(tabKey), "tabKey");
-
+            if (string.IsNullOrEmpty(tabKey)) throw new ArgumentException("tabKey");
+            
             var request = GlimpseRequests.FirstOrDefault(r => r.RequestId == requestId);
 
             if (request == null || !request.PluginData.ContainsKey(tabKey))

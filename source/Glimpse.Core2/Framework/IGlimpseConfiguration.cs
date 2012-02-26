@@ -5,7 +5,6 @@ namespace Glimpse.Core2.Framework
 {
     public interface IGlimpseConfiguration
     {
-        //TODO: Move contracts here
         ICollection<IClientScript> ClientScripts { get; }
         IFrameworkProvider FrameworkProvider { get; }
         IHtmlEncoder HtmlEncoder { get; }

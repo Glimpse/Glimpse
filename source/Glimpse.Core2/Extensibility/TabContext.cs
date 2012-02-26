@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.Contracts;
 
 namespace Glimpse.Core2.Extensibility
 {
@@ -8,10 +7,10 @@ namespace Glimpse.Core2.Extensibility
 
         public TabContext(object requestContext, IDataStore pluginStore, ILogger logger, IMessageBroker messageBroker)
         {
-            Contract.Requires<ArgumentNullException>(requestContext != null, "requestContext");
-            Contract.Requires<ArgumentNullException>(pluginStore != null, "pluginStore");
-            Contract.Requires<ArgumentNullException>(logger != null, "logger");
-            Contract.Requires<ArgumentNullException>(messageBroker != null, "messageBroker");
+            if (requestContext == null) throw new ArgumentNullException("requestContext");
+            if (pluginStore == null) throw new ArgumentNullException("pluginStore");
+            if (logger == null) throw new ArgumentNullException("logger");
+            if (messageBroker == null) throw new ArgumentNullException("messageBroker");
 
             RequestContext = requestContext;
             TabStore = pluginStore;

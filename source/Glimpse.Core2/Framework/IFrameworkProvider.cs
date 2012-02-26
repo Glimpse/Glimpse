@@ -2,7 +2,6 @@
 
 namespace Glimpse.Core2.Framework
 {
-    //TODO: Add contracts to ensure these values are never null
     //TODO: Does Http* make sense for names
     public interface IFrameworkProvider
     {

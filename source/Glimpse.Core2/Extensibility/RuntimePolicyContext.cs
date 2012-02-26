@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.Contracts;
 using Glimpse.Core2.Framework;
 
 namespace Glimpse.Core2.Extensibility
@@ -14,10 +13,10 @@ namespace Glimpse.Core2.Extensibility
 
         public RuntimePolicyContext(IRequestMetadata requestMetadata, ILogger logger, object requestContext)
         {
-            Contract.Requires<ArgumentNullException>(requestMetadata != null, "requestMetadata");
-            Contract.Requires<ArgumentNullException>(logger != null, "logger");
-            Contract.Requires<ArgumentNullException>(requestContext != null, "requestContext");
-
+            if (requestMetadata == null) throw new ArgumentNullException("requestMetadata");
+            if (logger == null) throw new ArgumentNullException("logger");
+            if (requestContext == null) throw new ArgumentNullException("requestContext");
+            
             RequestMetadata = requestMetadata;
             Logger = logger;
             RequestContext = requestContext;

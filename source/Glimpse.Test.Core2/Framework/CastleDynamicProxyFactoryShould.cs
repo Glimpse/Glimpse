@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Castle.DynamicProxy;
 using System;
 using System.Collections.Generic;
 using Glimpse.Core2.Extensibility;
@@ -104,6 +103,27 @@ namespace Glimpse.Test.Core2.Framework
             var isProxyable = factory.IsProxyable(proxy);
 
             Assert.False(isProxyable);
+        }
+
+        [Fact]
+        public void SupportMixins()
+        {
+            var loggerMock = new Mock<ILogger>();
+            var factory = new CastleDynamicProxyFactory(loggerMock.Object);
+
+            string expectedName = "any string";
+            var dummyTab = new DummyTab();
+            var dummyMixin = new DummyMixin {Name = expectedName};
+
+            var proxy = factory.CreateProxy(dummyTab, Enumerable.Empty<IAlternateImplementation<ITab>>(), dummyMixin);
+
+            Assert.NotNull(proxy);
+            Assert.NotNull(proxy as ITab);
+
+            var mixin = proxy as IDummyMixin;
+
+            Assert.NotNull(mixin);
+            Assert.Equal(expectedName, mixin.Name);
         }
     }
 }

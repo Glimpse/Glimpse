@@ -2,6 +2,7 @@
 using Glimpse.Core2;
 using Glimpse.Core2.Framework;
 using Glimpse.Test.Core2.TestDoubles;
+using Moq;
 using Xunit;
 
 namespace Glimpse.Test.Core2
@@ -32,6 +33,20 @@ namespace Glimpse.Test.Core2
 
             Assert.Equal(message, exception.Message);
             Assert.Equal(innerException, exception.InnerException);
+        }
+
+        [Fact(Skip = "This method is hard to test and framework code anyways.")]
+        public void ConstructWithSerializationInfoAndStreamingContext()
+        {
+            var formatConverterMock = new Mock<IFormatterConverter>();
+
+            var info = new SerializationInfo(typeof (GlimpseExceptionShould), formatConverterMock.Object);
+
+            var context = new StreamingContext();
+
+            var exception = new GlimpseException(info, context);
+
+            Assert.NotNull(exception);
         }
     }
 }

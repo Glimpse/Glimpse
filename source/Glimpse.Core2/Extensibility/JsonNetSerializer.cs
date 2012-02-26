@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using Newtonsoft.Json;
 
 namespace Glimpse.Core2.Extensibility
@@ -31,7 +30,7 @@ namespace Glimpse.Core2.Extensibility
 
         public void RegisterSerializationConverters(IEnumerable<ISerializationConverter> converters)
         {
-            Contract.Requires<ArgumentNullException>(converters != null, "converters");
+            if (converters == null) throw new ArgumentNullException("converters");
 
             var jsonConverters = Settings.Converters;
 

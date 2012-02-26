@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Core2.Framework
@@ -24,22 +23,19 @@ namespace Glimpse.Core2.Framework
             IProxyFactory proxyFactory,
             IMessageBroker messageBroker)
         {
-            //TODO: Test building glimpse on clean VS install with contracts
-            //TODO: Test building glimpse on teamcity with contracts
-            Contract.Requires<ArgumentNullException>(frameworkProvider != null, "frameworkProvider");
-            Contract.Requires<ArgumentNullException>(endpointConfiguration != null, "endpointConfiguration");
-            Contract.Requires<ArgumentNullException>(logger != null, "logger");
-            Contract.Requires<ArgumentNullException>(htmlEncoder != null, "htmlEncoder");
-            Contract.Requires<ArgumentNullException>(persistanceStore != null, "persistanceStore");
-            Contract.Requires<ArgumentNullException>(clientScripts != null, "clientScripts");
-            Contract.Requires<ArgumentNullException>(pipelineInspectors != null, "pipelineInspectors");
-            Contract.Requires<ArgumentNullException>(resources != null, "resources");
-            Contract.Requires<ArgumentNullException>(serializer != null, "serializer");
-            Contract.Requires<ArgumentNullException>(tabs != null, "tabs");
-            Contract.Requires<ArgumentNullException>(runtimePolicies != null, "runtimePolicies");
-            Contract.Requires<ArgumentNullException>(defaultResource != null, "defaultResource");
-            Contract.Requires<ArgumentNullException>(proxyFactory != null, "proxyFactory");
-            Contract.Requires<ArgumentNullException>(messageBroker != null, "messageBroker");
+            if (frameworkProvider == null) throw new ArgumentNullException("frameworkProvider");
+            if (endpointConfiguration == null) throw new ArgumentNullException("endpointConfiguration");
+            if (logger == null) throw new ArgumentNullException("logger");
+            if (htmlEncoder == null) throw new ArgumentNullException("htmlEncoder");
+            if (persistanceStore == null) throw new ArgumentNullException("persistanceStore");
+            if (clientScripts == null) throw new ArgumentNullException("clientScripts");
+            if (resources == null) throw new ArgumentNullException("pipelineInspectors");
+            if (serializer == null) throw new ArgumentNullException("serializer");
+            if (tabs == null) throw new ArgumentNullException("tabs");
+            if (runtimePolicies == null) throw new ArgumentNullException("runtimePolicies");
+            if (defaultResource == null) throw new ArgumentNullException("defaultResource");
+            if (proxyFactory == null) throw new ArgumentNullException("proxyFactory");
+            if (messageBroker == null) throw new ArgumentNullException("messageBroker");
 
             Logger = logger;
             ClientScripts = clientScripts;
@@ -63,12 +59,11 @@ namespace Glimpse.Core2.Framework
         {
             get
             {
-                Contract.Ensures(Contract.Result<ICollection<IClientScript>>() != null);
                 return clientScripts;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>(value!=null, "value");
+                if (value == null) throw new ArgumentNullException("value");
                 clientScripts = value;
             }
         }
@@ -78,12 +73,11 @@ namespace Glimpse.Core2.Framework
         {
             get
             {
-                Contract.Ensures(Contract.Result<IFrameworkProvider>() != null);
                 return frameworkProvider;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>(value != null, "value");
+                if (value == null) throw new ArgumentNullException("value");
                 frameworkProvider = value;
             }
         }
@@ -93,12 +87,11 @@ namespace Glimpse.Core2.Framework
         {
             get
             {
-                Contract.Ensures(Contract.Result<IHtmlEncoder>()!=null);
                 return htmlEncoder;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>(value!=null, "value");
+                if (value == null) throw new ArgumentNullException("value");
                 htmlEncoder = value;
             }
         }
@@ -108,12 +101,11 @@ namespace Glimpse.Core2.Framework
         {
             get
             {
-                Contract.Ensures(Contract.Result<ILogger>()!=null);
                 return logger;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>(value!=null,"value");
+                if (value == null) throw new ArgumentNullException("value");
                 logger = value;
             }
         }
@@ -123,12 +115,11 @@ namespace Glimpse.Core2.Framework
         {
             get
             {
-                Contract.Ensures(Contract.Result<IPersistanceStore>()!=null);
                 return persistanceStore;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>(value!=null, "value");
+                if (value == null) throw new ArgumentNullException("value");
                 persistanceStore = value;
             }
         }
@@ -138,12 +129,11 @@ namespace Glimpse.Core2.Framework
         {
             get
             {
-                Contract.Ensures(Contract.Result<ICollection<IPipelineInspector>>()!=null);
                 return pipelineInspectors;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>(value!=null,"value");
+                if (value == null) throw new ArgumentNullException("value");
                 pipelineInspectors = value;
             }
         }
@@ -153,12 +143,11 @@ namespace Glimpse.Core2.Framework
         {
             get
             {
-                Contract.Ensures(Contract.Result<ResourceEndpointConfiguration>()!=null);
                 return resourceEndpoint;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>(value!=null, "value");
+                if (value == null) throw new ArgumentNullException("value");
                 resourceEndpoint = value;
             }
         }
@@ -168,12 +157,11 @@ namespace Glimpse.Core2.Framework
         {
             get
             {
-                Contract.Ensures(Contract.Result<ICollection<IResource>>()!=null);
                 return resources;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>(value!=null, "value");
+                if (value == null) throw new ArgumentNullException("value");
                 resources = value;
             }
         }
@@ -183,12 +171,11 @@ namespace Glimpse.Core2.Framework
         {
             get
             {
-                Contract.Ensures(Contract.Result<ISerializer>()!=null);
                 return serializer;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>(value!=null,"value");
+                if (value == null) throw new ArgumentNullException("value");
                 serializer = value;
             }
         }
@@ -198,12 +185,11 @@ namespace Glimpse.Core2.Framework
         {
             get
             {
-                Contract.Ensures(Contract.Result<ICollection<ITab>>()!=null);
                 return tabs;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>(value!=null,"value");
+                if (value == null) throw new ArgumentNullException("value");
                 tabs = value;
             }
         }
@@ -213,12 +199,11 @@ namespace Glimpse.Core2.Framework
         {
             get
             {
-                Contract.Ensures(Contract.Result<ICollection<IRuntimePolicy>>() != null);
                 return runtimePolicies;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>(value!=null,"value");
+                if (value == null) throw new ArgumentNullException("value");
                 runtimePolicies = value;
             }
         }
@@ -228,12 +213,11 @@ namespace Glimpse.Core2.Framework
         {
             get
             {
-                Contract.Ensures(Contract.Result<IResource>()!=null);
                 return defaultResource;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>(value != null, "value");
+                if (value == null) throw new ArgumentNullException("value");
                 defaultResource = value;
             }
         }
@@ -243,12 +227,11 @@ namespace Glimpse.Core2.Framework
         {
             get
             {
-                Contract.Ensures(Contract.Result<IProxyFactory>()!=null);
                 return proxyFactory;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>(value != null, "value");
+                if (value == null) throw new ArgumentNullException("value");
                 proxyFactory = value;
             }
         }
@@ -258,12 +241,11 @@ namespace Glimpse.Core2.Framework
         {
             get
             {
-                Contract.Ensures(Contract.Result<IMessageBroker>()!=null);
                 return messageBroker;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>(value!=null, "value");
+                if (value == null) throw new ArgumentNullException("value");
                 messageBroker = value;
             }
         }

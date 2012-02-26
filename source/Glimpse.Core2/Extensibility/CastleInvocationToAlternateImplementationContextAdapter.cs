@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.Contracts;
 using System.Reflection;
 using Castle.DynamicProxy;
 
@@ -9,9 +8,9 @@ namespace Glimpse.Core2.Extensibility
     {
         public CastleInvocationToAlternateImplementationContextAdapter(IInvocation invocation, ILogger logger)
         {
-            Contract.Requires<ArgumentNullException>(invocation != null, "invocation");
-            Contract.Requires<ArgumentNullException>(logger != null, "logger");
-
+            if (invocation  == null) throw new ArgumentNullException("invocation");
+            if (logger == null) throw new ArgumentNullException("logger");
+            
             Invocation = invocation;
             Logger = logger;
         }

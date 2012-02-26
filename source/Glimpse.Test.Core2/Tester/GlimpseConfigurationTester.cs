@@ -46,6 +46,9 @@ namespace Glimpse.Test.Core2.Tester
             HtmlEncoderMock = htmlEncoderMock;
             PersistanceStoreMock = persistanceStoreMock;
             SerializerMock = serializerMock;
+            ProxyFactoryMock = proxyFactoryMock;
+            MessageBrokerMock = messageBrokerMock;
+            DefaultResourceMock = new Mock<IResource>();
         }
 
         public static GlimpseConfigurationTester Create()
@@ -76,5 +79,8 @@ namespace Glimpse.Test.Core2.Tester
         public Mock<IHtmlEncoder> HtmlEncoderMock { get; set; }
         public Mock<IPersistanceStore> PersistanceStoreMock { get; set; }
         public Mock<ISerializer> SerializerMock { get; set; }
+        public Mock<IProxyFactory> ProxyFactoryMock { get; set; }
+        public Mock<IMessageBroker> MessageBrokerMock { get; set; }
+        public Mock<IResource> DefaultResourceMock { get; set; }
     }
 }

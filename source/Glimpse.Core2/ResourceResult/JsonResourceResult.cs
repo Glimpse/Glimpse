@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.Contracts;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Extensions;
 using Glimpse.Core2.Framework;
@@ -23,7 +22,8 @@ namespace Glimpse.Core2.ResourceResult
 
         public JsonResourceResult(object data, string callback, long cacheDuration, CacheSetting? cacheSetting)
         {
-            Contract.Requires<ArgumentNullException>(data != null, "data");
+            
+            if (data == null) throw new ArgumentNullException("data");
 
             Data = data;
             Callback = callback;
@@ -41,7 +41,7 @@ namespace Glimpse.Core2.ResourceResult
 
             frameworkProvider.SetHttpResponseHeader("Content-Type", ContentType);
 
-            if (CacheSetting.HasValue)
+            if (CacheSetting.HasValue)//TODO: #if debug
                 frameworkProvider.SetHttpResponseHeader("Cache-Control", string.Format("{0}, max-age={1}", CacheSetting.Value.ToDescription(), CacheDuration));
 
             var toWrite = string.IsNullOrEmpty(Callback) ? result : string.Format("{0}({1});", Callback, result);

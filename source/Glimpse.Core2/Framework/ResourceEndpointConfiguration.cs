@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Core2.Framework
@@ -9,10 +8,9 @@ namespace Glimpse.Core2.Framework
     {
         public string GenerateUri(IResource resource, ILogger logger, IDictionary<string, string> requestTokenValues)
         {
-            Contract.Requires<ArgumentNullException>(resource != null, "resource");
-            Contract.Requires<ArgumentNullException>(logger != null, "logger");
-            Contract.Requires<ArgumentNullException>(requestTokenValues != null, "requestTokenValues");
-            Contract.Ensures(Contract.Result<string>() != null);
+            if (resource == null) throw new ArgumentNullException("resource");
+            if (logger == null) throw new ArgumentNullException("logger");
+            if (requestTokenValues == null) throw new ArgumentNullException("requestTokenValues");
 
             var parmeters = new Dictionary<string, string>();
 

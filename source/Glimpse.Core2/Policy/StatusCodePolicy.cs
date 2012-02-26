@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics.Contracts;
 using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Core2.Policy
@@ -18,7 +17,7 @@ namespace Glimpse.Core2.Policy
 
         public StatusCodePolicy(IList<int> statusCodeWhitelist)
         {
-            Contract.Requires<ArgumentNullException>(statusCodeWhitelist != null, "statusCodeWhitelist");
+            if (statusCodeWhitelist == null) throw new ArgumentNullException("statusCodeWhitelist");
 
             StatusCodeWhitelist = statusCodeWhitelist;
         }

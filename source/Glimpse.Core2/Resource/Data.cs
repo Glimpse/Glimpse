@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
 using Glimpse.Core2.ResourceResult;
@@ -24,6 +23,8 @@ namespace Glimpse.Core2.Resource
 
         public IResourceResult Execute(IResourceContext context)
         {
+            if (context == null) throw new ArgumentNullException("context");
+
             Guid requestId;
 
             if (!Guid.TryParse(context.Parameters[ResourceParameterKey.RequestId], out requestId))

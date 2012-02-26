@@ -138,7 +138,7 @@ namespace Glimpse.Test.Core2
         [Fact]
         public void ThrowWithEmptyTabKey()
         {
-            Assert.Throws<ArgumentNullException>(()=>Store.GetByRequestIdAndTabKey(Guid.NewGuid(), string.Empty));
+            Assert.Throws<ArgumentException>(()=>Store.GetByRequestIdAndTabKey(Guid.NewGuid(), string.Empty));
         }
 
         [Fact]

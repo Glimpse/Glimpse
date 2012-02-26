@@ -1,6 +1,6 @@
-﻿using Glimpse.Core2.Extensibility;
+﻿using System;
+using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
-using Glimpse.Core2.Resource;
 using Glimpse.Core2.ResourceResult;
 using Moq;
 using Xunit;
@@ -110,6 +110,12 @@ namespace Glimpse.Test.Core2.Extensibility
             var result = new JsonResourceResult(new { Any = "Thing" }, "callback");
 
             Assert.Equal(@"application/x-javascript", result.ContentType);
+        }
+
+        [Fact]
+        public void ThrowExceptionWithNulData()
+        {
+            Assert.Throws<ArgumentNullException>(()=>new JsonResourceResult(null));
         }
     }
 }

@@ -127,5 +127,11 @@ namespace Glimpse.Test.Core2
             var instance = new DictionaryDataStoreAdapter(Dictionary);
             Assert.False(instance.Contains("random string"));
         }
+
+        [Fact]
+        public void ThrowExceptionWhenConstructedWithNullDictionary()
+        {
+            Assert.Throws<ArgumentException>(()=>new DictionaryDataStoreAdapter(null));
+        }
     }
 }

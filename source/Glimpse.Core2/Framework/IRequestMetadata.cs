@@ -1,6 +1,5 @@
 namespace Glimpse.Core2.Framework
 {
-    //TODO: Add contracts to ensure these values are never null
     public interface IRequestMetadata
     {
         string RequestUri { get; }

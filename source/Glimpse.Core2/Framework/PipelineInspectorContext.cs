@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.Contracts;
 using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Core2.Framework
@@ -13,11 +12,11 @@ namespace Glimpse.Core2.Framework
 
         public PipelineInspectorContext(ILogger logger, IProxyFactory proxyFactory, IMessageBroker messageBroker, Func<IExecutionTimer> timerStrategy)
         {
-            Contract.Requires<ArgumentNullException>(logger != null, "logger");
-            Contract.Requires<ArgumentNullException>(proxyFactory != null, "proxyFactory");
-            Contract.Requires<ArgumentNullException>(messageBroker != null, "messageBroker");
-            Contract.Requires<ArgumentNullException>(timerStrategy != null, "getTimer");
-
+            if (logger == null) throw new ArgumentNullException("logger");
+            if (proxyFactory == null) throw new ArgumentNullException("proxyFactory");
+            if (messageBroker == null) throw new ArgumentNullException("messageBroker");
+            if (timerStrategy == null) throw new ArgumentNullException("timerStrategy");
+            
             Logger = logger;
             ProxyFactory = proxyFactory;
             TimerStrategy = timerStrategy;

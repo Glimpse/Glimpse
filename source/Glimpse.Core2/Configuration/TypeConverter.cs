@@ -19,9 +19,7 @@ namespace Glimpse.Core2.Configuration
 
         public override object ConvertTo(ITypeDescriptorContext ctx, CultureInfo ci, object value, Type type)
         {
-            var t = value as Type;
-
-            return t.AssemblyQualifiedName;
+            return value.GetType().AssemblyQualifiedName;
         }
     }
 }

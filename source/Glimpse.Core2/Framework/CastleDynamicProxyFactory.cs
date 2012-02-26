@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using Castle.DynamicProxy;
 using Glimpse.Core2.Extensibility;
@@ -14,9 +13,7 @@ namespace Glimpse.Core2.Framework
 
         public CastleDynamicProxyFactory(ILogger logger)
         {
-            Contract.Requires<ArgumentNullException>(logger != null, "logger");
-            Contract.Ensures(Logger != null);
-            Contract.Ensures(ProxyGenerator != null);
+            if (logger == null) throw new ArgumentNullException("logger");
 
             Logger = logger;
             ProxyGenerator = new ProxyGenerator();

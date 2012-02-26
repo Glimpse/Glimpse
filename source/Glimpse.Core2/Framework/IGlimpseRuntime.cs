@@ -1,6 +1,5 @@
 namespace Glimpse.Core2.Framework
 {
-    //TODO: Add contracts here?
     public interface IGlimpseRuntime
     {
         string Version { get; }

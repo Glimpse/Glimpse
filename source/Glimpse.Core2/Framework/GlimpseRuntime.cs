@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using Glimpse.Core2.Extensibility;
@@ -211,9 +210,9 @@ namespace Glimpse.Core2.Framework
 
         public void ExecuteResource(string resourceName, ResourceParameters parameters)
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(resourceName), "resourceName");
-            Contract.Requires<ArgumentNullException>(parameters != null, "parameters");
-
+            if (string.IsNullOrEmpty(resourceName)) throw new ArgumentNullException("resourceName");
+            if (parameters == null) throw new ArgumentNullException("parameters");
+            
             var logger = Configuration.Logger;
             var context = new ResourceResultContext(logger, Configuration.FrameworkProvider, Configuration.Serializer, Configuration.HtmlEncoder);
             IResourceResult result;

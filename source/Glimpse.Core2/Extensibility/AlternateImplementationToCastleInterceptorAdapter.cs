@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Reflection;
 using Castle.DynamicProxy;
 
@@ -12,8 +11,8 @@ namespace Glimpse.Core2.Extensibility
 
         public AlternateImplementationToCastleInterceptorAdapter(IAlternateImplementation<T> implementation, ILogger logger)
         {
-            Contract.Requires<ArgumentNullException>(implementation != null, "implementation");
-            Contract.Requires<ArgumentNullException>(logger != null, "logger");
+            if (implementation == null) throw new ArgumentNullException("implementation");
+            if (logger == null) throw new ArgumentNullException("logger");
 
             Implementation = implementation;
             Logger = logger;

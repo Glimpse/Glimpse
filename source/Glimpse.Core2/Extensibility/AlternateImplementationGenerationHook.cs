@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using Castle.DynamicProxy;
@@ -14,9 +13,9 @@ namespace Glimpse.Core2.Extensibility
 
         public AlternateImplementationGenerationHook(IEnumerable<IAlternateImplementation<T>> methodImplementations, ILogger logger)
         {
-            Contract.Requires<ArgumentNullException>(methodImplementations != null, "methodImplementations");
-            Contract.Requires<ArgumentNullException>(logger != null, "logger");
-
+            if (methodImplementations == null) throw new ArgumentNullException("methodImplementations");
+            if (logger == null) throw new ArgumentNullException("logger");
+            
             MethodImplementations = methodImplementations;
             Logger = logger;
         }

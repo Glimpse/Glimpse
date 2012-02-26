@@ -17,7 +17,7 @@ namespace Glimpse.Core2.Framework
         {
         }
 
-        protected GlimpseException(SerializationInfo info, StreamingContext context) : base(info, context)
+        public GlimpseException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Threading;
 using Moq;
 using Xunit;
@@ -37,6 +38,16 @@ namespace Glimpse.Test.Core2.Configuration
 
             Assert.Throws<ArgumentException>(() => converter.ConvertFrom(""));
             Assert.Throws<ArgumentException>(() => converter.ConvertFrom(null));
+        }
+
+        [Fact]
+        public void ConvertTo()
+        {
+            var contextMock = new Mock<ITypeDescriptorContext>();
+
+            var converter = new TypeConverter();
+
+            var result = converter.ConvertTo(contextMock.Object, Thread.CurrentThread.CurrentCulture, "any object", typeof (string));
         }
     }
 }

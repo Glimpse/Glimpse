@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Core2.Policy
@@ -8,7 +7,7 @@ namespace Glimpse.Core2.Policy
     {
         public RuntimePolicy Execute(IRuntimePolicyContext policyContext)
         {
-            Contract.Requires<ArgumentNullException>(policyContext != null, "policyContext");
+            if (policyContext == null) throw new ArgumentNullException("policyContext");
 
             try
             {

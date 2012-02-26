@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Glimpse.Core2.Extensibility;
@@ -20,7 +19,7 @@ namespace Glimpse.Core2.Policy
 
         public UriPolicy(IList<Regex> uriBlacklist)
         {
-            Contract.Requires<ArgumentNullException>(uriBlacklist != null, "uriBlacklist");
+            if (uriBlacklist == null) throw new ArgumentNullException("uriBlacklist");
 
             UriBlacklist = uriBlacklist;
         }

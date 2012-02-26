@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics.Contracts;
 using Glimpse.Core2.Configuration;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Extensions;
@@ -17,7 +16,7 @@ namespace Glimpse.Core2.Framework
         internal IServiceLocator ProviderServiceLocator { get; set; }
         internal GlimpseSection Configuration { get; set; }
 
-        public Factory() : this(null)
+        public Factory() : this(null)//TODO: Should I kill this?
         {
         }
 
@@ -46,8 +45,6 @@ namespace Glimpse.Core2.Framework
 
         public IGlimpseRuntime InstantiateRuntime()
         {
-            Contract.Ensures(Contract.Result<IGlimpseRuntime>() != null);
-
             IGlimpseRuntime result;
             if (TrySingleInstanceFromServiceLocators(out result)) return result;
 
@@ -58,8 +55,6 @@ namespace Glimpse.Core2.Framework
 
         public IFrameworkProvider InstantiateFrameworkProvider()
         {
-            Contract.Ensures(Contract.Result<IFrameworkProvider>() != null);
-
             if (FrameworkProvider != null) return FrameworkProvider;
 
             IFrameworkProvider result;
@@ -80,8 +75,6 @@ namespace Glimpse.Core2.Framework
 
         public ResourceEndpointConfiguration InstantiateResourceEndpointConfiguration()
         {
-            Contract.Ensures(Contract.Result<ResourceEndpointConfiguration>() != null);
-
             ResourceEndpointConfiguration result;
             if (TrySingleInstanceFromServiceLocators(out result)) return result;
 
@@ -98,8 +91,6 @@ namespace Glimpse.Core2.Framework
 
         public ICollection<IClientScript> InstantiateClientScripts()
         {
-            Contract.Ensures(Contract.Result<ICollection<IClientScript>>() != null);
-
             ICollection<IClientScript> result;
             if (TryAllInstancesFromServiceLocators(out result)) return result;
 
@@ -110,8 +101,6 @@ namespace Glimpse.Core2.Framework
 
         public ILogger InstantiateLogger()
         {
-            Contract.Ensures(Contract.Result<ILogger>() != null);
-
             //reuse logger if already created
             if (Logger != null) return Logger;
 
@@ -154,8 +143,6 @@ namespace Glimpse.Core2.Framework
 
         public IHtmlEncoder InstantiateHtmlEncoder()
         {
-            Contract.Ensures(Contract.Result<IHtmlEncoder>() != null);
-
             IHtmlEncoder encoder;
 
             if (TrySingleInstanceFromServiceLocators(out encoder)) return encoder;
@@ -165,8 +152,6 @@ namespace Glimpse.Core2.Framework
 
         public IPersistanceStore InstantiatePersistanceStore()
         {
-            Contract.Ensures(Contract.Result<IPersistanceStore>() != null);
-
             IPersistanceStore store;
             if (TrySingleInstanceFromServiceLocators(out store)) return store;
 
@@ -175,8 +160,6 @@ namespace Glimpse.Core2.Framework
 
         public ICollection<IPipelineInspector> InstantiatePipelineInspectors()
         {
-            Contract.Ensures(Contract.Result<ICollection<IPipelineInspector>>() != null);
-
             ICollection<IPipelineInspector> result;
             if (TryAllInstancesFromServiceLocators(out result)) return result;
 
@@ -185,8 +168,6 @@ namespace Glimpse.Core2.Framework
 
         public ICollection<IResource> InstantiateResources()
         {
-            Contract.Ensures(Contract.Result<ICollection<IResource>>() != null);
-
             ICollection<IResource> resources;
             if (TryAllInstancesFromServiceLocators(out resources)) return resources;
 
@@ -195,8 +176,6 @@ namespace Glimpse.Core2.Framework
 
         public ISerializer InstantiateSerializer()
         {
-            Contract.Ensures(Contract.Result<ISerializer>() != null);
-
             ISerializer result;
             if (TrySingleInstanceFromServiceLocators(out result)) return result;
 
@@ -208,8 +187,6 @@ namespace Glimpse.Core2.Framework
 
         public ICollection<ITab> InstantiateTabs()
         {
-            Contract.Ensures(Contract.Result<ICollection<ITab>>() != null);
-
             ICollection<ITab> tabs;
             if (TryAllInstancesFromServiceLocators(out tabs)) return tabs;
 
@@ -218,8 +195,6 @@ namespace Glimpse.Core2.Framework
 
         public ICollection<IRuntimePolicy> InstantiateRuntimePolicies()
         {
-            Contract.Ensures(Contract.Result<ICollection<IRuntimePolicy>>() != null);
-
             ICollection<IRuntimePolicy> result;
             if (TryAllInstancesFromServiceLocators(out result)) return result;
 
@@ -229,8 +204,6 @@ namespace Glimpse.Core2.Framework
 
         public ICollection<ISerializationConverter> InstantiateSerializationConverters()
         {
-            Contract.Ensures(Contract.Result<ICollection<ISerializationConverter>>() != null);
-
             ICollection<ISerializationConverter> result;
             if (TryAllInstancesFromServiceLocators(out result)) return result;
 
@@ -239,8 +212,6 @@ namespace Glimpse.Core2.Framework
 
         public IResource InstantiateDefaultResource()
         {
-            Contract.Ensures(Contract.Result<IResource>() != null);
-
             IResource result;
             if (TrySingleInstanceFromServiceLocators(out result)) return result;
 
@@ -249,8 +220,6 @@ namespace Glimpse.Core2.Framework
 
         public IGlimpseConfiguration InstantiateConfiguration()
         {
-            Contract.Ensures(Contract.Result<IGlimpseConfiguration>() != null);
-
             IGlimpseConfiguration result;
             if (TrySingleInstanceFromServiceLocators(out result)) return result;
 
@@ -278,8 +247,6 @@ namespace Glimpse.Core2.Framework
 
         public IMessageBroker InstantiateMessageBroker()
         {
-            Contract.Ensures(Contract.Result<IMessageBroker>()!=null);
-
             IMessageBroker result;
             if (TrySingleInstanceFromServiceLocators(out result)) return result;
 
@@ -288,8 +255,6 @@ namespace Glimpse.Core2.Framework
 
         public IProxyFactory InstantiateProxyFactory()
         {
-            Contract.Ensures(Contract.Result<IProxyFactory>() != null);
-
             IProxyFactory result;
             if (TrySingleInstanceFromServiceLocators(out result)) return result;
 
@@ -313,8 +278,6 @@ namespace Glimpse.Core2.Framework
 
         private bool TrySingleInstanceFromServiceLocators<T>(out T instance) where T : class
         {
-            Contract.Ensures(!Contract.Result<bool>() || Contract.ValueAtReturn(out instance) != null);
-
             if (UserServiceLocator != null)
             {
                 instance = UserServiceLocator.GetInstance<T>();
@@ -333,8 +296,6 @@ namespace Glimpse.Core2.Framework
 
         private bool TryAllInstancesFromServiceLocators<T>(out ICollection<T> instance) where T : class
         {
-            Contract.Ensures(!Contract.Result<bool>() || Contract.ValueAtReturn(out instance) != null);
-
             IEnumerable<T> result;
             if (UserServiceLocator != null)
             {
