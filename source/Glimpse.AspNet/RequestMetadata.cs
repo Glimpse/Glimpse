@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Web;
 using Glimpse.Core2.Framework;
 
@@ -11,7 +10,7 @@ namespace Glimpse.AspNet
 
         public RequestMetadata(HttpContextBase context)
         {
-            Contract.Requires<ArgumentNullException>(context != null, "context");
+            if (context == null) throw new ArgumentNullException("context");
 
             Context = context;
         }
