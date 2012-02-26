@@ -301,11 +301,6 @@ namespace Glimpse.Core2.Framework
             var logger = Configuration.Logger;
 
 
-            //Create storage space for tabs to access
-            //var tabStore = new DictionaryDataStoreAdapter(new Dictionary<string, object>());
-
-            //Create UserServiceLocator valid for this request
-
             foreach (var tab in supportedRuntimeTabs)
             {
                 var key = tab.GetType().FullName;

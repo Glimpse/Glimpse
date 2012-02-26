@@ -2,6 +2,6 @@
 {
     public interface IDynamicClientScript:IClientScript
     {
-        string GetResourceName();
+        string GetResourceName();//TODO: Document this well or change name of method
     }
 }
