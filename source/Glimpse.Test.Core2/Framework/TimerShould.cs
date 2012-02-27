@@ -16,7 +16,7 @@ namespace Glimpse.Test.Core2.Framework
             var result = timer.Time(() => Thread.Sleep(waitTime));
 
             Assert.NotNull(result);
-            Assert.True(result.Duration.Milliseconds >= waitTime-1, result.Duration.Milliseconds.ToString() + " not greater than " + waitTime.ToString());//-1 since we get rounding issues sometimes that makes this test fail
+            Assert.True(result.Duration.Milliseconds >= waitTime-2, result.Duration.Milliseconds.ToString() + " not greater than " + waitTime.ToString());//-2 since we get rounding issues sometimes that makes this test fail
         }
 
         [Fact]
