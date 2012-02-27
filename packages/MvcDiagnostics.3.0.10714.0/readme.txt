@@ -1,1 +1,0 @@
-For more details on how to use this, visit http://bradwilson.typepad.com/blog/2010/03/diagnosing-aspnet-mvc-problems.html
