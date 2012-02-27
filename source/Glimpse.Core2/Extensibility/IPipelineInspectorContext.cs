@@ -7,5 +7,6 @@ namespace Glimpse.Core2.Extensibility
         IProxyFactory ProxyFactory { get; }
         Func<IExecutionTimer> TimerStrategy { get; }
         IMessageBroker MessageBroker { get; }
+        Func<RuntimePolicy> RuntimePolicyStrategy { get; }
     }
 }

@@ -460,7 +460,7 @@ namespace Glimpse.Test.Core2.Framework
 
             Runtime.BeginRequest();
 
-            Assert.Equal(glimpseMode, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePermissionsKey));
+            Assert.Equal(glimpseMode, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePolicyKey));
         }
 
         [Fact]
@@ -495,7 +495,7 @@ namespace Glimpse.Test.Core2.Framework
             
             Runtime.Initialize();
             
-            Assert.Equal(RuntimePolicy.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePermissionsKey));
+            Assert.Equal(RuntimePolicy.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePolicyKey));
         }
 
         [Fact] //False result means GlimpseMode == Off
@@ -508,7 +508,7 @@ namespace Glimpse.Test.Core2.Framework
 
             Assert.True(result);
 
-            Assert.Equal(RuntimePolicy.ModifyResponseBody, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePermissionsKey));
+            Assert.Equal(RuntimePolicy.ModifyResponseBody, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePolicyKey));
         }
 
         [Fact]
@@ -518,7 +518,7 @@ namespace Glimpse.Test.Core2.Framework
 
             Runtime.Initialize();
 
-            Assert.Equal(RuntimePolicy.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePermissionsKey));
+            Assert.Equal(RuntimePolicy.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePolicyKey));
         }
 
         [Fact]
@@ -528,7 +528,7 @@ namespace Glimpse.Test.Core2.Framework
 
             Runtime.ExecuteResource("doesn't matter", new ResourceParameters(new string[]{}));
 
-            Assert.Equal(RuntimePolicy.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePermissionsKey));
+            Assert.Equal(RuntimePolicy.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePolicyKey));
         }
 
         [Fact]
@@ -538,7 +538,7 @@ namespace Glimpse.Test.Core2.Framework
 
             Runtime.EndRequest();
 
-            Assert.Equal(RuntimePolicy.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePermissionsKey));
+            Assert.Equal(RuntimePolicy.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePolicyKey));
         }
 
         [Fact]

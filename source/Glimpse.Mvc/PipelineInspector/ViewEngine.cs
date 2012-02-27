@@ -13,7 +13,7 @@ namespace Glimpse.Mvc.PipelineInspector
             var logger = context.Logger;
             var proxyFactory = context.ProxyFactory;
 
-            var alternateImplementations = AlternateImplementation.ViewEngine.AllMethods(context.MessageBroker, context.ProxyFactory, context.Logger, context.TimerStrategy);
+            var alternateImplementations = AlternateImplementation.ViewEngine.AllMethods(context.MessageBroker, context.ProxyFactory, context.Logger, context.TimerStrategy, context.RuntimePolicyStrategy);
 
             OriginalViewEngines = new List<IViewEngine>();
 

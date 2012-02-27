@@ -343,7 +343,10 @@ namespace Glimpse.Core2.Framework
                 }
             }
 
-            var pipelineInspectorContext = new PipelineInspectorContext(logger, Configuration.ProxyFactory, messageBroker, () => Configuration.FrameworkProvider.HttpRequestStore.Get<ExecutionTimer>(Constants.GlobalTimerKey));
+            Func<IExecutionTimer> timerStrategy = () => Configuration.FrameworkProvider.HttpRequestStore.Get<IExecutionTimer>(Constants.GlobalTimerKey);
+            Func<RuntimePolicy> runtimePolicyStrategy =() => Configuration.FrameworkProvider.HttpRequestStore.Get<RuntimePolicy>(Constants.RuntimePolicyKey);
+
+            var pipelineInspectorContext = new PipelineInspectorContext(logger, Configuration.ProxyFactory, messageBroker, timerStrategy, runtimePolicyStrategy);
 
             foreach (var pipelineInspector in Configuration.PipelineInspectors)
             {
@@ -368,8 +371,8 @@ namespace Glimpse.Core2.Framework
             var frameworkProvider = Configuration.FrameworkProvider;
             var requestStore = frameworkProvider.HttpRequestStore;
             //Begin with the lowest policy for this request, or the lowest policy per config
-            var finalResult = requestStore.Contains(Constants.RuntimePermissionsKey)
-                             ? requestStore.Get<RuntimePolicy>(Constants.RuntimePermissionsKey)
+            var finalResult = requestStore.Contains(Constants.RuntimePolicyKey)
+                             ? requestStore.Get<RuntimePolicy>(Constants.RuntimePolicyKey)
                              : Configuration.DefaultRuntimePolicy;
 
             if (!finalResult.HasFlag(RuntimePolicy.Off))
@@ -398,7 +401,7 @@ namespace Glimpse.Core2.Framework
             }
 
             //store result for request
-            requestStore.Set(Constants.RuntimePermissionsKey, finalResult);
+            requestStore.Set(Constants.RuntimePolicyKey, finalResult);
             return finalResult;
         }
     }

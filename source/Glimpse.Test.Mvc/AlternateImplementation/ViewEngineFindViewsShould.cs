@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
+using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
 using Glimpse.Mvc.AlternateImplementation;
@@ -19,7 +20,7 @@ namespace Glimpse.Test.Mvc.AlternateImplementation
         public Mock<ILogger> LoggerMock { get; set; }
         public Mock<IExecutionTimer> ExecutionTimerMock { get; set; }
 
-        private ViewEngineFindViewsTester(Mock<IMessageBroker> brokerMock, Mock<IProxyFactory> factoryMock, Mock<ILogger> loggerMock, Mock<IExecutionTimer> timerMock):base(brokerMock.Object, factoryMock.Object, loggerMock.Object, ()=>timerMock.Object, false)
+        private ViewEngineFindViewsTester(Mock<IMessageBroker> brokerMock, Mock<IProxyFactory> factoryMock, Mock<ILogger> loggerMock, Mock<IExecutionTimer> timerMock):base(brokerMock.Object, factoryMock.Object, loggerMock.Object, ()=>timerMock.Object,()=>RuntimePolicy.On,  false)
         {
             MessageBrokerMock = brokerMock;
             ProxyFactoryMock = factoryMock;
@@ -50,7 +51,7 @@ namespace Glimpse.Test.Mvc.AlternateImplementation
         [Fact]
         public void ReturnAllMethodImplementationsWithStaticAll()
         {
-            var implementations = ViewEngine.AllMethods(Implementation.MessageBrokerMock.Object, Implementation.ProxyFactoryMock.Object, Implementation.LoggerMock.Object, () => Implementation.ExecutionTimerMock.Object);
+            var implementations = ViewEngine.AllMethods(Implementation.MessageBrokerMock.Object, Implementation.ProxyFactoryMock.Object, Implementation.LoggerMock.Object, () => Implementation.ExecutionTimerMock.Object, ()=>RuntimePolicy.On);
 
             Assert.Equal(2, implementations.Count());
         }
@@ -58,7 +59,7 @@ namespace Glimpse.Test.Mvc.AlternateImplementation
         [Fact]
         public void Construct()
         {
-            var implementation = new ViewEngine.FindViews(Implementation.MessageBrokerMock.Object, Implementation.ProxyFactoryMock.Object, Implementation.LoggerMock.Object, () => new ExecutionTimer(Stopwatch.StartNew()), false);
+            var implementation = new ViewEngine.FindViews(Implementation.MessageBrokerMock.Object, Implementation.ProxyFactoryMock.Object, Implementation.LoggerMock.Object, () => new ExecutionTimer(Stopwatch.StartNew()), ()=>RuntimePolicy.On, false);
 
             Assert.NotNull(implementation);
             Assert.NotNull(implementation as IAlternateImplementation<IViewEngine>);

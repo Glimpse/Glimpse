@@ -1,4 +1,5 @@
 ﻿using System;
+using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
 using Moq;
@@ -16,7 +17,7 @@ namespace Glimpse.Test.Core2.Framework
             var brokerMock = new Mock<IMessageBroker>();
             var timerMock = new Mock<IExecutionTimer>();
 
-            var context = new PipelineInspectorContext(loggerMock.Object, factoryMock.Object, brokerMock.Object, () => timerMock.Object);
+            var context = new PipelineInspectorContext(loggerMock.Object, factoryMock.Object, brokerMock.Object, () => timerMock.Object, ()=>RuntimePolicy.On);
 
             Assert.NotNull(context);
             Assert.Equal(loggerMock.Object, context.Logger);
@@ -33,7 +34,7 @@ namespace Glimpse.Test.Core2.Framework
             var brokerMock = new Mock<IMessageBroker>();
             var timerMock = new Mock<IExecutionTimer>();
 
-            Assert.Throws<ArgumentNullException>(()=> new PipelineInspectorContext(null, factoryMock.Object, brokerMock.Object, () => timerMock.Object));
+            Assert.Throws<ArgumentNullException>(() => new PipelineInspectorContext(null, factoryMock.Object, brokerMock.Object, () => timerMock.Object, () => RuntimePolicy.On));
         }
 
         [Fact]
@@ -44,7 +45,7 @@ namespace Glimpse.Test.Core2.Framework
             var brokerMock = new Mock<IMessageBroker>();
             var timerMock = new Mock<IExecutionTimer>();
 
-            Assert.Throws<ArgumentNullException>(() => new PipelineInspectorContext(loggerMock.Object, null, brokerMock.Object, () => timerMock.Object));
+            Assert.Throws<ArgumentNullException>(() => new PipelineInspectorContext(loggerMock.Object, null, brokerMock.Object, () => timerMock.Object, () => RuntimePolicy.On));
         }
 
         [Fact]
@@ -55,7 +56,7 @@ namespace Glimpse.Test.Core2.Framework
             var brokerMock = new Mock<IMessageBroker>();
             var timerMock = new Mock<IExecutionTimer>();
 
-            Assert.Throws<ArgumentNullException>(() => new PipelineInspectorContext(loggerMock.Object, factoryMock.Object, null, () => timerMock.Object));
+            Assert.Throws<ArgumentNullException>(() => new PipelineInspectorContext(loggerMock.Object, factoryMock.Object, null, () => timerMock.Object, () => RuntimePolicy.On));
         }
 
         [Fact]
@@ -66,7 +67,18 @@ namespace Glimpse.Test.Core2.Framework
             var brokerMock = new Mock<IMessageBroker>();
             var timerMock = new Mock<IExecutionTimer>();
 
-            Assert.Throws<ArgumentNullException>(() => new PipelineInspectorContext(loggerMock.Object, factoryMock.Object, brokerMock.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new PipelineInspectorContext(loggerMock.Object, factoryMock.Object, brokerMock.Object, null, () => RuntimePolicy.On));
+        }
+
+        [Fact]
+        public void ThrowExceptionOnConstructWithNullRuntimePolicyStrategy()
+        {
+            var loggerMock = new Mock<ILogger>();
+            var factoryMock = new Mock<IProxyFactory>();
+            var brokerMock = new Mock<IMessageBroker>();
+            var timerMock = new Mock<IExecutionTimer>();
+
+            Assert.Throws<ArgumentNullException>(() => new PipelineInspectorContext(loggerMock.Object, factoryMock.Object, brokerMock.Object, () => timerMock.Object, null));
         }
     }
 }
