@@ -37,10 +37,41 @@ namespace Glimpse.Test.Core2.Framework
             Assert.NotNull(Configuration.Logger);
         }
 
-        [Fact(Skip = "Create a test to cover the constructor")]
+        [Fact]
         public void Construct()
         {
-            
+            var providerMock = new Mock<IFrameworkProvider>();
+            var endpointConfogMock = new Mock<ResourceEndpointConfiguration>();
+            var clientScriptsStub = new List<IClientScript>();
+            var loggerMock = new Mock<ILogger>();
+            var encoderMock = new Mock<IHtmlEncoder>();
+            var storeMock = new Mock<IPersistanceStore>();
+            var inspectorsStub = new LinkedList<IPipelineInspector>();
+            var resourcesStub = new LinkedList<IResource>();
+            var serializerMock = new Mock<ISerializer>();
+            var tabsStub = new List<ITab>();
+            var policiesStub = new List<IRuntimePolicy>();
+            var defaultResourceMock = new Mock<IResource>();
+            var factoryMock = new Mock<IProxyFactory>();
+            var brokerMock = new Mock<IMessageBroker>();
+
+            var config = new GlimpseConfiguration(providerMock.Object, endpointConfogMock.Object, clientScriptsStub, loggerMock.Object, RuntimePolicy.On, encoderMock.Object, storeMock.Object, inspectorsStub, resourcesStub, serializerMock.Object, 
+                tabsStub, policiesStub, defaultResourceMock.Object, factoryMock.Object, brokerMock.Object);
+
+            Assert.Equal(providerMock.Object, config.FrameworkProvider);
+            Assert.Equal(endpointConfogMock.Object, config.ResourceEndpoint);
+            Assert.Equal(clientScriptsStub, config.ClientScripts);
+            Assert.Equal(loggerMock.Object, config.Logger);
+            Assert.Equal(encoderMock.Object, config.HtmlEncoder);
+            Assert.Equal(storeMock.Object, config.PersistanceStore);
+            Assert.Equal(inspectorsStub, config.PipelineInspectors);
+            Assert.Equal(resourcesStub, config.Resources);
+            Assert.Equal(serializerMock.Object, config.Serializer);
+            Assert.Equal(tabsStub, config.Tabs);
+            Assert.Equal(policiesStub, config.RuntimePolicies);
+            Assert.Equal(defaultResourceMock.Object, config.DefaultResource);
+            Assert.Equal(factoryMock.Object, config.ProxyFactory);
+            Assert.Equal(brokerMock.Object, config.MessageBroker);
         }
 
         [Fact]
