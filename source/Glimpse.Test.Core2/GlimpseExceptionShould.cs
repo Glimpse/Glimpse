@@ -35,7 +35,7 @@ namespace Glimpse.Test.Core2
             Assert.Equal(innerException, exception.InnerException);
         }
 
-        [Fact(Skip = "This method is hard to test and framework code anyways.")]
+        [Fact(Skip = "This method is hard to test and is framework code anyways.")]
         public void ConstructWithSerializationInfoAndStreamingContext()
         {
             var formatConverterMock = new Mock<IFormatterConverter>();
