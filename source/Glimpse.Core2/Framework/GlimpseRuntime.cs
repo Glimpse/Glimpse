@@ -393,7 +393,9 @@ namespace Glimpse.Core2.Framework
                     try
                     {
                         policyResult = policy.Execute(policyContext);
-                        logger.Debug("RuntimePolicy set to '{0}' by IRuntimePolicy of type '{1}' during RuntimeEvent '{2}'.", policyResult, policy.GetType(), runtimeEvent);
+
+                        if (policyResult != RuntimePolicy.On)
+                            logger.Debug("RuntimePolicy set to '{0}' by IRuntimePolicy of type '{1}' during RuntimeEvent '{2}'.", policyResult, policy.GetType(), runtimeEvent);
                     }
                     catch (Exception exception)
                     {
