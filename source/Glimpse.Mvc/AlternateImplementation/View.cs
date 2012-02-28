@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Web.Mvc;
+using Glimpse.Core2;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Mvc.Message;
 
@@ -12,9 +13,9 @@ namespace Glimpse.Mvc.AlternateImplementation
     {
         private View(){}
 
-        public static IEnumerable<IAlternateImplementation<IView>> AllMethods(IMessageBroker messageBroker, Func<IExecutionTimer> timerStrategy)
+        public static IEnumerable<IAlternateImplementation<IView>> AllMethods(IMessageBroker messageBroker, Func<IExecutionTimer> timerStrategy, Func<RuntimePolicy> runtimePolicyStrategy)
         {
-            yield return new Render(messageBroker, timerStrategy);
+            yield return new Render(messageBroker, timerStrategy, runtimePolicyStrategy);
         }
 
         public class Render : IAlternateImplementation<IView>
@@ -22,16 +23,24 @@ namespace Glimpse.Mvc.AlternateImplementation
             public IMessageBroker MessageBroker { get; set; }
             public Func<IExecutionTimer> TimerStrategy { get; set; }
             public MethodInfo MethodToImplement { get; private set; }
+            public Func<RuntimePolicy> RuntimePolicyStrategy { get; set; }
 
-            public Render(IMessageBroker messageBroker, Func<IExecutionTimer> timerStrategy)
+            public Render(IMessageBroker messageBroker, Func<IExecutionTimer> timerStrategy, Func<RuntimePolicy> runtimePolicyStrategy)
             {
                 MessageBroker = messageBroker;
                 TimerStrategy = timerStrategy;
                 MethodToImplement = typeof (IView).GetMethod("Render");
+                RuntimePolicyStrategy = runtimePolicyStrategy;
             }
 
             public void NewImplementation(IAlternateImplementationContext context)
             {
+                if (RuntimePolicyStrategy() == RuntimePolicy.Off)
+                {
+                    context.Proceed();
+                    return;
+                }
+
                 var input = new Arguments(context.Arguments);
 
                 //TODO: This is where we could use writer.Write calls to inject HTML comments

@@ -75,7 +75,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     if (ProxyFactory.IsProxyable(originalView))
                     {
                         var newView = ProxyFactory.CreateProxy(originalView,
-                                                               AlternateImplementation.View.AllMethods(MessageBroker, TimerStrategy),
+                                                               AlternateImplementation.View.AllMethods(MessageBroker, TimerStrategy, RuntimePolicyStrategy),
                                                                new View.Render.Mixin(viewName, isPartial, id));
 
                         Logger.Info(Resources.FindViewsProxyOutputReplacedIView, originalView.GetType(), viewName);
