@@ -380,6 +380,7 @@ namespace Glimpse.Core2.Framework
 
             if (!finalResult.HasFlag(RuntimePolicy.Off))
             {
+                var logger = Configuration.Logger;
                 //only run policies for this runtimeEvent, or all runtime events
                 var policies =
                     Configuration.RuntimePolicies.Where(
@@ -392,10 +393,11 @@ namespace Glimpse.Core2.Framework
                     try
                     {
                         policyResult = policy.Execute(policyContext);
+                        logger.Debug("RuntimePolicy set to '{0}' by IRuntimePolicy of type '{1}' during RuntimeEvent '{2}'.", policyResult, policy.GetType(), runtimeEvent);
                     }
                     catch (Exception exception)
                     {
-                        Configuration.Logger.Warn("Exception when executing IRuntimePolicy of type '{0}'. RuntimePolicy is now set to 'Off'.", exception, policy.GetType());
+                        logger.Warn("Exception when executing IRuntimePolicy of type '{0}'. RuntimePolicy is now set to 'Off'.", exception, policy.GetType());
                     }
 
                     //Only use the lowest policy allowed for the request
