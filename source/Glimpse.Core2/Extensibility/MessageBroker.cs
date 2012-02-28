@@ -41,7 +41,7 @@ namespace Glimpse.Core2.Extensibility
             var subscriptionId = Guid.NewGuid();
             subscriptions.Add(new Subscriber<T>(action, subscriptionId));
 
-            Logger.Debug("Method '{0}' on type '{1}' has been subscribed to all '{2}' messages.", action.Method.Name, action.Method.DeclaringType, typeof(T)); //TODO: Move to resource
+            Logger.Debug(Resources.MessageBrokerSubscribe, action.Method.Name, action.Method.DeclaringType, typeof(T));
 
             return subscriptionId;
         }

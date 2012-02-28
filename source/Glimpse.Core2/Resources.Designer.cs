@@ -61,6 +61,24 @@ namespace Glimpse.Core2 {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Methods inspected via proxy generation hook on type &apos;{0}&apos;..
+        /// </summary>
+        internal static string AlternateImplementationGenerationHookMethodsInspected {
+            get {
+                return ResourceManager.GetString("AlternateImplementationGenerationHookMethodsInspected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} method of type &apos;{1}&apos; is not proxyable..
+        /// </summary>
+        internal static string AlternateImplementationGenerationHookNonProxyableMemberNotification {
+            get {
+                return ResourceManager.GetString("AlternateImplementationGenerationHookNonProxyableMemberNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Initialize method has not been called in the context on the current Glimpse runtime instance. Calls to BeginRequest must be preceded by calls to Initialize..
         /// </summary>
         internal static string BeginRequestOutOfOrderRuntimeMethodCall {
@@ -214,6 +232,33 @@ namespace Glimpse.Core2 {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not persist metadata with IPersistanceStore of type &apos;{0}&apos;..
+        /// </summary>
+        internal static string GlimpseRuntimeEndRequesPersistError {
+            get {
+                return ResourceManager.GetString("GlimpseRuntimeEndRequesPersistError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error executing IResource &apos;{0}&apos;..
+        /// </summary>
+        internal static string GlimpseRuntimeExecuteResourceError {
+            get {
+                return ResourceManager.GetString("GlimpseRuntimeExecuteResourceError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error executing resource result of type &apos;{0}&apos;..
+        /// </summary>
+        internal static string GlimpseRuntimeExecuteResourceResultError {
+            get {
+                return ResourceManager.GetString("GlimpseRuntimeExecuteResourceResultError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Setup IPipelineInspector of type &apos;{0}&apos;..
         /// </summary>
         internal static string GlimpseRuntimeInitializeSetupPipelineInspector {
@@ -255,6 +300,15 @@ namespace Glimpse.Core2 {
         internal static string InstantiateResourceEndpointConfigurationException {
             get {
                 return ResourceManager.GetString("InstantiateResourceEndpointConfigurationException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method &apos;{0}&apos; on type &apos;{1}&apos; has been subscribed to all &apos;{2}&apos; messages..
+        /// </summary>
+        internal static string MessageBrokerSubscribe {
+            get {
+                return ResourceManager.GetString("MessageBrokerSubscribe", resourceCulture);
             }
         }
         

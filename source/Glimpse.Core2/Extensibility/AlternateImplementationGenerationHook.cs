@@ -46,12 +46,12 @@ namespace Glimpse.Core2.Extensibility
 
         public void MethodsInspected()
         {
-            Logger.Debug("Methods inspected on type '{0}'.", typeof(T));//TODO: Add to resx file
+            Logger.Debug(Resources.AlternateImplementationGenerationHookMethodsInspected, typeof(T));
         }
 
         public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)
         {
-            Logger.Debug("{0} method of {1} type is not proxyable.", memberInfo.Name, type);//TODO: Add to resx file
+            Logger.Debug(Resources.AlternateImplementationGenerationHookNonProxyableMemberNotification, memberInfo.Name, type);
         }
 
         public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)

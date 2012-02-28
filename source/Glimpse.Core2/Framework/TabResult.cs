@@ -2,7 +2,14 @@ namespace Glimpse.Core2.Framework
 {
     public class TabResult
     {
-        public object Data { get; set; }//TODO: Should this be an ISerializable since it will have to be stored in a DB depending on the implementation of IPersistanceStore?
+        /// <summary>
+        /// Gets or sets the data.
+        /// </summary>
+        /// <remarks>The Data property will be serialized by the Glimpse runtime, as such, objects stored in Data should be serializable.</remarks>
+        /// <value>
+        /// The data.
+        /// </value>
+        public object Data { get; set; }
         public string Name { get; set; }
 
         public TabResult(string name, object data)

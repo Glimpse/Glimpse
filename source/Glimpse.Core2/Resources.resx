@@ -212,4 +212,28 @@
         <value xml:space="preserve">Setup IPipelineInspector of type '{0}'.</value>
         <comment>{0} - GetType() of IPipelineInspector</comment>
     </data>
+    <data name="AlternateImplementationGenerationHookMethodsInspected">
+        <value xml:space="preserve">Methods inspected via proxy generation hook on type '{0}'.</value>
+        <comment>{0} - typeof(T)</comment>
+    </data>
+    <data name="AlternateImplementationGenerationHookNonProxyableMemberNotification">
+        <value xml:space="preserve">{0} method of type '{1}' is not proxyable.</value>
+        <comment>{0} - .Name of MemberInfo, {1} - Proxy Type</comment>
+    </data>
+    <data name="MessageBrokerSubscribe">
+        <value xml:space="preserve">Method '{0}' on type '{1}' has been subscribed to all '{2}' messages.</value>
+        <comment>{0} - the method name, {1} = the method's declaring type, {2} = the message type</comment>
+    </data>
+    <data name="GlimpseRuntimeEndRequesPersistError">
+        <value xml:space="preserve">Could not persist metadata with IPersistanceStore of type '{0}'.</value>
+        <comment>{0} - GetType() of persistance store</comment>
+    </data>
+    <data name="GlimpseRuntimeExecuteResourceError">
+        <value xml:space="preserve">Error executing IResource '{0}'.</value>
+        <comment>{0} - name of IResource</comment>
+    </data>
+    <data name="GlimpseRuntimeExecuteResourceResultError">
+        <value xml:space="preserve">Error executing resource result of type '{0}'.</value>
+        <comment>{0} - GetType() of errant ResourceResult</comment>
+    </data>
 </root>

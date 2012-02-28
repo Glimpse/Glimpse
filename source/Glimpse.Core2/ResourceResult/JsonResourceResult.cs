@@ -41,8 +41,12 @@ namespace Glimpse.Core2.ResourceResult
 
             frameworkProvider.SetHttpResponseHeader("Content-Type", ContentType);
 
-            if (CacheSetting.HasValue)//TODO: #if debug
+#if !DEBUG
+            if (CacheSetting.HasValue)
                 frameworkProvider.SetHttpResponseHeader("Cache-Control", string.Format("{0}, max-age={1}", CacheSetting.Value.ToDescription(), CacheDuration));
+#else
+            frameworkProvider.SetHttpResponseHeader("Cache-Control", "no-cache");
+#endif
 
             var toWrite = string.IsNullOrEmpty(Callback) ? result : string.Format("{0}({1});", Callback, result);
 

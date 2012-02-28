@@ -5,7 +5,6 @@ namespace Glimpse.Core2.Extensibility
 {
     public interface IAlternateImplementationContext : IContext
     {
-        //TODO: Rename any of these items if there is a better name
         object Proxy { get; }
         object InvocationTarget { get; }
         Type TargetType { get; }

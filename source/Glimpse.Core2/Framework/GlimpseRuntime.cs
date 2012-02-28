@@ -105,8 +105,7 @@ namespace Glimpse.Core2.Framework
                 }
                 catch(Exception exception)
                 {
-                    //TODO: Use resource
-                    Configuration.Logger.Error("Could not persist metadata with IPersistanceStore of type '{0}'.", exception, persistanceStore.GetType());
+                    Configuration.Logger.Error(Resources.GlimpseRuntimeEndRequesPersistError, exception, persistanceStore.GetType());
                 }
             }
 
@@ -133,7 +132,7 @@ namespace Glimpse.Core2.Framework
                                          {
                                              {ResourceParameterKey.RequestId, requestId.ToString()},
                                              {ResourceParameterKey.VersionNumber, Version},
-                                             {ResourceParameterKey.Callback, "console.log"} //TODO: This should not be hard coded
+                                             {ResourceParameterKey.Callback, "console.log"} //TODO: This should not be hard coded, introduce yet another collection?
                                          };
 
             var stringBuilder = new StringBuilder();
@@ -244,8 +243,7 @@ namespace Glimpse.Core2.Framework
                     }
                     catch (Exception ex)
                     {
-                        //TODO: Use resource
-                        logger.Error("Error executing resource '{0}'", ex, resourceName);
+                        logger.Error(Resources.GlimpseRuntimeExecuteResourceError, ex, resourceName);
                         result = new ExceptionResourceResult(ex);
                     }
                     break;
@@ -265,7 +263,7 @@ namespace Glimpse.Core2.Framework
             }
             catch (Exception exception)
             {
-                logger.Fatal("Error executing resource result of type '{0}'", exception, result.GetType());
+                logger.Fatal(Resources.GlimpseRuntimeExecuteResourceResultError, exception, result.GetType());
             }
         }
 

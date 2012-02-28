@@ -33,8 +33,12 @@ namespace Glimpse.Core2.ResourceResult
 
             frameworkProvider.SetHttpResponseHeader("Content-Type", ContentType);
 
+#if !DEBUG
             if (CacheSetting.HasValue)
                 frameworkProvider.SetHttpResponseHeader("Cache-Control", string.Format("{0}, max-age={1}", CacheSetting.Value.ToDescription(), CacheDuration));
+#else
+            frameworkProvider.SetHttpResponseHeader("Cache-Control", "no-cache");
+#endif
 
             frameworkProvider.WriteHttpResponse(Content);
         }

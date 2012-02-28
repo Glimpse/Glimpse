@@ -73,7 +73,7 @@ namespace Glimpse.Test.Core2.Extensibility
 
             result.Execute(contextMock.Object);
 
-            frameworkProviderMock.Verify(fp => fp.SetHttpResponseHeader("Cache-Control", It.IsAny<string>()), Times.Never());
+            frameworkProviderMock.Verify(fp => fp.SetHttpResponseHeader("Cache-Control", It.IsRegex(".+max-age.+")), Times.Never());
             frameworkProviderMock.Verify(fp => fp.WriteHttpResponse(It.IsAny<string>()), Times.Once());
             serializerMock.Verify(s => s.Serialize(obj), Times.Once());
         }

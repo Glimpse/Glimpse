@@ -16,7 +16,7 @@ namespace Glimpse.Core2.Framework
         internal IServiceLocator ProviderServiceLocator { get; set; }
         internal GlimpseSection Configuration { get; set; }
 
-        public Factory() : this(null)//TODO: Should I kill this?
+        public Factory() : this(null)
         {
         }
 
@@ -29,11 +29,9 @@ namespace Glimpse.Core2.Framework
         {
         }
 
-        public Factory(IServiceLocator providerServiceLocator, IServiceLocator userServiceLocator,
-                       GlimpseSection configuration)
+        public Factory(IServiceLocator providerServiceLocator, IServiceLocator userServiceLocator, GlimpseSection configuration)
         {
-            Configuration = configuration ??
-                            ConfigurationManager.GetSection("glimpse") as GlimpseSection ?? new GlimpseSection();
+            Configuration = configuration ?? ConfigurationManager.GetSection("glimpse") as GlimpseSection ?? new GlimpseSection();
 
             IServiceLocator loadedServiceLocator = null;
             if (userServiceLocator == null && Configuration.ServiceLocatorType != null)
