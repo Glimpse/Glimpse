@@ -41,7 +41,7 @@ namespace Glimpse.Core2.Extensibility
 
         public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
         {
-            return MethodImplementations.Where(i => i.MethodToImplement == method).ToArray<IInterceptor>();
+            return MethodImplementations.Where(i => i.MethodToImplement == method).Cast<IInterceptor>().ToArray();
         }
     }
 }

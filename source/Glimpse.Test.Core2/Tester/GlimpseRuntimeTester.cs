@@ -21,7 +21,7 @@ namespace Glimpse.Test.Core2.Tester
         public Mock<IResource> ResourceMock { get; set; }
         public Mock<IResourceResult> ResourceResultMock { get; set; }
         public Mock<IRuntimePolicy> RuntimePolicyMock { get; set; }
-        public GlimpseConfiguration Configuration { get; set; }
+        public new GlimpseConfiguration Configuration { get; set; }
         public Mock<IStaticClientScript> StaticScriptMock { get; set; }
         public Mock<IDynamicClientScript> DynamicScriptMock { get; set; }
         public Mock<IHtmlEncoder> EncoderMock { get; set; }

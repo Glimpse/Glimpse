@@ -5,6 +5,9 @@ using System.Linq;
 using System.Text;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.ResourceResult;
+#if NET35
+using Glimpse.Core2.Backport;
+#endif
 
 namespace Glimpse.Core2.Framework
 {
@@ -152,7 +155,7 @@ namespace Glimpse.Core2.Framework
                         }
 
                         var uri = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUri(resource, logger, requestTokenValues));
-                        if (!string.IsNullOrWhiteSpace(uri))
+                        if (!string.IsNullOrEmpty(uri))
                             stringBuilder.AppendFormat(@"<script type='text/javascript' src='{0}'></script>", uri);
 
                         continue;
@@ -170,7 +173,7 @@ namespace Glimpse.Core2.Framework
                     {
                         var uri = encoder.HtmlAttributeEncode(staticScript.GetUri(Version));
 
-                        if (!string.IsNullOrWhiteSpace(uri))
+                        if (!string.IsNullOrEmpty(uri))
                             stringBuilder.AppendFormat(@"<script type='text/javascript' src='{0}'></script>", uri);
 
                         continue;

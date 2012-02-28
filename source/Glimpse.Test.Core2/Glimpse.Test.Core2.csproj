@@ -76,6 +76,7 @@
     <Compile Include="Framework\EventBrokerShould.cs" />
     <Compile Include="Framework\FactoryShould.cs" />
     <Compile Include="Framework\GlimpseConfigurationShould.cs" />
+    <Compile Include="Framework\GlimpseMetadataShould.cs" />
     <Compile Include="Framework\GlimpseRuntimeShould.cs" />
     <Compile Include="Framework\PipelineInspectorContextShould.cs" />
     <Compile Include="Framework\ReflectionDiscoverableCollectionShould.cs" />

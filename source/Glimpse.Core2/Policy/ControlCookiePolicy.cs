@@ -1,5 +1,8 @@
 ﻿using System;
 using Glimpse.Core2.Extensibility;
+#if NET35
+using Glimpse.Core2.Backport;
+#endif
 
 namespace Glimpse.Core2.Policy
 {
@@ -16,8 +19,13 @@ namespace Glimpse.Core2.Policy
                 
             RuntimePolicy result;
 
+#if NET35
+            if (!Net35Backport.TryParseEnum(cookie, true, out result))
+                return RuntimePolicy.Off;
+#else
             if (!Enum.TryParse(cookie, true, out result)) 
                 return RuntimePolicy.Off;
+#endif
 
             return result;
         }

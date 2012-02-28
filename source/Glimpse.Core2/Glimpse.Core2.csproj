@@ -141,9 +141,9 @@
     <Compile Include="ResourceResult\FileResourceResult.cs" />
     <Compile Include="ResourceResult\JsonResourceResult.cs" />
     <Compile Include="ResourceResult\StatusCodeResourceResult.cs" />
-    <Compile Include="Resource\Client.cs" />
+    <Compile Include="Resource\ClientResource.cs" />
     <Compile Include="Resource\Configuration.cs" />
-    <Compile Include="Resource\Data.cs" />
+    <Compile Include="Resource\DataResource.cs" />
     <Compile Include="RuntimePolicy.cs" />
     <Compile Include="Extensibility\IHtmlEncoder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

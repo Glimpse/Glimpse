@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+#if NET35
+using Glimpse.Core2.Backport;
+#endif
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
 using Glimpse.Core2.ResourceResult;
@@ -27,9 +30,14 @@ namespace Glimpse.Core2.Resource
 
             Guid requestId;
 
+#if NET35
+            if (!Net35Backport.TryParseGuid(context.Parameters[ResourceParameterKey.RequestId], out requestId))
+                return new StatusCodeResourceResult(404);
+#else
             if (!Guid.TryParse(context.Parameters[ResourceParameterKey.RequestId], out requestId))
                 return new StatusCodeResourceResult(404);
-            
+#endif
+
             var data = context.PersistanceStore.GetByRequestId(requestId);
 
             if(data == null)

@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+#if NET35
+using Glimpse.Core2.Backport;
+#endif
 
 namespace Glimpse.Core2.Framework
 {
@@ -21,8 +24,14 @@ namespace Glimpse.Core2.Framework
             UserAgent = requestMetadata.GetHttpHeader(Constants.UserAgentHeaderName);
 
             Guid parentRequestId;
+
+#if NET35
+            if (RequestIsAjax && Net35Backport.TryParseGuid(requestMetadata.GetHttpHeader(Constants.HttpRequestHeader), out parentRequestId))
+                ParentRequestId = parentRequestId;
+#else
             if (RequestIsAjax && Guid.TryParse(requestMetadata.GetHttpHeader(Constants.HttpRequestHeader), out parentRequestId))
                 ParentRequestId = parentRequestId;
+#endif
         }
 
         public string ClientId { get; set; }
