@@ -13,23 +13,23 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-        <DebugSymbols>true</DebugSymbols>
-        <DebugType>full</DebugType>
-        <Optimize>false</Optimize>
-        <OutputPath>bin\Debug\</OutputPath>
-        <DefineConstants>DEBUG;TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <DebugType>pdbonly</DebugType>
-        <Optimize>true</Optimize>
-        <OutputPath>bin\Release\</OutputPath>
-        <DefineConstants>TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-    </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="ClientScript\Client.cs" />
     <Compile Include="ClientScript\Data.cs" />
+    <Compile Include="ClientScript\Metadata.cs" />
     <Compile Include="Configuration\DiscoverableCollectionElement.cs" />
     <Compile Include="Configuration\GlimpseSection.cs" />
     <Compile Include="Configuration\LoggingElement.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="Framework\Factory.cs" />
     <Compile Include="Framework\GlimpseException.cs" />
     <Compile Include="Framework\GlimpseMetadata.cs" />
+    <Compile Include="Framework\GlimpseRequest.cs" />
     <Compile Include="Framework\IDiscoverableCollection.cs" />
     <Compile Include="Framework\IGlimpseConfiguration.cs" />
     <Compile Include="Framework\IGlimpseRuntime.cs" />
@@ -153,6 +155,7 @@
     <Compile Include="Resource\ClientResource.cs" />
     <Compile Include="Resource\Configuration.cs" />
     <Compile Include="Resource\DataResource.cs" />
+    <Compile Include="Resource\MetadataResource.cs" />
     <Compile Include="RuntimePolicy.cs" />
     <Compile Include="Extensibility\IHtmlEncoder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -8,28 +8,34 @@ namespace Glimpse.Core2.Framework
     public class ApplicationPersistanceStore : IPersistanceStore
     {
         private IDataStore DataStore { get; set; }
-        internal IList<GlimpseMetadata> GlimpseRequests { get; set; }
+        private GlimpseMetadata Metadata { get; set; }
+        internal IList<GlimpseRequest> GlimpseRequests { get; set; }
         private const string PersistanceStoreKey = "__GlimpsePersistanceKey";
 
         public ApplicationPersistanceStore(IDataStore dataStore)
         {
             DataStore = dataStore;
 
-            var glimpseRequests = DataStore.Get<IList<GlimpseMetadata>>(PersistanceStoreKey);
+            var glimpseRequests = DataStore.Get<IList<GlimpseRequest>>(PersistanceStoreKey);
             if (glimpseRequests == null)
             {
-                glimpseRequests = new List<GlimpseMetadata>();
+                glimpseRequests = new List<GlimpseRequest>();
                 DataStore.Set(PersistanceStoreKey, glimpseRequests);
             }
             GlimpseRequests = glimpseRequests;
         }
 
-        public void Save(GlimpseMetadata data)
+        public void Save(GlimpseRequest request)
         {
-            GlimpseRequests.Add(data);
+            GlimpseRequests.Add(request);
         }
 
-        public GlimpseMetadata GetByRequestId(Guid requestId)
+        public void Save(GlimpseMetadata metadata)
+        {
+            Metadata = metadata;
+        }
+
+        public GlimpseRequest GetByRequestId(Guid requestId)
         {
             return GlimpseRequests.FirstOrDefault(r => r.RequestId == requestId);
         }
@@ -46,14 +52,19 @@ namespace Glimpse.Core2.Framework
             return request.PluginData[tabKey];
         }
 
-        public IEnumerable<GlimpseMetadata> GetByRequestParentId(Guid parentRequestId)
+        public IEnumerable<GlimpseRequest> GetByRequestParentId(Guid parentRequestId)
         {
             return GlimpseRequests.Where(r => r.ParentRequestId == parentRequestId).ToList();
         }
 
-        public IEnumerable<GlimpseMetadata> GetTop(int count)
+        public IEnumerable<GlimpseRequest> GetTop(int count)
         {
             return GlimpseRequests.Take(count).ToList();
+        }
+
+        public GlimpseMetadata GetMetadata()
+        {
+            return Metadata;
         }
     }
 }

@@ -97,7 +97,7 @@ namespace Glimpse.Core2.Framework
                 var persistanceStore = Configuration.PersistanceStore;
                 var requestMetadata = frameworkProvider.RequestMetadata;
 
-                var metadata = new GlimpseMetadata(requestId, requestMetadata, TabResultsStore, stopwatch.ElapsedMilliseconds);
+                var metadata = new GlimpseRequest(requestId, requestMetadata, TabResultsStore, stopwatch.ElapsedMilliseconds);
 
                 try
                 {
@@ -362,9 +362,32 @@ namespace Glimpse.Core2.Framework
                 }
             }
 
+            PersistMetadata();
+
             IsInitialized = true;
 
             return policy != RuntimePolicy.Off;
+        }
+
+        private void PersistMetadata()
+        {
+            var metadata = new GlimpseMetadata {Version = Version};
+            var pluginMetadata = metadata.PluginMetadata;
+
+            foreach (var tab in Configuration.Tabs)
+            {
+                var metadataInstance = new PluginMetadata();
+                var documentationTab = tab as IDocumentation;
+                if (documentationTab != null)
+                {
+                    metadataInstance.DocumentationUri = documentationTab.DocumentationUri;
+                }
+
+                if (metadataInstance.HasMetadata)
+                    pluginMetadata[tab.GetType().FullName] = metadataInstance;
+            }
+
+            Configuration.PersistanceStore.Save(metadata);
         }
 
         private RuntimePolicy GetRuntimePolicy(RuntimeEvent runtimeEvent)

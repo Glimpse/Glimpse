@@ -5,9 +5,10 @@ namespace Glimpse.Core2.Framework
 {
     public interface IReadOnlyPersistanceStore
     {
-        GlimpseMetadata GetByRequestId(Guid requestId);
+        GlimpseRequest GetByRequestId(Guid requestId);
         TabResult GetByRequestIdAndTabKey(Guid requestId, string tabKey);
-        IEnumerable<GlimpseMetadata> GetByRequestParentId(Guid parentRequestId);
-        IEnumerable<GlimpseMetadata> GetTop(int count);
+        IEnumerable<GlimpseRequest> GetByRequestParentId(Guid parentRequestId);
+        IEnumerable<GlimpseRequest> GetTop(int count);
+        GlimpseMetadata GetMetadata();
     }
 }

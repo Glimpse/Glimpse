@@ -16,7 +16,7 @@ namespace Glimpse.Test.Core2.Framework
 
             var pluginData = new Dictionary<string, TabResult>();
             var expectedDuration = 5;
-            var metadata = new GlimpseMetadata(guid, metadataMock.Object, pluginData, expectedDuration);
+            var metadata = new GlimpseRequest(guid, metadataMock.Object, pluginData, expectedDuration);
 
             Assert.Equal(guid, metadata.RequestId);
             Assert.Equal(pluginData, metadata.PluginData);
