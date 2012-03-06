@@ -18,7 +18,7 @@ namespace Glimpse.Core2.Resource
 
         public IEnumerable<string> ParameterKeys
         {
-            get { return Enumerable.Empty<string>(); }
+            get { return new[] { ResourceParameterKey.VersionNumber }; }
         }
 
         public IResourceResult Execute(IResourceContext context)
