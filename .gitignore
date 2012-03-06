@@ -11,6 +11,7 @@ _ReSharper.*
 *.resharper.user
 *.rptproj.user
 *.db
+*.ncrunchsolution
 Glimpse.5.1.ReSharper.user
 /source/Glimpse.Test/obj
 /source/Glimpse.Test/bin
