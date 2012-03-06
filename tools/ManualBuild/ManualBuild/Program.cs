@@ -11,8 +11,8 @@ namespace ManualBuild
     {
         static void Main(string[] args)
         {
-            var assets = new Assets(args[0] + "\\Scripts");
-            var assetsTest = new Assets(args[0] + "\\Scripts\\Test");
+            var assets = new Assets(args[0]);
+            var assetsTest = new Assets(args[0] + "\\FunctionalTests\\Mock");
 
             var coreContent = File.ReadAllText(assets.BuildPath("glimpse.core.js"));
             coreContent = ProcessFile(coreContent, assets);
