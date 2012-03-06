@@ -10,7 +10,7 @@ namespace Glimpse.Core2.Resource
     public class Client:IResource
     {
         internal const string InternalName = "glimpse.js";
-        internal string ResourceName = "Glimpse.Core2.glimpseClient.js";
+        internal string ResourceName = "Glimpse.Core2.glimpse.js"; 
         private const int CacheDuration = 12960000; //150 days
 
         public string Name
