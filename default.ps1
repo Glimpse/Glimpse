@@ -7,7 +7,6 @@ properties {
     $source_dir = "$base_dir\source"
     $tools_dir = "$base_dir\tools"
     $framework_dir = $([System.Runtime.InteropServices.RuntimeEnvironment]::GetRuntimeDirectory().Replace("v2.0.50727", "v4.0.30319"))
-    
     $config = "release"
 }
 
@@ -16,22 +15,51 @@ properties {
 task default -depends compile
 
 task clean {
-    "Cleaning Glimpse.Core, Glimpse.Mvc3, Glimpse.Ef & Glimpse.Elmah bin and obj"
+    "Cleaning"
+    "   Glimpse.Core2"
+    "   Glimpse.Core2.Net35"
+    "   Glimpse.AspNet"
+    "   Glimpse.Mvc"
+    "   Glimpse.JavaScript"
+    "   Glimpse.Mvc3.MusicStore.Sample"
+    "   Glimpse.Test.*"
 
-    delete_directory "$source_dir\Glimpse.Core\bin"
-    delete_directory "$source_dir\Glimpse.Core\obj"
-    delete_directory "$source_dir\Glimpse.Mvc3\bin"
-    delete_directory "$source_dir\Glimpse.Mvc3\obj"
-    delete_directory "$source_dir\Glimpse.Ef\bin"
-    delete_directory "$source_dir\Glimpse.Ef\obj"
-    delete_directory "$source_dir\Glimpse.Elmah\bin"
-    delete_directory "$source_dir\Glimpse.Elmah\obj"
+    Delete-Directory "$source_dir\Glimpse.Core2\bin"
+    Delete-Directory "$source_dir\Glimpse.Core2\obj"
+    
+    Delete-Directory "$source_dir\Glimpse.Core2.Net35\bin"
+    Delete-Directory "$source_dir\Glimpse.Core2.Net35\obj"
+    
+    Delete-Directory "$source_dir\Glimpse.AspNet\bin"
+    Delete-Directory "$source_dir\Glimpse.AspNet\obj"
+    
+    Delete-Directory "$source_dir\Glimpse.Mvc\bin"
+    Delete-Directory "$source_dir\Glimpse.Mvc\obj"
+    
+    Delete-Directory "$source_dir\Glimpse.JavaScript\bin"
+    Delete-Directory "$source_dir\Glimpse.Glimpse.JavaScript\obj"
+    
+    Delete-Directory "$source_dir\Glimpse.Mvc3.MusicStore.Sample\bin"
+    Delete-Directory "$source_dir\Glimpse.Mvc3.MusicStore.Sample\obj"
+        
+    Delete-Directory "$source_dir\Glimpse.Test.AspNet\bin"
+    Delete-Directory "$source_dir\Glimpse.Test.AspNet\obj"
+    
+    Delete-Directory "$source_dir\Glimpse.Test.Core2\bin"
+    Delete-Directory "$source_dir\Glimpse.Test.Core2\obj"
+    
+    Delete-Directory "$source_dir\Glimpse.Test.Core2.Net35\bin"
+    Delete-Directory "$source_dir\Glimpse.Test.Core2.net35\obj"
+    
+    Delete-Directory "$source_dir\Glimpse.Test.Mvc\bin"
+    Delete-Directory "$source_dir\Glimpse.Test.Mvc\obj"
 }
 
 task compile -depends clean {
-    "Compiling Glimpse.All.sln"
+    "Compiling"
+    "   Glimpse.All.sln"
     
-    exec { msbuild $base_dir\Glimpse.All.sln /p:Configuration=$config }
+    exec { msbuild $base_dir\Glimpse.All.sln /p:Configuration=$config /nologo /verbosity:minimal }
 }
 
 task merge -depends compile {
@@ -84,9 +112,9 @@ task buildjs {
 
 #functions ---------------------------------------------------------------------------------------------------------
 
-function global:delete_directory($directory_name)
+function Delete-Directory($path)
 {
-  rd $directory_name -recurse -force -ErrorAction SilentlyContinue | out-null
+  rd $path -recurse -force -ErrorAction SilentlyContinue | out-null
 }
 
 function Add-Zip
