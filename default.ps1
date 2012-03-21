@@ -63,17 +63,14 @@ task compile -depends clean {
 }
 
 task merge -depends compile {
-    "Merging Glimpse.Core, Glimpse.Mvc3, Glimpse.Ef & Glimpse.Elmah to nuspec dir"
-
-    exec { & $tools_dir\ilmerge.exe /targetplatform:"v4,$framework_dir" /log /out:"$source_dir\Glimpse.Core\nuspec\lib\net40\Glimpse.Core.dll" /internalize:$tools_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core\bin\Release\Glimpse.Core.dll" "$source_dir\Glimpse.Core\bin\Release\Newtonsoft.Json.Net35.dll" "$source_dir\Glimpse.Core\bin\Release\NLog.dll" }
-    del $source_dir\Glimpse.Core\nuspec\lib\net40\Glimpse.Core.pdb
+    "Merging"
+    "   Glimpse.Core2"
     
-    exec { & $tools_dir\ilmerge.exe /targetplatform:"v4,$framework_dir" /log /out:"$source_dir\Glimpse.Mvc3\nuspec\lib\net40\Glimpse.Mvc3.dll" /internalize:$tools_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Mvc3\bin\Release\Glimpse.Mvc3.dll" "$source_dir\Glimpse.Mvc3\bin\Release\Castle.Core.dll" }
-    del $source_dir\Glimpse.Mvc3\nuspec\lib\net40\Glimpse.Mvc3.pdb
+    exec { & $tools_dir\ilmerge.exe /targetplatform:"v4,$framework_dir" /log /out:"$source_dir\Glimpse.Core2\nuspec\lib\net40\Glimpse.Core2.dll" /internalize:$tools_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core2\bin\Release\Glimpse.Core2.dll" "$source_dir\Glimpse.Core2\bin\Release\Newtonsoft.Json.dll" "$source_dir\Glimpse.Core2\bin\Release\Castle.Core.dll" "$source_dir\Glimpse.Core2\bin\Release\NLog.dll" "$source_dir\Glimpse.Core2\bin\Release\AntiXssLibrary.dll" }
+    del $source_dir\Glimpse.Core2\nuspec\lib\net40\Glimpse.Core2.pdb
     
-    copy $source_dir\Glimpse.Ef\bin\Release\Glimpse.Ef.dll $source_dir\Glimpse.Ef\nuspec\lib\net40\Glimpse.Ef.dll
-    copy $source_dir\Glimpse.Elmah\bin\Release\Glimpse.Elmah.dll $source_dir\Glimpse.Elmah\nuspec\lib\net40\Glimpse.Elmah.dll
-
+    exec { & $tools_dir\ilmerge.exe /log /out:"$source_dir\Glimpse.Core2\nuspec\lib\net35\Glimpse.Core2.dll" /internalize:$tools_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core2.Net35\bin\Release\Glimpse.Core2.dll" "$source_dir\Glimpse.Core2.Net35\bin\Release\Newtonsoft.Json.dll" "$source_dir\Glimpse.Core2.Net35\bin\Release\Castle.Core.dll" "$source_dir\Glimpse.Core2.Net35\bin\Release\NLog.dll" "$source_dir\Glimpse.Core2.Net35\bin\Release\AntiXssLibrary.dll" }
+    del $source_dir\Glimpse.Core2\nuspec\lib\net35\Glimpse.Core2.pdb
 }
 
 task pack -depends merge {

@@ -1,0 +1,24 @@
+﻿<configuration>
+    <configSections>
+        <section name="glimpse" type="Glimpse.Core.Configuration.GlimpseConfiguration" />
+    </configSections>
+    <glimpse enabled="true"/>
+    <system.web>
+        <trace writeToDiagnosticsTrace="true" enabled="true" pageOutput="false"/>
+        <httpModules>
+            <add name="Glimpse" type="Glimpse.Core.Module"/>
+        </httpModules>
+        <httpHandlers>
+            <add path="glimpse.axd" verb="GET,POST" type="Glimpse.Core.Handler"/>
+        </httpHandlers>
+    </system.web>
+    <system.webServer>
+        <validation validateIntegratedModeConfiguration="false"/>
+        <modules>
+            <add name="Glimpse" type="Glimpse.Core.Module,Glimpse.Core" preCondition="integratedMode"/>
+        </modules>
+        <handlers>
+            <add name="Glimpse" path="glimpse.axd" verb="GET,POST" type="Glimpse.Core.Handler,Glimpse.Core"  preCondition="integratedMode" />
+        </handlers>
+    </system.webServer>
+</configuration>
