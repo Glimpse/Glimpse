@@ -2,9 +2,9 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <!-- Values in dollar $igns are automatically pulled from the AssemblyInfo.cs attributes by psake build script -->
     <metadata>
-        <id>Glimpse</id>
+        <id>Glimpse.AspNet</id>
         <version>0.0.0</version><!-- Replaced at build time by AssemblyInformationalVersion in AssemblyInfo.cs -->
-        <title>Glimpse Core</title>
+        <title>Glimpse for ASP.NET</title>
         <authors>nmolnar, avanderhoorn</authors>
         <owners>nmolnar, avanderhoorn</owners>
         <licenseUrl>http://www.opensource.org/licenses/apache2.0</licenseUrl>
@@ -18,10 +18,9 @@
     <files>
         <file src="lib\net35\*.*" target="lib\net35" />
         <file src="lib\net40\*.*" target="lib\net40" />
+        <file src="content\*.*" target="content" />
+        <file src="readme.txt" target="readme.txt" />
         <file src="..\**\*.cs" target="src" />
-        <file src="..\glimpseClient.js" target="src" />
         <file src="..\Resources.resx" target="src" />
-        <file src="..\Resources.Designer.cs" target="src\Glimpse.Core2" />
-        <file src="..\..\Glimpse.Core2.Net35\Backport\*.*" target="src\Backport" />
     </files>
 </package>

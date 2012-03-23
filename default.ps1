@@ -6,6 +6,7 @@ properties {
     $build_dir = "$base_dir\builds"
     $source_dir = "$base_dir\source"
     $tools_dir = "$base_dir\tools"
+    $package_dir = "$base_dir\packages"
     $framework_dir = $([System.Runtime.InteropServices.RuntimeEnvironment]::GetRuntimeDirectory().Replace("v2.0.50727", "v4.0.30319"))
     $config = "release"
 }
@@ -16,32 +17,28 @@ task default -depends compile
 
 task clean {
     "Cleaning"
+    
     "   Glimpse.Core2"
-    "   Glimpse.Core2.Net35"
-    "   Glimpse.AspNet"
-    "   Glimpse.Mvc"
-    "   Glimpse.JavaScript"
-    "   Glimpse.Mvc3.MusicStore.Sample"
-    "   Glimpse.Test.*"
-
     Delete-Directory "$source_dir\Glimpse.Core2\bin"
     Delete-Directory "$source_dir\Glimpse.Core2\obj"
     
+    "   Glimpse.Core2.Net35"
     Delete-Directory "$source_dir\Glimpse.Core2.Net35\bin"
     Delete-Directory "$source_dir\Glimpse.Core2.Net35\obj"
     
+    "   Glimpse.AspNet"
     Delete-Directory "$source_dir\Glimpse.AspNet\bin"
     Delete-Directory "$source_dir\Glimpse.AspNet\obj"
     
+    "   Glimpse.Mvc"
     Delete-Directory "$source_dir\Glimpse.Mvc\bin"
     Delete-Directory "$source_dir\Glimpse.Mvc\obj"
-    
-    Delete-Directory "$source_dir\Glimpse.JavaScript\bin"
-    Delete-Directory "$source_dir\Glimpse.Glimpse.JavaScript\obj"
-    
+       
+    "   Glimpse.Mvc3.MusicStore.Sample"
     Delete-Directory "$source_dir\Glimpse.Mvc3.MusicStore.Sample\bin"
     Delete-Directory "$source_dir\Glimpse.Mvc3.MusicStore.Sample\obj"
         
+    "   Glimpse.Test.*"
     Delete-Directory "$source_dir\Glimpse.Test.AspNet\bin"
     Delete-Directory "$source_dir\Glimpse.Test.AspNet\obj"
     
@@ -64,13 +61,53 @@ task compile -depends clean {
 
 task merge -depends compile {
     "Merging"
+
     "   Glimpse.Core2"
-    
+    del "$source_dir\Glimpse.Core2\bin\Release\Newtonsoft.Json.pdb" #get rid of JSON PDF file, causes issues with Glimpse symbol package
     exec { & $tools_dir\ilmerge.exe /targetplatform:"v4,$framework_dir" /log /out:"$source_dir\Glimpse.Core2\nuspec\lib\net40\Glimpse.Core2.dll" /internalize:$tools_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core2\bin\Release\Glimpse.Core2.dll" "$source_dir\Glimpse.Core2\bin\Release\Newtonsoft.Json.dll" "$source_dir\Glimpse.Core2\bin\Release\Castle.Core.dll" "$source_dir\Glimpse.Core2\bin\Release\NLog.dll" "$source_dir\Glimpse.Core2\bin\Release\AntiXssLibrary.dll" }
-    del $source_dir\Glimpse.Core2\nuspec\lib\net40\Glimpse.Core2.pdb
     
+    "   Glimpse.Core2.Net35"
+    del "$source_dir\Glimpse.Core2.Net35\bin\Release\Newtonsoft.Json.pdb" #get rid of JSON PDF file, causes issues with Glimpse symbol package
     exec { & $tools_dir\ilmerge.exe /log /out:"$source_dir\Glimpse.Core2\nuspec\lib\net35\Glimpse.Core2.dll" /internalize:$tools_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core2.Net35\bin\Release\Glimpse.Core2.dll" "$source_dir\Glimpse.Core2.Net35\bin\Release\Newtonsoft.Json.dll" "$source_dir\Glimpse.Core2.Net35\bin\Release\Castle.Core.dll" "$source_dir\Glimpse.Core2.Net35\bin\Release\NLog.dll" "$source_dir\Glimpse.Core2.Net35\bin\Release\AntiXssLibrary.dll" }
-    del $source_dir\Glimpse.Core2\nuspec\lib\net35\Glimpse.Core2.pdb
+    
+    "   Glimpse.AspNet"
+    copy $source_dir\Glimpse.AspNet\bin\Release\Glimpse.AspNet.* $source_dir\Glimpse.AspNet\nuspec\lib\net40\
+    "   Glimpse.AspNet.Net35"
+    #TODO: Create AspNet.Net35
+}
+
+task pack2 -depends merge {
+    "Packing"
+    
+    cd $package_dir\NuGet.CommandLine.*\tools\
+    
+    "   Glimpse.nuspec"
+    $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.Core2\Properties\AssemblyInfo.cs
+    exec { & .\nuget.exe pack $source_dir\Glimpse.Core2\NuSpec\Glimpse.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
+    
+    "   Glimpse.AspNet.nuspec"
+    $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.AspNet\Properties\AssemblyInfo.cs
+    exec { & .\nuget.exe pack $source_dir\Glimpse.AspNet\NuSpec\Glimpse.AspNet.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
+    
+    "   Glimpse.zip"
+    New-Item $build_dir\local\zip\Core\net40 -Type directory -Force > $null
+    New-Item $build_dir\local\zip\Core\net35 -Type directory -Force > $null
+    New-Item $build_dir\local\zip\AspNet\net40 -Type directory -Force > $null
+    New-Item $build_dir\local\zip\AspNet\net35 -Type directory -Force > $null
+
+    copy $base_dir\license.txt $build_dir\local\zip
+        
+    copy $source_dir\Glimpse.Core2\nuspec\lib\net40\Glimpse.Core2.dll $build_dir\local\zip\Core\net40
+    copy $source_dir\Glimpse.Core2\nuspec\lib\net35\Glimpse.Core2.dll $build_dir\local\zip\Core\net35
+    
+    copy $source_dir\Glimpse.AspNet\nuspec\lib\net40\Glimpse.AspNet.dll $build_dir\local\zip\AspNet\net40
+    #copy $source_dir\Glimpse.AspNet\nuspec\lib\net35\Glimpse.AspNet.dll $build_dir\local\zip\AspNet\net35
+    copy $source_dir\Glimpse.AspNet\nuspec\readme.txt $build_dir\local\zip\AspNet
+    
+    #TODO: Add help .CHM file
+        
+    Create-Zip $build_dir\local\zip $build_dir\local\Glimpse.zip
+    Delete-Directory $build_dir\local\zip
 }
 
 task pack -depends merge {
@@ -114,22 +151,18 @@ function Delete-Directory($path)
   rd $path -recurse -force -ErrorAction SilentlyContinue | out-null
 }
 
-function Add-Zip
+function Get-AssemblyInformationalVersion($path)
 {
-	param([string]$zipfilename)
+    $line = Get-Content $path | where {$_.Contains("AssemblyInformationalVersion")}
+    $line.Split('"')[1]
+}
 
-	if(-not (test-path($zipfilename)))
-	{
-		set-content $zipfilename ("PK" + [char]5 + [char]6 + ("$([char]0)" * 18))
-		(dir $zipfilename).IsReadOnly = $false	
-	}
-	
-	$shellApplication = new-object -com shell.application
-	$zipPackage = $shellApplication.NameSpace($zipfilename)
-	
-	foreach($file in $input) 
-	{ 
-            $zipPackage.CopyHere($file.FullName)
-            Start-sleep -milliseconds 500
-	}
+function Create-Zip($sourcePath, $destinationFile)
+{
+    cd $package_dir\SharpZipLib.*\lib\20\
+    
+    Add-Type -Path ICSharpCode.SharpZipLib.dll
+
+    $zip = New-Object ICSharpCode.SharpZipLib.Zip.FastZip
+    $zip.CreateZip("$destinationFile", "$sourcePath", $true, $null)
 }

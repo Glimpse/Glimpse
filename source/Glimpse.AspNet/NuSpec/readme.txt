@@ -1,3 +1,15 @@
+
+
+
+
+**CLEAN ME UP!**
+
+
+
+
+
+
+
 NOTE: Glimpse/Config is now deprecated, use Glimpse.axd instead.
 --------------------------------------
 
@@ -222,4 +234,4 @@ Release Notes
 
 Attribution
 -----------
-Some Icons are Copyright � Yusuke Kamiyamane. [http://p.yusukekamiyamane.com/]
+Some Icons are Copyright © Yusuke Kamiyamane. [http://p.yusukekamiyamane.com/]

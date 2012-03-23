@@ -168,7 +168,6 @@
     <Compile Include="SerializationConverter\GlimpseMetadataConverter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="NuSpec\content\web.config.transform" />
     <None Include="NuSpec\Glimpse.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
@@ -187,10 +186,9 @@
       <Link>glimpse.js</Link>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="NuSpec\lib\net40\.gitignore" />
-    <Content Include="NuSpec\readme.txt" />
+    <Folder Include="NuSpec\lib\net35\" />
+    <Folder Include="NuSpec\lib\net40\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
