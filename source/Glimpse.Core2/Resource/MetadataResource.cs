@@ -18,7 +18,7 @@ namespace Glimpse.Core2.Resource
 
         public IEnumerable<string> ParameterKeys
         {
-            get { return new[] { ResourceParameterKey.VersionNumber }; }
+            get { return new[] { ResourceParameterKey.VersionNumber, ResourceParameterKey.Callback }; }
         }
 
         public IResourceResult Execute(IResourceContext context)
@@ -28,7 +28,7 @@ namespace Glimpse.Core2.Resource
             if (metadata == null)
                 return new StatusCodeResourceResult(404);
 
-            return new JsonResourceResult(metadata, "console.log", CacheDuration, CacheSetting.Public);
+            return new JsonResourceResult(metadata, context.Parameters[ResourceParameterKey.Callback], CacheDuration, CacheSetting.Public);
         }
     }
 }
