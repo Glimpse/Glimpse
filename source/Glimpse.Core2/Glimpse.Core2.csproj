@@ -168,7 +168,9 @@
     <Compile Include="SerializationConverter\GlimpseMetadataConverter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="NuSpec\Glimpse.nuspec" />
+    <None Include="NuSpec\Glimpse.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

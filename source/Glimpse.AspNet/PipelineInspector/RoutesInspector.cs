@@ -2,7 +2,7 @@
 
 namespace Glimpse.AspNet.PipelineInspector
 {
-    public class Routes:IPipelineInspector
+    public class RoutesInspector:IPipelineInspector
     {
         public void Setup(IPipelineInspectorContext context)
         {

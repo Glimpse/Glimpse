@@ -29,6 +29,10 @@ task clean {
     "   Glimpse.AspNet"
     Delete-Directory "$source_dir\Glimpse.AspNet\bin"
     Delete-Directory "$source_dir\Glimpse.AspNet\obj"
+
+    "   Glimpse.AspNet.Net35"
+    Delete-Directory "$source_dir\Glimpse.AspNet.Net35\bin"
+    Delete-Directory "$source_dir\Glimpse.AspNet.Net35\obj"
     
     "   Glimpse.Mvc"
     Delete-Directory "$source_dir\Glimpse.Mvc\bin"
@@ -72,8 +76,10 @@ task merge -depends compile {
     
     "   Glimpse.AspNet"
     copy $source_dir\Glimpse.AspNet\bin\Release\Glimpse.AspNet.* $source_dir\Glimpse.AspNet\nuspec\lib\net40\
+    
     "   Glimpse.AspNet.Net35"
-    #TODO: Create AspNet.Net35
+    copy $source_dir\Glimpse.AspNet\bin\Release\Glimpse.AspNet.* $source_dir\Glimpse.AspNet\nuspec\lib\net35\
+    
 }
 
 task pack2 -depends merge {
@@ -97,11 +103,11 @@ task pack2 -depends merge {
 
     copy $base_dir\license.txt $build_dir\local\zip
         
-    copy $source_dir\Glimpse.Core2\nuspec\lib\net40\Glimpse.Core2.dll $build_dir\local\zip\Core\net40
-    copy $source_dir\Glimpse.Core2\nuspec\lib\net35\Glimpse.Core2.dll $build_dir\local\zip\Core\net35
+    copy $source_dir\Glimpse.Core2\nuspec\lib\net40\Glimpse.Core2.* $build_dir\local\zip\Core\net40
+    copy $source_dir\Glimpse.Core2\nuspec\lib\net35\Glimpse.Core2.* $build_dir\local\zip\Core\net35
     
-    copy $source_dir\Glimpse.AspNet\nuspec\lib\net40\Glimpse.AspNet.dll $build_dir\local\zip\AspNet\net40
-    #copy $source_dir\Glimpse.AspNet\nuspec\lib\net35\Glimpse.AspNet.dll $build_dir\local\zip\AspNet\net35
+    copy $source_dir\Glimpse.AspNet\nuspec\lib\net40\Glimpse.AspNet.* $build_dir\local\zip\AspNet\net40
+    copy $source_dir\Glimpse.AspNet\nuspec\lib\net35\Glimpse.AspNet.* $build_dir\local\zip\AspNet\net35
     copy $source_dir\Glimpse.AspNet\nuspec\readme.txt $build_dir\local\zip\AspNet
     
     #TODO: Add help .CHM file
