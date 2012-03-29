@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xunit>
+    <assemblies>
+        <assembly filename="..\..\source\Glimpse.Test.Core2\bin\Release\Glimpse.Test.Core2.dll" shadow-copy="true">
+            <output type="xml" filename="..\..\builds\local\artifacts\test.core2.xml" />
+        </assembly>
+        <assembly filename="..\..\source\Glimpse.Test.Core2.Net35\bin\Release\Glimpse.Test.Core2.Net35.dll" shadow-copy="true">
+            <output type="xml" filename="..\..\builds\local\artifacts\test.core2.net35.xml" />
+        </assembly>
+        <assembly filename="..\..\source\Glimpse.Test.AspNet\bin\Release\Glimpse.Test.AspNet.dll" shadow-copy="true">
+            <output type="xml" filename="..\..\builds\local\artifacts\test.aspnet.xml" />
+        </assembly>
+        <assembly filename="..\..\source\Glimpse.Test.AspNet.Net35\bin\Release\Glimpse.Test.AspNet.Net35.dll" shadow-copy="true">
+            <output type="xml" filename="..\..\builds\local\artifacts\test.aspnet.net35.xml" />
+        </assembly>
+        <assembly filename="..\..\source\Glimpse.Test.Mvc\bin\Release\Glimpse.Test.Mvc.dll" shadow-copy="true">
+            <output type="xml" filename="..\..\builds\local\artifacts\test.mvc.xml" />
+        </assembly>
+    </assemblies>
+</xunit>

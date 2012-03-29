@@ -1,4 +1,6 @@
-﻿namespace Glimpse.AspNet.Net35.Backport
+﻿using System.Linq;
+
+namespace Glimpse.AspNet.Net35.Backport
 {
     public static class Net35Backport
     {
@@ -6,12 +8,7 @@
         {
             if (value == null) return true;
 
-            for (int i = 0; i < value.Length; i++)
-            {
-                if (!char.IsWhiteSpace(value[i])) return false;
-            }
-
-            return true;
+            return value.All(char.IsWhiteSpace);
         }
     }
 }

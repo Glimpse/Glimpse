@@ -63,7 +63,7 @@ task compile -depends clean {
     exec { msbuild $base_dir\Glimpse.All.sln /p:Configuration=$config /nologo /verbosity:minimal }
 }
 
-task merge -depends compile {
+task merge -depends test {
     "Merging"
 
     "   Glimpse.Core2"
@@ -82,7 +82,7 @@ task merge -depends compile {
     
 }
 
-task pack2 -depends merge {
+task pack -depends merge {
     "Packing"
     
     cd $package_dir\NuGet.CommandLine.*\tools\
@@ -110,41 +110,21 @@ task pack2 -depends merge {
     copy $source_dir\Glimpse.AspNet\nuspec\lib\net35\Glimpse.AspNet.* $build_dir\local\zip\AspNet\net35
     copy $source_dir\Glimpse.AspNet\nuspec\readme.txt $build_dir\local\zip\AspNet
     
+    #TODO: Add MVC
     #TODO: Add help .CHM file
         
     Create-Zip $build_dir\local\zip $build_dir\local\Glimpse.zip
     Delete-Directory $build_dir\local\zip
 }
 
-task pack -depends merge {
-    "Creating Glimpse.nupkg, Glimpse.Mvc3.nupkg, Glimpse.Ef.nupkg & Glimpse.Elmah.nupkg"
-
-    exec { & $tools_dir\nuget.exe pack $source_dir\Glimpse.Core\nuspec\Glimpse.nuspec -OutputDirectory $build_dir\local }
-    exec { & $tools_dir\nuget.exe pack $source_dir\Glimpse.Mvc3\nuspec\Glimpse.Mvc3.nuspec -OutputDirectory $build_dir\local }
-    exec { & $tools_dir\nuget.exe pack $source_dir\Glimpse.Ef\nuspec\Glimpse.Ef.nuspec -OutputDirectory $build_dir\local }
-    exec { & $tools_dir\nuget.exe pack $source_dir\Glimpse.Elmah\nuspec\Glimpse.Elmah.nuspec -OutputDirectory $build_dir\local }
-    
-    mkdir $build_dir\local\zip
-    copy $source_dir\Glimpse.Core\nuspec\lib\net40\Glimpse.Core.dll $build_dir\local\zip
-    copy $source_dir\Glimpse.Mvc3\nuspec\lib\net40\Glimpse.Mvc3.dll $build_dir\local\zip
-    copy $source_dir\Glimpse.Ef\nuspec\lib\net40\Glimpse.Ef.dll $build_dir\local\zip
-    copy $source_dir\Glimpse.Elmah\nuspec\lib\net40\Glimpse.Elmah.dll $build_dir\local\zip
-    
-    copy $source_dir\Glimpse.Core\nuspec\content\App_Readme\glimpse.readme.txt $build_dir\local\zip
-    copy $source_dir\Glimpse.Mvc3\nuspec\content\App_Readme\glimpse.mvc3.readme.txt $build_dir\local\zip
-    copy $source_dir\Glimpse.Ef\nuspec\content\App_Readme\glimpse.ef.readme.txt $build_dir\local\zip
-    copy $source_dir\Glimpse.Elmah\nuspec\content\App_Readme\glimpse.elmah.readme.txt $build_dir\local\zip
-    
-    copy $base_dir\license.txt $build_dir\local\zip
-    
-    dir $build_dir\local\zip\*.* -Recurse | add-Zip $build_dir\local\Glimpse.zip
-    del $build_dir\local\zip -Recurse
-}
-
 task test -depends compile{
-    "Testing Glimpse.Test.Core"
+    "Testing"
     
-    exec { & $tools_dir\nunit\nunit-console.exe $tools_dir\nunit\GlimpseTests.nunit /labels /nologo }
+    New-Item $build_dir\local\artifacts -Type directory -Force > $null
+    
+    cd $tools_dir\xunit*\
+    
+    exec { & .\xunit.console.clr4 tests.xunit }
 }
 
 task buildjs {

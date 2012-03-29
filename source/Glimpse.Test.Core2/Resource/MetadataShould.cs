@@ -29,10 +29,10 @@ namespace Glimpse.Test.Core2.Resource
         }
 
         [Fact]
-        public void NotRequireParameterKeys()
+        public void RequireParameterKeys()
         {
             var metadata = new Metadata();
-            Assert.Empty(metadata.ParameterKeys);
+            Assert.NotEmpty(metadata.ParameterKeys);
         }
 
         /*[Fact]
