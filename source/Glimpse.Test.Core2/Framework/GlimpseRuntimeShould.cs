@@ -602,8 +602,8 @@ namespace Glimpse.Test.Core2.Framework
         {
             var callCount = 0;
             //Lightweight call sequence checking idea from http://dpwhelan.com/blog/software-development/moq-sequences/
-            Runtime.DynamicScriptMock.Setup(ds => ds.GetResourceName()).Returns("http://localhost/dynamic").Callback(()=>Assert.Equal(callCount++, 0));
-            Runtime.StaticScriptMock.Setup(ss => ss.GetUri(Runtime.Version)).Returns("http://localhost/static").Callback(()=>Assert.Equal(callCount++, 1));
+            Runtime.DynamicScriptMock.Setup(ds => ds.GetResourceName()).Returns("http://localhost/dynamic").Callback(()=>Assert.Equal(callCount++, 1));
+            Runtime.StaticScriptMock.Setup(ss => ss.GetUri(Runtime.Version)).Returns("http://localhost/static").Callback(()=>Assert.Equal(callCount++, 0));
             Runtime.EncoderMock.Setup(e => e.HtmlAttributeEncode("http://localhost/static")).Returns("http://localhost/static/encoded");
 
             Runtime.Configuration.ClientScripts.Add(Runtime.StaticScriptMock.Object);

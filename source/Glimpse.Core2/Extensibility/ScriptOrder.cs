@@ -2,11 +2,12 @@
 {
     public enum ScriptOrder
     {
-        IncludeBeforeRequestDataScript,
-        RequestDataScript,
-        IncludeAfterRequestDataScript,
         IncludeBeforeClientInterfaceScript,
         ClientInterfaceScript,
         IncludeAfterClientInterfaceScript,
+        IncludeBeforeRequestDataScript,
+        RequestDataScript, 
+        RequestMetadataScript,
+        IncludeAfterRequestDataScript,
     }
 }
