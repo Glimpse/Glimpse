@@ -780,7 +780,7 @@ var glimpse = (function ($, scope) {
                     data.retrieve(requestId, switchContextFunc);
                 },
                 buildEnvironment = function (requestMetadata) {
-                    var urls = requestMetadata.request.environmentUrls, 
+                    var urls = requestMetadata.environmentUrls, 
                         html = ''; 
         
                     if (urls) {
@@ -800,7 +800,7 @@ var glimpse = (function ($, scope) {
                     return html;
                 },
                 buildCorrelation = function (request, requestMetadata) {
-                    var correlation = requestMetadata.request.correlation, 
+                    var correlation = requestMetadata.correlation, 
                         html = request.url; 
         
                     if (correlation) { 

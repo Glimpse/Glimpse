@@ -54,7 +54,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FunctionalTests\glimpse.js" />
     <Content Include="FunctionalTests\glimpseSprite.png" />
     <Content Include="FunctionalTests\Mock\glimpseTest.js" />
     <Content Include="FunctionalTests\Mock\test.glimpse.ajax.ajax.js" />

@@ -50,12 +50,11 @@ var glimpseData = {
         requestId : '1234',
         isAjax : false,
         url : '/',  
-        metadata : {"request" : {
-                        "correlation" : { 
-                                title : 'PRG Request', 
-                                legs : [ { method : 'POST', url : '/Help/Feature/Add', glimpseId : 'PRG' }, 
-                                        { method : 'GET', url : '/', glimpseId : '1234' } ] },
-                        "environmentUrls":{"Dev":"http://localhost/","QA":"http://qa.getglimpse.com/","Prod":"http://getglimpse.com/"} },
+        metadata : {"correlation" : { 
+                            title : 'PRG Request', 
+                            legs : [ { method : 'POST', url : '/Help/Feature/Add', glimpseId : 'PRG' }, 
+                                    { method : 'GET', url : '/', glimpseId : '1234' } ] },
+                    "environmentUrls":{"Dev":"http://localhost/","QA":"http://qa.getglimpse.com/","Prod":"http://getglimpse.com/"},
                     "version":0.85,
                     "plugins": {
                         "Paging":{"pagingInfo":{ pagerType : 'continuous', pageSize : 5, pageIndex : 0, totalNumberOfRecords : 31 }}, 
@@ -134,8 +133,7 @@ var glimpseData2 = {
         isAjax : false,
         url : '/Test/test',  
         metadata : {
-            "request": {
-                "environmentUrls":{"Dev":"http://localhost/","QA":"http://qa.getglimpse.com/","Prod":"http://getglimpse.com/"} },
+            "environmentUrls":{"Dev":"http://localhost/","QA":"http://qa.getglimpse.com/","Prod":"http://getglimpse.com/"},
             "version":0.85,
             "plugins": {
                 "Server":{"helpUrl":"http://getGlimpse.com/Help/Plugin/Server"},
