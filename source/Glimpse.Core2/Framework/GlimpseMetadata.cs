@@ -7,11 +7,11 @@ namespace Glimpse.Core2.Framework
     {
         public GlimpseMetadata()
         {
-            PluginMetadata = new Dictionary<string, PluginMetadata>();
+            plugins = new Dictionary<string, PluginMetadata>();
         }
 
-        public string Version{ get; set; }
-        public IDictionary<string,PluginMetadata> PluginMetadata { get; set; }
+        public string version{ get; set; }
+        public IDictionary<string,PluginMetadata> plugins { get; set; }
     }
 
     public class PluginMetadata

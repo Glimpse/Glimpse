@@ -371,8 +371,8 @@ namespace Glimpse.Core2.Framework
 
         private void PersistMetadata()
         {
-            var metadata = new GlimpseMetadata {Version = Version};
-            var pluginMetadata = metadata.PluginMetadata;
+            var metadata = new GlimpseMetadata {version = Version};
+            var pluginMetadata = metadata.plugins;
 
             foreach (var tab in Configuration.Tabs)
             {
