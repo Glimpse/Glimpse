@@ -11,7 +11,7 @@
                 currentVersion = '';
 
             if (newestVersion) {
-                currentVersion = metadata.request.runningVersion;
+                currentVersion = metadata.version;
                 if (currentVersion < newestVersion)
                     elements.holder.find('.glimpse-meta-update').attr('title', 'Update: Glimpse ' + parseFloat(newestVersion).toFixed(2) + ' now available on nuget.org').css('display', 'inline-block');
                 return;

@@ -27,57 +27,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{13FEFF53
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Test.Core2.Net35", "source\Glimpse.Test.Core2.Net35\Glimpse.Test.Core2.Net35.csproj", "{E242E3FC-DEF4-45E2-A129-A5DC3B0B8F9B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JavaScript", "JavaScript", "{B9021233-BA5C-47C7-A0BE-D59EBEA8A24A}"
-	ProjectSection(SolutionItems) = preProject
-		source\Glimpse.JavaScript\glimpse.controller.lazyloader.js = source\Glimpse.JavaScript\glimpse.controller.lazyloader.js
-		source\Glimpse.JavaScript\glimpse.controller.metadata.js = source\Glimpse.JavaScript\glimpse.controller.metadata.js
-		source\Glimpse.JavaScript\glimpse.controller.notification.js = source\Glimpse.JavaScript\glimpse.controller.notification.js
-		source\Glimpse.JavaScript\glimpse.controller.paging.js = source\Glimpse.JavaScript\glimpse.controller.paging.js
-		source\Glimpse.JavaScript\glimpse.controller.render.js = source\Glimpse.JavaScript\glimpse.controller.render.js
-		source\Glimpse.JavaScript\glimpse.controller.shell.js = source\Glimpse.JavaScript\glimpse.controller.shell.js
-		source\Glimpse.JavaScript\glimpse.controller.sizer.js = source\Glimpse.JavaScript\glimpse.controller.sizer.js
-		source\Glimpse.JavaScript\glimpse.controller.title.js = source\Glimpse.JavaScript\glimpse.controller.title.js
-		source\Glimpse.JavaScript\glimpse.controller.toolbar.js = source\Glimpse.JavaScript\glimpse.controller.toolbar.js
-		source\Glimpse.JavaScript\glimpse.core.data.js = source\Glimpse.JavaScript\glimpse.core.data.js
-		source\Glimpse.JavaScript\glimpse.core.js = source\Glimpse.JavaScript\glimpse.core.js
-		source\Glimpse.JavaScript\glimpse.core.pubsub.js = source\Glimpse.JavaScript\glimpse.core.pubsub.js
-		source\Glimpse.JavaScript\glimpse.core.state.js = source\Glimpse.JavaScript\glimpse.core.state.js
-		source\Glimpse.JavaScript\glimpse.core.util.js = source\Glimpse.JavaScript\glimpse.core.util.js
-		source\Glimpse.JavaScript\glimpse.js = source\Glimpse.JavaScript\glimpse.js
-		source\Glimpse.JavaScript\glimpse.min.js = source\Glimpse.JavaScript\glimpse.min.js
-		source\Glimpse.JavaScript\glimpse.paging.engine.continuous.js = source\Glimpse.JavaScript\glimpse.paging.engine.continuous.js
-		source\Glimpse.JavaScript\glimpse.paging.engine.js = source\Glimpse.JavaScript\glimpse.paging.engine.js
-		source\Glimpse.JavaScript\glimpse.paging.engine.scrolling.js = source\Glimpse.JavaScript\glimpse.paging.engine.scrolling.js
-		source\Glimpse.JavaScript\glimpse.paging.engine.traditional.js = source\Glimpse.JavaScript\glimpse.paging.engine.traditional.js
-		source\Glimpse.JavaScript\glimpse.plugin.ajax.js = source\Glimpse.JavaScript\glimpse.plugin.ajax.js
-		source\Glimpse.JavaScript\glimpse.plugin.ajax.spy.js = source\Glimpse.JavaScript\glimpse.plugin.ajax.spy.js
-		source\Glimpse.JavaScript\glimpse.plugin.history.js = source\Glimpse.JavaScript\glimpse.plugin.history.js
-		source\Glimpse.JavaScript\glimpse.plugin.timeline.core.js = source\Glimpse.JavaScript\glimpse.plugin.timeline.core.js
-		source\Glimpse.JavaScript\glimpse.plugin.timeline.js = source\Glimpse.JavaScript\glimpse.plugin.timeline.js
-		source\Glimpse.JavaScript\glimpse.plugin.timeline.shell.css = source\Glimpse.JavaScript\glimpse.plugin.timeline.shell.css
-		source\Glimpse.JavaScript\glimpse.plugin.timeline.shell.html = source\Glimpse.JavaScript\glimpse.plugin.timeline.shell.html
-		source\Glimpse.JavaScript\glimpse.process.elements.js = source\Glimpse.JavaScript\glimpse.process.elements.js
-		source\Glimpse.JavaScript\glimpse.process.template.js = source\Glimpse.JavaScript\glimpse.process.template.js
-		source\Glimpse.JavaScript\glimpse.remote.plugin.js = source\Glimpse.JavaScript\glimpse.remote.plugin.js
-		source\Glimpse.JavaScript\glimpse.render.engine.js = source\Glimpse.JavaScript\glimpse.render.engine.js
-		source\Glimpse.JavaScript\glimpse.render.engine.keyvalue.js = source\Glimpse.JavaScript\glimpse.render.engine.keyvalue.js
-		source\Glimpse.JavaScript\glimpse.render.engine.master.js = source\Glimpse.JavaScript\glimpse.render.engine.master.js
-		source\Glimpse.JavaScript\glimpse.render.engine.string.js = source\Glimpse.JavaScript\glimpse.render.engine.string.js
-		source\Glimpse.JavaScript\glimpse.render.engine.structured.js = source\Glimpse.JavaScript\glimpse.render.engine.structured.js
-		source\Glimpse.JavaScript\glimpse.render.engine.table.js = source\Glimpse.JavaScript\glimpse.render.engine.table.js
-		source\Glimpse.JavaScript\glimpse.render.style.js = source\Glimpse.JavaScript\glimpse.render.style.js
-		source\Glimpse.JavaScript\glimpse.render.util.rawString.js = source\Glimpse.JavaScript\glimpse.render.util.rawString.js
-		source\Glimpse.JavaScript\glimpse.view.metadata.html = source\Glimpse.JavaScript\glimpse.view.metadata.html
-		source\Glimpse.JavaScript\glimpse.view.shell.code.css = source\Glimpse.JavaScript\glimpse.view.shell.code.css
-		source\Glimpse.JavaScript\glimpse.view.shell.css = source\Glimpse.JavaScript\glimpse.view.shell.css
-		source\Glimpse.JavaScript\glimpse.view.shell.html = source\Glimpse.JavaScript\glimpse.view.shell.html
-		source\Glimpse.JavaScript\google-code-prettify.js = source\Glimpse.JavaScript\google-code-prettify.js
-		source\Glimpse.JavaScript\jquery-1.6.3.min.js = source\Glimpse.JavaScript\jquery-1.6.3.min.js
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.AspNet.Net35", "source\Glimpse.AspNet.Net35\Glimpse.AspNet.Net35.csproj", "{971143D1-B40E-4AF4-AD3D-D4FFAD3FE444}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Test.AspNet.Net35", "source\Glimpse.Test.AspNet.Net35\Glimpse.Test.AspNet.Net35.csproj", "{CD52E292-1514-4B09-900B-6A7E20468152}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.JavaScript", "source\Glimpse.JavaScript\Glimpse.JavaScript.csproj", "{2C80D03B-32DC-4D52-9200-0B7598D9D1FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -199,6 +153,16 @@ Global
 		{CD52E292-1514-4B09-900B-6A7E20468152}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{CD52E292-1514-4B09-900B-6A7E20468152}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{CD52E292-1514-4B09-900B-6A7E20468152}.Release|x86.ActiveCfg = Release|Any CPU
+		{2C80D03B-32DC-4D52-9200-0B7598D9D1FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C80D03B-32DC-4D52-9200-0B7598D9D1FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C80D03B-32DC-4D52-9200-0B7598D9D1FF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2C80D03B-32DC-4D52-9200-0B7598D9D1FF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2C80D03B-32DC-4D52-9200-0B7598D9D1FF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2C80D03B-32DC-4D52-9200-0B7598D9D1FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C80D03B-32DC-4D52-9200-0B7598D9D1FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C80D03B-32DC-4D52-9200-0B7598D9D1FF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2C80D03B-32DC-4D52-9200-0B7598D9D1FF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2C80D03B-32DC-4D52-9200-0B7598D9D1FF}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
