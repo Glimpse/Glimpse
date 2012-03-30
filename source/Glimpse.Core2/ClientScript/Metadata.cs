@@ -6,7 +6,7 @@ namespace Glimpse.Core2.ClientScript
     {
         public ScriptOrder Order
         {
-            get { return ScriptOrder.IncludeAfterClientInterfaceScript; }
+            get { return ScriptOrder.RequestMetadataScript; }
         }
 
         public string GetResourceName()
