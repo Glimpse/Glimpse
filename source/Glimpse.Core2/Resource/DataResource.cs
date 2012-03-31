@@ -43,7 +43,9 @@ namespace Glimpse.Core2.Resource
             if(data == null)
                 return new StatusCodeResourceResult(404);
 
-            return new JsonResourceResult(data, context.Parameters[ResourceParameterKey.Callback], CacheDuration, CacheSetting.Private);
+            //return new JsonResourceResult(data, context.Parameters[ResourceParameterKey.Callback], CacheDuration, CacheSetting.Private);
+            //NOTE: temp hack whilst we are sorting out how the callback key is actually set in the first place
+            return new JsonResourceResult(data, "glimpse.data.initData", CacheDuration, CacheSetting.Private);
             
         }
     }
