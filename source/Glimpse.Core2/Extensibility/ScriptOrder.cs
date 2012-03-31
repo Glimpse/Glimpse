@@ -6,8 +6,8 @@
         ClientInterfaceScript,
         IncludeAfterClientInterfaceScript,
         IncludeBeforeRequestDataScript,
-        RequestDataScript, 
         RequestMetadataScript,
+        RequestDataScript, 
         IncludeAfterRequestDataScript,
     }
 }
