@@ -7,9 +7,8 @@
         //Main 
         mergeMetadata = function () { 
             if (!inner.metadata)
-                inner.metadata = {}; 
-            //Merge the global data with the local data
-            $.extend(inner.metadata, metadataBase);
+                inner.metadata = {};  
+            $.extend(true, inner.metadata, metadataBase);
         },
         update = function (data) {
             inner = data;
@@ -56,15 +55,7 @@
             inner = input; 
             base = input; 
             
-            mergeMetadata();
-            
-            //Core way that glimpse is started
-            var start = new Date().getTime();
-
-            glimpse.init();
-
-            var end = new Date().getTime(); 
-            console.log('Total execution time: ' + (end - start));
+            mergeMetadata(); 
         },
         initMetadata = function (input) {
             metadataBase = input;

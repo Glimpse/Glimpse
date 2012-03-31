@@ -315,9 +315,8 @@ var glimpse = (function ($, scope) {
                 //Main 
                 mergeMetadata = function () { 
                     if (!inner.metadata)
-                        inner.metadata = {}; 
-                    //Merge the global data with the local data
-                    $.extend(inner.metadata, metadataBase);
+                        inner.metadata = {};  
+                    $.extend(true, inner.metadata, metadataBase);
                 },
                 update = function (data) {
                     inner = data;
@@ -364,15 +363,7 @@ var glimpse = (function ($, scope) {
                     inner = input; 
                     base = input; 
                     
-                    mergeMetadata();
-                    
-                    //Core way that glimpse is started
-                    var start = new Date().getTime();
-        
-                    glimpse.init();
-        
-                    var end = new Date().getTime(); 
-                    console.log('Total execution time: ' + (end - start));
+                    mergeMetadata(); 
                 },
                 initMetadata = function (input) {
                     metadataBase = input;
@@ -1633,11 +1624,16 @@ var glimpse = (function ($, scope) {
                 register : register
             };
         } (), 
-        init = function () {
+        init = function () { 
+            var start = new Date().getTime();
+             
             pubsub.publish('state.init'); 
             pubsub.publish('state.build');  
             pubsub.publish('state.render'); 
             pubsub.publish('state.final'); 
+            
+            var end = new Date().getTime(); 
+            console.log('Total execution time: ' + (end - start));
         };
         
 
@@ -1651,6 +1647,10 @@ var glimpse = (function ($, scope) {
         settings : settings
     };
 }($Glimpse, $Glimpse(document)));
+
+$Glimpse(document).ready(function() {
+    glimpse.init();
+});
 
 var glimpseAjaxPlugin = (function ($, glimpse) {
 

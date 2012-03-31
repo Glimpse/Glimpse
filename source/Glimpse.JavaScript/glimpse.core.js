@@ -28,11 +28,16 @@ var glimpse = (function ($, scope) {
 /*(import:glimpse.controller.notification.js|2)*/,
 /*(import:glimpse.controller.paging.js|2)*/,
 /*(import:glimpse.render.engine.js|2)*/, 
-        init = function () {
+        init = function () { 
+            var start = new Date().getTime();
+             
             pubsub.publish('state.init'); 
             pubsub.publish('state.build');  
             pubsub.publish('state.render'); 
             pubsub.publish('state.final'); 
+            
+            var end = new Date().getTime(); 
+            console.log('Total execution time: ' + (end - start));
         };
         
 
@@ -46,6 +51,10 @@ var glimpse = (function ($, scope) {
         settings : settings
     };
 }($Glimpse, $Glimpse(document)));
+
+$Glimpse(document).ready(function() {
+    glimpse.init();
+});
 
 /*(import:glimpse.plugin.ajax.js)*/
 /*(import:glimpse.plugin.history.js)*/

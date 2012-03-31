@@ -38,9 +38,10 @@
         <div class="sample18 glimpse-panel"></div>
         <div class="sample19 glimpse-panel"></div>
     </div>
-    
+
+    <script src="../glimpse.js" type="text/javascript"></script>
+    <script src="Mock/glimpseTest.js" type="text/javascript"></script>    
     <script type="text/javascript"> 
-var glimpseVersion = 0.85;
 var glimpsePath  = '';
 var glimpseData = {
         method : 'Get',  
@@ -53,29 +54,7 @@ var glimpseData = {
         metadata : {"correlation" : { 
                             title : 'PRG Request', 
                             legs : [ { method : 'POST', url : '/Help/Feature/Add', glimpseId : 'PRG' }, 
-                                    { method : 'GET', url : '/', glimpseId : '1234' } ] },
-                    "environmentUrls":{"Dev":"http://localhost/","QA":"http://qa.getglimpse.com/","Prod":"http://getglimpse.com/"},
-                    "version":0.85,
-                    "plugins": {
-                        "Paging":{"pagingInfo":{ pagerType : 'continuous', pageSize : 5, pageIndex : 0, totalNumberOfRecords : 31 }}, 
-                        "Lazy":{},
-                        "Server":{"helpUrl":"http://getGlimpse.com/Help/Plugin/Server"},
-                        "Timeline":{"helpUrl":"http://getGlimpse.com/Help/Plugin/Timeline"},
-                        "Session":{"helpUrl":"http://getGlimpse.com/Help/Plugin/Session"},
-                        "Request":{"helpUrl":"http://getGlimpse.com/Help/Plugin/Request"},
-                        "Trace":{"helpUrl":"http://getGlimpse.com/Help/Plugin/Trace"},
-                        "Config":{"helpUrl":"http://getGlimpse.com/Help/Plugin/Config"},
-                        "Environment":{"helpUrl":"http://getGlimpse.com/Help/Plugin/Environment"},
-                        "SQL": {
-                            "helpUrl":"http://getGlimpse.com/Help/Plugin/EF",
-                            "structure":[[{"forceFull":true,"data":0,"structure":[[{"span":6,"forceFull":true,"minDisplay":true,"data":0,"structure":[[{"width":"150px","key":true,"data":0},{"data":1}]]}],[{"width":"55px","data":1},{"isCode":true,"codeType":"sql","data":2},{"width":"25%","data":3},{"width":"60px","data":4},{"width":"100px","post":" ms","className":"mono","data":5},{"width":"70px","pre":"T+ ","post":" ms","className":"mono","data":6}],[{"span":6,"forceFull":true,"minDisplay":true,"data":8,"structure":[[{"width":"20%","data":0},{"className":"mono","data":1}]]}],[{"span":6,"forceFull":true,"minDisplay":true,"data":7,"structure":[[{"width":"150px","key":true,"data":0},{"data":1}]]}]]},{"width":"75px","post":" ms","className":"mono","data":1}]]
-                        },
-                        "Routes":{"helpUrl":"http://getGlimpse.com/Help/Plugin/Routes"},
-                        "Binding":{"helpUrl":"http://getGlimpse.com/Help/Plugin/Binders"},
-                        "Views":{"helpUrl":"http://getGlimpse.com/Help/Plugin/Views"},
-                        "Execution":{"helpUrl":"http://getGlimpse.com/Help/Plugin/Execution"},
-                        "MetaData":{"helpUrl":"http://getGlimpse.com/Help/Plugin/MetaData","structure":[[{"width":"150px","data":0},{"width":"25%","data":1},{"data":2}]]}
-                    } 
+                                    { method : 'GET', url : '/', glimpseId : '1234' } ] }
             },
         data : {
                 "Session":{ name : 'Session', data : [["Key","Value","Type"],["CartId","2dc2f24f-5816-4e8e-bc70-2438ce628be8","string"],["__ControllerTempData",{"Test":"A bit of temp"},"System.Collections.Generic.Dictionary<string,object>"]] },
@@ -123,6 +102,32 @@ var glimpseData = {
                 } }
             }
         }; 
+var glimpseMetadata = {"environmentUrls":{"Dev":"http://localhost/","QA":"http://qa.getglimpse.com/","Prod":"http://getglimpse.com/"},
+            "version":0.85,
+            "plugins": {
+                "Paging":{"pagingInfo":{ pagerType : 'continuous', pageSize : 5, pageIndex : 0, totalNumberOfRecords : 31 }}, 
+                "Lazy":{},
+                "Server":{"helpUrl":"http://getGlimpse.com/Help/Plugin/Server"},
+                "Timeline":{"helpUrl":"http://getGlimpse.com/Help/Plugin/Timeline"},
+                "Session":{"helpUrl":"http://getGlimpse.com/Help/Plugin/Session"},
+                "Request":{"helpUrl":"http://getGlimpse.com/Help/Plugin/Request"},
+                "Trace":{"helpUrl":"http://getGlimpse.com/Help/Plugin/Trace"},
+                "Config":{"helpUrl":"http://getGlimpse.com/Help/Plugin/Config"},
+                "Environment":{"helpUrl":"http://getGlimpse.com/Help/Plugin/Environment"},
+                "SQL": {
+                    "helpUrl":"http://getGlimpse.com/Help/Plugin/EF",
+                    "structure":[[{"forceFull":true,"data":0,"structure":[[{"span":6,"forceFull":true,"minDisplay":true,"data":0,"structure":[[{"width":"150px","key":true,"data":0},{"data":1}]]}],[{"width":"55px","data":1},{"isCode":true,"codeType":"sql","data":2},{"width":"25%","data":3},{"width":"60px","data":4},{"width":"100px","post":" ms","className":"mono","data":5},{"width":"70px","pre":"T+ ","post":" ms","className":"mono","data":6}],[{"span":6,"forceFull":true,"minDisplay":true,"data":8,"structure":[[{"width":"20%","data":0},{"className":"mono","data":1}]]}],[{"span":6,"forceFull":true,"minDisplay":true,"data":7,"structure":[[{"width":"150px","key":true,"data":0},{"data":1}]]}]]},{"width":"75px","post":" ms","className":"mono","data":1}]]
+                },
+                "Routes":{"helpUrl":"http://getGlimpse.com/Help/Plugin/Routes"},
+                "Binding":{"helpUrl":"http://getGlimpse.com/Help/Plugin/Binders"},
+                "Views":{"helpUrl":"http://getGlimpse.com/Help/Plugin/Views"},
+                "Execution":{"helpUrl":"http://getGlimpse.com/Help/Plugin/Execution"},
+                "MetaData":{"helpUrl":"http://getGlimpse.com/Help/Plugin/MetaData","structure":[[{"width":"150px","data":0},{"width":"25%","data":1},{"data":2}]]}
+            } 
+    };
+glimpse.data.initMetadata(glimpseMetadata);
+glimpse.data.initData(glimpseData);
+
 
 var glimpseData2 = {
         method : 'Get',  
@@ -152,8 +157,6 @@ var glimpseData2 = {
             }
         }; 
     </script>
-    <script src="../glimpse.js" type="text/javascript"></script>
-    <script src="Mock/glimpseTest.js" type="text/javascript"></script>
     <script type="text/javascript"> 
 (function($) {
     $(document).ready(function() { 
