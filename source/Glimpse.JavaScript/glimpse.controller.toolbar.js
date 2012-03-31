@@ -1,6 +1,8 @@
 ﻿toolbarController = function () {
     var //Support
-        isPopup = window.location.href.indexOf(config.popupUrl) > -1,
+        isPopup = function() {
+            return window.location.href.indexOf(data.currentMetadata().paths.popup) > -1;
+        },
         wireListeners = function() {
             pubsub.subscribe('action.open', function(topic, payload) { open(payload); });
             pubsub.subscribe('action.minimize', function() { close(false); });
@@ -17,7 +19,7 @@
             elements.scope.find('.glimpse-popout').click(function () { pubsub.publish('action.popout'); return false; });
 
             if (settings.popupOn) {
-                if (isPopup) {
+                if (isPopup()) {
                     $(window).resize(function () {
                         elements.holder.find('.glimpse-panel').height($(window).height() - 54);
                     });
@@ -31,7 +33,8 @@
 
             util.cookie('glimpseKeepPopup', '1');
 
-            var url = 'test-popup.html'; //static.popupUrl + '&glimpseRequestID=' + $('#glimpseData').data('glimpse-requestID');
+            //TODO !!!! This needs to be updated once we get going !!!!
+            var url = data.currentMetadata().paths.popup; // + '&glimpseRequestID=' + $('#glimpseData').data('glimpse-requestID');
             window.open(url, 'GlimpsePopup', 'width=1100,height=600,status=no,toolbar=no,menubar=no,location=no,resizable=yes,scrollbars=yes');
         },
             
@@ -65,15 +68,16 @@
 
             close(false, true);
         },
-        checkPopout = function () { 
-            if (isPopup)
+        checkPopout = function () {
+            var pResult = isPopup();
+            if (pResult)
                 util.cookie('glimpseKeepPopup', '');
 
-            if (settings.open && settings.popupOn && !isPopup)
+            if (settings.open && settings.popupOn && !pResult)
                 openPopup(); 
         },
         closePopup = function () {
-            if (isPopup && !util.cookie('glimpseKeepPopup')) { 
+            if (isPopup() && !util.cookie('glimpseKeepPopup')) { 
                 settings.popupOn = false;
                 pubsub.publish('state.persist');
             }

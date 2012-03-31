@@ -49,7 +49,7 @@
             //Poll for updated summary data
             notice.prePoll(); 
             $.ajax({
-                url: glimpsePath + 'History', 
+                url: glimpse.data.currentMetadata().paths.history, 
                 type: 'GET',
                 contentType: 'application/json',
                 complete : function(jqXHR, textStatus) {

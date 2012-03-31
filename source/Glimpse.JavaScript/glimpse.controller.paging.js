@@ -35,7 +35,7 @@
                 isLoading = true; 
                 showLoadingMessage(key);
                 $.ajax({
-                    url: glimpsePath + 'Pager',
+                    url: data.currentMetadata().paths.pager,
                     type: 'GET',
                     data: { 'key': pagerKey, 'pageIndex': pageIndex },
                     contentType: 'application/json',

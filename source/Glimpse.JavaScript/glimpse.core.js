@@ -4,10 +4,6 @@ var glimpse = (function ($, scope) {
     var //Private
         elements = {},
         template = {},
-        config = {
-            path : '',
-            popupUrl : 'test-popup.html'
-        },
         settings = {
             height : 250,
             activeTab: 'Routes'
@@ -39,8 +35,7 @@ var glimpse = (function ($, scope) {
             var end = new Date().getTime(); 
             console.log('Total execution time: ' + (end - start));
         };
-        
-
+    
     return { 
         init : init,
         pubsub : pubsub, 

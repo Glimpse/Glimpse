@@ -24,7 +24,7 @@
 
             if (requestId != base.requestId) {
                 $.ajax({
-                    url : glimpsePath + 'History',
+                    url : currentMetadata().history,
                     type : 'GET',
                     data : { 'ClientRequestID': requestId },
                     contentType : 'application/json',

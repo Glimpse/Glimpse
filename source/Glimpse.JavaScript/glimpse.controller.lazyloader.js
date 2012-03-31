@@ -6,7 +6,7 @@
         retrievePlugin = function(key) {   
             var currentData = data.current();
             $.ajax({
-                url : glimpsePath + 'History',
+                url : data.currentMetadata().paths.history,
                 type : 'GET',
                 data : { 'ClientRequestID' : currentData.requestId, 'PluginKey' : key },
                 contentType : 'application/json',

@@ -4,7 +4,7 @@
             pubsub.subscribe('state.build.template', processData);  
         },
         processData = function () {  
-            var version = data.currentMetadata().version;
+            var metadata = data.currentMetadata();
             template.css = '/*(import:glimpse.view.shell.css)*/';
             template.html = '/*(import:glimpse.view.shell.html)*/';
             template.metadata = '/*(import:glimpse.view.metadata.html)*/';
