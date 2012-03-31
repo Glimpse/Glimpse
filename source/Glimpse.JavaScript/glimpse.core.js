@@ -47,15 +47,6 @@ var glimpse = (function ($, scope) {
     };
 }($Glimpse, $Glimpse(document)));
 
-$Glimpse(document).ready(function() {
-    var start = new Date().getTime();
-
-    glimpse.init();
-
-    var end = new Date().getTime(); 
-    console.log('Total execution time: ' + (end - start));
-});
-
 /*(import:glimpse.plugin.ajax.js)*/
 /*(import:glimpse.plugin.history.js)*/
 /*(import:glimpse.plugin.timeline.js)*/

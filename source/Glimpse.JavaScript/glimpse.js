@@ -310,10 +310,18 @@ var glimpse = (function ($, scope) {
             var //Support
                 inner = {},  
                 base = {},
+                metadataBase = {},
             
                 //Main 
+                mergeMetadata = function () { 
+                    if (!inner.metadata)
+                        inner.metadata = {}; 
+                    //Merge the global data with the local data
+                    $.extend(inner.metadata, metadataBase);
+                },
                 update = function (data) {
-                    inner = data;  
+                    inner = data;
+                    mergeMetadata();
                     pubsub.publish('action.data.update');
                 },
                 reset = function () {
@@ -351,20 +359,33 @@ var glimpse = (function ($, scope) {
                 currentMetadata = function () {
                     return inner.metadata;
                 },
-        
-                init = function () {
-                    inner = glimpseData; 
-                    base = glimpseData; 
-                };
                 
-            init(); 
-            
+                initData = function (input) { 
+                    inner = input; 
+                    base = input; 
+                    
+                    mergeMetadata();
+                    
+                    //Core way that glimpse is started
+                    var start = new Date().getTime();
+        
+                    glimpse.init();
+        
+                    var end = new Date().getTime(); 
+                    console.log('Total execution time: ' + (end - start));
+                },
+                initMetadata = function (input) {
+                    metadataBase = input;
+                };
+             
             return { 
                 current : current, 
                 currentMetadata : currentMetadata,
                 update : update,
                 retrieve : retrieve,
-                reset : reset
+                reset : reset,
+                initData : initData,
+                initMetadata : initMetadata
             };
         }()),
         elementsProcess = function () {
@@ -1630,15 +1651,6 @@ var glimpse = (function ($, scope) {
         settings : settings
     };
 }($Glimpse, $Glimpse(document)));
-
-$Glimpse(document).ready(function() {
-    var start = new Date().getTime();
-
-    glimpse.init();
-
-    var end = new Date().getTime(); 
-    console.log('Total execution time: ' + (end - start));
-});
 
 var glimpseAjaxPlugin = (function ($, glimpse) {
 
