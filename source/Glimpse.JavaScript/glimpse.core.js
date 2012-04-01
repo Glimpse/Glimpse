@@ -26,7 +26,7 @@ var glimpse = (function ($, scope) {
 /*(import:glimpse.render.engine.js|2)*/, 
         init = function () { 
             var start = new Date().getTime();
-             
+            
             pubsub.publish('state.init'); 
             pubsub.publish('state.build');  
             pubsub.publish('state.render'); 
