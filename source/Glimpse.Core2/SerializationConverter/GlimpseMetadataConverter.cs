@@ -20,7 +20,7 @@ namespace Glimpse.Core2.SerializationConverter
                            {"uri", request.RequestUri},
                            {"contentType", request.ResponseContentType},
                            {"statusCode", request.ResponseStatusCode},
-                           {"plugins", request.PluginData},
+                           {"data", request.PluginData},
                            {"userAgent", request.UserAgent}
                        };
         }
