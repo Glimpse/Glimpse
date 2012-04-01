@@ -7,15 +7,15 @@ using Glimpse.Core2.ResourceResult;
 
 namespace Glimpse.Core2.Resource
 {
-    public class Client : FileResource
+    public class Logo:FileResource
     {
-        internal const string InternalName = "glimpse.js";
+        internal const string InternalName = "logo.png";
 
-        public Client()
+        public Logo()
         {
-            ResourceName = "Glimpse.Core2.glimpse.js";
-            ResourceType = @"application/x-javascript";
+            ResourceName = "Glimpse.Core2.logo.png";
+            ResourceType = "image/png";
             Name = InternalName;
-        }
+        }  
     }
 }

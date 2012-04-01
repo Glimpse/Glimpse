@@ -154,8 +154,11 @@
     <Compile Include="ResourceResult\StatusCodeResourceResult.cs" />
     <Compile Include="Resource\ClientResource.cs" />
     <Compile Include="Resource\Configuration.cs" />
+    <Compile Include="Resource\FileResource.cs" />
+    <Compile Include="Resource\LogoResource.cs" />
     <Compile Include="Resource\DataResource.cs" />
     <Compile Include="Resource\MetadataResource.cs" />
+    <Compile Include="Resource\SpriteResource.cs" />
     <Compile Include="RuntimePolicy.cs" />
     <Compile Include="Extensibility\IHtmlEncoder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -191,6 +194,10 @@
   <ItemGroup>
     <Folder Include="NuSpec\lib\net35\" />
     <Folder Include="NuSpec\lib\net40\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="logo.png" />
+    <EmbeddedResource Include="sprite.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
