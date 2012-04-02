@@ -68,9 +68,10 @@
         },
         buildTypes = function (types) {
             var payload = data.current(),
+                basePayload = data.base(),
                 ajax = payload.isAjax && payload.requestId,
-                history = (payload.isAjax && glimpseData.requestId != payload.parentId && payload.parentId) || (!payload.isAjax && glimpseData.requestId != payload.requestId && payload.requestId),
-                home = glimpseData.requestId,
+                history = (payload.isAjax && basePayload.requestId != payload.parentId && payload.parentId) || (!payload.isAjax && basePayload.requestId != payload.requestId && payload.requestId),
+                home = basePayload.requestId,
                 html = '';
             
             if (ajax)

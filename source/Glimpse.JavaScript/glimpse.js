@@ -305,7 +305,7 @@ var glimpse = (function ($, scope) {
         data = (function () {
             var //Support
                 inner = {},  
-                base = {},
+                baseInner = {},
                 metadataBase = {},
             
                 //Main 
@@ -320,13 +320,13 @@ var glimpse = (function ($, scope) {
                     pubsub.publish('action.data.update');
                 },
                 reset = function () {
-                    update(base);
+                    update(baseInner);
                 },
                 retrieve = function (requestId, callback) { 
                     if (callback && callback.start)
                         callback.start(requestId);
         
-                    if (requestId != base.requestId) {
+                    if (requestId != baseInner.requestId) {
                         $.ajax({
                             url : currentMetadata().history,
                             type : 'GET',
@@ -342,12 +342,15 @@ var glimpse = (function ($, scope) {
                         });
                     }
                     else { 
-                        if (callback && callback.success) { callback.success(requestId, base, inner, 'Success'); }
-                        update(base);  
+                        if (callback && callback.success) { callback.success(requestId, baseInner, inner, 'Success'); }
+                        update(baseInner);  
                         if (callback && callback.complete) { callback.complete(requestId, undefined, 'Success'); } 
                     }
                 },
-        
+                 
+                base = function () {
+                    return baseInner;
+                },
                 current = function () {
                     return inner;
                 }, 
@@ -357,7 +360,7 @@ var glimpse = (function ($, scope) {
                 
                 initData = function (input) { 
                     inner = input; 
-                    base = input; 
+                    baseInner = input; 
                     
                     mergeMetadata(); 
                 },
@@ -366,6 +369,7 @@ var glimpse = (function ($, scope) {
                 };
              
             return { 
+                base : base,
                 current : current, 
                 currentMetadata : currentMetadata,
                 update : update,
@@ -755,7 +759,7 @@ var glimpse = (function ($, scope) {
                 }, 
                 activateHelp = function (key) { 
                     var metaData = data.currentMetadata().plugins[key], 
-                        url = metaData && metaData.helpUrl;
+                        url = metaData && metaData.documentationUri;
         
                     elements.holder.find('.glimpse-meta-help').toggle(url != undefined).attr('href', url); 
                 },
@@ -835,9 +839,10 @@ var glimpse = (function ($, scope) {
                 },
                 buildTypes = function (types) {
                     var payload = data.current(),
+                        basePayload = data.base(),
                         ajax = payload.isAjax && payload.requestId,
-                        history = (payload.isAjax && glimpseData.requestId != payload.parentId && payload.parentId) || (!payload.isAjax && glimpseData.requestId != payload.requestId && payload.requestId),
-                        home = glimpseData.requestId,
+                        history = (payload.isAjax && basePayload.requestId != payload.parentId && payload.parentId) || (!payload.isAjax && basePayload.requestId != payload.requestId && payload.requestId),
+                        home = basePayload.requestId,
                         html = '';
                     
                     if (ajax)
@@ -1626,7 +1631,7 @@ var glimpse = (function ($, scope) {
         } (), 
         init = function () { 
             var start = new Date().getTime();
-             
+            
             pubsub.publish('state.init'); 
             pubsub.publish('state.build');  
             pubsub.publish('state.render'); 
@@ -1682,7 +1687,7 @@ var glimpseAjaxPlugin = (function ($, glimpse) {
                 metadata = glimpse.data.currentMetadata().plugins;
                  
             payload.data.Ajax = { name: 'Ajax', data: 'No requests currently detected...', isPermanent : true };
-            metadata.Ajax = { helpUrl: 'http://getglimpse.com/Help/Plugin/Ajax' }; 
+            metadata.Ajax = { documentationUri: 'http://getglimpse.com/Help/Plugin/Ajax' }; 
         }, 
         
         active = function () {
@@ -1826,7 +1831,7 @@ var glimpseHistoryPlugin = (function ($, glimpse) {
                 metadata = glimpse.data.currentMetadata().plugins;
                  
             payload.data.History = { name: 'History', data: 'No requests currently detected...', isPermanent : true };
-            metadata.History = { helpUrl: 'http://getglimpse.com/Help/Plugin/Remote' };  
+            metadata.History = { documentationUri: 'http://getglimpse.com/Help/Plugin/Remote' };  
         },
          
         active = function () {

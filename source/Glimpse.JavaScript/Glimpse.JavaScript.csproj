@@ -93,7 +93,6 @@
     <Content Include="glimpse.plugin.timeline.shell.html" />
     <Content Include="glimpse.process.elements.js" />
     <Content Include="glimpse.process.template.js" />
-    <Content Include="glimpse.remote.plugin.js" />
     <Content Include="glimpse.render.engine.js" />
     <Content Include="glimpse.render.engine.keyvalue.js" />
     <Content Include="glimpse.render.engine.master.js" />

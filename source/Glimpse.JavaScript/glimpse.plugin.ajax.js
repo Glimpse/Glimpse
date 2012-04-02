@@ -29,7 +29,7 @@
                 metadata = glimpse.data.currentMetadata().plugins;
                  
             payload.data.Ajax = { name: 'Ajax', data: 'No requests currently detected...', isPermanent : true };
-            metadata.Ajax = { helpUrl: 'http://getglimpse.com/Help/Plugin/Ajax' }; 
+            metadata.Ajax = { documentationUri: 'http://getglimpse.com/Help/Plugin/Ajax' }; 
         }, 
         
         active = function () {

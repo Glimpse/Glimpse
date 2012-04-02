@@ -1,7 +1,7 @@
 ﻿data = (function () {
     var //Support
         inner = {},  
-        base = {},
+        baseInner = {},
         metadataBase = {},
     
         //Main 
@@ -16,13 +16,13 @@
             pubsub.publish('action.data.update');
         },
         reset = function () {
-            update(base);
+            update(baseInner);
         },
         retrieve = function (requestId, callback) { 
             if (callback && callback.start)
                 callback.start(requestId);
 
-            if (requestId != base.requestId) {
+            if (requestId != baseInner.requestId) {
                 $.ajax({
                     url : currentMetadata().history,
                     type : 'GET',
@@ -38,12 +38,15 @@
                 });
             }
             else { 
-                if (callback && callback.success) { callback.success(requestId, base, inner, 'Success'); }
-                update(base);  
+                if (callback && callback.success) { callback.success(requestId, baseInner, inner, 'Success'); }
+                update(baseInner);  
                 if (callback && callback.complete) { callback.complete(requestId, undefined, 'Success'); } 
             }
         },
-
+         
+        base = function () {
+            return baseInner;
+        },
         current = function () {
             return inner;
         }, 
@@ -53,7 +56,7 @@
         
         initData = function (input) { 
             inner = input; 
-            base = input; 
+            baseInner = input; 
             
             mergeMetadata(); 
         },
@@ -62,6 +65,7 @@
         };
      
     return { 
+        base : base,
         current : current, 
         currentMetadata : currentMetadata,
         update : update,

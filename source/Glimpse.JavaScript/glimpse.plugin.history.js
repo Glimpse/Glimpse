@@ -27,7 +27,7 @@
                 metadata = glimpse.data.currentMetadata().plugins;
                  
             payload.data.History = { name: 'History', data: 'No requests currently detected...', isPermanent : true };
-            metadata.History = { helpUrl: 'http://getglimpse.com/Help/Plugin/Remote' };  
+            metadata.History = { documentationUri: 'http://getglimpse.com/Help/Plugin/Remote' };  
         },
          
         active = function () {
