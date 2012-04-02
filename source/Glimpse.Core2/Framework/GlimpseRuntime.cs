@@ -371,20 +371,20 @@ namespace Glimpse.Core2.Framework
 
         private void PersistMetadata()
         {
-            var metadata = new GlimpseMetadata {version = Version};
-            var pluginMetadata = metadata.plugins;
+            var metadata = new GlimpseMetadata {Version = Version};
+            var pluginMetadata = metadata.Plugins;
 
             foreach (var tab in Configuration.Tabs)
             {
                 var metadataInstance = new PluginMetadata();
                 var documentationTab = tab as IDocumentation;
-                if (documentationTab != null)
-                {
-                    metadataInstance.DocumentationUri = documentationTab.DocumentationUri;
-                }
+                if (documentationTab != null) 
+                    metadataInstance.DocumentationUri = documentationTab.DocumentationUri; 
 
-                if (metadataInstance.HasMetadata)
-                    pluginMetadata[tab.GetType().FullName] = metadataInstance;
+                //TODO I have done this as every tab must have metadata as far as the client is concerned
+                //if (metadataInstance.HasMetadata)
+                //    pluginMetadata[tab.GetType().FullName] = metadataInstance;
+                pluginMetadata[tab.GetType().FullName] = metadataInstance;
             }
 
             Configuration.PersistanceStore.Save(metadata);
