@@ -21,7 +21,8 @@ namespace Glimpse.Core2.SerializationConverter
                            {"contentType", request.ResponseContentType},
                            {"statusCode", request.ResponseStatusCode},
                            {"data", request.PluginData},
-                           {"userAgent", request.UserAgent}
+                           {"userAgent", request.UserAgent},
+                           {"clientName", ""} //TODO Nik needs to fix this up
                        };
         }
     }
