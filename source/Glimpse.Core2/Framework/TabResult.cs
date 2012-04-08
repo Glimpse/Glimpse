@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 
 namespace Glimpse.Core2.Framework
 {
+    //TODO this needs to use a converter instead (like GlimpseMetadataConverter)
     public class TabResult
     {
         /// <summary>
