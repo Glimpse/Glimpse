@@ -330,7 +330,7 @@ namespace Glimpse.Core
         {
             var batch = new CompositionBatch();
 
-            var directoryCatalog = new BlacklistedSafeDirectoryCatalog("bin", Configuration.PluginBlacklist.TypeNames());
+            var directoryCatalog = new BlacklistedSafeDirectoryCatalog(Configuration.PluginDirectories.DirectoryNames, Configuration.PluginBlacklist.TypeNames());
             var container = new CompositionContainer(directoryCatalog);
 
             container.ComposeParts(this, RequestValidator);

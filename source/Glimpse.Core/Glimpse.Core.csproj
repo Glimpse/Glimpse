@@ -78,6 +78,8 @@
     <Compile Include="Configuration\IpCollection.cs" />
     <Compile Include="Configuration\GlimpseMode.cs" />
     <Compile Include="Configuration\PluginBlacklistCollection.cs" />
+    <Compile Include="Configuration\PluginDirectory.cs" />
+    <Compile Include="Configuration\PluginDirectoryCollection.cs" />
     <Compile Include="Configuration\UrlBlacklistCollection.cs" />
     <Compile Include="Converter\AuthenticationSectionConverter.cs" />
     <Compile Include="Converter\CustomErrorsSectionConverter.cs" />

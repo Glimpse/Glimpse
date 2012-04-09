@@ -14,34 +14,37 @@ namespace Glimpse.Core.Plumbing
         public IList<Exception> Exceptions { get; private set; }
         private IEnumerable<string> TypesBlacklist { get; set; }
 
-        public BlacklistedSafeDirectoryCatalog(string path, IEnumerable<string> typesBlacklist)
+        public BlacklistedSafeDirectoryCatalog(IEnumerable<string> paths, IEnumerable<string> typesBlacklist)
         {
             Exceptions = new List<Exception>();
             TypesBlacklist = typesBlacklist;
 
-            var files = Directory.EnumerateFiles(GetFullPath(path), "*.dll", SearchOption.AllDirectories);
-
             AggregateCatalog = new AggregateCatalog();
 
-            foreach (var file in files)
+            foreach (var path in paths)
             {
-                try
-                {
-                    var assemblyCatalog = new AssemblyCatalog(file);
+                var files = Directory.EnumerateFiles(GetFullPath(path), "*.dll", SearchOption.AllDirectories);
 
-                    if (assemblyCatalog.Parts.ToList().Count > 0)
-                        AggregateCatalog.Catalogs.Add(assemblyCatalog);
-                }
-                catch (ReflectionTypeLoadException ex)
+                foreach (var file in files)
                 {
-                    foreach (var exception in ex.LoaderExceptions)
+                    try
                     {
-                        Exceptions.Add(exception);
+                        var assemblyCatalog = new AssemblyCatalog(file);
+
+                        if (assemblyCatalog.Parts.ToList().Count > 0)
+                            AggregateCatalog.Catalogs.Add(assemblyCatalog);
                     }
-                }
-                catch (Exception ex)
-                {
-                    Exceptions.Add(ex);
+                    catch (ReflectionTypeLoadException ex)
+                    {
+                        foreach (var exception in ex.LoaderExceptions)
+                        {
+                            Exceptions.Add(exception);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Exceptions.Add(ex);
+                    }
                 }
             }
         }

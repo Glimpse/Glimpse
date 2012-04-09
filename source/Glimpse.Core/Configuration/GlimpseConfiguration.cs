@@ -103,6 +103,16 @@ namespace Glimpse.Core.Configuration
             }
         }
 
+        [ConfigurationProperty("pluginDirectories", IsRequired = false)]
+        public PluginDirectoryCollection PluginDirectories
+        {
+            set { this["pluginDirectories"] = value; }
+            get
+            {
+                return this["pluginDirectories"] as PluginDirectoryCollection;
+            }
+        }
+
         [ConfigurationProperty("urlBlacklist", IsRequired = false)]
         public UrlBlacklistCollection UrlBlackList
         {
