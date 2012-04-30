@@ -306,13 +306,18 @@ var glimpse = (function ($, scope) {
             var //Support
                 inner = {},  
                 baseInner = {},
-                metadataBase = {},
+                baseMetadata = {},
             
                 //Main 
                 mergeMetadata = function () { 
                     if (!inner.metadata)
                         inner.metadata = {};  
-                    $.extend(true, inner.metadata, metadataBase);
+                    $.extend(true, inner.metadata, baseMetadata);
+                    
+                    for (var key in inner.data) {
+                        if (!inner.metadata.plugins[key])
+                            inner.metadata.plugins[key] = {};
+                    }
                 },
                 update = function (data) {
                     inner = data;
@@ -365,7 +370,7 @@ var glimpse = (function ($, scope) {
                     mergeMetadata(); 
                 },
                 initMetadata = function (input) {
-                    metadataBase = input;
+                    baseMetadata = input;
                 };
              
             return { 

@@ -381,10 +381,8 @@ namespace Glimpse.Core2.Framework
                 if (documentationTab != null) 
                     metadataInstance.DocumentationUri = documentationTab.DocumentationUri; 
 
-                //TODO I have done this as every tab must have metadata as far as the client is concerned
-                //if (metadataInstance.HasMetadata)
-                //    pluginMetadata[tab.GetType().FullName] = metadataInstance;
-                pluginMetadata[tab.GetType().FullName] = metadataInstance;
+                if (metadataInstance.HasMetadata)
+                    pluginMetadata[tab.GetType().FullName] = metadataInstance; 
             }
 
             Configuration.PersistanceStore.Save(metadata);
