@@ -155,6 +155,7 @@
     </Content>
     <Content Include="Scripts\glimpse.min.js" />
     <Content Include="Scripts\glimpse.render.engine.master.js" />
+    <Compile Include="Sanitizer\CSharpTypenameConverter.cs" />
     <Compile Include="Validator\ContentTypeValidator.cs" />
     <Compile Include="Validator\GlimpseModeValidator.cs" />
     <Compile Include="Validator\GlimpseRequestValidator.cs" />

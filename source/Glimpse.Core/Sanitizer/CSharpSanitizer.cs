@@ -8,24 +8,6 @@ namespace Glimpse.Core.Sanitizer
     {
         public string Sanitize(string json)
         {
-            json = FixGenerics(json); //Replace '`1[]' for generics    
-            json = Regex.Replace(json, @"(?<=System\.Nullable<.+)>(?= )", @"?"); //Add '?' for nullable types
-            json = Regex.Replace(json, @"System.Nullable<", @""); //Add '?' for nullable types
-            json = json.Replace("System.Boolean", "bool"); //Convert CLR type names to c# keywords
-            json = json.Replace("System.Byte", "byte");
-            json = json.Replace("System.SByte", "sbyte");
-            json = json.Replace("System.Char", "char");
-            json = json.Replace("System.Decimal", "decimal");
-            json = json.Replace("System.Double", "double");
-            json = json.Replace("System.Single", "float");
-            json = json.Replace("System.Int32", "int");
-            json = json.Replace("System.UInt32", "uint");
-            json = json.Replace("System.Int64", "long");
-            json = json.Replace("System.UInt64", "ulong");
-            json = json.Replace("System.Object", "object");
-            json = json.Replace("System.Int16", "short");
-            json = json.Replace("System.UInt16", "ushort");
-            json = json.Replace("System.String", "string");
             json = json.Replace("-2147483648", "\"int.MinValue\""); //Convert min ints
             json = json.Replace("2147483647", "\"int.MaxValue\""); //Convert max ints
 
@@ -44,18 +26,6 @@ namespace Glimpse.Core.Sanitizer
                 }
             }
 
-            return json;
-        }
-
-        private static readonly Regex GenericRegex = new Regex(@"\`[0-9]+\[([^\s^:^;^""]+)\]", RegexOptions.Compiled);
-        private static string FixGenerics(string json)
-        {
-            var i = 0;
-            while (GenericRegex.IsMatch(json) && i < 10)
-            {
-                json = GenericRegex.Replace(json, @"<$1>");
-                i++;
-            }
             return json;
         }
     }

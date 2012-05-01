@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Sanitizer;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -23,6 +24,7 @@ namespace Glimpse.Core.Plumbing
             };
 
             Settings.Converters.Add(new JavaScriptDateTimeConverter());
+            Settings.Converters.Add(new CSharpTypenameConverter());
 
             DefaultFormatting = Formatting.None;
         }
