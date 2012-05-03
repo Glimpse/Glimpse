@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Web;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Plugin;
@@ -47,8 +48,9 @@ namespace Glimpse.Test.Core.Plugin
 		[Ignore("TODO: Remove ignore and fix implementation")]
         public void Session_GetData_WithEmptySession_ReturnsNull()
         {
-            //TODO: Mock out session state
             var session = new Mock<HttpSessionStateBase>();
+            session.Setup(s => s.Keys).Returns(new NameValueCollection().Keys);
+
             Context.Setup(ctx => ctx.Session).Returns(session.Object);
             var data = Plugin.GetData(Context.Object);
 
@@ -56,8 +58,59 @@ namespace Glimpse.Test.Core.Plugin
             Context.VerifyAll();
         }
 
+        [Test]
+        public void Session_GetData_ReturnsData()
+        {
+            Mock<HttpSessionStateBase> session = CreateSession(new NameValueCollection { { "test", "value" } });
+            Context.Setup(ctx => ctx.Session).Returns(session.Object);
+
+            var data = Plugin.GetData(Context.Object);
+
+            var expected = new List<object[]>
+                { 
+                    Session.Header,
+                    new object[] { "test", "value", "System.String", 29 } ,
+                    new object[] { "Total Session Size", "", "(calculated)", 29 },
+                };
+
+            Assert.AreEqual(expected, data);
+            Context.VerifyAll();
+        }
+
+        [Test]
+        public void Session_GetData_ToleratesNullValues()
+        {
+            Mock<HttpSessionStateBase> session = CreateSession(new NameValueCollection { { "test", null } });
+            Context.Setup(ctx => ctx.Session).Returns(session.Object);
+
+            var data = Plugin.GetData(Context.Object);
+
+            var expected = new List<object[]>
+                { 
+                    Session.Header,
+                    new object[] { "test", null, null, 0 } ,
+                    new object[] { "Total Session Size", "", "(calculated)", 0 },
+                };
+
+            Assert.AreEqual(expected, data);
+            Context.VerifyAll();
+        }
+
+        private static Mock<HttpSessionStateBase> CreateSession(NameValueCollection values)
+        {
+            var session = new Mock<HttpSessionStateBase>();
+            session.Setup(s => s.Keys).Returns(values.Keys);
+            foreach (string key in values.Keys)
+            {
+                string captureKey = key;
+                session.Setup(s => s[captureKey]).Returns(values[captureKey]);
+            }
+            return session;
+        }
+
         public IGlimpsePlugin Plugin { get; set; }
         public Mock<HttpContextBase> Context { get; set; }
+
         [SetUp]
         public void Setup()
         {
