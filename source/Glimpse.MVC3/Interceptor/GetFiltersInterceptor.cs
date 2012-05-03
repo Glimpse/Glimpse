@@ -60,7 +60,7 @@ namespace Glimpse.Mvc3.Interceptor
                 var originalFilter = authorizationFilters[i];
                 if (!(originalFilter is GlimpseAuthorizationFilter))
                 {
-                    var innerFilter = filtersEnum.Where(f => f.Instance == originalFilter).SingleOrDefault();
+                    var innerFilter = filtersEnum.Where(f => f.Instance == originalFilter).FirstOrDefault();
                     var newFilter = new GlimpseAuthorizationFilter(originalFilter)
                     {
                         Filter = innerFilter,
@@ -79,7 +79,7 @@ namespace Glimpse.Mvc3.Interceptor
                 var originalFilter = exceptionFilters[i];
                 if (!(originalFilter is GlimpseExceptionFilter))
                 {
-                    var innerFilter = filtersEnum.Where(f => f.Instance == originalFilter).SingleOrDefault();
+                    var innerFilter = filtersEnum.Where(f => f.Instance == originalFilter).FirstOrDefault();
                     var newFilter = new GlimpseExceptionFilter(originalFilter)
                     {
                         Filter = innerFilter,
@@ -98,7 +98,7 @@ namespace Glimpse.Mvc3.Interceptor
                 var originalFilter = resultFilters[i];
                 if (!(originalFilter is GlimpseResultFilter))
                 {
-                    var innerFilter = filtersEnum.Where(f => f.Instance == originalFilter).SingleOrDefault();
+                    var innerFilter = filtersEnum.Where(f => f.Instance == originalFilter).FirstOrDefault();
                     var newFilter = new GlimpseResultFilter(originalFilter)
                     {
                         Filter = innerFilter,

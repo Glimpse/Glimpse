@@ -27,6 +27,7 @@ namespace MvcMusicStore.Controllers
             return Json(new {Message = test.Name + " is number " + test.Number, Time = DateTime.Now});
         }
 
+        [Authorize]
         public virtual ActionResult Index()
         {
             // Get most popular albums
