@@ -45,8 +45,6 @@ namespace Glimpse.Test.Core2.SerializationConverter
             Assert.NotNull(result["contentType"]);
             Assert.True(result.ContainsKey("statusCode"));
             Assert.NotNull(result["statusCode"]);
-            Assert.True(result.ContainsKey("plugins"));
-            Assert.NotNull(result["plugins"]);
             Assert.True(result.ContainsKey("userAgent"));
             Assert.NotNull(result["userAgent"]);
         }
