@@ -122,9 +122,9 @@ task test -depends compile{
     
     New-Item $build_dir\local\artifacts -Type directory -Force > $null
     
-    cd $tools_dir\xunit*\
+    cd $package_dir\xunit.runners*\tools\
     
-    exec { & .\xunit.console.clr4 tests.xunit }
+    exec { & .\xunit.console.clr4 $base_dir\tests.xunit }
 }
 
 task buildjs {
