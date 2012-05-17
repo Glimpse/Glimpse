@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
 using Glimpse.Core2.ResourceResult;
@@ -28,9 +27,7 @@ namespace Glimpse.Core2.Resource
             if (metadata == null)
                 return new StatusCodeResourceResult(404);
 
-            //return new JsonResourceResult(metadata, context.Parameters[ResourceParameterKey.Callback], CacheDuration, CacheSetting.Public);
-            //NOTE: temp hack whilst we are sorting out how the callback key is actually set in the first place
-            return new JsonResourceResult(metadata, "glimpse.data.initMetadata", CacheDuration, CacheSetting.Public);
+            return new JsonResourceResult(metadata, context.Parameters[ResourceParameterKey.Callback], CacheDuration, CacheSetting.Public);
         }
     }
 }

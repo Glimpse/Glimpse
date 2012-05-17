@@ -128,13 +128,6 @@ namespace Glimpse.Core2.Framework
             var logger = Configuration.Logger;
             var resources = Configuration.Resources;
 
-            var requestTokenValues = new Dictionary<string, string>
-                                         {
-                                             {ResourceParameterKey.RequestId, requestId.ToString()},
-                                             {ResourceParameterKey.VersionNumber, Version},
-                                             {ResourceParameterKey.Callback, "console.log"} //TODO: This should not be hard coded, introduce yet another collection?
-                                         };
-
             var stringBuilder = new StringBuilder();
 
             foreach (var clientScript in clientScripts.OrderBy(cs=>cs.Order))
@@ -144,6 +137,13 @@ namespace Glimpse.Core2.Framework
                 {
                     try
                     {
+                        var requestTokenValues = new Dictionary<string, string>
+                                         {
+                                             {ResourceParameterKey.RequestId, requestId.ToString()},
+                                             {ResourceParameterKey.VersionNumber, Version},
+                                             {ResourceParameterKey.Callback, "console.log"} //TODO: This should not be hard coded, introduce yet another collection?
+                                         };
+
                         var resourceName = dynamicScript.GetResourceName();
                         var resource = resources.FirstOrDefault(r => r.Name.Equals(resourceName, StringComparison.InvariantCultureIgnoreCase));
 
@@ -151,6 +151,13 @@ namespace Glimpse.Core2.Framework
                         {
                             logger.Warn(Resources.RenderClientScriptMissingResourceWarning,clientScript.GetType(), resourceName);
                             continue;
+                        }
+
+                        var resourceParameterProvider = dynamicScript as IParameterValueProvider;
+
+                        if (resourceParameterProvider != null)
+                        {
+                            resourceParameterProvider.OverrideParameterValues(requestTokenValues);
                         }
 
                         var uri = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUri(resource, logger, requestTokenValues));

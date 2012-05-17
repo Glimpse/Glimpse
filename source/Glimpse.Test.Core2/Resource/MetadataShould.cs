@@ -35,21 +35,17 @@ namespace Glimpse.Test.Core2.Resource
             Assert.NotEmpty(metadata.ParameterKeys);
         }
 
-        /*[Fact]
+        [Fact]
         public void ReturnResourceResult()
         {
-            var pluginData = new Dictionary<string, TabResult>
-                {
-                    {"A", new TabResult("A Name", 234)}
-                };
-
-            var metadata = new GlimpseRequest(Guid.NewGuid(), new Mock<IRequestMetadata>().Object, pluginData, 8);
+            var metadata = new GlimpseMetadata();
 
             var storeMock = new Mock<IReadOnlyPersistanceStore>();
-            storeMock.Setup(s => s.GetByRequestId(Constants.MetadataGuid)).Returns(metadata);
+            storeMock.Setup(s => s.GetMetadata()).Returns(metadata);
 
             var contextMock = new Mock<IResourceContext>();
             contextMock.Setup(c => c.PersistanceStore).Returns(storeMock.Object);
+            contextMock.Setup(c => c.Parameters[ResourceParameterKey.Callback]).Returns("a string");
 
             var resource = new Metadata();
 
@@ -62,7 +58,7 @@ namespace Glimpse.Test.Core2.Resource
         public void Return404ResultIfDataIsMissing()
         {
             var storeMock = new Mock<IReadOnlyPersistanceStore>();
-            storeMock.Setup(s => s.GetByRequestId(Constants.MetadataGuid)).Returns<GlimpseRequest>(null);
+            storeMock.Setup(s => s.GetMetadata()).Returns<GlimpseMetadata>(null);
 
             var contextMock = new Mock<IResourceContext>();
             contextMock.Setup(c => c.PersistanceStore).Returns(storeMock.Object);
@@ -76,6 +72,6 @@ namespace Glimpse.Test.Core2.Resource
             var statusCodeResult = result as StatusCodeResourceResult;
             Assert.NotNull(statusCodeResult);
             Assert.Equal(404, statusCodeResult.StatusCode);
-        }*/
+        }
     }
 }

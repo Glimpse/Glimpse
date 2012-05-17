@@ -613,6 +613,25 @@ namespace Glimpse.Test.Core2.Framework
         }
 
         [Fact]
+        public void GenerateScriptTagsWithParameterValueProvider()
+        {
+            var resourceName = "resourceName";
+            var uri = "http://somethingEncoded";
+            Runtime.ResourceMock.Setup(r => r.Name).Returns(resourceName);
+            Runtime.DynamicScriptMock.Setup(ds => ds.GetResourceName()).Returns(resourceName);
+            var parameterValueProviderMock = Runtime.DynamicScriptMock.As<IParameterValueProvider>();
+            Runtime.EndpointConfigMock.Protected().Setup<string>("GenerateUri", resourceName, ItExpr.IsAny<IEnumerable<KeyValuePair<string, string>>>(), ItExpr.IsAny<ILogger>()).Returns("http://something");
+            Runtime.EncoderMock.Setup(e => e.HtmlAttributeEncode("http://something")).Returns(uri);
+
+            Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
+            Runtime.Configuration.ClientScripts.Add(Runtime.DynamicScriptMock.Object);
+
+            Assert.Contains(uri, Runtime.GenerateScriptTags(Guid.NewGuid()));
+
+            parameterValueProviderMock.Verify(vp=>vp.OverrideParameterValues(It.IsAny<IDictionary<string,string>>()));
+        }
+
+        [Fact]
         public void GenerateScriptTagsWithDynamicScriptAndMatchingResource()
         {
             var resourceName = "resourceName";

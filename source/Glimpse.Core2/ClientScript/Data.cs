@@ -1,8 +1,9 @@
+using System.Collections.Generic;
 using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Core2.ClientScript
 {
-    public class Data:IDynamicClientScript
+    public class Data:IDynamicClientScript, IParameterValueProvider
     {
         public ScriptOrder Order
         {
@@ -12,6 +13,11 @@ namespace Glimpse.Core2.ClientScript
         public string GetResourceName()
         {
             return Resource.Data.InternalName;
+        }
+
+        public void OverrideParameterValues(IDictionary<string, string> defaults)
+        {
+            defaults[ResourceParameterKey.Callback] = "glimpse.data.initData";
         }
     }
 }

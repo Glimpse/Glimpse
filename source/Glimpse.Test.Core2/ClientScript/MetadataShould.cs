@@ -5,32 +5,28 @@ using Xunit;
 
 namespace Glimpse.Test.Core2.ClientScript
 {
-    public class DataShould
+    public class MetadataShould
     {
         [Fact]
-        public void BeARequestDataScript()
+        public void BeInTheProperOrder()
         {
-            var clientScript = new Data();
-            Assert.Equal(ScriptOrder.RequestDataScript, clientScript.Order);
+            var clientScript = new Metadata();
+
+            Assert.Equal(ScriptOrder.RequestMetadataScript, clientScript.Order);
         }
 
         [Fact]
         public void HaveProperResourceName()
         {
-            var clientScript = new Data();
-            Assert.Equal("data.js", clientScript.GetResourceName());
-        }
+            var clientScript = new Metadata();
 
-        [Fact]
-        public void BeDynamic()
-        {
-            Assert.NotNull(new Data() as IDynamicClientScript);
+            Assert.Equal("metadata.js", clientScript.GetResourceName());
         }
 
         [Fact]
         public void OverrideParameterValues()
         {
-            var clientScript = new Data();
+            var clientScript = new Metadata();
 
             var dictionary = new Dictionary<string, string>();
 

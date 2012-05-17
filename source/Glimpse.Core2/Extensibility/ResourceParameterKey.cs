@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Glimpse.Core2.Extensibility
+﻿namespace Glimpse.Core2.Extensibility
 {
     public class ResourceParameterKey
     {
