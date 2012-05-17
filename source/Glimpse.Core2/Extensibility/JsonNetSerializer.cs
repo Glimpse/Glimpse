@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 
 namespace Glimpse.Core2.Extensibility
 {
-    //TODO: Merge JSON.NET DLL - or remove dependency 
     public class JsonNetSerializer:ISerializer
     {
         private JsonSerializerSettings Settings { get; set; }

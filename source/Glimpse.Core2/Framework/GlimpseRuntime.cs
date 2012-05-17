@@ -67,7 +67,6 @@ namespace Glimpse.Core2.Framework
         }
 
         //TODO: Add PRG support
-        //TODO: Process MetaData, including: HelpUri's
         //TODO: Structured layout support
         public void EndRequest()
         {
@@ -141,7 +140,7 @@ namespace Glimpse.Core2.Framework
                                          {
                                              {ResourceParameterKey.RequestId, requestId.ToString()},
                                              {ResourceParameterKey.VersionNumber, Version},
-                                             {ResourceParameterKey.Callback, "console.log"} //TODO: This should not be hard coded, introduce yet another collection?
+                                             {ResourceParameterKey.Callback, "console.log"}
                                          };
 
                         var resourceName = dynamicScript.GetResourceName();
