@@ -170,6 +170,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="SerializationConverter\GlimpseMetadataConverter.cs" />
+    <Compile Include="SerializationConverter\GlimpseRequestConverter.cs" />
+    <Compile Include="SerializationConverter\PluginMetadataConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NuSpec\Glimpse.nuspec">

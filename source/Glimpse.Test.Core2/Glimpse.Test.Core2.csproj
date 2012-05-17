@@ -108,6 +108,8 @@
     <Compile Include="Resource\DataShould.cs" />
     <Compile Include="Resource\MetadataShould.cs" />
     <Compile Include="SerializationConverter\GlimpseMetadataConverterShould.cs" />
+    <Compile Include="SerializationConverter\GlimpseRequestConverterShould.cs" />
+    <Compile Include="SerializationConverter\PluginMetadataConverterShould.cs" />
     <Compile Include="StatusCodeResourceResultShould.cs" />
     <Compile Include="TestDoubles\DummyEnum.cs" />
     <Compile Include="TestDoubles\DummyMessage.cs" />
