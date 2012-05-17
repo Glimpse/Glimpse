@@ -236,4 +236,8 @@
         <value xml:space="preserve">Error executing resource result of type '{0}'.</value>
         <comment>{0} - GetType() of errant ResourceResult</comment>
     </data>
+    <data name="GlimpseRuntimePersistMetadataMultipleResourceWarning">
+        <value xml:space="preserve">Multiple Resources with name of '{0}'. Resources should have unique names.</value>
+        <comment>{0} - The name of ambiguous resource.</comment>
+    </data>
 </root>

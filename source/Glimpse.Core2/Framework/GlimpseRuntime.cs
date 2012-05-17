@@ -392,6 +392,18 @@ namespace Glimpse.Core2.Framework
                     pluginMetadata[tab.GetType().FullName] = metadataInstance; 
             }
 
+            var resources = metadata.Resources;
+            var endpoint = Configuration.ResourceEndpoint;
+            var logger = Configuration.Logger;
+            var parameterValues = new Dictionary<string, string>{{ResourceParameterKey.VersionNumber, Version}};
+            foreach (var resource in Configuration.Resources)
+            {
+                if (resources.ContainsKey(resource.Name))
+                    logger.Warn(Resources.GlimpseRuntimePersistMetadataMultipleResourceWarning, resource.Name);
+
+                resources[resource.Name] = endpoint.GenerateUri(resource, logger, parameterValues);
+            }
+
             Configuration.PersistanceStore.Save(metadata);
         }
 

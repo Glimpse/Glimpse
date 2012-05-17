@@ -12,7 +12,7 @@ namespace Glimpse.Core2.SerializationConverter
                        {
                            {"version", metadata.Version},
                            {"plugins", metadata.Plugins},
-                           {"paths", metadata.Paths}
+                           {"paths", metadata.Resources}//TODO:Rename to resources in JS too?
                        };
         }
     }

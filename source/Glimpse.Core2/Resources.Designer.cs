@@ -268,6 +268,15 @@ namespace Glimpse.Core2 {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Multiple Resources with name of &apos;{0}&apos;. Resources should have unique names..
+        /// </summary>
+        internal static string GlimpseRuntimePersistMetadataMultipleResourceWarning {
+            get {
+                return ResourceManager.GetString("GlimpseRuntimePersistMetadataMultipleResourceWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exception initializing pipeline inspector of type &apos;{0}&apos;..
         /// </summary>
         internal static string InitializePipelineInspectorError {
