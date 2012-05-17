@@ -1,8 +1,5 @@
-using Newtonsoft.Json;
-
 namespace Glimpse.Core2.Framework
 {
-    //TODO this needs to use a converter instead (like GlimpseMetadataConverter)
     public class TabResult
     {
         /// <summary>
@@ -12,10 +9,8 @@ namespace Glimpse.Core2.Framework
         /// <value>
         /// The data.
         /// </value>
-        [JsonProperty(PropertyName = "data")]
         public object Data { get; set; }
 
-        [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
 
         public TabResult(string name, object data)

@@ -8,7 +8,6 @@ namespace Glimpse.Core2.Framework
         {
             Plugins = new Dictionary<string, PluginMetadata>();
 
-            //TODO: this is really bad... Nik needs to work on how we want to do this. Version numbers need to be taken into account too
             Resources = new Dictionary<string, string>//TODO: once the resources below are implemented, this constructor should just instantiate paths.
                         {
                             {"history", "NEED TO IMPLMENT RESOURCE History"},//TODO: Implement resource
