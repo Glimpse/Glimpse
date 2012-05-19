@@ -78,6 +78,7 @@
     box-shadow: inset 0px 1px 0px 0px #E2E2E2;
     border-top: 1px solid #7A7A7A;
     height: 25px;
+    position: relative;
 }
 .glimpse-bar .glimpse-icon {
     margin-top: 3px;
@@ -85,9 +86,11 @@
 }
 .glimpse-buttons {
     text-align: right;
-    float: right;
+    position: absolute;
+    right: 0;
+    top: 0;
     height: 17px;
-    width: 150px;
+    width: 200px;
     padding: 6px;
 }
 .glimpse-title {
@@ -209,8 +212,10 @@
     margin-right: 15px;
 }
 .glimpse-meta-update {
-    background-position: -198px -1px;
-    display: none;
+    position: absolute;
+    color: #666 !important;
+    top: 5px;
+    left: 0;
 }
 .glimpse-meta-update:hover {
     background-position: -213px -1px;
