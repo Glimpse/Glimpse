@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
+using Glimpse.Core2.Configuration;
 using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Core2.Policy
 {
-    public class StatusCodePolicy:ConfigurationSection, IRuntimePolicy
+    public class StatusCodePolicy:IRuntimePolicy, IConfigurable
     {
-        //TODO: Turn into a proper configuration class
         public IList<int> StatusCodeWhitelist { get; set; }
 
         public StatusCodePolicy()
         {
-            StatusCodeWhitelist = new List<int>{200, 301, 302};
+            StatusCodeWhitelist = new List<int>();
         }
 
         public StatusCodePolicy(IList<int> statusCodeWhitelist)
@@ -39,6 +38,16 @@ namespace Glimpse.Core2.Policy
         public RuntimeEvent ExecuteOn
         {
             get { return RuntimeEvent.EndRequest; }
+        }
+
+        public void Configure(GlimpseSection section)
+        {
+            StatusCodeWhitelist = new List<int>();
+
+            foreach (StatusCodeElement item in section.RuntimePolicies.StatusCodes)
+            {
+                StatusCodeWhitelist.Add(item.StatusCode);
+            }
         }
     }
 }

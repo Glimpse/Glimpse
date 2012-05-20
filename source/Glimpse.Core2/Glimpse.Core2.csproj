@@ -63,6 +63,11 @@
     <Compile Include="Configuration\LoggingElement.cs" />
     <Compile Include="Configuration\LoggingLevel.cs" />
     <Compile Include="Configuration\PolicyDiscoverableCollectionElement.cs" />
+    <Compile Include="Configuration\RegexConverter.cs" />
+    <Compile Include="Configuration\RegexElement.cs" />
+    <Compile Include="Configuration\RegexElementCollection.cs" />
+    <Compile Include="Configuration\StatusCodeElement.cs" />
+    <Compile Include="Configuration\StatusCodeElementCollection.cs" />
     <Compile Include="Configuration\TypeConverter.cs" />
     <Compile Include="Configuration\TypeElement.cs" />
     <Compile Include="Configuration\TypeElementCollection.cs" />

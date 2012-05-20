@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Core2.Policy
 {
-    public class UriPolicy: ConfigurationSection, IRuntimePolicy
+    public class UriPolicy: IRuntimePolicy
     {
-        //TODO: Turn into a proper configuration class
         public IList<Regex> UriBlacklist { get; set; }
 
         public UriPolicy()

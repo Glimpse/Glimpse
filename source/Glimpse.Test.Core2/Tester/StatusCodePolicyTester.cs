@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
 using Glimpse.Core2.Policy;
@@ -11,7 +12,7 @@ namespace Glimpse.Test.Core2.Tester
         public Mock<IRuntimePolicyContext> ContextMock { get; set; }
         public Mock<ILogger> LoggerMock { get; set; }
 
-        private StatusCodePolicyTester()
+        private StatusCodePolicyTester(IList<int> statusCodes):base(statusCodes)
         {
             RequestMetadataMock = new Mock<IRequestMetadata>();
             RequestMetadataMock.Setup(r => r.ResponseStatusCode).Returns(500);
@@ -25,7 +26,7 @@ namespace Glimpse.Test.Core2.Tester
 
         public static StatusCodePolicyTester Create()
         {
-            return new StatusCodePolicyTester();
+            return new StatusCodePolicyTester(new List<int>{200,301,302});
         }
     }
 }

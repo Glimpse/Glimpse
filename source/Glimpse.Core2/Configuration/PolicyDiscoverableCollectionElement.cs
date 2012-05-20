@@ -11,7 +11,18 @@ namespace Glimpse.Core2.Configuration
             set { base["contentTypes"] = value; }
         }
 
-        //TODO: Add nodes for allowed StatusCodes w/ defaults
-        //TODO: Add nodes for Uri RegEx's w/ defaults
+        [ConfigurationProperty("statusCodes")]
+        public StatusCodeElementCollection StatusCodes
+        {
+            get { return (StatusCodeElementCollection) base["statusCodes"]; }
+            set { base["statusCodes"] = value; }
+        }
+
+        [ConfigurationProperty("uris")]
+        public RegexElementCollection Uris
+        {
+            get { return (RegexElementCollection) base["uris"]; }
+            set { base["uris"] = value; }
+        }
     }
 }
