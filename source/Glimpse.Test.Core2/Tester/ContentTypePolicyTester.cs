@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
 using Glimpse.Core2.Policy;
@@ -11,7 +12,7 @@ namespace Glimpse.Test.Core2.Tester
         public Mock<IRequestMetadata> RequestMetadataMock { get; set; }
         public Mock<ILogger> LoggerMock { get; set; }
 
-        private ContentTypePolicyTester()
+        private ContentTypePolicyTester(IList<string> contentTypes):base(contentTypes)
         {
             RequestMetadataMock = new Mock<IRequestMetadata>();
             RequestMetadataMock.Setup(r => r.ResponseContentType).Returns(@"text/html");
@@ -25,7 +26,11 @@ namespace Glimpse.Test.Core2.Tester
 
         public static ContentTypePolicyTester Create()
         {
-            return new ContentTypePolicyTester();
+            return new ContentTypePolicyTester(new List<string>
+                                       {
+                                           @"text/html",
+                                           @"application/json"
+                                       });
         }
     }
 }

@@ -1,8 +1,16 @@
+using System.Configuration;
+
 namespace Glimpse.Core2.Configuration
 {
     public class PolicyDiscoverableCollectionElement:DiscoverableCollectionElement
     {
-        //TODO: Add nodes for allowed ContentTypes w/ defaults
+        [ConfigurationProperty("contentTypes")]
+        public ContentTypeElementCollection ContentTypes
+        {
+            get { return (ContentTypeElementCollection) base["contentTypes"]; }
+            set { base["contentTypes"] = value; }
+        }
+
         //TODO: Add nodes for allowed StatusCodes w/ defaults
         //TODO: Add nodes for Uri RegEx's w/ defaults
     }

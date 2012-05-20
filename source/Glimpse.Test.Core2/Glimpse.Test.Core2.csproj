@@ -57,6 +57,8 @@
     <Compile Include="ClientScript\ClientShould.cs" />
     <Compile Include="ClientScript\DataShould.cs" />
     <Compile Include="ClientScript\MetadataShould.cs" />
+    <Compile Include="Configuration\ContentTypeElementCollectionShould.cs" />
+    <Compile Include="Configuration\ContentTypeElementShould.cs" />
     <Compile Include="Configuration\DiscoverableCollectionElementShould.cs" />
     <Compile Include="Configuration\GlimpseSectionShould.cs" />
     <Compile Include="Configuration\LoggingElementShould.cs" />

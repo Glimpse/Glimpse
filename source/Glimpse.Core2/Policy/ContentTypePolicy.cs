@@ -2,22 +2,18 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using Glimpse.Core2.Configuration;
 using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Core2.Policy
 {
-    public class ContentTypePolicy:ConfigurationSection, IRuntimePolicy
+    public class ContentTypePolicy:IRuntimePolicy, IConfigurable
     {
-        //TODO: Turn into a proper configuration class
         public IList<string> ContentTypeWhitelist { get; set; }
 
         public ContentTypePolicy()
         {
-            ContentTypeWhitelist = new List<string>
-                                       {
-                                           @"text/html",
-                                           @"application/json"
-                                       };
+            ContentTypeWhitelist = new List<string>();
         }
 
         public ContentTypePolicy(IList<string> contentTypeWhitelist)
@@ -45,6 +41,16 @@ namespace Glimpse.Core2.Policy
         public RuntimeEvent ExecuteOn
         {
             get { return RuntimeEvent.EndRequest; }
+        }
+
+        public void Configure(GlimpseSection section)
+        {
+            ContentTypeWhitelist = new List<string>();
+
+            foreach (ContentTypeElement item in section.RuntimePolicies.ContentTypes)
+            {
+                ContentTypeWhitelist.Add(item.ContentType);
+            }
         }
     }
 }

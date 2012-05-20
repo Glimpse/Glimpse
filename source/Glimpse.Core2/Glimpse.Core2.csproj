@@ -56,6 +56,8 @@
     <Compile Include="ClientScript\Client.cs" />
     <Compile Include="ClientScript\Data.cs" />
     <Compile Include="ClientScript\Metadata.cs" />
+    <Compile Include="Configuration\ContentTypeElement.cs" />
+    <Compile Include="Configuration\ContentTypeElementCollection.cs" />
     <Compile Include="Configuration\DiscoverableCollectionElement.cs" />
     <Compile Include="Configuration\GlimpseSection.cs" />
     <Compile Include="Configuration\LoggingElement.cs" />
@@ -70,6 +72,7 @@
     <Compile Include="Extensibility\CastleInvocationToAlternateImplementationContextAdapter.cs" />
     <Compile Include="Extensibility\DictionaryDataStoreAdapter.cs" />
     <Compile Include="Extensibility\ExecutionTimer.cs" />
+    <Compile Include="Extensibility\IConfigurable.cs" />
     <Compile Include="Extensibility\IParameterValueProvider.cs" />
     <Compile Include="Extensibility\TimerResult.cs" />
     <Compile Include="Extensibility\IAlternateImplementation.cs" />

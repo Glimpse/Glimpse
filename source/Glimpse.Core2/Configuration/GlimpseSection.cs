@@ -42,9 +42,9 @@ namespace Glimpse.Core2.Configuration
         }
 
         [ConfigurationProperty("runtimePolicies")]
-        public DiscoverableCollectionElement RuntimePolicies
+        public PolicyDiscoverableCollectionElement RuntimePolicies
         {
-            get { return (DiscoverableCollectionElement) base["runtimePolicies"]; }
+            get { return (PolicyDiscoverableCollectionElement)base["runtimePolicies"]; }
             set { base["runtimePolicies"] = value; }
         }
 

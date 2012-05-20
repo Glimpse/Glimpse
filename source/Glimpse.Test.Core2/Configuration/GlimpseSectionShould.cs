@@ -194,7 +194,7 @@ namespace Glimpse.Test.Core2.Configuration
         {
             var section = new GlimpseSection();
 
-            var element = new DiscoverableCollectionElement {AutoDiscover = false};
+            var element = new PolicyDiscoverableCollectionElement {AutoDiscover = false};
 
             section.RuntimePolicies = element;
 

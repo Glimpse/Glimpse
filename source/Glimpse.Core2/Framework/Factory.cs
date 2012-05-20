@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using Glimpse.Core2.Configuration;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Extensions;
@@ -196,8 +197,14 @@ namespace Glimpse.Core2.Framework
             ICollection<IRuntimePolicy> result;
             if (TryAllInstancesFromServiceLocators(out result)) return result;
 
-            return CreateDiscoverableCollection<IRuntimePolicy>(Configuration.RuntimePolicies);
-            //TODO: Special configuration for Uri, StatusCode and ContentType policies
+            var collection = CreateDiscoverableCollection<IRuntimePolicy>(Configuration.RuntimePolicies);
+
+            foreach (var config in collection.OfType<IConfigurable>())
+            {
+                config.Configure(Configuration);
+            }
+
+            return collection;
         }
 
         public ICollection<ISerializationConverter> InstantiateSerializationConverters()
