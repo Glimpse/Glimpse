@@ -58,6 +58,7 @@
     <EmbeddedResource Include="Plumbing\Profiler\GlimpseProfileDbDriverNh121.cs" />
     <Compile Include="Plumbing\Injectors\GlimpseProfileDbDriverFactory.cs" />
     <Compile Include="Plumbing\Injectors\IGlimpseProfileDbDriverFactory.cs" />
+    <EmbeddedResource Include="Plumbing\Profiler\GlimpseProfileDbDriverNh330.cs" />
     <Compile Include="Plumbing\Profiler\IGlimpseProfileDbDriver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\NH.cs" />
