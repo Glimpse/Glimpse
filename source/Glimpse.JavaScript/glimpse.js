@@ -333,7 +333,7 @@ var glimpse = (function ($, scope) {
         
                     if (requestId != baseInner.requestId) {
                         $.ajax({
-                            url : currentMetadata().history,
+                            url : currentMetadata().paths.history,
                             type : 'GET',
                             data : { 'ClientRequestID': requestId },
                             contentType : 'application/json',
