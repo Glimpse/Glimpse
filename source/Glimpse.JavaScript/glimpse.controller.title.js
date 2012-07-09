@@ -18,7 +18,10 @@
         },
         switchContextFunc = {
             start : function () { elements.title.find('.glimpse-url .loading').fadeIn(); }, 
-            complete : function () { elements.title.find('.glimpse-url .loading').fadeOut(); }
+            complete: function () { elements.title.find('.glimpse-url .loading').fadeOut(); },
+            success: function (requestId, newResult, oldResult) {
+                newResult.metadata.correlation = oldResult.metadata.correlation;
+            }
         },
         switchContext = function (requestId) { 
             glimpse.pubsub.publish('action.data.context.reset', 'Title');
@@ -57,7 +60,7 @@
                     var leg = correlation.legs[i];
                     if (leg.url == currentUrl) {
                         currentLeg = leg.url;
-                        html += currentLeg + ' - <strong>' + leg.method + '</strong> (Current)';
+                        html += currentLeg + ' - <strong>' + leg.method + '</strong> (Current)<br />';
                     }
                     else
                         html += '<a title="Go to ' + leg.url + '" href="#" data-requestId="' + leg.glimpseId + '" data-url="' + leg.url + '">' + leg.url + '</a> - <strong>' + leg.method + '</strong><br />';
