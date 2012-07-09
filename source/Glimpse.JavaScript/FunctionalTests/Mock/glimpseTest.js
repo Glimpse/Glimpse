@@ -159,10 +159,7 @@ var glimpseTest = (function ($) {
         
                     setTimeout(function () { 
                         var response; 
-                        if (param.data && param.data.ClientRequestID) { 
-                            if (param.complete)
-                                param.complete();  
-        
+                        if (param.data && param.data.ClientRequestID) {
                             if (param.data.ClientRequestID != 'PRG') {
                                 for (var name in requests) {
                                     var nameValue = requests[name];
@@ -183,6 +180,9 @@ var glimpseTest = (function ($) {
                             }
                             else
                                 response = prgData;
+                            
+                            if (param.complete)
+                                param.complete();
                         } 
                         else { 
                             param.complete(null, (random(11) != 10 ? 'Success' : 'Fail')); 
