@@ -1945,11 +1945,14 @@ var glimpseHistoryPlugin = (function ($, glimpse) {
                 context.resultCount = 0;
                 mainBody.empty();
             }
-            
-            for (var x = clientData.length; --x >= context.resultCount;) {
+
+            var html = '';
+            for (var x = context.resultCount; x < clientData.length; x++) {
                 var item = clientData[x];
-                mainBody.prepend('<tr class="' + (x % 2 == 0 ? 'even' : 'odd') + '" data-requestId="' + item.requestId + '"><td>' + item.url + '</td><td>' + item.method + '</td><td>' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.requestTime + '</td><td>' + item.isAjax + '</td><td><a href="#" class="glimpse-history-link" data-glimpseId="' + item.requestId + '">Inspect</a></td></tr>');
+                html = '<tr class="' + (x % 2 == 0 ? 'even' : 'odd') + '" data-requestId="' + item.requestId + '"><td>' + item.url + '</td><td>' + item.method + '</td><td>' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.requestTime + '</td><td>' + item.isAjax + '</td><td><a href="#" class="glimpse-history-link" data-glimpseId="' + item.requestId + '">Inspect</a></td></tr>' + html;
             }
+            mainBody.prepend(html);
+            
             if (currentRequestId)
                 mainBody.find('tr[data-requestId="' + currentRequestId + '"]').addClass('selected');
 
