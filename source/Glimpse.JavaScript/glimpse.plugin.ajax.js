@@ -62,7 +62,7 @@
             notice.prePoll(); 
             $.ajax({
                 url: glimpse.data.currentMetadata().paths.ajax,
-                data: { 'ClientRequestID': currentId },
+                data: { 'clientRequestID': currentId },
                 type: 'GET',
                 contentType: 'application/json',
                 complete : function(jqXHR, textStatus) {
