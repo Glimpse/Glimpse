@@ -335,7 +335,7 @@ var glimpse = (function ($, scope) {
                         $.ajax({
                             url : currentMetadata().paths.history,
                             type : 'GET',
-                            data : { 'clientRequestID': requestId },
+                            data : { 'requestID': requestId },
                             contentType : 'application/json',
                             success : function (result, textStatus, jqXHR) {   
                                 if (callback && callback.success) { callback.success(requestId, result, inner, textStatus, jqXHR); }
@@ -899,7 +899,7 @@ var glimpse = (function ($, scope) {
                     $.ajax({
                         url : data.currentMetadata().paths.history,
                         type : 'GET',
-                        data : { 'clientRequestID' : currentData.requestId, 'PluginKey' : key },
+                        data : { 'requestID' : currentData.requestId, 'PluginKey' : key },
                         contentType : 'application/json',
                         success : function (result) {
                             var itemData = currentData.data[key];
@@ -1728,7 +1728,7 @@ var glimpseAjaxPlugin = (function ($, glimpse) {
             notice.prePoll(); 
             $.ajax({
                 url: glimpse.data.currentMetadata().paths.ajax,
-                data: { 'clientRequestID': currentId },
+                data: { 'requestID': currentId },
                 type: 'GET',
                 contentType: 'application/json',
                 complete : function(jqXHR, textStatus) {

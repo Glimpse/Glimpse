@@ -31,7 +31,7 @@
                 $.ajax({
                     url : currentMetadata().paths.history,
                     type : 'GET',
-                    data : { 'clientRequestID': requestId },
+                    data : { 'requestID': requestId },
                     contentType : 'application/json',
                     success : function (result, textStatus, jqXHR) {   
                         if (callback && callback.success) { callback.success(requestId, result, inner, textStatus, jqXHR); }

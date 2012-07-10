@@ -10,14 +10,14 @@
         index = 0,
         lastId = 0,
         generate = function (data) {  
-            if ((index < 6 && data.clientRequestID == 1234) || index < 3)
+            if ((index < 6 && data.requestID == 1234) || index < 3)
                 result.push(possibleResults[index++]);
             return $.extend(true, [], result);
         },
         trigger = function (param) { 
-            if (param.data.clientRequestID != lastId) {
+            if (param.data.requestID != lastId) {
                 index = 0;
-                lastId = param.data.clientRequestID;
+                lastId = param.data.requestID;
             }
 
             setTimeout(function () {
