@@ -1818,6 +1818,7 @@ var glimpseHistoryPlugin = (function ($, glimpse) {
         isActive = false,  
         notice = undefined, 
         currentData = undefined,
+        currentRequestId = undefined,
         wireListener = function () {  
             glimpse.pubsub.subscribe('data.elements.processed', wireDomListeners); 
             glimpse.pubsub.subscribe('action.data.applied', setupData);  
@@ -1947,8 +1948,11 @@ var glimpseHistoryPlugin = (function ($, glimpse) {
             
             for (var x = clientData.length; --x >= context.resultCount;) {
                 var item = clientData[x];
-                mainBody.prepend('<tr class="' + (x % 2 == 0 ? 'even' : 'odd') + '"><td>' + item.url + '</td><td>' + item.method + '</td><td>' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.requestTime + '</td><td>' + item.isAjax + '</td><td><a href="#" class="glimpse-history-link" data-glimpseId="' + item.requestId + '">Inspect</a></td></tr>');
+                mainBody.prepend('<tr class="' + (x % 2 == 0 ? 'even' : 'odd') + '" data-requestId="' + item.requestId + '"><td>' + item.url + '</td><td>' + item.method + '</td><td>' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.requestTime + '</td><td>' + item.isAjax + '</td><td><a href="#" class="glimpse-history-link" data-glimpseId="' + item.requestId + '">Inspect</a></td></tr>');
             }
+            if (currentRequestId)
+                mainBody.find('tr[data-requestId="' + currentRequestId + '"]').addClass('selected');
+
             context.resultCount = clientData.length;
             context.clientName = clientName;
         },
@@ -1965,7 +1969,7 @@ var glimpseHistoryPlugin = (function ($, glimpse) {
         
         
         selected = function (item) {
-            var requestId = item.attr('data-glimpseId');
+            var requestId = currentRequestId = item.attr('data-glimpseId');
 
             item.hide().parent().append('<div class="loading glimpse-history-loading" data-glimpseId="' + requestId + '"><div class="icon"></div>Loading...</div>');
 
@@ -1995,6 +1999,8 @@ var glimpseHistoryPlugin = (function ($, glimpse) {
         reset = function (type) {
             var panel = glimpse.elements.findPanel('History'),
                 main = panel.find('.glimpse-col-main');
+
+            currentRequestId = undefined;
 
             main.find('.glimpse-head-message').fadeOut();
             main.find('.selected').removeClass('selected');
