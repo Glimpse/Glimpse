@@ -42,14 +42,14 @@ var glimpseTest = (function ($) {
                 index = 0,
                 lastId = 0,
                 generate = function (data) {  
-                    if ((index < 6 && data.glimpseId == 1234) || index < 3)
+                    if ((index < 6 && data.clientRequestID == 1234) || index < 3)
                         result.push(possibleResults[index++]);
                     return result;
                 },
                 trigger = function (param) { 
-                    if (param.data.glimpseId != lastId) {
+                    if (param.data.clientRequestID != lastId) {
                         index = 0;
-                        lastId = param.data.glimpseId;
+                        lastId = param.data.clientRequestID;
                     }
         
                     setTimeout(function () {
@@ -159,12 +159,12 @@ var glimpseTest = (function ($) {
         
                     setTimeout(function () { 
                         var response; 
-                        if (param.data && param.data.ClientRequestID) {
-                            if (param.data.ClientRequestID != 'PRG') {
+                        if (param.data && param.data.clientRequestID) {
+                            if (param.data.clientRequestID != 'PRG') {
                                 for (var name in requests) {
                                     var nameValue = requests[name];
                                     for (var i = 0; i < nameValue.length ; i++) {
-                                        if (nameValue[i].requestId == param.data.ClientRequestID)
+                                        if (nameValue[i].requestId == param.data.clientRequestID)
                                             response = nameValue[i];
                                     }
                                 }

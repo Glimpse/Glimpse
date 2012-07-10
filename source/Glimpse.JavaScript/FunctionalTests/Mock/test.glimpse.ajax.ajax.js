@@ -10,14 +10,14 @@
         index = 0,
         lastId = 0,
         generate = function (data) {  
-            if ((index < 6 && data.glimpseId == 1234) || index < 3)
+            if ((index < 6 && data.clientRequestID == 1234) || index < 3)
                 result.push(possibleResults[index++]);
             return result;
         },
         trigger = function (param) { 
-            if (param.data.glimpseId != lastId) {
+            if (param.data.clientRequestID != lastId) {
                 index = 0;
-                lastId = param.data.glimpseId;
+                lastId = param.data.clientRequestID;
             }
 
             setTimeout(function () {
