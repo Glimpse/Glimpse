@@ -5,6 +5,7 @@
     <title></title>
     <style>
         .glimpse-example .glimpse-panel { display:block !important; margin-bottom:20px; }
+        pre { font-family: Consolas, monospace, serif; font-size: 11px;border: 1px dashed #777; background-color: #EEE; padding: 1em; }
     </style>
 </head>
 <body>
@@ -16,27 +17,28 @@
     <a class="data-test-2" href="#">New Data</a>
 
     <h1>Render Test</h1>
-    <div class="glimpse glimpse-example">
-        <div class="sample1 glimpse-panel"></div>
-        <div class="sample2 glimpse-panel"></div>
-        <div class="sample3 glimpse-panel"></div>
-        <div class="sample4 glimpse-panel"></div>
-        <div class="sample5 glimpse-panel"></div>
-        <div class="sample6 glimpse-panel"></div>
-        <div class="sample7 glimpse-panel"></div>
-        <div class="sample8 glimpse-panel"></div>
-        <div class="sample9 glimpse-panel"></div>
+    <div class="glimpse-example">
         
-        <div class="sample10 glimpse-panel"></div>
-        <div class="sample11 glimpse-panel"></div>
-        <div class="sample12 glimpse-panel"></div>
-        <div class="sample13 glimpse-panel"></div>
-        <div class="sample14 glimpse-panel"></div>
-        <div class="sample15 glimpse-panel"></div>
-        <div class="sample16 glimpse-panel"></div>
-        <div class="sample17 glimpse-panel"></div>
-        <div class="sample18 glimpse-panel"></div>
-        <div class="sample19 glimpse-panel"></div>
+        <div class="glimpse"><div class="sample1 glimpse-panel"></div></div>
+        <div class="glimpse"><div class="sample2 glimpse-panel"></div></div>
+        <div class="glimpse"><div class="sample3 glimpse-panel"></div></div>
+        <div class="glimpse"><div class="sample4 glimpse-panel"></div></div>
+        <div class="glimpse"><div class="sample5 glimpse-panel"></div></div>
+        <div class="glimpse"><div class="sample6 glimpse-panel"></div></div>
+        <div class="glimpse"><div class="sample7 glimpse-panel"></div></div>
+        <div class="glimpse"><div class="sample8 glimpse-panel"></div></div>
+        <div class="glimpse"><div class="sample9 glimpse-panel"></div></div>
+        
+        <div class="glimpse"><div class="sample10 glimpse-panel"></div></div>
+        <div class="glimpse"><div class="sample11 glimpse-panel"></div></div>
+        <div class="glimpse"><div class="sample12 glimpse-panel"></div></div>
+        <div class="glimpse"><div class="sample13 glimpse-panel"></div></div>
+        <div class="glimpse"><div class="sample14 glimpse-panel"></div></div>
+        <div class="glimpse"><div class="sample15 glimpse-panel"></div></div>
+        <div class="glimpse"><div class="sample16 glimpse-panel"></div></div>
+        <div class="glimpse"><div class="sample17 glimpse-panel"></div></div>
+        <div class="glimpse"><div class="sample18 glimpse-panel"></div></div>
+        <div class="glimpse"><div class="sample19 glimpse-panel"></div></div>
     </div>
 
     <script src="../glimpse.js" type="text/javascript"></script>
@@ -179,14 +181,60 @@ var glimpseData2 = {
 })($Glimpse);
     </script>
     <script type="text/javascript"> 
-(function($) {
+(function($) { 
+    var formatJson = function(val) {
+        var result = '',
+            stack = [],
+            stackTop = { indent: '' },
+            strLen = val.length,
+            char = '',
+            indentStr = '    ',
+            newLine = '\r\n';
+        
+        for (var i = 0; i < strLen; i++) {
+            char = val[i];
+            
+            if (char == '{' || char == '[') {
+                stack.push(stackTop = {
+                    isArray: char == '[',
+                    isOutterArray: char == '[' && val[i + 1] == '[',
+                    indent: stackTop.indent + (!stackTop.isOutterArray ? indentStr : '')
+                }); 
+            }
+            
+            if (char == '}' || (char == ']' && stackTop.isOutterArray))
+                result += newLine + (stack.length > 1 ? stack[stack.length - 2].indent : '');
+             
+            result += ((char == ']' && !stackTop.isOutterArray) || char == ':' ? ' ' : '') + char + (char == '[' || char == ':' || (char == ',' && stackTop.isArray) ? ' ' : '');
+             
+            if ((char == ',' && (!stackTop.isArray || stackTop.isOutterArray)) || char == '{' || (char == '[' && stackTop.isOutterArray))
+                result += newLine + stackTop.indent;
+            
+            if (char == '}' || char == ']') {
+                stack.pop();
+                stackTop = stack[stack.length - 1];
+            } 
+        }
+
+        return result;
+    };
+
+
+    var process = function(scope, data) {
+        var dataPretty = formatJson(JSON.stringify(data));
+
+        scope.parent().before('<pre>' + dataPretty + '</pre>');
+
+        glimpse.render.insert(scope, data); 
+    };
+
     var data1 = {
             'Movie': 'Star Wars',
             'Genera/Theme': 'Science Fiction',
             'GlimpseOn': 'True',
-            'Plot & Description': 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.'
+            'Plot & Description': 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.'
         };
-    glimpse.render.insert($('.sample1'), data1); 
+    process($('.sample1'), data1); 
 
             
     var data2 = [
@@ -200,7 +248,7 @@ var glimpseData2 = {
         ['Anthony Daniels', 'C-3PO', 'Droid', '101'],
         ['Kenny Baker', 'R2-D2', 'Droid', '150']
     ];
-    glimpse.render.insert($('.sample2'), data2); 
+    process($('.sample2'), data2); 
 
     
     var data3 = [
@@ -218,7 +266,7 @@ var glimpseData2 = {
         ['Shelagh Fraser', 'Aunt Beru', 'Female', '29'],
         ['Alex McCrindle', 'General Dodonna', 'Male', '43', 'fail']
     ];
-    glimpse.render.insert($('.sample3'), data3); 
+    process($('.sample3'), data3); 
 
     
     var data4 = {
@@ -227,11 +275,11 @@ var glimpseData2 = {
         'Actors/Cast': [
                 ['Actor', 'Character', 'Gender', 'Age'],
                 ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
-                ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+                ['James Earl Jones', 'Darth Vader', 'Male', '45']
             ],
-        'Plot & Description': 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.'
+        'Plot & Description': 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.'
     };
-    glimpse.render.insert($('.sample4'), data4); 
+    process($('.sample4'), data4); 
     
 
     var data5 = {
@@ -242,9 +290,9 @@ var glimpseData2 = {
                 ['Mark Hamill', 'Luke Skywalker - Luke Skywalker was a legendary war hero and Jedi who helped defeat the Galactic Empire in the Galactic Civil War and helped found the New Republic, as well as the New Jedi Order.', 'Male', '21'],
                 ['James Earl Jones', 'Darth Vader', 'Male', '45'],
             ],
-        'Plot & Description': 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.'
+        'Plot & Description': 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.'
     };
-    glimpse.render.insert($('.sample5'), data5); 
+    process($('.sample5'), data5); 
 
     
     var data6 = {
@@ -261,9 +309,9 @@ var glimpseData2 = {
                 ['Anthony Daniels', 'C-3PO', 'Droid', '101'],
                 ['Kenny Baker', 'R2-D2', 'Droid', '150']
             ],
-        'Plot & Description': 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.'
+        'Plot & Description': 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.'
     };
-    glimpse.render.insert($('.sample6'), data6); 
+    process($('.sample6'), data6); 
 
     
     var data7 = {
@@ -280,9 +328,9 @@ var glimpseData2 = {
                 ['Anthony Daniels', 'C-3PO', 'Droid', '101'],
                 ['Kenny Baker', 'R2-D2', 'Droid', '150']
             ],
-        'Plot & Description': 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.'
+        'Plot & Description': 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.'
     };
-    glimpse.render.insert($('.sample7'), data7); 
+    process($('.sample7'), data7); 
 
     
     var data8 = {
@@ -293,9 +341,9 @@ var glimpseData2 = {
             'James Earl Jones': 'Darth Vader',
             'Harrison Ford': 'Han Solo'
         },
-        'Plot & Description': 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.'
+        'Plot & Description': 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.'
     };
-    glimpse.render.insert($('.sample8'), data8);
+    process($('.sample8'), data8);
 
     
     var data9 = {
@@ -311,9 +359,9 @@ var glimpseData2 = {
             'Anthony Daniels': 'C-3PO',
             'Kenny Baker': 'R2-D2'
         },
-        'Plot & Description': 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.'
+        'Plot & Description': 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.'
     };
-    glimpse.render.insert($('.sample9'), data9); 
+    process($('.sample9'), data9); 
 
 
     var data10 = [
@@ -325,9 +373,9 @@ var glimpseData2 = {
                 ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
                 ['James Earl Jones', 'Darth Vader', 'Male', '45'],
             ], 'Cast details pending'],
-        ['\tPlot & Description', 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.', ' Best movie of all time']
+        ['\tPlot & Description', 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.', ' Best movie of all time']
     ];
-    glimpse.render.insert($('.sample10'), data10); 
+    process($('.sample10'), data10); 
 
     
     var data11 = [
@@ -345,9 +393,9 @@ var glimpseData2 = {
                 ['Anthony Daniels', 'C-3PO', 'Droid', '101'],
                 ['Kenny Baker', 'R2-D2', 'Droid', '150']
             ], 'Cast details pending'],
-        ['Plot & Description', 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.', ' Best movie of all time']
+        ['Plot & Description', 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.', ' Best movie of all time']
     ];
-    glimpse.render.insert($('.sample11'), data11); 
+    process($('.sample11'), data11); 
 
     
     var data12 = [
@@ -359,9 +407,9 @@ var glimpseData2 = {
             'James Earl Jones': 'Darth Vader',
             'Harrison Ford': 'Han Solo'
         }, 'Cast details pending'],
-        ['Plot & Description', 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.', ' Best movie of all time']
+        ['Plot & Description', 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.', ' Best movie of all time']
     ];
-    glimpse.render.insert($('.sample12'), data12); 
+    process($('.sample12'), data12); 
     
 
     var data13 = [
@@ -378,9 +426,9 @@ var glimpseData2 = {
             'Anthony Daniels': 'C-3PO',
             'Kenny Baker': 'R2-D2'
         }, 'Cast details pending'],
-        ['Plot & Description', 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.', ' Best movie of all time']
+        ['Plot & Description', 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.', ' Best movie of all time']
     ];
-    glimpse.render.insert($('.sample13'), data13); 
+    process($('.sample13'), data13); 
 
     
     var data14 = {
@@ -391,9 +439,9 @@ var glimpseData2 = {
                 ['Mark Hamill', { 'Frist Name': 'Luke Skywalker' }, 'Male', '21'],
                 ['James Earl Jones', 'Darth Vader', [['Height', 'Weight'], ['213', '433']], 'Male'],
             ],
-        'Plot & Description': 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.'
+        'Plot & Description': 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.'
     };
-    glimpse.render.insert($('.sample14'), data14); 
+    process($('.sample14'), data14); 
 
     
     var data15 = {
@@ -410,9 +458,9 @@ var glimpseData2 = {
                 ['Anthony Daniels', 'C-3PO', 'Droid', '101'],
                 ['Kenny Baker', 'R2-D2', 'Droid', '150']
             ],
-        'Plot & Description': 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.'
+        'Plot & Description': 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.'
     };
-    glimpse.render.insert($('.sample15'), data15);
+    process($('.sample15'), data15);
 
     
     var data16 = {
@@ -429,9 +477,9 @@ var glimpseData2 = {
                 ['Anthony Daniels', 'C-3PO', 'Droid', '101'],
                 ['Kenny Baker', 'R2-D2', 'Droid', '150']
             ],
-        'Plot & Description': [ 'Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.' ]
+        'Plot & Description': [ 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.' ]
     };
-    glimpse.render.insert($('.sample16'), data16);
+    process($('.sample16'), data16);
 
 
     var data17 = [
@@ -462,10 +510,11 @@ var glimpseData2 = {
             ], 'Droid', '101', '2'],
         ['Kenny Baker', 'R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker. While Luke cleans the sand out of R2-D2\'s gears, he discovers a fragment of Leia\'s message, and removes the droid\'s restraining bolt to see more; once free of the bolt, R2 claims to have no knowledge of the message. R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker. While Luke cleans the sand out of R2-D2\'s gears, he discovers a fragment of Leia\'s message, and removes the droid\'s restraining bolt to see more; once free of the bolt, R2 claims to have no knowledge of the message. R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker. While Luke cleans the sand out of R2-D2\'s gears, he discovers a fragment of Leia\'s message, and removes the droid\'s restraining bolt to see more; once free of the bolt, R2 claims to have no knowledge of the message. R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker. While Luke cleans the sand out of R2-D2\'s gears, he discovers a fragment of Leia\'s message, and removes the droid\'s restraining bolt to see more; once free of the bolt, R2 claims to have no knowledge of the message. R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker. While Luke cleans the sand out of R2-D2\'s gears, he discovers a fragment of Leia\'s message, and removes the droid\'s restraining bolt to see more; once free of the bolt, R2 claims to have no knowledge of the message.R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker. While Luke cleans the sand out of R2-D2\'s gears, he discovers a fragment of Leia\'s message, and removes the droid\'s restraining bolt to see more; once free of the bolt, R2 claims to have no knowledge of the message.R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker. While Luke cleans the sand out of R2-D2\'s gears, he discovers a fragment of Leia\'s message, and removes the droid\'s restraining bolt to see more; once free of the bolt, R2 claims to have no knowledge of the message. R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker. While Luke cleans the sand out of R2-D2\'s gears, he discovers a fragment of Leia\'s message, and removes the droid\'s restraining bolt to see more; once free of the bolt, R2 claims to have no knowledge of the message. R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker. While Luke cleans the sand out of R2-D2\'s gears, he discovers a fragment of Leia\'s message, and removes the droid\'s restraining bolt to see more; once free of the bolt, R2 claims to have no knowledge of the message. R2-D2 - R2-D2 and C-3PO are abducted by Jawas and bought by Owen Lars, step-uncle of Luke Skywalker. While Luke cleans the sand out of R2-D2\'s gears, he discovers a fragment of Leia\'s message, and removes the droid\'s restraining bolt to see more; once free of the bolt, R2 claims to have no knowledge of the message.', 'Droid', '150', '6']
     ]; 
+    
     var metaData17 = [
             [ { data : [{ data : 0, key : true, align : 'right' }, { data : 2, align : 'right' }, { data : '{{3}} - {{4}}', align : 'right' }, ], width : '200px' }, { data : 1 } ]
         ];
-    glimpse.render.insert($('.sample17'), data17, metaData17); 
+    process($('.sample17'), data17, metaData17); 
 
 })($Glimpse);
     </script>
