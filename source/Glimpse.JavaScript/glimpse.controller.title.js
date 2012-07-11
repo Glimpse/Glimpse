@@ -5,8 +5,8 @@
             pubsub.subscribe('data.elements.processed', wireDomListeners); 
         },
         wireDomListeners = function() {
-            elements.title.find('.glimpse-url a').live('click', function() { switchContext($(this).attr('data-requestId')); return false; });
-            elements.title.find('.glimpse-snapshot-path a').live('click', function() { switchContext($(this).attr('data-requestId')); return false; });
+            elements.title.find('.glimpse-url a').live('click', function() { switchContext($(this).attr('data-requestId'), 'Correlation'); return false; });
+            elements.title.find('.glimpse-snapshot-path a').live('click', function() { switchContext($(this).attr('data-requestId'), 'Path'); return false; });
         }, 
         dropFunction = function (scope) { 
             scope.find('.glimpse-drop').mouseenter(function() { 
@@ -16,17 +16,25 @@
                 $(this).fadeOut(100);  
             }); 
         },
-        switchContextFunc = {
+        
+        switchContextPathFunc = {
             start : function () { elements.title.find('.glimpse-url .loading').fadeIn(); }, 
-            complete: function () { elements.title.find('.glimpse-url .loading').fadeOut(); },
+            complete: function () { elements.title.find('.glimpse-url .loading').fadeOut(); }
+        },
+        switchContextCorrelationFunc = $.extend({
             success: function (requestId, newResult, oldResult) {
                 newResult.metadata.correlation = oldResult.metadata.correlation;
             }
-        },
-        switchContext = function (requestId) { 
+        }, switchContextPathFunc), 
+        switchContextFunc = {
+            'Path': switchContextPathFunc,
+            'Correlation': switchContextCorrelationFunc
+        }, 
+        switchContext = function (requestId, type) { 
             glimpse.pubsub.publish('action.data.context.reset', 'Title');
-            data.retrieve(requestId, switchContextFunc);
+            data.retrieve(requestId, switchContextFunc[type]);
         },
+        
         buildEnvironment = function (requestMetadata) {
             var urls = requestMetadata.environmentUrls, 
                 html = ''; 
