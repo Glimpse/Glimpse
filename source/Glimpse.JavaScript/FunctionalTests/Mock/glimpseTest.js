@@ -175,8 +175,8 @@ var glimpseTest = (function ($) {
                                     response.metadata = metadata; 
                                 } 
                             
-                                if (param.data.PluginKey) 
-                                    response = param.data.PluginKey != "Lazy" ? response.data[param.data.PluginKey] : lazyData;
+                                if (param.data.pluginKey) 
+                                    response = param.data.pluginKey != "Lazy" ? response.data[param.data.pluginKey] : lazyData;
                                 
                                 response = $.extend(true, {}, response);
                             }
