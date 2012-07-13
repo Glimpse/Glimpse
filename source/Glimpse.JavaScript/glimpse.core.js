@@ -1,13 +1,15 @@
 ﻿/*(import:jquery-1.6.3.min.js)*/
 
 var glimpse = (function ($, scope) {
+    if (!console) { (console = {}).log = function () {}; }
+
     var //Private
         elements = {},
         template = {},
         settings = {
             height : 250,
             activeTab: 'Routes'
-        },
+        }, 
 /*(import:glimpse.core.util.js|2)*/,
 /*(import:glimpse.core.pubsub.js|2)*/,
 /*(import:glimpse.core.state.js|2)*/,
