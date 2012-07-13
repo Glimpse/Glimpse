@@ -1,7 +1,7 @@
 ﻿/*(import:jquery-1.6.3.min.js)*/
 
 var glimpse = (function ($, scope) {
-    if (!console) { (console = {}).log = function () {}; }
+    if (!window.console) { (window.console = {}).log = function () {}; }
 
     var //Private
         elements = {},
