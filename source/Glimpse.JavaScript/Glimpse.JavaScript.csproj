@@ -93,7 +93,6 @@
     <Content Include="glimpse.paging.engine.scrolling.js" />
     <Content Include="glimpse.paging.engine.traditional.js" />
     <Content Include="glimpse.plugin.ajax.js" />
-    <Content Include="glimpse.plugin.ajax.spy.js" />
     <Content Include="glimpse.plugin.history.js" />
     <Content Include="glimpse.plugin.timeline.core.js" />
     <Content Include="glimpse.plugin.timeline.js" />
