@@ -10,7 +10,10 @@
 </head>
 <body>
     <h1>Pupop Test</h1>
-    <a href="test-a.html">Test A</a>
+    <a href="?title=a">Test A</a>
+    <a href="?title=b">Test B</a>
+    <a href="?title=c">Test C</a>
+    <a href="./test.html">Reset</a>
 
     <h1>Data Test</h1>
     <a class="data-test-1" href="#">Reset</a>
@@ -69,7 +72,7 @@ var glimpseData = {
         browser : '',
         clientName : '',
         requestTime : '',
-        requestId : '1234',
+        requestId : '1234' + (window.location.search ? Math.round(new Date().getTime() / 1000) : ''),
         isAjax : false,
         url : '/',  
         metadata : {"correlation" : { 
