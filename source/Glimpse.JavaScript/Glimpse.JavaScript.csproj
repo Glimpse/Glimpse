@@ -70,7 +70,6 @@
     <Content Include="FunctionalTests\Mock\test.glimpse.ajax.js" />
     <Content Include="FunctionalTests\Mock\test.glimpse.ajax.pager.js" />
     <Content Include="FunctionalTests\sprite.png" />
-    <Content Include="FunctionalTests\test-a.html" />
     <Content Include="FunctionalTests\test-popup.html" />
     <Content Include="FunctionalTests\test.html" />
     <Content Include="glimpse.controller.lazyloader.js" />
