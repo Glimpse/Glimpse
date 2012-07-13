@@ -520,12 +520,15 @@
         }(),
         view = function () {
             var apply = function(showTimeline, isFirst) {
-                    elements.contentTableHolder.parent().toggle(!showTimeline); 
-                    elements.contentRow.find('.glimpse-tl-content-scroll:first-child').toggle(showTimeline);
-                    elements.contentRow.find('.glimpse-tl-resizer').toggle(showTimeline); 
+                    if (showTimeline == undefined || showTimeline == null)
+                        showTimeline = false;
+
+                    elements.contentTableHolder.parent().toggle(showTimeline); 
+                    elements.contentRow.find('.glimpse-tl-content-scroll:first-child').toggle(!showTimeline);
+                    elements.contentRow.find('.glimpse-tl-resizer').toggle(!showTimeline); 
                     
                     eventBuilder.colorRows(isFirst); 
-                    if (showTimeline) 
+                    if (!showTimeline) 
                         dividerBuilder.render();
                 },
                 toggle = function() {
