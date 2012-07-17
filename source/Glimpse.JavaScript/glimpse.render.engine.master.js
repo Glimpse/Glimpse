@@ -13,15 +13,8 @@
                 result = keyValue.build(data, level, forceFull, forceLimit);
             else if (level == 0) {
                 if (data === undefined || data === null || data === '')
-                    result = '';
-                else {
-                    attr = '';
-                    if (data.indexOf('http://') == 0) {
-                        attr = ' data-glimpse-lazy-url="' + data + '"';
-                        data = 'Loading data, please wait...';
-                    } 
-                    result = '<div class="glimpse-panel-message"' + attr + '>' + data + '</div>';
-                }
+                    data = 'No data found for this plugin.';
+                result = '<div class="glimpse-panel-message">' + data + '</div>';
             }
             else
                 result = string.build(data, level, forceLimit);

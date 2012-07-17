@@ -61,8 +61,10 @@
                 html = '<div class="glimpse-panel glimpse-panelitem-' + key + permanent + '" data-glimpseKey="' + key + '"><div class="glimpse-panel-message">Loading data, please wait...</div></div>',
                 panel = $(html).appendTo(elements.panelHolder);
 
-            if (!pluginData.isLazy && pluginData.data)
+            
+            if (!pluginData.isLazy) {
                 renderEngine.insert(panel, pluginData.data, metadata);
+            }
             else {
                 panel.addClass('glimpse-lazy-item');
                 pubsub.publishAsync('action.plugin.lazyload', key);

@@ -498,8 +498,10 @@ var glimpse = (function ($, scope) {
                         html = '<div class="glimpse-panel glimpse-panelitem-' + key + permanent + '" data-glimpseKey="' + key + '"><div class="glimpse-panel-message">Loading data, please wait...</div></div>',
                         panel = $(html).appendTo(elements.panelHolder);
         
-                    if (!pluginData.isLazy && pluginData.data)
+                    
+                    if (!pluginData.isLazy) {
                         renderEngine.insert(panel, pluginData.data, metadata);
+                    }
                     else {
                         panel.addClass('glimpse-lazy-item');
                         pubsub.publishAsync('action.plugin.lazyload', key);
@@ -1327,15 +1329,8 @@ var glimpse = (function ($, scope) {
                                 result = keyValue.build(data, level, forceFull, forceLimit);
                             else if (level == 0) {
                                 if (data === undefined || data === null || data === '')
-                                    result = '';
-                                else {
-                                    attr = '';
-                                    if (data.indexOf('http://') == 0) {
-                                        attr = ' data-glimpse-lazy-url="' + data + '"';
-                                        data = 'Loading data, please wait...';
-                                    } 
-                                    result = '<div class="glimpse-panel-message"' + attr + '>' + data + '</div>';
-                                }
+                                    data = 'No data found for this plugin.';
+                                result = '<div class="glimpse-panel-message">' + data + '</div>';
                             }
                             else
                                 result = string.build(data, level, forceLimit);
