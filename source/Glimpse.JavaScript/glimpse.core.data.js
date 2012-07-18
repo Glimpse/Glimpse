@@ -29,7 +29,7 @@
 
             if (requestId != baseInner.requestId) {
                 $.ajax({
-                    url : currentMetadata().paths.history,
+                    url : currentMetadata().paths.data,
                     type : 'GET',
                     data : { 'requestID': requestId },
                     contentType : 'application/json',

@@ -59,8 +59,8 @@
             //Poll for updated summary data
             notice.prePoll(); 
             $.ajax({
-                url: glimpse.data.currentMetadata().paths.ajax,
-                data: { 'requestID': currentId },
+                url: glimpse.data.currentMetadata().paths.data,
+                data: { 'requestID': currentId, 'ajaxResults': true },
                 type: 'GET',
                 contentType: 'application/json',
                 complete : function(jqXHR, textStatus) {

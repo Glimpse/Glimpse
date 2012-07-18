@@ -66,6 +66,7 @@
   <ItemGroup>
     <Content Include="FunctionalTests\Mock\glimpseTest.js" />
     <Content Include="FunctionalTests\Mock\test.glimpse.ajax.ajax.js" />
+    <Content Include="FunctionalTests\Mock\test.glimpse.ajax.data.js" />
     <Content Include="FunctionalTests\Mock\test.glimpse.ajax.history.js" />
     <Content Include="FunctionalTests\Mock\test.glimpse.ajax.js" />
     <Content Include="FunctionalTests\Mock\test.glimpse.ajax.pager.js" />
