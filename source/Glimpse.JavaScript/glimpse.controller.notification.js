@@ -1,4 +1,4 @@
-﻿notificationrController = function () {
+﻿notificationController = function () {
     var //Support  
         wireListeners = function() {
             pubsub.subscribe('state.final', check); 
