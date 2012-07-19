@@ -335,9 +335,9 @@ var glimpse = (function ($, scope) {
         
                     if (requestId != baseInner.requestId) {
                         $.ajax({
-                            url : currentMetadata().paths.history,
+                            url : currentMetadata().paths.data,
                             type : 'GET',
-                            data : { 'requestID': requestId },
+                            data : { 'requestId': requestId },
                             contentType : 'application/json',
                             success : function (result, textStatus, jqXHR) {   
                                 if (callback && callback.success) { callback.success(requestId, result, inner, textStatus, jqXHR); }
@@ -909,9 +909,9 @@ var glimpse = (function ($, scope) {
                 retrievePlugin = function(key) {   
                     var currentData = data.current();
                     $.ajax({
-                        url : data.currentMetadata().paths.history,
+                        url : data.currentMetadata().paths.data,
                         type : 'GET',
-                        data : { 'requestID' : currentData.requestId, 'pluginKey' : key },
+                        data : { 'requestId' : currentData.requestId, 'pluginKey' : key },
                         contentType : 'application/json',
                         success : function (result) {
                             var itemData = currentData.data[key];
@@ -1718,10 +1718,12 @@ var glimpseAjaxPlugin = (function ($, glimpse) {
                 newId = payload.isAjax ? payload.parentId : payload.requestId,
                 panel = glimpse.elements.findPanel('Ajax');
 
-            if (currentId != newId)
+            if (currentId != newId) {
                 panel.find('tbody').empty();
+                resultCount = 0;
+            }
             
-            currentId = newId;
+            currentId = newId; 
         },
         
         retreieveSummary = function () { 
@@ -1730,8 +1732,8 @@ var glimpseAjaxPlugin = (function ($, glimpse) {
             //Poll for updated summary data
             notice.prePoll(); 
             $.ajax({
-                url: glimpse.data.currentMetadata().paths.ajax,
-                data: { 'requestID': currentId },
+                url: glimpse.data.currentMetadata().paths.data,
+                data: { 'parentRequestId': currentId, 'ajaxResults': true },
                 type: 'GET',
                 contentType: 'application/json',
                 complete : function(jqXHR, textStatus) {
@@ -1758,7 +1760,7 @@ var glimpseAjaxPlugin = (function ($, glimpse) {
             
             //Prepend results as we go 
             var panelBody = panel.find('tbody');
-            for (var x = result.length; --x >= resultCount;) {
+            for (var x = resultCount; x < result.length; x++) {
                 var item = result[x];
                 panelBody.prepend('<tr class="' + (x % 2 == 0 ? 'even' : 'odd') + '"><td>' + item.url + '</td><td>' + item.method + '</td><td>' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.requestTime + '</td><td><a href="#" class="glimpse-ajax-link" data-glimpseId="' + item.requestId + '">Inspect</a></td></tr>');
             }
@@ -1778,7 +1780,7 @@ var glimpseAjaxPlugin = (function ($, glimpse) {
             var panel = glimpse.elements.findPanel('Ajax');
             panel.find('.glimpse-head-message').fadeOut();
             panel.find('.selected').removeClass('selected');
-             
+            
             if (type == 'Ajax')
                 glimpse.data.retrieve(currentId);
         },
@@ -1865,7 +1867,7 @@ var glimpseHistoryPlugin = (function ($, glimpse) {
             //Poll for updated summary data
             notice.prePoll(); 
             $.ajax({
-                url: glimpse.data.currentMetadata().paths.history, 
+                url: glimpse.data.currentMetadata().paths.data, 
                 type: 'GET',
                 contentType: 'application/json',
                 complete : function(jqXHR, textStatus) {

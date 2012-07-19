@@ -47,10 +47,12 @@
                 newId = payload.isAjax ? payload.parentId : payload.requestId,
                 panel = glimpse.elements.findPanel('Ajax');
 
-            if (currentId != newId)
+            if (currentId != newId) {
                 panel.find('tbody').empty();
+                resultCount = 0;
+            }
             
-            currentId = newId;
+            currentId = newId; 
         },
         
         retreieveSummary = function () { 
@@ -60,7 +62,7 @@
             notice.prePoll(); 
             $.ajax({
                 url: glimpse.data.currentMetadata().paths.data,
-                data: { 'requestID': currentId, 'ajaxResults': true },
+                data: { 'parentRequestId': currentId, 'ajaxResults': true },
                 type: 'GET',
                 contentType: 'application/json',
                 complete : function(jqXHR, textStatus) {
@@ -87,7 +89,7 @@
             
             //Prepend results as we go 
             var panelBody = panel.find('tbody');
-            for (var x = result.length; --x >= resultCount;) {
+            for (var x = resultCount; x < result.length; x++) {
                 var item = result[x];
                 panelBody.prepend('<tr class="' + (x % 2 == 0 ? 'even' : 'odd') + '"><td>' + item.url + '</td><td>' + item.method + '</td><td>' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.requestTime + '</td><td><a href="#" class="glimpse-ajax-link" data-glimpseId="' + item.requestId + '">Inspect</a></td></tr>');
             }
@@ -107,7 +109,7 @@
             var panel = glimpse.elements.findPanel('Ajax');
             panel.find('.glimpse-head-message').fadeOut();
             panel.find('.selected').removeClass('selected');
-             
+            
             if (type == 'Ajax')
                 glimpse.data.retrieve(currentId);
         },

@@ -8,7 +8,7 @@
             $.ajax({
                 url : data.currentMetadata().paths.data,
                 type : 'GET',
-                data : { 'requestID' : currentData.requestId, 'pluginKey' : key },
+                data : { 'requestId' : currentData.requestId, 'pluginKey' : key },
                 contentType : 'application/json',
                 success : function (result) {
                     var itemData = currentData.data[key];

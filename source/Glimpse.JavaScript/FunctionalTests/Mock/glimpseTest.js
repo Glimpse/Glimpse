@@ -29,43 +29,10 @@ var glimpseTest = (function ($) {
             return {
                 trigger : trigger
             };
-        } (),
-        ajax = function () {
-            var result = [],
-                possibleResults = [{ method : 'Get', duration : 213, browser : '', clientName : '', requestTime : '2011/11/09 12:00:12', requestId : 'ajax0', parentId : '1234', isAjax : true, url : '/Product'},
-                    { method : 'Get', duration : 123, browser : '', clientName : '', requestTime : '2011/11/09 12:10:34', requestId : 'ajax1', parentId : '1234', isAjax : true, url : '/Product/Trip'},
-                    { method : 'Get', duration : 234, browser : '', clientName : '', requestTime : '2011/11/09 12:12:23', requestId : 'ajax2', parentId : '1234', isAjax : true, url : '/Product/230'},
-                    { method : 'Post', duration : 342, browser : '', clientName : '', requestTime : '2011/11/09 12:17:52', requestId : 'ajax3', parentId : '1234', isAjax : true, url : '/Product/Add'},
-                    { method : 'Post', duration : 211, browser : '', clientName : '', requestTime : '2011/11/24 12:00:35', requestId : 'ajax4', parentId : '1234', isAjax : true, url : '/Product/Results'},
-                    { method : 'Post', duration : 242, browser : '', clientName : '', requestTime : '2011/11/09 12:27:23', requestId : 'ajax5', parentId : '1234', isAjax : true, url : '/Product/List'},
-                    { method : 'Get', duration : 1234, browser : '', clientName : '', requestTime : '2011/11/09 12:29:14', requestId : 'ajax6', parentId : '1234', isAjax : true, url : '/Product'}],
-                index = 0,
-                lastId = 0,
-                generate = function (data) {  
-                    if ((index < 6 && data.requestID == 1234) || index < 3)
-                        result.push(possibleResults[index++]);
-                    return $.extend(true, [], result);
-                },
-                trigger = function (param) { 
-                    if (param.data.requestID != lastId) {
-                        index = 0;
-                        lastId = param.data.requestID;
-                    }
-        
-                    setTimeout(function () {
-                        var success = (Math.floor(Math.random() * 11) != 10);
-                        param.complete(null, (success ? 'Success' : 'Fail'));
-                        if (success)
-                            param.success(generate(param.data));
-                    }, 300);
-                };
-        
-            return {
-                trigger : trigger
-            };
-        } (),
-        history = function () {
-            var metadata = {"environmentUrls":{"Dev":"http://localhost/","QA":"http://qa.getglimpse.com/","Prod":"http://getglimpse.com/"},"version":0.85,"plugins":{"Paging":{"pagingInfo":{ pagerType : 'continuous', pageSize : 5, pageIndex : 0, totalNumberOfRecords : 31 }}, "Lazy":{},"Server":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Server"},"Session":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Session"},"Request":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Request"},"Trace":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Trace"},"Config":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Config"},"Environment":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Environment"},"SQL":{"documentationUri":"http://getGlimpse.com/Help/Plugin/EF","structure":[[{"forceFull":true,"data":0,"structure":[[{"span":6,"forceFull":true,"minDisplay":true,"data":0,"structure":[[{"width":"150px","key":true,"data":0},{"data":1}]]}],[{"width":"55px","data":1},{"isCode":true,"codeType":"sql","data":2},{"width":"25%","data":3},{"width":"60px","data":4},{"width":"100px","post":" ms","className":"mono","data":5},{"width":"70px","pre":"T+ ","post":" ms","className":"mono","data":6}],[{"span":6,"forceFull":true,"minDisplay":true,"data":8,"structure":[[{"width":"20%","data":0},{"className":"mono","data":1}]]}],[{"span":6,"forceFull":true,"minDisplay":true,"data":7,"structure":[[{"width":"150px","key":true,"data":0},{"data":1}]]}]]},{"width":"75px","post":" ms","className":"mono","data":1}]]},"Routes":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Routes"},"Binding":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Binders"},"Views":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Views"},"Execution":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Execution"},"MetaData":{"documentationUri":"http://getGlimpse.com/Help/Plugin/MetaData","structure":[[{"width":"150px","data":0},{"width":"25%","data":1},{"data":2}]]}} },
+        } (), 
+        data = function () {
+            var 
+                metadata = {"environmentUrls":{"Dev":"http://localhost/","QA":"http://qa.getglimpse.com/","Prod":"http://getglimpse.com/"},"version":0.85,"plugins":{"Paging":{"pagingInfo":{ pagerType : 'continuous', pageSize : 5, pageIndex : 0, totalNumberOfRecords : 31 }}, "Lazy":{},"Server":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Server"},"Session":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Session"},"Request":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Request"},"Trace":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Trace"},"Config":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Config"},"Environment":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Environment"},"SQL":{"documentationUri":"http://getGlimpse.com/Help/Plugin/EF","structure":[[{"forceFull":true,"data":0,"structure":[[{"span":6,"forceFull":true,"minDisplay":true,"data":0,"structure":[[{"width":"150px","key":true,"data":0},{"data":1}]]}],[{"width":"55px","data":1},{"isCode":true,"codeType":"sql","data":2},{"width":"25%","data":3},{"width":"60px","data":4},{"width":"100px","post":" ms","className":"mono","data":5},{"width":"70px","pre":"T+ ","post":" ms","className":"mono","data":6}],[{"span":6,"forceFull":true,"minDisplay":true,"data":8,"structure":[[{"width":"20%","data":0},{"className":"mono","data":1}]]}],[{"span":6,"forceFull":true,"minDisplay":true,"data":7,"structure":[[{"width":"150px","key":true,"data":0},{"data":1}]]}]]},{"width":"75px","post":" ms","className":"mono","data":1}]]},"Routes":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Routes"},"Binding":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Binders"},"Views":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Views"},"Execution":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Execution"},"MetaData":{"documentationUri":"http://getGlimpse.com/Help/Plugin/MetaData","structure":[[{"width":"150px","data":0},{"width":"25%","data":1},{"data":2}]]}} },
                 data = {
                     "Session":{ name : 'Session', data : [["Key","Value","Type"],["CartId","2dc2f24f-5816-4e8e-bc70-2438ce628be8","string"],["__ControllerTempData",{"Test":"A bit of temp"},"System.Collections.Generic.Dictionary<string,object>"]] },
                     "Server":{ name : 'Server', data : {"ALL_HTTP":"HTTP_CONNECTION:keep-alive\r\nHTTP_ACCEPT:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nHTTP_ACCEPT_CHARSET:ISO-8859-1,utf-8;q=0.7,*;q=0.3\r\nHTTP_ACCEPT_ENCODING:gzip,deflate,sdch\r\nHTTP_ACCEPT_LANGUAGE:en-US,en;q=0.8\r\nHTTP_COOKIE:glimpseClientName=null; glimpseState=On; ASP.NET_SessionId=1k33gr33dxqvzw3tm41koizh; prgLocation=/StoreManager/; prgLocationRedirect=/Account/LogOn?ReturnUrl=%2fStoreManager%2f; prgLocationId=25620064-8eb8-4879-842d-092a99b2b0ef; prgLocationMethod=GET; glimpseOptions=%7B%220%22%3A%22n%22%2C%221%22%3A%22u%22%2C%222%22%3A%22l%22%2C%223%22%3A%22l%22%2C%22open%22%3Atrue%2C%22height%22%3A447%2C%22activeTab%22%3A%22Views%22%2C%22popupOn%22%3Afalse%2C%22firstPopup%22%3Atrue%2C%22timeView%22%3Afalse%7D\r\nHTTP_HOST:localhost:33333\r\nHTTP_USER_AGENT:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.83 Safari/535.2\r\n","ALL_RAW":"Connection: keep-alive\r\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3\r\nAccept-Encoding: gzip,deflate,sdch\r\nAccept-Language: en-US,en;q=0.8\r\nCookie: glimpseClientName=null; glimpseState=On; ASP.NET_SessionId=1k33gr33dxqvzw3tm41koizh; prgLocation=/StoreManager/; prgLocationRedirect=/Account/LogOn?ReturnUrl=%2fStoreManager%2f; prgLocationId=25620064-8eb8-4879-842d-092a99b2b0ef; prgLocationMethod=GET; glimpseOptions=%7B%220%22%3A%22n%22%2C%221%22%3A%22u%22%2C%222%22%3A%22l%22%2C%223%22%3A%22l%22%2C%22open%22%3Atrue%2C%22height%22%3A447%2C%22activeTab%22%3A%22Views%22%2C%22popupOn%22%3Afalse%2C%22firstPopup%22%3Atrue%2C%22timeView%22%3Afalse%7D\r\nHost: localhost:33333\r\nUser-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.83 Safari/535.2\r\n","APPL_MD_PATH":"","APPL_PHYSICAL_PATH":"C:\\Users\\avanderhoorn\\Glimpse\\source\\Glimpse.Sample.MVC3\\","AUTH_TYPE":"","AUTH_USER":"","AUTH_PASSWORD":"","LOGON_USER":"CORP\\AVanDerHoorn","REMOTE_USER":"","CERT_COOKIE":"","CERT_FLAGS":"","CERT_ISSUER":"","CERT_KEYSIZE":"","CERT_SECRETKEYSIZE":"","CERT_SERIALNUMBER":"","CERT_SERVER_ISSUER":"","CERT_SERVER_SUBJECT":"","CERT_SUBJECT":"","CONTENT_LENGTH":"0","CONTENT_TYPE":"","GATEWAY_INTERFACE":"","HTTPS":"","HTTPS_KEYSIZE":"","HTTPS_SECRETKEYSIZE":"","HTTPS_SERVER_ISSUER":"","HTTPS_SERVER_SUBJECT":"","INSTANCE_ID":"","INSTANCE_META_PATH":"","LOCAL_ADDR":"127.0.0.1","PATH_INFO":"/","PATH_TRANSLATED":"C:\\Users\\avanderhoorn\\Glimpse\\source\\Glimpse.Sample.MVC3","QUERY_STRING":"","REMOTE_ADDR":"127.0.0.1","REMOTE_HOST":"127.0.0.1","REMOTE_PORT":"","REQUEST_METHOD":"GET","SCRIPT_NAME":"/","SERVER_NAME":"localhost","SERVER_PORT":"33333","SERVER_PORT_SECURE":"0","SERVER_PROTOCOL":"HTTP/1.1","SERVER_SOFTWARE":"","URL":"/","HTTP_CONNECTION":"keep-alive","HTTP_ACCEPT":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","HTTP_ACCEPT_CHARSET":"ISO-8859-1,utf-8;q=0.7,*;q=0.3","HTTP_ACCEPT_ENCODING":"gzip,deflate,sdch","HTTP_ACCEPT_LANGUAGE":"en-US,en;q=0.8","HTTP_COOKIE":"glimpseClientName=null; glimpseState=On; ASP.NET_SessionId=1k33gr33dxqvzw3tm41koizh; prgLocation=/StoreManager/; prgLocationRedirect=/Account/LogOn?ReturnUrl=%2fStoreManager%2f; prgLocationId=25620064-8eb8-4879-842d-092a99b2b0ef; prgLocationMethod=GET; glimpseOptions=%7B%220%22%3A%22n%22%2C%221%22%3A%22u%22%2C%222%22%3A%22l%22%2C%223%22%3A%22l%22%2C%22open%22%3Atrue%2C%22height%22%3A447%2C%22activeTab%22%3A%22Views%22%2C%22popupOn%22%3Afalse%2C%22firstPopup%22%3Atrue%2C%22timeView%22%3Afalse%7D","HTTP_HOST":"localhost:33333","HTTP_USER_AGENT":"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.83 Safari/535.2"} },
@@ -80,31 +47,33 @@ var glimpseTest = (function ($) {
                     'Lazy Description' : 'Because I said so'
                 },
         
-                prgData = {
-                    method : 'Post',  
-                    browser : '',
-                    clientName : '',
-                    requestTime : '',
-                    requestId : 'PRG',
-                    isAjax : false,
-                    url : '/Help/Feature/Add',  
-                    metadata : {
-                        "environmentUrls":{"Dev":"http://localhost/","QA":"http://qa.getglimpse.com/","Prod":"http://getglimpse.com/"},
-                        "version":0.85,
-                        "plugins": {
-                            "Server":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Server"},
-                            "Session":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Session"}, 
-                            "Views":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Views"},
-                            "Execution":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Execution"},
-                            "MetaData":{"documentationUri":"http://getGlimpse.com/Help/Plugin/MetaData"}
+                requestData = {
+                        'PRG': {
+                        method : 'Post',  
+                        browser : '',
+                        clientName : '',
+                        requestTime : '',
+                        requestId : 'PRG',
+                        isAjax : false,
+                        url : '/Help/Feature/Add',  
+                        metadata : {
+                            "environmentUrls":{"Dev":"http://localhost/","QA":"http://qa.getglimpse.com/","Prod":"http://getglimpse.com/"},
+                            "version":0.85,
+                            "plugins": {
+                                "Server":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Server"},
+                                "Session":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Session"}, 
+                                "Views":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Views"},
+                                "Execution":{"documentationUri":"http://getGlimpse.com/Help/Plugin/Execution"},
+                                "MetaData":{"documentationUri":"http://getGlimpse.com/Help/Plugin/MetaData"}
+                            }
+                        },
+                        data : {
+                                "Session":{ name : 'Session', data : [["Key","Value","Type"],["CartId","2dc2f24f-5816-4e8e-bc70-2438ce628be8","string"],["__ControllerTempData",{"Test":"A bit of temp"},"System.Collections.Generic.Dictionary<string,object>"]] },
+                                "Server":{ name : 'Server', data : {"ALL_HTTP":"HTTP_CONNECTION:keep-alive\r\nHTTP_ACCEPT:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nHTTP_ACCEPT_CHARSET:ISO-8859-1,utf-8;q=0.7,*;q=0.3\r\nHTTP_ACCEPT_ENCODING:gzip,deflate,sdch\r\nHTTP_ACCEPT_LANGUAGE:en-US,en;q=0.8\r\nHTTP_COOKIE:glimpseClientName=null; glimpseState=On; ASP.NET_SessionId=1k33gr33dxqvzw3tm41koizh; prgLocation=/StoreManager/; prgLocationRedirect=/Account/LogOn?ReturnUrl=%2fStoreManager%2f; prgLocationId=25620064-8eb8-4879-842d-092a99b2b0ef; prgLocationMethod=GET; glimpseOptions=%7B%220%22%3A%22n%22%2C%221%22%3A%22u%22%2C%222%22%3A%22l%22%2C%223%22%3A%22l%22%2C%22open%22%3Atrue%2C%22height%22%3A447%2C%22activeTab%22%3A%22Views%22%2C%22popupOn%22%3Afalse%2C%22firstPopup%22%3Atrue%2C%22timeView%22%3Afalse%7D\r\nHTTP_HOST:localhost:33333\r\nHTTP_USER_AGENT:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.83 Safari/535.2\r\n","ALL_RAW":"Connection: keep-alive\r\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3\r\nAccept-Encoding: gzip,deflate,sdch\r\nAccept-Language: en-US,en;q=0.8\r\nCookie: glimpseClientName=null; glimpseState=On; ASP.NET_SessionId=1k33gr33dxqvzw3tm41koizh; prgLocation=/StoreManager/; prgLocationRedirect=/Account/LogOn?ReturnUrl=%2fStoreManager%2f; prgLocationId=25620064-8eb8-4879-842d-092a99b2b0ef; prgLocationMethod=GET; glimpseOptions=%7B%220%22%3A%22n%22%2C%221%22%3A%22u%22%2C%222%22%3A%22l%22%2C%223%22%3A%22l%22%2C%22open%22%3Atrue%2C%22height%22%3A447%2C%22activeTab%22%3A%22Views%22%2C%22popupOn%22%3Afalse%2C%22firstPopup%22%3Atrue%2C%22timeView%22%3Afalse%7D\r\nHost: localhost:33333\r\nUser-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.83 Safari/535.2\r\n","APPL_MD_PATH":"","APPL_PHYSICAL_PATH":"C:\\Users\\avanderhoorn\\Glimpse\\source\\Glimpse.Sample.MVC3\\","AUTH_TYPE":"","AUTH_USER":"","AUTH_PASSWORD":"","LOGON_USER":"CORP\\AVanDerHoorn","REMOTE_USER":"","CERT_COOKIE":"","CERT_FLAGS":"","CERT_ISSUER":"","CERT_KEYSIZE":"","CERT_SECRETKEYSIZE":"","CERT_SERIALNUMBER":"","CERT_SERVER_ISSUER":"","CERT_SERVER_SUBJECT":"","CERT_SUBJECT":"","CONTENT_LENGTH":"0","CONTENT_TYPE":"","GATEWAY_INTERFACE":"","HTTPS":"","HTTPS_KEYSIZE":"","HTTPS_SECRETKEYSIZE":"","HTTPS_SERVER_ISSUER":"","HTTPS_SERVER_SUBJECT":"","INSTANCE_ID":"","INSTANCE_META_PATH":"","LOCAL_ADDR":"127.0.0.1","PATH_INFO":"/","PATH_TRANSLATED":"C:\\Users\\avanderhoorn\\Glimpse\\source\\Glimpse.Sample.MVC3","QUERY_STRING":"","REMOTE_ADDR":"127.0.0.1","REMOTE_HOST":"127.0.0.1","REMOTE_PORT":"","REQUEST_METHOD":"GET","SCRIPT_NAME":"/","SERVER_NAME":"localhost","SERVER_PORT":"33333","SERVER_PORT_SECURE":"0","SERVER_PROTOCOL":"HTTP/1.1","SERVER_SOFTWARE":"","URL":"/","HTTP_CONNECTION":"keep-alive","HTTP_ACCEPT":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","HTTP_ACCEPT_CHARSET":"ISO-8859-1,utf-8;q=0.7,*;q=0.3","HTTP_ACCEPT_ENCODING":"gzip,deflate,sdch","HTTP_ACCEPT_LANGUAGE":"en-US,en;q=0.8","HTTP_COOKIE":"glimpseClientName=null; glimpseState=On; ASP.NET_SessionId=1k33gr33dxqvzw3tm41koizh; prgLocation=/StoreManager/; prgLocationRedirect=/Account/LogOn?ReturnUrl=%2fStoreManager%2f; prgLocationId=25620064-8eb8-4879-842d-092a99b2b0ef; prgLocationMethod=GET; glimpseOptions=%7B%220%22%3A%22n%22%2C%221%22%3A%22u%22%2C%222%22%3A%22l%22%2C%223%22%3A%22l%22%2C%22open%22%3Atrue%2C%22height%22%3A447%2C%22activeTab%22%3A%22Views%22%2C%22popupOn%22%3Afalse%2C%22firstPopup%22%3Atrue%2C%22timeView%22%3Afalse%7D","HTTP_HOST":"localhost:33333","HTTP_USER_AGENT":"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.83 Safari/535.2"} },
+                                "Views":{ name : 'Views', data : [["Ordinal","Requested View","Master Override","Partial","View Engine","Check Cache","Found","Details"],[1,"Index","","False","WebFormViewEngine","True","False",[["Not Found In"],["_WebFormViewEngine cache_"]]],[2,"Index","","False","RazorViewEngine","True","False",[["Not Found In"],["_RazorViewEngine cache_"]]],[3,"Index","","False","WebFormViewEngine","False","False",[["Not Found In"],["~/Views/Home/Index.aspx"],["~/Views/Home/Index.ascx"],["~/Views/Shared/Index.aspx"],["~/Views/Shared/Index.ascx"]]],[4,"Index","","False","RazorViewEngine","False","True",{"ViewData":null,"Model":{"ModelType":"System.Collections.Generic.List<MvcMusicStore.Models.Album>","Value":{"0":{"Artist":"Men At Work","Genre":"Rock","Price":"$8.99","Title":"The Best Of Men At Work"},"1":{"Artist":"AC/DC","Genre":"Rock","Price":"$8.99","Title":"For Those About To Rock We Salute You"},"2":{"Artist":"AC/DC","Genre":"Rock","Price":"$8.99","Title":"Let There Be Rock"},"3":{"Artist":"Accept","Genre":"Rock","Price":"$8.99","Title":"Balls to the Wall"},"4":{"Artist":"Accept","Genre":"Rock","Price":"$8.99","Title":"Restless and Wild"}}},"TempData":{"Test":"A bit of temp"}},"selected"],[5,"CartSummary","","True","WebFormViewEngine","True","False",[["Not Found In"],["_WebFormViewEngine cache_"]]],[6,"CartSummary","","True","RazorViewEngine","True","False",[["Not Found In"],["_RazorViewEngine cache_"]]],[7,"CartSummary","","True","WebFormViewEngine","False","False",[["Not Found In"],["~/Views/ShoppingCart/CartSummary.aspx"],["~/Views/ShoppingCart/CartSummary.ascx"],["~/Views/Shared/CartSummary.aspx"],["~/Views/Shared/CartSummary.ascx"]]],[8,"CartSummary","","True","RazorViewEngine","False","True",{"ViewData":{"CartCount":"0"},"Model":null,"TempData":{"Test":"A bit of temp"}},"selected"],[9,"GenreMenu","","True","WebFormViewEngine","True","False",[["Not Found In"],["_WebFormViewEngine cache_"]]],[10,"GenreMenu","","True","RazorViewEngine","True","False",[["Not Found In"],["_RazorViewEngine cache_"]]],[11,"GenreMenu","","True","WebFormViewEngine","False","False",[["Not Found In"],["~/Views/Store/GenreMenu.aspx"],["~/Views/Store/GenreMenu.ascx"],["~/Views/Shared/GenreMenu.aspx"],["~/Views/Shared/GenreMenu.ascx"]]],[12,"GenreMenu","","True","RazorViewEngine","False","True",{"ViewData":null,"Model":{"ModelType":"System.Collections.Generic.List<MvcMusicStore.Models.Genre>","Value":{"0":{"Name":"Rock","Id":"1","Description":null},"1":{"Name":"Classical","Id":"2","Description":null},"2":{"Name":"Jazz","Id":"3","Description":null},"3":{"Name":"Pop","Id":"4","Description":null},"4":{"Name":"Disco","Id":"5","Description":null},"5":{"Name":"Latin","Id":"6","Description":null},"6":{"Name":"Metal","Id":"7","Description":null},"7":{"Name":"Alternative","Id":"8","Description":null},"8":{"Name":"Reggae","Id":"9","Description":null},"9":{"Name":"Blues","Id":"10","Description":null}}},"TempData":{"Test":"A bit of temp"}},"selected"]] },
+                                "Execution":{ name : 'Execution', data : {"ExecutedMethods":[["Ordinal","Child","Category","Type","Method","Time Elapsed","Order","Scope","Details"],[0,"False","Authorization","HomeController","OnAuthorization()","1 ms","int.MinValue","First",null],[1,"False","Action","HomeController","OnActionExecuting()","~ 0 ms","int.MinValue","First",null],[2,"False","","HomeController","Index()","1706 ms",null,"",null,"selected"],[3,"False","Action","HomeController","OnActionExecuted()","~ 0 ms","int.MinValue","First",null],[4,"False","Result","HomeController","OnResultExecuting()","~ 0 ms","int.MinValue","First",null],[5,"False","","ViewResult","ExecuteResult(ControllerContext context)","3039 ms",null,"",null,"selected"],[6,"True","Authorization","ShoppingCartController","OnAuthorization()","~ 0 ms","int.MinValue","First",null],[7,"True","Authorization","ChildActionOnlyAttribute","OnAuthorization()","~ 0 ms",-1,"Action",null],[8,"True","Action","ShoppingCartController","OnActionExecuting()","~ 0 ms","int.MinValue","First",null],[9,"True","","ShoppingCartController","CartSummary()","47 ms",null,"",null,"selected"],[10,"True","Action","ShoppingCartController","OnActionExecuted()","~ 0 ms","int.MinValue","First",null],[11,"True","Result","ShoppingCartController","OnResultExecuting()","~ 0 ms","int.MinValue","First",null],[12,"True","","PartialViewResult","ExecuteResult(ControllerContext context)","419 ms",null,"",null,"selected"],[13,"True","Result","ShoppingCartController","OnResultExecuted()","~ 0 ms","int.MinValue","First",null],[14,"True","Authorization","StoreController","OnAuthorization()","~ 0 ms","int.MinValue","First",null],[15,"True","Authorization","ChildActionOnlyAttribute","OnAuthorization()","~ 0 ms",-1,"Action",null],[16,"True","Action","StoreController","OnActionExecuting()","~ 0 ms","int.MinValue","First",null],[17,"True","","StoreController","GenreMenu()","416 ms",null,"",null,"selected"],[18,"True","Action","StoreController","OnActionExecuted()","~ 0 ms","int.MinValue","First",null],[19,"True","Result","StoreController","OnResultExecuting()","~ 0 ms","int.MinValue","First",null],[20,"True","","PartialViewResult","ExecuteResult(ControllerContext context)","436 ms",null,"",null,"selected"],[21,"True","Result","StoreController","OnResultExecuted()","~ 0 ms","int.MinValue","First",null],[22,"False","Result","HomeController","OnResultExecuted()","~ 0 ms","int.MinValue","First",null]],"UnExecutedMethods":[["Child","Category","Type","Method","Order","Scope","Details"],["False","Exception","HomeController","OnException()","int.MinValue","First",null,"quiet"],["False","Exception","HandleErrorAttribute","OnException()",-1,"Global",{"ExceptionType":"System.Exception","Master":"","View":"Error"},"quiet"],["True","Exception","ShoppingCartController","OnException()","int.MinValue","First",null,"quiet"],["True","Exception","HandleErrorAttribute","OnException()",-1,"Global",{"ExceptionType":"System.Exception","Master":"","View":"Error"},"quiet"],["True","Exception","StoreController","OnException()","int.MinValue","First",null,"quiet"],["True","Exception","HandleErrorAttribute","OnException()",-1,"Global",{"ExceptionType":"System.Exception","Master":"","View":"Error"},"quiet"]]} },
+                                "MetaData":{ name : 'MetaData', data : [["Registration","Type","Details"],["Primary View Model","System.Collections.Generic.List<MvcMusicStore.Models.Album>",{"ConvertEmptyStringToNull":"True","DataTypeName":null,"Description":null,"DisplayFormatString":null,"DisplayName":null,"EditFormatString":null,"HideSurroundingHtml":"False","IsComplexType":true,"IsNullableValueType":false,"IsReadOnly":"False","IsRequired":"False","NullDisplayText":null,"ShortDisplayName":null,"ShowForDisplay":"True","ShowForEdit":"True","SimpleDisplayText":"System.Collections.Generic.List<MvcMusicStore.Models.Album>","TemplateHint":null,"Watermark":null},""],["View Model Properties",null,{"Capacity":{"ConvertEmptyStringToNull":"True","DataTypeName":null,"Description":null,"DisplayFormatString":null,"DisplayName":null,"EditFormatString":null,"HideSurroundingHtml":"False","IsComplexType":false,"IsNullableValueType":false,"IsReadOnly":"False","IsRequired":"*True*","NullDisplayText":null,"ShortDisplayName":null,"ShowForDisplay":"True","ShowForEdit":"True","SimpleDisplayText":"8","TemplateHint":null,"Watermark":null},"Count":{"ConvertEmptyStringToNull":"True","DataTypeName":null,"Description":null,"DisplayFormatString":null,"DisplayName":null,"EditFormatString":null,"HideSurroundingHtml":"False","IsComplexType":false,"IsNullableValueType":false,"IsReadOnly":"*True*","IsRequired":"*True*","NullDisplayText":null,"ShortDisplayName":null,"ShowForDisplay":"True","ShowForEdit":"True","SimpleDisplayText":"5","TemplateHint":null,"Watermark":null}},"glimpse-start-open"]] }
                         }
-                    },
-                    data : {
-                            "Session":{ name : 'Session', data : [["Key","Value","Type"],["CartId","2dc2f24f-5816-4e8e-bc70-2438ce628be8","string"],["__ControllerTempData",{"Test":"A bit of temp"},"System.Collections.Generic.Dictionary<string,object>"]] },
-                            "Server":{ name : 'Server', data : {"ALL_HTTP":"HTTP_CONNECTION:keep-alive\r\nHTTP_ACCEPT:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nHTTP_ACCEPT_CHARSET:ISO-8859-1,utf-8;q=0.7,*;q=0.3\r\nHTTP_ACCEPT_ENCODING:gzip,deflate,sdch\r\nHTTP_ACCEPT_LANGUAGE:en-US,en;q=0.8\r\nHTTP_COOKIE:glimpseClientName=null; glimpseState=On; ASP.NET_SessionId=1k33gr33dxqvzw3tm41koizh; prgLocation=/StoreManager/; prgLocationRedirect=/Account/LogOn?ReturnUrl=%2fStoreManager%2f; prgLocationId=25620064-8eb8-4879-842d-092a99b2b0ef; prgLocationMethod=GET; glimpseOptions=%7B%220%22%3A%22n%22%2C%221%22%3A%22u%22%2C%222%22%3A%22l%22%2C%223%22%3A%22l%22%2C%22open%22%3Atrue%2C%22height%22%3A447%2C%22activeTab%22%3A%22Views%22%2C%22popupOn%22%3Afalse%2C%22firstPopup%22%3Atrue%2C%22timeView%22%3Afalse%7D\r\nHTTP_HOST:localhost:33333\r\nHTTP_USER_AGENT:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.83 Safari/535.2\r\n","ALL_RAW":"Connection: keep-alive\r\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3\r\nAccept-Encoding: gzip,deflate,sdch\r\nAccept-Language: en-US,en;q=0.8\r\nCookie: glimpseClientName=null; glimpseState=On; ASP.NET_SessionId=1k33gr33dxqvzw3tm41koizh; prgLocation=/StoreManager/; prgLocationRedirect=/Account/LogOn?ReturnUrl=%2fStoreManager%2f; prgLocationId=25620064-8eb8-4879-842d-092a99b2b0ef; prgLocationMethod=GET; glimpseOptions=%7B%220%22%3A%22n%22%2C%221%22%3A%22u%22%2C%222%22%3A%22l%22%2C%223%22%3A%22l%22%2C%22open%22%3Atrue%2C%22height%22%3A447%2C%22activeTab%22%3A%22Views%22%2C%22popupOn%22%3Afalse%2C%22firstPopup%22%3Atrue%2C%22timeView%22%3Afalse%7D\r\nHost: localhost:33333\r\nUser-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.83 Safari/535.2\r\n","APPL_MD_PATH":"","APPL_PHYSICAL_PATH":"C:\\Users\\avanderhoorn\\Glimpse\\source\\Glimpse.Sample.MVC3\\","AUTH_TYPE":"","AUTH_USER":"","AUTH_PASSWORD":"","LOGON_USER":"CORP\\AVanDerHoorn","REMOTE_USER":"","CERT_COOKIE":"","CERT_FLAGS":"","CERT_ISSUER":"","CERT_KEYSIZE":"","CERT_SECRETKEYSIZE":"","CERT_SERIALNUMBER":"","CERT_SERVER_ISSUER":"","CERT_SERVER_SUBJECT":"","CERT_SUBJECT":"","CONTENT_LENGTH":"0","CONTENT_TYPE":"","GATEWAY_INTERFACE":"","HTTPS":"","HTTPS_KEYSIZE":"","HTTPS_SECRETKEYSIZE":"","HTTPS_SERVER_ISSUER":"","HTTPS_SERVER_SUBJECT":"","INSTANCE_ID":"","INSTANCE_META_PATH":"","LOCAL_ADDR":"127.0.0.1","PATH_INFO":"/","PATH_TRANSLATED":"C:\\Users\\avanderhoorn\\Glimpse\\source\\Glimpse.Sample.MVC3","QUERY_STRING":"","REMOTE_ADDR":"127.0.0.1","REMOTE_HOST":"127.0.0.1","REMOTE_PORT":"","REQUEST_METHOD":"GET","SCRIPT_NAME":"/","SERVER_NAME":"localhost","SERVER_PORT":"33333","SERVER_PORT_SECURE":"0","SERVER_PROTOCOL":"HTTP/1.1","SERVER_SOFTWARE":"","URL":"/","HTTP_CONNECTION":"keep-alive","HTTP_ACCEPT":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","HTTP_ACCEPT_CHARSET":"ISO-8859-1,utf-8;q=0.7,*;q=0.3","HTTP_ACCEPT_ENCODING":"gzip,deflate,sdch","HTTP_ACCEPT_LANGUAGE":"en-US,en;q=0.8","HTTP_COOKIE":"glimpseClientName=null; glimpseState=On; ASP.NET_SessionId=1k33gr33dxqvzw3tm41koizh; prgLocation=/StoreManager/; prgLocationRedirect=/Account/LogOn?ReturnUrl=%2fStoreManager%2f; prgLocationId=25620064-8eb8-4879-842d-092a99b2b0ef; prgLocationMethod=GET; glimpseOptions=%7B%220%22%3A%22n%22%2C%221%22%3A%22u%22%2C%222%22%3A%22l%22%2C%223%22%3A%22l%22%2C%22open%22%3Atrue%2C%22height%22%3A447%2C%22activeTab%22%3A%22Views%22%2C%22popupOn%22%3Afalse%2C%22firstPopup%22%3Atrue%2C%22timeView%22%3Afalse%7D","HTTP_HOST":"localhost:33333","HTTP_USER_AGENT":"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.83 Safari/535.2"} },
-                            "Views":{ name : 'Views', data : [["Ordinal","Requested View","Master Override","Partial","View Engine","Check Cache","Found","Details"],[1,"Index","","False","WebFormViewEngine","True","False",[["Not Found In"],["_WebFormViewEngine cache_"]]],[2,"Index","","False","RazorViewEngine","True","False",[["Not Found In"],["_RazorViewEngine cache_"]]],[3,"Index","","False","WebFormViewEngine","False","False",[["Not Found In"],["~/Views/Home/Index.aspx"],["~/Views/Home/Index.ascx"],["~/Views/Shared/Index.aspx"],["~/Views/Shared/Index.ascx"]]],[4,"Index","","False","RazorViewEngine","False","True",{"ViewData":null,"Model":{"ModelType":"System.Collections.Generic.List<MvcMusicStore.Models.Album>","Value":{"0":{"Artist":"Men At Work","Genre":"Rock","Price":"$8.99","Title":"The Best Of Men At Work"},"1":{"Artist":"AC/DC","Genre":"Rock","Price":"$8.99","Title":"For Those About To Rock We Salute You"},"2":{"Artist":"AC/DC","Genre":"Rock","Price":"$8.99","Title":"Let There Be Rock"},"3":{"Artist":"Accept","Genre":"Rock","Price":"$8.99","Title":"Balls to the Wall"},"4":{"Artist":"Accept","Genre":"Rock","Price":"$8.99","Title":"Restless and Wild"}}},"TempData":{"Test":"A bit of temp"}},"selected"],[5,"CartSummary","","True","WebFormViewEngine","True","False",[["Not Found In"],["_WebFormViewEngine cache_"]]],[6,"CartSummary","","True","RazorViewEngine","True","False",[["Not Found In"],["_RazorViewEngine cache_"]]],[7,"CartSummary","","True","WebFormViewEngine","False","False",[["Not Found In"],["~/Views/ShoppingCart/CartSummary.aspx"],["~/Views/ShoppingCart/CartSummary.ascx"],["~/Views/Shared/CartSummary.aspx"],["~/Views/Shared/CartSummary.ascx"]]],[8,"CartSummary","","True","RazorViewEngine","False","True",{"ViewData":{"CartCount":"0"},"Model":null,"TempData":{"Test":"A bit of temp"}},"selected"],[9,"GenreMenu","","True","WebFormViewEngine","True","False",[["Not Found In"],["_WebFormViewEngine cache_"]]],[10,"GenreMenu","","True","RazorViewEngine","True","False",[["Not Found In"],["_RazorViewEngine cache_"]]],[11,"GenreMenu","","True","WebFormViewEngine","False","False",[["Not Found In"],["~/Views/Store/GenreMenu.aspx"],["~/Views/Store/GenreMenu.ascx"],["~/Views/Shared/GenreMenu.aspx"],["~/Views/Shared/GenreMenu.ascx"]]],[12,"GenreMenu","","True","RazorViewEngine","False","True",{"ViewData":null,"Model":{"ModelType":"System.Collections.Generic.List<MvcMusicStore.Models.Genre>","Value":{"0":{"Name":"Rock","Id":"1","Description":null},"1":{"Name":"Classical","Id":"2","Description":null},"2":{"Name":"Jazz","Id":"3","Description":null},"3":{"Name":"Pop","Id":"4","Description":null},"4":{"Name":"Disco","Id":"5","Description":null},"5":{"Name":"Latin","Id":"6","Description":null},"6":{"Name":"Metal","Id":"7","Description":null},"7":{"Name":"Alternative","Id":"8","Description":null},"8":{"Name":"Reggae","Id":"9","Description":null},"9":{"Name":"Blues","Id":"10","Description":null}}},"TempData":{"Test":"A bit of temp"}},"selected"]] },
-                            "Execution":{ name : 'Execution', data : {"ExecutedMethods":[["Ordinal","Child","Category","Type","Method","Time Elapsed","Order","Scope","Details"],[0,"False","Authorization","HomeController","OnAuthorization()","1 ms","int.MinValue","First",null],[1,"False","Action","HomeController","OnActionExecuting()","~ 0 ms","int.MinValue","First",null],[2,"False","","HomeController","Index()","1706 ms",null,"",null,"selected"],[3,"False","Action","HomeController","OnActionExecuted()","~ 0 ms","int.MinValue","First",null],[4,"False","Result","HomeController","OnResultExecuting()","~ 0 ms","int.MinValue","First",null],[5,"False","","ViewResult","ExecuteResult(ControllerContext context)","3039 ms",null,"",null,"selected"],[6,"True","Authorization","ShoppingCartController","OnAuthorization()","~ 0 ms","int.MinValue","First",null],[7,"True","Authorization","ChildActionOnlyAttribute","OnAuthorization()","~ 0 ms",-1,"Action",null],[8,"True","Action","ShoppingCartController","OnActionExecuting()","~ 0 ms","int.MinValue","First",null],[9,"True","","ShoppingCartController","CartSummary()","47 ms",null,"",null,"selected"],[10,"True","Action","ShoppingCartController","OnActionExecuted()","~ 0 ms","int.MinValue","First",null],[11,"True","Result","ShoppingCartController","OnResultExecuting()","~ 0 ms","int.MinValue","First",null],[12,"True","","PartialViewResult","ExecuteResult(ControllerContext context)","419 ms",null,"",null,"selected"],[13,"True","Result","ShoppingCartController","OnResultExecuted()","~ 0 ms","int.MinValue","First",null],[14,"True","Authorization","StoreController","OnAuthorization()","~ 0 ms","int.MinValue","First",null],[15,"True","Authorization","ChildActionOnlyAttribute","OnAuthorization()","~ 0 ms",-1,"Action",null],[16,"True","Action","StoreController","OnActionExecuting()","~ 0 ms","int.MinValue","First",null],[17,"True","","StoreController","GenreMenu()","416 ms",null,"",null,"selected"],[18,"True","Action","StoreController","OnActionExecuted()","~ 0 ms","int.MinValue","First",null],[19,"True","Result","StoreController","OnResultExecuting()","~ 0 ms","int.MinValue","First",null],[20,"True","","PartialViewResult","ExecuteResult(ControllerContext context)","436 ms",null,"",null,"selected"],[21,"True","Result","StoreController","OnResultExecuted()","~ 0 ms","int.MinValue","First",null],[22,"False","Result","HomeController","OnResultExecuted()","~ 0 ms","int.MinValue","First",null]],"UnExecutedMethods":[["Child","Category","Type","Method","Order","Scope","Details"],["False","Exception","HomeController","OnException()","int.MinValue","First",null,"quiet"],["False","Exception","HandleErrorAttribute","OnException()",-1,"Global",{"ExceptionType":"System.Exception","Master":"","View":"Error"},"quiet"],["True","Exception","ShoppingCartController","OnException()","int.MinValue","First",null,"quiet"],["True","Exception","HandleErrorAttribute","OnException()",-1,"Global",{"ExceptionType":"System.Exception","Master":"","View":"Error"},"quiet"],["True","Exception","StoreController","OnException()","int.MinValue","First",null,"quiet"],["True","Exception","HandleErrorAttribute","OnException()",-1,"Global",{"ExceptionType":"System.Exception","Master":"","View":"Error"},"quiet"]]} },
-                            "MetaData":{ name : 'MetaData', data : [["Registration","Type","Details"],["Primary View Model","System.Collections.Generic.List<MvcMusicStore.Models.Album>",{"ConvertEmptyStringToNull":"True","DataTypeName":null,"Description":null,"DisplayFormatString":null,"DisplayName":null,"EditFormatString":null,"HideSurroundingHtml":"False","IsComplexType":true,"IsNullableValueType":false,"IsReadOnly":"False","IsRequired":"False","NullDisplayText":null,"ShortDisplayName":null,"ShowForDisplay":"True","ShowForEdit":"True","SimpleDisplayText":"System.Collections.Generic.List<MvcMusicStore.Models.Album>","TemplateHint":null,"Watermark":null},""],["View Model Properties",null,{"Capacity":{"ConvertEmptyStringToNull":"True","DataTypeName":null,"Description":null,"DisplayFormatString":null,"DisplayName":null,"EditFormatString":null,"HideSurroundingHtml":"False","IsComplexType":false,"IsNullableValueType":false,"IsReadOnly":"False","IsRequired":"*True*","NullDisplayText":null,"ShortDisplayName":null,"ShowForDisplay":"True","ShowForEdit":"True","SimpleDisplayText":"8","TemplateHint":null,"Watermark":null},"Count":{"ConvertEmptyStringToNull":"True","DataTypeName":null,"Description":null,"DisplayFormatString":null,"DisplayName":null,"EditFormatString":null,"HideSurroundingHtml":"False","IsComplexType":false,"IsNullableValueType":false,"IsReadOnly":"*True*","IsRequired":"*True*","NullDisplayText":null,"ShortDisplayName":null,"ShowForDisplay":"True","ShowForEdit":"True","SimpleDisplayText":"5","TemplateHint":null,"Watermark":null}},"glimpse-start-open"]] }
                     }
                 },
         
@@ -118,10 +87,10 @@ var glimpseTest = (function ($) {
                     { type : 'Routes', method : 'Get', duration : 1234, browser : 'Chrome 16.0', clientName : '', requestTime : '2011/11/09 12:29:14', requestId : 'ajax6', parentId : '1234', isAjax : true, url : '/Product'}
                 ],
                 requests2 = [ 
-                    { type : 'Session', method : 'Post', duration : 213, browser : 'iPhone 1', clientName : 'iPhone', requestTime : '2011/11/09 12:00:12', requestId : '1ajax0', isAjax : true, url : '/Product'},
-                    { type : 'Server', method : 'Post', duration : 123, browser : 'iPhone 1', clientName : 'iPhone', requestTime : '2011/11/09 12:10:34', requestId : '1ajax1', isAjax : false, url : '/Product'},
-                    { type : 'Request', method : 'Post', duration : 234, browser : 'iPhone 1', clientName : 'iPhone', requestTime : '2011/11/09 12:12:23', requestId : '1ajax2', isAjax : false, url : '/Product/230'},
-                    { type : 'Trace', method : 'Post', duration : 342, browser : 'iPhone 1', clientName : 'iPhone', requestTime : '2011/11/09 12:17:52', requestId : '1ajax3', isAjax : false, url : '/Product/Add'}
+                    { type : 'Session', method : 'Post', duration : 213, browser : 'iPhone 1', clientName : 'iPhone', requestTime : '2011/11/09 12:00:12', requestId : 'iPhone1Ajax', parentId : 'iPhone1', isAjax : true, url : '/Product'},
+                    { type : 'Server', method : 'Post', duration : 123, browser : 'iPhone 1', clientName : 'iPhone', requestTime : '2011/11/09 12:10:34', requestId : 'iPhone1', isAjax : false, url : '/Product'},
+                    { type : 'Request', method : 'Post', duration : 234, browser : 'iPhone 1', clientName : 'iPhone', requestTime : '2011/11/09 12:12:23', requestId : 'iPhone2', isAjax : false, url : '/Product/230'},
+                    { type : 'Trace', method : 'Post', duration : 342, browser : 'iPhone 1', clientName : 'iPhone', requestTime : '2011/11/09 12:17:52', requestId : 'iPhone3', isAjax : false, url : '/Product/Add'}
                 ],
                 requests3 = [ 
                     { type : 'Environment', method : 'Get', duration : 211, browser : 'IE6', clientName : 'Remote', requestTime : '2011/11/24 12:00:35', requestId : '2ajax4', isAjax : false, url : '/Product/Results'},
@@ -134,65 +103,109 @@ var glimpseTest = (function ($) {
                     'Remote' : requests3 
                 },  
                 
-                tracker = [ 
+                requestTracker = [ 
                     { name : '', count : 0, max : 7 },
                     { name : 'iPhone', count : 0, max : 4 },
                     { name : 'Remote', count : 0, max : 3 } 
                 ],  
-                trackerData = {},
+                requestTrackerResults = {},
+                
+                ajaxRequestTracker = {
+                    index: 0,
+                    lastId: 0
+                },
+                ajaxRequestTrackerResults = [],
         
-                radomResponse = function() { 
-                    var mainIndex = random(4);
-                    if (mainIndex < 3) {
-                        var tackedItem = tracker[mainIndex];
-                        if (tackedItem.count < tackedItem.max) { 
-                            if (tackedItem.count == 0) 
-                                trackerData[tackedItem.name] = []; 
-                            trackerData[tackedItem.name].push(requests[tackedItem.name][tackedItem.count]);
-                            tackedItem.count++;
-                        }
+                
+                generateAjaxResults = function (requestId) { 
+                    if (requestId != ajaxRequestTracker.lastId) {
+                        ajaxRequestTracker.index = 0;
+                        ajaxRequestTracker.lastId = requestId;
+                        ajaxRequestTrackerResults = [];
                     }
-                    return trackerData;
+        
+                    if (random(2) == 1 && (ajaxRequestTracker.index < 6 && requestId == 1234) || ajaxRequestTracker.index < 3)
+                        ajaxRequestTrackerResults.push(requests1[ajaxRequestTracker.index++]);
+                    
+                    return ajaxRequestTrackerResults;
                 },
         
+                findRequest = function (requestId) {
+                    var response;
+                    for (var name in requests) {
+                        var nameValue = requests[name];
+                        for (var i = 0; i < nameValue.length ; i++) {
+                            if (nameValue[i].requestId == requestId)
+                                response = nameValue[i];
+                        }
+                    }
+                     
+                    if (response) {
+                        response = $.extend(true, {}, response);
+                        
+                        response.data = {};
+                        response.data[response.type] = data[response.type];
+                        response.metadata = metadata; 
+                    } 
+        
+                    return response;
+                },
+        
+                radomResponse = function() { 
+                    if (random(2) == 1) {
+                        var mainIndex = random(5);
+                        if (mainIndex < 3) {
+                            var tackedItem = requestTracker[mainIndex];
+                            if (tackedItem.count < tackedItem.max) { 
+                                if (tackedItem.count == 0) 
+                                    requestTrackerResults[tackedItem.name] = []; 
+                                requestTrackerResults[tackedItem.name].push(requests[tackedItem.name][tackedItem.count]);
+                                tackedItem.count++;
+                            }
+                        }
+                    }
+                    return requestTrackerResults;
+                },
+                
                 trigger = function (param) { 
-        
                     setTimeout(function () { 
-                        var response; 
-                        if (param.data && param.data.requestID) {
-                            if (param.data.requestID != 'PRG') {
-                                for (var name in requests) {
-                                    var nameValue = requests[name];
-                                    for (var i = 0; i < nameValue.length ; i++) {
-                                        if (nameValue[i].requestId == param.data.requestID)
-                                            response = nameValue[i];
-                                    }
-                                }
-        
-                                if (response) {
-                                    response.data = {};
-                                    response.data[response.type] = data[response.type];
-                                    response.metadata = metadata; 
-                                } 
-                            
+                        
+                        var response, 
+                            success = 'Success';
+                        
+                        if (param.data) { 
+                            if (param.data.requestId) {
+                                if (requestData[param.data.requestId])
+                                    response = requestData[param.data.requestId];
+                                else 
+                                    response = findRequest(param.data.requestId);
+                                
                                 if (param.data.pluginKey) 
                                     response = param.data.pluginKey != "Lazy" ? response.data[param.data.pluginKey] : lazyData;
-                                
-                                response = $.extend(true, {}, response);
+                            }            
+                            else if (param.data.parentRequestId) { 
+                                if (param.data.ajaxResults) {
+                                    success = random(11) != 10 ? 'Success' : 'Fail';
+                                    if (success == 'Success') 
+                                        response = generateAjaxResults(param.data.parentRequestId); 
+                                }
                             }
-                            else
-                                response = prgData;
-                            
-                            if (param.complete)
-                                param.complete();
-                        } 
-                        else { 
-                            param.complete(null, (random(11) != 10 ? 'Success' : 'Fail')); 
-                            response = radomResponse();
+                        }
+                        else {
+                            success = random(11) != 10 ? 'Success' : 'Fail';
+                            if (success == 'Success')
+                                response = radomResponse();
                         }
                         
-                        param.success(response);
-                    }, 300);
+                        if (response)
+                            response = $.extend(true, $.isArray(response) ? [] : {}, response);
+        
+                        if (param.complete)
+                            param.complete(null, success);
+                        if (param.success && success == 'Success')
+                            param.success(response);
+                        
+                    }, random(6) * 100 + 1);
                 };
         
             return {
@@ -202,7 +215,7 @@ var glimpseTest = (function ($) {
         
         //Main
         random = function (length) {
-            return Math.floor(Math.random() * length)
+            return Math.floor(Math.random() * length);
         },
         retrieve = function (name) {
             return testHandlers[name];
@@ -212,8 +225,7 @@ var glimpseTest = (function ($) {
         },
         init = function () { 
             register("Pager", function(param) { pager.trigger(param); });
-            register("Ajax", function(param) { ajax.trigger(param); }); 
-            register("History", function(param) { history.trigger(param); }); 
+            register("Data", function(param) { data.trigger(param); }); 
 
             //http://stackoverflow.com/questions/5272698/how-to-fake-jquery-ajax-response
             var original = $.ajax;
