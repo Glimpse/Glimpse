@@ -5,24 +5,31 @@
         },   
 
         //Main 
-        check = function () {
-            var metadata = data.currentMetadata(),
-                newestVersion = util.cookie('glimpseLatestVersion'),
-                currentVersion = '';
-
-            if (newestVersion) {
-                currentVersion = metadata.version;
-                if (currentVersion < newestVersion)
-                    elements.holder.find('.glimpse-meta-update').attr('title', 'Update: Glimpse ' + parseFloat(newestVersion).toFixed(2) + ' now available on nuget.org').css('display', 'inline-block');
-                return;
+        retrieveStamp = function () {
+            if (!settings.stamp) {
+                settings.stamp = (new Date()).getTime();
+                pubsub.publish('state.persist');
             }
+            return settings.stamp;
+        },
+        check = function () {
+            var metadata = data.currentMetadata();
 
-            util.cookie('glimpseLatestVersion', -1, 1); 
+            if (settings.newVersion) 
+                elements.holder.find('.glimpse-meta-update').attr('title', 'Update: Glimpse ' + settings.newVersion + ' now available on nuget.org').css('display', 'inline-block');
+
+            if (util.cookie('glimpseVersionCheck'))
+                return;
+
             $.ajax({
                 dataType: 'jsonp',
                 url: 'http://getglimpse.com/Glimpse/CurrentVersion/',
-                success: function (data) {
-                    util.cookie('glimpseLatestVersion', data, 1);
+                data: { stamp: retrieveStamp(), version: metadata.version },
+                success: function (data) { 
+                    settings.newVersion = data;
+                    pubsub.publish('state.persist');
+
+                    util.cookie('glimpseVersionCheck', 1, 1);  //Not sure if this should only be set on success 
                 }
             }); 
         }, 
