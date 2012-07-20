@@ -6,11 +6,13 @@
         },
 /*(import:glimpse.paging.engine.js|2)*/,
         refresh = function (key) {  
-            var pagingInfo = data.currentMetadata().plugins[key].pagingInfo; 
-            if (pagingInfo) {
-                var panelItem = elements.findPanel(key);
-                removePreviousPager(key, panelItem); 
-                renderPager(key, panelItem, pagingInfo);
+            if (data.currentMetadata().plugins[key]) {
+                var pagingInfo = data.currentMetadata().plugins[key].pagingInfo; 
+                if (pagingInfo) {
+                    var panelItem = elements.findPanel(key);
+                    removePreviousPager(key, panelItem); 
+                    renderPager(key, panelItem, pagingInfo);
+                }
             }
         },
         removePreviousPager = function (key, panelItem) {
