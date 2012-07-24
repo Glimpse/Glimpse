@@ -2,13 +2,13 @@
 using System.Linq;
 using System.Web;
 using System.Web.Routing;
+using Glimpse.AspNet.Extensibility;
 using Glimpse.AspNet.Model;
 using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.AspNet.Tab
 {
-    //TODO: Use AspTab
-    public class Routes : TabBase<HttpContextBase>, IDocumentation
+    public class Routes : AspNetTab, IDocumentation
     {
         public override object GetData(ITabContext context)
         {
