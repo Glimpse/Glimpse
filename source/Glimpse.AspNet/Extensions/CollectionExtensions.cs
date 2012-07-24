@@ -12,5 +12,12 @@ namespace Glimpse.AspNet.Extensions
             result.AddRange(cookies.Select(cookie => new[] { cookie.Name, cookie.Value, cookie.Path, cookie.IsSecure.ToString() }));
             return result;
         }
+
+        public static object ToTable(this IEnumerable<RequestModel.QueryStringParameter> parameters)
+        {
+            var result = new List<string[]> { new[] { "Name", "Value" } };
+            result.AddRange(parameters.Select(parameter => new[]{ parameter.Key, parameter.Value }));
+            return result;
+        }
     }
 }

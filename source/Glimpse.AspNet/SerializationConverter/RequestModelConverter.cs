@@ -14,7 +14,7 @@ namespace Glimpse.AspNet.SerializationConverter
                            //TODO: Leverage Kristoffer Ahl's fluent interface for transformation into a table and formatting
                            {"Cookies", request.Cookies.ToTable()},
                            //TODO: Leverage Kristoffer Ahl's fluent interface for transformation into a table and formatting
-                           {"Query String", request.QueryString},
+                           {"Query String", request.QueryString.ToTable()},
                            {"Url", request.Url.ToString()},
                            {"Url Referrer", request.UrlReferrer == null ? null : request.UrlReferrer.ToString()},
                            //TODO: Create .ToGlimpseString(this Uri)
