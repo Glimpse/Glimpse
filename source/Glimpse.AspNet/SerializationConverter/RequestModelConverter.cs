@@ -1,19 +1,22 @@
 ﻿using System.Collections.Generic;
+using Glimpse.AspNet.Extensions;
 using Glimpse.AspNet.Model;
 using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.AspNet.SerializationConverter
 {
-    public class RequestModelConverter:SerializationConverter<RequestModel>
+    public class RequestModelConverter : SerializationConverter<RequestModel>
     {
         public override IDictionary<string, object> Convert(RequestModel request)
         {
             return new Dictionary<string, object>
                        {
-                           {"cookie", request.Cookies},//TODO: Leverage Kristoffer Ahl's fluent interface for transformation into a table and formatting
-                           {"queryString", request.QueryString},//TODO: Leverage Kristoffer Ahl's fluent interface for transformation into a table and formatting
-                           {"url", request.Url.ToString()},
-                           {"urlReferrer", request.UrlReferrer ==  null ? null : request.UrlReferrer.ToString()},
+                           //TODO: Leverage Kristoffer Ahl's fluent interface for transformation into a table and formatting
+                           {"Cookies", request.Cookies.ToTable()},
+                           //TODO: Leverage Kristoffer Ahl's fluent interface for transformation into a table and formatting
+                           {"Query String", request.QueryString},
+                           {"Url", request.Url.ToString()},
+                           {"Url Referrer", request.UrlReferrer == null ? null : request.UrlReferrer.ToString()},
                            //TODO: Create .ToGlimpseString(this Uri)
                            {"appRelativeCurrentExecutionFilePath", request.AppRelativeCurrentExecutionFilePath},
                            {"applicationPath", request.ApplicationPath},
@@ -29,7 +32,6 @@ namespace Glimpse.AspNet.SerializationConverter
                            {"userHostAddress", request.UserHostAddress},
                            {"userHostName", request.UserHostName},
                        };
-
         }
     }
 }

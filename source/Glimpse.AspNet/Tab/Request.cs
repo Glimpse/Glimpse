@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Glimpse.AspNet.Extensibility;
+﻿using Glimpse.AspNet.Extensibility;
 using Glimpse.AspNet.Extensions;
 using Glimpse.AspNet.Model;
 using Glimpse.Core2.Extensibility;
