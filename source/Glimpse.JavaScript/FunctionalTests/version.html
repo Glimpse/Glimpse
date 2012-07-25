@@ -16,7 +16,49 @@
     
     <div class="container">
         <h1>Version Markup Tester</h1>
+        <a href="#" class="example" id="firstData" data-example="1">Example A</a> || 
+        <a href="#" class="example" data-example="2">Example B</a> || 
+        <a href="#" class="example" data-example="3">Example C</a> || 
+        <a href="#" class="example" data-example="4">Example D</a> ||
         <textarea class="editor">
+        </textarea><br />
+        <input type="button" class="execute" value="Parse!" />
+        
+        <div style="display: none">
+            <div class="exampleContent1">
+Incremental release designed to provide a update to some of the core plugins.
+
+ - Release Checker: Now gives you a breakdown of exactly what you are missing from the latest version. +New
+ - Structured Layout: An alternative layout engine that allows developers to control the layout of the data. +New
+ - Timeline: Comes with an additional grid view to show the same data. +Changed
+ - Ajax: Fix that crashed poll in Chrome and IE due to log/trace statement. +Fix
+            </div>
+            <div class="exampleContent2">
+Incremental release designed to provide a update to some of the core plugins.
+
+@System
+ - *Release Checker*: Now gives you a breakdown of exactly what you are missing from the latest version. +New
+ - *Structured Layout*: An alternative layout engine that allows developers to control the layout of the data. +New
+
+@Plugin
+ - *Timeline*: Comes with an additional grid view to show the same data. +Changed
+ - *Ajax*: Fix that crashed poll in Chrome and IE due to log/trace statement. +Fix
+            </div>
+            <div class="exampleContent3">
+Incremental release designed to provide a update to some of the core plugins.
+ - *Example*: You can have global issues that aren't grouped to a section
+
+@System
+This description is specific to system section.
+ - *Release Checker*: Now gives you a breakdown of exactly what you are missing from the latest version. +New
+ - *Structured Layout*: An alternative layout engine that allows developers to control the layout of the data. +New
+
+@Plugin
+This description is specific to plugin section.
+ - *Timeline*: Comes with an additional grid view to show the same data. +Changed
+ - *Ajax*: Fix that crashed poll in Chrome and IE due to log/trace statement. +Fix [[i1234][http://getglimpse.com]]
+            </div>
+            <div class="exampleContent4">
 Incremental release designed to provide a update to some of the core plugins.
  - (A) *Example*: You can have global issues that aren't grouped to a section
 
@@ -29,9 +71,10 @@ This description is specific to system section.
 This description is specific to plugin section.
  - (B) *Timeline*: Comes with an additional grid view to show the same data. +Changed
  - (A) *Ajax*: Fix that crashed poll in Chrome and IE due to log/trace statement. +Fix [[i1234][http://getglimpse.com]]
-        </textarea><br />
-        <input type="button" class="execute" value="Parse!" />
+            </div> 
+        </div>
         
+
         <h1>Processed Text</h1> 
         <div class="resultText"></div>
 
@@ -277,6 +320,13 @@ This description is specific to plugin section.
             $('.execute').click(function() {
                 process(parse.process($('.editor').val()), $('.editor').val());
             });
+            
+            $('.example').click(function () {
+                var data = $('.exampleContent' + $(this).attr('data-example')).text();
+                $('.editor').val(data);
+            });
+            
+            $('#firstData').click();
         });
     </script>
 </body>
