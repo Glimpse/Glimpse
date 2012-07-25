@@ -7,9 +7,9 @@
         .container { width: 80%; margin-left: 10%; }
         .editor { width: 100%; height: 200px; }
         .execute { width: 200px; font-size: 20px; margin-bottom: 40px; }
-        .resultJson, .resultHtml { font-size: 11px;border: 1px dashed #777; background-color: #EEE; padding: 1em; width: 100%; overflow-x: scroll; }
+        .resultJson, .resultHtml, .resultText { font-size: 11px;border: 1px dashed #777; background-color: #EEE; padding: 1em; width: 100%; overflow-x: scroll; }
         .resultJson { min-height: 200px; font-family: Consolas, monospace, serif; } 
-        .resultHtml { min-height: 200px; font-size: 90%; }
+        .resultHtml, .resultText { min-height: 200px; font-size: 90%; }
     </style>
 </head>
 <body>
@@ -32,7 +32,10 @@ This description is specific to plugin section.
         </textarea><br />
         <input type="button" class="execute" value="Parse!" />
         
-        <h1>Processed HTML</h1>
+        <h1>Processed Text</h1> 
+        <div class="resultText"></div>
+
+        <h1>Processed HTML</h1> 
         <div class="resultHtml"></div>
         
         <h1>Processed JSON</h1>
@@ -261,17 +264,18 @@ This description is specific to plugin section.
             };
         })();
 
-        var process = function(data) {
+        var process = function(data, raw) {
             var stringData = formatJson.process(JSON.stringify(data)),
                 stringHtml = formatHtml.process(data);
 
             $('.resultJson').html('<pre>' + stringData + '</pre>');
             $('.resultHtml').html(stringHtml);
+            $('.resultText').html(raw.replace(/\n/g, '<br />'));
         };
 
         $(function (){
             $('.execute').click(function() {
-                process(parse.process($('.editor').val()));
+                process(parse.process($('.editor').val()), $('.editor').val());
             });
         });
     </script>
