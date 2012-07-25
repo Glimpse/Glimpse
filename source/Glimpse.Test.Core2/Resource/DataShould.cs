@@ -16,7 +16,7 @@ namespace Glimpse.Test.Core2.Resource
         public void ProvideProperName()
         {
             var resource = new Data();
-            Assert.Equal("data.js", resource.Name);
+            Assert.Equal("request", resource.Name);
         }
 
         [Fact]

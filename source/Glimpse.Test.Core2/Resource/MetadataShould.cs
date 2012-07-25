@@ -25,7 +25,7 @@ namespace Glimpse.Test.Core2.Resource
         public void HaveProperName()
         {
             var metadata = new Metadata();
-            Assert.Equal("metadata.js", metadata.Name);
+            Assert.Equal("metadata", metadata.Name);
         }
 
         [Fact]

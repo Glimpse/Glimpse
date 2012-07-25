@@ -18,7 +18,7 @@ namespace Glimpse.Test.Core2.ClientScript
         public void HaveProperResourceName()
         {
             var clientScript = new Data();
-            Assert.Equal("data.js", clientScript.GetResourceName());
+            Assert.Equal("request", clientScript.GetResourceName());
         }
 
         [Fact]

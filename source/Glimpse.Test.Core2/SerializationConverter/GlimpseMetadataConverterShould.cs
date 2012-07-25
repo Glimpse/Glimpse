@@ -17,7 +17,7 @@ namespace Glimpse.Test.Core2.SerializationConverter
 
             Assert.True(result.ContainsKey("version"));
             Assert.True(result.ContainsKey("plugins"));
-            Assert.True(result.ContainsKey("paths"));
+            Assert.True(result.ContainsKey("resources"));
         }
     }
 }
