@@ -21,7 +21,7 @@ namespace Glimpse.Test.Core2.Framework
             Assert.Equal(guid, metadata.RequestId);
             Assert.Equal(pluginData, metadata.PluginData);
             Assert.Equal(expectedDuration, metadata.Duration);
-            Assert.Equal(default(Guid), metadata.ParentRequestId);
+            Assert.Null(metadata.ParentRequestId);
         }
     }
 }

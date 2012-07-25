@@ -32,7 +32,7 @@ namespace Glimpse.Test.Core2.SerializationConverter
             Assert.True(result.ContainsKey("duration"));
             Assert.NotNull(result["duration"]);
             Assert.True(result.ContainsKey("parentRequestId"));
-            Assert.NotNull(result["parentRequestId"]);
+            Assert.Null(result["parentRequestId"]);
             Assert.True(result.ContainsKey("requestId"));
             Assert.NotNull(result["requestId"]);
             Assert.True(result.ContainsKey("isAjax"));

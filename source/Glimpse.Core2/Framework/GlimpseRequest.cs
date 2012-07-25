@@ -37,7 +37,7 @@ namespace Glimpse.Core2.Framework
         public string ClientId { get; set; }
         public DateTime DateTime { get; set; }
         public long Duration { get; set; }
-        public Guid ParentRequestId { get; set; }
+        public Guid? ParentRequestId { get; set; }
         public Guid RequestId { get; set; }
         public bool RequestIsAjax { get; set; }
         public string RequestHttpMethod { get; set; }
