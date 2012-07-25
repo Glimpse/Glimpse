@@ -92,8 +92,19 @@ namespace Glimpse.Core2.Framework
                 try
                 {
                     assembly = Assembly.LoadFrom(file);
+                    Type[] allTypes;
 
-                    var concreteTypes = assembly.GetTypes().Where(type => typeof (T).IsAssignableFrom(type) &&
+                    //GetTypes potentially throws and exception. Defensive coding as per http://haacked.com/archive/2012/07/23/get-all-types-in-an-assembly.aspx
+                    try
+                    {
+                        allTypes = assembly.GetTypes();
+                    }
+                    catch(ReflectionTypeLoadException ex)
+                    {
+                        allTypes = ex.Types.Where(t => t != null).ToArray();
+                    }
+                    
+                    var concreteTypes = allTypes.Where(type => typeof (T).IsAssignableFrom(type) &&
                                                                           !type.IsInterface &&
                                                                           !type.IsAbstract &&
                                                                           !IgnoredTypes.Contains(type));
