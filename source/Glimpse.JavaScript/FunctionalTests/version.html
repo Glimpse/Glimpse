@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Version Tester</title> 
+    <style>
+        .container { width: 80%; margin-left: 10%; }
+        .editor { width: 100%; height: 200px; }
+        .execute { width: 200px; font-size: 20px; margin-bottom: 40px; }
+        .resultJson, .resultHtml { font-size: 11px;border: 1px dashed #777; background-color: #EEE; padding: 1em; width: 100%; overflow-x: scroll; }
+        .resultJson { min-height: 200px; font-family: Consolas, monospace, serif; } 
+        .resultHtml { min-height: 200px; font-size: 90%; }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <h1>Version Markup Tester</h1>
+        <textarea class="editor">
+Incremental release designed to provide a update to some of the core plugins.
+ - (A) *Example*: You can have global issues that aren't grouped to a section
+
+@System [[icon][http://getglimpse.com/release/icon/core.png]]
+This description is specific to system section.
+ - (C) *Release Checker*: Now gives you a breakdown of exactly what you are missing from the latest version. +New
+ - (A) *Structured Layout*: An alternative layout engine that allows developers to control the layout of the data. +New
+
+@Plugin [[icon][http://getglimpse.com/release/icon/mvc.png]]
+This description is specific to plugin section.
+ - (B) *Timeline*: Comes with an additional grid view to show the same data. +Changed
+ - (A) *Ajax*: Fix that crashed poll in Chrome and IE due to log/trace statement. +Fix [[i1234][http://getglimpse.com]]
+        </textarea><br />
+        <input type="button" class="execute" value="Parse!" />
+        
+        <h1>Processed HTML</h1>
+        <div class="resultHtml"></div>
+        
+        <h1>Processed JSON</h1>
+        <div class="resultJson"></div>
+    </div>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript">
+        var parse = (function () {
+            var linkProcessor = {
+                    pattern : /\[\[(\S+)\]\[(\S+)\]\]/i,
+                    process : function (input, obj) {
+                        var match =  this.pattern.exec(input);
+                        
+                        if (match) {
+                            if ($.isArray(obj)) {
+                                obj.push(match[1]);
+                                obj.push(match[2]);
+                            }
+                            else
+                                obj[input[1]] = input[2];
+                        }
+                        
+                        return obj;
+                    }
+                },
+                lineProcessor = {
+                    options : [{ 
+                        titlePattern : /^@(\w*)/i,
+                        test : function (input) {
+                            return input[0] === '@';
+                        },
+                        process : function (obj, input) {
+                            var title = this.titlePattern.exec(input),
+                                links = linkProcessor.process(input, {}),
+                                feature = { items : [] };
+                            
+                            feature.name = title[1];
+                            if (links.icon)
+                                feature.icon = links.icon;
+                            
+                            // Store results 
+                            if (!obj.features)
+                                obj.features = []; 
+                            obj.features.push(feature);
+                        }
+                    },
+                    {
+                        pattern : /^ \- /i,
+                        priorityPattern : /^ \- \(([A-Z])\) /i,
+                        categoryPattern : /\+([^\s]+)/i,
+                        test : function (input) {
+                            return this.pattern.test(input);
+                        },
+                        process : function (obj, input) {
+                            var priority = this.priorityPattern.exec(input),
+                                category = this.categoryPattern.exec(input),
+                                links = linkProcessor.process(input, []),
+                                item = {};
+                            
+                            if (priority) {
+                                item.priority =  priority[1];
+                                input = input.replace(this.priorityPattern, '');
+                            }
+                            input = input.replace(this.pattern, '');
+                            if (category) {
+                                item.category = category[1];
+                                input = input.replace(this.categoryPattern, '');
+                            }
+                            if (links.length > 0) {
+                                item.taskId = links[0];
+                                item.teskLink = links[1];
+                                input = input.replace(linkProcessor.pattern, '');
+                            }
+                            item.summary = input.trim();
+
+                            // Store results 
+                            if (!obj.features) {
+                                if (!obj.items)
+                                    obj.items = [];
+                                obj.items.push(item);
+                            }
+                            else 
+                                obj.features[obj.features.length - 1].items.push(item); 
+                        }
+                    }],
+                    primary : {
+                        process : function (obj, input) {
+                            input = input.trim();
+                            if (input === '')
+                                return;
+
+                            var item = obj;
+                            if (obj.features) 
+                                item = obj.features[obj.features.length - 1];
+                            
+                            if (!item.summary)
+                                item.summary = '';
+                            else 
+                                item.summary += '\n'; 
+                            item.summary += input; 
+                        }
+                    }
+                },
+                process = function (raw) {
+                    var result = {},
+                        rawLines = raw.split('\n');
+
+                    for (var rawLineIndex in rawLines) {
+                        var rawLine = rawLines[rawLineIndex],
+                            matched = false;
+
+                        // Process the line
+                        for (var optionIndex in lineProcessor.options) {
+                            var option = lineProcessor.options[optionIndex];
+                            
+                            if (option.test(rawLine)) {
+                                option.process(result, rawLine);
+                                matched = true;
+                            }
+                        }
+                        if (!matched)
+                            lineProcessor.primary.process(result, rawLine);
+                    }
+                    
+                    return result;
+                };
+             
+            return {
+                process : process  
+            };
+        })();
+        
+        var formatJson = (function () {
+            var process = function(val) {
+                var result = '',
+                    stack = [],
+                    stackTop = { indent: '' },
+                    strLen = val.length,
+                    char = '',
+                    indentStr = '    ',
+                    newLine = '\r\n';
+        
+                for (var i = 0; i < strLen; i++) {
+                    char = val[i];
+            
+                    if (char == '{' || char == '[') {
+                        stack.push(stackTop = {
+                            isArray: char == '[',
+                            isOutterArray: char == '[' && val[i + 1] == '[',
+                            indent: stackTop.indent + (!stackTop.isOutterArray ? indentStr : '')
+                        }); 
+                    }
+            
+                    if (char == '}' || (char == ']' && stackTop.isOutterArray))
+                        result += newLine + (stack.length > 1 ? stack[stack.length - 2].indent : '');
+             
+                    result += ((char == ']' && !stackTop.isOutterArray) || char == ':' ? ' ' : '') + char + (char == '[' || char == ':' || (char == ',' && stackTop.isArray) ? ' ' : '');
+             
+                    if ((char == ',' && (!stackTop.isArray || stackTop.isOutterArray)) || char == '{' || (char == '[' && stackTop.isOutterArray))
+                        result += newLine + stackTop.indent;
+            
+                    if (char == '}' || char == ']') {
+                        stack.pop();
+                        stackTop = stack[stack.length - 1];
+                    } 
+                }
+
+                return result;
+            };
+            
+            return {
+                process : process
+            };
+        })();
+        
+        var formatHtml = (function () {
+            var formatHtmlParser = [
+                    {
+                        pattern : /\*([\S ]+)\*/i,
+                        process : function(val) {
+                            return val.replace(this.pattern, '<strong>$1</strong>');
+                        }
+                    }
+                ],
+                processList = function (items) { 
+                    var result = '<ul>';
+
+                    for (var itemIndex in items) {
+                        var item = items[itemIndex];
+                    
+                        result += '<li>';
+                        if (item.priority == 'A')
+                            result += '* ';
+                        if (item.category)
+                            result += ' {' + item.category + '}';
+                    
+                        var summary = item.summary;
+                        for (var fomatterIndex in formatHtmlParser) 
+                            summary = formatHtmlParser[fomatterIndex].process(summary);
+                        result += summary;
+                    
+                        if (item.taskId)
+                            result += ' <a href="' + item.teskLink + '">' + item.taskId + '</a>';
+                        result += '</li>';
+                    }
+
+                    result += '</ul>';
+                    
+                    return result;
+                },
+                process = function (val) {
+                    var result = '';
+              
+                    result += '<div>' + processList(val.items) + '</div>';
+                    for (var featureIndex in val.features) {
+                        var feature = val.features[featureIndex];
+                
+                        result += '<div><h1>' + feature.name + '</h1>' + processList(feature.items) + '</div>';
+                    }
+
+                    return result; 
+                };
+            
+            return {
+                process : process
+            };
+        })();
+
+        var process = function(data) {
+            var stringData = formatJson.process(JSON.stringify(data)),
+                stringHtml = formatHtml.process(data);
+
+            $('.resultJson').html('<pre>' + stringData + '</pre>');
+            $('.resultHtml').html(stringHtml);
+        };
+
+        $(function (){
+            $('.execute').click(function() {
+                process(parse.process($('.editor').val()));
+            });
+        });
+    </script>
+</body>
+</html>

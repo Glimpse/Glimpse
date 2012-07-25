@@ -71,6 +71,7 @@
     <Content Include="FunctionalTests\sprite.png" />
     <Content Include="FunctionalTests\test-popup.html" />
     <Content Include="FunctionalTests\test.html" />
+    <Content Include="FunctionalTests\version.html" />
     <Content Include="glimpse.controller.lazyloader.js" />
     <Content Include="glimpse.controller.metadata.js" />
     <Content Include="glimpse.controller.notification.js" />
