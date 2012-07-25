@@ -102,6 +102,9 @@ namespace Glimpse.Core2.Framework
                     catch(ReflectionTypeLoadException ex)
                     {
                         allTypes = ex.Types.Where(t => t != null).ToArray();
+
+                        foreach (var exception in ex.LoaderExceptions)
+                            Logger.Warn(Resources.DiscoverGetType, exception);
                     }
                     
                     var concreteTypes = allTypes.Where(type => typeof (T).IsAssignableFrom(type) &&

@@ -240,4 +240,7 @@
         <value xml:space="preserve">Multiple Resources with name of '{0}'. Resources should have unique names.</value>
         <comment>{0} - The name of ambiguous resource.</comment>
     </data>
+  <data name="DiscoverGetType">
+    <value xml:space="preserve">Unable to GetType.</value>
+  </data>
 </root>
