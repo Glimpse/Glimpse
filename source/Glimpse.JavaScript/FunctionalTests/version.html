@@ -19,7 +19,7 @@
         <a href="#" class="example" id="firstData" data-example="1">Example A</a> || 
         <a href="#" class="example" data-example="2">Example B</a> || 
         <a href="#" class="example" data-example="3">Example C</a> || 
-        <a href="#" class="example" data-example="4">Example D</a> ||
+        <a href="#" class="example" data-example="4">Example D</a>
         <textarea class="editor">
         </textarea><br />
         <input type="button" class="execute" value="Parse!" />
@@ -36,11 +36,11 @@ Incremental release designed to provide a update to some of the core plugins.
             <div class="exampleContent2">
 Incremental release designed to provide a update to some of the core plugins.
 
-@System
+# System
  - *Release Checker*: Now gives you a breakdown of exactly what you are missing from the latest version. +New
  - *Structured Layout*: An alternative layout engine that allows developers to control the layout of the data. +New
 
-@Plugin
+# Plugin
  - *Timeline*: Comes with an additional grid view to show the same data. +Changed
  - *Ajax*: Fix that crashed poll in Chrome and IE due to log/trace statement. +Fix
             </div>
@@ -48,12 +48,12 @@ Incremental release designed to provide a update to some of the core plugins.
 Incremental release designed to provide a update to some of the core plugins.
  - *Example*: You can have global issues that aren't grouped to a section
 
-@System
+# System
 This description is specific to system section.
  - *Release Checker*: Now gives you a breakdown of exactly what you are missing from the latest version. +New
  - *Structured Layout*: An alternative layout engine that allows developers to control the layout of the data. +New
 
-@Plugin
+# Plugin
 This description is specific to plugin section.
  - *Timeline*: Comes with an additional grid view to show the same data. +Changed
  - *Ajax*: Fix that crashed poll in Chrome and IE due to log/trace statement. +Fix [[i1234][http://getglimpse.com]]
@@ -62,12 +62,12 @@ This description is specific to plugin section.
 Incremental release designed to provide a update to some of the core plugins.
  - (A) *Example*: You can have global issues that aren't grouped to a section
 
-@System [[icon][http://getglimpse.com/release/icon/core.png]]
+# System [[icon][http://getglimpse.com/release/icon/core.png]]
 This description is specific to system section.
  - (C) *Release Checker*: Now gives you a breakdown of exactly what you are missing from the latest version. +New
  - (A) *Structured Layout*: An alternative layout engine that allows developers to control the layout of the data. +New
 
-@Plugin [[icon][http://getglimpse.com/release/icon/mvc.png]]
+# Plugin [[icon][http://getglimpse.com/release/icon/mvc.png]]
 This description is specific to plugin section.
  - (B) *Timeline*: Comes with an additional grid view to show the same data. +Changed
  - (A) *Ajax*: Fix that crashed poll in Chrome and IE due to log/trace statement. +Fix [[i1234][http://getglimpse.com]]
@@ -75,7 +75,7 @@ This description is specific to plugin section.
         </div>
         
 
-        <h1>Processed Text</h1> 
+        <h1>Text</h1> 
         <div class="resultText"></div>
 
         <h1>Processed HTML</h1> 
@@ -106,12 +106,12 @@ This description is specific to plugin section.
                 },
                 lineProcessor = {
                     options : [{ 
-                        titlePattern : /^@(\w*)/i,
+                        pattern : /^# (\w*)/i,
                         test : function (input) {
-                            return input[0] === '@';
+                            return this.pattern.test(input);
                         },
                         process : function (obj, input) {
-                            var title = this.titlePattern.exec(input),
+                            var title = this.pattern.exec(input),
                                 links = linkProcessor.process(input, {}),
                                 feature = { items : [] };
                             
@@ -263,6 +263,9 @@ This description is specific to plugin section.
                         }
                     }
                 ],
+                processString = function (val) {
+                    return val ? val.replace(/\n/g, '<br />') : '';
+                },
                 processList = function (items) { 
                     var result = '<ul>';
 
@@ -292,11 +295,11 @@ This description is specific to plugin section.
                 process = function (val) {
                     var result = '';
               
-                    result += '<div>' + processList(val.items) + '</div>';
+                    result += '<div>' + processString(val.summary) + processList(val.items) + '</div>';
                     for (var featureIndex in val.features) {
                         var feature = val.features[featureIndex];
                 
-                        result += '<div><h1>' + feature.name + '</h1>' + processList(feature.items) + '</div>';
+                        result += '<div><h1>' + feature.name + '</h1>' + processString(feature.summary) + processList(feature.items) + '</div>';
                     }
 
                     return result; 
