@@ -107,6 +107,7 @@
     <Compile Include="Policy\UserHostAddressPolicyShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourcesShould.cs" />
+    <Compile Include="Resource\AjaxShould.cs" />
     <Compile Include="Resource\ClientShould.cs" />
     <Compile Include="Resource\ConfigurationShould.cs" />
     <Compile Include="Resource\DataShould.cs" />
