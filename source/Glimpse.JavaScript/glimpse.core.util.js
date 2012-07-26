@@ -71,7 +71,34 @@
             that.scope = scope;
             that.text = scope.find('span');
             return that;
-        }; 
+        },
+        tokenizer = (function () {
+            var results = {},
+                pattern = /\{([a-zA-z0-9]*)\}+/ig,
+                parse = function (input, data) {
+                    var tokens = results[input];
+                    if (!tokens) {
+                        tokens = results[input] = [];
+                        input.replace(pattern, function (a, b) {
+                            tokens.push(b);
+                        });   
+                    }
+                    
+                    for (var tokenIndex in tokens) {
+                        var token = tokens[tokenIndex],
+                            value = data[token];
+                        if (value === undefined)
+                            value = '';
+                        input = input.replace('{' + token + '}', value);
+                    }
+                    
+                    return input;
+                };
+            
+            return {
+                parse : parse  
+            };
+        })(); 
 
     connectionNotice.prototype = {
         connected : false, 
@@ -187,6 +214,7 @@
             if (value < 1000)
                 return value + 'ms';
             return Math.round(value / 10) / 100 + 's';
-        }
+        },
+        replaceTokens: tokenizer.parse
     }; 
 } ()

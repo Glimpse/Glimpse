@@ -29,9 +29,8 @@
 
             if (requestId != baseInner.requestId) {
                 $.ajax({
-                    url : currentMetadata().resources.request,
+                    url : util.replaceTokens(currentMetadata().resources.request, { 'requestId': requestId }),
                     type : 'GET',
-                    data : { 'requestId': requestId },
                     contentType : 'application/json',
                     success : function (result, textStatus, jqXHR) {   
                         if (callback && callback.success) { callback.success(requestId, result, inner, textStatus, jqXHR); }

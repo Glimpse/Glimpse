@@ -86,7 +86,34 @@ var glimpse = (function ($, scope) {
                     that.scope = scope;
                     that.text = scope.find('span');
                     return that;
-                }; 
+                },
+                tokenizer = (function () {
+                    var results = {},
+                        pattern = /\{([a-zA-z0-9]*)\}+/ig,
+                        parse = function (input, data) {
+                            var tokens = results[input];
+                            if (!tokens) {
+                                tokens = results[input] = [];
+                                input.replace(pattern, function (a, b) {
+                                    tokens.push(b);
+                                });   
+                            }
+                            
+                            for (var tokenIndex in tokens) {
+                                var token = tokens[tokenIndex],
+                                    value = data[token];
+                                if (value === undefined)
+                                    value = '';
+                                input = input.replace('{' + token + '}', value);
+                            }
+                            
+                            return input;
+                        };
+                    
+                    return {
+                        parse : parse  
+                    };
+                })(); 
         
             connectionNotice.prototype = {
                 connected : false, 
@@ -202,7 +229,8 @@ var glimpse = (function ($, scope) {
                     if (value < 1000)
                         return value + 'ms';
                     return Math.round(value / 10) / 100 + 's';
-                }
+                },
+                replaceTokens: tokenizer.parse
             }; 
         } (),
         pubsub = (function () {
@@ -335,9 +363,8 @@ var glimpse = (function ($, scope) {
         
                     if (requestId != baseInner.requestId) {
                         $.ajax({
-                            url : currentMetadata().resources.request,
+                            url : util.replaceTokens(currentMetadata().resources.request, { 'requestId': requestId }),
                             type : 'GET',
-                            data : { 'requestId': requestId },
                             contentType : 'application/json',
                             success : function (result, textStatus, jqXHR) {   
                                 if (callback && callback.success) { callback.success(requestId, result, inner, textStatus, jqXHR); }
@@ -909,9 +936,8 @@ var glimpse = (function ($, scope) {
                 retrievePlugin = function(key) {   
                     var currentData = data.current();
                     $.ajax({
-                        url : data.currentMetadata().resources.tab,
+                        url : util.replaceTokens(data.currentMetadata().resources.tab, { 'requestId' : currentData.requestId, 'pluginKey' : key }),
                         type : 'GET',
-                        data : { 'requestId' : currentData.requestId, 'pluginKey' : key },
                         contentType : 'application/json',
                         success : function (result) {
                             var itemData = currentData.data[key];
@@ -1160,9 +1186,8 @@ var glimpse = (function ($, scope) {
                         isLoading = true; 
                         showLoadingMessage(key);
                         $.ajax({
-                            url: data.currentMetadata().resources.paging,
-                            type: 'GET',
-                            data: { 'key': pagerKey, 'pageIndex': pageIndex },
+                            url: util.replaceTokens(data.currentMetadata().resources.paging, { 'key': pagerKey, 'pageIndex': pageIndex }),
+                            type: 'GET', 
                             contentType: 'application/json',
                             cache: false, 
                             success: function (data, textStatus, jqXHR) { 
@@ -1741,8 +1766,7 @@ var glimpseAjaxPlugin = (function ($, glimpse) {
             //Poll for updated summary data
             notice.prePoll(); 
             $.ajax({
-                url: glimpse.data.currentMetadata().resources.ajax,
-                data: { 'parentRequestId': currentId, 'ajaxResults': true },
+                url: glimpse.util.replaceTokens(glimpse.data.currentMetadata().resources.ajax, { 'parentRequestId': currentId, 'ajaxResults': true }),
                 type: 'GET',
                 contentType: 'application/json',
                 complete : function(jqXHR, textStatus) {

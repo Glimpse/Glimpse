@@ -37,9 +37,8 @@
                 isLoading = true; 
                 showLoadingMessage(key);
                 $.ajax({
-                    url: data.currentMetadata().resources.paging,
-                    type: 'GET',
-                    data: { 'key': pagerKey, 'pageIndex': pageIndex },
+                    url: util.replaceTokens(data.currentMetadata().resources.paging, { 'key': pagerKey, 'pageIndex': pageIndex }),
+                    type: 'GET', 
                     contentType: 'application/json',
                     cache: false, 
                     success: function (data, textStatus, jqXHR) { 

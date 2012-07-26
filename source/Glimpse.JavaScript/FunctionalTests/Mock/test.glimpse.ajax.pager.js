@@ -14,11 +14,11 @@
 
             return result;
         },
-        trigger = function (param) {
+        trigger = function (param, data) {
             param.complete();
 
             setTimeout(function () {
-                param.success(generate(param.data));
+                param.success(generate(data));
             }, 300);
         };
 

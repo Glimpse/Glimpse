@@ -139,30 +139,30 @@
             return requestTrackerResults;
         },
         
-        trigger = function (param) { 
+        trigger = function (param, data) { 
             setTimeout(function () { 
                 
                 var response, 
                     success = 'Success';
                 
-                if (param.data) { 
-                    if (param.data.requestId) {
+                if (data) { 
+                    if (data.requestId) {
                         // Request
-                        if (requestData[param.data.requestId])
-                            response = requestData[param.data.requestId];   // Find Exact Request
+                        if (requestData[data.requestId])
+                            response = requestData[data.requestId];   // Find Exact Request
                         else 
-                            response = findRequest(param.data.requestId);   // Generate Partical Request
+                            response = findRequest(data.requestId);   // Generate Partical Request
                         
                         // Tab Request
-                        if (param.data.pluginKey) 
-                            response = param.data.pluginKey != "Lazy" ? response.data[param.data.pluginKey] : lazyData;
+                        if (data.pluginKey) 
+                            response = data.pluginKey != "Lazy" ? response.data[data.pluginKey] : lazyData;
                     }            
-                    else if (param.data.parentRequestId) { 
+                    else if (data.parentRequestId) { 
                         // Ajax Requests
-                        if (param.data.ajaxResults) {
+                        if (data.ajaxResults) {
                             success = random(11) != 10 ? 'Success' : 'Fail';
                             if (success == 'Success') 
-                                response = generateAjaxResults(param.data.parentRequestId); 
+                                response = generateAjaxResults(data.parentRequestId); 
                         }
                     }
                 }

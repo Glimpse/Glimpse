@@ -6,9 +6,8 @@
         retrievePlugin = function(key) {   
             var currentData = data.current();
             $.ajax({
-                url : data.currentMetadata().resources.tab,
+                url : util.replaceTokens(data.currentMetadata().resources.tab, { 'requestId' : currentData.requestId, 'pluginKey' : key }),
                 type : 'GET',
-                data : { 'requestId' : currentData.requestId, 'pluginKey' : key },
                 contentType : 'application/json',
                 success : function (result) {
                     var itemData = currentData.data[key];
