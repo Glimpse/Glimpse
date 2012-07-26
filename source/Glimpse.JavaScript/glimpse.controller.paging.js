@@ -37,7 +37,7 @@
                 isLoading = true; 
                 showLoadingMessage(key);
                 $.ajax({
-                    url: data.currentMetadata().paths.pager,
+                    url: data.currentMetadata().resources.pager,
                     type: 'GET',
                     data: { 'key': pagerKey, 'pageIndex': pageIndex },
                     contentType: 'application/json',
