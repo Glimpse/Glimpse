@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Glimpse.Core2.Backport;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.ResourceResult;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace Glimpse.Core2.Resource
             Guid parentRequestId;
 
 #if NET35
-            if (!Net35Backport.TryParseGuid(context.Parameters[ParentRequestKey], out requestId))
+            if (!Net35Backport.TryParseGuid(context.Parameters[ParentRequestKey], out parentRequestId))
                 return new StatusCodeResourceResult(404);
 #else
             if (!Guid.TryParse(context.Parameters[ParentRequestKey], out parentRequestId))
