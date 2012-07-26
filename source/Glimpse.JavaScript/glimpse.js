@@ -335,7 +335,7 @@ var glimpse = (function ($, scope) {
         
                     if (requestId != baseInner.requestId) {
                         $.ajax({
-                            url : currentMetadata().resources.data,
+                            url : currentMetadata().resources.request,
                             type : 'GET',
                             data : { 'requestId': requestId },
                             contentType : 'application/json',
@@ -909,7 +909,7 @@ var glimpse = (function ($, scope) {
                 retrievePlugin = function(key) {   
                     var currentData = data.current();
                     $.ajax({
-                        url : data.currentMetadata().resources.data,
+                        url : data.currentMetadata().resources.tab,
                         type : 'GET',
                         data : { 'requestId' : currentData.requestId, 'pluginKey' : key },
                         contentType : 'application/json',
@@ -1160,7 +1160,7 @@ var glimpse = (function ($, scope) {
                         isLoading = true; 
                         showLoadingMessage(key);
                         $.ajax({
-                            url: data.currentMetadata().resources.pager,
+                            url: data.currentMetadata().resources.paging,
                             type: 'GET',
                             data: { 'key': pagerKey, 'pageIndex': pageIndex },
                             contentType: 'application/json',
@@ -1741,7 +1741,7 @@ var glimpseAjaxPlugin = (function ($, glimpse) {
             //Poll for updated summary data
             notice.prePoll(); 
             $.ajax({
-                url: glimpse.data.currentMetadata().resources.data,
+                url: glimpse.data.currentMetadata().resources.ajax,
                 data: { 'parentRequestId': currentId, 'ajaxResults': true },
                 type: 'GET',
                 contentType: 'application/json',
@@ -1876,7 +1876,7 @@ var glimpseHistoryPlugin = (function ($, glimpse) {
             //Poll for updated summary data
             notice.prePoll(); 
             $.ajax({
-                url: glimpse.data.currentMetadata().resources.data, 
+                url: glimpse.data.currentMetadata().resources.history, 
                 type: 'GET',
                 contentType: 'application/json',
                 complete : function(jqXHR, textStatus) {

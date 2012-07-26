@@ -179,15 +179,18 @@ var glimpseTest = (function ($) {
                         
                         if (param.data) { 
                             if (param.data.requestId) {
+                                // Request
                                 if (requestData[param.data.requestId])
-                                    response = requestData[param.data.requestId];
+                                    response = requestData[param.data.requestId];   // Find Exact Request
                                 else 
-                                    response = findRequest(param.data.requestId);
+                                    response = findRequest(param.data.requestId);   // Generate Partical Request
                                 
+                                // Tab Request
                                 if (param.data.pluginKey) 
                                     response = param.data.pluginKey != "Lazy" ? response.data[param.data.pluginKey] : lazyData;
                             }            
                             else if (param.data.parentRequestId) { 
+                                // Ajax Requests
                                 if (param.data.ajaxResults) {
                                     success = random(11) != 10 ? 'Success' : 'Fail';
                                     if (success == 'Success') 
@@ -196,6 +199,7 @@ var glimpseTest = (function ($) {
                             }
                         }
                         else {
+                            // 
                             success = random(11) != 10 ? 'Success' : 'Fail';
                             if (success == 'Success')
                                 response = radomResponse();
@@ -229,7 +233,10 @@ var glimpseTest = (function ($) {
         },
         init = function () { 
             register("Pager", function(param) { pager.trigger(param); });
-            register("Data", function(param) { data.trigger(param); }); 
+            register("Ajax", function(param) { data.trigger(param); }); 
+            register("History", function(param) { data.trigger(param); }); 
+            register("Request", function(param) { data.trigger(param); }); 
+            register("Tab", function(param) { data.trigger(param); }); 
 
             //http://stackoverflow.com/questions/5272698/how-to-fake-jquery-ajax-response
             var original = $.ajax;

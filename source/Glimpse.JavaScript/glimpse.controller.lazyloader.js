@@ -6,7 +6,7 @@
         retrievePlugin = function(key) {   
             var currentData = data.current();
             $.ajax({
-                url : data.currentMetadata().resources.data,
+                url : data.currentMetadata().resources.tab,
                 type : 'GET',
                 data : { 'requestId' : currentData.requestId, 'pluginKey' : key },
                 contentType : 'application/json',

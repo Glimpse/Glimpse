@@ -147,15 +147,18 @@
                 
                 if (param.data) { 
                     if (param.data.requestId) {
+                        // Request
                         if (requestData[param.data.requestId])
-                            response = requestData[param.data.requestId];
+                            response = requestData[param.data.requestId];   // Find Exact Request
                         else 
-                            response = findRequest(param.data.requestId);
+                            response = findRequest(param.data.requestId);   // Generate Partical Request
                         
+                        // Tab Request
                         if (param.data.pluginKey) 
                             response = param.data.pluginKey != "Lazy" ? response.data[param.data.pluginKey] : lazyData;
                     }            
                     else if (param.data.parentRequestId) { 
+                        // Ajax Requests
                         if (param.data.ajaxResults) {
                             success = random(11) != 10 ? 'Success' : 'Fail';
                             if (success == 'Success') 
@@ -164,6 +167,7 @@
                     }
                 }
                 else {
+                    // 
                     success = random(11) != 10 ? 'Success' : 'Fail';
                     if (success == 'Success')
                         response = radomResponse();
