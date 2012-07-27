@@ -2,7 +2,7 @@
 {
     public class Logo:FileResource
     {
-        internal const string InternalName = "logo";
+        internal const string InternalName = "glimpse-logo";
 
         public Logo()
         {

@@ -14,7 +14,6 @@ namespace Glimpse.Core2.Framework
                             {"paging", "NEED TO IMPLMENT RESOURCE Pager"},//TODO: Implement resource
                             {"popup", "NEED TO IMPLMENT RESOURCE test-popup.html"},//TODO: Implement resource
                             {"tab", "NEED TO IMPLMENT RESOURCE test-popup.html"},//TODO: Implement resource
-
                         };
         }
 

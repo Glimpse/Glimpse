@@ -14,7 +14,7 @@ namespace Glimpse.Test.Core2.Resource
         public void ProvideProperName()
         {
             var resource = new Client();
-            Assert.Equal("client", resource.Name);
+            Assert.Equal("glimpse-client", resource.Name);
         }
 
         [Fact]

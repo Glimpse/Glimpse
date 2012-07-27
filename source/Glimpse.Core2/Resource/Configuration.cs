@@ -6,7 +6,7 @@ namespace Glimpse.Core2.Resource
 {
     public class Configuration:IResource
     {
-        internal const string InternalName = "config";
+        internal const string InternalName = "glimpse-config";
 
         public string Name
         {

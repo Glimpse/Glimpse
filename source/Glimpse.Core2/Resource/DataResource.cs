@@ -8,7 +8,7 @@ namespace Glimpse.Core2.Resource
 {
     public class Data:IResource
     {
-        internal const string InternalName = "request";
+        internal const string InternalName = "glimpse-request";
         private const int CacheDuration = 12960000; //150 days
 
         public string Name
