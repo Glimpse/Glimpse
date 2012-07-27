@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-#if NET35
-using Glimpse.Core2.Backport;
-#endif
 
 namespace Glimpse.Core2.Framework
 {
@@ -26,7 +23,7 @@ namespace Glimpse.Core2.Framework
             Guid parentRequestId;
 
 #if NET35
-            if (RequestIsAjax && Net35Backport.TryParseGuid(requestMetadata.GetHttpHeader(Constants.HttpRequestHeader), out parentRequestId))
+            if (RequestIsAjax && Glimpse.Core2.Backport.Net35Backport.TryParseGuid(requestMetadata.GetHttpHeader(Constants.HttpRequestHeader), out parentRequestId))
                 ParentRequestId = parentRequestId;
 #else
             if (RequestIsAjax && Guid.TryParse(requestMetadata.GetHttpHeader(Constants.HttpRequestHeader), out parentRequestId))

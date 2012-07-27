@@ -1,9 +1,6 @@
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-#if NET35
-using Glimpse.AspNet.Net35.Backport;
-#endif
 
 namespace Glimpse.AspNet
 {
@@ -17,7 +14,7 @@ namespace Glimpse.AspNet
         public PreBodyTagFilter(string htmlSnippet, Stream outputStream, Encoding contentEncoding)
         {
 #if NET35
-            HtmlSnippet = Net35Backport.IsNullOrWhiteSpace(htmlSnippet) ? string.Empty : htmlSnippet + "</body>";
+            HtmlSnippet = Glimpse.AspNet.Net35.Backport.Net35Backport.IsNullOrWhiteSpace(htmlSnippet) ? string.Empty : htmlSnippet + "</body>";
 #else
             HtmlSnippet = string.IsNullOrWhiteSpace(htmlSnippet) ? string.Empty : htmlSnippet + "</body>";
 #endif
