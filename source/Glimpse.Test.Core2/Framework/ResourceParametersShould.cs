@@ -44,9 +44,8 @@ namespace Glimpse.Test.Core2.Framework
 
             Assert.Equal("1", result["One"]);
             Assert.Equal("2", result["Two"]);
-            Assert.Equal(string.Empty, result["Three"]);
+            Assert.Equal(null, result["Three"]);
             Assert.Equal(3, result.Count);
-            
         }
 
         [Fact]

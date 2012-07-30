@@ -153,7 +153,7 @@
     <comment>{0} - GetType() of IClientScript, {1} - Name of missing IResource</comment>
   </data>
   <data name="GenerateUriParameterKeysWarning" xml:space="preserve">
-    <value>Exception getting ParameterKeys for IResource of type '{0}'.</value>
+    <value>Exception getting Parameters for IResource of type '{0}'.</value>
     <comment>{0} - GetType() of offending resource</comment>
   </data>
   <data name="GenerateUriExecutionError" xml:space="preserve">

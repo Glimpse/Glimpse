@@ -50,6 +50,9 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="Tavis.UriTemplates">
+      <HintPath>..\..\packages\Tavis.UriTemplates.0.1.1\lib\NET35\Tavis.UriTemplates.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Glimpse.Core2\**\*.cs" Exclude="..\Glimpse.Core2\Properties\AssemblyInfo.cs">

@@ -2,7 +2,6 @@ namespace Glimpse.Core2.Framework
 {
     public interface IGlimpseRuntime
     {
-        string Version { get; }
         void BeginRequest();
         void EndRequest();
         void ExecuteDefaultResource();

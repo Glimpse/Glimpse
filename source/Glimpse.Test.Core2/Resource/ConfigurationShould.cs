@@ -22,7 +22,7 @@ namespace Glimpse.Test.Core2.Resource
         public void ReturnNoParameterKeys()
         {
             var resource = new Glimpse.Core2.Resource.Configuration();
-            Assert.Empty(resource.ParameterKeys);
+            Assert.Empty(resource.Parameters);
         }
 
         [Fact]

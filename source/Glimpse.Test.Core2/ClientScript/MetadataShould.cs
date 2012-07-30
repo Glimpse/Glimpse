@@ -32,7 +32,7 @@ namespace Glimpse.Test.Core2.ClientScript
 
             clientScript.OverrideParameterValues(dictionary);
 
-            Assert.True(dictionary.ContainsKey(ResourceParameterKey.Callback));
+            Assert.True(dictionary.ContainsKey(ResourceParameter.Callback.Name));
         }
     }
 }

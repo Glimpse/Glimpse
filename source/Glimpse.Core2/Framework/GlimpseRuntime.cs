@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Glimpse.Core2.Extensibility;
+using Glimpse.Core2.Extensions;
 using Glimpse.Core2.ResourceResult;
 #if NET35
 using Glimpse.Core2.Backport;
@@ -13,11 +15,15 @@ namespace Glimpse.Core2.Framework
 {
     public class GlimpseRuntime : IGlimpseRuntime
     {
-        public GlimpseRuntime(IGlimpseConfiguration configuration)
+        static GlimpseRuntime()
         {
             //Version is in major.minor.build format to support http://semver.org/
             //TODO: Consider adding configuration hash to version
-            Version = GetType().Assembly.GetName().Version.ToString(3);
+            Version = Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
+        }
+
+        public GlimpseRuntime(IGlimpseConfiguration configuration)
+        {
             Configuration = configuration;
         }
 
@@ -43,7 +49,7 @@ namespace Glimpse.Core2.Framework
 
         public bool IsInitialized { get; private set; }
 
-        public string Version { get; private set; }
+        public static string Version { get; private set; }
 
 
         public void BeginRequest()
@@ -138,9 +144,8 @@ namespace Glimpse.Core2.Framework
                     {
                         var requestTokenValues = new Dictionary<string, string>
                                          {
-                                             {ResourceParameterKey.RequestId, requestId.ToString()},
-                                             {ResourceParameterKey.VersionNumber, Version},
-                                             {ResourceParameterKey.Callback, "console.log"}
+                                             {ResourceParameter.RequestId.Name, requestId.ToString()},
+                                             {ResourceParameter.VersionNumber.Name, Version},
                                          };
 
                         var resourceName = dynamicScript.GetResourceName();
@@ -152,6 +157,8 @@ namespace Glimpse.Core2.Framework
                             continue;
                         }
 
+                        var uriTemplate = resourceEndpoint.GenerateUriTemplate(resource, logger);
+                        
                         var resourceParameterProvider = dynamicScript as IParameterValueProvider;
 
                         if (resourceParameterProvider != null)
@@ -159,7 +166,9 @@ namespace Glimpse.Core2.Framework
                             resourceParameterProvider.OverrideParameterValues(requestTokenValues);
                         }
 
-                        var uri = encoder.HtmlAttributeEncode(resourceEndpoint.GenerateUri(resource, logger, requestTokenValues));
+                        var template = new Tavis.UriTemplates.UriTemplate(uriTemplate).SetParameters(requestTokenValues);
+                        var uri = encoder.HtmlAttributeEncode(template.Resolve());
+
                         if (!string.IsNullOrEmpty(uri))
                             stringBuilder.AppendFormat(@"<script type='text/javascript' src='{0}'></script>", uri);
 
@@ -394,13 +403,13 @@ namespace Glimpse.Core2.Framework
             var resources = metadata.Resources;
             var endpoint = Configuration.ResourceEndpoint;
             var logger = Configuration.Logger;
-            var parameterValues = new Dictionary<string, string>{{ResourceParameterKey.VersionNumber, Version}};
+
             foreach (var resource in Configuration.Resources)
             {
                 if (resources.ContainsKey(resource.Name))
                     logger.Warn(Resources.GlimpseRuntimePersistMetadataMultipleResourceWarning, resource.Name);
 
-                resources[resource.Name] = endpoint.GenerateUri(resource, logger, parameterValues);
+                resources[resource.Name] = endpoint.GenerateUriTemplate(resource, logger);
             }
 
             Configuration.PersistanceStore.Save(metadata);

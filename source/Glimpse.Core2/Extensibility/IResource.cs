@@ -5,7 +5,7 @@ namespace Glimpse.Core2.Extensibility
     public interface IResource
     {
         string Name { get; }
-        IEnumerable<string> ParameterKeys { get; }
+        IEnumerable<ResourceParameterMetadata> Parameters { get; }
         IResourceResult Execute(IResourceContext context);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
 
@@ -7,18 +8,23 @@ namespace Glimpse.AspNet
 {
     public class HttpHandlerEndpointConfiguration:ResourceEndpointConfiguration
     {
-        protected override string GenerateUri(string resourceName, IEnumerable<KeyValuePair<string, string>> parameters, ILogger logger)
+        protected override string GenerateUriTemplate(string resourceName, IEnumerable<ResourceParameterMetadata> parameters, ILogger logger)
         {
             //TODO: Return properly rooted URL
             var stringBuilder = new StringBuilder(string.Format(@"/Glimpse.axd?n={0}", resourceName));
 
-            if (parameters != null)
+            var requiredParams = parameters.Where(p => p.IsRequired || p.HasValue);
+            foreach (var parameter in requiredParams)
             {
-                foreach (var parameter in parameters)
-                {
-                    stringBuilder.Append(string.Format("&{0}={1}", parameter.Key, parameter.Value));
-                }
+                var value = parameter.HasValue ? parameter.Value : string.Format("{{{0}}}", parameter.Name);
+                stringBuilder.Append(string.Format("&{0}={1}", parameter.Name, value));
             }
+
+            var optionalParams = parameters.Except(requiredParams).Select(p=>p.Name).ToArray();
+
+            //Format based on Form-style query continuation from RFC6570: http://tools.ietf.org/html/rfc6570#section-3.2.9
+            if(optionalParams.Any())
+                stringBuilder.Append(string.Format("{{&{0}}}", string.Join(",", optionalParams)));
 
             return stringBuilder.ToString();
         }

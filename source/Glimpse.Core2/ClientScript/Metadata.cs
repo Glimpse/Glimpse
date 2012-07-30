@@ -17,7 +17,7 @@ namespace Glimpse.Core2.ClientScript
 
         public void OverrideParameterValues(IDictionary<string, string> defaults)
         {
-            defaults[ResourceParameterKey.Callback] = "glimpse.data.initMetadata";
+            defaults[ResourceParameter.Callback.Name] = "glimpse.data.initMetadata";
         }
     }
 }

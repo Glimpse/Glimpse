@@ -21,7 +21,7 @@ namespace Glimpse.Test.Core2.Resource
         public void ReturnOneParameterKeys()
         {
             var resource = new Client();
-            Assert.Equal(1, resource.ParameterKeys.Count());
+            Assert.Equal(1, resource.Parameters.Count());
         }
 
         [Fact]

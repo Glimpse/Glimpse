@@ -18,9 +18,9 @@ namespace Glimpse.Core2.Resource
 
         public string Name { get; private set; }
 
-        public IEnumerable<string> ParameterKeys
+        public IEnumerable<ResourceParameterMetadata> Parameters
         {
-            get { return new[] {ParentRequestKey, ResourceParameterKey.VersionNumber, ResourceParameterKey.Callback}; }
+            get { return new[] { new ResourceParameterMetadata(ParentRequestKey), ResourceParameter.VersionNumber, ResourceParameter.Callback }; }
         }
         
         public IResourceResult Execute(IResourceContext context)
@@ -42,7 +42,7 @@ namespace Glimpse.Core2.Resource
             if (data == null)
                 return new StatusCodeResourceResult(404);
 
-            return new JsonResourceResult(data.Where(r=>r.RequestIsAjax), context.Parameters[ResourceParameterKey.Callback]);
+            return new JsonResourceResult(data.Where(r=>r.RequestIsAjax), context.Parameters[ResourceParameter.Callback.Name]);
 
         }
     }

@@ -15,9 +15,9 @@ namespace Glimpse.Core2.Resource
         public string ResourceType { get; set; }
         public string Name { get; protected set; }
 
-        public virtual IEnumerable<string> ParameterKeys
+        public virtual IEnumerable<ResourceParameterMetadata> Parameters
         {
-            get { return new[] { ResourceParameterKey.VersionNumber }; }
+            get { return new[] { ResourceParameter.VersionNumber }; }
         }
 
         public IResourceResult Execute(IResourceContext context)

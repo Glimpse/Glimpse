@@ -1,0 +1,18 @@
+﻿using System.Collections.Generic;
+using Tavis.UriTemplates;
+
+namespace Glimpse.Core2.Extensions
+{
+    public static class UriTemplateExtensions
+    {
+        public static UriTemplate SetParameters(this UriTemplate template, IEnumerable<KeyValuePair<string, string>> nameValues)
+         {
+             foreach (var pair in nameValues)
+             {
+                template.SetParameter(pair.Key, pair.Value);
+             }
+
+            return template;
+         }
+    }
+}

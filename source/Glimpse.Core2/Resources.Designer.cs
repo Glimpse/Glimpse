@@ -232,7 +232,7 @@ namespace Glimpse.Core2 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Exception getting ParameterKeys for IResource of type &apos;{0}&apos;..
+        ///   Looks up a localized string similar to Exception getting Parameters for IResource of type &apos;{0}&apos;..
         /// </summary>
         internal static string GenerateUriParameterKeysWarning {
             get {

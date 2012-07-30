@@ -16,9 +16,9 @@ namespace Glimpse.Core2.Resource
             get { return InternalName; }
         }
 
-        public IEnumerable<string> ParameterKeys
+        public IEnumerable<ResourceParameterMetadata> Parameters
         {
-            get { return new[] {ResourceParameterKey.RequestId, ResourceParameterKey.VersionNumber, ResourceParameterKey.Callback}; }
+            get { return new[] {ResourceParameter.RequestId, ResourceParameter.VersionNumber, ResourceParameter.Callback}; }
         }
 
         public IResourceResult Execute(IResourceContext context)
@@ -28,10 +28,10 @@ namespace Glimpse.Core2.Resource
             Guid requestId;
 
 #if NET35
-            if (!Glimpse.Core2.Backport.Net35Backport.TryParseGuid(context.Parameters[ResourceParameterKey.RequestId], out requestId))
+            if (!Glimpse.Core2.Backport.Net35Backport.TryParseGuid(context.Parameters[ResourceParameter.RequestId.Name], out requestId))
                 return new StatusCodeResourceResult(404);
 #else
-            if (!Guid.TryParse(context.Parameters[ResourceParameterKey.RequestId], out requestId))
+            if (!Guid.TryParse(context.Parameters[ResourceParameter.RequestId.Name], out requestId))
                 return new StatusCodeResourceResult(404);
 #endif
 
@@ -40,7 +40,7 @@ namespace Glimpse.Core2.Resource
             if(data == null)
                 return new StatusCodeResourceResult(404);
 
-            return new JsonResourceResult(data, context.Parameters[ResourceParameterKey.Callback], CacheDuration, CacheSetting.Private);
+            return new JsonResourceResult(data, context.Parameters[ResourceParameter.Callback.Name], CacheDuration, CacheSetting.Private);
         }
     }
 }

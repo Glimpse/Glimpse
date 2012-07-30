@@ -13,9 +13,9 @@ namespace Glimpse.Core2.Resource
             get { return InternalName; }
         }
 
-        public IEnumerable<string> ParameterKeys
+        public IEnumerable<ResourceParameterMetadata> Parameters
         {
-            get { return Enumerable.Empty<string>(); }
+            get { return Enumerable.Empty<ResourceParameterMetadata>(); }
         }
 
         public IResourceResult Execute(IResourceContext context)

@@ -51,6 +51,9 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="Tavis.UriTemplates, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Tavis.UriTemplates.0.1.1\lib\NET40\Tavis.UriTemplates.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientScript\Client.cs" />
@@ -79,6 +82,7 @@
     <Compile Include="Extensibility\ExecutionTimer.cs" />
     <Compile Include="Extensibility\IConfigurable.cs" />
     <Compile Include="Extensibility\IParameterValueProvider.cs" />
+    <Compile Include="Extensibility\ResourceParameterMetadata.cs" />
     <Compile Include="Extensibility\TimerResult.cs" />
     <Compile Include="Extensibility\IAlternateImplementation.cs" />
     <Compile Include="Extensibility\IAlternateImplementationContext.cs" />
@@ -102,7 +106,7 @@
     <Compile Include="Extensibility\NLogLogger.cs" />
     <Compile Include="Extensibility\NullLogger.cs" />
     <Compile Include="Extensibility\ResourceContext.cs" />
-    <Compile Include="Extensibility\ResourceParameterKey.cs" />
+    <Compile Include="Extensibility\ResourceParameter.cs" />
     <Compile Include="Extensibility\ResourceResultContext.cs" />
     <Compile Include="Extensibility\ScriptOrder.cs" />
     <Compile Include="Extensibility\SerializationConverter.cs" />
@@ -116,6 +120,7 @@
     <Compile Include="Extensibility\TabSetupContext.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\TypeElementCollectionExtensions.cs" />
+    <Compile Include="Extensions\UriTemplateExtensions.cs" />
     <Compile Include="Framework\ApplicationPersistanceStore.cs" />
     <Compile Include="Framework\CacheSetting.cs" />
     <Compile Include="Framework\CastleDynamicProxyFactory.cs" />

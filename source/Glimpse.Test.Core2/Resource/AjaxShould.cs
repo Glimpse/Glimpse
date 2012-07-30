@@ -23,7 +23,7 @@ namespace Glimpse.Test.Core2.Resource
         public void ReturnThreeParameterKeys()
         {
             var resource = new AjaxResource();
-            Assert.Equal(3, resource.ParameterKeys.Count());
+            Assert.Equal(3, resource.Parameters.Count());
         }
 
         [Fact]

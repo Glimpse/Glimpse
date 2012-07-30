@@ -37,14 +37,15 @@ namespace Glimpse.Core2.Framework
                 return result;
 
             var index = 0;
-            foreach (var key in resource.ParameterKeys)
+            var parameterCount = OrderedParameters.Count();
+            foreach (var parameter in resource.Parameters)
             {
-                var value = string.Empty;
+                string value = null;
 
-                if (index < OrderedParameters.Count())
+                if (index < parameterCount)
                     value = OrderedParameters[index];
 
-                result.Add(key, value);
+                result.Add(parameter.Name, value);
                 index++;
             }
 

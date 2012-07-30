@@ -32,7 +32,7 @@ namespace Glimpse.Test.Core2.Resource
         public void RequireParameterKeys()
         {
             var metadata = new Metadata();
-            Assert.NotEmpty(metadata.ParameterKeys);
+            Assert.NotEmpty(metadata.Parameters);
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace Glimpse.Test.Core2.Resource
 
             var contextMock = new Mock<IResourceContext>();
             contextMock.Setup(c => c.PersistanceStore).Returns(storeMock.Object);
-            contextMock.Setup(c => c.Parameters[ResourceParameterKey.Callback]).Returns("a string");
+            contextMock.Setup(c => c.Parameters[ResourceParameter.Callback.Name]).Returns("a string");
 
             var resource = new Metadata();
 
