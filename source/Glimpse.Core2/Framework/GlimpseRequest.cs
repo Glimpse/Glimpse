@@ -17,7 +17,7 @@ namespace Glimpse.Core2.Framework
             RequestUri = requestMetadata.RequestUri;
             ResponseStatusCode = requestMetadata.ResponseStatusCode;
             ResponseContentType = requestMetadata.ResponseContentType;
-            ClientId = requestMetadata.GetCookie(Constants.ClientIdCookieName);
+            ClientId = requestMetadata.GetCookie(Constants.ClientIdCookieName) ?? requestMetadata.ClientId;
             UserAgent = requestMetadata.GetHttpHeader(Constants.UserAgentHeaderName);
 
             Guid parentRequestId;

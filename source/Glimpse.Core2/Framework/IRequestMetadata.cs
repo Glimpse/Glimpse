@@ -10,5 +10,6 @@ namespace Glimpse.Core2.Framework
         string ResponseContentType { get; }
         string IpAddress { get; }
         bool RequestIsAjax { get; }
+        string ClientId { get; }
     }
 }

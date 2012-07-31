@@ -97,10 +97,11 @@ namespace Glimpse.Core2.Framework
                 throw new GlimpseException(Resources.EndRequestOutOfOrderRuntimeMethodCall, ex);
             }
 
+            var requestMetadata = frameworkProvider.RequestMetadata;
             if (policy.HasFlag(RuntimePolicy.PersistResults))
             {
                 var persistanceStore = Configuration.PersistanceStore;
-                var requestMetadata = frameworkProvider.RequestMetadata;
+
 
                 var metadata = new GlimpseRequest(requestId, requestMetadata, TabResultsStore, stopwatch.ElapsedMilliseconds);
 
@@ -115,7 +116,12 @@ namespace Glimpse.Core2.Framework
             }
 
             if (policy.HasFlag(RuntimePolicy.ModifyResponseHeaders))
+            {
                 frameworkProvider.SetHttpResponseHeader(Constants.HttpResponseHeader, requestId.ToString());
+
+                if (requestMetadata.GetCookie(Constants.ClientIdCookieName) == null)
+                    frameworkProvider.SetCookie(Constants.ClientIdCookieName, requestMetadata.ClientId);
+            }
 
             if (policy.HasFlag(RuntimePolicy.DisplayGlimpseClient))
             {

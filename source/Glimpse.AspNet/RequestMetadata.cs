@@ -62,5 +62,22 @@ namespace Glimpse.AspNet
                 return false;
             }
         }
+
+        public string ClientId { 
+            get
+            {
+                string user = Context.User.Identity.Name;
+                
+                if (!string.IsNullOrEmpty(user))
+                    return user;
+
+                var browser = Context.Request.Browser;
+
+                if (browser != null)
+                    return string.Format("{0} {1}", browser.Browser, browser.Version);
+
+                return Guid.NewGuid().ToString("N");
+            }
+        }
     }
 }

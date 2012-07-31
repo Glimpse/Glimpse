@@ -49,6 +49,11 @@ namespace Glimpse.AspNet
             Context.Response.StatusDescription = null;
         }
 
+        public void SetCookie(string name, string value)
+        {
+            Context.Response.Cookies.Add(new HttpCookie(name, value));
+        }
+
         public void InjectHttpResponseBody(string htmlSnippet)
         {
             var response = Context.Response;
