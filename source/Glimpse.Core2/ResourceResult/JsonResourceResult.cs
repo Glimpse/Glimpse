@@ -1,6 +1,9 @@
 using System;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
+// ReSharper disable RedundantUsingDirective
+using Glimpse.Core2.Extensions;
+// ReSharper restore RedundantUsingDirective
 
 namespace Glimpse.Core2.ResourceResult
 {
