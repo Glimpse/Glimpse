@@ -13,11 +13,10 @@ namespace Glimpse.AspNet
             //TODO: Return properly rooted URL
             var stringBuilder = new StringBuilder(string.Format(@"/Glimpse.axd?n={0}", resourceName));
 
-            var requiredParams = parameters.Where(p => p.IsRequired || p.HasValue);
+            var requiredParams = parameters.Where(p => p.IsRequired);
             foreach (var parameter in requiredParams)
             {
-                var value = parameter.HasValue ? parameter.Value : string.Format("{{{0}}}", parameter.Name);
-                stringBuilder.Append(string.Format("&{0}={1}", parameter.Name, value));
+                stringBuilder.Append(string.Format("&{0}={{{1}}}", parameter.Name, parameter.Name));
             }
 
             var optionalParams = parameters.Except(requiredParams).Select(p=>p.Name).ToArray();
