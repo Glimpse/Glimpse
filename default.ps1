@@ -68,11 +68,11 @@ task merge -depends test {
 
     "   Glimpse.Core2"
     del "$source_dir\Glimpse.Core2\bin\Release\Newtonsoft.Json.pdb" #get rid of JSON PDF file, causes issues with Glimpse symbol package
-    exec { & $tools_dir\ilmerge.exe /targetplatform:"v4,$framework_dir" /log /out:"$source_dir\Glimpse.Core2\nuspec\lib\net40\Glimpse.Core2.dll" /internalize:$tools_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core2\bin\Release\Glimpse.Core2.dll" "$source_dir\Glimpse.Core2\bin\Release\Newtonsoft.Json.dll" "$source_dir\Glimpse.Core2\bin\Release\Castle.Core.dll" "$source_dir\Glimpse.Core2\bin\Release\NLog.dll" "$source_dir\Glimpse.Core2\bin\Release\AntiXssLibrary.dll" }
+    exec { & $tools_dir\ilmerge.exe /targetplatform:"v4,$framework_dir" /log /out:"$source_dir\Glimpse.Core2\nuspec\lib\net40\Glimpse.Core2.dll" /internalize:$tools_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core2\bin\Release\Glimpse.Core2.dll" "$source_dir\Glimpse.Core2\bin\Release\Newtonsoft.Json.dll" "$source_dir\Glimpse.Core2\bin\Release\Castle.Core.dll" "$source_dir\Glimpse.Core2\bin\Release\NLog.dll" "$source_dir\Glimpse.Core2\bin\Release\AntiXssLibrary.dll" "$source_dir\Glimpse.Core2\bin\Release\Tavis.UriTemplates.dll" }
     
     "   Glimpse.Core2.Net35"
     del "$source_dir\Glimpse.Core2.Net35\bin\Release\Newtonsoft.Json.pdb" #get rid of JSON PDF file, causes issues with Glimpse symbol package
-    exec { & $tools_dir\ilmerge.exe /log /out:"$source_dir\Glimpse.Core2\nuspec\lib\net35\Glimpse.Core2.dll" /internalize:$tools_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core2.Net35\bin\Release\Glimpse.Core2.dll" "$source_dir\Glimpse.Core2.Net35\bin\Release\Newtonsoft.Json.dll" "$source_dir\Glimpse.Core2.Net35\bin\Release\Castle.Core.dll" "$source_dir\Glimpse.Core2.Net35\bin\Release\NLog.dll" "$source_dir\Glimpse.Core2.Net35\bin\Release\AntiXssLibrary.dll" }
+    exec { & $tools_dir\ilmerge.exe /log /out:"$source_dir\Glimpse.Core2\nuspec\lib\net35\Glimpse.Core2.dll" /internalize:$tools_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core2.Net35\bin\Release\Glimpse.Core2.dll" "$source_dir\Glimpse.Core2.Net35\bin\Release\Newtonsoft.Json.dll" "$source_dir\Glimpse.Core2.Net35\bin\Release\Castle.Core.dll" "$source_dir\Glimpse.Core2.Net35\bin\Release\NLog.dll" "$source_dir\Glimpse.Core2.Net35\bin\Release\AntiXssLibrary.dll"  "$source_dir\Glimpse.Core2.Net35\bin\Release\Tavis.UriTemplates.dll"}
     
     "   Glimpse.AspNet"
     copy $source_dir\Glimpse.AspNet\bin\Release\Glimpse.AspNet.* $source_dir\Glimpse.AspNet\nuspec\lib\net40\
