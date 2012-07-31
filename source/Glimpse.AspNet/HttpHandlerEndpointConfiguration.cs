@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using System.Web;
 using Glimpse.Core2.Extensibility;
 using Glimpse.Core2.Framework;
 
@@ -8,10 +9,18 @@ namespace Glimpse.AspNet
 {
     public class HttpHandlerEndpointConfiguration:ResourceEndpointConfiguration
     {
+        private string applicationPath;
+        public string ApplicationPath
+        {
+            get { return applicationPath ?? HttpContext.Current.Request.ApplicationPath; }
+            set { applicationPath = value; }
+        }
+
         protected override string GenerateUriTemplate(string resourceName, IEnumerable<ResourceParameterMetadata> parameters, ILogger logger)
         {
-            //TODO: Return properly rooted URL
-            var stringBuilder = new StringBuilder(string.Format(@"/Glimpse.axd?n={0}", resourceName));
+            var root = VirtualPathUtility.ToAbsolute("~/", ApplicationPath);
+
+            var stringBuilder = new StringBuilder(string.Format(@"{1}Glimpse.axd?n={0}", resourceName, root));
 
             var requiredParams = parameters.Where(p => p.IsRequired);
             foreach (var parameter in requiredParams)
