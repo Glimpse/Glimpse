@@ -539,7 +539,7 @@ namespace Glimpse.Test.Core2.Framework
             IResource resource = factory.InstantiateDefaultResource();
 
             Assert.NotNull(resource);
-            Assert.NotNull(resource as Glimpse.Core2.Resource.Configuration);
+            Assert.NotNull(resource as Glimpse.Core2.Resource.ConfigurationResource);
             locatorMock.Verify(l => l.GetInstance<IResource>(), Times.Once());
         }
 

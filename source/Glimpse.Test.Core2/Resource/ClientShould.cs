@@ -13,21 +13,21 @@ namespace Glimpse.Test.Core2.Resource
         [Fact]
         public void ProvideProperName()
         {
-            var resource = new Client();
+            var resource = new ClientResource();
             Assert.Equal("glimpse-client", resource.Name);
         }
 
         [Fact]
         public void ReturnOneParameterKeys()
         {
-            var resource = new Client();
+            var resource = new ClientResource();
             Assert.Equal(1, resource.Parameters.Count());
         }
 
         [Fact]
         public void ThrowExceptionWithNullParameters()
         {
-            var resource = new Client();
+            var resource = new ClientResource();
 
             Assert.Throws<ArgumentNullException>(() => resource.Execute(null));
         }
@@ -37,7 +37,7 @@ namespace Glimpse.Test.Core2.Resource
         {
             var contextMock = new Mock<IResourceContext>();
 
-            var resource = new Client {ResourceName = "wrong"};
+            var resource = new ClientResource {ResourceName = "wrong"};
 
 
             var result = resource.Execute(contextMock.Object);
@@ -50,7 +50,7 @@ namespace Glimpse.Test.Core2.Resource
         {
             var contextMock = new Mock<IResourceContext>();
 
-            var resource = new Client();
+            var resource = new ClientResource();
 
             var result = resource.Execute(contextMock.Object);
 

@@ -5,7 +5,7 @@ using Glimpse.Core2.ResourceResult;
 
 namespace Glimpse.Core2.Resource
 {
-    public class Metadata : IResource
+    public class MetadataResource : IResource
     {
         internal const string InternalName = "glimpse-metadata";
         private const int CacheDuration = 12960000; //150 days

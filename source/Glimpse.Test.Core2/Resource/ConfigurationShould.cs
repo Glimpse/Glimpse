@@ -12,16 +12,16 @@ namespace Glimpse.Test.Core2.Resource
         {
             var name = "glimpse-config";
 
-            var resource = new Glimpse.Core2.Resource.Configuration();
+            var resource = new Glimpse.Core2.Resource.ConfigurationResource();
 
-            Assert.Equal(name, Glimpse.Core2.Resource.Configuration.InternalName);
+            Assert.Equal(name, Glimpse.Core2.Resource.ConfigurationResource.InternalName);
             Assert.Equal(name, resource.Name);
         }
 
         [Fact]
         public void ReturnNoParameterKeys()
         {
-            var resource = new Glimpse.Core2.Resource.Configuration();
+            var resource = new Glimpse.Core2.Resource.ConfigurationResource();
             Assert.Empty(resource.Parameters);
         }
 
@@ -30,7 +30,7 @@ namespace Glimpse.Test.Core2.Resource
         {
             var contextMock = new Mock<IResourceContext>();
 
-            var resource = new Glimpse.Core2.Resource.Configuration();
+            var resource = new Glimpse.Core2.Resource.ConfigurationResource();
 
 
             Assert.Throws<NotImplementedException>(() => resource.Execute(contextMock.Object));

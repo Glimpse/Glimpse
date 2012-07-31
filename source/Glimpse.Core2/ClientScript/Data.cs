@@ -12,7 +12,7 @@ namespace Glimpse.Core2.ClientScript
 
         public string GetResourceName()
         {
-            return Resource.Data.InternalName;
+            return Resource.RequestResource.InternalName;
         }
 
         public void OverrideParameterValues(IDictionary<string, string> defaults)

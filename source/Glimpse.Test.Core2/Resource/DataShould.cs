@@ -15,21 +15,21 @@ namespace Glimpse.Test.Core2.Resource
         [Fact]
         public void ProvideProperName()
         {
-            var resource = new Data();
+            var resource = new RequestResource();
             Assert.Equal("glimpse-request", resource.Name);
         }
 
         [Fact]
         public void ReturnThreeParameterKeys()
         {
-            var resource = new Data();
+            var resource = new RequestResource();
             Assert.Equal(3, resource.Parameters.Count());
         }
 
         [Fact]
         public void ThrowExceptionWithNullParameters()
         {
-            var resource = new Data();
+            var resource = new RequestResource();
 
             Assert.Throws<ArgumentNullException>(()=>resource.Execute(null));
         }
@@ -45,7 +45,7 @@ namespace Glimpse.Test.Core2.Resource
             contextMock.Setup(c => c.Parameters).Returns(new Dictionary<string, string> { {ResourceParameter.RequestId.Name, guid.ToString()}, {ResourceParameter.Callback.Name, "console.log"} });
             contextMock.Setup(c => c.PersistanceStore).Returns(persistanceStoreMock.Object);
 
-            var resource = new Data();
+            var resource = new RequestResource();
 
             var result = resource.Execute(contextMock.Object);
 
@@ -63,7 +63,7 @@ namespace Glimpse.Test.Core2.Resource
             contextMock.Setup(c => c.Parameters).Returns(new Dictionary<string, string> { { ResourceParameter.RequestId.Name, "Not a real guid" } });
             contextMock.Setup(c => c.PersistanceStore).Returns(persistanceStoreMock.Object);
 
-            var resource = new Data();
+            var resource = new RequestResource();
 
             var result = resource.Execute(contextMock.Object);
 
@@ -80,7 +80,7 @@ namespace Glimpse.Test.Core2.Resource
             contextMock.Setup(c => c.Parameters).Returns(new Dictionary<string, string> { { ResourceParameter.RequestId.Name, guid.ToString() } });
             contextMock.Setup(c => c.PersistanceStore).Returns(persistanceStoreMock.Object);
 
-            var resource = new Data();
+            var resource = new RequestResource();
 
             var result = resource.Execute(contextMock.Object);
 

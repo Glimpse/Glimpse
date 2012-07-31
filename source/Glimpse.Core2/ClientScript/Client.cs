@@ -11,7 +11,7 @@ namespace Glimpse.Core2.ClientScript
 
         public string GetResourceName()
         {
-            return Resource.Client.InternalName;
+            return Resource.ClientResource.InternalName;
         }
     }
 }

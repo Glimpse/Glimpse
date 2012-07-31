@@ -4,7 +4,7 @@ using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Core2.Resource
 {
-    public class Configuration:IResource
+    public class ConfigurationResource:IResource
     {
         internal const string InternalName = "glimpse-config";
 

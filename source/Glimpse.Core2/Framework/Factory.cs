@@ -220,7 +220,7 @@ namespace Glimpse.Core2.Framework
             IResource result;
             if (TrySingleInstanceFromServiceLocators(out result)) return result;
 
-            return new Resource.Configuration();
+            return new Resource.ConfigurationResource();
         }
 
         public IGlimpseConfiguration InstantiateConfiguration()

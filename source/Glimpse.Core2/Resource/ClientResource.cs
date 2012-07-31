@@ -1,10 +1,10 @@
 ﻿namespace Glimpse.Core2.Resource
 {
-    public class Client : FileResource
+    public class ClientResource : FileResource
     {
         internal const string InternalName = "glimpse-client";
 
-        public Client()
+        public ClientResource()
         {
             ResourceName = "Glimpse.Core2.glimpse.js";
             ResourceType = @"application/x-javascript";

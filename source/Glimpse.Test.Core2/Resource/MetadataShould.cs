@@ -16,7 +16,7 @@ namespace Glimpse.Test.Core2.Resource
         [Fact]
         public void Construct()
         {
-            IResource metadata = new Metadata();
+            IResource metadata = new MetadataResource();
 
             Assert.NotNull(metadata);
         }
@@ -24,14 +24,14 @@ namespace Glimpse.Test.Core2.Resource
         [Fact]
         public void HaveProperName()
         {
-            var metadata = new Metadata();
+            var metadata = new MetadataResource();
             Assert.Equal("glimpse-metadata", metadata.Name);
         }
 
         [Fact]
         public void RequireParameterKeys()
         {
-            var metadata = new Metadata();
+            var metadata = new MetadataResource();
             Assert.NotEmpty(metadata.Parameters);
         }
 
@@ -47,7 +47,7 @@ namespace Glimpse.Test.Core2.Resource
             contextMock.Setup(c => c.PersistanceStore).Returns(storeMock.Object);
             contextMock.Setup(c => c.Parameters[ResourceParameter.Callback.Name]).Returns("a string");
 
-            var resource = new Metadata();
+            var resource = new MetadataResource();
 
             var result = resource.Execute(contextMock.Object);
 
@@ -63,7 +63,7 @@ namespace Glimpse.Test.Core2.Resource
             var contextMock = new Mock<IResourceContext>();
             contextMock.Setup(c => c.PersistanceStore).Returns(storeMock.Object);
 
-            var resource = new Metadata();
+            var resource = new MetadataResource();
 
             var result = resource.Execute(contextMock.Object);
 

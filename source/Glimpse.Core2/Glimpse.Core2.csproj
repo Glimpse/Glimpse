@@ -167,11 +167,11 @@
     <Compile Include="ResourceResult\JsonResourceResult.cs" />
     <Compile Include="ResourceResult\StatusCodeResourceResult.cs" />
     <Compile Include="Resource\ClientResource.cs" />
-    <Compile Include="Resource\Configuration.cs" />
+    <Compile Include="Resource\ConfigurationResource.cs" />
     <Compile Include="Resource\FileResource.cs" />
     <Compile Include="Resource\AjaxResource.cs" />
     <Compile Include="Resource\LogoResource.cs" />
-    <Compile Include="Resource\DataResource.cs" />
+    <Compile Include="Resource\RequestResource.cs" />
     <Compile Include="Resource\MetadataResource.cs" />
     <Compile Include="Resource\SpriteResource.cs" />
     <Compile Include="RuntimePolicy.cs" />
