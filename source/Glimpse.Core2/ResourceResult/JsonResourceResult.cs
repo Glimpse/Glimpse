@@ -1,6 +1,5 @@
 using System;
 using Glimpse.Core2.Extensibility;
-using Glimpse.Core2.Extensions;
 using Glimpse.Core2.Framework;
 
 namespace Glimpse.Core2.ResourceResult

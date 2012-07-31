@@ -170,6 +170,7 @@
     <Compile Include="Resource\ConfigurationResource.cs" />
     <Compile Include="Resource\FileResource.cs" />
     <Compile Include="Resource\AjaxResource.cs" />
+    <Compile Include="Resource\HistoryResource.cs" />
     <Compile Include="Resource\LogoResource.cs" />
     <Compile Include="Resource\RequestResource.cs" />
     <Compile Include="Resource\MetadataResource.cs" />
