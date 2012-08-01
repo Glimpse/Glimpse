@@ -2,7 +2,7 @@
 {
     public class ClientResource : FileResource
     {
-        internal const string InternalName = "glimpse-client";
+        internal const string InternalName = "glimpse_client";
 
         public ClientResource()
         {

@@ -61,7 +61,7 @@
             //Poll for updated summary data
             notice.prePoll(); 
             $.ajax({
-                url: glimpse.util.replaceTokens(glimpse.data.currentMetadata().resources.ajax, { 'parentRequestId': currentId, 'ajaxResults': true }),
+                url: glimpse.util.replaceTokens(glimpse.data.currentMetadata().resources.glimpse_ajax, { 'parentRequestId': currentId, 'ajaxResults': true }),
                 type: 'GET',
                 contentType: 'application/json',
                 complete : function(jqXHR, textStatus) {

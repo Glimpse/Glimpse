@@ -10,7 +10,7 @@ namespace Glimpse.Test.Core2.Resource
         [Fact]
         public void ReturnProperName()
         {
-            var name = "glimpse-config";
+            var name = "glimpse_config";
 
             var resource = new Glimpse.Core2.Resource.ConfigurationResource();
 

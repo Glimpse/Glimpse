@@ -9,7 +9,7 @@ namespace Glimpse.Core2.Resource
 {
     public class HistoryResource:IResource
     {
-        internal const string InternalName = "glimpse-history";
+        internal const string InternalName = "glimpse_history";
         internal const string TopKey = "top";
 
         public HistoryResource()

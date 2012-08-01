@@ -37,7 +37,7 @@
                 isLoading = true; 
                 showLoadingMessage(key);
                 $.ajax({
-                    url: util.replaceTokens(data.currentMetadata().resources.paging, { 'key': pagerKey, 'pageIndex': pageIndex }),
+                    url: util.replaceTokens(data.currentMetadata().resources.glimpse_paging, { 'key': pagerKey, 'pageIndex': pageIndex }),
                     type: 'GET', 
                     contentType: 'application/json',
                     cache: false, 

@@ -7,7 +7,7 @@ namespace Glimpse.Core2.Resource
 {
     public class MetadataResource : IResource
     {
-        internal const string InternalName = "glimpse-metadata";
+        internal const string InternalName = "glimpse_metadata";
         private const int CacheDuration = 12960000; //150 days
 
         public string Name

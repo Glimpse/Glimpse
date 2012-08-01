@@ -29,7 +29,7 @@
 
             if (requestId != baseInner.requestId) {
                 $.ajax({
-                    url : util.replaceTokens(currentMetadata().resources.request, { 'requestId': requestId }),
+                    url : util.replaceTokens(currentMetadata().resources.glimpse_request, { 'requestId': requestId }),
                     type : 'GET',
                     contentType : 'application/json',
                     success : function (result, textStatus, jqXHR) {   

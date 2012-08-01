@@ -6,7 +6,7 @@
         retrievePlugin = function(key) {   
             var currentData = data.current();
             $.ajax({
-                url : util.replaceTokens(data.currentMetadata().resources.tab, { 'requestId' : currentData.requestId, 'pluginKey' : key }),
+                url : util.replaceTokens(data.currentMetadata().resources.glimpse_tab, { 'requestId' : currentData.requestId, 'pluginKey' : key }),
                 type : 'GET',
                 contentType : 'application/json',
                 success : function (result) {

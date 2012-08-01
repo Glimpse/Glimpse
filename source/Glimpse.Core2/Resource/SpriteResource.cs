@@ -2,7 +2,7 @@ namespace Glimpse.Core2.Resource
 {
     public class SpriteResource:FileResource
     {
-        internal const string InternalName = "glimpse-sprite";
+        internal const string InternalName = "glimpse_sprite";
 
         public SpriteResource()
         {
