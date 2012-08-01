@@ -125,89 +125,10 @@ namespace Glimpse.Core2.Framework
 
             if (policy.HasFlag(RuntimePolicy.DisplayGlimpseClient))
             {
-                var html = GenerateScriptTags(requestId);
+                var html = Configuration.GenerateScriptTags(requestId, Version);
 
                 frameworkProvider.InjectHttpResponseBody(html);
             }
-        }
-
-        internal string GenerateScriptTags(Guid requestId)
-        {
-            var encoder = Configuration.HtmlEncoder;
-            var resourceEndpoint = Configuration.ResourceEndpoint;
-            var clientScripts = Configuration.ClientScripts;
-            var logger = Configuration.Logger;
-            var resources = Configuration.Resources;
-
-            var stringBuilder = new StringBuilder();
-
-            foreach (var clientScript in clientScripts.OrderBy(cs=>cs.Order))
-            {
-                var dynamicScript = clientScript as IDynamicClientScript;
-                if (dynamicScript != null)
-                {
-                    try
-                    {
-                        var requestTokenValues = new Dictionary<string, string>
-                                         {
-                                             {ResourceParameter.RequestId.Name, requestId.ToString()},
-                                             {ResourceParameter.VersionNumber.Name, Version},
-                                         };
-
-                        var resourceName = dynamicScript.GetResourceName();
-                        var resource = resources.FirstOrDefault(r => r.Name.Equals(resourceName, StringComparison.InvariantCultureIgnoreCase));
-
-                        if (resource == null)
-                        {
-                            logger.Warn(Resources.RenderClientScriptMissingResourceWarning,clientScript.GetType(), resourceName);
-                            continue;
-                        }
-
-                        var uriTemplate = resourceEndpoint.GenerateUriTemplate(resource, Configuration.EndpointBaseUri, logger);
-                        
-                        var resourceParameterProvider = dynamicScript as IParameterValueProvider;
-
-                        if (resourceParameterProvider != null)
-                        {
-                            resourceParameterProvider.OverrideParameterValues(requestTokenValues);
-                        }
-
-                        var template = new Tavis.UriTemplates.UriTemplate(uriTemplate).SetParameters(requestTokenValues);
-                        var uri = encoder.HtmlAttributeEncode(template.Resolve());
-
-                        if (!string.IsNullOrEmpty(uri))
-                            stringBuilder.AppendFormat(@"<script type='text/javascript' src='{0}'></script>", uri);
-
-                        continue;
-                    }
-                    catch(Exception exception)
-                    {
-                        logger.Error(Resources.GenerateScriptTagsDynamicException, exception, dynamicScript.GetType());
-                    }
-                }
-
-                var staticScript = clientScript as IStaticClientScript;
-                if (staticScript != null)
-                {
-                    try
-                    {
-                        var uri = encoder.HtmlAttributeEncode(staticScript.GetUri(Version));
-
-                        if (!string.IsNullOrEmpty(uri))
-                            stringBuilder.AppendFormat(@"<script type='text/javascript' src='{0}'></script>", uri);
-
-                        continue;
-                    }
-                    catch(Exception exception)
-                    {
-                        logger.Error(Resources.GenerateScriptTagsStaticException, exception, staticScript.GetType());
-                    }
-                }
-
-                logger.Warn(Resources.RenderClientScriptImproperImplementationWarning, clientScript.GetType());
-            }
-
-            return stringBuilder.ToString();
         }
 
         public void ExecuteDefaultResource()
@@ -260,7 +181,13 @@ namespace Glimpse.Core2.Framework
                     {
                         var resource = resources.First();
                         var resourceContext = new ResourceContext(parameters.GetParametersFor(resource), Configuration.PersistanceStore, logger);
-                        result = resources.First().Execute(resourceContext);
+
+                        var privilegedResource = resource as IPrivilegedResource;
+
+                        if (privilegedResource != null)
+                            result = privilegedResource.Execute(resourceContext, Configuration);
+                        else
+                            result = resource.Execute(resourceContext);
                     }
                     catch (Exception ex)
                     {

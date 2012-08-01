@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Glimpse.Core2.Extensibility;
 
@@ -21,5 +22,6 @@ namespace Glimpse.Core2.Framework
         IProxyFactory ProxyFactory { get; }
         IMessageBroker MessageBroker { get; }
         string EndpointBaseUri { get; }
+        string GenerateScriptTags(Guid requestId, string version);
     }
 }

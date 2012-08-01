@@ -82,6 +82,7 @@
     <Compile Include="Extensibility\ExecutionTimer.cs" />
     <Compile Include="Extensibility\IConfigurable.cs" />
     <Compile Include="Extensibility\IParameterValueProvider.cs" />
+    <Compile Include="Extensibility\IPrivilegedResource.cs" />
     <Compile Include="Extensibility\ResourceParameterMetadata.cs" />
     <Compile Include="Extensibility\TimerResult.cs" />
     <Compile Include="Extensibility\IAlternateImplementation.cs" />
@@ -164,6 +165,7 @@
     <Compile Include="Policy\UserHostAddressPolicy.cs" />
     <Compile Include="ResourceResult\ExceptionResourceResult.cs" />
     <Compile Include="ResourceResult\FileResourceResult.cs" />
+    <Compile Include="ResourceResult\HtmlResourceResult.cs" />
     <Compile Include="ResourceResult\JsonResourceResult.cs" />
     <Compile Include="ResourceResult\StatusCodeResourceResult.cs" />
     <Compile Include="Resource\ClientResource.cs" />
@@ -172,6 +174,7 @@
     <Compile Include="Resource\AjaxResource.cs" />
     <Compile Include="Resource\HistoryResource.cs" />
     <Compile Include="Resource\LogoResource.cs" />
+    <Compile Include="Resource\PopupResource.cs" />
     <Compile Include="Resource\RequestResource.cs" />
     <Compile Include="Resource\MetadataResource.cs" />
     <Compile Include="Resource\SpriteResource.cs" />

@@ -563,7 +563,7 @@ namespace Glimpse.Test.Core2.Framework
             Assert.True(Runtime.IsInitialized);
         }
 
-        [Fact]
+/*        [Fact]
         public void GenerateNoScriptTagsWithoutClientScripts()
         {
             Assert.Equal("", Runtime.GenerateScriptTags(Guid.NewGuid()));
@@ -691,7 +691,7 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.Configuration.ClientScripts.Add(Runtime.StaticScriptMock.Object);
 
             Assert.Empty(Runtime.GenerateScriptTags(Guid.NewGuid()));
-        }
+        }*/
 
         [Fact]
         public void LogErrorOnPersistanceStoreException()
