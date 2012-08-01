@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using Elmah;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
 using Glimpse.Elmah.Plumbing;
 
 namespace Glimpse.Elmah.Plugin
@@ -110,7 +111,7 @@ namespace Glimpse.Elmah.Plugin
 			           	};
 
             // Create the data rows
-            var path = VirtualPathUtility.ToAbsolute("~/", context.Request.ApplicationPath);
+            var path = context.GetGlimpseVirtualPathRoot();
             var errorPageUrl = GetErrorPageUrl();
 
             data.AddRange(errorList

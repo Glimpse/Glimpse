@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
+using System.Configuration;
+using System.Globalization;
 using System.Web;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Plumbing;
@@ -65,11 +66,44 @@ namespace Glimpse.Core.Extensions
 
         public static string GlimpseResourcePath(this HttpContextBase context, string resource)
         {
-            var root = VirtualPathUtility.ToAbsolute("~/", context.Request.ApplicationPath);
+            var virtualRootPath = context.GetGlimpseVirtualPathRoot();
+            if (resource == null)
+                return string.Format("{0}Glimpse.axd", virtualRootPath);
 
-            if (resource == null) return string.Format("{0}Glimpse.axd", root);
+            return string.Format("{0}Glimpse.axd?{3}={4}&{2}={1}", virtualRootPath, resource, Handler.ResourceKey, Handler.VersionKey, Module.RunningVersion);
+        }
 
-            return string.Format("{0}Glimpse.axd?{3}={4}&{2}={1}", root, resource, Handler.ResourceKey, Handler.VersionKey, Module.RunningVersion);
+        public static string GetGlimpseVirtualPathRoot(this HttpContextBase context)
+        {
+            var config = ConfigurationManager.GetSection("glimpse") as GlimpseConfiguration ?? new GlimpseConfiguration();
+            return context.GetGlimpseVirtualPathRoot(config.IpForwardingEnabled);
+        }
+
+        private static string GetGlimpseVirtualPathRoot(this HttpContextBase context, bool isIpForwardingEnabled)
+        {
+            var virtualPathRoot = VirtualPathUtility.ToAbsolute("~/", context.Request.ApplicationPath);
+            if (!isIpForwardingEnabled)
+            {
+                return virtualPathRoot;
+            }
+
+            // when behind a load balancer, make sure requests get routed to the server that handled the request.	
+            // This limits Glimpse users to be on the local network.	
+            string protocol;
+            string port;
+            if (context.Request.Url == null)
+            {
+                protocol = context.Request.IsSecureConnection ? "https" : "http";
+                port = context.Request.IsSecureConnection ? "443" : "80";
+            }
+            else
+            {
+                protocol = context.Request.Url.Scheme;
+                port = context.Request.Url.Port.ToString(CultureInfo.InvariantCulture);
+            }
+
+            var requestServerAddress = context.Request.ServerVariables["LOCAL_ADDR"];
+            return string.Format("{0}://{1}:{2}{3}", protocol, requestServerAddress, port, virtualPathRoot);
         }
 
 /*        public static List<IGlimpseWarning> GetWarnings(this HttpContextBase context)
