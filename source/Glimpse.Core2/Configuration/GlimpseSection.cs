@@ -69,5 +69,12 @@ namespace Glimpse.Core2.Configuration
             get { return (Type) base["serviceLocatorType"]; }
             set { base["serviceLocatorType"] = value; }
         }
+
+        [ConfigurationProperty("endpointBaseUri", DefaultValue = null, IsRequired = true)]
+        public string EndpointBaseUri
+        {
+            get { return (string)base["endpointBaseUri"]; }
+            set { base["endpointBaseUri"] = value; }
+        }
     }
 }

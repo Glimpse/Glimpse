@@ -20,5 +20,6 @@ namespace Glimpse.Core2.Framework
         RuntimePolicy DefaultRuntimePolicy { get; }
         IProxyFactory ProxyFactory { get; }
         IMessageBroker MessageBroker { get; }
+        string EndpointBaseUri { get; }
     }
 }

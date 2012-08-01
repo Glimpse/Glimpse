@@ -16,11 +16,11 @@ namespace Glimpse.AspNet
             set { applicationPath = value; }
         }
 
-        protected override string GenerateUriTemplate(string resourceName, IEnumerable<ResourceParameterMetadata> parameters, ILogger logger)
+        protected override string GenerateUriTemplate(string resourceName, string baseUri, IEnumerable<ResourceParameterMetadata> parameters, ILogger logger)
         {
-            var root = VirtualPathUtility.ToAbsolute("~/", ApplicationPath);
+            var root = VirtualPathUtility.ToAbsolute(baseUri, ApplicationPath);
 
-            var stringBuilder = new StringBuilder(string.Format(@"{1}Glimpse.axd?n={0}", resourceName, root));
+            var stringBuilder = new StringBuilder(string.Format(@"{0}?n={1}", root, resourceName));
 
             var requiredParams = parameters.Where(p => p.IsRequired);
             foreach (var parameter in requiredParams)

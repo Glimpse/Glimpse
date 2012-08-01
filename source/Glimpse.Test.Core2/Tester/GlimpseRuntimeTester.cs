@@ -88,7 +88,7 @@ namespace Glimpse.Test.Core2.Tester
             var messageBrokerMock = new Mock<IMessageBroker>();
 
             var configuration =
-                new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfigMock.Object, clientScripts, loggerMock.Object, RuntimePolicy.On, htmlEncoderMock.Object, persistanceStoreMock.Object, pipelineInspectors, resources, serializerMock.Object, tabs, policies, resourceMock.Object, proxyFactoryMock.Object, messageBrokerMock.Object);
+                new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfigMock.Object, clientScripts, loggerMock.Object, RuntimePolicy.On, htmlEncoderMock.Object, persistanceStoreMock.Object, pipelineInspectors, resources, serializerMock.Object, tabs, policies, resourceMock.Object, proxyFactoryMock.Object, messageBrokerMock.Object, "~/Glimpse.axd");
 
 
             return new GlimpseRuntimeTester(configuration, frameworkProviderMock, endpointConfigMock);

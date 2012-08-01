@@ -621,7 +621,7 @@ namespace Glimpse.Test.Core2.Framework
             Runtime.ResourceMock.Setup(r => r.Name).Returns(resourceName);
             Runtime.DynamicScriptMock.Setup(ds => ds.GetResourceName()).Returns(resourceName);
             var parameterValueProviderMock = Runtime.DynamicScriptMock.As<IParameterValueProvider>();
-            Runtime.EndpointConfigMock.Protected().Setup<string>("GenerateUriTemplate", resourceName, ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(), ItExpr.IsAny<ILogger>()).Returns("http://something");
+            Runtime.EndpointConfigMock.Protected().Setup<string>("GenerateUriTemplate", resourceName, "~/Glimpse.axd", ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(), ItExpr.IsAny<ILogger>()).Returns("http://something");
             Runtime.EncoderMock.Setup(e => e.HtmlAttributeEncode("http://something")).Returns(uri);
 
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
@@ -639,7 +639,7 @@ namespace Glimpse.Test.Core2.Framework
             var uri = "http://somethingEncoded";
             Runtime.ResourceMock.Setup(r => r.Name).Returns(resourceName);
             Runtime.DynamicScriptMock.Setup(ds => ds.GetResourceName()).Returns(resourceName);
-            Runtime.EndpointConfigMock.Protected().Setup<string>("GenerateUriTemplate", resourceName, ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(), ItExpr.IsAny<ILogger>()).Returns("http://something");
+            Runtime.EndpointConfigMock.Protected().Setup<string>("GenerateUriTemplate", resourceName, "~/Glimpse.axd", ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(), ItExpr.IsAny<ILogger>()).Returns("http://something");
             Runtime.EncoderMock.Setup(e => e.HtmlAttributeEncode("http://something")).Returns(uri);
 
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
@@ -648,7 +648,7 @@ namespace Glimpse.Test.Core2.Framework
             Assert.Contains(uri, Runtime.GenerateScriptTags(Guid.NewGuid()));
 
             Runtime.ResourceMock.Verify(rm=>rm.Name, Times.AtLeastOnce());
-            Runtime.EndpointConfigMock.Protected().Verify<string>("GenerateUriTemplate", Times.Once(), resourceName, ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(), ItExpr.IsAny<ILogger>());
+            Runtime.EndpointConfigMock.Protected().Verify<string>("GenerateUriTemplate", Times.Once(), resourceName, "~/Glimpse.axd", ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(), ItExpr.IsAny<ILogger>());
             Runtime.EncoderMock.Verify(e => e.HtmlAttributeEncode("http://something"), Times.Once());
         }
 
@@ -658,7 +658,7 @@ namespace Glimpse.Test.Core2.Framework
             var resourceName = "resourceName";
             Runtime.ResourceMock.Setup(r => r.Name).Returns(resourceName);
             Runtime.DynamicScriptMock.Setup(ds => ds.GetResourceName()).Returns(resourceName);
-            Runtime.EndpointConfigMock.Protected().Setup<string>("GenerateUriTemplate", resourceName, ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(), ItExpr.IsAny<ILogger>()).Returns("");
+            Runtime.EndpointConfigMock.Protected().Setup<string>("GenerateUriTemplate", resourceName, "~/Glimpse.axd", ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(), ItExpr.IsAny<ILogger>()).Returns("");
             Runtime.EncoderMock.Setup(e => e.HtmlAttributeEncode("")).Returns("");
 
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
@@ -667,7 +667,7 @@ namespace Glimpse.Test.Core2.Framework
             Assert.Empty(Runtime.GenerateScriptTags(Guid.NewGuid()));
 
             Runtime.ResourceMock.Verify(rm => rm.Name, Times.AtLeastOnce());
-            Runtime.EndpointConfigMock.Protected().Verify<string>("GenerateUriTemplate", Times.Once(), resourceName, ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(), ItExpr.IsAny<ILogger>());
+            Runtime.EndpointConfigMock.Protected().Verify<string>("GenerateUriTemplate", Times.Once(), resourceName, "~/Glimpse.axd", ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(), ItExpr.IsAny<ILogger>());
             Runtime.EncoderMock.Verify(e => e.HtmlAttributeEncode(""), Times.Once());
         }
 

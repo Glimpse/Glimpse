@@ -29,7 +29,7 @@ namespace Glimpse.Test.Core2.Extensibility
                     return endpointConfigMock;
 
                 var configMock = new Mock<ResourceEndpointConfiguration>();
-                configMock.Protected().Setup<string>("GenerateUriTemplate", "resourceName",
+                configMock.Protected().Setup<string>("GenerateUriTemplate", "resourceName", "~/Glimpse.axd",
                                                      ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(), ItExpr.IsAny<ILogger>())
                     .Returns("http://localhost/");
 
@@ -85,27 +85,27 @@ namespace Glimpse.Test.Core2.Extensibility
         [Fact]
         public void GenerateAUri()
         {
-            Assert.Equal("http://localhost/",
-                         EndpointConfig.GenerateUriTemplate(ResourceMock.Object, LoggerMock.Object));
+            Assert.Equal("",
+                         EndpointConfig.GenerateUriTemplate(ResourceMock.Object, "", LoggerMock.Object));
         }
 
         [Fact]
         public void ReturnEmptyStringWithNullChildResult()
         {
-            EndpointConfigMock.Protected().Setup<string>("GenerateUriTemplate", "resourceName",
+            EndpointConfigMock.Protected().Setup<string>("GenerateUriTemplate", "resourceName", "~/Glimpse.axd",
                                                          ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(),
                                                          ItExpr.IsAny<ILogger>()).Returns<string>(null);
 
             Assert.Equal("",
-                         EndpointConfig.GenerateUriTemplate(ResourceMock.Object, LoggerMock.Object));
+                         EndpointConfig.GenerateUriTemplate(ResourceMock.Object, "", LoggerMock.Object));
         }
 
         [Fact]
         public void PassesPlaceholderValuesWithoutMatches()
         {
-            EndpointConfig.GenerateUriTemplate(ResourceMock.Object, LoggerMock.Object);
+            EndpointConfig.GenerateUriTemplate(ResourceMock.Object, "~/Glimpse.axd", LoggerMock.Object);
 
-            EndpointConfigMock.Protected().Verify<string>("GenerateUriTemplate", Times.Once(), "resourceName",
+            EndpointConfigMock.Protected().Verify<string>("GenerateUriTemplate", Times.Once(), "resourceName", "~/Glimpse.axd",
                                                           ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(),
                                                           ItExpr.IsAny<ILogger>());
         }
@@ -113,21 +113,21 @@ namespace Glimpse.Test.Core2.Extensibility
         [Fact]
         public void PassesValuesWithMatches()
         {
-            EndpointConfig.GenerateUriTemplate(ResourceMock.Object, LoggerMock.Object);
+            EndpointConfig.GenerateUriTemplate(ResourceMock.Object, "~/Glimpse.axd", LoggerMock.Object);
 
-            EndpointConfigMock.Protected().Verify<string>("GenerateUriTemplate", Times.Once(), "resourceName", ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(), ItExpr.IsAny<ILogger>());
+            EndpointConfigMock.Protected().Verify<string>("GenerateUriTemplate", Times.Once(), "resourceName", "~/Glimpse.axd", ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(), ItExpr.IsAny<ILogger>());
         }
 
         [Fact]
         public void ReturnEmptyStringWithChildGenerateUriException()
         {
-            EndpointConfigMock.Protected().Setup<string>("GenerateUriTemplate", ItExpr.IsAny<string>(),
+            EndpointConfigMock.Protected().Setup<string>("GenerateUriTemplate", ItExpr.IsAny<string>(), "~/Glimpse.axd",
                                                          ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(),
                                                          ItExpr.IsAny<ILogger>()).Throws<DummyException>();
 
-            var result = EndpointConfig.GenerateUriTemplate(ResourceMock.Object, LoggerMock.Object);
+            var result = EndpointConfig.GenerateUriTemplate(ResourceMock.Object, "~/Glimpse.axd", LoggerMock.Object);
 
-            EndpointConfigMock.Protected().Verify<string>("GenerateUriTemplate", Times.Once(), "resourceName", ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(),
+            EndpointConfigMock.Protected().Verify<string>("GenerateUriTemplate", Times.Once(), "resourceName", "~/Glimpse.axd", ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(),
                                                           ItExpr.IsAny<ILogger>());
             LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<DummyException>(), It.IsAny<object[]>()));
             Assert.Equal("", result);
@@ -137,14 +137,14 @@ namespace Glimpse.Test.Core2.Extensibility
         public void ThrowsExceptionWithNullResource()
         {
             Assert.Throws<ArgumentNullException>(
-                () => EndpointConfig.GenerateUriTemplate(null, LoggerMock.Object));
+                () => EndpointConfig.GenerateUriTemplate(null, "", LoggerMock.Object));
         }
 
         [Fact]
         public void ThrowsExceptionWithNullLogger()
         {
             Assert.Throws<ArgumentNullException>(
-                () => EndpointConfig.GenerateUriTemplate(ResourceMock.Object, null));
+                () => EndpointConfig.GenerateUriTemplate(ResourceMock.Object, "", null));
         }
     }
 }

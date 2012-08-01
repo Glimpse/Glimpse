@@ -243,11 +243,17 @@ namespace Glimpse.Core2.Framework
             var defaultResource = InstantiateDefaultResource();
             var proxyFactory = InstantiateProxyFactory();
             var messageBroker = InstantiateMessageBroker();
+            var endpointBaseUri = InstantiateBaseResourceUri();
 
             return new GlimpseConfiguration(frameworkProvider, endpointConfiguration, clientScripts, logger, policy,
                                             htmlEncoder, persistanceStore, pipelineInspectors, resources, serializer,
                                             tabs,
-                                            runtimePolicies, defaultResource, proxyFactory, messageBroker);
+                                            runtimePolicies, defaultResource, proxyFactory, messageBroker, endpointBaseUri);
+        }
+
+        public string InstantiateBaseResourceUri()
+        {
+            return Configuration.EndpointBaseUri;
         }
 
         public IMessageBroker InstantiateMessageBroker()

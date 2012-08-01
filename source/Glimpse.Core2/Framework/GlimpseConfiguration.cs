@@ -21,7 +21,8 @@ namespace Glimpse.Core2.Framework
             ICollection<IRuntimePolicy> runtimePolicies,
             IResource defaultResource,
             IProxyFactory proxyFactory,
-            IMessageBroker messageBroker)
+            IMessageBroker messageBroker,
+            string endpointBaseUri)
         {
             if (frameworkProvider == null) throw new ArgumentNullException("frameworkProvider");
             if (endpointConfiguration == null) throw new ArgumentNullException("endpointConfiguration");
@@ -36,6 +37,7 @@ namespace Glimpse.Core2.Framework
             if (defaultResource == null) throw new ArgumentNullException("defaultResource");
             if (proxyFactory == null) throw new ArgumentNullException("proxyFactory");
             if (messageBroker == null) throw new ArgumentNullException("messageBroker");
+            if (endpointBaseUri == null) throw new ArgumentNullException("endpointBaseUri");
 
             Logger = logger;
             ClientScripts = clientScripts;
@@ -52,6 +54,7 @@ namespace Glimpse.Core2.Framework
             DefaultResource = defaultResource;
             ProxyFactory = proxyFactory;
             MessageBroker = messageBroker;
+            EndpointBaseUri = endpointBaseUri;
         }
 
         private ICollection<IClientScript> clientScripts;
@@ -251,5 +254,16 @@ namespace Glimpse.Core2.Framework
         }
 
         public RuntimePolicy DefaultRuntimePolicy { get; set; }
+
+        private string endpointBaseUri;
+        public string EndpointBaseUri
+        {
+            get { return endpointBaseUri; }
+            set
+            {
+                if (value == null) throw new ArgumentNullException("value");
+                endpointBaseUri = value;
+            }
+        }
     }
 }

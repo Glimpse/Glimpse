@@ -21,7 +21,8 @@ namespace Glimpse.Test.Core2.Tester
                                            IDiscoverableCollection<IRuntimePolicy> policiesStub,
                                            Mock<IResource> defaultResourceMock,
                                            Mock<IProxyFactory> proxyFactoryMock,
-            Mock<IMessageBroker> messageBrokerMock)
+                                           Mock<IMessageBroker> messageBrokerMock,
+                                           string endpointBaseUri)
             : base(
                 frameworkProviderMock.Object,
                 endpointConfigurationMock.Object,
@@ -37,7 +38,8 @@ namespace Glimpse.Test.Core2.Tester
                 policiesStub,
                 defaultResourceMock.Object,
                 proxyFactoryMock.Object,
-            messageBrokerMock.Object)
+                messageBrokerMock.Object,
+            endpointBaseUri)
         {
             FrameworkProviderMock = frameworkProviderMock;
             EndpointConfigMock = endpointConfigurationMock;
@@ -69,7 +71,8 @@ namespace Glimpse.Test.Core2.Tester
                                                   new ReflectionDiscoverableCollection<IRuntimePolicy>(loggerMock.Object),
                                                   new Mock<IResource>(),
                                                   new Mock<IProxyFactory>(),
-                                                  new Mock<IMessageBroker>());
+                                                  new Mock<IMessageBroker>(),
+                                                  "~/Glimpse.axd");
         }
 
         public Mock<ResourceEndpointConfiguration> EndpointConfigMock { get; set; }

@@ -163,7 +163,7 @@ namespace Glimpse.Core2.Framework
                             continue;
                         }
 
-                        var uriTemplate = resourceEndpoint.GenerateUriTemplate(resource, logger);
+                        var uriTemplate = resourceEndpoint.GenerateUriTemplate(resource, Configuration.EndpointBaseUri, logger);
                         
                         var resourceParameterProvider = dynamicScript as IParameterValueProvider;
 
@@ -415,7 +415,7 @@ namespace Glimpse.Core2.Framework
                 if (resources.ContainsKey(resource.Name))
                     logger.Warn(Resources.GlimpseRuntimePersistMetadataMultipleResourceWarning, resource.Name);
 
-                resources[resource.Name] = endpoint.GenerateUriTemplate(resource, logger);
+                resources[resource.Name] = endpoint.GenerateUriTemplate(resource, Configuration.EndpointBaseUri, logger);
             }
 
             Configuration.PersistanceStore.Save(metadata);

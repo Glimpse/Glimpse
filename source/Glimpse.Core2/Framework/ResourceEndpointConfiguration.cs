@@ -6,7 +6,7 @@ namespace Glimpse.Core2.Framework
 {
     public abstract class ResourceEndpointConfiguration
     {
-        public string GenerateUriTemplate(IResource resource, ILogger logger)
+        public string GenerateUriTemplate(IResource resource, string baseUri, ILogger logger)
         {
             if (resource == null) throw new ArgumentNullException("resource");
             if (logger == null) throw new ArgumentNullException("logger");
@@ -14,7 +14,7 @@ namespace Glimpse.Core2.Framework
             string result = null;
             try
             {
-                result = GenerateUriTemplate(resource.Name, resource.Parameters, logger);
+                result = GenerateUriTemplate(resource.Name, baseUri, resource.Parameters, logger);
             }
             catch(Exception exception)
             {
@@ -27,6 +27,6 @@ namespace Glimpse.Core2.Framework
             return string.Empty;
         }
 
-        protected abstract string GenerateUriTemplate(string resourceName, IEnumerable<ResourceParameterMetadata> parameters, ILogger logger);
+        protected abstract string GenerateUriTemplate(string resourceName, string baseUri, IEnumerable<ResourceParameterMetadata> parameters, ILogger logger);
     }
 }
