@@ -16,7 +16,7 @@ namespace Glimpse.Test.Core2.Resource
         public void ProvideProperName()
         {
             var resource = new AjaxResource();
-            Assert.Equal("glimpse-ajax", resource.Name);
+            Assert.Equal("glimpse_ajax", resource.Name);
         }
 
         [Fact]

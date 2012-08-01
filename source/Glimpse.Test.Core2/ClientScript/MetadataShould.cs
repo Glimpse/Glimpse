@@ -20,7 +20,7 @@ namespace Glimpse.Test.Core2.ClientScript
         {
             var clientScript = new Metadata();
 
-            Assert.Equal("glimpse-metadata", clientScript.GetResourceName());
+            Assert.Equal("glimpse_metadata", clientScript.GetResourceName());
         }
 
         [Fact]
