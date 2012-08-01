@@ -1,4 +1,5 @@
 ﻿/*(import:jquery-1.6.3.min.js)*/
+/*(import:uritemplate.min.js)*/
 
 var glimpse = (function ($, scope) {
     if (!window.console) { (window.console = {}).log = function () {}; }

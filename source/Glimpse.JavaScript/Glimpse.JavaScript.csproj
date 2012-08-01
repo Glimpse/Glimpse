@@ -120,6 +120,7 @@
     <Content Include="UnitTests\Unit\glimpse.core.process.js" />
     <Content Include="UnitTests\Unit\mock-glimpse.core.element.js" />
     <Content Include="UnitTests\Unit\mock-glimpse.core.pubsub.js" />
+    <Content Include="uritemplate.min.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -4,7 +4,7 @@
             pubsub.subscribe('state.build', build); 
         }, 
         getCss = function() {
-            return '<style type="text/css"> ' + template.css.replace(/url\(\)/gi, 'url(' + data.currentMetadata().resources.glimpse_sprite + ')') + ' </style>'; 
+            return '<style type="text/css"> ' + template.css.replace(/url\(\)/gi, 'url(' + util.replaceTokens(data.currentMetadata().resources.glimpse_sprite) + ')') + ' </style>'; 
         },
         getHtml = function() {
             return template.html;

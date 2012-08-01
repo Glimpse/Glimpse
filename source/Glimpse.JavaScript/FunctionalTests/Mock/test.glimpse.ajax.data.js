@@ -145,7 +145,13 @@
                 var response, 
                     success = 'Success';
                 
-                if (data) { 
+                if (param.url.indexOf("History") == 0) {
+                    // History
+                    success = random(11) != 10 ? 'Success' : 'Fail';
+                    if (success == 'Success')
+                        response = radomResponse();
+                }
+                else if (data) { 
                     if (data.requestId) {
                         // Request
                         if (requestData[data.requestId])
@@ -158,20 +164,12 @@
                             response = data.pluginKey != "Lazy" ? response.data[data.pluginKey] : lazyData;
                     }            
                     else if (data.parentRequestId) { 
-                        // Ajax Requests
-                        if (data.ajaxResults) {
-                            success = random(11) != 10 ? 'Success' : 'Fail';
-                            if (success == 'Success') 
-                                response = generateAjaxResults(data.parentRequestId); 
-                        }
+                        // Ajax Requests 
+                        success = random(11) != 10 ? 'Success' : 'Fail';
+                        if (success == 'Success') 
+                            response = generateAjaxResults(data.parentRequestId);  
                     }
-                }
-                else {
-                    // 
-                    success = random(11) != 10 ? 'Success' : 'Fail';
-                    if (success == 'Success')
-                        response = radomResponse();
-                }
+                } 
                 
                 if (response)
                     response = $.extend(true, $.isArray(response) ? [] : {}, response);

@@ -50,7 +50,7 @@
             //Poll for updated summary data
             notice.prePoll(); 
             $.ajax({
-                url: glimpse.data.currentMetadata().resources.glimpse_history, 
+                url: glimpse.util.replaceTokens(glimpse.data.currentMetadata().resources.glimpse_history), 
                 type: 'GET',
                 contentType: 'application/json',
                 complete : function(jqXHR, textStatus) {

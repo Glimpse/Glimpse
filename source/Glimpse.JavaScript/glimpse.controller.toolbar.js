@@ -1,7 +1,7 @@
 ﻿toolbarController = function () {
     var //Support
         isPopup = function() {
-            return window.location.href.indexOf(data.currentMetadata().resources.glimpse_popup) > -1;
+            return window.location.href.indexOf(util.replaceTokens(data.currentMetadata().resources.glimpse_popup)) > -1;
         },
         wireListeners = function() {
             pubsub.subscribe('action.open', function(topic, payload) { open(payload); });
@@ -33,7 +33,7 @@
 
             util.cookie('glimpseKeepPopup', '1');
              
-            var path = data.currentMetadata().resources.glimpse_popup,
+            var path = util.replaceTokens(data.currentMetadata().resources.glimpse_popup),
                 url = path + (path.indexOf('?') > -1 ? '&' : '?') + 'requestId=' + data.current().requestId;
             window.open(url, 'GlimpsePopup', 'width=1100,height=600,status=no,toolbar=no,menubar=no,location=no,resizable=yes,scrollbars=yes');
         },

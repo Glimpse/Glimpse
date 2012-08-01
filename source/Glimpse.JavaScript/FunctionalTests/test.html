@@ -128,15 +128,15 @@ var glimpseData = {
 var glimpseMetadata = {"environmentUrls":{"Dev":"http://localhost/","QA":"http://qa.getglimpse.com/","Prod":"http://getglimpse.com/"},
             "version":[{name: 'core', current: '0.85', channel: 'dev'}, {name: 'glimpse.mvc', current: '0.85', channel: 'dev'}, {name: 'glimpse.webforms', current: '0.85', channel: 'dev'}],
             "resources" : { 
-                "glimpse_request" : "Request?requestId={requestId}",
-                "glimpse_ajax" : "Ajax?parentRequestId={parentRequestId}&ajaxResults={ajaxResults}",
-                "glimpse_history" : "History?",
-                "glimpse_tab" : "Tab?requestId={requestId}&pluginKey={pluginKey}",
-                "glimpse_paging" : "Pager?key={key}&pageIndex={pageIndex}", 
-                "glimpse_config" : "Config",
-                "glimpse_logo" : "logo.png",
-                "glimpse_sprite" : "sprite.png",
-                "glimpse_popup" : "test-popup.html"
+                "glimpse_request" : "Request?requestId={requestId}&version={version}{&Callback}",
+                "glimpse_ajax" : "Ajax?parentRequestId={parentRequestId}&version={version}{&Callback}",
+                "glimpse_history" : "History?version={version}{&top}{&Callback}",
+                "glimpse_tab" : "Tab?requestId={requestId}&pluginKey={pluginKey}&version={version}{&Callback}",
+                "glimpse_paging" : "Pager?key={key}&pageIndex={pageIndex}&version={version}{&Callback}", 
+                "glimpse_config" : "Config?version={version}",
+                "glimpse_logo" : "logo.png?version={version}",
+                "glimpse_sprite" : "sprite.png?version={version}",
+                "glimpse_popup" : "test-popup.html?version={version}"
             },
             "plugins": {
                 "Paging":{"pagingInfo":{ pagerType : 'continuous', pageSize : 5, pageIndex : 0, totalNumberOfRecords : 31 }}, 
