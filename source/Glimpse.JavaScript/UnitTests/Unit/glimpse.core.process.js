@@ -1,3 +1,4 @@
+/*
 module("glimpse.core.process");
 
 test("Basic requirements", function() {
@@ -28,3 +29,4 @@ test("Basic requirements", function() {
     ok(elements.title.length > 0);
     ok(elements.options.length > 0);
 });
+*/
