@@ -119,6 +119,7 @@
     <Compile Include="Extensibility\RuntimeEvent.cs" />
     <Compile Include="Extensibility\RuntimePolicyContext.cs" />
     <Compile Include="Extensibility\TabSetupContext.cs" />
+    <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\TypeElementCollectionExtensions.cs" />
     <Compile Include="Extensions\UriTemplateExtensions.cs" />
