@@ -84,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="NuSpec\readme.txt" />
+    <None Include="NuSpec\content\GlimpseSecurityPolicy.cs.pp" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="NuSpec\lib\net35\" />
