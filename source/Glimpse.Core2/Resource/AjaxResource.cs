@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Glimpse.Core2.Extensibility;
+using Glimpse.Core2.Extensions;
 using Glimpse.Core2.ResourceResult;
 using System.Linq;
 
@@ -33,7 +34,7 @@ namespace Glimpse.Core2.Resource
             if (!Glimpse.Core2.Backport.Net35Backport.TryParseGuid(context.Parameters[ParentRequestKey], out parentRequestId))
                 return new StatusCodeResourceResult(404);
 #else
-            if (!Guid.TryParse(context.Parameters[ParentRequestKey], out parentRequestId))
+            if (!Guid.TryParse(context.Parameters.GetValueOrDefault(ParentRequestKey), out parentRequestId))
                 return new StatusCodeResourceResult(404);
 #endif
 
@@ -42,7 +43,7 @@ namespace Glimpse.Core2.Resource
             if (data == null)
                 return new StatusCodeResourceResult(404);
 
-            return new JsonResourceResult(data.Where(r=>r.RequestIsAjax), context.Parameters[ResourceParameter.Callback.Name]);
+            return new JsonResourceResult(data.Where(r=>r.RequestIsAjax), context.Parameters.GetValueOrDefault(ResourceParameter.Callback.Name));
 
         }
     }

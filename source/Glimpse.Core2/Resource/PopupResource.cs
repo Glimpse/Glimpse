@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Glimpse.Core2.Extensibility;
+using Glimpse.Core2.Extensions;
 using Glimpse.Core2.Framework;
 using Glimpse.Core2.ResourceResult;
 
@@ -34,11 +35,11 @@ namespace Glimpse.Core2.Resource
             if (!Glimpse.Core2.Backport.Net35Backport.TryParseGuid(context.Parameters[ResourceParameter.RequestId.Name], out requestId))
                 return new StatusCodeResourceResult(404);
 #else
-            if (!Guid.TryParse(context.Parameters[ResourceParameter.RequestId.Name], out requestId))
+            if (!Guid.TryParse(context.Parameters.GetValueOrDefault(ResourceParameter.RequestId.Name), out requestId))
                 return new StatusCodeResourceResult(404);
 #endif
 
-            string version = context.Parameters[ResourceParameter.VersionNumber.Name];
+            string version = context.Parameters.GetValueOrDefault(ResourceParameter.VersionNumber.Name);
 
             if (string.IsNullOrEmpty(version))
                 return new StatusCodeResourceResult(404);

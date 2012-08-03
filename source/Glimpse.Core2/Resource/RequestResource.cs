@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Glimpse.Core2.Extensibility;
+using Glimpse.Core2.Extensions;
 using Glimpse.Core2.Framework;
 using Glimpse.Core2.ResourceResult;
 
@@ -40,7 +41,7 @@ namespace Glimpse.Core2.Resource
             if(data == null)
                 return new StatusCodeResourceResult(404);
 
-            return new JsonResourceResult(data, context.Parameters[ResourceParameter.Callback.Name], CacheDuration, CacheSetting.Private);
+            return new JsonResourceResult(data, context.Parameters.GetValueOrDefault(ResourceParameter.Callback.Name), CacheDuration, CacheSetting.Private);
         }
     }
 }

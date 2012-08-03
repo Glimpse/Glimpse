@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Glimpse.Core2.Extensibility;
+using Glimpse.Core2.Extensions;
 using Glimpse.Core2.Framework;
 using Glimpse.Core2.ResourceResult;
 
@@ -27,15 +28,15 @@ namespace Glimpse.Core2.Resource
         {
             if (context == null) throw new ArgumentNullException("context");
 
-            var top = 50;
-            int.TryParse(context.Parameters[TopKey], out top);
+            var top = 0;
+            int.TryParse(context.Parameters.GetValueOrDefault(TopKey, "50"), out top);
 
             var data = context.PersistanceStore.GetTop(top);
 
             if (data == null)
                 return new StatusCodeResourceResult(404);
 
-            return new JsonResourceResult(data.GroupBy(d => d.ClientId).ToDictionary(group => group.Key, group => group.Cast<IRequestMetadata>()), context.Parameters[ResourceParameter.Callback.Name]);
+            return new JsonResourceResult(data.GroupBy(d => d.ClientId).ToDictionary(group => group.Key, group => group.Cast<IRequestMetadata>()), context.Parameters.GetValueOrDefault(ResourceParameter.Callback.Name));
         }
     }
 }
