@@ -9,7 +9,7 @@ namespace Glimpse.Core2.Resource
     public class AjaxResource:IResource
     {
         internal const string InternalName = "glimpse_ajax";
-        private const string ParentRequestKey = "ParentRequestId";
+        private const string ParentRequestKey = "parentRequestId";
 
         public AjaxResource()
         {
