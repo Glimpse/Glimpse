@@ -143,12 +143,12 @@
             setTimeout(function () { 
                 
                 var response, 
-                    success = 'Success';
+                    success = 'success';
                 
                 if (param.url.indexOf("History") == 0) {
                     // History
-                    success = random(11) != 10 ? 'Success' : 'Fail';
-                    if (success == 'Success')
+                    success = random(11) != 10 ? 'success' : 'Fail';
+                    if (success == 'success')
                         response = radomResponse();
                 }
                 else if (data) { 
@@ -165,8 +165,8 @@
                     }            
                     else if (data.parentRequestId) { 
                         // Ajax Requests 
-                        success = random(11) != 10 ? 'Success' : 'Fail';
-                        if (success == 'Success') 
+                        success = random(11) != 10 ? 'success' : 'Fail';
+                        if (success == 'success') 
                             response = generateAjaxResults(data.parentRequestId);  
                     }
                 } 
@@ -176,7 +176,7 @@
 
                 if (param.complete)
                     param.complete(null, success);
-                if (param.success && success == 'Success')
+                if (param.success && success == 'success')
                     param.success(response);
                 
             }, random(6) * 100 + 1);

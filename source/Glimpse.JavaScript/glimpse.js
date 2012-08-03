@@ -112,7 +112,7 @@ var glimpse = (function ($, scope) {
                 },
                 complete : function (textStatus) {
                     var that = this;
-                    if (textStatus != "Success") {
+                    if (textStatus != "success") {
                         that.connected = false;
                         that.text.text('Disconnected...');
                         that.scope.removeClass('gconnect').addClass('gdisconnect');
@@ -368,9 +368,9 @@ var glimpse = (function ($, scope) {
                         });
                     }
                     else { 
-                        if (callback && callback.success) { callback.success(requestId, baseInner, inner, 'Success'); }
+                        if (callback && callback.success) { callback.success(requestId, baseInner, inner, 'success'); }
                         update(baseInner);  
-                        if (callback && callback.complete) { callback.complete(requestId, undefined, 'Success'); } 
+                        if (callback && callback.complete) { callback.complete(requestId, undefined, 'success'); } 
                     }
                 },
                  

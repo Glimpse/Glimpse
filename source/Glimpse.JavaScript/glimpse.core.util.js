@@ -84,7 +84,7 @@
         },
         complete : function (textStatus) {
             var that = this;
-            if (textStatus != "Success") {
+            if (textStatus != "success") {
                 that.connected = false;
                 that.text.text('Disconnected...');
                 that.scope.removeClass('gconnect').addClass('gdisconnect');
