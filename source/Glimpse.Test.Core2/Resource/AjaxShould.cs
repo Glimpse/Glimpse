@@ -38,7 +38,7 @@ namespace Glimpse.Test.Core2.Resource
         public void ReturnStatusCodeResourceResultWithMissingParameter()
         {
             var contextMock = new Mock<IResourceContext>();
-            contextMock.Setup(c => c.Parameters).Returns(new Dictionary<string, string> { {"ParentRequestId", "bad data"} });
+            contextMock.Setup(c => c.Parameters).Returns(new Dictionary<string, string> { {"parentRequestId", "bad data"} });
 
             var resource = new AjaxResource();
 
@@ -54,7 +54,7 @@ namespace Glimpse.Test.Core2.Resource
 
             var guid = Guid.NewGuid();
 
-            contextMock.Setup(c => c.Parameters["ParentRequestId"]).Returns(guid.ToString());
+            contextMock.Setup(c => c.Parameters["parentRequestId"]).Returns(guid.ToString());
             contextMock.Setup(c => c.PersistanceStore.GetByRequestParentId(guid)).Returns(Enumerable.Empty<GlimpseRequest>());
 
             var resource = new AjaxResource();
