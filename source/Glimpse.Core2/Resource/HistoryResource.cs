@@ -29,7 +29,7 @@ namespace Glimpse.Core2.Resource
             if (context == null) throw new ArgumentNullException("context");
 
             var top = 0;
-            int.TryParse(context.Parameters.GetValueOrDefault(TopKey, "50"), out top);
+            int.TryParse(context.Parameters.GetValueOrDefault(TopKey, ifNotFound:"50"), out top);
 
             var data = context.PersistanceStore.GetTop(top);
 
