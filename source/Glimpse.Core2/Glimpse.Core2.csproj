@@ -188,6 +188,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SerializationConverter\GlimpseRequestHeadersConverter.cs" />
     <Compile Include="SerializationConverter\GlimpseMetadataConverter.cs" />
     <Compile Include="SerializationConverter\GlimpseRequestConverter.cs" />
     <Compile Include="SerializationConverter\PluginMetadataConverter.cs" />

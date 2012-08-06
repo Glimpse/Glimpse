@@ -4,9 +4,9 @@ using Glimpse.Core2.Framework;
 
 namespace Glimpse.Core2.SerializationConverter
 {
-    public class GlimpseRequestConverter:SerializationConverter<GlimpseRequest>
+    public class GlimpseRequestHeadersConverter:SerializationConverter<GlimpseRequestHeaders>
     {
-        public override IDictionary<string, object> Convert(GlimpseRequest request)
+        public override IDictionary<string, object> Convert(GlimpseRequestHeaders request)
         {
             return new Dictionary<string, object>
                        {
@@ -20,7 +20,6 @@ namespace Glimpse.Core2.SerializationConverter
                            {"uri", request.RequestUri},
                            {"contentType", request.ResponseContentType},
                            {"statusCode", request.ResponseStatusCode},
-                           {"data", request.PluginData},
                            {"userAgent", request.UserAgent},
                        };
         }

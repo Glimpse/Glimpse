@@ -36,7 +36,7 @@ namespace Glimpse.Core2.Resource
             if (data == null)
                 return new StatusCodeResourceResult(404);
 
-            var requests = data.GroupBy(d => d.ClientId).ToDictionary(group => @group.Key, group => @group);
+            var requests = data.GroupBy(d => d.ClientId).ToDictionary(group => group.Key, group => group.Select(g=>new GlimpseRequestHeaders(g)));
             return new JsonResourceResult(requests, context.Parameters.GetValueOrDefault(ResourceParameter.Callback.Name));
         }
     }
