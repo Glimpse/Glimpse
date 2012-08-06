@@ -11,7 +11,7 @@ namespace Glimpse.Core2.Policy
         {
             var cookie = policyContext.RequestMetadata.GetCookie(ControlCookieName);
 
-            if (String.IsNullOrEmpty(cookie))
+            if (string.IsNullOrEmpty(cookie))
                 return RuntimePolicy.Off;
                 
             RuntimePolicy result;
