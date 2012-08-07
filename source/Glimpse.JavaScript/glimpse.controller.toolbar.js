@@ -32,9 +32,9 @@
             pubsub.publish('state.persist');
 
             util.cookie('glimpseKeepPopup', '1');
-             
-            var path = util.replaceTokens(data.currentMetadata().resources.glimpse_popup),
-                url = path + (path.indexOf('?') > -1 ? '&' : '?') + 'requestId=' + data.current().requestId;
+
+            var url = util.replaceTokens(data.currentMetadata().resources.glimpse_popup, { requestId: data.current().requestId });
+                //url = path + (path.indexOf('?') > -1 ? '&' : '?') + 'requestId=' + data.current().requestId;
             window.open(url, 'GlimpsePopup', 'width=1100,height=600,status=no,toolbar=no,menubar=no,location=no,resizable=yes,scrollbars=yes');
         },
             
