@@ -44,6 +44,9 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="Tavis.UriTemplates, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Tavis.UriTemplates.0.1.1\lib\NET40\Tavis.UriTemplates.dll</HintPath>
+    </Reference>
     <Reference Include="xunit, Version=1.9.1.1600, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\xunit.1.9.1\lib\net20\xunit.dll</HintPath>
@@ -89,6 +92,7 @@
     <Compile Include="Extensibility\TabSetupContextShould.cs" />
     <Compile Include="Extensions\EnumExtensionsShould.cs" />
     <Compile Include="Extensions\TestingExtensions.cs" />
+    <Compile Include="Extensions\UriTemplateExtensionsShould.cs" />
     <Compile Include="Framework\CastleDynamicProxyFactoryShould.cs" />
     <Compile Include="Framework\EventBrokerShould.cs" />
     <Compile Include="Framework\FactoryShould.cs" />
