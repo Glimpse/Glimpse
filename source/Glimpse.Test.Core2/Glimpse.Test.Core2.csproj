@@ -120,6 +120,7 @@
     <Compile Include="Resource\DataShould.cs" />
     <Compile Include="Resource\HistoryResourceShould.cs" />
     <Compile Include="Resource\MetadataShould.cs" />
+    <Compile Include="Resource\PopupResourceShould.cs" />
     <Compile Include="SerializationConverter\GlimpseMetadataConverterShould.cs" />
     <Compile Include="SerializationConverter\GlimpseRequestConverterShould.cs" />
     <Compile Include="SerializationConverter\PluginMetadataConverterShould.cs" />
