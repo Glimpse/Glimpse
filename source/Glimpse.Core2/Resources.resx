@@ -243,4 +243,8 @@
   <data name="DiscoverGetType">
     <value xml:space="preserve">Unable to GetType.</value>
   </data>
+  <data name="RrivilegedResourceExecuteNotSupported">
+    <value xml:space="preserve">Invalid privileged resource execution on '{0}'. Call overload Execute(IResourceContext, IGlimpseConfiguration) instead.</value>
+    <comment>{0} - GetType() of offending resource</comment>
+  </data>
 </root>

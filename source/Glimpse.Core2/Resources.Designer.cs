@@ -349,6 +349,15 @@ namespace Glimpse.Core2 {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid privileged resource execution on &apos;{0}&apos;. Call overload Execute(IResourceContext, IGlimpseConfiguration) instead..
+        /// </summary>
+        internal static string RrivilegedResourceExecuteNotSupported {
+            get {
+                return ResourceManager.GetString("RrivilegedResourceExecuteNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The input value &apos;{0}&apos; creates path &apos;{1}&apos;, which does not exist..
         /// </summary>
         internal static string SetDiscoveryLocationDirectoryNotFoundMessage {

@@ -21,7 +21,7 @@ namespace Glimpse.Core2.Resource
 
         public IResourceResult Execute(IResourceContext context)
         {
-            throw new NotSupportedException("Privileged resource should call Execute(IResourceContext, IGlimpseConfiguration)");
+            throw new NotSupportedException(string.Format(Resources.RrivilegedResourceExecuteNotSupported, GetType().Name));
         }
 
         public IResourceResult Execute(IResourceContext context, IGlimpseConfiguration configuration)
