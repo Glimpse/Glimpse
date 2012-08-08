@@ -7,7 +7,7 @@ namespace Glimpse.AspNet.SerializationConverter
 {
     public class RequestModelConverter : SerializationConverter<RequestModel>
     {
-        public override IDictionary<string, object> Convert(RequestModel request)
+        public override object Convert(RequestModel request)
         {
             return new Dictionary<string, object>
                        {

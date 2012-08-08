@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Web;
 using Glimpse.AspNet.Model;
@@ -60,7 +61,9 @@ namespace Glimpse.Test.AspNet.SerializationConverter
             var model = new RequestModel(contextMock.Object);
 
             var converter = new RequestModelConverter();
-            var result = converter.Convert(model);
+            var obj = converter.Convert(model);
+
+            var result = obj as IDictionary<string, object>;
 
             Assert.NotNull(result);
             Assert.True(result.Keys.Count > 0);

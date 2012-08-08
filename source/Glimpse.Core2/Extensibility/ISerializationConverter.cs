@@ -9,6 +9,6 @@ namespace Glimpse.Core2.Extensibility
     public interface ISerializationConverter
     {
         IEnumerable<Type> SupportedTypes { get; }
-        IDictionary<string, object> Convert(object obj);
+        object Convert(object obj);
     }
 }

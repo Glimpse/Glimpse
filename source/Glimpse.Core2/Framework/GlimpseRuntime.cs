@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using Glimpse.Core2.Extensibility;
-using Glimpse.Core2.Extensions;
 using Glimpse.Core2.ResourceResult;
 #if NET35
 using Glimpse.Core2.Backport;

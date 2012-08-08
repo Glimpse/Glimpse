@@ -6,7 +6,7 @@ namespace Glimpse.Core2.SerializationConverter
 {
     public class PluginMetadataConverter : SerializationConverter<PluginMetadata>
     {
-        public override IDictionary<string, object> Convert(PluginMetadata metadata)
+        public override object Convert(PluginMetadata metadata)
         {
             return new Dictionary<string, object>
                        {

@@ -6,7 +6,7 @@ namespace Glimpse.Core2.SerializationConverter
 {
     public class GlimpseRequestHeadersConverter:SerializationConverter<GlimpseRequestHeaders>
     {
-        public override IDictionary<string, object> Convert(GlimpseRequestHeaders request)
+        public override object Convert(GlimpseRequestHeaders request)
         {
             return new Dictionary<string, object>
                        {

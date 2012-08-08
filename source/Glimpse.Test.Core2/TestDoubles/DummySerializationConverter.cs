@@ -11,7 +11,7 @@ namespace Glimpse.Test.Core2.TestDoubles
             get { return new[] {typeof (DummyObjectContext)}; }
         }
 
-        public IDictionary<string, object> Convert(object obj)
+        public object Convert(object obj)
         {
             throw new NotSupportedException();
         }

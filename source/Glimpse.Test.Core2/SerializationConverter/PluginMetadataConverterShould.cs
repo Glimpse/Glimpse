@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Glimpse.Core2.Framework;
 using Glimpse.Core2.SerializationConverter;
 using Xunit;
@@ -14,8 +15,11 @@ namespace Glimpse.Test.Core2.SerializationConverter
 
             var converter = new PluginMetadataConverter();
 
-            var result = converter.Convert(metadata);
+            var obj = converter.Convert(metadata);
 
+            var result = obj as IDictionary<string, object>;
+
+            Assert.NotNull(result);
             Assert.True(result.ContainsKey("documentationUri"));
             Assert.False(result.ContainsKey("hasMetadata"));
         }

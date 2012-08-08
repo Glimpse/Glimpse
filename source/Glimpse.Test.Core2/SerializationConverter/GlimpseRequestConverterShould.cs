@@ -23,8 +23,11 @@ namespace Glimpse.Test.Core2.SerializationConverter
             var metadata = new GlimpseRequest(Guid.NewGuid(), requestMock.Object, new Dictionary<string, TabResult>(), 55);
             var converter = new GlimpseRequestConverter();
 
-            var result = converter.Convert(metadata);
+            var obj = converter.Convert(metadata);
 
+            var result = obj as IDictionary<string, object>;
+
+            Assert.NotNull(result);
             Assert.True(result.ContainsKey("clientId"));
             Assert.NotNull(result["clientId"]);
             Assert.True(result.ContainsKey("dateTime"));

@@ -6,7 +6,7 @@ namespace Glimpse.Core2.SerializationConverter
 {
     public class TabResultConverter:SerializationConverter<TabResult>
     {
-        public override IDictionary<string, object> Convert(TabResult result)
+        public override object Convert(TabResult result)
         {
             return new Dictionary<string, object>
                        {
