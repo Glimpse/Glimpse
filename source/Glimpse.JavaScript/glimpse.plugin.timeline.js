@@ -11,12 +11,13 @@
             glimpse.pubsub.subscribe('action.plugin.active', function (topic, payload) { if (payload == 'Timeline') { resize(); } }); 
             glimpse.pubsub.subscribe('action.resize', resize);
             glimpse.pubsub.subscribe('state.build.template.modify', function(topic, payload) { modify(payload); }); 
-            
         }, 
           
         created = function () { 
             var panel = glimpse.elements.findPanel('Timeline'),
                 payload = glimpse.data.current().data;
+            
+            glimpse.pubsub.publish('state.timeline.build.prerender', currentData);
             
             currentTimeline = glimpseTimeline(panel, currentData);
             currentTimeline.init(); 
