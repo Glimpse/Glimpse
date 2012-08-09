@@ -16,6 +16,9 @@ namespace Glimpse.Mvc.Tab
             var viewRenderMessages = tabStore.Get<List<View.Render.Message>>(typeof(View.Render.Message).FullName);
             var result = new List<ViewsModel>();
 
+            if (viewEngineFindViewsMessages == null || viewRenderMessages == null)
+                return result;
+
             foreach (var findView in viewEngineFindViewsMessages)
             {
                 result.Add(new ViewsModel(findView, viewRenderMessages.SingleOrDefault(r => r.Mixin.ViewEngineFindCallId == findView.Id)));
