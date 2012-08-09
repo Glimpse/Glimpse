@@ -2669,6 +2669,9 @@ var glimpseTimelinePlugin = (function ($, glimpse) {
 
             if (payload.Timeline) {
                 currentData = payload.Timeline.data;
+                
+                glimpse.pubsub.publish('action.timeline.data.updated', currentData);
+                
                 if (currentData)
                     payload.Timeline.data = 'Generating timeline, please wait...';
             }
