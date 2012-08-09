@@ -188,11 +188,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SerializationConverter\BooleanConverter.cs" />
     <Compile Include="SerializationConverter\GlimpseRequestHeadersConverter.cs" />
     <Compile Include="SerializationConverter\GlimpseMetadataConverter.cs" />
     <Compile Include="SerializationConverter\GlimpseRequestConverter.cs" />
     <Compile Include="SerializationConverter\PluginMetadataConverter.cs" />
     <Compile Include="SerializationConverter\TabResultConverter.cs" />
+    <Compile Include="SerializationConverter\CSharpTypeConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NuSpec\Glimpse.nuspec">
