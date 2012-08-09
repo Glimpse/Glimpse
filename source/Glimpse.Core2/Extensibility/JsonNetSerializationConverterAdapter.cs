@@ -27,7 +27,7 @@ namespace Glimpse.Core2.Extensibility
 
             public override bool CanConvert(Type objectType)
             {
-                return Converter.SupportedTypes.Any(type => type == objectType);
+                return Converter.SupportedTypes.Any(type => type.IsAssignableFrom(objectType));
             }
     }
 }
