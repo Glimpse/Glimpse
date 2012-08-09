@@ -52,6 +52,7 @@ namespace Glimpse.Mvc.SerializationConverter
                 return new Dictionary<string, object>
                            {
                                {"Model Type", vmSummary.ModelType},
+                               {"Model State Valid", vmSummary.IsValid},
                                {"TempData Keys", vmSummary.TempDataKeys},
                                {"ViewData Keys", vmSummary.ViewDataKeys},
                            };
