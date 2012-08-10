@@ -29,10 +29,10 @@ namespace Glimpse.Core2.Resource
             Guid requestId;
 
 #if NET35
-            if (!Glimpse.Core2.Backport.Net35Backport.TryParseGuid(context.Parameters[ResourceParameter.RequestId.Name], out requestId))
+            if (!Glimpse.Core2.Backport.Net35Backport.TryParseGuid(context.Parameters.GetValueOrDefault(ResourceParameter.RequestId.Name), out requestId))
                 return new StatusCodeResourceResult(404);
 #else
-            if (!Guid.TryParse(context.Parameters[ResourceParameter.RequestId.Name], out requestId))
+            if (!Guid.TryParse(context.Parameters.GetValueOrDefault(ResourceParameter.RequestId.Name), out requestId))
                 return new StatusCodeResourceResult(404);
 #endif
 
