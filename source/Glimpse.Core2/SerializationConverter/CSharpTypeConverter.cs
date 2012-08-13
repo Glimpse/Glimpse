@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Core2.SerializationConverter
@@ -8,38 +10,68 @@ namespace Glimpse.Core2.SerializationConverter
     {
         public override object Convert(Type type)
         {
-            var name = type.Name;
-
-            if (type.IsValueType)
-            {
-                if (type == typeof (bool)) return "bool";
-                if (type == typeof (int)) return "int";
-                if (type == typeof (float)) return "float";
-                if (type == typeof (double)) return "double";
-                if (type == typeof (long)) return "long";
-                if (type == typeof (byte)) return "byte";
-                if (type == typeof (char)) return "char";
-                if (type == typeof (decimal)) return "decimal";
-                if (type == typeof (sbyte)) return "sbyte";
-                if (type == typeof (short)) return "short";
-                if (type == typeof (uint)) return "uint";
-                if (type == typeof (ulong)) return "ulong";
-                if (type == typeof (ushort)) return "ushort";
-            }
-
-            if (type == typeof(string)) return "string";
-            if (type == typeof(object)) return "object";
-            
-            if (!type.IsGenericType)
-                return name;
-
-            var plainTypeName = name.Substring(0, name.IndexOf('`'));
-            //Recurse over the Convert method (this method) to support N levels of generic parameters
-            var parameterList = string.Join(", ", type.GetGenericArguments().Select(Convert).Cast<string>().ToArray());
-            //.ToArray() required for .NET 3.5 support in string.Join.
-            //.NET 4.0+ string.Join(string, string[])
-            //.NET 3.5  string.Join(string, IEnumerable<string>)
-            return string.Format("{0}<{1}>", plainTypeName, parameterList);
+            return GetName(type);
         }
+
+        private string GetName(Type type)
+        {
+            var typename = new StringBuilder();
+            GetName(type, typename);
+            return typename.ToString();
+        }
+
+        private void GetName(Type type, StringBuilder output)
+        {
+            if (type.IsArray) //Array
+            {
+                GetName(type.GetElementType(), output);
+                output.Append("[]");
+            }
+            else if (!type.IsGenericType) //Non-Generics
+            {
+                output.Append(primitiveTypes.ContainsKey(type) ? primitiveTypes[type] : type.Name);
+            }
+            else if (type.GetGenericTypeDefinition() == typeof(Nullable<>)) //Nullables
+            {
+                GetName(type.GetGenericArguments().First(), output);
+                output.Append("?");
+            }
+            else //Generics
+            {
+                var genericBaseType = type.GetGenericTypeDefinition();
+                var genericName = genericBaseType.Name;
+                output.Append(genericName, 0, genericName.LastIndexOf('`'));
+                output.Append("<");
+
+                var genericArguments = type.GetGenericArguments();
+                for (int i = 0; i < genericArguments.Length; i++)
+                {
+                    if (i > 0) output.Append(", ");
+                    GetName(genericArguments[i], output);
+                }
+
+                output.Append(">");
+            }
+        }
+
+        private readonly static Dictionary<Type, string> primitiveTypes =
+            new Dictionary<Type, string>
+            {
+                {typeof(bool), "bool"},
+                {typeof(byte), "byte"},
+                {typeof(char), "char"},
+                {typeof(decimal), "decimal"},
+                {typeof(double), "double"},
+                {typeof(float), "float"},
+                {typeof(int), "int"},
+                {typeof(long), "long"},
+                {typeof(object), "object"},
+                {typeof(sbyte), "sbyte"},
+                {typeof(short), "short"},
+                {typeof(string), "string"},
+                {typeof(uint), "uint"},
+                {typeof(ulong), "ulong"},
+                {typeof(ushort), "ushort"},
+            };
     }
 }

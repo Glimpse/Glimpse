@@ -31,12 +31,31 @@ namespace Glimpse.Test.Core2.SerializationConverter
         [InlineData(typeof(IDictionary<string, object>), "IDictionary<string, object>")]
         [InlineData(typeof(IDictionary<string, List<int>>), "IDictionary<string, List<int>>")]
         [InlineData(typeof(IDictionary<string, IDictionary<int, IEnumerable<CSharpTypeConverterShould>>>), "IDictionary<string, IDictionary<int, IEnumerable<CSharpTypeConverterShould>>>")]
+        //Converter supports arrays
+        [InlineData(typeof(int[]), "int[]")]
+        [InlineData(typeof(Test[]), "Test[]")]
+        [InlineData(typeof(IEnumerable<int[]>[]), "IEnumerable<int[]>[]")]
+        [InlineData(typeof(int[][]), "int[][]")]
+        //Converter supports nullable types
+        [InlineData(typeof(int?), "int?")]
+        [InlineData(typeof(DateTime?), "DateTime?")]
+        [InlineData(typeof(Test?), "Test?")]
+        [InlineData(typeof(int?[]), "int?[]")]
+        //Converter - everything together
+        [InlineData(typeof(Tuple<IDictionary<int?, string[]>, char, Test>), "Tuple<IDictionary<int?, string[]>, char, Test>")]
         public void ConvertToDisplayString(Type intput, string output)
         {
             var converter = new CSharpTypeConverter();
             var result = converter.Convert(intput);
 
             Assert.Equal(output, result);
+        }
+
+        internal enum Test
+        {
+            A = 1,
+            B = 2,
+            C = 3,
         }
     }
 }
