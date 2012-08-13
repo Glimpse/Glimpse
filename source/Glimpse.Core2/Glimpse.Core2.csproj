@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientScript\Client.cs" />
+    <Compile Include="ClientScript\ClientTiming.cs" />
     <Compile Include="ClientScript\Data.cs" />
     <Compile Include="ClientScript\Metadata.cs" />
     <Compile Include="Configuration\ContentTypeElement.cs" />
@@ -171,6 +172,7 @@
     <Compile Include="ResourceResult\StatusCodeResourceResult.cs" />
     <Compile Include="Resource\ClientResource.cs" />
     <Compile Include="Resource\ConfigurationResource.cs" />
+    <Compile Include="Resource\ClientTimingResource.cs" />
     <Compile Include="Resource\FileResource.cs" />
     <Compile Include="Resource\AjaxResource.cs" />
     <Compile Include="Resource\HistoryResource.cs" />
@@ -225,6 +227,9 @@
   <ItemGroup>
     <EmbeddedResource Include="logo.png" />
     <EmbeddedResource Include="sprite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="clientTiming.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
