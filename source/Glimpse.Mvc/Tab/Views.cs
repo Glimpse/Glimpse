@@ -40,7 +40,7 @@ namespace Glimpse.Mvc.Tab
             messageBroker.Subscribe<View.Render.Message>(message => Persist(message, context));
         }
 
-        private static void Persist<T>(T message, ITabSetupContext context)
+        internal static void Persist<T>(T message, ITabSetupContext context)
         {
             var tabStore = context.GetTabStore();
             var key = typeof(T).FullName;

@@ -30,7 +30,7 @@ namespace Glimpse.Test.Mvc.AlternateImplementation
             var viewName = "anything";
             var useCache = true;
 
-            var args = new object[] { controllerContext, viewName, "MasterName", useCache }; //last false is a lie to prove the test
+            var args = new object[] { controllerContext, viewName, "MasterName", useCache }; 
 
             var arguments = new ViewEngine.FindViews.Arguments(args, false);
 

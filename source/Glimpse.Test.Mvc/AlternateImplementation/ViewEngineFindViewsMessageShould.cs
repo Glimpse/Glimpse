@@ -52,5 +52,44 @@ namespace Glimpse.Test.Mvc.AlternateImplementation
             Assert.Equal(id, message.Id);
             Assert.True(message.IsFound);
         }
+
+        [Fact]
+        public void ThrowArgumentExceptionWithNullInput()
+        {
+            ViewEngine.FindViews.Arguments input = null;
+            var output = new ViewEngineResult(Enumerable.Empty<string>());
+            var timing = new TimerResult();
+            var baseType = typeof(string);
+            var isPartial = false;
+            var id = Guid.NewGuid();
+
+            Assert.Throws<ArgumentNullException>(()=> new ViewEngine.FindViews.Message(input, output, timing, baseType, isPartial, id));
+        }
+
+        [Fact]
+        public void ThrowArgumentExceptionWithNullOutput()
+        {
+            var input = new ViewEngine.FindViews.Arguments(new object[] { new ControllerContext(), "ViewName", false }, true);
+            ViewEngineResult output = null;
+            var timing = new TimerResult();
+            var baseType = typeof(string);
+            var isPartial = false;
+            var id = Guid.NewGuid();
+
+            Assert.Throws<ArgumentNullException>(() => new ViewEngine.FindViews.Message(input, output, timing, baseType, isPartial, id));
+        }
+
+        [Fact]
+        public void ThrowArgumentExceptionWithNullTiming()
+        {
+            var input = new ViewEngine.FindViews.Arguments(new object[] { new ControllerContext(), "ViewName", false }, true);
+            var output = new ViewEngineResult(Enumerable.Empty<string>());
+            TimerResult timing = null;
+            var baseType = typeof(string);
+            var isPartial = false;
+            var id = Guid.NewGuid();
+
+            Assert.Throws<ArgumentNullException>(() => new ViewEngine.FindViews.Message(input, output, timing, baseType, isPartial, id));
+        }
     }
 }
