@@ -189,6 +189,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="SerializationConverter\BooleanConverter.cs" />
+    <Compile Include="SerializationConverter\DateTimeConverter.cs" />
     <Compile Include="SerializationConverter\GlimpseRequestHeadersConverter.cs" />
     <Compile Include="SerializationConverter\GlimpseMetadataConverter.cs" />
     <Compile Include="SerializationConverter\GlimpseRequestConverter.cs" />
