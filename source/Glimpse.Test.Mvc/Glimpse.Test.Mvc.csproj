@@ -47,6 +47,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlternateImplementation\ControllerFactoryCreateControllerArgumentsShould.cs" />
+    <Compile Include="AlternateImplementation\ControllerFactoryCreateControllerMessageShould.cs" />
+    <Compile Include="AlternateImplementation\ControllerFactoryCreateControllerShould.cs" />
     <Compile Include="AlternateImplementation\ViewEngineFindViewsArgumentsShould.cs" />
     <Compile Include="AlternateImplementation\ViewEngineFindViewsMessageShould.cs" />
     <Compile Include="AlternateImplementation\ViewEngineFindViewsShould.cs" />
@@ -58,12 +61,14 @@
     <Compile Include="Message\TimerResultShould.cs" />
     <Compile Include="Model\ViewModelSummaryShould.cs" />
     <Compile Include="Model\ViewsModelShould.cs" />
+    <Compile Include="PipelineInspector\ControllerFactoryShould.cs" />
     <Compile Include="PipelineInspector\ViewEngineShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourcesShould.cs" />
     <Compile Include="SerializationConverter\ListOfViewsModelConverterShould.cs" />
     <Compile Include="Tab\ViewsShould.cs" />
     <Compile Include="TestDoubles\DummyView.cs" />
+    <Compile Include="Tester\ControllerFactoryCreateControllerTester.cs" />
     <Compile Include="Tester\ViewEngineFindViewsTester.cs" />
   </ItemGroup>
   <ItemGroup>
