@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.Routing;
 using Glimpse.AspNet.Extensibility;
+using Glimpse.AspNet.Model;
 using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.AspNet.Tab
@@ -10,10 +12,7 @@ namespace Glimpse.AspNet.Tab
     {
         public override object GetData(ITabContext context)
         {
-            var result = new List<object[]>
-                                {
-                                    new[] {"Match", "Area", "Url", "Data", "Constraints", "DataTokens"}
-                                };
+            var result = new List<RouteModel>();
 
             var hasEverMatched = false;
             using (RouteTable.Routes.GetReadLock())
@@ -31,20 +30,13 @@ namespace Glimpse.AspNet.Tab
                         RouteValueDictionary values = null;
                         if (routeData != null) values = routeData.Values;
 
-                        var data = new List<object[]>
-                                        {
-                                            new[] {"Placeholder", "Default Value", "Actual Value"}
-                                        };
+                        var data = new List<RouteDataItemModel>();
 
                         if (values != null && route.Defaults != null)
                         {
-                            foreach (var item in route.Defaults)
-                            {
-                                var @default = /*item.Value == UrlParameter.Optional ? "_Optional_" :*/ item.Value;
-                                var value = values[item.Key];
-                                // if (value != null) value = value == UrlParameter.Optional ? "_Optional_" : value;
-                                data.Add(new[] {item.Key, @default, value});
-                            }
+                            data.AddRange(
+                                from item in route.Defaults
+                                select new RouteDataItemModel(item));
                         }
 
                         var area = "_Root_";
@@ -52,9 +44,7 @@ namespace Glimpse.AspNet.Tab
                         if (route.DataTokens != null && route.DataTokens.ContainsKey("area"))
                             area = route.DataTokens["area"].ToString();
 
-                        result.Add(new object[]
-                                        {
-                                            matchesCurrentRequest.ToString(), area,
+                        result.Add(new RouteModel(matchesCurrentRequest, area,
                                             route.Url, data.Count > 1 ? data : null,
                                             (route.Constraints == null || route.Constraints.Count == 0)
                                                 ? null
@@ -62,12 +52,12 @@ namespace Glimpse.AspNet.Tab
                                             (route.DataTokens == null || route.DataTokens.Count == 0)
                                                 ? null
                                                 : route.DataTokens,
-                                            matchesCurrentRequest && !hasEverMatched ? "selected" : ""
-                                        });
+                                            matchesCurrentRequest && !hasEverMatched
+                                        ));
                     }
                     else
                     {
-                        result.Add(new object[] {matchesCurrentRequest.ToString(), null, null, null, null});
+                        result.Add(new RouteModel(matchesCurrentRequest));
                     }
 
                     hasEverMatched = hasEverMatched || matchesCurrentRequest;
