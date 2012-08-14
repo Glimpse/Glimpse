@@ -1,1 +1,0 @@
-﻿console.log('Need to put the real Glimpse client here!');
