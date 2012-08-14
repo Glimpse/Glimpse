@@ -9,17 +9,18 @@ namespace Glimpse.Core2.Framework
     {
         private IDataStore DataStore { get; set; }
         private GlimpseMetadata Metadata { get; set; }
-        internal IList<GlimpseRequest> GlimpseRequests { get; set; }
+        internal Queue<GlimpseRequest> GlimpseRequests { get; set; }
         private const string PersistanceStoreKey = "__GlimpsePersistanceKey";
+        private const int BufferSize = 25;
 
         public ApplicationPersistanceStore(IDataStore dataStore)
         {
             DataStore = dataStore;
 
-            var glimpseRequests = DataStore.Get<IList<GlimpseRequest>>(PersistanceStoreKey);
+            var glimpseRequests = DataStore.Get<Queue<GlimpseRequest>>(PersistanceStoreKey);
             if (glimpseRequests == null)
             {
-                glimpseRequests = new List<GlimpseRequest>();
+                glimpseRequests = new Queue<GlimpseRequest>(BufferSize);
                 DataStore.Set(PersistanceStoreKey, glimpseRequests);
             }
             GlimpseRequests = glimpseRequests;
@@ -27,7 +28,10 @@ namespace Glimpse.Core2.Framework
 
         public void Save(GlimpseRequest request)
         {
-            GlimpseRequests.Add(request);
+            if (GlimpseRequests.Count >= BufferSize)
+                GlimpseRequests.Dequeue();
+
+            GlimpseRequests.Enqueue(request);
         }
 
         public void Save(GlimpseMetadata metadata)
