@@ -39,17 +39,11 @@ namespace Glimpse.AspNet.Model
 
     public class RouteDataItemModel
     {
-        public RouteDataItemModel(KeyValuePair<string, object> item)
+        public RouteDataItemModel(string key, object value, object defaultValue)
         {
-            PlaceHolder = item.Key;
-            ActualValue = item.Value;
-
-            /*
-            var @default = item.Value == UrlParameter.Optional ? "_Optional_" : item.Value;
-            var value = values[item.Key];
-            if (value != null) value = value == UrlParameter.Optional ? "_Optional_" : value;
-            data.Add(new[] { item.Key, @default, value });
-            */
+            PlaceHolder = key;
+            ActualValue = value;
+            DefaultValue = defaultValue;
         }
 
         public string PlaceHolder { get; set; }

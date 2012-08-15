@@ -49,6 +49,9 @@ namespace Glimpse.AspNet.SerializationConverter
                                        item.ActualValue
                                    };
 
+            // todo: support for optional parameters. This seems to be a feature of MVC though,
+            // so may be tough to do here.
+
             result.AddRange(items);
 
             return result;

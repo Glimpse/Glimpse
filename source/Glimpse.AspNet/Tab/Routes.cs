@@ -35,8 +35,9 @@ namespace Glimpse.AspNet.Tab
                         if (values != null && route.Defaults != null)
                         {
                             data.AddRange(
-                                from item in route.Defaults
-                                select new RouteDataItemModel(item));
+                                from defaultItem in route.Defaults
+                                select new RouteDataItemModel(defaultItem.Key, 
+                                    values[defaultItem.Key], defaultItem.Value));
                         }
 
                         var area = "_Root_";
