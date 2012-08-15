@@ -8,6 +8,7 @@ using Glimpse.Core2.Extensions;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
+using NLog.Targets.Wrappers;
 
 namespace Glimpse.Core2.Framework
 {
@@ -118,6 +119,7 @@ namespace Glimpse.Core2.Framework
                 return Logger;
             }
 
+
             //use NLog logger otherwise
             var fileTarget = new FileTarget
                                  {
@@ -126,9 +128,11 @@ namespace Glimpse.Core2.Framework
                                          "${longdate} | ${level:uppercase=true} | ${message} | ${exception:maxInnerExceptionLevel=5:format=type,message,stacktrace:separator=--:innerFormat=shortType,message,method:innerExceptionSeparator=>>}"
                                  };
 
+            var asyncTarget = new AsyncTargetWrapper(fileTarget);
+
             var loggingConfiguration = new LoggingConfiguration();
-            loggingConfiguration.AddTarget("file", fileTarget);
-            loggingConfiguration.LoggingRules.Add(new LoggingRule("*", LogLevel.FromOrdinal((int) logLevel), fileTarget));
+            loggingConfiguration.AddTarget("file", asyncTarget);
+            loggingConfiguration.LoggingRules.Add(new LoggingRule("*", LogLevel.FromOrdinal((int) logLevel), asyncTarget));
 
 
             Logger = new NLogLogger(new LogFactory(loggingConfiguration).GetLogger("Glimpse"));
