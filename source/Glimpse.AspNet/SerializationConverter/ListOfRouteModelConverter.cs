@@ -36,18 +36,21 @@ namespace Glimpse.AspNet.SerializationConverter
             if (routeData == null)
                 return null;
 
-            var result = new List<IEnumerable<object>>
+            var result = new List<object[]>
                 {
-                    new []{"Placeholder", "Default Value", "Actual Value"},
+                    new object[]{"Placeholder", "Default Value", "Actual Value"},
                 };
 
-            result.AddRange(from item in routeData
-                   select new[]
-                              {
-                                 item.PlaceHolder, 
-                                 item.DefaultValue,
-                                 item.ActualValue
-                              });
+            var items = from item in routeData
+                        select new[]
+                                   {
+                                       item.PlaceHolder,
+                                       item.DefaultValue,
+                                       item.ActualValue
+                                   };
+
+            result.AddRange(items);
+
             return result;
         }
     }
