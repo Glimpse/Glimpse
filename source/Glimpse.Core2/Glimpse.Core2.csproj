@@ -201,6 +201,7 @@
     <None Include="NuSpec\Glimpse.nuspec">
       <SubType>Designer</SubType>
     </None>
+    <None Include="NuSpec\tools\install.ps1" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -213,6 +214,7 @@
   <ItemGroup>
     <EmbeddedResource Include="..\Glimpse.JavaScript\glimpse.js">
       <Link>glimpse.js</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -222,6 +224,9 @@
   <ItemGroup>
     <EmbeddedResource Include="logo.png" />
     <EmbeddedResource Include="sprite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="NuSpec\glimpse.readme.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

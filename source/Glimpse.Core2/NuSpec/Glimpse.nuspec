@@ -16,10 +16,12 @@
         <tags>ASP.NET Web WebForms Glimpse</tags>
     </metadata>
     <files>
+        <file src="glimpse.readme.html" target="glimpse.readme.html"/>
+        <file src="tools\*.*" target="tools" />
         <file src="lib\net35\*.*" target="lib\net35" />
         <file src="lib\net40\*.*" target="lib\net40" />
         <file src="..\**\*.cs" target="src" />
-        <file src="..\glimpseClient.js" target="src" />
+        <file src="..\bin\Release\glimpse.js" target="src" />
         <file src="..\Resources.resx" target="src" />
         <file src="..\Resources.Designer.cs" target="src\Glimpse.Core2" />
         <file src="..\..\Glimpse.Core2.Net35\Backport\*.*" target="src\Backport" />
