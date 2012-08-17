@@ -39,6 +39,7 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlternateImplementation\Route.cs" />
     <Compile Include="AspNetFrameworkProvider.cs" />
     <Compile Include="AspNetServiceLocator.cs" />
     <Compile Include="Constants.cs" />

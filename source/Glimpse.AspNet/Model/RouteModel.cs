@@ -6,48 +6,73 @@ namespace Glimpse.AspNet.Model
     public class RouteModel
     {
         public RouteModel(
-            bool matchesCurrentRequest,
             string area,
             string url, 
-            List<RouteDataItemModel> routeData, 
-            RouteValueDictionary constraints, 
-            RouteValueDictionary datatokens, 
-            bool isFirstMatch)
+            IEnumerable<RouteDataItemModel> routeData,
+            IEnumerable<RouteConstraintModel> constraints, 
+            RouteValueDictionary datatokens)
         {
-            MatchesCurrentRequest = matchesCurrentRequest;
             Area = area;
             URL = url;
             RouteData = routeData;
             Constraints = constraints;
             DataTokens = datatokens;
-            IsFirstMatch = isFirstMatch;
         }
 
-        public RouteModel(bool matchesCurrentRequest)
+        public RouteModel()
         {
-            MatchesCurrentRequest = matchesCurrentRequest;
         }
 
         public bool MatchesCurrentRequest { get; set; }
         public string Area { get; set; }
         public string URL { get; set; }
-        public List<RouteDataItemModel> RouteData { get; set; }
-        public RouteValueDictionary Constraints { get; set; }
+        public IEnumerable<RouteDataItemModel> RouteData { get; set; }
+        public IEnumerable<RouteConstraintModel> Constraints { get; set; }
         public RouteValueDictionary DataTokens { get; set; }
         public bool IsFirstMatch { get; set; }
     }
 
     public class RouteDataItemModel
     {
-        public RouteDataItemModel(string key, object value, object defaultValue)
+        public RouteDataItemModel(string key, object defaultValue)
         {
             PlaceHolder = key;
-            ActualValue = value;
             DefaultValue = defaultValue;
         }
 
         public string PlaceHolder { get; set; }
         public object DefaultValue { get; set; }
         public object ActualValue { get; set; }
+    }
+
+    public class RouteConstraintModel
+    {
+        public RouteConstraintModel(string parameterName, string constraint, bool @checked, bool matched)
+        {
+            ParameterName = parameterName;
+            Constraint = constraint;
+            Checked = @checked;
+            Matched = matched;
+        }
+
+        /// <summary>
+        /// The name of the URL parameter on which this constraint operates
+        /// </summary>
+        public string ParameterName { get; set; }
+
+        /// <summary>
+        /// String representation of the constraint
+        /// </summary>
+        public string Constraint { get; set; }
+
+        /// <summary>
+        /// True if this constraint was checked.
+        /// </summary>
+        public bool Checked { get; set; }
+
+        /// <summary>
+        /// True if this constraint matched
+        /// </summary>
+        public bool Matched { get; set; }
     }
 }
