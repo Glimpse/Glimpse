@@ -56,7 +56,7 @@ namespace Glimpse.AspNet.AlternateImplementation
                 var args = new Arguments(context.Arguments);
                 var result = (bool)context.ReturnValue;
 
-                var msg = new Message((System.Web.Routing.Route)context.InvocationTarget, result, args);
+                var msg = new Message((System.Web.Routing.Route)context.InvocationTarget, args.ParameterName, result);
                 MessageBroker.Publish(msg);
             }
 
@@ -84,11 +84,11 @@ namespace Glimpse.AspNet.AlternateImplementation
                 public System.Web.Routing.Route Route { get; set; }
                 public string ParameterName { get; set; }
 
-                public Message(System.Web.Routing.Route route, bool isMatch, Arguments args)
+                public Message(System.Web.Routing.Route route, string parameterName, bool isMatch)
                 {
                     IsMatch = isMatch;
+                    ParameterName = parameterName;
                     Route = route;
-                    ParameterName = args.ParameterName;
                 }
             }
         }
