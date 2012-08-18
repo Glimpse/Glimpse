@@ -49,8 +49,9 @@ namespace Glimpse.AspNet.SerializationConverter
                                        item.ActualValue
                                    };
 
-            // todo: support for optional parameters. This seems to be a feature of MVC though,
-            // so may be tough to do here.
+            // other plugins can specify custom SerializationConverters for Route data item value types.
+            // For instance, Glimpse.Mvc has a SerializationConverter<UrlParameter>, which checks for
+            // the special "optional" parameter value and formats it specially.
 
             result.AddRange(items);
 

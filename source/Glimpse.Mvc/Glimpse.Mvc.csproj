@@ -48,6 +48,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="SerializationConverter\ListOfViewsModelConverter.cs" />
+    <Compile Include="SerializationConverter\UrlParameterConverter.cs" />
     <Compile Include="Tab\Views.cs" />
   </ItemGroup>
   <ItemGroup>
