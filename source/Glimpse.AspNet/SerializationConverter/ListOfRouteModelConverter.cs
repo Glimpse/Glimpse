@@ -22,7 +22,7 @@ namespace Glimpse.AspNet.SerializationConverter
                                 item.Area,        // area
                                 item.URL,         // Url
                                 GetRouteData(item.RouteData), // route data
-                                item.Constraints, // Constraints
+                                GetConstraintData(item.Constraints), // Constraints
                                 item.DataTokens,  // DataTokens
                                 "selected"
                             }
@@ -56,5 +56,29 @@ namespace Glimpse.AspNet.SerializationConverter
 
             return result;
         }
+
+        private static object GetConstraintData(IEnumerable<RouteConstraintModel> routeData)
+        {
+            if (routeData == null)
+                return null;
+
+            var result = new List<object[]>
+                {
+                    new object[]{"Parameter Name", "Constraint", "Constraint Checked", "Constraint Matched"},
+                };
+
+            var items = from item in routeData
+                        select new object[]
+                                   {
+                                       item.ParameterName,
+                                       item.Constraint,
+                                       item.Checked,
+                                       item.Checked ? (bool?) item.Matched : null
+                                   };
+            result.AddRange(items);
+
+            return result;
+        }
+
     }
 }
