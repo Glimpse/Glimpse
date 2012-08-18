@@ -35,6 +35,22 @@ namespace Glimpse.Core2.Framework
             return ProxyGenerator.CreateInterfaceProxyWithTarget(instance, options, interceptorArray);
         }
 
+        public T CreateClassProxy<T>(IEnumerable<IAlternateImplementation<T>> methodImplementations, object [] constructorParams) where T : class
+        {
+            return CreateClassProxy(methodImplementations, constructorParams, null);
+        }
+
+        public T CreateClassProxy<T>(IEnumerable<IAlternateImplementation<T>> methodImplementations, object [] constructorParams, object mixin) where T : class
+        {
+            var interceptorArray = (from implementaion in methodImplementations select new AlternateImplementationToCastleInterceptorAdapter<T>(implementaion, Logger)).ToArray();
+            var generationHook = new AlternateImplementationGenerationHook<T>(methodImplementations, Logger);
+            var selector = new AlternateImplementationSelector<T>(interceptorArray);
+            var options = new ProxyGenerationOptions(generationHook) {Selector = selector};
+            if (mixin != null) options.AddMixinInstance(mixin);
+
+            return (T) ProxyGenerator.CreateClassProxy(typeof(T), options, constructorParams, interceptorArray);
+        }
+
         public bool IsProxyable(object obj)
         {
             var objType = obj.GetType();

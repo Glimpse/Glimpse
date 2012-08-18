@@ -52,8 +52,7 @@
     <Compile Include="HttpModuleShould.cs" />
     <Compile Include="IResourceEndpointConfiguration.cs" />
     <Compile Include="Model\RequestModelShould.cs" />
-    <Compile Include="Model\RouteInstanceShould.cs" />
-    <Compile Include="Model\RouteInstanceTester.cs" />
+    <Compile Include="Model\RouteModelShould.cs" />
     <Compile Include="Policy\LocalPolicyShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerializationConverter\RequestModelConverterShould.cs" />
