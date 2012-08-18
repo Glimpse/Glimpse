@@ -33,12 +33,13 @@ namespace Glimpse.AspNet.Tab
                     var routeModel = routeBase is Route ? 
                         GetRouteModelForRoute(context, (Route)routeBase) : 
                         new RouteModel();
+                    
+                    RouteData routeData = null;
+                    if(httpContext != null)
+                        routeData = routeBase.GetRouteData(httpContext);
 
-                    var routeData = routeBase.GetRouteData(httpContext);
                     if (routeData != null)
-                    {
                         AddActualValuesToRouteModel(routeModel, routeData.Values);
-                    }
 
                     var matchesCurrentRequest = (routeData != null);
                     routeModel.IsFirstMatch = matchesCurrentRequest && !hasEverMatched;
@@ -52,7 +53,7 @@ namespace Glimpse.AspNet.Tab
             return result;
         }
 
-        private RouteModel GetRouteModelForRoute(ITabContext context, Route route)
+        public RouteModel GetRouteModelForRoute(ITabContext context, Route route)
         {
             var data = new List<RouteDataItemModel>();
 
