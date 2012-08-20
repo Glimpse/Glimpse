@@ -34,9 +34,9 @@ task clean {
     Delete-Directory "$source_dir\Glimpse.AspNet.Net35\bin"
     Delete-Directory "$source_dir\Glimpse.AspNet.Net35\obj"
     
-    "   Glimpse.Mvc"
-    Delete-Directory "$source_dir\Glimpse.Mvc\bin"
-    Delete-Directory "$source_dir\Glimpse.Mvc\obj"
+    "   Glimpse.Mvc3"
+    Delete-Directory "$source_dir\Glimpse.Mvc3\bin"
+    Delete-Directory "$source_dir\Glimpse.Mvc3\obj"
        
     "   Glimpse.Mvc3.MusicStore.Sample"
     Delete-Directory "$source_dir\Glimpse.Mvc3.MusicStore.Sample\bin"
@@ -52,8 +52,8 @@ task clean {
     Delete-Directory "$source_dir\Glimpse.Test.Core.Net35\bin"
     Delete-Directory "$source_dir\Glimpse.Test.Core.net35\obj"
     
-    Delete-Directory "$source_dir\Glimpse.Test.Mvc\bin"
-    Delete-Directory "$source_dir\Glimpse.Test.Mvc\obj"
+    Delete-Directory "$source_dir\Glimpse.Test.Mvc3\bin"
+    Delete-Directory "$source_dir\Glimpse.Test.Mvc3\obj"
 }
 
 task compile -depends clean {

@@ -20,9 +20,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Test.Core", "source
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Test.AspNet", "source\Glimpse.Test.AspNet\Glimpse.Test.AspNet.csproj", "{76714E46-AFE9-49F0-AEE8-C8A966195914}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Mvc", "source\Glimpse.Mvc\Glimpse.Mvc.csproj", "{0A68B072-7918-45AC-BB78-F05789D0BF44}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Mvc3", "source\Glimpse.Mvc3\Glimpse.Mvc3.csproj", "{0A68B072-7918-45AC-BB78-F05789D0BF44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Test.Mvc", "source\Glimpse.Test.Mvc\Glimpse.Test.Mvc.csproj", "{FE12BC0C-CD22-4D24-BFC7-13ED1C428BAD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Test.Mvc3", "source\Glimpse.Test.Mvc3\Glimpse.Test.Mvc3.csproj", "{FE12BC0C-CD22-4D24-BFC7-13ED1C428BAD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Mvc3.MusicStore.Sample", "source\Glimpse.Mvc3.MusicStore.Sample\Glimpse.Mvc3.MusicStore.Sample.csproj", "{32DCD27D-A84C-4250-B657-408B3620A9AC}"
 EndProject
