@@ -1,5 +1,5 @@
 ﻿using Glimpse.AspNet.Extensibility;
-using Glimpse.Core2.Extensibility;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.AspNet.Tab
 {

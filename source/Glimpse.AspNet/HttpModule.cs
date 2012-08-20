@@ -1,5 +1,5 @@
 ﻿using System.Web;
-using Glimpse.Core2.Framework;
+using Glimpse.Core.Framework;
 
 namespace Glimpse.AspNet
 {

@@ -1,5 +1,4 @@
 ﻿using System;
-using Glimpse.Core2.Extensibility;
 using Glimpse.Test.AspNet.Tester;
 using Xunit;
 using Moq;

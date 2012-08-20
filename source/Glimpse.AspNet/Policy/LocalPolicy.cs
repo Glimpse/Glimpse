@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web;
-using Glimpse.Core2;
-using Glimpse.Core2.Extensibility;
+using Glimpse.Core.Extensibility;
+using Glimpse.Core;
 
 namespace Glimpse.AspNet.Policy
 {

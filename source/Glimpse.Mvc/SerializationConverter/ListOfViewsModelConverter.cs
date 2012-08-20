@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
+using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.Model;
-using Glimpse.Core2.Extensibility;
 
 namespace Glimpse.Mvc.SerializationConverter
 {

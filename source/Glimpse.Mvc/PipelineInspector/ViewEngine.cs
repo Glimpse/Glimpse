@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
-using Glimpse.Core2.Extensibility;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Mvc.PipelineInspector
 {

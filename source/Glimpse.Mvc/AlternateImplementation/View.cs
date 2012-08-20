@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Web.Mvc;
-using Glimpse.Core2;
-using Glimpse.Core2.Extensibility;
+using Glimpse.Core.Extensibility;
+using Glimpse.Core;
 using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation

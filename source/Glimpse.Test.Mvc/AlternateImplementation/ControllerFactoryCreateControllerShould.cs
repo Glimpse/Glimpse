@@ -1,6 +1,6 @@
 ﻿using System;
-using Glimpse.Core2;
-using Glimpse.Core2.Extensibility;
+using Glimpse.Core.Extensibility;
+using Glimpse.Core;
 using Glimpse.Mvc.AlternateImplementation;
 using Glimpse.Test.Mvc.Tester;
 using Moq;

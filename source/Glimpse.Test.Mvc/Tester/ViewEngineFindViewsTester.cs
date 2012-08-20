@@ -1,5 +1,5 @@
-using Glimpse.Core2;
-using Glimpse.Core2.Extensibility;
+using Glimpse.Core.Extensibility;
+using Glimpse.Core;
 using Glimpse.Mvc.AlternateImplementation;
 using Moq;
 

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Web.Mvc;
-using Glimpse.Core2;
-using Glimpse.Core2.Extensibility;
+using Glimpse.Core.Extensibility;
+using Glimpse.Core;
 using Glimpse.Mvc.AlternateImplementation;
 using Glimpse.Mvc.Message;
 using Moq;

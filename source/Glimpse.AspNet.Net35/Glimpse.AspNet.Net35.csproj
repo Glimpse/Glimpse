@@ -45,9 +45,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Glimpse.Core2.Net35\Glimpse.Core2.Net35.csproj">
+    <ProjectReference Include="..\Glimpse.Core.Net35\Glimpse.Core.Net35.csproj">
       <Project>{22E8C0B0-E32F-4598-896F-81F3A6BD9862}</Project>
-      <Name>Glimpse.Core2.Net35</Name>
+      <Name>Glimpse.Core.Net35</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

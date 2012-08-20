@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9923BFBD-EA73-4719-A418-213003862550}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Glimpse.Test.Core</RootNamespace>
+    <AssemblyName>Glimpse.Test.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Castle.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Castle.Core.3.0.0.4001\lib\net40-client\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.0.8.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="Tavis.UriTemplates, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Tavis.UriTemplates.0.1.1\lib\NET40\Tavis.UriTemplates.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit, Version=1.9.1.1600, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\xunit.1.9.1\lib\net20\xunit.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.extensions">
+      <HintPath>..\..\packages\xunit.extensions.1.9.1\lib\net20\xunit.extensions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AntiXssEncoderShould.cs" />
+    <Compile Include="ApplicationPersistanceStoreShould.cs" />
+    <Compile Include="BadData\Blowup.cs" />
+    <Compile Include="BadData\IBlowup.cs" />
+    <Compile Include="ClientScript\ClientShould.cs" />
+    <Compile Include="ClientScript\DataShould.cs" />
+    <Compile Include="ClientScript\MetadataShould.cs" />
+    <Compile Include="Configuration\ContentTypeElementCollectionShould.cs" />
+    <Compile Include="Configuration\ContentTypeElementShould.cs" />
+    <Compile Include="Configuration\DiscoverableCollectionElementShould.cs" />
+    <Compile Include="Configuration\GlimpseSectionShould.cs" />
+    <Compile Include="Configuration\LoggingElementShould.cs" />
+    <Compile Include="Configuration\PolicyDiscoverableCollectionElementShould.cs" />
+    <Compile Include="Configuration\RegexConverterShould.cs" />
+    <Compile Include="Configuration\RegexElementShould.cs" />
+    <Compile Include="Configuration\TypeConverterShould.cs" />
+    <Compile Include="Configuration\TypeElementShould.cs" />
+    <Compile Include="DictionaryDataStoreAdapterShould.cs" />
+    <Compile Include="Extensibility\AlternateImplementationGenerationHookShould.cs" />
+    <Compile Include="Extensibility\AlternateImplementationSelectorShould.cs" />
+    <Compile Include="Extensibility\AlternateImplementationToCastleInterceptorAdapterShould.cs" />
+    <Compile Include="Extensibility\CastleInvocationToAlternateImplementationContextAdapterShould.cs" />
+    <Compile Include="Extensibility\ExceptionResourceResultShould.cs" />
+    <Compile Include="Extensibility\FileResourceResultShould.cs" />
+    <Compile Include="Extensibility\JsonNetSerializationConverterShould.cs" />
+    <Compile Include="Extensibility\JsonResourceResultShould.cs" />
+    <Compile Include="Extensibility\LoggerBaseShould.cs" />
+    <Compile Include="Extensibility\NullLoggerShould.cs" />
+    <Compile Include="Extensibility\ResourceEndpointConfigurationShould.cs" />
+    <Compile Include="Extensibility\RuntimePolicyContextShould.cs" />
+    <Compile Include="Extensibility\SerializationConverterShould.cs" />
+    <Compile Include="Extensibility\TabBaseShould.cs" />
+    <Compile Include="Extensibility\TabContextShould.cs" />
+    <Compile Include="Extensibility\TabSetupContextShould.cs" />
+    <Compile Include="Extensions\EnumExtensionsShould.cs" />
+    <Compile Include="Extensions\TestingExtensions.cs" />
+    <Compile Include="Extensions\UriTemplateExtensionsShould.cs" />
+    <Compile Include="Framework\CastleDynamicProxyFactoryShould.cs" />
+    <Compile Include="Framework\EventBrokerShould.cs" />
+    <Compile Include="Framework\FactoryShould.cs" />
+    <Compile Include="Framework\GlimpseConfigurationShould.cs" />
+    <Compile Include="Framework\GlimpseMetadataShould.cs" />
+    <Compile Include="Framework\GlimpseRuntimeShould.cs" />
+    <Compile Include="Framework\PipelineInspectorContextShould.cs" />
+    <Compile Include="Framework\ReflectionDiscoverableCollectionShould.cs" />
+    <Compile Include="Framework\ResourceParametersShould.cs" />
+    <Compile Include="Framework\TimerShould.cs" />
+    <Compile Include="GlimpseExceptionShould.cs" />
+    <Compile Include="JsonNetSerializerShould.cs" />
+    <Compile Include="Policy\AjaxPolicyShould.cs" />
+    <Compile Include="Policy\ContentTypePolicyShould.cs" />
+    <Compile Include="Policy\ControlCookiePolicyShould.cs" />
+    <Compile Include="Policy\GlimpseResourcePolicyShould.cs" />
+    <Compile Include="Policy\StatusCodePolicyShould.cs" />
+    <Compile Include="Policy\UriPolicyShould.cs" />
+    <Compile Include="Policy\UserHostAddressPolicyShould.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResourcesShould.cs" />
+    <Compile Include="Resource\AjaxShould.cs" />
+    <Compile Include="Resource\ClientShould.cs" />
+    <Compile Include="Resource\ConfigurationShould.cs" />
+    <Compile Include="Resource\DataShould.cs" />
+    <Compile Include="Resource\HistoryResourceShould.cs" />
+    <Compile Include="Resource\MetadataShould.cs" />
+    <Compile Include="Resource\PopupResourceShould.cs" />
+    <Compile Include="SerializationConverter\BooleanConverterShould.cs" />
+    <Compile Include="SerializationConverter\DateTimeConverterShould.cs" />
+    <Compile Include="SerializationConverter\GlimpseMetadataConverterShould.cs" />
+    <Compile Include="SerializationConverter\GlimpseRequestConverterShould.cs" />
+    <Compile Include="SerializationConverter\PluginMetadataConverterShould.cs" />
+    <Compile Include="SerializationConverter\TabResultConverterShould.cs" />
+    <Compile Include="SerializationConverter\CSharpTypeConverterShould.cs" />
+    <Compile Include="StatusCodeResourceResultShould.cs" />
+    <Compile Include="TestDoubles\DummyEnum.cs" />
+    <Compile Include="TestDoubles\DummyMessage.cs" />
+    <Compile Include="TestDoubles\DummyException.cs" />
+    <Compile Include="TestDoubles\DummyPipelineInspector1.cs" />
+    <Compile Include="TestDoubles\DummyObjectContext.cs" />
+    <Compile Include="TestDoubles\DummyPipelineInspector2.cs" />
+    <Compile Include="TestDoubles\DummySerializationConverter.cs" />
+    <Compile Include="TestDoubles\DummySerializationConverterOfT.cs" />
+    <Compile Include="TestDoubles\DummyServiceLocator.cs" />
+    <Compile Include="TestDoubles\DummyTabSetupTab.cs" />
+    <Compile Include="TestDoubles\DummyTab.cs" />
+    <Compile Include="TestDoubles\IDummyMixin.cs" />
+    <Compile Include="Tester\AjaxPolicyTester.cs" />
+    <Compile Include="Tester\ApplicationPersistanceStoreTester.cs" />
+    <Compile Include="Tester\ContentTypePolicyTester.cs" />
+    <Compile Include="Tester\ControlCookiePolicyTester.cs" />
+    <Compile Include="Tester\GlimpseConfigurationTester.cs" />
+    <Compile Include="Tester\GlimpseRuntimeTester.cs" />
+    <Compile Include="Tester\ResourceParametersTester.cs" />
+    <Compile Include="Tester\StatusCodePolicyTester.cs" />
+    <Compile Include="Tester\UriPolicyTester.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">
+      <Project>{C1289CE8-3259-41D9-893E-7A4E6F772D30}</Project>
+      <Name>Glimpse.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="BadData\NotReallyA.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

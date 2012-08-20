@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Web.Mvc;
-using Glimpse.Core2.Extensibility;
+using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.AlternateImplementation;
 using Glimpse.Mvc.Model;
 using Glimpse.Test.Mvc.AlternateImplementation;

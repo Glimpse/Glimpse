@@ -1,6 +1,6 @@
 using System.Linq;
 using Glimpse.AspNet.Extensibility;
-using Glimpse.Core2.Extensibility;
+using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.AlternateImplementation;
 using System.Collections.Generic;
 using Glimpse.Mvc.Model;

@@ -1,8 +1,7 @@
 ﻿using System;
-using Glimpse.Core2.Extensibility;
 using Glimpse.Mvc.Message;
 using Xunit;
-using TimerResult = Glimpse.Core2.Extensibility.TimerResult;
+using TimerResult = Glimpse.Core.Extensibility.TimerResult;
 
 namespace Glimpse.Test.Mvc.Message
 {

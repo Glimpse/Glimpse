@@ -14,9 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{13FEFF53
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.AspNet", "source\Glimpse.AspNet\Glimpse.AspNet.csproj", "{FDDFC8A6-CDDF-4BC6-9F07-E76050E1EEE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Core2", "source\Glimpse.Core2\Glimpse.Core2.csproj", "{C1289CE8-3259-41D9-893E-7A4E6F772D30}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Core", "source\Glimpse.Core\Glimpse.Core.csproj", "{C1289CE8-3259-41D9-893E-7A4E6F772D30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Test.Core2", "source\Glimpse.Test.Core2\Glimpse.Test.Core2.csproj", "{9923BFBD-EA73-4719-A418-213003862550}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Test.Core", "source\Glimpse.Test.Core\Glimpse.Test.Core.csproj", "{9923BFBD-EA73-4719-A418-213003862550}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Test.AspNet", "source\Glimpse.Test.AspNet\Glimpse.Test.AspNet.csproj", "{76714E46-AFE9-49F0-AEE8-C8A966195914}"
 EndProject
@@ -26,9 +26,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Test.Mvc", "source\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Mvc3.MusicStore.Sample", "source\Glimpse.Mvc3.MusicStore.Sample\Glimpse.Mvc3.MusicStore.Sample.csproj", "{32DCD27D-A84C-4250-B657-408B3620A9AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Core2.Net35", "source\Glimpse.Core2.Net35\Glimpse.Core2.Net35.csproj", "{22E8C0B0-E32F-4598-896F-81F3A6BD9862}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Core.Net35", "source\Glimpse.Core.Net35\Glimpse.Core.Net35.csproj", "{22E8C0B0-E32F-4598-896F-81F3A6BD9862}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Test.Core2.Net35", "source\Glimpse.Test.Core2.Net35\Glimpse.Test.Core2.Net35.csproj", "{E242E3FC-DEF4-45E2-A129-A5DC3B0B8F9B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Test.Core.Net35", "source\Glimpse.Test.Core.Net35\Glimpse.Test.Core.Net35.csproj", "{E242E3FC-DEF4-45E2-A129-A5DC3B0B8F9B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.AspNet.Net35", "source\Glimpse.AspNet.Net35\Glimpse.AspNet.Net35.csproj", "{971143D1-B40E-4AF4-AD3D-D4FFAD3FE444}"
 EndProject

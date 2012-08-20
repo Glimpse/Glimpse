@@ -2,8 +2,8 @@
 using System.Reflection;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Glimpse.Core2;
-using Glimpse.Core2.Extensibility;
+using Glimpse.Core.Extensibility;
+using Glimpse.Core;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {

@@ -18,13 +18,13 @@ task default -depends compile
 task clean {
     "Cleaning"
     
-    "   Glimpse.Core2"
-    Delete-Directory "$source_dir\Glimpse.Core2\bin"
-    Delete-Directory "$source_dir\Glimpse.Core2\obj"
+    "   Glimpse.Core"
+    Delete-Directory "$source_dir\Glimpse.Core\bin"
+    Delete-Directory "$source_dir\Glimpse.Core\obj"
     
-    "   Glimpse.Core2.Net35"
-    Delete-Directory "$source_dir\Glimpse.Core2.Net35\bin"
-    Delete-Directory "$source_dir\Glimpse.Core2.Net35\obj"
+    "   Glimpse.Core.Net35"
+    Delete-Directory "$source_dir\Glimpse.Core.Net35\bin"
+    Delete-Directory "$source_dir\Glimpse.Core.Net35\obj"
     
     "   Glimpse.AspNet"
     Delete-Directory "$source_dir\Glimpse.AspNet\bin"
@@ -46,11 +46,11 @@ task clean {
     Delete-Directory "$source_dir\Glimpse.Test.AspNet\bin"
     Delete-Directory "$source_dir\Glimpse.Test.AspNet\obj"
     
-    Delete-Directory "$source_dir\Glimpse.Test.Core2\bin"
-    Delete-Directory "$source_dir\Glimpse.Test.Core2\obj"
+    Delete-Directory "$source_dir\Glimpse.Test.Core\bin"
+    Delete-Directory "$source_dir\Glimpse.Test.Core\obj"
     
-    Delete-Directory "$source_dir\Glimpse.Test.Core2.Net35\bin"
-    Delete-Directory "$source_dir\Glimpse.Test.Core2.net35\obj"
+    Delete-Directory "$source_dir\Glimpse.Test.Core.Net35\bin"
+    Delete-Directory "$source_dir\Glimpse.Test.Core.net35\obj"
     
     Delete-Directory "$source_dir\Glimpse.Test.Mvc\bin"
     Delete-Directory "$source_dir\Glimpse.Test.Mvc\obj"
@@ -66,13 +66,13 @@ task compile -depends clean {
 task merge -depends test {
     "Merging"
 
-    "   Glimpse.Core2"
-    del "$source_dir\Glimpse.Core2\bin\Release\Newtonsoft.Json.pdb" #get rid of JSON PDF file, causes issues with Glimpse symbol package
-    exec { & $tools_dir\ilmerge.exe /targetplatform:"v4,$framework_dir" /log /out:"$source_dir\Glimpse.Core2\nuspec\lib\net40\Glimpse.Core2.dll" /internalize:$tools_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core2\bin\Release\Glimpse.Core2.dll" "$source_dir\Glimpse.Core2\bin\Release\Newtonsoft.Json.dll" "$source_dir\Glimpse.Core2\bin\Release\Castle.Core.dll" "$source_dir\Glimpse.Core2\bin\Release\NLog.dll" "$source_dir\Glimpse.Core2\bin\Release\AntiXssLibrary.dll" "$source_dir\Glimpse.Core2\bin\Release\Tavis.UriTemplates.dll" }
+    "   Glimpse.Core"
+    del "$source_dir\Glimpse.Core\bin\Release\Newtonsoft.Json.pdb" #get rid of JSON PDF file, causes issues with Glimpse symbol package
+    exec { & $tools_dir\ilmerge.exe /targetplatform:"v4,$framework_dir" /log /out:"$source_dir\Glimpse.Core\nuspec\lib\net40\Glimpse.Core.dll" /internalize:$tools_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core\bin\Release\Glimpse.Core.dll" "$source_dir\Glimpse.Core\bin\Release\Newtonsoft.Json.dll" "$source_dir\Glimpse.Core\bin\Release\Castle.Core.dll" "$source_dir\Glimpse.Core\bin\Release\NLog.dll" "$source_dir\Glimpse.Core\bin\Release\AntiXssLibrary.dll" "$source_dir\Glimpse.Core\bin\Release\Tavis.UriTemplates.dll" }
     
-    "   Glimpse.Core2.Net35"
-    del "$source_dir\Glimpse.Core2.Net35\bin\Release\Newtonsoft.Json.pdb" #get rid of JSON PDF file, causes issues with Glimpse symbol package
-    exec { & $tools_dir\ilmerge.exe /log /out:"$source_dir\Glimpse.Core2\nuspec\lib\net35\Glimpse.Core2.dll" /internalize:$tools_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core2.Net35\bin\Release\Glimpse.Core2.dll" "$source_dir\Glimpse.Core2.Net35\bin\Release\Newtonsoft.Json.dll" "$source_dir\Glimpse.Core2.Net35\bin\Release\Castle.Core.dll" "$source_dir\Glimpse.Core2.Net35\bin\Release\NLog.dll" "$source_dir\Glimpse.Core2.Net35\bin\Release\AntiXssLibrary.dll"  "$source_dir\Glimpse.Core2.Net35\bin\Release\Tavis.UriTemplates.dll"}
+    "   Glimpse.Core.Net35"
+    del "$source_dir\Glimpse.Core.Net35\bin\Release\Newtonsoft.Json.pdb" #get rid of JSON PDF file, causes issues with Glimpse symbol package
+    exec { & $tools_dir\ilmerge.exe /log /out:"$source_dir\Glimpse.Core\nuspec\lib\net35\Glimpse.Core.dll" /internalize:$tools_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core.Net35\bin\Release\Glimpse.Core.dll" "$source_dir\Glimpse.Core.Net35\bin\Release\Newtonsoft.Json.dll" "$source_dir\Glimpse.Core.Net35\bin\Release\Castle.Core.dll" "$source_dir\Glimpse.Core.Net35\bin\Release\NLog.dll" "$source_dir\Glimpse.Core.Net35\bin\Release\AntiXssLibrary.dll"  "$source_dir\Glimpse.Core.Net35\bin\Release\Tavis.UriTemplates.dll"}
     
     "   Glimpse.AspNet"
     copy $source_dir\Glimpse.AspNet\bin\Release\Glimpse.AspNet.* $source_dir\Glimpse.AspNet\nuspec\lib\net40\
@@ -88,8 +88,8 @@ task pack -depends merge {
     cd $package_dir\NuGet.CommandLine.*\tools\
     
     "   Glimpse.nuspec"
-    $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.Core2\Properties\AssemblyInfo.cs
-    exec { & .\nuget.exe pack $source_dir\Glimpse.Core2\NuSpec\Glimpse.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
+    $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.Core\Properties\AssemblyInfo.cs
+    exec { & .\nuget.exe pack $source_dir\Glimpse.Core\NuSpec\Glimpse.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
     
     "   Glimpse.AspNet.nuspec"
     $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.AspNet\Properties\AssemblyInfo.cs
@@ -103,8 +103,8 @@ task pack -depends merge {
 
     copy $base_dir\license.txt $build_dir\local\zip
         
-    copy $source_dir\Glimpse.Core2\nuspec\lib\net40\Glimpse.Core2.* $build_dir\local\zip\Core\net40
-    copy $source_dir\Glimpse.Core2\nuspec\lib\net35\Glimpse.Core2.* $build_dir\local\zip\Core\net35
+    copy $source_dir\Glimpse.Core\nuspec\lib\net40\Glimpse.Core.* $build_dir\local\zip\Core\net40
+    copy $source_dir\Glimpse.Core\nuspec\lib\net35\Glimpse.Core.* $build_dir\local\zip\Core\net35
     
     copy $source_dir\Glimpse.AspNet\nuspec\lib\net40\Glimpse.AspNet.* $build_dir\local\zip\AspNet\net40
     copy $source_dir\Glimpse.AspNet\nuspec\lib\net35\Glimpse.AspNet.* $build_dir\local\zip\AspNet\net35

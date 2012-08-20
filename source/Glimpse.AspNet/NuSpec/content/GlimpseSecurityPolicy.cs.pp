@@ -1,6 +1,6 @@
 ﻿using System.Web;
-using Glimpse.Core2;
-using Glimpse.Core2.Extensibility;
+using Glimpse.Core;
+using Glimpse.Core.Extensibility;
 
 namespace $rootnamespace$
 {

@@ -2,8 +2,8 @@
 using System.Text;
 using System.Linq;
 using System.Web;
-using Glimpse.Core2.Extensibility;
-using Glimpse.Core2.Framework;
+using Glimpse.Core.Extensibility;
+using Glimpse.Core.Framework;
 
 namespace Glimpse.AspNet
 {

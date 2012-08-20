@@ -1,5 +1,5 @@
 ﻿using System;
-using Glimpse.Core2.Extensibility;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Mvc.Message
 {

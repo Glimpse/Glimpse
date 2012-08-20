@@ -60,9 +60,9 @@
       <Project>{FDDFC8A6-CDDF-4BC6-9F07-E76050E1EEE7}</Project>
       <Name>Glimpse.AspNet</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Glimpse.Core2\Glimpse.Core2.csproj">
+    <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">
       <Project>{C1289CE8-3259-41D9-893E-7A4E6F772D30}</Project>
-      <Name>Glimpse.Core2</Name>
+      <Name>Glimpse.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
