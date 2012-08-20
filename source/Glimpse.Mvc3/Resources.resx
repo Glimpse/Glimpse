@@ -106,4 +106,8 @@
         <value xml:space="preserve">Replaced IView of type '{0}', named '{1}', with proxy implementation.</value>
         <comment>{0} - GetType() of IView, {1} - view name</comment>
     </data>
+  <data name="ControllerFactorySetup">
+    <value xml:space="preserve">Proxied IConrollerFactory of type '{0}'.</value>
+    <comment>{0} - GetType() of replaced controller factory</comment>
+  </data>
 </root>

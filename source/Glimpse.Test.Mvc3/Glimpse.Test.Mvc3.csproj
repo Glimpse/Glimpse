@@ -52,6 +52,7 @@
     <Compile Include="AlternateImplementation\ControllerFactoryCreateControllerArgumentsShould.cs" />
     <Compile Include="AlternateImplementation\ControllerFactoryCreateControllerMessageShould.cs" />
     <Compile Include="AlternateImplementation\ControllerFactoryCreateControllerShould.cs" />
+    <Compile Include="AlternateImplementation\ControllerFactoryShould.cs" />
     <Compile Include="AlternateImplementation\ViewEngineFindViewsArgumentsShould.cs" />
     <Compile Include="AlternateImplementation\ViewEngineFindViewsMessageShould.cs" />
     <Compile Include="AlternateImplementation\ViewEngineFindViewsShould.cs" />

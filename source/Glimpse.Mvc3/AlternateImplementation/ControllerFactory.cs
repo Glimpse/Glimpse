@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -7,20 +8,29 @@ using Glimpse.Core;
 
 namespace Glimpse.Mvc3.AlternateImplementation
 {
-    public class ControllerFactory
+    public abstract class ControllerFactory
     {
         public Func<RuntimePolicy> RuntimePolicyStrategy { get; set; }
         public IMessageBroker MessageBroker { get; set; }
 
+        public static IEnumerable<IAlternateImplementation<IControllerFactory>> AllMethods(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker)
+        {
+            yield return new CreateController(runtimePolicyStrategy, messageBroker);
+        }
+
+        protected ControllerFactory(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker)
+        {
+            if (runtimePolicyStrategy == null) throw new ArgumentNullException("runtimePolicyStrategy");
+            if (messageBroker == null) throw new ArgumentNullException("messageBroker");
+
+            RuntimePolicyStrategy = runtimePolicyStrategy;
+            MessageBroker = messageBroker;
+        }
+
         public class CreateController : ControllerFactory, IAlternateImplementation<IControllerFactory>
         {
-            public CreateController(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker)
+            public CreateController(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker):base(runtimePolicyStrategy, messageBroker)
             {
-                if (runtimePolicyStrategy == null) throw new ArgumentNullException("runtimePolicyStrategy");
-                if (messageBroker == null) throw new ArgumentNullException("messageBroker");
-
-                RuntimePolicyStrategy = runtimePolicyStrategy;
-                MessageBroker = messageBroker;
             }
 
             public MethodInfo MethodToImplement
@@ -39,7 +49,7 @@ namespace Glimpse.Mvc3.AlternateImplementation
 
                 var message = new Message(new Arguments(context.Arguments), controller);
 
-                //TODO: Need to proxy controller...
+                //TODO: Need to proxy action invoker...
 
                 MessageBroker.Publish(message);
             }

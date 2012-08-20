@@ -61,6 +61,15 @@ namespace Glimpse.Mvc3 {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Proxied IConrollerFactory of type &apos;{0}&apos;..
+        /// </summary>
+        internal static string ControllerFactorySetup {
+            get {
+                return ResourceManager.GetString("ControllerFactorySetup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Replaced IView of type &apos;{0}&apos;, named &apos;{1}&apos;, with proxy implementation..
         /// </summary>
         internal static string FindViewsProxyOutputReplacedIView {
