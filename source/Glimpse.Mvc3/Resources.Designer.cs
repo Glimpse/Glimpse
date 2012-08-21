@@ -61,11 +61,20 @@ namespace Glimpse.Mvc3 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Proxied IConrollerFactory of type &apos;{0}&apos;..
+        ///   Looks up a localized string similar to Proxied IControllerFactory of type &apos;{0}&apos;..
         /// </summary>
         internal static string ControllerFactorySetup {
             get {
                 return ResourceManager.GetString("ControllerFactorySetup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Proxied IDependencyResolver of type &apos;{0}&apos;..
+        /// </summary>
+        internal static string ExecutionSetupProxiedIDependencyResolver {
+            get {
+                return ResourceManager.GetString("ExecutionSetupProxiedIDependencyResolver", resourceCulture);
             }
         }
         

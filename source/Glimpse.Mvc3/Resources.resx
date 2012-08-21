@@ -107,7 +107,11 @@
         <comment>{0} - GetType() of IView, {1} - view name</comment>
     </data>
   <data name="ControllerFactorySetup">
-    <value xml:space="preserve">Proxied IConrollerFactory of type '{0}'.</value>
+    <value xml:space="preserve">Proxied IControllerFactory of type '{0}'.</value>
     <comment>{0} - GetType() of replaced controller factory</comment>
+  </data>
+  <data name="ExecutionSetupProxiedIDependencyResolver">
+    <value xml:space="preserve">Proxied IDependencyResolver of type '{0}'.</value>
+    <comment>{0} - GetType() of proxied dependency resolver</comment>
   </data>
 </root>
