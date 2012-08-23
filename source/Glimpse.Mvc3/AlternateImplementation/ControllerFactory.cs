@@ -27,6 +27,25 @@ namespace Glimpse.Mvc3.AlternateImplementation
             MessageBroker = messageBroker;
         }
 
+        protected void ProxyActionInvoker(IController iController)
+        {
+            if (iController == null)
+                return;
+
+            var asyncController = iController as AsyncController;
+            if (asyncController != null)
+            {
+                return;
+            }
+
+            var controller = iController as Controller;
+            if (controller != null)
+            {
+                return;
+            }
+        }
+
+
         public class CreateController : ControllerFactory, IAlternateImplementation<IControllerFactory>
         {
             public CreateController(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker):base(runtimePolicyStrategy, messageBroker)
@@ -49,9 +68,9 @@ namespace Glimpse.Mvc3.AlternateImplementation
 
                 var message = new Message(new Arguments(context.Arguments), controller);
 
-                //TODO: Need to proxy action invoker...
-
                 MessageBroker.Publish(message);
+
+                ProxyActionInvoker(controller);
             }
 
             public class Arguments

@@ -22,17 +22,7 @@ namespace Glimpse.Mvc3.PipelineInspector
                 logger.Debug(Resources.ControllerFactorySetup, controllerFactory.GetType());
             }
 
-            var dependencyResolver = DependencyResolver.Current;
-            if (proxyFactory.IsProxyable(dependencyResolver))
-            {
-                var alternateImplementations = AlternateImplementation.DependencyResolver.AllMethods(context.RuntimePolicyStrategy, context.MessageBroker);
 
-                var proxiedDependencyResolver = proxyFactory.CreateProxy(dependencyResolver, alternateImplementations);
-
-                DependencyResolver.SetResolver(proxiedDependencyResolver);
-
-                logger.Debug(Resources.ExecutionSetupProxiedIDependencyResolver, dependencyResolver.GetType());
-            }
         }
 
         public void Teardown(IPipelineInspectorContext context)

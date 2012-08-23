@@ -60,5 +60,13 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
 
             Tester.MessageBrokerMock.Verify(mb=>mb.Publish(It.IsAny<ControllerFactory.CreateController.Message>()));
         }
+
+        [Fact]
+        public void ProxyActionInvokerIfControllerFound()
+        {
+
+            //TODO
+            
+        }
     }
 }

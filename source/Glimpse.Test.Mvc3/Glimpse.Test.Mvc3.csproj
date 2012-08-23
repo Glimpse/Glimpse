@@ -69,6 +69,7 @@
     <Compile Include="Message\TimerResultShould.cs" />
     <Compile Include="Model\ViewModelSummaryShould.cs" />
     <Compile Include="Model\ViewsModelShould.cs" />
+    <Compile Include="PipelineInspector\DependencyInjectionShould.cs" />
     <Compile Include="PipelineInspector\ExecutionShould.cs" />
     <Compile Include="PipelineInspector\ViewEngineShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

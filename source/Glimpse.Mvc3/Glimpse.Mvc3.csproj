@@ -45,6 +45,7 @@
     <Compile Include="AlternateImplementation\ViewEngine.cs" />
     <Compile Include="Message\TimerResultMessage.cs" />
     <Compile Include="Model\ViewsModel.cs" />
+    <Compile Include="PipelineInspector\DependencyInjection.cs" />
     <Compile Include="PipelineInspector\Execution.cs" />
     <Compile Include="PipelineInspector\ViewEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

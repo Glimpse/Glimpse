@@ -38,10 +38,9 @@ namespace Glimpse.Mvc3.AlternateImplementation
                 if (RuntimePolicyStrategy() == RuntimePolicy.Off)
                     return;
 
-                var message = new Message((Type) context.Arguments[0], context.ReturnValue);
+                var resolvedObject = context.ReturnValue;
+                var message = new Message((Type) context.Arguments[0], resolvedObject);
                 MessageBroker.Publish(message);
-
-                //TODO: Handle IController's with IActionInvoker
             }
 
             public class Message
