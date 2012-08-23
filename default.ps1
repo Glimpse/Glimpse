@@ -63,11 +63,13 @@ task compile -depends clean {
 task merge -depends test {
     "Merging"
 
+    cd $package_dir\ilmerge.*\
+
     "   Glimpse.Core"
-    exec { & $tools_dir\ilmerge.exe /targetplatform:"v4,$framework_dir" /log /out:"$source_dir\Glimpse.Core\nuspec\lib\net40\Glimpse.Core.dll" /internalize:$tools_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core\bin\Release\Glimpse.Core.dll" "$source_dir\Glimpse.Core\bin\Release\Newtonsoft.Json.dll" "$source_dir\Glimpse.Core\bin\Release\Castle.Core.dll" "$source_dir\Glimpse.Core\bin\Release\NLog.dll" "$source_dir\Glimpse.Core\bin\Release\AntiXssLibrary.dll" "$source_dir\Glimpse.Core\bin\Release\Tavis.UriTemplates.dll" }
+    exec { & .\ilmerge.exe /targetplatform:"v4,$framework_dir" /log /out:"$source_dir\Glimpse.Core\nuspec\lib\net40\Glimpse.Core.dll" /internalize:$base_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core\bin\Release\Glimpse.Core.dll" "$source_dir\Glimpse.Core\bin\Release\Newtonsoft.Json.dll" "$source_dir\Glimpse.Core\bin\Release\Castle.Core.dll" "$source_dir\Glimpse.Core\bin\Release\NLog.dll" "$source_dir\Glimpse.Core\bin\Release\AntiXssLibrary.dll" "$source_dir\Glimpse.Core\bin\Release\Tavis.UriTemplates.dll" }
     
     "   Glimpse.Core.Net35"
-    exec { & $tools_dir\ilmerge.exe /log /out:"$source_dir\Glimpse.Core\nuspec\lib\net35\Glimpse.Core.dll" /internalize:$tools_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core.Net35\bin\Release\Glimpse.Core.dll" "$source_dir\Glimpse.Core.Net35\bin\Release\Newtonsoft.Json.dll" "$source_dir\Glimpse.Core.Net35\bin\Release\Castle.Core.dll" "$source_dir\Glimpse.Core.Net35\bin\Release\NLog.dll" "$source_dir\Glimpse.Core.Net35\bin\Release\AntiXssLibrary.dll"  "$source_dir\Glimpse.Core.Net35\bin\Release\Tavis.UriTemplates.dll"}
+    exec { & .\ilmerge.exe /log /out:"$source_dir\Glimpse.Core\nuspec\lib\net35\Glimpse.Core.dll" /internalize:$base_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core.Net35\bin\Release\Glimpse.Core.dll" "$source_dir\Glimpse.Core.Net35\bin\Release\Newtonsoft.Json.dll" "$source_dir\Glimpse.Core.Net35\bin\Release\Castle.Core.dll" "$source_dir\Glimpse.Core.Net35\bin\Release\NLog.dll" "$source_dir\Glimpse.Core.Net35\bin\Release\AntiXssLibrary.dll"  "$source_dir\Glimpse.Core.Net35\bin\Release\Tavis.UriTemplates.dll"}
     
     "   Glimpse.AspNet"
     copy $source_dir\Glimpse.AspNet\bin\Release\Glimpse.AspNet.* $source_dir\Glimpse.AspNet\nuspec\lib\net40\
