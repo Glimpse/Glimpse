@@ -239,7 +239,7 @@ var glimpseTest = (function ($) {
         },
         retrieve = function (url) {
             var parts = /(\S+)\?/ig.exec(url); 
-            if (parts.length == 2 && testHandlers[parts[1]]) 
+            if (parts != null && parts.length == 2 && testHandlers[parts[1]]) 
                 return testHandlers[parts[1]];
             return null;
         },
