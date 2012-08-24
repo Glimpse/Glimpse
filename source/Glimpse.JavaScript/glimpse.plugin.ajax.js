@@ -24,10 +24,13 @@
         
         setupData = function () {
             var payload = glimpse.data.current(),
-                metadata = glimpse.data.currentMetadata().plugins;
+                metadata = glimpse.data.currentMetadata();
                  
-            payload.data.Ajax = { name: 'Ajax', data: 'No requests currently detected...', isPermanent : true };
-            metadata.Ajax = { documentationUri: 'http://getglimpse.com/Help/Plugin/Ajax' }; 
+            // Only load the tab if we have what we need to support it 
+            if (metadata.resources.glimpse_ajax) {
+                payload.data.Ajax = { name: 'Ajax', data: 'No requests currently detected...', isPermanent: true };
+                metadata.plugins.Ajax = { documentationUri: 'http://getglimpse.com/Help/Plugin/Ajax' };
+            }
         }, 
         
         active = function () {

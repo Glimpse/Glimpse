@@ -25,10 +25,13 @@
         },
         setupData = function () {
             var payload = glimpse.data.current(),
-                metadata = glimpse.data.currentMetadata().plugins;
-                 
-            payload.data.History = { name: 'History', data: 'No requests currently detected...', isPermanent : true };
-            metadata.History = { documentationUri: 'http://getglimpse.com/Help/Plugin/Remote' };  
+                metadata = glimpse.data.currentMetadata();
+            
+            // Only load the tab if we have what we need to support it 
+            if (metadata.resources.glimpse_history) {
+                payload.data.History = { name: 'History', data: 'No requests currently detected...', isPermanent: true };
+                metadata.plugins.History = { documentationUri: 'http://getglimpse.com/Help/Plugin/Remote' };
+            }
         },
          
         active = function () {
@@ -201,7 +204,7 @@
         }, 
 
         //Main 
-        init = function () {
+        init = function () { 
             wireListener(); 
         };
 
