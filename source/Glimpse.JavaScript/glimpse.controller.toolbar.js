@@ -10,13 +10,15 @@
             pubsub.subscribe('action.popout', popout); 
             pubsub.subscribe('state.final', checkPopout); 
             pubsub.subscribe('state.build.shell.modify', wireDomListeners); 
-            pubsub.subscribe('state.build.rendered', restore); 
+            pubsub.subscribe('state.build.rendered', restore);
+            pubsub.subscribe('action.close.lightbox', closeLightbox);
         },
         wireDomListeners = function() {
             elements.scope.find('.glimpse-open').click(function () { pubsub.publish('action.open', false); return false; });
             elements.scope.find('.glimpse-minimize').click(function () { pubsub.publish('action.minimize'); return false; });
             elements.scope.find('.glimpse-close').click(function () { pubsub.publish('action.close'); return false; });
             elements.scope.find('.glimpse-popout').click(function () { pubsub.publish('action.popout'); return false; });
+            elements.lightbox.find('.close').live('click', function () { pubsub.publish('action.close.lightbox'); });
 
             if (settings.popupOn) {
                 if (isPopup()) {
@@ -27,6 +29,7 @@
                 $(window).unload(closePopup);
             }
         }, 
+        
         openPopup = function () { 
             settings.popupOn = true;
             pubsub.publish('state.persist');
@@ -34,7 +37,6 @@
             util.cookie('glimpseKeepPopup', '1');
 
             var url = util.replaceTokens(data.currentMetadata().resources.glimpse_popup, { requestId: data.current().requestId });
-                //url = path + (path.indexOf('?') > -1 ? '&' : '?') + 'requestId=' + data.current().requestId;
             window.open(url, 'GlimpsePopup', 'width=1100,height=600,status=no,toolbar=no,menubar=no,location=no,resizable=yes,scrollbars=yes');
         },
             
@@ -98,6 +100,10 @@
             if (opened && !popupOn)
                 pubsub.publish('action.open', true);
         },
+        closeLightbox = function () {
+            elements.scope.find('.glimpse-lb').hide();
+        },
+
         init = function () {
             wireListeners();
         };

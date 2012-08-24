@@ -15,6 +15,7 @@
             elements.findTab = function(key) {
                 return elements.tabHolder.find('.glimpse-tab[data-glimpseKey="' + key + '"]');
             };
+            elements.lightbox = $('.glimpse-lb');
 
             pubsub.publish('data.elements.processed'); 
         },
