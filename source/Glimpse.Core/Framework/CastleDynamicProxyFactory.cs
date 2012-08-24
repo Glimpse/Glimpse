@@ -32,7 +32,10 @@ namespace Glimpse.Core.Framework
             var options = new ProxyGenerationOptions(generationHook) {Selector = selector};
             if (mixin != null) options.AddMixinInstance(mixin);
 
-            return ProxyGenerator.CreateInterfaceProxyWithTarget(instance, options, interceptorArray);
+            if (typeof(T).IsInterface)
+                return ProxyGenerator.CreateInterfaceProxyWithTarget(instance, options, interceptorArray);
+
+            return ProxyGenerator.CreateClassProxyWithTarget(instance, options, interceptorArray);
         }
 
         public bool IsProxyable(object obj)
