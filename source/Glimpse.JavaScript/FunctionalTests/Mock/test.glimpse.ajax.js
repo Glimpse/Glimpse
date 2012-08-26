@@ -51,4 +51,4 @@ var glimpseTest = (function ($) {
         };
 
     init();
-}($Glimpse));
+}(jQueryGlimpse));

@@ -145,4 +145,4 @@
         };
 
     init();
-}($Glimpse, glimpse));
+}(jQueryGlimpse, glimpse));

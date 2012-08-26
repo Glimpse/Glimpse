@@ -1,4 +1,4 @@
-﻿/*(import:jquery-1.6.3.min.js)*/
+﻿/*(import:jquery-1.8.0.min.js)*/
 /*(import:jquery.jsonp-2.4.0.js)*/
 /*(import:uritemplate.min.js)*/
 
@@ -49,9 +49,9 @@ var glimpse = (function ($, scope) {
         util : util,
         settings : settings
     };
-}($Glimpse, $Glimpse(document)));
+}(jQueryGlimpse, jQueryGlimpse(document)));
 
-$Glimpse(document).ready(function() {
+jQueryGlimpse(document).ready(function() {
     glimpse.init();
 });
 

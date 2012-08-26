@@ -147,7 +147,7 @@
                     else if (x == '}' && count > 0)
                         count--;
                     else if (count == 2) {
-                        if ($.isNaN(x)) {
+                        if (!$.isNumeric(x)) {
                             count = 0;
                             working = '';
                         }

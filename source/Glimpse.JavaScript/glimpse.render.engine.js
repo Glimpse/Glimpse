@@ -2,7 +2,7 @@
     var //Support 
         registeredEngnies = {},
         shouldUsePreview = function (length, level, forceFull, limit, forceLimit, tolerance) {
-            if (!$.isNaN(forceLimit))  
+            if ($.isNumeric(forceLimit))  
                 limit = forceLimit; 
             return !forceFull && ((level == 1 && length > (limit + tolerance)) || (level > 1 && (!forceLimit || length > (limit + tolerance))));
         },
