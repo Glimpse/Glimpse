@@ -33,15 +33,13 @@
                 var payload = buildVersionPayload(version),
                     url = util.replaceTokens(metadata.resources.glimpse_version_check, payload);
                 
-                $.ajax({
-                    dataType: 'jsonp',
-                    type: 'GET',
+                $.jsonp({
                     url: url,
-                    success: function(data) {
-                        settings.newVersion = data;
+                    success: function(data) { 
+                        settings.newVersion = data.hasNewer;
                         pubsub.publish('state.persist');
                     },
-                    complete: function () {
+                    complete: function () { 
                         util.cookie('glimpseVersionCheck', 1, 1); //Not sure if this should only be set on success 
                     }
                 });

@@ -1,4 +1,5 @@
 ﻿/*(import:jquery-1.6.3.min.js)*/
+/*(import:jquery.jsonp-2.4.0.js)*/
 /*(import:uritemplate.min.js)*/
 
 var glimpse = (function ($, scope) {

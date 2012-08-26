@@ -113,6 +113,7 @@
     <Content Include="glimpse.view.shell.css" />
     <Content Include="glimpse.view.shell.html" />
     <Content Include="google-code-prettify.js" />
+    <Content Include="jquery.jsonp-2.4.0.js" />
     <Content Include="jquery-1.6.3.min.js" />
     <Content Include="UnitTests\index.html" />
     <Content Include="UnitTests\Lib\qunit.css" />

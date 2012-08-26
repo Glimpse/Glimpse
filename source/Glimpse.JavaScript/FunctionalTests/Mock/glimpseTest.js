@@ -260,7 +260,7 @@ var glimpseTest = (function ($) {
                 if (callback) 
                     callback(param, queryStringToObject(param.url));
                 else 
-                    original(param); 
+                    return original(param); 
             };
         };
 
