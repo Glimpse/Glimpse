@@ -1,7 +1,10 @@
 ﻿toolbarController = function () {
     var //Support
         isPopup = function() {
-            return window.location.href.indexOf(util.replaceTokens(data.currentMetadata().resources.glimpse_popup)) > -1;
+            var resources = data.currentMetadata().resources;
+            if (resources.glimpse_popup) 
+                return window.location.href.indexOf(util.replaceTokens(data.currentMetadata().resources.glimpse_popup)) > -1;
+            return false;
         },
         wireListeners = function() {
             pubsub.subscribe('action.open', function(topic, payload) { open(payload); });
@@ -17,17 +20,25 @@
             elements.scope.find('.glimpse-open').click(function () { pubsub.publish('action.open', false); return false; });
             elements.scope.find('.glimpse-minimize').click(function () { pubsub.publish('action.minimize'); return false; });
             elements.scope.find('.glimpse-close').click(function () { pubsub.publish('action.close'); return false; });
-            elements.scope.find('.glimpse-popout').click(function () { pubsub.publish('action.popout'); return false; });
             elements.lightbox.find('.close').live('click', function () { pubsub.publish('action.close.lightbox'); });
+            
+            // Determine whether we need to wireup up any popup events 
+            var resources = data.currentMetadata().resources,
+                popoutElement = elements.scope.find('.glimpse-popout');
+            if (resources.glimpse_popup) {
+                popoutElement.click(function () { pubsub.publish('action.popout'); return false; });
 
-            if (settings.popupOn) {
-                if (isPopup()) {
-                    $(window).resize(function () {
-                        elements.holder.find('.glimpse-panel').height($(window).height() - 54);
-                    });
-                } 
-                $(window).unload(closePopup);
+                if (settings.popupOn) {
+                    if (isPopup()) {
+                        $(window).resize(function () {
+                            elements.holder.find('.glimpse-panel').height($(window).height() - 54);
+                        });
+                    } 
+                    $(window).unload(closePopup);
+                }
             }
+            else
+                popoutElement.hide();
         }, 
         
         openPopup = function () { 
