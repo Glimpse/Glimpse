@@ -7,6 +7,8 @@ namespace Glimpse.Core.Extensibility
     {
         TimerResult<T> Time<T>(Func<T> func);
         TimerResult Time(Action action);
+        long Start();
+        TimerResult Stop(long offset);
     }
 
     public class ExecutionTimer : IExecutionTimer
@@ -43,6 +45,20 @@ namespace Glimpse.Core.Extensibility
                            Offset = offset,
                            Duration = TimeSpan.FromMilliseconds(Stopwatch.ElapsedMilliseconds - offset)
                        };
+        }
+
+        public long Start()
+        {
+            return Stopwatch.ElapsedMilliseconds;
+        }
+
+        public TimerResult Stop(long offset)
+        {
+            return new TimerResult
+            {
+                Offset = offset,
+                Duration = TimeSpan.FromMilliseconds(Stopwatch.ElapsedMilliseconds - offset)
+            };
         }
     }
 }
