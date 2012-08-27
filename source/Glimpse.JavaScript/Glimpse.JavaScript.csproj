@@ -115,6 +115,16 @@
     <Content Include="google-code-prettify.js" />
     <Content Include="jquery-1.8.0.min.js" />
     <Content Include="jquery.jsonp-2.4.0.js" />
+    <Content Include="Modules\glimpse.render.engine.raw.js" />
+    <Content Include="Modules\glimpse.render.engine.empty.js" />
+    <Content Include="Modules\glimpse.render.engine.js" />
+    <Content Include="Modules\glimpse.render.engine.keyvalue.js" />
+    <Content Include="Modules\glimpse.render.engine.master.js" />
+    <Content Include="Modules\glimpse.render.engine.string.js" />
+    <Content Include="Modules\glimpse.render.engine.structured.js" />
+    <Content Include="Modules\glimpse.render.engine.table.js" />
+    <Content Include="Modules\glimpse.render.util.js" />
+    <Content Include="Modules\test.html" />
     <Content Include="UnitTests\index.html" />
     <Content Include="UnitTests\Lib\qunit.css" />
     <Content Include="UnitTests\Lib\qunit.js" />
@@ -123,6 +133,7 @@
     <Content Include="UnitTests\Unit\mock-glimpse.core.pubsub.js" />
     <Content Include="uritemplate.min.js" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
