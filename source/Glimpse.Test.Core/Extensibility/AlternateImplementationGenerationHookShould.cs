@@ -107,32 +107,6 @@ namespace Glimpse.Test.Core.Extensibility
         }
 
         [Fact]
-        public void ReturnTheSameHashCodeWithDifferentlyOrderedCollections()
-        {
-            var implementationMock1 = new Mock<IAlternateImplementation<ITab>>();
-            var implementationMock2 = new Mock<IAlternateImplementation<ITab>>();
-
-            var implementations1 = new List<IAlternateImplementation<ITab>>
-                                      {
-                                          implementationMock1.Object,
-                                          implementationMock2.Object
-                                      };
-
-            var implementations2 = new List<IAlternateImplementation<ITab>> 
-                                      {
-                                          implementationMock2.Object,
-                                          implementationMock1.Object //Order has been changed
-                                      };
-            var loggerMock = new Mock<ILogger>();
-
-            var hook1 = new AlternateImplementationGenerationHook<ITab>(implementations1, loggerMock.Object);
-            var hook2 = new AlternateImplementationGenerationHook<ITab>(implementations2, loggerMock.Object);
-
-            Assert.Equal(hook2.GetHashCode(), hook1.GetHashCode());
-            Assert.True(hook2.Equals(hook1));
-        }
-
-        [Fact]
         public void ReturnNonMatchingHashCodesWithDifferentCollections()
         {
             var implementationMock1 = new Mock<IAlternateImplementation<ITab>>();

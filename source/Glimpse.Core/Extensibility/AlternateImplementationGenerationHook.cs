@@ -24,9 +24,12 @@ namespace Glimpse.Core.Extensibility
         {
             var input = obj as AlternateImplementationGenerationHook<T>;
 
-            if (input == null || MethodImplementations.Count() != input.MethodImplementations.Count()) return false;
+            if (input == null) return false;
 
-            return GetHashCode() == input.GetHashCode();//TODO: Better collection comparison
+            var result = 
+                MethodImplementations.SequenceEqual(input.MethodImplementations);
+
+            return result;
         }
 
         public override int GetHashCode()

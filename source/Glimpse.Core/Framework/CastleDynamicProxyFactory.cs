@@ -28,7 +28,7 @@ namespace Glimpse.Core.Framework
         {
             var interceptorArray = (from implementaion in methodImplementations select new AlternateImplementationToCastleInterceptorAdapter<T>(implementaion, Logger)).ToArray();
             var generationHook = new AlternateImplementationGenerationHook<T>(methodImplementations, Logger);
-            var selector = new AlternateImplementationSelector<T>(interceptorArray);
+            var selector = new AlternateImplementationSelector<T>();
             var options = new ProxyGenerationOptions(generationHook) {Selector = selector};
             if (mixin != null) options.AddMixinInstance(mixin);
 
