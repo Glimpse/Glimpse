@@ -459,11 +459,11 @@
     display: block;
 }
 .glimpse-resizer {
-    height: 4px;
+    height: 6px;
     cursor: n-resize;
     width: 100%;
     position: absolute;
-    top: -1px;
+    top: -5px;
 }
 li.glimpse-permanent {
     font-style: italic;
