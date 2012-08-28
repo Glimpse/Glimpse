@@ -64,12 +64,6 @@ namespace Glimpse.Test.AspNet.Model
             Assert.Null(RouteInstance.DataTokens);
         }
 
-        [Fact(Skip = "Not sure how to test this")]
-        public void ReturnProperTokenInstances()
-        {
-            Assert.Equal(2, RouteInstance.UriTokens.Count);
-        }
-
         [Fact]
         public void UriTemplateShouldMatch()
         {

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Castle.DynamicProxy;
 using Glimpse.Core.Extensibility;
 using Moq;
@@ -9,7 +8,7 @@ namespace Glimpse.Test.Core.Extensibility
 {
     public class AlternateImplementationSelectorShould
     {
-        [Fact(Skip = "Temp")]
+        [Fact]
         public void ReturnMatchingInterceptors()
         {
             var loggerMock = new Mock<ILogger>();
@@ -31,7 +30,7 @@ namespace Glimpse.Test.Core.Extensibility
             Assert.Equal(1, result.Length);
         }
 
-        [Fact(Skip = "Temp")]
+        [Fact]
         public void ReturnEmptyArrayWithoutMatch()
         {
             var loggerMock = new Mock<ILogger>();
