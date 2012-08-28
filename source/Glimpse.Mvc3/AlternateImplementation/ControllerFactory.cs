@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Web.Mvc;
+using System.Web.Mvc.Async;
 using System.Web.Routing;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core;
@@ -12,19 +13,25 @@ namespace Glimpse.Mvc3.AlternateImplementation
     {
         public Func<RuntimePolicy> RuntimePolicyStrategy { get; set; }
         public IMessageBroker MessageBroker { get; set; }
+        public IProxyFactory ProxyFactory { get; set; }
+        public Func<IExecutionTimer> TimerStrategy { get; set; }
 
-        public static IEnumerable<IAlternateImplementation<IControllerFactory>> AllMethods(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker)
+        public static IEnumerable<IAlternateImplementation<IControllerFactory>> AllMethods(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker, IProxyFactory proxyFactory, Func<IExecutionTimer> timerStrategy)
         {
-            yield return new CreateController(runtimePolicyStrategy, messageBroker);
+            yield return new CreateController(runtimePolicyStrategy, messageBroker, proxyFactory, timerStrategy);
         }
 
-        protected ControllerFactory(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker)
+        protected ControllerFactory(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker, IProxyFactory proxyFactory, Func<IExecutionTimer> timerStrategy)
         {
             if (runtimePolicyStrategy == null) throw new ArgumentNullException("runtimePolicyStrategy");
             if (messageBroker == null) throw new ArgumentNullException("messageBroker");
+            if (proxyFactory == null) throw new ArgumentNullException("proxyFactory");
+            if (timerStrategy == null) throw new ArgumentNullException("timerStrategy");
 
             RuntimePolicyStrategy = runtimePolicyStrategy;
             MessageBroker = messageBroker;
+            ProxyFactory = proxyFactory;
+            TimerStrategy = timerStrategy;
         }
 
         protected void ProxyActionInvoker(IController iController)
@@ -32,9 +39,18 @@ namespace Glimpse.Mvc3.AlternateImplementation
             if (iController == null)
                 return;
 
+            var proxyFactory = ProxyFactory;
+
             var asyncController = iController as AsyncController;
             if (asyncController != null)
             {
+                var actionInvoker = asyncController.ActionInvoker;
+                if (proxyFactory.IsProxyable(actionInvoker))
+                {
+                    var proxiedAsyncInvoker = proxyFactory.CreateProxy(actionInvoker as AsyncControllerActionInvoker, AsyncActionInvoker.AllMethods(RuntimePolicyStrategy, TimerStrategy, MessageBroker), new AsyncActionInvoker.ActionInvokerState());
+                    asyncController.ActionInvoker = proxiedAsyncInvoker;
+                }
+
                 return;
             }
 
@@ -48,7 +64,7 @@ namespace Glimpse.Mvc3.AlternateImplementation
 
         public class CreateController : ControllerFactory, IAlternateImplementation<IControllerFactory>
         {
-            public CreateController(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker):base(runtimePolicyStrategy, messageBroker)
+            public CreateController(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker, IProxyFactory proxyFactory, Func<IExecutionTimer> timerStrategy): base(runtimePolicyStrategy, messageBroker, proxyFactory, timerStrategy)
             {
             }
 
@@ -64,7 +80,7 @@ namespace Glimpse.Mvc3.AlternateImplementation
                 if (RuntimePolicyStrategy() == RuntimePolicy.Off)
                     return;
 
-                var controller = context.ReturnValue as IController;
+                var controller = context.ReturnValue as Controller;
 
                 var message = new Message(new Arguments(context.Arguments), controller);
 

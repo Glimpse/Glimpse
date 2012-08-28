@@ -14,8 +14,10 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         {
             Func<RuntimePolicy> runtimePolicyStrategy = () => RuntimePolicy.On;
             var messageBrokerMock = new Mock<IMessageBroker>();
+            var proxyMock = new Mock<IProxyFactory>();
+            Func<IExecutionTimer> timerStrategy = () => new Mock<IExecutionTimer>().Object;
 
-            var implementations = ControllerFactory.AllMethods(runtimePolicyStrategy, messageBrokerMock.Object);
+            var implementations = ControllerFactory.AllMethods(runtimePolicyStrategy, messageBrokerMock.Object, proxyMock.Object, timerStrategy);
 
             Assert.NotEmpty(implementations);
         }

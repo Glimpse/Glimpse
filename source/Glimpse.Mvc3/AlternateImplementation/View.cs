@@ -54,6 +54,18 @@ namespace Glimpse.Mvc3.AlternateImplementation
                 MessageBroker.Publish(new TimerResultMessage(timing, "Render View " + mixin.ViewName, "ASP.NET MVC"));//TODO: Clean this up
             }
 
+            public override bool Equals(object obj)
+            {
+                var input = obj as Render;
+
+                if (input != null)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
             public class Arguments
             {
                 public Arguments(object [] arguments)

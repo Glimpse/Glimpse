@@ -49,6 +49,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlternateImplementation\ActionInvokerInvokeActionMethodMessageShould.cs" />
+    <Compile Include="AlternateImplementation\AsyncActionInvokerArgumentsShould.cs" />
+    <Compile Include="AlternateImplementation\AsyncActionInvokerBeginInvokerActionMethodShould.cs" />
+    <Compile Include="AlternateImplementation\AsyncActionInvokerEndInvokeActionMethodShould.cs" />
+    <Compile Include="AlternateImplementation\AsyncActionInvokerShould.cs" />
     <Compile Include="AlternateImplementation\ControllerFactoryCreateControllerArgumentsShould.cs" />
     <Compile Include="AlternateImplementation\ControllerFactoryCreateControllerMessageShould.cs" />
     <Compile Include="AlternateImplementation\ControllerFactoryCreateControllerShould.cs" />
@@ -76,6 +81,7 @@
     <Compile Include="ResourcesShould.cs" />
     <Compile Include="SerializationConverter\ListOfViewsModelConverterShould.cs" />
     <Compile Include="Tab\ViewsShould.cs" />
+    <Compile Include="TestDoubles\DummyAsyncController.cs" />
     <Compile Include="TestDoubles\DummyView.cs" />
     <Compile Include="Tester\ControllerFactoryCreateControllerTester.cs" />
     <Compile Include="Tester\ViewEngineFindViewsTester.cs" />

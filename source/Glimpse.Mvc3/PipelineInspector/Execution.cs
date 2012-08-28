@@ -13,7 +13,7 @@ namespace Glimpse.Mvc3.PipelineInspector
             var controllerFactory = ControllerBuilder.Current.GetControllerFactory();
             if (proxyFactory.IsProxyable(controllerFactory))
             {
-                var alternateImplementations = AlternateImplementation.ControllerFactory.AllMethods(context.RuntimePolicyStrategy, context.MessageBroker);
+                var alternateImplementations = AlternateImplementation.ControllerFactory.AllMethods(context.RuntimePolicyStrategy, context.MessageBroker, context.ProxyFactory, context.TimerStrategy);
 
                 var proxiedControllerFactory = proxyFactory.CreateProxy(controllerFactory, alternateImplementations);
 
