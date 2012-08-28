@@ -54,13 +54,6 @@ namespace Glimpse.Core.Framework
                 return false;
             }
 
-            //TODO: Figure out if this is needed, it appears that it does not have to be given the .CreateInterfaceProxyWithTarget() call.
-            //if (objType.GetConstructor(new Type[] {}) == null)
-            //{
-            //    Logger.Debug("Object of type '{0}' is not proxyable because it does not have a public parameterless constructor.", objType);
-            //    return false;
-            //}
-
             return true;
         }
     }

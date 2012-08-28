@@ -64,16 +64,6 @@ namespace Glimpse.Test.Core.Framework
             Assert.False(factory.IsProxyable("any string"));
         }
 
-        [Fact(Skip = "Need to research this. Seems like we can proxy objects without default constructors.")]
-        public void ReturnFalseForNoDefaultConstructorOnIsProxyable()
-        {
-            var loggerMock = new Mock<ILogger>();
-
-            var factory = new CastleDynamicProxyFactory(loggerMock.Object);
-
-            Assert.False(factory.IsProxyable(new JsonNetSerializer(loggerMock.Object)));
-        }
-
         [Fact]
         public void ReturnTrueForOnIsProxyable()
         {
