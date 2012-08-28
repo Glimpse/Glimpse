@@ -56,19 +56,21 @@ namespace Glimpse.AspNet.Model
 
         private IEnumerable<Cookie> GetCookies(HttpCookieCollection cookies, HttpServerUtilityBase server)
         {
+            var result = new List<Cookie>();
+
             foreach (var key in cookies.AllKeys)
             {
                 var cookie = cookies[key];
 
-                yield return
-                    new Cookie
+                result.Add(new Cookie
                         {
                             Name = cookie.Name,
                             Path = cookie.Path,
                             IsSecure = cookie.Secure,
                             Value = server.UrlDecode(cookie.Value)
-                        };
+                        });
             }
+            return result;
         }
 
         private IEnumerable<QueryStringParameter> GetQueryString(NameValueCollection queryString)
