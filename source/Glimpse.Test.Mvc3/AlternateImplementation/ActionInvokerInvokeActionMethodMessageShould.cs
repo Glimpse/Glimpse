@@ -25,7 +25,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             actionDescriptorMock.Setup(ad => ad.ActionName).Returns(expectedActionName);
 
 
-            var arguments = new AsyncActionInvoker.Arguments(new object[]
+            var arguments = new ActionInvoker.InvokeActionMethod.Arguments(new object[]
                                                                  {
                                                                      new ControllerContext(),
                                                                      actionDescriptorMock.Object,

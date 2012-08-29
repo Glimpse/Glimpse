@@ -50,7 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlternateImplementation\ActionInvokerInvokeActionMethodMessageShould.cs" />
-    <Compile Include="AlternateImplementation\AsyncActionInvokerArgumentsShould.cs" />
+    <Compile Include="AlternateImplementation\ActionInvokerInvokeActionResultShould.cs" />
+    <Compile Include="AlternateImplementation\ActionInvokerInvokeActionMethodArgumentsShould.cs" />
     <Compile Include="AlternateImplementation\AsyncActionInvokerBeginInvokerActionMethodShould.cs" />
     <Compile Include="AlternateImplementation\AsyncActionInvokerEndInvokeActionMethodShould.cs" />
     <Compile Include="AlternateImplementation\AsyncActionInvokerShould.cs" />

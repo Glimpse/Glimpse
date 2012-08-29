@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Glimpse.Test.Mvc3.AlternateImplementation
 {
-    public class AsyncActionInvokerArgumentsShould
+    public class ActionInvokerInvokeActionMethodArgumentsShould
     {
         [Fact]
         public void ConstructForNonAsync()
@@ -16,7 +16,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             var expectedActionDescriptor = new Mock<ActionDescriptor>().Object;
             var expectedParameters = new Dictionary<string, object>();
 
-            var arguments = new AsyncActionInvoker.Arguments(new object[] {expectedControllerContext, expectedActionDescriptor, expectedParameters});
+            var arguments = new ActionInvoker.InvokeActionMethod.Arguments(new object[] {expectedControllerContext, expectedActionDescriptor, expectedParameters});
 
             Assert.Equal(expectedControllerContext, arguments.ControllerContext);
             Assert.Equal(expectedActionDescriptor, arguments.ActionDescriptor);
@@ -35,7 +35,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             AsyncCallback expectedCallback = null; //hack for testing!
             var expectedState = "any object";
 
-            var arguments = new AsyncActionInvoker.Arguments(new object[] { expectedControllerContext, expectedActionDescriptor, expectedParameters, expectedCallback, expectedState });
+            var arguments = new ActionInvoker.InvokeActionMethod.Arguments(new object[] { expectedControllerContext, expectedActionDescriptor, expectedParameters, expectedCallback, expectedState });
 
             Assert.Equal(expectedControllerContext, arguments.ControllerContext);
             Assert.Equal(expectedActionDescriptor, arguments.ActionDescriptor);
