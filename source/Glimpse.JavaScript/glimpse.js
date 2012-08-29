@@ -684,7 +684,7 @@ var glimpse = (function ($, scope) {
                                     elements.holder.find('.glimpse-panel').height($(window).height() - 54);
                                 });
                             } 
-                            $(window).unload(closePopup);
+                            $(window).unload(windowClosing);
                         }
                     }
                     else
@@ -705,6 +705,8 @@ var glimpse = (function ($, scope) {
                 open = function (shortCircuitSlide) {
                     settings.open = true;
                     pubsub.publish('state.persist');
+                    
+                    closePopout();
         
                     elements.opener.hide(); 
                     $.fn.add.call(elements.holder, elements.spacer).show().animate({ height : settings.height }, (shortCircuitSlide ? 0 : 'fast'));   
@@ -739,7 +741,12 @@ var glimpse = (function ($, scope) {
                     if (settings.open && settings.popupOn && !pResult)
                         openPopup(); 
                 },
-                closePopup = function () {
+                closePopout = function() {
+                    settings.popupOn = false;
+                    pubsub.publish('state.persist');
+                    util.cookie('glimpseKeepPopup', null);
+                },
+                windowClosing = function () {
                     if (isPopup() && !util.cookie('glimpseKeepPopup')) { 
                         settings.popupOn = false;
                         pubsub.publish('state.persist');
