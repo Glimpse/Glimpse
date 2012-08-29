@@ -36,20 +36,20 @@
         },
         
         buildEnvironment = function (requestMetadata) {
-            var urls = requestMetadata.environmentUrls, 
+            var uris = requestMetadata.environmentUrls, 
                 html = ''; 
 
-            if (urls) {
+            if (uris) {
                 var currentName = 'Enviro', 
                     currentDomain = util.getDomain(unescape(window.location.href));
 
-                for (targetName in urls) {
-                    if (util.getDomain(urls[targetName]) === currentDomain) {
+                for (targetName in uris) {
+                    if (util.getDomain(uris[targetName]) === currentDomain) {
                         currentName = targetName;
                         html += ' - ' + targetName + ' (Current)<br />';
                     }
                     else
-                        html += ' - <a title="Go to - ' + urls[targetName] + '" href="' + urls[targetName] + '">' + targetName + '</a><br />';
+                        html += ' - <a title="Go to - ' + uris[targetName] + '" href="' + uris[targetName] + '">' + targetName + '</a><br />';
                 }
                 html = '<span class="glimpse-drop">' + currentName + '<span class="glimpse-drop-arrow-holder"><span class="glimpse-drop-arrow"></span></span></span><div class="glimpse-drop-over"><div>Switch Servers</div>' + html + '</div>';
             }
@@ -57,21 +57,21 @@
         },
         buildCorrelation = function (request, requestMetadata) {
             var correlation = requestMetadata.correlation, 
-                html = request.url; 
+                html = request.uri; 
 
             if (correlation) { 
-                var currentUrl = request.url, 
+                var currentUri = request.uri, 
                     currentLeg; 
 
                 html = '<div>' + correlation.title + '</div>'; 
                 for (var i = 0; i < correlation.legs.length; i++) {
                     var leg = correlation.legs[i];
-                    if (leg.url == currentUrl) {
-                        currentLeg = leg.url;
+                    if (leg.uri == currentUri) {
+                        currentLeg = leg.uri;
                         html += currentLeg + ' - <strong>' + leg.method + '</strong> (Current)<br />';
                     }
                     else
-                        html += '<a title="Go to ' + leg.url + '" href="#" data-requestId="' + leg.glimpseId + '" data-url="' + leg.url + '">' + leg.url + '</a> - <strong>' + leg.method + '</strong><br />';
+                        html += '<a title="Go to ' + leg.uri + '" href="#" data-requestId="' + leg.requestId + '" data-url="' + leg.uri + '">' + leg.uri + '</a> - <strong>' + leg.method + '</strong><br />';
                 }
                 html = '<span class="glimpse-drop">' + currentLeg + '<span class="glimpse-drop-arrow-holder"><span class="glimpse-drop-arrow"></span></span></span><div class="glimpse-drop-over">' + html + '<div class="loading"><span class="icon"></span><span>Loaded...</span></div></div>'; 
             }

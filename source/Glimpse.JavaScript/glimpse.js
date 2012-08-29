@@ -859,20 +859,20 @@ var glimpse = (function ($, scope) {
                 },
                 
                 buildEnvironment = function (requestMetadata) {
-                    var urls = requestMetadata.environmentUrls, 
+                    var uris = requestMetadata.environmentUrls, 
                         html = ''; 
         
-                    if (urls) {
+                    if (uris) {
                         var currentName = 'Enviro', 
                             currentDomain = util.getDomain(unescape(window.location.href));
         
-                        for (targetName in urls) {
-                            if (util.getDomain(urls[targetName]) === currentDomain) {
+                        for (targetName in uris) {
+                            if (util.getDomain(uris[targetName]) === currentDomain) {
                                 currentName = targetName;
                                 html += ' - ' + targetName + ' (Current)<br />';
                             }
                             else
-                                html += ' - <a title="Go to - ' + urls[targetName] + '" href="' + urls[targetName] + '">' + targetName + '</a><br />';
+                                html += ' - <a title="Go to - ' + uris[targetName] + '" href="' + uris[targetName] + '">' + targetName + '</a><br />';
                         }
                         html = '<span class="glimpse-drop">' + currentName + '<span class="glimpse-drop-arrow-holder"><span class="glimpse-drop-arrow"></span></span></span><div class="glimpse-drop-over"><div>Switch Servers</div>' + html + '</div>';
                     }
@@ -880,21 +880,21 @@ var glimpse = (function ($, scope) {
                 },
                 buildCorrelation = function (request, requestMetadata) {
                     var correlation = requestMetadata.correlation, 
-                        html = request.url; 
+                        html = request.uri; 
         
                     if (correlation) { 
-                        var currentUrl = request.url, 
+                        var currentUri = request.uri, 
                             currentLeg; 
         
                         html = '<div>' + correlation.title + '</div>'; 
                         for (var i = 0; i < correlation.legs.length; i++) {
                             var leg = correlation.legs[i];
-                            if (leg.url == currentUrl) {
-                                currentLeg = leg.url;
+                            if (leg.uri == currentUri) {
+                                currentLeg = leg.uri;
                                 html += currentLeg + ' - <strong>' + leg.method + '</strong> (Current)<br />';
                             }
                             else
-                                html += '<a title="Go to ' + leg.url + '" href="#" data-requestId="' + leg.glimpseId + '" data-url="' + leg.url + '">' + leg.url + '</a> - <strong>' + leg.method + '</strong><br />';
+                                html += '<a title="Go to ' + leg.uri + '" href="#" data-requestId="' + leg.requestId + '" data-url="' + leg.uri + '">' + leg.uri + '</a> - <strong>' + leg.method + '</strong><br />';
                         }
                         html = '<span class="glimpse-drop">' + currentLeg + '<span class="glimpse-drop-arrow-holder"><span class="glimpse-drop-arrow"></span></span></span><div class="glimpse-drop-over">' + html + '<div class="loading"><span class="icon"></span><span>Loaded...</span></div></div>'; 
                     }
@@ -1855,7 +1855,7 @@ var glimpseAjaxPlugin = (function ($, glimpse) {
             var panelBody = panel.find('tbody');
             for (var x = resultCount; x < result.length; x++) {
                 var item = result[x];
-                panelBody.prepend('<tr class="' + (x % 2 == 0 ? 'even' : 'odd') + '"><td>' + item.uri + '</td><td>' + item.method + '</td><td>' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.dateTime + '</td><td><a href="#" class="glimpse-ajax-link" data-glimpseId="' + item.requestId + '">Inspect</a></td></tr>');
+                panelBody.prepend('<tr class="' + (x % 2 == 0 ? 'even' : 'odd') + '"><td>' + item.uri + '</td><td>' + item.method + '</td><td>' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.dateTime + '</td><td><a href="#" class="glimpse-ajax-link" data-requestId="' + item.requestId + '">Inspect</a></td></tr>');
             }
             
             resultCount = result.length; 
@@ -1879,9 +1879,9 @@ var glimpseAjaxPlugin = (function ($, glimpse) {
         },
         
         selected = function (item) {
-            var requestId = item.attr('data-glimpseId');
+            var requestId = item.attr('data-requestId');
 
-            item.hide().parent().append('<div class="loading glimpse-ajax-loading" data-glimpseId="' + requestId + '"><div class="icon"></div>Loading...</div>');
+            item.hide().parent().append('<div class="loading glimpse-ajax-loading" data-requestId="' + requestId + '"><div class="icon"></div>Loading...</div>');
 
             request(requestId);
         },
@@ -1892,8 +1892,8 @@ var glimpseAjaxPlugin = (function ($, glimpse) {
         },
         process = function (requestId) {
             var panel = glimpse.elements.findPanel('Ajax'),
-                loading = panel.find('.glimpse-ajax-loading[data-glimpseId="' + requestId + '"]'),
-                link = panel.find('.glimpse-ajax-link[data-glimpseId="' + requestId + '"]');
+                loading = panel.find('.glimpse-ajax-loading[data-requestId="' + requestId + '"]'),
+                link = panel.find('.glimpse-ajax-link[data-requestId="' + requestId + '"]');
 
             panel.find('.glimpse-head-message').fadeIn();
             panel.find('.selected').removeClass('selected'); 
@@ -2050,7 +2050,7 @@ var glimpseHistoryPlugin = (function ($, glimpse) {
             var html = '';
             for (var x = context.resultCount; x < clientData.length; x++) {
                 var item = clientData[x];
-                html = '<tr class="' + (x % 2 == 0 ? 'even' : 'odd') + '" data-requestId="' + item.requestId + '"><td>' + item.uri + '</td><td>' + item.method + '</td><td>' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.dateTime + '</td><td>' + item.isAjax + '</td><td><a href="#" class="glimpse-history-link" data-glimpseId="' + item.requestId + '">Inspect</a></td></tr>' + html;
+                html = '<tr class="' + (x % 2 == 0 ? 'even' : 'odd') + '" data-requestId="' + item.requestId + '"><td>' + item.uri + '</td><td>' + item.method + '</td><td>' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.dateTime + '</td><td>' + item.isAjax + '</td><td><a href="#" class="glimpse-history-link" data-requestId="' + item.requestId + '">Inspect</a></td></tr>' + html;
             }
             mainBody.prepend(html);
             
@@ -2073,9 +2073,9 @@ var glimpseHistoryPlugin = (function ($, glimpse) {
         
         
         selected = function (item) {
-            var requestId = currentRequestId = item.attr('data-glimpseId');
+            var requestId = currentRequestId = item.attr('data-requestId');
 
-            item.hide().parent().append('<div class="loading glimpse-history-loading" data-glimpseId="' + requestId + '"><div class="icon"></div>Loading...</div>');
+            item.hide().parent().append('<div class="loading glimpse-history-loading" data-requestId="' + requestId + '"><div class="icon"></div>Loading...</div>');
 
             request(requestId);
         },
@@ -2089,8 +2089,8 @@ var glimpseHistoryPlugin = (function ($, glimpse) {
         process = function (requestId) {
             var panel = glimpse.elements.findPanel('History'),
                 main = panel.find('.glimpse-col-main'), 
-                loading = panel.find('.glimpse-history-loading[data-glimpseId="' + requestId + '"]'),
-                link = panel.find('.glimpse-history-link[data-glimpseId="' + requestId + '"]');
+                loading = panel.find('.glimpse-history-loading[data-requestId="' + requestId + '"]'),
+                link = panel.find('.glimpse-history-link[data-requestId="' + requestId + '"]');
             
             context.requestId = requestId;
 
