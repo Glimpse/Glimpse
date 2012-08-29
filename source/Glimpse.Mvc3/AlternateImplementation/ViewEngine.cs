@@ -8,10 +8,23 @@ using Glimpse.Mvc3.Message;
 
 namespace Glimpse.Mvc3.AlternateImplementation
 {
-    public class ViewEngine
+    public abstract class ViewEngine
     {
-        private ViewEngine()
+        public IMessageBroker MessageBroker { get; set; }
+        public IProxyFactory ProxyFactory { get; set; }
+        public ILogger Logger { get; set; }
+        public Func<IExecutionTimer> TimerStrategy { get; set; }
+        public Func<RuntimePolicy> RuntimePolicyStrategy { get; set; }
+        public bool IsPartial { get; set; }
+        public MethodInfo MethodToImplement { get; private set; }
+
+        protected ViewEngine(IMessageBroker messageBroker, IProxyFactory proxyFactory, ILogger logger, Func<IExecutionTimer> timerStrategy, Func<RuntimePolicy> runtimePolicyStrategy)
         {
+            MessageBroker = messageBroker;
+            ProxyFactory = proxyFactory;
+            Logger = logger;
+            TimerStrategy = timerStrategy;
+            RuntimePolicyStrategy = runtimePolicyStrategy;
         }
 
         public static IEnumerable<IAlternateImplementation<IViewEngine>> AllMethods(IMessageBroker messageBroker, IProxyFactory proxyFactory, ILogger logger, Func<IExecutionTimer> timerStrategy, Func<RuntimePolicy> runtimePolicyStrategy)
@@ -21,24 +34,12 @@ namespace Glimpse.Mvc3.AlternateImplementation
         }
 
         //This class is the alternate implementation for both .FindView() AND .FindPartialView()
-        public class FindViews : IAlternateImplementation<IViewEngine>
+        public class FindViews : ViewEngine, IAlternateImplementation<IViewEngine>
         {
-            public IMessageBroker MessageBroker { get; set; }
-            public IProxyFactory ProxyFactory { get; set; }
-            public ILogger Logger { get; set; }
-            public Func<IExecutionTimer> TimerStrategy { get; set; }
-            public Func<RuntimePolicy> RuntimePolicyStrategy { get; set; }
-            public bool IsPartial { get; set; }
-            public MethodInfo MethodToImplement { get; private set; }
 
-            public FindViews(IMessageBroker messageBroker, IProxyFactory proxyFactory, ILogger logger, Func<IExecutionTimer> timerStrategy, Func<RuntimePolicy> runtimePolicyStrategy, bool isPartial)
+            public FindViews(IMessageBroker messageBroker, IProxyFactory proxyFactory, ILogger logger, Func<IExecutionTimer> timerStrategy, Func<RuntimePolicy> runtimePolicyStrategy, bool isPartial):base(messageBroker, proxyFactory, logger, timerStrategy, runtimePolicyStrategy)
             {
-                MessageBroker = messageBroker;
-                ProxyFactory = proxyFactory;
-                Logger = logger;
-                TimerStrategy = timerStrategy;
                 IsPartial = isPartial;
-                RuntimePolicyStrategy = runtimePolicyStrategy;
                 MethodToImplement = typeof (IViewEngine).GetMethod(IsPartial ? "FindPartialView" : "FindView");
             }
 
