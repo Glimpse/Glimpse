@@ -25,6 +25,12 @@ namespace Glimpse.Mvc3.AlternateImplementation
             MessageBroker = messageBroker;
         }
 
+        public static IEnumerable<IAlternateImplementation<ControllerActionInvoker>> AllMethods(Func<RuntimePolicy> runtimePolicyStrategy, Func<IExecutionTimer> timerStrategy, IMessageBroker messageBroker)
+        {
+            yield return new InvokeActionResult<ControllerActionInvoker>(runtimePolicyStrategy, timerStrategy, messageBroker);
+            yield return new InvokeActionMethod(runtimePolicyStrategy, timerStrategy, messageBroker);
+        }
+
         public class InvokeActionResult<T> : ActionInvoker, IAlternateImplementation<T> where T : class
         {
             public InvokeActionResult(Func<RuntimePolicy> runtimePolicyStrategy, Func<IExecutionTimer> timerStrategy, IMessageBroker messageBroker) : base(runtimePolicyStrategy, timerStrategy, messageBroker)
@@ -80,7 +86,7 @@ namespace Glimpse.Mvc3.AlternateImplementation
             }
         }
 
-        public class InvokeActionMethod
+        public class InvokeActionMethod: ActionInvoker, IAlternateImplementation<ControllerActionInvoker>
         {
             public class Arguments
             {
@@ -124,6 +130,16 @@ namespace Glimpse.Mvc3.AlternateImplementation
                 public bool IsChildAction { get; set; }
                 public string ActionName { get; set; }
                 public Type ActionResultType { get; set; }
+            }
+
+            public InvokeActionMethod(Func<RuntimePolicy> runtimePolicyStrategy, Func<IExecutionTimer> timerStrategy, IMessageBroker messageBroker) : base(runtimePolicyStrategy, timerStrategy, messageBroker)
+            {
+            }
+
+            public MethodInfo MethodToImplement { get; private set; }
+            public void NewImplementation(IAlternateImplementationContext context)
+            {
+                throw new NotImplementedException();
             }
         }
     }

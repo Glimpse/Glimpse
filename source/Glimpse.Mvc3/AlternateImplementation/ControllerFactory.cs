@@ -57,6 +57,15 @@ namespace Glimpse.Mvc3.AlternateImplementation
             var controller = iController as Controller;
             if (controller != null)
             {
+                var actionInvoker = controller.ActionInvoker;
+
+                if (proxyFactory.IsProxyable(actionInvoker))
+                {
+                    var proxiedActionInvoker = proxyFactory.CreateProxy(actionInvoker as ControllerActionInvoker, ActionInvoker.AllMethods(RuntimePolicyStrategy, TimerStrategy, MessageBroker));
+
+                    controller.ActionInvoker = proxiedActionInvoker;
+                }
+
                 return;
             }
         }

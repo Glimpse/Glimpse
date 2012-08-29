@@ -78,13 +78,23 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         }
 
         [Fact]
-        public void ProxyActionInvokerIfControllerFound()
+        public void ProxyActionInvokerIfAsyncControllerFound()
         {
             Tester.ContextMock.Setup(c => c.ReturnValue).Returns(new DummyAsyncController());
 
             Tester.NewImplementation(Tester.ContextMock.Object);
 
             Tester.ProxyFactoryMock.Verify(p => p.CreateProxy(It.IsAny<AsyncControllerActionInvoker>(), It.IsAny<IEnumerable<IAlternateImplementation<AsyncControllerActionInvoker>>>(), It.IsAny<object>()));
+        }
+
+        [Fact]
+        public void ProxyActionInvokerIfControllerFound()
+        {
+            Tester.ContextMock.Setup(c => c.ReturnValue).Returns(new DummyController());
+
+            Tester.NewImplementation(Tester.ContextMock.Object);
+
+            Tester.ProxyFactoryMock.Verify(p => p.CreateProxy(It.IsAny<ControllerActionInvoker>(), It.IsAny<IEnumerable<IAlternateImplementation<ControllerActionInvoker>>>()));
         }
     }
 }
