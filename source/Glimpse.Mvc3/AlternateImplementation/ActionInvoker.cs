@@ -52,7 +52,6 @@ namespace Glimpse.Mvc3.AlternateImplementation
                 }
 
                 var timer = TimerStrategy();
-
                 var timerResult = timer.Time(context.Proceed);
 
                 MessageBroker.Publish(new TimerResultMessage(timerResult, "ActionResult Executed", "MVC"));//TODO clean this up, use a constant?
@@ -88,6 +87,32 @@ namespace Glimpse.Mvc3.AlternateImplementation
 
         public class InvokeActionMethod: ActionInvoker, IAlternateImplementation<ControllerActionInvoker>
         {
+            public InvokeActionMethod(Func<RuntimePolicy> runtimePolicyStrategy, Func<IExecutionTimer> timerStrategy, IMessageBroker messageBroker) : base(runtimePolicyStrategy, timerStrategy, messageBroker)
+            {
+            }
+
+            public MethodInfo MethodToImplement
+            {
+                get { return typeof(ControllerActionInvoker).GetMethod("InvokeActionMethod", BindingFlags.Instance | BindingFlags.NonPublic); }
+            }
+            public void NewImplementation(IAlternateImplementationContext context)
+            {
+                //ActionResult InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary<string, object> parameters)
+                if (RuntimePolicyStrategy() == RuntimePolicy.Off) //TODO: NOT DRY AT ALL
+                {
+                    context.Proceed();
+                    return;
+                }
+
+                var timer = TimerStrategy();
+                var timerResult = timer.Time(context.Proceed);
+
+                var arguments = new Arguments(context.Arguments);
+
+                MessageBroker.Publish(new TimerResultMessage(timerResult, arguments.ActionDescriptor.ActionName+"()", "MVC"));
+                MessageBroker.Publish(new Message(arguments, context.ReturnValue as ActionResult));
+            }
+
             public class Arguments
             {
                 public Arguments(object[] arguments)
@@ -130,16 +155,6 @@ namespace Glimpse.Mvc3.AlternateImplementation
                 public bool IsChildAction { get; set; }
                 public string ActionName { get; set; }
                 public Type ActionResultType { get; set; }
-            }
-
-            public InvokeActionMethod(Func<RuntimePolicy> runtimePolicyStrategy, Func<IExecutionTimer> timerStrategy, IMessageBroker messageBroker) : base(runtimePolicyStrategy, timerStrategy, messageBroker)
-            {
-            }
-
-            public MethodInfo MethodToImplement { get; private set; }
-            public void NewImplementation(IAlternateImplementationContext context)
-            {
-                throw new NotImplementedException();
             }
         }
     }
