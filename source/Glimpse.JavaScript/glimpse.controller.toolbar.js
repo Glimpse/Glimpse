@@ -3,7 +3,7 @@
         isPopup = function() {
             var resources = data.currentMetadata().resources;
             if (resources.glimpse_popup) 
-                return window.location.href.indexOf(util.replaceTokens(data.currentMetadata().resources.glimpse_popup)) > -1;
+                return window.location.href.indexOf(util.replaceTokens(data.currentMetadata().resources.glimpse_popup, { requestId : data.current().requestId })) > -1;
             return false;
         },
         wireListeners = function() {
