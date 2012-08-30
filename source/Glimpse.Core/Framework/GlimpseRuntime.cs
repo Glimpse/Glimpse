@@ -333,6 +333,18 @@ namespace Glimpse.Core.Framework
                     pluginMetadata[tab.GetType().FullName] = metadataInstance; 
             }
 
+            foreach(var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                var nugetPackage = assembly.GetCustomAttributes(typeof (NuGetPackageAttribute), false).Cast<NuGetPackageAttribute>().SingleOrDefault();
+                if (nugetPackage == null)
+                    continue;
+
+                var version = nugetPackage.GetVersion(assembly);
+                var id = nugetPackage.GetId(assembly);
+
+                metadata.Packages[id] = version;
+            }
+
             var resources = metadata.Resources;
             var endpoint = Configuration.ResourceEndpoint;
             var logger = Configuration.Logger;

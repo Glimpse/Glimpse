@@ -86,6 +86,7 @@
     <Compile Include="Extensibility\IConfigurable.cs" />
     <Compile Include="Extensibility\IParameterValueProvider.cs" />
     <Compile Include="Extensibility\IPrivilegedResource.cs" />
+    <Compile Include="Extensibility\NuGetPackageAttribute.cs" />
     <Compile Include="Extensibility\ResourceParameterMetadata.cs" />
     <Compile Include="Extensibility\TimerResult.cs" />
     <Compile Include="Extensibility\IAlternateImplementation.cs" />
