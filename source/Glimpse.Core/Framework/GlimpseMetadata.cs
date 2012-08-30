@@ -10,6 +10,7 @@ namespace Glimpse.Core.Framework
 
             Resources = new Dictionary<string, string>//TODO: once the resources below are implemented, this constructor should just instantiate variable.
                         {
+                            {"glimpse_packageUpdates", "//getGlimpse.com/{?packages*}"},
                             {"paging", "NEED TO IMPLMENT RESOURCE Pager"},//TODO: Implement resource
                             {"tab", "NEED TO IMPLMENT RESOURCE test-popup.html"},//TODO: Implement resource
                         };
