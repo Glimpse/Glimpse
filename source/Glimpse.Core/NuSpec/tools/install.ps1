@@ -1,5 +1,3 @@
 ﻿param($installPath, $toolsPath, $package, $project)
 
-$path = [System.IO.Path]
-$readmefile = $path::Combine($installPath, "glimpse.readme.html")
-$DTE.ItemOperations.Navigate($readmefile)
+$DTE.ItemOperations.Navigate("http://getglimpse.com/?id=" + $package.Id + "/" + $package.Version)
