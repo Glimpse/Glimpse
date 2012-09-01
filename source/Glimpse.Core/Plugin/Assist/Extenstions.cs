@@ -4,7 +4,7 @@ namespace Glimpse.Core.Plugin.Assist
 {
 	public static class Extenstions
 	{
-		public static GlimpseSection AsGlimpseSection(this object o)
+		public static GlimpseSection ToGlimpseSection(this object o)
 		{
 			var section = o as GlimpseSection;
 			if (section != null)

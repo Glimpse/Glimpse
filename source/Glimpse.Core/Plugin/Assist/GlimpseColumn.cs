@@ -4,17 +4,16 @@ namespace Glimpse.Core.Plugin.Assist
 	{
 		public object Data { get; private set; }
 
-		public GlimpseColumn(object o)
+		public GlimpseColumn(object columnData)
 		{
-			if (o is GlimpseSection)
-				Data = o.AsGlimpseSection().Build();
-			else
-				Data = o;
+			Data = columnData is GlimpseSection
+				? columnData.ToGlimpseSection().Build()
+				: columnData;
 		}
 
-		internal void OverrideData(object data)
+		internal void OverrideData(object columnData)
 		{
-			Data = data;
+			Data = columnData;
 		}
 	}
 }
