@@ -2,10 +2,12 @@ using System;
 
 namespace Glimpse.Core.Plugin.Assist
 {
-	public static class Extenstions
+	public static class AssistExtensions
 	{
 		public static GlimpseSection ToGlimpseSection(this object o)
 		{
+			if (o == null) throw new ArgumentNullException("o");
+
 			var section = o as GlimpseSection;
 			if (section != null)
 				return section;
@@ -13,8 +15,9 @@ namespace Glimpse.Core.Plugin.Assist
 			var instance = o as GlimpseSection.Instance;
 			if (instance != null)
 				return instance.Data;
-			
-			throw new InvalidCastException(String.Format("The object is not a glimpse root. Object is of type {0}.", o.GetType()));
+
+			var message = String.Format("The object is not a {0}. Object is of type {1}.", typeof(GlimpseSection).Name, o.GetType());
+			throw new InvalidOperationException(message);
 		}
 	}
 }

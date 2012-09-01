@@ -161,7 +161,7 @@
     <Compile Include="Framework\IFrameworkProvider.cs" />
     <Compile Include="Framework\GlimpseConfiguration.cs" />
     <Compile Include="Framework\GlimpseRuntime.cs" />
-    <Compile Include="Plugin\Assist\Extenstions.cs" />
+    <Compile Include="Plugin\Assist\AssistExtensions.cs" />
     <Compile Include="Plugin\Assist\FormattingExtensions.cs" />
     <Compile Include="Plugin\Assist\GlimpseColumn.cs" />
     <Compile Include="Plugin\Assist\GlimpseRow.cs" />
