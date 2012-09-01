@@ -109,8 +109,8 @@
     <Compile Include="GlimpseExceptionShould.cs" />
     <Compile Include="JsonNetSerializerShould.cs" />
     <Compile Include="Plugin\Assist\AssistExtensionsTest.cs" />
-    <Compile Include="Plugin\Assist\FormattingExtensionsTest.cs" />
     <Compile Include="Plugin\Assist\GlimpseColumnTest.cs" />
+    <Compile Include="Plugin\Assist\GlimpseRowFormattingExtensionsTest.cs" />
     <Compile Include="Plugin\Assist\GlimpseRowTest.cs" />
     <Compile Include="Plugin\Assist\GlimpseSectionTest.cs" />
     <Compile Include="Policy\AjaxPolicyShould.cs" />

@@ -5,9 +5,9 @@ using Xunit;
 
 namespace Glimpse.Test.Core.Plugin.Assist
 {
-	public class FormattingExtensionsFact
-	{
-		[Fact]
+	public class GlimpseRowFormattingExtensionsTest
+    {
+        [Fact]
 		public void GlimpseRow_Bold_AppliesBoldToLastColumn()
 		{
 			var row = Row.Bold();
@@ -57,7 +57,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 
 		private GlimpseRow Row { get; set; }
 
-		public FormattingExtensionsFact()
+		public GlimpseRowFormattingExtensionsTest()
 		{
 			Row = new GlimpseRow().Column("Text");
 		}

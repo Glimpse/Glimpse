@@ -7,6 +7,18 @@ namespace Glimpse.Core.Plugin.Assist
 	{
 		private readonly List<GlimpseRow> _rows = new List<GlimpseRow>();
 
+		public GlimpseSection() {}
+
+		public GlimpseSection(params string[] headers)
+		{
+			if (headers.Any())
+			{
+				var row = AddRow();
+				foreach (var header in headers)
+					row.Column(header);
+			}
+		}
+
 		public IEnumerable<GlimpseRow> Rows
 		{
 			get { return _rows; }
