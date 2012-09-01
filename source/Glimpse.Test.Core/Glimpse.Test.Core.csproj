@@ -108,6 +108,8 @@
     <Compile Include="Framework\TimerShould.cs" />
     <Compile Include="GlimpseExceptionShould.cs" />
     <Compile Include="JsonNetSerializerShould.cs" />
+    <Compile Include="Plugin\Assist\GlimpseRowTest.cs" />
+    <Compile Include="Plugin\Assist\GlimpseSectionTest.cs" />
     <Compile Include="Policy\AjaxPolicyShould.cs" />
     <Compile Include="Policy\ContentTypePolicyShould.cs" />
     <Compile Include="Policy\ControlCookiePolicyShould.cs" />
