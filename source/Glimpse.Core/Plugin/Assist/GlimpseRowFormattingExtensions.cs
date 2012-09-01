@@ -58,7 +58,7 @@ namespace Glimpse.Core.Plugin.Assist
 
 		public static GlimpseRow Error(this GlimpseRow row)
 		{
-			return VerifyAndApplyFormatting(row, "Error");
+			return VerifyAndApplyFormatting(row, FormattingKeywords.Error);
 		}
 
 		public static GlimpseRow ErrorIf(this GlimpseRow row, bool condition)
@@ -68,7 +68,7 @@ namespace Glimpse.Core.Plugin.Assist
 
 		public static GlimpseRow Fail(this GlimpseRow row)
 		{
-			return VerifyAndApplyFormatting(row, "Fail");
+			return VerifyAndApplyFormatting(row, FormattingKeywords.Fail);
 		}
 
 		public static GlimpseRow FailIf(this GlimpseRow row, bool condition)
@@ -78,7 +78,7 @@ namespace Glimpse.Core.Plugin.Assist
 
 		public static GlimpseRow Info(this GlimpseRow row)
 		{
-			return VerifyAndApplyFormatting(row, "Info");
+			return VerifyAndApplyFormatting(row, FormattingKeywords.Info);
 		}
 
 		public static GlimpseRow InfoIf(this GlimpseRow row, bool condition)
@@ -86,9 +86,19 @@ namespace Glimpse.Core.Plugin.Assist
 			return condition ? row.Info() : row;
 		}
 
+		public static GlimpseRow Loading(this GlimpseRow row)
+		{
+			return VerifyAndApplyFormatting(row, FormattingKeywords.Loading);
+		}
+
+		public static GlimpseRow LoadingIf(this GlimpseRow row, bool condition)
+		{
+			return condition ? row.Loading() : row;
+		}
+
 		public static GlimpseRow Ms(this GlimpseRow row)
 		{
-			return VerifyAndApplyFormatting(row, "Ms");
+			return VerifyAndApplyFormatting(row, FormattingKeywords.Ms);
 		}
 
 		public static GlimpseRow MsIf(this GlimpseRow row, bool condition)
@@ -98,7 +108,7 @@ namespace Glimpse.Core.Plugin.Assist
 
 		public static GlimpseRow Quiet(this GlimpseRow row)
 		{
-			return VerifyAndApplyFormatting(row, "Quiet");
+			return VerifyAndApplyFormatting(row, FormattingKeywords.Quiet);
 		}
 
 		public static GlimpseRow QuietIf(this GlimpseRow row, bool condition)
@@ -108,27 +118,17 @@ namespace Glimpse.Core.Plugin.Assist
 
 		public static GlimpseRow Selected(this GlimpseRow row)
 		{
-			return VerifyAndApplyFormatting(row, "Selected");
+			return VerifyAndApplyFormatting(row, FormattingKeywords.Selected);
 		}
 
 		public static GlimpseRow SelectedIf(this GlimpseRow row, bool condition)
 		{
 			return condition ? row.Selected() : row;
 		}
-
-		public static GlimpseRow Loading(this GlimpseRow row)
-		{
-			return VerifyAndApplyFormatting(row, "Loading");
-		}
-
-		public static GlimpseRow LoadingIf(this GlimpseRow row, bool condition)
-		{
-			return condition ? row.Loading() : row;
-		}
-
+		
 		public static GlimpseRow Warn(this GlimpseRow row)
 		{
-			return VerifyAndApplyFormatting(row, "Warn");
+			return VerifyAndApplyFormatting(row, FormattingKeywords.Warn);
 		}
 
 		public static GlimpseRow WarnIf(this GlimpseRow row, bool condition)

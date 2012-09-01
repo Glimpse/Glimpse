@@ -5,14 +5,38 @@ using Xunit;
 
 namespace Glimpse.Test.Core.Plugin.Assist
 {
-	public class GlimpseRowFormattingExtensionsTest
-    {
-        [Fact]
+	public class GlimpseRowFormattingExtensionsFact
+	{
+		[Fact]
 		public void GlimpseRow_Bold_AppliesBoldToLastColumn()
 		{
 			var row = Row.Bold();
 
-			Assert.Equal(row.Columns.Last().Data, "*Text*");
+			Assert.Equal(row.Columns.Last().Data, @"*Text*");
+		}
+
+		[Fact]
+		public void GlimpseRow_Italic_AppliesItalicToLastColumn()
+		{
+			var row = Row.Italic();
+
+			Assert.Equal(row.Columns.Last().Data, @"\Text\");
+		}
+
+		[Fact]
+		public void GlimpseRow_Raw_AppliesRawToLastColumn()
+		{
+			var row = Row.Raw();
+
+			Assert.Equal(row.Columns.Last().Data, @"!Text!");
+		}
+
+		[Fact]
+		public void GlimpseRow_Sub_AppliesSubToLastColumn()
+		{
+			var row = Row.Sub();
+
+			Assert.Equal(row.Columns.Last().Data, @"|Text|");
 		}
 
 		[Fact]
@@ -24,11 +48,51 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void GlimpseRow_RowOperation_IsInvalidForRowsWithoutColumns()
+		public void GlimpseRow_RowOperations_AreInvalidForRowsWithoutColumns()
 		{
 			var row = new GlimpseRow();
 
 			Assert.Throws<InvalidOperationException>(() => row.Quiet());
+		}
+
+		[Fact]
+		public void GlimpseRow_Error_AddsColumnWithError()
+		{
+			var row = Row.Error();
+
+			Assert.Equal(row.Columns.Last().Data, "error");
+		}
+
+		[Fact]
+		public void GlimpseRow_Fail_AddsColumnWithFail()
+		{
+			var row = Row.Fail();
+
+			Assert.Equal(row.Columns.Last().Data, "fail");
+		}
+
+		[Fact]
+		public void GlimpseRow_Info_AddsColumnWithInfo()
+		{
+			var row = Row.Info();
+
+			Assert.Equal(row.Columns.Last().Data, "info");
+		}
+
+		[Fact]
+		public void GlimpseRow_Loading_AddsColumnWithLoading()
+		{
+			var row = Row.Loading();
+
+			Assert.Equal(row.Columns.Last().Data, "loading");
+		}
+
+		[Fact]
+		public void GlimpseRow_Ms_AddsColumnWithMs()
+		{
+			var row = Row.Ms();
+
+			Assert.Equal(row.Columns.Last().Data, "ms");
 		}
 
 		[Fact]
@@ -57,7 +121,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 
 		private GlimpseRow Row { get; set; }
 
-		public GlimpseRowFormattingExtensionsTest()
+		public GlimpseRowFormattingExtensionsFact()
 		{
 			Row = new GlimpseRow().Column("Text");
 		}
