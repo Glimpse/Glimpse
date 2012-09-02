@@ -109,11 +109,15 @@
     <Compile Include="GlimpseExceptionShould.cs" />
     <Compile Include="JsonNetSerializerShould.cs" />
     <Compile Include="Plugin\Assist\AssistExtensionsFact.cs" />
+    <Compile Include="Plugin\Assist\PluginFact.cs" />
+    <Compile Include="Plugin\Assist\StructuredLayoutCellFact.cs" />
+    <Compile Include="Plugin\Assist\StructuredLayoutFact.cs" />
     <Compile Include="Plugin\Assist\GlimpseColumnFact.cs" />
     <Compile Include="Plugin\Assist\GlimpseRowFormattingExtensionsFact.cs" />
     <Compile Include="Plugin\Assist\GlimpseRowFact.cs" />
     <Compile Include="Plugin\Assist\GlimpseSectionFact.cs" />
     <Compile Include="Plugin\Assist\StringFormattingExtensionsFact.cs" />
+    <Compile Include="Plugin\Assist\StructuredLayoutRowFact.cs" />
     <Compile Include="Policy\AjaxPolicyShould.cs" />
     <Compile Include="Policy\ContentTypePolicyShould.cs" />
     <Compile Include="Policy\ControlCookiePolicyShould.cs" />
