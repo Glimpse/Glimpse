@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Glimpse.Core.Plugin.Assist;
 using Xunit;
 
@@ -12,6 +13,14 @@ namespace Glimpse.Test.Core.Plugin.Assist
 			var columns = Row.Columns;
 
 			Assert.Equal(0, columns.Count());
+		}
+
+		[Fact]
+		public void GlimpseRow_Column_ThrowsForNullValue()
+		{
+			object columnObject = null;
+			
+			Assert.Throws<ArgumentNullException>(() => Row.Column(columnObject));
 		}
 
 		[Fact]

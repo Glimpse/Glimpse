@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,9 +15,12 @@ namespace Glimpse.Core.Plugin.Assist
 
 		public GlimpseRow Column(object columnData)
 		{
-			// TODO: Should we throw if column data is null
+			if (columnData == null)
+				throw new ArgumentNullException("columnData", "Column data must not be null.");
+			
 			var column = new GlimpseColumn(columnData);
 			_columns.Add(column);
+			
 			return this;
 		}
 
