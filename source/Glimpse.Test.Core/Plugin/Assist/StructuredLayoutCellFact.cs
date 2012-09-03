@@ -1,4 +1,3 @@
-using System.Linq;
 using Glimpse.Core.Plugin.Assist;
 using Xunit;
 
