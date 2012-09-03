@@ -6,24 +6,30 @@ namespace Glimpse.Core.Plugin.Assist
 	{
 		public StructuredLayoutCell(int cell)
 		{
+			if (cell < 0)
+				throw new ArgumentException("Cell must not be a negative value.", "cell");
+
 			Data = cell;
 		}
 
 		public StructuredLayoutCell(string format)
 		{
+			if (String.IsNullOrEmpty(format)) 
+				throw new ArgumentException("Format must not be null or empty.", "format");
+
 			Data = format;
 		}
 
 		public object Data { get; private set; }
-		public object Structure { get; set; }
+		public object Structure { get; private set; }
 		
-		public bool? Key { get; private set; }
+		public bool? IsKey { get; private set; }
 		public bool? IsCode { get; private set; }
 		public string CodeType { get; private set; }
 		
 		public string Align { get; private set; }
 		public string Width { get; private set; }
-		protected int? Rspan { get; private set; }
+		public int? RowSpan { get; private set; }
 		public string ClassName { get; private set; }
 
 		public bool? SuppressAutoPreview { get; private set; }
@@ -34,6 +40,9 @@ namespace Glimpse.Core.Plugin.Assist
 
 		public StructuredLayoutCell Format(string format)
 		{
+			if (String.IsNullOrEmpty(format))
+				throw new ArgumentException("Format must not be null or empty.", "format");
+
 			Data = format;
 			return this;
 		}
@@ -53,12 +62,15 @@ namespace Glimpse.Core.Plugin.Assist
 
 		public StructuredLayoutCell AsKey()
 		{
-			Key = true;
+			IsKey = true;
 			return this;
 		}
 
 		public StructuredLayoutCell AsCode(string codeType)
 		{
+			if (String.IsNullOrEmpty(codeType))
+				throw new ArgumentException("Code type must not be null or empty.", "codeType");
+
 			IsCode = true;
 			CodeType = codeType;
 			return this;
@@ -70,26 +82,38 @@ namespace Glimpse.Core.Plugin.Assist
 			return this;
 		}
 
-		public StructuredLayoutCell WidthInPercent(int value)
+		public StructuredLayoutCell WidthInPixels(int pixels)
 		{
-			Width = value + "%";
+			if (pixels < 0)
+				throw new ArgumentException("Pixels must not be a negative value.", "pixels");
+
+			Width = pixels + "px";
 			return this;
 		}
 
-		public StructuredLayoutCell WidthInPixels(int value)
+		public StructuredLayoutCell WidthInPercent(int percent)
 		{
-			Width = value + "px";
+			if (percent < 0)
+				throw new ArgumentException("Percent must not be a negative value.", "percent");
+
+			Width = percent + "%";
 			return this;
 		}
 
-		public StructuredLayoutCell RowSpan(int value)
+		public StructuredLayoutCell SpanRows(int rows)
 		{
-			Rspan = value;
+			if (rows < 1)
+				throw new ArgumentException("Rows must not be less then 0.", "rows");
+
+			RowSpan = rows;
 			return this;
 		}
 
 		public StructuredLayoutCell Class(string className)
 		{
+			if (String.IsNullOrEmpty(className))
+				throw new ArgumentException("Class name must not be null or empty.", "className");
+
 			ClassName = className;
 			return this;
 		}
@@ -102,19 +126,28 @@ namespace Glimpse.Core.Plugin.Assist
 
 		public StructuredLayoutCell LimitTo(int rows)
 		{
+			if (rows < 1)
+				throw new ArgumentException("Rows must not be less then 0.", "rows");
+
 			Limit = rows;
 			return this;
 		}
 
-		public StructuredLayoutCell Prefix(string text)
+		public StructuredLayoutCell Prefix(string prefix)
 		{
-			Pre = text;
+			if (String.IsNullOrEmpty(prefix))
+				throw new ArgumentException("Prefix must not be null or empty.", "prefix");
+
+			Pre = prefix;
 			return this;
 		}
 
-		public StructuredLayoutCell Suffix(string text)
+		public StructuredLayoutCell Suffix(string suffix)
 		{
-			Post = text;
+			if (String.IsNullOrEmpty(suffix))
+				throw new ArgumentException("Suffix must not be null or empty.", "suffix");
+
+			Post = suffix;
 			return this;
 		}
 	}
