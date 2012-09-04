@@ -1,5 +1,6 @@
 ﻿(function($, glimpse) {
-    var templates = {
+    var pubsub = glimpse.pubsub,
+        templates = {
             css: '/*(import:glimpse.view.shell.css)*/',
             html: '/*(import:glimpse.view.shell.html)*/'
         },
@@ -13,15 +14,15 @@
             return template.html;
         },
         ready = function() {
-            glimpse.pubsub.subscribe('action.template.processing', templates);
-            glimpse.pubsub.subscribe('action.shell.loading');
+            pubsub.subscribe('action.template.processing', templates);
+            pubsub.subscribe('action.shell.loading');
             
             $(getCss()).appendTo('head'); 
             $(getHtml()).appendTo('body');
             
-            glimpse.pubsub.subscribe('action.template.processed', templates);
-            glimpse.pubsub.subscribe('action.shell.loaded');
+            pubsub.subscribe('action.template.processed', templates);
+            pubsub.subscribe('action.shell.loaded');
         };
 
-    glimpse.pubsub.subscribe('trigger.shell.load', start); 
+    pubsub.subscribe('trigger.shell.load', start); 
 })(jQueryGlimpse, glimpse);

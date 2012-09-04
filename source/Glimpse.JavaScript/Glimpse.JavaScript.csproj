@@ -130,6 +130,7 @@
     <Content Include="Modules\glimpse.render.util.js" />
     <Content Include="Modules\glimpse.shell.js" />
     <Content Include="Modules\glimpse.system.js" />
+    <Content Include="Modules\glimpse.util.js" />
     <Content Include="Modules\test.html" />
     <Content Include="UnitTests\index.html" />
     <Content Include="UnitTests\Lib\qunit.css" />
