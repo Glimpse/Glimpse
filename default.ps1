@@ -146,7 +146,9 @@ function Update-AssemblyInformationalVersion
     if ($preReleaseVersion -ne $null)
     {
         $version = ([string]$input).Split('-')[0]
-        return "$version-$preReleaseVersion"
+        $date = Get-Date
+        $parsed = $preReleaseVersion.Replace("{date}", $date.ToString("yyMMdd"))
+        return "$version-$parsed"
     }
     else
     {
