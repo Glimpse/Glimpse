@@ -8,7 +8,7 @@
         },
         callSubscriber = function(subscriber, message, data) {
             try {
-                subscriber(message, data);
+                subscriber(data, message);
             } catch(ex) {
                 setTimeout(throwException(ex), 0);
             }

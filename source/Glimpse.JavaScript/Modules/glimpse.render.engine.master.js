@@ -23,17 +23,3 @@
 
     engine.register('master', provider);
 })(glimpse.render.engine);
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -117,6 +117,7 @@
     <Content Include="jquery.jsonp-2.4.0.js" />
     <Content Include="Modules\glimpse.data.js" />
     <Content Include="Modules\glimpse.element.js" />
+    <Content Include="Modules\glimpse.js" />
     <Content Include="Modules\glimpse.render.js" />
     <Content Include="Modules\glimpse.pubsub.js" />
     <Content Include="Modules\glimpse.render.engine.raw.js" />
@@ -127,11 +128,18 @@
     <Content Include="Modules\glimpse.render.engine.string.js" />
     <Content Include="Modules\glimpse.render.engine.structured.js" />
     <Content Include="Modules\glimpse.render.engine.table.js" />
+    <Content Include="Modules\glimpse.render.lazy.js" />
+    <Content Include="Modules\glimpse.render.panel.js" />
+    <Content Include="Modules\glimpse.render.tab.js" />
     <Content Include="Modules\glimpse.render.util.js" />
     <Content Include="Modules\glimpse.shell.js" />
     <Content Include="Modules\glimpse.system.js" />
     <Content Include="Modules\glimpse.util.js" />
+    <Content Include="Modules\glimpse.shell.css" />
+    <Content Include="Modules\glimpse.shell.html" />
+    <Content Include="Modules\jquery-1.8.0.min.js" />
     <Content Include="Modules\test.html" />
+    <Content Include="Modules\_glimpse.build.js" />
     <Content Include="UnitTests\index.html" />
     <Content Include="UnitTests\Lib\qunit.css" />
     <Content Include="UnitTests\Lib\qunit.js" />

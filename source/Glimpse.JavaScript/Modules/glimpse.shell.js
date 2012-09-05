@@ -1,8 +1,8 @@
 ﻿(function($, glimpse) {
     var pubsub = glimpse.pubsub,
         templates = {
-            css: '/*(import:glimpse.view.shell.css)*/',
-            html: '/*(import:glimpse.view.shell.html)*/'
+            css: '/*(import:glimpse.shell.css)*/',
+            html: '/*(import:glimpse.shell.html)*/'
         },
         getCss = function() {
             var spriteAddress = util.replaceTokens(data.currentMetadata().resources.glimpse_sprite),
