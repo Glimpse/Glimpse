@@ -6,6 +6,7 @@ properties {
     $package_dir = "$base_dir\packages"
     $framework_dir = $([System.Runtime.InteropServices.RuntimeEnvironment]::GetRuntimeDirectory().Replace("v2.0.50727", "v4.0.30319"))
     $config = "release"
+    $preReleaseVersion = $null
 }
 
 #tasks -------------------------------------------------------------------------------------------------------------
@@ -85,11 +86,11 @@ task pack -depends merge {
     cd $base_dir\.NuGet
     
     "   Glimpse.nuspec"
-    $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.Core\Properties\AssemblyInfo.cs
+    $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.Core\Properties\AssemblyInfo.cs | Update-AssemblyInformationalVersion
     exec { & .\nuget.exe pack $source_dir\Glimpse.Core\NuSpec\Glimpse.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
     
     "   Glimpse.AspNet.nuspec"
-    $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.AspNet\Properties\AssemblyInfo.cs
+    $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.AspNet\Properties\AssemblyInfo.cs | Update-AssemblyInformationalVersion
     exec { & .\nuget.exe pack $source_dir\Glimpse.AspNet\NuSpec\Glimpse.AspNet.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
     
     "   Glimpse.zip"
@@ -138,6 +139,19 @@ function Get-AssemblyInformationalVersion($path)
 {
     $line = Get-Content $path | where {$_.Contains("AssemblyInformationalVersion")}
     $line.Split('"')[1]
+}
+
+function Update-AssemblyInformationalVersion
+{
+    if ($preReleaseVersion -ne $null)
+    {
+        $version = ([string]$input).Split('-')[0]
+        return "$version-$preReleaseVersion"
+    }
+    else
+    {
+        return $input
+    }
 }
 
 function Create-Zip($sourcePath, $destinationFile)
