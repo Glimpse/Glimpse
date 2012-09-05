@@ -86,19 +86,12 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_AsCode_ThrowsForNullOrEmpty()
-		{
-			Assert.Throws<ArgumentException>(() => Cell.AsCode(null));
-			Assert.Throws<ArgumentException>(() => Cell.AsCode(""));
-		}
-
-		[Fact]
 		public void StructuredLayoutCell_AsCode_SetsIsCodeAndCodeType()
 		{
-			Cell.AsCode("sql");
+			Cell.AsCode(CodeType.Sql);
 
 			Assert.Equal(true, Cell.IsCode);
-			Assert.Equal("sql", Cell.CodeType);
+			Assert.Equal(CodeType.Sql.ToString().ToLower(), Cell.CodeType);
 		}
 
 		[Fact]

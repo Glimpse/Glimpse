@@ -1,0 +1,30 @@
+namespace Glimpse.Core.Plugin.Assist
+{
+	public enum CodeType
+	{
+		Bsh,
+		C,
+		Cc,
+		Cpp,
+		Cs,
+		Csh,
+		Cyc,
+		Cv,
+		Htm,
+		Html,
+		Java,
+		Js,
+		M,
+		Mxml,
+		Perl,
+		Pl,
+		Pm,
+		Py,
+		Rb,
+		Sh,
+		Sql,
+		Xhtml,
+		Xml,
+		Xsl
+	}
+}

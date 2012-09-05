@@ -66,13 +66,10 @@ namespace Glimpse.Core.Plugin.Assist
 			return this;
 		}
 
-		public StructuredLayoutCell AsCode(string codeType)
+		public StructuredLayoutCell AsCode(CodeType codeType)
 		{
-			if (String.IsNullOrEmpty(codeType))
-				throw new ArgumentException("Code type must not be null or empty.", "codeType");
-
 			IsCode = true;
-			CodeType = codeType;
+			CodeType = codeType.ToString().ToLower();
 			return this;
 		}
 
