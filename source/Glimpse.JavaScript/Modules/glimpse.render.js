@@ -1,19 +1,48 @@
-﻿glimpse.render = (function($, glimpse, pubsub) {
-    var coreRender = function(isInitial, topic) {
-            pubsub.publish(topic + '.rendering', isInitial);
-            pubsub.publish('action.shell.rendering', isInitial); 
-            pubsub.publish('trigger.tab.render', isInitial); 
-            pubsub.publish('action.shell.rendered', isInitial);
-            pubsub.publish(topic + '.rendered', isInitial);
+﻿glimpse.render = (function($, pubsub, util, data) {
+    var templates = {
+            css: '/*(import:glimpse.render.shell.css)*/',
+            html: '/*(import:glimpse.render.shell.html)*/'
         },
-        rerender = function() { 
-            coreRender(false, 'action.shell.refresh'); 
+        generateSpriteAddress = function () {
+            return util.uriTemplate(data.currentMetadata().resources.glimpse_sprite);
         },
-        render = function() { 
-            coreRender(true, 'action.shell.initial'); 
-        };
+        getCss = function() {
+            var content = templates.css.replace(/url\(\)/gi, 'url(' + generateSpriteAddress() + ')');
+            
+            return '<style type="text/css"> ' + content + ' </style>'; 
+        },
+        getHtml = function() {
+            return templates.html;
+        },
+        process = function(isInitial, topic) {
+            pubsub.publish(topic + '.rendering', { isInitial: isInitial });
+            pubsub.publish('action.shell.rendering', { isInitial: isInitial }); 
+        
+            pubsub.publish('trigger.tab.render', { isInitial: isInitial });
+        
+            pubsub.publish('action.shell.rendered', { isInitial: isInitial });
+            pubsub.publish(topic + '.rendered', { isInitial: isInitial });
+        },
+        refresh = function() { 
+            process(false, 'action.shell.refresh'); 
+        },
+        render = function() {  
+            pubsub.publish('action.template.processing', { templates: templates });
+            pubsub.publish('action.shell.loading');
+            
+            $(getCss()).appendTo('head'); 
+            $(getHtml()).appendTo('body');
+            
+            pubsub.publish('action.shell.loaded');
+            pubsub.publish('action.template.processed', { templates: templates });
 
-    glimpse.pubsub.subscribe('trigger.shell.render', render); 
+            pubsub.publish('trigger.shell.listener.subscriptions');
+
+            process(true, 'action.shell.initial'); 
+        };
+    
+    pubsub.subscribe('trigger.shell.refresh', refresh); 
+    pubsub.subscribe('trigger.shell.render', render);  
     
     return {};
-})(jQueryGlimpse, glimpse, glimpse.pubsub);
+})(jQueryGlimpse, glimpse.pubsub, glimpse.util, glimpse.data); 

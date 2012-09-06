@@ -1,9 +1,5 @@
-﻿(function($, glimpse) {
-    var data = glimpse.data,
-        elements = glimpse.elements,
-        util = glimpse.util,
-        pubsub = glimpse.pubsub,
-        wireListeners = function () {
+﻿(function($, data, elements, util, pubsub) {
+    var wireListeners = function () {
             var tabHolder = elements.tabHolder();
             
             tabHolder.find('li:not(.glimpse-active, .glimpse-disabled)').live('click', function () {
@@ -27,14 +23,14 @@
         render = function() {
             pubsub.publish('action.tab.rendering');
             
-            var plugins = data.current().data,
+            var currentData = data.currentData(),
                 tabHolder = elements.tabHolder();
 
             // Make sure that the tabs are sorted
-            plugins.data = util.sortTabs(plugins.data);
+            currentData.data = util.sortTabs(currentData.data);
 
             // Add tabs to the dom
-            var tabHtml = generateHtml(plugins.data);
+            var tabHtml = generateHtml(currentData.data);
             tabHolder.append(tabHtml);
             
             pubsub.publish('action.tab.rendered', tabHolder);
@@ -47,7 +43,7 @@
             tab.addClass('glimpse-active');
         };
     
-    pubsub.subscribe('action.shell.initial.rendered', wireListeners);
+    pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners);
     pubsub.subscribe('trigger.tab.render', render);
     pubsub.subscribe('trigger.tab.select', selected);
-})(jQueryGlimpse, glimpse);
+})(jQueryGlimpse, glimpse.data, glimpse.elements, glimpse.util, glimpse.pubsub);

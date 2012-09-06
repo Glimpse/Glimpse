@@ -1,10 +1,9 @@
-﻿glimpse.data = (function($, glimpse) {
-    var pubsub = glimpse.pubsub,
-        innerBaseData = {},
+﻿glimpse.data = (function($, pubsub) {
+    var innerBaseData = {},
         innerBaseMetadata = {},
         innerCurrentData = {},
-        requestUrl = function (requestId) {
-            return util.replaceTokens(currentMetadata().resources.glimpse_request, { 'requestId': requestId });
+        generateRequestAddress = function (requestId) {
+            return util.uriTemplate(currentMetadata().resources.glimpse_request, { 'requestId': requestId });
         },
         validateMetadata = function () { 
             // Make sure that out data has metadata
@@ -60,7 +59,7 @@
                 pubsub.publish('action.data.featching', requestId);
                 
                 $.get({
-                    url: requestUrl(requestId), 
+                    url: generateRequestAddress(requestId), 
                     contentType: 'application/json',
                     success: function (result, textStatus, jqXHR) {    
                         pubsub.publish('action.data.featched', requestId, innerCurrentData, result);
@@ -116,4 +115,4 @@
         initMetadata: initMetadata,
         initData: initData
     };
-})(jQueryGlimpse, glimpse);
+})(jQueryGlimpse, glimpse.pubsub);

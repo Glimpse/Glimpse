@@ -1,25 +1,48 @@
-﻿/*(import:jquery-1.8.0.min.js)*/
+﻿// jquery-1.8.0.min.js
+/*(import:jquery-1.8.0.min.js)*/
+// uritemplate.min.js
+/*(import:uritemplate.min.js)*/
 
-var glimpse = {};
+// glimpse.core.js
+/*(import:glimpse.core.js)*/
+
+// glimpse.pubsub.js
 /*(import:glimpse.pubsub.js)*/
+// glimpse.util.js
 /*(import:glimpse.util.js)*/
+// glimpse.data.js
 /*(import:glimpse.data.js)*/
+// glimpse.element.js
 /*(import:glimpse.element.js)*/
 
-
-/*(import:glimpse.shell.js)*/
+// glimpse.render.js
 /*(import:glimpse.render.js)*/
-/*(import:glimpse.render.tab.js)*/
-/*(import:glimpse.render.panel.js)*/
-/*(import:glimpse.render.lazy.js)*/
+// glimpse.render.engine.js
 /*(import:glimpse.render.engine.js)*/
+// glimpse.render.engine.util.js
+/*(import:glimpse.render.engine.util.js)*/
+// glimpse.render.engine.util.raw.js
+/*(import:glimpse.render.engine.util.raw.js)*/
+// glimpse.render.engine.style.js
+/*(import:glimpse.render.engine.style.js)*/
+// glimpse.render.engine.keyvalue.js
 /*(import:glimpse.render.engine.keyvalue.js)*/
+// glimpse.render.engine.empty.js
 /*(import:glimpse.render.engine.empty.js)*/
+// glimpse.render.engine.master.js
 /*(import:glimpse.render.engine.master.js)*/
-/*(import:glimpse.render.engine.raw.js)*/
+// glimpse.render.engine.string.js
 /*(import:glimpse.render.engine.string.js)*/
+// glimpse.render.engine.structured.js
 /*(import:glimpse.render.engine.structured.js)*/
+// glimpse.render.engine.table.js
 /*(import:glimpse.render.engine.table.js)*/
+// glimpse.render.tab.js
+/*(import:glimpse.render.tab.js)*/
+// glimpse.render.panel.js
+/*(import:glimpse.render.panel.js)*/
+// glimpse.render.lazy.js
+/*(import:glimpse.render.lazy.js)*/
 
-
-/*(import:glimpse.system.js)*/
+// google-code-prettify.js
+/*(import:google-code-prettify.js)*/

@@ -1,4 +1,4 @@
-﻿glimpse.render.util = (function() {
+﻿glimpse.render.engine.util = (function($) {
     return {
         shouldUsePreview: function(length, level, forceFull, limit, forceLimit, tolerance) {
             if ($.isNumeric(forceLimit))
@@ -14,4 +14,4 @@
             return html;
         }          
     };
-}); 
+})(jQueryGlimpse); 

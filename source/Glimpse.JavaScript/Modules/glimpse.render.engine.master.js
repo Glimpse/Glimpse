@@ -1,4 +1,4 @@
-﻿(function(engine) {
+﻿(function($, engine) {
     var providers = engine._providers,
         provider = {
             build: function(data, level, forceFull, metadata, forceLimit) {
@@ -22,4 +22,4 @@
         };
 
     engine.register('master', provider);
-})(glimpse.render.engine);
+})(jQueryGlimpse, glimpse.render.engine);

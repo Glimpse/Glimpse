@@ -1,8 +1,9 @@
-﻿(function(engine, util) {
+﻿glimpse.render.engine.util.raw = (function($, util) {
     var scrub = function(d) {
             return d.substr(1, d.length - 2);
-        }, 
-        provider = { 
+        };
+     
+    return { 
             types: {
                 italics : {
                     match: function (d) { return d.match(/^\_[\w\D]+\_$/) != null; },
@@ -39,8 +40,8 @@
                 if (typeof data != 'string')
                     data = data + '';  
                 if (!skipEncoding) {
-                    for (var typeKey in types) {
-                        var type = types[typeKey];
+                    for (var typeKey in this.types) {
+                        var type = this.types[typeKey];
                         if (type.match(data)) {
                             replace = type.replace;
                             trimmable = type.trimmable;
@@ -54,6 +55,4 @@
                 return replace(data);
             }
         };
-     
-    engine.register('raw', provider);
-})(glimpse.render.engine, glimpse.util);
+})(jQueryGlimpse, glimpse.util);

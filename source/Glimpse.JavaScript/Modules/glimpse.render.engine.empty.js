@@ -1,4 +1,4 @@
-﻿(function(engine) {
+﻿(function($, engine) {
     var provider = {
             build: function(data) { 
                 if (data === undefined || data === null || data === '')
@@ -8,4 +8,4 @@
         };
 
     engine.register('empty', provider);
-})(glimpse.render.engine);
+})(jQueryGlimpse, glimpse.render.engine);

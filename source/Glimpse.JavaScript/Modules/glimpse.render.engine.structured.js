@@ -1,4 +1,4 @@
-﻿(function(engine) {
+﻿(function($, util, engine, engineUtil) {
     var providers = engine._providers,
         buildFormatString = function(content, data, indexs) {  
             for (var i = 0; i < indexs.length; i++) {
@@ -34,7 +34,7 @@
                 if (metadataItem.minDisplay && (rowIndex == 0 || cellContent == undefined || cellContent == null))
                     return ""; 
                      
-                cellContent = master.build(cellContent, level + 1, metadataItem.forceFull, newMetadataItem, rowIndex == 0 ? undefined : metadataItem.limit);
+                cellContent = providers.master.build(cellContent, level + 1, metadataItem.forceFull, newMetadataItem, rowIndex == 0 ? undefined : metadataItem.limit);
 
                 //Content pre/post
                 if (rowIndex != 0) {
@@ -70,7 +70,7 @@
         build = function (data, level, forceFull, metadata, forceLimit) { 
             var limit = !$.isNumeric(forceLimit) ? 3 : forceLimit;
 
-            if (shouldUsePreview(data.length, level, forceFull, limit, forceLimit, 1))
+            if (engineUtil.shouldUsePreview(data.length, level, forceFull, limit, forceLimit, 1))
                 return buildPreview(data, level, metadata);
             
             var html = '<table>', rowClass = '';
@@ -97,7 +97,7 @@
             return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + buildPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + build(data, level, true, metadata) + '</div></td></tr></table>';
         },
         buildPreviewOnly = function (data, level) { 
-            return table.buildPreviewOnly(data, level);
+            return providers.table.buildPreviewOnly(data, level);
         },
         provider = {
             build : build,
@@ -106,4 +106,4 @@
         }; 
 
     engine.register('structured', provider);
-})(glimpse.render.engine);
+})(jQueryGlimpse, glimpse.util, glimpse.render.engine, glimpse.render.engine.util);

@@ -1,4 +1,4 @@
-﻿glimpse.render.engine = (function() {
+﻿glimpse.render.engine = (function(pubsub) {
     var providers = {},
         retrieve = function(name) {
             return providers[name];
@@ -10,8 +10,8 @@
             return providers.master.build(data, 0, true, metadata, 1);
         },
         insert = function(scope, data, metadata) {
-            scope.html(build(data, metadata));
-            style.apply(scope);
+            scope.html(build(data, metadata)); 
+            pubsub.publish('trigger.panel.render.style', { scope: scope });
         };
    
     return {
@@ -21,4 +21,4 @@
         build: build,
         insert: insert
     };
-})();
+})(glimpse.pubsub);

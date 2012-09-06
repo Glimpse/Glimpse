@@ -2,8 +2,8 @@
     var obj = {},
         ready = function() {
             obj.pubsub.publish('trigger.system.init');
-            obj.pubsub.publish('action.system.starting');
-            obj.pubsub.publish('trigger.shell.load');
+            
+            obj.pubsub.publish('action.system.starting'); 
             obj.pubsub.publish('trigger.shell.render');
             obj.pubsub.publish('action.system.started');
         };

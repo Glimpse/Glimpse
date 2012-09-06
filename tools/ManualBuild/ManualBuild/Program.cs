@@ -21,7 +21,7 @@ namespace ManualBuild
             var testContent = File.ReadAllText(assetsTest.BuildPath("test.glimpse.ajax.js"));
             testContent = ProcessFile(testContent, assetsTest);
 
-            var moduleContent = File.ReadAllText(assetsModule.BuildPath("_glimpse.build.js"));
+            var moduleContent = File.ReadAllText(assetsModule.BuildPath("_build.js"));
             moduleContent = ProcessFile(moduleContent, assetsModule);
 
             File.WriteAllText(assets.BuildPath("glimpse.js"), coreContent);

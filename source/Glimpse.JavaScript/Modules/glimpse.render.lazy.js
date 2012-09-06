@@ -1,52 +1,42 @@
-﻿(function($, glimpse) {
-    var data = glimpse.data,
-        util = glimpse.util,
-        elements = glimpse.elements,
-        pubsub = glimpse.pubsub,
-        renderEngine = glimpse.render.engine,
-        generateResourceUri = function (currentData, key) {
-            var resources = data.currentMetadata().resources;
-            
-            return util.replaceTokens(resources.glimpse_tab, { 'requestId': currentData.requestId, 'pluginKey': key });
+﻿(function($, data, util, elements, pubsub, renderEngine) {
+    var generateLazyAddress = function (key) {
+            return util.replaceTokens(data.currentMetadata().resources.glimpse_tab, { 'requestId': data.currentData().requestId, 'pluginKey': key });
         },
-        retrieveData = function(key) {
-            var resources = data.currentMetadata().resources;
+        retrieveData = function(options) {
+            var resources = data.currentMetadata().resources; 
             
             if (resources.glimpse_tab) {
-                pubsub.publish('action.tab.lazy.fetching', { key: key });
+                pubsub.publish('action.tab.lazy.fetching', { key: options.key });
                 
                 $.ajax({
-                    url: generateResourceUri(),
+                    url: generateLazyAddress(key),
                     type: 'GET',
                     contentType: 'application/json',
                     success: function(result) {
-                        processData(key, result);
+                        processData(options.key, options.pluginData, options.pluginMetadata, result);
                     },
                     complete: function(xhr, status) {
-                        pubsub.publish('action.tab.lazy.fetched', { key: key, status: status, result: xhr.responseText });
+                        pubsub.publish('action.tab.lazy.fetched', { key: options.key, status: status, result: xhr.responseText });
                     }
                 });
             }
             else
-                pubsub.publish('trigger.notification.toast', { type: 'error', message: 'Lazy loading isn\'t currently supported by your server implementation.' });
+                pubsub.publishAsync('trigger.notification.toast', { type: 'error', message: 'Lazy loading isn\'t currently supported by your server implementation. Sorry :(' });
         },
-        processData = function (key, result) {
-            var panelHolder = elements.panelHolder(),
-                panel = panelHolder.find('.glimpse-panel[data-glimpseKey="' + key + '"]');
-            
-            renderEngine.insert(panel, pluginData.data, pluginMetadata.structure); 
+        processData = function (key, pluginData, pluginMetadata, result) {
+            options.pluginData.data = result;
 
-            
+            renderEngine.insert(elements.panel(key), pluginData.data, pluginMetadata.structure);  
         },
         rendering = function (options) {
-            if (options.plugin.isLazy)
+            if (options.pluginData.isLazy)
                 options.plugin.dontRender = true;
         },
         rendered = function (options) {
-            if (options.plugin.isLazy)
-                retrieveData(options.key);
+            if (options.pluginData.isLazy)
+                retrieveData(options);
         };
      
     pubsub.subscribe('action.panel.rendering', rendering);
     pubsub.subscribe('action.panel.rendered', rendered);
-})(jQueryGlimpse, glimpse);
+})(jQueryGlimpse, glimpse.data, glimpse.util, glimpse.elements, glimpse.pubsub, glimpse.render.engine);
