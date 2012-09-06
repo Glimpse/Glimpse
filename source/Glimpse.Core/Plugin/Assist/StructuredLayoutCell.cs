@@ -69,7 +69,7 @@ namespace Glimpse.Core.Plugin.Assist
 		public StructuredLayoutCell AsCode(CodeType codeType)
 		{
 			IsCode = true;
-			CodeType = codeType.ToString().ToLower();
+			CodeType = CodeTypeConverter.Convert(codeType);
 			return this;
 		}
 

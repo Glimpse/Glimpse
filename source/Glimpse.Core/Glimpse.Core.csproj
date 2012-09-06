@@ -163,6 +163,7 @@
     <Compile Include="Framework\GlimpseRuntime.cs" />
     <Compile Include="Plugin\Assist\AssistExtensions.cs" />
     <Compile Include="Plugin\Assist\CodeType.cs" />
+    <Compile Include="Plugin\Assist\CodeTypeConverter.cs" />
     <Compile Include="Plugin\Assist\Formats.cs" />
     <Compile Include="Plugin\Assist\FormattingKeywords.cs" />
     <Compile Include="Plugin\Assist\GlimpseColumn.cs" />
