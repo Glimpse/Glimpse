@@ -22,7 +22,7 @@ namespace Glimpse.Test.Core.Framework
             Assert.True(result.Duration.Milliseconds >= waitTime-1, failureMessage); //-1 to handle issues with rounding??
         }
 
-        [Fact]
+        [Fact(Skip = "This test is flaky. Need to find a better way to do this...")]
         public void TimeMethod()
         {
             var waitTime = 33;
