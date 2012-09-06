@@ -14,14 +14,11 @@ namespace Glimpse.Core.Framework
                             {"paging", "NEED TO IMPLMENT RESOURCE Pager"},//TODO: Implement resource
                             {"tab", "NEED TO IMPLMENT RESOURCE test-popup.html"},//TODO: Implement resource
                         };
-
-            Packages = new Dictionary<string, string>();
         }
 
         public string Version { get; set; }
         public IDictionary<string,PluginMetadata> Plugins { get; set; }
         public IDictionary<string,string> Resources { get; set; }
-        public IDictionary<string,string> Packages { get; set; }
     }
 
     public class PluginMetadata

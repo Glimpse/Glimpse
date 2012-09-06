@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Glimpse.Core.Extensibility;
 
 [assembly: ComVisible(false)]
 [assembly: Guid("3b7a68a9-2d81-49c9-9838-c72698176b9c")]
@@ -18,3 +19,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyInformationalVersion("1.0.0-rc")] //Used to specify the NuGet version number at build time
 
 [assembly: InternalsVisibleTo("Glimpse.Test.Core")]
+[assembly: NuGetPackage("Glimpse")]

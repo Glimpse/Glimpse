@@ -172,6 +172,7 @@
     <Compile Include="ResourceResult\FileResourceResult.cs" />
     <Compile Include="ResourceResult\HtmlResourceResult.cs" />
     <Compile Include="ResourceResult\JsonResourceResult.cs" />
+    <Compile Include="ResourceResult\RedirectResourceResult.cs" />
     <Compile Include="ResourceResult\StatusCodeResourceResult.cs" />
     <Compile Include="Resource\ClientResource.cs" />
     <Compile Include="Resource\ConfigurationResource.cs" />
@@ -183,6 +184,7 @@
     <Compile Include="Resource\RequestResource.cs" />
     <Compile Include="Resource\MetadataResource.cs" />
     <Compile Include="Resource\SpriteResource.cs" />
+    <Compile Include="Resource\VersionCheckResource.cs" />
     <Compile Include="RuntimePolicy.cs" />
     <Compile Include="Extensibility\IHtmlEncoder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -116,6 +116,7 @@
     <Compile Include="Policy\UriPolicyShould.cs" />
     <Compile Include="Policy\UserHostAddressPolicyShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResourceResult\RedirectResourceResultShould.cs" />
     <Compile Include="ResourcesShould.cs" />
     <Compile Include="Resource\AjaxShould.cs" />
     <Compile Include="Resource\ClientShould.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Resource\HistoryResourceShould.cs" />
     <Compile Include="Resource\MetadataShould.cs" />
     <Compile Include="Resource\PopupResourceShould.cs" />
+    <Compile Include="Resource\VersionCheckResourceShould.cs" />
     <Compile Include="SerializationConverter\DateTimeConverterShould.cs" />
     <Compile Include="SerializationConverter\GlimpseMetadataConverterShould.cs" />
     <Compile Include="SerializationConverter\GlimpseRequestConverterShould.cs" />

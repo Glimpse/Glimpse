@@ -13,7 +13,6 @@ namespace Glimpse.Core.SerializationConverter
                            {"version", metadata.Version},
                            {"plugins", metadata.Plugins},
                            {"resources", metadata.Resources},
-                           {"packages", metadata.Packages},
                        };
         }
     }
