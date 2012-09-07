@@ -15,7 +15,7 @@ namespace Glimpse.Mvc3.AlternateImplementation
         {
         }
 
-        public static IEnumerable<IAlternateImplementation<AsyncControllerActionInvoker>> AllMethods(Func<RuntimePolicy> runtimePolicyStrategy, Func<IExecutionTimer> timerStrategy, IMessageBroker messageBroker)
+        public static new IEnumerable<IAlternateImplementation<AsyncControllerActionInvoker>> AllMethods(Func<RuntimePolicy> runtimePolicyStrategy, Func<IExecutionTimer> timerStrategy, IMessageBroker messageBroker)
         {
             yield return new BeginInvokeActionMethod(runtimePolicyStrategy, timerStrategy, messageBroker);
             yield return new EndInvokeActionMethod(runtimePolicyStrategy, timerStrategy, messageBroker);
