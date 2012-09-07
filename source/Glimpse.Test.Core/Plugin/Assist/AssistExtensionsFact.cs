@@ -25,7 +25,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void ToGlimpseSection_GlimseSection_ReturnsGlimpseSection()
 		{
-			object obj = new GlimpseSection();
+			object obj = new TabSection();
 
 			var result = obj.ToGlimpseSection();
 
@@ -35,7 +35,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void ToGlimpseSection_GlimseSectionInstance_ReturnsGlimpseSection()
 		{
-			var section = new GlimpseSection();
+			var section = new TabSection();
 			object obj = section.Build();
 
 			var result = obj.ToGlimpseSection();

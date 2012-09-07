@@ -3,13 +3,13 @@ using System.Linq;
 
 namespace Glimpse.Core.Plugin.Assist
 {
-	public class GlimpseSection
+	public class TabSection
 	{
 		private readonly List<GlimpseRow> _rows = new List<GlimpseRow>();
 
-		public GlimpseSection() {}
+		public TabSection() {}
 
-		public GlimpseSection(params string[] headers)
+		public TabSection(params string[] headers)
 		{
 			if (headers.Any())
 			{
@@ -40,9 +40,9 @@ namespace Glimpse.Core.Plugin.Assist
 
 		internal class Instance : List<object[]>
 		{
-			public GlimpseSection Data { get; private set; }
+			public TabSection Data { get; private set; }
 
-			internal Instance(GlimpseSection instance)
+			internal Instance(TabSection instance)
 			{
 				Data = instance;
 			}

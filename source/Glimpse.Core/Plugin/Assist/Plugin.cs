@@ -4,22 +4,22 @@ namespace Glimpse.Core.Plugin.Assist
 {
 	public static class Plugin
 	{
-		public static GlimpseSection Create(params string[] headers)
+		public static TabSection Create(params string[] headers)
 		{
-			return new GlimpseSection(headers);
+			return new TabSection(headers);
 		}
 
-		public static GlimpseSection Section(this GlimpseSection current, string sectionName, Action<GlimpseSection> section)
+		public static TabSection Section(this TabSection current, string sectionName, Action<TabSection> section)
 		{
 			if (section == null)
 				throw new ArgumentNullException("section", "Section must not be null!");
 
-			var glimpseSection = new GlimpseSection();
-			section.Invoke(glimpseSection);
-			return current.Section(sectionName, glimpseSection);
+			var tabSection = new TabSection();
+			section.Invoke(tabSection);
+			return current.Section(sectionName, tabSection);
 		}
 
-		public static GlimpseSection Section(this GlimpseSection current, string sectionName, GlimpseSection section)
+		public static TabSection Section(this TabSection current, string sectionName, TabSection section)
 		{
 			if (String.IsNullOrEmpty(sectionName))
 				throw new ArgumentException("Section name must not be null or empty!", "sectionName");

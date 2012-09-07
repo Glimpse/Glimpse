@@ -8,7 +8,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 	public class PluginFact
 	{
 		[Fact]
-		public void Plugin_Create_ReturnsNewGlimpseSectionWithNoRows()
+		public void Plugin_Create_ReturnsNewSectionWithNoRows()
 		{
 			var section = Glimpse.Core.Plugin.Assist.Plugin.Create();
 
@@ -16,7 +16,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void Plugin_Create_ReturnsNewGlimpseSectionWithRowsAndColumns()
+		public void Plugin_Create_ReturnsNewSectionWithRowsAndColumns()
 		{
 			var section = Glimpse.Core.Plugin.Assist.Plugin.Create("Header1", "Header2");
 			
@@ -29,7 +29,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void Plugin_Section_ReturnsSelf()
 		{
-			var section1 = Plugin.Section("SectionName", new GlimpseSection());
+			var section1 = Plugin.Section("SectionName", new TabSection());
 			var section2 = Plugin.Section("SectionName", section => {});
 
 			Assert.Equal(section1, Plugin);
@@ -39,8 +39,8 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void Plugin_Section_ThrowsWhenSectionNameIsNullOrEmpty()
 		{
-			var validSection = new GlimpseSection();
-			Action<GlimpseSection> validSectionAction = section => {};
+			var validSection = new TabSection();
+			Action<TabSection> validSectionAction = section => {};
 			
 			Assert.Throws<ArgumentException>(() => Plugin.Section(null, validSection));
 			Assert.Throws<ArgumentException>(() => Plugin.Section("", validSection));
@@ -52,8 +52,8 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void Plugin_Section_ThrowsWhenSectionIsNull()
 		{
-			GlimpseSection section = null;
-			Action<GlimpseSection> sectionAction = null;
+			TabSection section = null;
+			Action<TabSection> sectionAction = null;
 			
 			Assert.Throws<ArgumentNullException>(() => Plugin.Section("SectionName", section));
 			Assert.Throws<ArgumentNullException>(() => Plugin.Section("SectionName", sectionAction));
@@ -62,7 +62,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void Plugin_Section_AddsNewSection()
 		{
-			var innerSection = new GlimpseSection();
+			var innerSection = new TabSection();
 			Plugin.Section("SectionName1", innerSection);
 
 			Assert.Equal(1, Plugin.Rows.Count());
@@ -89,7 +89,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 			Assert.Equal(rows, Plugin.Rows.Single().Columns.Last().Data);
 		}
 
-		private GlimpseSection Plugin { get; set; }
+		private TabSection Plugin { get; set; }
 
 		public PluginFact()
 		{

@@ -14,9 +14,9 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void GlimpseColumn_New_HasGlimpseSectionAsData()
+		public void GlimpseColumn_New_HasTabSectionAsData()
 		{
-			var section = new GlimpseSection();
+			var section = new TabSection();
 			var column = new GlimpseColumn(section);
 
 			Assert.Equal(section, column.Data.ToGlimpseSection());

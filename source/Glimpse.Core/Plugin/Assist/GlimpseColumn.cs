@@ -6,7 +6,7 @@ namespace Glimpse.Core.Plugin.Assist
 
 		public GlimpseColumn(object columnData)
 		{
-			Data = columnData is GlimpseSection
+			Data = columnData is TabSection
 				? columnData.ToGlimpseSection().Build()
 				: columnData;
 		}
