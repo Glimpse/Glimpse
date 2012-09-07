@@ -14,14 +14,14 @@ namespace Glimpse.Core.Plugin.Assist
 			return condition ? value.Strong() : value;
 		}
 
-		public static string Italic(this string value)
+		public static string Emphasis(this string value)
 		{
-			return Formats.Italic.FormatWith(value);
+			return Formats.Emphasis.FormatWith(value);
 		}
 
-		public static string ItalicIf(this string value, bool condition)
+		public static string EmphasisIf(this string value, bool condition)
 		{
-			return condition ? value.Italic() : value;
+			return condition ? value.Emphasis() : value;
 		}
 
 		public static string Raw(this string value)

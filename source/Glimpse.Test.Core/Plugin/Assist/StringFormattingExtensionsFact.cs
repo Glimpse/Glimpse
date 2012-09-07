@@ -14,15 +14,15 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void String_Italic_AppliesStrongFormatting()
+		public void String_Emphasis_AppliesEmphasisFormatting()
 		{
-			var result = String.Italic();
+			var result = String.Emphasis();
 
 			Assert.Equal(result, @"\Text\");
 		}
 
 		[Fact]
-		public void String_Raw_AppliesStrongFormatting()
+		public void String_Raw_AppliesRawFormatting()
 		{
 			var result = String.Raw();
 
@@ -30,7 +30,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void String_Sub_AppliesStrongFormatting()
+		public void String_Sub_AppliesSubFormatting()
 		{
 			var result = String.Sub();
 
@@ -38,7 +38,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void String_Underline_AppliesStrongFormatting()
+		public void String_Underline_AppliesUnderlineFormatting()
 		{
 			var result = String.Underline();
 

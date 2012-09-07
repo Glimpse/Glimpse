@@ -16,9 +16,9 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void TabRow_Italic_AppliesItalicToLastColumn()
+		public void TabRow_Emphasis_AppliesEmphasisToLastColumn()
 		{
-			var row = Row.Italic();
+			var row = Row.Emphasis();
 
 			Assert.Equal(row.Columns.Last().Data, @"\Text\");
 		}

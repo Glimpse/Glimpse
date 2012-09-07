@@ -15,14 +15,14 @@ namespace Glimpse.Core.Plugin.Assist
 			return condition ? row.Strong() : row;
 		}
 
-		public static TabRow Italic(this TabRow row)
+		public static TabRow Emphasis(this TabRow row)
 		{
-			return ApplyToLastColumn(row, Formats.Italic);
+			return ApplyToLastColumn(row, Formats.Emphasis);
 		}
 
-		public static TabRow ItalicIf(this TabRow row, bool condition)
+		public static TabRow EmphasisIf(this TabRow row, bool condition)
 		{
-			return condition ? row.Italic() : row;
+			return condition ? row.Emphasis() : row;
 		}
 
 		public static TabRow Raw(this TabRow row)
