@@ -139,7 +139,7 @@ namespace Glimpse.Core.Plugin.Assist
 
 		private static TabRow VerifyAndApplyFormatting(TabRow row, string operation)
 		{
-			if (row.Columns.Count() <= 0)
+			if (!row.Columns.Any())
 				throw new InvalidOperationException(String.Format("The operation '{0}' is only valid when row has columns.", operation));
 
 			row.Column(operation.ToLower());
