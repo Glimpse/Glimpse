@@ -8,8 +8,19 @@ namespace Glimpse.Core.Extensibility
 {
     public class AlternateImplementationGenerationHook<T> : IProxyGenerationHook where T:class
     {
-        public IEnumerable<IAlternateImplementation<T>> MethodImplementations { get; set; }
-        public ILogger Logger { get; set; }
+        private IEnumerable<MethodInfo> methodSet;
+        private IEnumerable<IAlternateImplementation<T>> methodImplementations;
+        internal IEnumerable<IAlternateImplementation<T>> MethodImplementations
+        {
+            get { return methodImplementations; }
+            set
+            {
+                methodImplementations = value;
+                methodSet = value.Select(m => m.MethodToImplement);
+            }
+        }
+
+        internal ILogger Logger { get; set; }
 
         public AlternateImplementationGenerationHook(IEnumerable<IAlternateImplementation<T>> methodImplementations, ILogger logger)
         {
@@ -20,6 +31,8 @@ namespace Glimpse.Core.Extensibility
             Logger = logger;
         }
 
+        
+
         public override bool Equals(object obj)
         {
             var input = obj as AlternateImplementationGenerationHook<T>;
@@ -27,7 +40,7 @@ namespace Glimpse.Core.Extensibility
             if (input == null) return false;
 
             var result = 
-                MethodImplementations.SequenceEqual(input.MethodImplementations);
+                methodSet.SequenceEqual(input.MethodImplementations.Select(m=>m.MethodToImplement));
 
             return result;
         }
