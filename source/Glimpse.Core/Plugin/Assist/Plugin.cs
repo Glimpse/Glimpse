@@ -28,7 +28,7 @@ namespace Glimpse.Core.Plugin.Assist
 				throw new ArgumentNullException("section", "Section must not be null!");
 
 			current.AddRow()
-				.Column(sectionName).Bold()
+				.Column(sectionName).Strong()
 				.Column(section);
 
 			return current;

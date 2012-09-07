@@ -6,15 +6,15 @@ namespace Glimpse.Test.Core.Plugin.Assist
 	public class StringFormattingExtensionsFact
 	{
 		[Fact]
-		public void String_Bold_AppliesBoldFormatting()
+		public void String_Strong_AppliesStrongFormatting()
 		{
-			var result = String.Bold();
+			var result = String.Strong();
 
 			Assert.Equal(result, @"*Text*");
 		}
 
 		[Fact]
-		public void String_Italic_AppliesBoldFormatting()
+		public void String_Italic_AppliesStrongFormatting()
 		{
 			var result = String.Italic();
 
@@ -22,7 +22,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void String_Raw_AppliesBoldFormatting()
+		public void String_Raw_AppliesStrongFormatting()
 		{
 			var result = String.Raw();
 
@@ -30,7 +30,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void String_Sub_AppliesBoldFormatting()
+		public void String_Sub_AppliesStrongFormatting()
 		{
 			var result = String.Sub();
 
@@ -38,7 +38,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void String_Underline_AppliesBoldFormatting()
+		public void String_Underline_AppliesStrongFormatting()
 		{
 			var result = String.Underline();
 

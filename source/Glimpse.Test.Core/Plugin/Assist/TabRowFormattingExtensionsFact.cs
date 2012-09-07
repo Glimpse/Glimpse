@@ -8,9 +8,9 @@ namespace Glimpse.Test.Core.Plugin.Assist
 	public class TabRowFormattingExtensionsFact
 	{
 		[Fact]
-		public void TabRow_Bold_AppliesBoldToLastColumn()
+		public void TabRow_Strong_AppliesStrongToLastColumn()
 		{
-			var row = Row.Bold();
+			var row = Row.Strong();
 
 			Assert.Equal(row.Columns.Last().Data, @"*Text*");
 		}

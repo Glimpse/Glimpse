@@ -4,14 +4,14 @@ namespace Glimpse.Core.Plugin.Assist
 {
 	public static class StringFormattingExtensions
 	{
-		public static string Bold(this string value)
+		public static string Strong(this string value)
 		{
-			return Formats.Bold.FormatWith(value);
+			return Formats.Strong.FormatWith(value);
 		}
 
-		public static string BoldIf(this string value, bool condition)
+		public static string StrongIf(this string value, bool condition)
 		{
-			return condition ? value.Bold() : value;
+			return condition ? value.Strong() : value;
 		}
 
 		public static string Italic(this string value)
@@ -51,7 +51,7 @@ namespace Glimpse.Core.Plugin.Assist
 
 		public static string UnderlineIf(this string value, bool condition)
 		{
-			return condition ? value.Bold() : value;
+			return condition ? value.Strong() : value;
 		}
 
 		public static string FormatWith(this string format, params object[] arguments)

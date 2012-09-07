@@ -5,14 +5,14 @@ namespace Glimpse.Core.Plugin.Assist
 {
 	public static class TabRowFormattingExtensions
 	{
-		public static TabRow Bold(this TabRow row)
+		public static TabRow Strong(this TabRow row)
 		{
-			return ApplyToLastColumn(row, Formats.Bold);
+			return ApplyToLastColumn(row, Formats.Strong);
 		}
 
-		public static TabRow BoldIf(this TabRow row, bool condition)
+		public static TabRow StrongIf(this TabRow row, bool condition)
 		{
-			return condition ? row.Bold() : row;
+			return condition ? row.Strong() : row;
 		}
 
 		public static TabRow Italic(this TabRow row)
