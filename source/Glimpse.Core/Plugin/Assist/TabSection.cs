@@ -5,7 +5,7 @@ namespace Glimpse.Core.Plugin.Assist
 {
 	public class TabSection
 	{
-		private readonly List<GlimpseRow> _rows = new List<GlimpseRow>();
+		private readonly List<TabRow> _rows = new List<TabRow>();
 
 		public TabSection() {}
 
@@ -19,14 +19,14 @@ namespace Glimpse.Core.Plugin.Assist
 			}
 		}
 
-		public IEnumerable<GlimpseRow> Rows
+		public IEnumerable<TabRow> Rows
 		{
 			get { return _rows; }
 		}
 
-		public GlimpseRow AddRow()
+		public TabRow AddRow()
 		{
-			var row = new GlimpseRow();
+			var row = new TabRow();
 			_rows.Add(row);
 			return row;
 		}

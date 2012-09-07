@@ -5,10 +5,10 @@ using Xunit;
 
 namespace Glimpse.Test.Core.Plugin.Assist
 {
-	public class GlimpseRowFormattingExtensionsFact
+	public class TabRowFormattingExtensionsFact
 	{
 		[Fact]
-		public void GlimpseRow_Bold_AppliesBoldToLastColumn()
+		public void TabRow_Bold_AppliesBoldToLastColumn()
 		{
 			var row = Row.Bold();
 
@@ -16,7 +16,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void GlimpseRow_Italic_AppliesItalicToLastColumn()
+		public void TabRow_Italic_AppliesItalicToLastColumn()
 		{
 			var row = Row.Italic();
 
@@ -24,7 +24,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void GlimpseRow_Raw_AppliesRawToLastColumn()
+		public void TabRow_Raw_AppliesRawToLastColumn()
 		{
 			var row = Row.Raw();
 
@@ -32,7 +32,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void GlimpseRow_Sub_AppliesSubToLastColumn()
+		public void TabRow_Sub_AppliesSubToLastColumn()
 		{
 			var row = Row.Sub();
 
@@ -40,7 +40,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void GlimpseRow_Underline_AppliesUnderlineToLastColumn()
+		public void TabRow_Underline_AppliesUnderlineToLastColumn()
 		{
 			var row = Row.Underline();
 
@@ -48,15 +48,15 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void GlimpseRow_RowOperations_AreInvalidForRowsWithoutColumns()
+		public void TabRow_RowOperations_AreInvalidForRowsWithoutColumns()
 		{
-			var row = new GlimpseRow();
+			var row = new TabRow();
 
 			Assert.Throws<InvalidOperationException>(() => row.Quiet());
 		}
 
 		[Fact]
-		public void GlimpseRow_Error_AddsColumnWithError()
+		public void TabRow_Error_AddsColumnWithError()
 		{
 			var row = Row.Error();
 
@@ -64,7 +64,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void GlimpseRow_Fail_AddsColumnWithFail()
+		public void TabRow_Fail_AddsColumnWithFail()
 		{
 			var row = Row.Fail();
 
@@ -72,7 +72,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void GlimpseRow_Info_AddsColumnWithInfo()
+		public void TabRow_Info_AddsColumnWithInfo()
 		{
 			var row = Row.Info();
 
@@ -80,7 +80,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void GlimpseRow_Loading_AddsColumnWithLoading()
+		public void TabRow_Loading_AddsColumnWithLoading()
 		{
 			var row = Row.Loading();
 
@@ -88,7 +88,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void GlimpseRow_Ms_AddsColumnWithMs()
+		public void TabRow_Ms_AddsColumnWithMs()
 		{
 			var row = Row.Ms();
 
@@ -96,7 +96,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void GlimpseRow_Quiet_AddsColumnWithQuiet()
+		public void TabRow_Quiet_AddsColumnWithQuiet()
 		{
 			var row = Row.Quiet();
 
@@ -104,7 +104,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void GlimpseRow_Selected_AddsColumnWithSelected()
+		public void TabRow_Selected_AddsColumnWithSelected()
 		{
 			var row = Row.Selected();
 
@@ -112,18 +112,18 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void GlimpseRow_Warn_AddsColumnWithWarn()
+		public void TabRow_Warn_AddsColumnWithWarn()
 		{
 			var row = Row.Warn();
 
 			Assert.Equal(row.Columns.Last().Data, "warn");
 		}
 
-		private GlimpseRow Row { get; set; }
+		private TabRow Row { get; set; }
 
-		public GlimpseRowFormattingExtensionsFact()
+		public TabRowFormattingExtensionsFact()
 		{
-			Row = new GlimpseRow().Column("Text");
+			Row = new TabRow().Column("Text");
 		}
 	}
 }

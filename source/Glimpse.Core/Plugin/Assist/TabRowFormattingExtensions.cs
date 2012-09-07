@@ -3,141 +3,141 @@ using System.Linq;
 
 namespace Glimpse.Core.Plugin.Assist
 {
-	public static class GlimpseRowFormattingExtensions
+	public static class TabRowFormattingExtensions
 	{
-		public static GlimpseRow Bold(this GlimpseRow row)
+		public static TabRow Bold(this TabRow row)
 		{
 			return ApplyToLastColumn(row, Formats.Bold);
 		}
 
-		public static GlimpseRow BoldIf(this GlimpseRow row, bool condition)
+		public static TabRow BoldIf(this TabRow row, bool condition)
 		{
 			return condition ? row.Bold() : row;
 		}
 
-		public static GlimpseRow Italic(this GlimpseRow row)
+		public static TabRow Italic(this TabRow row)
 		{
 			return ApplyToLastColumn(row, Formats.Italic);
 		}
 
-		public static GlimpseRow ItalicIf(this GlimpseRow row, bool condition)
+		public static TabRow ItalicIf(this TabRow row, bool condition)
 		{
 			return condition ? row.Italic() : row;
 		}
 
-		public static GlimpseRow Raw(this GlimpseRow row)
+		public static TabRow Raw(this TabRow row)
 		{
 			return ApplyToLastColumn(row, Formats.Raw);
 		}
 
-		public static GlimpseRow RawIf(this GlimpseRow row, bool condition)
+		public static TabRow RawIf(this TabRow row, bool condition)
 		{
 			return condition ? row.Raw() : row;
 		}
 
-		public static GlimpseRow Sub(this GlimpseRow row)
+		public static TabRow Sub(this TabRow row)
 		{
 			return ApplyToLastColumn(row, Formats.Sub);
 		}
 
-		public static GlimpseRow SubIf(this GlimpseRow row, bool condition)
+		public static TabRow SubIf(this TabRow row, bool condition)
 		{
 			return condition ? row.Sub() : row;
 		}
 
-		public static GlimpseRow Underline(this GlimpseRow row)
+		public static TabRow Underline(this TabRow row)
 		{
 			return ApplyToLastColumn(row, Formats.Underline);
 		}
 
-		public static GlimpseRow UnderlineIf(this GlimpseRow row, bool condition)
+		public static TabRow UnderlineIf(this TabRow row, bool condition)
 		{
 			return condition ? row.Underline() : row;
 		}
 
 
-		public static GlimpseRow Error(this GlimpseRow row)
+		public static TabRow Error(this TabRow row)
 		{
 			return VerifyAndApplyFormatting(row, FormattingKeywords.Error);
 		}
 
-		public static GlimpseRow ErrorIf(this GlimpseRow row, bool condition)
+		public static TabRow ErrorIf(this TabRow row, bool condition)
 		{
 			return condition ? row.Error() : row;
 		}
 
-		public static GlimpseRow Fail(this GlimpseRow row)
+		public static TabRow Fail(this TabRow row)
 		{
 			return VerifyAndApplyFormatting(row, FormattingKeywords.Fail);
 		}
 
-		public static GlimpseRow FailIf(this GlimpseRow row, bool condition)
+		public static TabRow FailIf(this TabRow row, bool condition)
 		{
 			return condition ? row.Fail() : row;
 		}
 
-		public static GlimpseRow Info(this GlimpseRow row)
+		public static TabRow Info(this TabRow row)
 		{
 			return VerifyAndApplyFormatting(row, FormattingKeywords.Info);
 		}
 
-		public static GlimpseRow InfoIf(this GlimpseRow row, bool condition)
+		public static TabRow InfoIf(this TabRow row, bool condition)
 		{
 			return condition ? row.Info() : row;
 		}
 
-		public static GlimpseRow Loading(this GlimpseRow row)
+		public static TabRow Loading(this TabRow row)
 		{
 			return VerifyAndApplyFormatting(row, FormattingKeywords.Loading);
 		}
 
-		public static GlimpseRow LoadingIf(this GlimpseRow row, bool condition)
+		public static TabRow LoadingIf(this TabRow row, bool condition)
 		{
 			return condition ? row.Loading() : row;
 		}
 
-		public static GlimpseRow Ms(this GlimpseRow row)
+		public static TabRow Ms(this TabRow row)
 		{
 			return VerifyAndApplyFormatting(row, FormattingKeywords.Ms);
 		}
 
-		public static GlimpseRow MsIf(this GlimpseRow row, bool condition)
+		public static TabRow MsIf(this TabRow row, bool condition)
 		{
 			return condition ? row.Ms() : row;
 		}
 
-		public static GlimpseRow Quiet(this GlimpseRow row)
+		public static TabRow Quiet(this TabRow row)
 		{
 			return VerifyAndApplyFormatting(row, FormattingKeywords.Quiet);
 		}
 
-		public static GlimpseRow QuietIf(this GlimpseRow row, bool condition)
+		public static TabRow QuietIf(this TabRow row, bool condition)
 		{
 			return condition ? row.Quiet() : row;
 		}
 
-		public static GlimpseRow Selected(this GlimpseRow row)
+		public static TabRow Selected(this TabRow row)
 		{
 			return VerifyAndApplyFormatting(row, FormattingKeywords.Selected);
 		}
 
-		public static GlimpseRow SelectedIf(this GlimpseRow row, bool condition)
+		public static TabRow SelectedIf(this TabRow row, bool condition)
 		{
 			return condition ? row.Selected() : row;
 		}
 		
-		public static GlimpseRow Warn(this GlimpseRow row)
+		public static TabRow Warn(this TabRow row)
 		{
 			return VerifyAndApplyFormatting(row, FormattingKeywords.Warn);
 		}
 
-		public static GlimpseRow WarnIf(this GlimpseRow row, bool condition)
+		public static TabRow WarnIf(this TabRow row, bool condition)
 		{
 			return condition ? row.Warn() : row;
 		}
 
 
-		private static GlimpseRow VerifyAndApplyFormatting(GlimpseRow row, string operation)
+		private static TabRow VerifyAndApplyFormatting(TabRow row, string operation)
 		{
 			if (row.Columns.Count() <= 0)
 				throw new InvalidOperationException(String.Format("The operation '{0}' is only valid when row has columns.", operation));
@@ -146,7 +146,7 @@ namespace Glimpse.Core.Plugin.Assist
 			return row;
 		}
 
-		private static GlimpseRow ApplyToLastColumn(GlimpseRow row, string format)
+		private static TabRow ApplyToLastColumn(TabRow row, string format)
 		{
 			var data = row.Columns.Last().Data;
 			var formattedData = format.FormatWith(data);

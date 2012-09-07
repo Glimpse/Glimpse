@@ -5,10 +5,10 @@ using Xunit;
 
 namespace Glimpse.Test.Core.Plugin.Assist
 {
-	public class GlimpseRowFact
+	public class TabRowFact
 	{
 		[Fact]
-		public void GlimpseRow_New_HasNoColumns()
+		public void TabRow_New_HasNoColumns()
 		{
 			var columns = Row.Columns;
 
@@ -16,7 +16,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void GlimpseRow_Column_ThrowsForNullValue()
+		public void TabRow_Column_ThrowsForNullValue()
 		{
 			object columnObject = null;
 			
@@ -24,7 +24,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void GlimpseRow_Column_AddsColumnAndReturnsSelf()
+		public void TabRow_Column_AddsColumnAndReturnsSelf()
 		{
 			var columnObject = new { };
 			var row = Row.Column(columnObject);
@@ -34,7 +34,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void GlimpseRow_Build_ReturnsObjectArrayOfColumnData()
+		public void TabRow_Build_ReturnsObjectArrayOfColumnData()
 		{
 			var columnObject1 = new { Id = "obj1" };
 			var columnObject2 = new { Id = "obj2" };
@@ -48,11 +48,11 @@ namespace Glimpse.Test.Core.Plugin.Assist
 			Assert.Equal(columnObject2, columnData.ElementAt(1));
 		}
 
-		private GlimpseRow Row { get; set; }
+		private TabRow Row { get; set; }
 
-		public GlimpseRowFact()
+		public TabRowFact()
 		{
-			Row = new GlimpseRow();
+			Row = new TabRow();
 		}
 	}
 }

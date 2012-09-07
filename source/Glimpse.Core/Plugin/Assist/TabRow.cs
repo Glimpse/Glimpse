@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Glimpse.Core.Plugin.Assist
 {
-	public class GlimpseRow
+	public class TabRow
 	{
 		private readonly List<GlimpseColumn> _columns = new List<GlimpseColumn>();
 
@@ -13,7 +13,7 @@ namespace Glimpse.Core.Plugin.Assist
 			get { return _columns; }
 		}
 
-		public GlimpseRow Column(object columnData)
+		public TabRow Column(object columnData)
 		{
 			if (columnData == null)
 				throw new ArgumentNullException("columnData", "Column data must not be null.");
