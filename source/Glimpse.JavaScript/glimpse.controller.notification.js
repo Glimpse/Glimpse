@@ -20,8 +20,7 @@
             return settings.stamp;
         },
         check = function () {
-            var metadata = data.currentMetadata(),
-                version = metadata.version;
+            var metadata = data.currentMetadata();
 
             if (settings.newVersion) 
                 elements.holder.find('.glimpse-meta-update').attr('title', 'New Updates are available, take a look at what you are missing.').css('display', 'inline-block');
@@ -29,45 +28,40 @@
             if (util.cookie('glimpseVersionCheck'))
                 return;
 
-            if (version) {
-                var payload = buildVersionPayload(version),
-                    url = util.replaceTokens(metadata.resources.glimpse_version_check, payload);
+            if (metadata.resources.glimpse_version_check) {
+                var url = util.replaceTokens(metadata.resources.glimpse_version_check, { stamp: retrieveStamp() });
                 
-                $.jsonp({
-                    url: url,
-                    success: function(data) { 
-                        settings.newVersion = data.hasNewer;
-                        pubsub.publish('state.persist');
-                    },
-                    complete: function () { 
-                        util.cookie('glimpseVersionCheck', 1, 1); //Not sure if this should only be set on success 
-                    }
+                $.ajax({
+                    url: url, 
+                    type: 'GET',
+                    dataType: 'jsonp',
+                    crossDomain: true,
+                    jsonpCallback: 'glimpse.versionCheck'
                 });
             }
+            util.cookie('glimpseVersionCheck', 1, 1);  
         }, 
         view = function () {
-            var metadata = data.currentMetadata(),
-                version = metadata.version;
+            var metadata = data.currentMetadata();
             if (version) {
-                var payload = buildVersionPayload(version),
-                    url = util.replaceTokens(metadata.resources.glimpse_version_detail, payload);
+                var url = util.replaceTokens(metadata.resources.glimpse_version_detail, { stamp: retrieveStamp() });
 
                 elements.lightbox.find('.glimpse-lb-element').html('<div class="close">[close]</div><iframe src="' + url + '"></iframe>');
                 elements.lightbox.show();
             }
         },
-        
-        buildVersionPayload = function (version) {
-            return {
-                packages: version.map(function(x) { return x.name; }).join(','),
-                versions: version.map(function(x) { return x.version; }).join(','),
-                stamp: retrieveStamp()
-            };
+        response = function (payload) {
+            settings.newVersion = payload.hasNewer;
+            pubsub.publish('state.persist');
         },
         
         init = function () {
             wireListeners();
         };
     
-    init(); 
+    init();
+
+    return {
+        response: response
+    };
 } ()

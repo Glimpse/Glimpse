@@ -47,7 +47,8 @@ var glimpse = (function ($, scope) {
         render : renderEngine,
         data : data,
         util : util,
-        settings : settings
+        settings : settings,
+        versionCheck: notificationController.response
     };
 }(jQueryGlimpse, jQueryGlimpse(document)));
 

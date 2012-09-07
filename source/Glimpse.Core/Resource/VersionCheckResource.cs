@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
@@ -47,9 +48,12 @@ namespace Glimpse.Core.Resource
             if (packages.Count > 0)
                 data.Add("packages", packages);
 
+            var domain = ConfigurationManager.AppSettings["GlimpseVersionCheckAPIDomain"];
+            if (string.IsNullOrEmpty(domain))
+                domain = "version.getglimpse.com";
+
             return
-                new RedirectResourceResult(
-                    @"//version.getglimpse.com/api/release/check{?packages*}{&stamp}{&callback}", data);
+                new RedirectResourceResult(@"//" + domain  + "/api/release/check{?packages*}{&stamp}{&callback}", data);
         }
     }
 }
