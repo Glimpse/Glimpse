@@ -7,38 +7,38 @@ namespace Glimpse.Test.Core.Plugin.Assist
 	public class AssistExtensionsFact
 	{
 		[Fact]
-		public void ToGlimpseSection_null_ShouldThrow()
+		public void ToTabSection_null_ShouldThrow()
 		{
 			object obj = null;
 
-			Assert.Throws<ArgumentNullException>(() => obj.ToGlimpseSection());
+			Assert.Throws<ArgumentNullException>(() => obj.ToTabSection());
 		}
 
 		[Fact]
-		public void ToGlimpseSection_NonGlimpseSectionObject_ShouldThrow()
+		public void ToTabSection_NonTabSectionObject_ShouldThrow()
 		{
 			object obj = new object();
 
-			Assert.Throws<InvalidOperationException>(() => obj.ToGlimpseSection());
+			Assert.Throws<InvalidOperationException>(() => obj.ToTabSection());
 		}
 
 		[Fact]
-		public void ToGlimpseSection_GlimseSection_ReturnsGlimpseSection()
+		public void ToTabSection_GlimseSection_ReturnsTabSection()
 		{
 			object obj = new TabSection();
 
-			var result = obj.ToGlimpseSection();
+			var result = obj.ToTabSection();
 
 			Assert.Equal(obj, result);
 		}
 
 		[Fact]
-		public void ToGlimpseSection_GlimseSectionInstance_ReturnsGlimpseSection()
+		public void ToTabSection_TabSectionInstance_ReturnsTabSection()
 		{
 			var section = new TabSection();
 			object obj = section.Build();
 
-			var result = obj.ToGlimpseSection();
+			var result = obj.ToTabSection();
 
 			Assert.Equal(section, result);
 		}

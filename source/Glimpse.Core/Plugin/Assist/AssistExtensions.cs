@@ -4,7 +4,7 @@ namespace Glimpse.Core.Plugin.Assist
 {
 	public static class AssistExtensions
 	{
-		public static TabSection ToGlimpseSection(this object o)
+		public static TabSection ToTabSection(this object o)
 		{
 			if (o == null) throw new ArgumentNullException("o");
 

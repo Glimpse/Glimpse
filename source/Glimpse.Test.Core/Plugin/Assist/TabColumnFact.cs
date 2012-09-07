@@ -19,7 +19,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 			var section = new TabSection();
 			var column = new TabColumn(section);
 
-			Assert.Equal(section, column.Data.ToGlimpseSection());
+			Assert.Equal(section, column.Data.ToTabSection());
 		}
 
 		[Fact]
