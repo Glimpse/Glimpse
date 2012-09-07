@@ -166,7 +166,7 @@
     <Compile Include="Plugin\Assist\CodeTypeConverter.cs" />
     <Compile Include="Plugin\Assist\Formats.cs" />
     <Compile Include="Plugin\Assist\FormattingKeywords.cs" />
-    <Compile Include="Plugin\Assist\GlimpseColumn.cs" />
+    <Compile Include="Plugin\Assist\TabColumn.cs" />
     <Compile Include="Plugin\Assist\TabRow.cs" />
     <Compile Include="Plugin\Assist\TabRowFormattingExtensions.cs" />
     <Compile Include="Plugin\Assist\TabSection.cs" />

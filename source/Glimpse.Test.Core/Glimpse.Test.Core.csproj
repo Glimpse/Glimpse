@@ -112,7 +112,7 @@
     <Compile Include="Plugin\Assist\PluginFact.cs" />
     <Compile Include="Plugin\Assist\StructuredLayoutCellFact.cs" />
     <Compile Include="Plugin\Assist\StructuredLayoutFact.cs" />
-    <Compile Include="Plugin\Assist\GlimpseColumnFact.cs" />
+    <Compile Include="Plugin\Assist\TabColumnFact.cs" />
     <Compile Include="Plugin\Assist\TabRowFormattingExtensionsFact.cs" />
     <Compile Include="Plugin\Assist\TabRowFact.cs" />
     <Compile Include="Plugin\Assist\TabSectionFact.cs" />

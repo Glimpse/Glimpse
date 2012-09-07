@@ -3,10 +3,10 @@ using Xunit;
 
 namespace Glimpse.Test.Core.Plugin.Assist
 {
-	public class GlimpseColumnFact
+	public class TabColumnFact
 	{
 		[Fact]
-		public void GlimpseColumn_New_HasData()
+		public void TabColumn_New_HasData()
 		{
 			var column = Column;
 
@@ -14,20 +14,20 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void GlimpseColumn_New_HasTabSectionAsData()
+		public void TabColumn_New_HasTabSectionAsData()
 		{
 			var section = new TabSection();
-			var column = new GlimpseColumn(section);
+			var column = new TabColumn(section);
 
 			Assert.Equal(section, column.Data.ToGlimpseSection());
 		}
 
 		[Fact]
-		public void GlimpseColumn_OverrideData_SetsData()
+		public void TabColumn_OverrideData_SetsData()
 		{
 			var columnData = new { };
 			var overrideColumnData = new { };
-			var column = new GlimpseColumn(columnData);
+			var column = new TabColumn(columnData);
 
 			column.OverrideData(overrideColumnData);
 
@@ -35,12 +35,12 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		private object ColumnObject { get; set; }
-		private GlimpseColumn Column { get; set; }
+		private TabColumn Column { get; set; }
 
-		public GlimpseColumnFact()
+		public TabColumnFact()
 		{
 			ColumnObject = new { SomeProperty = "SomeValue" };
-			Column = new GlimpseColumn(ColumnObject);
+			Column = new TabColumn(ColumnObject);
 		}
 	}
 }

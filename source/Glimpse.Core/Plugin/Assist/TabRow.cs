@@ -6,9 +6,9 @@ namespace Glimpse.Core.Plugin.Assist
 {
 	public class TabRow
 	{
-		private readonly List<GlimpseColumn> _columns = new List<GlimpseColumn>();
+		private readonly List<TabColumn> _columns = new List<TabColumn>();
 
-		public IEnumerable<GlimpseColumn> Columns
+		public IEnumerable<TabColumn> Columns
 		{
 			get { return _columns; }
 		}
@@ -18,7 +18,7 @@ namespace Glimpse.Core.Plugin.Assist
 			if (columnData == null)
 				throw new ArgumentNullException("columnData", "Column data must not be null.");
 			
-			var column = new GlimpseColumn(columnData);
+			var column = new TabColumn(columnData);
 			_columns.Add(column);
 			
 			return this;
