@@ -6,6 +6,8 @@
             obj.pubsub.publish('action.system.starting'); 
             obj.pubsub.publish('trigger.shell.render');
             obj.pubsub.publish('action.system.started');
+            
+            obj.pubsub.publish('trigger.system.ready');
         };
 
     $(function() {

@@ -1,8 +1,23 @@
 ﻿glimpse.elements = (function($) {
     var scope = $(document),
-        panelHolder, tabHolder;
+        holder, opener, pageSpacer, barHolder, panelHolder, tabHolder;
     
     return {
+        scope: function () {
+            return scope;
+        },
+        holder: function () {
+            return holder || (holder = scope.find('.glimpse-holder'));
+        },
+        opener: function () {
+            return opener || (opener = scope.find('.glimpse-open'));
+        },
+        pageSpacer: function () {
+            return pageSpacer || (pageSpacer = scope.find('.glimpse-spacer'));
+        },
+        barHolder: function () {
+            return barHolder || (barHolder = scope.find('.glimpse-bar'));
+        },
         tabHolder: function() {
              return tabHolder || (tabHolder = scope.find('.glimpse-tabs ul'));
         },

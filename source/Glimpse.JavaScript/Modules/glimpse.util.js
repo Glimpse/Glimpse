@@ -1,5 +1,31 @@
 ﻿glimpse.util = (function($) {
     return {
+        cookie : function (key, value, days) {
+            if (arguments.length > 1) { 
+                value = $.isPlainObject(value) ? JSON.stringify(value) : String(value);
+        
+		        var date = new Date();
+                date.setDate(date.getDate() + days || 1000);
+        
+	            document.cookie = key + "=" + encodeURIComponent(value) + "; expires=" + date.toGMTString() + "; path=/";
+                return;
+            }
+     
+	        key += "=";
+	        var ca = document.cookie.split(';');
+	        for (var i = 0; i < ca.length; i++) {
+		        var c = ca[i];
+		        while (c.charAt(0) == ' ') 
+		            c = c.substring(1, c.length);
+		        if (c.indexOf(key) == 0) 
+		            return JSON.parse(decodeURIComponent(c.substring(key.length, c.length)));
+	        }
+        },
+        localStorage: function (key, value) {
+            if (arguments.length == 1)
+                return JSON.parse(localStorage.getItem('testObject'));
+            localStorage.setItem(key, JSON.stringify(value)); 
+        },
         htmlEncode: function (value) {
             return !(value == undefined || value == null) ? value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
         },

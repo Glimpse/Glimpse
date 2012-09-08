@@ -10,6 +10,8 @@
 /*(import:glimpse.pubsub.js)*/
 // glimpse.util.js
 /*(import:glimpse.util.js)*/
+// glimpse.settings.js
+/*(import:glimpse.settings.js)*/
 // glimpse.data.js
 /*(import:glimpse.data.js)*/
 // glimpse.element.js
@@ -43,6 +45,9 @@
 /*(import:glimpse.render.panel.js)*/
 // glimpse.render.lazy.js
 /*(import:glimpse.render.lazy.js)*/
+
+// glimpse.shell.controls.js
+/*(import:glimpse.shell.controls.js)*/
 
 // google-code-prettify.js
 /*(import:google-code-prettify.js)*/

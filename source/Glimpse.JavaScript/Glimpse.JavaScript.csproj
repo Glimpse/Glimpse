@@ -134,6 +134,7 @@
     <Content Include="Modules\glimpse.render.tab.js" />
     <Content Include="Modules\glimpse.render.engine.util.js" />
     <Content Include="Modules\glimpse.core.js" />
+    <Content Include="Modules\glimpse.settings.js" />
     <Content Include="Modules\glimpse.shell.controls.js" />
     <Content Include="Modules\glimpse.util.js" />
     <Content Include="Modules\glimpse.render.shell.css" />
@@ -153,7 +154,6 @@
     <Content Include="UnitTests\Unit\mock-glimpse.core.pubsub.js" />
     <Content Include="uritemplate.min.js" />
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
