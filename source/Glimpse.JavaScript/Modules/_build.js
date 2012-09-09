@@ -3,6 +3,9 @@
 // uritemplate.min.js
 /*(import:uritemplate.min.js)*/
 
+// glimpse.jquery.draggable.js
+/*(import:glimpse.jquery.draggable.js)*/
+
 // glimpse.core.js
 /*(import:glimpse.core.js)*/
 
