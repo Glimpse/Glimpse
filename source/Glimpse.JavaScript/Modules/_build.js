@@ -51,6 +51,8 @@
 
 // glimpse.shell.controls.js
 /*(import:glimpse.shell.controls.js)*/
+// glimpse.shell.resize.js
+/*(import:glimpse.shell.resize.js)*/
 
 // google-code-prettify.js
 /*(import:google-code-prettify.js)*/

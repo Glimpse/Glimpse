@@ -137,6 +137,7 @@
     <Content Include="Modules\glimpse.settings.js" />
     <Content Include="Modules\glimpse.shell.controls.js" />
     <Content Include="Modules\glimpse.jquery.draggable.js" />
+    <Content Include="Modules\glimpse.shell.resize.js" />
     <Content Include="Modules\glimpse.util.js" />
     <Content Include="Modules\glimpse.render.shell.css" />
     <Content Include="Modules\glimpse.render.shell.html" />

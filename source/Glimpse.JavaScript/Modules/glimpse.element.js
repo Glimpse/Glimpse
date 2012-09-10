@@ -26,6 +26,9 @@
         },
         panel: function(key) {
              return this.panelHolder().find('.glimpse-panel[data-glimpseKey="' + key + '"]');
+        },
+        panels: function() {
+             return this.panelHolder().find('.glimpse-panel');
         }
     };
 })(jQueryGlimpse);
