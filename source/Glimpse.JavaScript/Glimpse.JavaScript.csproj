@@ -118,6 +118,7 @@
     <Content Include="Modules\glimpse.data.js" />
     <Content Include="Modules\glimpse.element.js" />
     <Content Include="Modules\glimpse.js" />
+    <Content Include="Modules\glimpse.render.default.js" />
     <Content Include="Modules\glimpse.render.engine.style.js" />
     <Content Include="Modules\glimpse.render.js" />
     <Content Include="Modules\glimpse.pubsub.js" />
