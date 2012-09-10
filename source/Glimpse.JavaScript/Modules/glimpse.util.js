@@ -23,7 +23,7 @@
         },
         localStorage: function (key, value) {
             if (arguments.length == 1)
-                return JSON.parse(localStorage.getItem('testObject'));
+                return JSON.parse(localStorage.getItem(key));
             localStorage.setItem(key, JSON.stringify(value)); 
         },
         htmlEncode: function (value) {
