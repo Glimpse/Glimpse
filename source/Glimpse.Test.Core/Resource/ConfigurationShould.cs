@@ -32,9 +32,8 @@ namespace Glimpse.Test.Core.Resource
             var contextMock = new Mock<IResourceContext>();
 
             var resource = new ConfigurationResource();
-
-
-            Assert.Throws<NotImplementedException>(() => resource.Execute(contextMock.Object));
+             
+            Assert.NotNull(resource.Execute(contextMock.Object));
         }
     }
 }
