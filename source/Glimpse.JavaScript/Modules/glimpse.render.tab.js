@@ -4,7 +4,7 @@
             
             tabHolder.find('li:not(.glimpse-active, .glimpse-disabled)').live('click', function () {
                 var key = $(this).attr('data-glimpseKey');
-                pubsub.publish('trigger.tab.select.' + key, key);
+                pubsub.publish('trigger.tab.select.' + key, { key: key });
             }); 
             tabHolder.find('li:not(.glimpse-active, .glimpse-disabled)').live('mouseover mouseout', function (e) {
                 e.type == 'mouseover' ? $(this).addClass('glimpse-hover') : $(this).removeClass('glimpse-hover');
@@ -35,9 +35,9 @@
             
             pubsub.publish('action.tab.rendered', tabHolder);
         },
-        selected = function(key) {
+        selected = function(options) {
             var tabHolder = elements.tabHolder(),
-                tab = tabHolder.find('.glimpse-tab[data-glimpseKey="' + key + '"]');
+                tab = elements.tab(options.key);
 
             tabHolder.find('.glimpse-active, .glimpse-hover').removeClass('glimpse-active').removeClass('glimpse-hover');
             tab.addClass('glimpse-active');
