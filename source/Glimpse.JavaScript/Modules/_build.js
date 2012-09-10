@@ -48,6 +48,8 @@
 /*(import:glimpse.render.panel.js)*/
 // glimpse.render.lazy.js
 /*(import:glimpse.render.lazy.js)*/
+// glimpse.render.default.js
+/*(import:glimpse.render.default.js)*/
 
 // glimpse.shell.controls.js
 /*(import:glimpse.shell.controls.js)*/

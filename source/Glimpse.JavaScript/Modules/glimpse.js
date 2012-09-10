@@ -90,6 +90,8 @@ glimpse = (function($) {
             obj.pubsub.publish('trigger.shell.render');
             obj.pubsub.publish('action.system.started');
             
+            obj.pubsub.publish('trigger.shell.default.view');
+            
             obj.pubsub.publish('trigger.system.ready');
         };
 
@@ -248,7 +250,7 @@ glimpse.util = (function($) {
         },
         localStorage: function (key, value) {
             if (arguments.length == 1)
-                return JSON.parse(localStorage.getItem('testObject'));
+                return JSON.parse(localStorage.getItem(key));
             localStorage.setItem(key, JSON.stringify(value)); 
         },
         htmlEncode: function (value) {
@@ -488,6 +490,9 @@ glimpse.elements = (function($) {
         },
         panel: function(key) {
              return this.panelHolder().find('.glimpse-panel[data-glimpseKey="' + key + '"]');
+        },
+        tab: function(key) {
+             return this.tabHolder().find('.glimpse-tab[data-glimpseKey="' + key + '"]');
         },
         panels: function() {
              return this.panelHolder().find('.glimpse-panel');
@@ -1000,7 +1005,7 @@ glimpse.render.engine.util.raw = (function($, util) {
             
             tabHolder.find('li:not(.glimpse-active, .glimpse-disabled)').live('click', function () {
                 var key = $(this).attr('data-glimpseKey');
-                pubsub.publish('trigger.tab.select.' + key, key);
+                pubsub.publish('trigger.tab.select.' + key, { key: key });
             }); 
             tabHolder.find('li:not(.glimpse-active, .glimpse-disabled)').live('mouseover mouseout', function (e) {
                 e.type == 'mouseover' ? $(this).addClass('glimpse-hover') : $(this).removeClass('glimpse-hover');
@@ -1031,9 +1036,9 @@ glimpse.render.engine.util.raw = (function($, util) {
             
             pubsub.publish('action.tab.rendered', tabHolder);
         },
-        selected = function(key) {
+        selected = function(options) {
             var tabHolder = elements.tabHolder(),
-                tab = tabHolder.find('.glimpse-tab[data-glimpseKey="' + key + '"]');
+                tab = elements.tab(options.key);
 
             tabHolder.find('.glimpse-active, .glimpse-hover').removeClass('glimpse-active').removeClass('glimpse-hover');
             tab.addClass('glimpse-active');
@@ -1059,12 +1064,12 @@ glimpse.render.engine.util.raw = (function($, util) {
 
             return panel;
         },
-        selected = function(key) {
-            var panel = elements.panel(key);
+        selected = function(options) {
+            var panel = elements.panel(options.key);
 
             // Only render the content when we need to
             if (panel.length == 0) 
-                panel = render(key, data.currentData().data[key], data.currentMetadata().plugins[key]);  
+                panel = render(options.key, data.currentData().data[options.key], data.currentMetadata().plugins[options.key]);  
 
             elements.panelHolder().find('.glimpse-active').removeClass('glimpse-active');
             panel.addClass('glimpse-active');
@@ -1115,31 +1120,46 @@ glimpse.render.engine.util.raw = (function($, util) {
     pubsub.subscribe('action.panel.rendering', rendering);
     pubsub.subscribe('action.panel.rendered', rendered);
 })(jQueryGlimpse, glimpse.data, glimpse.util, glimpse.elements, glimpse.pubsub, glimpse.render.engine);
+// glimpse.render.default.js
+(function(settings, pubsub, elements) { 
+    var start = function () {
+            var current = settings.local('view'),
+                isOpen = settings.local('isOpen');
+        
+            if (!current)
+                current = elements.tabHolder().find('li:not(.glimpse-active, .glimpse-disabled):first').attr('data-glimpseKey'); 
+            pubsub.publish('trigger.tab.select.' + current, { key: current });
+        
+            if (isOpen) {
+                pubsub.publish('trigger.shell.open', true);
+            }
+    },
+        selected = function (options) {
+            settings.local('view', options.key);
+        };
+
+    pubsub.subscribe('trigger.shell.default.view', start);
+    pubsub.subscribe('trigger.tab.select', selected);
+})(glimpse.settings, glimpse.pubsub, glimpse.elements);
 
 // glimpse.shell.controls.js
 (function($, pubsub, elements, settings) {
-    var coreOpen = function (isInit) {
-             pubsub.publish('action.shell.opening', {isInit: isInit});
+    var wireListeners = function () { 
+            elements.opener().click(function () { pubsub.publish('trigger.shell.open'); });
+            elements.barHolder().find('.glimpse-minimize').click(function () { pubsub.publish('trigger.shell.minimize'); });
+            elements.barHolder().find('.glimpse-close').click(function () { pubsub.publish('trigger.shell.close'); });
+        },  
+        open = function(isInit) {
+            settings.local('isOpen', true);
+
+            pubsub.publish('action.shell.opening', {isInit: isInit});
             
             elements.opener().hide(); 
             $.fn.add.call(elements.holder(), elements.pageSpacer())
                 .show()
                 .animate({ height : settings.local('height') ||300 }, (isInit ? 0 : 'fast'), function () {
                     pubsub.publish('action.shell.opened', {isInit: isInit});
-                });            
-        },
-        wireListeners = function () { 
-            elements.opener().click(function () { pubsub.publish('trigger.shell.open'); });
-            elements.barHolder().find('.glimpse-minimize').click(function () { pubsub.publish('trigger.shell.minimize'); });
-            elements.barHolder().find('.glimpse-close').click(function () { pubsub.publish('trigger.shell.close'); });
-        }, 
-        ready = function() { 
-            if (settings.local('isOpen'))
-                coreOpen(true);
-        },  
-        open = function() {
-            settings.local('isOpen', true);
-            coreOpen(false);
+                });  
         },
         minimize = function() {
             settings.local('isOpen', false);
@@ -1174,8 +1194,7 @@ glimpse.render.engine.util.raw = (function($, util) {
     pubsub.subscribe('trigger.shell.open', open);
     pubsub.subscribe('trigger.shell.minimize', minimize);
     pubsub.subscribe('trigger.shell.close', close);
-    pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners);
-    pubsub.subscribe('trigger.system.ready', ready);
+    pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners); 
 })(jQueryGlimpse, glimpse.pubsub, glimpse.elements, glimpse.settings);
 // glimpse.shell.resize.js
 (function($, pubsub, elements, settings, util) {
@@ -1194,6 +1213,8 @@ glimpse.render.engine.util.raw = (function($, util) {
             elements.panels().height(height - 52);
         },
         panelRendered = function (args) {
+            var height = settings.local('height');
+            
             elements.panel(args.key).height(height - 52);
         };
     

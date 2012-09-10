@@ -7,6 +7,8 @@
             obj.pubsub.publish('trigger.shell.render');
             obj.pubsub.publish('action.system.started');
             
+            obj.pubsub.publish('trigger.shell.default.view');
+            
             obj.pubsub.publish('trigger.system.ready');
         };
 

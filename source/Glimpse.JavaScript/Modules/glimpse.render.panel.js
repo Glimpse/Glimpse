@@ -13,12 +13,12 @@
 
             return panel;
         },
-        selected = function(key) {
-            var panel = elements.panel(key);
+        selected = function(options) {
+            var panel = elements.panel(options.key);
 
             // Only render the content when we need to
             if (panel.length == 0) 
-                panel = render(key, data.currentData().data[key], data.currentMetadata().plugins[key]);  
+                panel = render(options.key, data.currentData().data[options.key], data.currentMetadata().plugins[options.key]);  
 
             elements.panelHolder().find('.glimpse-active').removeClass('glimpse-active');
             panel.addClass('glimpse-active');
