@@ -14,6 +14,8 @@
             elements.panels().height(height - 52);
         },
         panelRendered = function (args) {
+            var height = settings.local('height');
+            
             elements.panel(args.key).height(height - 52);
         };
     
