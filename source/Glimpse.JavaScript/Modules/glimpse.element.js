@@ -27,6 +27,9 @@
         panel: function(key) {
              return this.panelHolder().find('.glimpse-panel[data-glimpseKey="' + key + '"]');
         },
+        tab: function(key) {
+             return this.tabHolder().find('.glimpse-tab[data-glimpseKey="' + key + '"]');
+        },
         panels: function() {
              return this.panelHolder().find('.glimpse-panel');
         }
