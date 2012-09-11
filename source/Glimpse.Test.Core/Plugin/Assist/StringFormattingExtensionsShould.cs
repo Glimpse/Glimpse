@@ -13,6 +13,18 @@ namespace Glimpse.Test.Core.Plugin.Assist
 			Assert.Equal(result, @"*Text*");
 		}
 
+        [Fact]
+        public void ApplyStrongFormattingIf()
+        {
+            var result = String.StrongIf(true);
+
+            Assert.Equal(result, @"*Text*");
+
+            result = String.StrongIf(false);
+
+            Assert.Equal(result, @"Text");
+        }
+
 		[Fact]
 		public void ApplyEmphasisFormatting()
 		{
@@ -20,6 +32,18 @@ namespace Glimpse.Test.Core.Plugin.Assist
 
 			Assert.Equal(result, @"\Text\");
 		}
+
+        [Fact]
+        public void ApplyEmphasisFormattingIf()
+        {
+            var result = String.EmphasisIf(true);
+
+            Assert.Equal(result, @"\Text\");
+
+            result = String.EmphasisIf(false);
+
+            Assert.Equal(result, @"Text");
+        }
 
 		[Fact]
 		public void ApplyRawFormatting()
@@ -29,6 +53,18 @@ namespace Glimpse.Test.Core.Plugin.Assist
 			Assert.Equal(result, @"!Text!");
 		}
 
+        [Fact]
+        public void ApplyRawFormattingIf()
+        {
+            var result = String.RawIf(true);
+
+            Assert.Equal(result, @"!Text!");
+
+            result = String.RawIf(false);
+
+            Assert.Equal(result, @"Text");
+        }
+
 		[Fact]
 		public void ApplySubFormatting()
 		{
@@ -37,6 +73,18 @@ namespace Glimpse.Test.Core.Plugin.Assist
 			Assert.Equal(result, @"|Text|");
 		}
 
+        [Fact]
+        public void ApplySubFormattingIf()
+        {
+            var result = String.SubIf(true);
+
+            Assert.Equal(result, @"|Text|");
+
+            result = String.SubIf(false);
+
+            Assert.Equal(result, @"Text");
+        }
+
 		[Fact]
 		public void ApplyUnderlineFormatting()
 		{
@@ -44,6 +92,18 @@ namespace Glimpse.Test.Core.Plugin.Assist
 
 			Assert.Equal(result, @"_Text_");
 		}
+
+        [Fact]
+        public void ApplyUnderlineFormattingIf()
+        {
+            var result = String.UnderlineIf(true);
+
+            Assert.Equal(result, @"_Text_");
+
+            result = String.UnderlineIf(false);
+
+            Assert.Equal(result, @"Text");
+        }
 
 		private string String { get; set; }
 
