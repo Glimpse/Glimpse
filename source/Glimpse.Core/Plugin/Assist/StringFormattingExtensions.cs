@@ -51,7 +51,7 @@ namespace Glimpse.Core.Plugin.Assist
 
 		public static string UnderlineIf(this string value, bool condition)
 		{
-			return condition ? value.Strong() : value;
+			return condition ? value.Underline() : value;
 		}
 
 		public static string FormatWith(this string format, params object[] arguments)
