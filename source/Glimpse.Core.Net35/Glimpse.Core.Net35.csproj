@@ -59,8 +59,590 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Glimpse.Core\**\*.cs" Exclude="..\Glimpse.Core\Properties\AssemblyInfo.cs">
-      <Link />
+    <Compile Include="..\Glimpse.Core\ClientScript\Client.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\ClientScript\Data.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\ClientScript\Metadata.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Configuration\ContentTypeElement.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Configuration\ContentTypeElementCollection.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Configuration\DiscoverableCollectionElement.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Configuration\GlimpseSection.cs">
+      <Link>GlimpseSection.cs</Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Configuration\LoggingElement.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Configuration\LoggingLevel.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Configuration\PolicyDiscoverableCollectionElement.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Configuration\RegexConverter.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Configuration\RegexElement.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Configuration\RegexElementCollection.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Configuration\StatusCodeElement.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Configuration\StatusCodeElementCollection.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Configuration\TypeConverter.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Configuration\TypeElement.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Configuration\TypeElementCollection.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Constants.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\AlternateImplementationGenerationHook.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\AlternateImplementationSelector.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\AlternateImplementationToCastleInterceptorAdapter.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\AntiXssEncoder.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\CastleInvocationToAlternateImplementationContextAdapter.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\DictionaryDataStoreAdapter.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\ExecutionTimer.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\IAlternateImplementation.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\IAlternateImplementationContext.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\IClientScript.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\IConfigurable.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\IContext.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\IDataStore.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\IDocumentation.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\IDynamicClientScript.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\IHtmlEncoder.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\ILogger.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\IMessageBroker.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\IParameterValueProvider.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\IPipelineInspector.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\IPipelineInspectorContext.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\IPrivilegedResource.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\IProxyFactory.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\IResource.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\IResourceContext.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\IResourceResult.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\IResourceResultContext.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\IRuntimePolicy.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\IRuntimePolicyContext.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\ISerializationConverter.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\ISerializer.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\IStaticClientScript.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\ITab.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\ITabContext.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\ITabSetup.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\ITabSetupContext.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\JsonNetSerializationConverterAdapter.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\JsonNetSerializer.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\LoggerBase.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\MessageBroker.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\NLogLogger.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\NuGetPackageAttribute.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\NullLogger.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\ResourceContext.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\ResourceParameter.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\ResourceParameterMetadata.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\ResourceResultContext.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\RuntimeEvent.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\RuntimePolicyContext.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\ScriptOrder.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\SerializationConverter.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\TabBase.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\TabBaseOfT.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\TabContext.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\TabSetupContext.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\TimerResult.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensibility\TimerResultOfT.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensions\DictionaryExtensions.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensions\EnumExtensions.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensions\TypeElementCollectionExtensions.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Extensions\UriTemplateExtensions.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Framework\ApplicationPersistanceStore.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Framework\CacheSetting.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Framework\CastleDynamicProxyFactory.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Framework\Factory.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Framework\GlimpseConfiguration.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Framework\GlimpseException.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Framework\GlimpseMetadata.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Framework\GlimpseRequest.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Framework\GlimpseRuntime.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Framework\IDiscoverableCollection.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Framework\IFrameworkProvider.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Framework\IGlimpseConfiguration.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Framework\IGlimpseRuntime.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Framework\IPersistanceStore.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Framework\IReadOnlyPersistanceStore.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Framework\IRequestMetadata.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Framework\IServiceLocator.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Framework\PipelineInspectorContext.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Framework\ReflectionDiscoverableCollection.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Framework\ResourceEndpointConfiguration.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Framework\ResourceParameters.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Framework\Subscriber.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Framework\SubscriberOfT.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Framework\TabResult.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Plugin\Assist\AssistExtensions.cs">
+      <Link>Plugin\Assist\AssistExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Plugin\Assist\CodeType.cs">
+      <Link>Plugin\Assist\CodeType.cs</Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Plugin\Assist\CodeTypeConverter.cs">
+      <Link>Plugin\Assist\CodeTypeConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Plugin\Assist\Formats.cs">
+      <Link>Plugin\Assist\Formats.cs</Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Plugin\Assist\FormattingKeywords.cs">
+      <Link>Plugin\Assist\FormattingKeywords.cs</Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Plugin\Assist\Plugin.cs">
+      <Link>Plugin\Assist\Plugin.cs</Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Plugin\Assist\StringFormattingExtensions.cs">
+      <Link>Plugin\Assist\StringFormattingExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Plugin\Assist\StructuredLayout.cs">
+      <Link>Plugin\Assist\StructuredLayout.cs</Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Plugin\Assist\StructuredLayoutCell.cs">
+      <Link>Plugin\Assist\StructuredLayoutCell.cs</Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Plugin\Assist\StructuredLayoutRow.cs">
+      <Link>Plugin\Assist\StructuredLayoutRow.cs</Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Plugin\Assist\TabColumn.cs">
+      <Link>Plugin\Assist\TabColumn.cs</Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Plugin\Assist\TabRow.cs">
+      <Link>Plugin\Assist\TabRow.cs</Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Plugin\Assist\TabRowFormattingExtensions.cs">
+      <Link>Plugin\Assist\TabRowFormattingExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Plugin\Assist\TabSection.cs">
+      <Link>Plugin\Assist\TabSection.cs</Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Policy\AjaxPolicy.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Policy\ContentTypePolicy.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Policy\ControlCookiePolicy.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Policy\GlimpseResourcePolicy.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Policy\StatusCodePolicy.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Policy\UriPolicy.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Policy\UserHostAddressPolicy.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\ResourceResult\ExceptionResourceResult.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\ResourceResult\FileResourceResult.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\ResourceResult\HtmlResourceResult.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\ResourceResult\JsonResourceResult.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\ResourceResult\StatusCodeResourceResult.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Resources.Designer.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Resource\AjaxResource.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Resource\ClientResource.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Resource\ConfigurationResource.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Resource\FileResource.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Resource\HistoryResource.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Resource\LogoResource.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Resource\MetadataResource.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Resource\PopupResource.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Resource\RequestResource.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\Resource\SpriteResource.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\RuntimePolicy.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\SerializationConverter\BooleanConverter.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\SerializationConverter\CSharpTypeConverter.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\SerializationConverter\DateTimeConverter.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\SerializationConverter\GlimpseMetadataConverter.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\SerializationConverter\GlimpseRequestConverter.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\SerializationConverter\GlimpseRequestHeadersConverter.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\SerializationConverter\PluginMetadataConverter.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Core\SerializationConverter\TabResultConverter.cs">
+      <Link>
+      </Link>
     </Compile>
     <Compile Include="Backport\Net35Backport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
