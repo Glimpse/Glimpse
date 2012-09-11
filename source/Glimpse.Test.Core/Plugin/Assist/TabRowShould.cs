@@ -5,10 +5,10 @@ using Xunit;
 
 namespace Glimpse.Test.Core.Plugin.Assist
 {
-	public class TabRowFact
+	public class TabRowShould
 	{
 		[Fact]
-		public void TabRow_New_HasNoColumns()
+		public void HaveNoColumns()
 		{
 			var columns = Row.Columns;
 
@@ -16,7 +16,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void TabRow_Column_ThrowsForNullValue()
+		public void ThrowForNullValue()
 		{
 			object columnObject = null;
 			
@@ -24,7 +24,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void TabRow_Column_AddsColumnAndReturnsSelf()
+		public void AddColumnAndReturnsSelf()
 		{
 			var columnObject = new { };
 			var row = Row.Column(columnObject);
@@ -34,7 +34,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void TabRow_Build_ReturnsObjectArrayOfColumnData()
+		public void ReturnObjectArrayOfColumnData()
 		{
 			var columnObject1 = new { Id = "obj1" };
 			var columnObject2 = new { Id = "obj2" };
@@ -50,7 +50,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 
 		private TabRow Row { get; set; }
 
-		public TabRowFact()
+		public TabRowShould()
 		{
 			Row = new TabRow();
 		}

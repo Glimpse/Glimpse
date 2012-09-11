@@ -5,10 +5,10 @@ using Xunit;
 
 namespace Glimpse.Test.Core.Plugin.Assist
 {
-	public class StructuredLayoutCellFact
+	public class StructuredLayoutCellShould
 	{
 		[Fact]
-		public void StructuredLayoutCell_New_SetsDataId()
+		public void SetDataId()
 		{
 			var cell = new StructuredLayoutCell(1);
 			
@@ -16,13 +16,13 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_New_ThrowsForNegativeValue()
+		public void ThrowForNegativeValue()
 		{
 			Assert.Throws<ArgumentException>(() => new StructuredLayoutCell(-1));
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_New_SetsDataFormat()
+		public void SetDataFormatOnConstruction()
 		{
 			var cell = new StructuredLayoutCell("{0} - {1}");
 
@@ -30,21 +30,21 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_New_ThrowsForNullOrEmpty()
+		public void ThrowForNullOrEmptyConstruction()
 		{
 			Assert.Throws<ArgumentException>(() => new StructuredLayoutCell(null));
 			Assert.Throws<ArgumentException>(() => new StructuredLayoutCell(""));
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_Format_ThrowsWhenNullOrEmpty()
+		public void ThrowWhenNullOrEmpty()
 		{
-			Assert.Throws<ArgumentException>(() => Cell.Format(null));
-			Assert.Throws<ArgumentException>(() => Cell.Format(""));
+		    Assert.Throws<ArgumentException>(() => Cell.Format(""));
+		    Assert.Throws<ArgumentException>(() => Cell.Format(null));
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_Format_SetsDataFormat()
+		public void SetDataFormat()
 		{
 			Cell.Format("{0} -> {1} <- {2}");
 
@@ -52,7 +52,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_Layout_SetsStructureToRows()
+		public void SetStructureToRows()
 		{
 			var structuredLayout = StructuredLayout.Create();
 			structuredLayout.Row(r => { }).Row(r => {});
@@ -63,7 +63,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_Layout_AddsRowsToStructure()
+		public void AddRowsToStructure()
 		{
 			IEnumerable<StructuredLayoutRow> rows = null;
 
@@ -78,7 +78,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_AsKey_SetsIsKey()
+		public void SetIsKey()
 		{
 			Cell.AsKey();
 
@@ -86,7 +86,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_AsCode_SetsIsCodeAndCodeType()
+		public void SetIsCodeAndCodeType()
 		{
 			Cell.AsCode(CodeType.Sql);
 
@@ -95,7 +95,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_AlignRight_SetsAlign()
+		public void SetAlign()
 		{
 			Cell.AlignRight();
 
@@ -103,13 +103,13 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_WidthInPixels_ThrowsForNegativeValue()
+		public void ThrowForNegativeValuePixelValue()
 		{
 			Assert.Throws<ArgumentException>(() => Cell.WidthInPixels(-1));
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_WidthInPixels_SetsWidth()
+		public void SetWidthInPixels()
 		{
 			Cell.WidthInPixels(123);
 
@@ -117,13 +117,13 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_WidthInPercent_ThrowsForNegativeValue()
+		public void ThrowForNegativePercentValue()
 		{
 			Assert.Throws<ArgumentException>(() => Cell.WidthInPercent(-1));
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_WidthInPercent_SetsWidth()
+		public void SetWidthInPecent()
 		{
 			Cell.WidthInPercent(123);
 
@@ -131,14 +131,14 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_SpanRows_ThrowsForValueLessThenOne()
+		public void ThrowForValueLessThenOne()
 		{
 			Assert.Throws<ArgumentException>(() => Cell.SpanRows(-1));
 			Assert.Throws<ArgumentException>(() => Cell.SpanRows(0));
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_SpanRows_SetsRowSpan()
+		public void SetRowSpan()
 		{
 			Cell.SpanRows(3);
 
@@ -146,14 +146,14 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_Class_ThrowsForNullOrEmpty()
+		public void ThrowForNullOrEmptyClass()
 		{
 			Assert.Throws<ArgumentException>(() => Cell.Class(null));
 			Assert.Throws<ArgumentException>(() => Cell.Class(""));
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_Class_SetsClassName()
+		public void SetClassName()
 		{
 			Cell.Class("mono");
 
@@ -161,7 +161,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_DisableLimit_SetsSuppressAutoPreview()
+		public void SetSuppressAutoPreview()
 		{
 			Cell.DisableLimit();
 
@@ -169,14 +169,14 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_LimitTo_ThrowsForValueLessThenOne()
+		public void ThrowForValueLessThenOneLimitTo()
 		{
 			Assert.Throws<ArgumentException>(() => Cell.LimitTo(-1));
 			Assert.Throws<ArgumentException>(() => Cell.LimitTo(0));
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_LimitTo_SetsLimit()
+		public void SetLimit()
 		{
 			Cell.LimitTo(10);
 
@@ -184,14 +184,14 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_Prefix_ThrowsForNullOrEmpty()
+		public void ThrowForNullOrEmptyPrefix()
 		{
 			Assert.Throws<ArgumentException>(() => Cell.Prefix(null));
 			Assert.Throws<ArgumentException>(() => Cell.Prefix(""));
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_Prefix_SetsPre()
+		public void SetPre()
 		{
 			Cell.Prefix("T+ ");
 
@@ -199,14 +199,14 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_Suffix_ThrowsForNullOrEmpty()
+		public void ThrowForNullOrEmptySuffix()
 		{
 			Assert.Throws<ArgumentException>(() => Cell.Suffix(null));
 			Assert.Throws<ArgumentException>(() => Cell.Suffix(""));
 		}
 
 		[Fact]
-		public void StructuredLayoutCell_Suffix_SetsPost()
+		public void SetPost()
 		{
 			Cell.Suffix(" ms");
 
@@ -215,7 +215,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 
 		private StructuredLayoutCell Cell { get; set; }
 
-		public StructuredLayoutCellFact()
+		public StructuredLayoutCellShould()
 		{
 			Cell = new StructuredLayoutCell(1);
 		}

@@ -3,10 +3,10 @@ using Xunit;
 
 namespace Glimpse.Test.Core.Plugin.Assist
 {
-	public class StringFormattingExtensionsFact
+	public class StringFormattingExtensionsShould
 	{
 		[Fact]
-		public void String_Strong_AppliesStrongFormatting()
+		public void ApplyStrongFormatting()
 		{
 			var result = String.Strong();
 
@@ -14,7 +14,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void String_Emphasis_AppliesEmphasisFormatting()
+		public void ApplyEmphasisFormatting()
 		{
 			var result = String.Emphasis();
 
@@ -22,7 +22,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void String_Raw_AppliesRawFormatting()
+		public void ApplyRawFormatting()
 		{
 			var result = String.Raw();
 
@@ -30,7 +30,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void String_Sub_AppliesSubFormatting()
+		public void ApplySubFormatting()
 		{
 			var result = String.Sub();
 
@@ -38,7 +38,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void String_Underline_AppliesUnderlineFormatting()
+		public void ApplyUnderlineFormatting()
 		{
 			var result = String.Underline();
 
@@ -47,7 +47,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 
 		private string String { get; set; }
 
-		public StringFormattingExtensionsFact()
+		public StringFormattingExtensionsShould()
 		{
 			String = "Text";
 		}

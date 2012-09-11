@@ -3,10 +3,10 @@ using Xunit;
 
 namespace Glimpse.Test.Core.Plugin.Assist
 {
-	public class TabColumnFact
+	public class TabColumnShould
 	{
 		[Fact]
-		public void TabColumn_New_HasData()
+		public void ConstructWithData()
 		{
 			var column = Column;
 
@@ -14,7 +14,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void TabColumn_New_HasTabSectionAsData()
+		public void HaveTabSectionAsData()
 		{
 			var section = new TabSection();
 			var column = new TabColumn(section);
@@ -23,7 +23,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void TabColumn_OverrideData_SetsData()
+		public void SetData()
 		{
 			var columnData = new { };
 			var overrideColumnData = new { };
@@ -37,7 +37,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		private object ColumnObject { get; set; }
 		private TabColumn Column { get; set; }
 
-		public TabColumnFact()
+		public TabColumnShould()
 		{
 			ColumnObject = new { SomeProperty = "SomeValue" };
 			Column = new TabColumn(ColumnObject);

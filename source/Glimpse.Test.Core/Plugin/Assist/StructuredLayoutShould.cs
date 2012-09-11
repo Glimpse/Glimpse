@@ -4,10 +4,10 @@ using Xunit;
 
 namespace Glimpse.Test.Core.Plugin.Assist
 {
-	public class StructuredLayoutFact
+	public class StructuredLayoutShould
 	{
 		[Fact]
-		public void StructuredLayout_Create_HasNoRows()
+		public void ConstructWithNoRows()
 		{
 			var layout = StructuredLayout.Create();
 			
@@ -17,7 +17,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void StructuredLayout_Create_HasSingleRow()
+		public void ConstructWithSingleRow()
 		{
 			var layout = StructuredLayout.Create(l => l.Row(r => {}));
 			
@@ -27,7 +27,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void StructuredLayout_Create_HasTwoRows()
+		public void ConstructWithTwoRows()
 		{
 			var layout = StructuredLayout.Create(l =>
 			{
@@ -41,7 +41,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void StructuredLayout_Row_AddsSingleRow()
+		public void AddSingleRow()
 		{
 			var layout = StructuredLayout.Create().Row(r => {});
 
@@ -51,7 +51,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void StructuredLayout_Row_AddsTwoRows()
+		public void AddTwoRows()
 		{
 			var layout = StructuredLayout.Create().Row(r => { }).Row(r => { });
 

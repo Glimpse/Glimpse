@@ -5,10 +5,10 @@ using Xunit;
 
 namespace Glimpse.Test.Core.Plugin.Assist
 {
-	public class TabSectionFact
+	public class TabSectionShould
 	{
 		[Fact]
-		public void TabSection_New_HasNoRows()
+		public void HaveNoRows()
 		{
 			var rows = Section.Rows.Count();
 
@@ -16,7 +16,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void TabSection_AddRow_AddsAndReturnsRow()
+		public void AddAndReturnsRow()
 		{
 			var row = Section.AddRow();
 
@@ -27,7 +27,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void TabSection_Build_ReturnsRowsAsInstance()
+		public void ReturnRowsAsInstance()
 		{
 			Section.AddRow();
 
@@ -38,7 +38,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void TabSection_InstanceData_IsSelf()
+		public void BeSelf()
 		{
 			var section = Section;
 			var sectionInstance = Section.Build() as TabSection.Instance;
@@ -47,14 +47,14 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void TabSection_Instance_IsListOfObjectArray()
+		public void BeListOfObjectArray()
 		{
 			Assert.True(typeof(List<object[]>).IsAssignableFrom(typeof(TabSection.Instance)));
 		}
 
 		private TabSection Section { get; set; }
 
-		public TabSectionFact()
+		public TabSectionShould()
 		{
 			Section = new TabSection();
 		}

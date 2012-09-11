@@ -5,10 +5,10 @@ using Xunit;
 
 namespace Glimpse.Test.Core.Plugin.Assist
 {
-	public class PluginFact
+	public class PluginShould
 	{
 		[Fact]
-		public void Plugin_Create_ReturnsNewSectionWithNoRows()
+		public void ReturnNewSectionWithNoRows()
 		{
 			var section = Glimpse.Core.Plugin.Assist.Plugin.Create();
 
@@ -16,7 +16,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void Plugin_Create_ReturnsNewSectionWithRowsAndColumns()
+		public void ReturnNewSectionWithRowsAndColumns()
 		{
 			var section = Glimpse.Core.Plugin.Assist.Plugin.Create("Header1", "Header2");
 			
@@ -27,7 +27,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void Plugin_Section_ReturnsSelf()
+		public void ReturnSelf()
 		{
 			var section1 = Plugin.Section("SectionName", new TabSection());
 			var section2 = Plugin.Section("SectionName", section => {});
@@ -37,7 +37,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void Plugin_Section_ThrowsWhenSectionNameIsNullOrEmpty()
+		public void ThrowWhenSectionNameIsNullOrEmpty()
 		{
 			var validSection = new TabSection();
 			Action<TabSection> validSectionAction = section => {};
@@ -50,7 +50,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void Plugin_Section_ThrowsWhenSectionIsNull()
+		public void ThrowWhenSectionIsNull()
 		{
 			TabSection section = null;
 			Action<TabSection> sectionAction = null;
@@ -60,7 +60,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void Plugin_Section_AddsNewSection()
+		public void AddNewSection()
 		{
 			var innerSection = new TabSection();
 			Plugin.Section("SectionName1", innerSection);
@@ -72,7 +72,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void Plugin_Section_AddsSectionWithThreeRows()
+		public void AddSectionWithThreeRows()
 		{
 			object rows = null;
 			Plugin.Section("SectionName2", innerSection =>
@@ -91,7 +91,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 
 		private TabSection Plugin { get; set; }
 
-		public PluginFact()
+		public PluginShould()
 		{
 			Plugin = Glimpse.Core.Plugin.Assist.Plugin.Create();
 		}

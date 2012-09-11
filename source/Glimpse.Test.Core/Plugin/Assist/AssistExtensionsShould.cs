@@ -4,10 +4,10 @@ using Xunit;
 
 namespace Glimpse.Test.Core.Plugin.Assist
 {
-	public class AssistExtensionsFact
+	public class AssistExtensionsShould
 	{
 		[Fact]
-		public void ToTabSection_null_ShouldThrow()
+		public void ThrowWithNull()
 		{
 			object obj = null;
 
@@ -15,7 +15,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void ToTabSection_NonTabSectionObject_ShouldThrow()
+		public void ThrowWithNonTabSectionObject()
 		{
 			object obj = new object();
 
@@ -23,7 +23,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void ToTabSection_GlimseSection_ReturnsTabSection()
+		public void ReturnTabSectionFromGlimpseSection()
 		{
 			object obj = new TabSection();
 
@@ -33,7 +33,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void ToTabSection_TabSectionInstance_ReturnsTabSection()
+		public void ReturnTabSectionFromTabSectionInstance()
 		{
 			var section = new TabSection();
 			object obj = section.Build();

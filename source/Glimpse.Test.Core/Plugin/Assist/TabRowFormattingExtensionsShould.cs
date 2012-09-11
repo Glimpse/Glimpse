@@ -5,10 +5,10 @@ using Xunit;
 
 namespace Glimpse.Test.Core.Plugin.Assist
 {
-	public class TabRowFormattingExtensionsFact
+	public class TabRowFormattingExtensionsShould
 	{
 		[Fact]
-		public void TabRow_Strong_AppliesStrongToLastColumn()
+		public void ApplyStrongToLastColumn()
 		{
 			var row = Row.Strong();
 
@@ -16,7 +16,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void TabRow_Emphasis_AppliesEmphasisToLastColumn()
+		public void ApplyEmphasisToLastColumn()
 		{
 			var row = Row.Emphasis();
 
@@ -24,7 +24,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void TabRow_Raw_AppliesRawToLastColumn()
+		public void ApplyRawToLastColumn()
 		{
 			var row = Row.Raw();
 
@@ -32,7 +32,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void TabRow_Sub_AppliesSubToLastColumn()
+		public void ApplySubToLastColumn()
 		{
 			var row = Row.Sub();
 
@@ -40,7 +40,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void TabRow_Underline_AppliesUnderlineToLastColumn()
+		public void ApplyUnderlineToLastColumn()
 		{
 			var row = Row.Underline();
 
@@ -48,7 +48,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void TabRow_RowOperations_AreInvalidForRowsWithoutColumns()
+		public void ThrowForRowOperationsWithoutColumns()
 		{
 			var row = new TabRow();
 
@@ -56,7 +56,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void TabRow_Error_AddsColumnWithError()
+		public void AddColumnWithError()
 		{
 			var row = Row.Error();
 
@@ -64,7 +64,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void TabRow_Fail_AddsColumnWithFail()
+		public void AddColumnWithFail()
 		{
 			var row = Row.Fail();
 
@@ -72,7 +72,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void TabRow_Info_AddsColumnWithInfo()
+		public void AddColumnWithInfo()
 		{
 			var row = Row.Info();
 
@@ -80,7 +80,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void TabRow_Loading_AddsColumnWithLoading()
+		public void AddColumnWithLoading()
 		{
 			var row = Row.Loading();
 
@@ -88,7 +88,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void TabRow_Ms_AddsColumnWithMs()
+		public void AddColumnWithMs()
 		{
 			var row = Row.Ms();
 
@@ -96,7 +96,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void TabRow_Quiet_AddsColumnWithQuiet()
+		public void AddColumnWithQuiet()
 		{
 			var row = Row.Quiet();
 
@@ -104,7 +104,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void TabRow_Selected_AddsColumnWithSelected()
+		public void AddColumnWithSelected()
 		{
 			var row = Row.Selected();
 
@@ -112,7 +112,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void TabRow_Warn_AddsColumnWithWarn()
+		public void AddColumnWithWarn()
 		{
 			var row = Row.Warn();
 
@@ -121,7 +121,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 
 		private TabRow Row { get; set; }
 
-		public TabRowFormattingExtensionsFact()
+		public TabRowFormattingExtensionsShould()
 		{
 			Row = new TabRow().Column("Text");
 		}
