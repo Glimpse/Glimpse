@@ -218,6 +218,7 @@
     color: #666 !important;
     top: 5px;
     left: 0;
+    display: none;
 }
 .glimpse .glimpse-meta-update:hover {
     background-position: -213px -1px;
