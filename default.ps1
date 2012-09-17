@@ -134,10 +134,65 @@ task test -depends compile{
     exec { & .\xunit.console.clr4 $base_dir\tests.xunit }
 }
 
+task push {
+    "Pushing"
+    "`nPush the following packages:"
+    
+    cd $build_dir\local
+    
+    $packages = Get-ChildItem * -Include *.nupkg -Exclude *.symbols.nupkg
+    
+    foreach($package in $packages){ 
+        Write-Host "`t$package" 
+    } 
+     
+    #Get-ChildItem -Path .\builds\local -Filter *.nupkg | FT Name
+    
+    $input = Read-Host "to (N)uget, (M)yget, (B)oth or (Q)uit?"
+
+    switch ($input) 
+        { 
+            N {
+               "Pushing to NuGet...";
+               Push-Packages https://nuget.org/api/v2/
+               break;
+               } 
+            M {
+               "Pushing to MyGet...";
+               Push-Packages http://www.myget.org/F/getglimpse/
+               break;
+              } 
+            B {
+               "Pushing to MyGet...";
+               Push-Packages http://www.myget.org/F/getglimpse/
+               "Pushing to NuGet...";
+               Push-Packages https://nuget.org/api/v2/
+               break;
+              } 
+            default {
+              "Push aborted";
+              break;
+              }
+        }
+}
+
 task buildjs {
 }
 
 #functions ---------------------------------------------------------------------------------------------------------
+
+function Push-Packages($uri)
+{
+  cd $build_dir\local
+  $packages = Get-ChildItem * -Include *.nupkg -Exclude *.symbols.nupkg
+  
+  cd $base_dir\.NuGet
+  
+  foreach($package in $packages){
+    exec { & .\nuget.exe push $package -src $uri}
+  }
+    
+}
 
 function Delete-Directory($path)
 {

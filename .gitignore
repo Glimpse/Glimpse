@@ -24,3 +24,4 @@ _ReSharper.*
 /Packages.dgml
 /packages
 /source/Glimpse.Mvc3/NuSpec/lib/
+/.nuget/NuGet.Config
