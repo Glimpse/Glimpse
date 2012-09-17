@@ -78,6 +78,9 @@ task merge -depends test {
     "   Glimpse.AspNet.Net35"
     copy $source_dir\Glimpse.AspNet\bin\Release\Glimpse.AspNet.* $source_dir\Glimpse.AspNet\nuspec\lib\net35\
     
+    "   Glimpse.Mvc3"
+    copy $source_dir\Glimpse.Mvc3\bin\Release\Glimpse.Mvc3.* $source_dir\Glimpse.Mvc3\nuspec\lib\net40\
+    
 }
 
 task pack -depends merge {
@@ -93,11 +96,16 @@ task pack -depends merge {
     $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.AspNet\Properties\AssemblyInfo.cs | Update-AssemblyInformationalVersion
     exec { & .\nuget.exe pack $source_dir\Glimpse.AspNet\NuSpec\Glimpse.AspNet.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
     
+    "   Glimpse.Mvc3.nuspec"
+    $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.Mvc3\Properties\AssemblyInfo.cs | Update-AssemblyInformationalVersion
+    exec { & .\nuget.exe pack $source_dir\Glimpse.Mvc3\NuSpec\Glimpse.Mvc3.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
+    
     "   Glimpse.zip"
     New-Item $build_dir\local\zip\Core\net40 -Type directory -Force > $null
     New-Item $build_dir\local\zip\Core\net35 -Type directory -Force > $null
     New-Item $build_dir\local\zip\AspNet\net40 -Type directory -Force > $null
     New-Item $build_dir\local\zip\AspNet\net35 -Type directory -Force > $null
+    New-Item $build_dir\local\zip\MVC3\net40 -Type directory -Force > $null
 
     copy $base_dir\license.txt $build_dir\local\zip
         
@@ -108,9 +116,10 @@ task pack -depends merge {
     copy $source_dir\Glimpse.AspNet\nuspec\lib\net35\Glimpse.AspNet.* $build_dir\local\zip\AspNet\net35
     copy $source_dir\Glimpse.AspNet\nuspec\readme.txt $build_dir\local\zip\AspNet
     
-    #TODO: Add MVC
-    #TODO: Add help .CHM file
+    copy $source_dir\Glimpse.Mvc3\nuspec\lib\net40\Glimpse.Mvc3.* $build_dir\local\zip\Mvc3\net40
         
+    #TODO: Add help .CHM file
+    
     Create-Zip $build_dir\local\zip $build_dir\local\Glimpse.zip
     Delete-Directory $build_dir\local\zip
 }

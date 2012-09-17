@@ -22,5 +22,5 @@ _ReSharper.*
 /source/Glimpse.Mvc3.MusicStore.Sample/App_Data/ASPNETDB_log.ldf
 /source/Glimpse.Mvc3.MusicStore.Sample/App_Data/MvcMusicStore.sdf
 /Packages.dgml
-/source/Glimpse.Core2/NuSpec/
 /packages
+/source/Glimpse.Mvc3/NuSpec/lib/

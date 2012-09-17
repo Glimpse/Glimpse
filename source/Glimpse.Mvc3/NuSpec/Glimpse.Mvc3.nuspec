@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <!-- Values in dollar $igns are automatically pulled from the AssemblyInfo.cs attributes by psake build script -->
+    <metadata>
+        <id>Glimpse.Mvc3</id>
+        <version>0.0.0</version><!-- Replaced at build time by AssemblyInformationalVersion in AssemblyInfo.cs -->
+        <title>Glimpse Mvc3</title>
+        <authors>nmolnar, avanderhoorn</authors>
+        <owners>nmolnar, avanderhoorn</owners>
+        <licenseUrl>http://www.opensource.org/licenses/apache2.0</licenseUrl>
+        <projectUrl>http://getglimpse.com</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <iconUrl>http://getglimpse.com/content/glimpse32.png</iconUrl>
+        <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET MVC 3.0 application.</description>
+        <summary>ASP.NET MVC 3.0 web debugging and diagnostics tool.</summary>
+        <tags>ASP.NET Web MVC Glimpse</tags>
+        <dependencies>
+          <dependency id="Glimpse.AspNet" version="1.0.0-rc" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="lib\net40\*.*" target="lib\net40" />
+        <file src="..\**\*.*" target="src" exclude="..\bin\**;..\obj\**;..\NuSpec\**" />
+    </files>
+</package>
