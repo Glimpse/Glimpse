@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Plugin.Assist;
 using Glimpse.Core.ResourceResult;
 using Glimpse.Core;
 
@@ -255,7 +256,15 @@ namespace Glimpse.Core.Framework
                 try
                 {
                     var tabContext = new TabContext(runtimeContext, GetTabStore(key), logger, messageBroker);
-                    var result = new TabResult(tab.Name, tab.GetData(tabContext));
+                    var tabData = tab.GetData(tabContext);
+
+                    var tabSection = tabData as TabSection;
+                    if (tabSection != null)
+                    {
+                        tabData = tabSection.Build();
+                    }
+                    
+                    var result = new TabResult(tab.Name, tabData);
 
                     if (tabResultsStore.ContainsKey(key))
                         tabResultsStore[key] = result;
