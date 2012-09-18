@@ -162,7 +162,7 @@ namespace Glimpse.Core.Framework
             IResourceResult result;
 
             var policy = GetRuntimePolicy(RuntimeEvent.ExecuteResource);
-            if (policy == RuntimePolicy.Off)
+            if (policy == RuntimePolicy.Off && !resourceName.Equals(Configuration.DefaultResource.Name))
             {
                 var message = string.Format(Resources.ExecuteResourceInsufficientPolicy, resourceName);
                 logger.Info(message);
