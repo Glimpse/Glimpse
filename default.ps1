@@ -159,12 +159,12 @@ task push {
                } 
             M {
                "Pushing to MyGet...";
-               Push-Packages http://www.myget.org/F/getglimpse/
+               Push-Packages http://www.myget.org/F/glimpsemilestone/
                break;
               } 
             B {
                "Pushing to MyGet...";
-               Push-Packages http://www.myget.org/F/getglimpse/
+               Push-Packages http://www.myget.org/F/glimpsemilestone/
                "Pushing to NuGet...";
                Push-Packages https://nuget.org/api/v2/
                break;
