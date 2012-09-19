@@ -1,20 +1,31 @@
 ﻿(function($, pubsub, elements, settings) {
     var wireListeners = function () { 
-            elements.opener().click(function () { pubsub.publish('trigger.shell.open'); });
+            elements.opener().click(function () { pubsub.publish('trigger.shell.open', { isInit: false }); });
             elements.barHolder().find('.glimpse-minimize').click(function () { pubsub.publish('trigger.shell.minimize'); });
             elements.barHolder().find('.glimpse-close').click(function () { pubsub.publish('trigger.shell.close'); });
         },  
-        open = function(isInit) {
-            settings.local('isOpen', true);
-
-            pubsub.publish('action.shell.opening', {isInit: isInit});
+        open = function(args) {
+            if (!args.isInit)
+                settings.local('hidden', false);
             
-            elements.opener().hide(); 
-            $.fn.add.call(elements.holder(), elements.pageSpacer())
-                .show()
-                .animate({ height : settings.local('height') ||300 }, (isInit ? 0 : 'fast'), function () {
-                    pubsub.publish('action.shell.opened', {isInit: isInit});
-                });  
+            if (!settings.local('hidden') || args.force) {
+                settings.local('isOpen', true);
+
+                pubsub.publish('action.shell.opening', { isInit: args.isInit });
+
+                var height = settings.local('height') || 300,
+                    body = $.fn.add.call(elements.holder(), elements.pageSpacer()).show();
+                
+                elements.opener().hide();
+                if (args.isInit)
+                    body.height(height);
+                else 
+                    body.animate({ height: settings.local('height') || 300 }, 'fast');
+                
+                pubsub.publish('action.shell.opened', { isInit: args.isInit });
+            }
+            else
+                pubsub.publish('trigger.shell.suppressed.open');
         },
         minimize = function() {
             settings.local('isOpen', false);
@@ -33,8 +44,16 @@
                 });
             
         },
+        hide = function () {
+            settings.local('hidden', true);
+
+            elements.holder().hide();
+            elements.pageSpacer().hide();
+            elements.opener().show(); 
+        },
         close = function() {
             settings.local('isOpen', false);
+            settings.local('hidden', false);
             settings.global('glimpseState', null, -1);
             
             pubsub.publish('action.shell.closeing');
@@ -50,4 +69,5 @@
     pubsub.subscribe('trigger.shell.minimize', minimize);
     pubsub.subscribe('trigger.shell.close', close);
     pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners); 
+    pubsub.subscribe('trigger.shell.hide', hide);
 })(jQueryGlimpse, glimpse.pubsub, glimpse.elements, glimpse.settings);

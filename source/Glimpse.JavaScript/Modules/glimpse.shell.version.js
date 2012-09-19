@@ -1,6 +1,6 @@
 ﻿glimpse.versionCheck = (function ($, pubsub, settings, elements) {
     var wireListeners = function () {
-        
+            //TODO: Need to wireup light box
         },
         retrieveStamp = function () {
             if (!settings.local('stamp'))
@@ -39,7 +39,7 @@
             local('hasNewerVersion', data.hasNewer);
         };
     
-    pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners);
+    pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners  );
     pubsub.subscribe('trigger.system.ready', ready);
 
     return {
