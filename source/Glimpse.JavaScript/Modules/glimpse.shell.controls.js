@@ -54,7 +54,7 @@
         close = function() {
             settings.local('isOpen', false);
             settings.local('hidden', false);
-            settings.global('glimpseState', null, -1);
+            settings.global('glimpsePolicy', null, -1);
             
             pubsub.publish('action.shell.closeing');
 

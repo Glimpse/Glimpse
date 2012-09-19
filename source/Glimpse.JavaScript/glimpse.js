@@ -314,7 +314,7 @@ var glimpse = (function ($, scope) {
                     settings = $.extend(settings, util.cookie('glimpseOptions'));
                 },
                 terminate = function () {
-                    util.cookie('glimpseState', null);
+                    util.cookie('glimpsePolicy', null);
                 }, 
                 init = function () {
                     wireListeners();
