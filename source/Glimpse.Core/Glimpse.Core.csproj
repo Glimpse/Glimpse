@@ -172,9 +172,9 @@
     <Compile Include="Plugin\Assist\TabSection.cs" />
     <Compile Include="Plugin\Assist\Plugin.cs" />
     <Compile Include="Plugin\Assist\StringFormattingExtensions.cs" />
-    <Compile Include="Plugin\Assist\StructuredLayout.cs" />
-    <Compile Include="Plugin\Assist\StructuredLayoutCell.cs" />
-    <Compile Include="Plugin\Assist\StructuredLayoutRow.cs" />
+    <Compile Include="Plugin\Assist\TabLayout.cs" />
+    <Compile Include="Plugin\Assist\TabLayoutCell.cs" />
+    <Compile Include="Plugin\Assist\TabLayoutRow.cs" />
     <Compile Include="Policy\AjaxPolicy.cs" />
     <Compile Include="Policy\ContentTypePolicy.cs" />
     <Compile Include="Policy\ControlCookiePolicy.cs" />

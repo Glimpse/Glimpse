@@ -74,7 +74,7 @@ namespace Glimpse.Core.Framework
         }
 
         //TODO: Add PRG support
-        //TODO: Structured layout support
+        //TODO: Structured layout support (TabLayout)
         public void EndRequest()
         {
             var policy = GetRuntimePolicy(RuntimeEvent.EndRequest);

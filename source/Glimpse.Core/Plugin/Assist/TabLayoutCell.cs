@@ -2,9 +2,9 @@ using System;
 
 namespace Glimpse.Core.Plugin.Assist
 {
-	public class StructuredLayoutCell
+	public class TabLayoutCell
 	{
-		public StructuredLayoutCell(int cell)
+		public TabLayoutCell(int cell)
 		{
 			if (cell < 0)
 				throw new ArgumentException("Cell must not be a negative value.", "cell");
@@ -12,7 +12,7 @@ namespace Glimpse.Core.Plugin.Assist
 			Data = cell;
 		}
 
-		public StructuredLayoutCell(string format)
+		public TabLayoutCell(string format)
 		{
 			if (String.IsNullOrEmpty(format)) 
 				throw new ArgumentException("Format must not be null or empty.", "format");
@@ -21,7 +21,7 @@ namespace Glimpse.Core.Plugin.Assist
 		}
 
 		public object Data { get; private set; }
-		public object Structure { get; private set; }
+		public object TabLayout { get; private set; }
 		
 		public bool? IsKey { get; private set; }
 		public bool? IsCode { get; private set; }
@@ -38,7 +38,7 @@ namespace Glimpse.Core.Plugin.Assist
 		public string Pre { get; private set; }
 		public string Post { get; private set; }
 
-		public StructuredLayoutCell Format(string format)
+		public TabLayoutCell Format(string format)
 		{
 			if (String.IsNullOrEmpty(format))
 				throw new ArgumentException("Format must not be null or empty.", "format");
@@ -47,39 +47,39 @@ namespace Glimpse.Core.Plugin.Assist
 			return this;
 		}
 
-		public StructuredLayoutCell Layout(StructuredLayout layout)
+		public TabLayoutCell Layout(TabLayout layout)
 		{
-			Structure = layout.Rows;
+			TabLayout = layout.Rows;
 			return this;
 		}
 
-		public StructuredLayoutCell Layout(Action<StructuredLayout> layout)
+		public TabLayoutCell Layout(Action<TabLayout> layout)
 		{
-			var structuredLayout = StructuredLayout.Create(layout);
-			Structure = structuredLayout.Rows;
+			var tabLayout = Assist.TabLayout.Create(layout);
+			TabLayout = tabLayout.Rows;
 			return this;
 		}
 
-		public StructuredLayoutCell AsKey()
+		public TabLayoutCell AsKey()
 		{
 			IsKey = true;
 			return this;
 		}
 
-		public StructuredLayoutCell AsCode(CodeType codeType)
+		public TabLayoutCell AsCode(CodeType codeType)
 		{
 			IsCode = true;
 			CodeType = CodeTypeConverter.Convert(codeType);
 			return this;
 		}
 
-		public StructuredLayoutCell AlignRight()
+		public TabLayoutCell AlignRight()
 		{
 			Align = "Right";
 			return this;
 		}
 
-		public StructuredLayoutCell WidthInPixels(int pixels)
+		public TabLayoutCell WidthInPixels(int pixels)
 		{
 			if (pixels < 0)
 				throw new ArgumentException("Pixels must not be a negative value.", "pixels");
@@ -88,7 +88,7 @@ namespace Glimpse.Core.Plugin.Assist
 			return this;
 		}
 
-		public StructuredLayoutCell WidthInPercent(int percent)
+		public TabLayoutCell WidthInPercent(int percent)
 		{
 			if (percent < 0)
 				throw new ArgumentException("Percent must not be a negative value.", "percent");
@@ -97,7 +97,7 @@ namespace Glimpse.Core.Plugin.Assist
 			return this;
 		}
 
-		public StructuredLayoutCell SpanRows(int rows)
+		public TabLayoutCell SpanRows(int rows)
 		{
 			if (rows < 1)
 				throw new ArgumentException("Rows must not be less then 0.", "rows");
@@ -106,7 +106,7 @@ namespace Glimpse.Core.Plugin.Assist
 			return this;
 		}
 
-		public StructuredLayoutCell Class(string className)
+		public TabLayoutCell Class(string className)
 		{
 			if (String.IsNullOrEmpty(className))
 				throw new ArgumentException("Class name must not be null or empty.", "className");
@@ -115,13 +115,13 @@ namespace Glimpse.Core.Plugin.Assist
 			return this;
 		}
 
-		public StructuredLayoutCell DisableLimit()
+		public TabLayoutCell DisableLimit()
 		{
 			SuppressAutoPreview = true;
 			return this;
 		}
 
-		public StructuredLayoutCell LimitTo(int rows)
+		public TabLayoutCell LimitTo(int rows)
 		{
 			if (rows < 1)
 				throw new ArgumentException("Rows must not be less then 0.", "rows");
@@ -130,7 +130,7 @@ namespace Glimpse.Core.Plugin.Assist
 			return this;
 		}
 
-		public StructuredLayoutCell Prefix(string prefix)
+		public TabLayoutCell Prefix(string prefix)
 		{
 			if (String.IsNullOrEmpty(prefix))
 				throw new ArgumentException("Prefix must not be null or empty.", "prefix");
@@ -139,7 +139,7 @@ namespace Glimpse.Core.Plugin.Assist
 			return this;
 		}
 
-		public StructuredLayoutCell Suffix(string suffix)
+		public TabLayoutCell Suffix(string suffix)
 		{
 			if (String.IsNullOrEmpty(suffix))
 				throw new ArgumentException("Suffix must not be null or empty.", "suffix");

@@ -5,12 +5,12 @@ using Xunit;
 
 namespace Glimpse.Test.Core.Plugin.Assist
 {
-	public class StructuredLayoutCellShould
+	public class TabLayoutCellShould
 	{
 		[Fact]
 		public void SetDataId()
 		{
-			var cell = new StructuredLayoutCell(1);
+			var cell = new TabLayoutCell(1);
 			
 			Assert.Equal(1, cell.Data);
 		}
@@ -18,13 +18,13 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void ThrowForNegativeValue()
 		{
-			Assert.Throws<ArgumentException>(() => new StructuredLayoutCell(-1));
+			Assert.Throws<ArgumentException>(() => new TabLayoutCell(-1));
 		}
 
 		[Fact]
 		public void SetDataFormatOnConstruction()
 		{
-			var cell = new StructuredLayoutCell("{0} - {1}");
+			var cell = new TabLayoutCell("{0} - {1}");
 
 			Assert.Equal("{0} - {1}", cell.Data);
 		}
@@ -32,8 +32,8 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void ThrowForNullOrEmptyConstruction()
 		{
-			Assert.Throws<ArgumentException>(() => new StructuredLayoutCell(null));
-			Assert.Throws<ArgumentException>(() => new StructuredLayoutCell(""));
+			Assert.Throws<ArgumentException>(() => new TabLayoutCell(null));
+			Assert.Throws<ArgumentException>(() => new TabLayoutCell(""));
 		}
 
 		[Fact]
@@ -54,27 +54,27 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void SetStructureToRows()
 		{
-			var structuredLayout = StructuredLayout.Create();
-			structuredLayout.Row(r => { }).Row(r => {});
+			var layout = TabLayout.Create();
+			layout.Row(r => { }).Row(r => {});
 
-			Cell.Layout(structuredLayout);
+			Cell.Layout(layout);
 
-			Assert.Equal(structuredLayout.Rows, Cell.Structure);
+			Assert.Equal(layout.Rows, Cell.TabLayout);
 		}
 
 		[Fact]
 		public void AddRowsToStructure()
 		{
-			IEnumerable<StructuredLayoutRow> rows = null;
+			IEnumerable<TabLayoutRow> rows = null;
 
-			Cell.Layout(structuredLayout =>
+			Cell.Layout(layout =>
 			{
-				structuredLayout.Row(r => { }).Row(r => { });
+				layout.Row(r => { }).Row(r => { });
 
-				rows = structuredLayout.Rows;
+				rows = layout.Rows;
 			});
 
-			Assert.Equal(rows, Cell.Structure);
+			Assert.Equal(rows, Cell.TabLayout);
 		}
 
 		[Fact]
@@ -213,11 +213,11 @@ namespace Glimpse.Test.Core.Plugin.Assist
 			Assert.Equal(" ms", Cell.Post);
 		}
 
-		private StructuredLayoutCell Cell { get; set; }
+		private TabLayoutCell Cell { get; set; }
 
-		public StructuredLayoutCellShould()
+		public TabLayoutCellShould()
 		{
-			Cell = new StructuredLayoutCell(1);
+			Cell = new TabLayoutCell(1);
 		}
 	}
 }
