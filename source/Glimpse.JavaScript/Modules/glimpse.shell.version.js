@@ -23,7 +23,7 @@
             }
             
             var metadata = data.currentMetadata(),
-                url = util.replaceTokens(metadata.resources.glimpse_version_check, { stamp: retrieveStamp() });
+                url = util.uriTemplate(metadata.resources.glimpse_version_check, { stamp: retrieveStamp() });
             
             $.ajax({
                 url: url, 
