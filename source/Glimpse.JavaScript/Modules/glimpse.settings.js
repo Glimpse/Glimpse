@@ -1,12 +1,17 @@
 ﻿glimpse.settings = (function($, pubsub, util) {
     var globalSettings = {},
         localStorage = {},  
-        restore = function () {
+        init = function () {
             globalSettings = $.extend({}, util.cookie('glimpseOptions'));
             localStorage = $.extend({}, util.localStorage('glimpseOptions'));
+
+            $(window).bind('storage', function(e) {
+                if (e.originalEvent.key == 'glimpseOptions') 
+                    localStorage = JSON.parse(e.originalEvent.newValue); 
+            });
         };
 
-    pubsub.subscribe('trigger.system.init', restore);
+    pubsub.subscribe('trigger.system.init', init);
 
     return {
         global: function (key, value) { 
