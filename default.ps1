@@ -14,9 +14,6 @@ properties {
 task default -depends compile
 
 task clean {
-    $framework_dir
-    
-
     "Cleaning"
     
     "   Glimpse.Core"
