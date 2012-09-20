@@ -4,7 +4,7 @@ properties {
     $source_dir = "$base_dir\source"
     $tools_dir = "$base_dir\tools"
     $package_dir = "$base_dir\packages"
-    $framework_dir = $([System.Runtime.InteropServices.RuntimeEnvironment]::GetRuntimeDirectory().Replace("v2.0.50727", "v4.0.30319"))
+    $framework_dir =  (Get-ProgramFiles) + "\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0"
     $config = "release"
     $preReleaseVersion = $null
 }
@@ -14,6 +14,9 @@ properties {
 task default -depends compile
 
 task clean {
+    $framework_dir
+    
+
     "Cleaning"
     
     "   Glimpse.Core"
@@ -228,4 +231,14 @@ function Create-Zip($sourcePath, $destinationFile)
 
     $zip = New-Object ICSharpCode.SharpZipLib.Zip.FastZip
     $zip.CreateZip("$destinationFile", "$sourcePath", $true, $null)
+}
+
+function Get-ProgramFiles
+{
+    #TODO: Someone please come up with a better way of detecting this - Tried http://msmvps.com/blogs/richardsiddaway/archive/2010/02/26/powershell-pack-mount-specialfolder.aspx and some enums missing
+    #      This is needed because of this http://www.mattwrock.com/post/2012/02/29/What-you-should-know-about-running-ILMerge-on-Net-45-Beta-assemblies-targeting-Net-40.aspx (for machines that dont have .net 4.5 and only have 4.0)
+    if (Test-Path "C:\Program Files (x86)") {
+        return "C:\Program Files (x86)"
+    }
+    return "C:\Program Files"
 }
