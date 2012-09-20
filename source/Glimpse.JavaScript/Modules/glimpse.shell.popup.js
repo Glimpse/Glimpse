@@ -1,18 +1,21 @@
-﻿(function ($, settings, data) {
+﻿(function ($, pubsub, settings, data, elements, util) {
     var wireListeners = function() {
-            elements.holder().find('glimpse-popout').click(function() { pubsub.publish('trigger.shell.popup'); });
+            elements.holder().find('.glimpse-popout').click(function() { pubsub.publish('trigger.shell.popup'); });
 
             if (settings.local('popupOn')) {
                 if (isPopup()) {
+                    elements.pageSpacer().remove();
+                    
+                    var holder = elements.holder();
                     $(window).resize(function() {
-                        elements.holder.find('.glimpse-panel').height($(window).height() - 54);
+                        holder.find('.glimpse-panel').height($(window).height() - 54);
                     });
                 }
                 $(window).unload(windowUnloading);
             }
         },
         generatePopupAddress = function() {
-            return util.replaceTokens(data.currentMetadata().resources.glimpse_tab, { 'requestId': data.currentData().requestId });
+            return util.uriTemplate(data.currentMetadata().resources.glimpse_popup, { 'requestId': data.currentData().requestId });
         },
         isPopup = function() {
             return data.currentMetadata().resources.glimpse_popup ? window.location.href.indexOf(generatePopupAddress()) > -1 : false;
@@ -28,9 +31,14 @@
         tryOpenPopup = function () {                    //WHEN PARENT WINDOW IS LOADING AND DETECTS THAT IT HAS BEEN SUPPRESSED, IF POPUP ON, REDIRECT THE POPUP OR FORCE THE WINDOW OPEN
             if (settings.local('popupOn')) {
                 if (!isPopup()) 
-                    pubsub.trigger('trigger.shell.popup');
-                else
+                    pubsub.publish('trigger.shell.popup');
+                else {
                     pubsub.publish('trigger.shell.open', { isInit: true, force: true });
+                    
+                    elements.holder().height('');
+                    
+                    settings.local('popupKeep', false);
+                }
             }
         },
         windowUnloading = function() {                   //WHEN USER CLOSES POPUP WE WANT TO TURN EVERYTHING OFF 
@@ -50,4 +58,4 @@
     pubsub.subscribe('action.shell.closeed', terminate);
     pubsub.subscribe('action.shell.opening', terminate);
     pubsub.subscribe('trigger.shell.suppressed.open', tryOpenPopup);
-})(jQueryGlimpse, glimpse.settings, glimpse.data)
+})(jQueryGlimpse, glimpse.pubsub, glimpse.settings, glimpse.data, glimpse.elements, glimpse.util)

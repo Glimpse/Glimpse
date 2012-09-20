@@ -148,6 +148,7 @@
     <Content Include="Modules\google-code-prettify.js" />
     <Content Include="Modules\jquery-1.8.0.min.js" />
     <Content Include="Modules\sprite.png" />
+    <Content Include="Modules\test-popup.html" />
     <Content Include="Modules\test.html" />
     <Content Include="Modules\test_drag.html" />
     <Content Include="Modules\uritemplate.min.js" />
