@@ -162,6 +162,9 @@
     <Content Include="UnitTests\Unit\mock-glimpse.core.pubsub.js" />
     <Content Include="uritemplate.min.js" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Modules\glimpse.shell.environment.js" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
