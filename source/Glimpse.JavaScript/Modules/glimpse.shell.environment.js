@@ -30,4 +30,4 @@
 
     pubsub.subscribe('action.shell.loaded', render);
     pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners);
-})(jQueryGlimpse, glimpse.data, glimpse.elements);
+})(jQueryGlimpse, glimpse.pubsub, glimpse.data, glimpse.elements);
