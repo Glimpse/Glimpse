@@ -48,41 +48,36 @@
         reset = function () {
             update(innerBaseData);
         },
-        retrieve = function (requestId, callback) { 
-            if (!callback)
-                callback = {};
-            if (callback.start)
-                callback.start(requestId);
+        retrieve = function (requestId, topic) { 
+            topic = topic ? '.' + topic : '';
+
+            pubsub.publish('action.data.retrieve.starting' + topic, { requestId: requestId });
 
             // Only need to do to the server if we dont have the data
             if (requestId != innerBaseData.requestId) {
-                pubsub.publish('action.data.featching', requestId);
+                pubsub.publish('action.data.featching' + topic, requestId);
                 
                 $.get({
                     url: generateRequestAddress(requestId), 
                     contentType: 'application/json',
-                    success: function (result, textStatus, jqXHR) {    
-                        pubsub.publish('action.data.featched', requestId, innerCurrentData, result);
+                    success: function (result) {    
+                        pubsub.publish('action.data.featched' + topic, { requestId: requestId, oldData: innerCurrentData, newData: result });
                         
-                        if (callback.success) 
-                            callback.success(requestId, result, innerCurrentData, textStatus, jqXHR);
+                        pubsub.publish('action.data.retrieve.succeeded' + topic, { requestId: requestId });
                         
                         update(result);  
                     }, 
-                    complete: function (jqXHR, textStatus) {
-                        if (callback.complete)
-                            callback.complete(requestId, jqXHR, textStatus); 
+                    complete: function (jqXhr, textStatus) { 
+                        pubsub.publish('action.data.retrieve.completed' + topic, { requestId: requestId, textStatus: textStatus });
                     }
                 });
             }
             else { 
-                if (callback.success) 
-                    callback.success(requestId, innerBaseData, innerCurrentData, 'success'); 
+                pubsub.publish('action.data.retrieve.succeeded' + topic, { requestId: requestId });
                 
                 update(innerBaseData);  
                 
-                if (callback.complete)  
-                    callback.complete(requestId, undefined, 'success'); 
+                pubsub.publish('action.data.retrieve.completed' + topic, { requestId: requestId, textStatus: 'success' });
             }
         },
         initMetadata = function (input) {
