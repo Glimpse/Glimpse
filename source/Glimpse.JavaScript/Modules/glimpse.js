@@ -79,6 +79,21 @@ e+" and cannot be reopened in position "+b);if("}"===c){if(e+1===b)throw Error("
         return this;
     };
 })(jQueryGlimpse);
+// glimpse.jquery.draggable.js
+(function ($) { 
+    $.fn.dropdown = function() {
+        var scope = $(this);
+        
+        scope.find('.glimpse-drop').live('mouseenter', function() { 
+            $(this).next().css('left', $(this).position().left).show(); 
+        }); 
+        scope.find('.glimpse-drop-over').live('mouseleave', function() {
+            $(this).fadeOut(100);  
+        }); 
+        
+        return scope;
+    };
+})(jQueryGlimpse);
 
 // glimpse.core.js
 glimpse = (function($) {
@@ -398,41 +413,36 @@ glimpse.data = (function($, pubsub) {
         reset = function () {
             update(innerBaseData);
         },
-        retrieve = function (requestId, callback) { 
-            if (!callback)
-                callback = {};
-            if (callback.start)
-                callback.start(requestId);
+        retrieve = function (requestId, topic) { 
+            topic = topic ? '.' + topic : '';
+
+            pubsub.publish('action.data.retrieve.starting' + topic, { requestId: requestId });
 
             // Only need to do to the server if we dont have the data
             if (requestId != innerBaseData.requestId) {
-                pubsub.publish('action.data.featching', requestId);
+                pubsub.publish('action.data.featching' + topic, requestId);
                 
                 $.get({
                     url: generateRequestAddress(requestId), 
                     contentType: 'application/json',
-                    success: function (result, textStatus, jqXHR) {    
-                        pubsub.publish('action.data.featched', requestId, innerCurrentData, result);
+                    success: function (result) {    
+                        pubsub.publish('action.data.featched' + topic, { requestId: requestId, oldData: innerCurrentData, newData: result });
                         
-                        if (callback.success) 
-                            callback.success(requestId, result, innerCurrentData, textStatus, jqXHR);
+                        pubsub.publish('action.data.retrieve.succeeded' + topic, { requestId: requestId });
                         
                         update(result);  
                     }, 
-                    complete: function (jqXHR, textStatus) {
-                        if (callback.complete)
-                            callback.complete(requestId, jqXHR, textStatus); 
+                    complete: function (jqXhr, textStatus) { 
+                        pubsub.publish('action.data.retrieve.completed' + topic, { requestId: requestId, textStatus: textStatus });
                     }
                 });
             }
             else { 
-                if (callback.success) 
-                    callback.success(requestId, innerBaseData, innerCurrentData, 'success'); 
+                pubsub.publish('action.data.retrieve.succeeded' + topic, { requestId: requestId });
                 
                 update(innerBaseData);  
                 
-                if (callback.complete)  
-                    callback.complete(requestId, undefined, 'success'); 
+                pubsub.publish('action.data.retrieve.completed' + topic, { requestId: requestId, textStatus: 'success' });
             }
         },
         initMetadata = function (input) {
@@ -469,7 +479,7 @@ glimpse.data = (function($, pubsub) {
 // glimpse.element.js
 glimpse.elements = (function($) {
     var scope = $(document),
-        holder, opener, pageSpacer, barHolder, panelHolder, tabHolder;
+        holder, opener, pageSpacer, barHolder, panelHolder, tabHolder, titleHolder;
     
     return {
         scope: function () {
@@ -486,6 +496,9 @@ glimpse.elements = (function($) {
         },
         barHolder: function () {
             return barHolder || (barHolder = scope.find('.glimpse-bar'));
+        },
+        titleHolder: function () {
+            return titleHolder || (titleHolder = scope.find('.glimpse-title'));
         },
         tabHolder: function() {
              return tabHolder || (tabHolder = scope.find('.glimpse-tabs ul'));
@@ -1307,6 +1320,84 @@ glimpse.render.engine.util.raw = (function($, util) {
     pubsub.subscribe('action.shell.opening', terminate);
     pubsub.subscribe('trigger.shell.suppressed.open', tryOpenPopup);
 })(jQueryGlimpse, glimpse.pubsub, glimpse.settings, glimpse.data, glimpse.elements, glimpse.util)
+// glimpse.shell.prg.js
+(function($, data, elements) {
+    var wireListeners = function() {
+            elements.titleHolder().find('.glimpse-url a').live('click', function() { data.retrieve($(this).attr('data-requestId'), 'prg'); });
+            elements.titleHolder().find('.glimpse-url').dropdown();
+        },
+        buildHtml = function(request, requestMetadata) {
+            var correlation = requestMetadata.correlation,
+                html = request.uri;
+
+            if (correlation) {
+                var currentUri = request.uri,
+                    currentLeg = '';
+
+                html = '<div>' + correlation.title + '</div>';
+                for (var i = 0; i < correlation.legs.length; i++) {
+                    var leg = correlation.legs[i];
+                    if (leg.uri == currentUri) {
+                        currentLeg = leg.uri;
+                        html += currentLeg + ' - <strong>' + leg.method + '</strong> (Current)<br />';
+                    } else
+                        html += '<a title="Go to ' + leg.uri + '" href="#" data-requestId="' + leg.requestId + '" data-url="' + leg.uri + '">' + leg.uri + '</a> - <strong>' + leg.method + '</strong><br />';
+                }
+                html = '<span class="glimpse-drop">' + currentLeg + '<span class="glimpse-drop-arrow-holder"><span class="glimpse-drop-arrow"></span></span></span><div class="glimpse-drop-over">' + html + '<div class="loading"><span class="icon"></span><span>Loaded...</span></div></div>';
+            }
+            return html;
+        }.
+        render = function() {
+            var html = buildHtml(data.currentData(), data.currentMetadata());
+
+            elements.titleHolder().find('.glimpse-url').html(html);
+        },
+        startingRetrieve = function() {
+            elements.titleHolder().find('.glimpse-url .loading').fadeIn();
+        },
+        completedRetrieve = function() {
+            elements.titleHolder().find('.glimpse-url .loading').fadeOut();
+        };
+
+    pubsub.subscribe('action.shell.loaded', render);
+    pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners);
+    pubsub.subscribe('action.data.retrieve.starting.prg', startingRetrieve);
+    pubsub.subscribe('action.data.retrieve.completed.prg', completedRetrieve);
+})(jQueryGlimpse, glimpse.pubsub, glimpse.data, glimpse.elements);
+// glimpse.shell.environment.js
+(function($, data, elements) {
+    var wireListeners = function() {
+            elements.titleHolder().find('.glimpse-enviro').dropdown();
+        },
+        buildHtml = function(requestMetadata) {
+            var uris = requestMetadata.environmentUrls, 
+                html = ''; 
+
+            if (uris) {
+                var currentName = 'Enviro', 
+                    currentDomain = util.getDomain(unescape(window.location.href));
+
+                for (var targetName in uris) {
+                    if (util.getDomain(uris[targetName]) === currentDomain) {
+                        currentName = targetName;
+                        html += ' - ' + targetName + ' (Current)<br />';
+                    }
+                    else
+                        html += ' - <a title="Go to - ' + uris[targetName] + '" href="' + uris[targetName] + '">' + targetName + '</a><br />';
+                }
+                html = '<span class="glimpse-drop">' + currentName + '<span class="glimpse-drop-arrow-holder"><span class="glimpse-drop-arrow"></span></span></span><div class="glimpse-drop-over"><div>Switch Servers</div>' + html + '</div>';
+            }
+            return html;
+        },
+        render = function() {
+            var html = buildHtml(data.currentMetadata());
+
+            elements.titleHolder().find('.glimpse-enviro').html(html);
+        };
+
+    pubsub.subscribe('action.shell.loaded', render);
+    pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners);
+})(jQueryGlimpse, glimpse.pubsub, glimpse.data, glimpse.elements);
 
 // google-code-prettify.js
 if (!window.PR_SHOULD_USE_CONTINUATION) {

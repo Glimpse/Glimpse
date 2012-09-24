@@ -40,4 +40,4 @@
     pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners);
     pubsub.subscribe('action.data.retrieve.starting.prg', startingRetrieve);
     pubsub.subscribe('action.data.retrieve.completed.prg', completedRetrieve);
-})(jQueryGlimpse, glimpse.data, glimpse.elements);
+})(jQueryGlimpse, glimpse.pubsub, glimpse.data, glimpse.elements);
