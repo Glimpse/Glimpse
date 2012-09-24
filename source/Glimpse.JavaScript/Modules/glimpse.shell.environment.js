@@ -1,6 +1,6 @@
 ﻿(function($, data, elements) {
     var wireListeners = function() {
-            //elements.title().find('.glimpse-url a').live('click', function() { data.retrieve($(this).attr('data-requestId'), 'prg'); });
+            elements.titleHolder().find('.glimpse-enviro').dropdown();
         },
         buildHtml = function(requestMetadata) {
             var uris = requestMetadata.environmentUrls, 

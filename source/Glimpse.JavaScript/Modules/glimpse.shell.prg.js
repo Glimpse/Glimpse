@@ -1,6 +1,7 @@
 ﻿(function($, data, elements) {
     var wireListeners = function() {
-            elements.title().find('.glimpse-url a').live('click', function() { data.retrieve($(this).attr('data-requestId'), 'prg'); });
+            elements.titleHolder().find('.glimpse-url a').live('click', function() { data.retrieve($(this).attr('data-requestId'), 'prg'); });
+            elements.titleHolder().find('.glimpse-url').dropdown();
         },
         buildHtml = function(request, requestMetadata) {
             var correlation = requestMetadata.correlation,

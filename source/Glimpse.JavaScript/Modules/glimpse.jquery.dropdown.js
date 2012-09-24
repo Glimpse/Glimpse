@@ -2,10 +2,10 @@
     $.fn.dropdown = function() {
         var scope = $(this);
         
-        scope.live('mouseenter', function() { 
+        scope.find('.glimpse-drop').live('mouseenter', function() { 
             $(this).next().css('left', $(this).position().left).show(); 
         }); 
-        scope('mouseleave', function() {
+        scope.find('.glimpse-drop-over').live('mouseleave', function() {
             $(this).fadeOut(100);  
         }); 
         
