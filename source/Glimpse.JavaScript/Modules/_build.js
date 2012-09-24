@@ -5,6 +5,8 @@
 
 // glimpse.jquery.draggable.js
 /*(import:glimpse.jquery.draggable.js)*/
+// glimpse.jquery.draggable.js
+/*(import:glimpse.jquery.dropdown.js)*/
 
 // glimpse.core.js
 /*(import:glimpse.core.js)*/

@@ -117,6 +117,7 @@
     <Content Include="jquery.jsonp-2.4.0.js" />
     <Content Include="Modules\glimpse.data.js" />
     <Content Include="Modules\glimpse.element.js" />
+    <Content Include="Modules\glimpse.jquery.dropdown.js" />
     <Content Include="Modules\glimpse.js" />
     <Content Include="Modules\glimpse.render.default.js" />
     <Content Include="Modules\glimpse.render.engine.style.js" />
