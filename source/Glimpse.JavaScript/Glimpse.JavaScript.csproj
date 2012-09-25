@@ -145,7 +145,7 @@
     <Content Include="Modules\glimpse.shell.correlation.js" />
     <Content Include="Modules\glimpse.shell.resize.js" />
     <Content Include="Modules\glimpse.shell.title.js" />
-    <Content Include="Modules\glimpse.shell.version.js" />
+    <Content Include="Modules\glimpse.version.check.js" />
     <Content Include="Modules\glimpse.util.js" />
     <Content Include="Modules\glimpse.render.shell.css" />
     <Content Include="Modules\glimpse.render.shell.html" />
