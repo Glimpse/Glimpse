@@ -1,4 +1,4 @@
-﻿glimpse.render = (function($, pubsub, util, data) {
+﻿(function($, pubsub, util, data) {
     var templates = {
             css: '/*(import:glimpse.render.shell.css)*/',
             html: '/*(import:glimpse.render.shell.html)*/'
@@ -42,7 +42,5 @@
         };
     
     pubsub.subscribe('trigger.shell.refresh', refresh); 
-    pubsub.subscribe('trigger.shell.render', render);  
-    
-    return {};
+    pubsub.subscribe('trigger.shell.render', render);   
 })(jQueryGlimpse, glimpse.pubsub, glimpse.util, glimpse.data); 
