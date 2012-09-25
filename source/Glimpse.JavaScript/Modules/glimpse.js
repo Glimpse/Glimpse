@@ -1445,7 +1445,7 @@ glimpse.render.engine.util.raw = (function($, util) {
     pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners);
 })(jQueryGlimpse, glimpse.pubsub, glimpse.data, glimpse.elements, glimpse.util);
 
-// glimpse.notification.js
+// glimpse.shell.notification.js
 (function($, pubsub, elements) {
     var toast = function(options) {
             var toast  = $('<div class="glimpse-notification glimpse-notification-' + options.type + '">' + options.message + '</div>').appendTo(elements.notificationHolder());
@@ -1458,6 +1458,78 @@ glimpse.render.engine.util.raw = (function($, util) {
 
     pubsub.subscribe('trigger.notification.toast', toast);
 })(jQueryGlimpse, glimpse.pubsub, glimpse.elements)
+
+// glimpse.version.check.js
+glimpse.versionCheck = (function($, pubsub, settings, elements, data, util) {
+    var retrieveStamp = function() {
+            if (!settings.local('stamp'))
+                settings.local('stamp', (new Date()).getTime());
+            return settings.local('stamp');
+        },
+        generateVersionCheckAddress = function() {
+            return util.uriTemplate(data.currentMetadata().resources.glimpse_version_check, { stamp: retrieveStamp() });
+        },
+        ready = function() {
+            var nextChecked = settings.local('nextCheckedVersionTime'),
+                hasNewerVersion = settings.local('hasNewerVersion'),
+                now = new Date();
+
+            if (hasNewerVersion)
+                elements.holder().find('.glimpse-meta-update').show();
+
+            if (nextChecked) {
+                var nextCheckedTickes = parseInt(nextChecked),
+                    currentTimeTickes = now.getTime();
+                if (nextCheckedTickes > currentTimeTickes)
+                    return;
+            }
+
+            $.ajax({
+                url: generateVersionCheckAddress(),
+                type: 'GET',
+                dataType: 'jsonp',
+                crossDomain: true,
+                jsonpCallback: 'glimpse.versionCheck.result'   //TODO: Need to setup a correct callback
+            });
+
+            settings.local('nextCheckedVersionTime', now.setDate(now.getDate() + 1));
+        },
+        result = function(data) {
+            settings.local('hasNewerVersion', data.hasNewer);
+        };
+
+    pubsub.subscribe('trigger.system.ready', ready);
+
+    return {
+        result: result
+    };
+})(jQueryGlimpse, glimpse.pubsub, glimpse.settings, glimpse.elements, glimpse.data, glimpse.util);
+// glimpse.version.shell.js
+(function($, pubsub, elements, util, data) {
+    var wireListeners = function() {
+            elements.holder().find('.glimpse-meta-update').click(function() { pubsub.publish('trigger.shell.version.info.show'); });
+        },  
+        retrieveStamp = function () {
+            if (!settings.local('stamp'))
+                settings.local('stamp', (new Date()).getTime()); 
+            return settings.local('stamp');
+        },
+        generateVersionDetailAddress = function () {
+            return util.uriTemplate(data.currentMetadata().resources.glimpse_version_detail, { stamp: retrieveStamp() });
+        },
+        show = function() {
+            var metadata = data.currentMetadata();
+            if (metadata.resources.glimpse_version_detail) { 
+                elements.lightbox.find('.glimpse-lb-element').html('<div class="close">[close]</div><iframe src="' + generateVersionDetailAddress() + '"></iframe>');
+                elements.lightbox.show();
+            }
+            else
+                pubsub.publishAsync('trigger.notification.toast', { type: 'error', message: 'Version check isn\'t currently supported by your server implementation. Sorry :(' });
+        };
+    
+    pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners);
+    pubsub.subscribe('trigger.shell.version.info.show', show);
+})(jQueryGlimpse, glimpse.pubsub, glimpse.elements, glimpse.util, glimpse.data);
 
 // google-code-prettify.js
 if (!window.PR_SHOULD_USE_CONTINUATION) {

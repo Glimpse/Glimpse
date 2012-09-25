@@ -1,17 +1,17 @@
-﻿glimpse.versionCheck = (function ($, pubsub, settings, elements) {
-    var wireListeners = function () {
-            //TODO: Need to wireup light box
-        },
-        retrieveStamp = function () {
+﻿glimpse.versionCheck = (function($, pubsub, settings, elements, data, util) {
+    var retrieveStamp = function() {
             if (!settings.local('stamp'))
-                settings.local('stamp', (new Date()).getTime()); 
+                settings.local('stamp', (new Date()).getTime());
             return settings.local('stamp');
         },
+        generateVersionCheckAddress = function() {
+            return util.uriTemplate(data.currentMetadata().resources.glimpse_version_check, { stamp: retrieveStamp() });
+        },
         ready = function() {
-            var nextChecked = local('nextCheckedVersionTime'),
-                hasNewerVersion = local('hasNewerVersion'),
+            var nextChecked = settings.local('nextCheckedVersionTime'),
+                hasNewerVersion = settings.local('hasNewerVersion'),
                 now = new Date();
-            
+
             if (hasNewerVersion)
                 elements.holder().find('.glimpse-meta-update').show();
 
@@ -21,28 +21,24 @@
                 if (nextCheckedTickes > currentTimeTickes)
                     return;
             }
-            
-            var metadata = data.currentMetadata(),
-                url = util.uriTemplate(metadata.resources.glimpse_version_check, { stamp: retrieveStamp() });
-            
+
             $.ajax({
-                url: url, 
+                url: generateVersionCheckAddress(),
                 type: 'GET',
                 dataType: 'jsonp',
                 crossDomain: true,
                 jsonpCallback: 'glimpse.versionCheck.result'   //TODO: Need to setup a correct callback
             });
-            
-            local('nextCheckedVersionTime', now.setDate(now.getDate() + 1).getTime());
+
+            settings.local('nextCheckedVersionTime', now.setDate(now.getDate() + 1));
         },
         result = function(data) {
-            local('hasNewerVersion', data.hasNewer);
+            settings.local('hasNewerVersion', data.hasNewer);
         };
-    
-    pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners  );
+
     pubsub.subscribe('trigger.system.ready', ready);
 
     return {
         result: result
     };
-})(jQueryGlimpse, glimpse.pubsub, glimpse.settings, glimpse.elements)
+})(jQueryGlimpse, glimpse.pubsub, glimpse.settings, glimpse.elements, glimpse.data, glimpse.util);

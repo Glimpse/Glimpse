@@ -72,5 +72,10 @@
 // glimpse.shell.notification.js
 /*(import:glimpse.shell.notification.js)*/
 
+// glimpse.version.check.js
+/*(import:glimpse.version.check.js)*/
+// glimpse.version.shell.js
+/*(import:glimpse.version.shell.js)*/
+
 // google-code-prettify.js
 /*(import:google-code-prettify.js)*/
