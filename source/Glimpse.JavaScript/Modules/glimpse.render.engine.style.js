@@ -9,7 +9,7 @@
         },
         apply = function(options) { 
             // Expand collapse  
-            options.scope.find('.glimpse-expand').live('click', function() {
+            options.scope.find('.glimpse-expand').click(function() {
                 var toggle = $(this).toggleClass('glimpse-collapse'),
                     hasClass = toggle.hasClass('glimpse-collapse');
                 toggle.parent().next().children().first().toggle(!hasClass).next().toggle(hasClass);
