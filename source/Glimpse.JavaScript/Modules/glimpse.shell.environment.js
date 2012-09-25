@@ -1,4 +1,4 @@
-﻿(function($, data, elements) {
+﻿(function($, pubsub, data, elements, util) {
     var wireListeners = function() {
             elements.titleHolder().find('.glimpse-enviro').dropdown();
         },
@@ -22,12 +22,12 @@
             }
             return html;
         },
-        render = function() {
+        renderLayout = function() {
             var html = buildHtml(data.currentMetadata());
 
             elements.titleHolder().find('.glimpse-enviro').html(html);
         };
 
-    pubsub.subscribe('action.shell.loaded', render);
+    pubsub.subscribe('action.shell.loaded', renderLayout);
     pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners);
-})(jQueryGlimpse, glimpse.pubsub, glimpse.data, glimpse.elements);
+})(jQueryGlimpse, glimpse.pubsub, glimpse.data, glimpse.elements, glimpse.util);

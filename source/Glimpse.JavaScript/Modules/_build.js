@@ -22,6 +22,9 @@
 // glimpse.element.js
 /*(import:glimpse.element.js)*/
 
+// glimpse.ready.js
+/*(import:glimpse.ready.js)*/
+
 // glimpse.render.js
 /*(import:glimpse.render.js)*/
 // glimpse.render.engine.js
@@ -59,8 +62,10 @@
 /*(import:glimpse.shell.resize.js)*/
 // glimpse.shell.popup.js
 /*(import:glimpse.shell.popup.js)*/
-// glimpse.shell.prg.js
-/*(import:glimpse.shell.prg.js)*/
+// glimpse.shell.title.js
+/*(import:glimpse.shell.title.js)*/
+// glimpse.shell.correlation.js
+/*(import:glimpse.shell.correlation.js)*/
 // glimpse.shell.environment.js
 /*(import:glimpse.shell.environment.js)*/
 

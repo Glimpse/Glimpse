@@ -38,8 +38,13 @@
                 $.each(data, function (k, v) { count++; });
             return count;
         }, 
-        uriTemplate: function (url, data) {
-            return UriTemplate.parse(url).expand(data || {});
+        uriTemplate: function (uri, data) {
+            return UriTemplate.parse(uri).expand(data || {});
+        },
+        getDomain: function (uri) {
+            if (uri.indexOf('://') > -1)
+                uri = uri.split('://')[1];
+            return uri.split('/')[0];
         },
         sortTabs: function (data) {
             var sorted = {},

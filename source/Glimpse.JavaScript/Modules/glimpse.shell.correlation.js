@@ -1,11 +1,11 @@
-﻿(function($, data, elements) {
+﻿(function($, pubsub, data, elements) {
     var wireListeners = function() {
-            elements.titleHolder().find('.glimpse-url a').live('click', function() { data.retrieve($(this).attr('data-requestId'), 'prg'); });
-            elements.titleHolder().find('.glimpse-url').dropdown();
+            elements.titleHolder().find('.glimpse-correlation a').live('click', function() { data.retrieve($(this).attr('data-requestId'), 'prg'); });
+            elements.titleHolder().find('.glimpse-correlation').dropdown();
         },
         buildHtml = function(request, requestMetadata) {
             var correlation = requestMetadata.correlation,
-                html = request.uri;
+                html = '';
 
             if (correlation) {
                 var currentUri = request.uri,
@@ -23,20 +23,22 @@
                 html = '<span class="glimpse-drop">' + currentLeg + '<span class="glimpse-drop-arrow-holder"><span class="glimpse-drop-arrow"></span></span></span><div class="glimpse-drop-over">' + html + '<div class="loading"><span class="icon"></span><span>Loaded...</span></div></div>';
             }
             return html;
-        }.
-        render = function() {
+        },
+        renderLayout = function() {
             var html = buildHtml(data.currentData(), data.currentMetadata());
-
-            elements.titleHolder().find('.glimpse-url').html(html);
+            if (html) {
+                elements.titleHolder().find('.glimpse-uri').hide();
+                elements.titleHolder().find('.glimpse-correlation').html(html);
+            }
         },
         startingRetrieve = function() {
-            elements.titleHolder().find('.glimpse-url .loading').fadeIn();
+            elements.titleHolder().find('.glimpse-correlation .loading').fadeIn();
         },
         completedRetrieve = function() {
-            elements.titleHolder().find('.glimpse-url .loading').fadeOut();
+            elements.titleHolder().find('.glimpse-correlation .loading').fadeOut();
         };
 
-    pubsub.subscribe('action.shell.loaded', render);
+    pubsub.subscribe('action.shell.loaded', renderLayout);
     pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners);
     pubsub.subscribe('action.data.retrieve.starting.prg', startingRetrieve);
     pubsub.subscribe('action.data.retrieve.completed.prg', completedRetrieve);

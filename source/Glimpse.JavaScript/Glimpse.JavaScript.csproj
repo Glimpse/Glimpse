@@ -119,6 +119,7 @@
     <Content Include="Modules\glimpse.element.js" />
     <Content Include="Modules\glimpse.jquery.dropdown.js" />
     <Content Include="Modules\glimpse.js" />
+    <Content Include="Modules\glimpse.ready.js" />
     <Content Include="Modules\glimpse.render.default.js" />
     <Content Include="Modules\glimpse.render.engine.style.js" />
     <Content Include="Modules\glimpse.render.js" />
@@ -140,8 +141,9 @@
     <Content Include="Modules\glimpse.shell.controls.js" />
     <Content Include="Modules\glimpse.jquery.draggable.js" />
     <Content Include="Modules\glimpse.shell.popup.js" />
-    <Content Include="Modules\glimpse.shell.prg.js" />
+    <Content Include="Modules\glimpse.shell.correlation.js" />
     <Content Include="Modules\glimpse.shell.resize.js" />
+    <Content Include="Modules\glimpse.shell.title.js" />
     <Content Include="Modules\glimpse.shell.version.js" />
     <Content Include="Modules\glimpse.util.js" />
     <Content Include="Modules\glimpse.render.shell.css" />
