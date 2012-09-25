@@ -1116,14 +1116,14 @@ glimpse.render.engine.util.raw = (function($, util) {
                 pubsub.publish('action.tab.lazy.fetching', { key: options.key });
                 
                 $.ajax({
-                    url: generateLazyAddress(key),
+                    url: generateLazyAddress(options.key),
                     type: 'GET',
                     contentType: 'application/json',
                     success: function(result) {
                         processData(options.key, options.pluginData, options.pluginMetadata, result);
                     },
                     complete: function(xhr, status) {
-                        pubsub.publish('action.tab.lazy.fetched', { key: options.key, status: status, result: xhr.responseText });
+                        pubsub.publish('action.tab.lazy.fetched', { key: options.key, status: status });
                     }
                 });
             }
@@ -1131,13 +1131,13 @@ glimpse.render.engine.util.raw = (function($, util) {
                 pubsub.publishAsync('trigger.notification.toast', { type: 'error', message: 'Lazy loading isn\'t currently supported by your server implementation. Sorry :(' });
         },
         processData = function (key, pluginData, pluginMetadata, result) {
-            options.pluginData.data = result;
+            pluginData.data = result;
 
             renderEngine.insert(elements.panel(key), pluginData.data, pluginMetadata.structure);  
         },
         rendering = function (options) {
             if (options.pluginData.isLazy)
-                options.plugin.dontRender = true;
+                options.pluginData.dontRender = true;
         },
         rendered = function (options) {
             if (options.pluginData.isLazy)
