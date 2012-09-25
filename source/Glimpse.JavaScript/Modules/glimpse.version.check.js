@@ -13,7 +13,7 @@
                 now = new Date();
             
             if (hasNewerVersion)
-                elements.holder.find('.glimpse-meta-update').show();
+                elements.holder().find('.glimpse-meta-update').show();
 
             if (nextChecked) {
                 var nextCheckedTickes = parseInt(nextChecked),
