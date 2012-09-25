@@ -119,6 +119,7 @@
     <Content Include="Modules\glimpse.element.js" />
     <Content Include="Modules\glimpse.jquery.dropdown.js" />
     <Content Include="Modules\glimpse.js" />
+    <Content Include="Modules\glimpse.notification.js" />
     <Content Include="Modules\glimpse.system.js" />
     <Content Include="Modules\glimpse.render.default.js" />
     <Content Include="Modules\glimpse.render.engine.style.js" />

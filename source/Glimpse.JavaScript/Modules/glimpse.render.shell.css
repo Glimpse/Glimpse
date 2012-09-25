@@ -714,7 +714,33 @@ li.glimpse-permanent {
 .glimpse-popup .glimpse-panel { 
     overflow:visible !important; 
 }
- 
+
+.glimpse-notification-holder {
+    position: absolute;
+    z-index: 200;
+    width: 100%;
+    top: 85px;
+}
+.glimpse-notification {
+    padding: 5px 20px;
+    border-radius: 5px;
+    margin: 0 auto 10px auto;
+    text-align: center;
+    max-width: 500px;
+    -moz-box-shadow: 0 0 5px #888;
+    -webkit-box-shadow: 0 0 5px#888;
+    box-shadow: 0 0 5px #888;
+    width: 50%;
+}
+.glimpse-notification-error {
+    background-color: #F97474;
+    border: 1px solid red;
+}
+.glimpse-notification-info {
+    background-color: #B7C5ED;
+    border: 1px solid #3156C1;
+}
+
 .glimpse-lb {
     display: none;
     position:fixed;  
