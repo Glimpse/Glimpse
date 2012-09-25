@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 using Glimpse.Core.Extensibility;
-using Glimpse.Mvc3.Model;
+using Glimpse.Mvc.Model;
 
-namespace Glimpse.Mvc3.SerializationConverter
+namespace Glimpse.Mvc.SerializationConverter
 {
     public class ListOfViewsModelConverter:SerializationConverter<List<ViewsModel>>
     {
@@ -42,7 +42,7 @@ namespace Glimpse.Mvc3.SerializationConverter
                 if (model.UseCache)
                     searchedLocations.Add(new[] {"_" + model.ViewEngineType.Name + " cache_"});//TODO: Wrap "markup" in util library/extensions: string.Underline() or Markdown.Underline(string)
                 else
-                    searchedLocations.AddRange(model.SearchedLocations.Select(location => new[] {location}));
+                    searchedLocations.AddRange(model.SearchedLocations.Select(location => new[] {location}).ToArray()); //.ToArray() required for NET35 support
 
                 return searchedLocations;
             }

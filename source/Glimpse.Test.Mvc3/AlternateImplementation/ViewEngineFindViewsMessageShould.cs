@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
-using Glimpse.Mvc3.AlternateImplementation;
+using Glimpse.Mvc.AlternateImplementation;
 using Moq;
 using Xunit;
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
-using Glimpse.Mvc3.PipelineInspector;
+using Glimpse.Mvc.PipelineInspector;
 using Moq;
 using Xunit;
 
@@ -14,7 +14,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         [Fact]
         public void Construct()
         {
-            var inspector = new ViewEngine();
+            var inspector = new ViewEngineInspector();
 
             Assert.NotNull(inspector);
             Assert.NotNull(inspector as IPipelineInspector);
@@ -31,7 +31,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
             contextMock.Setup(c => c.ProxyFactory).Returns(proxyFactoryMock.Object);
             contextMock.Setup(c => c.Logger).Returns(new Mock<ILogger>().Object);
 
-            var viewEngine = new ViewEngine();
+            var viewEngine = new ViewEngineInspector();
 
             viewEngine.Setup(contextMock.Object);
 
@@ -51,7 +51,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
 
             Assert.True(ViewEngines.Engines.Any(e=>e.GetType() == typeof(RazorViewEngine)));
 
-            var viewEngine = new ViewEngine();
+            var viewEngine = new ViewEngineInspector();
 
             viewEngine.Setup(contextMock.Object);
 
@@ -72,7 +72,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
             var contextMock = new Mock<IPipelineInspectorContext>();
             contextMock.Setup(c => c.ProxyFactory).Returns(proxyFactoryMock.Object);
 
-            var viewEngine = new ViewEngine();
+            var viewEngine = new ViewEngineInspector();
 
             viewEngine.Teardown(contextMock.Object);
 

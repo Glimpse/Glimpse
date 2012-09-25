@@ -1,7 +1,7 @@
 ﻿using System;
 using Glimpse.Core.Extensibility;
 
-namespace Glimpse.Mvc3.Message
+namespace Glimpse.Mvc.Message
 {
     public class TimerResultMessage
     {

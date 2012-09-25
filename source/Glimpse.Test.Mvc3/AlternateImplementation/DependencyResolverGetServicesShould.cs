@@ -5,6 +5,7 @@ using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Moq;
 using Xunit;
+using DependencyResolver = Glimpse.Mvc.AlternateImplementation.DependencyResolver;
 
 namespace Glimpse.Test.Mvc3.AlternateImplementation
 {
@@ -16,7 +17,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             Func<RuntimePolicy> policyStrategy = ()=> RuntimePolicy.On;
             var brokerMock = new Mock<IMessageBroker>();
 
-            var implementation = new Glimpse.Mvc3.AlternateImplementation.DependencyResolver.GetServices(policyStrategy, brokerMock.Object);
+            var implementation = new DependencyResolver.GetServices(policyStrategy, brokerMock.Object);
 
             Assert.Equal(policyStrategy, implementation.RuntimePolicyStrategy);
             Assert.Equal(brokerMock.Object, implementation.MessageBroker);
@@ -28,7 +29,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             Func<RuntimePolicy> policyStrategy = () => RuntimePolicy.On;
             var brokerMock = new Mock<IMessageBroker>();
 
-            IAlternateImplementation<IDependencyResolver> implementation = new Glimpse.Mvc3.AlternateImplementation.DependencyResolver.GetServices(policyStrategy, brokerMock.Object);
+            IAlternateImplementation<IDependencyResolver> implementation = new DependencyResolver.GetServices(policyStrategy, brokerMock.Object);
 
             Assert.Equal("GetServices", implementation.MethodToImplement.Name);
         }
@@ -41,7 +42,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
 
             var contextMock = new Mock<IAlternateImplementationContext>();
 
-            var implementation = new Glimpse.Mvc3.AlternateImplementation.DependencyResolver.GetServices(policyStrategy, brokerMock.Object);
+            var implementation = new DependencyResolver.GetServices(policyStrategy, brokerMock.Object);
 
             implementation.NewImplementation(contextMock.Object);
 
@@ -60,12 +61,12 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             contextMock.Setup(c => c.Arguments).Returns(new object[] {typeof (string)});
             contextMock.Setup(c => c.ReturnValue).Returns(Enumerable.Empty<object>());
 
-            var implementation = new Glimpse.Mvc3.AlternateImplementation.DependencyResolver.GetServices(policyStrategy, brokerMock.Object);
+            var implementation = new DependencyResolver.GetServices(policyStrategy, brokerMock.Object);
 
             implementation.NewImplementation(contextMock.Object);
 
             contextMock.Verify(c => c.Proceed());
-            brokerMock.Verify(b => b.Publish(It.IsAny<Glimpse.Mvc3.AlternateImplementation.DependencyResolver.GetServices.Message>()));
+            brokerMock.Verify(b => b.Publish(It.IsAny<DependencyResolver.GetServices.Message>()));
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
-using Glimpse.Mvc3.Model;
+using Glimpse.Mvc.Model;
 using Xunit;
 
 namespace Glimpse.Test.Mvc3.Model

@@ -1,5 +1,5 @@
 ﻿using System.Web.Routing;
-using Glimpse.Mvc3.AlternateImplementation;
+using Glimpse.Mvc.AlternateImplementation;
 using Xunit;
 
 namespace Glimpse.Test.Mvc3.AlternateImplementation

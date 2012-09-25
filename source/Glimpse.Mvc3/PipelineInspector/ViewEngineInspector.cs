@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
+using Glimpse.Mvc.AlternateImplementation;
 
-namespace Glimpse.Mvc3.PipelineInspector
+namespace Glimpse.Mvc.PipelineInspector
 {
-    public class ViewEngine : IPipelineInspector
+    public class ViewEngineInspector : IPipelineInspector
     {
         private IList<IViewEngine> OriginalViewEngines { get; set; }
 
@@ -13,7 +14,7 @@ namespace Glimpse.Mvc3.PipelineInspector
             var logger = context.Logger;
             var proxyFactory = context.ProxyFactory;
 
-            var alternateImplementations = Mvc3.AlternateImplementation.ViewEngine.AllMethods(context.MessageBroker, context.ProxyFactory, context.Logger, context.TimerStrategy, context.RuntimePolicyStrategy);
+            var alternateImplementations = ViewEngine.AllMethods(context.MessageBroker, context.ProxyFactory, context.Logger, context.TimerStrategy, context.RuntimePolicyStrategy);
 
             OriginalViewEngines = new List<IViewEngine>();
 

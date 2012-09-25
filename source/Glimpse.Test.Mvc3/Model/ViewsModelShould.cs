@@ -2,8 +2,8 @@
 using System.IO;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
-using Glimpse.Mvc3.AlternateImplementation;
-using Glimpse.Mvc3.Model;
+using Glimpse.Mvc.AlternateImplementation;
+using Glimpse.Mvc.Model;
 using Glimpse.Test.Mvc3.AlternateImplementation;
 using Moq;
 using Xunit;

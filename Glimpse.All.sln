@@ -44,6 +44,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{035297
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Mvc2", "source\Glimpse.Mvc2\Glimpse.Mvc2.csproj", "{6B8B535F-923B-4083-A5BD-31A34F5230A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -174,6 +176,16 @@ Global
 		{2C80D03B-32DC-4D52-9200-0B7598D9D1FF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{2C80D03B-32DC-4D52-9200-0B7598D9D1FF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{2C80D03B-32DC-4D52-9200-0B7598D9D1FF}.Release|x86.ActiveCfg = Release|Any CPU
+		{6B8B535F-923B-4083-A5BD-31A34F5230A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B8B535F-923B-4083-A5BD-31A34F5230A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B8B535F-923B-4083-A5BD-31A34F5230A1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6B8B535F-923B-4083-A5BD-31A34F5230A1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6B8B535F-923B-4083-A5BD-31A34F5230A1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6B8B535F-923B-4083-A5BD-31A34F5230A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B8B535F-923B-4083-A5BD-31A34F5230A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B8B535F-923B-4083-A5BD-31A34F5230A1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6B8B535F-923B-4083-A5BD-31A34F5230A1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6B8B535F-923B-4083-A5BD-31A34F5230A1}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -186,6 +198,7 @@ Global
 		{13FEFF53-9CD2-4BF1-9128-A60F99E5532F} = {44EAFB31-C422-4B52-BBCE-18A3E95713DC}
 		{22E8C0B0-E32F-4598-896F-81F3A6BD9862} = {44EAFB31-C422-4B52-BBCE-18A3E95713DC}
 		{971143D1-B40E-4AF4-AD3D-D4FFAD3FE444} = {44EAFB31-C422-4B52-BBCE-18A3E95713DC}
+		{6B8B535F-923B-4083-A5BD-31A34F5230A1} = {44EAFB31-C422-4B52-BBCE-18A3E95713DC}
 		{E242E3FC-DEF4-45E2-A129-A5DC3B0B8F9B} = {13FEFF53-9CD2-4BF1-9128-A60F99E5532F}
 		{CD52E292-1514-4B09-900B-6A7E20468152} = {13FEFF53-9CD2-4BF1-9128-A60F99E5532F}
 	EndGlobalSection

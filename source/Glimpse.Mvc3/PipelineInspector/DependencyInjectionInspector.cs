@@ -1,9 +1,9 @@
 ﻿using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 
-namespace Glimpse.Mvc3.PipelineInspector
+namespace Glimpse.Mvc.PipelineInspector
 {
-    public class DependencyInjection:IPipelineInspector
+    public class DependencyInjectionInspector:IPipelineInspector
     {
         public void Setup(IPipelineInspectorContext context)
         {
@@ -13,7 +13,7 @@ namespace Glimpse.Mvc3.PipelineInspector
             var dependencyResolver = DependencyResolver.Current;
             if (proxyFactory.IsProxyable(dependencyResolver))
             {
-                var alternateImplementations = AlternateImplementation.DependencyResolver.AllMethods(context.RuntimePolicyStrategy, context.MessageBroker);
+                var alternateImplementations = Mvc.AlternateImplementation.DependencyResolver.AllMethods(context.RuntimePolicyStrategy, context.MessageBroker);
 
                 var proxiedDependencyResolver = proxyFactory.CreateProxy(dependencyResolver, alternateImplementations);
 

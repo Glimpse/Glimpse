@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-using Glimpse.Mvc3;
+using Glimpse.Mvc;
 using Xunit;
 
 namespace Glimpse.Test.Mvc3

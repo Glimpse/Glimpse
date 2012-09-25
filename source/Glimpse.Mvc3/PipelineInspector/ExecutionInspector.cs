@@ -1,9 +1,10 @@
 ﻿using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
+using Glimpse.Mvc.AlternateImplementation;
 
-namespace Glimpse.Mvc3.PipelineInspector
+namespace Glimpse.Mvc.PipelineInspector
 {
-    public class Execution : IPipelineInspector
+    public class ExecutionInspector : IPipelineInspector
     {
         public void Setup(IPipelineInspectorContext context)
         {
@@ -13,7 +14,7 @@ namespace Glimpse.Mvc3.PipelineInspector
             var controllerFactory = ControllerBuilder.Current.GetControllerFactory();
             if (proxyFactory.IsProxyable(controllerFactory))
             {
-                var alternateImplementations = AlternateImplementation.ControllerFactory.AllMethods(context.RuntimePolicyStrategy, context.MessageBroker, context.ProxyFactory, context.TimerStrategy);
+                var alternateImplementations = ControllerFactory.AllMethods(context.RuntimePolicyStrategy, context.MessageBroker, context.ProxyFactory, context.TimerStrategy);
 
                 var proxiedControllerFactory = proxyFactory.CreateProxy(controllerFactory, alternateImplementations);
 

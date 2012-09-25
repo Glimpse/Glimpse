@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Glimpse.Mvc.AlternateImplementation;
+using Xunit;
 
 namespace Glimpse.Test.Mvc3.AlternateImplementation
 {
@@ -10,7 +11,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             var input = typeof(string);
             var output = "output";
 
-            var message = new Glimpse.Mvc3.AlternateImplementation.DependencyResolver.GetService.Message(input, output);
+            var message = new DependencyResolver.GetService.Message(input, output);
 
             Assert.Equal(input, message.ServiceType);
             Assert.Equal(output.GetType(), message.ResolvedType);
@@ -23,7 +24,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             var input = typeof(string);
             object output = null;
 
-            var message = new Glimpse.Mvc3.AlternateImplementation.DependencyResolver.GetService.Message(input, output);
+            var message = new DependencyResolver.GetService.Message(input, output);
 
             Assert.Equal(input, message.ServiceType);
             Assert.Equal(null, message.ResolvedType);

@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
-using Glimpse.Mvc3.AlternateImplementation;
+using Glimpse.Mvc.AlternateImplementation;
 using Moq;
 using Xunit;
 

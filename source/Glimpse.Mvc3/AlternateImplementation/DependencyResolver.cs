@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 
-namespace Glimpse.Mvc3.AlternateImplementation
+namespace Glimpse.Mvc.AlternateImplementation
 {
     public abstract class DependencyResolver
     {

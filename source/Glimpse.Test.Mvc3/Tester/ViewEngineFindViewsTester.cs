@@ -1,6 +1,6 @@
 using Glimpse.Core.Extensibility;
 using Glimpse.Core;
-using Glimpse.Mvc3.AlternateImplementation;
+using Glimpse.Mvc.AlternateImplementation;
 using Moq;
 
 namespace Glimpse.Test.Mvc3.Tester

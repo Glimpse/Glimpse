@@ -7,7 +7,7 @@ using System.Web.Routing;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core;
 
-namespace Glimpse.Mvc3.AlternateImplementation
+namespace Glimpse.Mvc.AlternateImplementation
 {
     public abstract class ControllerFactory
     {

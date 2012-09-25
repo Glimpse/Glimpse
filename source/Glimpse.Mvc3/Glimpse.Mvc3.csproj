@@ -8,7 +8,7 @@
     <ProjectGuid>{0A68B072-7918-45AC-BB78-F05789D0BF44}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Glimpse.Mvc3</RootNamespace>
+    <RootNamespace>Glimpse.Mvc</RootNamespace>
     <AssemblyName>Glimpse.Mvc3</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -75,9 +75,9 @@
     <Compile Include="AlternateImplementation\ViewEngine.cs" />
     <Compile Include="Message\TimerResultMessage.cs" />
     <Compile Include="Model\ViewsModel.cs" />
-    <Compile Include="PipelineInspector\DependencyInjection.cs" />
-    <Compile Include="PipelineInspector\Execution.cs" />
-    <Compile Include="PipelineInspector\ViewEngine.cs" />
+    <Compile Include="PipelineInspector\DependencyInjectionInspector.cs" />
+    <Compile Include="PipelineInspector\ExecutionInspector.cs" />
+    <Compile Include="PipelineInspector\ViewEngineInspector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>

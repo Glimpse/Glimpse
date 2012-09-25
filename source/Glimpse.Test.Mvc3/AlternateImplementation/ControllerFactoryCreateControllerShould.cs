@@ -4,7 +4,7 @@ using System.Web.Mvc;
 using System.Web.Mvc.Async;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core;
-using Glimpse.Mvc3.AlternateImplementation;
+using Glimpse.Mvc.AlternateImplementation;
 using Glimpse.Test.Mvc3.TestDoubles;
 using Glimpse.Test.Mvc3.Tester;
 using Moq;

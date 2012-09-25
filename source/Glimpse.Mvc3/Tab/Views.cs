@@ -2,10 +2,10 @@ using System.Linq;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.Core.Extensibility;
 using System.Collections.Generic;
-using Glimpse.Mvc3.AlternateImplementation;
-using Glimpse.Mvc3.Model;
+using Glimpse.Mvc.AlternateImplementation;
+using Glimpse.Mvc.Model;
 
-namespace Glimpse.Mvc3.Tab
+namespace Glimpse.Mvc.Tab
 {
     public class Views : AspNetTab, ITabSetup
     {

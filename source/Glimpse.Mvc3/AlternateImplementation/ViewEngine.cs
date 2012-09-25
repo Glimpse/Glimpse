@@ -4,9 +4,9 @@ using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core;
-using Glimpse.Mvc3.Message;
+using Glimpse.Mvc.Message;
 
-namespace Glimpse.Mvc3.AlternateImplementation
+namespace Glimpse.Mvc.AlternateImplementation
 {
     public abstract class ViewEngine
     {

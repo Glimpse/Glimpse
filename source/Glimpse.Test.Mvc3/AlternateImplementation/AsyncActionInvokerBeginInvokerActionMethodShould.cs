@@ -4,7 +4,7 @@ using System.Web.Mvc;
 using System.Web.Mvc.Async;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
-using Glimpse.Mvc3.AlternateImplementation;
+using Glimpse.Mvc.AlternateImplementation;
 using Moq;
 using Xunit;
 

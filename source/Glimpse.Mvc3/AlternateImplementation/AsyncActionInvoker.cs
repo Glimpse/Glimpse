@@ -5,9 +5,9 @@ using System.Web.Mvc;
 using System.Web.Mvc.Async;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
-using Glimpse.Mvc3.Message;
+using Glimpse.Mvc.Message;
 
-namespace Glimpse.Mvc3.AlternateImplementation
+namespace Glimpse.Mvc.AlternateImplementation
 {
     public abstract class AsyncActionInvoker:ActionInvoker
     {

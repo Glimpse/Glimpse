@@ -1,7 +1,7 @@
 ﻿using System;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
-using Glimpse.Mvc3.AlternateImplementation;
+using Glimpse.Mvc.AlternateImplementation;
 using Moq;
 using Xunit;
 

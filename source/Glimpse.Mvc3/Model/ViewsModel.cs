@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using Glimpse.Mvc3.AlternateImplementation;
+using Glimpse.Mvc.AlternateImplementation;
 
-namespace Glimpse.Mvc3.Model
+namespace Glimpse.Mvc.Model
 {
     public class ViewsModel
     {

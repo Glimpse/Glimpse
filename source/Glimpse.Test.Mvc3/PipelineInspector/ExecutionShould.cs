@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
-using Glimpse.Mvc3.PipelineInspector;
+using Glimpse.Mvc.PipelineInspector;
 using Moq;
 using Xunit;
 
@@ -20,7 +20,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
             var contextMock = new Mock<IPipelineInspectorContext>();
             contextMock.Setup(c => c.ProxyFactory).Returns(factoryMock.Object);
 
-            var inspector = new Execution();
+            var inspector = new ExecutionInspector();
 
             inspector.Setup(contextMock.Object);
 
@@ -45,7 +45,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
             contextMock.Setup(c => c.ProxyFactory).Returns(factoryMock.Object);
             contextMock.Setup(c => c.Logger).Returns(loggerMock.Object);
 
-            var inspector = new Execution();
+            var inspector = new ExecutionInspector();
 
             inspector.Setup(contextMock.Object);
 
