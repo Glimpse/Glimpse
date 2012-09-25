@@ -43,7 +43,7 @@
             validateMetadata();
             
             pubsub.publish('action.data.changed', data);
-            pubsub.publish('action.data.refresh.changing', oldData, data);
+            pubsub.publish('action.data.refresh.changed', oldData, data);
         },
         reset = function () {
             update(innerBaseData);
@@ -57,13 +57,14 @@
             if (requestId != innerBaseData.requestId) {
                 pubsub.publish('action.data.featching' + topic, requestId);
                 
-                $.get({
+                $.ajax({
+                    type: 'GET',
                     url: generateRequestAddress(requestId), 
                     contentType: 'application/json',
                     success: function (result) {    
                         pubsub.publish('action.data.featched' + topic, { requestId: requestId, oldData: innerCurrentData, newData: result });
                         
-                        pubsub.publish('action.data.retrieve.succeeded' + topic, { requestId: requestId });
+                        pubsub.publish('action.data.retrieve.succeeded' + topic, { requestId: requestId, oldData: innerCurrentData, newData: result });
                         
                         update(result);  
                     }, 
@@ -73,7 +74,7 @@
                 });
             }
             else { 
-                pubsub.publish('action.data.retrieve.succeeded' + topic, { requestId: requestId });
+                pubsub.publish('action.data.retrieve.succeeded' + topic, { requestId: requestId, oldData: innerCurrentData, newData: innerBaseData });
                 
                 update(innerBaseData);  
                 

@@ -1,6 +1,6 @@
 ﻿(function($, pubsub, data, elements) {
     var wireListeners = function() {
-            elements.titleHolder().find('.glimpse-correlation a').live('click', function() { data.retrieve($(this).attr('data-requestId'), 'prg'); });
+            elements.titleHolder().find('.glimpse-correlation a').live('click', function() { data.retrieve($(this).attr('data-requestId'), 'correlation'); });
             elements.titleHolder().find('.glimpse-correlation').dropdown();
         },
         buildHtml = function(request, requestMetadata) {
@@ -27,7 +27,7 @@
         renderLayout = function() {
             var html = buildHtml(data.currentData(), data.currentMetadata());
             if (html) {
-                elements.titleHolder().find('.glimpse-uri').hide();
+                elements.titleHolder().find('.glimpse-uri').hide(); //TODO will probably need to reshow this at some point
                 elements.titleHolder().find('.glimpse-correlation').html(html);
             }
         },
@@ -36,10 +36,14 @@
         },
         completedRetrieve = function() {
             elements.titleHolder().find('.glimpse-correlation .loading').fadeOut();
+        },
+        succeededRetrieve = function(options) {
+            options.newData.metadata.correlation = options.oldData.metadata.correlation;
         };
 
-    pubsub.subscribe('action.shell.loaded', renderLayout);
+    pubsub.subscribe('action.shell.rendering', renderLayout);
     pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners);
-    pubsub.subscribe('action.data.retrieve.starting.prg', startingRetrieve);
-    pubsub.subscribe('action.data.retrieve.completed.prg', completedRetrieve);
+    pubsub.subscribe('action.data.retrieve.starting.correlation', startingRetrieve);
+    pubsub.subscribe('action.data.retrieve.completed.correlation', completedRetrieve);
+    pubsub.subscribe('action.data.retrieve.succeeded.correlation', succeededRetrieve);
 })(jQueryGlimpse, glimpse.pubsub, glimpse.data, glimpse.elements);

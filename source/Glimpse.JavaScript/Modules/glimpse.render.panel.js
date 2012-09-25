@@ -22,7 +22,11 @@
 
             elements.panelHolder().find('.glimpse-active').removeClass('glimpse-active');
             panel.addClass('glimpse-active');
+        },
+        clear = function() {
+            elements.panelHolder().empty();
         };
 
     pubsub.subscribe('trigger.tab.select', selected);
+    pubsub.subscribe('trigger.shell.clear', clear);
 })(jQueryGlimpse, glimpse.data, glimpse.elements, glimpse.pubsub, glimpse.render.engine);

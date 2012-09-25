@@ -9,7 +9,7 @@
         
             if (isOpen) 
                 pubsub.publish('trigger.shell.open', { isInit: true }); 
-    },
+        },
         selected = function (options) {
             settings.local('view', options.key);
         };

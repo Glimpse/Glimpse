@@ -22,8 +22,8 @@
 // glimpse.element.js
 /*(import:glimpse.element.js)*/
 
-// glimpse.ready.js
-/*(import:glimpse.ready.js)*/
+// glimpse.system.js
+/*(import:glimpse.system.js)*/
 
 // glimpse.render.js
 /*(import:glimpse.render.js)*/

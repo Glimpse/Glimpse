@@ -31,7 +31,7 @@
 
             // Add tabs to the dom
             var tabHtml = generateHtml(currentData.data);
-            tabHolder.append(tabHtml);
+            tabHolder.html(tabHtml);
             
             pubsub.publish('action.tab.rendered', tabHolder);
         },
@@ -41,9 +41,13 @@
 
             tabHolder.find('.glimpse-active, .glimpse-hover').removeClass('glimpse-active').removeClass('glimpse-hover');
             tab.addClass('glimpse-active');
+        },
+        clear = function() {
+            elements.tabHolder().empty();
         };
     
     pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners);
     pubsub.subscribe('trigger.tab.render', render);
     pubsub.subscribe('trigger.tab.select', selected);
+    pubsub.subscribe('trigger.shell.clear', clear);
 })(jQueryGlimpse, glimpse.data, glimpse.elements, glimpse.util, glimpse.pubsub);

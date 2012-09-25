@@ -1,4 +1,4 @@
-﻿(function($, pubsub, util, data) {
+﻿glimpse.render = (function($, pubsub, util, data, settings) {
     var templates = {
             css: '/*(import:glimpse.render.shell.css)*/',
             html: '/*(import:glimpse.render.shell.html)*/'
@@ -23,10 +23,16 @@
             pubsub.publish('action.shell.rendered', { isInitial: isInitial });
             pubsub.publish(topic + '.rendered', { isInitial: isInitial });
         },
-        refresh = function() { 
-            process(false, 'action.shell.refresh'); 
+        refresh = function() {
+            var currentKey = settings.local('view');
+            
+            pubsub.publish('trigger.shell.clear');
+
+            process(false, 'action.shell.refresh');
+
+            pubsub.publish('trigger.tab.select.' + currentKey, { key: currentKey });
         },
-        render = function() {  
+        init = function() {  
             pubsub.publish('action.template.processing', { templates: templates });
             pubsub.publish('action.shell.loading');
             
@@ -36,11 +42,15 @@
             pubsub.publish('action.shell.loaded');
             pubsub.publish('action.template.processed', { templates: templates });
 
-            pubsub.publish('trigger.shell.listener.subscriptions');
+            pubsub.publish('trigger.shell.listener.subscriptions'); //TODO look to rename
 
             process(true, 'action.shell.initial'); 
+            
+            pubsub.publish('trigger.shell.default.view');  //TODO look to rename
         };
     
     pubsub.subscribe('trigger.shell.refresh', refresh); 
-    pubsub.subscribe('trigger.shell.render', render);   
-})(jQueryGlimpse, glimpse.pubsub, glimpse.util, glimpse.data); 
+    pubsub.subscribe('trigger.shell.init', init);
+
+    return {};
+})(jQueryGlimpse, glimpse.pubsub, glimpse.util, glimpse.data, glimpse.settings); 

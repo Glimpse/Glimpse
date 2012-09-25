@@ -28,6 +28,6 @@
             elements.titleHolder().find('.glimpse-enviro').html(html);
         };
 
-    pubsub.subscribe('action.shell.loaded', renderLayout);
+    pubsub.subscribe('action.shell.rendering', renderLayout);
     pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners);
 })(jQueryGlimpse, glimpse.pubsub, glimpse.data, glimpse.elements, glimpse.util);
