@@ -69,8 +69,8 @@
 // glimpse.shell.environment.js
 /*(import:glimpse.shell.environment.js)*/
 
-// glimpse.notification.js
-/*(import:glimpse.notification.js)*/
+// glimpse.shell.notification.js
+/*(import:glimpse.shell.notification.js)*/
 
 // google-code-prettify.js
 /*(import:google-code-prettify.js)*/
