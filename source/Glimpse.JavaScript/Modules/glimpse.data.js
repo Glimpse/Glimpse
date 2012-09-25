@@ -1,4 +1,4 @@
-﻿glimpse.data = (function($, pubsub) {
+﻿glimpse.data = (function($, pubsub, util) {
     var innerBaseData = {},
         innerBaseMetadata = {},
         innerCurrentData = {},
@@ -33,8 +33,8 @@
         update = function (data) {
             var oldData = innerCurrentData;
             
-            pubsub.publish('action.data.changing', data);
             pubsub.publish('action.data.refresh.changing', oldData, data);
+            pubsub.publish('action.data.changing', data);
             
             // Set the data as current
             innerCurrentData = data;
@@ -42,8 +42,8 @@
             // Make sure the metadata is correct 
             validateMetadata();
             
-            pubsub.publish('action.data.refresh.changing', oldData, data);
             pubsub.publish('action.data.changed', data);
+            pubsub.publish('action.data.refresh.changing', oldData, data);
         },
         reset = function () {
             update(innerBaseData);
@@ -88,16 +88,16 @@
             pubsub.publish('action.data.metadata.changed', input);
         },
         initData = function (input) { 
-            pubsub.publish('action.data.changing', input);
             pubsub.publish('action.data.initial.changing', input);
+            pubsub.publish('action.data.changing', input);
             
             innerCurrentData = input; 
             innerBaseData = input; 
             
             validateMetadata(); 
             
-            pubsub.publish('action.data.initial.changed', input);
             pubsub.publish('action.data.changed', input);
+            pubsub.publish('action.data.initial.changed', input);
         };
 
     return {
@@ -110,4 +110,4 @@
         initMetadata: initMetadata,
         initData: initData
     };
-})(jQueryGlimpse, glimpse.pubsub);
+})(jQueryGlimpse, glimpse.pubsub, glimpse.util);
