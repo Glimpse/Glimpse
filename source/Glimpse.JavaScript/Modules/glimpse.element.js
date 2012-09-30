@@ -1,6 +1,6 @@
 ﻿glimpse.elements = (function($) {
     var scope = $(document),
-        holder, opener, pageSpacer, barHolder, panelHolder, tabHolder, titleHolder, notificationHolder;
+        holder, opener, pageSpacer, barHolder, panelHolder, tabHolder, titleHolder, notificationHolder, lightbox;
     
     return {
         scope: function () {
@@ -29,6 +29,9 @@
         },
         notificationHolder: function() {
             return notificationHolder || (notificationHolder = scope.find('.glimpse-notification-holder'));
+        },
+        lightbox: function() {
+            return lightbox || (lightbox = scope.find('.glimpse-lightbox'));
         },
         panel: function(key) {
              return this.panelHolder().find('.glimpse-panel[data-glimpseKey="' + key + '"]');
