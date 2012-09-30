@@ -7,13 +7,16 @@
         generateVersionCheckAddress = function() {
             return util.uriTemplate(data.currentMetadata().resources.glimpse_version_check, { stamp: retrieveStamp() });
         },
-        ready = function() {
-            var nextChecked = settings.local('nextCheckedVersionTime'),
-                hasNewerVersion = settings.local('hasNewerVersion'),
-                now = new Date();
-
+        tryShow = function () {
+            var hasNewerVersion = settings.local('hasNewerVersion');
             if (hasNewerVersion)
                 elements.holder().find('.glimpse-meta-update').show();
+        },
+        ready = function() {
+            var nextChecked = settings.local('nextCheckedVersionTime'),
+                now = new Date();
+
+            tryShow();
 
             if (nextChecked) {
                 var nextCheckedTickes = parseInt(nextChecked),
@@ -34,6 +37,9 @@
         },
         result = function(data) {
             settings.local('hasNewerVersion', data.hasNewer);
+            settings.local('versionViewUri', data.viewLink);
+            
+            tryShow();
         };
 
     pubsub.subscribe('trigger.system.ready', ready);
