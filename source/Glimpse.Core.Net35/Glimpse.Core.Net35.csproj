@@ -71,11 +71,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Glimpse.Core\**\*.png" />
-    <EmbeddedResource Include="..\Glimpse.Core\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>..\Glimpse.Core\Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
+    <EmbeddedResource Include="..\Glimpse.Core\Resources.resx"/>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

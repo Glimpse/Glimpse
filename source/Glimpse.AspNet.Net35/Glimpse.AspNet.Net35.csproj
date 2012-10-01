@@ -45,11 +45,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\Glimpse.AspNet\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>..\Glimpse.AspNet\Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
+    <EmbeddedResource Include="..\Glimpse.AspNet\Resources.resx"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Glimpse.Core.Net35\Glimpse.Core.Net35.csproj">
