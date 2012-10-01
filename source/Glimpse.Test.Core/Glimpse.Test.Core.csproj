@@ -110,14 +110,14 @@
     <Compile Include="JsonNetSerializerShould.cs" />
     <Compile Include="Plugin\Assist\AssistExtensionsShould.cs" />
     <Compile Include="Plugin\Assist\PluginShould.cs" />
-    <Compile Include="Plugin\Assist\StructuredLayoutCellShould.cs" />
-    <Compile Include="Plugin\Assist\StructuredLayoutShould.cs" />
+    <Compile Include="Plugin\Assist\TabLayoutCellShould.cs" />
+    <Compile Include="Plugin\Assist\TabLayoutShould.cs" />
     <Compile Include="Plugin\Assist\TabColumnShould.cs" />
     <Compile Include="Plugin\Assist\TabRowFormattingExtensionsShould.cs" />
     <Compile Include="Plugin\Assist\TabRowShould.cs" />
     <Compile Include="Plugin\Assist\TabSectionShould.cs" />
     <Compile Include="Plugin\Assist\StringFormattingExtensionsShould.cs" />
-    <Compile Include="Plugin\Assist\StructuredLayoutRowShould.cs" />
+    <Compile Include="Plugin\Assist\TabLayoutRowShould.cs" />
     <Compile Include="Policy\AjaxPolicyShould.cs" />
     <Compile Include="Policy\ContentTypePolicyShould.cs" />
     <Compile Include="Policy\ControlCookiePolicyShould.cs" />
