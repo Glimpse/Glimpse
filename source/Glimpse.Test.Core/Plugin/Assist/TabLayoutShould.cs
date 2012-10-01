@@ -4,12 +4,12 @@ using Xunit;
 
 namespace Glimpse.Test.Core.Plugin.Assist
 {
-	public class StructuredLayoutShould
+	public class TabLayoutShould
 	{
 		[Fact]
 		public void ConstructWithNoRows()
 		{
-			var layout = StructuredLayout.Create();
+			var layout = TabLayout.Create();
 			
 			var rows = layout.Rows.Count();
 			
@@ -19,7 +19,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void ConstructWithSingleRow()
 		{
-			var layout = StructuredLayout.Create(l => l.Row(r => {}));
+			var layout = TabLayout.Create(l => l.Row(r => {}));
 			
 			var rows = layout.Rows;
 			
@@ -29,7 +29,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void ConstructWithTwoRows()
 		{
-			var layout = StructuredLayout.Create(l =>
+			var layout = TabLayout.Create(l =>
 			{
 				l.Row(r => { });
 				l.Row(r => { });
@@ -43,7 +43,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void AddSingleRow()
 		{
-			var layout = StructuredLayout.Create().Row(r => {});
+			var layout = TabLayout.Create().Row(r => {});
 
 			var rows = layout.Rows;
 
@@ -53,7 +53,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void AddTwoRows()
 		{
-			var layout = StructuredLayout.Create().Row(r => { }).Row(r => { });
+			var layout = TabLayout.Create().Row(r => { }).Row(r => { });
 
 			var rows = layout.Rows;
 

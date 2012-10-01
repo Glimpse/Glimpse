@@ -4,12 +4,12 @@ using Xunit;
 
 namespace Glimpse.Test.Core.Plugin.Assist
 {
-	public class StructuredLayoutRowShould
+	public class TabLayoutRowShould
 	{
 		[Fact]
 		public void ConstructWithNoCells()
 		{
-			var row = new StructuredLayoutRow();
+			var row = new TabLayoutRow();
 			
 			var cells = row.Build();
 
@@ -20,7 +20,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		public void AddSingleCell()
 		{
 			const int expectedCellId = 1;
-			var row = new StructuredLayoutRow();
+			var row = new TabLayoutRow();
 			var cell = row.Cell(expectedCellId);
 
 			var cells = row.Build();
@@ -33,7 +33,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void AddTwoCells()
 		{
-			var row = new StructuredLayoutRow();
+			var row = new TabLayoutRow();
 			var cell1 = row.Cell(1);
 			var cell2 = row.Cell(2);
 
@@ -47,7 +47,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void ReturnObjectArrayOfColumnData()
 		{
-			var row = new StructuredLayoutRow();
+			var row = new TabLayoutRow();
 
 			row.Cell(1);
 			row.Cell(2);
