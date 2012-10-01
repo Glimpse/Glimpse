@@ -2,36 +2,36 @@
 
 namespace Glimpse.Core.Plugin.Assist
 {
-	public static class Plugin
-	{
-		public static TabSection Create(params string[] headers)
-		{
-			return new TabSection(headers);
-		}
+    public static class Plugin
+    {
+        public static TabSection Create(params string[] headers)
+        {
+            return new TabSection(headers);
+        }
 
-		public static TabSection Section(this TabSection current, string sectionName, Action<TabSection> section)
-		{
-			if (section == null)
-				throw new ArgumentNullException("section", "Section must not be null!");
+        public static TabSection Section(this TabSection current, string sectionName, Action<TabSection> section)
+        {
+            if (section == null)
+                throw new ArgumentNullException("section", "Section must not be null!");
 
-			var tabSection = new TabSection();
-			section.Invoke(tabSection);
-			return current.Section(sectionName, tabSection);
-		}
+            var tabSection = new TabSection();
+            section.Invoke(tabSection);
+            return current.Section(sectionName, tabSection);
+        }
 
-		public static TabSection Section(this TabSection current, string sectionName, TabSection section)
-		{
-			if (String.IsNullOrEmpty(sectionName))
-				throw new ArgumentException("Section name must not be null or empty!", "sectionName");
+        public static TabSection Section(this TabSection current, string sectionName, TabSection section)
+        {
+            if (String.IsNullOrEmpty(sectionName))
+                throw new ArgumentException("Section name must not be null or empty!", "sectionName");
 
-			if (section == null)
-				throw new ArgumentNullException("section", "Section must not be null!");
+            if (section == null)
+                throw new ArgumentNullException("section", "Section must not be null!");
 
-			current.AddRow()
-				.Column(sectionName).Strong()
-				.Column(section);
+            current.AddRow()
+                .Column(sectionName).Strong()
+                .Column(section);
 
-			return current;
-		}
-	}
+            return current;
+        }
+    }
 }

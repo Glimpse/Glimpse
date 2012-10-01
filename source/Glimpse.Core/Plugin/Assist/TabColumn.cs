@@ -1,19 +1,19 @@
 namespace Glimpse.Core.Plugin.Assist
 {
-	public class TabColumn
-	{
-		public object Data { get; private set; }
+    public class TabColumn
+    {
+        public object Data { get; private set; }
 
-		public TabColumn(object columnData)
-		{
-			Data = columnData is TabSection
-				? columnData.ToTabSection().Build()
-				: columnData;
-		}
+        public TabColumn(object columnData)
+        {
+            Data = columnData is TabSection
+                ? columnData.ToTabSection().Build()
+                : columnData;
+        }
 
-		internal void OverrideData(object columnData)
-		{
-			Data = columnData;
-		}
-	}
+        internal void OverrideData(object columnData)
+        {
+            Data = columnData;
+        }
+    }
 }
