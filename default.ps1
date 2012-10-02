@@ -16,6 +16,10 @@ task default -depends compile
 task clean {
     "Cleaning"
     
+    "   builds/local"
+    Remove-Item $build_dir\local\*.nupkg
+    Remove-Item $build_dir\local\*.zip
+    
     "   Glimpse.Core"
     Delete-Directory "$source_dir\Glimpse.Core\bin"
     Delete-Directory "$source_dir\Glimpse.Core\obj"
