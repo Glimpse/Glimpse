@@ -595,20 +595,7 @@ li.glimpse-permanent {
     bottom: 5px;
     color: #777;
 }
-/*
-.glimpse-panelitem-Ajax .loading .icon {
-    float: right;
-}
-.glimpse-panelitem-Remote .glimpse-side-sub-panel .loading, .glimpse-panelitem-Remote .glimpse-side-main-panel .loading, .glimpse-clear {
-    position: fixed;
-    bottom: 5px;
-    right: 10px;
-    color: #777;
-}
-.glimpse-panelitem-Remote .glimpse-side-main-panel .loading {
-    right: 27%;
-}
-*/
+
 .glimpse-clear {
     bottom: 30px;
     position: absolute;
@@ -658,6 +645,9 @@ li.glimpse-permanent {
 }
 .glimpse-pager .glimpse-pager-link, .glimpse-pager .glimpse-pager-link:hover {
     font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
+    color: #2200C1;
 }
 .glimpse-pager .glimpse-pager-link-firstPage {
     background-position: -2px -38px;
