@@ -11,7 +11,7 @@
             pagerEngine.renderControls(args.key, args.pagerContainer, args.pagerKey, args.pagerType, args.pageIndex, args.pageIndexLast);
         };
    
-    pubsub.subscribe('trigger.tab.paging.controls', render);  
+    pubsub.subscribe('trigger.paging.controls.render', render);  
     
     return {
         retrieve: retrieve,

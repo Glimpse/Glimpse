@@ -11,7 +11,7 @@ glimpse.paging = (function($, pubsub, util, data, elements) {
                     pageIndexLast = Math.floor((pagingInfo.totalNumberOfRecords - 1) / pagingInfo.pageSize),
                     pagerContainer = $('<div class="glimpse-pager"></div>').appendTo(panelItem); 
 
-                pubsub.publish('trigger.tab.paging.controls', { key: key, pagerContainer: pagerContainer, pagerKey: pagingInfo.pagerKey, pagerType: pagingInfo.pagerType, pageIndex: pageIndex, pageIndexLast: pageIndexLast });
+                pubsub.publish('trigger.paging.controls.render', { key: key, pagerContainer: pagerContainer, pagerKey: pagingInfo.pagerKey, pagerType: pagingInfo.pagerType, pageIndex: pageIndex, pageIndexLast: pageIndexLast });
             }
     };
     
