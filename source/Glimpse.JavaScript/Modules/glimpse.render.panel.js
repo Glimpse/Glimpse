@@ -1,6 +1,6 @@
 ﻿(function($, data, elements, pubsub, renderEngine) {
     var render = function (key, pluginData, pluginMetadata) {
-            pubsub.publish('action.panel.rendering', { key: key, pluginData: pluginData, pluginMetadata: pluginMetadata.constructor });
+            pubsub.publish('action.panel.rendering.' + key, { key: key, pluginData: pluginData, pluginMetadata: pluginMetadata.constructor });
             
             var panelHolder = elements.panelHolder(),  
                 html = '<div class="glimpse-panel glimpse-panelitem-' + key  + '" data-glimpseKey="' + key + '"><div class="glimpse-panel-message">Loading data, please wait...</div></div>',
@@ -9,12 +9,14 @@
             if (!pluginData.dontRender)
                 renderEngine.insert(panel, pluginData.data, pluginMetadata.structure); 
             
-            pubsub.publish('action.panel.rendered', { key: key, pluginData: pluginData, pluginMetadata: pluginMetadata, panelHolder: panelHolder });
+            pubsub.publish('action.panel.rendered.' + key, { key: key, pluginData: pluginData, pluginMetadata: pluginMetadata, panelHolder: panelHolder });
 
             return panel;
         },
         selected = function(options) {
             var panel = elements.panel(options.key);
+
+            pubsub.publish('action.panel.showing.' + options.key, { key: options.key });
 
             // Only render the content when we need to
             if (panel.length == 0) 
@@ -22,6 +24,8 @@
 
             elements.panelHolder().find('.glimpse-active').removeClass('glimpse-active');
             panel.addClass('glimpse-active');
+
+            pubsub.publish('action.panel.showed.' + options.key, { key: options.key });
         },
         clear = function() {
             elements.panelHolder().empty();

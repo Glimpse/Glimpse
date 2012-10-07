@@ -1097,7 +1097,7 @@ glimpse.render.engine.util.raw = (function($, util) {
 // glimpse.render.panel.js
 (function($, data, elements, pubsub, renderEngine) {
     var render = function (key, pluginData, pluginMetadata) {
-            pubsub.publish('action.panel.rendering', { key: key, pluginData: pluginData, pluginMetadata: pluginMetadata.constructor });
+            pubsub.publish('action.panel.rendering.' + key, { key: key, pluginData: pluginData, pluginMetadata: pluginMetadata.constructor });
             
             var panelHolder = elements.panelHolder(),  
                 html = '<div class="glimpse-panel glimpse-panelitem-' + key  + '" data-glimpseKey="' + key + '"><div class="glimpse-panel-message">Loading data, please wait...</div></div>',
@@ -1106,12 +1106,14 @@ glimpse.render.engine.util.raw = (function($, util) {
             if (!pluginData.dontRender)
                 renderEngine.insert(panel, pluginData.data, pluginMetadata.structure); 
             
-            pubsub.publish('action.panel.rendered', { key: key, pluginData: pluginData, pluginMetadata: pluginMetadata, panelHolder: panelHolder });
+            pubsub.publish('action.panel.rendered.' + key, { key: key, pluginData: pluginData, pluginMetadata: pluginMetadata, panelHolder: panelHolder });
 
             return panel;
         },
         selected = function(options) {
             var panel = elements.panel(options.key);
+
+            pubsub.publish('action.panel.showing.' + options.key, { key: options.key });
 
             // Only render the content when we need to
             if (panel.length == 0) 
@@ -1119,6 +1121,8 @@ glimpse.render.engine.util.raw = (function($, util) {
 
             elements.panelHolder().find('.glimpse-active').removeClass('glimpse-active');
             panel.addClass('glimpse-active');
+
+            pubsub.publish('action.panel.showed.' + options.key, { key: options.key });
         },
         clear = function() {
             elements.panelHolder().empty();
@@ -1545,6 +1549,205 @@ glimpse.versionCheck = (function($, pubsub, settings, elements, data, util) {
     pubsub.subscribe('trigger.shell.version.info.show', show);
     pubsub.subscribe('trigger.shell.version.info.close', close);
 })(jQueryGlimpse, glimpse.pubsub, glimpse.elements, glimpse.util, glimpse.settings);
+
+// glimpse.paging.js
+glimpse.paging = (function($, pubsub, util, data, elements) {
+    var process = function(args) {
+            var key = args.key,
+                pagingInfo = data.currentMetadata().plugins[key].pagingInfo,
+                panelItem = elements.panel(key); 
+        
+            if (pagingInfo) {
+                panelItem.find('.glimpse-pager').remove();
+
+                var pageIndex = pagingInfo.pageIndex,
+                    pageIndexLast = Math.floor((pagingInfo.totalNumberOfRecords - 1) / pagingInfo.pageSize),
+                    pagerContainer = $('<div class="glimpse-pager"></div>').appendTo(panelItem); 
+
+                pubsub.publish('trigger.tab.paging.controls', { key: key, pagerContainer: pagerContainer, pagerKey: pagingInfo.pagerKey, pagerType: pagingInfo.pagerType, pageIndex: pageIndex, pageIndexLast: pageIndexLast });
+            }
+    };
+    
+    pubsub.subscribe('trigger.tab.select', process);  
+    pubsub.subscribe('trigger.tab.paging.refresh', process); 
+
+    return {};
+})(jQueryGlimpse, glimpse.pubsub, glimpse.util, glimpse.data, glimpse.elements); 
+// glimpse.paging.engine.js
+glimpse.paging.engine = (function(pubsub) {
+    var providers = {},
+        retrieve = function(name) {
+            return providers[name];
+        },
+        register = function(name, engine) {
+            providers[name] = engine;
+        },
+        render = function(args) {
+            var pagerEngine = providers[args.pagerType]; 
+            pagerEngine.renderControls(args.key, args.pagerContainer, args.pagerKey, args.pagerType, args.pageIndex, args.pageIndexLast);
+        };
+   
+    pubsub.subscribe('trigger.tab.paging.controls', render);  
+    
+    return {
+        retrieve: retrieve,
+        register: register
+    };
+})(glimpse.pubsub);
+// glimpse.paging.engine.util.js
+glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEngine) {
+    var generatePagingAddress = function(pagerKey, pageIndex) {
+            return util.uriTemplate(data.currentMetadata().resources.glimpse_paging, { 'key': pagerKey, 'pageIndex': pageIndex });
+        },
+        requestStart = function(key) {
+            var pager = elements.panel(key).find('.glimpse-pager');
+
+            pager.html('<span class="glimpse-pager-message">Loading...</span>');
+        },
+        requestSuccess = function(key, pagerKey, pageIndex, method, result) {  
+            var pagingInfo = data.currentMetadata().plugins[key].pagingInfo,
+                content = renderEngine.build(result, data.currentMetadata().plugins[key].structure),
+                scope = renderMethod[method](elements.panel(key), content);
+            
+            pagingInfo.pageIndex = pageIndex; 
+            
+            pubsub.publish('trigger.panel.render.style', { scope: scope });
+            pubsub.publish('trigger.tab.paging.refresh', { key: key });
+        }, 
+        renderMethod = {
+            insert: function(panelItem, content) {
+                panelItem.find('> table').remove();
+                
+                return $(content).appendTo(panelItem); 
+            },
+            append: function (panelItem, content) {
+                var table = panelItem.find('> table'),
+                    nodes = $(content.substring(content.indexOf('>') + 1, content.lastIndexOf('<')))[1];
+
+                table.find('> tbody:last-child > tr:last-child').addClass('glimpse-pager-separator');
+                
+                return $(nodes).appendTo(table); 
+            }
+        };
+
+    return {   
+        load: (function() {
+            var isLoading = false;
+
+            return function(key, pagerKey, pageIndex, method) {
+                    if (!isLoading) {
+                        isLoading = true; 
+                
+                        requestStart(key);
+                
+                        $.ajax({
+                            url: generatePagingAddress(pagerKey, pageIndex),
+                            type: 'GET', 
+                            contentType: 'application/json',
+                            cache: false, 
+                            success: function(result) { 
+                                requestSuccess(key, pagerKey, pageIndex, method, result);
+                            },
+                            complete: function () {
+                                isLoading = false;
+                            }
+                        });
+                    }
+                };
+        })()
+    };
+})(jQueryGlimpse, glimpse.pubsub, glimpse.data, glimpse.elements, glimpse.util, glimpse.render.engine); 
+// glimpse.paging.engine.continuous.js
+(function($, util, engine, engineUtil) {
+    var provider = {
+            removeExistingResults: false,
+            renderControls: function (key, pagerContainer, pagerKey, pagerType, pageIndex, pageIndexLast) {
+                var pagerMessage = $('<span class="glimpse-pager-message">Showing ' + (pageIndex + 1) + ' page(s) of ' + (pageIndexLast + 1) + ' pages(s).</span>');
+                pagerContainer.append(pagerMessage);
+
+                if (pageIndex < pageIndexLast) {
+                    var pagerNextPageLink = $('<span href="#" class="glimpse-pager-link">More</span>');
+                    pagerNextPageLink.one('click', function() { engineUtil.load(key, pagerKey, pageIndex + 1, 'append'); });
+                    pagerContainer.append(pagerNextPageLink);
+                }
+            }
+        };
+    
+    engine.register('continuous', provider);
+})(jQueryGlimpse, glimpse.util, glimpse.paging.engine, glimpse.paging.engine.util);
+// glimpse.paging.engine.scrolling.js
+(function($, pubsub, util, engine, engineUtil, elements, data) {
+    var provider = {
+            renderControls: function (key, pagerContainer, pagerKey, pagerType, pageIndex, pageIndexLast, suppressRecheck) {
+                var panelItem = elements.panel(key),
+                    clientHeight = panelItem[0].clientHeight;
+                 
+                if (clientHeight == 0 && !suppressRecheck) {
+                    var that = this;
+                    setTimeout(function() {
+                        that.renderControls(key, pagerContainer, pagerKey, pagerType, pageIndex, pageIndexLast, true);
+                    }, 300);
+                    return;
+                }
+
+                var pagerMessage = $('<span class="glimpse-pager-message">Showing ' + (pageIndex + 1) + ' page(s) of ' + (pageIndexLast + 1) + ' pages(s).</span>');
+                pagerContainer.append(pagerMessage);
+                    
+                if (pageIndex < pageIndexLast) { 
+                    if (clientHeight >= panelItem.find(':last').position().top) 
+                        engineUtil.load(key, pagerKey, pageIndex + 1, 'append');
+                    else {
+                        var scrollingCallback = function() {
+                            if (panelItem[0].clientHeight >= panelItem.find(':last').position().top) {
+                                engineUtil.load(key, pagerKey, pageIndex + 1, 'append');
+                                panelItem.unbind('scroll');
+                            }
+                        };
+                        panelItem.bind('scroll', scrollingCallback);
+                    } 
+                }
+            }
+        };
+    
+    engine.register('scrolling', provider);
+})(jQueryGlimpse, glimpse.pubsub, glimpse.util, glimpse.paging.engine, glimpse.paging.engine.util, glimpse.elements, glimpse.data);
+// glimpse.paging.engine.traditional.js
+(function($, util, engine, engineUtil) {
+    var provider = {
+            renderControls: function (key, pagerContainer, pagerKey, pagerType, pageIndex, pageIndexLast) {
+                var pagerFirstPageLink = $('<span href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-firstPage"></span>'),
+                    pagerPreviousPageLink = $('<span href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-previousPage"></span>'),
+                    pagerMessage = $('<span class="glimpse-pager-message">' + (pageIndex + 1) + ' / ' + (pageIndexLast + 1) + '</span>'),
+                    pagerNextPageLink = $('<span href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-nextPage"></span>'),
+                    pagerLastPageLink = $('<span href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-lastPage"></span>');
+
+                pagerContainer.append(pagerFirstPageLink);
+                pagerContainer.append(pagerPreviousPageLink); 
+                pagerContainer.append(pagerMessage); 
+                pagerContainer.append(pagerNextPageLink);
+                pagerContainer.append(pagerLastPageLink);
+
+                if (pageIndex > 0) {
+                    pagerFirstPageLink.one('click', function() { engineUtil.load(key, pagerKey, 0, 'insert'); });
+                    pagerPreviousPageLink.one('click', function() { engineUtil.load(key, pagerKey, pageIndex - 1, 'insert'); });
+                } else {
+                    pagerFirstPageLink.addClass('glimpse-pager-link-firstPage-disabled');
+                    pagerPreviousPageLink.addClass('glimpse-pager-link-previousPage-disabled');
+                }
+
+                if (pageIndex < pageIndexLast) {
+                    pagerNextPageLink.one('click', function() { engineUtil.load(key, pagerKey, pageIndex + 1, 'insert'); });
+                    pagerLastPageLink.one('click', function() { engineUtil.load(key, pagerKey, pageIndexLast, 'insert'); });
+                } else {
+                    pagerNextPageLink.addClass('glimpse-pager-link-nextPage-disabled');
+                    pagerLastPageLink.addClass('glimpse-pager-link-lastPage-disabled');
+                }
+            }
+        };
+    
+    engine.register('traditional', provider);
+})(jQueryGlimpse, glimpse.util, glimpse.paging.engine, glimpse.paging.engine.util);
+
 
 // google-code-prettify.js
 if (!window.PR_SHOULD_USE_CONTINUATION) {

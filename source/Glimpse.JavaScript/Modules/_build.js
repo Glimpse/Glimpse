@@ -77,5 +77,19 @@
 // glimpse.version.shell.js
 /*(import:glimpse.version.shell.js)*/
 
+// glimpse.paging.js
+/*(import:glimpse.paging.js)*/
+// glimpse.paging.engine.js
+/*(import:glimpse.paging.engine.js)*/
+// glimpse.paging.engine.util.js
+/*(import:glimpse.paging.engine.util.js)*/
+// glimpse.paging.engine.continuous.js
+/*(import:glimpse.paging.engine.continuous.js)*/
+// glimpse.paging.engine.scrolling.js
+/*(import:glimpse.paging.engine.scrolling.js)*/
+// glimpse.paging.engine.traditional.js
+/*(import:glimpse.paging.engine.traditional.js)*/
+
+
 // google-code-prettify.js
 /*(import:google-code-prettify.js)*/
