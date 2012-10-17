@@ -1,7 +1,7 @@
 ﻿(function($, pubsub, util, elements, data, renderEngine) {
     var isActive = true,
         notice = undefined,
-        resultCount = 0,
+        context = { resultCount : 0 },
         
         wireListeners = function () {
             elements.holder().find('.glimpse-clear-ajax').live('click', clearLayout);
@@ -35,7 +35,7 @@
 
             if (oldId != newId) {
                 panel.find('tbody').empty();
-                resultCount = 0;
+                context.resultCount = 0;
             }
         },
         setupData = function (input) { 
@@ -72,7 +72,7 @@
             });
         },
         tryProcessSummaryData = function(result) {
-            if (resultCount != result.length) 
+            if (context.resultCount != result.length) 
                 processSummaryData(result); 
         },
         processSummaryData = function(result) {
@@ -80,20 +80,20 @@
             
             //Insert container table
             if (panel.find('table').length == 0) {
-                var data = [['Request URL', 'Method', 'Duration', 'Date/Time', 'View']],
-                    metadata = [[ { data : 0, key : true, width : '40%' }, { data : 1 }, { data : 2, width : '10%' },  { data : 3, width : '20%' },  { data : 4, width : '100px' } ]];
-                panel.html(renderEngine.build(data, metadata)).find('table').append('<tbody></tbody>');
+                var viewData = [['Request URL', 'Method', 'Duration', 'Date/Time', 'View']],
+                    viewMetadata = [[ { data : 0, key : true, width : '40%' }, { data : 1 }, { data : 2, width : '10%' },  { data : 3, width : '20%' },  { data : 4, width : '100px' } ]];
+                panel.html(renderEngine.build(viewData, viewMetadata)).find('table').append('<tbody></tbody>');
                 panel.find('thead').append('<tr class="glimpse-head-message" style="display:none"><td colspan="6"><a href="#">Reset context back to starting page</a></td></tr>');
             }
             
             //Prepend results as we go 
             var panelBody = panel.find('tbody');
-            for (var x = resultCount; x < result.length; x++) {
+            for (var x = context.resultCount; x < result.length; x++) {
                 var item = result[x];
                 panelBody.prepend('<tr class="' + (x % 2 == 0 ? 'even' : 'odd') + '"><td>' + item.uri + '</td><td>' + item.method + '</td><td>' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.dateTime + '</td><td><a href="#" class="glimpse-ajax-link" data-requestId="' + item.requestId + '">Inspect</a></td></tr>');
             }
             
-            resultCount = result.length; 
+            context.resultCount = result.length; 
         },
         
         clearLayout = function () {
@@ -140,4 +140,4 @@
     pubsub.subscribe('action.data.refresh.changed', dataUpdate); 
     pubsub.subscribe('action.data.initial.changed', setupData);
     pubsub.subscribe('action.data.context.reset', reset);
-})(jQueryGlimpse, glimpse.pubsub, glimpse.util, glimpse.elements, glimpse.data, glimpse.render.engine)
+})(jQueryGlimpse, glimpse.pubsub, glimpse.util, glimpse.elements, glimpse.data, glimpse.render.engine);

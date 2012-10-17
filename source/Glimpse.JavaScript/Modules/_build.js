@@ -92,7 +92,8 @@
 
 // glimpse.module.ajax.js
 /*(import:glimpse.module.ajax.js)*/
-
+// glimpse.module.history.js
+/*(import:glimpse.module.history.js)*/
 
 // google-code-prettify.js
 /*(import:google-code-prettify.js)*/
