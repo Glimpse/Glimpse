@@ -171,8 +171,15 @@
                     }
                 } 
                 
-                if (response)
-                    response = $.extend(true, $.isArray(response) ? [] : {}, response);
+                if (response) {
+                    response = $.extend(true, $.isArray(response) ? [] : { }, response);
+                    
+                    // Make sure that the keys all match up
+                    if (data.parentRequestId) {
+                        for (var key in response)
+                            response[key].parentId = data.parentRequestId;
+                    }
+                }
 
                 if (param.complete)
                     param.complete(null, success);

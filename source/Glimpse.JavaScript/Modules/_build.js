@@ -90,6 +90,9 @@
 // glimpse.paging.engine.traditional.js
 /*(import:glimpse.paging.engine.traditional.js)*/
 
+// glimpse.module.ajax.js
+/*(import:glimpse.module.ajax.js)*/
+
 
 // google-code-prettify.js
 /*(import:google-code-prettify.js)*/

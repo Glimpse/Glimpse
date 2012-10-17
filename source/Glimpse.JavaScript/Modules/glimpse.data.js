@@ -21,6 +21,15 @@
                     innerCurrentData.metadata.plugins[key] = {};
             }
         },
+        copyPermanentData = function (newData) {
+            for (var key in innerBaseData.data) {
+                var current = innerBaseData.data[key];
+                if (current.isPermanent) {
+                    newData.data[key] = current;
+                    newData.metadata.plugins[key] = innerBaseData.metadata.plugins[key];
+                }
+            }
+        },
         baseData = function () {
             return innerBaseData;
         },
@@ -33,7 +42,7 @@
         update = function (data) {
             var oldData = innerCurrentData;
             
-            pubsub.publish('action.data.refresh.changing', oldData, data);
+            pubsub.publish('action.data.refresh.changing', { oldData: oldData, newData: data });
             pubsub.publish('action.data.changing', data);
             
             // Set the data as current
@@ -42,8 +51,11 @@
             // Make sure the metadata is correct 
             validateMetadata();
             
+            // Bring across the perminate data
+            copyPermanentData(data);
+            
             pubsub.publish('action.data.changed', data);
-            pubsub.publish('action.data.refresh.changed', oldData, data);
+            pubsub.publish('action.data.refresh.changed', { oldData: oldData, newData: data });
         },
         reset = function () {
             update(innerBaseData);

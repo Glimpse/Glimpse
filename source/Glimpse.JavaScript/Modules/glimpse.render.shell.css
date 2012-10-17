@@ -66,6 +66,9 @@
     -webkit-box-shadow: 0 0 5px#888;
     box-shadow: 0 0 5px #888;
 }
+.glimpse-content {
+    position: relative;
+}
 .glimpse-bar {
     background: #cfcfcf;
     background: -moz-linear-gradient(top, #cfcfcf 0%, #dddddd 100%);
@@ -241,6 +244,14 @@
 }
 .glimpse .glimpse-popout:hover {
     background-position: -111px -1px;
+}
+.glimpse-tabs-permanent {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.glimpse-tabs-permanent li {
+    font-style: italic;
 }
 .glimpse-tabs {
     background: #afafaf;
@@ -466,9 +477,6 @@
     width: 100%;
     position: absolute;
     top: -5px;
-}
-li.glimpse-permanent {
-    font-style: italic;
 }
 .glimpse-preview-object {
     color: #006400;

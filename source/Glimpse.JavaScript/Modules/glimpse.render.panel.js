@@ -3,7 +3,8 @@
             pubsub.publish('action.panel.rendering.' + key, { key: key, pluginData: pluginData, pluginMetadata: pluginMetadata.constructor });
             
             var panelHolder = elements.panelHolder(),  
-                html = '<div class="glimpse-panel glimpse-panelitem-' + key  + '" data-glimpseKey="' + key + '"><div class="glimpse-panel-message">Loading data, please wait...</div></div>',
+                permanent = pluginData.isPermanent ? ' glimpse-permanent' : '',
+                html = '<div class="glimpse-panel glimpse-panelitem-' + key + permanent  + '" data-glimpseKey="' + key + '"><div class="glimpse-panel-message">Loading data, please wait...</div></div>',
                 panel = $(html).appendTo(panelHolder);
 
             if (!pluginData.dontRender)
@@ -14,7 +15,16 @@
             return panel;
         },
         selected = function(options) {
-            var panel = elements.panel(options.key);
+            var panel = elements.panel(options.key),
+                currentSelection = elements.panelHolder().find('.glimpse-active');
+            
+            // Raise an event that lets us know when we dont care about a panel any more
+            if (currentSelection.length > 0) {
+                currentSelection.removeClass('glimpse-active');
+
+                var oldKey = currentSelection.attr('data-glimpseKey');
+                pubsub.publish('action.panel.hiding.' + oldKey, { key: oldKey });
+            }
 
             pubsub.publish('action.panel.showing.' + options.key, { key: options.key });
 
@@ -22,13 +32,12 @@
             if (panel.length == 0) 
                 panel = render(options.key, data.currentData().data[options.key], data.currentMetadata().plugins[options.key]);  
 
-            elements.panelHolder().find('.glimpse-active').removeClass('glimpse-active');
             panel.addClass('glimpse-active');
 
             pubsub.publish('action.panel.showed.' + options.key, { key: options.key });
         },
         clear = function() {
-            elements.panelHolder().empty();
+            elements.panelHolder().find('.glimpse-panel:not(.glimpse-permanent)').remove();
         };
 
     pubsub.subscribe('trigger.tab.select', selected);

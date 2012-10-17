@@ -30,7 +30,8 @@
 
             process(false, 'action.shell.refresh');
 
-            pubsub.publish('trigger.tab.select.' + currentKey, { key: currentKey });
+            if (!data.currentData().data[currentKey].isPermanent)
+                pubsub.publish('trigger.tab.select.' + currentKey, { key: currentKey });
         },
         init = function() {  
             pubsub.publish('action.template.processing', { templates: templates });

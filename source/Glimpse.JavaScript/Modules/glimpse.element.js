@@ -1,6 +1,6 @@
 ﻿glimpse.elements = (function($) {
     var scope = $(document),
-        holder, opener, pageSpacer, barHolder, panelHolder, tabHolder, titleHolder, notificationHolder, lightbox;
+        holder, opener, pageSpacer, barHolder, panelHolder, tabHolder, tabInstanceHolder, tabPermanentHolder, titleHolder, notificationHolder, lightbox, optionsHolder;
     
     return {
         scope: function () {
@@ -24,6 +24,12 @@
         tabHolder: function() {
              return tabHolder || (tabHolder = scope.find('.glimpse-tabs ul'));
         },
+        tabInstanceHolder: function() {
+             return tabInstanceHolder || (tabInstanceHolder = scope.find('.glimpse-tabs-instance ul'));
+        },
+        tabPermanentHolder: function() {
+             return tabPermanentHolder || (tabPermanentHolder = scope.find('.glimpse-tabs-permanent ul'));
+        },
         panelHolder: function() {
              return panelHolder || (panelHolder = scope.find('.glimpse-panel-holder'));
         },
@@ -41,6 +47,9 @@
         },
         panels: function() {
              return this.panelHolder().find('.glimpse-panel');
+        },
+        optionsHolder: function() {
+            return optionsHolder || (optionsHolder = scope.find('.glimpse-options'));
         }
     };
 })(jQueryGlimpse);
