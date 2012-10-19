@@ -427,78 +427,74 @@ glimpse.data = (function($, pubsub, util) {
         currentMetadata = function () {
             return innerCurrentData.metadata;
         },
-        update = function (data) {
+        update = function (data, topic) {
             var oldData = innerCurrentData;
             
-            pubsub.publish('action.data.refresh.changing', { oldData: oldData, newData: data });
-            pubsub.publish('action.data.changing', data);
-            
-            // Set the data as current
+            pubsub.publish('action.data.refresh.changing', { oldData: oldData, newData: data, type: topic });
+            pubsub.publish('action.data.changing', { newData: data });
+             
             innerCurrentData = data;
-            
-            // Make sure the metadata is correct 
-            validateMetadata();
-            
-            // Bring across the perminate data
+             
+            validateMetadata(); 
             copyPermanentData(data);
             
-            pubsub.publish('action.data.changed', data);
-            pubsub.publish('action.data.refresh.changed', { oldData: oldData, newData: data });
+            pubsub.publish('action.data.changed', { newData: data });
+            pubsub.publish('action.data.refresh.changed', { oldData: oldData, newData: data, type: topic });
         },
         reset = function () {
             update(innerBaseData);
         },
         retrieve = function (requestId, topic) { 
-            topic = topic ? '.' + topic : '';
+            var parsedTopic = topic ? '.' + topic : '';
 
-            pubsub.publish('action.data.retrieve.starting' + topic, { requestId: requestId });
+            pubsub.publish('action.data.retrieve.starting' + parsedTopic, { requestId: requestId });
 
             // Only need to do to the server if we dont have the data
             if (requestId != innerBaseData.requestId) {
-                pubsub.publish('action.data.featching' + topic, requestId);
+                pubsub.publish('action.data.featching' + parsedTopic, requestId);
                 
                 $.ajax({
                     type: 'GET',
                     url: generateRequestAddress(requestId), 
                     contentType: 'application/json',
                     success: function (result) {    
-                        pubsub.publish('action.data.featched' + topic, { requestId: requestId, oldData: innerCurrentData, newData: result });
+                        pubsub.publish('action.data.featched' + parsedTopic, { requestId: requestId, oldData: innerCurrentData, newData: result });
                         
-                        pubsub.publish('action.data.retrieve.succeeded' + topic, { requestId: requestId, oldData: innerCurrentData, newData: result });
+                        pubsub.publish('action.data.retrieve.succeeded' + parsedTopic, { requestId: requestId, oldData: innerCurrentData, newData: result });
                         
-                        update(result);  
+                        update(result, topic);  
                     }, 
                     complete: function (jqXhr, textStatus) { 
-                        pubsub.publish('action.data.retrieve.completed' + topic, { requestId: requestId, textStatus: textStatus });
+                        pubsub.publish('action.data.retrieve.completed' + parsedTopic, { requestId: requestId, textStatus: textStatus });
                     }
                 });
             }
             else { 
-                pubsub.publish('action.data.retrieve.succeeded' + topic, { requestId: requestId, oldData: innerCurrentData, newData: innerBaseData });
+                pubsub.publish('action.data.retrieve.succeeded' + parsedTopic, { requestId: requestId, oldData: innerCurrentData, newData: innerBaseData });
                 
                 update(innerBaseData);  
                 
-                pubsub.publish('action.data.retrieve.completed' + topic, { requestId: requestId, textStatus: 'success' });
+                pubsub.publish('action.data.retrieve.completed' + parsedTopic, { requestId: requestId, textStatus: 'success' });
             }
         },
         initMetadata = function (input) {
-            pubsub.publish('action.data.metadata.changing', input);
+            pubsub.publish('action.data.metadata.changing', { metadata: input });
             
             innerBaseMetadata = input;
             
-            pubsub.publish('action.data.metadata.changed', input);
+            pubsub.publish('action.data.metadata.changed', { metadata: input });
         },
         initData = function (input) { 
-            pubsub.publish('action.data.initial.changing', input);
-            pubsub.publish('action.data.changing', input);
+            pubsub.publish('action.data.initial.changing', { newData: input });
+            pubsub.publish('action.data.changing', { newData: input });
             
             innerCurrentData = input; 
             innerBaseData = input; 
             
             validateMetadata(); 
             
-            pubsub.publish('action.data.changed', input);
-            pubsub.publish('action.data.initial.changed', input);
+            pubsub.publish('action.data.changed', { newData: input });
+            pubsub.publish('action.data.initial.changed', { newData: input });
         };
 
     return {
@@ -1827,7 +1823,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
 
 // glimpse.module.ajax.js
 (function($, pubsub, util, elements, data, renderEngine) {
-    var context = { resultCount : 0, notice: undefined, isActive: false },
+    var context = { resultCount : 0, notice: undefined, isActive: false, contextRequestId: undefined },
         generateAjaxAddress = function () {
             return util.uriTemplate(data.currentMetadata().resources.glimpse_ajax, { 'parentRequestId': retrieveScopeId() });
         },
@@ -1843,9 +1839,9 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
             panel.find('tbody a').live('click', function() { pubsub.publish('trigger.data.context.switch', { requestId: $(this).attr('data-requestId'), type: 'ajax' }); }); 
             panel.find('.glimpse-head-message a').live('click', function() { pubsub.publish('trigger.data.context.reset', { type: 'ajax' }); }); 
         }, 
-        setup = function(input) { 
-            input.data.ajax = { name: 'Ajax', data: 'No requests currently detected...', isPermanent: true };
-            input.metadata.plugins.ajax = { documentationUri: 'http://getglimpse.com/Help/Plugin/Ajax' };
+        setup = function(args) {  
+            args.newData.data.ajax = { name: 'Ajax', data: 'No requests currently detected...', isPermanent: true };
+            args.newData.metadata.plugins.ajax = { documentationUri: 'http://getglimpse.com/Help/Plugin/Ajax' };
         },
         activate = function() {
             context.isActive = true;
@@ -1871,6 +1867,8 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                 elements.panel('ajax').find('tbody').empty();
                 context.resultCount = 0;
             }
+            if (args.type != 'ajax')
+                context.contextRequestId = newPayload.requestId;
         }, 
         fetch = function() { 
             if (!context.isActive) 
@@ -1928,6 +1926,9 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
             detailBody.prepend(html);
             
             context.resultCount = result.length; 
+            
+            if (context.contextRequestId)
+                selectStart({ requestId: context.contextRequestId, suppressClear: true });
         }, 
         layoutClear = function () {
             elements.panel('ajax').html('<div class="glimpse-panel-message">No requests currently detected...</div>');
@@ -1935,7 +1936,9 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
         selectClear = function (args) {
             var panel = elements.panel('ajax'); 
             panel.find('.glimpse-head-message').fadeOut();
-            panel.find('.selected').removeClass('selected'); 
+            panel.find('.selected').removeClass('selected');
+            
+            context.contextRequestId = undefined;
             
             if (args.type == 'ajax')
                 data.retrieve(data.currentData().parentId);
@@ -1944,11 +1947,13 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
             var link = elements.panel('ajax').find('.glimpse-ajax-link[data-requestId="' + args.requestId + '"]');
                 
             if (link.length > 0) {
+                context.contextRequestId = undefined;
+                
                 link.hide().parent().append('<div class="loading glimpse-ajax-loading" data-requestId="' + args.requestId + '"><div class="icon"></div>Loading...</div>');
             
                 data.retrieve(args.requestId, 'ajax');
             }
-            else 
+            else if (!args.suppressClear)
                 selectClear(args);
         },
         selectFinish = function (args) {
@@ -1974,7 +1979,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
 })(jQueryGlimpse, glimpse.pubsub, glimpse.util, glimpse.elements, glimpse.data, glimpse.render.engine);
 // glimpse.module.history.js
 (function($, pubsub, util, elements, data, renderEngine) {
-    var context = { resultCount : 0, clientName : '', requestId : '', currentData: undefined, notice: undefined, isActive: false }, 
+    var context = { resultCount : 0, clientName : '', requestId : '', currentData: undefined, notice: undefined, isActive: false, contextRequestId: undefined }, 
         generateHistoryAddress = function () {
             return util.uriTemplate(data.currentMetadata().resources.glimpse_history);
         },
@@ -1986,9 +1991,9 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
             panel.find('.glimpse-col-side tbody a').live('click', function() { selectSession($(this).attr('data-clientName')); }); 
             panel.find('.glimpse-col-main .glimpse-head-message a').live('click', function() { pubsub.publish('trigger.data.context.reset', { type: 'history' }); });
         },
-        setup = function (input) { 
-            input.data.history = { name: 'History', data: 'No requests currently detected...', isPermanent: true };
-            input.metadata.plugins.history = { documentationUri: 'http://getglimpse.com/Help/Plugin/History' };
+        setup = function (args) { 
+            args.newData.data.history = { name: 'History', data: 'No requests currently detected...', isPermanent: true };
+            args.newData.metadata.plugins.history = { documentationUri: 'http://getglimpse.com/Help/Plugin/History' };
         }, 
         activate = function () {
             context.isActive = true;
@@ -2003,6 +2008,12 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
             
             elements.optionsHolder().html(''); 
             context.notice = null;
+        },
+        contextSwitch = function(args) {
+            var newPayload = args.newData;
+            
+            if (args.type != 'history')
+                context.contextRequestId = newPayload.requestId;
         },
         fetch = function () { 
             if (!context.isActive) 
@@ -2037,6 +2048,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
             
             layoutBuildShell(); 
             layoutBuildContentMaster(result); 
+            layoutBuildContentDetail(context.clientName, result[context.clientName]);
         },
         layoutBuildShell = function() {
             var panel = elements.panel('history'),
@@ -2074,10 +2086,14 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
             }
             detailBody.prepend(html);
             
-            detailBody.find('tr[data-requestId="' + data.currentData().requestId + '"]').addClass('selected');
+            //TODO: make sure i can remove
+            //detailBody.find('tr[data-requestId="' + data.currentData().requestId + '"]').addClass('selected');
 
             context.resultCount = clientData.length;
             context.clientName = clientName;
+            
+            if (context.contextRequestId)
+                selectStart({ requestId: context.contextRequestId, suppressClear: true });
         }, 
         layoutBuildContentMaster = function(result) {
             var panel = elements.panel('history'),
@@ -2092,9 +2108,11 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                 
                 masterRow.find('.glimpse-history-count').text(result[recordName].length);
                 
-                if (rowCount == 0) 
+                if (rowCount == 0) {
+                    context.clientName = recordName;
                     selectSession(recordName);
-            }  
+                }
+            }
         },
         layoutClear = function() {
             elements.panel('history').html('<div class="glimpse-panel-message">No requests currently detected...</div>'); 
@@ -2104,6 +2122,8 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
             panel.find('.glimpse-head-message').fadeOut();
             panel.find('.selected').removeClass('selected');
             
+            context.contextRequestId = undefined;
+            
             if (args.type == 'history')
                 data.reset();
         },
@@ -2111,11 +2131,13 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
             var link = elements.panel('history').find('.glimpse-history-link[data-requestId="' + args.requestId + '"]');
                 
             if (link.length > 0) {
-                link.hide().parent().append('<div class="loading glimpse-history-loading" data-requestId="' + requestId + '"><div class="icon"></div>Loading...</div>');
+                context.contextRequestId = undefined;
+                
+                link.hide().parent().append('<div class="loading glimpse-history-loading" data-requestId="' + args.requestId + '"><div class="icon"></div>Loading...</div>');
             
-                data.retrieve(requestId, 'history');
+                data.retrieve(args.requestId, 'history');
             }
-            else 
+            else if (!args.suppressClear)
                 selectClear(args);
         },
         selectFinished = function (args) {
@@ -2140,11 +2162,11 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
             layoutBuildContentDetail(clientName, clientData);
         };
 
-    
     pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners);
-    pubsub.subscribe('action.data.featched.history', selectFinished); 
     pubsub.subscribe('action.panel.hiding.history', deactivate); 
     pubsub.subscribe('action.panel.showing.history', activate); 
+    pubsub.subscribe('action.data.featched.history', selectFinished); 
+    pubsub.subscribe('action.data.refresh.changed', contextSwitch); 
     pubsub.subscribe('action.data.initial.changed', setup); 
     pubsub.subscribe('trigger.data.context.reset', selectClear);
     pubsub.subscribe('trigger.shell.clear.history', layoutClear);

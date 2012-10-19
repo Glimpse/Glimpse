@@ -39,78 +39,74 @@
         currentMetadata = function () {
             return innerCurrentData.metadata;
         },
-        update = function (data) {
+        update = function (data, topic) {
             var oldData = innerCurrentData;
             
-            pubsub.publish('action.data.refresh.changing', { oldData: oldData, newData: data });
-            pubsub.publish('action.data.changing', data);
-            
-            // Set the data as current
+            pubsub.publish('action.data.refresh.changing', { oldData: oldData, newData: data, type: topic });
+            pubsub.publish('action.data.changing', { newData: data });
+             
             innerCurrentData = data;
-            
-            // Make sure the metadata is correct 
-            validateMetadata();
-            
-            // Bring across the perminate data
+             
+            validateMetadata(); 
             copyPermanentData(data);
             
-            pubsub.publish('action.data.changed', data);
-            pubsub.publish('action.data.refresh.changed', { oldData: oldData, newData: data });
+            pubsub.publish('action.data.changed', { newData: data });
+            pubsub.publish('action.data.refresh.changed', { oldData: oldData, newData: data, type: topic });
         },
         reset = function () {
             update(innerBaseData);
         },
         retrieve = function (requestId, topic) { 
-            topic = topic ? '.' + topic : '';
+            var parsedTopic = topic ? '.' + topic : '';
 
-            pubsub.publish('action.data.retrieve.starting' + topic, { requestId: requestId });
+            pubsub.publish('action.data.retrieve.starting' + parsedTopic, { requestId: requestId });
 
             // Only need to do to the server if we dont have the data
             if (requestId != innerBaseData.requestId) {
-                pubsub.publish('action.data.featching' + topic, requestId);
+                pubsub.publish('action.data.featching' + parsedTopic, requestId);
                 
                 $.ajax({
                     type: 'GET',
                     url: generateRequestAddress(requestId), 
                     contentType: 'application/json',
                     success: function (result) {    
-                        pubsub.publish('action.data.featched' + topic, { requestId: requestId, oldData: innerCurrentData, newData: result });
+                        pubsub.publish('action.data.featched' + parsedTopic, { requestId: requestId, oldData: innerCurrentData, newData: result });
                         
-                        pubsub.publish('action.data.retrieve.succeeded' + topic, { requestId: requestId, oldData: innerCurrentData, newData: result });
+                        pubsub.publish('action.data.retrieve.succeeded' + parsedTopic, { requestId: requestId, oldData: innerCurrentData, newData: result });
                         
-                        update(result);  
+                        update(result, topic);  
                     }, 
                     complete: function (jqXhr, textStatus) { 
-                        pubsub.publish('action.data.retrieve.completed' + topic, { requestId: requestId, textStatus: textStatus });
+                        pubsub.publish('action.data.retrieve.completed' + parsedTopic, { requestId: requestId, textStatus: textStatus });
                     }
                 });
             }
             else { 
-                pubsub.publish('action.data.retrieve.succeeded' + topic, { requestId: requestId, oldData: innerCurrentData, newData: innerBaseData });
+                pubsub.publish('action.data.retrieve.succeeded' + parsedTopic, { requestId: requestId, oldData: innerCurrentData, newData: innerBaseData });
                 
                 update(innerBaseData);  
                 
-                pubsub.publish('action.data.retrieve.completed' + topic, { requestId: requestId, textStatus: 'success' });
+                pubsub.publish('action.data.retrieve.completed' + parsedTopic, { requestId: requestId, textStatus: 'success' });
             }
         },
         initMetadata = function (input) {
-            pubsub.publish('action.data.metadata.changing', input);
+            pubsub.publish('action.data.metadata.changing', { metadata: input });
             
             innerBaseMetadata = input;
             
-            pubsub.publish('action.data.metadata.changed', input);
+            pubsub.publish('action.data.metadata.changed', { metadata: input });
         },
         initData = function (input) { 
-            pubsub.publish('action.data.initial.changing', input);
-            pubsub.publish('action.data.changing', input);
+            pubsub.publish('action.data.initial.changing', { newData: input });
+            pubsub.publish('action.data.changing', { newData: input });
             
             innerCurrentData = input; 
             innerBaseData = input; 
             
             validateMetadata(); 
             
-            pubsub.publish('action.data.changed', input);
-            pubsub.publish('action.data.initial.changed', input);
+            pubsub.publish('action.data.changed', { newData: input });
+            pubsub.publish('action.data.initial.changed', { newData: input });
         };
 
     return {

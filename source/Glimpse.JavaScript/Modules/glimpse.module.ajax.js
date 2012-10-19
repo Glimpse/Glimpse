@@ -1,5 +1,5 @@
 ﻿(function($, pubsub, util, elements, data, renderEngine) {
-    var context = { resultCount : 0, notice: undefined, isActive: false },
+    var context = { resultCount : 0, notice: undefined, isActive: false, contextRequestId: undefined },
         generateAjaxAddress = function () {
             return util.uriTemplate(data.currentMetadata().resources.glimpse_ajax, { 'parentRequestId': retrieveScopeId() });
         },
@@ -15,9 +15,9 @@
             panel.find('tbody a').live('click', function() { pubsub.publish('trigger.data.context.switch', { requestId: $(this).attr('data-requestId'), type: 'ajax' }); }); 
             panel.find('.glimpse-head-message a').live('click', function() { pubsub.publish('trigger.data.context.reset', { type: 'ajax' }); }); 
         }, 
-        setup = function(input) { 
-            input.data.ajax = { name: 'Ajax', data: 'No requests currently detected...', isPermanent: true };
-            input.metadata.plugins.ajax = { documentationUri: 'http://getglimpse.com/Help/Plugin/Ajax' };
+        setup = function(args) {  
+            args.newData.data.ajax = { name: 'Ajax', data: 'No requests currently detected...', isPermanent: true };
+            args.newData.metadata.plugins.ajax = { documentationUri: 'http://getglimpse.com/Help/Plugin/Ajax' };
         },
         activate = function() {
             context.isActive = true;
@@ -43,6 +43,8 @@
                 elements.panel('ajax').find('tbody').empty();
                 context.resultCount = 0;
             }
+            if (args.type != 'ajax')
+                context.contextRequestId = newPayload.requestId;
         }, 
         fetch = function() { 
             if (!context.isActive) 
@@ -100,6 +102,9 @@
             detailBody.prepend(html);
             
             context.resultCount = result.length; 
+            
+            if (context.contextRequestId)
+                selectStart({ requestId: context.contextRequestId, suppressClear: true });
         }, 
         layoutClear = function () {
             elements.panel('ajax').html('<div class="glimpse-panel-message">No requests currently detected...</div>');
@@ -107,7 +112,9 @@
         selectClear = function (args) {
             var panel = elements.panel('ajax'); 
             panel.find('.glimpse-head-message').fadeOut();
-            panel.find('.selected').removeClass('selected'); 
+            panel.find('.selected').removeClass('selected');
+            
+            context.contextRequestId = undefined;
             
             if (args.type == 'ajax')
                 data.retrieve(data.currentData().parentId);
@@ -116,11 +123,13 @@
             var link = elements.panel('ajax').find('.glimpse-ajax-link[data-requestId="' + args.requestId + '"]');
                 
             if (link.length > 0) {
+                context.contextRequestId = undefined;
+                
                 link.hide().parent().append('<div class="loading glimpse-ajax-loading" data-requestId="' + args.requestId + '"><div class="icon"></div>Loading...</div>');
             
                 data.retrieve(args.requestId, 'ajax');
             }
-            else 
+            else if (!args.suppressClear)
                 selectClear(args);
         },
         selectFinish = function (args) {
