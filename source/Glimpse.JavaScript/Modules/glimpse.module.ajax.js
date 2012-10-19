@@ -111,7 +111,7 @@
         }, 
         selectClear = function (args) {
             var panel = elements.panel('ajax'); 
-            panel.find('.glimpse-head-message').fadeOut();
+            panel.find('.glimpse-head-message').hide();
             panel.find('.selected').removeClass('selected');
             
             context.contextRequestId = undefined;
@@ -125,9 +125,13 @@
             if (link.length > 0) {
                 context.contextRequestId = undefined;
                 
-                link.hide().parent().append('<div class="loading glimpse-ajax-loading" data-requestId="' + args.requestId + '"><div class="icon"></div>Loading...</div>');
+                if (args.type == 'ajax') {
+                    link.hide().parent().append('<div class="loading glimpse-ajax-loading" data-requestId="' + args.requestId + '"><div class="icon"></div>Loading...</div>');
             
-                data.retrieve(args.requestId, 'ajax');
+                    data.retrieve(args.requestId, 'ajax');
+                }
+                else 
+                    selectFinish($.extend({ suppressAnimation: true }, args));
             }
             else if (!args.suppressClear)
                 selectClear(args);
@@ -137,10 +141,13 @@
                 loading = panel.find('.glimpse-ajax-loading[data-requestId="' + args.requestId + '"]'),
                 link = panel.find('.glimpse-ajax-link[data-requestId="' + args.requestId + '"]');
 
-            panel.find('.glimpse-head-message').fadeIn();
+            panel.find('.glimpse-head-message').show();
             panel.find('.selected').removeClass('selected'); 
-            loading.fadeOut(100).delay(100).remove(); 
-            link.delay(100).fadeIn().parents('tr:first').addClass('selected');
+            link.closest('tr').addClass('selected');
+            if (!args.suppressAnimation) {
+                loading.fadeOut(100).delay(100).remove(); 
+                link.delay(100).fadeIn();
+            }
         };
     
     pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners);

@@ -1935,7 +1935,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
         }, 
         selectClear = function (args) {
             var panel = elements.panel('ajax'); 
-            panel.find('.glimpse-head-message').fadeOut();
+            panel.find('.glimpse-head-message').hide();
             panel.find('.selected').removeClass('selected');
             
             context.contextRequestId = undefined;
@@ -1949,9 +1949,13 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
             if (link.length > 0) {
                 context.contextRequestId = undefined;
                 
-                link.hide().parent().append('<div class="loading glimpse-ajax-loading" data-requestId="' + args.requestId + '"><div class="icon"></div>Loading...</div>');
+                if (args.type == 'ajax') {
+                    link.hide().parent().append('<div class="loading glimpse-ajax-loading" data-requestId="' + args.requestId + '"><div class="icon"></div>Loading...</div>');
             
-                data.retrieve(args.requestId, 'ajax');
+                    data.retrieve(args.requestId, 'ajax');
+                }
+                else 
+                    selectFinish($.extend({ suppressAnimation: true }, args));
             }
             else if (!args.suppressClear)
                 selectClear(args);
@@ -1961,10 +1965,13 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                 loading = panel.find('.glimpse-ajax-loading[data-requestId="' + args.requestId + '"]'),
                 link = panel.find('.glimpse-ajax-link[data-requestId="' + args.requestId + '"]');
 
-            panel.find('.glimpse-head-message').fadeIn();
+            panel.find('.glimpse-head-message').show();
             panel.find('.selected').removeClass('selected'); 
-            loading.fadeOut(100).delay(100).remove(); 
-            link.delay(100).fadeIn().parents('tr:first').addClass('selected');
+            link.closest('tr').addClass('selected');
+            if (!args.suppressAnimation) {
+                loading.fadeOut(100).delay(100).remove(); 
+                link.delay(100).fadeIn();
+            }
         };
     
     pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners);
@@ -2119,8 +2126,8 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
         },  
         selectClear = function (args) {
             var panel = elements.panel('history');
-            panel.find('.glimpse-head-message').fadeOut();
-            panel.find('.selected').removeClass('selected');
+            panel.find('.glimpse-head-message').hide();
+            panel.find('.glimpse-col-main .selected').removeClass('selected');
             
             context.contextRequestId = undefined;
             
@@ -2132,24 +2139,31 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                 
             if (link.length > 0) {
                 context.contextRequestId = undefined;
-                
-                link.hide().parent().append('<div class="loading glimpse-history-loading" data-requestId="' + args.requestId + '"><div class="icon"></div>Loading...</div>');
             
-                data.retrieve(args.requestId, 'history');
+                if (args.type == 'history') {     
+                    link.hide().parent().append('<div class="loading glimpse-history-loading" data-requestId="' + args.requestId + '"><div class="icon"></div>Loading...</div>');
+            
+                    data.retrieve(args.requestId, 'history');
+                }
+                else 
+                    selectFinish($.extend({ suppressAnimation: true }, args));
             }
             else if (!args.suppressClear)
                 selectClear(args);
         },
-        selectFinished = function (args) {
+        selectFinish = function (args) {
             var panel = elements.panel('history'),
                 main = panel.find('.glimpse-col-main'), 
                 loading = panel.find('.glimpse-history-loading[data-requestId="' + args.requestId + '"]'),
                 link = panel.find('.glimpse-history-link[data-requestId="' + args.requestId + '"]');
             
-            main.find('.glimpse-head-message').fadeIn();
-            main.find('.selected').removeClass('selected'); 
-            loading.fadeOut(100).delay(100).remove(); 
-            link.delay(100).fadeIn().parents('tr:first').addClass('selected');;
+            main.find('.glimpse-head-message').show();
+            main.find('.selected').removeClass('selected');
+            link.closest('tr').addClass('selected'); 
+            if (!args.suppressAnimation) {
+                loading.fadeOut(100).delay(100).remove(); 
+                link.delay(100).fadeIn();
+            }
         }, 
         selectSession = function (clientName) {
             var panel = elements.panel('history'),
@@ -2165,7 +2179,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
     pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners);
     pubsub.subscribe('action.panel.hiding.history', deactivate); 
     pubsub.subscribe('action.panel.showing.history', activate); 
-    pubsub.subscribe('action.data.featched.history', selectFinished); 
+    pubsub.subscribe('action.data.featched.history', selectFinish); 
     pubsub.subscribe('action.data.refresh.changed', contextSwitch); 
     pubsub.subscribe('action.data.initial.changed', setup); 
     pubsub.subscribe('trigger.data.context.reset', selectClear);
