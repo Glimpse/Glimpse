@@ -1945,7 +1945,6 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
         },
         selectStart = function(args) {
             var link = elements.panel('ajax').find('.glimpse-ajax-link[data-requestId="' + args.requestId + '"]');
-                
             if (link.length > 0) {
                 context.contextRequestId = undefined;
                 
@@ -2093,9 +2092,6 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
             }
             detailBody.prepend(html);
             
-            //TODO: make sure i can remove
-            //detailBody.find('tr[data-requestId="' + data.currentData().requestId + '"]').addClass('selected');
-
             context.resultCount = clientData.length;
             context.clientName = clientName;
             
@@ -2136,7 +2132,6 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
         },
         selectStart = function(args) { 
             var link = elements.panel('history').find('.glimpse-history-link[data-requestId="' + args.requestId + '"]');
-                
             if (link.length > 0) {
                 context.contextRequestId = undefined;
             

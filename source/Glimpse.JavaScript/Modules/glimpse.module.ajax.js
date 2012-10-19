@@ -121,7 +121,6 @@
         },
         selectStart = function(args) {
             var link = elements.panel('ajax').find('.glimpse-ajax-link[data-requestId="' + args.requestId + '"]');
-                
             if (link.length > 0) {
                 context.contextRequestId = undefined;
                 
