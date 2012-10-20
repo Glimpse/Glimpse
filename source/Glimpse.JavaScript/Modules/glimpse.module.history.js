@@ -1,21 +1,21 @@
 ﻿(function($, pubsub, util, elements, data, renderEngine) {
     var context = { resultCount : 0, clientName : '', requestId : '', currentData: undefined, notice: undefined, isActive: false, contextRequestId: undefined }, 
-        generateHistoryAddress = function () {
+        generateHistoryAddress = function() {
             return util.uriTemplate(data.currentMetadata().resources.glimpse_history);
         },
-        wireListeners = function () {
+        wireListeners = function() {
             var panel = elements.panel('history');
             
-            elements.holder().find('.glimpse-clear-history').live('click', function() { pubsub.publish('trigger.shell.clear.history'); });            
+            elements.holder().find('.glimpse-clear-history').live('click', function() { pubsub.publish('trigger.shell.panel.clear.history'); });            
             panel.find('.glimpse-col-main tbody a').live('click', function() { pubsub.publish('trigger.data.context.switch', { requestId: $(this).attr('data-requestId'), type: 'history' }); }); 
             panel.find('.glimpse-col-side tbody a').live('click', function() { selectSession($(this).attr('data-clientName')); }); 
             panel.find('.glimpse-col-main .glimpse-head-message a').live('click', function() { pubsub.publish('trigger.data.context.reset', { type: 'history' }); });
         },
-        setup = function (args) { 
+        setup = function(args) { 
             args.newData.data.history = { name: 'History', data: 'No requests currently detected...', isPermanent: true };
             args.newData.metadata.plugins.history = { documentationUri: 'http://getglimpse.com/Help/Plugin/History' };
         }, 
-        activate = function () {
+        activate = function() {
             context.isActive = true;
             
             var options = elements.optionsHolder().html('<div class="glimpse-clear"><a href="#" class="glimpse-clear-history">Clear</a></div><div class="glimpse-notice gdisconnect"><div class="icon"></div><span>Disconnected...</span></div>');
@@ -23,19 +23,13 @@
             
             fetch();
         },
-        deactivate = function () {
+        deactivate = function() {
             context.isActive = false; 
             
             elements.optionsHolder().html(''); 
             context.notice = null;
-        },
-        contextSwitch = function(args) {
-            var newPayload = args.newData;
-            
-            if (args.type != 'history')
-                context.contextRequestId = newPayload.requestId;
-        },
-        fetch = function () { 
+        }, 
+        fetch = function() { 
             if (!context.isActive) 
                 return; 
 
@@ -52,7 +46,7 @@
                     context.notice.complete(textStatus); 
                     setTimeout(fetch, 1000);
                 },
-                success: function (result) {
+                success: function(result) {
                     if (!context.isActive)
                         return; 
                     
@@ -60,7 +54,7 @@
                 }
             });
         },
-        layoutRender = function (result) { 
+        layoutRender = function(result) { 
             if ($.isEmptyObject(result))
                 return;
 
@@ -132,49 +126,59 @@
             }
         },
         layoutClear = function() {
-            elements.panel('history').html('<div class="glimpse-panel-message">No requests currently detected...</div>'); 
+            pubsub.publish('trigger.data.context.reset', { type: 'history' });
+            elements.panel('history').html('<div class="glimpse-panel-message">No requests currently detected...</div>');
         },  
-        selectClear = function (args) {
-            var panel = elements.panel('history');
-            panel.find('.glimpse-head-message').hide();
-            panel.find('.glimpse-col-main .selected').removeClass('selected');
+        selectClear = function(args) { 
+            var panel = elements.panel('history'),
+                detailPanel = panel.find('.glimpse-col-main'), 
+                row = detailPanel.find('.selected'); 
             
-            context.contextRequestId = undefined;
+            if (row.length > 0) {
+                panel.find('.glimpse-head-message').hide();
+                row.removeClass('selected');
             
-            if (args.type == 'history')
-                data.reset();
+                if (args.type == 'history')
+                    data.reset();
+            }
         },
         selectStart = function(args) { 
             var link = elements.panel('history').find('.glimpse-history-link[data-requestId="' + args.requestId + '"]');
-            if (link.length > 0) {
-                context.contextRequestId = undefined;
             
+            context.contextRequestId = args.requestId;
+            
+            if (link.length > 0) { 
                 if (args.type == 'history') {     
                     link.hide().parent().append('<div class="loading glimpse-history-loading" data-requestId="' + args.requestId + '"><div class="icon"></div>Loading...</div>');
             
                     data.retrieve(args.requestId, 'history');
                 }
                 else 
-                    selectFinish($.extend({ suppressAnimation: true }, args));
+                    selectCore(args.requestId);
             }
-            else if (!args.suppressClear)
+            else 
                 selectClear(args);
         },
-        selectFinish = function (args) {
-            var panel = elements.panel('history'),
-                main = panel.find('.glimpse-col-main'), 
-                loading = panel.find('.glimpse-history-loading[data-requestId="' + args.requestId + '"]'),
-                link = panel.find('.glimpse-history-link[data-requestId="' + args.requestId + '"]');
+        selectFinish = function(args) {
+            var panel = elements.panel('history');
             
-            main.find('.glimpse-head-message').show();
-            main.find('.selected').removeClass('selected');
-            link.closest('tr').addClass('selected'); 
-            if (!args.suppressAnimation) {
-                loading.fadeOut(100).delay(100).remove(); 
-                link.delay(100).fadeIn();
-            }
+            panel.find('.glimpse-history-loading[data-requestId="' + args.requestId + '"]').fadeOut(100).delay(100).remove(); 
+            panel.find('.glimpse-history-link[data-requestId="' + args.requestId + '"]').delay(100).fadeIn(); 
+            
+            selectCore(args.requestId);
+        },
+        selectCore = function(requestId) {
+            var panel = elements.panel('history'),
+                detailPanel = panel.find('.glimpse-col-main'), 
+                row = detailPanel.find('tr[data-requestId="' + requestId + '"]');
+            
+            detailPanel.find('.glimpse-head-message').show();
+            detailPanel.find('.selected').removeClass('selected');
+            row.addClass('selected');
+            
+            context.contextRequestId = undefined; 
         }, 
-        selectSession = function (clientName) {
+        selectSession = function(clientName) {
             var panel = elements.panel('history'),
                 item = panel.find('a[data-clientName="' + clientName + '"]'), 
                 clientData = context.currentData[clientName];
@@ -189,9 +193,8 @@
     pubsub.subscribe('action.panel.hiding.history', deactivate); 
     pubsub.subscribe('action.panel.showing.history', activate); 
     pubsub.subscribe('action.data.featched.history', selectFinish); 
-    pubsub.subscribe('action.data.refresh.changed', contextSwitch); 
     pubsub.subscribe('action.data.initial.changed', setup); 
     pubsub.subscribe('trigger.data.context.reset', selectClear);
-    pubsub.subscribe('trigger.shell.clear.history', layoutClear);
+    pubsub.subscribe('trigger.shell.panel.clear.history', layoutClear);
     pubsub.subscribe('trigger.data.context.switch', selectStart);
 })(jQueryGlimpse, glimpse.pubsub, glimpse.util, glimpse.elements, glimpse.data, glimpse.render.engine);
