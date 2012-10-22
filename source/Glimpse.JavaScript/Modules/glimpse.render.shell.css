@@ -12,12 +12,13 @@
 .glimpse table {
     min-width: 0;
 }
-.glimpse a, .glimpse a:hover, .glimpse a:visited {
+.glimpse a, .glimpse a:hover, .glimpse a:visited, .glimpse-link {
     color: #2200C1;
     text-decoration: underline;
     font-weight: normal;
+    cursor: pointer;
 }
-.glimpse a:active {
+.glimpse a:active, .glimpse-link:active {
     color: #c11;
     text-decoration: underline;
     font-weight: normal;

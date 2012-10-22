@@ -82,13 +82,13 @@ var glimpseTest = (function ($) {
                 },
         
                 requests1 = [
-                    { type : 'Session', method : 'Get', duration : 213, browser : 'Chrome 16.0', clientName : '', dateTime : '2011/11/09 12:00:12', requestId : 'ajax0', parentId : '1234', isAjax : true, uri : '/Product'},
-                    { type : 'Server', method : 'Get', duration : 123, browser : 'Chrome 16.0', clientName : '', dateTime : '2011/11/09 12:10:34', requestId : 'ajax1', parentId : '1234', isAjax : true, uri : '/Product/Trip'},
-                    { type : 'Request', method : 'Get', duration : 234, browser : 'Chrome 16.0', clientName : '', dateTime : '2011/11/09 12:12:23', requestId : 'ajax2', parentId : '1234', isAjax : true, uri : '/Product/230'},
-                    { type : 'Trace', method : 'Post', duration : 342, browser : 'Chrome 16.0', clientName : '', dateTime : '2011/11/09 12:17:52', requestId : 'ajax3', parentId : '1234', isAjax : true, uri : '/Product/Add'},
-                    { type : 'Environment', method : 'Post', duration : 211, browser : 'Chrome 16.0', clientName : '', dateTime : '2011/11/24 12:00:35', requestId : 'ajax4', parentId : '1234', isAjax : true, uri : '/Product/Results'},
-                    { type : 'SQL', method : 'Post', duration : 242, browser : 'Chrome 16.0', clientName : '', dateTime : '2011/11/09 12:27:23', requestId : 'ajax5', parentId : '1234', isAjax : true, uri : '/Product/List'},
-                    { type : 'Routes', method : 'Get', duration : 1234, browser : 'Chrome 16.0', clientName : '', dateTime : '2011/11/09 12:29:14', requestId : 'ajax6', parentId : '1234', isAjax : true, uri : '/Product'}
+                    { type : 'Session', method : 'Get', duration : 213, browser : 'Chrome 16.0', clientName : 'IE10', dateTime : '2011/11/09 12:00:12', requestId : 'ajax0', parentId : '1234', isAjax : true, uri : '/Product'},
+                    { type : 'Server', method : 'Get', duration : 123, browser : 'Chrome 16.0', clientName : 'IE10', dateTime : '2011/11/09 12:10:34', requestId : 'ajax1', parentId : '1234', isAjax : true, uri : '/Product/Trip'},
+                    { type : 'Request', method : 'Get', duration : 234, browser : 'Chrome 16.0', clientName : 'IE10', dateTime : '2011/11/09 12:12:23', requestId : 'ajax2', parentId : '1234', isAjax : true, uri : '/Product/230'},
+                    { type : 'Trace', method : 'Post', duration : 342, browser : 'Chrome 16.0', clientName : 'IE10', dateTime : '2011/11/09 12:17:52', requestId : 'ajax3', parentId : '1234', isAjax : true, uri : '/Product/Add'},
+                    { type : 'Environment', method : 'Post', duration : 211, browser : 'Chrome 16.0', clientName : 'IE10', dateTime : '2011/11/24 12:00:35', requestId : 'ajax4', parentId : '1234', isAjax : true, uri : '/Product/Results'},
+                    { type : 'SQL', method : 'Post', duration : 242, browser : 'Chrome 16.0', clientName : 'IE10', dateTime : '2011/11/09 12:27:23', requestId : 'ajax5', parentId : '1234', isAjax : true, uri : '/Product/List'},
+                    { type : 'Routes', method : 'Get', duration : 1234, browser : 'Chrome 16.0', clientName : 'IE10', dateTime : '2011/11/09 12:29:14', requestId : 'ajax6', parentId : '1234', isAjax : true, uri : '/Product'}
                 ],
                 requests2 = [ 
                     { type : 'Session', method : 'Post', duration : 213, browser : 'iPhone 1', clientName : 'iPhone', dateTime : '2011/11/09 12:00:12', requestId : 'iPhone1Ajax', parentId : 'iPhone1', isAjax : true, uri : '/Product'},
