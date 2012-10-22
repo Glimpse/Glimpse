@@ -68,6 +68,8 @@
 /*(import:glimpse.shell.correlation.js)*/
 // glimpse.shell.environment.js
 /*(import:glimpse.shell.environment.js)*/
+// glimpse.shell.path.js
+/*(import:glimpse.shell.path.js)*/
 
 // glimpse.shell.notification.js
 /*(import:glimpse.shell.notification.js)*/
