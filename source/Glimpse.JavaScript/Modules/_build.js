@@ -92,10 +92,10 @@
 // glimpse.paging.engine.traditional.js
 /*(import:glimpse.paging.engine.traditional.js)*/
 
-// glimpse.module.ajax.js
-/*(import:glimpse.module.ajax.js)*/
-// glimpse.module.history.js
-/*(import:glimpse.module.history.js)*/
+// glimpse.ajax.js
+/*(import:glimpse.ajax.js)*/
+// glimpse.history.js
+/*(import:glimpse.history.js)*/
 
 // google-code-prettify.js
 /*(import:google-code-prettify.js)*/

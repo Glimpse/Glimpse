@@ -1852,7 +1852,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
     engine.register('traditional', provider);
 })(jQueryGlimpse, glimpse.util, glimpse.paging.engine, glimpse.paging.engine.util);
 
-// glimpse.module.ajax.js
+// glimpse.ajax.js
 (function($, pubsub, util, elements, data, renderEngine) {
     var context = { resultCount : 0, notice: undefined, isActive: false, contextRequestId: undefined },
         generateAjaxAddress = function() {
@@ -2021,7 +2021,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
     pubsub.subscribe('trigger.shell.panel.clear.ajax', layoutClear);
     pubsub.subscribe('trigger.data.context.switch', selectStart);
 })(jQueryGlimpse, glimpse.pubsub, glimpse.util, glimpse.elements, glimpse.data, glimpse.render.engine);
-// glimpse.module.history.js
+// glimpse.history.js
 (function($, pubsub, util, elements, data, renderEngine) {
     var context = { resultCount : 0, clientName : '', requestId : '', currentData: undefined, notice: undefined, isActive: false, contextRequestId: undefined }, 
         generateHistoryAddress = function() {

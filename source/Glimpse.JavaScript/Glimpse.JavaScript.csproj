@@ -116,8 +116,8 @@
     <Content Include="jquery-1.8.0.min.js" />
     <Content Include="jquery.jsonp-2.4.0.js" />
     <Content Include="Modules\glimpse.shell.path.js" />
-    <Content Include="Modules\glimpse.module.ajax.js" />
-    <Content Include="Modules\glimpse.module.history.js" />
+    <Content Include="Modules\glimpse.ajax.js" />
+    <Content Include="Modules\glimpse.history.js" />
     <Content Include="Modules\glimpse.paging.engine.continuous.js" />
     <Content Include="Modules\glimpse.paging.engine.js" />
     <Content Include="Modules\glimpse.data.js" />
