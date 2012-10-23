@@ -2,19 +2,30 @@ using System;
 
 namespace Glimpse.Core.Extensibility
 {
-    public abstract class LoggerBase:ILogger
+    public abstract class LoggerBase : ILogger
     {
         public abstract void Trace(string message);
+        
         public abstract void Debug(string message);
+        
         public abstract void Info(string message);
+        
         public abstract void Warn(string message);
+        
         public abstract void Error(string message);
+        
         public abstract void Fatal(string message);
+        
         public abstract void Trace(string message, Exception exception);
+        
         public abstract void Debug(string message, Exception exception);
+        
         public abstract void Info(string message, Exception exception);
+        
         public abstract void Warn(string message, Exception exception);
+        
         public abstract void Error(string message, Exception exception);
+        
         public abstract void Fatal(string message, Exception exception);
 
         public void Trace(string messageFormat, params object[] args)

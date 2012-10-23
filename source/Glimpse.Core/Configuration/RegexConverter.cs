@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace Glimpse.Core.Configuration
 {
-    public class RegexConverter:ConfigurationConverterBase
+    public class RegexConverter : ConfigurationConverterBase
     {
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
@@ -20,9 +20,11 @@ namespace Glimpse.Core.Configuration
             var regex = value as Regex;
 
             if (regex != null)
+            {
                 return regex.ToString();
+            }
 
-            return "";
+            return string.Empty;
         }
     }
 }

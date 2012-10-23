@@ -8,14 +8,22 @@ namespace Glimpse.Core.Extensibility
     {
         public CastleInvocationToAlternateImplementationContextAdapter(IInvocation invocation, ILogger logger)
         {
-            if (invocation  == null) throw new ArgumentNullException("invocation");
-            if (logger == null) throw new ArgumentNullException("logger");
+            if (invocation  == null)
+            {
+                throw new ArgumentNullException("invocation");
+            }
+
+            if (logger == null)
+            {
+                throw new ArgumentNullException("logger");
+            }
             
             Invocation = invocation;
             Logger = logger;
         }
 
         public IInvocation Invocation { get; set; }
+        
         public ILogger Logger { get; set; }
 
         public object Proxy
@@ -32,10 +40,12 @@ namespace Glimpse.Core.Extensibility
         {
             get { return Invocation.TargetType; }
         }
+
         public object[] Arguments
         {
             get { return Invocation.Arguments; }
         }
+
         public Type[] GenericArguments
         {
             get { return Invocation.GenericArguments; }

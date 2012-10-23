@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core;
 
 namespace Glimpse.Core.Policy
 {
-    public class UriPolicy: IRuntimePolicy
+    public class UriPolicy : IRuntimePolicy
     {
-        public IList<Regex> UriBlacklist { get; set; }
-
         public UriPolicy()
         {
             UriBlacklist = new List<Regex>();
@@ -18,17 +15,29 @@ namespace Glimpse.Core.Policy
 
         public UriPolicy(IList<Regex> uriBlacklist)
         {
-            if (uriBlacklist == null) throw new ArgumentNullException("uriBlacklist");
+            if (uriBlacklist == null)
+            {
+                throw new ArgumentNullException("uriBlacklist");
+            }
 
             UriBlacklist = uriBlacklist;
         }
+
+        public RuntimeEvent ExecuteOn
+        {
+            get { return RuntimeEvent.BeginRequest; }
+        }
+
+        public IList<Regex> UriBlacklist { get; set; }
 
         public RuntimePolicy Execute(IRuntimePolicyContext policyContext)
         {
             try
             {
-                if (UriBlacklist.Count == 0) 
+                if (UriBlacklist.Count == 0)
+                {
                     return RuntimePolicy.On;
+                }
 
                 var uri = policyContext.RequestMetadata.RequestUri;
 
@@ -44,11 +53,6 @@ namespace Glimpse.Core.Policy
                 policyContext.Logger.Warn(Resources.ExecutePolicyWarning, exception, GetType());
                 return RuntimePolicy.Off;
             }
-        }
-
-        public RuntimeEvent ExecuteOn
-        {
-            get { return RuntimeEvent.BeginRequest; }
         }
     }
 }

@@ -12,7 +12,9 @@ namespace Glimpse.Core.Configuration
             var typeName = data as string;
 
             if (string.IsNullOrEmpty(typeName))
+            {
                 throw new ArgumentException(string.Format("Invalid Type name '{0}'.", typeName));
+            }
 
             return Type.GetType(typeName, true, true);
         }

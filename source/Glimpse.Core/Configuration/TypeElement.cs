@@ -10,7 +10,7 @@ namespace Glimpse.Core.Configuration
         [TypeConverter(typeof(TypeConverter))]
         public Type Type
         {
-            get { return (Type) base["type"]; }
+            get { return (Type)base["type"]; }
             set { base["type"] = value; }
         }
     }

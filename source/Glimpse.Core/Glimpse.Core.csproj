@@ -84,6 +84,7 @@
     <Compile Include="Extensibility\DictionaryDataStoreAdapter.cs" />
     <Compile Include="Extensibility\ExecutionTimer.cs" />
     <Compile Include="Extensibility\IConfigurable.cs" />
+    <Compile Include="Extensibility\IExecutionTimer.cs" />
     <Compile Include="Extensibility\IParameterValueProvider.cs" />
     <Compile Include="Extensibility\IPrivilegedResource.cs" />
     <Compile Include="Extensibility\ITabLayout.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Framework\GlimpseException.cs" />
     <Compile Include="Framework\GlimpseMetadata.cs" />
     <Compile Include="Framework\GlimpseRequest.cs" />
+    <Compile Include="Framework\GlimpseRequestHeaders.cs" />
     <Compile Include="Framework\IDiscoverableCollection.cs" />
     <Compile Include="Framework\IGlimpseConfiguration.cs" />
     <Compile Include="Framework\IGlimpseRuntime.cs" />
@@ -143,6 +145,7 @@
     <Compile Include="Framework\IReadOnlyPersistenceStore.cs" />
     <Compile Include="Framework\IServiceLocator.cs" />
     <Compile Include="Framework\PipelineInspectorContext.cs" />
+    <Compile Include="Framework\PluginMetadata.cs" />
     <Compile Include="Framework\ReflectionDiscoverableCollection.cs" />
     <Compile Include="Framework\ResourceEndpointConfiguration.cs" />
     <Compile Include="Framework\ResourceParameters.cs" />

@@ -3,14 +3,14 @@ using NLog;
 
 namespace Glimpse.Core.Extensibility
 {
-    public class NLogLogger:LoggerBase
+    public class NLogLogger : LoggerBase
     {
-        private Logger Logger { get; set; }
-
         public NLogLogger(Logger logger)
         {
             Logger = logger;
         }
+
+        private Logger Logger { get; set; }
 
         public override void Trace(string message)
         {

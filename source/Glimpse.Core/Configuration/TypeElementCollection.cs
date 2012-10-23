@@ -2,7 +2,7 @@ using System.Configuration;
 
 namespace Glimpse.Core.Configuration
 {
-    [ConfigurationCollection(typeof (TypeElement), CollectionType = ConfigurationElementCollectionType.AddRemoveClearMap)]
+    [ConfigurationCollection(typeof(TypeElement), CollectionType = ConfigurationElementCollectionType.AddRemoveClearMap)]
     public class TypeElementCollection : ConfigurationElementCollection
     {
         protected override ConfigurationElement CreateNewElement()
@@ -12,7 +12,7 @@ namespace Glimpse.Core.Configuration
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((TypeElement) element).Type;
+            return ((TypeElement)element).Type;
         }
     }
 }

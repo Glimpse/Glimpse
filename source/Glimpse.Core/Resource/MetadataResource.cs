@@ -9,7 +9,7 @@ namespace Glimpse.Core.Resource
     public class MetadataResource : IResource
     {
         internal const string InternalName = "glimpse_metadata";
-        private const int CacheDuration = 12960000; //150 days
+        private const int CacheDuration = 12960000; // 150 days
 
         public string Name
         {
@@ -26,7 +26,9 @@ namespace Glimpse.Core.Resource
             var metadata = context.PersistenceStore.GetMetadata();
 
             if (metadata == null)
+            {
                 return new StatusCodeResourceResult(404);
+            }
 
             return new JsonResourceResult(metadata, context.Parameters.GetValueOrDefault(ResourceParameter.Callback.Name), CacheDuration, CacheSetting.Public);
         }

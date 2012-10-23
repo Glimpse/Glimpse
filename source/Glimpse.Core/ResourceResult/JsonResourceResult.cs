@@ -7,25 +7,28 @@ using Glimpse.Core.Framework;
 
 namespace Glimpse.Core.ResourceResult
 {
-    public class JsonResourceResult:IResourceResult
+    public class JsonResourceResult : IResourceResult
     {
-        public object Data { get; set; }
-        public string Callback { get; set; }
-        public string ContentType { get; set; }
-        public long CacheDuration { get; set; }
-        public CacheSetting? CacheSetting { get; set; }
         private const long NoCaching = -1;
 
-        public JsonResourceResult(object data):this(data, null, NoCaching, null){}
+        public JsonResourceResult(object data) : this(data, null, NoCaching, null)
+        {
+        }
 
-        public JsonResourceResult(object data, string callback): this(data, callback, NoCaching, null){}
+        public JsonResourceResult(object data, string callback) : this(data, callback, NoCaching, null)
+        {
+        }
 
-        public JsonResourceResult(object data, long cacheDuration, CacheSetting? cacheSetting):this(data, null, cacheDuration, cacheSetting){}
+        public JsonResourceResult(object data, long cacheDuration, CacheSetting? cacheSetting) : this(data, null, cacheDuration, cacheSetting)
+        {
+        }
 
         public JsonResourceResult(object data, string callback, long cacheDuration, CacheSetting? cacheSetting)
         {
-            
-            if (data == null) throw new ArgumentNullException("data");
+            if (data == null)
+            {
+                throw new ArgumentNullException("data");
+            }
 
             Data = data;
             Callback = callback;
@@ -33,6 +36,16 @@ namespace Glimpse.Core.ResourceResult
             CacheDuration = cacheDuration;
             CacheSetting = cacheSetting;
         }
+
+        public long CacheDuration { get; set; }
+        
+        public CacheSetting? CacheSetting { get; set; }
+
+        public string Callback { get; set; }
+        
+        public string ContentType { get; set; }
+        
+        public object Data { get; set; }
 
         public void Execute(IResourceResultContext context)
         {
@@ -45,7 +58,9 @@ namespace Glimpse.Core.ResourceResult
 
 #if !DEBUG
             if (CacheSetting.HasValue)
+            {
                 frameworkProvider.SetHttpResponseHeader("Cache-Control", string.Format("{0}, max-age={1}", CacheSetting.Value.ToDescription(), CacheDuration));
+            }
 #else
             frameworkProvider.SetHttpResponseHeader("Cache-Control", "no-cache");
 #endif

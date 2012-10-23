@@ -1,8 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Configuration;
-using Glimpse.Core;
-using TypeConverter = Glimpse.Core.Configuration.TypeConverter;
 
 namespace Glimpse.Core.Configuration
 {
@@ -11,35 +9,35 @@ namespace Glimpse.Core.Configuration
         [ConfigurationProperty("logging")]
         public LoggingElement Logging
         {
-            get { return (LoggingElement) base["logging"]; }
+            get { return (LoggingElement)base["logging"]; }
             set { base["logging"] = value; }
         }
 
         [ConfigurationProperty("clientScripts")]
         public DiscoverableCollectionElement ClientScripts
         {
-            get { return (DiscoverableCollectionElement) base["clientScripts"]; }
+            get { return (DiscoverableCollectionElement)base["clientScripts"]; }
             set { base["clientScripts"] = value; }
         }
 
         [ConfigurationProperty("pipelineInspectors")]
         public DiscoverableCollectionElement PipelineInspectors
         {
-            get { return (DiscoverableCollectionElement) base["pipelineInspectors"]; }
+            get { return (DiscoverableCollectionElement)base["pipelineInspectors"]; }
             set { base["pipelineInspectors"] = value; }
         }
 
         [ConfigurationProperty("resources")]
         public DiscoverableCollectionElement Resources
         {
-            get { return (DiscoverableCollectionElement) base["resources"]; }
+            get { return (DiscoverableCollectionElement)base["resources"]; }
             set { base["resources"] = value; }
         }
 
         [ConfigurationProperty("tabs")]
         public DiscoverableCollectionElement Tabs
         {
-            get { return (DiscoverableCollectionElement) base["tabs"]; }
+            get { return (DiscoverableCollectionElement)base["tabs"]; }
             set { base["tabs"] = value; }
         }
 
@@ -53,7 +51,7 @@ namespace Glimpse.Core.Configuration
         [ConfigurationProperty("serializationConverters")]
         public DiscoverableCollectionElement SerializationConverters
         {
-            get { return (DiscoverableCollectionElement) base["serializationConverters"]; }
+            get { return (DiscoverableCollectionElement)base["serializationConverters"]; }
             set { base["serializationConverters"] = value; }
         }
 
@@ -68,7 +66,7 @@ namespace Glimpse.Core.Configuration
         [TypeConverter(typeof(TypeConverter))]
         public Type ServiceLocatorType
         {
-            get { return (Type) base["serviceLocatorType"]; }
+            get { return (Type)base["serviceLocatorType"]; }
             set { base["serviceLocatorType"] = value; }
         }
 

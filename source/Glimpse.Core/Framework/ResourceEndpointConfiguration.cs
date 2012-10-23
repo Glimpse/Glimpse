@@ -8,21 +8,30 @@ namespace Glimpse.Core.Framework
     {
         public string GenerateUriTemplate(IResource resource, string baseUri, ILogger logger)
         {
-            if (resource == null) throw new ArgumentNullException("resource");
-            if (logger == null) throw new ArgumentNullException("logger");
+            if (resource == null)
+            {
+                throw new ArgumentNullException("resource");
+            }
+
+            if (logger == null)
+            {
+                throw new ArgumentNullException("logger");
+            }
 
             string result = null;
             try
             {
                 result = GenerateUriTemplate(resource.Name, baseUri, resource.Parameters, logger);
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 logger.Error(Resources.GenerateUriExecutionError, exception, GetType());
             }
 
             if (result != null)
+            {
                 return result;
+            }
 
             return string.Empty;
         }

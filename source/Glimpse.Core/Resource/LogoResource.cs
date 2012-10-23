@@ -1,6 +1,6 @@
 ﻿namespace Glimpse.Core.Resource
 {
-    public class LogoResource:FileResource
+    public class LogoResource : FileResource
     {
         internal const string InternalName = "glimpse_logo";
 

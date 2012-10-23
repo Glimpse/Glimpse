@@ -3,12 +3,12 @@
 namespace Glimpse.Core.Configuration
 {
     [ConfigurationCollection(typeof(ContentTypeElement), CollectionType = ConfigurationElementCollectionType.AddRemoveClearMap)]
-    public class ContentTypeElementCollection:ConfigurationElementCollection
+    public class ContentTypeElementCollection : ConfigurationElementCollection
     {
         public ContentTypeElementCollection()
         {
-            base.BaseAdd(new ContentTypeElement { ContentType = @"text/html"});
-            base.BaseAdd(new ContentTypeElement { ContentType = @"application/json" });
+            BaseAdd(new ContentTypeElement { ContentType = @"text/html" });
+            BaseAdd(new ContentTypeElement { ContentType = @"application/json" });
         }
 
         protected override ConfigurationElement CreateNewElement()
@@ -18,7 +18,7 @@ namespace Glimpse.Core.Configuration
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((ContentTypeElement) element).ContentType;
+            return ((ContentTypeElement)element).ContentType;
         }
     }
 }

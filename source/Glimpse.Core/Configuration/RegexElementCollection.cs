@@ -3,7 +3,7 @@
 namespace Glimpse.Core.Configuration
 {
     [ConfigurationCollection(typeof(RegexElement), CollectionType = ConfigurationElementCollectionType.AddRemoveClearMap)]
-    public class RegexElementCollection:ConfigurationElementCollection
+    public class RegexElementCollection : ConfigurationElementCollection
     {
         protected override ConfigurationElement CreateNewElement()
         {
@@ -12,7 +12,7 @@ namespace Glimpse.Core.Configuration
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((RegexElement) element).Regex;
+            return ((RegexElement)element).Regex;
         }
     }
 }

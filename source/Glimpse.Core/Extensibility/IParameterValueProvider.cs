@@ -4,6 +4,6 @@ namespace Glimpse.Core.Extensibility
 {
     public interface IParameterValueProvider
     {
-        void OverrideParameterValues(IDictionary<string,string> defaults);
+        void OverrideParameterValues(IDictionary<string, string> defaults);
     }
 }

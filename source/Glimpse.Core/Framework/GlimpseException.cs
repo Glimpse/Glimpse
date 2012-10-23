@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace Glimpse.Core.Framework
 {
-    public class GlimpseException:Exception
+    public class GlimpseException : Exception
     {
         public GlimpseException()
         {

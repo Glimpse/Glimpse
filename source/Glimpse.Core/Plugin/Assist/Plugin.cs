@@ -12,7 +12,9 @@ namespace Glimpse.Core.Plugin.Assist
         public static TabSection Section(this TabSection current, string sectionName, Action<TabSection> section)
         {
             if (section == null)
+            {
                 throw new ArgumentNullException("section", "Section must not be null!");
+            }
 
             var tabSection = new TabSection();
             section.Invoke(tabSection);
@@ -21,11 +23,15 @@ namespace Glimpse.Core.Plugin.Assist
 
         public static TabSection Section(this TabSection current, string sectionName, TabSection section)
         {
-            if (String.IsNullOrEmpty(sectionName))
+            if (string.IsNullOrEmpty(sectionName))
+            {
                 throw new ArgumentException("Section name must not be null or empty!", "sectionName");
+            }
 
             if (section == null)
+            {
                 throw new ArgumentNullException("section", "Section must not be null!");
+            }
 
             current.AddRow()
                 .Column(sectionName).Strong()

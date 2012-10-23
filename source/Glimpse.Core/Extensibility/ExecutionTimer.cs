@@ -3,25 +3,19 @@ using System.Diagnostics;
 
 namespace Glimpse.Core.Extensibility
 {
-    public interface IExecutionTimer
-    {
-        TimerResult<T> Time<T>(Func<T> func);
-        TimerResult Time(Action action);
-        long Start();
-        TimerResult Stop(long offset);
-    }
-
     public class ExecutionTimer : IExecutionTimer
     {
-        internal Stopwatch Stopwatch { get; set; }
-
         public ExecutionTimer(Stopwatch stopwatch)
         {
             if (!stopwatch.IsRunning)
+            {
                 stopwatch.Start();
+            }
 
             Stopwatch = stopwatch;
         }
+
+        internal Stopwatch Stopwatch { get; set; }
 
         public TimerResult<T> Time<T>(Func<T> func)
         {

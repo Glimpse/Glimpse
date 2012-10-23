@@ -7,12 +7,12 @@ using Glimpse.Core.ResourceResult;
 
 namespace Glimpse.Core.Resource
 {
-    public abstract class FileResource:IResource
+    public abstract class FileResource : IResource
     {
-        protected virtual int CacheDuration { get { return 12960000; /*150 days*/ } }
-
         public string ResourceName { get; set; }
+        
         public string ResourceType { get; set; }
+
         public string Name { get; protected set; }
 
         public virtual IEnumerable<ResourceParameterMetadata> Parameters
@@ -20,9 +20,17 @@ namespace Glimpse.Core.Resource
             get { return new[] { ResourceParameter.VersionNumber }; }
         }
 
+        protected virtual int CacheDuration
+        {
+            get { return 12960000; /*150 days*/ }
+        }
+
         public IResourceResult Execute(IResourceContext context)
         {
-            if (context == null) throw new ArgumentNullException("context");
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
 
             var assembly = Assembly.GetExecutingAssembly();
              

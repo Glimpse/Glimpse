@@ -11,8 +11,8 @@ namespace Glimpse.Core.SerializationConverter
         {
             get
             {
-                yield return typeof (DateTime);
-                yield return typeof (DateTime?);
+                yield return typeof(DateTime);
+                yield return typeof(DateTime?);
             }
         }
 
@@ -21,7 +21,9 @@ namespace Glimpse.Core.SerializationConverter
             var converted = date as DateTime?;
 
             if (converted.HasValue)
+            {
                 return converted.Value.ToString(CultureInfo.InvariantCulture);
+            }
 
             return null;
         }

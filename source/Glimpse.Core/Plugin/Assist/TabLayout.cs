@@ -5,14 +5,16 @@ namespace Glimpse.Core.Plugin.Assist
 {
     public class TabLayout
     {
-        private readonly List<TabLayoutRow> _rows = new List<TabLayoutRow>();
+        private readonly List<TabLayoutRow> rows = new List<TabLayoutRow>();
+
+        private TabLayout()
+        {
+        }
 
         public IEnumerable<TabLayoutRow> Rows
         {
-            get { return _rows; }
+            get { return rows; }
         }
-
-        private TabLayout() {}
 
         public static TabLayout Create()
         {
@@ -30,7 +32,7 @@ namespace Glimpse.Core.Plugin.Assist
         {
             var layoutRow = new TabLayoutRow();
             row.Invoke(layoutRow);
-            _rows.Add(layoutRow);
+            rows.Add(layoutRow);
             return this;
         }
     }

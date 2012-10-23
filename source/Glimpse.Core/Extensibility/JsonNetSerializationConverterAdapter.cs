@@ -6,14 +6,14 @@ namespace Glimpse.Core.Extensibility
 {
     public class JsonNetSerializationConverterAdapter : JsonConverter
     {
-            private ISerializationConverter Converter { get; set; }
-
-            public JsonNetSerializationConverterAdapter(ISerializationConverter converter)
+        public JsonNetSerializationConverterAdapter(ISerializationConverter converter)
             {
                 Converter = converter;
             }
 
-            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        private ISerializationConverter Converter { get; set; }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
             {
                 var dict = Converter.Convert(value);
 

@@ -1,6 +1,6 @@
 namespace Glimpse.Core.Resource
 {
-    public class SpriteResource:FileResource
+    public class SpriteResource : FileResource
     {
         internal const string InternalName = "glimpse_sprite";
 

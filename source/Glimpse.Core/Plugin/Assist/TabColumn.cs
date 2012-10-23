@@ -2,14 +2,14 @@ namespace Glimpse.Core.Plugin.Assist
 {
     public class TabColumn
     {
-        public object Data { get; private set; }
-
         public TabColumn(object columnData)
         {
             Data = columnData is TabSection
                 ? columnData.ToTabSection().Build()
                 : columnData;
         }
+
+        public object Data { get; private set; }
 
         internal void OverrideData(object columnData)
         {
