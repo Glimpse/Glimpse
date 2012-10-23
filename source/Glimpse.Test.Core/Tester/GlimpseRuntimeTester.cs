@@ -15,7 +15,7 @@ namespace Glimpse.Test.Core.Tester
         public Mock<ITab> TabMock { get; set; }
         public Mock<IPipelineInspector> PipelineInspectorMock { get; set; }
         public Mock<ISerializer> SerializerMock { get; set; }
-        public Mock<IPersistanceStore> PersistanceStoreMock { get; set; }
+        public Mock<IPersistenceStore> PersistanceStoreMock { get; set; }
         public Mock<ILogger> LoggerMock { get; set; }
         public Mock<IRequestMetadata> RequestMetadataMock { get; set; }
         public Mock<IResource> ResourceMock { get; set; }
@@ -34,7 +34,7 @@ namespace Glimpse.Test.Core.Tester
             TabMock = new Mock<ITab>().Setup();
             PipelineInspectorMock = new Mock<IPipelineInspector>();
             SerializerMock = new Mock<ISerializer>();
-            PersistanceStoreMock = new Mock<IPersistanceStore>();
+            PersistanceStoreMock = new Mock<IPersistenceStore>();
             LoggerMock = new Mock<ILogger>();
             ResourceMock = new Mock<IResource>();
             ResourceResultMock = new Mock<IResourceResult>();
@@ -62,7 +62,7 @@ namespace Glimpse.Test.Core.Tester
             FrameworkProviderMock.Setup(fp => fp.RequestMetadata).Returns(RequestMetadataMock.Object);
 
             configuration.Serializer = SerializerMock.Object;
-            configuration.PersistanceStore = PersistanceStoreMock.Object;
+            configuration.PersistenceStore = PersistanceStoreMock.Object;
             configuration.Logger = LoggerMock.Object;
             configuration.DefaultRuntimePolicy = RuntimePolicy.On;
             configuration.HtmlEncoder = EncoderMock.Object;
@@ -77,7 +77,7 @@ namespace Glimpse.Test.Core.Tester
             var loggerMock = new Mock<ILogger>();
             var clientScripts = new ReflectionDiscoverableCollection<IClientScript>(loggerMock.Object);
             var htmlEncoderMock = new Mock<IHtmlEncoder>();
-            var persistanceStoreMock = new Mock<IPersistanceStore>();
+            var persistanceStoreMock = new Mock<IPersistenceStore>();
             var pipelineInspectors = new ReflectionDiscoverableCollection<IPipelineInspector>(loggerMock.Object);
             var resources = new ReflectionDiscoverableCollection<IResource>(loggerMock.Object);
             var serializerMock = new Mock<ISerializer>();

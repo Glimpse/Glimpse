@@ -57,7 +57,7 @@ namespace Glimpse.Test.Core.Resource
             var output = guid.ToString();
 
             contextMock.Setup(c => c.Parameters.TryGetValue("parentRequestId", out output)).Returns(true);
-            contextMock.Setup(c => c.PersistanceStore.GetByRequestParentId(guid)).Returns(Enumerable.Empty<GlimpseRequest>());
+            contextMock.Setup(c => c.PersistenceStore.GetByRequestParentId(guid)).Returns(Enumerable.Empty<GlimpseRequest>());
 
             var resource = new AjaxResource();
 

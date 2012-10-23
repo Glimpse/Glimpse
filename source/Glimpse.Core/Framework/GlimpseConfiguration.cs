@@ -16,7 +16,7 @@ namespace Glimpse.Core.Framework
             ILogger logger,
             RuntimePolicy defaultRuntimePolicy,
             IHtmlEncoder htmlEncoder,
-            IPersistanceStore persistanceStore,
+            IPersistenceStore persistenceStore,
             ICollection<IPipelineInspector> pipelineInspectors,
             ICollection<IResource> resources,
             ISerializer serializer,
@@ -31,7 +31,7 @@ namespace Glimpse.Core.Framework
             if (endpointConfiguration == null) throw new ArgumentNullException("endpointConfiguration");
             if (logger == null) throw new ArgumentNullException("logger");
             if (htmlEncoder == null) throw new ArgumentNullException("htmlEncoder");
-            if (persistanceStore == null) throw new ArgumentNullException("persistanceStore");
+            if (persistenceStore == null) throw new ArgumentNullException("persistenceStore");
             if (clientScripts == null) throw new ArgumentNullException("clientScripts");
             if (resources == null) throw new ArgumentNullException("pipelineInspectors");
             if (serializer == null) throw new ArgumentNullException("serializer");
@@ -46,7 +46,7 @@ namespace Glimpse.Core.Framework
             ClientScripts = clientScripts;
             FrameworkProvider = frameworkProvider;
             HtmlEncoder = htmlEncoder;
-            PersistanceStore = persistanceStore;
+            PersistenceStore = persistenceStore;
             PipelineInspectors = pipelineInspectors;
             ResourceEndpoint = endpointConfiguration;
             Resources = resources;
@@ -116,17 +116,17 @@ namespace Glimpse.Core.Framework
             }
         }
 
-        private IPersistanceStore persistanceStore;
-        public IPersistanceStore PersistanceStore
+        private IPersistenceStore persistenceStore;
+        public IPersistenceStore PersistenceStore
         {
             get
             {
-                return persistanceStore;
+                return persistenceStore;
             }
             set
             {
                 if (value == null) throw new ArgumentNullException("value");
-                persistanceStore = value;
+                persistenceStore = value;
             }
         }
 

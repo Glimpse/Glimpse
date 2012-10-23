@@ -36,7 +36,7 @@ namespace Glimpse.Core.Resource
                 return new StatusCodeResourceResult(404);
 #endif
 
-            var data = context.PersistanceStore.GetByRequestId(requestId);
+            var data = context.PersistenceStore.GetByRequestId(requestId);
 
             if(data == null)
                 return new StatusCodeResourceResult(404);

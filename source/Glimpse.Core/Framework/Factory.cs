@@ -155,12 +155,12 @@ namespace Glimpse.Core.Framework
             return new AntiXssEncoder();
         }
 
-        public IPersistanceStore InstantiatePersistanceStore()
+        public IPersistenceStore InstantiatePersistanceStore()
         {
-            IPersistanceStore store;
+            IPersistenceStore store;
             if (TrySingleInstanceFromServiceLocators(out store)) return store;
 
-            return new ApplicationPersistanceStore(InstantiateFrameworkProvider().HttpServerStore);
+            return new ApplicationPersistenceStore(InstantiateFrameworkProvider().HttpServerStore);
         }
 
         public ICollection<IPipelineInspector> InstantiatePipelineInspectors()

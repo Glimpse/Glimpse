@@ -6,6 +6,6 @@ namespace Glimpse.Core.Extensibility
     public interface IResourceContext:IContext
     {
         IDictionary<string, string> Parameters { get; }
-        IReadOnlyPersistanceStore PersistanceStore { get; }
+        IReadOnlyPersistenceStore PersistenceStore { get; }
     }
 }

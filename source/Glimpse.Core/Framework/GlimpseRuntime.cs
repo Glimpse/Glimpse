@@ -101,7 +101,7 @@ namespace Glimpse.Core.Framework
             var requestMetadata = frameworkProvider.RequestMetadata;
             if (policy.HasFlag(RuntimePolicy.PersistResults))
             {
-                var persistanceStore = Configuration.PersistanceStore;
+                var persistanceStore = Configuration.PersistenceStore;
 
 
                 var metadata = new GlimpseRequest(requestId, requestMetadata, TabResultsStore, stopwatch.ElapsedMilliseconds);
@@ -181,7 +181,7 @@ namespace Glimpse.Core.Framework
                     try
                     {
                         var resource = resources.First();
-                        var resourceContext = new ResourceContext(parameters.GetParametersFor(resource), Configuration.PersistanceStore, logger);
+                        var resourceContext = new ResourceContext(parameters.GetParametersFor(resource), Configuration.PersistenceStore, logger);
 
                         var privilegedResource = resource as IPrivilegedResource;
 
@@ -354,7 +354,7 @@ namespace Glimpse.Core.Framework
                 resources[resource.Name] = endpoint.GenerateUriTemplate(resource, Configuration.EndpointBaseUri, logger);
             }
 
-            Configuration.PersistanceStore.Save(metadata);
+            Configuration.PersistenceStore.Save(metadata);
         }
 
         private RuntimePolicy GetRuntimePolicy(RuntimeEvent runtimeEvent)

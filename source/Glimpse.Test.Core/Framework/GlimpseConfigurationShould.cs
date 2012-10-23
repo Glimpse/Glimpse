@@ -44,7 +44,7 @@ namespace Glimpse.Test.Core.Framework
             var clientScriptsStub = new List<IClientScript>();
             var loggerMock = new Mock<ILogger>();
             var encoderMock = new Mock<IHtmlEncoder>();
-            var storeMock = new Mock<IPersistanceStore>();
+            var storeMock = new Mock<IPersistenceStore>();
             var inspectorsStub = new LinkedList<IPipelineInspector>();
             var resourcesStub = new LinkedList<IResource>();
             var serializerMock = new Mock<ISerializer>();
@@ -62,7 +62,7 @@ namespace Glimpse.Test.Core.Framework
             Assert.Equal(clientScriptsStub, config.ClientScripts);
             Assert.Equal(loggerMock.Object, config.Logger);
             Assert.Equal(encoderMock.Object, config.HtmlEncoder);
-            Assert.Equal(storeMock.Object, config.PersistanceStore);
+            Assert.Equal(storeMock.Object, config.PersistenceStore);
             Assert.Equal(inspectorsStub, config.PipelineInspectors);
             Assert.Equal(resourcesStub, config.Resources);
             Assert.Equal(serializerMock.Object, config.Serializer);
@@ -161,7 +161,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void PersistanceStoreCannotBeNull()
         {
-            Assert.Throws<ArgumentNullException>(() => Configuration.PersistanceStore = null);
+            Assert.Throws<ArgumentNullException>(() => Configuration.PersistenceStore = null);
         }
 
         [Fact]

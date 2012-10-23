@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Glimpse.Core.Framework
 {
-    public interface IReadOnlyPersistanceStore
+    public interface IReadOnlyPersistenceStore
     {
         GlimpseRequest GetByRequestId(Guid requestId);
         TabResult GetByRequestIdAndTabKey(Guid requestId, string tabKey);

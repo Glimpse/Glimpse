@@ -23,7 +23,7 @@ namespace Glimpse.Core.Resource
 
         public IResourceResult Execute(IResourceContext context)
         {
-            var metadata = context.PersistanceStore.GetMetadata();
+            var metadata = context.PersistenceStore.GetMetadata();
 
             if (metadata == null)
                 return new StatusCodeResourceResult(404);

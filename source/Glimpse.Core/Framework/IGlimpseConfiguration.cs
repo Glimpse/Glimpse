@@ -11,7 +11,7 @@ namespace Glimpse.Core.Framework
         IFrameworkProvider FrameworkProvider { get; }
         IHtmlEncoder HtmlEncoder { get; }
         ILogger Logger { get; }
-        IPersistanceStore PersistanceStore { get; }
+        IPersistenceStore PersistenceStore { get; }
         ICollection<IPipelineInspector> PipelineInspectors { get; }
         ResourceEndpointConfiguration ResourceEndpoint { get; }
         ICollection<IResource> Resources { get; }

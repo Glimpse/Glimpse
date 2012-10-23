@@ -5,7 +5,7 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Framework
 {
-    public class ApplicationPersistanceStore : IPersistanceStore
+    public class ApplicationPersistenceStore : IPersistenceStore
     {
         private IDataStore DataStore { get; set; }
         private GlimpseMetadata Metadata { get; set; }
@@ -13,7 +13,7 @@ namespace Glimpse.Core.Framework
         private const string PersistanceStoreKey = "__GlimpsePersistanceKey";
         private const int BufferSize = 25;
 
-        public ApplicationPersistanceStore(IDataStore dataStore)
+        public ApplicationPersistenceStore(IDataStore dataStore)
         {
             DataStore = dataStore;
 

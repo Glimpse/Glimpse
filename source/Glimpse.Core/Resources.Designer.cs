@@ -241,7 +241,7 @@ namespace Glimpse.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Could not persist metadata with IPersistanceStore of type &apos;{0}&apos;..
+        ///   Looks up a localized string similar to Could not persist metadata with IPersistenceStore of type &apos;{0}&apos;..
         /// </summary>
         internal static string GlimpseRuntimeEndRequesPersistError {
             get {

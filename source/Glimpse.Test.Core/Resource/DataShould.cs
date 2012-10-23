@@ -39,11 +39,11 @@ namespace Glimpse.Test.Core.Resource
         {
             var guid = Guid.Parse("321caff1-f442-4dbb-8c5b-3ed528cde3fd");
             var metadataMock = new Mock<IRequestMetadata>();
-            var persistanceStoreMock = new Mock<IReadOnlyPersistanceStore>();
+            var persistanceStoreMock = new Mock<IReadOnlyPersistenceStore>();
             persistanceStoreMock.Setup(ps => ps.GetByRequestId(guid)).Returns(new GlimpseRequest(guid, metadataMock.Object, new Dictionary<string, TabResult>(), 0));
             var contextMock = new Mock<IResourceContext>();
             contextMock.Setup(c => c.Parameters).Returns(new Dictionary<string, string> { {ResourceParameter.RequestId.Name, guid.ToString()}, {ResourceParameter.Callback.Name, "console.log"} });
-            contextMock.Setup(c => c.PersistanceStore).Returns(persistanceStoreMock.Object);
+            contextMock.Setup(c => c.PersistenceStore).Returns(persistanceStoreMock.Object);
 
             var resource = new RequestResource();
 
@@ -57,11 +57,11 @@ namespace Glimpse.Test.Core.Resource
         {
             var guid = Guid.Parse("321caff1-f442-4dbb-8c5b-3ed528cde3fd");
             var metadataMock = new Mock<IRequestMetadata>();
-            var persistanceStoreMock = new Mock<IReadOnlyPersistanceStore>();
+            var persistanceStoreMock = new Mock<IReadOnlyPersistenceStore>();
             persistanceStoreMock.Setup(ps => ps.GetByRequestId(guid)).Returns(new GlimpseRequest(guid, metadataMock.Object, new Dictionary<string, TabResult>(), 0));
             var contextMock = new Mock<IResourceContext>();
             contextMock.Setup(c => c.Parameters).Returns(new Dictionary<string, string> { { ResourceParameter.RequestId.Name, "Not a real guid" } });
-            contextMock.Setup(c => c.PersistanceStore).Returns(persistanceStoreMock.Object);
+            contextMock.Setup(c => c.PersistenceStore).Returns(persistanceStoreMock.Object);
 
             var resource = new RequestResource();
 
@@ -74,11 +74,11 @@ namespace Glimpse.Test.Core.Resource
         public void ReturnStatusCodeResultWithMissingData()
         {
             var guid = Guid.Parse("321caff1-f442-4dbb-8c5b-3ed528cde3fd");
-            var persistanceStoreMock = new Mock<IReadOnlyPersistanceStore>();
+            var persistanceStoreMock = new Mock<IReadOnlyPersistenceStore>();
             persistanceStoreMock.Setup(ps => ps.GetByRequestId(guid)).Returns<GlimpseRequest>(null);
             var contextMock = new Mock<IResourceContext>();
             contextMock.Setup(c => c.Parameters).Returns(new Dictionary<string, string> { { ResourceParameter.RequestId.Name, guid.ToString() } });
-            contextMock.Setup(c => c.PersistanceStore).Returns(persistanceStoreMock.Object);
+            contextMock.Setup(c => c.PersistenceStore).Returns(persistanceStoreMock.Object);
 
             var resource = new RequestResource();
 
