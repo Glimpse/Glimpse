@@ -1,7 +1,7 @@
+using System.Collections.Generic;
 using System.Linq;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.Core.Extensibility;
-using System.Collections.Generic;
 using Glimpse.Mvc.AlternateImplementation;
 using Glimpse.Mvc.Model;
 
@@ -9,6 +9,11 @@ namespace Glimpse.Mvc.Tab
 {
     public class Views : AspNetTab, ITabSetup
     {
+        public override string Name
+        {
+            get { return "Views"; }
+        }
+
         public override object GetData(ITabContext context)
         {
             var tabStore = context.TabStore;
@@ -17,19 +22,16 @@ namespace Glimpse.Mvc.Tab
             var result = new List<ViewsModel>();
 
             if (viewEngineFindViewsMessages == null || viewRenderMessages == null)
+            {
                 return result;
+            }
 
             foreach (var findView in viewEngineFindViewsMessages)
             {
-                result.Add(new ViewsModel(findView, viewRenderMessages.SingleOrDefault(r => r.Mixin.ViewEngineFindCallId == findView.Id)));
+                result.Add(new ViewsModel(findView, viewRenderMessages.SingleOrDefault(r => r.ViewCorrelation.ViewEngineFindCallId == findView.Id)));
             }
 
             return result;
-        }
-
-        public override string Name
-        {
-            get { return "Views"; }
         }
 
         public void Setup(ITabSetupContext context)
@@ -46,7 +48,9 @@ namespace Glimpse.Mvc.Tab
             var key = typeof(T).FullName;
 
             if (!tabStore.Contains(key))
+            {
                 tabStore.Set(key, new List<T>());
+            }
 
             var messages = tabStore.Get<IList<T>>(key);
 

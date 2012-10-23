@@ -3,7 +3,7 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Mvc.PipelineInspector
 {
-    public class DependencyInjectionInspector:IPipelineInspector
+    public class DependencyInjectionInspector : IPipelineInspector
     {
         public void Setup(IPipelineInspectorContext context)
         {

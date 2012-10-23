@@ -13,9 +13,9 @@ namespace Glimpse.Mvc.Message
         }
 
         public string EventName { get; set; }
+        
         public string EventCategory { get; set; }
-        private TimerResult Result { get; set; }
-
+        
         public long Offset
         {
             get { return Result.Offset; }
@@ -25,5 +25,7 @@ namespace Glimpse.Mvc.Message
         {
             get { return Result.Duration; }
         }
+
+        private TimerResult Result { get; set; }
     }
 }

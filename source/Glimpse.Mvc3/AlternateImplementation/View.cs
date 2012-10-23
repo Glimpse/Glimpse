@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Web.Mvc;
-using Glimpse.Core.Extensibility;
 using Glimpse.Core;
+using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
     public class View
     {
-        private View(){}
+        private View()
+        {
+        }
 
         public static IEnumerable<IAlternateImplementation<IView>> AllMethods(IMessageBroker messageBroker, Func<IExecutionTimer> timerStrategy, Func<RuntimePolicy> runtimePolicyStrategy)
         {
@@ -20,18 +22,21 @@ namespace Glimpse.Mvc.AlternateImplementation
 
         public class Render : IAlternateImplementation<IView>
         {
-            public IMessageBroker MessageBroker { get; set; }
-            public Func<IExecutionTimer> TimerStrategy { get; set; }
-            public MethodInfo MethodToImplement { get; private set; }
-            public Func<RuntimePolicy> RuntimePolicyStrategy { get; set; }
-
             public Render(IMessageBroker messageBroker, Func<IExecutionTimer> timerStrategy, Func<RuntimePolicy> runtimePolicyStrategy)
             {
                 MessageBroker = messageBroker;
                 TimerStrategy = timerStrategy;
-                MethodToImplement = typeof (IView).GetMethod("Render");
+                MethodToImplement = typeof(IView).GetMethod("Render");
                 RuntimePolicyStrategy = runtimePolicyStrategy;
             }
+
+            public IMessageBroker MessageBroker { get; set; }
+            
+            public Func<IExecutionTimer> TimerStrategy { get; set; }
+            
+            public MethodInfo MethodToImplement { get; private set; }
+            
+            public Func<RuntimePolicy> RuntimePolicyStrategy { get; set; }
 
             public void NewImplementation(IAlternateImplementationContext context)
             {
@@ -43,64 +48,47 @@ namespace Glimpse.Mvc.AlternateImplementation
 
                 var input = new Arguments(context.Arguments);
 
-                //TODO: This is where we could use writer.Write calls to inject HTML comments
+                //// TODO: This is where we could use writer.Write calls to inject HTML comments
 
                 var timer = TimerStrategy();
                 var timing = timer.Time(context.Proceed);
 
-                var mixin = context.Proxy as IMixin;
+                var mixin = context.Proxy as IViewCorrelation;
 
                 MessageBroker.Publish(new Message(input, timing, context.TargetType, mixin));
-                MessageBroker.Publish(new TimerResultMessage(timing, "Render View " + mixin.ViewName, "ASP.NET MVC"));//TODO: Clean this up
+                MessageBroker.Publish(new TimerResultMessage(timing, "Render View " + mixin.ViewName, "ASP.NET MVC")); // TODO: Clean this up
             }
 
             public class Arguments
             {
-                public Arguments(object [] arguments)
+                public Arguments(object[] arguments)
                 {
                     ViewContext = (ViewContext)arguments[0];
-                    Writer = (TextWriter) arguments[1];
+                    Writer = (TextWriter)arguments[1];
                 }
 
                 public ViewContext ViewContext { get; set; }
+                
                 public TextWriter Writer { get; set; }
             }
 
             public class Message
             {
-                public Message(Arguments input, TimerResult timing, Type baseType, IMixin mixin)
+                public Message(Arguments input, TimerResult timing, Type baseType, IViewCorrelation viewCorrelation)
                 {
                     Input = input;
                     Timing = timing;
                     BaseType = baseType;
-                    Mixin = mixin;
+                    ViewCorrelation = viewCorrelation;
                 }
 
                 public Arguments Input { get; set; }
+               
                 public TimerResult Timing { get; set; }
+                
                 public Type BaseType { get; set; }
-                public IMixin Mixin { get; set; }
-            }
-
-            public interface IMixin
-            {
-                string ViewName { get; }
-                bool IsPartial { get; }
-                Guid ViewEngineFindCallId { get; }
-            }
-
-            public class Mixin : IMixin
-            {
-                public Mixin(string viewName, bool isPartial, Guid viewEngineFindCallId)
-                {
-                    ViewName = viewName;
-                    IsPartial = isPartial;
-                    ViewEngineFindCallId = viewEngineFindCallId;
-                }
-
-                public string ViewName { get; set; }
-                public bool IsPartial { get; set; }
-                public Guid ViewEngineFindCallId { get; set; }
+                
+                public IViewCorrelation ViewCorrelation { get; set; }
             }
         }
     }

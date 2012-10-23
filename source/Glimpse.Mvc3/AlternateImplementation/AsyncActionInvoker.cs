@@ -9,7 +9,7 @@ using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public abstract class AsyncActionInvoker:ActionInvoker
+    public abstract class AsyncActionInvoker : ActionInvoker
     {
         protected AsyncActionInvoker(Func<RuntimePolicy> runtimePolicyStrategy, Func<IExecutionTimer> timerStrategy, IMessageBroker messageBroker) : base(runtimePolicyStrategy, timerStrategy, messageBroker)
         {
@@ -24,7 +24,7 @@ namespace Glimpse.Mvc.AlternateImplementation
 
         public class BeginInvokeActionMethod : AsyncActionInvoker, IAlternateImplementation<AsyncControllerActionInvoker>
         {
-            public BeginInvokeActionMethod(Func<RuntimePolicy> runtimePolicyStrategy, Func<IExecutionTimer> timerStrategy, IMessageBroker messageBroker): base(runtimePolicyStrategy, timerStrategy, messageBroker)
+            public BeginInvokeActionMethod(Func<RuntimePolicy> runtimePolicyStrategy, Func<IExecutionTimer> timerStrategy, IMessageBroker messageBroker) : base(runtimePolicyStrategy, timerStrategy, messageBroker)
             {
             }
 
@@ -35,14 +35,14 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public void NewImplementation(IAlternateImplementationContext context)
             {
-                //BeginInvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary<string, object> parameters, AsyncCallback callback, object state)
+                // BeginInvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary<string, object> parameters, AsyncCallback callback, object state)
                 if (RuntimePolicyStrategy() == RuntimePolicy.Off)
                 {
                     context.Proceed();
                     return;
                 }
 
-                var state = (IActionInvokerState) context.Proxy;
+                var state = (IActionInvokerState)context.Proxy;
                 var timer = TimerStrategy();
                 state.Arguments = new InvokeActionMethod.Arguments(context.Arguments);
                 state.Offset = timer.Start();
@@ -52,7 +52,7 @@ namespace Glimpse.Mvc.AlternateImplementation
 
         public class EndInvokeActionMethod : AsyncActionInvoker, IAlternateImplementation<AsyncControllerActionInvoker>
         {
-            public EndInvokeActionMethod(Func<RuntimePolicy> runtimePolicyStrategy, Func<IExecutionTimer> timerStrategy, IMessageBroker messageBroker): base(runtimePolicyStrategy, timerStrategy, messageBroker)
+            public EndInvokeActionMethod(Func<RuntimePolicy> runtimePolicyStrategy, Func<IExecutionTimer> timerStrategy, IMessageBroker messageBroker) : base(runtimePolicyStrategy, timerStrategy, messageBroker)
             {
             }
 
@@ -70,28 +70,17 @@ namespace Glimpse.Mvc.AlternateImplementation
                 }
 
                 context.Proceed();
-                var state = (IActionInvokerState) context.Proxy;
+                var state = (IActionInvokerState)context.Proxy;
                 var timer = TimerStrategy();
                 var timerResult = timer.Stop(state.Offset);
 
-                MessageBroker.Publish(new InvokeActionMethod.Message(state.Arguments, (ActionResult) context.ReturnValue));
-                var eventName = string.Format("{0}.{1}()",
-                                              state.Arguments.ActionDescriptor.ControllerDescriptor.ControllerName,
-                                              state.Arguments.ActionDescriptor.ActionName);
-                MessageBroker.Publish(new TimerResultMessage(timerResult, eventName, "ASP.NET MVC")); //TODO: This should be abstracted
+                MessageBroker.Publish(new InvokeActionMethod.Message(state.Arguments, (ActionResult)context.ReturnValue));
+                var eventName = string.Format(
+                    "{0}.{1}()",
+                    state.Arguments.ActionDescriptor.ControllerDescriptor.ControllerName,
+                    state.Arguments.ActionDescriptor.ActionName);
+                MessageBroker.Publish(new TimerResultMessage(timerResult, eventName, "ASP.NET MVC")); // TODO: This should be abstracted
             }
-        }
-
-        public interface IActionInvokerState
-        {
-            long Offset { get; set; }
-            InvokeActionMethod.Arguments Arguments { get; set; }
-        }
-
-        public class ActionInvokerState:IActionInvokerState
-        {
-            public long Offset { get; set; }
-            public InvokeActionMethod.Arguments Arguments { get; set; }
         }
     }
 }

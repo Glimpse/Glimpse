@@ -10,14 +10,15 @@ namespace Glimpse.Mvc.AlternateImplementation
 {
     public abstract class DependencyResolver
     {
-        public Func<RuntimePolicy> RuntimePolicyStrategy { get; set; }
-        public IMessageBroker MessageBroker { get; set; }
-
         protected DependencyResolver(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker)
         {
             RuntimePolicyStrategy = runtimePolicyStrategy;
             MessageBroker = messageBroker;
         }
+
+        public Func<RuntimePolicy> RuntimePolicyStrategy { get; set; }
+
+        public IMessageBroker MessageBroker { get; set; }
 
         public static IEnumerable<IAlternateImplementation<IDependencyResolver>> AllMethods(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker)
         {
@@ -27,19 +28,26 @@ namespace Glimpse.Mvc.AlternateImplementation
 
         public class GetService : DependencyResolver, IAlternateImplementation<IDependencyResolver>
         {
-            public GetService(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker):base(runtimePolicyStrategy, messageBroker){}
+            public GetService(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker) : base(runtimePolicyStrategy, messageBroker)
+            {
+            }
 
-            public MethodInfo MethodToImplement { get { return typeof (IDependencyResolver).GetMethod("GetService"); }}
+            public MethodInfo MethodToImplement
+            {
+                get { return typeof(IDependencyResolver).GetMethod("GetService"); }
+            }
             
             public void NewImplementation(IAlternateImplementationContext context)
             {
                 context.Proceed();
 
                 if (RuntimePolicyStrategy() == RuntimePolicy.Off)
+                {
                     return;
+                }
 
                 var resolvedObject = context.ReturnValue;
-                var message = new Message((Type) context.Arguments[0], resolvedObject);
+                var message = new Message((Type)context.Arguments[0], resolvedObject);
                 MessageBroker.Publish(message);
             }
 
@@ -57,28 +65,34 @@ namespace Glimpse.Mvc.AlternateImplementation
                 }
 
                 public Type ServiceType { get; set; }
+                
                 public Type ResolvedType { get; set; }
+                
                 public bool IsResolved { get; set; }
             }
         }
 
-
-        public class GetServices:DependencyResolver, IAlternateImplementation<IDependencyResolver>
+        public class GetServices : DependencyResolver, IAlternateImplementation<IDependencyResolver>
         {
-            public GetServices(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker):base(runtimePolicyStrategy, messageBroker)
+            public GetServices(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker) : base(runtimePolicyStrategy, messageBroker)
             {
             }
 
-            public MethodInfo MethodToImplement { get { return typeof (IDependencyResolver).GetMethod("GetServices"); } }
+            public MethodInfo MethodToImplement
+            {
+                get { return typeof(IDependencyResolver).GetMethod("GetServices"); }
+            }
 
             public void NewImplementation(IAlternateImplementationContext context)
             {
                 context.Proceed();
 
                 if (RuntimePolicyStrategy() == RuntimePolicy.Off)
+                {
                     return;
+                }
 
-                var message = new Message((Type) context.Arguments[0], (IEnumerable<object>) context.ReturnValue);
+                var message = new Message((Type)context.Arguments[0], (IEnumerable<object>)context.ReturnValue);
                 MessageBroker.Publish(message);
             }
 
@@ -96,7 +110,9 @@ namespace Glimpse.Mvc.AlternateImplementation
                 }
 
                 public Type ServiceType { get; set; }
+                
                 public IEnumerable<Type> ResolvedTypes { get; set; }
+                
                 public bool IsResolved { get; set; }
             }
         }

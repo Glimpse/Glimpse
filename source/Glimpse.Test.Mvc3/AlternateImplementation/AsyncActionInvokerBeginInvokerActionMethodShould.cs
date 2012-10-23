@@ -53,7 +53,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             var implementation = new AsyncActionInvoker.BeginInvokeActionMethod(runtimePolicyStrategy, () => new Mock<IExecutionTimer>().Object, new Mock<IMessageBroker>().Object);
 
             var contextMock = new Mock<IAlternateImplementationContext>();
-            var stateMock = new Mock<AsyncActionInvoker.IActionInvokerState>();
+            var stateMock = new Mock<IActionInvokerState>();
             contextMock.Setup(c => c.Proxy).Returns(stateMock.Object);
             contextMock.Setup(c => c.Arguments).Returns(new object[]
                                                             {

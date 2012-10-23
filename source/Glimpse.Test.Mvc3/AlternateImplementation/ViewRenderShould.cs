@@ -43,7 +43,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
 
             var contextMock = new Mock<IAlternateImplementationContext>();
             contextMock.Setup(c => c.Arguments).Returns(GetArguments());
-            var mixinMock = new Mock<View.Render.IMixin>();
+            var mixinMock = new Mock<IViewCorrelation>();
             mixinMock.Setup(m => m.ViewName).Returns("astring");
             contextMock.Setup(c => c.Proxy).Returns(mixinMock.Object);
             

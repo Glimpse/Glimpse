@@ -22,8 +22,6 @@ namespace Glimpse.Mvc.PipelineInspector
 
                 logger.Debug(Resources.ControllerFactorySetup, controllerFactory.GetType());
             }
-
-
         }
 
         public void Teardown(IPipelineInspectorContext context)

@@ -1,32 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
 using System.Web.Routing;
-using Glimpse.Core.Extensibility;
 using Glimpse.Core;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
     public abstract class ControllerFactory
     {
-        public Func<RuntimePolicy> RuntimePolicyStrategy { get; set; }
-        public IMessageBroker MessageBroker { get; set; }
-        public IProxyFactory ProxyFactory { get; set; }
-        public Func<IExecutionTimer> TimerStrategy { get; set; }
-
-        public static IEnumerable<IAlternateImplementation<IControllerFactory>> AllMethods(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker, IProxyFactory proxyFactory, Func<IExecutionTimer> timerStrategy)
-        {
-            yield return new CreateController(runtimePolicyStrategy, messageBroker, proxyFactory, timerStrategy);
-        }
-
         protected ControllerFactory(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker, IProxyFactory proxyFactory, Func<IExecutionTimer> timerStrategy)
         {
-            if (runtimePolicyStrategy == null) throw new ArgumentNullException("runtimePolicyStrategy");
-            if (messageBroker == null) throw new ArgumentNullException("messageBroker");
-            if (proxyFactory == null) throw new ArgumentNullException("proxyFactory");
-            if (timerStrategy == null) throw new ArgumentNullException("timerStrategy");
+            if (runtimePolicyStrategy == null)
+            {
+                throw new ArgumentNullException("runtimePolicyStrategy");
+            }
+
+            if (messageBroker == null)
+            {
+                throw new ArgumentNullException("messageBroker");
+            }
+
+            if (proxyFactory == null)
+            {
+                throw new ArgumentNullException("proxyFactory");
+            }
+
+            if (timerStrategy == null)
+            {
+                throw new ArgumentNullException("timerStrategy");
+            }
 
             RuntimePolicyStrategy = runtimePolicyStrategy;
             MessageBroker = messageBroker;
@@ -34,10 +40,26 @@ namespace Glimpse.Mvc.AlternateImplementation
             TimerStrategy = timerStrategy;
         }
 
+        public Func<RuntimePolicy> RuntimePolicyStrategy { get; set; }
+        
+        public IMessageBroker MessageBroker { get; set; }
+        
+        public IProxyFactory ProxyFactory { get; set; }
+        
+        public Func<IExecutionTimer> TimerStrategy { get; set; }
+
+        public static IEnumerable<IAlternateImplementation<IControllerFactory>> AllMethods(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker, IProxyFactory proxyFactory, Func<IExecutionTimer> timerStrategy)
+        {
+            yield return new CreateController(runtimePolicyStrategy, messageBroker, proxyFactory, timerStrategy);
+        }
+
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "iController name is allowed in this usage.")]
         protected void ProxyActionInvoker(IController iController)
         {
             if (iController == null)
+            {
                 return;
+            }
 
             var proxyFactory = ProxyFactory;
 
@@ -47,7 +69,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 var actionInvoker = asyncController.ActionInvoker;
                 if (proxyFactory.IsProxyable(actionInvoker))
                 {
-                    var proxiedAsyncInvoker = proxyFactory.CreateProxy(actionInvoker as AsyncControllerActionInvoker, AsyncActionInvoker.AllMethods(RuntimePolicyStrategy, TimerStrategy, MessageBroker), new AsyncActionInvoker.ActionInvokerState());
+                    var proxiedAsyncInvoker = proxyFactory.CreateProxy(actionInvoker as AsyncControllerActionInvoker, AsyncActionInvoker.AllMethods(RuntimePolicyStrategy, TimerStrategy, MessageBroker), new ActionInvokerState());
                     asyncController.ActionInvoker = proxiedAsyncInvoker;
                 }
 
@@ -65,21 +87,18 @@ namespace Glimpse.Mvc.AlternateImplementation
 
                     controller.ActionInvoker = proxiedActionInvoker;
                 }
-
-                return;
             }
         }
 
-
         public class CreateController : ControllerFactory, IAlternateImplementation<IControllerFactory>
         {
-            public CreateController(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker, IProxyFactory proxyFactory, Func<IExecutionTimer> timerStrategy): base(runtimePolicyStrategy, messageBroker, proxyFactory, timerStrategy)
+            public CreateController(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker, IProxyFactory proxyFactory, Func<IExecutionTimer> timerStrategy) : base(runtimePolicyStrategy, messageBroker, proxyFactory, timerStrategy)
             {
             }
 
             public MethodInfo MethodToImplement
             {
-                get { return typeof (IControllerFactory).GetMethod("CreateController"); }
+                get { return typeof(IControllerFactory).GetMethod("CreateController"); }
             }
 
             public void NewImplementation(IAlternateImplementationContext context)
@@ -87,7 +106,9 @@ namespace Glimpse.Mvc.AlternateImplementation
                 context.Proceed();
 
                 if (RuntimePolicyStrategy() == RuntimePolicy.Off)
+                {
                     return;
+                }
 
                 var controller = context.ReturnValue as Controller;
 
@@ -102,11 +123,12 @@ namespace Glimpse.Mvc.AlternateImplementation
             {
                 public Arguments(object[] arguments)
                 {
-                    RequestContext = (RequestContext) arguments[0];
-                    ControllerName = (string) arguments[1];
+                    RequestContext = (RequestContext)arguments[0];
+                    ControllerName = (string)arguments[1];
                 }
 
                 public RequestContext RequestContext { get; set; }
+                
                 public string ControllerName { get; set; }
             }
 
@@ -126,8 +148,11 @@ namespace Glimpse.Mvc.AlternateImplementation
                 }
 
                 public bool IsControllerResolved { get; set; }
+                
                 public Type ControllerType { get; set; }
+                
                 public RouteData RouteData { get; set; }
+                
                 public string ControllerName { get; set; }
             }
         }

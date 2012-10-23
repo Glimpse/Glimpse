@@ -2,22 +2,14 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Web.Mvc;
-using Glimpse.Core.Extensibility;
 using Glimpse.Core;
+using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
     public abstract class ViewEngine
     {
-        public IMessageBroker MessageBroker { get; set; }
-        public IProxyFactory ProxyFactory { get; set; }
-        public ILogger Logger { get; set; }
-        public Func<IExecutionTimer> TimerStrategy { get; set; }
-        public Func<RuntimePolicy> RuntimePolicyStrategy { get; set; }
-        public bool IsPartial { get; set; }
-        public MethodInfo MethodToImplement { get; private set; }
-
         protected ViewEngine(IMessageBroker messageBroker, IProxyFactory proxyFactory, ILogger logger, Func<IExecutionTimer> timerStrategy, Func<RuntimePolicy> runtimePolicyStrategy)
         {
             MessageBroker = messageBroker;
@@ -27,20 +19,33 @@ namespace Glimpse.Mvc.AlternateImplementation
             RuntimePolicyStrategy = runtimePolicyStrategy;
         }
 
+        public IMessageBroker MessageBroker { get; set; }
+        
+        public IProxyFactory ProxyFactory { get; set; }
+        
+        public ILogger Logger { get; set; }
+        
+        public Func<IExecutionTimer> TimerStrategy { get; set; }
+        
+        public Func<RuntimePolicy> RuntimePolicyStrategy { get; set; }
+        
+        public bool IsPartial { get; set; }
+        
+        public MethodInfo MethodToImplement { get; private set; }
+
         public static IEnumerable<IAlternateImplementation<IViewEngine>> AllMethods(IMessageBroker messageBroker, IProxyFactory proxyFactory, ILogger logger, Func<IExecutionTimer> timerStrategy, Func<RuntimePolicy> runtimePolicyStrategy)
         {
             yield return new FindViews(messageBroker, proxyFactory, logger, timerStrategy, runtimePolicyStrategy, false);
             yield return new FindViews(messageBroker, proxyFactory, logger, timerStrategy, runtimePolicyStrategy, true);
         }
 
-        //This class is the alternate implementation for both .FindView() AND .FindPartialView()
+        // This class is the alternate implementation for both .FindView() AND .FindPartialView()
         public class FindViews : ViewEngine, IAlternateImplementation<IViewEngine>
         {
-
-            public FindViews(IMessageBroker messageBroker, IProxyFactory proxyFactory, ILogger logger, Func<IExecutionTimer> timerStrategy, Func<RuntimePolicy> runtimePolicyStrategy, bool isPartial):base(messageBroker, proxyFactory, logger, timerStrategy, runtimePolicyStrategy)
+            public FindViews(IMessageBroker messageBroker, IProxyFactory proxyFactory, ILogger logger, Func<IExecutionTimer> timerStrategy, Func<RuntimePolicy> runtimePolicyStrategy, bool isPartial) : base(messageBroker, proxyFactory, logger, timerStrategy, runtimePolicyStrategy)
             {
                 IsPartial = isPartial;
-                MethodToImplement = typeof (IViewEngine).GetMethod(IsPartial ? "FindPartialView" : "FindView");
+                MethodToImplement = typeof(IViewEngine).GetMethod(IsPartial ? "FindPartialView" : "FindView");
             }
 
             public void NewImplementation(IAlternateImplementationContext context)
@@ -64,7 +69,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 output = ProxyOutput(output, context, input.ViewName, IsPartial, id);
 
                 MessageBroker.Publish(new Message(input, output, timing, context.TargetType, IsPartial, id));
-                MessageBroker.Publish(new TimerResultMessage(timing, "Find View " + input.ViewName, "ASP.NET MVC"));//TODO: Clean this up
+                MessageBroker.Publish(new TimerResultMessage(timing, "Find View " + input.ViewName, "ASP.NET MVC")); // TODO: Clean this up
             }
 
             private ViewEngineResult ProxyOutput(ViewEngineResult viewEngineResult, IAlternateImplementationContext context, string viewName, bool isPartial, Guid id)
@@ -75,9 +80,10 @@ namespace Glimpse.Mvc.AlternateImplementation
 
                     if (ProxyFactory.IsProxyable(originalView))
                     {
-                        var newView = ProxyFactory.CreateProxy(originalView,
-                                                               View.AllMethods(MessageBroker, TimerStrategy, RuntimePolicyStrategy),
-                                                               new View.Render.Mixin(viewName, isPartial, id));
+                        var newView = ProxyFactory.CreateProxy(
+                            originalView,
+                            View.AllMethods(MessageBroker, TimerStrategy, RuntimePolicyStrategy),
+                            new ViewCorrelation(viewName, isPartial, id));
 
                         Logger.Info(Resources.FindViewsProxyOutputReplacedIView, originalView.GetType(), viewName);
 
@@ -86,17 +92,28 @@ namespace Glimpse.Mvc.AlternateImplementation
                         return result;
                     }
                 }
+
                 return viewEngineResult;
             }
 
             public class Message
             {
-                public Message(Arguments input, ViewEngineResult output, TimerResult timing, Type baseType,
-                               bool isPartial, Guid id)
+                public Message(Arguments input, ViewEngineResult output, TimerResult timing, Type baseType, bool isPartial, Guid id)
                 {
-                    if (input == null) throw new ArgumentNullException("input");
-                    if (output == null) throw new ArgumentNullException("output");
-                    if (timing == null) throw new ArgumentNullException("timing");
+                    if (input == null)
+                    {
+                        throw new ArgumentNullException("input");
+                    }
+
+                    if (output == null)
+                    {
+                        throw new ArgumentNullException("output");
+                    }
+
+                    if (timing == null)
+                    {
+                        throw new ArgumentNullException("timing");
+                    }
 
                     Input = input;
                     Output = output;
@@ -108,11 +125,15 @@ namespace Glimpse.Mvc.AlternateImplementation
                 }
 
                 public Arguments Input { get; set; }
+                
                 public ViewEngineResult Output { get; set; }
+                
                 public TimerResult Timing { get; set; }
+                
                 public Type BaseType { get; set; }
 
                 public bool IsPartial { get; set; }
+                
                 public Guid Id { get; set; }
 
                 public bool IsFound
@@ -125,15 +146,18 @@ namespace Glimpse.Mvc.AlternateImplementation
             {
                 public Arguments(object[] arguments, bool isPartial)
                 {
-                    ControllerContext = (ControllerContext) arguments[0];
-                    ViewName = (string) arguments[1];
-                    UseCache = isPartial ? (bool) arguments[2] : (bool) arguments[3];
-                    MasterName = isPartial ? string.Empty : (string) arguments[2];
+                    ControllerContext = (ControllerContext)arguments[0];
+                    ViewName = (string)arguments[1];
+                    UseCache = isPartial ? (bool)arguments[2] : (bool)arguments[3];
+                    MasterName = isPartial ? string.Empty : (string)arguments[2];
                 }
 
                 public ControllerContext ControllerContext { get; set; }
+                
                 public string ViewName { get; set; }
+                
                 public string MasterName { get; set; }
+                
                 public bool UseCache { get; set; }
             }
         }

@@ -35,7 +35,10 @@ namespace Glimpse.Mvc.PipelineInspector
 
         public void Teardown(IPipelineInspectorContext context)
         {
-            if (OriginalViewEngines == null) return;
+            if (OriginalViewEngines == null)
+            {
+                return;
+            }
 
             var engines = ViewEngines.Engines;
 
