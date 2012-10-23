@@ -17,14 +17,16 @@ namespace Glimpse.AspNet.Extensions
         public static object ToTable(this IEnumerable<RequestModel.QueryStringParameter> parameters)
         {
             var result = new List<string[]> { new[] { "Name", "Value" } };
-            result.AddRange(parameters.Select(parameter => new[]{ parameter.Key, parameter.Value }));
+            result.AddRange(parameters.Select(parameter => new[] { parameter.Key, parameter.Value }));
             return result;
         }
 
         public static object OrNull(this Uri uri)
         {
             if (uri == null)
+            {
                 return null;
+            }
 
             return uri.ToString();
         }

@@ -3,16 +3,20 @@ using Glimpse.Core.Framework;
 
 namespace Glimpse.AspNet
 {
-    public class AspNetServiceLocator:IServiceLocator
+    public class AspNetServiceLocator : IServiceLocator
     {
-        public T GetInstance<T>() where T:class
+        public T GetInstance<T>() where T : class
         {
-            var tType = typeof (T);
-            if (tType == typeof(IFrameworkProvider))
+            var type = typeof(T);
+            if (type == typeof(IFrameworkProvider))
+            {
                 return new AspNetFrameworkProvider() as T;
+            }
 
-            if (tType == typeof(ResourceEndpointConfiguration))
+            if (type == typeof(ResourceEndpointConfiguration))
+            {
                 return new HttpHandlerEndpointConfiguration() as T;
+            }
 
             return null;
         }

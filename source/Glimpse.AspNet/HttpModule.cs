@@ -3,9 +3,8 @@ using Glimpse.Core.Framework;
 
 namespace Glimpse.AspNet
 {
-    public class HttpModule:IHttpModule
+    public class HttpModule : IHttpModule
     {
-
         public void Init(HttpApplication httpApplication)
         {
             var runtime = GetRuntime(new HttpApplicationStateWrapper(httpApplication.Application));
@@ -19,18 +18,9 @@ namespace Glimpse.AspNet
             }
         }
 
-        private void EndSessionAccess(HttpContextBase httpContext)
+        public void Dispose()
         {
-            var runtime = GetRuntime(httpContext.Application);
-
-            runtime.EndSessionAccess();
-        }
-
-        private void BeginSessionAccess(HttpContextBase httpContext)
-        {
-            var runtime = GetRuntime(httpContext.Application);
-
-            runtime.BeginSessionAccess();
+            // Nothing to dispose
         }
 
         internal IGlimpseRuntime GetRuntime(HttpApplicationStateBase applicationState)
@@ -49,21 +39,13 @@ namespace Glimpse.AspNet
             return runtime;
         }
 
-        private static HttpContextBase WithTestable(object sender)
-        {
-            var httpApplication = sender as HttpApplication;
-
-            return new HttpContextWrapper(httpApplication.Context);
-        }
-
         internal void BeginRequest(HttpContextBase httpContext)
         {
-            //TODO: Add Logging to either methods here or in Runtime
+            // TODO: Add Logging to either methods here or in Runtime
             var runtime = GetRuntime(httpContext.Application);
 
             runtime.BeginRequest();
         }
-
 
         internal void EndRequest(HttpContextBase httpContext)
         {
@@ -72,9 +54,25 @@ namespace Glimpse.AspNet
             runtime.EndRequest();
         }
 
-        public void Dispose()
+        private static HttpContextBase WithTestable(object sender)
         {
-            //Nothing to dispose
+            var httpApplication = sender as HttpApplication;
+
+            return new HttpContextWrapper(httpApplication.Context);
+        }
+
+        private void BeginSessionAccess(HttpContextBase httpContext)
+        {
+            var runtime = GetRuntime(httpContext.Application);
+
+            runtime.BeginSessionAccess();
+        }
+
+        private void EndSessionAccess(HttpContextBase httpContext)
+        {
+            var runtime = GetRuntime(httpContext.Application);
+
+            runtime.EndSessionAccess();
         }
     }
 }
