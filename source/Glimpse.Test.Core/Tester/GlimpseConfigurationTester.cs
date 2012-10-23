@@ -13,7 +13,7 @@ namespace Glimpse.Test.Core.Tester
                                            IDiscoverableCollection<IClientScript> clientScriptsStub,
                                            Mock<ILogger> loggerMock,
                                            Mock<IHtmlEncoder> htmlEncoderMock,
-                                           Mock<IPersistenceStore> persistanceStoreMock,
+                                           Mock<IPersistenceStore> persistenceStoreMock,
                                            IDiscoverableCollection<IPipelineInspector> pipelineInspectorsStub,
                                            IDiscoverableCollection<IResource> resourcesStub,
                                            Mock<ISerializer> serializerMock,
@@ -30,7 +30,7 @@ namespace Glimpse.Test.Core.Tester
                 loggerMock.Object,
                 RuntimePolicy.On,
                 htmlEncoderMock.Object,
-                persistanceStoreMock.Object,
+                persistenceStoreMock.Object,
                 pipelineInspectorsStub,
                 resourcesStub,
                 serializerMock.Object,
@@ -46,7 +46,7 @@ namespace Glimpse.Test.Core.Tester
             ClientScriptsStub = clientScriptsStub;
             LoggerMock = loggerMock;
             HtmlEncoderMock = htmlEncoderMock;
-            PersistanceStoreMock = persistanceStoreMock;
+            PersistenceStoreMock = persistenceStoreMock;
             SerializerMock = serializerMock;
             ProxyFactoryMock = proxyFactoryMock;
             MessageBrokerMock = messageBrokerMock;
@@ -80,7 +80,7 @@ namespace Glimpse.Test.Core.Tester
         public IDiscoverableCollection<IClientScript> ClientScriptsStub { get; set; }
         public Mock<ILogger> LoggerMock { get; set; }
         public Mock<IHtmlEncoder> HtmlEncoderMock { get; set; }
-        public Mock<IPersistenceStore> PersistanceStoreMock { get; set; }
+        public Mock<IPersistenceStore> PersistenceStoreMock { get; set; }
         public Mock<ISerializer> SerializerMock { get; set; }
         public Mock<IProxyFactory> ProxyFactoryMock { get; set; }
         public Mock<IMessageBroker> MessageBrokerMock { get; set; }

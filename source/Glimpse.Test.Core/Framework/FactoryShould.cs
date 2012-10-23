@@ -316,7 +316,7 @@ namespace Glimpse.Test.Core.Framework
         }
 
         [Fact]
-        public void InstantiatePersistanceStoreWithApplicationPersistanceStore()
+        public void InstantiatePersistenceStoreWithApplicationPersistenceStore()
         {
             var dataStoreMock = new Mock<IDataStore>();
             var providerMock = new Mock<IFrameworkProvider>();
@@ -326,29 +326,29 @@ namespace Glimpse.Test.Core.Framework
 
             var factory = new Factory(locatorMock.Object);
 
-            IPersistenceStore store = factory.InstantiatePersistanceStore();
+            IPersistenceStore store = factory.InstantiatePersistenceStore();
 
             Assert.NotNull(store);
             Assert.NotNull(store as ApplicationPersistenceStore);
         }
 
         [Fact]
-        public void LeverageServiceLocatorForPersistanceStore()
+        public void LeverageServiceLocatorForPersistenceStore()
         {
             var dataStoreMock = new Mock<IDataStore>();
             var providerMock = new Mock<IFrameworkProvider>();
             providerMock.Setup(pm => pm.HttpServerStore).Returns(dataStoreMock.Object);
-            var persistanceStoreMock = new Mock<IPersistenceStore>();
+            var persistenceStoreMock = new Mock<IPersistenceStore>();
             var locatorMock = new Mock<IServiceLocator>();
             locatorMock.Setup(l => l.GetInstance<IFrameworkProvider>()).Returns(providerMock.Object);
-            locatorMock.Setup(l => l.GetInstance<IPersistenceStore>()).Returns(persistanceStoreMock.Object);
+            locatorMock.Setup(l => l.GetInstance<IPersistenceStore>()).Returns(persistenceStoreMock.Object);
 
             var factory = new Factory(locatorMock.Object);
 
-            IPersistenceStore store = factory.InstantiatePersistanceStore();
+            IPersistenceStore store = factory.InstantiatePersistenceStore();
 
             Assert.NotNull(store);
-            Assert.Equal(persistanceStoreMock.Object, store);
+            Assert.Equal(persistenceStoreMock.Object, store);
         }
 
         [Fact]

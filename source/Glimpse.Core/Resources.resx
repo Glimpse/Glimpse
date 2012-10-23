@@ -226,7 +226,7 @@
     </data>
     <data name="GlimpseRuntimeEndRequesPersistError">
         <value xml:space="preserve">Could not persist metadata with IPersistenceStore of type '{0}'.</value>
-        <comment>{0} - GetType() of persistance store</comment>
+        <comment>{0} - GetType() of persistence store</comment>
     </data>
     <data name="GlimpseRuntimeExecuteResourceError">
         <value xml:space="preserve">Error executing IResource '{0}'.</value>

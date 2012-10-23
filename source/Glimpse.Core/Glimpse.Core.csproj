@@ -128,7 +128,7 @@
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\TypeElementCollectionExtensions.cs" />
     <Compile Include="Extensions\UriTemplateExtensions.cs" />
-    <Compile Include="Framework\ApplicationPersistanceStore.cs" />
+    <Compile Include="Framework\ApplicationPersistenceStore.cs" />
     <Compile Include="Framework\CacheSetting.cs" />
     <Compile Include="Framework\CastleDynamicProxyFactory.cs" />
     <Compile Include="Framework\Factory.cs" />
@@ -138,9 +138,9 @@
     <Compile Include="Framework\IDiscoverableCollection.cs" />
     <Compile Include="Framework\IGlimpseConfiguration.cs" />
     <Compile Include="Framework\IGlimpseRuntime.cs" />
-    <Compile Include="Framework\IPersistanceStore.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Framework\IReadOnlyPersistanceStore.cs" />
+    <Compile Include="Framework\IPersistenceStore.cs" />
+    <Compile Include="Framework\IReadOnlyPersistenceStore.cs" />
     <Compile Include="Framework\IServiceLocator.cs" />
     <Compile Include="Framework\PipelineInspectorContext.cs" />
     <Compile Include="Framework\ReflectionDiscoverableCollection.cs" />

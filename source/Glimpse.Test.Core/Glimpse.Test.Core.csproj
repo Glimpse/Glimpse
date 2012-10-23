@@ -60,7 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AntiXssEncoderShould.cs" />
-    <Compile Include="ApplicationPersistanceStoreShould.cs" />
+    <Compile Include="ApplicationPersistenceStoreShould.cs" />
     <Compile Include="BadData\Blowup.cs" />
     <Compile Include="BadData\IBlowup.cs" />
     <Compile Include="ClientScript\ClientShould.cs" />
