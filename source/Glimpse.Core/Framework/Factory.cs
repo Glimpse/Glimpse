@@ -332,7 +332,7 @@ namespace Glimpse.Core.Framework
                 return result;
             }
 
-            return new CastleDynamicProxyFactory(InstantiateLogger());
+            return new CastleDynamicProxyFactory(InstantiateLogger(), InstantiateMessageBroker(), InstantiateTimerStrategy(), InstantiateRuntimePolicyStrategy());
         }
 
         private IDiscoverableCollection<T> CreateDiscoverableCollection<T>(DiscoverableCollectionElement config)

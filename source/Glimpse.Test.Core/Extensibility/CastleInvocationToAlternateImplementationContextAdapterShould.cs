@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using Castle.DynamicProxy;
+using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Moq;
 using Xunit;
@@ -15,7 +17,7 @@ namespace Glimpse.Test.Core.Extensibility
             var invocationMock = new Mock<IInvocation>();
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
 
             Assert.Equal(invocationMock.Object, adapter.Invocation);
             Assert.Equal(loggerMock.Object, adapter.Logger);
@@ -27,8 +29,8 @@ namespace Glimpse.Test.Core.Extensibility
             var invocationMock = new Mock<IInvocation>();
             var loggerMock = new Mock<ILogger>();
 
-            Assert.Throws<ArgumentNullException>(()=>new CastleInvocationToAlternateImplementationContextAdapter(null, loggerMock.Object));
-            Assert.Throws<ArgumentNullException>(()=>new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new CastleInvocationToAlternateImplementationContextAdapter(null, loggerMock.Object, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
+            Assert.Throws<ArgumentNullException>(() => new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, null, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
         }
 
         [Fact]
@@ -39,7 +41,7 @@ namespace Glimpse.Test.Core.Extensibility
             invocationMock.Setup(i => i.Proxy).Returns(expected);
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
 
             Assert.Equal(expected, adapter.Proxy);
             invocationMock.Verify(i=>i.Proxy, Times.Once());
@@ -53,7 +55,7 @@ namespace Glimpse.Test.Core.Extensibility
             invocationMock.Setup(i => i.ReturnValue).Returns(expected);
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
 
             Assert.Equal(expected, adapter.ReturnValue);
             invocationMock.Verify(i => i.ReturnValue, Times.Once());
@@ -66,7 +68,7 @@ namespace Glimpse.Test.Core.Extensibility
             var invocationMock = new Mock<IInvocation>();
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
 
             adapter.ReturnValue = expected;
             
@@ -81,7 +83,7 @@ namespace Glimpse.Test.Core.Extensibility
             invocationMock.Setup(i => i.InvocationTarget).Returns(expected);
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
 
             Assert.Equal(expected, adapter.InvocationTarget);
             invocationMock.Verify(i => i.InvocationTarget, Times.Once());
@@ -95,7 +97,7 @@ namespace Glimpse.Test.Core.Extensibility
             invocationMock.Setup(i => i.Method).Returns(expected);
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
 
             Assert.Equal(expected, adapter.Method);
             invocationMock.Verify(i => i.Method, Times.Once());
@@ -109,7 +111,7 @@ namespace Glimpse.Test.Core.Extensibility
             invocationMock.Setup(i => i.MethodInvocationTarget).Returns(expected);
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
 
             Assert.Equal(expected, adapter.MethodInvocationTarget);
             invocationMock.Verify(i => i.MethodInvocationTarget, Times.Once());
@@ -123,7 +125,7 @@ namespace Glimpse.Test.Core.Extensibility
             invocationMock.Setup(i => i.TargetType).Returns(expected);
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
 
             Assert.Equal(expected, adapter.TargetType);
             invocationMock.Verify(i => i.TargetType, Times.Once());
@@ -137,7 +139,7 @@ namespace Glimpse.Test.Core.Extensibility
             invocationMock.Setup(i => i.Arguments).Returns(expected);
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
 
             Assert.Equal(expected, adapter.Arguments);
             invocationMock.Verify(i => i.Arguments, Times.Once());
@@ -151,7 +153,7 @@ namespace Glimpse.Test.Core.Extensibility
             invocationMock.Setup(i => i.GenericArguments).Returns(expected);
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
 
             Assert.Equal(expected, adapter.GenericArguments);
             invocationMock.Verify(i => i.GenericArguments, Times.Once());
@@ -163,7 +165,7 @@ namespace Glimpse.Test.Core.Extensibility
             var invocationMock = new Mock<IInvocation>();
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
             adapter.SetArgumentValue(0, "thing");
 
             invocationMock.Verify(i => i.SetArgumentValue(0,"thing"), Times.Once());
@@ -177,7 +179,7 @@ namespace Glimpse.Test.Core.Extensibility
             invocationMock.Setup(i => i.GetArgumentValue(0)).Returns(expected);
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
 
             Assert.Equal(expected, adapter.GetArgumentValue(0));
             invocationMock.Verify(i => i.GetArgumentValue(0), Times.Once());
@@ -191,7 +193,7 @@ namespace Glimpse.Test.Core.Extensibility
             invocationMock.Setup(i => i.GetConcreteMethod()).Returns(expected);
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
 
             Assert.Equal(expected, adapter.GetConcreteMethod());
             invocationMock.Verify(i => i.GetConcreteMethod(), Times.Once());
@@ -205,7 +207,7 @@ namespace Glimpse.Test.Core.Extensibility
             invocationMock.Setup(i => i.GetConcreteMethodInvocationTarget()).Returns(expected);
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
 
             Assert.Equal(expected, adapter.GetConcreteMethodInvocationTarget());
             invocationMock.Verify(i => i.GetConcreteMethodInvocationTarget(), Times.Once());
@@ -217,7 +219,7 @@ namespace Glimpse.Test.Core.Extensibility
             var invocationMock = new Mock<IInvocation>();
             var loggerMock = new Mock<ILogger>();
 
-            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object);
+            var adapter = new CastleInvocationToAlternateImplementationContextAdapter(invocationMock.Object, loggerMock.Object, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
 
             adapter.Proceed();
             invocationMock.Verify(i => i.Proceed(), Times.Once());

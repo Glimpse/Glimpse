@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using Castle.DynamicProxy;
+using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Moq;
 using Xunit;
@@ -21,8 +23,8 @@ namespace Glimpse.Test.Core.Extensibility
             var selector = new AlternateImplementationSelector<IDisposable>();
             var interceptors = new IInterceptor[]
                                    {
-                                       new AlternateImplementationToCastleInterceptorAdapter<IDisposable>(alternateMock1.Object, loggerMock.Object),
-                                       new AlternateImplementationToCastleInterceptorAdapter<IDisposable>(alternateMock2.Object, loggerMock.Object),
+                                       new AlternateImplementationToCastleInterceptorAdapter<IDisposable>(alternateMock1.Object, loggerMock.Object, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On),
+                                       new AlternateImplementationToCastleInterceptorAdapter<IDisposable>(alternateMock2.Object, loggerMock.Object, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On),
                                    };
 
             var result = selector.SelectInterceptors(null, typeof (IDisposable).GetMethod("Dispose"), interceptors);
@@ -42,7 +44,7 @@ namespace Glimpse.Test.Core.Extensibility
 
             var interceptors = new IInterceptor[]
                                     {
-                                        new AlternateImplementationToCastleInterceptorAdapter<IDisposable>(alternateMock1.Object, loggerMock.Object), new AlternateImplementationToCastleInterceptorAdapter<IDisposable>(alternateMock2.Object, loggerMock.Object),
+                                        new AlternateImplementationToCastleInterceptorAdapter<IDisposable>(alternateMock1.Object, loggerMock.Object, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On), new AlternateImplementationToCastleInterceptorAdapter<IDisposable>(alternateMock2.Object, loggerMock.Object, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On),
                                     };
             var selector = new AlternateImplementationSelector<IDisposable>();
 

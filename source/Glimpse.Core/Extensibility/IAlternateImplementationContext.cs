@@ -20,6 +20,14 @@ namespace Glimpse.Core.Extensibility
         MethodInfo MethodInvocationTarget { get; }
         
         object ReturnValue { get; set; }
+
+        IMessageBroker MessageBroker { get; }
+
+        IProxyFactory ProxyFactory { get; }
+
+        Func<IExecutionTimer> TimerStrategy { get; }
+
+        Func<RuntimePolicy> RuntimePolicyStrategy { get; }
         
         void SetArgumentValue(int index, object value);
         

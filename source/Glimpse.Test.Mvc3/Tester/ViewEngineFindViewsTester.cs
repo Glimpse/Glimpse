@@ -12,7 +12,7 @@ namespace Glimpse.Test.Mvc3.Tester
         public Mock<ILogger> LoggerMock { get; set; }
         public Mock<IExecutionTimer> ExecutionTimerMock { get; set; }
 
-        private ViewEngineFindViewsTester(Mock<IMessageBroker> brokerMock, Mock<IProxyFactory> factoryMock, Mock<ILogger> loggerMock, Mock<IExecutionTimer> timerMock):base(brokerMock.Object, factoryMock.Object, loggerMock.Object, ()=>timerMock.Object,()=>RuntimePolicy.On,  false)
+        private ViewEngineFindViewsTester(Mock<IMessageBroker> brokerMock, Mock<IProxyFactory> factoryMock, Mock<ILogger> loggerMock, Mock<IExecutionTimer> timerMock):base(false)
         {
             MessageBrokerMock = brokerMock;
             ProxyFactoryMock = factoryMock;

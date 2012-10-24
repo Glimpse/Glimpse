@@ -10,39 +10,20 @@ namespace Glimpse.Mvc.AlternateImplementation
 {
     public abstract class ViewEngine
     {
-        protected ViewEngine(IMessageBroker messageBroker, IProxyFactory proxyFactory, ILogger logger, Func<IExecutionTimer> timerStrategy, Func<RuntimePolicy> runtimePolicyStrategy)
-        {
-            MessageBroker = messageBroker;
-            ProxyFactory = proxyFactory;
-            Logger = logger;
-            TimerStrategy = timerStrategy;
-            RuntimePolicyStrategy = runtimePolicyStrategy;
-        }
-
-        public IMessageBroker MessageBroker { get; set; }
-        
-        public IProxyFactory ProxyFactory { get; set; }
-        
-        public ILogger Logger { get; set; }
-        
-        public Func<IExecutionTimer> TimerStrategy { get; set; }
-        
-        public Func<RuntimePolicy> RuntimePolicyStrategy { get; set; }
-        
         public bool IsPartial { get; set; }
         
         public MethodInfo MethodToImplement { get; private set; }
 
-        public static IEnumerable<IAlternateImplementation<IViewEngine>> AllMethods(IMessageBroker messageBroker, IProxyFactory proxyFactory, ILogger logger, Func<IExecutionTimer> timerStrategy, Func<RuntimePolicy> runtimePolicyStrategy)
+        public static IEnumerable<IAlternateImplementation<IViewEngine>> AllMethods()
         {
-            yield return new FindViews(messageBroker, proxyFactory, logger, timerStrategy, runtimePolicyStrategy, false);
-            yield return new FindViews(messageBroker, proxyFactory, logger, timerStrategy, runtimePolicyStrategy, true);
+            yield return new FindViews(false);
+            yield return new FindViews(true);
         }
 
         // This class is the alternate implementation for both .FindView() AND .FindPartialView()
         public class FindViews : ViewEngine, IAlternateImplementation<IViewEngine>
         {
-            public FindViews(IMessageBroker messageBroker, IProxyFactory proxyFactory, ILogger logger, Func<IExecutionTimer> timerStrategy, Func<RuntimePolicy> runtimePolicyStrategy, bool isPartial) : base(messageBroker, proxyFactory, logger, timerStrategy, runtimePolicyStrategy)
+            public FindViews(bool isPartial)
             {
                 IsPartial = isPartial;
                 MethodToImplement = typeof(IViewEngine).GetMethod(IsPartial ? "FindPartialView" : "FindView");
@@ -50,13 +31,13 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public void NewImplementation(IAlternateImplementationContext context)
             {
-                if (RuntimePolicyStrategy() == RuntimePolicy.Off)
+                if (context.RuntimePolicyStrategy() == RuntimePolicy.Off)
                 {
                     context.Proceed();
                     return;
                 }
 
-                var timer = TimerStrategy();
+                var timer = context.TimerStrategy();
 
                 var timing = timer.Time(context.Proceed);
 
@@ -68,8 +49,8 @@ namespace Glimpse.Mvc.AlternateImplementation
 
                 output = ProxyOutput(output, context, input.ViewName, IsPartial, id);
 
-                MessageBroker.Publish(new Message(input, output, timing, context.TargetType, IsPartial, id));
-                MessageBroker.Publish(new TimerResultMessage(timing, "Find View " + input.ViewName, "ASP.NET MVC")); // TODO: Clean this up
+                context.MessageBroker.Publish(new Message(input, output, timing, context.TargetType, IsPartial, id));
+                context.MessageBroker.Publish(new TimerResultMessage(timing, "Find View " + input.ViewName, "ASP.NET MVC")); // TODO: Clean this up
             }
 
             private ViewEngineResult ProxyOutput(ViewEngineResult viewEngineResult, IAlternateImplementationContext context, string viewName, bool isPartial, Guid id)
@@ -78,14 +59,14 @@ namespace Glimpse.Mvc.AlternateImplementation
                 {
                     var originalView = viewEngineResult.View;
 
-                    if (ProxyFactory.IsProxyable(originalView))
+                    if (context.ProxyFactory.IsProxyable(originalView))
                     {
-                        var newView = ProxyFactory.CreateProxy(
+                        var newView = context.ProxyFactory.CreateProxy(
                             originalView,
-                            View.AllMethods(MessageBroker, TimerStrategy, RuntimePolicyStrategy),
+                            View.AllMethods(context.MessageBroker, context.TimerStrategy, context.RuntimePolicyStrategy),
                             new ViewCorrelation(viewName, isPartial, id));
 
-                        Logger.Info(Resources.FindViewsProxyOutputReplacedIView, originalView.GetType(), viewName);
+                        context.Logger.Info(Resources.FindViewsProxyOutputReplacedIView, originalView.GetType(), viewName);
 
                         var result = new ViewEngineResult(newView, viewEngineResult.ViewEngine);
                         context.ReturnValue = result;
