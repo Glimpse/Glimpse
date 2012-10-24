@@ -66,11 +66,13 @@ namespace Glimpse.Mvc.AlternateImplementation
             var asyncController = iController as AsyncController;
             if (asyncController != null)
             {
-                var actionInvoker = asyncController.ActionInvoker;
-                if (proxyFactory.IsProxyable(actionInvoker))
+                var alternateImplementation = new AsyncActionInvoker(proxyFactory);
+                var originalActionInvoker = asyncController.ActionInvoker;
+                AsyncControllerActionInvoker newActionInvoker;
+
+                if (alternateImplementation.TryCreate(originalActionInvoker as AsyncControllerActionInvoker, out newActionInvoker, new ActionInvokerState()))
                 {
-                    var proxiedAsyncInvoker = proxyFactory.CreateProxy(actionInvoker as AsyncControllerActionInvoker, AsyncActionInvoker.AllMethods(RuntimePolicyStrategy, TimerStrategy, MessageBroker), new ActionInvokerState());
-                    asyncController.ActionInvoker = proxiedAsyncInvoker;
+                    asyncController.ActionInvoker = newActionInvoker;
                 }
 
                 return;
@@ -79,13 +81,13 @@ namespace Glimpse.Mvc.AlternateImplementation
             var controller = iController as Controller;
             if (controller != null)
             {
-                var actionInvoker = controller.ActionInvoker;
+                var alternateImplementation = new ActionInvoker(proxyFactory);
+                var originalActionInvoker = controller.ActionInvoker;
+                ControllerActionInvoker newActionInvoker;
 
-                if (proxyFactory.IsProxyable(actionInvoker))
+                if (alternateImplementation.TryCreate(originalActionInvoker as ControllerActionInvoker, out newActionInvoker))
                 {
-                    var proxiedActionInvoker = proxyFactory.CreateProxy(actionInvoker as ControllerActionInvoker, ActionInvoker.AllMethods(RuntimePolicyStrategy, TimerStrategy, MessageBroker));
-
-                    controller.ActionInvoker = proxiedActionInvoker;
+                    controller.ActionInvoker = newActionInvoker;
                 }
             }
         }

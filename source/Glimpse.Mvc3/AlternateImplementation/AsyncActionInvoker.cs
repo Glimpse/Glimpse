@@ -9,61 +9,57 @@ using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public abstract class AsyncActionInvoker : ActionInvoker
+    public class AsyncActionInvoker : Alternate<AsyncControllerActionInvoker>
     {
-        protected AsyncActionInvoker(Func<RuntimePolicy> runtimePolicyStrategy, Func<IExecutionTimer> timerStrategy, IMessageBroker messageBroker) : base(runtimePolicyStrategy, timerStrategy, messageBroker)
+        public AsyncActionInvoker(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
 
-        public static new IEnumerable<IAlternateImplementation<AsyncControllerActionInvoker>> AllMethods(Func<RuntimePolicy> runtimePolicyStrategy, Func<IExecutionTimer> timerStrategy, IMessageBroker messageBroker)
+        public override IEnumerable<IAlternateImplementation<AsyncControllerActionInvoker>> AllMethods()
         {
-            yield return new BeginInvokeActionMethod(runtimePolicyStrategy, timerStrategy, messageBroker);
-            yield return new EndInvokeActionMethod(runtimePolicyStrategy, timerStrategy, messageBroker);
-            yield return new InvokeActionResult<AsyncControllerActionInvoker>(runtimePolicyStrategy, timerStrategy, messageBroker);
+            yield return new BeginInvokeActionMethod();
+            yield return new EndInvokeActionMethod();
+            yield return new ActionInvoker.InvokeActionResult<AsyncControllerActionInvoker>();
         }
 
-        public class BeginInvokeActionMethod : AsyncActionInvoker, IAlternateImplementation<AsyncControllerActionInvoker>
+        public class BeginInvokeActionMethod : IAlternateImplementation<AsyncControllerActionInvoker>
         {
-            public BeginInvokeActionMethod(Func<RuntimePolicy> runtimePolicyStrategy, Func<IExecutionTimer> timerStrategy, IMessageBroker messageBroker) : base(runtimePolicyStrategy, timerStrategy, messageBroker)
+            public BeginInvokeActionMethod()
             {
+                MethodToImplement = typeof(AsyncControllerActionInvoker).GetMethod("BeginInvokeActionMethod", BindingFlags.Instance | BindingFlags.NonPublic);
             }
 
-            public MethodInfo MethodToImplement
-            {
-                get { return typeof(AsyncControllerActionInvoker).GetMethod("BeginInvokeActionMethod", BindingFlags.Instance | BindingFlags.NonPublic); }
-            }
+            public MethodInfo MethodToImplement { get; private set; }
 
             public void NewImplementation(IAlternateImplementationContext context)
             {
                 // BeginInvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary<string, object> parameters, AsyncCallback callback, object state)
-                if (RuntimePolicyStrategy() == RuntimePolicy.Off)
+                if (context.RuntimePolicyStrategy() == RuntimePolicy.Off)
                 {
                     context.Proceed();
                     return;
                 }
 
                 var state = (IActionInvokerState)context.Proxy;
-                var timer = TimerStrategy();
-                state.Arguments = new InvokeActionMethod.Arguments(context.Arguments);
+                var timer = context.TimerStrategy();
+                state.Arguments = new ActionInvoker.InvokeActionMethod.Arguments(context.Arguments);
                 state.Offset = timer.Start();
                 context.Proceed();
             }
         }
 
-        public class EndInvokeActionMethod : AsyncActionInvoker, IAlternateImplementation<AsyncControllerActionInvoker>
+        public class EndInvokeActionMethod : IAlternateImplementation<AsyncControllerActionInvoker>
         {
-            public EndInvokeActionMethod(Func<RuntimePolicy> runtimePolicyStrategy, Func<IExecutionTimer> timerStrategy, IMessageBroker messageBroker) : base(runtimePolicyStrategy, timerStrategy, messageBroker)
+            public EndInvokeActionMethod()
             {
+                MethodToImplement = typeof(AsyncControllerActionInvoker).GetMethod("EndInvokeActionMethod", BindingFlags.Instance | BindingFlags.NonPublic);
             }
 
-            public MethodInfo MethodToImplement
-            {
-                get { return typeof(AsyncControllerActionInvoker).GetMethod("EndInvokeActionMethod", BindingFlags.Instance | BindingFlags.NonPublic); }
-            }
+            public MethodInfo MethodToImplement { get; private set; }
 
             public void NewImplementation(IAlternateImplementationContext context)
             {
-                if (RuntimePolicyStrategy() == RuntimePolicy.Off)
+                if (context.RuntimePolicyStrategy() == RuntimePolicy.Off)
                 {
                     context.Proceed();
                     return;
@@ -71,15 +67,15 @@ namespace Glimpse.Mvc.AlternateImplementation
 
                 context.Proceed();
                 var state = (IActionInvokerState)context.Proxy;
-                var timer = TimerStrategy();
+                var timer = context.TimerStrategy();
                 var timerResult = timer.Stop(state.Offset);
 
-                MessageBroker.Publish(new InvokeActionMethod.Message(state.Arguments, (ActionResult)context.ReturnValue));
+                context.MessageBroker.Publish(new ActionInvoker.InvokeActionMethod.Message(state.Arguments, (ActionResult)context.ReturnValue));
                 var eventName = string.Format(
                     "{0}.{1}()",
                     state.Arguments.ActionDescriptor.ControllerDescriptor.ControllerName,
                     state.Arguments.ActionDescriptor.ActionName);
-                MessageBroker.Publish(new TimerResultMessage(timerResult, eventName, "ASP.NET MVC")); // TODO: This should be abstracted
+                context.MessageBroker.Publish(new TimerResultMessage(timerResult, eventName, "ASP.NET MVC")); // TODO: This should be abstracted
             }
         }
     }

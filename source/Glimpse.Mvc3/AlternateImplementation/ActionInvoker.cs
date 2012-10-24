@@ -8,48 +8,20 @@ using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public abstract class ActionInvoker
+    public class ActionInvoker : Alternate<ControllerActionInvoker>
     {
-        protected ActionInvoker(Func<RuntimePolicy> runtimePolicyStrategy, Func<IExecutionTimer> timerStrategy, IMessageBroker messageBroker)
+        public ActionInvoker(IProxyFactory proxyFactory) : base(proxyFactory)
         {
-            if (runtimePolicyStrategy == null)
-            {
-                throw new ArgumentNullException("runtimePolicyStrategy");
-            }
-
-            if (timerStrategy == null)
-            {
-                throw new ArgumentNullException("timerStrategy");
-            }
-
-            if (messageBroker == null)
-            {
-                throw new ArgumentNullException("messageBroker");
-            }
-
-            RuntimePolicyStrategy = runtimePolicyStrategy;
-            TimerStrategy = timerStrategy;
-            MessageBroker = messageBroker;
         }
 
-        public Func<RuntimePolicy> RuntimePolicyStrategy { get; set; }
-        
-        public Func<IExecutionTimer> TimerStrategy { get; set; }
-        
-        public IMessageBroker MessageBroker { get; set; }
-
-        public static IEnumerable<IAlternateImplementation<ControllerActionInvoker>> AllMethods(Func<RuntimePolicy> runtimePolicyStrategy, Func<IExecutionTimer> timerStrategy, IMessageBroker messageBroker)
+        public override IEnumerable<IAlternateImplementation<ControllerActionInvoker>> AllMethods()
         {
-            yield return new InvokeActionResult<ControllerActionInvoker>(runtimePolicyStrategy, timerStrategy, messageBroker);
-            yield return new InvokeActionMethod(runtimePolicyStrategy, timerStrategy, messageBroker);
+            yield return new InvokeActionResult<ControllerActionInvoker>();
+            yield return new InvokeActionMethod();
         }
 
-        public class InvokeActionResult<T> : ActionInvoker, IAlternateImplementation<T> where T : class
+        public class InvokeActionResult<T> : IAlternateImplementation<T> where T : class
         {
-            public InvokeActionResult(Func<RuntimePolicy> runtimePolicyStrategy, Func<IExecutionTimer> timerStrategy, IMessageBroker messageBroker) : base(runtimePolicyStrategy, timerStrategy, messageBroker)
-            {
-            }
-
             public MethodInfo MethodToImplement
             {
                 get { return typeof(T).GetMethod("InvokeActionResult", BindingFlags.Instance | BindingFlags.NonPublic); }
@@ -58,17 +30,17 @@ namespace Glimpse.Mvc.AlternateImplementation
             public void NewImplementation(IAlternateImplementationContext context)
             {
                 // void InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
-                if (RuntimePolicyStrategy() == RuntimePolicy.Off)
+                if (context.RuntimePolicyStrategy() == RuntimePolicy.Off)
                 {
                     context.Proceed();
                     return;
                 }
 
-                var timer = TimerStrategy();
+                var timer = context.TimerStrategy();
                 var timerResult = timer.Time(context.Proceed);
 
-                MessageBroker.Publish(new TimerResultMessage(timerResult, "ActionResult Executed", "MVC")); // TODO clean this up, use a constant?
-                MessageBroker.Publish(new Message(new Arguments(context.Arguments)));
+                context.MessageBroker.Publish(new TimerResultMessage(timerResult, "ActionResult Executed", "MVC")); // TODO clean this up, use a constant?
+                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments)));
             }
 
             public class Arguments
@@ -101,12 +73,8 @@ namespace Glimpse.Mvc.AlternateImplementation
             }
         }
 
-        public class InvokeActionMethod : ActionInvoker, IAlternateImplementation<ControllerActionInvoker>
+        public class InvokeActionMethod : IAlternateImplementation<ControllerActionInvoker>
         {
-            public InvokeActionMethod(Func<RuntimePolicy> runtimePolicyStrategy, Func<IExecutionTimer> timerStrategy, IMessageBroker messageBroker) : base(runtimePolicyStrategy, timerStrategy, messageBroker)
-            {
-            }
-
             public MethodInfo MethodToImplement
             {
                 get { return typeof(ControllerActionInvoker).GetMethod("InvokeActionMethod", BindingFlags.Instance | BindingFlags.NonPublic); }
@@ -117,19 +85,19 @@ namespace Glimpse.Mvc.AlternateImplementation
                 //// ActionResult InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary<string, object> parameters)
 
                 // TODO: NOT DRY AT ALL
-                if (RuntimePolicyStrategy() == RuntimePolicy.Off) 
+                if (context.RuntimePolicyStrategy() == RuntimePolicy.Off) 
                 {
                     context.Proceed();
                     return;
                 }
 
-                var timer = TimerStrategy();
+                var timer = context.TimerStrategy();
                 var timerResult = timer.Time(context.Proceed);
 
                 var arguments = new Arguments(context.Arguments);
 
-                MessageBroker.Publish(new TimerResultMessage(timerResult, arguments.ActionDescriptor.ActionName + "()", "MVC"));
-                MessageBroker.Publish(new Message(arguments, context.ReturnValue as ActionResult));
+                context.MessageBroker.Publish(new TimerResultMessage(timerResult, arguments.ActionDescriptor.ActionName + "()", "MVC"));
+                context.MessageBroker.Publish(new Message(arguments, context.ReturnValue as ActionResult));
             }
 
             public class Arguments
