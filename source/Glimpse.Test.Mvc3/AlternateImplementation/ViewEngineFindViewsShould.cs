@@ -28,9 +28,9 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         }
 
         [Fact]
-        public void ReturnAllMethodImplementationsWithStaticAll()
+        public void ReturnAllMethodImplementationsWithAllMethods()
         {
-            var implementations = ViewEngine.AllMethods();
+            var implementations = new ViewEngine(new Mock<IProxyFactory>().Object).AllMethods();
 
             Assert.Equal(2, implementations.Count());
         }
