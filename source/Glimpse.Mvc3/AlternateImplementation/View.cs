@@ -9,38 +9,29 @@ using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class View
+    public class View : Alternate<IView>
     {
-        private View()
+        public View(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
 
-        public static IEnumerable<IAlternateImplementation<IView>> AllMethods(IMessageBroker messageBroker, Func<IExecutionTimer> timerStrategy, Func<RuntimePolicy> runtimePolicyStrategy)
+        public override IEnumerable<IAlternateImplementation<IView>> AllMethods()
         {
-            yield return new Render(messageBroker, timerStrategy, runtimePolicyStrategy);
+            yield return new Render();
         }
 
         public class Render : IAlternateImplementation<IView>
         {
-            public Render(IMessageBroker messageBroker, Func<IExecutionTimer> timerStrategy, Func<RuntimePolicy> runtimePolicyStrategy)
+            public Render()
             {
-                MessageBroker = messageBroker;
-                TimerStrategy = timerStrategy;
                 MethodToImplement = typeof(IView).GetMethod("Render");
-                RuntimePolicyStrategy = runtimePolicyStrategy;
             }
 
-            public IMessageBroker MessageBroker { get; set; }
-            
-            public Func<IExecutionTimer> TimerStrategy { get; set; }
-            
             public MethodInfo MethodToImplement { get; private set; }
             
-            public Func<RuntimePolicy> RuntimePolicyStrategy { get; set; }
-
             public void NewImplementation(IAlternateImplementationContext context)
             {
-                if (RuntimePolicyStrategy() == RuntimePolicy.Off)
+                if (context.RuntimePolicyStrategy() == RuntimePolicy.Off)
                 {
                     context.Proceed();
                     return;
@@ -50,13 +41,13 @@ namespace Glimpse.Mvc.AlternateImplementation
 
                 //// TODO: This is where we could use writer.Write calls to inject HTML comments
 
-                var timer = TimerStrategy();
+                var timer = context.TimerStrategy();
                 var timing = timer.Time(context.Proceed);
 
                 var mixin = context.Proxy as IViewCorrelation;
 
-                MessageBroker.Publish(new Message(input, timing, context.TargetType, mixin));
-                MessageBroker.Publish(new TimerResultMessage(timing, "Render View " + mixin.ViewName, "ASP.NET MVC")); // TODO: Clean this up
+                context.MessageBroker.Publish(new Message(input, timing, context.TargetType, mixin));
+                context.MessageBroker.Publish(new TimerResultMessage(timing, "Render View " + mixin.ViewName, "ASP.NET MVC")); // TODO: Clean this up
             }
 
             public class Arguments

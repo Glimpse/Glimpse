@@ -15,19 +15,8 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Fact]
         public void SetProperties()
         {
-            var brokerMock = new Mock<IMessageBroker>();
-            Func<IExecutionTimer> timer = () =>
-                                              {
-                                                  var mock = new Mock<IExecutionTimer>();
-                                                  return mock.Object;
-                                              };
-            Func<RuntimePolicy> policy = () => RuntimePolicy.On;
+            var render = new View.Render();
 
-            var render = new View.Render(brokerMock.Object, timer, policy);
-
-            Assert.Equal(brokerMock.Object, render.MessageBroker);
-            Assert.Equal(timer, render.TimerStrategy);
-            Assert.Equal(policy, render.RuntimePolicyStrategy);
             Assert.NotNull(render.MethodToImplement);
         }
 
@@ -39,10 +28,14 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             Func<IExecutionTimer> timer = () => timerMock.Object;
             Func<RuntimePolicy> policy = () => RuntimePolicy.On;
 
-            var render = new View.Render(brokerMock.Object, timer, policy);
+            var render = new View.Render();
 
             var contextMock = new Mock<IAlternateImplementationContext>();
             contextMock.Setup(c => c.Arguments).Returns(GetArguments());
+            contextMock.Setup(c => c.MessageBroker).Returns(brokerMock.Object);
+            contextMock.Setup(c => c.TimerStrategy).Returns(timer);
+            contextMock.Setup(c => c.RuntimePolicyStrategy).Returns(policy);
+
             var mixinMock = new Mock<IViewCorrelation>();
             mixinMock.Setup(m => m.ViewName).Returns("astring");
             contextMock.Setup(c => c.Proxy).Returns(mixinMock.Object);
@@ -62,9 +55,12 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             Func<IExecutionTimer> timer = () => timerMock.Object;
             Func<RuntimePolicy> policy = () => RuntimePolicy.Off;
 
-            var render = new View.Render(brokerMock.Object, timer, policy);
+            var render = new View.Render();
 
             var contextMock = new Mock<IAlternateImplementationContext>();
+            contextMock.Setup(c => c.MessageBroker).Returns(brokerMock.Object);
+            contextMock.Setup(c => c.TimerStrategy).Returns(timer);
+            contextMock.Setup(c => c.RuntimePolicyStrategy).Returns(policy);
 
             render.NewImplementation(contextMock.Object);
 

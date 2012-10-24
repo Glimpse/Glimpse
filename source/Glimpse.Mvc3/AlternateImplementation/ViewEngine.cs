@@ -59,11 +59,23 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             private ViewEngineResult ProxyOutput(ViewEngineResult viewEngineResult, IAlternateImplementationContext context, string viewName, bool isPartial, Guid id)
             {
+                var alternateImplementation = new View(context.ProxyFactory);
+
                 if (viewEngineResult.View != null)
                 {
                     var originalView = viewEngineResult.View;
 
-                    if (context.ProxyFactory.IsProxyable(originalView))
+                    IView newView;
+                    if (alternateImplementation.TryCreate(originalView, out newView, new ViewCorrelation(viewName, isPartial, id)))
+                    {
+                        context.Logger.Info(Resources.FindViewsProxyOutputReplacedIView, originalView.GetType(), viewName);
+
+                        var result = new ViewEngineResult(newView, viewEngineResult.ViewEngine);
+                        context.ReturnValue = result;
+                        return result;
+                    }
+
+                    /*if (context.ProxyFactory.IsProxyable(originalView))
                     {
                         var newView = context.ProxyFactory.CreateProxy(
                             originalView,
@@ -75,7 +87,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                         var result = new ViewEngineResult(newView, viewEngineResult.ViewEngine);
                         context.ReturnValue = result;
                         return result;
-                    }
+                    }*/
                 }
 
                 return viewEngineResult;
