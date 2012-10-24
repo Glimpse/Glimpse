@@ -266,10 +266,7 @@ namespace Glimpse.Core.Framework
                 }
             }
 
-            Func<IExecutionTimer> timerStrategy = () => Configuration.FrameworkProvider.HttpRequestStore.Get<IExecutionTimer>(Constants.GlobalTimerKey);
-            Func<RuntimePolicy> runtimePolicyStrategy = () => Configuration.FrameworkProvider.HttpRequestStore.Get<RuntimePolicy>(Constants.RuntimePolicyKey);
-
-            var pipelineInspectorContext = new PipelineInspectorContext(logger, Configuration.ProxyFactory, messageBroker, timerStrategy, runtimePolicyStrategy);
+            var pipelineInspectorContext = new PipelineInspectorContext(logger, Configuration.ProxyFactory, messageBroker, Configuration.TimerStrategy, Configuration.RuntimePolicyStrategy);
 
             foreach (var pipelineInspector in Configuration.PipelineInspectors)
             {

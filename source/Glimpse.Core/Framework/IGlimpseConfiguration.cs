@@ -37,7 +37,11 @@ namespace Glimpse.Core.Framework
         IMessageBroker MessageBroker { get; }
         
         string EndpointBaseUri { get; }
+
+        Func<RuntimePolicy> RuntimePolicyStrategy { get; set; }
         
+        Func<IExecutionTimer> TimerStrategy { get; set; }
+
         string GenerateScriptTags(Guid requestId, string version);
     }
 }

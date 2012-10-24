@@ -24,8 +24,9 @@ namespace Glimpse.Core.Framework
         private ICollection<IRuntimePolicy> runtimePolicies;
         private ISerializer serializer;
         private ICollection<ITab> tabs;
+        private Func<IExecutionTimer> timerStrategy;
+        private Func<RuntimePolicy> runtimePolicyStrategy;
 
-        // TODO: Add Sanitizer?
         public GlimpseConfiguration(
             IFrameworkProvider frameworkProvider, 
             ResourceEndpointConfiguration endpointConfiguration,
@@ -42,7 +43,9 @@ namespace Glimpse.Core.Framework
             IResource defaultResource,
             IProxyFactory proxyFactory,
             IMessageBroker messageBroker,
-            string endpointBaseUri)
+            string endpointBaseUri,
+            Func<IExecutionTimer> timerStrategy,
+            Func<RuntimePolicy> runtimePolicyStrategy)
         {
             if (frameworkProvider == null)
             {
@@ -114,6 +117,16 @@ namespace Glimpse.Core.Framework
                 throw new ArgumentNullException("endpointBaseUri");
             }
 
+            if (timerStrategy == null)
+            {
+                throw new ArgumentNullException("timerStrategy");
+            }
+
+            if (runtimePolicyStrategy == null)
+            {
+                throw new ArgumentNullException("runtimePolicyStrategy");
+            }
+
             Logger = logger;
             ClientScripts = clientScripts;
             FrameworkProvider = frameworkProvider;
@@ -130,6 +143,8 @@ namespace Glimpse.Core.Framework
             ProxyFactory = proxyFactory;
             MessageBroker = messageBroker;
             EndpointBaseUri = endpointBaseUri;
+            TimerStrategy = timerStrategy;
+            RuntimePolicyStrategy = runtimePolicyStrategy;
         }
 
         public ICollection<IClientScript> ClientScripts
@@ -368,6 +383,24 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        public Func<RuntimePolicy> RuntimePolicyStrategy
+        {
+            get
+            {
+                return runtimePolicyStrategy;
+            }
+
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException("value");
+                }
+
+                runtimePolicyStrategy = value;
+            }
+        }
+
         public ISerializer Serializer
         {
             get
@@ -401,6 +434,24 @@ namespace Glimpse.Core.Framework
                 }
 
                 tabs = value;
+            }
+        }
+
+        public Func<IExecutionTimer> TimerStrategy 
+        { 
+            get
+            {
+                return timerStrategy;
+            }
+
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException("value");
+                }
+
+                timerStrategy = value;
             }
         }
 

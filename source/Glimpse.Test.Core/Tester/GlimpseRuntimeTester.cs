@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
@@ -88,7 +89,7 @@ namespace Glimpse.Test.Core.Tester
             var messageBrokerMock = new Mock<IMessageBroker>();
 
             var configuration =
-                new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfigMock.Object, clientScripts, loggerMock.Object, RuntimePolicy.On, htmlEncoderMock.Object, persistenceStoreMock.Object, pipelineInspectors, resources, serializerMock.Object, tabs, policies, resourceMock.Object, proxyFactoryMock.Object, messageBrokerMock.Object, "~/Glimpse.axd");
+                new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfigMock.Object, clientScripts, loggerMock.Object, RuntimePolicy.On, htmlEncoderMock.Object, persistenceStoreMock.Object, pipelineInspectors, resources, serializerMock.Object, tabs, policies, resourceMock.Object, proxyFactoryMock.Object, messageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
 
 
             return new GlimpseRuntimeTester(configuration, frameworkProviderMock, endpointConfigMock);

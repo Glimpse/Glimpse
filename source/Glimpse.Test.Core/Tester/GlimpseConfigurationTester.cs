@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 using Glimpse.Core;
@@ -22,7 +24,9 @@ namespace Glimpse.Test.Core.Tester
                                            Mock<IResource> defaultResourceMock,
                                            Mock<IProxyFactory> proxyFactoryMock,
                                            Mock<IMessageBroker> messageBrokerMock,
-                                           string endpointBaseUri)
+                                           string endpointBaseUri,
+                                           Func<IExecutionTimer> timerStrategy,
+                                           Func<RuntimePolicy> runtimePolicyStrategy)
             : base(
                 frameworkProviderMock.Object,
                 endpointConfigurationMock.Object,
@@ -39,7 +43,9 @@ namespace Glimpse.Test.Core.Tester
                 defaultResourceMock.Object,
                 proxyFactoryMock.Object,
                 messageBrokerMock.Object,
-            endpointBaseUri)
+                endpointBaseUri,
+                timerStrategy,
+                runtimePolicyStrategy)
         {
             FrameworkProviderMock = frameworkProviderMock;
             EndpointConfigMock = endpointConfigurationMock;
@@ -72,7 +78,9 @@ namespace Glimpse.Test.Core.Tester
                                                   new Mock<IResource>(),
                                                   new Mock<IProxyFactory>(),
                                                   new Mock<IMessageBroker>(),
-                                                  "~/Glimpse.axd");
+                                                  "~/Glimpse.axd",
+                                                  () => new ExecutionTimer(Stopwatch.StartNew()),
+                                                  () => RuntimePolicy.On);
         }
 
         public Mock<ResourceEndpointConfiguration> EndpointConfigMock { get; set; }

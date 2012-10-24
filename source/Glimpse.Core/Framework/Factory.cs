@@ -265,6 +265,19 @@ namespace Glimpse.Core.Framework
             return new ConfigurationResource();
         }
 
+        public Func<IExecutionTimer> InstantiateTimerStrategy()
+        {
+            var frameworkProvider = InstantiateFrameworkProvider();
+
+            return () => frameworkProvider.HttpRequestStore.Get<IExecutionTimer>(Constants.GlobalTimerKey);
+        }
+
+        public Func<RuntimePolicy> InstantiateRuntimePolicyStrategy()
+        {
+            var frameworkProvider = InstantiateFrameworkProvider();
+            return () => frameworkProvider.HttpRequestStore.Get<RuntimePolicy>(Constants.RuntimePolicyKey);
+        }
+
         public IGlimpseConfiguration InstantiateConfiguration()
         {
             IGlimpseConfiguration result;
@@ -274,6 +287,8 @@ namespace Glimpse.Core.Framework
             }
 
             var frameworkProvider = InstantiateFrameworkProvider();
+            var timerStrategy = InstantiateTimerStrategy();
+            var runtimePolicyStrategy = InstantiateRuntimePolicyStrategy();
             var endpointConfiguration = InstantiateResourceEndpointConfiguration();
             var clientScripts = InstantiateClientScripts();
             var logger = InstantiateLogger();
@@ -290,7 +305,7 @@ namespace Glimpse.Core.Framework
             var messageBroker = InstantiateMessageBroker();
             var endpointBaseUri = InstantiateBaseResourceUri();
 
-            return new GlimpseConfiguration(frameworkProvider, endpointConfiguration, clientScripts, logger, policy, htmlEncoder, persistenceStore, pipelineInspectors, resources, serializer, tabs, runtimePolicies, defaultResource, proxyFactory, messageBroker, endpointBaseUri);
+            return new GlimpseConfiguration(frameworkProvider, endpointConfiguration, clientScripts, logger, policy, htmlEncoder, persistenceStore, pipelineInspectors, resources, serializer, tabs, runtimePolicies, defaultResource, proxyFactory, messageBroker, endpointBaseUri, timerStrategy, runtimePolicyStrategy);
         }
 
         public string InstantiateBaseResourceUri()
