@@ -13,20 +13,15 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Fact]
         public void Construct()
         {
-            Func<RuntimePolicy> runtimePolicyStrategy = ()=>RuntimePolicy.On;
-            var brokerMock = new Mock<IMessageBroker>();
-            var implementation = new DependencyResolver.GetService(runtimePolicyStrategy, brokerMock.Object);
+            var implementation = new DependencyResolver.GetService();
 
-            Assert.Equal(runtimePolicyStrategy, implementation.RuntimePolicyStrategy);
-            Assert.Equal(brokerMock.Object, implementation.MessageBroker);
+            Assert.NotNull(implementation.MethodToImplement);
         }
 
         [Fact]
         public void ImplementGetService()
         {
-            Func<RuntimePolicy> runtimePolicyStrategy = () => RuntimePolicy.On;
-            var brokerMock = new Mock<IMessageBroker>();
-            var implementation = new DependencyResolver.GetService(runtimePolicyStrategy, brokerMock.Object);
+            var implementation = new DependencyResolver.GetService();
 
             var methodToImplement = implementation.MethodToImplement;
 
@@ -36,11 +31,13 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Fact]
         public void ProceedWithRuntimePolicyOff()
         {
-            var contextMock = new Mock<IAlternateImplementationContext>();
-
             Func<RuntimePolicy> runtimePolicyStrategy = () => RuntimePolicy.Off;
             var brokerMock = new Mock<IMessageBroker>();
-            var implementation = new DependencyResolver.GetService(runtimePolicyStrategy, brokerMock.Object);
+            var contextMock = new Mock<IAlternateImplementationContext>();
+            contextMock.Setup(c => c.RuntimePolicyStrategy).Returns(runtimePolicyStrategy);
+            contextMock.Setup(c => c.MessageBroker).Returns(brokerMock.Object);
+
+            var implementation = new DependencyResolver.GetService();
 
             implementation.NewImplementation(contextMock.Object);
 
@@ -52,13 +49,15 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Fact]
         public void PublishMessageWithRuntimePolicyOn()
         {
+            Func<RuntimePolicy> runtimePolicyStrategy = () => RuntimePolicy.On;
+            var brokerMock = new Mock<IMessageBroker>();
             var contextMock = new Mock<IAlternateImplementationContext>();
             contextMock.Setup(c => c.Arguments).Returns(new object[] {typeof(IController)});
             contextMock.Setup(c => c.ReturnValue).Returns(null);
+            contextMock.Setup(c => c.RuntimePolicyStrategy).Returns(runtimePolicyStrategy);
+            contextMock.Setup(c => c.MessageBroker).Returns(brokerMock.Object);
 
-            Func<RuntimePolicy> runtimePolicyStrategy = () => RuntimePolicy.On;
-            var brokerMock = new Mock<IMessageBroker>();
-            var implementation = new DependencyResolver.GetService(runtimePolicyStrategy, brokerMock.Object);
+            var implementation = new DependencyResolver.GetService();
 
             implementation.NewImplementation(contextMock.Object);
 
