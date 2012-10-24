@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Glimpse.Core.Extensibility
 {
@@ -6,6 +7,11 @@ namespace Glimpse.Core.Extensibility
     {
         protected Alternate(IProxyFactory proxyFactory)
         {
+            if (proxyFactory == null)
+            {
+                throw new ArgumentNullException("proxyFactory");
+            }
+
             ProxyFactory = proxyFactory;
         }
 

@@ -35,33 +35,9 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         }
 
         [Fact]
-        public void ThrowWithNullRuntimePolicyStrategy()
-        {
-            Assert.Throws<ArgumentNullException>(() => new ControllerFactory.CreateController(null, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, () => new Mock<IExecutionTimer>().Object));
-        }
-
-        [Fact]
-        public void ThrowWithNullMessageBroker()
-        {
-            Assert.Throws<ArgumentNullException>(() => new ControllerFactory.CreateController(() => RuntimePolicy.On, null, new Mock<IProxyFactory>().Object, () => new Mock<IExecutionTimer>().Object));
-        }
-
-        [Fact]
-        public void ThrowWithNullProxyFactory()
-        {
-            Assert.Throws<ArgumentNullException>(() => new ControllerFactory.CreateController(() => RuntimePolicy.On, new Mock<IMessageBroker>().Object, null, () => new Mock<IExecutionTimer>().Object));
-        }
-
-        [Fact]
-        public void ThrowsWithNullTimerStrategy()
-        {
-            Assert.Throws<ArgumentNullException>(() => new ControllerFactory.CreateController(() => RuntimePolicy.On, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, null));
-        }
-
-        [Fact]
         public void ProceedImmediatlyIfRuntimePolicyOff()
         {
-            Tester.RuntimePolicyStrategy = ()=> RuntimePolicy.Off;
+            Tester.ContextMock.Setup(c => c.RuntimePolicyStrategy).Returns(() => RuntimePolicy.Off);
 
             Tester.NewImplementation(Tester.ContextMock.Object);
 
