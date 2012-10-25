@@ -1,31 +1,31 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
-using Glimpse.Mvc3.AlternateImplementation;
+using Glimpse.Mvc.AlternateImplementation;
 using Moq;
 using Xunit;
 
 namespace Glimpse.Test.Mvc3.AlternateImplementation
 {
-    public class ActionInvokerGetFiltersShould
+    public class ControllerActionInvokerGetFiltersShould : ActionInvokerGetFiltersShould<ControllerActionInvoker>
+    {
+    }
+
+    public class AsyncControllerActionInvokerGetFiltersShould : ActionInvokerGetFiltersShould<AsyncControllerActionInvoker>
+    {
+    }
+
+    public abstract class ActionInvokerGetFiltersShould<T> where T : class
     {
         [Fact]
         public void ImplementProperMethod()
         {
-            Func<RuntimePolicy> policyStrategy = ()=>RuntimePolicy.Off;
-            Func<IExecutionTimer> timerStrategy = () => new Mock<IExecutionTimer>().Object;
-            var brokerMock = new Mock<IMessageBroker>();
-            var factoryMock = new Mock<IProxyFactory>();
-
-            var implementation = new ActionInvoker.GetFilters<ControllerActionInvoker>(policyStrategy, timerStrategy, brokerMock.Object, factoryMock.Object);
+            var implementation = new ActionInvoker.GetFilters<T>();
 
             Assert.Equal("GetFilters", implementation.MethodToImplement.Name);
-
-            var asyncImplementation = new ActionInvoker.GetFilters<AsyncControllerActionInvoker>(policyStrategy, timerStrategy, brokerMock.Object, factoryMock.Object);
-
-            Assert.Equal("GetFilters", asyncImplementation.MethodToImplement.Name);
         }
 
         [Fact]
@@ -38,8 +38,12 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
 
 
             var contextMock = new Mock<IAlternateImplementationContext>();
+            contextMock.Setup(c => c.MessageBroker).Returns(brokerMock.Object);
+            contextMock.Setup(c => c.ProxyFactory).Returns(factoryMock.Object);
+            contextMock.Setup(c => c.TimerStrategy).Returns(timerStrategy);
+            contextMock.Setup(c => c.RuntimePolicyStrategy).Returns(policyStrategy);
 
-            var implementation = new ActionInvoker.GetFilters<ControllerActionInvoker>(policyStrategy, timerStrategy, brokerMock.Object, factoryMock.Object);
+            var implementation = new ActionInvoker.GetFilters<T>();
 
             implementation.NewImplementation(contextMock.Object);
 
@@ -56,8 +60,12 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             var factoryMock = new Mock<IProxyFactory>();
 
             var contextMock = new Mock<IAlternateImplementationContext>();
+            contextMock.Setup(c => c.MessageBroker).Returns(brokerMock.Object);
+            contextMock.Setup(c => c.ProxyFactory).Returns(factoryMock.Object);
+            contextMock.Setup(c => c.TimerStrategy).Returns(timerStrategy);
+            contextMock.Setup(c => c.RuntimePolicyStrategy).Returns(policyStrategy);
 
-            var implementation = new ActionInvoker.GetFilters<ControllerActionInvoker>(policyStrategy, timerStrategy, brokerMock.Object, factoryMock.Object);
+            var implementation = new ActionInvoker.GetFilters<T>();
 
             implementation.NewImplementation(contextMock.Object);
 

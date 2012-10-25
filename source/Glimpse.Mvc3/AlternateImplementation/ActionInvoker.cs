@@ -20,6 +20,26 @@ namespace Glimpse.Mvc.AlternateImplementation
             yield return new InvokeActionMethod();
         }
 
+        public class GetFilters<T> : IAlternateImplementation<T> where T : class
+        {
+            public GetFilters()
+            {
+                MethodToImplement = typeof(T).GetMethod("GetFilters", BindingFlags.Instance | BindingFlags.NonPublic);
+            }
+
+            public MethodInfo MethodToImplement { get; private set; }
+
+            public void NewImplementation(IAlternateImplementationContext context)
+            {
+                context.Proceed();
+
+                if (context.RuntimePolicyStrategy() == RuntimePolicy.Off)
+                    return;
+
+                // TODO:Proxy all filters
+            }
+        }
+
         public class InvokeActionResult<T> : IAlternateImplementation<T> where T : class
         {
             public MethodInfo MethodToImplement

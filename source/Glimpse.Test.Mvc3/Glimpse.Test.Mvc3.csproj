@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlternateImplementation\ActionInvokerGetFiltersShould.cs" />
     <Compile Include="AlternateImplementation\ActionInvokerInvokeActionMethodMessageShould.cs" />
     <Compile Include="AlternateImplementation\ActionInvokerInvokeActionMethodShould.cs" />
     <Compile Include="AlternateImplementation\ActionInvokerInvokeActionResultShould.cs" />
