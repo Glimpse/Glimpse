@@ -16,11 +16,14 @@
                 var height = settings.local('height') || 300,
                     body = $.fn.add.call(elements.holder(), elements.pageSpacer()).show();
                 
+                settings.local('height', height);
+                settings.local('panelHeight', height - 52);
+
                 elements.opener().hide();
                 if (args.isInit)
                     body.height(height);
                 else 
-                    body.animate({ height: settings.local('height') || 300 }, 'fast');
+                    body.animate({ height: settings.local('height') }, 'fast');
                 
                 pubsub.publish('action.shell.opened', { isInit: args.isInit });
             }
@@ -68,6 +71,6 @@
     pubsub.subscribe('trigger.shell.open', open);
     pubsub.subscribe('trigger.shell.minimize', minimize);
     pubsub.subscribe('trigger.shell.close', close);
-    pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners); 
+    pubsub.subscribe('trigger.shell.subscriptions', wireListeners); 
     pubsub.subscribe('trigger.shell.hide', hide);
 })(jQueryGlimpse, glimpse.pubsub, glimpse.elements, glimpse.settings);

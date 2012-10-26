@@ -43,11 +43,11 @@
             pubsub.publish('action.shell.loaded');
             pubsub.publish('action.template.processed', { templates: templates });
 
-            pubsub.publish('trigger.shell.listener.subscriptions'); //TODO look to rename
+            pubsub.publish('trigger.shell.subscriptions'); 
 
             process(true, 'action.shell.initial'); 
             
-            pubsub.publish('trigger.shell.default.view');  //TODO look to rename
+            pubsub.publish('trigger.shell.present'); 
         };
     
     pubsub.subscribe('trigger.shell.refresh', refresh); 

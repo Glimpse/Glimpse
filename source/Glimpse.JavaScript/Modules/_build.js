@@ -96,6 +96,8 @@
 /*(import:glimpse.ajax.js)*/
 // glimpse.history.js
 /*(import:glimpse.history.js)*/
+// glimpse.timeline.js
+/*(import:glimpse.timeline.js)*/
 
 // google-code-prettify.js
 /*(import:google-code-prettify.js)*/

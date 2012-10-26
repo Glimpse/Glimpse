@@ -29,5 +29,5 @@
         };
 
     pubsub.subscribe('action.shell.rendering', renderLayout);
-    pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners);
+    pubsub.subscribe('trigger.shell.subscriptions', wireListeners);
 })(jQueryGlimpse, glimpse.pubsub, glimpse.data, glimpse.elements, glimpse.util);

@@ -14,6 +14,6 @@
             settings.local('view', options.key);
         };
 
-    pubsub.subscribe('trigger.shell.default.view', start);
+    pubsub.subscribe('trigger.shell.present', start);
     pubsub.subscribe('trigger.tab.select', selected);
 })(glimpse.settings, glimpse.pubsub, glimpse.elements);

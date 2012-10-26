@@ -31,5 +31,5 @@
      
     pubsub.subscribe('action.data.refresh.changed', contextSwitch); 
     pubsub.subscribe('trigger.data.context.switch', selected); 
-    pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners);
+    pubsub.subscribe('trigger.shell.subscriptions', wireListeners);
 })(jQueryGlimpse, glimpse.pubsub, glimpse.data, glimpse.elements);

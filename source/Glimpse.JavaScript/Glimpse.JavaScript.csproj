@@ -154,6 +154,9 @@
     <Content Include="Modules\glimpse.shell.correlation.js" />
     <Content Include="Modules\glimpse.shell.resize.js" />
     <Content Include="Modules\glimpse.shell.title.js" />
+    <Content Include="Modules\glimpse.timeline.js" />
+    <Content Include="Modules\glimpse.timeline.shell.css" />
+    <Content Include="Modules\glimpse.timeline.shell.html" />
     <Content Include="Modules\glimpse.version.check.js" />
     <Content Include="Modules\glimpse.util.js" />
     <Content Include="Modules\glimpse.render.shell.css" />

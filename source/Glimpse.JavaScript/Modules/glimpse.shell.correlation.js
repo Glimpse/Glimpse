@@ -42,7 +42,7 @@
         };
 
     pubsub.subscribe('action.shell.rendering', renderLayout);
-    pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners);
+    pubsub.subscribe('trigger.shell.subscriptions', wireListeners);
     pubsub.subscribe('action.data.retrieve.starting.correlation', startingRetrieve);
     pubsub.subscribe('action.data.retrieve.completed.correlation', completedRetrieve);
     pubsub.subscribe('action.data.retrieve.succeeded.correlation', succeededRetrieve);
