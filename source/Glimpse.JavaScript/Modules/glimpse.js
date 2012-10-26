@@ -2779,13 +2779,15 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                 pubsub.publish('trigger.timline.divider.render', {});
             },
             panelResize = function() { 
-                //Work out what heihgt we can work with
-                var contentHeight = settings.local('panelHeight') - (elements.summaryRow.height() + elements.scope.find('.glimpse-tl-row-spacer').height());  
-                elements.contentRow.height(contentHeight + 'px');
+                if (elements.scope) {
+                    //Work out what heihgt we can work with
+                    var contentHeight = settings.local('panelHeight') - (elements.summaryRow.height() + elements.scope.find('.glimpse-tl-row-spacer').height());  
+                    elements.contentRow.height(contentHeight + 'px');
                     
-                //Render Divers
-                //dividerBuilder.render();
-                pubsub.publish('trigger.timline.divider.render', {});
+                    //Render Divers
+                    //dividerBuilder.render();
+                    pubsub.publish('trigger.timline.divider.render', {});
+                }
             };
         
         pubsub.subscribe('trigger.timline.shell.subscriptions', wireListeners); 
