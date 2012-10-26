@@ -156,7 +156,7 @@
             context.contextRequestId = undefined;
         };
     
-    pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners);
+    pubsub.subscribe('trigger.shell.subscriptions', wireListeners);
     pubsub.subscribe('action.panel.hiding.ajax', deactivate); 
     pubsub.subscribe('action.panel.showing.ajax', activate); 
     pubsub.subscribe('action.data.featched.ajax', selectFinish); 

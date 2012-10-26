@@ -25,7 +25,7 @@
             elements.lightbox().hide();
         };
     
-    pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners);
+    pubsub.subscribe('trigger.shell.subscriptions', wireListeners);
     pubsub.subscribe('trigger.shell.version.info.show', show);
     pubsub.subscribe('trigger.shell.version.info.close', close);
 })(jQueryGlimpse, glimpse.pubsub, glimpse.elements, glimpse.util, glimpse.settings);

@@ -189,7 +189,7 @@
             layoutBuildContentDetail(clientName, clientData);
         };
 
-    pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners);
+    pubsub.subscribe('trigger.shell.subscriptions', wireListeners);
     pubsub.subscribe('action.panel.hiding.history', deactivate); 
     pubsub.subscribe('action.panel.showing.history', activate); 
     pubsub.subscribe('action.data.featched.history', selectFinish); 

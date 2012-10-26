@@ -53,7 +53,7 @@
         };
 
     pubsub.subscribe('trigger.shell.popup', openPopup);
-    pubsub.subscribe('trigger.shell.listener.subscriptions', wireListeners);
+    pubsub.subscribe('trigger.shell.subscriptions', wireListeners);
     pubsub.subscribe('action.shell.closeed', terminate);
     pubsub.subscribe('action.shell.opening', terminate);
     pubsub.subscribe('trigger.shell.suppressed.open', tryOpenPopup);

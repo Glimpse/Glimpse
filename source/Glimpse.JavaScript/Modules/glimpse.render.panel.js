@@ -10,7 +10,7 @@
             if (!pluginData.dontRender)
                 renderEngine.insert(panel, pluginData.data, pluginMetadata.structure); 
             
-            pubsub.publish('action.panel.rendered.' + key, { key: key, pluginData: pluginData, pluginMetadata: pluginMetadata, panelHolder: panelHolder });
+            pubsub.publish('action.panel.rendered.' + key, { key: key, panel: panel, pluginData: pluginData, pluginMetadata: pluginMetadata, panelHolder: panelHolder });
 
             return panel;
         },
