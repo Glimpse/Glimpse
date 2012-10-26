@@ -7,7 +7,10 @@ namespace Glimpse.Core.Extensibility
     {
         public DictionaryDataStoreAdapter(IDictionary dictionary)
         {
-            if (!IsValidDictionaryType(dictionary)) throw new ArgumentException("dictionary");
+            if (!IsValidDictionaryType(dictionary))
+            {
+                throw new ArgumentException("dictionary");
+            }
             
             Dictionary = dictionary;
         }
@@ -16,12 +19,12 @@ namespace Glimpse.Core.Extensibility
 
         public T Get<T>()
         {
-            return (T) Dictionary[typeof (T).AssemblyQualifiedName];
+            return (T)Dictionary[typeof(T).AssemblyQualifiedName];
         }
 
         public T Get<T>(string key)
         {
-            return (T) Dictionary[key];
+            return (T)Dictionary[key];
         }
 
         public object Get(string key)
@@ -31,7 +34,7 @@ namespace Glimpse.Core.Extensibility
 
         public void Set<T>(T value)
         {
-            Dictionary[typeof (T).AssemblyQualifiedName] = value;
+            Dictionary[typeof(T).AssemblyQualifiedName] = value;
         }
 
         public void Set(string key, object value)
@@ -46,15 +49,29 @@ namespace Glimpse.Core.Extensibility
 
         private static bool IsValidDictionaryType(IDictionary dictionary)
         {
-            if (dictionary == null) return false;
+            if (dictionary == null)
+            {
+                return false;
+            }
 
             Type[] genericParameters = dictionary.GetType().GetGenericArguments();
 
-            //Support non-generics IDictionary
-            if (genericParameters.Length == 0) return true;
-            //Only support IDictionary<string|object, object>
-            if (genericParameters[0] != typeof (string) && genericParameters[0] != typeof (object)) return false;
-            if (genericParameters[1] != typeof (object)) return false;
+            // Support non-generics IDictionary
+            if (genericParameters.Length == 0)
+            {
+                return true;
+            }
+
+            // Only support IDictionary<string|object, object>
+            if (genericParameters[0] != typeof(string) && genericParameters[0] != typeof(object))
+            {
+                return false;
+            }
+
+            if (genericParameters[1] != typeof(object))
+            {
+                return false;
+            }
 
             return true;
         }

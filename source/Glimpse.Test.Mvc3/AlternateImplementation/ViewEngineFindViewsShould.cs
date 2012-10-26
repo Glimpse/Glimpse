@@ -28,9 +28,9 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         }
 
         [Fact]
-        public void ReturnAllMethodImplementationsWithStaticAll()
+        public void ReturnAllMethodImplementationsWithAllMethods()
         {
-            var implementations = ViewEngine.AllMethods(Implementation.MessageBrokerMock.Object, Implementation.ProxyFactoryMock.Object, Implementation.LoggerMock.Object, () => Implementation.ExecutionTimerMock.Object, ()=>RuntimePolicy.On);
+            var implementations = new ViewEngine(new Mock<IProxyFactory>().Object).AllMethods();
 
             Assert.Equal(2, implementations.Count());
         }
@@ -38,7 +38,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Fact]
         public void Construct()
         {
-            var implementation = new ViewEngine.FindViews(Implementation.MessageBrokerMock.Object, Implementation.ProxyFactoryMock.Object, Implementation.LoggerMock.Object, () => new ExecutionTimer(Stopwatch.StartNew()), ()=>RuntimePolicy.On, false);
+            var implementation = new ViewEngine.FindViews(false);
 
             Assert.NotNull(implementation);
             Assert.NotNull(implementation as IAlternateImplementation<IViewEngine>);
@@ -53,8 +53,13 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Fact]
         public void ProceedIfRuntimePolicyIsOff()
         {
-            var findViews = new ViewEngine.FindViews(Implementation.MessageBrokerMock.Object, Implementation.ProxyFactoryMock.Object, Implementation.LoggerMock.Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.Off, false);
+            var findViews = new ViewEngine.FindViews(false);
             var contextMock = new Mock<IAlternateImplementationContext>();
+            contextMock.Setup(c => c.MessageBroker).Returns(Implementation.MessageBrokerMock.Object);
+            contextMock.Setup(c => c.ProxyFactory).Returns(Implementation.ProxyFactoryMock.Object);
+            contextMock.Setup(c => c.Logger).Returns(Implementation.LoggerMock.Object);
+            contextMock.Setup(c => c.TimerStrategy).Returns(() => new ExecutionTimer(Stopwatch.StartNew()));
+            contextMock.Setup(c => c.RuntimePolicyStrategy).Returns(() => RuntimePolicy.Off);
 
             findViews.NewImplementation(contextMock.Object);
 
@@ -64,17 +69,22 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Fact]
         public void PublishMessagesIfRuntimePolicyIsOnAndViewNotFound()
         {
-            var findViews = new ViewEngine.FindViews(Implementation.MessageBrokerMock.Object, Implementation.ProxyFactoryMock.Object, Implementation.LoggerMock.Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On, false);
+            var findViews = new ViewEngine.FindViews(false);
 
             var controllerContext = new ControllerContext();
             var viewName = "anything";
             var useCache = true;
 
-            var args = new object[] { controllerContext, viewName, "MasterName", useCache }; 
+            var args = new object[] { controllerContext, viewName, "MasterName", useCache };
 
             var contextMock = new Mock<IAlternateImplementationContext>();
             contextMock.Setup(c => c.Arguments).Returns(args);
             contextMock.Setup(c => c.ReturnValue).Returns(new ViewEngineResult(Enumerable.Empty<string>()));
+            contextMock.Setup(c => c.MessageBroker).Returns(Implementation.MessageBrokerMock.Object);
+            contextMock.Setup(c => c.ProxyFactory).Returns(Implementation.ProxyFactoryMock.Object);
+            contextMock.Setup(c => c.Logger).Returns(Implementation.LoggerMock.Object);
+            contextMock.Setup(c => c.TimerStrategy).Returns(() => new ExecutionTimer(Stopwatch.StartNew()));
+            contextMock.Setup(c => c.RuntimePolicyStrategy).Returns(() => RuntimePolicy.On);
 
             findViews.NewImplementation(contextMock.Object);
 
@@ -94,7 +104,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
                 p.CreateProxy(It.IsAny<IView>(), It.IsAny<IEnumerable<IAlternateImplementation<IView>>>(),
                               It.IsAny<object>())).Returns(viewMock.Object);
 
-            var findViews = new ViewEngine.FindViews(Implementation.MessageBrokerMock.Object, Implementation.ProxyFactoryMock.Object, Implementation.LoggerMock.Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On, false);
+            var findViews = new ViewEngine.FindViews(false);
 
             var controllerContext = new ControllerContext();
             var viewName = "anything";
@@ -104,6 +114,11 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
 
             var contextMock = new Mock<IAlternateImplementationContext>();
             contextMock.Setup(c => c.Arguments).Returns(args);
+            contextMock.Setup(c => c.MessageBroker).Returns(Implementation.MessageBrokerMock.Object);
+            contextMock.Setup(c => c.ProxyFactory).Returns(Implementation.ProxyFactoryMock.Object);
+            contextMock.Setup(c => c.Logger).Returns(Implementation.LoggerMock.Object);
+            contextMock.Setup(c => c.TimerStrategy).Returns(() => new ExecutionTimer(Stopwatch.StartNew()));
+            contextMock.Setup(c => c.RuntimePolicyStrategy).Returns(() => RuntimePolicy.On);
 
             var viewEngineResult = new ViewEngineResult(viewMock.Object, engineMock.Object);
             contextMock.Setup(c => c.ReturnValue).Returns(viewEngineResult);

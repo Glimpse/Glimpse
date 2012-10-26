@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using System;
 using System.Collections.Generic;
+using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 using Glimpse.Test.Core.TestDoubles;
@@ -16,7 +18,7 @@ namespace Glimpse.Test.Core.Framework
         {
             var loggerMock = new Mock<ILogger>();
 
-            var factory = new CastleDynamicProxyFactory(loggerMock.Object);
+            var factory = new CastleDynamicProxyFactory(loggerMock.Object, new Mock<IMessageBroker>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
 
             Assert.Equal(loggerMock.Object, factory.Logger);
             Assert.NotNull(factory.ProxyGenerator);
@@ -25,7 +27,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void ThrowsWithNullLogger()
         {
-            Assert.Throws<ArgumentNullException>(() => new CastleDynamicProxyFactory(null));
+            Assert.Throws<ArgumentNullException>(() => new CastleDynamicProxyFactory(null, new Mock<IMessageBroker>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
         }
 
         [Fact]
@@ -33,7 +35,7 @@ namespace Glimpse.Test.Core.Framework
         {
             var loggerMock = new Mock<ILogger>();
 
-            var factory = new CastleDynamicProxyFactory(loggerMock.Object);
+            var factory = new CastleDynamicProxyFactory(loggerMock.Object, new Mock<IMessageBroker>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
 
             var typeMock = new Mock<ITab>();
             var implementationMock = new Mock<IAlternateImplementation<ITab>>();
@@ -59,7 +61,7 @@ namespace Glimpse.Test.Core.Framework
         {
             var loggerMock = new Mock<ILogger>();
 
-            var factory = new CastleDynamicProxyFactory(loggerMock.Object);
+            var factory = new CastleDynamicProxyFactory(loggerMock.Object, new Mock<IMessageBroker>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
 
             Assert.False(factory.IsProxyable("any string"));
         }
@@ -69,7 +71,7 @@ namespace Glimpse.Test.Core.Framework
         {
             var loggerMock = new Mock<ILogger>();
 
-            var factory = new CastleDynamicProxyFactory(loggerMock.Object);
+            var factory = new CastleDynamicProxyFactory(loggerMock.Object, new Mock<IMessageBroker>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
 
             var dummyTab = new DummyTab();
 
@@ -81,7 +83,7 @@ namespace Glimpse.Test.Core.Framework
         {
             var loggerMock = new Mock<ILogger>();
 
-            var factory = new CastleDynamicProxyFactory(loggerMock.Object);
+            var factory = new CastleDynamicProxyFactory(loggerMock.Object, new Mock<IMessageBroker>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
 
             var dummyTab = new DummyTab();
 
@@ -99,7 +101,7 @@ namespace Glimpse.Test.Core.Framework
         public void SupportMixins()
         {
             var loggerMock = new Mock<ILogger>();
-            var factory = new CastleDynamicProxyFactory(loggerMock.Object);
+            var factory = new CastleDynamicProxyFactory(loggerMock.Object, new Mock<IMessageBroker>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
 
             string expectedName = "any string";
             var dummyTab = new DummyTab();

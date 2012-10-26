@@ -287,7 +287,7 @@ namespace Glimpse.Test.Core.Framework
             Runtime.BeginRequest();
             Runtime.EndRequest();
 
-            Runtime.PersistanceStoreMock.Verify(ps => ps.Save(It.IsAny<GlimpseRequest>()));
+            Runtime.PersistenceStoreMock.Verify(ps => ps.Save(It.IsAny<GlimpseRequest>()));
         }
 
         [Fact]
@@ -692,9 +692,9 @@ namespace Glimpse.Test.Core.Framework
         }*/
 
         [Fact]
-        public void LogErrorOnPersistanceStoreException()
+        public void LogErrorOnPersistenceStoreException()
         {
-            Runtime.PersistanceStoreMock.Setup(ps => ps.Save(It.IsAny<GlimpseRequest>())).Throws<DummyException>();
+            Runtime.PersistenceStoreMock.Setup(ps => ps.Save(It.IsAny<GlimpseRequest>())).Throws<DummyException>();
 
             Runtime.Initialize();
             Runtime.BeginRequest();

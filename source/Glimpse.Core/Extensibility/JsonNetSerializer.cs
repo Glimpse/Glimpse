@@ -4,11 +4,8 @@ using Newtonsoft.Json;
 
 namespace Glimpse.Core.Extensibility
 {
-    public class JsonNetSerializer:ISerializer
+    public class JsonNetSerializer : ISerializer
     {
-        private JsonSerializerSettings Settings { get; set; }
-        private ILogger Logger { get; set; }
-
         public JsonNetSerializer(ILogger logger)
         {
             Logger = logger;
@@ -22,6 +19,10 @@ namespace Glimpse.Core.Extensibility
                                   };
         }
 
+        private ILogger Logger { get; set; }
+        
+        private JsonSerializerSettings Settings { get; set; }
+
         public string Serialize(object obj)
         {
             return JsonConvert.SerializeObject(obj, Formatting.None, Settings);
@@ -29,7 +30,10 @@ namespace Glimpse.Core.Extensibility
 
         public void RegisterSerializationConverters(IEnumerable<ISerializationConverter> converters)
         {
-            if (converters == null) throw new ArgumentNullException("converters");
+            if (converters == null)
+            {
+                throw new ArgumentNullException("converters");
+            }
 
             var jsonConverters = Settings.Converters;
 

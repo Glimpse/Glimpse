@@ -11,25 +11,26 @@ namespace Glimpse.AspNet.SerializationConverter
         {
             return new Dictionary<string, object>
                        {
-                           //TODO: Leverage Kristoffer Ahl's fluent interface for transformation into a table and formatting
-                           {"Cookies", request.Cookies.ToTable()},
-                           //TODO: Leverage Kristoffer Ahl's fluent interface for transformation into a table and formatting
-                           {"Query String", request.QueryString.ToTable()},
-                           {"Url", request.Url.ToString()},
-                           {"Url Referrer", request.UrlReferrer.OrNull()},
-                           {"App Relative Current Execution File Path", request.AppRelativeCurrentExecutionFilePath},
-                           {"Application Path", request.ApplicationPath},
-                           {"Current Execution File Path", request.CurrentExecutionFilePath},
-                           {"Current UI Culture", request.CurrentUICulture},
-                           {"File Path", request.FilePath},
-                           {"Path", request.Path},
-                           {"Path Info", request.PathInfo},
-                           {"Physical Application Path", request.PhysicalApplicationPath},
-                           {"Physical Path", request.PhysicalPath},
-                           {"Raw Url", request.RawUrl},
-                           {"User Agent", request.UserAgent},
-                           {"User Host Address", request.UserHostAddress},
-                           {"User Host Name", request.UserHostName},
+                           // TODO: Leverage Kristoffer Ahl's fluent interface for transformation into a table and formatting
+                           { "Cookies", request.Cookies.ToTable() },
+
+                           // TODO: Leverage Kristoffer Ahl's fluent interface for transformation into a table and formatting
+                           { "Query String", request.QueryString.ToTable() },
+                           { "Url", request.Url.ToString() },
+                           { "Url Referrer", request.UrlReferrer.OrNull() },
+                           { "App Relative Current Execution File Path", request.AppRelativeCurrentExecutionFilePath },
+                           { "Application Path", request.ApplicationPath },
+                           { "Current Execution File Path", request.CurrentExecutionFilePath },
+                           { "Current UI Culture", request.CurrentUiCulture },
+                           { "File Path", request.FilePath },
+                           { "Path", request.Path },
+                           { "Path Info", request.PathInfo },
+                           { "Physical Application Path", request.PhysicalApplicationPath },
+                           { "Physical Path", request.PhysicalPath },
+                           { "Raw Url", request.RawUrl },
+                           { "User Agent", request.UserAgent },
+                           { "User Host Address", request.UserHostAddress },
+                           { "User Host Name", request.UserHostName },
                        };
         }
     }

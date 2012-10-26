@@ -8,16 +8,44 @@ namespace Glimpse.Core.Framework
 {
     public class CastleDynamicProxyFactory : IProxyFactory
     {
-        public ILogger Logger { get; set; }
-        public ProxyGenerator ProxyGenerator { get; set; }
-
-        public CastleDynamicProxyFactory(ILogger logger)
+        public CastleDynamicProxyFactory(ILogger logger, IMessageBroker messageBroker, Func<IExecutionTimer> timerStrategy, Func<RuntimePolicy> runtimePolicyStrategy)
         {
-            if (logger == null) throw new ArgumentNullException("logger");
+            if (logger == null)
+            {
+                throw new ArgumentNullException("logger");
+            }
+
+            if (messageBroker == null)
+            {
+                throw new ArgumentNullException("messageBroker");
+            }
+
+            if (timerStrategy == null)
+            {
+                throw new ArgumentNullException("timerStrategy");
+            }
+
+            if (runtimePolicyStrategy == null)
+            {
+                throw new ArgumentNullException("runtimePolicyStrategy");
+            }
 
             Logger = logger;
+            MessageBroker = messageBroker;
+            TimerStrategy = timerStrategy;
+            RuntimePolicyStrategy = runtimePolicyStrategy;
             ProxyGenerator = new ProxyGenerator();
         }
+
+        public ILogger Logger { get; set; }
+        
+        public ProxyGenerator ProxyGenerator { get; set; }
+
+        public IMessageBroker MessageBroker { get; set; }
+
+        public Func<RuntimePolicy> RuntimePolicyStrategy { get; set; }
+
+        public Func<IExecutionTimer> TimerStrategy { get; set; }
 
         public T CreateProxy<T>(T instance, IEnumerable<IAlternateImplementation<T>> methodImplementations) where T : class
         {
@@ -26,14 +54,19 @@ namespace Glimpse.Core.Framework
 
         public T CreateProxy<T>(T instance, IEnumerable<IAlternateImplementation<T>> methodImplementations, object mixin) where T : class
         {
-            var interceptorArray = (from implementaion in methodImplementations select new AlternateImplementationToCastleInterceptorAdapter<T>(implementaion, Logger)).ToArray();
+            var interceptorArray = (from implementaion in methodImplementations select new AlternateImplementationToCastleInterceptorAdapter<T>(implementaion, Logger, MessageBroker, this, TimerStrategy, RuntimePolicyStrategy)).ToArray();
             var generationHook = new AlternateImplementationGenerationHook<T>(methodImplementations, Logger);
             var selector = new AlternateImplementationSelector<T>();
-            var options = new ProxyGenerationOptions(generationHook) {Selector = selector};
-            if (mixin != null) options.AddMixinInstance(mixin);
+            var options = new ProxyGenerationOptions(generationHook) { Selector = selector };
+            if (mixin != null)
+            {
+                options.AddMixinInstance(mixin);
+            }
 
             if (typeof(T).IsInterface)
+            {
                 return ProxyGenerator.CreateInterfaceProxyWithTarget(instance, options, interceptorArray);
+            }
 
             return ProxyGenerator.CreateClassProxyWithTarget(instance, options, interceptorArray);
         }

@@ -1,6 +1,4 @@
-﻿using System;
-using Glimpse.Core;
-using Glimpse.Core.Extensibility;
+﻿using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.AlternateImplementation;
 using Moq;
 using Xunit;
@@ -12,12 +10,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Fact]
         public void ReturnAllAlternateImplementations()
         {
-            Func<RuntimePolicy> runtimePolicyStrategy = () => RuntimePolicy.On;
-            var messageBrokerMock = new Mock<IMessageBroker>();
-            var proxyMock = new Mock<IProxyFactory>();
-            Func<IExecutionTimer> timerStrategy = () => new Mock<IExecutionTimer>().Object;
-
-            var implementations = ControllerFactory.AllMethods(runtimePolicyStrategy, messageBrokerMock.Object, proxyMock.Object, timerStrategy);
+            var implementations = new ControllerFactory(new Mock<IProxyFactory>().Object).AllMethods();
 
             Assert.NotEmpty(implementations);
         }

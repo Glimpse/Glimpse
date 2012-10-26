@@ -6,7 +6,7 @@ using Glimpse.Core.ResourceResult;
 
 namespace Glimpse.Core.Resource
 {
-    public class ConfigurationResource:IResource
+    public class ConfigurationResource : IResource
     {
         internal const string InternalName = "glimpse_config";
 

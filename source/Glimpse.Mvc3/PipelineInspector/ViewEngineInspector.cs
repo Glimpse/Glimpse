@@ -12,30 +12,33 @@ namespace Glimpse.Mvc.PipelineInspector
         public void Setup(IPipelineInspectorContext context)
         {
             var logger = context.Logger;
-            var proxyFactory = context.ProxyFactory;
 
-            var alternateImplementations = ViewEngine.AllMethods(context.MessageBroker, context.ProxyFactory, context.Logger, context.TimerStrategy, context.RuntimePolicyStrategy);
+            var alternateImplementation = new ViewEngine(context.ProxyFactory);
 
             OriginalViewEngines = new List<IViewEngine>();
 
             var currentEngines = ViewEngines.Engines;
             for (var i = 0; i < currentEngines.Count; i++)
             {
-                var engine = currentEngines[i];
+                var originalEngine = currentEngines[i];
 
-                OriginalViewEngines.Add(engine);
+                OriginalViewEngines.Add(originalEngine);
 
-                if (proxyFactory.IsProxyable(engine))
+                IViewEngine newEngine;
+                if (alternateImplementation.TryCreate(originalEngine, out newEngine))
                 {
-                    currentEngines[i] = proxyFactory.CreateProxy(engine, alternateImplementations);
-                    logger.Info(Resources.ViewEngineSetupReplacedViewEngine, engine.GetType());
+                    currentEngines[i] = newEngine;
+                    logger.Info(Resources.ViewEngineSetupReplacedViewEngine, originalEngine.GetType());
                 }
             }
         }
 
         public void Teardown(IPipelineInspectorContext context)
         {
-            if (OriginalViewEngines == null) return;
+            if (OriginalViewEngines == null)
+            {
+                return;
+            }
 
             var engines = ViewEngines.Engines;
 

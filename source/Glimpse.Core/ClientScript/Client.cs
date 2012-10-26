@@ -3,7 +3,7 @@ using Glimpse.Core.Resource;
 
 namespace Glimpse.Core.ClientScript
 {
-    public class Client:IDynamicClientScript
+    public class Client : IDynamicClientScript
     {
         public ScriptOrder Order
         {

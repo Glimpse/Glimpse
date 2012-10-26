@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core;
 
 namespace Glimpse.Core.Policy
 {
-    public class StatusCodePolicy:IRuntimePolicy, IConfigurable
+    public class StatusCodePolicy : IRuntimePolicy, IConfigurable
     {
-        public IList<int> StatusCodeWhitelist { get; set; }
-
         public StatusCodePolicy()
         {
             StatusCodeWhitelist = new List<int>();
@@ -17,10 +14,20 @@ namespace Glimpse.Core.Policy
 
         public StatusCodePolicy(IList<int> statusCodeWhitelist)
         {
-            if (statusCodeWhitelist == null) throw new ArgumentNullException("statusCodeWhitelist");
+            if (statusCodeWhitelist == null)
+            {
+                throw new ArgumentNullException("statusCodeWhitelist");
+            }
 
             StatusCodeWhitelist = statusCodeWhitelist;
         }
+
+        public RuntimeEvent ExecuteOn
+        {
+            get { return RuntimeEvent.EndRequest; }
+        }
+
+        public IList<int> StatusCodeWhitelist { get; set; }
 
         public RuntimePolicy Execute(IRuntimePolicyContext policyContext)
         {
@@ -34,11 +41,6 @@ namespace Glimpse.Core.Policy
                 policyContext.Logger.Warn(Resources.ExecutePolicyWarning, exception, GetType());
                 return RuntimePolicy.Off;
             }
-        }
-
-        public RuntimeEvent ExecuteOn
-        {
-            get { return RuntimeEvent.EndRequest; }
         }
 
         public void Configure(GlimpseSection section)

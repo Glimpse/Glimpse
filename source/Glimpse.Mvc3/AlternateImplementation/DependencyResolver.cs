@@ -8,39 +8,39 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public abstract class DependencyResolver
+    public class DependencyResolver : Alternate<IDependencyResolver>
     {
-        public Func<RuntimePolicy> RuntimePolicyStrategy { get; set; }
-        public IMessageBroker MessageBroker { get; set; }
-
-        protected DependencyResolver(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker)
+        public DependencyResolver(IProxyFactory proxyFactory) : base(proxyFactory)
         {
-            RuntimePolicyStrategy = runtimePolicyStrategy;
-            MessageBroker = messageBroker;
         }
 
-        public static IEnumerable<IAlternateImplementation<IDependencyResolver>> AllMethods(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker)
+        public override IEnumerable<IAlternateImplementation<IDependencyResolver>> AllMethods()
         {
-            yield return new GetService(runtimePolicyStrategy, messageBroker);
-            yield return new GetServices(runtimePolicyStrategy, messageBroker);
+            yield return new GetService();
+            yield return new GetServices();
         }
 
-        public class GetService : DependencyResolver, IAlternateImplementation<IDependencyResolver>
+        public class GetService : IAlternateImplementation<IDependencyResolver>
         {
-            public GetService(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker):base(runtimePolicyStrategy, messageBroker){}
+            public GetService()
+            {
+                MethodToImplement = typeof(IDependencyResolver).GetMethod("GetService");
+            }
 
-            public MethodInfo MethodToImplement { get { return typeof (IDependencyResolver).GetMethod("GetService"); }}
+            public MethodInfo MethodToImplement { get; private set; }
             
             public void NewImplementation(IAlternateImplementationContext context)
             {
                 context.Proceed();
 
-                if (RuntimePolicyStrategy() == RuntimePolicy.Off)
+                if (context.RuntimePolicyStrategy() == RuntimePolicy.Off)
+                {
                     return;
+                }
 
                 var resolvedObject = context.ReturnValue;
-                var message = new Message((Type) context.Arguments[0], resolvedObject);
-                MessageBroker.Publish(message);
+                var message = new Message((Type)context.Arguments[0], resolvedObject);
+                context.MessageBroker.Publish(message);
             }
 
             public class Message
@@ -57,29 +57,33 @@ namespace Glimpse.Mvc.AlternateImplementation
                 }
 
                 public Type ServiceType { get; set; }
+                
                 public Type ResolvedType { get; set; }
+                
                 public bool IsResolved { get; set; }
             }
         }
 
-
-        public class GetServices:DependencyResolver, IAlternateImplementation<IDependencyResolver>
+        public class GetServices : IAlternateImplementation<IDependencyResolver>
         {
-            public GetServices(Func<RuntimePolicy> runtimePolicyStrategy, IMessageBroker messageBroker):base(runtimePolicyStrategy, messageBroker)
+            public GetServices()
             {
+                MethodToImplement = typeof(IDependencyResolver).GetMethod("GetServices");
             }
 
-            public MethodInfo MethodToImplement { get { return typeof (IDependencyResolver).GetMethod("GetServices"); } }
+            public MethodInfo MethodToImplement { get; private set; }
 
             public void NewImplementation(IAlternateImplementationContext context)
             {
                 context.Proceed();
 
-                if (RuntimePolicyStrategy() == RuntimePolicy.Off)
+                if (context.RuntimePolicyStrategy() == RuntimePolicy.Off)
+                {
                     return;
+                }
 
-                var message = new Message((Type) context.Arguments[0], (IEnumerable<object>) context.ReturnValue);
-                MessageBroker.Publish(message);
+                var message = new Message((Type)context.Arguments[0], (IEnumerable<object>)context.ReturnValue);
+                context.MessageBroker.Publish(message);
             }
 
             public class Message
@@ -96,7 +100,9 @@ namespace Glimpse.Mvc.AlternateImplementation
                 }
 
                 public Type ServiceType { get; set; }
+                
                 public IEnumerable<Type> ResolvedTypes { get; set; }
+                
                 public bool IsResolved { get; set; }
             }
         }

@@ -6,11 +6,6 @@ namespace Glimpse.AspNet
 {
     public class PreBodyTagFilter : Stream
     {
-        private string HtmlSnippet { get; set; }
-        private Stream OutputStream { get; set; }
-        private Encoding ContentEncoding { get; set; }
-        private Regex BodyEnd { get; set; }
-
         public PreBodyTagFilter(string htmlSnippet, Stream outputStream, Encoding contentEncoding)
         {
 #if NET35
@@ -23,6 +18,40 @@ namespace Glimpse.AspNet
             ContentEncoding = contentEncoding;
             BodyEnd = new Regex("</body>", RegexOptions.Compiled | RegexOptions.Multiline);
         }
+
+        public override bool CanRead
+        {
+            get { return OutputStream.CanRead; }
+        }
+
+        public override bool CanSeek
+        {
+            get { return OutputStream.CanSeek; }
+        }
+
+        public override bool CanWrite
+        {
+            get { return OutputStream.CanWrite; }
+        }
+
+        public override long Length
+        {
+            get { return OutputStream.Length; }
+        }
+
+        public override long Position
+        {
+            get { return OutputStream.Position; }
+            set { OutputStream.Position = value; }
+        }
+
+        private string HtmlSnippet { get; set; }
+        
+        private Stream OutputStream { get; set; }
+        
+        private Encoding ContentEncoding { get; set; }
+        
+        private Regex BodyEnd { get; set; }
 
         public override void Flush()
         {
@@ -60,32 +89,6 @@ namespace Glimpse.AspNet
             {
                 OutputStream.Write(buffer, offset, count);
             }
-        }
-
-        public override bool CanRead
-        {
-            get { return OutputStream.CanRead; }
-        }
-
-        public override bool CanSeek
-        {
-            get { return OutputStream.CanSeek; }
-        }
-
-        public override bool CanWrite
-        {
-            get { return OutputStream.CanWrite; }
-        }
-
-        public override long Length
-        {
-            get { return OutputStream.Length; }
-        }
-
-        public override long Position
-        {
-            get { return OutputStream.Position; }
-            set { OutputStream.Position = value; }
         }
     }
 }

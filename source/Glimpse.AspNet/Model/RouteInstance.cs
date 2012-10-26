@@ -8,6 +8,10 @@ namespace Glimpse.AspNet.Model
 {
     public class RouteInstance
     {
+        private const string DefaultAreaName = "Root";
+
+        private List<UriTokenInstance> tokens;
+
         public RouteInstance(RouteBase routeBase, HttpContextBase requestContext)
         {
             RouteType = routeBase.GetType();
@@ -16,9 +20,7 @@ namespace Glimpse.AspNet.Model
             Route = routeBase as Route;
         }
 
-        //TODO: Underline?
-        private const string DefaultAreaName = "Root";
-        //TODO: technically Area's are an MVC concept. Can we get away with just showing data tokens?
+        // TODO: technically Area's are an MVC concept. Can we get away with just showing data tokens?
         public string AreaName
         {
             get
@@ -31,7 +33,7 @@ namespace Glimpse.AspNet.Model
             }
         }
 
-        //TODO: Check to see if constraints passed
+        // TODO: Check to see if constraints passed
         public RouteValueDictionary Constraints
         {
             get { return Route != null ? Route.Constraints : null; }
@@ -44,20 +46,16 @@ namespace Glimpse.AspNet.Model
 
         public bool IsMatch { get; private set; }
 
-        internal Route Route { get; set; }
-
-        internal RouteData RouteData { get; set; }
-
         public Type RouteType { get; private set; }
-
-        private List<UriTokenInstance> tokens;
 
         public IList<UriTokenInstance> UriTokens
         {
             get
             {
-                if (tokens != null) 
+                if (tokens != null)
+                {
                     return tokens;
+                }
 
                 var result = new List<UriTokenInstance>();
 
@@ -82,5 +80,9 @@ namespace Glimpse.AspNet.Model
         {
             get { return Route != null ? Route.Url : null; }
         }
+
+        internal Route Route { get; set; }
+        
+        internal RouteData RouteData { get; set; }
     }
 }

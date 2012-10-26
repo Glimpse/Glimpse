@@ -1,7 +1,6 @@
 ﻿using System.Web;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
-using Glimpse.Core;
 
 namespace Glimpse.AspNet
 {
@@ -11,12 +10,6 @@ namespace Glimpse.AspNet
         /// Wrapper around HttpContext.Current for testing purposes. Not for public use.
         /// </summary>
         private HttpContextBase context;
-
-        internal HttpContextBase Context
-        {
-            get { return context ?? new HttpContextWrapper(HttpContext.Current); }
-            set { context = value; }
-        }
 
         public IDataStore HttpRequestStore
         {
@@ -36,6 +29,12 @@ namespace Glimpse.AspNet
         public IRequestMetadata RequestMetadata
         {
             get { return new RequestMetadata(Context); }
+        }
+
+        internal HttpContextBase Context
+        {
+            get { return context ?? new HttpContextWrapper(HttpContext.Current); }
+            set { context = value; }
         }
 
         public void SetHttpResponseHeader(string name, string value)

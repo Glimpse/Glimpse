@@ -10,9 +10,7 @@ namespace Glimpse.Core.Framework
 {
     public class ReflectionDiscoverableCollection<T> : IDiscoverableCollection<T>
     {
-        internal List<T> Items { get; set; }
-        internal List<Type> IgnoredTypes { get; set; }
-        internal ILogger Logger { get; set; }
+        private string discoveryLocation;
 
         public ReflectionDiscoverableCollection(ILogger logger)
         {
@@ -21,6 +19,50 @@ namespace Glimpse.Core.Framework
             AutoDiscover = true;
             Logger = logger;
         }
+
+        public bool AutoDiscover { get; set; }
+
+        public int Count
+        {
+            get
+            {
+                return Items.Count;
+            }
+        }
+
+        public string DiscoveryLocation
+        {
+            get
+            {
+                return discoveryLocation ?? (discoveryLocation = AppDomain.CurrentDomain.BaseDirectory);
+            }
+
+            set
+            {
+                var result = Path.IsPathRooted(value) ? value : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, value);
+
+                if (!Directory.Exists(result))
+                {
+                    throw new DirectoryNotFoundException(string.Format(Resources.SetDiscoveryLocationDirectoryNotFoundMessage, value, result));
+                }
+                
+                discoveryLocation = result;
+            }
+        }
+
+        public bool IsReadOnly
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        internal List<T> Items { get; set; }
+        
+        internal List<Type> IgnoredTypes { get; set; }
+        
+        internal ILogger Logger { get; set; }
 
         public IEnumerator<T> GetEnumerator()
         {
@@ -59,22 +101,12 @@ namespace Glimpse.Core.Framework
             var result = Items.Remove(item);
 
             if (result)
+            {
                 Logger.Debug(Resources.DiscoverableCollectionRemove, typeof(T).Name, item.GetType());
+            }
 
             return result;
         }
-
-        public int Count
-        {
-            get { return Items.Count; }
-        }
-
-        public bool IsReadOnly
-        {
-            get { return false; }
-        }
-
-        public bool AutoDiscover { get; set; }
 
         public void IgnoreType(Type type)
         {
@@ -85,7 +117,6 @@ namespace Glimpse.Core.Framework
         {
             var results = new List<T>();
 
-
             foreach (var file in Directory.GetFiles(DiscoveryLocation, "*.dll", SearchOption.AllDirectories))
             {
                 Assembly assembly;
@@ -94,20 +125,22 @@ namespace Glimpse.Core.Framework
                     assembly = Assembly.LoadFrom(file);
                     Type[] allTypes;
 
-                    //GetTypes potentially throws and exception. Defensive coding as per http://haacked.com/archive/2012/07/23/get-all-types-in-an-assembly.aspx
+                    // GetTypes potentially throws and exception. Defensive coding as per http://haacked.com/archive/2012/07/23/get-all-types-in-an-assembly.aspx
                     try
                     {
                         allTypes = assembly.GetTypes();
                     }
-                    catch(ReflectionTypeLoadException ex)
+                    catch (ReflectionTypeLoadException ex)
                     {
                         allTypes = ex.Types.Where(t => t != null).ToArray();
 
                         foreach (var exception in ex.LoaderExceptions)
+                        {
                             Logger.Warn(Resources.DiscoverGetType, exception);
+                        }
                     }
                     
-                    var concreteTypes = allTypes.Where(type => typeof (T).IsAssignableFrom(type) &&
+                    var concreteTypes = allTypes.Where(type => typeof(T).IsAssignableFrom(type) &&
                                                                           !type.IsInterface &&
                                                                           !type.IsAbstract &&
                                                                           !IgnoredTypes.Contains(type));
@@ -115,7 +148,7 @@ namespace Glimpse.Core.Framework
                     {
                         try
                         {
-                            var instance = (T) Activator.CreateInstance(type);
+                            var instance = (T)Activator.CreateInstance(type);
                             results.Add(instance);
                         }
                         catch (Exception exception)
@@ -140,24 +173,6 @@ namespace Glimpse.Core.Framework
                 }
 
                 Items.AddRange(results);
-            }
-        }
-
-        private string discoveryLocation;
-
-        public string DiscoveryLocation
-        {
-            get { return discoveryLocation ?? (discoveryLocation = AppDomain.CurrentDomain.BaseDirectory); }
-            set
-            {
-                var result = Path.IsPathRooted(value)
-                                        ? value
-                                        : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, value);
-
-                if (!Directory.Exists(result))
-                    throw new DirectoryNotFoundException(string.Format(Resources.SetDiscoveryLocationDirectoryNotFoundMessage, value, result));
-                
-                discoveryLocation = result;
             }
         }
     }

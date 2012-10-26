@@ -14,15 +14,22 @@ namespace Glimpse.Test.Mvc3.Tester
         public Mock<IMessageBroker> MessageBrokerMock { get; set; }
         public Mock<IProxyFactory> ProxyFactoryMock { get; set; }
         public Mock<IExecutionTimer> TimerMock { get; set; }
+        public Func<RuntimePolicy> RuntimePolicyStrategy { get; set; }
 
-        private ControllerFactoryCreateControllerTester(Func<RuntimePolicy> runtimePolicyStrategy, Mock<IMessageBroker> messageBrokerMock, Mock<IProxyFactory> proxyMock, Mock<IExecutionTimer> timerMock):base(runtimePolicyStrategy, messageBrokerMock.Object, proxyMock.Object, ()=>timerMock.Object)
+        private ControllerFactoryCreateControllerTester(Func<RuntimePolicy> runtimePolicyStrategy, Mock<IMessageBroker> messageBrokerMock, Mock<IProxyFactory> proxyMock, Mock<IExecutionTimer> timerMock)
         {
+            TimerMock = timerMock;
+            RuntimePolicyStrategy = runtimePolicyStrategy;
+
             ContextMock = new Mock<IAlternateImplementationContext>();
             ContextMock.Setup(c => c.Arguments).Returns(new object[]{new RequestContext(), "a controller name"});
+            ContextMock.Setup(c => c.RuntimePolicyStrategy).Returns(RuntimePolicyStrategy);
+            ContextMock.Setup(c => c.TimerStrategy).Returns(() => TimerMock.Object);
+            ContextMock.Setup(c => c.MessageBroker).Returns(messageBrokerMock.Object);
+            ContextMock.Setup(c => c.ProxyFactory).Returns(proxyMock.Object);
             MessageBrokerMock = messageBrokerMock;
             ProxyFactoryMock = proxyMock;
             ProxyFactoryMock.Setup(p => p.IsProxyable(It.IsAny<IActionInvoker>())).Returns(true);
-            TimerMock = timerMock;
         }
 
         public static ControllerFactoryCreateControllerTester Create()

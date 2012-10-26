@@ -8,22 +8,18 @@ namespace Glimpse.Mvc.PipelineInspector
     {
         public void Setup(IPipelineInspectorContext context)
         {
-            var proxyFactory = context.ProxyFactory;
             var logger = context.Logger;
 
-            var controllerFactory = ControllerBuilder.Current.GetControllerFactory();
-            if (proxyFactory.IsProxyable(controllerFactory))
+            var originalControllerFactory = ControllerBuilder.Current.GetControllerFactory();
+            var alternateImplementation = new ControllerFactory(context.ProxyFactory);
+            IControllerFactory newControllerFactory;
+
+            if (alternateImplementation.TryCreate(originalControllerFactory, out newControllerFactory))
             {
-                var alternateImplementations = ControllerFactory.AllMethods(context.RuntimePolicyStrategy, context.MessageBroker, context.ProxyFactory, context.TimerStrategy);
+                ControllerBuilder.Current.SetControllerFactory(newControllerFactory);
 
-                var proxiedControllerFactory = proxyFactory.CreateProxy(controllerFactory, alternateImplementations);
-
-                ControllerBuilder.Current.SetControllerFactory(proxiedControllerFactory);
-
-                logger.Debug(Resources.ControllerFactorySetup, controllerFactory.GetType());
+                logger.Debug(Resources.ControllerFactorySetup, originalControllerFactory.GetType());
             }
-
-
         }
 
         public void Teardown(IPipelineInspectorContext context)

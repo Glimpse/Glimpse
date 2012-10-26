@@ -8,7 +8,9 @@ namespace Glimpse.Core.Extensions
         public static UriTemplate SetParameters(this UriTemplate template, IEnumerable<KeyValuePair<string, string>> nameValues)
          {
              if (nameValues == null)
+             {
                  return template;
+             }
 
              foreach (var pair in nameValues)
              {

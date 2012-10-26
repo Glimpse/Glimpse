@@ -56,7 +56,7 @@ namespace Glimpse.Core.Plugin.Assist
 
         public static string FormatWith(this string format, params object[] arguments)
         {
-            return String.Format(format, arguments);
+            return string.Format(format, arguments);
         }
     }
 }

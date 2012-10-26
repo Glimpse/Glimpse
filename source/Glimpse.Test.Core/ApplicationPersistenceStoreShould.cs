@@ -7,12 +7,12 @@ using Xunit;
 
 namespace Glimpse.Test.Core
 {
-    public class ApplicationPersistanceStoreShould:IDisposable
+    public class ApplicationPersistenceStoreShould:IDisposable
     {
-        private ApplicationPersistanceStoreTester tester;
-        public ApplicationPersistanceStoreTester Store
+        private ApplicationPersistenceStoreTester tester;
+        public ApplicationPersistenceStoreTester Store
         {
-            get { return tester ?? (tester = ApplicationPersistanceStoreTester.Create()); }
+            get { return tester ?? (tester = ApplicationPersistenceStoreTester.Create()); }
             set { tester = value; }
         }
 

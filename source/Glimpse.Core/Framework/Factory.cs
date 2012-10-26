@@ -6,7 +6,6 @@ using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Resource;
-using Glimpse.Core;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
@@ -16,10 +15,6 @@ namespace Glimpse.Core.Framework
 {
     public class Factory
     {
-        internal IServiceLocator UserServiceLocator { get; set; }
-        internal IServiceLocator ProviderServiceLocator { get; set; }
-        internal GlimpseSection Configuration { get; set; }
-
         public Factory() : this(null)
         {
         }
@@ -28,8 +23,7 @@ namespace Glimpse.Core.Framework
         {
         }
 
-        public Factory(IServiceLocator providerServiceLocator, IServiceLocator userServiceLocator)
-            : this(providerServiceLocator, userServiceLocator, null)
+        public Factory(IServiceLocator providerServiceLocator, IServiceLocator userServiceLocator) : this(providerServiceLocator, userServiceLocator, null)
         {
         }
 
@@ -39,25 +33,41 @@ namespace Glimpse.Core.Framework
 
             IServiceLocator loadedServiceLocator = null;
             if (userServiceLocator == null && Configuration.ServiceLocatorType != null)
+            {
                 loadedServiceLocator = Activator.CreateInstance(Configuration.ServiceLocatorType) as IServiceLocator;
+            }
 
             ProviderServiceLocator = providerServiceLocator;
             UserServiceLocator = userServiceLocator ?? loadedServiceLocator;
         }
 
+        internal IServiceLocator UserServiceLocator { get; set; }
+
+        internal IServiceLocator ProviderServiceLocator { get; set; }
+        
+        internal GlimpseSection Configuration { get; set; }
+
+        private ILogger Logger { get; set; }
+
+        private IFrameworkProvider FrameworkProvider { get; set; }
+
         public IGlimpseRuntime InstantiateRuntime()
         {
             IGlimpseRuntime result;
-            if (TrySingleInstanceFromServiceLocators(out result)) return result;
+            if (TrySingleInstanceFromServiceLocators(out result))
+            {
+                return result;
+            }
 
             return new GlimpseRuntime(InstantiateConfiguration());
         }
 
-        private IFrameworkProvider FrameworkProvider { get; set; }
-
         public IFrameworkProvider InstantiateFrameworkProvider()
         {
-            if (FrameworkProvider != null) return FrameworkProvider;
+            if (FrameworkProvider != null)
+            {
+                return FrameworkProvider;
+            }
 
             IFrameworkProvider result;
             if (TrySingleInstanceFromServiceLocators(out result))
@@ -66,45 +76,46 @@ namespace Glimpse.Core.Framework
                 return FrameworkProvider;
             }
 
-            throw new GlimpseException(string.Format(Resources.InstantiateFrameworkProviderException,
-                                                     UserServiceLocator == null
-                                                         ? "UserServiceLocator not configured"
-                                                         : UserServiceLocator.GetType().AssemblyQualifiedName,
-                                                     ProviderServiceLocator == null
-                                                         ? "ProviderServiceLocator not configured"
-                                                         : ProviderServiceLocator.GetType().AssemblyQualifiedName));
+            throw new GlimpseException(
+                string.Format(
+                    Resources.InstantiateFrameworkProviderException,
+                    UserServiceLocator == null ? "UserServiceLocator not configured" : UserServiceLocator.GetType().AssemblyQualifiedName,
+                    ProviderServiceLocator == null ? "ProviderServiceLocator not configured" : ProviderServiceLocator.GetType().AssemblyQualifiedName));
         }
 
         public ResourceEndpointConfiguration InstantiateResourceEndpointConfiguration()
         {
             ResourceEndpointConfiguration result;
-            if (TrySingleInstanceFromServiceLocators(out result)) return result;
-
+            if (TrySingleInstanceFromServiceLocators(out result))
+            {
+                return result;
+            }
 
             throw new GlimpseException(
-                string.Format(Resources.InstantiateResourceEndpointConfigurationException,
-                              UserServiceLocator == null
-                                  ? "UserServiceLocator not configured"
-                                  : UserServiceLocator.GetType().AssemblyQualifiedName,
-                              ProviderServiceLocator == null
-                                  ? "ProviderServiceLocator not configured"
-                                  : ProviderServiceLocator.GetType().AssemblyQualifiedName));
+                string.Format(
+                    Resources.InstantiateResourceEndpointConfigurationException,
+                    UserServiceLocator == null ? "UserServiceLocator not configured" : UserServiceLocator.GetType().AssemblyQualifiedName,
+                    ProviderServiceLocator == null ? "ProviderServiceLocator not configured" : ProviderServiceLocator.GetType().AssemblyQualifiedName));
         }
 
         public ICollection<IClientScript> InstantiateClientScripts()
         {
             ICollection<IClientScript> result;
-            if (TryAllInstancesFromServiceLocators(out result)) return result;
+            if (TryAllInstancesFromServiceLocators(out result))
+            {
+                return result;
+            }
 
             return CreateDiscoverableCollection<IClientScript>(Configuration.ClientScripts);
         }
 
-        private ILogger Logger { get; set; }
-
         public ILogger InstantiateLogger()
         {
-            //reuse logger if already created
-            if (Logger != null) return Logger;
+            // reuse logger if already created
+            if (Logger != null)
+            {
+                return Logger;
+            }
 
             ILogger result;
             if (TrySingleInstanceFromServiceLocators(out result))
@@ -113,7 +124,7 @@ namespace Glimpse.Core.Framework
                 return Logger;
             }
 
-            //use null logger if logging is off
+            // use null logger if logging is off
             var logLevel = Configuration.Logging.Level;
             if (logLevel == LoggingLevel.Off)
             {
@@ -121,8 +132,7 @@ namespace Glimpse.Core.Framework
                 return Logger;
             }
 
-
-            //use NLog logger otherwise
+            // use NLog logger otherwise
             var fileTarget = new FileTarget
                                  {
                                      FileName = "${basedir}/Glimpse.log",
@@ -134,8 +144,7 @@ namespace Glimpse.Core.Framework
 
             var loggingConfiguration = new LoggingConfiguration();
             loggingConfiguration.AddTarget("file", asyncTarget);
-            loggingConfiguration.LoggingRules.Add(new LoggingRule("*", LogLevel.FromOrdinal((int) logLevel), asyncTarget));
-
+            loggingConfiguration.LoggingRules.Add(new LoggingRule("*", LogLevel.FromOrdinal((int)logLevel), asyncTarget));
 
             Logger = new NLogLogger(new LogFactory(loggingConfiguration).GetLogger("Glimpse"));
             return Logger;
@@ -150,23 +159,32 @@ namespace Glimpse.Core.Framework
         {
             IHtmlEncoder encoder;
 
-            if (TrySingleInstanceFromServiceLocators(out encoder)) return encoder;
+            if (TrySingleInstanceFromServiceLocators(out encoder))
+            {
+                return encoder;
+            }
 
             return new AntiXssEncoder();
         }
 
-        public IPersistanceStore InstantiatePersistanceStore()
+        public IPersistenceStore InstantiatePersistenceStore()
         {
-            IPersistanceStore store;
-            if (TrySingleInstanceFromServiceLocators(out store)) return store;
+            IPersistenceStore store;
+            if (TrySingleInstanceFromServiceLocators(out store))
+            {
+                return store;
+            }
 
-            return new ApplicationPersistanceStore(InstantiateFrameworkProvider().HttpServerStore);
+            return new ApplicationPersistenceStore(InstantiateFrameworkProvider().HttpServerStore);
         }
 
         public ICollection<IPipelineInspector> InstantiatePipelineInspectors()
         {
             ICollection<IPipelineInspector> result;
-            if (TryAllInstancesFromServiceLocators(out result)) return result;
+            if (TryAllInstancesFromServiceLocators(out result))
+            {
+                return result;
+            }
 
             return CreateDiscoverableCollection<IPipelineInspector>(Configuration.PipelineInspectors);
         }
@@ -174,7 +192,10 @@ namespace Glimpse.Core.Framework
         public ICollection<IResource> InstantiateResources()
         {
             ICollection<IResource> resources;
-            if (TryAllInstancesFromServiceLocators(out resources)) return resources;
+            if (TryAllInstancesFromServiceLocators(out resources))
+            {
+                return resources;
+            }
 
             return CreateDiscoverableCollection<IResource>(Configuration.Resources);
         }
@@ -182,7 +203,10 @@ namespace Glimpse.Core.Framework
         public ISerializer InstantiateSerializer()
         {
             ISerializer result;
-            if (TrySingleInstanceFromServiceLocators(out result)) return result;
+            if (TrySingleInstanceFromServiceLocators(out result))
+            {
+                return result;
+            }
 
             result = new JsonNetSerializer(InstantiateLogger());
             result.RegisterSerializationConverters(InstantiateSerializationConverters());
@@ -193,7 +217,10 @@ namespace Glimpse.Core.Framework
         public ICollection<ITab> InstantiateTabs()
         {
             ICollection<ITab> tabs;
-            if (TryAllInstancesFromServiceLocators(out tabs)) return tabs;
+            if (TryAllInstancesFromServiceLocators(out tabs))
+            {
+                return tabs;
+            }
 
             return CreateDiscoverableCollection<ITab>(Configuration.Tabs);
         }
@@ -201,7 +228,10 @@ namespace Glimpse.Core.Framework
         public ICollection<IRuntimePolicy> InstantiateRuntimePolicies()
         {
             ICollection<IRuntimePolicy> result;
-            if (TryAllInstancesFromServiceLocators(out result)) return result;
+            if (TryAllInstancesFromServiceLocators(out result))
+            {
+                return result;
+            }
 
             var collection = CreateDiscoverableCollection<IRuntimePolicy>(Configuration.RuntimePolicies);
 
@@ -216,7 +246,10 @@ namespace Glimpse.Core.Framework
         public ICollection<ISerializationConverter> InstantiateSerializationConverters()
         {
             ICollection<ISerializationConverter> result;
-            if (TryAllInstancesFromServiceLocators(out result)) return result;
+            if (TryAllInstancesFromServiceLocators(out result))
+            {
+                return result;
+            }
 
             return CreateDiscoverableCollection<ISerializationConverter>(Configuration.SerializationConverters);
         }
@@ -224,23 +257,44 @@ namespace Glimpse.Core.Framework
         public IResource InstantiateDefaultResource()
         {
             IResource result;
-            if (TrySingleInstanceFromServiceLocators(out result)) return result;
+            if (TrySingleInstanceFromServiceLocators(out result))
+            {
+                return result;
+            }
 
             return new ConfigurationResource();
+        }
+
+        public Func<IExecutionTimer> InstantiateTimerStrategy()
+        {
+            var frameworkProvider = InstantiateFrameworkProvider();
+
+            return () => frameworkProvider.HttpRequestStore.Get<IExecutionTimer>(Constants.GlobalTimerKey);
+        }
+
+        public Func<RuntimePolicy> InstantiateRuntimePolicyStrategy()
+        {
+            var frameworkProvider = InstantiateFrameworkProvider();
+            return () => frameworkProvider.HttpRequestStore.Get<RuntimePolicy>(Constants.RuntimePolicyKey);
         }
 
         public IGlimpseConfiguration InstantiateConfiguration()
         {
             IGlimpseConfiguration result;
-            if (TrySingleInstanceFromServiceLocators(out result)) return result;
+            if (TrySingleInstanceFromServiceLocators(out result))
+            {
+                return result;
+            }
 
             var frameworkProvider = InstantiateFrameworkProvider();
+            var timerStrategy = InstantiateTimerStrategy();
+            var runtimePolicyStrategy = InstantiateRuntimePolicyStrategy();
             var endpointConfiguration = InstantiateResourceEndpointConfiguration();
             var clientScripts = InstantiateClientScripts();
             var logger = InstantiateLogger();
             var policy = InstantiateDefaultRuntimePolicy();
             var htmlEncoder = InstantiateHtmlEncoder();
-            var persistanceStore = InstantiatePersistanceStore();
+            var persistenceStore = InstantiatePersistenceStore();
             var pipelineInspectors = InstantiatePipelineInspectors();
             var resources = InstantiateResources();
             var serializer = InstantiateSerializer();
@@ -251,10 +305,7 @@ namespace Glimpse.Core.Framework
             var messageBroker = InstantiateMessageBroker();
             var endpointBaseUri = InstantiateBaseResourceUri();
 
-            return new GlimpseConfiguration(frameworkProvider, endpointConfiguration, clientScripts, logger, policy,
-                                            htmlEncoder, persistanceStore, pipelineInspectors, resources, serializer,
-                                            tabs,
-                                            runtimePolicies, defaultResource, proxyFactory, messageBroker, endpointBaseUri);
+            return new GlimpseConfiguration(frameworkProvider, endpointConfiguration, clientScripts, logger, policy, htmlEncoder, persistenceStore, pipelineInspectors, resources, serializer, tabs, runtimePolicies, defaultResource, proxyFactory, messageBroker, endpointBaseUri, timerStrategy, runtimePolicyStrategy);
         }
 
         public string InstantiateBaseResourceUri()
@@ -265,7 +316,10 @@ namespace Glimpse.Core.Framework
         public IMessageBroker InstantiateMessageBroker()
         {
             IMessageBroker result;
-            if (TrySingleInstanceFromServiceLocators(out result)) return result;
+            if (TrySingleInstanceFromServiceLocators(out result))
+            {
+                return result;
+            }
 
             return new MessageBroker(InstantiateLogger());
         }
@@ -273,9 +327,12 @@ namespace Glimpse.Core.Framework
         public IProxyFactory InstantiateProxyFactory()
         {
             IProxyFactory result;
-            if (TrySingleInstanceFromServiceLocators(out result)) return result;
+            if (TrySingleInstanceFromServiceLocators(out result))
+            {
+                return result;
+            }
 
-            return new CastleDynamicProxyFactory(InstantiateLogger());
+            return new CastleDynamicProxyFactory(InstantiateLogger(), InstantiateMessageBroker(), InstantiateTimerStrategy(), InstantiateRuntimePolicyStrategy());
         }
 
         private IDiscoverableCollection<T> CreateDiscoverableCollection<T>(DiscoverableCollectionElement config)
@@ -285,10 +342,15 @@ namespace Glimpse.Core.Framework
             discoverableCollection.IgnoredTypes.AddRange(config.IgnoredTypes.ToEnumerable());
 
             if (config.DiscoveryLocation != DiscoverableCollectionElement.DefaultLocation)
+            {
                 discoverableCollection.DiscoveryLocation = config.DiscoveryLocation;
+            }
 
             discoverableCollection.AutoDiscover = config.AutoDiscover;
-            if (discoverableCollection.AutoDiscover) discoverableCollection.Discover();
+            if (discoverableCollection.AutoDiscover)
+            {
+                discoverableCollection.Discover();
+            }
 
             return discoverableCollection;
         }
@@ -298,13 +360,19 @@ namespace Glimpse.Core.Framework
             if (UserServiceLocator != null)
             {
                 instance = UserServiceLocator.GetInstance<T>();
-                if (instance != null) return true;
+                if (instance != null)
+                {
+                    return true;
+                }
             }
 
             if (ProviderServiceLocator != null)
             {
                 instance = ProviderServiceLocator.GetInstance<T>();
-                if (instance != null) return true;
+                if (instance != null)
+                {
+                    return true;
+                }
             }
 
             instance = null;

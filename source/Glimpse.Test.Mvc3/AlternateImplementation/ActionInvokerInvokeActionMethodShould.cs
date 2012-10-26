@@ -15,11 +15,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Fact]
         public void ImplementProperMethod()
         {
-            Func<RuntimePolicy> policyStrategy = () => RuntimePolicy.Off;
-            Func<IExecutionTimer> timerStrategy = () => new Mock<IExecutionTimer>().Object;
-            var brokerMock = new Mock<IMessageBroker>();
-
-            var implementation = new ActionInvoker.InvokeActionMethod(policyStrategy, timerStrategy, brokerMock.Object);
+            var implementation = new ActionInvoker.InvokeActionMethod();
 
             Assert.Equal("InvokeActionMethod", implementation.MethodToImplement.Name);
         }
@@ -32,8 +28,11 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             var brokerMock = new Mock<IMessageBroker>();
 
             var contextMock = new Mock<IAlternateImplementationContext>();
+            contextMock.Setup(c => c.MessageBroker).Returns(brokerMock.Object);
+            contextMock.Setup(c => c.TimerStrategy).Returns(timerStrategy);
+            contextMock.Setup(c => c.RuntimePolicyStrategy).Returns(policyStrategy);
 
-            var implementation = new ActionInvoker.InvokeActionMethod(policyStrategy, timerStrategy, brokerMock.Object);
+            var implementation = new ActionInvoker.InvokeActionMethod();
             implementation.NewImplementation(contextMock.Object);
 
 
@@ -53,6 +52,9 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             actionDescriptorMock.Setup(a => a.ControllerDescriptor).Returns(new ReflectedControllerDescriptor(typeof(DummyController)));
 
             var contextMock = new Mock<IAlternateImplementationContext>();
+            contextMock.Setup(c => c.MessageBroker).Returns(brokerMock.Object);
+            contextMock.Setup(c => c.TimerStrategy).Returns(timerStrategy);
+            contextMock.Setup(c => c.RuntimePolicyStrategy).Returns(policyStrategy);
             contextMock.Setup(c => c.ReturnValue).Returns(new ContentResult());
             contextMock.Setup(c => c.Arguments).Returns(new object[]
                                                             {
@@ -61,7 +63,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
                                                                 new Dictionary<string,object>(),
                                                             });
 
-            var implementation = new ActionInvoker.InvokeActionMethod(policyStrategy, timerStrategy, brokerMock.Object);
+            var implementation = new ActionInvoker.InvokeActionMethod();
             implementation.NewImplementation(contextMock.Object);
 
             timerMock.Verify(t=>t.Time(It.IsAny<Action>()));

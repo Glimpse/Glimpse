@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 using Glimpse.Core;
@@ -13,7 +15,7 @@ namespace Glimpse.Test.Core.Tester
                                            IDiscoverableCollection<IClientScript> clientScriptsStub,
                                            Mock<ILogger> loggerMock,
                                            Mock<IHtmlEncoder> htmlEncoderMock,
-                                           Mock<IPersistanceStore> persistanceStoreMock,
+                                           Mock<IPersistenceStore> persistenceStoreMock,
                                            IDiscoverableCollection<IPipelineInspector> pipelineInspectorsStub,
                                            IDiscoverableCollection<IResource> resourcesStub,
                                            Mock<ISerializer> serializerMock,
@@ -22,7 +24,9 @@ namespace Glimpse.Test.Core.Tester
                                            Mock<IResource> defaultResourceMock,
                                            Mock<IProxyFactory> proxyFactoryMock,
                                            Mock<IMessageBroker> messageBrokerMock,
-                                           string endpointBaseUri)
+                                           string endpointBaseUri,
+                                           Func<IExecutionTimer> timerStrategy,
+                                           Func<RuntimePolicy> runtimePolicyStrategy)
             : base(
                 frameworkProviderMock.Object,
                 endpointConfigurationMock.Object,
@@ -30,7 +34,7 @@ namespace Glimpse.Test.Core.Tester
                 loggerMock.Object,
                 RuntimePolicy.On,
                 htmlEncoderMock.Object,
-                persistanceStoreMock.Object,
+                persistenceStoreMock.Object,
                 pipelineInspectorsStub,
                 resourcesStub,
                 serializerMock.Object,
@@ -39,14 +43,16 @@ namespace Glimpse.Test.Core.Tester
                 defaultResourceMock.Object,
                 proxyFactoryMock.Object,
                 messageBrokerMock.Object,
-            endpointBaseUri)
+                endpointBaseUri,
+                timerStrategy,
+                runtimePolicyStrategy)
         {
             FrameworkProviderMock = frameworkProviderMock;
             EndpointConfigMock = endpointConfigurationMock;
             ClientScriptsStub = clientScriptsStub;
             LoggerMock = loggerMock;
             HtmlEncoderMock = htmlEncoderMock;
-            PersistanceStoreMock = persistanceStoreMock;
+            PersistenceStoreMock = persistenceStoreMock;
             SerializerMock = serializerMock;
             ProxyFactoryMock = proxyFactoryMock;
             MessageBrokerMock = messageBrokerMock;
@@ -62,7 +68,7 @@ namespace Glimpse.Test.Core.Tester
                                                   new ReflectionDiscoverableCollection<IClientScript>(loggerMock.Object),
                                                   loggerMock,
                                                   new Mock<IHtmlEncoder>(),
-                                                  new Mock<IPersistanceStore>(),
+                                                  new Mock<IPersistenceStore>(),
                                                   new ReflectionDiscoverableCollection<IPipelineInspector>(
                                                       loggerMock.Object),
                                                   new ReflectionDiscoverableCollection<IResource>(loggerMock.Object),
@@ -72,7 +78,9 @@ namespace Glimpse.Test.Core.Tester
                                                   new Mock<IResource>(),
                                                   new Mock<IProxyFactory>(),
                                                   new Mock<IMessageBroker>(),
-                                                  "~/Glimpse.axd");
+                                                  "~/Glimpse.axd",
+                                                  () => new ExecutionTimer(Stopwatch.StartNew()),
+                                                  () => RuntimePolicy.On);
         }
 
         public Mock<ResourceEndpointConfiguration> EndpointConfigMock { get; set; }
@@ -80,7 +88,7 @@ namespace Glimpse.Test.Core.Tester
         public IDiscoverableCollection<IClientScript> ClientScriptsStub { get; set; }
         public Mock<ILogger> LoggerMock { get; set; }
         public Mock<IHtmlEncoder> HtmlEncoderMock { get; set; }
-        public Mock<IPersistanceStore> PersistanceStoreMock { get; set; }
+        public Mock<IPersistenceStore> PersistenceStoreMock { get; set; }
         public Mock<ISerializer> SerializerMock { get; set; }
         public Mock<IProxyFactory> ProxyFactoryMock { get; set; }
         public Mock<IMessageBroker> MessageBrokerMock { get; set; }

@@ -2,7 +2,7 @@ using Glimpse.Core.Framework;
 
 namespace Glimpse.Core.Extensibility
 {
-    public class ResourceResultContext:IResourceResultContext
+    public class ResourceResultContext : IResourceResultContext
     {
         public ResourceResultContext(ILogger logger, IFrameworkProvider frameworkProvider, ISerializer serializer, IHtmlEncoder htmlEncoder)
         {

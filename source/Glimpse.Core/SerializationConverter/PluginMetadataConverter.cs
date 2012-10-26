@@ -10,8 +10,7 @@ namespace Glimpse.Core.SerializationConverter
         {
             return new Dictionary<string, object>
                        {
-                           {"documentationUri", metadata.DocumentationUri}
-                           //Don't think the client needs "HasMetadata", so leaving it out
+                           { "documentationUri", metadata.DocumentationUri }
                        };
         }
     }

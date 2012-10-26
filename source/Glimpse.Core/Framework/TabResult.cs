@@ -2,6 +2,12 @@ namespace Glimpse.Core.Framework
 {
     public class TabResult
     {
+        public TabResult(string name, object data)
+        {
+            Data = data;
+            Name = name;
+        }
+
         /// <summary>
         /// Gets or sets the data.
         /// </summary>
@@ -12,11 +18,5 @@ namespace Glimpse.Core.Framework
         public object Data { get; set; }
 
         public string Name { get; set; }
-
-        public TabResult(string name, object data)
-        {
-            Data = data;
-            Name = name;
-        }
     }
 }

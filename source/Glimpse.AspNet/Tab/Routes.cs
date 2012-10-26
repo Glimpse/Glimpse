@@ -10,6 +10,16 @@ namespace Glimpse.AspNet.Tab
 {
     public class Routes : AspNetTab, IDocumentation
     {
+        public string DocumentationUri
+        {
+            get { return "http://getGlimpse.com/Help/Plugin/Routes"; }
+        }
+
+        public override string Name
+        {
+            get { return "Routes"; }
+        }
+
         public override object GetData(ITabContext context)
         {
             var result = new List<RouteInstance>();
@@ -18,23 +28,15 @@ namespace Glimpse.AspNet.Tab
             {
                 var requestContext = context.GetRequestContext<HttpContextBase>();
 
-                if (requestContext == null) 
+                if (requestContext == null)
+                {
                     return null;
+                }
 
                 result.AddRange(RouteTable.Routes.Select(routeBase => new RouteInstance(routeBase, requestContext)));
             }
 
             return result;
-        }
-
-        public override string Name
-        {
-            get { return "Routes"; }
-        }
-
-        public string DocumentationUri
-        {
-            get { return "http://getGlimpse.com/Help/Plugin/Routes"; }
         }
     }
 }

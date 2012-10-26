@@ -15,11 +15,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Fact]
         public void ImplementProperMethod()
         {
-            Func<RuntimePolicy> runtimeStrategy = ()=>RuntimePolicy.On;
-            Func<IExecutionTimer> timerStategy = () => new Mock<IExecutionTimer>().Object;
-            var brokerMock = new Mock<IMessageBroker>();
-
-            var implementation = new AsyncActionInvoker.EndInvokeActionMethod(runtimeStrategy, timerStategy, brokerMock.Object);
+            var implementation = new AsyncActionInvoker.EndInvokeActionMethod();
 
             Assert.Equal("EndInvokeActionMethod", implementation.MethodToImplement.Name);
         }
@@ -32,8 +28,11 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             var brokerMock = new Mock<IMessageBroker>();
 
             var contextMock = new Mock<IAlternateImplementationContext>();
+            contextMock.Setup(c => c.MessageBroker).Returns(brokerMock.Object);
+            contextMock.Setup(c => c.RuntimePolicyStrategy).Returns(runtimeStrategy);
+            contextMock.Setup(c => c.TimerStrategy).Returns(timerStategy);
 
-            var implementation = new AsyncActionInvoker.EndInvokeActionMethod(runtimeStrategy, timerStategy, brokerMock.Object);
+            var implementation = new AsyncActionInvoker.EndInvokeActionMethod();
 
             implementation.NewImplementation(contextMock.Object);
 
@@ -60,7 +59,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             actionDescriptorMock.Setup(ad => ad.ActionName).Returns("Index");
 
             var contextMock = new Mock<IAlternateImplementationContext>();
-            contextMock.Setup(c => c.Proxy).Returns(new AsyncActionInvoker.ActionInvokerState
+            contextMock.Setup(c => c.Proxy).Returns(new ActionInvokerState
             {
                 Offset = 10,
                 Arguments = new ActionInvoker.InvokeActionMethod.Arguments(new object[]
@@ -70,7 +69,11 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
                                                                                                                                                                 new Dictionary<string, object>()
                                                                                                                                                             })});
             contextMock.Setup(c => c.ReturnValue).Returns(new ContentResult());
-            var implementation = new AsyncActionInvoker.EndInvokeActionMethod(runtimeStrategy, timerStategy, brokerMock.Object);
+            contextMock.Setup(c => c.MessageBroker).Returns(brokerMock.Object);
+            contextMock.Setup(c => c.RuntimePolicyStrategy).Returns(runtimeStrategy);
+            contextMock.Setup(c => c.TimerStrategy).Returns(timerStategy);
+
+            var implementation = new AsyncActionInvoker.EndInvokeActionMethod();
 
             implementation.NewImplementation(contextMock.Object);
 

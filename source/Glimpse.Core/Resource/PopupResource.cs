@@ -14,7 +14,7 @@ namespace Glimpse.Core.Resource
             get { return "glimpse_popup"; }
         }
 
-        public virtual IEnumerable<ResourceParameterMetadata> Parameters
+        public IEnumerable<ResourceParameterMetadata> Parameters
         {
             get { return new[] { ResourceParameter.RequestId, ResourceParameter.VersionNumber }; }
         }
@@ -26,23 +26,36 @@ namespace Glimpse.Core.Resource
 
         public IResourceResult Execute(IResourceContext context, IGlimpseConfiguration configuration)
         {
-            if (context == null) throw new ArgumentNullException("context");
-            if (configuration == null) throw new ArgumentNullException("configuration");
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            if (configuration == null)
+            {
+                throw new ArgumentNullException("configuration");
+            }
 
             Guid requestId;
 
 #if NET35
             if (!Glimpse.Core.Backport.Net35Backport.TryParseGuid(context.Parameters[ResourceParameter.RequestId.Name], out requestId))
+            {
                 return new StatusCodeResourceResult(404);
+            }
 #else
             if (!Guid.TryParse(context.Parameters.GetValueOrDefault(ResourceParameter.RequestId.Name), out requestId))
+            {
                 return new StatusCodeResourceResult(404);
+            }
 #endif
 
             string version = context.Parameters.GetValueOrDefault(ResourceParameter.VersionNumber.Name);
 
             if (string.IsNullOrEmpty(version))
+            {
                 return new StatusCodeResourceResult(404);
+            }
 
             string scriptTags = configuration.GenerateScriptTags(requestId, version);
 

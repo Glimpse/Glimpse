@@ -2,14 +2,14 @@
 
 namespace Glimpse.Core.ResourceResult
 {
-    public class HtmlResourceResult:IResourceResult
+    public class HtmlResourceResult : IResourceResult
     {
-        public string Html { get; set; }
-
         public HtmlResourceResult(string html)
         {
             Html = html;
         }
+
+        public string Html { get; set; }
 
         public void Execute(IResourceResultContext context)
         {

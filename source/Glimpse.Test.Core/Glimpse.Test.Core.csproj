@@ -60,7 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AntiXssEncoderShould.cs" />
-    <Compile Include="ApplicationPersistanceStoreShould.cs" />
+    <Compile Include="ApplicationPersistenceStoreShould.cs" />
     <Compile Include="BadData\Blowup.cs" />
     <Compile Include="BadData\IBlowup.cs" />
     <Compile Include="ClientScript\ClientShould.cs" />
@@ -156,7 +156,7 @@
     <Compile Include="TestDoubles\DummyTab.cs" />
     <Compile Include="TestDoubles\IDummyMixin.cs" />
     <Compile Include="Tester\AjaxPolicyTester.cs" />
-    <Compile Include="Tester\ApplicationPersistanceStoreTester.cs" />
+    <Compile Include="Tester\ApplicationPersistenceStoreTester.cs" />
     <Compile Include="Tester\ContentTypePolicyTester.cs" />
     <Compile Include="Tester\ControlCookiePolicyTester.cs" />
     <Compile Include="Tester\GlimpseConfigurationTester.cs" />

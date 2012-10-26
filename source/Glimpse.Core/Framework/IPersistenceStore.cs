@@ -1,8 +1,9 @@
 namespace Glimpse.Core.Framework
 {
-    public interface IPersistanceStore:IReadOnlyPersistanceStore
+    public interface IPersistenceStore : IReadOnlyPersistenceStore
     {
         void Save(GlimpseRequest request);
+        
         void Save(GlimpseMetadata metadata);
     }
 }

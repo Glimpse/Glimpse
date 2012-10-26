@@ -4,7 +4,7 @@ namespace Glimpse.Core.Plugin.Assist
 {
     public static class CodeTypeConverter
     {
-        private static readonly IDictionary<CodeType,string> Map = new Dictionary<CodeType, string>
+        private static readonly IDictionary<CodeType, string> Map = new Dictionary<CodeType, string>
         {
             { CodeType.Bash, "bsh" },
             { CodeType.Csharp, "cs" },
@@ -16,9 +16,7 @@ namespace Glimpse.Core.Plugin.Assist
 
         public static string Convert(CodeType codeType)
         {
-            return Map.ContainsKey(codeType)
-                ? Map[codeType]
-                : codeType.ToString().ToLower();
+            return Map.ContainsKey(codeType) ? Map[codeType] : codeType.ToString().ToLower();
         }
     }
 }

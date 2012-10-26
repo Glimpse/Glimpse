@@ -10,6 +10,7 @@ namespace Glimpse.Core.Framework
         }
 
         public Guid SubscriptionId { get; set; }
+
         public abstract void Execute(object message);
     }
 }

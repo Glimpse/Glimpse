@@ -5,15 +5,8 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.AspNet.Tab
 {
-    public class Request:AspNetTab, IDocumentation
+    public class Request : AspNetTab, IDocumentation
     {
-        public override object GetData(ITabContext context)
-        {
-            var httpContext = context.GetHttpContext();
-
-            return new RequestModel(httpContext);
-        }
-
         public override string Name
         {
             get { return "Request"; }
@@ -21,8 +14,15 @@ namespace Glimpse.AspNet.Tab
 
         public string DocumentationUri
         {
-            //TODO: Update to proper Uri
+            // TODO: Update to proper Uri
             get { return "http://localhost/someUrl"; }
+        }
+
+        public override object GetData(ITabContext context)
+        {
+            var httpContext = context.GetHttpContext();
+
+            return new RequestModel(httpContext);
         }
     }
 }

@@ -36,11 +36,11 @@ namespace Glimpse.Test.Core.Resource
         {
             var metadata = new GlimpseMetadata();
 
-            var storeMock = new Mock<IReadOnlyPersistanceStore>();
+            var storeMock = new Mock<IReadOnlyPersistenceStore>();
             storeMock.Setup(s => s.GetMetadata()).Returns(metadata);
 
             var contextMock = new Mock<IResourceContext>();
-            contextMock.Setup(c => c.PersistanceStore).Returns(storeMock.Object);
+            contextMock.Setup(c => c.PersistenceStore).Returns(storeMock.Object);
             contextMock.Setup(c => c.Parameters[ResourceParameter.Callback.Name]).Returns("a string");
 
             var resource = new MetadataResource();
@@ -53,11 +53,11 @@ namespace Glimpse.Test.Core.Resource
         [Fact]
         public void Return404ResultIfDataIsMissing()
         {
-            var storeMock = new Mock<IReadOnlyPersistanceStore>();
+            var storeMock = new Mock<IReadOnlyPersistenceStore>();
             storeMock.Setup(s => s.GetMetadata()).Returns<GlimpseMetadata>(null);
 
             var contextMock = new Mock<IResourceContext>();
-            contextMock.Setup(c => c.PersistanceStore).Returns(storeMock.Object);
+            contextMock.Setup(c => c.PersistenceStore).Returns(storeMock.Object);
 
             var resource = new MetadataResource();
 

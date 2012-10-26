@@ -2,11 +2,9 @@
 
 namespace Glimpse.Core.Extensibility
 {
-    public abstract class TabBase:ITab
+    public abstract class TabBase : ITab
     {
-        public abstract object GetData(ITabContext context);
-
-        public abstract string Name{get; }
+        public abstract string Name { get; }
 
         public virtual RuntimeEvent ExecuteOn
         {
@@ -17,5 +15,7 @@ namespace Glimpse.Core.Extensibility
         {
             get { return null; }
         }
+
+        public abstract object GetData(ITabContext context);
     }
 }

@@ -15,19 +15,9 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Fact]
         public void ImplementProperMethod()
         {
-            IAlternateImplementation<AsyncControllerActionInvoker> implementation = new AsyncActionInvoker.BeginInvokeActionMethod(()=>RuntimePolicy.On, ()=>new Mock<IExecutionTimer>().Object, new Mock<IMessageBroker>().Object);
+            IAlternateImplementation<AsyncControllerActionInvoker> implementation = new AsyncActionInvoker.BeginInvokeActionMethod();
 
             Assert.Equal("BeginInvokeActionMethod", implementation.MethodToImplement.Name);
-        }
-
-        [Fact]
-        public void ConstructWithRuntimePolicyStrategy()
-        {
-            Func<RuntimePolicy> runtimePolicyStrategy = ()=>RuntimePolicy.On;
-
-            var implementation = new AsyncActionInvoker.BeginInvokeActionMethod(runtimePolicyStrategy, () => new Mock<IExecutionTimer>().Object, new Mock<IMessageBroker>().Object);
-
-            Assert.Equal(runtimePolicyStrategy, implementation.RuntimePolicyStrategy);
         }
 
         [Fact]
@@ -35,9 +25,12 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         {
             Func<RuntimePolicy> runtimePolicyStrategy = () => RuntimePolicy.Off;
 
-            var implementation = new AsyncActionInvoker.BeginInvokeActionMethod(runtimePolicyStrategy, () => new Mock<IExecutionTimer>().Object, new Mock<IMessageBroker>().Object);
+            var implementation = new AsyncActionInvoker.BeginInvokeActionMethod();
 
             var contextMock = new Mock<IAlternateImplementationContext>();
+            contextMock.Setup(c => c.RuntimePolicyStrategy).Returns(runtimePolicyStrategy);
+            contextMock.Setup(c => c.TimerStrategy).Returns(() => new Mock<IExecutionTimer>().Object);
+            contextMock.Setup(c => c.MessageBroker).Returns(new Mock<IMessageBroker>().Object);
 
             implementation.NewImplementation(contextMock.Object);
 
@@ -50,10 +43,13 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         {
             Func<RuntimePolicy> runtimePolicyStrategy = () => RuntimePolicy.On;
 
-            var implementation = new AsyncActionInvoker.BeginInvokeActionMethod(runtimePolicyStrategy, () => new Mock<IExecutionTimer>().Object, new Mock<IMessageBroker>().Object);
+            var implementation = new AsyncActionInvoker.BeginInvokeActionMethod();
 
             var contextMock = new Mock<IAlternateImplementationContext>();
-            var stateMock = new Mock<AsyncActionInvoker.IActionInvokerState>();
+            contextMock.Setup(c => c.RuntimePolicyStrategy).Returns(runtimePolicyStrategy);
+            contextMock.Setup(c => c.TimerStrategy).Returns(() => new Mock<IExecutionTimer>().Object);
+            contextMock.Setup(c => c.MessageBroker).Returns(new Mock<IMessageBroker>().Object);
+            var stateMock = new Mock<IActionInvokerState>();
             contextMock.Setup(c => c.Proxy).Returns(stateMock.Object);
             contextMock.Setup(c => c.Arguments).Returns(new object[]
                                                             {

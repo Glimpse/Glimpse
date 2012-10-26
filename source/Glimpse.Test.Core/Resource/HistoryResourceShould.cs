@@ -46,11 +46,11 @@ namespace Glimpse.Test.Core.Resource
         {
             var resource = new HistoryResource();
 
-            var storeMock = new Mock<IReadOnlyPersistanceStore>();
+            var storeMock = new Mock<IReadOnlyPersistenceStore>();
             var contextMock = new Mock<IResourceContext>();
             string output = parameterValue;
             contextMock.Setup(c => c.Parameters.TryGetValue(parameterName, out output)).Returns(parameterValueIsInt);
-            contextMock.Setup(c => c.PersistanceStore).Returns(storeMock.Object);
+            contextMock.Setup(c => c.PersistenceStore).Returns(storeMock.Object);
 
             resource.Execute(contextMock.Object);
 
@@ -62,12 +62,12 @@ namespace Glimpse.Test.Core.Resource
         {
             var resource = new HistoryResource();
 
-            var storeMock = new Mock<IReadOnlyPersistanceStore>();
+            var storeMock = new Mock<IReadOnlyPersistenceStore>();
             storeMock.Setup(s => s.GetTop(It.IsAny<int>())).Returns<IEnumerable<GlimpseRequest>>(null);
             var contextMock = new Mock<IResourceContext>();
             string output = "25";
             contextMock.Setup(c => c.Parameters.TryGetValue("top", out output)).Returns(true);
-            contextMock.Setup(c => c.PersistanceStore).Returns(storeMock.Object);
+            contextMock.Setup(c => c.PersistenceStore).Returns(storeMock.Object);
 
             var result = resource.Execute(contextMock.Object);
 
@@ -82,12 +82,12 @@ namespace Glimpse.Test.Core.Resource
         {
             var resource = new HistoryResource();
 
-            var storeMock = new Mock<IReadOnlyPersistanceStore>();
+            var storeMock = new Mock<IReadOnlyPersistenceStore>();
             storeMock.Setup(s => s.GetTop(It.IsAny<int>())).Returns(Enumerable.Empty<GlimpseRequest>());
             var contextMock = new Mock<IResourceContext>();
             string output = "25";
             contextMock.Setup(c => c.Parameters.TryGetValue("top", out output)).Returns(true);
-            contextMock.Setup(c => c.PersistanceStore).Returns(storeMock.Object);
+            contextMock.Setup(c => c.PersistenceStore).Returns(storeMock.Object);
 
             var result = resource.Execute(contextMock.Object);
 

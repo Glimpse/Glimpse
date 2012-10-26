@@ -5,16 +5,16 @@ namespace Glimpse.Core.Extensibility
 {
     public class ResourceContext : IResourceContext
     {
-        public ResourceContext(IDictionary<string, string> parameters, IReadOnlyPersistanceStore persistanceStore, ILogger logger)
+        public ResourceContext(IDictionary<string, string> parameters, IReadOnlyPersistenceStore persistenceStore, ILogger logger)
         {
             Parameters = parameters;
-            PersistanceStore = persistanceStore;
+            PersistenceStore = persistenceStore;
             Logger = logger;
         }
 
         public IDictionary<string, string> Parameters { get; set; }
 
-        public IReadOnlyPersistanceStore PersistanceStore { get; set; }
+        public IReadOnlyPersistenceStore PersistenceStore { get; set; }
 
         public ILogger Logger { get; set; }
     }

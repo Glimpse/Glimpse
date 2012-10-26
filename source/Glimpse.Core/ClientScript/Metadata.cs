@@ -4,7 +4,7 @@ using Glimpse.Core.Resource;
 
 namespace Glimpse.Core.ClientScript
 {
-    public class Metadata:IDynamicClientScript, IParameterValueProvider
+    public class Metadata : IDynamicClientScript, IParameterValueProvider
     {
         public ScriptOrder Order
         {
