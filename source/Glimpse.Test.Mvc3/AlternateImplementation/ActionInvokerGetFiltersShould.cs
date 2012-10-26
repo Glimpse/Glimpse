@@ -5,15 +5,21 @@ using System.Web.Mvc.Async;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.AlternateImplementation;
+using Glimpse.Test.Common;
 using Moq;
+using Ploeh.AutoFixture;
+using Ploeh.AutoFixture.Xunit;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Glimpse.Test.Mvc3.AlternateImplementation
 {
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed. Class is okay because it only changes the generic T parameter for the abstract class below.")]
     public class ControllerActionInvokerGetFiltersShould : ActionInvokerGetFiltersShould<ControllerActionInvoker>
     {
     }
 
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed. Class is okay because it only changes the generic T parameter for the abstract class below.")]
     public class AsyncControllerActionInvokerGetFiltersShould : ActionInvokerGetFiltersShould<AsyncControllerActionInvoker>
     {
     }
@@ -28,50 +34,28 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             Assert.Equal("GetFilters", implementation.MethodToImplement.Name);
         }
 
-        [Fact]
-        public void ProceedAndReturnWithRuntimePolicyOff()
+        [Theory, AutoMock]
+        public void ProceedAndReturnWithRuntimePolicyOff(IAlternateImplementationContext context)
         {
-            Func<RuntimePolicy> policyStrategy = () => RuntimePolicy.Off;
-            Func<IExecutionTimer> timerStrategy = () => new Mock<IExecutionTimer>().Object;
-            var brokerMock = new Mock<IMessageBroker>();
-            var factoryMock = new Mock<IProxyFactory>();
-
-
-            var contextMock = new Mock<IAlternateImplementationContext>();
-            contextMock.Setup(c => c.MessageBroker).Returns(brokerMock.Object);
-            contextMock.Setup(c => c.ProxyFactory).Returns(factoryMock.Object);
-            contextMock.Setup(c => c.TimerStrategy).Returns(timerStrategy);
-            contextMock.Setup(c => c.RuntimePolicyStrategy).Returns(policyStrategy);
+            context.Setup(c => c.RuntimePolicyStrategy).Returns(() => RuntimePolicy.Off);
 
             var implementation = new ActionInvoker.GetFilters<T>();
 
-            implementation.NewImplementation(contextMock.Object);
+            implementation.NewImplementation(context);
 
-            contextMock.Verify(c=>c.Proceed());
-            contextMock.Verify(c=>c.ReturnValue, Times.Never());
+            context.Verify(c => c.Proceed());
+            context.Verify(c => c.ReturnValue, Times.Never());
         }
 
-        [Fact(Skip = "Need to finish this")]
-        public void ProxyFiltersWithRuntimePolicyOn()
+        [Theory, AutoMock]
+        public void ProxyFiltersWithRuntimePolicyOn([Frozen] IExecutionTimer timer, IAlternateImplementationContext context)
         {
-            Func<RuntimePolicy> policyStrategy = () => RuntimePolicy.On;
-            Func<IExecutionTimer> timerStrategy = () => new Mock<IExecutionTimer>().Object;
-            var brokerMock = new Mock<IMessageBroker>();
-            var factoryMock = new Mock<IProxyFactory>();
-
-            var contextMock = new Mock<IAlternateImplementationContext>();
-            contextMock.Setup(c => c.MessageBroker).Returns(brokerMock.Object);
-            contextMock.Setup(c => c.ProxyFactory).Returns(factoryMock.Object);
-            contextMock.Setup(c => c.TimerStrategy).Returns(timerStrategy);
-            contextMock.Setup(c => c.RuntimePolicyStrategy).Returns(policyStrategy);
-
             var implementation = new ActionInvoker.GetFilters<T>();
 
-            implementation.NewImplementation(contextMock.Object);
+            implementation.NewImplementation(context);
 
-            contextMock.Verify(c=>c.Proceed());
-            contextMock.Verify(c => c.ReturnValue);
-            factoryMock.Verify(f=>f.IsProxyable(It.IsAny<object>()), Times.AtLeastOnce());
+            timer.Verify(t => t.Time(It.IsAny<Action>()));
+            context.Verify(c => c.ReturnValue);
         }
     }
 }

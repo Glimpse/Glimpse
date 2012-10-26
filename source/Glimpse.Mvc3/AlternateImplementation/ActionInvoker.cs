@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
 using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
@@ -31,12 +32,24 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public void NewImplementation(IAlternateImplementationContext context)
             {
-                context.Proceed();
-
-                if (context.RuntimePolicyStrategy() == RuntimePolicy.Off)
+                var timer = context.ProceedWithTimerIfAllowed();
+                if (timer == null)
+                {
                     return;
+                }
 
-                // TODO:Proxy all filters
+                var result = context.ReturnValue as FilterInfo;
+                if (result == null)
+                {
+                    return;
+                }
+
+                Proxy(result.ActionFilters);
+            }
+
+            private void Proxy(IList<IActionFilter> filters)
+            {
+                throw new NotImplementedException("Finsh me!");
             }
         }
 

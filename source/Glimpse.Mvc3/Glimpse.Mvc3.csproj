@@ -67,6 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlternateImplementation\ActionFilter.cs" />
     <Compile Include="AlternateImplementation\ActionInvoker.cs" />
     <Compile Include="AlternateImplementation\ActionInvokerState.cs" />
     <Compile Include="AlternateImplementation\AsyncActionInvoker.cs" />

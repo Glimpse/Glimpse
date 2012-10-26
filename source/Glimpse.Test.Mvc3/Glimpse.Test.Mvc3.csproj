@@ -36,6 +36,18 @@
     <Reference Include="Moq">
       <HintPath>..\..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
+    <Reference Include="Ploeh.AutoFixture">
+      <HintPath>..\..\packages\AutoFixture.2.13.3\lib\net35\Ploeh.AutoFixture.dll</HintPath>
+    </Reference>
+    <Reference Include="Ploeh.AutoFixture.AutoMoq">
+      <HintPath>..\..\packages\AutoFixture.AutoMoq.2.13.3\lib\net35\Ploeh.AutoFixture.AutoMoq.dll</HintPath>
+    </Reference>
+    <Reference Include="Ploeh.AutoFixture.Xunit">
+      <HintPath>..\..\packages\AutoFixture.Xunit.2.13.3\lib\net35\Ploeh.AutoFixture.Xunit.dll</HintPath>
+    </Reference>
+    <Reference Include="Ploeh.SemanticComparison">
+      <HintPath>..\..\packages\AutoFixture.2.13.3\lib\net35\Ploeh.SemanticComparison.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -49,6 +61,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlternateImplementation\ActionFilterOnActionExecutedShould.cs" />
+    <Compile Include="AlternateImplementation\ActionFilterOnActionExecutedMessageShould.cs" />
+    <Compile Include="AlternateImplementation\ActionFilterOnActionExecutingMessageShould.cs" />
+    <Compile Include="AlternateImplementation\ActionFilterOnActionExecutingShould.cs" />
+    <Compile Include="AlternateImplementation\ActionFilterShould.cs" />
     <Compile Include="AlternateImplementation\ActionInvokerGetFiltersShould.cs" />
     <Compile Include="AlternateImplementation\ActionInvokerInvokeActionMethodMessageShould.cs" />
     <Compile Include="AlternateImplementation\ActionInvokerInvokeActionMethodShould.cs" />
@@ -103,8 +120,13 @@
       <Project>{0A68B072-7918-45AC-BB78-F05789D0BF44}</Project>
       <Name>Glimpse.Mvc3</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Glimpse.Test.Common\Glimpse.Test.Common.csproj">
+      <Project>{BC28BB90-8BF2-4D54-B96E-0E0181DDF432}</Project>
+      <Name>Glimpse.Test.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
