@@ -248,6 +248,7 @@
   <ItemGroup>
     <EmbeddedResource Include="..\Glimpse.JavaScript\Modules\glimpse.js">
       <Link>glimpse.js</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
