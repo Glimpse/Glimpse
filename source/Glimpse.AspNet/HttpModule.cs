@@ -1,9 +1,10 @@
 ﻿using System.Web;
+using System.Web.SessionState;
 using Glimpse.Core.Framework;
 
 namespace Glimpse.AspNet
 {
-    public class HttpModule : IHttpModule
+    public class HttpModule : IHttpModule  
     {
         public void Init(HttpApplication httpApplication)
         {
@@ -13,7 +14,7 @@ namespace Glimpse.AspNet
             {
                 httpApplication.BeginRequest += (context, e) => BeginRequest(WithTestable(context));
                 httpApplication.PostAcquireRequestState += (context, e) => BeginSessionAccess(WithTestable(context));
-                httpApplication.ReleaseRequestState += (context, e) => EndSessionAccess(WithTestable(context));
+                httpApplication.PostRequestHandlerExecute += (context, e) => EndSessionAccess(WithTestable(context));
                 httpApplication.PostReleaseRequestState += (context, e) => EndRequest(WithTestable(context));
             }
         }
