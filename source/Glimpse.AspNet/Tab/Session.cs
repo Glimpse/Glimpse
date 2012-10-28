@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using Glimpse.AspNet.Extensibility;
+using Glimpse.AspNet.Extensions;
 using Glimpse.AspNet.Model;
 using Glimpse.Core.Extensibility;
 
@@ -29,7 +30,7 @@ namespace Glimpse.AspNet.Tab
 
         public override object GetData(ITabContext context)
         {
-            var requestContext = context.GetRequestContext<HttpContextBase>();
+            var requestContext = context.GetHttpContext();
 
             var session = requestContext.Session;
             if (session == null || session.Count == 0)
