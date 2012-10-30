@@ -37,7 +37,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
@@ -51,6 +53,17 @@
     <Compile Include="HttpHandler.cs" />
     <Compile Include="HttpHandlerEndpointConfiguration.cs" />
     <Compile Include="HttpModule.cs" />
+    <Compile Include="Model\ConfigurationAuthenticationFormsCredentialsModel.cs" />
+    <Compile Include="Model\ConfigurationAuthenticationFormsModel.cs" />
+    <Compile Include="Model\ConfigurationAuthenticationModel.cs" />
+    <Compile Include="Model\ConfigurationConnectionStringModel.cs" />
+    <Compile Include="Model\ConfigurationCustomErrorsErrorModel.cs" />
+    <Compile Include="Model\ConfigurationCustomErrorsModel.cs" />
+    <Compile Include="Model\ConfigurationHttpHandlersModel.cs" />
+    <Compile Include="Model\ConfigurationHttpModulesModel.cs" />
+    <Compile Include="Model\ConfigurationModel.cs" />
+    <Compile Include="Model\ConfigurationRoleManagerModel.cs" />
+    <Compile Include="Model\ConfigurationRoleManagerProviderSettingsModel.cs" />
     <Compile Include="Model\EnvironmentAssemblyModel.cs" />
     <Compile Include="Model\EnvironmentFrameworkModel.cs" />
     <Compile Include="Model\EnvironmentMachineModel.cs" />
@@ -70,9 +83,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SerializationConverter\ConfigurationModelConverter.cs" />
     <Compile Include="SerializationConverter\EnvironmentModelConverter.cs" />
     <Compile Include="SerializationConverter\RequestModelConverter.cs" />
     <Compile Include="SerializationConverter\SessionModelConverter.cs" />
+    <Compile Include="Tab\Configuration.cs" />
     <Compile Include="Tab\Environment.cs" />
     <Compile Include="Tab\Request.cs" />
     <Compile Include="PreBodyTagFilter.cs" />
