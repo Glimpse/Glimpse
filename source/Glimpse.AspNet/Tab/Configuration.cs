@@ -15,6 +15,9 @@ namespace Glimpse.AspNet.Tab
 {
     public class Configuration : AspNetTab, IDocumentation
     {
+        private readonly IEnumerable<string> _keysToAnnomalizePassword = new [] { "Password", "Pwd" };
+        private readonly string _passwordHash = "########";
+
         public override string Name
         {
             get { return "Configuration"; }
@@ -105,7 +108,7 @@ namespace Glimpse.AspNet.Tab
                 {
                     connectionStringBuilder.ConnectionString = connectionString.ConnectionString;
 
-                    var connectionDetails = new Dictionary<string, object>();
+                    var connectionDetails = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
                     var keys = connectionStringBuilder.Keys;
                     if (keys != null)
                     {
@@ -115,6 +118,8 @@ namespace Glimpse.AspNet.Tab
                         }
 
                         resultItem.Details = connectionDetails;
+
+                        AnnomalizeConnectionStringPassword(connectionDetails, resultItem);
                     }
                 }
 
@@ -123,6 +128,24 @@ namespace Glimpse.AspNet.Tab
 
             return result.Count > 0 ? result : null;
         } 
+
+        private void AnnomalizeConnectionStringPassword(IDictionary<string, object> connectionDetails, ConfigurationConnectionStringModel model)
+        {
+            foreach (var key in _keysToAnnomalizePassword)
+            {
+                if (connectionDetails.ContainsKey(key))
+                {
+                    var password = connectionDetails[key].ToString();
+                    if (!String.IsNullOrEmpty(password))
+                    {
+                        connectionDetails[key] = _passwordHash; 
+                        model.Raw = model.Raw.Replace(password, _passwordHash);
+                    }
+
+                    return;
+                }
+            }
+        }
 
         private ConfigurationCustomErrorsModel ProcessCustomErrors(CustomErrorsSection customErrorsSection)
         {
