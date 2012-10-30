@@ -74,7 +74,7 @@ namespace Glimpse.AspNet.Tab
         private EnvironmentMachineModel BuildMachineDetails()
         {
             var name = string.Format("{0} ({1} processors)", System.Environment.MachineName, System.Environment.ProcessorCount);
-            var operatingSystem = ""; // string.Format("{0} ({1} bit)", System.Environment.OSVersion.VersionString, System.Environment.Is64BitOperatingSystem ? "64" : "32"); //TODO: need to sort this out
+            var operatingSystem = string.Format("{0} ({1} bit)", System.Environment.OSVersion.VersionString, System.Environment.Is64BitOperatingSystem ? "64" : "32"); //TODO: need to sort this out
             var startTime = DateTime.Now.AddMilliseconds(System.Environment.TickCount * -1);
 
             return new EnvironmentMachineModel { Name = name, OperatingSystem = operatingSystem, StartTime = startTime };
@@ -122,7 +122,7 @@ namespace Glimpse.AspNet.Tab
                 var version = assemblyName.Version.ToString();
                 var culture = string.IsNullOrEmpty(assemblyName.CultureInfo.Name) ? "neutral" : assemblyName.CultureInfo.Name; 
                 var fromGac = assembly.GlobalAssemblyCache;
-                var fullTrust = false;// assembly.IsFullyTrusted; //TODO: need to sort this out
+                var fullTrust = assembly.IsFullyTrusted; //TODO: need to sort this out
 
                 var result = new EnvironmentAssemblyModel { Name = name, Version = version, Culture = culture, FromGac = fromGac, FullTrust = fullTrust };
 
