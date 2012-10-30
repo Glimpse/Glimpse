@@ -7,5 +7,9 @@ namespace Glimpse.AspNet.Model
         public string DefaultRedirect { get; set; }
 
         public IEnumerable<ConfigurationCustomErrorsErrorModel> Errors { get; set; }
+
+        public string RedirectMode { get; set; }
+
+        public string Mode { get; set; }
     }
 }

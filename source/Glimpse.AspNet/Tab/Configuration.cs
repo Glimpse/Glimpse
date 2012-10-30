@@ -130,8 +130,10 @@ namespace Glimpse.AspNet.Tab
                 return null;
 
             var result = new ConfigurationCustomErrorsModel();
-            result.DefaultRedirect = customErrorsSection.DefaultRedirect; 
-
+            result.DefaultRedirect = customErrorsSection.DefaultRedirect;
+            result.RedirectMode = customErrorsSection.RedirectMode.ToString();
+            result.Mode = customErrorsSection.Mode.ToString(); 
+            
             var errorsSection = customErrorsSection.Errors;
             if (errorsSection != null)
             {
@@ -162,6 +164,8 @@ namespace Glimpse.AspNet.Tab
                 var resultItem = new ConfigurationHttpModulesModel();
                 resultItem.Name = httpModule.Name;
                 resultItem.Type = httpModule.Type;
+
+                result.Add(resultItem);
             }
 
             return result;
@@ -180,6 +184,8 @@ namespace Glimpse.AspNet.Tab
                 resultItem.Verb = httpModule.Verb;
                 resultItem.Validate = httpModule.Validate;
                 resultItem.Type = httpModule.Type;
+
+                result.Add(resultItem);
             }
 
             return result;
@@ -214,6 +220,8 @@ namespace Glimpse.AspNet.Tab
                     resultProvider.Name = provider.Name;
                     resultProvider.Type = provider.Type;
                     resultProvider.Parameters = provider.Parameters.ToDictionary();
+
+                    resultProviders.Add(resultProvider);
                 }
 
                 result.Providers = resultProviders;

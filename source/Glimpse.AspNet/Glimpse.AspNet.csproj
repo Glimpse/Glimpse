@@ -84,6 +84,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="SerializationConverter\ConfigurationModelConverter.cs" />
+    <Compile Include="SerializationConverter\ConfigurationRoleManagerProviderSettingsModelConverter.cs" />
     <Compile Include="SerializationConverter\EnvironmentModelConverter.cs" />
     <Compile Include="SerializationConverter\RequestModelConverter.cs" />
     <Compile Include="SerializationConverter\SessionModelConverter.cs" />

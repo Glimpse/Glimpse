@@ -18,8 +18,8 @@ namespace Glimpse.AspNet.SerializationConverter
             root.AddRow().Column("/configuration/system.web/authentication").Column(obj.Authentication);
             root.AddRow().Column("/configuration/system.web/roleManager").Column(obj.RoleManager);
             root.AddRow().Column("/configuration/system.web/customErrors").Column(obj.CustomErrors);
-            root.AddRow().Column("/configuration/system.web/httpModules").Column(obj.HttpModules);
-            root.AddRow().Column("/configuration/system.web/httpHandlers").Column(obj.HttpHandlers);
+            root.AddRow().Column("/configuration/system.web/httpModules").Column(BuildHttpModulesDetails(obj.HttpModules));
+            root.AddRow().Column("/configuration/system.web/httpHandlers").Column(BuildHttpHandlersDetails(obj.HttpHandlers));
 
             return root.Build();
         }
@@ -29,10 +29,32 @@ namespace Glimpse.AspNet.SerializationConverter
             var section = new TabSection("Key", "ProviderName", "Connection String");
             foreach (var item in model)
             {
-                section.AddRow().Column(item.Key).Column(item.ProviderName).Column(new { item.Raw, item.Details });    
+                section.AddRow().Column(item.Key).Column(item.ProviderName).Column(new { item.Raw, item.Details });
             }
 
             return section;
         }
-    } 
+
+        private TabSection BuildHttpModulesDetails(IEnumerable<ConfigurationHttpModulesModel> model)
+        {
+            var section = new TabSection("Name", "Type");
+            foreach (var item in model)
+            {
+                section.AddRow().Column(item.Name).Column(item.Type);
+            }
+
+            return section;
+        }
+
+        private TabSection BuildHttpHandlersDetails(IEnumerable<ConfigurationHttpHandlersModel> model)
+        {
+            var section = new TabSection("Type", "Verb", "Path", "Validate");
+            foreach (var item in model)
+            {
+                section.AddRow().Column(item.Type).Column(item.Verb).Column(item.Path).Column(item.Validate);
+            }
+
+            return section;
+        }
+    }
 }
