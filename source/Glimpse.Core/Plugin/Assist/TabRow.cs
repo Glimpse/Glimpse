@@ -14,12 +14,7 @@ namespace Glimpse.Core.Plugin.Assist
         }
 
         public TabRow Column(object columnData)
-        {
-            if (columnData == null)
-            {
-                throw new ArgumentNullException("columnData", "Column data must not be null.");
-            }
-            
+        { 
             var column = new TabColumn(columnData);
             columns.Add(column);
             
