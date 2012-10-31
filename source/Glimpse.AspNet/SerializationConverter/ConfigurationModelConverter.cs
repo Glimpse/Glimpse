@@ -27,7 +27,9 @@ namespace Glimpse.AspNet.SerializationConverter
         private TabSection BuildConnectionStringsDetails(IEnumerable<ConfigurationConnectionStringModel> model)
         {
             if (model == null)
+            {
                 return null;
+            }
 
             var section = new TabSection("Key", "ProviderName", "Connection String");
             foreach (var item in model)
@@ -41,7 +43,9 @@ namespace Glimpse.AspNet.SerializationConverter
         private TabSection BuildHttpModulesDetails(IEnumerable<ConfigurationHttpModulesModel> model)
         {
             if (model == null)
+            {
                 return null;
+            }
 
             var section = new TabSection("Name", "Type");
             foreach (var item in model)
@@ -55,7 +59,9 @@ namespace Glimpse.AspNet.SerializationConverter
         private TabSection BuildHttpHandlersDetails(IEnumerable<ConfigurationHttpHandlersModel> model)
         {
             if (model == null)
+            {
                 return null;
+            }
 
             var section = new TabSection("Type", "Verb", "Path", "Validate");
             foreach (var item in model)

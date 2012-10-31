@@ -15,7 +15,7 @@ namespace Glimpse.AspNet.Tab
 {
     public class Configuration : AspNetTab, IDocumentation
     {
-        private readonly IEnumerable<string> _keysToAnnomalizePassword = new [] { "Password", "Pwd" };
+        private readonly IEnumerable<string> _keysToAnnomalizePassword = new[] { "Password", "Pwd" };
         private readonly string _passwordHash = "########";
 
         public override string Name
@@ -43,11 +43,12 @@ namespace Glimpse.AspNet.Tab
             return result;
         }
 
-
         private ConfigurationAuthenticationModel ProcessAuthenticationSection(AuthenticationSection authenticationSection)
         {
             if (authenticationSection == null)
+            {
                 return null;
+            }
 
             var formsSection = authenticationSection.Forms;
 
@@ -83,7 +84,9 @@ namespace Glimpse.AspNet.Tab
         private IEnumerable<ConfigurationConnectionStringModel> ProcessConnectionString(ConnectionStringSettingsCollection connectionStrings)
         {
             if (connectionStrings == null)
+            {
                 return null;
+            }
 
             var result = new List<ConfigurationConnectionStringModel>();
 
@@ -128,7 +131,7 @@ namespace Glimpse.AspNet.Tab
                 if (connectionDetails.ContainsKey(key))
                 {
                     var password = connectionDetails[key].ToString();
-                    if (!String.IsNullOrEmpty(password))
+                    if (!string.IsNullOrEmpty(password))
                     {
                         connectionDetails[key] = _passwordHash; 
                         model.Raw = model.Raw.Replace(password, _passwordHash);
@@ -142,7 +145,9 @@ namespace Glimpse.AspNet.Tab
         private ConfigurationCustomErrorsModel ProcessCustomErrors(CustomErrorsSection customErrorsSection)
         {
             if (customErrorsSection == null)
+            {
                 return null;
+            }
 
             var result = new ConfigurationCustomErrorsModel();
             result.DefaultRedirect = customErrorsSection.DefaultRedirect;
@@ -171,7 +176,9 @@ namespace Glimpse.AspNet.Tab
         private IEnumerable<ConfigurationHttpModulesModel> ProcessHttpModules(HttpModulesSection httpModulesSection)
         {
             if (httpModulesSection == null)
+            {
                 return null;
+            }
 
             var result = new List<ConfigurationHttpModulesModel>();
             foreach (HttpModuleAction httpModule in httpModulesSection.Modules)
@@ -189,7 +196,9 @@ namespace Glimpse.AspNet.Tab
         private IEnumerable<ConfigurationHttpHandlersModel> ProcessHttpHandler(HttpHandlersSection httpHandlersSection)
         {
             if (httpHandlersSection == null)
+            {
                 return null;
+            }
 
             var result = new List<ConfigurationHttpHandlersModel>();
             foreach (HttpHandlerAction httpModule in httpHandlersSection.Handlers)
@@ -209,7 +218,9 @@ namespace Glimpse.AspNet.Tab
         private ConfigurationRoleManagerModel ProcessRoleManager(RoleManagerSection roleManagerSection)
         {
             if (roleManagerSection == null)
+            {
                 return null;
+            }
 
             var result = new ConfigurationRoleManagerModel();
             result.CacheRolesInCookie = roleManagerSection.CacheRolesInCookie;
