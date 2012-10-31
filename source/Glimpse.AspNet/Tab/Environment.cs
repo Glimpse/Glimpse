@@ -78,8 +78,9 @@ namespace Glimpse.AspNet.Tab
 
         private EnvironmentMachineModel BuildMachineDetails()
         {
+            var is64BitOperatingSystem = Is64BitOperatingSystem();
             var name = string.Format("{0} ({1} processors)", System.Environment.MachineName, System.Environment.ProcessorCount);
-            var operatingSystem = string.Format("{0} ({1} bit)", System.Environment.OSVersion.VersionString, System.Environment.Is64BitOperatingSystem ? "64" : "32"); 
+            var operatingSystem = string.Format("{0} ({1} bit)", System.Environment.OSVersion.VersionString, (is64BitOperatingSystem == null ? "?" : is64BitOperatingSystem.Value ? "64" : "32"));  
             var startTime = DateTime.Now.AddMilliseconds(System.Environment.TickCount * -1);
 
             return new EnvironmentMachineModel { Name = name, OperatingSystem = operatingSystem, StartTime = startTime };
@@ -127,7 +128,7 @@ namespace Glimpse.AspNet.Tab
                 var version = assemblyName.Version.ToString();
                 var culture = string.IsNullOrEmpty(assemblyName.CultureInfo.Name) ? "neutral" : assemblyName.CultureInfo.Name; 
                 var fromGac = assembly.GlobalAssemblyCache;
-                var fullTrust = assembly.IsFullyTrusted; 
+                var fullTrust = IsFullyTrusted(assembly); 
 
                 var result = new EnvironmentAssemblyModel { Name = name, Version = version, Culture = culture, FromGac = fromGac, FullTrust = fullTrust };
 
@@ -171,6 +172,24 @@ namespace Glimpse.AspNet.Tab
             }
 
             return AspNetHostingPermissionLevel.None;
+        }
+
+        private bool? Is64BitOperatingSystem()
+        {
+#if NET35
+            return null;      
+#else
+            return System.Environment.Is64BitOperatingSystem;
+#endif
+        }
+
+        private bool? IsFullyTrusted(Assembly assembly)
+        {
+#if NET35
+            return null;      
+#else
+            return assembly.IsFullyTrusted;
+#endif
         }
     }
 }
