@@ -16,11 +16,11 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void ThrowForNullValue()
+		public void AcceptNullValue()
 		{
 			object columnObject = null;
 			
-			Assert.Throws<ArgumentNullException>(() => Row.Column(columnObject));
+			Row.Column(columnObject);
 		}
 
 		[Fact]
