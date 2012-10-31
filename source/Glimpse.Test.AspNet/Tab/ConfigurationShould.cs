@@ -44,12 +44,8 @@ namespace Glimpse.Test.AspNet.Tab
 
         [Fact]
         public void ReturnData()
-        { 
-            var httpBaseMock = new Mock<HttpContextBase>(); 
-            httpBaseMock.Setup(c => c.Application["Glimpse.AspNet.Configuration"]).Returns(null);
-
-            var contextMock = new Mock<ITabContext>();
-            contextMock.Setup(c => c.GetRequestContext<HttpContextBase>()).Returns(httpBaseMock.Object);
+        {  
+            var contextMock = new Mock<ITabContext>(); 
 
             var request = new Glimpse.AspNet.Tab.Configuration();
             var result = request.GetData(contextMock.Object);
@@ -58,23 +54,6 @@ namespace Glimpse.Test.AspNet.Tab
 
             Assert.NotNull(result);
             Assert.NotNull(result as ConfigurationModel);
-        }
-
-        [Fact]
-        public void ReturnStoredData()
-        {
-            var model = new ConfigurationModel();
-
-            var httpBaseMock = new Mock<HttpContextBase>();
-            httpBaseMock.Setup(c => c.Application["Glimpse.AspNet.Configuration"]).Returns(model);
-
-            var contextMock = new Mock<ITabContext>();
-            contextMock.Setup(c => c.GetRequestContext<HttpContextBase>()).Returns(httpBaseMock.Object);
-
-            var request = new Glimpse.AspNet.Tab.Configuration();
-            var result = request.GetData(contextMock.Object);
-
-            Assert.Same(model, result);
-        }
+        } 
     }
 }

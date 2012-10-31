@@ -30,24 +30,16 @@ namespace Glimpse.AspNet.Tab
         }
 
         public override object GetData(ITabContext context)
-        {
-            var httpContext = context.GetHttpContext();
-
-            var result = httpContext.Application["Glimpse.AspNet.Configuration"] as ConfigurationModel;
-            if (result == null)
-            {
-                result = new ConfigurationModel();
-                result.AppSettings = ConfigurationManager.AppSettings.ToDictionary();
-                result.Authentication = ProcessAuthenticationSection(ConfigurationManager.GetSection("system.web/authentication") as AuthenticationSection);
-                result.ConnectionStrings = ProcessConnectionString(ConfigurationManager.ConnectionStrings);
-                result.CustomErrors = ProcessCustomErrors(ConfigurationManager.GetSection("system.web/customErrors") as CustomErrorsSection);
-                result.HttpModules = ProcessHttpModules(ConfigurationManager.GetSection("system.web/httpModules") as HttpModulesSection);
-                result.HttpHandlers = ProcessHttpHandler(ConfigurationManager.GetSection("system.web/httpHandlers") as HttpHandlersSection);
-                result.RoleManager = ProcessRoleManager(ConfigurationManager.GetSection("system.web/roleManager") as RoleManagerSection);
-
-                httpContext.Application["Glimpse.AspNet.Configuration"] = result;
-            }
-
+        { 
+            var result = new ConfigurationModel();
+            result.AppSettings = ConfigurationManager.AppSettings.ToDictionary();
+            result.Authentication = ProcessAuthenticationSection(ConfigurationManager.GetSection("system.web/authentication") as AuthenticationSection);
+            result.ConnectionStrings = ProcessConnectionString(ConfigurationManager.ConnectionStrings);
+            result.CustomErrors = ProcessCustomErrors(ConfigurationManager.GetSection("system.web/customErrors") as CustomErrorsSection);
+            result.HttpModules = ProcessHttpModules(ConfigurationManager.GetSection("system.web/httpModules") as HttpModulesSection);
+            result.HttpHandlers = ProcessHttpHandler(ConfigurationManager.GetSection("system.web/httpHandlers") as HttpHandlersSection);
+            result.RoleManager = ProcessRoleManager(ConfigurationManager.GetSection("system.web/roleManager") as RoleManagerSection);
+             
             return result;
         }
 
