@@ -83,6 +83,10 @@
     <Compile Include="AlternateImplementation\DependencyResolverGetServicesMessageShould.cs" />
     <Compile Include="AlternateImplementation\DependencyResolverGetServicesShould.cs" />
     <Compile Include="AlternateImplementation\DependencyResolverShould.cs" />
+    <Compile Include="AlternateImplementation\ResultFilterOnResultExecutedMessageShould.cs" />
+    <Compile Include="AlternateImplementation\ResultFilterOnResultExecutedShould.cs" />
+    <Compile Include="AlternateImplementation\ResultFilterOnResultExecutingShould.cs" />
+    <Compile Include="AlternateImplementation\ResultFilterShould.cs" />
     <Compile Include="AlternateImplementation\ViewEngineFindViewsArgumentsShould.cs" />
     <Compile Include="AlternateImplementation\ViewEngineFindViewsMessageShould.cs" />
     <Compile Include="AlternateImplementation\ViewEngineFindViewsShould.cs" />
