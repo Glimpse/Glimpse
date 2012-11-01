@@ -74,6 +74,9 @@
     <Compile Include="AlternateImplementation\AsyncActionInvokerBeginInvokerActionMethodShould.cs" />
     <Compile Include="AlternateImplementation\AsyncActionInvokerEndInvokeActionMethodShould.cs" />
     <Compile Include="AlternateImplementation\AsyncActionInvokerShould.cs" />
+    <Compile Include="AlternateImplementation\AuthorizationFilterOnAuthorizationMessageShould.cs" />
+    <Compile Include="AlternateImplementation\AuthorizationFilterOnAuthorizationShould.cs" />
+    <Compile Include="AlternateImplementation\AuthorizationFilterShould.cs" />
     <Compile Include="AlternateImplementation\ControllerFactoryCreateControllerArgumentsShould.cs" />
     <Compile Include="AlternateImplementation\ControllerFactoryCreateControllerMessageShould.cs" />
     <Compile Include="AlternateImplementation\ControllerFactoryCreateControllerShould.cs" />

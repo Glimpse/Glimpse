@@ -71,6 +71,7 @@
     <Compile Include="AlternateImplementation\ActionInvoker.cs" />
     <Compile Include="AlternateImplementation\ActionInvokerState.cs" />
     <Compile Include="AlternateImplementation\AsyncActionInvoker.cs" />
+    <Compile Include="AlternateImplementation\AuthorizationFilter.cs" />
     <Compile Include="AlternateImplementation\ControllerFactory.cs" />
     <Compile Include="AlternateImplementation\DependencyResolver.cs" />
     <Compile Include="AlternateImplementation\ResultFilter.cs" />

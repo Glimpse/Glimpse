@@ -14,21 +14,6 @@ namespace Glimpse.Test.Common
             ActionDescriptor(fixture);
             ActionExecutedContext(fixture);
             ActionExecutingContext(fixture);
-            ResultExecutedContext(fixture);
-
-            ResultExecutingContext(fixture);
-        }
-
-        private static void ResultExecutingContext(IFixture fixture)
-        {
-            fixture.Register<ControllerContext, ActionResult, ResultExecutingContext>(
-                (controllerContext, result) => new ResultExecutingContext(controllerContext, result));
-        }
-
-        private static void ResultExecutedContext(IFixture fixture)
-        {
-            fixture.Register<ControllerContext, ActionResult, bool, Exception, ResultExecutedContext>(
-                (controllerContext, result, canceled, exception) => new ResultExecutedContext(controllerContext, result, canceled, exception));
         }
 
         private static void ActionExecutingContext(IFixture fixture)
