@@ -44,12 +44,23 @@ namespace Glimpse.Mvc.AlternateImplementation
                     return;
                 }
 
-                Proxy(result.ActionFilters);
+                Proxy(result.ActionFilters, new ActionFilter(context.ProxyFactory));
             }
 
-            private void Proxy(IList<IActionFilter> filters)
+            private void Proxy<TFilter>(IList<TFilter> filters, Alternate<TFilter> alternateImplementation) where TFilter : class
             {
-                throw new NotImplementedException("Finsh me!");
+                var count = filters.Count;
+
+                for (int i = 0; i < count; i++)
+                {
+                    var originalFilter = filters[i];
+                    TFilter newFilter;
+                
+                    if (alternateImplementation.TryCreate(originalFilter, out newFilter))
+                    {
+                        filters[i] = newFilter;
+                    }
+                }
             }
         }
 
