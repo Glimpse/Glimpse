@@ -97,7 +97,7 @@
     <Compile Include="Extensions\TestingExtensions.cs" />
     <Compile Include="Extensions\UriTemplateExtensionsShould.cs" />
     <Compile Include="Framework\CastleDynamicProxyFactoryShould.cs" />
-    <Compile Include="Framework\EventBrokerShould.cs" />
+    <Compile Include="Framework\MessageBrokerShould.cs" />
     <Compile Include="Framework\FactoryShould.cs" />
     <Compile Include="Framework\GlimpseConfigurationShould.cs" />
     <Compile Include="Framework\GlimpseMetadataShould.cs" />

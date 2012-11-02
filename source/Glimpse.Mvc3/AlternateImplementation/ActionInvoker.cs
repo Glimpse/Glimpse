@@ -5,7 +5,7 @@ using System.Web.Mvc;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-using Glimpse.Mvc.Message;
+using Glimpse.Core.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
@@ -104,7 +104,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public ActionResult ActionResult { get; set; }
             }
 
-            public class Message
+            public class Message : MessageBase
             {
                 public Message(Arguments arguments)
                 {
@@ -178,7 +178,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public bool IsAsync { get; set; }
             }
 
-            public class Message
+            public class Message : MessageBase
             {
                 public Message(Arguments arguments, ActionResult returnValue)
                 {

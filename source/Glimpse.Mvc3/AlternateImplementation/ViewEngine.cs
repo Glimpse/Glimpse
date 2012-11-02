@@ -5,7 +5,7 @@ using System.Web.Mvc;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-using Glimpse.Mvc.Message;
+using Glimpse.Core.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
@@ -95,9 +95,9 @@ namespace Glimpse.Mvc.AlternateImplementation
                 return viewEngineResult;
             }
 
-            public class Message
+            public class Message : MessageBase
             {
-                public Message(Arguments input, ViewEngineResult output, TimerResult timing, Type baseType, bool isPartial, Guid id)
+                public Message(Arguments input, ViewEngineResult output, TimerResult timing, Type baseType, bool isPartial, Guid correlationId)
                 {
                     if (input == null)
                     {
@@ -120,7 +120,7 @@ namespace Glimpse.Mvc.AlternateImplementation
 
                     IsPartial = isPartial;
                     BaseType = baseType;
-                    Id = id;
+                    CorrelationId = correlationId;
                 }
 
                 public Arguments Input { get; set; }
@@ -133,7 +133,7 @@ namespace Glimpse.Mvc.AlternateImplementation
 
                 public bool IsPartial { get; set; }
                 
-                public Guid Id { get; set; }
+                public Guid CorrelationId { get; set; }
 
                 public bool IsFound
                 {

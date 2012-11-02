@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-using Glimpse.Mvc.Message;
+using Glimpse.Core.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
@@ -42,7 +42,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     new TimerResultMessage(timer, "OnAuthorization", "AuthorizationFilter"));
             }
 
-            public class Message
+            public class Message : MessageBase
             {
                 public Message(AuthorizationContext argument)
                 {

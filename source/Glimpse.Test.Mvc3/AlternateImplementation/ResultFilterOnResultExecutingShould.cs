@@ -2,8 +2,8 @@
 using System.Web.Mvc;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Message;
 using Glimpse.Mvc.AlternateImplementation;
-using Glimpse.Mvc.Message;
 using Glimpse.Test.Common;
 using Moq;
 using Xunit;
@@ -30,7 +30,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             sut.NewImplementation(context);
             
             context.Verify(c => c.Proceed());
-            context.MessageBroker.Verify(mb => mb.Publish(It.IsAny<object>()), Times.Never());
+            context.MessageBroker.Verify(mb => mb.Publish(It.IsAny<MessageBase>()), Times.Never());
         }
 
         [Theory, AutoMock]

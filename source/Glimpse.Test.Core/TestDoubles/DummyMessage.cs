@@ -1,7 +1,9 @@
-﻿namespace Glimpse.Test.Core.TestDoubles
+﻿using Glimpse.Core.Extensibility;
+
+namespace Glimpse.Test.Core.TestDoubles
 {
-    public class DummyMessage
+    public class DummyMessage : MessageBase
     {
-        public string Id { get; set; }
+        public string Identifier { get; set; }
     }
 }

@@ -42,7 +42,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 context.MessageBroker.Publish(new Message((Type)context.Arguments[0], resolvedObject));
             }
 
-            public class Message
+            public class Message : MessageBase
             {
                 public Message(Type serviceType, object resolvedObject)
                 {
@@ -85,7 +85,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     new Message((Type)context.Arguments[0], (IEnumerable<object>)context.ReturnValue));
             }
 
-            public class Message
+            public class Message : MessageBase
             {
                 public Message(Type serviceType, IEnumerable<object> resolvedObjects)
                 {

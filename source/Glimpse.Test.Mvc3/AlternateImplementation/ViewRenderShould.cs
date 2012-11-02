@@ -3,8 +3,8 @@ using System.IO;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core;
+using Glimpse.Core.Message;
 using Glimpse.Mvc.AlternateImplementation;
-using Glimpse.Mvc.Message;
 using Moq;
 using Xunit;
 

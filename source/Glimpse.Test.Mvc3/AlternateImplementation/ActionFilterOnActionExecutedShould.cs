@@ -2,8 +2,8 @@
 using System.Web.Mvc;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Message;
 using Glimpse.Mvc.AlternateImplementation;
-using Glimpse.Mvc.Message;
 using Glimpse.Test.Common;
 using Moq;
 using Ploeh.AutoFixture.Xunit;

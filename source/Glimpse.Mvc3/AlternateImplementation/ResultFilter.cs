@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-using Glimpse.Mvc.Message;
+using Glimpse.Core.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
@@ -43,7 +43,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     new TimerResultMessage(timer, "OnResultExecuting", "ResultFilter"));
             }
 
-            public class Message
+            public class Message : MessageBase
             {
                 public Message(ResultExecutingContext argument)
                 {
@@ -75,7 +75,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     new TimerResultMessage(timer, "OnResultExecuted", "ResultFilter"));
             }
 
-            public class Message
+            public class Message : MessageBase
             {
                 public Message(ResultExecutedContext arguments)
                 {

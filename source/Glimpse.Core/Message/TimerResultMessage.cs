@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using Glimpse.Core.Extensibility;
 
-namespace Glimpse.Mvc.Message
+namespace Glimpse.Core.Message
 {
-    public class TimerResultMessage
+    public class TimerResultMessage : MessageBase
     {
         public TimerResultMessage(TimerResult timerResult, string eventName, string eventCategory)
         {

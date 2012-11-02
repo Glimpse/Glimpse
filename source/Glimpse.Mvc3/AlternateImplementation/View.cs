@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-using Glimpse.Mvc.Message;
+using Glimpse.Core.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
@@ -65,7 +65,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public TextWriter Writer { get; set; }
             }
 
-            public class Message
+            public class Message : MessageBase
             {
                 public Message(Arguments input, TimerResult timing, Type baseType, IViewCorrelation viewCorrelation)
                 {

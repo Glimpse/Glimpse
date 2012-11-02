@@ -98,7 +98,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public string ControllerName { get; set; }
             }
 
-            public class Message
+            public class Message : MessageBase
             {
                 public Message(Arguments arguments, IController controller)
                 {

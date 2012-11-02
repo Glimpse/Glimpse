@@ -21,7 +21,7 @@ namespace Glimpse.Core.Extensibility
 
         internal IDictionary<Type, List<Subscriber>> Subscriptions { get; set; }
 
-        public void Publish<T>(T message)
+        public void Publish<T>(T message) where T : MessageBase
         {
             foreach (var subscriber in GetSubscriptions(typeof(T)))
             {
@@ -36,7 +36,7 @@ namespace Glimpse.Core.Extensibility
             }
         }
 
-        public Guid Subscribe<T>(Action<T> action)
+        public Guid Subscribe<T>(Action<T> action) where T : MessageBase
         {
             if (action == null)
             {
@@ -53,7 +53,7 @@ namespace Glimpse.Core.Extensibility
             return subscriptionId;
         }
 
-        public void Unsubscribe<T>(Guid subscriptionId)
+        public void Unsubscribe<T>(Guid subscriptionId) where T : MessageBase
         {
             var subscriptions = GetSubscriptions(typeof(T));
             subscriptions.RemoveAll(i => i.SubscriptionId == subscriptionId);

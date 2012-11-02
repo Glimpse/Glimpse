@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Glimpse.Test.Core.Framework
 {
-    public class EventBrokerShould
+    public class MessageBrokerShould
     {
         [Fact]
         public void Construct()
@@ -65,13 +65,13 @@ namespace Glimpse.Test.Core.Framework
         {
             var counter = 0;
             var expected = "Any Value";
-            var message = new DummyMessage {Id = expected};
+            var message = new DummyMessage {Identifier = expected};
 
             var loggerMock = new Mock<ILogger>();
             var eventBroker = new MessageBroker(loggerMock.Object);
             var subId = eventBroker.Subscribe<DummyMessage>(evt =>
                                                                 {
-                                                                    Assert.Equal(expected, evt.Id);
+                                                                    Assert.Equal(expected, evt.Identifier);
                                                                     counter++;
                                                                 });
 

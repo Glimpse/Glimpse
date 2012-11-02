@@ -1,6 +1,6 @@
 ﻿using System;
 using Glimpse.Core.Extensibility;
-using Glimpse.Mvc.Message;
+using Glimpse.Core.Message;
 using Xunit;
 
 namespace Glimpse.Test.Mvc3.Message
