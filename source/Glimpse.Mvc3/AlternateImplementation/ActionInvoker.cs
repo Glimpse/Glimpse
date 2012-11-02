@@ -47,6 +47,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 Proxy(result.ActionFilters, new ActionFilter(context.ProxyFactory));
                 Proxy(result.ResultFilters, new ResultFilter(context.ProxyFactory));
                 Proxy(result.AuthorizationFilters, new AuthorizationFilter(context.ProxyFactory));
+                Proxy(result.ExceptionFilters, new ExceptionFilter(context.ProxyFactory));
             }
 
             private void Proxy<TFilter>(IList<TFilter> filters, Alternate<TFilter> alternateImplementation) where TFilter : class

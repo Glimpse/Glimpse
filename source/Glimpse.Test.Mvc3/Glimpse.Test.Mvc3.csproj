@@ -74,6 +74,9 @@
     <Compile Include="AlternateImplementation\AsyncActionInvokerBeginInvokerActionMethodShould.cs" />
     <Compile Include="AlternateImplementation\AsyncActionInvokerEndInvokeActionMethodShould.cs" />
     <Compile Include="AlternateImplementation\AsyncActionInvokerShould.cs" />
+    <Compile Include="AlternateImplementation\AuthorizationFilterOnAuthorizationMessageShould.cs" />
+    <Compile Include="AlternateImplementation\AuthorizationFilterOnAuthorizationShould.cs" />
+    <Compile Include="AlternateImplementation\AuthorizationFilterShould.cs" />
     <Compile Include="AlternateImplementation\ControllerFactoryCreateControllerArgumentsShould.cs" />
     <Compile Include="AlternateImplementation\ControllerFactoryCreateControllerMessageShould.cs" />
     <Compile Include="AlternateImplementation\ControllerFactoryCreateControllerShould.cs" />
@@ -83,6 +86,9 @@
     <Compile Include="AlternateImplementation\DependencyResolverGetServicesMessageShould.cs" />
     <Compile Include="AlternateImplementation\DependencyResolverGetServicesShould.cs" />
     <Compile Include="AlternateImplementation\DependencyResolverShould.cs" />
+    <Compile Include="AlternateImplementation\ExceptionFilterOnExceptionMessageShould.cs" />
+    <Compile Include="AlternateImplementation\ExceptionFilterOnExceptionShould.cs" />
+    <Compile Include="AlternateImplementation\ExceptionFilterShould.cs" />
     <Compile Include="AlternateImplementation\ResultFilterOnResultExecutedMessageShould.cs" />
     <Compile Include="AlternateImplementation\ResultFilterOnResultExecutedShould.cs" />
     <Compile Include="AlternateImplementation\ResultFilterOnResultExecutingShould.cs" />
