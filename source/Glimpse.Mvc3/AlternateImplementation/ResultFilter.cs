@@ -38,17 +38,16 @@ namespace Glimpse.Mvc.AlternateImplementation
                     return;
                 }
 
-                var messageBroker = context.MessageBroker;
-                var message = new Message((ResultExecutingContext)context.Arguments[0]);
-                messageBroker.Publish(message);
-                messageBroker.Publish(new TimerResultMessage(timer, "OnResultExecuting", "ResultFilter"));
+                context.MessageBroker.PublishMany(
+                    new Message((ResultExecutingContext)context.Arguments[0]), 
+                    new TimerResultMessage(timer, "OnResultExecuting", "ResultFilter"));
             }
 
             public class Message
             {
                 public Message(ResultExecutingContext argument)
                 {
-                    
+                    // TODO
                 }
             }
         }
@@ -71,10 +70,9 @@ namespace Glimpse.Mvc.AlternateImplementation
                     return;
                 }
 
-                var messageBroker = context.MessageBroker;
-                var message = new Message((ResultExecutedContext)context.Arguments[0]);
-                messageBroker.Publish(message);
-                messageBroker.Publish(new TimerResultMessage(timer, "OnResultExecuted", "ResultFilter"));
+                context.MessageBroker.PublishMany(
+                    new Message((ResultExecutedContext)context.Arguments[0]), 
+                    new TimerResultMessage(timer, "OnResultExecuted", "ResultFilter"));
             }
 
             public class Message

@@ -85,8 +85,9 @@ namespace Glimpse.Mvc.AlternateImplementation
                 var timer = context.TimerStrategy();
                 var timerResult = timer.Time(context.Proceed);
 
-                context.MessageBroker.Publish(new TimerResultMessage(timerResult, "ActionResult Executed", "MVC")); // TODO clean this up, use a constant?
-                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments)));
+                context.MessageBroker.PublishMany(
+                    new TimerResultMessage(timerResult, "ActionResult Executed", "MVC"),
+                    new Message(new Arguments(context.Arguments))); // TODO clean this up, use a constant?
             }
 
             public class Arguments
@@ -142,8 +143,9 @@ namespace Glimpse.Mvc.AlternateImplementation
 
                 var arguments = new Arguments(context.Arguments);
 
-                context.MessageBroker.Publish(new TimerResultMessage(timerResult, arguments.ActionDescriptor.ActionName + "()", "MVC"));
-                context.MessageBroker.Publish(new Message(arguments, context.ReturnValue as ActionResult));
+                context.MessageBroker.PublishMany(
+                    new TimerResultMessage(timerResult, arguments.ActionDescriptor.ActionName + "()", "MVC"),
+                    new Message(arguments, context.ReturnValue as ActionResult));
             }
 
             public class Arguments

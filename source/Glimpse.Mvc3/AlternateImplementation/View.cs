@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
 using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
@@ -46,8 +47,9 @@ namespace Glimpse.Mvc.AlternateImplementation
 
                 var mixin = context.Proxy as IViewCorrelation;
 
-                context.MessageBroker.Publish(new Message(input, timing, context.TargetType, mixin));
-                context.MessageBroker.Publish(new TimerResultMessage(timing, "Render View " + mixin.ViewName, "ASP.NET MVC")); // TODO: Clean this up
+                context.MessageBroker.PublishMany(
+                    new Message(input, timing, context.TargetType, mixin),
+                    new TimerResultMessage(timing, "Render View " + mixin.ViewName, "ASP.NET MVC"));
             }
 
             public class Arguments

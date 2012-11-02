@@ -39,8 +39,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 }
 
                 var resolvedObject = context.ReturnValue;
-                var message = new Message((Type)context.Arguments[0], resolvedObject);
-                context.MessageBroker.Publish(message);
+                context.MessageBroker.Publish(new Message((Type)context.Arguments[0], resolvedObject));
             }
 
             public class Message
@@ -82,8 +81,8 @@ namespace Glimpse.Mvc.AlternateImplementation
                     return;
                 }
 
-                var message = new Message((Type)context.Arguments[0], (IEnumerable<object>)context.ReturnValue);
-                context.MessageBroker.Publish(message);
+                context.MessageBroker.Publish(
+                    new Message((Type)context.Arguments[0], (IEnumerable<object>)context.ReturnValue));
             }
 
             public class Message

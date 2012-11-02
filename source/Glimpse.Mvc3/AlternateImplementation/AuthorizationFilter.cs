@@ -37,10 +37,9 @@ namespace Glimpse.Mvc.AlternateImplementation
                     return;
                 }
 
-                var messageBroker = context.MessageBroker;
-                var message = new Message((AuthorizationContext)context.Arguments[0]);
-                messageBroker.Publish(message);
-                messageBroker.Publish(new TimerResultMessage(timer, "OnAuthorization", "AuthorizationFilter"));
+                context.MessageBroker.PublishMany(
+                    new Message((AuthorizationContext)context.Arguments[0]), 
+                    new TimerResultMessage(timer, "OnAuthorization", "AuthorizationFilter"));
             }
 
             public class Message
@@ -56,6 +55,5 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public string ActionName { get; set; }
             }
         }
-
     }
 }

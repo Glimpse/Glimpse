@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
 using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
@@ -53,8 +54,9 @@ namespace Glimpse.Mvc.AlternateImplementation
 
                 output = ProxyOutput(output, context, input.ViewName, IsPartial, id);
 
-                context.MessageBroker.Publish(new Message(input, output, timing, context.TargetType, IsPartial, id));
-                context.MessageBroker.Publish(new TimerResultMessage(timing, "Find View " + input.ViewName, "ASP.NET MVC")); // TODO: Clean this up
+                context.MessageBroker.PublishMany(
+                    new Message(input, output, timing, context.TargetType, IsPartial, id),
+                    new TimerResultMessage(timing, "Find View " + input.ViewName, "ASP.NET MVC"));
             }
 
             private ViewEngineResult ProxyOutput(ViewEngineResult viewEngineResult, IAlternateImplementationContext context, string viewName, bool isPartial, Guid id)

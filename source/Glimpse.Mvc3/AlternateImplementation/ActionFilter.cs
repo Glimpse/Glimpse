@@ -38,10 +38,9 @@ namespace Glimpse.Mvc.AlternateImplementation
                     return;
                 }
 
-                var messageBroker = context.MessageBroker;
-                var message = new Message((ActionExecutingContext)context.Arguments[0]);
-                messageBroker.Publish(message);
-                messageBroker.Publish(new TimerResultMessage(timer, "OnActionExecuting", "ActionFilter"));
+                context.MessageBroker.PublishMany(
+                    new Message((ActionExecutingContext)context.Arguments[0]), 
+                    new TimerResultMessage(timer, "OnActionExecuting", "ActionFilter"));
             }
 
             public class Message
@@ -76,10 +75,9 @@ namespace Glimpse.Mvc.AlternateImplementation
                     return;
                 }
 
-                var messageBroker = context.MessageBroker;
-                var message = new Message((ActionExecutedContext)context.Arguments[0]);
-                messageBroker.Publish(message);
-                messageBroker.Publish(new TimerResultMessage(timer, "OnActionExecuted", "ActionFilter"));
+                context.MessageBroker.PublishMany(
+                    new Message((ActionExecutedContext)context.Arguments[0]), 
+                    new TimerResultMessage(timer, "OnActionExecuted", "ActionFilter"));
             }
 
             public class Message
