@@ -119,7 +119,7 @@ namespace Glimpse.Test.Mvc3.Tab
             var timerResult = new TimerResult();
             var baseType2 = typeof(ViewRenderMessageShould);
 
-            var mixinMock = new Mock<IViewCorrelation>();
+            var mixinMock = new Mock<IViewCorrelationMixin>();
             mixinMock.Setup(m => m.ViewEngineFindCallId).Returns(id);
             var mixin = mixinMock.Object;
 

@@ -39,7 +39,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
 
             var factoryMock = new Mock<IProxyFactory>();
             factoryMock.Setup(f => f.IsProxyable(It.IsAny<object>())).Returns(true);
-            factoryMock.Setup(f =>f.CreateProxy(It.IsAny<IControllerFactory>(),It.IsAny<IEnumerable<IAlternateImplementation<IControllerFactory>>>())).Returns(controllerFactoryMock.Object);
+            factoryMock.Setup(f => f.CreateProxy(It.IsAny<IControllerFactory>(), It.IsAny<IEnumerable<IAlternateImplementation<IControllerFactory>>>(), null)).Returns(controllerFactoryMock.Object);
 
             var contextMock = new Mock<IPipelineInspectorContext>();
             contextMock.Setup(c => c.ProxyFactory).Returns(factoryMock.Object);

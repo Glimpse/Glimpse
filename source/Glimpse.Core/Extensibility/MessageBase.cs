@@ -4,11 +4,15 @@ namespace Glimpse.Core.Extensibility
 {
     public class MessageBase
     {
-        private readonly Guid id = Guid.NewGuid();
-
-        public Guid Id 
+        public MessageBase() : this(Guid.NewGuid())
         {
-            get { return id; }
-        } 
+        }
+
+        public MessageBase(Guid id)
+        {
+            Id = id;
+        }
+
+        public Guid Id { get; set; } 
     }
 }

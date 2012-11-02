@@ -70,7 +70,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
 
             Tester.NewImplementation(Tester.ContextMock.Object);
 
-            Tester.ProxyFactoryMock.Verify(p => p.CreateProxy(It.IsAny<ControllerActionInvoker>(), It.IsAny<IEnumerable<IAlternateImplementation<ControllerActionInvoker>>>()));
+            Tester.ProxyFactoryMock.Verify(p => p.CreateProxy(It.IsAny<ControllerActionInvoker>(), It.IsAny<IEnumerable<IAlternateImplementation<ControllerActionInvoker>>>(), null));
         }
     }
 }

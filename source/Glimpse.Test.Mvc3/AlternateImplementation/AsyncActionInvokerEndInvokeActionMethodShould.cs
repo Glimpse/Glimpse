@@ -59,7 +59,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             actionDescriptorMock.Setup(ad => ad.ActionName).Returns("Index");
 
             var contextMock = new Mock<IAlternateImplementationContext>();
-            contextMock.Setup(c => c.Proxy).Returns(new ActionInvokerState
+            contextMock.Setup(c => c.Proxy).Returns(new ActionInvokerStateMixin
             {
                 Offset = 10,
                 Arguments = new ActionInvoker.InvokeActionMethod.Arguments(new object[]

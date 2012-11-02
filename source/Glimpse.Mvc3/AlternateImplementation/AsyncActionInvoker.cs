@@ -41,7 +41,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     return;
                 }
 
-                var state = (IActionInvokerState)context.Proxy;
+                var state = (IActionInvokerStateMixin)context.Proxy;
                 var timer = context.TimerStrategy();
                 state.Arguments = new ActionInvoker.InvokeActionMethod.Arguments(context.Arguments);
                 state.Offset = timer.Start();
@@ -67,7 +67,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 }
 
                 context.Proceed();
-                var state = (IActionInvokerState)context.Proxy;
+                var state = (IActionInvokerStateMixin)context.Proxy;
                 var timer = context.TimerStrategy();
                 var timerResult = timer.Stop(state.Offset);
 

@@ -17,7 +17,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
 
             var factoryMock = new Mock<IProxyFactory>();
             factoryMock.Setup(f => f.IsProxyable(It.IsAny<object>())).Returns(true);
-            factoryMock.Setup(f => f.CreateProxy(It.IsAny<IDependencyResolver>(), It.IsAny<IEnumerable<IAlternateImplementation<IDependencyResolver>>>())).Returns(resolverMock.Object);
+            factoryMock.Setup(f => f.CreateProxy(It.IsAny<IDependencyResolver>(), It.IsAny<IEnumerable<IAlternateImplementation<IDependencyResolver>>>(), null)).Returns(resolverMock.Object);
 
             var loggerMock = new Mock<ILogger>();
 

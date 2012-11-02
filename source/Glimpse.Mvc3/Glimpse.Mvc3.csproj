@@ -69,7 +69,7 @@
   <ItemGroup>
     <Compile Include="AlternateImplementation\ActionFilter.cs" />
     <Compile Include="AlternateImplementation\ActionInvoker.cs" />
-    <Compile Include="AlternateImplementation\ActionInvokerState.cs" />
+    <Compile Include="AlternateImplementation\ActionInvokerStateMixin.cs" />
     <Compile Include="AlternateImplementation\AsyncActionInvoker.cs" />
     <Compile Include="AlternateImplementation\AuthorizationFilter.cs" />
     <Compile Include="AlternateImplementation\ControllerFactory.cs" />
@@ -77,7 +77,7 @@
     <Compile Include="AlternateImplementation\ExceptionFilter.cs" />
     <Compile Include="AlternateImplementation\ResultFilter.cs" />
     <Compile Include="AlternateImplementation\View.cs" />
-    <Compile Include="AlternateImplementation\ViewCorrelation.cs" />
+    <Compile Include="AlternateImplementation\ViewCorrelationMixin.cs" />
     <Compile Include="AlternateImplementation\ViewEngine.cs" />
     <Compile Include="Model\ViewModelSummary.cs" />
     <Compile Include="Model\ViewsModel.cs" />

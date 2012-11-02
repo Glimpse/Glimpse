@@ -1,13 +1,13 @@
 ﻿namespace Glimpse.Mvc.AlternateImplementation
 {
-    public interface IActionInvokerState
+    public interface IActionInvokerStateMixin
     {
         long Offset { get; set; }
 
         ActionInvoker.InvokeActionMethod.Arguments Arguments { get; set; }
     }
 
-    public class ActionInvokerState : IActionInvokerState
+    public class ActionInvokerStateMixin : IActionInvokerStateMixin
     {
         public long Offset { get; set; }
 

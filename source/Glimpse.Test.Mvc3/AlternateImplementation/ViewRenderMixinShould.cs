@@ -13,7 +13,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             var isPartial = true;
             var id = Guid.NewGuid();
 
-            var mixin = new ViewCorrelation(viewName, isPartial, id);
+            var mixin = new ViewCorrelationMixin(viewName, isPartial, id);
 
             Assert.Equal(viewName, mixin.ViewName);
             Assert.Equal(isPartial, mixin.IsPartial);

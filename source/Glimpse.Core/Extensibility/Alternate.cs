@@ -19,14 +19,7 @@ namespace Glimpse.Core.Extensibility
 
         public bool TryCreate(T originalObj, out T newObj)
         {
-            if (ProxyFactory.IsProxyable(originalObj))
-            {
-                newObj = ProxyFactory.CreateProxy(originalObj, AllMethods());
-                return true;
-            }
-
-            newObj = null;
-            return false;
+            return TryCreate(originalObj, out newObj, null);
         }
 
         public bool TryCreate(T originalObj, out T newObj, object mixin)

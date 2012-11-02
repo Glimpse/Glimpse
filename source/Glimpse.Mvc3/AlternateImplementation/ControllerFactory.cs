@@ -63,7 +63,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     var originalActionInvoker = asyncController.ActionInvoker;
                     AsyncControllerActionInvoker newActionInvoker;
 
-                    if (alternateImplementation.TryCreate(originalActionInvoker as AsyncControllerActionInvoker, out newActionInvoker, new ActionInvokerState()))
+                    if (alternateImplementation.TryCreate(originalActionInvoker as AsyncControllerActionInvoker, out newActionInvoker, new ActionInvokerStateMixin()))
                     {
                         asyncController.ActionInvoker = newActionInvoker;
                     }

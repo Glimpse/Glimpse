@@ -2,7 +2,7 @@
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public interface IViewCorrelation
+    public interface IViewCorrelationMixin
     {
         string ViewName { get; }
 
@@ -11,9 +11,9 @@ namespace Glimpse.Mvc.AlternateImplementation
         Guid ViewEngineFindCallId { get; }
     }
 
-    public class ViewCorrelation : IViewCorrelation
+    public class ViewCorrelationMixin : IViewCorrelationMixin
     {
-        public ViewCorrelation(string viewName, bool isPartial, Guid viewEngineFindCallId)
+        public ViewCorrelationMixin(string viewName, bool isPartial, Guid viewEngineFindCallId)
         {
             ViewName = viewName;
             IsPartial = isPartial;

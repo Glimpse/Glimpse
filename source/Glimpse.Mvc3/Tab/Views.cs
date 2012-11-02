@@ -28,7 +28,7 @@ namespace Glimpse.Mvc.Tab
 
             foreach (var findView in viewEngineFindViewsMessages)
             {
-                result.Add(new ViewsModel(findView, viewRenderMessages.SingleOrDefault(r => r.ViewCorrelation.ViewEngineFindCallId == findView.CorrelationId)));
+                result.Add(new ViewsModel(findView, viewRenderMessages.SingleOrDefault(r => r.ViewCorrelation.ViewEngineFindCallId == findView.Id)));
             }
 
             return result;

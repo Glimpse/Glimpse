@@ -36,7 +36,7 @@ namespace Glimpse.Test.Mvc3.Model
             var timerResult = new TimerResult();
             var baseType2 = typeof(ViewRenderMessageShould);
 
-            var mixinMock = new Mock<IViewCorrelation>();
+            var mixinMock = new Mock<IViewCorrelationMixin>();
             var mixin = mixinMock.Object;
 
             var viewRenderMessage = new View.Render.Message(arguments, timerResult, baseType2, mixin);

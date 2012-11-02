@@ -45,7 +45,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 var timer = context.TimerStrategy();
                 var timing = timer.Time(context.Proceed);
 
-                var mixin = context.Proxy as IViewCorrelation;
+                var mixin = context.Proxy as IViewCorrelationMixin;
 
                 context.MessageBroker.PublishMany(
                     new Message(input, timing, context.TargetType, mixin),
@@ -67,7 +67,7 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public class Message : MessageBase
             {
-                public Message(Arguments input, TimerResult timing, Type baseType, IViewCorrelation viewCorrelation)
+                public Message(Arguments input, TimerResult timing, Type baseType, IViewCorrelationMixin viewCorrelation)
                 {
                     Input = input;
                     Timing = timing;
@@ -81,7 +81,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 
                 public Type BaseType { get; set; }
                 
-                public IViewCorrelation ViewCorrelation { get; set; }
+                public IViewCorrelationMixin ViewCorrelation { get; set; }
             }
         }
     }

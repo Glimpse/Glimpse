@@ -36,7 +36,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             contextMock.Setup(c => c.TimerStrategy).Returns(timer);
             contextMock.Setup(c => c.RuntimePolicyStrategy).Returns(policy);
 
-            var mixinMock = new Mock<IViewCorrelation>();
+            var mixinMock = new Mock<IViewCorrelationMixin>();
             mixinMock.Setup(m => m.ViewName).Returns("astring");
             contextMock.Setup(c => c.Proxy).Returns(mixinMock.Object);
             

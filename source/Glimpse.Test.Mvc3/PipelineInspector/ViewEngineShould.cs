@@ -25,7 +25,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         {
             var proxyFactoryMock = new Mock<IProxyFactory>();
             proxyFactoryMock.Setup(pf => pf.IsProxyable(It.IsAny<object>())).Returns(true);
-            proxyFactoryMock.Setup(pf => pf.CreateProxy<IViewEngine>(It.IsAny<IViewEngine>(), It.IsAny<IEnumerable<IAlternateImplementation<IViewEngine>>>())).Returns(new Mock<IViewEngine>().Object);
+            proxyFactoryMock.Setup(pf => pf.CreateProxy<IViewEngine>(It.IsAny<IViewEngine>(), It.IsAny<IEnumerable<IAlternateImplementation<IViewEngine>>>(), null)).Returns(new Mock<IViewEngine>().Object);
 
             var contextMock = new Mock<IPipelineInspectorContext>();
             contextMock.Setup(c => c.ProxyFactory).Returns(proxyFactoryMock.Object);
@@ -35,7 +35,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
 
             viewEngine.Setup(contextMock.Object);
 
-            proxyFactoryMock.Verify(pf=>pf.CreateProxy(It.IsAny<IViewEngine>(), It.IsAny<IEnumerable<IAlternateImplementation<IViewEngine>>>()), Times.AtLeastOnce());
+            proxyFactoryMock.Verify(pf => pf.CreateProxy(It.IsAny<IViewEngine>(), It.IsAny<IEnumerable<IAlternateImplementation<IViewEngine>>>(), null), Times.AtLeastOnce());
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         {
             var proxyFactoryMock = new Mock<IProxyFactory>();
             proxyFactoryMock.Setup(pf => pf.IsProxyable(It.IsAny<object>())).Returns(true);
-            proxyFactoryMock.Setup(pf => pf.CreateProxy<IViewEngine>(It.IsAny<IViewEngine>(), It.IsAny<IEnumerable<IAlternateImplementation<IViewEngine>>>())).Returns(new Mock<IViewEngine>().Object);
+            proxyFactoryMock.Setup(pf => pf.CreateProxy<IViewEngine>(It.IsAny<IViewEngine>(), It.IsAny<IEnumerable<IAlternateImplementation<IViewEngine>>>(), null)).Returns(new Mock<IViewEngine>().Object);
 
             var contextMock = new Mock<IPipelineInspectorContext>();
             contextMock.Setup(c => c.ProxyFactory).Returns(proxyFactoryMock.Object);

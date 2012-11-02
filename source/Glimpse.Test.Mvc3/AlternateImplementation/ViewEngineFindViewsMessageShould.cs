@@ -26,7 +26,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             Assert.Equal(output, message.Output);
             Assert.Equal(timing, message.Timing);
             Assert.Equal(isPartial, message.IsPartial);
-            Assert.Equal(id, message.CorrelationId);
+            Assert.Equal(id, message.Id);
             Assert.False(message.IsFound);
         }
 
@@ -49,7 +49,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             Assert.Equal(output, message.Output);
             Assert.Equal(timing, message.Timing);
             Assert.Equal(isPartial, message.IsPartial);
-            Assert.Equal(id, message.CorrelationId);
+            Assert.Equal(id, message.Id);
             Assert.True(message.IsFound);
         }
 

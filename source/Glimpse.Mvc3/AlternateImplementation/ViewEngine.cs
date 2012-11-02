@@ -68,7 +68,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     var originalView = viewEngineResult.View;
 
                     IView newView;
-                    if (alternateImplementation.TryCreate(originalView, out newView, new ViewCorrelation(viewName, isPartial, id)))
+                    if (alternateImplementation.TryCreate(originalView, out newView, new ViewCorrelationMixin(viewName, isPartial, id)))
                     {
                         context.Logger.Info(Resources.FindViewsProxyOutputReplacedIView, originalView.GetType(), viewName);
 
@@ -76,20 +76,6 @@ namespace Glimpse.Mvc.AlternateImplementation
                         context.ReturnValue = result;
                         return result;
                     }
-
-                    /*if (context.ProxyFactory.IsProxyable(originalView))
-                    {
-                        var newView = context.ProxyFactory.CreateProxy(
-                            originalView,
-                            View.AllMethods(context.MessageBroker, context.TimerStrategy, context.RuntimePolicyStrategy),
-                            new ViewCorrelation(viewName, isPartial, id));
-
-                        context.Logger.Info(Resources.FindViewsProxyOutputReplacedIView, originalView.GetType(), viewName);
-
-                        var result = new ViewEngineResult(newView, viewEngineResult.ViewEngine);
-                        context.ReturnValue = result;
-                        return result;
-                    }*/
                 }
 
                 return viewEngineResult;
@@ -97,7 +83,7 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public class Message : MessageBase
             {
-                public Message(Arguments input, ViewEngineResult output, TimerResult timing, Type baseType, bool isPartial, Guid correlationId)
+                public Message(Arguments input, ViewEngineResult output, TimerResult timing, Type baseType, bool isPartial, Guid id) : base(id)
                 {
                     if (input == null)
                     {
@@ -120,7 +106,6 @@ namespace Glimpse.Mvc.AlternateImplementation
 
                     IsPartial = isPartial;
                     BaseType = baseType;
-                    CorrelationId = correlationId;
                 }
 
                 public Arguments Input { get; set; }
@@ -133,8 +118,6 @@ namespace Glimpse.Mvc.AlternateImplementation
 
                 public bool IsPartial { get; set; }
                 
-                public Guid CorrelationId { get; set; }
-
                 public bool IsFound
                 {
                     get { return Output.View != null; }
