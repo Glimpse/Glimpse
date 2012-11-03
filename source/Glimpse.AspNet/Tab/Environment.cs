@@ -80,7 +80,7 @@ namespace Glimpse.AspNet.Tab
         {
             var is64BitOperatingSystem = Is64BitOperatingSystem();
             var name = string.Format("{0} ({1} processors)", System.Environment.MachineName, System.Environment.ProcessorCount);
-            var operatingSystem = string.Format("{0} ({1} bit)", System.Environment.OSVersion.VersionString, (is64BitOperatingSystem == null ? "?" : is64BitOperatingSystem.Value ? "64" : "32"));  
+            var operatingSystem = string.Format("{0} ({1} bit)", System.Environment.OSVersion.VersionString, is64BitOperatingSystem == null ? "?" : is64BitOperatingSystem.Value ? "64" : "32");  
             var startTime = DateTime.Now.AddMilliseconds(System.Environment.TickCount * -1);
 
             return new EnvironmentMachineModel { Name = name, OperatingSystem = operatingSystem, StartTime = startTime };
