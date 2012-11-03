@@ -68,6 +68,7 @@
     <Compile Include="Model\RequestModelShould.cs" />
     <Compile Include="Model\RouteInstanceShould.cs" />
     <Compile Include="Model\RouteInstanceTester.cs" />
+    <Compile Include="PipelineInspector\TraceInspectorShould.cs" />
     <Compile Include="Policy\LocalPolicyShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerializationConverter\ConfigurationModelConverterShould.cs" />

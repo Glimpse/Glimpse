@@ -152,7 +152,7 @@ namespace Glimpse.AspNet.PipelineInspector
         public override void TraceData(TraceEventCache eventCache, string source, TraceEventType eventType, int id, object data)
         {
             var message = new StringBuilder();
-            message.AppendLine(WriteHeader(source, id));
+            message.Append(WriteHeader(source, id));
                 
             if (data != null)
             {
