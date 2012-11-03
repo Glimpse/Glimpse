@@ -61,11 +61,13 @@
     <Compile Include="SerializationConverter\ConfigurationModelConverterShould.cs" />
     <Compile Include="SerializationConverter\ConfigurationRoleManagerProviderSettingsModelConverterShould.cs" />
     <Compile Include="SerializationConverter\RequestModelConverterShould.cs" />
+    <Compile Include="SerializationConverter\TraceModelConverterShould.cs" />
     <Compile Include="Tab\ConfigurationShould.cs" />
     <Compile Include="Tab\EnvironmentShould.cs" />
     <Compile Include="Tab\RequestShould.cs" />
     <Compile Include="Tab\RoutesShould.cs" />
     <Compile Include="Tab\SessionShould.cs" />
+    <Compile Include="Tab\TraceShould.cs" />
     <Compile Include="Tester\AspNetFrameworkProviderTester.cs" />
     <Compile Include="Tester\HttpHandlerTester.cs" />
     <Compile Include="Tester\HttpModuleTester.cs" />
