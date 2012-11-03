@@ -7,7 +7,7 @@
         Info,
         Error,
         Fail,
-        Quite,
+        Quiet,
         Loading,
         Selected,
         System

@@ -23,7 +23,7 @@
                     return Info;
                 case FormattingKeywordEnum.Loading:
                     return Loading;
-                case FormattingKeywordEnum.Quite:
+                case FormattingKeywordEnum.Quiet:
                     return Quiet;
                 case FormattingKeywordEnum.Selected:
                     return Selected;

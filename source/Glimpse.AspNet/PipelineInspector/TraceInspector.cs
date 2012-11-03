@@ -316,7 +316,7 @@ namespace Glimpse.AspNet.PipelineInspector
                 case "fail":
                     return FormattingKeywordEnum.Fail;
                 case "quiet":
-                    return FormattingKeywordEnum.Quite;
+                    return FormattingKeywordEnum.Quiet;
                 case "timing":
                     return FormattingKeywordEnum.Loading;
                 case "selected":
