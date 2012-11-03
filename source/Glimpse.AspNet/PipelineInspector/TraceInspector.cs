@@ -49,10 +49,6 @@ namespace Glimpse.AspNet.PipelineInspector
 
                 return lastWatch;
             } 
-            set
-            {
-                _context.GetTabStore().Set(Tab.Trace.LastWatchStoreKey, value);
-            }
         }
 
         private IList<TraceModel> Messages
@@ -270,6 +266,7 @@ namespace Glimpse.AspNet.PipelineInspector
 
                     message.Append(obj);
                 }
+
                 message.AppendLine(string.Empty);
             }
 
