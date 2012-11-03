@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using MvcMusicStore.Models;
@@ -16,6 +17,12 @@ namespace MvcMusicStore.Controllers
         {
             // Get most popular albums
             var albums = GetTopSellingAlbums(5);
+
+
+            Trace.Write("Got top 5 albums");
+            Trace.TraceWarning("Test TraceWarning;");
+            Trace.TraceError("Test TraceError;");
+            Trace.TraceInformation("Test TraceInformation;"); 
 
             return View(albums);
         }
