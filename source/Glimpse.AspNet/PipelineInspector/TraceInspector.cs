@@ -49,6 +49,10 @@ namespace Glimpse.AspNet.PipelineInspector
 
                 return lastWatch;
             } 
+            set
+            {
+                _context.GetTabStore().Set(Tab.Trace.LastWatchStoreKey, value);
+            }
         }
 
         private IList<TraceModel> Messages
@@ -224,7 +228,8 @@ namespace Glimpse.AspNet.PipelineInspector
             model.FromLast = lastWatch.ElapsedTicks.ConvertNanosecondsToMilliseconds();
             model.IndentLevel = IndentLevel;
 
-            lastWatch.Restart();
+            lastWatch.Reset();
+            lastWatch.Start();
 
             Messages.Add(model);
         }
@@ -344,6 +349,6 @@ namespace Glimpse.AspNet.PipelineInspector
             }
 
             return FormattingKeywordEnum.None;
-        }
+        } 
     }
 }
