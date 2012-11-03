@@ -45,7 +45,9 @@ namespace Glimpse.AspNet.Tab
         {
             var traceListeners = System.Diagnostics.Trace.Listeners;
             if (!traceListeners.OfType<TraceInspector>().Any())
+            {
                 traceListeners.Add(new TraceInspector(context));
+            }
         }
     }
 }
