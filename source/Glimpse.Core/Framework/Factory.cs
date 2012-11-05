@@ -51,6 +51,8 @@ namespace Glimpse.Core.Framework
 
         private IFrameworkProvider FrameworkProvider { get; set; }
 
+        private IMessageBroker MessageBroker { get; set; }
+
         public IGlimpseRuntime InstantiateRuntime()
         {
             IGlimpseRuntime result;
@@ -312,16 +314,23 @@ namespace Glimpse.Core.Framework
         {
             return Configuration.EndpointBaseUri;
         }
-
+        
         public IMessageBroker InstantiateMessageBroker()
         {
-            IMessageBroker result;
-            if (TrySingleInstanceFromServiceLocators(out result))
-            {
-                return result;
+            if (MessageBroker == null)
+            { 
+                IMessageBroker result;
+                if (TrySingleInstanceFromServiceLocators(out result))
+                {
+                    MessageBroker = result; 
+                }
+                else
+                {
+                    MessageBroker = new MessageBroker(InstantiateLogger());
+                }
             }
 
-            return new MessageBroker(InstantiateLogger());
+            return MessageBroker;
         }
 
         public IProxyFactory InstantiateProxyFactory()
