@@ -91,6 +91,7 @@
     <Compile Include="AlternateImplementation\ExceptionFilterShould.cs" />
     <Compile Include="AlternateImplementation\ResultFilterOnResultExecutedMessageShould.cs" />
     <Compile Include="AlternateImplementation\ResultFilterOnResultExecutedShould.cs" />
+    <Compile Include="AlternateImplementation\ResultFilterOnResultExecutingMessageShould.cs" />
     <Compile Include="AlternateImplementation\ResultFilterOnResultExecutingShould.cs" />
     <Compile Include="AlternateImplementation\ResultFilterShould.cs" />
     <Compile Include="AlternateImplementation\ViewEngineFindViewsArgumentsShould.cs" />

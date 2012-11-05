@@ -47,8 +47,13 @@ namespace Glimpse.Mvc.AlternateImplementation
             {
                 public Message(ResultExecutingContext argument)
                 {
-                    // TODO
+                    IsCanceled = argument.Cancel;
+                    ResultType = argument.Result == null ? null : argument.Result.GetType();
                 }
+
+                public Type ResultType { get; set; }
+
+                public bool IsCanceled { get; set; }
             }
         }
 
