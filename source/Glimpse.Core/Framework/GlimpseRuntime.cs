@@ -14,6 +14,8 @@ namespace Glimpse.Core.Framework
 {
     public class GlimpseRuntime : IGlimpseRuntime
     {
+        private static object lockObj = new object();
+
         static GlimpseRuntime()
         {
             // Version is in major.minor.build format to support http://semver.org/
@@ -249,41 +251,51 @@ namespace Glimpse.Core.Framework
                 return false;
             }
 
-            var messageBroker = Configuration.MessageBroker;
-
-            var tabsThatRequireSetup = Configuration.Tabs.Where(tab => tab is ITabSetup).Select(tab => tab);
-            foreach (ITabSetup tab in tabsThatRequireSetup)
+            // Double checked lock to ensure thread safety. http://en.wikipedia.org/wiki/Double_checked_locking_pattern
+            if (!IsInitialized)
             {
-                var key = tab.GetType().FullName;
-                try
+                lock (lockObj)
                 {
-                    var setupContext = new TabSetupContext(logger, messageBroker, () => GetTabStore(key));
-                    tab.Setup(setupContext);
-                }
-                catch (Exception exception)
-                {
-                    logger.Error(Resources.InitializeTabError, exception, key);
+                    if (!IsInitialized)
+                    {
+                        var messageBroker = Configuration.MessageBroker;
+
+                        var tabsThatRequireSetup = Configuration.Tabs.Where(tab => tab is ITabSetup).Select(tab => tab);
+                        foreach (ITabSetup tab in tabsThatRequireSetup)
+                        {
+                            var key = tab.GetType().FullName;
+                            try
+                            {
+                                var setupContext = new TabSetupContext(logger, messageBroker, () => GetTabStore(key));
+                                tab.Setup(setupContext);
+                            }
+                            catch (Exception exception)
+                            {
+                                logger.Error(Resources.InitializeTabError, exception, key);
+                            }
+                        }
+
+                        var pipelineInspectorContext = new PipelineInspectorContext(logger, Configuration.ProxyFactory, messageBroker, Configuration.TimerStrategy, Configuration.RuntimePolicyStrategy);
+
+                        foreach (var pipelineInspector in Configuration.PipelineInspectors)
+                        {
+                            try
+                            {
+                                pipelineInspector.Setup(pipelineInspectorContext);
+                                logger.Debug(Resources.GlimpseRuntimeInitializeSetupPipelineInspector, pipelineInspector.GetType());
+                            }
+                            catch (Exception exception)
+                            {
+                                logger.Error(Resources.InitializePipelineInspectorError, exception, pipelineInspector.GetType());
+                            }
+                        }
+
+                        PersistMetadata();
+
+                        IsInitialized = true;
+                    }
                 }
             }
-
-            var pipelineInspectorContext = new PipelineInspectorContext(logger, Configuration.ProxyFactory, messageBroker, Configuration.TimerStrategy, Configuration.RuntimePolicyStrategy);
-
-            foreach (var pipelineInspector in Configuration.PipelineInspectors)
-            {
-                try
-                {
-                    pipelineInspector.Setup(pipelineInspectorContext);
-                    logger.Debug(Resources.GlimpseRuntimeInitializeSetupPipelineInspector, pipelineInspector.GetType());
-                }
-                catch (Exception exception)
-                {
-                    logger.Error(Resources.InitializePipelineInspectorError, exception, pipelineInspector.GetType());
-                }
-            }
-
-            PersistMetadata();
-
-            IsInitialized = true;
 
             return policy != RuntimePolicy.Off;
         }
