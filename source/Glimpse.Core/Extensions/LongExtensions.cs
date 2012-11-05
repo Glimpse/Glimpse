@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+﻿using System.Diagnostics;
 
 namespace Glimpse.Core.Extensions
 {
@@ -10,7 +6,7 @@ namespace Glimpse.Core.Extensions
     {
         public static double ConvertNanosecondsToMilliseconds(this long ticks)
         {
-            var ns = 1000000000.0 * (double)ticks / Stopwatch.Frequency;
+            var ns = 1000000000.0 * ticks / Stopwatch.Frequency;
             return ns / 1000000.0;
         }
     }
