@@ -16,10 +16,21 @@ namespace Glimpse.AspNet.SerializationConverter
             var root = new TabSection("Category", "Trace", "From First", "From Last");
             foreach (var item in obj)
             {
-                root.AddRow().Column(item.Category == FormattingKeywordEnum.None ? string.Empty : item.Category.ToString()).Column(item.Message).Column(item.FromFirst.ToString("0.## ms")).Column(item.FromLast.ToString("0.## ms")).Style(item.Category);
+                root.AddRow().Column(item.Category == FormattingKeywordEnum.None ? string.Empty : item.Category.ToString()).Column(GenerateTabs(item)).Column(item.FromFirst.ToString("0.## ms")).Column(item.FromLast.ToString("0.## ms")).Style(item.Category);
             }
 
             return root.Build();
         } 
+
+        private string GenerateTabs(TraceModel item)
+        {
+            var tabs = string.Empty;
+            for (var i = 0; i < item.IndentLevel; i++)
+            {
+                tabs += "\t";
+            }
+
+            return tabs + item.Message;
+        }
     }
 }

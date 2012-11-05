@@ -21,7 +21,12 @@ namespace MvcMusicStore.Controllers
 
             Trace.Write("Got top 5 albums");
             Trace.TraceWarning("Test TraceWarning;");
+            Trace.IndentLevel++;
             Trace.TraceError("Test TraceError;");
+            Trace.Write("Another trace line");
+            Trace.IndentLevel++;
+            Trace.Write("Yet another trace line");
+            Trace.IndentLevel = 0;
             Trace.TraceInformation("Test TraceInformation;"); 
 
             return View(albums);
