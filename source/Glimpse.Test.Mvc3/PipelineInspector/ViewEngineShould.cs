@@ -38,47 +38,6 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
             proxyFactoryMock.Verify(pf => pf.CreateProxy(It.IsAny<IViewEngine>(), It.IsAny<IEnumerable<IAlternateImplementation<IViewEngine>>>(), null), Times.AtLeastOnce());
         }
 
-        [Fact]
-        public void Teardown()
-        {
-            var proxyFactoryMock = new Mock<IProxyFactory>();
-            proxyFactoryMock.Setup(pf => pf.IsProxyable(It.IsAny<object>())).Returns(true);
-            proxyFactoryMock.Setup(pf => pf.CreateProxy<IViewEngine>(It.IsAny<IViewEngine>(), It.IsAny<IEnumerable<IAlternateImplementation<IViewEngine>>>(), null)).Returns(new Mock<IViewEngine>().Object);
-
-            var contextMock = new Mock<IPipelineInspectorContext>();
-            contextMock.Setup(c => c.ProxyFactory).Returns(proxyFactoryMock.Object);
-            contextMock.Setup(c => c.Logger).Returns(new Mock<ILogger>().Object);
-
-            Assert.True(ViewEngines.Engines.Any(e=>e.GetType() == typeof(RazorViewEngine)));
-
-            var viewEngine = new ViewEngineInspector();
-
-            viewEngine.Setup(contextMock.Object);
-
-            Assert.False(ViewEngines.Engines.Any(e=>e.GetType() == typeof(RazorViewEngine)));
-            
-            viewEngine.Teardown(contextMock.Object);
-
-            Assert.True(ViewEngines.Engines.Any(e=>e.GetType() == typeof(RazorViewEngine)));
-        }
-
-        [Fact]
-        public void NotClearOutViewEnginesIfTeardownCalledBeforeSetup()
-        {
-            var proxyFactoryMock = new Mock<IProxyFactory>();
-            proxyFactoryMock.Setup(pf => pf.IsProxyable(It.IsAny<object>())).Returns(true);
-            proxyFactoryMock.Setup(pf => pf.CreateProxy<IViewEngine>(It.IsAny<IViewEngine>(), It.IsAny<IEnumerable<IAlternateImplementation<IViewEngine>>>())).Returns(new Mock<IViewEngine>().Object);
-
-            var contextMock = new Mock<IPipelineInspectorContext>();
-            contextMock.Setup(c => c.ProxyFactory).Returns(proxyFactoryMock.Object);
-
-            var viewEngine = new ViewEngineInspector();
-
-            viewEngine.Teardown(contextMock.Object);
-
-            Assert.True(ViewEngines.Engines.Any(e => e.GetType() == typeof(RazorViewEngine)));
-        }
-
         public void Dispose()
         {
             ViewEngines.Engines.Clear();

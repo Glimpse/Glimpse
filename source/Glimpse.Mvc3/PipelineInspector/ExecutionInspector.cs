@@ -21,10 +21,5 @@ namespace Glimpse.Mvc.PipelineInspector
                 logger.Debug(Resources.ControllerFactorySetup, originalControllerFactory.GetType());
             }
         }
-
-        public void Teardown(IPipelineInspectorContext context)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

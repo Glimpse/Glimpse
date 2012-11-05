@@ -10,11 +10,5 @@ namespace Glimpse.Test.Core.TestDoubles
             //Simple IGlimpsePipelineInspector for testing
             throw new NotSupportedException("I am DummyGlimpsePipelineInspector1");
         }
-
-        public void Teardown(IPipelineInspectorContext context)
-        {
-            //Simple IGlimpsePipelineInspector for testing
-            throw new NotSupportedException("I am DummyGlimpsePipelineInspector1");
-        }
     }
 }

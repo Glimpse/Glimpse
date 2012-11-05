@@ -8,10 +8,5 @@ namespace Glimpse.AspNet.PipelineInspector
         {
             throw new System.NotImplementedException();
         }
-
-        public void Teardown(IPipelineInspectorContext context)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }
