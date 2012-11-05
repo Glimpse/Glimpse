@@ -131,7 +131,9 @@
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\MessageBrokerExtensions.cs" />
+    <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Extensions\NameValueCollectionExtension.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\TypeElementCollectionExtensions.cs" />
     <Compile Include="Extensions\UriTemplateExtensions.cs" />
     <Compile Include="Framework\ApplicationPersistenceStore.cs" />
@@ -175,6 +177,7 @@
     <Compile Include="Plugin\Assist\CodeType.cs" />
     <Compile Include="Plugin\Assist\CodeTypeConverter.cs" />
     <Compile Include="Plugin\Assist\Formats.cs" />
+    <Compile Include="Plugin\Assist\FormattingKeywordEnum.cs" />
     <Compile Include="Plugin\Assist\FormattingKeywords.cs" />
     <Compile Include="Plugin\Assist\TabColumn.cs" />
     <Compile Include="Plugin\Assist\TabRow.cs" />

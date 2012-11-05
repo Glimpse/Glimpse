@@ -8,6 +8,11 @@ namespace Glimpse.Mvc.Model
     {
         public ViewsModel(ViewEngine.FindViews.Message viewEngineFindView, View.Render.Message viewRender)
         {
+            if (viewRender != null && viewRender.Input.ViewContext.Controller != null)
+            {
+                SourceController = viewRender.Input.ViewContext.Controller.ValueProvider.GetValue("controller").RawValue;
+            }
+
             ViewName = viewEngineFindView.Input.ViewName;
             MasterName = viewEngineFindView.Input.MasterName;
             IsPartial = viewEngineFindView.IsPartial;
@@ -22,6 +27,8 @@ namespace Glimpse.Mvc.Model
                 ViewModelSummary = new ViewModelSummary(viewContext.ViewData, viewContext.TempData);
             }
         }
+
+        public object SourceController { get; set; }
 
         public string ViewName { get; set; }
 

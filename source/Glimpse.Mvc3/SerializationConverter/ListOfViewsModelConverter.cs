@@ -12,7 +12,7 @@ namespace Glimpse.Mvc.SerializationConverter
         {
             var result = new List<IEnumerable<object>>
                 {
-                    new[] { "Ordinal", "Requested View", "Master Override", "Partial", "View Engine", "Check Cache", "Found", "Details" },
+                    new[] { "Ordinal", "Source Controller", "Requested View", "Master Override", "Partial", "View Engine", "Check Cache", "Found", "Details" },
                 };
 
             var count = 0;
@@ -22,6 +22,7 @@ namespace Glimpse.Mvc.SerializationConverter
                             let row = new[]
                                           {
                                               count++, // Ordinal
+                                              item.SourceController, // Source Controller
                                               item.ViewName, // Requested View
                                               item.MasterName, // Master Override
                                               item.IsPartial, // Partial

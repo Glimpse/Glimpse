@@ -74,8 +74,10 @@
     <Compile Include="Model\RequestModel.cs" />
     <Compile Include="Model\RouteInstance.cs" />
     <Compile Include="Model\SessionModel.cs" />
+    <Compile Include="Model\TraceModel.cs" />
     <Compile Include="Model\UriTokenInstance.cs" />
     <Compile Include="PipelineInspector\RoutesInspector.cs" />
+    <Compile Include="PipelineInspector\TraceInspector.cs" />
     <Compile Include="Policy\LocalPolicy.cs" />
     <Compile Include="RequestMetadata.cs" />
     <Compile Include="Resources.Designer.cs">
@@ -88,14 +90,17 @@
     <Compile Include="SerializationConverter\EnvironmentModelConverter.cs" />
     <Compile Include="SerializationConverter\RequestModelConverter.cs" />
     <Compile Include="SerializationConverter\SessionModelConverter.cs" />
+    <Compile Include="SerializationConverter\TraceModelConverter.cs" />
     <Compile Include="Tab\Configuration.cs" />
     <Compile Include="Tab\Environment.cs" />
     <Compile Include="Tab\Request.cs" />
     <Compile Include="PreBodyTagFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tab\Routes.cs" />
+    <Compile Include="Tab\Server.cs" />
     <Compile Include="Tab\Session.cs" />
     <Compile Include="Tab\Timeline.cs" />
+    <Compile Include="Tab\Trace.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">

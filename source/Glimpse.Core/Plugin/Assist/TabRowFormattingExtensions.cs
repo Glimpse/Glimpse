@@ -135,6 +135,26 @@ namespace Glimpse.Core.Plugin.Assist
             return condition ? row.Warn() : row;
         }
 
+        public static TabRow Style(this TabRow row, string @class)
+        {
+            return !string.IsNullOrEmpty(@class) ? VerifyAndApplyFormatting(row, @class) : row;
+        }
+
+        public static TabRow StyleIf(this TabRow row, string @class, bool condition)
+        {
+            return condition ? row.Style(@class) : row;
+        }
+
+        public static TabRow Style(this TabRow row, FormattingKeywordEnum keyword)
+        {
+            return keyword != FormattingKeywordEnum.None ? VerifyAndApplyFormatting(row, FormattingKeywords.Convert(keyword)) : row;
+        }
+
+        public static TabRow StyleIf(this TabRow row, FormattingKeywordEnum keyword, bool condition)
+        {
+            return condition ? row.Style(keyword) : row;
+        }
+
         private static TabRow VerifyAndApplyFormatting(TabRow row, string operation)
         {
             if (!row.Columns.Any())
