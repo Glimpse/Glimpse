@@ -44,6 +44,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Newtonsoft.Json.4.5.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Ploeh.AutoFixture">
+      <HintPath>..\..\packages\AutoFixture.2.13.3\lib\net35\Ploeh.AutoFixture.dll</HintPath>
+    </Reference>
+    <Reference Include="Ploeh.AutoFixture.AutoMoq">
+      <HintPath>..\..\packages\AutoFixture.AutoMoq.2.13.3\lib\net35\Ploeh.AutoFixture.AutoMoq.dll</HintPath>
+    </Reference>
+    <Reference Include="Ploeh.AutoFixture.Xunit">
+      <HintPath>..\..\packages\AutoFixture.Xunit.2.13.3\lib\net35\Ploeh.AutoFixture.Xunit.dll</HintPath>
+    </Reference>
+    <Reference Include="Ploeh.SemanticComparison">
+      <HintPath>..\..\packages\AutoFixture.2.13.3\lib\net35\Ploeh.SemanticComparison.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -154,6 +166,7 @@
     <Compile Include="TestDoubles\DummyServiceLocator.cs" />
     <Compile Include="TestDoubles\DummyTabSetupTab.cs" />
     <Compile Include="TestDoubles\DummyTab.cs" />
+    <Compile Include="TestDoubles\IDummyInterface.cs" />
     <Compile Include="TestDoubles\IDummyMixin.cs" />
     <Compile Include="Tester\AjaxPolicyTester.cs" />
     <Compile Include="Tester\ApplicationPersistenceStoreTester.cs" />
@@ -166,13 +179,19 @@
     <Compile Include="Tester\UriPolicyTester.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">
       <Project>{C1289CE8-3259-41D9-893E-7A4E6F772D30}</Project>
       <Name>Glimpse.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Glimpse.Test.Common\Glimpse.Test.Common.csproj">
+      <Project>{BC28BB90-8BF2-4D54-B96E-0E0181DDF432}</Project>
+      <Name>Glimpse.Test.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

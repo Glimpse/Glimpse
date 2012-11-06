@@ -1,124 +1,138 @@
 ﻿using System;
 using System.Linq;
 using Glimpse.Core.Extensibility;
+using Glimpse.Test.Common;
 using Glimpse.Test.Core.TestDoubles;
 using Moq;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Glimpse.Test.Core.Framework
 {
     public class MessageBrokerShould
     {
-        [Fact]
-        public void Construct()
+        [Theory, AutoMock]
+        public void Construct(ILogger logger)
         {
-            var loggerMock = new Mock<ILogger>();
+            var sut = new MessageBroker(logger);
 
-            var eventBroker = new MessageBroker(loggerMock.Object);
-
-            Assert.NotNull(eventBroker);
+            Assert.NotNull(sut);
+            Assert.Equal(logger, sut.Logger);
         }
 
-        [Fact]
-        public void SubscribeToEvents()
+        [Theory, AutoMock]
+        public void SubscribeToEvents(MessageBroker sut)
         {
-            var loggerMock = new Mock<ILogger>();
-            var eventBroker = new MessageBroker(loggerMock.Object);
+            sut.Subscribe<DummyMessage>(evt => Assert.IsType<DummyMessage>(evt));
 
-            eventBroker.Subscribe<DummyMessage>(evt => Assert.IsType<DummyMessage>(evt));
-
-            Assert.True(eventBroker.Subscriptions[typeof(DummyMessage)].Any());
+            Assert.True(sut.Subscriptions[typeof(DummyMessage)].Any());
         }
 
-        [Fact]
-        public void SubscribeToEventsGrowsSubscriberbase()
+        [Theory, AutoMock]
+        public void SubscribeToEventsGrowsSubscriberbase(MessageBroker sut)
         {
-            var loggerMock = new Mock<ILogger>();
-            var eventBroker = new MessageBroker(loggerMock.Object);
+            sut.Subscribe<DummyMessage>(evt => Assert.IsType<DummyMessage>(evt));
 
-            eventBroker.Subscribe<DummyMessage>(evt => Assert.IsType<DummyMessage>(evt));
+            Assert.True(sut.Subscriptions[typeof(DummyMessage)].Count() == 1);
 
-            Assert.True(eventBroker.Subscriptions[typeof(DummyMessage)].Count() == 1);
+            sut.Subscribe<DummyMessage>(Assert.NotNull);
 
-            eventBroker.Subscribe<DummyMessage>(Assert.NotNull);
-
-            Assert.True(eventBroker.Subscriptions[typeof(DummyMessage)].Count() == 2);
+            Assert.True(sut.Subscriptions[typeof(DummyMessage)].Count() == 2);
         }
 
-        [Fact]
-        public void UnsubscribeFromEvent()
+        [Theory, AutoMock]
+        public void UnsubscribeFromEvent(MessageBroker sut)
         {
-            var loggerMock = new Mock<ILogger>();
-            var eventBroker = new MessageBroker(loggerMock.Object);
+            var subId = sut.Subscribe<DummyMessage>(evt => Assert.IsType<DummyMessage>(evt));
 
-            var subId = eventBroker.Subscribe<DummyMessage>(evt => Assert.IsType<DummyMessage>(evt));
+            Assert.True(sut.Subscriptions[typeof(DummyMessage)].Any());
 
-            Assert.True(eventBroker.Subscriptions[typeof(DummyMessage)].Any());
+            sut.Unsubscribe<DummyMessage>(subId);
 
-            eventBroker.Unsubscribe<DummyMessage>(subId);
-
-            Assert.False(eventBroker.Subscriptions[typeof(DummyMessage)].Any());
+            Assert.False(sut.Subscriptions[typeof(DummyMessage)].Any());
         }
 
-        [Fact]
-        public void Publish()
+        [Theory, AutoMock]
+        public void Publish(MessageBroker sut, string expected)
         {
             var counter = 0;
-            var expected = "Any Value";
-            var message = new DummyMessage {Identifier = expected};
+            var message = new DummyMessage { Identifier = expected };
 
-            var loggerMock = new Mock<ILogger>();
-            var eventBroker = new MessageBroker(loggerMock.Object);
-            var subId = eventBroker.Subscribe<DummyMessage>(evt =>
-                                                                {
-                                                                    Assert.Equal(expected, evt.Identifier);
-                                                                    counter++;
-                                                                });
+            sut.Subscribe<DummyMessage>(
+                evt =>
+                {
+                    Assert.Equal(expected, evt.Identifier);
+                    counter++;
+                });
 
-            eventBroker.Publish(message);
+            sut.Publish(message);
 
             Assert.Equal(1, counter);
         }
 
-        [Fact]
-        public void LogSubscriptions()
+        [Theory, AutoMock]
+        public void LogSubscriptions(MessageBroker sut)
         {
-            var loggerMock = new Mock<ILogger>();
+            sut.Subscribe<DummyMessage>(Assert.NotNull);
 
-            var eventBroker = new MessageBroker(loggerMock.Object);
-
-            eventBroker.Subscribe<DummyMessage>(Assert.NotNull);
-
-            loggerMock.Verify(l=>l.Debug(It.IsAny<string>(), It.IsAny<object[]>()));
+            sut.Logger.Verify(l => l.Debug(It.IsAny<string>(), It.IsAny<object[]>()));
         }
 
         [Fact]
         public void ThrowWithNullLogger()
         {
-            Assert.Throws<ArgumentNullException>(()=>new MessageBroker(null));
+            Assert.Throws<ArgumentNullException>(() => new MessageBroker(null));
         }
 
-        [Fact]
-        public void HandleExceptionsFromSubscribers()
+        [Theory, AutoMock]
+        public void HandleExceptionsFromSubscribers(MessageBroker sut)
         {
-            var loggerMock = new Mock<ILogger>();
+            sut.Subscribe<DummyMessage>(m => { throw new DummyException(); });
+            sut.Publish(new DummyMessage());
 
-            var eventBroker = new MessageBroker(loggerMock.Object);
-
-            eventBroker.Subscribe<DummyMessage>(m => { throw new DummyException(); });
-            eventBroker.Publish(new DummyMessage());
-
-            loggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<DummyException>(), It.IsAny<object[]>()));
+            sut.Logger.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<DummyException>(), It.IsAny<object[]>()));
         }
 
-        [Fact]
-        public void ThrowWithNullSubscriptionAction()
+        [Theory, AutoMock]
+        public void ThrowWithNullSubscriptionAction(MessageBroker sut)
         {
-            var loggerMock = new Mock<ILogger>();
+            Assert.Throws<ArgumentNullException>(() => sut.Subscribe<DummyMessage>(null));
+        }
 
-            var eventBroker = new MessageBroker(loggerMock.Object);
+        [Theory, AutoMock]
+        public void HandleInterfaceBasedSubscriptions(MessageBroker sut)
+        {
+            var counter = 0;
 
-            Assert.Throws<ArgumentNullException>(()=>eventBroker.Subscribe<DummyMessage>(null));
+            sut.Subscribe<IDummyInterface>(m => counter++);
+
+            sut.Publish(new DummyMessage());
+
+            Assert.Equal(1, counter);
+        }
+
+        [Theory, AutoMock]
+        public void HandleMessageInheritanceChains(MessageBroker sut)
+        {
+            var counter = 0;
+
+            sut.Subscribe<MessageBase>(m => counter++);
+
+            sut.Publish(new DummyMessage());
+
+            Assert.Equal(1, counter);
+        }
+
+        [Theory, AutoMock]
+        public void IgnoreUnknownTypes(MessageBroker sut)
+        {
+            var counter = 0;
+
+            sut.Subscribe<IDisposable>(m => counter++);
+
+            sut.Publish(new DummyMessage());
+
+            Assert.Equal(0, counter);
         }
     }
 }
