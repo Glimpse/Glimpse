@@ -21,22 +21,28 @@ namespace Glimpse.Core.Extensibility
 
         internal IDictionary<Type, List<Subscriber>> Subscriptions { get; set; }
 
-        public void Publish<T>(T message) where T : MessageBase
+        public void Publish<T>(T message)
         {
-            foreach (var subscriber in GetSubscriptions(typeof(T)))
+            foreach (var subscriptions in Subscriptions)
             {
-                try
+                if (subscriptions.Key.IsInstanceOfType(message))
                 {
-                    subscriber.Execute(message);
-                }
-                catch (Exception exception)
-                {
-                    Logger.Error("Exception calling subscriber with message of type '{0}'.", exception, typeof(T));
+                    foreach (var subscriber in subscriptions.Value)
+                    {
+                        try
+                        {
+                            subscriber.Execute(message);
+                        }
+                        catch (Exception exception)
+                        {
+                            Logger.Error("Exception calling subscriber with message of type '{0}'.", exception, typeof(T));
+                        }
+                    }
                 }
             }
         }
 
-        public Guid Subscribe<T>(Action<T> action) where T : MessageBase
+        public Guid Subscribe<T>(Action<T> action)
         {
             if (action == null)
             {
@@ -53,7 +59,7 @@ namespace Glimpse.Core.Extensibility
             return subscriptionId;
         }
 
-        public void Unsubscribe<T>(Guid subscriptionId) where T : MessageBase
+        public void Unsubscribe<T>(Guid subscriptionId)
         {
             var subscriptions = GetSubscriptions(typeof(T));
             subscriptions.RemoveAll(i => i.SubscriptionId == subscriptionId);
