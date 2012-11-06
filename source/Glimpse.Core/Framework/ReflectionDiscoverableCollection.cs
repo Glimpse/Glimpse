@@ -115,6 +115,8 @@ namespace Glimpse.Core.Framework
 
         public void Discover()
         {
+            Logger.Debug("Discovering {0}'s in '{1}' and all subdirectories.", typeof(T).Name, DiscoveryLocation);
+
             var results = new List<T>();
 
             foreach (var file in Directory.GetFiles(DiscoveryLocation, "*.dll", SearchOption.AllDirectories))
