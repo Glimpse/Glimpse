@@ -43,7 +43,7 @@ namespace Glimpse.AspNet.Tab
             {
                 var key = sessionKey.ToString();
                 var value = session[key];
-                var type = value != null ? value.GetType().ToString() : null;
+                var type = value != null ? value.GetType() : null;
                 result.Add(new SessionModel { Key = key, Type = type, Value = value });
             }
 

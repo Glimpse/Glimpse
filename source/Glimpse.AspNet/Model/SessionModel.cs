@@ -11,6 +11,6 @@ namespace Glimpse.AspNet.Model
         
         public object Value { get; set; }
 
-        public string Type { get; set; }
+        public Type Type { get; set; }
     }
 }
