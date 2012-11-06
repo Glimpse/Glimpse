@@ -111,6 +111,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourcesShould.cs" />
     <Compile Include="SerializationConverter\ListOfViewsModelConverterShould.cs" />
+    <Compile Include="SerializationConverter\ListOfMetadataItemModelConverterShould.cs" />
+    <Compile Include="Tab\MetadataShould.cs" />
     <Compile Include="Tab\ViewsShould.cs" />
     <Compile Include="TestDoubles\DummyAsyncController.cs" />
     <Compile Include="TestDoubles\DummyController.cs" />
