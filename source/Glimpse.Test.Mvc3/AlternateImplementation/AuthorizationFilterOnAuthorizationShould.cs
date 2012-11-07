@@ -2,7 +2,6 @@
 using System.Web.Mvc;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Message;
 using Glimpse.Mvc.AlternateImplementation;
 using Glimpse.Test.Common;
 using Moq;
@@ -42,7 +41,6 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             sut.NewImplementation(context);
 
             context.TimerStrategy().Verify(c => c.Time(It.IsAny<Action>()));
-            context.MessageBroker.Verify(mb => mb.Publish(It.IsAny<TimerResultMessage>()));
             context.MessageBroker.Verify(mb => mb.Publish(It.IsAny<AuthorizationFilter.OnAuthorization.Message>()));
         }
     }

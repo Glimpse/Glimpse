@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Message;
+using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
@@ -37,14 +38,16 @@ namespace Glimpse.Mvc.AlternateImplementation
                     return;
                 }
 
-                context.MessageBroker.PublishMany(
-                    new Message((AuthorizationContext)context.Arguments[0]), 
-                    new TimerResultMessage(timer, "OnAuthorization", "AuthorizationFilter"));
+                context.MessageBroker.Publish(new Message(
+                    (AuthorizationContext)context.Arguments[0],
+                    context.InvocationTarget.GetType(),
+                    context.MethodInvocationTarget,
+                    timer));
             }
 
-            public class Message : MessageBase
+            public class Message : ActionFilterMessage
             {
-                public Message(AuthorizationContext argument)
+                public Message(AuthorizationContext argument, Type filterType, MethodInfo method, TimerResult timerResult) : base(FilterCategory.Authorization, filterType, method, timerResult, argument.Controller)
                 {
                     ActionName = argument.ActionDescriptor.ActionName;
                     ResultType = argument.Result == null ? null : argument.Result.GetType();

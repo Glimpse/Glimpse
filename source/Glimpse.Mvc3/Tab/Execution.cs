@@ -32,7 +32,7 @@ namespace Glimpse.Mvc.Tab
             messageBroker.Subscribe<ActionInvoker.InvokeActionResult<ControllerActionInvoker>.Message>(message => Persist(message, context));
             messageBroker.Subscribe<ActionInvoker.InvokeActionResult<AsyncControllerActionInvoker>.Message>(message => Persist(message, context));
 
-            messageBroker.Subscribe<AuthorizationFilter.OnAuthorization.Message>(message => Persist(message, context));
+            messageBroker.Subscribe<AuthorizationFilter.OnAuthorization.Message>(message => Persist(message, context)); // check
             messageBroker.Subscribe<ExceptionFilter.OnException.Message>(message => Persist(message, context));
             messageBroker.Subscribe<ResultFilter.OnResultExecuted.Message>(message => Persist(message, context));
             messageBroker.Subscribe<ResultFilter.OnResultExecuting.Message>(message => Persist(message, context));

@@ -4,7 +4,7 @@ namespace Glimpse.Mvc.Message
     {
         Action,
         Result,
-        Authentication,
+        Authorization,
         Exception,
     }
 }
