@@ -39,14 +39,16 @@ namespace Glimpse.Mvc.AlternateImplementation
                     return;
                 }
 
-                context.MessageBroker.PublishMany(
-                    new Message((ResultExecutingContext)context.Arguments[0]), 
-                    new TimerResultMessage(timer, "OnResultExecuting", "ResultFilter"));
+                context.MessageBroker.Publish(new Message(
+                    (ResultExecutingContext)context.Arguments[0],
+                    context.InvocationTarget.GetType(),
+                    context.MethodInvocationTarget,
+                    timer));
             }
 
-            public class Message : MessageBase
+            public class Message : ActionFilterMessage
             {
-                public Message(ResultExecutingContext argument)
+                public Message(ResultExecutingContext argument, Type filterType, MethodInfo method, TimerResult timerResult) : base(FilterCategory.Result, filterType, method, timerResult, argument.Controller)
                 {
                     IsCanceled = argument.Cancel;
                     ResultType = argument.Result == null ? null : argument.Result.GetType();
