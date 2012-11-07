@@ -18,7 +18,7 @@ namespace Glimpse.Mvc.Tab
         public override object GetData(ITabContext context)
         {
             return null;
-            // throw new NotImplementedException();
+            //// throw new NotImplementedException();
         }
 
         public void Setup(ITabSetupContext context)
@@ -26,7 +26,7 @@ namespace Glimpse.Mvc.Tab
             var messageBroker = context.MessageBroker;
 
             messageBroker.Subscribe<ActionFilter.OnActionExecuted.Message>(message => Persist(message, context)); // check
-            messageBroker.Subscribe<ActionFilter.OnActionExecuting.Message>(message => Persist(message, context));
+            messageBroker.Subscribe<ActionFilter.OnActionExecuting.Message>(message => Persist(message, context)); // check
 
             messageBroker.Subscribe<ActionInvoker.InvokeActionMethod.Message>(message => Persist(message, context));
             messageBroker.Subscribe<ActionInvoker.InvokeActionResult<ControllerActionInvoker>.Message>(message => Persist(message, context));

@@ -14,14 +14,18 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Theory, AutoMock]
         public void Construct(ActionExecutedContext context, Type filterType, MethodInfo methodInfo, TimerResult timerResult)
         {
-            var message = new ActionFilter.OnActionExecuted.Message(context, filterType, methodInfo, timerResult);
+            var sut = new ActionFilter.OnActionExecuted.Message(context, filterType, methodInfo, timerResult);
 
-            Assert.Equal(context.ActionDescriptor.ActionName, message.ActionName);
-            Assert.Equal(context.ActionDescriptor.ControllerDescriptor.ControllerName, message.ControllerName);
-            Assert.Equal(context.Exception.GetType(), message.ExceptionType);
-            Assert.Equal(context.Canceled, message.IsCanceled);
-            Assert.Equal(context.ExceptionHandled, message.ExceptionHandled);
-            Assert.Equal(context.Result.GetType(), message.ResultType);
+            Assert.Equal(context.ActionDescriptor.ActionName, sut.ActionName);
+            Assert.Equal(context.ActionDescriptor.ControllerDescriptor.ControllerName, sut.ControllerName);
+            Assert.Equal(context.Exception.GetType(), sut.ExceptionType);
+            Assert.Equal(context.Canceled, sut.IsCanceled);
+            Assert.Equal(context.ExceptionHandled, sut.ExceptionHandled);
+            Assert.Equal(context.Result.GetType(), sut.ResultType);
+            Assert.Equal(filterType, sut.FilterType);
+            Assert.Equal(methodInfo, sut.Method);
+            Assert.Equal(timerResult.Duration, sut.Duration);
+            Assert.Equal(timerResult.Offset, sut.Offset);
         }
 
         [Theory, AutoMock]
@@ -29,9 +33,9 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         {
             context.Exception = null;
 
-            var message = new ActionFilter.OnActionExecuted.Message(context, filterType, methodInfo, timerResult);
+            var sut = new ActionFilter.OnActionExecuted.Message(context, filterType, methodInfo, timerResult);
 
-            Assert.Null(message.ExceptionType);
+            Assert.Null(sut.ExceptionType);
         }
 
         [Theory, AutoMock]
@@ -39,10 +43,10 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         {
             context.Result = null;
 
-            var message = new ActionFilter.OnActionExecuted.Message(context, filterType, methodInfo, timerResult);
+            var sut = new ActionFilter.OnActionExecuted.Message(context, filterType, methodInfo, timerResult);
 
-            Assert.NotNull(message.ResultType);
-            Assert.Equal(typeof(EmptyResult), message.ResultType);
+            Assert.NotNull(sut.ResultType);
+            Assert.Equal(typeof(EmptyResult), sut.ResultType);
         }
     }
 }
