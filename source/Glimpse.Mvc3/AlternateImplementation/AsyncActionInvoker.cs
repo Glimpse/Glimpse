@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
@@ -21,6 +20,7 @@ namespace Glimpse.Mvc.AlternateImplementation
             yield return new BeginInvokeActionMethod();
             yield return new EndInvokeActionMethod();
             yield return new ActionInvoker.InvokeActionResult<AsyncControllerActionInvoker>();
+            yield return new ActionInvoker.GetFilters<AsyncControllerActionInvoker>();
         }
 
         public class BeginInvokeActionMethod : IAlternateImplementation<AsyncControllerActionInvoker>

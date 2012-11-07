@@ -19,6 +19,7 @@ namespace Glimpse.Mvc.AlternateImplementation
         {
             yield return new InvokeActionResult<ControllerActionInvoker>();
             yield return new InvokeActionMethod();
+            yield return new GetFilters<ControllerActionInvoker>();
         }
 
         public class GetFilters<T> : IAlternateImplementation<T> where T : class
