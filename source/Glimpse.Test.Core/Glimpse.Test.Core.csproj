@@ -120,7 +120,6 @@
     <Compile Include="Framework\TimerShould.cs" />
     <Compile Include="GlimpseExceptionShould.cs" />
     <Compile Include="JsonNetSerializerShould.cs" />
-    <Compile Include="Plugin\Assist\AssistExtensionsShould.cs" />
     <Compile Include="Plugin\Assist\PluginShould.cs" />
     <Compile Include="Plugin\Assist\TabLayoutCellShould.cs" />
     <Compile Include="Plugin\Assist\TabLayoutShould.cs" />

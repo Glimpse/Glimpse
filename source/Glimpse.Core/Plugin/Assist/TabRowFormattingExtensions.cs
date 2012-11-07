@@ -5,173 +5,173 @@ namespace Glimpse.Core.Plugin.Assist
 {
     public static class TabRowFormattingExtensions
     {
-        public static TabRow Strong(this TabRow row)
+        public static TabSectionRow Strong(this TabSectionRow sectionRow)
         {
-            return ApplyToLastColumn(row, Formats.Strong);
+            return ApplyToLastColumn(sectionRow, Formats.Strong);
         }
 
-        public static TabRow StrongIf(this TabRow row, bool condition)
+        public static TabSectionRow StrongIf(this TabSectionRow sectionRow, bool condition)
         {
-            return condition ? row.Strong() : row;
+            return condition ? sectionRow.Strong() : sectionRow;
         }
 
-        public static TabRow Emphasis(this TabRow row)
+        public static TabSectionRow Emphasis(this TabSectionRow sectionRow)
         {
-            return ApplyToLastColumn(row, Formats.Emphasis);
+            return ApplyToLastColumn(sectionRow, Formats.Emphasis);
         }
 
-        public static TabRow EmphasisIf(this TabRow row, bool condition)
+        public static TabSectionRow EmphasisIf(this TabSectionRow sectionRow, bool condition)
         {
-            return condition ? row.Emphasis() : row;
+            return condition ? sectionRow.Emphasis() : sectionRow;
         }
 
-        public static TabRow Raw(this TabRow row)
+        public static TabSectionRow Raw(this TabSectionRow sectionRow)
         {
-            return ApplyToLastColumn(row, Formats.Raw);
+            return ApplyToLastColumn(sectionRow, Formats.Raw);
         }
 
-        public static TabRow RawIf(this TabRow row, bool condition)
+        public static TabSectionRow RawIf(this TabSectionRow sectionRow, bool condition)
         {
-            return condition ? row.Raw() : row;
+            return condition ? sectionRow.Raw() : sectionRow;
         }
 
-        public static TabRow Sub(this TabRow row)
+        public static TabSectionRow Sub(this TabSectionRow sectionRow)
         {
-            return ApplyToLastColumn(row, Formats.Sub);
+            return ApplyToLastColumn(sectionRow, Formats.Sub);
         }
 
-        public static TabRow SubIf(this TabRow row, bool condition)
+        public static TabSectionRow SubIf(this TabSectionRow sectionRow, bool condition)
         {
-            return condition ? row.Sub() : row;
+            return condition ? sectionRow.Sub() : sectionRow;
         }
 
-        public static TabRow Underline(this TabRow row)
+        public static TabSectionRow Underline(this TabSectionRow sectionRow)
         {
-            return ApplyToLastColumn(row, Formats.Underline);
+            return ApplyToLastColumn(sectionRow, Formats.Underline);
         }
 
-        public static TabRow UnderlineIf(this TabRow row, bool condition)
+        public static TabSectionRow UnderlineIf(this TabSectionRow sectionRow, bool condition)
         {
-            return condition ? row.Underline() : row;
+            return condition ? sectionRow.Underline() : sectionRow;
         }
 
-        public static TabRow Error(this TabRow row)
+        public static TabSectionRow Error(this TabSectionRow sectionRow)
         {
-            return VerifyAndApplyFormatting(row, FormattingKeywords.Error);
+            return VerifyAndApplyFormatting(sectionRow, FormattingKeywords.Error);
         }
 
-        public static TabRow ErrorIf(this TabRow row, bool condition)
+        public static TabSectionRow ErrorIf(this TabSectionRow sectionRow, bool condition)
         {
-            return condition ? row.Error() : row;
+            return condition ? sectionRow.Error() : sectionRow;
         }
 
-        public static TabRow Fail(this TabRow row)
+        public static TabSectionRow Fail(this TabSectionRow sectionRow)
         {
-            return VerifyAndApplyFormatting(row, FormattingKeywords.Fail);
+            return VerifyAndApplyFormatting(sectionRow, FormattingKeywords.Fail);
         }
 
-        public static TabRow FailIf(this TabRow row, bool condition)
+        public static TabSectionRow FailIf(this TabSectionRow sectionRow, bool condition)
         {
-            return condition ? row.Fail() : row;
+            return condition ? sectionRow.Fail() : sectionRow;
         }
 
-        public static TabRow Info(this TabRow row)
+        public static TabSectionRow Info(this TabSectionRow sectionRow)
         {
-            return VerifyAndApplyFormatting(row, FormattingKeywords.Info);
+            return VerifyAndApplyFormatting(sectionRow, FormattingKeywords.Info);
         }
 
-        public static TabRow InfoIf(this TabRow row, bool condition)
+        public static TabSectionRow InfoIf(this TabSectionRow sectionRow, bool condition)
         {
-            return condition ? row.Info() : row;
+            return condition ? sectionRow.Info() : sectionRow;
         }
 
-        public static TabRow Loading(this TabRow row)
+        public static TabSectionRow Loading(this TabSectionRow sectionRow)
         {
-            return VerifyAndApplyFormatting(row, FormattingKeywords.Loading);
+            return VerifyAndApplyFormatting(sectionRow, FormattingKeywords.Loading);
         }
 
-        public static TabRow LoadingIf(this TabRow row, bool condition)
+        public static TabSectionRow LoadingIf(this TabSectionRow sectionRow, bool condition)
         {
-            return condition ? row.Loading() : row;
+            return condition ? sectionRow.Loading() : sectionRow;
         }
 
-        public static TabRow Ms(this TabRow row)
+        public static TabSectionRow Ms(this TabSectionRow sectionRow)
         {
-            return VerifyAndApplyFormatting(row, FormattingKeywords.Ms);
+            return VerifyAndApplyFormatting(sectionRow, FormattingKeywords.Ms);
         }
 
-        public static TabRow MsIf(this TabRow row, bool condition)
+        public static TabSectionRow MsIf(this TabSectionRow sectionRow, bool condition)
         {
-            return condition ? row.Ms() : row;
+            return condition ? sectionRow.Ms() : sectionRow;
         }
 
-        public static TabRow Quiet(this TabRow row)
+        public static TabSectionRow Quiet(this TabSectionRow sectionRow)
         {
-            return VerifyAndApplyFormatting(row, FormattingKeywords.Quiet);
+            return VerifyAndApplyFormatting(sectionRow, FormattingKeywords.Quiet);
         }
 
-        public static TabRow QuietIf(this TabRow row, bool condition)
+        public static TabSectionRow QuietIf(this TabSectionRow sectionRow, bool condition)
         {
-            return condition ? row.Quiet() : row;
+            return condition ? sectionRow.Quiet() : sectionRow;
         }
 
-        public static TabRow Selected(this TabRow row)
+        public static TabSectionRow Selected(this TabSectionRow sectionRow)
         {
-            return VerifyAndApplyFormatting(row, FormattingKeywords.Selected);
+            return VerifyAndApplyFormatting(sectionRow, FormattingKeywords.Selected);
         }
 
-        public static TabRow SelectedIf(this TabRow row, bool condition)
+        public static TabSectionRow SelectedIf(this TabSectionRow sectionRow, bool condition)
         {
-            return condition ? row.Selected() : row;
+            return condition ? sectionRow.Selected() : sectionRow;
         }
         
-        public static TabRow Warn(this TabRow row)
+        public static TabSectionRow Warn(this TabSectionRow sectionRow)
         {
-            return VerifyAndApplyFormatting(row, FormattingKeywords.Warn);
+            return VerifyAndApplyFormatting(sectionRow, FormattingKeywords.Warn);
         }
 
-        public static TabRow WarnIf(this TabRow row, bool condition)
+        public static TabSectionRow WarnIf(this TabSectionRow sectionRow, bool condition)
         {
-            return condition ? row.Warn() : row;
+            return condition ? sectionRow.Warn() : sectionRow;
         }
 
-        public static TabRow Style(this TabRow row, string @class)
+        public static TabSectionRow Style(this TabSectionRow sectionRow, string @class)
         {
-            return !string.IsNullOrEmpty(@class) ? VerifyAndApplyFormatting(row, @class) : row;
+            return !string.IsNullOrEmpty(@class) ? VerifyAndApplyFormatting(sectionRow, @class) : sectionRow;
         }
 
-        public static TabRow StyleIf(this TabRow row, string @class, bool condition)
+        public static TabSectionRow StyleIf(this TabSectionRow sectionRow, string @class, bool condition)
         {
-            return condition ? row.Style(@class) : row;
+            return condition ? sectionRow.Style(@class) : sectionRow;
         }
 
-        public static TabRow Style(this TabRow row, FormattingKeywordEnum keyword)
+        public static TabSectionRow Style(this TabSectionRow sectionRow, FormattingKeywordEnum keyword)
         {
-            return keyword != FormattingKeywordEnum.None ? VerifyAndApplyFormatting(row, FormattingKeywords.Convert(keyword)) : row;
+            return keyword != FormattingKeywordEnum.None ? VerifyAndApplyFormatting(sectionRow, FormattingKeywords.Convert(keyword)) : sectionRow;
         }
 
-        public static TabRow StyleIf(this TabRow row, FormattingKeywordEnum keyword, bool condition)
+        public static TabSectionRow StyleIf(this TabSectionRow sectionRow, FormattingKeywordEnum keyword, bool condition)
         {
-            return condition ? row.Style(keyword) : row;
+            return condition ? sectionRow.Style(keyword) : sectionRow;
         }
 
-        private static TabRow VerifyAndApplyFormatting(TabRow row, string operation)
+        private static TabSectionRow VerifyAndApplyFormatting(TabSectionRow sectionRow, string operation)
         {
-            if (!row.Columns.Any())
+            if (!sectionRow.Columns.Any())
             {
                 throw new InvalidOperationException(string.Format("The operation '{0}' is only valid when row has columns.", operation));
             }
 
-            row.Column(operation.ToLower());
-            return row;
+            sectionRow.Column(operation.ToLower());
+            return sectionRow;
         }
 
-        private static TabRow ApplyToLastColumn(TabRow row, string format)
+        private static TabSectionRow ApplyToLastColumn(TabSectionRow sectionRow, string format)
         {
-            var data = row.Columns.Last().Data;
+            var data = sectionRow.Columns.Last().Data;
             var formattedData = format.FormatWith(data);
-            row.Columns.Last().OverrideData(formattedData);
-            return row;
+            sectionRow.Columns.Last().OverrideData(formattedData);
+            return sectionRow;
         }
     }
 }

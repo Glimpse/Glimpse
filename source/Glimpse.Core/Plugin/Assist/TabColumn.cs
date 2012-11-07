@@ -4,9 +4,8 @@ namespace Glimpse.Core.Plugin.Assist
     {
         public TabColumn(object columnData)
         {
-            Data = columnData is TabSection
-                ? columnData.ToTabSection().Build()
-                : columnData;
+            var typeData = columnData as ITabBuild;
+            Data = typeData ?? columnData; 
         }
 
         public object Data { get; private set; }

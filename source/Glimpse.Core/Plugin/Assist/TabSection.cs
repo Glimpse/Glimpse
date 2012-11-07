@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace Glimpse.Core.Plugin.Assist
 {
-    public class TabSection
+    public class TabSection : ITabBuild
     {
-        private readonly List<TabRow> rows = new List<TabRow>();
+        private readonly List<TabSectionRow> rows = new List<TabSectionRow>();
 
         public TabSection()
         {
@@ -23,33 +23,21 @@ namespace Glimpse.Core.Plugin.Assist
             }
         }
 
-        public IEnumerable<TabRow> Rows
+        public IEnumerable<TabSectionRow> Rows
         {
             get { return rows; }
         }
 
-        public TabRow AddRow()
+        public TabSectionRow AddRow()
         {
-            var row = new TabRow();
+            var row = new TabSectionRow();
             rows.Add(row);
             return row;
         }
 
-        public List<object[]> Build()
-        {
-            var rootList = new Instance(this);
-            rootList.AddRange(rows.Select(r => r.Build()));
-            return rootList;
-        }
-
-        internal class Instance : List<object[]>
-        {
-            internal Instance(TabSection instance)
-            {
-                Data = instance;
-            }
-
-            public TabSection Data { get; private set; }
-        }
+        public object Build()
+        { 
+            return rows.Select(r => r.Build());
+        } 
     }
 }

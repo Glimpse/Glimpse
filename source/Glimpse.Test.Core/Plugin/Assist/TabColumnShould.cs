@@ -14,15 +14,6 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		}
 
 		[Fact]
-		public void HaveTabSectionAsData()
-		{
-			var section = new TabSection();
-			var column = new TabColumn(section);
-
-			Assert.Equal(section, column.Data.ToTabSection());
-		}
-
-		[Fact]
 		public void SetData()
 		{
 			var columnData = new { };

@@ -26,32 +26,6 @@ namespace Glimpse.Test.Core.Plugin.Assist
 			Assert.Equal(row, rows.First());
 		}
 
-		[Fact]
-		public void ReturnRowsAsInstance()
-		{
-			Section.AddRow();
-
-			var section = Section.Build();
-
-			Assert.Equal(Section.Rows.Count(), section.Count());
-			Assert.Equal(typeof(TabSection.Instance), section.GetType());
-		}
-
-		[Fact]
-		public void BeSelf()
-		{
-			var section = Section;
-			var sectionInstance = Section.Build() as TabSection.Instance;
-
-			Assert.Equal(section, sectionInstance.Data);
-		}
-
-		[Fact]
-		public void BeListOfObjectArray()
-		{
-			Assert.True(typeof(List<object[]>).IsAssignableFrom(typeof(TabSection.Instance)));
-		}
-
 		private TabSection Section { get; set; }
 
 		public TabSectionShould()

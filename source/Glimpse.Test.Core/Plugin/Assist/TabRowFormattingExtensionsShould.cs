@@ -10,7 +10,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void ApplyStrongToLastColumn()
 		{
-			var row = Row.Strong();
+			var row = SectionRow.Strong();
 
 			Assert.Equal(row.Columns.Last().Data, @"*Text*");
 		}
@@ -18,11 +18,11 @@ namespace Glimpse.Test.Core.Plugin.Assist
         [Fact]
         public void ApplyStrongToLastColumnIf()
         {
-            var row = Row.StrongIf(false);
+            var row = SectionRow.StrongIf(false);
 
             Assert.Equal(row.Columns.Last().Data, @"Text");
 
-            row = Row.StrongIf(true);
+            row = SectionRow.StrongIf(true);
 
             Assert.Equal(row.Columns.Last().Data, @"*Text*");
         }
@@ -30,7 +30,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void ApplyEmphasisToLastColumn()
 		{
-			var row = Row.Emphasis();
+			var row = SectionRow.Emphasis();
 
 			Assert.Equal(row.Columns.Last().Data, @"\Text\");
 		}
@@ -38,11 +38,11 @@ namespace Glimpse.Test.Core.Plugin.Assist
         [Fact]
         public void ApplyEmphasisToLastColumnIf()
         {
-            var row = Row.EmphasisIf(false);
+            var row = SectionRow.EmphasisIf(false);
 
             Assert.Equal(row.Columns.Last().Data, @"Text");
 
-            row = Row.EmphasisIf(true);
+            row = SectionRow.EmphasisIf(true);
 
             Assert.Equal(row.Columns.Last().Data, @"\Text\");
         }
@@ -50,7 +50,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void ApplyRawToLastColumn()
 		{
-			var row = Row.Raw();
+			var row = SectionRow.Raw();
 
 			Assert.Equal(row.Columns.Last().Data, @"!Text!");
 		}
@@ -58,11 +58,11 @@ namespace Glimpse.Test.Core.Plugin.Assist
         [Fact]
         public void ApplyRawToLastColumnIf()
         {
-            var row = Row.RawIf(false);
+            var row = SectionRow.RawIf(false);
 
             Assert.Equal(row.Columns.Last().Data, @"Text");
 
-            row = Row.RawIf(true);
+            row = SectionRow.RawIf(true);
 
             Assert.Equal(row.Columns.Last().Data, @"!Text!");
         }
@@ -70,7 +70,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void ApplySubToLastColumn()
 		{
-			var row = Row.Sub();
+			var row = SectionRow.Sub();
 
 			Assert.Equal(row.Columns.Last().Data, @"|Text|");
 		}
@@ -78,11 +78,11 @@ namespace Glimpse.Test.Core.Plugin.Assist
         [Fact]
         public void ApplySubToLastColumnIf()
         {
-            var row = Row.SubIf(false);
+            var row = SectionRow.SubIf(false);
 
             Assert.Equal(row.Columns.Last().Data, @"Text");
 
-            row = Row.SubIf(true);
+            row = SectionRow.SubIf(true);
 
             Assert.Equal(row.Columns.Last().Data, @"|Text|");
         }
@@ -90,7 +90,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void ApplyUnderlineToLastColumn()
 		{
-			var row = Row.Underline();
+			var row = SectionRow.Underline();
 
 			Assert.Equal(row.Columns.Last().Data, "_Text_");
 		}
@@ -98,11 +98,11 @@ namespace Glimpse.Test.Core.Plugin.Assist
         [Fact]
         public void ApplyUnderlineToLastColumnIf()
         {
-            var row = Row.UnderlineIf(false);
+            var row = SectionRow.UnderlineIf(false);
 
             Assert.Equal(row.Columns.Last().Data, @"Text");
 
-            row = Row.UnderlineIf(true);
+            row = SectionRow.UnderlineIf(true);
 
             Assert.Equal(row.Columns.Last().Data, @"_Text_");
         }
@@ -110,7 +110,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void ThrowForRowOperationsWithoutColumns()
 		{
-			var row = new TabRow();
+			var row = new TabSectionRow();
 
 			Assert.Throws<InvalidOperationException>(() => row.Quiet());
 		}
@@ -118,7 +118,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void AddColumnWithError()
 		{
-			var row = Row.Error();
+			var row = SectionRow.Error();
 
 			Assert.Equal(row.Columns.Last().Data, "error");
 		}
@@ -126,11 +126,11 @@ namespace Glimpse.Test.Core.Plugin.Assist
         [Fact]
         public void AddColumnWithErrorIf()
         {
-            var row = Row.ErrorIf(false);
+            var row = SectionRow.ErrorIf(false);
 
             Assert.Equal(row.Columns.Last().Data, @"Text");
 
-            row = Row.ErrorIf(true);
+            row = SectionRow.ErrorIf(true);
 
             Assert.Equal(row.Columns.Last().Data, @"error");
         }
@@ -138,7 +138,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void AddColumnWithFail()
 		{
-			var row = Row.Fail();
+			var row = SectionRow.Fail();
 
 			Assert.Equal(row.Columns.Last().Data, "fail");
 		}
@@ -146,11 +146,11 @@ namespace Glimpse.Test.Core.Plugin.Assist
         [Fact]
         public void AddColumnWithFailIf()
         {
-            var row = Row.FailIf(false);
+            var row = SectionRow.FailIf(false);
 
             Assert.Equal(row.Columns.Last().Data, @"Text");
 
-            row = Row.FailIf(true);
+            row = SectionRow.FailIf(true);
 
             Assert.Equal(row.Columns.Last().Data, @"fail");
         }
@@ -158,7 +158,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void AddColumnWithInfo()
 		{
-			var row = Row.Info();
+			var row = SectionRow.Info();
 
 			Assert.Equal(row.Columns.Last().Data, "info");
 		}
@@ -166,11 +166,11 @@ namespace Glimpse.Test.Core.Plugin.Assist
         [Fact]
         public void AddColumnWithInfoIf()
         {
-            var row = Row.InfoIf(false);
+            var row = SectionRow.InfoIf(false);
 
             Assert.Equal(row.Columns.Last().Data, @"Text");
 
-            row = Row.InfoIf(true);
+            row = SectionRow.InfoIf(true);
 
             Assert.Equal(row.Columns.Last().Data, @"info");
         }
@@ -178,7 +178,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void AddColumnWithLoading()
 		{
-			var row = Row.Loading();
+			var row = SectionRow.Loading();
 
 			Assert.Equal(row.Columns.Last().Data, "loading");
 		}
@@ -186,11 +186,11 @@ namespace Glimpse.Test.Core.Plugin.Assist
         [Fact]
         public void AddColumnWithLodaingIf()
         {
-            var row = Row.LoadingIf(false);
+            var row = SectionRow.LoadingIf(false);
 
             Assert.Equal(row.Columns.Last().Data, @"Text");
 
-            row = Row.LoadingIf(true);
+            row = SectionRow.LoadingIf(true);
 
             Assert.Equal(row.Columns.Last().Data, @"loading");
         }
@@ -198,7 +198,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void AddColumnWithMs()
 		{
-			var row = Row.Ms();
+			var row = SectionRow.Ms();
 
 			Assert.Equal(row.Columns.Last().Data, "ms");
 		}
@@ -206,11 +206,11 @@ namespace Glimpse.Test.Core.Plugin.Assist
         [Fact]
         public void AddColumnWithMsIf()
         {
-            var row = Row.MsIf(false);
+            var row = SectionRow.MsIf(false);
 
             Assert.Equal(row.Columns.Last().Data, @"Text");
 
-            row = Row.MsIf(true);
+            row = SectionRow.MsIf(true);
 
             Assert.Equal(row.Columns.Last().Data, @"ms");
         }
@@ -218,7 +218,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void AddColumnWithQuiet()
 		{
-			var row = Row.Quiet();
+			var row = SectionRow.Quiet();
 
 			Assert.Equal(row.Columns.Last().Data, "quiet");
 		}
@@ -226,11 +226,11 @@ namespace Glimpse.Test.Core.Plugin.Assist
         [Fact]
         public void AddColumnWithQuietIf()
         {
-            var row = Row.QuietIf(false);
+            var row = SectionRow.QuietIf(false);
 
             Assert.Equal(row.Columns.Last().Data, @"Text");
 
-            row = Row.QuietIf(true);
+            row = SectionRow.QuietIf(true);
 
             Assert.Equal(row.Columns.Last().Data, @"quiet");
         }
@@ -238,7 +238,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void AddColumnWithSelected()
 		{
-			var row = Row.Selected();
+			var row = SectionRow.Selected();
 
 			Assert.Equal(row.Columns.Last().Data, "selected");
 		}
@@ -246,11 +246,11 @@ namespace Glimpse.Test.Core.Plugin.Assist
         [Fact]
         public void AddColumnWithSelectedIf()
         {
-            var row = Row.SelectedIf(false);
+            var row = SectionRow.SelectedIf(false);
 
             Assert.Equal(row.Columns.Last().Data, @"Text");
 
-            row = Row.SelectedIf(true);
+            row = SectionRow.SelectedIf(true);
 
             Assert.Equal(row.Columns.Last().Data, @"selected");
         }
@@ -259,7 +259,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void AddColumnWithWarn()
 		{
-			var row = Row.Warn();
+			var row = SectionRow.Warn();
 
 			Assert.Equal(row.Columns.Last().Data, "warn");
 		}
@@ -267,20 +267,20 @@ namespace Glimpse.Test.Core.Plugin.Assist
         [Fact]
         public void AddColumnWithWarnIf()
         {
-            var row = Row.WarnIf(false);
+            var row = SectionRow.WarnIf(false);
 
             Assert.Equal(row.Columns.Last().Data, @"Text");
 
-            row = Row.WarnIf(true);
+            row = SectionRow.WarnIf(true);
 
             Assert.Equal(row.Columns.Last().Data, @"warn");
         }
 
-		private TabRow Row { get; set; }
+		private TabSectionRow SectionRow { get; set; }
 
 		public TabRowFormattingExtensionsShould()
 		{
-			Row = new TabRow().Column("Text");
+			SectionRow = new TabSectionRow().Column("Text");
 		}
 	}
 }
