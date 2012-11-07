@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Message;
+using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
@@ -37,18 +38,20 @@ namespace Glimpse.Mvc.AlternateImplementation
                     return;
                 }
 
-                context.MessageBroker.PublishMany(
-                    new Message((ExceptionContext)context.Arguments[0]), 
-                    new TimerResultMessage(timer, "ExceptionContext", "ExceptionFilter"));
+                context.MessageBroker.Publish(new Message(
+                    (ExceptionContext)context.Arguments[0],
+                    context.InvocationTarget.GetType(),
+                    context.MethodInvocationTarget,
+                    timer));
             }
 
-            public class Message : MessageBase
+            public class Message : ActionFilterMessage
             {
-                public Message(ExceptionContext exceptionContext)
+                public Message(ExceptionContext context, Type filterType, MethodInfo method, TimerResult timerResult) : base(FilterCategory.Exception, filterType, method, timerResult, context.Controller)
                 {
-                    ExceptionHandled = exceptionContext.ExceptionHandled;
-                    ExceptionType = exceptionContext.Exception == null ? null : exceptionContext.Exception.GetType();
-                    ResultType = exceptionContext.Result == null ? null : exceptionContext.Result.GetType();
+                    ExceptionHandled = context.ExceptionHandled;
+                    ExceptionType = context.Exception == null ? null : context.Exception.GetType();
+                    ResultType = context.Result == null ? null : context.Result.GetType();
                 }
 
                 public Type ResultType { get; set; }
