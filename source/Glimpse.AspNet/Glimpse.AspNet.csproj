@@ -47,7 +47,6 @@
     <Compile Include="AspNetServiceLocator.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Extensibility\AspNetTab.cs" />
-    <Compile Include="Extensions\ConverterExtensions.cs" />
     <Compile Include="Extensions\TabContextExtensions.cs" />
     <Compile Include="HttpApplicationStateBaseDataStoreAdapter.cs" />
     <Compile Include="HttpHandler.cs" />

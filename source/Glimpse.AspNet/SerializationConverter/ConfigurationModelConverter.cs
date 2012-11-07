@@ -12,14 +12,14 @@ namespace Glimpse.AspNet.SerializationConverter
     {
         public override object Convert(ConfigurationModel obj)
         {
-            var root = new TabSection("Key", "Value");
-            root.AddRow().Column("/configuration/appSettings").Column(obj.AppSettings);
-            root.AddRow().Column("/configuration/connectionStrings").Column(BuildConnectionStringsDetails(obj.ConnectionStrings));
-            root.AddRow().Column("/configuration/system.web/authentication").Column(obj.Authentication);
-            root.AddRow().Column("/configuration/system.web/roleManager").Column(obj.RoleManager);
-            root.AddRow().Column("/configuration/system.web/customErrors").Column(obj.CustomErrors);
-            root.AddRow().Column("/configuration/system.web/httpModules").Column(BuildHttpModulesDetails(obj.HttpModules));
-            root.AddRow().Column("/configuration/system.web/httpHandlers").Column(BuildHttpHandlersDetails(obj.HttpHandlers));
+            var root = new TabObject();
+            root.AddRow().Key("/configuration/appSettings").Value(obj.AppSettings);
+            root.AddRow().Key("/configuration/connectionStrings").Value(BuildConnectionStringsDetails(obj.ConnectionStrings));
+            root.AddRow().Key("/configuration/system.web/authentication").Value(obj.Authentication);
+            root.AddRow().Key("/configuration/system.web/roleManager").Value(obj.RoleManager);
+            root.AddRow().Key("/configuration/system.web/customErrors").Value(obj.CustomErrors);
+            root.AddRow().Key("/configuration/system.web/httpModules").Value(BuildHttpModulesDetails(obj.HttpModules));
+            root.AddRow().Key("/configuration/system.web/httpHandlers").Value(BuildHttpHandlersDetails(obj.HttpHandlers));
 
             return root.Build();
         }
