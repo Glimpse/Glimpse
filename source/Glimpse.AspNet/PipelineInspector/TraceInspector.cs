@@ -12,22 +12,22 @@ namespace Glimpse.AspNet.PipelineInspector
 {
     public class TraceInspector : System.Diagnostics.TraceListener
     {
-        private readonly ITabSetupContext _context;
+        private readonly ITabSetupContext context;
 
         public TraceInspector(ITabSetupContext context)
         {
-            _context = context;
+            this.context = context;
         }
 
         private Stopwatch FirstWatch
         {
             get
             {
-                var firstWatch = _context.GetTabStore().Get<Stopwatch>(Tab.Trace.FirstWatchStoreKey);
+                var firstWatch = context.GetTabStore().Get<Stopwatch>(Tab.Trace.FirstWatchStoreKey);
                 if (firstWatch == null) 
                 {
                     firstWatch = new Stopwatch();
-                    _context.GetTabStore().Set(Tab.Trace.FirstWatchStoreKey, firstWatch);
+                    context.GetTabStore().Set(Tab.Trace.FirstWatchStoreKey, firstWatch);
                     firstWatch.Start();
                 }
 
@@ -39,11 +39,11 @@ namespace Glimpse.AspNet.PipelineInspector
         {
             get
             {
-                var lastWatch = _context.GetTabStore().Get<Stopwatch>(Tab.Trace.LastWatchStoreKey);
+                var lastWatch = context.GetTabStore().Get<Stopwatch>(Tab.Trace.LastWatchStoreKey);
                 if (lastWatch == null)
                 {
                     lastWatch = new Stopwatch();
-                    _context.GetTabStore().Set(Tab.Trace.LastWatchStoreKey, lastWatch);
+                    context.GetTabStore().Set(Tab.Trace.LastWatchStoreKey, lastWatch);
                     lastWatch.Start();
                 } 
 
@@ -55,11 +55,11 @@ namespace Glimpse.AspNet.PipelineInspector
         {
             get
             {
-                var messages = _context.GetTabStore().Get<IList<TraceModel>>(Tab.Trace.TraceMessageStoreKey);
+                var messages = context.GetTabStore().Get<IList<TraceModel>>(Tab.Trace.TraceMessageStoreKey);
                 if (messages == null) 
                 {
                     messages = new List<TraceModel>();
-                    _context.GetTabStore().Set(Tab.Trace.TraceMessageStoreKey, messages); 
+                    context.GetTabStore().Set(Tab.Trace.TraceMessageStoreKey, messages); 
                 }
                 
                 return messages;
