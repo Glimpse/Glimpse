@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Message;
+using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
@@ -75,14 +76,17 @@ namespace Glimpse.Mvc.AlternateImplementation
                     return;
                 }
 
-                context.MessageBroker.PublishMany(
-                    new Message((ActionExecutedContext)context.Arguments[0]), 
-                    new TimerResultMessage(timer, "OnActionExecuted", "ActionFilter"));
+                context.MessageBroker.Publish(new Message(
+                        (ActionExecutedContext)context.Arguments[0], 
+                        context.InvocationTarget.GetType(), 
+                        context.MethodInvocationTarget, 
+                        timer));
             }
 
-            public class Message : MessageBase
+            public class Message : ActionFilterMessage
             {
-                public Message(ActionExecutedContext context)
+                public Message(ActionExecutedContext context, Type filterType, MethodInfo method, TimerResult timerResult)
+                    : base(FilterCategory.Action, filterType, method, timerResult, context.Controller)
                 {
                     ActionName = context.ActionDescriptor.ActionName;
                     ControllerName = context.ActionDescriptor.ControllerDescriptor.ControllerName;

@@ -45,7 +45,6 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
 
             timer.Verify(t => t.Time(It.IsAny<Action>()));
             context.MessageBroker.Verify(mb => mb.Publish(It.IsAny<ActionFilter.OnActionExecuted.Message>()));
-            context.MessageBroker.Verify(mb => mb.Publish(It.IsAny<TimerResultMessage>()));
         }
     }
 }

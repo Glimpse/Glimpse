@@ -5,7 +5,7 @@ namespace Glimpse.Test.Common
 {
     public class AutoFixtureCustomizations : CompositeCustomization
     {
-        public AutoFixtureCustomizations() : base(new AutoMoqCustomization(), new MvcCustomizations(), new GlimpseCustomizations())
+        public AutoFixtureCustomizations() : base(new AutoMoqCustomization(), new SystemCustomizations(), new MvcCustomizations(), new GlimpseCustomizations())
         {
         }
     }

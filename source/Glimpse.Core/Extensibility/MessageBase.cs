@@ -1,8 +1,9 @@
 using System;
+using Glimpse.Core.Message;
 
 namespace Glimpse.Core.Extensibility
 {
-    public class MessageBase
+    public class MessageBase : IMessage
     {
         public MessageBase() : this(Guid.NewGuid())
         {

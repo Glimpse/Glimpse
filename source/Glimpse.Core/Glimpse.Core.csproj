@@ -172,6 +172,8 @@
     <Compile Include="Framework\IFrameworkProvider.cs" />
     <Compile Include="Framework\GlimpseConfiguration.cs" />
     <Compile Include="Framework\GlimpseRuntime.cs" />
+    <Compile Include="Message\IMessage.cs" />
+    <Compile Include="Message\ITimerResultMessage.cs" />
     <Compile Include="Message\TimerResultMessage.cs" />
     <Compile Include="Plugin\Assist\AssistExtensions.cs" />
     <Compile Include="Plugin\Assist\CodeType.cs" />

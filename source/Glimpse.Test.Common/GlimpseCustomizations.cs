@@ -22,6 +22,8 @@ namespace Glimpse.Test.Common
                         mock.Setup(m => m.ProxyFactory).Returns(proxy);
                         mock.Setup(m => m.RuntimePolicyStrategy).Returns(() => RuntimePolicy.On);
                         mock.Setup(m => m.TimerStrategy).Returns(() => timer);
+                        mock.Setup(m => m.InvocationTarget).Returns(new object());
+                        mock.Setup(m => m.MethodInvocationTarget).Returns(typeof(object).GetMethod("ToString"));
                         return mock.Object;
                     });
         }

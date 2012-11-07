@@ -3,7 +3,7 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Message
 {
-    public class TimerResultMessage : MessageBase
+    public class TimerResultMessage : MessageBase, ITimerResultMessage
     {
         public TimerResultMessage(TimerResult timerResult, string eventName, string eventCategory)
         {
