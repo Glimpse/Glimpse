@@ -1,11 +1,10 @@
 namespace Glimpse.Core.Plugin.Assist
 {
-    public class TabColumn
+    public class TabColumn : ITabBuild
     {
         public TabColumn(object columnData)
-        {
-            var typeData = columnData as ITabBuild;
-            Data = typeData ?? columnData; 
+        { 
+            Data = columnData; 
         }
 
         public object Data { get; private set; }
@@ -13,6 +12,12 @@ namespace Glimpse.Core.Plugin.Assist
         internal void OverrideData(object columnData)
         {
             Data = columnData;
+        }
+
+        public object Build()
+        {
+            var columnData = Data as ITabBuild;
+            return columnData != null ? columnData.Build() : Data;
         }
     }
 }

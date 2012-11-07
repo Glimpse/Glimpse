@@ -18,7 +18,8 @@ namespace Glimpse.Core.Plugin.Assist
             var dictionary = new Dictionary<object, object>();
             foreach (var row in rows)
             {
-                dictionary[row.BaseKey] = row.BaseValue;
+                var valueRow = row.BaseValue as ITabBuild;
+                dictionary[row.BaseKey] = valueRow != null ? valueRow.Build() : row.BaseValue;
             }
 
             return dictionary;

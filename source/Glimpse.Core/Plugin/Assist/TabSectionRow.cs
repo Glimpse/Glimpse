@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Glimpse.Core.Plugin.Assist
 {
-    public class TabSectionRow
+    public class TabSectionRow : ITabBuild
     {
         private readonly List<TabColumn> columns = new List<TabColumn>();
 
@@ -21,9 +21,9 @@ namespace Glimpse.Core.Plugin.Assist
             return this;
         }
 
-        internal object[] Build()
+        public object Build()
         {
-            return columns.Select(c => c.Data).ToArray();
+            return columns.Select(x => x.Build());
         }
     }
 }
