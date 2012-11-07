@@ -2,6 +2,7 @@
 using Glimpse.AspNet.Extensions;
 using Glimpse.AspNet.Model;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Plugin.Assist;
 
 namespace Glimpse.AspNet.SerializationConverter
 {
@@ -9,13 +10,13 @@ namespace Glimpse.AspNet.SerializationConverter
     {
         public override object Convert(List<SessionModel> obj)
         {
-            var result = new List<object[]> { new[] { "Key", "Value", "Type" } };
+            var root = new TabSection("Key", "Value", "Type");
             foreach (var item in obj)
             {
-                result.Add(new[] { item.Key, item.Value, item.Type });
+                root.AddRow().Column(item.Key).Column(item.Value).Column(item.Type);
             }
 
-            return result;
+            return root.Build();
         }
     }
 }
