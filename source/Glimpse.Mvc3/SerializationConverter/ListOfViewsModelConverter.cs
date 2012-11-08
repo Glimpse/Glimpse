@@ -6,66 +6,50 @@ using Glimpse.Mvc.Model;
 
 namespace Glimpse.Mvc.SerializationConverter
 {
+    using Glimpse.Core.Plugin.Assist;
+
     public class ListOfViewsModelConverter : SerializationConverter<List<ViewsModel>>
     {
         public override object Convert(List<ViewsModel> models)
         {
-            var result = new List<IEnumerable<object>>
-                {
-                    new[] { "Ordinal", "Source Controller", "Requested View", "Master Override", "Partial", "View Engine", "Check Cache", "Found", "Details" },
-                };
-
             var count = 0;
-            
-            // all rows start as selected, but the jagged selected "column" is dropped via Take(8)
-            result.AddRange(from item in models
-                            let row = new[]
-                                          {
-                                              count++, // Ordinal
-                                              item.SourceController, // Source Controller
-                                              item.ViewName, // Requested View
-                                              item.MasterName, // Master Override
-                                              item.IsPartial, // Partial
-                                              item.ViewEngineType, // View Engine
-                                              item.UseCache, // Check Cache
-                                              item.IsFound, // Found
-                                              GetDetails(item), // Details
-                                              "selected"
-                                          }
-                            select item.IsFound ? row : row.Take(row.Length - 1));
 
-            return result;
+            var root = new TabSection("Ordinal", "Source Controller", "Requested View", "Master Override", "Partial", "View Engine", "Check Cache", "Found", "Details");
+            foreach (var item in models)
+            {
+                root.AddRow().Column(count++).Column(item.SourceController).Column(item.ViewName).Column(item.MasterName).Column(item.IsPartial).Column(item.ViewEngineType).Column(item.UseCache).Column(item.IsFound).Column(GetDetails(item)).SelectedIf(item.IsFound);
+            }
+             
+            return root.Build();
         }
-
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Reviewed. Suppression is OK here.")]
+        
         private object GetDetails(ViewsModel model)
         {
             if (!model.IsFound)
-            {
-                var searchedLocations = new List<IEnumerable<string>> { new[] { "Not Found In" } };
-
+            { 
                 if (model.UseCache)
                 {
-                    // TODO: Wrap "markup" in util library/extensions: string.Underline() or Markdown.Underline(string)
-                    searchedLocations.Add(new[] { "_" + model.ViewEngineType.Name + " cache_" });
+                    return "Not Found In Cache";
                 }
-                else
+
+                var searchedLocations = new TabSection("Not Found In");
+                foreach (var searchedLocation in model.SearchedLocations)
                 {
-                    // .ToArray() required for NET35 support
-                    searchedLocations.AddRange(model.SearchedLocations.Select(location => new[] { location }).ToArray());
-                }
+                    searchedLocations.AddRow().Column(searchedLocation);
+                }  
 
                 return searchedLocations;
             }
-            
+
             var summary = model.ViewModelSummary;
-            return new Dictionary<string, object>
-                       {
-                           { "Model Type", summary.ModelType },
-                           { "Model State Valid", summary.IsValid },
-                           { "TempData Keys", summary.TempDataKeys },
-                           { "ViewData Keys", summary.ViewDataKeys },
-                       };
+
+            var section = new TabSection("Key", "Value");
+            section.AddRow().Column("Model Type").Column(summary.ModelType);
+            section.AddRow().Column("Model State Valid").Column(summary.IsValid);
+            section.AddRow().Column("TempData Keys").Column(summary.TempDataKeys);
+            section.AddRow().Column("ViewData Keys").Column(summary.ViewDataKeys);
+
+            return section;
         }
     }
 }
