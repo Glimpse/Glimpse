@@ -73,7 +73,7 @@ namespace Glimpse.Mvc.Model
         public DefaultValueModel<bool> IsComplexType { get; private set; }
         
         /// <summary>
-        /// Gets a flag which indicates whether the model is a nullable value type (namely, Nullable<T>). Not user-settable
+        /// Gets a flag which indicates whether the model is a nulable value type (namely, Nulable). Not user-settable
         /// </summary>
         public DefaultValueModel<bool> IsNullableValueType { get; set; }
         
@@ -83,7 +83,7 @@ namespace Glimpse.Mvc.Model
         public DefaultValueModel<bool> IsReadOnly { get; private set; }
         
         /// <summary>
-        /// Gets a flag which indicates if this value is required. Default: true for non-nullable value types; false for all others.
+        /// Gets a flag which indicates if this value is required. Default: true for non-nulable value types; false for all others.
         /// </summary>
         public DefaultValueModel<bool> IsRequired { get; private set; } 
         

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,10 +18,10 @@ namespace Glimpse.Test.AspNet.SerializationConverter
             var model = new List<TraceModel> { new TraceModel { Category = FormattingKeywordEnum.System, FromFirst = 1.2, FromLast = 2.3, IndentLevel = 0, Message = "test" } };
 
             var converter = new TraceModelConverter();
-            var result = converter.Convert(model) as IList<object[]>;
+            var result = converter.Convert(model) as IEnumerable<object>;
 
             Assert.NotNull(result);
-            Assert.True(result.Count > 0);
+            Assert.True(result.Count() > 0);
         }
     }
 }

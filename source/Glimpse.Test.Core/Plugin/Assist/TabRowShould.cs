@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Glimpse.Core.Plugin.Assist;
 using Xunit;
@@ -41,7 +42,8 @@ namespace Glimpse.Test.Core.Plugin.Assist
 
 			SectionRow.Column(columnObject1).Column(columnObject2);
 
-			var columnData = SectionRow.Build();
+			SectionRow.Build();
+            var columnData = (IEnumerable<object>)SectionRow.Build();
 
 			Assert.Equal(2, SectionRow.Columns.Count());
 			Assert.Equal(columnObject1, columnData.ElementAt(0));

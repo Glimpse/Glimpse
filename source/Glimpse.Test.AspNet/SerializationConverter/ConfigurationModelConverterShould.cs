@@ -23,7 +23,7 @@ namespace Glimpse.Test.AspNet.SerializationConverter
             model.RoleManager = new ConfigurationRoleManagerModel();
 
             var converter = new ConfigurationModelConverter();
-            var result = converter.Convert(model) as IList<object[]>;
+            var result = converter.Convert(model) as IDictionary<object, object>;
              
             Assert.NotNull(result);
             Assert.True(result.Count > 0); 

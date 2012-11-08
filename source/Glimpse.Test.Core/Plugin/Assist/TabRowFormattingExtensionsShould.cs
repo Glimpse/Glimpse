@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Glimpse.Core.Plugin.Assist;
 using Xunit;
@@ -10,270 +11,301 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void ApplyStrongToLastColumn()
 		{
-			var row = SectionRow.Strong();
+			SectionRow.Strong();
+            var row = (IEnumerable<object>)SectionRow.Build();
 
-			Assert.Equal(row.Columns.Last().Data, @"*Text*");
+			Assert.Equal(row.Last(), @"*Text*");
 		}
 
         [Fact]
         public void ApplyStrongToLastColumnIf()
         {
-            var row = SectionRow.StrongIf(false);
+            SectionRow.StrongIf(false);
+            var row = (IEnumerable<object>)SectionRow.Build();
 
-            Assert.Equal(row.Columns.Last().Data, @"Text");
+            Assert.Equal(row.Last(), @"Text");
 
-            row = SectionRow.StrongIf(true);
+            SectionRow.StrongIf(true); 
+            row = (IEnumerable<object>)SectionRow.Build();
 
-            Assert.Equal(row.Columns.Last().Data, @"*Text*");
+            Assert.Equal(row.Last(), @"*Text*");
         }
 
 		[Fact]
 		public void ApplyEmphasisToLastColumn()
 		{
-			var row = SectionRow.Emphasis();
+			SectionRow.Emphasis();
+            var row = (IEnumerable<object>)SectionRow.Build();
 
-			Assert.Equal(row.Columns.Last().Data, @"\Text\");
+			Assert.Equal(row.Last(), @"\Text\");
 		}
 
         [Fact]
         public void ApplyEmphasisToLastColumnIf()
         {
-            var row = SectionRow.EmphasisIf(false);
+            SectionRow.EmphasisIf(false);
+            var row = (IEnumerable<object>)SectionRow.Build(); 
 
-            Assert.Equal(row.Columns.Last().Data, @"Text");
+            Assert.Equal(row.Last(), @"Text");
 
-            row = SectionRow.EmphasisIf(true);
+            SectionRow.EmphasisIf(true);
+            row = (IEnumerable<object>)SectionRow.Build(); 
 
-            Assert.Equal(row.Columns.Last().Data, @"\Text\");
+            Assert.Equal(row.Last(), @"\Text\");
         }
 
 		[Fact]
 		public void ApplyRawToLastColumn()
 		{
-			var row = SectionRow.Raw();
+            SectionRow.Raw();
+            var row = (IEnumerable<object>)SectionRow.Build(); 
 
-			Assert.Equal(row.Columns.Last().Data, @"!Text!");
+			Assert.Equal(row.Last(), @"!Text!");
 		}
 
         [Fact]
         public void ApplyRawToLastColumnIf()
         {
-            var row = SectionRow.RawIf(false);
+            SectionRow.RawIf(false);
+            var row = (IEnumerable<object>)SectionRow.Build(); 
 
-            Assert.Equal(row.Columns.Last().Data, @"Text");
+            Assert.Equal(row.Last(), @"Text");
 
-            row = SectionRow.RawIf(true);
+            SectionRow.RawIf(true);
+            row = (IEnumerable<object>)SectionRow.Build(); 
 
-            Assert.Equal(row.Columns.Last().Data, @"!Text!");
+            Assert.Equal(row.Last(), @"!Text!");
         }
 
 		[Fact]
 		public void ApplySubToLastColumn()
 		{
-			var row = SectionRow.Sub();
+			SectionRow.Sub();
+            var row = (IEnumerable<object>)SectionRow.Build();
 
-			Assert.Equal(row.Columns.Last().Data, @"|Text|");
+			Assert.Equal(row.Last(), @"|Text|");
 		}
 
         [Fact]
         public void ApplySubToLastColumnIf()
         {
-            var row = SectionRow.SubIf(false);
+            SectionRow.SubIf(false);
+            var row = (IEnumerable<object>)SectionRow.Build(); 
 
-            Assert.Equal(row.Columns.Last().Data, @"Text");
+            Assert.Equal(row.Last(), @"Text");
 
-            row = SectionRow.SubIf(true);
+            SectionRow.SubIf(true);
+            row = (IEnumerable<object>)SectionRow.Build();
 
-            Assert.Equal(row.Columns.Last().Data, @"|Text|");
+            Assert.Equal(row.Last(), @"|Text|");
         }
 
 		[Fact]
 		public void ApplyUnderlineToLastColumn()
 		{
-			var row = SectionRow.Underline();
+			SectionRow.Underline();
+            var row = (IEnumerable<object>)SectionRow.Build();
 
-			Assert.Equal(row.Columns.Last().Data, "_Text_");
+			Assert.Equal(row.Last(), "_Text_");
 		}
 
         [Fact]
         public void ApplyUnderlineToLastColumnIf()
         {
-            var row = SectionRow.UnderlineIf(false);
+            SectionRow.UnderlineIf(false);
+            var row = (IEnumerable<object>)SectionRow.Build();
 
-            Assert.Equal(row.Columns.Last().Data, @"Text");
+            Assert.Equal(row.Last(), @"Text");
 
-            row = SectionRow.UnderlineIf(true);
+            SectionRow.UnderlineIf(true);
+            row = (IEnumerable<object>)SectionRow.Build();
 
-            Assert.Equal(row.Columns.Last().Data, @"_Text_");
+            Assert.Equal(row.Last(), @"_Text_");
         }
-
-		[Fact]
-		public void ThrowForRowOperationsWithoutColumns()
-		{
-			var row = new TabSectionRow();
-
-			Assert.Throws<InvalidOperationException>(() => row.Quiet());
-		}
 
 		[Fact]
 		public void AddColumnWithError()
 		{
-			var row = SectionRow.Error();
+			SectionRow.Error();
 
-			Assert.Equal(row.Columns.Last().Data, "error");
+            var row = (IEnumerable<object>)SectionRow.Build();
+            Assert.Equal(row.Last(), "error");
 		}
 
         [Fact]
         public void AddColumnWithErrorIf()
         {
-            var row = SectionRow.ErrorIf(false);
+            SectionRow.ErrorIf(false); 
+            var row = (IEnumerable<object>)SectionRow.Build();
 
-            Assert.Equal(row.Columns.Last().Data, @"Text");
+            Assert.Equal(row.Last(), @"Text");
 
-            row = SectionRow.ErrorIf(true);
+            SectionRow.ErrorIf(true);
+            row = (IEnumerable<object>)SectionRow.Build();
 
-            Assert.Equal(row.Columns.Last().Data, @"error");
+            Assert.Equal(row.Last(), @"error");
         }
 
 		[Fact]
 		public void AddColumnWithFail()
 		{
-			var row = SectionRow.Fail();
+            SectionRow.Fail();
+            var row = (IEnumerable<object>)SectionRow.Build();
 
-			Assert.Equal(row.Columns.Last().Data, "fail");
+			Assert.Equal(row.Last(), "fail");
 		}
 
         [Fact]
         public void AddColumnWithFailIf()
         {
-            var row = SectionRow.FailIf(false);
+            SectionRow.FailIf(false);
+            var row = (IEnumerable<object>)SectionRow.Build();
 
-            Assert.Equal(row.Columns.Last().Data, @"Text");
+            Assert.Equal(row.Last(), @"Text");
 
-            row = SectionRow.FailIf(true);
+            SectionRow.FailIf(true);
+            row = (IEnumerable<object>)SectionRow.Build();
 
-            Assert.Equal(row.Columns.Last().Data, @"fail");
+            Assert.Equal(row.Last(), @"fail");
         }
 
 		[Fact]
 		public void AddColumnWithInfo()
 		{
-			var row = SectionRow.Info();
+            SectionRow.Info();
+            var row = (IEnumerable<object>)SectionRow.Build();
 
-			Assert.Equal(row.Columns.Last().Data, "info");
+			Assert.Equal(row.Last(), "info");
 		}
 
         [Fact]
         public void AddColumnWithInfoIf()
         {
-            var row = SectionRow.InfoIf(false);
+            SectionRow.InfoIf(false);
+            var row = (IEnumerable<object>)SectionRow.Build();
 
-            Assert.Equal(row.Columns.Last().Data, @"Text");
+            Assert.Equal(row.Last(), @"Text");
 
-            row = SectionRow.InfoIf(true);
+            SectionRow.InfoIf(true);
+            row = (IEnumerable<object>)SectionRow.Build();
 
-            Assert.Equal(row.Columns.Last().Data, @"info");
+            Assert.Equal(row.Last(), @"info");
         }
 
 		[Fact]
 		public void AddColumnWithLoading()
 		{
-			var row = SectionRow.Loading();
+            SectionRow.Loading();
+            var row = (IEnumerable<object>)SectionRow.Build();
 
-			Assert.Equal(row.Columns.Last().Data, "loading");
+			Assert.Equal(row.Last(), "loading");
 		}
 
         [Fact]
         public void AddColumnWithLodaingIf()
         {
-            var row = SectionRow.LoadingIf(false);
+            SectionRow.LoadingIf(false);
+            var row = (IEnumerable<object>)SectionRow.Build();
 
-            Assert.Equal(row.Columns.Last().Data, @"Text");
+            Assert.Equal(row.Last(), @"Text");
 
-            row = SectionRow.LoadingIf(true);
+            SectionRow.LoadingIf(true);
+            row = (IEnumerable<object>)SectionRow.Build();
 
-            Assert.Equal(row.Columns.Last().Data, @"loading");
+            Assert.Equal(row.Last(), @"loading");
         }
 
 		[Fact]
 		public void AddColumnWithMs()
 		{
-			var row = SectionRow.Ms();
+            SectionRow.Ms();
+            var row = (IEnumerable<object>)SectionRow.Build();
 
-			Assert.Equal(row.Columns.Last().Data, "ms");
+			Assert.Equal(row.Last(), "ms");
 		}
 
         [Fact]
         public void AddColumnWithMsIf()
         {
-            var row = SectionRow.MsIf(false);
+            SectionRow.MsIf(false);
+            var row = (IEnumerable<object>)SectionRow.Build();
 
-            Assert.Equal(row.Columns.Last().Data, @"Text");
+            Assert.Equal(row.Last(), @"Text");
 
-            row = SectionRow.MsIf(true);
+            SectionRow.MsIf(true);
+            row = (IEnumerable<object>)SectionRow.Build();
 
-            Assert.Equal(row.Columns.Last().Data, @"ms");
+            Assert.Equal(row.Last(), @"ms");
         }
 
 		[Fact]
 		public void AddColumnWithQuiet()
 		{
-			var row = SectionRow.Quiet();
+            SectionRow.Quiet();
+            var row = (IEnumerable<object>)SectionRow.Build();
 
-			Assert.Equal(row.Columns.Last().Data, "quiet");
+			Assert.Equal(row.Last(), "quiet");
 		}
 
         [Fact]
         public void AddColumnWithQuietIf()
         {
-            var row = SectionRow.QuietIf(false);
+            SectionRow.QuietIf(false);
+            var row = (IEnumerable<object>)SectionRow.Build(); 
 
-            Assert.Equal(row.Columns.Last().Data, @"Text");
+            Assert.Equal(row.Last(), @"Text");
 
-            row = SectionRow.QuietIf(true);
+            SectionRow.QuietIf(true);
+            row = (IEnumerable<object>)SectionRow.Build(); 
 
-            Assert.Equal(row.Columns.Last().Data, @"quiet");
+            Assert.Equal(row.Last(), @"quiet");
         }
 
 		[Fact]
 		public void AddColumnWithSelected()
 		{
-			var row = SectionRow.Selected();
+            SectionRow.Selected();
+            var row = (IEnumerable<object>)SectionRow.Build();
 
-			Assert.Equal(row.Columns.Last().Data, "selected");
+			Assert.Equal(row.Last(), "selected");
 		}
 
         [Fact]
         public void AddColumnWithSelectedIf()
         {
-            var row = SectionRow.SelectedIf(false);
+            SectionRow.SelectedIf(false);
+            var row = (IEnumerable<object>)SectionRow.Build();
 
-            Assert.Equal(row.Columns.Last().Data, @"Text");
+            Assert.Equal(row.Last(), @"Text");
 
-            row = SectionRow.SelectedIf(true);
+            SectionRow.SelectedIf(true);
+            row = (IEnumerable<object>)SectionRow.Build();
 
-            Assert.Equal(row.Columns.Last().Data, @"selected");
+            Assert.Equal(row.Last(), @"selected");
         }
 
 
 		[Fact]
 		public void AddColumnWithWarn()
 		{
-			var row = SectionRow.Warn();
+            SectionRow.Warn();
+            var row = (IEnumerable<object>)SectionRow.Build();
 
-			Assert.Equal(row.Columns.Last().Data, "warn");
+			Assert.Equal(row.Last(), "warn");
 		}
 
         [Fact]
         public void AddColumnWithWarnIf()
         {
-            var row = SectionRow.WarnIf(false);
+            SectionRow.WarnIf(false);
+            var row = (IEnumerable<object>)SectionRow.Build();
 
-            Assert.Equal(row.Columns.Last().Data, @"Text");
+            Assert.Equal(row.Last(), @"Text");
 
-            row = SectionRow.WarnIf(true);
+            SectionRow.WarnIf(true);
+            row = (IEnumerable<object>)SectionRow.Build();
 
-            Assert.Equal(row.Columns.Last().Data, @"warn");
+            Assert.Equal(row.Last(), @"warn");
         }
 
 		private TabSectionRow SectionRow { get; set; }

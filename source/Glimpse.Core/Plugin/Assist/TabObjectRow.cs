@@ -1,6 +1,6 @@
 namespace Glimpse.Core.Plugin.Assist
 {
-    public class TabObjectRow : ITabObjectItem
+    public class TabObjectRow : ITabObjectItem, ITabStyleValue
     {
         internal object BaseKey { get; set; }
 
@@ -12,9 +12,15 @@ namespace Glimpse.Core.Plugin.Assist
             return this;
         }
 
-        public void Value(object value)
+        public ITabStyleValue Value(object value)
         {
             BaseValue = value;
+            return this;
+        }
+
+        public void ApplyValueStyle(string format)
+        {
+            BaseValue = format.FormatWith(BaseValue);
         }
     }
 }

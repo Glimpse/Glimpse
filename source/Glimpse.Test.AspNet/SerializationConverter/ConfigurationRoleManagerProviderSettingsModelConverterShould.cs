@@ -16,10 +16,10 @@ namespace Glimpse.Test.AspNet.SerializationConverter
             var model = new List<ConfigurationRoleManagerProviderSettingsModel> { new ConfigurationRoleManagerProviderSettingsModel { Name = "Name Test", Type = "Type Test", Parameters = new Dictionary<string, string> { { "Test", "Pest" }, { "Jester", "Wester" } } } };
              
             var converter = new ConfigurationRoleManagerProviderSettingsModelConverter();
-            var result = converter.Convert(model) as IList<object[]>;
+            var result = converter.Convert(model) as IEnumerable<object>;
 
             Assert.NotNull(result);
-            Assert.True(result.Count > 0);
+            Assert.True(result.Count() > 0);
         }
     }
 }

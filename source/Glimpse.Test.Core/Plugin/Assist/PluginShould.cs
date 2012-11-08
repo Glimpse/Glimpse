@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Glimpse.Core.Plugin.Assist;
 using Xunit;
@@ -68,7 +69,9 @@ namespace Glimpse.Test.Core.Plugin.Assist
 			Assert.Equal(1, Plugin.Rows.Count());
 			Assert.Equal(2, Plugin.Rows.Single().Columns.Count());
 			Assert.Equal("*SectionName1*", Plugin.Rows.Single().Columns.First().Data);
-			Assert.Equal(innerSection.Build(), Plugin.Rows.Single().Columns.Last().Data);
+
+            var buildResult = innerSection.Build() as IEnumerable<object>;
+            Assert.Equal(0, buildResult.Count());
 		}
 
 		[Fact]
@@ -86,7 +89,9 @@ namespace Glimpse.Test.Core.Plugin.Assist
 			Assert.Equal(1, Plugin.Rows.Count());
 			Assert.Equal(2, Plugin.Rows.Single().Columns.Count());
 			Assert.Equal("*SectionName2*", Plugin.Rows.Single().Columns.First().Data);
-			Assert.Equal(rows, Plugin.Rows.Single().Columns.Last().Data);
+
+            var buildResult = rows as IEnumerable<object>;
+            Assert.Equal(3, buildResult.Count());
 		}
 
 		private TabSection Plugin { get; set; }

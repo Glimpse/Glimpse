@@ -5,173 +5,255 @@ namespace Glimpse.Core.Plugin.Assist
 {
     public static class TabRowFormattingExtensions
     {
-        public static TabSectionRow Strong(this TabSectionRow sectionRow)
+        public static T Strong<T>(this ITabStyleValue<T> sectionRow)
         {
-            return ApplyToLastColumn(sectionRow, Formats.Strong);
+            return sectionRow.ApplyValueStyle(Formats.Strong);
         }
 
-        public static TabSectionRow StrongIf(this TabSectionRow sectionRow, bool condition)
+        public static T StrongIf<T>(this ITabStyleValue<T> sectionRow, bool condition)
         {
-            return condition ? sectionRow.Strong() : sectionRow;
+            return condition ? sectionRow.Strong() : (T)sectionRow;
         }
 
-        public static TabSectionRow Emphasis(this TabSectionRow sectionRow)
+        public static T Emphasis<T>(this ITabStyleValue<T> sectionRow)
         {
-            return ApplyToLastColumn(sectionRow, Formats.Emphasis);
+            return sectionRow.ApplyValueStyle(Formats.Emphasis);
         }
 
-        public static TabSectionRow EmphasisIf(this TabSectionRow sectionRow, bool condition)
+        public static T EmphasisIf<T>(this ITabStyleValue<T> sectionRow, bool condition)
         {
-            return condition ? sectionRow.Emphasis() : sectionRow;
+            return condition ? sectionRow.Emphasis() : (T)sectionRow;
         }
 
-        public static TabSectionRow Raw(this TabSectionRow sectionRow)
+        public static T Raw<T>(this ITabStyleValue<T> sectionRow)
         {
-            return ApplyToLastColumn(sectionRow, Formats.Raw);
+            return sectionRow.ApplyValueStyle(Formats.Raw);
         }
 
-        public static TabSectionRow RawIf(this TabSectionRow sectionRow, bool condition)
+        public static T RawIf<T>(this ITabStyleValue<T> sectionRow, bool condition)
         {
-            return condition ? sectionRow.Raw() : sectionRow;
+            return condition ? sectionRow.Raw() : (T)sectionRow;
         }
 
-        public static TabSectionRow Sub(this TabSectionRow sectionRow)
+        public static T Sub<T>(this ITabStyleValue<T> sectionRow)
         {
-            return ApplyToLastColumn(sectionRow, Formats.Sub);
+            return sectionRow.ApplyValueStyle(Formats.Sub);
         }
 
-        public static TabSectionRow SubIf(this TabSectionRow sectionRow, bool condition)
+        public static T SubIf<T>(this ITabStyleValue<T> sectionRow, bool condition)
         {
-            return condition ? sectionRow.Sub() : sectionRow;
+            return condition ? sectionRow.Sub() : (T)sectionRow;
         }
 
-        public static TabSectionRow Underline(this TabSectionRow sectionRow)
+        public static T Underline<T>(this ITabStyleValue<T> sectionRow)
         {
-            return ApplyToLastColumn(sectionRow, Formats.Underline);
+            return sectionRow.ApplyValueStyle(Formats.Underline);
         }
 
-        public static TabSectionRow UnderlineIf(this TabSectionRow sectionRow, bool condition)
+        public static T UnderlineIf<T>(this ITabStyleValue<T> sectionRow, bool condition)
         {
-            return condition ? sectionRow.Underline() : sectionRow;
+            return condition ? sectionRow.Underline() : (T)sectionRow;
+        }
+         
+        public static void Strong(this ITabStyleValue sectionRow)
+        {
+            sectionRow.ApplyValueStyle(Formats.Strong);
         }
 
-        public static TabSectionRow Error(this TabSectionRow sectionRow)
+        public static void StrongIf(this ITabStyleValue sectionRow, bool condition)
         {
-            return VerifyAndApplyFormatting(sectionRow, FormattingKeywords.Error);
+            if (condition)
+            {
+                sectionRow.Strong();
+            }
         }
 
-        public static TabSectionRow ErrorIf(this TabSectionRow sectionRow, bool condition)
+        public static void Emphasis(this ITabStyleValue sectionRow)
         {
-            return condition ? sectionRow.Error() : sectionRow;
+            sectionRow.ApplyValueStyle(Formats.Emphasis);
         }
 
-        public static TabSectionRow Fail(this TabSectionRow sectionRow)
+        public static void EmphasisIf(this ITabStyleValue sectionRow, bool condition)
         {
-            return VerifyAndApplyFormatting(sectionRow, FormattingKeywords.Fail);
+            if (condition)
+            {
+                sectionRow.Emphasis();
+            }
         }
 
-        public static TabSectionRow FailIf(this TabSectionRow sectionRow, bool condition)
+        public static void Raw(this ITabStyleValue sectionRow)
         {
-            return condition ? sectionRow.Fail() : sectionRow;
+            sectionRow.ApplyValueStyle(Formats.Raw);
         }
 
-        public static TabSectionRow Info(this TabSectionRow sectionRow)
+        public static void RawIf(this ITabStyleValue sectionRow, bool condition)
         {
-            return VerifyAndApplyFormatting(sectionRow, FormattingKeywords.Info);
+            if (condition)
+            {
+                sectionRow.Raw();
+            }
         }
 
-        public static TabSectionRow InfoIf(this TabSectionRow sectionRow, bool condition)
+        public static void Sub(this ITabStyleValue sectionRow)
         {
-            return condition ? sectionRow.Info() : sectionRow;
+            sectionRow.ApplyValueStyle(Formats.Sub);
         }
 
-        public static TabSectionRow Loading(this TabSectionRow sectionRow)
+        public static void SubIf(this ITabStyleValue sectionRow, bool condition)
         {
-            return VerifyAndApplyFormatting(sectionRow, FormattingKeywords.Loading);
+            if (condition)
+            {
+                sectionRow.Sub();
+            }
         }
 
-        public static TabSectionRow LoadingIf(this TabSectionRow sectionRow, bool condition)
+        public static void Underline(this ITabStyleValue sectionRow)
         {
-            return condition ? sectionRow.Loading() : sectionRow;
+            sectionRow.ApplyValueStyle(Formats.Underline);
         }
 
-        public static TabSectionRow Ms(this TabSectionRow sectionRow)
+        public static void UnderlineIf(this ITabStyleValue sectionRow, bool condition)
         {
-            return VerifyAndApplyFormatting(sectionRow, FormattingKeywords.Ms);
+            if (condition)
+            {
+                sectionRow.Underline();
+            }
         }
 
-        public static TabSectionRow MsIf(this TabSectionRow sectionRow, bool condition)
+        public static void Error(this ITabStyleRow sectionRow)
         {
-            return condition ? sectionRow.Ms() : sectionRow;
+            sectionRow.ApplyRowStyle(FormattingKeywords.Error);
         }
 
-        public static TabSectionRow Quiet(this TabSectionRow sectionRow)
+        public static void ErrorIf(this ITabStyleRow sectionRow, bool condition)
         {
-            return VerifyAndApplyFormatting(sectionRow, FormattingKeywords.Quiet);
+            if (condition)
+            {
+                sectionRow.Error();
+            }
         }
 
-        public static TabSectionRow QuietIf(this TabSectionRow sectionRow, bool condition)
+        public static void Fail(this ITabStyleRow sectionRow)
         {
-            return condition ? sectionRow.Quiet() : sectionRow;
+            sectionRow.ApplyRowStyle(FormattingKeywords.Fail);
         }
 
-        public static TabSectionRow Selected(this TabSectionRow sectionRow)
+        public static void FailIf(this ITabStyleRow sectionRow, bool condition)
         {
-            return VerifyAndApplyFormatting(sectionRow, FormattingKeywords.Selected);
+            if (condition)
+            {
+                sectionRow.Fail();
+            } 
         }
 
-        public static TabSectionRow SelectedIf(this TabSectionRow sectionRow, bool condition)
+        public static void Info(this ITabStyleRow sectionRow)
         {
-            return condition ? sectionRow.Selected() : sectionRow;
+            sectionRow.ApplyRowStyle(FormattingKeywords.Info);
+        }
+
+        public static void InfoIf(this ITabStyleRow sectionRow, bool condition)
+        {
+            if (condition)
+            {
+                sectionRow.Info();
+            }  
+        }
+
+        public static void Loading(this ITabStyleRow sectionRow)
+        {
+            sectionRow.ApplyRowStyle(FormattingKeywords.Loading);
+        }
+
+        public static void LoadingIf(this ITabStyleRow sectionRow, bool condition)
+        {
+            if (condition)
+            {
+                sectionRow.Loading();
+            }   
+        }
+
+        public static void Ms(this ITabStyleRow sectionRow)
+        {
+            sectionRow.ApplyRowStyle(FormattingKeywords.Ms);
+        }
+
+        public static void MsIf(this ITabStyleRow sectionRow, bool condition)
+        {
+            if (condition)
+            {
+                sectionRow.Ms();
+            }
+        }
+
+        public static void Quiet(this ITabStyleRow sectionRow)
+        {
+            sectionRow.ApplyRowStyle(FormattingKeywords.Quiet);
+        }
+
+        public static void QuietIf(this ITabStyleRow sectionRow, bool condition)
+        {
+            if (condition)
+            {
+                sectionRow.Quiet();
+            }
+        }
+
+        public static void Selected(this ITabStyleRow sectionRow)
+        {
+            sectionRow.ApplyRowStyle(FormattingKeywords.Selected);
+        }
+
+        public static void SelectedIf(this ITabStyleRow sectionRow, bool condition)
+        {
+            if (condition)
+            {
+                sectionRow.Selected();
+            } 
         }
         
-        public static TabSectionRow Warn(this TabSectionRow sectionRow)
+        public static void Warn(this ITabStyleRow sectionRow)
         {
-            return VerifyAndApplyFormatting(sectionRow, FormattingKeywords.Warn);
+            sectionRow.ApplyRowStyle(FormattingKeywords.Warn);
         }
 
-        public static TabSectionRow WarnIf(this TabSectionRow sectionRow, bool condition)
+        public static void WarnIf(this ITabStyleRow sectionRow, bool condition)
         {
-            return condition ? sectionRow.Warn() : sectionRow;
-        }
-
-        public static TabSectionRow Style(this TabSectionRow sectionRow, string @class)
-        {
-            return !string.IsNullOrEmpty(@class) ? VerifyAndApplyFormatting(sectionRow, @class) : sectionRow;
-        }
-
-        public static TabSectionRow StyleIf(this TabSectionRow sectionRow, string @class, bool condition)
-        {
-            return condition ? sectionRow.Style(@class) : sectionRow;
-        }
-
-        public static TabSectionRow Style(this TabSectionRow sectionRow, FormattingKeywordEnum keyword)
-        {
-            return keyword != FormattingKeywordEnum.None ? VerifyAndApplyFormatting(sectionRow, FormattingKeywords.Convert(keyword)) : sectionRow;
-        }
-
-        public static TabSectionRow StyleIf(this TabSectionRow sectionRow, FormattingKeywordEnum keyword, bool condition)
-        {
-            return condition ? sectionRow.Style(keyword) : sectionRow;
-        }
-
-        private static TabSectionRow VerifyAndApplyFormatting(TabSectionRow sectionRow, string operation)
-        {
-            if (!sectionRow.Columns.Any())
+            if (condition)
             {
-                throw new InvalidOperationException(string.Format("The operation '{0}' is only valid when row has columns.", operation));
-            }
-
-            sectionRow.Column(operation.ToLower());
-            return sectionRow;
+                sectionRow.Warn();
+            }  
         }
 
-        private static TabSectionRow ApplyToLastColumn(TabSectionRow sectionRow, string format)
+        public static void Style(this ITabStyleRow sectionRow, string style)
         {
-            var data = sectionRow.Columns.Last().Data;
-            var formattedData = format.FormatWith(data);
-            sectionRow.Columns.Last().OverrideData(formattedData);
-            return sectionRow;
+            if (!string.IsNullOrEmpty(style))
+            {
+                sectionRow.ApplyRowStyle(style);
+            }
         }
+
+        public static void StyleIf(this ITabStyleRow sectionRow, string style, bool condition)
+        {
+            if (condition)
+            {
+                sectionRow.Style(style);
+            }
+        }
+
+        public static void Style(this ITabStyleRow sectionRow, FormattingKeywordEnum keyword)
+        {
+            if (keyword != FormattingKeywordEnum.None)
+            {
+                sectionRow.ApplyRowStyle(FormattingKeywords.Convert(keyword));
+            }
+        }
+
+        public static void StyleIf(this ITabStyleRow sectionRow, FormattingKeywordEnum keyword, bool condition)
+        {
+            if (condition)
+            {
+                sectionRow.Style(keyword);
+            }
+        } 
     }
 }

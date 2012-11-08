@@ -35,26 +35,26 @@ namespace Glimpse.Mvc.SerializationConverter
                 return null;
             }
 
-            var section = new TabSection("Key", "Value");
-            section.AddRow().Column("ConvertEmptyStringToNull").Column(metadata.ConvertEmptyStringToNull.Value).StrongIf(!metadata.ConvertEmptyStringToNull.IsDefault());
-            section.AddRow().Column("DataTypeName").Column(metadata.DataTypeName.Value).StrongIf(!metadata.DataTypeName.IsDefault());
-            section.AddRow().Column("Description").Column(metadata.Description.Value).StrongIf(!metadata.Description.IsDefault());
-            section.AddRow().Column("DisplayFormatString").Column(metadata.DisplayFormatString.Value).StrongIf(!metadata.DisplayFormatString.IsDefault());
-            section.AddRow().Column("DisplayName").Column(metadata.DisplayName.Value).StrongIf(!metadata.DisplayName.IsDefault());
-            section.AddRow().Column("EditFormatString").Column(metadata.EditFormatString.Value).StrongIf(!metadata.EditFormatString.IsDefault());
-            section.AddRow().Column("HideSurroundingHtml").Column(metadata.HideSurroundingHtml.Value).StrongIf(!metadata.HideSurroundingHtml.IsDefault());
-            section.AddRow().Column("IsComplexType").Column(metadata.IsComplexType.Value).StrongIf(!metadata.IsComplexType.IsDefault());
-            section.AddRow().Column("IsNullableValueType").Column(metadata.IsNullableValueType.Value).StrongIf(!metadata.IsNullableValueType.IsDefault());
-            section.AddRow().Column("IsReadOnly").Column(metadata.IsReadOnly.Value).StrongIf(!metadata.IsReadOnly.IsDefault());
-            section.AddRow().Column("IsRequired").Column(metadata.IsRequired.Value).StrongIf(!metadata.IsRequired.IsDefault());
-            section.AddRow().Column("NullDisplayText").Column(metadata.NullDisplayText.Value).StrongIf(!metadata.NullDisplayText.IsDefault());
-            section.AddRow().Column("Order").Column(metadata.Order.Value).StrongIf(!metadata.Order.IsDefault());
-            section.AddRow().Column("ShortDisplayName").Column(metadata.ShortDisplayName.Value).StrongIf(!metadata.ShortDisplayName.IsDefault());
-            section.AddRow().Column("ShowForDisplay").Column(metadata.ShowForDisplay.Value).StrongIf(!metadata.ShowForDisplay.IsDefault());
-            section.AddRow().Column("ShowForEdit").Column(metadata.ShowForEdit.Value).StrongIf(!metadata.ShowForEdit.IsDefault());
-            section.AddRow().Column("SimpleDisplayText").Column(metadata.SimpleDisplayText.Value).StrongIf(!metadata.SimpleDisplayText.IsDefault());
-            section.AddRow().Column("TemplateHint").Column(metadata.TemplateHint.Value).StrongIf(!metadata.TemplateHint.IsDefault());
-            section.AddRow().Column("Watermark").Column(metadata.Watermark.Value).StrongIf(!metadata.Watermark.IsDefault());
+            var section = new TabObject();
+            section.AddRow().Key("ConvertEmptyStringToNull").Value(metadata.ConvertEmptyStringToNull.Value).StrongIf(!metadata.ConvertEmptyStringToNull.IsDefault());
+            section.AddRow().Key("DataTypeName").Value(metadata.DataTypeName.Value).StrongIf(!metadata.DataTypeName.IsDefault());
+            section.AddRow().Key("Description").Value(metadata.Description.Value).StrongIf(!metadata.Description.IsDefault());
+            section.AddRow().Key("DisplayFormatString").Value(metadata.DisplayFormatString.Value).StrongIf(!metadata.DisplayFormatString.IsDefault());
+            section.AddRow().Key("DisplayName").Value(metadata.DisplayName.Value).StrongIf(!metadata.DisplayName.IsDefault());
+            section.AddRow().Key("EditFormatString").Value(metadata.EditFormatString.Value).StrongIf(!metadata.EditFormatString.IsDefault());
+            section.AddRow().Key("HideSurroundingHtml").Value(metadata.HideSurroundingHtml.Value).StrongIf(!metadata.HideSurroundingHtml.IsDefault());
+            section.AddRow().Key("IsComplexType").Value(metadata.IsComplexType.Value).StrongIf(!metadata.IsComplexType.IsDefault());
+            section.AddRow().Key("IsNullableValueType").Value(metadata.IsNullableValueType.Value).StrongIf(!metadata.IsNullableValueType.IsDefault());
+            section.AddRow().Key("IsReadOnly").Value(metadata.IsReadOnly.Value).StrongIf(!metadata.IsReadOnly.IsDefault());
+            section.AddRow().Key("IsRequired").Value(metadata.IsRequired.Value).StrongIf(!metadata.IsRequired.IsDefault());
+            section.AddRow().Key("NullDisplayText").Value(metadata.NullDisplayText.Value).StrongIf(!metadata.NullDisplayText.IsDefault());
+            section.AddRow().Key("Order").Value(metadata.Order.Value).StrongIf(!metadata.Order.IsDefault());
+            section.AddRow().Key("ShortDisplayName").Value(metadata.ShortDisplayName.Value).StrongIf(!metadata.ShortDisplayName.IsDefault());
+            section.AddRow().Key("ShowForDisplay").Value(metadata.ShowForDisplay.Value).StrongIf(!metadata.ShowForDisplay.IsDefault());
+            section.AddRow().Key("ShowForEdit").Value(metadata.ShowForEdit.Value).StrongIf(!metadata.ShowForEdit.IsDefault());
+            section.AddRow().Key("SimpleDisplayText").Value(metadata.SimpleDisplayText.Value).StrongIf(!metadata.SimpleDisplayText.IsDefault());
+            section.AddRow().Key("TemplateHint").Value(metadata.TemplateHint.Value).StrongIf(!metadata.TemplateHint.IsDefault());
+            section.AddRow().Key("Watermark").Value(metadata.Watermark.Value).StrongIf(!metadata.Watermark.IsDefault());
              
             return section;
         }
