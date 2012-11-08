@@ -15,7 +15,7 @@ namespace Glimpse.Test.AspNet.SerializationConverter
         [Fact]
         public void ConvertToList()
         {
-            var model = new List<TraceModel> { new TraceModel { Category = FormattingKeywordEnum.System, FromFirst = 1.2, FromLast = 2.3, IndentLevel = 0, Message = "test" } };
+            var model = new List<TraceModel> { new TraceModel { Category = FormattingKeywords.Ms, FromFirst = 1.2, FromLast = 2.3, IndentLevel = 0, Message = "test" } };
 
             var converter = new TraceModelConverter();
             var result = converter.Convert(model) as IEnumerable<object>;

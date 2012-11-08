@@ -239,21 +239,5 @@ namespace Glimpse.Core.Plugin.Assist
                 sectionRow.Style(style);
             }
         }
-
-        public static void Style(this ITabStyleRow sectionRow, FormattingKeywordEnum keyword)
-        {
-            if (keyword != FormattingKeywordEnum.None)
-            {
-                sectionRow.ApplyRowStyle(FormattingKeywords.Convert(keyword));
-            }
-        }
-
-        public static void StyleIf(this ITabStyleRow sectionRow, FormattingKeywordEnum keyword, bool condition)
-        {
-            if (condition)
-            {
-                sectionRow.Style(keyword);
-            }
-        } 
     }
 }

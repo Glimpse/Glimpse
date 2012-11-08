@@ -122,13 +122,13 @@ namespace Glimpse.AspNet.PipelineInspector
 
         public override void WriteLine(string message, string category)
         {
-            var typedCategory = DeriveCategory(category);
-            if (typedCategory == FormattingKeywordEnum.None && !string.IsNullOrEmpty(category))
+            var derivedCategory = DeriveCategory(category) ?? category;
+            if (!string.IsNullOrEmpty(derivedCategory))
             {
                 message = category + ": " + message;
             }
 
-            InternalWrite(message, typedCategory);
+            InternalWrite(message, derivedCategory);
         }
   
         public override void Fail(string message)
@@ -146,7 +146,7 @@ namespace Glimpse.AspNet.PipelineInspector
                 failMessage.Append(detailMessage);
             }
 
-            InternalWrite(failMessage.ToString(), FormattingKeywordEnum.Fail);
+            InternalWrite(failMessage.ToString(), FormattingKeywords.Fail);
         }
 
         public override void TraceData(TraceEventCache eventCache, string source, TraceEventType eventType, int id, object data)
@@ -212,7 +212,7 @@ namespace Glimpse.AspNet.PipelineInspector
             InternalWrite(message.ToString(), DeriveCategory(eventType));
         }
 
-        private void InternalWrite(string message, FormattingKeywordEnum category)
+        private void InternalWrite(string message, string category)
         {
             var firstWatch = FirstWatch;
             var lastWatch = LastWatch;
@@ -298,54 +298,54 @@ namespace Glimpse.AspNet.PipelineInspector
             return (opts & TraceOutputOptions) != 0;
         }
 
-        private FormattingKeywordEnum DeriveCategory(string category)
+        private string DeriveCategory(string category)
         {
-            if (string.IsNullOrEmpty(category))
+            if (!string.IsNullOrEmpty(category))
             {
-                return FormattingKeywordEnum.None;
+                switch (category.ToLower())
+                {
+                    case "warning":
+                    case "warn":
+                        return FormattingKeywords.Warn;
+                    case "information":
+                    case "info":
+                        return FormattingKeywords.Info;
+                    case "error":
+                        return FormattingKeywords.Error;
+                    case "fail":
+                        return FormattingKeywords.Fail;
+                    case "quiet":
+                        return FormattingKeywords.Quiet;
+                    case "timing":
+                    case "loading":
+                        return FormattingKeywords.Loading;
+                    case "selected":
+                        return FormattingKeywords.Selected;
+                    case "aspx.page":
+                    case "system":
+                    case "ms":
+                        return FormattingKeywords.Ms;
+                } 
             }
 
-            switch (category.ToLower())
-            {
-                case "warning":
-                case "warn":
-                    return FormattingKeywordEnum.Warn;
-                case "information":
-                case "info":
-                    return FormattingKeywordEnum.Info;
-                case "error":
-                    return FormattingKeywordEnum.Error;
-                case "fail":
-                    return FormattingKeywordEnum.Fail;
-                case "quiet":
-                    return FormattingKeywordEnum.Quiet;
-                case "timing":
-                case "loading":
-                    return FormattingKeywordEnum.Loading;
-                case "selected":
-                    return FormattingKeywordEnum.Selected;
-                case "aspx.page":
-                    return FormattingKeywordEnum.System;
-            }
-
-            return FormattingKeywordEnum.None;
+            return null;
         }
 
-        private FormattingKeywordEnum DeriveCategory(TraceEventType type)
+        private string DeriveCategory(TraceEventType type)
         {
             switch (type)
             {
                 case TraceEventType.Error:
-                    return FormattingKeywordEnum.Error;
+                    return FormattingKeywords.Error;
                 case TraceEventType.Critical:
-                    return FormattingKeywordEnum.Fail;
+                    return FormattingKeywords.Fail;
                 case TraceEventType.Warning:
-                    return FormattingKeywordEnum.Warn;
+                    return FormattingKeywords.Warn;
                 case TraceEventType.Information:
-                    return FormattingKeywordEnum.Info;
+                    return FormattingKeywords.Info;
             }
 
-            return FormattingKeywordEnum.None;
+            return null;
         } 
     }
 }

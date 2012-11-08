@@ -24,7 +24,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
 
             Assert.Equal(1, list.Count);
             Assert.Equal("Message", list[0].Message);
-            Assert.Equal(FormattingKeywordEnum.None, list[0].Category);
+            Assert.Equal(null, list[0].Category);
         }
 
         [Theory, AutoMock]
@@ -37,7 +37,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
 
             Assert.Equal(1, list.Count);
             Assert.Equal("New Message", list[0].Message);
-            Assert.Equal(FormattingKeywordEnum.None, list[0].Category);
+            Assert.Equal(null, list[0].Category);
         }
 
         [Theory, AutoMock]
@@ -49,8 +49,8 @@ namespace Glimpse.Test.AspNet.PipelineInspector
             traceInspector.Write(new TestClass(), "Warn");
 
             Assert.Equal(1, list.Count);
-            Assert.Equal("Message", list[0].Message);
-            Assert.Equal(FormattingKeywordEnum.Warn, list[0].Category);
+            Assert.Equal("Warn: Message", list[0].Message);
+            Assert.Equal(FormattingKeywords.Warn, list[0].Category);
         }
 
         [Theory, AutoMock]
@@ -62,8 +62,8 @@ namespace Glimpse.Test.AspNet.PipelineInspector
             traceInspector.Write("New Message", "Info");
 
             Assert.Equal(1, list.Count);
-            Assert.Equal("New Message", list[0].Message);
-            Assert.Equal(FormattingKeywordEnum.Info, list[0].Category);
+            Assert.Equal("Info: New Message", list[0].Message);
+            Assert.Equal(FormattingKeywords.Info, list[0].Category);
         }
 
         [Theory, AutoMock]
@@ -76,7 +76,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
 
             Assert.Equal(1, list.Count);
             Assert.Equal("Message", list[0].Message);
-            Assert.Equal(FormattingKeywordEnum.None, list[0].Category);
+            Assert.Equal(null, list[0].Category);
         }
 
         [Theory, AutoMock]
@@ -89,7 +89,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
 
             Assert.Equal(1, list.Count);
             Assert.Equal("New Message", list[0].Message);
-            Assert.Equal(FormattingKeywordEnum.None, list[0].Category);
+            Assert.Equal(null, list[0].Category);
         }
 
         [Theory, AutoMock]
@@ -101,8 +101,8 @@ namespace Glimpse.Test.AspNet.PipelineInspector
             traceInspector.WriteLine(new TestClass(), "Loading");
 
             Assert.Equal(1, list.Count);
-            Assert.Equal("Message", list[0].Message);
-            Assert.Equal(FormattingKeywordEnum.Loading, list[0].Category);
+            Assert.Equal("Loading: Message", list[0].Message);
+            Assert.Equal(FormattingKeywords.Loading, list[0].Category);
         }
 
         [Theory, AutoMock]
@@ -114,8 +114,8 @@ namespace Glimpse.Test.AspNet.PipelineInspector
             traceInspector.WriteLine("New Message", "quiet");
 
             Assert.Equal(1, list.Count);
-            Assert.Equal("New Message", list[0].Message);
-            Assert.Equal(FormattingKeywordEnum.Quiet, list[0].Category);
+            Assert.Equal("quiet: New Message", list[0].Message);
+            Assert.Equal(FormattingKeywords.Quiet, list[0].Category);
         }
 
         [Theory, AutoMock]
@@ -128,7 +128,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
 
             Assert.Equal(1, list.Count);
             Assert.Equal("Message", list[0].Message);
-            Assert.Equal(FormattingKeywordEnum.Fail, list[0].Category);
+            Assert.Equal(FormattingKeywords.Fail, list[0].Category);
         }
 
         [Theory, AutoMock]
@@ -141,7 +141,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
 
             Assert.Equal(1, list.Count);
             Assert.Equal("Message Detail", list[0].Message);
-            Assert.Equal(FormattingKeywordEnum.Fail, list[0].Category);
+            Assert.Equal(FormattingKeywords.Fail, list[0].Category);
         }
 
         [Theory, AutoMock]
@@ -154,7 +154,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
 
             Assert.Equal(1, list.Count);
             Assert.Equal("TestSource: 123: Message\r\n", list[0].Message);
-            Assert.Equal(FormattingKeywordEnum.None, list[0].Category);
+            Assert.Equal(null, list[0].Category);
         }
 
         [Theory, AutoMock]
@@ -168,7 +168,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
 
             Assert.Equal(1, list.Count);
             Assert.True(list[0].Message.StartsWith("TestSource: 123: Message\r\nCallstack"));
-            Assert.Equal(FormattingKeywordEnum.Error, list[0].Category);
+            Assert.Equal(FormattingKeywords.Error, list[0].Category);
         }
 
         [Theory, AutoMock]
@@ -182,7 +182,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
 
             Assert.Equal(1, list.Count);
             Assert.True(list[0].Message.StartsWith("TestSource: 123: Message\r\nTimestamp"));
-            Assert.Equal(FormattingKeywordEnum.Error, list[0].Category);
+            Assert.Equal(FormattingKeywords.Error, list[0].Category);
         }
 
         [Theory, AutoMock]
@@ -195,7 +195,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
 
             Assert.Equal(1, list.Count);
             Assert.Equal("TestSource: 123: Message, Message\r\n", list[0].Message);
-            Assert.Equal(FormattingKeywordEnum.Fail, list[0].Category);
+            Assert.Equal(FormattingKeywords.Fail, list[0].Category);
         }
 
         [Theory, AutoMock]
@@ -208,7 +208,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
 
             Assert.Equal(1, list.Count);
             Assert.Equal("TestSource: 123: Message\r\n", list[0].Message);
-            Assert.Equal(FormattingKeywordEnum.Warn, list[0].Category);
+            Assert.Equal(FormattingKeywords.Warn, list[0].Category);
         }
 
         [Theory, AutoMock]
@@ -221,7 +221,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
 
             Assert.Equal(1, list.Count);
             Assert.Equal("TestSource: 123: Test Message Test\r\n", list[0].Message);
-            Assert.Equal(FormattingKeywordEnum.Warn, list[0].Category);
+            Assert.Equal(FormattingKeywords.Warn, list[0].Category);
         }
 
         private IList<TraceModel> SetupMessageStore(ITabSetupContext context)

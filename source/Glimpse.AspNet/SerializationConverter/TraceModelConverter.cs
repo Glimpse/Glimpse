@@ -16,7 +16,7 @@ namespace Glimpse.AspNet.SerializationConverter
             var root = new TabSection("Category", "Trace", "From First", "From Last");
             foreach (var item in obj)
             {
-                root.AddRow().Column(item.Category == FormattingKeywordEnum.None ? string.Empty : item.Category.ToString()).Column(GenerateTabs(item)).Column(item.FromFirst.ToString("0.## ms")).Column(item.FromLast.ToString("0.## ms")).Style(item.Category);
+                root.AddRow().Column(item.Category).Column(GenerateTabs(item)).Column(item.FromFirst.ToString("0.## ms")).Column(item.FromLast.ToString("0.## ms")).Style(item.Category);
             }
 
             return root.Build();

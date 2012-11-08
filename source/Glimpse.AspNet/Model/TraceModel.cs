@@ -8,7 +8,7 @@ namespace Glimpse.AspNet.Model
 {
     public class TraceModel
     {
-        public FormattingKeywordEnum Category { get; set; }
+        public string Category { get; set; }
 
         public string Message { get; set; }
 
