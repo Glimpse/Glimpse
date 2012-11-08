@@ -4,9 +4,11 @@ using System.Web.Mvc;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.AlternateImplementation;
+using Glimpse.Test.Common;
 using Glimpse.Test.Mvc3.TestDoubles;
 using Moq;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Glimpse.Test.Mvc3.AlternateImplementation
 {
@@ -15,59 +17,40 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Fact]
         public void ImplementProperMethod()
         {
-            var implementation = new ActionInvoker.InvokeActionMethod();
+            var sut = new ActionInvoker.InvokeActionMethod();
 
-            Assert.Equal("InvokeActionMethod", implementation.MethodToImplement.Name);
+            Assert.Equal("InvokeActionMethod", sut.MethodToImplement.Name);
         }
 
-        [Fact]
-        public void ProccedAndReturnWithRuntimePolicyOff()
+        [Theory, AutoMock]
+        public void ProccedAndReturnWithRuntimePolicyOff(ActionInvoker.InvokeActionMethod sut, IAlternateImplementationContext context)
         {
-            Func<RuntimePolicy> policyStrategy = () => RuntimePolicy.Off;
-            Func<IExecutionTimer> timerStrategy = () => new Mock<IExecutionTimer>().Object;
-            var brokerMock = new Mock<IMessageBroker>();
+            context.Setup(c => c.RuntimePolicyStrategy).Returns(() => RuntimePolicy.Off);
 
-            var contextMock = new Mock<IAlternateImplementationContext>();
-            contextMock.Setup(c => c.MessageBroker).Returns(brokerMock.Object);
-            contextMock.Setup(c => c.TimerStrategy).Returns(timerStrategy);
-            contextMock.Setup(c => c.RuntimePolicyStrategy).Returns(policyStrategy);
+            sut.NewImplementation(context);
 
-            var implementation = new ActionInvoker.InvokeActionMethod();
-            implementation.NewImplementation(contextMock.Object);
-
-
-            contextMock.Verify(c=>c.Proceed());
-            brokerMock.Verify(b=>b.Publish(It.IsAny<ActionInvoker.InvokeActionMethod.Message>()), Times.Never());
+            context.Verify(c => c.Proceed());
+            context.MessageBroker.Verify(b => b.Publish(It.IsAny<ActionInvoker.InvokeActionMethod.Message>()), Times.Never());
         }
 
-        [Fact]
-        public void PublishMessageWithRuntimePolicyOn()
+        [Theory, AutoMock]
+        public void PublishMessageWithRuntimePolicyOn(ActionInvoker.InvokeActionMethod sut, IAlternateImplementationContext context)
         {
-            Func<RuntimePolicy> policyStrategy = () => RuntimePolicy.On;
-            var timerMock = new Mock<IExecutionTimer>();
-            Func<IExecutionTimer> timerStrategy = () => timerMock.Object;
-            var brokerMock = new Mock<IMessageBroker>();
-
             var actionDescriptorMock = new Mock<ActionDescriptor>();
             actionDescriptorMock.Setup(a => a.ControllerDescriptor).Returns(new ReflectedControllerDescriptor(typeof(DummyController)));
 
-            var contextMock = new Mock<IAlternateImplementationContext>();
-            contextMock.Setup(c => c.MessageBroker).Returns(brokerMock.Object);
-            contextMock.Setup(c => c.TimerStrategy).Returns(timerStrategy);
-            contextMock.Setup(c => c.RuntimePolicyStrategy).Returns(policyStrategy);
-            contextMock.Setup(c => c.ReturnValue).Returns(new ContentResult());
-            contextMock.Setup(c => c.Arguments).Returns(new object[]
+            context.Setup(c => c.ReturnValue).Returns(new ContentResult());
+            context.Setup(c => c.Arguments).Returns(new object[]
                                                             {
                                                                 new ControllerContext(),
                                                                 actionDescriptorMock.Object,
-                                                                new Dictionary<string,object>(),
+                                                                new Dictionary<string, object>()
                                                             });
 
-            var implementation = new ActionInvoker.InvokeActionMethod();
-            implementation.NewImplementation(contextMock.Object);
+            sut.NewImplementation(context);
 
-            timerMock.Verify(t=>t.Time(It.IsAny<Action>()));
-            brokerMock.Verify(b => b.Publish(It.IsAny<ActionInvoker.InvokeActionMethod.Message>()));
+            context.TimerStrategy().Verify(t => t.Time(It.IsAny<Action>()));
+            context.MessageBroker.Verify(b => b.Publish(It.IsAny<ActionInvoker.InvokeActionMethod.Message>()));
         } 
     }
 }

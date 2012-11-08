@@ -31,7 +31,7 @@ namespace Glimpse.Mvc.Tab
 
 
 
-            messageBroker.Subscribe<ActionInvoker.InvokeActionMethod.Message>(message => Persist(message, context));
+            messageBroker.Subscribe<ActionInvoker.InvokeActionMethod.Message>(message => Persist(message, context)); // check
             messageBroker.Subscribe<ActionInvoker.InvokeActionResult<ControllerActionInvoker>.Message>(message => Persist(message, context)); // check
             messageBroker.Subscribe<ActionInvoker.InvokeActionResult<AsyncControllerActionInvoker>.Message>(message => Persist(message, context)); // check
 

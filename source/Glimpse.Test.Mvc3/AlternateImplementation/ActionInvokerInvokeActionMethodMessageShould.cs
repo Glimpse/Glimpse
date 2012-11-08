@@ -1,45 +1,36 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.AlternateImplementation;
+using Glimpse.Test.Common;
 using Moq;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Glimpse.Test.Mvc3.AlternateImplementation
 {
     public class ActionInvokerInvokeActionMethodMessageShould
     {
-        [Fact]
-        public void Construct()
+        [Theory, AutoMock]
+        public void Construct(ActionDescriptor actionDescriptor, MethodInfo method, TimerResult timer, ActionResult result)
         {
-            var expectedControllerName = "a name";
-            var expectedControllerType = "".GetType();
-            var expectedActionName = "an action name";
-
-            var controllerDescriptorMock = new Mock<ControllerDescriptor>();
-            controllerDescriptorMock.Setup(cd => cd.ControllerName).Returns(expectedControllerName);
-            controllerDescriptorMock.Setup(cd => cd.ControllerType).Returns(expectedControllerType);
-
-            var actionDescriptorMock = new Mock<ActionDescriptor>();
-            actionDescriptorMock.Setup(ad => ad.ControllerDescriptor).Returns(controllerDescriptorMock.Object);
-            actionDescriptorMock.Setup(ad => ad.ActionName).Returns(expectedActionName);
-
-
+            var expectedControllerType = typeof(Controller);
+            actionDescriptor.ControllerDescriptor.Setup(cd => cd.ControllerType).Returns(expectedControllerType);
             var arguments = new ActionInvoker.InvokeActionMethod.Arguments(new object[]
                                                                  {
                                                                      new ControllerContext(),
-                                                                     actionDescriptorMock.Object,
+                                                                     actionDescriptor,
                                                                      new Dictionary<string, object>()
                                                                  });
-            var returnValue = new ContentResult();
 
-            var message = new ActionInvoker.InvokeActionMethod.Message(arguments, returnValue);
+            var sut = new ActionInvoker.InvokeActionMethod.Message(arguments, result, method, timer);
 
-            Assert.Equal(expectedControllerName, message.ControllerName);
-            Assert.Equal(expectedControllerType, message.ControllerType);
-            Assert.Equal(expectedActionName, message.ActionName);
-            Assert.False(message.IsChildAction);
-            Assert.Equal(returnValue.GetType(), message.ActionResultType);
+            Assert.Equal(actionDescriptor.ControllerDescriptor.ControllerName, sut.ControllerName);
+            Assert.Equal(expectedControllerType, sut.ExecutedType);
+            Assert.Equal(actionDescriptor.ActionName, sut.ActionName);
+            Assert.False(sut.IsChildAction);
+            Assert.Equal(result.GetType(), sut.ActionResultType);
         }
     }
 }

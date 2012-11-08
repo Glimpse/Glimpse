@@ -71,14 +71,11 @@ namespace Glimpse.Mvc.AlternateImplementation
                 var timer = context.TimerStrategy();
                 var timerResult = timer.Stop(state.Offset);
 
-                var eventName = string.Format(
-                    "{0}.{1}()",
-                    state.Arguments.ActionDescriptor.ControllerDescriptor.ControllerName,
-                    state.Arguments.ActionDescriptor.ActionName);
-                
-                context.MessageBroker.PublishMany(
-                    new ActionInvoker.InvokeActionMethod.Message(state.Arguments, (ActionResult)context.ReturnValue),
-                    new TimerResultMessage(timerResult, eventName, "ASP.NET MVC")); // TODO: This should be abstracted
+                context.MessageBroker.Publish(new ActionInvoker.InvokeActionMethod.Message(
+                    state.Arguments, 
+                    (ActionResult)context.ReturnValue, 
+                    context.MethodInvocationTarget, 
+                    timerResult));
             }
         }
     }

@@ -138,22 +138,18 @@ namespace Glimpse.Mvc.AlternateImplementation
             public void NewImplementation(IAlternateImplementationContext context)
             {
                 //// ActionResult InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary<string, object> parameters)
+                var timerResult = context.ProceedWithTimerIfAllowed();
 
-                // TODO: NOT DRY AT ALL
-                if (context.RuntimePolicyStrategy() == RuntimePolicy.Off) 
+                if (timerResult == null)
                 {
-                    context.Proceed();
                     return;
                 }
 
-                var timer = context.TimerStrategy();
-                var timerResult = timer.Time(context.Proceed);
-
-                var arguments = new Arguments(context.Arguments);
-
-                context.MessageBroker.PublishMany(
-                    new TimerResultMessage(timerResult, arguments.ActionDescriptor.ActionName + "()", "MVC"),
-                    new Message(arguments, context.ReturnValue as ActionResult));
+                context.MessageBroker.Publish(new Message(
+                    new Arguments(context.Arguments), 
+                    context.ReturnValue as ActionResult, 
+                    context.MethodInvocationTarget, 
+                    timerResult));
             }
 
             public class Arguments
@@ -185,23 +181,29 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public bool IsAsync { get; set; }
             }
 
-            public class Message : MessageBase
+            public class Message : TimerResultMessage, IActionFilterMessage
             {
-                public Message(Arguments arguments, ActionResult returnValue)
+                public Message(Arguments arguments, ActionResult returnValue, MethodInfo method, TimerResult timerResult) : base(timerResult, arguments.ActionDescriptor.ActionName, "MVC")
                 {
                     var controllerDescriptor = arguments.ActionDescriptor.ControllerDescriptor;
 
                     ControllerName = controllerDescriptor.ControllerName;
-                    ControllerType = controllerDescriptor.ControllerType;
+                    ExecutedType = controllerDescriptor.ControllerType;
                     IsChildAction = arguments.ControllerContext.IsChildAction;
                     ActionName = arguments.ActionDescriptor.ActionName;
                     ActionResultType = returnValue.GetType();
+                    Category = null;
+                    ExecutedMethod = method;
                 }
 
                 public string ControllerName { get; set; }
-                
-                public Type ControllerType { get; set; }
-                
+
+                public FilterCategory? Category { get; private set; }
+
+                public Type ExecutedType { get; set; }
+
+                public MethodInfo ExecutedMethod { get; private set; }
+
                 public bool IsChildAction { get; set; }
                 
                 public string ActionName { get; set; }
