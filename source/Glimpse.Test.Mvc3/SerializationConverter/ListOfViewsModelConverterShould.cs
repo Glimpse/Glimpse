@@ -23,7 +23,7 @@ namespace Glimpse.Test.Mvc3.SerializationConverter
             var converter = new ListOfViewsModelConverter();
             var result = converter.Convert(emptyCollection);
 
-            var data = result as List<IEnumerable<object>>;
+            var data = result as IEnumerable<object>;
 
             Assert.NotNull(data);
             Assert.NotEmpty(data);
@@ -79,7 +79,7 @@ namespace Glimpse.Test.Mvc3.SerializationConverter
             var converter = new ListOfViewsModelConverter();
             var result = converter.Convert(vms);
 
-            var data = result as List<IEnumerable<object>>;
+            var data = result as IEnumerable<object>;
 
             Assert.NotNull(data);
             Assert.NotEmpty(data);

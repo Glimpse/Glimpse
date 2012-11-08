@@ -19,10 +19,10 @@ namespace Glimpse.Test.Mvc3.SerializationConverter
             var model = new List<MetadataItemModel> { new MetadataItemModel { Action = "Action", Controller = "Controller", DisplayName = "Name", Name = "Display", Type = typeof(int) } };
 
             var converter = new ListOfMetadataItemModelConverter();
-            var result = converter.Convert(model) as IList<object[]>;
+            var result = converter.Convert(model) as IEnumerable<object>;
 
             Assert.NotNull(result);
-            Assert.True(result.Count > 0);
+            Assert.Equal(2, result.Count());
         }
     }
 }
