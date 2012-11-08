@@ -8,11 +8,11 @@ namespace Glimpse.Mvc.Message
     {
         bool IsChildAction { get; }
 
-        FilterCategory FilterCategory { get; }
+        FilterCategory? Category { get; }
 
-        Type FilterType { get; }
+        Type ExecutedType { get; }
 
-        MethodInfo Method { get; }
+        MethodInfo ExecutedMethod { get; }
 
         TimeSpan Duration { get; }
     }

@@ -87,8 +87,7 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public class Message : ActionFilterMessage
             {
-                public Message(ActionExecutedContext context, Type filterType, MethodInfo method, TimerResult timerResult)
-                    : base(FilterCategory.Action, filterType, method, timerResult, context.Controller)
+                public Message(ActionExecutedContext context, Type filterType, MethodInfo method, TimerResult timerResult) : base(FilterCategory.Action, filterType, method, timerResult, context.Controller)
                 {
                     ActionName = context.ActionDescriptor.ActionName;
                     ControllerName = context.ActionDescriptor.ControllerDescriptor.ControllerName;

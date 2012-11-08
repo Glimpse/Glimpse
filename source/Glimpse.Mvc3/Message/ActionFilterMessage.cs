@@ -8,13 +8,13 @@ namespace Glimpse.Mvc.Message
 {
     public class ActionFilterMessage : MessageBase, IActionFilterMessage, ITimerResultMessage
     {
-        public ActionFilterMessage(FilterCategory filterCategory, Type filterType, MethodInfo method, TimerResult timerResult, ControllerBase controllerBase)
+        public ActionFilterMessage(FilterCategory? filterCategory, Type filterType, MethodInfo method, TimerResult timerResult, ControllerBase controllerBase)
         {
             // IsChildAction is false if ControllerContext is null
             IsChildAction = controllerBase.ControllerContext != null && controllerBase.ControllerContext.IsChildAction;
-            FilterCategory = filterCategory;
-            FilterType = filterType;
-            Method = method;
+            Category = filterCategory;
+            ExecutedType = filterType;
+            ExecutedMethod = method;
             Duration = timerResult.Duration;
             Offset = timerResult.Offset;
             EventName = Simplify(method.Name);
@@ -23,11 +23,11 @@ namespace Glimpse.Mvc.Message
 
         public bool IsChildAction { get; private set; }
 
-        public FilterCategory FilterCategory { get; private set; }
+        public FilterCategory? Category { get; private set; }
 
-        public Type FilterType { get; private set; }
+        public Type ExecutedType { get; private set; }
 
-        public MethodInfo Method { get; private set; }
+        public MethodInfo ExecutedMethod { get; private set; }
 
         public string EventName { get; private set; }
 

@@ -19,12 +19,12 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
 
             Assert.Equal(argument.ActionDescriptor.ActionName, sut.ActionName);
             Assert.Equal(argument.Result.GetType(), sut.ResultType);
-            Assert.Equal(filterType, sut.FilterType);
-            Assert.Equal(method, sut.Method);
+            Assert.Equal(filterType, sut.ExecutedType);
+            Assert.Equal(method, sut.ExecutedMethod);
             Assert.Equal(timerResult.Duration, sut.Duration);
             Assert.Equal(timerResult.Offset, sut.Offset);
             Assert.Contains(sut.EventName, method.Name);
-            Assert.Equal(FilterCategory.Authorization, sut.FilterCategory);
+            Assert.Equal(FilterCategory.Authorization, sut.Category);
         }
 
         [Theory, AutoMock]

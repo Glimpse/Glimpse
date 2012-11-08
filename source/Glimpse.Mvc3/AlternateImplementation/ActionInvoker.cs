@@ -6,6 +6,7 @@ using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Message;
+using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
@@ -78,18 +79,17 @@ namespace Glimpse.Mvc.AlternateImplementation
             public void NewImplementation(IAlternateImplementationContext context)
             {
                 // void InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
-                if (context.RuntimePolicyStrategy() == RuntimePolicy.Off)
+                var timerResult = context.ProceedWithTimerIfAllowed();
+
+                if (timerResult == null)
                 {
-                    context.Proceed();
                     return;
                 }
 
-                var timer = context.TimerStrategy();
-                var timerResult = timer.Time(context.Proceed);
-
-                context.MessageBroker.PublishMany(
-                    new TimerResultMessage(timerResult, "ActionResult Executed", "MVC"),
-                    new Message(new Arguments(context.Arguments))); // TODO clean this up, use a constant?
+                context.MessageBroker.Publish(new Message(
+                    new Arguments(context.Arguments), 
+                    context.MethodInvocationTarget, 
+                    timerResult));
             }
 
             public class Arguments
@@ -105,20 +105,26 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public ActionResult ActionResult { get; set; }
             }
 
-            public class Message : MessageBase
+            public class Message : TimerResultMessage, IActionFilterMessage
             {
-                public Message(Arguments arguments)
+                public Message(Arguments arguments, MethodInfo method, TimerResult timerResult) : base(timerResult, "ActionResult Executed", "MVC")
                 {
                     ActionResultType = arguments.ActionResult.GetType();
-                    ConrollerType = arguments.ControllerContext.Controller.GetType();
+                    ExecutedType = arguments.ControllerContext.Controller.GetType();
                     IsChildAction = arguments.ControllerContext.IsChildAction;
+                    Category = null;
+                    ExecutedMethod = method;
                 }
 
                 public Type ActionResultType { get; set; }
+
+                public Type ExecutedType { get; private set; }
                 
-                public Type ConrollerType { get; set; }
+                public bool IsChildAction { get; private set; }
                 
-                public bool IsChildAction { get; set; }
+                public FilterCategory? Category { get; private set; }
+
+                public MethodInfo ExecutedMethod { get; private set; }
             }
         }
 

@@ -7,7 +7,6 @@ using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.AlternateImplementation;
 using Glimpse.Test.Common;
 using Moq;
-using Ploeh.AutoFixture;
 using Ploeh.AutoFixture.Xunit;
 using Xunit;
 using Xunit.Extensions;
