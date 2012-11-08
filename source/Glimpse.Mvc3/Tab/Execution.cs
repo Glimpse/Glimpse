@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using System.Web.Mvc.Async;
+using System.Linq;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.Core.Extensibility;
-using Glimpse.Mvc.AlternateImplementation;
 using Glimpse.Mvc.Message;
+using Glimpse.Mvc.Model;
 
 namespace Glimpse.Mvc.Tab
 {
@@ -20,7 +19,8 @@ namespace Glimpse.Mvc.Tab
         public override object GetData(ITabContext context)
         {
             var actionFilterMessages = context.TabStore.Get<IList<IExecutionMessage>>(TabStoreKey);
-            return actionFilterMessages;
+
+            return actionFilterMessages.Select(message => new ExecutionModel(message)).ToList();
         }
 
         public void Setup(ITabSetupContext context)

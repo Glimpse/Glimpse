@@ -38,6 +38,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         {
             var actionDescriptorMock = new Mock<ActionDescriptor>();
             actionDescriptorMock.Setup(a => a.ControllerDescriptor).Returns(new ReflectedControllerDescriptor(typeof(DummyController)));
+            actionDescriptorMock.Setup(a => a.ActionName).Returns("Index");
 
             context.Setup(c => c.ReturnValue).Returns(new ContentResult());
             context.Setup(c => c.Arguments).Returns(new object[]

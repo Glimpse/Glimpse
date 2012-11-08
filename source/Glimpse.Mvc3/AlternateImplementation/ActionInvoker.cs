@@ -87,7 +87,6 @@ namespace Glimpse.Mvc.AlternateImplementation
 
                 context.MessageBroker.Publish(new Message(
                     new Arguments(context.Arguments), 
-                    context.MethodInvocationTarget, 
                     timerResult));
             }
 
@@ -106,16 +105,14 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public class Message : TimerResultMessage, IExecutionMessage
             {
-                public Message(Arguments arguments, MethodInfo method, TimerResult timerResult) : base(timerResult, "ActionResult Executed", "MVC")
+                private static MethodInfo executedMethod = typeof(ActionResult).GetMethod("ExecuteResult");
+
+                public Message(Arguments arguments, TimerResult timerResult) : base(timerResult, "ActionResult Executed", "MVC")
                 {
-                    ActionResultType = arguments.ActionResult.GetType();
-                    ExecutedType = arguments.ControllerContext.Controller.GetType();
+                    ExecutedType = arguments.ActionResult.GetType();
                     IsChildAction = arguments.ControllerContext.IsChildAction;
                     Category = null;
-                    ExecutedMethod = method;
                 }
-
-                public Type ActionResultType { get; set; }
 
                 public Type ExecutedType { get; private set; }
                 
@@ -123,7 +120,10 @@ namespace Glimpse.Mvc.AlternateImplementation
                 
                 public FilterCategory? Category { get; private set; }
 
-                public MethodInfo ExecutedMethod { get; private set; }
+                public MethodInfo ExecutedMethod
+                {
+                    get { return executedMethod; }
+                }
             }
         }
 
@@ -191,7 +191,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     ActionName = arguments.ActionDescriptor.ActionName;
                     ActionResultType = returnValue.GetType();
                     Category = null;
-                    ExecutedMethod = method;
+                    ExecutedMethod = ExecutedType.GetMethod(ActionName);
                 }
 
                 public string ControllerName { get; set; }

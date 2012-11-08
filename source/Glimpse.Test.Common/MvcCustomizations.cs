@@ -45,6 +45,7 @@ namespace Glimpse.Test.Common
                     {
                         var mock = new Mock<ControllerDescriptor>();
                         mock.Setup(m => m.ControllerName).Returns(controllerName);
+                        mock.Setup(m => m.ControllerType).Returns(typeof(Controller));
                         return mock.Object;
                     });
         }

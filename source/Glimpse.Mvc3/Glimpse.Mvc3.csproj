@@ -83,6 +83,7 @@
     <Compile Include="Message\FilterCategory.cs" />
     <Compile Include="Message\IExecutionMessage.cs" />
     <Compile Include="Model\DefaultValueModel.cs" />
+    <Compile Include="Model\ExecutionModel.cs" />
     <Compile Include="Model\MetadataContentModel.cs" />
     <Compile Include="Model\MetadataItemModel.cs" />
     <Compile Include="Model\MetadataPropertyItemModel.cs" />
@@ -97,6 +98,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SerializationConverter\ListOfExecutionModelConverter.cs" />
     <Compile Include="SerializationConverter\ListOfMetadataItemModelConverter.cs" />
     <Compile Include="SerializationConverter\ListOfViewsModelConverter.cs" />
     <Compile Include="Tab\Execution.cs">
