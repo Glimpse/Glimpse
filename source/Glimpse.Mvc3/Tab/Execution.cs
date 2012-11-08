@@ -25,25 +25,10 @@ namespace Glimpse.Mvc.Tab
 
         public void Setup(ITabSetupContext context)
         {
-            var messageBroker = context.MessageBroker;
-                
-            messageBroker.Subscribe<IExecutionMessage>(message => PersistActionFilterMessage(message, context));
-
-
-
-            messageBroker.Subscribe<ActionInvoker.InvokeActionMethod.Message>(message => Persist(message, context)); // check
-            messageBroker.Subscribe<ActionInvoker.InvokeActionResult<ControllerActionInvoker>.Message>(message => Persist(message, context)); // check
-            messageBroker.Subscribe<ActionInvoker.InvokeActionResult<AsyncControllerActionInvoker>.Message>(message => Persist(message, context)); // check
-
-            // messageBroker.Subscribe<ActionFilter.OnActionExecuted.Message>(message => Persist(message, context)); // check
-            // messageBroker.Subscribe<ActionFilter.OnActionExecuting.Message>(message => Persist(message, context)); // check
-            // messageBroker.Subscribe<AuthorizationFilter.OnAuthorization.Message>(message => Persist(message, context)); // check
-            // messageBroker.Subscribe<ExceptionFilter.OnException.Message>(message => Persist(message, context)); // check
-            // messageBroker.Subscribe<ResultFilter.OnResultExecuted.Message>(message => Persist(message, context)); // check
-            // messageBroker.Subscribe<ResultFilter.OnResultExecuting.Message>(message => Persist(message, context)); // check
+            context.MessageBroker.Subscribe<IExecutionMessage>(message => PersistActionFilterMessage(message, context));
         }
 
-        internal static void PersistActionFilterMessage(IExecutionMessage message, ITabSetupContext context)
+        private static void PersistActionFilterMessage(IExecutionMessage message, ITabSetupContext context)
         {
             var tabStore = context.GetTabStore();
 
@@ -53,21 +38,6 @@ namespace Glimpse.Mvc.Tab
             }
 
             var messages = tabStore.Get<IList<IExecutionMessage>>(TabStoreKey);
-
-            messages.Add(message);
-        }
-
-        internal static void Persist<T>(T message, ITabSetupContext context)
-        {
-            var tabStore = context.GetTabStore();
-            var key = typeof(T).FullName;
-
-            if (!tabStore.Contains(key))
-            {
-                tabStore.Set(key, new List<T>());
-            }
-
-            var messages = tabStore.Get<IList<T>>(key);
 
             messages.Add(message);
         }

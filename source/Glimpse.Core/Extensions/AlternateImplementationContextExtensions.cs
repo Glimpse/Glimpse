@@ -4,17 +4,19 @@ namespace Glimpse.Core.Extensions
 {
     public static class AlternateImplementationContextExtensions
     {
-        public static TimerResult ProceedWithTimerIfAllowed(this IAlternateImplementationContext context)
+        public static bool TryProceedWithTimer(this IAlternateImplementationContext context, out TimerResult timerResult)
         {
             if (context.RuntimePolicyStrategy() == RuntimePolicy.Off)
             {
                 context.Proceed();
-                return null;
+                timerResult = null;
+                return false;
             }
 
             var timer = context.TimerStrategy();
 
-            return timer.Time(context.Proceed);
+            timerResult = timer.Time(context.Proceed);
+            return true;
         }
     }
 }

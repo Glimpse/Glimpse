@@ -34,8 +34,8 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public void NewImplementation(IAlternateImplementationContext context)
             {
-                var timer = context.ProceedWithTimerIfAllowed();
-                if (timer == null)
+                TimerResult timer;
+                if (!context.TryProceedWithTimer(out timer))
                 {
                     return;
                 }
@@ -79,9 +79,8 @@ namespace Glimpse.Mvc.AlternateImplementation
             public void NewImplementation(IAlternateImplementationContext context)
             {
                 // void InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
-                var timerResult = context.ProceedWithTimerIfAllowed();
-
-                if (timerResult == null)
+                TimerResult timerResult;
+                if (!context.TryProceedWithTimer(out timerResult))
                 {
                     return;
                 }
@@ -138,9 +137,8 @@ namespace Glimpse.Mvc.AlternateImplementation
             public void NewImplementation(IAlternateImplementationContext context)
             {
                 //// ActionResult InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary<string, object> parameters)
-                var timerResult = context.ProceedWithTimerIfAllowed();
-
-                if (timerResult == null)
+                TimerResult timerResult;
+                if (!context.TryProceedWithTimer(out timerResult))
                 {
                     return;
                 }

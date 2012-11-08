@@ -32,9 +32,8 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public void NewImplementation(IAlternateImplementationContext context)
             {
-                var timer = context.ProceedWithTimerIfAllowed();
-
-                if (timer == null)
+                TimerResult timer;
+                if (!context.TryProceedWithTimer(out timer))
                 {
                     return;
                 }
@@ -71,9 +70,8 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public void NewImplementation(IAlternateImplementationContext context)
             {
-                var timer = context.ProceedWithTimerIfAllowed();
-
-                if (timer == null)
+                TimerResult timer;
+                if (!context.TryProceedWithTimer(out timer))
                 {
                     return;
                 }
