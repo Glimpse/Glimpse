@@ -105,7 +105,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public ActionResult ActionResult { get; set; }
             }
 
-            public class Message : TimerResultMessage, IActionFilterMessage
+            public class Message : TimerResultMessage, IExecutionMessage
             {
                 public Message(Arguments arguments, MethodInfo method, TimerResult timerResult) : base(timerResult, "ActionResult Executed", "MVC")
                 {
@@ -181,7 +181,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public bool IsAsync { get; set; }
             }
 
-            public class Message : TimerResultMessage, IActionFilterMessage
+            public class Message : TimerResultMessage, IExecutionMessage
             {
                 public Message(Arguments arguments, ActionResult returnValue, MethodInfo method, TimerResult timerResult) : base(timerResult, arguments.ActionDescriptor.ActionName, "MVC")
                 {

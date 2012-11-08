@@ -79,9 +79,9 @@
     <Compile Include="AlternateImplementation\View.cs" />
     <Compile Include="AlternateImplementation\ViewCorrelationMixin.cs" />
     <Compile Include="AlternateImplementation\ViewEngine.cs" />
-    <Compile Include="Message\ActionFilterMessage.cs" />
+    <Compile Include="Message\ExecutionMessage.cs" />
     <Compile Include="Message\FilterCategory.cs" />
-    <Compile Include="Message\IActionFilterMessage.cs" />
+    <Compile Include="Message\IExecutionMessage.cs" />
     <Compile Include="Model\DefaultValueModel.cs" />
     <Compile Include="Model\MetadataContentModel.cs" />
     <Compile Include="Model\MetadataItemModel.cs" />

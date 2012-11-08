@@ -46,7 +46,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     timer));
             }
 
-            public class Message : ActionFilterMessage
+            public class Message : ExecutionMessage
             {
                 public Message(ResultExecutingContext argument, Type filterType, MethodInfo method, TimerResult timerResult) : base(FilterCategory.Result, filterType, method, timerResult, argument.Controller)
                 {
@@ -85,7 +85,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     timer));
             }
 
-            public class Message : ActionFilterMessage
+            public class Message : ExecutionMessage
             {
                 public Message(ResultExecutedContext arguments, Type filterType, MethodInfo method, TimerResult timerResult) : base(FilterCategory.Result, filterType, method, timerResult, arguments.Controller)
                 {

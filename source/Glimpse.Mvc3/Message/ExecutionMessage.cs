@@ -6,9 +6,9 @@ using Glimpse.Core.Message;
 
 namespace Glimpse.Mvc.Message
 {
-    public class ActionFilterMessage : MessageBase, IActionFilterMessage, ITimerResultMessage
+    public class ExecutionMessage : MessageBase, IExecutionMessage, ITimerResultMessage
     {
-        public ActionFilterMessage(FilterCategory? filterCategory, Type filterType, MethodInfo method, TimerResult timerResult, ControllerBase controllerBase)
+        public ExecutionMessage(FilterCategory? filterCategory, Type filterType, MethodInfo method, TimerResult timerResult, ControllerBase controllerBase)
         {
             // IsChildAction is false if ControllerContext is null
             IsChildAction = controllerBase.ControllerContext != null && controllerBase.ControllerContext.IsChildAction;

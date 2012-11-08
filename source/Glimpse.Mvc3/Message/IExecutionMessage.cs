@@ -4,7 +4,7 @@ using Glimpse.Core.Message;
 
 namespace Glimpse.Mvc.Message
 {
-    public interface IActionFilterMessage : IMessage
+    public interface IExecutionMessage : IMessage
     {
         bool IsChildAction { get; }
 

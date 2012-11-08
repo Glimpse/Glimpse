@@ -45,7 +45,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     timer));
             }
 
-            public class Message : ActionFilterMessage
+            public class Message : ExecutionMessage
             {
                 public Message(AuthorizationContext argument, Type filterType, MethodInfo method, TimerResult timerResult) : base(FilterCategory.Authorization, filterType, method, timerResult, argument.Controller)
                 {
