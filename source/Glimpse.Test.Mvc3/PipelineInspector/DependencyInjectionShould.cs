@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.PipelineInspector;
@@ -9,8 +10,15 @@ using Xunit.Extensions;
 
 namespace Glimpse.Test.Mvc3.PipelineInspector
 {
-    public class DependencyInjectionShould
+    public class DependencyInjectionShould : IDisposable
     {
+        private readonly IDependencyResolver originalResolver;
+
+        public DependencyInjectionShould()
+        {
+            originalResolver = DependencyResolver.Current;
+        }
+
         [Theory, AutoMock]
         public void ProxyDependencyResolver(DependencyInjectionInspector sut, IPipelineInspectorContext context, IDependencyResolver dependencyResolver)
         {
@@ -35,6 +43,11 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
             sut.Setup(context);
 
             Assert.Equal(dependencyResolver, DependencyResolver.Current);
+        }
+
+        public void Dispose()
+        {
+            DependencyResolver.SetResolver(originalResolver);
         }
     }
 }

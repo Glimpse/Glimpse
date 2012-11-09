@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.PipelineInspector;
@@ -9,11 +10,13 @@ using Xunit.Extensions;
 
 namespace Glimpse.Test.Mvc3.PipelineInspector
 {
-    public class ExecutionShould
+    public class ExecutionShould : IDisposable
     {
+        private readonly IControllerFactory controllerFactory;
+
         public ExecutionShould()
         {
-            ControllerBuilder.Current.SetControllerFactory(typeof(DefaultControllerFactory));
+            controllerFactory = ControllerBuilder.Current.GetControllerFactory();
         }
 
         [Theory, AutoMock]
@@ -36,6 +39,11 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
 
             Assert.Equal(ControllerBuilder.Current.GetControllerFactory(), controllerFactory);
             context.Logger.Verify(l => l.Debug(It.Is<string>(s => s.Contains("IControllerFactory")), It.IsAny<object[]>()));
+        }
+
+        public void Dispose()
+        {
+            ControllerBuilder.Current.SetControllerFactory(controllerFactory);
         }
     }
 }
