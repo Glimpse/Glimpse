@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Glimpse.Core.Extensibility
 {
@@ -11,7 +12,8 @@ namespace Glimpse.Core.Extensibility
             Logger = logger;
 
             Settings = new JsonSerializerSettings();
-                           
+            Settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            Settings.Converters.Add(new JsonNetConverterDictionaryKeysAreNotPropertyNames()); 
             Settings.Error += (obj, args) =>
                                   {
                                       Logger.Error("Error serializing object.", args.ErrorContext.Error);
@@ -35,10 +37,7 @@ namespace Glimpse.Core.Extensibility
                 throw new ArgumentNullException("converters");
             }
 
-            var jsonConverters = Settings.Converters;
-
-            jsonConverters.Clear();
-
+            var jsonConverters = Settings.Converters; 
             foreach (var converter in converters)
             {
                 jsonConverters.Add(new JsonNetSerializationConverterAdapter(converter));
