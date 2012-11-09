@@ -52,7 +52,6 @@ namespace Glimpse.Test.Core.Net35
             Assert.Equal(RuntimePolicy.On, result);
         }
 
-
         [Fact]
         public void NotParseIncorrectEnumValue()
         {
