@@ -1,84 +1,74 @@
 ﻿using System;
 using System.Web.Mvc;
 using Glimpse.Mvc.Model;
+using Glimpse.Test.Common;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Glimpse.Test.Mvc3.Model
 {
     public class ViewModelSummaryShould
     {
-        [Fact]
-        public void SetModelType()
+        [Theory, AutoMock]
+        public void SetModelType(TempDataDictionary tempData)
         {
-            var vm = DateTime.Now;
-            var viewData = new ViewDataDictionary(vm);
-            var tempData = new TempDataDictionary();
+            var viewData = new ViewDataDictionary(DateTime.Now);
 
-            var model = new ViewModelSummary(viewData, tempData);
+            var sut = new ViewModelSummary(viewData, tempData);
 
-            Assert.Equal(typeof(DateTime), model.ModelType);
+            Assert.Equal(typeof(DateTime), sut.ModelType);
         }
 
-        [Fact]
-        public void IgnoreModelTypeWithWeaklyTypedView()
+        [Theory, AutoMock]
+        public void IgnoreModelTypeWithWeaklyTypedView(TempDataDictionary tempData)
         {
             var viewData = new ViewDataDictionary();
-            var tempData = new TempDataDictionary();
 
-            var model = new ViewModelSummary(viewData, tempData);
+            var sut = new ViewModelSummary(viewData, tempData);
 
-            Assert.Null(model.ModelType);
+            Assert.Null(sut.ModelType);
         }
 
-        [Fact]
-        public void ReturnViewDataKeys()
+        [Theory, AutoMock]
+        public void ReturnViewDataKeys(TempDataDictionary tempData)
         {
-            var viewData = new ViewDataDictionary {{"A", 1}, {"B", 2}, {"C", 3}};
-            var tempData = new TempDataDictionary();
+            var viewData = new ViewDataDictionary { { "A", 1 }, { "B", 2 }, { "C", 3 } };
 
-            var model = new ViewModelSummary(viewData, tempData);
+            var sut = new ViewModelSummary(viewData, tempData);
 
-            Assert.Contains("A", model.ViewDataKeys);
-            Assert.Contains("B", model.ViewDataKeys);
-            Assert.Contains("C", model.ViewDataKeys);
+            Assert.Contains("A", sut.ViewDataKeys);
+            Assert.Contains("B", sut.ViewDataKeys);
+            Assert.Contains("C", sut.ViewDataKeys);
         }
 
-        [Fact]
-        public void ReturnTempDataKeys()
+        [Theory, AutoMock]
+        public void ReturnTempDataKeys(ViewDataDictionary viewData)
         {
-            var viewData = new ViewDataDictionary();
             var tempData = new TempDataDictionary { { "A", 1 }, { "B", 2 }, { "C", 3 } };
 
-            var model = new ViewModelSummary(viewData, tempData);
+            var sut = new ViewModelSummary(viewData, tempData);
 
-            Assert.Contains("A", model.TempDataKeys);
-            Assert.Contains("B", model.TempDataKeys);
-            Assert.Contains("C", model.TempDataKeys);
+            Assert.Contains("A", sut.TempDataKeys);
+            Assert.Contains("B", sut.TempDataKeys);
+            Assert.Contains("C", sut.TempDataKeys);
         }
 
-        [Fact]
-        public void SetInvalidModelState()
+        [Theory, AutoMock]
+        public void SetInvalidModelState(ViewDataDictionary viewData, TempDataDictionary tempData)
         {
-            var viewData = new ViewDataDictionary();
-            viewData.ModelState.AddModelError("key", "there was an error");
+            viewData.ModelState.AddModelError("key", @"there was an error");
 
-            var tempData = new TempDataDictionary();
+            var sut = new ViewModelSummary(viewData, tempData);
 
-            var model = new ViewModelSummary(viewData, tempData);
-
-            Assert.False(model.IsValid);
+            Assert.False(sut.IsValid);
         }
 
-        [Fact]
-        public void SetValidModelState()
+        [Theory, AutoMock]
+        public void SetValidModelState(ViewDataDictionary viewData, TempDataDictionary tempData)
         {
-            var viewData = new ViewDataDictionary();
+            var sut = new ViewModelSummary(viewData, tempData);
 
-            var tempData = new TempDataDictionary();
-
-            var model = new ViewModelSummary(viewData, tempData);
-
-            Assert.True(model.IsValid);
+            Assert.True(sut.IsValid);
         }
     }
 }

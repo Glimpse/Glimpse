@@ -26,7 +26,7 @@ namespace Glimpse.Test.Common
                 new View.Render.Arguments(
                     new object[]
                         {
-                            new ViewContext(),
+                            new ViewContext { ViewData = new ViewDataDictionary(), TempData = new TempDataDictionary() },
                             new StringWriter()
                         }));
         }

@@ -14,6 +14,9 @@ namespace Glimpse.Test.Common
             ActionDescriptor(fixture);
             ActionExecutedContext(fixture);
             ActionExecutingContext(fixture);
+
+            fixture.Register<IView, IViewEngine, ViewEngineResult>(
+                (view, viewEngine) => new ViewEngineResult(view, viewEngine));
         }
 
         private static void ActionExecutingContext(IFixture fixture)
