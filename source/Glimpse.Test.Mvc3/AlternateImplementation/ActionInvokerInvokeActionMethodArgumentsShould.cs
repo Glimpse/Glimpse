@@ -2,39 +2,30 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using Glimpse.Mvc.AlternateImplementation;
-using Moq;
+using Glimpse.Test.Common;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Glimpse.Test.Mvc3.AlternateImplementation
 {
     public class ActionInvokerInvokeActionMethodArgumentsShould
     {
-        [Fact]
-        public void ConstructForNonAsync()
+        [Theory, AutoMock]
+        public void ConstructForNonAsync(ControllerContext expectedControllerContext, ActionDescriptor expectedActionDescriptor, IDictionary<string, object> expectedParameters)
         {
-            var expectedControllerContext = new ControllerContext();
-            var expectedActionDescriptor = new Mock<ActionDescriptor>().Object;
-            var expectedParameters = new Dictionary<string, object>();
+            var sut = new ActionInvoker.InvokeActionMethod.Arguments(new object[] { expectedControllerContext, expectedActionDescriptor, expectedParameters });
 
-            var arguments = new ActionInvoker.InvokeActionMethod.Arguments(new object[] {expectedControllerContext, expectedActionDescriptor, expectedParameters});
-
-            Assert.Equal(expectedControllerContext, arguments.ControllerContext);
-            Assert.Equal(expectedActionDescriptor, arguments.ActionDescriptor);
-            Assert.Equal(expectedParameters, arguments.Parameters);
-            Assert.False(arguments.IsAsync);
-            Assert.Null(arguments.Callback);
-            Assert.Null(arguments.State);
+            Assert.Equal(expectedControllerContext, sut.ControllerContext);
+            Assert.Equal(expectedActionDescriptor, sut.ActionDescriptor);
+            Assert.Equal(expectedParameters, sut.Parameters);
+            Assert.False(sut.IsAsync);
+            Assert.Null(sut.Callback);
+            Assert.Null(sut.State);
         }
 
-        [Fact]
-        public void ConstructForAsync()
+        [Theory, AutoMock]
+        public void ConstructForAsync(ControllerContext expectedControllerContext, ActionDescriptor expectedActionDescriptor, IDictionary<string, object> expectedParameters, AsyncCallback expectedCallback, string expectedState)
         {
-            var expectedControllerContext = new ControllerContext();
-            var expectedActionDescriptor = new Mock<ActionDescriptor>().Object;
-            var expectedParameters = new Dictionary<string, object>();
-            AsyncCallback expectedCallback = null; //hack for testing!
-            var expectedState = "any object";
-
             var arguments = new ActionInvoker.InvokeActionMethod.Arguments(new object[] { expectedControllerContext, expectedActionDescriptor, expectedParameters, expectedCallback, expectedState });
 
             Assert.Equal(expectedControllerContext, arguments.ControllerContext);

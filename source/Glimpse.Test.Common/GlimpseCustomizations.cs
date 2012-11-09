@@ -1,5 +1,8 @@
+using System.IO;
+using System.Web.Mvc;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
+using Glimpse.Mvc.AlternateImplementation;
 using Moq;
 using Ploeh.AutoFixture;
 
@@ -10,12 +13,44 @@ namespace Glimpse.Test.Common
         public void Customize(IFixture fixture)
         {
             IAlternateImplementationContext(fixture);
+
+            ViewEngineFindViewArguments(fixture);
+
+            ViewRenderArguments(fixture);
         }
 
-        private static void IAlternateImplementationContext(IFixture fixture)
+        private static void ViewRenderArguments(IFixture fixture)
         {
-            fixture.Register<IMessageBroker, IProxyFactory, IExecutionTimer, IAlternateImplementationContext>(
-                (broker, proxy, timer) =>
+            fixture.Register(
+                () =>
+                new View.Render.Arguments(
+                    new object[]
+                        {
+                            new ViewContext(),
+                            new StringWriter()
+                        }));
+        }
+
+        private static void ViewEngineFindViewArguments(IFixture fixture)
+        {
+            fixture.Register<string, bool, ViewEngine.FindViews.Arguments>(
+                (viewName, isPartial) =>
+                new ViewEngine.FindViews.Arguments(
+                    new object[]
+                        {
+                            new ControllerContext(),
+                            viewName,
+                            true
+                        },
+                    isPartial));
+        }
+
+// ReSharper disable InconsistentNaming
+        private static void IAlternateImplementationContext(IFixture fixture)
+// ReSharper restore InconsistentNaming
+        {
+            fixture.Register<IMessageBroker, IProxyFactory, IExecutionTimer, ILogger, IAlternateImplementationContext>(
+                (broker, proxy, timer, logger) =>
                     {
                         var mock = new Mock<IAlternateImplementationContext>();
                         mock.Setup(m => m.MessageBroker).Returns(broker);
@@ -24,6 +59,7 @@ namespace Glimpse.Test.Common
                         mock.Setup(m => m.TimerStrategy).Returns(() => timer);
                         mock.Setup(m => m.InvocationTarget).Returns(new object());
                         mock.Setup(m => m.MethodInvocationTarget).Returns(typeof(object).GetMethod("ToString"));
+                        mock.Setup(m => m.Logger).Returns(logger);
                         return mock.Object;
                     });
         }

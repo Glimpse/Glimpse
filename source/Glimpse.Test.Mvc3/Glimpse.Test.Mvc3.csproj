@@ -117,8 +117,6 @@
     <Compile Include="TestDoubles\DummyAsyncController.cs" />
     <Compile Include="TestDoubles\DummyController.cs" />
     <Compile Include="TestDoubles\DummyView.cs" />
-    <Compile Include="Tester\ControllerFactoryCreateControllerTester.cs" />
-    <Compile Include="Tester\ViewEngineFindViewsTester.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Glimpse.AspNet\Glimpse.AspNet.csproj">

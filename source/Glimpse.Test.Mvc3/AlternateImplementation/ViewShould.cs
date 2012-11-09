@@ -1,19 +1,19 @@
 ﻿using System.Linq;
-using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.AlternateImplementation;
-using Moq;
+using Glimpse.Test.Common;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Glimpse.Test.Mvc3.AlternateImplementation
 {
     public class ViewShould
     {
-        [Fact]
-        public void GetAlternateImplementations()
+        [Theory, AutoMock]
+        public void GetAlternateImplementations(View sut)
         {
-            var implementations = new View(new Mock<IProxyFactory>().Object).AllMethods();
+            var allMethods = sut.AllMethods();
 
-            Assert.True(implementations.Count() == 1);
+            Assert.True(allMethods.Count() == 1);
         }
     }
 }

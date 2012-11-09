@@ -1,135 +1,102 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Glimpse.Core.Extensibility;
 using Glimpse.Core;
+using Glimpse.Core.Extensibility;
 using Glimpse.Core.Message;
 using Glimpse.Mvc.AlternateImplementation;
-using Glimpse.Test.Mvc3.Tester;
+using Glimpse.Test.Common;
 using Moq;
+using Ploeh.AutoFixture;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Glimpse.Test.Mvc3.AlternateImplementation
 {
-    public class ViewEngineFindViewsShould:IDisposable
+    public class ViewEngineFindViewsShould
     {
-        private ViewEngineFindViewsTester implementation;
-        public ViewEngineFindViewsTester Implementation
-        {
-            get { return implementation ?? (implementation = ViewEngineFindViewsTester.Create()); }
-            set { implementation = value; }
-        }
+        private readonly IFixture fixture = new Fixture();
 
-        public void Dispose()
+        [Theory, AutoMock]
+        public void ReturnAllMethodImplementationsWithAllMethods(ViewEngine sut)
         {
-            Implementation = null;
-        }
+            var allMethods = sut.AllMethods();
 
-        [Fact]
-        public void ReturnAllMethodImplementationsWithAllMethods()
-        {
-            var implementations = new ViewEngine(new Mock<IProxyFactory>().Object).AllMethods();
-
-            Assert.Equal(2, implementations.Count());
+            Assert.Equal(2, allMethods.Count());
         }
 
         [Fact]
         public void Construct()
         {
-            var implementation = new ViewEngine.FindViews(false);
+            var sut = new ViewEngine.FindViews(false);
 
-            Assert.NotNull(implementation);
-            Assert.NotNull(implementation as IAlternateImplementation<IViewEngine>);
+            Assert.NotNull(sut);
+            Assert.IsAssignableFrom<IAlternateImplementation<IViewEngine>>(sut);
         }
 
         [Fact]
         public void MethodToImplementIsRight()
         {
-            Assert.Equal(typeof(IViewEngine), Implementation.MethodToImplement.DeclaringType);
+            var sut1 = new ViewEngine.FindViews(false);
+            Assert.Equal("FindView", sut1.MethodToImplement.Name);
+
+            var sut2 = new ViewEngine.FindViews(true);
+            Assert.Equal("FindPartialView", sut2.MethodToImplement.Name);
         }
 
-        [Fact]
-        public void ProceedIfRuntimePolicyIsOff()
+        [Theory, AutoMock]
+        public void ProceedIfRuntimePolicyIsOff(ViewEngine.FindViews sut, IAlternateImplementationContext context)
         {
-            var findViews = new ViewEngine.FindViews(false);
-            var contextMock = new Mock<IAlternateImplementationContext>();
-            contextMock.Setup(c => c.MessageBroker).Returns(Implementation.MessageBrokerMock.Object);
-            contextMock.Setup(c => c.ProxyFactory).Returns(Implementation.ProxyFactoryMock.Object);
-            contextMock.Setup(c => c.Logger).Returns(Implementation.LoggerMock.Object);
-            contextMock.Setup(c => c.TimerStrategy).Returns(() => new ExecutionTimer(Stopwatch.StartNew()));
-            contextMock.Setup(c => c.RuntimePolicyStrategy).Returns(() => RuntimePolicy.Off);
+            context.Setup(c => c.RuntimePolicyStrategy).Returns(() => RuntimePolicy.Off);
 
-            findViews.NewImplementation(contextMock.Object);
+            sut.NewImplementation(context);
 
-            contextMock.Verify(c=>c.Proceed());
+            context.Verify(c => c.Proceed());
         }
 
-        [Fact]
-        public void PublishMessagesIfRuntimePolicyIsOnAndViewNotFound()
+        [Theory, AutoMock]
+        public void PublishMessagesIfRuntimePolicyIsOnAndViewNotFound(ViewEngine.FindViews sut, IAlternateImplementationContext context)
         {
-            var findViews = new ViewEngine.FindViews(false);
+            context.Setup(c => c.Arguments).Returns(GetArguments());
+            context.Setup(c => c.ReturnValue).Returns(new ViewEngineResult(Enumerable.Empty<string>()));
 
-            var controllerContext = new ControllerContext();
-            var viewName = "anything";
-            var useCache = true;
+            sut.NewImplementation(context);
 
-            var args = new object[] { controllerContext, viewName, "MasterName", useCache };
-
-            var contextMock = new Mock<IAlternateImplementationContext>();
-            contextMock.Setup(c => c.Arguments).Returns(args);
-            contextMock.Setup(c => c.ReturnValue).Returns(new ViewEngineResult(Enumerable.Empty<string>()));
-            contextMock.Setup(c => c.MessageBroker).Returns(Implementation.MessageBrokerMock.Object);
-            contextMock.Setup(c => c.ProxyFactory).Returns(Implementation.ProxyFactoryMock.Object);
-            contextMock.Setup(c => c.Logger).Returns(Implementation.LoggerMock.Object);
-            contextMock.Setup(c => c.TimerStrategy).Returns(() => new ExecutionTimer(Stopwatch.StartNew()));
-            contextMock.Setup(c => c.RuntimePolicyStrategy).Returns(() => RuntimePolicy.On);
-
-            findViews.NewImplementation(contextMock.Object);
-
-            Implementation.MessageBrokerMock.Verify(b=>b.Publish(It.IsAny<ViewEngine.FindViews.Message>()));
-            Implementation.MessageBrokerMock.Verify(b=>b.Publish(It.IsAny<TimerResultMessage>()));
+            context.MessageBroker.Verify(b => b.Publish(It.IsAny<ViewEngine.FindViews.Message>()));
+            context.MessageBroker.Verify(b => b.Publish(It.IsAny<TimerResultMessage>()));
         }
 
-        [Fact]
-        public void PublishMessagesIfRuntimePolicyIsOnAndViewIsFound()
+        [Theory, AutoMock]
+        public void PublishMessagesIfRuntimePolicyIsOnAndViewIsFound(ViewEngine.FindViews sut, IAlternateImplementationContext context, IView view, IViewEngine engine)
         {
-            var viewMock = new Mock<IView>();
-            var engineMock = new Mock<IViewEngine>();
+            context.Setup(c => c.Arguments).Returns(GetArguments);
+            context.Setup(c => c.ReturnValue).Returns(new ViewEngineResult(view, engine));
+            context.ProxyFactory.Setup(p => p.IsProxyable(It.IsAny<object>())).Returns(true);
+            context.ProxyFactory.Setup(p => 
+                    p.CreateProxy(
+                        It.IsAny<IView>(), 
+                        It.IsAny<IEnumerable<IAlternateImplementation<IView>>>(), 
+                        It.IsAny<object>()))
+                    .Returns(view);
 
-            Implementation.ProxyFactoryMock.Setup(p => p.IsProxyable(It.IsAny<object>())).Returns(true);
-            Implementation.ProxyFactoryMock.Setup(
-                p =>
-                p.CreateProxy(It.IsAny<IView>(), It.IsAny<IEnumerable<IAlternateImplementation<IView>>>(),
-                              It.IsAny<object>())).Returns(viewMock.Object);
+            sut.NewImplementation(context);
 
-            var findViews = new ViewEngine.FindViews(false);
+            context.ProxyFactory.Verify(p => p.IsProxyable(It.IsAny<object>()));
+            context.Logger.Verify(l => l.Info(It.IsAny<string>(), It.IsAny<object[]>()));
+            context.VerifySet(c => c.ReturnValue = It.IsAny<ViewEngineResult>());
+            context.MessageBroker.Verify(b => b.Publish(It.IsAny<ViewEngine.FindViews.Message>()));
+            context.MessageBroker.Verify(b => b.Publish(It.IsAny<TimerResultMessage>()));
+        }
 
-            var controllerContext = new ControllerContext();
-            var viewName = "anything";
-            var useCache = true;
-
-            var args = new object[] { controllerContext, viewName, "MasterName", useCache };
-
-            var contextMock = new Mock<IAlternateImplementationContext>();
-            contextMock.Setup(c => c.Arguments).Returns(args);
-            contextMock.Setup(c => c.MessageBroker).Returns(Implementation.MessageBrokerMock.Object);
-            contextMock.Setup(c => c.ProxyFactory).Returns(Implementation.ProxyFactoryMock.Object);
-            contextMock.Setup(c => c.Logger).Returns(Implementation.LoggerMock.Object);
-            contextMock.Setup(c => c.TimerStrategy).Returns(() => new ExecutionTimer(Stopwatch.StartNew()));
-            contextMock.Setup(c => c.RuntimePolicyStrategy).Returns(() => RuntimePolicy.On);
-
-            var viewEngineResult = new ViewEngineResult(viewMock.Object, engineMock.Object);
-            contextMock.Setup(c => c.ReturnValue).Returns(viewEngineResult);
-
-            findViews.NewImplementation(contextMock.Object);
-
-            Implementation.ProxyFactoryMock.Verify(p=>p.IsProxyable(It.IsAny<object>()));
-            Implementation.LoggerMock.Verify(l=>l.Info(It.IsAny<string>(), It.IsAny<object[]>()));
-            contextMock.VerifySet(c=>c.ReturnValue = It.IsAny<ViewEngineResult>());
-            Implementation.MessageBrokerMock.Verify(b => b.Publish(It.IsAny<ViewEngine.FindViews.Message>()));
-            Implementation.MessageBrokerMock.Verify(b => b.Publish(It.IsAny<TimerResultMessage>()));
+        private object[] GetArguments()
+        {
+            return new object[]
+                {
+                    new ControllerContext(), 
+                    fixture.CreateAnonymous("ViewName"), 
+                    fixture.CreateAnonymous("MasterName"), 
+                    fixture.CreateAnonymous<bool>()
+                };
         }
     }
 }

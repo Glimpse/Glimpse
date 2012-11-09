@@ -3,93 +3,61 @@ using System.Linq;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.AlternateImplementation;
+using Glimpse.Test.Common;
 using Moq;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Glimpse.Test.Mvc3.AlternateImplementation
 {
     public class ViewEngineFindViewsMessageShould
     {
-        [Fact]
-        public void NotFindViewWithMissingViewEngineResult()
+        [Theory, AutoMock]
+        public void NotFindViewWithMissingViewEngineResult(ViewEngine.FindViews.Arguments input, TimerResult timing, Type baseType, bool isPartial, Guid id)
         {
-            var input = new ViewEngine.FindViews.Arguments(new object[] {new ControllerContext(), "ViewName", false}, true);
             var output = new ViewEngineResult(Enumerable.Empty<string>());
-            var timing = new TimerResult();
-            var baseType = typeof (string);
-            var isPartial = false;
-            var id = Guid.NewGuid();
 
-            var message = new ViewEngine.FindViews.Message(input, output, timing, baseType, isPartial, id);
+            var sut = new ViewEngine.FindViews.Message(input, output, timing, baseType, isPartial, id);
 
-            Assert.Equal(input, message.Input);
-            Assert.Equal(output, message.Output);
-            Assert.Equal(timing, message.Timing);
-            Assert.Equal(isPartial, message.IsPartial);
-            Assert.Equal(id, message.Id);
-            Assert.False(message.IsFound);
+            Assert.Equal(input, sut.Input);
+            Assert.Equal(output, sut.Output);
+            Assert.Equal(timing, sut.Timing);
+            Assert.Equal(isPartial, sut.IsPartial);
+            Assert.Equal(id, sut.Id);
+            Assert.False(sut.IsFound);
         }
 
-        [Fact]
-        public void FindViewWIthViewEngineResult()
+        [Theory, AutoMock]
+        public void FindViewWithViewEngineResult(ViewEngine.FindViews.Arguments input, TimerResult timing, Type baseType, bool isPartial, Guid id)
         {
-            var viewMock = new Mock<IView>();
-            var viewEngineMock = new Mock<IViewEngine>();
+            var output = new ViewEngineResult(new Mock<IView>().Object, new Mock<IViewEngine>().Object);
 
-            var input = new ViewEngine.FindViews.Arguments(new object[] { new ControllerContext(), "ViewName", "MasterName", false }, false);
-            var output = new ViewEngineResult(viewMock.Object, viewEngineMock.Object);
-            var timing = new TimerResult();
-            var baseType = typeof(string);
-            var isPartial = false;
-            var id = Guid.NewGuid();
+            var sut = new ViewEngine.FindViews.Message(input, output, timing, baseType, isPartial, id);
 
-            var message = new ViewEngine.FindViews.Message(input, output, timing, baseType, isPartial, id);
-
-            Assert.Equal(input, message.Input);
-            Assert.Equal(output, message.Output);
-            Assert.Equal(timing, message.Timing);
-            Assert.Equal(isPartial, message.IsPartial);
-            Assert.Equal(id, message.Id);
-            Assert.True(message.IsFound);
+            Assert.Equal(input, sut.Input);
+            Assert.Equal(output, sut.Output);
+            Assert.Equal(timing, sut.Timing);
+            Assert.Equal(isPartial, sut.IsPartial);
+            Assert.Equal(id, sut.Id);
+            Assert.True(sut.IsFound);
         }
 
-        [Fact]
-        public void ThrowArgumentExceptionWithNullInput()
+        [Theory, AutoMock]
+        public void ThrowArgumentExceptionWithNullInput(ViewEngineResult output, TimerResult timing, Type baseType, bool isPartial, Guid id)
         {
-            ViewEngine.FindViews.Arguments input = null;
-            var output = new ViewEngineResult(Enumerable.Empty<string>());
-            var timing = new TimerResult();
-            var baseType = typeof(string);
-            var isPartial = false;
-            var id = Guid.NewGuid();
-
-            Assert.Throws<ArgumentNullException>(()=> new ViewEngine.FindViews.Message(input, output, timing, baseType, isPartial, id));
+            Assert.Throws<ArgumentNullException>(() => new ViewEngine.FindViews.Message(null, output, timing, baseType, isPartial, id));
         }
 
-        [Fact]
-        public void ThrowArgumentExceptionWithNullOutput()
+        [Theory, AutoMock]
+        public void ThrowArgumentExceptionWithNullOutput(ViewEngine.FindViews.Arguments input, TimerResult timing, Type baseType, bool isPartial, Guid id)
         {
-            var input = new ViewEngine.FindViews.Arguments(new object[] { new ControllerContext(), "ViewName", false }, true);
-            ViewEngineResult output = null;
-            var timing = new TimerResult();
-            var baseType = typeof(string);
-            var isPartial = false;
-            var id = Guid.NewGuid();
-
-            Assert.Throws<ArgumentNullException>(() => new ViewEngine.FindViews.Message(input, output, timing, baseType, isPartial, id));
+            Assert.Throws<ArgumentNullException>(() => new ViewEngine.FindViews.Message(input, null, timing, baseType, isPartial, id));
         }
 
-        [Fact]
-        public void ThrowArgumentExceptionWithNullTiming()
+        [Theory, AutoMock]
+        public void ThrowArgumentExceptionWithNullTiming(ViewEngine.FindViews.Arguments input, ViewEngineResult output, Type baseType, bool isPartial, Guid id)
         {
-            var input = new ViewEngine.FindViews.Arguments(new object[] { new ControllerContext(), "ViewName", false }, true);
-            var output = new ViewEngineResult(Enumerable.Empty<string>());
-            TimerResult timing = null;
-            var baseType = typeof(string);
-            var isPartial = false;
-            var id = Guid.NewGuid();
-
-            Assert.Throws<ArgumentNullException>(() => new ViewEngine.FindViews.Message(input, output, timing, baseType, isPartial, id));
+            Assert.Throws<ArgumentNullException>(() => new ViewEngine.FindViews.Message(input, output, null, baseType, isPartial, id));
         }
     }
 }

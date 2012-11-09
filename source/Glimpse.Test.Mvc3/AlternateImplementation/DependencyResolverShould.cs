@@ -1,18 +1,16 @@
-﻿using Glimpse.Core.Extensibility;
-using Glimpse.Mvc.AlternateImplementation;
-using Moq;
+﻿using Glimpse.Mvc.AlternateImplementation;
+using Glimpse.Test.Common;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Glimpse.Test.Mvc3.AlternateImplementation
 {
     public class DependencyResolverShould
     {
-        [Fact]
-        public void ReturnAllMethods()
+        [Theory, AutoMock]
+        public void ReturnAllMethods(DependencyResolver sut)
         {
-            var allMethods = new DependencyResolver(new Mock<IProxyFactory>().Object).AllMethods();
-
-            Assert.NotEmpty(allMethods);
+            Assert.NotEmpty(sut.AllMethods());
         }
     }
 }

@@ -4,7 +4,6 @@ using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.AlternateImplementation;
 using Glimpse.Test.Common;
-using Moq;
 using Xunit;
 using Xunit.Extensions;
 

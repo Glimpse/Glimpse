@@ -12,10 +12,10 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         {
             var viewContext = new ViewContext();
             var textWriter = new StringWriter();
-            var arguments = new View.Render.Arguments(new object[] {viewContext, textWriter});
+            var sut = new View.Render.Arguments(new object[] { viewContext, textWriter });
 
-            Assert.Equal(viewContext, arguments.ViewContext);
-            Assert.Equal(textWriter, arguments.Writer);
+            Assert.Equal(viewContext, sut.ViewContext);
+            Assert.Equal(textWriter, sut.Writer);
         } 
     }
 }

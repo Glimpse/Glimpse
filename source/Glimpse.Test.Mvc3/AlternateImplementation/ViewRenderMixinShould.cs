@@ -1,23 +1,21 @@
 ﻿using System;
 using Glimpse.Mvc.AlternateImplementation;
+using Glimpse.Test.Common;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Glimpse.Test.Mvc3.AlternateImplementation
 {
     public class ViewRenderMixinShould
     {
-        [Fact]
-        public void SetProperties()
+        [Theory, AutoMock]
+        public void SetProperties(string viewName, bool isPartial, Guid id)
         {
-            var viewName = "AView";
-            var isPartial = true;
-            var id = Guid.NewGuid();
+            var sut = new ViewCorrelationMixin(viewName, isPartial, id);
 
-            var mixin = new ViewCorrelationMixin(viewName, isPartial, id);
-
-            Assert.Equal(viewName, mixin.ViewName);
-            Assert.Equal(isPartial, mixin.IsPartial);
-            Assert.Equal(id, mixin.ViewEngineFindCallId);
+            Assert.Equal(viewName, sut.ViewName);
+            Assert.Equal(isPartial, sut.IsPartial);
+            Assert.Equal(id, sut.ViewEngineFindCallId);
         } 
     }
 }

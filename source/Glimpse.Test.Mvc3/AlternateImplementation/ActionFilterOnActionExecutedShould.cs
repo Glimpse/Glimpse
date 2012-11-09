@@ -2,7 +2,6 @@
 using System.Web.Mvc;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Message;
 using Glimpse.Mvc.AlternateImplementation;
 using Glimpse.Test.Common;
 using Moq;
@@ -37,7 +36,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Theory, AutoMock]
         public void PublishMessageWhenExecuted([Frozen] IExecutionTimer timer, ActionExecutedContext argument, IAlternateImplementationContext context)
         {
-            context.Setup(c => c.Arguments).Returns(new[] { argument });
+            context.Setup(c => c.Arguments).Returns(new object[] { argument });
 
             var impl = new ActionFilter.OnActionExecuted();
 

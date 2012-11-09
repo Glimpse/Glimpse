@@ -36,5 +36,10 @@ namespace Glimpse.Test.Common
         {
             return Mock.Get(obj).Setup(expression);
         }
+
+        public static void VerifySet<T>(this T obj, Action<T> expression) where T : class
+        {
+            Mock.Get(obj).VerifySet(expression);
+        }
     }
 }

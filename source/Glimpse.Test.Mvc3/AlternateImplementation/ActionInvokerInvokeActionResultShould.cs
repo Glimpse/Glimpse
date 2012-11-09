@@ -1,10 +1,8 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Message;
 using Glimpse.Mvc.AlternateImplementation;
 using Glimpse.Test.Common;
 using Glimpse.Test.Mvc3.TestDoubles;

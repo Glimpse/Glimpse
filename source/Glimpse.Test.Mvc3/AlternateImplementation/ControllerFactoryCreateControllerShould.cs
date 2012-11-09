@@ -1,76 +1,71 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
-using Glimpse.Core.Extensibility;
+using System.Web.Routing;
 using Glimpse.Core;
+using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.AlternateImplementation;
+using Glimpse.Test.Common;
 using Glimpse.Test.Mvc3.TestDoubles;
-using Glimpse.Test.Mvc3.Tester;
 using Moq;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Glimpse.Test.Mvc3.AlternateImplementation
 {
-    public class ControllerFactoryCreateControllerShould:IDisposable
+    public class ControllerFactoryCreateControllerShould
     {
-        private ControllerFactoryCreateControllerTester tester;
-        public ControllerFactoryCreateControllerTester Tester
+        [Theory, AutoMock]
+        public void SetMethodToImplement(ControllerFactory.CreateController sut)
         {
-            get { return tester ?? (tester = ControllerFactoryCreateControllerTester.Create()); }
-            set { tester = value; }
-        }
-
-        public void Dispose()
-        {
-            Tester = null;
-        }
-
-        [Fact]
-        public void SetMethodToImplement()
-        {
-            var result = Tester.MethodToImplement;
+            var result = sut.MethodToImplement;
 
             Assert.Equal("CreateController", result.Name);
         }
 
-        [Fact]
-        public void ProceedImmediatlyIfRuntimePolicyOff()
+        [Theory, AutoMock]
+        public void ProceedImmediatlyIfRuntimePolicyOff(ControllerFactory.CreateController sut, IAlternateImplementationContext context)
         {
-            Tester.ContextMock.Setup(c => c.RuntimePolicyStrategy).Returns(() => RuntimePolicy.Off);
+            context.Setup(c => c.RuntimePolicyStrategy).Returns(() => RuntimePolicy.Off);
 
-            Tester.NewImplementation(Tester.ContextMock.Object);
+            sut.NewImplementation(context);
 
-            Tester.ContextMock.Verify(c=>c.Proceed());
-            Tester.MessageBrokerMock.Verify(mb => mb.Publish(It.IsAny<ControllerFactory.CreateController.Message>()), Times.Never());
+            context.Verify(c => c.Proceed());
+            context.MessageBroker.Verify(mb => mb.Publish(It.IsAny<ControllerFactory.CreateController.Message>()), Times.Never());
         }
 
-        [Fact]
-        public void PublishMessageIfRuntimePolicyOn()
+        [Theory, AutoMock]
+        public void PublishMessageIfRuntimePolicyOn(ControllerFactory.CreateController sut, IAlternateImplementationContext context, RequestContext requestContext, string controllerName)
         {
-            Tester.NewImplementation(Tester.ContextMock.Object);
+            context.Setup(c => c.Arguments).Returns(new object[] { requestContext, controllerName });
 
-            Tester.MessageBrokerMock.Verify(mb=>mb.Publish(It.IsAny<ControllerFactory.CreateController.Message>()));
+            sut.NewImplementation(context);
+
+            context.MessageBroker.Verify(mb => mb.Publish(It.IsAny<ControllerFactory.CreateController.Message>()));
         }
 
-        [Fact]
-        public void ProxyActionInvokerIfAsyncControllerFound()
+        [Theory, AutoMock]
+        public void ProxyActionInvokerIfAsyncControllerFound(ControllerFactory.CreateController sut, IAlternateImplementationContext context, RequestContext requestContext, string controllerName)
         {
-            Tester.ContextMock.Setup(c => c.ReturnValue).Returns(new DummyAsyncController());
+            context.Setup(c => c.ReturnValue).Returns(new DummyAsyncController());
+            context.Setup(c => c.Arguments).Returns(new object[] { requestContext, controllerName });
+            context.ProxyFactory.Setup(p => p.IsProxyable(It.IsAny<IActionInvoker>())).Returns(true);
 
-            Tester.NewImplementation(Tester.ContextMock.Object);
+            sut.NewImplementation(context);
 
-            Tester.ProxyFactoryMock.Verify(p => p.CreateProxy(It.IsAny<AsyncControllerActionInvoker>(), It.IsAny<IEnumerable<IAlternateImplementation<AsyncControllerActionInvoker>>>(), It.IsAny<object>()));
+            context.ProxyFactory.Verify(p => p.CreateProxy(It.IsAny<AsyncControllerActionInvoker>(), It.IsAny<IEnumerable<IAlternateImplementation<AsyncControllerActionInvoker>>>(), It.IsAny<object>()));
         }
 
-        [Fact]
-        public void ProxyActionInvokerIfControllerFound()
+        [Theory, AutoMock]
+        public void ProxyActionInvokerIfControllerFound(ControllerFactory.CreateController sut, IAlternateImplementationContext context, RequestContext requestContext, string controllerName)
         {
-            Tester.ContextMock.Setup(c => c.ReturnValue).Returns(new DummyController());
+            context.Setup(c => c.ReturnValue).Returns(new DummyController());
+            context.Setup(c => c.Arguments).Returns(new object[] { requestContext, controllerName });
+            context.ProxyFactory.Setup(p => p.IsProxyable(It.IsAny<IActionInvoker>())).Returns(true);
 
-            Tester.NewImplementation(Tester.ContextMock.Object);
+            sut.NewImplementation(context);
 
-            Tester.ProxyFactoryMock.Verify(p => p.CreateProxy(It.IsAny<ControllerActionInvoker>(), It.IsAny<IEnumerable<IAlternateImplementation<ControllerActionInvoker>>>(), null));
+            context.ProxyFactory.Verify(p => p.CreateProxy(It.IsAny<ControllerActionInvoker>(), It.IsAny<IEnumerable<IAlternateImplementation<ControllerActionInvoker>>>(), null));
         }
     }
 }

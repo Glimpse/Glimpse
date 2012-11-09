@@ -1,47 +1,38 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
 using Glimpse.Mvc.AlternateImplementation;
-using Moq;
+using Glimpse.Test.Common;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Glimpse.Test.Mvc3.AlternateImplementation
 {
     public class ControllerFactoryCreateControllerMessageShould
     {
-        [Fact]
-        public void Construct()
+        [Theory, AutoMock]
+        public void Construct(RequestContext requestContext, string controllerName, IController controller)
         {
-
-            var routeData = new RouteData();
-            var requestContext = new RequestContext{RouteData = routeData};
-            var controllerName = "aName";
             var arguments = new ControllerFactory.CreateController.Arguments(new object[] { requestContext, controllerName });
 
-            var controllerMock = new Mock<IController>();
+            var sut = new ControllerFactory.CreateController.Message(arguments, controller);
 
-            var message = new ControllerFactory.CreateController.Message(arguments, controllerMock.Object);
-
-            Assert.Equal(routeData, message.RouteData);
-            Assert.Equal(controllerName, message.ControllerName);
-            Assert.True(message.IsControllerResolved);
-            Assert.Equal(controllerMock.Object.GetType(), message.ControllerType);
+            Assert.Equal(requestContext.RouteData, sut.RouteData);
+            Assert.Equal(controllerName, sut.ControllerName);
+            Assert.True(sut.IsControllerResolved);
+            Assert.Equal(controller.GetType(), sut.ControllerType);
         }
 
-        [Fact]
-        public void ConstructWithNullController()
+        [Theory, AutoMock]
+        public void ConstructWithNullController(RequestContext requestContext, string controllerName, IController controller)
         {
-
-            var routeData = new RouteData();
-            var requestContext = new RequestContext { RouteData = routeData };
-            var controllerName = "aName";
             var arguments = new ControllerFactory.CreateController.Arguments(new object[] { requestContext, controllerName });
 
-            var message = new ControllerFactory.CreateController.Message(arguments, null);
+            var sut = new ControllerFactory.CreateController.Message(arguments, null);
 
-            Assert.Equal(routeData, message.RouteData);
-            Assert.Equal(controllerName, message.ControllerName);
-            Assert.False(message.IsControllerResolved);
-            Assert.Null(message.ControllerType);
+            Assert.Equal(requestContext.RouteData, sut.RouteData);
+            Assert.Equal(controllerName, sut.ControllerName);
+            Assert.False(sut.IsControllerResolved);
+            Assert.Null(sut.ControllerType);
         }
     }
 }

@@ -1,34 +1,31 @@
-﻿using Glimpse.Mvc.AlternateImplementation;
+﻿using System;
+using Glimpse.Mvc.AlternateImplementation;
+using Glimpse.Test.Common;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Glimpse.Test.Mvc3.AlternateImplementation
 {
     public class DependencyResolverGetServiceMessageShould
     {
-        [Fact]
-        public void Construct()
+        [Theory, AutoMock]
+        public void Construct(Type input, string output)
         {
-            var input = typeof(string);
-            var output = "output";
+            var sut = new DependencyResolver.GetService.Message(input, output);
 
-            var message = new DependencyResolver.GetService.Message(input, output);
-
-            Assert.Equal(input, message.ServiceType);
-            Assert.Equal(output.GetType(), message.ResolvedType);
-            Assert.True(message.IsResolved);
+            Assert.Equal(input, sut.ServiceType);
+            Assert.Equal(output.GetType(), sut.ResolvedType);
+            Assert.True(sut.IsResolved);
         }
 
-        [Fact]
-        public void HandleNullResolvedObjects()
+        [Theory, AutoMock]
+        public void HandleNullResolvedObjects(Type input)
         {
-            var input = typeof(string);
-            object output = null;
+            var sut = new DependencyResolver.GetService.Message(input, null);
 
-            var message = new DependencyResolver.GetService.Message(input, output);
-
-            Assert.Equal(input, message.ServiceType);
-            Assert.Equal(null, message.ResolvedType);
-            Assert.False(message.IsResolved);
+            Assert.Equal(input, sut.ServiceType);
+            Assert.Equal(null, sut.ResolvedType);
+            Assert.False(sut.IsResolved);
         }
     }
 }

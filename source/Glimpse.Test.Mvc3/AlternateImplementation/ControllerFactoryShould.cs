@@ -1,18 +1,16 @@
-﻿using Glimpse.Core.Extensibility;
-using Glimpse.Mvc.AlternateImplementation;
-using Moq;
+﻿using Glimpse.Mvc.AlternateImplementation;
+using Glimpse.Test.Common;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Glimpse.Test.Mvc3.AlternateImplementation
 {
     public class ControllerFactoryShould
     {
-        [Fact]
-        public void ReturnAllAlternateImplementations()
+        [Theory, AutoMock]
+        public void ReturnAllAlternateImplementations(ControllerFactory sut)
         {
-            var implementations = new ControllerFactory(new Mock<IProxyFactory>().Object).AllMethods();
-
-            Assert.NotEmpty(implementations);
+            Assert.NotEmpty(sut.AllMethods());
         }
     }
 }

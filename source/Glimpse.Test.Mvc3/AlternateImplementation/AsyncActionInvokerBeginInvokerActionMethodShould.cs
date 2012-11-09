@@ -5,8 +5,10 @@ using System.Web.Mvc.Async;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.AlternateImplementation;
+using Glimpse.Test.Common;
 using Moq;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Glimpse.Test.Mvc3.AlternateImplementation
 {
@@ -15,56 +17,40 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Fact]
         public void ImplementProperMethod()
         {
-            IAlternateImplementation<AsyncControllerActionInvoker> implementation = new AsyncActionInvoker.BeginInvokeActionMethod();
+            IAlternateImplementation<AsyncControllerActionInvoker> sut = new AsyncActionInvoker.BeginInvokeActionMethod();
 
-            Assert.Equal("BeginInvokeActionMethod", implementation.MethodToImplement.Name);
+            Assert.Equal("BeginInvokeActionMethod", sut.MethodToImplement.Name);
         }
 
-        [Fact]
-        public void ProceedAndReturnWithRuntimePolicyOff()
+        [Theory, AutoMock]
+        public void ProceedAndReturnWithRuntimePolicyOff(AsyncActionInvoker.BeginInvokeActionMethod sut, IAlternateImplementationContext context)
         {
-            Func<RuntimePolicy> runtimePolicyStrategy = () => RuntimePolicy.Off;
+            context.Setup(c => c.RuntimePolicyStrategy).Returns(() => RuntimePolicy.Off);
 
-            var implementation = new AsyncActionInvoker.BeginInvokeActionMethod();
+            sut.NewImplementation(context);
 
-            var contextMock = new Mock<IAlternateImplementationContext>();
-            contextMock.Setup(c => c.RuntimePolicyStrategy).Returns(runtimePolicyStrategy);
-            contextMock.Setup(c => c.TimerStrategy).Returns(() => new Mock<IExecutionTimer>().Object);
-            contextMock.Setup(c => c.MessageBroker).Returns(new Mock<IMessageBroker>().Object);
-
-            implementation.NewImplementation(contextMock.Object);
-
-            contextMock.Verify(c=>c.Proceed());
-            contextMock.Verify(c=>c.Proxy, Times.Never());
+            context.Verify(c => c.Proceed());
+            context.Verify(c => c.Proxy, Times.Never());
         }
 
-        [Fact]
-        public void StartTimingExecution()
+        [Theory, AutoMock]
+        public void StartTimingExecution(AsyncActionInvoker.BeginInvokeActionMethod sut, IAlternateImplementationContext context, IActionInvokerStateMixin mixin)
         {
-            Func<RuntimePolicy> runtimePolicyStrategy = () => RuntimePolicy.On;
-
-            var implementation = new AsyncActionInvoker.BeginInvokeActionMethod();
-
-            var contextMock = new Mock<IAlternateImplementationContext>();
-            contextMock.Setup(c => c.RuntimePolicyStrategy).Returns(runtimePolicyStrategy);
-            contextMock.Setup(c => c.TimerStrategy).Returns(() => new Mock<IExecutionTimer>().Object);
-            contextMock.Setup(c => c.MessageBroker).Returns(new Mock<IMessageBroker>().Object);
-            var stateMock = new Mock<IActionInvokerStateMixin>();
-            contextMock.Setup(c => c.Proxy).Returns(stateMock.Object);
-            contextMock.Setup(c => c.Arguments).Returns(new object[]
+            context.Setup(c => c.Proxy).Returns(mixin);
+            context.Setup(c => c.Arguments).Returns(new object[]
                                                             {
                                                                 new ControllerContext(),
                                                                 new Mock<ActionDescriptor>().Object,
-                                                                new Dictionary<string,object>(),
-                                                                new AsyncCallback(delegate {  }),
-                                                                "state",
+                                                                new Dictionary<string, object>(),
+                                                                new AsyncCallback(delegate { }),
+                                                                "state"
                                                             });
 
-            implementation.NewImplementation(contextMock.Object);
+            sut.NewImplementation(context);
 
-            contextMock.Verify(c => c.Proceed());
-            contextMock.Verify(c=>c.Proxy);
-            stateMock.VerifySet(s=>s.Offset = It.IsAny<long>());
+            context.Verify(c => c.Proceed());
+            context.Verify(c => c.Proxy);
+            mixin.VerifySet(m => m.Offset = It.IsAny<long>());
         }
     }
 }
