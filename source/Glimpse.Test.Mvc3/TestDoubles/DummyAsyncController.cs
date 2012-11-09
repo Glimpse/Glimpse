@@ -2,7 +2,7 @@ using System.Web.Mvc;
 
 namespace Glimpse.Test.Mvc3.TestDoubles
 {
-    public class DummyAsyncController:AsyncController
+    public class DummyAsyncController : AsyncController
     {
          public void IndexAsync()
          {

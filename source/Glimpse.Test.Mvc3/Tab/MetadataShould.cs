@@ -18,8 +18,8 @@ namespace Glimpse.Test.Mvc3.Tab
         [Theory, AutoMock]
         public void Construct(Metadata sut)
         {
-            Assert.NotNull(sut as ITab);
-            Assert.NotNull(sut as ITabSetup);
+            Assert.IsAssignableFrom<ITab>(sut);
+            Assert.IsAssignableFrom<ITabSetup>(sut);
         }
 
         [Theory, AutoMock]
@@ -99,7 +99,6 @@ namespace Glimpse.Test.Mvc3.Tab
         {
             context.GetTabStore().Setup(s => s.Contains(It.IsAny<string>())).Returns(false);
             context.GetTabStore().Setup(s => s.Get<IList<int>>(It.IsAny<string>())).Returns(list);
-
 
             Metadata.Persist(int.MaxValue, context);
 
