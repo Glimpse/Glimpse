@@ -14,7 +14,46 @@ namespace Glimpse.Test.Common
             ActionDescriptor(fixture);
             ActionExecutedContext(fixture);
             ActionExecutingContext(fixture);
+            ViewEngineResult(fixture);
+            ViewContext(fixture);
+            ControllerBase(fixture);
+            IValueProvider(fixture);
+        }
 
+// ReSharper disable InconsistentNaming
+        private static void IValueProvider(IFixture fixture)
+// ReSharper restore InconsistentNaming
+        {
+            fixture.Register<IValueProvider>(() =>
+                {
+                    var mock = new Mock<IValueProvider>();
+                    mock.Setup(x => x.GetValue("action")).Returns(new ValueProviderResult("action", null, null));
+                    mock.Setup(x => x.GetValue("controller")).Returns(new ValueProviderResult("controller", null, null));
+                    return mock.Object;
+                });
+        }
+
+        private static void ControllerBase(IFixture fixture)
+        {
+            fixture.Register<IValueProvider, ControllerBase>(
+                valueProvider =>
+                    {
+                        var mock = new Mock<ControllerBase>();
+                        mock.Object.ValueProvider = valueProvider;
+                        return mock.Object;
+                    });
+        }
+
+        private static void ViewContext(IFixture fixture)
+        {
+            fixture.Register<ControllerBase, ViewContext>(
+                controllerBase =>
+                new ViewContext
+                    {TempData = new TempDataDictionary(), ViewData = new ViewDataDictionary(), Controller = controllerBase});
+        }
+
+        private static void ViewEngineResult(IFixture fixture)
+        {
             fixture.Register<IView, IViewEngine, ViewEngineResult>(
                 (view, viewEngine) => new ViewEngineResult(view, viewEngine));
         }

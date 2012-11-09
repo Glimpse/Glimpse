@@ -1,179 +1,123 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.AlternateImplementation;
 using Glimpse.Mvc.Model;
 using Glimpse.Mvc.Tab;
+using Glimpse.Test.Common;
 using Glimpse.Test.Mvc3.AlternateImplementation;
 using Moq;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Glimpse.Test.Mvc3.Tab
 {
     public class ViewsShould
     {
-        [Fact]
-        public void Construct()
+        [Theory, AutoMock]
+        public void Construct(Views sut)
         {
-            var views = new Views();
-
-            Assert.NotNull(views as ITab);
-            Assert.NotNull(views as ITabSetup);
+            Assert.IsAssignableFrom<ITab>(sut);
+            Assert.IsAssignableFrom<ITabSetup>(sut);
         }
 
-        [Fact]
-        public void ExecuteOnEndRequest()
+        [Theory, AutoMock]
+        public void ExecuteOnEndRequest(Views sut)
         {
-            var views = new Views();
-
-            Assert.Equal(RuntimeEvent.EndRequest, views.ExecuteOn);
+            Assert.Equal(RuntimeEvent.EndRequest, sut.ExecuteOn);
         }
 
-        [Fact]
-        public void HaveHttpContextBase()
+        [Theory, AutoMock]
+        public void HaveHttpContextBase(Views sut)
         {
-            var views = new Views();
-            Assert.Equal(typeof(HttpContextBase), views.RequestContextType);
+            Assert.Equal(typeof(HttpContextBase), sut.RequestContextType);
         }
 
-        [Fact]
-        public void HaveProperName()
+        [Theory, AutoMock]
+        public void HaveProperName(Views sut)
         {
-            var views = new Views();
-            Assert.Equal("Views", views.Name);
-            
+            Assert.Equal("Views", sut.Name);
         }
 
-        [Fact]
-        public void SubscribeToViewMessageTypes()
+        [Theory, AutoMock]
+        public void SubscribeToViewMessageTypes(Views sut, ITabSetupContext context)
         {
-            var messageBrokerMock = new Mock<IMessageBroker>();
-            var contextMock = new Mock<ITabSetupContext>();
-            contextMock.Setup(c => c.MessageBroker).Returns(messageBrokerMock.Object);
+            sut.Setup(context);
 
-            var tab = new Views();
-            tab.Setup(contextMock.Object);
-
-            messageBrokerMock.Verify(mb => mb.Subscribe(It.IsAny<Action<ViewEngine.FindViews.Message>>()));
-            messageBrokerMock.Verify(mb => mb.Subscribe(It.IsAny<Action<View.Render.Message>>()));
+            context.MessageBroker.Verify(mb => mb.Subscribe(It.IsAny<Action<ViewEngine.FindViews.Message>>()));
+            context.MessageBroker.Verify(mb => mb.Subscribe(It.IsAny<Action<View.Render.Message>>()));
         }
 
-        [Fact]
-        public void HandleNullFindViewMessageCollection()
+        [Theory, AutoMock]
+        public void HandleNullFindViewMessageCollection(Views sut, ITabContext context)
         {
-            var storeMock = new Mock<IDataStore>();
-            storeMock.Setup(ds => ds.Get<List<ViewEngine.FindViews.Message>>(typeof(ViewEngine.FindViews.Message).FullName)).Returns<List<ViewEngine.FindViews.Message>>(null);
-            storeMock.Setup(ds => ds.Get<List<View.Render.Message>>(typeof(View.Render.Message).FullName)).Returns(new List<View.Render.Message>());
+            context.TabStore.Setup(ds => ds.Get<List<ViewEngine.FindViews.Message>>(typeof(ViewEngine.FindViews.Message).FullName)).Returns<List<ViewEngine.FindViews.Message>>(null);
+            context.TabStore.Setup(ds => ds.Get<List<View.Render.Message>>(typeof(View.Render.Message).FullName)).Returns(new List<View.Render.Message>());
 
-            var contextMock = new Mock<ITabContext>();
-            contextMock.Setup(c => c.TabStore).Returns(storeMock.Object);
-
-            var tab = new Views();
-
-            Assert.DoesNotThrow(()=>tab.GetData(contextMock.Object));
+            Assert.DoesNotThrow(() => sut.GetData(context));
         }
 
-        [Fact]
-        public void HandleNullViewRenderMessageCollection()
+        [Theory, AutoMock]
+        public void HandleNullViewRenderMessageCollection(Views sut, ITabContext context)
         {
-            var storeMock = new Mock<IDataStore>();
-            storeMock.Setup(ds => ds.Get<List<ViewEngine.FindViews.Message>>(typeof(ViewEngine.FindViews.Message).FullName)).Returns(new List<ViewEngine.FindViews.Message>());
-            storeMock.Setup(ds => ds.Get<List<View.Render.Message>>(typeof(View.Render.Message).FullName)).Returns<List<View.Render.Message>>(null);
+            context.TabStore.Setup(ds => ds.Get<List<ViewEngine.FindViews.Message>>(typeof(ViewEngine.FindViews.Message).FullName)).Returns(new List<ViewEngine.FindViews.Message>());
+            context.TabStore.Setup(ds => ds.Get<List<View.Render.Message>>(typeof(View.Render.Message).FullName)).Returns<List<View.Render.Message>>(null);
 
-            var contextMock = new Mock<ITabContext>();
-            contextMock.Setup(c => c.TabStore).Returns(storeMock.Object);
-
-            var tab = new Views();
-
-            Assert.DoesNotThrow(() => tab.GetData(contextMock.Object));
+            Assert.DoesNotThrow(() => sut.GetData(context));
         }
 
-        [Fact]
-        public void ReturnResult()
+        [Theory, AutoMock]
+        public void ReturnResult(Views sut, ITabContext context, View.Render.Arguments renderArgs, ViewEngine.FindViews.Arguments findViewArgs, ViewEngineResult viewEngineResult, IViewCorrelationMixin mixin, TimerResult timerResult, Guid id)
         {
-            var storeMock = new Mock<IDataStore>();
+            var findViewMessage = new ViewEngine.FindViews.Message(
+                input: findViewArgs, 
+                output: viewEngineResult, 
+                timing: timerResult, 
+                baseType: typeof(string), 
+                isPartial: false, 
+                id: id);
 
-            var input = new ViewEngine.FindViews.Arguments(new object[] { new ControllerContext(), "ViewName", false }, true);
-            var output = new ViewEngineResult(Enumerable.Empty<string>());
-            var timing = new TimerResult();
-            var baseType1 = typeof(string);
-            var isPartial = false;
-            var id = Guid.NewGuid();
+            context.TabStore.Setup(ds => ds.Get<List<ViewEngine.FindViews.Message>>(typeof(ViewEngine.FindViews.Message).FullName)).Returns(new List<ViewEngine.FindViews.Message> { findViewMessage });
 
-            var findViewMessage = new ViewEngine.FindViews.Message(input, output, timing, baseType1, isPartial, id);
+            mixin.Setup(m => m.ViewEngineFindCallId).Returns(id);
 
-            var findViewMessages = new List<ViewEngine.FindViews.Message>
-                               {
-                                   findViewMessage
-                               };
-            storeMock.Setup(ds => ds.Get<List<ViewEngine.FindViews.Message>>(typeof(ViewEngine.FindViews.Message).FullName)).Returns(findViewMessages);
+            var renderMessage = new View.Render.Message(
+                input: renderArgs, 
+                timing: timerResult, 
+                baseType: typeof(ViewRenderMessageShould), 
+                viewCorrelation: mixin);
 
-            var viewContext = new ViewContext {ViewData = new ViewDataDictionary(), TempData = new TempDataDictionary()};
-            var textWriter = new StringWriter();
-            var arguments = new View.Render.Arguments(new object[] { viewContext, textWriter });
+            context.TabStore.Setup(ds => ds.Get<List<View.Render.Message>>(typeof(View.Render.Message).FullName)).Returns(new List<View.Render.Message> { renderMessage });
 
-            var timerResult = new TimerResult();
-            var baseType2 = typeof(ViewRenderMessageShould);
+            var result = sut.GetData(context) as List<ViewsModel>;
 
-            var mixinMock = new Mock<IViewCorrelationMixin>();
-            mixinMock.Setup(m => m.ViewEngineFindCallId).Returns(id);
-            var mixin = mixinMock.Object;
-
-            var renderMessage = new View.Render.Message(arguments, timerResult, baseType2, mixin);
-
-            var renderMessages = new List<View.Render.Message>{renderMessage};
-            storeMock.Setup(ds => ds.Get<List<View.Render.Message>>(typeof(View.Render.Message).FullName)).Returns(renderMessages);
-
-            var contextMock = new Mock<ITabContext>();
-            contextMock.Setup(c => c.TabStore).Returns(storeMock.Object);
-
-            var tab = new Views();
-
-            var result = tab.GetData(contextMock.Object);
-
-            var data = result as List<ViewsModel>;
-
-            Assert.NotNull(data);
-            Assert.NotEmpty(data);
+            Assert.NotNull(result);
+            Assert.NotEmpty(result);
         }
 
-        [Fact]
-        public void PersistOnMessagePublish()
+        [Theory, AutoMock]
+        public void PersistOnMessagePublish(ITabSetupContext context, IList<int> list)
         {
-            var listMock = new Mock<IList<int>>();
+            context.GetTabStore().Setup(s => s.Contains(It.IsAny<string>())).Returns(true);
+            context.GetTabStore().Setup(s => s.Get<IList<int>>(It.IsAny<string>())).Returns(list);
 
-            var storeMock = new Mock<IDataStore>();
-            storeMock.Setup(s => s.Contains(It.IsAny<string>())).Returns(true);
-            storeMock.Setup(s => s.Get<IList<int>>(It.IsAny<string>())).Returns(listMock.Object);
+            Views.Persist(int.MaxValue, context);
 
-            var contextMock = new Mock<ITabSetupContext>();
-            contextMock.Setup(c => c.GetTabStore()).Returns(storeMock.Object);
-
-            Views.Persist(int.MaxValue, contextMock.Object);
-
-            listMock.Verify(l=>l.Add(It.IsAny<int>()));
+            list.Verify(l => l.Add(It.IsAny<int>()));
         }
 
-        [Fact]
-        public void CreateKeyOnMessagePublish()
+        [Theory, AutoMock]
+        public void CreateKeyOnMessagePublish(ITabSetupContext context, IList<int> list)
         {
-            var listMock = new Mock<IList<int>>();
+            context.GetTabStore().Setup(s => s.Contains(It.IsAny<string>())).Returns(false);
+            context.GetTabStore().Setup(s => s.Get<IList<int>>(It.IsAny<string>())).Returns(list);
 
-            var storeMock = new Mock<IDataStore>();
-            storeMock.Setup(s => s.Contains(It.IsAny<string>())).Returns(false);
-            storeMock.Setup(s => s.Get<IList<int>>(It.IsAny<string>())).Returns(listMock.Object);
+            Views.Persist(int.MaxValue, context);
 
-            var contextMock = new Mock<ITabSetupContext>();
-            contextMock.Setup(c => c.GetTabStore()).Returns(storeMock.Object);
-
-            Views.Persist(int.MaxValue, contextMock.Object);
-
-            listMock.Verify(l => l.Add(It.IsAny<int>()));
-            storeMock.Verify(s => s.Set(typeof (int).FullName, It.IsAny<List<int>>()));
+            list.Verify(l => l.Add(It.IsAny<int>()));
+            context.GetTabStore().Verify(s => s.Set(typeof(int).FullName, It.IsAny<List<int>>()));
         }
     }
 }

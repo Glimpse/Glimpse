@@ -21,12 +21,12 @@ namespace Glimpse.Test.Common
 
         private static void ViewRenderArguments(IFixture fixture)
         {
-            fixture.Register(
-                () =>
+            fixture.Register<ViewContext, View.Render.Arguments>(
+                viewContext =>
                 new View.Render.Arguments(
                     new object[]
                         {
-                            new ViewContext { ViewData = new ViewDataDictionary(), TempData = new TempDataDictionary() },
+                            viewContext,
                             new StringWriter()
                         }));
         }
