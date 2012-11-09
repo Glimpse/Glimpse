@@ -457,17 +457,17 @@
     // Info
     (function(elements) {
         var wireListeners = function() {
-                elements.eventInfo
-                    .live('mouseenter', function() { elements.eventInfo.stop(true, true).clearQueue(); })
-                    .live('mouseleave', function() { hideBubble(); });
-
-                elements.contentRow.find('.glimpse-tl-event-overlay')
-                    .live('mouseenter', function() { showBubble($(this)); })
-                    .live('mouseleave', function() { hideBubble(); });
-
-                elements.contentEventHolder.find('.glimpse-tl-band')
-                    .live('mouseenter', function() { showTip($(this)); })
-                    .live('mouseleave', function() { hideTip($(this)); });
+                elements.scope
+                    .delegate('.glimpse-tl-event-info', 'mouseenter', function() { elements.eventInfo.stop(true, true).clearQueue(); })
+                    .delegate('.glimpse-tl-event-info', 'mouseleave', function() { hideBubble(); });
+            
+                elements.contentRow
+                    .delegate('.glimpse-tl-event-overlay', 'mouseenter', function() { showBubble($(this)); })
+                    .delegate('.glimpse-tl-event-overlay', 'mouseleave', function() { hideBubble($(this)); });
+            
+                elements.contentEventHolder
+                    .delegate('.glimpse-tl-band', 'mouseenter', function() { showTip($(this)); })
+                    .delegate('.glimpse-tl-band', 'mouseleave', function() { hideTip($(this)); });
             },
             showTip = function(item) {
                 item.find('.glimpse-tl-event-overlay').stop(true, true).fadeIn(); 
