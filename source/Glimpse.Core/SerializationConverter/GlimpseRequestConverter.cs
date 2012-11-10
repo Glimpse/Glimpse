@@ -12,7 +12,7 @@ namespace Glimpse.Core.SerializationConverter
                        {
                            { "clientId", request.ClientId },
                            { "dateTime", request.DateTime },
-                           { "duration", request.Duration },
+                           { "duration", request.Duration.ToString("0.## ms") },
                            { "parentRequestId", request.ParentRequestId },
                            { "requestId", request.RequestId },
                            { "isAjax", request.RequestIsAjax },

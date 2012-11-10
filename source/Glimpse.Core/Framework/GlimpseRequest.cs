@@ -5,7 +5,7 @@ namespace Glimpse.Core.Framework
 {
     public class GlimpseRequest
     {
-        public GlimpseRequest(Guid requestId, IRequestMetadata requestMetadata, IDictionary<string, TabResult> pluginData, long duration)
+        public GlimpseRequest(Guid requestId, IRequestMetadata requestMetadata, IDictionary<string, TabResult> pluginData, double duration)
         {
             RequestId = requestId;
             PluginData = pluginData;
@@ -39,7 +39,7 @@ namespace Glimpse.Core.Framework
 
         public DateTime DateTime { get; set; }
         
-        public long Duration { get; set; }
+        public double Duration { get; set; }
         
         public Guid? ParentRequestId { get; set; }
         

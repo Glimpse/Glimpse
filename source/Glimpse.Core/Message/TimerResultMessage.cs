@@ -16,12 +16,12 @@ namespace Glimpse.Core.Message
         
         public string EventCategory { get; set; }
         
-        public long Offset
+        public double Offset
         {
             get { return Result.Offset; }
         }
 
-        public TimeSpan Duration
+        public double Duration
         {
             get { return Result.Duration; }
         }

@@ -2,14 +2,14 @@
 
 namespace Glimpse.Core.Message
 {
-    public interface ITimerResultMessage
+    public interface ITimerResultMessage : IMessage
     {
         string EventName { get; }
         
         string EventCategory { get; }
-        
-        long Offset { get; }
 
-        TimeSpan Duration { get; }
+        double Offset { get; }
+
+        double Duration { get; }
     }
 }

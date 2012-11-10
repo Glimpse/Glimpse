@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using Glimpse.Core.Extensions;
 
 namespace Glimpse.Core.Extensibility
 {
@@ -19,40 +20,36 @@ namespace Glimpse.Core.Extensibility
 
         public TimerResult<T> Time<T>(Func<T> func)
         {
-            var offset = Stopwatch.ElapsedMilliseconds;
-            return new TimerResult<T>
-                       {
-                           Offset = offset,
-                           Result = func(),
-                           Duration = TimeSpan.FromMilliseconds(Stopwatch.ElapsedMilliseconds - offset)
-                       };
+            var result = new TimerResult<T>();
+            result.Offset = Stopwatch.ElapsedTicks.ConvertNanosecondsToMilliseconds();
+            result.Result = func();
+            result.Duration = Stopwatch.ElapsedTicks.ConvertNanosecondsToMilliseconds() - result.Offset;
+
+            return result;
         }
 
         public TimerResult Time(Action action)
         {
-            var offset = Stopwatch.ElapsedMilliseconds;
-
+            var result = new TimerResult();
+            result.Offset = Stopwatch.ElapsedTicks.ConvertNanosecondsToMilliseconds();
             action();
+            result.Duration = Stopwatch.ElapsedTicks.ConvertNanosecondsToMilliseconds() - result.Offset;
             
-            return new TimerResult
-                       {
-                           Offset = offset,
-                           Duration = TimeSpan.FromMilliseconds(Stopwatch.ElapsedMilliseconds - offset)
-                       };
+            return result;
         }
 
-        public long Start()
+        public double Start()
         {
-            return Stopwatch.ElapsedMilliseconds;
+            return Stopwatch.ElapsedMilliseconds.ConvertNanosecondsToMilliseconds();
         }
 
-        public TimerResult Stop(long offset)
+        public TimerResult Stop(double offset)
         {
-            return new TimerResult
-            {
-                Offset = offset,
-                Duration = TimeSpan.FromMilliseconds(Stopwatch.ElapsedMilliseconds - offset)
-            };
+            var result = new TimerResult();
+            result.Offset = offset;
+            result.Duration = Stopwatch.ElapsedTicks.ConvertNanosecondsToMilliseconds() - result.Offset;
+
+            return result;
         }
     }
 }

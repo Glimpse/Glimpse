@@ -19,7 +19,7 @@ namespace Glimpse.Core.Framework
             get { return GlimpseRequest.DateTime; }
         }
 
-        public long Duration
+        public double Duration
         {
             get { return GlimpseRequest.Duration; }
         }
