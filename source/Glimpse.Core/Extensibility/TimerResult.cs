@@ -7,5 +7,7 @@ namespace Glimpse.Core.Extensibility
         public double Offset { get; set; }
         
         public double Duration { get; set; }
+
+        public DateTime StartTime { get; set; }
     }
 }

@@ -21,6 +21,7 @@ namespace Glimpse.Core.Extensibility
         public TimerResult<T> Time<T>(Func<T> func)
         {
             var result = new TimerResult<T>();
+            result.StartTime = DateTime.Now;
             result.Offset = Stopwatch.ElapsedTicks.ConvertNanosecondsToMilliseconds();
             result.Result = func();
             result.Duration = Stopwatch.ElapsedTicks.ConvertNanosecondsToMilliseconds() - result.Offset;
@@ -31,6 +32,7 @@ namespace Glimpse.Core.Extensibility
         public TimerResult Time(Action action)
         {
             var result = new TimerResult();
+            result.StartTime = DateTime.Now;
             result.Offset = Stopwatch.ElapsedTicks.ConvertNanosecondsToMilliseconds();
             action();
             result.Duration = Stopwatch.ElapsedTicks.ConvertNanosecondsToMilliseconds() - result.Offset;
@@ -46,6 +48,7 @@ namespace Glimpse.Core.Extensibility
         public TimerResult Stop(double offset)
         {
             var result = new TimerResult();
+            result.StartTime = DateTime.Now.AddMilliseconds(offset * -1);
             result.Offset = offset;
             result.Duration = Stopwatch.ElapsedTicks.ConvertNanosecondsToMilliseconds() - result.Offset;
 

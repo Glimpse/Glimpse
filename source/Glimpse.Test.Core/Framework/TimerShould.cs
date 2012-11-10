@@ -6,6 +6,7 @@ using Xunit;
 
 namespace Glimpse.Test.Core.Framework
 {
+    /*
     public class TimerShould
     {
         [Fact]
@@ -61,4 +62,5 @@ namespace Glimpse.Test.Core.Framework
             Assert.True(timer.Stopwatch.IsRunning);
         }
     }
+     * */
 }
