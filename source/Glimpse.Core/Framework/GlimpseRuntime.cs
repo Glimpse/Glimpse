@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
 using Glimpse.Core.Plugin.Assist;
 using Glimpse.Core.ResourceResult;
 #if NET35
@@ -263,7 +264,7 @@ namespace Glimpse.Core.Framework
                         var tabsThatRequireSetup = Configuration.Tabs.Where(tab => tab is ITabSetup).Select(tab => tab);
                         foreach (ITabSetup tab in tabsThatRequireSetup)
                         {
-                            var key = tab.GetType().FullName;
+                            var key = tab.GetType().ConvertToSafeJson();
                             try
                             {
                                 var setupContext = new TabSetupContext(logger, messageBroker, () => GetTabStore(key));
@@ -339,7 +340,7 @@ namespace Glimpse.Core.Framework
 
             foreach (var tab in supportedRuntimeTabs)
             {
-                var key = tab.GetType().FullName;
+                var key = tab.GetType().ConvertToSafeJson();
                 try
                 {
                     var tabContext = new TabContext(runtimeContext, GetTabStore(key), logger, messageBroker);
@@ -385,7 +386,7 @@ namespace Glimpse.Core.Framework
 
                 if (metadataInstance.HasMetadata)
                 {
-                    pluginMetadata[tab.GetType().FullName] = metadataInstance;
+                    pluginMetadata[tab.GetType().ConvertToSafeJson()] = metadataInstance;
                 } 
             }
 

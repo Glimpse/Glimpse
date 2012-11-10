@@ -136,6 +136,7 @@
     <Compile Include="Extensions\NameValueCollectionExtension.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\TypeElementCollectionExtensions.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Extensions\UriTemplateExtensions.cs" />
     <Compile Include="Framework\ApplicationPersistenceStore.cs" />
     <Compile Include="Framework\CacheSetting.cs" />

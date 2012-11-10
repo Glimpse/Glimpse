@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
@@ -99,6 +100,20 @@ namespace Glimpse.Test.Core.Framework
             Assert.Equal(0, results.Count);
 
             Runtime.TabMock.Verify(p => p.GetData(It.IsAny<ITabContext>()), Times.Never());
+        }
+
+        [Fact]
+        public void ExecutePluginsMakeSureNamesAreJsonSafe()
+        {
+            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
+            Runtime.Initialize();
+            Runtime.BeginRequest();
+            Runtime.EndRequest();
+
+            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
+            Assert.NotNull(results);
+            Assert.Equal(1, results.Count);
+            Assert.Equal("Castle_Proxies_ITabProxy", results.First().Key); 
         }
 
         [Fact]
