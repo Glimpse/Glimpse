@@ -6,19 +6,16 @@ using Glimpse.Core.Message;
 
 namespace Glimpse.Mvc.Message
 {
-    public class ExecutionMessage : MessageBase, IExecutionMessage, ITimerResultMessage
+    public class ExecutionMessage : TimerResultMessage, IExecutionMessage
     {
         public ExecutionMessage(FilterCategory? filterCategory, Type filterType, MethodInfo method, TimerResult timerResult, ControllerBase controllerBase)
+            : base(timerResult, Simplify(method.Name), "Filter")
         {
             // IsChildAction is false if ControllerContext is null
             IsChildAction = controllerBase.ControllerContext != null && controllerBase.ControllerContext.IsChildAction;
             Category = filterCategory;
             ExecutedType = filterType;
-            ExecutedMethod = method;
-            Duration = timerResult.Duration;
-            Offset = timerResult.Offset;
-            EventName = Simplify(method.Name);
-            EventCategory = filterCategory + "Filter";
+            ExecutedMethod = method; 
         }
 
         public bool IsChildAction { get; private set; }
@@ -27,17 +24,9 @@ namespace Glimpse.Mvc.Message
 
         public Type ExecutedType { get; private set; }
 
-        public MethodInfo ExecutedMethod { get; private set; }
+        public MethodInfo ExecutedMethod { get; private set; } 
 
-        public string EventName { get; private set; }
-
-        public string EventCategory { get; private set; }
-        
-        public long Offset { get; private set; }
-        
-        public TimeSpan Duration { get; private set; }
-
-        private string Simplify(string methodName)
+        private static string Simplify(string methodName)
         {
             var nameParts = methodName.Split('.');
             return nameParts[nameParts.Length - 1];
