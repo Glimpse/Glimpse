@@ -45,9 +45,10 @@ namespace Glimpse.Mvc.AlternateImplementation
                     timer));
             }
 
-            public class Message : ExecutionMessage
+            public class Message : BoundedExecutionMessage
             {
-                public Message(ResultExecutingContext argument, Type filterType, MethodInfo method, TimerResult timerResult) : base(FilterCategory.Result, filterType, method, timerResult, argument.Controller)
+                public Message(ResultExecutingContext argument, Type filterType, MethodInfo method, TimerResult timerResult) 
+                    : base(FilterCategory.Result, FilterBounds.Executing, filterType, method, timerResult, argument.Controller)
                 {
                     IsCanceled = argument.Cancel;
                     ResultType = argument.Result == null ? null : argument.Result.GetType();
@@ -83,9 +84,10 @@ namespace Glimpse.Mvc.AlternateImplementation
                     timer));
             }
 
-            public class Message : ExecutionMessage
+            public class Message : BoundedExecutionMessage
             {
-                public Message(ResultExecutedContext arguments, Type filterType, MethodInfo method, TimerResult timerResult) : base(FilterCategory.Result, filterType, method, timerResult, arguments.Controller)
+                public Message(ResultExecutedContext arguments, Type filterType, MethodInfo method, TimerResult timerResult) 
+                    : base(FilterCategory.Result, FilterBounds.Executed, filterType, method, timerResult, arguments.Controller)
                 {
                     Canceled = arguments.Canceled;
                     ExceptionType = arguments.Exception == null ? null : arguments.Exception.GetType();

@@ -46,7 +46,8 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public class Message : ExecutionMessage
             {
-                public Message(ExceptionContext context, Type filterType, MethodInfo method, TimerResult timerResult) : base(FilterCategory.Exception, filterType, method, timerResult, context.Controller)
+                public Message(ExceptionContext context, Type filterType, MethodInfo method, TimerResult timerResult) 
+                    : base(FilterCategory.Exception, filterType, method, timerResult, context.Controller)
                 {
                     ExceptionHandled = context.ExceptionHandled;
                     ExceptionType = context.Exception == null ? null : context.Exception.GetType();

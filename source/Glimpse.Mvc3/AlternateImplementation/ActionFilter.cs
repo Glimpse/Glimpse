@@ -45,9 +45,10 @@ namespace Glimpse.Mvc.AlternateImplementation
                     timer));
             }
 
-            public class Message : ExecutionMessage
+            public class Message : BoundedExecutionMessage
             {
-                public Message(ActionExecutingContext context, Type filterType, MethodInfo method, TimerResult timerResult) : base(FilterCategory.Action, filterType, method, timerResult, context.Controller)
+                public Message(ActionExecutingContext context, Type filterType, MethodInfo method, TimerResult timerResult)
+                    : base(FilterCategory.Action, FilterBounds.Executing, filterType, method, timerResult, context.Controller)
                 {
                     ActionName = context.ActionDescriptor.ActionName;
                     ResultType = context.Result != null ? context.Result.GetType() : null;
@@ -83,9 +84,10 @@ namespace Glimpse.Mvc.AlternateImplementation
                         timer));
             }
 
-            public class Message : ExecutionMessage
+            public class Message : BoundedExecutionMessage
             {
-                public Message(ActionExecutedContext context, Type filterType, MethodInfo method, TimerResult timerResult) : base(FilterCategory.Action, filterType, method, timerResult, context.Controller)
+                public Message(ActionExecutedContext context, Type filterType, MethodInfo method, TimerResult timerResult) 
+                    : base(FilterCategory.Action, FilterBounds.Executed, filterType, method, timerResult, context.Controller)
                 {
                     ActionName = context.ActionDescriptor.ActionName;
                     ControllerName = context.ActionDescriptor.ControllerDescriptor.ControllerName;

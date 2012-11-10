@@ -46,7 +46,8 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public class Message : ExecutionMessage
             {
-                public Message(AuthorizationContext argument, Type filterType, MethodInfo method, TimerResult timerResult) : base(FilterCategory.Authorization, filterType, method, timerResult, argument.Controller)
+                public Message(AuthorizationContext argument, Type filterType, MethodInfo method, TimerResult timerResult) 
+                    : base(FilterCategory.Authorization, filterType, method, timerResult, argument.Controller)
                 {
                     ActionName = argument.ActionDescriptor.ActionName;
                     ResultType = argument.Result == null ? null : argument.Result.GetType();
