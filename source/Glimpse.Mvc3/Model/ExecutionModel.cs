@@ -6,17 +6,24 @@ namespace Glimpse.Mvc.Model
 {
     public class ExecutionModel
     {
-        public ExecutionModel(IExecutionMessage message) : this(message.IsChildAction, message.Category, message.ExecutedType, message.ExecutedMethod, message.Duration.Milliseconds)
+        public ExecutionModel(IExecutionMessage message)
         {
-        }
+            IsChildAction = message.IsChildAction;
+            ExecutedType = message.ExecutedType;
+            ExecutedMethod = message.ExecutedMethod;
+            MillisecondsDuration = message.Duration.Milliseconds;
 
-        public ExecutionModel(bool isChildAction, FilterCategory? category, Type executedType, MethodInfo executedMethod, int millisecondsDuration)
-        {
-            IsChildAction = isChildAction;
-            Category = category;
-            ExecutedType = executedType;
-            ExecutedMethod = executedMethod;
-            MillisecondsDuration = millisecondsDuration;
+            var filter = message as IFilterMessage;
+            if (filter != null)
+            {
+                Category = filter.Category;
+            }
+
+            var bounds = message as IBoundedFilterMessage;
+            if (bounds != null)
+            {
+                Bounds = bounds.Bounds;
+            }
         }
 
         public int MillisecondsDuration { get; set; }
@@ -26,6 +33,8 @@ namespace Glimpse.Mvc.Model
         public Type ExecutedType { get; set; }
 
         public FilterCategory? Category { get; set; }
+
+        public FilterBounds? Bounds { get; set; }
 
         public bool IsChildAction { get; set; }
     }

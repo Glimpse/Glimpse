@@ -45,7 +45,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     timer));
             }
 
-            public class Message : BoundedExecutionMessage
+            public class Message : BoundedFilterMessage
             {
                 public Message(ResultExecutingContext argument, Type filterType, MethodInfo method, TimerResult timerResult) 
                     : base(FilterCategory.Result, FilterBounds.Executing, filterType, method, timerResult, argument.Controller)
@@ -84,7 +84,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     timer));
             }
 
-            public class Message : BoundedExecutionMessage
+            public class Message : BoundedFilterMessage
             {
                 public Message(ResultExecutedContext arguments, Type filterType, MethodInfo method, TimerResult timerResult) 
                     : base(FilterCategory.Result, FilterBounds.Executed, filterType, method, timerResult, arguments.Controller)

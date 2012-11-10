@@ -79,11 +79,14 @@
     <Compile Include="AlternateImplementation\View.cs" />
     <Compile Include="AlternateImplementation\ViewCorrelationMixin.cs" />
     <Compile Include="AlternateImplementation\ViewEngine.cs" />
-    <Compile Include="Message\BoundedExecutionMessage.cs" />
+    <Compile Include="Message\BoundedFilterMessage.cs" />
     <Compile Include="Message\ExecutionMessage.cs" />
     <Compile Include="Message\FilterCategory.cs" />
     <Compile Include="Message\FilterBounds.cs" />
+    <Compile Include="Message\FilterMessage.cs" />
+    <Compile Include="Message\IBoundedFilterMessage.cs" />
     <Compile Include="Message\IExecutionMessage.cs" />
+    <Compile Include="Message\IFilterMessage.cs" />
     <Compile Include="Model\DefaultValueModel.cs" />
     <Compile Include="Model\ExecutionModel.cs" />
     <Compile Include="Model\MetadataContentModel.cs" />

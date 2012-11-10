@@ -8,9 +8,9 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Mvc.Message
 {
-    public class BoundedExecutionMessage : ExecutionMessage
+    public class BoundedFilterMessage : FilterMessage, IBoundedFilterMessage
     {
-        public BoundedExecutionMessage(FilterCategory filterCategory, FilterBounds bounds, Type filterType, MethodInfo method, TimerResult timerResult, ControllerBase controllerBase) 
+        public BoundedFilterMessage(FilterCategory filterCategory, FilterBounds bounds, Type filterType, MethodInfo method, TimerResult timerResult, ControllerBase controllerBase) 
             : base(filterCategory, filterType, method, timerResult, controllerBase)
         {
             Bounds = bounds;

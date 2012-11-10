@@ -44,7 +44,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     timer));
             }
 
-            public class Message : ExecutionMessage
+            public class Message : FilterMessage
             {
                 public Message(ExceptionContext context, Type filterType, MethodInfo method, TimerResult timerResult) 
                     : base(FilterCategory.Exception, filterType, method, timerResult, context.Controller)
