@@ -11,5 +11,7 @@ namespace Glimpse.Core.Message
         double Offset { get; }
 
         double Duration { get; }
+
+        DateTime StartTime { get; }
     }
 }

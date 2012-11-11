@@ -26,6 +26,11 @@ namespace Glimpse.Core.Message
             get { return Result.Duration; }
         }
 
+        public DateTime StartTime
+        {
+            get { return Result.StartTime; }
+        }
+
         private TimerResult Result { get; set; }
     }
 }
