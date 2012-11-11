@@ -50,7 +50,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
 
             context.Verify(c => c.Proceed());
             context.Verify(c => c.Proxy);
-            mixin.VerifySet(m => m.Offset = It.IsAny<long>());
+            mixin.VerifySet(m => m.Offset = It.IsAny<double>());
         }
     }
 }

@@ -6,7 +6,6 @@ using Xunit;
 
 namespace Glimpse.Test.Core.Framework
 {
-    /*
     public class TimerShould
     {
         [Fact]
@@ -18,9 +17,9 @@ namespace Glimpse.Test.Core.Framework
             var result = timer.Time(() => Thread.Sleep(waitTime));
 
             Assert.NotNull(result);
-            var failureMessage = result.Duration.Milliseconds.ToString() + " not greater than " + waitTime.ToString();
+            var failureMessage = result.Duration.ToString() + " not greater than " + waitTime.ToString();
             Console.Write(failureMessage);
-            Assert.True(result.Duration.Milliseconds >= waitTime-1, failureMessage); //-1 to handle issues with rounding??
+            Assert.True(result.Duration >= waitTime-1, failureMessage); //-1 to handle issues with rounding??
         }
 
         [Fact(Skip = "This test is flaky. Need to find a better way to do this...")]
@@ -36,7 +35,7 @@ namespace Glimpse.Test.Core.Framework
                                         });
 
             Assert.NotNull(result);
-            Assert.True(result.Duration.Milliseconds >= waitTime);
+            Assert.True(result.Duration >= waitTime);
             Assert.Equal("STRING", result.Result);
         }
 
@@ -62,5 +61,4 @@ namespace Glimpse.Test.Core.Framework
             Assert.True(timer.Stopwatch.IsRunning);
         }
     }
-     * */
 }
