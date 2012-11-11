@@ -16,7 +16,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         {
             var sut = new ResultFilter.OnResultExecuting.Message(context, filterType, method, timerResult);
 
-            Assert.Equal(context.Cancel, sut.IsCanceled);
+            Assert.Equal(context.Cancel, sut.Canceled);
             Assert.Equal(context.Result.GetType(), sut.ResultType);
         }
 

@@ -84,7 +84,10 @@
     <Compile Include="Message\FilterCategory.cs" />
     <Compile Include="Message\FilterBounds.cs" />
     <Compile Include="Message\FilterMessage.cs" />
+    <Compile Include="Message\IActionBasedFilterMessage.cs" />
     <Compile Include="Message\IBoundedFilterMessage.cs" />
+    <Compile Include="Message\ICanceledBasedFilterMessage.cs" />
+    <Compile Include="Message\IExceptionBasedFilterMessage.cs" />
     <Compile Include="Message\IExecutionMessage.cs" />
     <Compile Include="Message\IFilterMessage.cs" />
     <Compile Include="Model\DefaultValueModel.cs" />

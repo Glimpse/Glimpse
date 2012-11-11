@@ -45,18 +45,19 @@ namespace Glimpse.Mvc.AlternateImplementation
                     timer));
             }
 
-            public class Message : BoundedFilterMessage
+            public class Message : BoundedFilterMessage, IActionBasedFilterMessage
             {
                 public Message(ActionExecutingContext context, Type filterType, MethodInfo method, TimerResult timerResult)
                     : base(FilterCategory.Action, FilterBounds.Executing, filterType, method, timerResult, context.Controller)
                 {
-                    ActionName = context.ActionDescriptor.ActionName;
                     ResultType = context.Result != null ? context.Result.GetType() : null;
+                    ControllerName = context.ActionDescriptor.ControllerDescriptor.ControllerName;
+                    ActionName = context.ActionDescriptor.ActionName; 
                 }
 
-                public string ActionName { get; private set; }
+                public string ControllerName { get; private set; }
 
-                public Type ResultType { get; set; }
+                public string ActionName { get; private set; }
             }
         }
 
@@ -84,30 +85,28 @@ namespace Glimpse.Mvc.AlternateImplementation
                         timer));
             }
 
-            public class Message : BoundedFilterMessage
+            public class Message : BoundedFilterMessage, IActionBasedFilterMessage, IExceptionBasedFilterMessage, ICanceledBasedFilterMessage
             {
-                public Message(ActionExecutedContext context, Type filterType, MethodInfo method, TimerResult timerResult) 
+                public Message(ActionExecutedContext context, Type filterType, MethodInfo method, TimerResult timerResult)
                     : base(FilterCategory.Action, FilterBounds.Executed, filterType, method, timerResult, context.Controller)
-                {
-                    ActionName = context.ActionDescriptor.ActionName;
-                    ControllerName = context.ActionDescriptor.ControllerDescriptor.ControllerName;
-                    IsCanceled = context.Canceled;
+                { 
+                    this.Canceled = context.Canceled;
                     ExceptionHandled = context.ExceptionHandled;
                     ExceptionType = context.Exception != null ? context.Exception.GetType() : null;
                     ResultType = context.Result != null ? context.Result.GetType() : null;
-                }
+                    ControllerName = context.ActionDescriptor.ControllerDescriptor.ControllerName;
+                    ActionName = context.ActionDescriptor.ActionName; 
+                } 
 
-                public string ActionName { get; private set; }
-
-                public string ControllerName { get; private set; }
-
-                public bool IsCanceled { get; private set; }
+                public bool Canceled { get; private set; }
 
                 public bool ExceptionHandled { get; private set; }
 
                 public Type ExceptionType { get; private set; }
 
-                public Type ResultType { get; private set; }
+                public string ControllerName { get; private set; }
+
+                public string ActionName { get; private set; }
             }
         }
     }

@@ -19,7 +19,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             Assert.Equal(context.ActionDescriptor.ActionName, sut.ActionName);
             Assert.Equal(context.ActionDescriptor.ControllerDescriptor.ControllerName, sut.ControllerName);
             Assert.Equal(context.Exception.GetType(), sut.ExceptionType);
-            Assert.Equal(context.Canceled, sut.IsCanceled);
+            Assert.Equal(context.Canceled, sut.Canceled);
             Assert.Equal(context.ExceptionHandled, sut.ExceptionHandled);
             Assert.Equal(context.Result.GetType(), sut.ResultType);
             Assert.Equal(filterType, sut.ExecutedType);

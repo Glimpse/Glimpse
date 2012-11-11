@@ -45,18 +45,16 @@ namespace Glimpse.Mvc.AlternateImplementation
                     timer));
             }
 
-            public class Message : BoundedFilterMessage
+            public class Message : BoundedFilterMessage, ICanceledBasedFilterMessage
             {
-                public Message(ResultExecutingContext argument, Type filterType, MethodInfo method, TimerResult timerResult) 
-                    : base(FilterCategory.Result, FilterBounds.Executing, filterType, method, timerResult, argument.Controller)
-                {
-                    IsCanceled = argument.Cancel;
-                    ResultType = argument.Result == null ? null : argument.Result.GetType();
-                }
+                public Message(ResultExecutingContext context, Type filterType, MethodInfo method, TimerResult timerResult) 
+                    : base(FilterCategory.Result, FilterBounds.Executing, filterType, method, timerResult, context.Controller)
+                { 
+                    Canceled = context.Cancel;
+                    ResultType = context.Result == null ? null : context.Result.GetType();
+                } 
 
-                public Type ResultType { get; set; }
-
-                public bool IsCanceled { get; set; }
+                public bool Canceled { get; set; }
             }
         }
 
@@ -84,18 +82,16 @@ namespace Glimpse.Mvc.AlternateImplementation
                     timer));
             }
 
-            public class Message : BoundedFilterMessage
+            public class Message : BoundedFilterMessage, IExceptionBasedFilterMessage, ICanceledBasedFilterMessage
             {
-                public Message(ResultExecutedContext arguments, Type filterType, MethodInfo method, TimerResult timerResult) 
-                    : base(FilterCategory.Result, FilterBounds.Executed, filterType, method, timerResult, arguments.Controller)
+                public Message(ResultExecutedContext context, Type filterType, MethodInfo method, TimerResult timerResult)
+                    : base(FilterCategory.Result, FilterBounds.Executed, filterType, method, timerResult, context.Controller)
                 {
-                    Canceled = arguments.Canceled;
-                    ExceptionType = arguments.Exception == null ? null : arguments.Exception.GetType();
-                    ExceptionHandled = arguments.ExceptionHandled;
-                    ResultType = arguments.Result == null ? null : arguments.Result.GetType();
+                    Canceled = context.Canceled;
+                    ExceptionType = context.Exception == null ? null : context.Exception.GetType();
+                    ExceptionHandled = context.ExceptionHandled;
+                    ResultType = context.Result == null ? null : context.Result.GetType(); 
                 }
-
-                public Type ResultType { get; set; }
 
                 public bool ExceptionHandled { get; set; }
 

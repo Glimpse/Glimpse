@@ -44,18 +44,19 @@ namespace Glimpse.Mvc.AlternateImplementation
                     timer));
             }
 
-            public class Message : FilterMessage
+            public class Message : FilterMessage, IActionBasedFilterMessage
             {
-                public Message(AuthorizationContext argument, Type filterType, MethodInfo method, TimerResult timerResult) 
-                    : base(FilterCategory.Authorization, filterType, method, timerResult, argument.Controller)
+                public Message(AuthorizationContext context, Type filterType, MethodInfo method, TimerResult timerResult) 
+                    : base(FilterCategory.Authorization, filterType, method, timerResult, context.Controller)
                 {
-                    ActionName = argument.ActionDescriptor.ActionName;
-                    ResultType = argument.Result == null ? null : argument.Result.GetType();
+                    ResultType = context.Result == null ? null : context.Result.GetType();
+                    ControllerName = context.ActionDescriptor.ControllerDescriptor.ControllerName;
+                    ActionName = context.ActionDescriptor.ActionName;
                 }
 
-                public Type ResultType { get; set; }
+                public string ControllerName { get; private set; }
 
-                public string ActionName { get; set; }
+                public string ActionName { get; private set; }
             }
         }
     }

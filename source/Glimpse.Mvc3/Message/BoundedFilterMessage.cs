@@ -10,7 +10,7 @@ namespace Glimpse.Mvc.Message
 {
     public class BoundedFilterMessage : FilterMessage, IBoundedFilterMessage
     {
-        public BoundedFilterMessage(FilterCategory filterCategory, FilterBounds bounds, Type filterType, MethodInfo method, TimerResult timerResult, ControllerBase controllerBase) 
+        public BoundedFilterMessage(FilterCategory filterCategory, FilterBounds bounds, Type filterType, MethodInfo method, TimerResult timerResult, ControllerBase controllerBase)
             : base(filterCategory, filterType, method, timerResult, controllerBase)
         {
             Bounds = bounds;

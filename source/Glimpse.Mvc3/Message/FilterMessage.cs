@@ -13,9 +13,11 @@ namespace Glimpse.Mvc.Message
         public FilterMessage(FilterCategory filterCategory, Type filterType, MethodInfo method, TimerResult timerResult, ControllerBase controllerBase) 
             : base(filterType, method, timerResult, controllerBase)
         {
-            Category = filterCategory;
+            Category = filterCategory; 
         }
 
         public FilterCategory Category { get; private set; }
+
+        public Type ResultType { get; set; }
     }
 }

@@ -44,17 +44,15 @@ namespace Glimpse.Mvc.AlternateImplementation
                     timer));
             }
 
-            public class Message : FilterMessage
+            public class Message : FilterMessage, IExceptionBasedFilterMessage
             {
-                public Message(ExceptionContext context, Type filterType, MethodInfo method, TimerResult timerResult) 
+                public Message(ExceptionContext context, Type filterType, MethodInfo method, TimerResult timerResult)
                     : base(FilterCategory.Exception, filterType, method, timerResult, context.Controller)
                 {
                     ExceptionHandled = context.ExceptionHandled;
                     ExceptionType = context.Exception == null ? null : context.Exception.GetType();
-                    ResultType = context.Result == null ? null : context.Result.GetType();
+                    ResultType = context.Result == null ? null : context.Result.GetType();  
                 }
-
-                public Type ResultType { get; set; }
 
                 public Type ExceptionType { get; set; }
 
