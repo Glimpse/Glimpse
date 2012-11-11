@@ -38,11 +38,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     return;
                 }
 
-                context.MessageBroker.Publish(new Message(
-                    (ActionExecutingContext)context.Arguments[0],
-                    context.InvocationTarget.GetType(),
-                    context.MethodInvocationTarget,
-                    timer));
+                context.MessageBroker.Publish(new Message((ActionExecutingContext)context.Arguments[0], context.InvocationTarget.GetType(), context.MethodInvocationTarget, timer));
             }
 
             public class Message : BoundedFilterMessage, IActionBasedFilterMessage
@@ -78,11 +74,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     return;
                 }
 
-                context.MessageBroker.Publish(new Message(
-                        (ActionExecutedContext)context.Arguments[0], 
-                        context.InvocationTarget.GetType(), 
-                        context.MethodInvocationTarget, 
-                        timer));
+                context.MessageBroker.Publish(new Message((ActionExecutedContext)context.Arguments[0], context.InvocationTarget.GetType(), context.MethodInvocationTarget, timer));
             }
 
             public class Message : BoundedFilterMessage, IActionBasedFilterMessage, IExceptionBasedFilterMessage, ICanceledBasedFilterMessage

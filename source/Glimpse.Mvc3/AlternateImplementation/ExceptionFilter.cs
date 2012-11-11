@@ -37,11 +37,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     return;
                 }
 
-                context.MessageBroker.Publish(new Message(
-                    (ExceptionContext)context.Arguments[0],
-                    context.InvocationTarget.GetType(),
-                    context.MethodInvocationTarget,
-                    timer));
+                context.MessageBroker.Publish(new Message((ExceptionContext)context.Arguments[0], context.InvocationTarget.GetType(), context.MethodInvocationTarget, timer));
             }
 
             public class Message : FilterMessage, IExceptionBasedFilterMessage
