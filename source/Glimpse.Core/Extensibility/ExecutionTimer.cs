@@ -18,6 +18,16 @@ namespace Glimpse.Core.Extensibility
 
         internal Stopwatch Stopwatch { get; set; }
 
+        public TimerResult Point()
+        {
+            var result = new TimerResult();
+            result.StartTime = DateTime.Now;
+            result.Offset = Stopwatch.ElapsedTicks.ConvertNanosecondsToMilliseconds();
+            result.Duration = 0;
+
+            return result;
+        }
+
         public TimerResult<T> Time<T>(Func<T> func)
         {
             var result = new TimerResult<T>();
