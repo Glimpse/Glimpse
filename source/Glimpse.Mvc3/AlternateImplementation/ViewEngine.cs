@@ -9,6 +9,8 @@ using Glimpse.Core.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
+    using Glimpse.Mvc.Message;
+
     public class ViewEngine : Alternate<IViewEngine>
     {
         public ViewEngine(IProxyFactory proxyFactory) : base(proxyFactory)
@@ -43,20 +45,16 @@ namespace Glimpse.Mvc.AlternateImplementation
                 }
 
                 var timer = context.TimerStrategy();
-
                 var timing = timer.Time(context.Proceed);
-
                 var input = new Arguments(context.Arguments, IsPartial);
-
                 var id = Guid.NewGuid();
-
                 var output = context.ReturnValue as ViewEngineResult;
 
                 output = ProxyOutput(output, context, input.ViewName, IsPartial, id);
 
                 context.MessageBroker.PublishMany(
                     new Message(input, output, timing, context.TargetType, IsPartial, id),
-                    new TimerResultMessage(timing, "Find View " + input.ViewName, "ASP.NET MVC"));
+                    new EventMessage(input, timing, context.TargetType));
             }
 
             private ViewEngineResult ProxyOutput(ViewEngineResult viewEngineResult, IAlternateImplementationContext context, string viewName, bool isPartial, Guid id)
@@ -121,6 +119,34 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public bool IsFound
                 {
                     get { return Output.View != null; }
+                }
+            }
+
+            public class EventMessage : TimerResultMessage, IActionBasedMessage
+            {
+                public EventMessage(Arguments arguments, TimerResult timerResult, Type executedType)
+                    : base(timerResult, "FindView", "View")
+                {
+                    ViewEngineType = executedType;
+                    UseCache = arguments.UseCache;
+                    ActionName = arguments.ControllerContext.Controller.ValueProvider.GetValue("action").RawValue.ToStringOrDefault();
+                    ControllerName = arguments.ControllerContext.Controller.ValueProvider.GetValue("controller").RawValue.ToStringOrDefault(); 
+                }
+
+                public string ControllerName { get; private set; }
+
+                public string ActionName { get; private set; }
+
+                public Type ViewEngineType { get; private set; }
+
+                public bool UseCache { get; private set; }
+
+                public override void BuildEvent(ITimelineEvent timelineEvent)
+                {
+                    base.BuildEvent(timelineEvent);
+
+                    timelineEvent.Title = string.Format("Find:View - {0}:{1}", ControllerName, ActionName);
+                    timelineEvent.SubText = string.Format("{0}:{1}", ViewEngineType.Name, UseCache);
                 }
             }
 

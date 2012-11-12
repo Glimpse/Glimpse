@@ -42,8 +42,8 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public class Message : FilterMessage, IExceptionBasedFilterMessage
             {
-                public Message(ExceptionContext context, Type filterType, MethodInfo method, TimerResult timerResult)
-                    : base(FilterCategory.Exception, filterType, method, timerResult, context.Controller)
+                public Message(ExceptionContext context, Type executedType, MethodInfo method, TimerResult timerResult)
+                    : base(FilterCategory.Exception, executedType, method, timerResult, context.Controller)
                 {
                     ExceptionHandled = context.ExceptionHandled;
                     ExceptionType = context.Exception == null ? null : context.Exception.GetType();
@@ -53,6 +53,14 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public Type ExceptionType { get; set; }
 
                 public bool ExceptionHandled { get; set; }
+
+                public override void BuildEvent(ITimelineEvent timelineEvent)
+                {
+                    base.BuildEvent(timelineEvent);
+
+                    timelineEvent.Details.Add("ExceptionHandled", ExceptionHandled);
+                    timelineEvent.Details.Add("ExceptionType", ExceptionType); 
+                }
             }
         }
     }

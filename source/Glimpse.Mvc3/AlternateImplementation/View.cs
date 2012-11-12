@@ -10,6 +10,8 @@ using Glimpse.Core.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
+    using Glimpse.Mvc.Message;
+
     public class View : Alternate<IView>
     {
         public View(IProxyFactory proxyFactory) : base(proxyFactory)
@@ -49,7 +51,7 @@ namespace Glimpse.Mvc.AlternateImplementation
 
                 context.MessageBroker.PublishMany(
                     new Message(input, timing, context.TargetType, mixin),
-                    new TimerResultMessage(timing, "Render View " + mixin.ViewName, "ASP.NET MVC"));
+                    new EventMessage(input, timing));
             }
 
             public class Arguments
@@ -82,6 +84,27 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public Type BaseType { get; set; }
                 
                 public IViewCorrelationMixin ViewCorrelation { get; set; }
+            }
+
+            public class EventMessage : TimerResultMessage, IActionBasedMessage
+            {
+                public EventMessage(Arguments arguments, TimerResult timerResult)
+                    : base(timerResult, "RenderView", "View")
+                { 
+                    ActionName = arguments.ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToStringOrDefault();
+                    ControllerName = arguments.ViewContext.Controller.ValueProvider.GetValue("controller").RawValue.ToStringOrDefault();
+                }
+
+                public string ControllerName { get; private set; }
+
+                public string ActionName { get; private set; } 
+
+                public override void BuildEvent(ITimelineEvent timelineEvent)
+                {
+                    base.BuildEvent(timelineEvent);
+
+                    timelineEvent.Title = string.Format("Render:View - {0}:{1}", ControllerName, ActionName); 
+                }
             }
         }
     }

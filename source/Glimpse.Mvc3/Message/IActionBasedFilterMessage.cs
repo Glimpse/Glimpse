@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Glimpse.Mvc.Message
 {
-    public interface IActionBasedFilterMessage
+    public interface IActionBasedMessage
     {
         string ControllerName { get;  }
 

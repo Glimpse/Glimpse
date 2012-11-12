@@ -1,4 +1,5 @@
 ﻿using System;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Message
 {
@@ -13,5 +14,7 @@ namespace Glimpse.Core.Message
         double Duration { get; }
 
         DateTime StartTime { get; }
+
+        void BuildEvent(ITimelineEvent timelineEvent);
     }
 }

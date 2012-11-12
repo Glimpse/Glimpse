@@ -629,7 +629,7 @@
          
         pubsub.subscribe('action.template.processing', modify); 
         pubsub.subscribe('trigger.timline.init', init); 
-        pubsub.subscribe('action.panel.rendering.Timeline', prerender);
-        pubsub.subscribe('action.panel.rendered.Timeline', postrender);
+        pubsub.subscribe('action.panel.rendering.Glimpse_AspNet_Tab_Timeline', prerender);
+        pubsub.subscribe('action.panel.rendered.Glimpse_AspNet_Tab_Timeline', postrender);
     })();
 })(jQueryGlimpse, glimpse.pubsub, glimpse.settings, glimpse.util, glimpse.render.engine);

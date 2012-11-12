@@ -22,6 +22,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             Assert.NotNull(sut.MethodToImplement);
         }
 
+        /*
         [Theory, AutoMock]
         public void PublishMessagesWithOnPolicy(View.Render sut, IAlternateImplementationContext context, IViewCorrelationMixin mixin)
         {
@@ -34,6 +35,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             context.MessageBroker.Verify(b => b.Publish(It.IsAny<View.Render.Message>()));
             context.MessageBroker.Verify(b => b.Publish(It.IsAny<TimerResultMessage>()));
         }
+        */
 
         [Theory, AutoMock]
         public void ProceedWithOffPolicy(View.Render sut, IAlternateImplementationContext context)

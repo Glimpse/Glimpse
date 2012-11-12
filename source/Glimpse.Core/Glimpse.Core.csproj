@@ -89,6 +89,7 @@
     <Compile Include="Extensibility\IParameterValueProvider.cs" />
     <Compile Include="Extensibility\IPrivilegedResource.cs" />
     <Compile Include="Extensibility\ITabLayout.cs" />
+    <Compile Include="Extensibility\ITimelineEvent.cs" />
     <Compile Include="Extensibility\JsonNetConverterDictionaryKeysAreNotPropertyNames.cs" />
     <Compile Include="Extensibility\MessageBase.cs" />
     <Compile Include="Extensibility\NuGetPackageAttribute.cs" />

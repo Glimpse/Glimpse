@@ -10,14 +10,25 @@ namespace Glimpse.Mvc.Message
 {
     public class FilterMessage : ExecutionMessage, IFilterMessage
     {
-        public FilterMessage(FilterCategory filterCategory, Type filterType, MethodInfo method, TimerResult timerResult, ControllerBase controllerBase) 
-            : base(filterType, method, timerResult, controllerBase)
+        public FilterMessage(FilterCategory filterCategory, Type executedType, MethodInfo method, TimerResult timerResult, ControllerBase controllerBase) 
+            : base(executedType, method, timerResult)
         {
-            Category = filterCategory; 
+            IsChildAction = controllerBase.ControllerContext != null && controllerBase.ControllerContext.IsChildAction;
+            Category = filterCategory;
+            EventCategory = "Filter";
         }
 
         public FilterCategory Category { get; private set; }
 
         public Type ResultType { get; set; }
+
+        public override void BuildEvent(ITimelineEvent timelineEvent)
+        {
+            base.BuildEvent(timelineEvent);
+
+            timelineEvent.Title = string.Format("{0}", Category.ToString());
+            timelineEvent.Details.Add("Category", Category.ToString());
+            timelineEvent.Details.Add("ResultType", ResultType);
+        }
     }
 }

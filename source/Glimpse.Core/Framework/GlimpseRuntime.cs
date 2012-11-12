@@ -260,7 +260,7 @@ namespace Glimpse.Core.Framework
                     if (!IsInitialized)
                     {
                         var messageBroker = Configuration.MessageBroker;
-
+                        
                         var tabsThatRequireSetup = Configuration.Tabs.Where(tab => tab is ITabSetup).Select(tab => tab);
                         foreach (ITabSetup tab in tabsThatRequireSetup)
                         {

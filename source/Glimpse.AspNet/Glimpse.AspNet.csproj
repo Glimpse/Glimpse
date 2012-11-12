@@ -73,6 +73,9 @@
     <Compile Include="Model\RequestModel.cs" />
     <Compile Include="Model\RouteInstance.cs" />
     <Compile Include="Model\SessionModel.cs" />
+    <Compile Include="Model\TimelineCategoryModel.cs" />
+    <Compile Include="Model\TimelineEventModel.cs" />
+    <Compile Include="Model\TimelineModel.cs" />
     <Compile Include="Model\TraceModel.cs" />
     <Compile Include="Model\UriTokenInstance.cs" />
     <Compile Include="PipelineInspector\RoutesInspector.cs" />
@@ -89,6 +92,7 @@
     <Compile Include="SerializationConverter\EnvironmentModelConverter.cs" />
     <Compile Include="SerializationConverter\RequestModelConverter.cs" />
     <Compile Include="SerializationConverter\SessionModelConverter.cs" />
+    <Compile Include="SerializationConverter\TimelineEventModelConverter.cs" />
     <Compile Include="SerializationConverter\TraceModelConverter.cs" />
     <Compile Include="Tab\Configuration.cs" />
     <Compile Include="Tab\Environment.cs" />
@@ -105,6 +109,10 @@
     <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">
       <Project>{C1289CE8-3259-41D9-893E-7A4E6F772D30}</Project>
       <Name>Glimpse.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Glimpse.Mvc2\Glimpse.Mvc2.csproj">
+      <Project>{6B8B535F-923B-4083-A5BD-31A34F5230A1}</Project>
+      <Name>Glimpse.Mvc2</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

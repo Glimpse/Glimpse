@@ -43,14 +43,23 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public class Message : BoundedFilterMessage, ICanceledBasedFilterMessage
             {
-                public Message(ResultExecutingContext context, Type filterType, MethodInfo method, TimerResult timerResult) 
-                    : base(FilterCategory.Result, FilterBounds.Executing, filterType, method, timerResult, context.Controller)
+                public Message(ResultExecutingContext context, Type executedType, MethodInfo method, TimerResult timerResult) 
+                    : base(FilterCategory.Result, FilterBounds.Executing, executedType, method, timerResult, context.Controller)
                 { 
                     Canceled = context.Cancel;
                     ResultType = context.Result == null ? null : context.Result.GetType();
-                } 
+                    ActionName = context.Controller.ValueProvider.GetValue("action").RawValue.ToStringOrDefault();
+                    ControllerName = context.Controller.ValueProvider.GetValue("controller").RawValue.ToStringOrDefault(); 
+                }
 
                 public bool Canceled { get; set; }
+
+                public override void BuildEvent(ITimelineEvent timelineEvent)
+                {
+                    base.BuildEvent(timelineEvent);
+
+                    timelineEvent.Details.Add("Canceled", Canceled);
+                }
             }
         }
 
@@ -76,13 +85,15 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public class Message : BoundedFilterMessage, IExceptionBasedFilterMessage, ICanceledBasedFilterMessage
             {
-                public Message(ResultExecutedContext context, Type filterType, MethodInfo method, TimerResult timerResult)
-                    : base(FilterCategory.Result, FilterBounds.Executed, filterType, method, timerResult, context.Controller)
+                public Message(ResultExecutedContext context, Type executedType, MethodInfo method, TimerResult timerResult)
+                    : base(FilterCategory.Result, FilterBounds.Executed, executedType, method, timerResult, context.Controller)
                 {
                     Canceled = context.Canceled;
                     ExceptionType = context.Exception == null ? null : context.Exception.GetType();
                     ExceptionHandled = context.ExceptionHandled;
-                    ResultType = context.Result == null ? null : context.Result.GetType(); 
+                    ResultType = context.Result == null ? null : context.Result.GetType();
+                    ActionName = context.Controller.ValueProvider.GetValue("action").RawValue.ToStringOrDefault();
+                    ControllerName = context.Controller.ValueProvider.GetValue("controller").RawValue.ToStringOrDefault(); 
                 }
 
                 public bool ExceptionHandled { get; set; }
@@ -90,6 +101,15 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public Type ExceptionType { get; set; }
 
                 public bool Canceled { get; set; }
+
+                public override void BuildEvent(ITimelineEvent timelineEvent)
+                {
+                    base.BuildEvent(timelineEvent);
+
+                    timelineEvent.Details.Add("Canceled", Canceled);
+                    timelineEvent.Details.Add("ExceptionHandled", ExceptionHandled);
+                    timelineEvent.Details.Add("ExceptionType", ExceptionType); 
+                }
             }
         }
     }

@@ -103,26 +103,27 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public ActionResult ActionResult { get; set; }
             }
 
-            public class Message : TimerResultMessage, IExecutionMessage
+            public class Message : ExecutionMessage, IActionBasedMessage
             {
                 private static MethodInfo executedMethod = typeof(ActionResult).GetMethod("ExecuteResult");
 
-                public Message(Arguments arguments, TimerResult timerResult) : base(timerResult, "ActionResult Executed", "MVC")
+                public Message(Arguments arguments, TimerResult timerResult)
+                    : base(arguments.ActionResult.GetType(), executedMethod, timerResult)
                 {
-                    ExecutedType = arguments.ActionResult.GetType();
                     IsChildAction = arguments.ControllerContext.IsChildAction;
-                    Category = null;
+                    ActionName = arguments.ControllerContext.Controller.ValueProvider.GetValue("action").RawValue.ToStringOrDefault();
+                    ControllerName = arguments.ControllerContext.Controller.ValueProvider.GetValue("controller").RawValue.ToStringOrDefault(); 
                 }
+                 
+                public string ControllerName { get; private set; }
 
-                public Type ExecutedType { get; private set; }
-                
-                public bool IsChildAction { get; private set; }
-                
-                public FilterCategory? Category { get; private set; }
-
-                public MethodInfo ExecutedMethod
+                public string ActionName { get; private set; }
+                 
+                public override void BuildEvent(ITimelineEvent timelineEvent)
                 {
-                    get { return executedMethod; }
+                    base.BuildEvent(timelineEvent);
+
+                    timelineEvent.Title = string.Format("InvokeActionResult - {0}:{1}", ControllerName, ActionName);
                 }
             }
         }
@@ -179,34 +180,31 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public bool IsAsync { get; set; }
             }
 
-            public class Message : TimerResultMessage, IExecutionMessage
+            public class Message : ExecutionMessage, IActionBasedMessage
             {
-                public Message(Arguments arguments, ActionResult returnValue, MethodInfo method, TimerResult timerResult) : base(timerResult, arguments.ActionDescriptor.ActionName, "MVC")
+                public Message(Arguments arguments, ActionResult returnValue, MethodInfo method, TimerResult timerResult)
+                    : base(arguments.ActionDescriptor.ControllerDescriptor.ControllerType, method, timerResult) 
                 {
                     var controllerDescriptor = arguments.ActionDescriptor.ControllerDescriptor;
-
-                    ControllerName = controllerDescriptor.ControllerName;
-                    ExecutedType = controllerDescriptor.ControllerType;
+                     
                     IsChildAction = arguments.ControllerContext.IsChildAction;
+                    ResultType = returnValue.GetType(); 
                     ActionName = arguments.ActionDescriptor.ActionName;
-                    ActionResultType = returnValue.GetType();
-                    Category = null;
-                    ExecutedMethod = ExecutedType.GetMethod(ActionName);
+                    ControllerName = controllerDescriptor.ControllerName;
                 }
 
-                public string ControllerName { get; set; }
-
-                public FilterCategory? Category { get; private set; }
-
-                public Type ExecutedType { get; set; }
-
-                public MethodInfo ExecutedMethod { get; private set; }
-
-                public bool IsChildAction { get; set; }
+                public string ControllerName { get; set; }  
                 
                 public string ActionName { get; set; }
-                
-                public Type ActionResultType { get; set; }
+
+                public Type ResultType { get; set; }
+
+                public override void BuildEvent(ITimelineEvent timelineEvent)
+                {
+                    base.BuildEvent(timelineEvent);
+
+                    timelineEvent.Title = string.Format("InvokeActionMethod - {0}:{1}", ControllerName, ActionName); 
+                }
             }
         }
     }

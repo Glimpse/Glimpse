@@ -29,7 +29,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             Assert.Equal(expectedControllerType, sut.ExecutedType);
             Assert.Equal(actionDescriptor.ActionName, sut.ActionName);
             Assert.False(sut.IsChildAction);
-            Assert.Equal(result.GetType(), sut.ActionResultType);
+            Assert.Equal(result.GetType(), sut.ResultType);
         }
     }
 }

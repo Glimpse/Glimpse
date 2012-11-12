@@ -5,9 +5,14 @@ namespace Glimpse.Core.Message
 {
     public class TimerResultMessage : MessageBase, ITimerResultMessage
     {
-        public TimerResultMessage(TimerResult timerResult, string eventName, string eventCategory)
+        public TimerResultMessage(TimerResult timerResult)
         {
             Result = timerResult;
+        }
+
+        public TimerResultMessage(TimerResult timerResult, string eventName, string eventCategory)
+            : this(timerResult)
+        { 
             EventName = eventName;
             EventCategory = eventCategory;
         }
@@ -32,5 +37,14 @@ namespace Glimpse.Core.Message
         }
 
         private TimerResult Result { get; set; }
+
+        public virtual void BuildEvent(ITimelineEvent timelineEvent)
+        {
+            timelineEvent.Title = EventName;
+            timelineEvent.Category = EventCategory;
+            timelineEvent.Duration = Duration;
+            timelineEvent.StartPoint = Offset;
+            timelineEvent.StartTime = StartTime;
+        }
     }
 }
