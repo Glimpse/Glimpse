@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
+using Glimpse.Core.Message;
 using Glimpse.Core.Plugin.Assist;
 using Glimpse.Core.ResourceResult;
 #if NET35
@@ -74,8 +75,11 @@ namespace Glimpse.Core.Framework
 
             // Create and start global stopwatch
             var stopwatch = Stopwatch.StartNew();
+            var executionTimer = new ExecutionTimer(stopwatch);
             requestStore.Set(Constants.GlobalStopwatchKey, stopwatch);
-            requestStore.Set(Constants.GlobalTimerKey, new ExecutionTimer(stopwatch));
+            requestStore.Set(Constants.GlobalTimerKey, executionTimer);
+
+            Configuration.MessageBroker.Publish(new TimerResultMessage(executionTimer.Point(), "Start Request", "WebForms"));
         }
 
         // TODO: Add PRG support
@@ -88,11 +92,15 @@ namespace Glimpse.Core.Framework
                 return;
             }
 
-            ExecuteTabs(RuntimeEvent.EndRequest);
-
             var frameworkProvider = Configuration.FrameworkProvider;
             var requestStore = frameworkProvider.HttpRequestStore;
-            
+
+            var executionTimer = requestStore.Get<ExecutionTimer>(Constants.GlobalTimerKey);
+
+            Configuration.MessageBroker.Publish(new TimerResultMessage(executionTimer.Point(), "End Request", "WebForms"));
+
+            ExecuteTabs(RuntimeEvent.EndRequest);
+
             Guid requestId;
             Stopwatch stopwatch;
             try
