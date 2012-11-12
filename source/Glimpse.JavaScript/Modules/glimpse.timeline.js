@@ -183,7 +183,7 @@
                 }
             },
             processEvents = function() { 
-                var eventStack = [], lastEvent = { startPoint : 0, duration : 0, childlessDuration : 0 };
+                var eventStack = [], lastEvent = { startPoint : 0, duration : 0, childlessDuration : 0, endPoint : 0 };
                 for (var i = 0; i < timeline.data.events.length; i += 1) {
                     var event = timeline.data.events[i],
                         topEvent = eventStack.length > 0 ? eventStack[eventStack.length - 1] : undefined,
@@ -198,14 +198,16 @@
                         subTextPre = (event.subText ? '(' + event.subText + ')' : ''),
                         subText = (subTextPre ? '<span class="glimpse-tl-event-desc-sub">' + subTextPre + '</span>' : ''),
                         stackParsed = false;
-                             
+
+                    event.endPoint = (parseFloat(event.startPoint) + parseFloat(event.duration)).toFixed(2);
+
                     //Derive event nesting  
                     while (!stackParsed) {
-                        if (event.startPoint > lastEvent.startPoint && (event.startPoint + event.duration) <= (lastEvent.startPoint + lastEvent.duration)) {
+                        if (event.startPoint > lastEvent.startPoint && event.endPoint <= lastEvent.endPoint) {
                             eventStack.push(lastEvent); 
                             stackParsed = true;
                         }
-                        else if (topEvent != undefined && (topEvent.startPoint + topEvent.duration) < (event.startPoint + event.duration)) {
+                        else if (topEvent != undefined && topEvent.endPoint < event.endPoint) {
                             eventStack.pop(); 
                             topEvent = eventStack.length > 0 ? eventStack[eventStack.length - 1] : undefined; 
                             stackParsed = false;
@@ -228,9 +230,9 @@
                     //Build up the event decoration
                     var eventDecoration = '';
                     if (width >= 0)
-                        eventDecoration = '<div class="glimpse-tl-event-overlay-lh"><div class="glimpse-tl-event-overlay-li"></div><div class="glimpse-tl-event-overlay-lt">' + event.startPoint + 'ms</div></div>';
+                        eventDecoration = '<div class="glimpse-tl-event-overlay-lh"><div class="glimpse-tl-event-overlay-li"></div><div class="glimpse-tl-event-overlay-lt">' + event.startPoint + ' ms</div></div>';
                     if (width > 0)
-                        eventDecoration += '<div class="glimpse-tl-event-overlay-rh"><div class="glimpse-tl-event-overlay-ri"></div><div class="glimpse-tl-event-overlay-rt">' + (event.startPoint + event.duration) + 'ms</div></div><div class="glimpse-tl-event-overlay-c">' + (width < 3.5 ? '...' : (event.duration + 'ms')) + '</div>';
+                        eventDecoration += '<div class="glimpse-tl-event-overlay-rh"><div class="glimpse-tl-event-overlay-ri"></div><div class="glimpse-tl-event-overlay-rt">' + event.endPoint + ' ms</div></div><div class="glimpse-tl-event-overlay-c">' + (width < 3.5 ? '...' : (event.duration + ' ms')) + '</div>';
                     eventDecoration = '<div class="glimpse-tl-event-overlay" style="left:' + left + '%;' + widthStyle + maxStyle + '" data-timelineItemIndex="' + i + '">' + eventDecoration + '</div>';
 
                     //Add main event HTML to DOM
@@ -481,7 +483,7 @@
                 for (detailKey in event.details) {
                     details += '<tr><th>' + detailKey + '</th><td>' + event.details[detailKey] + '</td></tr>';
                 }
-                return '<table><tr><th colspan="2"><div class="glimpse-tl-event-info-title"><div class="glimpse-tl-event" style="background-color:' + category.eventColor + ';border:1px solid ' + category.eventColorHighlight + '"></div>' + event.title + ' - Details</div></th></tr><tr><th>Duration</th><td>' + event.duration + 'ms (at ' + event.startPoint + 'ms' + ( + event.duration > 1 ? (' to ' + (event.startPoint + event.duration) + 'ms') : '' ) +')</td></tr>' + (event.duration != event.childlessDuration ? '<tr><th>w/out Children</th><td>' + event.childlessDuration + 'ms</td></tr>' : '') + (event.subText ? '<tr><th>Details</th><td>' + event.subText + '</td></tr>' : '' ) + details + '</table>';
+                return '<table><tr><th colspan="2"><div class="glimpse-tl-event-info-title"><div class="glimpse-tl-event" style="background-color:' + category.eventColor + ';border:1px solid ' + category.eventColorHighlight + '"></div>' + event.title + ' - Details</div></th></tr><tr><th>Duration</th><td>' + event.duration + ' ms (at ' + event.startPoint + ' ms' + ( + event.duration > 1 ? (' to ' + event.endPoint + ' ms') : '' ) +')</td></tr>' + (event.duration != event.childlessDuration ? '<tr><th>w/out Children</th><td>' + event.childlessDuration + ' ms</td></tr>' : '') + (event.subText ? '<tr><th>Details</th><td>' + event.subText + '</td></tr>' : '' ) + details + '</table>';
             },
             updateBubble = function(item) {
                 var eventOffset = item.offset(), 
