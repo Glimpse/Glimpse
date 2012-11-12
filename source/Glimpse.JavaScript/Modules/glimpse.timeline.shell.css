@@ -181,6 +181,7 @@
     font-size: 0.8em;
     top: 2px;
     color: rgba(0, 0, 0, 0.75);
+    white-space: nowrap;
 }
 .glimpse-panel .glimpse-tl-event-overlay-rh {
     position: absolute;
@@ -202,6 +203,7 @@
     top: 2px;
     left: 11px;
     color: rgba(0, 0, 0, 0.75);
+    white-space: nowrap;
 }
 .glimpse-panel .glimpse-tl-event-overlay-c {
     font-size: 0.9em;
