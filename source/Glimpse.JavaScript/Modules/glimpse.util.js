@@ -128,8 +128,8 @@
         },
         timeConvert : function(value) {
             if (value < 1000)
-                return value + 'ms';
-            return Math.round(value / 10) / 100 + 's';
+                return value + ' ms';
+            return Math.round(value / 10) / 100 + ' s';
         },
     };
 })(jQueryGlimpse);
