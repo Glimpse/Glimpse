@@ -54,23 +54,22 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             context.Verify(c => c.Proceed());
         }
 
-        /* TODO nikmd23 not sure what you want to do here
         [Theory, AutoMock]
-        public void PublishMessagesIfRuntimePolicyIsOnAndViewNotFound(ViewEngine.FindViews sut, IAlternateImplementationContext context)
+        public void PublishMessagesIfRuntimePolicyIsOnAndViewNotFound(ViewEngine.FindViews sut, IAlternateImplementationContext context, ControllerContext controllerContext)
         {
-            context.Setup(c => c.Arguments).Returns(GetArguments());
+            context.Setup(c => c.Arguments).Returns(GetArguments(controllerContext));
             context.Setup(c => c.ReturnValue).Returns(new ViewEngineResult(Enumerable.Empty<string>()));
 
             sut.NewImplementation(context);
 
             context.MessageBroker.Verify(b => b.Publish(It.IsAny<ViewEngine.FindViews.Message>()));
-            context.MessageBroker.Verify(b => b.Publish(It.IsAny<TimerResultMessage>()));
+            context.MessageBroker.Verify(b => b.Publish(It.IsAny<ViewEngine.FindViews.EventMessage>()));
         }
 
         [Theory, AutoMock]
-        public void PublishMessagesIfRuntimePolicyIsOnAndViewIsFound(ViewEngine.FindViews sut, IAlternateImplementationContext context, IView view, IViewEngine engine)
+        public void PublishMessagesIfRuntimePolicyIsOnAndViewIsFound(ViewEngine.FindViews sut, IAlternateImplementationContext context, IView view, IViewEngine engine, ControllerContext controllerContext)
         {
-            context.Setup(c => c.Arguments).Returns(GetArguments);
+            context.Setup(c => c.Arguments).Returns(GetArguments(controllerContext));
             context.Setup(c => c.ReturnValue).Returns(new ViewEngineResult(view, engine));
             context.ProxyFactory.Setup(p => p.IsProxyable(It.IsAny<object>())).Returns(true);
             context.ProxyFactory.Setup(p => 
@@ -86,15 +85,14 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             context.Logger.Verify(l => l.Info(It.IsAny<string>(), It.IsAny<object[]>()));
             context.VerifySet(c => c.ReturnValue = It.IsAny<ViewEngineResult>());
             context.MessageBroker.Verify(b => b.Publish(It.IsAny<ViewEngine.FindViews.Message>()));
-            context.MessageBroker.Verify(b => b.Publish(It.IsAny<TimerResultMessage>()));
+            context.MessageBroker.Verify(b => b.Publish(It.IsAny<ViewEngine.FindViews.EventMessage>()));
         }
-        */
 
-        private object[] GetArguments()
+        private object[] GetArguments(ControllerContext controllerContext)
         {
             return new object[]
                 {
-                    new ControllerContext(), 
+                    controllerContext, 
                     fixture.CreateAnonymous("ViewName"), 
                     fixture.CreateAnonymous("MasterName"), 
                     fixture.CreateAnonymous<bool>()

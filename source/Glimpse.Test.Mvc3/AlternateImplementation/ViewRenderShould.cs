@@ -21,21 +21,19 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
 
             Assert.NotNull(sut.MethodToImplement);
         }
-
-        /*
+        
         [Theory, AutoMock]
-        public void PublishMessagesWithOnPolicy(View.Render sut, IAlternateImplementationContext context, IViewCorrelationMixin mixin)
+        public void PublishMessagesWithOnPolicy(View.Render sut, IAlternateImplementationContext context, IViewCorrelationMixin mixin, ViewContext viewContext)
         {
-            context.Setup(c => c.Arguments).Returns(GetArguments());
+            context.Setup(c => c.Arguments).Returns(new object[] { viewContext, new StringWriter() });
             context.Setup(c => c.Proxy).Returns(mixin);
 
             sut.NewImplementation(context);
 
             context.TimerStrategy().Verify(t => t.Time(It.IsAny<Action>()));
             context.MessageBroker.Verify(b => b.Publish(It.IsAny<View.Render.Message>()));
-            context.MessageBroker.Verify(b => b.Publish(It.IsAny<TimerResultMessage>()));
-        }
-        */
+            context.MessageBroker.Verify(b => b.Publish(It.IsAny<View.Render.EventMessage>()));
+        } 
 
         [Theory, AutoMock]
         public void ProceedWithOffPolicy(View.Render sut, IAlternateImplementationContext context)
@@ -46,13 +44,6 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
 
             context.Verify(c => c.Proceed());
             context.TimerStrategy().Verify(t => t.Time(It.IsAny<Action>()), Times.Never());
-        }
-
-        private object[] GetArguments()
-        {
-            var viewContext = new ViewContext();
-            var textWriter = new StringWriter();
-            return new object[] { viewContext, textWriter };
-        }
+        } 
     }
 }
