@@ -56,7 +56,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public PropertyDescriptor PropertyDescriptor { get; set; }
             }
 
-            public class Message
+            public class Message : MessageBase
             {
                 public Message(Arguments arguments)
                 {

@@ -99,6 +99,9 @@
     <Compile Include="AlternateImplementation\ResultFilterOnResultExecutingMessageShould.cs" />
     <Compile Include="AlternateImplementation\ResultFilterOnResultExecutingShould.cs" />
     <Compile Include="AlternateImplementation\ResultFilterShould.cs" />
+    <Compile Include="AlternateImplementation\ValueProviderGetValueArgumentShould.cs" />
+    <Compile Include="AlternateImplementation\ValueProviderGetValueShould.cs" />
+    <Compile Include="AlternateImplementation\ValueProviderShould.cs" />
     <Compile Include="AlternateImplementation\ViewEngineFindViewsArgumentsShould.cs" />
     <Compile Include="AlternateImplementation\ViewEngineFindViewsMessageShould.cs" />
     <Compile Include="AlternateImplementation\ViewEngineFindViewsShould.cs" />
