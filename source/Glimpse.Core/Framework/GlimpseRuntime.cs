@@ -96,8 +96,10 @@ namespace Glimpse.Core.Framework
             var requestStore = frameworkProvider.HttpRequestStore;
 
             var executionTimer = requestStore.Get<ExecutionTimer>(Constants.GlobalTimerKey);
-
-            Configuration.MessageBroker.Publish(new TimelineMessage(executionTimer.Point(), "End Request", "WebForms"));
+            if (executionTimer != null)
+            {
+                Configuration.MessageBroker.Publish(new TimelineMessage(executionTimer.Point(), "End Request", "WebForms"));
+            }
 
             ExecuteTabs(RuntimeEvent.EndRequest);
 
