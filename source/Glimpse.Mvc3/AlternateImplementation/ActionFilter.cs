@@ -78,7 +78,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public Message(ActionExecutedContext context, Type executedType, MethodInfo method, TimerResult timerResult)
                     : base(FilterCategory.Action, FilterBounds.Executed, executedType, method, timerResult, context.Controller)
                 { 
-                    this.Canceled = context.Canceled;
+                    Canceled = context.Canceled;
                     ExceptionHandled = context.ExceptionHandled;
                     ExceptionType = context.Exception != null ? context.Exception.GetType() : null;
                     ResultType = context.Result != null ? context.Result.GetType() : null;
