@@ -89,6 +89,11 @@
     <Compile Include="AlternateImplementation\ExceptionFilterOnExceptionMessageShould.cs" />
     <Compile Include="AlternateImplementation\ExceptionFilterOnExceptionShould.cs" />
     <Compile Include="AlternateImplementation\ExceptionFilterShould.cs" />
+    <Compile Include="AlternateImplementation\ModelBinderBindModelArgumentsShould.cs" />
+    <Compile Include="AlternateImplementation\ModelBinderBindModelShould.cs" />
+    <Compile Include="AlternateImplementation\ModelBinderBindPropertyArgumentsShould.cs" />
+    <Compile Include="AlternateImplementation\ModelBinderBindPropertyShould.cs" />
+    <Compile Include="AlternateImplementation\ModelBinderShould.cs" />
     <Compile Include="AlternateImplementation\ResultFilterOnResultExecutedMessageShould.cs" />
     <Compile Include="AlternateImplementation\ResultFilterOnResultExecutedShould.cs" />
     <Compile Include="AlternateImplementation\ResultFilterOnResultExecutingMessageShould.cs" />

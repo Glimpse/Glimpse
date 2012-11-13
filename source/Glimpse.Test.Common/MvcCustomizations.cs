@@ -18,6 +18,12 @@ namespace Glimpse.Test.Common
             ViewContext(fixture);
             ControllerBase(fixture);
             IValueProvider(fixture);
+            ModelBindingContext(fixture);
+        }
+
+        private static void ModelBindingContext(IFixture fixture)
+        {
+            fixture.Customize<ModelBindingContext>(context => context.OmitAutoProperties());
         }
 
 // ReSharper disable InconsistentNaming
