@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web;
-using Glimpse.AspNet.Model;
+﻿using Glimpse.AspNet.Model;
 using Glimpse.Core.Extensibility; 
 
 namespace Glimpse.AspNet.SerializationConverter
 { 
-
     public class TimelineEventModelConverter : SerializationConverter<TimelineEventModel>
     {
         public override object Convert(TimelineEventModel obj)

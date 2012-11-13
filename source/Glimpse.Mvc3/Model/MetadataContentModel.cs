@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Web.Mvc;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace Glimpse.Mvc.Model
 {
@@ -73,9 +70,9 @@ namespace Glimpse.Mvc.Model
         public DefaultValueModel<bool> IsComplexType { get; private set; }
         
         /// <summary>
-        /// Gets a flag which indicates whether the model is a nulable value type (namely, Nulable). Not user-settable
+        /// Gets a flag which indicates whether the model is a nullable value type (namely, Nullable). Not user-settable
         /// </summary>
-        public DefaultValueModel<bool> IsNullableValueType { get; set; }
+        public DefaultValueModel<bool> IsNullableValueType { get; private set; }
         
         /// <summary>
         /// Gets a flag which indicates if this value is read-only (for example, because the property does not have a setter). Default: false
@@ -83,7 +80,7 @@ namespace Glimpse.Mvc.Model
         public DefaultValueModel<bool> IsReadOnly { get; private set; }
         
         /// <summary>
-        /// Gets a flag which indicates if this value is required. Default: true for non-nulable value types; false for all others.
+        /// Gets a flag which indicates if this value is required. Default: true for non-nullable value types; false for all others.
         /// </summary>
         public DefaultValueModel<bool> IsRequired { get; private set; } 
         

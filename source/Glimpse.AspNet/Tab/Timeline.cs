@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.AspNet.Model;
 using Glimpse.Core.Extensibility;
@@ -19,14 +17,14 @@ namespace Glimpse.AspNet.Tab
                                { "View", new TimelineCategoryModel { EventColor = "#10E309", EventColorHighlight = "#0EC41D" } }, 
                            };
 
-        //.glimpse-panel .glimpse-tl-event-purple { border:1px solid #823BBE; background-color:#AF78DD; } 
-        //.glimpse-panel .glimpse-tl-event-orange { border:1px solid #DDA431; background-color:#FDBF45; } 
-        //.glimpse-panel .glimpse-tl-event-blue { border:1px solid #5087CF; background-color:#72A3E4; } 
-        //.glimpse-panel .glimpse-tl-event-green { border:1px solid #0EC41D; background-color:#10E309; } 
-        //.glimpse-panel .glimpse-tl-event-aqua { border:1px solid #2EBFC7; background-color:#72DEE4; } 
-        //.glimpse-panel .glimpse-tl-event-yellow { border:1px solid #DEE81A; background-color:#F0ED5D; } 
-        //.glimpse-panel .glimpse-tl-event-pink { border:1px solid #DD31DA; background-color:#FD45F7; } 
-        //.glimpse-panel .glimpse-tl-event-red { border:1px solid #DD3131; background-color:#FD4545; }  
+        //// .glimpse-panel .glimpse-tl-event-purple { border:1px solid #823BBE; background-color:#AF78DD; } 
+        //// .glimpse-panel .glimpse-tl-event-orange { border:1px solid #DDA431; background-color:#FDBF45; } 
+        //// .glimpse-panel .glimpse-tl-event-blue { border:1px solid #5087CF; background-color:#72A3E4; } 
+        //// .glimpse-panel .glimpse-tl-event-green { border:1px solid #0EC41D; background-color:#10E309; } 
+        //// .glimpse-panel .glimpse-tl-event-aqua { border:1px solid #2EBFC7; background-color:#72DEE4; } 
+        //// .glimpse-panel .glimpse-tl-event-yellow { border:1px solid #DEE81A; background-color:#F0ED5D; } 
+        //// .glimpse-panel .glimpse-tl-event-pink { border:1px solid #DD31DA; background-color:#FD45F7; } 
+        //// .glimpse-panel .glimpse-tl-event-red { border:1px solid #DD3131; background-color:#FD4545; }  
 
         public override string Name
         {

@@ -7,14 +7,14 @@ namespace Glimpse.Core.Extensibility
 {
     public class JsonNetConverterDictionaryKeysAreNotPropertyNames : JsonConverter
     {
-        public override bool CanConvert(Type objectType)
-        {
-            return typeof(IDictionary).IsAssignableFrom(objectType);
-        }
-
         public override bool CanRead
         {
             get { return false; }
+        }
+
+        public override bool CanConvert(Type objectType)
+        {
+            return typeof(IDictionary).IsAssignableFrom(objectType);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)

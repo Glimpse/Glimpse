@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 
@@ -21,6 +17,7 @@ namespace Glimpse.Mvc.Message
             {
                 EventName = string.Format("{0}", Category.ToString());
             }
+
             if (string.IsNullOrEmpty(eventCategory))
             {
                 EventCategory = "Filter";
@@ -43,24 +40,5 @@ namespace Glimpse.Mvc.Message
         {
             return result.GetTypeOrNull();
         } 
-    }
-
-    public class ActionFilterMessage : FilterMessage, IActionBasedMessage
-    {
-        public ActionFilterMessage(TimerResult timerResult, string controllerName, string actionName, FilterCategory filterCategory, Type resultType, bool isChildAction, Type executedType, MethodInfo method, string eventName = null, string eventCategory = null)
-            : base(timerResult, filterCategory, resultType, isChildAction, executedType, method, eventName, eventCategory)
-        {
-            ControllerName = controllerName;
-            ActionName = actionName; 
-
-            if (string.IsNullOrEmpty(eventName))
-            {
-                EventName = string.Format("{0} - {1}:{2}", Category.ToString(), ControllerName, ActionName);
-            }
-        }
-
-        public string ControllerName { get; protected set; }
-
-        public string ActionName { get; protected set; }
     }
 }
