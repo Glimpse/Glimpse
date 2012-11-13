@@ -5,21 +5,16 @@ namespace Glimpse.Core.Message
 {
     public class TimelineMessage : MessageBase, ITimerResultMessage
     {
-        public TimelineMessage(TimerResult timerResult)
+        public TimelineMessage(TimerResult timerResult, string eventName = null, string eventCategory = null) 
         {
             Result = timerResult;
-        }
-
-        public TimelineMessage(TimerResult timerResult, string eventName, string eventCategory)
-            : this(timerResult)
-        { 
             EventName = eventName;
             EventCategory = eventCategory;
         }
 
-        public string EventName { get; set; }
-        
-        public string EventCategory { get; set; }
+        public string EventName { get; protected set; }
+
+        public string EventCategory { get; protected set; }
         
         public double Offset
         {

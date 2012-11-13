@@ -5,30 +5,62 @@ using System.Reflection;
 using System.Text;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
 
 namespace Glimpse.Mvc.Message
 {
     public class FilterMessage : ExecutionMessage, IFilterMessage
     {
-        public FilterMessage(FilterCategory filterCategory, Type executedType, MethodInfo method, TimerResult timerResult, ControllerBase controllerBase) 
-            : base(executedType, method, timerResult)
+        public FilterMessage(TimerResult timerResult, FilterCategory filterCategory, Type resultType, bool isChildAction, Type executedType, MethodInfo method, string eventName = null, string eventCategory = null)
+            : base(timerResult, isChildAction, executedType, method, eventName, eventCategory) 
         {
-            IsChildAction = controllerBase.ControllerContext != null && controllerBase.ControllerContext.IsChildAction;
             Category = filterCategory;
-            EventCategory = "Filter";
+            ResultType = resultType;
+
+            if (string.IsNullOrEmpty(eventName))
+            {
+                EventName = string.Format("{0}", Category.ToString());
+            }
+            if (string.IsNullOrEmpty(eventCategory))
+            {
+                EventCategory = "Filter";
+            }  
         }
 
-        public FilterCategory Category { get; private set; }
+        public FilterCategory Category { get; protected set; }
 
-        public Type ResultType { get; set; }
+        public Type ResultType { get; protected set; }
 
         public override void BuildEvent(ITimelineEvent timelineEvent)
         {
             base.BuildEvent(timelineEvent);
 
-            timelineEvent.Title = string.Format("{0}", Category.ToString());
             timelineEvent.Details.Add("Category", Category.ToString());
             timelineEvent.Details.Add("ResultType", ResultType);
         }
+
+        protected static Type GetResultType(object result)
+        {
+            return result.GetTypeOrNull();
+        } 
+    }
+
+    public class ActionFilterMessage : FilterMessage, IActionBasedMessage
+    {
+        public ActionFilterMessage(TimerResult timerResult, string controllerName, string actionName, FilterCategory filterCategory, Type resultType, bool isChildAction, Type executedType, MethodInfo method, string eventName = null, string eventCategory = null)
+            : base(timerResult, filterCategory, resultType, isChildAction, executedType, method, eventName, eventCategory)
+        {
+            ControllerName = controllerName;
+            ActionName = actionName; 
+
+            if (string.IsNullOrEmpty(eventName))
+            {
+                EventName = string.Format("{0} - {1}:{2}", Category.ToString(), ControllerName, ActionName);
+            }
+        }
+
+        public string ControllerName { get; protected set; }
+
+        public string ActionName { get; protected set; }
     }
 }

@@ -43,11 +43,10 @@ namespace Glimpse.Mvc.AlternateImplementation
             public class Message : FilterMessage, IExceptionBasedFilterMessage
             {
                 public Message(ExceptionContext context, Type executedType, MethodInfo method, TimerResult timerResult)
-                    : base(FilterCategory.Exception, executedType, method, timerResult, context.Controller)
+                    : base(timerResult, FilterCategory.Exception, GetResultType(context.Result), GetIsChildAction(context.Controller), executedType, method) 
                 {
+                    ExceptionType = context.Exception.GetTypeOrNull();
                     ExceptionHandled = context.ExceptionHandled;
-                    ExceptionType = context.Exception == null ? null : context.Exception.GetType();
-                    ResultType = context.Result == null ? null : context.Result.GetType();  
                 }
 
                 public Type ExceptionType { get; set; }

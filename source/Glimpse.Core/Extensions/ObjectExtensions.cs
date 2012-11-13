@@ -16,5 +16,15 @@ namespace Glimpse.Core.Extensions
 
             return value.ToString();
         }
+
+        public static Type GetTypeOrNull(this object value)
+        {
+            if (value == null)
+            {
+                return null;
+            }
+
+            return value.GetType();
+        }
     }
 }

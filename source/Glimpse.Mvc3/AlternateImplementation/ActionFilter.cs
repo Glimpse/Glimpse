@@ -44,11 +44,8 @@ namespace Glimpse.Mvc.AlternateImplementation
             public class Message : BoundedFilterMessage
             {
                 public Message(ActionExecutingContext context, Type executedType, MethodInfo method, TimerResult timerResult)
-                    : base(FilterCategory.Action, FilterBounds.Executing, executedType, method, timerResult, context.Controller)
+                    : base(timerResult, GetControllerName(context.ActionDescriptor), GetActionName(context.ActionDescriptor), FilterBounds.Executing, FilterCategory.Action, GetResultType(context.Result), GetIsChildAction(context.Controller), executedType, method)
                 {
-                    ResultType = context.Result != null ? context.Result.GetType() : null;
-                    ControllerName = context.ActionDescriptor.ControllerDescriptor.ControllerName;
-                    ActionName = context.ActionDescriptor.ActionName; 
                 }  
             }
         }
@@ -76,14 +73,11 @@ namespace Glimpse.Mvc.AlternateImplementation
             public class Message : BoundedFilterMessage, IExceptionBasedFilterMessage, ICanceledBasedFilterMessage
             {
                 public Message(ActionExecutedContext context, Type executedType, MethodInfo method, TimerResult timerResult)
-                    : base(FilterCategory.Action, FilterBounds.Executed, executedType, method, timerResult, context.Controller)
+                    : base(timerResult, GetControllerName(context.ActionDescriptor), GetActionName(context.ActionDescriptor), FilterBounds.Executed, FilterCategory.Action, GetResultType(context.Result), GetIsChildAction(context.Controller), executedType, method)
                 { 
                     Canceled = context.Canceled;
                     ExceptionHandled = context.ExceptionHandled;
-                    ExceptionType = context.Exception != null ? context.Exception.GetType() : null;
-                    ResultType = context.Result != null ? context.Result.GetType() : null;
-                    ControllerName = context.ActionDescriptor.ControllerDescriptor.ControllerName;
-                    ActionName = context.ActionDescriptor.ActionName; 
+                    ExceptionType = context.Exception.GetTypeOrNull();
                 } 
 
                 public bool Canceled { get; private set; }

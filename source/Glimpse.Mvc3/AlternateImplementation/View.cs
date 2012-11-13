@@ -7,11 +7,10 @@ using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Message;
+using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    using Glimpse.Mvc.Message;
-
     public class View : Alternate<IView>
     {
         public View(IProxyFactory proxyFactory) : base(proxyFactory)

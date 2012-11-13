@@ -5,28 +5,29 @@ using System.Reflection;
 using System.Text;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
 
 namespace Glimpse.Mvc.Message
 {
-    public class BoundedFilterMessage : FilterMessage, IBoundedFilterMessage
-    {
-        public BoundedFilterMessage(FilterCategory filterCategory, FilterBounds bounds, Type executedType, MethodInfo method, TimerResult timerResult, ControllerBase controllerBase)
-            : base(filterCategory, executedType, method, timerResult, controllerBase)
+    public class BoundedFilterMessage : ActionFilterMessage, IBoundedFilterMessage
+    { 
+        public BoundedFilterMessage(TimerResult timerResult, string controllerName, string actionName, FilterBounds bounds, FilterCategory filterCategory, Type resultType, bool isChildAction, Type executedType, MethodInfo method, string eventName = null, string eventCategory = null)
+            : base(timerResult, controllerName, actionName, filterCategory, resultType, isChildAction, executedType, method, eventName, eventCategory)
         {
             Bounds = bounds;
-        }
 
-        public FilterBounds Bounds { get; private set; }
+            if (string.IsNullOrEmpty(eventName))
+            {
+                EventName = string.Format("{0}:{1} - {2}:{3}", Category.ToString(), Bounds.ToString(), ControllerName, ActionName); 
+            }
+        } 
 
-        public string ControllerName { get; protected set; }
-
-        public string ActionName { get; protected set; }
+        public FilterBounds Bounds { get; protected set; }
 
         public override void BuildEvent(ITimelineEvent timelineEvent)
         {
             base.BuildEvent(timelineEvent);
 
-            timelineEvent.Title = string.Format("{0}:{1} - {2}:{3}", Category.ToString(), Bounds.ToString(), ControllerName, ActionName); 
             timelineEvent.Details.Add("Bounds", Bounds.ToString());
         }
     }

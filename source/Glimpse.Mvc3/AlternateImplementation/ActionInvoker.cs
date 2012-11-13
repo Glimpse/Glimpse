@@ -85,9 +85,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     return;
                 }
 
-                context.MessageBroker.Publish(new Message(
-                    new Arguments(context.Arguments), 
-                    timerResult));
+                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), timerResult));
             }
 
             public class Arguments
@@ -103,27 +101,14 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public ActionResult ActionResult { get; set; }
             }
 
-            public class Message : ExecutionMessage, IActionBasedMessage
+            public class Message : ActionMessage
             {
                 private static MethodInfo executedMethod = typeof(ActionResult).GetMethod("ExecuteResult");
 
                 public Message(Arguments arguments, TimerResult timerResult)
-                    : base(arguments.ActionResult.GetType(), executedMethod, timerResult)
+                    : base(timerResult, GetControllerName(arguments.ControllerContext.Controller), GetActionName(arguments.ControllerContext.Controller), GetIsChildAction(arguments.ControllerContext.Controller), arguments.ActionResult.GetType(), executedMethod)
                 {
-                    IsChildAction = arguments.ControllerContext.IsChildAction;
-                    ActionName = arguments.ControllerContext.Controller.ValueProvider.GetValue("action").RawValue.ToStringOrDefault();
-                    ControllerName = arguments.ControllerContext.Controller.ValueProvider.GetValue("controller").RawValue.ToStringOrDefault(); 
-                }
-                 
-                public string ControllerName { get; private set; }
-
-                public string ActionName { get; private set; }
-                 
-                public override void BuildEvent(ITimelineEvent timelineEvent)
-                {
-                    base.BuildEvent(timelineEvent);
-
-                    timelineEvent.Title = string.Format("InvokeActionResult - {0}:{1}", ControllerName, ActionName);
+                    EventName = string.Format("InvokeActionResult - {0}:{1}", ControllerName, ActionName);
                 }
             }
         }
@@ -144,11 +129,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     return;
                 }
 
-                context.MessageBroker.Publish(new Message(
-                    new Arguments(context.Arguments), 
-                    context.ReturnValue as ActionResult, 
-                    context.MethodInvocationTarget, 
-                    timerResult));
+                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), context.ReturnValue as ActionResult, context.MethodInvocationTarget, timerResult));
             }
 
             public class Arguments
@@ -180,22 +161,14 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public bool IsAsync { get; set; }
             }
 
-            public class Message : ExecutionMessage, IActionBasedMessage
+            public class Message : ActionMessage
             {
                 public Message(Arguments arguments, ActionResult returnValue, MethodInfo method, TimerResult timerResult)
-                    : base(arguments.ActionDescriptor.ControllerDescriptor.ControllerType, method, timerResult) 
+                    : base(timerResult, GetControllerName(arguments.ControllerContext.Controller), GetActionName(arguments.ControllerContext.Controller), GetIsChildAction(arguments.ControllerContext.Controller), returnValue.GetType(), method)
                 {
-                    var controllerDescriptor = arguments.ActionDescriptor.ControllerDescriptor;
-                     
-                    IsChildAction = arguments.ControllerContext.IsChildAction;
-                    ResultType = returnValue.GetType(); 
-                    ActionName = arguments.ActionDescriptor.ActionName;
-                    ControllerName = controllerDescriptor.ControllerName;
+                    ResultType = returnValue.GetType();
+                    EventName = string.Format("InvokeActionMethod - {0}:{1}", ControllerName, ActionName);
                 }
-
-                public string ControllerName { get; set; }  
-                
-                public string ActionName { get; set; }
 
                 public Type ResultType { get; set; }
 
@@ -203,7 +176,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 {
                     base.BuildEvent(timelineEvent);
 
-                    timelineEvent.Title = string.Format("InvokeActionMethod - {0}:{1}", ControllerName, ActionName); 
+                    timelineEvent.Details.Add("ResultType", ResultType);
                 }
             }
         }

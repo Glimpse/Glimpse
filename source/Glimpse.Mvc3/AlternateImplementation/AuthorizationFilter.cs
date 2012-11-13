@@ -40,25 +40,11 @@ namespace Glimpse.Mvc.AlternateImplementation
                 context.MessageBroker.Publish(new Message((AuthorizationContext)context.Arguments[0], context.InvocationTarget.GetType(), context.MethodInvocationTarget, timer));
             }
 
-            public class Message : FilterMessage, IActionBasedMessage
+            public class Message : ActionFilterMessage
             {
-                public Message(AuthorizationContext context, Type executedType, MethodInfo method, TimerResult timerResult) 
-                    : base(FilterCategory.Authorization, executedType, method, timerResult, context.Controller)
+                public Message(AuthorizationContext context, Type executedType, MethodInfo method, TimerResult timerResult)
+                    : base(timerResult, GetControllerName(context.ActionDescriptor), GetActionName(context.ActionDescriptor), FilterCategory.Authorization, GetResultType(context.Result), GetIsChildAction(context.Controller), executedType, method)
                 {
-                    ResultType = context.Result == null ? null : context.Result.GetType();
-                    ControllerName = context.ActionDescriptor.ControllerDescriptor.ControllerName;
-                    ActionName = context.ActionDescriptor.ActionName;
-                }
-
-                public string ControllerName { get; private set; }
-
-                public string ActionName { get; private set; }
-
-                public override void BuildEvent(ITimelineEvent timelineEvent)
-                {
-                    base.BuildEvent(timelineEvent);
-
-                    timelineEvent.Title = string.Format("{0} - {1}:{2}", Category.ToString(), ControllerName, ActionName);
                 }
             }
         }
