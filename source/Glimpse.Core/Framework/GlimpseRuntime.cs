@@ -79,7 +79,7 @@ namespace Glimpse.Core.Framework
             requestStore.Set(Constants.GlobalStopwatchKey, stopwatch);
             requestStore.Set(Constants.GlobalTimerKey, executionTimer);
 
-            Configuration.MessageBroker.Publish(new TimerResultMessage(executionTimer.Point(), "Start Request", "WebForms"));
+            Configuration.MessageBroker.Publish(new TimelineMessage(executionTimer.Point(), "Start Request", "WebForms"));
         }
 
         // TODO: Add PRG support
@@ -97,7 +97,7 @@ namespace Glimpse.Core.Framework
 
             var executionTimer = requestStore.Get<ExecutionTimer>(Constants.GlobalTimerKey);
 
-            Configuration.MessageBroker.Publish(new TimerResultMessage(executionTimer.Point(), "End Request", "WebForms"));
+            Configuration.MessageBroker.Publish(new TimelineMessage(executionTimer.Point(), "End Request", "WebForms"));
 
             ExecuteTabs(RuntimeEvent.EndRequest);
 

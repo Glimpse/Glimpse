@@ -122,7 +122,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 }
             }
 
-            public class EventMessage : TimerResultMessage, IActionBasedMessage
+            public class EventMessage : TimelineMessage, IActionBasedMessage
             {
                 public EventMessage(Arguments arguments, TimerResult timerResult, Type executedType)
                     : base(timerResult, "FindView", "View")

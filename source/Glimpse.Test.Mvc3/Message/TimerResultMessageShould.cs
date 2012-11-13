@@ -11,7 +11,7 @@ namespace Glimpse.Test.Mvc3.Message
         [Theory, AutoMock]
         public void Construct(TimerResult timerResult, string expectedEventName, string expectedCategory)
         {
-            var sut = new TimerResultMessage(timerResult, expectedEventName, expectedCategory);
+            var sut = new TimelineMessage(timerResult, expectedEventName, expectedCategory);
 
             Assert.Equal(expectedCategory, sut.EventCategory);
             Assert.Equal(timerResult.Duration, sut.Duration);

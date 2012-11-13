@@ -177,7 +177,7 @@
     <Compile Include="Framework\GlimpseRuntime.cs" />
     <Compile Include="Message\IMessage.cs" />
     <Compile Include="Message\ITimerResultMessage.cs" />
-    <Compile Include="Message\TimerResultMessage.cs" />
+    <Compile Include="Message\TimelineMessage.cs" />
     <Compile Include="Plugin\Assist\CodeType.cs" />
     <Compile Include="Plugin\Assist\CodeTypeConverter.cs" />
     <Compile Include="Plugin\Assist\Formats.cs" />

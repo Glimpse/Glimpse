@@ -3,14 +3,14 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Message
 {
-    public class TimerResultMessage : MessageBase, ITimerResultMessage
+    public class TimelineMessage : MessageBase, ITimerResultMessage
     {
-        public TimerResultMessage(TimerResult timerResult)
+        public TimelineMessage(TimerResult timerResult)
         {
             Result = timerResult;
         }
 
-        public TimerResultMessage(TimerResult timerResult, string eventName, string eventCategory)
+        public TimelineMessage(TimerResult timerResult, string eventName, string eventCategory)
             : this(timerResult)
         { 
             EventName = eventName;

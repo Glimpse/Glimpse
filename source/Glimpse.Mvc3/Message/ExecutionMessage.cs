@@ -6,7 +6,7 @@ using Glimpse.Core.Message;
 
 namespace Glimpse.Mvc.Message
 {
-    public class ExecutionMessage : TimerResultMessage, IExecutionMessage
+    public class ExecutionMessage : TimelineMessage, IExecutionMessage
     {
         public ExecutionMessage(Type executedType, MethodInfo method, TimerResult timerResult)
             : base(timerResult)

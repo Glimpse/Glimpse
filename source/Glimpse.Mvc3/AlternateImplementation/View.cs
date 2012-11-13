@@ -86,7 +86,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public IViewCorrelationMixin ViewCorrelation { get; set; }
             }
 
-            public class EventMessage : TimerResultMessage, IActionBasedMessage
+            public class EventMessage : TimelineMessage, IActionBasedMessage
             {
                 public EventMessage(Arguments arguments, TimerResult timerResult)
                     : base(timerResult, "RenderView", "View")
