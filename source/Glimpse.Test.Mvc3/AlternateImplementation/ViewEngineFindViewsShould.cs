@@ -58,6 +58,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         public void PublishMessagesIfRuntimePolicyIsOnAndViewNotFound(ViewEngine.FindViews sut, IAlternateImplementationContext context, ControllerContext controllerContext)
         {
             context.Setup(c => c.Arguments).Returns(GetArguments(controllerContext));
+            context.Setup(c => c.TargetType).Returns(typeof(int));
             context.Setup(c => c.ReturnValue).Returns(new ViewEngineResult(Enumerable.Empty<string>()));
 
             sut.NewImplementation(context);
@@ -71,6 +72,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         {
             context.Setup(c => c.Arguments).Returns(GetArguments(controllerContext));
             context.Setup(c => c.ReturnValue).Returns(new ViewEngineResult(view, engine));
+            context.Setup(c => c.TargetType).Returns(typeof(int));
             context.ProxyFactory.Setup(p => p.IsProxyable(It.IsAny<object>())).Returns(true);
             context.ProxyFactory.Setup(p => 
                     p.CreateProxy(
