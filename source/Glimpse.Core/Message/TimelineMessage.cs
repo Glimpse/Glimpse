@@ -15,6 +15,8 @@ namespace Glimpse.Core.Message
         public string EventName { get; protected set; }
 
         public string EventCategory { get; protected set; }
+
+        public string EventSubText { get; protected set; }
         
         public double Offset
         {
