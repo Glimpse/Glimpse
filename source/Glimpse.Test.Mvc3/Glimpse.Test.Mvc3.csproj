@@ -110,7 +110,11 @@
     <Compile Include="AlternateImplementation\ViewRenderMixinShould.cs" />
     <Compile Include="AlternateImplementation\ViewRenderShould.cs" />
     <Compile Include="AlternateImplementation\ViewShould.cs" />
-    <Compile Include="Message\TimerResultMessageShould.cs" />
+    <Compile Include="Message\ActionFilterMessageShould.cs" />
+    <Compile Include="Message\ActionMessageShould.cs" />
+    <Compile Include="Message\BoundedFilterMessageShould.cs" />
+    <Compile Include="Message\ExecutionMessageShould.cs" />
+    <Compile Include="Message\FilterMessageShould.cs" />
     <Compile Include="Model\ViewModelSummaryShould.cs" />
     <Compile Include="Model\ViewsModelShould.cs" />
     <Compile Include="PipelineInspector\DependencyInjectionShould.cs" />
