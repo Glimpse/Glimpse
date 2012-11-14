@@ -7,8 +7,7 @@
             };
         },
         callSubscriber = function(subscriber, message, data) {
-            try {
-                console.log(message);
+            try { 
                 subscriber(data, message);
             } catch(ex) {
                 setTimeout(throwException(ex), 0);

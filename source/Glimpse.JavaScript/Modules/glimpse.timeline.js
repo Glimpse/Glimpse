@@ -390,7 +390,7 @@
                     offset: 1, 
                     min: 0,
                     max: function() { return (elements.zoomRightHandle.position().left - 20); },
-                    dragging: function() { elements.zoomLeftHandle.css('left', (elements.zoomLeftHandle.position().left) + 'px'); console.log(elements.zoomLeftHandle.css('left')); },
+                    dragging: function() { elements.zoomLeftHandle.css('left', (elements.zoomLeftHandle.position().left) + 'px'); },
                     dragged: function() { positionLeft(); }
                 }); 
                 jQueryGlimpse.draggable({
