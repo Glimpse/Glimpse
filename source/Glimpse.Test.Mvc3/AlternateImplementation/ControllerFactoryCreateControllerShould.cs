@@ -8,6 +8,7 @@ using Glimpse.Mvc.AlternateImplementation;
 using Glimpse.Test.Common;
 using Glimpse.Test.Mvc3.TestDoubles;
 using Moq;
+using Ploeh.AutoFixture.Xunit;
 using Xunit;
 using Xunit.Extensions;
 
@@ -45,27 +46,27 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         }
 
         [Theory, AutoMock]
-        public void ProxyActionInvokerIfAsyncControllerFound(ControllerFactory.CreateController sut, IAlternateImplementationContext context, RequestContext requestContext, string controllerName)
+        public void ProxyActionInvokerIfAsyncControllerFound([Frozen] IProxyFactory proxyFactory, ControllerFactory.CreateController sut, IAlternateImplementationContext context, RequestContext requestContext, string controllerName)
         {
             context.Setup(c => c.ReturnValue).Returns(new DummyAsyncController());
             context.Setup(c => c.Arguments).Returns(new object[] { requestContext, controllerName });
-            context.ProxyFactory.Setup(p => p.IsProxyable(It.IsAny<IActionInvoker>())).Returns(true);
+            proxyFactory.Setup(p => p.IsProxyable(It.IsAny<IActionInvoker>())).Returns(true);
 
             sut.NewImplementation(context);
 
-            context.ProxyFactory.Verify(p => p.CreateProxy(It.IsAny<AsyncControllerActionInvoker>(), It.IsAny<IEnumerable<IAlternateImplementation<AsyncControllerActionInvoker>>>(), It.IsAny<object>()));
+            proxyFactory.Verify(p => p.CreateProxy(It.IsAny<AsyncControllerActionInvoker>(), It.IsAny<IEnumerable<IAlternateImplementation<AsyncControllerActionInvoker>>>(), It.IsAny<object>()));
         }
 
         [Theory, AutoMock]
-        public void ProxyActionInvokerIfControllerFound(ControllerFactory.CreateController sut, IAlternateImplementationContext context, RequestContext requestContext, string controllerName)
+        public void ProxyActionInvokerIfControllerFound([Frozen] IProxyFactory proxyFactory, ControllerFactory.CreateController sut, IAlternateImplementationContext context, RequestContext requestContext, string controllerName)
         {
             context.Setup(c => c.ReturnValue).Returns(new DummyController());
             context.Setup(c => c.Arguments).Returns(new object[] { requestContext, controllerName });
-            context.ProxyFactory.Setup(p => p.IsProxyable(It.IsAny<IActionInvoker>())).Returns(true);
+            proxyFactory.Setup(p => p.IsProxyable(It.IsAny<IActionInvoker>())).Returns(true);
 
             sut.NewImplementation(context);
 
-            context.ProxyFactory.Verify(p => p.CreateProxy(It.IsAny<ControllerActionInvoker>(), It.IsAny<IEnumerable<IAlternateImplementation<ControllerActionInvoker>>>(), null));
+            proxyFactory.Verify(p => p.CreateProxy(It.IsAny<ControllerActionInvoker>(), It.IsAny<IEnumerable<IAlternateImplementation<ControllerActionInvoker>>>(), null));
         }
     }
 }

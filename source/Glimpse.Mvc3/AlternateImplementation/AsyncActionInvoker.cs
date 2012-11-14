@@ -4,8 +4,6 @@ using System.Web.Mvc;
 using System.Web.Mvc.Async;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions;
-using Glimpse.Core.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
