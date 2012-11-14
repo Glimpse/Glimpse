@@ -11,14 +11,14 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
 {
     public class ActionInvokerInvokeActionMethodMessageShould
     {
-        [Theory(Skip = "Need to make work"), AutoMock]
-        public void Construct(ActionDescriptor actionDescriptor, MethodInfo method, TimerResult timer, ActionResult result)
+        [Theory, AutoMock]
+        public void Construct(ActionDescriptor actionDescriptor, MethodInfo method, TimerResult timer, ActionResult result, ControllerContext context)
         {
             var expectedControllerType = typeof(Controller);
             actionDescriptor.ControllerDescriptor.Setup(cd => cd.ControllerType).Returns(expectedControllerType);
             var arguments = new ActionInvoker.InvokeActionMethod.Arguments(new object[]
                                                                  {
-                                                                     new ControllerContext(),
+                                                                     context,
                                                                      actionDescriptor,
                                                                      new Dictionary<string, object>()
                                                                  });

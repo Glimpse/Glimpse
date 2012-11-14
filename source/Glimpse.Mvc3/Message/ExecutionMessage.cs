@@ -25,12 +25,22 @@ namespace Glimpse.Mvc.Message
 
         protected static bool GetIsChildAction(ControllerBase controller)
         {
-            return controller.ControllerContext != null && controller.ControllerContext.IsChildAction;
+            return GetIsChildAction(controller.ControllerContext);
+        }
+
+        protected static bool GetIsChildAction(ControllerContext controllerContext)
+        {
+            return controllerContext != null && controllerContext.IsChildAction;
         }
 
         protected static string GetActionName(ActionDescriptor descriptor)
         {
             return descriptor.ActionName;
+        }
+
+        protected static string GetActionName(ControllerContext controllerContext)
+        {
+            return GetActionName(controllerContext.Controller);
         }
 
         protected static string GetActionName(ControllerBase controller)
@@ -43,9 +53,19 @@ namespace Glimpse.Mvc.Message
             return descriptor.ControllerDescriptor.ControllerName;
         }
 
+        protected static string GetControllerName(ControllerContext controllerContext)
+        {
+            return GetControllerName(controllerContext.Controller);
+        }
+
         protected static string GetControllerName(ControllerBase controller)
         {
             return controller.ValueProvider.GetValue("controller").RawValue.ToStringOrDefault();
+        }
+
+        protected static Type GetExecutedType(ActionDescriptor descriptor)
+        {
+            return descriptor.ControllerDescriptor.ControllerType;
         }
     }
 }

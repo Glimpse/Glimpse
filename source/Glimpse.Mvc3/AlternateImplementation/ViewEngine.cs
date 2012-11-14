@@ -125,7 +125,7 @@ namespace Glimpse.Mvc.AlternateImplementation
             public class EventMessage : ActionMessage
             {
                 public EventMessage(Arguments arguments, TimerResult timerResult, Type executedType, MethodInfo method)
-                    : base(timerResult, GetControllerName(arguments.ControllerContext.Controller), GetActionName(arguments.ControllerContext.Controller), GetIsChildAction(arguments.ControllerContext.Controller), executedType, method)
+                    : base(timerResult, GetControllerName(arguments.ControllerContext), GetActionName(arguments.ControllerContext), GetIsChildAction(arguments.ControllerContext), executedType, method)
                 { 
                     ViewEngineType = executedType;
                     UseCache = arguments.UseCache;

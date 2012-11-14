@@ -12,7 +12,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
 {
     public class AuthorizationFilterOnAuthorizationMessageShould
     {
-        [Theory(Skip = "Need to make work"), AutoMock]
+        [Theory, AutoMock]
         public void Constuct(AuthorizationContext argument, Type filterType, MethodInfo method, TimerResult timerResult)
         {
             var sut = new AuthorizationFilter.OnAuthorization.Message(argument, filterType, method, timerResult);
@@ -23,7 +23,8 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             Assert.Equal(method, sut.ExecutedMethod);
             Assert.Equal(timerResult.Duration, sut.Duration);
             Assert.Equal(timerResult.Offset, sut.Offset);
-            Assert.Contains(sut.EventName, method.Name);
+            Assert.Contains(sut.ActionName, sut.EventName);
+            Assert.Contains(sut.ControllerName, sut.EventName);
             Assert.Equal(FilterCategory.Authorization, sut.Category);
         }
 

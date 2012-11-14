@@ -104,7 +104,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 private static MethodInfo executedMethod = typeof(ActionResult).GetMethod("ExecuteResult");
 
                 public Message(Arguments arguments, TimerResult timerResult)
-                    : base(timerResult, GetControllerName(arguments.ControllerContext.Controller), GetActionName(arguments.ControllerContext.Controller), GetIsChildAction(arguments.ControllerContext.Controller), arguments.ActionResult.GetType(), executedMethod)
+                    : base(timerResult, GetControllerName(arguments.ControllerContext), GetActionName(arguments.ControllerContext), GetIsChildAction(arguments.ControllerContext), arguments.ActionResult.GetType(), executedMethod)
                 {
                     EventName = string.Format("InvokeActionResult - {0}:{1}", ControllerName, ActionName);
                     EventCategory = "Controller";
@@ -163,7 +163,7 @@ namespace Glimpse.Mvc.AlternateImplementation
             public class Message : ActionMessage
             {
                 public Message(Arguments arguments, ActionResult returnValue, MethodInfo method, TimerResult timerResult)
-                    : base(timerResult, GetControllerName(arguments.ControllerContext.Controller), GetActionName(arguments.ControllerContext.Controller), GetIsChildAction(arguments.ControllerContext.Controller), returnValue.GetType(), method)
+                    : base(timerResult, GetControllerName(arguments.ActionDescriptor), GetActionName(arguments.ActionDescriptor), GetIsChildAction(arguments.ControllerContext), GetExecutedType(arguments.ActionDescriptor), method)
                 {
                     ResultType = returnValue.GetType();
                     EventName = string.Format("InvokeActionMethod - {0}:{1}", ControllerName, ActionName);

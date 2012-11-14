@@ -33,7 +33,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             context.MessageBroker.Verify(b => b.Publish(It.IsAny<ActionInvoker.InvokeActionMethod.Message>()), Times.Never());
         }
 
-        [Theory(Skip = "Need to make work"), AutoMock]
+        [Theory, AutoMock]
         public void PublishMessageWithRuntimePolicyOn(ActionInvoker.InvokeActionMethod sut, IAlternateImplementationContext context)
         {
             var actionDescriptorMock = new Mock<ActionDescriptor>();
