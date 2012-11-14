@@ -65,10 +65,14 @@ namespace Glimpse.Core.Framework
 
             if (typeof(T).IsInterface)
             {
-                return ProxyGenerator.CreateInterfaceProxyWithTarget(instance, options, interceptorArray);
+                var interfaceProxy = ProxyGenerator.CreateInterfaceProxyWithTarget(instance, options, interceptorArray);
+                Logger.Debug("Proxied interface of type '{0}' with '{1}'.", typeof(T), interfaceProxy.GetType());
+                return interfaceProxy;
             }
 
-            return ProxyGenerator.CreateClassProxyWithTarget(instance, options, interceptorArray);
+            var classProxy = ProxyGenerator.CreateClassProxyWithTarget(instance, options, interceptorArray);
+            Logger.Debug("Proxied class of type '{0}' with '{1}'.", typeof(T), classProxy.GetType());
+            return classProxy;
         }
 
         public bool IsProxyable(object obj)
