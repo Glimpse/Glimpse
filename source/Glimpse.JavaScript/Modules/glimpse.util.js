@@ -128,7 +128,7 @@
         },
         timeConvert : function(value) {
             if (value < 1000)
-                return value + ' ms';
+                return value.toFixed(1) + ' ms';
             return Math.round(value / 10) / 100 + ' s';
         },
     };
