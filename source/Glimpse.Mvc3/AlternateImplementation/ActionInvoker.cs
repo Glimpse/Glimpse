@@ -107,6 +107,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     : base(timerResult, GetControllerName(arguments.ControllerContext.Controller), GetActionName(arguments.ControllerContext.Controller), GetIsChildAction(arguments.ControllerContext.Controller), arguments.ActionResult.GetType(), executedMethod)
                 {
                     EventName = string.Format("InvokeActionResult - {0}:{1}", ControllerName, ActionName);
+                    EventCategory = "Controller";
                 }
             }
         }
@@ -166,6 +167,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 {
                     ResultType = returnValue.GetType();
                     EventName = string.Format("InvokeActionMethod - {0}:{1}", ControllerName, ActionName);
+                    EventCategory = "Controller";
                 }
 
                 public Type ResultType { get; set; }
