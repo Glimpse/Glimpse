@@ -553,7 +553,7 @@
         
         pubsub.subscribe('trigger.timline.shell.subscriptions', wireListeners); 
         pubsub.subscribe('trigger.shell.resize', panelResize); 
-        pubsub.subscribe('action.panel.showed.Timeline', function() { setTimeout(panelResize, 1); }); 
+        pubsub.subscribe('action.panel.showed.Glimpse_AspNet_Tab_Timeline', function() { setTimeout(panelResize, 1); }); 
     })(timeline.elements);
 
     // View
