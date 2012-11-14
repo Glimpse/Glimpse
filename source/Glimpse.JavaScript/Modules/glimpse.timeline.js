@@ -219,8 +219,7 @@
                     //Work out childless timings 
                     var temp = eventStack.length > 0 ? eventStack[eventStack.length - 1] : undefined; 
                     if (temp) {
-                        temp.childlessDuration -= event.duration;
-                        temp.childlessDuration = temp.childlessDuration.toFixed(2);
+                        temp.childlessDuration = (temp.childlessDuration - event.duration).toFixed(2);
                     } 
 
                     //Save calc data
