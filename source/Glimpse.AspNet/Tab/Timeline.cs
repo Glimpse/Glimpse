@@ -56,7 +56,14 @@ namespace Glimpse.AspNet.Tab
                 foreach (var viewRenderMessage in viewRenderMessages)
                 {
                     var timelineEvent = new TimelineEventModel();
-                    viewRenderMessage.BuildEvent(timelineEvent); // BuildEvent(timelineEvent, viewRenderMessage);
+                    timelineEvent.Title = viewRenderMessage.EventName;
+                    timelineEvent.Category = viewRenderMessage.EventCategory;
+                    timelineEvent.SubText = viewRenderMessage.EventSubText;
+                    timelineEvent.Duration = viewRenderMessage.Duration;
+                    timelineEvent.StartPoint = viewRenderMessage.Offset;
+                    timelineEvent.StartTime = viewRenderMessage.StartTime;
+                    viewRenderMessage.BuildDetails(timelineEvent.Details); 
+
                     events.Add(timelineEvent);
 
                     var endPoint = timelineEvent.EndPoint;

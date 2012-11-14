@@ -53,12 +53,12 @@ namespace Glimpse.Mvc.AlternateImplementation
 
                 public bool ExceptionHandled { get; set; }
 
-                public override void BuildEvent(ITimelineEvent timelineEvent)
+                public override void BuildDetails(IDictionary<string, object> details)
                 {
-                    base.BuildEvent(timelineEvent);
+                    base.BuildDetails(details);
 
-                    timelineEvent.Details.Add("ExceptionHandled", ExceptionHandled);
-                    timelineEvent.Details.Add("ExceptionType", ExceptionType); 
+                    details.Add("ExceptionHandled", ExceptionHandled);
+                    details.Add("ExceptionType", ExceptionType); 
                 }
             }
         }

@@ -172,11 +172,11 @@ namespace Glimpse.Mvc.AlternateImplementation
 
                 public Type ResultType { get; set; }
 
-                public override void BuildEvent(ITimelineEvent timelineEvent)
+                public override void BuildDetails(IDictionary<string, object> details)
                 {
-                    base.BuildEvent(timelineEvent);
+                    base.BuildDetails(details);
 
-                    timelineEvent.Details.Add("ResultType", ResultType);
+                    details.Add("ResultType", ResultType);
                 }
             }
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
@@ -21,7 +22,23 @@ namespace Glimpse.Mvc.Message
 
         public Type ExecutedType { get; protected set; }
 
-        public bool IsChildAction { get; protected set; } 
+        public bool IsChildAction { get; protected set; }
+
+        public override void BuildDetails(IDictionary<string, object> details)
+        {
+            base.BuildDetails(details);
+
+            details.Add("IsChildAction", IsChildAction);
+            if (ExecutedMethod != null)
+            {
+                details.Add("ExecutionMethod", ExecutedMethod.Name);
+            }
+
+            if (ExecutedType != null)
+            {
+                details.Add("ExecutedType", ExecutedType);
+            }
+        }
 
         protected static bool GetIsChildAction(ControllerBase controller)
         {

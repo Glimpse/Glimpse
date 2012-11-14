@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Message
@@ -35,13 +36,8 @@ namespace Glimpse.Core.Message
 
         private TimerResult Result { get; set; }
 
-        public virtual void BuildEvent(ITimelineEvent timelineEvent)
-        {
-            timelineEvent.Title = EventName;
-            timelineEvent.Category = EventCategory;
-            timelineEvent.Duration = Duration;
-            timelineEvent.StartPoint = Offset;
-            timelineEvent.StartTime = StartTime;
+        public virtual void BuildDetails(IDictionary<string, object> details)
+        { 
         }
     }
 }

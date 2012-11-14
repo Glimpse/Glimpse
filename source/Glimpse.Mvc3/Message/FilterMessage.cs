@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
@@ -28,12 +29,11 @@ namespace Glimpse.Mvc.Message
 
         public Type ResultType { get; protected set; }
 
-        public override void BuildEvent(ITimelineEvent timelineEvent)
+        public override void BuildDetails(IDictionary<string, object> details)
         {
-            base.BuildEvent(timelineEvent);
+            base.BuildDetails(details);
 
-            timelineEvent.Details.Add("Category", Category.ToString());
-            timelineEvent.Details.Add("ResultType", ResultType);
+            details.Add("ResultType", ResultType);
         }
 
         protected static Type GetResultType(object result)

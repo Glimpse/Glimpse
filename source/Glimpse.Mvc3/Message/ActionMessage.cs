@@ -14,7 +14,7 @@ namespace Glimpse.Mvc.Message
 
             if (string.IsNullOrEmpty(eventName))
             {
-                EventName = string.Format(" {0}:{1}", ControllerName, ActionName);
+                EventName = string.Format("{0}:{1}", ControllerName, ActionName);
             }
         }
 

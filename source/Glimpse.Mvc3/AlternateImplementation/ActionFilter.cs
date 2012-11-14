@@ -83,15 +83,15 @@ namespace Glimpse.Mvc.AlternateImplementation
 
                 public bool ExceptionHandled { get; private set; }
 
-                public Type ExceptionType { get; private set; } 
+                public Type ExceptionType { get; private set; }
 
-                public override void BuildEvent(ITimelineEvent timelineEvent)
+                public override void BuildDetails(IDictionary<string, object> details)
                 {
-                    base.BuildEvent(timelineEvent);
+                    base.BuildDetails(details);
 
-                    timelineEvent.Details.Add("Canceled", Canceled);
-                    timelineEvent.Details.Add("ExceptionHandled", ExceptionHandled);
-                    timelineEvent.Details.Add("ExceptionType", ExceptionType);
+                    details.Add("Canceled", Canceled);
+                    details.Add("ExceptionHandled", ExceptionHandled);
+                    details.Add("ExceptionType", ExceptionType);
                 }
             }
         }

@@ -5,7 +5,7 @@ namespace Glimpse.AspNet.Model
 {
     using Glimpse.Core.Extensibility;
 
-    public class TimelineEventModel : ITimelineEvent
+    public class TimelineEventModel
     {
         public TimelineEventModel()
         {

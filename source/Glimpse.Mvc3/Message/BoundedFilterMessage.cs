@@ -23,12 +23,5 @@ namespace Glimpse.Mvc.Message
         } 
 
         public FilterBounds Bounds { get; protected set; }
-
-        public override void BuildEvent(ITimelineEvent timelineEvent)
-        {
-            base.BuildEvent(timelineEvent);
-
-            timelineEvent.Details.Add("Bounds", Bounds.ToString());
-        }
     }
 }

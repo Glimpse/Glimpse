@@ -1,5 +1,5 @@
 ﻿using System;
-using Glimpse.Core.Extensibility;
+using System.Collections.Generic;
 
 namespace Glimpse.Core.Message
 {
@@ -9,12 +9,14 @@ namespace Glimpse.Core.Message
         
         string EventCategory { get; }
 
+        string EventSubText { get; }
+
         double Offset { get; }
 
         double Duration { get; }
 
         DateTime StartTime { get; }
 
-        void BuildEvent(ITimelineEvent timelineEvent);
+        void BuildDetails(IDictionary<string, object> details);
     }
 }
