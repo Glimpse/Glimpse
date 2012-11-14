@@ -13,7 +13,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Theory, AutoMock]
         public void ConstructForNonAsync(ControllerContext expectedControllerContext, ActionDescriptor expectedActionDescriptor, IDictionary<string, object> expectedParameters)
         {
-            var sut = new ActionInvoker.InvokeActionMethod.Arguments(new object[] { expectedControllerContext, expectedActionDescriptor, expectedParameters });
+            var sut = new ActionInvoker.InvokeActionMethod.Arguments(expectedControllerContext, expectedActionDescriptor, expectedParameters);
 
             Assert.Equal(expectedControllerContext, sut.ControllerContext);
             Assert.Equal(expectedActionDescriptor, sut.ActionDescriptor);
@@ -26,7 +26,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Theory, AutoMock]
         public void ConstructForAsync(ControllerContext expectedControllerContext, ActionDescriptor expectedActionDescriptor, IDictionary<string, object> expectedParameters, AsyncCallback expectedCallback, string expectedState)
         {
-            var arguments = new ActionInvoker.InvokeActionMethod.Arguments(new object[] { expectedControllerContext, expectedActionDescriptor, expectedParameters, expectedCallback, expectedState });
+            var arguments = new ActionInvoker.InvokeActionMethod.Arguments(expectedControllerContext, expectedActionDescriptor, expectedParameters, expectedCallback, expectedState);
 
             Assert.Equal(expectedControllerContext, arguments.ControllerContext);
             Assert.Equal(expectedActionDescriptor, arguments.ActionDescriptor);

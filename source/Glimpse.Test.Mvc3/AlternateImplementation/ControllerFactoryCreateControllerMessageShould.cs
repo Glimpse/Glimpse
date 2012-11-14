@@ -12,7 +12,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Theory, AutoMock]
         public void Construct(RequestContext requestContext, string controllerName, IController controller)
         {
-            var arguments = new ControllerFactory.CreateController.Arguments(new object[] { requestContext, controllerName });
+            var arguments = new ControllerFactory.CreateController.Arguments(requestContext, controllerName);
 
             var sut = new ControllerFactory.CreateController.Message(arguments, controller);
 
@@ -25,7 +25,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Theory, AutoMock]
         public void ConstructWithNullController(RequestContext requestContext, string controllerName, IController controller)
         {
-            var arguments = new ControllerFactory.CreateController.Arguments(new object[] { requestContext, controllerName });
+            var arguments = new ControllerFactory.CreateController.Arguments(requestContext, controllerName);
 
             var sut = new ControllerFactory.CreateController.Message(arguments, null);
 

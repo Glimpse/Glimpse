@@ -91,7 +91,7 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public class Arguments
             {
-                public Arguments(object[] arguments)
+                public Arguments(params object[] arguments)
                 {
                     RequestContext = (RequestContext)arguments[0];
                     ControllerName = (string)arguments[1];

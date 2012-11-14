@@ -16,12 +16,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         {
             var expectedControllerType = typeof(Controller);
             actionDescriptor.ControllerDescriptor.Setup(cd => cd.ControllerType).Returns(expectedControllerType);
-            var arguments = new ActionInvoker.InvokeActionMethod.Arguments(new object[]
-                                                                 {
-                                                                     context,
-                                                                     actionDescriptor,
-                                                                     new Dictionary<string, object>()
-                                                                 });
+            var arguments = new ActionInvoker.InvokeActionMethod.Arguments(context, actionDescriptor, new Dictionary<string, object>());
 
             var sut = new ActionInvoker.InvokeActionMethod.Message(arguments, result, method, timer);
 

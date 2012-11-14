@@ -7,6 +7,7 @@ using Glimpse.Mvc.AlternateImplementation;
 using Glimpse.Test.Common;
 using Moq;
 using Ploeh.AutoFixture;
+using Ploeh.AutoFixture.Xunit;
 using Xunit;
 using Xunit.Extensions;
 
@@ -67,13 +68,13 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         }
 
         [Theory, AutoMock]
-        public void PublishMessagesIfRuntimePolicyIsOnAndViewIsFound(ViewEngine.FindViews sut, IAlternateImplementationContext context, IView view, IViewEngine engine, ControllerContext controllerContext)
+        public void PublishMessagesIfRuntimePolicyIsOnAndViewIsFound([Frozen] IProxyFactory proxyFactory, ViewEngine.FindViews sut, IAlternateImplementationContext context, IView view, IViewEngine engine, ControllerContext controllerContext)
         {
             context.Setup(c => c.Arguments).Returns(GetArguments(controllerContext));
             context.Setup(c => c.ReturnValue).Returns(new ViewEngineResult(view, engine));
             context.Setup(c => c.TargetType).Returns(typeof(int));
-            context.ProxyFactory.Setup(p => p.IsProxyable(It.IsAny<object>())).Returns(true);
-            context.ProxyFactory.Setup(p => 
+            proxyFactory.Setup(p => p.IsProxyable(It.IsAny<object>())).Returns(true);
+            proxyFactory.Setup(p => 
                     p.CreateProxy(
                         It.IsAny<IView>(), 
                         It.IsAny<IEnumerable<IAlternateImplementation<IView>>>(), 
@@ -82,7 +83,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
 
             sut.NewImplementation(context);
 
-            context.ProxyFactory.Verify(p => p.IsProxyable(It.IsAny<object>()));
+            proxyFactory.Verify(p => p.IsProxyable(It.IsAny<object>()));
             context.Logger.Verify(l => l.Info(It.IsAny<string>(), It.IsAny<object[]>()));
             context.VerifySet(c => c.ReturnValue = It.IsAny<ViewEngineResult>());
             context.MessageBroker.Verify(b => b.Publish(It.IsAny<ViewEngine.FindViews.Message>()));

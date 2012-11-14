@@ -50,7 +50,7 @@ namespace Glimpse.Mvc.AlternateImplementation
 
                 var timer = context.TimerStrategy();
                 var timing = timer.Time(context.Proceed);
-                var input = new Arguments(context.Arguments, IsPartial);
+                var input = new Arguments(IsPartial, context.Arguments);
                 var id = Guid.NewGuid();
                 var output = context.ReturnValue as ViewEngineResult;
 
@@ -144,7 +144,7 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public class Arguments
             {
-                public Arguments(object[] arguments, bool isPartial)
+                public Arguments(bool isPartial, params object[] arguments)
                 {
                     ControllerContext = (ControllerContext)arguments[0];
                     ViewName = (string)arguments[1];

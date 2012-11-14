@@ -55,7 +55,7 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public class Arguments
             {
-                public Arguments(object[] arguments)
+                public Arguments(params object[] arguments)
                 {
                     ViewContext = (ViewContext)arguments[0];
                     Writer = (TextWriter)arguments[1];

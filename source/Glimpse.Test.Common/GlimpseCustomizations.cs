@@ -23,26 +23,14 @@ namespace Glimpse.Test.Common
         {
             fixture.Register<ViewContext, View.Render.Arguments>(
                 viewContext =>
-                new View.Render.Arguments(
-                    new object[]
-                        {
-                            viewContext,
-                            new StringWriter()
-                        }));
+                new View.Render.Arguments(viewContext, new StringWriter()));
         }
 
         private static void ViewEngineFindViewArguments(IFixture fixture)
         {
             fixture.Register<string, bool, ViewEngine.FindViews.Arguments>(
                 (viewName, isPartial) =>
-                new ViewEngine.FindViews.Arguments(
-                    new object[]
-                        {
-                            new ControllerContext(),
-                            viewName,
-                            true
-                        },
-                    isPartial));
+                new ViewEngine.FindViews.Arguments(isPartial, new ControllerContext(), viewName, true));
         }
 
 // ReSharper disable InconsistentNaming

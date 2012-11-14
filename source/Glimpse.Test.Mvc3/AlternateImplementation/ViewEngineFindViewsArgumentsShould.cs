@@ -11,9 +11,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Theory, AutoMock]
         public void ConstructForPartial(ControllerContext controllerContext, string viewName, bool useCache)
         {
-            var args = new object[] { controllerContext, viewName, useCache, false }; // last false is a lie to prove the test
-
-            var sut = new ViewEngine.FindViews.Arguments(args, true);
+            var sut = new ViewEngine.FindViews.Arguments(true, controllerContext, viewName, useCache, false); // last false is a lie to prove the test
 
             Assert.Equal(controllerContext, sut.ControllerContext);
             Assert.Equal(viewName, sut.ViewName);
@@ -24,9 +22,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Theory, AutoMock]
         public void ConstructForNonPartial(ControllerContext controllerContext, string viewName, bool useCache)
         {
-            var args = new object[] { controllerContext, viewName, "MasterName", useCache }; 
-
-            var sut = new ViewEngine.FindViews.Arguments(args, false);
+            var sut = new ViewEngine.FindViews.Arguments(false, controllerContext, viewName, "MasterName", useCache);
 
             Assert.Equal(controllerContext, sut.ControllerContext);
             Assert.Equal(viewName, sut.ViewName);

@@ -39,13 +39,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
                 new ActionInvokerStateMixin
                 {
                     Offset = 10, 
-                    Arguments = new ActionInvoker.InvokeActionMethod.Arguments(
-                        new object[]
-                        {
-                            new ControllerContext(),
-                            actionDescriptor,
-                            new Dictionary<string, object>()
-                        })
+                    Arguments = new ActionInvoker.InvokeActionMethod.Arguments(new ControllerContext(), actionDescriptor, new Dictionary<string, object>())
                 });
 
             sut.NewImplementation(context);

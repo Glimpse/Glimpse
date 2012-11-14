@@ -100,7 +100,7 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public class Arguments
             {
-                public Arguments(object[] args)
+                public Arguments(params object[] args)
                 {
                     ControllerContext = (ControllerContext)args[0];
                     ActionResult = (ActionResult)args[1];
@@ -145,7 +145,7 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public class Arguments
             {
-                public Arguments(object[] arguments)
+                public Arguments(params object[] arguments)
                 {
                     ControllerContext = (ControllerContext)arguments[0];
                     ActionDescriptor = (ActionDescriptor)arguments[1];
