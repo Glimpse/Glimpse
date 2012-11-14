@@ -2328,7 +2328,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                     if (!force && currentDividerCount === dividerCount) { return; }
 
                     var leftOffset = 100 / dividerCount,
-                        timeSlice = Math.round((range.endTime - range.startTime) / dividerCount),
+                        timeSlice = (range.endTime - range.startTime) / dividerCount,
                         divider = holder.find('.glimpse-tl-divider:first-child');
 
                     for (var i = 0; i < dividerCount; i += 1) {
@@ -2341,7 +2341,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                         divider.css('left', (leftOffset * (i + 1)) + '%');
                         //Set label of divider
                         var time = i == (dividerCount - 1) ? range.endTime : (timeSlice * (i + 1)) + range.startTime; 
-                        divider.find('div').text(util.timeConvert(parseInt(time)));
+                        divider.find('div').text(util.timeConvert(parseFloat(time)));
                         //Move onto next
                         divider = divider.next();
                     }
@@ -2463,8 +2463,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                     //Work out childless timings 
                     var temp = eventStack.length > 0 ? eventStack[eventStack.length - 1] : undefined; 
                     if (temp) {
-                        temp.childlessDuration -= event.duration;
-                        temp.childlessDuration = temp.childlessDuration.toFixed(2);
+                        temp.childlessDuration = (temp.childlessDuration - event.duration).toFixed(2);
                     } 
 
                     //Save calc data
