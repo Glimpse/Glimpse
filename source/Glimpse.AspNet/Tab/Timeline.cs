@@ -44,7 +44,7 @@ namespace Glimpse.AspNet.Tab
 
         public override object GetData(ITabContext context)
         {
-            var viewRenderMessages = context.TabStore.Get<IEnumerable<ITimerResultMessage>>(typeof(ITimerResultMessage).FullName).OrderBy(x => x.Offset); 
+            var viewRenderMessages = context.TabStore.Get<IEnumerable<ITimerResultMessage>>(typeof(ITimerResultMessage).FullName); 
 
             var result = new TimelineModel();
             result.Category = categories;
@@ -53,7 +53,7 @@ namespace Glimpse.AspNet.Tab
             {
                 var maxEndPoint = 0.0;
                 var events = new List<TimelineEventModel>();
-                foreach (var viewRenderMessage in viewRenderMessages)
+                foreach (var viewRenderMessage in viewRenderMessages.OrderBy(x => x.Offset))
                 {
                     var timelineEvent = new TimelineEventModel();
                     timelineEvent.Title = viewRenderMessage.EventName;
@@ -67,14 +67,14 @@ namespace Glimpse.AspNet.Tab
                     events.Add(timelineEvent);
 
                     var endPoint = timelineEvent.EndPoint;
-                    if (timelineEvent.EndPoint > maxEndPoint)
+                    if (endPoint > maxEndPoint)
                     {
                         maxEndPoint = endPoint;
                     }
                 }
 
                 result.Events = events;
-                result.Duration = maxEndPoint * 1.01;
+                result.Duration = maxEndPoint;
             }
             
             return result;
