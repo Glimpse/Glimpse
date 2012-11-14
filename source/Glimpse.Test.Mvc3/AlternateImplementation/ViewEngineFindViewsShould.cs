@@ -3,7 +3,6 @@ using System.Linq;
 using System.Web.Mvc;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Message;
 using Glimpse.Mvc.AlternateImplementation;
 using Glimpse.Test.Common;
 using Moq;
@@ -25,22 +24,22 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             Assert.Equal(2, allMethods.Count());
         }
 
-        [Fact]
-        public void Construct()
+        [Theory, AutoMock]
+        public void Construct(Alternate<IView> alternateView)
         {
-            var sut = new ViewEngine.FindViews(false);
+            var sut = new ViewEngine.FindViews(false, alternateView);
 
             Assert.NotNull(sut);
             Assert.IsAssignableFrom<IAlternateImplementation<IViewEngine>>(sut);
         }
 
-        [Fact]
-        public void MethodToImplementIsRight()
+        [Theory, AutoMock]
+        public void MethodToImplementIsRight(Alternate<IView> alternateView)
         {
-            var sut1 = new ViewEngine.FindViews(false);
+            var sut1 = new ViewEngine.FindViews(false, alternateView);
             Assert.Equal("FindView", sut1.MethodToImplement.Name);
 
-            var sut2 = new ViewEngine.FindViews(true);
+            var sut2 = new ViewEngine.FindViews(true, alternateView);
             Assert.Equal("FindPartialView", sut2.MethodToImplement.Name);
         }
 

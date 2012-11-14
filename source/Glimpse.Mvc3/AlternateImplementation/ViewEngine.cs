@@ -19,18 +19,22 @@ namespace Glimpse.Mvc.AlternateImplementation
 
         public override IEnumerable<IAlternateImplementation<IViewEngine>> AllMethods()
         {
-            yield return new FindViews(false);
-            yield return new FindViews(true);
+            var alternateView = new View(ProxyFactory);
+            yield return new FindViews(false, alternateView);
+            yield return new FindViews(true, alternateView);
         }
 
         // This class is the alternate implementation for both .FindView() AND .FindPartialView()
         public class FindViews : IAlternateImplementation<IViewEngine>
         {
-            public FindViews(bool isPartial)
+            public FindViews(bool isPartial, Alternate<IView> alternateView)
             {
+                AlternateView = alternateView;
                 IsPartial = isPartial;
                 MethodToImplement = typeof(IViewEngine).GetMethod(IsPartial ? "FindPartialView" : "FindView");
             }
+
+            public Alternate<IView> AlternateView { get; set; }
 
             public bool IsPartial { get; set; }
 
@@ -59,14 +63,12 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             private ViewEngineResult ProxyOutput(ViewEngineResult viewEngineResult, IAlternateImplementationContext context, string viewName, bool isPartial, Guid id)
             {
-                var alternateImplementation = new View(context.ProxyFactory);
-
                 if (viewEngineResult.View != null)
                 {
                     var originalView = viewEngineResult.View;
 
                     IView newView;
-                    if (alternateImplementation.TryCreate(originalView, out newView, new ViewCorrelationMixin(viewName, isPartial, id)))
+                    if (AlternateView.TryCreate(originalView, out newView, new ViewCorrelationMixin(viewName, isPartial, id)))
                     {
                         context.Logger.Info(Resources.FindViewsProxyOutputReplacedIView, originalView.GetType(), viewName);
 
