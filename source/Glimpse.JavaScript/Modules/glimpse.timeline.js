@@ -542,7 +542,7 @@
             panelResize = function() { 
                 if (elements.scope) {
                     //Work out what heihgt we can work with
-                    var contentHeight = settings.local('panelHeight') - (elements.summaryRow.height() + elements.scope.find('.glimpse-tl-row-spacer').height());  
+                    var contentHeight = settings.local('panelHeight') - (elements.summaryRow.height() + elements.scope.find('.glimpse-tl-row-spacer').height() + 2);  
                     elements.contentRow.height(contentHeight + 'px');
                     
                     //Render Divers
