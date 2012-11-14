@@ -101,6 +101,8 @@
     <Compile Include="AlternateImplementation\ResultFilterOnResultExecutingMessageShould.cs" />
     <Compile Include="AlternateImplementation\ResultFilterOnResultExecutingShould.cs" />
     <Compile Include="AlternateImplementation\ResultFilterShould.cs" />
+    <Compile Include="AlternateImplementation\ValueProviderFactoryGetValueProviderShould.cs" />
+    <Compile Include="AlternateImplementation\ValueProviderFactoryShould.cs" />
     <Compile Include="AlternateImplementation\ValueProviderGetValueArgumentShould.cs" />
     <Compile Include="AlternateImplementation\ValueProviderGetValueShould.cs" />
     <Compile Include="AlternateImplementation\ValueProviderShould.cs" />

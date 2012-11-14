@@ -79,6 +79,7 @@
     <Compile Include="AlternateImplementation\ModelBinderProvider.cs" />
     <Compile Include="AlternateImplementation\ResultFilter.cs" />
     <Compile Include="AlternateImplementation\ValueProvider.cs" />
+    <Compile Include="AlternateImplementation\ValueProviderFactory.cs" />
     <Compile Include="AlternateImplementation\View.cs" />
     <Compile Include="AlternateImplementation\ViewCorrelationMixin.cs" />
     <Compile Include="AlternateImplementation\ViewEngine.cs" />

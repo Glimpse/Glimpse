@@ -88,7 +88,7 @@ namespace Glimpse.Mvc {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot proxy model binder of type &apos;{0}&apos; because it is not a DefaultModelBinder..
+        ///   Looks up a localized string similar to Cannot proxy model binder of type &apos;{0}&apos; because it is not a System.Web.Mvc.DefaultModelBinder..
         /// </summary>
         internal static string GetBinderNewImplementationCannotProxyWarning {
             get {
