@@ -25,33 +25,27 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
 
     public abstract class ActionInvokerGetFiltersShould<T> where T : class
     {
-        [Fact]
-        public void ImplementProperMethod()
+        [Theory, AutoMock]
+        public void ImplementProperMethod(ActionInvoker.GetFilters<T> sut)
         {
-            var implementation = new ActionInvoker.GetFilters<T>();
-
-            Assert.Equal("GetFilters", implementation.MethodToImplement.Name);
+            Assert.Equal("GetFilters", sut.MethodToImplement.Name);
         }
 
         [Theory, AutoMock]
-        public void ProceedAndReturnWithRuntimePolicyOff(IAlternateImplementationContext context)
+        public void ProceedAndReturnWithRuntimePolicyOff(ActionInvoker.GetFilters<T> sut, IAlternateImplementationContext context)
         {
             context.Setup(c => c.RuntimePolicyStrategy).Returns(() => RuntimePolicy.Off);
 
-            var implementation = new ActionInvoker.GetFilters<T>();
-
-            implementation.NewImplementation(context);
+            sut.NewImplementation(context);
 
             context.Verify(c => c.Proceed());
             context.Verify(c => c.ReturnValue, Times.Never());
         }
 
         [Theory, AutoMock]
-        public void ProxyFiltersWithRuntimePolicyOn([Frozen] IExecutionTimer timer, IAlternateImplementationContext context)
+        public void ProxyFiltersWithRuntimePolicyOn([Frozen] IExecutionTimer timer, ActionInvoker.GetFilters<T> sut, IAlternateImplementationContext context)
         {
-            var implementation = new ActionInvoker.GetFilters<T>();
-
-            implementation.NewImplementation(context);
+            sut.NewImplementation(context);
 
             timer.Verify(t => t.Time(It.IsAny<Action>()));
             context.Verify(c => c.ReturnValue);

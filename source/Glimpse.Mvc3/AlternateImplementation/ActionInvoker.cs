@@ -18,15 +18,27 @@ namespace Glimpse.Mvc.AlternateImplementation
         {
             yield return new InvokeActionResult<ControllerActionInvoker>();
             yield return new InvokeActionMethod();
-            yield return new GetFilters<ControllerActionInvoker>();
+            yield return new GetFilters<ControllerActionInvoker>(new ActionFilter(ProxyFactory), new ResultFilter(ProxyFactory), new AuthorizationFilter(ProxyFactory), new ExceptionFilter(ProxyFactory));
         }
 
         public class GetFilters<T> : IAlternateImplementation<T> where T : class
         {
-            public GetFilters()
+            public GetFilters(Alternate<IActionFilter> alternateActionFilter, Alternate<IResultFilter> alternateResultFilter, Alternate<IAuthorizationFilter> alternateAuthorizationFilter, Alternate<IExceptionFilter> alternateExceptionFilter)
             {
+                AlternateActionFilter = alternateActionFilter;
+                AlternateResultFilter = alternateResultFilter;
+                AlternateAuthorizationFilter = alternateAuthorizationFilter;
+                AlternateExceptionFilter = alternateExceptionFilter;
                 MethodToImplement = typeof(T).GetMethod("GetFilters", BindingFlags.Instance | BindingFlags.NonPublic);
             }
+
+            public Alternate<IExceptionFilter> AlternateExceptionFilter { get; set; }
+
+            public Alternate<IAuthorizationFilter> AlternateAuthorizationFilter { get; set; }
+
+            public Alternate<IResultFilter> AlternateResultFilter { get; set; }
+
+            public Alternate<IActionFilter> AlternateActionFilter { get; set; }
 
             public MethodInfo MethodToImplement { get; private set; }
 
@@ -44,10 +56,10 @@ namespace Glimpse.Mvc.AlternateImplementation
                     return;
                 }
 
-                Proxy(result.ActionFilters, new ActionFilter(context.ProxyFactory));
-                Proxy(result.ResultFilters, new ResultFilter(context.ProxyFactory));
-                Proxy(result.AuthorizationFilters, new AuthorizationFilter(context.ProxyFactory));
-                Proxy(result.ExceptionFilters, new ExceptionFilter(context.ProxyFactory));
+                Proxy(result.ActionFilters, AlternateActionFilter);
+                Proxy(result.ResultFilters, AlternateResultFilter);
+                Proxy(result.AuthorizationFilters, AlternateAuthorizationFilter);
+                Proxy(result.ExceptionFilters, AlternateExceptionFilter);
             }
 
             private void Proxy<TFilter>(IList<TFilter> filters, Alternate<TFilter> alternateImplementation) where TFilter : class

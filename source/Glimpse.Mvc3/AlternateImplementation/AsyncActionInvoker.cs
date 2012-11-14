@@ -18,7 +18,7 @@ namespace Glimpse.Mvc.AlternateImplementation
             yield return new BeginInvokeActionMethod();
             yield return new EndInvokeActionMethod();
             yield return new ActionInvoker.InvokeActionResult<AsyncControllerActionInvoker>();
-            yield return new ActionInvoker.GetFilters<AsyncControllerActionInvoker>();
+            yield return new ActionInvoker.GetFilters<AsyncControllerActionInvoker>(new ActionFilter(ProxyFactory), new ResultFilter(ProxyFactory), new AuthorizationFilter(ProxyFactory), new ExceptionFilter(ProxyFactory));
         }
 
         public class BeginInvokeActionMethod : IAlternateImplementation<AsyncControllerActionInvoker>
