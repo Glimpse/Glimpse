@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Reflection;
-using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 
@@ -18,11 +17,11 @@ namespace Glimpse.Mvc.AlternateImplementation
             yield return new GetValue<T>();
         }
 
-        public class GetValue<T> : IAlternateImplementation<T> where T : class
+        public class GetValue<TValue> : IAlternateImplementation<TValue> where TValue : class
         {
             public GetValue()
             {
-                MethodToImplement = typeof(T).GetMethod("GetValue");
+                MethodToImplement = typeof(TValue).GetMethod("GetValue");
             }
 
             public MethodInfo MethodToImplement { get; private set; }
