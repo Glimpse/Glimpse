@@ -3,6 +3,9 @@ using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
+#if MVC2
+using Glimpse.Mvc2.Backport;
+#endif
 
 namespace Glimpse.Mvc.AlternateImplementation
 {

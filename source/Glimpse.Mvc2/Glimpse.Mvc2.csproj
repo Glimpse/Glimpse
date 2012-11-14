@@ -20,7 +20,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;MVC2</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -28,7 +28,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;MVC2</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -49,6 +49,7 @@
     <Compile Include="..\Glimpse.Mvc3\**\*.cs" Exclude="..\Glimpse.Mvc3\Properties\AssemblyInfo.cs;..\Glimpse.Mvc3\PipelineInspector\DependencyInjectionInspector.cs;..\Glimpse.Mvc3\AlternateImplementation\DependencyResolver.cs;..\Glimpse.Mvc3\AlternateImplementation\ModelBinderProvider.cs;">
       <Link />
     </Compile>
+    <Compile Include="Backport\IUnvalidatedValueProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
