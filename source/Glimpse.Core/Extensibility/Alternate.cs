@@ -17,12 +17,12 @@ namespace Glimpse.Core.Extensibility
 
         public IProxyFactory ProxyFactory { get; set; }
 
-        public bool TryCreate(T originalObj, out T newObj)
+        public virtual bool TryCreate(T originalObj, out T newObj)
         {
             return TryCreate(originalObj, out newObj, null);
         }
 
-        public bool TryCreate(T originalObj, out T newObj, object mixin)
+        public virtual bool TryCreate(T originalObj, out T newObj, object mixin)
         {
             if (ProxyFactory.IsProxyable(originalObj))
             {

@@ -114,4 +114,7 @@
     <value xml:space="preserve">Proxied IDependencyResolver of type '{0}'.</value>
     <comment>{0} - GetType() of proxied dependency resolver</comment>
   </data>
+  <data name="GetBinderNewImplementationCannotProxyWarning">
+    <value xml:space="preserve">Cannot proxy model binder of type '{0}' because it is not a DefaultModelBinder.</value>
+  </data>
 </root>
