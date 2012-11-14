@@ -2462,7 +2462,10 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                         
                     //Work out childless timings 
                     var temp = eventStack.length > 0 ? eventStack[eventStack.length - 1] : undefined; 
-                    if (temp) { temp.childlessDuration -= event.duration; } 
+                    if (temp) {
+                        temp.childlessDuration -= event.duration;
+                        temp.childlessDuration = temp.childlessDuration.toFixed(2);
+                    } 
 
                     //Save calc data
                     event.childlessDuration = event.duration;
