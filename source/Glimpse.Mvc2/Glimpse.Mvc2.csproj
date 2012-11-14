@@ -46,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Glimpse.Mvc3\**\*.cs" Exclude="..\Glimpse.Mvc3\Properties\AssemblyInfo.cs;..\Glimpse.Mvc3\PipelineInspector\DependencyInjectionInspector.cs;..\Glimpse.Mvc3\AlternateImplementation\DependencyResolver.cs;">
+    <Compile Include="..\Glimpse.Mvc3\**\*.cs" Exclude="..\Glimpse.Mvc3\Properties\AssemblyInfo.cs;..\Glimpse.Mvc3\PipelineInspector\DependencyInjectionInspector.cs;..\Glimpse.Mvc3\AlternateImplementation\DependencyResolver.cs;..\Glimpse.Mvc3\AlternateImplementation\ModelBinderProvider.cs;">
       <Link />
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -76,6 +76,7 @@
     <Compile Include="AlternateImplementation\DependencyResolver.cs" />
     <Compile Include="AlternateImplementation\ExceptionFilter.cs" />
     <Compile Include="AlternateImplementation\ModelBinder.cs" />
+    <Compile Include="AlternateImplementation\ModelBinderProvider.cs" />
     <Compile Include="AlternateImplementation\ResultFilter.cs" />
     <Compile Include="AlternateImplementation\ValueProvider.cs" />
     <Compile Include="AlternateImplementation\View.cs" />

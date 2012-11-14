@@ -93,6 +93,8 @@
     <Compile Include="AlternateImplementation\ModelBinderBindModelShould.cs" />
     <Compile Include="AlternateImplementation\ModelBinderBindPropertyArgumentsShould.cs" />
     <Compile Include="AlternateImplementation\ModelBinderBindPropertyShould.cs" />
+    <Compile Include="AlternateImplementation\ModelBinderProviderGetBinderShould.cs" />
+    <Compile Include="AlternateImplementation\ModelBinderProviderShould.cs" />
     <Compile Include="AlternateImplementation\ModelBinderShould.cs" />
     <Compile Include="AlternateImplementation\ResultFilterOnResultExecutedMessageShould.cs" />
     <Compile Include="AlternateImplementation\ResultFilterOnResultExecutedShould.cs" />
