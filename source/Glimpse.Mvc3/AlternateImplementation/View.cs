@@ -50,7 +50,7 @@ namespace Glimpse.Mvc.AlternateImplementation
 
                 context.MessageBroker.PublishMany(
                     new Message(input, timing, context.TargetType, mixin),
-                    new EventMessage(input, timing));
+                    new EventMessage(input, timing, context.InvocationTarget.GetType(), context.MethodInvocationTarget));
             }
 
             public class Arguments
@@ -85,24 +85,13 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public IViewCorrelationMixin ViewCorrelation { get; set; }
             }
 
-            public class EventMessage : TimelineMessage, IActionBasedMessage
+            public class EventMessage : ActionMessage
             {
-                public EventMessage(Arguments arguments, TimerResult timerResult)
-                    : base(timerResult, "RenderView", "View")
-                { 
-                    ActionName = arguments.ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToStringOrDefault();
-                    ControllerName = arguments.ViewContext.Controller.ValueProvider.GetValue("controller").RawValue.ToStringOrDefault();
-                }
-
-                public string ControllerName { get; private set; }
-
-                public string ActionName { get; private set; } 
-
-                public override void BuildEvent(ITimelineEvent timelineEvent)
+                public EventMessage(Arguments arguments, TimerResult timerResult, Type executedType, MethodInfo method)
+                    : base(timerResult, GetControllerName(arguments.ViewContext.Controller), GetActionName(arguments.ViewContext.Controller), GetIsChildAction(arguments.ViewContext.Controller), executedType, method)
                 {
-                    base.BuildEvent(timelineEvent);
-
-                    timelineEvent.Title = string.Format("Render:View - {0}:{1}", ControllerName, ActionName); 
+                    EventName = string.Format("Render:View - {0}:{1}", ControllerName, ActionName); 
+                    EventCategory = "View";
                 }
             }
         }

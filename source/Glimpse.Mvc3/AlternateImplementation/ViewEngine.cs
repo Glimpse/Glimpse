@@ -54,7 +54,7 @@ namespace Glimpse.Mvc.AlternateImplementation
 
                 context.MessageBroker.PublishMany(
                     new Message(input, output, timing, context.TargetType, IsPartial, id),
-                    new EventMessage(input, timing, context.TargetType));
+                    new EventMessage(input, timing, context.TargetType, context.MethodInvocationTarget));
             }
 
             private ViewEngineResult ProxyOutput(ViewEngineResult viewEngineResult, IAlternateImplementationContext context, string viewName, bool isPartial, Guid id)
@@ -122,32 +122,22 @@ namespace Glimpse.Mvc.AlternateImplementation
                 }
             }
 
-            public class EventMessage : TimelineMessage, IActionBasedMessage
+            public class EventMessage : ActionMessage
             {
-                public EventMessage(Arguments arguments, TimerResult timerResult, Type executedType)
-                    : base(timerResult, "FindView", "View")
-                {
+                public EventMessage(Arguments arguments, TimerResult timerResult, Type executedType, MethodInfo method)
+                    : base(timerResult, GetControllerName(arguments.ControllerContext.Controller), GetActionName(arguments.ControllerContext.Controller), GetIsChildAction(arguments.ControllerContext.Controller), executedType, method)
+                { 
                     ViewEngineType = executedType;
                     UseCache = arguments.UseCache;
-                    ActionName = arguments.ControllerContext.Controller.ValueProvider.GetValue("action").RawValue.ToStringOrDefault();
-                    ControllerName = arguments.ControllerContext.Controller.ValueProvider.GetValue("controller").RawValue.ToStringOrDefault(); 
+
+                    EventName = string.Format("Find:View - {0}:{1}", ControllerName, ActionName);
+                    EventSubText = string.Format("{0}:{1}", ViewEngineType.Name, UseCache);
+                    EventCategory = "View";
                 }
-
-                public string ControllerName { get; private set; }
-
-                public string ActionName { get; private set; }
-
+                 
                 public Type ViewEngineType { get; private set; }
 
-                public bool UseCache { get; private set; }
-
-                public override void BuildEvent(ITimelineEvent timelineEvent)
-                {
-                    base.BuildEvent(timelineEvent);
-
-                    timelineEvent.Title = string.Format("Find:View - {0}:{1}", ControllerName, ActionName);
-                    timelineEvent.SubText = string.Format("{0}:{1}", ViewEngineType.Name, UseCache);
-                }
+                public bool UseCache { get; private set; } 
             }
 
             public class Arguments
