@@ -203,7 +203,9 @@
 
                     //Derive event nesting  
                     while (!stackParsed) {
+                            console.log(event.startPoint + '_' + lastEvent.startPoint + '_' + event.endPoint + '_' + lastEvent.endPoint + '_' + (event.startPoint > lastEvent.startPoint) + '_' + (event.endPoint <= lastEvent.endPoint) + '_' + (parseFloat(event.startPoint) > parseFloat(lastEvent.startPoint)) + '_' + (parseFloat(event.endPoint) <= parseFloat(lastEvent.endPoint)));
                         if (event.startPoint > lastEvent.startPoint && event.endPoint <= lastEvent.endPoint) {
+                            console.log('found');
                             eventStack.push(lastEvent); 
                             stackParsed = true;
                         }

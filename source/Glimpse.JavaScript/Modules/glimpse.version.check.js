@@ -30,7 +30,7 @@
                 type: 'GET',
                 dataType: 'jsonp',
                 crossDomain: true,
-                jsonpCallback: 'glimpse.versionCheck.result'   //TODO: Need to setup a correct callback
+                jsonpCallback: 'glimpse.versionCheck.result' 
             });
 
             settings.local('nextCheckedVersionTime', now.setDate(now.getDate() + 1));

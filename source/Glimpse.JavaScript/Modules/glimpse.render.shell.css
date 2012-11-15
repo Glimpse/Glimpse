@@ -579,10 +579,10 @@
     background-position: -64px -22px;
 }
 .glimpse .gconnect .icon {
-    background-position: -213px -20px; /*TODO fix position*/
+    background-position: -213px -20px; 
 }
 .glimpse .gdisconnect .icon {
-    background-position: -195px -20px; /*TODO fix position*/
+    background-position: -195px -20px; 
 }
 .glimpse .info * {
     color: #067CE5;

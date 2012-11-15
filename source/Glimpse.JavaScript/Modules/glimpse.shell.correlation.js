@@ -27,7 +27,7 @@
         renderLayout = function() {
             var html = buildHtml(data.currentData(), data.currentMetadata());
             if (html) {
-                elements.titleHolder().find('.glimpse-uri').hide(); //TODO will probably need to reshow this at some point
+                elements.titleHolder().find('.glimpse-uri').hide();
                 elements.titleHolder().find('.glimpse-correlation').html(html);
             }
         },
