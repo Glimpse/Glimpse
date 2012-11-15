@@ -10,8 +10,18 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.AspNet.Tab
 {
-    public class Session : AspNetTab, IDocumentation
+    using Glimpse.Core.Plugin.Assist;
+
+    public class Session : AspNetTab, IDocumentation, ITabLayout
     {
+        private static readonly object Layout = TabLayout.Create()
+                .Row(r =>
+                {
+                    r.Cell(0).AsKey().WidthInPixels(250);
+                    r.Cell(1);
+                    r.Cell(2).WidthInPercent(15);
+                }).Build();
+
         public string DocumentationUri
         {
             // TODO: Update to proper Uri
@@ -26,6 +36,11 @@ namespace Glimpse.AspNet.Tab
         public override RuntimeEvent ExecuteOn
         {
             get { return RuntimeEvent.EndSessionAccess; }
+        }
+
+        public object GetLayout()
+        {
+            return Layout;
         }
 
         public override object GetData(ITabContext context)
