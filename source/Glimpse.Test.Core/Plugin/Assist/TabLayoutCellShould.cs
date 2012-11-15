@@ -82,7 +82,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		{
 			Cell.AsKey();
 
-			Assert.Equal(true, Cell.IsKey);
+			Assert.Equal(true, Cell.Key);
 		}
 
 		[Fact]
