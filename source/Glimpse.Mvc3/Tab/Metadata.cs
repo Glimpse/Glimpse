@@ -11,8 +11,21 @@ using Glimpse.Mvc.Model;
 
 namespace Glimpse.Mvc.Tab
 {
-    public class Metadata : AspNetTab, IDocumentation, ITabSetup
+    using Glimpse.Core.Plugin.Assist;
+
+    public class Metadata : AspNetTab, IDocumentation, ITabSetup, ITabLayout
     {
+        private static readonly object Layout = TabLayout.Create()
+                .Row(r =>
+                {
+                    r.Cell(0).AsKey().WidthInPixels(150);
+                    r.Cell(1).WidthInPixels(180);
+                    r.Cell(2).WidthInPixels(180);
+                    r.Cell(3).WidthInPercent(15);
+                    r.Cell(4).WidthInPercent(15);
+                    r.Cell(5);
+                }).Build();
+
         public override string Name
         {
             get { return "Metadata"; }
@@ -27,6 +40,11 @@ namespace Glimpse.Mvc.Tab
         public void Setup(ITabSetupContext context)
         { 
             context.MessageBroker.Subscribe<View.Render.Message>(message => Persist(message, context));
+        }
+        
+        public object GetLayout()
+        {
+            return Layout;
         }
 
         public override object GetData(ITabContext context)
