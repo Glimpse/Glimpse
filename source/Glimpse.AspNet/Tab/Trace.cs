@@ -8,11 +8,22 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.AspNet.Tab
 {
-    public class Trace : ITab, ITabSetup, IDocumentation
+    using Glimpse.Core.Plugin.Assist;
+
+    public class Trace : ITab, ITabSetup, IDocumentation, ITabLayout
     {
         public const string TraceMessageStoreKey = "Glimpse.Trace.Messages";
         public const string FirstWatchStoreKey = "Glimpse.Trace.FirstWatch";
-        public const string LastWatchStoreKey = "Glimpse.Trace.LastWatch"; 
+        public const string LastWatchStoreKey = "Glimpse.Trace.LastWatch";
+
+        private static readonly object Layout = TabLayout.Create()
+                .Row(r =>
+                {
+                    r.Cell(0).AsKey().WidthInPixels(100);
+                    r.Cell(1);
+                    r.Cell(2).WidthInPercent(15).Suffix(" ms");
+                    r.Cell(3).WidthInPercent(15).Suffix(" ms");
+                }).Build();
 
         public string Name
         {
@@ -33,6 +44,11 @@ namespace Glimpse.AspNet.Tab
         public Type RequestContextType
         {
             get { return null; }
+        }
+
+        public object GetLayout()
+        {
+            return Layout;
         }
 
         public object GetData(ITabContext context)
