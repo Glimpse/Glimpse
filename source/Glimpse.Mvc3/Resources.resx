@@ -136,4 +136,16 @@
   <data name="GetBinderNewImplementationCannotProxyWarning" xml:space="preserve">
     <value>Cannot proxy model binder of type '{0}' because it is not a System.Web.Mvc.DefaultModelBinder.</value>
   </data>
+  <data name="ModelBinderInspectorSetupReplacedModelBinderProvider" xml:space="preserve">
+    <value>Replaced IModelBinderProvider of type '{0}' with proxy implementation.</value>
+    <comment>{0} - GetType() of replaced ModelBinderProvider</comment>
+  </data>
+  <data name="ModelBinderInspectorSetupReplacedModelBinder" xml:space="preserve">
+    <value>Replaced IModelBinder of type '{0}' with proxy implementation.</value>
+    <comment>{0} - GetType() of replaced IModelBinder</comment>
+  </data>
+  <data name="ModelBinderInspectorSetupReplacedValueProviderFactory" xml:space="preserve">
+    <value>Replaced ValueProviderFactory of type '{0}' with proxy implementation.</value>
+    <comment>{0} - GetType() of replaced ValueProviderFactory</comment>
+  </data>
 </root>

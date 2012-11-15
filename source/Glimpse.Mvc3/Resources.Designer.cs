@@ -97,6 +97,33 @@ namespace Glimpse.Mvc {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Replaced IModelBinder of type &apos;{0}&apos; with proxy implementation..
+        /// </summary>
+        internal static string ModelBinderInspectorSetupReplacedModelBinder {
+            get {
+                return ResourceManager.GetString("ModelBinderInspectorSetupReplacedModelBinder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replaced IModelBinderProvider of type &apos;{0}&apos; with proxy implementation..
+        /// </summary>
+        internal static string ModelBinderInspectorSetupReplacedModelBinderProvider {
+            get {
+                return ResourceManager.GetString("ModelBinderInspectorSetupReplacedModelBinderProvider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replaced ValueProviderFactory of type &apos;{0}&apos; with proxy implementation..
+        /// </summary>
+        internal static string ModelBinderInspectorSetupReplacedValueProviderFactory {
+            get {
+                return ResourceManager.GetString("ModelBinderInspectorSetupReplacedValueProviderFactory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Replaced IViewEngine of type &apos;{0}&apos; with proxy implementation..
         /// </summary>
         internal static string ViewEngineSetupReplacedViewEngine {

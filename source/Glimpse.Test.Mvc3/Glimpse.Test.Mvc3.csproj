@@ -123,6 +123,7 @@
     <Compile Include="Model\ViewsModelShould.cs" />
     <Compile Include="PipelineInspector\DependencyInjectionShould.cs" />
     <Compile Include="PipelineInspector\ExecutionShould.cs" />
+    <Compile Include="PipelineInspector\ModelBinderInspectorShould.cs" />
     <Compile Include="PipelineInspector\ViewEngineShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourcesShould.cs" />
@@ -132,6 +133,9 @@
     <Compile Include="Tab\ViewsShould.cs" />
     <Compile Include="TestDoubles\DummyAsyncController.cs" />
     <Compile Include="TestDoubles\DummyController.cs" />
+    <Compile Include="TestDoubles\DummyDefaultModelBinder.cs" />
+    <Compile Include="TestDoubles\DummyModelBinderProvider.cs" />
+    <Compile Include="TestDoubles\DummyValueProviderFactory.cs" />
     <Compile Include="TestDoubles\DummyView.cs" />
   </ItemGroup>
   <ItemGroup>
