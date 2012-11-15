@@ -28,7 +28,7 @@ namespace Glimpse.Core.Plugin.Assist
 
         public object TabLayout { get; private set; }
         
-        public bool? IsKey { get; private set; }
+        public bool? Key { get; private set; }
 
         public bool? IsCode { get; private set; }
         
@@ -76,7 +76,7 @@ namespace Glimpse.Core.Plugin.Assist
 
         public TabLayoutCell AsKey()
         {
-            IsKey = true;
+            this.Key = true;
             return this;
         }
 
