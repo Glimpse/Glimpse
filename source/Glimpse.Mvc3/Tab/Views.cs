@@ -7,11 +7,32 @@ using Glimpse.Mvc.Model;
 
 namespace Glimpse.Mvc.Tab
 {
-    public class Views : AspNetTab, ITabSetup
+    using Glimpse.Core.Plugin.Assist;
+
+    public class Views : AspNetTab, ITabSetup, ITabLayout
     {
+        private static readonly object Layout = TabLayout.Create()
+                .Row(r =>
+                {
+                    r.Cell(0).AsKey().WidthInPixels(60);
+                    r.Cell(1).WidthInPixels(160);
+                    r.Cell(2).WidthInPixels(160);
+                    r.Cell(3);
+                    r.Cell(4).WidthInPixels(60);
+                    r.Cell(5).WidthInPercent(15);
+                    r.Cell(6).WidthInPixels(80);
+                    r.Cell(7).WidthInPixels(60);
+                    r.Cell(8);
+                }).Build();
+
         public override string Name
         {
             get { return "Views"; }
+        }
+
+        public object GetLayout()
+        {
+            return Layout;
         }
 
         public override object GetData(ITabContext context)
