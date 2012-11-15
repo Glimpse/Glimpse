@@ -12,14 +12,14 @@ namespace Glimpse.AspNet.SerializationConverter
     {
         public override object Convert(EnvironmentModel obj)
         {
-            var root = new TabSection("Key", "Value");
-            root.AddRow().Column("Machine").Column(BuildMachineDetails(obj.Machine));
-            root.AddRow().Column("Web Server").Column(BuildWebServerDetails(obj.WebServer));
-            root.AddRow().Column("Framework").Column(BuildFrameworkDetails(obj.Framework));
-            root.AddRow().Column("Process").Column(BuildProcessDetails(obj.Process));
-            root.AddRow().Column("Timezone").Column(BuildTimeZoneDetails(obj.TimeZone));
-            root.AddRow().Column("Application Assemblies").Column(BuildAssemblyDetails(obj.ApplicationAssemblies));
-            root.AddRow().Column("System Assemblies").Column(BuildAssemblyDetails(obj.SystemAssemblies));
+            var root = new TabObject();
+            root.AddRow().Key("Machine").Value(BuildMachineDetails(obj.Machine));
+            root.AddRow().Key("Web Server").Value(BuildWebServerDetails(obj.WebServer));
+            root.AddRow().Key("Framework").Value(BuildFrameworkDetails(obj.Framework));
+            root.AddRow().Key("Process").Value(BuildProcessDetails(obj.Process));
+            root.AddRow().Key("Timezone").Value(BuildTimeZoneDetails(obj.TimeZone));
+            root.AddRow().Key("Application Assemblies").Value(BuildAssemblyDetails(obj.ApplicationAssemblies));
+            root.AddRow().Key("System Assemblies").Value(BuildAssemblyDetails(obj.SystemAssemblies));
 
             return root.Build();
         }
