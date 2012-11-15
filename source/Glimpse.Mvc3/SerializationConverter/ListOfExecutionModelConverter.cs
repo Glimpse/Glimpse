@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Plugin.Assist;
@@ -15,7 +16,7 @@ namespace Glimpse.Mvc.SerializationConverter
             var section = new TabSection("Ordinal", "Is Child", "Category", "Category", "Type", "Method", "Time Elapsed");
             foreach (var model in models)
             {
-                section.AddRow().Column(ordinal++).Column(model.IsChildAction).Column(model.Category.ToStringOrDefault()).Column(model.Bounds.ToStringOrDefault()).Column(model.ExecutedType).Column(model.ExecutedMethod).Column(model.MillisecondsDuration.ToString("0.##")).SelectedIf(!model.Category.HasValue);
+                section.AddRow().Column(ordinal++).Column(model.IsChildAction).Column(model.Category.ToStringOrDefault()).Column(model.Bounds.ToStringOrDefault()).Column(model.ExecutedType).Column(model.ExecutedMethod).Column(Math.Round(model.MillisecondsDuration, 2)).SelectedIf(!model.Category.HasValue);
             }
 
             return section.Build();

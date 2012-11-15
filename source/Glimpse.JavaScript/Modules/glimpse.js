@@ -2442,13 +2442,11 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                         subText = (subTextPre ? '<span class="glimpse-tl-event-desc-sub">' + subTextPre + '</span>' : ''),
                         stackParsed = false;
 
-                    event.endPoint = (parseFloat(event.startPoint) + parseFloat(event.duration)).toFixed(2);
+                    event.endPoint = parseFloat((event.startPoint + event.duration).toFixed(2));
 
                     //Derive event nesting  
                     while (!stackParsed) {
-                            console.log(event.startPoint + '_' + lastEvent.startPoint + '_' + event.endPoint + '_' + lastEvent.endPoint + '_' + (event.startPoint > lastEvent.startPoint) + '_' + (event.endPoint <= lastEvent.endPoint) + '_' + (parseFloat(event.startPoint) > parseFloat(lastEvent.startPoint)) + '_' + (parseFloat(event.endPoint) <= parseFloat(lastEvent.endPoint)));
-                        if (event.startPoint > lastEvent.startPoint && event.endPoint <= lastEvent.endPoint) {
-                            console.log('found');
+                        if (event.startPoint > lastEvent.startPoint && event.endPoint <= lastEvent.endPoint) { 
                             eventStack.push(lastEvent); 
                             stackParsed = true;
                         }
@@ -2464,7 +2462,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                     //Work out childless timings 
                     var temp = eventStack.length > 0 ? eventStack[eventStack.length - 1] : undefined; 
                     if (temp) {
-                        temp.childlessDuration = (temp.childlessDuration - event.duration).toFixed(2);
+                        temp.childlessDuration = parseFloat((temp.childlessDuration - event.duration).toFixed(2));
                     } 
 
                     //Save calc data
