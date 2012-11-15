@@ -186,7 +186,7 @@
     <Compile Include="Plugin\Assist\ITabStyleRow.cs" />
     <Compile Include="Plugin\Assist\ITabStyleValue.cs" />
     <Compile Include="Plugin\Assist\ITabStyleValueT.cs" />
-    <Compile Include="Plugin\Assist\TabColumn.cs" />
+    <Compile Include="Plugin\Assist\TabSectionColumn.cs" />
     <Compile Include="Plugin\Assist\TabObject.cs" />
     <Compile Include="Plugin\Assist\TabObjectRow.cs" />
     <Compile Include="Plugin\Assist\TabSectionRow.cs" />

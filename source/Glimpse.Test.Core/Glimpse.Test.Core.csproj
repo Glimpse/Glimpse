@@ -124,7 +124,7 @@
     <Compile Include="Plugin\Assist\PluginShould.cs" />
     <Compile Include="Plugin\Assist\TabLayoutCellShould.cs" />
     <Compile Include="Plugin\Assist\TabLayoutShould.cs" />
-    <Compile Include="Plugin\Assist\TabColumnShould.cs" />
+    <Compile Include="Plugin\Assist\TabSectionColumnShould.cs" />
     <Compile Include="Plugin\Assist\TabRowFormattingExtensionsShould.cs" />
     <Compile Include="Plugin\Assist\TabRowShould.cs" />
     <Compile Include="Plugin\Assist\TabSectionShould.cs" />

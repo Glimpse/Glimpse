@@ -1,8 +1,8 @@
 namespace Glimpse.Core.Plugin.Assist
 {
-    public class TabColumn : ITabBuild
+    public class TabSectionColumn : ITabBuild
     {
-        public TabColumn(object columnData)
+        public TabSectionColumn(object columnData)
         { 
             Data = columnData; 
         }

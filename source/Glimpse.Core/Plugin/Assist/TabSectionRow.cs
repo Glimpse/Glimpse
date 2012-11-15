@@ -6,17 +6,17 @@ namespace Glimpse.Core.Plugin.Assist
 {
     public class TabSectionRow : ITabBuild, ITabStyleValue<TabSectionRow>, ITabStyleRow
     {
-        private readonly List<TabColumn> columns = new List<TabColumn>();
+        private readonly List<TabSectionColumn> columns = new List<TabSectionColumn>();
 
         // TODO this might be able to go
-        public IEnumerable<TabColumn> Columns
+        public IEnumerable<TabSectionColumn> Columns
         {
             get { return columns; }
         }
 
         public TabSectionRow Column(object columnData)
         { 
-            var column = new TabColumn(columnData);
+            var column = new TabSectionColumn(columnData);
             columns.Add(column);
             
             return this;
