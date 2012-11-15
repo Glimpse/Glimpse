@@ -37,8 +37,7 @@ namespace Glimpse.Test.Core.Resource
         {
             var contextMock = new Mock<IResourceContext>();
 
-            var resource = new ClientResource {ResourceName = "wrong"};
-
+            var resource = new ClientResource { ResourceName = "wrong" };
 
             var result = resource.Execute(contextMock.Object);
 
@@ -54,7 +53,7 @@ namespace Glimpse.Test.Core.Resource
 
             var result = resource.Execute(contextMock.Object);
 
-            Assert.NotNull(result as FileResourceResult);
+            Assert.NotNull(result);
         }
     }
 }

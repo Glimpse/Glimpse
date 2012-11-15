@@ -138,6 +138,7 @@
     <Compile Include="Policy\UriPolicyShould.cs" />
     <Compile Include="Policy\UserHostAddressPolicyShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResourceResult\CacheControlDecoratorShould.cs" />
     <Compile Include="ResourceResult\RedirectResourceResultShould.cs" />
     <Compile Include="ResourcesShould.cs" />
     <Compile Include="Resource\AjaxShould.cs" />

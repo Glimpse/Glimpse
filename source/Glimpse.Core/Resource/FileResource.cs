@@ -40,7 +40,8 @@ namespace Glimpse.Core.Resource
                 {
                     var content = new byte[resourceStream.Length];
                     resourceStream.Read(content, 0, content.Length);
-                    return new FileResourceResult(content, ResourceType, CacheDuration, CacheSetting.Public);
+
+                    return new CacheControlDecorator(CacheDuration, CacheSetting.Public, new FileResourceResult(content, ResourceType));
                 }
             }
 

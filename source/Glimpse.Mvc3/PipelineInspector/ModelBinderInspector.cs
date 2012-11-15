@@ -17,7 +17,7 @@ namespace Glimpse.Mvc.PipelineInspector
 
         private void SetupModelBinderProviders(IPipelineInspectorContext context)
         {
-            #if !MVC2
+#if !MVC2
             var alternateModelBinderProvider = new ModelBinderProvider(context.ProxyFactory);
             var binderProviders = ModelBinderProviders.BinderProviders;
 
@@ -32,7 +32,7 @@ namespace Glimpse.Mvc.PipelineInspector
                     binderProviders[i] = newProvider;
                 }
             }
-            #endif
+#endif
         }
 
         private void SetupValueProviderFactories(IPipelineInspectorContext context)

@@ -53,7 +53,7 @@ namespace Glimpse.Core.Resource
                 return new StatusCodeResourceResult(404);
             }
 
-            return new JsonResourceResult(data, context.Parameters.GetValueOrDefault(ResourceParameter.Callback.Name), CacheDuration, CacheSetting.Private);
+            return new CacheControlDecorator(CacheDuration, CacheSetting.Private, new JsonResourceResult(data, context.Parameters.GetValueOrDefault(ResourceParameter.Callback.Name)));
         }
     }
 }

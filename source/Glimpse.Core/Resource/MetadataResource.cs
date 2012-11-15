@@ -30,7 +30,7 @@ namespace Glimpse.Core.Resource
                 return new StatusCodeResourceResult(404);
             }
 
-            return new JsonResourceResult(metadata, context.Parameters.GetValueOrDefault(ResourceParameter.Callback.Name), CacheDuration, CacheSetting.Public);
+            return new CacheControlDecorator(CacheDuration, CacheSetting.Public, new JsonResourceResult(metadata, context.Parameters.GetValueOrDefault(ResourceParameter.Callback.Name)));
         }
     }
 }

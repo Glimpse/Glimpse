@@ -31,7 +31,7 @@ namespace Glimpse.Test.Core.Resource
         {
             var resource = new RequestResource();
 
-            Assert.Throws<ArgumentNullException>(()=>resource.Execute(null));
+            Assert.Throws<ArgumentNullException>(() => resource.Execute(null));
         }
 
         [Fact]
@@ -42,14 +42,14 @@ namespace Glimpse.Test.Core.Resource
             var persistenceStoreMock = new Mock<IReadOnlyPersistenceStore>();
             persistenceStoreMock.Setup(ps => ps.GetByRequestId(guid)).Returns(new GlimpseRequest(guid, metadataMock.Object, new Dictionary<string, TabResult>(), 0));
             var contextMock = new Mock<IResourceContext>();
-            contextMock.Setup(c => c.Parameters).Returns(new Dictionary<string, string> { {ResourceParameter.RequestId.Name, guid.ToString()}, {ResourceParameter.Callback.Name, "console.log"} });
+            contextMock.Setup(c => c.Parameters).Returns(new Dictionary<string, string> { { ResourceParameter.RequestId.Name, guid.ToString() }, { ResourceParameter.Callback.Name, "console.log" } });
             contextMock.Setup(c => c.PersistenceStore).Returns(persistenceStoreMock.Object);
 
             var resource = new RequestResource();
 
             var result = resource.Execute(contextMock.Object);
 
-            Assert.NotNull(result as JsonResourceResult);
+            Assert.NotNull(result);
         }
 
         [Fact]

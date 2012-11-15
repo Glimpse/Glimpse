@@ -93,6 +93,7 @@
     <Compile Include="Extensibility\MessageBase.cs" />
     <Compile Include="Extensibility\NuGetPackageAttribute.cs" />
     <Compile Include="Extensibility\ResourceParameterMetadata.cs" />
+    <Compile Include="Extensibility\ResourceResultDecorator.cs" />
     <Compile Include="Extensibility\TimerResult.cs" />
     <Compile Include="Extensibility\IAlternateImplementation.cs" />
     <Compile Include="Extensibility\IAlternateImplementationContext.cs" />
@@ -204,6 +205,7 @@
     <Compile Include="Policy\StatusCodePolicy.cs" />
     <Compile Include="Policy\UriPolicy.cs" />
     <Compile Include="Policy\UserHostAddressPolicy.cs" />
+    <Compile Include="ResourceResult\CacheControlDecorator.cs" />
     <Compile Include="ResourceResult\ExceptionResourceResult.cs" />
     <Compile Include="ResourceResult\FileResourceResult.cs" />
     <Compile Include="ResourceResult\HtmlResourceResult.cs" />

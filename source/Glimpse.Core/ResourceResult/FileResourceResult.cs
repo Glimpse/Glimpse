@@ -1,19 +1,11 @@
 using System;
 using Glimpse.Core.Extensibility;
-// ReSharper disable RedundantUsingDirective
-using Glimpse.Core.Extensions;
-// ReSharper restore RedundantUsingDirective
-using Glimpse.Core.Framework;
 
 namespace Glimpse.Core.ResourceResult
 {
     public class FileResourceResult : IResourceResult
     {
-        public FileResourceResult(byte[] content, string contentType) : this(content, contentType, -1, null)
-        {
-        }
-
-        public FileResourceResult(byte[] content, string contentType, long cacheDuration, CacheSetting? cacheSetting)
+        public FileResourceResult(byte[] content, string contentType)
         {
             if (content == null)
             {
@@ -27,13 +19,7 @@ namespace Glimpse.Core.ResourceResult
 
             Content = content;
             ContentType = contentType;
-            CacheDuration = cacheDuration;
-            CacheSetting = cacheSetting;
         }
-
-        public long CacheDuration { get; set; }
-        
-        public CacheSetting? CacheSetting { get; set; }
 
         public byte[] Content { get; set; }
         
@@ -44,15 +30,6 @@ namespace Glimpse.Core.ResourceResult
             var frameworkProvider = context.FrameworkProvider;
 
             frameworkProvider.SetHttpResponseHeader("Content-Type", ContentType);
-
-#if !DEBUG
-            if (CacheSetting.HasValue)
-            {
-                frameworkProvider.SetHttpResponseHeader("Cache-Control", string.Format("{0}, max-age={1}", CacheSetting.Value.ToDescription(), CacheDuration));
-            }
-#else
-            frameworkProvider.SetHttpResponseHeader("Cache-Control", "no-cache");
-#endif
 
             frameworkProvider.WriteHttpResponse(Content);
         }
