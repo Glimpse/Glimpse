@@ -388,11 +388,18 @@ namespace Glimpse.Core.Framework
             foreach (var tab in Configuration.Tabs)
             {
                 var metadataInstance = new PluginMetadata();
+
                 var documentationTab = tab as IDocumentation;
                 if (documentationTab != null)
                 {
                     metadataInstance.DocumentationUri = documentationTab.DocumentationUri;
-                } 
+                }
+
+                var layoutTab = tab as ITabLayout;
+                if (layoutTab != null)
+                {
+                    metadataInstance.Layout = layoutTab.GetLayout();
+                }
 
                 if (metadataInstance.HasMetadata)
                 {
