@@ -43,11 +43,11 @@ namespace Glimpse.Mvc.SerializationConverter
 
             var summary = model.ViewModelSummary;
 
-            var section = new TabSection("Key", "Value");
-            section.AddRow().Column("Model Type").Column(summary.ModelType);
-            section.AddRow().Column("Model State Valid").Column(summary.IsValid);
-            section.AddRow().Column("TempData Keys").Column(summary.TempDataKeys);
-            section.AddRow().Column("ViewData Keys").Column(summary.ViewDataKeys);
+            var section = new TabObject();
+            section.AddRow().Key("Model Type").Value(summary.ModelType);
+            section.AddRow().Key("Model State Valid").Value(summary.IsValid);
+            section.AddRow().Key("TempData Keys").Value(summary.TempDataKeys);
+            section.AddRow().Key("ViewData Keys").Value(summary.ViewDataKeys);
 
             return section;
         }
