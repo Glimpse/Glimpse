@@ -391,8 +391,7 @@
     font-weight: bold;
 }
 .glimpse-panel th.glimpse-cell-key {
-    width: 30%;
-    max-width: 150px;
+    width: 250px;
 }
 .glimpse-panel table table {
     border: 1px solid #D9D9D9;

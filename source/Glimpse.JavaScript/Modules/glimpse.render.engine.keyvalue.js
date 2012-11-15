@@ -9,7 +9,7 @@
             var i = 1, 
                 html = '<table><thead><tr class="glimpse-row-header-' + level + '"><th class="glimpse-cell-key">Key</th><th class="glimpse-cell-value">Value</th></tr></thead>';
             for (var key in data)
-                html += '<tr class="' + (i++ % 2 ? 'odd' : 'even') + '"><th width="30%">' + engineUtil.raw.process(key) + '</th><td width="70%"> ' + providers.master.build(data[key], level + 1) + '</td></tr>';
+                html += '<tr class="' + (i++ % 2 ? 'odd' : 'even') + '"><th>' + engineUtil.raw.process(key) + '</th><td> ' + providers.master.build(data[key], level + 1) + '</td></tr>';
             html += '</table>';
 
             return html;
