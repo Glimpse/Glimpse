@@ -115,6 +115,7 @@
     <Content Include="google-code-prettify.js" />
     <Content Include="jquery-1.8.0.min.js" />
     <Content Include="jquery.jsonp-2.4.0.js" />
+    <Content Include="Modules\glimpse.shell.info.js" />
     <Content Include="Modules\glimpse.shell.path.js" />
     <Content Include="Modules\glimpse.ajax.js" />
     <Content Include="Modules\glimpse.history.js" />
@@ -163,6 +164,7 @@
     <Content Include="Modules\glimpse.render.shell.html" />
     <Content Include="Modules\glimpse.render.shell.code.css" />
     <Content Include="Modules\glimpse.version.shell.js" />
+    <Content Include="Modules\glimpse.render.shell.info.html" />
     <Content Include="Modules\google-code-prettify.js" />
     <Content Include="Modules\jquery-1.8.0.min.js" />
     <Content Include="Modules\sprite.png" />

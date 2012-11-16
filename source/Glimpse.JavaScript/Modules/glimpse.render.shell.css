@@ -620,20 +620,20 @@
     text-align: center;
     background-color: #DDD;
 }
-.glimpse-panelitem-GlimpseMetadata div {
+.glimpse-panelitem-info div {
     text-align: center;
 }
-.glimpse-panelitem-GlimpseMetadata .glimpse-panel-message {
+.glimpse-panelitem-info .glimpse-panel-message {
     padding-top: 5px;
 }
-.glimpse-panelitem-GlimpseMetadata strong {
+.glimpse-panelitem-info strong {
     font-weight: bold;
 }
-.glimpse-panelitem-GlimpseMetadata .glimpse-info-more {
+.glimpse-panelitem-info .glimpse-info-more {
     font-size: 1.5em;
     margin: 1em 0;
 }
-.glimpse-panelitem-GlimpseMetadata .glimpse-info-quote {
+.glimpse-panelitem-info .glimpse-info-quote {
     font-style: italic;
     margin: 0.75em 0 3em;
 }

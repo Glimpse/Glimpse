@@ -58,6 +58,8 @@
 
 // glimpse.shell.controls.js
 /*(import:glimpse.shell.controls.js)*/
+// glimpse.shell.info.js
+/*(import:glimpse.shell.info.js)*/
 // glimpse.shell.resize.js
 /*(import:glimpse.shell.resize.js)*/
 // glimpse.shell.popup.js
