@@ -33,8 +33,7 @@ namespace Glimpse.AspNet.Tab
 
         public string DocumentationUri
         {
-            // TODO: Update to proper Uri
-            get { return "http://localhost/someUrl"; }
+            get { return "http://getglimpse.com/Help/Plugin/Timeline"; }
         }
 
         public void Setup(ITabSetupContext context)

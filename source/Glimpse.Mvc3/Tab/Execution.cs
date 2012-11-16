@@ -4,12 +4,11 @@ using Glimpse.AspNet.Extensibility;
 using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.Message;
 using Glimpse.Mvc.Model;
+using Glimpse.Core.Plugin.Assist;
 
 namespace Glimpse.Mvc.Tab
 {
-    using Glimpse.Core.Plugin.Assist;
-
-    public class Execution : AspNetTab, ITabSetup, ITabLayout
+    public class Execution : AspNetTab, IDocumentation, ITabSetup, ITabLayout
     {
         private const string TabStoreKey = "IActionFilterMessageKey";
 
@@ -28,6 +27,11 @@ namespace Glimpse.Mvc.Tab
         public override string Name
         {
             get { return "Execution"; }
+        }
+
+        public string DocumentationUri
+        {
+            get { return "http://getglimpse.com/Help/Plugin/Execution"; }
         }
 
         public object GetLayout()

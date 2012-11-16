@@ -9,7 +9,7 @@ namespace Glimpse.Mvc.Tab
 {
     using Glimpse.Core.Plugin.Assist;
 
-    public class Views : AspNetTab, ITabSetup, ITabLayout
+    public class Views : AspNetTab, IDocumentation, ITabSetup, ITabLayout
     {
         private static readonly object Layout = TabLayout.Create()
                 .Row(r =>
@@ -33,6 +33,11 @@ namespace Glimpse.Mvc.Tab
         public object GetLayout()
         {
             return Layout;
+        }
+
+        public string DocumentationUri
+        {
+            get { return "http://getglimpse.com/Help/Plugin/Views"; }
         }
 
         public override object GetData(ITabContext context)
