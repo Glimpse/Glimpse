@@ -1120,10 +1120,12 @@ glimpse.render.engine.util.raw = (function($, util) {
                     permanent = pluginData.isPermanent ? ' glimpse-permanent' : '',
                     item = '<li class="glimpse-tab glimpse-tabitem-' + key + disabled + permanent + '" data-glimpseKey="' + key + '">' + pluginData.name + '</li>';
                 
-                if (!pluginData.isPermanent)
-                    html.instance += item;
-                else
-                    html.permanent += item;
+                if (!pluginData.suppressTab) { 
+                    if (!pluginData.isPermanent)
+                        html.instance += item;
+                    else
+                        html.permanent += item;
+                }
             }
             return html;
         },
