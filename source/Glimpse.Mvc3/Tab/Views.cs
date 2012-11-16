@@ -2,13 +2,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Plugin.Assist;
 using Glimpse.Mvc.AlternateImplementation;
 using Glimpse.Mvc.Model;
 
 namespace Glimpse.Mvc.Tab
 {
-    using Glimpse.Core.Plugin.Assist;
-
     public class Views : AspNetTab, IDocumentation, ITabSetup, ITabLayout
     {
         private static readonly object Layout = TabLayout.Create()
@@ -30,14 +29,14 @@ namespace Glimpse.Mvc.Tab
             get { return "Views"; }
         }
 
-        public object GetLayout()
-        {
-            return Layout;
-        }
-
         public string DocumentationUri
         {
             get { return "http://getglimpse.com/Help/Plugin/Views"; }
+        }
+
+        public object GetLayout()
+        {
+            return Layout;
         }
 
         public override object GetData(ITabContext context)

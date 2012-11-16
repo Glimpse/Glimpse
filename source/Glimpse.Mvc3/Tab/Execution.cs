@@ -2,9 +2,9 @@
 using System.Linq;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Plugin.Assist;
 using Glimpse.Mvc.Message;
 using Glimpse.Mvc.Model;
-using Glimpse.Core.Plugin.Assist;
 
 namespace Glimpse.Mvc.Tab
 {

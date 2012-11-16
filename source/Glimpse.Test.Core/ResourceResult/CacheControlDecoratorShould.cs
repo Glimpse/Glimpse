@@ -1,4 +1,8 @@
 ﻿using Glimpse.Core.Extensibility;
+// ReSharper disable RedundantUsingDirective
+// Glimpse.Core.Extensions.EnumExtensions.ToDescription() is used in !DEBUG
+using Glimpse.Core.Extensions;
+// ReSharper restore RedundantUsingDirective
 using Glimpse.Core.Framework;
 using Glimpse.Core.ResourceResult;
 using Glimpse.Test.Common;
@@ -40,11 +44,19 @@ namespace Glimpse.Test.Core.ResourceResult
         }
 
         [Theory, AutoMock]
-        public void ExecuteInDebug(CacheControlDecorator sut, IResourceResultContext context)
+        public void Execute(IResourceResult resourceResult, IResourceResultContext context)
         {
-            sut.Execute(context);
+            var expectedDuration = 8;
+            var expectedSetting = CacheSetting.MustRevalidate;
+            var sut = new CacheControlDecorator(expectedDuration, expectedSetting, resourceResult);
 
+            sut.Execute(context);
+#if !DEBUG
+            var regex = string.Format(@"{0}.+{1}", expectedSetting.ToDescription(), expectedDuration);
+            context.FrameworkProvider.Verify(fp => fp.SetHttpResponseHeader("Cache-Control", It.IsRegex(regex)));
+#else
             context.FrameworkProvider.Verify(fp => fp.SetHttpResponseHeader("Cache-Control", "no-cache"));
+#endif
         }
 
         [Fact]
