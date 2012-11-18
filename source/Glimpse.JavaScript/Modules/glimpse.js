@@ -849,8 +849,8 @@ glimpse.render.engine.util.raw = (function($, util) {
                 var result = '';
 
                 if ($.isArray(data)) {
-                    if (metadata)
-                        result = providers.layout.build(data, level, forceFull, metadata, forceLimit);
+                    if (metadata && metadata.layout)
+                        result = providers.layout.build(data, level, forceFull, metadata.layout, forceLimit);
                     else
                         result = providers.table.build(data, level, forceFull, forceLimit);
                 } 
@@ -1175,7 +1175,7 @@ glimpse.render.engine.util.raw = (function($, util) {
                 panel = $(html).appendTo(panelHolder);
 
             if (!pluginData.dontRender)
-                renderEngine.insert(panel, pluginData.data, pluginMetadata.layout); 
+                renderEngine.insert(panel, pluginData.data, pluginMetadata); 
             
             pubsub.publish('action.panel.rendered.' + key, { key: key, panel: panel, pluginData: pluginData, pluginMetadata: pluginMetadata, panelHolder: panelHolder });
 

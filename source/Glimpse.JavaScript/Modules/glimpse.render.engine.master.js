@@ -5,8 +5,8 @@
                 var result = '';
 
                 if ($.isArray(data)) {
-                    if (metadata)
-                        result = providers.layout.build(data, level, forceFull, metadata, forceLimit);
+                    if (metadata && metadata.layout)
+                        result = providers.layout.build(data, level, forceFull, metadata.layout, forceLimit);
                     else
                         result = providers.table.build(data, level, forceFull, forceLimit);
                 } 

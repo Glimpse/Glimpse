@@ -8,7 +8,7 @@
                 panel = $(html).appendTo(panelHolder);
 
             if (!pluginData.dontRender)
-                renderEngine.insert(panel, pluginData.data, pluginMetadata.layout); 
+                renderEngine.insert(panel, pluginData.data, pluginMetadata); 
             
             pubsub.publish('action.panel.rendered.' + key, { key: key, panel: panel, pluginData: pluginData, pluginMetadata: pluginMetadata, panelHolder: panelHolder });
 
