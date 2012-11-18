@@ -365,6 +365,14 @@
     font-family: Consolas, monospace, serif;
     font-size: 1.1em;
 }
+.glimpse-panel .glimpse-header {
+    font-weight: bold;
+    padding: 20px 0 12px 3px;
+    font-size: 140%;
+}
+.glimpse-panel .glimpse-header-content {
+    padding: 0 3px;
+}
 .glimpse-panel tr.glimpse-row-header-0 {
     height: 19px;
 }

@@ -10,8 +10,12 @@
                     else
                         result = providers.table.build(data, level, forceFull, forceLimit);
                 } 
-                else if ($.isPlainObject(data)) 
-                    result = providers.keyValue.build(data, level, forceFull, forceLimit);
+                else if ($.isPlainObject(data)) {
+                    if (metadata && metadata.keysHeadings)
+                        result = providers.heading.build(data, level, forceFull, forceLimit);
+                    else
+                        result = providers.keyValue.build(data, level, forceFull, forceLimit);
+                }
                 else if (level == 0) 
                     result = providers.empty.build(data);
                 else 
