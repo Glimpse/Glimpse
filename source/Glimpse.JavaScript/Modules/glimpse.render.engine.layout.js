@@ -24,7 +24,7 @@
                     metadataItem.indexs = util.getTokens(metadataItem.data, data); 
                 
                 //Get metadata for the new data 
-                var newMetadataItem = metadataItem.structure;
+                var newMetadataItem = metadataItem.layout;
                 if ($.isPlainObject(newMetadataItem)) 
                     newMetadataItem = newMetadataItem[rowIndex];
                     
@@ -105,5 +105,5 @@
             buildPreviewOnly : buildPreviewOnly
         }; 
 
-    engine.register('structured', provider);
+    engine.register('layout', provider);
 })(jQueryGlimpse, glimpse.util, glimpse.render.engine, glimpse.render.engine.util);

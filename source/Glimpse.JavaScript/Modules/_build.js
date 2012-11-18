@@ -43,8 +43,8 @@
 /*(import:glimpse.render.engine.master.js)*/
 // glimpse.render.engine.string.js
 /*(import:glimpse.render.engine.string.js)*/
-// glimpse.render.engine.structured.js
-/*(import:glimpse.render.engine.structured.js)*/
+// glimpse.render.engine.layout.js
+/*(import:glimpse.render.engine.layout.js)*/
 // glimpse.render.engine.table.js
 /*(import:glimpse.render.engine.table.js)*/
 // glimpse.render.tab.js

@@ -6,7 +6,7 @@
 
                 if ($.isArray(data)) {
                     if (metadata)
-                        result = providers.structured.build(data, level, forceFull, metadata, forceLimit);
+                        result = providers.layout.build(data, level, forceFull, metadata, forceLimit);
                     else
                         result = providers.table.build(data, level, forceFull, forceLimit);
                 } 

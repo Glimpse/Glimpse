@@ -850,7 +850,7 @@ glimpse.render.engine.util.raw = (function($, util) {
 
                 if ($.isArray(data)) {
                     if (metadata)
-                        result = providers.structured.build(data, level, forceFull, metadata, forceLimit);
+                        result = providers.layout.build(data, level, forceFull, metadata, forceLimit);
                     else
                         result = providers.table.build(data, level, forceFull, forceLimit);
                 } 
@@ -897,7 +897,7 @@ glimpse.render.engine.util.raw = (function($, util) {
     engine.register('string', provider);
 })(jQueryGlimpse, glimpse.util, glimpse.render.engine, glimpse.render.engine.util);
 
-// glimpse.render.engine.structured.js
+// glimpse.render.engine.layout.js
 (function($, util, engine, engineUtil) {
     var providers = engine._providers,
         buildFormatString = function(content, data, indexs) {  
@@ -924,7 +924,7 @@ glimpse.render.engine.util.raw = (function($, util) {
                     metadataItem.indexs = util.getTokens(metadataItem.data, data); 
                 
                 //Get metadata for the new data 
-                var newMetadataItem = metadataItem.structure;
+                var newMetadataItem = metadataItem.layout;
                 if ($.isPlainObject(newMetadataItem)) 
                     newMetadataItem = newMetadataItem[rowIndex];
                     
@@ -1005,7 +1005,7 @@ glimpse.render.engine.util.raw = (function($, util) {
             buildPreviewOnly : buildPreviewOnly
         }; 
 
-    engine.register('structured', provider);
+    engine.register('layout', provider);
 })(jQueryGlimpse, glimpse.util, glimpse.render.engine, glimpse.render.engine.util);
 
 // glimpse.render.engine.table.js
@@ -1175,7 +1175,7 @@ glimpse.render.engine.util.raw = (function($, util) {
                 panel = $(html).appendTo(panelHolder);
 
             if (!pluginData.dontRender)
-                renderEngine.insert(panel, pluginData.data, pluginMetadata.structure); 
+                renderEngine.insert(panel, pluginData.data, pluginMetadata.layout); 
             
             pubsub.publish('action.panel.rendered.' + key, { key: key, panel: panel, pluginData: pluginData, pluginMetadata: pluginMetadata, panelHolder: panelHolder });
 

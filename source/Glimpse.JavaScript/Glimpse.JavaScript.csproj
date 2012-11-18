@@ -141,7 +141,7 @@
     <Content Include="Modules\glimpse.render.engine.keyvalue.js" />
     <Content Include="Modules\glimpse.render.engine.master.js" />
     <Content Include="Modules\glimpse.render.engine.string.js" />
-    <Content Include="Modules\glimpse.render.engine.structured.js" />
+    <Content Include="Modules\glimpse.render.engine.layout.js" />
     <Content Include="Modules\glimpse.render.engine.table.js" />
     <Content Include="Modules\glimpse.render.lazy.js" />
     <Content Include="Modules\glimpse.render.panel.js" />
