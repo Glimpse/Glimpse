@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
+using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 
@@ -14,14 +17,14 @@ namespace Glimpse.Mvc.AlternateImplementation
 
         public override IEnumerable<IAlternateImplementation<T>> AllMethods()
         {
-            yield return new GetValue<T>();
+            yield return new GetValue();
         }
 
-        public class GetValue<TValue> : IAlternateImplementation<TValue> where TValue : class
+        public class GetValue : IAlternateImplementation<T>
         {
             public GetValue()
             {
-                MethodToImplement = typeof(TValue).GetMethod("GetValue");
+                MethodToImplement = typeof(T).GetMethod("GetValue");
             }
 
             public MethodInfo MethodToImplement { get; private set; }
@@ -34,7 +37,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     return;
                 }
 
-                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments)));
+                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), context.ReturnValue as ValueProviderResult, context.TargetType));
             }
 
             public class Arguments
@@ -57,10 +60,21 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public class Message : MessageBase
             {
-                public Message(Arguments arguments)
+                public Message(Arguments arguments, ValueProviderResult result, Type valueProviderType)
                 {
-                    // TODO: Add meaningful properties to message w/ test
+                    AttemptedValue = result.AttemptedValue;
+                    Culture = result.Culture;
+                    RawValue = result.RawValue;
+                    ValueProviderType = valueProviderType;
                 }
+
+                public Type ValueProviderType { get; set; }
+
+                public object RawValue { get; set; }
+
+                public CultureInfo Culture { get; set; }
+
+                public string AttemptedValue { get; set; }
             }
         }
     }

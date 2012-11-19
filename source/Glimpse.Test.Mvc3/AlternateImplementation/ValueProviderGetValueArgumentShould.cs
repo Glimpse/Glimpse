@@ -23,7 +23,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Theory, AutoMock]
         public void ConstructWithTwoArguments(string key, bool skipValidation)
         {
-            var sut = new ValueProvider<T>.GetValue<T>.Arguments(key, skipValidation);
+            var sut = new ValueProvider<T>.GetValue.Arguments(key, skipValidation);
 
             Assert.Equal(key, sut.Key);
             Assert.Equal(skipValidation, sut.SkipValidation);
@@ -32,7 +32,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Theory, AutoMock]
         public void ConstructWithOneArguments(string key)
         {
-            var sut = new ValueProvider<T>.GetValue<T>.Arguments(key);
+            var sut = new ValueProvider<T>.GetValue.Arguments(key);
 
             Assert.Equal(key, sut.Key);
             Assert.False(sut.SkipValidation);
@@ -41,13 +41,13 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Theory, AutoMock]
         public void ThrowWithInvalidKey(object key, bool skipValidation)
         {
-            Assert.Throws<InvalidCastException>(() => new ValueProvider<T>.GetValue<T>.Arguments(key, skipValidation));
+            Assert.Throws<InvalidCastException>(() => new ValueProvider<T>.GetValue.Arguments(key, skipValidation));
         }
 
         [Theory, AutoMock]
         public void ThrowWithInvalidSkipValidation(string key, object skipValidation)
         {
-            Assert.Throws<InvalidCastException>(() => new ValueProvider<T>.GetValue<T>.Arguments(key, skipValidation));
+            Assert.Throws<InvalidCastException>(() => new ValueProvider<T>.GetValue.Arguments(key, skipValidation));
         }
     }
 }

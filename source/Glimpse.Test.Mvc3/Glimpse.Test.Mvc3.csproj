@@ -106,6 +106,7 @@
     <Compile Include="AlternateImplementation\ValueProviderFactoryGetValueProviderShould.cs" />
     <Compile Include="AlternateImplementation\ValueProviderFactoryShould.cs" />
     <Compile Include="AlternateImplementation\ValueProviderGetValueArgumentShould.cs" />
+    <Compile Include="AlternateImplementation\ValueProviderGetValueMessageShould.cs" />
     <Compile Include="AlternateImplementation\ValueProviderGetValueShould.cs" />
     <Compile Include="AlternateImplementation\ValueProviderShould.cs" />
     <Compile Include="AlternateImplementation\ViewEngineFindViewsArgumentsShould.cs" />

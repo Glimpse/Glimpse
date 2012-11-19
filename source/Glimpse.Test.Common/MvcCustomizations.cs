@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Web.Mvc;
 using Moq;
 using Ploeh.AutoFixture;
@@ -19,6 +20,14 @@ namespace Glimpse.Test.Common
             ControllerBase(fixture);
             IValueProvider(fixture);
             ModelBindingContext(fixture);
+            ValueProviderResult(fixture);
+        }
+
+        private static void ValueProviderResult(IFixture fixture)
+        {
+            fixture.Register<object, string, CultureInfo, ValueProviderResult>(
+                (rawValue, attemptedValue, culture) =>
+                new ValueProviderResult(rawValue, attemptedValue, culture));
         }
 
         private static void ModelBindingContext(IFixture fixture)

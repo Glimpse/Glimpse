@@ -22,6 +22,18 @@ namespace Glimpse.Test.Common
             ModelBindBindModelArguments(fixture);
 
             ModelBinderBindPropertyArguments(fixture);
+
+            ValueProviderGetValueArguments(fixture);
+        }
+
+        private static void ValueProviderGetValueArguments(IFixture fixture)
+        {
+            fixture.Register<string, ValueProvider<IValueProvider>.GetValue.Arguments>(
+                key =>
+                new ValueProvider<IValueProvider>.GetValue.Arguments(key));
+            fixture.Register<string, bool, ValueProvider<IUnvalidatedValueProvider>.GetValue.Arguments>(
+                (key, skipValidation) =>
+                new ValueProvider<IUnvalidatedValueProvider>.GetValue.Arguments(key, skipValidation));
         }
 
         private static void ModelBinderBindPropertyArguments(IFixture fixture)

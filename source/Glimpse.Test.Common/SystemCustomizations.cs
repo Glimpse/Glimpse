@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Reflection;
 using Ploeh.AutoFixture;
 
@@ -8,6 +9,8 @@ namespace Glimpse.Test.Common
         public void Customize(IFixture fixture)
         {
             fixture.Register<MethodInfo>(() => typeof(object).GetMethod("ToString"));
+
+            fixture.Register(() => new CultureInfo("en-us"));
         }
     }
 }
