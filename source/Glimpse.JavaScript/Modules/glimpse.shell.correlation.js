@@ -1,6 +1,6 @@
 ﻿(function($, pubsub, data, elements) {
     var wireListeners = function() {
-            elements.titleHolder().find('.glimpse-correlation a').live('click', function() { data.retrieve($(this).attr('data-requestId'), 'correlation'); });
+            elements.titleHolder().find('.glimpse-correlation .glimpse-link').live('click', function() { data.retrieve($(this).attr('data-requestId'), 'correlation'); });
             elements.titleHolder().find('.glimpse-correlation').dropdown();
         },
         buildHtml = function(request, requestMetadata) {
@@ -18,7 +18,7 @@
                         currentLeg = leg.uri;
                         html += currentLeg + ' - <strong>' + leg.method + '</strong> (Current)<br />';
                     } else
-                        html += '<a title="Go to ' + leg.uri + '" href="#" data-requestId="' + leg.requestId + '" data-url="' + leg.uri + '">' + leg.uri + '</a> - <strong>' + leg.method + '</strong><br />';
+                        html += '<span class="glimpse-link" title="Go to ' + leg.uri + '" href="#" data-requestId="' + leg.requestId + '" data-url="' + leg.uri + '">' + leg.uri + '</span> - <strong>' + leg.method + '</strong><br />';
                 }
                 html = '<span class="glimpse-drop">' + currentLeg + '<span class="glimpse-drop-arrow-holder"><span class="glimpse-drop-arrow"></span></span></span><div class="glimpse-drop-over">' + html + '<div class="loading"><span class="icon"></span><span>Loaded...</span></div></div>';
             }
