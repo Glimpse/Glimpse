@@ -90,6 +90,7 @@
     <Compile Include="AlternateImplementation\ExceptionFilterOnExceptionShould.cs" />
     <Compile Include="AlternateImplementation\ExceptionFilterShould.cs" />
     <Compile Include="AlternateImplementation\ModelBinderBindModelArgumentsShould.cs" />
+    <Compile Include="AlternateImplementation\ModelBinderBindModelMessageShould.cs" />
     <Compile Include="AlternateImplementation\ModelBinderBindModelShould.cs" />
     <Compile Include="AlternateImplementation\ModelBinderBindPropertyArgumentsShould.cs" />
     <Compile Include="AlternateImplementation\ModelBinderBindPropertyShould.cs" />

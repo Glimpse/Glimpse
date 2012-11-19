@@ -23,7 +23,8 @@ namespace Glimpse.Test.Common
 
         private static void ModelBindingContext(IFixture fixture)
         {
-            fixture.Customize<ModelBindingContext>(context => context.OmitAutoProperties());
+            fixture.Register<ModelMetadata, string, ModelBindingContext>(
+                (modelMetadata, modelName) => new ModelBindingContext { ModelMetadata = modelMetadata, ModelName = modelName });
         }
 
 // ReSharper disable InconsistentNaming

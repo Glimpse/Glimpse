@@ -17,6 +17,15 @@ namespace Glimpse.Test.Common
             ViewEngineFindViewArguments(fixture);
 
             ViewRenderArguments(fixture);
+
+            ModelBindBindModelArguments(fixture);
+        }
+
+        private static void ModelBindBindModelArguments(IFixture fixture)
+        {
+            fixture.Register<ControllerContext, ModelBindingContext, ModelBinder.BindModel.Arguments>(
+                (controllerContext, modelBindingContext) =>
+                new ModelBinder.BindModel.Arguments(controllerContext, modelBindingContext));
         }
 
         private static void ViewRenderArguments(IFixture fixture)

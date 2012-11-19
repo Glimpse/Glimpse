@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
@@ -81,7 +82,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     return;
                 }
 
-                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments)));
+                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), context.TargetType, context.ReturnValue));
             }
 
             public class Arguments
@@ -99,10 +100,22 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public class Message
             {
-                public Message(Arguments arguments)
+                public Message(Arguments arguments, Type modelBinderType, object rawValue)
                 {
-                    // TODO: Add meaningful properties to message w/ test
+                    var modelBindingContext = arguments.ModelBindingContext;
+                    ModelName = modelBindingContext.ModelName;
+                    ModelType = modelBindingContext.ModelType;
+                    ModelBinderType = modelBinderType;
+                    RawValue = rawValue;
                 }
+
+                public object RawValue { get; set; }
+
+                public Type ModelBinderType { get; set; }
+
+                public Type ModelType { get; set; }
+
+                public string ModelName { get; set; }
             }
         }
     }
