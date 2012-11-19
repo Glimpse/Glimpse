@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.IO;
 using System.Web.Mvc;
 using Glimpse.Core;
@@ -19,6 +20,15 @@ namespace Glimpse.Test.Common
             ViewRenderArguments(fixture);
 
             ModelBindBindModelArguments(fixture);
+
+            ModelBinderBindPropertyArguments(fixture);
+        }
+
+        private static void ModelBinderBindPropertyArguments(IFixture fixture)
+        {
+            fixture.Register<ControllerContext, ModelBindingContext, PropertyDescriptor, ModelBinder.BindProperty.Arguments>(
+                (controllerContext, modelBindingContext, propertyDescriptor) =>
+                new ModelBinder.BindProperty.Arguments(controllerContext, modelBindingContext, propertyDescriptor));
         }
 
         private static void ModelBindBindModelArguments(IFixture fixture)

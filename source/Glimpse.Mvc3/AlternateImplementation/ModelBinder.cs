@@ -37,7 +37,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     return;
                 }
 
-                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments)));
+                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), context.TargetType));
             }
 
             public class Arguments
@@ -58,10 +58,18 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public class Message : MessageBase
             {
-                public Message(Arguments arguments)
+                public Message(Arguments arguments, Type modelBinderType)
                 {
-                    // TODO: Add meaningful properties to message w/ test
+                    Name = arguments.PropertyDescriptor.Name;
+                    Type = arguments.PropertyDescriptor.PropertyType;
+                    ModelBinderType = modelBinderType;
                 }
+
+                public Type ModelBinderType { get; set; }
+
+                public Type Type { get; set; }
+
+                public string Name { get; set; }
             }
         }
 
