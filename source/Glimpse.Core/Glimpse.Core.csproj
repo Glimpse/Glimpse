@@ -5,14 +5,15 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{21F99168-7D7B-49F2-A97C-5A983E0CA16F}</ProjectGuid>
+    <ProjectGuid>{C1289CE8-3259-41D9-893E-7A4E6F772D30}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Glimpse.Core</RootNamespace>
     <AssemblyName>Glimpse.Core</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,197 +33,245 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <RunPostBuildEvent>Always</RunPostBuildEvent>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LukeSkywalker.IPNetwork">
-      <HintPath>..\..\lib\IPNetwork\LukeSkywalker.IPNetwork.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json.Net35, Version=4.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="AntiXssLibrary, Version=4.2.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Json40r2\Bin\Net35\Newtonsoft.Json.Net35.dll</HintPath>
+      <HintPath>..\..\packages\AntiXSS.4.2.1\lib\net40\AntiXssLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="NLog">
-      <HintPath>..\..\lib\NLog2\NLog.dll</HintPath>
+    <Reference Include="Castle.Core, Version=3.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Castle.Core.3.1.0\lib\net40-client\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="System">
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Newtonsoft.Json.4.5.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="System.ComponentModel.Composition">
-      <Private>True</Private>
+    <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="System.configuration">
-      <Private>True</Private>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="Tavis.UriTemplates, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Tavis.UriTemplates.0.1.1\lib\NET40\Tavis.UriTemplates.dll</HintPath>
     </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\ContentTypeCollection.cs" />
-    <Compile Include="Configuration\ContentType.cs" />
-    <Compile Include="Configuration\Environment.cs" />
-    <Compile Include="Configuration\EnvironmentsCollection.cs" />
-    <Compile Include="Configuration\GlimpseConfiguration.cs" />
-    <Compile Include="Configuration\GlimpsePlugin.cs" />
-    <Compile Include="Configuration\GlimpseUrl.cs" />
-    <Compile Include="Configuration\INotifiyGlimpseConfigChanged.cs" />
-    <Compile Include="Configuration\IpAddress.cs" />
-    <Compile Include="Configuration\IpCollection.cs" />
-    <Compile Include="Configuration\GlimpseMode.cs" />
-    <Compile Include="Configuration\PluginBlacklistCollection.cs" />
-    <Compile Include="Configuration\UrlBlacklistCollection.cs" />
-    <Compile Include="Converter\AuthenticationSectionConverter.cs" />
-    <Compile Include="Converter\CustomErrorsSectionConverter.cs" />
-    <Compile Include="Extensibility\GlimpseTimer.cs" />
-    <Compile Include="Extensibility\GlimpseTrace.cs" />
-    <Compile Include="Extensibility\GlimpseHandlerAttribute.cs" />
-    <Compile Include="Extensibility\GlimpseValidatorAttribute.cs" />
-    <Compile Include="Extensibility\IGlimpseFactory.cs" />
-    <Compile Include="Extensibility\IGlimpseLogger.cs" />
-    <Compile Include="Extensibility\IGlimpseMetadataStore.cs" />
-    <Compile Include="Extensibility\IGlimpseWarning.cs" />
-    <Compile Include="Extensibility\IGlimpseHandler.cs" />
-    <Compile Include="Extensibility\IProvideGlimpseHelp.cs" />
-    <Compile Include="Extensibility\IProvideGlimpsePaging.cs" />
-    <Compile Include="Extensibility\IProvideGlimpseStructuredLayout.cs" />
-    <Compile Include="Extensibility\TimerMetadata.cs" />
-    <Compile Include="Handler.cs" />
-    <Compile Include="Handlers\HandlerBase.cs" />
-    <Compile Include="Handlers\ImageHandlerBase.cs" />
-    <Compile Include="Handlers\JavascriptData.cs" />
-    <Compile Include="Handlers\Pager.cs" />
-    <Compile Include="Plugin\Timing.cs" />
-    <Compile Include="Plumbing\GlimpseFactory.cs" />
-    <Compile Include="Plumbing\GlimpseContractResolver.cs" />
-    <Compile Include="Handlers\JsonHandlerBase.cs" />
-    <Compile Include="Handlers\Logo.cs" />
-    <Compile Include="Plumbing\GlimpseLogger.cs" />
-    <Compile Include="Plumbing\GlimpseResponseFilter.cs" />
-    <Compile Include="Plumbing\GlimpseSerializer.cs" />
-    <Compile Include="Plumbing\InProcStackMetadataStore.cs" />
-    <Content Include="Scripts\glimpse.remote.plugin.js" />
-    <Content Include="Scripts\glimpse.ajax.plugin.js" />
-    <Content Include="Scripts\glimpse.controller.lazyloader.js" />
-    <Content Include="Scripts\glimpse.controller.metadata.js" />
-    <Content Include="Scripts\glimpse.controller.notification.js" />
-    <Content Include="Scripts\glimpse.controller.paging.js" />
-    <Content Include="Scripts\glimpse.controller.title.js" />
-    <Content Include="Scripts\glimpse.core.objects.js" />
-    <Content Include="Scripts\glimpse.core.process.js" />
-    <Content Include="Scripts\glimpse.controller.render.js" />
-    <Content Include="Scripts\glimpse.controller.sizer.js" />
-    <Content Include="Scripts\glimpse.core.data.js" />
-    <Content Include="Scripts\glimpse.paging.engine.continuous.js" />
-    <Content Include="Scripts\glimpse.paging.engine.js" />
-    <Content Include="Scripts\glimpse.paging.engine.scrolling.js" />
-    <Content Include="Scripts\glimpse.paging.engine.traditional.js" />
-    <Content Include="Scripts\glimpse.render.style.js" />
-    <Content Include="Scripts\glimpse.render.util.rawString.js">
-      <SubType>UserControl</SubType>
-    </Content>
-    <Content Include="Scripts\glimpse.min.js" />
-    <Content Include="Scripts\glimpse.render.engine.master.js" />
-    <Compile Include="Validator\ContentTypeValidator.cs" />
-    <Compile Include="Validator\GlimpseModeValidator.cs" />
-    <Compile Include="Validator\GlimpseRequestValidator.cs" />
-    <Compile Include="Extensibility\IGlimpseValidator.cs" />
-    <Compile Include="Validator\HttpHandlerValidator.cs" />
-    <Compile Include="Validator\IpAddressValidator.cs" />
-    <Compile Include="Validator\LifecycleEvent.cs" />
-    <Compile Include="Validator\ResponseCodeValidator.cs" />
-    <Compile Include="Validator\UrlValidator.cs" />
-    <Compile Include="Warning\ExceptionWarning.cs" />
-    <Compile Include="Extensibility\GlimpseConverterAttribute.cs" />
-    <Compile Include="Extensibility\GlimpsePluginAttribute.cs" />
-    <Compile Include="Extensibility\IGlimpseConverter.cs" />
-    <Compile Include="Extensibility\IGlimpsePlugin.cs" />
-    <Compile Include="Extensibility\IGlimpsePluginRequirements.cs" />
-    <Compile Include="Extensibility\IGlimpseSanitizer.cs" />
-    <Compile Include="Extensions\HttpContextBaseExtensions.cs" />
-    <Compile Include="Extensions\KeyValuePairExtension.cs" />
-    <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
-    <Compile Include="Plugin\Request.cs" />
-    <Compile Include="Plumbing\GlimpseRequestMetadata.cs" />
-    <Compile Include="Plumbing\GlimpseTraceListener.cs" />
-    <Compile Include="Plumbing\BlacklistedSafeDirectoryCatalog.cs" />
-    <Compile Include="PreApplicationStartCode.cs" />
-    <Compile Include="Handlers\Clients.cs" />
-    <Compile Include="Handlers\Config.cs" />
-    <Compile Include="Handlers\Popup.cs" />
-    <Compile Include="Handlers\History.cs" />
-    <Compile Include="Handlers\JavascriptClient.cs" />
-    <Compile Include="Handlers\Sprite.cs" />
-    <Compile Include="Plugin\Environment.cs" />
-    <Compile Include="Plugin\Trace.cs" />
-    <Compile Include="Plugin\Config.cs" />
-    <Compile Include="GlimpseConstants.cs" />
-    <Compile Include="Module.cs" />
+    <Compile Include="ClientScript\Client.cs" />
+    <Compile Include="ClientScript\Data.cs" />
+    <Compile Include="ClientScript\Metadata.cs" />
+    <Compile Include="Configuration\ContentTypeElement.cs" />
+    <Compile Include="Configuration\ContentTypeElementCollection.cs" />
+    <Compile Include="Configuration\DiscoverableCollectionElement.cs" />
+    <Compile Include="Configuration\GlimpseSection.cs" />
+    <Compile Include="Configuration\LoggingElement.cs" />
+    <Compile Include="Configuration\LoggingLevel.cs" />
+    <Compile Include="Configuration\PolicyDiscoverableCollectionElement.cs" />
+    <Compile Include="Configuration\RegexConverter.cs" />
+    <Compile Include="Configuration\RegexElement.cs" />
+    <Compile Include="Configuration\RegexElementCollection.cs" />
+    <Compile Include="Configuration\StatusCodeElement.cs" />
+    <Compile Include="Configuration\StatusCodeElementCollection.cs" />
+    <Compile Include="Configuration\TypeConverter.cs" />
+    <Compile Include="Configuration\TypeElement.cs" />
+    <Compile Include="Configuration\TypeElementCollection.cs" />
+    <Compile Include="Extensibility\Alternate.cs" />
+    <Compile Include="Extensibility\AlternateImplementationGenerationHook.cs" />
+    <Compile Include="Extensibility\AlternateImplementationSelector.cs" />
+    <Compile Include="Extensibility\AntiXssEncoder.cs" />
+    <Compile Include="Extensibility\CastleInvocationToAlternateImplementationContextAdapter.cs" />
+    <Compile Include="Extensibility\DictionaryDataStoreAdapter.cs" />
+    <Compile Include="Extensibility\ExecutionTimer.cs" />
+    <Compile Include="Extensibility\IConfigurable.cs" />
+    <Compile Include="Extensibility\IExecutionTimer.cs" />
+    <Compile Include="Extensibility\IParameterValueProvider.cs" />
+    <Compile Include="Extensibility\IPrivilegedResource.cs" />
+    <Compile Include="Extensibility\ITabLayout.cs" />
+    <Compile Include="Extensibility\JsonNetConverterDictionaryKeysAreNotPropertyNames.cs" />
+    <Compile Include="Extensibility\MessageBase.cs" />
+    <Compile Include="Extensibility\NuGetPackageAttribute.cs" />
+    <Compile Include="Extensibility\ResourceParameterMetadata.cs" />
+    <Compile Include="Extensibility\ResourceResultDecorator.cs" />
+    <Compile Include="Extensibility\TimerResult.cs" />
+    <Compile Include="Extensibility\IAlternateImplementation.cs" />
+    <Compile Include="Extensibility\IAlternateImplementationContext.cs" />
+    <Compile Include="Extensibility\IClientScript.cs" />
+    <Compile Include="Extensibility\IContext.cs" />
+    <Compile Include="Extensibility\IDynamicClientScript.cs" />
+    <Compile Include="Extensibility\IMessageBroker.cs" />
+    <Compile Include="Extensibility\IPipelineInspectorContext.cs" />
+    <Compile Include="Extensibility\AlternateImplementationToCastleInterceptorAdapter.cs" />
+    <Compile Include="Extensibility\IProxyFactory.cs" />
+    <Compile Include="Extensibility\IResourceContext.cs" />
+    <Compile Include="Extensibility\IResourceResultContext.cs" />
+    <Compile Include="Extensibility\ISerializationConverter.cs" />
+    <Compile Include="Extensibility\IStaticClientScript.cs" />
+    <Compile Include="Extensibility\ITabSetupContext.cs" />
+    <Compile Include="Extensibility\JsonNetSerializationConverterAdapter.cs" />
+    <Compile Include="Extensibility\JsonNetSerializer.cs" />
+    <Compile Include="Extensibility\LoggerBase.cs" />
+    <Compile Include="Extensibility\MessageBroker.cs" />
+    <Compile Include="Extensibility\TimerResultOfT.cs" />
+    <Compile Include="Extensibility\NLogLogger.cs" />
+    <Compile Include="Extensibility\NullLogger.cs" />
+    <Compile Include="Extensibility\ResourceContext.cs" />
+    <Compile Include="Extensibility\ResourceParameter.cs" />
+    <Compile Include="Extensibility\ResourceResultContext.cs" />
+    <Compile Include="Extensibility\ScriptOrder.cs" />
+    <Compile Include="Extensibility\SerializationConverter.cs" />
+    <Compile Include="Extensibility\TabBase.cs" />
+    <Compile Include="Extensibility\TabBaseOfT.cs" />
+    <Compile Include="Extensibility\TabContext.cs" />
+    <Compile Include="Extensibility\ILogger.cs" />
+    <Compile Include="Extensibility\IRuntimePolicyContext.cs" />
+    <Compile Include="Extensibility\RuntimeEvent.cs" />
+    <Compile Include="Extensibility\RuntimePolicyContext.cs" />
+    <Compile Include="Extensibility\TabSetupContext.cs" />
+    <Compile Include="Extensions\AlternateImplementationContextExtensions.cs" />
+    <Compile Include="Extensions\DictionaryExtensions.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Extensions\MessageBrokerExtensions.cs" />
+    <Compile Include="Extensions\LongExtensions.cs" />
+    <Compile Include="Extensions\NameValueCollectionExtension.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="Extensions\TypeElementCollectionExtensions.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Extensions\UriTemplateExtensions.cs" />
+    <Compile Include="Framework\ApplicationPersistenceStore.cs" />
+    <Compile Include="Framework\CacheSetting.cs" />
+    <Compile Include="Framework\CastleDynamicProxyFactory.cs" />
+    <Compile Include="Framework\Factory.cs" />
+    <Compile Include="Framework\GlimpseException.cs" />
+    <Compile Include="Framework\GlimpseMetadata.cs" />
+    <Compile Include="Framework\GlimpseRequest.cs" />
+    <Compile Include="Framework\GlimpseRequestHeaders.cs" />
+    <Compile Include="Framework\IDiscoverableCollection.cs" />
+    <Compile Include="Framework\IGlimpseConfiguration.cs" />
+    <Compile Include="Framework\IGlimpseRuntime.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Framework\IPersistenceStore.cs" />
+    <Compile Include="Framework\IReadOnlyPersistenceStore.cs" />
+    <Compile Include="Framework\IServiceLocator.cs" />
+    <Compile Include="Framework\PipelineInspectorContext.cs" />
+    <Compile Include="Framework\PluginMetadata.cs" />
+    <Compile Include="Framework\ReflectionDiscoverableCollection.cs" />
+    <Compile Include="Framework\ResourceEndpointConfiguration.cs" />
+    <Compile Include="Framework\ResourceParameters.cs" />
+    <Compile Include="Framework\Subscriber.cs" />
+    <Compile Include="Framework\SubscriberOfT.cs" />
+    <Compile Include="Framework\TabResult.cs" />
+    <Compile Include="Extensibility\IRuntimePolicy.cs" />
+    <Compile Include="Extensibility\IResourceResult.cs" />
+    <Compile Include="Extensibility\IDataStore.cs" />
+    <Compile Include="Extensibility\IResource.cs" />
+    <Compile Include="Extensibility\IDocumentation.cs" />
+    <Compile Include="Extensibility\ITab.cs" />
+    <Compile Include="Extensibility\ITabSetup.cs" />
+    <Compile Include="Extensibility\IPipelineInspector.cs" />
+    <Compile Include="Extensibility\ISerializer.cs" />
+    <Compile Include="Extensibility\ITabContext.cs" />
+    <Compile Include="Framework\IFrameworkProvider.cs" />
+    <Compile Include="Framework\GlimpseConfiguration.cs" />
+    <Compile Include="Framework\GlimpseRuntime.cs" />
+    <Compile Include="Message\IMessage.cs" />
+    <Compile Include="Message\ITimerResultMessage.cs" />
+    <Compile Include="Message\TimelineMessage.cs" />
+    <Compile Include="Plugin\Assist\CodeType.cs" />
+    <Compile Include="Plugin\Assist\CodeTypeConverter.cs" />
+    <Compile Include="Plugin\Assist\Formats.cs" />
+    <Compile Include="Plugin\Assist\FormattingKeywords.cs" />
+    <Compile Include="Plugin\Assist\ITabBuild.cs" />
+    <Compile Include="Plugin\Assist\ITabObjectItem.cs" />
+    <Compile Include="Plugin\Assist\ITabStyleRow.cs" />
+    <Compile Include="Plugin\Assist\ITabStyleValue.cs" />
+    <Compile Include="Plugin\Assist\ITabStyleValueT.cs" />
+    <Compile Include="Plugin\Assist\TabSectionColumn.cs" />
+    <Compile Include="Plugin\Assist\TabObject.cs" />
+    <Compile Include="Plugin\Assist\TabObjectRow.cs" />
+    <Compile Include="Plugin\Assist\TabSectionRow.cs" />
+    <Compile Include="Plugin\Assist\TabRowFormattingExtensions.cs" />
+    <Compile Include="Plugin\Assist\TabSection.cs" />
+    <Compile Include="Plugin\Assist\Plugin.cs" />
+    <Compile Include="Plugin\Assist\StringFormattingExtensions.cs" />
+    <Compile Include="Plugin\Assist\TabLayout.cs" />
+    <Compile Include="Plugin\Assist\TabLayoutCell.cs" />
+    <Compile Include="Plugin\Assist\TabLayoutRow.cs" />
+    <Compile Include="Policy\AjaxPolicy.cs" />
+    <Compile Include="Policy\ContentTypePolicy.cs" />
+    <Compile Include="Policy\ControlCookiePolicy.cs" />
+    <Compile Include="Policy\GlimpseResourcePolicy.cs" />
+    <Compile Include="Policy\StatusCodePolicy.cs" />
+    <Compile Include="Policy\UriPolicy.cs" />
+    <Compile Include="Policy\UserHostAddressPolicy.cs" />
+    <Compile Include="ResourceResult\CacheControlDecorator.cs" />
+    <Compile Include="ResourceResult\ExceptionResourceResult.cs" />
+    <Compile Include="ResourceResult\FileResourceResult.cs" />
+    <Compile Include="ResourceResult\HtmlResourceResult.cs" />
+    <Compile Include="ResourceResult\JsonResourceResult.cs" />
+    <Compile Include="ResourceResult\RedirectResourceResult.cs" />
+    <Compile Include="ResourceResult\StatusCodeResourceResult.cs" />
+    <Compile Include="Resource\ClientResource.cs" />
+    <Compile Include="Resource\ConfigurationResource.cs" />
+    <Compile Include="Resource\FileResource.cs" />
+    <Compile Include="Resource\AjaxResource.cs" />
+    <Compile Include="Resource\HistoryResource.cs" />
+    <Compile Include="Resource\LogoResource.cs" />
+    <Compile Include="Resource\PopupResource.cs" />
+    <Compile Include="Resource\RequestResource.cs" />
+    <Compile Include="Resource\MetadataResource.cs" />
+    <Compile Include="Resource\SpriteResource.cs" />
+    <Compile Include="Resource\VersionCheckResource.cs" />
+    <Compile Include="RuntimePolicy.cs" />
+    <Compile Include="Extensibility\IHtmlEncoder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Plugin\Server.cs" />
-    <Compile Include="Plugin\Session.cs" />
-    <Compile Include="Sanitizer\CSharpSanitizer.cs" />
-    <Compile Include="Warning\SerializationWarning.cs" />
-    <Compile Include="Warning\Warning.cs" />
-    <Content Include="Scripts\Test\test.glimpse.ajax.ajax.js" />
-    <Content Include="Scripts\Test\glimpseTest.js" />
-    <Content Include="Scripts\Test\test.glimpse.ajax.pager.js" />
+    <Compile Include="Framework\IRequestMetadata.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SerializationConverter\DateTimeConverter.cs" />
+    <Compile Include="SerializationConverter\GlimpseRequestHeadersConverter.cs" />
+    <Compile Include="SerializationConverter\GlimpseMetadataConverter.cs" />
+    <Compile Include="SerializationConverter\GlimpseRequestConverter.cs" />
+    <Compile Include="SerializationConverter\MethodInfoConverter.cs" />
+    <Compile Include="SerializationConverter\PluginMetadataConverter.cs" />
+    <Compile Include="SerializationConverter\TabResultConverter.cs" />
+    <Compile Include="SerializationConverter\CSharpTypeConverter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="glimpseClient.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Scripts\glimpse.render.engine.string.js" />
-    <Content Include="Scripts\glimpse.js" />
-    <Content Include="Scripts\glimpse.render.engine.table.js" />
-    <Content Include="Scripts\glimpse.render.engine.js" />
-    <Content Include="Scripts\glimpse.render.engine.structured.js" />
-    <Content Include="Scripts\glimpse.view.metadata.html" />
-    <Content Include="Scripts\jquery-1.6.3.min.js" />
-    <Content Include="Scripts\sprite.png" />
-    <Content Include="Scripts\old-glimpseClient.js" />
-    <Content Include="Scripts\test-a.html" />
-    <Content Include="Scripts\test-popup.html" />
-    <Content Include="Scripts\Test\test.glimpse.ajax.js" />
-    <Content Include="Scripts\test.html" />
-    <Content Include="Scripts\glimpse.core.template.js" />
-    <Content Include="Scripts\glimpse.view.shell.css" />
-    <Content Include="Scripts\glimpse.view.shell.html" />
-    <Content Include="Scripts\glimpse.controller.shell.js" />
-    <Content Include="Scripts\glimpse.core.util.js" />
-    <Content Include="Scripts\glimpse.controller.tollbar.js" />
-    <Content Include="Scripts\glimpse.core.js" />
-    <Content Include="Scripts\glimpse.core.pubsub.js" />
-    <EmbeddedResource Include="glimpseLogo.png" />
-    <EmbeddedResource Include="glimpseSprite.png" />
-    <Content Include="NuSpec\content\web.config.transform" />
     <None Include="NuSpec\Glimpse.nuspec">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="NuSpec\content\App_Readme\glimpse.readme.txt" />
     <None Include="NuSpec\tools\install.ps1" />
-    <Content Include="Scripts\glimpse.core.state.js" />
-    <Content Include="Scripts\glimpse.render.engine.keyValue.js" />
-    <Content Include="Scripts\glimpse.ajax.spy.js" />
+    <None Include="NuSpec\tools\uninstall.ps1" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="NuSpec\lib\net35\" />
     <Folder Include="NuSpec\lib\net40\" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="logo.png" />
+    <EmbeddedResource Include="sprite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\Glimpse.JavaScript\Modules\glimpse.js">
+      <Link>glimpse.js</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -230,4 +279,27 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <StyleCopMSBuildTargetsFile>..\..\packages\StyleCop.MSBuild.4.7.40.0\tools\StyleCop.targets</StyleCopMSBuildTargetsFile>
+  </PropertyGroup>
+  <Import Condition="Exists('$(StyleCopMSBuildTargetsFile)')" Project="$(StyleCopMSBuildTargetsFile)" />
+  <PropertyGroup>
+    <StyleCopMSBuildMessageMissing>Failed to import StyleCop.MSBuild targets from '$(StyleCopMSBuildTargetsFile)'. The StyleCop.MSBuild package was either missing or incomplete when the project was loaded. Ensure that the package is present and then restart the build. If you are using an IDE (e.g. Visual Studio), reload the project before restarting the build.</StyleCopMSBuildMessageMissing>
+    <StyleCopMSBuildMessagePresent>Failed to import StyleCop.MSBuild targets from '$(StyleCopMSBuildTargetsFile)'. The StyleCop.MSBuild package was either missing or incomplete when the project was loaded (but is now present). To fix this, restart the build. If you are using an IDE (e.g. Visual Studio), reload the project before restarting the build.</StyleCopMSBuildMessagePresent>
+    <StyleCopMSBuildMessageRestore>Failed to import StyleCop.MSBuild targets from '$(StyleCopMSBuildTargetsFile)'. The StyleCop.MSBuild package was either missing or incomplete when the project was loaded. To fix this, restore the package and then restart the build. If you are using an IDE (e.g. Visual Studio), you may need to reload the project before restarting the build. Note that regular NuGet package restore (during build) does not work with this package because the package needs to be present before the project is loaded. If this is an automated build (e.g. CI server), you may want to ensure that the build process restores the StyleCop.MSBuild package before the project is built.</StyleCopMSBuildMessageRestore>
+    <StyleCopMSBuildMessageRestored>Failed to import StyleCop.MSBuild targets from '$(StyleCopMSBuildTargetsFile)'. The StyleCop.MSBuild package was either missing or incomplete when the project was loaded (but is now present). To fix this, restart the build. If you are using an IDE (e.g. Visual Studio), reload the project before restarting the build. Note that when using regular NuGet package restore (during build) the package will not be available for the initial build because the package needs to be present before the project is loaded. If package restore executes successfully in the intitial build then the package will be available for subsequent builds. If this is an automated build (e.g. CI server), you may want to ensure that the build process restores the StyleCop.MSBuild package before the initial build.</StyleCopMSBuildMessageRestored>
+  </PropertyGroup>
+  <Target Name="StyleCopMSBuildTargetsNotFound">
+    <Warning Condition="!Exists('$(StyleCopMSBuildTargetsFile)') And $(RestorePackages)!=true And $(StyleCopTreatErrorsAsWarnings)!=false" Text="$(StyleCopMSBuildMessageMissing)" />
+    <Warning Condition="Exists('$(StyleCopMSBuildTargetsFile)')  And $(RestorePackages)!=true And $(StyleCopTreatErrorsAsWarnings)!=false" Text="$(StyleCopMSBuildMessagePresent)" />
+    <Warning Condition="!Exists('$(StyleCopMSBuildTargetsFile)') And $(RestorePackages)==true And $(StyleCopTreatErrorsAsWarnings)!=false" Text="$(StyleCopMSBuildMessageRestore)" />
+    <Warning Condition="Exists('$(StyleCopMSBuildTargetsFile)')  And $(RestorePackages)==true And $(StyleCopTreatErrorsAsWarnings)!=false" Text="$(StyleCopMSBuildMessageRestored)" />
+    <Error Condition="!Exists('$(StyleCopMSBuildTargetsFile)') And $(RestorePackages)!=true And $(StyleCopTreatErrorsAsWarnings)==false" Text="$(StyleCopMSBuildMessageMissing)" />
+    <Error Condition="Exists('$(StyleCopMSBuildTargetsFile)')  And $(RestorePackages)!=true And $(StyleCopTreatErrorsAsWarnings)==false" Text="$(StyleCopMSBuildMessagePresent)" />
+    <Error Condition="!Exists('$(StyleCopMSBuildTargetsFile)') And $(RestorePackages)==true And $(StyleCopTreatErrorsAsWarnings)==false" Text="$(StyleCopMSBuildMessageRestore)" />
+    <Error Condition="Exists('$(StyleCopMSBuildTargetsFile)')  And $(RestorePackages)==true And $(StyleCopTreatErrorsAsWarnings)==false" Text="$(StyleCopMSBuildMessageRestored)" />
+  </Target>
+  <PropertyGroup>
+    <PrepareForBuildDependsOn Condition="!Exists('$(StyleCopMSBuildTargetsFile)')">StyleCopMSBuildTargetsNotFound;$(PrepareForBuildDependsOn)</PrepareForBuildDependsOn>
+  </PropertyGroup>
 </Project>

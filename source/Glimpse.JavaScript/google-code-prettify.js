@@ -33,4 +33,4 @@ PR_NOCODE:"nocode",PR_PLAIN:"pln",PR_PUNCTUATION:"pun",PR_SOURCE:"src",PR_STRING
             template.css += '/*(import:glimpse.view.shell.code.css)*/';
         };
         glimpse.pubsub.subscribe('state.build.template.modify', function(t, p) { modify(p); }); 
-}($Glimpse, glimpse));
+}(jQueryGlimpse, glimpse));

@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Routing;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.AspNet.Model;
-using Glimpse.Core2.Extensibility;
+using Glimpse.Core.Extensibility;
 using Route = System.Web.Routing.Route;
 using ProcessConstraint = Glimpse.AspNet.AlternateImplementation.Route.ProcessConstraint;
 
@@ -13,6 +13,16 @@ namespace Glimpse.AspNet.Tab
 {
     public class Routes : AspNetTab, IDocumentation, ITabSetup
     {
+        public string DocumentationUri
+        {
+            get { return "http://getGlimpse.com/Help/Plugin/Routes"; }
+        }
+
+        public override string Name
+        {
+            get { return "Routes"; }
+        }
+
         /*
          * Implementation note: we have an entry in the tabstore for each
          * Route. Each entry is in turn a dictionary mapping from Constraint
@@ -121,16 +131,6 @@ namespace Glimpse.AspNet.Tab
             {
                 item.ActualValue = values[item.PlaceHolder];
             }
-        }
-
-        public override string Name
-        {
-            get { return "Routes"; }
-        }
-
-        public string DocumentationUri
-        {
-            get { return "http://getGlimpse.com/Help/Plugin/Routes"; }
         }
 
         public void Setup(ITabSetupContext context)

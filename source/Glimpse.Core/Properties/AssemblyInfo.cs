@@ -1,21 +1,22 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-
-[assembly: AssemblyTitle("Glimpse for ASP.NET (Beta)")]
-[assembly: AssemblyDescription("Glimpse is a web debugging and diagnostics tool used to gain a better understanding of what's happening inside of your ASP.NET 4.0 application. For ASP.NET MVC3 support, please reference Glimpse.Mvc3.dll (Beta)")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("nmolnar, avanderhoorn")]
-[assembly: AssemblyProduct("Glimpse")]
-[assembly: AssemblyCopyright("")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
+using Glimpse.Core.Extensibility;
 
 [assembly: ComVisible(false)]
-[assembly: Guid("4e613cbe-2441-4dc4-a812-4e6bba03e25c")]
+[assembly: Guid("3b7a68a9-2d81-49c9-9838-c72698176b9c")]
 
-[assembly: AssemblyVersion("0.85")]
-[assembly: AssemblyFileVersion("0.85")]
+[assembly: AssemblyTitle("Glimpse Core Assembly")]
+[assembly: AssemblyDescription("Core interfaces and types for Glimpse.")]// When you right-click the assembly file in Windows Explorer, this attribute appears as the Comments value on the Version tab of the file properties dialog box.
+[assembly: AssemblyProduct("Glimpse")]
+[assembly: AssemblyCopyright("© 2012 Nik Molnar & Anthony van der Hoorn")]
+[assembly: AssemblyTrademark("Glimpse™")]
 
-//[assembly: PreApplicationStartMethod(typeof(PreApplicationStartCode), "Start")]
+// Version is in major.minor.build format to support http://semver.org/
+// Keep these three attributes in sync
+[assembly: AssemblyVersion("1.0.0")]
+[assembly: AssemblyFileVersion("1.0.0")]
+[assembly: AssemblyInformationalVersion("1.0.0-ctp1")] // Used to specify the NuGet version number at build time
+
 [assembly: InternalsVisibleTo("Glimpse.Test.Core")]
+[assembly: NuGetPackage("Glimpse")]

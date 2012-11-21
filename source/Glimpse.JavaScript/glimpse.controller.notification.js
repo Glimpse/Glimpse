@@ -2,7 +2,14 @@
     var //Support  
         wireListeners = function() {
             pubsub.subscribe('state.final', check); 
+            pubsub.subscribe('state.build.shell.modify', wireDomListeners); 
+            pubsub.subscribe('action.update.view', view);
         },   
+        wireDomListeners = function() { 
+            elements.scope.find('.glimpse-meta-update').click(function (event) {
+                 event.preventDefault(); event.stopPropagation(); pubsub.publish('action.update.view');
+            });
+        }, 
 
         //Main 
         retrieveStamp = function () {
@@ -16,26 +23,45 @@
             var metadata = data.currentMetadata();
 
             if (settings.newVersion) 
-                elements.holder.find('.glimpse-meta-update').attr('title', 'Update: Glimpse ' + settings.newVersion + ' now available on nuget.org').css('display', 'inline-block');
+                elements.holder.find('.glimpse-meta-update').attr('title', 'New Updates are available, take a look at what you are missing.').css('display', 'inline-block');
 
             if (util.cookie('glimpseVersionCheck'))
                 return;
 
-            $.ajax({
-                dataType: 'jsonp',
-                url: 'http://getglimpse.com/Glimpse/CurrentVersion/',
-                data: { stamp: retrieveStamp(), version: metadata.version },
-                success: function (data) { 
-                    settings.newVersion = data;
-                    pubsub.publish('state.persist');
-
-                    util.cookie('glimpseVersionCheck', 1, 1);  //Not sure if this should only be set on success 
-                }
-            }); 
+            if (metadata.resources.glimpse_version_check) {
+                var url = util.replaceTokens(metadata.resources.glimpse_version_check, { stamp: retrieveStamp() });
+                
+                $.ajax({
+                    url: url, 
+                    type: 'GET',
+                    dataType: 'jsonp',
+                    crossDomain: true,
+                    jsonpCallback: 'glimpse.versionCheck'
+                });
+            }
+            util.cookie('glimpseVersionCheck', 1, 1);  
         }, 
+        view = function () {
+            var metadata = data.currentMetadata();
+            if (version) {
+                var url = util.replaceTokens(metadata.resources.glimpse_version_detail, { stamp: retrieveStamp() });
+
+                elements.lightbox.find('.glimpse-lb-element').html('<div class="close">[close]</div><iframe src="' + url + '"></iframe>');
+                elements.lightbox.show();
+            }
+        },
+        response = function (payload) {
+            settings.newVersion = payload.hasNewer;
+            pubsub.publish('state.persist');
+        },
+        
         init = function () {
             wireListeners();
         };
     
-    init(); 
+    init();
+
+    return {
+        response: response
+    };
 } ()

@@ -24,10 +24,13 @@
         
         setupData = function () {
             var payload = glimpse.data.current(),
-                metadata = glimpse.data.currentMetadata().plugins;
+                metadata = glimpse.data.currentMetadata();
                  
-            payload.data.Ajax = { name: 'Ajax', data: 'No requests currently detected...', isPermanent : true };
-            metadata.Ajax = { documentationUri: 'http://getglimpse.com/Help/Plugin/Ajax' }; 
+            // Only load the tab if we have what we need to support it 
+            if (metadata.resources.glimpse_ajax) {
+                payload.data.Ajax = { name: 'Ajax', data: 'No requests currently detected...', isPermanent: true };
+                metadata.plugins.Ajax = { documentationUri: 'http://getglimpse.com/Help/Plugin/Ajax' };
+            }
         }, 
         
         active = function () {
@@ -90,7 +93,7 @@
             var panelBody = panel.find('tbody');
             for (var x = resultCount; x < result.length; x++) {
                 var item = result[x];
-                panelBody.prepend('<tr class="' + (x % 2 == 0 ? 'even' : 'odd') + '"><td>' + item.url + '</td><td>' + item.method + '</td><td>' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.requestTime + '</td><td><a href="#" class="glimpse-ajax-link" data-glimpseId="' + item.requestId + '">Inspect</a></td></tr>');
+                panelBody.prepend('<tr class="' + (x % 2 == 0 ? 'even' : 'odd') + '"><td>' + item.uri + '</td><td>' + item.method + '</td><td>' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.dateTime + '</td><td><a href="#" class="glimpse-ajax-link" data-requestId="' + item.requestId + '">Inspect</a></td></tr>');
             }
             
             resultCount = result.length; 
@@ -114,9 +117,9 @@
         },
         
         selected = function (item) {
-            var requestId = item.attr('data-glimpseId');
+            var requestId = item.attr('data-requestId');
 
-            item.hide().parent().append('<div class="loading glimpse-ajax-loading" data-glimpseId="' + requestId + '"><div class="icon"></div>Loading...</div>');
+            item.hide().parent().append('<div class="loading glimpse-ajax-loading" data-requestId="' + requestId + '"><div class="icon"></div>Loading...</div>');
 
             request(requestId);
         },
@@ -127,8 +130,8 @@
         },
         process = function (requestId) {
             var panel = glimpse.elements.findPanel('Ajax'),
-                loading = panel.find('.glimpse-ajax-loading[data-glimpseId="' + requestId + '"]'),
-                link = panel.find('.glimpse-ajax-link[data-glimpseId="' + requestId + '"]');
+                loading = panel.find('.glimpse-ajax-loading[data-requestId="' + requestId + '"]'),
+                link = panel.find('.glimpse-ajax-link[data-requestId="' + requestId + '"]');
 
             panel.find('.glimpse-head-message').fadeIn();
             panel.find('.selected').removeClass('selected'); 
@@ -142,4 +145,4 @@
         };
 
     init();
-}($Glimpse, glimpse));
+}(jQueryGlimpse, glimpse));

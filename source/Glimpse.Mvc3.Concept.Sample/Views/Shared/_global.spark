@@ -1,0 +1,9 @@
+﻿<use namespace="System"/>
+<use namespace="System.Collections.Generic"/>
+<use namespace="System.Linq"/>
+<use namespace="System.Web.Mvc"/>
+<use namespace="System.Web.Mvc.Html"/>
+
+<use assembly="Spark.Web.Mvc"/>
+<use assembly="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"/>
+<use assembly="System.Web.Routing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"/>

@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xunit>
     <assemblies>
-        <assembly filename="source\Glimpse.Test.Core2\bin\Release\Glimpse.Test.Core2.dll" shadow-copy="true">
-            <output type="xml" filename="builds\local\artifacts\test.core2.xml" />
+        <assembly filename="source\Glimpse.Test.Core\bin\Release\Glimpse.Test.Core.dll" shadow-copy="true">
+            <output type="xml" filename="builds\local\artifacts\test.core.xml" />
         </assembly>
-        <assembly filename="source\Glimpse.Test.Core2.Net35\bin\Release\Glimpse.Test.Core2.Net35.dll" shadow-copy="true">
-            <output type="xml" filename="builds\local\artifacts\test.core2.net35.xml" />
+        <assembly filename="source\Glimpse.Test.Core.Net35\bin\Release\Glimpse.Test.Core.Net35.dll" shadow-copy="true">
+            <output type="xml" filename="builds\local\artifacts\test.core.net35.xml" />
         </assembly>
         <assembly filename="source\Glimpse.Test.AspNet\bin\Release\Glimpse.Test.AspNet.dll" shadow-copy="true">
             <output type="xml" filename="builds\local\artifacts\test.aspnet.xml" />
@@ -13,8 +13,8 @@
         <assembly filename="source\Glimpse.Test.AspNet.Net35\bin\Release\Glimpse.Test.AspNet.Net35.dll" shadow-copy="true">
             <output type="xml" filename="builds\local\artifacts\test.aspnet.net35.xml" />
         </assembly>
-        <assembly filename="source\Glimpse.Test.Mvc\bin\Release\Glimpse.Test.Mvc.dll" shadow-copy="true">
-            <output type="xml" filename="builds\local\artifacts\test.mvc.xml" />
+        <assembly filename="source\Glimpse.Test.Mvc3\bin\Release\Glimpse.Test.Mvc3.dll" shadow-copy="true">
+            <output type="xml" filename="builds\local\artifacts\test.mvc3.xml" />
         </assembly>
     </assemblies>
 </xunit>

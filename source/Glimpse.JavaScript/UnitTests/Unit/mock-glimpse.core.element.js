@@ -1,3 +1,3 @@
-$ = $Glimpse;
+$ = jQueryGlimpse;
 scope = $('.glimpse-outer');
 elements = {};

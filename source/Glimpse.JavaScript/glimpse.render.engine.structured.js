@@ -20,7 +20,7 @@
                     cellContent += buildCell(data, metadataItem.data[i], level, 'div', rowIndex);
             }
             else { 
-                if (!metadataItem.indexs && $.isNaN(metadataItem.data)) 
+                if (!metadataItem.indexs && !$.isNumeric(metadataItem.data)) 
                     metadataItem.indexs = util.getTokens(metadataItem.data, data); 
                 
                 //Get metadata for the new data 
@@ -67,7 +67,7 @@
 
         //Main
         build = function (data, level, forceFull, metadata, forceLimit) { 
-            var limit = $.isNaN(forceLimit) ? 3 : forceLimit;
+            var limit = !$.isNumeric(forceLimit) ? 3 : forceLimit;
 
             if (shouldUsePreview(data.length, level, forceFull, limit, forceLimit, 1))
                 return buildPreview(data, level, metadata);

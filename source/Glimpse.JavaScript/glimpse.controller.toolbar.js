@@ -1,7 +1,10 @@
 ﻿toolbarController = function () {
     var //Support
         isPopup = function() {
-            return window.location.href.indexOf(util.replaceTokens(data.currentMetadata().resources.glimpse_popup)) > -1;
+            var resources = data.currentMetadata().resources;
+            if (resources.glimpse_popup) 
+                return window.location.href.indexOf(util.replaceTokens(data.currentMetadata().resources.glimpse_popup, { requestId : data.current().requestId })) > -1;
+            return false;
         },
         wireListeners = function() {
             pubsub.subscribe('action.open', function(topic, payload) { open(payload); });
@@ -10,23 +13,34 @@
             pubsub.subscribe('action.popout', popout); 
             pubsub.subscribe('state.final', checkPopout); 
             pubsub.subscribe('state.build.shell.modify', wireDomListeners); 
-            pubsub.subscribe('state.build.rendered', restore); 
+            pubsub.subscribe('state.build.rendered', restore);
+            pubsub.subscribe('action.close.lightbox', closeLightbox);
         },
         wireDomListeners = function() {
             elements.scope.find('.glimpse-open').click(function () { pubsub.publish('action.open', false); return false; });
             elements.scope.find('.glimpse-minimize').click(function () { pubsub.publish('action.minimize'); return false; });
             elements.scope.find('.glimpse-close').click(function () { pubsub.publish('action.close'); return false; });
-            elements.scope.find('.glimpse-popout').click(function () { pubsub.publish('action.popout'); return false; });
+            elements.lightbox.find('.close').live('click', function () { pubsub.publish('action.close.lightbox'); });
+            
+            // Determine whether we need to wireup up any popup events 
+            var resources = data.currentMetadata().resources,
+                popoutElement = elements.scope.find('.glimpse-popout');
+            if (resources.glimpse_popup) {
+                popoutElement.click(function () { pubsub.publish('action.popout'); return false; });
 
-            if (settings.popupOn) {
-                if (isPopup()) {
-                    $(window).resize(function () {
-                        elements.holder.find('.glimpse-panel').height($(window).height() - 54);
-                    });
-                } 
-                $(window).unload(closePopup);
+                if (settings.popupOn) {
+                    if (isPopup()) {
+                        $(window).resize(function () {
+                            elements.holder.find('.glimpse-panel').height($(window).height() - 54);
+                        });
+                    } 
+                    $(window).unload(windowClosing);
+                }
             }
+            else
+                popoutElement.hide();
         }, 
+        
         openPopup = function () { 
             settings.popupOn = true;
             pubsub.publish('state.persist');
@@ -34,7 +48,6 @@
             util.cookie('glimpseKeepPopup', '1');
 
             var url = util.replaceTokens(data.currentMetadata().resources.glimpse_popup, { requestId: data.current().requestId });
-                //url = path + (path.indexOf('?') > -1 ? '&' : '?') + 'requestId=' + data.current().requestId;
             window.open(url, 'GlimpsePopup', 'width=1100,height=600,status=no,toolbar=no,menubar=no,location=no,resizable=yes,scrollbars=yes');
         },
             
@@ -42,6 +55,8 @@
         open = function (shortCircuitSlide) {
             settings.open = true;
             pubsub.publish('state.persist');
+            
+            closePopout();
 
             elements.opener.hide(); 
             $.fn.add.call(elements.holder, elements.spacer).show().animate({ height : settings.height }, (shortCircuitSlide ? 0 : 'fast'));   
@@ -76,7 +91,12 @@
             if (settings.open && settings.popupOn && !pResult)
                 openPopup(); 
         },
-        closePopup = function () {
+        closePopout = function() {
+            settings.popupOn = false;
+            pubsub.publish('state.persist');
+            util.cookie('glimpseKeepPopup', null);
+        },
+        windowClosing = function () {
             if (isPopup() && !util.cookie('glimpseKeepPopup')) { 
                 settings.popupOn = false;
                 pubsub.publish('state.persist');
@@ -98,6 +118,10 @@
             if (opened && !popupOn)
                 pubsub.publish('action.open', true);
         },
+        closeLightbox = function () {
+            elements.scope.find('.glimpse-lb').hide();
+        },
+
         init = function () {
             wireListeners();
         };

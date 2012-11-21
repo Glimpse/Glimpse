@@ -1,7 +1,7 @@
 ﻿keyValue = function () {
     var //Main
         build = function (data, level, forceFull, forceLimit) {  
-            var limit = $.isNaN(forceLimit) ? 3 : forceLimit;
+            var limit = !$.isNumeric(forceLimit) ? 3 : forceLimit;
 
             if (shouldUsePreview(util.lengthJson(data), level, forceFull, limit, forceLimit, 1))
                 return buildPreview(data, level);

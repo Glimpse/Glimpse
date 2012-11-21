@@ -23,9 +23,9 @@ var glimpseTest = (function ($) {
         random = function (length) {
             return Math.floor(Math.random() * length);
         },
-        retrieve = function (url) {
-            var parts = /(\S+)\?/ig.exec(url); 
-            if (parts.length == 2 && testHandlers[parts[1]]) 
+        retrieve = function (uri) {
+            var parts = /(\S+)\?/ig.exec(uri); 
+            if (parts != null && parts.length == 2 && testHandlers[parts[1]]) 
                 return testHandlers[parts[1]];
             return null;
         },
@@ -46,9 +46,9 @@ var glimpseTest = (function ($) {
                 if (callback) 
                     callback(param, queryStringToObject(param.url));
                 else 
-                    original(param); 
+                    return original(param); 
             };
         };
 
     init();
-}($Glimpse));
+}(jQueryGlimpse));

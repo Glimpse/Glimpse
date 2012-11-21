@@ -4,7 +4,7 @@ using System.Web;
 using System.Web.Routing;
 using Glimpse.AspNet.Model;
 using Glimpse.AspNet.Tab;
-using Glimpse.Core2.Extensibility;
+using Glimpse.Core.Extensibility;
 using Moq;
 using Xunit;
 using System.Collections.Generic;

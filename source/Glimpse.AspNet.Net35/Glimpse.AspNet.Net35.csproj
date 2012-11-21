@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Glimpse.AspNet.Net35</RootNamespace>
-    <AssemblyName>Glimpse.AspNet.Net35</AssemblyName>
+    <AssemblyName>Glimpse.AspNet</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -32,7 +32,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
@@ -45,9 +47,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Glimpse.Core2.Net35\Glimpse.Core2.Net35.csproj">
+    <EmbeddedResource Include="..\Glimpse.AspNet\Resources.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Glimpse.Core.Net35\Glimpse.Core.Net35.csproj">
       <Project>{22E8C0B0-E32F-4598-896F-81F3A6BD9862}</Project>
-      <Name>Glimpse.Core2.Net35</Name>
+      <Name>Glimpse.Core.Net35</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

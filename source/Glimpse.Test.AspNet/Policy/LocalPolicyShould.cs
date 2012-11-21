@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Web;
 using Glimpse.AspNet.Policy;
-using Glimpse.Core2;
-using Glimpse.Core2.Extensibility;
+using Glimpse.Core.Extensibility;
+using Glimpse.Core;
 using Moq;
 using Xunit;
 using Xunit.Extensions;

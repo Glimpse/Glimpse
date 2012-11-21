@@ -8,7 +8,7 @@
             if ($.isPlainObject(data))
                 return '{ ... }';
 
-            var charMax = !$.isNaN(forceLimit) ? forceLimit : (level > 1 ? 80 : 150),
+            var charMax = $.isNumeric(forceLimit) ? forceLimit : (level > 1 ? 80 : 150),
                 charOuterMax = (charMax * 1.2),
                 content = rawString.process(data, charMax, charOuterMax, true);
 

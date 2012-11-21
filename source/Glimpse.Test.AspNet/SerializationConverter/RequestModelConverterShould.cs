@@ -63,7 +63,7 @@ namespace Glimpse.Test.AspNet.SerializationConverter
             var converter = new RequestModelConverter();
             var obj = converter.Convert(model);
 
-            var result = obj as IDictionary<string, object>;
+            var result = obj as IDictionary<object, object>;
 
             Assert.NotNull(result);
             Assert.True(result.Keys.Count > 0);

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Web;
 using System.Web.Routing;
-using Glimpse.Core2;
-using Glimpse.Core2.Extensibility;
+using Glimpse.Core;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.AspNet.AlternateImplementation
 {

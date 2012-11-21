@@ -1,4 +1,5 @@
-﻿/*(import:jquery-1.6.3.min.js)*/
+﻿/*(import:jquery-1.8.0.min.js)*/
+/*(import:jquery.jsonp-2.4.0.js)*/
 /*(import:uritemplate.min.js)*/
 
 var glimpse = (function ($, scope) {
@@ -46,11 +47,12 @@ var glimpse = (function ($, scope) {
         render : renderEngine,
         data : data,
         util : util,
-        settings : settings
+        settings : settings,
+        versionCheck: notificationController.response
     };
-}($Glimpse, $Glimpse(document)));
+}(jQueryGlimpse, jQueryGlimpse(document)));
 
-$Glimpse(document).ready(function() {
+jQueryGlimpse(document).ready(function() {
     glimpse.init();
 });
 

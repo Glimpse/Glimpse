@@ -25,10 +25,13 @@
         },
         setupData = function () {
             var payload = glimpse.data.current(),
-                metadata = glimpse.data.currentMetadata().plugins;
-                 
-            payload.data.History = { name: 'History', data: 'No requests currently detected...', isPermanent : true };
-            metadata.History = { documentationUri: 'http://getglimpse.com/Help/Plugin/Remote' };  
+                metadata = glimpse.data.currentMetadata();
+            
+            // Only load the tab if we have what we need to support it 
+            if (metadata.resources.glimpse_history) {
+                payload.data.History = { name: 'History', data: 'No requests currently detected...', isPermanent: true };
+                metadata.plugins.History = { documentationUri: 'http://getglimpse.com/Help/Plugin/Remote' };
+            }
         },
          
         active = function () {
@@ -137,7 +140,7 @@
             var html = '';
             for (var x = context.resultCount; x < clientData.length; x++) {
                 var item = clientData[x];
-                html = '<tr class="' + (x % 2 == 0 ? 'even' : 'odd') + '" data-requestId="' + item.requestId + '"><td>' + item.url + '</td><td>' + item.method + '</td><td>' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.requestTime + '</td><td>' + item.isAjax + '</td><td><a href="#" class="glimpse-history-link" data-glimpseId="' + item.requestId + '">Inspect</a></td></tr>' + html;
+                html = '<tr class="' + (x % 2 == 0 ? 'even' : 'odd') + '" data-requestId="' + item.requestId + '"><td>' + item.uri + '</td><td>' + item.method + '</td><td>' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.dateTime + '</td><td>' + item.isAjax + '</td><td><a href="#" class="glimpse-history-link" data-requestId="' + item.requestId + '">Inspect</a></td></tr>' + html;
             }
             mainBody.prepend(html);
             
@@ -160,9 +163,9 @@
         
         
         selected = function (item) {
-            var requestId = currentRequestId = item.attr('data-glimpseId');
+            var requestId = currentRequestId = item.attr('data-requestId');
 
-            item.hide().parent().append('<div class="loading glimpse-history-loading" data-glimpseId="' + requestId + '"><div class="icon"></div>Loading...</div>');
+            item.hide().parent().append('<div class="loading glimpse-history-loading" data-requestId="' + requestId + '"><div class="icon"></div>Loading...</div>');
 
             request(requestId);
         },
@@ -176,8 +179,8 @@
         process = function (requestId) {
             var panel = glimpse.elements.findPanel('History'),
                 main = panel.find('.glimpse-col-main'), 
-                loading = panel.find('.glimpse-history-loading[data-glimpseId="' + requestId + '"]'),
-                link = panel.find('.glimpse-history-link[data-glimpseId="' + requestId + '"]');
+                loading = panel.find('.glimpse-history-loading[data-requestId="' + requestId + '"]'),
+                link = panel.find('.glimpse-history-link[data-requestId="' + requestId + '"]');
             
             context.requestId = requestId;
 
@@ -201,9 +204,9 @@
         }, 
 
         //Main 
-        init = function () {
+        init = function () { 
             wireListener(); 
         };
 
     init();
-}($Glimpse, glimpse));
+}(jQueryGlimpse, glimpse));

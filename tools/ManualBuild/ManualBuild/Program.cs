@@ -13,6 +13,7 @@ namespace ManualBuild
         {
             var assets = new Assets(args[0]);
             var assetsTest = new Assets(args[0] + "\\FunctionalTests\\Mock");
+            var assetsModule = new Assets(args[0] + "\\Modules");
 
             var coreContent = File.ReadAllText(assets.BuildPath("glimpse.core.js"));
             coreContent = ProcessFile(coreContent, assets);
@@ -20,8 +21,12 @@ namespace ManualBuild
             var testContent = File.ReadAllText(assetsTest.BuildPath("test.glimpse.ajax.js"));
             testContent = ProcessFile(testContent, assetsTest);
 
+            var moduleContent = File.ReadAllText(assetsModule.BuildPath("_build.js"));
+            moduleContent = ProcessFile(moduleContent, assetsModule);
+
             File.WriteAllText(assets.BuildPath("glimpse.js"), coreContent);
             File.WriteAllText(assetsTest.BuildPath("glimpseTest.js"), testContent);
+            File.WriteAllText(assetsModule.BuildPath("glimpse.js"), moduleContent);
         }
 
         static string ProcessFile(string fileContent, Assets assets)

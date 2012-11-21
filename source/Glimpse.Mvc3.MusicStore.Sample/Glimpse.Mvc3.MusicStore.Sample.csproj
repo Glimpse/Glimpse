@@ -21,6 +21,8 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -99,6 +101,7 @@
     <Content Include="Content\Images\home-showcase.png" />
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\placeholder.gif" />
+    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\jquery-1.7.1-vsdoc.js" />
@@ -190,9 +193,9 @@
       <Project>{FDDFC8A6-CDDF-4BC6-9F07-E76050E1EEE7}</Project>
       <Name>Glimpse.AspNet</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Glimpse.Mvc\Glimpse.Mvc.csproj">
+    <ProjectReference Include="..\Glimpse.Mvc3\Glimpse.Mvc3.csproj">
       <Project>{0A68B072-7918-45AC-BB78-F05789D0BF44}</Project>
-      <Name>Glimpse.Mvc</Name>
+      <Name>Glimpse.Mvc3</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
@@ -248,4 +251,5 @@ copy ASPNETDB_log_ReadOnly.ldf ASPNETDB_log.ldf
 attrib -r ASPNETDB_log.ldf
 )</PostBuildEvent>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
 </Project>

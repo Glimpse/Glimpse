@@ -1,5 +1,5 @@
-﻿using System.Web.Routing;
-using Glimpse.Core2.Extensibility;
+using System.Web.Routing;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.AspNet.PipelineInspector
 {
@@ -7,7 +7,7 @@ namespace Glimpse.AspNet.PipelineInspector
     /// PipelineInspector which will replace any routes in the route table
     /// with a proxied version (from Glimpse.AspNet.AlternateImplementation.Route)
     /// </summary>
-    public class RoutesInspector:IPipelineInspector
+    public class RoutesInspector : IPipelineInspector
     {
         public void Setup(IPipelineInspectorContext context)
         {
@@ -41,11 +41,6 @@ namespace Glimpse.AspNet.PipelineInspector
                    RouteTable.Routes[i] = newRoute;
                }
            }
-        }
-
-        public void Teardown(IPipelineInspectorContext context)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }
