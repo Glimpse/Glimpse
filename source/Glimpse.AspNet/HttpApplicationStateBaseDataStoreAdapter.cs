@@ -14,7 +14,7 @@ namespace Glimpse.AspNet
 
         public T Get<T>()
         {
-            return Get<T>(typeof(T).AssemblyQualifiedName);
+            return Get<T>(KeyOf<T>());
         }
 
         public T Get<T>(string key)
@@ -29,7 +29,7 @@ namespace Glimpse.AspNet
 
         public void Set<T>(T value)
         {
-            ApplicationState.Set(typeof(T).AssemblyQualifiedName, value);
+            Set(KeyOf<T>(), value);
         }
 
         public void Set(string key, object value)
@@ -37,11 +37,21 @@ namespace Glimpse.AspNet
             ApplicationState.Set(key, value);
         }
 
+        public bool Contains<T>()
+        {
+            return Contains(KeyOf<T>());
+        }
+
         public bool Contains(string key)
         {
             var result = ApplicationState.Get(key);
 
             return result != null;
+        }
+
+        private static string KeyOf<T>()
+        {
+            return typeof(T).AssemblyQualifiedName;
         }
     }
 }

@@ -12,6 +12,8 @@
         
         void Set(string key, object value);
 
+        bool Contains<T>();
+
         bool Contains(string key);
     }
 }

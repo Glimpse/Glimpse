@@ -19,7 +19,7 @@ namespace Glimpse.Core.Extensibility
 
         public T Get<T>()
         {
-            return (T)Dictionary[typeof(T).AssemblyQualifiedName];
+            return Get<T>(KeyOf<T>());
         }
 
         public T Get<T>(string key)
@@ -34,7 +34,7 @@ namespace Glimpse.Core.Extensibility
 
         public void Set<T>(T value)
         {
-            Dictionary[typeof(T).AssemblyQualifiedName] = value;
+            Set(KeyOf<T>(), value);
         }
 
         public void Set(string key, object value)
@@ -42,9 +42,19 @@ namespace Glimpse.Core.Extensibility
             Dictionary[key] = value;
         }
 
+        public bool Contains<T>()
+        {
+            return Contains(KeyOf<T>());
+        }
+
         public bool Contains(string key)
         {
             return Dictionary.Contains(key);
+        }
+
+        private static string KeyOf<T>()
+        {
+            return typeof(T).AssemblyQualifiedName;
         }
 
         private static bool IsValidDictionaryType(IDictionary dictionary)
