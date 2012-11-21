@@ -43,6 +43,7 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlternateImplementation\Route.cs" />
     <Compile Include="AspNetFrameworkProvider.cs" />
     <Compile Include="AspNetServiceLocator.cs" />
     <Compile Include="Constants.cs" />
@@ -71,7 +72,7 @@
     <Compile Include="Model\EnvironmentTimeZoneModel.cs" />
     <Compile Include="Model\EnvironmentWebServerModel.cs" />
     <Compile Include="Model\RequestModel.cs" />
-    <Compile Include="Model\RouteInstance.cs" />
+    <Compile Include="Model\RouteModel.cs" />
     <Compile Include="Model\SessionModel.cs" />
     <Compile Include="Model\TimelineCategoryModel.cs" />
     <Compile Include="Model\TimelineEventModel.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="SerializationConverter\ConfigurationModelConverter.cs" />
     <Compile Include="SerializationConverter\ConfigurationRoleManagerProviderSettingsModelConverter.cs" />
     <Compile Include="SerializationConverter\EnvironmentModelConverter.cs" />
+    <Compile Include="SerializationConverter\ListOfRouteModelConverter.cs" />
     <Compile Include="SerializationConverter\RequestModelConverter.cs" />
     <Compile Include="SerializationConverter\SessionModelConverter.cs" />
     <Compile Include="SerializationConverter\TimelineEventModelConverter.cs" />

@@ -7,7 +7,6 @@ namespace Glimpse.Core.Extensibility
         bool IsProxyable(object obj);
         
         T CreateProxy<T>(T instance, IEnumerable<IAlternateImplementation<T>> methodImplementations) where T : class;
-        
         T CreateProxy<T>(T instance, IEnumerable<IAlternateImplementation<T>> methodImplementations, object mixin) where T : class;
     }
 }
