@@ -31,12 +31,8 @@ namespace Glimpse.AspNet.PipelineInspector
                    var methods = AlternateImplementation.Route.AllMethods(context.MessageBroker,
                                                                           context.TimerStrategy,
                                                                           context.RuntimePolicyStrategy);
-                   var newRoute = context.ProxyFactory.CreateClassProxy(methods,
-                       new object [] {  route.Url,
-                                 route.Defaults,
-                                 route.Constraints,
-                                 route.DataTokens,
-                                 route.RouteHandler});
+
+                   var newRoute = context.ProxyFactory.CreateProxy(route, methods);
 
                    RouteTable.Routes[i] = newRoute;
                }
