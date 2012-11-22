@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web;
 using System.Web.Routing;
 using Glimpse.AspNet.Model;
@@ -7,6 +8,7 @@ using Glimpse.Core.Extensibility;
 using Moq;
 using Xunit;
 using System.Collections.Generic;
+using Route = Glimpse.AspNet.AlternateImplementation.Route;
 
 namespace Glimpse.Test.AspNet.Tab
 {
@@ -57,18 +59,21 @@ namespace Glimpse.Test.AspNet.Tab
         }
 
         [Fact]
-        public void ReturnNullWhenRequestContextIsNull()
+        public void ReturnRouteInstancesEvenWhenContextIsNull()
         {
             Tab.TabContextMock.Setup(tc => tc.GetRequestContext<HttpContextBase>()).Returns<HttpContextBase>(null);
 
-            Assert.Null(Tab.GetData(Tab.TabContextMock.Object));
+            var data = Tab.GetData(Tab.TabContextMock.Object) as IList<RouteModel>;
+
+            Assert.NotNull(data);
+            Assert.Equal(RouteTable.Routes.Count, data.Count);
         }
 
         [Fact]
-        public void ReturnRouteInstances()
+        public void ReturnRouteInstancesEvenWhenRoutesTableEmpty()
         {
             RouteTable.Routes.Clear();
-            var data = Tab.GetData(Tab.TabContextMock.Object) as IList<RouteInstance>;
+            var data = Tab.GetData(Tab.TabContextMock.Object) as IList<RouteModel>;
             Assert.NotNull(data);
             Assert.Empty(data);
         }
@@ -79,10 +84,59 @@ namespace Glimpse.Test.AspNet.Tab
             RouteTable.Routes.Clear();
             RouteTable.Routes.Ignore("Something");
 
-            var data = Tab.GetData(Tab.TabContextMock.Object) as IList<RouteInstance>;
+            var data = Tab.GetData(Tab.TabContextMock.Object) as IList<RouteModel>;
 
             Assert.NotNull(data);
             Assert.Equal(RouteTable.Routes.Count, data.Count);
+        }
+
+        [Fact]
+        public void SubscribeToConstraintMessageTypes()
+        {
+            var messageBrokerMock = new Mock<IMessageBroker>();
+            var setupMock = new Mock<ITabSetupContext>();
+            setupMock.Setup(c => c.MessageBroker).Returns(messageBrokerMock.Object);
+            Tab.Setup(setupMock.Object);
+
+            messageBrokerMock.Verify(mb => mb.Subscribe(It.IsAny<Action<Route.ProcessConstraint.Message>>()));
+        }
+
+        [Fact]
+        public void MatchConstraintMessageToRoute()
+        {
+            // create a TabDataStore, and configure a ITabSetupContext and ITabContext which will return it
+            var store = new DictionaryDataStoreAdapter(new Dictionary<object, object>());
+            var setupMock = new Mock<ITabSetupContext>();
+            setupMock.Setup(s => s.GetTabStore()).Returns(store);
+            Tab.TabContextMock.Setup(s => s.TabStore).Returns(store);
+
+            // set up the test route
+            var routeHandler = new Mock<IRouteHandler>();
+            var constraints = new RouteValueDictionary(new {
+                                                               controller = "zz",
+                                                               action = "bb"
+                                                           });
+            var route1 = new System.Web.Routing.Route("url", null, constraints, routeHandler.Object);
+  
+            // send a constraint-processed message
+            var msg = new Route.ProcessConstraint.Message(route1, "controller", false);
+            Routes.Persist(msg, setupMock.Object);
+
+            // check the output
+            var model1 = Tab.GetRouteModelForRoute(Tab.TabContextMock.Object, route1);
+
+            Assert.Equal("url",model1.URL);
+            Assert.NotNull(model1.Constraints);
+            Assert.Equal(2, model1.Constraints.Count());
+
+            var matchedConstraint = model1.Constraints.First(c => c.ParameterName == "controller");
+            Assert.NotNull(matchedConstraint);
+            Assert.True(matchedConstraint.Checked);
+            Assert.False(matchedConstraint.Matched);
+
+            var unmatchedConstraint = model1.Constraints.First(c => c.ParameterName != "controller");
+            Assert.NotNull(unmatchedConstraint);
+            Assert.False(unmatchedConstraint.Checked);
         }
     }
 }
