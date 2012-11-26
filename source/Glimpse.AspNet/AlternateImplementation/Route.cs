@@ -1,93 +1,87 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Web;
 using System.Web.Routing;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
 
 namespace Glimpse.AspNet.AlternateImplementation
 {
-    /// <summary>
-    /// Generator of Route proxies. The proxy intercepts Route.ProcessConstraint and records
-    /// the exection details.
-    /// </summary>
-    public static class Route
+    public class Route : Alternate<System.Web.Routing.Route>
     {
-        public static IEnumerable<IAlternateImplementation<System.Web.Routing.Route>> AllMethods(IMessageBroker messageBroker, Func<IExecutionTimer> timerStrategy, Func<RuntimePolicy> runtimePolicyStrategy)
+        public Route(IProxyFactory proxyFactory)
+            : base(proxyFactory)
         {
-            yield return new ProcessConstraint(messageBroker, timerStrategy, runtimePolicyStrategy);
         }
 
-        /// <summary>
-        /// protected virtual bool ProcessConstraint(HttpContextBase httpContext,
-        ///     object constraint, string parameterName, RouteValueDictionary values,
-        ///     RouteDirection routeDirection)
-        /// </summary>
+        public override IEnumerable<IAlternateImplementation<System.Web.Routing.Route>> AllMethods()
+        {
+            yield return new ProcessConstraint();
+            yield return new RouteBase.GetRouteData<System.Web.Routing.Route>();
+        }
+
         public class ProcessConstraint : IAlternateImplementation<System.Web.Routing.Route>
         {
-            public ProcessConstraint(IMessageBroker messageBroker, Func<IExecutionTimer> timerStrategy, Func<RuntimePolicy> runtimePolicyStrategy)
+            public ProcessConstraint()
             {
-                MessageBroker = messageBroker;
-                TimerStrategy = timerStrategy;
-                RuntimePolicyStrategy = runtimePolicyStrategy;
+                MethodToImplement = typeof(System.Web.Routing.Route).GetMethod("ProcessConstraint", BindingFlags.NonPublic | BindingFlags.Instance);
             }
 
-            public IMessageBroker MessageBroker { get; set; }
-            public Func<IExecutionTimer> TimerStrategy { get; set; }
-            public Func<RuntimePolicy> RuntimePolicyStrategy { get; set; }
-
-            public MethodInfo MethodToImplement
-            {
-                get { return typeof (System.Web.Routing.Route).GetMethod("ProcessConstraint", BindingFlags.NonPublic | BindingFlags.Instance); }
-            }
+            public MethodInfo MethodToImplement { get; set; }
 
             public void NewImplementation(IAlternateImplementationContext context)
             {
-                context.Proceed();
-
-                if (RuntimePolicyStrategy() == RuntimePolicy.Off)
+                TimerResult timer;
+                if (!context.TryProceedWithTimer(out timer))
                 {
                     return;
                 }
 
-                var args = new Arguments(context.Arguments);
                 var result = (bool)context.ReturnValue;
 
-                var msg = new Message((System.Web.Routing.Route)context.InvocationTarget, args.ParameterName, result);
-                MessageBroker.Publish(msg);
+                context.MessageBroker.Publish(new Message((System.Web.Routing.Route)context.InvocationTarget, new Arguments(context.Arguments), result));
             }
 
             public class Arguments
             {
-                public Arguments(object [] args)
+                public Arguments(object[] args)
                 {
-                    HttpContext = (HttpContextBase) args[0];
+                    HttpContext = (HttpContextBase)args[0];
                     Constraint = args[1];
-                    ParameterName = (string) args[2];
-                    Values = (RouteValueDictionary) args[3];
-                    RouteDirection = (RouteDirection) args[4];
+                    ParameterName = (string)args[2];
+                    Values = (RouteValueDictionary)args[3];
+                    RouteDirection = (RouteDirection)args[4];
                 }
 
                 public HttpContextBase HttpContext { get; set; }
+
                 public object Constraint { get; set; }
+
                 public string ParameterName { get; set; }
+
                 public RouteValueDictionary Values { get; set; }
+
                 public RouteDirection RouteDirection { get; set; }
             }
 
             public class Message
             {
-                public bool IsMatch { get; set; }
-                public System.Web.Routing.Route Route { get; set; }
-                public string ParameterName { get; set; }
-
-                public Message(System.Web.Routing.Route route, string parameterName, bool isMatch)
+                public Message(System.Web.Routing.Route route, Arguments args, bool isMatch)
                 {
                     IsMatch = isMatch;
-                    ParameterName = parameterName;
+                    ParameterName = args.ParameterName;
                     Route = route;
                 }
+
+                public bool IsMatch { get; set; }
+
+                public System.Web.Routing.Route Route { get; set; }
+
+                public string ParameterName { get; set; }
             }
         }
     }

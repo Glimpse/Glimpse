@@ -60,6 +60,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlternateImplementation\RouteBaseGetRouteDataShould.cs" />
+    <Compile Include="AlternateImplementation\RouteBaseShould.cs" />
+    <Compile Include="AlternateImplementation\RouteProcessConstraintShould.cs" />
+    <Compile Include="AlternateImplementation\RouteShould.cs" />
     <Compile Include="AspNetFrameworkProviderShould.cs" />
     <Compile Include="HttpApplicationStateBaseDataAdapterShould.cs" />
     <Compile Include="HttpHandlerShould.cs" />
