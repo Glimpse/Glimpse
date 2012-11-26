@@ -43,7 +43,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         {
             context.Setup(c => c.Arguments).Returns(new object[] { arg1 });
             context.Setup(c => c.ReturnValue).Returns(returnValue);
-            alternateModelBinder.Setup(amb => amb.TryCreate(It.IsAny<DefaultModelBinder>(), out newModelBinder)).Returns(true);
+            alternateModelBinder.Setup(amb => amb.TryCreate(It.IsAny<DefaultModelBinder>(), out newModelBinder, null, null)).Returns(true);
 
             var sut = new ModelBinderProvider.GetBinder(alternateModelBinder);
             sut.NewImplementation(context);
@@ -52,7 +52,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             context.Verify(mb => mb.ReturnValue);
             context.Logger.Verify(l => l.Warn(It.IsAny<string>(), context.ReturnValue.GetType()), Times.Never());
             context.VerifySet(c => c.ReturnValue = newModelBinder);
-            alternateModelBinder.Verify(amb => amb.TryCreate(It.IsAny<DefaultModelBinder>(), out newModelBinder));
+            alternateModelBinder.Verify(amb => amb.TryCreate(It.IsAny<DefaultModelBinder>(), out newModelBinder, null, null));
         }
 
         [Theory, AutoMock]

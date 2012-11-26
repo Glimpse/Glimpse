@@ -25,7 +25,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         {
             ModelBinderProviders.BinderProviders.Clear();
             context.ProxyFactory.Setup(pf => pf.IsProxyable(It.IsAny<IModelBinderProvider>())).Returns(true);
-            context.ProxyFactory.Setup(pf => pf.CreateProxy(It.IsAny<IModelBinderProvider>(), It.IsAny<IEnumerable<IAlternateImplementation<IModelBinderProvider>>>(), null)).Returns(proxy);
+            context.ProxyFactory.Setup(pf => pf.CreateProxy(It.IsAny<IModelBinderProvider>(), It.IsAny<IEnumerable<IAlternateImplementation<IModelBinderProvider>>>(), null, null)).Returns(proxy);
 
             sut.Setup(context);
 
@@ -38,7 +38,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         {
             ModelBinderProviders.BinderProviders.Add(new DummyModelBinderProvider());
             context.ProxyFactory.Setup(pf => pf.IsProxyable(It.IsAny<IModelBinderProvider>())).Returns(true);
-            context.ProxyFactory.Setup(pf => pf.CreateProxy(It.IsAny<IModelBinderProvider>(), It.IsAny<IEnumerable<IAlternateImplementation<IModelBinderProvider>>>(), null)).Returns(proxy);
+            context.ProxyFactory.Setup(pf => pf.CreateProxy(It.IsAny<IModelBinderProvider>(), It.IsAny<IEnumerable<IAlternateImplementation<IModelBinderProvider>>>(), null, null)).Returns(proxy);
 
             sut.Setup(context);
 
@@ -51,7 +51,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         {
             ValueProviderFactories.Factories.Clear();
             context.ProxyFactory.Setup(pf => pf.IsProxyable(It.IsAny<ValueProviderFactory>())).Returns(true);
-            context.ProxyFactory.Setup(pf => pf.CreateProxy(It.IsAny<ValueProviderFactory>(), It.IsAny<IEnumerable<IAlternateImplementation<ValueProviderFactory>>>(), null)).Returns(proxy);
+            context.ProxyFactory.Setup(pf => pf.CreateProxy(It.IsAny<ValueProviderFactory>(), It.IsAny<IEnumerable<IAlternateImplementation<ValueProviderFactory>>>(), null, null)).Returns(proxy);
 
             sut.Setup(context);
 
@@ -64,7 +64,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         {
             ValueProviderFactories.Factories.Add(new DummyValueProviderFactory());
             context.ProxyFactory.Setup(pf => pf.IsProxyable(It.IsAny<ValueProviderFactory>())).Returns(true);
-            context.ProxyFactory.Setup(pf => pf.CreateProxy(It.IsAny<ValueProviderFactory>(), It.IsAny<IEnumerable<IAlternateImplementation<ValueProviderFactory>>>(), null)).Returns(proxy);
+            context.ProxyFactory.Setup(pf => pf.CreateProxy(It.IsAny<ValueProviderFactory>(), It.IsAny<IEnumerable<IAlternateImplementation<ValueProviderFactory>>>(), null, null)).Returns(proxy);
 
             sut.Setup(context);
 
@@ -77,7 +77,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         {
             ModelBinders.Binders.Add(typeof(object), seedBinder);
             context.ProxyFactory.Setup(pf => pf.IsProxyable(It.IsAny<DefaultModelBinder>())).Returns(true);
-            context.ProxyFactory.Setup(pf => pf.CreateProxy(It.IsAny<DefaultModelBinder>(), It.IsAny<IEnumerable<IAlternateImplementation<DefaultModelBinder>>>(), null)).Returns(proxy);
+            context.ProxyFactory.Setup(pf => pf.CreateProxy(It.IsAny<DefaultModelBinder>(), It.IsAny<IEnumerable<IAlternateImplementation<DefaultModelBinder>>>(), null, null)).Returns(proxy);
 
             sut.Setup(context);
 
@@ -90,7 +90,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         public void UpdateDefaultModelBinder(ModelBinderInspector sut, IPipelineInspectorContext context, DefaultModelBinder proxy)
         {
             context.ProxyFactory.Setup(pf => pf.IsProxyable(It.IsAny<DefaultModelBinder>())).Returns(true);
-            context.ProxyFactory.Setup(pf => pf.CreateProxy(It.IsAny<DefaultModelBinder>(), It.IsAny<IEnumerable<IAlternateImplementation<DefaultModelBinder>>>(), null)).Returns(proxy);
+            context.ProxyFactory.Setup(pf => pf.CreateProxy(It.IsAny<DefaultModelBinder>(), It.IsAny<IEnumerable<IAlternateImplementation<DefaultModelBinder>>>(), null, null)).Returns(proxy);
 
             sut.Setup(context);
 

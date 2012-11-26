@@ -49,10 +49,20 @@ namespace Glimpse.Core.Framework
 
         public T CreateProxy<T>(T instance, IEnumerable<IAlternateImplementation<T>> methodImplementations) where T : class
         {
-            return CreateProxy(instance, methodImplementations, null);
+            return CreateProxy(instance, methodImplementations, null, null);
         }
 
         public T CreateProxy<T>(T instance, IEnumerable<IAlternateImplementation<T>> methodImplementations, object mixin) where T : class
+        {
+            return CreateProxy(instance, methodImplementations, mixin, null);
+        }
+
+        public T CreateProxy<T>(T instance, IEnumerable<IAlternateImplementation<T>> methodImplementations, object[] constructorArguments) where T : class
+        {
+            return CreateProxy(instance, methodImplementations, null, constructorArguments);
+        }
+
+        public T CreateProxy<T>(T instance, IEnumerable<IAlternateImplementation<T>> methodImplementations, object mixin, object[] constructorArguments) where T : class
         {
             var interceptorArray = (from implementaion in methodImplementations select new AlternateImplementationToCastleInterceptorAdapter<T>(implementaion, Logger, MessageBroker, this, TimerStrategy, RuntimePolicyStrategy)).ToArray();
             var generationHook = new AlternateImplementationGenerationHook<T>(methodImplementations, Logger);
@@ -70,7 +80,7 @@ namespace Glimpse.Core.Framework
                 return interfaceProxy;
             }
 
-            var classProxy = ProxyGenerator.CreateClassProxyWithTarget(instance, options, interceptorArray);
+            var classProxy = (T)ProxyGenerator.CreateClassProxyWithTarget(typeof(T), instance, options, constructorArguments, interceptorArray);
             Logger.Debug("Proxied class of type '{0}' with '{1}'.", typeof(T), classProxy.GetType());
             return classProxy;
         }

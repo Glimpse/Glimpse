@@ -25,7 +25,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
             DependencyResolver.SetResolver(dependencyResolver);
 
             context.ProxyFactory.Setup(f => f.IsProxyable(It.IsAny<object>())).Returns(true);
-            context.ProxyFactory.Setup(f => f.CreateProxy(It.IsAny<IDependencyResolver>(), It.IsAny<IEnumerable<IAlternateImplementation<IDependencyResolver>>>(), null)).Returns(dependencyResolver);
+            context.ProxyFactory.Setup(f => f.CreateProxy(It.IsAny<IDependencyResolver>(), It.IsAny<IEnumerable<IAlternateImplementation<IDependencyResolver>>>(), null, null)).Returns(dependencyResolver);
 
             sut.Setup(context);
 

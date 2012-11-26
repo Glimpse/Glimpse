@@ -57,7 +57,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         {
             context.Setup(c => c.Arguments).Returns(new object[] { arg1 });
             context.Setup(c => c.ReturnValue).Returns(returnValue);
-            alternateUnvalidatedValueProvider.Setup(a => a.TryCreate(It.IsAny<IUnvalidatedValueProvider>(), out returnValue)).Returns(true);
+            alternateUnvalidatedValueProvider.Setup(a => a.TryCreate(It.IsAny<IUnvalidatedValueProvider>(), out returnValue, null, null)).Returns(true);
 
             sut.NewImplementation(context);
 
@@ -71,7 +71,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         {
             context.Setup(c => c.Arguments).Returns(new object[] { arg1 });
             context.Setup(c => c.ReturnValue).Returns(returnValue);
-            alternateValueProvider.Setup(a => a.TryCreate(It.IsAny<IValueProvider>(), out returnValue)).Returns(true);
+            alternateValueProvider.Setup(a => a.TryCreate(It.IsAny<IValueProvider>(), out returnValue, null, null)).Returns(true);
 
             sut.NewImplementation(context);
 
