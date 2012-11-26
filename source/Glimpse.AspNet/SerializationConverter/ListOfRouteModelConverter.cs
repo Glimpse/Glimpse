@@ -20,7 +20,7 @@ namespace Glimpse.AspNet.SerializationConverter
                             {
                                 item.MatchesCurrentRequest, // match
                                 item.Area,        // area
-                                item.URL,         // Url
+                                item.Url,         // Url
                                 GetRouteData(item.RouteData), // route data
                                 GetConstraintData(item.Constraints), // Constraints
                                 item.DataTokens,  // DataTokens

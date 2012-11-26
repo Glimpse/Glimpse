@@ -9,7 +9,7 @@ namespace Glimpse.AspNet.Model
 
         public string Area { get; set; }
 
-        public string URL { get; set; }
+        public string Url { get; set; }
 
         public IEnumerable<RouteDataItemModel> RouteData { get; set; }
 

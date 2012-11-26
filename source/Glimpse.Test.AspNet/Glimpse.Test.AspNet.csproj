@@ -71,6 +71,7 @@
     <Compile Include="IResourceEndpointConfiguration.cs" />
     <Compile Include="Model\RequestModelShould.cs" />
     <Compile Include="Model\RouteModelShould.cs" />
+    <Compile Include="PipelineInspector\RoutesInspectorShould.cs" />
     <Compile Include="PipelineInspector\TraceInspectorShould.cs" />
     <Compile Include="Policy\LocalPolicyShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -111,6 +112,7 @@
       <Name>Glimpse.Test.Common</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -10,17 +10,22 @@ namespace Glimpse.Test.AspNet.Model
         public void SetProperties()
         {
             var defaults = new[] { new RouteDataItemModel("controller", "Home") };
-            var constraints = new[] { new RouteConstraintModel("action", ".+", true, true) };
+            var constraints = new[] { new RouteConstraintModel { Checked = true, Matched = true, ParameterName = "action", Constraint = ".+" } };
             var dataTokens = new RouteValueDictionary(new { area = "Test", name = "Hi" });
+            var url = "{controller}/{action}/{id}";
 
-            const string url = "{controller}/{action}/{id}";
-            var test = new RouteModel("Test", url, defaults, constraints, dataTokens);
-            
+            var test = new RouteModel();
+            test.Area = "Test";
+            test.Url = url;
+            test.RouteData = defaults;
+            test.Constraints = constraints;
+            test.DataTokens = dataTokens;
+
             Assert.False(test.IsFirstMatch);
             Assert.False(test.MatchesCurrentRequest);
 
             Assert.Equal("Test", test.Area);
-            Assert.Equal(url, test.URL);
+            Assert.Equal(url, test.Url);
             Assert.Same(defaults, test.RouteData);
             Assert.Same(constraints, test.Constraints);
             Assert.Same(dataTokens, test.DataTokens);

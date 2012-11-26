@@ -1,42 +1,33 @@
-using System.Web.Routing;
 using Glimpse.Core.Extensibility;
 
 namespace Glimpse.AspNet.PipelineInspector
-{
-    /// <summary>
-    /// PipelineInspector which will replace any routes in the route table
-    /// with a proxied version (from Glimpse.AspNet.AlternateImplementation.Route)
-    /// </summary>
+{ 
     public class RoutesInspector : IPipelineInspector
     {
         public void Setup(IPipelineInspectorContext context)
         {
-           using (RouteTable.Routes.GetWriteLock())
-           {
-               for (var i = 0; i < RouteTable.Routes.Count; i++)
-               {
-                   var route = RouteTable.Routes[i] as Route;
-                   if (route == null)
-                   {
-                       // we don't try to do any magic with anything which doesn't implement Route.
-                       continue;
-                   }
+            var logger = context.Logger;
+            var alternateImplementation = new Glimpse.AspNet.AlternateImplementation.Route(context.ProxyFactory);
 
-                   if (!context.ProxyFactory.IsProxyable(route))
-                   {
-                       // nor anything which isn't proxyable.
-                       continue;
-                   }
+            var currentRoutes = System.Web.Routing.RouteTable.Routes;
+            using (currentRoutes.GetWriteLock())
+            {
+                for (var i = 0; i < currentRoutes.Count; i++)
+                {
+                    var originalRoute = currentRoutes[i] as System.Web.Routing.Route;
+                    if (originalRoute == null)
+                    {
+                        continue;
+                    }
 
-                   var methods = AlternateImplementation.Route.AllMethods(context.MessageBroker,
-                                                                          context.TimerStrategy,
-                                                                          context.RuntimePolicyStrategy);
-
-                   var newRoute = context.ProxyFactory.CreateProxy(route, methods);
-
-                   RouteTable.Routes[i] = newRoute;
-               }
-           }
+                    System.Web.Routing.Route newRoute;
+                    if (alternateImplementation.TryCreate(originalRoute, out newRoute, constructorArguments: new object[] { originalRoute.Url, originalRoute.Defaults, originalRoute.Constraints, originalRoute.DataTokens, originalRoute.RouteHandler }))
+                    {
+                        currentRoutes[i] = newRoute;
+                        logger.Info(Resources.RouteSetupReplacedRoute, originalRoute.GetType());
+                    }
+                }
+            }
         }
     }
 }
