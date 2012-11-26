@@ -1,11 +1,10 @@
 ﻿using System;
-using Glimpse.Core;
-using Glimpse.Core.Framework;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Web; 
 using Glimpse.AspNet.PipelineInspector;
+using Glimpse.Core;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Framework; 
 using Glimpse.Test.Common;
 using Moq;
 using Xunit;
@@ -22,6 +21,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
             System.Web.Routing.RouteTable.Routes.Clear();
             System.Web.Routing.RouteTable.Routes.Add("Test", new System.Web.Routing.Route("Test", routeHandler));
             System.Web.Routing.RouteTable.Routes.Add("Other", new System.Web.Routing.Route("Other", routeHandler));
+            System.Web.Routing.RouteTable.Routes.Add("Typed", new NewRoute());
         }
 
         [Fact]
@@ -34,15 +34,17 @@ namespace Glimpse.Test.AspNet.PipelineInspector
         }
 
         [Theory, AutoMock]
-        public void Setup(RoutesInspector sut, IPipelineInspectorContext context, System.Web.Routing.Route route1, System.Web.Routing.Route route2)
+        public void Setup(RoutesInspector sut, IPipelineInspectorContext context, System.Web.Routing.Route route1, System.Web.Routing.Route route2, System.Web.Routing.RouteBase route3)
         { 
             context.ProxyFactory.Setup(pf => pf.IsProxyable(It.IsAny<object>())).Returns(true);
             context.ProxyFactory.Setup(pf => pf.CreateProxy((System.Web.Routing.Route)System.Web.Routing.RouteTable.Routes[0], It.IsAny<IEnumerable<IAlternateImplementation<System.Web.Routing.Route>>>(), null, It.IsAny<object[]>())).Returns(route1);
             context.ProxyFactory.Setup(pf => pf.CreateProxy((System.Web.Routing.Route)System.Web.Routing.RouteTable.Routes[1], It.IsAny<IEnumerable<IAlternateImplementation<System.Web.Routing.Route>>>(), null, It.IsAny<object[]>())).Returns(route2);
+            context.ProxyFactory.Setup(pf => pf.CreateProxy(System.Web.Routing.RouteTable.Routes[2], It.IsAny<IEnumerable<IAlternateImplementation<System.Web.Routing.RouteBase>>>(), null, null)).Returns(route3);
 
             sut.Setup(context);
 
             context.ProxyFactory.Verify(pf => pf.CreateProxy(It.IsAny<System.Web.Routing.Route>(), It.IsAny<IEnumerable<IAlternateImplementation<System.Web.Routing.Route>>>(), null, It.IsAny<object[]>()), Times.AtLeastOnce());
+            context.ProxyFactory.Verify(pf => pf.CreateProxy(It.IsAny<System.Web.Routing.RouteBase>(), It.IsAny<IEnumerable<IAlternateImplementation<System.Web.Routing.RouteBase>>>(), null, null), Times.AtLeastOnce());
         }
 
         [Theory, AutoMock]
@@ -63,6 +65,19 @@ namespace Glimpse.Test.AspNet.PipelineInspector
         private string GetRouteUrl(int index)
         {
             return ((System.Web.Routing.Route)System.Web.Routing.RouteTable.Routes[index]).Url;
+        }
+
+        private class NewRoute : System.Web.Routing.RouteBase
+        {
+            public override System.Web.Routing.RouteData GetRouteData(HttpContextBase httpContext)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override System.Web.Routing.VirtualPathData GetVirtualPath(System.Web.Routing.RequestContext requestContext, System.Web.Routing.RouteValueDictionary values)
+            {
+                throw new NotImplementedException();
+            } 
         }
     }
 }

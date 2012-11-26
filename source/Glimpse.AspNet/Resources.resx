@@ -120,6 +120,9 @@
   <data name="ProcessRequestMissingRuntime" xml:space="preserve">
     <value>Glimpse runtime has not been initialized.</value>
   </data>
+  <data name="RouteSetupNotReplacedRoute" xml:space="preserve">
+    <value>Couldn't replace route of type '{0}' with proxy implementation.</value>
+  </data>
   <data name="RouteSetupReplacedRoute" xml:space="preserve">
     <value>Replaced Route of type '{0}' with proxy implementation.</value>
     <comment>{0} - GetType() of replaced Route</comment>

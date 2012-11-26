@@ -70,6 +70,15 @@ namespace Glimpse.AspNet {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Couldn&apos;t replace route of type &apos;{0}&apos; with proxy implementation..
+        /// </summary>
+        internal static string RouteSetupNotReplacedRoute {
+            get {
+                return ResourceManager.GetString("RouteSetupNotReplacedRoute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Replaced Route of type &apos;{0}&apos; with proxy implementation..
         /// </summary>
         internal static string RouteSetupReplacedRoute {

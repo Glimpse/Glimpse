@@ -8,24 +8,43 @@ namespace Glimpse.AspNet.PipelineInspector
         {
             var logger = context.Logger;
             var alternateImplementation = new Glimpse.AspNet.AlternateImplementation.Route(context.ProxyFactory);
+            var alternateBaseImplementation = new Glimpse.AspNet.AlternateImplementation.RouteBase(context.ProxyFactory);
 
             var currentRoutes = System.Web.Routing.RouteTable.Routes;
             using (currentRoutes.GetWriteLock())
             {
                 for (var i = 0; i < currentRoutes.Count; i++)
                 {
-                    var originalRoute = currentRoutes[i] as System.Web.Routing.Route;
-                    if (originalRoute == null)
+                    var replaceRoute = (System.Web.Routing.RouteBase)null; 
+
+                    var routeBase = currentRoutes[i]; 
+                    var route = routeBase as System.Web.Routing.Route;
+                    if (route != null)
                     {
-                        continue;
+                        System.Web.Routing.Route newRoute;
+                        if (alternateImplementation.TryCreate(route, out newRoute, constructorArguments: new object[] { route.Url, route.Defaults, route.Constraints, route.DataTokens, route.RouteHandler }))
+                        {
+                            replaceRoute = newRoute; 
+                        }
+                    }
+                    else
+                    {
+                        System.Web.Routing.RouteBase newRouteBase;
+                        if (alternateBaseImplementation.TryCreate(routeBase, out newRouteBase))
+                        {
+                            replaceRoute = newRouteBase;
+                        }
                     }
 
-                    System.Web.Routing.Route newRoute;
-                    if (alternateImplementation.TryCreate(originalRoute, out newRoute, constructorArguments: new object[] { originalRoute.Url, originalRoute.Defaults, originalRoute.Constraints, originalRoute.DataTokens, originalRoute.RouteHandler }))
+                    if (replaceRoute != null)
                     {
-                        currentRoutes[i] = newRoute;
-                        logger.Info(Resources.RouteSetupReplacedRoute, originalRoute.GetType());
+                        currentRoutes[i] = replaceRoute; 
+                        logger.Info(Resources.RouteSetupReplacedRoute, routeBase.GetType());
                     }
+                    else
+                    {
+                        logger.Info(Resources.RouteSetupNotReplacedRoute, routeBase.GetType());
+                    } 
                 }
             }
         }
