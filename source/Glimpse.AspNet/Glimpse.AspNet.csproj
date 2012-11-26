@@ -72,6 +72,8 @@
     <Compile Include="Model\EnvironmentTimeZoneModel.cs" />
     <Compile Include="Model\EnvironmentWebServerModel.cs" />
     <Compile Include="Model\RequestModel.cs" />
+    <Compile Include="Model\RouteConstraintModel.cs" />
+    <Compile Include="Model\RouteDataItemModel.cs" />
     <Compile Include="Model\RouteModel.cs" />
     <Compile Include="Model\SessionModel.cs" />
     <Compile Include="Model\TimelineCategoryModel.cs" />
