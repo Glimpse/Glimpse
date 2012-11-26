@@ -6,17 +6,17 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.AspNet.SerializationConverter
 {
-    class ListOfRouteModelConverter : SerializationConverter<List<RouteModel>>
+    public class ListOfRouteModelConverter : SerializationConverter<List<RouteModel>>
     {
         public override object Convert(List<RouteModel> routes)
         {
             var result = new List<IEnumerable<object>>
                 {
-                    new []{"Match", "Area", "Url", "Data", "Constraints", "DataTokens"},
+                    new[] { "Match", "Area", "Url", "Data", "Constraints", "DataTokens" },
                 };
 
             result.AddRange(from item in routes
-                            let row = new []
+                            let row = new[]
                             {
                                 item.MatchesCurrentRequest, // match
                                 item.Area,        // area
@@ -38,7 +38,7 @@ namespace Glimpse.AspNet.SerializationConverter
 
             var result = new List<object[]>
                 {
-                    new object[]{"Placeholder", "Default Value", "Actual Value"},
+                    new object[] { "Placeholder", "Default Value", "Actual Value" },
                 };
 
             var items = from item in routeData
@@ -65,7 +65,7 @@ namespace Glimpse.AspNet.SerializationConverter
 
             var result = new List<object[]>
                 {
-                    new object[]{"Parameter Name", "Constraint", "Constraint Checked", "Constraint Matched"},
+                    new object[] { "Parameter Name", "Constraint", "Constraint Checked", "Constraint Matched" },
                 };
 
             var items = from item in routeData
@@ -74,7 +74,7 @@ namespace Glimpse.AspNet.SerializationConverter
                                        item.ParameterName,
                                        item.Constraint,
                                        item.Checked,
-                                       item.Checked ? (bool?) item.Matched : null
+                                       item.Checked ? (bool?)item.Matched : null
                                    };
             result.AddRange(items);
 
