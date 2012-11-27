@@ -33,7 +33,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         public void ProxyControllerFactory(ExecutionInspector sut, IPipelineInspectorContext context, IControllerFactory controllerFactory)
         {
             context.ProxyFactory.Setup(f => f.IsProxyable(It.IsAny<object>())).Returns(true);
-            context.ProxyFactory.Setup(f => f.CreateProxy(It.IsAny<IControllerFactory>(), It.IsAny<IEnumerable<IAlternateImplementation<IControllerFactory>>>(), null)).Returns(controllerFactory);
+            context.ProxyFactory.Setup(f => f.CreateProxy(It.IsAny<IControllerFactory>(), It.IsAny<IEnumerable<IAlternateImplementation<IControllerFactory>>>(), null, null)).Returns(controllerFactory);
 
             sut.Setup(context);
 

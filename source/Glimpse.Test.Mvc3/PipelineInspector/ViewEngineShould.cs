@@ -31,11 +31,11 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         public void Setup(ViewEngineInspector sut, IPipelineInspectorContext context, IViewEngine viewEngine)
         {
             context.ProxyFactory.Setup(pf => pf.IsProxyable(It.IsAny<object>())).Returns(true);
-            context.ProxyFactory.Setup(pf => pf.CreateProxy(It.IsAny<IViewEngine>(), It.IsAny<IEnumerable<IAlternateImplementation<IViewEngine>>>(), null)).Returns(viewEngine);
+            context.ProxyFactory.Setup(pf => pf.CreateProxy(It.IsAny<IViewEngine>(), It.IsAny<IEnumerable<IAlternateImplementation<IViewEngine>>>(), null, null)).Returns(viewEngine);
 
             sut.Setup(context);
 
-            context.ProxyFactory.Verify(pf => pf.CreateProxy(It.IsAny<IViewEngine>(), It.IsAny<IEnumerable<IAlternateImplementation<IViewEngine>>>(), null), Times.AtLeastOnce());
+            context.ProxyFactory.Verify(pf => pf.CreateProxy(It.IsAny<IViewEngine>(), It.IsAny<IEnumerable<IAlternateImplementation<IViewEngine>>>(), null, null), Times.AtLeastOnce());
         }
     }
 }

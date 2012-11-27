@@ -116,6 +116,7 @@
     <Compile Include="SerializationConverter\ListOfExecutionModelConverter.cs" />
     <Compile Include="SerializationConverter\ListOfMetadataItemModelConverter.cs" />
     <Compile Include="SerializationConverter\ListOfViewsModelConverter.cs" />
+    <Compile Include="SerializationConverter\UrlParameterConverter.cs" />
     <Compile Include="Tab\Execution.cs">
       <SubType>Code</SubType>
     </Compile>

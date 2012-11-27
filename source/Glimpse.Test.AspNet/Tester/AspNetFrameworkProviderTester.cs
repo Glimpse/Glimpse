@@ -8,10 +8,11 @@ namespace Glimpse.Test.AspNet.Tester
     public class AspNetFrameworkProviderTester : AspNetFrameworkProvider
     {
         public Mock<HttpContextBase> HttpContextMock { get; set; }
+
         public Mock<HttpApplicationStateBase> HttpApplicationStateMock { get; set; }
+
         public Mock<HttpResponseBase> HttpResponseMock { get; set; }
     
-
         private AspNetFrameworkProviderTester()
         {
             HttpResponseMock = new Mock<HttpResponseBase>();
@@ -25,8 +26,8 @@ namespace Glimpse.Test.AspNet.Tester
             HttpContextMock.Setup(ctx => ctx.Items)
                 .Returns(new Dictionary<object, object>
                              {
-                                 {typeof (string).AssemblyQualifiedName, "TestString"},
-                                 {typeof (int).AssemblyQualifiedName, 5}
+                                 { typeof(string).AssemblyQualifiedName, "TestString" },
+                                 { typeof(int).AssemblyQualifiedName, 5 }
                              });
 
             Context = HttpContextMock.Object;
