@@ -18,6 +18,44 @@ namespace Glimpse.Mvc.AlternateImplementation
         public override IEnumerable<IAlternateImplementation<T>> AllMethods()
         {
             yield return new GetValue();
+            yield return new ContainsPrefix();
+        }
+
+        public class ContainsPrefix : IAlternateImplementation<T>
+        {
+            public ContainsPrefix()
+            {
+                MethodToImplement = typeof(IValueProvider).GetMethod("ContainsPrefix");
+            }
+
+            public MethodInfo MethodToImplement { get; private set; }
+
+            public void NewImplementation(IAlternateImplementationContext context)
+            {
+                TimerResult timerResult;
+                if (!context.TryProceedWithTimer(out timerResult))
+                {
+                    return;
+                }
+
+                context.MessageBroker.Publish(new Message((string)context.Arguments[0], (bool)context.ReturnValue, context.TargetType));
+            }
+
+            public class Message : MessageBase
+            {
+                public Message(string prefix, bool isMatch, Type valueProviderType)
+                {
+                    Prefix = prefix;
+                    IsMatch = isMatch;
+                    ValueProviderType = valueProviderType;
+                }
+
+                public bool IsMatch { get; set; }
+
+                public Type ValueProviderType { get; set; }
+
+                public string Prefix { get; set; }
+            }
         }
 
         public class GetValue : IAlternateImplementation<T>
@@ -62,11 +100,19 @@ namespace Glimpse.Mvc.AlternateImplementation
             {
                 public Message(Arguments arguments, ValueProviderResult result, Type valueProviderType)
                 {
-                    AttemptedValue = result.AttemptedValue;
-                    Culture = result.Culture;
-                    RawValue = result.RawValue;
+                    IsFound = false;
+                    if (result != null)
+                    {
+                        IsFound = true;
+                        AttemptedValue = result.AttemptedValue;
+                        Culture = result.Culture;
+                        RawValue = result.RawValue;
+                    }
+
                     ValueProviderType = valueProviderType;
                 }
+
+                public bool IsFound { get; set; }
 
                 public Type ValueProviderType { get; set; }
 

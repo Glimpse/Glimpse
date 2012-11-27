@@ -103,6 +103,9 @@
     <Compile Include="AlternateImplementation\ResultFilterOnResultExecutingMessageShould.cs" />
     <Compile Include="AlternateImplementation\ResultFilterOnResultExecutingShould.cs" />
     <Compile Include="AlternateImplementation\ResultFilterShould.cs" />
+    <Compile Include="AlternateImplementation\ValueProviderContainsPrefixMessageShould.cs" />
+    <Compile Include="AlternateImplementation\ValueProviderContainsPrefixShould.cs" />
+    <Compile Include="AlternateImplementation\ValueProviderFactoryDecoratorShould.cs" />
     <Compile Include="AlternateImplementation\ValueProviderFactoryGetValueProviderShould.cs" />
     <Compile Include="AlternateImplementation\ValueProviderFactoryShould.cs" />
     <Compile Include="AlternateImplementation\ValueProviderGetValueArgumentShould.cs" />
@@ -133,6 +136,7 @@
     <Compile Include="SerializationConverter\ListOfViewsModelConverterShould.cs" />
     <Compile Include="SerializationConverter\ListOfMetadataItemModelConverterShould.cs" />
     <Compile Include="Tab\MetadataShould.cs" />
+    <Compile Include="Tab\ModelBindingShould.cs" />
     <Compile Include="Tab\ViewsShould.cs" />
     <Compile Include="TestDoubles\DummyAsyncController.cs" />
     <Compile Include="TestDoubles\DummyController.cs" />

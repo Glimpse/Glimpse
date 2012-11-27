@@ -14,12 +14,12 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
     public class ValueProviderFactoryGetValueProviderShould
     {
         [Theory, AutoMock]
-        public void Construct(Alternate<IValueProvider> alternateValueProvider, Alternate<IUnvalidatedValueProvider> alternateUnvalidatedValueProvider)
+        public void Construct(Func<IValueProvider, IValueProvider> proxyValueProviderStrategy)
         {
-            var sut = new ValueProviderFactory.GetValueProvider(alternateValueProvider, alternateUnvalidatedValueProvider);
+            var sut = new ValueProviderFactory.GetValueProvider(proxyValueProviderStrategy);
 
-            Assert.Equal(alternateValueProvider, sut.AlternateValidatedValueProvider);
-            Assert.Equal(alternateUnvalidatedValueProvider, sut.AlternateUnvalidatedValueProvider);
+            Assert.Equal(proxyValueProviderStrategy, sut.ProxyValueProviderStrategy);
+            
             Assert.NotNull(sut.MethodToImplement);
         }
 
@@ -53,11 +53,11 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         }
 
         [Theory, AutoMock]
-        public void ProceedWithTimerWithIUnvalidatedValueProviderReturnValue([Frozen] Alternate<IUnvalidatedValueProvider> alternateUnvalidatedValueProvider, ValueProviderFactory.GetValueProvider sut, IAlternateImplementationContext context, ControllerContext arg1, IUnvalidatedValueProvider returnValue)
+        public void ProceedWithTimerWithIUnvalidatedValueProviderReturnValue(ValueProviderFactory.GetValueProvider sut, IAlternateImplementationContext context, ControllerContext arg1, IUnvalidatedValueProvider returnValue)
         {
             context.Setup(c => c.Arguments).Returns(new object[] { arg1 });
             context.Setup(c => c.ReturnValue).Returns(returnValue);
-            alternateUnvalidatedValueProvider.Setup(a => a.TryCreate(It.IsAny<IUnvalidatedValueProvider>(), out returnValue)).Returns(true);
+            sut.ProxyValueProviderStrategy = _ => returnValue;
 
             sut.NewImplementation(context);
 
@@ -67,11 +67,11 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         }
 
         [Theory, AutoMock]
-        public void ProceedWithTimerWithIValueProviderReturnValue([Frozen] Alternate<IValueProvider> alternateValueProvider, ValueProviderFactory.GetValueProvider sut, IAlternateImplementationContext context, ControllerContext arg1, IValueProvider returnValue)
+        public void ProceedWithTimerWithIValueProviderReturnValue(ValueProviderFactory.GetValueProvider sut, IAlternateImplementationContext context, ControllerContext arg1, IValueProvider returnValue)
         {
             context.Setup(c => c.Arguments).Returns(new object[] { arg1 });
             context.Setup(c => c.ReturnValue).Returns(returnValue);
-            alternateValueProvider.Setup(a => a.TryCreate(It.IsAny<IValueProvider>(), out returnValue)).Returns(true);
+            sut.ProxyValueProviderStrategy = _ => returnValue;
 
             sut.NewImplementation(context);
 

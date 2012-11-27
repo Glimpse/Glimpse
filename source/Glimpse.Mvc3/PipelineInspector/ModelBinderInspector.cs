@@ -18,8 +18,13 @@ namespace Glimpse.Mvc.PipelineInspector
         private void SetupModelBinderProviders(IPipelineInspectorContext context)
         {
 #if !MVC2
-            var alternateModelBinderProvider = new ModelBinderProvider(context.ProxyFactory);
             var binderProviders = ModelBinderProviders.BinderProviders;
+            if (binderProviders.Count == 0)
+            {
+                return;
+            }
+
+            var alternateModelBinderProvider = new ModelBinderProvider(context.ProxyFactory);
 
             for (int i = 0; i < binderProviders.Count; i++)
             {
@@ -37,8 +42,13 @@ namespace Glimpse.Mvc.PipelineInspector
 
         private void SetupValueProviderFactories(IPipelineInspectorContext context)
         {
-            var alternateValueProviderFactory = new ValueProviderFactory(context.ProxyFactory);
             var factories = ValueProviderFactories.Factories;
+            if (factories.Count == 0)
+            {
+                return;
+            }
+
+            var alternateValueProviderFactory = new ValueProviderFactory(context.ProxyFactory);
 
             for (int i = 0; i < factories.Count; i++)
             {
@@ -47,7 +57,7 @@ namespace Glimpse.Mvc.PipelineInspector
 
                 if (alternateValueProviderFactory.TryCreate(originalFactory, out newFactory))
                 {
-                    context.Logger.Info(Resources.ModelBinderInspectorSetupReplacedModelBinderProvider, originalFactory.GetType());
+                    context.Logger.Info(Resources.ModelBinderInspectorSetupReplacedValueProviderFactory, originalFactory.GetType());
                     factories[i] = newFactory;
                 }
             }

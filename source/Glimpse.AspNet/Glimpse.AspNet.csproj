@@ -110,10 +110,6 @@
       <Project>{C1289CE8-3259-41D9-893E-7A4E6F772D30}</Project>
       <Name>Glimpse.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Glimpse.Mvc2\Glimpse.Mvc2.csproj">
-      <Project>{6B8B535F-923B-4083-A5BD-31A34F5230A1}</Project>
-      <Name>Glimpse.Mvc2</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">

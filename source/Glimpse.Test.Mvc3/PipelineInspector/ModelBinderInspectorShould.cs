@@ -30,7 +30,6 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
             sut.Setup(context);
 
             Assert.Empty(ModelBinderProviders.BinderProviders);
-            context.Logger.Verify(l => l.Info(It.IsAny<string>(), It.IsAny<object[]>()), Times.Never());
         }
 
         [Theory, AutoMock]

@@ -120,6 +120,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tab\Metadata.cs" />
+    <Compile Include="Tab\ModelBinding.cs" />
     <Compile Include="Tab\Views.cs" />
   </ItemGroup>
   <ItemGroup>
