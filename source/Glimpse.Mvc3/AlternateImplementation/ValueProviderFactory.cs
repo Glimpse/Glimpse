@@ -28,7 +28,7 @@ namespace Glimpse.Mvc.AlternateImplementation
             yield return new GetValueProvider(ProxyValueProviderStrategy);
         }
 
-        public override bool TryCreate(MvcValueProviderFactory originalObj, out MvcValueProviderFactory newObj, object mixin)
+        public override bool TryCreate(MvcValueProviderFactory originalObj, out MvcValueProviderFactory newObj, object mixin, object[] constuctorArgs = null)
         {
             if (!base.TryCreate(originalObj, out newObj, mixin))
             {

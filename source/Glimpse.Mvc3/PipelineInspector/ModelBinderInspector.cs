@@ -55,7 +55,7 @@ namespace Glimpse.Mvc.PipelineInspector
                 var originalFactory = factories[i];
                 System.Web.Mvc.ValueProviderFactory newFactory;
 
-                if (alternateValueProviderFactory.TryCreate(originalFactory, out newFactory))
+                if (alternateValueProviderFactory.TryCreate(originalFactory, out newFactory, null, null))
                 {
                     context.Logger.Info(Resources.ModelBinderInspectorSetupReplacedValueProviderFactory, originalFactory.GetType());
                     factories[i] = newFactory;
