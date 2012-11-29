@@ -62,7 +62,9 @@ namespace Glimpse.Mvc.Message
 
         protected static string GetActionName(ControllerBase controller)
         {
-            return controller.ValueProvider.GetValue("action").RawValue.ToStringOrDefault();
+            return "I'M BROKEN";
+
+            // return controller.ValueProvider.GetValue("action").RawValue.ToStringOrDefault();
         }
 
         protected static string GetControllerName(ActionDescriptor descriptor)
@@ -77,7 +79,9 @@ namespace Glimpse.Mvc.Message
 
         protected static string GetControllerName(ControllerBase controller)
         {
-            return controller.ValueProvider.GetValue("controller").RawValue.ToStringOrDefault();
+            return "I'M BROKEN";
+
+            // return controller.ValueProvider.GetValue("controller").RawValue.ToStringOrDefault();
         }
 
         protected static Type GetExecutedType(ActionDescriptor descriptor)

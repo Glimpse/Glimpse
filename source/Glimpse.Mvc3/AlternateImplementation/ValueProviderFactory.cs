@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-using MvcValueProviderFactory = System.Web.Mvc.ValueProviderFactory;
 #if MVC2
 using Glimpse.Mvc2.Backport;
 #endif
+using MvcValueProviderFactory = System.Web.Mvc.ValueProviderFactory;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
@@ -28,9 +29,14 @@ namespace Glimpse.Mvc.AlternateImplementation
             yield return new GetValueProvider(ProxyValueProviderStrategy);
         }
 
-        public override bool TryCreate(MvcValueProviderFactory originalObj, out MvcValueProviderFactory newObj, object mixin, object[] constuctorArgs = null)
+        public override bool TryCreate(MvcValueProviderFactory originalObj, out MvcValueProviderFactory newObj, IEnumerable<object> mixins = null, object[] constuctorArgs = null)
         {
-            if (!base.TryCreate(originalObj, out newObj, mixin))
+            if (mixins == null)
+            {
+                mixins = Enumerable.Empty<object>();
+            }
+
+            if (!base.TryCreate(originalObj, out newObj, mixins, constuctorArgs))
             {
                 newObj = new ValueProviderFactoryDecorator(originalObj, ProxyValueProviderStrategy);
             }

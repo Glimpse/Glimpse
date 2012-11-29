@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.PipelineInspector;
@@ -24,8 +25,8 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         {
             DependencyResolver.SetResolver(dependencyResolver);
 
-            context.ProxyFactory.Setup(f => f.IsProxyable(It.IsAny<object>())).Returns(true);
-            context.ProxyFactory.Setup(f => f.CreateProxy(It.IsAny<IDependencyResolver>(), It.IsAny<IEnumerable<IAlternateImplementation<IDependencyResolver>>>(), null, null)).Returns(dependencyResolver);
+            context.ProxyFactory.Setup(f => f.IsWrapInterfaceEligible(It.IsAny<Type>())).Returns(true);
+            context.ProxyFactory.Setup(f => f.WrapInterface(It.IsAny<IDependencyResolver>(), It.IsAny<IEnumerable<IAlternateImplementation<IDependencyResolver>>>(), Enumerable.Empty<object>())).Returns(dependencyResolver);
 
             sut.Setup(context);
 
@@ -38,7 +39,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         {
             DependencyResolver.SetResolver(dependencyResolver);
 
-            context.ProxyFactory.Setup(f => f.IsProxyable(It.IsAny<object>())).Returns(false);
+            context.ProxyFactory.Setup(f => f.IsWrapInterfaceEligible(It.IsAny<Type>())).Returns(false);
 
             sut.Setup(context);
 

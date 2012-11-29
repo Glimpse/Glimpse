@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Glimpse.Core.Extensibility
 {
@@ -17,12 +18,34 @@ namespace Glimpse.Core.Extensibility
 
         public IProxyFactory ProxyFactory { get; set; }
 
-        public virtual bool TryCreate(T originalObj, out T newObj, object mixin = null, object[] constructorArguments = null)
+        public virtual bool TryCreate(T originalObj, out T newObj, IEnumerable<object> mixins = null, object[] constructorArguments = null)
         {
-            if (ProxyFactory.IsProxyable(originalObj))
+            var objType = originalObj.GetType();
+            var allMethods = AllMethods();
+
+            if (mixins == null)
             {
-                newObj = ProxyFactory.CreateProxy(originalObj, AllMethods(), mixin, constructorArguments);
+                mixins = Enumerable.Empty<object>();
+            }
+
+            if (ProxyFactory.IsWrapInterfaceEligible(objType))
+            {
+                newObj = ProxyFactory.WrapInterface(originalObj, allMethods, mixins);
                 return true;
+            }
+
+            if (ProxyFactory.IsWrapClassEligible(objType))
+            {
+                try
+                {
+                    newObj = ProxyFactory.WrapClass(originalObj, allMethods, mixins, constructorArguments);
+                    return true;
+                }
+                catch
+                {
+                    newObj = null;
+                    return false;
+                }
             }
 
             newObj = null;

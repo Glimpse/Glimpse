@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Glimpse.Core;
@@ -73,17 +74,17 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             context.Setup(c => c.Arguments).Returns(GetArguments(controllerContext));
             context.Setup(c => c.ReturnValue).Returns(new ViewEngineResult(view, engine));
             context.Setup(c => c.TargetType).Returns(typeof(int));
-            proxyFactory.Setup(p => p.IsProxyable(It.IsAny<object>())).Returns(true);
+            proxyFactory.Setup(p => p.IsWrapInterfaceEligible(It.IsAny<Type>())).Returns(true);
             proxyFactory.Setup(p => 
-                    p.CreateProxy(
+                    p.WrapInterface(
                         It.IsAny<IView>(), 
-                        It.IsAny<IEnumerable<IAlternateImplementation<IView>>>(), 
-                        It.IsAny<object>()))
+                        It.IsAny<IEnumerable<IAlternateImplementation<IView>>>(),
+                        It.IsAny<IEnumerable<object>>()))
                     .Returns(view);
 
             sut.NewImplementation(context);
 
-            proxyFactory.Verify(p => p.IsProxyable(It.IsAny<object>()));
+            proxyFactory.Verify(p => p.IsWrapInterfaceEligible(It.IsAny<Type>()));
             context.Logger.Verify(l => l.Info(It.IsAny<string>(), It.IsAny<object[]>()));
             context.VerifySet(c => c.ReturnValue = It.IsAny<ViewEngineResult>());
             context.MessageBroker.Verify(b => b.Publish(It.IsAny<ViewEngine.FindViews.Message>()));

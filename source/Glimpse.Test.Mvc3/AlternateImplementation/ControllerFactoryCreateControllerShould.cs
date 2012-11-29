@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
 using System.Web.Routing;
@@ -50,11 +52,11 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         {
             context.Setup(c => c.ReturnValue).Returns(new DummyAsyncController());
             context.Setup(c => c.Arguments).Returns(new object[] { requestContext, controllerName });
-            proxyFactory.Setup(p => p.IsProxyable(It.IsAny<IActionInvoker>())).Returns(true);
+            proxyFactory.Setup(p => p.IsWrapClassEligible(It.IsAny<Type>())).Returns(true);
 
             sut.NewImplementation(context);
 
-            proxyFactory.Verify(p => p.CreateProxy(It.IsAny<AsyncControllerActionInvoker>(), It.IsAny<IEnumerable<IAlternateImplementation<AsyncControllerActionInvoker>>>(), It.IsAny<object>(), null));
+            proxyFactory.Verify(p => p.WrapClass(It.IsAny<AsyncControllerActionInvoker>(), It.IsAny<IEnumerable<IAlternateImplementation<AsyncControllerActionInvoker>>>(), It.IsAny<IEnumerable<object>>(), null));
         }
 
         [Theory, AutoMock]
@@ -62,11 +64,11 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         {
             context.Setup(c => c.ReturnValue).Returns(new DummyController());
             context.Setup(c => c.Arguments).Returns(new object[] { requestContext, controllerName });
-            proxyFactory.Setup(p => p.IsProxyable(It.IsAny<IActionInvoker>())).Returns(true);
+            proxyFactory.Setup(p => p.IsWrapInterfaceEligible(It.IsAny<Type>())).Returns(true);
 
             sut.NewImplementation(context);
 
-            proxyFactory.Verify(p => p.CreateProxy(It.IsAny<ControllerActionInvoker>(), It.IsAny<IEnumerable<IAlternateImplementation<ControllerActionInvoker>>>(), null, null));
+            proxyFactory.Verify(p => p.WrapInterface(It.IsAny<ControllerActionInvoker>(), It.IsAny<IEnumerable<IAlternateImplementation<ControllerActionInvoker>>>(), It.IsAny<IEnumerable<object>>()));
         }
     }
 }

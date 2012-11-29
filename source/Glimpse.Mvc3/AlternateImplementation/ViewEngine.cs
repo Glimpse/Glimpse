@@ -68,7 +68,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     var originalView = viewEngineResult.View;
 
                     IView newView;
-                    if (AlternateView.TryCreate(originalView, out newView, new ViewCorrelationMixin(viewName, isPartial, id)))
+                    if (AlternateView.TryCreate(originalView, out newView, new[] { new ViewCorrelationMixin(viewName, isPartial, id) }))
                     {
                         context.Logger.Info(Resources.FindViewsProxyOutputReplacedIView, originalView.GetType(), viewName);
 

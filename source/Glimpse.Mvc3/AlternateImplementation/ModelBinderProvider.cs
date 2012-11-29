@@ -43,6 +43,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 if (originalModelBinder == null)
                 {
                     context.Logger.Warn(Resources.GetBinderNewImplementationCannotProxyWarning, context.ReturnValue.GetType());
+                    return;
                 }
 
                 DefaultModelBinder newModelBinder;

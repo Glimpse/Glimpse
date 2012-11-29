@@ -1,17 +1,30 @@
+using System;
 using System.Collections.Generic;
 
 namespace Glimpse.Core.Extensibility
 {
     public interface IProxyFactory
     {
-        bool IsProxyable(object obj);
+        bool IsWrapInterfaceEligible(Type type);
 
-        T CreateProxy<T>(T instance, IEnumerable<IAlternateImplementation<T>> methodImplementations) where T : class;
+        T WrapInterface<T>(T instance, IEnumerable<IAlternateImplementation<T>> methodImplementations) where T : class;
 
-        T CreateProxy<T>(T instance, IEnumerable<IAlternateImplementation<T>> methodImplementations, object mixin) where T : class;
+        T WrapInterface<T>(T instance, IEnumerable<IAlternateImplementation<T>> methodImplementations, IEnumerable<object> mixins) where T : class;
 
-        T CreateProxy<T>(T instance, IEnumerable<IAlternateImplementation<T>> methodImplementations, object[] constructorArguments) where T : class;
+        bool IsWrapClassEligible(Type type);
 
-        T CreateProxy<T>(T instance, IEnumerable<IAlternateImplementation<T>> methodImplementations, object mixin, object[] constructorArguments) where T : class; 
+        T WrapClass<T>(T instance, IEnumerable<IAlternateImplementation<T>> methodImplementations) where T : class;
+
+        T WrapClass<T>(T instance, IEnumerable<IAlternateImplementation<T>> methodImplementations, IEnumerable<object> mixins) where T : class;
+
+        T WrapClass<T>(T instance, IEnumerable<IAlternateImplementation<T>> methodImplementations, IEnumerable<object> mixins, IEnumerable<object> constructorArguments) where T : class;
+
+        bool IsExtendClassEligible(Type type);
+
+        T ExtendClass<T>(IEnumerable<IAlternateImplementation<T>> methodImplementations) where T : class;
+
+        T ExtendClass<T>(IEnumerable<IAlternateImplementation<T>> methodImplementations, IEnumerable<object> mixins) where T : class;
+
+        T ExtendClass<T>(IEnumerable<IAlternateImplementation<T>> methodImplementations, IEnumerable<object> mixins, IEnumerable<object> constructorArguments) where T : class;
     }
 }

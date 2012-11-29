@@ -36,15 +36,15 @@ namespace Glimpse.Test.AspNet.PipelineInspector
         [Theory, AutoMock]
         public void Setup(RoutesInspector sut, IPipelineInspectorContext context, System.Web.Routing.Route route1, System.Web.Routing.Route route2, System.Web.Routing.RouteBase route3)
         { 
-            context.ProxyFactory.Setup(pf => pf.IsProxyable(It.IsAny<object>())).Returns(true);
-            context.ProxyFactory.Setup(pf => pf.CreateProxy((System.Web.Routing.Route)System.Web.Routing.RouteTable.Routes[0], It.IsAny<IEnumerable<IAlternateImplementation<System.Web.Routing.Route>>>(), null, It.IsAny<object[]>())).Returns(route1);
-            context.ProxyFactory.Setup(pf => pf.CreateProxy((System.Web.Routing.Route)System.Web.Routing.RouteTable.Routes[1], It.IsAny<IEnumerable<IAlternateImplementation<System.Web.Routing.Route>>>(), null, It.IsAny<object[]>())).Returns(route2);
-            context.ProxyFactory.Setup(pf => pf.CreateProxy(System.Web.Routing.RouteTable.Routes[2], It.IsAny<IEnumerable<IAlternateImplementation<System.Web.Routing.RouteBase>>>(), null, null)).Returns(route3);
+            context.ProxyFactory.Setup(pf => pf.IsWrapClassEligible(It.IsAny<Type>())).Returns(true);
+            context.ProxyFactory.Setup(pf => pf.WrapClass((System.Web.Routing.Route)System.Web.Routing.RouteTable.Routes[0], It.IsAny<IEnumerable<IAlternateImplementation<System.Web.Routing.Route>>>(), null, It.IsAny<object[]>())).Returns(route1);
+            context.ProxyFactory.Setup(pf => pf.WrapClass((System.Web.Routing.Route)System.Web.Routing.RouteTable.Routes[1], It.IsAny<IEnumerable<IAlternateImplementation<System.Web.Routing.Route>>>(), null, It.IsAny<object[]>())).Returns(route2);
+            context.ProxyFactory.Setup(pf => pf.WrapClass(System.Web.Routing.RouteTable.Routes[2], It.IsAny<IEnumerable<IAlternateImplementation<System.Web.Routing.RouteBase>>>(), null, null)).Returns(route3);
 
             sut.Setup(context);
 
-            context.ProxyFactory.Verify(pf => pf.CreateProxy(It.IsAny<System.Web.Routing.Route>(), It.IsAny<IEnumerable<IAlternateImplementation<System.Web.Routing.Route>>>(), null, It.IsAny<object[]>()), Times.AtLeastOnce());
-            context.ProxyFactory.Verify(pf => pf.CreateProxy(It.IsAny<System.Web.Routing.RouteBase>(), It.IsAny<IEnumerable<IAlternateImplementation<System.Web.Routing.RouteBase>>>(), null, null), Times.AtLeastOnce());
+            context.ProxyFactory.Verify(pf => pf.WrapClass(It.IsAny<System.Web.Routing.Route>(), It.IsAny<IEnumerable<IAlternateImplementation<System.Web.Routing.Route>>>(), It.IsAny<IEnumerable<object>>(), It.IsAny<IEnumerable<object>>()), Times.AtLeastOnce());
+            context.ProxyFactory.Verify(pf => pf.WrapClass(It.IsAny<System.Web.Routing.RouteBase>(), It.IsAny<IEnumerable<IAlternateImplementation<System.Web.Routing.RouteBase>>>(), It.IsAny<IEnumerable<object>>(), null), Times.AtLeastOnce());
         }
 
         [Theory, AutoMock]
