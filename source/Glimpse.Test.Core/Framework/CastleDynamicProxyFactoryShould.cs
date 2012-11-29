@@ -21,7 +21,7 @@ namespace Glimpse.Test.Core.Framework
         }
 
         [Theory, AutoMock]
-        public void ImplementIWrapper(CastleDynamicProxyFactory sut, IDisposable instance, IEnumerable<IAlternateImplementation> methodInvocations)
+        public void ImplementIWrapper(CastleDynamicProxyFactory sut, IDisposable instance, IEnumerable<IAlternateMethod> methodInvocations)
         {
             var result = sut.WrapInterface(instance, methodInvocations);
 
@@ -56,10 +56,10 @@ namespace Glimpse.Test.Core.Framework
             var factory = new CastleDynamicProxyFactory(loggerMock.Object, new Mock<IMessageBroker>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
 
             var typeMock = new Mock<ITab>();
-            var implementationMock = new Mock<IAlternateImplementation<ITab>>();
+            var implementationMock = new Mock<IAlternateMethod<ITab>>();
             implementationMock.Setup(i => i.MethodToImplement).Returns(typeof (ITab).GetMethod("GetData"));
             
-            var implementations = new List<IAlternateImplementation<ITab>>
+            var implementations = new List<IAlternateMethod<ITab>>
                                       {
                                           implementationMock.Object
                                       };
@@ -105,7 +105,7 @@ namespace Glimpse.Test.Core.Framework
 
             var dummyTab = new DummyTab();
 
-            var proxy = factory.CreateProxy(dummyTab, Enumerable.Empty<IAlternateImplementation<ITab>>());
+            var proxy = factory.CreateProxy(dummyTab, Enumerable.Empty<IAlternateMethod<ITab>>());
 
             Assert.NotNull(proxy);
             Assert.NotNull(proxy as ITab);
@@ -125,7 +125,7 @@ namespace Glimpse.Test.Core.Framework
             var dummyTab = new DummyTab();
             var dummyMixin = new DummyMixin {Name = expectedName};
 
-            var proxy = factory.CreateProxy(dummyTab, Enumerable.Empty<IAlternateImplementation<ITab>>(), dummyMixin);
+            var proxy = factory.CreateProxy(dummyTab, Enumerable.Empty<IAlternateMethod<ITab>>(), dummyMixin);
 
             Assert.NotNull(proxy);
             Assert.NotNull(proxy as ITab);

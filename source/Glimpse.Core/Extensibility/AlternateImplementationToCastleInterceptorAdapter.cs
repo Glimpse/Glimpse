@@ -6,7 +6,7 @@ namespace Glimpse.Core.Extensibility
 {
     public class AlternateImplementationToCastleInterceptorAdapter : IInterceptor
     {
-        public AlternateImplementationToCastleInterceptorAdapter(IAlternateImplementation implementation, ILogger logger, IMessageBroker messageBroker, IProxyFactory proxyFactory, Func<IExecutionTimer> timerStrategy, Func<RuntimePolicy> runtimePolicyStrategy)
+        public AlternateImplementationToCastleInterceptorAdapter(IAlternateMethod implementation, ILogger logger, IMessageBroker messageBroker, IProxyFactory proxyFactory, Func<IExecutionTimer> timerStrategy, Func<RuntimePolicy> runtimePolicyStrategy)
         {
             if (implementation == null)
             {
@@ -26,7 +26,7 @@ namespace Glimpse.Core.Extensibility
             RuntimePolicyStrategy = runtimePolicyStrategy;
         }
 
-        public IAlternateImplementation Implementation { get; set; }
+        public IAlternateMethod Implementation { get; set; }
         
         public ILogger Logger { get; set; }
 

@@ -57,12 +57,12 @@ namespace Glimpse.Core.Framework
             return IsGenerallyEligable(type);
         }
 
-        public T WrapInterface<T>(T instance, IEnumerable<IAlternateImplementation> methodImplementations) where T : class
+        public T WrapInterface<T>(T instance, IEnumerable<IAlternateMethod> methodImplementations) where T : class
         {
             return WrapInterface(instance, methodImplementations, Enumerable.Empty<object>());
         }
 
-        public T WrapInterface<T>(T instance, IEnumerable<IAlternateImplementation> methodImplementations, IEnumerable<object> mixins) where T : class
+        public T WrapInterface<T>(T instance, IEnumerable<IAlternateMethod> methodImplementations, IEnumerable<object> mixins) where T : class
         {
             CheckInput(instance, methodImplementations, mixins);
 
@@ -84,17 +84,17 @@ namespace Glimpse.Core.Framework
             return IsExtendClassEligible(type);
         }
 
-        public T WrapClass<T>(T instance, IEnumerable<IAlternateImplementation> methodImplementations) where T : class
+        public T WrapClass<T>(T instance, IEnumerable<IAlternateMethod> methodImplementations) where T : class
         {
             return WrapClass<T>(instance, methodImplementations, Enumerable.Empty<object>());
         }
 
-        public T WrapClass<T>(T instance, IEnumerable<IAlternateImplementation> methodImplementations, IEnumerable<object> mixins) where T : class
+        public T WrapClass<T>(T instance, IEnumerable<IAlternateMethod> methodImplementations, IEnumerable<object> mixins) where T : class
         {
             return WrapClass<T>(instance, methodImplementations, mixins, null);
         }
 
-        public T WrapClass<T>(T instance, IEnumerable<IAlternateImplementation> methodImplementations, IEnumerable<object> mixins, IEnumerable<object> constructorArguments) where T : class
+        public T WrapClass<T>(T instance, IEnumerable<IAlternateMethod> methodImplementations, IEnumerable<object> mixins, IEnumerable<object> constructorArguments) where T : class
         {
             CheckInput(instance, methodImplementations, mixins); // null constructorArguments is valid input
 
@@ -121,17 +121,17 @@ namespace Glimpse.Core.Framework
             return IsGenerallyEligable(type);
         }
 
-        public T ExtendClass<T>(IEnumerable<IAlternateImplementation> methodImplementations) where T : class
+        public T ExtendClass<T>(IEnumerable<IAlternateMethod> methodImplementations) where T : class
         {
             return ExtendClass<T>(methodImplementations, Enumerable.Empty<object>());
         }
 
-        public T ExtendClass<T>(IEnumerable<IAlternateImplementation> methodImplementations, IEnumerable<object> mixins) where T : class
+        public T ExtendClass<T>(IEnumerable<IAlternateMethod> methodImplementations, IEnumerable<object> mixins) where T : class
         {
             return ExtendClass<T>(methodImplementations, mixins, null);
         }
 
-        public T ExtendClass<T>(IEnumerable<IAlternateImplementation> methodImplementations, IEnumerable<object> mixins, IEnumerable<object> constructorArguments) where T : class
+        public T ExtendClass<T>(IEnumerable<IAlternateMethod> methodImplementations, IEnumerable<object> mixins, IEnumerable<object> constructorArguments) where T : class
         {
             CheckInput(methodImplementations, mixins); // null constructorArguments is valid input
 
@@ -141,7 +141,7 @@ namespace Glimpse.Core.Framework
             return (T)ProxyGenerator.CreateClassProxy(typeof(T), options, constructorArguments.ToArray(), interceptorArray);
         }
 
-        private void CheckInput(IEnumerable<IAlternateImplementation> methodImplementations, IEnumerable<object> mixins)
+        private void CheckInput(IEnumerable<IAlternateMethod> methodImplementations, IEnumerable<object> mixins)
         {
             if (methodImplementations == null)
             {
@@ -154,7 +154,7 @@ namespace Glimpse.Core.Framework
             }
         }
 
-        private void CheckInput(object instance, IEnumerable<IAlternateImplementation> methodImplementations, IEnumerable<object> mixins)
+        private void CheckInput(object instance, IEnumerable<IAlternateMethod> methodImplementations, IEnumerable<object> mixins)
         {
             CheckInput(methodImplementations, mixins);
 
@@ -169,7 +169,7 @@ namespace Glimpse.Core.Framework
             return !type.IsSealed && type.IsAssignableFrom(typeof(IProxyTargetAccessor));
         }
 
-        private ProxyGenerationOptions CreateProxyOptions<T>(IEnumerable<IAlternateImplementation> methodImplementations, IEnumerable<object> mixins)
+        private ProxyGenerationOptions CreateProxyOptions<T>(IEnumerable<IAlternateMethod> methodImplementations, IEnumerable<object> mixins)
         {
             var generationHook = new AlternateImplementationGenerationHook<T>(methodImplementations, Logger);
             var selector = new AlternateImplementationSelector();
@@ -186,7 +186,7 @@ namespace Glimpse.Core.Framework
             return options;
         }
 
-        private IInterceptor[] CreateInterceptorArray(IEnumerable<IAlternateImplementation> methodImplementations)
+        private IInterceptor[] CreateInterceptorArray(IEnumerable<IAlternateMethod> methodImplementations)
         {
             return (from implementaion in methodImplementations select new AlternateImplementationToCastleInterceptorAdapter(implementaion, Logger, MessageBroker, this, TimerStrategy, RuntimePolicyStrategy)).ToArray();
         }

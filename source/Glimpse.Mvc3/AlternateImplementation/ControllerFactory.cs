@@ -16,12 +16,12 @@ namespace Glimpse.Mvc.AlternateImplementation
         {
         }
 
-        public override IEnumerable<IAlternateImplementation> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods()
         {
             yield return new CreateController(new ActionInvoker(ProxyFactory), new AsyncActionInvoker(ProxyFactory));
         }
 
-        public class CreateController : IAlternateImplementation
+        public class CreateController : IAlternateMethod
         {
             public CreateController(Alternate<ControllerActionInvoker> alternateControllerActionInvoker, Alternate<AsyncControllerActionInvoker> alternateAsyncControllerActionInvoker)
             {

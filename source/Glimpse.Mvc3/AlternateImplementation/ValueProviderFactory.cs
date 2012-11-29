@@ -24,7 +24,7 @@ namespace Glimpse.Mvc.AlternateImplementation
 
         private ValueProvider<IValueProvider> AlternateValidatedValueProvider { get; set; }
 
-        public override IEnumerable<IAlternateImplementation> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods()
         {
             yield return new GetValueProvider(ProxyValueProviderStrategy);
         }
@@ -70,7 +70,7 @@ namespace Glimpse.Mvc.AlternateImplementation
             return null;
         }
 
-        public class GetValueProvider : IAlternateImplementation
+        public class GetValueProvider : IAlternateMethod
         {
             public GetValueProvider(Func<IValueProvider, IValueProvider> proxyValueProviderStrategy)
             {

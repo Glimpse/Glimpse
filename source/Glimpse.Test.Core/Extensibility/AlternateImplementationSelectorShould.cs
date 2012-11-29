@@ -14,10 +14,10 @@ namespace Glimpse.Test.Core.Extensibility
         public void ReturnMatchingInterceptors()
         {
             var loggerMock = new Mock<ILogger>();
-            var alternateMock1 = new Mock<IAlternateImplementation>();
+            var alternateMock1 = new Mock<IAlternateMethod>();
             alternateMock1.Setup(a => a.MethodToImplement).Returns(typeof(IDisposable).GetMethod("Dispose"));
 
-            var alternateMock2 = new Mock<IAlternateImplementation>();
+            var alternateMock2 = new Mock<IAlternateMethod>();
             alternateMock2.Setup(a => a.MethodToImplement).Returns(typeof(AlternateImplementationSelectorShould).GetMethod("ReturnMatchingInterceptors"));
 
             var selector = new AlternateImplementationSelector();
@@ -36,10 +36,10 @@ namespace Glimpse.Test.Core.Extensibility
         public void ReturnEmptyArrayWithoutMatch()
         {
             var loggerMock = new Mock<ILogger>();
-            var alternateMock1 = new Mock<IAlternateImplementation>();
+            var alternateMock1 = new Mock<IAlternateMethod>();
             alternateMock1.Setup(a => a.MethodToImplement).Returns(typeof(IDisposable).GetMethod("Dispose"));
 
-            var alternateMock2 = new Mock<IAlternateImplementation>();
+            var alternateMock2 = new Mock<IAlternateMethod>();
             alternateMock2.Setup(a => a.MethodToImplement).Returns(typeof(AlternateImplementationSelectorShould).GetMethod("ReturnMatchingInterceptors"));
 
             var interceptors = new IInterceptor[]

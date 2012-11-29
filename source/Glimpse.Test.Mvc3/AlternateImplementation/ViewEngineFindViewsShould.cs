@@ -32,7 +32,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             var sut = new ViewEngine.FindViews(false, alternateView);
 
             Assert.NotNull(sut);
-            Assert.IsAssignableFrom<IAlternateImplementation>(sut);
+            Assert.IsAssignableFrom<IAlternateMethod>(sut);
         }
 
         [Theory, AutoMock]
@@ -78,7 +78,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             proxyFactory.Setup(p => 
                     p.WrapInterface(
                         It.IsAny<IView>(), 
-                        It.IsAny<IEnumerable<IAlternateImplementation>>(),
+                        It.IsAny<IEnumerable<IAlternateMethod>>(),
                         It.IsAny<IEnumerable<object>>()))
                     .Returns(view);
 

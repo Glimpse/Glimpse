@@ -15,13 +15,13 @@ namespace Glimpse.Mvc.AlternateImplementation
         {
         }
 
-        public override IEnumerable<IAlternateImplementation> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods()
         {
             yield return new GetValue();
             yield return new ContainsPrefix();
         }
 
-        public class ContainsPrefix : IAlternateImplementation
+        public class ContainsPrefix : IAlternateMethod
         {
             public ContainsPrefix()
             {
@@ -58,7 +58,7 @@ namespace Glimpse.Mvc.AlternateImplementation
             }
         }
 
-        public class GetValue : IAlternateImplementation
+        public class GetValue : IAlternateMethod
         {
             public GetValue()
             {

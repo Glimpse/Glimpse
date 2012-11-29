@@ -96,7 +96,7 @@
     <Compile Include="Extensibility\ResourceParameterMetadata.cs" />
     <Compile Include="Extensibility\ResourceResultDecorator.cs" />
     <Compile Include="Extensibility\TimerResult.cs" />
-    <Compile Include="Extensibility\IAlternateImplementation.cs" />
+    <Compile Include="Extensibility\IAlternateMethod.cs" />
     <Compile Include="Extensibility\IAlternateImplementationContext.cs" />
     <Compile Include="Extensibility\IClientScript.cs" />
     <Compile Include="Extensibility\IContext.cs" />

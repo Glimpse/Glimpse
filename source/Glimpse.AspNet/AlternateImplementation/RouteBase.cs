@@ -18,12 +18,12 @@ namespace Glimpse.AspNet.AlternateImplementation
         {
         }
 
-        public override IEnumerable<IAlternateImplementation> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods()
         {
             yield return new GetRouteData<System.Web.Routing.RouteBase>();
         } 
 
-        public class GetRouteData<T> : IAlternateImplementation
+        public class GetRouteData<T> : IAlternateMethod
             where T : System.Web.Routing.RouteBase
         {
             public GetRouteData()

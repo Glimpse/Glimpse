@@ -15,12 +15,12 @@ namespace Glimpse.Mvc.AlternateImplementation
         {
         }
 
-        public override IEnumerable<IAlternateImplementation> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods()
         {
             yield return new OnAuthorization();
         }
 
-        public class OnAuthorization : IAlternateImplementation
+        public class OnAuthorization : IAlternateMethod
         {
             public OnAuthorization()
             {

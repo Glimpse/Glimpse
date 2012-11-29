@@ -13,7 +13,7 @@ namespace Glimpse.Mvc.AlternateImplementation
         {
         }
 
-        public override IEnumerable<IAlternateImplementation> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods()
         {
             yield return new BeginInvokeActionMethod();
             yield return new EndInvokeActionMethod();
@@ -21,7 +21,7 @@ namespace Glimpse.Mvc.AlternateImplementation
             yield return new ActionInvoker.GetFilters<AsyncControllerActionInvoker>(new ActionFilter(ProxyFactory), new ResultFilter(ProxyFactory), new AuthorizationFilter(ProxyFactory), new ExceptionFilter(ProxyFactory));
         }
 
-        public class BeginInvokeActionMethod : IAlternateImplementation
+        public class BeginInvokeActionMethod : IAlternateMethod
         {
             public BeginInvokeActionMethod()
             {
@@ -47,7 +47,7 @@ namespace Glimpse.Mvc.AlternateImplementation
             }
         }
 
-        public class EndInvokeActionMethod : IAlternateImplementation
+        public class EndInvokeActionMethod : IAlternateMethod
         {
             public EndInvokeActionMethod()
             {

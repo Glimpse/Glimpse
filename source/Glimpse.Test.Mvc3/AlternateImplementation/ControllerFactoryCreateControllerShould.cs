@@ -56,7 +56,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
 
             sut.NewImplementation(context);
 
-            proxyFactory.Verify(p => p.WrapClass(It.IsAny<AsyncControllerActionInvoker>(), It.IsAny<IEnumerable<IAlternateImplementation>>(), It.IsAny<IEnumerable<object>>(), null));
+            proxyFactory.Verify(p => p.WrapClass(It.IsAny<AsyncControllerActionInvoker>(), It.IsAny<IEnumerable<IAlternateMethod>>(), It.IsAny<IEnumerable<object>>(), null));
         }
 
         [Theory, AutoMock]
@@ -68,7 +68,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
 
             sut.NewImplementation(context);
 
-            proxyFactory.Verify(p => p.WrapInterface(It.IsAny<ControllerActionInvoker>(), It.IsAny<IEnumerable<IAlternateImplementation>>(), It.IsAny<IEnumerable<object>>()));
+            proxyFactory.Verify(p => p.WrapInterface(It.IsAny<ControllerActionInvoker>(), It.IsAny<IEnumerable<IAlternateMethod>>(), It.IsAny<IEnumerable<object>>()));
         }
     }
 }

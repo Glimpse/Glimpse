@@ -10,9 +10,9 @@ namespace Glimpse.Core.Extensibility
     {
         private IEnumerable<MethodInfo> methodSet;
         
-        private IEnumerable<IAlternateImplementation> methodImplementations;
+        private IEnumerable<IAlternateMethod> methodImplementations;
 
-        public AlternateImplementationGenerationHook(IEnumerable<IAlternateImplementation> methodImplementations, ILogger logger)
+        public AlternateImplementationGenerationHook(IEnumerable<IAlternateMethod> methodImplementations, ILogger logger)
         {
             if (methodImplementations == null)
             {
@@ -28,7 +28,7 @@ namespace Glimpse.Core.Extensibility
             Logger = logger;
         }
 
-        internal IEnumerable<IAlternateImplementation> MethodImplementations
+        internal IEnumerable<IAlternateMethod> MethodImplementations
         {
             get
             {

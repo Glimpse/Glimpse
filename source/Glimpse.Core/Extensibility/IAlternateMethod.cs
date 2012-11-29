@@ -2,7 +2,7 @@ using System.Reflection;
 
 namespace Glimpse.Core.Extensibility
 {
-    public interface IAlternateImplementation
+    public interface IAlternateMethod
     {
         MethodInfo MethodToImplement { get; }
         

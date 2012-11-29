@@ -14,13 +14,13 @@ namespace Glimpse.Mvc.AlternateImplementation
         {
         }
 
-        public override IEnumerable<IAlternateImplementation> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods()
         {
             yield return new GetService();
             yield return new GetServices();
         }
 
-        public class GetService : IAlternateImplementation
+        public class GetService : IAlternateMethod
         {
             public GetService()
             {
@@ -63,7 +63,7 @@ namespace Glimpse.Mvc.AlternateImplementation
             }
         }
 
-        public class GetServices : IAlternateImplementation
+        public class GetServices : IAlternateMethod
         {
             public GetServices()
             {

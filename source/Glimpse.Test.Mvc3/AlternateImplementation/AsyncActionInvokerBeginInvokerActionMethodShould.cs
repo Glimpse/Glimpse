@@ -16,7 +16,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Fact]
         public void ImplementProperMethod()
         {
-            IAlternateImplementation sut = new AsyncActionInvoker.BeginInvokeActionMethod();
+            IAlternateMethod sut = new AsyncActionInvoker.BeginInvokeActionMethod();
 
             Assert.Equal("BeginInvokeActionMethod", sut.MethodToImplement.Name);
         }

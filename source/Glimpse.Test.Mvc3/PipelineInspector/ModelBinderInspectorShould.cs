@@ -27,7 +27,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         {
             ModelBinderProviders.BinderProviders.Clear();
             context.ProxyFactory.Setup(pf => pf.IsWrapInterfaceEligible(It.IsAny<Type>())).Returns(true);
-            context.ProxyFactory.Setup(pf => pf.WrapInterface(It.IsAny<IModelBinderProvider>(), It.IsAny<IEnumerable<IAlternateImplementation>>(), Enumerable.Empty<object>())).Returns(proxy);
+            context.ProxyFactory.Setup(pf => pf.WrapInterface(It.IsAny<IModelBinderProvider>(), It.IsAny<IEnumerable<IAlternateMethod>>(), Enumerable.Empty<object>())).Returns(proxy);
 
             sut.Setup(context);
 
@@ -39,7 +39,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         {
             ModelBinderProviders.BinderProviders.Add(new DummyModelBinderProvider());
             context.ProxyFactory.Setup(pf => pf.IsWrapInterfaceEligible(It.IsAny<Type>())).Returns(true);
-            context.ProxyFactory.Setup(pf => pf.WrapInterface(It.IsAny<IModelBinderProvider>(), It.IsAny<IEnumerable<IAlternateImplementation>>(), Enumerable.Empty<object>())).Returns(proxy);
+            context.ProxyFactory.Setup(pf => pf.WrapInterface(It.IsAny<IModelBinderProvider>(), It.IsAny<IEnumerable<IAlternateMethod>>(), Enumerable.Empty<object>())).Returns(proxy);
 
             sut.Setup(context);
 
@@ -52,7 +52,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         {
             ValueProviderFactories.Factories.Clear();
             context.ProxyFactory.Setup(pf => pf.IsWrapClassEligible(It.IsAny<Type>())).Returns(true);
-            context.ProxyFactory.Setup(pf => pf.WrapClass(It.IsAny<ValueProviderFactory>(), It.IsAny<IEnumerable<IAlternateImplementation>>(), Enumerable.Empty<object>(), null)).Returns(proxy);
+            context.ProxyFactory.Setup(pf => pf.WrapClass(It.IsAny<ValueProviderFactory>(), It.IsAny<IEnumerable<IAlternateMethod>>(), Enumerable.Empty<object>(), null)).Returns(proxy);
 
             sut.Setup(context);
 
@@ -64,7 +64,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         {
             ValueProviderFactories.Factories.Add(new DummyValueProviderFactory());
             context.ProxyFactory.Setup(pf => pf.IsWrapClassEligible(It.IsAny<Type>())).Returns(true);
-            context.ProxyFactory.Setup(pf => pf.WrapClass(It.IsAny<ValueProviderFactory>(), It.IsAny<IEnumerable<IAlternateImplementation>>(), Enumerable.Empty<object>(), null)).Returns(proxy);
+            context.ProxyFactory.Setup(pf => pf.WrapClass(It.IsAny<ValueProviderFactory>(), It.IsAny<IEnumerable<IAlternateMethod>>(), Enumerable.Empty<object>(), null)).Returns(proxy);
 
             sut.Setup(context);
 
@@ -77,7 +77,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         {
             ModelBinders.Binders.Add(typeof(object), seedBinder);
             context.ProxyFactory.Setup(pf => pf.IsWrapClassEligible(It.IsAny<Type>())).Returns(true);
-            context.ProxyFactory.Setup(pf => pf.WrapClass(It.IsAny<DefaultModelBinder>(), It.IsAny<IEnumerable<IAlternateImplementation>>(), Enumerable.Empty<object>(), null)).Returns(proxy);
+            context.ProxyFactory.Setup(pf => pf.WrapClass(It.IsAny<DefaultModelBinder>(), It.IsAny<IEnumerable<IAlternateMethod>>(), Enumerable.Empty<object>(), null)).Returns(proxy);
 
             sut.Setup(context);
 
@@ -90,7 +90,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         public void UpdateDefaultModelBinder(ModelBinderInspector sut, IPipelineInspectorContext context, DefaultModelBinder proxy)
         {
             context.ProxyFactory.Setup(pf => pf.IsWrapClassEligible(It.IsAny<Type>())).Returns(true);
-            context.ProxyFactory.Setup(pf => pf.WrapClass(It.IsAny<DefaultModelBinder>(), It.IsAny<IEnumerable<IAlternateImplementation>>(), Enumerable.Empty<object>(), null)).Returns(proxy);
+            context.ProxyFactory.Setup(pf => pf.WrapClass(It.IsAny<DefaultModelBinder>(), It.IsAny<IEnumerable<IAlternateMethod>>(), Enumerable.Empty<object>(), null)).Returns(proxy);
 
             sut.Setup(context);
 

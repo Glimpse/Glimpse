@@ -15,13 +15,13 @@ namespace Glimpse.Mvc.AlternateImplementation
         {
         }
 
-        public override IEnumerable<IAlternateImplementation> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods()
         {
             yield return new OnResultExecuting();
             yield return new OnResultExecuted();
         }
 
-        public class OnResultExecuting : IAlternateImplementation
+        public class OnResultExecuting : IAlternateMethod
         {
             public OnResultExecuting()
             {
@@ -60,7 +60,7 @@ namespace Glimpse.Mvc.AlternateImplementation
             }
         }
 
-        public class OnResultExecuted : IAlternateImplementation
+        public class OnResultExecuted : IAlternateMethod
         {
             public OnResultExecuted()
             {

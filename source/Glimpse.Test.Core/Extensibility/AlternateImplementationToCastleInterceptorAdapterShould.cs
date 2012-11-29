@@ -14,7 +14,7 @@ namespace Glimpse.Test.Core.Extensibility
         [Fact]
         public void Construct()
         {
-            var implementationMock = new Mock<IAlternateImplementation>();
+            var implementationMock = new Mock<IAlternateMethod>();
             var loggerMock = new Mock<ILogger>();
 
             var adapter = new AlternateImplementationToCastleInterceptorAdapter(implementationMock.Object, loggerMock.Object, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
@@ -26,7 +26,7 @@ namespace Glimpse.Test.Core.Extensibility
         [Fact]
         public void ThrowWithNullConstructorParameters()
         {
-            var implementationMock = new Mock<IAlternateImplementation>();
+            var implementationMock = new Mock<IAlternateMethod>();
             var loggerMock = new Mock<ILogger>();
 
             Assert.Throws<ArgumentNullException>(() => new AlternateImplementationToCastleInterceptorAdapter(null, loggerMock.Object, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
@@ -37,7 +37,7 @@ namespace Glimpse.Test.Core.Extensibility
         public void PassThroughMethodToImplement()
         {
             var expected = GetType().GetMethods().First();
-            var implementationMock = new Mock<IAlternateImplementation>();
+            var implementationMock = new Mock<IAlternateMethod>();
             implementationMock.Setup(i => i.MethodToImplement).Returns(expected);
             var loggerMock = new Mock<ILogger>();
 
@@ -49,7 +49,7 @@ namespace Glimpse.Test.Core.Extensibility
         [Fact]
         public void Intercept()
         {
-            var implementationMock = new Mock<IAlternateImplementation>();
+            var implementationMock = new Mock<IAlternateMethod>();
             var loggerMock = new Mock<ILogger>();
 
             var adapter = new AlternateImplementationToCastleInterceptorAdapter(implementationMock.Object, loggerMock.Object, new Mock<IMessageBroker>().Object, new Mock<IProxyFactory>().Object, () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);

@@ -18,13 +18,13 @@ namespace Glimpse.AspNet.AlternateImplementation
         {
         }
 
-        public override IEnumerable<IAlternateImplementation> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods()
         {
             yield return new ProcessConstraint();
             yield return new RouteBase.GetRouteData<System.Web.Routing.Route>();
         }
 
-        public class ProcessConstraint : IAlternateImplementation
+        public class ProcessConstraint : IAlternateMethod
         {
             public ProcessConstraint()
             {

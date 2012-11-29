@@ -12,12 +12,12 @@ namespace Glimpse.Mvc.AlternateImplementation
         {
         }
 
-        public override IEnumerable<IAlternateImplementation> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods()
         {
             yield return new GetBinder(new ModelBinder(ProxyFactory));
         }
 
-        public class GetBinder : IAlternateImplementation
+        public class GetBinder : IAlternateMethod
         {
             public GetBinder(Alternate<DefaultModelBinder> alternateModelBinder)
             {
