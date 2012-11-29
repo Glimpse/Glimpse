@@ -20,6 +20,17 @@ namespace Glimpse.Test.Core.Framework
         {
         }
 
+        [Theory, AutoMock]
+        public void ImplementIWrapper(CastleDynamicProxyFactory sut, IDisposable instance, IEnumerable<IAlternateImplementation<IDisposable>> methodInvocations)
+        {
+            var result = sut.WrapInterface(instance, methodInvocations);
+
+            var resultAsWrapper = result as IWrapper<IDisposable>;
+
+            Assert.NotNull(resultAsWrapper);
+            Assert.Equal(instance, resultAsWrapper.GetWrappedObject());
+        }
+
 /*        [Fact]
         public void ConstructWithLogger()
         {

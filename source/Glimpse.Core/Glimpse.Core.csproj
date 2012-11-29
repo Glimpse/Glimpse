@@ -89,6 +89,7 @@
     <Compile Include="Extensibility\IParameterValueProvider.cs" />
     <Compile Include="Extensibility\IPrivilegedResource.cs" />
     <Compile Include="Extensibility\ITabLayout.cs" />
+    <Compile Include="Extensibility\IWrapper.cs" />
     <Compile Include="Extensibility\JsonNetConverterDictionaryKeysAreNotPropertyNames.cs" />
     <Compile Include="Extensibility\MessageBase.cs" />
     <Compile Include="Extensibility\NuGetPackageAttribute.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="Framework\ApplicationPersistenceStore.cs" />
     <Compile Include="Framework\CacheSetting.cs" />
     <Compile Include="Framework\CastleDynamicProxyFactory.cs" />
+    <Compile Include="Framework\CastleDynamicProxyWrapper.cs" />
     <Compile Include="Framework\Factory.cs" />
     <Compile Include="Framework\GlimpseException.cs" />
     <Compile Include="Framework\GlimpseMetadata.cs" />

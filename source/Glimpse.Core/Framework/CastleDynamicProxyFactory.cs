@@ -67,9 +67,16 @@ namespace Glimpse.Core.Framework
             CheckInput(instance, methodImplementations, mixins);
 
             var options = CreateProxyOptions(methodImplementations, mixins);
+            var wrapper = new CastleDynamicProxyWrapper<T>();
+            options.AddMixinInstance(wrapper);
+
             var interceptorArray = CreateInterceptorArray(methodImplementations);
 
-            return ProxyGenerator.CreateInterfaceProxyWithTarget(instance, options, interceptorArray);
+            var result = ProxyGenerator.CreateInterfaceProxyWithTarget(instance, options, interceptorArray);
+
+            wrapper.ProxyTargetAccessor = result as IProxyTargetAccessor;
+
+            return result;
         }
 
         public bool IsWrapClassEligible(Type type)
@@ -92,9 +99,16 @@ namespace Glimpse.Core.Framework
             CheckInput(instance, methodImplementations, mixins); // null constructorArguments is valid input
 
             var options = CreateProxyOptions(methodImplementations, mixins);
+            var wrapper = new CastleDynamicProxyWrapper<T>();
+            options.AddMixinInstance(wrapper);
+
             var interceptorArray = CreateInterceptorArray(methodImplementations);
 
-            return (T)ProxyGenerator.CreateClassProxyWithTarget(typeof(T), instance, options, constructorArguments.ToArray(), interceptorArray);
+            var result = (T)ProxyGenerator.CreateClassProxyWithTarget(typeof(T), instance, options, constructorArguments.ToArray(), interceptorArray);
+
+            wrapper.ProxyTargetAccessor = result as IProxyTargetAccessor;
+
+            return result;
         }
 
         public bool IsExtendClassEligible(Type type)
