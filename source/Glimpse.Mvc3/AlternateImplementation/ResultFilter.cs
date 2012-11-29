@@ -15,13 +15,13 @@ namespace Glimpse.Mvc.AlternateImplementation
         {
         }
 
-        public override IEnumerable<IAlternateImplementation<IResultFilter>> AllMethods()
+        public override IEnumerable<IAlternateImplementation> AllMethods()
         {
             yield return new OnResultExecuting();
             yield return new OnResultExecuted();
         }
 
-        public class OnResultExecuting : IAlternateImplementation<IResultFilter>
+        public class OnResultExecuting : IAlternateImplementation
         {
             public OnResultExecuting()
             {
@@ -60,7 +60,7 @@ namespace Glimpse.Mvc.AlternateImplementation
             }
         }
 
-        public class OnResultExecuted : IAlternateImplementation<IResultFilter>
+        public class OnResultExecuted : IAlternateImplementation
         {
             public OnResultExecuted()
             {

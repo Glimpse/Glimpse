@@ -15,12 +15,12 @@ namespace Glimpse.Mvc.AlternateImplementation
         {
         }
 
-        public override IEnumerable<IAlternateImplementation<IExceptionFilter>> AllMethods()
+        public override IEnumerable<IAlternateImplementation> AllMethods()
         {
             yield return new OnException();
         }
 
-        public class OnException : IAlternateImplementation<IExceptionFilter>
+        public class OnException : IAlternateImplementation
         {
             public OnException()
             {

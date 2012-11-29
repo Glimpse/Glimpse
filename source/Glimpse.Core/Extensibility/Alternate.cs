@@ -52,6 +52,6 @@ namespace Glimpse.Core.Extensibility
             return false;
         }
 
-        public abstract IEnumerable<IAlternateImplementation<T>> AllMethods();
+        public abstract IEnumerable<IAlternateImplementation> AllMethods();
     }
 }

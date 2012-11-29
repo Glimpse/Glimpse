@@ -12,7 +12,7 @@ namespace Glimpse.Test.Core.Extensibility
         [Fact]
         public void ConstructWithParameters()
         {
-            var alternateImplementations = Enumerable.Empty<IAlternateImplementation<ITab>>();
+            var alternateImplementations = Enumerable.Empty<IAlternateImplementation>();
             var loggerMock = new Mock<ILogger>();
 
             var hook = new AlternateImplementationGenerationHook<ITab>(alternateImplementations, loggerMock.Object);
@@ -32,7 +32,7 @@ namespace Glimpse.Test.Core.Extensibility
         [Fact]
         public void ThrowWithNullLoggerParameter()
         {
-            var alternateImplementations = Enumerable.Empty<IAlternateImplementation<ITab>>();
+            var alternateImplementations = Enumerable.Empty<IAlternateImplementation>();
 
             Assert.Throws<ArgumentNullException>(() => new AlternateImplementationGenerationHook<ITab>(alternateImplementations, null));
         }
@@ -40,7 +40,7 @@ namespace Glimpse.Test.Core.Extensibility
         [Fact]
         public void LogWhenMethodsInspected()
         {
-            var alternateImplementations = Enumerable.Empty<IAlternateImplementation<ITab>>();
+            var alternateImplementations = Enumerable.Empty<IAlternateImplementation>();
             var loggerMock = new Mock<ILogger>();
 
             var hook = new AlternateImplementationGenerationHook<ITab>(alternateImplementations, loggerMock.Object);
@@ -53,7 +53,7 @@ namespace Glimpse.Test.Core.Extensibility
         [Fact]
         public void LogWhenNonProxableMemberNotification()
         {
-            var alternateImplementations = Enumerable.Empty<IAlternateImplementation<ITab>>();
+            var alternateImplementations = Enumerable.Empty<IAlternateImplementation>();
             var loggerMock = new Mock<ILogger>();
 
             var hook = new AlternateImplementationGenerationHook<ITab>(alternateImplementations, loggerMock.Object);
@@ -71,10 +71,10 @@ namespace Glimpse.Test.Core.Extensibility
         {
             var type = typeof (AlternateImplementationGenerationHookShould);
             var methodInfo = type.GetMethod("CanInterceptMethods");
-            var implementationMock = new Mock<IAlternateImplementation<ITab>>();
+            var implementationMock = new Mock<IAlternateImplementation>();
             implementationMock.Setup(i => i.MethodToImplement).Returns(methodInfo);
 
-            var alternateImplementations = new List<IAlternateImplementation<ITab>>();
+            var alternateImplementations = new List<IAlternateImplementation>();
             alternateImplementations.Add(implementationMock.Object);
             
             var loggerMock = new Mock<ILogger>();
@@ -91,10 +91,10 @@ namespace Glimpse.Test.Core.Extensibility
         {
             var type = typeof(AlternateImplementationGenerationHookShould);
             var methodInfo = type.GetMethod("CanInterceptMethods");
-            var implementationMock = new Mock<IAlternateImplementation<ITab>>();
+            var implementationMock = new Mock<IAlternateImplementation>();
             implementationMock.Setup(i => i.MethodToImplement).Returns(methodInfo);
 
-            var alternateImplementations = new List<IAlternateImplementation<ITab>>();
+            var alternateImplementations = new List<IAlternateImplementation>();
             alternateImplementations.Add(implementationMock.Object);
 
             var loggerMock = new Mock<ILogger>();
@@ -109,16 +109,16 @@ namespace Glimpse.Test.Core.Extensibility
         [Fact]
         public void ReturnNonMatchingHashCodesWithDifferentCollections()
         {
-            var implementationMock1 = new Mock<IAlternateImplementation<ITab>>();
-            var implementationMock2 = new Mock<IAlternateImplementation<ITab>>();
+            var implementationMock1 = new Mock<IAlternateImplementation>();
+            var implementationMock2 = new Mock<IAlternateImplementation>();
 
-            var implementations1 = new List<IAlternateImplementation<ITab>>
+            var implementations1 = new List<IAlternateImplementation>
                                       {
                                           implementationMock1.Object,
                                           implementationMock2.Object
                                       };
 
-            var implementations2 = new List<IAlternateImplementation<ITab>> 
+            var implementations2 = new List<IAlternateImplementation> 
                                       {
                                           implementationMock1.Object //One less object
                                       };

@@ -26,7 +26,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
             DependencyResolver.SetResolver(dependencyResolver);
 
             context.ProxyFactory.Setup(f => f.IsWrapInterfaceEligible(It.IsAny<Type>())).Returns(true);
-            context.ProxyFactory.Setup(f => f.WrapInterface(It.IsAny<IDependencyResolver>(), It.IsAny<IEnumerable<IAlternateImplementation<IDependencyResolver>>>(), Enumerable.Empty<object>())).Returns(dependencyResolver);
+            context.ProxyFactory.Setup(f => f.WrapInterface(It.IsAny<IDependencyResolver>(), It.IsAny<IEnumerable<IAlternateImplementation>>(), Enumerable.Empty<object>())).Returns(dependencyResolver);
 
             sut.Setup(context);
 

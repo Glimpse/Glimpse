@@ -14,14 +14,14 @@ namespace Glimpse.Mvc.AlternateImplementation
         {
         }
 
-        public override IEnumerable<IAlternateImplementation<ControllerActionInvoker>> AllMethods()
+        public override IEnumerable<IAlternateImplementation> AllMethods()
         {
             yield return new InvokeActionResult<ControllerActionInvoker>();
             yield return new InvokeActionMethod();
             yield return new GetFilters<ControllerActionInvoker>(new ActionFilter(ProxyFactory), new ResultFilter(ProxyFactory), new AuthorizationFilter(ProxyFactory), new ExceptionFilter(ProxyFactory));
         }
 
-        public class GetFilters<T> : IAlternateImplementation<T> where T : class
+        public class GetFilters<T> : IAlternateImplementation where T : class
         {
             public GetFilters(Alternate<IActionFilter> alternateActionFilter, Alternate<IResultFilter> alternateResultFilter, Alternate<IAuthorizationFilter> alternateAuthorizationFilter, Alternate<IExceptionFilter> alternateExceptionFilter)
             {
@@ -79,7 +79,7 @@ namespace Glimpse.Mvc.AlternateImplementation
             }
         }
 
-        public class InvokeActionResult<T> : IAlternateImplementation<T> where T : class
+        public class InvokeActionResult<T> : IAlternateImplementation where T : class
         {
             public MethodInfo MethodToImplement
             {
@@ -124,7 +124,7 @@ namespace Glimpse.Mvc.AlternateImplementation
             }
         }
 
-        public class InvokeActionMethod : IAlternateImplementation<ControllerActionInvoker>
+        public class InvokeActionMethod : IAlternateImplementation
         {
             public MethodInfo MethodToImplement
             {

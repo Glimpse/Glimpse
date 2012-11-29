@@ -21,7 +21,7 @@ namespace Glimpse.Test.Core.Framework
         }
 
         [Theory, AutoMock]
-        public void ImplementIWrapper(CastleDynamicProxyFactory sut, IDisposable instance, IEnumerable<IAlternateImplementation<IDisposable>> methodInvocations)
+        public void ImplementIWrapper(CastleDynamicProxyFactory sut, IDisposable instance, IEnumerable<IAlternateImplementation> methodInvocations)
         {
             var result = sut.WrapInterface(instance, methodInvocations);
 

@@ -14,13 +14,13 @@ namespace Glimpse.Mvc.AlternateImplementation
         {
         }
 
-        public override IEnumerable<IAlternateImplementation<IActionFilter>> AllMethods()
+        public override IEnumerable<IAlternateImplementation> AllMethods()
         {
             yield return new OnActionExecuting();
             yield return new OnActionExecuted();
         }
 
-        public class OnActionExecuting : IAlternateImplementation<IActionFilter>
+        public class OnActionExecuting : IAlternateImplementation
         {
             public OnActionExecuting()
             {
@@ -49,7 +49,7 @@ namespace Glimpse.Mvc.AlternateImplementation
             }
         }
 
-        public class OnActionExecuted : IAlternateImplementation<IActionFilter>
+        public class OnActionExecuted : IAlternateImplementation
         {
             public OnActionExecuted()
             {

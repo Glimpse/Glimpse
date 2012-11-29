@@ -17,12 +17,12 @@ namespace Glimpse.Mvc.AlternateImplementation
         {
         }
 
-        public override IEnumerable<IAlternateImplementation<IView>> AllMethods()
+        public override IEnumerable<IAlternateImplementation> AllMethods()
         {
             yield return new Render();
         }
 
-        public class Render : IAlternateImplementation<IView>
+        public class Render : IAlternateImplementation
         {
             public Render()
             {

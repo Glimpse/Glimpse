@@ -14,13 +14,13 @@ namespace Glimpse.Mvc.AlternateImplementation
         {
         }
 
-        public override IEnumerable<IAlternateImplementation<DefaultModelBinder>> AllMethods()
+        public override IEnumerable<IAlternateImplementation> AllMethods()
         {
             yield return new BindModel();
             yield return new BindProperty();
         }
 
-        public class BindProperty : IAlternateImplementation<DefaultModelBinder>
+        public class BindProperty : IAlternateImplementation
         {
             public BindProperty()
             {
@@ -73,7 +73,7 @@ namespace Glimpse.Mvc.AlternateImplementation
             }
         }
 
-        public class BindModel : IAlternateImplementation<DefaultModelBinder>
+        public class BindModel : IAlternateImplementation
         {
             public BindModel()
             {

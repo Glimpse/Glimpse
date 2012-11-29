@@ -17,7 +17,7 @@ namespace Glimpse.Mvc.AlternateImplementation
         {
         }
 
-        public override IEnumerable<IAlternateImplementation<IViewEngine>> AllMethods()
+        public override IEnumerable<IAlternateImplementation> AllMethods()
         {
             var alternateView = new View(ProxyFactory);
             yield return new FindViews(false, alternateView);
@@ -25,7 +25,7 @@ namespace Glimpse.Mvc.AlternateImplementation
         }
 
         // This class is the alternate implementation for both .FindView() AND .FindPartialView()
-        public class FindViews : IAlternateImplementation<IViewEngine>
+        public class FindViews : IAlternateImplementation
         {
             public FindViews(bool isPartial, Alternate<IView> alternateView)
             {
