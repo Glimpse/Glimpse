@@ -7,7 +7,7 @@ namespace Glimpse.Test.Mvc3.TestDoubles
     {
         public IModelBinder GetBinder(Type modelType)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
     }
 }
