@@ -1,9 +1,16 @@
+<<<<<<< Updated upstream
+﻿using System.Collections.Generic;
+using System.Reflection;
+using System.Web;
+using System.Web.Routing;
+=======
 ﻿using System;
 using System.Collections.Generic; 
 using System.Reflection; 
 using System.Web;
 using System.Web.Routing; 
 using Glimpse.AspNet.Message;
+>>>>>>> Stashed changes
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions; 
 
@@ -19,15 +26,20 @@ namespace Glimpse.AspNet.AlternateImplementation
 
         public override IEnumerable<IAlternateMethod> AllMethods
         {
+<<<<<<< Updated upstream
             get
             {
                 return allMethods ?? (allMethods = new List<IAlternateMethod>
                     {
                         new ProcessConstraint(),
-                        new RouteBase.GetRouteData<System.Web.Routing.Route>(),
-                        new RouteBase.GetVirtualPath<System.Web.Routing.Route>()
+                        new RouteBase.GetRouteData<System.Web.Routing.Route>()
                     });
             }
+=======
+            yield return new RouteBase.GetRouteData<System.Web.Routing.Route>();
+            yield return new RouteBase.GetVirtualPath<System.Web.Routing.Route>();
+            yield return new ProcessConstraint();
+>>>>>>> Stashed changes
         }
 
         public class ProcessConstraint : IAlternateMethod

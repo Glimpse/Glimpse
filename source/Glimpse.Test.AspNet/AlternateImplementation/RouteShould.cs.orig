@@ -7,20 +7,24 @@ using Xunit.Extensions;
 
 namespace Glimpse.Test.AspNet.AlternateImplementation
 {
-    public class RouteBaseShould
+    public class RouteShould
     {
         [Theory, AutoMock]
-        public void ReturnOneMethod(IProxyFactory proxyFactory)
+        public void ReturnTwoMethods(IProxyFactory proxyFactory)
         {
-            AlternateType<System.Web.Routing.RouteBase> alternationImplementation = new RouteBase(proxyFactory);
+            AlternateType<System.Web.Routing.Route> alternationImplementation = new Route(proxyFactory);
 
+<<<<<<< Updated upstream
             Assert.Equal(2, alternationImplementation.AllMethods.Count());
+=======
+            Assert.Equal(3, alternationImplementation.AllMethods().Count());
+>>>>>>> Stashed changes
         }
 
         [Theory, AutoMock]
         public void SetProxyFactory(IProxyFactory proxyFactory)
         {
-            AlternateType<System.Web.Routing.RouteBase> alternationImplementation = new RouteBase(proxyFactory);
+            AlternateType<System.Web.Routing.Route> alternationImplementation = new Route(proxyFactory);
 
             Assert.Equal(proxyFactory, alternationImplementation.ProxyFactory);
         }

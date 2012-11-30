@@ -1,6 +1,12 @@
+<<<<<<< Updated upstream
+﻿using System.Collections.Generic;
+using System.Reflection;
+using System.Web.Routing;
+=======
 ﻿using System;
 using System.Collections.Generic; 
 using System.Reflection; 
+>>>>>>> Stashed changes
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Message;
@@ -17,15 +23,20 @@ namespace Glimpse.AspNet.AlternateImplementation
 
         public override IEnumerable<IAlternateMethod> AllMethods
         {
+<<<<<<< Updated upstream
             get 
             { 
                 return allMethods ?? (allMethods = new List<IAlternateMethod>
                 {
-                    new GetRouteData<System.Web.Routing.RouteBase>(),
-                    new GetVirtualPath<System.Web.Routing.RouteBase>()
+                    new GetRouteData<System.Web.Routing.RouteBase>()
                 }); 
             }
         }
+=======
+            yield return new GetRouteData<System.Web.Routing.RouteBase>();
+            yield return new GetVirtualPath<System.Web.Routing.RouteBase>();
+        } 
+>>>>>>> Stashed changes
 
         public class GetRouteData<T> : IAlternateMethod
             where T : System.Web.Routing.RouteBase
@@ -69,7 +80,7 @@ namespace Glimpse.AspNet.AlternateImplementation
             }
         }
 
-        public class GetVirtualPath<T> : IAlternateMethod
+        public class GetVirtualPath<T> : IAlternateImplementation<T>
             where T : System.Web.Routing.RouteBase
         {
             public GetVirtualPath()

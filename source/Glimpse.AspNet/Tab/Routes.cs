@@ -48,11 +48,11 @@ namespace Glimpse.AspNet.Tab
                     System.Web.Routing.RouteData routeData = null;
                     if (httpContext != null)
                     {
-                        routeData = routeBase.GetRouteData(httpContext);
-                        if (routeData != null)
-                        {
-                            ProcessValues(routeModel, routeData.Values);
-                        }
+                        ////routeData = routeBase.GetRouteData(httpContext);
+                        ////if (routeData != null)
+                        ////{
+                        ////    ProcessValues(routeModel, routeData.Values);
+                        ////}
                     }
 
                     var matchesCurrentRequest = routeData != null;
@@ -98,7 +98,7 @@ namespace Glimpse.AspNet.Tab
             {
                 var model = new RouteConstraintModel();
                 model.ParameterName = constraint.Key;
-                model.Constraint = constraint.Value.ToString();
+                model.Constraint = constraint.Value.ToString(); 
 
                 result.Add(model);
             }

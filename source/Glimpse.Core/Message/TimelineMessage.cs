@@ -1,14 +1,13 @@
-using System;
 using System.Collections.Generic;
 using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Message
 {
-    public class TimelineMessage : MessageBase, ITimerResultMessage
+    public class TimelineMessage : TimeMessage, ITimerResultMessage
     {
         public TimelineMessage(TimerResult timerResult, string eventName = null, string eventCategory = null) 
+            : base(timerResult)
         {
-            Result = timerResult;
             EventName = eventName;
             EventCategory = eventCategory;
         }
@@ -19,23 +18,6 @@ namespace Glimpse.Core.Message
 
         public string EventSubText { get; protected set; }
         
-        public double Offset
-        {
-            get { return Result.Offset; }
-        }
-
-        public double Duration
-        {
-            get { return Result.Duration; }
-        }
-
-        public DateTime StartTime
-        {
-            get { return Result.StartTime; }
-        }
-
-        private TimerResult Result { get; set; }
-
         public virtual void BuildDetails(IDictionary<string, object> details)
         { 
         }

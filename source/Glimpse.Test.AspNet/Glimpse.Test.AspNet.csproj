@@ -62,6 +62,9 @@
   <ItemGroup>
     <Compile Include="AlternateImplementation\RouteBaseGetRouteDataShould.cs" />
     <Compile Include="AlternateImplementation\RouteBaseShould.cs" />
+    <Compile Include="AlternateImplementation\RouteConstraintMatchShould.cs" />
+    <Compile Include="AlternateImplementation\RouteConstraintRegexShould.cs" />
+    <Compile Include="AlternateImplementation\RouteConstraintShould.cs" />
     <Compile Include="AlternateImplementation\RouteProcessConstraintShould.cs" />
     <Compile Include="AlternateImplementation\RouteShould.cs" />
     <Compile Include="AspNetFrameworkProviderShould.cs" />

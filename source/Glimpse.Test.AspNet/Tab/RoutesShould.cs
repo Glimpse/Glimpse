@@ -118,7 +118,7 @@ namespace Glimpse.Test.AspNet.Tab
             var route1 = new System.Web.Routing.Route("url", null, constraints, routeHandler.Object);
   
             // send a constraint-processed message
-            var msg = new Route.ProcessConstraint.Message(route1, new Route.ProcessConstraint.Arguments(new object[] { null, null, "controller", null, RouteDirection.IncomingRequest }), false);
+            var msg = new Route.ProcessConstraint.Message(new Route.ProcessConstraint.Arguments(new object[] { null, null, "controller", null, RouteDirection.IncomingRequest }), null, null, null, false);
             Routes.Persist(msg, setupMock.Object);
 
             // check the output

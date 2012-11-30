@@ -67,7 +67,11 @@ namespace Glimpse.Core.Framework
         {
             CheckInput(instance, methodImplementations);
 
-            var options = CreateProxyOptions<T>(methodImplementations, mixins.ToEmptyIfNull());
+<<<<<<< Updated upstream
+            var options = CreateProxyOptions<T>(methodImplementations, mixins);
+=======
+            var options = CreateProxyOptions(methodImplementations, mixins.ToEmptyIfNull());
+>>>>>>> Stashed changes
             var wrapper = new CastleDynamicProxyWrapper<T>();
             options.AddMixinInstance(wrapper);
 
@@ -99,7 +103,11 @@ namespace Glimpse.Core.Framework
         {
             CheckInput(instance, methodImplementations);
 
-            var options = CreateProxyOptions<T>(methodImplementations, mixins.ToEmptyIfNull());
+<<<<<<< Updated upstream
+            var options = CreateProxyOptions<T>(methodImplementations, mixins);
+=======
+            var options = CreateProxyOptions(methodImplementations, mixins.ToEmptyIfNull());
+>>>>>>> Stashed changes
             var wrapper = new CastleDynamicProxyWrapper<T>();
             options.AddMixinInstance(wrapper);
 
@@ -136,13 +144,21 @@ namespace Glimpse.Core.Framework
         {
             CheckInput(methodImplementations); 
 
-            var options = CreateProxyOptions<T>(methodImplementations, mixins.ToEmptyIfNull());
+<<<<<<< Updated upstream
+            var options = CreateProxyOptions<T>(methodImplementations, mixins);
+=======
+            var options = CreateProxyOptions(methodImplementations, mixins.ToEmptyIfNull());
+>>>>>>> Stashed changes
             var interceptorArray = CreateInterceptorArray(methodImplementations);
 
             return (T)ProxyGenerator.CreateClassProxy(typeof(T), options, constructorArguments.ToArrayOrDefault(), interceptorArray);
         }
 
-        private void CheckInput(IEnumerable<IAlternateMethod> methodImplementations)
+<<<<<<< Updated upstream
+        private void CheckInput(IEnumerable<IAlternateMethod> methodImplementations, IEnumerable<object> mixins)
+=======
+        private void CheckInput<T>(IEnumerable<IAlternateImplementation<T>> methodImplementations) where T : class
+>>>>>>> Stashed changes
         {
             if (methodImplementations == null)
             {
@@ -150,7 +166,11 @@ namespace Glimpse.Core.Framework
             }
         }
 
-        private void CheckInput(object instance, IEnumerable<IAlternateMethod> methodImplementations)
+<<<<<<< Updated upstream
+        private void CheckInput(object instance, IEnumerable<IAlternateMethod> methodImplementations, IEnumerable<object> mixins)
+=======
+        private void CheckInput<T>(object instance, IEnumerable<IAlternateImplementation<T>> methodImplementations) where T : class
+>>>>>>> Stashed changes
         {
             CheckInput(methodImplementations);
 

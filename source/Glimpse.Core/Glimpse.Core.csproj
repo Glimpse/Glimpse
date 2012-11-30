@@ -134,6 +134,7 @@
     <Compile Include="Extensibility\TabSetupContext.cs" />
     <Compile Include="Extensions\AlternateImplementationContextExtensions.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
+    <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\MessageBrokerExtensions.cs" />
     <Compile Include="Extensions\LongExtensions.cs" />
@@ -180,8 +181,10 @@
     <Compile Include="Framework\GlimpseConfiguration.cs" />
     <Compile Include="Framework\GlimpseRuntime.cs" />
     <Compile Include="Message\IMessage.cs" />
+    <Compile Include="Message\ITimeMessage.cs" />
     <Compile Include="Message\ITimerResultMessage.cs" />
     <Compile Include="Message\TimelineMessage.cs" />
+    <Compile Include="Message\TimeMessage.cs" />
     <Compile Include="Plugin\Assist\CodeType.cs" />
     <Compile Include="Plugin\Assist\CodeTypeConverter.cs" />
     <Compile Include="Plugin\Assist\Formats.cs" />
