@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Glimpse.Core.Extensibility
 {
-    public abstract class AlternateType<T> where T : class
+    public abstract class AlternateType<T> : IAlternateType<T> where T : class
     {
         protected AlternateType(IProxyFactory proxyFactory)
         {
@@ -20,7 +20,17 @@ namespace Glimpse.Core.Extensibility
 
         public abstract IEnumerable<IAlternateMethod> AllMethods { get; }
 
-        public virtual bool TryCreate(T originalObj, out T newObj, IEnumerable<object> mixins = null, object[] constructorArguments = null)
+        public virtual bool TryCreate(T originalObj, out T newobj)
+        {
+            return TryCreate(originalObj, out newobj, null, null);
+        }
+
+        public virtual bool TryCreate(T originalObj, out T newobj, IEnumerable<object> mixins)
+        {
+            return TryCreate(originalObj, out newobj, mixins, null);
+        }
+
+        public virtual bool TryCreate(T originalObj, out T newObj, IEnumerable<object> mixins, object[] constructorArguments)
         {
             var objType = originalObj.GetType();
             var allMethods = AllMethods;

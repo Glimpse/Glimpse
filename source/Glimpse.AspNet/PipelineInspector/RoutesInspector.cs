@@ -22,7 +22,7 @@ namespace Glimpse.AspNet.PipelineInspector
                     if (route != null)
                     {
                         System.Web.Routing.Route newRoute;
-                        if (alternateImplementation.TryCreate(route, out newRoute, constructorArguments: new object[] { route.Url, route.Defaults, route.Constraints, route.DataTokens, route.RouteHandler }))
+                        if (alternateImplementation.TryCreate(route, out newRoute, null, new object[] { route.Url, route.Defaults, route.Constraints, route.DataTokens, route.RouteHandler }))
                         {
                             replaceRoute = newRoute; 
                         }
