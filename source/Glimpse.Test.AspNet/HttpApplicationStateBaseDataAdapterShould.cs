@@ -1,4 +1,5 @@
 ﻿using System.Web;
+using Glimpse.Core.Extensions;
 using Glimpse.AspNet;
 using Moq;
 using Xunit;

@@ -133,6 +133,7 @@
     <Compile Include="Extensibility\RuntimePolicyContext.cs" />
     <Compile Include="Extensibility\TabSetupContext.cs" />
     <Compile Include="Extensions\AlternateImplementationContextExtensions.cs" />
+    <Compile Include="Extensions\DataStoreExtensions.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\MessageBrokerExtensions.cs" />

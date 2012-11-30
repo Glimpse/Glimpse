@@ -3,6 +3,7 @@ using System.Linq;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.AspNet.Model;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
 using Glimpse.Core.Message; 
 
 namespace Glimpse.AspNet.Tab

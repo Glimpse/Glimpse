@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Glimpse.AspNet.Model;
 using Glimpse.AspNet.PipelineInspector;
-using Glimpse.Core.Extensibility; 
+using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
 
 namespace Glimpse.AspNet.Tab
 {

@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Web;
 using Glimpse.AspNet.Model;
 using Glimpse.AspNet.Tab;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
 using Glimpse.Core.Message;
 using Glimpse.Test.Common;
-using Moq;
 using Xunit;
 using Xunit.Extensions;
 
@@ -49,7 +47,7 @@ namespace Glimpse.Test.AspNet.Tab
         [Theory, AutoMock]
         public void ReturnData(ITabContext context)
         { 
-            context.TabStore.Setup(x => x.Get<IEnumerable<ITimerResultMessage>>(typeof(ITimerResultMessage).FullName)).Returns(BuildMessages());
+            context.TabStore.Setup(x => x.Get(typeof(ITimerResultMessage).FullName)).Returns(BuildMessages());
 
             var timeline = new Timeline();
             var result = timeline.GetData(context) as TimelineModel;
@@ -65,7 +63,7 @@ namespace Glimpse.Test.AspNet.Tab
         [Theory, AutoMock]
         public void ReturnEmptyWhenNoData(ITabContext context)
         {
-            context.TabStore.Setup(x => x.Get<IEnumerable<ITimerResultMessage>>(typeof(ITimerResultMessage).FullName)).Returns((IEnumerable<ITimerResultMessage>)null);
+            context.TabStore.Setup(x => x.Get(typeof(ITimerResultMessage).FullName)).Returns((IEnumerable<ITimerResultMessage>)null);
 
             var timeline = new Timeline();
             var result = timeline.GetData(context) as TimelineModel;

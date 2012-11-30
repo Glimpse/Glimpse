@@ -1,12 +1,11 @@
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Web;
 using Glimpse.AspNet.AlternateImplementation;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.AspNet.Model;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Message;
+using Glimpse.Core.Extensions;
 
 namespace Glimpse.AspNet.Tab
 {

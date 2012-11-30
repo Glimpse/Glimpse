@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
 using Glimpse.Mvc.AlternateImplementation;
 using Glimpse.Mvc.Model;
 using Glimpse.Mvc.Tab;
@@ -53,8 +54,8 @@ namespace Glimpse.Test.Mvc3.Tab
         [Theory, AutoMock]
         public void HandleNullFindViewMessageCollection(Views sut, ITabContext context)
         {
-            context.TabStore.Setup(ds => ds.Get<List<ViewEngine.FindViews.Message>>(typeof(ViewEngine.FindViews.Message).FullName)).Returns<List<ViewEngine.FindViews.Message>>(null);
-            context.TabStore.Setup(ds => ds.Get<List<View.Render.Message>>(typeof(View.Render.Message).FullName)).Returns(new List<View.Render.Message>());
+            context.TabStore.Setup(ds => ds.Get(typeof(ViewEngine.FindViews.Message).FullName)).Returns<List<ViewEngine.FindViews.Message>>(null);
+            context.TabStore.Setup(ds => ds.Get(typeof(View.Render.Message).FullName)).Returns(new List<View.Render.Message>());
 
             Assert.DoesNotThrow(() => sut.GetData(context));
         }
@@ -62,8 +63,8 @@ namespace Glimpse.Test.Mvc3.Tab
         [Theory, AutoMock]
         public void HandleNullViewRenderMessageCollection(Views sut, ITabContext context)
         {
-            context.TabStore.Setup(ds => ds.Get<List<ViewEngine.FindViews.Message>>(typeof(ViewEngine.FindViews.Message).FullName)).Returns(new List<ViewEngine.FindViews.Message>());
-            context.TabStore.Setup(ds => ds.Get<List<View.Render.Message>>(typeof(View.Render.Message).FullName)).Returns<List<View.Render.Message>>(null);
+            context.TabStore.Setup(ds => ds.Get(typeof(ViewEngine.FindViews.Message).FullName)).Returns(new List<ViewEngine.FindViews.Message>());
+            context.TabStore.Setup(ds => ds.Get(typeof(View.Render.Message).FullName)).Returns<List<View.Render.Message>>(null);
 
             Assert.DoesNotThrow(() => sut.GetData(context));
         }
@@ -79,7 +80,7 @@ namespace Glimpse.Test.Mvc3.Tab
                 isPartial: false, 
                 id: id);
 
-            context.TabStore.Setup(ds => ds.Get<List<ViewEngine.FindViews.Message>>(typeof(ViewEngine.FindViews.Message).FullName)).Returns(new List<ViewEngine.FindViews.Message> { findViewMessage });
+            context.TabStore.Setup(ds => ds.Get(typeof(ViewEngine.FindViews.Message).FullName)).Returns(new List<ViewEngine.FindViews.Message> { findViewMessage });
 
             mixin.Setup(m => m.ViewEngineFindCallId).Returns(id);
 
@@ -89,7 +90,7 @@ namespace Glimpse.Test.Mvc3.Tab
                 baseType: typeof(ViewRenderMessageShould), 
                 viewCorrelation: mixin);
 
-            context.TabStore.Setup(ds => ds.Get<List<View.Render.Message>>(typeof(View.Render.Message).FullName)).Returns(new List<View.Render.Message> { renderMessage });
+            context.TabStore.Setup(ds => ds.Get(typeof(View.Render.Message).FullName)).Returns(new List<View.Render.Message> { renderMessage });
 
             var result = sut.GetData(context) as List<ViewsModel>;
 
@@ -101,7 +102,7 @@ namespace Glimpse.Test.Mvc3.Tab
         public void PersistOnMessagePublish(ITabSetupContext context, IList<int> list)
         {
             context.GetTabStore().Setup(s => s.Contains(It.IsAny<string>())).Returns(true);
-            context.GetTabStore().Setup(s => s.Get<IList<int>>(It.IsAny<string>())).Returns(list);
+            context.GetTabStore().Setup(s => s.Get(It.IsAny<string>())).Returns(list);
 
             Views.Persist(int.MaxValue, context);
 
@@ -112,7 +113,7 @@ namespace Glimpse.Test.Mvc3.Tab
         public void CreateKeyOnMessagePublish(ITabSetupContext context, IList<int> list)
         {
             context.GetTabStore().Setup(s => s.Contains(It.IsAny<string>())).Returns(false);
-            context.GetTabStore().Setup(s => s.Get<IList<int>>(It.IsAny<string>())).Returns(list);
+            context.GetTabStore().Setup(s => s.Get(It.IsAny<string>())).Returns(list);
 
             Views.Persist(int.MaxValue, context);
 

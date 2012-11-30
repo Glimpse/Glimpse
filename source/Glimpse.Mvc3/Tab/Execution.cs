@@ -2,6 +2,7 @@
 using System.Linq;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
 using Glimpse.Core.Plugin.Assist;
 using Glimpse.Mvc.Message;
 using Glimpse.Mvc.Model;
