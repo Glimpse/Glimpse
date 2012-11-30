@@ -43,8 +43,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             context.MessageBroker.Verify(b => b.Publish(It.IsAny<ActionInvoker.InvokeActionResult<T>.Message>()), Times.Never());
         }
 
-        /* TODO: Nikmd23 not sure how to fix this one
-        [Theory, AutoMock]
+        [Theory(Skip = "@nikmd23 not sure how to fix this one"), AutoMock]
         public void PublishMessageWithRuntimePolicyOn(ActionInvoker.InvokeActionResult<T> sut, IAlternateImplementationContext context)
         {
             context.Setup(c => c.Arguments).Returns(new object[]
@@ -60,6 +59,5 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
 
             context.MessageBroker.Verify(b => b.Publish(It.IsAny<ActionInvoker.InvokeActionResult<T>.Message>()));
         }
-        */
     }
 }
