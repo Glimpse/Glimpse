@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
+using Glimpse.Core.Framework;
 using Glimpse.Core.ResourceResult;
 
 namespace Glimpse.Core.Resource
@@ -11,6 +12,7 @@ namespace Glimpse.Core.Resource
     public class VersionCheckResource : IResource
     {
         internal const string InternalName = "glimpse_version_check";
+        private const int OneDay = 86400;
 
         public string Name
         {
@@ -70,7 +72,7 @@ namespace Glimpse.Core.Resource
                 domain = "version.getglimpse.com";
             }
 
-            return new RedirectResourceResult(@"//" + domain  + "/api/release/check{?packages*}{&stamp}{&callback}", data);
+            return new CacheControlDecorator(OneDay, CacheSetting.Public, new RedirectResourceResult(@"//" + domain  + "/api/release/check{?packages*}{&stamp}{&callback}", data));
         }
     }
 }
