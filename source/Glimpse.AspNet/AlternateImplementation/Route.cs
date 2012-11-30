@@ -11,7 +11,7 @@ using Glimpse.Core.Extensions;
 
 namespace Glimpse.AspNet.AlternateImplementation
 {
-    public class Route : Alternate<System.Web.Routing.Route>
+    public class Route : AlternateType<System.Web.Routing.Route>
     {
         public Route(IProxyFactory proxyFactory)
             : base(proxyFactory)

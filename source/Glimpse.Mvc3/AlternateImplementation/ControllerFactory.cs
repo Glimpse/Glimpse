@@ -10,7 +10,7 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class ControllerFactory : Alternate<IControllerFactory>
+    public class ControllerFactory : AlternateType<IControllerFactory>
     {
         public ControllerFactory(IProxyFactory proxyFactory) : base(proxyFactory)
         {
@@ -23,15 +23,15 @@ namespace Glimpse.Mvc.AlternateImplementation
 
         public class CreateController : AlternateMethod
         {
-            public CreateController(Alternate<ControllerActionInvoker> alternateControllerActionInvoker, Alternate<AsyncControllerActionInvoker> alternateAsyncControllerActionInvoker) : base(typeof(IControllerFactory), "CreateController")
+            public CreateController(AlternateType<ControllerActionInvoker> alternateControllerActionInvoker, AlternateType<AsyncControllerActionInvoker> alternateAsyncControllerActionInvoker) : base(typeof(IControllerFactory), "CreateController")
             {
                 AlternateControllerActionInvoker = alternateControllerActionInvoker;
                 AlternateAsyncControllerActionInvoker = alternateAsyncControllerActionInvoker;
             }
 
-            public Alternate<ControllerActionInvoker> AlternateControllerActionInvoker { get; set; }
+            public AlternateType<ControllerActionInvoker> AlternateControllerActionInvoker { get; set; }
 
-            public Alternate<AsyncControllerActionInvoker> AlternateAsyncControllerActionInvoker { get; set; }
+            public AlternateType<AsyncControllerActionInvoker> AlternateAsyncControllerActionInvoker { get; set; }
 
             public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {

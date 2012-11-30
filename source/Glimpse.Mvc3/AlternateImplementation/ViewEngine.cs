@@ -11,7 +11,7 @@ namespace Glimpse.Mvc.AlternateImplementation
 {
     using Glimpse.Mvc.Message;
 
-    public class ViewEngine : Alternate<IViewEngine>
+    public class ViewEngine : AlternateType<IViewEngine>
     {
         public ViewEngine(IProxyFactory proxyFactory) : base(proxyFactory)
         {
@@ -27,13 +27,13 @@ namespace Glimpse.Mvc.AlternateImplementation
         // This class is the alternate implementation for both .FindView() AND .FindPartialView()
         public class FindViews : AlternateMethod
         {
-            public FindViews(bool isPartial, Alternate<IView> alternateView) : base(typeof(IViewEngine), isPartial ? "FindPartialView" : "FindView")
+            public FindViews(bool isPartial, AlternateType<IView> alternateView) : base(typeof(IViewEngine), isPartial ? "FindPartialView" : "FindView")
             {
                 AlternateView = alternateView;
                 IsPartial = isPartial;
             }
 
-            public Alternate<IView> AlternateView { get; set; }
+            public AlternateType<IView> AlternateView { get; set; }
 
             public bool IsPartial { get; set; }
 

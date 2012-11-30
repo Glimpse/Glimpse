@@ -8,7 +8,7 @@ using Glimpse.Core.Extensions;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class ValueProvider<T> : Alternate<T> where T : class
+    public class ValueProvider<T> : AlternateType<T> where T : class
     {
         // This class manages alternate implementations of both IValueProvider and IUnvalidatedValueProvider
         public ValueProvider(IProxyFactory proxyFactory) : base(proxyFactory)

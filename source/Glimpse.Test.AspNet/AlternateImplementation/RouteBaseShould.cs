@@ -12,7 +12,7 @@ namespace Glimpse.Test.AspNet.AlternateImplementation
         [Theory, AutoMock]
         public void ReturnOneMethod(IProxyFactory proxyFactory)
         {
-            Alternate<System.Web.Routing.RouteBase> alternationImplementation = new RouteBase(proxyFactory);
+            AlternateType<System.Web.Routing.RouteBase> alternationImplementation = new RouteBase(proxyFactory);
 
             Assert.Equal(1, alternationImplementation.AllMethods().Count());
         }
@@ -20,7 +20,7 @@ namespace Glimpse.Test.AspNet.AlternateImplementation
         [Theory, AutoMock]
         public void SetProxyFactory(IProxyFactory proxyFactory)
         {
-            Alternate<System.Web.Routing.RouteBase> alternationImplementation = new RouteBase(proxyFactory);
+            AlternateType<System.Web.Routing.RouteBase> alternationImplementation = new RouteBase(proxyFactory);
 
             Assert.Equal(proxyFactory, alternationImplementation.ProxyFactory);
         }

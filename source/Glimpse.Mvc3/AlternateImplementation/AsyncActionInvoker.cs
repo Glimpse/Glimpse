@@ -7,7 +7,7 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class AsyncActionInvoker : Alternate<AsyncControllerActionInvoker>
+    public class AsyncActionInvoker : AlternateType<AsyncControllerActionInvoker>
     {
         public AsyncActionInvoker(IProxyFactory proxyFactory) : base(proxyFactory)
         {

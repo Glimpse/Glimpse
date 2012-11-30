@@ -13,7 +13,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Theory, AutoMock]
         public void ReturnTwoMethods(IProxyFactory proxyFactory)
         {
-            Alternate<IActionFilter> alternationImplementation = new ActionFilter(proxyFactory);
+            AlternateType<IActionFilter> alternationImplementation = new ActionFilter(proxyFactory);
 
             Assert.Equal(2, alternationImplementation.AllMethods().Count());
         }
@@ -21,7 +21,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Theory, AutoMock]
         public void SetProxyFactory(IProxyFactory proxyFactory)
         {
-            Alternate<IActionFilter> alternationImplementation = new ActionFilter(proxyFactory);
+            AlternateType<IActionFilter> alternationImplementation = new ActionFilter(proxyFactory);
 
             Assert.Equal(proxyFactory, alternationImplementation.ProxyFactory);
         }

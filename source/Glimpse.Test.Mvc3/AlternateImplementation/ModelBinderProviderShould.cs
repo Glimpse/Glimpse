@@ -13,10 +13,10 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Theory, AutoMock]
         public void Construct(IProxyFactory proxyFactory)
         {
-            Alternate<IModelBinderProvider> sut = new ModelBinderProvider(proxyFactory);
+            AlternateType<IModelBinderProvider> sut = new ModelBinderProvider(proxyFactory);
 
             Assert.NotNull(sut);
-            Assert.IsAssignableFrom<Alternate<IModelBinderProvider>>(sut);
+            Assert.IsAssignableFrom<AlternateType<IModelBinderProvider>>(sut);
         }
 
         [Theory, AutoMock]

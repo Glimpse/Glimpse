@@ -8,7 +8,7 @@ using Glimpse.Core.Extensions;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class ModelBinder : Alternate<DefaultModelBinder>
+    public class ModelBinder : AlternateType<DefaultModelBinder>
     {
         public ModelBinder(IProxyFactory proxyFactory) : base(proxyFactory)
         {

@@ -6,7 +6,7 @@ using Glimpse.Core.Extensions;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class ModelBinderProvider : Alternate<IModelBinderProvider>
+    public class ModelBinderProvider : AlternateType<IModelBinderProvider>
     {
         public ModelBinderProvider(IProxyFactory proxyFactory) : base(proxyFactory)
         {
@@ -19,12 +19,12 @@ namespace Glimpse.Mvc.AlternateImplementation
 
         public class GetBinder : AlternateMethod
         {
-            public GetBinder(Alternate<DefaultModelBinder> alternateModelBinder) : base(typeof(IModelBinderProvider), "GetBinder")
+            public GetBinder(AlternateType<DefaultModelBinder> alternateModelBinder) : base(typeof(IModelBinderProvider), "GetBinder")
             {
                 AlternateModelBinder = alternateModelBinder;
             }
 
-            public Alternate<DefaultModelBinder> AlternateModelBinder { get; set; }
+            public AlternateType<DefaultModelBinder> AlternateModelBinder { get; set; }
 
             public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {

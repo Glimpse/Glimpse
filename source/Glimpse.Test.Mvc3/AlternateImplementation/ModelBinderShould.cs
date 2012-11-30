@@ -16,7 +16,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             var sut = new ModelBinder(proxyFactory);
 
             Assert.NotNull(sut);
-            Assert.IsAssignableFrom<Alternate<DefaultModelBinder>>(sut);
+            Assert.IsAssignableFrom<AlternateType<DefaultModelBinder>>(sut);
         }
 
         [Theory, AutoMock]

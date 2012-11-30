@@ -8,7 +8,7 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class DependencyResolver : Alternate<IDependencyResolver>
+    public class DependencyResolver : AlternateType<IDependencyResolver>
     {
         public DependencyResolver(IProxyFactory proxyFactory) : base(proxyFactory)
         {

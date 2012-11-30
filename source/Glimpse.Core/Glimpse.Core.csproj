@@ -77,7 +77,7 @@
     <Compile Include="Configuration\TypeConverter.cs" />
     <Compile Include="Configuration\TypeElement.cs" />
     <Compile Include="Configuration\TypeElementCollection.cs" />
-    <Compile Include="Extensibility\Alternate.cs" />
+    <Compile Include="Extensibility\AlternateType.cs" />
     <Compile Include="Extensibility\AlternateImplementationGenerationHook.cs" />
     <Compile Include="Extensibility\AlternateImplementationSelector.cs" />
     <Compile Include="Extensibility\AlternateMethod.cs" />

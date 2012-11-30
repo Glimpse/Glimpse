@@ -8,7 +8,7 @@ using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class ActionInvoker : Alternate<ControllerActionInvoker>
+    public class ActionInvoker : AlternateType<ControllerActionInvoker>
     {
         public ActionInvoker(IProxyFactory proxyFactory) : base(proxyFactory)
         {
@@ -23,7 +23,7 @@ namespace Glimpse.Mvc.AlternateImplementation
 
         public class GetFilters<T> : AlternateMethod where T : class
         {
-            public GetFilters(Alternate<IActionFilter> alternateActionFilter, Alternate<IResultFilter> alternateResultFilter, Alternate<IAuthorizationFilter> alternateAuthorizationFilter, Alternate<IExceptionFilter> alternateExceptionFilter) : base(typeof(T), "GetFilters", BindingFlags.Instance | BindingFlags.NonPublic)
+            public GetFilters(AlternateType<IActionFilter> alternateActionFilter, AlternateType<IResultFilter> alternateResultFilter, AlternateType<IAuthorizationFilter> alternateAuthorizationFilter, AlternateType<IExceptionFilter> alternateExceptionFilter) : base(typeof(T), "GetFilters", BindingFlags.Instance | BindingFlags.NonPublic)
             {
                 AlternateActionFilter = alternateActionFilter;
                 AlternateResultFilter = alternateResultFilter;
@@ -31,13 +31,13 @@ namespace Glimpse.Mvc.AlternateImplementation
                 AlternateExceptionFilter = alternateExceptionFilter;
             }
 
-            public Alternate<IExceptionFilter> AlternateExceptionFilter { get; set; }
+            public AlternateType<IExceptionFilter> AlternateExceptionFilter { get; set; }
 
-            public Alternate<IAuthorizationFilter> AlternateAuthorizationFilter { get; set; }
+            public AlternateType<IAuthorizationFilter> AlternateAuthorizationFilter { get; set; }
 
-            public Alternate<IResultFilter> AlternateResultFilter { get; set; }
+            public AlternateType<IResultFilter> AlternateResultFilter { get; set; }
 
-            public Alternate<IActionFilter> AlternateActionFilter { get; set; }
+            public AlternateType<IActionFilter> AlternateActionFilter { get; set; }
 
             public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
@@ -53,7 +53,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 Proxy(result.ExceptionFilters, AlternateExceptionFilter);
             }
 
-            private void Proxy<TFilter>(IList<TFilter> filters, Alternate<TFilter> alternateImplementation) where TFilter : class
+            private void Proxy<TFilter>(IList<TFilter> filters, AlternateType<TFilter> alternateImplementation) where TFilter : class
             {
                 var count = filters.Count;
 

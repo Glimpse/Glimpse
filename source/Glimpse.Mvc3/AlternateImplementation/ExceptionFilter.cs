@@ -9,7 +9,7 @@ using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class ExceptionFilter : Alternate<IExceptionFilter>
+    public class ExceptionFilter : AlternateType<IExceptionFilter>
     {
         public ExceptionFilter(IProxyFactory proxyFactory) : base(proxyFactory)
         {

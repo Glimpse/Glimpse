@@ -8,7 +8,7 @@ using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class ActionFilter : Alternate<IActionFilter>
+    public class ActionFilter : AlternateType<IActionFilter>
     {
         public ActionFilter(IProxyFactory proxyFactory) : base(proxyFactory)
         {

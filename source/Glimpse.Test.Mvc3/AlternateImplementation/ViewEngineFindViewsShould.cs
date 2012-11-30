@@ -27,7 +27,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         }
 
         [Theory, AutoMock]
-        public void Construct(Alternate<IView> alternateView)
+        public void Construct(AlternateType<IView> alternateView)
         {
             var sut = new ViewEngine.FindViews(false, alternateView);
 
@@ -36,7 +36,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         }
 
         [Theory, AutoMock]
-        public void MethodToImplementIsRight(Alternate<IView> alternateView)
+        public void MethodToImplementIsRight(AlternateType<IView> alternateView)
         {
             var sut1 = new ViewEngine.FindViews(false, alternateView);
             Assert.Equal("FindView", sut1.MethodToImplement.Name);

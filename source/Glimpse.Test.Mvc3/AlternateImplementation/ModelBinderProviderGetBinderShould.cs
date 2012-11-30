@@ -13,7 +13,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
     public class ModelBinderProviderGetBinderShould
     {
         [Theory, AutoMock]
-        public void Construct(Alternate<DefaultModelBinder> alternateModelBinder)
+        public void Construct(AlternateType<DefaultModelBinder> alternateModelBinder)
         {
             var sut = new ModelBinderProvider.GetBinder(alternateModelBinder);
 
@@ -39,7 +39,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         }
 
         [Theory, AutoMock]
-        public void ProceedAndWrapResultWithRuntimePolicyOnAndDefaultModelBinder(Alternate<DefaultModelBinder> alternateModelBinder, IAlternateImplementationContext context, Type arg1, DefaultModelBinder returnValue, DefaultModelBinder newModelBinder)
+        public void ProceedAndWrapResultWithRuntimePolicyOnAndDefaultModelBinder(AlternateType<DefaultModelBinder> alternateModelBinder, IAlternateImplementationContext context, Type arg1, DefaultModelBinder returnValue, DefaultModelBinder newModelBinder)
         {
             context.Setup(c => c.Arguments).Returns(new object[] { arg1 });
             context.Setup(c => c.ReturnValue).Returns(returnValue);
@@ -56,7 +56,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         }
 
         [Theory, AutoMock]
-        public void ProceedAndWarnWithRuntimePolicyOnAndIModelBinder(Alternate<DefaultModelBinder> alternateModelBinder, IAlternateImplementationContext context, Type arg1, IModelBinder returnValue)
+        public void ProceedAndWarnWithRuntimePolicyOnAndIModelBinder(AlternateType<DefaultModelBinder> alternateModelBinder, IAlternateImplementationContext context, Type arg1, IModelBinder returnValue)
         {
             context.Setup(c => c.Arguments).Returns(new object[] { arg1 });
             context.Setup(c => c.ReturnValue).Returns(returnValue);

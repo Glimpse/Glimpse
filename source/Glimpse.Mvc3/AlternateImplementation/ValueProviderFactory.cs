@@ -12,7 +12,7 @@ using MvcValueProviderFactory = System.Web.Mvc.ValueProviderFactory;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class ValueProviderFactory : Alternate<MvcValueProviderFactory>
+    public class ValueProviderFactory : AlternateType<MvcValueProviderFactory>
     {
         public ValueProviderFactory(IProxyFactory proxyFactory) : base(proxyFactory)
         {

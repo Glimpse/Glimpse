@@ -11,7 +11,7 @@ using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class View : Alternate<IView>
+    public class View : AlternateType<IView>
     {
         public View(IProxyFactory proxyFactory) : base(proxyFactory)
         {

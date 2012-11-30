@@ -15,7 +15,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             var sut = new Mvc.AlternateImplementation.ValueProviderFactory(proxyFactory);
 
             Assert.NotNull(sut);
-            Assert.IsAssignableFrom<Alternate<ValueProviderFactory>>(sut);
+            Assert.IsAssignableFrom<AlternateType<ValueProviderFactory>>(sut);
         }
 
         [Theory, AutoMock]

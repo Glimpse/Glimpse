@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace Glimpse.Core.Extensibility
 {
-    public abstract class Alternate<T> where T : class
+    public abstract class AlternateType<T> where T : class
     {
-        protected Alternate(IProxyFactory proxyFactory)
+        protected AlternateType(IProxyFactory proxyFactory)
         {
             if (proxyFactory == null)
             {

@@ -7,7 +7,7 @@ using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class AuthorizationFilter : Alternate<IAuthorizationFilter>
+    public class AuthorizationFilter : AlternateType<IAuthorizationFilter>
     {
         public AuthorizationFilter(IProxyFactory proxyFactory) : base(proxyFactory)
         {
