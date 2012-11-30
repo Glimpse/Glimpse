@@ -25,4 +25,4 @@ _ReSharper.*
 /packages
 /.nuget/NuGet.Config
 TestResults
-/*.DotSettings
+/*.DotSettings.user
