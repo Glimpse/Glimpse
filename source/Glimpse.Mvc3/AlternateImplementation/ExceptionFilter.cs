@@ -4,20 +4,27 @@ using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-using Glimpse.Core.Message;
 using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
     public class ExceptionFilter : AlternateType<IExceptionFilter>
     {
+        private IEnumerable<IAlternateMethod> allMethods;
+
         public ExceptionFilter(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
 
-        public override IEnumerable<IAlternateMethod> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods
         {
-            yield return new OnException();
+            get
+            {
+                return allMethods ?? (allMethods = new List<IAlternateMethod>
+                    {
+                        new OnException()
+                    });
+            }
         }
 
         public class OnException : AlternateMethod

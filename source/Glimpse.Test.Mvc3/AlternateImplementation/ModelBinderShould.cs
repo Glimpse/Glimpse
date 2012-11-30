@@ -22,7 +22,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Theory, AutoMock]
         public void ImplementTwoMethods(ModelBinder sut)
         {
-            Assert.Equal(2, sut.AllMethods().Count());
+            Assert.Equal(2, sut.AllMethods.Count());
         }
     }
 }

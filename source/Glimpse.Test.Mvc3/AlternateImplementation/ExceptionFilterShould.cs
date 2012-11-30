@@ -23,7 +23,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         {
             AlternateType<IExceptionFilter> sut = new ExceptionFilter(proxyFactory);
 
-            Assert.Equal(1, sut.AllMethods().Count());
+            Assert.Equal(1, sut.AllMethods.Count());
         }
     }
 }

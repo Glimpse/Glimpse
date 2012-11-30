@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions;
 #if MVC2
 using Glimpse.Mvc2.Backport;
 #endif
@@ -14,20 +12,28 @@ namespace Glimpse.Mvc.AlternateImplementation
 {
     public class ValueProviderFactory : AlternateType<MvcValueProviderFactory>
     {
+        private IEnumerable<IAlternateMethod> allMethods;
+
         public ValueProviderFactory(IProxyFactory proxyFactory) : base(proxyFactory)
         {
             AlternateValidatedValueProvider = new ValueProvider<IValueProvider>(ProxyFactory);
             AlternateUnvalidatedValueProvider = new ValueProvider<IUnvalidatedValueProvider>(ProxyFactory);
         }
 
+        public override IEnumerable<IAlternateMethod> AllMethods
+        {
+            get
+            {
+                return allMethods ?? (allMethods = new List<IAlternateMethod>
+                    {
+                        new GetValueProvider(ProxyValueProviderStrategy)
+                    });
+            }
+        }
+
         private ValueProvider<IUnvalidatedValueProvider> AlternateUnvalidatedValueProvider { get; set; }
 
         private ValueProvider<IValueProvider> AlternateValidatedValueProvider { get; set; }
-
-        public override IEnumerable<IAlternateMethod> AllMethods()
-        {
-            yield return new GetValueProvider(ProxyValueProviderStrategy);
-        }
 
         public override bool TryCreate(MvcValueProviderFactory originalObj, out MvcValueProviderFactory newObj, IEnumerable<object> mixins = null, object[] constuctorArgs = null)
         {

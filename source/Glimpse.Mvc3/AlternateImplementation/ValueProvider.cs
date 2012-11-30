@@ -1,24 +1,30 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
     public class ValueProvider<T> : AlternateType<T> where T : class
     {
+        private IEnumerable<IAlternateMethod> allMethods;
+
         // This class manages alternate implementations of both IValueProvider and IUnvalidatedValueProvider
         public ValueProvider(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
 
-        public override IEnumerable<IAlternateMethod> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods
         {
-            yield return new GetValue();
-            yield return new ContainsPrefix();
+            get
+            {
+                return allMethods ?? (allMethods = new List<IAlternateMethod>
+                    {
+                        new GetValue(), 
+                        new ContainsPrefix()
+                    });
+            }
         }
 
         public class ContainsPrefix : AlternateMethod

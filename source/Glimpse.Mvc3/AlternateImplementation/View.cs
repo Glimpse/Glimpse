@@ -3,23 +3,29 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Web.Mvc;
-using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-using Glimpse.Core.Message;
 using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
     public class View : AlternateType<IView>
     {
+        private List<IAlternateMethod> allMethods;
+
         public View(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
 
-        public override IEnumerable<IAlternateMethod> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods
         {
-            yield return new Render();
+            get
+            {
+                return allMethods ?? (allMethods = new List<IAlternateMethod>
+                    {
+                        new Render()
+                    });
+            }
         }
 
         public class Render : AlternateMethod

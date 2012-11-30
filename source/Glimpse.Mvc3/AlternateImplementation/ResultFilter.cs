@@ -4,21 +4,28 @@ using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-using Glimpse.Core.Message;
 using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
     public class ResultFilter : AlternateType<IResultFilter>
     {
+        private IEnumerable<IAlternateMethod> allMethods;
+
         public ResultFilter(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
 
-        public override IEnumerable<IAlternateMethod> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods
         {
-            yield return new OnResultExecuting();
-            yield return new OnResultExecuted();
+            get 
+            { 
+                return allMethods ?? (allMethods = new List<IAlternateMethod>
+                {
+                    new OnResultExecuting(),
+                    new OnResultExecuted()
+                }); 
+            }
         }
 
         public class OnResultExecuting : AlternateMethod

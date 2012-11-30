@@ -21,7 +21,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Theory, AutoMock]
         public void ReturnAllMethodImplementationsWithAllMethods(ViewEngine sut)
         {
-            var allMethods = sut.AllMethods();
+            var allMethods = sut.AllMethods;
 
             Assert.Equal(2, allMethods.Count());
         }

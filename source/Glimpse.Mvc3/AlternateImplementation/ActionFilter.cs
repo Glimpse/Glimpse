@@ -10,14 +10,22 @@ namespace Glimpse.Mvc.AlternateImplementation
 {
     public class ActionFilter : AlternateType<IActionFilter>
     {
+        private IEnumerable<IAlternateMethod> allMethods;
+
         public ActionFilter(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
 
-        public override IEnumerable<IAlternateMethod> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods
         {
-            yield return new OnActionExecuting();
-            yield return new OnActionExecuted();
+            get 
+            { 
+                return allMethods ?? (allMethods = new List<IAlternateMethod>
+                {
+                    new OnActionExecuting(),
+                    new OnActionExecuted()
+                }); 
+            }
         }
 
         public class OnActionExecuting : AlternateMethod

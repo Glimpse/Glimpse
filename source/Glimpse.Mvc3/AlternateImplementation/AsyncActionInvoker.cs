@@ -9,16 +9,24 @@ namespace Glimpse.Mvc.AlternateImplementation
 {
     public class AsyncActionInvoker : AlternateType<AsyncControllerActionInvoker>
     {
+        private IEnumerable<IAlternateMethod> allMethods;
+
         public AsyncActionInvoker(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
 
-        public override IEnumerable<IAlternateMethod> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods
         {
-            yield return new BeginInvokeActionMethod();
-            yield return new EndInvokeActionMethod();
-            yield return new ActionInvoker.InvokeActionResult<AsyncControllerActionInvoker>();
-            yield return new ActionInvoker.GetFilters<AsyncControllerActionInvoker>(new ActionFilter(ProxyFactory), new ResultFilter(ProxyFactory), new AuthorizationFilter(ProxyFactory), new ExceptionFilter(ProxyFactory));
+            get
+            {
+                return allMethods ?? (allMethods = new List<IAlternateMethod>
+                    {
+                        new BeginInvokeActionMethod(),
+                        new EndInvokeActionMethod(),
+                        new ActionInvoker.InvokeActionResult<AsyncControllerActionInvoker>(),
+                        new ActionInvoker.GetFilters<AsyncControllerActionInvoker>(new ActionFilter(ProxyFactory), new ResultFilter(ProxyFactory), new AuthorizationFilter(ProxyFactory), new ExceptionFilter(ProxyFactory))
+                    });
+            }
         }
 
         public class BeginInvokeActionMethod : IAlternateMethod

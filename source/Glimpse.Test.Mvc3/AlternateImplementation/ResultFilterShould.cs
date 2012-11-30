@@ -23,7 +23,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         {
             AlternateType<IResultFilter> sut = new ResultFilter(proxyFactory);
 
-            Assert.Equal(2, sut.AllMethods().Count());
+            Assert.Equal(2, sut.AllMethods.Count());
         }
     }
 }

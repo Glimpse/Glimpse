@@ -1,24 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
 using System.Web.Routing;
-using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
     public class ControllerFactory : AlternateType<IControllerFactory>
     {
+        private IEnumerable<IAlternateMethod> allMethods;
+
         public ControllerFactory(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
 
-        public override IEnumerable<IAlternateMethod> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods
         {
-            yield return new CreateController(new ActionInvoker(ProxyFactory), new AsyncActionInvoker(ProxyFactory));
+            get
+            {
+                return allMethods ?? (allMethods = new List<IAlternateMethod>
+                    {
+                        new CreateController(new ActionInvoker(ProxyFactory), new AsyncActionInvoker(ProxyFactory))
+                    });
+            }
         }
 
         public class CreateController : AlternateMethod

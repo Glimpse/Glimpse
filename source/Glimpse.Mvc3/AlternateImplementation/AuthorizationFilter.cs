@@ -9,13 +9,21 @@ namespace Glimpse.Mvc.AlternateImplementation
 {
     public class AuthorizationFilter : AlternateType<IAuthorizationFilter>
     {
+        private IEnumerable<IAlternateMethod> allMethods;
+
         public AuthorizationFilter(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
 
-        public override IEnumerable<IAlternateMethod> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods
         {
-            yield return new OnAuthorization();
+            get 
+            { 
+                return allMethods ?? (allMethods = new List<IAlternateMethod>
+                {
+                    new OnAuthorization()
+                }); 
+            }
         }
 
         public class OnAuthorization : AlternateMethod

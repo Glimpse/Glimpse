@@ -21,7 +21,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Theory, AutoMock]
         public void ImplementOneMethod(Mvc.AlternateImplementation.ValueProviderFactory sut)
         {
-            Assert.Equal(1, sut.AllMethods().Count());
+            Assert.Equal(1, sut.AllMethods.Count());
         }
     }
 }

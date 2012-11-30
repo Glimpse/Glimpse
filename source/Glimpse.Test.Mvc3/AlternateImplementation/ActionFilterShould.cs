@@ -15,7 +15,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         {
             AlternateType<IActionFilter> alternationImplementation = new ActionFilter(proxyFactory);
 
-            Assert.Equal(2, alternationImplementation.AllMethods().Count());
+            Assert.Equal(2, alternationImplementation.AllMethods.Count());
         }
 
         [Theory, AutoMock]

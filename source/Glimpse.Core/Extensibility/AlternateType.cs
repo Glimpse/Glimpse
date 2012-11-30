@@ -18,10 +18,12 @@ namespace Glimpse.Core.Extensibility
 
         public IProxyFactory ProxyFactory { get; set; }
 
+        public abstract IEnumerable<IAlternateMethod> AllMethods { get; }
+
         public virtual bool TryCreate(T originalObj, out T newObj, IEnumerable<object> mixins = null, object[] constructorArguments = null)
         {
             var objType = originalObj.GetType();
-            var allMethods = AllMethods();
+            var allMethods = AllMethods;
 
             if (mixins == null)
             {
@@ -51,7 +53,5 @@ namespace Glimpse.Core.Extensibility
             newObj = null;
             return false;
         }
-
-        public abstract IEnumerable<IAlternateMethod> AllMethods();
     }
 }

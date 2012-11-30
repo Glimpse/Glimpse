@@ -2,26 +2,36 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Web.Mvc;
-using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-using Glimpse.Core.Message;
+using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    using Glimpse.Mvc.Message;
-
     public class ViewEngine : AlternateType<IViewEngine>
     {
+        private List<IAlternateMethod> allMethods;
+
         public ViewEngine(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
 
-        public override IEnumerable<IAlternateMethod> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods
         {
-            var alternateView = new View(ProxyFactory);
-            yield return new FindViews(false, alternateView);
-            yield return new FindViews(true, alternateView);
+            get
+            {
+                if (allMethods == null)
+                {
+                    var alternateView = new View(ProxyFactory);
+                    allMethods = new List<IAlternateMethod>
+                        {
+                            new FindViews(false, alternateView),
+                            new FindViews(true, alternateView)
+                        };
+                }
+
+                return allMethods;
+            }
         }
 
         // This class is the alternate implementation for both .FindView() AND .FindPartialView()

@@ -10,7 +10,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Fact]
         public void ReturnAllMethods()
         {
-            var sut = new AsyncActionInvoker(new Mock<IProxyFactory>().Object).AllMethods();
+            var sut = new AsyncActionInvoker(new Mock<IProxyFactory>().Object).AllMethods;
 
             Assert.NotEmpty(sut);
         }

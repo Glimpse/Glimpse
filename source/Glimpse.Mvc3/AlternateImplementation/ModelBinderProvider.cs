@@ -1,20 +1,26 @@
 using System.Collections.Generic;
-using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
     public class ModelBinderProvider : AlternateType<IModelBinderProvider>
     {
+        private IEnumerable<IAlternateMethod> allMethods;
+
         public ModelBinderProvider(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
 
-        public override IEnumerable<IAlternateMethod> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods
         {
-            yield return new GetBinder(new ModelBinder(ProxyFactory));
+            get
+            {
+                return allMethods ?? (allMethods = new List<IAlternateMethod>
+                    {
+                        new GetBinder(new ModelBinder(ProxyFactory))
+                    });
+            }
         }
 
         public class GetBinder : AlternateMethod

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
-using System.Web;
 using System.Web.Routing;
-using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 
@@ -13,15 +8,22 @@ namespace Glimpse.AspNet.AlternateImplementation
 {
     public class RouteBase : AlternateType<System.Web.Routing.RouteBase>
     {
-        public RouteBase(IProxyFactory proxyFactory)
-            : base(proxyFactory)
+        private IEnumerable<IAlternateMethod> allMethods;
+
+        public RouteBase(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
 
-        public override IEnumerable<IAlternateMethod> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods
         {
-            yield return new GetRouteData<System.Web.Routing.RouteBase>();
-        } 
+            get 
+            { 
+                return allMethods ?? (allMethods = new List<IAlternateMethod>
+                {
+                    new GetRouteData<System.Web.Routing.RouteBase>()
+                }); 
+            }
+        }
 
         public class GetRouteData<T> : IAlternateMethod
             where T : System.Web.Routing.RouteBase

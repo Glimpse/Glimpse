@@ -3,22 +3,29 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions;
 using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
     public class ActionInvoker : AlternateType<ControllerActionInvoker>
     {
+        private IEnumerable<IAlternateMethod> allMethods;
+
         public ActionInvoker(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
 
-        public override IEnumerable<IAlternateMethod> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods
         {
-            yield return new InvokeActionResult<ControllerActionInvoker>();
-            yield return new InvokeActionMethod();
-            yield return new GetFilters<ControllerActionInvoker>(new ActionFilter(ProxyFactory), new ResultFilter(ProxyFactory), new AuthorizationFilter(ProxyFactory), new ExceptionFilter(ProxyFactory));
+            get 
+            { 
+                return allMethods ?? (allMethods = new List<IAlternateMethod>
+                {
+                    new InvokeActionResult<ControllerActionInvoker>(),
+                    new InvokeActionMethod(),
+                    new GetFilters<ControllerActionInvoker>(new ActionFilter(ProxyFactory), new ResultFilter(ProxyFactory), new AuthorizationFilter(ProxyFactory), new ExceptionFilter(ProxyFactory))
+                }); 
+            }
         }
 
         public class GetFilters<T> : AlternateMethod where T : class

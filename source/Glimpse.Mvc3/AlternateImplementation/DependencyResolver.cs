@@ -1,23 +1,29 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Web.Mvc;
-using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
     public class DependencyResolver : AlternateType<IDependencyResolver>
     {
+        private IEnumerable<IAlternateMethod> allMethods;
+
         public DependencyResolver(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
 
-        public override IEnumerable<IAlternateMethod> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods
         {
-            yield return new GetService();
-            yield return new GetServices();
+            get 
+            { 
+                return allMethods ?? (allMethods = new List<IAlternateMethod>
+                {
+                    new GetService(),
+                    new GetServices(),
+                }); 
+            }
         }
 
         public class GetService : AlternateMethod
