@@ -47,7 +47,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
             ////context.ProxyFactory.Setup(pf => pf.WrapClass((System.Web.Routing.Route)System.Web.Routing.RouteTable.Routes[1], It.IsAny<IEnumerable<IAlternateImplementation<System.Web.Routing.Route>>>(), null, It.IsAny<object[]>())).Returns(route2);
             ////context.ProxyFactory.Setup(pf => pf.WrapClass(System.Web.Routing.RouteTable.Routes[2], It.IsAny<IEnumerable<IAlternateImplementation<System.Web.Routing.RouteBase>>>(), null, null)).Returns(route3);
 
-            sut.Setup(context);
+            sut.Setup(context); 
 
             ////context.ProxyFactory.Verify(pf => pf.WrapClass(It.IsAny<System.Web.Routing.Route>(), It.IsAny<IEnumerable<IAlternateImplementation<System.Web.Routing.Route>>>(), It.IsAny<IEnumerable<object>>(), It.IsAny<IEnumerable<object>>()), Times.AtLeastOnce());
             ////context.ProxyFactory.Verify(pf => pf.WrapClass(It.IsAny<System.Web.Routing.RouteBase>(), It.IsAny<IEnumerable<IAlternateImplementation<System.Web.Routing.RouteBase>>>(), It.IsAny<IEnumerable<object>>(), null), Times.AtLeastOnce());
