@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Extensions
 {
@@ -25,6 +26,18 @@ namespace Glimpse.Core.Extensions
             }
 
             return value.GetType();
+        }
+
+        public static T CastAs<T>(this object obj)
+        {
+            var wrapper = obj as IWrapper<T>;
+
+            if (wrapper != null)
+            {
+                return wrapper.GetWrappedObject();
+            }
+
+            return (T)obj;
         }
     }
 }
