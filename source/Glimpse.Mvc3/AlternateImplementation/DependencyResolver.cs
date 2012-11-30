@@ -20,24 +20,14 @@ namespace Glimpse.Mvc.AlternateImplementation
             yield return new GetServices();
         }
 
-        public class GetService : IAlternateMethod
+        public class GetService : AlternateMethod
         {
-            public GetService()
+            public GetService() : base(typeof(IDependencyResolver), "GetService")
             {
-                MethodToImplement = typeof(IDependencyResolver).GetMethod("GetService");
             }
-
-            public MethodInfo MethodToImplement { get; private set; }
             
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                context.Proceed();
-
-                if (context.RuntimePolicyStrategy() == RuntimePolicy.Off)
-                {
-                    return;
-                }
-
                 var resolvedObject = context.ReturnValue;
                 context.MessageBroker.Publish(new Message((Type)context.Arguments[0], resolvedObject));
             }
@@ -63,24 +53,14 @@ namespace Glimpse.Mvc.AlternateImplementation
             }
         }
 
-        public class GetServices : IAlternateMethod
+        public class GetServices : AlternateMethod
         {
-            public GetServices()
+            public GetServices() : base(typeof(IDependencyResolver), "GetServices")
             {
-                MethodToImplement = typeof(IDependencyResolver).GetMethod("GetServices");
             }
 
-            public MethodInfo MethodToImplement { get; private set; }
-
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                context.Proceed();
-
-                if (context.RuntimePolicyStrategy() == RuntimePolicy.Off)
-                {
-                    return;
-                }
-
                 context.MessageBroker.Publish(
                     new Message((Type)context.Arguments[0], (IEnumerable<object>)context.ReturnValue));
             }

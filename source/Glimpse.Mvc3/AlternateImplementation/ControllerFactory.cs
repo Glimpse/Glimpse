@@ -21,30 +21,20 @@ namespace Glimpse.Mvc.AlternateImplementation
             yield return new CreateController(new ActionInvoker(ProxyFactory), new AsyncActionInvoker(ProxyFactory));
         }
 
-        public class CreateController : IAlternateMethod
+        public class CreateController : AlternateMethod
         {
-            public CreateController(Alternate<ControllerActionInvoker> alternateControllerActionInvoker, Alternate<AsyncControllerActionInvoker> alternateAsyncControllerActionInvoker)
+            public CreateController(Alternate<ControllerActionInvoker> alternateControllerActionInvoker, Alternate<AsyncControllerActionInvoker> alternateAsyncControllerActionInvoker) : base(typeof(IControllerFactory), "CreateController")
             {
                 AlternateControllerActionInvoker = alternateControllerActionInvoker;
                 AlternateAsyncControllerActionInvoker = alternateAsyncControllerActionInvoker;
-                MethodToImplement = typeof(IControllerFactory).GetMethod("CreateController");
             }
 
             public Alternate<ControllerActionInvoker> AlternateControllerActionInvoker { get; set; }
 
             public Alternate<AsyncControllerActionInvoker> AlternateAsyncControllerActionInvoker { get; set; }
 
-            public MethodInfo MethodToImplement { get; private set; }
-
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                context.Proceed();
-
-                if (context.RuntimePolicyStrategy() == RuntimePolicy.Off)
-                {
-                    return;
-                }
-
                 var controller = context.ReturnValue as Controller;
 
                 var message = new Message(new Arguments(context.Arguments), controller);

@@ -21,15 +21,14 @@ namespace Glimpse.Mvc.AlternateImplementation
             yield return new GetFilters<ControllerActionInvoker>(new ActionFilter(ProxyFactory), new ResultFilter(ProxyFactory), new AuthorizationFilter(ProxyFactory), new ExceptionFilter(ProxyFactory));
         }
 
-        public class GetFilters<T> : IAlternateMethod where T : class
+        public class GetFilters<T> : AlternateMethod where T : class
         {
-            public GetFilters(Alternate<IActionFilter> alternateActionFilter, Alternate<IResultFilter> alternateResultFilter, Alternate<IAuthorizationFilter> alternateAuthorizationFilter, Alternate<IExceptionFilter> alternateExceptionFilter)
+            public GetFilters(Alternate<IActionFilter> alternateActionFilter, Alternate<IResultFilter> alternateResultFilter, Alternate<IAuthorizationFilter> alternateAuthorizationFilter, Alternate<IExceptionFilter> alternateExceptionFilter) : base(typeof(T), "GetFilters", BindingFlags.Instance | BindingFlags.NonPublic)
             {
                 AlternateActionFilter = alternateActionFilter;
                 AlternateResultFilter = alternateResultFilter;
                 AlternateAuthorizationFilter = alternateAuthorizationFilter;
                 AlternateExceptionFilter = alternateExceptionFilter;
-                MethodToImplement = typeof(T).GetMethod("GetFilters", BindingFlags.Instance | BindingFlags.NonPublic);
             }
 
             public Alternate<IExceptionFilter> AlternateExceptionFilter { get; set; }
@@ -40,16 +39,8 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public Alternate<IActionFilter> AlternateActionFilter { get; set; }
 
-            public MethodInfo MethodToImplement { get; private set; }
-
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                TimerResult timer;
-                if (!context.TryProceedWithTimer(out timer))
-                {
-                    return;
-                }
-
                 var result = context.ReturnValue as FilterInfo;
                 if (result == null)
                 {
@@ -79,22 +70,15 @@ namespace Glimpse.Mvc.AlternateImplementation
             }
         }
 
-        public class InvokeActionResult<T> : IAlternateMethod where T : class
+        public class InvokeActionResult<T> : AlternateMethod where T : class
         {
-            public MethodInfo MethodToImplement
+            public InvokeActionResult() : base(typeof(T), "InvokeActionResult", BindingFlags.Instance | BindingFlags.NonPublic)
             {
-                get { return typeof(T).GetMethod("InvokeActionResult", BindingFlags.Instance | BindingFlags.NonPublic); }
             }
 
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
                 // void InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
-                TimerResult timerResult;
-                if (!context.TryProceedWithTimer(out timerResult))
-                {
-                    return;
-                }
-
                 context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), timerResult));
             }
 
@@ -124,22 +108,15 @@ namespace Glimpse.Mvc.AlternateImplementation
             }
         }
 
-        public class InvokeActionMethod : IAlternateMethod
+        public class InvokeActionMethod : AlternateMethod
         {
-            public MethodInfo MethodToImplement
+            public InvokeActionMethod() : base(typeof(ControllerActionInvoker), "InvokeActionMethod", BindingFlags.Instance | BindingFlags.NonPublic)
             {
-                get { return typeof(ControllerActionInvoker).GetMethod("InvokeActionMethod", BindingFlags.Instance | BindingFlags.NonPublic); }
             }
 
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
                 //// ActionResult InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary<string, object> parameters)
-                TimerResult timerResult;
-                if (!context.TryProceedWithTimer(out timerResult))
-                {
-                    return;
-                }
-
                 context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), context.ReturnValue as ActionResult, context.MethodInvocationTarget, timerResult));
             }
 

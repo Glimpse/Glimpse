@@ -20,23 +20,14 @@ namespace Glimpse.Mvc.AlternateImplementation
             yield return new BindProperty();
         }
 
-        public class BindProperty : IAlternateMethod
+        public class BindProperty : AlternateMethod
         {
-            public BindProperty()
+            public BindProperty() : base(typeof(DefaultModelBinder), "BindProperty", BindingFlags.Instance | BindingFlags.NonPublic)
             {
-                MethodToImplement = typeof(DefaultModelBinder).GetMethod("BindProperty", BindingFlags.Instance | BindingFlags.NonPublic);
             }
 
-            public MethodInfo MethodToImplement { get; private set; }
-
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                TimerResult timerResult;
-                if (!context.TryProceedWithTimer(out timerResult))
-                {
-                    return;
-                }
-
                 context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), context.TargetType));
             }
 
@@ -73,23 +64,14 @@ namespace Glimpse.Mvc.AlternateImplementation
             }
         }
 
-        public class BindModel : IAlternateMethod
+        public class BindModel : AlternateMethod
         {
-            public BindModel()
+            public BindModel() : base(typeof(DefaultModelBinder), "BindModel")
             {
-                MethodToImplement = typeof(DefaultModelBinder).GetMethod("BindModel");
             }
 
-            public MethodInfo MethodToImplement { get; private set; }
-
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                TimerResult timerResult;
-                if (!context.TryProceedWithTimer(out timerResult))
-                {
-                    return;
-                }
-
                 context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), context.TargetType, context.ReturnValue));
             }
 

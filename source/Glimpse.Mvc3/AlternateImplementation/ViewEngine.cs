@@ -25,31 +25,20 @@ namespace Glimpse.Mvc.AlternateImplementation
         }
 
         // This class is the alternate implementation for both .FindView() AND .FindPartialView()
-        public class FindViews : IAlternateMethod
+        public class FindViews : AlternateMethod
         {
-            public FindViews(bool isPartial, Alternate<IView> alternateView)
+            public FindViews(bool isPartial, Alternate<IView> alternateView) : base(typeof(IViewEngine), isPartial ? "FindPartialView" : "FindView")
             {
                 AlternateView = alternateView;
                 IsPartial = isPartial;
-                MethodToImplement = typeof(IViewEngine).GetMethod(IsPartial ? "FindPartialView" : "FindView");
             }
 
             public Alternate<IView> AlternateView { get; set; }
 
             public bool IsPartial { get; set; }
 
-            public MethodInfo MethodToImplement { get; private set; }
-
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                if (context.RuntimePolicyStrategy() == RuntimePolicy.Off)
-                {
-                    context.Proceed();
-                    return;
-                }
-
-                var timer = context.TimerStrategy();
-                var timing = timer.Time(context.Proceed);
                 var input = new Arguments(IsPartial, context.Arguments);
                 var id = Guid.NewGuid();
                 var output = context.ReturnValue as ViewEngineResult;
@@ -57,8 +46,8 @@ namespace Glimpse.Mvc.AlternateImplementation
                 output = ProxyOutput(output, context, input.ViewName, IsPartial, id);
 
                 context.MessageBroker.PublishMany(
-                    new Message(input, output, timing, context.TargetType, IsPartial, id),
-                    new EventMessage(input, timing, context.TargetType, context.MethodInvocationTarget));
+                    new Message(input, output, timerResult, context.TargetType, IsPartial, id),
+                    new EventMessage(input, timerResult, context.TargetType, context.MethodInvocationTarget));
             }
 
             private ViewEngineResult ProxyOutput(ViewEngineResult viewEngineResult, IAlternateImplementationContext context, string viewName, bool isPartial, Guid id)

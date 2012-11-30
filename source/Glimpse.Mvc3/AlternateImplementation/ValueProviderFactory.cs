@@ -70,26 +70,17 @@ namespace Glimpse.Mvc.AlternateImplementation
             return null;
         }
 
-        public class GetValueProvider : IAlternateMethod
+        public class GetValueProvider : AlternateMethod
         {
-            public GetValueProvider(Func<IValueProvider, IValueProvider> proxyValueProviderStrategy)
+            public GetValueProvider(Func<IValueProvider, IValueProvider> proxyValueProviderStrategy) : base(typeof(System.Web.Mvc.ValueProviderFactory), "GetValueProvider")
             {
-                MethodToImplement = typeof(System.Web.Mvc.ValueProviderFactory).GetMethod("GetValueProvider");
                 ProxyValueProviderStrategy = proxyValueProviderStrategy;
             }
 
-            public MethodInfo MethodToImplement { get; private set; }
-
             internal Func<IValueProvider, IValueProvider> ProxyValueProviderStrategy { get; set; }
 
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                TimerResult timerResult;
-                if (!context.TryProceedWithTimer(out timerResult))
-                {
-                    return;
-                }
-
                 var originalValueProvider = context.ReturnValue as IValueProvider;
 
                 var result = ProxyValueProviderStrategy(originalValueProvider);

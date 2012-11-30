@@ -20,24 +20,15 @@ namespace Glimpse.Mvc.AlternateImplementation
             yield return new OnActionExecuted();
         }
 
-        public class OnActionExecuting : IAlternateMethod
+        public class OnActionExecuting : AlternateMethod
         {
-            public OnActionExecuting()
+            public OnActionExecuting() : base(typeof(IActionFilter), "OnActionExecuting")
             {
-                MethodToImplement = typeof(IActionFilter).GetMethod("OnActionExecuting");
             }
 
-            public MethodInfo MethodToImplement { get; private set; }
-
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                TimerResult timer;
-                if (!context.TryProceedWithTimer(out timer))
-                {
-                    return;
-                }
-
-                context.MessageBroker.Publish(new Message((ActionExecutingContext)context.Arguments[0], context.InvocationTarget.GetType(), context.MethodInvocationTarget, timer));
+                context.MessageBroker.Publish(new Message((ActionExecutingContext)context.Arguments[0], context.InvocationTarget.GetType(), context.MethodInvocationTarget, timerResult));
             }
 
             public class Message : BoundedFilterMessage
@@ -49,24 +40,15 @@ namespace Glimpse.Mvc.AlternateImplementation
             }
         }
 
-        public class OnActionExecuted : IAlternateMethod
+        public class OnActionExecuted : AlternateMethod
         {
-            public OnActionExecuted()
+            public OnActionExecuted() : base(typeof(IActionFilter), "OnActionExecuted")
             {
-                MethodToImplement = typeof(IActionFilter).GetMethod("OnActionExecuted");
             }
 
-            public MethodInfo MethodToImplement { get; private set; }
-
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                TimerResult timer;
-                if (!context.TryProceedWithTimer(out timer))
-                {
-                    return;
-                }
-
-                context.MessageBroker.Publish(new Message((ActionExecutedContext)context.Arguments[0], context.InvocationTarget.GetType(), context.MethodInvocationTarget, timer));
+                context.MessageBroker.Publish(new Message((ActionExecutedContext)context.Arguments[0], context.InvocationTarget.GetType(), context.MethodInvocationTarget, timerResult));
             }
 
             public class Message : BoundedFilterMessage, IExceptionBasedFilterMessage, ICanceledBasedFilterMessage

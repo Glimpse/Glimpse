@@ -20,24 +20,15 @@ namespace Glimpse.Mvc.AlternateImplementation
             yield return new OnException();
         }
 
-        public class OnException : IAlternateMethod
+        public class OnException : AlternateMethod
         {
-            public OnException()
+            public OnException() : base(typeof(IExceptionFilter), "OnException")
             {
-                MethodToImplement = typeof(IExceptionFilter).GetMethod("OnException");
             }
 
-            public MethodInfo MethodToImplement { get; private set; }
-
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                TimerResult timer;
-                if (!context.TryProceedWithTimer(out timer))
-                {
-                    return;
-                }
-
-                context.MessageBroker.Publish(new Message((ExceptionContext)context.Arguments[0], context.InvocationTarget.GetType(), context.MethodInvocationTarget, timer));
+                context.MessageBroker.Publish(new Message((ExceptionContext)context.Arguments[0], context.InvocationTarget.GetType(), context.MethodInvocationTarget, timerResult));
             }
 
             public class Message : FilterMessage, IExceptionBasedFilterMessage

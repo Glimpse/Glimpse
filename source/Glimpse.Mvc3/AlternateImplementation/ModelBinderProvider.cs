@@ -17,26 +17,17 @@ namespace Glimpse.Mvc.AlternateImplementation
             yield return new GetBinder(new ModelBinder(ProxyFactory));
         }
 
-        public class GetBinder : IAlternateMethod
+        public class GetBinder : AlternateMethod
         {
-            public GetBinder(Alternate<DefaultModelBinder> alternateModelBinder)
+            public GetBinder(Alternate<DefaultModelBinder> alternateModelBinder) : base(typeof(IModelBinderProvider), "GetBinder")
             {
-                MethodToImplement = typeof(IModelBinderProvider).GetMethod("GetBinder");
                 AlternateModelBinder = alternateModelBinder;
             }
 
             public Alternate<DefaultModelBinder> AlternateModelBinder { get; set; }
 
-            public MethodInfo MethodToImplement { get; private set; }
-
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                TimerResult timerResult;
-                if (!context.TryProceedWithTimer(out timerResult))
-                {
-                    return;
-                }
-
                 var originalModelBinder = context.ReturnValue as DefaultModelBinder;
                 
                 // Can only wrap implementations of DefaultModelBinder (not IModelBinder!) for now

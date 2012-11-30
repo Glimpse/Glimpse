@@ -21,23 +21,14 @@ namespace Glimpse.Mvc.AlternateImplementation
             yield return new ContainsPrefix();
         }
 
-        public class ContainsPrefix : IAlternateMethod
+        public class ContainsPrefix : AlternateMethod
         {
-            public ContainsPrefix()
+            public ContainsPrefix() : base(typeof(IValueProvider), "ContainsPrefix")
             {
-                MethodToImplement = typeof(IValueProvider).GetMethod("ContainsPrefix");
             }
 
-            public MethodInfo MethodToImplement { get; private set; }
-
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                TimerResult timerResult;
-                if (!context.TryProceedWithTimer(out timerResult))
-                {
-                    return;
-                }
-
                 context.MessageBroker.Publish(new Message((string)context.Arguments[0], (bool)context.ReturnValue, context.TargetType));
             }
 
@@ -58,23 +49,14 @@ namespace Glimpse.Mvc.AlternateImplementation
             }
         }
 
-        public class GetValue : IAlternateMethod
+        public class GetValue : AlternateMethod
         {
-            public GetValue()
+            public GetValue() : base(typeof(T), "GetValue")
             {
-                MethodToImplement = typeof(T).GetMethod("GetValue");
             }
 
-            public MethodInfo MethodToImplement { get; private set; }
-
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                TimerResult timerResult;
-                if (!context.TryProceedWithTimer(out timerResult))
-                {
-                    return;
-                }
-
                 context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), context.ReturnValue as ValueProviderResult, context.TargetType));
             }
 

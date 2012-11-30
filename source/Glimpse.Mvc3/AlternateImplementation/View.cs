@@ -22,29 +22,15 @@ namespace Glimpse.Mvc.AlternateImplementation
             yield return new Render();
         }
 
-        public class Render : IAlternateMethod
+        public class Render : AlternateMethod
         {
-            public Render()
+            public Render() : base(typeof(IView), "Render")
             {
-                MethodToImplement = typeof(IView).GetMethod("Render");
             }
 
-            public MethodInfo MethodToImplement { get; private set; }
-            
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timing)
             {
-                if (context.RuntimePolicyStrategy() == RuntimePolicy.Off)
-                {
-                    context.Proceed();
-                    return;
-                }
-
                 var input = new Arguments(context.Arguments);
-
-                //// TODO: This is where we could use writer.Write calls to inject HTML comments
-
-                var timer = context.TimerStrategy();
-                var timing = timer.Time(context.Proceed);
 
                 var mixin = context.Proxy as IViewCorrelationMixin;
 
