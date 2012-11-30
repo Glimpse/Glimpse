@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
@@ -131,6 +132,7 @@ namespace Glimpse.Mvc.Tab
         }
     }
 
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "This type is still a work in progress. It will be moved soon.")]
     public class ModelBindingPropertyModel
     {
         public ModelBindingPropertyModel()
@@ -157,6 +159,7 @@ namespace Glimpse.Mvc.Tab
         public CultureInfo Culture { get; set; }
     }
 
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "This type is still a work in progress. It will be moved soon.")]
     public class ModelBindingModel
     {
         private ModelBindingPropertyModel currentProperty;

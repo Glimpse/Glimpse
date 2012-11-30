@@ -5,6 +5,8 @@ namespace Glimpse.Core.Framework
 {
     public class CastleDynamicProxyWrapper<T> : IWrapper<T>
     {
+        internal IProxyTargetAccessor ProxyTargetAccessor { get; set; }
+
         public T GetWrappedObject()
         {
             if (ProxyTargetAccessor == null)
@@ -14,7 +16,5 @@ namespace Glimpse.Core.Framework
 
             return (T)ProxyTargetAccessor.DynProxyGetTarget();
         }
-
-        internal IProxyTargetAccessor ProxyTargetAccessor { get; set; }
     }
 }

@@ -3,7 +3,6 @@ using System.Linq;
 using Glimpse.AspNet.Model;
 using Glimpse.Core.Extensibility;
 
-
 namespace Glimpse.AspNet.SerializationConverter
 {
     public class ListOfRouteModelConverter : SerializationConverter<List<RouteModel>>
@@ -26,7 +25,7 @@ namespace Glimpse.AspNet.SerializationConverter
                                 item.DataTokens,  // DataTokens
                                 "selected"
                             }
-                            select item.IsFirstMatch ? row : row.Take(row.Length - 1)); //all rows start as selected, but the jagged selected "column" is dropped via Take(8)
+                            select item.IsFirstMatch ? row : row.Take(row.Length - 1)); // all rows start as selected, but the jagged selected "column" is dropped via Take(8)
 
             return result;
         }
@@ -34,7 +33,9 @@ namespace Glimpse.AspNet.SerializationConverter
         private static object GetRouteData(IEnumerable<RouteDataItemModel> routeData)
         {
             if (routeData == null)
+            {
                 return null;
+            }
 
             var result = new List<object[]>
                 {
@@ -49,9 +50,9 @@ namespace Glimpse.AspNet.SerializationConverter
                                        item.ActualValue
                                    };
 
-            // other plugins can specify custom SerializationConverters for Route data item value types.
-            // For instance, Glimpse.Mvc has a SerializationConverter<UrlParameter>, which checks for
-            // the special "optional" parameter value and formats it specially.
+            //// other plugins can specify custom SerializationConverters for Route data item value types.
+            //// For instance, Glimpse.Mvc has a SerializationConverter<UrlParameter>, which checks for
+            //// the special "optional" parameter value and formats it specially.
 
             result.AddRange(items);
 
@@ -61,7 +62,9 @@ namespace Glimpse.AspNet.SerializationConverter
         private static object GetConstraintData(IEnumerable<RouteConstraintModel> routeData)
         {
             if (routeData == null)
+            {
                 return null;
+            }
 
             var result = new List<object[]>
                 {
@@ -80,6 +83,5 @@ namespace Glimpse.AspNet.SerializationConverter
 
             return result;
         }
-
     }
 }

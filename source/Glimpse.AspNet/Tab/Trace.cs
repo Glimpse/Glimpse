@@ -58,7 +58,6 @@ namespace Glimpse.AspNet.Tab
         public void Setup(ITabSetupContext context)
         {
             // TODO: This seems like it would fit better in an IPipeline inspector. No?
-
             var traceListeners = System.Diagnostics.Trace.Listeners;
             if (!traceListeners.OfType<TraceInspector>().Any())
             {

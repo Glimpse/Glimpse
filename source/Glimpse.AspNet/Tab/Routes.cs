@@ -9,7 +9,6 @@ using Glimpse.Core.Extensions;
 
 namespace Glimpse.AspNet.Tab
 {
-
     public class Routes : AspNetTab, IDocumentation, ITabSetup
     {
         public override string Name
