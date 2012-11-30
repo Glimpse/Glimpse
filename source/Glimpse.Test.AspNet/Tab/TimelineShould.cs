@@ -47,7 +47,8 @@ namespace Glimpse.Test.AspNet.Tab
         [Theory, AutoMock]
         public void ReturnData(ITabContext context)
         { 
-            context.TabStore.Setup(x => x.Get(typeof(ITimerResultMessage).FullName)).Returns(BuildMessages());
+            context.TabStore.Setup(x => x.Contains(typeof(IList<ITimerResultMessage>).AssemblyQualifiedName)).Returns(true);
+            context.TabStore.Setup(x => x.Get(typeof(IList<ITimerResultMessage>).AssemblyQualifiedName)).Returns(BuildMessages());
 
             var timeline = new Timeline();
             var result = timeline.GetData(context) as TimelineModel;

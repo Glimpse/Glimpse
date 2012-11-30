@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
+using Glimpse.Core.Plugin.Assist;
 using Glimpse.Mvc.AlternateImplementation;
 using Glimpse.Mvc.Model;
 
 namespace Glimpse.Mvc.Tab
 {
-    using Glimpse.Core.Plugin.Assist;
-
     public class Metadata : AspNetTab, IDocumentation, ITabSetup, ITabLayout
     {
         private static readonly object Layout = TabLayout.Create()
@@ -37,8 +33,8 @@ namespace Glimpse.Mvc.Tab
         }
 
         public void Setup(ITabSetupContext context)
-        { 
-            context.MessageBroker.Subscribe<View.Render.Message>(message => Persist(message, context));
+        {
+            context.PersistMessages<View.Render.Message>();
         }
         
         public object GetLayout()
@@ -48,7 +44,7 @@ namespace Glimpse.Mvc.Tab
 
         public override object GetData(ITabContext context)
         { 
-            var viewRenderMessages = context.TabStore.Get<List<View.Render.Message>>(typeof(View.Render.Message).FullName); 
+            var viewRenderMessages = context.GetMessages<View.Render.Message>(); 
 
             var metadataResults = new List<MetadataItemModel>();
             if (viewRenderMessages != null)
@@ -84,21 +80,6 @@ namespace Glimpse.Mvc.Tab
             }
 
             return metadataResults;
-        }
-
-        internal static void Persist<T>(T message, ITabSetupContext context)
-        {
-            var tabStore = context.GetTabStore();
-            var key = typeof(T).FullName;
-
-            if (!tabStore.Contains(key))
-            {
-                tabStore.Set(key, new List<T>());
-            }
-
-            var messages = tabStore.Get<IList<T>>(key);
-
-            messages.Add(message);
         }
 
         private MetadataContentModel ProcessMetaData(ModelMetadata metadata)

@@ -140,6 +140,7 @@
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Extensions\NameValueCollectionExtension.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="Extensions\TabContextExtensions.cs" />
     <Compile Include="Extensions\TypeElementCollectionExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Extensions\UriTemplateExtensions.cs" />

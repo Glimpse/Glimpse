@@ -5,11 +5,10 @@ using Glimpse.AspNet.Model;
 using Glimpse.AspNet.PipelineInspector;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
+using Glimpse.Core.Plugin.Assist;
 
 namespace Glimpse.AspNet.Tab
 {
-    using Glimpse.Core.Plugin.Assist;
-
     public class Trace : ITab, ITabSetup, IDocumentation, ITabLayout
     {
         public const string TraceMessageStoreKey = "Glimpse.Trace.Messages";
@@ -58,6 +57,8 @@ namespace Glimpse.AspNet.Tab
 
         public void Setup(ITabSetupContext context)
         {
+            // TODO: This seems like it would fit better in an IPipeline inspector. No?
+
             var traceListeners = System.Diagnostics.Trace.Listeners;
             if (!traceListeners.OfType<TraceInspector>().Any())
             {

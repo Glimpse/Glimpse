@@ -39,12 +39,12 @@ namespace Glimpse.AspNet.Tab
 
         public void Setup(ITabSetupContext context)
         {
-            context.MessageBroker.Subscribe<ITimerResultMessage>(message => Persist(message, context));
+            context.PersistMessages<ITimerResultMessage>(); // TODO: Should we rename ITimerResultMessage to ITimelineMessage?
         }
 
         public override object GetData(ITabContext context)
         {
-            var viewRenderMessages = context.TabStore.Get<IEnumerable<ITimerResultMessage>>(typeof(ITimerResultMessage).FullName); 
+            var viewRenderMessages = context.GetMessages<ITimerResultMessage>(); 
 
             var result = new TimelineModel();
             result.Category = categories;
@@ -78,21 +78,6 @@ namespace Glimpse.AspNet.Tab
             }
             
             return result;
-        }
-
-        internal static void Persist<T>(T message, ITabSetupContext context)
-        {
-            var tabStore = context.GetTabStore();
-            var key = typeof(T).FullName;
-
-            if (!tabStore.Contains(key))
-            {
-                tabStore.Set(key, new List<T>());
-            }
-
-            var messages = tabStore.Get<IList<T>>(key);
-
-            messages.Add(message);
         }
     }
 }

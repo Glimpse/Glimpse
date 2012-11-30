@@ -54,8 +54,8 @@ namespace Glimpse.Test.Mvc3.Tab
         [Theory, AutoMock]
         public void HandleNullFindViewMessageCollection(Views sut, ITabContext context)
         {
-            context.TabStore.Setup(ds => ds.Get(typeof(ViewEngine.FindViews.Message).FullName)).Returns<List<ViewEngine.FindViews.Message>>(null);
-            context.TabStore.Setup(ds => ds.Get(typeof(View.Render.Message).FullName)).Returns(new List<View.Render.Message>());
+            context.TabStore.Setup(ds => ds.Get(typeof(IList<ViewEngine.FindViews.Message>).AssemblyQualifiedName)).Returns<List<ViewEngine.FindViews.Message>>(null);
+            context.TabStore.Setup(ds => ds.Get(typeof(IList<View.Render.Message>).AssemblyQualifiedName)).Returns(new List<View.Render.Message>());
 
             Assert.DoesNotThrow(() => sut.GetData(context));
         }
@@ -63,8 +63,8 @@ namespace Glimpse.Test.Mvc3.Tab
         [Theory, AutoMock]
         public void HandleNullViewRenderMessageCollection(Views sut, ITabContext context)
         {
-            context.TabStore.Setup(ds => ds.Get(typeof(ViewEngine.FindViews.Message).FullName)).Returns(new List<ViewEngine.FindViews.Message>());
-            context.TabStore.Setup(ds => ds.Get(typeof(View.Render.Message).FullName)).Returns<List<View.Render.Message>>(null);
+            context.TabStore.Setup(ds => ds.Get(typeof(IList<ViewEngine.FindViews.Message>).AssemblyQualifiedName)).Returns(new List<ViewEngine.FindViews.Message>());
+            context.TabStore.Setup(ds => ds.Get(typeof(IList<View.Render.Message>).AssemblyQualifiedName)).Returns<List<View.Render.Message>>(null);
 
             Assert.DoesNotThrow(() => sut.GetData(context));
         }
@@ -80,7 +80,8 @@ namespace Glimpse.Test.Mvc3.Tab
                 isPartial: false, 
                 id: id);
 
-            context.TabStore.Setup(ds => ds.Get(typeof(ViewEngine.FindViews.Message).FullName)).Returns(new List<ViewEngine.FindViews.Message> { findViewMessage });
+            context.TabStore.Setup(ds => ds.Contains(typeof(IList<ViewEngine.FindViews.Message>).AssemblyQualifiedName)).Returns(true);
+            context.TabStore.Setup(ds => ds.Get(typeof(IList<ViewEngine.FindViews.Message>).AssemblyQualifiedName)).Returns(new List<ViewEngine.FindViews.Message> { findViewMessage });
 
             mixin.Setup(m => m.ViewEngineFindCallId).Returns(id);
 
@@ -90,35 +91,13 @@ namespace Glimpse.Test.Mvc3.Tab
                 baseType: typeof(ViewRenderMessageShould), 
                 viewCorrelation: mixin);
 
-            context.TabStore.Setup(ds => ds.Get(typeof(View.Render.Message).FullName)).Returns(new List<View.Render.Message> { renderMessage });
+            context.TabStore.Setup(ds => ds.Contains(typeof(IList<View.Render.Message>).AssemblyQualifiedName)).Returns(true);
+            context.TabStore.Setup(ds => ds.Get(typeof(IList<View.Render.Message>).AssemblyQualifiedName)).Returns(new List<View.Render.Message> { renderMessage });
 
             var result = sut.GetData(context) as List<ViewsModel>;
 
             Assert.NotNull(result);
             Assert.NotEmpty(result);
-        }
-
-        [Theory, AutoMock]
-        public void PersistOnMessagePublish(ITabSetupContext context, IList<int> list)
-        {
-            context.GetTabStore().Setup(s => s.Contains(It.IsAny<string>())).Returns(true);
-            context.GetTabStore().Setup(s => s.Get(It.IsAny<string>())).Returns(list);
-
-            Views.Persist(int.MaxValue, context);
-
-            list.Verify(l => l.Add(It.IsAny<int>()));
-        }
-
-        [Theory, AutoMock]
-        public void CreateKeyOnMessagePublish(ITabSetupContext context, IList<int> list)
-        {
-            context.GetTabStore().Setup(s => s.Contains(It.IsAny<string>())).Returns(false);
-            context.GetTabStore().Setup(s => s.Get(It.IsAny<string>())).Returns(list);
-
-            Views.Persist(int.MaxValue, context);
-
-            list.Verify(l => l.Add(It.IsAny<int>()));
-            context.GetTabStore().Verify(s => s.Set(typeof(int).FullName, It.IsAny<List<int>>()));
         }
     }
 }

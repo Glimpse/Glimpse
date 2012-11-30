@@ -24,12 +24,12 @@ namespace Glimpse.AspNet.Tab
 
         public void Setup(ITabSetupContext context)
         {
-            context.MessageBroker.Subscribe<Route.ProcessConstraint.Message>(msg => Persist(msg, context));
+            context.PersistMessages<Route.ProcessConstraint.Message>();
         }
 
         public override object GetData(ITabContext context)
         {
-            var routeMessages = context.TabStore.Get<IEnumerable<Route.ProcessConstraint.Message>>(typeof(Route.ProcessConstraint.Message).FullName);
+            var routeMessages = context.GetMessages<Route.ProcessConstraint.Message>();
 
             var result = new List<RouteModel>();
 
@@ -116,21 +116,6 @@ namespace Glimpse.AspNet.Tab
             {
                 item.ActualValue = values[item.PlaceHolder];
             }
-        }
-
-        internal static void Persist<T>(T message, ITabSetupContext context)
-        {
-            var tabStore = context.GetTabStore();
-            var key = typeof(T).FullName;
-
-            if (!tabStore.Contains(key))
-            {
-                tabStore.Set(key, new List<T>());
-            }
-
-            var messages = tabStore.Get<IList<T>>(key);
-
-            messages.Add(message);
         }
     }
 }

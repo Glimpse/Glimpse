@@ -42,9 +42,8 @@ namespace Glimpse.Mvc.Tab
 
         public override object GetData(ITabContext context)
         {
-            var tabStore = context.TabStore;
-            var viewEngineFindViewsMessages = tabStore.Get<List<ViewEngine.FindViews.Message>>(typeof(ViewEngine.FindViews.Message).FullName);
-            var viewRenderMessages = tabStore.Get<List<View.Render.Message>>(typeof(View.Render.Message).FullName);
+            var viewEngineFindViewsMessages = context.GetMessages<ViewEngine.FindViews.Message>();
+            var viewRenderMessages = context.GetMessages<View.Render.Message>();
             var result = new List<ViewsModel>();
 
             if (viewEngineFindViewsMessages == null || viewRenderMessages == null)
@@ -62,25 +61,8 @@ namespace Glimpse.Mvc.Tab
 
         public void Setup(ITabSetupContext context)
         {
-            var messageBroker = context.MessageBroker;
-
-            messageBroker.Subscribe<ViewEngine.FindViews.Message>(message => Persist(message, context));
-            messageBroker.Subscribe<View.Render.Message>(message => Persist(message, context));
-        }
-
-        internal static void Persist<T>(T message, ITabSetupContext context)
-        {
-            var tabStore = context.GetTabStore();
-            var key = typeof(T).FullName;
-
-            if (!tabStore.Contains(key))
-            {
-                tabStore.Set(key, new List<T>());
-            }
-
-            var messages = tabStore.Get<IList<T>>(key);
-
-            messages.Add(message);
+            context.PersistMessages<ViewEngine.FindViews.Message>();
+            context.PersistMessages<View.Render.Message>();
         }
     }
 }
