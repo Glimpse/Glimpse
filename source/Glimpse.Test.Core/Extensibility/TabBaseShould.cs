@@ -42,12 +42,12 @@ namespace Glimpse.Test.Core.Extensibility
         {
             public override object GetData(ITabContext context)
             {
-                throw new System.NotImplementedException();
+                throw new System.NotSupportedException();
             }
 
             public override string Name
             {
-                get { throw new System.NotImplementedException(); }
+                get { throw new System.NotSupportedException(); }
             }
         }
 
@@ -55,12 +55,12 @@ namespace Glimpse.Test.Core.Extensibility
         {
             public override object GetData(ITabContext context)
             {
-                throw new System.NotImplementedException();
+                throw new System.NotSupportedException();
             }
 
             public override string Name
             {
-                get { throw new System.NotImplementedException(); }
+                get { throw new System.NotSupportedException(); }
             }
         }
     }
