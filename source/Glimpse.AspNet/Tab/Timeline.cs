@@ -38,12 +38,12 @@ namespace Glimpse.AspNet.Tab
 
         public void Setup(ITabSetupContext context)
         {
-            context.MessageBroker.Subscribe<ITimerResultMessage>(message => Persist(message, context));
+            context.MessageBroker.Subscribe<ITimelineMessage>(message => Persist(message, context));
         }
 
         public override object GetData(ITabContext context)
         {
-            var viewRenderMessages = context.TabStore.Get<IEnumerable<ITimerResultMessage>>(typeof(ITimerResultMessage).FullName); 
+            var viewRenderMessages = context.TabStore.Get<IEnumerable<ITimelineMessage>>(typeof(ITimelineMessage).FullName); 
 
             var result = new TimelineModel();
             result.Category = categories;

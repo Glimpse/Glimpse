@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Web;
 using Glimpse.AspNet.Model;
@@ -49,7 +50,7 @@ namespace Glimpse.Test.AspNet.Tab
         [Theory, AutoMock]
         public void ReturnData(ITabContext context)
         { 
-            context.TabStore.Setup(x => x.Get<IEnumerable<ITimerResultMessage>>(typeof(ITimerResultMessage).FullName)).Returns(BuildMessages());
+            context.TabStore.Setup(x => x.Get<IEnumerable<ITimelineMessage>>(typeof(ITimelineMessage).FullName)).Returns(BuildMessages());
 
             var timeline = new Timeline();
             var result = timeline.GetData(context) as TimelineModel;
@@ -65,7 +66,7 @@ namespace Glimpse.Test.AspNet.Tab
         [Theory, AutoMock]
         public void ReturnEmptyWhenNoData(ITabContext context)
         {
-            context.TabStore.Setup(x => x.Get<IEnumerable<ITimerResultMessage>>(typeof(ITimerResultMessage).FullName)).Returns((IEnumerable<ITimerResultMessage>)null);
+            context.TabStore.Setup(x => x.Get<IEnumerable<ITimelineMessage>>(typeof(ITimelineMessage).FullName)).Returns((IEnumerable<ITimelineMessage>)null);
 
             var timeline = new Timeline();
             var result = timeline.GetData(context) as TimelineModel;
@@ -75,19 +76,23 @@ namespace Glimpse.Test.AspNet.Tab
             Assert.Null(result.Events);
         } 
 
-        private IEnumerable<ITimerResultMessage> BuildMessages()
+        private IEnumerable<ITimelineMessage> BuildMessages()
         {
-            return new List<ITimerResultMessage>
+            return new List<ITimelineMessage>
                                {
-                                   new TestTimerResultMessage { Duration = 1, EventCategory = "Test1", EventName = "TestName1", EventSubText = "TestSub1", Offset = 1, StartTime = DateTime.Now },
-                                   new TestTimerResultMessage { Duration = 4, EventCategory = "Test2", EventName = "TestName2", EventSubText = "TestSub2", Offset = 3, StartTime = DateTime.Now },
-                                   new TestTimerResultMessage { Duration = 1, EventCategory = "Test3", EventName = "TestName3", EventSubText = "TestSub3", Offset = 2, StartTime = DateTime.Now }
+                                   new TestTimelineMessage { Duration = 1, EventCategory = "Test1", EventName = "TestName1", EventSubText = "TestSub1", Offset = 1, StartTime = DateTime.Now },
+                                   new TestTimelineMessage { Duration = 4, EventCategory = "Test2", EventName = "TestName2", EventSubText = "TestSub2", Offset = 3, StartTime = DateTime.Now },
+                                   new TestTimelineMessage { Duration = 1, EventCategory = "Test3", EventName = "TestName3", EventSubText = "TestSub3", Offset = 2, StartTime = DateTime.Now }
                                };
         }
 
-        public class TestTimerResultMessage : ITimerResultMessage
+        public class TestTimelineMessage : ITimelineMessage
         {
             public Guid Id { get; set; }
+
+            public Type ExecutedType { get; set; }
+
+            public MethodInfo ExecutedMethod { get; set; }
 
             public string EventName { get; set; }
 

@@ -43,18 +43,12 @@ namespace Glimpse.AspNet.AlternateImplementation
             public class Message : TimeMessage
             {
                 public Message(TimerResult timer, Type executedType, MethodInfo executedMethod, object invocationTarget, System.Web.Routing.RouteData routeData)
-                    : base(timer)
-                {
-                    ExecutedType = executedType;
-                    ExecutedMethod = executedMethod;
+                    : base(timer, executedType, executedMethod)
+                { 
                     IsMatch = routeData != null;
                     RouteHashCode = invocationTarget.GetHashCode();
                 }
 
-                public MethodInfo ExecutedMethod { get; protected set; }
-
-                public Type ExecutedType { get; protected set; }
-                 
                 public int RouteHashCode { get; protected set; }
 
                 public bool IsMatch { get; protected set; }
@@ -90,17 +84,11 @@ namespace Glimpse.AspNet.AlternateImplementation
             public class Message : TimeMessage
             {
                 public Message(Arguments args, TimerResult timer, Type executedType, MethodInfo executedMethod, object invocationTarget, System.Web.Routing.VirtualPathData virtualPathData)
-                    : base(timer)
-                {
-                    ExecutedType = executedType;
-                    ExecutedMethod = executedMethod; 
+                    : base(timer, executedType, executedMethod)
+                { 
                     IsMatch = virtualPathData != null;
                     RouteHashCode = invocationTarget.GetHashCode();
                 }
-
-                public MethodInfo ExecutedMethod { get; private set; }
-
-                public Type ExecutedType { get; private set; }
 
                 public int RouteHashCode { get; protected set; } 
 

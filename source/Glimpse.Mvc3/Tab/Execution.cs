@@ -41,26 +41,26 @@ namespace Glimpse.Mvc.Tab
 
         public override object GetData(ITabContext context)
         {
-            var actionFilterMessages = context.TabStore.Get<IList<IExecutionMessage>>(TabStoreKey);
+            var actionFilterMessages = context.TabStore.Get<IList<IActionBaseMessage>>(TabStoreKey);
 
             return actionFilterMessages.Select(message => new ExecutionModel(message)).ToList();
         }
 
         public void Setup(ITabSetupContext context)
         {
-            context.MessageBroker.Subscribe<IExecutionMessage>(message => PersistActionFilterMessage(message, context));
+            context.MessageBroker.Subscribe<IActionBaseMessage>(message => PersistActionFilterMessage(message, context));
         }
 
-        private static void PersistActionFilterMessage(IExecutionMessage message, ITabSetupContext context)
+        private static void PersistActionFilterMessage(IActionBaseMessage message, ITabSetupContext context)
         {
             var tabStore = context.GetTabStore();
 
             if (!tabStore.Contains(TabStoreKey))
             {
-                tabStore.Set(TabStoreKey, new List<IExecutionMessage>());
+                tabStore.Set(TabStoreKey, new List<IActionBaseMessage>());
             }
 
-            var messages = tabStore.Get<IList<IExecutionMessage>>(TabStoreKey);
+            var messages = tabStore.Get<IList<IActionBaseMessage>>(TabStoreKey);
 
             messages.Add(message);
         }

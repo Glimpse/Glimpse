@@ -182,7 +182,7 @@
     <Compile Include="Framework\GlimpseRuntime.cs" />
     <Compile Include="Message\IMessage.cs" />
     <Compile Include="Message\ITimeMessage.cs" />
-    <Compile Include="Message\ITimerResultMessage.cs" />
+    <Compile Include="Message\ITimelineMessage.cs" />
     <Compile Include="Message\TimelineMessage.cs" />
     <Compile Include="Message\TimeMessage.cs" />
     <Compile Include="Plugin\Assist\CodeType.cs" />

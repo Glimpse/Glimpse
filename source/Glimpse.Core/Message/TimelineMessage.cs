@@ -1,12 +1,14 @@
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Message
 {
-    public class TimelineMessage : TimeMessage, ITimerResultMessage
+    public class TimelineMessage : TimeMessage, ITimelineMessage
     {
-        public TimelineMessage(TimerResult timerResult, string eventName = null, string eventCategory = null) 
-            : base(timerResult)
+        public TimelineMessage(TimerResult timerResult, Type executedType, MethodInfo executedMethod, string eventName = null, string eventCategory = null)
+            : base(timerResult, executedType, executedMethod)
         {
             EventName = eventName;
             EventCategory = eventCategory;

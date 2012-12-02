@@ -1,28 +1,30 @@
 using System;
+using System.Reflection; 
 using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Message
 {
     public class TimeMessage : MessageBase
     {
-        public TimeMessage(TimerResult timerResult)
+        public TimeMessage(TimerResult timerResult, Type executedType, MethodInfo executedMethod)
+            : base(executedType, executedMethod)
         { 
-            this.Result = timerResult;
+            Result = timerResult;
         }
 
         public double Offset
         {
-            get { return this.Result.Offset; }
+            get { return Result.Offset; }
         }
 
         public double Duration
         {
-            get { return this.Result.Duration; }
+            get { return Result.Duration; }
         }
 
         public DateTime StartTime
         {
-            get { return this.Result.StartTime; }
+            get { return Result.StartTime; }
         }
 
         private TimerResult Result { get; set; }
