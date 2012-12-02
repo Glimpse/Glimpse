@@ -27,27 +27,19 @@ namespace Glimpse.AspNet.AlternateImplementation
             }
         }
 
-        public class GetRouteData<T> : IAlternateMethod
+        public class GetRouteData<T> : AlternateMethod
             where T : System.Web.Routing.RouteBase
         {
             public GetRouteData()
-            {
-                MethodToImplement = typeof(T).GetMethod("GetRouteData", BindingFlags.Public | BindingFlags.Instance);
-            }
-
-            public MethodInfo MethodToImplement { get; set; }
-
-            public void NewImplementation(IAlternateImplementationContext context)
-            {
-                TimerResult timer;
-                if (!context.TryProceedWithTimer(out timer))
-                {
-                    return;
-                }
-
-                context.MessageBroker.Publish(new Message(timer, context.InvocationTarget.GetType(), context.MethodInvocationTarget, context.InvocationTarget, (System.Web.Routing.RouteData)context.ReturnValue));
+                : base(typeof(T), "GetRouteData", BindingFlags.Public | BindingFlags.Instance)
+            {   
             }
              
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
+            {
+                context.MessageBroker.Publish(new Message(timerResult, context.InvocationTarget.GetType(), context.MethodInvocationTarget, context.InvocationTarget, (System.Web.Routing.RouteData)context.ReturnValue));
+            }
+
             public class Message : TimeMessage
             {
                 public Message(TimerResult timer, Type executedType, MethodInfo executedMethod, object invocationTarget, System.Web.Routing.RouteData routeData)
@@ -69,25 +61,17 @@ namespace Glimpse.AspNet.AlternateImplementation
             }
         }
 
-        public class GetVirtualPath<T> : IAlternateMethod
+        public class GetVirtualPath<T> : AlternateMethod
             where T : System.Web.Routing.RouteBase
         {
             public GetVirtualPath()
-            {
-                MethodToImplement = typeof(T).GetMethod("GetVirtualPath", BindingFlags.Public | BindingFlags.Instance);
+                : base(typeof(T), "GetVirtualPath", BindingFlags.Public | BindingFlags.Instance)
+            { 
             }
 
-            public MethodInfo MethodToImplement { get; set; }
-
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                TimerResult timer;
-                if (!context.TryProceedWithTimer(out timer))
-                {
-                    return;
-                }
-
-                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), timer, context.InvocationTarget.GetType(), context.MethodInvocationTarget, context.InvocationTarget, (System.Web.Routing.VirtualPathData)context.ReturnValue));
+                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), timerResult, context.InvocationTarget.GetType(), context.MethodInvocationTarget, context.InvocationTarget, (System.Web.Routing.VirtualPathData)context.ReturnValue));
             }
 
             public class Arguments

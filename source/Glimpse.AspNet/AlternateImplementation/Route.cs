@@ -30,24 +30,16 @@ namespace Glimpse.AspNet.AlternateImplementation
             }
         }
 
-        public class ProcessConstraint : IAlternateMethod
+        public class ProcessConstraint : AlternateMethod
         {
             public ProcessConstraint()
+                : base(typeof(System.Web.Routing.Route), "ProcessConstraint", BindingFlags.NonPublic | BindingFlags.Instance)
             {
-                MethodToImplement = typeof(System.Web.Routing.Route).GetMethod("ProcessConstraint", BindingFlags.NonPublic | BindingFlags.Instance);
             }
 
-            public MethodInfo MethodToImplement { get; set; }
-
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                TimerResult timer;
-                if (!context.TryProceedWithTimer(out timer))
-                {
-                    return;
-                }
-
-                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), timer, context.InvocationTarget.GetType(), context.MethodInvocationTarget, context.InvocationTarget.GetHashCode(), (bool)context.ReturnValue));
+                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), timerResult, context.InvocationTarget.GetType(), context.MethodInvocationTarget, context.InvocationTarget.GetHashCode(), (bool)context.ReturnValue));
             }
 
             public class Arguments
