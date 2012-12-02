@@ -8,11 +8,12 @@ namespace Glimpse.AspNet.Message
 { 
     public class ProcessConstraintMessage : TimeMessage
     {
-        public ProcessConstraintMessage(TimerResult timer, Type executedType, MethodInfo executedMethod, bool isMatch, string parameterName, object constraint, IDictionary<string, object> values)
+        public ProcessConstraintMessage(TimerResult timer, Type executedType, MethodInfo executedMethod, int routeHashCode, bool isMatch, string parameterName, object constraint, IDictionary<string, object> values)
             : base(timer)
         {
             ExecutedMethod = executedMethod;
             ExecutedType = executedType;
+            RouteHashCode = routeHashCode;
             IsMatch = isMatch;
             ParameterName = parameterName;
             Constraint = constraint;
@@ -22,6 +23,8 @@ namespace Glimpse.AspNet.Message
         public MethodInfo ExecutedMethod { get; private set; }
 
         public Type ExecutedType { get; private set; }
+
+        public int RouteHashCode { get; private set; }
 
         public bool IsMatch { get; private set; }
 

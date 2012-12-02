@@ -47,7 +47,7 @@ namespace Glimpse.AspNet.AlternateImplementation
                     return;
                 }
 
-                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), timer, context.InvocationTarget.GetType(), context.MethodInvocationTarget, (bool)context.ReturnValue));
+                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), timer, context.InvocationTarget.GetType(), context.MethodInvocationTarget, context.InvocationTarget.GetHashCode(), (bool)context.ReturnValue));
             }
 
             public class Arguments
@@ -74,8 +74,8 @@ namespace Glimpse.AspNet.AlternateImplementation
 
             public class Message : ProcessConstraintMessage
             {
-                public Message(Arguments args, TimerResult timer, Type executedType, MethodInfo executedMethod, bool isMatch)
-                    : base(timer, executedType, executedMethod, isMatch, args.ParameterName, args.Constraint, args.Values)
+                public Message(Arguments args, TimerResult timer, Type executedType, MethodInfo executedMethod, int routeHashCode, bool isMatch)
+                    : base(timer, executedType, executedMethod, routeHashCode, isMatch, args.ParameterName, args.Constraint, args.Values)
                 { 
                 } 
             }

@@ -36,9 +36,9 @@ namespace Glimpse.Test.AspNet.AlternateImplementation
         }
 
         [Theory, AutoMock]
-        public void PublishMessageWhenExecuted([Frozen] IExecutionTimer timer, IAlternateImplementationContext context)
-        { 
-            context.Setup(c => c.Arguments).Returns(new object[] { (System.Web.HttpContextBase)null, (System.Web.Routing.Route)null, (string)null, (System.Web.Routing.RouteValueDictionary)null, System.Web.Routing.RouteDirection.IncomingRequest });
+        public void PublishMessageWhenExecuted([Frozen] IExecutionTimer timer, IAlternateImplementationContext context, System.Web.Routing.IRouteHandler handler)
+        {
+            context.Setup(c => c.Arguments).Returns(new object[] { (System.Web.HttpContextBase)null, new System.Web.Routing.Route("Test", handler), (string)null, (System.Web.Routing.RouteValueDictionary)null, System.Web.Routing.RouteDirection.IncomingRequest });
             context.Setup(c => c.ReturnValue).Returns(true);
             context.Setup(c => c.InvocationTarget).Returns(new System.Web.Routing.Route("Test", null));
 

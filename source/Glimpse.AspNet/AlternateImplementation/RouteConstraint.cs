@@ -65,7 +65,7 @@ namespace Glimpse.AspNet.AlternateImplementation
             public class Message : ProcessConstraintMessage
             {
                 public Message(Arguments args, TimerResult timer, Type executedType, MethodInfo executedMethod, bool isMatch)
-                    : base(timer, executedType, executedMethod, isMatch, args.ParameterName, executedType, args.Values)
+                    : base(timer, executedType, executedMethod, args.Route.GetHashCode(), isMatch, args.ParameterName, executedType, args.Values)
                 { 
                 } 
             }
