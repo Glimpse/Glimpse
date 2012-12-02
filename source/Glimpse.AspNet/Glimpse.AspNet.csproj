@@ -85,6 +85,7 @@
     <Compile Include="Model\TimelineModel.cs" />
     <Compile Include="Model\TraceModel.cs" />
     <Compile Include="Model\UriTokenInstance.cs" />
+    <Compile Include="PipelineInspector\RoutesConstraintInspector.cs" />
     <Compile Include="PipelineInspector\RoutesInspector.cs" />
     <Compile Include="PipelineInspector\TraceInspector.cs" />
     <Compile Include="Policy\LocalPolicy.cs" />

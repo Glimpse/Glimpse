@@ -74,6 +74,7 @@
     <Compile Include="IResourceEndpointConfiguration.cs" />
     <Compile Include="Model\RequestModelShould.cs" />
     <Compile Include="Model\RouteModelShould.cs" />
+    <Compile Include="PipelineInspector\RoutesConstraintsInspectorShould.cs" />
     <Compile Include="PipelineInspector\RoutesInspectorShould.cs" />
     <Compile Include="PipelineInspector\TraceInspectorShould.cs" />
     <Compile Include="Policy\LocalPolicyShould.cs" />
