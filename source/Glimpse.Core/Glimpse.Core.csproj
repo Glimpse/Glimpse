@@ -93,7 +93,7 @@
     <Compile Include="Extensibility\ITabLayout.cs" />
     <Compile Include="Extensibility\IWrapper.cs" />
     <Compile Include="Extensibility\JsonNetConverterDictionaryKeysAreNotPropertyNames.cs" />
-    <Compile Include="Extensibility\MessageBase.cs" />
+    <Compile Include="Message\MessageBase.cs" />
     <Compile Include="Extensibility\NuGetPackageAttribute.cs" />
     <Compile Include="Extensibility\ResourceParameterMetadata.cs" />
     <Compile Include="Extensibility\ResourceResultDecorator.cs" />

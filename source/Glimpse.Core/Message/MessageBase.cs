@@ -1,7 +1,6 @@
 using System;
-using Glimpse.Core.Message;
 
-namespace Glimpse.Core.Extensibility
+namespace Glimpse.Core.Message
 {
     public class MessageBase : IMessage
     {
@@ -11,7 +10,7 @@ namespace Glimpse.Core.Extensibility
 
         public MessageBase(Guid id)
         {
-            Id = id;
+            this.Id = id;
         }
 
         public Guid Id { get; set; } 

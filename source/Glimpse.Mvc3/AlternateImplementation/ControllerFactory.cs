@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using System.Web.Mvc.Async;
 using System.Web.Routing;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
