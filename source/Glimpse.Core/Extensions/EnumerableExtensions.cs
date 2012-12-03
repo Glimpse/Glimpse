@@ -36,5 +36,25 @@ namespace Glimpse.Core.Extensions
 
             return source.ToList();
         }
+
+        public static TSource SafeFirstOrDefault<TSource>(this IEnumerable<TSource> source)
+        {
+            if (source == null)
+            {
+                return default(TSource);
+            }
+
+            return source.FirstOrDefault();
+        }
+
+        public static TSource SafeFirstOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        {
+            if (source == null)
+            {
+                return default(TSource);
+            }
+
+            return source.FirstOrDefault(predicate);
+        }
     }
 }

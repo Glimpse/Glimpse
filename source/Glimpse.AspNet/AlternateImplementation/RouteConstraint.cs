@@ -37,7 +37,7 @@ namespace Glimpse.AspNet.AlternateImplementation
              
             public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), timerResult, context.InvocationTarget.GetType(), context.MethodInvocationTarget, (bool)context.ReturnValue));
+                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), timerResult, context.InvocationTarget.GetType(), context.MethodInvocationTarget, context.InvocationTarget, (bool)context.ReturnValue));
             }
 
             public class Arguments
@@ -64,8 +64,8 @@ namespace Glimpse.AspNet.AlternateImplementation
 
             public class Message : ProcessConstraintMessage
             {
-                public Message(Arguments args, TimerResult timer, Type executedType, MethodInfo executedMethod, bool isMatch)
-                    : base(timer, executedType, executedMethod, args.Route.GetHashCode(), isMatch, args.ParameterName, executedType, args.Values)
+                public Message(Arguments args, TimerResult timer, Type executedType, MethodInfo executedMethod, object invocationTarget, bool isMatch)
+                    : base(timer, executedType, executedMethod, args.Route.GetHashCode(), invocationTarget.GetHashCode(), isMatch, args.ParameterName, executedType, args.Values, args.RouteDirection)
                 { 
                 } 
             }

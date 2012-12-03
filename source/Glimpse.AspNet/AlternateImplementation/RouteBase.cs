@@ -27,14 +27,13 @@ namespace Glimpse.AspNet.AlternateImplementation
             }
         }
 
-        public class GetRouteData<T> : AlternateMethod
-            where T : System.Web.Routing.RouteBase
+        public class GetRouteData : AlternateMethod
         {
-            public GetRouteData()
-                : base(typeof(T), "GetRouteData", BindingFlags.Public | BindingFlags.Instance)
-            {   
+            public GetRouteData(Type type, string methodName, BindingFlags bindingFlags)
+                : base(type, methodName, bindingFlags)
+            {
             }
-             
+
             public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
                 context.MessageBroker.Publish(new Message(timerResult, context.InvocationTarget.GetType(), context.MethodInvocationTarget, context.InvocationTarget, (System.Web.Routing.RouteData)context.ReturnValue));
@@ -44,7 +43,7 @@ namespace Glimpse.AspNet.AlternateImplementation
             {
                 public Message(TimerResult timer, Type executedType, MethodInfo executedMethod, object invocationTarget, System.Web.Routing.RouteData routeData)
                     : base(timer, executedType, executedMethod)
-                { 
+                {
                     IsMatch = routeData != null;
                     RouteHashCode = invocationTarget.GetHashCode();
                 }
@@ -55,12 +54,20 @@ namespace Glimpse.AspNet.AlternateImplementation
             }
         }
 
-        public class GetVirtualPath<T> : AlternateMethod
+        public class GetRouteData<T> : GetRouteData
             where T : System.Web.Routing.RouteBase
         {
-            public GetVirtualPath()
-                : base(typeof(T), "GetVirtualPath", BindingFlags.Public | BindingFlags.Instance)
-            { 
+            public GetRouteData()
+                : base(typeof(T), "GetRouteData", BindingFlags.Public | BindingFlags.Instance)
+            {
+            }
+        }
+
+        public class GetVirtualPath : AlternateMethod
+        {
+            public GetVirtualPath(Type type, string methodName, BindingFlags bindingFlags)
+                : base(type, methodName, bindingFlags)
+            {
             }
 
             public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
@@ -85,14 +92,23 @@ namespace Glimpse.AspNet.AlternateImplementation
             {
                 public Message(Arguments args, TimerResult timer, Type executedType, MethodInfo executedMethod, object invocationTarget, System.Web.Routing.VirtualPathData virtualPathData)
                     : base(timer, executedType, executedMethod)
-                { 
+                {
                     IsMatch = virtualPathData != null;
                     RouteHashCode = invocationTarget.GetHashCode();
                 }
 
-                public int RouteHashCode { get; protected set; } 
+                public int RouteHashCode { get; protected set; }
 
                 public bool IsMatch { get; protected set; }
+            }
+        }
+
+        public class GetVirtualPath<T> : GetVirtualPath
+            where T : System.Web.Routing.RouteBase
+        {
+            public GetVirtualPath()
+                : base(typeof(T), "GetVirtualPath", BindingFlags.Public | BindingFlags.Instance)
+            { 
             }
         }
     }
