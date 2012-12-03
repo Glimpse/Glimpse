@@ -8,18 +8,20 @@ using Glimpse.Core.ResourceResult;
 
 namespace Glimpse.Core.Resource
 {
-    public class HistoryResource : IResource
+    public class HistoryResource : IResource, IKey
     {
         internal const string InternalName = "glimpse_history";
-        
         internal const string TopKey = "top";
 
-        public HistoryResource()
+        public string Name 
         {
-            Name = InternalName;
+            get { return InternalName; }
         }
 
-        public string Name { get; private set; }
+        public string Key
+        {
+            get { return Name; }
+        }
 
         public IEnumerable<ResourceParameterMetadata> Parameters 
         {

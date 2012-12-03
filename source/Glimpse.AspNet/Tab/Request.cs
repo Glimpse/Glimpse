@@ -5,11 +5,16 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.AspNet.Tab
 {
-    public class Request : AspNetTab, IDocumentation
+    public class Request : AspNetTab, IDocumentation, IKey
     {
         public override string Name
         {
             get { return "Request"; }
+        }
+
+        public string Key 
+        {
+            get { return "glimpse_request"; }
         }
 
         public string DocumentationUri

@@ -11,11 +11,16 @@ using MvcRouteValueDictionary = System.Web.Routing.RouteValueDictionary;
 
 namespace Glimpse.AspNet.Tab
 {
-    public class Routes : AspNetTab, IDocumentation, ITabSetup
+    public class Routes : AspNetTab, IDocumentation, ITabSetup, IKey
     {
         public override string Name
         {
             get { return "Routes"; }
+        }
+
+        public string Key
+        {
+            get { return "glimpse_routes"; }
         }
 
         public string DocumentationUri

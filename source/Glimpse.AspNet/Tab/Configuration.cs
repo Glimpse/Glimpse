@@ -2,25 +2,27 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Common;
-using System.Linq;
-using System.Text;
 using System.Web.Configuration;
 using Glimpse.AspNet.Extensibility;
-using Glimpse.AspNet.Extensions;
 using Glimpse.AspNet.Model;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 
 namespace Glimpse.AspNet.Tab
 {
-    public class Configuration : AspNetTab, IDocumentation
+    public class Configuration : AspNetTab, IDocumentation, IKey
     {
-        private readonly IEnumerable<string> _keysToAnnomalizePassword = new[] { "Password", "Pwd" };
-        private readonly string _passwordHash = "########";
+        private const string PasswordHash = "########";
+        private readonly IEnumerable<string> keysToAnnomalizePassword = new[] { "Password", "Pwd" };
 
         public override string Name
         {
             get { return "Configuration"; }
+        }
+
+        public string Key 
+        {
+            get { return "glimpse_configuration"; }
         }
 
         public string DocumentationUri
@@ -30,15 +32,17 @@ namespace Glimpse.AspNet.Tab
 
         public override object GetData(ITabContext context)
         { 
-            var result = new ConfigurationModel();
-            result.AppSettings = ConfigurationManager.AppSettings.ToDictionary();
-            result.Authentication = ProcessAuthenticationSection(ConfigurationManager.GetSection("system.web/authentication") as AuthenticationSection);
-            result.ConnectionStrings = ProcessConnectionString(ConfigurationManager.ConnectionStrings);
-            result.CustomErrors = ProcessCustomErrors(ConfigurationManager.GetSection("system.web/customErrors") as CustomErrorsSection);
-            result.HttpModules = ProcessHttpModules(ConfigurationManager.GetSection("system.web/httpModules") as HttpModulesSection);
-            result.HttpHandlers = ProcessHttpHandler(ConfigurationManager.GetSection("system.web/httpHandlers") as HttpHandlersSection);
-            result.RoleManager = ProcessRoleManager(ConfigurationManager.GetSection("system.web/roleManager") as RoleManagerSection);
-             
+            var result = new ConfigurationModel
+                {
+                    AppSettings = ConfigurationManager.AppSettings.ToDictionary(),
+                    Authentication = ProcessAuthenticationSection(ConfigurationManager.GetSection("system.web/authentication") as AuthenticationSection),
+                    ConnectionStrings = ProcessConnectionString(ConfigurationManager.ConnectionStrings),
+                    CustomErrors = ProcessCustomErrors(ConfigurationManager.GetSection("system.web/customErrors") as CustomErrorsSection),
+                    HttpModules = ProcessHttpModules(ConfigurationManager.GetSection("system.web/httpModules") as HttpModulesSection),
+                    HttpHandlers = ProcessHttpHandler(ConfigurationManager.GetSection("system.web/httpHandlers") as HttpHandlersSection),
+                    RoleManager = ProcessRoleManager(ConfigurationManager.GetSection("system.web/roleManager") as RoleManagerSection)
+                };
+
             return result;
         }
 
@@ -51,29 +55,32 @@ namespace Glimpse.AspNet.Tab
 
             var formsSection = authenticationSection.Forms;
 
-            var result = new ConfigurationAuthenticationModel();
-            result.Mode = authenticationSection.Mode.ToString();
+            var result = new ConfigurationAuthenticationModel { Mode = authenticationSection.Mode.ToString() };
 
             if (result.Forms != null)
             {
-                result.Forms = new ConfigurationAuthenticationFormsModel();
-                result.Forms.Cookieless = formsSection.Cookieless.ToString();
-                result.Forms.DefaultUrl = formsSection.DefaultUrl;
-                result.Forms.Domain = formsSection.Domain;
-                result.Forms.EnableCrossAppRedirects = formsSection.EnableCrossAppRedirects;
-                result.Forms.Name = formsSection.Name;
-                result.Forms.Path = formsSection.Path;
-                result.Forms.Protection = formsSection.Protection.ToString();
-                result.Forms.RequireSSL = formsSection.RequireSSL;
-                result.Forms.SlidingExpiration = formsSection.SlidingExpiration;
-                result.Forms.TicketCompatibilityMode = TicketCompatibilityMode(formsSection);
-                result.Forms.Timeout = formsSection.Timeout;
+                result.Forms = new ConfigurationAuthenticationFormsModel
+                    {
+                        Cookieless = formsSection.Cookieless.ToString(),
+                        DefaultUrl = formsSection.DefaultUrl,
+                        Domain = formsSection.Domain,
+                        EnableCrossAppRedirects = formsSection.EnableCrossAppRedirects,
+                        Name = formsSection.Name,
+                        Path = formsSection.Path,
+                        Protection = formsSection.Protection.ToString(),
+                        RequireSSL = formsSection.RequireSSL,
+                        SlidingExpiration = formsSection.SlidingExpiration,
+                        TicketCompatibilityMode = TicketCompatibilityMode(formsSection),
+                        Timeout = formsSection.Timeout
+                    };
 
                 var credentialsSection = formsSection.Credentials;
                 if (credentialsSection != null)
                 {
-                    result.Forms.Credentials = new ConfigurationAuthenticationFormsCredentialsModel();
-                    result.Forms.Credentials.PasswordFormat = credentialsSection.PasswordFormat.ToString();
+                    result.Forms.Credentials = new ConfigurationAuthenticationFormsCredentialsModel
+                        {
+                            PasswordFormat = credentialsSection.PasswordFormat.ToString()
+                        };
                 }
             }
 
@@ -91,10 +98,12 @@ namespace Glimpse.AspNet.Tab
 
             foreach (ConnectionStringSettings connectionString in connectionStrings)
             {
-                var resultItem = new ConfigurationConnectionStringModel();
-                resultItem.Key = connectionString.Name;
-                resultItem.Raw = connectionString.ConnectionString;
-                resultItem.ProviderName = connectionString.ProviderName;
+                var resultItem = new ConfigurationConnectionStringModel
+                    {
+                        Key = connectionString.Name,
+                        Raw = connectionString.ConnectionString,
+                        ProviderName = connectionString.ProviderName
+                    };
 
                 var connectionFactory = DbProviderFactories.GetFactory(connectionString.ProviderName);
                 var connectionStringBuilder = connectionFactory.CreateConnectionStringBuilder();
@@ -121,19 +130,19 @@ namespace Glimpse.AspNet.Tab
             }
 
             return result.Count > 0 ? result : null;
-        } 
+        }
 
         private void AnnomalizeConnectionStringPassword(IDictionary<string, object> connectionDetails, ConfigurationConnectionStringModel model)
         {
-            foreach (var key in _keysToAnnomalizePassword)
+            foreach (var key in keysToAnnomalizePassword)
             {
                 if (connectionDetails.ContainsKey(key))
                 {
                     var password = connectionDetails[key].ToString();
                     if (!string.IsNullOrEmpty(password))
                     {
-                        connectionDetails[key] = _passwordHash; 
-                        model.Raw = model.Raw.Replace(password, _passwordHash);
+                        connectionDetails[key] = PasswordHash; 
+                        model.Raw = model.Raw.Replace(password, PasswordHash);
                     }
 
                     return;
@@ -148,20 +157,24 @@ namespace Glimpse.AspNet.Tab
                 return null;
             }
 
-            var result = new ConfigurationCustomErrorsModel();
-            result.DefaultRedirect = customErrorsSection.DefaultRedirect;
-            result.RedirectMode = customErrorsSection.RedirectMode.ToString();
-            result.Mode = customErrorsSection.Mode.ToString(); 
-            
+            var result = new ConfigurationCustomErrorsModel
+                {
+                    DefaultRedirect = customErrorsSection.DefaultRedirect,
+                    RedirectMode = customErrorsSection.RedirectMode.ToString(),
+                    Mode = customErrorsSection.Mode.ToString()
+                };
+
             var errorsSection = customErrorsSection.Errors;
             if (errorsSection != null)
             {
                 var resultErrors = new List<ConfigurationCustomErrorsErrorModel>();
                 foreach (CustomError error in errorsSection)
                 {
-                    var resultError = new ConfigurationCustomErrorsErrorModel();
-                    resultError.Redirect = error.Redirect;
-                    resultError.StatusCode = error.StatusCode;
+                    var resultError = new ConfigurationCustomErrorsErrorModel
+                        {
+                            Redirect = error.Redirect,
+                            StatusCode = error.StatusCode
+                        };
 
                     resultErrors.Add(resultError);
                 }
@@ -182,9 +195,7 @@ namespace Glimpse.AspNet.Tab
             var result = new List<ConfigurationHttpModulesModel>();
             foreach (HttpModuleAction httpModule in httpModulesSection.Modules)
             {
-                var resultItem = new ConfigurationHttpModulesModel();
-                resultItem.Name = httpModule.Name;
-                resultItem.Type = httpModule.Type;
+                var resultItem = new ConfigurationHttpModulesModel { Name = httpModule.Name, Type = httpModule.Type };
 
                 result.Add(resultItem);
             }
@@ -202,11 +213,13 @@ namespace Glimpse.AspNet.Tab
             var result = new List<ConfigurationHttpHandlersModel>();
             foreach (HttpHandlerAction httpModule in httpHandlersSection.Handlers)
             {
-                var resultItem = new ConfigurationHttpHandlersModel();
-                resultItem.Path = httpModule.Path;
-                resultItem.Verb = httpModule.Verb;
-                resultItem.Validate = httpModule.Validate;
-                resultItem.Type = httpModule.Type;
+                var resultItem = new ConfigurationHttpHandlersModel
+                    {
+                        Path = httpModule.Path,
+                        Verb = httpModule.Verb,
+                        Validate = httpModule.Validate,
+                        Type = httpModule.Type
+                    };
 
                 result.Add(resultItem);
             }
@@ -221,19 +234,21 @@ namespace Glimpse.AspNet.Tab
                 return null;
             }
 
-            var result = new ConfigurationRoleManagerModel();
-            result.CacheRolesInCookie = roleManagerSection.CacheRolesInCookie;
-            result.CookieName = roleManagerSection.CookieName;
-            result.CookiePath = roleManagerSection.CookiePath;
-            result.CookieProtection = roleManagerSection.CookieProtection.ToString();
-            result.CookieRequireSSL = roleManagerSection.CookieRequireSSL;
-            result.CookieSlidingExpiration = roleManagerSection.CookieSlidingExpiration;
-            result.CookieTimeout = roleManagerSection.CookieTimeout;
-            result.CreatePersistentCookie = roleManagerSection.CreatePersistentCookie;
-            result.DefaultProvider = roleManagerSection.DefaultProvider;
-            result.Domain = roleManagerSection.Domain;
-            result.Enabled = roleManagerSection.Enabled;
-            result.MaxCachedResults = roleManagerSection.MaxCachedResults;
+            var result = new ConfigurationRoleManagerModel
+                {
+                    CacheRolesInCookie = roleManagerSection.CacheRolesInCookie,
+                    CookieName = roleManagerSection.CookieName,
+                    CookiePath = roleManagerSection.CookiePath,
+                    CookieProtection = roleManagerSection.CookieProtection.ToString(),
+                    CookieRequireSSL = roleManagerSection.CookieRequireSSL,
+                    CookieSlidingExpiration = roleManagerSection.CookieSlidingExpiration,
+                    CookieTimeout = roleManagerSection.CookieTimeout,
+                    CreatePersistentCookie = roleManagerSection.CreatePersistentCookie,
+                    DefaultProvider = roleManagerSection.DefaultProvider,
+                    Domain = roleManagerSection.Domain,
+                    Enabled = roleManagerSection.Enabled,
+                    MaxCachedResults = roleManagerSection.MaxCachedResults
+                };
 
             var providerSection = roleManagerSection.Providers;
             if (providerSection != null)
@@ -241,10 +256,12 @@ namespace Glimpse.AspNet.Tab
                 var resultProviders = new List<ConfigurationRoleManagerProviderSettingsModel>();
                 foreach (ProviderSettings provider in providerSection)
                 {
-                    var resultProvider = new ConfigurationRoleManagerProviderSettingsModel();
-                    resultProvider.Name = provider.Name;
-                    resultProvider.Type = provider.Type;
-                    resultProvider.Parameters = provider.Parameters.ToDictionary();
+                    var resultProvider = new ConfigurationRoleManagerProviderSettingsModel
+                        {
+                            Name = provider.Name,
+                            Type = provider.Type,
+                            Parameters = provider.Parameters.ToDictionary()
+                        };
 
                     resultProviders.Add(resultProvider);
                 }

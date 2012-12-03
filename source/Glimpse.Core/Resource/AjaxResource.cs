@@ -7,23 +7,26 @@ using Glimpse.Core.ResourceResult;
 
 namespace Glimpse.Core.Resource
 {
-    public class AjaxResource : IResource
+    public class AjaxResource : IResource, IKey
     {
         internal const string InternalName = "glimpse_ajax";
         private const string ParentRequestKey = "parentRequestId";
 
-        public AjaxResource()
+        public string Name 
         {
-            Name = InternalName;
+            get { return InternalName; }
         }
-
-        public string Name { get; private set; }
 
         public IEnumerable<ResourceParameterMetadata> Parameters
         {
             get { return new[] { new ResourceParameterMetadata(ParentRequestKey), ResourceParameter.VersionNumber, ResourceParameter.Callback }; }
         }
-        
+
+        public string Key 
+        {
+            get { return Name; }
+        }
+
         public IResourceResult Execute(IResourceContext context)
         {
             if (context == null)

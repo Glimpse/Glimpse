@@ -114,7 +114,7 @@ namespace Glimpse.Test.Core.Framework
             var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
             Assert.Equal(1, results.Count);
-            Assert.Contains("Castle_Proxies_ITabProxy", results.First().Key); 
+            Assert.Contains("castle_proxies_itabproxy", results.First().Key); 
         }
 
         [Fact]

@@ -88,6 +88,7 @@
     <Compile Include="Extensibility\IAlternateType.cs" />
     <Compile Include="Extensibility\IConfigurable.cs" />
     <Compile Include="Extensibility\IExecutionTimer.cs" />
+    <Compile Include="Extensibility\IKey.cs" />
     <Compile Include="Extensibility\IParameterValueProvider.cs" />
     <Compile Include="Extensibility\IPrivilegedResource.cs" />
     <Compile Include="Extensibility\ITabLayout.cs" />
@@ -143,7 +144,6 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\TabContextExtensions.cs" />
     <Compile Include="Extensions\TypeElementCollectionExtensions.cs" />
-    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Extensions\UriTemplateExtensions.cs" />
     <Compile Include="Framework\ApplicationPersistenceStore.cs" />
     <Compile Include="Framework\CacheSetting.cs" />

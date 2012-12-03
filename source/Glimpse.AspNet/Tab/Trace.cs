@@ -9,7 +9,7 @@ using Glimpse.Core.Plugin.Assist;
 
 namespace Glimpse.AspNet.Tab
 {
-    public class Trace : ITab, ITabSetup, IDocumentation, ITabLayout
+    public class Trace : ITab, ITabSetup, IDocumentation, ITabLayout, IKey
     {
         public const string TraceMessageStoreKey = "Glimpse.Trace.Messages";
         public const string FirstWatchStoreKey = "Glimpse.Trace.FirstWatch";
@@ -27,6 +27,11 @@ namespace Glimpse.AspNet.Tab
         public string Name
         {
             get { return "Trace"; }
+        }
+
+        public string Key
+        {
+            get { return "glimpse_trace"; }
         }
 
         public string DocumentationUri

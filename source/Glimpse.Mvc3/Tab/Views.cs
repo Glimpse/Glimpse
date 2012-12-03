@@ -9,7 +9,7 @@ using Glimpse.Mvc.Model;
 
 namespace Glimpse.Mvc.Tab
 {
-    public class Views : AspNetTab, IDocumentation, ITabSetup, ITabLayout
+    public class Views : AspNetTab, IDocumentation, ITabSetup, ITabLayout, IKey
     {
         private static readonly object Layout = TabLayout.Create()
                 .Row(r =>
@@ -28,6 +28,11 @@ namespace Glimpse.Mvc.Tab
         public override string Name
         {
             get { return "Views"; }
+        }
+
+        public string Key
+        {
+            get { return "glimpse_views"; }
         }
 
         public string DocumentationUri

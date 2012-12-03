@@ -286,7 +286,7 @@ namespace Glimpse.Core.Framework
                         var tabsThatRequireSetup = Configuration.Tabs.Where(tab => tab is ITabSetup).Select(tab => tab);
                         foreach (ITabSetup tab in tabsThatRequireSetup)
                         {
-                            var key = tab.GetType().ConvertToSafeJson();
+                            var key = tab.CreateKey();
                             try
                             {
                                 var setupContext = new TabSetupContext(logger, messageBroker, () => GetTabStore(key));
@@ -363,7 +363,7 @@ namespace Glimpse.Core.Framework
             foreach (var tab in supportedRuntimeTabs)
             {
                 TabResult result;
-                var key = tab.GetType().ConvertToSafeJson();
+                var key = tab.CreateKey();
                 try
                 {
                     var tabContext = new TabContext(runtimeContext, GetTabStore(key), logger, messageBroker);
@@ -417,7 +417,7 @@ namespace Glimpse.Core.Framework
 
                 if (metadataInstance.HasMetadata)
                 {
-                    pluginMetadata[tab.GetType().ConvertToSafeJson()] = metadataInstance;
+                    pluginMetadata[tab.CreateKey()] = metadataInstance;
                 } 
             }
 
@@ -427,12 +427,13 @@ namespace Glimpse.Core.Framework
 
             foreach (var resource in Configuration.Resources)
             {
-                if (resources.ContainsKey(resource.Name))
+                var resourceKey = resource.CreateKey();
+                if (resources.ContainsKey(resourceKey))
                 {
                     logger.Warn(Resources.GlimpseRuntimePersistMetadataMultipleResourceWarning, resource.Name);
                 }
 
-                resources[resource.Name] = endpoint.GenerateUriTemplate(resource, Configuration.EndpointBaseUri, logger);
+                resources[resourceKey] = endpoint.GenerateUriTemplate(resource, Configuration.EndpointBaseUri, logger);
             }
 
             Configuration.PersistenceStore.Save(metadata);

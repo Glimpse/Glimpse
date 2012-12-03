@@ -14,11 +14,16 @@ using Glimpse.Mvc2.Backport;
 
 namespace Glimpse.Mvc.Tab
 {
-    public class ModelBinding : AspNetTab, ITabSetup
+    public class ModelBinding : AspNetTab, ITabSetup, IKey
     {
         public override string Name
         {
             get { return "Model Binding"; }
+        }
+
+        public string Key
+        {
+            get { return "glimpse_binding"; }
         }
 
         public override object GetData(ITabContext context)

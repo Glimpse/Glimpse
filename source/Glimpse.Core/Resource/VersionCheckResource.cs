@@ -9,7 +9,7 @@ using Glimpse.Core.ResourceResult;
 
 namespace Glimpse.Core.Resource
 {
-    public class VersionCheckResource : IResource
+    public class VersionCheckResource : IResource, IKey
     {
         internal const string InternalName = "glimpse_version_check";
         private const int OneDay = 86400;
@@ -17,6 +17,11 @@ namespace Glimpse.Core.Resource
         public string Name
         {
             get { return InternalName; }
+        }
+
+        public string Key
+        {
+            get { return Name; }
         }
 
         public IEnumerable<ResourceParameterMetadata> Parameters

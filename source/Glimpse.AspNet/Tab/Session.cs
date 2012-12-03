@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web;
+﻿using System.Collections.Generic;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.AspNet.Extensions;
 using Glimpse.AspNet.Model;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Plugin.Assist;
 
 namespace Glimpse.AspNet.Tab
 {
-    using Glimpse.Core.Plugin.Assist;
-
-    public class Session : AspNetTab, IDocumentation, ITabLayout
+    public class Session : AspNetTab, IDocumentation, ITabLayout, IKey
     {
         private static readonly object Layout = TabLayout.Create()
                 .Row(r =>
@@ -30,6 +25,11 @@ namespace Glimpse.AspNet.Tab
         public override string Name
         {
             get { return "Session"; }
+        }
+
+        public string Key
+        {
+            get { return "glimpse_session"; }
         }
 
         public override RuntimeEvent ExecuteOn

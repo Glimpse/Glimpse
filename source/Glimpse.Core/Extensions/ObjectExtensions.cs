@@ -39,5 +39,25 @@ namespace Glimpse.Core.Extensions
 
             return (T)obj;
         }
+
+        internal static string CreateKey(this object obj)
+        {
+            string result;
+            var keyProvider = obj as IKey;
+
+            if (keyProvider != null)
+            {
+                result = keyProvider.Key;
+            }
+            else
+            {
+                result = obj.GetType().FullName;
+            }
+
+            return result
+                .Replace('.', '_')
+                .Replace(' ', '_')
+                .ToLower();
+        }
     }
 }

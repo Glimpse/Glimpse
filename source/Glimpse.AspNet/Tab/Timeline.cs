@@ -8,7 +8,7 @@ using Glimpse.Core.Message;
 
 namespace Glimpse.AspNet.Tab
 { 
-    public class Timeline : AspNetTab, IDocumentation, ITabSetup
+    public class Timeline : AspNetTab, IDocumentation, ITabSetup, IKey
     {
         private readonly IDictionary<string, TimelineCategoryModel> categories = new Dictionary<string, TimelineCategoryModel>
                            {
@@ -30,6 +30,11 @@ namespace Glimpse.AspNet.Tab
         public override string Name
         {
             get { return "Timeline"; }
+        }
+
+        public string Key
+        {
+            get { return "glimpse_timeline"; }
         }
 
         public string DocumentationUri
