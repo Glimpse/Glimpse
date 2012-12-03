@@ -933,7 +933,9 @@ glimpse.render.engine.util.raw = (function($, util) {
                 var newMetadataItem = metadataItem.layout;
                 if ($.isPlainObject(newMetadataItem)) 
                     newMetadataItem = newMetadataItem[rowIndex];
-                    
+                if (newMetadataItem)
+                    newMetadataItem = { layout: newMetadataItem };
+
                 cellContent = metadataItem.indexs ? buildFormatString(metadataItem.data, data, metadataItem.indexs) : data[metadataItem.data];
                 
                 //If minDisplay and we are in header or there is no data, we don't want to render anything 
