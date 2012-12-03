@@ -2,7 +2,7 @@
 
 namespace Glimpse.Mvc.Message
 {
-    public interface IFilterMessage : IExecutionMessage
+    public interface IFilterMessage : IActionBaseMessage
     {
         FilterCategory Category { get; }
 

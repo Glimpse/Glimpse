@@ -106,7 +106,7 @@ namespace Glimpse.Test.AspNet.Tab
         [Fact(Skip = "Work in progress")]
         public void MatchConstraintMessageToRoute()
         {
-            // create a TabDataStore, and configure a ITabSetupContext and ITabContext which will return it
+            /*// create a TabDataStore, and configure a ITabSetupContext and ITabContext which will return it
             var store = new DictionaryDataStoreAdapter(new Dictionary<object, object>());
             var setupMock = new Mock<ITabSetupContext>();
             setupMock.Setup(s => s.GetTabStore()).Returns(store);
@@ -118,8 +118,8 @@ namespace Glimpse.Test.AspNet.Tab
             var route1 = new System.Web.Routing.Route("url", null, constraints, routeHandler.Object);
   
             // send a constraint-processed message
-            var msg = new Route.ProcessConstraint.Message(route1, new Route.ProcessConstraint.Arguments(new object[] { null, null, "controller", null, RouteDirection.IncomingRequest }), false);
-            // Routes.Persist(msg, setupMock.Object); Persist method is gone now, will need to test this another way
+            var msg = new Route.ProcessConstraint.Message(new Route.ProcessConstraint.Arguments(new object[] { null, null, "controller", null, RouteDirection.IncomingRequest }), null, null, null, 123, false);
+            Routes.Persist(msg, setupMock.Object);
 
             // check the output
             var model1 = Tab.GetRouteModelForRoute(Tab.TabContextMock.Object, route1, null);
@@ -135,7 +135,7 @@ namespace Glimpse.Test.AspNet.Tab
 
             var unmatchedConstraint = model1.Constraints.First(c => c.ParameterName != "controller");
             Assert.NotNull(unmatchedConstraint);
-            Assert.False(unmatchedConstraint.Checked);
+            Assert.False(unmatchedConstraint.Checked);*/
         }
     }
 }

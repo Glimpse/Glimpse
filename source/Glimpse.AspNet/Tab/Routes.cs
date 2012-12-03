@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Glimpse.AspNet.AlternateImplementation;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.AspNet.Model;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
+using MvcRoute = System.Web.Routing.Route;
+using MvcRouteBase = System.Web.Routing.RouteBase;
+using MvcRouteValueDictionary = System.Web.Routing.RouteValueDictionary;
 
 namespace Glimpse.AspNet.Tab
 {
@@ -24,72 +26,88 @@ namespace Glimpse.AspNet.Tab
         public void Setup(ITabSetupContext context)
         {
             context.PersistMessages<Route.ProcessConstraint.Message>();
+            context.PersistMessages<RouteBase.GetRouteData.Message>();
         }
 
         public override object GetData(ITabContext context)
         {
-            var routeMessages = context.GetMessages<Route.ProcessConstraint.Message>();
+            var routeMessages = ProcessMessages(context.GetMessages<RouteBase.GetRouteData.Message>());
+            var constraintMessages = ProcessMessages(context.GetMessages<Route.ProcessConstraint.Message>());
 
             var result = new List<RouteModel>();
-
-            var httpContext = context.GetRequestContext<HttpContextBase>();
-            var hasEverMatched = false;
 
             using (System.Web.Routing.RouteTable.Routes.GetReadLock())
             {
                 foreach (var routeBase in System.Web.Routing.RouteTable.Routes)
                 {
-                    var route = routeBase as System.Web.Routing.Route;
-
-                    var routeModel = route != null ? GetRouteModelForRoute(context, route, routeMessages) : new RouteModel();
-
-                    System.Web.Routing.RouteData routeData = null;
-                    if (httpContext != null)
-                    {
-                        routeData = routeBase.GetRouteData(httpContext);
-                        if (routeData != null)
-                        {
-                            ProcessValues(routeModel, routeData.Values);
-                        }
-                    }
-
-                    var matchesCurrentRequest = routeData != null;
-                    routeModel.IsFirstMatch = matchesCurrentRequest && !hasEverMatched;
-                    routeModel.MatchesCurrentRequest = matchesCurrentRequest;
+                    var routeModel = GetRouteModelForRoute(context, routeBase, routeMessages, constraintMessages);
 
                     result.Add(routeModel);
-
-                    hasEverMatched = hasEverMatched || matchesCurrentRequest;
                 }
             }
 
             return result;
         }
 
-        public RouteModel GetRouteModelForRoute(ITabContext context, System.Web.Routing.Route route, IEnumerable<Route.ProcessConstraint.Message> routeMessages)
+        private Dictionary<int, List<RouteBase.GetRouteData.Message>> ProcessMessages(IEnumerable<RouteBase.GetRouteData.Message> messages)
+        { 
+            return messages.GroupBy(x => x.RouteHashCode).ToDictionary(x => x.Key, x => x.ToList());
+        }
+
+        private Dictionary<int, Dictionary<int, List<Route.ProcessConstraint.Message>>> ProcessMessages(IEnumerable<Route.ProcessConstraint.Message> messages)
+        { 
+            return messages.GroupBy(x => x.RouteHashCode).ToDictionary(x => x.Key, x => x.ToList().GroupBy(y => y.ConstraintHashCode).ToDictionary(y => y.Key, y => y.ToList()));
+        }
+
+        private RouteModel GetRouteModelForRoute(ITabContext context, MvcRouteBase routeBase, Dictionary<int, List<RouteBase.GetRouteData.Message>> routeMessages, Dictionary<int, Dictionary<int, List<Route.ProcessConstraint.Message>>> constraintMessages)
         {
-            var routeData = new List<RouteDataItemModel>();
-            if (route.Defaults != null)
+            var result = new RouteModel();
+
+            var route = routeBase as MvcRoute;
+            if (route != null)
             {
-                routeData.AddRange(route.Defaults.Select(x => new RouteDataItemModel(x.Key, x.Value)));
+                result.Area = (route.DataTokens != null && route.DataTokens.ContainsKey("area")) ? route.DataTokens["area"].ToString() : null;
+                result.Url = route.Url;
+                result.RouteData = ProcessRouteData(route.Defaults);
+                result.Constraints = ProcessConstraints(context, route, constraintMessages);
+                result.DataTokens = ProcessDataTokens(route.DataTokens);
+            }
+            else
+            {
+                result.Url = "Can't show non System.Web.MVC.Route types";
             }
 
-            var result = new RouteModel();
-            result.Area = (route.DataTokens != null && route.DataTokens.ContainsKey("area")) ? route.DataTokens["area"].ToString() : null;
-            result.Url = route.Url;
-            result.RouteData = routeData.Count > 1 ? routeData : null;
-            result.Constraints = ProcessConstraints(context, route, routeMessages);
-            result.DataTokens = (route.DataTokens != null && route.DataTokens.Count > 0) ? route.DataTokens : null;
+            var routeMessage = routeMessages.GetValueOrDefault(routeBase.GetHashCode()).SafeFirstOrDefault();
+            if (routeMessage != null)
+            {
+                result.Duration = routeMessage.Duration;
+                result.IsFirstMatch = routeMessage.IsMatch;
+            }
 
             return result;
         }
 
-        private IEnumerable<RouteConstraintModel> ProcessConstraints(ITabContext context, System.Web.Routing.Route route, IEnumerable<Route.ProcessConstraint.Message> routeMessages)
+        private IEnumerable<RouteDataItemModel> ProcessRouteData(MvcRouteValueDictionary defaults)
+        {
+            if (defaults == null || defaults.Count == 0)
+            {
+                return null;
+            }
+
+            var routeData = new List<RouteDataItemModel>();
+            routeData.AddRange(defaults.Select(x => new RouteDataItemModel(x.Key, x.Value)));
+
+            return routeData;
+        }
+
+        private IEnumerable<RouteConstraintModel> ProcessConstraints(ITabContext context, MvcRoute route, Dictionary<int, Dictionary<int, List<Route.ProcessConstraint.Message>>> constraintMessages)
         {
             if (route.Constraints == null || route.Constraints.Count == 0)
             {
                 return null;
             }
+             
+            var counstraintRouteMessages = constraintMessages.GetValueOrDefault(route.GetHashCode()); 
 
             var result = new List<RouteConstraintModel>();
             foreach (var constraint in route.Constraints)
@@ -98,10 +116,25 @@ namespace Glimpse.AspNet.Tab
                 model.ParameterName = constraint.Key;
                 model.Constraint = constraint.Value.ToString();
 
+                if (counstraintRouteMessages != null)
+                {
+                    var counstraintMessage = counstraintRouteMessages.GetValueOrDefault(route.GetHashCode()).SafeFirstOrDefault();
+                    model.Checked = true;
+                    if (counstraintMessage != null)
+                    {
+                        model.Matched = counstraintMessage.IsMatch;
+                    }
+                }
+
                 result.Add(model);
             }
 
             return result;
+        }
+
+        private IDictionary<string, object> ProcessDataTokens(IDictionary<string, object> dataTokens)
+        {
+            return dataTokens != null && dataTokens.Count > 0 ? dataTokens : null;
         }
 
         private void ProcessValues(RouteModel model, System.Web.Routing.RouteValueDictionary values)

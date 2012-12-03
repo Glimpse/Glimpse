@@ -19,7 +19,30 @@ namespace MvcMusicStore
 
         public static void RegisterRoutes(RouteCollection routes)
         {
+
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
+            routes.MapRoute(
+                "BlogArchive",
+                "Archive/{entryDate}",
+                new { controller = "Blog", action = "Archive" },
+                new { entryDate = @"d{2}-d{2}-d{4}" }
+            );
+
+            routes.MapRoute(
+                "Product",
+                "Product/Insert",
+                new { controller = "Product", action = "Insert" },
+                new { Grendal = new HttpMethodConstraint("POST") }
+            );
+
+            routes.MapRoute(
+                "DefaultBrowse", // Route name
+                "{controller}/{action}/{id}", // URL with parameters
+                new { controller = "Home", action = "Browse", id = UrlParameter.Optional }, // Parameter defaults
+                new { action = @"Index" }
+            );
+
 
             routes.MapRoute(
                 "Default", // Route name
@@ -27,6 +50,11 @@ namespace MvcMusicStore
                 new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults
             );
 
+            routes.MapRoute(
+                "DefaultTest", // Route name
+                "{controller}/{action}/{id}/{test}", // URL with parameters
+                new { controller = "Home", action = "Index", id = UrlParameter.Optional, test = 1 } // Parameter defaults
+            ); 
         }
 
         protected void Application_Start()

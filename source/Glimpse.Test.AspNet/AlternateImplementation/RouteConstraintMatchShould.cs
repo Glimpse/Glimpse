@@ -1,23 +1,26 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text; 
 using Glimpse.AspNet.AlternateImplementation;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
-using Glimpse.Test.Common;
-using Moq;
-using Ploeh.AutoFixture.Xunit;
+using Glimpse.Test.Common; 
+using Moq; 
+using Ploeh.AutoFixture.Xunit; 
 using Xunit;
 using Xunit.Extensions;
 
 namespace Glimpse.Test.AspNet.AlternateImplementation
 {
-    public class RouteProcessConstraintShould
+    public class RouteConstraintMatchShould
     {
         [Fact]
         public void ReturnProperMethodToImplement()
         {
-            var impl = new Route.ProcessConstraint();
+            var impl = new RouteConstraint.Match();
 
-            Assert.Equal("ProcessConstraint", impl.MethodToImplement.Name);
+            Assert.Equal("Match", impl.MethodToImplement.Name);
         }
 
         [Theory, AutoMock]
@@ -25,7 +28,7 @@ namespace Glimpse.Test.AspNet.AlternateImplementation
         {
             context.Setup(c => c.RuntimePolicyStrategy).Returns(() => RuntimePolicy.Off);
 
-            var impl = new Route.ProcessConstraint();
+            var impl = new RouteConstraint.Match();
 
             impl.NewImplementation(context);
 
@@ -33,18 +36,18 @@ namespace Glimpse.Test.AspNet.AlternateImplementation
         }
 
         [Theory, AutoMock]
-        public void PublishMessageWhenExecuted([Frozen] IExecutionTimer timer, IAlternateImplementationContext context)
+        public void PublishMessageWhenExecuted([Frozen] IExecutionTimer timer, IAlternateImplementationContext context, System.Web.Routing.IRouteHandler handler)
         {
-            context.Setup(c => c.Arguments).Returns(new object[] { (System.Web.HttpContextBase)null, new object(), (string)null, (System.Web.Routing.RouteValueDictionary)null, System.Web.Routing.RouteDirection.IncomingRequest });
+            context.Setup(c => c.Arguments).Returns(new object[] { (System.Web.HttpContextBase)null, new System.Web.Routing.Route("Test", handler), (string)null, (System.Web.Routing.RouteValueDictionary)null, System.Web.Routing.RouteDirection.IncomingRequest });
             context.Setup(c => c.ReturnValue).Returns(true);
             context.Setup(c => c.InvocationTarget).Returns(new System.Web.Routing.Route("Test", null));
 
-            var impl = new Route.ProcessConstraint();
+            var impl = new RouteConstraint.Match();
 
             impl.NewImplementation(context);
 
             timer.Verify(t => t.Time(It.IsAny<Action>()));
-            context.MessageBroker.Verify(mb => mb.Publish(It.IsAny<Route.ProcessConstraint.Message>()));
+            context.MessageBroker.Verify(mb => mb.Publish(It.IsAny<RouteConstraint.Match.Message>()));
         }
     }
 }

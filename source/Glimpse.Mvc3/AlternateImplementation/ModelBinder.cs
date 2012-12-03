@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {

@@ -1,44 +1,57 @@
+using System.Linq; 
 using Glimpse.Core.Extensibility;
 
 namespace Glimpse.AspNet.PipelineInspector
-{ 
+{
     public class RoutesInspector : IPipelineInspector
     {
-        public void Setup(IPipelineInspectorContext context)
+        public RoutesInspector()
         {
-            var logger = context.Logger;
+            RoutesConstraintInspector = new RoutesConstraintInspector();
+        }
+
+        private RoutesConstraintInspector RoutesConstraintInspector { get; set; }
+
+        public void Setup(IPipelineInspectorContext context)
+        { 
+            var logger = context.Logger; 
             var alternateImplementation = new Glimpse.AspNet.AlternateImplementation.Route(context.ProxyFactory);
             var alternateBaseImplementation = new Glimpse.AspNet.AlternateImplementation.RouteBase(context.ProxyFactory);
+            var alternateConstraintImplementation = new Glimpse.AspNet.AlternateImplementation.RouteConstraint(context.ProxyFactory); 
 
             var currentRoutes = System.Web.Routing.RouteTable.Routes;
             using (currentRoutes.GetWriteLock())
             {
                 for (var i = 0; i < currentRoutes.Count; i++)
                 {
-                    var replaceRoute = (System.Web.Routing.RouteBase)null; 
+                    var routeBase = currentRoutes[i];
+                    var replaceRoute = (System.Web.Routing.RouteBase)null;
 
-                    var routeBase = currentRoutes[i]; 
                     var route = routeBase as System.Web.Routing.Route;
                     if (route != null)
                     {
-                        System.Web.Routing.Route newRoute;
-                        if (alternateImplementation.TryCreate(route, out newRoute, null, new object[] { route.Url, route.Defaults, route.Constraints, route.DataTokens, route.RouteHandler }))
+                        if (routeBase.GetType() == typeof(System.Web.Routing.Route))
                         {
-                            replaceRoute = newRoute; 
+                            replaceRoute = context.ProxyFactory.ExtendClass<System.Web.Routing.Route>(alternateImplementation.AllMethods, Enumerable.Empty<object>(), new object[] { route.Url, route.Defaults, route.Constraints, route.DataTokens, route.RouteHandler });
+                        }
+                        else if (context.ProxyFactory.IsWrapClassEligible(typeof(System.Web.Routing.Route)))
+                        {
+                            replaceRoute = context.ProxyFactory.WrapClass(route, alternateImplementation.AllMethods, Enumerable.Empty<object>(), new object[] { route.Url, route.Defaults, route.Constraints, route.DataTokens, route.RouteHandler });
+                            RoutesConstraintInspector.Setup(logger, context.ProxyFactory, alternateConstraintImplementation, route.Constraints);
                         }
                     }
-                    else
+
+                    if (replaceRoute == null)
                     {
-                        System.Web.Routing.RouteBase newRouteBase;
-                        if (alternateBaseImplementation.TryCreate(routeBase, out newRouteBase))
+                        if (context.ProxyFactory.IsWrapClassEligible(typeof(System.Web.Routing.RouteBase)))
                         {
-                            replaceRoute = newRouteBase;
+                            replaceRoute = context.ProxyFactory.WrapClass(routeBase, alternateBaseImplementation.AllMethods);
                         }
                     }
 
                     if (replaceRoute != null)
                     {
-                        currentRoutes[i] = replaceRoute; 
+                        currentRoutes[i] = replaceRoute;
                         logger.Info(Resources.RouteSetupReplacedRoute, routeBase.GetType());
                     }
                     else

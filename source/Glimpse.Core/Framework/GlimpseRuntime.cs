@@ -16,13 +16,25 @@ namespace Glimpse.Core.Framework
 {
     public class GlimpseRuntime : IGlimpseRuntime
     {
-        private static object lockObj = new object();
+        private static readonly MethodInfo MethodInfoBeginRequest = typeof(GlimpseRuntime).GetMethod("BeginRequest", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo MethodInfoEndRequest = typeof(GlimpseRuntime).GetMethod("EndRequest", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly object LockObj = new object();
 
         static GlimpseRuntime()
         {
             // Version is in major.minor.build format to support http://semver.org/
             // TODO: Consider adding configuration hash to version
             Version = Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
+
+            if (MethodInfoBeginRequest == null)
+            {
+                throw new NullReferenceException("BeginRequest method not found");
+            }
+
+            if (MethodInfoEndRequest == null)
+            {
+                throw new NullReferenceException("EndRequest method not found");
+            }
         }
 
         public GlimpseRuntime(IGlimpseConfiguration configuration)
@@ -79,7 +91,7 @@ namespace Glimpse.Core.Framework
             requestStore.Set(Constants.GlobalStopwatchKey, stopwatch);
             requestStore.Set(Constants.GlobalTimerKey, executionTimer);
 
-            Configuration.MessageBroker.Publish(new TimelineMessage(executionTimer.Point(), "Start Request", "WebForms"));
+            Configuration.MessageBroker.Publish(new TimelineMessage(executionTimer.Point(), typeof(GlimpseRuntime), MethodInfoBeginRequest, "Start Request", "WebForms"));
         }
 
         // TODO: Add PRG support
@@ -98,7 +110,7 @@ namespace Glimpse.Core.Framework
             var executionTimer = requestStore.Get<ExecutionTimer>(Constants.GlobalTimerKey);
             if (executionTimer != null)
             {
-                Configuration.MessageBroker.Publish(new TimelineMessage(executionTimer.Point(), "End Request", "WebForms"));
+                Configuration.MessageBroker.Publish(new TimelineMessage(executionTimer.Point(), typeof(GlimpseRuntime), MethodInfoEndRequest, "End Request", "WebForms"));
             }
 
             ExecuteTabs(RuntimeEvent.EndRequest);
@@ -265,7 +277,7 @@ namespace Glimpse.Core.Framework
             // Double checked lock to ensure thread safety. http://en.wikipedia.org/wiki/Double_checked_locking_pattern
             if (!IsInitialized)
             {
-                lock (lockObj)
+                lock (LockObj)
                 {
                     if (!IsInitialized)
                     {

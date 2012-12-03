@@ -2,26 +2,21 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Web.Mvc;
-using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions;
+using Glimpse.Core.Extensibility; 
 using Glimpse.Core.Message;
 
 namespace Glimpse.Mvc.Message
 {
-    public class ExecutionMessage : TimelineMessage, IExecutionMessage
+    public class ActionBaseMessage : TimelineMessage, IActionBaseMessage
     {
-        public ExecutionMessage(TimerResult timerResult, bool isChildAction, Type executedType, MethodInfo method, string eventName = null, string eventCategory = null)
-            : base(timerResult, eventName, eventCategory) 
+        public ActionBaseMessage(TimerResult timerResult, bool isChildAction, Type executedType, MethodInfo method, string eventName = null, string eventCategory = null)
+            : base(timerResult, executedType, method, eventName, eventCategory) 
         {
             IsChildAction = isChildAction;
             ExecutedType = executedType;
             ExecutedMethod = method; 
         }
-
-        public MethodInfo ExecutedMethod { get; protected set; } 
-
-        public Type ExecutedType { get; protected set; }
-
+         
         public bool IsChildAction { get; protected set; }
 
         public override void BuildDetails(IDictionary<string, object> details)

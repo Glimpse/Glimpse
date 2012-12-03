@@ -7,6 +7,11 @@ namespace Glimpse.Test.Common
 {
     public static class MoqExtensions
     {
+        public static void VerifyAll<T>(this T obj) where T : class
+        {
+            Mock.Get(obj).VerifyAll();
+        }
+
         public static void Verify<T, TResult>(this T obj, Expression<Func<T, TResult>> expression) where T : class
         {
             Mock.Get(obj).Verify(expression);

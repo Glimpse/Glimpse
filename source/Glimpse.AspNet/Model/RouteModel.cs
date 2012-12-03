@@ -15,8 +15,10 @@ namespace Glimpse.AspNet.Model
 
         public IEnumerable<RouteConstraintModel> Constraints { get; set; }
 
-        public RouteValueDictionary DataTokens { get; set; }
+        public IDictionary<string, object> DataTokens { get; set; }
 
         public bool IsFirstMatch { get; set; }
+
+        public double Duration { get; set; }
     }
 }

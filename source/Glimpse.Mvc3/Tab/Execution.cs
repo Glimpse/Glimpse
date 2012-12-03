@@ -39,14 +39,14 @@ namespace Glimpse.Mvc.Tab
 
         public override object GetData(ITabContext context)
         {
-            var actionFilterMessages = context.GetMessages<IExecutionMessage>();
+            var actionFilterMessages = context.GetMessages<IActionBaseMessage>();
 
             return actionFilterMessages.Select(message => new ExecutionModel(message)).ToList();
         }
 
         public void Setup(ITabSetupContext context)
         {
-            context.PersistMessages<IExecutionMessage>();
+            context.PersistMessages<IActionBaseMessage>();
         }
     }
 }

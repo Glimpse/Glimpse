@@ -1,0 +1,102 @@
+using System.Linq;
+
+using Glimpse.AspNet.AlternateImplementation;
+using Glimpse.Core.Extensibility;
+
+namespace Glimpse.AspNet.PipelineInspector
+{ 
+    public class RoutesInspector : IPipelineInspector
+    {
+        public void Setup(IPipelineInspectorContext context)
+        { 
+            var logger = context.Logger; 
+            var alternateImplementation = new Glimpse.AspNet.AlternateImplementation.Route(context.ProxyFactory);
+            var alternateBaseImplementation = new Glimpse.AspNet.AlternateImplementation.RouteBase(context.ProxyFactory);
+            var alternateConstraintImplementation = new Glimpse.AspNet.AlternateImplementation.RouteConstraint(context.ProxyFactory); 
+
+            var currentRoutes = System.Web.Routing.RouteTable.Routes;
+            using (currentRoutes.GetWriteLock())
+            {
+                for (var i = 0; i < currentRoutes.Count; i++)
+                {
+                    var routeBase = currentRoutes[i];
+                    var replaceRoute = (System.Web.Routing.RouteBase)null;
+
+                    var route = routeBase as System.Web.Routing.Route;
+                    if (route != null)
+                    {
+<<<<<<< Updated upstream
+                        System.Web.Routing.Route newRoute;
+                        if (alternateImplementation.TryCreate(route, out newRoute, null, new object[] { route.Url, route.Defaults, route.Constraints, route.DataTokens, route.RouteHandler }))
+=======
+                        if (routeBase.GetType() == typeof(System.Web.Routing.Route))
+                        {
+                            replaceRoute = context.ProxyFactory.ExtendClass(alternateImplementation.AllMethods(), Enumerable.Empty<object>(), new object[] { route.Url, route.Defaults, route.Constraints, route.DataTokens, route.RouteHandler });
+                        }
+                        else if (context.ProxyFactory.IsWrapClassEligible(typeof(System.Web.Routing.Route)))
+>>>>>>> Stashed changes
+                        {
+                            replaceRoute = context.ProxyFactory.WrapClass(route, alternateImplementation.AllMethods(), Enumerable.Empty<object>(), new object[] { route.Url, route.Defaults, route.Constraints, route.DataTokens, route.RouteHandler });
+                            SetupConstraint(logger, context.ProxyFactory, alternateConstraintImplementation, route.Constraints);
+                        }
+                    }
+
+                    if (replaceRoute == null)
+                    {
+                        if (context.ProxyFactory.IsWrapClassEligible(typeof(System.Web.Routing.RouteBase)))
+                        {
+                            replaceRoute = context.ProxyFactory.WrapClass(routeBase, alternateBaseImplementation.AllMethods());
+                        }
+                    }
+
+                    if (replaceRoute != null)
+                    {
+                        currentRoutes[i] = replaceRoute;
+                        logger.Info(Resources.RouteSetupReplacedRoute, routeBase.GetType());
+                    }
+                    else
+                    {
+                        logger.Info(Resources.RouteSetupNotReplacedRoute, routeBase.GetType());
+                    } 
+                }
+            }
+        }
+
+        private void SetupConstraint(ILogger logger, IProxyFactory proxyFactory, RouteConstraint alternateConstraintImplementation, System.Web.Routing.RouteValueDictionary constraints)
+        {
+            if (constraints != null)
+            {
+                var keys = constraints.Keys.ToList();
+                for (var i = 0; i < keys.Count; i++)
+                {
+                    var constraintKey = keys[i];
+                    var constraint = constraints[constraintKey];
+
+                    var routeConstraint = constraint as System.Web.Routing.IRouteConstraint;
+                    if (routeConstraint == null)
+                    {
+                        var stringRouteConstraint = constraint as string;
+                        if (stringRouteConstraint != null)
+                        {
+                            routeConstraint = new RouteConstraintRegex(stringRouteConstraint);
+                        }
+                    }
+
+                    if (routeConstraint != null)
+                    {
+                        var replaceRouteConstraint = proxyFactory.WrapInterface(routeConstraint, alternateConstraintImplementation.AllMethods());
+                        if (replaceRouteConstraint != null)
+                        {
+                            constraints[constraintKey] = replaceRouteConstraint;
+                            logger.Info(Resources.RouteSetupReplacedRoute, constraint.GetType());
+                        }
+                        else
+                        {
+                            logger.Info(Resources.RouteSetupNotReplacedRoute, constraint.GetType());
+                        }
+                    }
+                } 
+            }
+        }
+    }
+}

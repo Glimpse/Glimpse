@@ -93,7 +93,7 @@
     <Compile Include="Extensibility\ITabLayout.cs" />
     <Compile Include="Extensibility\IWrapper.cs" />
     <Compile Include="Extensibility\JsonNetConverterDictionaryKeysAreNotPropertyNames.cs" />
-    <Compile Include="Extensibility\MessageBase.cs" />
+    <Compile Include="Message\MessageBase.cs" />
     <Compile Include="Extensibility\NuGetPackageAttribute.cs" />
     <Compile Include="Extensibility\ResourceParameterMetadata.cs" />
     <Compile Include="Extensibility\ResourceResultDecorator.cs" />
@@ -135,6 +135,7 @@
     <Compile Include="Extensions\AlternateImplementationContextExtensions.cs" />
     <Compile Include="Extensions\DataStoreExtensions.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
+    <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\MessageBrokerExtensions.cs" />
     <Compile Include="Extensions\LongExtensions.cs" />
@@ -182,8 +183,10 @@
     <Compile Include="Framework\GlimpseConfiguration.cs" />
     <Compile Include="Framework\GlimpseRuntime.cs" />
     <Compile Include="Message\IMessage.cs" />
-    <Compile Include="Message\ITimerResultMessage.cs" />
+    <Compile Include="Message\ITimeMessage.cs" />
+    <Compile Include="Message\ITimelineMessage.cs" />
     <Compile Include="Message\TimelineMessage.cs" />
+    <Compile Include="Message\TimeMessage.cs" />
     <Compile Include="Plugin\Assist\CodeType.cs" />
     <Compile Include="Plugin\Assist\CodeTypeConverter.cs" />
     <Compile Include="Plugin\Assist\Formats.cs" />

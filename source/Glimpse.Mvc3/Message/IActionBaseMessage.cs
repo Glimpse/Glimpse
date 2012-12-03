@@ -4,12 +4,8 @@ using Glimpse.Core.Message;
 
 namespace Glimpse.Mvc.Message
 {
-    public interface IExecutionMessage : ITimerResultMessage
+    public interface IActionBaseMessage : ITimelineMessage
     {
         bool IsChildAction { get; }
-
-        Type ExecutedType { get; }
-
-        MethodInfo ExecutedMethod { get; } 
     }
 }

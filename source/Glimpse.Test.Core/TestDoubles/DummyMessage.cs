@@ -1,4 +1,5 @@
 ﻿using Glimpse.Core.Extensibility;
+using Glimpse.Core.Message;
 
 namespace Glimpse.Test.Core.TestDoubles
 {

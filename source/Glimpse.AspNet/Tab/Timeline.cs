@@ -39,12 +39,12 @@ namespace Glimpse.AspNet.Tab
 
         public void Setup(ITabSetupContext context)
         {
-            context.PersistMessages<ITimerResultMessage>(); // TODO: Should we rename ITimerResultMessage to ITimelineMessage?
+            context.PersistMessages<ITimelineMessage>();
         }
 
         public override object GetData(ITabContext context)
         {
-            var viewRenderMessages = context.GetMessages<ITimerResultMessage>(); 
+            var viewRenderMessages = context.GetMessages<ITimelineMessage>(); 
 
             var result = new TimelineModel();
             result.Category = categories;

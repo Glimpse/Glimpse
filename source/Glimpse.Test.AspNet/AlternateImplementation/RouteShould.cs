@@ -14,7 +14,7 @@ namespace Glimpse.Test.AspNet.AlternateImplementation
         {
             AlternateType<System.Web.Routing.Route> alternationImplementation = new Route(proxyFactory);
 
-            Assert.Equal(2, alternationImplementation.AllMethods.Count());
+            Assert.Equal(3, alternationImplementation.AllMethods.Count());
         }
 
         [Theory, AutoMock]
