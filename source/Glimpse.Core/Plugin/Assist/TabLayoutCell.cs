@@ -26,7 +26,7 @@ namespace Glimpse.Core.Plugin.Assist
 
         public object Data { get; private set; }
 
-        public object TabLayout { get; private set; }
+        public object Layout { get; private set; }
         
         public bool? Key { get; private set; }
 
@@ -61,16 +61,16 @@ namespace Glimpse.Core.Plugin.Assist
             return this;
         }
 
-        public TabLayoutCell Layout(TabLayout layout)
+        public TabLayoutCell SetLayout(TabLayout layout)
         {
-            TabLayout = layout.Rows;
+            this.Layout = layout.Build(); 
             return this;
         }
 
-        public TabLayoutCell Layout(Action<TabLayout> layout)
+        public TabLayoutCell SetLayout(Action<TabLayout> layout)
         {
             var tabLayout = Assist.TabLayout.Create(layout);
-            TabLayout = tabLayout.Rows;
+            this.Layout = tabLayout.Rows;
             return this;
         }
 

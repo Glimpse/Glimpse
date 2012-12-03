@@ -57,9 +57,9 @@ namespace Glimpse.Test.Core.Plugin.Assist
 			var layout = TabLayout.Create();
 			layout.Row(r => { }).Row(r => {});
 
-			Cell.Layout(layout);
+			Cell.SetLayout(layout);
 
-			Assert.Equal(layout.Rows, Cell.TabLayout);
+			Assert.Equal(layout.Rows, Cell.Layout);
 		}
 
 		[Fact]
@@ -67,14 +67,14 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		{
 			IEnumerable<TabLayoutRow> rows = null;
 
-			Cell.Layout(layout =>
+			Cell.SetLayout(layout =>
 			{
 				layout.Row(r => { }).Row(r => { });
 
 				rows = layout.Rows;
 			});
 
-			Assert.Equal(rows, Cell.TabLayout);
+			Assert.Equal(rows, Cell.Layout);
 		}
 
 		[Fact]

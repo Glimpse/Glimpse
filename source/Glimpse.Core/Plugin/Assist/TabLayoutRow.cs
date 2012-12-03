@@ -14,6 +14,13 @@ namespace Glimpse.Core.Plugin.Assist
             return layoutCell;
         }
 
+        public TabLayoutCell Cell(string format)
+        {
+            var layoutCell = new TabLayoutCell(format);
+            cells.Add(layoutCell);
+            return layoutCell;
+        }
+
         public object Build()
         {
             return cells.Select(x => x.Build());
