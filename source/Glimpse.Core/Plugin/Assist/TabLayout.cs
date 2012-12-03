@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Glimpse.Core.Plugin.Assist
 {
-    using System.Linq;
-
-    public class TabLayout
+    public class TabLayout : ITabBuild
     {
         private readonly List<TabLayoutRow> rows = new List<TabLayoutRow>();
 

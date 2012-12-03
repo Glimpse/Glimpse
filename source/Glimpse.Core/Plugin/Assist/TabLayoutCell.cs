@@ -2,7 +2,7 @@ using System;
 
 namespace Glimpse.Core.Plugin.Assist
 {
-    public class TabLayoutCell
+    public class TabLayoutCell : ITabBuild
     {
         public TabLayoutCell(int cell)
         {
@@ -173,6 +173,11 @@ namespace Glimpse.Core.Plugin.Assist
             }
 
             Post = suffix;
+            return this;
+        }
+
+        public object Build()
+        {
             return this;
         }
     }

@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Glimpse.Core.Plugin.Assist
 {
-    public class TabLayoutRow
+    public class TabLayoutRow : ITabBuild
     {
         private readonly List<TabLayoutCell> cells = new List<TabLayoutCell>();
 
@@ -13,9 +14,9 @@ namespace Glimpse.Core.Plugin.Assist
             return layoutCell;
         }
 
-        internal TabLayoutCell[] Build()
+        public object Build()
         {
-            return cells.ToArray();
+            return cells.Select(x => x.Build());
         }
     }
 }
