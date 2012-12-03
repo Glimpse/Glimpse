@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-using Glimpse.Core.Plugin.Assist;
+using Glimpse.Core.Tab.Assist;
 using Glimpse.Mvc.Model;
 
 namespace Glimpse.Mvc.SerializationConverter

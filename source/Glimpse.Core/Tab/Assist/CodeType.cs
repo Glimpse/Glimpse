@@ -1,4 +1,4 @@
-namespace Glimpse.Core.Plugin.Assist
+namespace Glimpse.Core.Tab.Assist
 {
     public enum CodeType
     {

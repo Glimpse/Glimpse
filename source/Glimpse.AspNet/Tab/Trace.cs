@@ -5,7 +5,7 @@ using Glimpse.AspNet.Model;
 using Glimpse.AspNet.PipelineInspector;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-using Glimpse.Core.Plugin.Assist;
+using Glimpse.Core.Tab.Assist;
 
 namespace Glimpse.AspNet.Tab
 {

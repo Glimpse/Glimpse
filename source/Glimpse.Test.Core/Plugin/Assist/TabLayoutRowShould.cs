@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Glimpse.Core.Plugin.Assist;
+using Glimpse.Core.Tab.Assist;
 using Xunit;
 
 namespace Glimpse.Test.Core.Plugin.Assist

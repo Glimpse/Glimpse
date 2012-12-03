@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Glimpse.AspNet.Model;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Plugin.Assist;
+using Glimpse.Core.Tab.Assist;
 
 namespace Glimpse.AspNet.SerializationConverter
 {

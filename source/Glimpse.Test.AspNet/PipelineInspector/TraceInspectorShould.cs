@@ -4,7 +4,7 @@
 ﻿using Glimpse.AspNet.PipelineInspector;
 ﻿using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-﻿using Glimpse.Core.Plugin.Assist;
+﻿using Glimpse.Core.Tab.Assist;
 ﻿using Glimpse.Test.Common;
 using Xunit;
 using Xunit.Extensions;

@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace Glimpse.Core.Plugin.Assist
+namespace Glimpse.Core.Tab.Assist
 {
     public static class TabRowFormattingExtensions
     {

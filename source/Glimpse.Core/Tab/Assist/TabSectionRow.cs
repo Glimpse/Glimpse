@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Glimpse.Core.Plugin.Assist
+namespace Glimpse.Core.Tab.Assist
 {
     public class TabSectionRow : ITabBuild, ITabStyleValue<TabSectionRow>, ITabStyleRow
     {

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Glimpse.Core.Plugin.Assist
+namespace Glimpse.Core.Tab.Assist
 {
     public class TabObject : ITabBuild
     {

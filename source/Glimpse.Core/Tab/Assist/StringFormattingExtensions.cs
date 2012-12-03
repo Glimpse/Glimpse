@@ -1,6 +1,6 @@
 using System;
 
-namespace Glimpse.Core.Plugin.Assist
+namespace Glimpse.Core.Tab.Assist
 {
     public static class StringFormattingExtensions
     {

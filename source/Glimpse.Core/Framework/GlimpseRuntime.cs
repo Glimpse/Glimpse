@@ -6,7 +6,7 @@ using System.Reflection;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Message;
-using Glimpse.Core.Plugin.Assist;
+using Glimpse.Core.Tab.Assist;
 using Glimpse.Core.ResourceResult;
 #if NET35
 using Glimpse.Core.Backport;

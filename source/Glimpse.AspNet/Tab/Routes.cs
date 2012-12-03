@@ -5,7 +5,7 @@ using Glimpse.AspNet.Extensibility;
 using Glimpse.AspNet.Model;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-using Glimpse.Core.Plugin.Assist;
+using Glimpse.Core.Tab.Assist;
 using MvcRoute = System.Web.Routing.Route;
 using MvcRouteBase = System.Web.Routing.RouteBase;
 using MvcRouteValueDictionary = System.Web.Routing.RouteValueDictionary;

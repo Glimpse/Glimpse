@@ -6,7 +6,7 @@ using Glimpse.Mvc.Model;
 
 namespace Glimpse.Mvc.SerializationConverter
 {
-    using Glimpse.Core.Plugin.Assist;
+    using Core.Tab.Assist;
 
     public class ListOfViewsModelConverter : SerializationConverter<List<ViewsModel>>
     {
