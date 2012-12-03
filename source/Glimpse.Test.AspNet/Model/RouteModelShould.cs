@@ -9,8 +9,8 @@ namespace Glimpse.Test.AspNet.Model
         [Fact]
         public void SetProperties()
         {
-            var defaults = new[] { new RouteDataItemModel("controller", "Home") };
-            var constraints = new[] { new RouteConstraintModel { Checked = true, Matched = true, ParameterName = "action", Constraint = ".+" } };
+            var defaults = new[] { new RouteDataItemModel { PlaceHolder = "controller", DefaultValue = "Home" } };
+            var constraints = new[] { new RouteConstraintModel { IsMatch = true, ParameterName = "action", Constraint = ".+" } };
             var dataTokens = new RouteValueDictionary(new { area = "Test", name = "Hi" });
             var url = "{controller}/{action}/{id}";
 
@@ -20,9 +20,8 @@ namespace Glimpse.Test.AspNet.Model
             test.RouteData = defaults;
             test.Constraints = constraints;
             test.DataTokens = dataTokens;
-
-            Assert.False(test.IsFirstMatch);
-            Assert.False(test.MatchesCurrentRequest);
+             
+            Assert.False(test.IsMatch);
 
             Assert.Equal("Test", test.Area);
             Assert.Equal(url, test.Url);
@@ -30,11 +29,8 @@ namespace Glimpse.Test.AspNet.Model
             Assert.Same(constraints, test.Constraints);
             Assert.Same(dataTokens, test.DataTokens);
 
-            test.MatchesCurrentRequest = true;
-            Assert.True(test.MatchesCurrentRequest);
-
-            test.IsFirstMatch = true;
-            Assert.True(test.IsFirstMatch);
+            test.IsMatch = true;
+            Assert.True(test.IsMatch); 
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Glimpse.AspNet.Model
 {
     public class RouteModel
     {
-        public bool MatchesCurrentRequest { get; set; }
+        public bool IsMatch { get; set; }
 
         public string Area { get; set; }
 
@@ -15,9 +15,7 @@ namespace Glimpse.AspNet.Model
 
         public IEnumerable<RouteConstraintModel> Constraints { get; set; }
 
-        public IDictionary<string, object> DataTokens { get; set; }
-
-        public bool IsFirstMatch { get; set; }
+        public IDictionary<string, object> DataTokens { get; set; } 
 
         public double Duration { get; set; }
     }

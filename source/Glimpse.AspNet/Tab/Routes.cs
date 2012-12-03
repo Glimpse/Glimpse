@@ -5,14 +5,39 @@ using Glimpse.AspNet.Extensibility;
 using Glimpse.AspNet.Model;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
+using Glimpse.Core.Plugin.Assist;
 using MvcRoute = System.Web.Routing.Route;
 using MvcRouteBase = System.Web.Routing.RouteBase;
 using MvcRouteValueDictionary = System.Web.Routing.RouteValueDictionary;
 
 namespace Glimpse.AspNet.Tab
 {
-    public class Routes : AspNetTab, IDocumentation, ITabSetup, IKey
+    public class Routes : AspNetTab, IDocumentation, ITabSetup, ITabLayout, IKey
     {
+        private static readonly object Layout = TabLayout.Create()
+                .Row(r =>
+                {
+                    r.Cell(0).WidthInPixels(100);
+                    r.Cell(1).AsKey();
+                    r.Cell(2).WidthInPercent(20).SetLayout(TabLayout.Create().Row(x => 
+                        {
+                            x.Cell("{{0}} ({{1}})").WidthInPercent(45); 
+                            x.Cell(2);
+                        }));
+                    r.Cell(3).WidthInPercent(35).SetLayout(TabLayout.Create().Row(x =>
+                        {
+                            x.Cell(0).WidthInPercent(30);
+                            x.Cell(1);
+                            x.Cell(2).WidthInPercent(30);
+                        }));
+                    r.Cell(4).WidthInPercent(15).SetLayout(TabLayout.Create().Row(x =>
+                        {
+                            x.Cell(0).WidthInPercent(45);
+                            x.Cell(1).WidthInPercent(55); 
+                        }));
+                    r.Cell(5).WidthInPixels(100).Suffix(" ms");
+                }).Build();
+
         public override string Name
         {
             get { return "Routes"; }
@@ -26,6 +51,11 @@ namespace Glimpse.AspNet.Tab
         public string DocumentationUri
         {
             get { return "http://getGlimpse.com/Help/Plugin/Routes"; }
+        }
+
+        public object GetLayout()
+        {
+            return Layout;
         }
 
         public void Setup(ITabSetupContext context)
@@ -56,51 +86,73 @@ namespace Glimpse.AspNet.Tab
 
         private Dictionary<int, List<RouteBase.GetRouteData.Message>> ProcessMessages(IEnumerable<RouteBase.GetRouteData.Message> messages)
         { 
+            if (messages == null)
+            {
+                return new Dictionary<int, List<RouteBase.GetRouteData.Message>>();
+            }
+
             return messages.GroupBy(x => x.RouteHashCode).ToDictionary(x => x.Key, x => x.ToList());
         }
 
         private Dictionary<int, Dictionary<int, List<Route.ProcessConstraint.Message>>> ProcessMessages(IEnumerable<Route.ProcessConstraint.Message> messages)
-        { 
+        {
+            if (messages == null)
+            {
+                return new Dictionary<int, Dictionary<int, List<Route.ProcessConstraint.Message>>>();
+            }
+
             return messages.GroupBy(x => x.RouteHashCode).ToDictionary(x => x.Key, x => x.ToList().GroupBy(y => y.ConstraintHashCode).ToDictionary(y => y.Key, y => y.ToList()));
         }
 
         private RouteModel GetRouteModelForRoute(ITabContext context, MvcRouteBase routeBase, Dictionary<int, List<RouteBase.GetRouteData.Message>> routeMessages, Dictionary<int, Dictionary<int, List<Route.ProcessConstraint.Message>>> constraintMessages)
         {
-            var result = new RouteModel();
-
-            var route = routeBase as MvcRoute;
-            if (route != null)
-            {
-                result.Area = (route.DataTokens != null && route.DataTokens.ContainsKey("area")) ? route.DataTokens["area"].ToString() : null;
-                result.Url = route.Url;
-                result.RouteData = ProcessRouteData(route.Defaults);
-                result.Constraints = ProcessConstraints(context, route, constraintMessages);
-                result.DataTokens = ProcessDataTokens(route.DataTokens);
-            }
-            else
-            {
-                result.Url = "Can't show non System.Web.MVC.Route types";
-            }
+            var routeModel = new RouteModel();
 
             var routeMessage = routeMessages.GetValueOrDefault(routeBase.GetHashCode()).SafeFirstOrDefault();
             if (routeMessage != null)
             {
-                result.Duration = routeMessage.Duration;
-                result.IsFirstMatch = routeMessage.IsMatch;
+                routeModel.Duration = routeMessage.Duration; 
+                routeModel.IsMatch = routeMessage.IsMatch;
             }
 
-            return result;
+            var route = routeBase as MvcRoute;
+            if (route != null)
+            {
+                routeModel.Area = (route.DataTokens != null && route.DataTokens.ContainsKey("area")) ? route.DataTokens["area"].ToString() : null;
+                routeModel.Url = route.Url;
+                routeModel.RouteData = ProcessRouteData(route.Defaults, routeMessage);
+                routeModel.Constraints = ProcessConstraints(context, route, constraintMessages);
+                routeModel.DataTokens = ProcessDataTokens(route.DataTokens);
+            }
+            else
+            {
+                routeModel.Url = routeModel.ToString();
+            }
+
+            return routeModel;
         }
 
-        private IEnumerable<RouteDataItemModel> ProcessRouteData(MvcRouteValueDictionary defaults)
+        private IEnumerable<RouteDataItemModel> ProcessRouteData(MvcRouteValueDictionary dataDefaults, RouteBase.GetRouteData.Message routeMessage)
         {
-            if (defaults == null || defaults.Count == 0)
+            if (dataDefaults == null || dataDefaults.Count == 0)
             {
                 return null;
             }
 
             var routeData = new List<RouteDataItemModel>();
-            routeData.AddRange(defaults.Select(x => new RouteDataItemModel(x.Key, x.Value)));
+            foreach (var dataDefault in dataDefaults)
+            {
+                var routeDataItemModel = new RouteDataItemModel();
+                routeDataItemModel.PlaceHolder = dataDefault.Key;
+                routeDataItemModel.DefaultValue = dataDefault.Value;
+
+                if (routeMessage != null && routeMessage.Values != null)
+                {
+                    routeDataItemModel.ActualValue = routeMessage.Values[dataDefault.Key];
+                }
+
+                routeData.Add(routeDataItemModel);
+            }
 
             return routeData;
         }
@@ -123,11 +175,12 @@ namespace Glimpse.AspNet.Tab
 
                 if (counstraintRouteMessages != null)
                 {
-                    var counstraintMessage = counstraintRouteMessages.GetValueOrDefault(route.GetHashCode()).SafeFirstOrDefault();
-                    model.Checked = true;
+                    var counstraintMessage = counstraintRouteMessages.GetValueOrDefault(constraint.Value.GetHashCode()).SafeFirstOrDefault();
+                    model.IsMatch = false;
+                    
                     if (counstraintMessage != null)
                     {
-                        model.Matched = counstraintMessage.IsMatch;
+                        model.IsMatch = counstraintMessage.IsMatch;
                     }
                 }
 
@@ -140,19 +193,6 @@ namespace Glimpse.AspNet.Tab
         private IDictionary<string, object> ProcessDataTokens(IDictionary<string, object> dataTokens)
         {
             return dataTokens != null && dataTokens.Count > 0 ? dataTokens : null;
-        }
-
-        private void ProcessValues(RouteModel model, System.Web.Routing.RouteValueDictionary values)
-        {
-            if (values == null || model.RouteData == null)
-            {
-                return;
-            }
-
-            foreach (var item in model.RouteData)
-            {
-                item.ActualValue = values[item.PlaceHolder];
-            }
         }
     }
 }

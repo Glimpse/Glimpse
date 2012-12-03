@@ -17,7 +17,7 @@ namespace Glimpse.Mvc.SerializationConverter
         {
             if (obj == UrlParameter.Optional)
             {
-                return "_Optional_";
+                return "OPTIONAL";
             }
                 
             return obj;

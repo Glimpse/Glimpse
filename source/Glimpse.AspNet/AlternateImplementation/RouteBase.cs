@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic; 
-using System.Reflection; 
+using System.Reflection;
+using System.Web.Routing;
+
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Message;
@@ -21,15 +23,20 @@ namespace Glimpse.AspNet.AlternateImplementation
             { 
                 return allMethods ?? (allMethods = new List<IAlternateMethod>
                 {
-                    new GetRouteData<System.Web.Routing.RouteBase>(),
-                    new GetVirtualPath<System.Web.Routing.RouteBase>()
+                    new GetRouteData(typeof(System.Web.Routing.RouteBase)),
+                    new GetVirtualPath(typeof(System.Web.Routing.RouteBase))
                 }); 
             }
         }
 
         public class GetRouteData : AlternateMethod
         {
-            public GetRouteData(Type type, string methodName, BindingFlags bindingFlags)
+            public GetRouteData(Type type)
+                : this(type, "GetRouteData", BindingFlags.Public | BindingFlags.Instance)
+            {
+            }
+
+            private GetRouteData(Type type, string methodName, BindingFlags bindingFlags)
                 : base(type, methodName, bindingFlags)
             {
             }
@@ -46,26 +53,29 @@ namespace Glimpse.AspNet.AlternateImplementation
                 {
                     IsMatch = routeData != null;
                     RouteHashCode = invocationTarget.GetHashCode();
+
+                    if (routeData != null)
+                    {
+                        Values = routeData.Values;
+                    }
                 }
+
+                public RouteValueDictionary Values { get; protected set; }
 
                 public int RouteHashCode { get; protected set; }
 
                 public bool IsMatch { get; protected set; }
             }
-        }
-
-        public class GetRouteData<T> : GetRouteData
-            where T : System.Web.Routing.RouteBase
-        {
-            public GetRouteData()
-                : base(typeof(T), "GetRouteData", BindingFlags.Public | BindingFlags.Instance)
-            {
-            }
-        }
+        } 
 
         public class GetVirtualPath : AlternateMethod
         {
-            public GetVirtualPath(Type type, string methodName, BindingFlags bindingFlags)
+            public GetVirtualPath(Type type)
+                : this(type, "GetVirtualPath", BindingFlags.Public | BindingFlags.Instance)
+            {
+            }
+
+            private GetVirtualPath(Type type, string methodName, BindingFlags bindingFlags)
                 : base(type, methodName, bindingFlags)
             {
             }
@@ -100,15 +110,6 @@ namespace Glimpse.AspNet.AlternateImplementation
                 public int RouteHashCode { get; protected set; }
 
                 public bool IsMatch { get; protected set; }
-            }
-        }
-
-        public class GetVirtualPath<T> : GetVirtualPath
-            where T : System.Web.Routing.RouteBase
-        {
-            public GetVirtualPath()
-                : base(typeof(T), "GetVirtualPath", BindingFlags.Public | BindingFlags.Instance)
-            { 
             }
         }
     }

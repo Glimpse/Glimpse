@@ -5,9 +5,7 @@ namespace Glimpse.AspNet.Model
         public string ParameterName { get; set; }
          
         public string Constraint { get; set; }
-         
-        public bool Checked { get; set; }
-         
-        public bool Matched { get; set; }
+          
+        public bool? IsMatch { get; set; }
     }
 }

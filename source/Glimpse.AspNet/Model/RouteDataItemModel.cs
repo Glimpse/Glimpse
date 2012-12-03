@@ -2,10 +2,8 @@ namespace Glimpse.AspNet.Model
 {
     public class RouteDataItemModel
     {
-        public RouteDataItemModel(string key, object defaultValue)
-        {
-            this.PlaceHolder = key;
-            this.DefaultValue = defaultValue;
+        public RouteDataItemModel()
+        { 
         }
 
         public string PlaceHolder { get; set; }

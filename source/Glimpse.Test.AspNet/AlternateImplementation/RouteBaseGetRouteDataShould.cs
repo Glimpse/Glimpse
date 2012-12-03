@@ -27,7 +27,7 @@ namespace Glimpse.Test.AspNet.AlternateImplementation
         [Fact]
         public void ReturnProperMethodToImplement()
         {
-            var impl = new RouteBase.GetRouteData<T>();
+            var impl = new RouteBase.GetRouteData(typeof(T));
 
             Assert.Equal("GetRouteData", impl.MethodToImplement.Name);
         }
@@ -37,7 +37,7 @@ namespace Glimpse.Test.AspNet.AlternateImplementation
         {
             context.Setup(c => c.RuntimePolicyStrategy).Returns(() => RuntimePolicy.Off);
 
-            var impl = new RouteBase.GetRouteData<T>();
+            var impl = new RouteBase.GetRouteData(typeof(T));
 
             impl.NewImplementation(context);
 
@@ -51,12 +51,12 @@ namespace Glimpse.Test.AspNet.AlternateImplementation
             context.Setup(c => c.ReturnValue).Returns(new System.Web.Routing.RouteData());
             context.Setup(c => c.InvocationTarget).Returns(new System.Web.Routing.Route("Test", null));
 
-            var impl = new RouteBase.GetRouteData<T>();
+            var impl = new RouteBase.GetRouteData(typeof(T));
 
             impl.NewImplementation(context);
 
             timer.Verify(t => t.Time(It.IsAny<Action>()));
-            context.MessageBroker.Verify(mb => mb.Publish(It.IsAny<RouteBase.GetRouteData<T>.Message>()));
+            context.MessageBroker.Verify(mb => mb.Publish(It.IsAny<RouteBase.GetRouteData.Message>()));
         }
     }
 }

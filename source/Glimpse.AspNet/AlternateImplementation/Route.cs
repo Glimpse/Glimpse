@@ -5,7 +5,6 @@ using System.Web;
 using System.Web.Routing; 
 using Glimpse.AspNet.Message;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions; 
 
 namespace Glimpse.AspNet.AlternateImplementation
 {
@@ -24,8 +23,8 @@ namespace Glimpse.AspNet.AlternateImplementation
                 return allMethods ?? (allMethods = new List<IAlternateMethod>
                     {
                         new ProcessConstraint(),
-                        new RouteBase.GetRouteData<System.Web.Routing.Route>(),
-                        new RouteBase.GetVirtualPath<System.Web.Routing.Route>()
+                        new RouteBase.GetRouteData(typeof(System.Web.Routing.Route)),
+                        new RouteBase.GetVirtualPath(typeof(System.Web.Routing.Route))
                     });
             }
         }

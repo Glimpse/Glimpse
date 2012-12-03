@@ -19,8 +19,11 @@ namespace MvcMusicStore
 
         public static void RegisterRoutes(RouteCollection routes)
         {
-
+            var myRoute = new Route("Blog/Archive/{year}/{month}/{day}", new RouteValueDictionary { { "controller", "Blog" }, { "action", "archive" }, { "year", "" }, { "month", "" },  { "day", "" }, { "page", 0 } }, null, new RouteValueDictionary { { "Test", "Data" }, { "Other", "Me" } }, new MvcRouteHandler());
+            
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
+            routes.Add(myRoute);
 
             routes.MapRoute(
                 "BlogArchive",
@@ -33,16 +36,15 @@ namespace MvcMusicStore
                 "Product",
                 "Product/Insert",
                 new { controller = "Product", action = "Insert" },
-                new { Grendal = new HttpMethodConstraint("POST") }
+                new { httpMethod = new HttpMethodConstraint("POST"), random = "Test" }
             );
 
             routes.MapRoute(
-                "DefaultBrowse", // Route name
+                "OtherDefaultBrowse", // Route name
                 "{controller}/{action}/{id}", // URL with parameters
                 new { controller = "Home", action = "Browse", id = UrlParameter.Optional }, // Parameter defaults
-                new { action = @"Index" }
+                new { action = @"Index", controller = "Test" }
             );
-
 
             routes.MapRoute(
                 "Default", // Route name
@@ -53,7 +55,8 @@ namespace MvcMusicStore
             routes.MapRoute(
                 "DefaultTest", // Route name
                 "{controller}/{action}/{id}/{test}", // URL with parameters
-                new { controller = "Home", action = "Index", id = UrlParameter.Optional, test = 1 } // Parameter defaults
+                new { controller = "Home", action = "Index", id = UrlParameter.Optional, test = 1 }, // Parameter defaults
+                new { action = @"Index", controller = "Test" }
             ); 
         }
 

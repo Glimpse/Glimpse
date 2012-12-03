@@ -130,7 +130,7 @@ namespace Glimpse.Test.AspNet.Tab
             var matchedConstraint = model1.Constraints.First(c => c.ParameterName == "controller");
             Assert.NotNull(matchedConstraint);
             Assert.True(matchedConstraint.Checked);
-            Assert.False(matchedConstraint.Matched);
+            Assert.False(matchedConstraint.IsMatch);
 
             var unmatchedConstraint = model1.Constraints.First(c => c.ParameterName != "controller");
             Assert.NotNull(unmatchedConstraint);
