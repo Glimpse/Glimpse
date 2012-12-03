@@ -179,10 +179,11 @@ namespace Glimpse.Test.Core.Framework
 
             var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
-            Assert.Equal(0, results.Count);
+            Assert.Equal(1, results.Count);
 
             Runtime.TabMock.Verify(p => p.GetData(It.IsAny<ITabContext>()), Times.Once());
-            //Make sure the excption type above is logged here.
+            
+            // Make sure the excption type above is logged here.
             Runtime.LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<DummyException>()), Times.AtMost(Runtime.Configuration.Tabs.Count));
         }
 

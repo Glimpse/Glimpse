@@ -362,6 +362,7 @@ namespace Glimpse.Core.Framework
 
             foreach (var tab in supportedRuntimeTabs)
             {
+                TabResult result;
                 var key = tab.GetType().ConvertToSafeJson();
                 try
                 {
@@ -373,21 +374,22 @@ namespace Glimpse.Core.Framework
                     {
                         tabData = tabSection.Build();
                     }
-                    
-                    var result = new TabResult(tab.Name, tabData);
 
-                    if (tabResultsStore.ContainsKey(key))
-                    {
-                        tabResultsStore[key] = result;
-                    }
-                    else
-                    {
-                        tabResultsStore.Add(key, result);
-                    }
+                    result = new TabResult(tab.Name, tabData);
                 }
                 catch (Exception exception)
                 {
+                    result = new TabResult(tab.Name, exception.ToString());
                     logger.Error(Resources.ExecuteTabError, exception, key);
+                }
+
+                if (tabResultsStore.ContainsKey(key))
+                {
+                    tabResultsStore[key] = result;
+                }
+                else
+                {
+                    tabResultsStore.Add(key, result);
                 }
             }
         }
