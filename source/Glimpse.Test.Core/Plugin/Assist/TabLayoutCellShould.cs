@@ -59,7 +59,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 
 			Cell.SetLayout(layout);
 
-			Assert.Equal(layout.Rows, Cell.Layout);
+			Assert.NotEqual(layout.Rows, Cell.Layout);
 		}
 
 		[Fact]
