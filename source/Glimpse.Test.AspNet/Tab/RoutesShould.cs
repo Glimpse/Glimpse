@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Web;
 using System.Web.Routing;
 using Glimpse.AspNet.Model;
@@ -7,7 +7,6 @@ using Glimpse.AspNet.Tab;
 using Glimpse.Core.Extensibility;
 using Moq;
 using Xunit;
-using System.Collections.Generic;
 using Route = Glimpse.AspNet.AlternateImplementation.Route;
 
 namespace Glimpse.Test.AspNet.Tab
@@ -18,6 +17,11 @@ namespace Glimpse.Test.AspNet.Tab
 
         public Mock<HttpContextBase> HttpContextMock { get; set; }
 
+        public static RouteTester Create()
+        {
+            return new RouteTester();
+        }
+
         private RouteTester()
         {
             HttpContextMock = new Mock<HttpContextBase>();
@@ -26,14 +30,9 @@ namespace Glimpse.Test.AspNet.Tab
             TabContextMock = new Mock<ITabContext>();
             TabContextMock.Setup(tc => tc.GetRequestContext<HttpContextBase>()).Returns(HttpContextMock.Object);
         }
-
-        public static RouteTester Create()
-        {
-            return new RouteTester();
-        }
     }
 
-    public class RoutesShould:IDisposable
+    public class RoutesShould : IDisposable
     {
         private RouteTester tester;
 
