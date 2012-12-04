@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
 using Glimpse.Core.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
@@ -78,8 +79,8 @@ namespace Glimpse.Mvc.AlternateImplementation
                     : base(executedType, executedMethod)
                 {
                     ServiceType = serviceType;
-                    
-                    if (resolvedObjects != null && resolvedObjects.Any())
+
+                    if (resolvedObjects.SafeAny())
                     {
                         IsResolved = true;
                         ResolvedTypes = resolvedObjects.Select(obj => obj.GetType());

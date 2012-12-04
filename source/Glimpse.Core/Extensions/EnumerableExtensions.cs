@@ -56,5 +56,16 @@ namespace Glimpse.Core.Extensions
 
             return source.FirstOrDefault(predicate);
         }
+
+        public static bool SafeAny<TSource>(this IEnumerable<TSource> source)
+        {
+            if (source == null)
+            {
+                return false;
+            }
+
+            return source.Any();
+        } 
+
     }
 }
