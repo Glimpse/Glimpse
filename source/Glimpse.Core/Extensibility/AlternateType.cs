@@ -32,7 +32,6 @@ namespace Glimpse.Core.Extensibility
 
         public virtual bool TryCreate(T originalObj, out T newObj, IEnumerable<object> mixins, object[] constructorArguments)
         {
-            var objType = originalObj.GetType();
             var allMethods = AllMethods;
 
             if (mixins == null)
@@ -40,13 +39,13 @@ namespace Glimpse.Core.Extensibility
                 mixins = Enumerable.Empty<object>();
             }
 
-            if (ProxyFactory.IsWrapInterfaceEligible(objType))
+            if (ProxyFactory.IsWrapInterfaceEligible(typeof(T)))
             {
                 newObj = ProxyFactory.WrapInterface(originalObj, allMethods, mixins);
                 return true;
             }
 
-            if (ProxyFactory.IsWrapClassEligible(objType))
+            if (ProxyFactory.IsWrapClassEligible(typeof(T)))
             {
                 try
                 {
