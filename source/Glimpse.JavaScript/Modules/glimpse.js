@@ -2450,7 +2450,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
             },
             processTableData = function() {
                 var dataResult = [ [ 'Title', 'Description', 'Category', 'Timing', 'Start Point', 'Duration', 'w/out Children' ] ],
-                    metadata = [ [ { data : '{{0}} |({{1}})|' }, { data : 2, width : '18%' }, { data : 3, width : '9%' }, { data : 4, align : 'right', pre : 'T+ ', post : ' ms', className : 'mono', width : '100px' }, { data : 5, align : 'right', post : ' ms', className : 'mono', width : '100px' }, { data : 6, align : 'right', post : ' ms', className : 'mono', width : '100px' } ] ];
+                    metadata = { layout: [ [ { data : '{{0}} |({{1}})|' }, { data : 2, width : '18%' }, { data : 3, width : '9%' }, { data : 4, align : 'right', pre : 'T+ ', post : ' ms', className : 'mono', width : '100px' }, { data : 5, align : 'right', post : ' ms', className : 'mono', width : '100px' }, { data : 6, align : 'right', post : ' ms', className : 'mono', width : '100px' } ] ] };
                     
                 //Massage the data 
                 for (var i = 0; i < timeline.data.events.length; i++) {
@@ -2598,7 +2598,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                 colorElement(elements.contentDescHolder.find('> div'), filter);
                 colorElement(elements.summaryBandHolder.find('> div'), filter);
                 colorElement(elements.summaryDescHolder.find('> div'), filter);
-                colorElement(elements.contentTableHolder.find('tbody'), filter); 
+                colorElement(elements.contentTableHolder.find('tbody > tr'), filter); 
             },
             colorElement = function(scope, filter) {
                 scope.removeClass('odd').removeClass('even');
@@ -2854,7 +2854,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
         
         pubsub.subscribe('trigger.timline.shell.subscriptions', wireListeners); 
         pubsub.subscribe('trigger.shell.resize', panelResize); 
-        pubsub.subscribe('action.panel.showed.Glimpse_AspNet_Tab_Timeline', function() { setTimeout(panelResize, 1); }); 
+        pubsub.subscribe('action.panel.showed.glimpse_timeline', function() { setTimeout(panelResize, 1); }); 
     })(timeline.elements);
 
     // View
@@ -2932,8 +2932,8 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
          
         pubsub.subscribe('action.template.processing', modify); 
         pubsub.subscribe('trigger.timline.init', init); 
-        pubsub.subscribe('action.panel.rendering.Glimpse_AspNet_Tab_Timeline', prerender);
-        pubsub.subscribe('action.panel.rendered.Glimpse_AspNet_Tab_Timeline', postrender);
+        pubsub.subscribe('action.panel.rendering.glimpse_timeline', prerender);
+        pubsub.subscribe('action.panel.rendered.glimpse_timeline', postrender);
     })();
 })(jQueryGlimpse, glimpse.pubsub, glimpse.settings, glimpse.util, glimpse.render.engine);
 
