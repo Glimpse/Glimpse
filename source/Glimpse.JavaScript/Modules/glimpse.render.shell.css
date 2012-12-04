@@ -843,3 +843,7 @@
 	overflow: visible;
 	width: 16px;
 }
+
+.glimpse-open .glimpse-icon {
+    margin: 1px 1px 0;
+}
