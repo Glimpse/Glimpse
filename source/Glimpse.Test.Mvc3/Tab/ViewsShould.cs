@@ -72,13 +72,7 @@ namespace Glimpse.Test.Mvc3.Tab
         [Theory, AutoMock]
         public void ReturnResult(Views sut, ITabContext context, View.Render.Arguments renderArgs, ViewEngine.FindViews.Arguments findViewArgs, ViewEngineResult viewEngineResult, IViewCorrelationMixin mixin, TimerResult timerResult, Guid id)
         {
-            var findViewMessage = new ViewEngine.FindViews.Message(
-                input: findViewArgs, 
-                output: viewEngineResult, 
-                timing: timerResult, 
-                baseType: typeof(string), 
-                isPartial: false, 
-                id: id);
+            var findViewMessage = new ViewEngine.FindViews.Message(findViewArgs, timerResult, typeof(IViewEngine), null, viewEngineResult, typeof(string), false, id);
 
             context.TabStore.Setup(ds => ds.Contains(typeof(IList<ViewEngine.FindViews.Message>).AssemblyQualifiedName)).Returns(true);
             context.TabStore.Setup(ds => ds.Get(typeof(IList<ViewEngine.FindViews.Message>).AssemblyQualifiedName)).Returns(new List<ViewEngine.FindViews.Message> { findViewMessage });

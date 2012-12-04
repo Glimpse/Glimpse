@@ -13,13 +13,13 @@ namespace Glimpse.Mvc.Model
                 SourceController = viewRender.Input.ViewContext.Controller.ValueProvider.GetValue("controller").RawValue;
             }
 
-            ViewName = viewEngineFindView.Input.ViewName;
-            MasterName = viewEngineFindView.Input.MasterName;
+            ViewName = viewEngineFindView.ViewName;
+            MasterName = viewEngineFindView.MasterName;
             IsPartial = viewEngineFindView.IsPartial;
             ViewEngineType = viewEngineFindView.BaseType;
-            UseCache = viewEngineFindView.Input.UseCache;
+            UseCache = viewEngineFindView.UseCache;
             IsFound = viewEngineFindView.IsFound;
-            SearchedLocations = viewEngineFindView.Output.SearchedLocations;
+            SearchedLocations = viewEngineFindView.SearchedLocations;
 
             if (viewRender != null)
             {

@@ -17,7 +17,7 @@ namespace Glimpse.Test.Mvc3.Model
         [Theory, AutoMock]
         public void SetProperties(ViewEngine.FindViews.Arguments findViewArgs, View.Render.Arguments renderArgs, ViewEngineResult viewEngineResult, IViewCorrelationMixin mixin, TimerResult timerResult, Type type)
         {
-            var findViewMessage = new ViewEngine.FindViews.Message(findViewArgs, viewEngineResult, timerResult, type, isPartial: false, id: Guid.NewGuid());
+            var findViewMessage = new ViewEngine.FindViews.Message(findViewArgs, timerResult, typeof(IViewEngine), null, viewEngineResult, type, false, Guid.NewGuid());
 
             var viewRenderMessage = new View.Render.Message(renderArgs, timerResult, type, mixin);
 

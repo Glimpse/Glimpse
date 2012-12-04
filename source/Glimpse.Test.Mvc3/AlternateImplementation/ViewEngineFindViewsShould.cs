@@ -64,8 +64,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
 
             sut.NewImplementation(context);
 
-            context.MessageBroker.Verify(b => b.Publish(It.IsAny<ViewEngine.FindViews.Message>()));
-            context.MessageBroker.Verify(b => b.Publish(It.IsAny<ViewEngine.FindViews.EventMessage>()));
+            context.MessageBroker.Verify(b => b.Publish(It.IsAny<ViewEngine.FindViews.Message>())); 
         }
 
         [Theory, AutoMock]
@@ -87,8 +86,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             proxyFactory.Verify(p => p.IsWrapInterfaceEligible(It.IsAny<Type>()));
             context.Logger.Verify(l => l.Info(It.IsAny<string>(), It.IsAny<object[]>()));
             context.VerifySet(c => c.ReturnValue = It.IsAny<ViewEngineResult>());
-            context.MessageBroker.Verify(b => b.Publish(It.IsAny<ViewEngine.FindViews.Message>()));
-            context.MessageBroker.Verify(b => b.Publish(It.IsAny<ViewEngine.FindViews.EventMessage>()));
+            context.MessageBroker.Verify(b => b.Publish(It.IsAny<ViewEngine.FindViews.Message>())); 
         }
 
         private object[] GetArguments(ControllerContext controllerContext)

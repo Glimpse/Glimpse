@@ -24,6 +24,10 @@ namespace Glimpse.Mvc.PipelineInspector
                     currentEngines[i] = newEngine;
                     logger.Info(Resources.ViewEngineSetupReplacedViewEngine, originalEngine.GetType());
                 }
+                else
+                {
+                    logger.Warn(Resources.ViewEngineSetupNotReplacedViewEngine, originalEngine.GetType()); 
+                }
             }
         }
     }

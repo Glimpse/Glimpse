@@ -148,4 +148,8 @@
     <value>Replaced ValueProviderFactory of type '{0}' with proxy implementation.</value>
     <comment>{0} - GetType() of replaced ValueProviderFactory</comment>
   </data>
+  <data name="ViewEngineSetupNotReplacedViewEngine" xml:space="preserve">
+    <value>Couldn't replace IViewEngine of type '{0}' with proxy implementation.</value>
+    <comment>{0} - GetType() of non replaced ViewEngine</comment>
+  </data>
 </root>

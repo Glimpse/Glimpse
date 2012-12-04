@@ -50,15 +50,13 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                var input = new Arguments(IsPartial, context.Arguments);
+                var arguments = new Arguments(IsPartial, context.Arguments);
                 var id = Guid.NewGuid();
-                var output = context.ReturnValue as ViewEngineResult;
 
-                output = ProxyOutput(output, context, input.ViewName, IsPartial, id);
+                var output = context.ReturnValue as ViewEngineResult; 
+                output = ProxyOutput(output, context, arguments.ViewName, IsPartial, id);
 
-                context.MessageBroker.PublishMany(
-                    new Message(input, output, timerResult, context.TargetType, IsPartial, id),
-                    new EventMessage(input, timerResult, context.TargetType, context.MethodInvocationTarget));
+                context.MessageBroker.Publish(new Message(arguments, timerResult, context.TargetType, context.MethodInvocationTarget, output, context.TargetType, IsPartial, id));
             }
 
             private ViewEngineResult ProxyOutput(ViewEngineResult viewEngineResult, IAlternateImplementationContext context, string viewName, bool isPartial, Guid id)
@@ -81,65 +79,34 @@ namespace Glimpse.Mvc.AlternateImplementation
                 return viewEngineResult;
             }
 
-            public class Message : MessageBase
+            public class Message : ActionMessage
             {
-                public Message(Arguments input, ViewEngineResult output, TimerResult timing, Type baseType, bool isPartial, Guid id) : base(id)
+                public Message(Arguments arguments, TimerResult timerResult, Type executedType, MethodInfo method, ViewEngineResult output, Type baseType, bool isPartial, Guid id)
+                    : base(timerResult, GetControllerName(arguments.ControllerContext), GetActionName(arguments.ControllerContext), GetIsChildAction(arguments.ControllerContext), executedType, method)
                 {
-                    if (input == null)
-                    {
-                        throw new ArgumentNullException("input");
-                    }
-
-                    if (output == null)
-                    {
-                        throw new ArgumentNullException("output");
-                    }
-
-                    if (timing == null)
-                    {
-                        throw new ArgumentNullException("timing");
-                    }
-
-                    Input = input;
-                    Output = output;
-                    Timing = timing;
-
+                    ViewName = arguments.ViewName;
+                    MasterName = arguments.MasterName;
+                    UseCache = arguments.UseCache;
+                    SearchedLocations = output.SearchedLocations; 
                     IsPartial = isPartial;
                     BaseType = baseType;
+                    Id = id;
+                    IsFound = output.View != null;
                 }
 
-                public Arguments Input { get; set; }
-                
-                public ViewEngineResult Output { get; set; }
-                
-                public TimerResult Timing { get; set; }
-                
-                public Type BaseType { get; set; }
+                public string ViewName { get; protected set; }
 
-                public bool IsPartial { get; set; }
-                
-                public bool IsFound
-                {
-                    get { return Output.View != null; }
-                }
-            }
+                public string MasterName { get; protected set; }
 
-            public class EventMessage : ActionMessage
-            {
-                public EventMessage(Arguments arguments, TimerResult timerResult, Type executedType, MethodInfo method)
-                    : base(timerResult, GetControllerName(arguments.ControllerContext), GetActionName(arguments.ControllerContext), GetIsChildAction(arguments.ControllerContext), executedType, method)
-                { 
-                    ViewEngineType = executedType;
-                    UseCache = arguments.UseCache;
+                public bool UseCache { get; protected set; }
 
-                    EventName = string.Format("Find:View - {0}:{1}", ControllerName, ActionName);
-                    EventSubText = string.Format("{0}:{1}", ViewEngineType.Name, UseCache);
-                    EventCategory = "View";
-                }
-                 
-                public Type ViewEngineType { get; private set; }
+                public IEnumerable<string> SearchedLocations { get; protected set; }
 
-                public bool UseCache { get; private set; } 
+                public Type BaseType { get; protected set; }
+
+                public bool IsPartial { get; protected set; }
+
+                public bool IsFound { get; protected set; }
             }
 
             public class Arguments
