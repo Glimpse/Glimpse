@@ -105,7 +105,6 @@
     <Compile Include="AlternateImplementation\ResultFilterShould.cs" />
     <Compile Include="AlternateImplementation\ValueProviderContainsPrefixMessageShould.cs" />
     <Compile Include="AlternateImplementation\ValueProviderContainsPrefixShould.cs" />
-    <Compile Include="AlternateImplementation\ValueProviderFactoryDecoratorShould.cs" />
     <Compile Include="AlternateImplementation\ValueProviderFactoryGetValueProviderShould.cs" />
     <Compile Include="AlternateImplementation\ValueProviderFactoryShould.cs" />
     <Compile Include="AlternateImplementation\ValueProviderGetValueArgumentShould.cs" />
