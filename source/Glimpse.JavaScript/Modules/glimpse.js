@@ -2598,7 +2598,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                 colorElement(elements.contentDescHolder.find('> div'), filter);
                 colorElement(elements.summaryBandHolder.find('> div'), filter);
                 colorElement(elements.summaryDescHolder.find('> div'), filter);
-                colorElement(elements.contentTableHolder.find('tbody > tr'), filter); 
+                colorElement(elements.contentTableHolder.find('tbody'), filter); 
             },
             colorElement = function(scope, filter) {
                 scope.removeClass('odd').removeClass('even');
