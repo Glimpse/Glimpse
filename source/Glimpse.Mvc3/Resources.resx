@@ -129,9 +129,9 @@
     <value>Proxied IControllerFactory of type '{0}'.</value>
     <comment>{0} - GetType() of replaced controller factory</comment>
   </data>
-  <data name="ExecutionSetupProxiedIDependencyResolver" xml:space="preserve">
-    <value>Proxied IDependencyResolver of type '{0}'.</value>
-    <comment>{0} - GetType() of proxied dependency resolver</comment>
+  <data name="DependencyResolverSetupReplacedDependencyResolver" xml:space="preserve">
+    <value>Replaced IDependencyResolver of type '{0}' with proxy implementation.</value>
+    <comment>{0} - GetType() of replaced IDependencyResolver</comment>
   </data>
   <data name="GetBinderNewImplementationCannotProxyWarning" xml:space="preserve">
     <value>Cannot proxy model binder of type '{0}' because it is not a System.Web.Mvc.DefaultModelBinder.</value>
@@ -151,5 +151,9 @@
   <data name="ViewEngineSetupNotReplacedViewEngine" xml:space="preserve">
     <value>Couldn't replace IViewEngine of type '{0}' with proxy implementation.</value>
     <comment>{0} - GetType() of non replaced ViewEngine</comment>
+  </data>
+  <data name="DependencyResolverSetupNotReplacedDependencyResolver" xml:space="preserve">
+    <value>Couldn't replace IDependencyResolver of type '{0}' with proxy implementation.</value>
+    <comment>{0} - GetType() of replaced IDependencyResolver</comment>
   </data>
 </root>

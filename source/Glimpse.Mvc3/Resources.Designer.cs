@@ -70,11 +70,20 @@ namespace Glimpse.Mvc {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Proxied IDependencyResolver of type &apos;{0}&apos;..
+        ///   Looks up a localized string similar to Couldn&apos;t replace IDependencyResolver of type &apos;{0}&apos; with proxy implementation..
         /// </summary>
-        internal static string ExecutionSetupProxiedIDependencyResolver {
+        internal static string DependencyResolverSetupNotReplacedDependencyResolver {
             get {
-                return ResourceManager.GetString("ExecutionSetupProxiedIDependencyResolver", resourceCulture);
+                return ResourceManager.GetString("DependencyResolverSetupNotReplacedDependencyResolver", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replaced IDependencyResolver of type &apos;{0}&apos; with proxy implementation..
+        /// </summary>
+        internal static string DependencyResolverSetupReplacedDependencyResolver {
+            get {
+                return ResourceManager.GetString("DependencyResolverSetupReplacedDependencyResolver", resourceCulture);
             }
         }
         

@@ -18,7 +18,11 @@ namespace Glimpse.Mvc.PipelineInspector
             {
                 DependencyResolver.SetResolver(newResolver);
 
-                logger.Debug(Resources.ExecutionSetupProxiedIDependencyResolver, dependencyResolver.GetType());
+                logger.Debug(Resources.DependencyResolverSetupReplacedDependencyResolver, dependencyResolver.GetType());
+            }
+            else
+            {
+                logger.Warn(Resources.DependencyResolverSetupNotReplacedDependencyResolver, dependencyResolver.GetType());
             }
         }
     }
