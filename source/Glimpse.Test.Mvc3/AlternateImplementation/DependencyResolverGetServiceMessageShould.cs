@@ -11,7 +11,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Theory, AutoMock]
         public void Construct(Type input, string output)
         {
-            var sut = new DependencyResolver.GetService.Message(input, output);
+            var sut = new DependencyResolver.GetService.Message(typeof(System.Web.Mvc.IDependencyResolver), null, input, output);
 
             Assert.Equal(input, sut.ServiceType);
             Assert.Equal(output.GetType(), sut.ResolvedType);
@@ -21,7 +21,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Theory, AutoMock]
         public void HandleNullResolvedObjects(Type input)
         {
-            var sut = new DependencyResolver.GetService.Message(input, null);
+            var sut = new DependencyResolver.GetService.Message(typeof(System.Web.Mvc.IDependencyResolver), null, input, null);
 
             Assert.Equal(input, sut.ServiceType);
             Assert.Equal(null, sut.ResolvedType);

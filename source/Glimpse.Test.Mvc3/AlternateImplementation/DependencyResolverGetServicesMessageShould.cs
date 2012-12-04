@@ -14,7 +14,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         {
             var output = new object[] { 1, "a", DateTime.Now };
 
-            var sut = new DependencyResolver.GetServices.Message(input, output);
+            var sut = new DependencyResolver.GetServices.Message(typeof(System.Web.Mvc.IDependencyResolver), null, input, output);
 
             Assert.Equal(input, sut.ServiceType);
             Assert.Equal(output.Length, sut.ResolvedTypes.Count());
@@ -26,7 +26,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         {
             var output = Enumerable.Empty<object>();
 
-            var sut = new DependencyResolver.GetServices.Message(input, output);
+            var sut = new DependencyResolver.GetServices.Message(typeof(System.Web.Mvc.IDependencyResolver), null, input, output);
 
             Assert.Equal(input, sut.ServiceType);
             Assert.Null(sut.ResolvedTypes);

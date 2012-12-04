@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Message;
@@ -35,13 +36,13 @@ namespace Glimpse.Mvc.AlternateImplementation
             
             public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                var resolvedObject = context.ReturnValue;
-                context.MessageBroker.Publish(new Message((Type)context.Arguments[0], resolvedObject));
+                context.MessageBroker.Publish(new Message(context.TargetType, context.MethodInvocationTarget, (Type)context.Arguments[0], context.ReturnValue));
             }
 
             public class Message : MessageBase
             {
-                public Message(Type serviceType, object resolvedObject)
+                public Message(Type executedType, MethodInfo executedMethod, Type serviceType, object resolvedObject)
+                    : base(executedType, executedMethod)
                 {
                     ServiceType = serviceType;
                     
@@ -68,13 +69,13 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                context.MessageBroker.Publish(
-                    new Message((Type)context.Arguments[0], (IEnumerable<object>)context.ReturnValue));
+                context.MessageBroker.Publish(new Message(context.TargetType, context.MethodInvocationTarget, (Type)context.Arguments[0], (IEnumerable<object>)context.ReturnValue));
             }
 
             public class Message : MessageBase
             {
-                public Message(Type serviceType, IEnumerable<object> resolvedObjects)
+                public Message(Type executedType, MethodInfo executedMethod, Type serviceType, IEnumerable<object> resolvedObjects)
+                    : base(executedType, executedMethod)
                 {
                     ServiceType = serviceType;
                     
