@@ -198,7 +198,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     EventCategory = "Controller";
                 }
 
-                public Type ResultType { get; set; }
+                public Type ResultType { get; private set; }
 
                 public override void BuildDetails(IDictionary<string, object> details)
                 {
