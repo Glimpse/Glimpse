@@ -55,6 +55,7 @@ namespace Glimpse.Mvc.Message
 
         protected static string GetActionName(ControllerBase controller)
         {
+            // TODO: Fix me!
             return "I'M BROKEN";
 
             // return controller.ValueProvider.GetValue("action").RawValue.ToStringOrDefault();
@@ -72,6 +73,7 @@ namespace Glimpse.Mvc.Message
 
         protected static string GetControllerName(ControllerBase controller)
         {
+            // TODO: Fix me!
             return "I'M BROKEN";
 
             // return controller.ValueProvider.GetValue("controller").RawValue.ToStringOrDefault();
