@@ -7,7 +7,7 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class AsyncActionInvoker : AlternateType<AsyncControllerActionInvoker>
+    public class AsyncActionInvoker : AlternateType<IAsyncActionInvoker>
     {
         private IEnumerable<IAlternateMethod> allMethods;
 
@@ -27,6 +27,38 @@ namespace Glimpse.Mvc.AlternateImplementation
                         new ActionInvoker.GetFilters<AsyncControllerActionInvoker>(new ActionFilter(ProxyFactory), new ResultFilter(ProxyFactory), new AuthorizationFilter(ProxyFactory), new ExceptionFilter(ProxyFactory))
                     });
             }
+        }
+
+        public override bool TryCreate(IAsyncActionInvoker originalObj, out IAsyncActionInvoker newObj, IEnumerable<object> mixins, object[] constructorArgs)
+        {
+            if (originalObj == null)
+            {
+                newObj = null;
+                return false;
+            }
+
+            var originalType = originalObj.GetType();
+
+            if (originalType == typeof(AsyncControllerActionInvoker) && ProxyFactory.IsExtendClassEligible(originalType))
+            {
+                newObj = ProxyFactory.ExtendClass<AsyncControllerActionInvoker>(AllMethods, new[] { new ActionInvokerStateMixin() });
+                return true;
+            }
+
+            if (originalObj is AsyncControllerActionInvoker && ProxyFactory.IsWrapClassEligible(originalType))
+            {
+                newObj = ProxyFactory.WrapClass((AsyncControllerActionInvoker)originalObj, AllMethods, new object[] { new ActionInvokerStateMixin() });
+                return true;
+            }
+
+            if (ProxyFactory.IsWrapInterfaceEligible<IAsyncActionInvoker>(originalType))
+            {
+                newObj = ProxyFactory.WrapInterface(originalObj, AllMethods, new[] { new ActionInvokerStateMixin() });
+                return true;
+            }
+
+            newObj = null;
+            return false;
         }
 
         public class BeginInvokeActionMethod : IAlternateMethod

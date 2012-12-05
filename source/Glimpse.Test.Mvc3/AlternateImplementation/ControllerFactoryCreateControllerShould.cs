@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
 using System.Web.Routing;
@@ -56,7 +55,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
 
             sut.NewImplementation(context);
 
-            proxyFactory.Verify(p => p.WrapClass(It.IsAny<AsyncControllerActionInvoker>(), It.IsAny<IEnumerable<IAlternateMethod>>(), It.IsAny<IEnumerable<object>>(), null));
+            proxyFactory.Verify(p => p.WrapClass<AsyncControllerActionInvoker>(It.IsAny<AsyncControllerActionInvoker>(), It.IsAny<IEnumerable<IAlternateMethod>>(), It.IsAny<IEnumerable<object>>()));
         }
 
         [Theory(Skip = "Fix this along with IActionInvoker strategy"), AutoMock]

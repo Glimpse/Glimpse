@@ -24,6 +24,15 @@ namespace Glimpse.Test.Common
             ModelBinderBindPropertyArguments(fixture);
 
             ValueProviderGetValueArguments(fixture);
+
+            ControllerFactoryCreateController(fixture);
+        }
+
+        private static void ControllerFactoryCreateController(IFixture fixture)
+        {
+            fixture.Register<IProxyFactory, ControllerFactory.CreateController>(
+                (proxyFactory) =>
+                new ControllerFactory.CreateController(new ActionInvoker(proxyFactory), new AsyncActionInvoker(proxyFactory)));
         }
 
         private static void ValueProviderGetValueArguments(IFixture fixture)

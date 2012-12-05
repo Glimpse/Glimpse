@@ -31,15 +31,15 @@ namespace Glimpse.Mvc.AlternateImplementation
 
         public class CreateController : AlternateMethod
         {
-            public CreateController(AlternateType<ControllerActionInvoker> alternateControllerActionInvoker, AlternateType<AsyncControllerActionInvoker> alternateAsyncControllerActionInvoker) : base(typeof(IControllerFactory), "CreateController")
+            public CreateController(AlternateType<IActionInvoker> alternateControllerActionInvoker, AlternateType<IAsyncActionInvoker> alternateAsyncControllerActionInvoker) : base(typeof(IControllerFactory), "CreateController")
             {
                 AlternateControllerActionInvoker = alternateControllerActionInvoker;
                 AlternateAsyncControllerActionInvoker = alternateAsyncControllerActionInvoker;
             }
 
-            public AlternateType<ControllerActionInvoker> AlternateControllerActionInvoker { get; set; }
+            public AlternateType<IActionInvoker> AlternateControllerActionInvoker { get; set; }
 
-            public AlternateType<AsyncControllerActionInvoker> AlternateAsyncControllerActionInvoker { get; set; }
+            public AlternateType<IAsyncActionInvoker> AlternateAsyncControllerActionInvoker { get; set; }
 
             public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
@@ -53,7 +53,7 @@ namespace Glimpse.Mvc.AlternateImplementation
             }
 
             [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "iController name is allowed in this usage.")]
-            protected void ProxyActionInvoker(IController iController)
+            private void ProxyActionInvoker(IController iController)
             {
                 if (iController == null)
                 {
@@ -61,12 +61,12 @@ namespace Glimpse.Mvc.AlternateImplementation
                 }
 
                 var asyncController = iController as AsyncController;
-                if (asyncController != null)
+                if (asyncController != null && asyncController.ActionInvoker is IAsyncActionInvoker)
                 {
-                    var originalActionInvoker = asyncController.ActionInvoker;
-                    AsyncControllerActionInvoker newActionInvoker;
+                    var originalActionInvoker = asyncController.ActionInvoker as IAsyncActionInvoker;
+                    IAsyncActionInvoker newActionInvoker;
 
-                    if (AlternateAsyncControllerActionInvoker.TryCreate(originalActionInvoker as AsyncControllerActionInvoker, out newActionInvoker, new[] { new ActionInvokerStateMixin() }))
+                    if (AlternateAsyncControllerActionInvoker.TryCreate(originalActionInvoker, out newActionInvoker))
                     {
                         asyncController.ActionInvoker = newActionInvoker;
                     }
@@ -78,9 +78,9 @@ namespace Glimpse.Mvc.AlternateImplementation
                 if (controller != null)
                 {
                     var originalActionInvoker = controller.ActionInvoker;
-                    ControllerActionInvoker newActionInvoker;
+                    IActionInvoker newActionInvoker;
 
-                    if (AlternateControllerActionInvoker.TryCreate(originalActionInvoker as ControllerActionInvoker, out newActionInvoker))
+                    if (AlternateControllerActionInvoker.TryCreate(originalActionInvoker, out newActionInvoker))
                     {
                         controller.ActionInvoker = newActionInvoker;
                     }

@@ -7,7 +7,7 @@ using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class ActionInvoker : AlternateType<ControllerActionInvoker>
+    public class ActionInvoker : AlternateType<IActionInvoker>
     {
         private IEnumerable<IAlternateMethod> allMethods;
 
@@ -26,6 +26,38 @@ namespace Glimpse.Mvc.AlternateImplementation
                     new GetFilters<ControllerActionInvoker>(new ActionFilter(ProxyFactory), new ResultFilter(ProxyFactory), new AuthorizationFilter(ProxyFactory), new ExceptionFilter(ProxyFactory))
                 }); 
             }
+        }
+
+        public override bool TryCreate(IActionInvoker originalObj, out IActionInvoker newObj, IEnumerable<object> mixins, object[] constructorArgs)
+        {
+            if (originalObj == null)
+            {
+                newObj = null;
+                return false;
+            }
+
+            var originalType = originalObj.GetType();
+
+            if (originalType == typeof(ControllerActionInvoker) && ProxyFactory.IsExtendClassEligible(originalType))
+            {
+                newObj = ProxyFactory.ExtendClass<ControllerActionInvoker>(AllMethods);
+                return true;
+            }
+
+            if (originalObj is ControllerActionInvoker && ProxyFactory.IsWrapClassEligible(originalType))
+            {
+                newObj = ProxyFactory.WrapClass((ControllerActionInvoker)originalObj, AllMethods);
+                return true;
+            }
+
+            if (ProxyFactory.IsWrapInterfaceEligible<IActionInvoker>(originalType))
+            {
+                newObj = ProxyFactory.WrapInterface(originalObj, AllMethods);
+                return true;
+            }
+
+            newObj = null;
+            return false;
         }
 
         public class GetFilters<T> : AlternateMethod where T : class
