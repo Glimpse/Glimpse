@@ -5,8 +5,7 @@ namespace Glimpse.Core.Message
 {
     public class MessageBase : IMessage
     {
-        public MessageBase() 
-            : this(Guid.NewGuid())
+        public MessageBase() : this(Guid.NewGuid())
         {
         }
 
@@ -15,7 +14,7 @@ namespace Glimpse.Core.Message
             Id = id;
         }
 
-        public MessageBase(Type executedType, MethodInfo executedMethod)
+        public MessageBase(Type executedType, MethodInfo executedMethod) : this()
         {
             ExecutedType = executedType;
             ExecutedMethod = executedMethod;
