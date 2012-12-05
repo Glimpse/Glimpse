@@ -5,7 +5,7 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Message
 {
-    public class TimelineMessage : TimeMessage, ITimelineMessage
+    public class TimelineMessage : TimeMessage
     {
         public TimelineMessage(TimerResult timerResult, Type executedType, MethodInfo executedMethod, string eventName = null, string eventCategory = null)
             : base(timerResult, executedType, executedMethod)

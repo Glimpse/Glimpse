@@ -185,6 +185,7 @@
     <Compile Include="Message\IMessage.cs" />
     <Compile Include="Message\ITimeMessage.cs" />
     <Compile Include="Message\ITimelineMessage.cs" />
+    <Compile Include="Message\PointTimelineMessage.cs" />
     <Compile Include="Message\TimelineMessage.cs" />
     <Compile Include="Message\TimeMessage.cs" />
     <Compile Include="Tab\Assist\CodeType.cs" />

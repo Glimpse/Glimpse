@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Message;
 using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
@@ -134,7 +135,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public ActionResult ActionResult { get; set; }
             }
 
-            public class Message : ActionMessage
+            public class Message : ActionMessage, IExecutionMessage, ITimelineMessage
             {
                 private static MethodInfo executedMethod = typeof(ActionResult).GetMethod("ExecuteResult");
 
@@ -188,7 +189,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public bool IsAsync { get; set; }
             }
 
-            public class Message : ActionMessage
+            public class Message : ActionMessage, IExecutionMessage, ITimelineMessage
             {
                 public Message(Arguments arguments, ActionResult returnValue, MethodInfo method, TimerResult timerResult)
                     : base(timerResult, GetControllerName(arguments.ActionDescriptor), GetActionName(arguments.ActionDescriptor), GetIsChildAction(arguments.ControllerContext), GetExecutedType(arguments.ActionDescriptor), method)

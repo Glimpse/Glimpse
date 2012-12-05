@@ -95,6 +95,7 @@
     <Compile Include="Message\ICanceledBasedFilterMessage.cs" />
     <Compile Include="Message\IExceptionBasedFilterMessage.cs" />
     <Compile Include="Message\IActionBaseMessage.cs" />
+    <Compile Include="Message\IExecutionMessage.cs" />
     <Compile Include="Message\IFilterMessage.cs" />
     <Compile Include="Model\DefaultValueModel.cs" />
     <Compile Include="Model\ExecutionModel.cs" />

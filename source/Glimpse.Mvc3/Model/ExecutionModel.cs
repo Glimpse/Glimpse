@@ -6,7 +6,7 @@ namespace Glimpse.Mvc.Model
 {
     public class ExecutionModel
     {
-        public ExecutionModel(IActionBaseMessage message)
+        public ExecutionModel(IExecutionMessage message)
         {
             IsChildAction = message.IsChildAction;
             ExecutedType = message.ExecutedType;

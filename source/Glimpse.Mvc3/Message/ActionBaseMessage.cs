@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Web.Mvc;
-using Glimpse.Core.Extensibility; 
+using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
 using Glimpse.Core.Message;
 
 namespace Glimpse.Mvc.Message
@@ -10,11 +11,11 @@ namespace Glimpse.Mvc.Message
     public class ActionBaseMessage : TimelineMessage, IActionBaseMessage
     {
         public ActionBaseMessage(TimerResult timerResult, bool isChildAction, Type executedType, MethodInfo method, string eventName = null, string eventCategory = null)
-            : base(timerResult, executedType, method, eventName, eventCategory) 
+            : base(timerResult, executedType, method, eventName, eventCategory)
         {
             IsChildAction = isChildAction;
         }
-         
+
         public bool IsChildAction { get; protected set; }
 
         public override void BuildDetails(IDictionary<string, object> details)
@@ -55,10 +56,7 @@ namespace Glimpse.Mvc.Message
 
         protected static string GetActionName(ControllerBase controller)
         {
-            // TODO: Fix me!
-            return "I'M BROKEN";
-
-            // return controller.ValueProvider.GetValue("action").RawValue.ToStringOrDefault();
+            return GetValueProviderEntry(controller, "action");
         }
 
         protected static string GetControllerName(ActionDescriptor descriptor)
@@ -73,15 +71,27 @@ namespace Glimpse.Mvc.Message
 
         protected static string GetControllerName(ControllerBase controller)
         {
-            // TODO: Fix me!
-            return "I'M BROKEN";
-
-            // return controller.ValueProvider.GetValue("controller").RawValue.ToStringOrDefault();
+            return GetValueProviderEntry(controller, "controller");
         }
 
         protected static Type GetExecutedType(ActionDescriptor descriptor)
         {
             return descriptor.ControllerDescriptor.ControllerType;
+        }
+
+        protected static string GetValueProviderEntry(ControllerBase controller, string key)
+        {
+            var result = string.Empty;
+            if (controller != null && controller.ValueProvider != null)
+            {
+                var resultObject = controller.ValueProvider.GetValue(key);
+                if (resultObject != null)
+                {
+                    result = resultObject.RawValue.ToStringOrDefault();
+                }
+            }
+
+            return result;
         }
     }
 }

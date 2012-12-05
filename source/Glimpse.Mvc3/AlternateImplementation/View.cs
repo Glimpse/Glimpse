@@ -4,7 +4,8 @@ using System.IO;
 using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions; 
+using Glimpse.Core.Extensions;
+using Glimpse.Core.Message;
 using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
@@ -54,7 +55,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public TextWriter Writer { get; set; }
             }
 
-            public class Message : ActionMessage
+            public class Message : ActionMessage, ITimelineMessage
             {
                 public Message(Arguments arguments, Type executedType, MethodInfo method, TimerResult timerResult, Type baseType, IViewCorrelationMixin viewCorrelation)
                     : base(timerResult, GetControllerName(arguments.ViewContext.Controller), GetActionName(arguments.ViewContext.Controller), GetIsChildAction(arguments.ViewContext.Controller), executedType, method)
