@@ -775,7 +775,6 @@ namespace Glimpse.Test.Core.Framework
             Runtime.BeginRequest();
 
             Runtime.HttpRequestStoreMock.Verify(fp=>fp.Set(Constants.RequestIdKey, It.IsAny<Guid>()), Times.Never());
-            Runtime.HttpRequestStoreMock.Verify(fp=>fp.Set(Constants.GlobalStopwatchKey, It.IsAny<Stopwatch>()), Times.Never());
         }
 
         [Fact]

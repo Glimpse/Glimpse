@@ -85,11 +85,7 @@ namespace Glimpse.Core.Framework
             // Give Request an ID
             requestStore.Set(Constants.RequestIdKey, Guid.NewGuid());
 
-            // Create and start global stopwatch
-            var stopwatch = Stopwatch.StartNew();
-            var executionTimer = new ExecutionTimer(stopwatch);
-            requestStore.Set(Constants.GlobalStopwatchKey, stopwatch);
-            requestStore.Set(Constants.GlobalTimerKey, executionTimer);
+            var executionTimer = CreateAndStartGlobalExecutionTimer(requestStore);
 
             Configuration.MessageBroker.Publish(new TimelineMessage(executionTimer.Point(), typeof(GlimpseRuntime), MethodInfoBeginRequest, "Start Request", "WebForms"));
         }
@@ -267,6 +263,8 @@ namespace Glimpse.Core.Framework
 
         public bool Initialize()
         {
+            CreateAndStartGlobalExecutionTimer(Configuration.FrameworkProvider.HttpRequestStore);
+
             var logger = Configuration.Logger;
             var policy = GetRuntimePolicy(RuntimeEvent.Initialize);
             if (policy == RuntimePolicy.Off)
@@ -321,6 +319,21 @@ namespace Glimpse.Core.Framework
             }
 
             return policy != RuntimePolicy.Off;
+        }
+
+        private static ExecutionTimer CreateAndStartGlobalExecutionTimer(IDataStore requestStore)
+        {
+            if (requestStore.Contains(Constants.GlobalStopwatchKey) && requestStore.Contains(Constants.GlobalTimerKey))
+            {
+                return requestStore.Get<ExecutionTimer>(Constants.GlobalTimerKey);
+            }
+
+            // Create and start global stopwatch
+            var stopwatch = Stopwatch.StartNew();
+            var executionTimer = new ExecutionTimer(stopwatch);
+            requestStore.Set(Constants.GlobalStopwatchKey, stopwatch);
+            requestStore.Set(Constants.GlobalTimerKey, executionTimer);
+            return executionTimer;
         }
 
         private IDataStore GetTabStore(string tabName)
