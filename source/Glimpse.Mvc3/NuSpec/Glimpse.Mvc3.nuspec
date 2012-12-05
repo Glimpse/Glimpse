@@ -15,7 +15,7 @@
         <summary>ASP.NET MVC 3.0 web debugging and diagnostics tool.</summary>
         <tags>ASP.NET Web MVC Glimpse</tags>
         <dependencies>
-          <dependency id="Glimpse.AspNet" version="1.0.0-ctp1" />
+          <dependency id="Glimpse.AspNet" version="1.0.0-rc1" />
         </dependencies>
     </metadata>
     <files>

@@ -15,14 +15,14 @@
         <summary>ASP.NET 4.0 web debugging and diagnostics tool.</summary>
         <tags>ASP.NET Web WebForms Glimpse</tags>
         <dependencies>
-          <dependency id="Glimpse" version="1.0.0-ctp1" />
+          <dependency id="Glimpse" version="1.0.0-rc1" />
         </dependencies>
     </metadata>
     <files>
         <file src="lib\net35\*.*" target="lib\net35" />
         <file src="lib\net40\*.*" target="lib\net40" />
         <file src="content\*.*" target="content" />
-        <file src="readme.txt" target="readme.txt" />
+        <!--<file src="readme.txt" target="readme.txt" />-->
         <file src="..\**\*.cs" target="src" />
         <file src="..\Resources.resx" target="src" />
     </files>

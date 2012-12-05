@@ -8,7 +8,6 @@ namespace Glimpse.Core.Tab.Assist
     {
         private readonly List<TabSectionColumn> columns = new List<TabSectionColumn>();
 
-        // TODO this might be able to go
         public IEnumerable<TabSectionColumn> Columns
         {
             get { return columns; }
