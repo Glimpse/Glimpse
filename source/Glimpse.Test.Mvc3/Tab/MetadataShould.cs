@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web;
+using System.Web.Mvc;
+
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Mvc.AlternateImplementation;
@@ -70,11 +72,7 @@ namespace Glimpse.Test.Mvc3.Tab
         [Theory, AutoMock]
         public void ReturnResult(Metadata sut, ITabContext context, View.Render.Arguments renderArgs, TimerResult timerResult, IViewCorrelationMixin mixin)
         {
-            var renderMessage = new View.Render.Message(
-                input: renderArgs, 
-                timing: timerResult, 
-                baseType: typeof(ViewRenderMessageShould), 
-                viewCorrelation: mixin);
+            var renderMessage = new View.Render.Message(renderArgs, typeof(IView), null, timerResult, typeof(ViewRenderMessageShould), mixin);
 
             context.TabStore.Setup(ds => ds.Contains(typeof(IList<View.Render.Message>).AssemblyQualifiedName)).Returns(true);
             context.TabStore.Setup(ds => ds.Get(typeof(IList<View.Render.Message>).AssemblyQualifiedName)).Returns(new List<View.Render.Message> { renderMessage });

@@ -79,11 +79,7 @@ namespace Glimpse.Test.Mvc3.Tab
 
             mixin.Setup(m => m.ViewEngineFindCallId).Returns(id);
 
-            var renderMessage = new View.Render.Message(
-                input: renderArgs, 
-                timing: timerResult, 
-                baseType: typeof(ViewRenderMessageShould), 
-                viewCorrelation: mixin);
+            var renderMessage = new View.Render.Message(renderArgs, typeof(IView), null, timerResult, typeof(ViewRenderMessageShould), mixin);
 
             context.TabStore.Setup(ds => ds.Contains(typeof(IList<View.Render.Message>).AssemblyQualifiedName)).Returns(true);
             context.TabStore.Setup(ds => ds.Get(typeof(IList<View.Render.Message>).AssemblyQualifiedName)).Returns(new List<View.Render.Message> { renderMessage });

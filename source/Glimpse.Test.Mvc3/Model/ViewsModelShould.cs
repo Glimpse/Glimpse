@@ -19,7 +19,7 @@ namespace Glimpse.Test.Mvc3.Model
         {
             var findViewMessage = new ViewEngine.FindViews.Message(findViewArgs, timerResult, typeof(IViewEngine), null, viewEngineResult, type, false, Guid.NewGuid());
 
-            var viewRenderMessage = new View.Render.Message(renderArgs, timerResult, type, mixin);
+            var viewRenderMessage = new View.Render.Message(renderArgs, typeof(IView), null, timerResult, type, mixin);
 
             var model = new ViewsModel(findViewMessage, viewRenderMessage);
 

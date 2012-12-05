@@ -55,15 +55,14 @@ namespace Glimpse.Mvc.Tab
             if (viewRenderMessages != null)
             {
                 foreach (var viewRenderMessage in viewRenderMessages)
-                {
-                    var viewContext = viewRenderMessage.Input.ViewContext;
-                    var metadata = viewContext.ViewData.ModelMetadata;
+                { 
+                    var metadata = viewRenderMessage.ModelMetadata;
 
                     var item = new MetadataItemModel();
                     var propertyMetadata = new List<MetadataPropertyItemModel>();
 
-                    item.Action = viewContext.Controller.ValueProvider.GetValue("action").RawValue.ToStringOrDefault();
-                    item.Controller = viewContext.Controller.ValueProvider.GetValue("controller").RawValue.ToStringOrDefault();
+                    item.Action = viewRenderMessage.ActionName;
+                    item.Controller = viewRenderMessage.ControllerName;
                     if (metadata != null)
                     {
                         item.ModelMetadata = ProcessMetaData(metadata);

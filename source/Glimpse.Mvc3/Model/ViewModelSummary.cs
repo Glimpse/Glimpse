@@ -6,14 +6,10 @@ namespace Glimpse.Mvc.Model
 {
     public class ViewModelSummary
     {
-        public ViewModelSummary(ViewDataDictionary viewData, TempDataDictionary tempData)
+        public ViewModelSummary(IDictionary<string, object> viewData, IDictionary<string, object> tempData, Type viewDataModelType, bool modelStateIsValid)
         {
-            if (viewData.Model != null)
-            {
-                ModelType = viewData.Model.GetType();
-            }
-
-            IsValid = viewData.ModelState.IsValid;
+            ModelType = viewDataModelType;
+            IsValid = modelStateIsValid;
             TempDataKeys = tempData.Keys;
             ViewDataKeys = viewData.Keys;
         }

@@ -31,8 +31,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             sut.NewImplementation(context);
 
             context.TimerStrategy().Verify(t => t.Time(It.IsAny<Action>()));
-            context.MessageBroker.Verify(b => b.Publish(It.IsAny<View.Render.Message>()));
-            context.MessageBroker.Verify(b => b.Publish(It.IsAny<View.Render.EventMessage>()));
+            context.MessageBroker.Verify(b => b.Publish(It.IsAny<View.Render.Message>())); 
         } 
 
         [Theory, AutoMock]
