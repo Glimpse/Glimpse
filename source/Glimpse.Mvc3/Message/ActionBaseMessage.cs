@@ -13,8 +13,6 @@ namespace Glimpse.Mvc.Message
             : base(timerResult, executedType, method, eventName, eventCategory) 
         {
             IsChildAction = isChildAction;
-            ExecutedType = executedType;
-            ExecutedMethod = method; 
         }
          
         public bool IsChildAction { get; protected set; }

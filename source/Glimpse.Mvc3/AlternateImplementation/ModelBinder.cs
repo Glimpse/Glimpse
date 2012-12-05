@@ -62,7 +62,7 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), context.TargetType));
+                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), context.TargetType, context.MethodInvocationTarget));
             }
 
             public class Arguments
@@ -83,18 +83,18 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public class Message : MessageBase
             {
-                public Message(Arguments arguments, Type modelBinderType)
+                public Message(Arguments arguments, Type modelBinderType, MethodInfo executedMethod) : base(modelBinderType, executedMethod)
                 {
                     Name = arguments.PropertyDescriptor.Name;
                     Type = arguments.PropertyDescriptor.PropertyType;
                     ModelBinderType = modelBinderType;
                 }
 
-                public Type ModelBinderType { get; set; }
+                public Type ModelBinderType { get; private set; }
 
-                public Type Type { get; set; }
+                public Type Type { get; private set; }
 
-                public string Name { get; set; }
+                public string Name { get; private set; }
             }
         }
 

@@ -20,10 +20,10 @@ namespace Glimpse.Core.Message
             ExecutedMethod = executedMethod;
         }
 
-        public Guid Id { get; set; }
+        public Guid Id { get; protected internal set; }
 
-        public Type ExecutedType { get; set; }
+        public Type ExecutedType { get; private set; }
 
-        public MethodInfo ExecutedMethod { get; set; }
+        public MethodInfo ExecutedMethod { get; private set; }
     }
 }
