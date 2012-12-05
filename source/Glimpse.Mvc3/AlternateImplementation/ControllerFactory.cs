@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
 using System.Web.Routing;
@@ -44,7 +45,7 @@ namespace Glimpse.Mvc.AlternateImplementation
             {
                 var controller = context.ReturnValue as Controller;
 
-                var message = new Message(new Arguments(context.Arguments), controller);
+                var message = new Message(new Arguments(context.Arguments), controller, context.TargetType, context.MethodInvocationTarget);
 
                 context.MessageBroker.Publish(message);
 
@@ -101,9 +102,8 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public class Message : MessageBase
             {
-                public Message(Arguments arguments, IController controller)
+                public Message(Arguments arguments, IController controller, Type executedType, MethodInfo executedMethod) : base(executedType, executedMethod)
                 {
-                    RouteData = arguments.RequestContext.RouteData;
                     ControllerName = arguments.ControllerName;
                     IsControllerResolved = false;
 
@@ -114,13 +114,11 @@ namespace Glimpse.Mvc.AlternateImplementation
                     }
                 }
 
-                public bool IsControllerResolved { get; set; }
-                
-                public Type ControllerType { get; set; }
-                
-                public RouteData RouteData { get; set; }
-                
-                public string ControllerName { get; set; }
+                public bool IsControllerResolved { get; private set; }
+
+                public Type ControllerType { get; private set; }
+
+                public string ControllerName { get; private set; }
             }
         }
     }
