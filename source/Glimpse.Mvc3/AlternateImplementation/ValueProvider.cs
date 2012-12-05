@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Message;
@@ -36,23 +37,23 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                context.MessageBroker.Publish(new Message((string)context.Arguments[0], (bool)context.ReturnValue, context.TargetType));
+                context.MessageBroker.Publish(new Message((string)context.Arguments[0], (bool)context.ReturnValue, context.TargetType, context.MethodInvocationTarget));
             }
 
             public class Message : MessageBase
             {
-                public Message(string prefix, bool isMatch, Type valueProviderType)
+                public Message(string prefix, bool isMatch, Type valueProviderType, MethodInfo executedMethod) : base(valueProviderType, executedMethod)
                 {
                     Prefix = prefix;
                     IsMatch = isMatch;
                     ValueProviderType = valueProviderType;
                 }
 
-                public bool IsMatch { get; set; }
+                public bool IsMatch { get; private set; }
 
-                public Type ValueProviderType { get; set; }
+                public Type ValueProviderType { get; private set; }
 
-                public string Prefix { get; set; }
+                public string Prefix { get; private set; }
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Mvc.AlternateImplementation;
 using Glimpse.Test.Common;
@@ -21,9 +22,9 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
     public abstract class ValueProviderContainsPrefixMessageShould<T> where T : class
     {
         [Theory, AutoMock]
-        public void Construct(string prefix, bool containsPrefix, Type valueProviderType)
+        public void Construct(string prefix, bool containsPrefix, Type valueProviderType, MethodInfo executedMethod)
         {
-            var sut = new ValueProvider<T>.ContainsPrefix.Message(prefix, containsPrefix, valueProviderType);
+            var sut = new ValueProvider<T>.ContainsPrefix.Message(prefix, containsPrefix, valueProviderType, executedMethod);
 
             Assert.Equal(prefix, sut.Prefix);
             Assert.Equal(containsPrefix, sut.IsMatch);
