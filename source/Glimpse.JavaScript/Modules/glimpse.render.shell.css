@@ -32,7 +32,7 @@
     right: 0;
     bottom: 0;
     height: 27px;
-    width: 28px;
+    min-width: 28px;
     background: #cfcfcf;
     background: -moz-linear-gradient(top, #cfcfcf 0%, #dddddd 100%);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cfcfcf), color-stop(100%,#dddddd));
@@ -795,6 +795,23 @@
     height: 100%;
 }
 
+.glimpse-open .glimpse-icon {
+    margin: 1px 1px 0;
+}
+
+.glimpse .glimpse-hud {
+    font-size: 11px;
+    padding: 4px 5px 0 5px;
+}
+.glimpse .glimpse-hud-title {
+    font-weight: bold;
+}
+.glimpse .glimpse-hud-graph-bar {
+    width: 150px;
+    height: 10px;
+    display: inline-table;
+    margin: 0 5px;
+}
 
 .glimpse ::-webkit-scrollbar-corner {
 	vbackground: transparent;
@@ -842,8 +859,4 @@
 	height: 16px;
 	overflow: visible;
 	width: 16px;
-}
-
-.glimpse-open .glimpse-icon {
-    margin: 1px 1px 0;
 }

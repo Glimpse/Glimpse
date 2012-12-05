@@ -102,6 +102,8 @@
 /*(import:glimpse.history.js)*/
 // glimpse.timeline.js
 /*(import:glimpse.timeline.js)*/
+// glimpse.hud.js
+/*(import:glimpse.hud.js)*/
 
 // google-code-prettify.js
 /*(import:google-code-prettify.js)*/
