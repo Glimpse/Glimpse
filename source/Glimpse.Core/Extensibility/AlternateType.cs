@@ -20,12 +20,12 @@ namespace Glimpse.Core.Extensibility
 
         public abstract IEnumerable<IAlternateMethod> AllMethods { get; }
 
-        public virtual bool TryCreate(T originalObj, out T newObj)
+        public bool TryCreate(T originalObj, out T newObj)
         {
             return TryCreate(originalObj, out newObj, null, null);
         }
 
-        public virtual bool TryCreate(T originalObj, out T newObj, IEnumerable<object> mixins)
+        public bool TryCreate(T originalObj, out T newObj, IEnumerable<object> mixins)
         {
             return TryCreate(originalObj, out newObj, mixins, null);
         }
