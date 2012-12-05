@@ -8,7 +8,7 @@ using Glimpse.Core.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class ModelBinder : AlternateType<DefaultModelBinder>
+    public class ModelBinder : AlternateType<IModelBinder>
     {
         private IEnumerable<IAlternateMethod> allMethods;
 
@@ -26,6 +26,32 @@ namespace Glimpse.Mvc.AlternateImplementation
                     new BindProperty()
                 }); 
             }
+        }
+
+        public override bool TryCreate(IModelBinder originalObj, out IModelBinder newObj)
+        {
+            var originalType = originalObj.GetType();
+
+            if (originalType == typeof(DefaultModelBinder) && ProxyFactory.IsExtendClassEligible(originalType))
+            {
+                newObj = ProxyFactory.ExtendClass<DefaultModelBinder>(AllMethods);
+                return true;
+            }
+
+            if (originalObj is DefaultModelBinder && ProxyFactory.IsWrapClassEligible(originalType))
+            {
+                newObj = ProxyFactory.WrapClass(originalObj, AllMethods);
+                return true;
+            }
+
+            if (ProxyFactory.IsWrapInterfaceEligible<IModelBinder>(originalType))
+            {
+                newObj = ProxyFactory.WrapInterface(originalObj, AllMethods);
+                return true;
+            }
+
+            newObj = null;
+            return false;
         }
 
         public class BindProperty : AlternateMethod

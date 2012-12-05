@@ -2,6 +2,6 @@
 {
     public interface IAlternateType<T>
     {
-        bool TryCreate(T originalObj, out T newobj);
+        bool TryCreate(T originalObj, out T newObj);
     }
 }

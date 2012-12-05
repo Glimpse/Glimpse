@@ -72,10 +72,10 @@ namespace Glimpse.Mvc.PipelineInspector
             for (int i = 0; i < keys.Length; i++)
             {
                 var type = keys[i];
-                var originalBinder = binders[type] as DefaultModelBinder; // TODO: Handle IModelBinders as well
-                DefaultModelBinder newBinder;
+                var originalBinder = binders[type];
+                IModelBinder newBinder;
 
-                if (originalBinder != null && alternateModelBinder.TryCreate(originalBinder, out newBinder))
+                if (alternateModelBinder.TryCreate(originalBinder, out newBinder))
                 {
                     context.Logger.Info(Resources.ModelBinderInspectorSetupReplacedModelBinder, originalBinder.GetType());
                     binders[type] = newBinder;
@@ -84,7 +84,7 @@ namespace Glimpse.Mvc.PipelineInspector
 
             // handle default binder
             var originalDefaultBinder = ModelBinders.Binders.DefaultBinder as DefaultModelBinder;
-            DefaultModelBinder newDefaultBinder;
+            IModelBinder newDefaultBinder;
             if (originalDefaultBinder != null && alternateModelBinder.TryCreate(originalDefaultBinder, out newDefaultBinder))
             {
                 context.Logger.Info(Resources.ModelBinderInspectorSetupReplacedModelBinder, originalDefaultBinder.GetType());

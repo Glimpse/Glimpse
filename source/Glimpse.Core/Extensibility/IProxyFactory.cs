@@ -5,7 +5,7 @@ namespace Glimpse.Core.Extensibility
 {
     public interface IProxyFactory
     {
-        bool IsWrapInterfaceEligible(Type type);
+        bool IsWrapInterfaceEligible<TToWrap>(Type type);
 
         T WrapInterface<T>(T instance, IEnumerable<IAlternateMethod> methodImplementations) where T : class;
 

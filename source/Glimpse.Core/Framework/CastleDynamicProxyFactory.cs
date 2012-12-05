@@ -48,9 +48,14 @@ namespace Glimpse.Core.Framework
 
         public Func<IExecutionTimer> TimerStrategy { get; set; }
 
-        public bool IsWrapInterfaceEligible(Type type)
+        public bool IsWrapInterfaceEligible<TToWrap>(Type type)
         {
-            if (!type.IsInterface)
+            if (!typeof(TToWrap).IsInterface)
+            {
+                return false;
+            }
+
+            if (!type.IsAssignableFrom(typeof(TToWrap)))
             {
                 return false;
             }

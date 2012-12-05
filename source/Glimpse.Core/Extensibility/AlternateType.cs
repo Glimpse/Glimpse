@@ -20,14 +20,14 @@ namespace Glimpse.Core.Extensibility
 
         public abstract IEnumerable<IAlternateMethod> AllMethods { get; }
 
-        public virtual bool TryCreate(T originalObj, out T newobj)
+        public virtual bool TryCreate(T originalObj, out T newObj)
         {
-            return TryCreate(originalObj, out newobj, null, null);
+            return TryCreate(originalObj, out newObj, null, null);
         }
 
-        public virtual bool TryCreate(T originalObj, out T newobj, IEnumerable<object> mixins)
+        public virtual bool TryCreate(T originalObj, out T newObj, IEnumerable<object> mixins)
         {
-            return TryCreate(originalObj, out newobj, mixins, null);
+            return TryCreate(originalObj, out newObj, mixins, null);
         }
 
         public virtual bool TryCreate(T originalObj, out T newObj, IEnumerable<object> mixins, object[] constructorArguments)
@@ -39,7 +39,7 @@ namespace Glimpse.Core.Extensibility
                 mixins = Enumerable.Empty<object>();
             }
 
-            if (ProxyFactory.IsWrapInterfaceEligible(typeof(T)))
+            if (ProxyFactory.IsWrapInterfaceEligible<T>(typeof(T)))
             {
                 newObj = ProxyFactory.WrapInterface(originalObj, allMethods, mixins);
                 return true;

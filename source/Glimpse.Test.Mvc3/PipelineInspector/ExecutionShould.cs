@@ -33,7 +33,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         [Theory, AutoMock]
         public void ProxyControllerFactory(ExecutionInspector sut, IPipelineInspectorContext context, IControllerFactory controllerFactory)
         {
-            context.ProxyFactory.Setup(f => f.IsWrapInterfaceEligible(It.IsAny<Type>())).Returns(true);
+            context.ProxyFactory.Setup(f => f.IsWrapInterfaceEligible<IControllerFactory>(It.IsAny<Type>())).Returns(true);
             context.ProxyFactory.Setup(f => f.WrapInterface(It.IsAny<IControllerFactory>(), It.IsAny<IEnumerable<IAlternateMethod>>(), Enumerable.Empty<object>())).Returns(controllerFactory);
 
             sut.Setup(context);

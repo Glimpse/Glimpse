@@ -73,7 +73,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             context.Setup(c => c.Arguments).Returns(GetArguments(controllerContext));
             context.Setup(c => c.ReturnValue).Returns(new ViewEngineResult(view, engine));
             context.Setup(c => c.TargetType).Returns(typeof(int));
-            proxyFactory.Setup(p => p.IsWrapInterfaceEligible(It.IsAny<Type>())).Returns(true);
+            proxyFactory.Setup(p => p.IsWrapInterfaceEligible<IView>(It.IsAny<Type>())).Returns(true);
             proxyFactory.Setup(p => 
                     p.WrapInterface(
                         It.IsAny<IView>(), 
@@ -83,7 +83,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
 
             sut.NewImplementation(context);
 
-            proxyFactory.Verify(p => p.IsWrapInterfaceEligible(It.IsAny<Type>()));
+            proxyFactory.Verify(p => p.IsWrapInterfaceEligible<IView>(It.IsAny<Type>()));
             context.Logger.Verify(l => l.Info(It.IsAny<string>(), It.IsAny<object[]>()));
             context.VerifySet(c => c.ReturnValue = It.IsAny<ViewEngineResult>());
             context.MessageBroker.Verify(b => b.Publish(It.IsAny<ViewEngine.FindViews.Message>())); 

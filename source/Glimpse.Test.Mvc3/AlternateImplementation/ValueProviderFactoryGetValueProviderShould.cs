@@ -48,7 +48,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         {
             context.Setup(c => c.Arguments).Returns(new object[] { arg1 });
             context.Setup(c => c.ReturnValue).Returns(returnValue);
-            proxyFactory.Setup(pf => pf.IsWrapInterfaceEligible(typeof(IUnvalidatedValueProvider))).Returns(true);
+            proxyFactory.Setup(pf => pf.IsWrapInterfaceEligible<IUnvalidatedValueProvider>(typeof(IUnvalidatedValueProvider))).Returns(true);
             proxyFactory.Setup(pf => pf.WrapInterface(It.IsAny<IUnvalidatedValueProvider>(), It.IsAny<IEnumerable<IAlternateMethod>>())).Returns(returnValue);
 
             sut.NewImplementation(context);
@@ -63,7 +63,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         {
             context.Setup(c => c.Arguments).Returns(new object[] { arg1 });
             context.Setup(c => c.ReturnValue).Returns(returnValue);
-            proxyFactory.Setup(pf => pf.IsWrapInterfaceEligible(typeof(IValueProvider))).Returns(true);
+            proxyFactory.Setup(pf => pf.IsWrapInterfaceEligible<IValueProvider>(typeof(IValueProvider))).Returns(true);
             proxyFactory.Setup(pf => pf.WrapInterface(It.IsAny<IValueProvider>(), It.IsAny<IEnumerable<IAlternateMethod>>())).Returns(returnValue);
 
             sut.NewImplementation(context);

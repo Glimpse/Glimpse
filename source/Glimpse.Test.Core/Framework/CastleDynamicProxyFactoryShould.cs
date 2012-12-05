@@ -61,10 +61,10 @@ namespace Glimpse.Test.Core.Framework
         [Theory, AutoMock]
         public void IsWrapInterfaceEligibleOnlyAcceptsInterfaces(CastleDynamicProxyFactory sut)
         {
-            var result = sut.IsWrapInterfaceEligible(typeof(ITestProxy)); 
+            var result = sut.IsWrapInterfaceEligible<ITestProxy>(typeof(ITestProxy)); 
             Assert.True(result);
 
-            result = sut.IsWrapInterfaceEligible(typeof(TestProxy));
+            result = sut.IsWrapInterfaceEligible<ITestProxy>(typeof(TestProxy));
             Assert.False(result);
         }
 
