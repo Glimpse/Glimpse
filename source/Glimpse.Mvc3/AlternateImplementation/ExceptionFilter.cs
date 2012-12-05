@@ -47,9 +47,9 @@ namespace Glimpse.Mvc.AlternateImplementation
                     ExceptionHandled = context.ExceptionHandled;
                 }
 
-                public Type ExceptionType { get; set; }
+                public Type ExceptionType { get; private set; }
 
-                public bool ExceptionHandled { get; set; }
+                public bool ExceptionHandled { get; private set; }
 
                 public override void BuildDetails(IDictionary<string, object> details)
                 {
