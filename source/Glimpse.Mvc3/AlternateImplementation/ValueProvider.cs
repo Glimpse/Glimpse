@@ -65,7 +65,7 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), context.ReturnValue as ValueProviderResult, context.TargetType));
+                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), context.ReturnValue as ValueProviderResult, context.TargetType, context.MethodInvocationTarget));
             }
 
             public class Arguments
@@ -88,29 +88,29 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public class Message : MessageBase
             {
-                public Message(Arguments arguments, ValueProviderResult result, Type valueProviderType)
+                public Message(Arguments arguments, ValueProviderResult result, Type valueProviderType, MethodInfo executedMethod) : base(valueProviderType, executedMethod)
                 {
                     IsFound = false;
                     if (result != null)
                     {
                         IsFound = true;
                         AttemptedValue = result.AttemptedValue;
-                        Culture = result.Culture;
+                        Culture = CultureInfo.ReadOnly(result.Culture);
                         RawValue = result.RawValue;
                     }
 
                     ValueProviderType = valueProviderType;
                 }
 
-                public bool IsFound { get; set; }
+                public bool IsFound { get; private set; }
 
-                public Type ValueProviderType { get; set; }
+                public Type ValueProviderType { get; private set; }
 
-                public object RawValue { get; set; }
+                public object RawValue { get; private set; }
 
-                public CultureInfo Culture { get; set; }
+                public CultureInfo Culture { get; private set; }
 
-                public string AttemptedValue { get; set; }
+                public string AttemptedValue { get; private set; }
             }
         }
     }
