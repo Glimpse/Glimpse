@@ -47,7 +47,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     Canceled = context.Cancel; 
                 }
 
-                public bool Canceled { get; set; }
+                public bool Canceled { get; private set; }
 
                 public override void BuildDetails(IDictionary<string, object> details)
                 {
