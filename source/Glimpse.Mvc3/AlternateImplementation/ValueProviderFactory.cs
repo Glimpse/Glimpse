@@ -43,6 +43,11 @@ namespace Glimpse.Mvc.AlternateImplementation
             {
                 var original = context.ReturnValue as IValueProvider;
 
+                if (original == null)
+                {
+                    return;
+                }
+
                 var originalUnvalidatedValueProvider = original as IUnvalidatedValueProvider;
                 if (originalUnvalidatedValueProvider != null)
                 {

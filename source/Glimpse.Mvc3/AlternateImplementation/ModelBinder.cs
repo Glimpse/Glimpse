@@ -28,8 +28,14 @@ namespace Glimpse.Mvc.AlternateImplementation
             }
         }
 
-        public override bool TryCreate(IModelBinder originalObj, out IModelBinder newObj)
+        public override bool TryCreate(IModelBinder originalObj, out IModelBinder newObj, IEnumerable<object> mixins, object[] constructorArgs)
         {
+            if (originalObj == null)
+            {
+                newObj = null;
+                return false;
+            }
+
             var originalType = originalObj.GetType();
 
             if (originalType == typeof(DefaultModelBinder) && ProxyFactory.IsExtendClassEligible(originalType))
@@ -40,7 +46,7 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             if (originalObj is DefaultModelBinder && ProxyFactory.IsWrapClassEligible(originalType))
             {
-                newObj = ProxyFactory.WrapClass(originalObj, AllMethods);
+                newObj = ProxyFactory.WrapClass((DefaultModelBinder)originalObj, AllMethods);
                 return true;
             }
 
