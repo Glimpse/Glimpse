@@ -12,8 +12,13 @@ using Xunit.Extensions;
 
 namespace Glimpse.Test.Mvc3.PipelineInspector
 {
-    public class ModelBinderInspectorShould
+    public class ModelBinderInspectorShould : IDisposable
     {
+        public void Dispose()
+        {
+            ModelBinders.Binders.DefaultBinder = new DefaultModelBinder();
+        }
+
         [Fact]
         public void Constuct()
         {
