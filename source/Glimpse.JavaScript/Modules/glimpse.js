@@ -2939,12 +2939,19 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
 // glimpse.hud.js
 (function($, pubsub, data, elements) {
     var loaded = function() {
-            var plugin = data.currentData().data.glimpse_hud,
+            var plugin = data.currentData().data.glimpse_hud, 
                 html = '';
 
-            if (plugin.timings && window.performance.timing) {
+            html += processClientTimings();
+            
+            elements.opener().find('tr').prepend('<td class="glimpse-hud">' + html + '</td>');
+        },
+        processClientTimings = function() {
+            var html = '';
+            
+            if (window.performance.timing) {
                 var timingSum = 0,
-                    timing = plugin.timings;
+                    timing = {};
                     
                 populateClientTimings(timing);
 
@@ -2955,12 +2962,13 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                     timingSum += category.duration; 
                     html += '<td style="background-color:' + category.categoryColor + ';width:' + category.percentage + '%" title="' + category.label + ' timing - ' + category.duration + ' ms"></td>';
                 }
+                
                 html += '</tr></table><span class="glimpse-hud-details"><span title="Total request time">' + timingSum + ' ms</span> ';
                 html += '(<span title="Network timing">' + timing.network.duration + ' ms</span> / <span title="Server timing">' + timing.server.duration + ' ms</span> / <span title="Browser timing">' + timing.browser.duration + ' ms</span>)';
                 html += '</span></div>';
             }
 
-            elements.opener().find('tr').prepend('<td class="glimpse-hud">' + html + '</td>');
+            return html;
         },
         populateClientTimings = function(timings) {
             var timingApi = window.performance.timing,
