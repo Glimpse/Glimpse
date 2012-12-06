@@ -121,6 +121,7 @@
     <Compile Include="Tab\Execution.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tab\HudPoc.cs" />
     <Compile Include="Tab\Metadata.cs" />
     <Compile Include="Tab\ModelBinding.cs" />
     <Compile Include="Tab\Views.cs" />
