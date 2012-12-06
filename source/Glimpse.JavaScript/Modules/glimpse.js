@@ -2942,7 +2942,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
             var plugin = data.currentData().data.glimpse_hud, 
                 html = '';
 
-            html += processClientTimings();
+            html += processClientTimings(); 
             
             elements.opener().find('tr').prepend('<td class="glimpse-hud">' + html + '</td>');
         },
@@ -2972,15 +2972,47 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
         },
         populateClientTimings = function(timings) {
             var timingApi = window.performance.timing,
-                network = timingApi.connectEnd - timingApi.navigationStart,
-                server = timingApi.responseEnd - timingApi.requestStart,
-                browser = timingApi.loadEventEnd - timingApi.unloadEventStart,
+                timingOrder = ['navigationStart', 'redirectStart', 'redirectStart', 'redirectEnd', 'fetchStart', 'domainLookupStart', 'domainLookupEnd', 'connectStart', 'secureConnectionStart', 'connectEnd', 'requestStart', 'responseStart', 'responseEnd', 'unloadEventStart', 'unloadEventEnd', 'domLoading', 'domInteractive', 'msFirstPaint', 'domContentLoadedEventStart', 'domContentLoadedEventEnd', 'domContentLoaded', 'domComplete', 'loadEventStart', 'loadEventEnd'],
+                start = timingApi.navigationStart || 0,
+                network = calculateClientTimings(start, timingApi, timingOrder, 'navigationStart', 'connectEnd'),
+                server = calculateClientTimings(start, timingApi, timingOrder, 'requestStart', 'responseEnd'),
+                browser = calculateClientTimings(start, timingApi, timingOrder, 'unloadEventStart', 'loadEventEnd'),
                 total = network + server + browser;
 
             timings.network = { label: 'Network', categoryColor: '#FD4545', duration: network, percentage: (network / total) * 100 };
             timings.server = { label: 'Server', categoryColor: '#823BBE', duration: server, percentage: (server / total) * 100 };
             timings.browser = { label: 'Browser', categoryColor: '#5087CF', duration: browser, percentage: (browser / total) * 100 };
-        };
+        },
+        calculateClientTimings = function(start, timingApi, timingOrder, startIndex, finishIndex) {
+            var total = 0; 
+            for (var i = timingOrder.indexOf(startIndex); i <= timingOrder.indexOf(finishIndex); i++) {
+                var value = timingApi[timingOrder[i]];
+                if (value && value > total) { 
+                    total = (value - start);
+                }
+            } 
+            return total;
+        }
+        /*
+        //Resource Spike 
+        processResourceEntities = function() {
+            var html = '';
+            
+            if (window.performance.getEntriesByType) { 
+                var resourceList = window.performance.getEntriesByType("resource");
+                for (var i = 0; i < resourceList.length; i++)
+                { 
+                    console.log("End to end resource fetch: " + resourceList[i].duration); 
+                    for (var key in resourceList[i]) {
+                        console.log('   ' + key + ' = ' + resourceList[i][key]);
+                    }
+                } 
+            }
+
+            return html;
+        }
+        */
+        ;
 
     pubsub.subscribe('action.shell.loaded', loaded); 
 
