@@ -11,10 +11,8 @@
             
             if (window.performance.timing) {
                 var timingSum = 0,
-                    timing = {};
+                    timing = populateClientTimings();
                     
-                populateClientTimings(timing);
-
                 html += '<div class="glimpse-hud-section"><span class="glimpse-hud-title">Timings</span><table class="glimpse-hud-graph-bar"><tr>';
                 for (var key in timing) {
                     var category = timing[key];
@@ -30,8 +28,9 @@
 
             return html;
         },
-        populateClientTimings = function(timings) {
-            var timingApi = window.performance.timing,
+        populateClientTimings = function() {
+            var result = {},
+                timingApi = window.performance.timing,
                 timingOrder = ['navigationStart', 'redirectStart', 'redirectStart', 'redirectEnd', 'fetchStart', 'domainLookupStart', 'domainLookupEnd', 'connectStart', 'secureConnectionStart', 'connectEnd', 'requestStart', 'responseStart', 'responseEnd', 'unloadEventStart', 'unloadEventEnd', 'domLoading', 'domInteractive', 'msFirstPaint', 'domContentLoadedEventStart', 'domContentLoadedEventEnd', 'domContentLoaded', 'domComplete', 'loadEventStart', 'loadEventEnd'],
                 start = timingApi.navigationStart || 0,
                 network = calculateClientTimings(start, timingApi, timingOrder, 'navigationStart', 'connectEnd'),
@@ -39,9 +38,11 @@
                 browser = calculateClientTimings(start, timingApi, timingOrder, 'unloadEventStart', 'loadEventEnd'),
                 total = network + server + browser;
 
-            timings.network = { label: 'Network', categoryColor: '#FD4545', duration: network, percentage: (network / total) * 100 };
-            timings.server = { label: 'Server', categoryColor: '#823BBE', duration: server, percentage: (server / total) * 100 };
-            timings.browser = { label: 'Browser', categoryColor: '#5087CF', duration: browser, percentage: (browser / total) * 100 };
+            result.network = { label: 'Network', categoryColor: '#FD4545', duration: network, percentage: (network / total) * 100 };
+            result.server = { label: 'Server', categoryColor: '#823BBE', duration: server, percentage: (server / total) * 100 };
+            result.browser = { label: 'Browser', categoryColor: '#5087CF', duration: browser, percentage: (browser / total) * 100 };
+
+            return result;
         },
         calculateClientTimings = function(start, timingApi, timingOrder, startIndex, finishIndex) {
             var total = 0; 
