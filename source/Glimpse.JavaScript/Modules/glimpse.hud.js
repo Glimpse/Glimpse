@@ -23,7 +23,7 @@
                             html += '<td style="background-color:' + category.categoryColor + ';width:' + category.percentage + '%" title="' + category.label + ' timing - ' + category.duration + ' ms"></td>';
                         }
 
-                        html += '</tr></table><span class="glimpse-hud-details"><span title="Total request time">' + timingSum + ' ms</span> ';
+                        html += '</tr></table><span class="glimpse-hud-details"><span title="Total request time" class="glimpse-hud-focus">' + timingSum + ' ms</span> ';
                         html += '(<span title="Network timing">' + timing.network.duration + ' ms</span> / <span title="Server timing">' + timing.server.duration + ' ms</span> / <span title="Browser timing">' + timing.browser.duration + ' ms</span>)';
                         html += '</span></div>';
                     }

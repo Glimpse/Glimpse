@@ -812,8 +812,12 @@
     display: inline-block;
     margin: 0 10px 0 12px;
 }
+.glimpse .glimpse-hud-focus {
+    font-weight: bold;
+}
 .glimpse .glimpse-hud-title {
     font-weight: bold;
+    color: #777;
 }
 .glimpse .glimpse-hud-graph-bar {
     width: 150px;
