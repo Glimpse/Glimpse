@@ -803,6 +803,15 @@
     font-size: 11px;
     padding: 4px 5px 0 5px;
 }
+.glimpse .glimpse-hud-section {
+    display: inline-block;
+}
+.glimpse .glimpse-hud-divider {
+    height: 10px;
+    border-left: 1px solid black;
+    display: inline-block;
+    margin: 0 10px 0 12px;
+}
 .glimpse .glimpse-hud-title {
     font-weight: bold;
 }
