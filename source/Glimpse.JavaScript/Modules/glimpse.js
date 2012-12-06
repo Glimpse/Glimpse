@@ -2944,7 +2944,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
 
             html += clientTimings.render(tabData);
             html += '<div class="glimpse-hud-divider"></div>';
-            html += clientTimings.render(tabData);
+            html += ajaxRequests.render(tabData);
 
             elements.opener().find('tr').prepend('<td class="glimpse-hud">' + html + '</td>');
         },
@@ -3016,6 +3016,33 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
 
                     return html;
                 };
+
+            return {
+                render: render
+            };
+        })(),
+        ajaxRequests = (function() {
+            var send = XMLHttpRequest.prototype.send,
+                count = 0,
+                render = function(tabData) {
+                    var html = '<div class="glimpse-hud-section"><span class="glimpse-hud-title">Ajax</span><span class="glimpse-hud-details"><span title="Number of Ajax request" class="glimpse-hud-focus glimpse-hug-ajax-count">0</span></span></div>';
+                    return html;
+                },
+                update = function() {
+                    $('.glimpse-hug-ajax-count').text(++count);
+                };
+
+
+            XMLHttpRequest.prototype.send = function() { 
+                var callback = this.onreadystatechange;
+                this.onreadystatechange = function() {
+                    if (this.readyState == 4) {
+                        update();
+                    } 
+                    callback.apply(this, arguments);
+                }; 
+                send.apply(this, arguments);
+            };
 
             return {
                 render: render
