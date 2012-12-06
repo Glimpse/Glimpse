@@ -1,7 +1,6 @@
 ﻿(function($, pubsub, data, elements) {
     var loaded = function() {
-            var plugin = data.currentData().data.glimpse_hud, 
-                html = '';
+            var html = '';
 
             html += processClientTimings(); 
             
