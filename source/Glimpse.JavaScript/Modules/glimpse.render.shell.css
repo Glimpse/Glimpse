@@ -42,7 +42,8 @@
 .glimpse-icon { 
     margin: 3px 8px 0;
     cursor: pointer;
-    font-size: 16px; 
+    font-size: 16px;
+    line-height: 18px;
     font-family: "Segoe UI Web Light", "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Arial;
 }
 .glimpse-holder {
@@ -72,7 +73,7 @@
     line-height: 15px;
 }
 .glimpse-bar .glimpse-icon {
-    margin-top: 7px;
+    margin-top: 5px;
     float: left;
 }
 
@@ -133,6 +134,8 @@
 }
 .glimpse-drop {
     padding: 0 1px 0 8px;
+    height: 16px;
+    font-size: 12px;
 }
 .glimpse-drop, .glimpse-drop-over {
     font-weight: normal;
@@ -157,6 +160,7 @@
     padding-left: 3px;
     border-left: 1px solid #5f9a26;
     font-size: 9px;
+    line-height: 11px;
     height: 9px;
     width: 10px;
 }
@@ -238,6 +242,7 @@
     padding: 5px 15px 0; 
     cursor: pointer;
     font-size: 13px;
+    line-height: 13px;
     -webkit-transition: background-color 0.3s ease;
     -moz-transition: background-color 0.3s ease;
     -o-transition: background-color 0.3s ease;
@@ -265,20 +270,25 @@
     position: relative;
     color: #323232;
     font-size: 11px;
+    line-height: 13px;
 }
 .glimpse-panel-message {
     text-align: center;
     padding-top: 40px;
-    font-size: 1.1em;
+    font-size: 1.1em; 
     color: #AAA;
 }
 .glimpse-panel table {
     border-spacing: 0;
-    width: 97%;
-    margin: 1.5%;
+    width: 98%;
+    margin: 1%;
+}
+.glimpse-panel tr {
+    line-height: 14px;
 }
 .glimpse-panel th {
     font-size: 12px;
+    line-height: 14px;
     font-weight: bold;
 }
 .glimpse-panel thead th {
@@ -309,6 +319,7 @@
     border-bottom: 3px solid #CCC; 
     border-left: 1px solid #CCC;
     font-size: 14px;
+    line-height: 12px;
 }
 .glimpse-panel .glimpse-row-header-0 th:first-child {
     border-left-width: 0;
@@ -331,6 +342,7 @@
 }
 .glimpse-panel table table thead tr th {
     border-left: 1px solid #CCC;
+    line-height: 10px;
 }
 .glimpse-panel table table thead tr th:first-child {
     border-left-width: 0;
@@ -468,7 +480,7 @@
     color: #AAA;
 }
 .glimpse-panel .selected, .glimpse-panel .selected > td, .glimpse-panel .selected > th, .glimpse-panel .selected > tr > td, .glimpse-panel .selected > tr > th, .selected > td > .glimpse-preview-table > tbody > tr > td, .selected > tr > td > .glimpse-preview-table > tbody > tr > td {
-    background-color: #FFFF99;
+    background-color: #E6F5E6;
 }
 .glimpse-panel .selected * {
     color: #409B3B;
