@@ -14,9 +14,16 @@
             var html = { instance: '', permanent: '' };
             for (var key in pluginDataSet) {
                 var pluginData = pluginDataSet[key],
-                    disabled = (pluginData.data === undefined || pluginData.data === null) ? ' glimpse-disabled' : '',
+                    disabled = '',
                     permanent = pluginData.isPermanent ? ' glimpse-permanent' : '',
-                    item = '<li class="glimpse-tab glimpse-tabitem-' + key + disabled + permanent + '" data-glimpseKey="' + key + '">' + pluginData.name + '</li>';
+                    disabledTitle = '';
+                
+                if (pluginData.data === undefined || pluginData.data === null) {
+                    disabled = ' glimpse-disabled';
+                    disabledTitle = ' title="No data avaiable"';
+                } 
+
+                var item = '<li class="glimpse-tab glimpse-tabitem-' + key + disabled + permanent + '" data-glimpseKey="' + key + '"' + disabledTitle + '>' + pluginData.name + '</li>';
                 
                 if (!pluginData.suppressTab) { 
                     if (!pluginData.isPermanent)

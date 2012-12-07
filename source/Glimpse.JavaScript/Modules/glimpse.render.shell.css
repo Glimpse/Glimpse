@@ -1,10 +1,7 @@
 ﻿.glimpse, .glimpse *, .glimpse a, .glimpse td, .glimpse th, .glimpse table {
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;
     background-color: transparent;
-    font-size: 11px;
-    line-height: 14px;
     border: 0px;
-    color: #232323;
     text-align: left;
     padding: 0;
     margin: 0;
@@ -17,6 +14,10 @@
     text-decoration: underline;
     font-weight: normal;
     cursor: pointer;
+    -webkit-transition: color 0.3s ease;
+    -moz-transition: color 0.3s ease;
+    -o-transition: color 0.3s ease;
+    transition: color 0.3s ease;
 }
 .glimpse a:active, .glimpse-link:active {
     color: #c11;
@@ -25,7 +26,7 @@
 }
 .glimpse th {
     font-weight: bold;
-}
+} 
 .glimpse-open {
     z-index: 100010;
     position: fixed;
@@ -33,26 +34,16 @@
     bottom: 0;
     height: 27px;
     min-width: 28px;
-    background: #cfcfcf;
-    background: -moz-linear-gradient(top, #cfcfcf 0%, #dddddd 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cfcfcf), color-stop(100%,#dddddd));
-    background: -webkit-linear-gradient(top, #cfcfcf 0%,#dddddd 100%);
-    background: -o-linear-gradient(top, #cfcfcf 0%,#dddddd 100%);
-    background: -ms-linear-gradient(top, #cfcfcf 0%,#dddddd 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#cfcfcf\', endColorstr=\'#dddddd\',GradientType=0 );
-    background: linear-gradient(top, #cfcfcf 0%,#dddddd 100%);
-    -webkit-box-shadow: inset 0px 1px 0px 0px #E2E2E2;
-    -moz-box-shadow: inset 0px 1px 0px 0px #E2E2E2;
-    box-shadow: inset 0px 1px 0px 0px #E2E2E2;
-    border-top: 1px solid #7A7A7A;
-    border-left: 1px solid #7A7A7A;
+    background: #3c454f;
+    border-top: 1px solid #fff;
+    border-left: 1px solid #fff;
+    color: #fff; 
 }
-.glimpse-icon {
-    background: url() 0px -16px;
-    height: 20px;
-    width: 20px;
-    margin: 3px 4px 0;
+.glimpse-icon { 
+    margin: 3px 8px 0;
     cursor: pointer;
+    font-size: 16px; 
+    font-family: "Segoe UI Web Light", "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Arial;
 }
 .glimpse-holder {
     display: none;
@@ -69,27 +60,29 @@
 }
 .glimpse-content {
     position: relative;
+    font-size: 11px;
+    line-height: 13px;
 }
 .glimpse-bar {
-    background: #cfcfcf;
-    background: -moz-linear-gradient(top, #cfcfcf 0%, #dddddd 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cfcfcf), color-stop(100%,#dddddd));
-    background: -webkit-linear-gradient(top, #cfcfcf 0%,#dddddd 100%);
-    background: -o-linear-gradient(top, #cfcfcf 0%,#dddddd 100%);
-    background: -ms-linear-gradient(top, #cfcfcf 0%,#dddddd 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#cfcfcf\', endColorstr=\'#dddddd\',GradientType=0 );
-    background: linear-gradient(top, #cfcfcf 0%,#dddddd 100%);
-    -webkit-box-shadow: inset 0px 1px 0px 0px #E2E2E2;
-    -moz-box-shadow: inset 0px 1px 0px 0px #E2E2E2;
-    box-shadow: inset 0px 1px 0px 0px #E2E2E2;
-    border-top: 1px solid #7A7A7A;
-    height: 25px;
+    background: #3c454f;
+    color: #fff;
+    height: 30px;
     position: relative;
+    font-size: 13px;
+    line-height: 15px;
 }
 .glimpse-bar .glimpse-icon {
-    margin-top: 3px;
+    margin-top: 7px;
     float: left;
 }
+
+.glimpse-bar .glimpse-link, .glimpse-bar a, .glimpse-bar a:visited, .glimpse-bar a:hover {
+    color: #fff;
+}
+.glimpse-bar .glimpse-link:active, .glimpse-bar a:active {
+    color: #c11; 
+}
+
 .glimpse-buttons {
     text-align: right;
     position: absolute;
@@ -97,15 +90,17 @@
     top: 0;
     height: 17px;
     width: 200px;
-    padding: 6px;
+    padding: 8px 6px 6px 6px;
 }
 .glimpse-title {
-    margin: 0 0 0 15px;
+    margin: 1px 0 0 15px;
     padding-top: 5px;
     font-weight: bold;
     display: inline-block;
     width: 75%;
     overflow: hidden;
+    font-size: 13px;
+    line-height: 15px;
 }
 .glimpse-title .glimpse-snapshot-name {
     display: inline-block;
@@ -113,10 +108,7 @@
 }
 .glimpse-title .glimpse-snapshot-path {
     font-weight:normal;
-}
-.glimpse-title .glimpse-snapshot-path a {
-    cursor: pointer;
-}
+} 
 .glimpse-title .glimpse-enviro {
     padding-left: 10px;
     white-space: nowrap;
@@ -139,55 +131,36 @@
     cursor:pointer;
     font-weight:bold;
 }
-.glimpse .glimpse-drop {
-    padding: 1px 1px 1px 8px;
-    height: 14px;
-    font-size: 0.9em;
+.glimpse-drop {
+    padding: 0 1px 0 8px;
 }
-.glimpse .glimpse-drop, .glimpse .glimpse-drop-over {
+.glimpse-drop, .glimpse-drop-over {
     font-weight: normal;
-    font-weight: normal;
-    background: #f7f7f7;
-    background: -moz-linear-gradient(top, #f7f7f7 0%, #e6e6e6 29%, #e2e2e2 31%, #c9c9c9 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f7f7f7), color-stop(29%,#e6e6e6), color-stop(31%,#e2e2e2), color-stop(100%,#c9c9c9));
-    background: -webkit-linear-gradient(top, #f7f7f7 0%,#e6e6e6 29%,#e2e2e2 31%,#c9c9c9 100%);
-    background: -o-linear-gradient(top, #f7f7f7 0%,#e6e6e6 29%,#e2e2e2 31%,#c9c9c9 100%);
-    background: -ms-linear-gradient(top, #f7f7f7 0%,#e6e6e6 29%,#e2e2e2 31%,#c9c9c9 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#f7f7f7\', endColorstr=\'#c9c9c9\',GradientType=0 );
-    background: linear-gradient(top, #f7f7f7 0%,#e6e6e6 29%,#e2e2e2 31%,#c9c9c9 100%);
-    -webkit-box-shadow: inset 0px 1px 0px 0px #F9F9F9;
-    -moz-box-shadow: inset 0px 1px 0px 0px #F9F9F9;
-    box-shadow: inset 0px 1px 0px 0px #F9F9F9;
-    border: 1px solid #A7A7A7;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
+    background: #8bc441; 
     margin: 0 5px 0 0;
+    display: inline-block;
 }
-.glimpse .glimpse-drop-over {
+.glimpse-drop-over {
     position: absolute;
     display: none;
-    top: 4px;
-    padding: 1px 10px 10px 10px;
-    z-index: 100;
-    -webkit-box-shadow: 0px 0px 8px 0px #696969;
-    -moz-box-shadow: 0px 0px 8px 0px #696969;
-    box-shadow: 0px 0px 8px 0px #696969;
+    top: 6px;
+    padding: 1px 20px 10px 20px;
+    z-index: 100; 
 }
-.glimpse .glimpse-drop-over div {
+.glimpse-drop-over div {
     text-align: center;
     font-weight: bold;
     margin: 5px 0;
 }
-.glimpse .glimpse-drop-arrow-holder {
+.glimpse-drop-arrow-holder {
     margin: 3px 3px 3px 5px;
     padding-left: 3px;
-    border-left: 1px solid #A7A7A7;
+    border-left: 1px solid #5f9a26;
     font-size: 9px;
     height: 9px;
     width: 10px;
 }
-.glimpse .glimpse-drop-arrow {
+.glimpse-drop-arrow {
     background: url() no-repeat -22px -18px;
     width: 7px;
     height: 4px;
@@ -218,16 +191,13 @@
     margin-right: 15px;
 }
 .glimpse .glimpse-meta-update {
-    position: absolute;
-    color: #666 !important;
+    position: absolute; 
     text-decoration: underline;
     top: 5px;
     left: 0;
+    cursor: pointer;
     display: none;
-}
-.glimpse .glimpse-meta-update:hover {
-    background-position: -213px -1px;
-}
+} 
 .glimpse .glimpse-minimize {
     background-position: -1px -1px;
 }
@@ -255,85 +225,36 @@
     font-style: italic;
 }
 .glimpse-tabs {
-    background: #afafaf;
-    background: -moz-linear-gradient(top, #afafaf 0%, #cfcfcf 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#afafaf), color-stop(100%,#cfcfcf));
-    background: -webkit-linear-gradient(top, #afafaf 0%,#cfcfcf 100%);
-    background: -o-linear-gradient(top, #afafaf 0%,#cfcfcf 100%);
-    background: -ms-linear-gradient(top, #afafaf 0%,#cfcfcf 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#afafaf\', endColorstr=\'#cfcfcf\',GradientType=0 );
-    background: linear-gradient(top, #afafaf 0%,#cfcfcf 100%);
-    border-bottom: 1px solid #A4A4A4;
-    border-top: 1px solid #F9F9F9;
-    -webkit-box-shadow: inset 0px 1px 0px 0px #8b8b8b;
-    -moz-box-shadow: inset 0px 1px 0px 0px #8b8b8b;
-    box-shadow: inset 0px 1px 0px 0px #8b8b8b;
-    font-weight: bold;
-    height: 24px;
+    background: #71b1d1;  
+    height: 26px; 
+    color: #fff;
 }
-.glimpse-tabs ul {
-    margin: 4px 0px 0 0;
+.glimpse-tabs ul { 
     padding: 0px;
 }
 .glimpse-tabs li {
-    display: inline;
-    margin: 0 2px 3px 2px;
-    height: 22px;
-    padding: 4px 9px 3px;
-    color: #565656;
+    display: inline-block; 
+    height: 21px;
+    padding: 5px 15px 0; 
     cursor: pointer;
-    border-radius: 0px 0px 3px 3px;
-    -moz-border-radius: 0px 0px 3px 3px;
-    -webkit-border-bottom-right-radius: 3px;
-    -webkit-border-bottom-left-radius: 3px;
-    -webkit-transition: color 0.3s ease;
-    -moz-transition: color 0.3s ease;
-    -o-transition: color 0.3s ease;
-    transition: color 0.3s ease;
+    font-size: 13px;
+    -webkit-transition: background-color 0.3s ease;
+    -moz-transition: background-color 0.3s ease;
+    -o-transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease;
     -moz-user-select: -moz-none;
     -khtml-user-select: none;
     -webkit-user-select: none;
     user-select: none;
 }
-.glimpse-tabs li.glimpse-hover {
-    padding: 4px 8px 3px;
-    background: #dddddd;
-    background: -moz-linear-gradient(top, #dddddd 0%, #ffffff 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dddddd), color-stop(100%,#ffffff));
-    background: -webkit-linear-gradient(top, #dddddd 0%,#ffffff 100%);
-    background: -o-linear-gradient(top, #dddddd 0%,#ffffff 100%);
-    background: -ms-linear-gradient(top, #dddddd 0%,#ffffff 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#dddddd\', endColorstr=\'#ffffff\',GradientType=0 );
-    background: linear-gradient(top, #dddddd 0%,#ffffff 100%);
-    -webkit-box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;
-    -moz-box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;
-    box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;
-    border-bottom: 1px solid #8B8B8B;
-    border-left: 1px solid #8B8B8B;
-    border-right: 1px solid #8B8B8B;
-    border-top: 2px solid #DDD;
+.glimpse-tabs li.glimpse-hover { 
+    background: #519bbd; 
 }
 .glimpse-tabs li.glimpse-active {
-    background: #dddddd;
-    background: -moz-linear-gradient(top, #dddddd 0%, #efefef 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dddddd), color-stop(100%,#efefef));
-    background: -webkit-linear-gradient(top, #dddddd 0%,#efefef 100%);
-    background: -o-linear-gradient(top, #dddddd 0%,#efefef 100%);
-    background: -ms-linear-gradient(top, #dddddd 0%,#efefef 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#dddddd\', endColorstr=\'#efefef\',GradientType=0 );
-    background: linear-gradient(top, #dddddd 0%,#efefef 100%);
-    -webkit-box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;
-    -moz-box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;
-    box-shadow: inset 1px -1px 0px #F9F9F9, inset -1px 0px 0px #F9F9F9;
-    border-bottom: 1px solid #8b8b8b;
-    border-left: 1px solid #8b8b8b;
-    border-right: 1px solid #8b8b8b;
-    border-top: 2px solid #DDD;
-    color: #000;
-    padding: 4px 8px 3px;
+    background: #7c4b75;  
 }
 .glimpse-tabs li.glimpse-disabled {
-    color: #AAA;
+    color: #111;
     cursor: default;
 }
 .glimpse-panel-holder {
@@ -342,6 +263,8 @@
     display: none;
     overflow: auto;
     position: relative;
+    color: #323232;
+    font-size: 11px;
 }
 .glimpse-panel-message {
     text-align: center;
@@ -351,10 +274,19 @@
 }
 .glimpse-panel table {
     border-spacing: 0;
-    width: 100%;
+    width: 97%;
+    margin: 1.5%;
 }
-.glimpse-panel table td, .glimpse-panel table th {
-    padding: 3px 4px;
+.glimpse-panel th {
+    font-size: 12px;
+    font-weight: bold;
+}
+.glimpse-panel thead th {
+    text-align: center;
+    vertical-align: top;
+    padding: 3px 3px 6px;
+}
+.glimpse-panel table td { 
     text-align: left;
     vertical-align: top;
 }
@@ -367,30 +299,19 @@
 }
 .glimpse-panel .glimpse-header {
     font-weight: bold;
-    padding: 20px 0 12px 3px;
+    padding: 20px 0 0 1%;
     font-size: 140%;
 }
 .glimpse-panel .glimpse-header-content {
     padding: 0 3px;
 }
-.glimpse-panel tr.glimpse-row-header-0 {
-    height: 19px;
-}
 .glimpse-panel .glimpse-row-header-0 th {
-    background: #DFDFDF;
-    background: -moz-linear-gradient(top, #f3f3f3 0%, #f3f3f3 5%, #e6e6e6 6%, #d1d1d1 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f3f3f3), color-stop(5%,#f3f3f3), color-stop(6%,#e6e6e6), color-stop(100%,#d1d1d1));
-    background: -webkit-linear-gradient(top, #f3f3f3 0%,#f3f3f3 5%,#e6e6e6 6%,#d1d1d1 100%);
-    background: -o-linear-gradient(top, #f3f3f3 0%,#f3f3f3 5%,#e6e6e6 6%,#d1d1d1 100%);
-    background: -ms-linear-gradient(top, #f3f3f3 0%,#f3f3f3 5%,#e6e6e6 6%,#d1d1d1 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#f3f3f3\', endColorstr=\'#d1d1d1\',GradientType=0 );
-    background: linear-gradient(top, #f3f3f3 0%,#f3f3f3 5%,#e6e6e6 6%,#d1d1d1 100%);
-    border-bottom: 1px solid #9C9C9C;
-    font-weight: bold;
+    border-bottom: 3px solid #CCC; 
+    border-left: 1px solid #CCC;
+    font-size: 14px;
 }
-.glimpse-panel .glimpse-row-header-0 th {
-    border-left: 1px solid #D9D9D9;
-    border-right: 1px solid #9C9C9C;
+.glimpse-panel .glimpse-row-header-0 th:first-child {
+    border-left-width: 0;
 }
 .glimpse-panel .glimpse-soft {
     color: #999;
@@ -401,27 +322,18 @@
 .glimpse-panel th.glimpse-cell-key {
     width: 250px;
 }
-.glimpse-panel table table {
-    border: 1px solid #D9D9D9;
+.glimpse-panel table table { 
+    margin: 0;
+    width: 100%;
 }
 .glimpse-panel table table thead th {
-    background: #f3f3f3;
-    background: -moz-linear-gradient(top, #f3f3f3 0%, #e6e6e6 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f3f3f3), color-stop(100%,#e6e6e6));
-    background: -webkit-linear-gradient(top, #f3f3f3 0%,#e6e6e6 100%);
-    background: -o-linear-gradient(top, #f3f3f3 0%,#e6e6e6 100%);
-    background: -ms-linear-gradient(top, #f3f3f3 0%,#e6e6e6 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#f3f3f3\', endColorstr=\'#e6e6e6\',GradientType=0 );
-    background: linear-gradient(top, #f3f3f3 0%,#e6e6e6 100%);
-    border-bottom: 1px solid #9C9C9C;
+    border-bottom: 2px solid #CCC;
 }
 .glimpse-panel table table thead tr th {
-    border-left: 1px solid #C6C6C6;
-    border-right: 1px solid #D9D9D9;
-    padding: 1px 4px 2px 4px;
+    border-left: 1px solid #CCC;
 }
 .glimpse-panel table table thead tr th:first-child {
-    border-left: 0px;
+    border-left-width: 0;
 }
 .glimpse-panel table table thead tr th:last-child {
     border-right: 0px;
@@ -433,12 +345,11 @@
     background-color: #FEFFFF;
 }
 .glimpse-panel table table tbody th {
-    font-weight: normal;
     font-style: italic;
+    font-weight: normal;
 }
 .glimpse-panel table table thead th {
     font-weight: bold;
-    font-style: normal;
 }
 /*
 .glimpse-panel .glimpse-side-sub-panel {
@@ -469,6 +380,9 @@
 	left: 200px;
 	right: 0px;
 	top: 0px;
+}
+.glimpse-panel td, .glimpse-panel th {
+    padding: 7px;
 }
 .glimpse-col-side .even, .glimpse-col-side .even > td {
 	background-color: #E1E7F0;
@@ -522,6 +436,9 @@
     padding-left: 0;
     padding-right: 2px;
     width: 11px;
+}
+.glimpse-panel .glimpse-preview-table > tbody > tr > td {
+    padding: 0;
 }
 .glimpse-expand {
     height: 11px;
@@ -691,12 +608,7 @@
 }
 .glimpse-panel table tr.glimpse-pager-separator td {
     border-bottom: 3px solid #C6C6C6;
-}
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-    .glimpse-tabs li.glimpse-hover, .glimpse-tabs li.glimpse-active {
-        border-top: 1px solid #DDD;
-    }
-}
+} 
 .glimpse-panel .glimpse-sub-text { 
     color: #AAA; 
     font-size: 0.9em; 
