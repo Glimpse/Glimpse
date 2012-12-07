@@ -13,7 +13,7 @@ using Glimpse.Core.Extensions;
 
 namespace Glimpse.AspNet.Tab
 {
-    public class Configuration : AspNetTab, IDocumentation
+    public class Configuration : AspNetTab, IDocumentation, ILayoutControl
     {
         private readonly IEnumerable<string> _keysToAnnomalizePassword = new[] { "Password", "Pwd" };
         private readonly string _passwordHash = "########";
@@ -26,6 +26,11 @@ namespace Glimpse.AspNet.Tab
         public string DocumentationUri
         {
             get { return "http://getglimpse.com/Help/Plugin/Config"; }
+        }
+
+        public bool KeysHeadings 
+        { 
+            get { return true; } 
         }
 
         public override object GetData(ITabContext context)

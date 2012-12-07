@@ -395,6 +395,12 @@ namespace Glimpse.Core.Framework
                     metadataInstance.DocumentationUri = documentationTab.DocumentationUri;
                 }
 
+                var layoutControlTab = tab as ILayoutControl;
+                if (layoutControlTab != null)
+                {
+                    metadataInstance.KeysHeadings = layoutControlTab.KeysHeadings;
+                }
+
                 var layoutTab = tab as ITabLayout;
                 if (layoutTab != null)
                 {
