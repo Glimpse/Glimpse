@@ -66,6 +66,5 @@ namespace Glimpse.Core.Extensions
 
             return source.Any();
         } 
-
     }
 }

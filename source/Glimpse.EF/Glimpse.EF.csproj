@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1AEDC219-C2A4-422E-8DD8-A9ABAE1B4F3B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Glimpse.EF</RootNamespace>
+    <AssemblyName>Glimpse.Ef</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Plumbing\Profiler\GlimpseProfileDbConnectionFactory.cs" />
+    <Compile Include="Service\EF.cs" />
+    <Compile Include="Plumbing\Injectors\WrapCachedMetadata.cs" />
+    <Compile Include="Plumbing\Injectors\WrapDbConnectionFactories.cs" />
+    <Compile Include="Plumbing\Injectors\WrapDbProviderFactories.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Glimpse.Ado\Glimpse.Ado.csproj">
+      <Project>{4C993B73-D03A-4080-B31E-C04F23372997}</Project>
+      <Name>Glimpse.Ado</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Glimpse.AspNet\Glimpse.AspNet.csproj">
+      <Project>{FDDFC8A6-CDDF-4BC6-9F07-E76050E1EEE7}</Project>
+      <Name>Glimpse.AspNet</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">
+      <Project>{21F99168-7D7B-49F2-A97C-5A983E0CA16F}</Project>
+      <Name>Glimpse.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NuSpec\lib\net40\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="NuSpec\content\App_Readme\glimpse.ef.readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="NuSpec\Glimpse.Ef.nuspec">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="NuSpec\tools\install.ps1" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

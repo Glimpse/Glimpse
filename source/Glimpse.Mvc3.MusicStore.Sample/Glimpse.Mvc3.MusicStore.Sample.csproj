@@ -189,9 +189,17 @@
     <Content Include="Views\Store\GenreMenu.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Glimpse.Ado\Glimpse.Ado.csproj">
+      <Project>{4C993B73-D03A-4080-B31E-C04F23372997}</Project>
+      <Name>Glimpse.Ado</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Glimpse.AspNet\Glimpse.AspNet.csproj">
       <Project>{FDDFC8A6-CDDF-4BC6-9F07-E76050E1EEE7}</Project>
       <Name>Glimpse.AspNet</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Glimpse.EF\Glimpse.EF.csproj">
+      <Project>{1AEDC219-C2A4-422E-8DD8-A9ABAE1B4F3B}</Project>
+      <Name>Glimpse.EF</Name>
     </ProjectReference>
     <ProjectReference Include="..\Glimpse.Mvc3\Glimpse.Mvc3.csproj">
       <Project>{0A68B072-7918-45AC-BB78-F05789D0BF44}</Project>

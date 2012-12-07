@@ -127,6 +127,10 @@
     <Compile Include="Tab\Views.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Glimpse.Ado\Glimpse.Ado.csproj">
+      <Project>{4C993B73-D03A-4080-B31E-C04F23372997}</Project>
+      <Name>Glimpse.Ado</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Glimpse.AspNet\Glimpse.AspNet.csproj">
       <Project>{FDDFC8A6-CDDF-4BC6-9F07-E76050E1EEE7}</Project>
       <Name>Glimpse.AspNet</Name>

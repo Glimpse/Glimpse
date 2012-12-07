@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Web;
+using Glimpse.Ado.Plugin;
+using Glimpse.Ado.Plumbing.Models;
 using Glimpse.AspNet.Extensibility;
+using Glimpse.AspNet.Extensions;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Mvc.AlternateImplementation;
@@ -22,7 +27,22 @@ namespace Glimpse.Mvc.Tab
 
         public override object GetData(ITabContext context)
         {
-            return context.TabStore.Get<HudModel>();
+            var result = context.TabStore.Get<HudModel>();
+
+            var httpContext = context.GetHttpContext();
+
+            var queryData = httpContext.Items[SQL.StoreKey] as GlimpseDbQueryMetadata;
+            result.QueryCount = queryData.Commands.Count;
+            result.ConnectionCount = queryData.Connections.Count;
+            result.TransactionCount = queryData.Transactions.Count;
+
+            foreach (var command in queryData.Commands )
+            {
+                var commandMetadata = command.Value;
+                result.QueryExecutionTime += commandMetadata.ElapsedMilliseconds;
+            }
+
+            return result;
         }
 
         public void Setup(ITabSetupContext context)
@@ -86,12 +106,14 @@ namespace Glimpse.Mvc.Tab
         }
     }
 
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Just a POC - this is okay")]
     public class HudModel
     {
         public HudModel()
         {
             ChildViewCount = -1;
             MachineName = Environment.MachineName;
+            QueryExecutionTime = 0;
         }
 
         public string ActionName { get; set; }
@@ -109,6 +131,14 @@ namespace Glimpse.Mvc.Tab
         public string MachineName { get; set; }
 
         public string ControllerName { get; set; }
+
+        public int QueryCount { get; set; }
+
+        public double QueryExecutionTime { get; set; }
+
+        public int ConnectionCount { get; set; }
+
+        public int TransactionCount { get; set; }
     }
 
     public class HudModelConverter : SerializationConverter<HudModel>
@@ -127,9 +157,16 @@ namespace Glimpse.Mvc.Tab
                             { "viewName", obj.ViewName },
                             { "viewRenderTime", Math.Round(obj.ViewRenderTime.Value, 2) },
                         },
-                    environment = new Dictionary<string,object>
+                    environment = new Dictionary<string, object>
                         {
                             { "serverName", obj.MachineName },
+                        },
+                    sql = new Dictionary<string, object>
+                        {
+                            { "queryCount", obj.QueryCount },
+                            { "connectionCount", obj.ConnectionCount },
+                            { "transactionCount", obj.TransactionCount },
+                            { "queryExecutionTime", obj.QueryExecutionTime },
                         }
                 };
         }
