@@ -3,9 +3,11 @@
             var html = '',
                 tabData = data.currentData().data.glimpse_hud;
 
-            html += clientTimings.render(tabData);
+            html += clientTimings.render(tabData.data);
             html += '<div class="glimpse-hud-divider"></div>';
-            html += ajaxRequests.render(tabData);
+            html += mvcTimings.render(tabData.data);
+            html += '<div class="glimpse-hud-divider"></div>';
+            html += ajaxRequests.render(tabData.data);
 
             elements.opener().find('tr').prepend('<td class="glimpse-hud">' + html + '</td>');
         },
@@ -64,14 +66,14 @@
             };
         })(),
         mvcTimings = (function() {
-            var timingApi = window.performance.timing,
-                render = function(tabData) {
-                    var html = '';
+            var render = function(tabData) {
+                    var html = '',
+                        mvcData = tabData.mvc;
 
-                    if (tabData.mvc) { 
-                        html += '<div class="glimpse-hud-section"><span class="glimpse-hud-title">MVC</span>'; 
-                        html += '<span class="glimpse-hud-details"><span title="Total request time" class="glimpse-hud-focus">' + util.timeConvert(timingSum) + '</span> ';
-                        html += '(<span title="Network timing">' + util.timeConvert(timing.network.duration) + '</span> / <span title="Server timing">' + util.timeConvert(timing.server.duration) + '</span> / <span title="Browser timing">' + util.timeConvert(timing.browser.duration) + '</span>)';
+                    if (mvcData) { 
+                        html += '<div class="glimpse-hud-section"><span class="glimpse-hud-title">MVC</span> '; 
+                        html += '<span class="glimpse-hud-details"><span class="glimpse-hud-focus"><span title="MVC Controller">' + mvcData.controllerName + '</span>:<span title="MVC Controller">' + mvcData.actionName + '</span> <span title="Action execution time">' + mvcData.actionExecutionTime + ' ms</span></span> ';
+                        html += '(<span title="View Name">' + mvcData.viewName + '</span> <span title="View rendering time">' + mvcData.viewRenderTime + ' ms</span> - <span title="Number of child actions">' + mvcData.childActionCount + '</span> / <span title="Number of child views">' + mvcData.childViewCount + '</span>)';
                         html += '</span></div>';
                     }
 
@@ -85,8 +87,8 @@
         ajaxRequests = (function() {
             var send = XMLHttpRequest.prototype.send,
                 count = 0,
-                render = function(tabData) {
-                    var html = '<div class="glimpse-hud-section"><span class="glimpse-hud-title">Ajax</span><span class="glimpse-hud-details"><span title="Number of Ajax request" class="glimpse-hud-focus glimpse-hug-ajax-count">0</span></span></div>';
+                render = function() {
+                    var html = '<div class="glimpse-hud-section"><span class="glimpse-hud-title">Ajax</span> <span class="glimpse-hud-details"><span title="Number of Ajax request" class="glimpse-hud-focus glimpse-hug-ajax-count">0</span></span></div>';
                     return html;
                 },
                 update = function() {

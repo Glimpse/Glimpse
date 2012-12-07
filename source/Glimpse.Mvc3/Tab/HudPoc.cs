@@ -54,6 +54,7 @@ namespace Glimpse.Mvc.Tab
             {
                 model.ActionName = message.ActionName;
                 model.ActionExecutionTime = message.Duration;
+                model.ControllerName = message.ControllerName;
             }
         }
 
@@ -106,6 +107,8 @@ namespace Glimpse.Mvc.Tab
         public int ChildViewCount { get; set; }
 
         public string MachineName { get; set; }
+
+        public string ControllerName { get; set; }
     }
 
     public class HudModelConverter : SerializationConverter<HudModel>
@@ -116,6 +119,7 @@ namespace Glimpse.Mvc.Tab
                 {
                     mvc = new Dictionary<string, object>
                         {
+                            { "controllerName", obj.ControllerName },
                             { "actionName", obj.ActionName },
                             { "actionExecutionTime", Math.Round(obj.ActionExecutionTime.Value, 2) },
                             { "childActionCount", obj.ChildActionCount },
