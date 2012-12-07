@@ -3009,10 +3009,11 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                     var html = '',
                         mvcData = tabData.mvc;
 
-                    if (mvcData) { 
+                    if (mvcData) {
+                        var viewIsDifferent = mvcData.actionName != mvcData.viewName;
                         html += '<div class="glimpse-hud-section"><span class="glimpse-hud-title">MVC</span> '; 
-                        html += '<span class="glimpse-hud-details"><span class="glimpse-hud-focus"><span title="MVC Controller">' + mvcData.controllerName + '</span>:<span title="MVC Controller">' + mvcData.actionName + '</span> <span title="Action execution time">' + mvcData.actionExecutionTime + ' ms</span></span> ';
-                        html += '(<span title="View Name">' + mvcData.viewName + '</span> <span title="View rendering time">' + mvcData.viewRenderTime + ' ms</span> - <span title="Number of child actions">' + mvcData.childActionCount + '</span> / <span title="Number of child views">' + mvcData.childViewCount + '</span>)';
+                        html += '<span class="glimpse-hud-details"><span class="glimpse-hud-focus"><span title="MVC Controller">' + mvcData.controllerName + '</span>:<span title="MVC Action' + (!viewIsDifferent ? ' & View' : '') + '">' + mvcData.actionName + '</span> <span title="Action execution time">' + mvcData.actionExecutionTime + ' ms</span></span> ';
+                        html += '(' + (viewIsDifferent ? '<span title="View Name">' + mvcData.viewName + '</span> ' : '') + '<span title="View rendering time">' + mvcData.viewRenderTime + ' ms</span> - <span title="Number of child actions">' + mvcData.childActionCount + '</span> / <span title="Number of child views">' + mvcData.childViewCount + '</span>)';
                         html += '</span></div>';
                     }
 
