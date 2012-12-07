@@ -198,6 +198,19 @@
       <Name>Glimpse.Mvc3</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\One.cshtml" />
+    <Content Include="Views\Home\Seven.cshtml" />
+    <Content Include="Views\Home\Six.cshtml" />
+    <Content Include="Views\Home\Test.cshtml" />
+    <Content Include="Views\Home\Three.cshtml" />
+    <Content Include="Views\Home\Two.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Eight.cshtml" />
+    <Content Include="Views\Home\Five.cshtml" />
+    <Content Include="Views\Home\Four.cshtml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
