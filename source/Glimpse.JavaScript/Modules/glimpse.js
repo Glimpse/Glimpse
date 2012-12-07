@@ -3034,16 +3034,9 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                 update = function() {
                     $('.glimpse-hug-ajax-count').text(++count);
                 };
-
-
+             
             XMLHttpRequest.prototype.send = function() { 
-                var callback = this.onreadystatechange;
-                this.onreadystatechange = function() {
-                    if (this.readyState == 4) {
-                        update();
-                    } 
-                    callback.apply(this, arguments);
-                }; 
+                update();
                 send.apply(this, arguments);
             };
 
@@ -3076,6 +3069,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
     pubsub.subscribe('action.shell.loaded', loaded); 
 
 })(jQueryGlimpse, glimpse.pubsub, glimpse.data, glimpse.elements, glimpse.util);
+
 
 // google-code-prettify.js
 if (!window.PR_SHOULD_USE_CONTINUATION) {

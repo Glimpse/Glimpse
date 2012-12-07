@@ -95,16 +95,9 @@
                 update = function() {
                     $('.glimpse-hug-ajax-count').text(++count);
                 };
-
-
+             
             XMLHttpRequest.prototype.send = function() { 
-                var callback = this.onreadystatechange;
-                this.onreadystatechange = function() {
-                    if (this.readyState == 4) {
-                        update();
-                    } 
-                    callback.apply(this, arguments);
-                }; 
+                update();
                 send.apply(this, arguments);
             };
 
