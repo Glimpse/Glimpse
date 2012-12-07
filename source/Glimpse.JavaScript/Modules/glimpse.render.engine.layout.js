@@ -76,7 +76,7 @@
             var html = '<table>', rowClass = '';
             for (var i = 0; i < data.length; i++) {
                 rowClass = data[i].length > data[0].length ? (' ' + data[i][data[i].length - 1]) : '';
-                html += (i == 0) ? '<thead class="glimpse-row-header-' + level + '">' : '<tbody class="' + (i % 2 ? 'odd' : 'even') + rowClass + '">';
+                html += (i == 0) ? '<thead class="glimpse-row-header glimpse-row-header-' + level + '">' : '<tbody class="' + (i % 2 ? 'odd' : 'even') + rowClass + '">';
                 for (var x = 0; x < metadata.length; x++) { 
                     var rowData = '';
                      

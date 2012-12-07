@@ -796,7 +796,7 @@ glimpse.render.engine.util.raw = (function($, util) {
                 return buildPreview(data, level);
                 
             var i = 1, 
-                html = '<table><thead><tr class="glimpse-row-header-' + level + '"><th class="glimpse-cell-key">Key</th><th class="glimpse-cell-value">Value</th></tr></thead>';
+                html = '<table><thead><tr class="glimpse-row-header glimpse-row-header-' + level + '"><th class="glimpse-cell-key">Key</th><th class="glimpse-cell-value">Value</th></tr></thead>';
             for (var key in data)
                 html += '<tr class="' + (i++ % 2 ? 'odd' : 'even') + '"><th>' + engineUtil.raw.process(key) + '</th><td> ' + providers.master.build(data[key], level + 1) + '</td></tr>';
             html += '</table>';
@@ -982,7 +982,7 @@ glimpse.render.engine.util.raw = (function($, util) {
             var html = '<table>', rowClass = '';
             for (var i = 0; i < data.length; i++) {
                 rowClass = data[i].length > data[0].length ? (' ' + data[i][data[i].length - 1]) : '';
-                html += (i == 0) ? '<thead class="glimpse-row-header-' + level + '">' : '<tbody class="' + (i % 2 ? 'odd' : 'even') + rowClass + '">';
+                html += (i == 0) ? '<thead class="glimpse-row-header glimpse-row-header-' + level + '">' : '<tbody class="' + (i % 2 ? 'odd' : 'even') + rowClass + '">';
                 for (var x = 0; x < metadata.length; x++) { 
                     var rowData = '';
                      
@@ -1023,7 +1023,7 @@ glimpse.render.engine.util.raw = (function($, util) {
             if (engineUtil.shouldUsePreview(data.length, level, forceFull, limit, forceLimit, 1))
                 return buildPreview(data, level);
 
-            var html = '<table><thead><tr class="glimpse-row-header-' + level + '">';
+            var html = '<table><thead><tr class="glimpse-row-header glimpse-row-header-' + level + '">';
             if ($.isArray(data[0])) {
                 for (var x = 0; x < data[0].length; x++)
                     html += '<th>' + engineUtil.raw.process(data[0][x]) + '</th>';
