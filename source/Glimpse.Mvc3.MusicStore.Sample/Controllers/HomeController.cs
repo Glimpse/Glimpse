@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
@@ -30,6 +31,17 @@ namespace MvcMusicStore.Controllers
             Trace.TraceInformation("Test TraceInformation;"); 
 
             return View(albums);
+        }
+
+        public virtual ActionResult News()
+        {
+            var views = new[] { "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight" };
+
+            var randomIndex = new Random().Next(0, views.Count());
+
+            Trace.Write("Randomly selected story number " + randomIndex);
+
+            return PartialView(views[randomIndex]);
         }
 
         private List<Album> GetTopSellingAlbums(int count)
