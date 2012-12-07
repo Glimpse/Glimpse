@@ -4,12 +4,42 @@ using System.Web;
 using Glimpse.Ado.Plugin.Support;
 using Glimpse.Ado.Plumbing.Models;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Tab.Assist;
 
 namespace Glimpse.Ado.Plugin
 {
-    public class SQL : TabBase<HttpContextBase>, IDocumentation
+    public class SQL : TabBase<HttpContextBase>, IDocumentation, ITabLayout
     {
-        public const string StoreKey = "Glimpse.DbQuery";
+        public const string StoreKey = "Glimpse.DbQuery"; 
+        private static readonly object Layout = TabLayout.Create()
+                .Row(r =>
+                {
+                    r.Cell(0).DisableLimit().SetLayout(TabLayout.Create().Row(x =>
+                            x.Cell(0).SpanRows(6).DisableLimit().SetLayout(TabLayout.Create().Row(y => //// MinimalDisplay
+                            {
+                                y.Cell(0).WidthInPixels(150).AsKey();
+                                y.Cell(1);
+                            }))).Row(x =>
+                            {
+                                x.Cell(1).WidthInPixels(55);
+                                x.Cell(2).AsCode(CodeType.Sql);
+                                x.Cell(3).WidthInPercent(25);
+                                x.Cell(4).WidthInPixels(60);
+                                x.Cell(5).WidthInPixels(100).Suffix(" ms").Class("mono");
+                                x.Cell(6).WidthInPixels(70).Prefix("T+ ").Suffix(" ms").Class("mono");
+                            }).Row(x =>
+                            x.Cell(8).SpanRows(6).DisableLimit().SetLayout(TabLayout.Create().Row(y => //// MinimalDisplay
+                            {
+                                y.Cell(0).WidthInPercent(20);
+                                y.Cell(1).Class("mono");
+                            }))).Row(x =>
+                            x.Cell(7).SpanRows(6).DisableLimit().SetLayout(TabLayout.Create().Row(y => //// MinimalDisplay
+                            {
+                                y.Cell(0).WidthInPixels(150).AsKey();
+                                y.Cell(1);
+                            }))));
+                    r.Cell(1).WidthInPixels(75).Suffix(" ms").Class("mono");
+                }).Build();
 
         public SQL()
         {
@@ -21,7 +51,17 @@ namespace Glimpse.Ado.Plugin
             get { return "SQL"; }
         }
 
+        public string DocumentationUri
+        {
+            get { return "http://getGlimpse.com/Help/Plugin/SQL"; }
+        }
+
         private CommandSanitizer Sanitizer { get; set; }
+
+        public object GetLayout()
+        {
+            return Layout;
+        }
 
         public override object GetData(ITabContext context)
         {
@@ -96,17 +136,10 @@ namespace Glimpse.Ado.Plugin
                 connections.Add(new object[] { commands, elapse });
             }
 
-            return connections.Count > 1 ? connections : null;
-
+            return connections.Count > 1 ? connections : null; 
         }
-
-        public string DocumentationUri
-        {
-            get { return "http://getGlimpse.com/Help/Plugin/SQL"; }
-        }
-
-        /*
-         * TODO: Convert this over to the new interface and syntax
+         
+         /* TODO: Convert this over to the new interface and syntax
         #region IProvideGlimpseStructuredLayout
         //TODO: Move to client prerender plugin
 
@@ -163,8 +196,7 @@ namespace Glimpse.Ado.Plugin
             get { return _structuredLayout; }
         }
 
-        #endregion
-         */
-
+        #endregion 
+        */
     }
 }
