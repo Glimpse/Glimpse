@@ -89,6 +89,7 @@
     <Compile Include="Extensibility\IConfigurable.cs" />
     <Compile Include="Extensibility\IExecutionTimer.cs" />
     <Compile Include="Extensibility\IKey.cs" />
+    <Compile Include="Extensibility\ILayoutControl.cs" />
     <Compile Include="Extensibility\IParameterValueProvider.cs" />
     <Compile Include="Extensibility\IPrivilegedResource.cs" />
     <Compile Include="Extensibility\ITabLayout.cs" />

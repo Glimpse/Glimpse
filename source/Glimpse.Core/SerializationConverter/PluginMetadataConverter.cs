@@ -11,6 +11,7 @@ namespace Glimpse.Core.SerializationConverter
             return new Dictionary<string, object>
                        {
                            { "documentationUri", metadata.DocumentationUri },
+                           { "keysHeadings", metadata.KeysHeadings },
                            { "layout", metadata.Layout }
                        };
         }

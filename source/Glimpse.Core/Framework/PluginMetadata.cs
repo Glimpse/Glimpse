@@ -4,6 +4,8 @@ namespace Glimpse.Core.Framework
     {
         public string DocumentationUri { get; set; }
 
+        public bool KeysHeadings { get; set; }
+
         public object Layout { get; set; }
         
         public bool HasMetadata 

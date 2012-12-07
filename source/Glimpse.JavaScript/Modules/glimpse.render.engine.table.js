@@ -6,7 +6,7 @@
             if (engineUtil.shouldUsePreview(data.length, level, forceFull, limit, forceLimit, 1))
                 return buildPreview(data, level);
 
-            var html = '<table><thead><tr class="glimpse-row-header-' + level + '">';
+            var html = '<table><thead><tr class="glimpse-row-header glimpse-row-header-' + level + '">';
             if ($.isArray(data[0])) {
                 for (var x = 0; x < data[0].length; x++)
                     html += '<th>' + engineUtil.raw.process(data[0][x]) + '</th>';
