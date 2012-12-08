@@ -38,11 +38,11 @@ namespace Glimpse.Core.Tab.Assist
         
         public string Width { get; private set; }
         
-        public int? RowSpan { get; private set; }
+        public int? Span { get; private set; }
         
         public string ClassName { get; private set; }
 
-        public bool? SuppressAutoPreview { get; private set; }
+        public bool? ForceFull { get; private set; }
         
         public int? Limit { get; private set; }
 
@@ -117,14 +117,14 @@ namespace Glimpse.Core.Tab.Assist
             return this;
         }
 
-        public TabLayoutCell SpanRows(int rows)
+        public TabLayoutCell SpanColumns(int rows)
         {
             if (rows < 1)
             {
                 throw new ArgumentException("Rows must not be less then 0.", "rows");
             }
 
-            RowSpan = rows;
+            Span = rows;
             return this;
         }
 
@@ -139,9 +139,9 @@ namespace Glimpse.Core.Tab.Assist
             return this;
         }
 
-        public TabLayoutCell DisableLimit()
+        public TabLayoutCell DisablePreview()
         {
-            SuppressAutoPreview = true;
+            ForceFull = true;
             return this;
         }
 
