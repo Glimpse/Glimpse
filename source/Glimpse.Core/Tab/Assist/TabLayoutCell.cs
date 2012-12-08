@@ -50,6 +50,8 @@ namespace Glimpse.Core.Tab.Assist
         
         public string Post { get; private set; }
 
+        public bool MinDisplay { get; private set; }
+
         public TabLayoutCell Format(string format)
         {
             if (string.IsNullOrEmpty(format))
@@ -173,6 +175,12 @@ namespace Glimpse.Core.Tab.Assist
             }
 
             Post = suffix;
+            return this;
+        }
+
+        public TabLayoutCell AsMinimalDisplay()
+        {
+            MinDisplay = true;
             return this;
         }
 
