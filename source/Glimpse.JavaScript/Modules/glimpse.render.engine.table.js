@@ -59,7 +59,7 @@
                     html += '<span class="start">[</span>';
                     var spacer = '';
                     for (var x = 0; x < columnLimit; x++) {
-                        html += spacer + '<span>\'</span>' + providers.string.build(data[i][x], level, 12) + '<span>\'</span>';
+                        html += spacer + '<span>\'</span>' + providers.string.build(data[i][x], level, false, 12) + '<span>\'</span>';
                         spacer = '<span class="rspace">,</span>';
                     }
                     if (x < data[0].length)
@@ -72,7 +72,7 @@
                     html += engineUtil.newItemSpacer(i + 1, rowLimit, length);
                     if (i >= length || i >= rowLimit)
                         break;
-                    html += '<span>\'</span>' + providers.string.build(data[i], level, 12) + '<span>\'</span>';
+                    html += '<span>\'</span>' + providers.string.build(data[i], level, false, 12) + '<span>\'</span>';
                 } 
             }
 
