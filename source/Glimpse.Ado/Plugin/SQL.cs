@@ -14,26 +14,26 @@ namespace Glimpse.Ado.Plugin
         private static readonly object Layout = TabLayout.Create()
                 .Row(r =>
                 {
-                    r.Cell(0).DisableLimit().SetLayout(TabLayout.Create().Row(x =>
-                            x.Cell(0).SpanRows(6).DisableLimit().SetLayout(TabLayout.Create().Row(y => //// MinimalDisplay
+                    r.Cell(0).DisablePreview().SetLayout(TabLayout.Create().Row(x =>
+                            x.Cell(0).SpanColumns(6).DisablePreview().AsMinimalDisplay().SetLayout(TabLayout.Create().Row(y =>  
                             {
                                 y.Cell(0).WidthInPixels(150).AsKey();
                                 y.Cell(1);
                             }))).Row(x =>
                             {
                                 x.Cell(1).WidthInPixels(55);
-                                x.Cell(2).AsCode(CodeType.Sql);
-                                x.Cell(3).WidthInPercent(25);
+                                x.Cell(2).AsCode(CodeType.Sql).DisablePreview();
+                                x.Cell(3).WidthInPercent(25).DisablePreview();
                                 x.Cell(4).WidthInPixels(60);
                                 x.Cell(5).WidthInPixels(100).Suffix(" ms").Class("mono");
                                 x.Cell(6).WidthInPixels(70).Prefix("T+ ").Suffix(" ms").Class("mono");
                             }).Row(x =>
-                            x.Cell(8).SpanRows(6).DisableLimit().SetLayout(TabLayout.Create().Row(y => //// MinimalDisplay
+                            x.Cell(8).SpanColumns(6).DisablePreview().AsMinimalDisplay().SetLayout(TabLayout.Create().Row(y =>  
                             {
                                 y.Cell(0).WidthInPercent(20);
-                                y.Cell(1).Class("mono");
+                                y.Cell(1).Class("mono").DisablePreview();
                             }))).Row(x =>
-                            x.Cell(7).SpanRows(6).DisableLimit().SetLayout(TabLayout.Create().Row(y => //// MinimalDisplay
+                            x.Cell(7).SpanColumns(6).DisablePreview().AsMinimalDisplay().SetLayout(TabLayout.Create().Row(y => 
                             {
                                 y.Cell(0).WidthInPixels(150).AsKey();
                                 y.Cell(1);
@@ -145,10 +145,10 @@ namespace Glimpse.Ado.Plugin
 
         private static readonly GlimpseStructuredLayout _structuredLayout = new GlimpseStructuredLayout { 
                 new GlimpseStructuredLayoutSection {
-                    new GlimpseStructuredLayoutCell { Data = 0, SuppressAutoPreview = true, 
+                    new GlimpseStructuredLayoutCell { Data = 0, ForceFull = true, 
                         Structure = new GlimpseStructuredLayout { 
                             new GlimpseStructuredLayoutSection {
-                                new GlimpseStructuredLayoutCell { Data = 0, Span = 6, SuppressAutoPreview = true, MinimalDisplay = true,
+                                new GlimpseStructuredLayoutCell { Data = 0, Span = 6, ForceFull = true, MinimalDisplay = true,
                                     Structure = new GlimpseStructuredLayout { 
                                         new GlimpseStructuredLayoutSection {
                                             new GlimpseStructuredLayoutCell { Data = 0, Width = "150px", IsKey = true },
@@ -166,7 +166,7 @@ namespace Glimpse.Ado.Plugin
                                 new GlimpseStructuredLayoutCell { Data = 6, ClassName = "mono", Prefix = "T+ ", Postfix = " ms", Width = "70px" }
                             },
                             new GlimpseStructuredLayoutSection { 
-                                new GlimpseStructuredLayoutCell { Data = 8, Span = 6, SuppressAutoPreview = true, MinimalDisplay = true,
+                                new GlimpseStructuredLayoutCell { Data = 8, Span = 6, ForceFull = true, MinimalDisplay = true,
                                     Structure = new GlimpseStructuredLayout { 
                                         new GlimpseStructuredLayoutSection {
                                             new GlimpseStructuredLayoutCell { Data = 0, Width = "20%" },
@@ -176,7 +176,7 @@ namespace Glimpse.Ado.Plugin
                                 }
                             },
                             new GlimpseStructuredLayoutSection {
-                                new GlimpseStructuredLayoutCell { Data = 7, Span = 6, SuppressAutoPreview = true, MinimalDisplay = true,
+                                new GlimpseStructuredLayoutCell { Data = 7, Span = 6, ForceFull = true, MinimalDisplay = true,
                                     Structure = new GlimpseStructuredLayout { 
                                         new GlimpseStructuredLayoutSection {
                                             new GlimpseStructuredLayoutCell { Data = 0, Width = "150px", IsKey = true },
