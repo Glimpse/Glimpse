@@ -24,38 +24,49 @@ namespace Glimpse.AspNet.SerializationConverter
             return root.Build();
         }
 
-        private static TabSection BuildWebServerDetails(EnvironmentWebServerModel model)
-        { 
-            var section = new TabSection("Type", "Integrated Pipeline");
-            section.AddRow().Column(model.ServerType).Column(model.IntegratedPipeline);
+        private static TabObject BuildWebServerDetails(EnvironmentWebServerModel model)
+        {
+            var section = new TabObject();
+            section.AddRow().Key("Type").Value(model.ServerType);
+            section.AddRow().Key("Integrated Pipeline").Value(model.IntegratedPipeline);
             return section;
         }
 
-        private TabSection BuildFrameworkDetails(EnvironmentFrameworkModel model)
+        private TabObject BuildFrameworkDetails(EnvironmentFrameworkModel model)
         {
-            var section = new TabSection(".NET Framework", "Debugging", "Server Culture", "Current Trust Level");
-            section.AddRow().Column(model.DotnetFramework).Column(model.Debugging).Column(model.ServerCulture).Column(model.CurrentTrustLevel);
+            var section = new TabObject();
+            section.AddRow().Key(".NET Framework").Value(model.DotnetFramework);
+            section.AddRow().Key("Debugging").Value(model.Debugging);
+            section.AddRow().Key("Server Culture").Value(model.ServerCulture);
+            section.AddRow().Key("Current Trust Level").Value(model.CurrentTrustLevel); 
             return section;
         }
 
-        private TabSection BuildMachineDetails(EnvironmentMachineModel model)
+        private TabObject BuildMachineDetails(EnvironmentMachineModel model)
         {
-            var section = new TabSection("Name", "Operating System", "Start Time");
-            section.AddRow().Column(model.Name).Column(model.OperatingSystem).Column(model.StartTime);
+            var section = new TabObject();
+            section.AddRow().Key("Name").Value(model.Name);
+            section.AddRow().Key("Operating System").Value(model.OperatingSystem);
+            section.AddRow().Key("Start Time").Value(model.StartTime); 
             return section;
         }
 
-        private TabSection BuildTimeZoneDetails(EnvironmentTimeZoneModel model)
+        private TabObject BuildTimeZoneDetails(EnvironmentTimeZoneModel model)
         {
-            var section = new TabSection("Current", "Is Daylight Saving", "UtcOffset", "UtcOffset w/DLS");
-            section.AddRow().Column(model.Name).Column(model.IsDaylightSavingTime).Column(model.UtcOffset).Column(model.UtcOffsetWithDls);
+            var section = new TabObject();
+            section.AddRow().Key("Current").Value(model.Name);
+            section.AddRow().Key("Is Daylight Saving").Value(model.IsDaylightSavingTime);
+            section.AddRow().Key("UtcOffset").Value(model.UtcOffset);
+            section.AddRow().Key("UtcOffset w/DLS").Value(model.UtcOffsetWithDls); 
             return section;
         }
 
-        private TabSection BuildProcessDetails(EnvironmentProcessModel model)
+        private TabObject BuildProcessDetails(EnvironmentProcessModel model)
         {
-            var section = new TabSection("Worker Process", "Process ID", "Start Time");
-            section.AddRow().Column(model.WorkerProcess).Column(model.ProcessId).Column(model.StartTime);
+            var section = new TabObject();
+            section.AddRow().Key("Worker Process").Value(model.WorkerProcess);
+            section.AddRow().Key("Process ID").Value(model.ProcessId);
+            section.AddRow().Key("Start Time").Value(model.StartTime); 
             return section;
         }
 

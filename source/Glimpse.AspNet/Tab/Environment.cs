@@ -13,7 +13,7 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.AspNet.Tab
 {
-    public class Environment : AspNetTab, IDocumentation, IKey
+    public class Environment : AspNetTab, IDocumentation, IKey, ILayoutControl
     { 
         private readonly IEnumerable<string> systemNamspaces = new List<string> { "System", "Microsoft" }; 
 
@@ -30,6 +30,11 @@ namespace Glimpse.AspNet.Tab
         public string DocumentationUri
         {
             get { return "http://getglimpse.com/Help/Plugin/Environment"; }
+        }
+
+        public bool KeysHeadings
+        {
+            get { return true; }
         }
 
         public override object GetData(ITabContext context)
