@@ -8,7 +8,7 @@
                 if ($.isPlainObject(data))
                     return '{ ... }';
                 if (forceFull)
-                    return util.preserveWhitespace(data);  
+                    return util.preserveWhitespace(engineUtil.raw.process(data));  
 
                 var charMax = $.isNumeric(forceLimit) ? forceLimit : (level > 1 ? 80 : 150),
                     charOuterMax = (charMax * 1.2),
