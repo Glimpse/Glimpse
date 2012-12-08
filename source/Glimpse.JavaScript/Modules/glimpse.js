@@ -865,7 +865,7 @@ glimpse.render.engine.util.raw = (function($, util) {
                 else if (level == 0) 
                     result = providers.empty.build(data);
                 else 
-                    result = providers.string.build(data, level, forceLimit);
+                    result = providers.string.build(data, level, forceFull, forceLimit);
 
                 return result;
             }
@@ -876,13 +876,15 @@ glimpse.render.engine.util.raw = (function($, util) {
 // glimpse.render.engine.string.js
 (function($, util, engine, engineUtil) {
     var provider = {
-            build: function (data, level, forceLimit) { 
+            build: function (data, level, forceFull, forceLimit) { 
                 if (data == undefined || data == null)
                     return '--';
                 if ($.isArray(data))
                     return '[ ... ]';
                 if ($.isPlainObject(data))
                     return '{ ... }';
+                if (forceFull)
+                    return util.preserveWhitespace(data);  
 
                 var charMax = $.isNumeric(forceLimit) ? forceLimit : (level > 1 ? 80 : 150),
                     charOuterMax = (charMax * 1.2),
@@ -1078,7 +1080,7 @@ glimpse.render.engine.util.raw = (function($, util) {
                     html += '<span class="start">[</span>';
                     var spacer = '';
                     for (var x = 0; x < columnLimit; x++) {
-                        html += spacer + '<span>\'</span>' + providers.string.build(data[i][x], level, 12) + '<span>\'</span>';
+                        html += spacer + '<span>\'</span>' + providers.string.build(data[i][x], level, false, 12) + '<span>\'</span>';
                         spacer = '<span class="rspace">,</span>';
                     }
                     if (x < data[0].length)
@@ -1091,7 +1093,7 @@ glimpse.render.engine.util.raw = (function($, util) {
                     html += engineUtil.newItemSpacer(i + 1, rowLimit, length);
                     if (i >= length || i >= rowLimit)
                         break;
-                    html += '<span>\'</span>' + providers.string.build(data[i], level, 12) + '<span>\'</span>';
+                    html += '<span>\'</span>' + providers.string.build(data[i], level, false, 12) + '<span>\'</span>';
                 } 
             }
 
