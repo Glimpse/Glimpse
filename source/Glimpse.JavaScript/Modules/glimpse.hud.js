@@ -7,6 +7,8 @@
             html += '<div class="glimpse-hud-divider"></div>';
             html += mvcTimings.render(tabData.data);
             html += '<div class="glimpse-hud-divider"></div>';
+            html += sqlTimings.render(tabData.data);
+            html += '<div class="glimpse-hud-divider"></div>';
             html += ajaxRequests.render(tabData.data);
 
             elements.opener().find('tr').prepend('<td class="glimpse-hud">' + html + '</td>');
@@ -73,8 +75,27 @@
                     if (mvcData) {
                         var viewIsDifferent = mvcData.actionName != mvcData.viewName;
                         html += '<div class="glimpse-hud-section"><span class="glimpse-hud-title">MVC</span> '; 
-                        html += '<span class="glimpse-hud-details"><span class="glimpse-hud-focus"><span title="MVC Controller">' + mvcData.controllerName + '</span>:<span title="MVC Action' + (!viewIsDifferent ? ' & View' : '') + '">' + mvcData.actionName + '</span> <span title="Action execution time">' + mvcData.actionExecutionTime + ' ms</span></span> ';
+                        html += '<span class="glimpse-hud-details"><span class="glimpse-hud-focus"><span title="MVC Controller">' + mvcData.controllerName + '</span> : <span title="MVC Action' + (!viewIsDifferent ? ' & View' : '') + '">' + mvcData.actionName + '</span> <span title="Action execution time">' + mvcData.actionExecutionTime + ' ms</span></span> ';
                         html += '(' + (viewIsDifferent ? '<span title="View Name">' + mvcData.viewName + '</span> ' : '') + '<span title="View rendering time">' + mvcData.viewRenderTime + ' ms</span> - <span title="Number of child actions">' + mvcData.childActionCount + '</span> / <span title="Number of child views">' + mvcData.childViewCount + '</span>)';
+                        html += '</span></div>';
+                    }
+
+                    return html;
+                };
+
+            return {
+                render: render
+            };
+        })(),
+        sqlTimings = (function() {
+            var render = function(tabData) {
+                    var html = '',
+                        sqlData = tabData.sql;
+
+                    if (sqlData) { 
+                        html += '<div class="glimpse-hud-section"><span class="glimpse-hud-title">SQL</span> '; 
+                        html += '<span class="glimpse-hud-details"><span class="glimpse-hud-focus"><span title="Total query time">' + sqlData.queryExecutionTime + ' ms</span> ';
+                        html += '(<span title="Number of transactions">' + sqlData.transactionCount + '</span> / <span title="Number of connections">' + sqlData.connectionCount + '</span> / <span title="Number of queries">' + sqlData.queryCount + '</span>)';
                         html += '</span></div>';
                     }
 
