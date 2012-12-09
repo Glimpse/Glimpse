@@ -45,12 +45,12 @@ namespace Glimpse.Test.AspNet.AlternateImplementation
         }
 
         [Theory, AutoMock]
-        public void PublishMessageWhenExecuted([Frozen] IExecutionTimer timer, IAlternateImplementationContext context)
+        public void PublishMessageWhenExecuted([Frozen] IExecutionTimer timer, IAlternateImplementationContext context, IRouteNameMixin mixin)
         {
             context.Setup(c => c.Arguments).Returns(new object[5]);
             context.Setup(c => c.ReturnValue).Returns(new System.Web.Routing.RouteData());
             context.Setup(c => c.InvocationTarget).Returns(new System.Web.Routing.Route("Test", null));
-            context.Setup(c => c.Proxy).Returns(new object());
+            context.Setup(c => c.Proxy).Returns(mixin);
 
             var impl = new RouteBase.GetRouteData(typeof(T));
 

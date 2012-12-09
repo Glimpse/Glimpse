@@ -43,16 +43,19 @@ namespace Glimpse.AspNet.AlternateImplementation
 
             public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                context.MessageBroker.Publish(new Message(timerResult, context.InvocationTarget.GetType(), context.MethodInvocationTarget, context.Proxy.GetHashCode(), (System.Web.Routing.RouteData)context.ReturnValue));
+                var mixin = (IRouteNameMixin)context.Proxy;
+
+                context.MessageBroker.Publish(new Message(timerResult, context.InvocationTarget.GetType(), context.MethodInvocationTarget, context.Proxy.GetHashCode(), (System.Web.Routing.RouteData)context.ReturnValue, mixin.Name));
             }
 
             public class Message : TimeMessage
             {
-                public Message(TimerResult timer, Type executedType, MethodInfo executedMethod, int routeHashCode, System.Web.Routing.RouteData routeData)
+                public Message(TimerResult timer, Type executedType, MethodInfo executedMethod, int routeHashCode, System.Web.Routing.RouteData routeData, string routeName)
                     : base(timer, executedType, executedMethod)
                 {
                     IsMatch = routeData != null;
                     RouteHashCode = routeHashCode;
+                    RouteName = routeName;
 
                     if (routeData != null)
                     {
@@ -65,6 +68,8 @@ namespace Glimpse.AspNet.AlternateImplementation
                 public int RouteHashCode { get; protected set; }
 
                 public bool IsMatch { get; protected set; }
+
+                public string RouteName { get; protected set; }
             }
         } 
 
