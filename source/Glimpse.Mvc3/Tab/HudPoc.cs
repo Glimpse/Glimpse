@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Web;
 using Glimpse.Ado.Plugin;
 using Glimpse.Ado.Plumbing.Models;
+using Glimpse.AspNet.AlternateImplementation;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.AspNet.Extensions;
 using Glimpse.Core.Extensibility;
@@ -36,7 +37,7 @@ namespace Glimpse.Mvc.Tab
             result.ConnectionCount = queryData.Connections.Count;
             result.TransactionCount = queryData.Transactions.Count;
 
-            foreach (var command in queryData.Commands )
+            foreach (var command in queryData.Commands)
             {
                 var commandMetadata = command.Value;
                 result.QueryExecutionTime += commandMetadata.ElapsedMilliseconds;
@@ -52,6 +53,19 @@ namespace Glimpse.Mvc.Tab
             mb.Subscribe<ActionInvoker.InvokeActionMethod.Message>(m => UpdateAction(m, context));
             mb.Subscribe<ViewEngine.FindViews.Message>(m => UpdateView(m, context));
             mb.Subscribe<View.Render.Message>(m => UpdateRender(m, context));
+            mb.Subscribe<RouteBase.GetRouteData.Message>(m => UpdateRoute(m, context));
+        }
+
+        private void UpdateRoute(RouteBase.GetRouteData.Message message, ITabSetupContext context)
+        {
+            var model = GetModel(context.GetTabStore());
+
+            // string.Empty is a valid routeName
+            if (message.IsMatch && model.MatchedRouteName == null) 
+            {
+                // only update the first matched route
+                model.MatchedRouteName = message.RouteName;
+            }
         }
 
         private void UpdateRender(View.Render.Message message, ITabSetupContext context)
@@ -139,6 +153,8 @@ namespace Glimpse.Mvc.Tab
         public int ConnectionCount { get; set; }
 
         public int TransactionCount { get; set; }
+
+        public string MatchedRouteName { get; set; }
     }
 
     public class HudModelConverter : SerializationConverter<HudModel>
@@ -156,6 +172,7 @@ namespace Glimpse.Mvc.Tab
                             { "childViewCount", obj.ChildViewCount },
                             { "viewName", obj.ViewName },
                             { "viewRenderTime", Math.Round(obj.ViewRenderTime.Value, 2) },
+                            { "matchedRouteName", obj.MatchedRouteName },
                         },
                     environment = new Dictionary<string, object>
                         {

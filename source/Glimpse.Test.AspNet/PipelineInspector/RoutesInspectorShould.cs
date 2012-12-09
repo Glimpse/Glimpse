@@ -94,7 +94,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
             MvcRouteTable.Routes.Add("Test", route);
 
             context.ProxyFactory.Setup(x => x.IsWrapClassEligible(typeof(MvcRouteBase))).Returns(true);
-            context.ProxyFactory.Setup(x => x.WrapClass((MvcRouteBase)route, It.IsAny<IEnumerable<IAlternateMethod>>())).Returns(newRoute).Verifiable();
+            context.ProxyFactory.Setup(x => x.WrapClass((MvcRouteBase)route, It.IsAny<IEnumerable<IAlternateMethod>>(), It.IsAny<object[]>())).Returns(newRoute).Verifiable();
 
             sut.Setup(context);
 
