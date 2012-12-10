@@ -478,7 +478,7 @@
 .glimpse-panel .selected * {
     color: #409B3B;
 }
-.glimpse .info .icon, .glimpse .warn .icon, .glimpse .loading .icon, .glimpse .error .icon, .glimpse .fail .icon, .glimpse .ms .icon, .glimpse .gconnect .icon, .glimpse .gdisconnect .icon {
+.glimpse .info .icon, .glimpse .warn .icon, .glimpse .loading .icon, .glimpse .error .icon, .glimpse .fail .icon, .glimpse .ms .icon, .glimpse .gconnect .icon, .glimpse .gdisconnect .icon, .glimpse .alert .icon {
     width: 14px;
     height: 14px;
     background-image: url();
@@ -507,6 +507,9 @@
 }
 .glimpse .fail .icon {
     background-position: -64px -22px;
+}
+.glimpse .alert .icon {
+    background-position: -135px -22px;
 }
 .glimpse .gconnect .icon {
     background-position: -213px -20px; 
@@ -811,6 +814,24 @@
     float: left;
     font-size: 10px;
     height: 30px;
+}
+.glimpse-open .glimpse-hud .alert {
+    float: left;
+    margin: 8px 0 0 15px;
+}
+.glimpse-open .glimpse-hud-graph {
+    width: 40px;
+    right: 0;
+    position: absolute;
+    height: 8px;
+    top: 3px;
+}
+.glimpse-open .glimpse-hud-graph-item {
+    width: 1px;
+    background-color: white;
+    bottom: 1px;
+    position: absolute;
+    height: 100%;
 }
 
 
