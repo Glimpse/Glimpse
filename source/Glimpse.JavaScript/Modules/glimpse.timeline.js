@@ -168,15 +168,15 @@
                         event = timeline.data.events[i],  
                         category = timeline.data.category[event.category];
                              
-                    row.find('td:first-child').prepend($('<div class="glimpse-tl-event"></div>').css({ 'backgroundColor' : category.eventColor, marginLeft : (15 * event.nesting) + 'px', 'border' : '1px solid ' + category.eventColorHighlight }));
-                    row.find('td:nth-child(3)').css('position', 'relative').prepend($('<div class="glimpse-tl-event"></div>').css({ 'backgroundColor' : category.eventColor, 'border' : '1px solid ' + category.eventColorHighlight, 'margin-left' : event.startPersent + '%', width : event.widthPersent + '%' })); 
+                    row.find('td:first-child').prepend($('<div class="glimpse-tl-event"></div>').css({ 'backgroundColor' : category.eventColor, marginLeft : (15 * event.nesting) + 'px' }));
+                    row.find('td:nth-child(3)').css('position', 'relative').prepend($('<div class="glimpse-tl-event"></div>').css({ 'backgroundColor' : category.eventColor, 'margin-left' : event.startPersent + '%', width : event.widthPersent + '%' })); 
                 }); 
             },
             processCategories = function() {
                 for (var categoryName in timeline.data.category) {
                     var category = timeline.data.category[categoryName];
 
-                    elements.summaryDescHolder.append('<div class="glimpse-tl-band glimpse-tl-category-selected"><input type="checkbox" value="' + categoryName +'" checked="checked" /><div class="glimpse-tl-event" style="background-color:' + category.eventColor + ';border:1px solid ' + category.eventColorHighlight + '"></div>' + categoryName +'</div>'); 
+                    elements.summaryDescHolder.append('<div class="glimpse-tl-band glimpse-tl-category-selected"><input type="checkbox" value="' + categoryName +'" checked="checked" /><div class="glimpse-tl-event" style="background-color:' + category.eventColor + ';"></div>' + categoryName +'</div>'); 
                     elements.summaryBandHolder.append('<div class="glimpse-tl-band"></div>');
                     category.holder = $('<div class="glimpse-tl-band"></div>').appendTo(elements.summaryEventHolder); 
                     category.events = {};
@@ -194,7 +194,7 @@
                         width = actualWidth < 1 ? 0 : actualWidth,
                         rWidth = Math.round(width),
                         widthStyle = (width > 0 ? 'width:' + width + '%' : ''),
-                        maxStyle = (width <= 0 ? 'max-width:7px;' : ''),
+                        maxStyle = (width <= 0 ? 'max-width:6px;' : ''),
                         subTextPre = (event.subText ? '(' + event.subText + ')' : ''),
                         subText = (subTextPre ? '<span class="glimpse-tl-event-desc-sub">' + subTextPre + '</span>' : ''),
                         stackParsed = false;
@@ -239,8 +239,8 @@
 
                     //Add main event HTML to DOM
                     elements.contentBandHolder.append('<div class="glimpse-tl-band"></div>');
-                    elements.contentEventHolder.append('<div class="glimpse-tl-band"><div class="glimpse-tl-event" style="background-color:' + category.eventColor + ';border:1px solid ' + category.eventColorHighlight + ';left:' + left + '%;' + widthStyle + maxStyle + '"></div>'+ eventDecoration +'</div>');
-                    elements.contentDescHolder.append('<div class="glimpse-tl-band" title="' + event.title + ' ' + subTextPre + '"><div class="glimpse-tl-event" style="background-color:' + category.eventColor + ';border:1px solid ' + category.eventColorHighlight + '"></div>' + event.title + subText +'</div>');
+                    elements.contentEventHolder.append('<div class="glimpse-tl-band"><div class="glimpse-tl-event" style="background-color:' + category.eventColor + ';left:' + left + '%;' + widthStyle + maxStyle + '"></div>'+ eventDecoration +'</div>');
+                    elements.contentDescHolder.append('<div class="glimpse-tl-band" title="' + event.title + ' ' + subTextPre + '"><div class="glimpse-tl-event" style="background-color:' + category.eventColor + ';"></div>' + event.title + subText +'</div>');
                      
                     //Register events for summary  
                     deriveEventSummary(category, left, rLeft, width, rWidth);
@@ -263,8 +263,8 @@
                 var addCategoryEvent = function(category, start, finish) {
                     var width = (finish - start), 
                         widthStyle = (width > 0 ? 'width:' + width + '%' : ''),
-                        maxStyle = (width <= 0 ? 'max-width:7px;' : ''); 
-                    category.holder.append('<div class="glimpse-tl-event" style="background-color:' + category.eventColor + ';border:1px solid ' + category.eventColorHighlight + '; left:' + start + '%;' + widthStyle + maxStyle + '"></div>');
+                        maxStyle = (width <= 0 ? 'max-width:6px;' : ''); 
+                    category.holder.append('<div class="glimpse-tl-event" style="background-color:' + category.eventColor + ';left:' + start + '%;' + widthStyle + maxStyle + '"></div>');
                 };
 
                 for (var categoryName in timeline.data.category) {
@@ -485,7 +485,7 @@
                 for (detailKey in event.details) {
                     details += '<tr><th>' + detailKey + '</th><td>' + event.details[detailKey] + '</td></tr>';
                 }
-                return '<table><tr><th colspan="2"><div class="glimpse-tl-event-info-title"><div class="glimpse-tl-event" style="background-color:' + category.eventColor + ';border:1px solid ' + category.eventColorHighlight + '"></div>' + event.title + ' - Details</div></th></tr><tr><th>Duration</th><td>' + event.duration + ' ms (at ' + event.startPoint + ' ms' + ( + event.duration > 1 ? (' to ' + event.endPoint + ' ms') : '' ) +')</td></tr>' + (event.duration != event.childlessDuration ? '<tr><th>w/out Children</th><td>' + event.childlessDuration + ' ms</td></tr>' : '') + (event.subText ? '<tr><th>Details</th><td>' + event.subText + '</td></tr>' : '' ) + details + '</table>';
+                return '<table><tr><th colspan="2"><div class="glimpse-tl-event-info-title"><div class="glimpse-tl-event" style="background-color:' + category.eventColor + ';"></div>' + event.title + ' - Details</div></th></tr><tr><th>Duration</th><td>' + event.duration + ' ms (at ' + event.startPoint + ' ms' + ( + event.duration > 1 ? (' to ' + event.endPoint + ' ms') : '' ) +')</td></tr>' + (event.duration != event.childlessDuration ? '<tr><th>w/out Children</th><td>' + event.childlessDuration + ' ms</td></tr>' : '') + (event.subText ? '<tr><th>Details</th><td>' + event.subText + '</td></tr>' : '' ) + details + '</table>';
             },
             updateBubble = function(item) {
                 var eventOffset = item.offset(), 
@@ -572,7 +572,7 @@
                 elements.contentTableHolder.parent().toggle(showTimeline); 
                 elements.contentRow.find('.glimpse-tl-content-scroll:first-child').toggle(!showTimeline);
                 elements.contentRow.find('.glimpse-tl-resizer').toggle(!showTimeline); 
-                    
+                elements.contentRow.find('.glimpse-tl-content-overlay').toggle(!showTimeline); 
                 
                 if (!showTimeline) {
                     //dividerBuilder.render();
