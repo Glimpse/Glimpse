@@ -29,7 +29,7 @@
                         }
                         tabData.request.requestTime = timingSum;
                         
-                        html += '<div class="glimpse-hud-section glimpse-hud-section-request" data-maxValue="1000">';
+                        html += '<div class="glimpse-hud-section glimpse-hud-section-request" data-maxValue="1000" data-warnValue="600" data-leftPosition="65">';
                         html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" title="Total request time" data-maxValue="600">' + timingSum + '</div><div class="glimpse-hud-postfix">ms</div></div>';
                         html += '<div class="glimpse-hud-content">';
                         html += '<div class="glimpse-hud-title">Request</div>';
@@ -84,7 +84,7 @@
 
                     if (mvcData) { 
                         var viewIsDifferent = mvcData.actionName != mvcData.viewName;
-                        html += '<div class="glimpse-hud-section glimpse-hud-section-mvc" data-maxValue="1500">';
+                        html += '<div class="glimpse-hud-section glimpse-hud-section-mvc" data-maxValue="1500" data-warnValue="600" data-leftPosition="45">';
                         html += '<div class="glimpse-hud-main">';
                         html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-detailtitle"><span title="MVC Controller">' + mvcData.controllerName + '</span>.<span title="MVC Action' + (!viewIsDifferent ? ' & View' : '') + '">' + mvcData.actionName + '</span>(...)' + (viewIsDifferent ? ' - <span title="View Name">' + mvcData.viewName + '</span> ' : '') + '</div><div class="glimpse-hud-detailsubtitle">' + mvcData.routeName + '</div></div>';
                         html += '<div class="glimpse-hud-value" title="Action execution time">' + mvcData.actionExecutionTime + '</div><div class="glimpse-hud-postfix">ms</div>';
@@ -113,7 +113,7 @@
                         sqlData = tabData.sql;
 
                     if (sqlData) { 
-                        html += '<div class="glimpse-hud-section glimpse-hud-section-sql" data-maxValue="200">';
+                        html += '<div class="glimpse-hud-section glimpse-hud-section-sql" data-maxValue="200" data-warnValue="20" data-leftPosition="40">';
                         html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" title="Total query time" data-maxValue="20">' + sqlData.queryExecutionTime + '</div><div class="glimpse-hud-postfix">ms</div></div>';
                         html += '<div class="glimpse-hud-content">';
                         html += '<div class="glimpse-hud-title">SQL</div>';
@@ -182,36 +182,37 @@
             var inject = function(tabData, scope) {
                     var graphData = util.localStorage('glimpseHudGraph') || { requestTime: [], queryExecutionTime: [], actionExecutionTime: [] };
                  
-                    graphData.requestTime.push(selectValue(tabData.request.requestTime, scope.find('.glimpse-hud-section-request').attr('data-maxValue')));
+                    graphData.requestTime.push({ capped: selectValue(tabData.request.requestTime, scope.find('.glimpse-hud-section-request').attr('data-maxValue')), raw: tabData.request.requestTime });
                     checkSize(graphData.requestTime);
                 
-                    graphData.queryExecutionTime.push(selectValue(tabData.sql.queryExecutionTime, scope.find('.glimpse-hud-section-sql').attr('data-maxValue')));
-                    checkSize(graphData.queryExecutionTime);
-                
-                    graphData.actionExecutionTime.push(selectValue(tabData.mvc.actionExecutionTime, scope.find('.glimpse-hud-section-mvc').attr('data-maxValue')));
+                    graphData.actionExecutionTime.push({ capped: selectValue(tabData.mvc.actionExecutionTime, scope.find('.glimpse-hud-section-mvc').attr('data-maxValue')), raw: tabData.mvc.actionExecutionTime });
                     checkSize(graphData.actionExecutionTime); 
                 
-                    scope.find('.glimpse-hud-section-request .glimpse-hud-content').prepend(build(graphData.requestTime));
-                    scope.find('.glimpse-hud-section-mvc .glimpse-hud-content').prepend(build(graphData.actionExecutionTime));
-                    scope.find('.glimpse-hud-section-sql .glimpse-hud-content').prepend(build(graphData.queryExecutionTime));
+                    graphData.queryExecutionTime.push({ capped: selectValue(tabData.sql.queryExecutionTime, scope.find('.glimpse-hud-section-sql').attr('data-maxValue')), raw: tabData.sql.queryExecutionTime });
+                    checkSize(graphData.queryExecutionTime);
+                
+                    scope.find('.glimpse-hud-section-request .glimpse-hud-content').prepend(build(graphData.requestTime, scope.find('.glimpse-hud-section-request')));
+                    scope.find('.glimpse-hud-section-mvc .glimpse-hud-content').prepend(build(graphData.actionExecutionTime, scope.find('.glimpse-hud-section-mvc')));
+                    scope.find('.glimpse-hud-section-sql .glimpse-hud-content').prepend(build(graphData.queryExecutionTime, scope.find('.glimpse-hud-section-sql')));
 
                     util.localStorage('glimpseHudGraph', graphData);
                 },
-                build = function(graphItem, maxValue) {
-                    var min = graphItem[0],
-                        max = graphItem[0],
+                build = function(graphItem, scope) {
+                    var min = graphItem[0].capped,
+                        max = graphItem[0].capped,
                         difference = 0,
-                        html = '<div class="glimpse-hud-graph">';
+                        html = '<div class="glimpse-hud-graph" style="left:' + scope.attr('data-leftPosition') + 'px">';
                     
                     for (var i = 0; i < graphItem.length; i++) { 
-                        min = Math.min(min, graphItem[i]);
-                        max = Math.max(max, graphItem[i]); 
+                        min = Math.min(min, graphItem[i].capped);
+                        max = Math.max(max, graphItem[i].capped); 
                     }
                     difference = max - min;
                     
                     for (i = 0; i < graphItem.length; i++) { 
-                        var height = (((((graphItem[i] - min) / difference) * 100) / 5) * 4) + 20;
-                        html += '<div class="glimpse-hud-graph-item" style="left:' + (i * 2) + 'px;height:' + height + '%"></div>';
+                        var height = (((((graphItem[i].capped - min) / difference) * 100) / 5) * 4) + 20,
+                            warnClass = graphItem[i].raw > scope.attr('data-warnValue') ? ' glimpse-hud-graph-item-alert' : '';
+                        html += '<div class="glimpse-hud-graph-item' + warnClass + '" style="left:' + (i * 3) + 'px;height:' + height + '%" title="' + graphItem[i].raw + ' ms"></div>';
                     }
 
                     return html + '</div>';

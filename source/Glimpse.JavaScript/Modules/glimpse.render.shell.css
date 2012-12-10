@@ -769,7 +769,7 @@
 }
 .glimpse-open .glimpse-hud-main .glimpse-hud-detail {
     float: left;
-    padding: 3px 7px 0 0;
+    padding: 3px 10px 0 0;
 }
 .glimpse-open .glimpse-hud-main .glimpse-hud-detail .glimpse-hud-detailtitle {
     font-size: 13px;
@@ -820,20 +820,21 @@
     margin: 8px 0 0 15px;
 }
 .glimpse-open .glimpse-hud-graph {
-    width: 40px;
-    right: 0;
+    width: 45px; 
     position: absolute;
     height: 8px;
-    top: 3px;
+    top: 4px;
 }
 .glimpse-open .glimpse-hud-graph-item {
-    width: 1px;
+    width: 2px;
     background-color: white;
     bottom: 1px;
     position: absolute;
     height: 100%;
 }
-
+.glimpse-open .glimpse-hud-graph-item.glimpse-hud-graph-item-alert { 
+    background-color: #e0695c; 
+} 
 
 
 .glimpse ::-webkit-scrollbar-corner {
