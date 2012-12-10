@@ -46,7 +46,11 @@ namespace Glimpse.Mvc.Tab
             foreach (var connection in queryData.Connections)
             {
                 GlimpseDbQueryConnectionMetadata connectionMetadata = connection.Value;
-                result.ConnectionOpenTime += connectionMetadata.EllapsedMilliseconds;
+
+                if (connectionMetadata.EndDateTime.HasValue && connectionMetadata.StartDateTime.HasValue)
+                {
+                    result.ConnectionOpenTime += connectionMetadata.EndDateTime.Value.Subtract(connectionMetadata.StartDateTime.Value).Ticks.ConvertNanosecondsToMilliseconds();
+                }
             }
 
             return result;
@@ -162,7 +166,7 @@ namespace Glimpse.Mvc.Tab
 
         public string MatchedRouteName { get; set; }
 
-        public double? ConnectionOpenTime { get; set; }
+        public double ConnectionOpenTime { get; set; }
     }
 
     public class HudModelConverter : SerializationConverter<HudModel>
@@ -192,7 +196,7 @@ namespace Glimpse.Mvc.Tab
                             { "connectionCount", obj.ConnectionCount },
                             { "transactionCount", obj.TransactionCount },
                             { "queryExecutionTime", obj.QueryExecutionTime },
-                            { "connectionOpenTime", obj.ConnectionOpenTime.HasValue ? Math.Round(obj.ConnectionOpenTime.Value, 2) : -1 },
+                            { "connectionOpenTime", Math.Round(obj.ConnectionOpenTime, 2) },
                         }
                 };
         }

@@ -113,10 +113,12 @@
                         sqlData = tabData.sql;
 
                     if (sqlData) { 
-                        html += '<div class="glimpse-hud-section glimpse-hud-section-sql" data-maxValue="200" data-warnValue="20" data-leftPosition="40">';
-                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" title="Total query time" data-maxValue="20">' + sqlData.queryExecutionTime + '</div><div class="glimpse-hud-postfix">ms</div></div>';
+                        html += '<div class="glimpse-hud-section glimpse-hud-section-sql" data-maxValue="1200" data-warnValue="300" data-leftPosition="40">';
+                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" title="Total connection open time" data-maxValue="300">' + sqlData.connectionOpenTime + '</div><div class="glimpse-hud-postfix">ms</div></div>';
                         html += '<div class="glimpse-hud-content">';
                         html += '<div class="glimpse-hud-title">SQL</div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Total query time" data-maxValue="20">' + sqlData.queryExecutionTime + '</div><div class="glimpse-hud-postfix">ms</div></div>';
+                        html += '<div class="glimpse-hud-detail-divider">/</div>';
                         html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Number of transactions">' + sqlData.transactionCount + '</div></div>';
                         html += '<div class="glimpse-hud-detail-divider">/</div>';
                         html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Number of connections">' + sqlData.connectionCount + '</div></div>';
@@ -180,7 +182,7 @@
         },
         graph = (function() {
             var inject = function(tabData, scope) {
-                    var graphData = util.localStorage('glimpseHudGraph') || { requestTime: [], queryExecutionTime: [], actionExecutionTime: [] };
+                    var graphData = util.localStorage('glimpseHudGraph') || { requestTime: [], connectionOpenTime: [], actionExecutionTime: [] };
                  
                     graphData.requestTime.push({ capped: selectValue(tabData.request.requestTime, scope.find('.glimpse-hud-section-request').attr('data-maxValue')), raw: tabData.request.requestTime });
                     checkSize(graphData.requestTime);
@@ -188,12 +190,12 @@
                     graphData.actionExecutionTime.push({ capped: selectValue(tabData.mvc.actionExecutionTime, scope.find('.glimpse-hud-section-mvc').attr('data-maxValue')), raw: tabData.mvc.actionExecutionTime });
                     checkSize(graphData.actionExecutionTime); 
                 
-                    graphData.queryExecutionTime.push({ capped: selectValue(tabData.sql.queryExecutionTime, scope.find('.glimpse-hud-section-sql').attr('data-maxValue')), raw: tabData.sql.queryExecutionTime });
-                    checkSize(graphData.queryExecutionTime);
+                    graphData.connectionOpenTime.push({ capped: selectValue(tabData.sql.connectionOpenTime, scope.find('.glimpse-hud-section-sql').attr('data-maxValue')), raw: tabData.sql.connectionOpenTime });
+                    checkSize(graphData.connectionOpenTime);
                 
                     scope.find('.glimpse-hud-section-request .glimpse-hud-content').prepend(build(graphData.requestTime, scope.find('.glimpse-hud-section-request')));
                     scope.find('.glimpse-hud-section-mvc .glimpse-hud-content').prepend(build(graphData.actionExecutionTime, scope.find('.glimpse-hud-section-mvc')));
-                    scope.find('.glimpse-hud-section-sql .glimpse-hud-content').prepend(build(graphData.queryExecutionTime, scope.find('.glimpse-hud-section-sql')));
+                    scope.find('.glimpse-hud-section-sql .glimpse-hud-content').prepend(build(graphData.connectionOpenTime, scope.find('.glimpse-hud-section-sql')));
 
                     util.localStorage('glimpseHudGraph', graphData);
                 },

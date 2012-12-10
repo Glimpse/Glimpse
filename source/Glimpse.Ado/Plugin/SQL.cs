@@ -4,6 +4,7 @@ using System.Web;
 using Glimpse.Ado.Plugin.Support;
 using Glimpse.Ado.Plumbing.Models;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
 using Glimpse.Core.Tab.Assist;
 
 namespace Glimpse.Ado.Plugin
@@ -129,10 +130,14 @@ namespace Glimpse.Ado.Plugin
                     var records = command.RecordsAffected == null || command.RecordsAffected < 0 ? command.TotalRecords : command.RecordsAffected;
                     commands.Add(new object[] { headTransaction, commandCount++, Sanitizer.Process(command.Command, command.Parameters), parameters, records, command.ElapsedMilliseconds, "0", tailTransaction, errors, errors != null ? "error" : "" });
                 }
+
                 var elapse = 0.0;
-                //TODO: Can we use a stopwatch here?
+                ////TODO: Can we use a stopwatch here?
                 if (connection.EndDateTime.HasValue && connection.StartDateTime.HasValue)
-                    elapse = Convert.ToInt32(connection.EndDateTime.Value.Subtract(connection.StartDateTime.Value).TotalMilliseconds);
+                {
+                    elapse = Math.Round(connection.EndDateTime.Value.Subtract(connection.StartDateTime.Value).Ticks.ConvertNanosecondsToMilliseconds(), 2);
+                }
+
                 connections.Add(new object[] { commands, elapse });
             }
 
