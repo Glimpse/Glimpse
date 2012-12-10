@@ -12,10 +12,10 @@ namespace Glimpse.AspNet.Tab
     {
         private readonly IDictionary<string, TimelineCategoryModel> categories = new Dictionary<string, TimelineCategoryModel>
                            {
-                               { "ASP.NET", new TimelineCategoryModel { EventColor = "#AF78DD", EventColorHighlight = "#823BBE" } },
-                               { "Controller", new TimelineCategoryModel { EventColor = "#FDBF45", EventColorHighlight = "#DDA431" } },
-                               { "Filter", new TimelineCategoryModel { EventColor = "#72A3E4", EventColorHighlight = "#5087CF" } }, 
-                               { "View", new TimelineCategoryModel { EventColor = "#10E309", EventColorHighlight = "#0EC41D" } }, 
+                               { "ASP.NET", new TimelineCategoryModel { EventColor = "#5A75CF", EventColorHighlight = "#5A75CF" } },
+                               { "Controller", new TimelineCategoryModel { EventColor = "#D29A3C", EventColorHighlight = "#D29A3C" } },
+                               { "Filter", new TimelineCategoryModel { EventColor = "#43A39E", EventColorHighlight = "#43A39E" } }, 
+                               { "View", new TimelineCategoryModel { EventColor = "#B194AD", EventColorHighlight = "#B194AD" } }, 
                            };
 
         //// .glimpse-panel .glimpse-tl-event-purple { border:1px solid #823BBE; background-color:#AF78DD; } 
