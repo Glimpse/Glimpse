@@ -4,14 +4,11 @@
                 tabData = data.currentData().data.glimpse_hud;
 
             html += clientTimings.render(tabData.data);
-            html += '<div class="glimpse-hud-divider"></div>';
             html += mvcTimings.render(tabData.data);
-            html += '<div class="glimpse-hud-divider"></div>';
             html += sqlTimings.render(tabData.data);
-            html += '<div class="glimpse-hud-divider"></div>';
             html += ajaxRequests.render(tabData.data);
 
-            elements.opener().find('tr').prepend('<td class="glimpse-hud">' + html + '</td>');
+            elements.opener().prepend('<div class="glimpse-hud">' + html + '</div>');
         },
         clientTimings = (function() {
             var timingApi = window.performance.timing,
@@ -21,18 +18,22 @@
                     if (timingApi) {
                         var timingSum = 0,
                             timing = populate();
-
-                        html += '<div class="glimpse-hud-section"><span class="glimpse-hud-title">Timings</span><table class="glimpse-hud-graph-bar"><tr>';
+                        
                         for (var key in timing) {
-                            var category = timing[key];
-
-                            timingSum += category.duration;
-                            html += '<td style="background-color:' + category.categoryColor + ';width:' + category.percentage + '%" title="' + category.label + ' timing - ' + category.duration + ' ms"></td>';
+                            timingSum += timing[key].duration;
                         }
-
-                        html += '</tr></table><span class="glimpse-hud-details"><span title="Total request time" class="glimpse-hud-focus">' + timingSum + ' ms</span> ';
-                        html += '(<span title="Network timing">' + timing.network.duration + ' ms</span> / <span title="Server timing">' + timing.server.duration + ' ms</span> / <span title="Browser timing">' + timing.browser.duration + ' ms</span>)';
-                        html += '</span></div>';
+                        
+                        html += '<div class="glimpse-hud-section">';
+                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" title="Total request time">' + timingSum + '</div><div class="glimpse-hud-postfix">ms</div></div>';
+                        html += '<div class="glimpse-hud-content">';
+                        html += '<div class="glimpse-hud-title">Request</div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Network timing">' + timing.network.duration + '</div><div class="glimpse-hud-postfix">ms</div></div>';
+                        html += '<div class="glimpse-hud-detail-divider"></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Server timing">' + timing.server.duration + '</div><div class="glimpse-hud-postfix">ms</div></div>';
+                        html += '<div class="glimpse-hud-detail-divider"></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Browser timing">' + timing.browser.duration + '</div><div class="glimpse-hud-postfix">ms</div></div>';
+                        html += '</div>'; 
+                        html += '</div>';
                     }
 
                     return html;
@@ -72,12 +73,22 @@
                     var html = '',
                         mvcData = tabData.mvc;
 
-                    if (mvcData) {
+                    if (mvcData) { 
                         var viewIsDifferent = mvcData.actionName != mvcData.viewName;
-                        html += '<div class="glimpse-hud-section"><span class="glimpse-hud-title">MVC</span> '; 
-                        html += '<span class="glimpse-hud-details"><span class="glimpse-hud-focus"><span title="MVC Controller">' + mvcData.controllerName + '</span> : <span title="MVC Action' + (!viewIsDifferent ? ' & View' : '') + '">' + mvcData.actionName + '</span> <span title="Action execution time">' + mvcData.actionExecutionTime + ' ms</span></span> ';
-                        html += '(' + (viewIsDifferent ? '<span title="View Name">' + mvcData.viewName + '</span> ' : '') + '<span title="View rendering time">' + mvcData.viewRenderTime + ' ms</span> - <span title="Number of child actions">' + mvcData.childActionCount + '</span> / <span title="Number of child views">' + mvcData.childViewCount + '</span>)';
-                        html += '</span></div>';
+                        html += '<div class="glimpse-hud-section">';
+                        html += '<div class="glimpse-hud-main">';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-detailtitle"><span title="MVC Controller">' + mvcData.controllerName + '</span>.<span title="MVC Action' + (!viewIsDifferent ? ' & View' : '') + '">' + mvcData.actionName + '</span>(...)' + (viewIsDifferent ? ' - <span title="View Name">' + mvcData.viewName + '</span> ' : '') + '</div><div class="glimpse-hud-detailsubtitle">' + mvcData.routeName + '</div></div>';
+                        html += '<div class="glimpse-hud-value" title="Action execution time">' + mvcData.actionExecutionTime + '</div><div class="glimpse-hud-postfix">ms</div>';
+                        html += '</div>';
+                        html += '<div class="glimpse-hud-content">';
+                        html += '<div class="glimpse-hud-title">ASP.NET MVC</div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="View rendering time">' + mvcData.viewRenderTime + '</div><div class="glimpse-hud-postfix">ms</div></div>';
+                        html += '<div class="glimpse-hud-detail-divider"></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Number of child actions">' + mvcData.childActionCount + '</div></div>';
+                        html += '<div class="glimpse-hud-detail-divider">/</div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Number of child views">' + mvcData.childViewCount + '</div></div>';
+                        html += '</div>'; 
+                        html += '</div>'; 
                     }
 
                     return html;
@@ -93,10 +104,17 @@
                         sqlData = tabData.sql;
 
                     if (sqlData) { 
-                        html += '<div class="glimpse-hud-section"><span class="glimpse-hud-title">SQL</span> '; 
-                        html += '<span class="glimpse-hud-details"><span class="glimpse-hud-focus"><span title="Total query time">' + sqlData.queryExecutionTime + ' ms</span> ';
-                        html += '(<span title="Number of transactions">' + sqlData.transactionCount + '</span> / <span title="Number of connections">' + sqlData.connectionCount + '</span> / <span title="Number of queries">' + sqlData.queryCount + '</span>)';
-                        html += '</span></div>';
+                        html += '<div class="glimpse-hud-section">';
+                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" title="Total query time">' + sqlData.queryExecutionTime + '</div><div class="glimpse-hud-postfix">ms</div></div>';
+                        html += '<div class="glimpse-hud-content">';
+                        html += '<div class="glimpse-hud-title">SQL</div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Number of transactions">' + sqlData.transactionCount + '</div></div>';
+                        html += '<div class="glimpse-hud-detail-divider">/</div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Number of connections">' + sqlData.connectionCount + '</div></div>';
+                        html += '<div class="glimpse-hud-detail-divider">/</div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Number of queries">' + sqlData.queryCount + '</div></div>';
+                        html += '</div>'; 
+                        html += '</div>';
                     }
 
                     return html;
@@ -110,11 +128,20 @@
             var send = XMLHttpRequest.prototype.send,
                 count = 0,
                 render = function() {
-                    var html = '<div class="glimpse-hud-section"><span class="glimpse-hud-title">Ajax</span> <span class="glimpse-hud-details"><span title="Number of Ajax request" class="glimpse-hud-focus glimpse-hug-ajax-count">0</span></span></div>';
+                    var html = '<div class="glimpse-hud-section">';
+                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value glimpse-hug-ajax-count" title="Number of Ajax request">0</div></div>';
+                        html += '<div class="glimpse-hud-content">';
+                        html += '<div class="glimpse-hud-title">Ajax</div>';
+                        html += '</div>'; 
+                        html += '</div>';
+
                     return html;
                 },
                 update = function() {
-                    $('.glimpse-hug-ajax-count').text(++count);
+                    $('.glimpse-hug-ajax-count').text(++count).addClass('glimpse-hud-value-update');
+                    setTimeout(function() {
+                        $('.glimpse-hug-ajax-count').removeClass('glimpse-hud-value-update');
+                    }, 2000);
                 };
              
             XMLHttpRequest.prototype.send = function() { 

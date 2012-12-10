@@ -711,32 +711,106 @@
 }
 
 
-.glimpse .glimpse-hud { 
+.glimpse-open .glimpse-icon {
+    float: left;
+}
+.glimpse-open .glimpse-hud { 
     padding: 0 5px;
+    float: left;
 }
-.glimpse .glimpse-hud-section {
-    display: inline-block;
+.glimpse-open .glimpse-hud-section {
+    float: left;
+    padding: 0 20px 0 10px;
 }
-.glimpse .glimpse-hud-divider {
-    height: 10px;
-    border-left: 1px solid black;
-    display: inline-block;
-    margin: 0 10px 0 12px;
+.glimpse-open .glimpse-hud-section:hover .glimpse-hud-title {
+    color: #8BC441;
 }
-.glimpse .glimpse-hud-focus {
-    font-weight: bold;
+.glimpse-open .glimpse-hud-title { 
+    position: absolute;
+    line-height: 100%;
+    font-family: "Segoe UI Semibold";
+    font-size: 10px;
+    top: 2px;
+    color: #71b1d1;
+    text-transform: uppercase; 
+    -webkit-transition: color 0.3s ease;
+    -moz-transition: color 0.3s ease;
+    -o-transition: color 0.3s ease;
+    transition: color 0.3s ease;
 }
-.glimpse .glimpse-hud-title {
-    color: #BBB;
-    text-transform: uppercase;  
-    padding: 0 8px;
+.glimpse-open .glimpse-hud-postfix {
+    float: left;
+    line-height: 100%;
+    padding-left: 2px;
+    color: #bcbcbc; 
 }
-.glimpse .glimpse-hud-graph-bar {
-    width: 150px;
-    height: 10px;
-    display: inline-table;
-    margin: 0 5px;
+.glimpse-open .glimpse-hud-value {
+    line-height: 90%;
+    float: left;
+    -webkit-transition: color 0.3s ease;
+    -moz-transition: color 0.3s ease;
+    -o-transition: color 0.3s ease;
+    transition: color 0.3s ease;
 }
+.glimpse-open .glimpse-hud-value-update {
+    color: #71b1d1;
+}
+.glimpse-open .glimpse-hud-detail {
+    float: left;
+}
+.glimpse-open .glimpse-hud-main {
+    float: left;
+}
+.glimpse-open .glimpse-hud-main .glimpse-hud-detail {
+    float: left;
+    padding: 3px 7px 0 0;
+}
+.glimpse-open .glimpse-hud-main .glimpse-hud-detail .glimpse-hud-detailtitle {
+    font-size: 13px;
+}
+.glimpse-open .glimpse-hud-main .glimpse-hud-detail .glimpse-hud-detailsubtitle {
+    font-size: 10px;
+    text-align: right;
+}
+.glimpse-open .glimpse-hud-main .glimpse-hud-value {
+    font-size: 30px;
+    height: 30px;
+}
+.glimpse-open .glimpse-hud-main .glimpse-hud-postfix { 
+    padding-left: 3px; 
+}
+.glimpse-open .glimpse-hud-content {
+    float: left;
+    position: relative;
+    padding: 0 10px;
+}
+.glimpse-open .glimpse-hud-content .glimpse-hud-detail {
+    padding-top: 14px; 
+}
+.glimpse-open .glimpse-hud-content .glimpse-hud-detail.glimpse-hud-detail-small {
+    padding-top: 17px;
+}
+.glimpse-open .glimpse-hud-content .glimpse-hud-detail .glimpse-hud-postfix {
+    font-size: 10px;
+}
+.glimpse-open .glimpse-hud-content .glimpse-hud-detail-small .glimpse-hud-postfix {
+    font-size: 6px;
+}
+.glimpse-open .glimpse-hud-content .glimpse-hud-detail .glimpse-hud-value {
+    font-size: 14px;
+}
+.glimpse-open .glimpse-hud-content .glimpse-hud-detail-small .glimpse-hud-value {
+    font-size: 10px;
+}
+.glimpse-open .glimpse-hud-content .glimpse-hud-detail-divider {
+    padding: 14px 10px 0 10px;
+    color: #bcbcbc;  
+    float: left;
+    font-size: 10px;
+    height: 30px;
+}
+
+
 
 .glimpse ::-webkit-scrollbar-corner {
 	vbackground: transparent;
