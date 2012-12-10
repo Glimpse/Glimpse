@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Glimpse.Core.Extensions;
 
 namespace Glimpse.Ado.Plumbing.Models
 {
@@ -58,6 +59,20 @@ namespace Glimpse.Ado.Plumbing.Models
         public DateTime? EndDateTime { get; private set; }
         public int EndCount { get; private set; }
         public IDictionary<string, GlimpseDbQueryCommandMetadata> Commands { get; private set; }
-        public IDictionary<string, GlimpseDbQueryTransactionMetadata> Transactions { get; private set; } 
+        public IDictionary<string, GlimpseDbQueryTransactionMetadata> Transactions { get; private set; }
+        public double? EllapsedMilliseconds
+        {
+            get
+            {
+                if (!StartDateTime.HasValue || !EndDateTime.HasValue)
+                {
+                    return null;
+                }
+
+                var timeSpan = EndDateTime.Value - StartDateTime.Value;
+
+                return timeSpan.Ticks.ConvertNanosecondsToMilliseconds();
+            }
+        }
     }
 }
