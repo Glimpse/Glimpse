@@ -1317,7 +1317,7 @@ glimpse.render.engine.util.raw = (function($, util) {
 // glimpse.shell.controls.js
 (function($, pubsub, elements, settings) {
     var wireListeners = function () { 
-            elements.opener().click(function () { pubsub.publish('trigger.shell.open', { isInit: false }); });
+            elements.opener().find('.glimpse-icon').click(function () { pubsub.publish('trigger.shell.open', { isInit: false }); });
             elements.barHolder().find('.glimpse-minimize').click(function () { pubsub.publish('trigger.shell.minimize'); });
             elements.barHolder().find('.glimpse-close').click(function () { pubsub.publish('trigger.shell.close'); });
         },  
