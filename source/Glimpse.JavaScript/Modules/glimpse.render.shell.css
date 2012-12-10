@@ -755,6 +755,9 @@
 .glimpse-open .glimpse-hud-value-update {
     color: #71b1d1;
 }
+.glimpse-open .glimpse-hud-value-alert {
+    color: #e0695c;
+}
 .glimpse-open .glimpse-hud-detail {
     float: left;
 }

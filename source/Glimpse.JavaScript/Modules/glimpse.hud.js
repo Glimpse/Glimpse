@@ -9,6 +9,8 @@
             html += ajaxRequests.render(tabData.data);
 
             elements.opener().prepend('<div class="glimpse-hud">' + html + '</div>');
+
+            adjustForAlerts(elements.opener().find('.glimpse-hud'));
         },
         clientTimings = (function() {
             var timingApi = window.performance.timing,
@@ -24,14 +26,14 @@
                         }
                         
                         html += '<div class="glimpse-hud-section">';
-                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" title="Total request time">' + timingSum + '</div><div class="glimpse-hud-postfix">ms</div></div>';
+                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" title="Total request time" data-maxValue="600">' + timingSum + '</div><div class="glimpse-hud-postfix">ms</div></div>';
                         html += '<div class="glimpse-hud-content">';
                         html += '<div class="glimpse-hud-title">Request</div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Network timing">' + timing.network.duration + '</div><div class="glimpse-hud-postfix">ms</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Network timing" data-maxValue="15">' + timing.network.duration + '</div><div class="glimpse-hud-postfix">ms</div></div>';
                         html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Server timing">' + timing.server.duration + '</div><div class="glimpse-hud-postfix">ms</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Server timing" data-maxValue="250">' + timing.server.duration + '</div><div class="glimpse-hud-postfix">ms</div></div>';
                         html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Browser timing">' + timing.browser.duration + '</div><div class="glimpse-hud-postfix">ms</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Browser timing" data-maxValue="350">' + timing.browser.duration + '</div><div class="glimpse-hud-postfix">ms</div></div>';
                         html += '</div>'; 
                         html += '</div>';
                     }
@@ -105,14 +107,14 @@
 
                     if (sqlData) { 
                         html += '<div class="glimpse-hud-section">';
-                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" title="Total query time">' + sqlData.queryExecutionTime + '</div><div class="glimpse-hud-postfix">ms</div></div>';
+                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" title="Total query time" data-maxValue="20">' + sqlData.queryExecutionTime + '</div><div class="glimpse-hud-postfix">ms</div></div>';
                         html += '<div class="glimpse-hud-content">';
                         html += '<div class="glimpse-hud-title">SQL</div>';
                         html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Number of transactions">' + sqlData.transactionCount + '</div></div>';
                         html += '<div class="glimpse-hud-detail-divider">/</div>';
                         html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Number of connections">' + sqlData.connectionCount + '</div></div>';
                         html += '<div class="glimpse-hud-detail-divider">/</div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Number of queries">' + sqlData.queryCount + '</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Number of queries" data-maxValue="4">' + sqlData.queryCount + '</div></div>';
                         html += '</div>'; 
                         html += '</div>';
                     }
@@ -152,7 +154,16 @@
             return {
                 render: render
             };
-        })();
+        })(),
+        adjustForAlerts = function(scope) {
+            var items = scope.find('[data-maxValue]');
+            items.each(function() {
+                var item = $(this);
+                if (parseInt(item.text()) > parseInt(item.attr('data-maxValue'))) { 
+                    item.addClass('glimpse-hud-value-alert').attr('title', item.attr('title') + ' - Max allowed time "' + item.attr('data-maxValue') + '"');
+                }
+            });
+        };
         
         /*
         //Resource Spike 
