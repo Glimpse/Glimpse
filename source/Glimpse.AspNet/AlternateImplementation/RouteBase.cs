@@ -43,16 +43,16 @@ namespace Glimpse.AspNet.AlternateImplementation
 
             public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                context.MessageBroker.Publish(new Message(timerResult, context.InvocationTarget.GetType(), context.MethodInvocationTarget, context.InvocationTarget, (System.Web.Routing.RouteData)context.ReturnValue));
+                context.MessageBroker.Publish(new Message(timerResult, context.InvocationTarget.GetType(), context.MethodInvocationTarget, context.Proxy.GetHashCode(), (System.Web.Routing.RouteData)context.ReturnValue));
             }
 
             public class Message : TimeMessage
             {
-                public Message(TimerResult timer, Type executedType, MethodInfo executedMethod, object invocationTarget, System.Web.Routing.RouteData routeData)
+                public Message(TimerResult timer, Type executedType, MethodInfo executedMethod, int routeHashCode, System.Web.Routing.RouteData routeData)
                     : base(timer, executedType, executedMethod)
                 {
                     IsMatch = routeData != null;
-                    RouteHashCode = invocationTarget.GetHashCode();
+                    RouteHashCode = routeHashCode;
 
                     if (routeData != null)
                     {

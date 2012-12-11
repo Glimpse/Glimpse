@@ -84,7 +84,7 @@ namespace Glimpse.Test.AspNet.Tab
             RouteTable.Routes.Clear();
             RouteTable.Routes.Add(route); 
 
-            var routeMessage = new RouteBase.GetRouteData.Message(new TimerResult { Duration = 19 }, route.GetType(), null, route, new System.Web.Routing.RouteData());
+            var routeMessage = new RouteBase.GetRouteData.Message(new TimerResult { Duration = 19 }, route.GetType(), null, route.GetHashCode(), new System.Web.Routing.RouteData());
             var constraintMessage = new Route.ProcessConstraint.Message(new Route.ProcessConstraint.Arguments(new object[] { (HttpContextBase)null, constraint, "test", (System.Web.Routing.RouteValueDictionary)null, System.Web.Routing.RouteDirection.IncomingRequest }), new TimerResult { Duration = 25 }, route.GetType(), null, route.GetHashCode(), true);
 
             context.TabStore.Setup(mb => mb.Contains(typeof(IList<Route.ProcessConstraint.Message>).AssemblyQualifiedName)).Returns(true).Verifiable();
