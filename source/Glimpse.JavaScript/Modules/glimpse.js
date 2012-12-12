@@ -2089,6 +2089,15 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
             context.contextRequestId = undefined;
         };
     
+    var send = XMLHttpRequest.prototype.send;
+    XMLHttpRequest.prototype.send = function() { 
+        this.setRequestHeader("X-Glimpse-Parent-RequestID", data.baseData().requestId);
+        
+        pubsub.publish('trigger.ajax.request.send');
+        
+        send.apply(this, arguments);
+    };
+    
     pubsub.subscribe('trigger.shell.subscriptions', wireListeners);
     pubsub.subscribe('action.panel.hiding.ajax', deactivate); 
     pubsub.subscribe('action.panel.showing.ajax', activate); 
