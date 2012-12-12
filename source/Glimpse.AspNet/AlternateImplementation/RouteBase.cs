@@ -45,16 +45,16 @@ namespace Glimpse.AspNet.AlternateImplementation
             {
                 var mixin = (IRouteNameMixin)context.Proxy;
 
-                context.MessageBroker.Publish(new Message(timerResult, context.InvocationTarget.GetType(), context.MethodInvocationTarget, context.InvocationTarget, (System.Web.Routing.RouteData)context.ReturnValue, mixin.Name));
+                context.MessageBroker.Publish(new Message(timerResult, context.InvocationTarget.GetType(), context.MethodInvocationTarget, context.Proxy.GetHashCode(), (System.Web.Routing.RouteData)context.ReturnValue, mixin.Name));
             }
 
             public class Message : TimeMessage
             {
-                public Message(TimerResult timer, Type executedType, MethodInfo executedMethod, object invocationTarget, System.Web.Routing.RouteData routeData, string routeName)
+                public Message(TimerResult timer, Type executedType, MethodInfo executedMethod, int routeHashCode, System.Web.Routing.RouteData routeData, string routeName)
                     : base(timer, executedType, executedMethod)
                 {
                     IsMatch = routeData != null;
-                    RouteHashCode = invocationTarget.GetHashCode();
+                    RouteHashCode = routeHashCode;
                     RouteName = routeName;
 
                     if (routeData != null)
