@@ -1614,9 +1614,9 @@ glimpse.render.engine.util.raw = (function($, util) {
             
             if (currentData.isAjax)
                 html = ' &gt; Ajax';
-            if ((currentData.isAjax && baseData.requestId != currentData.parentId) || (!currentData.isAjax && baseData.requestId != currentData.requestId)) {
+            if ((currentData.isAjax && baseData.requestId != currentData.parentRequestId) || (!currentData.isAjax && baseData.requestId != currentData.requestId)) {
                 if (html) 
-                    html = ' &gt; <span class="glimpse-link" data-requestId="' + (currentData.isAjax ? currentData.parentId : currentData.requestId) + '">History</span>' + html;
+                    html = ' &gt; <span class="glimpse-link" data-requestId="' + (currentData.isAjax ? currentData.parentRequestId : currentData.requestId) + '">History</span>' + html;
                 else
                     html = ' &gt; History';    
             }
@@ -1946,7 +1946,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
         retrieveScopeId = function() { 
             var payload = data.currentData();
                 
-            return payload.isAjax ? payload.parentId : payload.requestId;
+            return payload.isAjax ? payload.parentRequestId : payload.requestId;
         }, 
         wireListeners = function() {
             var panel = elements.panel('ajax');
@@ -1976,8 +1976,8 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
         contextSwitch = function(args) {
             var newPayload = args.newData,
                 oldPayload = args.oldData,
-                newId = newPayload.isAjax ? newPayload.parentId : newPayload.requestId,
-                oldId = oldPayload.isAjax ? oldPayload.parentId : oldPayload.requestId;
+                newId = newPayload.isAjax ? newPayload.parentRequestId : newPayload.requestId,
+                oldId = oldPayload.isAjax ? oldPayload.parentRequestId : oldPayload.requestId;
 
             if (oldId != newId) {
                 elements.panel('ajax').find('tbody').empty();
@@ -2057,7 +2057,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                 row.removeClass('selected');
             
                 if (args.type == 'ajax')
-                    data.retrieve(data.currentData().parentId);
+                    data.retrieve(data.currentData().parentRequestId);
             }
         },
         selectStart = function(args) {
