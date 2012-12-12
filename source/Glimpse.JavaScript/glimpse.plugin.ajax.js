@@ -47,7 +47,7 @@
         }, 
         contextChanged = function () {
             var payload = glimpse.data.current(),
-                newId = payload.isAjax ? payload.parentId : payload.requestId,
+                newId = payload.isAjax ? payload.parentRequestId : payload.requestId,
                 panel = glimpse.elements.findPanel('Ajax');
 
             if (currentId != newId) {
