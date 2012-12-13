@@ -1,5 +1,5 @@
 ﻿.glimpse, .glimpse *, .glimpse a, .glimpse td, .glimpse th, .glimpse table {
-    font-family: "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;
+    font-family: "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;
     background-color: transparent;
     border: 0px;
     text-align: left;
@@ -8,6 +8,8 @@
 }
 .glimpse table {
     min-width: 0;
+    border-collapse: collapse;
+	border-spacing: 0;
 }
 .glimpse a, .glimpse a:hover, .glimpse a:visited, .glimpse-link {
     color: #2200C1;
@@ -33,16 +35,21 @@
     right: 0;
     bottom: 0;
     height: 30px;
-    width: 54px;
+    min-width: 54px;
     background: #3c454f; 
     color: #fff; 
+}
+.glimpse-open td, .glimpse-open span, .glimpse-open div {
+    color: #fff;
+    font-size: 13px;
+    line-height: 13px;
 }
 .glimpse-icon {  
     cursor: pointer; 
     background: url() no-repeat -127px -38px;
     height: 30px;
     width: 39px;
-    margin-left: 8px;
+    margin: 0 8px;
 }
 .glimpse-holder {
     display: none;
@@ -88,7 +95,7 @@
     right: 0;
     top: 0;
     height: 17px;
-    width: 200px;
+    width: 250px;
     padding: 8px 12px 6px 6px;
 }
 .glimpse-title {
@@ -195,7 +202,7 @@
 .glimpse .glimpse-meta-update {
     position: absolute; 
     text-decoration: underline;
-    top: 5px;
+    top: 6px;
     left: 0;
     cursor: pointer;
     display: none;
@@ -270,6 +277,9 @@
     font-size: 11px;
     line-height: 13px;
 }
+.glimpse-panel div, .glimpse-panel span, .glimpse-panel td, .glimpse-panel th {
+    font-family: "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;
+}
 .glimpse-panel-message {
     text-align: center;
     padding-top: 40px;
@@ -287,7 +297,7 @@
 .glimpse-panel th {
     font-size: 12px;
     line-height: 14px;
-    font-weight: bold;
+    font-weight: bold; 
 }
 .glimpse-panel thead th {
     text-align: center;
@@ -296,7 +306,7 @@
 }
 .glimpse-panel table td { 
     text-align: left;
-    vertical-align: top;
+    vertical-align: top; 
 }
 .glimpse-panel table td .glimpse-cell {
     vertical-align: top;
@@ -309,6 +319,7 @@
     font-weight: bold;
     padding: 20px 0 0 1%;
     font-size: 140%;
+    font-family: "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;
 }
 .glimpse-panel .glimpse-header-content {
     padding: 0 3px;
@@ -360,23 +371,7 @@
 }
 .glimpse-panel table table thead th {
     font-weight: bold;
-}
-/*
-.glimpse-panel .glimpse-side-sub-panel {
-    right: 0;
-    z-index: 10;
-    background-color: #FAFCFC;
-    height: 100%;
-    width: 25%;
-    border-left: 1px solid #ACA899;
-    position: absolute;
-}
-.glimpse-panel .glimpse-side-main-panel {
-    position: relative;
-    height: 100%;
-    width: 75%;
-    float: left;
-}*/
+} 
 .glimpse-panel .glimpse-col-side {
 	border-right: 1px solid #404040;
 	background-color: #F2F5F7;
@@ -483,7 +478,7 @@
 .glimpse-panel .selected * {
     color: #409B3B;
 }
-.glimpse .info .icon, .glimpse .warn .icon, .glimpse .loading .icon, .glimpse .error .icon, .glimpse .fail .icon, .glimpse .ms .icon, .glimpse .gconnect .icon, .glimpse .gdisconnect .icon {
+.glimpse .info .icon, .glimpse .warn .icon, .glimpse .loading .icon, .glimpse .error .icon, .glimpse .fail .icon, .glimpse .ms .icon, .glimpse .gconnect .icon, .glimpse .gdisconnect .icon, .glimpse .alert .icon {
     width: 14px;
     height: 14px;
     background-image: url();
@@ -512,6 +507,9 @@
 }
 .glimpse .fail .icon {
     background-position: -64px -22px;
+}
+.glimpse .alert .icon {
+    background-position: -135px -22px;
 }
 .glimpse .gconnect .icon {
     background-position: -213px -20px; 
@@ -695,9 +693,7 @@
     width: 80%;
     height: 80%;
     top: 10%;
-    left: 10%;
-    /*margin-top: -40%;
-    margin-left: -40%;*/
+    left: 10%; 
     background-color: #fff;
     -webkit-box-shadow: 0px 0px 30px rgba(50, 50, 50, 1);
     -moz-box-shadow: 0px 0px 30px rgba(50, 50, 50, 1);
@@ -715,6 +711,11 @@
     width: 100%;
     border: 0px;
     height: 100%;
+}
+
+
+.glimpse-open .glimpse-icon {
+    float: left;
 }
 
 
