@@ -5,49 +5,47 @@ using System.Reflection;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
 using System.Web.Routing;
-using Glimpse.Core;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class ControllerFactory : Alternate<IControllerFactory>
+    public class ControllerFactory : AlternateType<IControllerFactory>
     {
+        private IEnumerable<IAlternateMethod> allMethods;
+
         public ControllerFactory(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
 
-        public override IEnumerable<IAlternateImplementation<IControllerFactory>> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods
         {
-            yield return new CreateController(new ActionInvoker(ProxyFactory), new AsyncActionInvoker(ProxyFactory));
+            get
+            {
+                return allMethods ?? (allMethods = new List<IAlternateMethod>
+                    {
+                        new CreateController(new ActionInvoker(ProxyFactory), new AsyncActionInvoker(ProxyFactory))
+                    });
+            }
         }
 
-        public class CreateController : IAlternateImplementation<IControllerFactory>
+        public class CreateController : AlternateMethod
         {
-            public CreateController(Alternate<ControllerActionInvoker> alternateControllerActionInvoker, Alternate<AsyncControllerActionInvoker> alternateAsyncControllerActionInvoker)
+            public CreateController(AlternateType<IActionInvoker> alternateControllerActionInvoker, AlternateType<IAsyncActionInvoker> alternateAsyncControllerActionInvoker) : base(typeof(IControllerFactory), "CreateController")
             {
                 AlternateControllerActionInvoker = alternateControllerActionInvoker;
                 AlternateAsyncControllerActionInvoker = alternateAsyncControllerActionInvoker;
-                MethodToImplement = typeof(IControllerFactory).GetMethod("CreateController");
             }
 
-            public Alternate<ControllerActionInvoker> AlternateControllerActionInvoker { get; set; }
+            public AlternateType<IActionInvoker> AlternateControllerActionInvoker { get; set; }
 
-            public Alternate<AsyncControllerActionInvoker> AlternateAsyncControllerActionInvoker { get; set; }
+            public AlternateType<IAsyncActionInvoker> AlternateAsyncControllerActionInvoker { get; set; }
 
-            public MethodInfo MethodToImplement { get; private set; }
-
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                context.Proceed();
-
-                if (context.RuntimePolicyStrategy() == RuntimePolicy.Off)
-                {
-                    return;
-                }
-
                 var controller = context.ReturnValue as Controller;
 
-                var message = new Message(new Arguments(context.Arguments), controller);
+                var message = new Message(new Arguments(context.Arguments), controller, context.TargetType, context.MethodInvocationTarget);
 
                 context.MessageBroker.Publish(message);
 
@@ -55,7 +53,7 @@ namespace Glimpse.Mvc.AlternateImplementation
             }
 
             [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "iController name is allowed in this usage.")]
-            protected void ProxyActionInvoker(IController iController)
+            private void ProxyActionInvoker(IController iController)
             {
                 if (iController == null)
                 {
@@ -63,12 +61,12 @@ namespace Glimpse.Mvc.AlternateImplementation
                 }
 
                 var asyncController = iController as AsyncController;
-                if (asyncController != null)
+                if (asyncController != null && asyncController.ActionInvoker is IAsyncActionInvoker)
                 {
-                    var originalActionInvoker = asyncController.ActionInvoker;
-                    AsyncControllerActionInvoker newActionInvoker;
+                    var originalActionInvoker = asyncController.ActionInvoker as IAsyncActionInvoker;
+                    IAsyncActionInvoker newActionInvoker;
 
-                    if (AlternateAsyncControllerActionInvoker.TryCreate(originalActionInvoker as AsyncControllerActionInvoker, out newActionInvoker, new ActionInvokerStateMixin()))
+                    if (AlternateAsyncControllerActionInvoker.TryCreate(originalActionInvoker, out newActionInvoker))
                     {
                         asyncController.ActionInvoker = newActionInvoker;
                     }
@@ -80,9 +78,9 @@ namespace Glimpse.Mvc.AlternateImplementation
                 if (controller != null)
                 {
                     var originalActionInvoker = controller.ActionInvoker;
-                    ControllerActionInvoker newActionInvoker;
+                    IActionInvoker newActionInvoker;
 
-                    if (AlternateControllerActionInvoker.TryCreate(originalActionInvoker as ControllerActionInvoker, out newActionInvoker))
+                    if (AlternateControllerActionInvoker.TryCreate(originalActionInvoker, out newActionInvoker))
                     {
                         controller.ActionInvoker = newActionInvoker;
                     }
@@ -104,9 +102,8 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public class Message : MessageBase
             {
-                public Message(Arguments arguments, IController controller)
+                public Message(Arguments arguments, IController controller, Type executedType, MethodInfo executedMethod) : base(executedType, executedMethod)
                 {
-                    RouteData = arguments.RequestContext.RouteData;
                     ControllerName = arguments.ControllerName;
                     IsControllerResolved = false;
 
@@ -117,13 +114,11 @@ namespace Glimpse.Mvc.AlternateImplementation
                     }
                 }
 
-                public bool IsControllerResolved { get; set; }
-                
-                public Type ControllerType { get; set; }
-                
-                public RouteData RouteData { get; set; }
-                
-                public string ControllerName { get; set; }
+                public bool IsControllerResolved { get; private set; }
+
+                public Type ControllerType { get; private set; }
+
+                public string ControllerName { get; private set; }
             }
         }
     }

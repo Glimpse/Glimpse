@@ -5,6 +5,7 @@
 ^Castle.DynamicProxy.AbstractInvocation$
 ^Castle.DynamicProxy.Generators.AttributesToAvoidReplicating$
 ^Castle.DynamicProxy.InheritanceInvocation$
+^Castle.DynamicProxy.Internal.InheritanceInvocation$
 ^Castle.DynamicProxy.IInterceptorSelector$
 ^Castle.DynamicProxy.IProxyGenerationHook$
 ^Castle.DynamicProxy.IProxyTargetAccessor$

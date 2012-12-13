@@ -90,8 +90,10 @@
     <Compile Include="AlternateImplementation\ExceptionFilterOnExceptionShould.cs" />
     <Compile Include="AlternateImplementation\ExceptionFilterShould.cs" />
     <Compile Include="AlternateImplementation\ModelBinderBindModelArgumentsShould.cs" />
+    <Compile Include="AlternateImplementation\ModelBinderBindModelMessageShould.cs" />
     <Compile Include="AlternateImplementation\ModelBinderBindModelShould.cs" />
     <Compile Include="AlternateImplementation\ModelBinderBindPropertyArgumentsShould.cs" />
+    <Compile Include="AlternateImplementation\ModelBinderBindPropertyMessageShould.cs" />
     <Compile Include="AlternateImplementation\ModelBinderBindPropertyShould.cs" />
     <Compile Include="AlternateImplementation\ModelBinderProviderGetBinderShould.cs" />
     <Compile Include="AlternateImplementation\ModelBinderProviderShould.cs" />
@@ -101,9 +103,12 @@
     <Compile Include="AlternateImplementation\ResultFilterOnResultExecutingMessageShould.cs" />
     <Compile Include="AlternateImplementation\ResultFilterOnResultExecutingShould.cs" />
     <Compile Include="AlternateImplementation\ResultFilterShould.cs" />
+    <Compile Include="AlternateImplementation\ValueProviderContainsPrefixMessageShould.cs" />
+    <Compile Include="AlternateImplementation\ValueProviderContainsPrefixShould.cs" />
     <Compile Include="AlternateImplementation\ValueProviderFactoryGetValueProviderShould.cs" />
     <Compile Include="AlternateImplementation\ValueProviderFactoryShould.cs" />
     <Compile Include="AlternateImplementation\ValueProviderGetValueArgumentShould.cs" />
+    <Compile Include="AlternateImplementation\ValueProviderGetValueMessageShould.cs" />
     <Compile Include="AlternateImplementation\ValueProviderGetValueShould.cs" />
     <Compile Include="AlternateImplementation\ValueProviderShould.cs" />
     <Compile Include="AlternateImplementation\ViewEngineFindViewsArgumentsShould.cs" />
@@ -130,6 +135,7 @@
     <Compile Include="SerializationConverter\ListOfViewsModelConverterShould.cs" />
     <Compile Include="SerializationConverter\ListOfMetadataItemModelConverterShould.cs" />
     <Compile Include="Tab\MetadataShould.cs" />
+    <Compile Include="Tab\ModelBindingShould.cs" />
     <Compile Include="Tab\ViewsShould.cs" />
     <Compile Include="TestDoubles\DummyAsyncController.cs" />
     <Compile Include="TestDoubles\DummyController.cs" />

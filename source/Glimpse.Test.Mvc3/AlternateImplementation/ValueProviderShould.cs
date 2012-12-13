@@ -24,16 +24,16 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Theory, AutoMock]
         public void Construct(IProxyFactory proxyFactory)
         {
-            Alternate<T> sut = new ValueProvider<T>(proxyFactory);
+            AlternateType<T> sut = new ValueProvider<T>(proxyFactory);
 
-            Assert.IsAssignableFrom<Alternate<T>>(sut);
+            Assert.IsAssignableFrom<AlternateType<T>>(sut);
             Assert.NotNull(sut);
         }
 
         [Theory, AutoMock]
         public void ImplementOneMethod(ValueProvider<T> sut)
         {
-            Assert.Equal(1, sut.AllMethods().Count());
+            Assert.Equal(2, sut.AllMethods.Count());
         }
     }
 }

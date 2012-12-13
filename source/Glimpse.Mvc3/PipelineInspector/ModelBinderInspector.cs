@@ -18,8 +18,13 @@ namespace Glimpse.Mvc.PipelineInspector
         private void SetupModelBinderProviders(IPipelineInspectorContext context)
         {
 #if !MVC2
-            var alternateModelBinderProvider = new ModelBinderProvider(context.ProxyFactory);
             var binderProviders = ModelBinderProviders.BinderProviders;
+            if (binderProviders.Count == 0)
+            {
+                return;
+            }
+
+            var alternateModelBinderProvider = new ModelBinderProvider(context.ProxyFactory);
 
             for (int i = 0; i < binderProviders.Count; i++)
             {
@@ -37,8 +42,13 @@ namespace Glimpse.Mvc.PipelineInspector
 
         private void SetupValueProviderFactories(IPipelineInspectorContext context)
         {
-            var alternateValueProviderFactory = new ValueProviderFactory(context.ProxyFactory);
             var factories = ValueProviderFactories.Factories;
+            if (factories.Count == 0)
+            {
+                return;
+            }
+
+            var alternateValueProviderFactory = new ValueProviderFactory(context.ProxyFactory);
 
             for (int i = 0; i < factories.Count; i++)
             {
@@ -47,7 +57,7 @@ namespace Glimpse.Mvc.PipelineInspector
 
                 if (alternateValueProviderFactory.TryCreate(originalFactory, out newFactory))
                 {
-                    context.Logger.Info(Resources.ModelBinderInspectorSetupReplacedModelBinderProvider, originalFactory.GetType());
+                    context.Logger.Info(Resources.ModelBinderInspectorSetupReplacedValueProviderFactory, originalFactory.GetType());
                     factories[i] = newFactory;
                 }
             }
@@ -62,10 +72,10 @@ namespace Glimpse.Mvc.PipelineInspector
             for (int i = 0; i < keys.Length; i++)
             {
                 var type = keys[i];
-                var originalBinder = binders[type] as DefaultModelBinder; // TODO: Handle IModelBinders as well
-                DefaultModelBinder newBinder;
+                var originalBinder = binders[type];
+                IModelBinder newBinder;
 
-                if (originalBinder != null && alternateModelBinder.TryCreate(originalBinder, out newBinder))
+                if (alternateModelBinder.TryCreate(originalBinder, out newBinder))
                 {
                     context.Logger.Info(Resources.ModelBinderInspectorSetupReplacedModelBinder, originalBinder.GetType());
                     binders[type] = newBinder;
@@ -74,7 +84,7 @@ namespace Glimpse.Mvc.PipelineInspector
 
             // handle default binder
             var originalDefaultBinder = ModelBinders.Binders.DefaultBinder as DefaultModelBinder;
-            DefaultModelBinder newDefaultBinder;
+            IModelBinder newDefaultBinder;
             if (originalDefaultBinder != null && alternateModelBinder.TryCreate(originalDefaultBinder, out newDefaultBinder))
             {
                 context.Logger.Info(Resources.ModelBinderInspectorSetupReplacedModelBinder, originalDefaultBinder.GetType());

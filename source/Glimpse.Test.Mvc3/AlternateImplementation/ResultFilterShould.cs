@@ -13,7 +13,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Theory, AutoMock]
         public void SetProxyFactory(IProxyFactory proxyFactory)
         {
-            Alternate<IResultFilter> sut = new ResultFilter(proxyFactory);
+            AlternateType<IResultFilter> sut = new ResultFilter(proxyFactory);
 
             Assert.Equal(proxyFactory, sut.ProxyFactory);
         }
@@ -21,9 +21,9 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Theory, AutoMock]
         public void ReturnTwoMethods(IProxyFactory proxyFactory)
         {
-            Alternate<IResultFilter> sut = new ResultFilter(proxyFactory);
+            AlternateType<IResultFilter> sut = new ResultFilter(proxyFactory);
 
-            Assert.Equal(2, sut.AllMethods().Count());
+            Assert.Equal(2, sut.AllMethods.Count());
         }
     }
 }

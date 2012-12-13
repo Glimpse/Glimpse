@@ -6,7 +6,7 @@ using Glimpse.Core.Extensions;
 
 namespace Glimpse.Mvc.Message
 {
-    public class FilterMessage : ExecutionMessage, IFilterMessage
+    public class FilterMessage : ActionBaseMessage, IFilterMessage, IExecutionMessage
     {
         public FilterMessage(TimerResult timerResult, FilterCategory filterCategory, Type resultType, bool isChildAction, Type executedType, MethodInfo method, string eventName = null, string eventCategory = null)
             : base(timerResult, isChildAction, executedType, method, eventName, eventCategory) 

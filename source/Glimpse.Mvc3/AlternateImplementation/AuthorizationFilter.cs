@@ -3,41 +3,38 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions;
-using Glimpse.Core.Message;
 using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class AuthorizationFilter : Alternate<IAuthorizationFilter>
+    public class AuthorizationFilter : AlternateType<IAuthorizationFilter>
     {
+        private IEnumerable<IAlternateMethod> allMethods;
+
         public AuthorizationFilter(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
 
-        public override IEnumerable<IAlternateImplementation<IAuthorizationFilter>> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods
         {
-            yield return new OnAuthorization();
+            get 
+            { 
+                return allMethods ?? (allMethods = new List<IAlternateMethod>
+                {
+                    new OnAuthorization()
+                }); 
+            }
         }
 
-        public class OnAuthorization : IAlternateImplementation<IAuthorizationFilter>
+        public class OnAuthorization : AlternateMethod
         {
-            public OnAuthorization()
+            public OnAuthorization() : base(typeof(IAuthorizationFilter), "OnAuthorization")
             {
-                MethodToImplement = typeof(IAuthorizationFilter).GetMethod("OnAuthorization");
             }
 
-            public MethodInfo MethodToImplement { get; private set; }
-
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                TimerResult timer;
-                if (!context.TryProceedWithTimer(out timer))
-                {
-                    return;
-                }
-
-                context.MessageBroker.Publish(new Message((AuthorizationContext)context.Arguments[0], context.InvocationTarget.GetType(), context.MethodInvocationTarget, timer));
+                context.MessageBroker.Publish(new Message((AuthorizationContext)context.Arguments[0], context.InvocationTarget.GetType(), context.MethodInvocationTarget, timerResult));
             }
 
             public class Message : ActionFilterMessage

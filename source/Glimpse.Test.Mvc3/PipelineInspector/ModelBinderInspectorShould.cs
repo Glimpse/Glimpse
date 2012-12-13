@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.PipelineInspector;
@@ -10,8 +12,13 @@ using Xunit.Extensions;
 
 namespace Glimpse.Test.Mvc3.PipelineInspector
 {
-    public class ModelBinderInspectorShould
+    public class ModelBinderInspectorShould : IDisposable
     {
+        public void Dispose()
+        {
+            ModelBinders.Binders.DefaultBinder = new DefaultModelBinder();
+        }
+
         [Fact]
         public void Constuct()
         {
@@ -24,21 +31,20 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         public void IgnoreEmptyModelBindingProvidersCollection(ModelBinderInspector sut, IPipelineInspectorContext context, IModelBinderProvider proxy)
         {
             ModelBinderProviders.BinderProviders.Clear();
-            context.ProxyFactory.Setup(pf => pf.IsProxyable(It.IsAny<IModelBinderProvider>())).Returns(true);
-            context.ProxyFactory.Setup(pf => pf.CreateProxy(It.IsAny<IModelBinderProvider>(), It.IsAny<IEnumerable<IAlternateImplementation<IModelBinderProvider>>>(), null)).Returns(proxy);
+            context.ProxyFactory.Setup(pf => pf.IsWrapInterfaceEligible<IModelBinderProvider>(It.IsAny<Type>())).Returns(true);
+            context.ProxyFactory.Setup(pf => pf.WrapInterface(It.IsAny<IModelBinderProvider>(), It.IsAny<IEnumerable<IAlternateMethod>>(), Enumerable.Empty<object>())).Returns(proxy);
 
             sut.Setup(context);
 
             Assert.Empty(ModelBinderProviders.BinderProviders);
-            context.Logger.Verify(l => l.Info(It.IsAny<string>(), It.IsAny<object[]>()), Times.Never());
         }
 
         [Theory, AutoMock]
         public void UpdateModelBindingProviders(ModelBinderInspector sut, IPipelineInspectorContext context, IModelBinderProvider proxy)
         {
             ModelBinderProviders.BinderProviders.Add(new DummyModelBinderProvider());
-            context.ProxyFactory.Setup(pf => pf.IsProxyable(It.IsAny<IModelBinderProvider>())).Returns(true);
-            context.ProxyFactory.Setup(pf => pf.CreateProxy(It.IsAny<IModelBinderProvider>(), It.IsAny<IEnumerable<IAlternateImplementation<IModelBinderProvider>>>(), null)).Returns(proxy);
+            context.ProxyFactory.Setup(pf => pf.IsWrapInterfaceEligible<IModelBinderProvider>(It.IsAny<Type>())).Returns(true);
+            context.ProxyFactory.Setup(pf => pf.WrapInterface(It.IsAny<IModelBinderProvider>(), It.IsAny<IEnumerable<IAlternateMethod>>(), Enumerable.Empty<object>())).Returns(proxy);
 
             sut.Setup(context);
 
@@ -50,21 +56,20 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         public void IgnoreEmptyValueProviderFactoriesCollection(ModelBinderInspector sut, IPipelineInspectorContext context, ValueProviderFactory proxy)
         {
             ValueProviderFactories.Factories.Clear();
-            context.ProxyFactory.Setup(pf => pf.IsProxyable(It.IsAny<ValueProviderFactory>())).Returns(true);
-            context.ProxyFactory.Setup(pf => pf.CreateProxy(It.IsAny<ValueProviderFactory>(), It.IsAny<IEnumerable<IAlternateImplementation<ValueProviderFactory>>>(), null)).Returns(proxy);
+            context.ProxyFactory.Setup(pf => pf.IsWrapClassEligible(It.IsAny<Type>())).Returns(true);
+            context.ProxyFactory.Setup(pf => pf.WrapClass(It.IsAny<ValueProviderFactory>(), It.IsAny<IEnumerable<IAlternateMethod>>(), Enumerable.Empty<object>(), null)).Returns(proxy);
 
             sut.Setup(context);
 
             Assert.Empty(ValueProviderFactories.Factories);
-            context.Logger.Verify(l => l.Info(It.IsAny<string>(), It.IsAny<object[]>()), Times.Never());
         }
 
         [Theory, AutoMock]
         public void UpdateValueProviderFactories(ModelBinderInspector sut, IPipelineInspectorContext context, ValueProviderFactory proxy)
         {
             ValueProviderFactories.Factories.Add(new DummyValueProviderFactory());
-            context.ProxyFactory.Setup(pf => pf.IsProxyable(It.IsAny<ValueProviderFactory>())).Returns(true);
-            context.ProxyFactory.Setup(pf => pf.CreateProxy(It.IsAny<ValueProviderFactory>(), It.IsAny<IEnumerable<IAlternateImplementation<ValueProviderFactory>>>(), null)).Returns(proxy);
+            context.ProxyFactory.Setup(pf => pf.IsWrapClassEligible(It.IsAny<Type>())).Returns(true);
+            context.ProxyFactory.Setup(pf => pf.WrapClass(It.IsAny<ValueProviderFactory>(), It.IsAny<IEnumerable<IAlternateMethod>>(), Enumerable.Empty<object>(), null)).Returns(proxy);
 
             sut.Setup(context);
 
@@ -73,11 +78,11 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         }
 
         [Theory, AutoMock]
-        public void UpdateModelBinders(ModelBinderInspector sut, IPipelineInspectorContext context, DummyDefaultModelBinder seedBinder, DefaultModelBinder proxy)
+        public void UpdateModelBinders(ModelBinderInspector sut, IPipelineInspectorContext context, DummyDefaultModelBinder seedBinder, IModelBinder proxy)
         {
             ModelBinders.Binders.Add(typeof(object), seedBinder);
-            context.ProxyFactory.Setup(pf => pf.IsProxyable(It.IsAny<DefaultModelBinder>())).Returns(true);
-            context.ProxyFactory.Setup(pf => pf.CreateProxy(It.IsAny<DefaultModelBinder>(), It.IsAny<IEnumerable<IAlternateImplementation<DefaultModelBinder>>>(), null)).Returns(proxy);
+            context.ProxyFactory.Setup(pf => pf.IsWrapInterfaceEligible<IModelBinder>(It.IsAny<Type>())).Returns(true);
+            context.ProxyFactory.Setup(pf => pf.WrapInterface(It.IsAny<IModelBinder>(), It.IsAny<IEnumerable<IAlternateMethod>>())).Returns(proxy);
 
             sut.Setup(context);
 
@@ -89,8 +94,8 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         [Theory, AutoMock]
         public void UpdateDefaultModelBinder(ModelBinderInspector sut, IPipelineInspectorContext context, DefaultModelBinder proxy)
         {
-            context.ProxyFactory.Setup(pf => pf.IsProxyable(It.IsAny<DefaultModelBinder>())).Returns(true);
-            context.ProxyFactory.Setup(pf => pf.CreateProxy(It.IsAny<DefaultModelBinder>(), It.IsAny<IEnumerable<IAlternateImplementation<DefaultModelBinder>>>(), null)).Returns(proxy);
+            context.ProxyFactory.Setup(pf => pf.IsExtendClassEligible(It.IsAny<Type>())).Returns(true);
+            context.ProxyFactory.Setup(pf => pf.ExtendClass<DefaultModelBinder>(It.IsAny<IEnumerable<IAlternateMethod>>())).Returns(proxy);
 
             sut.Setup(context);
 

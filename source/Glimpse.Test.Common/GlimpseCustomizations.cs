@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.IO;
 using System.Web.Mvc;
 using Glimpse.Core;
@@ -17,6 +18,45 @@ namespace Glimpse.Test.Common
             ViewEngineFindViewArguments(fixture);
 
             ViewRenderArguments(fixture);
+
+            ModelBindBindModelArguments(fixture);
+
+            ModelBinderBindPropertyArguments(fixture);
+
+            ValueProviderGetValueArguments(fixture);
+
+            ControllerFactoryCreateController(fixture);
+        }
+
+        private static void ControllerFactoryCreateController(IFixture fixture)
+        {
+            fixture.Register<IProxyFactory, ControllerFactory.CreateController>(
+                (proxyFactory) =>
+                new ControllerFactory.CreateController(new ActionInvoker(proxyFactory), new AsyncActionInvoker(proxyFactory)));
+        }
+
+        private static void ValueProviderGetValueArguments(IFixture fixture)
+        {
+            fixture.Register<string, ValueProvider<IValueProvider>.GetValue.Arguments>(
+                key =>
+                new ValueProvider<IValueProvider>.GetValue.Arguments(key));
+            fixture.Register<string, bool, ValueProvider<IUnvalidatedValueProvider>.GetValue.Arguments>(
+                (key, skipValidation) =>
+                new ValueProvider<IUnvalidatedValueProvider>.GetValue.Arguments(key, skipValidation));
+        }
+
+        private static void ModelBinderBindPropertyArguments(IFixture fixture)
+        {
+            fixture.Register<ControllerContext, ModelBindingContext, PropertyDescriptor, ModelBinder.BindProperty.Arguments>(
+                (controllerContext, modelBindingContext, propertyDescriptor) =>
+                new ModelBinder.BindProperty.Arguments(controllerContext, modelBindingContext, propertyDescriptor));
+        }
+
+        private static void ModelBindBindModelArguments(IFixture fixture)
+        {
+            fixture.Register<ControllerContext, ModelBindingContext, ModelBinder.BindModel.Arguments>(
+                (controllerContext, modelBindingContext) =>
+                new ModelBinder.BindModel.Arguments(controllerContext, modelBindingContext));
         }
 
         private static void ViewRenderArguments(IFixture fixture)

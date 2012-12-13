@@ -904,7 +904,7 @@ var glimpse = (function ($, scope) {
                     var payload = data.current(),
                         basePayload = data.base(),
                         ajax = payload.isAjax && payload.requestId,
-                        history = (payload.isAjax && basePayload.requestId != payload.parentId && payload.parentId) || (!payload.isAjax && basePayload.requestId != payload.requestId && payload.requestId),
+                        history = (payload.isAjax && basePayload.requestId != payload.parentRequestId && payload.parentRequestId) || (!payload.isAjax && basePayload.requestId != payload.requestId && payload.requestId),
                         home = basePayload.requestId,
                         html = '';
                     
@@ -1804,7 +1804,7 @@ var glimpseAjaxPlugin = (function ($, glimpse) {
         }, 
         contextChanged = function () {
             var payload = glimpse.data.current(),
-                newId = payload.isAjax ? payload.parentId : payload.requestId,
+                newId = payload.isAjax ? payload.parentRequestId : payload.requestId,
                 panel = glimpse.elements.findPanel('Ajax');
 
             if (currentId != newId) {

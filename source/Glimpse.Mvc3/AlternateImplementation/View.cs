@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Web.Mvc;
-using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Message;
@@ -11,46 +10,36 @@ using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class View : Alternate<IView>
+    public class View : AlternateType<IView>
     {
+        private List<IAlternateMethod> allMethods;
+
         public View(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
 
-        public override IEnumerable<IAlternateImplementation<IView>> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods
         {
-            yield return new Render();
+            get
+            {
+                return allMethods ?? (allMethods = new List<IAlternateMethod>
+                    {
+                        new Render()
+                    });
+            }
         }
 
-        public class Render : IAlternateImplementation<IView>
+        public class Render : AlternateMethod
         {
-            public Render()
+            public Render() : base(typeof(IView), "Render")
             {
-                MethodToImplement = typeof(IView).GetMethod("Render");
             }
 
-            public MethodInfo MethodToImplement { get; private set; }
-            
-            public void NewImplementation(IAlternateImplementationContext context)
-            {
-                if (context.RuntimePolicyStrategy() == RuntimePolicy.Off)
-                {
-                    context.Proceed();
-                    return;
-                }
-
-                var input = new Arguments(context.Arguments);
-
-                //// TODO: This is where we could use writer.Write calls to inject HTML comments
-
-                var timer = context.TimerStrategy();
-                var timing = timer.Time(context.Proceed);
-
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timing)
+            { 
                 var mixin = context.Proxy as IViewCorrelationMixin;
 
-                context.MessageBroker.PublishMany(
-                    new Message(input, timing, context.TargetType, mixin),
-                    new EventMessage(input, timing, context.InvocationTarget.GetType(), context.MethodInvocationTarget));
+                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), context.InvocationTarget.GetType(), context.MethodInvocationTarget, timing, context.TargetType, mixin));
             }
 
             public class Arguments
@@ -66,34 +55,39 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public TextWriter Writer { get; set; }
             }
 
-            public class Message : MessageBase
+            public class Message : ActionMessage, ITimelineMessage
             {
-                public Message(Arguments input, TimerResult timing, Type baseType, IViewCorrelationMixin viewCorrelation)
-                {
-                    Input = input;
-                    Timing = timing;
-                    BaseType = baseType;
-                    ViewCorrelation = viewCorrelation;
-                }
-
-                public Arguments Input { get; set; }
-               
-                public TimerResult Timing { get; set; }
-                
-                public Type BaseType { get; set; }
-                
-                public IViewCorrelationMixin ViewCorrelation { get; set; }
-            }
-
-            public class EventMessage : ActionMessage
-            {
-                public EventMessage(Arguments arguments, TimerResult timerResult, Type executedType, MethodInfo method)
+                public Message(Arguments arguments, Type executedType, MethodInfo method, TimerResult timerResult, Type baseType, IViewCorrelationMixin viewCorrelation)
                     : base(timerResult, GetControllerName(arguments.ViewContext.Controller), GetActionName(arguments.ViewContext.Controller), GetIsChildAction(arguments.ViewContext.Controller), executedType, method)
                 {
-                    EventName = string.Format("Render:View - {0}:{1}", ControllerName, ActionName); 
-                    EventCategory = "View";
+                    EventName = string.Format("Render:View - {0}:{1}", ControllerName, ActionName);
+                    EventCategory = "View"; 
+                    Input = arguments; 
+                    BaseType = baseType;
+                    ViewCorrelation = viewCorrelation;
+                    ViewData = arguments.ViewContext.ViewData;
+                    TempData = arguments.ViewContext.TempData;
+                    ModelMetadata = arguments.ViewContext.ViewData.ModelMetadata;
+                    ModelStateIsValid = arguments.ViewContext.ViewData.ModelState.IsValid;
+                    ViewDataModelType = arguments.ViewContext.ViewData.Model.GetTypeOrNull(); 
                 }
-            }
+
+                public Type ViewDataModelType { get; private set; }
+
+                public Arguments Input { get; private set; }
+
+                public bool ModelStateIsValid { get; private set; }
+
+                public IDictionary<string, object> TempData { get; private set; }
+
+                public IDictionary<string, object> ViewData { get; private set; }
+
+                public ModelMetadata ModelMetadata { get; private set; }
+
+                public Type BaseType { get; private set; }
+
+                public IViewCorrelationMixin ViewCorrelation { get; private set; }
+            } 
         }
     }
 }

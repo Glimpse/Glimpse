@@ -3,48 +3,47 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
-using Glimpse.Core;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
+using Glimpse.Core.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class DependencyResolver : Alternate<IDependencyResolver>
+    public class DependencyResolver : AlternateType<IDependencyResolver>
     {
+        private IEnumerable<IAlternateMethod> allMethods;
+
         public DependencyResolver(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
 
-        public override IEnumerable<IAlternateImplementation<IDependencyResolver>> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods
         {
-            yield return new GetService();
-            yield return new GetServices();
+            get 
+            { 
+                return allMethods ?? (allMethods = new List<IAlternateMethod>
+                {
+                    new GetService(),
+                    new GetServices(),
+                }); 
+            }
         }
 
-        public class GetService : IAlternateImplementation<IDependencyResolver>
+        public class GetService : AlternateMethod
         {
-            public GetService()
+            public GetService() : base(typeof(IDependencyResolver), "GetService")
             {
-                MethodToImplement = typeof(IDependencyResolver).GetMethod("GetService");
             }
-
-            public MethodInfo MethodToImplement { get; private set; }
             
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                context.Proceed();
-
-                if (context.RuntimePolicyStrategy() == RuntimePolicy.Off)
-                {
-                    return;
-                }
-
-                var resolvedObject = context.ReturnValue;
-                context.MessageBroker.Publish(new Message((Type)context.Arguments[0], resolvedObject));
+                context.MessageBroker.Publish(new Message(context.TargetType, context.MethodInvocationTarget, (Type)context.Arguments[0], context.ReturnValue));
             }
 
             public class Message : MessageBase
             {
-                public Message(Type serviceType, object resolvedObject)
+                public Message(Type executedType, MethodInfo executedMethod, Type serviceType, object resolvedObject)
+                    : base(executedType, executedMethod)
                 {
                     ServiceType = serviceType;
                     
@@ -63,35 +62,25 @@ namespace Glimpse.Mvc.AlternateImplementation
             }
         }
 
-        public class GetServices : IAlternateImplementation<IDependencyResolver>
+        public class GetServices : AlternateMethod
         {
-            public GetServices()
+            public GetServices() : base(typeof(IDependencyResolver), "GetServices")
             {
-                MethodToImplement = typeof(IDependencyResolver).GetMethod("GetServices");
             }
 
-            public MethodInfo MethodToImplement { get; private set; }
-
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                context.Proceed();
-
-                if (context.RuntimePolicyStrategy() == RuntimePolicy.Off)
-                {
-                    return;
-                }
-
-                context.MessageBroker.Publish(
-                    new Message((Type)context.Arguments[0], (IEnumerable<object>)context.ReturnValue));
+                context.MessageBroker.Publish(new Message(context.TargetType, context.MethodInvocationTarget, (Type)context.Arguments[0], (IEnumerable<object>)context.ReturnValue));
             }
 
             public class Message : MessageBase
             {
-                public Message(Type serviceType, IEnumerable<object> resolvedObjects)
+                public Message(Type executedType, MethodInfo executedMethod, Type serviceType, IEnumerable<object> resolvedObjects)
+                    : base(executedType, executedMethod)
                 {
                     ServiceType = serviceType;
-                    
-                    if (resolvedObjects != null && resolvedObjects.Any())
+
+                    if (resolvedObjects.SafeAny())
                     {
                         IsResolved = true;
                         ResolvedTypes = resolvedObjects.Select(obj => obj.GetType());

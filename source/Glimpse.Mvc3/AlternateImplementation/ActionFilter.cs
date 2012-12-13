@@ -8,36 +8,35 @@ using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class ActionFilter : Alternate<IActionFilter>
+    public class ActionFilter : AlternateType<IActionFilter>
     {
+        private IEnumerable<IAlternateMethod> allMethods;
+
         public ActionFilter(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
 
-        public override IEnumerable<IAlternateImplementation<IActionFilter>> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods
         {
-            yield return new OnActionExecuting();
-            yield return new OnActionExecuted();
+            get 
+            { 
+                return allMethods ?? (allMethods = new List<IAlternateMethod>
+                {
+                    new OnActionExecuting(),
+                    new OnActionExecuted()
+                }); 
+            }
         }
 
-        public class OnActionExecuting : IAlternateImplementation<IActionFilter>
+        public class OnActionExecuting : AlternateMethod
         {
-            public OnActionExecuting()
+            public OnActionExecuting() : base(typeof(IActionFilter), "OnActionExecuting")
             {
-                MethodToImplement = typeof(IActionFilter).GetMethod("OnActionExecuting");
             }
 
-            public MethodInfo MethodToImplement { get; private set; }
-
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                TimerResult timer;
-                if (!context.TryProceedWithTimer(out timer))
-                {
-                    return;
-                }
-
-                context.MessageBroker.Publish(new Message((ActionExecutingContext)context.Arguments[0], context.InvocationTarget.GetType(), context.MethodInvocationTarget, timer));
+                context.MessageBroker.Publish(new Message((ActionExecutingContext)context.Arguments[0], context.InvocationTarget.GetType(), context.MethodInvocationTarget, timerResult));
             }
 
             public class Message : BoundedFilterMessage
@@ -49,24 +48,15 @@ namespace Glimpse.Mvc.AlternateImplementation
             }
         }
 
-        public class OnActionExecuted : IAlternateImplementation<IActionFilter>
+        public class OnActionExecuted : AlternateMethod
         {
-            public OnActionExecuted()
+            public OnActionExecuted() : base(typeof(IActionFilter), "OnActionExecuted")
             {
-                MethodToImplement = typeof(IActionFilter).GetMethod("OnActionExecuted");
             }
 
-            public MethodInfo MethodToImplement { get; private set; }
-
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                TimerResult timer;
-                if (!context.TryProceedWithTimer(out timer))
-                {
-                    return;
-                }
-
-                context.MessageBroker.Publish(new Message((ActionExecutedContext)context.Arguments[0], context.InvocationTarget.GetType(), context.MethodInvocationTarget, timer));
+                context.MessageBroker.Publish(new Message((ActionExecutedContext)context.Arguments[0], context.InvocationTarget.GetType(), context.MethodInvocationTarget, timerResult));
             }
 
             public class Message : BoundedFilterMessage, IExceptionBasedFilterMessage, ICanceledBasedFilterMessage

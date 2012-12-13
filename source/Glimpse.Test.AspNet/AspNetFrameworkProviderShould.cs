@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Web;
-using Glimpse.Core;
+using Glimpse.Core.Extensions;
 using Glimpse.Test.AspNet.Tester;
 using Moq;
 using Xunit;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
@@ -13,16 +14,6 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
 {
     public class ValueProviderFactoryGetValueProviderShould
     {
-        [Theory, AutoMock]
-        public void Construct(Alternate<IValueProvider> alternateValueProvider, Alternate<IUnvalidatedValueProvider> alternateUnvalidatedValueProvider)
-        {
-            var sut = new ValueProviderFactory.GetValueProvider(alternateValueProvider, alternateUnvalidatedValueProvider);
-
-            Assert.Equal(alternateValueProvider, sut.AlternateValidatedValueProvider);
-            Assert.Equal(alternateUnvalidatedValueProvider, sut.AlternateUnvalidatedValueProvider);
-            Assert.NotNull(sut.MethodToImplement);
-        }
-
         [Theory, AutoMock]
         public void ImplementProperMethod(ValueProviderFactory.GetValueProvider sut)
         {
@@ -53,31 +44,33 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         }
 
         [Theory, AutoMock]
-        public void ProceedWithTimerWithIUnvalidatedValueProviderReturnValue([Frozen] Alternate<IUnvalidatedValueProvider> alternateUnvalidatedValueProvider, ValueProviderFactory.GetValueProvider sut, IAlternateImplementationContext context, ControllerContext arg1, IUnvalidatedValueProvider returnValue)
+        public void ProceedWithTimerWithIUnvalidatedValueProviderReturnValue([Frozen] IProxyFactory proxyFactory, ValueProviderFactory.GetValueProvider sut, IAlternateImplementationContext context, ControllerContext arg1, IUnvalidatedValueProvider returnValue)
         {
             context.Setup(c => c.Arguments).Returns(new object[] { arg1 });
             context.Setup(c => c.ReturnValue).Returns(returnValue);
-            alternateUnvalidatedValueProvider.Setup(a => a.TryCreate(It.IsAny<IUnvalidatedValueProvider>(), out returnValue)).Returns(true);
+            proxyFactory.Setup(pf => pf.IsWrapInterfaceEligible<IUnvalidatedValueProvider>(typeof(IUnvalidatedValueProvider))).Returns(true);
+            proxyFactory.Setup(pf => pf.WrapInterface(It.IsAny<IUnvalidatedValueProvider>(), It.IsAny<IEnumerable<IAlternateMethod>>())).Returns(returnValue);
 
             sut.NewImplementation(context);
 
             context.TimerStrategy().Verify(c => c.Time(It.IsAny<Action>()));
             context.Verify(c => c.ReturnValue);
-            context.VerifySet(c => c.ReturnValue = returnValue);
+            context.VerifySet(c => c.ReturnValue = It.IsAny<IUnvalidatedValueProvider>());
         }
 
         [Theory, AutoMock]
-        public void ProceedWithTimerWithIValueProviderReturnValue([Frozen] Alternate<IValueProvider> alternateValueProvider, ValueProviderFactory.GetValueProvider sut, IAlternateImplementationContext context, ControllerContext arg1, IValueProvider returnValue)
+        public void ProceedWithTimerWithIValueProviderReturnValue([Frozen] IProxyFactory proxyFactory, ValueProviderFactory.GetValueProvider sut, IAlternateImplementationContext context, ControllerContext arg1, IValueProvider returnValue)
         {
             context.Setup(c => c.Arguments).Returns(new object[] { arg1 });
             context.Setup(c => c.ReturnValue).Returns(returnValue);
-            alternateValueProvider.Setup(a => a.TryCreate(It.IsAny<IValueProvider>(), out returnValue)).Returns(true);
+            proxyFactory.Setup(pf => pf.IsWrapInterfaceEligible<IValueProvider>(typeof(IValueProvider))).Returns(true);
+            proxyFactory.Setup(pf => pf.WrapInterface(It.IsAny<IValueProvider>(), It.IsAny<IEnumerable<IAlternateMethod>>())).Returns(returnValue);
 
             sut.NewImplementation(context);
 
             context.TimerStrategy().Verify(c => c.Time(It.IsAny<Action>()));
             context.Verify(c => c.ReturnValue);
-            context.VerifySet(c => c.ReturnValue = returnValue);
+            context.VerifySet(c => c.ReturnValue = It.IsAny<IValueProvider>());
         }
     }
 }

@@ -17,24 +17,9 @@ namespace Glimpse.Core.Extensibility
 
         internal IDictionary Dictionary { get; set; }
 
-        public T Get<T>()
-        {
-            return (T)Dictionary[typeof(T).AssemblyQualifiedName];
-        }
-
-        public T Get<T>(string key)
-        {
-            return (T)Dictionary[key];
-        }
-
         public object Get(string key)
         {
             return Dictionary[key];
-        }
-
-        public void Set<T>(T value)
-        {
-            Dictionary[typeof(T).AssemblyQualifiedName] = value;
         }
 
         public void Set(string key, object value)

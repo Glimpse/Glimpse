@@ -1,4 +1,7 @@
-﻿using System.Web;
+﻿/*
+// Uncomment this class to provide custom runtime policy for Glimpse
+
+using System.Web;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 
@@ -8,11 +11,12 @@ namespace $rootnamespace$
     {
         public RuntimePolicy Execute(IRuntimePolicyContext policyContext)
         {
-            var context = policyContext.GetRequestContext<HttpContextBase>();
-
-            //You can perform a check like the one below to control Glimpse's permissions within your application.
-            //if (!context.User.IsInRole("Administrator")) 
-            //    return RuntimePolicy.Off;
+            // You can perform a check like the one below to control Glimpse's permissions within your application.
+			// var context = policyContext.GetRequestContext<HttpContextBase>();
+            // if (!context.User.IsInRole("Administrator"))
+			// {
+            //     return RuntimePolicy.Off;
+			// }
 
             return RuntimePolicy.On;
         }
@@ -23,3 +27,4 @@ namespace $rootnamespace$
         }
     }
 }
+*/

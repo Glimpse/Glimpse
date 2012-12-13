@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web;
+using System.Web.Mvc;
+
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
 using Glimpse.Mvc.AlternateImplementation;
 using Glimpse.Mvc.Model;
 using Glimpse.Mvc.Tab;
@@ -51,8 +54,8 @@ namespace Glimpse.Test.Mvc3.Tab
         [Theory, AutoMock]
         public void HandleNullFindViewMessageCollection(Metadata sut, ITabContext context)
         {
-            context.TabStore.Setup(ds => ds.Get<List<ViewEngine.FindViews.Message>>(typeof(ViewEngine.FindViews.Message).FullName)).Returns<List<ViewEngine.FindViews.Message>>(null);
-            context.TabStore.Setup(ds => ds.Get<List<View.Render.Message>>(typeof(View.Render.Message).FullName)).Returns(new List<View.Render.Message>());
+            context.TabStore.Setup(ds => ds.Get(typeof(ViewEngine.FindViews.Message).FullName)).Returns<List<ViewEngine.FindViews.Message>>(null);
+            context.TabStore.Setup(ds => ds.Get(typeof(View.Render.Message).FullName)).Returns(new List<View.Render.Message>());
 
             Assert.DoesNotThrow(() => sut.GetData(context));
         }
@@ -60,8 +63,8 @@ namespace Glimpse.Test.Mvc3.Tab
         [Theory, AutoMock]
         public void HandleNullViewRenderMessageCollection(Metadata sut, ITabContext context)
         {
-            context.TabStore.Setup(ds => ds.Get<List<ViewEngine.FindViews.Message>>(typeof(ViewEngine.FindViews.Message).FullName)).Returns(new List<ViewEngine.FindViews.Message>());
-            context.TabStore.Setup(ds => ds.Get<List<View.Render.Message>>(typeof(View.Render.Message).FullName)).Returns<List<View.Render.Message>>(null);
+            context.TabStore.Setup(ds => ds.Get(typeof(ViewEngine.FindViews.Message).FullName)).Returns(new List<ViewEngine.FindViews.Message>());
+            context.TabStore.Setup(ds => ds.Get(typeof(View.Render.Message).FullName)).Returns<List<View.Render.Message>>(null);
 
             Assert.DoesNotThrow(() => sut.GetData(context));
         }
@@ -69,41 +72,15 @@ namespace Glimpse.Test.Mvc3.Tab
         [Theory, AutoMock]
         public void ReturnResult(Metadata sut, ITabContext context, View.Render.Arguments renderArgs, TimerResult timerResult, IViewCorrelationMixin mixin)
         {
-            var renderMessage = new View.Render.Message(
-                input: renderArgs, 
-                timing: timerResult, 
-                baseType: typeof(ViewRenderMessageShould), 
-                viewCorrelation: mixin);
+            var renderMessage = new View.Render.Message(renderArgs, typeof(IView), null, timerResult, typeof(ViewRenderMessageShould), mixin);
 
-            context.TabStore.Setup(ds => ds.Get<List<View.Render.Message>>(typeof(View.Render.Message).FullName)).Returns(new List<View.Render.Message> { renderMessage });
+            context.TabStore.Setup(ds => ds.Contains(typeof(IList<View.Render.Message>).AssemblyQualifiedName)).Returns(true);
+            context.TabStore.Setup(ds => ds.Get(typeof(IList<View.Render.Message>).AssemblyQualifiedName)).Returns(new List<View.Render.Message> { renderMessage });
 
             var result = sut.GetData(context) as List<MetadataItemModel>;
 
             Assert.NotNull(result);
             Assert.NotEmpty(result);
-        }
-
-        [Theory, AutoMock]
-        public void PersistOnMessagePublish(ITabSetupContext context, IList<int> list)
-        {
-            context.GetTabStore().Setup(s => s.Contains(It.IsAny<string>())).Returns(true);
-            context.GetTabStore().Setup(s => s.Get<IList<int>>(It.IsAny<string>())).Returns(list);
-
-            Metadata.Persist(int.MaxValue, context);
-
-            list.Verify(l => l.Add(It.IsAny<int>()));
-        }
-
-        [Theory, AutoMock]
-        public void CreateKeyOnMessagePublish(ITabSetupContext context, IList<int> list)
-        {
-            context.GetTabStore().Setup(s => s.Contains(It.IsAny<string>())).Returns(false);
-            context.GetTabStore().Setup(s => s.Get<IList<int>>(It.IsAny<string>())).Returns(list);
-
-            Metadata.Persist(int.MaxValue, context);
-
-            list.Verify(l => l.Add(It.IsAny<int>()));
-            context.GetTabStore().Verify(s => s.Set(typeof(int).FullName, It.IsAny<List<int>>()));
         }
     }
 }

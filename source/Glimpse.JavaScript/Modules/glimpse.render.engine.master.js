@@ -19,7 +19,7 @@
                 else if (level == 0) 
                     result = providers.empty.build(data);
                 else 
-                    result = providers.string.build(data, level, forceLimit);
+                    result = providers.string.build(data, level, forceFull, forceLimit);
 
                 return result;
             }

@@ -4,40 +4,38 @@ using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-using Glimpse.Core.Message;
 using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class ExceptionFilter : Alternate<IExceptionFilter>
+    public class ExceptionFilter : AlternateType<IExceptionFilter>
     {
+        private IEnumerable<IAlternateMethod> allMethods;
+
         public ExceptionFilter(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
 
-        public override IEnumerable<IAlternateImplementation<IExceptionFilter>> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods
         {
-            yield return new OnException();
+            get
+            {
+                return allMethods ?? (allMethods = new List<IAlternateMethod>
+                    {
+                        new OnException()
+                    });
+            }
         }
 
-        public class OnException : IAlternateImplementation<IExceptionFilter>
+        public class OnException : AlternateMethod
         {
-            public OnException()
+            public OnException() : base(typeof(IExceptionFilter), "OnException")
             {
-                MethodToImplement = typeof(IExceptionFilter).GetMethod("OnException");
             }
 
-            public MethodInfo MethodToImplement { get; private set; }
-
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                TimerResult timer;
-                if (!context.TryProceedWithTimer(out timer))
-                {
-                    return;
-                }
-
-                context.MessageBroker.Publish(new Message((ExceptionContext)context.Arguments[0], context.InvocationTarget.GetType(), context.MethodInvocationTarget, timer));
+                context.MessageBroker.Publish(new Message((ExceptionContext)context.Arguments[0], context.InvocationTarget.GetType(), context.MethodInvocationTarget, timerResult));
             }
 
             public class Message : FilterMessage, IExceptionBasedFilterMessage
@@ -49,9 +47,9 @@ namespace Glimpse.Mvc.AlternateImplementation
                     ExceptionHandled = context.ExceptionHandled;
                 }
 
-                public Type ExceptionType { get; set; }
+                public Type ExceptionType { get; private set; }
 
-                public bool ExceptionHandled { get; set; }
+                public bool ExceptionHandled { get; private set; }
 
                 public override void BuildDetails(IDictionary<string, object> details)
                 {

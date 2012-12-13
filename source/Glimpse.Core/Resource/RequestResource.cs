@@ -7,7 +7,7 @@ using Glimpse.Core.ResourceResult;
 
 namespace Glimpse.Core.Resource
 {
-    public class RequestResource : IResource
+    public class RequestResource : IResource, IKey
     {
         internal const string InternalName = "glimpse_request";
         private const int CacheDuration = 12960000; // 150 days
@@ -15,6 +15,11 @@ namespace Glimpse.Core.Resource
         public string Name
         {
             get { return InternalName; }
+        }
+
+        public string Key
+        {
+            get { return Name; }
         }
 
         public IEnumerable<ResourceParameterMetadata> Parameters

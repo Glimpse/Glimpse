@@ -1,88 +1,111 @@
 ﻿using System;
-using System.Web;
-using System.Web.Routing;
+using System.Collections.Generic;
+using System.Web; 
+using Glimpse.AspNet.AlternateImplementation;
 using Glimpse.AspNet.Model;
 using Glimpse.AspNet.Tab;
 using Glimpse.Core.Extensibility;
+using Glimpse.Test.Common; 
 using Moq;
 using Xunit;
-using System.Collections.Generic;
+using Xunit.Extensions;
+
+using Route = Glimpse.AspNet.AlternateImplementation.Route;
+using RouteBase = Glimpse.AspNet.AlternateImplementation.RouteBase;
+using RouteTable = System.Web.Routing.RouteTable;
 
 namespace Glimpse.Test.AspNet.Tab
-{
-    public class RouteTester : Routes
+{ 
+    public class RoutesShould
     {
-        public Mock<ITabContext> TabContextMock { get; set; }
-        public Mock<HttpContextBase> HttpContextMock { get; set; }
-
-        private RouteTester()
+        [Theory, AutoMock]
+        public void ReturnName(Routes tab)
         {
-            HttpContextMock = new Mock<HttpContextBase>();
-            HttpContextMock.Setup(c => c.Request.AppRelativeCurrentExecutionFilePath).Returns("~/is/something");
-
-            TabContextMock = new Mock<ITabContext>();
-            TabContextMock.Setup(tc => tc.GetRequestContext<HttpContextBase>()).Returns(HttpContextMock.Object);
+            Assert.Equal("Routes", tab.Name);
         }
 
-        public static RouteTester Create()
+        [Theory, AutoMock]
+        public void ReturnDocumentationUri(Routes tab)
         {
-            return new RouteTester();
-        }
-    }
-
-    public class RoutesShould:IDisposable
-    {
-        private RouteTester tester;
-        public RouteTester Tab
-        {
-            get { return tester ?? (tester = RouteTester.Create()); }
-            set { tester = value; }
+            Assert.True(tab.DocumentationUri.Contains("getGlimpse.com"));
         }
 
-        public void Dispose()
+        [Theory, AutoMock]
+        public void ReturnRouteInstancesEvenWhenContextIsNull(Routes tab, ITabContext context)
         {
-            Tab = null;
+            context.Setup(x => x.GetRequestContext<HttpContextBase>()).Returns((HttpContextBase)null);
+
+            RouteTable.Routes.Clear();
+            RouteTable.Routes.Ignore("Test");
+             
+            var data = tab.GetData(context) as IList<RouteModel>;
+
+            Assert.NotNull(data);
+            Assert.Equal(RouteTable.Routes.Count, data.Count); 
         }
 
-        [Fact]
-        public void ReturnName()
-        {
-            Assert.Equal("Routes", Tab.Name);
-        }
-
-        [Fact]
-        public void ReturnDocumentationUri()
-        {
-            Assert.True(Tab.DocumentationUri.Contains("getGlimpse.com"));
-        }
-
-        [Fact]
-        public void ReturnNullWhenRequestContextIsNull()
-        {
-            Tab.TabContextMock.Setup(tc => tc.GetRequestContext<HttpContextBase>()).Returns<HttpContextBase>(null);
-
-            Assert.Null(Tab.GetData(Tab.TabContextMock.Object));
-        }
-
-        [Fact]
-        public void ReturnRouteInstances()
+        [Theory, AutoMock]
+        public void ReturnRouteInstancesEvenWhenRoutesTableEmpty(Routes tab, ITabContext context)
         {
             RouteTable.Routes.Clear();
-            var data = Tab.GetData(Tab.TabContextMock.Object) as IList<RouteInstance>;
+
+            var data = tab.GetData(context) as IList<RouteModel>;
+
             Assert.NotNull(data);
             Assert.Empty(data);
         }
 
-        [Fact]
-        public void ReturnProperNumberOfInstances()
+        [Theory, AutoMock]
+        public void ReturnProperNumberOfInstances(Routes tab, ITabContext context)
         {
             RouteTable.Routes.Clear();
             RouteTable.Routes.Ignore("Something");
 
-            var data = Tab.GetData(Tab.TabContextMock.Object) as IList<RouteInstance>;
+            var data = tab.GetData(context) as IList<RouteModel>;
 
             Assert.NotNull(data);
             Assert.Equal(RouteTable.Routes.Count, data.Count);
+        }
+
+        [Theory, AutoMock]
+        public void SubscribeToConstraintMessageTypes(Routes tab, ITabSetupContext setupContext)
+        { 
+            tab.Setup(setupContext);
+
+            setupContext.MessageBroker.Verify(mb => mb.Subscribe(It.IsAny<Action<Route.ProcessConstraint.Message>>()));
+            setupContext.MessageBroker.Verify(mb => mb.Subscribe(It.IsAny<Action<RouteBase.GetRouteData.Message>>())); 
+        }
+
+        [Theory, AutoMock]
+        public void MatchConstraintMessageToRoute(Routes tab, ITabContext context, System.Web.Routing.IRouteConstraint constraint)
+        {
+            var route = new System.Web.Routing.Route("url", new System.Web.Routing.RouteValueDictionary { { "Test", "Other" } }, new System.Web.Routing.RouteValueDictionary { { "Test", constraint } }, new System.Web.Routing.RouteValueDictionary { { "Data", "Tokens" } }, new System.Web.Routing.PageRouteHandler("~/Path"));
+
+            RouteTable.Routes.Clear();
+            RouteTable.Routes.Add(route); 
+
+            var routeMessage = new RouteBase.GetRouteData.Message(new TimerResult { Duration = 19 }, route.GetType(), null, route.GetHashCode(), new System.Web.Routing.RouteData());
+            var constraintMessage = new Route.ProcessConstraint.Message(new Route.ProcessConstraint.Arguments(new object[] { (HttpContextBase)null, constraint, "test", (System.Web.Routing.RouteValueDictionary)null, System.Web.Routing.RouteDirection.IncomingRequest }), new TimerResult { Duration = 25 }, route.GetType(), null, route.GetHashCode(), true);
+
+            context.TabStore.Setup(mb => mb.Contains(typeof(IList<Route.ProcessConstraint.Message>).AssemblyQualifiedName)).Returns(true).Verifiable();
+            context.TabStore.Setup(mb => mb.Contains(typeof(IList<RouteBase.GetRouteData.Message>).AssemblyQualifiedName)).Returns(true).Verifiable();
+             
+            context.TabStore.Setup(mb => mb.Get(typeof(IList<Route.ProcessConstraint.Message>).AssemblyQualifiedName)).Returns(new List<Route.ProcessConstraint.Message> { constraintMessage }).Verifiable();
+            context.TabStore.Setup(mb => mb.Get(typeof(IList<RouteBase.GetRouteData.Message>).AssemblyQualifiedName)).Returns(new List<RouteBase.GetRouteData.Message> { routeMessage }).Verifiable();
+             
+            var model = tab.GetData(context) as List<RouteModel>;       
+            var itemModel = model[0];
+             
+            Assert.NotNull(model);
+            Assert.Equal(1, model.Count);
+            Assert.NotNull(itemModel.Constraints);
+            Assert.True(itemModel.IsMatch);
+            Assert.Equal("Test", ((List<RouteConstraintModel>)itemModel.Constraints)[0].ParameterName);
+            Assert.Equal(true, ((List<RouteConstraintModel>)itemModel.Constraints)[0].IsMatch);
+            Assert.NotNull(itemModel.DataTokens);
+            Assert.Equal("Tokens", itemModel.DataTokens["Data"]);
+            Assert.NotNull(itemModel.RouteData);
+            Assert.Equal("Other", ((List<RouteDataItemModel>)itemModel.RouteData)[0].DefaultValue);
         }
     }
 }

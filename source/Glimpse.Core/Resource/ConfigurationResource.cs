@@ -6,7 +6,7 @@ using Glimpse.Core.ResourceResult;
 
 namespace Glimpse.Core.Resource
 {
-    public class ConfigurationResource : IResource
+    public class ConfigurationResource : IResource, IKey
     {
         internal const string InternalName = "glimpse_config";
 
@@ -18,6 +18,11 @@ namespace Glimpse.Core.Resource
         public IEnumerable<ResourceParameterMetadata> Parameters
         {
             get { return Enumerable.Empty<ResourceParameterMetadata>(); }
+        }
+
+        public string Key
+        {
+            get { return Name; }
         }
 
         public IResourceResult Execute(IResourceContext context)

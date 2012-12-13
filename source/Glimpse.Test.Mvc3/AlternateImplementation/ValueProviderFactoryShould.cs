@@ -15,13 +15,13 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             var sut = new Mvc.AlternateImplementation.ValueProviderFactory(proxyFactory);
 
             Assert.NotNull(sut);
-            Assert.IsAssignableFrom<Alternate<ValueProviderFactory>>(sut);
+            Assert.IsAssignableFrom<AlternateType<ValueProviderFactory>>(sut);
         }
 
         [Theory, AutoMock]
         public void ImplementOneMethod(Mvc.AlternateImplementation.ValueProviderFactory sut)
         {
-            Assert.Equal(1, sut.AllMethods().Count());
+            Assert.Equal(1, sut.AllMethods.Count());
         }
     }
 }

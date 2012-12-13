@@ -2,25 +2,27 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Common;
-using System.Linq;
-using System.Text;
 using System.Web.Configuration;
 using Glimpse.AspNet.Extensibility;
-using Glimpse.AspNet.Extensions;
 using Glimpse.AspNet.Model;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 
 namespace Glimpse.AspNet.Tab
 {
-    public class Configuration : AspNetTab, IDocumentation, ILayoutControl
+    public class Configuration : AspNetTab, IDocumentation, ILayoutControl, IKey
     {
-        private readonly IEnumerable<string> _keysToAnnomalizePassword = new[] { "Password", "Pwd" };
-        private readonly string _passwordHash = "########";
+        private const string PasswordHash = "########";
+        private readonly IEnumerable<string> keysToAnnomalizePassword = new[] { "Password", "Pwd" };
 
         public override string Name
         {
             get { return "Configuration"; }
+        }
+
+        public string Key 
+        {
+            get { return "glimpse_configuration"; }
         }
 
         public string DocumentationUri
@@ -130,15 +132,15 @@ namespace Glimpse.AspNet.Tab
 
         private void AnnomalizeConnectionStringPassword(IDictionary<string, object> connectionDetails, ConfigurationConnectionStringModel model)
         {
-            foreach (var key in _keysToAnnomalizePassword)
+            foreach (var key in keysToAnnomalizePassword)
             {
                 if (connectionDetails.ContainsKey(key))
                 {
                     var password = connectionDetails[key].ToString();
                     if (!string.IsNullOrEmpty(password))
                     {
-                        connectionDetails[key] = _passwordHash; 
-                        model.Raw = model.Raw.Replace(password, _passwordHash);
+                        connectionDetails[key] = PasswordHash; 
+                        model.Raw = model.Raw.Replace(password, PasswordHash);
                     }
 
                     return;

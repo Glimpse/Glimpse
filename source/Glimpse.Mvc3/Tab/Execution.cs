@@ -1,17 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Plugin.Assist;
+using Glimpse.Core.Extensions;
+using Glimpse.Core.Tab.Assist;
 using Glimpse.Mvc.Message;
 using Glimpse.Mvc.Model;
 
 namespace Glimpse.Mvc.Tab
 {
-    public class Execution : AspNetTab, IDocumentation, ITabSetup, ITabLayout
+    public class Execution : AspNetTab, IDocumentation, ITabSetup, ITabLayout, IKey
     {
-        private const string TabStoreKey = "IActionFilterMessageKey";
-
         private static readonly object Layout = TabLayout.Create()
                 .Row(r =>
                 {
@@ -29,6 +27,11 @@ namespace Glimpse.Mvc.Tab
             get { return "Execution"; }
         }
 
+        public string Key
+        {
+            get { return "glimpse_execution"; }
+        }
+
         public string DocumentationUri
         {
             get { return "http://getglimpse.com/Help/Plugin/Execution"; }
@@ -41,28 +44,14 @@ namespace Glimpse.Mvc.Tab
 
         public override object GetData(ITabContext context)
         {
-            var actionFilterMessages = context.TabStore.Get<IList<IExecutionMessage>>(TabStoreKey);
+            var actionFilterMessages = context.GetMessages<IExecutionMessage>();
 
             return actionFilterMessages.Select(message => new ExecutionModel(message)).ToList();
         }
 
         public void Setup(ITabSetupContext context)
         {
-            context.MessageBroker.Subscribe<IExecutionMessage>(message => PersistActionFilterMessage(message, context));
-        }
-
-        private static void PersistActionFilterMessage(IExecutionMessage message, ITabSetupContext context)
-        {
-            var tabStore = context.GetTabStore();
-
-            if (!tabStore.Contains(TabStoreKey))
-            {
-                tabStore.Set(TabStoreKey, new List<IExecutionMessage>());
-            }
-
-            var messages = tabStore.Get<IList<IExecutionMessage>>(TabStoreKey);
-
-            messages.Add(message);
+            context.PersistMessages<IExecutionMessage>();
         }
     }
 }

@@ -1,51 +1,48 @@
 using System.Collections.Generic;
-using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class ModelBinderProvider : Alternate<IModelBinderProvider>
+    public class ModelBinderProvider : AlternateType<IModelBinderProvider>
     {
+        private IEnumerable<IAlternateMethod> allMethods;
+
         public ModelBinderProvider(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
 
-        public override IEnumerable<IAlternateImplementation<IModelBinderProvider>> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods
         {
-            yield return new GetBinder(new ModelBinder(ProxyFactory));
+            get
+            {
+                return allMethods ?? (allMethods = new List<IAlternateMethod>
+                    {
+                        new GetBinder(new ModelBinder(ProxyFactory))
+                    });
+            }
         }
 
-        public class GetBinder : IAlternateImplementation<IModelBinderProvider>
+        public class GetBinder : AlternateMethod
         {
-            public GetBinder(Alternate<DefaultModelBinder> alternateModelBinder)
+            public GetBinder(AlternateType<IModelBinder> alternateModelBinder) : base(typeof(IModelBinderProvider), "GetBinder")
             {
-                MethodToImplement = typeof(IModelBinderProvider).GetMethod("GetBinder");
                 AlternateModelBinder = alternateModelBinder;
             }
 
-            public Alternate<DefaultModelBinder> AlternateModelBinder { get; set; }
+            public AlternateType<IModelBinder> AlternateModelBinder { get; set; }
 
-            public MethodInfo MethodToImplement { get; private set; }
-
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                TimerResult timerResult;
-                if (!context.TryProceedWithTimer(out timerResult))
-                {
-                    return;
-                }
-
                 var originalModelBinder = context.ReturnValue as DefaultModelBinder;
                 
-                // Can only wrap implementations of DefaultModelBinder (not IModelBinder!) for now
                 if (originalModelBinder == null)
                 {
                     context.Logger.Warn(Resources.GetBinderNewImplementationCannotProxyWarning, context.ReturnValue.GetType());
+                    return;
                 }
 
-                DefaultModelBinder newModelBinder;
+                IModelBinder newModelBinder;
                 if (AlternateModelBinder.TryCreate(originalModelBinder, out newModelBinder))
                 {
                     context.ReturnValue = newModelBinder;

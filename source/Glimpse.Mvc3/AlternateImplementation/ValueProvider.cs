@@ -1,40 +1,71 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
+using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions;
+using Glimpse.Core.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class ValueProvider<T> : Alternate<T> where T : class
+    public class ValueProvider<T> : AlternateType<T> where T : class
     {
+        private IEnumerable<IAlternateMethod> allMethods;
+
         // This class manages alternate implementations of both IValueProvider and IUnvalidatedValueProvider
         public ValueProvider(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
 
-        public override IEnumerable<IAlternateImplementation<T>> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods
         {
-            yield return new GetValue<T>();
+            get
+            {
+                return allMethods ?? (allMethods = new List<IAlternateMethod>
+                    {
+                        new GetValue(), 
+                        new ContainsPrefix()
+                    });
+            }
         }
 
-        public class GetValue<TValue> : IAlternateImplementation<TValue> where TValue : class
+        public class ContainsPrefix : AlternateMethod
         {
-            public GetValue()
+            public ContainsPrefix() : base(typeof(IValueProvider), "ContainsPrefix")
             {
-                MethodToImplement = typeof(TValue).GetMethod("GetValue");
             }
 
-            public MethodInfo MethodToImplement { get; private set; }
-
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                TimerResult timerResult;
-                if (!context.TryProceedWithTimer(out timerResult))
+                context.MessageBroker.Publish(new Message((string)context.Arguments[0], (bool)context.ReturnValue, context.TargetType, context.MethodInvocationTarget));
+            }
+
+            public class Message : MessageBase
+            {
+                public Message(string prefix, bool isMatch, Type valueProviderType, MethodInfo executedMethod) : base(valueProviderType, executedMethod)
                 {
-                    return;
+                    Prefix = prefix;
+                    IsMatch = isMatch;
+                    ValueProviderType = valueProviderType;
                 }
 
-                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments)));
+                public bool IsMatch { get; private set; }
+
+                public Type ValueProviderType { get; private set; }
+
+                public string Prefix { get; private set; }
+            }
+        }
+
+        public class GetValue : AlternateMethod
+        {
+            public GetValue() : base(typeof(T), "GetValue")
+            {
+            }
+
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
+            {
+                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), context.ReturnValue as ValueProviderResult, context.TargetType, context.MethodInvocationTarget));
             }
 
             public class Arguments
@@ -57,10 +88,29 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public class Message : MessageBase
             {
-                public Message(Arguments arguments)
+                public Message(Arguments arguments, ValueProviderResult result, Type valueProviderType, MethodInfo executedMethod) : base(valueProviderType, executedMethod)
                 {
-                    // TODO: Add meaningful properties to message w/ test
+                    IsFound = false;
+                    if (result != null)
+                    {
+                        IsFound = true;
+                        AttemptedValue = result.AttemptedValue;
+                        Culture = CultureInfo.ReadOnly(result.Culture);
+                        RawValue = result.RawValue;
+                    }
+
+                    ValueProviderType = valueProviderType;
                 }
+
+                public bool IsFound { get; private set; }
+
+                public Type ValueProviderType { get; private set; }
+
+                public object RawValue { get; private set; }
+
+                public CultureInfo Culture { get; private set; }
+
+                public string AttemptedValue { get; private set; }
             }
         }
     }

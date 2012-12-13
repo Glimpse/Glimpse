@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
+using Glimpse.Core.Tab.Assist;
 using Glimpse.Mvc.AlternateImplementation;
 using Glimpse.Mvc.Model;
 
 namespace Glimpse.Mvc.Tab
 {
-    using Glimpse.Core.Plugin.Assist;
-
-    public class Metadata : AspNetTab, IDocumentation, ITabSetup, ITabLayout
+    public class Metadata : AspNetTab, IDocumentation, ITabSetup, ITabLayout, IKey
     {
         private static readonly object Layout = TabLayout.Create()
                 .Row(r =>
@@ -31,14 +27,19 @@ namespace Glimpse.Mvc.Tab
             get { return "Metadata"; }
         }
 
+        public string Key
+        {
+            get { return "glimpse_metadata"; }
+        }
+
         public string DocumentationUri
         {
             get { return "http://getglimpse.com/Help/Plugin/Metadata"; }
         }
 
         public void Setup(ITabSetupContext context)
-        { 
-            context.MessageBroker.Subscribe<View.Render.Message>(message => Persist(message, context));
+        {
+            context.PersistMessages<View.Render.Message>();
         }
         
         public object GetLayout()
@@ -48,21 +49,20 @@ namespace Glimpse.Mvc.Tab
 
         public override object GetData(ITabContext context)
         { 
-            var viewRenderMessages = context.TabStore.Get<List<View.Render.Message>>(typeof(View.Render.Message).FullName); 
+            var viewRenderMessages = context.GetMessages<View.Render.Message>(); 
 
             var metadataResults = new List<MetadataItemModel>();
             if (viewRenderMessages != null)
             {
                 foreach (var viewRenderMessage in viewRenderMessages)
-                {
-                    var viewContext = viewRenderMessage.Input.ViewContext;
-                    var metadata = viewContext.ViewData.ModelMetadata;
+                { 
+                    var metadata = viewRenderMessage.ModelMetadata;
 
                     var item = new MetadataItemModel();
                     var propertyMetadata = new List<MetadataPropertyItemModel>();
 
-                    item.Action = viewContext.Controller.ValueProvider.GetValue("action").RawValue.ToStringOrDefault();
-                    item.Controller = viewContext.Controller.ValueProvider.GetValue("controller").RawValue.ToStringOrDefault();
+                    item.Action = viewRenderMessage.ActionName;
+                    item.Controller = viewRenderMessage.ControllerName;
                     if (metadata != null)
                     {
                         item.ModelMetadata = ProcessMetaData(metadata);
@@ -84,21 +84,6 @@ namespace Glimpse.Mvc.Tab
             }
 
             return metadataResults;
-        }
-
-        internal static void Persist<T>(T message, ITabSetupContext context)
-        {
-            var tabStore = context.GetTabStore();
-            var key = typeof(T).FullName;
-
-            if (!tabStore.Contains(key))
-            {
-                tabStore.Set(key, new List<T>());
-            }
-
-            var messages = tabStore.Get<IList<T>>(key);
-
-            messages.Add(message);
         }
 
         private MetadataContentModel ProcessMetaData(ModelMetadata metadata)

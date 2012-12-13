@@ -1,6 +1,6 @@
 ﻿namespace Glimpse.Core.Extensibility
 {
-    public abstract class ResourceResultDecorator : IResourceResult
+    public abstract class ResourceResultDecorator : IResourceResult, IWrapper<IResourceResult>
     {
         protected ResourceResultDecorator(IResourceResult wrappedResourceResult)
         {
@@ -8,6 +8,11 @@
         }
 
         protected IResourceResult WrappedResourceResult { get; set; }
+
+        public IResourceResult GetWrappedObject()
+        {
+            return WrappedResourceResult;
+        }
 
         public void Execute(IResourceResultContext context)
         {

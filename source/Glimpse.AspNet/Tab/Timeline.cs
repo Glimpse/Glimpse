@@ -3,15 +3,16 @@ using System.Linq;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.AspNet.Model;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
 using Glimpse.Core.Message; 
 
 namespace Glimpse.AspNet.Tab
 { 
-    public class Timeline : AspNetTab, IDocumentation, ITabSetup
+    public class Timeline : AspNetTab, IDocumentation, ITabSetup, IKey
     {
         private readonly IDictionary<string, TimelineCategoryModel> categories = new Dictionary<string, TimelineCategoryModel>
                            {
-                               { "WebForms", new TimelineCategoryModel { EventColor = "#AF78DD", EventColorHighlight = "#823BBE" } },
+                               { "ASP.NET", new TimelineCategoryModel { EventColor = "#AF78DD", EventColorHighlight = "#823BBE" } },
                                { "Controller", new TimelineCategoryModel { EventColor = "#FDBF45", EventColorHighlight = "#DDA431" } },
                                { "Filter", new TimelineCategoryModel { EventColor = "#72A3E4", EventColorHighlight = "#5087CF" } }, 
                                { "View", new TimelineCategoryModel { EventColor = "#10E309", EventColorHighlight = "#0EC41D" } }, 
@@ -31,6 +32,11 @@ namespace Glimpse.AspNet.Tab
             get { return "Timeline"; }
         }
 
+        public string Key
+        {
+            get { return "glimpse_timeline"; }
+        }
+
         public string DocumentationUri
         {
             get { return "http://getglimpse.com/Help/Plugin/Timeline"; }
@@ -38,12 +44,12 @@ namespace Glimpse.AspNet.Tab
 
         public void Setup(ITabSetupContext context)
         {
-            context.MessageBroker.Subscribe<ITimerResultMessage>(message => Persist(message, context));
+            context.PersistMessages<ITimelineMessage>();
         }
 
         public override object GetData(ITabContext context)
         {
-            var viewRenderMessages = context.TabStore.Get<IEnumerable<ITimerResultMessage>>(typeof(ITimerResultMessage).FullName); 
+            var viewRenderMessages = context.GetMessages<ITimelineMessage>(); 
 
             var result = new TimelineModel();
             result.Category = categories;
@@ -77,21 +83,6 @@ namespace Glimpse.AspNet.Tab
             }
             
             return result;
-        }
-
-        internal static void Persist<T>(T message, ITabSetupContext context)
-        {
-            var tabStore = context.GetTabStore();
-            var key = typeof(T).FullName;
-
-            if (!tabStore.Contains(key))
-            {
-                tabStore.Set(key, new List<T>());
-            }
-
-            var messages = tabStore.Get<IList<T>>(key);
-
-            messages.Add(message);
         }
     }
 }

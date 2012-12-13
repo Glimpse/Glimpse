@@ -6,8 +6,8 @@ using System.Reflection;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Message;
-using Glimpse.Core.Plugin.Assist;
 using Glimpse.Core.ResourceResult;
+using Glimpse.Core.Tab.Assist;
 #if NET35
 using Glimpse.Core.Backport;
 #endif
@@ -16,13 +16,25 @@ namespace Glimpse.Core.Framework
 {
     public class GlimpseRuntime : IGlimpseRuntime
     {
-        private static object lockObj = new object();
+        private static readonly MethodInfo MethodInfoBeginRequest = typeof(GlimpseRuntime).GetMethod("BeginRequest", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo MethodInfoEndRequest = typeof(GlimpseRuntime).GetMethod("EndRequest", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly object LockObj = new object();
 
         static GlimpseRuntime()
         {
             // Version is in major.minor.build format to support http://semver.org/
             // TODO: Consider adding configuration hash to version
             Version = Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
+
+            if (MethodInfoBeginRequest == null)
+            {
+                throw new NullReferenceException("BeginRequest method not found");
+            }
+
+            if (MethodInfoEndRequest == null)
+            {
+                throw new NullReferenceException("EndRequest method not found");
+            }
         }
 
         public GlimpseRuntime(IGlimpseConfiguration configuration)
@@ -73,17 +85,12 @@ namespace Glimpse.Core.Framework
             // Give Request an ID
             requestStore.Set(Constants.RequestIdKey, Guid.NewGuid());
 
-            // Create and start global stopwatch
-            var stopwatch = Stopwatch.StartNew();
-            var executionTimer = new ExecutionTimer(stopwatch);
-            requestStore.Set(Constants.GlobalStopwatchKey, stopwatch);
-            requestStore.Set(Constants.GlobalTimerKey, executionTimer);
+            var executionTimer = CreateAndStartGlobalExecutionTimer(requestStore);
 
-            Configuration.MessageBroker.Publish(new TimelineMessage(executionTimer.Point(), "Start Request", "WebForms"));
+            Configuration.MessageBroker.Publish(new PointTimelineMessage(executionTimer.Point(), typeof(GlimpseRuntime), MethodInfoBeginRequest, "Start Request", "ASP.NET"));
         }
 
         // TODO: Add PRG support
-        // TODO: Structured layout support (TabLayout)
         public void EndRequest()
         {
             var policy = GetRuntimePolicy(RuntimeEvent.EndRequest);
@@ -98,7 +105,7 @@ namespace Glimpse.Core.Framework
             var executionTimer = requestStore.Get<ExecutionTimer>(Constants.GlobalTimerKey);
             if (executionTimer != null)
             {
-                Configuration.MessageBroker.Publish(new TimelineMessage(executionTimer.Point(), "End Request", "WebForms"));
+                Configuration.MessageBroker.Publish(new PointTimelineMessage(executionTimer.Point(), typeof(GlimpseRuntime), MethodInfoEndRequest, "End Request", "ASP.NET"));
             }
 
             ExecuteTabs(RuntimeEvent.EndRequest);
@@ -255,6 +262,8 @@ namespace Glimpse.Core.Framework
 
         public bool Initialize()
         {
+            CreateAndStartGlobalExecutionTimer(Configuration.FrameworkProvider.HttpRequestStore);
+
             var logger = Configuration.Logger;
             var policy = GetRuntimePolicy(RuntimeEvent.Initialize);
             if (policy == RuntimePolicy.Off)
@@ -265,7 +274,7 @@ namespace Glimpse.Core.Framework
             // Double checked lock to ensure thread safety. http://en.wikipedia.org/wiki/Double_checked_locking_pattern
             if (!IsInitialized)
             {
-                lock (lockObj)
+                lock (LockObj)
                 {
                     if (!IsInitialized)
                     {
@@ -274,7 +283,7 @@ namespace Glimpse.Core.Framework
                         var tabsThatRequireSetup = Configuration.Tabs.Where(tab => tab is ITabSetup).Select(tab => tab);
                         foreach (ITabSetup tab in tabsThatRequireSetup)
                         {
-                            var key = tab.GetType().ConvertToSafeJson();
+                            var key = tab.CreateKey();
                             try
                             {
                                 var setupContext = new TabSetupContext(logger, messageBroker, () => GetTabStore(key));
@@ -309,6 +318,21 @@ namespace Glimpse.Core.Framework
             }
 
             return policy != RuntimePolicy.Off;
+        }
+
+        private static ExecutionTimer CreateAndStartGlobalExecutionTimer(IDataStore requestStore)
+        {
+            if (requestStore.Contains(Constants.GlobalStopwatchKey) && requestStore.Contains(Constants.GlobalTimerKey))
+            {
+                return requestStore.Get<ExecutionTimer>(Constants.GlobalTimerKey);
+            }
+
+            // Create and start global stopwatch
+            var stopwatch = Stopwatch.StartNew();
+            var executionTimer = new ExecutionTimer(stopwatch);
+            requestStore.Set(Constants.GlobalStopwatchKey, stopwatch);
+            requestStore.Set(Constants.GlobalTimerKey, executionTimer);
+            return executionTimer;
         }
 
         private IDataStore GetTabStore(string tabName)
@@ -350,7 +374,8 @@ namespace Glimpse.Core.Framework
 
             foreach (var tab in supportedRuntimeTabs)
             {
-                var key = tab.GetType().ConvertToSafeJson();
+                TabResult result;
+                var key = tab.CreateKey();
                 try
                 {
                     var tabContext = new TabContext(runtimeContext, GetTabStore(key), logger, messageBroker);
@@ -361,21 +386,22 @@ namespace Glimpse.Core.Framework
                     {
                         tabData = tabSection.Build();
                     }
-                    
-                    var result = new TabResult(tab.Name, tabData);
 
-                    if (tabResultsStore.ContainsKey(key))
-                    {
-                        tabResultsStore[key] = result;
-                    }
-                    else
-                    {
-                        tabResultsStore.Add(key, result);
-                    }
+                    result = new TabResult(tab.Name, tabData);
                 }
                 catch (Exception exception)
                 {
+                    result = new TabResult(tab.Name, exception.ToString());
                     logger.Error(Resources.ExecuteTabError, exception, key);
+                }
+
+                if (tabResultsStore.ContainsKey(key))
+                {
+                    tabResultsStore[key] = result;
+                }
+                else
+                {
+                    tabResultsStore.Add(key, result);
                 }
             }
         }
@@ -409,7 +435,7 @@ namespace Glimpse.Core.Framework
 
                 if (metadataInstance.HasMetadata)
                 {
-                    pluginMetadata[tab.GetType().ConvertToSafeJson()] = metadataInstance;
+                    pluginMetadata[tab.CreateKey()] = metadataInstance;
                 } 
             }
 
@@ -419,12 +445,13 @@ namespace Glimpse.Core.Framework
 
             foreach (var resource in Configuration.Resources)
             {
-                if (resources.ContainsKey(resource.Name))
+                var resourceKey = resource.CreateKey();
+                if (resources.ContainsKey(resourceKey))
                 {
                     logger.Warn(Resources.GlimpseRuntimePersistMetadataMultipleResourceWarning, resource.Name);
                 }
 
-                resources[resource.Name] = endpoint.GenerateUriTemplate(resource, Configuration.EndpointBaseUri, logger);
+                resources[resourceKey] = endpoint.GenerateUriTemplate(resource, Configuration.EndpointBaseUri, logger);
             }
 
             Configuration.PersistenceStore.Save(metadata);

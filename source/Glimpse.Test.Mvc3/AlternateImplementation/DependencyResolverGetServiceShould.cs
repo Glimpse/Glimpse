@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Test.Common;
@@ -46,7 +47,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
 
             sut.NewImplementation(context);
 
-            context.Verify(c => c.Proceed());
+            context.TimerStrategy().Verify(t => t.Time(It.IsAny<Action>()));
             context.MessageBroker.Verify(b => b.Publish(It.IsAny<DependencyResolver.GetService.Message>()));
         }
     }

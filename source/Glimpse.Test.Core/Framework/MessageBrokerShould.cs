@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Message;
 using Glimpse.Test.Common;
 using Glimpse.Test.Core.TestDoubles;
 using Moq;

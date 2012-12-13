@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Glimpse.Core.Plugin.Assist;
+using Glimpse.Core.Tab.Assist;
 using Xunit;
 
 namespace Glimpse.Test.Core.Plugin.Assist
@@ -11,7 +11,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void ReturnNewSectionWithNoRows()
 		{
-			var section = Glimpse.Core.Plugin.Assist.Plugin.Create();
+			var section = Glimpse.Core.Tab.Assist.Plugin.Create();
 
 			Assert.Equal(0, section.Rows.Count());
 		}
@@ -19,7 +19,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void ReturnNewSectionWithRowsAndColumns()
 		{
-			var section = Glimpse.Core.Plugin.Assist.Plugin.Create("Header1", "Header2");
+			var section = Glimpse.Core.Tab.Assist.Plugin.Create("Header1", "Header2");
 			
 			Assert.Equal(1, section.Rows.Count());
 			Assert.Equal(2, section.Rows.Single().Columns.Count());
@@ -98,7 +98,7 @@ namespace Glimpse.Test.Core.Plugin.Assist
 
 		public PluginShould()
 		{
-			Plugin = Glimpse.Core.Plugin.Assist.Plugin.Create();
+			Plugin = Glimpse.Core.Tab.Assist.Plugin.Create();
 		}
 	}
 }

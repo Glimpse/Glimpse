@@ -1,12 +1,11 @@
-﻿﻿using System;
-﻿using System.Collections.Generic;
+﻿﻿using System.Collections.Generic;
 ﻿using System.Diagnostics;
 ﻿using Glimpse.AspNet.Model;
 ﻿using Glimpse.AspNet.PipelineInspector;
 ﻿using Glimpse.Core.Extensibility;
-﻿using Glimpse.Core.Plugin.Assist;
+using Glimpse.Core.Extensions;
+﻿using Glimpse.Core.Tab.Assist;
 ﻿using Glimpse.Test.Common;
-using Moq;
 using Xunit;
 using Xunit.Extensions;
 
@@ -227,7 +226,9 @@ namespace Glimpse.Test.AspNet.PipelineInspector
         private IList<TraceModel> SetupMessageStore(ITabSetupContext context)
         {
             var list = new List<TraceModel>();
-            context.GetTabStore().Setup(x => x.Get<IList<TraceModel>>(Glimpse.AspNet.Tab.Trace.TraceMessageStoreKey)).Returns(list);
+            context.GetTabStore().Setup(x => x.Get(Glimpse.AspNet.Tab.Trace.TraceMessageStoreKey)).Returns(list);
+            context.GetTabStore().Setup(x => x.Get(Glimpse.AspNet.Tab.Trace.FirstWatchStoreKey)).Returns(null);
+            context.GetTabStore().Setup(x => x.Get(Glimpse.AspNet.Tab.Trace.LastWatchStoreKey)).Returns(null);
 
             return list;
         } 

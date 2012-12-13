@@ -8,9 +8,9 @@
             
             if (currentData.isAjax)
                 html = ' &gt; Ajax';
-            if ((currentData.isAjax && baseData.requestId != currentData.parentId) || (!currentData.isAjax && baseData.requestId != currentData.requestId)) {
+            if ((currentData.isAjax && baseData.requestId != currentData.parentRequestId) || (!currentData.isAjax && baseData.requestId != currentData.requestId)) {
                 if (html) 
-                    html = ' &gt; <span class="glimpse-link" data-requestId="' + (currentData.isAjax ? currentData.parentId : currentData.requestId) + '">History</span>' + html;
+                    html = ' &gt; <span class="glimpse-link" data-requestId="' + (currentData.isAjax ? currentData.parentRequestId : currentData.requestId) + '">History</span>' + html;
                 else
                     html = ' &gt; History';    
             }

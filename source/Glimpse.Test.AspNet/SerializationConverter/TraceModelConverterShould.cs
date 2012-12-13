@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using Glimpse.AspNet.Model;
 using Glimpse.AspNet.SerializationConverter;
-using Glimpse.Core.Plugin.Assist;
+using Glimpse.Core.Tab.Assist;
 using Xunit;
 
 namespace Glimpse.Test.AspNet.SerializationConverter

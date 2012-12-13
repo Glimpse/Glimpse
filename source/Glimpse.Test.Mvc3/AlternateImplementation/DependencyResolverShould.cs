@@ -10,7 +10,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Theory, AutoMock]
         public void ReturnAllMethods(DependencyResolver sut)
         {
-            Assert.NotEmpty(sut.AllMethods());
+            Assert.NotEmpty(sut.AllMethods);
         }
     }
 }

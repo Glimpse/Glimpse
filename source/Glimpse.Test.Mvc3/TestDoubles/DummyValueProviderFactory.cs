@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 
 namespace Glimpse.Test.Mvc3.TestDoubles
 {
@@ -6,7 +7,7 @@ namespace Glimpse.Test.Mvc3.TestDoubles
     {
         public override IValueProvider GetValueProvider(ControllerContext controllerContext)
         {
-            throw new System.NotImplementedException();
+            throw new NotSupportedException();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Glimpse.Test.Mvc3.Message
         [Theory, AutoMock]
         public void Construct(TimerResult timerResult, bool isChildAction, Type executedType, MethodInfo method, string eventName, string eventCategory)
         {
-            var message = new ExecutionMessage(timerResult, isChildAction, executedType, method, eventName, eventCategory);
+            var message = new ActionBaseMessage(timerResult, isChildAction, executedType, method, eventName, eventCategory);
 
             Assert.Equal(timerResult.Duration, message.Duration);
             Assert.Equal(timerResult.Offset, message.Offset);
@@ -29,7 +29,7 @@ namespace Glimpse.Test.Mvc3.Message
         [Theory, AutoMock]
         public void BuildDetails(TimerResult timerResult, bool isChildAction, Type executedType, MethodInfo method, string eventName, string eventCategory)
         {
-            var message = new ExecutionMessage(timerResult, isChildAction, executedType, method, eventName, eventCategory);
+            var message = new ActionBaseMessage(timerResult, isChildAction, executedType, method, eventName, eventCategory);
 
             var dictionary = new Dictionary<string, object>();
             message.BuildDetails(dictionary);

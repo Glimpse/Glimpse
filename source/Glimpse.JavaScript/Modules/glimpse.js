@@ -865,7 +865,7 @@ glimpse.render.engine.util.raw = (function($, util) {
                 else if (level == 0) 
                     result = providers.empty.build(data);
                 else 
-                    result = providers.string.build(data, level, forceLimit);
+                    result = providers.string.build(data, level, forceFull, forceLimit);
 
                 return result;
             }
@@ -876,13 +876,15 @@ glimpse.render.engine.util.raw = (function($, util) {
 // glimpse.render.engine.string.js
 (function($, util, engine, engineUtil) {
     var provider = {
-            build: function (data, level, forceLimit) { 
+            build: function (data, level, forceFull, forceLimit) { 
                 if (data == undefined || data == null)
                     return '--';
                 if ($.isArray(data))
                     return '[ ... ]';
                 if ($.isPlainObject(data))
                     return '{ ... }';
+                if (forceFull)
+                    return util.preserveWhitespace(engineUtil.raw.process(data));  
 
                 var charMax = $.isNumeric(forceLimit) ? forceLimit : (level > 1 ? 80 : 150),
                     charOuterMax = (charMax * 1.2),
@@ -933,7 +935,9 @@ glimpse.render.engine.util.raw = (function($, util) {
                 var newMetadataItem = metadataItem.layout;
                 if ($.isPlainObject(newMetadataItem)) 
                     newMetadataItem = newMetadataItem[rowIndex];
-                    
+                if (newMetadataItem)
+                    newMetadataItem = { layout: newMetadataItem };
+
                 cellContent = metadataItem.indexs ? buildFormatString(metadataItem.data, data, metadataItem.indexs) : data[metadataItem.data];
                 
                 //If minDisplay and we are in header or there is no data, we don't want to render anything 
@@ -1076,7 +1080,7 @@ glimpse.render.engine.util.raw = (function($, util) {
                     html += '<span class="start">[</span>';
                     var spacer = '';
                     for (var x = 0; x < columnLimit; x++) {
-                        html += spacer + '<span>\'</span>' + providers.string.build(data[i][x], level, 12) + '<span>\'</span>';
+                        html += spacer + '<span>\'</span>' + providers.string.build(data[i][x], level, false, 12) + '<span>\'</span>';
                         spacer = '<span class="rspace">,</span>';
                     }
                     if (x < data[0].length)
@@ -1089,7 +1093,7 @@ glimpse.render.engine.util.raw = (function($, util) {
                     html += engineUtil.newItemSpacer(i + 1, rowLimit, length);
                     if (i >= length || i >= rowLimit)
                         break;
-                    html += '<span>\'</span>' + providers.string.build(data[i], level, 12) + '<span>\'</span>';
+                    html += '<span>\'</span>' + providers.string.build(data[i], level, false, 12) + '<span>\'</span>';
                 } 
             }
 
@@ -1610,9 +1614,9 @@ glimpse.render.engine.util.raw = (function($, util) {
             
             if (currentData.isAjax)
                 html = ' &gt; Ajax';
-            if ((currentData.isAjax && baseData.requestId != currentData.parentId) || (!currentData.isAjax && baseData.requestId != currentData.requestId)) {
+            if ((currentData.isAjax && baseData.requestId != currentData.parentRequestId) || (!currentData.isAjax && baseData.requestId != currentData.requestId)) {
                 if (html) 
-                    html = ' &gt; <span class="glimpse-link" data-requestId="' + (currentData.isAjax ? currentData.parentId : currentData.requestId) + '">History</span>' + html;
+                    html = ' &gt; <span class="glimpse-link" data-requestId="' + (currentData.isAjax ? currentData.parentRequestId : currentData.requestId) + '">History</span>' + html;
                 else
                     html = ' &gt; History';    
             }
@@ -1942,7 +1946,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
         retrieveScopeId = function() { 
             var payload = data.currentData();
                 
-            return payload.isAjax ? payload.parentId : payload.requestId;
+            return payload.isAjax ? payload.parentRequestId : payload.requestId;
         }, 
         wireListeners = function() {
             var panel = elements.panel('ajax');
@@ -1972,8 +1976,8 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
         contextSwitch = function(args) {
             var newPayload = args.newData,
                 oldPayload = args.oldData,
-                newId = newPayload.isAjax ? newPayload.parentId : newPayload.requestId,
-                oldId = oldPayload.isAjax ? oldPayload.parentId : oldPayload.requestId;
+                newId = newPayload.isAjax ? newPayload.parentRequestId : newPayload.requestId,
+                oldId = oldPayload.isAjax ? oldPayload.parentRequestId : oldPayload.requestId;
 
             if (oldId != newId) {
                 elements.panel('ajax').find('tbody').empty();
@@ -2053,7 +2057,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                 row.removeClass('selected');
             
                 if (args.type == 'ajax')
-                    data.retrieve(data.currentData().parentId);
+                    data.retrieve(data.currentData().parentRequestId);
             }
         },
         selectStart = function(args) {
@@ -2091,6 +2095,15 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
             
             context.contextRequestId = undefined;
         };
+    
+    var send = XMLHttpRequest.prototype.send;
+    XMLHttpRequest.prototype.send = function() { 
+        this.setRequestHeader("X-Glimpse-Parent-RequestID", data.baseData().requestId);
+        
+        pubsub.publish('trigger.ajax.request.send');
+        
+        send.apply(this, arguments);
+    };
     
     pubsub.subscribe('trigger.shell.subscriptions', wireListeners);
     pubsub.subscribe('action.panel.hiding.ajax', deactivate); 
@@ -2455,7 +2468,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
             },
             processTableData = function() {
                 var dataResult = [ [ 'Title', 'Description', 'Category', 'Timing', 'Start Point', 'Duration', 'w/out Children' ] ],
-                    metadata = [ [ { data : '{{0}} |({{1}})|' }, { data : 2, width : '18%' }, { data : 3, width : '9%' }, { data : 4, align : 'right', pre : 'T+ ', post : ' ms', className : 'mono', width : '100px' }, { data : 5, align : 'right', post : ' ms', className : 'mono', width : '100px' }, { data : 6, align : 'right', post : ' ms', className : 'mono', width : '100px' } ] ];
+                    metadata = { layout: [ [ { data : '{{0}} |({{1}})|' }, { data : 2, width : '18%' }, { data : 3, width : '9%' }, { data : 4, align : 'right', pre : 'T+ ', post : ' ms', className : 'mono', width : '100px' }, { data : 5, align : 'right', post : ' ms', className : 'mono', width : '100px' }, { data : 6, align : 'right', post : ' ms', className : 'mono', width : '100px' } ] ] };
                     
                 //Massage the data 
                 for (var i = 0; i < timeline.data.events.length; i++) {
@@ -2859,7 +2872,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
         
         pubsub.subscribe('trigger.timline.shell.subscriptions', wireListeners); 
         pubsub.subscribe('trigger.shell.resize', panelResize); 
-        pubsub.subscribe('action.panel.showed.Glimpse_AspNet_Tab_Timeline', function() { setTimeout(panelResize, 1); }); 
+        pubsub.subscribe('action.panel.showed.glimpse_timeline', function() { setTimeout(panelResize, 1); }); 
     })(timeline.elements);
 
     // View
@@ -2937,10 +2950,51 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
          
         pubsub.subscribe('action.template.processing', modify); 
         pubsub.subscribe('trigger.timline.init', init); 
-        pubsub.subscribe('action.panel.rendering.Glimpse_AspNet_Tab_Timeline', prerender);
-        pubsub.subscribe('action.panel.rendered.Glimpse_AspNet_Tab_Timeline', postrender);
+        pubsub.subscribe('action.panel.rendering.glimpse_timeline', prerender);
+        pubsub.subscribe('action.panel.rendered.glimpse_timeline', postrender);
     })();
 })(jQueryGlimpse, glimpse.pubsub, glimpse.settings, glimpse.util, glimpse.render.engine);
+// glimpse.hud.js
+(function($, pubsub, data, elements) {
+    var loaded = function() {
+            var plugin = data.currentData().data.glimpse_hud,
+                html = '';
+
+            if (plugin.timings && window.performance.timing) {
+                var timingSum = 0,
+                    timing = plugin.timings;
+                    
+                populateClientTimings(timing);
+
+                html += '<div class="glimpse-hud-section"><span class="glimpse-hud-title">Timings</span><table class="glimpse-hud-graph-bar"><tr>';
+                for (var key in timing) {
+                    var category = timing[key];
+                    
+                    timingSum += category.duration; 
+                    html += '<td style="background-color:' + category.categoryColor + ';width:' + category.percentage + '%" title="' + category.label + ' timing - ' + category.duration + ' ms"></td>';
+                }
+                html += '</tr></table><span class="glimpse-hud-details"><span title="Total request time">' + timingSum + ' ms</span> ';
+                html += '(<span title="Network timing">' + timing.network.duration + ' ms</span> / <span title="Server timing">' + timing.server.duration + ' ms</span> / <span title="Browser timing">' + timing.browser.duration + ' ms</span>)';
+                html += '</span></div>';
+            }
+
+            elements.opener().find('tr').prepend('<td class="glimpse-hud">' + html + '</td>');
+        },
+        populateClientTimings = function(timings) {
+            var timingApi = window.performance.timing,
+                network = timingApi.connectEnd - timingApi.navigationStart,
+                server = timingApi.responseEnd - timingApi.requestStart,
+                browser = timingApi.loadEventEnd - timingApi.unloadEventStart,
+                total = network + server + browser;
+
+            timings.network = { label: 'Network', categoryColor: '#FD4545', duration: network, percentage: (network / total) * 100 };
+            timings.server = { label: 'Server', categoryColor: '#823BBE', duration: server, percentage: (server / total) * 100 };
+            timings.browser = { label: 'Browser', categoryColor: '#5087CF', duration: browser, percentage: (browser / total) * 100 };
+        };
+
+    pubsub.subscribe('action.shell.loaded', loaded); 
+
+})(jQueryGlimpse, glimpse.pubsub, glimpse.data, glimpse.elements);
 
 // google-code-prettify.js
 if (!window.PR_SHOULD_USE_CONTINUATION) {

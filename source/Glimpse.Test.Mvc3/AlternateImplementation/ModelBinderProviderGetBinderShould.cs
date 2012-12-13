@@ -13,7 +13,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
     public class ModelBinderProviderGetBinderShould
     {
         [Theory, AutoMock]
-        public void Construct(Alternate<DefaultModelBinder> alternateModelBinder)
+        public void Construct(AlternateType<IModelBinder> alternateModelBinder)
         {
             var sut = new ModelBinderProvider.GetBinder(alternateModelBinder);
 
@@ -39,11 +39,11 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         }
 
         [Theory, AutoMock]
-        public void ProceedAndWrapResultWithRuntimePolicyOnAndDefaultModelBinder(Alternate<DefaultModelBinder> alternateModelBinder, IAlternateImplementationContext context, Type arg1, DefaultModelBinder returnValue, DefaultModelBinder newModelBinder)
+        public void ProceedAndWrapResultWithRuntimePolicyOnAndDefaultModelBinder(AlternateType<IModelBinder> alternateModelBinder, IAlternateImplementationContext context, Type arg1, DefaultModelBinder returnValue, IModelBinder newModelBinder)
         {
             context.Setup(c => c.Arguments).Returns(new object[] { arg1 });
             context.Setup(c => c.ReturnValue).Returns(returnValue);
-            alternateModelBinder.Setup(amb => amb.TryCreate(It.IsAny<DefaultModelBinder>(), out newModelBinder)).Returns(true);
+            alternateModelBinder.Setup(amb => amb.TryCreate(It.IsAny<IModelBinder>(), out newModelBinder, null, null)).Returns(true);
 
             var sut = new ModelBinderProvider.GetBinder(alternateModelBinder);
             sut.NewImplementation(context);
@@ -52,11 +52,11 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             context.Verify(mb => mb.ReturnValue);
             context.Logger.Verify(l => l.Warn(It.IsAny<string>(), context.ReturnValue.GetType()), Times.Never());
             context.VerifySet(c => c.ReturnValue = newModelBinder);
-            alternateModelBinder.Verify(amb => amb.TryCreate(It.IsAny<DefaultModelBinder>(), out newModelBinder));
+            alternateModelBinder.Verify(amb => amb.TryCreate(It.IsAny<IModelBinder>(), out newModelBinder, null, null));
         }
 
         [Theory, AutoMock]
-        public void ProceedAndWarnWithRuntimePolicyOnAndIModelBinder(Alternate<DefaultModelBinder> alternateModelBinder, IAlternateImplementationContext context, Type arg1, IModelBinder returnValue)
+        public void ProceedAndWarnWithRuntimePolicyOnAndIModelBinder(AlternateType<IModelBinder> alternateModelBinder, IAlternateImplementationContext context, Type arg1, IModelBinder returnValue)
         {
             context.Setup(c => c.Arguments).Returns(new object[] { arg1 });
             context.Setup(c => c.ReturnValue).Returns(returnValue);

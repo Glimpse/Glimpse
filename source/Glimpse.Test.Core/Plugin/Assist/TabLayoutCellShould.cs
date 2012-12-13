@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Glimpse.Core.Plugin.Assist;
+using Glimpse.Core.Tab.Assist;
 using Xunit;
 
 namespace Glimpse.Test.Core.Plugin.Assist
@@ -57,9 +57,9 @@ namespace Glimpse.Test.Core.Plugin.Assist
 			var layout = TabLayout.Create();
 			layout.Row(r => { }).Row(r => {});
 
-			Cell.Layout(layout);
+			Cell.SetLayout(layout);
 
-			Assert.Equal(layout.Rows, Cell.TabLayout);
+			Assert.NotEqual(layout.Rows, Cell.Layout);
 		}
 
 		[Fact]
@@ -67,14 +67,14 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		{
 			IEnumerable<TabLayoutRow> rows = null;
 
-			Cell.Layout(layout =>
+			Cell.SetLayout(layout =>
 			{
 				layout.Row(r => { }).Row(r => { });
 
 				rows = layout.Rows;
 			});
 
-			Assert.Equal(rows, Cell.TabLayout);
+			Assert.Equal(rows, Cell.Layout);
 		}
 
 		[Fact]
@@ -133,16 +133,16 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void ThrowForValueLessThenOne()
 		{
-			Assert.Throws<ArgumentException>(() => Cell.SpanRows(-1));
-			Assert.Throws<ArgumentException>(() => Cell.SpanRows(0));
+			Assert.Throws<ArgumentException>(() => Cell.SpanColumns(-1));
+			Assert.Throws<ArgumentException>(() => Cell.SpanColumns(0));
 		}
 
 		[Fact]
 		public void SetRowSpan()
 		{
-			Cell.SpanRows(3);
+			Cell.SpanColumns(3);
 
-			Assert.Equal(3, Cell.RowSpan);
+			Assert.Equal(3, Cell.Span);
 		}
 
 		[Fact]
@@ -163,9 +163,9 @@ namespace Glimpse.Test.Core.Plugin.Assist
 		[Fact]
 		public void SetSuppressAutoPreview()
 		{
-			Cell.DisableLimit();
+			Cell.DisablePreview();
 
-			Assert.Equal(true, Cell.SuppressAutoPreview);
+			Assert.Equal(true, Cell.ForceFull);
 		}
 
 		[Fact]

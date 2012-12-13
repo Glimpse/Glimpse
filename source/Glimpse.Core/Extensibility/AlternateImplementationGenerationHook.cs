@@ -6,13 +6,13 @@ using Castle.DynamicProxy;
 
 namespace Glimpse.Core.Extensibility
 {
-    public class AlternateImplementationGenerationHook<T> : IProxyGenerationHook where T : class
+    public class AlternateImplementationGenerationHook<T> : IProxyGenerationHook
     {
         private IEnumerable<MethodInfo> methodSet;
         
-        private IEnumerable<IAlternateImplementation<T>> methodImplementations;
+        private IEnumerable<IAlternateMethod> methodImplementations;
 
-        public AlternateImplementationGenerationHook(IEnumerable<IAlternateImplementation<T>> methodImplementations, ILogger logger)
+        public AlternateImplementationGenerationHook(IEnumerable<IAlternateMethod> methodImplementations, ILogger logger)
         {
             if (methodImplementations == null)
             {
@@ -28,7 +28,7 @@ namespace Glimpse.Core.Extensibility
             Logger = logger;
         }
 
-        internal IEnumerable<IAlternateImplementation<T>> MethodImplementations
+        internal IEnumerable<IAlternateMethod> MethodImplementations
         {
             get
             {

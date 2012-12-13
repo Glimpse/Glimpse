@@ -1,55 +1,54 @@
 using System.Collections.Generic;
-using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions;
 #if MVC2
 using Glimpse.Mvc2.Backport;
 #endif
+using MvcValueProviderFactory = System.Web.Mvc.ValueProviderFactory;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class ValueProviderFactory : Alternate<System.Web.Mvc.ValueProviderFactory>
+    public class ValueProviderFactory : AlternateType<MvcValueProviderFactory>
     {
+        private IEnumerable<IAlternateMethod> allMethods;
+
         public ValueProviderFactory(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
 
-        public override IEnumerable<IAlternateImplementation<System.Web.Mvc.ValueProviderFactory>> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods
         {
-            yield return new GetValueProvider(new ValueProvider<IValueProvider>(ProxyFactory), new ValueProvider<IUnvalidatedValueProvider>(ProxyFactory));
+            get
+            {
+                return allMethods ?? (allMethods = new List<IAlternateMethod>
+                    {
+                        new GetValueProvider(new ValueProvider<IValueProvider>(ProxyFactory), new ValueProvider<IUnvalidatedValueProvider>(ProxyFactory))
+                    });
+            }
         }
 
-        public class GetValueProvider : IAlternateImplementation<System.Web.Mvc.ValueProviderFactory>
+        public class GetValueProvider : AlternateMethod
         {
-            public GetValueProvider(Alternate<IValueProvider> alternateValueProvider, Alternate<IUnvalidatedValueProvider> alternateUnvalidatedValueProvider)
+            public GetValueProvider(ValueProvider<IValueProvider> alternateValidatedValueProvider, ValueProvider<IUnvalidatedValueProvider> alternateUnvalidatedValueProvider) : base(typeof(System.Web.Mvc.ValueProviderFactory), "GetValueProvider")
             {
-                AlternateValidatedValueProvider = alternateValueProvider;
+                AlternateValidatedValueProvider = alternateValidatedValueProvider;
                 AlternateUnvalidatedValueProvider = alternateUnvalidatedValueProvider;
-                MethodToImplement = typeof(System.Web.Mvc.ValueProviderFactory).GetMethod("GetValueProvider");
             }
 
-            public MethodInfo MethodToImplement { get; private set; }
+            private ValueProvider<IUnvalidatedValueProvider> AlternateUnvalidatedValueProvider { get; set; }
 
-            public Alternate<IValueProvider> AlternateValidatedValueProvider { get; set; }
+            private ValueProvider<IValueProvider> AlternateValidatedValueProvider { get; set; }
 
-            public Alternate<IUnvalidatedValueProvider> AlternateUnvalidatedValueProvider { get; set; }
-
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                TimerResult timerResult;
-                if (!context.TryProceedWithTimer(out timerResult))
+                var original = context.ReturnValue as IValueProvider;
+
+                if (original == null)
                 {
                     return;
                 }
 
-                var originalValueProvider = context.ReturnValue as IValueProvider;
-                if (originalValueProvider == null)
-                {
-                    return;
-                }
-
-                var originalUnvalidatedValueProvider = originalValueProvider as IUnvalidatedValueProvider;
+                var originalUnvalidatedValueProvider = original as IUnvalidatedValueProvider;
                 if (originalUnvalidatedValueProvider != null)
                 {
                     IUnvalidatedValueProvider newUnvalidatedValueProvider;
@@ -61,7 +60,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 }
 
                 IValueProvider newValueProvider;
-                if (AlternateValidatedValueProvider.TryCreate(originalValueProvider, out newValueProvider))
+                if (AlternateValidatedValueProvider.TryCreate(original, out newValueProvider))
                 {
                     context.ReturnValue = newValueProvider;
                 }

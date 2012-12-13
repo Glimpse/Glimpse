@@ -1,14 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
 using Glimpse.Core.Framework;
 using Glimpse.Test.Core.TestDoubles;
 using Glimpse.Test.Core.Tester;
 using Moq;
 using Xunit;
-using System.Collections.Generic;
 
 namespace Glimpse.Test.Core.Framework
 {
@@ -113,7 +114,7 @@ namespace Glimpse.Test.Core.Framework
             var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
             Assert.Equal(1, results.Count);
-            Assert.Contains("Castle_Proxies_ITabProxy", results.First().Key); 
+            Assert.Contains("castle_proxies_itabproxy", results.First().Key); 
         }
 
         [Fact]
@@ -178,10 +179,11 @@ namespace Glimpse.Test.Core.Framework
 
             var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
             Assert.NotNull(results);
-            Assert.Equal(0, results.Count);
+            Assert.Equal(1, results.Count);
 
             Runtime.TabMock.Verify(p => p.GetData(It.IsAny<ITabContext>()), Times.Once());
-            //Make sure the excption type above is logged here.
+            
+            // Make sure the excption type above is logged here.
             Runtime.LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<DummyException>()), Times.AtMost(Runtime.Configuration.Tabs.Count));
         }
 
@@ -773,7 +775,6 @@ namespace Glimpse.Test.Core.Framework
             Runtime.BeginRequest();
 
             Runtime.HttpRequestStoreMock.Verify(fp=>fp.Set(Constants.RequestIdKey, It.IsAny<Guid>()), Times.Never());
-            Runtime.HttpRequestStoreMock.Verify(fp=>fp.Set(Constants.GlobalStopwatchKey, It.IsAny<Stopwatch>()), Times.Never());
         }
 
         [Fact]

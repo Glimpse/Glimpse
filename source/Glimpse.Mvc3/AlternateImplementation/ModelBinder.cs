@@ -1,42 +1,74 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions;
+using Glimpse.Core.Message;
 
 namespace Glimpse.Mvc.AlternateImplementation
 {
-    public class ModelBinder : Alternate<DefaultModelBinder>
+    public class ModelBinder : AlternateType<IModelBinder>
     {
+        private IEnumerable<IAlternateMethod> allMethods;
+
         public ModelBinder(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
 
-        public override IEnumerable<IAlternateImplementation<DefaultModelBinder>> AllMethods()
+        public override IEnumerable<IAlternateMethod> AllMethods
         {
-            yield return new BindModel();
-            yield return new BindProperty();
+            get 
+            { 
+                return allMethods ?? (allMethods = new List<IAlternateMethod>
+                {
+                    new BindModel(),
+                    new BindProperty()
+                }); 
+            }
         }
 
-        public class BindProperty : IAlternateImplementation<DefaultModelBinder>
+        public override bool TryCreate(IModelBinder originalObj, out IModelBinder newObj, IEnumerable<object> mixins, object[] constructorArgs)
         {
-            public BindProperty()
+            if (originalObj == null)
             {
-                MethodToImplement = typeof(DefaultModelBinder).GetMethod("BindProperty", BindingFlags.Instance | BindingFlags.NonPublic);
+                newObj = null;
+                return false;
             }
 
-            public MethodInfo MethodToImplement { get; private set; }
+            var originalType = originalObj.GetType();
 
-            public void NewImplementation(IAlternateImplementationContext context)
+            if (originalType == typeof(DefaultModelBinder) && ProxyFactory.IsExtendClassEligible(originalType))
             {
-                TimerResult timerResult;
-                if (!context.TryProceedWithTimer(out timerResult))
-                {
-                    return;
-                }
+                newObj = ProxyFactory.ExtendClass<DefaultModelBinder>(AllMethods);
+                return true;
+            }
 
-                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments)));
+            if (originalObj is DefaultModelBinder && ProxyFactory.IsWrapClassEligible(originalType))
+            {
+                newObj = ProxyFactory.WrapClass((DefaultModelBinder)originalObj, AllMethods);
+                return true;
+            }
+
+            if (ProxyFactory.IsWrapInterfaceEligible<IModelBinder>(originalType))
+            {
+                newObj = ProxyFactory.WrapInterface(originalObj, AllMethods);
+                return true;
+            }
+
+            newObj = null;
+            return false;
+        }
+
+        public class BindProperty : AlternateMethod
+        {
+            public BindProperty() : base(typeof(DefaultModelBinder), "BindProperty", BindingFlags.Instance | BindingFlags.NonPublic)
+            {
+            }
+
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
+            {
+                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), context.TargetType, context.MethodInvocationTarget));
             }
 
             public class Arguments
@@ -57,31 +89,30 @@ namespace Glimpse.Mvc.AlternateImplementation
 
             public class Message : MessageBase
             {
-                public Message(Arguments arguments)
+                public Message(Arguments arguments, Type modelBinderType, MethodInfo executedMethod) : base(modelBinderType, executedMethod)
                 {
-                    // TODO: Add meaningful properties to message w/ test
+                    Name = arguments.PropertyDescriptor.Name;
+                    Type = arguments.PropertyDescriptor.PropertyType;
+                    ModelBinderType = modelBinderType;
                 }
+
+                public Type ModelBinderType { get; private set; }
+
+                public Type Type { get; private set; }
+
+                public string Name { get; private set; }
             }
         }
 
-        public class BindModel : IAlternateImplementation<DefaultModelBinder>
+        public class BindModel : AlternateMethod
         {
-            public BindModel()
+            public BindModel() : base(typeof(DefaultModelBinder), "BindModel")
             {
-                MethodToImplement = typeof(DefaultModelBinder).GetMethod("BindModel");
             }
 
-            public MethodInfo MethodToImplement { get; private set; }
-
-            public void NewImplementation(IAlternateImplementationContext context)
+            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
             {
-                TimerResult timerResult;
-                if (!context.TryProceedWithTimer(out timerResult))
-                {
-                    return;
-                }
-
-                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments)));
+                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), context.TargetType, context.ReturnValue, context.MethodInvocationTarget));
             }
 
             public class Arguments
@@ -97,12 +128,24 @@ namespace Glimpse.Mvc.AlternateImplementation
                 public ModelBindingContext ModelBindingContext { get; set; }
             }
 
-            public class Message
+            public class Message : MessageBase
             {
-                public Message(Arguments arguments)
+                public Message(Arguments arguments, Type modelBinderType, object rawValue, MethodInfo executedMethod) : base(modelBinderType, executedMethod)
                 {
-                    // TODO: Add meaningful properties to message w/ test
+                    var modelBindingContext = arguments.ModelBindingContext;
+                    ModelName = modelBindingContext.ModelName;
+                    ModelType = modelBindingContext.ModelType;
+                    ModelBinderType = modelBinderType;
+                    RawValue = rawValue;
                 }
+
+                public object RawValue { get; private set; }
+
+                public Type ModelBinderType { get; private set; }
+
+                public Type ModelType { get; private set; }
+
+                public string ModelName { get; private set; }
             }
         }
     }

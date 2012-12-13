@@ -24,13 +24,13 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
     public abstract class ValueProviderGetValueShould<T> where T : class
     {
         [Theory, AutoMock]
-        public void ImplementProperMethod(ValueProvider<T>.GetValue<T> sut)
+        public void ImplementProperMethod(ValueProvider<T>.GetValue sut)
         {
             Assert.Equal("GetValue", sut.MethodToImplement.Name);
         }
 
         [Theory, AutoMock]
-        public void ProceedAndAbortWithRuntimePolicyOff(ValueProvider<T>.GetValue<T> sut, IAlternateImplementationContext context)
+        public void ProceedAndAbortWithRuntimePolicyOff(ValueProvider<T>.GetValue sut, IAlternateImplementationContext context)
         {
             context.Setup(c => c.RuntimePolicyStrategy).Returns(() => RuntimePolicy.Off);
 
@@ -41,14 +41,16 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         }
 
         [Theory, AutoMock]
-        public void ProceedAndPublishMessageWithRuntimePolicyOn(ValueProvider<T>.GetValue<T> sut, IAlternateImplementationContext context, string arg1, bool arg2)
+        public void ProceedAndPublishMessageWithRuntimePolicyOn(ValueProvider<T>.GetValue sut, IAlternateImplementationContext context, string arg1, bool arg2, ValueProviderResult returnValue, Type targetType)
         {
             context.Setup(c => c.Arguments).Returns(new object[] { arg1, arg2 });
+            context.Setup(c => c.ReturnValue).Returns(returnValue);
+            context.Setup(c => c.TargetType).Returns(targetType);
 
             sut.NewImplementation(context);
 
             context.TimerStrategy().Verify(t => t.Time(It.IsAny<Action>()));
-            context.MessageBroker.Verify(mb => mb.Publish(It.IsAny<ValueProvider<T>.GetValue<T>.Message>()));
+            context.MessageBroker.Verify(mb => mb.Publish(It.IsAny<ValueProvider<T>.GetValue.Message>()));
         }
     }
 }

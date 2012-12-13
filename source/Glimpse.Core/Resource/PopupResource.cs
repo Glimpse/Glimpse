@@ -7,11 +7,16 @@ using Glimpse.Core.ResourceResult;
 
 namespace Glimpse.Core.Resource
 {
-    public class PopupResource : IPrivilegedResource
+    public class PopupResource : IPrivilegedResource, IKey
     {
         public string Name
         {
             get { return "glimpse_popup"; }
+        }
+
+        public string Key
+        {
+            get { return Name; }
         }
 
         public IEnumerable<ResourceParameterMetadata> Parameters

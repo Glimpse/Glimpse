@@ -12,24 +12,9 @@ namespace Glimpse.AspNet
 
         internal HttpApplicationStateBase ApplicationState { get; set; }
 
-        public T Get<T>()
-        {
-            return Get<T>(typeof(T).AssemblyQualifiedName);
-        }
-
-        public T Get<T>(string key)
-        {
-            return (T)Get(key);
-        }
-
         public object Get(string key)
         {
             return ApplicationState.Get(key);
-        }
-
-        public void Set<T>(T value)
-        {
-            ApplicationState.Set(typeof(T).AssemblyQualifiedName, value);
         }
 
         public void Set(string key, object value)

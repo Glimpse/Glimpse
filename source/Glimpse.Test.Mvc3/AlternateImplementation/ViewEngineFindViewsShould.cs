@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Glimpse.Core;
@@ -20,22 +21,22 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Theory, AutoMock]
         public void ReturnAllMethodImplementationsWithAllMethods(ViewEngine sut)
         {
-            var allMethods = sut.AllMethods();
+            var allMethods = sut.AllMethods;
 
             Assert.Equal(2, allMethods.Count());
         }
 
         [Theory, AutoMock]
-        public void Construct(Alternate<IView> alternateView)
+        public void Construct(AlternateType<IView> alternateView)
         {
             var sut = new ViewEngine.FindViews(false, alternateView);
 
             Assert.NotNull(sut);
-            Assert.IsAssignableFrom<IAlternateImplementation<IViewEngine>>(sut);
+            Assert.IsAssignableFrom<IAlternateMethod>(sut);
         }
 
         [Theory, AutoMock]
-        public void MethodToImplementIsRight(Alternate<IView> alternateView)
+        public void MethodToImplementIsRight(AlternateType<IView> alternateView)
         {
             var sut1 = new ViewEngine.FindViews(false, alternateView);
             Assert.Equal("FindView", sut1.MethodToImplement.Name);
@@ -63,8 +64,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
 
             sut.NewImplementation(context);
 
-            context.MessageBroker.Verify(b => b.Publish(It.IsAny<ViewEngine.FindViews.Message>()));
-            context.MessageBroker.Verify(b => b.Publish(It.IsAny<ViewEngine.FindViews.EventMessage>()));
+            context.MessageBroker.Verify(b => b.Publish(It.IsAny<ViewEngine.FindViews.Message>())); 
         }
 
         [Theory, AutoMock]
@@ -73,21 +73,20 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             context.Setup(c => c.Arguments).Returns(GetArguments(controllerContext));
             context.Setup(c => c.ReturnValue).Returns(new ViewEngineResult(view, engine));
             context.Setup(c => c.TargetType).Returns(typeof(int));
-            proxyFactory.Setup(p => p.IsProxyable(It.IsAny<object>())).Returns(true);
+            proxyFactory.Setup(p => p.IsWrapInterfaceEligible<IView>(It.IsAny<Type>())).Returns(true);
             proxyFactory.Setup(p => 
-                    p.CreateProxy(
+                    p.WrapInterface(
                         It.IsAny<IView>(), 
-                        It.IsAny<IEnumerable<IAlternateImplementation<IView>>>(), 
-                        It.IsAny<object>()))
+                        It.IsAny<IEnumerable<IAlternateMethod>>(),
+                        It.IsAny<IEnumerable<object>>()))
                     .Returns(view);
 
             sut.NewImplementation(context);
 
-            proxyFactory.Verify(p => p.IsProxyable(It.IsAny<object>()));
+            proxyFactory.Verify(p => p.IsWrapInterfaceEligible<IView>(It.IsAny<Type>()));
             context.Logger.Verify(l => l.Info(It.IsAny<string>(), It.IsAny<object[]>()));
             context.VerifySet(c => c.ReturnValue = It.IsAny<ViewEngineResult>());
-            context.MessageBroker.Verify(b => b.Publish(It.IsAny<ViewEngine.FindViews.Message>()));
-            context.MessageBroker.Verify(b => b.Publish(It.IsAny<ViewEngine.FindViews.EventMessage>()));
+            context.MessageBroker.Verify(b => b.Publish(It.IsAny<ViewEngine.FindViews.Message>())); 
         }
 
         private object[] GetArguments(ControllerContext controllerContext)

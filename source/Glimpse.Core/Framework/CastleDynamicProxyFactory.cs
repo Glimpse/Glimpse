@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Castle.DynamicProxy;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
 
 namespace Glimpse.Core.Framework
 {
@@ -47,51 +48,148 @@ namespace Glimpse.Core.Framework
 
         public Func<IExecutionTimer> TimerStrategy { get; set; }
 
-        public T CreateProxy<T>(T instance, IEnumerable<IAlternateImplementation<T>> methodImplementations) where T : class
+        public bool IsWrapInterfaceEligible<TToWrap>(Type type)
         {
-            return CreateProxy(instance, methodImplementations, null);
+            if (!typeof(TToWrap).IsInterface)
+            {
+                return false;
+            }
+
+            if (!type.IsAssignableFrom(typeof(TToWrap)))
+            {
+                return false;
+            }
+
+            return IsGenerallyEligable(type);
         }
 
-        public T CreateProxy<T>(T instance, IEnumerable<IAlternateImplementation<T>> methodImplementations, object mixin) where T : class
+        public T WrapInterface<T>(T instance, IEnumerable<IAlternateMethod> methodImplementations) where T : class
         {
-            var interceptorArray = (from implementaion in methodImplementations select new AlternateImplementationToCastleInterceptorAdapter<T>(implementaion, Logger, MessageBroker, this, TimerStrategy, RuntimePolicyStrategy)).ToArray();
+            return WrapInterface(instance, methodImplementations, Enumerable.Empty<object>());
+        }
+
+        public T WrapInterface<T>(T instance, IEnumerable<IAlternateMethod> methodImplementations, IEnumerable<object> mixins) where T : class
+        {
+            CheckInput(instance, methodImplementations);
+
+            var options = CreateProxyOptions<T>(methodImplementations, mixins.ToEmptyIfNull());
+            var wrapper = new CastleDynamicProxyWrapper<T>();
+            options.AddMixinInstance(wrapper);
+
+            var interceptorArray = CreateInterceptorArray(methodImplementations);
+
+            var result = ProxyGenerator.CreateInterfaceProxyWithTarget(instance, options, interceptorArray);
+
+            wrapper.ProxyTargetAccessor = result as IProxyTargetAccessor;
+
+            return result;
+        }
+
+        public bool IsWrapClassEligible(Type type)
+        {
+            return IsExtendClassEligible(type);
+        }
+
+        public T WrapClass<T>(T instance, IEnumerable<IAlternateMethod> methodImplementations) where T : class
+        {
+            return WrapClass<T>(instance, methodImplementations, Enumerable.Empty<object>());
+        }
+
+        public T WrapClass<T>(T instance, IEnumerable<IAlternateMethod> methodImplementations, IEnumerable<object> mixins) where T : class
+        {
+            return WrapClass<T>(instance, methodImplementations, mixins, null);
+        }
+
+        public T WrapClass<T>(T instance, IEnumerable<IAlternateMethod> methodImplementations, IEnumerable<object> mixins, IEnumerable<object> constructorArguments) where T : class
+        {
+            CheckInput(instance, methodImplementations);
+
+            var options = CreateProxyOptions<T>(methodImplementations, mixins.ToEmptyIfNull());
+            var wrapper = new CastleDynamicProxyWrapper<T>();
+            options.AddMixinInstance(wrapper);
+
+            var interceptorArray = CreateInterceptorArray(methodImplementations);
+
+            var result = (T)ProxyGenerator.CreateClassProxyWithTarget(typeof(T), instance, options, constructorArguments.ToArrayOrDefault(), interceptorArray);
+
+            wrapper.ProxyTargetAccessor = result as IProxyTargetAccessor;
+
+            return result;
+        }
+
+        public bool IsExtendClassEligible(Type type)
+        {
+            if (!type.IsClass)
+            {
+                return false;
+            }
+
+            return IsGenerallyEligable(type);
+        }
+
+        public T ExtendClass<T>(IEnumerable<IAlternateMethod> methodImplementations) where T : class
+        {
+            return ExtendClass<T>(methodImplementations, Enumerable.Empty<object>());
+        }
+
+        public T ExtendClass<T>(IEnumerable<IAlternateMethod> methodImplementations, IEnumerable<object> mixins) where T : class
+        {
+            return ExtendClass<T>(methodImplementations, mixins, null);
+        }
+
+        public T ExtendClass<T>(IEnumerable<IAlternateMethod> methodImplementations, IEnumerable<object> mixins, IEnumerable<object> constructorArguments) where T : class
+        {
+            CheckInput(methodImplementations); 
+
+            var options = CreateProxyOptions<T>(methodImplementations, mixins.ToEmptyIfNull());
+            var interceptorArray = CreateInterceptorArray(methodImplementations);
+
+            return (T)ProxyGenerator.CreateClassProxy(typeof(T), options, constructorArguments.ToArrayOrDefault(), interceptorArray);
+        }
+
+        private void CheckInput(IEnumerable<IAlternateMethod> methodImplementations)
+        {
+            if (methodImplementations == null)
+            {
+                throw new ArgumentNullException("methodImplementations");
+            }
+        }
+
+        private void CheckInput(object instance, IEnumerable<IAlternateMethod> methodImplementations)
+        {
+            CheckInput(methodImplementations);
+
+            if (instance == null)
+            {
+                throw new ArgumentNullException("instance");
+            }
+        }
+
+        private bool IsGenerallyEligable(Type type)
+        { 
+            return !type.IsSealed && !type.IsAssignableFrom(typeof(IProxyTargetAccessor));
+        }
+
+        private ProxyGenerationOptions CreateProxyOptions<T>(IEnumerable<IAlternateMethod> methodImplementations, IEnumerable<object> mixins)
+        {
             var generationHook = new AlternateImplementationGenerationHook<T>(methodImplementations, Logger);
-            var selector = new AlternateImplementationSelector<T>();
+            var selector = new AlternateImplementationSelector();
             var options = new ProxyGenerationOptions(generationHook) { Selector = selector };
-            if (mixin != null)
+
+            if (mixins != null)
             {
-                options.AddMixinInstance(mixin);
+                foreach (var mixin in mixins)
+                {
+                    options.AddMixinInstance(mixin);
+                }
             }
 
-            if (typeof(T).IsInterface)
-            {
-                var interfaceProxy = ProxyGenerator.CreateInterfaceProxyWithTarget(instance, options, interceptorArray);
-                Logger.Debug("Proxied interface of type '{0}' with '{1}'.", typeof(T), interfaceProxy.GetType());
-                return interfaceProxy;
-            }
-
-            var classProxy = ProxyGenerator.CreateClassProxyWithTarget(instance, options, interceptorArray);
-            Logger.Debug("Proxied class of type '{0}' with '{1}'.", typeof(T), classProxy.GetType());
-            return classProxy;
+            return options;
         }
 
-        public bool IsProxyable(object obj)
+        private IInterceptor[] CreateInterceptorArray(IEnumerable<IAlternateMethod> methodImplementations)
         {
-            var objType = obj.GetType();
-
-            if (objType.IsSealed)
-            {
-                Logger.Debug("Object of type '{0}' is not proxyable because it is sealed.", objType);
-                return false;
-            }
-
-            if (obj is IProxyTargetAccessor)
-            {
-                Logger.Debug("Object of type '{0}' is not proxyable because it is already a proxy object.", objType);
-                return false;
-            }
-
-            return true;
+            return (from implementaion in methodImplementations select new AlternateImplementationToCastleInterceptorAdapter(implementaion, Logger, MessageBroker, this, TimerStrategy, RuntimePolicyStrategy)).ToArray();
         }
     }
 }

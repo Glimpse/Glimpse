@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web;
+﻿using System.Collections.Generic;
 using Glimpse.AspNet.Model;
 using Glimpse.AspNet.Tab;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
 using Moq;
 using Xunit;
 
@@ -48,7 +45,7 @@ namespace Glimpse.Test.AspNet.Tab
         { 
             var model = new List<TraceModel>();
             var dataStoreMock = new Mock<IDataStore>();
-            dataStoreMock.Setup(c => c.Get<IList<TraceModel>>(Trace.TraceMessageStoreKey)).Returns(model);
+            dataStoreMock.Setup(c => c.Get(Trace.TraceMessageStoreKey)).Returns(model);
             var contextMock = new Mock<ITabContext>();
             contextMock.SetupGet(c => c.TabStore).Returns(dataStoreMock.Object);
 

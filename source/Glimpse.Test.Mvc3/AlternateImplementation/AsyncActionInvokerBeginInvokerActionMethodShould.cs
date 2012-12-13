@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using System.Web.Mvc.Async;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.AlternateImplementation;
@@ -17,7 +16,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
         [Fact]
         public void ImplementProperMethod()
         {
-            IAlternateImplementation<AsyncControllerActionInvoker> sut = new AsyncActionInvoker.BeginInvokeActionMethod();
+            IAlternateMethod sut = new AsyncActionInvoker.BeginInvokeActionMethod();
 
             Assert.Equal("BeginInvokeActionMethod", sut.MethodToImplement.Name);
         }

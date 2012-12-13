@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
 using Glimpse.Core.Resource;
 using Glimpse.Core.ResourceResult;
 using Moq;
@@ -30,11 +31,11 @@ namespace Glimpse.Test.Core.Resource
             var resource = new VersionCheckResource();
 
             var contextMock = new Mock<IResourceContext>();
-            contextMock.Setup(c => c.Parameters).Returns(new Dictionary<string, string> {{"stamp", "stamp"},{"callback","callback"}});
+            contextMock.Setup(c => c.Parameters).Returns(new Dictionary<string, string> { { "stamp", "stamp" }, { "callback", "callback" } });
 
             var result = resource.Execute(contextMock.Object);
 
-            Assert.NotNull(result as RedirectResourceResult);
+            Assert.NotNull(result.CastAs<IResourceResult>());
         }
     }
 }

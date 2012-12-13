@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Web;
 using System.Web.Compilation;
@@ -14,13 +13,18 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.AspNet.Tab
 {
-    public class Environment : AspNetTab, IDocumentation
+    public class Environment : AspNetTab, IDocumentation, IKey
     { 
-        private readonly IEnumerable<string> _systemNamspaces = new List<string> { "System", "Microsoft" }; 
+        private readonly IEnumerable<string> systemNamspaces = new List<string> { "System", "Microsoft" }; 
 
         public override string Name
         {
             get { return "Environment"; }
+        }
+
+        public string Key 
+        {
+            get { return "glimpse_environment"; }
         }
 
         public string DocumentationUri
@@ -35,12 +39,14 @@ namespace Glimpse.AspNet.Tab
             var result = httpContext.Application["Glimpse.AspNet.Environment"] as EnvironmentModel;
             if (result == null)
             {
-                result = new EnvironmentModel();
-                result.WebServer = BuildWebServerDetails(httpContext);
-                result.Framework = BuildFrameworkDetails(httpContext);
-                result.Machine = BuildMachineDetails();
-                result.TimeZone = BuildTimeZoneDetails();
-                result.Process = BuildProcessDetails();
+                result = new EnvironmentModel
+                    {
+                        WebServer = BuildWebServerDetails(httpContext),
+                        Framework = BuildFrameworkDetails(httpContext),
+                        Machine = BuildMachineDetails(),
+                        TimeZone = BuildTimeZoneDetails(),
+                        Process = BuildProcessDetails()
+                    };
                 FindAssemblies(result);
 
                 httpContext.Application["Glimpse.AspNet.Environment"] = result;
@@ -131,7 +137,7 @@ namespace Glimpse.AspNet.Tab
 
                 var result = new EnvironmentAssemblyModel { Name = name, Version = version, Culture = culture, FromGac = fromGac, FullTrust = fullTrust };
 
-                var isSystem = _systemNamspaces.Any(systemNamspace => assembly.FullName.StartsWith(systemNamspace)); 
+                var isSystem = systemNamspaces.Any(systemNamspace => assembly.FullName.StartsWith(systemNamspace)); 
                 if (isSystem)
                 {
                     sysAssemblies.Add(result);

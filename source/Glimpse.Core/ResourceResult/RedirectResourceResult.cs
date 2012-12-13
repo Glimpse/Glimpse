@@ -33,7 +33,6 @@ namespace Glimpse.Core.ResourceResult
 
         public void Execute(IResourceResultContext context)
         {
-            // TODO: Add http caching
             var data = Data;
             var uriTemplate = UriTemplate;
             foreach (var parameter in uriTemplate.GetParameterNames())

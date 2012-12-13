@@ -1,15 +1,16 @@
-﻿using System;
-using System.Reflection;
-using Glimpse.Core.Message;
+﻿using System; 
+using System.Reflection; 
 
 namespace Glimpse.Mvc.Message
 {
-    public interface IExecutionMessage : ITimerResultMessage
+    public interface IExecutionMessage
     {
         bool IsChildAction { get; }
 
         Type ExecutedType { get; }
 
-        MethodInfo ExecutedMethod { get; } 
+        MethodInfo ExecutedMethod { get; }
+
+        double Duration { get; } 
     }
 }

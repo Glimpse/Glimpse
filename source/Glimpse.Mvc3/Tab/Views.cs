@@ -2,13 +2,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Plugin.Assist;
+using Glimpse.Core.Extensions;
+using Glimpse.Core.Tab.Assist;
 using Glimpse.Mvc.AlternateImplementation;
 using Glimpse.Mvc.Model;
 
 namespace Glimpse.Mvc.Tab
 {
-    public class Views : AspNetTab, IDocumentation, ITabSetup, ITabLayout
+    public class Views : AspNetTab, IDocumentation, ITabSetup, ITabLayout, IKey
     {
         private static readonly object Layout = TabLayout.Create()
                 .Row(r =>
@@ -29,6 +30,11 @@ namespace Glimpse.Mvc.Tab
             get { return "Views"; }
         }
 
+        public string Key
+        {
+            get { return "glimpse_views"; }
+        }
+
         public string DocumentationUri
         {
             get { return "http://getglimpse.com/Help/Plugin/Views"; }
@@ -41,9 +47,8 @@ namespace Glimpse.Mvc.Tab
 
         public override object GetData(ITabContext context)
         {
-            var tabStore = context.TabStore;
-            var viewEngineFindViewsMessages = tabStore.Get<List<ViewEngine.FindViews.Message>>(typeof(ViewEngine.FindViews.Message).FullName);
-            var viewRenderMessages = tabStore.Get<List<View.Render.Message>>(typeof(View.Render.Message).FullName);
+            var viewEngineFindViewsMessages = context.GetMessages<ViewEngine.FindViews.Message>();
+            var viewRenderMessages = context.GetMessages<View.Render.Message>();
             var result = new List<ViewsModel>();
 
             if (viewEngineFindViewsMessages == null || viewRenderMessages == null)
@@ -61,25 +66,8 @@ namespace Glimpse.Mvc.Tab
 
         public void Setup(ITabSetupContext context)
         {
-            var messageBroker = context.MessageBroker;
-
-            messageBroker.Subscribe<ViewEngine.FindViews.Message>(message => Persist(message, context));
-            messageBroker.Subscribe<View.Render.Message>(message => Persist(message, context));
-        }
-
-        internal static void Persist<T>(T message, ITabSetupContext context)
-        {
-            var tabStore = context.GetTabStore();
-            var key = typeof(T).FullName;
-
-            if (!tabStore.Contains(key))
-            {
-                tabStore.Set(key, new List<T>());
-            }
-
-            var messages = tabStore.Get<IList<T>>(key);
-
-            messages.Add(message);
+            context.PersistMessages<ViewEngine.FindViews.Message>();
+            context.PersistMessages<View.Render.Message>();
         }
     }
 }

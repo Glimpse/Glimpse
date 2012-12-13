@@ -6,7 +6,7 @@
         retrieveScopeId = function() { 
             var payload = data.currentData();
                 
-            return payload.isAjax ? payload.parentId : payload.requestId;
+            return payload.isAjax ? payload.parentRequestId : payload.requestId;
         }, 
         wireListeners = function() {
             var panel = elements.panel('ajax');
@@ -36,8 +36,8 @@
         contextSwitch = function(args) {
             var newPayload = args.newData,
                 oldPayload = args.oldData,
-                newId = newPayload.isAjax ? newPayload.parentId : newPayload.requestId,
-                oldId = oldPayload.isAjax ? oldPayload.parentId : oldPayload.requestId;
+                newId = newPayload.isAjax ? newPayload.parentRequestId : newPayload.requestId,
+                oldId = oldPayload.isAjax ? oldPayload.parentRequestId : oldPayload.requestId;
 
             if (oldId != newId) {
                 elements.panel('ajax').find('tbody').empty();
@@ -117,7 +117,7 @@
                 row.removeClass('selected');
             
                 if (args.type == 'ajax')
-                    data.retrieve(data.currentData().parentId);
+                    data.retrieve(data.currentData().parentRequestId);
             }
         },
         selectStart = function(args) {
@@ -155,6 +155,15 @@
             
             context.contextRequestId = undefined;
         };
+    
+    var send = XMLHttpRequest.prototype.send;
+    XMLHttpRequest.prototype.send = function() { 
+        this.setRequestHeader("X-Glimpse-Parent-RequestID", data.baseData().requestId);
+        
+        pubsub.publish('trigger.ajax.request.send');
+        
+        send.apply(this, arguments);
+    };
     
     pubsub.subscribe('trigger.shell.subscriptions', wireListeners);
     pubsub.subscribe('action.panel.hiding.ajax', deactivate); 
