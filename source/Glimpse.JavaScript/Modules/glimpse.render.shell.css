@@ -387,7 +387,7 @@
 	top: 0px;
 }
 .glimpse-panel td, .glimpse-panel th {
-    padding: 7px;
+    padding: 5px 7px;
 }
 .glimpse-col-side .even, .glimpse-col-side .even > td {
 	background-color: #E1E7F0;
