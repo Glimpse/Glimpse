@@ -35,7 +35,7 @@ namespace Glimpse.AspNet.Tab
                             x.Cell(0).WidthInPercent(45);
                             x.Cell(1).WidthInPercent(55); 
                         }));
-                    r.Cell(5).WidthInPixels(100).Suffix(" ms");
+                    r.Cell(5).WidthInPixels(100).Suffix(" ms").Class("mono").AlignRight();
                 }).Build();
 
         public override string Name

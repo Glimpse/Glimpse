@@ -19,7 +19,7 @@ namespace Glimpse.Mvc.Tab
                     r.Cell(3).WidthInPixels(160);
                     r.Cell(4);
                     r.Cell(5);
-                    r.Cell(6).WidthInPercent(15).Suffix(" ms");
+                    r.Cell(6).WidthInPercent(15).Suffix(" ms").Class("mono").AlignRight();
                 }).Build();
 
         public override string Name
