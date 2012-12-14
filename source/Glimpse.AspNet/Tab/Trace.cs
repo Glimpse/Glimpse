@@ -20,8 +20,8 @@ namespace Glimpse.AspNet.Tab
                 {
                     r.Cell(0).AsKey().WidthInPixels(100);
                     r.Cell(1);
-                    r.Cell(2).WidthInPercent(15).Suffix(" ms");
-                    r.Cell(3).WidthInPercent(15).Suffix(" ms");
+                    r.Cell(2).WidthInPercent(15).Suffix(" ms").AlignRight().Prefix("T+ ").Class("mono");
+                    r.Cell(3).WidthInPercent(15).Suffix(" ms").AlignRight().Class("mono"); 
                 }).Build();
 
         public string Name
