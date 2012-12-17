@@ -25,5 +25,6 @@
         <!--<file src="readme.txt" target="readme.txt" />-->
         <file src="..\**\*.cs" target="src" />
         <file src="..\Resources.resx" target="src" />
+        <file src="..\..\Glimpse.AspNet.Net35\Backport\Net35Backport.cs" target="src" />
     </files>
 </package>
