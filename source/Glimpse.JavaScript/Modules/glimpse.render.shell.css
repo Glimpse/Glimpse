@@ -9,7 +9,7 @@
 .glimpse table {
     min-width: 0;
     border-collapse: collapse;
-	border-spacing: 0;
+    border-spacing: 0;
 }
 .glimpse a, .glimpse a:hover, .glimpse a:visited, .glimpse-link {
     color: #2200C1;
@@ -387,7 +387,7 @@
 	top: 0px;
 }
 .glimpse-panel td, .glimpse-panel th {
-    padding: 7px;
+    padding: 5px 7px;
 }
 .glimpse-col-side .even, .glimpse-col-side .even > td {
 	background-color: #E1E7F0;

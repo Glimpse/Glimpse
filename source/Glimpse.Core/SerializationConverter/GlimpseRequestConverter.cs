@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 
@@ -12,7 +13,7 @@ namespace Glimpse.Core.SerializationConverter
                        {
                            { "clientId", request.ClientId },
                            { "dateTime", request.DateTime },
-                           { "duration", request.Duration.ToString("0.## ms") },
+                           { "duration", Math.Round(request.Duration, 2) },
                            { "parentRequestId", request.ParentRequestId },
                            { "requestId", request.RequestId },
                            { "isAjax", request.RequestIsAjax },
