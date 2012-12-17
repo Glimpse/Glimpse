@@ -43,7 +43,6 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             Assert.True(sut.ModelStateIsValid);
         }
 
-
         [Theory, AutoMock]
         public void SetEmptyModel(View.Render.Arguments arguments, TimerResult timerResult, IViewCorrelationMixin mixin)
         {

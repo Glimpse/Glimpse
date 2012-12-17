@@ -46,7 +46,7 @@ namespace Glimpse.AspNet.SerializationConverter
             var section = new TabSection("Placeholder", "Default", "Actual");
             foreach (var item in routeData)
             {
-                var value = item.DefaultValue ?? "MISSING";
+                var value = item.DefaultValue as string ?? "MISSING";
                 if (value == string.Empty)
                 {
                     value = "\"\"";
