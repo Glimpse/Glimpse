@@ -196,6 +196,30 @@ task push {
 task buildjs {
 }
 
+task int {
+    "Integration Testing"
+    
+    "`nInstalling Glimpse"
+    #cd $base_dir\.NuGet
+    
+    #nuget update -source "c:\glimpse\builds\local" -Id Glimpse.MVC3;Glimpse.AspNet;Glimpse -Verbose "c:\glimpse\source\Glimpse.Test.Integration.Cassini\packages.config"
+    #exec { & .\nuget.exe update -source $build_dir\local -id "Glimpse.MVC3, Glimpse.AspNet, Glimpse" }
+    
+    
+    
+    
+    "`nEnding Cassini"
+    kill -name WebDev.WebServer*
+
+    "`nStarting Cassini"
+    &WebDev.WebServer40.EXE /port:234 /path:"$source_dir\Glimpse.Test.Integration.Cassini"
+    
+    "`nRunning Tests"
+    New-Item $build_dir\local\artifacts -Type directory -Force > $null
+    cd $package_dir\xunit.runners*\tools\
+    exec { & .\xunit.console.clr4.x86 $base_dir\integration.xunit }
+}
+
 #functions ---------------------------------------------------------------------------------------------------------
 
 function Push-Packages($uri)
