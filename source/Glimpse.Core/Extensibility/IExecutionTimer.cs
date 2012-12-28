@@ -10,8 +10,8 @@ namespace Glimpse.Core.Extensibility
         
         TimerResult Time(Action action);
 
-        double Start();
+        TimeSpan Start();
 
-        TimerResult Stop(double offset);
+        TimerResult Stop(TimeSpan offset);
     }
 }

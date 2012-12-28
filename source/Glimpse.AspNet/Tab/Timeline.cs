@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.AspNet.Model;
@@ -56,7 +57,7 @@ namespace Glimpse.AspNet.Tab
 
             if (viewRenderMessages != null)
             {
-                var maxEndPoint = 0.0;
+                var maxEndPoint = TimeSpan.Zero;
                 var events = new List<TimelineEventModel>();
                 foreach (var viewRenderMessage in viewRenderMessages.OrderBy(x => x.Offset))
                 {

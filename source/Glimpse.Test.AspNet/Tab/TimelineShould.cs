@@ -57,7 +57,7 @@ namespace Glimpse.Test.AspNet.Tab
             var result = timeline.GetData(context) as TimelineModel;
 
             Assert.NotNull(result);
-            Assert.Equal(7, result.Duration);
+            Assert.Equal(TimeSpan.FromMilliseconds(7), result.Duration);
             Assert.Equal(3, result.Events.Count);
             Assert.Equal("TestName1", result.Events[0].Title);
             Assert.Equal("TestName3", result.Events[1].Title);
@@ -73,7 +73,7 @@ namespace Glimpse.Test.AspNet.Tab
             var result = timeline.GetData(context) as TimelineModel;
 
             Assert.NotNull(result);
-            Assert.Equal(0, result.Duration);
+            Assert.Equal(TimeSpan.FromMilliseconds(0), result.Duration);
             Assert.Null(result.Events);
         } 
 
@@ -81,9 +81,9 @@ namespace Glimpse.Test.AspNet.Tab
         {
             return new List<ITimelineMessage>
                                {
-                                   new TestTimelineMessage { Duration = 1, EventCategory = "Test1", EventName = "TestName1", EventSubText = "TestSub1", Offset = 1, StartTime = DateTime.Now },
-                                   new TestTimelineMessage { Duration = 4, EventCategory = "Test2", EventName = "TestName2", EventSubText = "TestSub2", Offset = 3, StartTime = DateTime.Now },
-                                   new TestTimelineMessage { Duration = 1, EventCategory = "Test3", EventName = "TestName3", EventSubText = "TestSub3", Offset = 2, StartTime = DateTime.Now }
+                                   new TestTimelineMessage { Duration = TimeSpan.FromMilliseconds(1), EventCategory = "Test1", EventName = "TestName1", EventSubText = "TestSub1", Offset = TimeSpan.FromMilliseconds(1), StartTime = DateTime.Now },
+                                   new TestTimelineMessage { Duration = TimeSpan.FromMilliseconds(4), EventCategory = "Test2", EventName = "TestName2", EventSubText = "TestSub2", Offset = TimeSpan.FromMilliseconds(3), StartTime = DateTime.Now },
+                                   new TestTimelineMessage { Duration = TimeSpan.FromMilliseconds(1), EventCategory = "Test3", EventName = "TestName3", EventSubText = "TestSub3", Offset = TimeSpan.FromMilliseconds(2), StartTime = DateTime.Now }
                                };
         }
 
@@ -101,9 +101,9 @@ namespace Glimpse.Test.AspNet.Tab
 
             public string EventSubText { get; set; }
 
-            public double Offset { get; set; }
+            public TimeSpan Offset { get; set; }
 
-            public double Duration { get; set; }
+            public TimeSpan Duration { get; set; }
 
             public DateTime StartTime { get; set; }
 

@@ -14,7 +14,7 @@ namespace Glimpse.AspNet.SerializationConverter
             var section = new TabSection("Area", "Url", "Data", "Constraints", "DataTokens", "Duration");
             foreach (var item in routes)
             {
-                section.AddRow().Column(item.Area).Column(item.Url).Column(GetRouteData(item.RouteData)).Column(GetConstraintData(item.Constraints)).Column(GetDataTokens(item.DataTokens)).Column(Math.Round(item.Duration, 2)).SelectedIf(item.IsMatch);
+                section.AddRow().Column(item.Area).Column(item.Url).Column(GetRouteData(item.RouteData)).Column(GetConstraintData(item.Constraints)).Column(GetDataTokens(item.DataTokens)).Column(item.Duration).SelectedIf(item.IsMatch);
             }
 
             return section.Build();
