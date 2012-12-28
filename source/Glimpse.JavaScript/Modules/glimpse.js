@@ -2956,7 +2956,8 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
 })(jQueryGlimpse, glimpse.pubsub, glimpse.settings, glimpse.util, glimpse.render.engine);
 // glimpse.hud.js
 (function($, pubsub, data, elements, util) {
-    var loaded = function() {
+    var serverTime = 0,
+        loaded = function() {
             var html = '',
                 tabData = data.currentData().data.glimpse_hud;
 
@@ -2997,6 +2998,8 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                         html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Browser timing" data-maxValue="350">' + timing.browser.duration + '</div><div class="glimpse-hud-postfix">ms</div></div>';
                         html += '</div>'; 
                         html += '</div>';
+                        
+                        serverTime = timingSum;
                     }
 
                     return html;
@@ -3005,29 +3008,19 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                     var result = { },
                         timingOrder = ['navigationStart', 'redirectStart', 'redirectStart', 'redirectEnd', 'fetchStart', 'domainLookupStart', 'domainLookupEnd', 'connectStart', 'secureConnectionStart', 'connectEnd', 'requestStart', 'responseStart', 'responseEnd', 'unloadEventStart', 'unloadEventEnd', 'domLoading', 'domInteractive', 'msFirstPaint', 'domContentLoadedEventStart', 'domContentLoadedEventEnd', 'domContentLoaded', 'domComplete', 'loadEventStart', 'loadEventEnd'],
                         start = timingApi.navigationStart || 0,
-                        network = safeCheck(calculateTimings(start, timingOrder, 'navigationStart', 'connectEnd')),
-                        server = safeCheck(calculateTimings(start, timingOrder, 'requestStart', 'responseEnd')),
-                        browser = safeCheck(calculateTimings(start, timingOrder, 'unloadEventStart', 'loadEventEnd')),
+                        network = calculateTimings(start, 'navigationStart', 'requestStart'),
+                        server = calculateTimings(start, 'requestStart', 'domLoading'),
+                        browser = calculateTimings(start, 'domLoading', timingApi['loadEventEnd'] > 0 ? 'loadEventEnd' : 'domContentLoadedEventEnd'),
                         total = network + server + browser;
-
+                      
                     result.network = { label: 'Network', categoryColor: '#FD4545', duration: network, percentage: (network / total) * 100 };
                     result.server = { label: 'Server', categoryColor: '#823BBE', duration: server, percentage: (server / total) * 100 };
                     result.browser = { label: 'Browser', categoryColor: '#5087CF', duration: browser, percentage: (browser / total) * 100 };
 
                     return result;
                 },
-                calculateTimings = function(start, timingOrder, startIndex, finishIndex) {
-                    var total = 0;
-                    for (var i = timingOrder.indexOf(startIndex); i <= timingOrder.indexOf(finishIndex); i++) {
-                        var value = timingApi[timingOrder[i]];
-                        if (value && value > total) {
-                            total = (value - start);
-                        }
-                    }
-                    return total;
-                },
-                safeCheck = function(value) {
-                    return value > 10000000 ? 24 : value;
+                calculateTimings = function(start, startIndex, finishIndex) { 
+                    return (timingApi[finishIndex] - start) - (timingApi[startIndex] - start);
                 };
 
             return {
@@ -3071,11 +3064,13 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
 
                     if (sqlData) { 
                         html += '<div class="glimpse-hud-section glimpse-hud-section-sql" data-maxValue="1200" data-warnValue="300" data-leftPosition="40">';
-                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" title="Total connection open time" data-maxValue="300">' + sqlData.connectionOpenTime + '</div><div class="glimpse-hud-postfix">ms</div></div>';
+                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value">' + limitValue(parseInt((sqlData.connectionOpenTime / serverTime) * 100)) + '</div><div class="glimpse-hud-postfix">%</div></div>';
                         html += '<div class="glimpse-hud-content">';
                         html += '<div class="glimpse-hud-title">SQL</div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Total query time" data-maxValue="20">' + sqlData.queryExecutionTime + '</div><div class="glimpse-hud-postfix">ms</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Total connection open time" data-maxValue="300">' + sqlData.connectionOpenTime + '</div><div class="glimpse-hud-postfix">ms</div></div>';
                         html += '<div class="glimpse-hud-detail-divider">/</div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Total query time" data-maxValue="20">' + sqlData.queryExecutionTime + '</div><div class="glimpse-hud-postfix">ms</div></div>';
+                        html += '<div class="glimpse-hud-detail-divider"></div>';
                         html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Number of transactions">' + sqlData.transactionCount + '</div></div>';
                         html += '<div class="glimpse-hud-detail-divider">/</div>';
                         html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Number of connections">' + sqlData.connectionCount + '</div></div>';
@@ -3086,7 +3081,10 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                     }
 
                     return html;
-                };
+                },
+                limitValue = function(value) {
+                    return value > 100 ? 23 : value;
+                }; 
 
             return {
                 render: render
