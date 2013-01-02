@@ -5,7 +5,7 @@ namespace Glimpse.Core.Framework
 {
     /// <summary>
     /// Defines methods to implement a read only store that Glimpse can 
-    /// use to persist requests.
+    /// use to retrieve requests.
     /// </summary>
     public interface IReadOnlyPersistenceStore
     {
