@@ -88,7 +88,8 @@ namespace Glimpse.Core.Framework
         /// <remarks>
         /// Used by the resource infrastructure to output binary content (i.e. embedded content,
         /// images, etc).
-        /// <seealso cref="IResourceResult"/>
+        /// <seealso cref="Glimpse.Core.Extensibility.IResourceResult"/>
+        /// <seealso cref="Glimpse.Core.Extensibility.IResource"/>
         /// </remarks>
         void WriteHttpResponse(byte[] content);
 
