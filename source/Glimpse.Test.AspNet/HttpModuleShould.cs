@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Web;
+using Glimpse.AspNet;
 using Glimpse.Test.AspNet.Tester;
 using Xunit;
 using Moq;
@@ -40,6 +42,25 @@ namespace Glimpse.Test.AspNet
         public void DisposeNothing()
         {
             HttpModule.Dispose();
+        }
+
+        [Fact]
+        public void LogOnAppDomainUnload()
+        {
+            var currentDomain = AppDomain.CurrentDomain;
+            currentDomain.SetData(Constants.LoggerKey, HttpModule.LoggerMock.Object);
+
+            HttpModule.UnloadDomain(currentDomain, null);
+
+            HttpModule.LoggerMock.Verify(l => l.Fatal(It.IsAny<string>(), It.IsAny<object[]>()));
+        }
+
+        [Fact(Skip = "Need to implement an IHttpApplicationWrapper interface and passthrough class to allow for testability.")]
+        public void SetAppDomainLoggerOnInit()
+        {
+            HttpModule.Init(HttpModule.AppMock.Object);
+
+            Assert.NotNull(AppDomain.CurrentDomain.GetData(Constants.LoggerKey));
         }
     }
 }

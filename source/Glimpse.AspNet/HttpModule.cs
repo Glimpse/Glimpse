@@ -1,14 +1,19 @@
-﻿using System.Web;
-using System.Web.SessionState;
+﻿using System;
+using System.Web;
+using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 
 namespace Glimpse.AspNet
 {
     public class HttpModule : IHttpModule  
     {
+        private readonly Factory factory = new Factory(new AspNetServiceLocator());
+
         public void Init(HttpApplication httpApplication)
         {
             var runtime = GetRuntime(new HttpApplicationStateWrapper(httpApplication.Application));
+
+            AppDomain.CurrentDomain.SetData(Constants.LoggerKey, factory.InstantiateLogger());
 
             if (runtime.IsInitialized || runtime.Initialize())
             {
@@ -16,6 +21,18 @@ namespace Glimpse.AspNet
                 httpApplication.PostAcquireRequestState += (context, e) => BeginSessionAccess(WithTestable(context));
                 httpApplication.PostRequestHandlerExecute += (context, e) => EndSessionAccess(WithTestable(context));
                 httpApplication.PostReleaseRequestState += (context, e) => EndRequest(WithTestable(context));
+                AppDomain.CurrentDomain.DomainUnload += UnloadDomain;
+            }
+        }
+
+        internal void UnloadDomain(object sender, EventArgs e)
+        {
+            var appDomain = sender as AppDomain;
+            var logger = appDomain.GetData(Constants.LoggerKey) as ILogger;
+
+            if (logger != null)
+            {
+                logger.Fatal("App domain with Id: '{0}' and BaseDirectory: '{1}' has been unloaded. Any in memory data stores have been lost.", appDomain.Id, appDomain.BaseDirectory);
             }
         }
 
@@ -30,8 +47,6 @@ namespace Glimpse.AspNet
 
             if (runtime == null)
             {
-                var factory = new Factory(new AspNetServiceLocator());
-
                 runtime = factory.InstantiateRuntime();
 
                 applicationState.Add(Constants.RuntimeKey, runtime);
