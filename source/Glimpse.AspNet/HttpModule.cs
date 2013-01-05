@@ -11,7 +11,12 @@ namespace Glimpse.AspNet
 
         public void Init(HttpApplication httpApplication)
         {
-            var runtime = GetRuntime(new HttpApplicationStateWrapper(httpApplication.Application));
+            Init(WithTestable(httpApplication));
+        }
+
+        internal void Init(HttpApplicationBase httpApplication)
+        {
+            var runtime = GetRuntime(httpApplication.Application);
 
             AppDomain.CurrentDomain.SetData(Constants.LoggerKey, factory.InstantiateLogger());
 
@@ -75,6 +80,11 @@ namespace Glimpse.AspNet
             var httpApplication = sender as HttpApplication;
 
             return new HttpContextWrapper(httpApplication.Context);
+        }
+
+        private static HttpApplicationBase WithTestable(HttpApplication httpApplication)
+        {
+            return new HttpApplicationWrapper(httpApplication);
         }
 
         private void BeginSessionAccess(HttpContextBase httpContext)

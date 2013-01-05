@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Web;
 using Glimpse.AspNet;
 using Glimpse.Test.AspNet.Tester;
 using Xunit;
@@ -55,7 +54,7 @@ namespace Glimpse.Test.AspNet
             HttpModule.LoggerMock.Verify(l => l.Fatal(It.IsAny<string>(), It.IsAny<object[]>()));
         }
 
-        [Fact(Skip = "Need to implement an IHttpApplicationWrapper interface and passthrough class to allow for testability.")]
+        [Fact]
         public void SetAppDomainLoggerOnInit()
         {
             HttpModule.Init(HttpModule.AppMock.Object);

@@ -8,7 +8,7 @@ namespace Glimpse.Test.AspNet.Tester
 {
     public class HttpModuleTester : HttpModule
     {
-        public Mock<HttpApplication> AppMock { get; set; }
+        public Mock<HttpApplicationBase> AppMock { get; set; }
         public Mock<HttpApplicationStateBase> AppStateMock { get; set; }
         public Mock<IGlimpseRuntime> RuntimeMock { get; set; }
         public Mock<HttpContextBase> ContextMock { get; set; }
@@ -21,7 +21,8 @@ namespace Glimpse.Test.AspNet.Tester
             AppStateMock = new Mock<HttpApplicationStateBase>();
             AppStateMock.Setup(s => s[Constants.RuntimeKey]).Returns(RuntimeMock.Object);
 
-            AppMock = new Mock<HttpApplication>();
+            AppMock = new Mock<HttpApplicationBase>();
+            AppMock.Setup(a => a.Application).Returns(AppStateMock.Object);
 
             ContextMock = new Mock<HttpContextBase>();
             ContextMock.Setup(c => c.Application).Returns(AppStateMock.Object);
