@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Web;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
@@ -34,10 +35,23 @@ namespace Glimpse.AspNet
         {
             var appDomain = sender as AppDomain;
             var logger = appDomain.GetData(Constants.LoggerKey) as ILogger;
+            string shutDownMessage = "Reason for shutdown: ";
+            var httpRuntimeType = typeof(HttpRuntime);
+
+            // Get shutdown message from HttpRuntime via ScottGu: http://weblogs.asp.net/scottgu/archive/2005/12/14/433194.aspx
+            var httpRuntime = httpRuntimeType.InvokeMember("_theRuntime", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.GetField, null, null, null) as HttpRuntime;
+            if (httpRuntime != null)
+            {
+                shutDownMessage += httpRuntimeType.InvokeMember("_shutDownMessage", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField, null, httpRuntime, null) as string;
+            }
+            else
+            {
+                shutDownMessage += "unknown.";
+            }
 
             if (logger != null)
             {
-                logger.Fatal("App domain with Id: '{0}' and BaseDirectory: '{1}' has been unloaded. Any in memory data stores have been lost.", appDomain.Id, appDomain.BaseDirectory);
+                logger.Fatal("App domain with Id: '{0}' and BaseDirectory: '{1}' has been unloaded. Any in memory data stores have been lost.{2}", appDomain.Id, appDomain.BaseDirectory, shutDownMessage);
             }
         }
 
