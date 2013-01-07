@@ -196,7 +196,8 @@ namespace Glimpse.Core.Framework
             {
                 throw new ArgumentNullException("parameters");
             }
-            
+
+            string message;
             var logger = Configuration.Logger;
             var context = new ResourceResultContext(logger, Configuration.FrameworkProvider, Configuration.Serializer, Configuration.HtmlEncoder);
             IResourceResult result;
@@ -204,7 +205,7 @@ namespace Glimpse.Core.Framework
             var policy = GetRuntimePolicy(RuntimeEvent.ExecuteResource);
             if (policy == RuntimePolicy.Off && !resourceName.Equals(Configuration.DefaultResource.Name))
             {
-                var message = string.Format(Resources.ExecuteResourceInsufficientPolicy, resourceName);
+                message = string.Format(Resources.ExecuteResourceInsufficientPolicy, resourceName);
                 logger.Info(message);
                 new StatusCodeResourceResult(403, message).Execute(context);
                 return;
@@ -241,12 +242,14 @@ namespace Glimpse.Core.Framework
 
                     break;
                 case 0: // 404 - File Not Found
-                    logger.Warn(Resources.ExecuteResourceMissingError, resourceName);
-                    result = new StatusCodeResourceResult(404);
+                    message = string.Format(Resources.ExecuteResourceMissingError, resourceName);
+                    logger.Warn(message);
+                    result = new StatusCodeResourceResult(404, message);
                     break;
                 default: // 500 - Server Error
-                    logger.Warn(Resources.ExecuteResourceDuplicateError, resourceName);
-                    result = new StatusCodeResourceResult(500);
+                    message = string.Format(Resources.ExecuteResourceDuplicateError, resourceName);
+                    logger.Warn(message);
+                    result = new StatusCodeResourceResult(500, message);
                     break;
             }
 

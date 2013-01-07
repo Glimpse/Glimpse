@@ -42,16 +42,17 @@ namespace Glimpse.Core.Resource
             }
 
             Guid requestId;
+            var request = context.Parameters.GetValueOrDefault(ResourceParameter.RequestId.Name);
 
 #if NET35
-            if (!Glimpse.Core.Backport.Net35Backport.TryParseGuid(context.Parameters[ResourceParameter.RequestId.Name], out requestId))
+            if (!Glimpse.Core.Backport.Net35Backport.TryParseGuid(request, out requestId))
             {
-                return new StatusCodeResourceResult(404);
+                return new StatusCodeResourceResult(404, string.Format("Could not parse RequestId of '{0}' as GUID.", request));
             }
 #else
-            if (!Guid.TryParse(context.Parameters.GetValueOrDefault(ResourceParameter.RequestId.Name), out requestId))
+            if (!Guid.TryParse(request, out requestId))
             {
-                return new StatusCodeResourceResult(404);
+                return new StatusCodeResourceResult(404, string.Format("Could not parse RequestId of '{0}' as GUID.", request));
             }
 #endif
 
@@ -59,7 +60,7 @@ namespace Glimpse.Core.Resource
 
             if (string.IsNullOrEmpty(version))
             {
-                return new StatusCodeResourceResult(404);
+                return new StatusCodeResourceResult(404, "Could not get version.");
             }
 
             string scriptTags = configuration.GenerateScriptTags(requestId, version);

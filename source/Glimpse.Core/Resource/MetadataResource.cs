@@ -32,7 +32,7 @@ namespace Glimpse.Core.Resource
 
             if (metadata == null)
             {
-                return new StatusCodeResourceResult(404);
+                return new StatusCodeResourceResult(404, "Metadata not found.");
             }
 
             return new CacheControlDecorator(CacheDuration, CacheSetting.Public, new JsonResourceResult(metadata, context.Parameters.GetValueOrDefault(ResourceParameter.Callback.Name)));

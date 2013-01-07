@@ -11,8 +11,10 @@ namespace Glimpse.Test.Core
         [Fact]
         public void ConstructWithStatusCode()
         {
-            var result = new StatusCodeResourceResult(101);
+            var expectedMessage = "any message";
+            var result = new StatusCodeResourceResult(101, expectedMessage);
             Assert.Equal(101, result.StatusCode);
+            Assert.Equal(expectedMessage, result.Message);
         }
 
         [Fact]
@@ -22,7 +24,7 @@ namespace Glimpse.Test.Core
             var contextMock = new Mock<IResourceResultContext>();
             contextMock.Setup(c => c.FrameworkProvider).Returns(frameworkProviderMock.Object);
 
-            var result = new StatusCodeResourceResult(101);
+            var result = new StatusCodeResourceResult(101, "Message");
 
             result.Execute(contextMock.Object);
 
