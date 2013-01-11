@@ -199,25 +199,59 @@ task buildjs {
 task int {
     "Integration Testing"
     
-    "`nInstalling Glimpse"
+    "`nGlimpse must be manually installed while waiting for http://nuget.codeplex.com/workitem/2730"
     #cd $base_dir\.NuGet
     
-    #nuget update -source "c:\glimpse\builds\local" -Id Glimpse.MVC3;Glimpse.AspNet;Glimpse -Verbose "c:\glimpse\source\Glimpse.Test.Integration.Cassini\packages.config"
-    #exec { & .\nuget.exe update -source $build_dir\local -id "Glimpse.MVC3, Glimpse.AspNet, Glimpse" }
-    
-    
-    
+    #nuget update -source "c:\glimpse\builds\local" -Id Glimpse.MVC3;Glimpse.AspNet;Glimpse -Verbose "c:\glimpse\source\Glimpse.Test.Integration.Site\packages.config"
+    #exec { & .\nuget.exe update -source $build_dir\local -id "Glimpse.MVC3;Glimpse.AspNet;Glimpse" -Verbose "$source_dir\Glimpse.Test.Integration.Site\packages.config" }
     
     "`nEnding Cassini"
     kill -name WebDev.WebServer*
 
+    "`nEnding IIS Express"
+    kill -name iisexpress*
+    
+    $cassiniPath = "C:\Program Files (x86)\Common Files\microsoft shared\DevServer\11.0\WebDev.WebServer40.EXE"
+    $exists = Test-Path($cassiniPath)
+    if ($exists -eq $false)
+    {
+        $cassiniPath = "C:\Program Files\Common Files\microsoft shared\DevServer\11.0\WebDev.WebServer40.EXE"
+        $exists = Test-Path($cassiniPath)
+        if ($exists -eq $false)
+        {
+            throw "Add directory containing 'WebDev.WebServer40.EXE' to PATH environment variable."
+        }
+    }
+    
+    $iisExpressPath = "C:\Program Files (x86)\IIS Express\iisexpress.exe"
+    $exists = Test-Path($iisExpressPath)
+    if ($exists -eq $false)
+    {
+        $iisExpressPath = "C:\Program Files (x86)\IIS Express\iisexpress.exe"
+        $exists = Test-Path($iisExpressPath)
+        if ($exists -eq $false)
+        {
+            throw "Add directory containing 'iisexpress.exe' to PATH environment variable."
+        }
+    }
+
     "`nStarting Cassini"
-    &WebDev.WebServer40.EXE /port:234 /path:"$source_dir\Glimpse.Test.Integration.Cassini"
+    &$cassiniPath /port:234 /path:"$source_dir\Glimpse.Test.Integration.Site"
+    
+    "`nStarting IIS Express"
+    $iisExpressArgs = "/port:1153 /path:$source_dir\Glimpse.Test.Integration.Site /systray:true"
+    start-process $iisExpressPath $iisExpressArgs 
     
     "`nRunning Tests"
     New-Item $build_dir\local\artifacts -Type directory -Force > $null
     cd $package_dir\xunit.runners*\tools\
     exec { & .\xunit.console.clr4.x86 $base_dir\integration.xunit }
+    
+    "`nEnding Cassini"
+    kill -name WebDev.WebServer*
+
+    "`nEnding IIS Express"
+    kill -name iisexpress*
 }
 
 #functions ---------------------------------------------------------------------------------------------------------
