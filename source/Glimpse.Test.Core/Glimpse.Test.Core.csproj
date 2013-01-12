@@ -152,6 +152,7 @@
     <Compile Include="Resource\MetadataShould.cs" />
     <Compile Include="Resource\PopupResourceShould.cs" />
     <Compile Include="Resource\VersionCheckResourceShould.cs" />
+    <Compile Include="SerializationConverter\TimeStampConverterShould.cs" />
     <Compile Include="SerializationConverter\DateTimeConverterShould.cs" />
     <Compile Include="SerializationConverter\GlimpseMetadataConverterShould.cs" />
     <Compile Include="SerializationConverter\GlimpseRequestConverterShould.cs" />

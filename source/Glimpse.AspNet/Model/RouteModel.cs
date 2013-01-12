@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Web.Routing;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Glimpse.AspNet.Model
 {
@@ -17,6 +17,6 @@ namespace Glimpse.AspNet.Model
 
         public IDictionary<string, object> DataTokens { get; set; } 
 
-        public double Duration { get; set; }
+        public TimeSpan Duration { get; set; }
     }
 }

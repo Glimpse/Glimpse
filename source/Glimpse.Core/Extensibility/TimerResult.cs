@@ -4,9 +4,9 @@ namespace Glimpse.Core.Extensibility
 {
     public class TimerResult
     {
-        public double Offset { get; set; }
-        
-        public double Duration { get; set; }
+        public TimeSpan Offset { get; set; }
+
+        public TimeSpan Duration { get; set; }
 
         public DateTime StartTime { get; set; }
     }

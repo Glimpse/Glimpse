@@ -35,16 +35,17 @@ namespace Glimpse.Core.Resource
             }
 
             Guid parentRequestId;
+            var parentRequestKey = context.Parameters.GetValueOrDefault(ParentRequestKey);
 
 #if NET35
-            if (!Glimpse.Core.Backport.Net35Backport.TryParseGuid(context.Parameters[ParentRequestKey], out parentRequestId))
+            if (!Glimpse.Core.Backport.Net35Backport.TryParseGuid(parentRequestKey, out parentRequestId))
             {
-                return new StatusCodeResourceResult(404);
+                return new StatusCodeResourceResult(404, string.Format("Could not parse ParentRequestKey '{0}' as GUID.", parentRequestKey));
             }
 #else
-            if (!Guid.TryParse(context.Parameters.GetValueOrDefault(ParentRequestKey), out parentRequestId))
+            if (!Guid.TryParse(parentRequestKey, out parentRequestId))
             {
-                return new StatusCodeResourceResult(404);
+                return new StatusCodeResourceResult(404, string.Format("Could not parse ParentRequestKey '{0}' as GUID.", parentRequestKey));
             }
 #endif
 
@@ -52,7 +53,7 @@ namespace Glimpse.Core.Resource
 
             if (data == null)
             {
-                return new StatusCodeResourceResult(404);
+                return new StatusCodeResourceResult(404, string.Format("Could not find requests with ParentRequestKey '{0}'.", parentRequestKey));
             }
 
             return new JsonResourceResult(data.Where(r => r.RequestIsAjax), context.Parameters.GetValueOrDefault(ResourceParameter.Callback.Name));

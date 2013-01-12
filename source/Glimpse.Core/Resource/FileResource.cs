@@ -45,7 +45,7 @@ namespace Glimpse.Core.Resource
                 }
             }
 
-            return new StatusCodeResourceResult(404);
+            return new StatusCodeResourceResult(404, string.Format("Could not locate file with ResourceName '{0}'.", ResourceName));
         } 
     }
 }

@@ -12,12 +12,12 @@ namespace Glimpse.Core.Message
             Result = timerResult;
         }
 
-        public double Offset
+        public TimeSpan Offset
         {
             get { return Result.Offset; }
         }
 
-        public double Duration
+        public TimeSpan Duration
         {
             get { return Result.Duration; }
         }

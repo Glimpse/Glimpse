@@ -83,7 +83,7 @@ namespace Glimpse.Mvc.Tab
             var model = GetModel(context.GetTabStore());
 
             // Last message in is the first/primary view
-            model.ViewRenderTime = message.Duration;
+            model.ViewRenderTime = Math.Round(message.Duration.TotalMilliseconds, 2);
         }
 
         private void UpdateAction(ActionInvoker.InvokeActionMethod.Message message, ITabSetupContext context)
@@ -97,7 +97,7 @@ namespace Glimpse.Mvc.Tab
             else
             {
                 model.ActionName = message.ActionName;
-                model.ActionExecutionTime = message.Duration;
+                model.ActionExecutionTime = Math.Round(message.Duration.TotalMilliseconds, 2);
                 model.ControllerName = message.ControllerName;
             }
         }

@@ -19,7 +19,7 @@ namespace Glimpse.Test.Core.Framework
             Assert.NotNull(result);
             var failureMessage = result.Duration.ToString() + " not greater than " + waitTime.ToString();
             Console.Write(failureMessage);
-            Assert.True(result.Duration >= waitTime-1, failureMessage); //-1 to handle issues with rounding??
+            Assert.True(new DateTime().AddTicks(result.Duration.Ticks) >= new DateTime().AddTicks(result.Duration.Ticks).AddMilliseconds(waitTime - 1), failureMessage); //-1 to handle issues with rounding??
         }
 
         [Fact(Skip = "This test is flaky. Need to find a better way to do this...")]
@@ -35,7 +35,7 @@ namespace Glimpse.Test.Core.Framework
                                         });
 
             Assert.NotNull(result);
-            Assert.True(result.Duration >= waitTime);
+            Assert.True(new DateTime().AddTicks(result.Duration.Ticks) >= new DateTime().AddTicks(result.Duration.Ticks).AddMilliseconds(waitTime));
             Assert.Equal("STRING", result.Result);
         }
 

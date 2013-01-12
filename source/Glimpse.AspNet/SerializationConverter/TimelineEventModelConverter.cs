@@ -8,7 +8,7 @@ namespace Glimpse.AspNet.SerializationConverter
     {
         public override object Convert(TimelineEventModel obj)
         {
-            return new { obj.Title, obj.Category, obj.SubText, obj.StartTime, obj.Details, Duration = Math.Round(obj.Duration, 2), StartPoint = Math.Round(obj.StartPoint, 2) };
+            return new { obj.Title, obj.Category, obj.SubText, obj.StartTime, obj.Details, obj.Duration, obj.StartPoint };
         } 
     }
 }
