@@ -38,16 +38,17 @@ namespace Glimpse.Core.Resource
             }
 
             Guid requestId;
+            var request = context.Parameters.GetValueOrDefault(ResourceParameter.RequestId.Name);
 
 #if NET35
-            if (!Glimpse.Core.Backport.Net35Backport.TryParseGuid(context.Parameters.GetValueOrDefault(ResourceParameter.RequestId.Name), out requestId))
+            if (!Glimpse.Core.Backport.Net35Backport.TryParseGuid(request, out requestId))
             {
-                return new StatusCodeResourceResult(404);
+                return new StatusCodeResourceResult(404, string.Format("Could not parse RequestId '{0} as GUID.'", request));
             }
 #else
-            if (!Guid.TryParse(context.Parameters.GetValueOrDefault(ResourceParameter.RequestId.Name), out requestId))
+            if (!Guid.TryParse(request, out requestId))
             {
-                return new StatusCodeResourceResult(404);
+                return new StatusCodeResourceResult(404, string.Format("Could not parse RequestId '{0} as GUID.'", request));
             }
 #endif
 
@@ -55,7 +56,7 @@ namespace Glimpse.Core.Resource
 
             if (data == null)
             {
-                return new StatusCodeResourceResult(404);
+                return new StatusCodeResourceResult(404, string.Format("No data found for RequestId '{0}'.", request));
             }
 
             return new CacheControlDecorator(CacheDuration, CacheSetting.Private, new JsonResourceResult(data, context.Parameters.GetValueOrDefault(ResourceParameter.Callback.Name)));

@@ -11,7 +11,7 @@ namespace Glimpse.Mvc.Model
             IsChildAction = message.IsChildAction;
             ExecutedType = message.ExecutedType;
             ExecutedMethod = message.ExecutedMethod;
-            MillisecondsDuration = message.Duration;
+            Duration = message.Duration;
 
             var filter = message as IFilterMessage;
             if (filter != null)
@@ -26,7 +26,7 @@ namespace Glimpse.Mvc.Model
             }
         }
 
-        public double MillisecondsDuration { get; set; }
+        public TimeSpan Duration { get; set; }
 
         public MethodInfo ExecutedMethod { get; set; }
 

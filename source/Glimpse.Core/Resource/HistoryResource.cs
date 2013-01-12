@@ -42,7 +42,7 @@ namespace Glimpse.Core.Resource
 
             if (data == null)
             {
-                return new StatusCodeResourceResult(404);
+                return new StatusCodeResourceResult(404, string.Format("No data found in top {0}.", top));
             }
 
             var requests = data.GroupBy(d => d.ClientId).ToDictionary(group => group.Key, group => group.Select(g => new GlimpseRequestHeaders(g)));

@@ -4,9 +4,9 @@ namespace Glimpse.Core.Message
 {
     public interface ITimeMessage : IMessage
     {
-        double Offset { get; }
+        TimeSpan Offset { get; }
 
-        double Duration { get; }
+        TimeSpan Duration { get; }
 
         DateTime StartTime { get; }
     }

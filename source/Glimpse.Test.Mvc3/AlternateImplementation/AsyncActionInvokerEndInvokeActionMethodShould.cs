@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
@@ -38,7 +39,7 @@ namespace Glimpse.Test.Mvc3.AlternateImplementation
             context.Setup(c => c.Proxy).Returns(
                 new ActionInvokerStateMixin
                 {
-                    Offset = 10, 
+                    Offset = TimeSpan.Zero, 
                     Arguments = new ActionInvoker.InvokeActionMethod.Arguments(new ControllerContext(), actionDescriptor, new Dictionary<string, object>())
                 });
 

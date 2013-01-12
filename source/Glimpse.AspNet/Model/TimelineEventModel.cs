@@ -16,9 +16,9 @@ namespace Glimpse.AspNet.Model
 
         public DateTime StartTime { get; set; }
 
-        public double StartPoint { get; set; } 
+        public TimeSpan StartPoint { get; set; }
 
-        public double Duration { get; set; }
+        public TimeSpan Duration { get; set; }
 
         public string Title { get; set; }
 
@@ -26,7 +26,7 @@ namespace Glimpse.AspNet.Model
 
         public IDictionary<string, object> Details { get; set; }
 
-        public double EndPoint
+        public TimeSpan EndPoint
         {
             get { return StartPoint + Duration; }
         } 

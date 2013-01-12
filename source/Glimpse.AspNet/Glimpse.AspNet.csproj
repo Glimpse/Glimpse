@@ -52,7 +52,9 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Extensibility\AspNetTab.cs" />
     <Compile Include="Extensions\TabContextExtensions.cs" />
+    <Compile Include="HttpApplicationBase.cs" />
     <Compile Include="HttpApplicationStateBaseDataStoreAdapter.cs" />
+    <Compile Include="HttpApplicationWrapper.cs" />
     <Compile Include="HttpHandler.cs" />
     <Compile Include="HttpHandlerEndpointConfiguration.cs" />
     <Compile Include="HttpModule.cs" />

@@ -11,6 +11,6 @@ namespace Glimpse.Mvc.Message
 
         MethodInfo ExecutedMethod { get; }
 
-        double Duration { get; } 
+        TimeSpan Duration { get; } 
     }
 }

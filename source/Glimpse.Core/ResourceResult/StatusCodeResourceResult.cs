@@ -4,10 +4,6 @@ namespace Glimpse.Core.ResourceResult
 {
     public class StatusCodeResourceResult : IResourceResult
     {
-        public StatusCodeResourceResult(int statusCode) : this(statusCode, string.Empty)
-        {
-        }
-
         public StatusCodeResourceResult(int statusCode, string message)
         {
             StatusCode = statusCode;
