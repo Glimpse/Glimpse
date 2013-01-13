@@ -183,13 +183,14 @@
             context.contextRequestId = undefined; 
         }, 
         selectSession = function(clientName) {
-            var panel = elements.panel('history'),
-                item = panel.find('a[data-clientName="' + clientName + '"]'), 
+            var panel = elements.panel('history')
+                masterPanel = panel.find('.glimpse-col-side'),
+                item = masterPanel.find('a[data-clientName="' + clientName + '"]'), 
                 clientData = context.currentData[clientName];
             
             settings.local('historyClient', clientName),
 
-            panel.find('.selected').removeClass('selected'); 
+            masterPanel.find('.selected').removeClass('selected'); 
             item.parents('tr:first').addClass('selected');
             
             layoutBuildContentDetail(clientName, clientData);
