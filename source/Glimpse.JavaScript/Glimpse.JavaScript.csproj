@@ -115,7 +115,6 @@
     <Content Include="google-code-prettify.js" />
     <Content Include="jquery-1.8.0.min.js" />
     <Content Include="jquery.jsonp-2.4.0.js" />
-    <Content Include="Modules\glimpse.hud.js" />
     <Content Include="Modules\glimpse.render.engine.heading.js" />
     <Content Include="Modules\glimpse.shell.info.js" />
     <Content Include="Modules\glimpse.shell.path.js" />
