@@ -103,25 +103,32 @@ namespace Glimpse.AspNet.Tab
                 resultItem.Raw = connectionString.ConnectionString;
                 resultItem.ProviderName = connectionString.ProviderName;
 
-                var connectionFactory = DbProviderFactories.GetFactory(connectionString.ProviderName);
-                var connectionStringBuilder = connectionFactory.CreateConnectionStringBuilder();
-                if (connectionStringBuilder != null)
+                try
                 {
-                    connectionStringBuilder.ConnectionString = connectionString.ConnectionString;
-
-                    var connectionDetails = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
-                    var keys = connectionStringBuilder.Keys;
-                    if (keys != null)
+                    var connectionFactory = DbProviderFactories.GetFactory(connectionString.ProviderName);
+                    var connectionStringBuilder = connectionFactory.CreateConnectionStringBuilder();
+                    if (connectionStringBuilder != null)
                     {
-                        foreach (string key in keys)
+                        connectionStringBuilder.ConnectionString = connectionString.ConnectionString;
+
+                        var connectionDetails = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
+                        var keys = connectionStringBuilder.Keys;
+                        if (keys != null)
                         {
-                            connectionDetails.Add(key, connectionStringBuilder[key]);
+                            foreach (string key in keys)
+                            {
+                                connectionDetails.Add(key, connectionStringBuilder[key]);
+                            }
+
+                            resultItem.Details = connectionDetails;
+
+                            AnnomalizeConnectionStringPassword(connectionDetails, resultItem);
                         }
-
-                        resultItem.Details = connectionDetails;
-
-                        AnnomalizeConnectionStringPassword(connectionDetails, resultItem);
                     }
+                }
+                catch (Exception e)
+                {
+                    resultItem.Details = new Dictionary<string, object> { { "Error", e.Message } };
                 }
 
                 result.Add(resultItem);
