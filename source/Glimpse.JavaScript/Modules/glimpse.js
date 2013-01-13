@@ -2109,7 +2109,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
     pubsub.subscribe('trigger.data.context.switch', selectStart);
 })(jQueryGlimpse, glimpse.pubsub, glimpse.util, glimpse.elements, glimpse.data, glimpse.render.engine);
 // glimpse.history.js
-(function($, pubsub, util, elements, data, renderEngine) {
+(function($, pubsub, util, settings, elements, data, renderEngine) {
     var context = { resultCount : 0, clientName : '', requestId : '', currentData: undefined, notice: undefined, isActive: false, contextRequestId: undefined }, 
         generateHistoryAddress = function() {
             return util.uriTemplate(data.currentMetadata().resources.glimpse_history);
@@ -2218,7 +2218,9 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                 selectStart({ requestId: context.contextRequestId, suppressClear: true });
         }, 
         layoutBuildContentMaster = function(result) {
-            var panel = elements.panel('history'),
+            var selected = settings.local('historyClient'),
+                firstFound = '',
+                panel = elements.panel('history'),
                 masterBody = panel.find('.glimpse-col-side tbody');
             
             for (var recordName in result) {
@@ -2226,15 +2228,16 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                     rowCount = masterBody.find('tr').length;
 
                 if (masterRow.length == 0)
-                    masterRow = $('<tr class="' + (rowCount % 2 == 0 ? 'even' : 'odd') + '" data><td>' + recordName + '</td><td class="glimpse-history-count">1</td><td><a href="#" class="glimpse-Client-link" data-clientName="' + recordName + '">Inspect</a></td></tr>').prependTo(masterBody);
+                    masterRow = $('<tr class="' + (rowCount % 2 == 0 ? 'even' : 'odd') + '"><td>' + recordName + '</td><td class="glimpse-history-count">1</td><td><a href="#" class="glimpse-Client-link" data-clientName="' + recordName + '">Inspect</a></td></tr>').prependTo(masterBody);
                 
                 masterRow.find('.glimpse-history-count').text(result[recordName].length);
                 
-                if (rowCount == 0) {
-                    context.clientName = recordName;
-                    selectSession(recordName);
-                }
+                if (rowCount == 0) 
+                    firstFound = recordName; 
             }
+            
+            context.clientName = result[selected] ? selected : firstFound;
+            selectSession(context.clientName);
         },
         layoutClear = function() {
             pubsub.publish('trigger.data.context.reset', { type: 'history' });
@@ -2294,6 +2297,8 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                 item = panel.find('a[data-clientName="' + clientName + '"]'), 
                 clientData = context.currentData[clientName];
             
+            settings.local('historyClient', clientName),
+
             panel.find('.selected').removeClass('selected'); 
             item.parents('tr:first').addClass('selected');
             
@@ -2308,7 +2313,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
     pubsub.subscribe('trigger.data.context.reset', selectClear);
     pubsub.subscribe('trigger.shell.panel.clear.history', layoutClear);
     pubsub.subscribe('trigger.data.context.switch', selectStart);
-})(jQueryGlimpse, glimpse.pubsub, glimpse.util, glimpse.elements, glimpse.data, glimpse.render.engine);
+})(jQueryGlimpse, glimpse.pubsub, glimpse.util, glimpse.settings, glimpse.elements, glimpse.data, glimpse.render.engine);
 // glimpse.timeline.js
 (function($, pubsub, settings, util, renderEngine) { 
     var timeline = {};
