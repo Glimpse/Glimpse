@@ -2149,6 +2149,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
             $.ajax({
                 url: generateHistoryAddress(), 
                 type: 'GET',
+                cache: false,
                 contentType: 'application/json',
                 complete : function(jqXHR, textStatus) {
                     if (!context.isActive) 
