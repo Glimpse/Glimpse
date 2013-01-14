@@ -8,7 +8,7 @@ namespace Glimpse.Test.Integration.Site.Controllers
         {
             HttpContext.Items.Add(IntegrationTestTab.Expected, id);
 
-            return View();
+            return View(model: id);
         }
     }
 }

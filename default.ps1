@@ -196,14 +196,30 @@ task push {
 task buildjs {
 }
 
-task int {
+task integrate {
     "Integration Testing"
+    
+    "   Clean Glimpse.Test.Integration"
+    Delete-Directory "$source_dir\Glimpse.Test.Integration\bin"
+    Delete-Directory "$source_dir\Glimpse.Test.Integration\obj"
+    
+    "   Clean Glimpse.Test.Integration.Site"
+    Delete-Directory "$source_dir\Glimpse.Test.Integration.Site\bin"
+    Delete-Directory "$source_dir\Glimpse.Test.Integration.Site\obj"
+
+    "`nBuild Integration Sln"
+    exec { msbuild $base_dir\Glimpse.Integration.sln /p:Configuration=$config /nologo /verbosity:minimal }
     
     "`nGlimpse must be manually installed while waiting for http://nuget.codeplex.com/workitem/2730"
     #cd $base_dir\.NuGet
     
     #nuget update -source "c:\glimpse\builds\local" -Id Glimpse.MVC3;Glimpse.AspNet;Glimpse -Verbose "c:\glimpse\source\Glimpse.Test.Integration.Site\packages.config"
     #exec { & .\nuget.exe update -source $build_dir\local -id "Glimpse.MVC3;Glimpse.AspNet;Glimpse" -Verbose "$source_dir\Glimpse.Test.Integration.Site\packages.config" }
+    
+    "`nIIS must be set up with Administrative privledges. Run: "
+    "C:\Windows\System32\inetsrv\appcmd.exe add site /name:""Glimpse Integration Test Site"" /bindings:""http/*:1155:"" /physicalPath:""C:\Glimpse\source\Glimpse.Test.Integration.Site"
+    "to support IIS testing"
+
     
     "`nEnding Cassini"
     kill -name WebDev.WebServer*
@@ -219,7 +235,8 @@ task int {
         $exists = Test-Path($cassiniPath)
         if ($exists -eq $false)
         {
-            throw "Add directory containing 'WebDev.WebServer40.EXE' to PATH environment variable."
+            "Using WebDev.WebServer40.EXE from PATH. Add directory containing 'WebDev.WebServer40.EXE' to PATH environment variable."
+            $cassiniPath = "WebDev.WebServer40.EXE"
         }
     }
     
@@ -227,11 +244,12 @@ task int {
     $exists = Test-Path($iisExpressPath)
     if ($exists -eq $false)
     {
-        $iisExpressPath = "C:\Program Files (x86)\IIS Express\iisexpress.exe"
+        $iisExpressPath = "C:\Program Files\IIS Express\iisexpress.exe"
         $exists = Test-Path($iisExpressPath)
         if ($exists -eq $false)
         {
-            throw "Add directory containing 'iisexpress.exe' to PATH environment variable."
+            "Using iisexpress.exe from PATH. Add directory containing 'iisexpress.exe' to PATH environment variable."
+            $iisExpressPath = "iisexpress.exe"
         }
     }
 

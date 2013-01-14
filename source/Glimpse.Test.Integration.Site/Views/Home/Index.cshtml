@@ -1,3 +1,20 @@
-﻿@model dynamic
+﻿@model string
 
-<h2>abc</h2>
+<h2>Home/Index</h2>
+
+<p>This is a <em>very</em> generic test page, typically used just to make sure there is not an exception thrown. The test harness will simply check Glimpse to ensure the value '@Model' is present.</p>
+
+<p>This test requires may require IIS, IIS Express or Cassini to be running. Cassini and IIS Express run with non-Administrator credentials and should have been setup automatically via the psake script. IIS requires manual configuration.</p>
+
+<p>
+    The following ports are used consistently across the test harness:
+    
+    <ul>
+        <li><strong>234:</strong> Cassini (<a href="http://localhost:234">http://localhost:234</a>)</li>
+        <li><strong>1153:</strong> IIS Express (<a href="http://localhost:1153">http://localhost:1153</a>)</li>
+        <li>
+            <strong>1155:</strong> IIS (<a href="http://localhost:1155">http://localhost:1155</a>)<br/>
+            <em>In addition, IIS should have a virtual directory named '<a href="http://localhost:1155/virdir">virdir</a>' pointed at the same application root.</em>
+        </li>
+    </ul>
+</p>
