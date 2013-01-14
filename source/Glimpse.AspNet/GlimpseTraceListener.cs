@@ -3,31 +3,40 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;
+using System.Web;
 using Glimpse.AspNet.Model;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Tab.Assist;
 
-namespace Glimpse.AspNet.PipelineInspector
+namespace Glimpse.AspNet
 {
-    public class TraceInspector : System.Diagnostics.TraceListener
+    public class GlimpseTraceListener : TraceListener
     {
-        private readonly ITabSetupContext context;
-
-        public TraceInspector(ITabSetupContext context)
+        public GlimpseTraceListener() : this(GetTabStore)
         {
-            this.context = context;
         }
+
+        public GlimpseTraceListener(string name) : this(GetTabStore)
+        {
+        }
+
+        public GlimpseTraceListener(Func<IDataStore> tabStoreStrategy)
+        {
+            TabStoreStrategy = tabStoreStrategy;
+        }
+
+        private Func<IDataStore> TabStoreStrategy { get; set; }
 
         private Stopwatch FirstWatch
         {
             get
             {
-                var firstWatch = context.GetTabStore().Get<Stopwatch>(Tab.Trace.FirstWatchStoreKey);
+                var firstWatch = TabStoreStrategy().Get<Stopwatch>(Tab.Trace.FirstWatchStoreKey);
                 if (firstWatch == null) 
                 {
                     firstWatch = new Stopwatch();
-                    context.GetTabStore().Set(Tab.Trace.FirstWatchStoreKey, firstWatch);
+                    TabStoreStrategy().Set(Tab.Trace.FirstWatchStoreKey, firstWatch);
                     firstWatch.Start();
                 }
 
@@ -39,11 +48,11 @@ namespace Glimpse.AspNet.PipelineInspector
         {
             get
             {
-                var lastWatch = context.GetTabStore().Get<Stopwatch>(Tab.Trace.LastWatchStoreKey);
+                var lastWatch = TabStoreStrategy().Get<Stopwatch>(Tab.Trace.LastWatchStoreKey);
                 if (lastWatch == null)
                 {
                     lastWatch = new Stopwatch();
-                    context.GetTabStore().Set(Tab.Trace.LastWatchStoreKey, lastWatch);
+                    TabStoreStrategy().Set(Tab.Trace.LastWatchStoreKey, lastWatch);
                     lastWatch.Start();
                 } 
 
@@ -55,17 +64,17 @@ namespace Glimpse.AspNet.PipelineInspector
         {
             get
             {
-                var messages = context.GetTabStore().Get<IList<TraceModel>>(Tab.Trace.TraceMessageStoreKey);
+                var messages = TabStoreStrategy().Get<IList<TraceModel>>(Tab.Trace.TraceMessageStoreKey);
                 if (messages == null) 
                 {
                     messages = new List<TraceModel>();
-                    context.GetTabStore().Set(Tab.Trace.TraceMessageStoreKey, messages); 
+                    TabStoreStrategy().Set(Tab.Trace.TraceMessageStoreKey, messages); 
                 }
                 
                 return messages;
             }
         }
-         
+
         public override void Write(object o)
         { 
             if (o == null)
@@ -92,7 +101,7 @@ namespace Glimpse.AspNet.PipelineInspector
                 Write(o == null ? string.Empty : o.ToString(), category);
             }
         }
-         
+
         public override void Write(string message, string category)
         { 
             if (category == null)
@@ -130,12 +139,12 @@ namespace Glimpse.AspNet.PipelineInspector
 
             InternalWrite(message, derivedCategory);
         }
-  
+
         public override void Fail(string message)
         {
             Fail(message, string.Empty);
         }
-         
+
         public override void Fail(string message, string detailMessage)
         {
             var failMessage = new StringBuilder(); 
@@ -212,17 +221,46 @@ namespace Glimpse.AspNet.PipelineInspector
             InternalWrite(message.ToString(), DeriveCategory(eventType));
         }
 
+        // Hack: This is a bit of a hack because it duplicates some code from GlimpseRuntime
+        private static IDataStore GetTabStore()
+        {
+            // This allows Tracing to work from non-ASP.NET tread.
+            if (HttpContext.Current == null)
+            {
+                return new DictionaryDataStoreAdapter(new Dictionary<string, object>());
+            }
+
+            var requestStore = new DictionaryDataStoreAdapter(HttpContext.Current.Items);
+
+            if (!requestStore.Contains(Core.Constants.TabStorageKey))
+            {
+                requestStore.Set(Core.Constants.TabStorageKey, new Dictionary<string, IDataStore>());
+            }
+
+            var tabStorage = requestStore.Get<IDictionary<string, IDataStore>>(Core.Constants.TabStorageKey);
+            var tabName = Tab.Trace.TabKey;
+
+            if (!tabStorage.ContainsKey(tabName))
+            {
+                tabStorage.Add(tabName, new DictionaryDataStoreAdapter(new Dictionary<string, object>()));
+            }
+
+            return tabStorage[tabName];
+        }
+
         private void InternalWrite(string message, string category)
         {
             var firstWatch = FirstWatch;
             var lastWatch = LastWatch;
 
-            var model = new TraceModel();
-            model.Category = category;
-            model.Message = message;
-            model.FromFirst = firstWatch.ElapsedTicks.ConvertNanosecondsToMilliseconds();
-            model.FromLast = lastWatch.ElapsedTicks.ConvertNanosecondsToMilliseconds();
-            model.IndentLevel = IndentLevel;
+            var model = new TraceModel
+                {
+                    Category = category,
+                    Message = message,
+                    FromFirst = firstWatch.ElapsedTicks.ConvertNanosecondsToMilliseconds(),
+                    FromLast = lastWatch.ElapsedTicks.ConvertNanosecondsToMilliseconds(),
+                    IndentLevel = IndentLevel
+                };
 
             lastWatch.Reset();
             lastWatch.Start();

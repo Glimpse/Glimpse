@@ -28,7 +28,12 @@ namespace MvcMusicStore.Controllers
             Trace.IndentLevel++;
             Trace.Write("Yet another trace line");
             Trace.IndentLevel = 0;
-            Trace.TraceInformation("Test TraceInformation;"); 
+            Trace.TraceInformation("Test TraceInformation;");
+
+
+            TraceSource ts = new TraceSource("Test source");
+
+            ts.TraceEvent(TraceEventType.Warning, 0, string.Format("{0}: {1}", "trace", "source"));
 
             return View(albums);
         }

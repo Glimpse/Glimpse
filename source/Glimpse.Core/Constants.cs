@@ -63,6 +63,6 @@
         /// <remarks>
         /// Typically used as the key for the local request storage (i.e. HttpContext.Items)
         /// </remarks>
-        internal const string TabStorageKey = "__GlimpseTabStorage";
+        public const string TabStorageKey = "__GlimpseTabStorage";
     }
 }
