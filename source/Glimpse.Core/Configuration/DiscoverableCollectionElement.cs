@@ -4,8 +4,6 @@ namespace Glimpse.Core.Configuration
 {
     public class DiscoverableCollectionElement : ConfigurationElement
     {
-        internal const string DefaultLocation = "";
-
         [ConfigurationProperty("autoDiscover", DefaultValue = true)]
         public bool AutoDiscover
         {
@@ -13,7 +11,7 @@ namespace Glimpse.Core.Configuration
             set { base["autoDiscover"] = value; }
         }
 
-        [ConfigurationProperty("discoveryLocation", DefaultValue = DefaultLocation)]
+        [ConfigurationProperty("discoveryLocation", DefaultValue = GlimpseSection.DefaultLocation)]
         public string DiscoveryLocation
         {
             get { return (string)base["discoveryLocation"]; }

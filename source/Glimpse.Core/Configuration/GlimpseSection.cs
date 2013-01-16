@@ -6,6 +6,8 @@ namespace Glimpse.Core.Configuration
 {
     public class GlimpseSection : ConfigurationSection
     {
+        internal const string DefaultLocation = "";
+
         [ConfigurationProperty("logging")]
         public LoggingElement Logging
         {
@@ -75,6 +77,13 @@ namespace Glimpse.Core.Configuration
         {
             get { return (string)base["endpointBaseUri"]; }
             set { base["endpointBaseUri"] = value; }
+        }
+
+        [ConfigurationProperty("discoveryLocation", DefaultValue = DefaultLocation)]
+        public string DiscoveryLocation
+        {
+            get { return (string)base["discoveryLocation"]; }
+            set { base["discoveryLocation"] = value; }
         }
     }
 }

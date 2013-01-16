@@ -350,9 +350,16 @@ namespace Glimpse.Core.Framework
 
             discoverableCollection.IgnoredTypes.AddRange(config.IgnoredTypes.ToEnumerable());
 
-            if (config.DiscoveryLocation != DiscoverableCollectionElement.DefaultLocation)
+            // config.DiscoveryLocation (collection specific) overrides Configuration.DiscoveryLocation (on main <glimpse> node)
+            var locationCascade = string.IsNullOrEmpty(config.DiscoveryLocation)
+                                       ? string.IsNullOrEmpty(Configuration.DiscoveryLocation)
+                                             ? null
+                                             : Configuration.DiscoveryLocation
+                                       : config.DiscoveryLocation;
+
+            if (locationCascade != null)
             {
-                discoverableCollection.DiscoveryLocation = config.DiscoveryLocation;
+                discoverableCollection.DiscoveryLocation = locationCascade;
             }
 
             discoverableCollection.AutoDiscover = config.AutoDiscover;
