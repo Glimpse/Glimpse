@@ -1,8 +1,6 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Runtime.Remoting;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 using Glimpse.Test.Core.BadData;
@@ -12,14 +10,15 @@ using Xunit;
 
 namespace Glimpse.Test.Core.Framework
 {
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed. Class is okay because it is only needed for the tests below.")]
     public class ReflectionDiscoverableCollectionTester<T> : ReflectionDiscoverableCollection<T>
     {
-        public Mock<ILogger> LoggerMock { get; set; }
-
-        private ReflectionDiscoverableCollectionTester(Mock<ILogger> loggerMock):base(loggerMock.Object)
+        private ReflectionDiscoverableCollectionTester(Mock<ILogger> loggerMock) : base(loggerMock.Object)
         {
             LoggerMock = loggerMock;
         }
+
+        public Mock<ILogger> LoggerMock { get; set; }
 
         public static ReflectionDiscoverableCollectionTester<T> Create()
         {
@@ -27,9 +26,32 @@ namespace Glimpse.Test.Core.Framework
         }
     }
 
-    public class ReflectionDiscoverableCollectionShould:IDisposable
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed. Class is okay because it is only needed for the tests below.")]
+    public class ReflectionDiscoverableCollectionTesterRef : MarshalByRefObject
+    {
+        private readonly ReflectionDiscoverableCollectionTester<IPipelineInspector> collection = ReflectionDiscoverableCollectionTester<IPipelineInspector>.Create();
+
+        public string DiscoveryLocation
+        {
+            get { return collection.DiscoveryLocation; }
+            set { collection.DiscoveryLocation = value; }
+        }
+
+        public void Discover()
+        {
+            collection.Discover();
+        }
+
+        public void LoggerVerify()
+        {
+            collection.LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<Exception>(), It.IsAny<object[]>()));
+        }
+    }
+
+    public class ReflectionDiscoverableCollectionShould : IDisposable
     {
         private ReflectionDiscoverableCollectionTester<IPipelineInspector> tester;
+
         public ReflectionDiscoverableCollectionTester<IPipelineInspector> Collection
         {
             get { return tester ?? (tester = ReflectionDiscoverableCollectionTester<IPipelineInspector>.Create()); }
@@ -93,7 +115,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void CopyTo()
         {
-            var items = new IPipelineInspector[] {new DummyPipelineInspector1(), new DummyPipelineInspector2()};
+            var items = new IPipelineInspector[] { new DummyPipelineInspector1(), new DummyPipelineInspector2() };
 
             Collection.CopyTo(items, 0);
 
@@ -168,29 +190,10 @@ namespace Glimpse.Test.Core.Framework
             Assert.True(Collection.Count >= 2);
         }
 
-        class ReflectionDiscoverableCollectionTesterRef : MarshalByRefObject {
-            readonly ReflectionDiscoverableCollectionTester<IPipelineInspector> _collection = ReflectionDiscoverableCollectionTester<IPipelineInspector>.Create();
-
-            public void Discover() {
-                _collection.Discover();
-            }
-
-            public void LoggerVerify() {
-                _collection.LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<Exception>(), It.IsAny<object[]>()));
-            }
-
-            public string DiscoveryLocation {
-                get { return _collection.DiscoveryLocation; }
-                set { _collection.DiscoveryLocation = value; }
-            }
-        }
-
         [Fact]
         public void DiscoverLogsAssemblyLoadExceptions()
         {
-            var setup = new AppDomainSetup {
-                ApplicationBase = AppDomain.CurrentDomain.BaseDirectory,
-            };
+            var setup = new AppDomainSetup { ApplicationBase = AppDomain.CurrentDomain.BaseDirectory };
             var domain = AppDomain.CreateDomain("TestAppDomain", null, setup);
             
             var refType = typeof(ReflectionDiscoverableCollectionTesterRef);
@@ -206,10 +209,10 @@ namespace Glimpse.Test.Core.Framework
         }
 
         [Fact]
-        public void UseBasePathInNonShadowedAppDomains() {
-            var setup = new AppDomainSetup {
-                ApplicationBase = AppDomain.CurrentDomain.BaseDirectory,
-            };
+        public void UseBasePathInNonShadowedAppDomains() 
+        {
+            var setup = new AppDomainSetup { ApplicationBase = AppDomain.CurrentDomain.BaseDirectory };
+
             var domain = AppDomain.CreateDomain("TestAppDomain", null, setup);
 
             var refType = typeof(ReflectionDiscoverableCollectionTesterRef);
@@ -221,8 +224,10 @@ namespace Glimpse.Test.Core.Framework
         }
 
         [Fact]
-        public void UseShadowCopyFolderInShadowedAppDomains() {
-            var setup = new AppDomainSetup {
+        public void UseShadowCopyFolderInShadowedAppDomains() 
+        {
+            var setup = new AppDomainSetup 
+            {
                 ShadowCopyFiles = "true",
                 ApplicationBase = AppDomain.CurrentDomain.BaseDirectory,
                 ApplicationName = Guid.NewGuid().ToString(),
@@ -274,7 +279,7 @@ namespace Glimpse.Test.Core.Framework
         public void ThrowArgumentExceptionWithBadPath()
         {
             var path = @"c:\I\dont\exist\";
-            Assert.Throws<DirectoryNotFoundException>(()=>Collection.DiscoveryLocation = path);
+            Assert.Throws<DirectoryNotFoundException>(() => Collection.DiscoveryLocation = path);
 
             path = @"..\neither\do\I\";
             Assert.Throws<DirectoryNotFoundException>(() => Collection.DiscoveryLocation = path);

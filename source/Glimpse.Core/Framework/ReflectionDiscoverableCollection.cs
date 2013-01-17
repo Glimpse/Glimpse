@@ -37,7 +37,8 @@ namespace Glimpse.Core.Framework
                 return discoveryLocation ?? (discoveryLocation = BaseDirectory);
             }
 
-            set {
+            set 
+            {
                 // If this isn't an absolute path then root it with the AppDomain's base directory
                 var result = Path.IsPathRooted(value) ? value : Path.Combine(BaseDirectory, value);
 
@@ -50,16 +51,6 @@ namespace Glimpse.Core.Framework
             }
         }
 
-        /// Get the directory of the application, if the AppDomain is shadow copied, use the shadow directory
-        static string BaseDirectory {
-            get {
-                var setupInfo = AppDomain.CurrentDomain.SetupInformation;
-                return string.Equals(setupInfo.ShadowCopyFiles, "true", StringComparison.OrdinalIgnoreCase)
-                           ? Path.Combine(setupInfo.CachePath, setupInfo.ApplicationName)
-                           : AppDomain.CurrentDomain.BaseDirectory;
-            }
-        }
-
         public bool IsReadOnly
         {
             get
@@ -69,10 +60,22 @@ namespace Glimpse.Core.Framework
         }
 
         internal List<T> Items { get; set; }
-        
+
         internal List<Type> IgnoredTypes { get; set; }
-        
+
         internal ILogger Logger { get; set; }
+
+        // Get the directory of the application, if the AppDomain is shadow copied, use the shadow directory
+        private static string BaseDirectory 
+        {
+            get 
+            {
+                var setupInfo = AppDomain.CurrentDomain.SetupInformation;
+                return string.Equals(setupInfo.ShadowCopyFiles, "true", StringComparison.OrdinalIgnoreCase)
+                           ? Path.Combine(setupInfo.CachePath, setupInfo.ApplicationName)
+                           : AppDomain.CurrentDomain.BaseDirectory;
+            }
+        }
 
         public IEnumerator<T> GetEnumerator()
         {
@@ -131,7 +134,8 @@ namespace Glimpse.Core.Framework
 
             foreach (var file in Directory.GetFiles(DiscoveryLocation, "*.dll", SearchOption.AllDirectories))
             {
-                try {
+                try 
+                {
                     Assembly assembly = Assembly.LoadFrom(file);
                     Type[] allTypes;
 
