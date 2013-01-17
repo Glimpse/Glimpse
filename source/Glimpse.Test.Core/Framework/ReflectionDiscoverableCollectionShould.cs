@@ -1,5 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Runtime.Remoting;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 using Glimpse.Test.Core.BadData;
@@ -165,14 +168,74 @@ namespace Glimpse.Test.Core.Framework
             Assert.True(Collection.Count >= 2);
         }
 
+        class ReflectionDiscoverableCollectionTesterRef : MarshalByRefObject {
+            readonly ReflectionDiscoverableCollectionTester<IPipelineInspector> _collection = ReflectionDiscoverableCollectionTester<IPipelineInspector>.Create();
+
+            public void Discover() {
+                _collection.Discover();
+            }
+
+            public void LoggerVerify() {
+                _collection.LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<Exception>(), It.IsAny<object[]>()));
+            }
+
+            public string DiscoveryLocation {
+                get { return _collection.DiscoveryLocation; }
+                set { _collection.DiscoveryLocation = value; }
+            }
+        }
+
         [Fact]
         public void DiscoverLogsAssemblyLoadExceptions()
         {
-            Collection.DiscoveryLocation = "../../BadData/";
+            var setup = new AppDomainSetup {
+                ApplicationBase = AppDomain.CurrentDomain.BaseDirectory,
+            };
+            var domain = AppDomain.CreateDomain("TestAppDomain", null, setup);
+            
+            var refType = typeof(ReflectionDiscoverableCollectionTesterRef);
+            var collection = domain.CreateInstanceAndUnwrap(refType.Assembly.FullName, refType.FullName) as ReflectionDiscoverableCollectionTesterRef;
 
-            Collection.Discover();
+            collection.DiscoveryLocation = "../../BadData/";
 
-            Collection.LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<Exception>(), It.IsAny<object[]>()));
+            collection.Discover();
+
+            collection.LoggerVerify();
+
+            AppDomain.Unload(domain);
+        }
+
+        [Fact]
+        public void UseBasePathInNonShadowedAppDomains() {
+            var setup = new AppDomainSetup {
+                ApplicationBase = AppDomain.CurrentDomain.BaseDirectory,
+            };
+            var domain = AppDomain.CreateDomain("TestAppDomain", null, setup);
+
+            var refType = typeof(ReflectionDiscoverableCollectionTesterRef);
+            var collection = domain.CreateInstanceAndUnwrap(refType.Assembly.FullName, refType.FullName) as ReflectionDiscoverableCollectionTesterRef;
+
+            Assert.Equal(setup.ApplicationBase, collection.DiscoveryLocation);
+
+            AppDomain.Unload(domain);
+        }
+
+        [Fact]
+        public void UseShadowCopyFolderInShadowedAppDomains() {
+            var setup = new AppDomainSetup {
+                ShadowCopyFiles = "true",
+                ApplicationBase = AppDomain.CurrentDomain.BaseDirectory,
+                ApplicationName = Guid.NewGuid().ToString(),
+                CachePath = Path.GetTempPath()
+            };
+            var domain = AppDomain.CreateDomain("TestAppDomain", null, setup);
+
+            var refType = typeof(ReflectionDiscoverableCollectionTesterRef);
+            var collection = domain.CreateInstanceAndUnwrap(refType.Assembly.FullName, refType.FullName) as ReflectionDiscoverableCollectionTesterRef;
+
+            Assert.Equal(Path.Combine(setup.CachePath, setup.ApplicationName), collection.DiscoveryLocation);
+
+            AppDomain.Unload(domain);
         }
 
         [Fact]
