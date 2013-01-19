@@ -298,7 +298,7 @@ glimpse.util = (function($) {
             return count;
         }, 
         uriTemplate: function (uri, data) {
-            if (data === null || data === undefined)
+            if (uri === null || uri === undefined)
                 return '';
             return UriTemplate.parse(uri).expand(data || {});
         },
