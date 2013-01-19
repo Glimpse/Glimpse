@@ -1199,7 +1199,7 @@ glimpse.render.engine.util.raw = (function($, util) {
 // glimpse.render.panel.js
 (function($, data, elements, pubsub, renderEngine) {
     var render = function (key, pluginData, pluginMetadata) {
-            pubsub.publish('action.panel.rendering.' + key, { key: key, pluginData: pluginData, pluginMetadata: pluginMetadata.constructor });
+            pubsub.publish('action.panel.rendering.' + key, { key: key, pluginData: pluginData, pluginMetadata: pluginMetadata });
             
             var panelHolder = elements.panelHolder(),  
                 permanent = pluginData.isPermanent ? ' glimpse-permanent' : '',
