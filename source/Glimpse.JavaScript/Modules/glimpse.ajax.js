@@ -169,7 +169,7 @@
     pubsub.subscribe('trigger.shell.subscriptions', wireListeners);
     pubsub.subscribe('action.panel.hiding.ajax', deactivate); 
     pubsub.subscribe('action.panel.showing.ajax', activate); 
-    pubsub.subscribe('action.data.featched.ajax', selectFinish); 
+    pubsub.subscribe('action.data.fetched.ajax', selectFinish); 
     pubsub.subscribe('action.data.refresh.changed', contextSwitch); 
     pubsub.subscribe('action.data.initial.changed', setup);
     pubsub.subscribe('trigger.data.context.reset', selectClear);

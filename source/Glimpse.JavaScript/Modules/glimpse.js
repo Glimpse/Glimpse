@@ -458,14 +458,14 @@ glimpse.data = (function($, pubsub, util) {
 
             // Only need to do to the server if we dont have the data
             if (requestId != innerBaseData.requestId) {
-                pubsub.publish('action.data.featching' + parsedTopic, requestId);
+                pubsub.publish('action.data.fetching' + parsedTopic, requestId);
                 
                 $.ajax({
                     type: 'GET',
                     url: generateRequestAddress(requestId), 
                     contentType: 'application/json',
                     success: function (result) {    
-                        pubsub.publish('action.data.featched' + parsedTopic, { requestId: requestId, oldData: innerCurrentData, newData: result });
+                        pubsub.publish('action.data.fetched' + parsedTopic, { requestId: requestId, oldData: innerCurrentData, newData: result });
                         
                         pubsub.publish('action.data.retrieve.succeeded' + parsedTopic, { requestId: requestId, oldData: innerCurrentData, newData: result });
                         
@@ -2102,7 +2102,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
     pubsub.subscribe('trigger.shell.subscriptions', wireListeners);
     pubsub.subscribe('action.panel.hiding.ajax', deactivate); 
     pubsub.subscribe('action.panel.showing.ajax', activate); 
-    pubsub.subscribe('action.data.featched.ajax', selectFinish); 
+    pubsub.subscribe('action.data.fetched.ajax', selectFinish); 
     pubsub.subscribe('action.data.refresh.changed', contextSwitch); 
     pubsub.subscribe('action.data.initial.changed', setup);
     pubsub.subscribe('trigger.data.context.reset', selectClear);
@@ -2311,7 +2311,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
     pubsub.subscribe('trigger.shell.subscriptions', wireListeners);
     pubsub.subscribe('action.panel.hiding.history', deactivate); 
     pubsub.subscribe('action.panel.showing.history', activate); 
-    pubsub.subscribe('action.data.featched.history', selectFinish); 
+    pubsub.subscribe('action.data.fetched.history', selectFinish); 
     pubsub.subscribe('action.data.initial.changed', setup); 
     pubsub.subscribe('trigger.data.context.reset', selectClear);
     pubsub.subscribe('trigger.shell.panel.clear.history', layoutClear);

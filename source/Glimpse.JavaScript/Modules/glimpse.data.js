@@ -63,14 +63,14 @@
 
             // Only need to do to the server if we dont have the data
             if (requestId != innerBaseData.requestId) {
-                pubsub.publish('action.data.featching' + parsedTopic, requestId);
+                pubsub.publish('action.data.fetching' + parsedTopic, requestId);
                 
                 $.ajax({
                     type: 'GET',
                     url: generateRequestAddress(requestId), 
                     contentType: 'application/json',
                     success: function (result) {    
-                        pubsub.publish('action.data.featched' + parsedTopic, { requestId: requestId, oldData: innerCurrentData, newData: result });
+                        pubsub.publish('action.data.fetched' + parsedTopic, { requestId: requestId, oldData: innerCurrentData, newData: result });
                         
                         pubsub.publish('action.data.retrieve.succeeded' + parsedTopic, { requestId: requestId, oldData: innerCurrentData, newData: result });
                         

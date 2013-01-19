@@ -199,7 +199,7 @@
     pubsub.subscribe('trigger.shell.subscriptions', wireListeners);
     pubsub.subscribe('action.panel.hiding.history', deactivate); 
     pubsub.subscribe('action.panel.showing.history', activate); 
-    pubsub.subscribe('action.data.featched.history', selectFinish); 
+    pubsub.subscribe('action.data.fetched.history', selectFinish); 
     pubsub.subscribe('action.data.initial.changed', setup); 
     pubsub.subscribe('trigger.data.context.reset', selectClear);
     pubsub.subscribe('trigger.shell.panel.clear.history', layoutClear);
