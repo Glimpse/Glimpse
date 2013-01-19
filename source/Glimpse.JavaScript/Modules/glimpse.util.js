@@ -74,6 +74,8 @@
             return count;
         }, 
         uriTemplate: function (uri, data) {
+            if (data === null || data === undefined)
+                return '';
             return UriTemplate.parse(uri).expand(data || {});
         },
         getDomain: function (uri) {
