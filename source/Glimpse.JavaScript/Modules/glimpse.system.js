@@ -12,6 +12,6 @@
             pubsub.publish('trigger.shell.refresh'); 
         };
 
-    pubsub.subscribe('action.data.refresh.changed', refresh); 
-    pubsub.subscribe('action.data.initial.changed', start);
+    pubsub.subscribe('trigger.system.refresh', refresh); 
+    pubsub.subscribe('trigger.system.start', start);
 })(glimpse.pubsub);
