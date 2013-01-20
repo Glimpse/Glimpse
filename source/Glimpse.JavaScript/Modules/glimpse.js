@@ -1301,7 +1301,7 @@ glimpse.render.engine.util.raw = (function($, util) {
             pubsub.publish('trigger.tab.select.' + current, { key: current });
         
             if (isOpen) 
-                pubsub.publish('trigger.shell.open', { isInit: true }); 
+                pubsub.publish('trigger.shell.open', { isInitial: true }); 
         },
         selected = function (options) {
             settings.local('view', options.key);
@@ -1314,18 +1314,18 @@ glimpse.render.engine.util.raw = (function($, util) {
 // glimpse.shell.controls.js
 (function($, pubsub, elements, settings) {
     var wireListeners = function () { 
-            elements.opener().click(function () { pubsub.publish('trigger.shell.open', { isInit: false }); });
+            elements.opener().click(function () { pubsub.publish('trigger.shell.open', { isInitial: false }); });
             elements.barHolder().find('.glimpse-minimize').click(function () { pubsub.publish('trigger.shell.minimize'); });
             elements.barHolder().find('.glimpse-close').click(function () { pubsub.publish('trigger.shell.close'); });
         },  
         open = function(args) {
-            if (!args.isInit)
+            if (!args.isInitial)
                 settings.local('hidden', false);
             
             if (!settings.local('hidden') || args.force) {
                 settings.local('isOpen', true);
 
-                pubsub.publish('action.shell.opening', { isInit: args.isInit });
+                pubsub.publish('action.shell.opening', { isInitial: args.isInitial });
 
                 var height = settings.local('height') || 300,
                     body = $.fn.add.call(elements.holder(), elements.pageSpacer()).show();
@@ -1334,12 +1334,12 @@ glimpse.render.engine.util.raw = (function($, util) {
                 settings.local('panelHeight', height - 52);
 
                 elements.opener().hide();
-                if (args.isInit)
+                if (args.isInitial)
                     body.height(height);
                 else 
                     body.animate({ height: settings.local('height') }, 'fast');
                 
-                pubsub.publish('action.shell.opened', { isInit: args.isInit });
+                pubsub.publish('action.shell.opened', { isInitial: args.isInitial });
             }
             else
                 pubsub.publish('trigger.shell.suppressed.open');
@@ -1479,7 +1479,7 @@ glimpse.render.engine.util.raw = (function($, util) {
                 if (!isPopup())
                     pubsub.publish('trigger.shell.popup');
                 else {
-                    pubsub.publish('trigger.shell.open', { isInit: true, force: true });
+                    pubsub.publish('trigger.shell.open', { isInitial: true, force: true });
 
                     elements.holder().height('');
 

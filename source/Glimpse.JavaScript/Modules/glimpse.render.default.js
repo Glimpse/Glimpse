@@ -8,7 +8,7 @@
             pubsub.publish('trigger.tab.select.' + current, { key: current });
         
             if (isOpen) 
-                pubsub.publish('trigger.shell.open', { isInit: true }); 
+                pubsub.publish('trigger.shell.open', { isInitial: true }); 
         },
         selected = function (options) {
             settings.local('view', options.key);

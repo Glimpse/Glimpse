@@ -33,7 +33,7 @@
                 if (!isPopup())
                     pubsub.publish('trigger.shell.popup');
                 else {
-                    pubsub.publish('trigger.shell.open', { isInit: true, force: true });
+                    pubsub.publish('trigger.shell.open', { isInitial: true, force: true });
 
                     elements.holder().height('');
 
