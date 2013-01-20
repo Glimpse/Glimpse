@@ -1214,7 +1214,9 @@ glimpse.render.engine.util.raw = (function($, util) {
             return panel;
         },
         selected = function(options) {
-            var panel = elements.panel(options.key),
+            var pluginData = data.currentData().data[options.key],
+                pluginMetadata = data.currentMetadata().plugins[options.key],
+                panel = elements.panel(options.key),
                 currentSelection = elements.panelHolder().find('.glimpse-active');
             
             // Raise an event that lets us know when we dont care about a panel any more
@@ -1225,19 +1227,16 @@ glimpse.render.engine.util.raw = (function($, util) {
                 pubsub.publish('action.panel.hiding.' + oldKey, { key: oldKey });
             }
 
-            pubsub.publish('action.panel.showing.' + options.key, { key: options.key });
+            // Only run if we have data 
+            if (pluginData != null && pluginData != undefined) {
+                pubsub.publish('action.panel.showing.' + options.key, { key: options.key });
 
-            // Only render the content when we need to
-            if (panel.length == 0) {
-                var pluginData = data.currentData().data[options.key],
-                    pluginMetadata = data.currentMetadata().plugins[options.key];
-                
-                if (pluginData != null && pluginData != undefined) 
+                // Only render the content when we need to
+                if (panel.length == 0) 
                     panel = render(options.key, pluginData, pluginMetadata);   
-            }
-            
-            if (panel.length > 0) {
+             
                 panel.addClass('glimpse-active'); 
+            
                 pubsub.publish('action.panel.showed.' + options.key, { key: options.key });
             }
         },
