@@ -643,7 +643,7 @@ glimpse.render = (function($, pubsub, util, data, settings) {
 
             process(true, 'action.shell.initial'); 
             
-            pubsub.publish('trigger.shell.present'); 
+            pubsub.publish('trigger.shell.ready'); 
         };
     
     pubsub.subscribe('trigger.shell.refresh', refresh); 
@@ -1307,7 +1307,7 @@ glimpse.render.engine.util.raw = (function($, util) {
             settings.local('view', options.key);
         };
 
-    pubsub.subscribe('trigger.shell.present', start);
+    pubsub.subscribe('trigger.shell.ready', start);
     pubsub.subscribe('trigger.tab.select', selected);
 })(glimpse.settings, glimpse.pubsub, glimpse.elements);
 

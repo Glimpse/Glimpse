@@ -47,7 +47,7 @@
 
             process(true, 'action.shell.initial'); 
             
-            pubsub.publish('trigger.shell.present'); 
+            pubsub.publish('trigger.shell.ready'); 
         };
     
     pubsub.subscribe('trigger.shell.refresh', refresh); 
