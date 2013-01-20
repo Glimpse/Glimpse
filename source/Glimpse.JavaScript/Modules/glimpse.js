@@ -1228,12 +1228,18 @@ glimpse.render.engine.util.raw = (function($, util) {
             pubsub.publish('action.panel.showing.' + options.key, { key: options.key });
 
             // Only render the content when we need to
-            if (panel.length == 0) 
-                panel = render(options.key, data.currentData().data[options.key], data.currentMetadata().plugins[options.key]);  
-
-            panel.addClass('glimpse-active');
-
-            pubsub.publish('action.panel.showed.' + options.key, { key: options.key });
+            if (panel.length == 0) {
+                var pluginData = data.currentData().data[options.key],
+                    pluginMetadata = data.currentMetadata().plugins[options.key];
+                
+                if (pluginData != null && pluginData != undefined) 
+                    panel = render(options.key, pluginData, pluginMetadata);   
+            }
+            
+            if (panel.length > 0) {
+                panel.addClass('glimpse-active'); 
+                pubsub.publish('action.panel.showed.' + options.key, { key: options.key });
+            }
         },
         clear = function() {
             elements.panelHolder().find('.glimpse-panel:not(.glimpse-permanent)').remove();
