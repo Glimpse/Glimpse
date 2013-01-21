@@ -396,9 +396,9 @@ glimpse.settings = (function($, pubsub, util) {
 })(jQueryGlimpse, glimpse.pubsub, glimpse.util);
 // glimpse.data.js
 glimpse.data = (function($, pubsub, util) {
-    var innerBaseData = {},
-        innerBaseMetadata = {},
-        innerCurrentData = {},
+    var innerBaseMetadata = { plugins : {}, resources : {} },
+        innerBaseData = { data : {}, metadata : innerBaseMetadata },
+        innerCurrentData = innerBaseData,
         generateRequestAddress = function (requestId) {
             return util.uriTemplate(currentMetadata().resources.glimpse_request, { 'requestId': requestId });
         },
@@ -449,6 +449,8 @@ glimpse.data = (function($, pubsub, util) {
             
             pubsub.publish('action.data.changed', { newData: data });
             pubsub.publish('action.data.refresh.changed', { oldData: oldData, newData: data, type: topic });
+
+            pubsub.publish('trigger.system.refresh');
         },
         reset = function () {
             update(innerBaseData);
@@ -504,6 +506,8 @@ glimpse.data = (function($, pubsub, util) {
             
             pubsub.publish('action.data.changed', { newData: input });
             pubsub.publish('action.data.initial.changed', { newData: input });
+
+            pubsub.publish('trigger.data.init', { isInitial: true });
         };
 
     return {
@@ -600,7 +604,13 @@ glimpse.render = (function($, pubsub, util, data, settings) {
             html: '<div class="glimpse-spacer"></div><div class="glimpse-open glimpse"><table><tr><td><div class="glimpse-icon"></div></td></tr></table></div><div class="glimpse-holder glimpse"><div class="glimpse-notification-holder"></div><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon" title="About Glimpse?"></div><div class="glimpse-title"><span class="glimpse-snapshot-name"></span><span class="glimpse-snapshot-path"></span><span><span class="glimpse-enviro"></span><span class="glimpse-context-stack"></span><span class="glimpse-uri"></span><span class="glimpse-correlation"></span></span></div><div class="glimpse-buttons"><a class="glimpse-meta-update" href="#" title="New Updates are available, take a look at what you are missing.">New update avaiable!</a><a class="glimpse-meta-warning glimpse-button" href="#" title="Glimpse has some warnings!"></a><a class="glimpse-meta-help glimpse-button" href="#" title="Need some help?" target="_blank"></a><a class="glimpse-minimize glimpse-button" href="#" title="Close/Minimize"></a><a class="glimpse-popout glimpse-button" href="#" title="Pop Out"></a><a class="glimpse-close glimpse-button" href="#" title="Shutdown/Terminate"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs glimpse-tabs-instance"><ul></ul></div><div class="glimpse-tabs glimpse-tabs-permanent"><ul></ul></div><div class="glimpse-panel-holder"></div><div class="glimpse-options"></div></div></div><div class="glimpse-lightbox"><div class="glimpse-lightbox-inner"><div class="glimpse-lightbox-element"></div></div></div>'
         },
         generateSpriteAddress = function () {
-            return util.uriTemplate(data.currentMetadata().resources.glimpse_sprite);
+            var uri = settings.local('sprite');
+            return uri ? util.uriTemplate(uri) : "http://getglimpse.com/sprite.png?version={version}";
+        },
+        updateSpriteAddress = function (args) {
+            var uri = args.metadata.resources.glimpse_sprite;
+            if (uri)
+                settings.local('sprite', uri);
         },
         getCss = function() {
             var content = templates.css.replace(/url\(\)/gi, 'url(' + generateSpriteAddress() + ')');
@@ -613,9 +623,7 @@ glimpse.render = (function($, pubsub, util, data, settings) {
         process = function(isInitial, topic) {
             pubsub.publish(topic + '.rendering', { isInitial: isInitial });
             pubsub.publish('action.shell.rendering', { isInitial: isInitial }); 
-        
-            pubsub.publish('trigger.tab.render', { isInitial: isInitial });
-        
+         
             pubsub.publish('action.shell.rendered', { isInitial: isInitial });
             pubsub.publish(topic + '.rendered', { isInitial: isInitial });
         },
@@ -645,7 +653,8 @@ glimpse.render = (function($, pubsub, util, data, settings) {
             
             pubsub.publish('trigger.shell.ready'); 
         };
-    
+
+    pubsub.subscribe('action.data.metadata.changed', updateSpriteAddress);
     pubsub.subscribe('trigger.shell.refresh', refresh); 
     pubsub.subscribe('trigger.shell.init', init);
 
@@ -1192,7 +1201,7 @@ glimpse.render.engine.util.raw = (function($, util) {
         };
     
     pubsub.subscribe('trigger.shell.subscriptions', wireListeners);
-    pubsub.subscribe('trigger.tab.render', render);
+    pubsub.subscribe('trigger.data.init', render);
     pubsub.subscribe('trigger.tab.select', selected);
     pubsub.subscribe('trigger.shell.clear', clear);
 })(jQueryGlimpse, glimpse.data, glimpse.elements, glimpse.util, glimpse.pubsub);
@@ -1292,22 +1301,23 @@ glimpse.render.engine.util.raw = (function($, util) {
 })(jQueryGlimpse, glimpse.data, glimpse.util, glimpse.elements, glimpse.pubsub, glimpse.render.engine);
 // glimpse.render.default.js
 (function(settings, pubsub, elements) { 
-    var start = function () {
-            var current = settings.local('view'),
-                isOpen = settings.local('isOpen');
-        
+    var readyOpen = function () {
+            var isOpen = settings.local('isOpen'); 
+            if (isOpen) 
+                pubsub.publish('trigger.shell.open', { isInitial: true }); 
+        },
+        readySelect = function () {
+            var current = settings.local('view'); 
             if (!current)
                 current = elements.tabHolder().find('li:not(.glimpse-active, .glimpse-disabled):first').attr('data-glimpseKey'); 
             pubsub.publish('trigger.tab.select.' + current, { key: current });
-        
-            if (isOpen) 
-                pubsub.publish('trigger.shell.open', { isInitial: true }); 
         },
         selected = function (options) {
             settings.local('view', options.key);
         };
 
-    pubsub.subscribe('trigger.shell.ready', start);
+    pubsub.subscribe('trigger.shell.ready', readyOpen);
+    pubsub.subscribe('action.tab.rendered', readySelect);
     pubsub.subscribe('trigger.tab.select', selected);
 })(glimpse.settings, glimpse.pubsub, glimpse.elements);
 
@@ -3001,3 +3011,5 @@ null],[PR.PR_LITERAL,/^[+-]?(?:0x[\da-f]+|(?:(?:\.\d+|\d+(?:\.\d*)?)(?:e[+\-]?\d
     
     pubsub.subscribe('action.template.processing', modify); 
 }(jQueryGlimpse, glimpse.pubsub));
+
+glimpse.pubsub.publish('trigger.system.start');

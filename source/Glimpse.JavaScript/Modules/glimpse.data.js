@@ -1,7 +1,7 @@
 ﻿glimpse.data = (function($, pubsub, util) {
-    var innerBaseData = {},
-        innerBaseMetadata = {},
-        innerCurrentData = {},
+    var innerBaseMetadata = { plugins : {}, resources : {} },
+        innerBaseData = { data : {}, metadata : innerBaseMetadata },
+        innerCurrentData = innerBaseData,
         generateRequestAddress = function (requestId) {
             return util.uriTemplate(currentMetadata().resources.glimpse_request, { 'requestId': requestId });
         },
@@ -52,6 +52,8 @@
             
             pubsub.publish('action.data.changed', { newData: data });
             pubsub.publish('action.data.refresh.changed', { oldData: oldData, newData: data, type: topic });
+
+            pubsub.publish('trigger.system.refresh');
         },
         reset = function () {
             update(innerBaseData);
@@ -107,6 +109,8 @@
             
             pubsub.publish('action.data.changed', { newData: input });
             pubsub.publish('action.data.initial.changed', { newData: input });
+
+            pubsub.publish('trigger.data.init', { isInitial: true });
         };
 
     return {

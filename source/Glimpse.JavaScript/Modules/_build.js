@@ -105,3 +105,5 @@
 
 // google-code-prettify.js
 /*(import:google-code-prettify.js)*/
+
+glimpse.pubsub.publish('trigger.system.start');

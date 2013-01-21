@@ -4,7 +4,13 @@
             html: '/*(import:glimpse.render.shell.html)*/'
         },
         generateSpriteAddress = function () {
-            return util.uriTemplate(data.currentMetadata().resources.glimpse_sprite);
+            var uri = settings.local('sprite');
+            return uri ? util.uriTemplate(uri) : "http://getglimpse.com/sprite.png?version={version}";
+        },
+        updateSpriteAddress = function (args) {
+            var uri = args.metadata.resources.glimpse_sprite;
+            if (uri)
+                settings.local('sprite', uri);
         },
         getCss = function() {
             var content = templates.css.replace(/url\(\)/gi, 'url(' + generateSpriteAddress() + ')');
@@ -17,9 +23,7 @@
         process = function(isInitial, topic) {
             pubsub.publish(topic + '.rendering', { isInitial: isInitial });
             pubsub.publish('action.shell.rendering', { isInitial: isInitial }); 
-        
-            pubsub.publish('trigger.tab.render', { isInitial: isInitial });
-        
+         
             pubsub.publish('action.shell.rendered', { isInitial: isInitial });
             pubsub.publish(topic + '.rendered', { isInitial: isInitial });
         },
@@ -49,7 +53,8 @@
             
             pubsub.publish('trigger.shell.ready'); 
         };
-    
+
+    pubsub.subscribe('action.data.metadata.changed', updateSpriteAddress);
     pubsub.subscribe('trigger.shell.refresh', refresh); 
     pubsub.subscribe('trigger.shell.init', init);
 
