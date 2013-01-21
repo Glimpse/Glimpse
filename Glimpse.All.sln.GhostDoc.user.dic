@@ -4,9 +4,11 @@ locator
 metadata
 Metadata
 mixins
+panelitem
 plugin
 Plugin
 proxied
 semver
+stringify
 Unsubscribes
 wikipedia
