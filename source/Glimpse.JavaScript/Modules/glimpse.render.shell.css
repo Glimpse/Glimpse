@@ -470,6 +470,15 @@
 	right: 0px;
 	top: 0px;
 }
+table.glimpse-ellipsis {
+    table-layout: fixed;
+}
+div.glimpse-ellipsis {
+    white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+    width: 100%;
+}
 .glimpse-col-side .even, .glimpse-col-side .even > td {
 	background-color: #E1E7F0;
 }

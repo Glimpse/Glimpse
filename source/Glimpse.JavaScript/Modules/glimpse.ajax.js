@@ -86,7 +86,7 @@
                     detailMetadata = { layout: [ [ { data : 0, key : true, width : '40%' }, { data : 1 }, { data : 2, width : '10%', className : 'mono', align : 'right' },  { data : 3, width : '20%' },  { data : 4, width : '100px' } ] ] };
                 
                 panel.html(renderEngine.build(detailData, detailMetadata)).find('table').append('<tbody></tbody>');
-                panel.find('thead').append('<tr class="glimpse-head-message" style="display:none"><td colspan="6"><a href="#">Reset context back to starting page</a></td></tr>');
+                panel.find('table').addClass('glimpse-ellipsis').find('thead').append('<tr class="glimpse-head-message" style="display:none"><td colspan="6"><a href="#">Reset context back to starting page</a></td></tr>');
             }
         },
         layoutBuildContent = function(result) {
@@ -96,7 +96,7 @@
             
             for (var x = context.resultCount; x < result.length; x++) {
                 var item = result[x];
-                html = '<tr data-requestId="' + item.requestId + '" class="' + (x % 2 == 0 ? 'even' : 'odd') + '"><td>' + item.uri + '</td><td>' + item.method + '</td><td class="mono" style="text-align:right">' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.dateTime + '</td><td><a href="#" class="glimpse-ajax-link" data-requestId="' + item.requestId + '">Inspect</a></td></tr>' + html;
+                html = '<tr data-requestId="' + item.requestId + '" class="' + (x % 2 == 0 ? 'even' : 'odd') + '"><td><div class="glimpse-ellipsis" title="' + item.uri + '">' + item.uri + '</div></td><td>' + item.method + '</td><td class="mono" style="text-align:right">' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.dateTime + '</td><td><a href="#" class="glimpse-ajax-link" data-requestId="' + item.requestId + '">Inspect</a></td></tr>' + html;
             }
             detailBody.prepend(html);
             
