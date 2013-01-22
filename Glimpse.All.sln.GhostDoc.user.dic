@@ -1,3 +1,4 @@
+colspan
 haacked
 javascript
 locator
@@ -11,5 +12,7 @@ Plugin
 proxied
 semver
 stringify
+tbody
+thead
 Unsubscribes
 wikipedia
