@@ -19,6 +19,7 @@ namespace Glimpse.Core
         /// Will not modify any part of the request
         /// </remarks>
         Off = 1,
+
         /// <summary>
         /// The execute resource only
         /// </summary>
@@ -26,6 +27,7 @@ namespace Glimpse.Core
         /// Will only resource endpoints to execute
         /// </remarks>
         ExecuteResourceOnly = 2 | Off,
+
         /// <summary>
         /// The persist results
         /// </summary>
@@ -33,6 +35,7 @@ namespace Glimpse.Core
         /// Will allow results to be persisted to the data store
         /// </remarks>
         PersistResults = 4,
+
         /// <summary>
         /// The modify response headers
         /// </summary>
@@ -40,6 +43,7 @@ namespace Glimpse.Core
         /// Allows the modification of response headers
         /// </remarks>
         ModifyResponseHeaders = 8 | PersistResults,
+
         /// <summary>
         /// The modify response body
         /// </summary>
@@ -47,6 +51,7 @@ namespace Glimpse.Core
         /// Allows the modification of response body
         /// </remarks>
         ModifyResponseBody = 16 | ModifyResponseHeaders,
+
         /// <summary>
         /// The display glimpse client
         /// </summary>
@@ -54,6 +59,7 @@ namespace Glimpse.Core
         /// Whether the client should show in the client browser
         /// </remarks>
         DisplayGlimpseClient = 32 | ModifyResponseBody,
+
         /// <summary>
         /// The on
         /// </summary>
