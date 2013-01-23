@@ -51,7 +51,8 @@ namespace Glimpse.Core.Extensibility
         RuntimeEvent ExecuteOn { get; }
 
         /// <summary>
-        /// Gets the type of the request context that the Tab relies on.
+        /// Gets the type of the request context that the Tab relies on. If 
+        /// returns null, the tab can be used in any context.
         /// </summary>
         /// <value>The type of the request context.</value>
         Type RequestContextType { get; }
