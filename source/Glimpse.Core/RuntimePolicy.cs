@@ -3,8 +3,7 @@
 namespace Glimpse.Core
 {
     /// <summary>
-    /// Enum RuntimePolicy used to describe what activity level Glimpse 
-    /// is allowed to operate in.
+    /// Used to describe what activity level Glimpse is allowed to operate in.
     /// </summary>
     /// <remarks>
     /// This is used at a request by request level.
