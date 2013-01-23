@@ -18,8 +18,8 @@ namespace Glimpse.Core.Extensibility
         /// <summary>
         /// Converts the specified object.
         /// </summary>
-        /// <param name="obj">The object to be converted.</param>
+        /// <param name="target">The object to be converted.</param>
         /// <returns>The new object representation.</returns>
-        object Convert(object obj);
+        object Convert(object target);
     }
 }
