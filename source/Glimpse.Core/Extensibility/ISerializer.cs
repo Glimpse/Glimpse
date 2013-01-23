@@ -10,9 +10,9 @@ namespace Glimpse.Core.Extensibility
         /// <summary>
         /// Serializes the specified object to JSON.
         /// </summary>
-        /// <param name="obj">The target to be Serialized.</param>
+        /// <param name="target">The target to be Serialized.</param>
         /// <returns>Serialized object.</returns>
-        string Serialize(object obj);
+        string Serialize(object target);
 
         /// <summary>
         /// Registers a collection of serialization converters which can conduct custom
