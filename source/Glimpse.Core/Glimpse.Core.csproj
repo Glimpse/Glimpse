@@ -275,7 +275,7 @@
     <EmbeddedResource Include="sprite.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\Glimpse.JavaScript\Modules\glimpse.js">
+    <EmbeddedResource Include="..\Glimpse.JavaScript\glimpse.js">
       <Link>glimpse.js</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
