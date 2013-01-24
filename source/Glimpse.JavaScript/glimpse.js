@@ -1526,7 +1526,7 @@ glimpse.render.engine.util.raw = (function($, util) {
 (function($, pubsub, data, elements) {
     var renderLayout = function() {
             var requestData = data.currentData(),
-                name = requestData.clientName ? '"' + requestData.clientName + '"' : '&nbsp;';
+                name = requestData.clientId ? '"' + requestData.clientId + '"' : '&nbsp;';
 
             elements.titleHolder().find('.glimpse-snapshot-name').html(name);
             elements.titleHolder().find('.glimpse-uri').text(requestData.uri);
