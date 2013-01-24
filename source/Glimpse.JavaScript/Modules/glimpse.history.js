@@ -183,7 +183,7 @@
             context.contextRequestId = undefined; 
         }, 
         selectSession = function(clientName) {
-            var panel = elements.panel('history')
+            var panel = elements.panel('history'),
                 masterPanel = panel.find('.glimpse-col-side'),
                 item = masterPanel.find('a[data-clientName="' + clientName + '"]'), 
                 clientData = context.currentData[clientName];
