@@ -1,6 +1,6 @@
 ﻿glimpse.data = (function($, pubsub, util) {
     var innerBaseMetadata = { plugins : {}, resources : {} },
-        innerBaseData = { data : {}, metadata : innerBaseMetadata },
+        innerBaseData = { data : {}, metadata : innerBaseMetadata, uri : window.location.href },
         innerCurrentData = innerBaseData,
         generateRequestAddress = function (requestId) {
             return util.uriTemplate(currentMetadata().resources.glimpse_request, { 'requestId': requestId });
