@@ -3,80 +3,80 @@
     /// <summary>
     /// Common constant strings used throughout Glimpse.
     /// </summary>
-    public static class Constants
+    internal static class Constants
     {
+        /// <summary>
+        /// The key Glimpse server uses to store an <c>IDictionary&lt;string, IDataStore&gt;</c> which provides each <see cref="Glimpse.Core.Extensibility.ITab"/> implementation a thread safe storage mechanism.
+        /// </summary>
+        /// <remarks>
+        /// Used as the key for the framework provider's local request storage mechanism (i.e. <c>HttpContext.Items</c>).
+        /// </remarks>
+        internal const string TabStorageKey = "__GlimpseTabStorage";
+
         /// <summary>
         /// The name of the cookie Glimpse will use to keep track of a user's session.
         /// </summary>
-        public const string ClientIdCookieName = "glimpseId";
-        
+        internal const string ClientIdCookieName = "glimpseId";
+
         /// <summary>
-        /// The name of the Http response header the Glimpse server will write the request ID to. 
+        /// The key Glimpse server uses to store a <see cref="System.Diagnostics.Stopwatch"/> for tracking execution duration.
         /// </summary>
         /// <remarks>
-        /// In the past <see cref="HttpResponseHeader"/> has used an "X-" prefix to denote a custom header, but that practice has been deprecated as of <seealso href="http://tools.ietf.org/html/rfc6648">RFC 6648</seealso>.
+        /// Used as the key for the framework provider's local request storage mechanism (i.e. <c>HttpContext.Items</c>).
         /// </remarks>
-        public const string HttpResponseHeader = "Glimpse-RequestID";
-        
+        internal const string GlobalStopwatchKey = "__GlimpseGlobalStopwatch";
+
         /// <summary>
-        /// The name of the Http request header which contains the client's user agent string as defined in <seealso href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.43">Section 14.43 of RFC 2616 - Hypertext Transfer Protocol (HTTP/1.1)</seealso>.
+        /// The key Glimpse server uses to store a <see cref="Glimpse.Core.Extensibility.IExecutionTimer"/> for tracking execution duration.
         /// </summary>
-        public const string UserAgentHeaderName = "User-Agent";
+        /// <remarks>
+        /// Used as the key for the framework provider's local request storage mechanism (i.e. <c>HttpContext.Items</c>).
+        /// </remarks>
+        internal const string GlobalTimerKey = "__GlimpseTimer";
 
         /// <summary>
         /// The name of the Http request header the Glimpse client will write the parent request ID to. 
         /// </summary>
         /// <remarks>
-        /// In the past <see cref="HttpRequestHeader"/> has used an "X-" prefix to denote a custom header, but that practice has been deprecated as of <seealso href="http://tools.ietf.org/html/rfc6648">RFC 6648</seealso>.
+        /// In the past <see cref="HttpRequestHeader"/> has used an "X-" prefix to denote a custom header, but that practice has been deprecated as of <see href="http://tools.ietf.org/html/rfc6648">RFC 6648</see>.
         /// </remarks>
-        public const string HttpRequestHeader = "Glimpse-Parent-RequestID";
+        internal const string HttpRequestHeader = "Glimpse-Parent-RequestID";
 
         /// <summary>
-        /// The key Glimpse server uses to store an <c>IDictionary&lt;string, IDataStore&gt;</c> which provides each <see cref="Glimpse.Core.Extensibility.ITab"/> implementation a thread safe storage mechanism.
+        /// The name of the Http response header the Glimpse server will write the request ID to. 
         /// </summary>
         /// <remarks>
-        /// Typically used as the key for the local request storage (i.e. <c>HttpContext.Items</c>).
+        /// In the past <see cref="HttpResponseHeader"/> has used an "X-" prefix to denote a custom header, but that practice has been deprecated as of <see href="http://tools.ietf.org/html/rfc6648">RFC 6648</see>.
         /// </remarks>
-        public const string TabStorageKey = "__GlimpseTabStorage";
+        internal const string HttpResponseHeader = "Glimpse-RequestID";
 
         /// <summary>
-        /// The plugin results data store key
+        /// The key Glimpse server uses to store a <see cref="System.Guid"/> which represents the current request's unique identifier.
         /// </summary>
         /// <remarks>
-        /// Typically used as the key for the local request storage (i.e. HttpContext.Items)
-        /// </remarks>
-        internal const string TabResultsDataStoreKey = "__GlimpseTabResults";
-
-        /// <summary>
-        /// The request id key
-        /// </summary>
-        /// <remarks>
-        /// Typically used as the key for the local request storage (i.e. HttpContext.Items)
+        /// Used as the key for the framework provider's local request storage mechanism (i.e. <c>HttpContext.Items</c>).
         /// </remarks>
         internal const string RequestIdKey = "__GlimpseRequestId";
 
         /// <summary>
-        /// The global stopwatch key
+        /// The key Glimpse server uses to store a <see cref="RuntimePolicy"/> for tracking Glimpse permissions.
         /// </summary>
         /// <remarks>
-        /// Typically used as the key for the local request storage (i.e. HttpContext.Items)
-        /// </remarks>
-        internal const string GlobalStopwatchKey = "__GlimpseGlobalStopwatch";
-
-        /// <summary>
-        /// The runtime policy key
-        /// </summary>
-        /// <remarks>
-        /// Typically used as the key for the local request storage (i.e. HttpContext.Items)
+        /// Used as the key for the framework provider's local request storage mechanism (i.e. <c>HttpContext.Items</c>).
         /// </remarks>
         internal const string RuntimePolicyKey = "__GlimpseRequestRuntimePermissions";
 
         /// <summary>
-        /// The global timer key
+        /// The key Glimpse server uses to store an <c>IDictionary&lt;string, TabResult&gt;</c> which stores the result of calling <c>GetData()</c> on each <see cref="Glimpse.Core.Extensibility.ITab"/> implementation.
         /// </summary>
         /// <remarks>
-        /// Typically used as the key for the local request storage (i.e. HttpContext.Items)
+        /// Used as the key for the framework provider's local request storage mechanism (i.e. <c>HttpContext.Items</c>).
         /// </remarks>
-        internal const string GlobalTimerKey = "__GlimpseTimer";
+        internal const string TabResultsDataStoreKey = "__GlimpseTabResults";
+
+        /// <summary>
+        /// The name of the Http request header which contains the client's user agent string as defined in <see href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.43">Section 14.43 of RFC 2616 - Hypertext Transfer Protocol (HTTP/1.1)</see>.
+        /// </summary>
+        internal const string UserAgentHeaderName = "User-Agent";
     }
 }
