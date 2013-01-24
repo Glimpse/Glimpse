@@ -139,6 +139,9 @@
                 row = detailPanel.find('.selected'); 
             
             if (row.length > 0) {
+                if (row.attr('data-requestId') == context.contextRequestId)
+                    context.contextRequestId = undefined; 
+                
                 panel.find('.glimpse-head-message').hide();
                 row.removeClass('selected');
             
@@ -179,8 +182,6 @@
             detailPanel.find('.glimpse-head-message').show();
             detailPanel.find('.selected').removeClass('selected');
             row.addClass('selected');
-            
-            context.contextRequestId = undefined; 
         }, 
         selectSession = function(clientName) {
             var panel = elements.panel('history'),

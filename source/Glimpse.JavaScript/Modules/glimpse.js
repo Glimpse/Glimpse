@@ -2272,6 +2272,9 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                 row = detailPanel.find('.selected'); 
             
             if (row.length > 0) {
+                if (row.attr('data-requestId') == context.contextRequestId)
+                    context.contextRequestId = undefined; 
+                
                 panel.find('.glimpse-head-message').hide();
                 row.removeClass('selected');
             
@@ -2312,8 +2315,6 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
             detailPanel.find('.glimpse-head-message').show();
             detailPanel.find('.selected').removeClass('selected');
             row.addClass('selected');
-            
-            context.contextRequestId = undefined; 
         }, 
         selectSession = function(clientName) {
             var panel = elements.panel('history'),
