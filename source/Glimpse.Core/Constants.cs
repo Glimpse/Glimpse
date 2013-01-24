@@ -32,10 +32,10 @@
         public const string HttpRequestHeader = "Glimpse-Parent-RequestID";
 
         /// <summary>
-        /// The tab storage key
+        /// The key Glimpse server uses to store an <c>IDictionary&lt;string, IDataStore&gt;</c> which provides each <see cref="Glimpse.Core.Extensibility.ITab"/> implementation a thread safe storage mechanism.
         /// </summary>
         /// <remarks>
-        /// Typically used as the key for the local request storage (i.e. HttpContext.Items)
+        /// Typically used as the key for the local request storage (i.e. <c>HttpContext.Items</c>).
         /// </remarks>
         public const string TabStorageKey = "__GlimpseTabStorage";
 
@@ -45,7 +45,7 @@
         /// <remarks>
         /// Typically used as the key for the local request storage (i.e. HttpContext.Items)
         /// </remarks>
-        internal const string PluginResultsDataStoreKey = "__GlimpsePluginResultsKey";
+        internal const string TabResultsDataStoreKey = "__GlimpseTabResults";
 
         /// <summary>
         /// The request id key

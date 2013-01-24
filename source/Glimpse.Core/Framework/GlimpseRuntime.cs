@@ -53,12 +53,12 @@ namespace Glimpse.Core.Framework
             get
             {
                 var requestStore = Configuration.FrameworkProvider.HttpRequestStore;
-                var result = requestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
+                var result = requestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
 
                 if (result == null)
                 {
                     result = new Dictionary<string, TabResult>();
-                    requestStore.Set(Constants.PluginResultsDataStoreKey, result);
+                    requestStore.Set(Constants.TabResultsDataStoreKey, result);
                 }
 
                 return result;
