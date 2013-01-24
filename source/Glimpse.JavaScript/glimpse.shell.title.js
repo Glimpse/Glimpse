@@ -8,4 +8,5 @@
         };
     
     pubsub.subscribe('action.shell.rendering', renderLayout);
+    pubsub.subscribe('trigger.title.render', renderLayout);
 })(jQueryGlimpse, glimpse.pubsub, glimpse.data, glimpse.elements);

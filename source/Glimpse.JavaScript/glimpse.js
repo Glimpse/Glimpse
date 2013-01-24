@@ -592,6 +592,7 @@ glimpse.elements = (function($) {
         },
         dataStart = function() {
             pubsub.publish('trigger.tab.render', { isInitial: true });
+            pubsub.publish('trigger.title.render');
         },
         update = function() {
             pubsub.publish('trigger.system.refresh');
@@ -600,6 +601,7 @@ glimpse.elements = (function($) {
         },
         dataUpdate = function() {
             pubsub.publish('trigger.tab.render', { isInitial: false });
+            pubsub.publish('trigger.title.render');
         };
 
     pubsub.subscribe('trigger.system.start', start);
@@ -1531,6 +1533,7 @@ glimpse.render.engine.util.raw = (function($, util) {
         };
     
     pubsub.subscribe('action.shell.rendering', renderLayout);
+    pubsub.subscribe('trigger.title.render', renderLayout);
 })(jQueryGlimpse, glimpse.pubsub, glimpse.data, glimpse.elements);
 // glimpse.shell.correlation.js
 (function($, pubsub, data, elements) {
@@ -1576,7 +1579,7 @@ glimpse.render.engine.util.raw = (function($, util) {
             options.newData.metadata.correlation = options.oldData.metadata.correlation;
         };
 
-    pubsub.subscribe('action.shell.rendering', renderLayout);
+    pubsub.subscribe('trigger.title.render', renderLayout);
     pubsub.subscribe('trigger.shell.subscriptions', wireListeners);
     pubsub.subscribe('action.data.retrieve.starting.correlation', startingRetrieve);
     pubsub.subscribe('action.data.retrieve.completed.correlation', completedRetrieve);
@@ -1613,7 +1616,7 @@ glimpse.render.engine.util.raw = (function($, util) {
             elements.titleHolder().find('.glimpse-enviro').html(html);
         };
 
-    pubsub.subscribe('action.shell.rendering', renderLayout);
+    pubsub.subscribe('trigger.title.render', renderLayout);
     pubsub.subscribe('trigger.shell.subscriptions', wireListeners);
 })(jQueryGlimpse, glimpse.pubsub, glimpse.data, glimpse.elements, glimpse.util);
 // glimpse.shell.path.js

@@ -10,6 +10,7 @@
         },
         dataStart = function() {
             pubsub.publish('trigger.tab.render', { isInitial: true });
+            pubsub.publish('trigger.title.render');
         },
         update = function() {
             pubsub.publish('trigger.system.refresh');
@@ -18,6 +19,7 @@
         },
         dataUpdate = function() {
             pubsub.publish('trigger.tab.render', { isInitial: false });
+            pubsub.publish('trigger.title.render');
         };
 
     pubsub.subscribe('trigger.system.start', start);

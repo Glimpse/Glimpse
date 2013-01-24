@@ -41,7 +41,7 @@
             options.newData.metadata.correlation = options.oldData.metadata.correlation;
         };
 
-    pubsub.subscribe('action.shell.rendering', renderLayout);
+    pubsub.subscribe('trigger.title.render', renderLayout);
     pubsub.subscribe('trigger.shell.subscriptions', wireListeners);
     pubsub.subscribe('action.data.retrieve.starting.correlation', startingRetrieve);
     pubsub.subscribe('action.data.retrieve.completed.correlation', completedRetrieve);
