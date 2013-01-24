@@ -53,7 +53,8 @@
             pubsub.publish('action.data.changed', { newData: data });
             pubsub.publish('action.data.refresh.changed', { oldData: oldData, newData: data, type: topic });
 
-            pubsub.publish('trigger.system.refresh');
+            pubsub.publish('trigger.system.update');
+            pubsub.publish('trigger.data.update');
         },
         reset = function () {
             update(innerBaseData);

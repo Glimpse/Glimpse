@@ -450,7 +450,8 @@ glimpse.data = (function($, pubsub, util) {
             pubsub.publish('action.data.changed', { newData: data });
             pubsub.publish('action.data.refresh.changed', { oldData: oldData, newData: data, type: topic });
 
-            pubsub.publish('trigger.system.refresh');
+            pubsub.publish('trigger.system.update');
+            pubsub.publish('trigger.data.update');
         },
         reset = function () {
             update(innerBaseData);
@@ -587,14 +588,24 @@ glimpse.elements = (function($) {
             pubsub.publish('trigger.shell.init');
             pubsub.publish('action.system.started');
             
-            pubsub.publish('trigger.system.ready'); 
+            pubsub.publish('trigger.system.ready');
         },
-        refresh = function() {
+        dataStart = function() {
+            pubsub.publish('trigger.tab.render', { isInitial: true });
+        },
+        update = function() {
+            pubsub.publish('trigger.system.refresh');
+            
             pubsub.publish('trigger.shell.refresh'); 
+        },
+        dataUpdate = function() {
+            pubsub.publish('trigger.tab.render', { isInitial: false });
         };
 
-    pubsub.subscribe('trigger.system.refresh', refresh); 
     pubsub.subscribe('trigger.system.start', start);
+    pubsub.subscribe('trigger.data.init', dataStart); 
+    pubsub.subscribe('trigger.system.update', update);
+    pubsub.subscribe('trigger.data.update', dataUpdate); 
 })(glimpse.pubsub);
 
 // glimpse.render.js
@@ -628,14 +639,9 @@ glimpse.render = (function($, pubsub, util, data, settings) {
             pubsub.publish(topic + '.rendered', { isInitial: isInitial });
         },
         refresh = function() {
-            var currentKey = settings.local('view');
-            
             pubsub.publish('trigger.shell.clear');
 
             process(false, 'action.shell.refresh');
-
-            if (!data.currentData().data[currentKey].isPermanent)
-                pubsub.publish('trigger.tab.select.' + currentKey, { key: currentKey });
         },
         init = function() {  
             pubsub.publish('action.template.processing', { templates: templates });
@@ -1141,7 +1147,7 @@ glimpse.render.engine.util.raw = (function($, util) {
 })(jQueryGlimpse, glimpse.util, glimpse.render.engine, glimpse.render.engine.util);
 
 // glimpse.render.tab.js
-(function($, data, elements, util, pubsub) {
+(function($, data, elements, util, pubsub, settings) {
     var wireListeners = function () {
             var tabHolder = elements.tabHolder();
             
@@ -1186,6 +1192,11 @@ glimpse.render.engine.util.raw = (function($, util) {
             if (args.isInitial) {
                 tabPermanentHolder.append(tabHtml.permanent);
             }
+            
+            // Check if we need to select a tab
+            var currentKey = settings.local('view');
+            if (currentData.data[currentKey].isPermanent)
+                pubsub.publish('trigger.tab.select.' + currentKey, { key: currentKey });
 
             pubsub.publish('action.tab.rendered', elements.tabHolder());
         },
@@ -1201,10 +1212,10 @@ glimpse.render.engine.util.raw = (function($, util) {
         };
     
     pubsub.subscribe('trigger.shell.subscriptions', wireListeners);
-    pubsub.subscribe('trigger.data.init', render);
+    pubsub.subscribe('trigger.tab.render', render);
     pubsub.subscribe('trigger.tab.select', selected);
     pubsub.subscribe('trigger.shell.clear', clear);
-})(jQueryGlimpse, glimpse.data, glimpse.elements, glimpse.util, glimpse.pubsub);
+})(jQueryGlimpse, glimpse.data, glimpse.elements, glimpse.util, glimpse.pubsub, glimpse.settings);
 // glimpse.render.panel.js
 (function($, data, elements, pubsub, renderEngine) {
     var render = function (key, pluginData, pluginMetadata) {

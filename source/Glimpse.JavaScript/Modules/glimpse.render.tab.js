@@ -1,4 +1,4 @@
-﻿(function($, data, elements, util, pubsub) {
+﻿(function($, data, elements, util, pubsub, settings) {
     var wireListeners = function () {
             var tabHolder = elements.tabHolder();
             
@@ -43,7 +43,7 @@
             if (args.isInitial) {
                 tabPermanentHolder.append(tabHtml.permanent);
             }
-
+            
             pubsub.publish('action.tab.rendered', elements.tabHolder());
         },
         selected = function(options) {
@@ -58,7 +58,7 @@
         };
     
     pubsub.subscribe('trigger.shell.subscriptions', wireListeners);
-    pubsub.subscribe('trigger.data.init', render);
+    pubsub.subscribe('trigger.tab.render', render);
     pubsub.subscribe('trigger.tab.select', selected);
     pubsub.subscribe('trigger.shell.clear', clear);
-})(jQueryGlimpse, glimpse.data, glimpse.elements, glimpse.util, glimpse.pubsub);
+})(jQueryGlimpse, glimpse.data, glimpse.elements, glimpse.util, glimpse.pubsub, glimpse.settings);

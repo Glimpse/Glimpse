@@ -28,14 +28,9 @@
             pubsub.publish(topic + '.rendered', { isInitial: isInitial });
         },
         refresh = function() {
-            var currentKey = settings.local('view');
-            
             pubsub.publish('trigger.shell.clear');
 
             process(false, 'action.shell.refresh');
-
-            if (!data.currentData().data[currentKey].isPermanent)
-                pubsub.publish('trigger.tab.select.' + currentKey, { key: currentKey });
         },
         init = function() {  
             pubsub.publish('action.template.processing', { templates: templates });
