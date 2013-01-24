@@ -1193,11 +1193,6 @@ glimpse.render.engine.util.raw = (function($, util) {
                 tabPermanentHolder.append(tabHtml.permanent);
             }
             
-            // Check if we need to select a tab
-            var currentKey = settings.local('view');
-            if (currentData.data[currentKey].isPermanent)
-                pubsub.publish('trigger.tab.select.' + currentKey, { key: currentKey });
-
             pubsub.publish('action.tab.rendered', elements.tabHolder());
         },
         selected = function(options) {
@@ -2045,7 +2040,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                     detailMetadata = { layout: [ [ { data : 0, key : true, width : '40%' }, { data : 1 }, { data : 2, width : '10%', className : 'mono', align : 'right' },  { data : 3, width : '20%' },  { data : 4, width : '100px' } ] ] };
                 
                 panel.html(renderEngine.build(detailData, detailMetadata)).find('table').append('<tbody></tbody>');
-                panel.find('table').addClass('glimpse-ellipsis').find('thead').append('<tr class="glimpse-head-message" style="display:none"><td colspan="6"><a href="#">Reset context back to starting page</a></td></tr>');
+                panel.find('table').addClass('glimpse-ellipsis').find('thead').append('<tr class="glimpse-head-message" style="display:none"><td colspan="5"><a href="#">Reset context back to starting page</a></td></tr>');
             }
         },
         layoutBuildContent = function(result) {
