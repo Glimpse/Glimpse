@@ -159,7 +159,7 @@
     
     var send = XMLHttpRequest.prototype.send;
     XMLHttpRequest.prototype.send = function() { 
-        this.setRequestHeader("X-Glimpse-Parent-RequestID", data.baseData().requestId);
+        this.setRequestHeader("Glimpse-Parent-RequestID", data.baseData().requestId);
         
         pubsub.publish('trigger.ajax.request.send');
         
