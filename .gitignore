@@ -27,3 +27,4 @@ _ReSharper.*
 TestResults
 /*.DotSettings.user
 *.DotSettings
+*.shfbproj_*

@@ -19,6 +19,7 @@ task clean {
     "   builds/local"
     Remove-Item $build_dir\local\*.nupkg
     Remove-Item $build_dir\local\*.zip
+    Remove-Item $build_dir\local\*.chm
     
     "   Glimpse.Core"
     Delete-Directory "$source_dir\Glimpse.Core\bin"
@@ -67,6 +68,13 @@ task compile -depends clean {
     "   Glimpse.All.sln"
     
     exec { msbuild $base_dir\Glimpse.All.sln /p:Configuration=$config /nologo /verbosity:minimal }
+}
+
+task docs -depends compile {
+    "Documenting"
+    "   Glimpse.Documentation.Api"
+    
+    exec { msbuild $source_dir\Glimpse.Documentation.Api\Glimpse.Documentation.Api.shfbproj /p:Configuration=$config /nologo /verbosity:minimal }
 }
 
 task merge -depends test {
