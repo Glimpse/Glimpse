@@ -45,8 +45,6 @@ namespace Glimpse.Core.Policy
 
         public void Configure(Section section)
         {
-            StatusCodeWhitelist = new List<int>();
-
             foreach (StatusCodeElement item in section.RuntimePolicies.StatusCodes)
             {
                 StatusCodeWhitelist.Add(item.StatusCode);

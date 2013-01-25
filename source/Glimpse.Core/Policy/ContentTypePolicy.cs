@@ -48,8 +48,6 @@ namespace Glimpse.Core.Policy
 
         public void Configure(Section section)
         {
-            ContentTypeWhitelist = new List<string>();
-
             foreach (ContentTypeElement item in section.RuntimePolicies.ContentTypes)
             {
                 ContentTypeWhitelist.Add(item.ContentType);

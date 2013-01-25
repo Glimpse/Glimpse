@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Policy
 {
-    public class UriPolicy : IRuntimePolicy
+    public class UriPolicy : IRuntimePolicy, IConfigurable
     {
         public UriPolicy()
         {
@@ -52,6 +53,14 @@ namespace Glimpse.Core.Policy
             {
                 policyContext.Logger.Warn(Resources.ExecutePolicyWarning, exception, GetType());
                 return RuntimePolicy.Off;
+            }
+        }
+
+        public void Configure(Section section)
+        {
+            foreach (RegexElement item in section.RuntimePolicies.Uris)
+            {
+                UriBlacklist.Add(item.Regex);
             }
         }
     }
