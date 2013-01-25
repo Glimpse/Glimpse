@@ -43,7 +43,7 @@ namespace Glimpse.Core.Policy
             }
         }
 
-        public void Configure(GlimpseSection section)
+        public void Configure(Section section)
         {
             StatusCodeWhitelist = new List<int>();
 

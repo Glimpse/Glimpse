@@ -11,7 +11,7 @@ namespace Glimpse.Core.Configuration
             set { base["autoDiscover"] = value; }
         }
 
-        [ConfigurationProperty("discoveryLocation", DefaultValue = GlimpseSection.DefaultLocation)]
+        [ConfigurationProperty("discoveryLocation", DefaultValue = Section.DefaultLocation)]
         public string DiscoveryLocation
         {
             get { return (string)base["discoveryLocation"]; }

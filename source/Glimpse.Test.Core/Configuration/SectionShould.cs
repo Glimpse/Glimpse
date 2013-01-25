@@ -1,24 +1,24 @@
 ﻿using System.Configuration;
-using Glimpse.Core.Configuration;
 using Glimpse.Core;
+using Glimpse.Core.Configuration;
 using Glimpse.Test.Core.TestDoubles;
 using Xunit;
 
 namespace Glimpse.Test.Core.Configuration
 {
-    public class GlimpseSectionShould
+    public class SectionShould
     {
         [Fact]
         public void LoadFromConfigFile()
         {
-            var section = ConfigurationManager.GetSection("glimpse") as GlimpseSection;
+            var section = ConfigurationManager.GetSection("glimpse") as Section;
             Assert.NotNull(section);
         }
 
         [Fact]
         public void ReadLoggingInfoFromFile()
         {
-            var section = ConfigurationManager.GetSection("glimpse") as GlimpseSection;
+            var section = ConfigurationManager.GetSection("glimpse") as Section;
             Assert.NotNull(section.Logging);
             Assert.Equal(LoggingLevel.Warn, section.Logging.Level);
         }
@@ -26,14 +26,14 @@ namespace Glimpse.Test.Core.Configuration
         [Fact]
         public void HaveDefaultLoggingLevel()
         {
-            var section = new GlimpseSection();
+            var section = new Section();
             Assert.Equal(LoggingLevel.Off, section.Logging.Level);
         }
 
         [Fact]
         public void HaveDefaultClientScripts()
         {
-            var section = new GlimpseSection();
+            var section = new Section();
             Assert.NotNull(section.ClientScripts);
             Assert.True(section.ClientScripts.AutoDiscover);
             Assert.Empty(section.ClientScripts.DiscoveryLocation);
@@ -43,7 +43,7 @@ namespace Glimpse.Test.Core.Configuration
         [Fact]
         public void ReadClientScriptsFromFile()
         {
-            var section = ConfigurationManager.GetSection("glimpse") as GlimpseSection;
+            var section = ConfigurationManager.GetSection("glimpse") as Section;
 
             Assert.True(section.ClientScripts.AutoDiscover);
             Assert.Equal("", section.ClientScripts.DiscoveryLocation);
@@ -55,7 +55,7 @@ namespace Glimpse.Test.Core.Configuration
         {
             var loggingElement = new LoggingElement();
 
-            var section = new GlimpseSection();
+            var section = new Section();
 
             section.Logging = loggingElement;
 
@@ -67,7 +67,7 @@ namespace Glimpse.Test.Core.Configuration
         {
             var scripts = new DiscoverableCollectionElement(){AutoDiscover = false};
 
-            var section = new GlimpseSection();
+            var section = new Section();
 
             section.ClientScripts = scripts;
 
@@ -77,7 +77,7 @@ namespace Glimpse.Test.Core.Configuration
         [Fact]
         public void ReturnDefaultBasePolicy()
         {
-            var section = new GlimpseSection();
+            var section = new Section();
 
             Assert.Equal(RuntimePolicy.Off, section.DefaultRuntimePolicy);
         }
@@ -85,7 +85,7 @@ namespace Glimpse.Test.Core.Configuration
         [Fact]
         public void ReadDefaultRuntimePolicyFromFile()
         {
-            var section = ConfigurationManager.GetSection("glimpse") as GlimpseSection;
+            var section = ConfigurationManager.GetSection("glimpse") as Section;
             Assert.Equal(RuntimePolicy.On, section.DefaultRuntimePolicy);
         }
 
@@ -94,7 +94,7 @@ namespace Glimpse.Test.Core.Configuration
         {
             var basePolicy = RuntimePolicy.ModifyResponseBody;
 
-            var section = new GlimpseSection();
+            var section = new Section();
 
             section.DefaultRuntimePolicy = basePolicy;
 
@@ -104,7 +104,7 @@ namespace Glimpse.Test.Core.Configuration
         [Fact]
         public void ReturnDefaultPipelineInspectors()
         {
-            var section = new GlimpseSection();
+            var section = new Section();
 
             var element = section.PipelineInspectors;
 
@@ -117,7 +117,7 @@ namespace Glimpse.Test.Core.Configuration
         [Fact]
         public void GetSetPipelineInspectors()
         {
-            var section = new GlimpseSection();
+            var section = new Section();
 
             var element = new DiscoverableCollectionElement(){AutoDiscover = false};
 
@@ -129,7 +129,7 @@ namespace Glimpse.Test.Core.Configuration
         [Fact]
         public void ReturnDefaultResources()
         {
-            var section = new GlimpseSection();
+            var section = new Section();
 
             var element = section.Resources;
 
@@ -142,7 +142,7 @@ namespace Glimpse.Test.Core.Configuration
         [Fact]
         public void GetSetResources()
         {
-            var section = new GlimpseSection();
+            var section = new Section();
 
             var element = new DiscoverableCollectionElement(){AutoDiscover = false};
 
@@ -154,7 +154,7 @@ namespace Glimpse.Test.Core.Configuration
         [Fact]
         public void ReturnDefaultTabs()
         {
-            var section = new GlimpseSection();
+            var section = new Section();
 
             var element = section.Tabs;
 
@@ -167,7 +167,7 @@ namespace Glimpse.Test.Core.Configuration
         [Fact]
         public void GetSetTabs()
         {
-            var section = new GlimpseSection();
+            var section = new Section();
 
             var element = new DiscoverableCollectionElement(){AutoDiscover = false};
 
@@ -179,7 +179,7 @@ namespace Glimpse.Test.Core.Configuration
         [Fact]
         public void ReturnDefaultRuntimePolicies()
         {
-            var section = new GlimpseSection();
+            var section = new Section();
 
             var element = section.RuntimePolicies;
 
@@ -192,7 +192,7 @@ namespace Glimpse.Test.Core.Configuration
         [Fact]
         public void GetSetRuntimePolicies()
         {
-            var section = new GlimpseSection();
+            var section = new Section();
 
             var element = new PolicyDiscoverableCollectionElement {AutoDiscover = false};
 
@@ -204,7 +204,7 @@ namespace Glimpse.Test.Core.Configuration
         [Fact]
         public void ReturnDefaultSerializationConverters()
         {
-            var section = new GlimpseSection();
+            var section = new Section();
 
             var element = section.SerializationConverters;
 
@@ -217,7 +217,7 @@ namespace Glimpse.Test.Core.Configuration
         [Fact]
         public void GetSetSerializationConverters()
         {
-            var section = new GlimpseSection();
+            var section = new Section();
 
             var element = new DiscoverableCollectionElement { AutoDiscover = false };
 
@@ -229,7 +229,7 @@ namespace Glimpse.Test.Core.Configuration
         [Fact]
         public void LoadUserServiceLocatorWhenConfigured()
         {
-            var section = ConfigurationManager.GetSection("glimpse") as GlimpseSection;
+            var section = ConfigurationManager.GetSection("glimpse") as Section;
             
             Assert.NotNull(section.ServiceLocatorType);
             Assert.True(section.ServiceLocatorType == typeof(DummyServiceLocator));
@@ -238,7 +238,7 @@ namespace Glimpse.Test.Core.Configuration
         [Fact]
         public void ReturnDefaultServiceLocatorType()
         {
-            var section = new GlimpseSection();
+            var section = new Section();
 
             Assert.Null(section.ServiceLocatorType);
         }
@@ -246,8 +246,8 @@ namespace Glimpse.Test.Core.Configuration
         [Fact]
         public void GetSetDefaultServiceLocatorType()
         {
-            var section = new GlimpseSection();
-            var type = typeof (GlimpseSectionShould);
+            var section = new Section();
+            var type = typeof (SectionShould);
 
             section.ServiceLocatorType = type;
 

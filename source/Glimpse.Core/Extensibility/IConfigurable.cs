@@ -4,7 +4,7 @@ namespace Glimpse.Core.Extensibility
 {
     /// <summary>
     /// Definition for an extension to <see cref="IRuntimePolicy"/> that allows the 
-    /// policy to receive current GlimpseSection.
+    /// policy to receive current Section.
     /// </summary>
     /// <remarks>
     /// An example of its use it to pick up types that are to be used from the Glimpse 
@@ -16,6 +16,6 @@ namespace Glimpse.Core.Extensibility
         /// Allows a given policy using the specified configuration section.
         /// </summary>
         /// <param name="section">The Glimpse configuration section.</param>
-        void Configure(GlimpseSection section);
+        void Configure(Section section);
     }
 }

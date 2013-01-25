@@ -27,9 +27,9 @@ namespace Glimpse.Core.Framework
         {
         }
 
-        public Factory(IServiceLocator providerServiceLocator, IServiceLocator userServiceLocator, GlimpseSection configuration)
+        public Factory(IServiceLocator providerServiceLocator, IServiceLocator userServiceLocator, Section configuration)
         {
-            Configuration = configuration ?? ConfigurationManager.GetSection("glimpse") as GlimpseSection ?? new GlimpseSection();
+            Configuration = configuration ?? ConfigurationManager.GetSection("glimpse") as Section ?? new Section();
 
             IServiceLocator loadedServiceLocator = null;
             if (userServiceLocator == null && Configuration.ServiceLocatorType != null)
@@ -45,7 +45,7 @@ namespace Glimpse.Core.Framework
 
         internal IServiceLocator ProviderServiceLocator { get; set; }
         
-        internal GlimpseSection Configuration { get; set; }
+        internal Section Configuration { get; set; }
 
         private ILogger Logger { get; set; }
 

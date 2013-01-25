@@ -153,7 +153,7 @@ namespace Glimpse.Test.Core.Framework
         public void InstantiateNullLogger()
         {
             var factory = new Factory();
-            factory.Configuration = new GlimpseSection {Logging = {Level = LoggingLevel.Off}};
+            factory.Configuration = new Section {Logging = {Level = LoggingLevel.Off}};
 
             var result = factory.InstantiateLogger();
             Assert.NotNull(result as NullLogger);
@@ -163,7 +163,7 @@ namespace Glimpse.Test.Core.Framework
         public void InstantiateNLogLogger()
         {
             var factory = new Factory();
-            factory.Configuration = new GlimpseSection { Logging = { Level = LoggingLevel.Warn } };
+            factory.Configuration = new Section { Logging = { Level = LoggingLevel.Warn } };
 
             var result = factory.InstantiateLogger();
             Assert.NotNull(result as NLogLogger);
@@ -258,7 +258,7 @@ namespace Glimpse.Test.Core.Framework
         public void LeverageConfigurationWhenCreatingDiscoverableCollection()
         {
             var path = @"c:\Windows";
-            var config = new GlimpseSection {ClientScripts = {DiscoveryLocation = path, AutoDiscover = false}};
+            var config = new Section {ClientScripts = {DiscoveryLocation = path, AutoDiscover = false}};
 
             var locatorMock = new Mock<IServiceLocator>();
             locatorMock.Setup(l => l.GetAllInstances<IClientScript>()).Returns<ICollection<IClientScript>>(null);
@@ -656,7 +656,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void LeaveUserServiceLocatorAsBlankWhenNotConfigured()
         {
-            var factory = new Factory(null, null, new GlimpseSection());
+            var factory = new Factory(null, null, new Section());
 
             Assert.Null(factory.UserServiceLocator);
         }

@@ -80,7 +80,7 @@
     <Compile Include="Configuration\ContentTypeElementCollectionShould.cs" />
     <Compile Include="Configuration\ContentTypeElementShould.cs" />
     <Compile Include="Configuration\DiscoverableCollectionElementShould.cs" />
-    <Compile Include="Configuration\GlimpseSectionShould.cs" />
+    <Compile Include="Configuration\SectionShould.cs" />
     <Compile Include="Configuration\LoggingElementShould.cs" />
     <Compile Include="Configuration\PolicyDiscoverableCollectionElementShould.cs" />
     <Compile Include="Configuration\RegexConverterShould.cs" />

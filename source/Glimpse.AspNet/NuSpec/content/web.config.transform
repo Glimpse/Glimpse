@@ -1,6 +1,6 @@
 ﻿<configuration>
     <configSections>
-        <section name="glimpse" type="Glimpse.Core.Configuration.GlimpseSection, Glimpse.Core" />
+        <section name="glimpse" type="Glimpse.Core.Configuration.Section, Glimpse.Core" />
     </configSections>
     <glimpse defaultRuntimePolicy="On" endpointBaseUri="~/Glimpse.axd"/>
     <system.web>

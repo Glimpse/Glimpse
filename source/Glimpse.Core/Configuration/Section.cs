@@ -4,7 +4,7 @@ using System.Configuration;
 
 namespace Glimpse.Core.Configuration
 {
-    public class GlimpseSection : ConfigurationSection
+    public class Section : ConfigurationSection
     {
         internal const string DefaultLocation = "";
 
