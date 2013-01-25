@@ -96,6 +96,9 @@
 // glimpse.paging.engine.traditional.js
 /*(import:glimpse.paging.engine.traditional.js)*/
 
+// glimpse.tab.js
+/*(import:glimpse.tab.js)*/
+
 // glimpse.ajax.js
 /*(import:glimpse.ajax.js)*/
 // glimpse.history.js

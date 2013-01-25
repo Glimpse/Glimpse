@@ -10,25 +10,30 @@
                 e.type == 'mouseover' ? $(this).addClass('glimpse-hover') : $(this).removeClass('glimpse-hover');
             }); 
         },
+        generateHtmlItem = function(key, pluginData) {
+            if (!pluginData.suppressTab) {
+                var disabled = (pluginData.data === undefined || pluginData.data === null) ? ' glimpse-disabled' : '',
+                    permanent = pluginData.isPermanent ? ' glimpse-permanent' : '';
+            
+                return '<li class="glimpse-tab glimpse-tabitem-' + key + disabled + permanent + '" data-glimpseKey="' + key + '">' + pluginData.name + '</li>';
+            }
+            return '';
+        },
         generateHtml = function(pluginDataSet) {
             var html = { instance: '', permanent: '' };
             for (var key in pluginDataSet) {
-                var pluginData = pluginDataSet[key],
-                    disabled = (pluginData.data === undefined || pluginData.data === null) ? ' glimpse-disabled' : '',
-                    permanent = pluginData.isPermanent ? ' glimpse-permanent' : '',
-                    item = '<li class="glimpse-tab glimpse-tabitem-' + key + disabled + permanent + '" data-glimpseKey="' + key + '">' + pluginData.name + '</li>';
-                
-                if (!pluginData.suppressTab) { 
-                    if (!pluginData.isPermanent)
-                        html.instance += item;
-                    else
-                        html.permanent += item;
-                }
+                var pluginData = pluginDataSet[key], 
+                    itemHtml = generateHtmlItem(key, pluginData);
+                 
+                if (pluginData.isPermanent)
+                    html.permanent += itemHtml; 
+                else
+                    html.instance += itemHtml;
             }
             return html;
         },
-        render = function(args) {
-            pubsub.publish('action.tab.rendering');
+        render = function(args) { 
+            pubsub.publish('action.tab.inserting.bulk');
 
             var currentData = data.currentData(),
                 tabInstanceHolder = elements.tabInstanceHolder(),
@@ -44,7 +49,7 @@
                 tabPermanentHolder.append(tabHtml.permanent);
             }
             
-            pubsub.publish('action.tab.rendered', elements.tabHolder());
+            pubsub.publish('action.tab.inserted.bulk'); 
         },
         selected = function(options) {
             var tabHolder = elements.tabHolder(),
@@ -55,10 +60,25 @@
         },
         clear = function() {
             elements.tabInstanceHolder().empty();
+        },
+        insert = function(args) {
+            var key = args.key,
+                payload = args.payload,
+                itemHtml = generateHtmlItem(key, payload);
+             
+            pubsub.publish('action.tab.inserting.single', { key: key });
+            
+            if (payload.isPermanent)
+                elements.tabPermanentHolder().append(itemHtml);
+            else
+                elements.tabInstanceHolder().append(itemHtml);
+            
+            pubsub.publish('action.tab.inserted.single', { key: key }); 
         };
     
     pubsub.subscribe('trigger.shell.subscriptions', wireListeners);
     pubsub.subscribe('trigger.tab.render', render);
     pubsub.subscribe('trigger.tab.select', selected);
     pubsub.subscribe('trigger.shell.clear', clear);
+    pubsub.subscribe('tigger.tab.insert', insert);
 })(jQueryGlimpse, glimpse.data, glimpse.elements, glimpse.util, glimpse.pubsub, glimpse.settings);

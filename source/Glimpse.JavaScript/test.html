@@ -172,6 +172,21 @@ var glimpseMetadata = {"environmentUrls":{"Dev":"http://localhost/","QA":"http:/
     };
 glimpse.data.initMetadata(glimpseMetadata);
 glimpse.data.initData(glimpseData); 
+var args = {
+        key: 'marionette-core',
+        payload: {
+            name : 'Marionette', 
+            isPermanent : true,
+            data :  [['Title 1', 'Title 2', 'Title 3'],['b', 'b', 'b'],['c', 'c', 'c'],['d', 'd', 'd'],['e', 'e', 'e'],['f', 'f', 'f']]
+        },
+        metadata: {
+            documentationUri: "http://marionettejs.com/Glimpse",
+            layout: [
+                [ { data: 0, key: true }, { data: 1, width: '20%' }, { data: 2, width: '20%' } ]
+            ]
+        }
+    };
+glimpse.tab.register(args);
     </script>
     <script type="text/javascript"> 
 (function($) { 

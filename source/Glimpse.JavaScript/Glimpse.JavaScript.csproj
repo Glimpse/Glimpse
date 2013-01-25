@@ -118,6 +118,7 @@
     <Content Include="glimpse.shell.resize.js" />
     <Content Include="glimpse.shell.title.js" />
     <Content Include="glimpse.system.js" />
+    <Content Include="glimpse.tab.js" />
     <Content Include="glimpse.timeline.js" />
     <Content Include="glimpse.timeline.shell.css" />
     <Content Include="glimpse.timeline.shell.html" />

@@ -1161,25 +1161,30 @@ glimpse.render.engine.util.raw = (function($, util) {
                 e.type == 'mouseover' ? $(this).addClass('glimpse-hover') : $(this).removeClass('glimpse-hover');
             }); 
         },
+        generateHtmlItem = function(key, pluginData) {
+            if (!pluginData.suppressTab) {
+                var disabled = (pluginData.data === undefined || pluginData.data === null) ? ' glimpse-disabled' : '',
+                    permanent = pluginData.isPermanent ? ' glimpse-permanent' : '';
+            
+                return '<li class="glimpse-tab glimpse-tabitem-' + key + disabled + permanent + '" data-glimpseKey="' + key + '">' + pluginData.name + '</li>';
+            }
+            return '';
+        },
         generateHtml = function(pluginDataSet) {
             var html = { instance: '', permanent: '' };
             for (var key in pluginDataSet) {
-                var pluginData = pluginDataSet[key],
-                    disabled = (pluginData.data === undefined || pluginData.data === null) ? ' glimpse-disabled' : '',
-                    permanent = pluginData.isPermanent ? ' glimpse-permanent' : '',
-                    item = '<li class="glimpse-tab glimpse-tabitem-' + key + disabled + permanent + '" data-glimpseKey="' + key + '">' + pluginData.name + '</li>';
-                
-                if (!pluginData.suppressTab) { 
-                    if (!pluginData.isPermanent)
-                        html.instance += item;
-                    else
-                        html.permanent += item;
-                }
+                var pluginData = pluginDataSet[key], 
+                    itemHtml = generateHtmlItem(key, pluginData);
+                 
+                if (pluginData.isPermanent)
+                    html.permanent += itemHtml; 
+                else
+                    html.instance += itemHtml;
             }
             return html;
         },
-        render = function(args) {
-            pubsub.publish('action.tab.rendering');
+        render = function(args) { 
+            pubsub.publish('action.tab.inserting.bulk');
 
             var currentData = data.currentData(),
                 tabInstanceHolder = elements.tabInstanceHolder(),
@@ -1195,7 +1200,7 @@ glimpse.render.engine.util.raw = (function($, util) {
                 tabPermanentHolder.append(tabHtml.permanent);
             }
             
-            pubsub.publish('action.tab.rendered', elements.tabHolder());
+            pubsub.publish('action.tab.inserted.bulk'); 
         },
         selected = function(options) {
             var tabHolder = elements.tabHolder(),
@@ -1206,12 +1211,27 @@ glimpse.render.engine.util.raw = (function($, util) {
         },
         clear = function() {
             elements.tabInstanceHolder().empty();
+        },
+        insert = function(args) {
+            var key = args.key,
+                payload = args.payload,
+                itemHtml = generateHtmlItem(key, payload);
+             
+            pubsub.publish('action.tab.inserting.single', { key: key });
+            
+            if (payload.isPermanent)
+                elements.tabPermanentHolder().append(itemHtml);
+            else
+                elements.tabInstanceHolder().append(itemHtml);
+            
+            pubsub.publish('action.tab.inserted.single', { key: key }); 
         };
     
     pubsub.subscribe('trigger.shell.subscriptions', wireListeners);
     pubsub.subscribe('trigger.tab.render', render);
     pubsub.subscribe('trigger.tab.select', selected);
     pubsub.subscribe('trigger.shell.clear', clear);
+    pubsub.subscribe('tigger.tab.insert', insert);
 })(jQueryGlimpse, glimpse.data, glimpse.elements, glimpse.util, glimpse.pubsub, glimpse.settings);
 // glimpse.render.panel.js
 (function($, data, elements, pubsub, renderEngine) {
@@ -1315,17 +1335,25 @@ glimpse.render.engine.util.raw = (function($, util) {
                 pubsub.publish('trigger.shell.open', { isInitial: true }); 
         },
         readySelect = function () {
-            var current = settings.local('view'); 
-            if (!current)
-                current = elements.tabHolder().find('li:not(.glimpse-active, .glimpse-disabled):first').attr('data-glimpseKey'); 
-            pubsub.publish('trigger.tab.select.' + current, { key: current });
+            var current = settings.local('view'),
+                tabElement = elements.tab(current),
+                forced = current != null;
+            
+            if (!current || tabElement.length == 0) {
+                tabElement = elements.tabHolder().find('li:not(.glimpse-active, .glimpse-disabled):first'); 
+                current = tabElement.attr('data-glimpseKey');
+            }
+             
+            if (tabElement.length > 0 && !tabElement.hasClass('glimpse-active'))
+                pubsub.publish('trigger.tab.select.' + current, { key: current, forced: forced });
         },
-        selected = function (options) {
-            settings.local('view', options.key);
+        selected = function (args) {
+            if (!args.forced)
+                settings.local('view', args.key);
         };
 
     pubsub.subscribe('trigger.shell.ready', readyOpen);
-    pubsub.subscribe('action.tab.rendered', readySelect);
+    pubsub.subscribe('action.tab.inserted', readySelect);
     pubsub.subscribe('trigger.tab.select', selected);
 })(glimpse.settings, glimpse.pubsub, glimpse.elements);
 
@@ -1953,6 +1981,23 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
     
     engine.register('traditional', provider);
 })(jQueryGlimpse, glimpse.util, glimpse.paging.engine, glimpse.paging.engine.util);
+
+// glimpse.tab.js
+glimpse.tab = (function($, pubsub, data) {
+    var register = function(args) {
+            //TODO: need to refactor this out as static plugins should not be stored in with the instance plugins    
+            var currentData = data.currentData(),
+                currentMetadata = data.currentMetadata();
+            currentData.data[args.key] = args.payload;
+            currentMetadata.plugins[args.key] = args.metadata;
+            
+            pubsub.publish('tigger.tab.insert', args); 
+        };
+    
+    return {
+            register: register
+        };
+})(jQueryGlimpse, glimpse.pubsub, glimpse.data);
 
 // glimpse.ajax.js
 (function($, pubsub, util, elements, data, renderEngine) {
