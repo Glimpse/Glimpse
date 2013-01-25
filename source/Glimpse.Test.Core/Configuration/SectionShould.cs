@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using Glimpse.Core;
 using Glimpse.Core.Configuration;
+using Glimpse.Core.Extensibility;
 using Glimpse.Test.Core.TestDoubles;
 using Xunit;
 
