@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
@@ -134,10 +135,22 @@ namespace Glimpse.Core.Framework
                 return Logger;
             }
 
+            var configuredPath = Configuration.Logging.LogLocation;
+            
+            // Root the path if it isn't already
+            var logDirPath = Path.IsPathRooted(configuredPath)
+                                 ? configuredPath
+                                 : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, configuredPath);
+            
+            // Add a filename if one isn't specified
+            var logFilePath = string.IsNullOrEmpty(Path.GetExtension(logDirPath))
+                                  ? Path.Combine(logDirPath, "Glimpse.log")
+                                  : logDirPath;
+
             // use NLog logger otherwise
             var fileTarget = new FileTarget
                                  {
-                                     FileName = "${basedir}/Glimpse.log",
+                                     FileName = logFilePath,
                                      Layout =
                                          "${longdate} | ${level:uppercase=true} | ${message} | ${exception:maxInnerExceptionLevel=5:format=type,message,stacktrace:separator=--:innerFormat=shortType,message,method:innerExceptionSeparator=>>}"
                                  };

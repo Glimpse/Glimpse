@@ -29,5 +29,23 @@ namespace Glimpse.Core.Configuration
             get { return (LoggingLevel)base["level"]; }
             set { base["level"] = value; }
         }
+
+        /// <summary>
+        /// Gets or sets the file path to the Glimpse log file.
+        /// </summary>
+        /// <remarks>
+        /// <c>LogLocation</c> is only written to if <c>Level</c> is not set to <c>Off</c>.
+        /// </remarks>
+        /// <value>
+        /// The absolute or relative file path to the log file. 
+        /// Relative paths are rooted from <c>AppDomain.CurrentDomain.BaseDirectory</c>.
+        /// The default value is <c>Glimpse.log</c>.
+        /// </value>
+        [ConfigurationProperty("logLocation", DefaultValue = "Glimpse.log")]
+        public string LogLocation
+        {
+            get { return (string)base["logLocation"]; }
+            set { base["logLocation"] = value; }
+        }
     }
 }
