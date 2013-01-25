@@ -95,6 +95,7 @@
     <Compile Include="Extensibility\ITabLayout.cs" />
     <Compile Include="Extensibility\IWrapper.cs" />
     <Compile Include="Extensibility\JsonNetConverterDictionaryKeysAreNotPropertyNames.cs" />
+    <Compile Include="Extensibility\RuntimePolicy.cs" />
     <Compile Include="Message\MessageBase.cs" />
     <Compile Include="Extensibility\NuGetPackageAttribute.cs" />
     <Compile Include="Extensibility\ResourceParameterMetadata.cs" />
@@ -235,7 +236,6 @@
     <Compile Include="Resource\MetadataResource.cs" />
     <Compile Include="Resource\SpriteResource.cs" />
     <Compile Include="Resource\VersionCheckResource.cs" />
-    <Compile Include="RuntimePolicy.cs" />
     <Compile Include="Extensibility\IHtmlEncoder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Framework\IRequestMetadata.cs" />

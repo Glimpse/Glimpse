@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Glimpse.Core
+namespace Glimpse.Core.Extensibility
 {
     /// <summary>
     /// Used to describe what activity level Glimpse is allowed to operate in.

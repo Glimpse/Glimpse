@@ -1,4 +1,6 @@
-﻿namespace Glimpse.Core
+﻿using Glimpse.Core.Extensibility;
+
+namespace Glimpse.Core
 {
     /// <summary>
     /// Common constant strings used throughout Glimpse.
