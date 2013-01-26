@@ -6,7 +6,7 @@
             currentData.data[args.key] = args.payload;
             currentMetadata.plugins[args.key] = args.metadata;
             
-            pubsub.publish('tigger.tab.insert', args); 
+            pubsub.publish('trigger.tab.insert', args); 
         };
     
     return {

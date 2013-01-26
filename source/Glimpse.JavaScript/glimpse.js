@@ -1231,7 +1231,7 @@ glimpse.render.engine.util.raw = (function($, util) {
     pubsub.subscribe('trigger.tab.render', render);
     pubsub.subscribe('trigger.tab.select', selected);
     pubsub.subscribe('trigger.shell.clear', clear);
-    pubsub.subscribe('tigger.tab.insert', insert);
+    pubsub.subscribe('trigger.tab.insert', insert);
 })(jQueryGlimpse, glimpse.data, glimpse.elements, glimpse.util, glimpse.pubsub, glimpse.settings);
 // glimpse.render.panel.js
 (function($, data, elements, pubsub, renderEngine) {
@@ -1991,7 +1991,7 @@ glimpse.tab = (function($, pubsub, data) {
             currentData.data[args.key] = args.payload;
             currentMetadata.plugins[args.key] = args.metadata;
             
-            pubsub.publish('tigger.tab.insert', args); 
+            pubsub.publish('trigger.tab.insert', args); 
         };
     
     return {

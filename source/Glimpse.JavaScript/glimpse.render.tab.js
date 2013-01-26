@@ -80,5 +80,5 @@
     pubsub.subscribe('trigger.tab.render', render);
     pubsub.subscribe('trigger.tab.select', selected);
     pubsub.subscribe('trigger.shell.clear', clear);
-    pubsub.subscribe('tigger.tab.insert', insert);
+    pubsub.subscribe('trigger.tab.insert', insert);
 })(jQueryGlimpse, glimpse.data, glimpse.elements, glimpse.util, glimpse.pubsub, glimpse.settings);
