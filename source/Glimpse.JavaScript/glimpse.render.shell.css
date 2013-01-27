@@ -565,7 +565,7 @@ div.glimpse-ellipsis {
 .glimpse-panel .selected * {
     color: #409B3B;
 }
-.glimpse .info .icon, .glimpse .warn .icon, .glimpse .loading .icon, .glimpse .error .icon, .glimpse .fail .icon, .glimpse .ms .icon, .glimpse .gconnect .icon, .glimpse .gdisconnect .icon {
+.glimpse .info .icon, .glimpse .warn .icon, .glimpse .loading .icon, .glimpse .error .icon, .glimpse .fail .icon, .glimpse .ms .icon, .glimpse .glimpse-connect .icon, .glimpse .glimpse-disconnect .icon {
     width: 14px;
     height: 14px;
     background-image: url();
@@ -573,7 +573,7 @@ div.glimpse-ellipsis {
     display: inline-block;
     margin-right: 5px;
 }
-.glimpse .gconnect .icon, .glimpse .gdisconnect .icon {
+.glimpse .glimpse-connect .icon, .glimpse .glimpse-disconnect .icon {
     width: 17px;
     height: 17px;
 }
@@ -595,10 +595,10 @@ div.glimpse-ellipsis {
 .glimpse .fail .icon {
     background-position: -64px -22px;
 }
-.glimpse .gconnect .icon {
+.glimpse .glimpse-connect .icon {
     background-position: -213px -20px; 
 }
-.glimpse .gdisconnect .icon {
+.glimpse .glimpse-disconnect .icon {
     background-position: -195px -20px; 
 }
 .glimpse .info * {

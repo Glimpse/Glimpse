@@ -12,7 +12,7 @@
             var that = this;
             if (!that.connected) { 
                 that.text.text('Connecting...'); 
-                that.scope.removeClass('gconnect').addClass('gdisconnect');
+                that.scope.removeClass('glimpse-connect').addClass('glimpse-disconnect');
             }
         },
         complete : function (textStatus) {
@@ -20,12 +20,12 @@
             if (textStatus != "success") {
                 that.connected = false;
                 that.text.text('Disconnected...');
-                that.scope.removeClass('gconnect').addClass('gdisconnect');
+                that.scope.removeClass('glimpse-connect').addClass('glimpse-disconnect');
             }
             else {
                 that.connected = true;
                 that.text.text('Connected...');
-                that.scope.removeClass('gdisconnect').addClass('gconnect');
+                that.scope.removeClass('glimpse-disconnect').addClass('glimpse-connect');
             }
         }
     };
