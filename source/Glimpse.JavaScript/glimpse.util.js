@@ -29,9 +29,7 @@
             }
         }
     };
-
-
-
+     
     return {
         cookie : function (key, value, days) {
             if (arguments.length > 1) { 
@@ -69,8 +67,8 @@
         },
         lengthJson: function (data) {
             var count = 0;
-            if ($.isPlainObject(data))
-                $.each(data, function (k, v) { count++; });
+            if (data === Object(data))
+                $.each(data, function () { count++; });
             return count;
         }, 
         uriTemplate: function (uri, data) {

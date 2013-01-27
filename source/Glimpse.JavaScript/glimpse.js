@@ -253,9 +253,7 @@ glimpse.util = (function($) {
             }
         }
     };
-
-
-
+     
     return {
         cookie : function (key, value, days) {
             if (arguments.length > 1) { 
@@ -293,8 +291,8 @@ glimpse.util = (function($) {
         },
         lengthJson: function (data) {
             var count = 0;
-            if ($.isPlainObject(data))
-                $.each(data, function (k, v) { count++; });
+            if (data === Object(data))
+                $.each(data, function () { count++; });
             return count;
         }, 
         uriTemplate: function (uri, data) {
@@ -872,7 +870,7 @@ glimpse.render.engine.util.raw = (function($, util) {
                     else
                         result = providers.table.build(data, level, forceFull, forceLimit);
                 } 
-                else if ($.isPlainObject(data)) {
+                else if (data === Object(data)) {
                     if (metadata && metadata.keysHeadings)
                         result = providers.heading.build(data, level, forceFull, forceLimit);
                     else

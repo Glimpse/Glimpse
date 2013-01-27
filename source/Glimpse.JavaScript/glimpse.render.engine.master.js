@@ -10,7 +10,7 @@
                     else
                         result = providers.table.build(data, level, forceFull, forceLimit);
                 } 
-                else if ($.isPlainObject(data)) {
+                else if (data === Object(data)) {
                     if (metadata && metadata.keysHeadings)
                         result = providers.heading.build(data, level, forceFull, forceLimit);
                     else
