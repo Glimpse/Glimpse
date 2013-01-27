@@ -864,7 +864,13 @@ glimpse.render.engine.util.raw = (function($, util) {
             build: function(data, level, forceFull, metadata, forceLimit) {
                 var result = '';
 
-                if ($.isArray(data)) {
+                if (metadata && metadata.engine) {
+                    if (providers[metadata.engine])
+                        result = providers[metadata.engine].build(data, level, forceFull, metadata, forceLimit);
+                    else
+                        result = 'Specified engine could not be found: ' + metadata.engine;
+                }
+                else if ($.isArray(data)) {
                     if (metadata && metadata.layout)
                         result = providers.layout.build(data, level, forceFull, metadata.layout, forceLimit);
                     else
@@ -945,25 +951,30 @@ glimpse.render.engine.util.raw = (function($, util) {
                 if (!metadataItem.indexs && !$.isNumeric(metadataItem.data)) 
                     metadataItem.indexs = util.getTokens(metadataItem.data, data); 
                 
-                //Get metadata for the new data 
-                var newMetadataItem = metadataItem.layout;
-                if ($.isPlainObject(newMetadataItem)) 
-                    newMetadataItem = newMetadataItem[rowIndex];
-                if (newMetadataItem)
-                    newMetadataItem = { layout: newMetadataItem };
-
                 cellContent = metadataItem.indexs ? buildFormatString(metadataItem.data, data, metadataItem.indexs) : data[metadataItem.data];
                 
-                //If minDisplay and we are in header or there is no data, we don't want to render anything 
-                if (metadataItem.minDisplay && (rowIndex == 0 || cellContent == undefined || cellContent == null))
-                    return ""; 
-                     
-                cellContent = providers.master.build(cellContent, level + 1, metadataItem.forceFull, newMetadataItem, rowIndex == 0 ? undefined : metadataItem.limit);
+                if (metadataItem.engine && rowIndex != 0) {
+                    cellContent = providers.master.build(cellContent, level + 1, metadataItem.forceFull, metadataItem, rowIndex == 0 ? undefined : metadataItem.limit);
+                }
+                else {
+                    //Get metadata for the new data 
+                    var newMetadataItem = metadataItem.layout;
+                    if ($.isPlainObject(newMetadataItem)) 
+                        newMetadataItem = newMetadataItem[rowIndex];
+                    if (newMetadataItem)
+                        newMetadataItem = { layout: newMetadataItem };
 
-                //Content pre/post
-                if (rowIndex != 0) {
-                    if (metadataItem.pre) { cellContent = '<span class="glimpse-soft">' + metadataItem.pre + '</span>' + cellContent; }
-                    if (metadataItem.post) { cellContent = cellContent + '<span class="glimpse-soft">' + metadataItem.post + '</span>'; }
+                    //If minDisplay and we are in header or there is no data, we don't want to render anything 
+                    if (metadataItem.minDisplay && (rowIndex == 0 || cellContent == undefined || cellContent == null))
+                        return ""; 
+                     
+                    cellContent = providers.master.build(cellContent, level + 1, metadataItem.forceFull, newMetadataItem, rowIndex == 0 ? undefined : metadataItem.limit);
+
+                    //Content pre/post
+                    if (rowIndex != 0) {
+                        if (metadataItem.pre) { cellContent = '<span class="glimpse-soft">' + metadataItem.pre + '</span>' + cellContent; }
+                        if (metadataItem.post) { cellContent = cellContent + '<span class="glimpse-soft">' + metadataItem.post + '</span>'; }
+                    }
                 }
             }
             

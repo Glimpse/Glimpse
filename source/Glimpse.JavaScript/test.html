@@ -172,6 +172,21 @@ var glimpseMetadata = {"environmentUrls":{"Dev":"http://localhost/","QA":"http:/
     };
 glimpse.data.initMetadata(glimpseMetadata);
 glimpse.data.initData(glimpseData); 
+    </script>
+    <script type="text/javascript"> 
+var customEngineA = {
+        build: function(data) {
+            return 'AAAA - ' + data + ' - AAAA';
+        }
+    },
+    customEngineB = {
+        build: function(data) {
+            return 'BBB - ' + data + ' - BBB';
+        }
+    };
+glimpse.render.engine.register('marionette-customA', customEngineA);
+glimpse.render.engine.register('marionette-customB', customEngineB);
+
 var args = {
         key: 'marionette-core',
         payload: {
@@ -182,7 +197,7 @@ var args = {
         metadata: {
             documentationUri: "http://marionettejs.com/Glimpse",
             layout: [
-                [ { data: 0, key: true }, { data: 1, width: '20%' }, { data: 2, width: '20%' } ]
+                [ { data: 0, key: true }, { data: 1, width: '20%', engine: 'marionette-customA' }, { data: 2, width: '20%', engine: 'marionette-customB' } ]
             ]
         }
     };

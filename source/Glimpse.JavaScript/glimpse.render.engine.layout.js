@@ -23,25 +23,30 @@
                 if (!metadataItem.indexs && !$.isNumeric(metadataItem.data)) 
                     metadataItem.indexs = util.getTokens(metadataItem.data, data); 
                 
-                //Get metadata for the new data 
-                var newMetadataItem = metadataItem.layout;
-                if ($.isPlainObject(newMetadataItem)) 
-                    newMetadataItem = newMetadataItem[rowIndex];
-                if (newMetadataItem)
-                    newMetadataItem = { layout: newMetadataItem };
-
                 cellContent = metadataItem.indexs ? buildFormatString(metadataItem.data, data, metadataItem.indexs) : data[metadataItem.data];
                 
-                //If minDisplay and we are in header or there is no data, we don't want to render anything 
-                if (metadataItem.minDisplay && (rowIndex == 0 || cellContent == undefined || cellContent == null))
-                    return ""; 
-                     
-                cellContent = providers.master.build(cellContent, level + 1, metadataItem.forceFull, newMetadataItem, rowIndex == 0 ? undefined : metadataItem.limit);
+                if (metadataItem.engine && rowIndex != 0) {
+                    cellContent = providers.master.build(cellContent, level + 1, metadataItem.forceFull, metadataItem, rowIndex == 0 ? undefined : metadataItem.limit);
+                }
+                else {
+                    //Get metadata for the new data 
+                    var newMetadataItem = metadataItem.layout;
+                    if ($.isPlainObject(newMetadataItem)) 
+                        newMetadataItem = newMetadataItem[rowIndex];
+                    if (newMetadataItem)
+                        newMetadataItem = { layout: newMetadataItem };
 
-                //Content pre/post
-                if (rowIndex != 0) {
-                    if (metadataItem.pre) { cellContent = '<span class="glimpse-soft">' + metadataItem.pre + '</span>' + cellContent; }
-                    if (metadataItem.post) { cellContent = cellContent + '<span class="glimpse-soft">' + metadataItem.post + '</span>'; }
+                    //If minDisplay and we are in header or there is no data, we don't want to render anything 
+                    if (metadataItem.minDisplay && (rowIndex == 0 || cellContent == undefined || cellContent == null))
+                        return ""; 
+                     
+                    cellContent = providers.master.build(cellContent, level + 1, metadataItem.forceFull, newMetadataItem, rowIndex == 0 ? undefined : metadataItem.limit);
+
+                    //Content pre/post
+                    if (rowIndex != 0) {
+                        if (metadataItem.pre) { cellContent = '<span class="glimpse-soft">' + metadataItem.pre + '</span>' + cellContent; }
+                        if (metadataItem.post) { cellContent = cellContent + '<span class="glimpse-soft">' + metadataItem.post + '</span>'; }
+                    }
                 }
             }
             

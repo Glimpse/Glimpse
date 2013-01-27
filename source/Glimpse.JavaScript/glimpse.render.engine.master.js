@@ -4,7 +4,13 @@
             build: function(data, level, forceFull, metadata, forceLimit) {
                 var result = '';
 
-                if ($.isArray(data)) {
+                if (metadata && metadata.engine) {
+                    if (providers[metadata.engine])
+                        result = providers[metadata.engine].build(data, level, forceFull, metadata, forceLimit);
+                    else
+                        result = 'Specified engine could not be found: ' + metadata.engine;
+                }
+                else if ($.isArray(data)) {
                     if (metadata && metadata.layout)
                         result = providers.layout.build(data, level, forceFull, metadata.layout, forceLimit);
                     else
