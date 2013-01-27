@@ -70,6 +70,8 @@
         <div class="glimpse"><div class="sample22 glimpse-panel"></div></div>
         <h4>Scenario 23 (Pass)</h4>
         <div class="glimpse"><div class="sample23 glimpse-panel"></div></div> 
+        <h4>Scenario 24 (Pass)</h4>
+        <div class="glimpse"><div class="sample24 glimpse-panel"></div></div> 
     </div>
 
     <script src="./glimpse.js" type="text/javascript"></script>
@@ -675,6 +677,42 @@ glimpse.tab.register(args);
         namedParams: function namedParams(hello, world) { return; }
     };
     process($('.sample23'), data23);
+    
+
+    
+    var data24EngineA = {
+            build: function(data) {
+                var val = [];
+                for (var key in data)
+                    val.push(' &nbsp; &nbsp;' + key + ': \'' + data[key] + '\'');
+                return '{<br />' + val.join(',<br />') + '<br />}';
+            }
+        },
+        data24EngineB = {
+            build: function(data) {
+                if (data !== Object(data))
+                    return data;
+                
+                var val = [];
+                for (var key in data)
+                    val.push(' &nbsp; &nbsp;' + data[key] + ': \'' + key + '\'');
+                return '{<br />' + val.join(',<br />') + '<br />}';
+            }
+        };
+    glimpse.render.engine.register('data24EngineA', data24EngineA);
+    glimpse.render.engine.register('data24EngineB', data24EngineB);
+    
+    
+    var data24 = [
+        ['Actor', 'Character', 'Gender', 'Age'],
+        ['Mark Hamill', 'Luke Skywalker', { male: true, female: false, other: true }, { isChild: false, isBaby: false, isTeen: false, isAdult: false, isJedi: true } ],
+        ['James Earl Jones', 'Darth Vader', { male: true, female: true }, '45', 'info' ]
+    ];
+    var metaData24 = { layout: [
+        [ { data : '{{0}} - ({{1}})', key : true }, { data : 2, width : '20%', engine: 'data24EngineA' }, { data : 3, width : '20%', engine: 'data24EngineB' } ]
+    ]};
+    process($('.sample24'), data24, metaData24);
+
 })(jQueryGlimpse);
     </script>
 </body>
