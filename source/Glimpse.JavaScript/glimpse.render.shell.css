@@ -532,6 +532,10 @@ div.glimpse-ellipsis {
     padding-right: 2px;
     width: 11px;
 }
+.glimpse-panel .glimpse-preview-table .glimpse-preview-cell, .glimpse-panel .glimpse-preview-table .glimpse-preview-cell + td {
+    padding-top: 0;
+    padding-bottom: 0;
+}
 .glimpse-expand {
     height: 11px;
     width: 11px;
