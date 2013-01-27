@@ -130,6 +130,7 @@
     <Content Include="jquery-1.8.0.min.js" />
     <Content Include="logo.png" />
     <Content Include="sprite.png" />
+    <Content Include="test_client.html" />
     <Content Include="test-popup.html" />
     <Content Include="test.html" />
     <Content Include="test_drag.html" />
