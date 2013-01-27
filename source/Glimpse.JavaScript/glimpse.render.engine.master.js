@@ -16,6 +16,8 @@
                     else
                         result = providers.table.build(data, level, forceFull, forceLimit);
                 } 
+                else if (typeof data === 'function')
+                    result = providers.function.build(data, level, forceFull, forceLimit);
                 else if (data === Object(data)) {
                     if (metadata && metadata.keysHeadings)
                         result = providers.heading.build(data, level, forceFull, forceLimit);

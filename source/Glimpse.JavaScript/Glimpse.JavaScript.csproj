@@ -89,6 +89,7 @@
     <Content Include="glimpse.pubsub.js" />
     <Content Include="glimpse.render.default.js" />
     <Content Include="glimpse.render.engine.empty.js" />
+    <Content Include="glimpse.render.engine.function.js" />
     <Content Include="glimpse.render.engine.heading.js" />
     <Content Include="glimpse.render.engine.js" />
     <Content Include="glimpse.render.engine.keyvalue.js" />

@@ -47,6 +47,8 @@
 /*(import:glimpse.render.engine.layout.js)*/
 // glimpse.render.engine.table.js
 /*(import:glimpse.render.engine.table.js)*/
+// glimpse.render.engine.function.js
+/*(import:glimpse.render.engine.function.js)*/
 // glimpse.render.engine.heading.js
 /*(import:glimpse.render.engine.heading.js)*/
 // glimpse.render.tab.js
