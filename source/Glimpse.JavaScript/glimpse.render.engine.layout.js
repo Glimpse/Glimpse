@@ -79,8 +79,11 @@
 
             if (engineUtil.shouldUsePreview(data.length, level, forceFull, limit, forceLimit, 1))
                 return buildPreview(data, level, metadata);
-            
-            var html = '<table>', rowClass = '';
+            return buildOnly(data, level, metadata);
+        },
+        buildOnly = function (data, level, metadata) {
+            var html = '<table>', 
+                rowClass = '';
             for (var i = 0; i < data.length; i++) {
                 rowClass = data[i].length > data[0].length ? (' ' + data[i][data[i].length - 1]) : '';
                 html += (i == 0) ? '<thead class="glimpse-row-header glimpse-row-header-' + level + '">' : '<tbody class="' + (i % 2 ? 'odd' : 'even') + rowClass + '">';
@@ -98,16 +101,17 @@
             }
             html += '</table>'; 
 
-            return html;
+            return html; 
         },
         buildPreview = function(data, level, metadata) { 
-            return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + buildPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + build(data, level, true, metadata) + '</div></td></tr></table>';
+            return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + buildPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + buildOnly(data, level, metadata) + '</div></td></tr></table>';
         },
         buildPreviewOnly = function (data, level) { 
             return providers.table.buildPreviewOnly(data, level);
         },
         provider = {
             build : build,
+            buildOnly : buildOnly,
             buildPreview : buildPreview,
             buildPreviewOnly : buildPreviewOnly
         }; 

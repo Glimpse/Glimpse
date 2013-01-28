@@ -5,7 +5,9 @@
 
             if (engineUtil.shouldUsePreview(data.length, level, forceFull, limit, forceLimit, 1))
                 return buildPreview(data, level);
-
+            return buildOnly(data, level);
+        },
+        buildOnly = function (data, level) {
             var html = '<table><thead><tr class="glimpse-row-header glimpse-row-header-' + level + '">';
             if ($.isArray(data[0])) {
                 for (var x = 0; x < data[0].length; x++)
@@ -37,7 +39,7 @@
             if (isComplex && data.length == 1)
                 return providers.master.build(data[0], level);
             if (isComplex || data.length > 1) 
-                return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + buildPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + build(data, level, true) + '</div></td></tr></table>';
+                return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + buildPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + buildOnly(data, level) + '</div></td></tr></table>';
             return providers.string.build(data[0], level + 1); 
         },
         buildPreviewOnly = function (data, level) { 
@@ -82,6 +84,7 @@
         },
         provider = {
             build : build,
+            buildOnly : buildOnly,
             buildPreview : buildPreview,
             buildPreviewOnly : buildPreviewOnly
         }; 

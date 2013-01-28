@@ -808,7 +808,9 @@ glimpse.render.engine.util.raw = (function($, util) {
 
             if (engineUtil.shouldUsePreview(util.lengthJson(data), level, forceFull, limit, forceLimit, 1))
                 return buildPreview(data, level);
-                
+            return buildOnly(data, level);
+        }, 
+        buildOnly = function(data, level) { 
             var i = 1, 
                 html = '<table><thead><tr class="glimpse-row-header glimpse-row-header-' + level + '"><th class="glimpse-cell-key">Key</th><th class="glimpse-cell-value">Value</th></tr></thead>';
             for (var key in data)
@@ -816,7 +818,7 @@ glimpse.render.engine.util.raw = (function($, util) {
             html += '</table>';
 
             return html;
-        }, 
+        },
         buildPreview = function (data, level) { 
             return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + buildPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + build(data, level, true) + '</div></td></tr></table>';
         },
@@ -838,6 +840,7 @@ glimpse.render.engine.util.raw = (function($, util) {
         },
         provider = {
             build : build,
+            buildOnly : buildOnly,
             buildPreview : buildPreview,
             buildPreviewOnly : buildPreviewOnly
         }; 
@@ -1009,8 +1012,11 @@ glimpse.render.engine.util.raw = (function($, util) {
 
             if (engineUtil.shouldUsePreview(data.length, level, forceFull, limit, forceLimit, 1))
                 return buildPreview(data, level, metadata);
-            
-            var html = '<table>', rowClass = '';
+            return buildOnly(data, level, metadata);
+        },
+        buildOnly = function (data, level, metadata) {
+            var html = '<table>', 
+                rowClass = '';
             for (var i = 0; i < data.length; i++) {
                 rowClass = data[i].length > data[0].length ? (' ' + data[i][data[i].length - 1]) : '';
                 html += (i == 0) ? '<thead class="glimpse-row-header glimpse-row-header-' + level + '">' : '<tbody class="' + (i % 2 ? 'odd' : 'even') + rowClass + '">';
@@ -1028,16 +1034,17 @@ glimpse.render.engine.util.raw = (function($, util) {
             }
             html += '</table>'; 
 
-            return html;
+            return html; 
         },
         buildPreview = function(data, level, metadata) { 
-            return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + buildPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + build(data, level, true, metadata) + '</div></td></tr></table>';
+            return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + buildPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + buildOnly(data, level, metadata) + '</div></td></tr></table>';
         },
         buildPreviewOnly = function (data, level) { 
             return providers.table.buildPreviewOnly(data, level);
         },
         provider = {
             build : build,
+            buildOnly : buildOnly,
             buildPreview : buildPreview,
             buildPreviewOnly : buildPreviewOnly
         }; 
@@ -1053,7 +1060,9 @@ glimpse.render.engine.util.raw = (function($, util) {
 
             if (engineUtil.shouldUsePreview(data.length, level, forceFull, limit, forceLimit, 1))
                 return buildPreview(data, level);
-
+            return buildOnly(data, level);
+        },
+        buildOnly = function (data, level) {
             var html = '<table><thead><tr class="glimpse-row-header glimpse-row-header-' + level + '">';
             if ($.isArray(data[0])) {
                 for (var x = 0; x < data[0].length; x++)
@@ -1085,7 +1094,7 @@ glimpse.render.engine.util.raw = (function($, util) {
             if (isComplex && data.length == 1)
                 return providers.master.build(data[0], level);
             if (isComplex || data.length > 1) 
-                return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + buildPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + build(data, level, true) + '</div></td></tr></table>';
+                return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + buildPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + buildOnly(data, level) + '</div></td></tr></table>';
             return providers.string.build(data[0], level + 1); 
         },
         buildPreviewOnly = function (data, level) { 
@@ -1130,6 +1139,7 @@ glimpse.render.engine.util.raw = (function($, util) {
         },
         provider = {
             build : build,
+            buildOnly : buildOnly,
             buildPreview : buildPreview,
             buildPreviewOnly : buildPreviewOnly
         }; 
@@ -1138,16 +1148,20 @@ glimpse.render.engine.util.raw = (function($, util) {
 })(jQueryGlimpse, glimpse.render.engine, glimpse.render.engine.util);
 // glimpse.render.engine.function.js
 (function($, util, engine, engineUtil) {
-    var build = function (data, level, forceFull) {
-            data = data.toString();
+    var build = function (data, level, forceFull) { 
             if (!forceFull)
                 return buildPreview(data, level); 
-            return data;
+            return buildOnly(data, level);
         }, 
+        buildOnly = function (data, level) {
+            return data.toString();
+        },
         buildPreview = function (data, level) { 
-            return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + buildPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + build(data, level, true) + '</div></td></tr></table>';
+            return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + buildPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + buildOnly(data, level) + '</div></td></tr></table>';
         },
         buildPreviewOnly = function (data, level) {
+            data = data.toString();
+            
             var name = data.substring(data.indexOf(' ') + 1, data.indexOf('(')),
                 args = data.substring(data.indexOf('(') + 1, data.indexOf(')')).split(', ').join('<span class="rspace">,</span>');
              
@@ -1155,6 +1169,7 @@ glimpse.render.engine.util.raw = (function($, util) {
         },
         provider = {
             build : build,
+            buildOnly : buildOnly,
             buildPreview : buildPreview,
             buildPreviewOnly : buildPreviewOnly
         }; 
