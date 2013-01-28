@@ -8,6 +8,7 @@ namespace Glimpse.AspNet
 {
     public class HttpModule : IHttpModule  
     {
+        private static readonly object LockObj = new object();
         private readonly Factory factory = new Factory(new AspNetServiceLocator());
 
         public void Init(HttpApplication httpApplication)
@@ -66,9 +67,17 @@ namespace Glimpse.AspNet
 
             if (runtime == null)
             {
-                runtime = factory.InstantiateRuntime();
+                lock (LockObj)
+                {
+                    runtime = applicationState[Constants.RuntimeKey] as IGlimpseRuntime;
 
-                applicationState.Add(Constants.RuntimeKey, runtime);
+                    if (runtime == null)
+                    {
+                        runtime = factory.InstantiateRuntime();
+
+                        applicationState.Add(Constants.RuntimeKey, runtime);
+                    }
+                }
             }
 
             return runtime;
