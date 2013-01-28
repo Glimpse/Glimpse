@@ -8,7 +8,7 @@ namespace Glimpse.Core.Extensions
     public static class DictionaryExtensions
     {
         /// <summary>
-        /// Gets the value, if available, or <param name="ifNotFound">ifNotFound</param>.
+        /// Gets the value, if available, or <paramref name="ifNotFound"/>.
         /// </summary>
         /// <typeparam name="TKey">The type of the key.</typeparam>
         /// <typeparam name="TValue">The type of the value.</typeparam>
@@ -16,7 +16,7 @@ namespace Glimpse.Core.Extensions
         /// <param name="key">The item key.</param>
         /// <param name="ifNotFound">The fallback value.</param>
         /// <returns>
-        /// Returns the item in <param name="dictionary">dictionary</param> that matches <param name="key">key</param>, falling back to the value of <param name="ifNotFound">ifNotFound</param> if the item is unavailable.
+        /// Returns the item in <paramref name="dictionary"/> that matches <paramref name="key"/>, falling back to the value of <paramref name="ifNotFound"/> if the item is unavailable.
         /// </returns>
         public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue ifNotFound = default(TValue))
         {

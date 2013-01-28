@@ -13,7 +13,7 @@ namespace Glimpse.Core.Extensions
         /// </summary>
         /// <param name="input">The <see cref="NameValueCollection"/> to convert.</param>
         /// <returns>
-        /// A <c>IDictionary&lt;string, string&gt;</c> containing the same key/value pairs as <param name="input">input</param>.
+        /// A <c>IDictionary&lt;string, string&gt;</c> containing the same key/value pairs as <paramref name="input"/>.
         /// </returns>
         public static IDictionary<string, string> ToDictionary(this NameValueCollection input)
         {

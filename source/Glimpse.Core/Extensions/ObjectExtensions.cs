@@ -8,10 +8,10 @@ namespace Glimpse.Core.Extensions
     public static class ObjectExtensions
     {
         /// <summary>
-        /// Returns the value of <c>ToString</c> if <param name="value">value</param> is not null.
+        /// Returns the value of <c>ToString</c> if <paramref name="value"/> is not null.
         /// </summary>
         /// <param name="value">The value.</param>
-        /// <returns>The value of <c>ToString</c> if <param name="value">value</param> is not null.</returns>
+        /// <returns>The value of <c>ToString</c> if <paramref name="value"/> is not null.</returns>
         public static string ToStringOrDefault(this object value)
         {
             if (value == null)
@@ -23,10 +23,10 @@ namespace Glimpse.Core.Extensions
         }
 
         /// <summary>
-        /// Returns the value of <c>GetType</c> if <param name="value">value</param> is not null.
+        /// Returns the value of <c>GetType</c> if <paramref name="value"/> is not null.
         /// </summary>
         /// <param name="value">The value.</param>
-        /// <returns>The value of <c>GetType</c> if <param name="value">value</param> is not null.</returns>
+        /// <returns>The value of <c>GetType</c> if <paramref name="value"/> is not null.</returns>
         public static Type GetTypeOrNull(this object value)
         {
             if (value == null)

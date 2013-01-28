@@ -9,12 +9,12 @@ namespace Glimpse.Core.Extensions
     public static class DataStoreExtensions
     {
         /// <summary>
-        /// Gets an item from <param name="store">store</param> using &lt;T&gt; as a key. This method should be used in combination with <c>Set&lt;T&gt;</c>.
+        /// Gets an item from <paramref name="store"/> using &lt;T&gt; as a key. This method should be used in combination with <c>Set&lt;T&gt;</c>.
         /// </summary>
         /// <typeparam name="T">The type of item to retrieve and the key when used in combination with <c>Set&lt;T&gt;</c>.</typeparam>
         /// <param name="store">The data store instance.</param>
         /// <returns>
-        /// An item of type <typeparam name="T">T</typeparam>, <c>null</c> or an <see cref="InvalidCastException"/> is thrown depending on the type of <param name="store">store</param>. Call <c>Contains&lt;T&gt;</c> first to ensure results.
+        /// An item of type <typeparamref name="T"/>, <c>null</c> or an <see cref="InvalidCastException"/> is thrown depending on the type of <paramref name="store"/>. Call <c>Contains&lt;T&gt;</c> first to ensure results.
         /// </returns>
         /// <exception cref="InvalidCastException">May throw an invalid cast exception if the <see cref="IDataStore"/> item and type do not match.</exception>
         public static T Get<T>(this IDataStore store)
@@ -23,13 +23,13 @@ namespace Glimpse.Core.Extensions
         }
 
         /// <summary>
-        /// Gets an item from <param name="store">store</param> using the key and casts to <c>&lt;T&gt;</c>.
+        /// Gets an item from <paramref name="store"/> using the key and casts to <c>&lt;T&gt;</c>.
         /// </summary>
         /// <typeparam name="T">The type of item to retrieve.</typeparam>
         /// <param name="store">The data store instance.</param>
         /// <param name="key">The item key.</param>
         /// <returns>
-        /// An item of type <typeparam name="T">T</typeparam>, <c>null</c> or an <see cref="InvalidCastException"/> is thrown depending on the type of <param name="store">store</param>. Call <c>Contains&lt;T&gt;</c> first to ensure results.
+        /// An item of type <typeparamref name="T"/>, <c>null</c> or an <see cref="InvalidCastException"/> is thrown depending on the type of <paramref name="store"/>. Call <c>Contains&lt;T&gt;</c> first to ensure results.
         /// </returns>
         /// <exception cref="InvalidCastException">May throw an invalid cast exception if the <see cref="IDataStore"/> item and type do not match.</exception>
         public static T Get<T>(this IDataStore store, string key)
@@ -38,7 +38,7 @@ namespace Glimpse.Core.Extensions
         }
 
         /// <summary>
-        /// Sets an item in <param name="store">store</param> using &lt;T&gt; as a key. This method should be used in combination with <c>Get&lt;T&gt;</c>.
+        /// Sets an item in <paramref name="store"/> using &lt;T&gt; as a key. This method should be used in combination with <c>Get&lt;T&gt;</c>.
         /// </summary>
         /// <typeparam name="T">The type of item to set.</typeparam>
         /// <param name="store">The data store instance.</param>
@@ -62,7 +62,7 @@ namespace Glimpse.Core.Extensions
         }
 
         /// <summary>
-        /// Determines whether <param name="store">store</param> contains and item with a key of <c>T</c>.
+        /// Determines whether <paramref name="store"/> contains and item with a key of <c>T</c>.
         /// </summary>
         /// <typeparam name="T">The item key.</typeparam>
         /// <param name="store">The data store instance.</param>
