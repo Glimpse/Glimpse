@@ -1484,7 +1484,7 @@ glimpse.render.engine.util.raw = (function($, util) {
             elements.pageSpacer().remove();
             elements.opener().remove(); 
 
-            pubsub.publish('action.shell.closeed'); 
+            pubsub.publish('action.shell.closed'); 
         };
     
     pubsub.subscribe('trigger.shell.open', open);
@@ -1606,7 +1606,7 @@ glimpse.render.engine.util.raw = (function($, util) {
 
     pubsub.subscribe('trigger.shell.popup', openPopup);
     pubsub.subscribe('trigger.shell.subscriptions', wireListeners);
-    pubsub.subscribe('action.shell.closeed', terminate);
+    pubsub.subscribe('action.shell.closed', terminate);
     pubsub.subscribe('action.shell.opening', terminate);
     pubsub.subscribe('trigger.shell.suppressed.open', tryOpenPopup);
 })(jQueryGlimpse, glimpse.pubsub, glimpse.settings, glimpse.data, glimpse.elements, glimpse.util);

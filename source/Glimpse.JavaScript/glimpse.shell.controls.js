@@ -65,7 +65,7 @@
             elements.pageSpacer().remove();
             elements.opener().remove(); 
 
-            pubsub.publish('action.shell.closeed'); 
+            pubsub.publish('action.shell.closed'); 
         };
     
     pubsub.subscribe('trigger.shell.open', open);
