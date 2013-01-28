@@ -99,6 +99,9 @@
     width: 200px;
     padding: 6px;
 }
+.glimpse-hidden {
+    display: none;
+}
 .glimpse-title {
     margin: 0 0 0 15px;
     padding-top: 5px;

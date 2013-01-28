@@ -109,8 +109,8 @@
             
             validateMetadata(); 
             
-            pubsub.publish('action.data.changed', { newData: input });
-            pubsub.publish('action.data.initial.changed', { newData: input });
+            pubsub.publish('action.data.changed', { newData: input, metadata: input.metadata });
+            pubsub.publish('action.data.initial.changed', { newData: input, metadata: input.metadata });
 
             pubsub.publish('trigger.data.init', { isInitial: true });
         };
