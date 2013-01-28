@@ -361,7 +361,7 @@ namespace Glimpse.Core.Framework
         {
             var discoverableCollection = new ReflectionDiscoverableCollection<T>(InstantiateLogger());
 
-            discoverableCollection.IgnoredTypes.AddRange(config.IgnoredTypes.ToEnumerable());
+            discoverableCollection.IgnoredTypes.AddRange(ToEnumerable(config.IgnoredTypes));
 
             // config.DiscoveryLocation (collection specific) overrides Configuration.DiscoveryLocation (on main <glimpse> node)
             var locationCascade = string.IsNullOrEmpty(config.DiscoveryLocation)
@@ -433,6 +433,14 @@ namespace Glimpse.Core.Framework
 
             instance = null;
             return false;
+        }
+
+        private static IEnumerable<Type> ToEnumerable(TypeElementCollection collection)
+        {
+            foreach (TypeElement typeElement in collection)
+            {
+                yield return typeElement.Type;
+            }
         }
     }
 }

@@ -260,8 +260,8 @@ namespace Glimpse.AspNet
                 {
                     Category = category,
                     Message = message,
-                    FromFirst = firstWatch.ElapsedTicks.ConvertNanosecondsToMilliseconds(),
-                    FromLast = lastWatch.ElapsedTicks.ConvertNanosecondsToMilliseconds(),
+                    FromFirst = firstWatch.Elapsed,
+                    FromLast = lastWatch.Elapsed,
                     IndentLevel = IndentLevel
                 };
 

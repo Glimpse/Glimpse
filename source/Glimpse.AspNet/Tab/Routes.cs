@@ -108,7 +108,7 @@ namespace Glimpse.AspNet.Tab
         {
             var routeModel = new RouteModel();
 
-            var routeMessage = routeMessages.GetValueOrDefault(routeBase.GetHashCode()).SafeFirstOrDefault();
+            var routeMessage = SafeFirstOrDefault(routeMessages.GetValueOrDefault(routeBase.GetHashCode()));
             if (routeMessage != null)
             {
                 routeModel.Duration = routeMessage.Duration; 
@@ -175,7 +175,7 @@ namespace Glimpse.AspNet.Tab
 
                 if (counstraintRouteMessages != null)
                 {
-                    var counstraintMessage = counstraintRouteMessages.GetValueOrDefault(constraint.Value.GetHashCode()).SafeFirstOrDefault();
+                    var counstraintMessage = SafeFirstOrDefault(counstraintRouteMessages.GetValueOrDefault(constraint.Value.GetHashCode()));
                     model.IsMatch = false;
                     
                     if (counstraintMessage != null)
@@ -193,6 +193,16 @@ namespace Glimpse.AspNet.Tab
         private IDictionary<string, object> ProcessDataTokens(IDictionary<string, object> dataTokens)
         {
             return dataTokens != null && dataTokens.Count > 0 ? dataTokens : null;
+        }
+
+        private static TSource SafeFirstOrDefault<TSource>(IEnumerable<TSource> source)
+        {
+            if (source == null)
+            {
+                return default(TSource);
+            }
+
+            return source.FirstOrDefault();
         }
     }
 }

@@ -286,7 +286,7 @@ namespace Glimpse.Core.Framework
                         var tabsThatRequireSetup = Configuration.Tabs.Where(tab => tab is ITabSetup).Select(tab => tab);
                         foreach (ITabSetup tab in tabsThatRequireSetup)
                         {
-                            var key = tab.CreateKey();
+                            var key = CreateKey(tab);
                             try
                             {
                                 var setupContext = new TabSetupContext(logger, messageBroker, () => GetTabStore(key));
@@ -378,7 +378,7 @@ namespace Glimpse.Core.Framework
             foreach (var tab in supportedRuntimeTabs)
             {
                 TabResult result;
-                var key = tab.CreateKey();
+                var key = CreateKey(tab);
                 try
                 {
                     var tabContext = new TabContext(runtimeContext, GetTabStore(key), logger, messageBroker);
@@ -432,7 +432,7 @@ namespace Glimpse.Core.Framework
 
                 if (metadataInstance.HasMetadata)
                 {
-                    pluginMetadata[tab.CreateKey()] = metadataInstance;
+                    pluginMetadata[CreateKey(tab)] = metadataInstance;
                 } 
             }
 
@@ -442,7 +442,7 @@ namespace Glimpse.Core.Framework
 
             foreach (var resource in Configuration.Resources)
             {
-                var resourceKey = resource.CreateKey();
+                var resourceKey = CreateKey(resource);
                 if (resources.ContainsKey(resourceKey))
                 {
                     logger.Warn(Resources.GlimpseRuntimePersistMetadataMultipleResourceWarning, resource.Name);
@@ -502,6 +502,26 @@ namespace Glimpse.Core.Framework
             // store result for request
             requestStore.Set(Constants.RuntimePolicyKey, finalResult);
             return finalResult;
+        }
+
+        private static string CreateKey(object obj)
+        {
+            string result;
+            var keyProvider = obj as IKey;
+
+            if (keyProvider != null)
+            {
+                result = keyProvider.Key;
+            }
+            else
+            {
+                result = obj.GetType().FullName;
+            }
+
+            return result
+                .Replace('.', '_')
+                .Replace(' ', '_')
+                .ToLower();
         }
     }
 }

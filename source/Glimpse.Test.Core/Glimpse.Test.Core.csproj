@@ -109,7 +109,6 @@
     <Compile Include="Extensibility\TabSetupContextShould.cs" />
     <Compile Include="Extensions\EnumExtensionsShould.cs" />
     <Compile Include="Extensions\TestingExtensions.cs" />
-    <Compile Include="Extensions\UriTemplateExtensionsShould.cs" />
     <Compile Include="Framework\CastleDynamicProxyFactoryShould.cs" />
     <Compile Include="Framework\MessageBrokerShould.cs" />
     <Compile Include="Framework\FactoryShould.cs" />

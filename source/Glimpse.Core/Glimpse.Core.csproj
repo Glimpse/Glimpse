@@ -96,6 +96,7 @@
     <Compile Include="Extensibility\IWrapper.cs" />
     <Compile Include="Extensibility\JsonNetConverterDictionaryKeysAreNotPropertyNames.cs" />
     <Compile Include="Extensibility\RuntimePolicy.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Message\MessageBase.cs" />
     <Compile Include="Extensibility\NuGetPackageAttribute.cs" />
     <Compile Include="Extensibility\ResourceParameterMetadata.cs" />
@@ -138,15 +139,9 @@
     <Compile Include="Extensions\AlternateImplementationContextExtensions.cs" />
     <Compile Include="Extensions\DataStoreExtensions.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
-    <Compile Include="Extensions\EnumerableExtensions.cs" />
-    <Compile Include="Extensions\EnumExtensions.cs" />
-    <Compile Include="Extensions\MessageBrokerExtensions.cs" />
-    <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Extensions\NameValueCollectionExtension.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\TabContextExtensions.cs" />
-    <Compile Include="Extensions\TypeElementCollectionExtensions.cs" />
-    <Compile Include="Extensions\UriTemplateExtensions.cs" />
     <Compile Include="Framework\ApplicationPersistenceStore.cs" />
     <Compile Include="Framework\CacheSetting.cs" />
     <Compile Include="Framework\CastleDynamicProxyFactory.cs" />
