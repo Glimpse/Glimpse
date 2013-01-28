@@ -1,69 +1,64 @@
 ﻿using System;
+using Glimpse.Core.Framework;
 
 namespace Glimpse.Core.Extensibility
 {
     /// <summary>
-    /// Used to describe what activity level Glimpse is allowed to operate in.
+    /// Used to describe what operations Glimpse is allowed to perform during a Http request/response.
     /// </summary>
-    /// <remarks>
-    /// This is used at a request by request level.
-    /// </remarks>
     [Flags]
     public enum RuntimePolicy
     {
         /// <summary>
-        /// The off
+        /// <c>Off</c> allows Glimpse to perform any operations on a Http request/response.
         /// </summary>
         /// <remarks>
-        /// Will not modify any part of the request
+        /// When a request's runtime policy is off, Glimpse will not modify any part of the response or capture any data.
         /// </remarks>
         Off = 1,
 
         /// <summary>
-        /// The execute resource only
+        /// <c>ExecuteResourceOnly</c> allows Glimpse to only respond to <see cref="IResource"/> requests. This mode is effectively a special type of <c>Off</c>.
         /// </summary>
-        /// <remarks>
-        /// Will only resource endpoints to execute
-        /// </remarks>
         ExecuteResourceOnly = 2 | Off,
 
         /// <summary>
-        /// The persist results
+        /// <c>PersistResults</c> allows Glimpse to write request metadata to current <see cref="IPersistenceStore"/> instance.
         /// </summary>
         /// <remarks>
-        /// Will allow results to be persisted to the data store
+        /// The act of persisting request metadata does not alter an Http response in any way.
         /// </remarks>
         PersistResults = 4,
 
         /// <summary>
-        /// The modify response headers
+        /// <c>ModifyResponseHeaders</c> allows Glimpse to write custom Http headers and set cookies on the Http response.
         /// </summary>
         /// <remarks>
-        /// Allows the modification of response headers
+        /// <c>ModifyResponseHeaders</c> also grants Glimpse the ability to <c>PersistResults</c>.
         /// </remarks>
         ModifyResponseHeaders = 8 | PersistResults,
 
         /// <summary>
-        /// The modify response body
+        /// <c>ModifyResponseBody</c> allows Glimpse to write to the Http response body.
         /// </summary>
         /// <remarks>
-        /// Allows the modification of response body
+        /// <c>ModifyResponseBody</c> also grants Glimpse the ability to <c>PersistResults</c> and <c>ModifyResponseHeaders</c>.
         /// </remarks>
         ModifyResponseBody = 16 | ModifyResponseHeaders,
 
         /// <summary>
-        /// The display glimpse client
+        /// <c>DisplayGlimpseClient</c> allows Glimpse to write the Glimpse JavaScript client <c>&lt;script&gt;</c> tag to the Http response body.
         /// </summary>
         /// <remarks>
-        /// Whether the client should show in the client browser
+        /// <c>DisplayGlimpseClient</c> also grants Glimpse the ability to <c>PersistResults</c>, <c>ModifyResponseHeaders</c> and <c>ModifyResponseBody</c>.
         /// </remarks>
         DisplayGlimpseClient = 32 | ModifyResponseBody,
 
         /// <summary>
-        /// The on
+        /// <c>On</c> allows Glimpse to run all operations against an Http request/response.
         /// </summary>
         /// <remarks>
-        /// Everything is turned on
+        /// <c>On</c> also grants Glimpse the ability to <c>PersistResults</c>, <c>ModifyResponseHeaders</c>, <c>ModifyResponseBody</c> and <c>DisplayGlimpseClient</c>.
         /// </remarks>
         On = DisplayGlimpseClient
     }

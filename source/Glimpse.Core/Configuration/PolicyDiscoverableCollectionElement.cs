@@ -29,7 +29,7 @@ namespace Glimpse.Core.Configuration
         /// Gets or sets a list of Http status codes.
         /// </summary>
         /// <remarks>
-        /// A list of ratified Http status codes in available in <see href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">Section 10 of RFC 2616</see>, the Http version 1.1 specification.
+        /// A list of ratified Http status codes is available in <see href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">Section 10 of RFC 2616</see>, the Http version 1.1 specification.
         /// </remarks>
         /// <value>
         /// The <c>StatusCodes</c> list is used by <see cref="StatusCodePolicy"/> to filter invalid Glimpse responses.

@@ -59,13 +59,13 @@ namespace Glimpse.Test.Core.Policy
         [Fact]
         public void ConstructWithNonNullWhitelist()
         {
-            Assert.NotNull(Policy.ContentTypeWhitelist);
+            Assert.NotNull(Policy.ContentTypeWhiteList);
         }
 
         [Fact]
         public void ConstructWithDefaultContentTypes()
         {
-            Assert.True(Policy.ContentTypeWhitelist.Count > 0);
+            Assert.True(Policy.ContentTypeWhiteList.Count > 0);
         }
 
         [Fact]
@@ -74,7 +74,7 @@ namespace Glimpse.Test.Core.Policy
             var list = new List<string>{"anything"};
             var policy = new ContentTypePolicy(list);
 
-            Assert.Equal(list, policy.ContentTypeWhitelist);
+            Assert.Equal(list, policy.ContentTypeWhiteList);
         }
 
         [Fact]

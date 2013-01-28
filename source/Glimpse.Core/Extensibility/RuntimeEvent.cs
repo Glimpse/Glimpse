@@ -3,42 +3,48 @@
 namespace Glimpse.Core.Extensibility
 {
     /// <summary>
-    /// Used to describe when a given policy should run.
+    /// Used to describe when a given <see cref="IRuntimePolicy"/> should be executed.
     /// </summary>
-    /// <remarks>
-    /// This is used at a request by request level.
-    /// </remarks>
     [Flags]
     public enum RuntimeEvent
     {
         /// <summary>
-        /// During the initialization process.
+        /// During the Glimpse initialization process.
         /// </summary>
         Initialize = 1,
 
         /// <summary>
-        /// When the request is beginning.
+        /// When a Http request is beginning.
         /// </summary>
         BeginRequest = 2,
 
         /// <summary>
-        /// When the request has begun to access the session.
+        /// When a Http request has begun to access user session store.
         /// </summary>
+        /// <remarks>
+        /// All frameworks may not support <c>BeginSessionAccess</c>.
+        /// </remarks>
         BeginSessionAccess = 4,
 
         /// <summary>
-        /// When the resource itself is being executed.
+        /// When a Glimpse <see cref="IResource"/> is being executed.
         /// </summary>
         ExecuteResource = 8,
 
         /// <summary>
-        /// When the request has ended access to the session.
+        /// When a Http request has ended access to the user session store.
         /// </summary>
+        /// <remarks>
+        /// All frameworks may not support <c>BeginSessionAccess</c>.
+        /// </remarks>
         EndSessionAccess = 16,
 
         /// <summary>
-        /// When the request has ended.
+        /// When a Http request has ended.
         /// </summary>
+        /// <remarks>
+        /// This is the most commonly used <see cref="RuntimeEvent"/>.
+        /// </remarks>
         EndRequest = 32
     }
 }

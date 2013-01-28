@@ -3,19 +3,17 @@
 namespace Glimpse.Core.Extensibility
 {
     /// <summary>
-    /// Definition for an extension to <see cref="IRuntimePolicy"/> that allows the 
-    /// policy to receive current Section.
+    /// <c>IConfigurable</c> allows types to participate in their own configuration.
     /// </summary>
     /// <remarks>
-    /// An example of its use it to pick up types that are to be used from the Glimpse 
-    /// section in the web.config.
+    /// Several <see cref="IRuntimePolicy"/> implementations leverage <c>IConfigurable</c> to allow for configuration via <c>web.config</c>.
     /// </remarks>
     public interface IConfigurable
     {
         /// <summary>
-        /// Allows a given policy using the specified configuration section.
+        /// Provides implementations an instance of <see cref="Section"/> to self populate any end user configuration options.
         /// </summary>
-        /// <param name="section">The Glimpse configuration section.</param>
+        /// <param name="section">The configuration section, <c>&lt;glimpse&gt;</c> from <c>web.config</c>.</param>
         void Configure(Section section);
     }
 }
