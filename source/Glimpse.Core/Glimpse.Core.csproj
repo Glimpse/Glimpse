@@ -212,7 +212,6 @@
     <Compile Include="Policy\GlimpseResourcePolicy.cs" />
     <Compile Include="Policy\StatusCodePolicy.cs" />
     <Compile Include="Policy\UriPolicy.cs" />
-    <Compile Include="Policy\UserHostAddressPolicy.cs" />
     <Compile Include="ResourceResult\CacheControlDecorator.cs" />
     <Compile Include="ResourceResult\ExceptionResourceResult.cs" />
     <Compile Include="ResourceResult\FileResourceResult.cs" />
