@@ -69,7 +69,7 @@
     <Content Include="FunctionalTests\Mock\test.glimpse.ajax.js" />
     <Content Include="FunctionalTests\Mock\test.glimpse.ajax.pager.js" />
     <Content Include="FunctionalTests\sprite.png" />
-    <Content Include="FunctionalTests\test-popup.html" />
+    <Content Include="FunctionalTests\test_popup.html" />
     <Content Include="FunctionalTests\test.html" />
     <Content Include="FunctionalTests\version.html" />
     <Content Include="glimpse.ajax.js" />
@@ -130,8 +130,8 @@
     <Content Include="jquery-1.8.0.min.js" />
     <Content Include="logo.png" />
     <Content Include="sprite.png" />
+    <Content Include="test_popup.html" />
     <Content Include="test_client.html" />
-    <Content Include="test-popup.html" />
     <Content Include="test.html" />
     <Content Include="test_drag.html" />
     <Content Include="UnitTests\index.html" />
