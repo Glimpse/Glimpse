@@ -5,14 +5,17 @@
         },
         generateSpriteAddress = function () {
             var uri = settings.local('sprite') || 'http://getglimpse.com/sprite.png?version={version}',
-                currentData = data.currentMetadata();
+                version = settings.local('version') || '0.0';
             
-            return util.uriTemplate(uri, { 'version': currentData.version });
+            return util.uriTemplate(uri, { 'version': version });
         },
         updateSpriteAddress = function (args) {
-            var uri = args.metadata.resources.glimpse_sprite;
+            var uri = args.metadata.resources.glimpse_sprite,
+                version = args.metadata.version;
             if (uri)
                 settings.local('sprite', uri);
+            if (version)
+                settings.local('version', version);
         },
         getCss = function() {
             var content = templates.css.replace(/url\(\)/gi, 'url(' + generateSpriteAddress() + ')');
