@@ -1,7 +1,8 @@
 ﻿(function($, pubsub, util, elements, data, renderEngine) {
     var context = { resultCount : 0, notice: undefined, isActive: false, contextRequestId: undefined },
         generateAjaxAddress = function() {
-            return util.uriTemplate(data.currentMetadata().resources.glimpse_ajax, { 'parentRequestId': retrieveScopeId() });
+            var currentMetadata = data.currentMetadata();
+            return util.uriTemplate(currentMetadata.resources.glimpse_ajax, { 'parentRequestId': retrieveScopeId(), 'version': currentMetadata.version });
         },
         retrieveScopeId = function() { 
             var payload = data.currentData();

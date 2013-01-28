@@ -4,8 +4,10 @@
             html: '/*(import:glimpse.render.shell.html)*/'
         },
         generateSpriteAddress = function () {
-            var uri = settings.local('sprite');
-            return uri ? util.uriTemplate(uri) : "http://getglimpse.com/sprite.png?version={version}";
+            var uri = settings.local('sprite') || 'http://getglimpse.com/sprite.png?version={version}',
+                currentData = data.currentMetadata();
+            
+            return util.uriTemplate(uri, { 'version': currentData.version });
         },
         updateSpriteAddress = function (args) {
             var uri = args.metadata.resources.glimpse_sprite;

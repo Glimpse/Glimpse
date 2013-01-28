@@ -1,7 +1,8 @@
 ﻿(function($, pubsub, util, settings, elements, data, renderEngine) {
     var context = { resultCount : 0, clientName : '', requestId : '', currentData: undefined, notice: undefined, isActive: false, contextRequestId: undefined }, 
         generateHistoryAddress = function() {
-            return util.uriTemplate(data.currentMetadata().resources.glimpse_history);
+            var currentMetadata = data.currentMetadata();
+            return util.uriTemplate(currentMetadata.resources.glimpse_history, { 'version': currentMetadata.version });
         },
         wireListeners = function() {
             var panel = elements.panel('history');

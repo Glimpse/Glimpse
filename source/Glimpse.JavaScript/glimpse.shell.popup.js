@@ -15,7 +15,8 @@
             }
         },
         generatePopupAddress = function() {
-            return util.uriTemplate(data.currentMetadata().resources.glimpse_popup, { 'requestId': data.currentData().requestId });
+            var currentMetadata = data.currentMetadata();
+            return util.uriTemplate(currentMetadata.resources.glimpse_popup, { 'requestId': data.currentData().requestId, 'version': currentMetadata.version });
         },
         isPopup = function() {
             return data.currentMetadata().resources.glimpse_popup ? window.location.href.indexOf(generatePopupAddress()) > -1 : false;

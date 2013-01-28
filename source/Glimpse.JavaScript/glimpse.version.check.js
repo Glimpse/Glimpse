@@ -5,7 +5,8 @@
             return settings.local('stamp');
         },
         generateVersionCheckAddress = function() {
-            return util.uriTemplate(data.currentMetadata().resources.glimpse_version_check, { stamp: retrieveStamp() });
+            var currentMetadata = data.currentMetadata();
+            return util.uriTemplate(currentMetadata.resources.glimpse_version_check, { stamp: retrieveStamp(), 'version': currentMetadata.version });
         },
         tryShow = function () {
             var hasNewerVersion = settings.local('hasNewerVersion');

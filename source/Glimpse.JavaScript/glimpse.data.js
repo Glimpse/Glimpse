@@ -3,7 +3,8 @@
         innerBaseData = { data : {}, metadata : innerBaseMetadata, uri : window.location.href },
         innerCurrentData = innerBaseData,
         generateRequestAddress = function (requestId) {
-            return util.uriTemplate(currentMetadata().resources.glimpse_request, { 'requestId': requestId });
+            var current = currentMetadata();
+            return util.uriTemplate(current.resources.glimpse_request, { 'requestId': requestId, 'version': current.version });
         },
         validateMetadata = function () { 
             // Make sure that out data has metadata

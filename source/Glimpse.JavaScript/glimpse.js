@@ -398,7 +398,8 @@ glimpse.data = (function($, pubsub, util) {
         innerBaseData = { data : {}, metadata : innerBaseMetadata, uri : window.location.href },
         innerCurrentData = innerBaseData,
         generateRequestAddress = function (requestId) {
-            return util.uriTemplate(currentMetadata().resources.glimpse_request, { 'requestId': requestId });
+            var current = currentMetadata();
+            return util.uriTemplate(current.resources.glimpse_request, { 'requestId': requestId, 'version': current.version });
         },
         validateMetadata = function () { 
             // Make sure that out data has metadata
@@ -615,8 +616,10 @@ glimpse.render = (function($, pubsub, util, data, settings) {
             html: '<div class="glimpse-spacer"></div><div class="glimpse-open glimpse"><table><tr><td><div class="glimpse-icon"></div></td></tr></table></div><div class="glimpse-holder glimpse"><div class="glimpse-notification-holder"></div><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon" title="About Glimpse?"></div><div class="glimpse-title"><span class="glimpse-snapshot-name"></span><span class="glimpse-snapshot-path"></span><span><span class="glimpse-enviro"></span><span class="glimpse-context-stack"></span><span class="glimpse-uri"></span><span class="glimpse-correlation"></span></span></div><div class="glimpse-buttons"><a class="glimpse-meta-update" href="#" title="New Updates are available, take a look at what you are missing.">New update avaiable!</a><a class="glimpse-meta-warning glimpse-button" href="#" title="Glimpse has some warnings!"></a><a class="glimpse-meta-help glimpse-button" href="#" title="Need some help?" target="_blank"></a><a class="glimpse-minimize glimpse-button" href="#" title="Close/Minimize"></a><a class="glimpse-popout glimpse-button" href="#" title="Pop Out"></a><a class="glimpse-close glimpse-button" href="#" title="Shutdown/Terminate"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs glimpse-tabs-instance"><ul></ul></div><div class="glimpse-tabs glimpse-tabs-permanent"><ul></ul></div><div class="glimpse-panel-holder"><div class="glimpse-panel glimpse-active"><div class="glimpse-panel-message">No data has been found. This could be caused because:<br /><br />- the data is still loading by the client, or<br />- no data has been received from the server (check to see if the data &amp; metadata payloads are present), or<br />- no plugin has been loaded, or<br />- an error has been thrown in the client (please check your JavaScript console and let us know if anything is up).</div></div></div><div class="glimpse-options"></div></div></div><div class="glimpse-lightbox"><div class="glimpse-lightbox-inner"><div class="glimpse-lightbox-element"></div></div></div>'
         },
         generateSpriteAddress = function () {
-            var uri = settings.local('sprite');
-            return uri ? util.uriTemplate(uri) : "http://getglimpse.com/sprite.png?version={version}";
+            var uri = settings.local('sprite') || 'http://getglimpse.com/sprite.png?version={version}',
+                currentData = data.currentMetadata();
+            
+            return util.uriTemplate(uri, { 'version': currentData.version });
         },
         updateSpriteAddress = function (args) {
             var uri = args.metadata.resources.glimpse_sprite;
@@ -1339,7 +1342,8 @@ glimpse.render.engine.util.raw = (function($, util) {
 // glimpse.render.lazy.js
 (function($, data, util, elements, pubsub, renderEngine) {
     var generateLazyAddress = function (key) {
-            return util.uriTemplate(data.currentMetadata().resources.glimpse_tab, { 'requestId': data.currentData().requestId, 'pluginKey': key });
+            var currentMetadata = data.currentMetadata();
+            return util.uriTemplate(currentMetadata.resources.glimpse_tab, { 'requestId': data.currentData().requestId, 'pluginKey': key, 'version': currentMetadata.version });
         },
         retrieveData = function(options) {
             var resources = data.currentMetadata().resources; 
@@ -1559,7 +1563,8 @@ glimpse.render.engine.util.raw = (function($, util) {
             }
         },
         generatePopupAddress = function() {
-            return util.uriTemplate(data.currentMetadata().resources.glimpse_popup, { 'requestId': data.currentData().requestId });
+            var currentMetadata = data.currentMetadata();
+            return util.uriTemplate(currentMetadata.resources.glimpse_popup, { 'requestId': data.currentData().requestId, 'version': currentMetadata.version });
         },
         isPopup = function() {
             return data.currentMetadata().resources.glimpse_popup ? window.location.href.indexOf(generatePopupAddress()) > -1 : false;
@@ -1758,7 +1763,8 @@ glimpse.versionCheck = (function($, pubsub, settings, elements, data, util) {
             return settings.local('stamp');
         },
         generateVersionCheckAddress = function() {
-            return util.uriTemplate(data.currentMetadata().resources.glimpse_version_check, { stamp: retrieveStamp() });
+            var currentMetadata = data.currentMetadata();
+            return util.uriTemplate(currentMetadata.resources.glimpse_version_check, { stamp: retrieveStamp(), 'version': currentMetadata.version });
         },
         tryShow = function () {
             var hasNewerVersion = settings.local('hasNewerVersion');
@@ -2060,7 +2066,8 @@ glimpse.tab = (function($, pubsub, data) {
 (function($, pubsub, util, elements, data, renderEngine) {
     var context = { resultCount : 0, notice: undefined, isActive: false, contextRequestId: undefined },
         generateAjaxAddress = function() {
-            return util.uriTemplate(data.currentMetadata().resources.glimpse_ajax, { 'parentRequestId': retrieveScopeId() });
+            var currentMetadata = data.currentMetadata();
+            return util.uriTemplate(currentMetadata.resources.glimpse_ajax, { 'parentRequestId': retrieveScopeId(), 'version': currentMetadata.version });
         },
         retrieveScopeId = function() { 
             var payload = data.currentData();
@@ -2239,7 +2246,8 @@ glimpse.tab = (function($, pubsub, data) {
 (function($, pubsub, util, settings, elements, data, renderEngine) {
     var context = { resultCount : 0, clientName : '', requestId : '', currentData: undefined, notice: undefined, isActive: false, contextRequestId: undefined }, 
         generateHistoryAddress = function() {
-            return util.uriTemplate(data.currentMetadata().resources.glimpse_history);
+            var currentMetadata = data.currentMetadata();
+            return util.uriTemplate(currentMetadata.resources.glimpse_history, { 'version': currentMetadata.version });
         },
         wireListeners = function() {
             var panel = elements.panel('history');
