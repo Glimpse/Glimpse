@@ -1,13 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
 
 namespace Glimpse.Core.Extensions
 {
+    /// <summary>
+    /// Extension methods to simplify common tasks completed with <see cref="NameValueCollection"/>.
+    /// </summary>
     public static class NameValueCollectionExtension
     {
+        /// <summary>
+        /// Converts a <see cref="NameValueCollection"/> to a <c>IDictionary&lt;string, string&gt;</c>.
+        /// </summary>
+        /// <param name="input">The <see cref="NameValueCollection"/> to convert.</param>
+        /// <returns>
+        /// A <c>IDictionary&lt;string, string&gt;</c> containing the same key/value pairs as <param name="input">input</param>.
+        /// </returns>
         public static IDictionary<string, string> ToDictionary(this NameValueCollection input)
         {
             var result = new Dictionary<string, string>(input.Count);
