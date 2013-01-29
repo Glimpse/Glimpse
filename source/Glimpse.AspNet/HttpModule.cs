@@ -16,6 +16,11 @@ namespace Glimpse.AspNet
             Init(WithTestable(httpApplication));
         }
 
+        public void Dispose()
+        {
+            // Nothing to dispose
+        }
+
         internal void Init(HttpApplicationBase httpApplication)
         {
             var runtime = GetRuntime(httpApplication.Application);
@@ -54,11 +59,6 @@ namespace Glimpse.AspNet
             {
                 logger.Fatal("App domain with Id: '{0}' and BaseDirectory: '{1}' has been unloaded. Any in memory data stores have been lost.{2}", appDomain.Id, appDomain.BaseDirectory, shutDownMessage);
             }
-        }
-
-        public void Dispose()
-        {
-            // Nothing to dispose
         }
 
         internal IGlimpseRuntime GetRuntime(HttpApplicationStateBase applicationState)
