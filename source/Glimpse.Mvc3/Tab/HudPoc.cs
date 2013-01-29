@@ -49,7 +49,7 @@ namespace Glimpse.Mvc.Tab
 
                 if (connectionMetadata.EndDateTime.HasValue && connectionMetadata.StartDateTime.HasValue)
                 {
-                    result.ConnectionOpenTime += connectionMetadata.EndDateTime.Value.Subtract(connectionMetadata.StartDateTime.Value).Ticks.ConvertNanosecondsToMilliseconds();
+                    result.ConnectionOpenTime += connectionMetadata.EndDateTime.Value.Subtract(connectionMetadata.StartDateTime.Value);
                 }
             }
 
@@ -166,7 +166,7 @@ namespace Glimpse.Mvc.Tab
 
         public string MatchedRouteName { get; set; }
 
-        public double ConnectionOpenTime { get; set; }
+        public TimeSpan ConnectionOpenTime { get; set; }
     }
 
     public class HudModelConverter : SerializationConverter<HudModel>
@@ -196,7 +196,7 @@ namespace Glimpse.Mvc.Tab
                             { "connectionCount", obj.ConnectionCount },
                             { "transactionCount", obj.TransactionCount },
                             { "queryExecutionTime", obj.QueryExecutionTime },
-                            { "connectionOpenTime", Math.Round(obj.ConnectionOpenTime, 2) },
+                            { "connectionOpenTime", obj.ConnectionOpenTime },
                         }
                 };
         }

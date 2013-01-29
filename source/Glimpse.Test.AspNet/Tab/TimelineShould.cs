@@ -74,7 +74,7 @@ namespace Glimpse.Test.AspNet.Tab
 
             Assert.NotNull(result);
             Assert.Equal(TimeSpan.FromMilliseconds(0), result.Duration);
-            Assert.Null(result.Events);
+            Assert.NotNull(result.Events);
         } 
 
         private IEnumerable<ITimelineMessage> BuildMessages()

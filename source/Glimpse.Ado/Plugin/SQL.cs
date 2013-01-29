@@ -131,11 +131,11 @@ namespace Glimpse.Ado.Plugin
                     commands.Add(new object[] { headTransaction, commandCount++, Sanitizer.Process(command.Command, command.Parameters), parameters, records, command.ElapsedMilliseconds, "0", tailTransaction, errors, errors != null ? "error" : "" });
                 }
 
-                var elapse = 0.0;
+                var elapse = TimeSpan.Zero;
                 ////TODO: Can we use a stopwatch here?
                 if (connection.EndDateTime.HasValue && connection.StartDateTime.HasValue)
                 {
-                    elapse = Math.Round(connection.EndDateTime.Value.Subtract(connection.StartDateTime.Value).Ticks.ConvertNanosecondsToMilliseconds(), 2);
+                    elapse = connection.EndDateTime.Value.Subtract(connection.StartDateTime.Value);
                 }
 
                 connections.Add(new object[] { commands, elapse });

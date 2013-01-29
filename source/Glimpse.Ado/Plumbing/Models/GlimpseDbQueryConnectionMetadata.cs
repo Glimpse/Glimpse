@@ -60,7 +60,7 @@ namespace Glimpse.Ado.Plumbing.Models
         public int EndCount { get; private set; }
         public IDictionary<string, GlimpseDbQueryCommandMetadata> Commands { get; private set; }
         public IDictionary<string, GlimpseDbQueryTransactionMetadata> Transactions { get; private set; }
-        public double? EllapsedMilliseconds
+        public TimeSpan? EllapsedMilliseconds
         {
             get
             {
@@ -68,10 +68,8 @@ namespace Glimpse.Ado.Plumbing.Models
                 {
                     return null;
                 }
-
-                var timeSpan = EndDateTime.Value - StartDateTime.Value;
-
-                return timeSpan.Ticks.ConvertNanosecondsToMilliseconds();
+                 
+                return EndDateTime.Value - StartDateTime.Value;
             }
         }
     }

@@ -5,7 +5,7 @@ namespace Glimpse.Core.Extensibility
 {
     /// <summary>
     /// <para>
-    /// Definition of a factory tha can create proxies of given objects/types. Factory 
+    /// Definition of a factory that can create proxies of given objects/types. Factory 
     /// supports wrapping a interfaces, wrapping a class or extending a class. 
     /// </para>
     /// <para>

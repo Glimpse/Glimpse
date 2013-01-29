@@ -80,7 +80,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                 {
                     ServiceType = serviceType;
 
-                    if (resolvedObjects.SafeAny())
+                    if (resolvedObjects != null && resolvedObjects.Any())
                     {
                         IsResolved = true;
                         ResolvedTypes = resolvedObjects.Select(obj => obj.GetType());

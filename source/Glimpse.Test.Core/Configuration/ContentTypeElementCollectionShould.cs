@@ -17,7 +17,7 @@ namespace Glimpse.Test.Core.Configuration
         [Fact]
         public void ClearDefaultValues()
         {
-            var section = ConfigurationManager.GetSection("glimpse") as GlimpseSection;
+            var section = ConfigurationManager.GetSection("glimpse") as Section;
 
             Assert.Equal(1, section.RuntimePolicies.ContentTypes.Count);
         }

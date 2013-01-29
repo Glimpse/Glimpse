@@ -8,11 +8,17 @@ namespace Glimpse.AspNet
 {
     public class HttpModule : IHttpModule  
     {
+        private static readonly object LockObj = new object();
         private readonly Factory factory = new Factory(new AspNetServiceLocator());
 
         public void Init(HttpApplication httpApplication)
         {
             Init(WithTestable(httpApplication));
+        }
+
+        public void Dispose()
+        {
+            // Nothing to dispose
         }
 
         internal void Init(HttpApplicationBase httpApplication)
@@ -55,20 +61,23 @@ namespace Glimpse.AspNet
             }
         }
 
-        public void Dispose()
-        {
-            // Nothing to dispose
-        }
-
         internal IGlimpseRuntime GetRuntime(HttpApplicationStateBase applicationState)
         {
             var runtime = applicationState[Constants.RuntimeKey] as IGlimpseRuntime;
 
             if (runtime == null)
             {
-                runtime = factory.InstantiateRuntime();
+                lock (LockObj)
+                {
+                    runtime = applicationState[Constants.RuntimeKey] as IGlimpseRuntime;
 
-                applicationState.Add(Constants.RuntimeKey, runtime);
+                    if (runtime == null)
+                    {
+                        runtime = factory.InstantiateRuntime();
+
+                        applicationState.Add(Constants.RuntimeKey, runtime);
+                    }
+                }
             }
 
             return runtime;

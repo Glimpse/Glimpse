@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions;
+using Tavis.UriTemplates;
 
 namespace Glimpse.Core.Framework
 {
@@ -496,7 +496,7 @@ namespace Glimpse.Core.Framework
                             resourceParameterProvider.OverrideParameterValues(requestTokenValues);
                         }
 
-                        var template = new Tavis.UriTemplates.UriTemplate(uriTemplate).SetParameters(requestTokenValues);
+                        var template = SetParameters(new UriTemplate(uriTemplate), requestTokenValues);
                         var uri = encoder.HtmlAttributeEncode(template.Resolve());
 
                         if (!string.IsNullOrEmpty(uri))
@@ -536,6 +536,21 @@ namespace Glimpse.Core.Framework
             }
 
             return stringBuilder.ToString();
+        }
+
+        private static UriTemplate SetParameters(UriTemplate template, IEnumerable<KeyValuePair<string, string>> nameValues)
+        {
+            if (nameValues == null)
+            {
+                return template;
+            }
+
+            foreach (var pair in nameValues)
+            {
+                template.SetParameter(pair.Key, pair.Value);
+            }
+
+            return template;
         }
     }
 }

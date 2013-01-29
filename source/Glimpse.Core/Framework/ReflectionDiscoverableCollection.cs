@@ -34,12 +34,13 @@ namespace Glimpse.Core.Framework
         {
             get
             {
-                return discoveryLocation ?? (discoveryLocation = AppDomain.CurrentDomain.BaseDirectory);
+                return discoveryLocation ?? (discoveryLocation = BaseDirectory);
             }
 
-            set
+            set 
             {
-                var result = Path.IsPathRooted(value) ? value : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, value);
+                // If this isn't an absolute path then root it with the AppDomain's base directory
+                var result = Path.IsPathRooted(value) ? value : Path.Combine(BaseDirectory, value);
 
                 if (!Directory.Exists(result))
                 {
@@ -59,10 +60,22 @@ namespace Glimpse.Core.Framework
         }
 
         internal List<T> Items { get; set; }
-        
+
         internal List<Type> IgnoredTypes { get; set; }
-        
+
         internal ILogger Logger { get; set; }
+
+        // Get the directory of the application, if the AppDomain is shadow copied, use the shadow directory
+        private static string BaseDirectory 
+        {
+            get 
+            {
+                var setupInfo = AppDomain.CurrentDomain.SetupInformation;
+                return string.Equals(setupInfo.ShadowCopyFiles, "true", StringComparison.OrdinalIgnoreCase)
+                           ? Path.Combine(setupInfo.CachePath, setupInfo.ApplicationName)
+                           : AppDomain.CurrentDomain.BaseDirectory;
+            }
+        }
 
         public IEnumerator<T> GetEnumerator()
         {
@@ -121,10 +134,9 @@ namespace Glimpse.Core.Framework
 
             foreach (var file in Directory.GetFiles(DiscoveryLocation, "*.dll", SearchOption.AllDirectories))
             {
-                Assembly assembly;
-                try
+                try 
                 {
-                    assembly = Assembly.LoadFrom(file);
+                    Assembly assembly = Assembly.LoadFrom(file);
                     Type[] allTypes;
 
                     // GetTypes potentially throws and exception. Defensive coding as per http://haacked.com/archive/2012/07/23/get-all-types-in-an-assembly.aspx

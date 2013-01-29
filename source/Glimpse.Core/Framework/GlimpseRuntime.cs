@@ -53,12 +53,12 @@ namespace Glimpse.Core.Framework
             get
             {
                 var requestStore = Configuration.FrameworkProvider.HttpRequestStore;
-                var result = requestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
+                var result = requestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
 
                 if (result == null)
                 {
                     result = new Dictionary<string, TabResult>();
-                    requestStore.Set(Constants.PluginResultsDataStoreKey, result);
+                    requestStore.Set(Constants.TabResultsDataStoreKey, result);
                 }
 
                 return result;
@@ -286,7 +286,7 @@ namespace Glimpse.Core.Framework
                         var tabsThatRequireSetup = Configuration.Tabs.Where(tab => tab is ITabSetup).Select(tab => tab);
                         foreach (ITabSetup tab in tabsThatRequireSetup)
                         {
-                            var key = tab.CreateKey();
+                            var key = CreateKey(tab);
                             try
                             {
                                 var setupContext = new TabSetupContext(logger, messageBroker, () => GetTabStore(key));
@@ -338,6 +338,26 @@ namespace Glimpse.Core.Framework
             return executionTimer;
         }
 
+        private static string CreateKey(object obj)
+        {
+            string result;
+            var keyProvider = obj as IKey;
+
+            if (keyProvider != null)
+            {
+                result = keyProvider.Key;
+            }
+            else
+            {
+                result = obj.GetType().FullName;
+            }
+
+            return result
+                .Replace('.', '_')
+                .Replace(' ', '_')
+                .ToLower();
+        }
+
         private IDataStore GetTabStore(string tabName)
         {
             var requestStore = Configuration.FrameworkProvider.HttpRequestStore;
@@ -378,7 +398,7 @@ namespace Glimpse.Core.Framework
             foreach (var tab in supportedRuntimeTabs)
             {
                 TabResult result;
-                var key = tab.CreateKey();
+                var key = CreateKey(tab);
                 try
                 {
                     var tabContext = new TabContext(runtimeContext, GetTabStore(key), logger, messageBroker);
@@ -438,7 +458,7 @@ namespace Glimpse.Core.Framework
 
                 if (metadataInstance.HasMetadata)
                 {
-                    pluginMetadata[tab.CreateKey()] = metadataInstance;
+                    pluginMetadata[CreateKey(tab)] = metadataInstance;
                 } 
             }
 
@@ -448,7 +468,7 @@ namespace Glimpse.Core.Framework
 
             foreach (var resource in Configuration.Resources)
             {
-                var resourceKey = resource.CreateKey();
+                var resourceKey = CreateKey(resource);
                 if (resources.ContainsKey(resourceKey))
                 {
                     logger.Warn(Resources.GlimpseRuntimePersistMetadataMultipleResourceWarning, resource.Name);

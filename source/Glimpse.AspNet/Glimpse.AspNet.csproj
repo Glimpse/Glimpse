@@ -91,7 +91,6 @@
     <Compile Include="Model\UriTokenInstance.cs" />
     <Compile Include="PipelineInspector\RoutesConstraintInspector.cs" />
     <Compile Include="PipelineInspector\RoutesInspector.cs" />
-    <Compile Include="PipelineInspector\TraceInspector.cs" />
     <Compile Include="Policy\LocalPolicy.cs" />
     <Compile Include="RequestMetadata.cs" />
     <Compile Include="Resources.Designer.cs">
@@ -117,6 +116,7 @@
     <Compile Include="Tab\Session.cs" />
     <Compile Include="Tab\Timeline.cs" />
     <Compile Include="Tab\Trace.cs" />
+    <Compile Include="GlimpseTraceListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">

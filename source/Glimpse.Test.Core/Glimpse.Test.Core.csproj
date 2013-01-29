@@ -41,8 +41,7 @@
       <HintPath>..\..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Newtonsoft.Json.4.5.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Ploeh.AutoFixture">
       <HintPath>..\..\packages\AutoFixture.2.13.3\lib\net35\Ploeh.AutoFixture.dll</HintPath>
@@ -81,7 +80,7 @@
     <Compile Include="Configuration\ContentTypeElementCollectionShould.cs" />
     <Compile Include="Configuration\ContentTypeElementShould.cs" />
     <Compile Include="Configuration\DiscoverableCollectionElementShould.cs" />
-    <Compile Include="Configuration\GlimpseSectionShould.cs" />
+    <Compile Include="Configuration\SectionShould.cs" />
     <Compile Include="Configuration\LoggingElementShould.cs" />
     <Compile Include="Configuration\PolicyDiscoverableCollectionElementShould.cs" />
     <Compile Include="Configuration\RegexConverterShould.cs" />
@@ -110,7 +109,6 @@
     <Compile Include="Extensibility\TabSetupContextShould.cs" />
     <Compile Include="Extensions\EnumExtensionsShould.cs" />
     <Compile Include="Extensions\TestingExtensions.cs" />
-    <Compile Include="Extensions\UriTemplateExtensionsShould.cs" />
     <Compile Include="Framework\CastleDynamicProxyFactoryShould.cs" />
     <Compile Include="Framework\MessageBrokerShould.cs" />
     <Compile Include="Framework\FactoryShould.cs" />
@@ -139,7 +137,6 @@
     <Compile Include="Policy\GlimpseResourcePolicyShould.cs" />
     <Compile Include="Policy\StatusCodePolicyShould.cs" />
     <Compile Include="Policy\UriPolicyShould.cs" />
-    <Compile Include="Policy\UserHostAddressPolicyShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceResult\CacheControlDecoratorShould.cs" />
     <Compile Include="ResourceResult\RedirectResourceResultShould.cs" />
