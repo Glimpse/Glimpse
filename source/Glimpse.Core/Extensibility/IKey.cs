@@ -1,19 +1,24 @@
 ﻿namespace Glimpse.Core.Extensibility
 {
     /// <summary>
-    /// Allows a <see cref="ITab"/> to define what key it should use in the JSON payload.
+    /// <c>IKey</c> provides implementers a means to override the automatically generated key for an object.
     /// </summary>
     /// <remarks>
-    /// If this interface isn't implemented on a <see cref="ITab"/> a key will be automatically 
-    /// generated instead. Typically used in cases where a client tab is needing to know the key
-    /// value so that it can perform data lookups.
+    /// <para>
+    /// <c>IKey</c> is used by <see cref="ITab"/> and <see cref="IResource"/> implementations that need consistent and predictable
+    /// key names for client side interaction.
+    /// </para>
+    /// <para>
+    /// All keys, rather dynamically generated or specified with <see cref="IKey"/> have spaces (<c>' '</c>) and periods (<c>'.'</c>) removed, 
+    /// and are converted to lower case for consistency and simplification of JavaScript access.
+    /// </para>
     /// </remarks>
     public interface IKey
     {
         /// <summary>
         /// Gets the key.
         /// </summary>
-        /// <value>The key.</value>
+        /// <value>The key. Only valid JavaScript identifiers should be used for future compatibility.</value>
         string Key { get; }
     }
 }
