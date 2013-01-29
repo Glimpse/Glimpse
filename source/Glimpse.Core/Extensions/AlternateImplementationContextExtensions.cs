@@ -13,7 +13,7 @@ namespace Glimpse.Core.Extensions
         /// <param name="context">The context.</param>
         /// <param name="timerResult">The timer result.</param>
         /// <returns>
-        /// Returns <c>true</c> if <c>Proceed</c> was called on the original object, and sets <param name="timerResult">timerResult</param>. Returns <c>false</c> and sets <param name="timerResult">timerResult</param> to <c>null</c> if <c>RuntimePolicy</c> is <c>Off</c>.
+        /// Returns <c>true</c> if <c>Proceed</c> was called on the original object, and sets <paramref name="timerResult" />. Returns <c>false</c> and sets <paramref name="timerResult" /> to <c>null</c> if <c>RuntimePolicy</c> is <c>Off</c>.
         /// </returns>
         public static bool TryProceedWithTimer(this IAlternateImplementationContext context, out TimerResult timerResult)
         {
