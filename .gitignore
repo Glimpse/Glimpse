@@ -29,3 +29,5 @@ TestResults
 *.DotSettings
 *.shfbproj_*
 working/
+/source/Glimpse.WebForms.WingTip.Sample/App_Data/wingtiptoys.mdf
+/source/Glimpse.WebForms.WingTip.Sample/App_Data/wingtiptoys_log.ldf
