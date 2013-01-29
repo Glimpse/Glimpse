@@ -9,19 +9,19 @@
                 if (metadata) {
                     if (metadata.engine && providers[metadata.engine])
                         result = providers[metadata.engine].build(data, level, forceFull, metadata, forceLimit);
-                    else if (metadata.layout && isArray) //remove isArray
+                    else if (metadata.layout && isArray) 
                         result = providers.layout.build(data, level, forceFull, metadata.layout, forceLimit);
                     else if (metadata.keysHeadings && isObject)
-                        result = providers.heading.build(data, level, forceFull, forceLimit);
+                        result = providers.heading.build(data, level, forceFull, metadata, forceLimit);
                 }
                 
                 if (result === '') {
-                    if (isArray)
-                        result = providers.table.build(data, level, forceFull, forceLimit);
+                    if (typeof data === 'function')
+                        result = providers.function.build(data, level, forceFull, metadata, forceLimit);
+                    else if (isArray)
+                        result = providers.table.build(data, level, forceFull, metadata, forceLimit);
                     else if (isObject)
-                        result = providers.keyValue.build(data, level, forceFull, forceLimit);
-                    else if (typeof data === 'function')
-                        result = providers.function.build(data, level, forceFull, forceLimit);
+                        result = providers.keyValue.build(data, level, forceFull, metadata, forceLimit);  
                     else if (level == 0) 
                         result = providers.empty.build(data);
                     else 

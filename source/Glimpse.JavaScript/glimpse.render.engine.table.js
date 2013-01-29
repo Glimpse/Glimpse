@@ -1,6 +1,6 @@
 ﻿(function($, engine, engineUtil) {
     var providers = engine._providers,
-        build = function (data, level, forceFull, forceLimit) { 
+        build = function (data, level, forceFull, metadata, forceLimit) { 
             var limit = !$.isNumeric(forceLimit) ? 3 : forceLimit;
 
             if (engineUtil.shouldUsePreview(data.length, level, forceFull, limit, forceLimit, 1))

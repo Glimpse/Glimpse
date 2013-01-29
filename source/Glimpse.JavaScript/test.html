@@ -268,6 +268,9 @@ glimpse.tab.register(args);
 
         glimpse.render.engine.insert(scope, data, metadata); 
     };
+    var processFunction = function(scope, heading, callback) {
+        scope.parent().before('<strong>' + heading + '</strong><pre>' + callback.toString().replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</pre>');
+    };
 
     var data1 = {
             'Movie': 'Star Wars',
@@ -686,7 +689,7 @@ glimpse.tab.register(args);
             build: function(data) {
                 var val = [];
                 for (var key in data)
-                    val.push(' &nbsp; &nbsp;' + key + ': \'' + data[key] + '\'');
+                    val.push(' &nbsp; &nbsp; - ' + key + ': \'' + data[key] + '\'');
                 return '{<br />' + val.join(',<br />') + '<br />}';
             }
         },
@@ -697,7 +700,7 @@ glimpse.tab.register(args);
                 
                 var val = [];
                 for (var key in data)
-                    val.push(' &nbsp; &nbsp;' + data[key] + ': \'' + key + '\'');
+                    val.push(' &nbsp; &nbsp; ^ ' + data[key] + ': \'' + key + '\'');
                 return '{<br />' + val.join(',<br />') + '<br />}';
             }
         };
@@ -714,7 +717,17 @@ glimpse.tab.register(args);
         [ { data : '{{0}} - ({{1}})', key : true }, { data : 2, width : '20%', engine: 'data24EngineA' }, { data : 3, width : '20%', engine: 'data24EngineB' } ]
     ]};
     process($('.sample24'), data24, metaData24);
+    processFunction($('.sample24'), 'Custom Engine - data24EngineA', data24EngineA.build);
+    processFunction($('.sample24'), 'Custom Engine - data24EngineB', data24EngineA.build);    
+
     
+    var data25Engine = {
+        build: function(data) {
+            return JSON.stringify(data);
+        }
+    };
+    glimpse.render.engine.register('data25Engine', data25Engine);
+
     var data25 = {
         'Movie': 'Star Wars',
         'Genera/Theme': [
@@ -728,9 +741,28 @@ glimpse.tab.register(args);
                 ['James Earl Jones', 'Darth Vader', 'Male', '45']
             ],
         'Headlines': {
-                'Mark Hamill': 'Luke Skywalker',
-                'James Earl Jones': 'Darth Vader',
-                'Harrison Ford': 'Han Solo'
+                'Mark Hamill': [
+                    ['Actor', 'Character', 'Gender', 'Age'],
+                    ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                    ['James Earl Jones', 'Darth Vader', 'Male', '45']
+                ],
+                'James Earl Jones': {
+                    'Mark Hamill': 'Luke Skywalker',
+                    'James Earl Jones': 'Darth Vader',
+                    'Harrison Ford': 'Han Solo',
+                    'Carrie Fisher': 'Princess Leia Organa',
+                    'Peter Cushing': 'Grand Moff Tarkin',
+                    'Alec Guinness': 'Ben Obi-Wan Kenobi',
+                    'Anthony Daniels': 'C-3PO',
+                    'Kenny Baker': 'R2-D2'
+                },
+                'Harrison Ford': 'Han Solo',
+                'Alec Guinness': {
+                    'Harrison Ford': 'Han Solo',
+                    'Carrie Fisher': 'Princess Leia Organa',
+                    'Peter Cushing': 'Grand Moff Tarkin',
+                    'Alec Guinness': 'Ben Obi-Wan Kenobi'
+                }
             }
     };
     var metaData25 = {
@@ -739,11 +771,17 @@ glimpse.tab.register(args);
                     [ { data : '{{0}} - ({{1}})', key : true }, { data : 2, width : '20%' }, { data : 3, width : '20%' } ]
                 ]},
             'Headlines': {
-                    keysHeadings: true
+                    keysHeadings: true,
+                    layout: {
+                       'Alec Guinness': {
+                           engine: 'data25Engine'
+                       }
+                    }
                 }
         }
     };
     process($('.sample25'), data25, metaData25);
+    processFunction($('.sample25'), 'Custom Engine - data25Engine', data25Engine.build);
     
 })(jQueryGlimpse);
     </script>

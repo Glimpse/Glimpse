@@ -700,6 +700,9 @@ glimpse.render.engine = (function(pubsub) {
 // glimpse.render.engine.util.js
 glimpse.render.engine.util = (function($) {
     return {
+        keyMetadata: function (key, metadata) {
+            return metadata && metadata.layout === Object(metadata.layout) ? metadata.layout[key] : null;
+        },
         shouldUsePreview: function(length, level, forceFull, limit, forceLimit, tolerance) {
             if ($.isNumeric(forceLimit))
                 limit = forceLimit;
@@ -809,18 +812,18 @@ glimpse.render.engine.util.raw = (function($, util) {
 // glimpse.render.engine.keyvalue.js
 (function($, util, engine, engineUtil) {
     var providers = engine._providers,
-        build = function (data, level, forceFull, forceLimit) {  
+        build = function (data, level, forceFull, metadata, forceLimit) {  
             var limit = !$.isNumeric(forceLimit) ? 3 : forceLimit;
 
             if (engineUtil.shouldUsePreview(util.lengthJson(data), level, forceFull, limit, forceLimit, 1))
                 return buildPreview(data, level);
-            return buildOnly(data, level);
+            return buildOnly(data, level, metadata);
         }, 
-        buildOnly = function(data, level) { 
+        buildOnly = function(data, level, metadata) { 
             var i = 1, 
                 html = '<table><thead><tr class="glimpse-row-header glimpse-row-header-' + level + '"><th class="glimpse-cell-key">Key</th><th class="glimpse-cell-value">Value</th></tr></thead>';
             for (var key in data)
-                html += '<tr class="' + (i++ % 2 ? 'odd' : 'even') + '"><th>' + engineUtil.raw.process(key) + '</th><td> ' + providers.master.build(data[key], level + 1) + '</td></tr>';
+                html += '<tr class="' + (i++ % 2 ? 'odd' : 'even') + '"><th>' + engineUtil.raw.process(key) + '</th><td> ' + providers.master.build(data[key], level + 1, null, engineUtil.keyMetadata(key, metadata)) + '</td></tr>';
             html += '</table>';
 
             return html;
@@ -878,19 +881,19 @@ glimpse.render.engine.util.raw = (function($, util) {
                 if (metadata) {
                     if (metadata.engine && providers[metadata.engine])
                         result = providers[metadata.engine].build(data, level, forceFull, metadata, forceLimit);
-                    else if (metadata.layout && isArray) //remove isArray
+                    else if (metadata.layout && isArray) 
                         result = providers.layout.build(data, level, forceFull, metadata.layout, forceLimit);
                     else if (metadata.keysHeadings && isObject)
-                        result = providers.heading.build(data, level, forceFull, forceLimit);
+                        result = providers.heading.build(data, level, forceFull, metadata, forceLimit);
                 }
                 
                 if (result === '') {
-                    if (isArray)
-                        result = providers.table.build(data, level, forceFull, forceLimit);
+                    if (typeof data === 'function')
+                        result = providers.function.build(data, level, forceFull, metadata, forceLimit);
+                    else if (isArray)
+                        result = providers.table.build(data, level, forceFull, metadata, forceLimit);
                     else if (isObject)
-                        result = providers.keyValue.build(data, level, forceFull, forceLimit);
-                    else if (typeof data === 'function')
-                        result = providers.function.build(data, level, forceFull, forceLimit);
+                        result = providers.keyValue.build(data, level, forceFull, metadata, forceLimit);  
                     else if (level == 0) 
                         result = providers.empty.build(data);
                     else 
@@ -1060,7 +1063,7 @@ glimpse.render.engine.util.raw = (function($, util) {
 // glimpse.render.engine.table.js
 (function($, engine, engineUtil) {
     var providers = engine._providers,
-        build = function (data, level, forceFull, forceLimit) { 
+        build = function (data, level, forceFull, metadata, forceLimit) { 
             var limit = !$.isNumeric(forceLimit) ? 3 : forceLimit;
 
             if (engineUtil.shouldUsePreview(data.length, level, forceFull, limit, forceLimit, 1))
@@ -1153,7 +1156,7 @@ glimpse.render.engine.util.raw = (function($, util) {
 })(jQueryGlimpse, glimpse.render.engine, glimpse.render.engine.util);
 // glimpse.render.engine.function.js
 (function($, util, engine, engineUtil) {
-    var build = function (data, level, forceFull) { 
+    var build = function (data, level, forceFull, metadata, forceLimit) { 
             if (!forceFull)
                 return buildPreview(data, level); 
             return buildOnly(data, level);
@@ -1184,15 +1187,14 @@ glimpse.render.engine.util.raw = (function($, util) {
 
 // glimpse.render.engine.heading.js
 (function($, util, engine, engineUtil) {
-    var providers = engine._providers,
-        build = function (data, level, forceFull, forceLimit) {   
-            var i = 1, 
-                html = '';
+    var providers = engine._providers, 
+        build = function (data, level, forceFull, metadata, forceLimit) {   
+            var html = '';
             for (var key in data) {
                 var value = data[key];
                 html += '<div class="glimpse-header">' + key + '</div>';
                 if (typeof value !== "string")
-                    html += providers.master.build(value, 0);
+                    html += providers.master.build(value, 0, null, engineUtil.keyMetadata(key, metadata));
                 else 
                     html += '<div class="glimpse-header-content">' + util.preserveWhitespace(value) + '</div>'; 
             }

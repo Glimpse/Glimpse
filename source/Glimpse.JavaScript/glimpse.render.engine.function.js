@@ -1,5 +1,5 @@
 ﻿(function($, util, engine, engineUtil) {
-    var build = function (data, level, forceFull) { 
+    var build = function (data, level, forceFull, metadata, forceLimit) { 
             if (!forceFull)
                 return buildPreview(data, level); 
             return buildOnly(data, level);
