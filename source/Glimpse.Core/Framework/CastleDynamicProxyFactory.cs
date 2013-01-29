@@ -147,6 +147,16 @@ namespace Glimpse.Core.Framework
             return (T)ProxyGenerator.CreateClassProxy(typeof(T), options, ToArrayOrDefault(constructorArguments), interceptorArray);
         }
 
+        private static TSource[] ToArrayOrDefault<TSource>(IEnumerable<TSource> source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            return source.ToArray();
+        }
+
         private void CheckInput(IEnumerable<IAlternateMethod> methodImplementations)
         {
             if (methodImplementations == null)
@@ -190,16 +200,6 @@ namespace Glimpse.Core.Framework
         private IInterceptor[] CreateInterceptorArray(IEnumerable<IAlternateMethod> methodImplementations)
         {
             return (from implementaion in methodImplementations select new AlternateImplementationToCastleInterceptorAdapter(implementaion, Logger, MessageBroker, this, TimerStrategy, RuntimePolicyStrategy)).ToArray();
-        }
-
-        private static TSource[] ToArrayOrDefault<TSource>(IEnumerable<TSource> source)
-        {
-            if (source == null)
-            {
-                return null;
-            }
-
-            return source.ToArray();
         }
     }
 }

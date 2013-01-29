@@ -338,6 +338,26 @@ namespace Glimpse.Core.Framework
             return executionTimer;
         }
 
+        private static string CreateKey(object obj)
+        {
+            string result;
+            var keyProvider = obj as IKey;
+
+            if (keyProvider != null)
+            {
+                result = keyProvider.Key;
+            }
+            else
+            {
+                result = obj.GetType().FullName;
+            }
+
+            return result
+                .Replace('.', '_')
+                .Replace(' ', '_')
+                .ToLower();
+        }
+
         private IDataStore GetTabStore(string tabName)
         {
             var requestStore = Configuration.FrameworkProvider.HttpRequestStore;
@@ -502,26 +522,6 @@ namespace Glimpse.Core.Framework
             // store result for request
             requestStore.Set(Constants.RuntimePolicyKey, finalResult);
             return finalResult;
-        }
-
-        private static string CreateKey(object obj)
-        {
-            string result;
-            var keyProvider = obj as IKey;
-
-            if (keyProvider != null)
-            {
-                result = keyProvider.Key;
-            }
-            else
-            {
-                result = obj.GetType().FullName;
-            }
-
-            return result
-                .Replace('.', '_')
-                .Replace(' ', '_')
-                .ToLower();
         }
     }
 }

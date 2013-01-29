@@ -84,6 +84,16 @@ namespace Glimpse.AspNet.Tab
             return result;
         }
 
+        private static TSource SafeFirstOrDefault<TSource>(IEnumerable<TSource> source)
+        {
+            if (source == null)
+            {
+                return default(TSource);
+            }
+
+            return source.FirstOrDefault();
+        }
+
         private Dictionary<int, List<RouteBase.GetRouteData.Message>> ProcessMessages(IEnumerable<RouteBase.GetRouteData.Message> messages)
         { 
             if (messages == null)
@@ -193,16 +203,6 @@ namespace Glimpse.AspNet.Tab
         private IDictionary<string, object> ProcessDataTokens(IDictionary<string, object> dataTokens)
         {
             return dataTokens != null && dataTokens.Count > 0 ? dataTokens : null;
-        }
-
-        private static TSource SafeFirstOrDefault<TSource>(IEnumerable<TSource> source)
-        {
-            if (source == null)
-            {
-                return default(TSource);
-            }
-
-            return source.FirstOrDefault();
         }
     }
 }

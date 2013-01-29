@@ -357,6 +357,14 @@ namespace Glimpse.Core.Framework
             return new CastleDynamicProxyFactory(InstantiateLogger(), InstantiateMessageBroker(), InstantiateTimerStrategy(), InstantiateRuntimePolicyStrategy());
         }
 
+        private static IEnumerable<Type> ToEnumerable(TypeElementCollection collection)
+        {
+            foreach (TypeElement typeElement in collection)
+            {
+                yield return typeElement.Type;
+            }
+        }
+
         private IDiscoverableCollection<T> CreateDiscoverableCollection<T>(DiscoverableCollectionElement config)
         {
             var discoverableCollection = new ReflectionDiscoverableCollection<T>(InstantiateLogger());
@@ -433,14 +441,6 @@ namespace Glimpse.Core.Framework
 
             instance = null;
             return false;
-        }
-
-        private static IEnumerable<Type> ToEnumerable(TypeElementCollection collection)
-        {
-            foreach (TypeElement typeElement in collection)
-            {
-                yield return typeElement.Type;
-            }
         }
     }
 }
