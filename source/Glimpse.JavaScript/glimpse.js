@@ -871,33 +871,32 @@ glimpse.render.engine.util.raw = (function($, util) {
     var providers = engine._providers,
         provider = {
             build: function(data, level, forceFull, metadata, forceLimit) {
-                var result = '';
+                var result = '',
+                    isArray = $.isArray(data),
+                    isObject = data === Object(data);
 
-                if (metadata && metadata.engine) {
-                    if (providers[metadata.engine])
+                if (metadata) {
+                    if (metadata.engine && providers[metadata.engine])
                         result = providers[metadata.engine].build(data, level, forceFull, metadata, forceLimit);
-                    else
-                        result = 'Specified engine could not be found: ' + metadata.engine;
-                }
-                else if ($.isArray(data)) {
-                    if (metadata && metadata.layout)
+                    else if (metadata.layout && isArray) //remove isArray
                         result = providers.layout.build(data, level, forceFull, metadata.layout, forceLimit);
-                    else
-                        result = providers.table.build(data, level, forceFull, forceLimit);
-                } 
-                else if (typeof data === 'function')
-                    result = providers.function.build(data, level, forceFull, forceLimit);
-                else if (data === Object(data)) {
-                    if (metadata && metadata.keysHeadings)
+                    else if (metadata.keysHeadings && isObject)
                         result = providers.heading.build(data, level, forceFull, forceLimit);
-                    else
-                        result = providers.keyValue.build(data, level, forceFull, forceLimit);
                 }
-                else if (level == 0) 
-                    result = providers.empty.build(data);
-                else 
-                    result = providers.string.build(data, level, forceFull, forceLimit);
-
+                
+                if (result === '') {
+                    if (isArray)
+                        result = providers.table.build(data, level, forceFull, forceLimit);
+                    else if (isObject)
+                        result = providers.keyValue.build(data, level, forceFull, forceLimit);
+                    else if (typeof data === 'function')
+                        result = providers.function.build(data, level, forceFull, forceLimit);
+                    else if (level == 0) 
+                        result = providers.empty.build(data);
+                    else 
+                        result = providers.string.build(data, level, forceFull, forceLimit);
+                }
+                
                 return result;
             }
         };
