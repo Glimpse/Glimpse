@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Glimpse.AspNet.Model;
-using Glimpse.AspNet.PipelineInspector;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Tab.Assist;
@@ -14,6 +13,7 @@ namespace Glimpse.AspNet.Tab
         public const string TraceMessageStoreKey = "Glimpse.Trace.Messages";
         public const string FirstWatchStoreKey = "Glimpse.Trace.FirstWatch";
         public const string LastWatchStoreKey = "Glimpse.Trace.LastWatch";
+        public const string TabKey = "glimpse_trace";
 
         private static readonly object Layout = TabLayout.Create()
                 .Row(r =>
@@ -27,11 +27,6 @@ namespace Glimpse.AspNet.Tab
         public string Name
         {
             get { return "Trace"; }
-        }
-
-        public string Key
-        {
-            get { return "glimpse_trace"; }
         }
 
         public string DocumentationUri
@@ -49,6 +44,11 @@ namespace Glimpse.AspNet.Tab
             get { return null; }
         }
 
+        public string Key
+        {
+            get { return TabKey; }
+        }
+
         public object GetLayout()
         {
             return Layout;
@@ -62,11 +62,10 @@ namespace Glimpse.AspNet.Tab
 
         public void Setup(ITabSetupContext context)
         {
-            // TODO: This seems like it would fit better in an IPipeline inspector. No?
             var traceListeners = System.Diagnostics.Trace.Listeners;
-            if (!traceListeners.OfType<TraceInspector>().Any())
+            if (!traceListeners.OfType<GlimpseTraceListener>().Any())
             {
-                traceListeners.Add(new TraceInspector(context));
+                traceListeners.Add(new GlimpseTraceListener(context.GetTabStore));
             }
         }
     }

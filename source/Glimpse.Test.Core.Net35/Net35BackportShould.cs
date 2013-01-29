@@ -1,6 +1,6 @@
 ﻿using System;
-using Glimpse.Core;
 using Glimpse.Core.Backport;
+using Glimpse.Core.Extensibility;
 using Xunit;
 
 namespace Glimpse.Test.Core.Net35

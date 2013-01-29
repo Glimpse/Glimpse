@@ -1,5 +1,6 @@
 ﻿﻿using System.Collections.Generic;
 ﻿using System.Diagnostics;
+﻿using Glimpse.AspNet;
 ﻿using Glimpse.AspNet.Model;
 ﻿using Glimpse.AspNet.PipelineInspector;
 ﻿using Glimpse.Core.Extensibility;
@@ -18,7 +19,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
         {
             var list = SetupMessageStore(context);
 
-            var traceInspector = new TraceInspector(context);
+            var traceInspector = new GlimpseTraceListener(context.GetTabStore);
             traceInspector.Write(new TestClass());
 
             Assert.Equal(1, list.Count);
@@ -31,7 +32,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
         {
             var list = SetupMessageStore(context);
 
-            var traceInspector = new TraceInspector(context);
+            var traceInspector = new GlimpseTraceListener(context.GetTabStore);
             traceInspector.Write("New Message");
 
             Assert.Equal(1, list.Count);
@@ -44,7 +45,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
         {
             var list = SetupMessageStore(context);
 
-            var traceInspector = new TraceInspector(context);
+            var traceInspector = new GlimpseTraceListener(context.GetTabStore);
             traceInspector.Write(new TestClass(), "Warn");
 
             Assert.Equal(1, list.Count);
@@ -57,7 +58,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
         {
             var list = SetupMessageStore(context);
 
-            var traceInspector = new TraceInspector(context);
+            var traceInspector = new GlimpseTraceListener(context.GetTabStore);
             traceInspector.Write("New Message", "Info");
 
             Assert.Equal(1, list.Count);
@@ -70,7 +71,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
         {
             var list = SetupMessageStore(context);
 
-            var traceInspector = new TraceInspector(context);
+            var traceInspector = new GlimpseTraceListener(context.GetTabStore);
             traceInspector.WriteLine(new TestClass());
 
             Assert.Equal(1, list.Count);
@@ -83,7 +84,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
         {
             var list = SetupMessageStore(context);
 
-            var traceInspector = new TraceInspector(context);
+            var traceInspector = new GlimpseTraceListener(context.GetTabStore);
             traceInspector.WriteLine("New Message");
 
             Assert.Equal(1, list.Count);
@@ -96,7 +97,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
         {
             var list = SetupMessageStore(context);
 
-            var traceInspector = new TraceInspector(context);
+            var traceInspector = new GlimpseTraceListener(context.GetTabStore);
             traceInspector.WriteLine(new TestClass(), "Loading");
 
             Assert.Equal(1, list.Count);
@@ -109,7 +110,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
         {
             var list = SetupMessageStore(context);
 
-            var traceInspector = new TraceInspector(context);
+            var traceInspector = new GlimpseTraceListener(context.GetTabStore);
             traceInspector.WriteLine("New Message", "quiet");
 
             Assert.Equal(1, list.Count);
@@ -122,7 +123,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
         {
             var list = SetupMessageStore(context);
 
-            var traceInspector = new TraceInspector(context);
+            var traceInspector = new GlimpseTraceListener(context.GetTabStore);
             traceInspector.Fail("Message");
 
             Assert.Equal(1, list.Count);
@@ -135,7 +136,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
         {
             var list = SetupMessageStore(context);
 
-            var traceInspector = new TraceInspector(context);
+            var traceInspector = new GlimpseTraceListener(context.GetTabStore);
             traceInspector.Fail("Message", "Detail");
 
             Assert.Equal(1, list.Count);
@@ -148,7 +149,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
         {
             var list = SetupMessageStore(context);
 
-            var traceInspector = new TraceInspector(context); 
+            var traceInspector = new GlimpseTraceListener(context.GetTabStore); 
             traceInspector.TraceData(new TraceEventCache(), "TestSource", TraceEventType.Verbose, 123, new TestClass());
 
             Assert.Equal(1, list.Count);
@@ -161,7 +162,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
         {
             var list = SetupMessageStore(context);
 
-            var traceInspector = new TraceInspector(context);
+            var traceInspector = new GlimpseTraceListener(context.GetTabStore);
             traceInspector.TraceOutputOptions = TraceOptions.Callstack;
             traceInspector.TraceData(new TraceEventCache(), "TestSource", TraceEventType.Error, 123, new TestClass());
 
@@ -175,7 +176,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
         {
             var list = SetupMessageStore(context);
 
-            var traceInspector = new TraceInspector(context);
+            var traceInspector = new GlimpseTraceListener(context.GetTabStore);
             traceInspector.TraceOutputOptions = TraceOptions.Timestamp;
             traceInspector.TraceData(new TraceEventCache(), "TestSource", TraceEventType.Error, 123, new TestClass());
 
@@ -189,7 +190,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
         {
             var list = SetupMessageStore(context);
 
-            var traceInspector = new TraceInspector(context);
+            var traceInspector = new GlimpseTraceListener(context.GetTabStore);
             traceInspector.TraceData(new TraceEventCache(), "TestSource", TraceEventType.Critical, 123, new TestClass(), new TestClass());
 
             Assert.Equal(1, list.Count);
@@ -202,7 +203,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
         {
             var list = SetupMessageStore(context);
 
-            var traceInspector = new TraceInspector(context);
+            var traceInspector = new GlimpseTraceListener(context.GetTabStore);
             traceInspector.TraceEvent(new TraceEventCache(), "TestSource", TraceEventType.Warning, 123, "Message");
 
             Assert.Equal(1, list.Count);
@@ -215,7 +216,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
         {
             var list = SetupMessageStore(context);
 
-            var traceInspector = new TraceInspector(context);
+            var traceInspector = new GlimpseTraceListener(context.GetTabStore);
             traceInspector.TraceEvent(new TraceEventCache(), "TestSource", TraceEventType.Warning, 123, "Test {0} {1}", "Message", "Test");
 
             Assert.Equal(1, list.Count);

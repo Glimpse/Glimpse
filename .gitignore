@@ -26,3 +26,5 @@ _ReSharper.*
 /.nuget/NuGet.Config
 TestResults
 /*.DotSettings.user
+*.DotSettings
+*.shfbproj_*

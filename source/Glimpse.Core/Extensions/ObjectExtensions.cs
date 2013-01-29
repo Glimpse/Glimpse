@@ -1,13 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Extensions
 {
+    /// <summary>
+    /// Extension methods to simplify common tasks completed with <see cref="Object"/>.
+    /// </summary>
     public static class ObjectExtensions
     {
+        /// <summary>
+        /// Returns the value of <c>ToString</c> if <paramref name="value"/> is not null.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The value of <c>ToString</c> if <paramref name="value"/> is not null.</returns>
         public static string ToStringOrDefault(this object value)
         {
             if (value == null)
@@ -18,6 +22,11 @@ namespace Glimpse.Core.Extensions
             return value.ToString();
         }
 
+        /// <summary>
+        /// Returns the value of <c>GetType</c> if <paramref name="value"/> is not null.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The value of <c>GetType</c> if <paramref name="value"/> is not null.</returns>
         public static Type GetTypeOrNull(this object value)
         {
             if (value == null)
@@ -26,38 +35,6 @@ namespace Glimpse.Core.Extensions
             }
 
             return value.GetType();
-        }
-
-        public static T CastAs<T>(this object obj)
-        {
-            var wrapper = obj as IWrapper<T>;
-
-            if (wrapper != null)
-            {
-                return wrapper.GetWrappedObject();
-            }
-
-            return (T)obj;
-        }
-
-        internal static string CreateKey(this object obj)
-        {
-            string result;
-            var keyProvider = obj as IKey;
-
-            if (keyProvider != null)
-            {
-                result = keyProvider.Key;
-            }
-            else
-            {
-                result = obj.GetType().FullName;
-            }
-
-            return result
-                .Replace('.', '_')
-                .Replace(' ', '_')
-                .ToLower();
         }
     }
 }

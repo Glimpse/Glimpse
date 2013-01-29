@@ -25,9 +25,9 @@ namespace Glimpse.Core.Extensibility
         
         private JsonSerializerSettings Settings { get; set; }
 
-        public string Serialize(object obj)
+        public string Serialize(object target)
         {
-            return JsonConvert.SerializeObject(obj, Formatting.None, Settings);
+            return JsonConvert.SerializeObject(target, Formatting.None, Settings);
         }
 
         public void RegisterSerializationConverters(IEnumerable<ISerializationConverter> converters)

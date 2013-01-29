@@ -72,7 +72,7 @@ namespace Glimpse.Core.Framework
         {
             CheckInput(instance, methodImplementations);
 
-            var options = CreateProxyOptions<T>(methodImplementations, mixins.ToEmptyIfNull());
+            var options = CreateProxyOptions<T>(methodImplementations, mixins ?? Enumerable.Empty<object>());
             var wrapper = new CastleDynamicProxyWrapper<T>();
             options.AddMixinInstance(wrapper);
 
@@ -104,13 +104,13 @@ namespace Glimpse.Core.Framework
         {
             CheckInput(instance, methodImplementations);
 
-            var options = CreateProxyOptions<T>(methodImplementations, mixins.ToEmptyIfNull());
+            var options = CreateProxyOptions<T>(methodImplementations, mixins ?? Enumerable.Empty<object>());
             var wrapper = new CastleDynamicProxyWrapper<T>();
             options.AddMixinInstance(wrapper);
 
             var interceptorArray = CreateInterceptorArray(methodImplementations);
 
-            var result = (T)ProxyGenerator.CreateClassProxyWithTarget(typeof(T), instance, options, constructorArguments.ToArrayOrDefault(), interceptorArray);
+            var result = (T)ProxyGenerator.CreateClassProxyWithTarget(typeof(T), instance, options, ToArrayOrDefault(constructorArguments), interceptorArray);
 
             wrapper.ProxyTargetAccessor = result as IProxyTargetAccessor;
 
@@ -139,12 +139,22 @@ namespace Glimpse.Core.Framework
 
         public T ExtendClass<T>(IEnumerable<IAlternateMethod> methodImplementations, IEnumerable<object> mixins, IEnumerable<object> constructorArguments) where T : class
         {
-            CheckInput(methodImplementations); 
+            CheckInput(methodImplementations);
 
-            var options = CreateProxyOptions<T>(methodImplementations, mixins.ToEmptyIfNull());
+            var options = CreateProxyOptions<T>(methodImplementations, mixins ?? Enumerable.Empty<object>());
             var interceptorArray = CreateInterceptorArray(methodImplementations);
 
-            return (T)ProxyGenerator.CreateClassProxy(typeof(T), options, constructorArguments.ToArrayOrDefault(), interceptorArray);
+            return (T)ProxyGenerator.CreateClassProxy(typeof(T), options, ToArrayOrDefault(constructorArguments), interceptorArray);
+        }
+
+        private static TSource[] ToArrayOrDefault<TSource>(IEnumerable<TSource> source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            return source.ToArray();
         }
 
         private void CheckInput(IEnumerable<IAlternateMethod> methodImplementations)

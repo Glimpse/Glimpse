@@ -1,19 +1,21 @@
-﻿keyValue = function () {
-    var //Main
-        build = function (data, level, forceFull, forceLimit) {  
+﻿(function($, util, engine, engineUtil) {
+    var providers = engine._providers,
+        build = function (data, level, forceFull, metadata, forceLimit) {  
             var limit = !$.isNumeric(forceLimit) ? 3 : forceLimit;
 
-            if (shouldUsePreview(util.lengthJson(data), level, forceFull, limit, forceLimit, 1))
+            if (engineUtil.shouldUsePreview(util.lengthJson(data), level, forceFull, limit, forceLimit, 1))
                 return buildPreview(data, level);
-                
+            return buildOnly(data, level, metadata);
+        }, 
+        buildOnly = function(data, level, metadata) { 
             var i = 1, 
-                html = '<table><thead><tr class="glimpse-row-header-' + level + '"><th class="glimpse-cell-key">Key</th><th class="glimpse-cell-value">Value</th></tr></thead>';
+                html = '<table><thead><tr class="glimpse-row-header glimpse-row-header-' + level + '"><th class="glimpse-cell-key">Key</th><th class="glimpse-cell-value">Value</th></tr></thead>';
             for (var key in data)
-                html += '<tr class="' + (i++ % 2 ? 'odd' : 'even') + '"><th width="30%">' + rawString.process(key) + '</th><td width="70%"> ' + master.build(data[key], level + 1) + '</td></tr>';
+                html += '<tr class="' + (i++ % 2 ? 'odd' : 'even') + '"><th>' + engineUtil.raw.process(key) + '</th><td> ' + providers.master.build(data[key], level + 1, null, engineUtil.keyMetadata(key, metadata)) + '</td></tr>';
             html += '</table>';
 
             return html;
-        }, 
+        },
         buildPreview = function (data, level) { 
             return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + buildPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + build(data, level, true) + '</div></td></tr></table>';
         },
@@ -24,19 +26,21 @@
                 html = '<span class="start">{</span>';
 
             for (var key in data) {
-                html += newItemSpacer(i, rowLimit, length);
+                html += engineUtil.newItemSpacer(i, rowLimit, length);
                 if (i > length || i++ > rowLimit)
                     break;
-                html += '<span>\'</span>' + string.build(key, level + 1) + '<span>\'</span><span class="mspace">:</span><span>\'</span>' + string.build(data[key], level, 12) + '<span>\'</span>';
+                html += '<span>\'</span>' + providers.string.build(key, level + 1) + '<span>\'</span><span class="mspace">:</span><span>\'</span>' + providers.string.build(data[key], level, 12) + '<span>\'</span>';
             }
             html += '<span class="end">}</span>';
 
             return html;
-        };
- 
-    return {
-        build : build,
-        buildPreview : buildPreview,
-        buildPreviewOnly : buildPreviewOnly
-    }; 
-} ()
+        },
+        provider = {
+            build : build,
+            buildOnly : buildOnly,
+            buildPreview : buildPreview,
+            buildPreviewOnly : buildPreviewOnly
+        }; 
+
+    engine.register('keyValue', provider);
+})(jQueryGlimpse, glimpse.util, glimpse.render.engine, glimpse.render.engine.util);

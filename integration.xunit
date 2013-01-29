@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xunit>
+    <assemblies>
+        <assembly filename="source\Glimpse.Test.Integration\bin\Release\Glimpse.Test.Integration.dll" shadow-copy="true">
+            <output type="xml" filename="builds\local\artifacts\test.integration.xml" />
+        </assembly>
+    </assemblies>
+</xunit>

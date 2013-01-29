@@ -1,40 +1,35 @@
-﻿traditional = function () {
-    return {
-        match: function (pagerType) {
-            return pagerType == 0;
-        },
-        render: function (key, pagerContainer, pagerKey, pagerType, pageIndex, pageIndexLast) {
-            var pagerFirstPageLink = $('<a href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-firstPage"></a>'),
-                pagerPreviousPageLink = $('<a href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-previousPage"></a>'),
-                pagerMessage = $('<span class="glimpse-pager-message">' + (pageIndex + 1) + ' / ' + (pageIndexLast + 1) + '</span>'),
-                pagerNextPageLink = $('<a href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-nextPage"></a>'),
-                pagerLastPageLink = $('<a href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-lastPage"></a>');
+﻿(function($, util, engine, engineUtil) {
+    var provider = {
+            renderControls: function (key, pagerContainer, pagerKey, pagerType, pageIndex, pageIndexLast) {
+                var pagerFirstPageLink = $('<span href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-firstPage"></span>'),
+                    pagerPreviousPageLink = $('<span href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-previousPage"></span>'),
+                    pagerMessage = $('<span class="glimpse-pager-message">' + (pageIndex + 1) + ' / ' + (pageIndexLast + 1) + '</span>'),
+                    pagerNextPageLink = $('<span href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-nextPage"></span>'),
+                    pagerLastPageLink = $('<span href="#" class="glimpse-button glimpse-pager-link glimpse-pager-link-lastPage"></span>');
 
-            pagerContainer.append(pagerFirstPageLink);
-            pagerContainer.append(pagerPreviousPageLink); 
-            pagerContainer.append(pagerMessage); 
-            pagerContainer.append(pagerNextPageLink);
-            pagerContainer.append(pagerLastPageLink);
+                pagerContainer.append(pagerFirstPageLink);
+                pagerContainer.append(pagerPreviousPageLink); 
+                pagerContainer.append(pagerMessage); 
+                pagerContainer.append(pagerNextPageLink);
+                pagerContainer.append(pagerLastPageLink);
 
-            if (pageIndex > 0) {
-                pagerFirstPageLink.one('click', function () { loadPage(key, pagerKey, pagerType, 0); return false; });
-                pagerPreviousPageLink.one('click', function () { loadPage(key, pagerKey, pagerType, pageIndex - 1); return false; });
-            } else {
-                pagerFirstPageLink.addClass('glimpse-pager-link-firstPage-disabled');
-                pagerPreviousPageLink.addClass('glimpse-pager-link-previousPage-disabled');
+                if (pageIndex > 0) {
+                    pagerFirstPageLink.one('click', function() { engineUtil.load(key, pagerKey, 0, 'insert'); });
+                    pagerPreviousPageLink.one('click', function() { engineUtil.load(key, pagerKey, pageIndex - 1, 'insert'); });
+                } else {
+                    pagerFirstPageLink.addClass('glimpse-pager-link-firstPage-disabled');
+                    pagerPreviousPageLink.addClass('glimpse-pager-link-previousPage-disabled');
+                }
+
+                if (pageIndex < pageIndexLast) {
+                    pagerNextPageLink.one('click', function() { engineUtil.load(key, pagerKey, pageIndex + 1, 'insert'); });
+                    pagerLastPageLink.one('click', function() { engineUtil.load(key, pagerKey, pageIndexLast, 'insert'); });
+                } else {
+                    pagerNextPageLink.addClass('glimpse-pager-link-nextPage-disabled');
+                    pagerLastPageLink.addClass('glimpse-pager-link-lastPage-disabled');
+                }
             }
-
-            if (pageIndex < pageIndexLast) {
-                pagerNextPageLink.one('click', function () { loadPage(key, pagerKey, pagerType, pageIndex + 1); return false; });
-                pagerLastPageLink.one('click', function () { loadPage(key, pagerKey, pagerType, pageIndexLast); return false; });
-            } else {
-                pagerNextPageLink.addClass('glimpse-pager-link-nextPage-disabled');
-                pagerLastPageLink.addClass('glimpse-pager-link-lastPage-disabled');
-            }
-        },
-        loadPageData: function (panelItem, data, structure) {
-            var content = renderEngine.build(data, structure);
-            panelItem.html(content);
-        }
-    };
-} ()
+        };
+    
+    engine.register('traditional', provider);
+})(jQueryGlimpse, glimpse.util, glimpse.paging.engine, glimpse.paging.engine.util);

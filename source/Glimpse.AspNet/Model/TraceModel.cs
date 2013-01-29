@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Glimpse.Core.Tab.Assist;
 
 namespace Glimpse.AspNet.Model
 {
@@ -12,9 +8,9 @@ namespace Glimpse.AspNet.Model
 
         public string Message { get; set; }
 
-        public double FromFirst { get; set; }
+        public TimeSpan FromFirst { get; set; }
 
-        public double FromLast { get; set; }
+        public TimeSpan FromLast { get; set; }
 
         public int IndentLevel { get; set; }
     }

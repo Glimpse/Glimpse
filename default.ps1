@@ -19,6 +19,7 @@ task clean {
     "   builds/local"
     Remove-Item $build_dir\local\*.nupkg
     Remove-Item $build_dir\local\*.zip
+    Remove-Item $build_dir\local\*.chm
     
     "   Glimpse.Core"
     Delete-Directory "$source_dir\Glimpse.Core\bin"
@@ -67,6 +68,13 @@ task compile -depends clean {
     "   Glimpse.All.sln"
     
     exec { msbuild $base_dir\Glimpse.All.sln /p:Configuration=$config /nologo /verbosity:minimal }
+}
+
+task docs -depends compile {
+    "Documenting"
+    "   Glimpse.Documentation.Api"
+    
+    exec { msbuild $source_dir\Glimpse.Documentation.Api\Glimpse.Documentation.Api.shfbproj /p:Configuration=$config /nologo /verbosity:minimal }
 }
 
 task merge -depends test {
@@ -194,6 +202,82 @@ task push {
 }
 
 task buildjs {
+}
+
+task integrate {
+    "Integration Testing"
+    
+    "   Clean Glimpse.Test.Integration"
+    Delete-Directory "$source_dir\Glimpse.Test.Integration\bin"
+    Delete-Directory "$source_dir\Glimpse.Test.Integration\obj"
+    
+    "   Clean Glimpse.Test.Integration.Site"
+    Delete-Directory "$source_dir\Glimpse.Test.Integration.Site\bin"
+    Delete-Directory "$source_dir\Glimpse.Test.Integration.Site\obj"
+
+    "`nBuild Integration Sln"
+    exec { msbuild $base_dir\Glimpse.Integration.sln /p:Configuration=$config /nologo /verbosity:minimal }
+    
+    "`nGlimpse must be manually installed while waiting for http://nuget.codeplex.com/workitem/2730"
+    #cd $base_dir\.NuGet
+    
+    #nuget update -source "c:\glimpse\builds\local" -Id Glimpse.MVC3;Glimpse.AspNet;Glimpse -Verbose "c:\glimpse\source\Glimpse.Test.Integration.Site\packages.config"
+    #exec { & .\nuget.exe update -source $build_dir\local -id "Glimpse.MVC3;Glimpse.AspNet;Glimpse" -Verbose "$source_dir\Glimpse.Test.Integration.Site\packages.config" }
+    
+    "`nIIS must be set up with Administrative privledges. Run: "
+    "C:\Windows\System32\inetsrv\appcmd.exe add site /name:""Glimpse Integration Test Site"" /bindings:""http/*:1155:"" /physicalPath:""C:\Glimpse\source\Glimpse.Test.Integration.Site"
+    "to support IIS testing"
+
+    
+    "`nEnding Cassini"
+    kill -name WebDev.WebServer*
+
+    "`nEnding IIS Express"
+    kill -name iisexpress*
+    
+    $cassiniPath = "C:\Program Files (x86)\Common Files\microsoft shared\DevServer\11.0\WebDev.WebServer40.EXE"
+    $exists = Test-Path($cassiniPath)
+    if ($exists -eq $false)
+    {
+        $cassiniPath = "C:\Program Files\Common Files\microsoft shared\DevServer\11.0\WebDev.WebServer40.EXE"
+        $exists = Test-Path($cassiniPath)
+        if ($exists -eq $false)
+        {
+            "Using WebDev.WebServer40.EXE from PATH. Add directory containing 'WebDev.WebServer40.EXE' to PATH environment variable."
+            $cassiniPath = "WebDev.WebServer40.EXE"
+        }
+    }
+    
+    $iisExpressPath = "C:\Program Files (x86)\IIS Express\iisexpress.exe"
+    $exists = Test-Path($iisExpressPath)
+    if ($exists -eq $false)
+    {
+        $iisExpressPath = "C:\Program Files\IIS Express\iisexpress.exe"
+        $exists = Test-Path($iisExpressPath)
+        if ($exists -eq $false)
+        {
+            "Using iisexpress.exe from PATH. Add directory containing 'iisexpress.exe' to PATH environment variable."
+            $iisExpressPath = "iisexpress.exe"
+        }
+    }
+
+    "`nStarting Cassini"
+    &$cassiniPath /port:234 /path:"$source_dir\Glimpse.Test.Integration.Site"
+    
+    "`nStarting IIS Express"
+    $iisExpressArgs = "/port:1153 /path:$source_dir\Glimpse.Test.Integration.Site /systray:true"
+    start-process $iisExpressPath $iisExpressArgs 
+    
+    "`nRunning Tests"
+    New-Item $build_dir\local\artifacts -Type directory -Force > $null
+    cd $package_dir\xunit.runners*\tools\
+    exec { & .\xunit.console.clr4.x86 $base_dir\integration.xunit }
+    
+    "`nEnding Cassini"
+    kill -name WebDev.WebServer*
+
+    "`nEnding IIS Express"
+    kill -name iisexpress*
 }
 
 #functions ---------------------------------------------------------------------------------------------------------

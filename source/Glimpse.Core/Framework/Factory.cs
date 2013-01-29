@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
@@ -27,9 +28,9 @@ namespace Glimpse.Core.Framework
         {
         }
 
-        public Factory(IServiceLocator providerServiceLocator, IServiceLocator userServiceLocator, GlimpseSection configuration)
+        public Factory(IServiceLocator providerServiceLocator, IServiceLocator userServiceLocator, Section configuration)
         {
-            Configuration = configuration ?? ConfigurationManager.GetSection("glimpse") as GlimpseSection ?? new GlimpseSection();
+            Configuration = configuration ?? ConfigurationManager.GetSection("glimpse") as Section ?? new Section();
 
             IServiceLocator loadedServiceLocator = null;
             if (userServiceLocator == null && Configuration.ServiceLocatorType != null)
@@ -45,7 +46,7 @@ namespace Glimpse.Core.Framework
 
         internal IServiceLocator ProviderServiceLocator { get; set; }
         
-        internal GlimpseSection Configuration { get; set; }
+        internal Section Configuration { get; set; }
 
         private ILogger Logger { get; set; }
 
@@ -134,10 +135,22 @@ namespace Glimpse.Core.Framework
                 return Logger;
             }
 
+            var configuredPath = Configuration.Logging.LogLocation;
+            
+            // Root the path if it isn't already
+            var logDirPath = Path.IsPathRooted(configuredPath)
+                                 ? configuredPath
+                                 : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, configuredPath);
+            
+            // Add a filename if one isn't specified
+            var logFilePath = string.IsNullOrEmpty(Path.GetExtension(logDirPath))
+                                  ? Path.Combine(logDirPath, "Glimpse.log")
+                                  : logDirPath;
+
             // use NLog logger otherwise
             var fileTarget = new FileTarget
                                  {
-                                     FileName = "${basedir}/Glimpse.log",
+                                     FileName = logFilePath,
                                      Layout =
                                          "${longdate} | ${level:uppercase=true} | ${message} | ${exception:maxInnerExceptionLevel=5:format=type,message,stacktrace:separator=--:innerFormat=shortType,message,method:innerExceptionSeparator=>>}"
                                  };
@@ -344,15 +357,30 @@ namespace Glimpse.Core.Framework
             return new CastleDynamicProxyFactory(InstantiateLogger(), InstantiateMessageBroker(), InstantiateTimerStrategy(), InstantiateRuntimePolicyStrategy());
         }
 
+        private static IEnumerable<Type> ToEnumerable(TypeElementCollection collection)
+        {
+            foreach (TypeElement typeElement in collection)
+            {
+                yield return typeElement.Type;
+            }
+        }
+
         private IDiscoverableCollection<T> CreateDiscoverableCollection<T>(DiscoverableCollectionElement config)
         {
             var discoverableCollection = new ReflectionDiscoverableCollection<T>(InstantiateLogger());
 
-            discoverableCollection.IgnoredTypes.AddRange(config.IgnoredTypes.ToEnumerable());
+            discoverableCollection.IgnoredTypes.AddRange(ToEnumerable(config.IgnoredTypes));
 
-            if (config.DiscoveryLocation != DiscoverableCollectionElement.DefaultLocation)
+            // config.DiscoveryLocation (collection specific) overrides Configuration.DiscoveryLocation (on main <glimpse> node)
+            var locationCascade = string.IsNullOrEmpty(config.DiscoveryLocation)
+                                       ? string.IsNullOrEmpty(Configuration.DiscoveryLocation)
+                                             ? null
+                                             : Configuration.DiscoveryLocation
+                                       : config.DiscoveryLocation;
+
+            if (locationCascade != null)
             {
-                discoverableCollection.DiscoveryLocation = config.DiscoveryLocation;
+                discoverableCollection.DiscoveryLocation = locationCascade;
             }
 
             discoverableCollection.AutoDiscover = config.AutoDiscover;

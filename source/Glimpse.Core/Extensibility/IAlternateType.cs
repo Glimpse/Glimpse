@@ -8,8 +8,8 @@
         /// <summary>
         /// Tries to create an alternate for the given target.
         /// </summary>
-        /// <param name="originalObj">The original obj.</param>
-        /// <param name="newObj">The new obj.</param>
+        /// <param name="originalObj">The original object.</param>
+        /// <param name="newObj">The new object.</param>
         /// <returns><c>true</c> if the create was successful, <c>false</c> otherwise</returns>
         bool TryCreate(T originalObj, out T newObj);
     }
