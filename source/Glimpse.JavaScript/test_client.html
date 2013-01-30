@@ -32,7 +32,7 @@
         args.panel.css('opacity', '0.5');
 
         // You could also do the following. You would use this in cases where you have no data up front when calling tab.register
-        //render.engine.insert(args.panelHolder, { 'testA': 'value', 'testB': 'value'});
+        //render.engine.insert(args.panel, { 'testA': 'value', 'testB': 'value'});
     }); 
     pubsub.subscribe('action.panel.showing.marionette-core', function() {
          console.log('Showing marionette-core');
