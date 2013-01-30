@@ -273,6 +273,12 @@ glimpse.tab.register(args);
     var processFunction = function(scope, heading, callback) {
         scope.parent().before('<strong>' + heading + '</strong><pre>' + callback.toString().replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</pre>');
     };
+    var processHeading = function(scope, heading, description) {
+        if (heading)
+            scope.parent().prev(':first').append(' - ' + heading);
+        if (description)
+            scope.parent().before('<div>' + description + '</div>');
+    };
 
     var data1 = {
             'Movie': 'Star Wars',
@@ -280,6 +286,7 @@ glimpse.tab.register(args);
             'GlimpseOn': 'True',
             'Plot & Description': 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.'
         };
+    processHeading($('.sample1'), 'Process object');
     process($('.sample1'), data1); 
 
             
@@ -294,6 +301,7 @@ glimpse.tab.register(args);
         ['Anthony Daniels', 'C-3PO', 'Droid', '101'],
         ['Kenny Baker', 'R2-D2', 'Droid', '150']
     ];
+    processHeading($('.sample2'), 'Process array with row styling', '<ul><li>Row styling</li></ul>');
     process($('.sample2'), data2); 
 
     
@@ -312,6 +320,7 @@ glimpse.tab.register(args);
         ['Shelagh Fraser', 'Aunt Beru', 'Female', '29'],
         ['Alex McCrindle', 'General Dodonna', 'Male', '43', 'fail']
     ];
+    processHeading($('.sample3'), 'Process array with row/cell styling', '<ul><li>Row styling</li><li>Trim long string content</li><li>Markup support</li></ul>');
     process($('.sample3'), data3); 
 
     
@@ -325,6 +334,7 @@ glimpse.tab.register(args);
             ],
         'Plot & Description': 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.'
     };
+    processHeading($('.sample4'), 'Process object with nested array');
     process($('.sample4'), data4); 
     
 
@@ -338,6 +348,7 @@ glimpse.tab.register(args);
             ],
         'Plot & Description': 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.'
     };
+    processHeading($('.sample5'), 'Process object with nested array', '<ul><li>Trim long string content of nested content</li></ul>');
     process($('.sample5'), data5); 
 
     
@@ -345,18 +356,19 @@ glimpse.tab.register(args);
         'Movie': 'Star Wars',
         'Genera/Theme': 'Science Fiction',
         'Actors/Cast': [
-                ['Actor', 'Character', 'Gender', 'Age'],
-                ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
-                ['James Earl Jones', 'Darth Vader', 'Male', '45'],
-                ['Harrison Ford', 'Han Solo', 'Male', '25'],
-                ['Carrie Fisher', 'Princess Leia Organa', 'Female', '21'],
-                ['Peter Cushing', 'Grand Moff Tarkin', 'Female', '69'],
-                ['Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70'],
-                ['Anthony Daniels', 'C-3PO', 'Droid', '101'],
-                ['Kenny Baker', 'R2-D2', 'Droid', '150']
+                ['Actor', 'Character', 'Gender'],
+                ['Mark Hamill', 'Luke Skywalker', 'Male'],
+                ['James Earl Jones', 'Darth Vader', 'Male'],
+                ['Harrison Ford', 'Han Solo', 'Male'],
+                ['Carrie Fisher', 'Princess Leia Organa', 'Female'],
+                ['Peter Cushing', 'Grand Moff Tarkin', 'Female'],
+                ['Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female'],
+                ['Anthony Daniels', 'C-3PO', 'Droid'],
+                ['Kenny Baker', 'R2-D2', 'Droid']
             ],
         'Plot & Description': 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.'
     };
+    processHeading($('.sample6'), 'Process object with nested array', '<ul><li>Show summary version of child array with too many items</li><li>When string in nested array is too long, preview trims the amount it shows</li></ul>');
     process($('.sample6'), data6); 
 
     
@@ -376,6 +388,7 @@ glimpse.tab.register(args);
             ],
         'Plot & Description': 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.'
     };
+    processHeading($('.sample7'), 'Process object with nested array', '<ul><li>Trim long string content of nested content</li><li>Show summary version of child array with too many items</li><li>When too many columns exist in nested array, preview trims the amount it shows</li></ul>');
     process($('.sample7'), data7); 
 
     
@@ -389,6 +402,7 @@ glimpse.tab.register(args);
         },
         'Plot & Description': 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.'
     };
+    processHeading($('.sample8'), 'Process object with nested object');
     process($('.sample8'), data8);
 
     
@@ -407,6 +421,7 @@ glimpse.tab.register(args);
         },
         'Plot & Description': 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.'
     };
+    processHeading($('.sample9'), 'Process object with nested object', '<ul><li>Show summary version of child object with too many items</li><li>When string in nested array is too long, preview trims the amount it shows</li></ul>');
     process($('.sample9'), data9); 
 
 
@@ -421,6 +436,7 @@ glimpse.tab.register(args);
             ], 'Cast details pending'],
         ['\tPlot & Description', 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.', ' Best movie of all time']
     ];
+    processHeading($('.sample10'), 'Process array with tabs');
     process($('.sample10'), data10); 
 
     
@@ -441,6 +457,7 @@ glimpse.tab.register(args);
             ], 'Cast details pending'],
         ['Plot & Description', 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.', ' Best movie of all time']
     ];
+    processHeading($('.sample11'), 'Process array with nested array', '<ul><li>Show summary version of child array with too many items</li></ul>');
     process($('.sample11'), data11); 
 
     
@@ -455,6 +472,7 @@ glimpse.tab.register(args);
         }, 'Cast details pending'],
         ['Plot & Description', 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.', ' Best movie of all time']
     ];
+    processHeading($('.sample12'), 'Process array with nested object');
     process($('.sample12'), data12); 
     
 
@@ -474,6 +492,7 @@ glimpse.tab.register(args);
         }, 'Cast details pending'],
         ['Plot & Description', 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.', ' Best movie of all time']
     ];
+    processHeading($('.sample13'), 'Process array with nested object', '<ul><li>Show summary version of child object with too many items</li></ul>');
     process($('.sample13'), data13); 
 
     
@@ -487,6 +506,7 @@ glimpse.tab.register(args);
             ],
         'Plot & Description': 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.'
     };
+    processHeading($('.sample14'), 'Process array with nested object with sub nested object/array');
     process($('.sample14'), data14); 
 
     
@@ -506,6 +526,7 @@ glimpse.tab.register(args);
             ],
         'Plot & Description': 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.'
     };
+    processHeading($('.sample15'), 'Process array with nested object with sub nested object/array', '<ul><li>Show summary version of child object with too many items</li></ul>');
     process($('.sample15'), data15);
 
     
@@ -525,6 +546,7 @@ glimpse.tab.register(args);
             ],
         'Plot & Description': [ 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.' ]
     };
+    processHeading($('.sample16'), 'Process array with nested object with sub nested object/array; with raw array', '<ul><li>Show summary version of child object with too many items</li></ul>');
     process($('.sample16'), data16);
 
 
@@ -559,6 +581,7 @@ glimpse.tab.register(args);
     var metaData17 = { layout: [
         [ { data : [{ data : 0, key : true, align : 'right' }, { data : 2, align : 'right' }, { data : '{{3}} - {{4}}', align : 'right' }, ], width : '200px' }, { data : 1 } ]
     ]}; 
+    processHeading($('.sample17'), 'Process custom layout array with nested array', '<ul><li>Custom layout hows how data can be pivoted, keys identified, aligned, formatted and widths controlled.</li><li>Show summary version of child array with too many items</li></ul>');
     process($('.sample17'), data17, metaData17); 
     
 
@@ -572,6 +595,7 @@ glimpse.tab.register(args);
     var metaData18 = { layout: [
         [ { data : [ { data : 0, key : true, align : 'right' }, { data : 1, align : 'right' }, { data : 2, align : 'right', post : ' ms', className : 'mono' }, { data : 3, align : 'right', pre : 'T+ ', post : ' ms', className : 'mono' } ], width : '200px' }, { data : 4, isCode : true, codeType : 'sql' } ]
     ]};
+    processHeading($('.sample18'), 'Process custom layout array', '<ul><li>Custom layout hows how data can be styled, post/pre formatting and code fomatted.</li></ul>');
     process($('.sample18'), data18, metaData18); 
     
 
@@ -585,6 +609,7 @@ glimpse.tab.register(args);
     var metaData19 = { layout: [
         [ { data : '{{0}} - ({{1}})', key : true }, { data : 2, width : '20%' }, { data : 3, width : '20%' } ]
     ]};
+    processHeading($('.sample19'), 'Process custom layout array with row style');
     process($('.sample19'), data19, metaData19);
     
 
@@ -605,6 +630,7 @@ glimpse.tab.register(args);
             { data : 4, layout : [ [ { data : 0, width : '30%' }, { data : 1, width : '30%' }, { data : 2, width : '20%' }, { data : 3, width : '20%' } ] ] } 
         ]
     ]}; 
+    processHeading($('.sample20'), 'Process custom layout array with sub custom layout array');
     process($('.sample20'), data20, metaData20);
     
 
@@ -639,6 +665,7 @@ glimpse.tab.register(args);
             ]] , 
         ['Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70', null ]
     ];
+    processHeading($('.sample21'), 'Process custom layout array with targeted sub custom layout array');
     var metaData21 = { layout: [
             [ { data : [ { data : '{{0}} - ({{1}})', key : true }, 
                          { data : '\t{{2}}' }, { data : '\t{{3}}' } ], width : '250px' }, 
@@ -672,6 +699,7 @@ glimpse.tab.register(args);
     var metaData22 = {
         keysHeadings: true
     };
+    processHeading($('.sample22'), 'Process object keys as headings');
     process($('.sample22'), data22, metaData22);
      
     var data23 = {
@@ -683,6 +711,7 @@ glimpse.tab.register(args);
         namedPamam: function namedPamam(hello) { return; },
         namedParams: function namedParams(hello, world) { return; }
     };
+    processHeading($('.sample23'), 'Process object and render functions');
     process($('.sample23'), data23);
     
 
@@ -718,6 +747,7 @@ glimpse.tab.register(args);
     var metaData24 = { layout: [
         [ { data : '{{0}} - ({{1}})', key : true }, { data : 2, width : '20%', engine: 'data24EngineA' }, { data : 3, width : '20%', engine: 'data24EngineB' } ]
     ]};
+    processHeading($('.sample24'), 'Process custom layout array with custom rendering engine');
     process($('.sample24'), data24, metaData24);
     processFunction($('.sample24'), 'Custom Engine - data24EngineA', data24EngineA.build);
     processFunction($('.sample24'), 'Custom Engine - data24EngineB', data24EngineA.build);    
@@ -782,6 +812,7 @@ glimpse.tab.register(args);
                 }
         }
     };
+    processHeading($('.sample25'), 'Process custom layout object with custom layout objects/arrays');
     process($('.sample25'), data25, metaData25);
     processFunction($('.sample25'), 'Custom Engine - data25Engine', data25Engine.build);
     
@@ -811,6 +842,7 @@ glimpse.tab.register(args);
             }
         }
     };
+    processHeading($('.sample26'), 'Process custom layout object with all heading suppressed');
     process($('.sample26'), data26, metaData26);
 
 })(jQueryGlimpse);
