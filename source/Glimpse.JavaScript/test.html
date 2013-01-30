@@ -74,6 +74,8 @@
         <div class="glimpse"><div class="sample24 glimpse-panel"></div></div> 
         <h4>Scenario 25 (Pass)</h4>
         <div class="glimpse"><div class="sample25 glimpse-panel"></div></div> 
+        <h4>Scenario 26 (Pass)</h4>
+        <div class="glimpse"><div class="sample26 glimpse-panel"></div></div> 
     </div>
 
     <script src="./glimpse.js" type="text/javascript"></script>
@@ -783,6 +785,34 @@ glimpse.tab.register(args);
     process($('.sample25'), data25, metaData25);
     processFunction($('.sample25'), 'Custom Engine - data25Engine', data25Engine.build);
     
+    var data26 = {
+        'Movie': 'Star Wars',
+        'Genera/Theme': [
+                ['Actor', 'Character' ],
+                ['Carrie Fisher', 'Princess Leia Organa'], 
+                ['Alec Guinness', 'Ben Obi-Wan Kenobi']
+            ], 
+        'Actors/Cast': [
+                ['Actor', 'Character', 'Gender', 'Age'],
+                ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                ['James Earl Jones', 'Darth Vader', 'Male', '45']
+            ],
+        'Plot & Description': 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.'
+    };
+    var metaData26 = {
+        suppressHeader: true,
+        layout: {
+            'Actors/Cast': {
+                suppressHeader: true
+            },
+            'Genera/Theme': {
+                suppressHeader: true,
+                layout: [[ { data: 0, align: 'right', width: '50%' }, { data: 1 } ]]
+            }
+        }
+    };
+    process($('.sample26'), data26, metaData26);
+
 })(jQueryGlimpse);
     </script>
 </body>

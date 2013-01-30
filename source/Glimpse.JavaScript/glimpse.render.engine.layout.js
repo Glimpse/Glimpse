@@ -83,15 +83,16 @@
         },
         buildOnly = function (data, level, metadata) {
             var html = '<table>', 
-                rowClass = '';
-            for (var i = 0; i < data.length; i++) {
+                rowClass = '',
+                layout = metadata.layout;
+            for (var i = engineUtil.includeHeading(metadata) ? 0 : 1; i < data.length; i++) {
                 rowClass = data[i].length > data[0].length ? (' ' + data[i][data[i].length - 1]) : '';
                 html += (i == 0) ? '<thead class="glimpse-row-header glimpse-row-header-' + level + '">' : '<tbody class="' + (i % 2 ? 'odd' : 'even') + rowClass + '">';
-                for (var x = 0; x < metadata.length; x++) { 
+                for (var x = 0; x < layout.length; x++) { 
                     var rowData = '';
                      
-                    for (var y = 0; y < metadata[x].length; y++) {
-                        var metadataItem = metadata[x][y], cellType = (i == 0 ? 'th' : 'td'); 
+                    for (var y = 0; y < layout[x].length; y++) {
+                        var metadataItem = layout[x][y], cellType = (i == 0 ? 'th' : 'td'); 
                         rowData += buildCell(data[i], metadataItem, level, cellType, i);
                     }
                      

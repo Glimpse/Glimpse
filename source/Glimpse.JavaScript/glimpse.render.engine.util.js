@@ -3,6 +3,9 @@
         keyMetadata: function (key, metadata) {
             return metadata && metadata.layout === Object(metadata.layout) ? metadata.layout[key] : null;
         },
+        includeHeading: function(metadata) {
+            return !(metadata && metadata.suppressHeader);
+        },
         shouldUsePreview: function(length, level, forceFull, limit, forceLimit, tolerance) {
             if ($.isNumeric(forceLimit))
                 limit = forceLimit;

@@ -5,14 +5,17 @@
 
             if (engineUtil.shouldUsePreview(data.length, level, forceFull, limit, forceLimit, 1))
                 return buildPreview(data, level);
-            return buildOnly(data, level);
+            return buildOnly(data, level, metadata);
         },
-        buildOnly = function (data, level) {
-            var html = '<table><thead><tr class="glimpse-row-header glimpse-row-header-' + level + '">';
+        buildOnly = function (data, level, metadata) {
+            var html = '<table>';
             if ($.isArray(data[0])) {
-                for (var x = 0; x < data[0].length; x++)
-                    html += '<th>' + engineUtil.raw.process(data[0][x]) + '</th>';
-                html += '</tr></thead>';
+                if (engineUtil.includeHeading(metadata)) {
+                    html += '<thead><tr class="glimpse-row-header glimpse-row-header-' + level + '">';
+                    for (var x = 0; x < data[0].length; x++)
+                        html += '<th>' + engineUtil.raw.process(data[0][x]) + '</th>';
+                    html += '</tr></thead>';
+                }
                 for (var i = 1; i < data.length; i++) {
                     html += '<tr class="' + (i % 2 ? 'odd' : 'even') + (data[i].length > data[0].length ? ' ' + data[i][data[i].length - 1] : '') + '">';
                     for (var x = 0; x < data[0].length; x++)
@@ -23,7 +26,8 @@
             }
             else {
                 if (data.length > 1) {
-                    html += '<th>Values</th></tr></thead>';
+                    if (engineUtil.includeHeading(metadata))
+                        html += '<thead><th>Values</th></tr></thead>';
                     for (var i = 0; i < data.length; i++)
                         html += '<tr class="' + (i % 2 ? 'odd' : 'even') + '"><td>' + providers.master.build(data[i], level + 1) + '</td></tr>';
                     html += '</table>';

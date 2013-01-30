@@ -703,6 +703,9 @@ glimpse.render.engine.util = (function($) {
         keyMetadata: function (key, metadata) {
             return metadata && metadata.layout === Object(metadata.layout) ? metadata.layout[key] : null;
         },
+        includeHeading: function(metadata) {
+            return !(metadata && metadata.suppressHeader);
+        },
         shouldUsePreview: function(length, level, forceFull, limit, forceLimit, tolerance) {
             if ($.isNumeric(forceLimit))
                 limit = forceLimit;
@@ -819,9 +822,11 @@ glimpse.render.engine.util.raw = (function($, util) {
                 return buildPreview(data, level);
             return buildOnly(data, level, metadata);
         }, 
-        buildOnly = function(data, level, metadata) { 
-            var i = 1, 
-                html = '<table><thead><tr class="glimpse-row-header glimpse-row-header-' + level + '"><th class="glimpse-cell-key">Key</th><th class="glimpse-cell-value">Value</th></tr></thead>';
+        buildOnly = function(data, level, metadata) {
+            var i = 1,
+                html = '<table>';
+            if (engineUtil.includeHeading(metadata))
+                html += '<thead><tr class="glimpse-row-header glimpse-row-header-' + level + '"><th class="glimpse-cell-key">Key</th><th class="glimpse-cell-value">Value</th></tr></thead>';
             for (var key in data)
                 html += '<tr class="' + (i++ % 2 ? 'odd' : 'even') + '"><th>' + engineUtil.raw.process(key) + '</th><td> ' + providers.master.build(data[key], level + 1, null, engineUtil.keyMetadata(key, metadata)) + '</td></tr>';
             html += '</table>';
@@ -882,7 +887,7 @@ glimpse.render.engine.util.raw = (function($, util) {
                     if (metadata.engine && providers[metadata.engine])
                         result = providers[metadata.engine].build(data, level, forceFull, metadata, forceLimit);
                     else if (metadata.layout && isArray) 
-                        result = providers.layout.build(data, level, forceFull, metadata.layout, forceLimit);
+                        result = providers.layout.build(data, level, forceFull, metadata, forceLimit);
                     else if (metadata.keysHeadings && isObject)
                         result = providers.heading.build(data, level, forceFull, metadata, forceLimit);
                 }
@@ -1024,15 +1029,16 @@ glimpse.render.engine.util.raw = (function($, util) {
         },
         buildOnly = function (data, level, metadata) {
             var html = '<table>', 
-                rowClass = '';
-            for (var i = 0; i < data.length; i++) {
+                rowClass = '',
+                layout = metadata.layout;
+            for (var i = engineUtil.includeHeading(metadata) ? 0 : 1; i < data.length; i++) {
                 rowClass = data[i].length > data[0].length ? (' ' + data[i][data[i].length - 1]) : '';
                 html += (i == 0) ? '<thead class="glimpse-row-header glimpse-row-header-' + level + '">' : '<tbody class="' + (i % 2 ? 'odd' : 'even') + rowClass + '">';
-                for (var x = 0; x < metadata.length; x++) { 
+                for (var x = 0; x < layout.length; x++) { 
                     var rowData = '';
                      
-                    for (var y = 0; y < metadata[x].length; y++) {
-                        var metadataItem = metadata[x][y], cellType = (i == 0 ? 'th' : 'td'); 
+                    for (var y = 0; y < layout[x].length; y++) {
+                        var metadataItem = layout[x][y], cellType = (i == 0 ? 'th' : 'td'); 
                         rowData += buildCell(data[i], metadataItem, level, cellType, i);
                     }
                      
@@ -1068,14 +1074,17 @@ glimpse.render.engine.util.raw = (function($, util) {
 
             if (engineUtil.shouldUsePreview(data.length, level, forceFull, limit, forceLimit, 1))
                 return buildPreview(data, level);
-            return buildOnly(data, level);
+            return buildOnly(data, level, metadata);
         },
-        buildOnly = function (data, level) {
-            var html = '<table><thead><tr class="glimpse-row-header glimpse-row-header-' + level + '">';
+        buildOnly = function (data, level, metadata) {
+            var html = '<table>';
             if ($.isArray(data[0])) {
-                for (var x = 0; x < data[0].length; x++)
-                    html += '<th>' + engineUtil.raw.process(data[0][x]) + '</th>';
-                html += '</tr></thead>';
+                if (engineUtil.includeHeading(metadata)) {
+                    html += '<thead><tr class="glimpse-row-header glimpse-row-header-' + level + '">';
+                    for (var x = 0; x < data[0].length; x++)
+                        html += '<th>' + engineUtil.raw.process(data[0][x]) + '</th>';
+                    html += '</tr></thead>';
+                }
                 for (var i = 1; i < data.length; i++) {
                     html += '<tr class="' + (i % 2 ? 'odd' : 'even') + (data[i].length > data[0].length ? ' ' + data[i][data[i].length - 1] : '') + '">';
                     for (var x = 0; x < data[0].length; x++)
@@ -1086,7 +1095,8 @@ glimpse.render.engine.util.raw = (function($, util) {
             }
             else {
                 if (data.length > 1) {
-                    html += '<th>Values</th></tr></thead>';
+                    if (engineUtil.includeHeading(metadata))
+                        html += '<thead><th>Values</th></tr></thead>';
                     for (var i = 0; i < data.length; i++)
                         html += '<tr class="' + (i % 2 ? 'odd' : 'even') + '"><td>' + providers.master.build(data[i], level + 1) + '</td></tr>';
                     html += '</table>';
