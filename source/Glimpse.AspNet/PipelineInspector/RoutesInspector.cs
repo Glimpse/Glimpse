@@ -36,10 +36,12 @@ namespace Glimpse.AspNet.PipelineInspector
                     var routeBase = currentRoutes[i];
                     var replaceRoute = (System.Web.Routing.RouteBase)null;
                     var mixins = new[] { RouteNameMixin.None() };
+                    string routeName = null;
 
                     if (mappedRoutes.ContainsValue(routeBase))
                     {
                         var pair = mappedRoutes.First(r => r.Value == routeBase);
+                        routeName = pair.Key;
                         mixins = new[] { new RouteNameMixin(pair.Key) };
                     }
 
@@ -68,6 +70,12 @@ namespace Glimpse.AspNet.PipelineInspector
                     if (replaceRoute != null)
                     {
                         currentRoutes[i] = replaceRoute;
+
+                        if (routeName != null)
+                        {
+                            mappedRoutes[routeName] = replaceRoute;
+                        }
+
                         logger.Info(Resources.RouteSetupReplacedRoute, routeBase.GetType());
                     }
                     else
