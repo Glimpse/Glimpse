@@ -65,7 +65,7 @@
                     html += '<span class="start">[</span>';
                     var spacer = '';
                     for (var x = 0; x < columnLimit; x++) {
-                        html += spacer + '<span>\'</span>' + providers.string.build(data[i][x], level, false, 12) + '<span>\'</span>';
+                        html += spacer + '<span>\'</span>' + providers.string.build(data[i][x], level + 1, false, 12) + '<span>\'</span>';
                         spacer = '<span class="rspace">,</span>';
                     }
                     if (x < data[0].length)
