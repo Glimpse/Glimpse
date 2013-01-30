@@ -846,7 +846,7 @@ glimpse.render.engine.util.raw = (function($, util) {
                 html += engineUtil.newItemSpacer(i, rowLimit, length);
                 if (i > length || i++ > rowLimit)
                     break;
-                html += '<span>\'</span>' + providers.string.build(key, level + 1) + '<span>\'</span><span class="mspace">:</span><span>\'</span>' + providers.string.build(data[key], level, 12) + '<span>\'</span>';
+                html += '<span>\'</span>' + providers.string.build(key, level + 1, false, 12) + '<span>\'</span><span class="mspace">:</span><span>\'</span>' + providers.string.build(data[key], level + 1, false, 12) + '<span>\'</span>';
             }
             html += '<span class="end">}</span>';
 
