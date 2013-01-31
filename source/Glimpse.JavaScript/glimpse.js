@@ -1225,7 +1225,7 @@ glimpse.render.engine.util.raw = (function($, util) {
             for (var key in data) {
                 var value = data[key];
                 html += '<div class="glimpse-row"><div class="glimpse-header">' + key + '</div>';
-                if (typeof value !== "string")
+                if ($.isArray(value) || value === Object(value))
                     html += providers.master.build(value, 0, null, engineUtil.keyMetadata(key, metadata));
                 else 
                     html += '<div class="glimpse-header-content">' + util.preserveWhitespace(value) + '</div>'; 
