@@ -83,6 +83,7 @@
     <Compile Include="AlternateImplementation\View.cs" />
     <Compile Include="AlternateImplementation\ViewCorrelationMixin.cs" />
     <Compile Include="AlternateImplementation\ViewEngine.cs" />
+    <Compile Include="Html\HtmlHelperExtension.cs" />
     <Compile Include="Message\ActionFilterMessage.cs" />
     <Compile Include="Message\ActionMessage.cs" />
     <Compile Include="Message\BoundedFilterMessage.cs" />
