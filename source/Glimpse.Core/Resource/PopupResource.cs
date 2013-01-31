@@ -107,7 +107,10 @@ namespace Glimpse.Core.Resource
                 return new StatusCodeResourceResult(404, "Could not get version.");
             }
 
-            string scriptTags = configuration.GenerateScriptTags(requestId, version);
+            var requestStore = configuration.FrameworkProvider.HttpRequestStore;
+            var generateScriptTags = requestStore.Get<Func<string>>(Constants.ClientScriptsStrategy);
+
+            string scriptTags = generateScriptTags();
 
             string html = string.Format("<!DOCTYPE html><html><head><meta charset='utf-8'><title>Glimpse Popup</title></head><body class='glimpse-popup'>{0}</body></html>", scriptTags);
 

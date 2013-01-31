@@ -1,3 +1,5 @@
+using System;
+
 namespace Glimpse.Core.Framework
 {
     /// <summary>
@@ -88,5 +90,12 @@ namespace Glimpse.Core.Framework
         /// <see cref="System.Web.IHttpModule.Init"/> method.
         /// </remarks>
         bool Initialize();
+
+        /// <summary>
+        /// Generates the script tags.
+        /// </summary>
+        /// <param name="requestId">The request id.</param>
+        /// <returns>Generated script tag.</returns>
+        //string GenerateScriptTags(Guid requestId);
     }
 }

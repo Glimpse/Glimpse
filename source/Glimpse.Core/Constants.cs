@@ -80,5 +80,15 @@ namespace Glimpse.Core
         /// The name of the Http request header which contains the client's user agent string as defined in <see href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.43">Section 14.43 of RFC 2616 - Hypertext Transfer Protocol (HTTP/1.1)</see>.
         /// </summary>
         internal const string UserAgentHeaderName = "User-Agent";
+
+        /// <summary>
+        /// The key Glimpse server uses to track if script tags have been injected into an Http response.
+        /// </summary>
+        internal const string ScriptsHaveRenderedKey = "__GlimpseScriptHasRendered";
+
+        /// <summary>
+        /// The key Glimpse server uses to store the client scripts strategy.
+        /// </summary>
+        internal const string ClientScriptsStrategy = "__GlimpseClientScriptsStrategy";
     }
 }

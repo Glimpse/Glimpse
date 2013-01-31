@@ -117,13 +117,5 @@ namespace Glimpse.Core.Framework
         /// </summary>
         /// <value>The timer strategy.</value>
         Func<IExecutionTimer> TimerStrategy { get; set; }
-
-        /// <summary>
-        /// Generates the script tags.
-        /// </summary>
-        /// <param name="requestId">The request id.</param>
-        /// <param name="version">The version.</param>
-        /// <returns>Generated script tag.</returns>
-        string GenerateScriptTags(Guid requestId, string version);
     }
 }
