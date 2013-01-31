@@ -68,7 +68,7 @@
         lengthJson: function (data) {
             var count = 0;
             if (data === Object(data))
-                $.each(data, function () { count++; });
+                for (var key in data) { count++; };
             return count;
         }, 
         uriTemplate: function (uri, data) {
