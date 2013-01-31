@@ -1,4 +1,5 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="WingtipToys.SiteMaster" %>
+<%@ Register TagPrefix="glimpse" Namespace="Glimpse.AspNet.Controls" Assembly="Glimpse.AspNet" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -111,5 +112,6 @@
         </div>
     </footer>
     </form>
+    <glimpse:Client runat="server"/>
 </body>
 </html>
