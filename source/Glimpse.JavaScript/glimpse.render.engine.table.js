@@ -8,29 +8,32 @@
             return buildOnly(data, level, metadata);
         },
         buildOnly = function (data, level, metadata) {
-            var html = '<table>';
+            var html = '<table>',
+                includeHeading = engineUtil.includeHeading(metadata);
             if ($.isArray(data[0])) {
-                if (engineUtil.includeHeading(metadata)) {
+                if (includeHeading) {
                     html += '<thead><tr class="glimpse-row-header glimpse-row-header-' + level + '">';
                     for (var x = 0; x < data[0].length; x++)
                         html += '<th>' + engineUtil.raw.process(data[0][x]) + '</th>';
                     html += '</tr></thead>';
                 }
-                for (var i = 1; i < data.length; i++) {
-                    html += '<tr class="' + (i % 2 ? 'odd' : 'even') + (data[i].length > data[0].length ? ' ' + data[i][data[i].length - 1] : '') + '">';
+                html += '<tbody class="glimpse-row-holder">';
+                for (var i = includeHeading ? 1 : 0; i < data.length; i++) {
+                    html += '<tr class="glimpse-row ' + (i % 2 ? 'odd' : 'even') + (data[i].length > data[0].length ? ' ' + data[i][data[i].length - 1] : '') + '">';
                     for (var x = 0; x < data[0].length; x++)
                         html += '<td>' + providers.master.build(data[i][x], level + 1) + '</td>';
                     html += '</tr>';
                 }
-                html += '</table>';
+                html += '</tbody></table>';
             }
             else {
                 if (data.length > 1) {
-                    if (engineUtil.includeHeading(metadata))
+                    if (includeHeading)
                         html += '<thead><th>Values</th></tr></thead>';
+                    html += '<tbody class="glimpse-row-holder">';
                     for (var i = 0; i < data.length; i++)
-                        html += '<tr class="' + (i % 2 ? 'odd' : 'even') + '"><td>' + providers.master.build(data[i], level + 1) + '</td></tr>';
-                    html += '</table>';
+                        html += '<tr class="glimpse-row ' + (i % 2 ? 'odd' : 'even') + '"><td>' + providers.master.build(data[i], level + 1) + '</td></tr>';
+                    html += '</tbody></table>';
                 }
                 else
                     html = providers.master.build(data[0], level + 1);
