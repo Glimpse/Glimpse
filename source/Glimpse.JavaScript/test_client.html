@@ -6,66 +6,261 @@
 <body>
     
 <script src="./glimpse.js" type="text/javascript"></script>   
-<script type="text/javascript"> 
-(function($, pubsub, tab, render) {
+    <script type="text/javascript"> 
+        (function($, pubsub, tab, render) {
     
-    // Creating some custom engnies that are registered with given names
-    var customEngineA = {
-            build: function(data) {
-                return 'AAAA - ' + data + ' - AAAA';
-            }
-        },
-        customEngineB = {
-            build: function(data) {
-                return 'BBB - ' + data + ' - BBB';
-            }
-        };
-    render.engine.register('marionette-customA', customEngineA);
-    render.engine.register('marionette-customB', customEngineB);
+// SAMPLE 1
     
-
-
-
-    // Some additional events you can tap into so you know when the dom is render for you to alter
-    pubsub.subscribe('action.panel.rendered.marionette-core', function(args) {
-
-        args.panel.css('opacity', '0.5');
-
-        // You could also do the following. You would use this in cases where you have no data up front when calling tab.register
-        //render.engine.insert(args.panel, { 'testA': 'value', 'testB': 'value'});
-    }); 
-    pubsub.subscribe('action.panel.showing.marionette-core', function() {
-         console.log('Showing marionette-core');
-    });
-    pubsub.subscribe('action.panel.hiding.marionette-core', function() {
-         console.log('Showing marionette-core');
-    });
-
-
-
-
-    // Creating the args which will be used with the plugin and registering the plugin
-    var config = {
-            key: 'marionette-core',
-            payload: {
-                name : 'Marionette', 
-                isPermanent : true,
-                data :  [['Title 1', 'Title 2', 'Title 3'],['b', 'b', 'b'],['c', 'c', 'c'],[function (a, b) { return a + b; }, 'd', 'd'],[jQueryGlimpse.fn, 'e', 'e'],['f', 'f', 'f']]
-                //data : 'Not ready yet' // If you dont have the data you need up front, returning a string will print this and then tab into the panel rendered event to work with the dom
+            // Creating some custom engines that are registered with given names
+            var customEngineA = {
+                build: function(data) {
+                    return 'AAAA - ' + data + ' - AAAA';
+                }
             },
-            metadata: {
-                documentationUri: "http://marionettejs.com/Glimpse",
-                layout: [
-                    [ { data: 0, key: true }, { data: 1, width: '20%', engine: 'marionette-customA' }, { data: 2, width: '20%', engine: 'marionette-customB' } ]
-                ]
-            }
-        };
-    tab.register(config);
+                customEngineB = {
+                    build: function(data) {
+                        return 'BBB - ' + data + ' - BBB';
+                    }
+                };
+            render.engine.register('marionette-customA', customEngineA);
+            render.engine.register('marionette-customB', customEngineB);
+     
+            // Some additional events you can tap into so you know when the dom is render for you to alter
+            pubsub.subscribe('action.panel.showing.sample1', function() {
+                console.log('Showing sample1');
+            });
+            pubsub.subscribe('action.panel.hiding.sample1', function() {
+                console.log('Showing sample1');
+            });
+
+            // Creating the args which will be used with the plugin and registering the plugin
+            var config1 = {
+                key: 'sample1',
+                payload: {
+                    name : 'Sample 1', 
+                    isPermanent : true,
+                    data :  [['Framework', 'Object', 'Ordering'],['jQuery', jQueryGlimpse.fn, 1],['Glimpse', glimpse, 2]]
+                },
+                metadata: {
+                    documentationUri: "http://sample1.com/Glimpse"
+                }
+            };
+            // Using typed API to register the tab
+            tab.register(config1);
     
-    // This is an alt way the plugin can be registered
-    //pubsub.publish('trigger.tab.register', args);  
+
     
-})(jQueryGlimpse, glimpse.pubsub, glimpse.tab, glimpse.render);
-</script>
+// SAMPLE 2
+    
+            pubsub.subscribe('action.panel.rendered.sample2', function(args) {   
+                //Example of how events might come in and how it could be handled
+                var i = 0,
+                    callback = function() {
+                        setTimeout(function() {
+                            if (i < 10) {
+                                if (i == 0)
+                                    render.engine.insert(args.panel, { 'Insert': 'value' + i, 'Time': new Date().getTime() }); 
+                                else if (i % 2 == 0)
+                                    render.engine.append(args.panel, { 'Append': 'value' + i, 'Time': new Date().getTime() }, { suppressHeader: true });
+                                else
+                                    render.engine.prepend(args.panel, { 'Prepend': 'value' + i, 'Time': new Date().getTime() }, { suppressHeader: true });
+                                i++;
+                                callback();
+                            }
+                        }, 2000);
+                    };
+                //We are manually triggering this event
+                callback();
+            }); 
+    
+            var config2 = {
+                key: 'sample2',
+                payload: {
+                    name : 'Sample 2', 
+                    isPermanent : true,
+                    data : 'Not ready yet' 
+                }
+            };
+
+            // This is an alt way the plugin can be registered using the metadata
+            pubsub.publish('trigger.tab.register', config2);
+    
+
+
+// SAMPLE 3
+    
+            pubsub.subscribe('action.panel.rendered.sample3', function(args) {   
+                //Example of how events might come in and how it could be handled
+                var i = 0,
+                    callback = function() {
+                        setTimeout(function() {
+                            if (i < 10) {
+                                if (i == 0)
+                                    render.engine.insert(args.panel, [['Title', 'Engine', 'Index', 'Time'],['Insert', 'value' + i, 'data', new Date().getTime()]]); 
+                                else if (i % 2 == 0) 
+                                    render.engine.append(args.panel, [['Append', 'value' + i, [
+                                            ['Actor', 'Character', 'Gender', 'Age'],
+                                            ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                                            ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+                                            ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                                            ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+                                            ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                                            ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+                                            ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                                            ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+                                            ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                                            ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+                                            ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                                            ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+                                            ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                                            ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+                                            ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                                            ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+                                            ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                                            ['James Earl Jones', 'Darth Vader', 'Male', '45']
+                                        ], new Date().getTime() + ' - This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed. This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed. This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed.']], { suppressHeader: true });
+                                else
+                                    render.engine.prepend(args.panel, [['Prepend', 'value' + i, {
+                                            'Mark Hamill': 'Luke Skywalker',
+                                            'James Earl Jones': 'Darth Vader',
+                                            'Harrison Ford': 'Han Solo',
+                                            'Carrie Fisher': 'Princess Leia Organa',
+                                            'Peter Cushing': 'Grand Moff Tarkin',
+                                            'Alec Guinness': 'Ben Obi-Wan Kenobi',
+                                            'Anthony Daniels': 'C-3PO',
+                                            'Kenny Baker': 'R2-D2'
+                                        }, new Date().getTime() + ' - This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed. This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed. This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed.']], { suppressHeader: true });
+                                i++;
+                                callback();
+                            }
+                        }, 2000);
+                    };
+                //We are manually triggering this event
+                callback();
+            }); 
+    
+            var config3 = {
+                key: 'sample3',
+                payload: {
+                    name : 'Sample 3', 
+                    isPermanent : true,
+                    data : 'Not ready yet' 
+                }
+            };
+
+            // This is an alt way the plugin can be registered using the metadata
+            pubsub.publish('trigger.tab.register', config3); 
+    
+
+
+// SAMPLE 4
+            
+            pubsub.subscribe('action.panel.rendered.sample4', function(args) {   
+                //Example of how events might come in and how it could be handled
+                var i = 0,
+                    layout = [
+                        [ { data: 0, key: true, pre: '|- ', post: ' -|' }, { data: 1, width: '8%', engine: 'marionette-customA' }, { data: 2, width: '30%' }, { data: 3, width: '30%' } ]
+                    ],
+                    callback = function() {
+                        setTimeout(function() {
+                            if (i < 10) {
+                                if (i == 0)
+                                    render.engine.insert(args.panel, [['Title', 'Engine', 'Index', 'Time'],['Insert', 'value' + i, 'data', new Date().getTime()]], { layout: layout }); 
+                                else if (i % 2 == 0)
+                                    render.engine.append(args.panel, [['Append', 'value' + i, [
+                                            ['Actor', 'Character', 'Gender', 'Age'],
+                                            ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                                            ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+                                            ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                                            ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+                                            ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                                            ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+                                            ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                                            ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+                                            ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                                            ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+                                            ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                                            ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+                                            ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                                            ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+                                            ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                                            ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+                                            ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                                            ['James Earl Jones', 'Darth Vader', 'Male', '45']
+                                        ], new Date().getTime() + ' - This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed. This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed. This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed.']], { suppressHeader: true, layout: layout });
+                                else
+                                    render.engine.prepend(args.panel, [['Prepend', 'value' + i, {
+                                            'Mark Hamill': 'Luke Skywalker',
+                                            'James Earl Jones': 'Darth Vader',
+                                            'Harrison Ford': 'Han Solo',
+                                            'Carrie Fisher': 'Princess Leia Organa',
+                                            'Peter Cushing': 'Grand Moff Tarkin',
+                                            'Alec Guinness': 'Ben Obi-Wan Kenobi',
+                                            'Anthony Daniels': 'C-3PO',
+                                            'Kenny Baker': 'R2-D2'
+                                        }, new Date().getTime() + ' - This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed. This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed. This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed.']], { suppressHeader: true, layout: layout });
+                                i++;
+                                callback();
+                            }
+                        }, 2000);
+                    };
+                //We are manually triggering this event
+                callback();
+            }); 
+    
+            var config4 = {
+                key: 'sample4',
+                payload: {
+                    name : 'Sample 4', 
+                    isPermanent : true,
+                    data : 'Not ready yet' 
+                }
+            };
+            
+            // Using typed API to register the tab
+            tab.register(config4);
+    
+
+    
+// SAMPLE 5
+    
+            pubsub.subscribe('action.panel.rendered.sample5', function(args) {   
+                //Example of how events might come in and how it could be handled
+                var i = 0,
+                    callback = function() {
+                        setTimeout(function() {
+                            if (i < 10) {
+                                if (i == 0)
+                                    render.engine.insert(args.panel, { 'Insert': 'value' + i, 'Time': new Date().getTime() }, { keysHeadings: true }); 
+                                else if (i % 2 == 0)
+                                    render.engine.append(args.panel, { 'Append': 'value' + i, 'Time': new Date().getTime() }, { keysHeadings: true });
+                                else
+                                    render.engine.prepend(args.panel, { 'Prepend': 'value' + i, 'Time': new Date().getTime() }, { keysHeadings: true });
+                                i++;
+                                callback();
+                            }
+                        }, 2000);
+                    };
+                //We are manually triggering this event
+                callback();
+            }); 
+    
+            var config5 = {
+                key: 'sample5',
+                payload: {
+                    name : 'Sample 5', 
+                    isPermanent : true,
+                    data : 'Not ready yet' 
+                }
+            };
+
+            // This is an alt way the plugin can be registered using the metadata
+            pubsub.publish('trigger.tab.register', config5);
+    
+        })(jQueryGlimpse, glimpse.pubsub, glimpse.tab, glimpse.render);
+    </script>
+    
+    
+   
 </body>
 </html>
