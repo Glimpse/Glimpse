@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Glimpse.AspNet.Model
+namespace Glimpse.Core.Model
 {
     public class TimelineModel
     {

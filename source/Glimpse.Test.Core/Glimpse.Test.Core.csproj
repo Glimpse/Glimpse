@@ -149,6 +149,7 @@
     <Compile Include="Resource\MetadataShould.cs" />
     <Compile Include="Resource\PopupResourceShould.cs" />
     <Compile Include="Resource\VersionCheckResourceShould.cs" />
+    <Compile Include="SerializationConverter\TimelineEventModelConverterShould.cs" />
     <Compile Include="SerializationConverter\TimeStampConverterShould.cs" />
     <Compile Include="SerializationConverter\DateTimeConverterShould.cs" />
     <Compile Include="SerializationConverter\GlimpseMetadataConverterShould.cs" />
@@ -157,6 +158,7 @@
     <Compile Include="SerializationConverter\TabResultConverterShould.cs" />
     <Compile Include="SerializationConverter\CSharpTypeConverterShould.cs" />
     <Compile Include="StatusCodeResourceResultShould.cs" />
+    <Compile Include="Tab\TimelineShould.cs" />
     <Compile Include="TestDoubles\DummyEnum.cs" />
     <Compile Include="TestDoubles\DummyMessage.cs" />
     <Compile Include="TestDoubles\DummyException.cs" />

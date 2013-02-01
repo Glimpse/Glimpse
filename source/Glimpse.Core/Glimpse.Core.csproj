@@ -185,6 +185,10 @@
     <Compile Include="Message\PointTimelineMessage.cs" />
     <Compile Include="Message\TimelineMessage.cs" />
     <Compile Include="Message\TimeMessage.cs" />
+    <Compile Include="Model\TimelineCategoryModel.cs" />
+    <Compile Include="Model\TimelineEventModel.cs" />
+    <Compile Include="Model\TimelineModel.cs" />
+    <Compile Include="SerializationConverter\TimelineEventModelConverter.cs" />
     <Compile Include="SerializationConverter\TimeSpanConverter.cs" />
     <Compile Include="Tab\Assist\CodeType.cs" />
     <Compile Include="Tab\Assist\CodeTypeConverter.cs" />
@@ -246,6 +250,7 @@
     <Compile Include="SerializationConverter\PluginMetadataConverter.cs" />
     <Compile Include="SerializationConverter\TabResultConverter.cs" />
     <Compile Include="SerializationConverter\CSharpTypeConverter.cs" />
+    <Compile Include="Tab\Timeline.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NuSpec\Glimpse.nuspec">

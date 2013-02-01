@@ -86,9 +86,6 @@
     <Compile Include="Model\RouteDataItemModel.cs" />
     <Compile Include="Model\RouteModel.cs" />
     <Compile Include="Model\SessionModel.cs" />
-    <Compile Include="Model\TimelineCategoryModel.cs" />
-    <Compile Include="Model\TimelineEventModel.cs" />
-    <Compile Include="Model\TimelineModel.cs" />
     <Compile Include="Model\TraceModel.cs" />
     <Compile Include="Model\UriTokenInstance.cs" />
     <Compile Include="PipelineInspector\RoutesConstraintInspector.cs" />
@@ -106,7 +103,6 @@
     <Compile Include="SerializationConverter\ListOfRouteModelConverter.cs" />
     <Compile Include="SerializationConverter\RequestModelConverter.cs" />
     <Compile Include="SerializationConverter\SessionModelConverter.cs" />
-    <Compile Include="SerializationConverter\TimelineEventModelConverter.cs" />
     <Compile Include="SerializationConverter\TraceModelConverter.cs" />
     <Compile Include="Tab\Configuration.cs" />
     <Compile Include="Tab\Environment.cs" />
@@ -116,7 +112,6 @@
     <Compile Include="Tab\Routes.cs" />
     <Compile Include="Tab\Server.cs" />
     <Compile Include="Tab\Session.cs" />
-    <Compile Include="Tab\Timeline.cs" />
     <Compile Include="Tab\Trace.cs" />
     <Compile Include="GlimpseTraceListener.cs" />
   </ItemGroup>

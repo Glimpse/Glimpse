@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Glimpse.AspNet.Extensibility;
-using Glimpse.AspNet.Model;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-using Glimpse.Core.Message; 
+using Glimpse.Core.Message;
+using Glimpse.Core.Model;
 
-namespace Glimpse.AspNet.Tab
-{ 
-    public class Timeline : AspNetTab, IDocumentation, ITabSetup, IKey
+namespace Glimpse.Core.Tab
+{
+    public class Timeline : TabBase, IDocumentation, ITabSetup, IKey
     {
         private readonly IDictionary<string, TimelineCategoryModel> categories = new Dictionary<string, TimelineCategoryModel>
                            {

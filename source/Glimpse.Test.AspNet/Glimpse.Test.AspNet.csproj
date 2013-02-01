@@ -81,11 +81,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerializationConverter\ConfigurationModelConverterShould.cs" />
     <Compile Include="SerializationConverter\ConfigurationRoleManagerProviderSettingsModelConverterShould.cs" />
-    <Compile Include="SerializationConverter\TimelineEventModelConverterShould.cs" />
     <Compile Include="SerializationConverter\RequestModelConverterShould.cs" />
     <Compile Include="SerializationConverter\TraceModelConverterShould.cs" />
     <Compile Include="Tab\ConfigurationShould.cs" />
-    <Compile Include="Tab\TimelineShould.cs" />
     <Compile Include="Tab\EnvironmentShould.cs" />
     <Compile Include="Tab\RequestShould.cs" />
     <Compile Include="Tab\RoutesShould.cs" />

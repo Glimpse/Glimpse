@@ -1,4 +1,4 @@
-namespace Glimpse.AspNet.Model
+namespace Glimpse.Core.Model
 {
     public class TimelineCategoryModel
     {

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Web;
-using Glimpse.AspNet.Model;
-using Glimpse.AspNet.Tab;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Message;
+using Glimpse.Core.Model;
+using Glimpse.Core.Tab;
 using Glimpse.Test.Common;
 using Xunit;
 using Xunit.Extensions;
@@ -22,7 +22,7 @@ namespace Glimpse.Test.AspNet.Tab
         {
             var timeline = new Timeline();
 
-            Assert.Equal(typeof(HttpContextBase), timeline.RequestContextType);
+            Assert.Null(timeline.RequestContextType);
         }
 
         [Fact]

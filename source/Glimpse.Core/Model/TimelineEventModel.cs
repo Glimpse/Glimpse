@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 
-namespace Glimpse.AspNet.Model
-{
-    using Glimpse.Core.Extensibility;
-
+namespace Glimpse.Core.Model
+{ 
     public class TimelineEventModel
     {
         public TimelineEventModel()

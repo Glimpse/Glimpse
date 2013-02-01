@@ -1,8 +1,8 @@
 ﻿using System;
-using Glimpse.AspNet.Model;
-using Glimpse.Core.Extensibility; 
+using Glimpse.Core.Extensibility;
+using Glimpse.Core.Model;
 
-namespace Glimpse.AspNet.SerializationConverter
+namespace Glimpse.Core.SerializationConverter
 { 
     public class TimelineEventModelConverter : SerializationConverter<TimelineEventModel>
     {
