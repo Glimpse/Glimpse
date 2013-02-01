@@ -677,6 +677,21 @@ glimpse.render = (function($, pubsub, util, data, settings) {
 // glimpse.render.engine.js
 glimpse.render.engine = (function($, pubsub) {
     var providers = {},
+        addition = function (scope, data, metadata, isAppend) {
+            var findType = isAppend ? 'last' : 'first',
+                insertType = isAppend ? 'insertAfter' : 'insertBefore',
+                html = $('<div>' + build(data, metadata) + '</div>').find('.glimpse-row-holder:first')[0].innerHTML;
+            
+            var target = scope.find('.glimpse-row-holder:first > .glimpse-row:' + findType);
+            if (target.length == 0) {
+                target = scope.find('.glimpse-row-holder:first');
+                insertType = 'appendTo';
+            }
+
+            var elements = $(html)[insertType](target);
+
+            pubsub.publish('trigger.panel.render.style', { scope: elements });
+        },
         retrieve = function(name) {
             return providers[name];
         },
@@ -691,16 +706,10 @@ glimpse.render.engine = (function($, pubsub) {
             pubsub.publish('trigger.panel.render.style', { scope: scope });
         },
         append = function(scope, data, metadata) {
-            var html = $('<div>' + build(data, metadata) + '</div>').find('.glimpse-row-holder:first')[0].innerHTML;
-            var elements = $(html).insertAfter(scope.find('.glimpse-row-holder:first > .glimpse-row:last'));
-            
-            pubsub.publish('trigger.panel.render.style', { scope: elements });
+            addition(scope, data, metadata, true);
         },
         prepend = function(scope, data, metadata) {
-            var html = $('<div>' + build(data, metadata) + '</div>').find('.glimpse-row-holder:first')[0].innerHTML;
-            var elements = $(html).insertBefore(scope.find('.glimpse-row-holder:first > .glimpse-row:first'));
-            
-            pubsub.publish('trigger.panel.render.style', { scope: elements });
+            addition(scope, data, metadata, false);
         };
    
     return {

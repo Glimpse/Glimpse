@@ -257,6 +257,41 @@
             // This is an alt way the plugin can be registered using the metadata
             pubsub.publish('trigger.tab.register', config5);
     
+
+    
+// SAMPLE 6
+    
+            pubsub.subscribe('action.panel.rendered.sample6', function(args) {   
+                //Example of how events might come in and how it could be handled
+                var i = 0,
+                    callback = function() {
+                        setTimeout(function() {
+                            if (i < 10) {
+                                if (i % 2 == 0)
+                                    render.engine.append(args.panel, [['Append', 'value' + i, new Date().getTime() + ' - This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed. This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed. This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed.']], { suppressHeader: true });
+                                else
+                                    render.engine.prepend(args.panel, [['Prepend', 'value' + i, new Date().getTime() + ' - This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed. This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed. This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed.']], { suppressHeader: true });
+                                i++;
+                                callback();
+                            }
+                        }, 2000);
+                    };
+                //We are manually triggering this event
+                callback();
+            }); 
+    
+            var config6 = {
+                key: 'sample6',
+                payload: {
+                    name : 'Sample 6', 
+                    isPermanent : true,
+                    data : [['Title', 'Engine', 'Time']]
+                }
+            };
+
+            // This is an alt way the plugin can be registered using the metadata
+            pubsub.publish('trigger.tab.register', config6);
+    
         })(jQueryGlimpse, glimpse.pubsub, glimpse.tab, glimpse.render);
     </script>
     
