@@ -17,12 +17,19 @@ using Glimpse.Core.Backport;
 
 namespace Glimpse.Core.Framework
 {
+    /// <summary>
+    /// The heart and soul of Glimpse. The runtime coordinate all input from a <see cref="IFrameworkProvider" />, persists collected runtime information and writes responses out to the <see cref="IFrameworkProvider" />.
+    /// </summary>
     public class GlimpseRuntime : IGlimpseRuntime
     {
         private static readonly MethodInfo MethodInfoBeginRequest = typeof(GlimpseRuntime).GetMethod("BeginRequest", BindingFlags.Public | BindingFlags.Instance);
         private static readonly MethodInfo MethodInfoEndRequest = typeof(GlimpseRuntime).GetMethod("EndRequest", BindingFlags.Public | BindingFlags.Instance);
         private static readonly object LockObj = new object();
 
+        /// <summary>
+        /// Initializes static members of the <see cref="GlimpseRuntime" /> class.
+        /// </summary>
+        /// <exception cref="System.NullReferenceException">BeginRequest method not found</exception>
         static GlimpseRuntime()
         {
             // Version is in major.minor.build format to support http://semver.org/
@@ -40,15 +47,44 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GlimpseRuntime" /> class.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <exception cref="System.ArgumentNullException">Throws an exception if <paramref name="configuration"/> is <c>null</c>.</exception>
         public GlimpseRuntime(IGlimpseConfiguration configuration)
         {
+            if (configuration == null)
+            {
+                throw new ArgumentNullException("configuration");
+            }
+
             Configuration = configuration;
         }
 
+        /// <summary>
+        /// Gets the executing version of Glimpse.
+        /// </summary>
+        /// <value>
+        /// The version of Glimpse.
+        /// </value>
+        /// <remarks>Glimpse versioning follows the rules of <see href="http://semver.org/">Semantic Versioning</see>.</remarks>
         public static string Version { get; private set; }
 
+        /// <summary>
+        /// Gets or sets the configuration.
+        /// </summary>
+        /// <value>
+        /// The configuration.
+        /// </value>
         public IGlimpseConfiguration Configuration { get; set; }
 
+        /// <summary>
+        /// Gets a value indicating whether this instance has been initialized.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is initialized; otherwise, <c>false</c>.
+        /// </value>
         public bool IsInitialized { get; private set; }
 
         private IDictionary<string, TabResult> TabResultsStore
@@ -68,6 +104,10 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        /// <summary>
+        /// Begins Glimpse's processing of a Http request.
+        /// </summary>
+        /// <exception cref="Glimpse.Core.Framework.GlimpseException">Throws an exception if <see cref="GlimpseRuntime"/> is not yet initialized.</exception>
         public void BeginRequest()
         {
             if (!IsInitialized)
@@ -96,8 +136,11 @@ namespace Glimpse.Core.Framework
             Configuration.MessageBroker.Publish(new PointTimelineMessage(executionTimer.Point(), typeof(GlimpseRuntime), MethodInfoBeginRequest, "Start Request", "ASP.NET"));
         }
 
-        // TODO: Add PRG support
-        public void EndRequest()
+        /// <summary>
+        /// Ends Glimpse's processing a Http request.
+        /// </summary>
+        /// <exception cref="Glimpse.Core.Framework.GlimpseException">Throws an exception if <c>BeginRequest</c> has not yet been called on a given request.</exception>
+        public void EndRequest() // TODO: Add PRG support
         {
             var policy = GetRuntimePolicy(RuntimeEvent.EndRequest);
             if (policy.HasFlag(RuntimePolicy.Off))
@@ -134,7 +177,7 @@ namespace Glimpse.Core.Framework
             {
                 var persistenceStore = Configuration.PersistenceStore;
 
-                var metadata = new GlimpseRequest(requestId, requestMetadata, TabResultsStore, stopwatch.ElapsedMilliseconds);
+                var metadata = new GlimpseRequest(requestId, requestMetadata, TabResultsStore, stopwatch.Elapsed);
 
                 try
                 {
@@ -164,11 +207,17 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        /// <summary>
+        /// Executes the default resource.
+        /// </summary>
         public void ExecuteDefaultResource()
         {
             ExecuteResource(Configuration.DefaultResource.Name, ResourceParameters.None());
         }
 
+        /// <summary>
+        /// Begins access to session data.
+        /// </summary>
         public void BeginSessionAccess()
         {
             var policy = GetRuntimePolicy(RuntimeEvent.BeginSessionAccess);
@@ -180,6 +229,9 @@ namespace Glimpse.Core.Framework
             ExecuteTabs(RuntimeEvent.BeginSessionAccess);
         }
 
+        /// <summary>
+        /// Ends access to session data.
+        /// </summary>
         public void EndSessionAccess()
         {
             var policy = GetRuntimePolicy(RuntimeEvent.EndSessionAccess);
@@ -191,6 +243,12 @@ namespace Glimpse.Core.Framework
             ExecuteTabs(RuntimeEvent.EndSessionAccess);
         }
 
+        /// <summary>
+        /// Executes the resource.
+        /// </summary>
+        /// <param name="resourceName">Name of the resource.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <exception cref="System.ArgumentNullException">Throws an exception if either parameter is <c>null</c>.</exception>
         public void ExecuteResource(string resourceName, ResourceParameters parameters)
         {
             if (string.IsNullOrEmpty(resourceName))
@@ -269,6 +327,12 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        /// <summary>
+        /// Initializes this instance of the Glimpse runtime.
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if system initialized successfully, <c>false</c> otherwise
+        /// </returns>
         public bool Initialize()
         {
             CreateAndStartGlobalExecutionTimer(Configuration.FrameworkProvider.HttpRequestStore);
@@ -327,6 +391,21 @@ namespace Glimpse.Core.Framework
             }
 
             return policy != RuntimePolicy.Off;
+        }
+
+        private static UriTemplate SetParameters(UriTemplate template, IEnumerable<KeyValuePair<string, string>> nameValues)
+        {
+            if (nameValues == null)
+            {
+                return template;
+            }
+
+            foreach (var pair in nameValues)
+            {
+                template.SetParameter(pair.Key, pair.Value);
+            }
+
+            return template;
         }
 
         private static ExecutionTimer CreateAndStartGlobalExecutionTimer(IDataStore requestStore)
@@ -438,11 +517,11 @@ namespace Glimpse.Core.Framework
         private void PersistMetadata()
         {
             var metadata = new GlimpseMetadata { Version = Version };
-            var pluginMetadata = metadata.Plugins;
+            var tabMetadata = metadata.Tabs;
 
             foreach (var tab in Configuration.Tabs)
             {
-                var metadataInstance = new PluginMetadata();
+                var metadataInstance = new TabMetadata();
 
                 var documentationTab = tab as IDocumentation;
                 if (documentationTab != null)
@@ -458,7 +537,7 @@ namespace Glimpse.Core.Framework
 
                 if (metadataInstance.HasMetadata)
                 {
-                    pluginMetadata[CreateKey(tab)] = metadataInstance;
+                    tabMetadata[CreateKey(tab)] = metadataInstance;
                 } 
             }
 
@@ -572,7 +651,7 @@ namespace Glimpse.Core.Framework
 
                         if (resource == null)
                         {
-                            logger.Warn(Core.Resources.RenderClientScriptMissingResourceWarning, clientScript.GetType(), resourceName);
+                            logger.Warn(Resources.RenderClientScriptMissingResourceWarning, clientScript.GetType(), resourceName);
                             continue;
                         }
 
@@ -626,21 +705,6 @@ namespace Glimpse.Core.Framework
 
             requestStore.Set(Constants.ScriptsHaveRenderedKey, true);
             return stringBuilder.ToString();
-        }
-
-        private static UriTemplate SetParameters(UriTemplate template, IEnumerable<KeyValuePair<string, string>> nameValues)
-        {
-            if (nameValues == null)
-            {
-                return template;
-            }
-
-            foreach (var pair in nameValues)
-            {
-                template.SetParameter(pair.Key, pair.Value);
-            }
-
-            return template;
         }
     }
 }

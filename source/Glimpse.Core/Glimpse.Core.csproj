@@ -95,7 +95,9 @@
     <Compile Include="Extensibility\ITabLayout.cs" />
     <Compile Include="Extensibility\IWrapper.cs" />
     <Compile Include="Extensibility\JsonNetConverterDictionaryKeysAreNotPropertyNames.cs" />
+    <Compile Include="Extensibility\PipelineInspectorContext.cs" />
     <Compile Include="Extensibility\RuntimePolicy.cs" />
+    <Compile Include="Extensibility\Subscriber.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Message\MessageBase.cs" />
     <Compile Include="Extensibility\NuGetPackageAttribute.cs" />
@@ -158,13 +160,11 @@
     <Compile Include="Framework\IPersistenceStore.cs" />
     <Compile Include="Framework\IReadOnlyPersistenceStore.cs" />
     <Compile Include="Framework\IServiceLocator.cs" />
-    <Compile Include="Framework\PipelineInspectorContext.cs" />
-    <Compile Include="Framework\PluginMetadata.cs" />
+    <Compile Include="Framework\TabMetadata.cs" />
     <Compile Include="Framework\ReflectionDiscoverableCollection.cs" />
     <Compile Include="Framework\ResourceEndpointConfiguration.cs" />
     <Compile Include="Framework\ResourceParameters.cs" />
-    <Compile Include="Framework\Subscriber.cs" />
-    <Compile Include="Framework\SubscriberOfT.cs" />
+    <Compile Include="Extensibility\SubscriberOfT.cs" />
     <Compile Include="Framework\TabResult.cs" />
     <Compile Include="Extensibility\IRuntimePolicy.cs" />
     <Compile Include="Extensibility\IResourceResult.cs" />
@@ -247,7 +247,7 @@
     <Compile Include="SerializationConverter\GlimpseMetadataConverter.cs" />
     <Compile Include="SerializationConverter\GlimpseRequestConverter.cs" />
     <Compile Include="SerializationConverter\MethodInfoConverter.cs" />
-    <Compile Include="SerializationConverter\PluginMetadataConverter.cs" />
+    <Compile Include="SerializationConverter\TabMetadataConverter.cs" />
     <Compile Include="SerializationConverter\TabResultConverter.cs" />
     <Compile Include="SerializationConverter\CSharpTypeConverter.cs" />
     <Compile Include="Tab\Timeline.cs" />

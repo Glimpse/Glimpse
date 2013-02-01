@@ -4,6 +4,9 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Framework
 {
+    /// <summary>
+    /// Contains all configuration required by <see cref="IGlimpseRuntime"/> instances to execute.
+    /// </summary>
     public class GlimpseConfiguration : IGlimpseConfiguration
     {
         private ICollection<IClientScript> clientScripts;
@@ -24,6 +27,28 @@ namespace Glimpse.Core.Framework
         private Func<IExecutionTimer> timerStrategy;
         private Func<RuntimePolicy> runtimePolicyStrategy;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GlimpseConfiguration" /> class.
+        /// </summary>
+        /// <param name="frameworkProvider">The framework provider.</param>
+        /// <param name="endpointConfiguration">The resource endpoint configuration.</param>
+        /// <param name="clientScripts">The client scripts collection.</param>
+        /// <param name="logger">The logger.</param>
+        /// <param name="defaultRuntimePolicy">The default runtime policy.</param>
+        /// <param name="htmlEncoder">The Html encoder.</param>
+        /// <param name="persistenceStore">The persistence store.</param>
+        /// <param name="pipelineInspectors">The pipeline inspectors collection.</param>
+        /// <param name="resources">The resources collection.</param>
+        /// <param name="serializer">The serializer.</param>
+        /// <param name="tabs">The tabs collection.</param>
+        /// <param name="runtimePolicies">The runtime policies collection.</param>
+        /// <param name="defaultResource">The default resource.</param>
+        /// <param name="proxyFactory">The proxy factory.</param>
+        /// <param name="messageBroker">The message broker.</param>
+        /// <param name="endpointBaseUri">The endpoint base Uri.</param>
+        /// <param name="timerStrategy">The timer strategy.</param>
+        /// <param name="runtimePolicyStrategy">The runtime policy strategy.</param>
+        /// <exception cref="System.ArgumentNullException">An exception is thrown if any parameter is <c>null</c>.</exception>
         public GlimpseConfiguration(
             IFrameworkProvider frameworkProvider, 
             ResourceEndpointConfiguration endpointConfiguration,
@@ -144,6 +169,13 @@ namespace Glimpse.Core.Framework
             RuntimePolicyStrategy = runtimePolicyStrategy;
         }
 
+        /// <summary>
+        /// Gets or sets the client scripts collection.
+        /// </summary>
+        /// <value>
+        /// The client scripts.
+        /// </value>
+        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public ICollection<IClientScript> ClientScripts
         {
             get
@@ -162,6 +194,13 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        /// <summary>
+        /// Gets or sets the default <see cref="IResource"/> to execute.
+        /// </summary>
+        /// <value>
+        /// The default resource.
+        /// </value>
+        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public IResource DefaultResource
         {
             get
@@ -180,8 +219,21 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        /// <summary>
+        /// Gets or sets the default runtime policy.
+        /// </summary>
+        /// <value>
+        /// The default runtime policy.
+        /// </value>
         public RuntimePolicy DefaultRuntimePolicy { get; set; }
 
+        /// <summary>
+        /// Gets or sets the endpoint base URI.
+        /// </summary>
+        /// <value>
+        /// The endpoint base URI.
+        /// </value>
+        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public string EndpointBaseUri
         {
             get
@@ -200,6 +252,13 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="IFrameworkProvider"/>.
+        /// </summary>
+        /// <value>
+        /// The configured <see cref="IFrameworkProvider"/>.
+        /// </value>
+        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public IFrameworkProvider FrameworkProvider
         {
             get
@@ -218,6 +277,13 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="IHtmlEncoder"/>.
+        /// </summary>
+        /// <value>
+        /// The configured <see cref="IHtmlEncoder"/>.
+        /// </value>
+        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public IHtmlEncoder HtmlEncoder
         {
             get
@@ -236,6 +302,13 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="ILogger"/>.
+        /// </summary>
+        /// <value>
+        /// The configured <see cref="ILogger"/>.
+        /// </value>
+        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public ILogger Logger
         {
             get
@@ -254,6 +327,13 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="IMessageBroker"/>.
+        /// </summary>
+        /// <value>
+        /// The configured <see cref="IMessageBroker"/>.
+        /// </value>
+        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public IMessageBroker MessageBroker
         {
             get
@@ -272,6 +352,13 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="IPersistenceStore"/>.
+        /// </summary>
+        /// <value>
+        /// The configured <see cref="IPersistenceStore"/>.
+        /// </value>
+        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public IPersistenceStore PersistenceStore
         {
             get
@@ -290,6 +377,13 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        /// <summary>
+        /// Gets or sets the collection of <see cref="IPipelineInspector"/>.
+        /// </summary>
+        /// <value>
+        /// The configured collection of <see cref="IPipelineInspector"/>.
+        /// </value>
+        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public ICollection<IPipelineInspector> PipelineInspectors
         {
             get
@@ -308,6 +402,13 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="IProxyFactory"/>.
+        /// </summary>
+        /// <value>
+        /// The configured <see cref="IProxyFactory"/>.
+        /// </value>
+        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public IProxyFactory ProxyFactory
         {
             get
@@ -326,6 +427,13 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="ResourceEndpointConfiguration"/>.
+        /// </summary>
+        /// <value>
+        /// The configured <see cref="ResourceEndpointConfiguration"/>.
+        /// </value>
+        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public ResourceEndpointConfiguration ResourceEndpoint
         {
             get
@@ -344,6 +452,13 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        /// <summary>
+        /// Gets or sets the collection of <see cref="IResource"/>.
+        /// </summary>
+        /// <value>
+        /// The configured collection of <see cref="IResource"/>.
+        /// </value>
+        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public ICollection<IResource> Resources
         {
             get
@@ -362,6 +477,13 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        /// <summary>
+        /// Gets or sets the collection of <see cref="IRuntimePolicy"/>.
+        /// </summary>
+        /// <value>
+        /// The configured collection of <see cref="IRuntimePolicy"/>.
+        /// </value>
+        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public ICollection<IRuntimePolicy> RuntimePolicies
         {
             get
@@ -380,6 +502,13 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="RuntimePolicy"/> strategy.
+        /// </summary>
+        /// <value>
+        /// The configured <see cref="RuntimePolicy"/>.
+        /// </value>
+        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public Func<RuntimePolicy> RuntimePolicyStrategy
         {
             get
@@ -398,6 +527,13 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="ISerializer"/>.
+        /// </summary>
+        /// <value>
+        /// The configured <see cref="ISerializer"/>.
+        /// </value>
+        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public ISerializer Serializer
         {
             get
@@ -416,6 +552,13 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        /// <summary>
+        /// Gets or sets the collection of <see cref="ITab"/>.
+        /// </summary>
+        /// <value>
+        /// The configured <see cref="ITab"/>.
+        /// </value>
+        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public ICollection<ITab> Tabs
         {
             get
@@ -434,6 +577,13 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="IExecutionTimer"/> strategy.
+        /// </summary>
+        /// <value>
+        /// The configured <see cref="IExecutionTimer"/> strategy.
+        /// </value>
+        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public Func<IExecutionTimer> TimerStrategy 
         { 
             get

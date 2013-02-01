@@ -1,6 +1,6 @@
 using System;
 
-namespace Glimpse.Core.Framework
+namespace Glimpse.Core.Extensibility
 {
     internal class Subscriber<T> : Subscriber
     {

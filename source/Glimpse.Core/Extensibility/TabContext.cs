@@ -4,16 +4,16 @@ namespace Glimpse.Core.Extensibility
 {
     public class TabContext : ITabContext
     {
-        public TabContext(object requestContext, IDataStore pluginStore, ILogger logger, IMessageBroker messageBroker)
+        public TabContext(object requestContext, IDataStore tabStore, ILogger logger, IMessageBroker messageBroker)
         {
             if (requestContext == null)
             {
                 throw new ArgumentNullException("requestContext");
             }
 
-            if (pluginStore == null)
+            if (tabStore == null)
             {
-                throw new ArgumentNullException("pluginStore");
+                throw new ArgumentNullException("tabStore");
             }
 
             if (logger == null)
@@ -27,7 +27,7 @@ namespace Glimpse.Core.Extensibility
             }
 
             RequestContext = requestContext;
-            TabStore = pluginStore;
+            TabStore = tabStore;
             Logger = logger;
             MessageBroker = messageBroker;
         }

@@ -19,7 +19,7 @@ namespace Glimpse.Core.SerializationConverter
             return new Dictionary<string, object>
                        {
                            { "version", metadata.Version },
-                           { "plugins", metadata.Plugins },
+                           { "plugins", metadata.Tabs },
                            { "resources", metadata.Resources },
                        };
         }

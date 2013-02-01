@@ -1,7 +1,6 @@
 using System;
-using Glimpse.Core.Extensibility;
 
-namespace Glimpse.Core.Framework
+namespace Glimpse.Core.Extensibility
 {
     public class PipelineInspectorContext : IPipelineInspectorContext
     {

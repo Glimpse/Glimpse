@@ -21,7 +21,7 @@ namespace Glimpse.Core.SerializationConverter
                        {
                            { "clientId", request.ClientId },
                            { "dateTime", request.DateTime },
-                           { "duration", Math.Round(request.Duration, 2) },
+                           { "duration", request.Duration },
                            { "parentRequestId", request.ParentRequestId },
                            { "requestId", request.RequestId },
                            { "isAjax", request.RequestIsAjax },
@@ -29,7 +29,7 @@ namespace Glimpse.Core.SerializationConverter
                            { "uri", request.RequestUri },
                            { "contentType", request.ResponseContentType },
                            { "statusCode", request.ResponseStatusCode },
-                           { "data", request.PluginData },
+                           { "data", request.TabData },
                            { "userAgent", request.UserAgent },
                        };
         }

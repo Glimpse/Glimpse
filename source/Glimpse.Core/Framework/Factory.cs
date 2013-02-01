@@ -14,20 +14,41 @@ using NLog.Targets.Wrappers;
 
 namespace Glimpse.Core.Framework
 {
+    /// <summary>
+    /// The main bootstrapper for Glimpse, <c>Factory</c> (or its derived types) is responsible for instantiating all required configurable types.
+    /// </summary>
     public class Factory
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Factory" /> class without any <see cref="IServiceLocator"/> implementations.
+        /// </summary>
         public Factory() : this(null)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Factory" /> class without a <see cref="IServiceLocator"/> implementation from the framework provider.
+        /// </summary>
+        /// <param name="providerServiceLocator">The framework provider's service locator.</param>
         public Factory(IServiceLocator providerServiceLocator) : this(providerServiceLocator, null)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Factory" /> class.
+        /// </summary>
+        /// <param name="providerServiceLocator">The framework provider's service locator.</param>
+        /// <param name="userServiceLocator">The user's service locator.</param>
         public Factory(IServiceLocator providerServiceLocator, IServiceLocator userServiceLocator) : this(providerServiceLocator, userServiceLocator, null)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Factory" /> class.
+        /// </summary>
+        /// <param name="providerServiceLocator">The framework provider's service locator.</param>
+        /// <param name="userServiceLocator">The user's service locator.</param>
+        /// <param name="configuration">The Glimpse configuration to use.</param>
         public Factory(IServiceLocator providerServiceLocator, IServiceLocator userServiceLocator, Section configuration)
         {
             Configuration = configuration ?? ConfigurationManager.GetSection("glimpse") as Section ?? new Section();
@@ -54,6 +75,10 @@ namespace Glimpse.Core.Framework
 
         private IMessageBroker MessageBroker { get; set; }
 
+        /// <summary>
+        /// Instantiates an instance of <see cref="IGlimpseRuntime"/>.
+        /// </summary>
+        /// <returns>A <see cref="IGlimpseRuntime"/> instance resolved by one of the <see cref="IServiceLocator"/>s, otherwise <see cref="GlimpseRuntime"/>.</returns>
         public IGlimpseRuntime InstantiateRuntime()
         {
             IGlimpseRuntime result;
@@ -65,6 +90,11 @@ namespace Glimpse.Core.Framework
             return new GlimpseRuntime(InstantiateConfiguration());
         }
 
+        /// <summary>
+        /// Instantiates an instance of <see cref="IFrameworkProvider"/>.
+        /// </summary>
+        /// <returns>A <see cref="IFrameworkProvider"/> instance resolved by one of the <see cref="IServiceLocator"/>s.</returns>
+        /// <exception cref="GlimpseException">An exception is thrown is an instance of <see cref="IFrameworkProvider"/> is not provided by a <see cref="IServiceLocator"/>.</exception>
         public IFrameworkProvider InstantiateFrameworkProvider()
         {
             if (FrameworkProvider != null)
@@ -86,6 +116,11 @@ namespace Glimpse.Core.Framework
                     ProviderServiceLocator == null ? "ProviderServiceLocator not configured" : ProviderServiceLocator.GetType().AssemblyQualifiedName));
         }
 
+        /// <summary>
+        /// Instantiates an instance of <see cref="ResourceEndpointConfiguration"/>.
+        /// </summary>
+        /// <returns>A <see cref="ResourceEndpointConfiguration"/> instance resolved by one of the <see cref="IServiceLocator"/>s.</returns>
+        /// <exception cref="GlimpseException">An exception is thrown is an instance of <see cref="ResourceEndpointConfiguration"/> is not provided by a <see cref="IServiceLocator"/>.</exception>
         public ResourceEndpointConfiguration InstantiateResourceEndpointConfiguration()
         {
             ResourceEndpointConfiguration result;
@@ -101,6 +136,12 @@ namespace Glimpse.Core.Framework
                     ProviderServiceLocator == null ? "ProviderServiceLocator not configured" : ProviderServiceLocator.GetType().AssemblyQualifiedName));
         }
 
+        /// <summary>
+        /// Instantiates a collection of <see cref="IClientScript"/>s.
+        /// </summary>
+        /// <returns>
+        /// A collection of <see cref="IClientScript"/> instances resolved by one of the <see cref="IServiceLocator"/>s, otherwise all <see cref="IClientScript"/>s discovered in the configured discovery location.
+        /// </returns>
         public ICollection<IClientScript> InstantiateClientScripts()
         {
             ICollection<IClientScript> result;
@@ -112,6 +153,10 @@ namespace Glimpse.Core.Framework
             return CreateDiscoverableCollection<IClientScript>(Configuration.ClientScripts);
         }
 
+        /// <summary>
+        /// Instantiates an instance of <see cref="ILogger"/>.
+        /// </summary>
+        /// <returns>A <see cref="ILogger"/> instance resolved by one of the <see cref="IServiceLocator"/>s, otherwise a <see cref="NullLogger"/> or <see cref="NLogLogger"/> (leveraging the <see href="http://nlog-project.org/">NLog</see> project) based on configuration settings.</returns>
         public ILogger InstantiateLogger()
         {
             // reuse logger if already created
@@ -165,11 +210,19 @@ namespace Glimpse.Core.Framework
             return Logger;
         }
 
+        /// <summary>
+        /// Instantiates the default instance of <see cref="RuntimePolicy"/>.
+        /// </summary>
+        /// <returns>A <see cref="RuntimePolicy"/> instance based on configuration settings.</returns>
         public RuntimePolicy InstantiateDefaultRuntimePolicy()
         {
             return Configuration.DefaultRuntimePolicy;
         }
 
+        /// <summary>
+        /// Instantiates an instance of <see cref="IHtmlEncoder"/>.
+        /// </summary>
+        /// <returns>A <see cref="IHtmlEncoder"/> instance resolved by one of the <see cref="IServiceLocator"/>s, otherwise <see cref="AntiXssEncoder"/> (leveraging the <see href="http://wpl.codeplex.com/">Microsoft Web Protection Library</see>).</returns>
         public IHtmlEncoder InstantiateHtmlEncoder()
         {
             IHtmlEncoder encoder;
@@ -182,6 +235,10 @@ namespace Glimpse.Core.Framework
             return new AntiXssEncoder();
         }
 
+        /// <summary>
+        /// Instantiates an instance of <see cref="IPersistenceStore"/>.
+        /// </summary>
+        /// <returns>A <see cref="IPersistenceStore"/> instance resolved by one of the <see cref="IServiceLocator"/>s, otherwise <see cref="ApplicationPersistenceStore"/>.</returns>
         public IPersistenceStore InstantiatePersistenceStore()
         {
             IPersistenceStore store;
@@ -193,6 +250,12 @@ namespace Glimpse.Core.Framework
             return new ApplicationPersistenceStore(InstantiateFrameworkProvider().HttpServerStore);
         }
 
+        /// <summary>
+        /// Instantiates a collection of <see cref="IPipelineInspector"/>s.
+        /// </summary>
+        /// <returns>
+        /// A collection of <see cref="IPipelineInspector"/> instances resolved by one of the <see cref="IServiceLocator"/>s, otherwise all <see cref="IPipelineInspector"/>s discovered in the configured discovery location.
+        /// </returns>
         public ICollection<IPipelineInspector> InstantiatePipelineInspectors()
         {
             ICollection<IPipelineInspector> result;
@@ -204,6 +267,12 @@ namespace Glimpse.Core.Framework
             return CreateDiscoverableCollection<IPipelineInspector>(Configuration.PipelineInspectors);
         }
 
+        /// <summary>
+        /// Instantiates a collection of <see cref="IResource"/>s.
+        /// </summary>
+        /// <returns>
+        /// A collection of <see cref="IResource"/> instances resolved by one of the <see cref="IServiceLocator"/>s, otherwise all <see cref="IResource"/>s discovered in the configured discovery location.
+        /// </returns>
         public ICollection<IResource> InstantiateResources()
         {
             ICollection<IResource> resources;
@@ -215,6 +284,10 @@ namespace Glimpse.Core.Framework
             return CreateDiscoverableCollection<IResource>(Configuration.Resources);
         }
 
+        /// <summary>
+        /// Instantiates an instance of <see cref="ISerializer"/>.
+        /// </summary>
+        /// <returns>A <see cref="ISerializer"/> instance resolved by one of the <see cref="IServiceLocator"/>s, otherwise <see cref="JsonNetSerializer"/> (leveraging <see href="http://json.codeplex.com/">Json.Net</see>).</returns>
         public ISerializer InstantiateSerializer()
         {
             ISerializer result;
@@ -229,6 +302,12 @@ namespace Glimpse.Core.Framework
             return result;
         }
 
+        /// <summary>
+        /// Instantiates a collection of <see cref="ITab"/>s.
+        /// </summary>
+        /// <returns>
+        /// A collection of <see cref="ITab"/> instances resolved by one of the <see cref="IServiceLocator"/>s, otherwise all <see cref="ITab"/>s discovered in the configured discovery location.
+        /// </returns>
         public ICollection<ITab> InstantiateTabs()
         {
             ICollection<ITab> tabs;
@@ -240,6 +319,12 @@ namespace Glimpse.Core.Framework
             return CreateDiscoverableCollection<ITab>(Configuration.Tabs);
         }
 
+        /// <summary>
+        /// Instantiates a collection of <see cref="IRuntimePolicy"/>s.
+        /// </summary>
+        /// <returns>
+        /// A collection of <see cref="IRuntimePolicy"/> instances resolved by one of the <see cref="IServiceLocator"/>s, otherwise all <see cref="IRuntimePolicy"/>s discovered in the configured discovery location.
+        /// </returns>
         public ICollection<IRuntimePolicy> InstantiateRuntimePolicies()
         {
             ICollection<IRuntimePolicy> result;
@@ -258,6 +343,12 @@ namespace Glimpse.Core.Framework
             return collection;
         }
 
+        /// <summary>
+        /// Instantiates a collection of <see cref="ISerializationConverter"/>s.
+        /// </summary>
+        /// <returns>
+        /// A collection of <see cref="ISerializationConverter"/> instances resolved by one of the <see cref="IServiceLocator"/>s, otherwise all <see cref="ISerializationConverter"/>s discovered in the configured discovery location.
+        /// </returns>
         public ICollection<ISerializationConverter> InstantiateSerializationConverters()
         {
             ICollection<ISerializationConverter> result;
@@ -269,6 +360,10 @@ namespace Glimpse.Core.Framework
             return CreateDiscoverableCollection<ISerializationConverter>(Configuration.SerializationConverters);
         }
 
+        /// <summary>
+        /// Instantiates an instance of <see cref="IResource"/>.
+        /// </summary>
+        /// <returns>A <see cref="IResource"/> instance resolved by one of the <see cref="IServiceLocator"/>s, otherwise <see cref="ConfigurationResource"/>.</returns>
         public IResource InstantiateDefaultResource()
         {
             IResource result;
@@ -280,6 +375,12 @@ namespace Glimpse.Core.Framework
             return new ConfigurationResource();
         }
 
+        /// <summary>
+        /// Instantiates a strategy pattern for accessing an instance of <see cref="IExecutionTimer"/>.
+        /// </summary>
+        /// <returns>
+        /// A <c>Func&lt;IExecutionTimer&gt;</c> to access the request specific <see cref="IExecutionTimer"/>.
+        /// </returns>
         public Func<IExecutionTimer> InstantiateTimerStrategy()
         {
             var frameworkProvider = InstantiateFrameworkProvider();
@@ -287,12 +388,22 @@ namespace Glimpse.Core.Framework
             return () => frameworkProvider.HttpRequestStore.Get<IExecutionTimer>(Constants.GlobalTimerKey);
         }
 
+        /// <summary>
+        /// Instantiates a strategy pattern for accessing an instance of <see cref="RuntimePolicy"/>.
+        /// </summary>
+        /// <returns>
+        /// A <c>Func&lt;RuntimePolicy&gt;</c> to access the request specific <see cref="RuntimePolicy"/>.
+        /// </returns>
         public Func<RuntimePolicy> InstantiateRuntimePolicyStrategy()
         {
             var frameworkProvider = InstantiateFrameworkProvider();
             return () => frameworkProvider.HttpRequestStore.Get<RuntimePolicy>(Constants.RuntimePolicyKey);
         }
 
+        /// <summary>
+        /// Instantiates an instance of <see cref="IGlimpseConfiguration"/>.
+        /// </summary>
+        /// <returns>A <see cref="IGlimpseConfiguration"/> instance resolved by one of the <see cref="IServiceLocator"/>s, otherwise <see cref="GlimpseConfiguration"/> with each constructor parameter created with the corresponding <see cref="Factory"/> method.</returns>
         public IGlimpseConfiguration InstantiateConfiguration()
         {
             IGlimpseConfiguration result;
@@ -323,11 +434,19 @@ namespace Glimpse.Core.Framework
             return new GlimpseConfiguration(frameworkProvider, endpointConfiguration, clientScripts, logger, policy, htmlEncoder, persistenceStore, pipelineInspectors, resources, serializer, tabs, runtimePolicies, defaultResource, proxyFactory, messageBroker, endpointBaseUri, timerStrategy, runtimePolicyStrategy);
         }
 
+        /// <summary>
+        /// Instantiates a string that represents the base Uri Glimpse will use for invoking all instances of <see cref="IResource"/>.
+        /// </summary>
+        /// <returns>A <see cref="string"/> instance based on configuration settings.</returns>
         public string InstantiateBaseResourceUri()
         {
             return Configuration.EndpointBaseUri;
         }
-        
+
+        /// <summary>
+        /// Instantiates an instance of <see cref="IMessageBroker"/>.
+        /// </summary>
+        /// <returns>A <see cref="IMessageBroker"/> instance resolved by one of the <see cref="IServiceLocator"/>s, otherwise <see cref="MessageBroker"/>.</returns>
         public IMessageBroker InstantiateMessageBroker()
         {
             if (MessageBroker == null)
@@ -346,6 +465,10 @@ namespace Glimpse.Core.Framework
             return MessageBroker;
         }
 
+        /// <summary>
+        /// Instantiates an instance of <see cref="IProxyFactory"/>.
+        /// </summary>
+        /// <returns>A <see cref="IProxyFactory"/> instance resolved by one of the <see cref="IServiceLocator"/>s, otherwise <see cref="CastleDynamicProxyFactory"/> (leveraging <see href="http://www.castleproject.org/projects/dynamicproxy/">Castle DynamicProxy</see>.).</returns>
         public IProxyFactory InstantiateProxyFactory()
         {
             IProxyFactory result;
