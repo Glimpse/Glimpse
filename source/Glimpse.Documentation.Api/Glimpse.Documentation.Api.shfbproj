@@ -43,7 +43,8 @@
       <NamespaceSummaryItem name="Glimpse.Core.Configuration" isDocumented="True">All types having to do with Glimpse configuration and the Glimpse specific XML nodes within &lt;c&gt;web.config&lt;/c&gt; are defined within this namespace.</NamespaceSummaryItem>
 <NamespaceSummaryItem name="Glimpse.Core.ClientScript" isDocumented="True">All types which result in Glimpse injecting &lt;c&gt;&amp;lt;script&amp;gt;&lt;/c&gt; tags  into a page response are defined within this namespace.</NamespaceSummaryItem>
 <NamespaceSummaryItem name="Glimpse.Core.Resource" isDocumented="True">All resources which provide data or assets to the Glimpse client are defined within this namespace.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Glimpse.Core.ResourceResult" isDocumented="True">All resource results which write &lt;see cref="IResource"/&gt; data to the framework provider are defined within this namespace.</NamespaceSummaryItem></NamespaceSummaries>
+<NamespaceSummaryItem name="Glimpse.Core.ResourceResult" isDocumented="True">All resource results which write &lt;see cref="IResource"/&gt; data to the framework provider are defined within this namespace.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Glimpse.Core.SerializationConverter" isDocumented="True">All implementations of &lt;see cref="ISerialiationConverter"/&gt;, which transform objects into more suitable representations for serialization, are defined within this namespace.</NamespaceSummaryItem></NamespaceSummaries>
     <FeedbackEMailLinkText>Glimpse Developers List</FeedbackEMailLinkText>
     <FeedbackEMailAddress>getglimpse-dev%40googlegroups.com</FeedbackEMailAddress>
     <FooterText>

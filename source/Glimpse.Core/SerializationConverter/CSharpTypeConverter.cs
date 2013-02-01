@@ -6,6 +6,15 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.SerializationConverter
 {
+    /// <summary>
+    /// The <see cref="ISerializationConverter"/> implementation responsible converting <see cref="Type"/> representation's into more recognizable C# syntax.
+    /// </summary>
+    /// <example>
+    /// With <see cref="CSharpTypeConverter"/>, <c>System.Int32</c> is converted to <c>int</c> and <c>System.Collections.Generic.IDictionary`2[System.Double, System.String[]]</c> to <c>IDictionary&lt;double, string[]&gt;</c>.
+    /// </example>
+    /// <remarks>
+    /// Users of other languages could disable <see cref="CSharpTypeConverter"/> and create a <c>SerializationConverter&lt;Type&gt;</c> implementation for their language.
+    /// </remarks>
     public class CSharpTypeConverter : SerializationConverter<Type>
     {
         private static readonly Dictionary<Type, string> PrimitiveTypes =
@@ -28,6 +37,11 @@ namespace Glimpse.Core.SerializationConverter
                     { typeof(ushort), "ushort" },
                 };
 
+        /// <summary>
+        /// Converts the specified type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>An string of the C# syntax which would be used to represent <paramref name="type"/>.</returns>
         public override object Convert(Type type)
         {
             return GetName(type);
@@ -35,9 +49,9 @@ namespace Glimpse.Core.SerializationConverter
 
         private string GetName(Type type)
         {
-            var typename = new StringBuilder();
-            GetName(type, typename);
-            return typename.ToString();
+            var typeName = new StringBuilder();
+            GetName(type, typeName);
+            return typeName.ToString();
         }
 
         private void GetName(Type type, StringBuilder output)
@@ -55,7 +69,7 @@ namespace Glimpse.Core.SerializationConverter
             }
             else if (type.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
-                // Nullables
+                // Null types
                 GetName(type.GetGenericArguments().First(), output);
                 output.Append("?");
             }

@@ -5,8 +5,16 @@ using Glimpse.Core.Framework;
 
 namespace Glimpse.Core.SerializationConverter
 {
+    /// <summary>
+    /// The <see cref="ISerializationConverter"/> implementation responsible converting <see cref="GlimpseRequest"/> representation's into a format suitable for serialization.
+    /// </summary>
     public class GlimpseRequestConverter : SerializationConverter<GlimpseRequest>
     {
+        /// <summary>
+        /// Converts the specified request.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>An object suitable for serialization.</returns>
         public override object Convert(GlimpseRequest request)
         {
             return new Dictionary<string, object>
