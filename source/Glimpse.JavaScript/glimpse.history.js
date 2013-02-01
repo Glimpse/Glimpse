@@ -1,5 +1,5 @@
 ﻿(function($, pubsub, util, settings, elements, data, renderEngine) {
-    var context = { resultCount : 0, clientName : '', requestId : '', currentData: undefined, notice: undefined, isActive: false, contextRequestId: undefined }, 
+    var context = { resultCount : 0, clientName : '', requestId : '', currentData: null, notice: null, isActive: false, contextRequestId: undefined }, 
         generateHistoryAddress = function() {
             var currentMetadata = data.currentMetadata();
             return util.uriTemplate(currentMetadata.resources.glimpse_history, { 'version': currentMetadata.version });

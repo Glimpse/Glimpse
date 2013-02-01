@@ -186,7 +186,7 @@
                 var eventStack = [], lastEvent = { startPoint : 0, duration : 0, childlessDuration : 0, endPoint : 0 };
                 for (var i = 0; i < timeline.data.events.length; i += 1) {
                     var event = timeline.data.events[i],
-                        topEvent = eventStack.length > 0 ? eventStack[eventStack.length - 1] : undefined,
+                        topEvent = eventStack.length > 0 ? eventStack[eventStack.length - 1] : null,
                         category = timeline.data.category[event.category],
                         left = (event.startPoint / timeline.data.duration) * 100,
                         rLeft = Math.round(left),
@@ -207,9 +207,9 @@
                             eventStack.push(lastEvent); 
                             stackParsed = true;
                         }
-                        else if (topEvent != undefined && topEvent.endPoint < event.endPoint) {
+                        else if (topEvent != null && topEvent.endPoint < event.endPoint) {
                             eventStack.pop(); 
-                            topEvent = eventStack.length > 0 ? eventStack[eventStack.length - 1] : undefined; 
+                            topEvent = eventStack.length > 0 ? eventStack[eventStack.length - 1] : null; 
                             stackParsed = false;
                         }
                         else
@@ -414,7 +414,7 @@
         var criteria = { 
                 persentLeft : 0, 
                 persentRightFromLeft : 100, 
-                hiddenCategories : undefined
+                hiddenCategories : null
             },
             search = function(c) {
                 pubsub.publish('trigger.timline.filtering', { criteria: c });
@@ -424,7 +424,7 @@
                     var event = timeline.data.events[i],
                         show = !(c.persentLeft > event.endPersent 
                                 || c.persentRightFromLeft < event.startPersent)
-                                && (c.hiddenCategories == undefined || c.hiddenCategories[event.category] == true);
+                                && (c.hiddenCategories == null || c.hiddenCategories[event.category] == true);
 
                     //Timeline elements
                     elements.contentBandHolder.find('.glimpse-tl-band').eq(i).toggle(show);
@@ -564,7 +564,7 @@
                 });
             },
             apply = function(showTimeline, isFirst) {
-                if (showTimeline == undefined || showTimeline == null)
+                if (showTimeline == null)
                     showTimeline = false;
                 
                 pubsub.publish('action.timline.shell.switching', { applyAll: isFirst, showTimeline: showTimeline });
@@ -621,7 +621,7 @@
             },
             postrender = function(args) { 
                 args.pluginData.data = args.pluginData._data;
-                args.pluginData._data = undefined;
+                args.pluginData._data = null;
                 
                 timeline.data = args.pluginData.data;
                 timeline.scope = args.panel;

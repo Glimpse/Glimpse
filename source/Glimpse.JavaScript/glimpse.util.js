@@ -58,7 +58,7 @@
             localStorage.setItem(key, JSON.stringify(value)); 
         },
         htmlEncode: function (value) {
-            return !(value == undefined || value == null) ? value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
+            return !(value == null) ? value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
         },
         preserveWhitespace: function (value) {
             if (typeof value !== "string")
@@ -74,7 +74,7 @@
             return count;
         }, 
         uriTemplate: function (uri, data) {
-            if (uri === null || uri === undefined)
+            if (uri == null)
                 return '';
             return UriTemplate.parse(uri).expand(data || {});
         },

@@ -1,7 +1,7 @@
 ﻿(function($, engine) {
     var provider = {
             build: function(data) { 
-                if (data === undefined || data === null || data === '')
+                if (data == null || data === '')
                     data = 'No data found for this plugin.';
                 return '<div class="glimpse-panel-message">' + data + '</div>';
             }

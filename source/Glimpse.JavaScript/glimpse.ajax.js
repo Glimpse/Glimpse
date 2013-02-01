@@ -1,5 +1,5 @@
 ﻿(function($, pubsub, util, elements, data, renderEngine) {
-    var context = { resultCount : 0, notice: undefined, isActive: false, contextRequestId: undefined },
+    var context = { resultCount : 0, notice: null, isActive: false, contextRequestId: null },
         generateAjaxAddress = function() {
             var currentMetadata = data.currentMetadata();
             return util.uriTemplate(currentMetadata.resources.glimpse_ajax, { 'parentRequestId': retrieveScopeId(), 'version': currentMetadata.version });
@@ -155,7 +155,7 @@
             panel.find('.selected').removeClass('selected');
             row.addClass('selected');
             
-            context.contextRequestId = undefined;
+            context.contextRequestId = null;
         };
     
     var send = XMLHttpRequest.prototype.send;

@@ -38,7 +38,7 @@
                         newMetadataItem = { layout: newMetadataItem };
 
                     //If minDisplay and we are in header or there is no data, we don't want to render anything 
-                    if (metadataItem.minDisplay && (isHeadingRow || cellContent == undefined || cellContent == null))
+                    if (metadataItem.minDisplay && (isHeadingRow || cellContent == null))
                         return ""; 
                      
                     cellContent = providers.master.build(cellContent, level + 1, metadataItem.forceFull, newMetadataItem, isHeadingRow ? undefined : metadataItem.limit);

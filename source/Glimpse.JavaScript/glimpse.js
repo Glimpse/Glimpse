@@ -61,9 +61,9 @@ e+" and cannot be reopened in position "+b);if("}"===c){if(e+1===b)throw Error("
             var settings = e.data.settings, 
                 newDimention = settings._startDimention + ((mousePosition(e) - settings._startMousePosition) * settings.offset);
             
-            if (settings._min != undefined) 
+            if (settings._min != null) 
                 newDimention = Math.max(settings._min, newDimention); 
-            if (settings._max != undefined) 
+            if (settings._max != null) 
                 newDimention = Math.min(settings._max, newDimention); 
 
             settings.setDimention.call(settings, newDimention); 
@@ -282,7 +282,7 @@ glimpse.util = (function($) {
             localStorage.setItem(key, JSON.stringify(value)); 
         },
         htmlEncode: function (value) {
-            return !(value == undefined || value == null) ? value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
+            return !(value == null) ? value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
         },
         preserveWhitespace: function (value) {
             if (typeof value !== "string")
@@ -298,7 +298,7 @@ glimpse.util = (function($) {
             return count;
         }, 
         uriTemplate: function (uri, data) {
-            if (uri === null || uri === undefined)
+            if (uri == null)
                 return '';
             return UriTemplate.parse(uri).expand(data || {});
         },
@@ -775,7 +775,7 @@ glimpse.render.engine.util.raw = (function($, util) {
                 var trimmable = true, 
                     replace = function (d) { return util.htmlEncode(d); };
 
-                if (data == undefined || data == null)
+                if (data == null)
                     return '--';
                 if (typeof data != 'string')
                     data = data + '';  
@@ -883,7 +883,7 @@ glimpse.render.engine.util.raw = (function($, util) {
 (function($, engine) {
     var provider = {
             build: function(data) { 
-                if (data === undefined || data === null || data === '')
+                if (data == null || data === '')
                     data = 'No data found for this plugin.';
                 return '<div class="glimpse-panel-message">' + data + '</div>';
             }
@@ -932,7 +932,7 @@ glimpse.render.engine.util.raw = (function($, util) {
 (function($, util, engine, engineUtil) {
     var provider = {
             build: function (data, level, forceFull, forceLimit) { 
-                if (data == undefined || data == null)
+                if (data == null)
                     return '--';
                 if ($.isArray(data))
                     return '[ ... ]';
@@ -1001,7 +1001,7 @@ glimpse.render.engine.util.raw = (function($, util) {
                         newMetadataItem = { layout: newMetadataItem };
 
                     //If minDisplay and we are in header or there is no data, we don't want to render anything 
-                    if (metadataItem.minDisplay && (isHeadingRow || cellContent == undefined || cellContent == null))
+                    if (metadataItem.minDisplay && (isHeadingRow || cellContent == null))
                         return ""; 
                      
                     cellContent = providers.master.build(cellContent, level + 1, metadataItem.forceFull, newMetadataItem, isHeadingRow ? undefined : metadataItem.limit);
@@ -1256,7 +1256,7 @@ glimpse.render.engine.util.raw = (function($, util) {
         },
         generateHtmlItem = function(key, pluginData) {
             if (!pluginData.suppressTab) {
-                var disabled = (pluginData.data === undefined || pluginData.data === null) ? ' glimpse-disabled' : '',
+                var disabled = pluginData.data == null ? ' glimpse-disabled' : '',
                     permanent = pluginData.isPermanent ? ' glimpse-permanent' : '';
             
                 return '<li class="glimpse-tab glimpse-tabitem-' + key + disabled + permanent + '" data-glimpseKey="' + key + '">' + pluginData.name + '</li>';
@@ -1358,7 +1358,7 @@ glimpse.render.engine.util.raw = (function($, util) {
             }
 
             // Only run if we have data 
-            if (pluginData != null && pluginData != undefined) {
+            if (pluginData != null) {
                 pubsub.publish('action.panel.showing.' + options.key, { key: options.key });
 
                 // Only render the content when we need to
@@ -1537,7 +1537,7 @@ glimpse.render.engine.util.raw = (function($, util) {
             var info = data.currentMetadata().plugins[options.key],
                 url = info && info.documentationUri; 
             
-            elements.barHolder().find('.glimpse-meta-help').toggle(url != undefined).attr('href', url); 
+            elements.barHolder().find('.glimpse-meta-help').toggle(url != null).attr('href', url); 
         }, 
         buildInfo = function(args) { 
             var metadata = data.currentMetadata(); 
@@ -2113,7 +2113,7 @@ glimpse.tab = (function($, pubsub, data) {
 
 // glimpse.ajax.js
 (function($, pubsub, util, elements, data, renderEngine) {
-    var context = { resultCount : 0, notice: undefined, isActive: false, contextRequestId: undefined },
+    var context = { resultCount : 0, notice: null, isActive: false, contextRequestId: null },
         generateAjaxAddress = function() {
             var currentMetadata = data.currentMetadata();
             return util.uriTemplate(currentMetadata.resources.glimpse_ajax, { 'parentRequestId': retrieveScopeId(), 'version': currentMetadata.version });
@@ -2269,7 +2269,7 @@ glimpse.tab = (function($, pubsub, data) {
             panel.find('.selected').removeClass('selected');
             row.addClass('selected');
             
-            context.contextRequestId = undefined;
+            context.contextRequestId = null;
         };
     
     var send = XMLHttpRequest.prototype.send;
@@ -2293,7 +2293,7 @@ glimpse.tab = (function($, pubsub, data) {
 })(jQueryGlimpse, glimpse.pubsub, glimpse.util, glimpse.elements, glimpse.data, glimpse.render.engine);
 // glimpse.history.js
 (function($, pubsub, util, settings, elements, data, renderEngine) {
-    var context = { resultCount : 0, clientName : '', requestId : '', currentData: undefined, notice: undefined, isActive: false, contextRequestId: undefined }, 
+    var context = { resultCount : 0, clientName : '', requestId : '', currentData: null, notice: null, isActive: false, contextRequestId: undefined }, 
         generateHistoryAddress = function() {
             var currentMetadata = data.currentMetadata();
             return util.uriTemplate(currentMetadata.resources.glimpse_history, { 'version': currentMetadata.version });
@@ -2690,7 +2690,7 @@ glimpse.tab = (function($, pubsub, data) {
                 var eventStack = [], lastEvent = { startPoint : 0, duration : 0, childlessDuration : 0, endPoint : 0 };
                 for (var i = 0; i < timeline.data.events.length; i += 1) {
                     var event = timeline.data.events[i],
-                        topEvent = eventStack.length > 0 ? eventStack[eventStack.length - 1] : undefined,
+                        topEvent = eventStack.length > 0 ? eventStack[eventStack.length - 1] : null,
                         category = timeline.data.category[event.category],
                         left = (event.startPoint / timeline.data.duration) * 100,
                         rLeft = Math.round(left),
@@ -2711,9 +2711,9 @@ glimpse.tab = (function($, pubsub, data) {
                             eventStack.push(lastEvent); 
                             stackParsed = true;
                         }
-                        else if (topEvent != undefined && topEvent.endPoint < event.endPoint) {
+                        else if (topEvent != null && topEvent.endPoint < event.endPoint) {
                             eventStack.pop(); 
-                            topEvent = eventStack.length > 0 ? eventStack[eventStack.length - 1] : undefined; 
+                            topEvent = eventStack.length > 0 ? eventStack[eventStack.length - 1] : null; 
                             stackParsed = false;
                         }
                         else
@@ -2918,7 +2918,7 @@ glimpse.tab = (function($, pubsub, data) {
         var criteria = { 
                 persentLeft : 0, 
                 persentRightFromLeft : 100, 
-                hiddenCategories : undefined
+                hiddenCategories : null
             },
             search = function(c) {
                 pubsub.publish('trigger.timline.filtering', { criteria: c });
@@ -2928,7 +2928,7 @@ glimpse.tab = (function($, pubsub, data) {
                     var event = timeline.data.events[i],
                         show = !(c.persentLeft > event.endPersent 
                                 || c.persentRightFromLeft < event.startPersent)
-                                && (c.hiddenCategories == undefined || c.hiddenCategories[event.category] == true);
+                                && (c.hiddenCategories == null || c.hiddenCategories[event.category] == true);
 
                     //Timeline elements
                     elements.contentBandHolder.find('.glimpse-tl-band').eq(i).toggle(show);
@@ -3068,7 +3068,7 @@ glimpse.tab = (function($, pubsub, data) {
                 });
             },
             apply = function(showTimeline, isFirst) {
-                if (showTimeline == undefined || showTimeline == null)
+                if (showTimeline == null)
                     showTimeline = false;
                 
                 pubsub.publish('action.timline.shell.switching', { applyAll: isFirst, showTimeline: showTimeline });
@@ -3125,7 +3125,7 @@ glimpse.tab = (function($, pubsub, data) {
             },
             postrender = function(args) { 
                 args.pluginData.data = args.pluginData._data;
-                args.pluginData._data = undefined;
+                args.pluginData._data = null;
                 
                 timeline.data = args.pluginData.data;
                 timeline.scope = args.panel;

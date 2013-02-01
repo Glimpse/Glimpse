@@ -42,9 +42,9 @@
             var settings = e.data.settings, 
                 newDimention = settings._startDimention + ((mousePosition(e) - settings._startMousePosition) * settings.offset);
             
-            if (settings._min != undefined) 
+            if (settings._min != null) 
                 newDimention = Math.max(settings._min, newDimention); 
-            if (settings._max != undefined) 
+            if (settings._max != null) 
                 newDimention = Math.min(settings._max, newDimention); 
 
             settings.setDimention.call(settings, newDimention); 

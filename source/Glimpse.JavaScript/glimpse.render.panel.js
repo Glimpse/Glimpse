@@ -29,7 +29,7 @@
             }
 
             // Only run if we have data 
-            if (pluginData != null && pluginData != undefined) {
+            if (pluginData != null) {
                 pubsub.publish('action.panel.showing.' + options.key, { key: options.key });
 
                 // Only render the content when we need to
