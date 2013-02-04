@@ -272,7 +272,7 @@ namespace Glimpse.Test.Core.Framework
 
             public int HitCount { get; set; }
 
-            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
+            public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
             {
                 HitCount++;
             }
@@ -287,7 +287,7 @@ namespace Glimpse.Test.Core.Framework
 
             public int HitCount { get; set; }
 
-            public override void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult)
+            public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
             {
                 HitCount++;
             }

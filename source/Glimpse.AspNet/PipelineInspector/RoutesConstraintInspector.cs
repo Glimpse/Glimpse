@@ -1,5 +1,5 @@
 using System.Linq;
-using Glimpse.AspNet.AlternateImplementation;
+using Glimpse.AspNet.AlternateType;
 using Glimpse.Core.Extensibility;
 
 namespace Glimpse.AspNet.PipelineInspector

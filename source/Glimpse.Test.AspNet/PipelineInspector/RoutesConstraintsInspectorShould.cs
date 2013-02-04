@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Web.Routing;
-using Glimpse.AspNet.AlternateImplementation;
+using Glimpse.AspNet.AlternateType;
 using Glimpse.AspNet.PipelineInspector;
 using Glimpse.Core.Extensibility;
 using Glimpse.Test.Common; 

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Glimpse.Mvc.AlternateImplementation;
+using Glimpse.Mvc.AlternateType;
 
 namespace Glimpse.Mvc.Model
 {

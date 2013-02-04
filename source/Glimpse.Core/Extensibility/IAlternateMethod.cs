@@ -23,6 +23,6 @@ namespace Glimpse.Core.Extensibility
         /// <remarks>
         /// It is up to this method to call the underlying target method.
         /// </remarks>
-        void NewImplementation(IAlternateImplementationContext context);
+        void NewImplementation(IAlternateMethodContext context);
     }
 }

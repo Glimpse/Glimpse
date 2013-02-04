@@ -26,7 +26,7 @@ namespace Glimpse.Core.Extensibility
 
         public MethodInfo MethodToImplement { get; private set; }
 
-        public void NewImplementation(IAlternateImplementationContext context)
+        public void NewImplementation(IAlternateMethodContext context)
         {
             TimerResult timerResult;
             if (!context.TryProceedWithTimer(out timerResult))
@@ -37,6 +37,6 @@ namespace Glimpse.Core.Extensibility
             PostImplementation(context, timerResult);
         }
 
-        public abstract void PostImplementation(IAlternateImplementationContext context, TimerResult timerResult);
+        public abstract void PostImplementation(IAlternateMethodContext context, TimerResult timerResult);
     }
 }

@@ -7,7 +7,8 @@ using System.Web.Mvc;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-using Glimpse.Mvc.AlternateImplementation;
+using Glimpse.Mvc.AlternateType;
+
 #if MVC2
 using Glimpse.Mvc2.Backport;
 #endif

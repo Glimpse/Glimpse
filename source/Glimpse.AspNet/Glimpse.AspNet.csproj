@@ -43,12 +43,12 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlternateImplementation\IRouteNameMixin.cs" />
-    <Compile Include="AlternateImplementation\Route.cs" />
-    <Compile Include="AlternateImplementation\RouteBase.cs" />
-    <Compile Include="AlternateImplementation\RouteConstraint.cs" />
-    <Compile Include="AlternateImplementation\RouteConstraintRegex.cs" />
-    <Compile Include="AlternateImplementation\RouteNameMixin.cs" />
+    <Compile Include="AlternateType\IRouteNameMixin.cs" />
+    <Compile Include="AlternateType\Route.cs" />
+    <Compile Include="AlternateType\RouteBase.cs" />
+    <Compile Include="AlternateType\RouteConstraint.cs" />
+    <Compile Include="AlternateType\RouteConstraintRegex.cs" />
+    <Compile Include="AlternateType\RouteNameMixin.cs" />
     <Compile Include="AspNetFrameworkProvider.cs" />
     <Compile Include="AspNetServiceLocator.cs" />
     <Compile Include="Controls\Client.cs" />

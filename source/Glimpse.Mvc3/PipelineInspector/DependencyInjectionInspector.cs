@@ -9,7 +9,7 @@ namespace Glimpse.Mvc.PipelineInspector
         {
             var logger = context.Logger;
 
-            var alternateImplementation = new AlternateImplementation.DependencyResolver(context.ProxyFactory);
+            var alternateImplementation = new AlternateType.DependencyResolver(context.ProxyFactory);
 
             var dependencyResolver = DependencyResolver.Current;
 

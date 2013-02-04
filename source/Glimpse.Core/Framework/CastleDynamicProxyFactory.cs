@@ -348,8 +348,8 @@ namespace Glimpse.Core.Framework
 
         private ProxyGenerationOptions CreateProxyOptions<T>(IEnumerable<IAlternateMethod> methodImplementations, IEnumerable<object> mixins)
         {
-            var generationHook = new AlternateImplementationGenerationHook<T>(methodImplementations, Logger);
-            var selector = new AlternateImplementationSelector();
+            var generationHook = new AlternateTypeGenerationHook<T>(methodImplementations, Logger);
+            var selector = new AlternateTypeSelector();
             var options = new ProxyGenerationOptions(generationHook) { Selector = selector };
 
             if (mixins != null)
@@ -365,7 +365,7 @@ namespace Glimpse.Core.Framework
 
         private IInterceptor[] CreateInterceptorArray(IEnumerable<IAlternateMethod> methodImplementations)
         {
-            return (from implementaion in methodImplementations select new AlternateImplementationToCastleInterceptorAdapter(implementaion, Logger, MessageBroker, this, TimerStrategy, RuntimePolicyStrategy)).ToArray();
+            return (from implementaion in methodImplementations select new AlternateTypeToCastleInterceptorAdapter(implementaion, Logger, MessageBroker, this, TimerStrategy, RuntimePolicyStrategy)).ToArray();
         }
     }
 }

@@ -91,10 +91,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DictionaryDataStoreAdapterShould.cs" />
-    <Compile Include="Extensibility\AlternateImplementationGenerationHookShould.cs" />
-    <Compile Include="Extensibility\AlternateImplementationSelectorShould.cs" />
-    <Compile Include="Extensibility\AlternateImplementationToCastleInterceptorAdapterShould.cs" />
-    <Compile Include="Extensibility\CastleInvocationToAlternateImplementationContextAdapterShould.cs" />
+    <Compile Include="Extensibility\AlternateTypeGenerationHookShould.cs" />
+    <Compile Include="Extensibility\AlternateTypeSelectorShould.cs" />
+    <Compile Include="Extensibility\AlternateTypeToCastleInterceptorAdapterShould.cs" />
+    <Compile Include="Extensibility\CastleInvocationToAlternateMethodContextAdapterShould.cs" />
     <Compile Include="Extensibility\ExceptionResourceResultShould.cs" />
     <Compile Include="Extensibility\FileResourceResultShould.cs" />
     <Compile Include="Extensibility\JsonNetSerializationConverterShould.cs" />

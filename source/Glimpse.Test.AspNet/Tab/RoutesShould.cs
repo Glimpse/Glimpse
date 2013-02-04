@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Web; 
-using Glimpse.AspNet.AlternateImplementation;
+using System.Web;
 using Glimpse.AspNet.Model;
 using Glimpse.AspNet.Tab;
 using Glimpse.Core.Extensibility;
@@ -10,8 +9,8 @@ using Moq;
 using Xunit;
 using Xunit.Extensions;
 
-using Route = Glimpse.AspNet.AlternateImplementation.Route;
-using RouteBase = Glimpse.AspNet.AlternateImplementation.RouteBase;
+using Route = Glimpse.AspNet.AlternateType.Route;
+using RouteBase = Glimpse.AspNet.AlternateType.RouteBase;
 using RouteTable = System.Web.Routing.RouteTable;
 
 namespace Glimpse.Test.AspNet.Tab

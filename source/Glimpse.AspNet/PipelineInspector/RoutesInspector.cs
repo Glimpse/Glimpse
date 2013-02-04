@@ -2,8 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Web.Routing;
-using Glimpse.AspNet.AlternateImplementation;
+using Glimpse.AspNet.AlternateType;
 using Glimpse.Core.Extensibility;
+using Route = Glimpse.AspNet.AlternateType.Route;
 using RouteBase = System.Web.Routing.RouteBase;
 
 namespace Glimpse.AspNet.PipelineInspector
@@ -22,9 +23,9 @@ namespace Glimpse.AspNet.PipelineInspector
         public void Setup(IPipelineInspectorContext context)
         { 
             var logger = context.Logger; 
-            var alternateImplementation = new Glimpse.AspNet.AlternateImplementation.Route(context.ProxyFactory);
-            var alternateBaseImplementation = new Glimpse.AspNet.AlternateImplementation.RouteBase(context.ProxyFactory);
-            var alternateConstraintImplementation = new Glimpse.AspNet.AlternateImplementation.RouteConstraint(context.ProxyFactory);
+            var alternateImplementation = new Route(context.ProxyFactory);
+            var alternateBaseImplementation = new AlternateType.RouteBase(context.ProxyFactory);
+            var alternateConstraintImplementation = new RouteConstraint(context.ProxyFactory);
 
             var currentRoutes = System.Web.Routing.RouteTable.Routes;
             using (currentRoutes.GetWriteLock())
