@@ -13,7 +13,7 @@ namespace Glimpse.Test.Core.Message
     public class TimelineMessageShould
     {
         [Theory, AutoMock]
-        public void Construct(TimerResult timerResult, Type type, MethodInfo methodInfo, string eventName, string eventCategory)
+        public void Construct(TimerResult timerResult, Type type, MethodInfo methodInfo, string eventName, TimelineCategory eventCategory)
         {
             var message = new TimelineMessage(timerResult, type, methodInfo, eventName, eventCategory);
 
@@ -27,7 +27,7 @@ namespace Glimpse.Test.Core.Message
         }
 
         [Theory, AutoMock]
-        public void BuildDetails(TimerResult timerResult, Type type, MethodInfo methodInfo, string eventName, string eventCategory)
+        public void BuildDetails(TimerResult timerResult, Type type, MethodInfo methodInfo, string eventName, TimelineCategory eventCategory)
         {
             var message = new TimelineMessage(timerResult, type, methodInfo, eventName, eventCategory);
 

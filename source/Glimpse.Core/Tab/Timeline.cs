@@ -9,24 +9,7 @@ using Glimpse.Core.Model;
 namespace Glimpse.Core.Tab
 {
     public class Timeline : TabBase, IDocumentation, ITabSetup, IKey
-    {
-        private readonly IDictionary<string, TimelineCategoryModel> categories = new Dictionary<string, TimelineCategoryModel>
-                           {
-                               { "ASP.NET", new TimelineCategoryModel { EventColor = "#AF78DD", EventColorHighlight = "#823BBE" } },
-                               { "Controller", new TimelineCategoryModel { EventColor = "#FDBF45", EventColorHighlight = "#DDA431" } },
-                               { "Filter", new TimelineCategoryModel { EventColor = "#72A3E4", EventColorHighlight = "#5087CF" } }, 
-                               { "View", new TimelineCategoryModel { EventColor = "#10E309", EventColorHighlight = "#0EC41D" } }, 
-                           };
-
-        //// .glimpse-panel .glimpse-tl-event-purple { border:1px solid #823BBE; background-color:#AF78DD; } 
-        //// .glimpse-panel .glimpse-tl-event-orange { border:1px solid #DDA431; background-color:#FDBF45; } 
-        //// .glimpse-panel .glimpse-tl-event-blue { border:1px solid #5087CF; background-color:#72A3E4; } 
-        //// .glimpse-panel .glimpse-tl-event-green { border:1px solid #0EC41D; background-color:#10E309; } 
-        //// .glimpse-panel .glimpse-tl-event-aqua { border:1px solid #2EBFC7; background-color:#72DEE4; } 
-        //// .glimpse-panel .glimpse-tl-event-yellow { border:1px solid #DEE81A; background-color:#F0ED5D; } 
-        //// .glimpse-panel .glimpse-tl-event-pink { border:1px solid #DD31DA; background-color:#FD45F7; } 
-        //// .glimpse-panel .glimpse-tl-event-red { border:1px solid #DD3131; background-color:#FD4545; }  
-
+    {  
         public override string Name
         {
             get { return "Timeline"; }
@@ -52,7 +35,7 @@ namespace Glimpse.Core.Tab
             var viewRenderMessages = context.GetMessages<ITimelineMessage>(); 
 
             var result = new TimelineModel();
-            result.Category = categories;
+            result.Category = new Dictionary<string, TimelineCategoryModel>();
 
             if (viewRenderMessages != null)
             {
@@ -60,9 +43,14 @@ namespace Glimpse.Core.Tab
                 var events = new List<TimelineEventModel>();
                 foreach (var viewRenderMessage in viewRenderMessages.OrderBy(x => x.Offset))
                 {
+                    if (!result.Category.ContainsKey(viewRenderMessage.EventCategory.Name))
+                    {
+                        result.Category[viewRenderMessage.EventCategory.Name] = new TimelineCategoryModel { EventColor = viewRenderMessage.EventCategory.Color, EventColorHighlight = viewRenderMessage.EventCategory.ColorHighlight };
+                    }
+
                     var timelineEvent = new TimelineEventModel();
                     timelineEvent.Title = viewRenderMessage.EventName;
-                    timelineEvent.Category = viewRenderMessage.EventCategory;
+                    timelineEvent.Category = viewRenderMessage.EventCategory.Name;
                     timelineEvent.SubText = viewRenderMessage.EventSubText;
                     timelineEvent.Duration = viewRenderMessage.Duration;
                     timelineEvent.StartPoint = viewRenderMessage.Offset;

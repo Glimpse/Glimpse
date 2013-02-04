@@ -7,7 +7,7 @@ namespace Glimpse.Core.Message
 {
     public class PointTimelineMessage : TimelineMessage, ITimelineMessage
     {
-        public PointTimelineMessage(TimerResult timerResult, Type executedType, MethodInfo executedMethod, string eventName = null, string eventCategory = null)
+        public PointTimelineMessage(TimerResult timerResult, Type executedType, MethodInfo executedMethod, string eventName = null, TimelineCategory eventCategory = null)
             : base(timerResult, executedType, executedMethod, eventName, eventCategory)
         {
         }

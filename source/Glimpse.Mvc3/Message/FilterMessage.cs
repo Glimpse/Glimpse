@@ -8,7 +8,7 @@ namespace Glimpse.Mvc.Message
 {
     public class FilterMessage : ActionBaseMessage, IFilterMessage, IExecutionMessage
     {
-        public FilterMessage(TimerResult timerResult, FilterCategory filterCategory, Type resultType, bool isChildAction, Type executedType, MethodInfo method, string eventName = null, string eventCategory = null)
+        public FilterMessage(TimerResult timerResult, FilterCategory filterCategory, Type resultType, bool isChildAction, Type executedType, MethodInfo method, string eventName = null, Core.Message.TimelineCategory eventCategory = null)
             : base(timerResult, isChildAction, executedType, method, eventName, eventCategory) 
         {
             Category = filterCategory;
@@ -19,9 +19,9 @@ namespace Glimpse.Mvc.Message
                 EventName = string.Format("{0}", Category.ToString());
             }
 
-            if (string.IsNullOrEmpty(eventCategory))
+            if (eventCategory == null)
             {
-                EventCategory = "Filter";
+                EventCategory = Timeline.Filter;
             }  
         }
 

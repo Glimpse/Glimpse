@@ -6,7 +6,7 @@ namespace Glimpse.Mvc.Message
 {
     public class ActionFilterMessage : FilterMessage, IActionBasedMessage
     {
-        public ActionFilterMessage(TimerResult timerResult, string controllerName, string actionName, FilterCategory filterCategory, Type resultType, bool isChildAction, Type executedType, MethodInfo method, string eventName = null, string eventCategory = null)
+        public ActionFilterMessage(TimerResult timerResult, string controllerName, string actionName, FilterCategory filterCategory, Type resultType, bool isChildAction, Type executedType, MethodInfo method, string eventName = null, Core.Message.TimelineCategory eventCategory = null)
             : base(timerResult, filterCategory, resultType, isChildAction, executedType, method, eventName, eventCategory)
         {
             ControllerName = controllerName;
