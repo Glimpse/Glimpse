@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Message;
 using Glimpse.Mvc.Message;
 using Glimpse.Test.Common; 
 using Xunit;
@@ -12,7 +13,7 @@ namespace Glimpse.Test.Mvc3.Message
     public class ExecutionMessageShould
     {
         [Theory, AutoMock]
-        public void Construct(TimerResult timerResult, bool isChildAction, Type executedType, MethodInfo method, string eventName, string eventCategory)
+        public void Construct(TimerResult timerResult, bool isChildAction, Type executedType, MethodInfo method, string eventName, TimelineCategory eventCategory)
         {
             var message = new ActionBaseMessage(timerResult, isChildAction, executedType, method, eventName, eventCategory);
 
@@ -27,7 +28,7 @@ namespace Glimpse.Test.Mvc3.Message
         }
 
         [Theory, AutoMock]
-        public void BuildDetails(TimerResult timerResult, bool isChildAction, Type executedType, MethodInfo method, string eventName, string eventCategory)
+        public void BuildDetails(TimerResult timerResult, bool isChildAction, Type executedType, MethodInfo method, string eventName, TimelineCategory eventCategory)
         {
             var message = new ActionBaseMessage(timerResult, isChildAction, executedType, method, eventName, eventCategory);
 

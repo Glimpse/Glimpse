@@ -6,7 +6,7 @@ namespace Glimpse.Core.Message
     {
         string EventName { get; }
         
-        string EventCategory { get; }
+        TimelineCategory EventCategory { get; }
 
         string EventSubText { get; }
 

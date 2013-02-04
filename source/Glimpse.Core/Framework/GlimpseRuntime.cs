@@ -93,7 +93,7 @@ namespace Glimpse.Core.Framework
 
             var executionTimer = CreateAndStartGlobalExecutionTimer(requestStore);
 
-            Configuration.MessageBroker.Publish(new PointTimelineMessage(executionTimer.Point(), typeof(GlimpseRuntime), MethodInfoBeginRequest, "Start Request", "Common"));
+            Configuration.MessageBroker.Publish(new PointTimelineMessage(executionTimer.Point(), typeof(GlimpseRuntime), MethodInfoBeginRequest, "Start Request", Timeline.Request));
         }
 
         // TODO: Add PRG support
@@ -111,7 +111,7 @@ namespace Glimpse.Core.Framework
             var executionTimer = requestStore.Get<ExecutionTimer>(Constants.GlobalTimerKey);
             if (executionTimer != null)
             {
-                Configuration.MessageBroker.Publish(new PointTimelineMessage(executionTimer.Point(), typeof(GlimpseRuntime), MethodInfoEndRequest, "End Request", "Common"));
+                Configuration.MessageBroker.Publish(new PointTimelineMessage(executionTimer.Point(), typeof(GlimpseRuntime), MethodInfoEndRequest, "End Request", Timeline.Request));
             }
 
             ExecuteTabs(RuntimeEvent.EndRequest);

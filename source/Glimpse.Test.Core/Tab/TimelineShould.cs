@@ -6,7 +6,6 @@ using System.Text;
 using System.Web;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-using Glimpse.Core.Message;
 using Glimpse.Core.Model;
 using Glimpse.Core.Tab;
 using Glimpse.Test.Common;
@@ -50,8 +49,8 @@ namespace Glimpse.Test.AspNet.Tab
         [Theory, AutoMock]
         public void ReturnData(ITabContext context)
         { 
-            context.TabStore.Setup(x => x.Contains(typeof(IList<ITimelineMessage>).AssemblyQualifiedName)).Returns(true);
-            context.TabStore.Setup(x => x.Get(typeof(IList<ITimelineMessage>).AssemblyQualifiedName)).Returns(BuildMessages());
+            context.TabStore.Setup(x => x.Contains(typeof(IList<Glimpse.Core.Message.ITimelineMessage>).AssemblyQualifiedName)).Returns(true);
+            context.TabStore.Setup(x => x.Get(typeof(IList<Glimpse.Core.Message.ITimelineMessage>).AssemblyQualifiedName)).Returns(BuildMessages());
 
             var timeline = new Timeline();
             var result = timeline.GetData(context) as TimelineModel;
@@ -67,7 +66,7 @@ namespace Glimpse.Test.AspNet.Tab
         [Theory, AutoMock]
         public void ReturnEmptyWhenNoData(ITabContext context)
         {
-            context.TabStore.Setup(x => x.Get(typeof(ITimelineMessage).FullName)).Returns((IEnumerable<ITimelineMessage>)null);
+            context.TabStore.Setup(x => x.Get(typeof(Glimpse.Core.Message.ITimelineMessage).FullName)).Returns((IEnumerable<Glimpse.Core.Message.ITimelineMessage>)null);
 
             var timeline = new Timeline();
             var result = timeline.GetData(context) as TimelineModel;
@@ -75,19 +74,19 @@ namespace Glimpse.Test.AspNet.Tab
             Assert.NotNull(result);
             Assert.Equal(TimeSpan.FromMilliseconds(0), result.Duration);
             Assert.NotNull(result.Events);
-        } 
+        }
 
-        private IEnumerable<ITimelineMessage> BuildMessages()
+        private IEnumerable<Glimpse.Core.Message.ITimelineMessage> BuildMessages()
         {
-            return new List<ITimelineMessage>
+            return new List<Glimpse.Core.Message.ITimelineMessage>
                                {
-                                   new TestTimelineMessage { Duration = TimeSpan.FromMilliseconds(1), EventCategory = "Test1", EventName = "TestName1", EventSubText = "TestSub1", Offset = TimeSpan.FromMilliseconds(1), StartTime = DateTime.Now },
-                                   new TestTimelineMessage { Duration = TimeSpan.FromMilliseconds(4), EventCategory = "Test2", EventName = "TestName2", EventSubText = "TestSub2", Offset = TimeSpan.FromMilliseconds(3), StartTime = DateTime.Now },
-                                   new TestTimelineMessage { Duration = TimeSpan.FromMilliseconds(1), EventCategory = "Test3", EventName = "TestName3", EventSubText = "TestSub3", Offset = TimeSpan.FromMilliseconds(2), StartTime = DateTime.Now }
+                                   new TestTimelineMessage { Duration = TimeSpan.FromMilliseconds(1), EventCategory = Glimpse.Core.Message.Timeline.Request, EventName = "TestName1", EventSubText = "TestSub1", Offset = TimeSpan.FromMilliseconds(1), StartTime = DateTime.Now },
+                                   new TestTimelineMessage { Duration = TimeSpan.FromMilliseconds(4), EventCategory = Glimpse.Core.Message.Timeline.Other, EventName = "TestName2", EventSubText = "TestSub2", Offset = TimeSpan.FromMilliseconds(3), StartTime = DateTime.Now },
+                                   new TestTimelineMessage { Duration = TimeSpan.FromMilliseconds(1), EventCategory = Glimpse.Core.Message.Timeline.Request, EventName = "TestName3", EventSubText = "TestSub3", Offset = TimeSpan.FromMilliseconds(2), StartTime = DateTime.Now }
                                };
         }
 
-        public class TestTimelineMessage : ITimelineMessage
+        public class TestTimelineMessage : Glimpse.Core.Message.ITimelineMessage
         {
             public Guid Id { get; set; }
 
@@ -97,7 +96,7 @@ namespace Glimpse.Test.AspNet.Tab
 
             public string EventName { get; set; }
 
-            public string EventCategory { get; set; }
+            public Glimpse.Core.Message.TimelineCategory EventCategory { get; set; }
 
             public string EventSubText { get; set; }
 

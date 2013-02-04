@@ -97,6 +97,9 @@
     <Compile Include="Extensibility\JsonNetConverterDictionaryKeysAreNotPropertyNames.cs" />
     <Compile Include="Extensibility\RuntimePolicy.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Message\TimelineCategoryOther.cs" />
+    <Compile Include="Message\TimelineCategory.cs" />
+    <Compile Include="Message\TimelineCategoryRequest.cs" />
     <Compile Include="Message\MessageBase.cs" />
     <Compile Include="Extensibility\NuGetPackageAttribute.cs" />
     <Compile Include="Extensibility\ResourceParameterMetadata.cs" />
@@ -183,6 +186,7 @@
     <Compile Include="Message\ITimeMessage.cs" />
     <Compile Include="Message\ITimelineMessage.cs" />
     <Compile Include="Message\PointTimelineMessage.cs" />
+    <Compile Include="Message\Timeline.cs" />
     <Compile Include="Message\TimelineMessage.cs" />
     <Compile Include="Message\TimeMessage.cs" />
     <Compile Include="Model\TimelineCategoryModel.cs" />

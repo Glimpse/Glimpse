@@ -61,7 +61,7 @@ namespace Glimpse.Mvc.AlternateImplementation
                     : base(timerResult, GetControllerName(arguments.ViewContext.Controller), GetActionName(arguments.ViewContext.Controller), GetIsChildAction(arguments.ViewContext.Controller), executedType, method)
                 {
                     EventName = string.Format("Render:View - {0}:{1}", ControllerName, ActionName);
-                    EventCategory = "View"; 
+                    EventCategory = Mvc.Message.Timeline.View; 
                     Input = arguments; 
                     BaseType = baseType;
                     ViewCorrelation = viewCorrelation;

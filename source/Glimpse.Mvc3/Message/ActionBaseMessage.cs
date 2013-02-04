@@ -10,7 +10,7 @@ namespace Glimpse.Mvc.Message
 {
     public class ActionBaseMessage : TimelineMessage, IActionBaseMessage
     {
-        public ActionBaseMessage(TimerResult timerResult, bool isChildAction, Type executedType, MethodInfo method, string eventName = null, string eventCategory = null)
+        public ActionBaseMessage(TimerResult timerResult, bool isChildAction, Type executedType, MethodInfo method, string eventName = null, TimelineCategory eventCategory = null)
             : base(timerResult, executedType, method, eventName, eventCategory)
         {
             IsChildAction = isChildAction;

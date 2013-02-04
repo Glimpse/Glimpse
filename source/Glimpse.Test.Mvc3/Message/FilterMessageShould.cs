@@ -27,7 +27,7 @@ namespace Glimpse.Test.Mvc3.Message
         }
 
         [Theory, AutoMock]
-        public void BuildDetails(TimerResult timerResult, FilterCategory filterCategory, Type resultType, bool isChildAction, Type executedType, MethodInfo method, string eventName, string eventCategory)
+        public void BuildDetails(TimerResult timerResult, FilterCategory filterCategory, Type resultType, bool isChildAction, Type executedType, MethodInfo method, string eventName, Core.Message.TimelineCategory eventCategory)
         {
             var message = new FilterMessage(timerResult, filterCategory, resultType, isChildAction, executedType, method, eventName, eventCategory);
 

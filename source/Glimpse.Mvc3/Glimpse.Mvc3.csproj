@@ -98,6 +98,10 @@
     <Compile Include="Message\IActionBaseMessage.cs" />
     <Compile Include="Message\IExecutionMessage.cs" />
     <Compile Include="Message\IFilterMessage.cs" />
+    <Compile Include="Message\TimelineCategories.cs" />
+    <Compile Include="Message\TimelineCategoryController.cs" />
+    <Compile Include="Message\TimelineCategoryFilter.cs" />
+    <Compile Include="Message\TimelineCategoryView.cs" />
     <Compile Include="Model\DefaultValueModel.cs" />
     <Compile Include="Model\ExecutionModel.cs" />
     <Compile Include="Model\MetadataContentModel.cs" />
