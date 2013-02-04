@@ -12,7 +12,7 @@ namespace Glimpse.Core.Tab
     {
         private readonly IDictionary<string, TimelineCategoryModel> categories = new Dictionary<string, TimelineCategoryModel>
                            {
-                               { "ASP.NET", new TimelineCategoryModel { EventColor = "#AF78DD", EventColorHighlight = "#823BBE" } },
+                               { "Common", new TimelineCategoryModel { EventColor = "#AF78DD", EventColorHighlight = "#823BBE" } },
                                { "Controller", new TimelineCategoryModel { EventColor = "#FDBF45", EventColorHighlight = "#DDA431" } },
                                { "Filter", new TimelineCategoryModel { EventColor = "#72A3E4", EventColorHighlight = "#5087CF" } }, 
                                { "View", new TimelineCategoryModel { EventColor = "#10E309", EventColorHighlight = "#0EC41D" } }, 
