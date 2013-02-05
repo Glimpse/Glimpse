@@ -6,7 +6,7 @@ namespace Glimpse.Core.Extensibility
     public interface IHtmlEncoder
     {
         /// <summary>
-        /// Encode a given value for use as a html attribute value.
+        /// Encode a given value for use as an Html attribute.
         /// </summary>
         /// <param name="input">The input.</param>
         /// <returns>Encoded result.</returns>

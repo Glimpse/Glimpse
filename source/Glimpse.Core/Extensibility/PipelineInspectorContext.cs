@@ -2,8 +2,20 @@ using System;
 
 namespace Glimpse.Core.Extensibility
 {
+    /// <summary>
+    /// The context passed into the <c>Setup</c> method of <see cref="IPipelineInspector"/>.
+    /// </summary>
     public class PipelineInspectorContext : IPipelineInspectorContext
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PipelineInspectorContext" /> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="proxyFactory">The proxy factory.</param>
+        /// <param name="messageBroker">The message broker.</param>
+        /// <param name="timerStrategy">The timer strategy.</param>
+        /// <param name="runtimePolicyStrategy">The runtime policy strategy.</param>
+        /// <exception cref="System.ArgumentNullException">Throws an exception if any parameter if <c>null</c>.</exception>
         public PipelineInspectorContext(ILogger logger, IProxyFactory proxyFactory, IMessageBroker messageBroker, Func<IExecutionTimer> timerStrategy, Func<RuntimePolicy> runtimePolicyStrategy)
         {
             if (logger == null)
@@ -38,14 +50,44 @@ namespace Glimpse.Core.Extensibility
             RuntimePolicyStrategy = runtimePolicyStrategy;
         }
 
+        /// <summary>
+        /// Gets the logger.
+        /// </summary>
+        /// <value>
+        /// The logger.
+        /// </value>
         public ILogger Logger { get; set; }
-        
+
+        /// <summary>
+        /// Gets the proxy factory.
+        /// </summary>
+        /// <value>
+        /// The proxy factory.
+        /// </value>
         public IProxyFactory ProxyFactory { get; set; }
-        
+
+        /// <summary>
+        /// Gets the timer strategy.
+        /// </summary>
+        /// <value>
+        /// The timer strategy.
+        /// </value>
         public Func<IExecutionTimer> TimerStrategy { get; set; }
-        
+
+        /// <summary>
+        /// Gets the message broker.
+        /// </summary>
+        /// <value>
+        /// The message broker.
+        /// </value>
         public IMessageBroker MessageBroker { get; set; }
-        
+
+        /// <summary>
+        /// Gets the runtime policy strategy.
+        /// </summary>
+        /// <value>
+        /// The runtime policy strategy.
+        /// </value>
         public Func<RuntimePolicy> RuntimePolicyStrategy { get; set; }
     }
 }
