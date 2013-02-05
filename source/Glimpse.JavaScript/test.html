@@ -76,6 +76,8 @@
         <div class="glimpse"><div class="sample25 glimpse-panel"></div></div> 
         <h4>Scenario 26 (Pass)</h4>
         <div class="glimpse"><div class="sample26 glimpse-panel"></div></div> 
+        <h4>Scenario 27 (Pass)</h4>
+        <div class="glimpse"><div class="sample27 glimpse-panel"></div></div> 
     </div>
 
     <script src="./glimpse.js" type="text/javascript"></script>
@@ -816,6 +818,7 @@ glimpse.tab.register(args);
     process($('.sample25'), data25, metaData25);
     processFunction($('.sample25'), 'Custom Engine - data25Engine', data25Engine.build);
     
+
     var data26 = {
         'Movie': 'Star Wars',
         'Genera/Theme': [ 
@@ -842,6 +845,39 @@ glimpse.tab.register(args);
     };
     processHeading($('.sample26'), 'Process custom layout object with all heading suppressed');
     process($('.sample26'), data26, metaData26);
+    
+
+    var data27 = [
+        ['Actor', 'Character', 'Gender', 'Age', 'Children' ],
+        ['Mark Hamill', 'Luke Skywalker', 'Male', '21', null ],
+        ['James Earl Jones', 'Darth Vader', 'Male', '45', [
+                ['Actor', 'Character', 'Gender', 'Age'],
+                ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+                ['Harrison Ford', 'Han Solo', 'Male', '25'],
+                ['Carrie Fisher', 'Princess Leia Organa', 'Female', '21'],
+                ['Peter Cushing', 'Grand Moff Tarkin', 'Female', '69'],
+                ['Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70'],
+                ['Anthony Daniels', 'C-3PO', 'Droid', '101'],
+                ['Kenny Baker', 'R2-D2', 'Droid', '150']
+            ] ],
+        ['Carrie Fisher', 'Princess Leia Organa', 'Female', '21', [
+                ['Actor', 'Character', 'Gender', 'Age'],
+                ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
+                ['James Earl Jones', 'Darth Vader', 'Male', '45']
+            ]], 
+        ['Alec Guinness', 'Ben Obi-Wan Kenobi', 'Female', '70', null ]
+    ];
+    var metaData27 = { layout: [
+        [ 
+            { data : 0, width : '30%', key : true }, { data : 1, width : '30%' }, { data : 2, width : '20%' }, { data : 3, width : '20%' }
+        ],
+        [
+            { data : 4, minDisplay : true, span : 4, suppressHeader : true, forceFull: true, layout : [ [ { data : 0, width : '30%', key : true }, { data : 1, width : '30%' }, { data : 2, width : '20%' }, { data : 3, width : '20%' } ] ] }
+        ]
+    ]}; 
+    processHeading($('.sample27'), 'Simulate parent/child layout');
+    process($('.sample27'), data27, metaData27);
 
 })(jQueryGlimpse);
     </script>
