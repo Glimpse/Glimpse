@@ -1,3 +1,5 @@
+[![Build Status](http://teamcity.codebetter.com/app/rest/builds/buildType:%28id:bt428%29/statusIcon)](http://teamcity.codebetter.com/viewType.html?buildTypeId=bt428&guest=1)
+
 A client side Glimpse into whats going on in your server 
 
 Overview
