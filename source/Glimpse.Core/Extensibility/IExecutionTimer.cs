@@ -10,7 +10,7 @@ namespace Glimpse.Core.Extensibility
         /// <summary>
         /// Points this instance.
         /// </summary>
-        /// <returns>TimerResult.</returns>
+        /// <returns>A <see cref="TimerResult"/> which represents a single point in time.</returns>
         TimerResult Point();
 
         /// <summary>

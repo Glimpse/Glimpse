@@ -51,7 +51,7 @@ namespace Glimpse.Core.Extensibility
         }
 
         /// <summary>
-        /// Gets the logger.
+        /// Gets or sets the logger.
         /// </summary>
         /// <value>
         /// The logger.
@@ -59,7 +59,7 @@ namespace Glimpse.Core.Extensibility
         public ILogger Logger { get; set; }
 
         /// <summary>
-        /// Gets the proxy factory.
+        /// Gets or sets the proxy factory.
         /// </summary>
         /// <value>
         /// The proxy factory.
@@ -67,7 +67,7 @@ namespace Glimpse.Core.Extensibility
         public IProxyFactory ProxyFactory { get; set; }
 
         /// <summary>
-        /// Gets the timer strategy.
+        /// Gets or sets the timer strategy.
         /// </summary>
         /// <value>
         /// The timer strategy.
@@ -75,7 +75,7 @@ namespace Glimpse.Core.Extensibility
         public Func<IExecutionTimer> TimerStrategy { get; set; }
 
         /// <summary>
-        /// Gets the message broker.
+        /// Gets or sets the message broker.
         /// </summary>
         /// <value>
         /// The message broker.
@@ -83,7 +83,7 @@ namespace Glimpse.Core.Extensibility
         public IMessageBroker MessageBroker { get; set; }
 
         /// <summary>
-        /// Gets the runtime policy strategy.
+        /// Gets or sets the runtime policy strategy.
         /// </summary>
         /// <value>
         /// The runtime policy strategy.

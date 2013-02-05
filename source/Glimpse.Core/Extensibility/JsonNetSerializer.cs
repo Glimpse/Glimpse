@@ -49,7 +49,7 @@ namespace Glimpse.Core.Extensibility
         /// transformations on given types when processed.
         /// </summary>
         /// <param name="converters">The converters.</param>
-        /// <exception cref="System.ArgumentNullException">converters</exception>
+        /// <exception cref="System.ArgumentNullException">Throws an exception if <paramref name="converters"/> is <c>null</c>.</exception>
         public void RegisterSerializationConverters(IEnumerable<ISerializationConverter> converters)
         {
             if (converters == null)

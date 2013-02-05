@@ -32,7 +32,7 @@ namespace Glimpse.Core.Extensibility
         /// Initializes a new instance of the <see cref="AlternateMethod" /> class.
         /// </summary>
         /// <param name="methodToImplement">The method to implement.</param>
-        /// <exception cref="System.ArgumentNullException">methodToImplement</exception>
+        /// <exception cref="System.ArgumentNullException">Throws an exception if <paramref name="methodToImplement"/> is <c>null</c>.</exception>
         protected AlternateMethod(MethodInfo methodToImplement)
         {
             if (methodToImplement == null)

@@ -29,7 +29,7 @@ namespace Glimpse.Core.Resource
         public string ResourceType { get; set; }
 
         /// <summary>
-        /// Gets the name of the resource.
+        /// Gets or sets the name of the resource.
         /// </summary>
         /// <value>
         /// The name.
@@ -39,6 +39,12 @@ namespace Glimpse.Core.Resource
         /// </remarks>
         public string Name { get; protected set; }
 
+        /// <summary>
+        /// Gets the required or optional parameters that a resource needs as processing input.
+        /// </summary>
+        /// <value>
+        /// The parameters.
+        /// </value>
         public virtual IEnumerable<ResourceParameterMetadata> Parameters
         {
             get { return new[] { ResourceParameter.VersionNumber }; }
@@ -65,7 +71,7 @@ namespace Glimpse.Core.Resource
         /// <returns>
         ///   <see cref="IResourceResult" /> that can be executed when the Http response is ready to be returned.
         /// </returns>
-        /// <exception cref="System.ArgumentNullException">context</exception>
+        /// <exception cref="System.ArgumentNullException">Throws an exception if <paramref name="context "/> is <c>null</c>.</exception>
         public IResourceResult Execute(IResourceContext context)
         {
             if (context == null)

@@ -3,7 +3,7 @@ using System;
 namespace Glimpse.Core.Extensibility
 {
     /// <summary>
-    /// An abstract base class which provides <see cref="ILogger"/> implementations with message formating abilities.
+    /// An abstract base class which provides <see cref="ILogger"/> implementations with message formatting abilities.
     /// </summary>
     public abstract class LoggerBase : ILogger
     {

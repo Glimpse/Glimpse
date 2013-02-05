@@ -18,7 +18,7 @@
         /// <remarks>
         /// Executed during the <see cref="Glimpse.Core.Framework.IGlimpseRuntime.Initialize"/> phase of 
         /// system startup. Specifically, with the ASP.NET provider, this is wired to/implemented by the 
-        /// <see cref="System.Web.IHttpModule.Init"/> method.
+        /// <c>System.Web.IHttpModule.Init</c> method.
         /// </remarks>
         void Setup(IPipelineInspectorContext context);
     }

@@ -13,7 +13,7 @@ namespace Glimpse.Core.ResourceResult
         /// </summary>
         /// <param name="content">The content.</param>
         /// <param name="contentType">Type of the content.</param>
-        /// <exception cref="System.ArgumentNullException">Exception thrown if either <paramref name="context"/> or <paramref name="contentType"/> are <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">Exception thrown if either <paramref name="content"/> or <paramref name="contentType"/> are <c>null</c>.</exception>
         public FileResourceResult(byte[] content, string contentType)
         {
             if (content == null)

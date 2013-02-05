@@ -15,14 +15,14 @@ namespace Glimpse.Core.Framework
         /// <summary>
         /// Gets the instance.
         /// </summary>
-        /// <typeparam name="T">Type that this instance should be</typeparam>
+        /// <typeparam name="T">The type to be resolved and returned.</typeparam>
         /// <returns>The instance that matches are the input Type.</returns>
         T GetInstance<T>() where T : class;
 
         /// <summary>
         /// Gets all instances.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">The type to be resolved and a collection of returned.</typeparam>
         /// <returns>The instance that matches are the input Type.</returns>
         ICollection<T> GetAllInstances<T>() where T : class;
     }

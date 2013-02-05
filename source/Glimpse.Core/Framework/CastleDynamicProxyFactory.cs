@@ -254,7 +254,7 @@ namespace Glimpse.Core.Framework
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns>
-        ///   <c>true</c> if the type is elibible to be extended; otherwise, <c>false</c>.
+        ///   <c>true</c> if the type is eligible to be extended; otherwise, <c>false</c>.
         /// </returns>
         public bool IsExtendClassEligible(Type type)
         {

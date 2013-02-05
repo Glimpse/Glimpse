@@ -44,7 +44,7 @@ namespace Glimpse.Core.Extensibility
         }
 
         /// <summary>
-        /// Gets or sets access to the tab store. This is where content can be
+        /// Gets access to the tab store. This is where content can be
         /// stored within the context of each request.
         /// </summary>
         /// <value>

@@ -21,7 +21,7 @@ namespace Glimpse.Core.ResourceResult
         /// </summary>
         /// <param name="data">The data.</param>
         /// <param name="callback">The callback.</param>
-        /// <exception cref="System.ArgumentNullException">data</exception>
+        /// <exception cref="System.ArgumentNullException">An exception is thrown is <paramref name="data"/> is <c>null</c>.</exception>
         public JsonResourceResult(object data, string callback)
         {
             if (data == null)

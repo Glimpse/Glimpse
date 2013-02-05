@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace Glimpse.Core.Extensibility
 {
     /// <summary>
-    /// An adpter which converts Glimpse's <see cref="ISerializationConverter"/> to Json.Net <see cref="JsonConverter"/>.
+    /// An adapter which converts Glimpse's <see cref="ISerializationConverter"/> to Json.Net <see cref="JsonConverter"/>.
     /// </summary>
     public class JsonNetSerializationConverterAdapter : JsonConverter
     {
@@ -43,7 +43,7 @@ namespace Glimpse.Core.Extensibility
         /// <returns>
         /// The object value.
         /// </returns>
-        /// <exception cref="System.NotSupportedException"></exception>
+        /// <exception cref="System.NotSupportedException">An exception is thrown if this method is called because it it not supported by Glimpse.</exception>
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             throw new NotSupportedException();

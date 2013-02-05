@@ -123,7 +123,7 @@ namespace Glimpse.Core.Extensibility
         /// <param name="type">The type which declares the non-virtual member.</param>
         /// <param name="memberInfo">The non-virtual member.</param>
         /// <remarks>
-        /// This method gives an opportunity to inspect any non-proxyable member of a type that has
+        /// This method gives an opportunity to inspect any member which is not proxyable of a type that has
         /// been requested to be proxied, and if appropriate - throw an exception to notify the caller.
         /// </remarks>
         public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)

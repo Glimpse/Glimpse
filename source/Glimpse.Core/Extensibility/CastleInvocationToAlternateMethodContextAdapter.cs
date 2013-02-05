@@ -68,7 +68,7 @@ namespace Glimpse.Core.Extensibility
         public IInvocation Invocation { get; set; }
 
         /// <summary>
-        /// Gets the logger.
+        /// Gets or sets the logger.
         /// </summary>
         /// <value>
         /// The logger.
