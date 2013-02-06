@@ -103,7 +103,7 @@ task merge -depends test {
     
 }
 
-task pack -depends merge, docs {
+task pack -depends merge {
     "Packing"
     
     cd $base_dir\.NuGet
