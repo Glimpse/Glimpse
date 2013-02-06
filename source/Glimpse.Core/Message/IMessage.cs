@@ -7,8 +7,8 @@ namespace Glimpse.Core.Message
     {
         Guid Id { get; }
 
-        Type ExecutedType { get; }
+        Type ExecutedType { get; } // TODO: Does this belong here?
 
-        MethodInfo ExecutedMethod { get; } 
+        MethodInfo ExecutedMethod { get; } // TODO: Does this belong here?
     }
 }

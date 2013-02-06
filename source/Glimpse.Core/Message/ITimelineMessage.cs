@@ -2,7 +2,7 @@
 
 namespace Glimpse.Core.Message
 {
-    public interface ITimelineMessage : ITimeMessage
+    public interface ITimelineMessage : ITimedMessage
     {
         string EventName { get; }
         

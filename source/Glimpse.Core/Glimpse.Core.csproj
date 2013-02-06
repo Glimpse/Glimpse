@@ -183,9 +183,8 @@
     <Compile Include="Framework\GlimpseConfiguration.cs" />
     <Compile Include="Framework\GlimpseRuntime.cs" />
     <Compile Include="Message\IMessage.cs" />
-    <Compile Include="Message\ITimeMessage.cs" />
+    <Compile Include="Message\ITimedMessage.cs" />
     <Compile Include="Message\ITimelineMessage.cs" />
-    <Compile Include="Message\PointTimelineMessage.cs" />
     <Compile Include="Message\Timeline.cs" />
     <Compile Include="Message\TimelineMessage.cs" />
     <Compile Include="Message\TimeMessage.cs" />
@@ -257,6 +256,7 @@
     <Compile Include="Tab\Timeline.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="NuSpec\Glimpse.nuspec">
       <SubType>Designer</SubType>
     </None>

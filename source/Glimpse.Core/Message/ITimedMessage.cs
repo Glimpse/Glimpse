@@ -2,7 +2,7 @@ using System;
 
 namespace Glimpse.Core.Message
 {
-    public interface ITimeMessage : IMessage
+    public interface ITimedMessage : IMessage
     {
         TimeSpan Offset { get; }
 

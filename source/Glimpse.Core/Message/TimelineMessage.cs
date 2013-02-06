@@ -20,7 +20,12 @@ namespace Glimpse.Core.Message
         public TimelineCategory EventCategory { get; protected set; }
 
         public string EventSubText { get; protected set; }
-        
+
+        public static TimelineMessage Point(TimerResult timerResult, Type executedType, MethodInfo executedMethod, string eventName, TimelineCategory eventCategory)
+        {
+            return new TimelineMessage(timerResult, executedType, executedMethod, eventName, eventCategory);
+        }
+
         public virtual void BuildDetails(IDictionary<string, object> details)
         { 
         }
