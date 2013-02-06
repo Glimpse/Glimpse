@@ -17,6 +17,7 @@
     </metadata>
     <files>
         <!--<file src="tools\*.*" target="tools" />-->
+        <file src="docs\*.*" target="docs" />
         <file src="lib\net35\*.*" target="lib\net35" />
         <file src="lib\net40\*.*" target="lib\net40" />
         <file src="..\**\*.cs" target="src" />

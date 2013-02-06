@@ -272,6 +272,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="NuSpec\docs\" />
     <Folder Include="NuSpec\lib\net35\" />
     <Folder Include="NuSpec\lib\net40\" />
   </ItemGroup>
