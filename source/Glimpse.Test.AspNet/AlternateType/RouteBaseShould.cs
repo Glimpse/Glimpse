@@ -10,19 +10,12 @@ namespace Glimpse.Test.AspNet.AlternateType
     public class RouteBaseShould
     {
         [Theory, AutoMock]
-        public void ReturnOneMethod(IProxyFactory proxyFactory)
+        public void ReturnOneMethod(IProxyFactory proxyFactory, ILogger logger)
         {
-            AlternateType<System.Web.Routing.RouteBase> alternationImplementation = new RouteBase(proxyFactory);
+            var alternationImplementation = new RouteBase(proxyFactory, logger);
 
-            Assert.Equal(2, alternationImplementation.AllMethods.Count());
-        }
-
-        [Theory, AutoMock]
-        public void SetProxyFactory(IProxyFactory proxyFactory)
-        {
-            AlternateType<System.Web.Routing.RouteBase> alternationImplementation = new RouteBase(proxyFactory);
-
-            Assert.Equal(proxyFactory, alternationImplementation.ProxyFactory);
-        }
+            Assert.Equal(2, alternationImplementation.AllMethodsRouteBase.Count());
+            Assert.Equal(3, alternationImplementation.AllMethodsRoute.Count());
+        } 
     }
 }

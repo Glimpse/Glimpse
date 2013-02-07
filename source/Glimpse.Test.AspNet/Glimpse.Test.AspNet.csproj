@@ -66,7 +66,6 @@
     <Compile Include="AlternateType\RouteConstraintRegexShould.cs" />
     <Compile Include="AlternateType\RouteConstraintShould.cs" />
     <Compile Include="AlternateType\RouteProcessConstraintShould.cs" />
-    <Compile Include="AlternateType\RouteShould.cs" />
     <Compile Include="AspNetFrameworkProviderShould.cs" />
     <Compile Include="HttpApplicationStateBaseDataAdapterShould.cs" />
     <Compile Include="HttpHandlerShould.cs" />
@@ -74,7 +73,6 @@
     <Compile Include="IResourceEndpointConfiguration.cs" />
     <Compile Include="Model\RequestModelShould.cs" />
     <Compile Include="Model\RouteModelShould.cs" />
-    <Compile Include="PipelineInspector\RoutesConstraintsInspectorShould.cs" />
     <Compile Include="PipelineInspector\RoutesInspectorShould.cs" />
     <Compile Include="PipelineInspector\TraceInspectorShould.cs" />
     <Compile Include="Policy\LocalPolicyShould.cs" />

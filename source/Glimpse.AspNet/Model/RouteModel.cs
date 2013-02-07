@@ -18,5 +18,7 @@ namespace Glimpse.AspNet.Model
         public IDictionary<string, object> DataTokens { get; set; } 
 
         public TimeSpan Duration { get; set; }
+
+        public string Name { get; set; }
     }
 }

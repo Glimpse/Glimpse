@@ -14,7 +14,7 @@ namespace Glimpse.Test.AspNet.AlternateType
         [Fact]
         public void ReturnProperMethodToImplement()
         {
-            var impl = new Route.ProcessConstraint();
+            var impl = new RouteBase.ProcessConstraint();
 
             Assert.Equal("ProcessConstraint", impl.MethodToImplement.Name);
         }
@@ -24,7 +24,7 @@ namespace Glimpse.Test.AspNet.AlternateType
         {
             context.Setup(c => c.RuntimePolicyStrategy).Returns(() => RuntimePolicy.Off);
 
-            var impl = new Route.ProcessConstraint();
+            var impl = new RouteBase.ProcessConstraint();
 
             impl.NewImplementation(context);
 
@@ -38,12 +38,12 @@ namespace Glimpse.Test.AspNet.AlternateType
             context.Setup(c => c.ReturnValue).Returns(true);
             context.Setup(c => c.InvocationTarget).Returns(new System.Web.Routing.Route("Test", null));
 
-            var impl = new Route.ProcessConstraint();
+            var impl = new RouteBase.ProcessConstraint();
 
             impl.NewImplementation(context);
 
             timer.Verify(t => t.Time(It.IsAny<Action>()));
-            context.MessageBroker.Verify(mb => mb.Publish(It.IsAny<Route.ProcessConstraint.Message>()));
+            context.MessageBroker.Verify(mb => mb.Publish(It.IsAny<RouteBase.ProcessConstraint.Message>()));
         }
     }
 }

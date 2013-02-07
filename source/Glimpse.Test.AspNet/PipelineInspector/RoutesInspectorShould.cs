@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics; 
-using System.Web; 
+using System.Web;
+using System.Web.Routing;
+using Glimpse.AspNet.AlternateType;
 using Glimpse.AspNet.PipelineInspector;
-using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework; 
 using Glimpse.Test.Common;
@@ -28,7 +29,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
         }
          
         [Theory, AutoMock]
-        public void IntergrationTestRouteProxing(System.Web.Routing.IRouteHandler routeHandler, RoutesInspector sut, IPipelineInspectorContext context)
+        public void IntergrationTestRouteProxing(RoutesInspector sut, System.Web.Routing.IRouteHandler routeHandler, IPipelineInspectorContext context)
         {
             MvcRouteTable.Routes.Clear();
             MvcRouteTable.Routes.Add("Test", new MvcRoute("Test", routeHandler));
@@ -73,12 +74,12 @@ namespace Glimpse.Test.AspNet.PipelineInspector
         }
 
         [Theory, AutoMock]
-        public void WrapsMvcRouteDerivedTypes(System.Web.Routing.IRouteHandler routeHandler, RoutesInspector sut, IPipelineInspectorContext context, NewRoute route, MvcRoute newRoute)
+        public void WrapsMvcRouteDerivedTypes(RoutesInspector sut, System.Web.Routing.IRouteHandler routeHandler, IPipelineInspectorContext context, NewRoute route, MvcRoute newRoute)
         {
             MvcRouteTable.Routes.Clear();
             MvcRouteTable.Routes.Add("Test", route);
 
-            context.ProxyFactory.Setup(x => x.IsWrapClassEligible(typeof(MvcRoute))).Returns(true);
+            context.ProxyFactory.Setup(x => x.IsWrapClassEligible(typeof(MvcRoute))).Returns(true).Verifiable();
             context.ProxyFactory.Setup(x => x.WrapClass((MvcRoute)route, It.IsAny<IEnumerable<IAlternateMethod>>(), It.IsAny<IEnumerable<object>>(), It.IsAny<object[]>())).Returns(newRoute).Verifiable();
 
             sut.Setup(context);
@@ -88,7 +89,7 @@ namespace Glimpse.Test.AspNet.PipelineInspector
         }
 
         [Theory, AutoMock]
-        public void WrapsMvcRouteBaseDerivedTypes(System.Web.Routing.IRouteHandler routeHandler, RoutesInspector sut, IPipelineInspectorContext context, NewRouteBase route, MvcRouteBase newRoute)
+        public void WrapsMvcRouteBaseDerivedTypes(RoutesInspector sut, System.Web.Routing.IRouteHandler routeHandler, IPipelineInspectorContext context, NewRouteBase route, MvcRouteBase newRoute)
         {
             MvcRouteTable.Routes.Clear();
             MvcRouteTable.Routes.Add("Test", route);
@@ -101,6 +102,43 @@ namespace Glimpse.Test.AspNet.PipelineInspector
             context.ProxyFactory.VerifyAll();
             Assert.Same(newRoute, MvcRouteTable.Routes[0]);
         }
+
+        [Theory, AutoMock]
+        public void ExtendsStringConstraints(RoutesInspector sut, IPipelineInspectorContext context, NewRoute route, MvcRoute newRoute, string routeConstraint)
+        {
+            route.Constraints = new RouteValueDictionary { { "controller", routeConstraint } };
+
+            MvcRouteTable.Routes.Clear();
+            MvcRouteTable.Routes.Add("Test", route);
+
+            context.ProxyFactory.Setup(x => x.IsWrapClassEligible(typeof(MvcRoute))).Returns(true).Verifiable();
+            context.ProxyFactory.Setup(x => x.WrapClass((MvcRoute)route, It.IsAny<IEnumerable<IAlternateMethod>>(), It.IsAny<IEnumerable<object>>(), It.IsAny<object[]>())).Returns(newRoute).Verifiable();
+
+            sut.Setup(context);
+
+            context.ProxyFactory.VerifyAll();
+            Assert.Same(typeof(RouteConstraintRegex), route.Constraints["controller"].GetType());
+        }
+         
+        [Theory, AutoMock]
+        public void ExtendsRouteConstraintConstraints(RoutesInspector sut, IPipelineInspectorContext context, NewRoute route, MvcRoute newRoute, IRouteConstraint routeConstraint, IRouteConstraint newRouteConstraint)
+        {
+            route.Constraints = new RouteValueDictionary { { "controller", routeConstraint } };
+
+            MvcRouteTable.Routes.Clear();
+            MvcRouteTable.Routes.Add("Test", route);
+
+            context.ProxyFactory.Setup(x => x.IsWrapClassEligible(typeof(MvcRoute))).Returns(true).Verifiable();
+            context.ProxyFactory.Setup(x => x.WrapClass((MvcRoute)route, It.IsAny<IEnumerable<IAlternateMethod>>(), It.IsAny<IEnumerable<object>>(), It.IsAny<object[]>())).Returns(newRoute).Verifiable();
+            context.ProxyFactory.Setup(x => x.IsWrapInterfaceEligible<IRouteConstraint>(typeof(IRouteConstraint))).Returns(true).Verifiable();
+            context.ProxyFactory.Setup(x => x.WrapInterface(routeConstraint, It.IsAny<IEnumerable<IAlternateMethod>>(), It.IsAny<IEnumerable<object>>())).Returns(newRouteConstraint).Verifiable();
+
+            sut.Setup(context);
+
+            context.ProxyFactory.VerifyAll();
+            Assert.Same(newRouteConstraint, route.Constraints["controller"]);
+        }
+
 
         public class NewRouteBase : MvcRouteBase
         {

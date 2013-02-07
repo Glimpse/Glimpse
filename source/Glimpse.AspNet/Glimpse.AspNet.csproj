@@ -44,7 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlternateType\IRouteNameMixin.cs" />
-    <Compile Include="AlternateType\Route.cs" />
     <Compile Include="AlternateType\RouteBase.cs" />
     <Compile Include="AlternateType\RouteConstraint.cs" />
     <Compile Include="AlternateType\RouteConstraintRegex.cs" />
@@ -88,7 +87,6 @@
     <Compile Include="Model\SessionModel.cs" />
     <Compile Include="Model\TraceModel.cs" />
     <Compile Include="Model\UriTokenInstance.cs" />
-    <Compile Include="PipelineInspector\RoutesConstraintInspector.cs" />
     <Compile Include="PipelineInspector\RoutesInspector.cs" />
     <Compile Include="Policy\LocalPolicy.cs" />
     <Compile Include="RequestMetadata.cs" />

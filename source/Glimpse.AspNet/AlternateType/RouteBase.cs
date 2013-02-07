@@ -1,43 +1,139 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
-using System.Web.Routing;
+using System.Web; 
+using Glimpse.AspNet.Message; 
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Message;
 
 namespace Glimpse.AspNet.AlternateType
 {
-    public class RouteBase : AlternateType<System.Web.Routing.RouteBase>
+    public class RouteBase : IAlternateType<System.Web.Routing.RouteBase>
     {
-        private IEnumerable<IAlternateMethod> allMethods;
+        private IEnumerable<IAlternateMethod> allMethodsRouteBase;
+        private IEnumerable<IAlternateMethod> allMethodsRoute;
+        private readonly RouteConstraint routeConstraintAlternate;
 
-        public RouteBase(IProxyFactory proxyFactory) : base(proxyFactory)
+        public RouteBase(IProxyFactory proxyFactory, ILogger logger)
         {
+            ProxyFactory = proxyFactory;
+            Logger = logger;
+            routeConstraintAlternate = new RouteConstraint(proxyFactory);
         }
 
-        public override IEnumerable<IAlternateMethod> AllMethods
+        public IEnumerable<IAlternateMethod> AllMethodsRouteBase
         {
-            get 
-            { 
-                return allMethods ?? (allMethods = new List<IAlternateMethod>
+            get
+            {
+                return allMethodsRouteBase ?? (allMethodsRouteBase = new List<IAlternateMethod>
                 {
                     new GetRouteData(typeof(System.Web.Routing.RouteBase)),
                     new GetVirtualPath(typeof(System.Web.Routing.RouteBase))
-                }); 
+                });
             }
         }
 
+        public IEnumerable<IAlternateMethod> AllMethodsRoute
+        {
+            get
+            {
+                return allMethodsRoute ?? (allMethodsRoute = new List<IAlternateMethod>
+                {
+                    new GetRouteData(typeof(System.Web.Routing.Route)),
+                    new GetVirtualPath(typeof(System.Web.Routing.Route)),
+                    new ProcessConstraint(),
+                });
+            }
+        }
+
+        private IProxyFactory ProxyFactory { get; set; }
+
+        private ILogger Logger { get; set; }
+
+        public bool TryCreate(System.Web.Routing.RouteBase originalObj, out System.Web.Routing.RouteBase newObj)
+        {
+            return TryCreate(originalObj, out newObj, null, null);
+        }
+
+        public bool TryCreate(System.Web.Routing.RouteBase originalObj, out System.Web.Routing.RouteBase newObj, IEnumerable<object> mixins)
+        {
+            return TryCreate(originalObj, out newObj, mixins, null);
+        }
+
+        public bool TryCreate(System.Web.Routing.RouteBase originalObj, out System.Web.Routing.RouteBase newObj, IEnumerable<object> mixins, object[] constructorArguments)
+        {
+            newObj = null;
+
+            var route = originalObj as System.Web.Routing.Route;
+            if (route != null)
+            {
+                if (originalObj.GetType() == typeof(System.Web.Routing.Route))
+                {
+                    newObj = ProxyFactory.ExtendClass<System.Web.Routing.Route>(AllMethodsRoute, mixins, new object[] { route.Url, route.Defaults, route.Constraints, route.DataTokens, route.RouteHandler });
+                }
+                else if (ProxyFactory.IsWrapClassEligible(typeof(System.Web.Routing.Route)))
+                {
+                    newObj = ProxyFactory.WrapClass(route, AllMethodsRoute, mixins, new object[] { route.Url, route.Defaults, route.Constraints, route.DataTokens, route.RouteHandler });
+                    SetupConstraints(Logger, ProxyFactory, route.Constraints);
+                }
+            }
+
+            if (newObj == null)
+            {
+                if (ProxyFactory.IsWrapClassEligible(typeof(System.Web.Routing.RouteBase)))
+                {
+                    newObj = ProxyFactory.WrapClass(originalObj, AllMethodsRouteBase, mixins);
+                }
+            }
+
+            return newObj != null;
+        }
+         
+        private void SetupConstraints(ILogger logger, IProxyFactory proxyFactory, System.Web.Routing.RouteValueDictionary constraints)
+        {
+            if (constraints != null)
+            {
+                var keys = constraints.Keys.ToList();
+                for (var i = 0; i < keys.Count; i++)
+                {
+                    var constraintKey = keys[i];
+                    var constraint = constraints[constraintKey];
+
+                    var originalObj = constraint as System.Web.Routing.IRouteConstraint;
+                    var newObj = (System.Web.Routing.IRouteConstraint)null;
+                    if (originalObj == null)
+                    {
+                        var stringRouteConstraint = constraint as string;
+                        if (stringRouteConstraint != null)
+                        {
+                            newObj = new RouteConstraintRegex(stringRouteConstraint);
+                        }
+                    }
+                    else
+                    {
+                        routeConstraintAlternate.TryCreate(originalObj, out newObj);
+                    }
+
+                    if (newObj != null)
+                    {
+                        constraints[constraintKey] = newObj;
+                        logger.Info(Resources.RouteSetupReplacedRoute, constraint.GetType());
+                    }
+                    else
+                    {
+                        logger.Info(Resources.RouteSetupNotReplacedRoute, constraint.GetType());
+                    } 
+                }
+            }
+        }
+         
         public class GetRouteData : AlternateMethod
         {
             public GetRouteData(Type type)
-                : this(type, "GetRouteData", BindingFlags.Public | BindingFlags.Instance)
+                : base(type, "GetRouteData", BindingFlags.Public | BindingFlags.Instance)
             {
-            }
-
-            private GetRouteData(Type type, string methodName, BindingFlags bindingFlags)
-                : base(type, methodName, bindingFlags)
-            {
-            }
+            } 
 
             public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
             {
@@ -61,7 +157,7 @@ namespace Glimpse.AspNet.AlternateType
                     }
                 }
 
-                public RouteValueDictionary Values { get; protected set; }
+                public System.Web.Routing.RouteValueDictionary Values { get; protected set; }
 
                 public int RouteHashCode { get; protected set; }
 
@@ -74,14 +170,9 @@ namespace Glimpse.AspNet.AlternateType
         public class GetVirtualPath : AlternateMethod
         {
             public GetVirtualPath(Type type)
-                : this(type, "GetVirtualPath", BindingFlags.Public | BindingFlags.Instance)
+                : base(type, "GetVirtualPath", BindingFlags.Public | BindingFlags.Instance)
             {
-            }
-
-            private GetVirtualPath(Type type, string methodName, BindingFlags bindingFlags)
-                : base(type, methodName, bindingFlags)
-            {
-            }
+            } 
 
             public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
             {
@@ -113,6 +204,49 @@ namespace Glimpse.AspNet.AlternateType
                 public int RouteHashCode { get; protected set; }
 
                 public bool IsMatch { get; protected set; }
+            }
+        }
+
+        public class ProcessConstraint : AlternateMethod
+        {
+            public ProcessConstraint()
+                : base(typeof(System.Web.Routing.Route), "ProcessConstraint", BindingFlags.NonPublic | BindingFlags.Instance)
+            {
+            }
+
+            public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
+            {
+                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), timerResult, context.InvocationTarget.GetType(), context.MethodInvocationTarget, context.InvocationTarget.GetHashCode(), (bool)context.ReturnValue));
+            }
+
+            public class Arguments
+            {
+                public Arguments(object[] args)
+                {
+                    HttpContext = (HttpContextBase)args[0];
+                    Constraint = args[1];
+                    ParameterName = (string)args[2];
+                    Values = (System.Web.Routing.RouteValueDictionary)args[3];
+                    RouteDirection = (System.Web.Routing.RouteDirection)args[4];
+                }
+
+                public HttpContextBase HttpContext { get; private set; }
+
+                public object Constraint { get; private set; }
+
+                public string ParameterName { get; private set; }
+
+                public System.Web.Routing.RouteValueDictionary Values { get; private set; }
+
+                public System.Web.Routing.RouteDirection RouteDirection { get; private set; }
+            }
+
+            public class Message : ProcessConstraintMessage
+            {
+                public Message(Arguments args, TimerResult timer, Type executedType, MethodInfo executedMethod, int routeHashCode, bool isMatch)
+                    : base(timer, executedType, executedMethod, routeHashCode, args.Constraint.GetHashCode(), isMatch, args.ParameterName, args.Constraint, args.Values, args.RouteDirection)
+                {
+                }
             }
         }
     }
