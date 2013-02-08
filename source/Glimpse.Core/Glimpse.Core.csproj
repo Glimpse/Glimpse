@@ -99,6 +99,7 @@
     <Compile Include="Extensibility\RuntimePolicy.cs" />
     <Compile Include="Extensibility\Subscriber.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Message\ISourceMessage.cs" />
     <Compile Include="Message\TimelineCategoryOther.cs" />
     <Compile Include="Message\TimelineCategory.cs" />
     <Compile Include="Message\TimelineCategoryRequest.cs" />
@@ -186,8 +187,6 @@
     <Compile Include="Message\ITimedMessage.cs" />
     <Compile Include="Message\ITimelineMessage.cs" />
     <Compile Include="Message\Timeline.cs" />
-    <Compile Include="Message\TimelineMessage.cs" />
-    <Compile Include="Message\TimeMessage.cs" />
     <Compile Include="Model\TimelineCategoryModel.cs" />
     <Compile Include="Model\TimelineEventModel.cs" />
     <Compile Include="Model\TimelineModel.cs" />

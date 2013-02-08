@@ -7,7 +7,7 @@ using Glimpse.Core.Message;
 
 namespace Glimpse.Mvc.Message
 {
-    public interface IExecutionMessage : ISourceMessage, IChildActionMessage, ITimelineMessage
+    public interface IInvokeActionResultMessage : IMessage
     {
     }
 }

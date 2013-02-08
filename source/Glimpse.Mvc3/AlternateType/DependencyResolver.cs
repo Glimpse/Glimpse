@@ -36,13 +36,15 @@ namespace Glimpse.Mvc.AlternateType
             
             public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
             {
-                context.MessageBroker.Publish(new Message(context.TargetType, context.MethodInvocationTarget, (Type)context.Arguments[0], context.ReturnValue));
+                var message = new Message((Type)context.Arguments[0], context.ReturnValue)
+                    .AsSourceMessage(context.TargetType, context.MethodInvocationTarget);
+
+                context.MessageBroker.Publish(message);
             }
 
-            public class Message : MessageBase
+            public class Message : MessageBase, ISourceMessage
             {
-                public Message(Type executedType, MethodInfo executedMethod, Type serviceType, object resolvedObject)
-                    : base(executedType, executedMethod)
+                public Message(Type serviceType, object resolvedObject)
                 {
                     ServiceType = serviceType;
                     
@@ -58,6 +60,10 @@ namespace Glimpse.Mvc.AlternateType
                 public Type ResolvedType { get; set; }
                 
                 public bool IsResolved { get; set; }
+
+                public Type ExecutedType { get; set; }
+
+                public MethodInfo ExecutedMethod { get; set; }
             }
         }
 
@@ -69,13 +75,15 @@ namespace Glimpse.Mvc.AlternateType
 
             public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
             {
-                context.MessageBroker.Publish(new Message(context.TargetType, context.MethodInvocationTarget, (Type)context.Arguments[0], (IEnumerable<object>)context.ReturnValue));
+                var message = new Message((Type)context.Arguments[0], (IEnumerable<object>)context.ReturnValue)
+                    .AsSourceMessage(context.TargetType, context.MethodInvocationTarget);
+
+                context.MessageBroker.Publish(message);
             }
 
-            public class Message : MessageBase
+            public class Message : MessageBase, ISourceMessage
             {
-                public Message(Type executedType, MethodInfo executedMethod, Type serviceType, IEnumerable<object> resolvedObjects)
-                    : base(executedType, executedMethod)
+                public Message(Type serviceType, IEnumerable<object> resolvedObjects)
                 {
                     ServiceType = serviceType;
 
@@ -91,6 +99,10 @@ namespace Glimpse.Mvc.AlternateType
                 public IEnumerable<Type> ResolvedTypes { get; set; }
                 
                 public bool IsResolved { get; set; }
+
+                public Type ExecutedType { get; set; }
+
+                public MethodInfo ExecutedMethod { get; set; }
             }
         }
     }

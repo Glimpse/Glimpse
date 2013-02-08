@@ -36,10 +36,15 @@ namespace Glimpse.Mvc.AlternateType
             }
 
             public override void PostImplementation(IAlternateMethodContext context, TimerResult timing)
-            { 
+            {
                 var mixin = context.Proxy as IViewCorrelationMixin;
+                var args = new Arguments(context.Arguments);
+                var message = new Message(args.ViewContext.ViewData.Model.GetTypeOrNull(), args.ViewContext.ViewData.ModelState.IsValid, args.ViewContext.TempData, args.ViewContext.ViewData, args.ViewContext.ViewData.ModelMetadata, context.TargetType, mixin)
+                    .AsActionMessage(args.ViewContext.Controller)
+                    .AsTimedMessage(timing)
+                    .AsMvcTimelineMessage(Glimpse.Mvc.Message.Timeline.View);
 
-                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), context.InvocationTarget.GetType(), context.MethodInvocationTarget, timing, context.TargetType, mixin));
+                context.MessageBroker.Publish(message);
             }
 
             public class Arguments
@@ -55,39 +60,49 @@ namespace Glimpse.Mvc.AlternateType
                 public TextWriter Writer { get; set; }
             }
 
-            public class Message : ActionMessage, ITimelineMessage
+            public class Message : MessageBase, IActionMessage, ITimelineMessage
             {
-                public Message(Arguments arguments, Type executedType, MethodInfo method, TimerResult timerResult, Type baseType, IViewCorrelationMixin viewCorrelation)
-                    : base(timerResult, GetControllerName(arguments.ViewContext.Controller), GetActionName(arguments.ViewContext.Controller), GetIsChildAction(arguments.ViewContext.Controller), executedType, method)
+                public Message(Type viewDataModelType, bool modelStateIsValid, IDictionary<string, object> tempData, IDictionary<string, object> viewData, ModelMetadata modelMetadata, Type baseType, IViewCorrelationMixin viewCorrelation)
                 {
-                    EventName = string.Format("Render:View - {0}:{1}", ControllerName, ActionName);
-                    EventCategory = Mvc.Message.Timeline.View; 
-                    Input = arguments; 
+                    ViewDataModelType = viewDataModelType;
+                    ModelStateIsValid = modelStateIsValid;
+                    TempData = tempData;
+                    ViewData = viewData;
+                    ModelMetadata = modelMetadata;
                     BaseType = baseType;
-                    ViewCorrelation = viewCorrelation;
-                    ViewData = arguments.ViewContext.ViewData;
-                    TempData = arguments.ViewContext.TempData;
-                    ModelMetadata = arguments.ViewContext.ViewData.ModelMetadata;
-                    ModelStateIsValid = arguments.ViewContext.ViewData.ModelState.IsValid;
-                    ViewDataModelType = arguments.ViewContext.ViewData.Model.GetTypeOrNull(); 
+                    ViewCorrelation= viewCorrelation;
                 }
 
-                public Type ViewDataModelType { get; private set; }
-
-                public Arguments Input { get; private set; }
-
-                public bool ModelStateIsValid { get; private set; }
-
-                public IDictionary<string, object> TempData { get; private set; }
-
-                public IDictionary<string, object> ViewData { get; private set; }
-
-                public ModelMetadata ModelMetadata { get; private set; }
-
-                public Type BaseType { get; private set; }
-
+                public string ControllerName { get; set; }
+                
+                public string ActionName { get; set; }
+                
+                public TimeSpan Offset { get; set; }
+                
+                public TimeSpan Duration { get; set; }
+                
+                public DateTime StartTime { get; set; }
+                
+                public string EventName { get; set; }
+                
+                public TimelineCategory EventCategory { get; set; }
+                
+                public string EventSubText { get; set; }
+                
+                public Type ViewDataModelType { get; private set; }  
+                
+                public bool ModelStateIsValid { get; private set; } 
+                
+                public IDictionary<string, object> TempData { get; private set; } 
+                
+                public IDictionary<string, object> ViewData { get; private set; } 
+                
+                public ModelMetadata ModelMetadata { get; private set; } 
+                
+                public Type BaseType { get; private set; } 
+                
                 public IViewCorrelationMixin ViewCorrelation { get; private set; }
-            } 
+            }
         }
     }
 }

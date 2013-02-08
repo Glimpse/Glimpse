@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Message;
 using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateType
@@ -48,13 +49,19 @@ namespace Glimpse.Mvc.AlternateType
 
             public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
             {
-                var arguments = new Arguments(IsPartial, context.Arguments);
+                var args = new Arguments(IsPartial, context.Arguments);
                 var id = Guid.NewGuid();
 
-                var output = context.ReturnValue as ViewEngineResult; 
-                output = ProxyOutput(output, context, arguments.ViewName, IsPartial, id);
+                var output = context.ReturnValue as ViewEngineResult;
+                output = ProxyOutput(output, context, args.ViewName, IsPartial, id);
 
-                context.MessageBroker.Publish(new Message(arguments, timerResult, context.TargetType, context.MethodInvocationTarget, output, context.TargetType, IsPartial, id));
+                var message = new Message(id, args.ViewName, args.MasterName, args.UseCache, output.SearchedLocations, context.TargetType, IsPartial, output.View != null)
+                    .AsActionMessage(args.ControllerContext)
+                    .AsChildActionMessage(args.ControllerContext)
+                    .AsSourceMessage(context.InvocationTarget.GetType(), context.MethodInvocationTarget)
+                    .AsTimedMessage(timerResult);
+
+                context.MessageBroker.Publish(message);  
             }
 
             private ViewEngineResult ProxyOutput(ViewEngineResult viewEngineResult, IAlternateMethodContext context, string viewName, bool isPartial, Guid id)
@@ -77,36 +84,6 @@ namespace Glimpse.Mvc.AlternateType
                 return viewEngineResult;
             }
 
-            public class Message : ActionMessage
-            {
-                public Message(Arguments arguments, TimerResult timerResult, Type executedType, MethodInfo method, ViewEngineResult output, Type baseType, bool isPartial, Guid id)
-                    : base(timerResult, GetControllerName(arguments.ControllerContext), GetActionName(arguments.ControllerContext), GetIsChildAction(arguments.ControllerContext), executedType, method)
-                {
-                    ViewName = arguments.ViewName;
-                    MasterName = arguments.MasterName;
-                    UseCache = arguments.UseCache;
-                    SearchedLocations = output.SearchedLocations; 
-                    IsPartial = isPartial;
-                    BaseType = baseType;
-                    Id = id;
-                    IsFound = output.View != null;
-                }
-
-                public string ViewName { get; protected set; }
-
-                public string MasterName { get; protected set; }
-
-                public bool UseCache { get; protected set; }
-
-                public IEnumerable<string> SearchedLocations { get; protected set; }
-
-                public Type BaseType { get; protected set; }
-
-                public bool IsPartial { get; protected set; }
-
-                public bool IsFound { get; protected set; }
-            }
-
             public class Arguments
             {
                 public Arguments(bool isPartial, params object[] arguments)
@@ -118,12 +95,65 @@ namespace Glimpse.Mvc.AlternateType
                 }
 
                 public ControllerContext ControllerContext { get; set; }
-                
+
                 public string ViewName { get; set; }
-                
+
                 public string MasterName { get; set; }
-                
+
                 public bool UseCache { get; set; }
+            }
+
+            public class Message : ISourceMessage, IChildActionMessage, ITimedMessage
+            {
+                public Message(Guid id, string viewName, string masterName, bool useCache, IEnumerable<string> searchedLocations, Type baseType, bool isPartial, bool isFound)
+                {
+                    Id = id;
+                    ViewName = viewName;
+                    MasterName = masterName;
+                    UseCache = useCache;
+                    SearchedLocations = searchedLocations;
+                    BaseType = baseType;
+                    IsPartial = isPartial;
+                    IsFound = isFound;
+                }
+
+                public Guid Id { get; private set; }
+                
+                public string ControllerName { get; set; }
+                
+                public string ActionName { get; set; }
+                
+                public bool IsChildAction { get; set; }
+                
+                public TimeSpan Offset { get; set; }
+                
+                public TimeSpan Duration { get; set; }
+                
+                public DateTime StartTime { get; set; }
+                
+                public string EventName { get; set; }
+                
+                public TimelineCategory EventCategory { get; set; }
+                
+                public string EventSubText { get; set; }
+                
+                public string ViewName { get; protected set; } 
+                
+                public string MasterName { get; protected set; } 
+                
+                public bool UseCache { get; protected set; } 
+                
+                public IEnumerable<string> SearchedLocations { get; protected set; } 
+                
+                public Type BaseType { get; protected set; } 
+                
+                public bool IsPartial { get; protected set; } 
+                
+                public bool IsFound { get; protected set; }
+
+                public Type ExecutedType { get; set; }
+
+                public MethodInfo ExecutedMethod { get; set; }
             }
         }
     }

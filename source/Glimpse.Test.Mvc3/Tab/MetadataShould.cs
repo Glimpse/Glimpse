@@ -70,10 +70,8 @@ namespace Glimpse.Test.Mvc3.Tab
         }
 
         [Theory, AutoMock]
-        public void ReturnResult(Metadata sut, ITabContext context, View.Render.Arguments renderArgs, TimerResult timerResult, IViewCorrelationMixin mixin)
-        {
-            var renderMessage = new View.Render.Message(renderArgs, typeof(IView), null, timerResult, typeof(ViewRenderMessageShould), mixin);
-
+        public void ReturnResult(Metadata sut, ITabContext context, View.Render.Message renderMessage)
+        { 
             context.TabStore.Setup(ds => ds.Contains(typeof(IList<View.Render.Message>).AssemblyQualifiedName)).Returns(true);
             context.TabStore.Setup(ds => ds.Get(typeof(IList<View.Render.Message>).AssemblyQualifiedName)).Returns(new List<View.Render.Message> { renderMessage });
 

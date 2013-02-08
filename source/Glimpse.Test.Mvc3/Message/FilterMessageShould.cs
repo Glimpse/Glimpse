@@ -1,7 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
-using Glimpse.Core.Extensibility;
+using System.Linq;
+using System.Text;
+using System.Web.Mvc;
 using Glimpse.Mvc.Message;
 using Glimpse.Test.Common;
 using Xunit;
@@ -12,30 +13,21 @@ namespace Glimpse.Test.Mvc3.Message
     public class FilterMessageShould
     {
         [Theory, AutoMock]
-        public void Construct(TimerResult timerResult, FilterCategory filterCategory, Type resultType, bool isChildAction, Type executedType, MethodInfo method)
+        public void ShouldBeAbleToBuildWithFactory(FilterCategory category, Type resultType)
         {
-            var message = new FilterMessage(timerResult, filterCategory, resultType, isChildAction, executedType, method);
+            var testMessage = new TestMessage().AsFilterMessage(category, resultType);
 
-            Assert.Equal(timerResult.Duration, message.Duration);
-            Assert.Equal(timerResult.Offset, message.Offset);
-            Assert.Equal(timerResult.StartTime, message.StartTime);  
-            Assert.Equal(executedType, message.ExecutedType);
-            Assert.Equal(method, message.ExecutedMethod);
-            Assert.Equal(filterCategory, message.Category);
-            Assert.Equal(resultType, message.ResultType);
-            Assert.Equal(string.Format("{0}", filterCategory.ToString()), message.EventName);
+            Assert.Equal(category, testMessage.Category);
+            Assert.Equal(resultType, testMessage.ResultType);
         }
 
-        [Theory, AutoMock]
-        public void BuildDetails(TimerResult timerResult, FilterCategory filterCategory, Type resultType, bool isChildAction, Type executedType, MethodInfo method, string eventName, Core.Message.TimelineCategory eventCategory)
+        public class TestMessage : IFilterMessage
         {
-            var message = new FilterMessage(timerResult, filterCategory, resultType, isChildAction, executedType, method, eventName, eventCategory);
-
-            var dictionary = new Dictionary<string, object>();
-            message.BuildDetails(dictionary);
-
-            Assert.Equal(4, dictionary.Count);
-            Assert.Equal(resultType, dictionary["ResultType"]);
+            public Guid Id { get; private set; }
+            public string ControllerName { get; set; }
+            public string ActionName { get; set; }
+            public FilterCategory Category { get; set; }
+            public Type ResultType { get; set; }
         }
     }
 }

@@ -37,12 +37,15 @@ namespace Glimpse.Mvc.AlternateType
 
             public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
             {
-                context.MessageBroker.Publish(new Message((string)context.Arguments[0], (bool)context.ReturnValue, context.TargetType, context.MethodInvocationTarget));
+                var message = new Message((string)context.Arguments[0], (bool)context.ReturnValue, context.TargetType)
+                    .AsSourceMessage(context.TargetType, context.MethodInvocationTarget);
+
+                context.MessageBroker.Publish(message);
             }
 
-            public class Message : MessageBase
+            public class Message : MessageBase, ISourceMessage
             {
-                public Message(string prefix, bool isMatch, Type valueProviderType, MethodInfo executedMethod) : base(valueProviderType, executedMethod)
+                public Message(string prefix, bool isMatch, Type valueProviderType)
                 {
                     Prefix = prefix;
                     IsMatch = isMatch;
@@ -54,6 +57,10 @@ namespace Glimpse.Mvc.AlternateType
                 public Type ValueProviderType { get; private set; }
 
                 public string Prefix { get; private set; }
+
+                public Type ExecutedType { get; set; }
+
+                public MethodInfo ExecutedMethod { get; set; }
             }
         }
 
@@ -65,7 +72,11 @@ namespace Glimpse.Mvc.AlternateType
 
             public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
             {
-                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), context.ReturnValue as ValueProviderResult, context.TargetType, context.MethodInvocationTarget));
+                var args = new Arguments(context.Arguments);
+                var message = new Message(context.ReturnValue as ValueProviderResult, context.TargetType)
+                    .AsSourceMessage(context.TargetType, context.MethodInvocationTarget);
+
+                context.MessageBroker.Publish(message);
             }
 
             public class Arguments
@@ -86,9 +97,9 @@ namespace Glimpse.Mvc.AlternateType
                 public bool SkipValidation { get; set; }
             }
 
-            public class Message : MessageBase
+            public class Message : MessageBase, ISourceMessage
             {
-                public Message(Arguments arguments, ValueProviderResult result, Type valueProviderType, MethodInfo executedMethod) : base(valueProviderType, executedMethod)
+                public Message(ValueProviderResult result, Type valueProviderType)
                 {
                     IsFound = false;
                     if (result != null)
@@ -111,6 +122,10 @@ namespace Glimpse.Mvc.AlternateType
                 public CultureInfo Culture { get; private set; }
 
                 public string AttemptedValue { get; private set; }
+
+                public Type ExecutedType { get; set; }
+
+                public MethodInfo ExecutedMethod { get; set; }
             }
         }
     }

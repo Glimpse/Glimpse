@@ -55,7 +55,7 @@ namespace Glimpse.Core.Tab
                     timelineEvent.Duration = viewRenderMessage.Duration;
                     timelineEvent.StartPoint = viewRenderMessage.Offset;
                     timelineEvent.StartTime = viewRenderMessage.StartTime;
-                    viewRenderMessage.BuildDetails(timelineEvent.Details); 
+                    //viewRenderMessage.BuildDetails(timelineEvent.Details); 
 
                     events.Add(timelineEvent);
 

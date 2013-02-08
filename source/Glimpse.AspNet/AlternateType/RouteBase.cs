@@ -139,13 +139,15 @@ namespace Glimpse.AspNet.AlternateType
             {
                 var mixin = (IRouteNameMixin)context.Proxy;
 
-                context.MessageBroker.Publish(new Message(timerResult, context.InvocationTarget.GetType(), context.MethodInvocationTarget, context.Proxy.GetHashCode(), (System.Web.Routing.RouteData)context.ReturnValue, mixin.Name));
+                context.MessageBroker.Publish(
+                    new Message(context.Proxy.GetHashCode(), (System.Web.Routing.RouteData)context.ReturnValue, mixin.Name)
+                    .AsTimedMessage(timerResult)
+                    .AsSourceMessage(context.InvocationTarget.GetType(), context.MethodInvocationTarget));
             }
 
-            public class Message : TimeMessage
+            public class Message : MessageBase, ITimedMessage, ISourceMessage
             {
-                public Message(TimerResult timer, Type executedType, MethodInfo executedMethod, int routeHashCode, System.Web.Routing.RouteData routeData, string routeName)
-                    : base(timer, executedType, executedMethod)
+                public Message(int routeHashCode, System.Web.Routing.RouteData routeData, string routeName) 
                 {
                     IsMatch = routeData != null;
                     RouteHashCode = routeHashCode;
@@ -156,13 +158,15 @@ namespace Glimpse.AspNet.AlternateType
                         Values = routeData.Values;
                     }
                 }
-
-                public System.Web.Routing.RouteValueDictionary Values { get; protected set; }
-
-                public int RouteHashCode { get; protected set; }
-
-                public bool IsMatch { get; protected set; }
-
+                 
+                public TimeSpan Offset { get; set; }
+                public TimeSpan Duration { get; set; }
+                public DateTime StartTime { get; set; }
+                public Type ExecutedType { get; set; }
+                public MethodInfo ExecutedMethod { get; set; }
+                public System.Web.Routing.RouteValueDictionary Values { get; protected set; } 
+                public int RouteHashCode { get; protected set; } 
+                public bool IsMatch { get; protected set; } 
                 public string RouteName { get; protected set; }
             }
         } 
@@ -176,7 +180,10 @@ namespace Glimpse.AspNet.AlternateType
 
             public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
             {
-                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), timerResult, context.InvocationTarget.GetType(), context.MethodInvocationTarget, context.InvocationTarget, (System.Web.Routing.VirtualPathData)context.ReturnValue));
+                context.MessageBroker.Publish(new Message(
+                    new Arguments(context.Arguments), context.InvocationTarget, (System.Web.Routing.VirtualPathData)context.ReturnValue)
+                    .AsTimedMessage(timerResult)
+                    .AsSourceMessage(context.InvocationTarget.GetType(), context.MethodInvocationTarget));
             }
 
             public class Arguments
@@ -192,18 +199,22 @@ namespace Glimpse.AspNet.AlternateType
                 public System.Web.Routing.RouteValueDictionary Values { get; private set; }
             }
 
-            public class Message : TimeMessage
+            public class Message : ITimedMessage, ISourceMessage
             {
-                public Message(Arguments args, TimerResult timer, Type executedType, MethodInfo executedMethod, object invocationTarget, System.Web.Routing.VirtualPathData virtualPathData)
-                    : base(timer, executedType, executedMethod)
+                public Message(Arguments args, object invocationTarget, System.Web.Routing.VirtualPathData virtualPathData) 
                 {
                     IsMatch = virtualPathData != null;
                     RouteHashCode = invocationTarget.GetHashCode();
                 }
 
-                public int RouteHashCode { get; protected set; }
-
+                public int RouteHashCode { get; protected set; } 
                 public bool IsMatch { get; protected set; }
+                public Guid Id { get; private set; }
+                public TimeSpan Offset { get; set; }
+                public TimeSpan Duration { get; set; }
+                public DateTime StartTime { get; set; }
+                public Type ExecutedType { get; set; }
+                public MethodInfo ExecutedMethod { get; set; }
             }
         }
 
@@ -216,7 +227,10 @@ namespace Glimpse.AspNet.AlternateType
 
             public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
             {
-                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), timerResult, context.InvocationTarget.GetType(), context.MethodInvocationTarget, context.InvocationTarget.GetHashCode(), (bool)context.ReturnValue));
+                context.MessageBroker.Publish(
+                    new Message(new Arguments(context.Arguments), context.InvocationTarget.GetHashCode(), (bool)context.ReturnValue)
+                    .AsTimedMessage(timerResult)
+                    .AsSourceMessage(context.InvocationTarget.GetType(), context.MethodInvocationTarget));
             }
 
             public class Arguments
@@ -243,10 +257,10 @@ namespace Glimpse.AspNet.AlternateType
 
             public class Message : ProcessConstraintMessage
             {
-                public Message(Arguments args, TimerResult timer, Type executedType, MethodInfo executedMethod, int routeHashCode, bool isMatch)
-                    : base(timer, executedType, executedMethod, routeHashCode, args.Constraint.GetHashCode(), isMatch, args.ParameterName, args.Constraint, args.Values, args.RouteDirection)
-                {
-                }
+                public Message(Arguments args, int routeHashCode, bool isMatch)
+                    : base(routeHashCode, args.Constraint.GetHashCode(), isMatch, args.ParameterName, args.Constraint, args.Values, args.RouteDirection) 
+                { 
+                } 
             }
         }
     }

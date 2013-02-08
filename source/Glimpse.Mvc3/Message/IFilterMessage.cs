@@ -1,12 +1,23 @@
-﻿using System; 
-using Glimpse.Core.Message;
+﻿using System;
 
 namespace Glimpse.Mvc.Message
 {
-    public interface IFilterMessage : IActionBaseMessage, ITimelineMessage
+    public interface IFilterMessage : IActionMessage 
     {
-        FilterCategory Category { get; }
+        FilterCategory Category { get; set; }
 
-        Type ResultType { get; }
+        Type ResultType { get; set; }
+    }
+
+    public static class FilterMessageExtension
+    {
+        public static T AsFilterMessage<T>(this T message, FilterCategory category, Type resultType)
+            where T : IFilterMessage
+        {
+            message.Category = category;
+            message.ResultType = resultType;
+
+            return message;
+        } 
     }
 }

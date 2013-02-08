@@ -68,7 +68,11 @@ namespace Glimpse.Mvc.AlternateType
 
             public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
             {
-                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), context.TargetType, context.MethodInvocationTarget));
+                var args = new Arguments(context.Arguments);
+                var messages = new Message(args.PropertyDescriptor, context.TargetType)
+                    .AsSourceMessage(context.TargetType, context.MethodInvocationTarget);
+
+                context.MessageBroker.Publish(messages);
             }
 
             public class Arguments
@@ -87,12 +91,12 @@ namespace Glimpse.Mvc.AlternateType
                 public PropertyDescriptor PropertyDescriptor { get; set; }
             }
 
-            public class Message : MessageBase
+            public class Message : MessageBase, ISourceMessage
             {
-                public Message(Arguments arguments, Type modelBinderType, MethodInfo executedMethod) : base(modelBinderType, executedMethod)
+                public Message(PropertyDescriptor propertyDescriptor, Type modelBinderType) 
                 {
-                    Name = arguments.PropertyDescriptor.Name;
-                    Type = arguments.PropertyDescriptor.PropertyType;
+                    Name = propertyDescriptor.Name;
+                    Type = propertyDescriptor.PropertyType;
                     ModelBinderType = modelBinderType;
                 }
 
@@ -101,6 +105,10 @@ namespace Glimpse.Mvc.AlternateType
                 public Type Type { get; private set; }
 
                 public string Name { get; private set; }
+
+                public Type ExecutedType { get; set; }
+
+                public MethodInfo ExecutedMethod { get; set; }
             }
         }
 
@@ -112,7 +120,11 @@ namespace Glimpse.Mvc.AlternateType
 
             public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
             {
-                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), context.TargetType, context.ReturnValue, context.MethodInvocationTarget));
+                var args = new Arguments(context.Arguments);
+                var message = new Message(args.ModelBindingContext, context.ReturnValue, context.TargetType)
+                    .AsSourceMessage(context.TargetType, context.MethodInvocationTarget);
+
+                context.MessageBroker.Publish(message);
             }
 
             public class Arguments
@@ -128,13 +140,12 @@ namespace Glimpse.Mvc.AlternateType
                 public ModelBindingContext ModelBindingContext { get; set; }
             }
 
-            public class Message : MessageBase
+            public class Message : MessageBase, ISourceMessage
             {
-                public Message(Arguments arguments, Type modelBinderType, object rawValue, MethodInfo executedMethod) : base(modelBinderType, executedMethod)
+                public Message(ModelBindingContext bindingContext, object rawValue, Type modelBinderType) 
                 {
-                    var modelBindingContext = arguments.ModelBindingContext;
-                    ModelName = modelBindingContext.ModelName;
-                    ModelType = modelBindingContext.ModelType;
+                    ModelName = bindingContext.ModelName;
+                    ModelType = bindingContext.ModelType;
                     ModelBinderType = modelBinderType;
                     RawValue = rawValue;
                 }
@@ -146,6 +157,10 @@ namespace Glimpse.Mvc.AlternateType
                 public Type ModelType { get; private set; }
 
                 public string ModelName { get; private set; }
+
+                public Type ExecutedType { get; set; }
+
+                public MethodInfo ExecutedMethod { get; set; }
             }
         }
     }

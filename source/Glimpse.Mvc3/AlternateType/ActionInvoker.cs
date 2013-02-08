@@ -118,8 +118,15 @@ namespace Glimpse.Mvc.AlternateType
 
             public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
             {
-                // void InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
-                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), timerResult));
+                var args = new Arguments(context.Arguments);
+                var message = new Message()
+                    .AsTimedMessage(timerResult)
+                    .AsSourceMessage(context.InvocationTarget.GetType(), context.MethodInvocationTarget)
+                    .AsChildActionMessage(args.ControllerContext)
+                    .AsActionMessage(args.ControllerContext)
+                    .AsMvcTimelineMessage(Glimpse.Mvc.Message.Timeline.Controller);
+
+                context.MessageBroker.Publish(message); 
             }
 
             public class Arguments
@@ -135,17 +142,30 @@ namespace Glimpse.Mvc.AlternateType
                 public ActionResult ActionResult { get; set; }
             }
 
-            public class Message : ActionMessage, IExecutionMessage, ITimelineMessage
+            public class Message : MessageBase, IExecutionMessage, IInvokeActionResultMessage
             {
-                private static MethodInfo executedMethod = typeof(ActionResult).GetMethod("ExecuteResult");
+                public string ControllerName { get; set; }
 
-                public Message(Arguments arguments, TimerResult timerResult)
-                    : base(timerResult, GetControllerName(arguments.ControllerContext), GetActionName(arguments.ControllerContext), GetIsChildAction(arguments.ControllerContext), arguments.ActionResult.GetType(), executedMethod)
-                {
-                    EventName = string.Format("InvokeActionResult - {0}:{1}", ControllerName, ActionName);
-                    EventCategory = Mvc.Message.Timeline.Controller;
-                }
-            }
+                public string ActionName { get; set; }
+
+                public Type ExecutedType { get; set; }
+
+                public MethodInfo ExecutedMethod { get; set; }
+
+                public TimeSpan Offset { get; set; }
+
+                public TimeSpan Duration { get; set; }
+
+                public DateTime StartTime { get; set; }
+
+                public string EventName { get; set; }
+
+                public TimelineCategory EventCategory { get; set; }
+
+                public string EventSubText { get; set; }
+
+                public bool IsChildAction { get; set; }
+            } 
         }
 
         public class InvokeActionMethod : AlternateMethod
@@ -156,8 +176,15 @@ namespace Glimpse.Mvc.AlternateType
 
             public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
             {
-                //// ActionResult InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary<string, object> parameters)
-                context.MessageBroker.Publish(new Message(new Arguments(context.Arguments), context.ReturnValue as ActionResult, context.MethodInvocationTarget, timerResult));
+                var args = new Arguments(context.Arguments);
+                var message = new Message(context.ReturnValue.GetType())
+                    .AsTimedMessage(timerResult)
+                    .AsSourceMessage(context.InvocationTarget.GetType(), context.MethodInvocationTarget)
+                    .AsChildActionMessage(args.ControllerContext)
+                    .AsActionMessage(args.ControllerContext)
+                    .AsMvcTimelineMessage(Glimpse.Mvc.Message.Timeline.Controller);
+
+                context.MessageBroker.Publish(message);  
             }
 
             public class Arguments
@@ -189,25 +216,37 @@ namespace Glimpse.Mvc.AlternateType
                 public bool IsAsync { get; set; }
             }
 
-            public class Message : ActionMessage, IExecutionMessage, ITimelineMessage
+            public class Message : MessageBase, IExecutionMessage
             {
-                public Message(Arguments arguments, ActionResult returnValue, MethodInfo method, TimerResult timerResult)
-                    : base(timerResult, GetControllerName(arguments.ActionDescriptor), GetActionName(arguments.ActionDescriptor), GetIsChildAction(arguments.ControllerContext), GetExecutedType(arguments.ActionDescriptor), method)
+                public Message(Type resultType)
                 {
-                    ResultType = returnValue.GetType();
-                    EventName = string.Format("InvokeActionMethod - {0}:{1}", ControllerName, ActionName);
-                    EventCategory = Mvc.Message.Timeline.Controller;
+                    ResultType = resultType;
                 }
+
+                public string ControllerName { get; set; }
+
+                public string ActionName { get; set; }
+
+                public Type ExecutedType { get; set; }
+
+                public MethodInfo ExecutedMethod { get; set; }
+
+                public TimeSpan Offset { get; set; }
+
+                public TimeSpan Duration { get; set; }
+
+                public DateTime StartTime { get; set; }
+
+                public string EventName { get; set; }
+
+                public TimelineCategory EventCategory { get; set; }
+
+                public string EventSubText { get; set; }
 
                 public Type ResultType { get; private set; }
 
-                public override void BuildDetails(IDictionary<string, object> details)
-                {
-                    base.BuildDetails(details);
-
-                    details.Add("ResultType", ResultType);
-                }
-            }
+                public bool IsChildAction { get; set; }
+            } 
         }
     }
 }

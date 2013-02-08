@@ -14,12 +14,13 @@ namespace Glimpse.Mvc.Tab
                 .Row(r =>
                 {
                     r.Cell(0).AsKey().WidthInPixels(60);
-                    r.Cell(1).WidthInPixels(60);
-                    r.Cell(2).WidthInPixels(160);
-                    r.Cell(3).WidthInPixels(160);
-                    r.Cell(4);
-                    r.Cell(5);
-                    r.Cell(6).WidthInPercent(15).Suffix(" ms").Class("mono").AlignRight();
+                    r.Cell(1);
+                    r.Cell(2);
+                    r.Cell(3).WidthInPixels(60);
+                    r.Cell(4).WidthInPixels(160);
+                    r.Cell(5).WidthInPixels(160);
+                    r.Cell("{{6}}.{{7}}"); 
+                    r.Cell(8).WidthInPercent(15).Suffix(" ms").Class("mono").AlignRight();
                 }).Build();
 
         public override string Name

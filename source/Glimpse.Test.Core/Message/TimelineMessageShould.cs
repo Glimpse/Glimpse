@@ -11,30 +11,26 @@ using Xunit.Extensions;
 namespace Glimpse.Test.Core.Message
 {
     public class TimelineMessageShould
-    {
+    { 
         [Theory, AutoMock]
-        public void Construct(TimerResult timerResult, Type type, MethodInfo methodInfo, string eventName, TimelineCategory eventCategory)
+        public void ShouldBeAbleToBuildWithFactory(TimerResult timerResult, string eventName, TimelineCategory eventCategory, string eventSubText)
         {
-            var message = new TimelineMessage(timerResult, type, methodInfo, eventName, eventCategory);
+            var testMessage = new TestMessage().AsTimelineMessage(eventName, eventCategory, eventSubText);
 
-            Assert.Equal(timerResult.Duration, message.Duration);
-            Assert.Equal(timerResult.Offset, message.Offset);
-            Assert.Equal(timerResult.StartTime, message.StartTime);
-            Assert.Equal(eventName, message.EventName);
-            Assert.Equal(eventCategory, message.EventCategory);
-            Assert.Equal(type, message.ExecutedType);
-            Assert.Equal(methodInfo, message.ExecutedMethod);
+            Assert.Equal(eventName, testMessage.EventName);
+            Assert.Equal(eventCategory, testMessage.EventCategory);
+            Assert.Equal(eventSubText, testMessage.EventSubText);
         }
 
-        [Theory, AutoMock]
-        public void BuildDetails(TimerResult timerResult, Type type, MethodInfo methodInfo, string eventName, TimelineCategory eventCategory)
+        public class TestMessage : ITimelineMessage
         {
-            var message = new TimelineMessage(timerResult, type, methodInfo, eventName, eventCategory);
-
-            var dictionary = new Dictionary<string, object>();
-            message.BuildDetails(dictionary);
-
-            Assert.Equal(0, dictionary.Count);
+            public Guid Id { get; private set; }  
+            public string EventName { get; set; }
+            public TimelineCategory EventCategory { get; set; }
+            public string EventSubText { get; set; }
+            public TimeSpan Offset { get; set; }
+            public TimeSpan Duration { get; set; }
+            public DateTime StartTime { get; set; }
         }
     }
 }

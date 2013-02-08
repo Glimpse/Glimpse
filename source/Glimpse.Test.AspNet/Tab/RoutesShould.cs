@@ -5,6 +5,7 @@ using Glimpse.AspNet.AlternateType;
 using Glimpse.AspNet.Model;
 using Glimpse.AspNet.Tab;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Message;
 using Glimpse.Test.Common; 
 using Moq;
 using Xunit;
@@ -80,8 +81,12 @@ namespace Glimpse.Test.AspNet.Tab
             System.Web.Routing.RouteTable.Routes.Clear();
             System.Web.Routing.RouteTable.Routes.Add(route); 
 
-            var routeMessage = new RouteBase.GetRouteData.Message(new TimerResult { Duration = TimeSpan.FromMilliseconds(19) }, route.GetType(), null, route.GetHashCode(), new System.Web.Routing.RouteData(), "routeName");
-            var constraintMessage = new RouteBase.ProcessConstraint.Message(new RouteBase.ProcessConstraint.Arguments(new object[] { (HttpContextBase)null, constraint, "test", (System.Web.Routing.RouteValueDictionary)null, System.Web.Routing.RouteDirection.IncomingRequest }), new TimerResult { Duration = TimeSpan.FromMilliseconds(25) }, route.GetType(), null, route.GetHashCode(), true);
+            var routeMessage = new RouteBase.GetRouteData.Message(route.GetHashCode(), new System.Web.Routing.RouteData(), "routeName")
+                .AsSourceMessage(route.GetType(), null)
+                .AsTimedMessage(new TimerResult { Duration = TimeSpan.FromMilliseconds(19) });
+            var constraintMessage = new RouteBase.ProcessConstraint.Message(new RouteBase.ProcessConstraint.Arguments(new object[] { (HttpContextBase)null, constraint, "test", (System.Web.Routing.RouteValueDictionary)null, System.Web.Routing.RouteDirection.IncomingRequest }), route.GetHashCode(), true)
+                .AsTimedMessage(new TimerResult { Duration = TimeSpan.FromMilliseconds(25) })
+                .AsSourceMessage(route.GetType(), null);
 
             context.TabStore.Setup(mb => mb.Contains(typeof(IList<RouteBase.ProcessConstraint.Message>).AssemblyQualifiedName)).Returns(true).Verifiable();
             context.TabStore.Setup(mb => mb.Contains(typeof(IList<RouteBase.GetRouteData.Message>).AssemblyQualifiedName)).Returns(true).Verifiable();

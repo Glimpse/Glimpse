@@ -133,7 +133,7 @@ namespace Glimpse.Core.Framework
 
             var executionTimer = CreateAndStartGlobalExecutionTimer(requestStore);
 
-            Configuration.MessageBroker.Publish(TimelineMessage.Point(executionTimer.Point(), typeof(GlimpseRuntime), MethodInfoBeginRequest, "Start Request", Timeline.Request));
+            Configuration.MessageBroker.Publish(new RuntimeMessage().AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest).AsTimelineMessage("Start Request", Timeline.Request).AsTimedMessage(executionTimer.Point()));
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace Glimpse.Core.Framework
             var executionTimer = requestStore.Get<ExecutionTimer>(Constants.GlobalTimerKey);
             if (executionTimer != null)
             {
-                Configuration.MessageBroker.Publish(TimelineMessage.Point(executionTimer.Point(), typeof(GlimpseRuntime), MethodInfoEndRequest, "End Request", Timeline.Request));
+                Configuration.MessageBroker.Publish(new RuntimeMessage().AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest).AsTimelineMessage("End Request", Timeline.Request).AsTimedMessage(executionTimer.Point()));
             }
 
             ExecuteTabs(RuntimeEvent.EndRequest);
@@ -705,6 +705,19 @@ namespace Glimpse.Core.Framework
 
             requestStore.Set(Constants.ScriptsHaveRenderedKey, true);
             return stringBuilder.ToString();
+        }
+
+        protected class RuntimeMessage : ITimelineMessage, ISourceMessage
+        {
+            public Guid Id { get; private set; }
+            public string EventName { get; set; }
+            public TimelineCategory EventCategory { get; set; }
+            public string EventSubText { get; set; }
+            public Type ExecutedType { get; set; }
+            public MethodInfo ExecutedMethod { get; set; }
+            public TimeSpan Offset { get; set; }
+            public TimeSpan Duration { get; set; }
+            public DateTime StartTime { get; set; }
         }
     }
 }

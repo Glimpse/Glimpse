@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
+using Glimpse.Core.Message;
 using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateType
@@ -34,15 +36,45 @@ namespace Glimpse.Mvc.AlternateType
 
             public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
             {
-                context.MessageBroker.Publish(new Message((AuthorizationContext)context.Arguments[0], context.InvocationTarget.GetType(), context.MethodInvocationTarget, timerResult));
+                var authorizationContext = (AuthorizationContext)context.Arguments[0];
+                var message = new Message()
+                    .AsTimedMessage(timerResult)
+                    .AsSourceMessage(context.InvocationTarget.GetType(), context.MethodInvocationTarget)
+                    .AsActionMessage(authorizationContext.ActionDescriptor)
+                    .AsChildActionMessage(authorizationContext.Controller)
+                    .AsFilterMessage(FilterCategory.Authorization, authorizationContext.GetTypeOrNull())
+                    .AsMvcTimelineMessage(Glimpse.Mvc.Message.Timeline.Filter);
+
+                context.MessageBroker.Publish(message);
             }
 
-            public class Message : ActionFilterMessage
+            public class Message : MessageBase, IFilterMessage, IExecutionMessage
             {
-                public Message(AuthorizationContext context, Type executedType, MethodInfo method, TimerResult timerResult)
-                    : base(timerResult, GetControllerName(context.ActionDescriptor), GetActionName(context.ActionDescriptor), FilterCategory.Authorization, GetResultType(context.Result), GetIsChildAction(context.Controller), executedType, method)
-                {
-                }
+                public string ControllerName { get; set; }
+                
+                public string ActionName { get; set; }
+                
+                public FilterCategory Category { get; set; }
+                
+                public Type ResultType { get; set; }
+                
+                public bool IsChildAction { get; set; }
+                
+                public Type ExecutedType { get; set; }
+                
+                public MethodInfo ExecutedMethod { get; set; }
+                
+                public TimeSpan Offset { get; set; }
+                
+                public TimeSpan Duration { get; set; }
+                
+                public DateTime StartTime { get; set; }
+                
+                public string EventName { get; set; }
+                
+                public TimelineCategory EventCategory { get; set; }
+                
+                public string EventSubText { get; set; }
             }
         }
     }

@@ -70,17 +70,11 @@ namespace Glimpse.Test.Mvc3.Tab
         }
 
         [Theory, AutoMock]
-        public void ReturnResult(Views sut, ITabContext context, View.Render.Arguments renderArgs, ViewEngine.FindViews.Arguments findViewArgs, ViewEngineResult viewEngineResult, IViewCorrelationMixin mixin, TimerResult timerResult, Guid id)
-        {
-            var findViewMessage = new ViewEngine.FindViews.Message(findViewArgs, timerResult, typeof(IViewEngine), null, viewEngineResult, typeof(string), false, id);
-
+        public void ReturnResult(Views sut, ITabContext context, View.Render.Arguments renderArgs, ViewEngine.FindViews.Message findViewMessage, View.Render.Message renderMessage)
+        { 
             context.TabStore.Setup(ds => ds.Contains(typeof(IList<ViewEngine.FindViews.Message>).AssemblyQualifiedName)).Returns(true);
             context.TabStore.Setup(ds => ds.Get(typeof(IList<ViewEngine.FindViews.Message>).AssemblyQualifiedName)).Returns(new List<ViewEngine.FindViews.Message> { findViewMessage });
-
-            mixin.Setup(m => m.ViewEngineFindCallId).Returns(id);
-
-            var renderMessage = new View.Render.Message(renderArgs, typeof(IView), null, timerResult, typeof(ViewRenderMessageShould), mixin);
-
+             
             context.TabStore.Setup(ds => ds.Contains(typeof(IList<View.Render.Message>).AssemblyQualifiedName)).Returns(true);
             context.TabStore.Setup(ds => ds.Get(typeof(IList<View.Render.Message>).AssemblyQualifiedName)).Returns(new List<View.Render.Message> { renderMessage });
 

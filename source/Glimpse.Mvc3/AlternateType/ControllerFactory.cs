@@ -45,7 +45,9 @@ namespace Glimpse.Mvc.AlternateType
             {
                 var controller = context.ReturnValue as Controller;
 
-                var message = new Message(new Arguments(context.Arguments), controller, context.TargetType, context.MethodInvocationTarget);
+                var args = new Arguments(context.Arguments); 
+                var message = new Message(args.ControllerName, controller)
+                    .AsSourceMessage(context.TargetType, context.MethodInvocationTarget);
 
                 context.MessageBroker.Publish(message);
 
@@ -100,11 +102,11 @@ namespace Glimpse.Mvc.AlternateType
                 public string ControllerName { get; set; }
             }
 
-            public class Message : MessageBase
+            public class Message : MessageBase, ISourceMessage
             {
-                public Message(Arguments arguments, IController controller, Type executedType, MethodInfo executedMethod) : base(executedType, executedMethod)
+                public Message(string controllerName, IController controller)
                 {
-                    ControllerName = arguments.ControllerName;
+                    ControllerName = controllerName;
                     IsControllerResolved = false;
 
                     if (controller != null)
@@ -119,6 +121,10 @@ namespace Glimpse.Mvc.AlternateType
                 public Type ControllerType { get; private set; }
 
                 public string ControllerName { get; private set; }
+
+                public Type ExecutedType { get; set; }
+
+                public MethodInfo ExecutedMethod { get; set; }
             }
         }
     }

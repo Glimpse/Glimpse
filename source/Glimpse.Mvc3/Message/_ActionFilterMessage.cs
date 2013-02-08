@@ -4,7 +4,7 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Mvc.Message
 {
-    public class ActionFilterMessage : FilterMessage, IActionBasedMessage
+    public class ActionFilterMessage : FilterMessage, IActionMessage
     {
         public ActionFilterMessage(TimerResult timerResult, string controllerName, string actionName, FilterCategory filterCategory, Type resultType, bool isChildAction, Type executedType, MethodInfo method, string eventName = null, Core.Message.TimelineCategory eventCategory = null)
             : base(timerResult, filterCategory, resultType, isChildAction, executedType, method, eventName, eventCategory)

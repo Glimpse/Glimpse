@@ -14,22 +14,18 @@ namespace Glimpse.Test.Mvc3.Model
     public class ViewsModelShould
     {
         [Theory, AutoMock]
-        public void SetProperties(ViewEngine.FindViews.Arguments findViewArgs, View.Render.Arguments renderArgs, ViewEngineResult viewEngineResult, IViewCorrelationMixin mixin, TimerResult timerResult, Type type)
-        {
-            var findViewMessage = new ViewEngine.FindViews.Message(findViewArgs, timerResult, typeof(IViewEngine), null, viewEngineResult, type, false, Guid.NewGuid());
-
-            var viewRenderMessage = new View.Render.Message(renderArgs, typeof(IView), null, timerResult, type, mixin);
-
+        public void SetProperties(ViewEngine.FindViews.Message findViewMessage, View.Render.Message viewRenderMessage)
+        { 
             var model = new ViewsModel(findViewMessage, viewRenderMessage);
 
-            Assert.Equal(findViewArgs.ViewName, model.ViewName);
-            Assert.Equal(findViewArgs.MasterName, model.MasterName);
-            Assert.False(model.IsPartial);
-            Assert.Equal(type, model.ViewEngineType);
-            Assert.True(model.UseCache);
-            Assert.True(model.IsFound);
-            Assert.Null(model.SearchedLocations);
-            Assert.NotNull(model.ViewModelSummary);
+            Assert.Equal(findViewMessage.ViewName, model.ViewName);
+            Assert.Equal(findViewMessage.MasterName, model.MasterName);
+            Assert.Equal(findViewMessage.IsPartial, model.IsPartial);
+            Assert.Equal(findViewMessage.BaseType, model.ViewEngineType);
+            Assert.Equal(findViewMessage.UseCache, model.UseCache);
+            Assert.Equal(findViewMessage.IsFound, model.IsFound);
+            Assert.Equal(findViewMessage.SearchedLocations, model.SearchedLocations);
+            Assert.NotNull(model.ViewModelSummary); 
         } 
     }
 }

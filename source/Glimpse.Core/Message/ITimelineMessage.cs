@@ -4,12 +4,31 @@ namespace Glimpse.Core.Message
 {
     public interface ITimelineMessage : ITimedMessage
     {
-        string EventName { get; }
-        
-        TimelineCategory EventCategory { get; }
+        string EventName { get; set; }
 
-        string EventSubText { get; }
+        TimelineCategory EventCategory { get; set; }
 
-        void BuildDetails(IDictionary<string, object> details);
+        string EventSubText { get; set; }
+    }
+     
+    public static class TimelineMessageExtension
+    {
+        public static T AsTimelineMessage<T>(this T message, string eventName, TimelineCategory eventCategory, string eventSubText = null)
+            where T : ITimelineMessage
+        {
+            message.EventName = eventName;
+            message.EventCategory = eventCategory;
+            message.EventSubText = eventSubText;
+
+            return message;
+        }
+
+        public static T AsTimelineMessage<T>(this T message, TimelineCategory eventCategory, string eventSubText = null)
+            where T : ITimelineMessage
+        { 
+            message.AsTimelineMessage(string.Empty, eventCategory, eventSubText);
+
+            return message;
+        }
     }
 }

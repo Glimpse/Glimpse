@@ -3,6 +3,8 @@ using System.Reflection;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Message;
+using Glimpse.Mvc.Message;
 
 namespace Glimpse.Mvc.AlternateType
 {
@@ -108,11 +110,14 @@ namespace Glimpse.Mvc.AlternateType
                 var timer = context.TimerStrategy();
                 var timerResult = timer.Stop(state.Offset);
 
-                context.MessageBroker.Publish(new ActionInvoker.InvokeActionMethod.Message(
-                    state.Arguments, 
-                    (ActionResult)context.ReturnValue, 
-                    context.MethodInvocationTarget, 
-                    timerResult));
+                var message = new ActionInvoker.InvokeActionMethod.Message(context.ReturnValue.GetType())
+                    .AsTimedMessage(timerResult)
+                    .AsSourceMessage(context.InvocationTarget.GetType(), context.MethodInvocationTarget)
+                    .AsChildActionMessage(state.Arguments.ControllerContext)
+                    .AsActionMessage(state.Arguments.ControllerContext)
+                    .AsMvcTimelineMessage(Glimpse.Mvc.Message.Timeline.Filter);
+
+                context.MessageBroker.Publish(message);
             }
         }
     }
