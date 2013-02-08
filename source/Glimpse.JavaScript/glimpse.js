@@ -2570,7 +2570,7 @@ glimpse.tab = (function($, pubsub, data) {
                 pubsub.publish('action.timeline.template.processed', { templates: templates });
             };
 
-        pubsub.subscribe('trigger.timline.shell.init', setup);
+        pubsub.subscribe('trigger.timeline.shell.init', setup);
     })();
         
     // Render Dividers
@@ -2631,9 +2631,9 @@ glimpse.tab = (function($, pubsub, data) {
                 elements.summaryRow.find('.glimpse-tl-summary-height').height(elements.summaryRow.height());
             };
             
-        pubsub.subscribe('trigger.timline.shell.subscriptions', wireListeners); 
-        pubsub.subscribe('trigger.timline.divider.render', render);
-        pubsub.subscribe('trigger.timline.filtered', adjustHeight);  
+        pubsub.subscribe('trigger.timeline.shell.subscriptions', wireListeners); 
+        pubsub.subscribe('trigger.timeline.divider.render', render);
+        pubsub.subscribe('trigger.timeline.filtered', adjustHeight);  
     })(timeline.elements);
 
     // Render Events
@@ -2647,10 +2647,10 @@ glimpse.tab = (function($, pubsub, data) {
                          if ($(this).has('input:checked').length > 0) { $(this).find('input').stop(true, true).clearQueue().fadeOut(); }
                     })
                     .delegate('input', 'click', function() {  categoryEvents($(this)); });
-                //elements.summaryDescHolder.find('input').click(function() { /*filter.category();*/ pubsub.publish('trigger.timline.search.category'); });
+                //elements.summaryDescHolder.find('input').click(function() { /*filter.category();*/ pubsub.publish('trigger.timeline.search.category'); });
             },
             render = function() {
-                pubsub.publish('action.timline.event.rendering');
+                pubsub.publish('action.timeline.event.rendering');
 
                 processCategories();
                 processEvents();
@@ -2658,7 +2658,7 @@ glimpse.tab = (function($, pubsub, data) {
                 processTableData(); 
                 
                 //view.start();
-                pubsub.publish('action.timline.event.rendered');
+                pubsub.publish('action.timeline.event.rendered');
             },
             processTableData = function() {
                 var dataResult = [ [ 'Title', 'Description', 'Category', 'Timing', 'Start Point', 'Duration', 'w/out Children' ] ],
@@ -2825,13 +2825,13 @@ glimpse.tab = (function($, pubsub, data) {
 
                 //Trigger search
                 //filter.category();
-                pubsub.publish('trigger.timline.search.category'); 
+                pubsub.publish('trigger.timeline.search.category'); 
             };
                  
-        pubsub.subscribe('trigger.timline.shell.subscriptions', wireListeners); 
-        pubsub.subscribe('trigger.timline.event.render', render);
-        pubsub.subscribe('trigger.timline.filtered', colorRows); 
-        pubsub.subscribe('action.timline.shell.switched', colorRows); 
+        pubsub.subscribe('trigger.timeline.shell.subscriptions', wireListeners); 
+        pubsub.subscribe('trigger.timeline.event.render', render);
+        pubsub.subscribe('trigger.timeline.filtered', colorRows); 
+        pubsub.subscribe('action.timeline.shell.switched', colorRows); 
     })(timeline.elements),  
 
     // Zoom
@@ -2848,7 +2848,7 @@ glimpse.tab = (function($, pubsub, data) {
 
                 //Force render
                 //dividerBuilder.render(true);
-                pubsub.publish('trigger.timline.divider.render', { force: true });
+                pubsub.publish('trigger.timeline.divider.render', { force: true });
 
                 //Zoom in on main line items 
                 zoomEvents(persentLeft, persentRight);
@@ -2858,7 +2858,7 @@ glimpse.tab = (function($, pubsub, data) {
                  
                 //Hide events that aren't needed
                 //filter.zoom(persentLeft, persentRight); 
-                pubsub.publish('trigger.timline.search.zoom', { persentLeft: persentLeft, persentRight: persentRight });
+                pubsub.publish('trigger.timeline.search.zoom', { persentLeft: persentLeft, persentRight: persentRight });
             },
             positionRight = function() {
                 var persentRight = ((elements.zoomHolder.width() - 4 - elements.zoomRightHandle.position().left) / elements.zoomHolder.width()) * 100, 
@@ -2872,14 +2872,14 @@ glimpse.tab = (function($, pubsub, data) {
                 
                 //Force render
                 //dividerBuilder.render(true);
-                pubsub.publish('trigger.timline.divider.render', { force: true });
+                pubsub.publish('trigger.timeline.divider.render', { force: true });
                 
                 //Zoom in on main line items 
                 zoomEvents(persentLeft, persentRight);
                     
                 //Hide events that aren't needed
                 //filter.zoom(persentLeft, persentRight);  
-                pubsub.publish('trigger.timline.search.zoom', { persentLeft: persentLeft, persentRight: persentRight });
+                pubsub.publish('trigger.timeline.search.zoom', { persentLeft: persentLeft, persentRight: persentRight });
             },
             zoomEvents = function(persentLeft, persentRight) {
                 var offset = (100 / (100 - persentLeft - persentRight)) * -1, 
@@ -2919,7 +2919,7 @@ glimpse.tab = (function($, pubsub, data) {
                 }); 
             };
                  
-        pubsub.subscribe('trigger.timline.shell.subscriptions', wireListeners);  
+        pubsub.subscribe('trigger.timeline.shell.subscriptions', wireListeners);  
     })(timeline.elements);
         
     // Filter
@@ -2930,7 +2930,7 @@ glimpse.tab = (function($, pubsub, data) {
                 hiddenCategories : null
             },
             search = function(c) {
-                pubsub.publish('trigger.timline.filtering', { criteria: c });
+                pubsub.publish('trigger.timeline.filtering', { criteria: c });
 
                 //Go through each event doing executing search
                 for (var i = 0; i < timeline.data.events.length; i += 1) {
@@ -2947,7 +2947,7 @@ glimpse.tab = (function($, pubsub, data) {
                     elements.contentTableHolder.find('tbody').eq(i).toggle(show); 
                 }
                 
-                pubsub.publish('trigger.timline.filtered', { criteria: c });  
+                pubsub.publish('trigger.timeline.filtered', { criteria: c });  
             },
             zoom = function(args) {
                 //Pull out current search
@@ -2968,8 +2968,8 @@ glimpse.tab = (function($, pubsub, data) {
                 search(criteria);
             };
         
-        pubsub.subscribe('trigger.timline.search.zoom', zoom);
-        pubsub.subscribe('trigger.timline.search.category', category); 
+        pubsub.subscribe('trigger.timeline.search.zoom', zoom);
+        pubsub.subscribe('trigger.timeline.search.category', category); 
     })(timeline.elements);
 
     // Info
@@ -3027,7 +3027,7 @@ glimpse.tab = (function($, pubsub, data) {
                 elements.eventInfo.stop(true, true).clearQueue().delay(500).fadeOut(); 
             };
                  
-        pubsub.subscribe('trigger.timline.shell.subscriptions', wireListeners); 
+        pubsub.subscribe('trigger.timeline.shell.subscriptions', wireListeners); 
     })(timeline.elements);
 
     // Resize
@@ -3050,7 +3050,7 @@ glimpse.tab = (function($, pubsub, data) {
                 elements.scope.find('.glimpse-tl-col-main').css('left', position + 'px');
                     
                 //dividerBuilder.render(false);
-                pubsub.publish('trigger.timline.divider.render', {});
+                pubsub.publish('trigger.timeline.divider.render', {});
             },
             panelResize = function() { 
                 if (elements.scope) {
@@ -3060,11 +3060,11 @@ glimpse.tab = (function($, pubsub, data) {
                     
                     //Render Divers
                     //dividerBuilder.render();
-                    pubsub.publish('trigger.timline.divider.render', {});
+                    pubsub.publish('trigger.timeline.divider.render', {});
                 }
             };
         
-        pubsub.subscribe('trigger.timline.shell.subscriptions', wireListeners); 
+        pubsub.subscribe('trigger.timeline.shell.subscriptions', wireListeners); 
         pubsub.subscribe('trigger.shell.resize', panelResize); 
         pubsub.subscribe('action.panel.showed.glimpse_timeline', function() { setTimeout(panelResize, 1); }); 
     })(timeline.elements);
@@ -3080,7 +3080,7 @@ glimpse.tab = (function($, pubsub, data) {
                 if (showTimeline == null)
                     showTimeline = false;
                 
-                pubsub.publish('action.timline.shell.switching', { applyAll: isFirst, showTimeline: showTimeline });
+                pubsub.publish('action.timeline.shell.switching', { applyAll: isFirst, showTimeline: showTimeline });
 
                 elements.contentTableHolder.parent().toggle(showTimeline); 
                 elements.contentRow.find('.glimpse-tl-content-scroll:first-child').toggle(!showTimeline);
@@ -3089,11 +3089,11 @@ glimpse.tab = (function($, pubsub, data) {
                 
                 if (!showTimeline) {
                     //dividerBuilder.render();
-                    pubsub.publish('trigger.timline.divider.render', {});
+                    pubsub.publish('trigger.timeline.divider.render', {});
                 }
                 
                 //eventBuilder.colorRows(isFirst); 
-                pubsub.publish('action.timline.shell.switched', { applyAll: isFirst, showTimeline: showTimeline });
+                pubsub.publish('action.timeline.shell.switched', { applyAll: isFirst, showTimeline: showTimeline });
             },
             toggle = function() {
                 var showTimeline = !(settings.local('timelineView'));
@@ -3109,21 +3109,21 @@ glimpse.tab = (function($, pubsub, data) {
                 apply(settings.local('timelineView'), true);
             };
              
-        pubsub.subscribe('trigger.timline.shell.subscriptions', wireListeners); 
-        pubsub.subscribe('trigger.timline.shell.toggle', toggle);
-        pubsub.subscribe('action.timline.event.rendered', start);
+        pubsub.subscribe('trigger.timeline.shell.subscriptions', wireListeners); 
+        pubsub.subscribe('trigger.timeline.shell.toggle', toggle);
+        pubsub.subscribe('action.timeline.event.rendered', start);
     })(timeline.elements);
 
-    // Timline
+    // Timeline
     (function() { 
         var init = function() { 
                 //Set defaults
                 timeline.data.startTime = 0;
                 timeline.data.endTime = timeline.data.duration;
                 
-                pubsub.publish('trigger.timline.shell.init');
-                pubsub.publish('trigger.timline.shell.subscriptions');
-                pubsub.publish('trigger.timline.event.render');
+                pubsub.publish('trigger.timeline.shell.init');
+                pubsub.publish('trigger.timeline.shell.subscriptions');
+                pubsub.publish('trigger.timeline.event.render');
             },
             modify = function(options) {
                 options.templates.css += '.glimpse-panel .glimpse-tl-resizer {position: absolute;width: 4px;height: 100%;cursor: col-resize;}.glimpse-panel .glimpse-tl-row-summary {position: relative;height: 100px;}.glimpse-panel .glimpse-tl-row-summary .glimpse-tl-resizer-bar {background-color: #404040;width: 1px;height: 100%;margin-left: 2px;}.glimpse-panel .glimpse-tl-row-summary .glimpse-tl-resizer-handle {background-color: #404040;width: 5px;height: 20px;top: 0;position: absolute;-webkit-border-radius: 2px;-moz-border-radius: 2px;border-radius: 2px;}.glimpse-panel .glimpse-tl-row-spacer {background: #cfcfcf;background: -moz-linear-gradient(top, #cfcfcf 0%, #dddddd 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cfcfcf), color-stop(100%,#dddddd));background: -webkit-linear-gradient(top, #cfcfcf 0%,#dddddd 100%);background: -o-linear-gradient(top, #cfcfcf 0%,#dddddd 100%);background: -ms-linear-gradient(top, #cfcfcf 0%,#dddddd 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#cfcfcf\', endColorstr=\'#dddddd\',GradientType=0 );background: linear-gradient(top, #cfcfcf 0%,#dddddd 100%);-webkit-box-shadow: inset 0px 1px 0px 0px #E2E2E2;-moz-box-shadow: inset 0px 1px 0px 0px #E2E2E2;box-shadow: inset 0px 1px 0px 0px #E2E2E2;border-top: 1px solid #7A7A7A;border-bottom: 1px solid #7A7A7A;height: 5px;}.glimpse-panel .glimpse-tl-col-side {position: absolute;width: 200px;height: 100%;left: 0px;}.glimpse-panel .glimpse-tl-col-main {position: absolute;left: 200px;right: 0px;top: 0px;}.glimpse-panel .glimpse-tl-row-content .glimpse-tl-col-side {border-right: 1px solid #404040;}.glimpse-panel .glimpse-tl-row-content {position: relative;height: 400px;}.glimpse-panel .glimpse-tl-row-content .glimpse-tl-resizer {left: 200px;}.glimpse-panel .glimpse-tl-row-content .glimpse-tl-resizer div {background-color: #404040;width: 1px;height: 100%;}.glimpse-panel .glimpse-tl-band {padding-top: 2px;padding-bottom: 2px;}.glimpse-panel .glimpse-tl-col-side .glimpse-tl-band {padding-top: 2px;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding-left: 5px;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;}.glimpse-panel .glimpse-tl-band {position: relative;height: 18px;padding: 0px;}.glimpse-panel .glimpse-tl-col-main .glimpse-tl-event {position: absolute;top: 4px;margin-left: -2px;}.glimpse-panel .glimpse-tl-band-title {height: 20px !important;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;font-weight: bold;padding-top: 4px;}.glimpse-panel .glimpse-tl-event {border-radius: 4px;width: 7px;height: 7px;display: inline-block;margin: 0 5px 0 2px;background: -moz-linear-gradient(top, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 40%, rgba(255,255,255,0) 70%, rgba(0,0,0,0.5) 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0.7)), color-stop(40%,rgba(255,255,255,0)), color-stop(70%,rgba(255,255,255,0)), color-stop(100%,rgba(0,0,0,0.5)));background: -webkit-linear-gradient(top, rgba(255,255,255,0.7) 0%,rgba(255,255,255,0) 40%,rgba(255,255,255,0) 70%,rgba(0,0,0,0.5) 100%);background: -o-linear-gradient(top, rgba(255,255,255,0.7) 0%,rgba(255,255,255,0) 40%,rgba(255,255,255,0) 70%,rgba(0,0,0,0.5) 100%);background: -ms-linear-gradient(top, rgba(255,255,255,0.7) 0%,rgba(255,255,255,0) 40%,rgba(255,255,255,0) 70%,rgba(0,0,0,0.5) 100%);background: linear-gradient(top, rgba(255,255,255,0.7) 0%,rgba(255,255,255,0) 40%,rgba(255,255,255,0) 70%,rgba(0,0,0,0.5) 100%);}.glimpse-panel .glimpse-tl-col-main .glimpse-tl-event {width: 1%;min-width: 3px;}.glimpse-panel .glimpse-tl-event-info {position: absolute;top: 1px;padding: 0.75em;border: 1px solid rgba(0, 0, 0, 0.3);background-color: #FCF7BD;display: none;-webkit-border-radius: 15px;-moz-border-radius: 15px;border-radius: 15px;-webkit-box-shadow: 0px 0px 8px 0px #696969;-moz-box-shadow: 0px 0px 8px 0px #696969;box-shadow: 0px 0px 8px 0px #696969;}.glimpse-panel .glimpse-tl-event-info th {font-weight: bold;text-align: right;}.glimpse-panel .glimpse-tl-event-info .glimpse-tl-event-info-title {text-align: left;border-bottom: 1px solid rgba(0, 0, 0, 0.3);}.glimpse-panel .glimpse-tl-row-summary .glimpse-tl-event-holder {margin-left: 3px;}.glimpse-panel .glimpse-tl-row-content .glimpse-tl-event-holder {margin-left: 15px;}.glimpse-panel .glimpse-tl-event-holder-inner {position: absolute;left: 0px;right: 0px;margin-left: 4px;}.glimpse-panel .glimpse-tl-event-desc-sub {color: #AAA;font-size: 0.9em;margin-left: 5px;}.glimpse-panel .glimpse-tl-event-overlay {display: none;position: absolute;height: 18px;width: 7px;}.glimpse-panel .glimpse-tl-event-overlay-lh {position: absolute;left: 0;width: 1px;}.glimpse-panel .glimpse-tl-event-overlay-li {position: absolute;right: -2px;font-size: 0.8em;top: 7px;background: url() no-repeat -31px -17px;width: 11px;height: 3px;}.glimpse-panel .glimpse-tl-event-overlay-lt {position: absolute;right: 15px;font-size: 0.8em;top: 2px;color: rgba(0, 0, 0, 0.75);white-space: nowrap;}.glimpse-panel .glimpse-tl-event-overlay-rh {position: absolute;right: 0;width: 1px;}.glimpse-panel .glimpse-tl-event-overlay-ri {position: absolute;left: -4px;font-size: 0.8em;top: 7px;background: url() no-repeat -44px -17px;width: 11px;height: 3px;}.glimpse-panel .glimpse-tl-event-overlay-rt {font-size: 0.8em;position: absolute;top: 2px;left: 11px;color: rgba(0, 0, 0, 0.75);white-space: nowrap;}.glimpse-panel .glimpse-tl-event-overlay-c {font-size: 0.9em;text-align: center;padding-top: 1px;color: rgba(0, 0, 0, 0.75);font-weight: bold;}.glimpse-panel .glimpse-tl-content-scroll {overflow-y: scroll;overflow-x: hidden;width: 100%;position: absolute;height: 100%;}.glimpse-panel .glimpse-tl-padding-holder {right: 18px;}.glimpse-panel .glimpse-tl-padding {position: absolute;width: 0;top: 0;bottom: 0;background-color: rgba(0, 0, 0, 0.3);}.glimpse-panel .glimpse-tl-padding-l {left: 0;border-left: 1px solid #555;}.glimpse-panel .glimpse-tl-padding-r {right: 0;border-right: 1px solid #555;}.glimpse-panel .glimpse-tl-divider-line-holder {position: absolute;height: 100%;top: 0;right: 0;}.glimpse-panel .glimpse-tl-divider {position: absolute;width: 1px;top: 0;bottom: 0;background-color: rgba(0, 0, 0, 0.1);}.glimpse-panel .glimpse-tl-divider div {position: absolute;top: 4px;right: 5px;font-size: 9px;color: #323232;white-space: nowrap;}.glimpse-panel .glimpse-tl-divider-title-bar {width: 100%;background-color: rgba(255, 255, 255, 0.8);border-bottom: 1px solid rgba(0, 0, 0, 0.3);height: 20px;}.glimpse-panel .glimpse-tl-divider-zero-holder {position: absolute;height: 100%;top: 0;right: 0;left: 0;}.glimpse-panel .glimpse-tl-divider-zero-holder .glimpse-tl-divider {left: 15px;}.glimpse-panel .glimpse-tl-content-scroll .glimpse-tl-divider div {display: none;}.glimpse-panel .glimpse-tl-row-summary .glimpse-tl-divider-holder {right: 19px;height: 20px;}.glimpse-panel .glimpse-tl-row-content .glimpse-tl-content-scroll .glimpse-tl-divider-holder {right: -1px;margin-left: 1px;height: 100%;}.glimpse-panel .glimpse-tl-row-content .glimpse-tl-content-overlay .glimpse-tl-divider-holder {right: 16px;height: 20px;border-left: 1px solid #404040;}.glimpse-panel .glimpse-tl-row-summary .glimpse-tl-divider-line-holder {left: 0;}.glimpse-panel .glimpse-tl-row-content .glimpse-tl-divider-line-holder {left: 15px;}.glimpse-panel .glimpse-tl-resizer-holder {right: 17px;}.glimpse-panel .glimpse-tl-resizer-l {left: 0px;margin-left: -2px;}.glimpse-panel .glimpse-tl-resizer-r {right: 0px;}.glimpse-panel .glimpse-tl-col-side {background-color: #F2F5F7;}.glimpse-panel .glimpse-tl-col-side .odd, .glimpse-panel .glimpse-tl-col-side .odd > td {background-color: #F2F5F7;}.glimpse-panel .glimpse-tl-col-side .even, .glimpse-panel .glimpse-tl-col-side .even > td {background-color: #E1E7F0;}.glimpse-panel .glimpse-tl-row-summary .glimpse-tl-band-title {opacity: 0.9;}.glimpse-panel .glimpse-tl-row-summary .glimpse-tl-event-desc-group .glimpse-tl-band {opacity: 0.95;}.glimpse-panel .glimpse-tl-row-summary .glimpse-tl-event-desc-group input {margin-right: 5px;float: right;display: none;}.glimpse-panel .glimpse-tl-band-title span {font-weight: normal;font-size: 0.8em;margin-left: 1em;cursor: pointer;}';
@@ -3139,11 +3139,11 @@ glimpse.tab = (function($, pubsub, data) {
                 timeline.data = args.pluginData.data;
                 timeline.scope = args.panel;
                 
-                pubsub.publishAsync('trigger.timline.init');
+                pubsub.publishAsync('trigger.timeline.init');
             };
          
         pubsub.subscribe('action.template.processing', modify); 
-        pubsub.subscribe('trigger.timline.init', init); 
+        pubsub.subscribe('trigger.timeline.init', init); 
         pubsub.subscribe('action.panel.rendering.glimpse_timeline', prerender);
         pubsub.subscribe('action.panel.rendered.glimpse_timeline', postrender);
     })();
