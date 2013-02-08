@@ -52,10 +52,15 @@ namespace Glimpse.AspNet
         private string HtmlSnippet { get; set; }
 
         private Stream OutputStream { get; set; }
-        
+
         private Encoding ContentEncoding { get; set; }
-        
+
         private Regex BodyEnd { get; set; }
+
+        public override void Close()
+        {
+            OutputStream.Close();
+        }
 
         public override void Flush()
         {
