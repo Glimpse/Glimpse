@@ -255,7 +255,6 @@
     <Compile Include="Tab\Timeline.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
     <None Include="NuSpec\Glimpse.nuspec">
       <SubType>Designer</SubType>
     </None>
