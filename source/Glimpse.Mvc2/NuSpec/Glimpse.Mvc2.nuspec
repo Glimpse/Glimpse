@@ -10,12 +10,12 @@
         <licenseUrl>http://www.opensource.org/licenses/apache2.0</licenseUrl>
         <projectUrl>http://getglimpse.com</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <iconUrl>http://getglimpse.com/content/glimpse32.png</iconUrl>
+        <iconUrl>http://getglimpse.com/content/glimpse100.png</iconUrl>
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET MVC 2.0 application.</description>
         <summary>ASP.NET MVC 2.0 web debugging and diagnostics tool.</summary>
         <tags>ASP.NET Web MVC Glimpse</tags>
         <dependencies>
-          <dependency id="Glimpse.AspNet" version="1.0.0-rc1" />
+          <dependency id="Glimpse.AspNet" version="1.0.0-rc2" />
         </dependencies>
     </metadata>
     <files>
