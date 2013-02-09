@@ -48,7 +48,7 @@
     <Compile Include="AlternateImplementation\RouteConstraint.cs" />
     <Compile Include="AlternateImplementation\RouteConstraintRegex.cs" />
     <Compile Include="AspNetFrameworkProvider.cs" />
-    <Compile Include="AspNetServiceLocator.cs" />
+    <Compile Include="Tab\AspNetServiceLocator.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Extensibility\AspNetTab.cs" />
     <Compile Include="Extensions\TabContextExtensions.cs" />
