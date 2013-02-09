@@ -51,6 +51,7 @@
     <Compile Include="AspNetFrameworkProvider.cs" />
     <Compile Include="AspNetServiceLocator.cs" />
     <Compile Include="Controls\Client.cs" />
+    <Compile Include="Tab\AspNetServiceLocator.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Extensibility\AspNetTab.cs" />
     <Compile Include="Extensions\HttpContextExtensions.cs" />
