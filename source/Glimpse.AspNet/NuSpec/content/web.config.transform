@@ -1,10 +1,11 @@
 ﻿<configuration>
     <configSections>
-        <section name="glimpse" type="Glimpse.Core.Configuration.GlimpseSection, Glimpse.Core" />
+        <section name="glimpse" type="Glimpse.Core.Configuration.Section, Glimpse.Core" />
     </configSections>
     <glimpse defaultRuntimePolicy="On" endpointBaseUri="~/Glimpse.axd"/>
     <system.web>
-        <trace writeToDiagnosticsTrace="true" enabled="true" pageOutput="false"/>
+        <!-- Glimpse: This can be commented in to add additional data to the Trace tab when using WebForms
+        <trace writeToDiagnosticsTrace="true" enabled="true" pageOutput="false"/> -->
         <httpModules>
             <add name="Glimpse" type="Glimpse.AspNet.HttpModule, Glimpse.AspNet"/>
         </httpModules>

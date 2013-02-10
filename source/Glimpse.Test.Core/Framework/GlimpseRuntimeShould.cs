@@ -80,7 +80,7 @@ namespace Glimpse.Test.Core.Framework
             Runtime.BeginRequest();
             Runtime.EndRequest();
 
-            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
+            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
             Assert.NotNull(results);
             Assert.Equal(1, results.Count);
 
@@ -96,7 +96,7 @@ namespace Glimpse.Test.Core.Framework
             Runtime.Initialize();
             Runtime.BeginRequest();
 
-            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
+            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
             Assert.NotNull(results);
             Assert.Equal(0, results.Count);
 
@@ -111,7 +111,7 @@ namespace Glimpse.Test.Core.Framework
             Runtime.BeginRequest();
             Runtime.EndRequest();
 
-            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
+            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
             Assert.NotNull(results);
             Assert.Equal(1, results.Count);
             Assert.Contains("castle_proxies_itabproxy", results.First().Key); 
@@ -125,7 +125,7 @@ namespace Glimpse.Test.Core.Framework
             Runtime.BeginRequest();
             Runtime.EndRequest();
 
-            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
+            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
             Assert.NotNull(results);
             Assert.Equal(1, results.Count);
 
@@ -142,7 +142,7 @@ namespace Glimpse.Test.Core.Framework
             Runtime.BeginRequest();
             Runtime.EndRequest();
 
-            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
+            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
             Assert.NotNull(results);
             Assert.Equal(1, results.Count);
 
@@ -160,7 +160,7 @@ namespace Glimpse.Test.Core.Framework
             Runtime.BeginRequest();
             Runtime.EndRequest();
 
-            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
+            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
             Assert.NotNull(results);
             Assert.Equal(1, results.Count);
 
@@ -177,7 +177,7 @@ namespace Glimpse.Test.Core.Framework
             Runtime.BeginRequest();
             Runtime.EndRequest();
 
-            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
+            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
             Assert.NotNull(results);
             Assert.Equal(1, results.Count);
 
@@ -195,7 +195,7 @@ namespace Glimpse.Test.Core.Framework
             Runtime.BeginRequest();
             Runtime.EndRequest();
 
-            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.PluginResultsDataStoreKey);
+            var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
             Assert.NotNull(results);
             Assert.Equal(0, results.Count);
         }

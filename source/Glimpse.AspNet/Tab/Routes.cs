@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Glimpse.AspNet.AlternateImplementation;
+using Glimpse.AspNet.AlternateType;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.AspNet.Model;
 using Glimpse.Core.Extensibility;
@@ -19,23 +19,24 @@ namespace Glimpse.AspNet.Tab
                 {
                     r.Cell(0).WidthInPixels(100);
                     r.Cell(1).AsKey();
-                    r.Cell(2).WidthInPercent(20).SetLayout(TabLayout.Create().Row(x => 
+                    r.Cell(2).Class("mono");
+                    r.Cell(3).WidthInPercent(20).SetLayout(TabLayout.Create().Row(x => 
                         {
                             x.Cell("{{0}} ({{1}})").WidthInPercent(45); 
                             x.Cell(2);
                         }));
-                    r.Cell(3).WidthInPercent(35).SetLayout(TabLayout.Create().Row(x =>
+                    r.Cell(4).WidthInPercent(35).SetLayout(TabLayout.Create().Row(x =>
                         {
                             x.Cell(0).WidthInPercent(30);
                             x.Cell(1);
                             x.Cell(2).WidthInPercent(30);
                         }));
-                    r.Cell(4).WidthInPercent(15).SetLayout(TabLayout.Create().Row(x =>
+                    r.Cell(5).WidthInPercent(15).SetLayout(TabLayout.Create().Row(x =>
                         {
                             x.Cell(0).WidthInPercent(45);
                             x.Cell(1).WidthInPercent(55); 
                         }));
-                    r.Cell(5).WidthInPixels(100).Suffix(" ms").Class("mono").AlignRight();
+                    r.Cell(6).WidthInPixels(100).Suffix(" ms").Class("mono").AlignRight();
                 }).Build();
 
         public override string Name
@@ -60,16 +61,16 @@ namespace Glimpse.AspNet.Tab
 
         public void Setup(ITabSetupContext context)
         {
-            context.PersistMessages<Route.ProcessConstraint.Message>();
+            context.PersistMessages<RouteBase.ProcessConstraint.Message>();
             context.PersistMessages<RouteBase.GetRouteData.Message>();
         }
 
         public override object GetData(ITabContext context)
         {
             var routeMessages = ProcessMessages(context.GetMessages<RouteBase.GetRouteData.Message>());
-            var constraintMessages = ProcessMessages(context.GetMessages<Route.ProcessConstraint.Message>());
+            var constraintMessages = ProcessMessages(context.GetMessages<RouteBase.ProcessConstraint.Message>());
 
-            var result = new List<RouteModel>();
+             var result = new List<RouteModel>();
 
             using (System.Web.Routing.RouteTable.Routes.GetReadLock())
             {
@@ -84,6 +85,16 @@ namespace Glimpse.AspNet.Tab
             return result;
         }
 
+        private static TSource SafeFirstOrDefault<TSource>(IEnumerable<TSource> source)
+        {
+            if (source == null)
+            {
+                return default(TSource);
+            }
+
+            return source.FirstOrDefault();
+        }
+
         private Dictionary<int, List<RouteBase.GetRouteData.Message>> ProcessMessages(IEnumerable<RouteBase.GetRouteData.Message> messages)
         { 
             if (messages == null)
@@ -94,21 +105,21 @@ namespace Glimpse.AspNet.Tab
             return messages.GroupBy(x => x.RouteHashCode).ToDictionary(x => x.Key, x => x.ToList());
         }
 
-        private Dictionary<int, Dictionary<int, List<Route.ProcessConstraint.Message>>> ProcessMessages(IEnumerable<Route.ProcessConstraint.Message> messages)
+        private Dictionary<int, Dictionary<int, List<RouteBase.ProcessConstraint.Message>>> ProcessMessages(IEnumerable<RouteBase.ProcessConstraint.Message> messages)
         {
             if (messages == null)
             {
-                return new Dictionary<int, Dictionary<int, List<Route.ProcessConstraint.Message>>>();
+                return new Dictionary<int, Dictionary<int, List<RouteBase.ProcessConstraint.Message>>>();
             }
 
             return messages.GroupBy(x => x.RouteHashCode).ToDictionary(x => x.Key, x => x.ToList().GroupBy(y => y.ConstraintHashCode).ToDictionary(y => y.Key, y => y.ToList()));
         }
 
-        private RouteModel GetRouteModelForRoute(ITabContext context, MvcRouteBase routeBase, Dictionary<int, List<RouteBase.GetRouteData.Message>> routeMessages, Dictionary<int, Dictionary<int, List<Route.ProcessConstraint.Message>>> constraintMessages)
+        private RouteModel GetRouteModelForRoute(ITabContext context, MvcRouteBase routeBase, Dictionary<int, List<RouteBase.GetRouteData.Message>> routeMessages, Dictionary<int, Dictionary<int, List<RouteBase.ProcessConstraint.Message>>> constraintMessages)
         {
             var routeModel = new RouteModel();
 
-            var routeMessage = routeMessages.GetValueOrDefault(routeBase.GetHashCode()).SafeFirstOrDefault();
+            var routeMessage = SafeFirstOrDefault(routeMessages.GetValueOrDefault(routeBase.GetHashCode()));
             if (routeMessage != null)
             {
                 routeModel.Duration = routeMessage.Duration; 
@@ -127,6 +138,12 @@ namespace Glimpse.AspNet.Tab
             else
             {
                 routeModel.Url = routeModel.ToString();
+            }
+
+            var routeName = routeBase as IRouteNameMixin;
+            if (routeName != null)
+            {
+                routeModel.Name = routeName.Name;
             }
 
             return routeModel;
@@ -157,7 +174,7 @@ namespace Glimpse.AspNet.Tab
             return routeData;
         }
 
-        private IEnumerable<RouteConstraintModel> ProcessConstraints(ITabContext context, MvcRoute route, Dictionary<int, Dictionary<int, List<Route.ProcessConstraint.Message>>> constraintMessages)
+        private IEnumerable<RouteConstraintModel> ProcessConstraints(ITabContext context, MvcRoute route, Dictionary<int, Dictionary<int, List<RouteBase.ProcessConstraint.Message>>> constraintMessages)
         {
             if (route.Constraints == null || route.Constraints.Count == 0)
             {
@@ -175,7 +192,7 @@ namespace Glimpse.AspNet.Tab
 
                 if (counstraintRouteMessages != null)
                 {
-                    var counstraintMessage = counstraintRouteMessages.GetValueOrDefault(constraint.Value.GetHashCode()).SafeFirstOrDefault();
+                    var counstraintMessage = SafeFirstOrDefault(counstraintRouteMessages.GetValueOrDefault(constraint.Value.GetHashCode()));
                     model.IsMatch = false;
                     
                     if (counstraintMessage != null)

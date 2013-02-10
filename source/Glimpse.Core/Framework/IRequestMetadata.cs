@@ -30,9 +30,9 @@ namespace Glimpse.Core.Framework
         string ResponseContentType { get; }
 
         /// <summary>
-        /// Gets the ip address.
+        /// Gets the IP address.
         /// </summary>
-        /// <value>The ip address.</value>
+        /// <value>The IP address.</value>
         string IpAddress { get; }
 
         /// <summary>

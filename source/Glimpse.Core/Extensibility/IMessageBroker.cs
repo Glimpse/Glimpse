@@ -19,7 +19,7 @@ namespace Glimpse.Core.Extensibility
         /// </summary>
         /// <typeparam name="T">Type of the message</typeparam>
         /// <param name="action">The action.</param>
-        /// <returns>Guid.</returns>
+        /// <returns>A subscription Id, which should be retained in order to unsubscribe.</returns>
         Guid Subscribe<T>(Action<T> action);
 
         /// <summary>

@@ -80,7 +80,7 @@
     <Compile Include="Configuration\ContentTypeElementCollectionShould.cs" />
     <Compile Include="Configuration\ContentTypeElementShould.cs" />
     <Compile Include="Configuration\DiscoverableCollectionElementShould.cs" />
-    <Compile Include="Configuration\GlimpseSectionShould.cs" />
+    <Compile Include="Configuration\SectionShould.cs" />
     <Compile Include="Configuration\LoggingElementShould.cs" />
     <Compile Include="Configuration\PolicyDiscoverableCollectionElementShould.cs" />
     <Compile Include="Configuration\RegexConverterShould.cs" />
@@ -91,10 +91,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DictionaryDataStoreAdapterShould.cs" />
-    <Compile Include="Extensibility\AlternateImplementationGenerationHookShould.cs" />
-    <Compile Include="Extensibility\AlternateImplementationSelectorShould.cs" />
-    <Compile Include="Extensibility\AlternateImplementationToCastleInterceptorAdapterShould.cs" />
-    <Compile Include="Extensibility\CastleInvocationToAlternateImplementationContextAdapterShould.cs" />
+    <Compile Include="Extensibility\AlternateTypeGenerationHookShould.cs" />
+    <Compile Include="Extensibility\AlternateTypeSelectorShould.cs" />
+    <Compile Include="Extensibility\AlternateTypeToCastleInterceptorAdapterShould.cs" />
+    <Compile Include="Extensibility\CastleInvocationToAlternateMethodContextAdapterShould.cs" />
     <Compile Include="Extensibility\ExceptionResourceResultShould.cs" />
     <Compile Include="Extensibility\FileResourceResultShould.cs" />
     <Compile Include="Extensibility\JsonNetSerializationConverterShould.cs" />
@@ -109,7 +109,6 @@
     <Compile Include="Extensibility\TabSetupContextShould.cs" />
     <Compile Include="Extensions\EnumExtensionsShould.cs" />
     <Compile Include="Extensions\TestingExtensions.cs" />
-    <Compile Include="Extensions\UriTemplateExtensionsShould.cs" />
     <Compile Include="Framework\CastleDynamicProxyFactoryShould.cs" />
     <Compile Include="Framework\MessageBrokerShould.cs" />
     <Compile Include="Framework\FactoryShould.cs" />
@@ -122,6 +121,8 @@
     <Compile Include="Framework\TimerShould.cs" />
     <Compile Include="GlimpseExceptionShould.cs" />
     <Compile Include="JsonNetSerializerShould.cs" />
+    <Compile Include="Message\ExecutionMessageShould.cs" />
+    <Compile Include="Message\TimedMessageShould.cs" />
     <Compile Include="Message\TimelineMessageShould.cs" />
     <Compile Include="Plugin\Assist\PluginShould.cs" />
     <Compile Include="Plugin\Assist\TabLayoutCellShould.cs" />
@@ -138,7 +139,6 @@
     <Compile Include="Policy\GlimpseResourcePolicyShould.cs" />
     <Compile Include="Policy\StatusCodePolicyShould.cs" />
     <Compile Include="Policy\UriPolicyShould.cs" />
-    <Compile Include="Policy\UserHostAddressPolicyShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceResult\CacheControlDecoratorShould.cs" />
     <Compile Include="ResourceResult\RedirectResourceResultShould.cs" />
@@ -151,6 +151,7 @@
     <Compile Include="Resource\MetadataShould.cs" />
     <Compile Include="Resource\PopupResourceShould.cs" />
     <Compile Include="Resource\VersionCheckResourceShould.cs" />
+    <Compile Include="SerializationConverter\TimelineEventModelConverterShould.cs" />
     <Compile Include="SerializationConverter\TimeStampConverterShould.cs" />
     <Compile Include="SerializationConverter\DateTimeConverterShould.cs" />
     <Compile Include="SerializationConverter\GlimpseMetadataConverterShould.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="SerializationConverter\TabResultConverterShould.cs" />
     <Compile Include="SerializationConverter\CSharpTypeConverterShould.cs" />
     <Compile Include="StatusCodeResourceResultShould.cs" />
+    <Compile Include="Tab\TimelineShould.cs" />
     <Compile Include="TestDoubles\DummyEnum.cs" />
     <Compile Include="TestDoubles\DummyMessage.cs" />
     <Compile Include="TestDoubles\DummyException.cs" />

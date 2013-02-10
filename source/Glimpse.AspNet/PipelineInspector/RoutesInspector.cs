@@ -1,63 +1,54 @@
-using System.Linq; 
-using Glimpse.Core.Extensibility;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection; 
+using Glimpse.AspNet.AlternateType;
+using Glimpse.Core.Extensibility; 
 
 namespace Glimpse.AspNet.PipelineInspector
 {
     public class RoutesInspector : IPipelineInspector
     {
-        public RoutesInspector()
-        {
-            RoutesConstraintInspector = new RoutesConstraintInspector();
-        }
-
-        private RoutesConstraintInspector RoutesConstraintInspector { get; set; }
-
+        private static readonly FieldInfo MappedRoutesField = typeof(System.Web.Routing.RouteCollection).GetField("_namedMap", BindingFlags.NonPublic | BindingFlags.Instance);
+         
         public void Setup(IPipelineInspectorContext context)
-        { 
-            var logger = context.Logger; 
-            var alternateImplementation = new Glimpse.AspNet.AlternateImplementation.Route(context.ProxyFactory);
-            var alternateBaseImplementation = new Glimpse.AspNet.AlternateImplementation.RouteBase(context.ProxyFactory);
-            var alternateConstraintImplementation = new Glimpse.AspNet.AlternateImplementation.RouteConstraint(context.ProxyFactory); 
+        {
+            var logger = context.Logger;
+            var alternateBaseImplementation = new AlternateType.RouteBase(context.ProxyFactory, context.Logger); 
 
             var currentRoutes = System.Web.Routing.RouteTable.Routes;
             using (currentRoutes.GetWriteLock())
             {
+                var mappedRoutes = (Dictionary<string, System.Web.Routing.RouteBase>)MappedRoutesField.GetValue(currentRoutes);
+
                 for (var i = 0; i < currentRoutes.Count; i++)
                 {
-                    var routeBase = currentRoutes[i];
-                    var replaceRoute = (System.Web.Routing.RouteBase)null;
+                    var originalObj = currentRoutes[i];
+                    var newObj = (System.Web.Routing.RouteBase)null;
 
-                    var route = routeBase as System.Web.Routing.Route;
-                    if (route != null)
+                    var mixins = new[] { RouteNameMixin.None() };
+                    var routeName = string.Empty; 
+                    if (mappedRoutes.ContainsValue(originalObj))
                     {
-                        if (routeBase.GetType() == typeof(System.Web.Routing.Route))
-                        {
-                            replaceRoute = context.ProxyFactory.ExtendClass<System.Web.Routing.Route>(alternateImplementation.AllMethods, Enumerable.Empty<object>(), new object[] { route.Url, route.Defaults, route.Constraints, route.DataTokens, route.RouteHandler });
-                        }
-                        else if (context.ProxyFactory.IsWrapClassEligible(typeof(System.Web.Routing.Route)))
-                        {
-                            replaceRoute = context.ProxyFactory.WrapClass(route, alternateImplementation.AllMethods, Enumerable.Empty<object>(), new object[] { route.Url, route.Defaults, route.Constraints, route.DataTokens, route.RouteHandler });
-                            RoutesConstraintInspector.Setup(logger, context.ProxyFactory, alternateConstraintImplementation, route.Constraints);
-                        }
+                        var pair = mappedRoutes.First(r => r.Value == originalObj);
+                        routeName = pair.Key;
+                        mixins = new[] { new RouteNameMixin(pair.Key) };
                     }
-
-                    if (replaceRoute == null)
+                      
+                    if (alternateBaseImplementation.TryCreate(originalObj, out newObj, mixins))
                     {
-                        if (context.ProxyFactory.IsWrapClassEligible(typeof(System.Web.Routing.RouteBase)))
+                        currentRoutes[i] = newObj;
+
+                        if (!string.IsNullOrEmpty(routeName))
                         {
-                            replaceRoute = context.ProxyFactory.WrapClass(routeBase, alternateBaseImplementation.AllMethods);
+                            mappedRoutes[routeName] = newObj;
                         }
-                    }
 
-                    if (replaceRoute != null)
-                    {
-                        currentRoutes[i] = replaceRoute;
-                        logger.Info(Resources.RouteSetupReplacedRoute, routeBase.GetType());
+                        logger.Info(Resources.RouteSetupReplacedRoute, originalObj.GetType());
                     }
                     else
                     {
-                        logger.Info(Resources.RouteSetupNotReplacedRoute, routeBase.GetType());
-                    } 
+                        logger.Info(Resources.RouteSetupNotReplacedRoute, originalObj.GetType());
+                    }
                 }
             }
         }

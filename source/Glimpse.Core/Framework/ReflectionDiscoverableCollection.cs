@@ -8,10 +8,18 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Framework
 {
+    /// <summary>
+    /// An implementation of <see cref="IDiscoverableCollection{T}"/> which uses .NET reflection to find and load types.
+    /// </summary>
+    /// <typeparam name="T">The type to find and load.</typeparam>
     public class ReflectionDiscoverableCollection<T> : IDiscoverableCollection<T>
     {
         private string discoveryLocation;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReflectionDiscoverableCollection{T}" /> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
         public ReflectionDiscoverableCollection(ILogger logger)
         {
             Items = new List<T>();
@@ -20,8 +28,18 @@ namespace Glimpse.Core.Framework
             Logger = logger;
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether or not auto discover.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [auto discover]; otherwise, <c>false</c>.
+        /// </value>
         public bool AutoDiscover { get; set; }
 
+        /// <summary>
+        /// Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1" />.
+        /// </summary>
+        /// <returns>The number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1" />.</returns>
         public int Count
         {
             get
@@ -30,6 +48,13 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        /// <summary>
+        /// Gets or sets the file path to the discovery location.
+        /// </summary>
+        /// <value>
+        /// The discovery location.
+        /// </value>
+        /// <exception cref="System.IO.DirectoryNotFoundException">Throws an exception if the directory does not exist.</exception>
         public string DiscoveryLocation
         {
             get
@@ -51,6 +76,10 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only.
+        /// </summary>
+        /// <returns>true if the <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only; otherwise, false.</returns>
         public bool IsReadOnly
         {
             get
@@ -77,38 +106,72 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        /// <summary>
+        /// Gets the enumerator.
+        /// </summary>
+        /// <returns>The enumerator.</returns>
         public IEnumerator<T> GetEnumerator()
         {
             return Items.GetEnumerator();
         }
 
+        /// <summary>
+        /// Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
+        /// </returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return Items.GetEnumerator();
         }
 
+        /// <summary>
+        /// Adds the specified item.
+        /// </summary>
+        /// <param name="item">The item.</param>
         public void Add(T item)
         {
             Items.Add(item);
             Logger.Debug(Resources.DiscoverableCollectionAdd, typeof(T).Name, item.GetType());
         }
 
+        /// <summary>
+        /// Clears this instance.
+        /// </summary>
         public void Clear()
         {
             Items.Clear();
             Logger.Debug(Resources.DiscoverableCollectionClear, typeof(T).Name);
         }
 
+        /// <summary>
+        /// Determines whether the collection contains the specified item.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns>
+        ///   <c>true</c> if the collection contains the specified item; otherwise, <c>false</c>.
+        /// </returns>
         public bool Contains(T item)
         {
             return Items.Contains(item);
         }
 
+        /// <summary>
+        /// Copies to.
+        /// </summary>
+        /// <param name="array">The array.</param>
+        /// <param name="arrayIndex">Index of the array.</param>
         public void CopyTo(T[] array, int arrayIndex)
         {
             Items.CopyTo(array, arrayIndex);
         }
 
+        /// <summary>
+        /// Removes the specified item.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns><c>true</c> is the item was removed.</returns>
         public bool Remove(T item)
         {
             var result = Items.Remove(item);
@@ -121,14 +184,21 @@ namespace Glimpse.Core.Framework
             return result;
         }
 
+        /// <summary>
+        /// Ignores the type.
+        /// </summary>
+        /// <param name="type">The type.</param>
         public void IgnoreType(Type type)
         {
             IgnoredTypes.Add(type);
         }
 
+        /// <summary>
+        /// Discovers this all instanced of <typeparamref name="T"/> within the discovery location.
+        /// </summary>
         public void Discover()
         {
-            Logger.Debug("Discovering {0}'s in '{1}' and all subdirectories.", typeof(T).Name, DiscoveryLocation);
+            Logger.Debug("Discovering {0}'s in '{1}' and all sub directories.", typeof(T).Name, DiscoveryLocation);
 
             var results = new List<T>();
 

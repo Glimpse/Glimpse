@@ -4,7 +4,7 @@ using Glimpse.AspNet.Extensibility;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Tab.Assist;
-using Glimpse.Mvc.AlternateImplementation;
+using Glimpse.Mvc.AlternateType;
 using Glimpse.Mvc.Model;
 
 namespace Glimpse.Mvc.Tab

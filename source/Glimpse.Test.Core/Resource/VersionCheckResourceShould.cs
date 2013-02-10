@@ -35,7 +35,7 @@ namespace Glimpse.Test.Core.Resource
 
             var result = resource.Execute(contextMock.Object);
 
-            Assert.NotNull(result.CastAs<IResourceResult>());
+            Assert.IsAssignableFrom<IResourceResult>(result);
         }
     }
 }

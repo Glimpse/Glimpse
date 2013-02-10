@@ -2,19 +2,43 @@ using System.Collections.Generic;
 
 namespace Glimpse.Core.Framework
 {
+    /// <summary>
+    /// A class which describes Glimpse system metadata, as required by a client.
+    /// </summary>
     public class GlimpseMetadata
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GlimpseMetadata" /> class.
+        /// </summary>
         public GlimpseMetadata()
         {
-            Plugins = new Dictionary<string, PluginMetadata>();
+            Tabs = new Dictionary<string, TabMetadata>();
 
             Resources = new Dictionary<string, string>();
         }
 
+        /// <summary>
+        /// Gets or sets the running version of Glimpse.
+        /// </summary>
+        /// <value>
+        /// The running version of Glimpse.
+        /// </value>
         public string Version { get; set; }
-        
-        public IDictionary<string, PluginMetadata> Plugins { get; set; }
-        
+
+        /// <summary>
+        /// Gets or sets the collection of tab specific metadata.
+        /// </summary>
+        /// <value>
+        /// The tab's metadata.
+        /// </value>
+        public IDictionary<string, TabMetadata> Tabs { get; set; }
+
+        /// <summary>
+        /// Gets or sets the collection resources keys and their corresponding Uri templates.
+        /// </summary>
+        /// <value>
+        /// The resources keys and Uri templates.
+        /// </value>
         public IDictionary<string, string> Resources { get; set; }
     }
 }

@@ -3,33 +3,38 @@
 namespace Glimpse.Core.Framework
 {
     /// <summary>
-    /// Defines methods to implement a Framework Provider
+    /// Defines methods to required to implement a Glimpse framework provider. 
+    /// Framework providers allow Glimpse to work generically against any .NET based web development framework.
     /// </summary>
     /// <remarks>
     /// Required by any different Framework Provider - i.e. ASP.NET, Self Hosted WebAPI, 
-    /// NancyFX, etc. As an example implementation see Glimpse.AspNet.AspNetFrameworkProvider
+    /// NancyFX, etc. See Glimpse.AspNet.AspNetFrameworkProvider
     /// as reference implementation.
     /// </remarks>
     public interface IFrameworkProvider
     {
         /// <summary>
-        /// Gets the HTTP request store.
+        /// Gets the Http request store.
         /// </summary>
-        /// <value>The HTTP request store.</value>
+        /// <value>The Http request store.</value>
         /// <remarks>
-        /// Default expectation is that a new instance is returned on each usage. This 
-        /// the local request storage (i.e. <see cref="System.Web.HttpContext.Items"/>).
+        /// A request store is a place for Glimpse to store data that lives and dies with an Http request.
         /// </remarks>
+        /// <example>
+        /// In ASP.NET, <c>HttpContext.Items</c> is a request store.
+        /// </example>
         IDataStore HttpRequestStore { get; }
 
         /// <summary>
-        /// Gets the HTTP server store.
+        /// Gets the Http server store.
         /// </summary>
-        /// <value>The HTTP server store.</value>
+        /// <value>The Http server store.</value>
         /// <remarks>
-        /// Default expectation is that a new instance is returned on each usage. This 
-        /// the local request storage (i.e. <see cref="System.Web.HttpContext.Application"/>).
+        /// A server store is a place for Glimpse to store data a persists across Http requests.
         /// </remarks>
+        /// <example>
+        /// In ASP.NET, <c>HttpContext.Application</c> is a server store.
+        /// </example>
         IDataStore HttpServerStore { get; }
 
         /// <summary>
@@ -37,9 +42,11 @@ namespace Glimpse.Core.Framework
         /// </summary>
         /// <value>The runtime context.</value>
         /// <remarks>
-        /// Instance of the underlying context that the Framework Provider uses 
-        /// (i.e. <see cref="System.Web.HttpContext.Current"/>). 
+        /// Instance of the underlying context that the web development framework uses.
         /// </remarks>
+        /// <example>
+        /// In ASP.NET, <c>HttpContext</c> is the runtime context.
+        /// </example>
         object RuntimeContext { get; }
 
         /// <summary>
@@ -47,20 +54,22 @@ namespace Glimpse.Core.Framework
         /// </summary>
         /// <value>The request metadata.</value>
         /// <remarks>
-        /// Default expectation is that a new instance is returned on each usage. Provides 
-        /// access to a request metadata abstraction.
+        /// An instance of <see cref="IRequestMetadata"/> which provides relevant metadata about an Http request.
         /// </remarks>
+        /// <example>
+        /// In ASP.NET, a <c>HttpRequest</c> contains must data required for creating a <see cref="IRequestMetadata"/>.
+        /// </example>
         IRequestMetadata RequestMetadata { get; }
 
         /// <summary>
-        /// Sets the HTTP response header.
+        /// Sets the Http response header.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="value">The value.</param>
         void SetHttpResponseHeader(string name, string value);
 
         /// <summary>
-        /// Sets the HTTP response status code.
+        /// Sets the Http response status code.
         /// </summary>
         /// <param name="statusCode">The status code.</param>
         void SetHttpResponseStatusCode(int statusCode);
@@ -73,16 +82,16 @@ namespace Glimpse.Core.Framework
         void SetCookie(string name, string value);
 
         /// <summary>
-        /// Injects the HTTP response body.
+        /// Injects the Http response body.
         /// </summary>
         /// <param name="htmlSnippet">The HTML snippet.</param>
         /// <remarks>
-        /// Inserts the given html snippet into the html document just before the end body tag.
+        /// Inserts the given html snippet into the html document just before the end <c>&lt;/body&gt;</c> tag.
         /// </remarks>
         void InjectHttpResponseBody(string htmlSnippet);
 
         /// <summary>
-        /// Writes the HTTP response.
+        /// Writes the Http response.
         /// </summary>
         /// <param name="content">The content.</param>
         /// <remarks>
@@ -94,7 +103,7 @@ namespace Glimpse.Core.Framework
         void WriteHttpResponse(byte[] content);
 
         /// <summary>
-        /// Writes the HTTP response.
+        /// Writes the Http response.
         /// </summary>
         /// <param name="content">The content.</param>
         /// <remarks>

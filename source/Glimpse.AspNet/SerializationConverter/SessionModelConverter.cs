@@ -13,7 +13,18 @@ namespace Glimpse.AspNet.SerializationConverter
             var root = new TabSection("Key", "Value", "Type");
             foreach (var item in obj)
             {
-                root.AddRow().Column(item.Key).Column(item.Value).Column(item.Type);
+                var row = root.AddRow().Column(item.Key);
+
+                if (item.Type != null && !item.Type.IsSerializable)
+                {
+                    row.Column("Non serializable type :(").Emphasis();
+                }
+                else
+                {
+                    row.Column(item.Value);
+                }
+
+                row.Column(item.Type);
             }
 
             return root.Build();

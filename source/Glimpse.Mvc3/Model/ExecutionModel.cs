@@ -12,6 +12,8 @@ namespace Glimpse.Mvc.Model
             ExecutedType = message.ExecutedType;
             ExecutedMethod = message.ExecutedMethod;
             Duration = message.Duration;
+            ActionName = message.ActionName;
+            ControllerName = message.ControllerName;
 
             var filter = message as IFilterMessage;
             if (filter != null)
@@ -37,5 +39,9 @@ namespace Glimpse.Mvc.Model
         public FilterBounds? Bounds { get; set; }
 
         public bool IsChildAction { get; set; }
+
+        public string ActionName { get; set; }
+
+        public string ControllerName { get; set; }
     }
 }

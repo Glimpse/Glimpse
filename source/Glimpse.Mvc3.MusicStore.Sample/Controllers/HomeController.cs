@@ -30,6 +30,7 @@ namespace MvcMusicStore.Controllers
             Trace.IndentLevel = 0;
             Trace.TraceInformation("Test TraceInformation;");
 
+            HttpContext.Session["TestObject"] = new Artist { ArtistId = 123, Name = "Test Artist" };
 
             TraceSource ts = new TraceSource("Test source");
 

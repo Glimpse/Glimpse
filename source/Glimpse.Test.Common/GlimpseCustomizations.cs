@@ -3,7 +3,7 @@ using System.IO;
 using System.Web.Mvc;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
-using Glimpse.Mvc.AlternateImplementation;
+using Glimpse.Mvc.AlternateType;
 using Moq;
 using Ploeh.AutoFixture;
 
@@ -13,7 +13,7 @@ namespace Glimpse.Test.Common
     {
         public void Customize(IFixture fixture)
         {
-            IAlternateImplementationContext(fixture);
+            IAlternateMethodContext(fixture);
 
             ViewEngineFindViewArguments(fixture);
 
@@ -74,13 +74,13 @@ namespace Glimpse.Test.Common
         }
 
 // ReSharper disable InconsistentNaming
-        private static void IAlternateImplementationContext(IFixture fixture)
+        private static void IAlternateMethodContext(IFixture fixture)
 // ReSharper restore InconsistentNaming
         {
-            fixture.Register<IMessageBroker, IProxyFactory, IExecutionTimer, ILogger, IAlternateImplementationContext>(
+            fixture.Register<IMessageBroker, IProxyFactory, IExecutionTimer, ILogger, IAlternateMethodContext>(
                 (broker, proxy, timer, logger) =>
                     {
-                        var mock = new Mock<IAlternateImplementationContext>();
+                        var mock = new Mock<IAlternateMethodContext>();
                         mock.Setup(m => m.MessageBroker).Returns(broker);
                         mock.Setup(m => m.ProxyFactory).Returns(proxy);
                         mock.Setup(m => m.RuntimePolicyStrategy).Returns(() => RuntimePolicy.On);

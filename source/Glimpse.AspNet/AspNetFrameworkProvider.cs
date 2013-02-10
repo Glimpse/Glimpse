@@ -1,4 +1,6 @@
-﻿using System.Web;
+﻿using System;
+using System.Web;
+using Glimpse.AspNet.Extensions;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 
@@ -10,6 +12,11 @@ namespace Glimpse.AspNet
         /// Wrapper around HttpContext.Current for testing purposes. Not for public use.
         /// </summary>
         private HttpContextBase context;
+
+        public AspNetFrameworkProvider(ILogger logger)
+        {
+            Logger = logger;
+        }
 
         public IDataStore HttpRequestStore
         {
@@ -37,36 +44,83 @@ namespace Glimpse.AspNet
             set { context = value; }
         }
 
+        private ILogger Logger { get; set; }
+
         public void SetHttpResponseHeader(string name, string value)
         {
-            Context.Response.AppendHeader(name, value);
+            if (!Context.HeadersSent())
+            {
+                try
+                {
+                    Context.Response.AppendHeader(name, value);
+                }
+                catch (Exception exception)
+                {
+                    Logger.Error("Exception setting Http response header '{0}' with value '{1}'.", exception, name, value);
+                }
+            }
         }
 
         public void SetHttpResponseStatusCode(int statusCode)
         {
-            Context.Response.StatusCode = statusCode;
-            Context.Response.StatusDescription = null;
+            try
+            {
+                Context.Response.StatusCode = statusCode;
+                Context.Response.StatusDescription = null;
+            }
+            catch (Exception exception)
+            {
+                Logger.Error("Exception setting Http status code with value '{0}'.", exception, statusCode);
+            }
         }
 
         public void SetCookie(string name, string value)
         {
-            Context.Response.Cookies.Add(new HttpCookie(name, value));
+            try
+            {
+                Context.Response.Cookies.Add(new HttpCookie(name, value));
+            }
+            catch (Exception exception)
+            {
+                Logger.Error("Exception setting cookie '{0}' with value '{1}'.", exception, name, value);
+            }
         }
 
         public void InjectHttpResponseBody(string htmlSnippet)
         {
-            var response = Context.Response;
-            response.Filter = new PreBodyTagFilter(htmlSnippet, response.Filter, response.ContentEncoding);
+            try
+            {
+                var response = Context.Response;
+                response.Filter = new PreBodyTagFilter(htmlSnippet, response.Filter, response.ContentEncoding, Logger);
+            }
+            catch (Exception exception)
+            {
+                Logger.Error("Exception injecting Http response body with Html snippet '{0}'.", exception, htmlSnippet);
+            }
         }
 
         public void WriteHttpResponse(byte[] content)
         {
-            Context.Response.BinaryWrite(content);
+            try
+            {
+                Context.Response.BinaryWrite(content);
+            }
+            catch (Exception exception)
+            {
+                Logger.Error("Exception writing Http response.", exception);
+            }
         }
 
         public void WriteHttpResponse(string content)
         {
-            Context.Response.Write(content);
+            try
+            {
+                Context.Response.Write(content);
+            }
+            catch (Exception exception)
+            {
+                Logger.Error("Exception writing Http response.", exception);
+            }
         }
     }
 }

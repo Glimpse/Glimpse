@@ -26,3 +26,9 @@ _ReSharper.*
 /.nuget/NuGet.Config
 TestResults
 /*.DotSettings.user
+*.DotSettings
+*.shfbproj_*
+working/
+Help/
+/source/Glimpse.WebForms.WingTip.Sample/App_Data/wingtiptoys.mdf
+/source/Glimpse.WebForms.WingTip.Sample/App_Data/wingtiptoys_log.ldf

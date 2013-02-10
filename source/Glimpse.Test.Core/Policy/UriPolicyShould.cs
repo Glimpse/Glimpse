@@ -32,7 +32,7 @@ namespace Glimpse.Test.Core.Policy
 
             var policy = new UriPolicy(blacklist);
 
-            Assert.Equal(blacklist, policy.UriBlacklist);
+            Assert.Equal(blacklist, policy.UriBlackList);
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace Glimpse.Test.Core.Policy
         {
             Policy.RequestMetadataMock.Setup(r => r.RequestUri).Returns("http://localhost/admin");
 
-            Policy.UriBlacklist.Add(new Regex(".+/admin"));
+            Policy.UriBlackList.Add(new Regex(".+/admin"));
 
             Assert.Equal(RuntimePolicy.Off, Policy.Execute(Policy.ContextMock.Object));
             

@@ -13,6 +13,9 @@ namespace Glimpse.AspNet
 {
     public class GlimpseTraceListener : TraceListener
     {
+        // HACK - this string has to match Glimpse.Core.Constants.TabStorageKey, as such this implementation should be changed
+        private const string TabStorageKey = "__GlimpseTabStorage"; 
+
         public GlimpseTraceListener() : this(GetTabStore)
         {
         }
@@ -232,12 +235,12 @@ namespace Glimpse.AspNet
 
             var requestStore = new DictionaryDataStoreAdapter(HttpContext.Current.Items);
 
-            if (!requestStore.Contains(Core.Constants.TabStorageKey))
+            if (!requestStore.Contains(TabStorageKey))
             {
-                requestStore.Set(Core.Constants.TabStorageKey, new Dictionary<string, IDataStore>());
+                requestStore.Set(TabStorageKey, new Dictionary<string, IDataStore>());
             }
 
-            var tabStorage = requestStore.Get<IDictionary<string, IDataStore>>(Core.Constants.TabStorageKey);
+            var tabStorage = requestStore.Get<IDictionary<string, IDataStore>>(TabStorageKey);
             var tabName = Tab.Trace.TabKey;
 
             if (!tabStorage.ContainsKey(tabName))
@@ -257,8 +260,8 @@ namespace Glimpse.AspNet
                 {
                     Category = category,
                     Message = message,
-                    FromFirst = firstWatch.ElapsedTicks.ConvertNanosecondsToMilliseconds(),
-                    FromLast = lastWatch.ElapsedTicks.ConvertNanosecondsToMilliseconds(),
+                    FromFirst = firstWatch.Elapsed,
+                    FromLast = lastWatch.Elapsed,
                     IndentLevel = IndentLevel
                 };
 

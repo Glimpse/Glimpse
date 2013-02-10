@@ -1,8 +1,15 @@
 <StyleCopSettings Version="105">
   <GlobalSettings>
     <CollectionProperty Name="RecognizedWords">
+      <Value>mixin</Value>
+      <Value>mixins</Value>
       <Value>non-nullable</Value>
       <Value>nullable</Value>
+      <Value>proxied</Value>
+      <Value>proxyable</Value>
+      <Value>bootstrapper</Value>
+      <Value>Json</Value>
+      <Value>Dll</Value>
     </CollectionProperty>
   </GlobalSettings>
   <Analyzers>

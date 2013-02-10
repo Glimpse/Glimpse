@@ -212,11 +212,11 @@
         <value xml:space="preserve">Setup IPipelineInspector of type '{0}'.</value>
         <comment>{0} - GetType() of IPipelineInspector</comment>
     </data>
-    <data name="AlternateImplementationGenerationHookMethodsInspected">
+    <data name="AlternateTypeGenerationHookMethodsInspected">
         <value xml:space="preserve">Methods inspected via proxy generation hook on type '{0}'.</value>
         <comment>{0} - typeof(T)</comment>
     </data>
-    <data name="AlternateImplementationGenerationHookNonProxyableMemberNotification">
+    <data name="AlternateTypeGenerationHookNonProxyableMemberNotification">
         <value xml:space="preserve">{0} method of type '{1}' is not proxyable.</value>
         <comment>{0} - .Name of MemberInfo, {1} - Proxy Type</comment>
     </data>

@@ -1,58 +1,47 @@
-﻿renderEngine = function () {
-    var //Support 
-        registeredEngnies = {},
-        shouldUsePreview = function (length, level, forceFull, limit, forceLimit, tolerance) {
-            if ($.isNumeric(forceLimit))  
-                limit = forceLimit; 
-            return !forceFull && ((level == 1 && length > (limit + tolerance)) || (level > 1 && (!forceLimit || length > (limit + tolerance))));
-        },
-        newItemSpacer = function (currentRow, rowLimit, dataLength) { 
-            var html = '';
-            if (currentRow > 1 && (currentRow <= rowLimit || dataLength > rowLimit)) 
-                html += '<span class="rspace">,</span>'; 
-            if (currentRow > rowLimit && dataLength > rowLimit) 
-                html += '<span class="small">length=' + dataLength + '</span>'; 
-            return html;
-        },
-/*(import:glimpse.render.util.rawString.js|2)*/,
-/*(import:glimpse.render.style.js|2)*/,
+﻿glimpse.render.engine = (function($, pubsub) {
+    var providers = {},
+        addition = function (scope, data, metadata, isAppend) {
+            var findType = isAppend ? 'last' : 'first',
+                insertType = isAppend ? 'insertAfter' : 'insertBefore',
+                html = $('<div>' + build(data, metadata) + '</div>').find('.glimpse-row-holder:first')[0].innerHTML;
+            
+            var target = scope.find('.glimpse-row-holder:first > .glimpse-row:' + findType);
+            if (target.length == 0) {
+                target = scope.find('.glimpse-row-holder:first');
+                insertType = 'appendTo';
+            }
 
-        //Engines 
-/*(import:glimpse.render.engine.master.js|2)*/,
-/*(import:glimpse.render.engine.keyValue.js|2)*/,
-/*(import:glimpse.render.engine.table.js|2)*/,
-/*(import:glimpse.render.engine.structured.js|2)*/,
-/*(import:glimpse.render.engine.string.js|2)*/,
+            var elements = $(html)[insertType](target);
 
-        //Main 
-        retrieve = function (name) {
-            return registeredEngnies[name];
+            pubsub.publish('trigger.panel.render.style', { scope: elements });
         },
-        register = function (name, engine) {
-            registeredEngnies[name] = engine;
+        retrieve = function(name) {
+            return providers[name];
         },
-        build = function (data, metadata) { 
-            return master.build(data, 0, true, metadata, 1);
+        register = function(name, engine) {
+            providers[name] = engine;
         },
-        insert = function (scope, data, metadata) {
-            scope.html(build(data, metadata));
-            style.apply(scope);
+        build = function(data, metadata) {
+            return providers.master.build(data, 0, true, metadata, 1);
         },
-        init = function () {
-            register('master', master);
-            register('keyvalue', keyValue);
-            register('table', table);
-            register('structured', structured);
-            register('string', string);
-
+        insert = function(scope, data, metadata) {
+            scope.html(build(data, metadata)); 
+            pubsub.publish('trigger.panel.render.style', { scope: scope });
+        },
+        append = function(scope, data, metadata) {
+            addition(scope, data, metadata, true);
+        },
+        prepend = function(scope, data, metadata) {
+            addition(scope, data, metadata, false);
         };
-
-    init();
-     
+   
     return {
-        insert : insert,
-        build : build,
-        retrieve : retrieve,
-        register : register
+        _providers: providers,
+        retrieve: retrieve,
+        register: register,
+        build: build,
+        insert: insert,
+        append: append,
+        prepend: prepend
     };
-} ()
+})(jQueryGlimpse, glimpse.pubsub);

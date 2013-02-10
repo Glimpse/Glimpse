@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Web;
+using Glimpse.AspNet.Extensions;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 
@@ -8,18 +9,31 @@ namespace Glimpse.AspNet
 {
     public class HttpModule : IHttpModule  
     {
-        private readonly Factory factory = new Factory(new AspNetServiceLocator());
+        private static readonly object LockObj = new object();
+        private static readonly Factory Factory;
+
+        static HttpModule()
+        {
+            var serviceLocator = new AspNetServiceLocator();
+            Factory = new Factory(serviceLocator);
+            serviceLocator.Logger = Factory.InstantiateLogger();
+        }
 
         public void Init(HttpApplication httpApplication)
         {
             Init(WithTestable(httpApplication));
         }
 
+        public void Dispose()
+        {
+            // Nothing to dispose
+        }
+
         internal void Init(HttpApplicationBase httpApplication)
         {
             var runtime = GetRuntime(httpApplication.Application);
 
-            AppDomain.CurrentDomain.SetData(Constants.LoggerKey, factory.InstantiateLogger());
+            AppDomain.CurrentDomain.SetData(Constants.LoggerKey, Factory.InstantiateLogger());
 
             if (runtime.IsInitialized || runtime.Initialize())
             {
@@ -27,6 +41,7 @@ namespace Glimpse.AspNet
                 httpApplication.PostAcquireRequestState += (context, e) => BeginSessionAccess(WithTestable(context));
                 httpApplication.PostRequestHandlerExecute += (context, e) => EndSessionAccess(WithTestable(context));
                 httpApplication.PostReleaseRequestState += (context, e) => EndRequest(WithTestable(context));
+                httpApplication.PreSendRequestHeaders += (context, e) => SendHeaders(WithTestable(context));
                 AppDomain.CurrentDomain.DomainUnload += UnloadDomain;
             }
         }
@@ -55,20 +70,23 @@ namespace Glimpse.AspNet
             }
         }
 
-        public void Dispose()
-        {
-            // Nothing to dispose
-        }
-
         internal IGlimpseRuntime GetRuntime(HttpApplicationStateBase applicationState)
         {
             var runtime = applicationState[Constants.RuntimeKey] as IGlimpseRuntime;
 
             if (runtime == null)
             {
-                runtime = factory.InstantiateRuntime();
+                lock (LockObj)
+                {
+                    runtime = applicationState[Constants.RuntimeKey] as IGlimpseRuntime;
 
-                applicationState.Add(Constants.RuntimeKey, runtime);
+                    if (runtime == null)
+                    {
+                        runtime = Factory.InstantiateRuntime();
+
+                        applicationState.Add(Constants.RuntimeKey, runtime);
+                    }
+                }
             }
 
             return runtime;
@@ -87,6 +105,11 @@ namespace Glimpse.AspNet
             var runtime = GetRuntime(httpContext.Application);
 
             runtime.EndRequest();
+        }
+
+        internal void SendHeaders(HttpContextBase httpContext)
+        {
+            httpContext.HeadersSent(true);
         }
 
         private static HttpContextBase WithTestable(object sender)

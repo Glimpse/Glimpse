@@ -1,11 +1,18 @@
 using System;
 using System.Collections.Generic;
-using Glimpse.Core.Framework;
 
 namespace Glimpse.Core.Extensibility
 {
+    /// <summary>
+    /// The default implementation of <see cref="IMessageBroker"/> which supports subscribing to messages based on types, base types and interfaces.
+    /// </summary>
     public class MessageBroker : IMessageBroker
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MessageBroker" /> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <exception cref="System.ArgumentNullException">Throws an exception if <paramref name="logger"/> is <c>null</c>.</exception>
         public MessageBroker(ILogger logger)
         {
             if (logger == null)
@@ -17,10 +24,27 @@ namespace Glimpse.Core.Extensibility
             Logger = logger;
         }
 
+        /// <summary>
+        /// Gets or sets the logger.
+        /// </summary>
+        /// <value>
+        /// The logger.
+        /// </value>
         public ILogger Logger { get; set; }
 
+        /// <summary>
+        /// Gets or sets the subscriptions.
+        /// </summary>
+        /// <value>
+        /// The subscriptions.
+        /// </value>
         internal IDictionary<Type, List<Subscriber>> Subscriptions { get; set; }
 
+        /// <summary>
+        /// Publishes the specified message using the type as the topic.
+        /// </summary>
+        /// <typeparam name="T">Type of the message</typeparam>
+        /// <param name="message">The message.</param>
         public void Publish<T>(T message)
         {
             foreach (var subscriptions in Subscriptions)
@@ -42,6 +66,15 @@ namespace Glimpse.Core.Extensibility
             }
         }
 
+        /// <summary>
+        /// Subscribes the specified action to the Type specified.
+        /// </summary>
+        /// <typeparam name="T">Type of the message</typeparam>
+        /// <param name="action">The action.</param>
+        /// <returns>
+        /// A subscription Id, which should be retained in order to unsubscribe.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException">Throws an exception if <paramref name="action"/> is <c>null</c>.</exception>
         public Guid Subscribe<T>(Action<T> action)
         {
             if (action == null)
@@ -59,6 +92,11 @@ namespace Glimpse.Core.Extensibility
             return subscriptionId;
         }
 
+        /// <summary>
+        /// Unsubscribes the listener from the specified subscription id.
+        /// </summary>
+        /// <typeparam name="T">Type of the message</typeparam>
+        /// <param name="subscriptionId">The subscription id.</param>
         public void Unsubscribe<T>(Guid subscriptionId)
         {
             var subscriptions = GetSubscriptions(typeof(T));

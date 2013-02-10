@@ -35,9 +35,13 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.Abstractions">
+      <Private>True</Private>
+      <HintPath>..\..\packages\Mvc2.2.0.1\lib\net35\System.Web.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
-      <HintPath>..\..\packages\Mvc2.2.0.0\lib\net35\System.Web.Mvc.dll</HintPath>
+      <HintPath>..\..\packages\Mvc2.2.0.1\lib\net35\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml.Linq" />
@@ -46,7 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Glimpse.Mvc3\**\*.cs" Exclude="..\Glimpse.Mvc3\Properties\AssemblyInfo.cs;..\Glimpse.Mvc3\PipelineInspector\DependencyInjectionInspector.cs;..\Glimpse.Mvc3\AlternateImplementation\DependencyResolver.cs;..\Glimpse.Mvc3\AlternateImplementation\ModelBinderProvider.cs;">
+    <Compile Include="..\Glimpse.Mvc3\**\*.cs" Exclude="..\Glimpse.Mvc3\Properties\AssemblyInfo.cs;..\Glimpse.Mvc3\PipelineInspector\DependencyInjectionInspector.cs;..\Glimpse.Mvc3\AlternateType\DependencyResolver.cs;..\Glimpse.Mvc3\AlternateType\ModelBinderProvider.cs;">
       <Link />
     </Compile>
     <Compile Include="Backport\IUnvalidatedValueProvider.cs" />

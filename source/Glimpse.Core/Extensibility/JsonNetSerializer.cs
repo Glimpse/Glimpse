@@ -5,8 +5,15 @@ using Newtonsoft.Json.Serialization;
 
 namespace Glimpse.Core.Extensibility
 {
+    /// <summary>
+    /// An implementation of <see cref="ISerializer"/> which leverages Json.Net.
+    /// </summary>
     public class JsonNetSerializer : ISerializer
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonNetSerializer" /> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
         public JsonNetSerializer(ILogger logger)
         {
             Logger = logger;
@@ -25,11 +32,24 @@ namespace Glimpse.Core.Extensibility
         
         private JsonSerializerSettings Settings { get; set; }
 
-        public string Serialize(object obj)
+        /// <summary>
+        /// Serializes the specified object to JSON.
+        /// </summary>
+        /// <param name="target">The target to be Serialized.</param>
+        /// <returns>
+        /// Serialized object.
+        /// </returns>
+        public string Serialize(object target)
         {
-            return JsonConvert.SerializeObject(obj, Formatting.None, Settings);
+            return JsonConvert.SerializeObject(target, Formatting.None, Settings);
         }
 
+        /// <summary>
+        /// Registers a collection of serialization converters which can conduct custom
+        /// transformations on given types when processed.
+        /// </summary>
+        /// <param name="converters">The converters.</param>
+        /// <exception cref="System.ArgumentNullException">Throws an exception if <paramref name="converters"/> is <c>null</c>.</exception>
         public void RegisterSerializationConverters(IEnumerable<ISerializationConverter> converters)
         {
             if (converters == null)
