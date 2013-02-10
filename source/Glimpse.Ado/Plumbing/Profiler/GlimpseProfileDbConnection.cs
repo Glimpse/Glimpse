@@ -14,19 +14,16 @@ namespace Glimpse.Ado.Plumbing.Profiler
             DbConnection inner, 
             DbProviderFactory providerFactory, 
             IPipelineInspectorContext inspectorContext, 
-            ProviderStats stats, Guid connectionId)
+            Guid connectionId)
         {
             InnerConnection = inner;
             InnerProviderFactory = providerFactory;
-            Stats = stats;
             ConnectionId = connectionId;
-            Stats.ConnectionStarted(ConnectionId);
             InspectorContext = inspectorContext;
             InspectorContext.MessageBroker.Publish(new ConnectionStartedMessage(ConnectionId));
         }
 
         private DbProviderFactory InnerProviderFactory { get; set; } 
-        private ProviderStats Stats { get; set; }
         private IPipelineInspectorContext InspectorContext { get; set; }
 
 
@@ -100,7 +97,6 @@ namespace Glimpse.Ado.Plumbing.Profiler
             if (transaction != null)
             {
                 transaction.TransactionCompleted += OnDtcTransactionCompleted; 
-                Stats.DtcTransactionEnlisted(ConnectionId, transaction.IsolationLevel);
                 InspectorContext.MessageBroker.Publish(new DtcTransactionEnlistedMessage(ConnectionId, transaction.IsolationLevel));
             }
         }
@@ -124,12 +120,12 @@ namespace Glimpse.Ado.Plumbing.Profiler
 
         protected override DbTransaction BeginDbTransaction(System.Data.IsolationLevel isolationLevel)
         {
-            return new GlimpseProfileDbTransaction(InnerConnection.BeginTransaction(isolationLevel), InspectorContext, Stats, this);
+            return new GlimpseProfileDbTransaction(InnerConnection.BeginTransaction(isolationLevel), InspectorContext, this);
         }
 
         protected override DbCommand CreateDbCommand()
         {
-            return new GlimpseProfileDbCommand(InnerConnection.CreateCommand(), InspectorContext, Stats);
+            return new GlimpseProfileDbCommand(InnerConnection.CreateCommand(), InspectorContext);
         }
 
         protected override object GetService(Type service)
@@ -150,7 +146,6 @@ namespace Glimpse.Ado.Plumbing.Profiler
 
         private void NotifyClosing()
         {
-            Stats.ConnectionClosed(ConnectionId);
             InspectorContext.MessageBroker.Publish(new ConnectionClosedMessage(ConnectionId));
         }
 
@@ -171,7 +166,6 @@ namespace Glimpse.Ado.Plumbing.Profiler
             {
                 aborted = TransactionStatus.Aborted;
             }
-            Stats.DtcTransactionCompleted(ConnectionId, aborted);
             InspectorContext.MessageBroker.Publish(new DtcTransactionCompletedMessage(ConnectionId, aborted));
         }
     }
