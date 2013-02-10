@@ -1,6 +1,6 @@
-﻿using Glimpse.Ado.Extensibility;
+using Glimpse.Ado.Extensibility;
 
-namespace Glimpse.Ado.Plugin.Support
+namespace Glimpse.Ado.Tab.Support
 {
     internal class GlimpseCommandParameterParser : IGlimpseCommandParameterParser
     {

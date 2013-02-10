@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Glimpse.Ado.Extensibility;
 using Glimpse.Ado.Plumbing.Models;
 
-namespace Glimpse.Ado.Plugin.Support
+namespace Glimpse.Ado.Tab.Support
 {
     internal class CommandSanitizer
     {
