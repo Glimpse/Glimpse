@@ -17,8 +17,8 @@ namespace Glimpse.Ado.Plumbing.Models
         public string Command { get; set; }
         public Exception Exception { get; set; }
         public DateTime? ExecutedDateTime { get; set; }
-        public int? RecordsAffected { get; set; }
-        public int? TotalRecords { get; set; }
+        public long? RecordsAffected { get; set; }
+        public long? TotalRecords { get; set; }
         public long ElapsedMilliseconds { get; set; }
         public IList<GlimpseDbQueryCommandParameterMetadata> Parameters { get; private set; }
         public int ExecutionIndex { get; set; }

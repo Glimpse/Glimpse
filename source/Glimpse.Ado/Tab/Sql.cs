@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Web;
+using System.Linq;
 using Glimpse.Ado.Messages;
 using Glimpse.Ado.Plumbing.Models;
 using Glimpse.Ado.Tab.Support;
@@ -9,7 +9,7 @@ using Glimpse.Core.Extensions;
 
 namespace Glimpse.Ado.Tab
 {
-    public class SQL : TabBase<HttpContextBase>, ITabSetup, IKey
+    public class SQL : TabBase, ITabSetup, IKey
     {
         public override string Name
         {
@@ -18,24 +18,20 @@ namespace Glimpse.Ado.Tab
 
         public override object GetData(ITabContext context)
         {
-            var sanitizer = new CommandSanitizer();
-            var adoMessages = context.GetMessages<AdoMessage>();
-
-            
-            
-            var queryMetadata = context.GetRequestContext<HttpContextBase>().Items["Glimpse.Db.Query"] as GlimpseDbQueryMetadata;            
-
-            if(queryMetadata == null)
-            {
+            var sanitizer = new CommandSanitizer();            
+            var messages = context.GetMessages<AdoMessage>().ToList();
+            var aggregator = new GlimpseDbQueryMessageAggregator(messages);
+            var queryMetadata = aggregator.Aggregate();
+               
+            if (queryMetadata == null)
                 return null;
-            }
 
-            var connections = new List<object[]> { new object[] { "Commands per Connection", "Open Time" } };
+            var connections = new List<object[]> { new[] { "Commands per Connection", "Open Time" } }; 
             foreach (var connection in queryMetadata.Connections.Values)
             {
                 if (connection.Commands.Count == 0 && connection.Transactions.Count == 0)
                     continue;
-
+                
                 var commands = new List<object[]> { new[] { "Transaction Start", "Ordinal", "Command", "Parameters", "Records", "Command Time", "From First", "Transaction End", "Errors" } };
                 var commandCount = 1;
                 foreach (var command in connection.Commands.Values)
@@ -48,8 +44,8 @@ namespace Glimpse.Ado.Tab
                     //Transaction Finish
                     List<object[]> tailTransaction = null;
                     if (command.TailTransaction != null)
-                        tailTransaction = new List<object[]> { new[] { "Name", "Committed" }, new[] { "Transaction Complete", command.TailTransaction.Committed ? "Committed" : "Rollbacked" } };
-
+                        tailTransaction = new List<object[]> { new[] { "Name", "Committed" }, new[] { "Transaction Complete", command.TailTransaction.Committed ? "Committed" : "Rollbacked" } }; 
+                     
                     //Parameters
                     List<object[]> parameters = null;
                     if (command.Parameters.Count > 0)
@@ -80,7 +76,7 @@ namespace Glimpse.Ado.Tab
                 connections.Add(new object[] { commands, elapse });
             }
 
-            return connections.Count > 1 ? connections : null;   
+            return connections.Count > 1 ? connections : null;
         }
 
         public string Key

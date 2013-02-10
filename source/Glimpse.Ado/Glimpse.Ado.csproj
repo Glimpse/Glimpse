@@ -36,7 +36,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Transactions" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -59,6 +58,7 @@
     <Compile Include="Plumbing\Models\GlimpseDbQueryCommandMetadata.cs" />
     <Compile Include="Plumbing\Models\GlimpseDbQueryCommandParameterMetadata.cs" />
     <Compile Include="Plumbing\Models\GlimpseDbQueryConnectionMetadata.cs" />
+    <Compile Include="Plumbing\Models\GlimpseDbQueryMessageAggregator.cs" />
     <Compile Include="Plumbing\Models\GlimpseDbQueryMetadata.cs" />
     <Compile Include="Plumbing\Models\GlimpseDbQueryTransactionMetadata.cs" />
     <Compile Include="Plumbing\Profiler\GlimpseProfileDbCommand.cs">
