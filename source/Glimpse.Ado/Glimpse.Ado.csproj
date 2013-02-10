@@ -42,7 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensibility\IGlimpseCommandParameterParser.cs" />
-    <Compile Include="Plugin\SQL.cs" />
+    <Compile Include="Messages\AdoMessage.cs" />
     <Compile Include="Plugin\Support\CommandSanitizer.cs" />
     <Compile Include="Plugin\Support\GlimpseCommandParameterParser.cs" />
     <Compile Include="Plumbing\Models\GlimpseDbQueryCommandMetadata.cs" />

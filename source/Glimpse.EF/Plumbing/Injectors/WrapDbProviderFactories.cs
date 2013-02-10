@@ -5,11 +5,19 @@ using System.Data.Common;
 using System.Linq;
 using System.Reflection;
 using Glimpse.Ado.Plumbing.Profiler;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.EF.Plumbing.Injectors
 {
     public class WrapDbProviderFactories
     {
+        private static IPipelineInspectorContext InspectorContext;
+
+        public WrapDbProviderFactories(IPipelineInspectorContext inspectorContext)
+        {
+            InspectorContext = inspectorContext;
+        }
+
         public void Inject()
         { 
             //This forces the creation 
@@ -74,7 +82,10 @@ namespace Glimpse.EF.Plumbing.Injectors
 
         private static Type GetProxyTypeForProvider(Type factoryType)
         {
-            return typeof(GlimpseProfileDbProviderFactory<>).MakeGenericType(factoryType);
+            var type = typeof(GlimpseProfileDbProviderFactory<>).MakeGenericType(factoryType);
+            var inspector = type.GetProperty("InspectorContext");
+            inspector.SetValue(null, InspectorContext, null);
+            return type;
         }
          
         private static void SwapAssemblyName(DataTable fromProviders, string withKey, Type newType)

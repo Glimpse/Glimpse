@@ -1,12 +1,16 @@
 ﻿using System.Data.Common;
 using System.Data.Common.CommandTrees;
 using System.Data.Metadata.Edm;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Ado.Plumbing.Profiler
 {
     internal class GlimpseProfileDbProviderServices : DbProviderServices
     { 
-        public GlimpseProfileDbProviderServices(DbProviderServices innerProviderServices, ProviderStats stats)
+        public GlimpseProfileDbProviderServices(
+            DbProviderServices innerProviderServices, 
+            IPipelineInspectorContext inspectorContext,
+            ProviderStats stats)
         {
             InnerProviderServices = innerProviderServices;
             Stats = stats;
@@ -15,16 +19,17 @@ namespace Glimpse.Ado.Plumbing.Profiler
 
         private DbProviderServices InnerProviderServices { get; set; }
         private ProviderStats Stats { get; set; }
+        private IPipelineInspectorContext InspectorContext { get; set; }
 
 
         public override DbCommandDefinition CreateCommandDefinition(DbCommand prototype)
         {
-            return new GlimpseProfileDbCommandDefinition(InnerProviderServices.CreateCommandDefinition(prototype), Stats);
+            return new GlimpseProfileDbCommandDefinition(InnerProviderServices.CreateCommandDefinition(prototype), InspectorContext, Stats);
         }
 
         protected override DbCommandDefinition CreateDbCommandDefinition(DbProviderManifest providerManifest, DbCommandTree commandTree)
         {
-            return new GlimpseProfileDbCommandDefinition(InnerProviderServices.CreateCommandDefinition(commandTree), Stats);
+            return new GlimpseProfileDbCommandDefinition(InnerProviderServices.CreateCommandDefinition(commandTree), InspectorContext, Stats);
         }
 
         protected override void DbCreateDatabase(DbConnection connection, int? commandTimeout, StoreItemCollection storeItemCollection)

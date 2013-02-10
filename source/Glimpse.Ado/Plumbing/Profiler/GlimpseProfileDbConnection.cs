@@ -3,24 +3,28 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
 using System.Transactions;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Ado.Plumbing.Profiler
 {
     public class GlimpseProfileDbConnection : DbConnection
     {
-        public GlimpseProfileDbConnection(DbConnection inner, DbProviderFactory providerFactory, ProviderStats stats, Guid connectionId)
+        public GlimpseProfileDbConnection(
+            DbConnection inner, 
+            DbProviderFactory providerFactory, 
+            IPipelineInspectorContext inspectorContext, 
+            ProviderStats stats, Guid connectionId)
         {
             InnerConnection = inner;
             InnerProviderFactory = providerFactory;
             Stats = stats;
             ConnectionId = connectionId;
-            
             Stats.ConnectionStarted(ConnectionId);
         }
 
-          
         private DbProviderFactory InnerProviderFactory { get; set; } 
         private ProviderStats Stats { get; set; }
+        private IPipelineInspectorContext InspectorContext { get; set; }
 
 
         public override string ConnectionString
@@ -121,7 +125,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
 
         protected override DbCommand CreateDbCommand()
         {
-            return new GlimpseProfileDbCommand(InnerConnection.CreateCommand(), Stats);
+            return new GlimpseProfileDbCommand(InnerConnection.CreateCommand(), InspectorContext, Stats);
         }
 
         protected override object GetService(Type service)

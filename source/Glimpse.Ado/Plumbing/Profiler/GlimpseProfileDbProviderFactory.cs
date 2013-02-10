@@ -1,15 +1,38 @@
 ﻿using System;
 using System.Data.Common;
 using System.Reflection;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Ado.Plumbing.Profiler
 {
     public class GlimpseProfileDbProviderFactory<TProviderFactory> : DbProviderFactory, IServiceProvider
         where TProviderFactory : DbProviderFactory
-    {
+    {        
         public static readonly GlimpseProfileDbProviderFactory<TProviderFactory> Instance;
         public static readonly ProviderStats Stats;
+        private static IPipelineInspectorContext inspectorContext;
         private readonly TProviderFactory inner;
+        
+        // TODO: this is a hack, but found no way to inject or locate as yet:
+        public static IPipelineInspectorContext InspectorContext
+        {
+            get
+            {
+                if(inspectorContext == null)
+                {
+                    throw new InvalidOperationException("The Pipeline Inspector was not set!");
+                }
+                return inspectorContext;
+            }
+            set
+            {
+                if(value == null)
+                {
+                    throw new ArgumentNullException("value");
+                }
+                inspectorContext = value;
+            }
+        }
 
         static GlimpseProfileDbProviderFactory()
         {
@@ -19,11 +42,11 @@ namespace Glimpse.Ado.Plumbing.Profiler
         }
 
         public GlimpseProfileDbProviderFactory()
-        {
+        {            
             var field = typeof(TProviderFactory).GetField("Instance", BindingFlags.Public | BindingFlags.Static);
             if (field == null)
                 throw new NotSupportedException("Provider doesn't have Instance property.");
-            inner = (TProviderFactory)field.GetValue(null); 
+            inner = (TProviderFactory)field.GetValue(null);           
         } 
 
         public override bool CanCreateDataSourceEnumerator
@@ -33,7 +56,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
 
         public override DbCommand CreateCommand()
         { 
-            return new GlimpseProfileDbCommand(inner.CreateCommand(), Stats);
+            return new GlimpseProfileDbCommand(inner.CreateCommand(), InspectorContext, Stats);
         }
 
         public override DbCommandBuilder CreateCommandBuilder()
@@ -43,7 +66,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
 
         public override DbConnection CreateConnection()
         { 
-            return new GlimpseProfileDbConnection(inner.CreateConnection(), this, Stats, Guid.NewGuid());
+            return new GlimpseProfileDbConnection(inner.CreateConnection(), this, InspectorContext, Stats, Guid.NewGuid());
         }
 
         public override DbConnectionStringBuilder CreateConnectionStringBuilder()
@@ -74,7 +97,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
             var service = ((IServiceProvider)this.inner).GetService(serviceType);
             var inner = service as DbProviderServices;
             if (inner != null)
-                return new GlimpseProfileDbProviderServices(inner, Stats); 
+                return new GlimpseProfileDbProviderServices(inner, InspectorContext, Stats); 
             return service;
         }
     }
