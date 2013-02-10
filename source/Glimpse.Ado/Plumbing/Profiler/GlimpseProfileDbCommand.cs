@@ -6,26 +6,31 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Ado.Plumbing.Profiler
 {
     public class GlimpseProfileDbCommand : DbCommand
     {
-        public GlimpseProfileDbCommand(DbCommand innerCommand, ProviderStats stats)
+        public GlimpseProfileDbCommand(DbCommand innerCommand, IPipelineInspectorContext context,  ProviderStats stats)
         {
             InnerCommand = innerCommand;
             Stats = stats;
+            InspectorContext = context;
         }
 
-        public GlimpseProfileDbCommand(DbCommand innerCommand, ProviderStats stats, GlimpseProfileDbConnection connection):this(innerCommand, stats)
+        public GlimpseProfileDbCommand(DbCommand innerCommand, IPipelineInspectorContext context, ProviderStats stats, GlimpseProfileDbConnection connection):
+            this(innerCommand, context, stats)
         {
-            InnerConnection = connection; 
+            InnerConnection = connection;
+            InspectorContext = context;
         }
 
 
         private DbCommand InnerCommand { get; set; }
         private GlimpseProfileDbConnection InnerConnection { get; set; } 
         private ProviderStats Stats { get; set; }
+        private IPipelineInspectorContext InspectorContext { get; set; }
 
 
 
@@ -109,7 +114,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
                 {
                     // Create a new GlimpseProfileDbConnection, this will happen when using a EntityConnection(and created with a SqlConnection for example) as a argument to ObjectContext constructor.
                     var factory = (DbProviderFactory)typeof(GlimpseProfileDbProviderFactory<>).MakeGenericType(DbProviderServices.GetProviderFactory(value).GetType()).GetField("Instance", BindingFlags.Static | BindingFlags.Public).GetValue(null);
-                    InnerConnection = new GlimpseProfileDbConnection(value, factory, Stats, Guid.NewGuid());
+                    InnerConnection = new GlimpseProfileDbConnection(value, factory, InspectorContext, Stats, Guid.NewGuid());
                     InnerCommand.Connection = InnerConnection.InnerConnection;
                 }
             }

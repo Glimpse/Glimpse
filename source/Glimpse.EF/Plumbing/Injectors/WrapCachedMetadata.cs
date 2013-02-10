@@ -8,14 +8,7 @@ using Glimpse.Core.Extensibility;
 namespace Glimpse.EF.Plumbing.Injectors
 {
     public class WrapCachedMetadata
-    {
-        //private IGlimpseLogger Logger { get; set; }
-
-        //public WrapCachedMetadata(IGlimpseLogger logger)
-        //{
-         //   Logger = logger;
-        //}
-
+    {       
         public void Inject()
         { 
             var type = Type.GetType("System.Data.Entity.Database, EntityFramework", false);

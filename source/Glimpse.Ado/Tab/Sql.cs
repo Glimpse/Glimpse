@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web;
+using Glimpse.Ado.Messages;
 using Glimpse.Ado.Plugin.Support;
 using Glimpse.Ado.Plumbing.Models;
 using Glimpse.Core.Extensibility;
@@ -8,17 +9,17 @@ using Glimpse.Core.Extensions;
 
 namespace Glimpse.Ado.Tab
 {
-    public class Sql : TabBase<HttpContextBase>, IKey
+    public class SQL : TabBase<HttpContextBase>, ITabSetup, IKey
     {
         public override string Name
         {
-            get { return "Sql"; }
+            get { return "SQL"; }
         }
 
         public override object GetData(ITabContext context)
         {
             var sanitizer = new CommandSanitizer();
-            var foo = context.GetMessages<GlimpseDbQueryMetadata>();
+            var foo = context.GetMessages<AdoMessage>();
             var queryMetadata = context.GetRequestContext<HttpContextBase>().Items["Glimpse.Db.Query"] as GlimpseDbQueryMetadata;            
 
             if(queryMetadata == null)
@@ -82,6 +83,66 @@ namespace Glimpse.Ado.Tab
         public string Key
         {
             get { return "glimpse_sql"; }
-        }        
+        }
+
+        public void Setup(ITabSetupContext context)
+        {
+            context.PersistMessages<AdoMessage>();
+        }
     }
 }
+
+
+
+//        private static readonly GlimpseStructuredLayout _structuredLayout = new GlimpseStructuredLayout { 
+//                new GlimpseStructuredLayoutSection {
+//                    new GlimpseStructuredLayoutCell { Data = 0, SuppressAutoPreview = true, 
+//                        Structure = new GlimpseStructuredLayout { 
+//                            new GlimpseStructuredLayoutSection {
+//                                new GlimpseStructuredLayoutCell { Data = 0, Span = 6, SuppressAutoPreview = true, MinimalDisplay = true,
+//                                    Structure = new GlimpseStructuredLayout { 
+//                                        new GlimpseStructuredLayoutSection {
+//                                            new GlimpseStructuredLayoutCell { Data = 0, Width = "150px", IsKey = true },
+//                                            new GlimpseStructuredLayoutCell { Data = 1 }
+//                                        }
+//                                    }
+//                                }
+//                            },
+//                            new GlimpseStructuredLayoutSection {
+//                                new GlimpseStructuredLayoutCell { Data = 1, Width = "55px" },
+//                                new GlimpseStructuredLayoutCell { Data = 2, IsCode = true, CodeType = "sql" },
+//                                new GlimpseStructuredLayoutCell { Data = 3, Width = "25%" },
+//                                new GlimpseStructuredLayoutCell { Data = 4, Width = "60px" },
+//                                new GlimpseStructuredLayoutCell { Data = 5, ClassName = "mono", Postfix = " ms", Width = "100px" },
+//                                new GlimpseStructuredLayoutCell { Data = 6, ClassName = "mono", Prefix = "T+ ", Postfix = " ms", Width = "70px" }
+//                            },
+//                            new GlimpseStructuredLayoutSection { 
+//                                new GlimpseStructuredLayoutCell { Data = 8, Span = 6, SuppressAutoPreview = true, MinimalDisplay = true,
+//                                    Structure = new GlimpseStructuredLayout { 
+//                                        new GlimpseStructuredLayoutSection {
+//                                            new GlimpseStructuredLayoutCell { Data = 0, Width = "20%" },
+//                                            new GlimpseStructuredLayoutCell { Data = 1, ClassName = "mono" }
+//                                        }
+//                                    }
+//                                }
+//                            },
+//                            new GlimpseStructuredLayoutSection {
+//                                new GlimpseStructuredLayoutCell { Data = 7, Span = 6, SuppressAutoPreview = true, MinimalDisplay = true,
+//                                    Structure = new GlimpseStructuredLayout { 
+//                                        new GlimpseStructuredLayoutSection {
+//                                            new GlimpseStructuredLayoutCell { Data = 0, Width = "150px", IsKey = true },
+//                                            new GlimpseStructuredLayoutCell { Data = 1 }
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    },
+//                    new GlimpseStructuredLayoutCell { Data = 1, ClassName = "mono", Postfix = " ms", Width = "75px" }
+//                }
+//            };
+
+//        public GlimpseStructuredLayout StructuredLayout
+//        {
+//            get { return _structuredLayout; }
+//        }
