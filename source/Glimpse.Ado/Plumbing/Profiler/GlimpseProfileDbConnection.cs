@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
 using System.Transactions;
+using Glimpse.Ado.Messages;
 using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Ado.Plumbing.Profiler
@@ -20,6 +21,8 @@ namespace Glimpse.Ado.Plumbing.Profiler
             Stats = stats;
             ConnectionId = connectionId;
             Stats.ConnectionStarted(ConnectionId);
+            InspectorContext = inspectorContext;
+            InspectorContext.MessageBroker.Publish(new ConnectionStartedMessage(ConnectionId));
         }
 
         private DbProviderFactory InnerProviderFactory { get; set; } 
@@ -98,6 +101,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
             {
                 transaction.TransactionCompleted += OnDtcTransactionCompleted; 
                 Stats.DtcTransactionEnlisted(ConnectionId, transaction.IsolationLevel);
+                InspectorContext.MessageBroker.Publish(new DtcTransactionEnlistedMessage(ConnectionId, transaction.IsolationLevel));
             }
         }
          
@@ -120,7 +124,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
 
         protected override DbTransaction BeginDbTransaction(System.Data.IsolationLevel isolationLevel)
         {
-            return new GlimpseProfileDbTransaction(InnerConnection.BeginTransaction(isolationLevel), Stats, this);
+            return new GlimpseProfileDbTransaction(InnerConnection.BeginTransaction(isolationLevel), InspectorContext, Stats, this);
         }
 
         protected override DbCommand CreateDbCommand()
@@ -147,9 +151,8 @@ namespace Glimpse.Ado.Plumbing.Profiler
         private void NotifyClosing()
         {
             Stats.ConnectionClosed(ConnectionId);
+            InspectorContext.MessageBroker.Publish(new ConnectionClosedMessage(ConnectionId));
         }
-
-
 
         public DbConnection InnerConnection { get; set; }
 
@@ -169,6 +172,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
                 aborted = TransactionStatus.Aborted;
             }
             Stats.DtcTransactionCompleted(ConnectionId, aborted);
+            InspectorContext.MessageBroker.Publish(new DtcTransactionCompletedMessage(ConnectionId, aborted));
         }
     }
 }

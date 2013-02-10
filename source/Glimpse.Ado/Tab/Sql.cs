@@ -19,7 +19,7 @@ namespace Glimpse.Ado.Tab
         public override object GetData(ITabContext context)
         {
             var sanitizer = new CommandSanitizer();
-            var foo = context.GetMessages<AdoMessage>();
+            var adoMessages = context.GetMessages<AdoMessage>();
             var queryMetadata = context.GetRequestContext<HttpContextBase>().Items["Glimpse.Db.Query"] as GlimpseDbQueryMetadata;            
 
             if(queryMetadata == null)

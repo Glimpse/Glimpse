@@ -3,18 +3,21 @@ using System.Collections;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using Glimpse.Ado.Messages;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Ado.Plumbing.Profiler
 {
     internal class GlimpseProfileDbDataReader : DbDataReader
     {
-        public GlimpseProfileDbDataReader(DbDataReader dataReader, DbCommand command, Guid connectionId, Guid statementGuid, ProviderStats stats)
+        public GlimpseProfileDbDataReader(DbDataReader dataReader, DbCommand command, Guid connectionId, Guid statementGuid, IPipelineInspectorContext inspectorContext, ProviderStats stats)
         {
             InnerDataReader = dataReader;
             InnerCommand = command;
-            Stats = stats;
+            Stats = stats;            
             ConnectionId = connectionId;
             CommandId = statementGuid;
+            InspectorContext = inspectorContext;
         }
 
 
@@ -23,6 +26,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
         private ProviderStats Stats { get; set; }
         private Guid ConnectionId { get; set; }
         private Guid CommandId { get; set; }
+        private IPipelineInspectorContext InspectorContext { get; set; }
         private bool Disposed { get; set; }
         private int RowCount { get; set; }
 
@@ -70,6 +74,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
         public override void Close()
         {
             Stats.CommandRowCount(ConnectionId, CommandId, RowCount);
+            InspectorContext.MessageBroker.Publish(new CommandRowCountMessage(ConnectionId, CommandId, RowCount));
 
             var inner = this.InnerDataReader as SqlDataReader;
             if (!Disposed && inner != null && InnerCommand.Transaction == null && inner.Read())

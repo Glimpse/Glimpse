@@ -42,7 +42,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensibility\IGlimpseCommandParameterParser.cs" />
+    <Compile Include="Messages\AdoCommandMessage.cs" />
     <Compile Include="Messages\AdoMessage.cs" />
+    <Compile Include="Messages\AdoTransactionMessage.cs" />
+    <Compile Include="Messages\CommandDurationAndRowCountMessage.cs" />
+    <Compile Include="Messages\CommandErrorMessage.cs" />
+    <Compile Include="Messages\CommandExecutedMessage.cs" />
+    <Compile Include="Messages\CommandRowCountMessage.cs" />
+    <Compile Include="Messages\ConnectionClosedMessage.cs" />
+    <Compile Include="Messages\ConnectionStartedMessage.cs" />
+    <Compile Include="Messages\DtcTransactionCompletedMessage.cs" />
+    <Compile Include="Messages\DtcTransactionEnlistedMessage.cs" />
+    <Compile Include="Messages\TransactionBeganMessage.cs" />
+    <Compile Include="Messages\TransactionCommitMessage.cs" />
+    <Compile Include="Messages\TransactionRollbackMessage.cs" />
     <Compile Include="Plugin\Support\CommandSanitizer.cs" />
     <Compile Include="Plugin\Support\GlimpseCommandParameterParser.cs" />
     <Compile Include="Plumbing\Models\GlimpseDbQueryCommandMetadata.cs" />

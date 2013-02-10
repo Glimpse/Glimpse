@@ -6,6 +6,7 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
+using Glimpse.Ado.Messages;
 using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Ado.Plumbing.Profiler
@@ -126,7 +127,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
             {
                 if (InnerCommand.Transaction == null)
                     return null; 
-                return new GlimpseProfileDbTransaction(InnerCommand.Transaction, Stats, InnerConnection);
+                return new GlimpseProfileDbTransaction(InnerCommand.Transaction, InspectorContext, Stats, InnerConnection);
             }
             set
             {
@@ -170,7 +171,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
             stopwatch.Stop(); 
             LogCommandEnd(commandId, stopwatch.ElapsedMilliseconds, reader.RecordsAffected);
 
-            return new GlimpseProfileDbDataReader(reader, InnerCommand, InnerConnection.ConnectionId, commandId, Stats); 
+            return new GlimpseProfileDbDataReader(reader, InnerCommand, InnerConnection.ConnectionId, commandId, InspectorContext, Stats); 
         }
 
         public override int ExecuteNonQuery()
@@ -267,16 +268,20 @@ namespace Glimpse.Ado.Plumbing.Profiler
             }
 
             Stats.CommandExecuted(InnerConnection.ConnectionId, commandId, InnerCommand.CommandText, parameters);
+            InspectorContext.MessageBroker.Publish(new CommandExecutedMessage(InnerConnection.ConnectionId, commandId, InnerCommand.CommandText, parameters));
         }
 
         private void LogCommandEnd(Guid commandId, long elapsedMilliseconds, int? recordsAffected)
         { 
             Stats.CommandDurationAndRowCount(InnerConnection.ConnectionId, commandId, elapsedMilliseconds, recordsAffected);
+            InspectorContext.MessageBroker.Publish(new CommandDurationAndRowCountMessage(InnerConnection.ConnectionId, commandId, elapsedMilliseconds, recordsAffected));
+
         }
 
         private void LogCommandError(Guid commandId, Exception exception)
         {
             Stats.CommandError(InnerConnection.ConnectionId, commandId, exception);
+            InspectorContext.MessageBroker.Publish(new CommandErrorMessage(InnerConnection.ConnectionId, commandId, exception));
         }
         #endregion
     }
