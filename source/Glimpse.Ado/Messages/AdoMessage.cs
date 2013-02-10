@@ -1,23 +1,21 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 using Glimpse.Core.Message;
 
 namespace Glimpse.Ado.Messages
 {
-    public class AdoMessage : IMessage
+    public abstract class AdoMessage : IMessage
     {
+        protected AdoMessage(Guid connectionId)
+        {
+            Id = Guid.NewGuid();
+            ConnectionId = connectionId;
+            TimeStamp = DateTime.Now;            
+        }
+
         public Guid Id { get; private set; }
-        public Type ExecutedType { get; private set; }
-        public MethodInfo ExecutedMethod { get; private set; }
-    }
-
-    public class FooMessage : AdoMessage
-    {
-        
-    }
-
-    public class BarMessage : AdoMessage
-    {
-        
+        public Guid ConnectionId { get; set; }    
+        public DateTime TimeStamp { get; set; }
     }
 }

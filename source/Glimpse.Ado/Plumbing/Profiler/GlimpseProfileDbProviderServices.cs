@@ -14,6 +14,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
         {
             InnerProviderServices = innerProviderServices;
             Stats = stats;
+            InspectorContext = inspectorContext;
         }
 
 
