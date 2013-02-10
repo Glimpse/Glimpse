@@ -9,28 +9,25 @@ namespace Glimpse.Ado.Plumbing.Profiler
     { 
         public GlimpseProfileDbProviderServices(
             DbProviderServices innerProviderServices, 
-            IPipelineInspectorContext inspectorContext,
-            ProviderStats stats)
+            IPipelineInspectorContext inspectorContext)
         {
             InnerProviderServices = innerProviderServices;
-            Stats = stats;
             InspectorContext = inspectorContext;
         }
 
 
         private DbProviderServices InnerProviderServices { get; set; }
-        private ProviderStats Stats { get; set; }
         private IPipelineInspectorContext InspectorContext { get; set; }
 
 
         public override DbCommandDefinition CreateCommandDefinition(DbCommand prototype)
         {
-            return new GlimpseProfileDbCommandDefinition(InnerProviderServices.CreateCommandDefinition(prototype), InspectorContext, Stats);
+            return new GlimpseProfileDbCommandDefinition(InnerProviderServices.CreateCommandDefinition(prototype), InspectorContext);
         }
 
         protected override DbCommandDefinition CreateDbCommandDefinition(DbProviderManifest providerManifest, DbCommandTree commandTree)
         {
-            return new GlimpseProfileDbCommandDefinition(InnerProviderServices.CreateCommandDefinition(commandTree), InspectorContext, Stats);
+            return new GlimpseProfileDbCommandDefinition(InnerProviderServices.CreateCommandDefinition(commandTree), InspectorContext);
         }
 
         protected override void DbCreateDatabase(DbConnection connection, int? commandTimeout, StoreItemCollection storeItemCollection)

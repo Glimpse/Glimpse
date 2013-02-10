@@ -9,7 +9,6 @@ namespace Glimpse.Ado.Plumbing.Profiler
         where TProviderFactory : DbProviderFactory
     {        
         public static readonly GlimpseProfileDbProviderFactory<TProviderFactory> Instance;
-        public static readonly ProviderStats Stats;
         private static IPipelineInspectorContext inspectorContext;
         private readonly TProviderFactory inner;
         
@@ -38,7 +37,6 @@ namespace Glimpse.Ado.Plumbing.Profiler
         {
             //Needs to be a singleton - http://ljusberg.se/blogs/smorakning/archive/2005/11/28/Custom-Data-Provider-_2800_continued_2900_.aspx
             Instance = new GlimpseProfileDbProviderFactory<TProviderFactory>();
-            Stats = new ProviderStats();
         }
 
         public GlimpseProfileDbProviderFactory()
@@ -56,7 +54,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
 
         public override DbCommand CreateCommand()
         { 
-            return new GlimpseProfileDbCommand(inner.CreateCommand(), InspectorContext, Stats);
+            return new GlimpseProfileDbCommand(inner.CreateCommand(), InspectorContext);
         }
 
         public override DbCommandBuilder CreateCommandBuilder()
@@ -66,7 +64,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
 
         public override DbConnection CreateConnection()
         { 
-            return new GlimpseProfileDbConnection(inner.CreateConnection(), this, InspectorContext, Stats, Guid.NewGuid());
+            return new GlimpseProfileDbConnection(inner.CreateConnection(), this, InspectorContext, Guid.NewGuid());
         }
 
         public override DbConnectionStringBuilder CreateConnectionStringBuilder()
@@ -97,7 +95,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
             var service = ((IServiceProvider)this.inner).GetService(serviceType);
             var inner = service as DbProviderServices;
             if (inner != null)
-                return new GlimpseProfileDbProviderServices(inner, InspectorContext, Stats); 
+                return new GlimpseProfileDbProviderServices(inner, InspectorContext); 
             return service;
         }
     }

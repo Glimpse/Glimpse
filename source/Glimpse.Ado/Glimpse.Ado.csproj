@@ -56,8 +56,6 @@
     <Compile Include="Messages\TransactionBeganMessage.cs" />
     <Compile Include="Messages\TransactionCommitMessage.cs" />
     <Compile Include="Messages\TransactionRollbackMessage.cs" />
-    <Compile Include="Plugin\Support\CommandSanitizer.cs" />
-    <Compile Include="Plugin\Support\GlimpseCommandParameterParser.cs" />
     <Compile Include="Plumbing\Models\GlimpseDbQueryCommandMetadata.cs" />
     <Compile Include="Plumbing\Models\GlimpseDbQueryCommandParameterMetadata.cs" />
     <Compile Include="Plumbing\Models\GlimpseDbQueryConnectionMetadata.cs" />
@@ -77,9 +75,10 @@
     <Compile Include="Plumbing\Profiler\GlimpseProfileDbProviderFactory.cs" />
     <Compile Include="Plumbing\Profiler\GlimpseProfileDbProviderServices.cs" />
     <Compile Include="Plumbing\Profiler\GlimpseProfileDbTransaction.cs" />
-    <Compile Include="Plumbing\ProviderStats.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tab\Sql.cs" />
+    <Compile Include="Tab\Support\CommandSanitizer.cs" />
+    <Compile Include="Tab\Support\GlimpseCommandParameterParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">

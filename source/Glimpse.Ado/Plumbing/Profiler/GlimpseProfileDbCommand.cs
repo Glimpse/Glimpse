@@ -13,15 +13,14 @@ namespace Glimpse.Ado.Plumbing.Profiler
 {
     public class GlimpseProfileDbCommand : DbCommand
     {
-        public GlimpseProfileDbCommand(DbCommand innerCommand, IPipelineInspectorContext context,  ProviderStats stats)
+        public GlimpseProfileDbCommand(DbCommand innerCommand, IPipelineInspectorContext context)
         {
             InnerCommand = innerCommand;
-            Stats = stats;
             InspectorContext = context;
         }
 
-        public GlimpseProfileDbCommand(DbCommand innerCommand, IPipelineInspectorContext context, ProviderStats stats, GlimpseProfileDbConnection connection):
-            this(innerCommand, context, stats)
+        public GlimpseProfileDbCommand(DbCommand innerCommand, IPipelineInspectorContext context, GlimpseProfileDbConnection connection):
+            this(innerCommand, context)
         {
             InnerConnection = connection;
             InspectorContext = context;
@@ -30,7 +29,6 @@ namespace Glimpse.Ado.Plumbing.Profiler
 
         private DbCommand InnerCommand { get; set; }
         private GlimpseProfileDbConnection InnerConnection { get; set; } 
-        private ProviderStats Stats { get; set; }
         private IPipelineInspectorContext InspectorContext { get; set; }
 
 
@@ -115,7 +113,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
                 {
                     // Create a new GlimpseProfileDbConnection, this will happen when using a EntityConnection(and created with a SqlConnection for example) as a argument to ObjectContext constructor.
                     var factory = (DbProviderFactory)typeof(GlimpseProfileDbProviderFactory<>).MakeGenericType(DbProviderServices.GetProviderFactory(value).GetType()).GetField("Instance", BindingFlags.Static | BindingFlags.Public).GetValue(null);
-                    InnerConnection = new GlimpseProfileDbConnection(value, factory, InspectorContext, Stats, Guid.NewGuid());
+                    InnerConnection = new GlimpseProfileDbConnection(value, factory, InspectorContext, Guid.NewGuid());
                     InnerCommand.Connection = InnerConnection.InnerConnection;
                 }
             }
@@ -127,7 +125,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
             {
                 if (InnerCommand.Transaction == null)
                     return null; 
-                return new GlimpseProfileDbTransaction(InnerCommand.Transaction, InspectorContext, Stats, InnerConnection);
+                return new GlimpseProfileDbTransaction(InnerCommand.Transaction, InspectorContext, InnerConnection);
             }
             set
             {
@@ -148,9 +146,6 @@ namespace Glimpse.Ado.Plumbing.Profiler
 
         protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior)
         {
-            if (!Stats.IsEnabled)
-                return InnerCommand.ExecuteReader(behavior);
-
             DbDataReader reader;
             var commandId = Guid.NewGuid();
 
@@ -171,14 +166,11 @@ namespace Glimpse.Ado.Plumbing.Profiler
             stopwatch.Stop(); 
             LogCommandEnd(commandId, stopwatch.ElapsedMilliseconds, reader.RecordsAffected);
 
-            return new GlimpseProfileDbDataReader(reader, InnerCommand, InnerConnection.ConnectionId, commandId, InspectorContext, Stats); 
+            return new GlimpseProfileDbDataReader(reader, InnerCommand, InnerConnection.ConnectionId, commandId, InspectorContext); 
         }
 
         public override int ExecuteNonQuery()
         {
-            if (!Stats.IsEnabled)
-                return InnerCommand.ExecuteNonQuery();
-
             int num;
             var commandId = Guid.NewGuid();
 
@@ -201,9 +193,6 @@ namespace Glimpse.Ado.Plumbing.Profiler
 
         public override object ExecuteScalar()
         {
-            if (!Stats.IsEnabled)
-                return InnerCommand.ExecuteScalar();
-
             object result;
             var commandId = Guid.NewGuid();
 
@@ -267,20 +256,17 @@ namespace Glimpse.Ado.Plumbing.Profiler
                 }
             }
 
-            Stats.CommandExecuted(InnerConnection.ConnectionId, commandId, InnerCommand.CommandText, parameters);
             InspectorContext.MessageBroker.Publish(new CommandExecutedMessage(InnerConnection.ConnectionId, commandId, InnerCommand.CommandText, parameters));
         }
 
         private void LogCommandEnd(Guid commandId, long elapsedMilliseconds, int? recordsAffected)
         { 
-            Stats.CommandDurationAndRowCount(InnerConnection.ConnectionId, commandId, elapsedMilliseconds, recordsAffected);
             InspectorContext.MessageBroker.Publish(new CommandDurationAndRowCountMessage(InnerConnection.ConnectionId, commandId, elapsedMilliseconds, recordsAffected));
 
         }
 
         private void LogCommandError(Guid commandId, Exception exception)
         {
-            Stats.CommandError(InnerConnection.ConnectionId, commandId, exception);
             InspectorContext.MessageBroker.Publish(new CommandErrorMessage(InnerConnection.ConnectionId, commandId, exception));
         }
         #endregion

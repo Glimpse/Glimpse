@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Web;
 using Glimpse.Ado.Messages;
-using Glimpse.Ado.Plugin.Support;
 using Glimpse.Ado.Plumbing.Models;
+using Glimpse.Ado.Tab.Support;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 
@@ -20,6 +20,9 @@ namespace Glimpse.Ado.Tab
         {
             var sanitizer = new CommandSanitizer();
             var adoMessages = context.GetMessages<AdoMessage>();
+
+            
+            
             var queryMetadata = context.GetRequestContext<HttpContextBase>().Items["Glimpse.Db.Query"] as GlimpseDbQueryMetadata;            
 
             if(queryMetadata == null)
