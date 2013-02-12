@@ -2386,7 +2386,7 @@ glimpse.tab = (function($, pubsub, data) {
                 detailPanel.html(renderEngine.build(detailData, detailMetadata)).find('table').append('<tbody></tbody>');
                 detailPanel.find('table').addClass('glimpse-ellipsis').find('thead').append('<tr class="glimpse-head-message" style="display:none"><td colspan="6"><a href="#">Reset context back to starting page</a></td></tr>');
                 
-                masterPanel.html(renderEngine.build(masterData)).find('table').append('<tbody></tbody>'); 
+                masterPanel.html(renderEngine.build(masterData)); 
             }
         }, 
         layoutBuildContentDetail = function(clientName, clientData) {
