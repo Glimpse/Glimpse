@@ -159,8 +159,10 @@
     <Compile Include="SerializationConverter\PluginMetadataConverterShould.cs" />
     <Compile Include="SerializationConverter\TabResultConverterShould.cs" />
     <Compile Include="SerializationConverter\CSharpTypeConverterShould.cs" />
+    <Compile Include="SerializationConverter\ListOfTraceMessageConverterShould.cs" />
     <Compile Include="StatusCodeResourceResultShould.cs" />
     <Compile Include="Tab\TimelineShould.cs" />
+    <Compile Include="Tab\TraceShould.cs" />
     <Compile Include="TestDoubles\DummyEnum.cs" />
     <Compile Include="TestDoubles\DummyMessage.cs" />
     <Compile Include="TestDoubles\DummyException.cs" />
@@ -183,6 +185,7 @@
     <Compile Include="Tester\ResourceParametersTester.cs" />
     <Compile Include="Tester\StatusCodePolicyTester.cs" />
     <Compile Include="Tester\UriPolicyTester.cs" />
+    <Compile Include="TraceListenerShould.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

@@ -61,9 +61,7 @@
     <Compile Include="HttpHandler.cs" />
     <Compile Include="HttpHandlerEndpointConfiguration.cs" />
     <Compile Include="HttpModule.cs" />
-    <Compile Include="Message\ITraceMessage.cs" />
     <Compile Include="Message\ProcessConstraintMessage.cs" />
-    <Compile Include="Message\TraceMessage.cs" />
     <Compile Include="Model\ConfigurationAuthenticationFormsCredentialsModel.cs" />
     <Compile Include="Model\ConfigurationAuthenticationFormsModel.cs" />
     <Compile Include="Model\ConfigurationAuthenticationModel.cs" />
@@ -89,7 +87,6 @@
     <Compile Include="Model\SessionModel.cs" />
     <Compile Include="Model\UriTokenInstance.cs" />
     <Compile Include="PipelineInspector\RoutesInspector.cs" />
-    <Compile Include="PipelineInspector\TraceInspector.cs" />
     <Compile Include="Policy\LocalPolicy.cs" />
     <Compile Include="RequestMetadata.cs" />
     <Compile Include="Resources.Designer.cs">
@@ -103,7 +100,6 @@
     <Compile Include="SerializationConverter\ListOfRouteModelConverter.cs" />
     <Compile Include="SerializationConverter\RequestModelConverter.cs" />
     <Compile Include="SerializationConverter\SessionModelConverter.cs" />
-    <Compile Include="SerializationConverter\ListOfTraceMessageConverter.cs" />
     <Compile Include="Tab\Configuration.cs" />
     <Compile Include="Tab\Environment.cs" />
     <Compile Include="Tab\Request.cs" />
@@ -112,8 +108,6 @@
     <Compile Include="Tab\Routes.cs" />
     <Compile Include="Tab\Server.cs" />
     <Compile Include="Tab\Session.cs" />
-    <Compile Include="Tab\Trace.cs" />
-    <Compile Include="TraceListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">

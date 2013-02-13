@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using Glimpse.AspNet.Message;
+using Glimpse.Core.Message;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Tab.Assist;
 
-namespace Glimpse.AspNet.SerializationConverter
+namespace Glimpse.Core.SerializationConverter
 {
     public class ListOfTraceMessageConverter : SerializationConverter<IEnumerable<ITraceMessage>>
     {

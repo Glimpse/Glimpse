@@ -1,13 +1,13 @@
 ﻿﻿using System.Diagnostics;
-﻿using Glimpse.AspNet.Message;
+﻿using Glimpse.Core.Message;
 ﻿using Glimpse.Core.Extensibility;
 ﻿using Glimpse.Core.Tab.Assist;
 ﻿using Glimpse.Test.Common;
 ﻿using Moq;
 using Xunit.Extensions;
-﻿using TraceListener = Glimpse.AspNet.TraceListener;
+﻿using TraceListener = Glimpse.Core.TraceListener;
 
-namespace Glimpse.Test.AspNet.PipelineInspector
+namespace Glimpse.Test.Core
 {
     public class TraceListenerShould
     {

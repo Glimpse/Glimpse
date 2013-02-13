@@ -603,13 +603,13 @@ namespace Glimpse.Core.Framework
         }
 
         // HACK: To support TraceListener with TraceSource via web.config
-        public static Func<IExecutionTimer> GetConfiguredTimerStrategy()
+        internal static Func<IExecutionTimer> GetConfiguredTimerStrategy()
         {
             return timerStrategy;
         }
 
         // HACK: To support TraceListener with TraceSource via web.config
-        public static IMessageBroker GetConfiguredMessageBroker()
+        internal static IMessageBroker GetConfiguredMessageBroker()
         {
             return messageBroker;
         }

@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.IO;
 using System.Web.Mvc;
-using Glimpse.AspNet;
+using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.AlternateType;
 using Moq;

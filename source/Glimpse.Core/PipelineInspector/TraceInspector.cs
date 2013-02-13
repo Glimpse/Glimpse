@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Glimpse.Core.Extensibility;
 
-namespace Glimpse.AspNet.PipelineInspector
+namespace Glimpse.Core.PipelineInspector
 {
     public class TraceInspector : IPipelineInspector
     {

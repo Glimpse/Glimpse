@@ -2,12 +2,12 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;
-using Glimpse.AspNet.Message;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
+using Glimpse.Core.Message;
 using Glimpse.Core.Tab.Assist;
 
-namespace Glimpse.AspNet
+namespace Glimpse.Core
 {
     public class TraceListener : System.Diagnostics.TraceListener
     {
@@ -46,70 +46,6 @@ namespace Glimpse.AspNet
         internal IMessageBroker MessageBroker { get; set; }
 
         internal Func<IExecutionTimer> TimerStrategy { get; set; }
-
-        /*private Func<IDataStore> TabStoreStrategy { get; set; }
-
-        private IDataStore TabStore 
-        {
-            get
-            {
-                try
-                {
-                    return TabStoreStrategy();
-                }
-                catch
-                {
-                    return new DictionaryDataStoreAdapter(new Dictionary<string, object>());
-                }
-            }
-        }
-
-        private Stopwatch FirstWatch
-        {
-            get
-            {
-                var firstWatch = TabStore.Get<Stopwatch>(Tab.Trace.FirstWatchStoreKey);
-                if (firstWatch == null) 
-                {
-                    firstWatch = new Stopwatch();
-                    TabStore.Set(Tab.Trace.FirstWatchStoreKey, firstWatch);
-                    firstWatch.Start();
-                }
-
-                return firstWatch;
-            } 
-        }
-
-        private Stopwatch LastWatch
-        {
-            get
-            {
-                var lastWatch = TabStore.Get<Stopwatch>(Tab.Trace.LastWatchStoreKey);
-                if (lastWatch == null)
-                {
-                    lastWatch = new Stopwatch();
-                    TabStore.Set(Tab.Trace.LastWatchStoreKey, lastWatch);
-                    lastWatch.Start();
-                } 
-
-                return lastWatch;
-            } 
-        }
-
-        private IList<TraceMessage> Messages
-        {
-            get
-            {
-                var messages = TabStore.Get<IList<TraceMessage>>(Tab.Trace.TraceMessageStoreKey);
-                if (messages == null) 
-                {
-                    messages = new List<TraceMessage>();
-                    TabStore.Set(Tab.Trace.TraceMessageStoreKey, messages); 
-                }
-                
-                return messages;
-            }
-        }*/
 
         public override void Write(object o)
         { 

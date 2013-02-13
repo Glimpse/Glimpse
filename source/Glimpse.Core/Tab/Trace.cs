@@ -1,10 +1,10 @@
 ﻿using System;
-using Glimpse.AspNet.Message;
+using Glimpse.Core.Message;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Tab.Assist;
 
-namespace Glimpse.AspNet.Tab
+namespace Glimpse.Core.Tab
 {
     public class Trace : ITab, ITabSetup, IDocumentation, ITabLayout, IKey
     {

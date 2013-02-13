@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
-using Glimpse.AspNet.Message;
-using Glimpse.AspNet.Model;
-using Glimpse.AspNet.Tab;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions;
+using Glimpse.Core.Message;
+using Glimpse.Core.Tab;
 using Moq;
 using Xunit;
 
-namespace Glimpse.Test.AspNet.Tab
+namespace Glimpse.Test.Core.Tab
 {
     public class TraceShould
     {

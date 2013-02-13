@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Glimpse.AspNet.Message
+namespace Glimpse.Core.Message
 {
     public interface ITraceMessage
     {

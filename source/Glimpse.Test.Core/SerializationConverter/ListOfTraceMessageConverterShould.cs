@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Glimpse.AspNet.Message;
-using Glimpse.AspNet.Model;
-using Glimpse.AspNet.SerializationConverter;
+using Glimpse.Core.Message;
+using Glimpse.Core.SerializationConverter;
 using Glimpse.Core.Tab.Assist;
 using Xunit;
 
-namespace Glimpse.Test.AspNet.SerializationConverter
+namespace Glimpse.Test.Core.SerializationConverter
 {
-    public class TraceModelConverterShould
+    public class ListOfTraceMessageConverterShould
     {
         [Fact]
         public void ConvertToList()
@@ -20,7 +19,7 @@ namespace Glimpse.Test.AspNet.SerializationConverter
             var result = converter.Convert(model) as IEnumerable<object>;
 
             Assert.NotNull(result);
-            Assert.True(result.Count() > 0);
+            Assert.True(result.Any());
         }
     }
 }
