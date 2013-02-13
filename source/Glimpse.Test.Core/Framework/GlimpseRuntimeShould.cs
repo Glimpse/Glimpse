@@ -264,26 +264,26 @@ namespace Glimpse.Test.Core.Framework
         }
 
         [Fact]
-        public void InitializeWithPipelineInspectors()
+        public void InitializeWithInspectors()
         {
-            Runtime.Configuration.PipelineInspectors.Add(Runtime.PipelineInspectorMock.Object);
+            Runtime.Configuration.Inspectors.Add(Runtime.InspectorMock.Object);
 
             Runtime.Initialize();
 
-            Runtime.PipelineInspectorMock.Verify(pi => pi.Setup(It.IsAny<IPipelineInspectorContext>()), Times.Once());
+            Runtime.InspectorMock.Verify(pi => pi.Setup(It.IsAny<IInspectorContext>()), Times.Once());
         }
 
         [Fact]
-        public void InitializeWithPipelineInspectorThatFails()
+        public void InitializeWithInspectorThatFails()
         {
-            Runtime.PipelineInspectorMock.Setup(pi => pi.Setup(It.IsAny<IPipelineInspectorContext>())).Throws<DummyException>();
+            Runtime.InspectorMock.Setup(pi => pi.Setup(It.IsAny<IInspectorContext>())).Throws<DummyException>();
 
-            Runtime.Configuration.PipelineInspectors.Add(Runtime.PipelineInspectorMock.Object);
+            Runtime.Configuration.Inspectors.Add(Runtime.InspectorMock.Object);
 
             Runtime.Initialize();
 
-            Runtime.PipelineInspectorMock.Verify(pi => pi.Setup(It.IsAny<IPipelineInspectorContext>()), Times.Once());
-            Runtime.LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<DummyException>()), Times.AtMost(Runtime.Configuration.PipelineInspectors.Count));
+            Runtime.InspectorMock.Verify(pi => pi.Setup(It.IsAny<IInspectorContext>()), Times.Once());
+            Runtime.LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<DummyException>()), Times.AtMost(Runtime.Configuration.Inspectors.Count));
         }
 
         [Fact]

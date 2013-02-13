@@ -109,10 +109,10 @@
     <Compile Include="Message\FilterMessageShould.cs" />
     <Compile Include="Model\ViewModelSummaryShould.cs" />
     <Compile Include="Model\ViewsModelShould.cs" />
-    <Compile Include="PipelineInspector\DependencyInjectionShould.cs" />
-    <Compile Include="PipelineInspector\ExecutionShould.cs" />
-    <Compile Include="PipelineInspector\ModelBinderInspectorShould.cs" />
-    <Compile Include="PipelineInspector\ViewEngineShould.cs" />
+    <Compile Include="Inspector\DependencyInjectionShould.cs" />
+    <Compile Include="Inspector\ExecutionShould.cs" />
+    <Compile Include="Inspector\ModelBinderInspectorShould.cs" />
+    <Compile Include="Inspector\ViewEngineShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourcesShould.cs" />
     <Compile Include="SerializationConverter\ListOfViewsModelConverterShould.cs" />

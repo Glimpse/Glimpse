@@ -3,9 +3,9 @@ using System;
 namespace Glimpse.Core.Extensibility
 {
     /// <summary>
-    /// Definition of a context that is used by the <see cref="IPipelineInspector"/>.
+    /// Definition of a context that is used by the <see cref="IInspector"/>.
     /// </summary>
-    public interface IPipelineInspectorContext : IContext
+    public interface IInspectorContext : IContext
     {
         /// <summary>
         /// Gets the proxy factory.

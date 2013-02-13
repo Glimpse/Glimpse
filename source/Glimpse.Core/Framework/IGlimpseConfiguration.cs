@@ -41,10 +41,10 @@ namespace Glimpse.Core.Framework
         IPersistenceStore PersistenceStore { get; }
 
         /// <summary>
-        /// Gets the pipeline inspectors.
+        /// Gets the inspectors.
         /// </summary>
-        /// <value>The pipeline inspectors.</value>
-        ICollection<IPipelineInspector> PipelineInspectors { get; }
+        /// <value>The inspectors.</value>
+        ICollection<IInspector> Inspectors { get; }
 
         /// <summary>
         /// Gets the resource endpoint.

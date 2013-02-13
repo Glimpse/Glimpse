@@ -95,7 +95,7 @@
     <Compile Include="Extensibility\ITabLayout.cs" />
     <Compile Include="Extensibility\IWrapper.cs" />
     <Compile Include="Extensibility\JsonNetConverterDictionaryKeysAreNotPropertyNames.cs" />
-    <Compile Include="Extensibility\PipelineInspectorContext.cs" />
+    <Compile Include="Extensibility\InspectorContext.cs" />
     <Compile Include="Extensibility\RuntimePolicy.cs" />
     <Compile Include="Extensibility\Subscriber.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
@@ -115,7 +115,7 @@
     <Compile Include="Extensibility\IContext.cs" />
     <Compile Include="Extensibility\IDynamicClientScript.cs" />
     <Compile Include="Extensibility\IMessageBroker.cs" />
-    <Compile Include="Extensibility\IPipelineInspectorContext.cs" />
+    <Compile Include="Extensibility\IInspectorContext.cs" />
     <Compile Include="Extensibility\AlternateTypeToCastleInterceptorAdapter.cs" />
     <Compile Include="Extensibility\IProxyFactory.cs" />
     <Compile Include="Extensibility\IResourceContext.cs" />
@@ -178,7 +178,7 @@
     <Compile Include="Extensibility\IDocumentation.cs" />
     <Compile Include="Extensibility\ITab.cs" />
     <Compile Include="Extensibility\ITabSetup.cs" />
-    <Compile Include="Extensibility\IPipelineInspector.cs" />
+    <Compile Include="Extensibility\IInspector.cs" />
     <Compile Include="Extensibility\ISerializer.cs" />
     <Compile Include="Extensibility\ITabContext.cs" />
     <Compile Include="Framework\IFrameworkProvider.cs" />
@@ -192,7 +192,7 @@
     <Compile Include="Model\TimelineCategoryModel.cs" />
     <Compile Include="Model\TimelineEventModel.cs" />
     <Compile Include="Model\TimelineModel.cs" />
-    <Compile Include="PipelineInspector\TraceInspector.cs" />
+    <Compile Include="Inspector\TraceInspector.cs" />
     <Compile Include="SerializationConverter\ListOfTraceMessageConverter.cs" />
     <Compile Include="SerializationConverter\TimelineEventModelConverter.cs" />
     <Compile Include="SerializationConverter\TimeSpanConverter.cs" />

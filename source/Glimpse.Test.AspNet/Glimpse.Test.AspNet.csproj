@@ -73,7 +73,7 @@
     <Compile Include="IResourceEndpointConfiguration.cs" />
     <Compile Include="Model\RequestModelShould.cs" />
     <Compile Include="Model\RouteModelShould.cs" />
-    <Compile Include="PipelineInspector\RoutesInspectorShould.cs" />
+    <Compile Include="Inspector\RoutesInspectorShould.cs" />
     <Compile Include="Policy\LocalPolicyShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerializationConverter\ConfigurationModelConverterShould.cs" />

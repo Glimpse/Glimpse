@@ -4,18 +4,18 @@ using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.AlternateType;
 using ValueProviderFactory = Glimpse.Mvc.AlternateType.ValueProviderFactory;
 
-namespace Glimpse.Mvc.PipelineInspector
+namespace Glimpse.Mvc.Inspector
 {
-    public class ModelBinderInspector : IPipelineInspector
+    public class ModelBinderInspector : IInspector
     {
-        public void Setup(IPipelineInspectorContext context)
+        public void Setup(IInspectorContext context)
         {
             SetupModelBinderProviders(context);
             SetupValueProviderFactories(context);
             SetupModelBinders(context);
         }
 
-        private void SetupModelBinderProviders(IPipelineInspectorContext context)
+        private void SetupModelBinderProviders(IInspectorContext context)
         {
 #if !MVC2
             var binderProviders = ModelBinderProviders.BinderProviders;
@@ -40,7 +40,7 @@ namespace Glimpse.Mvc.PipelineInspector
 #endif
         }
 
-        private void SetupValueProviderFactories(IPipelineInspectorContext context)
+        private void SetupValueProviderFactories(IInspectorContext context)
         {
             var factories = ValueProviderFactories.Factories;
             if (factories.Count == 0)
@@ -63,7 +63,7 @@ namespace Glimpse.Mvc.PipelineInspector
             }
         }
 
-        private void SetupModelBinders(IPipelineInspectorContext context)
+        private void SetupModelBinders(IInspectorContext context)
         {
             var alternateModelBinder = new ModelBinder(context.ProxyFactory);
             var binders = ModelBinders.Binders;

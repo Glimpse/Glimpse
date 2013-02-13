@@ -251,20 +251,20 @@ namespace Glimpse.Core.Framework
         }
 
         /// <summary>
-        /// Instantiates a collection of <see cref="IPipelineInspector"/>s.
+        /// Instantiates a collection of <see cref="IInspector"/>s.
         /// </summary>
         /// <returns>
-        /// A collection of <see cref="IPipelineInspector"/> instances resolved by one of the <see cref="IServiceLocator"/>s, otherwise all <see cref="IPipelineInspector"/>s discovered in the configured discovery location.
+        /// A collection of <see cref="IInspector"/> instances resolved by one of the <see cref="IServiceLocator"/>s, otherwise all <see cref="IInspector"/>s discovered in the configured discovery location.
         /// </returns>
-        public ICollection<IPipelineInspector> InstantiatePipelineInspectors()
+        public ICollection<IInspector> InstantiateInspectors()
         {
-            ICollection<IPipelineInspector> result;
+            ICollection<IInspector> result;
             if (TryAllInstancesFromServiceLocators(out result))
             {
                 return result;
             }
 
-            return CreateDiscoverableCollection<IPipelineInspector>(Configuration.PipelineInspectors);
+            return CreateDiscoverableCollection<IInspector>(Configuration.Inspectors);
         }
 
         /// <summary>
@@ -421,7 +421,7 @@ namespace Glimpse.Core.Framework
             var policy = InstantiateDefaultRuntimePolicy();
             var htmlEncoder = InstantiateHtmlEncoder();
             var persistenceStore = InstantiatePersistenceStore();
-            var pipelineInspectors = InstantiatePipelineInspectors();
+            var inspectors = InstantiateInspectors();
             var resources = InstantiateResources();
             var serializer = InstantiateSerializer();
             var tabs = InstantiateTabs();
@@ -431,7 +431,7 @@ namespace Glimpse.Core.Framework
             var messageBroker = InstantiateMessageBroker();
             var endpointBaseUri = InstantiateBaseResourceUri();
 
-            return new GlimpseConfiguration(frameworkProvider, endpointConfiguration, clientScripts, logger, policy, htmlEncoder, persistenceStore, pipelineInspectors, resources, serializer, tabs, runtimePolicies, defaultResource, proxyFactory, messageBroker, endpointBaseUri, timerStrategy, runtimePolicyStrategy);
+            return new GlimpseConfiguration(frameworkProvider, endpointConfiguration, clientScripts, logger, policy, htmlEncoder, persistenceStore, inspectors, resources, serializer, tabs, runtimePolicies, defaultResource, proxyFactory, messageBroker, endpointBaseUri, timerStrategy, runtimePolicyStrategy);
         }
 
         /// <summary>

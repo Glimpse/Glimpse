@@ -1,11 +1,11 @@
 ﻿using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 
-namespace Glimpse.Mvc.PipelineInspector
+namespace Glimpse.Mvc.Inspector
 {
-    public class DependencyInjectionInspector : IPipelineInspector
+    public class DependencyInjectionInspector : IInspector
     {
-        public void Setup(IPipelineInspectorContext context)
+        public void Setup(IInspectorContext context)
         {
             var logger = context.Logger;
 

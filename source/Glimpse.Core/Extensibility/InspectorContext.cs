@@ -3,12 +3,12 @@ using System;
 namespace Glimpse.Core.Extensibility
 {
     /// <summary>
-    /// The context passed into the <c>Setup</c> method of <see cref="IPipelineInspector"/>.
+    /// The context passed into the <c>Setup</c> method of <see cref="IInspector"/>.
     /// </summary>
-    public class PipelineInspectorContext : IPipelineInspectorContext
+    public class InspectorContext : IInspectorContext
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PipelineInspectorContext" /> class.
+        /// Initializes a new instance of the <see cref="InspectorContext" /> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
         /// <param name="proxyFactory">The proxy factory.</param>
@@ -16,7 +16,7 @@ namespace Glimpse.Core.Extensibility
         /// <param name="timerStrategy">The timer strategy.</param>
         /// <param name="runtimePolicyStrategy">The runtime policy strategy.</param>
         /// <exception cref="System.ArgumentNullException">Throws an exception if any parameter if <c>null</c>.</exception>
-        public PipelineInspectorContext(ILogger logger, IProxyFactory proxyFactory, IMessageBroker messageBroker, Func<IExecutionTimer> timerStrategy, Func<RuntimePolicy> runtimePolicyStrategy)
+        public InspectorContext(ILogger logger, IProxyFactory proxyFactory, IMessageBroker messageBroker, Func<IExecutionTimer> timerStrategy, Func<RuntimePolicy> runtimePolicyStrategy)
         {
             if (logger == null)
             {

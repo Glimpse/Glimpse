@@ -268,11 +268,11 @@ namespace Glimpse.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Setup IPipelineInspector of type &apos;{0}&apos;..
+        ///   Looks up a localized string similar to Setup IInspector of type &apos;{0}&apos;..
         /// </summary>
-        internal static string GlimpseRuntimeInitializeSetupPipelineInspector {
+        internal static string GlimpseRuntimeInitializeSetupInspector {
             get {
-                return ResourceManager.GetString("GlimpseRuntimeInitializeSetupPipelineInspector", resourceCulture);
+                return ResourceManager.GetString("GlimpseRuntimeInitializeSetupInspector", resourceCulture);
             }
         }
         
@@ -286,11 +286,11 @@ namespace Glimpse.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Exception initializing pipeline inspector of type &apos;{0}&apos;..
+        ///   Looks up a localized string similar to Exception initializing inspector of type &apos;{0}&apos;..
         /// </summary>
-        internal static string InitializePipelineInspectorError {
+        internal static string InitializeInspectorError {
             get {
-                return ResourceManager.GetString("InitializePipelineInspectorError", resourceCulture);
+                return ResourceManager.GetString("InitializeInspectorError", resourceCulture);
             }
         }
         

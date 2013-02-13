@@ -124,9 +124,9 @@
     <value>Exception executing tab of type '{0}'.</value>
     <comment>{0} - GetType() of offending tab</comment>
   </data>
-  <data name="InitializePipelineInspectorError" xml:space="preserve">
-    <value>Exception initializing pipeline inspector of type '{0}'.</value>
-    <comment>{0} - GetType() of offending pipelineInspector</comment>
+  <data name="InitializeInspectorError" xml:space="preserve">
+    <value>Exception initializing inspector of type '{0}'.</value>
+    <comment>{0} - GetType() of offending Inspector</comment>
   </data>
   <data name="InitializeTabError" xml:space="preserve">
     <value>Exception initializing tab of type '{0}'.</value>
@@ -208,9 +208,9 @@
     <data name="ExecuteResourceInsufficientPolicy">
         <value xml:space="preserve">Runtime policy does not allow execution of resource named '{0}'.</value>
     </data>
-    <data name="GlimpseRuntimeInitializeSetupPipelineInspector">
-        <value xml:space="preserve">Setup IPipelineInspector of type '{0}'.</value>
-        <comment>{0} - GetType() of IPipelineInspector</comment>
+    <data name="GlimpseRuntimeInitializeSetupInspector">
+        <value xml:space="preserve">Setup IInspector of type '{0}'.</value>
+        <comment>{0} - GetType() of IInspector</comment>
     </data>
     <data name="AlternateTypeGenerationHookMethodsInspected">
         <value xml:space="preserve">Methods inspected via proxy generation hook on type '{0}'.</value>

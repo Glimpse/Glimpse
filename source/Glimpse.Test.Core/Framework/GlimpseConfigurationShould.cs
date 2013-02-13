@@ -46,7 +46,7 @@ namespace Glimpse.Test.Core.Framework
             var loggerMock = new Mock<ILogger>();
             var encoderMock = new Mock<IHtmlEncoder>();
             var storeMock = new Mock<IPersistenceStore>();
-            var inspectorsStub = new LinkedList<IPipelineInspector>();
+            var inspectorsStub = new LinkedList<IInspector>();
             var resourcesStub = new LinkedList<IResource>();
             var serializerMock = new Mock<ISerializer>();
             var tabsStub = new List<ITab>();
@@ -66,7 +66,7 @@ namespace Glimpse.Test.Core.Framework
             Assert.Equal(loggerMock.Object, config.Logger);
             Assert.Equal(encoderMock.Object, config.HtmlEncoder);
             Assert.Equal(storeMock.Object, config.PersistenceStore);
-            Assert.Equal(inspectorsStub, config.PipelineInspectors);
+            Assert.Equal(inspectorsStub, config.Inspectors);
             Assert.Equal(resourcesStub, config.Resources);
             Assert.Equal(serializerMock.Object, config.Serializer);
             Assert.Equal(tabsStub, config.Tabs);
@@ -86,9 +86,9 @@ namespace Glimpse.Test.Core.Framework
         }
 
         [Fact]
-        public void CreateDefaultPiplineInspectorsCollection()
+        public void CreateDefaultInspectorsCollection()
         {
-            Assert.NotNull(Configuration.PipelineInspectors);
+            Assert.NotNull(Configuration.Inspectors);
         }
 
         [Fact]
@@ -122,9 +122,9 @@ namespace Glimpse.Test.Core.Framework
         }
 
         [Fact]
-        public void NotDiscoverPipelineInspectors()
+        public void NotDiscoverInspectors()
         {
-            Assert.Equal(0, Configuration.PipelineInspectors.Count);
+            Assert.Equal(0, Configuration.Inspectors.Count);
         }
 
         [Fact]
@@ -171,9 +171,9 @@ namespace Glimpse.Test.Core.Framework
         }
 
         [Fact]
-        public void PipelineInspectorsCannotBeNull()
+        public void InspectorsCannotBeNull()
         {
-            Assert.Throws<ArgumentNullException>(() => Configuration.PipelineInspectors = null);
+            Assert.Throws<ArgumentNullException>(() => Configuration.Inspectors = null);
         }
 
         [Fact]
@@ -241,47 +241,47 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void ThrowExceptionWhenConstructedWithNullFrameworkProvider()
         {
-            Assert.Throws<ArgumentNullException>(()=>new GlimpseConfiguration(null, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IPipelineInspector>(), new List<IResource>(), Configuration
+            Assert.Throws<ArgumentNullException>(()=>new GlimpseConfiguration(null, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IInspector>(), new List<IResource>(), Configuration
                 .SerializerMock.Object, new List<ITab>(), new List<IRuntimePolicy>(), Configuration.DefaultResourceMock.Object, Configuration.ProxyFactoryMock.Object, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
         }
 
         [Fact]
         public void ThrowExceptionWhenConstructedWithNullEndpointConfig()
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, null, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IPipelineInspector>(), new List<IResource>(), Configuration
+            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, null, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IInspector>(), new List<IResource>(), Configuration
                 .SerializerMock.Object, new List<ITab>(), new List<IRuntimePolicy>(), Configuration.DefaultResourceMock.Object, Configuration.ProxyFactoryMock.Object, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
         }
 
         [Fact]
         public void ThrowExceptionWhenConstructedWithNullClientScripts()
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, null, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IPipelineInspector>(), new List<IResource>(), Configuration
+            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, null, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IInspector>(), new List<IResource>(), Configuration
                 .SerializerMock.Object, new List<ITab>(), new List<IRuntimePolicy>(), Configuration.DefaultResourceMock.Object, Configuration.ProxyFactoryMock.Object, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
         }
 
         [Fact]
         public void ThrowExceptionWhenConstructedWithNullLogger()
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, null, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IPipelineInspector>(), new List<IResource>(), Configuration
+            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, null, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IInspector>(), new List<IResource>(), Configuration
                 .SerializerMock.Object, new List<ITab>(), new List<IRuntimePolicy>(), Configuration.DefaultResourceMock.Object, Configuration.ProxyFactoryMock.Object, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
         }
 
         [Fact]
         public void ThrowExceptionWhenConstructedWithNullHtmlEncoder()
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, null, Configuration.PersistenceStoreMock.Object, new List<IPipelineInspector>(), new List<IResource>(), Configuration
+            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, null, Configuration.PersistenceStoreMock.Object, new List<IInspector>(), new List<IResource>(), Configuration
                 .SerializerMock.Object, new List<ITab>(), new List<IRuntimePolicy>(), Configuration.DefaultResourceMock.Object, Configuration.ProxyFactoryMock.Object, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
         }
 
         [Fact]
         public void ThrowExceptionWhenConstructedWithNullRersistanceStore()
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, null, new List<IPipelineInspector>(), new List<IResource>(), Configuration
+            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, null, new List<IInspector>(), new List<IResource>(), Configuration
                 .SerializerMock.Object, new List<ITab>(), new List<IRuntimePolicy>(), Configuration.DefaultResourceMock.Object, Configuration.ProxyFactoryMock.Object, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
         }
 
         [Fact]
-        public void ThrowExceptionWhenConstructedWithNullPipelineInspectors()
+        public void ThrowExceptionWhenConstructedWithNullInspectors()
         {
             Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, null, new List<IResource>(), Configuration
                 .SerializerMock.Object, new List<ITab>(), new List<IRuntimePolicy>(), Configuration.DefaultResourceMock.Object, Configuration.ProxyFactoryMock.Object, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
@@ -290,48 +290,48 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void ThrowExceptionWhenConstructedWithNullResource()
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IPipelineInspector>(), null, Configuration
+            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IInspector>(), null, Configuration
                 .SerializerMock.Object, new List<ITab>(), new List<IRuntimePolicy>(), Configuration.DefaultResourceMock.Object, Configuration.ProxyFactoryMock.Object, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
         }
 
         [Fact]
         public void ThrowExceptionWhenConstructedWithNullSerializer()
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IPipelineInspector>(), new List<IResource>(), null, new List<ITab>(), new List<IRuntimePolicy>(), Configuration.DefaultResourceMock.Object, Configuration.ProxyFactoryMock.Object, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
+            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IInspector>(), new List<IResource>(), null, new List<ITab>(), new List<IRuntimePolicy>(), Configuration.DefaultResourceMock.Object, Configuration.ProxyFactoryMock.Object, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
         }
 
         [Fact]
         public void ThrowExceptionWhenConstructedWithNullTabs()
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IPipelineInspector>(), new List<IResource>(), Configuration
+            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IInspector>(), new List<IResource>(), Configuration
                 .SerializerMock.Object, null, new List<IRuntimePolicy>(), Configuration.DefaultResourceMock.Object, Configuration.ProxyFactoryMock.Object, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
         }
 
         [Fact]
         public void ThrowExceptionWhenConstructedWithNullRuntimePolicies()
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IPipelineInspector>(), new List<IResource>(), Configuration
+            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IInspector>(), new List<IResource>(), Configuration
                 .SerializerMock.Object, new List<ITab>(), null, Configuration.DefaultResourceMock.Object, Configuration.ProxyFactoryMock.Object, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
         }
 
         [Fact]
         public void ThrowExceptionWhenConstructedWithNullDefaultResource()
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IPipelineInspector>(), new List<IResource>(), Configuration
+            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IInspector>(), new List<IResource>(), Configuration
                 .SerializerMock.Object, new List<ITab>(), new List<IRuntimePolicy>(), null, Configuration.ProxyFactoryMock.Object, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
         }
 
         [Fact]
         public void ThrowExceptionWhenConstructedWithNullProxyFactory()
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IPipelineInspector>(), new List<IResource>(), Configuration
+            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IInspector>(), new List<IResource>(), Configuration
                 .SerializerMock.Object, new List<ITab>(), new List<IRuntimePolicy>(), Configuration.DefaultResourceMock.Object, null, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
         }
 
         [Fact]
         public void ThrowExceptionWhenConstructedWithNullMessageBroker()
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IPipelineInspector>(), new List<IResource>(), Configuration
+            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IInspector>(), new List<IResource>(), Configuration
                 .SerializerMock.Object, new List<ITab>(), new List<IRuntimePolicy>(), Configuration.DefaultResourceMock.Object, Configuration.ProxyFactoryMock.Object, null, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
         }
        

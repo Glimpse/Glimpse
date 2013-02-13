@@ -106,10 +106,10 @@
     <Compile Include="Model\MetadataPropertyItemModel.cs" />
     <Compile Include="Model\ViewModelSummary.cs" />
     <Compile Include="Model\ViewsModel.cs" />
-    <Compile Include="PipelineInspector\DependencyInjectionInspector.cs" />
-    <Compile Include="PipelineInspector\ExecutionInspector.cs" />
-    <Compile Include="PipelineInspector\ModelBinderInspector.cs" />
-    <Compile Include="PipelineInspector\ViewEngineInspector.cs" />
+    <Compile Include="Inspector\DependencyInjectionInspector.cs" />
+    <Compile Include="Inspector\ExecutionInspector.cs" />
+    <Compile Include="Inspector\ModelBinderInspector.cs" />
+    <Compile Include="Inspector\ViewEngineInspector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>

@@ -368,18 +368,18 @@ namespace Glimpse.Core.Framework
                             }
                         }
 
-                        var pipelineInspectorContext = new PipelineInspectorContext(logger, Configuration.ProxyFactory, messageBroker, Configuration.TimerStrategy, Configuration.RuntimePolicyStrategy);
+                        var inspectorContext = new InspectorContext(logger, Configuration.ProxyFactory, messageBroker, Configuration.TimerStrategy, Configuration.RuntimePolicyStrategy);
 
-                        foreach (var pipelineInspector in Configuration.PipelineInspectors)
+                        foreach (var inspector in Configuration.Inspectors)
                         {
                             try
                             {
-                                pipelineInspector.Setup(pipelineInspectorContext);
-                                logger.Debug(Resources.GlimpseRuntimeInitializeSetupPipelineInspector, pipelineInspector.GetType());
+                                inspector.Setup(inspectorContext);
+                                logger.Debug(Resources.GlimpseRuntimeInitializeSetupInspector, inspector.GetType());
                             }
                             catch (Exception exception)
                             {
-                                logger.Error(Resources.InitializePipelineInspectorError, exception, pipelineInspector.GetType());
+                                logger.Error(Resources.InitializeInspectorError, exception, inspector.GetType());
                             }
                         }
 

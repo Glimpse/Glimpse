@@ -1,16 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection; 
+using System.Reflection;
 using Glimpse.AspNet.AlternateType;
-using Glimpse.Core.Extensibility; 
+using Glimpse.Core.Extensibility;
 
-namespace Glimpse.AspNet.PipelineInspector
+namespace Glimpse.AspNet.Inspector
 {
-    public class RoutesInspector : IPipelineInspector
+    public class RoutesInspector : IInspector
     {
         private static readonly FieldInfo MappedRoutesField = typeof(System.Web.Routing.RouteCollection).GetField("_namedMap", BindingFlags.NonPublic | BindingFlags.Instance);
          
-        public void Setup(IPipelineInspectorContext context)
+        public void Setup(IInspectorContext context)
         {
             var logger = context.Logger;
             var alternateBaseImplementation = new AlternateType.RouteBase(context.ProxyFactory, context.Logger); 

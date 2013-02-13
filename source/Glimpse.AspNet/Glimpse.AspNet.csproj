@@ -86,7 +86,7 @@
     <Compile Include="Model\RouteModel.cs" />
     <Compile Include="Model\SessionModel.cs" />
     <Compile Include="Model\UriTokenInstance.cs" />
-    <Compile Include="PipelineInspector\RoutesInspector.cs" />
+    <Compile Include="Inspector\RoutesInspector.cs" />
     <Compile Include="Policy\LocalPolicy.cs" />
     <Compile Include="RequestMetadata.cs" />
     <Compile Include="Resources.Designer.cs">

@@ -1,13 +1,12 @@
-using System.Collections.Generic;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.AlternateType;
 
-namespace Glimpse.Mvc.PipelineInspector
+namespace Glimpse.Mvc.Inspector
 {
-    public class ViewEngineInspector : IPipelineInspector
+    public class ViewEngineInspector : IInspector
     {
-        public void Setup(IPipelineInspectorContext context)
+        public void Setup(IInspectorContext context)
         {
             var logger = context.Logger;
 

@@ -2,11 +2,11 @@
 using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.AlternateType;
 
-namespace Glimpse.Mvc.PipelineInspector
+namespace Glimpse.Mvc.Inspector
 {
-    public class ExecutionInspector : IPipelineInspector
+    public class ExecutionInspector : IInspector
     {
-        public void Setup(IPipelineInspectorContext context)
+        public void Setup(IInspectorContext context)
         {
             var logger = context.Logger;
 

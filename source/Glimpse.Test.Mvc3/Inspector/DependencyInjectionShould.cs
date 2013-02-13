@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
-using Glimpse.Mvc.PipelineInspector;
+using Glimpse.Mvc.Inspector;
 using Glimpse.Test.Common;
 using Moq;
 using Xunit;
 using Xunit.Extensions;
 
-namespace Glimpse.Test.Mvc3.PipelineInspector
+namespace Glimpse.Test.Mvc3.Inspector
 {
     public class DependencyInjectionShould : IDisposable
     {
@@ -21,7 +21,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         }
 
         [Theory, AutoMock]
-        public void ProxyDependencyResolver(DependencyInjectionInspector sut, IPipelineInspectorContext context, IDependencyResolver dependencyResolver)
+        public void ProxyDependencyResolver(DependencyInjectionInspector sut, IInspectorContext context, IDependencyResolver dependencyResolver)
         {
             DependencyResolver.SetResolver(dependencyResolver);
 
@@ -35,7 +35,7 @@ namespace Glimpse.Test.Mvc3.PipelineInspector
         }
 
         [Theory, AutoMock]
-        public void ContinueIfUnableToProxyDependencyResolver(DependencyInjectionInspector sut, IPipelineInspectorContext context, IDependencyResolver dependencyResolver)
+        public void ContinueIfUnableToProxyDependencyResolver(DependencyInjectionInspector sut, IInspectorContext context, IDependencyResolver dependencyResolver)
         {
             DependencyResolver.SetResolver(dependencyResolver);
 

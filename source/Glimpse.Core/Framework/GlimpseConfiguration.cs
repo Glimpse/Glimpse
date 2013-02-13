@@ -18,7 +18,7 @@ namespace Glimpse.Core.Framework
         private IHtmlEncoder htmlEncoder;
         private ILogger logger;
         private IPersistenceStore persistenceStore;
-        private ICollection<IPipelineInspector> pipelineInspectors;
+        private ICollection<IInspector> inspectors;
         private IProxyFactory proxyFactory;
         private ResourceEndpointConfiguration resourceEndpoint;
         private ICollection<IResource> resources;
@@ -37,7 +37,7 @@ namespace Glimpse.Core.Framework
         /// <param name="defaultRuntimePolicy">The default runtime policy.</param>
         /// <param name="htmlEncoder">The Html encoder.</param>
         /// <param name="persistenceStore">The persistence store.</param>
-        /// <param name="pipelineInspectors">The pipeline inspectors collection.</param>
+        /// <param name="inspectors">The inspectors collection.</param>
         /// <param name="resources">The resources collection.</param>
         /// <param name="serializer">The serializer.</param>
         /// <param name="tabs">The tabs collection.</param>
@@ -57,7 +57,7 @@ namespace Glimpse.Core.Framework
             RuntimePolicy defaultRuntimePolicy,
             IHtmlEncoder htmlEncoder,
             IPersistenceStore persistenceStore,
-            ICollection<IPipelineInspector> pipelineInspectors,
+            ICollection<IInspector> inspectors,
             ICollection<IResource> resources,
             ISerializer serializer,
             ICollection<ITab> tabs,
@@ -101,7 +101,7 @@ namespace Glimpse.Core.Framework
 
             if (resources == null)
             {
-                throw new ArgumentNullException("pipelineInspectors");
+                throw new ArgumentNullException("inspectors");
             }
 
             if (serializer == null)
@@ -154,7 +154,7 @@ namespace Glimpse.Core.Framework
             FrameworkProvider = frameworkProvider;
             HtmlEncoder = htmlEncoder;
             PersistenceStore = persistenceStore;
-            PipelineInspectors = pipelineInspectors;
+            Inspectors = inspectors;
             ResourceEndpoint = endpointConfiguration;
             Resources = resources;
             Serializer = serializer;
@@ -378,17 +378,17 @@ namespace Glimpse.Core.Framework
         }
 
         /// <summary>
-        /// Gets or sets the collection of <see cref="IPipelineInspector"/>.
+        /// Gets or sets the collection of <see cref="IInspector"/>.
         /// </summary>
         /// <value>
-        /// The configured collection of <see cref="IPipelineInspector"/>.
+        /// The configured collection of <see cref="IInspector"/>.
         /// </value>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public ICollection<IPipelineInspector> PipelineInspectors
+        public ICollection<IInspector> Inspectors
         {
             get
             {
-                return pipelineInspectors;
+                return inspectors;
             }
 
             set
@@ -398,7 +398,7 @@ namespace Glimpse.Core.Framework
                     throw new ArgumentNullException("value");
                 }
 
-                pipelineInspectors = value;
+                inspectors = value;
             }
         }
 

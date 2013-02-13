@@ -1,11 +1,11 @@
 ﻿using System.Linq;
 using Glimpse.Core.Extensibility;
 
-namespace Glimpse.Core.PipelineInspector
+namespace Glimpse.Core.Inspector
 {
-    public class TraceInspector : IPipelineInspector
+    public class TraceInspector : IInspector
     {
-        public void Setup(IPipelineInspectorContext context)
+        public void Setup(IInspectorContext context)
         {
             var traceListeners = System.Diagnostics.Trace.Listeners;
             if (!traceListeners.OfType<TraceListener>().Any())
