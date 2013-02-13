@@ -35,7 +35,7 @@ namespace Glimpse.Core.SerializationConverter
 
             if (converted.HasValue)
             {
-                return Math.Round(converted.Value.TotalMilliseconds, 2);
+                return Math.Round(converted.Value.TotalMilliseconds, 2).ToString("F2");
             }
 
             return null;

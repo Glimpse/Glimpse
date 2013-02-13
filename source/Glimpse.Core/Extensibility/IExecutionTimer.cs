@@ -8,6 +8,14 @@ namespace Glimpse.Core.Extensibility
     public interface IExecutionTimer
     {
         /// <summary>
+        /// Gets the request start date and time.
+        /// </summary>
+        /// <value>
+        /// The request start.
+        /// </value>
+        DateTime RequestStart { get; }
+
+        /// <summary>
         /// Points this instance.
         /// </summary>
         /// <returns>A <see cref="TimerResult"/> which represents a single point in time.</returns>

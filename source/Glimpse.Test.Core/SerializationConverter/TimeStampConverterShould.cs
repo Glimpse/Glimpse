@@ -36,7 +36,7 @@ namespace Glimpse.Test.Core.SerializationConverter
 
             var result = converter.Convert(input);
 
-            Assert.Equal(1.22, result);
+            Assert.Equal("1.22", result);
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace Glimpse.Test.Core.SerializationConverter
 
             var result = converter.Convert(input);
 
-            Assert.Equal(1.22, result);
+            Assert.Equal("1.22", result);
         }
 
         [Fact]

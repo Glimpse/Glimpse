@@ -74,7 +74,7 @@
     <Compile Include="Model\RequestModelShould.cs" />
     <Compile Include="Model\RouteModelShould.cs" />
     <Compile Include="PipelineInspector\RoutesInspectorShould.cs" />
-    <Compile Include="PipelineInspector\TraceInspectorShould.cs" />
+    <Compile Include="PipelineInspector\TraceListenerShould.cs" />
     <Compile Include="Policy\LocalPolicyShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerializationConverter\ConfigurationModelConverterShould.cs" />

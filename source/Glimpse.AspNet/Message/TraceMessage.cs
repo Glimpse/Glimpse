@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Glimpse.AspNet.Model
+namespace Glimpse.AspNet.Message
 {
-    public class TraceModel
+    public class TraceMessage : ITraceMessage
     {
         public string Category { get; set; }
 

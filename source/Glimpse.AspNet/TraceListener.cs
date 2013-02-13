@@ -1,45 +1,78 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;
-using System.Web;
-using Glimpse.AspNet.Model;
+using Glimpse.AspNet.Message;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions;
+using Glimpse.Core.Framework;
 using Glimpse.Core.Tab.Assist;
 
 namespace Glimpse.AspNet
 {
-    public class GlimpseTraceListener : TraceListener
+    public class TraceListener : System.Diagnostics.TraceListener
     {
-        // HACK - this string has to match Glimpse.Core.Constants.TabStorageKey, as such this implementation should be changed
-        private const string TabStorageKey = "__GlimpseTabStorage"; 
+        [ThreadStatic]
+        private static Stopwatch fromLastWatch;
 
-        public GlimpseTraceListener() : this(GetTabStore)
+        // ReSharper disable UnusedMember.Global
+        // These constructors used by .NET when TraceListener is set via web.config
+        public TraceListener() : this(GlimpseConfiguration.GetConfiguredMessageBroker(), GlimpseConfiguration.GetConfiguredTimerStrategy())
         {
         }
 
-        public GlimpseTraceListener(string name) : this(GetTabStore)
+        // This constructor is needed for users who configure web.config with <add name="myListener" type="Glimpse.AspNet.TraceListener" initializeData="XYZ"/>
+        public TraceListener(string initializeData) : this(GlimpseConfiguration.GetConfiguredMessageBroker(), GlimpseConfiguration.GetConfiguredTimerStrategy())
         {
         }
+        //// ReSharper restore UnusedMember.Global
 
-        public GlimpseTraceListener(Func<IDataStore> tabStoreStrategy)
+        public TraceListener(IMessageBroker messageBroker, Func<IExecutionTimer> timerStrategy)
         {
-            TabStoreStrategy = tabStoreStrategy;
+            MessageBroker = messageBroker;
+            TimerStrategy = () =>
+                {
+                    try
+                    {
+                        return timerStrategy();
+                    }
+                    catch
+                    {
+                        // Avoid exception being thrown from threads without access to request store
+                        return null;
+                    }
+                };
         }
 
-        private Func<IDataStore> TabStoreStrategy { get; set; }
+        internal IMessageBroker MessageBroker { get; set; }
+
+        internal Func<IExecutionTimer> TimerStrategy { get; set; }
+
+        /*private Func<IDataStore> TabStoreStrategy { get; set; }
+
+        private IDataStore TabStore 
+        {
+            get
+            {
+                try
+                {
+                    return TabStoreStrategy();
+                }
+                catch
+                {
+                    return new DictionaryDataStoreAdapter(new Dictionary<string, object>());
+                }
+            }
+        }
 
         private Stopwatch FirstWatch
         {
             get
             {
-                var firstWatch = TabStoreStrategy().Get<Stopwatch>(Tab.Trace.FirstWatchStoreKey);
+                var firstWatch = TabStore.Get<Stopwatch>(Tab.Trace.FirstWatchStoreKey);
                 if (firstWatch == null) 
                 {
                     firstWatch = new Stopwatch();
-                    TabStoreStrategy().Set(Tab.Trace.FirstWatchStoreKey, firstWatch);
+                    TabStore.Set(Tab.Trace.FirstWatchStoreKey, firstWatch);
                     firstWatch.Start();
                 }
 
@@ -51,11 +84,11 @@ namespace Glimpse.AspNet
         {
             get
             {
-                var lastWatch = TabStoreStrategy().Get<Stopwatch>(Tab.Trace.LastWatchStoreKey);
+                var lastWatch = TabStore.Get<Stopwatch>(Tab.Trace.LastWatchStoreKey);
                 if (lastWatch == null)
                 {
                     lastWatch = new Stopwatch();
-                    TabStoreStrategy().Set(Tab.Trace.LastWatchStoreKey, lastWatch);
+                    TabStore.Set(Tab.Trace.LastWatchStoreKey, lastWatch);
                     lastWatch.Start();
                 } 
 
@@ -63,20 +96,20 @@ namespace Glimpse.AspNet
             } 
         }
 
-        private IList<TraceModel> Messages
+        private IList<TraceMessage> Messages
         {
             get
             {
-                var messages = TabStoreStrategy().Get<IList<TraceModel>>(Tab.Trace.TraceMessageStoreKey);
+                var messages = TabStore.Get<IList<TraceMessage>>(Tab.Trace.TraceMessageStoreKey);
                 if (messages == null) 
                 {
-                    messages = new List<TraceModel>();
-                    TabStoreStrategy().Set(Tab.Trace.TraceMessageStoreKey, messages); 
+                    messages = new List<TraceMessage>();
+                    TabStore.Set(Tab.Trace.TraceMessageStoreKey, messages); 
                 }
                 
                 return messages;
             }
-        }
+        }*/
 
         public override void Write(object o)
         { 
@@ -225,7 +258,7 @@ namespace Glimpse.AspNet
         }
 
         // Hack: This is a bit of a hack because it duplicates some code from GlimpseRuntime
-        private static IDataStore GetTabStore()
+/*        private static IDataStore GetTabStore()
         {
             // This allows Tracing to work from non-ASP.NET tread.
             if (HttpContext.Current == null)
@@ -249,26 +282,48 @@ namespace Glimpse.AspNet
             }
 
             return tabStorage[tabName];
+        }*/
+
+        private TimeSpan CalculateFromLast(IExecutionTimer timer)
+        {
+            if (fromLastWatch == null)
+            {
+                fromLastWatch = Stopwatch.StartNew();
+                return TimeSpan.FromMilliseconds(0);
+            }
+
+            // Timer started before this request, reset it
+            if (DateTime.Now - fromLastWatch.Elapsed < timer.RequestStart)
+            {
+                fromLastWatch = Stopwatch.StartNew();
+                return TimeSpan.FromMilliseconds(0);
+            }
+
+            var result = fromLastWatch.Elapsed;
+            fromLastWatch = Stopwatch.StartNew();
+            return result;
         }
 
         private void InternalWrite(string message, string category)
         {
-            var firstWatch = FirstWatch;
-            var lastWatch = LastWatch;
+            var timer = TimerStrategy();
 
-            var model = new TraceModel
+            // Execution in on thread without access to RequestStore
+            if (timer == null || MessageBroker == null) 
+            {
+                return;
+            }
+
+            var model = new TraceMessage
                 {
                     Category = category,
                     Message = message,
-                    FromFirst = firstWatch.Elapsed,
-                    FromLast = lastWatch.Elapsed,
+                    FromFirst = timer.Point().Offset,
+                    FromLast = CalculateFromLast(timer),
                     IndentLevel = IndentLevel
                 };
 
-            lastWatch.Reset();
-            lastWatch.Start();
-
-            Messages.Add(model);
+            MessageBroker.Publish(model);
         }
 
         private string WriteHeader(string source, int id)

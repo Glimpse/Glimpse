@@ -9,13 +9,14 @@ namespace Glimpse.Core.Framework
     /// </summary>
     public class GlimpseConfiguration : IGlimpseConfiguration
     {
+        private static IMessageBroker messageBroker;
+        private static Func<IExecutionTimer> timerStrategy;
         private ICollection<IClientScript> clientScripts;
         private IResource defaultResource;
         private string endpointBaseUri;
         private IFrameworkProvider frameworkProvider;
         private IHtmlEncoder htmlEncoder;
         private ILogger logger;
-        private IMessageBroker messageBroker;
         private IPersistenceStore persistenceStore;
         private ICollection<IPipelineInspector> pipelineInspectors;
         private IProxyFactory proxyFactory;
@@ -24,7 +25,6 @@ namespace Glimpse.Core.Framework
         private ICollection<IRuntimePolicy> runtimePolicies;
         private ISerializer serializer;
         private ICollection<ITab> tabs;
-        private Func<IExecutionTimer> timerStrategy;
         private Func<RuntimePolicy> runtimePolicyStrategy;
 
         /// <summary>
@@ -600,6 +600,18 @@ namespace Glimpse.Core.Framework
 
                 timerStrategy = value;
             }
+        }
+
+        // HACK: To support TraceListener with TraceSource via web.config
+        public static Func<IExecutionTimer> GetConfiguredTimerStrategy()
+        {
+            return timerStrategy;
+        }
+
+        // HACK: To support TraceListener with TraceSource via web.config
+        public static IMessageBroker GetConfiguredMessageBroker()
+        {
+            return messageBroker;
         }
     }
 }

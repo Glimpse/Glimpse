@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Glimpse.AspNet.Model;
+using Glimpse.AspNet.Message;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Tab.Assist;
@@ -10,9 +8,6 @@ namespace Glimpse.AspNet.Tab
 {
     public class Trace : ITab, ITabSetup, IDocumentation, ITabLayout, IKey
     {
-        public const string TraceMessageStoreKey = "Glimpse.Trace.Messages";
-        public const string FirstWatchStoreKey = "Glimpse.Trace.FirstWatch";
-        public const string LastWatchStoreKey = "Glimpse.Trace.LastWatch";
         public const string TabKey = "glimpse_trace";
 
         private static readonly object Layout = TabLayout.Create()
@@ -56,17 +51,13 @@ namespace Glimpse.AspNet.Tab
 
         public object GetData(ITabContext context)
         {
-            var data = context.TabStore.Get<IList<TraceModel>>(TraceMessageStoreKey);
+            var data = context.GetMessages<ITraceMessage>();
             return data;
         }
 
         public void Setup(ITabSetupContext context)
         {
-            var traceListeners = System.Diagnostics.Trace.Listeners;
-            if (!traceListeners.OfType<GlimpseTraceListener>().Any())
-            {
-                traceListeners.Add(new GlimpseTraceListener(context.GetTabStore));
-            }
+            context.PersistMessages<ITraceMessage>();
         }
     }
 }

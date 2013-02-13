@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Glimpse.AspNet.Message;
 using Glimpse.AspNet.Model;
 using Glimpse.AspNet.Tab;
 using Glimpse.Core.Extensibility;
@@ -43,9 +44,9 @@ namespace Glimpse.Test.AspNet.Tab
         [Fact]
         public void ReturnData()
         { 
-            var model = new List<TraceModel>();
+            var model = new ITraceMessage[0];
             var dataStoreMock = new Mock<IDataStore>();
-            dataStoreMock.Setup(c => c.Get(Trace.TraceMessageStoreKey)).Returns(model);
+            dataStoreMock.Setup(c => c.Get(typeof(IList<ITraceMessage>).AssemblyQualifiedName)).Returns(model);
             var contextMock = new Mock<ITabContext>();
             contextMock.SetupGet(c => c.TabStore).Returns(dataStoreMock.Object);
 
@@ -53,7 +54,7 @@ namespace Glimpse.Test.AspNet.Tab
             var result = trace.GetData(contextMock.Object);
 
             Assert.NotNull(result);
-            Assert.Same(model, result);
+            Assert.Equal(model, result);
         } 
     }
 }

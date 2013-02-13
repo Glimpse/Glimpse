@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.IO;
 using System.Web.Mvc;
-using Glimpse.Core;
+using Glimpse.AspNet;
 using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.AlternateType;
 using Moq;
@@ -26,6 +26,15 @@ namespace Glimpse.Test.Common
             ValueProviderGetValueArguments(fixture);
 
             ControllerFactoryCreateController(fixture);
+
+            TraceListener(fixture);
+        }
+
+        private static void TraceListener(IFixture fixture)
+        {
+            fixture.Register<IMessageBroker, IExecutionTimer, TraceListener>(
+                (messageBroker, executionTimer) =>
+                new TraceListener(messageBroker, () => executionTimer));
         }
 
         private static void ControllerFactoryCreateController(IFixture fixture)

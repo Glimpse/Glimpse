@@ -20,7 +20,16 @@ namespace Glimpse.Core.Extensibility
             }
 
             Stopwatch = stopwatch;
+            RequestStart = DateTime.Now;
         }
+
+        /// <summary>
+        /// Gets the request start date and time.
+        /// </summary>
+        /// <value>
+        /// The request start.
+        /// </value>
+        public DateTime RequestStart { get; private set; }
 
         /// <summary>
         /// Gets or sets the stopwatch.
