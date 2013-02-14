@@ -115,7 +115,7 @@ namespace Glimpse.Test.Core.Resource
             var version = "1.X.Y";
             contextMock.Setup(c => c.Parameters.TryGetValue("version", out version)).Returns(true);
 
-            Func<string> strategy = () => requestId + version;
+            Func<Guid?, string> strategy = (id) => requestId + version;
             var configMock = new Mock<IGlimpseConfiguration>();
             
             configMock.Setup(c => c.FrameworkProvider.HttpRequestStore.Get(Constants.ClientScriptsStrategy)).Returns(() => strategy);

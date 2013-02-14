@@ -128,9 +128,9 @@ namespace Glimpse.Core.Framework
             // Give Request an ID
             var requestId = Guid.NewGuid();
             requestStore.Set(Constants.RequestIdKey, requestId);
-            Func<string> generateClientScripts = () => GenerateScriptTags(requestId);
+            Func<Guid?, string> generateClientScripts = (rId) => rId.HasValue ? GenerateScriptTags(rId.Value) : GenerateScriptTags(requestId);
             requestStore.Set(Constants.ClientScriptsStrategy, generateClientScripts);
-
+            
             var executionTimer = CreateAndStartGlobalExecutionTimer(requestStore);
 
             Configuration.MessageBroker.Publish(new RuntimeMessage().AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest).AsTimelineMessage("Start Request", Timeline.Request).AsTimedMessage(executionTimer.Point()));
@@ -620,7 +620,7 @@ namespace Glimpse.Core.Framework
                 hasRendered = requestStore.Get<bool>(Constants.ScriptsHaveRenderedKey);
             }
 
-            if (!runtimePolicy.HasFlag(RuntimePolicy.DisplayGlimpseClient) || hasRendered)
+            if (hasRendered)
             {
                 return string.Empty;
             }

@@ -108,9 +108,9 @@ namespace Glimpse.Core.Resource
             }
 
             var requestStore = configuration.FrameworkProvider.HttpRequestStore;
-            var generateScriptTags = requestStore.Get<Func<string>>(Constants.ClientScriptsStrategy);
+            var generateScriptTags = requestStore.Get<Func<Guid?, string>>(Constants.ClientScriptsStrategy);
 
-            string scriptTags = generateScriptTags();
+            string scriptTags = generateScriptTags(requestId);
 
             string html = string.Format("<!DOCTYPE html><html><head><meta charset='utf-8'><title>Glimpse Popup</title></head><body class='glimpse-popup'>{0}</body></html>", scriptTags);
 
