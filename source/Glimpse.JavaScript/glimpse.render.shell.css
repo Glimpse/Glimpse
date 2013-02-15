@@ -402,6 +402,9 @@
     font-weight: bold;
 }
 .glimpse-panel th.glimpse-cell-key {
+    width: 130px;
+}
+.glimpse-panel .glimpse-row-header-0 th.glimpse-cell-key {
     width: 250px;
 }
 .glimpse-panel table table {
