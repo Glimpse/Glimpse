@@ -4,6 +4,8 @@ using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.AlternateType;
 using Glimpse.Test.Common;
+using Glimpse.Test.Mvc3.TestDoubles;
+
 using Moq;
 using Xunit;
 using Xunit.Extensions;
@@ -34,6 +36,10 @@ namespace Glimpse.Test.Mvc3.AlternateType
         [Theory, AutoMock]
         public void PublishMessageWithRuntimePolicyOn(AsyncActionInvoker.EndInvokeActionMethod sut, IAlternateMethodContext context, ActionDescriptor actionDescriptor)
         {
+            var actionDescriptorMock = new Mock<ActionDescriptor>();
+            actionDescriptorMock.Setup(a => a.ControllerDescriptor).Returns(new ReflectedControllerDescriptor(typeof(DummyController)));
+            actionDescriptorMock.Setup(a => a.ActionName).Returns("Index");
+
             context.Setup(c => c.ReturnValue).Returns(new ContentResult());
             context.Setup(c => c.Proxy).Returns(
                 new ActionInvokerStateMixin
@@ -41,6 +47,12 @@ namespace Glimpse.Test.Mvc3.AlternateType
                     Offset = TimeSpan.Zero, 
                     Arguments = new ActionInvoker.InvokeActionMethod.Arguments(new ControllerContext(), actionDescriptor, new Dictionary<string, object>())
                 });
+            context.Setup(c => c.Arguments).Returns(new object[]
+                                                            {
+                                                                new ControllerContext(),
+                                                                actionDescriptorMock.Object,
+                                                                new Dictionary<string, object>()
+                                                            });
 
             sut.NewImplementation(context);
 

@@ -10,6 +10,7 @@ namespace Glimpse.Mvc.AlternateType
 {
     public class ActionInvoker : AlternateType<IActionInvoker>
     {
+        private static MethodInfo executedMethod = typeof(ActionResult).GetMethod("ExecuteResult");
         private IEnumerable<IAlternateMethod> allMethods;
 
         public ActionInvoker(IProxyFactory proxyFactory) : base(proxyFactory)
@@ -121,7 +122,7 @@ namespace Glimpse.Mvc.AlternateType
                 var args = new Arguments(context.Arguments);
                 var message = new Message()
                     .AsTimedMessage(timerResult)
-                    .AsSourceMessage(context.InvocationTarget.GetType(), context.MethodInvocationTarget)
+                    .AsSourceMessage(args.ActionResult.GetType(), executedMethod)
                     .AsChildActionMessage(args.ControllerContext)
                     .AsActionMessage(args.ControllerContext)
                     .AsMvcTimelineMessage(Glimpse.Mvc.Message.Timeline.Controller);
@@ -176,10 +177,11 @@ namespace Glimpse.Mvc.AlternateType
 
             public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
             {
-                var args = new Arguments(context.Arguments);
+                var args = new Arguments(context.Arguments); 
+                var controllerDescriptor = args.ActionDescriptor.ControllerDescriptor; 
                 var message = new Message(context.ReturnValue.GetType())
                     .AsTimedMessage(timerResult)
-                    .AsSourceMessage(context.InvocationTarget.GetType(), context.MethodInvocationTarget)
+                    .AsSourceMessage(controllerDescriptor.ControllerType, controllerDescriptor.ControllerType.GetMethod(args.ActionDescriptor.ActionName))
                     .AsChildActionMessage(args.ControllerContext)
                     .AsActionMessage(args.ControllerContext)
                     .AsMvcTimelineMessage(Glimpse.Mvc.Message.Timeline.Controller);

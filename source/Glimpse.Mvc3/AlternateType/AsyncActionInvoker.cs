@@ -110,9 +110,11 @@ namespace Glimpse.Mvc.AlternateType
                 var timer = context.TimerStrategy();
                 var timerResult = timer.Stop(state.Offset);
 
+                var args = new ActionInvoker.InvokeActionMethod.Arguments(context.Arguments);
+                var controllerDescriptor = args.ActionDescriptor.ControllerDescriptor; 
                 var message = new ActionInvoker.InvokeActionMethod.Message(context.ReturnValue.GetType())
                     .AsTimedMessage(timerResult)
-                    .AsSourceMessage(context.InvocationTarget.GetType(), context.MethodInvocationTarget)
+                    .AsSourceMessage(controllerDescriptor.ControllerType, controllerDescriptor.ControllerType.GetMethod(args.ActionDescriptor.ActionName))
                     .AsChildActionMessage(state.Arguments.ControllerContext)
                     .AsActionMessage(state.Arguments.ControllerContext)
                     .AsMvcTimelineMessage(Glimpse.Mvc.Message.Timeline.Filter);
