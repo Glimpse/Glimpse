@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
@@ -111,10 +112,14 @@ namespace Glimpse.Mvc.AlternateType
                 var timerResult = timer.Stop(state.Offset);
 
                 var args = new ActionInvoker.InvokeActionMethod.Arguments(context.Arguments);
-                var controllerDescriptor = args.ActionDescriptor.ControllerDescriptor; 
+                var actionDescriptor = args.ActionDescriptor;
+                var controllerDescriptor = args.ActionDescriptor.ControllerDescriptor;
+                var actionName = actionDescriptor.ActionName;
+                var actionParams = actionDescriptor.GetParameters().Select(p => p.ParameterType).ToArray();
+
                 var message = new ActionInvoker.InvokeActionMethod.Message(context.ReturnValue.GetType())
                     .AsTimedMessage(timerResult)
-                    .AsSourceMessage(controllerDescriptor.ControllerType, controllerDescriptor.ControllerType.GetMethod(args.ActionDescriptor.ActionName))
+                    .AsSourceMessage(controllerDescriptor.ControllerType, controllerDescriptor.ControllerType.GetMethod(actionName, actionParams))
                     .AsChildActionMessage(state.Arguments.ControllerContext)
                     .AsActionMessage(state.Arguments.ControllerContext)
                     .AsMvcTimelineMessage(Glimpse.Mvc.Message.Timeline.Filter);

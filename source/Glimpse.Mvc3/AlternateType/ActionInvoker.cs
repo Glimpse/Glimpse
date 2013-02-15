@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
@@ -177,11 +178,15 @@ namespace Glimpse.Mvc.AlternateType
 
             public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
             {
-                var args = new Arguments(context.Arguments); 
-                var controllerDescriptor = args.ActionDescriptor.ControllerDescriptor; 
+                var args = new Arguments(context.Arguments);
+                var actionDescriptor = args.ActionDescriptor;
+                var controllerDescriptor = actionDescriptor.ControllerDescriptor; 
+                var actionName = actionDescriptor.ActionName;
+                var actionParams = actionDescriptor.GetParameters().Select(p => p.ParameterType).ToArray();
+
                 var message = new Message(context.ReturnValue.GetType())
                     .AsTimedMessage(timerResult)
-                    .AsSourceMessage(controllerDescriptor.ControllerType, controllerDescriptor.ControllerType.GetMethod(args.ActionDescriptor.ActionName))
+                    .AsSourceMessage(controllerDescriptor.ControllerType, controllerDescriptor.ControllerType.GetMethod(actionName, actionParams))
                     .AsChildActionMessage(args.ControllerContext)
                     .AsActionMessage(args.ControllerContext)
                     .AsMvcTimelineMessage(Glimpse.Mvc.Message.Timeline.Controller);
