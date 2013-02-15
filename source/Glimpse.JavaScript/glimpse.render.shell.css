@@ -398,13 +398,13 @@
 .glimpse-panel .glimpse-soft {
     color: #999;
 }
-.glimpse-panel .glimpse-cell-key {
+.glimpse-panel .glimpse-cell-key, .glimpse-panel .glimpse-key {
     font-weight: bold;
 }
-.glimpse-panel th.glimpse-cell-key {
+.glimpse-panel th.glimpse-key {
     width: 130px;
 }
-.glimpse-panel .glimpse-row-header-0 th.glimpse-cell-key {
+.glimpse-panel .glimpse-row-header-0 th.glimpse-key {
     width: 250px;
 }
 .glimpse-panel table table {
