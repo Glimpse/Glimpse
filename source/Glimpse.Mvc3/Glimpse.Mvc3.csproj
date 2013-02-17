@@ -104,6 +104,7 @@
     <Compile Include="Model\MetadataContentModel.cs" />
     <Compile Include="Model\MetadataItemModel.cs" />
     <Compile Include="Model\MetadataPropertyItemModel.cs" />
+    <Compile Include="Model\ModelBindingModel.cs" />
     <Compile Include="Model\ViewModelSummary.cs" />
     <Compile Include="Model\ViewsModel.cs" />
     <Compile Include="Inspector\DependencyInjectionInspector.cs" />
@@ -116,6 +117,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SerializationConverter\CultureConverter.cs" />
     <Compile Include="SerializationConverter\ListOfExecutionModelConverter.cs" />
     <Compile Include="SerializationConverter\ListOfMetadataItemModelConverter.cs" />
     <Compile Include="SerializationConverter\ListOfViewsModelConverter.cs" />

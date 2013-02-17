@@ -73,7 +73,7 @@ namespace Glimpse.Mvc.AlternateType
             public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
             {
                 var args = new Arguments(context.Arguments);
-                var message = new Message(context.ReturnValue as ValueProviderResult, context.TargetType)
+                var message = new Message(args.Key, context.ReturnValue as ValueProviderResult, context.TargetType)
                     .AsSourceMessage(context.TargetType, context.MethodInvocationTarget);
 
                 context.MessageBroker.Publish(message);
@@ -99,8 +99,9 @@ namespace Glimpse.Mvc.AlternateType
 
             public class Message : MessageBase, ISourceMessage
             {
-                public Message(ValueProviderResult result, Type valueProviderType)
+                public Message(string key, ValueProviderResult result, Type valueProviderType)
                 {
+                    Key = key;
                     IsFound = false;
                     if (result != null)
                     {
@@ -112,6 +113,8 @@ namespace Glimpse.Mvc.AlternateType
 
                     ValueProviderType = valueProviderType;
                 }
+
+                public string Key { get; set; }
 
                 public bool IsFound { get; private set; }
 
