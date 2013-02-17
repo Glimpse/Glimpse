@@ -29,6 +29,11 @@ namespace Glimpse.Mvc.Tab
         {
             var models = GetStack(context.TabStore).Where(i => i.IsBound).Reverse();
 
+            if (!models.Any())
+            {
+                return null;
+            }
+
             // TODO: Move this display code over to leverage assist namespace and a serialization converter.
             var table = new List<object[]> { new object[] { "Ordinal", "Parameter", "Type", "Value", "Culture", "Model Binder", "Value Providers" } };
             
