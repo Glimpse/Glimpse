@@ -70,7 +70,7 @@ namespace Glimpse.Mvc.AlternateType
                     ViewData = viewData;
                     ModelMetadata = modelMetadata;
                     BaseType = baseType;
-                    ViewCorrelation= viewCorrelation;
+                    ViewCorrelation = viewCorrelation;
                 }
 
                 public string ControllerName { get; set; }

@@ -11,9 +11,9 @@ namespace Glimpse.AspNet.AlternateType
 {
     public class RouteBase : IAlternateType<System.Web.Routing.RouteBase>
     {
+        private readonly RouteConstraint routeConstraintAlternate;
         private IEnumerable<IAlternateMethod> allMethodsRouteBase;
         private IEnumerable<IAlternateMethod> allMethodsRoute;
-        private readonly RouteConstraint routeConstraintAlternate;
 
         public RouteBase(IProxyFactory proxyFactory, ILogger logger)
         {
@@ -160,13 +160,21 @@ namespace Glimpse.AspNet.AlternateType
                 }
                  
                 public TimeSpan Offset { get; set; }
+
                 public TimeSpan Duration { get; set; }
+                
                 public DateTime StartTime { get; set; }
+
                 public Type ExecutedType { get; set; }
+                
                 public MethodInfo ExecutedMethod { get; set; }
+                
                 public System.Web.Routing.RouteValueDictionary Values { get; protected set; } 
+                
                 public int RouteHashCode { get; protected set; } 
+                
                 public bool IsMatch { get; protected set; } 
+                
                 public string RouteName { get; protected set; }
             }
         } 
@@ -208,12 +216,19 @@ namespace Glimpse.AspNet.AlternateType
                 }
 
                 public int RouteHashCode { get; protected set; } 
+
                 public bool IsMatch { get; protected set; }
+                
                 public Guid Id { get; private set; }
+                
                 public TimeSpan Offset { get; set; }
+                
                 public TimeSpan Duration { get; set; }
+                
                 public DateTime StartTime { get; set; }
+                
                 public Type ExecutedType { get; set; }
+                
                 public MethodInfo ExecutedMethod { get; set; }
             }
         }

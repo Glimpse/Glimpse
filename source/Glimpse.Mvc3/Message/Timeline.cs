@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text; 
-using Glimpse.Core.Message;
+﻿using Glimpse.Core.Message;
 
 namespace Glimpse.Mvc.Message
 {
     /// <summary>
-    /// Options that can used for timeline evetns.
+    /// Options that can used for timeline events.
     /// </summary>
-    public class Timeline : Core.Message.Timeline
+    public class Timeline : Core.Message.TimelineMessage
     {
-        private static readonly TimelineCategory controller = new TimelineCategoryController();
-        private static readonly TimelineCategory filter = new TimelineCategoryFilter();
-        private static readonly TimelineCategory view = new TimelineCategoryView();
+        private static TimelineCategory controller = new TimelineCategoryController();
+        private static TimelineCategory filter = new TimelineCategoryFilter();
+        private static TimelineCategory view = new TimelineCategoryView();
 
         /// <summary>
-        /// Used for common events that occur during the event lifecycle.
+        /// Gets the timeline category for a controller.
         /// </summary>
         public static TimelineCategory Controller
         {
@@ -24,7 +20,7 @@ namespace Glimpse.Mvc.Message
         }
 
         /// <summary>
-        /// Used for common events that occur during the event lifecycle.
+        /// Gets the timeline category for a filter.
         /// </summary>
         public static TimelineCategory Filter
         {
@@ -32,7 +28,7 @@ namespace Glimpse.Mvc.Message
         }
 
         /// <summary>
-        /// Used for common events that occur during the event lifecycle.
+        /// Gets a timeline for a view.
         /// </summary>
         public static TimelineCategory View
         {

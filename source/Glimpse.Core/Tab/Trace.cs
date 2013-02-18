@@ -1,7 +1,7 @@
 ﻿using System;
-using Glimpse.Core.Message;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
+using Glimpse.Core.Message;
 using Glimpse.Core.Tab.Assist;
 
 namespace Glimpse.Core.Tab

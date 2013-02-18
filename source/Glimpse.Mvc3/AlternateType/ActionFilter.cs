@@ -105,7 +105,6 @@ namespace Glimpse.Mvc.AlternateType
                 context.MessageBroker.Publish(message);  
             }
 
-
             public class Message : MessageBase, IExceptionFilterMessage, IBoundedFilterMessage, ICanceledBasedFilterMessage, IExecutionMessage
             {
                 public string ControllerName { get; set; }

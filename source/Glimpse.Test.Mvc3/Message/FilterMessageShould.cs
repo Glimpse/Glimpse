@@ -24,9 +24,13 @@ namespace Glimpse.Test.Mvc3.Message
         public class TestMessage : IFilterMessage
         {
             public Guid Id { get; private set; }
+            
             public string ControllerName { get; set; }
+            
             public string ActionName { get; set; }
+            
             public FilterCategory Category { get; set; }
+            
             public Type ResultType { get; set; }
         }
     }

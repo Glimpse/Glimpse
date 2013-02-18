@@ -18,7 +18,7 @@ namespace Glimpse.Core.Message
         }
 
         /// <summary>
-        /// Gets or sets the name that will be displied in the UI.
+        /// Gets or sets the name that will be displayed in the UI.
         /// </summary>
         /// <value>The name.</value>
         public string Name { get; protected set; }

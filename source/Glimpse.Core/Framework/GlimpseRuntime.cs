@@ -133,7 +133,7 @@ namespace Glimpse.Core.Framework
             
             var executionTimer = CreateAndStartGlobalExecutionTimer(requestStore);
 
-            Configuration.MessageBroker.Publish(new RuntimeMessage().AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest).AsTimelineMessage("Start Request", Timeline.Request).AsTimedMessage(executionTimer.Point()));
+            Configuration.MessageBroker.Publish(new RuntimeMessage().AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest).AsTimelineMessage("Start Request", TimelineMessage.Request).AsTimedMessage(executionTimer.Point()));
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace Glimpse.Core.Framework
             var executionTimer = requestStore.Get<ExecutionTimer>(Constants.GlobalTimerKey);
             if (executionTimer != null)
             {
-                Configuration.MessageBroker.Publish(new RuntimeMessage().AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest).AsTimelineMessage("End Request", Timeline.Request).AsTimedMessage(executionTimer.Point()));
+                Configuration.MessageBroker.Publish(new RuntimeMessage().AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest).AsTimelineMessage("End Request", TimelineMessage.Request).AsTimedMessage(executionTimer.Point()));
             }
 
             ExecuteTabs(RuntimeEvent.EndRequest);
@@ -707,16 +707,81 @@ namespace Glimpse.Core.Framework
             return stringBuilder.ToString();
         }
 
+        /// <summary>
+        /// The message used to to track the beginning and end of Http requests.
+        /// </summary>
         protected class RuntimeMessage : ITimelineMessage, ISourceMessage
         {
+            /// <summary>
+            /// Gets the id of the request.
+            /// </summary>
+            /// <value>
+            /// The id.
+            /// </value>
             public Guid Id { get; private set; }
+
+            /// <summary>
+            /// Gets or sets the name of the event.
+            /// </summary>
+            /// <value>
+            /// The name of the event.
+            /// </value>
             public string EventName { get; set; }
+
+            /// <summary>
+            /// Gets or sets the event category.
+            /// </summary>
+            /// <value>
+            /// The event category.
+            /// </value>
             public TimelineCategory EventCategory { get; set; }
+
+            /// <summary>
+            /// Gets or sets the event sub text.
+            /// </summary>
+            /// <value>
+            /// The event sub text.
+            /// </value>
             public string EventSubText { get; set; }
+
+            /// <summary>
+            /// Gets or sets the type of the executed.
+            /// </summary>
+            /// <value>
+            /// The type of the executed.
+            /// </value>
             public Type ExecutedType { get; set; }
+
+            /// <summary>
+            /// Gets or sets the executed method.
+            /// </summary>
+            /// <value>
+            /// The executed method.
+            /// </value>
             public MethodInfo ExecutedMethod { get; set; }
+
+            /// <summary>
+            /// Gets or sets the offset.
+            /// </summary>
+            /// <value>
+            /// The offset.
+            /// </value>
             public TimeSpan Offset { get; set; }
+
+            /// <summary>
+            /// Gets or sets the duration.
+            /// </summary>
+            /// <value>
+            /// The duration.
+            /// </value>
             public TimeSpan Duration { get; set; }
+
+            /// <summary>
+            /// Gets or sets the start time.
+            /// </summary>
+            /// <value>
+            /// The start time.
+            /// </value>
             public DateTime StartTime { get; set; }
         }
     }

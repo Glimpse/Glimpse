@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using Glimpse.Core.Message;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Message;
 using Glimpse.Core.Tab.Assist;
 
 namespace Glimpse.Core.SerializationConverter

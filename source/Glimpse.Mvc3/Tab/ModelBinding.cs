@@ -58,7 +58,7 @@ namespace Glimpse.Mvc.Tab
 
             foreach (var model in models)
             {
-                var ordinalString = ordinalPrefix + innerOrdinal++.ToString();
+                var ordinalString = ordinalPrefix + innerOrdinal++;
                 table.Add(
                     new[]
                         {
