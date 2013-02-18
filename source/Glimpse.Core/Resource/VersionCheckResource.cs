@@ -105,7 +105,7 @@ namespace Glimpse.Core.Resource
             
             if (string.IsNullOrEmpty(domain))
             {
-                domain = "version.getglimpse.com";
+                domain = "getGlimpse.com";
             }
 
             return new CacheControlDecorator(OneDay, CacheSetting.Public, new RedirectResourceResult(@"//" + domain + "/Api/Version/Check{?packages*}{&stamp}{&callback}", data));
