@@ -15,7 +15,7 @@
         <summary>ASP.NET MVC 2.0 web debugging and diagnostics tool.</summary>
         <tags>ASP.NET Web MVC Glimpse</tags>
         <dependencies>
-          <dependency id="Glimpse.AspNet" version="1.0.0-rc2" />
+          <dependency id="Glimpse.AspNet" version="1.0.0" />
         </dependencies>
     </metadata>
     <files>
