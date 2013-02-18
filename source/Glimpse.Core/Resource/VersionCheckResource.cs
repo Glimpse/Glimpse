@@ -108,7 +108,7 @@ namespace Glimpse.Core.Resource
                 domain = "version.getglimpse.com";
             }
 
-            return new CacheControlDecorator(OneDay, CacheSetting.Public, new RedirectResourceResult(@"//" + domain  + "/api/release/check{?packages*}{&stamp}{&callback}", data));
+            return new CacheControlDecorator(OneDay, CacheSetting.Public, new RedirectResourceResult(@"//" + domain + "/Api/Version/Check{?packages*}{&stamp}{&callback}", data));
         }
     }
 }
