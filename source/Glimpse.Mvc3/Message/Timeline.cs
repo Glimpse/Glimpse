@@ -5,11 +5,11 @@ namespace Glimpse.Mvc.Message
     /// <summary>
     /// Options that can used for timeline events.
     /// </summary>
-    public class Timeline : Core.Message.TimelineMessage
+    public class Timeline : TimelineMessage
     {
-        private static TimelineCategory controller = new TimelineCategoryController();
-        private static TimelineCategory filter = new TimelineCategoryFilter();
-        private static TimelineCategory view = new TimelineCategoryView();
+        private static TimelineCategory controller = new TimelineCategory("Controller", "#FDBF45", "#DDA431");
+        private static TimelineCategory filter = new TimelineCategory("Filter", "#72A3E4", "#5087CF");
+        private static TimelineCategory view = new TimelineCategory("View", "#10E309", "#0EC41D");
 
         /// <summary>
         /// Gets the timeline category for a controller.

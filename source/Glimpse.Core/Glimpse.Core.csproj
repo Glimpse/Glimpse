@@ -101,9 +101,7 @@
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Message\ISourceMessage.cs" />
     <Compile Include="Message\ITraceMessage.cs" />
-    <Compile Include="Message\TimelineCategoryOther.cs" />
     <Compile Include="Message\TimelineCategory.cs" />
-    <Compile Include="Message\TimelineCategoryRequest.cs" />
     <Compile Include="Message\MessageBase.cs" />
     <Compile Include="Extensibility\NuGetPackageAttribute.cs" />
     <Compile Include="Extensibility\ResourceParameterMetadata.cs" />

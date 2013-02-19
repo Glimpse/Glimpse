@@ -5,8 +5,8 @@
     /// </summary>
     public class TimelineMessage
     {
-        private static TimelineCategory request = new TimelineCategoryRequest();
-        private static TimelineCategory other = new TimelineCategoryOther();
+        private static TimelineCategory request = new TimelineCategory("Common", "#AF78DD", "#823BBE");
+        private static TimelineCategory other = new TimelineCategory("Other", "#EEEEEE", "#CCCCCC");
 
         /// <summary>
         /// Gets the timeline category for a request.
