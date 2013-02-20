@@ -13,6 +13,9 @@
         <iconUrl>http://getglimpse.com/content/glimpse100.png</iconUrl>
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET MVC 2.0 application.</description>
         <summary>ASP.NET MVC 2.0 web debugging and diagnostics tool.</summary>
+        <releaseNotes>
+          Glimpse now supports .NET 3.5 and ASP.NET MVC 2! Full feature parity with Glimpse.Mvc3.
+        </releaseNotes>
         <tags>ASP.NET Web MVC Glimpse</tags>
         <dependencies>
           <dependency id="Glimpse.AspNet" version="1.0.0" />
