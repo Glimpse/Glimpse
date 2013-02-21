@@ -77,6 +77,7 @@
     <Compile Include="Areas\Area\Controllers\HomeAreaController.cs" />
     <Compile Include="Code\DomainData.cs" />
     <Compile Include="Code\DomainRoute.cs" />
+    <Compile Include="Controllers\AsyncTestController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RoutingController.cs" />
     <Compile Include="Controllers\TraceController.cs" />
@@ -145,6 +146,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Trace\ThreadTrace.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AsyncTest\Index.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
