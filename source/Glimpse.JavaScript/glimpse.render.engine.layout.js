@@ -89,7 +89,7 @@
                 includeHeading = engineUtil.includeHeading(metadata);
             for (var i = 0; i < data.length; i++) {
                 rowClass = data[i].length > data[0].length ? (' ' + data[i][data[i].length - 1]) : '';
-                html += (i == 0 && includeHeading) ? '<thead class="glimpse-row-header glimpse-row-header-' + level + '">' : '<tbody class="glimpse-row ' + (i % 2 ? 'odd' : 'even') + rowClass + '">';
+                html += (i == 0 && includeHeading) ? '<thead class="glimpse-row-header glimpse-row-header-' + level + '">' : '';
                 for (var x = 0; x < layout.length; x++) { 
                     var rowData = '';
                      
@@ -98,11 +98,11 @@
                         rowData += buildCell(data[i], metadataItem, level, cellType, i, includeHeading);
                     }
                      
-                    if (rowData != '') { html += '<tr>' + rowData + '</tr>'; };
+                    if (rowData != '') { html += '<tr class="glimpse-row ' + (i % 2 ? 'odd' : 'even') + rowClass + '">' + rowData + '</tr>'; };
                 }
-                html += (i == 0) ? '</thead>' : '</tbody>';
+                html += (i == 0) ? '</thead><tbody class="glimpse-row-holder">' : '';
             }
-            html += '</table>'; 
+            html += '</tbody></table>'; 
 
             return html; 
         },
