@@ -1,18 +1,10 @@
 ﻿glimpse.render.engine = (function($, pubsub) {
     var providers = {},
         addition = function (scope, data, metadata, isAppend) {
-            var findType = isAppend ? 'last' : 'first',
-                insertType = isAppend ? 'insertAfter' : 'insertBefore',
-                html = $('<div>' + build(data, metadata) + '</div>').find('.glimpse-row-holder:first')[0].innerHTML;
+            var insertType = isAppend ? 'appendTo' : 'prependTo',
+                html = $('<div>' + build(data, metadata) + '</div>').find('.glimpse-row-holder:first')[0].innerHTML,
+                elements = $(html)[insertType](scope.find('.glimpse-row-holder:first'));
             
-            var target = scope.find('.glimpse-row-holder:first > .glimpse-row:' + findType);
-            if (target.length == 0) {
-                target = scope.find('.glimpse-row-holder:first');
-                insertType = 'appendTo';
-            }
-
-            var elements = $(html)[insertType](target);
-
             pubsub.publish('trigger.panel.render.style', { scope: elements });
         },
         retrieve = function(name) {

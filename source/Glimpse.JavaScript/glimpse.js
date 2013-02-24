@@ -678,18 +678,10 @@ glimpse.render = (function($, pubsub, util, data, settings) {
 glimpse.render.engine = (function($, pubsub) {
     var providers = {},
         addition = function (scope, data, metadata, isAppend) {
-            var findType = isAppend ? 'last' : 'first',
-                insertType = isAppend ? 'insertAfter' : 'insertBefore',
-                html = $('<div>' + build(data, metadata) + '</div>').find('.glimpse-row-holder:first')[0].innerHTML;
+            var insertType = isAppend ? 'appendTo' : 'prependTo',
+                html = $('<div>' + build(data, metadata) + '</div>').find('.glimpse-row-holder:first')[0].innerHTML,
+                elements = $(html)[insertType](scope.find('.glimpse-row-holder:first'));
             
-            var target = scope.find('.glimpse-row-holder:first > .glimpse-row:' + findType);
-            if (target.length == 0) {
-                target = scope.find('.glimpse-row-holder:first');
-                insertType = 'appendTo';
-            }
-
-            var elements = $(html)[insertType](target);
-
             pubsub.publish('trigger.panel.render.style', { scope: elements });
         },
         retrieve = function(name) {
@@ -1062,6 +1054,7 @@ glimpse.render.engine.util.raw = (function($, util) {
             for (var i = 0; i < data.length; i++) {
                 rowClass = data[i].length > data[0].length ? (' ' + data[i][data[i].length - 1]) : '';
                 html += (i == 0 && includeHeading) ? '<thead class="glimpse-row-header glimpse-row-header-' + level + '">' : '';
+                html += (i == 1 || !includeHeading) ? '<tbody class="glimpse-row-holder">' : '';
                 for (var x = 0; x < layout.length; x++) { 
                     var rowData = '';
                      
@@ -1072,7 +1065,7 @@ glimpse.render.engine.util.raw = (function($, util) {
                      
                     if (rowData != '') { html += '<tr class="glimpse-row ' + (i % 2 ? 'odd' : 'even') + rowClass + '">' + rowData + '</tr>'; };
                 }
-                html += (i == 0) ? '</thead><tbody class="glimpse-row-holder">' : '';
+                html += (i == 0 && includeHeading) ? '</thead>' : '';
             }
             html += '</tbody></table>'; 
 
@@ -1230,17 +1223,17 @@ glimpse.render.engine.util.raw = (function($, util) {
 (function($, util, engine, engineUtil) {
     var providers = engine._providers, 
         build = function (data, level, forceFull, metadata, forceLimit) {   
-            var html = '<div class="glimpse-row-holder">';
+            var html = '<div class="glimpse-row-holder"><div class="glimpse-row">';
             for (var key in data) {
                 var value = data[key];
-                html += '<div class="glimpse-row"><div class="glimpse-header">' + key + '</div>';
+                html += '<div class="glimpse-header-item"><div class="glimpse-header">' + key + '</div>';
                 if ($.isArray(value) || value === Object(value))
                     html += providers.master.build(value, 0, null, engineUtil.keyMetadata(key, metadata));
                 else 
                     html += '<div class="glimpse-header-content">' + util.preserveWhitespace(value) + '</div>'; 
                 html += '</div>';
             }
-            html += '</div>';
+            html += '</div></div>';
             return html;
         }, 
         provider = {

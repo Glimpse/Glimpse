@@ -90,6 +90,7 @@
             for (var i = 0; i < data.length; i++) {
                 rowClass = data[i].length > data[0].length ? (' ' + data[i][data[i].length - 1]) : '';
                 html += (i == 0 && includeHeading) ? '<thead class="glimpse-row-header glimpse-row-header-' + level + '">' : '';
+                html += (i == 1 || !includeHeading) ? '<tbody class="glimpse-row-holder">' : '';
                 for (var x = 0; x < layout.length; x++) { 
                     var rowData = '';
                      
@@ -100,7 +101,7 @@
                      
                     if (rowData != '') { html += '<tr class="glimpse-row ' + (i % 2 ? 'odd' : 'even') + rowClass + '">' + rowData + '</tr>'; };
                 }
-                html += (i == 0) ? '</thead><tbody class="glimpse-row-holder">' : '';
+                html += (i == 0 && includeHeading) ? '</thead>' : '';
             }
             html += '</tbody></table>'; 
 
