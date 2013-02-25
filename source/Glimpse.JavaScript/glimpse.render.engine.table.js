@@ -19,7 +19,7 @@
                 }
                 html += '<tbody class="glimpse-row-holder">';
                 for (var i = includeHeading ? 1 : 0; i < data.length; i++) {
-                    html += '<tr class="glimpse-row ' + (i % 2 ? 'odd' : 'even') + (data[i].length > data[0].length ? ' ' + data[i][data[i].length - 1] : '') + '">';
+                    html += '<tr class="glimpse-row ' + (data[i].length > data[0].length ? ' ' + data[i][data[i].length - 1] : '') + '">';
                     for (var x = 0; x < data[0].length; x++)
                         html += '<td>' + providers.master.build(data[i][x], level + 1) + '</td>';
                     html += '</tr>';
@@ -32,7 +32,7 @@
                         html += '<thead><th>Values</th></tr></thead>';
                     html += '<tbody class="glimpse-row-holder">';
                     for (var i = 0; i < data.length; i++)
-                        html += '<tr class="glimpse-row ' + (i % 2 ? 'odd' : 'even') + '"><td>' + providers.master.build(data[i], level + 1) + '</td></tr>';
+                        html += '<tr class="glimpse-row"><td>' + providers.master.build(data[i], level + 1) + '</td></tr>';
                     html += '</tbody></table>';
                 }
                 else

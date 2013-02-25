@@ -310,12 +310,6 @@
 .glimpse-panel .glimpse-tl-col-side {
     background-color: #F2F5F7;
 }
-.glimpse-panel .glimpse-tl-col-side .odd, .glimpse-panel .glimpse-tl-col-side .odd > td {
-    background-color: #F2F5F7;
-}
-.glimpse-panel .glimpse-tl-col-side .even, .glimpse-panel .glimpse-tl-col-side .even > td {
-    background-color: #E1E7F0;
-}
 .glimpse-panel .glimpse-tl-row-summary .glimpse-tl-band-title {
     opacity: 0.9;
 }

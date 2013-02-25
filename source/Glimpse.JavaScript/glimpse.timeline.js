@@ -293,16 +293,18 @@
             },
             colorRows = function(args) { 
                 var filter = args.applyAll ? '' : ':visible';
-                colorElement(elements.contentBandHolder.find('> div'), filter);
-                colorElement(elements.contentDescHolder.find('> div'), filter);
-                colorElement(elements.summaryBandHolder.find('> div'), filter);
-                colorElement(elements.summaryDescHolder.find('> div'), filter);
-                colorElement(elements.contentTableHolder.find('tbody'), filter); 
+                colorElement(elements.contentBandHolder.find('> div'), filter, 'glimpse-row-');
+                colorElement(elements.contentDescHolder.find('> div'), filter, 'glimpse-row-alt-');
+                colorElement(elements.summaryBandHolder.find('> div'), filter, 'glimpse-row-');
+                colorElement(elements.summaryDescHolder.find('> div'), filter, 'glimpse-row-alt-');
+                colorElement(elements.contentTableHolder.find('tbody'), filter, 'glimpse-row-'); 
             },
-            colorElement = function(scope, filter) {
-                scope.removeClass('odd').removeClass('even');
-                scope.filter(filter + ':even').addClass('even');
-                scope.filter(filter + ':odd').addClass('odd');
+            colorElement = function(scope, filter, baseClass) {
+                var odd = baseClass + 'odd',
+                    even = baseClass + 'even';
+                scope.removeClass(odd).removeClass(even);
+                scope.filter(filter + ':even').addClass(odd);
+                scope.filter(filter + ':odd').addClass(even);
             },
             categoryEvents = function(item) {
                 //Handel how the UI will look

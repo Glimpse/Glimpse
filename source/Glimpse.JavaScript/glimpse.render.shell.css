@@ -431,13 +431,10 @@
 }
 .glimpse-panel table table thead tr th:last-child {
     border-right: 0px;
-}
-.glimpse-panel .even, .glimpse-panel .even > td, .glimpse-panel .even > th, .glimpse-panel .even > tr > td, .glimpse-panel .even > tr > th, .even > td > .glimpse-preview-table > tbody > tr > td, .even > tr > td > .glimpse-preview-table > tbody > tr > td {
-    background-color: #F2F5F9;
-}
-.glimpse-panel .odd, .glimpse-panel .odd > td, .glimpse-panel .odd > th, .glimpse-panel .odd > tr > td, .glimpse-panel .odd > tr > th, .odd > td > .glimpse-preview-table > tbody > tr > td, .odd > tr > td > .glimpse-preview-table > tbody > tr > td {
-    background-color: #FEFFFF;
-}
+} 
+.glimpse-row-holder > .glimpse-row:nth-of-type(odd), .glimpse-row-color:nth-of-type(odd), .glimpse-row-odd, .glimpse-row-odd > td { background-color: #FEFFFF; }
+.glimpse-row-holder > .glimpse-row:nth-of-type(even), .glimpse-row-color:nth-of-type(even), .glimpse-row-even, .glimpse-row-even > td { background-color: #F2F5F9; }
+.glimpse-row-holder.glimpse-row-holder-suppress > .glimpse-row { background-color: transparent; } 
 .glimpse-panel table table tbody th {
     font-weight: normal;
     font-style: italic;
@@ -485,12 +482,8 @@ div.glimpse-ellipsis {
 	text-overflow: ellipsis;
     width: 100%;
 }
-.glimpse-col-side .even, .glimpse-col-side .even > td {
-	background-color: #E1E7F0;
-}
-.glimpse-col-side .odd, .glimpse-col-side .odd > td {
-	background-color: #F2F5F7;
-}
+.glimpse-col-side .glimpse-row-holder > .glimpse-row:nth-of-type(odd), .glimpse-row-alt-color:nth-of-type(odd), .glimpse-row-alt-odd, .glimpse-row-alt-odd > td { background-color: #E1E7F0; }
+.glimpse-col-side .glimpse-row-holder > .glimpse-row:nth-of-type(even), .glimpse-row-alt-color:nth-of-type(even), .glimpse-row-alt-even, .glimpse-row-alt-even > td { background-color: #F2F5F7; } 
 .glimpse-panel-holder .glimpse-active {
     display: block;
 }

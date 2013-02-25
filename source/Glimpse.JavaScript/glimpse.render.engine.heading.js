@@ -1,7 +1,7 @@
 ﻿(function($, util, engine, engineUtil) {
     var providers = engine._providers, 
         build = function (data, level, forceFull, metadata, forceLimit) {   
-            var html = '<div class="glimpse-row-holder"><div class="glimpse-row">';
+            var html = '<div class="glimpse-row-holder glimpse-row-holder-suppress"><div class="glimpse-row">';
             for (var key in data) {
                 var value = data[key];
                 html += '<div class="glimpse-header-item"><div class="glimpse-header">' + key + '</div>';
