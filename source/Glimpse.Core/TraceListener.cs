@@ -13,6 +13,7 @@ namespace Glimpse.Core
     {
         [ThreadStatic]
         private static Stopwatch fromLastWatch;
+        private IMessageBroker messageBroker;
 
         // ReSharper disable UnusedMember.Global
         // These constructors used by .NET when TraceListener is set via web.config
@@ -43,7 +44,11 @@ namespace Glimpse.Core
                 };
         }
 
-        internal IMessageBroker MessageBroker { get; set; }
+        internal IMessageBroker MessageBroker 
+        {
+            get { return messageBroker ?? (messageBroker = GlimpseConfiguration.GetConfiguredMessageBroker()); }
+            set { messageBroker = value; }
+        }
 
         internal Func<IExecutionTimer> TimerStrategy { get; set; }
 
@@ -192,33 +197,6 @@ namespace Glimpse.Core
 
             InternalWrite(message.ToString(), DeriveCategory(eventType));
         }
-
-        // Hack: This is a bit of a hack because it duplicates some code from GlimpseRuntime
-/*        private static IDataStore GetTabStore()
-        {
-            // This allows Tracing to work from non-ASP.NET tread.
-            if (HttpContext.Current == null)
-            {
-                return new DictionaryDataStoreAdapter(new Dictionary<string, object>());
-            }
-
-            var requestStore = new DictionaryDataStoreAdapter(HttpContext.Current.Items);
-
-            if (!requestStore.Contains(TabStorageKey))
-            {
-                requestStore.Set(TabStorageKey, new Dictionary<string, IDataStore>());
-            }
-
-            var tabStorage = requestStore.Get<IDictionary<string, IDataStore>>(TabStorageKey);
-            var tabName = Tab.Trace.TabKey;
-
-            if (!tabStorage.ContainsKey(tabName))
-            {
-                tabStorage.Add(tabName, new DictionaryDataStoreAdapter(new Dictionary<string, object>()));
-            }
-
-            return tabStorage[tabName];
-        }*/
 
         private TimeSpan CalculateFromLast(IExecutionTimer timer)
         {
