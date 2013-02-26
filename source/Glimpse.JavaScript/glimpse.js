@@ -1481,6 +1481,16 @@ glimpse.render.engine.util.raw = (function($, util) {
                 else 
                     body.animate({ height: settings.local('height') }, 'fast');
                 
+                if (args.fullScreen) {
+                    elements.pageSpacer().remove();
+                    
+                    var holder = elements.holder();
+                    holder.height('');
+                    $(window).resize(function() {
+                        holder.find('.glimpse-panel').height($(window).height() - 54);
+                    });
+                }
+                
                 pubsub.publish('action.shell.opened', { isInitial: args.isInitial });
             }
             else
@@ -1597,15 +1607,7 @@ glimpse.render.engine.util.raw = (function($, util) {
                 tryOpenPopup();
             } 
 
-            if (settings.local('popupOn')) {
-                if (isPopup()) {
-                    elements.pageSpacer().remove();
-
-                    var holder = elements.holder();
-                    $(window).resize(function() {
-                        holder.find('.glimpse-panel').height($(window).height() - 54);
-                    });
-                }
+            if (settings.local('popupOn')) { 
                 $(window).unload(windowUnloading);
             }
         },
@@ -1619,23 +1621,22 @@ glimpse.render.engine.util.raw = (function($, util) {
         isPopup = function() {
             return data.currentMetadata().resources.glimpse_popup ? window.location.href.indexOf('n=glimpse_popup') > -1 : false;
         },
-        openPopup = function() {
-            settings.local('popupOn', true);
-            settings.local('popupKeep', true); //This second item is used to detect difference between user closing the page and a redirect
-
+        openPopup = function() { //WHEN USE CLICKS OPEN BUTTON 
+            settings.local('popupOn', true);   //Indicates popup should be used
+            settings.local('popupKeep', true); //This second item is used to detect difference between user closing the page and a redirect 
+             
             window.open(generatePopupAddress(), 'GlimpsePopup', 'width=1100,height=600,status=no,toolbar=no,menubar=no,location=no,resizable=yes,scrollbars=yes');
 
             pubsub.publish('trigger.shell.hide');
         },
-        tryOpenPopup = function() { //WHEN PARENT WINDOW IS LOADING AND DETECTS THAT IT HAS BEEN SUPPRESSED, IF POPUP ON, REDIRECT THE POPUP OR FORCE THE WINDOW OPEN
+        tryOpenPopup = function() { //WHEN PARENT WINDOW IS LOADING AND DETECTS THAT IT HAS BEEN SUPPRESSED, IF POPUP ON, REDIRECT THE POPUP OR FORCE THE WINDOW OPEN  
             if (settings.local('popupOn')) {
-                if (!isPopup())
+                if (!isPopup()) {
                     pubsub.publish('trigger.shell.popup');
+                }
                 else {
-                    pubsub.publish('trigger.shell.open', { isInitial: true, force: true });
-
-                    elements.holder().height('');
-
+                    pubsub.publish('trigger.shell.open', { isInitial: true, force: true, fullScreen: true });
+                     
                     settings.local('popupKeep', false);
                 }
             }
