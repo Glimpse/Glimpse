@@ -79,11 +79,11 @@
     <Compile Include="Configuration\TypeElement.cs" />
     <Compile Include="Configuration\TypeElementCollection.cs" />
     <Compile Include="Extensibility\AlternateType.cs" />
-    <Compile Include="Extensibility\AlternateImplementationGenerationHook.cs" />
-    <Compile Include="Extensibility\AlternateImplementationSelector.cs" />
+    <Compile Include="Extensibility\AlternateTypeGenerationHook.cs" />
+    <Compile Include="Extensibility\AlternateTypeSelector.cs" />
     <Compile Include="Extensibility\AlternateMethod.cs" />
     <Compile Include="Extensibility\AntiXssEncoder.cs" />
-    <Compile Include="Extensibility\CastleInvocationToAlternateImplementationContextAdapter.cs" />
+    <Compile Include="Extensibility\CastleInvocationToAlternateMethodContextAdapter.cs" />
     <Compile Include="Extensibility\DictionaryDataStoreAdapter.cs" />
     <Compile Include="Extensibility\ExecutionTimer.cs" />
     <Compile Include="Extensibility\IAlternateType.cs" />
@@ -96,21 +96,26 @@
     <Compile Include="Extensibility\ITabLayout.cs" />
     <Compile Include="Extensibility\IWrapper.cs" />
     <Compile Include="Extensibility\JsonNetConverterDictionaryKeysAreNotPropertyNames.cs" />
+    <Compile Include="Extensibility\InspectorContext.cs" />
     <Compile Include="Extensibility\RuntimePolicy.cs" />
+    <Compile Include="Extensibility\Subscriber.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Message\ISourceMessage.cs" />
+    <Compile Include="Message\ITraceMessage.cs" />
+    <Compile Include="Message\TimelineCategory.cs" />
     <Compile Include="Message\MessageBase.cs" />
     <Compile Include="Extensibility\NuGetPackageAttribute.cs" />
     <Compile Include="Extensibility\ResourceParameterMetadata.cs" />
     <Compile Include="Extensibility\ResourceResultDecorator.cs" />
     <Compile Include="Extensibility\TimerResult.cs" />
     <Compile Include="Extensibility\IAlternateMethod.cs" />
-    <Compile Include="Extensibility\IAlternateImplementationContext.cs" />
+    <Compile Include="Extensibility\IAlternateMethodContext.cs" />
     <Compile Include="Extensibility\IClientScript.cs" />
     <Compile Include="Extensibility\IContext.cs" />
     <Compile Include="Extensibility\IDynamicClientScript.cs" />
     <Compile Include="Extensibility\IMessageBroker.cs" />
-    <Compile Include="Extensibility\IPipelineInspectorContext.cs" />
-    <Compile Include="Extensibility\AlternateImplementationToCastleInterceptorAdapter.cs" />
+    <Compile Include="Extensibility\IInspectorContext.cs" />
+    <Compile Include="Extensibility\AlternateTypeToCastleInterceptorAdapter.cs" />
     <Compile Include="Extensibility\IProxyFactory.cs" />
     <Compile Include="Extensibility\IResourceContext.cs" />
     <Compile Include="Extensibility\IResourceResultContext.cs" />
@@ -137,7 +142,7 @@
     <Compile Include="Extensibility\RuntimeEvent.cs" />
     <Compile Include="Extensibility\RuntimePolicyContext.cs" />
     <Compile Include="Extensibility\TabSetupContext.cs" />
-    <Compile Include="Extensions\AlternateImplementationContextExtensions.cs" />
+    <Compile Include="Extensions\AlternateMethodContextExtensions.cs" />
     <Compile Include="Extensions\DataStoreExtensions.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\NameValueCollectionExtension.cs" />
@@ -159,13 +164,11 @@
     <Compile Include="Framework\IPersistenceStore.cs" />
     <Compile Include="Framework\IReadOnlyPersistenceStore.cs" />
     <Compile Include="Framework\IServiceLocator.cs" />
-    <Compile Include="Framework\PipelineInspectorContext.cs" />
-    <Compile Include="Framework\PluginMetadata.cs" />
+    <Compile Include="Framework\TabMetadata.cs" />
     <Compile Include="Framework\ReflectionDiscoverableCollection.cs" />
     <Compile Include="Framework\ResourceEndpointConfiguration.cs" />
     <Compile Include="Framework\ResourceParameters.cs" />
-    <Compile Include="Framework\Subscriber.cs" />
-    <Compile Include="Framework\SubscriberOfT.cs" />
+    <Compile Include="Extensibility\SubscriberOfT.cs" />
     <Compile Include="Framework\TabResult.cs" />
     <Compile Include="Extensibility\IRuntimePolicy.cs" />
     <Compile Include="Extensibility\IResourceResult.cs" />
@@ -174,18 +177,23 @@
     <Compile Include="Extensibility\IDocumentation.cs" />
     <Compile Include="Extensibility\ITab.cs" />
     <Compile Include="Extensibility\ITabSetup.cs" />
-    <Compile Include="Extensibility\IPipelineInspector.cs" />
+    <Compile Include="Extensibility\IInspector.cs" />
     <Compile Include="Extensibility\ISerializer.cs" />
     <Compile Include="Extensibility\ITabContext.cs" />
     <Compile Include="Framework\IFrameworkProvider.cs" />
     <Compile Include="Framework\GlimpseConfiguration.cs" />
     <Compile Include="Framework\GlimpseRuntime.cs" />
     <Compile Include="Message\IMessage.cs" />
-    <Compile Include="Message\ITimeMessage.cs" />
+    <Compile Include="Message\ITimedMessage.cs" />
     <Compile Include="Message\ITimelineMessage.cs" />
-    <Compile Include="Message\PointTimelineMessage.cs" />
     <Compile Include="Message\TimelineMessage.cs" />
-    <Compile Include="Message\TimeMessage.cs" />
+    <Compile Include="Message\TraceMessage.cs" />
+    <Compile Include="Model\TimelineCategoryModel.cs" />
+    <Compile Include="Model\TimelineEventModel.cs" />
+    <Compile Include="Model\TimelineModel.cs" />
+    <Compile Include="Inspector\TraceInspector.cs" />
+    <Compile Include="SerializationConverter\ListOfTraceMessageConverter.cs" />
+    <Compile Include="SerializationConverter\TimelineEventModelConverter.cs" />
     <Compile Include="SerializationConverter\TimeSpanConverter.cs" />
     <Compile Include="Tab\Assist\CodeType.cs" />
     <Compile Include="Tab\Assist\CodeTypeConverter.cs" />
@@ -244,9 +252,12 @@
     <Compile Include="SerializationConverter\GlimpseMetadataConverter.cs" />
     <Compile Include="SerializationConverter\GlimpseRequestConverter.cs" />
     <Compile Include="SerializationConverter\MethodInfoConverter.cs" />
-    <Compile Include="SerializationConverter\PluginMetadataConverter.cs" />
+    <Compile Include="SerializationConverter\TabMetadataConverter.cs" />
     <Compile Include="SerializationConverter\TabResultConverter.cs" />
     <Compile Include="SerializationConverter\CSharpTypeConverter.cs" />
+    <Compile Include="Tab\Timeline.cs" />
+    <Compile Include="Tab\Trace.cs" />
+    <Compile Include="TraceListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NuSpec\Glimpse.nuspec">
@@ -264,6 +275,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="NuSpec\docs\" />
     <Folder Include="NuSpec\lib\net35\" />
     <Folder Include="NuSpec\lib\net40\" />
   </ItemGroup>

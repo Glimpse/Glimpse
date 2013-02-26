@@ -43,14 +43,17 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlternateImplementation\Route.cs" />
-    <Compile Include="AlternateImplementation\RouteBase.cs" />
-    <Compile Include="AlternateImplementation\RouteConstraint.cs" />
-    <Compile Include="AlternateImplementation\RouteConstraintRegex.cs" />
+    <Compile Include="AlternateType\IRouteNameMixin.cs" />
+    <Compile Include="AlternateType\RouteBase.cs" />
+    <Compile Include="AlternateType\RouteConstraint.cs" />
+    <Compile Include="AlternateType\RouteConstraintRegex.cs" />
+    <Compile Include="AlternateType\RouteNameMixin.cs" />
     <Compile Include="AspNetFrameworkProvider.cs" />
     <Compile Include="AspNetServiceLocator.cs" />
+    <Compile Include="Controls\Client.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Extensibility\AspNetTab.cs" />
+    <Compile Include="Extensions\HttpContextExtensions.cs" />
     <Compile Include="Extensions\TabContextExtensions.cs" />
     <Compile Include="HttpApplicationBase.cs" />
     <Compile Include="HttpApplicationStateBaseDataStoreAdapter.cs" />
@@ -82,13 +85,8 @@
     <Compile Include="Model\RouteDataItemModel.cs" />
     <Compile Include="Model\RouteModel.cs" />
     <Compile Include="Model\SessionModel.cs" />
-    <Compile Include="Model\TimelineCategoryModel.cs" />
-    <Compile Include="Model\TimelineEventModel.cs" />
-    <Compile Include="Model\TimelineModel.cs" />
-    <Compile Include="Model\TraceModel.cs" />
     <Compile Include="Model\UriTokenInstance.cs" />
-    <Compile Include="PipelineInspector\RoutesConstraintInspector.cs" />
-    <Compile Include="PipelineInspector\RoutesInspector.cs" />
+    <Compile Include="Inspector\RoutesInspector.cs" />
     <Compile Include="Policy\LocalPolicy.cs" />
     <Compile Include="RequestMetadata.cs" />
     <Compile Include="Resources.Designer.cs">
@@ -102,8 +100,6 @@
     <Compile Include="SerializationConverter\ListOfRouteModelConverter.cs" />
     <Compile Include="SerializationConverter\RequestModelConverter.cs" />
     <Compile Include="SerializationConverter\SessionModelConverter.cs" />
-    <Compile Include="SerializationConverter\TimelineEventModelConverter.cs" />
-    <Compile Include="SerializationConverter\TraceModelConverter.cs" />
     <Compile Include="Tab\Configuration.cs" />
     <Compile Include="Tab\Environment.cs" />
     <Compile Include="Tab\Request.cs" />
@@ -112,9 +108,6 @@
     <Compile Include="Tab\Routes.cs" />
     <Compile Include="Tab\Server.cs" />
     <Compile Include="Tab\Session.cs" />
-    <Compile Include="Tab\Timeline.cs" />
-    <Compile Include="Tab\Trace.cs" />
-    <Compile Include="GlimpseTraceListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">

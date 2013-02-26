@@ -6,7 +6,7 @@ namespace Glimpse.Core.Extensibility
     /// Base implementation that allows simplified the implementation of a 
     /// tab. NOTE, this implementation is intended for by tabs that can 
     /// execute on any provider (i.e. aren't bound to HttpContextBase in 
-    /// the case of the ASP.NET provider). Most plugins wont be tied to a 
+    /// the case of the ASP.NET provider). Most tabs wont be tied to a 
     /// specific provider.
     /// </summary>
     public abstract class TabBase : ITab

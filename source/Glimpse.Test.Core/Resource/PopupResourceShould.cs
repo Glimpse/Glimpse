@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 using Glimpse.Core.Resource;
@@ -113,9 +114,11 @@ namespace Glimpse.Test.Core.Resource
             contextMock.Setup(c => c.Parameters.TryGetValue("requestId", out requestId)).Returns(true);
             var version = "1.X.Y";
             contextMock.Setup(c => c.Parameters.TryGetValue("version", out version)).Returns(true);
-            
+
+            Func<Guid?, string> strategy = (id) => requestId + version;
             var configMock = new Mock<IGlimpseConfiguration>();
-            configMock.Setup(c => c.GenerateScriptTags(guid, version)).Returns(requestId + version);
+            
+            configMock.Setup(c => c.FrameworkProvider.HttpRequestStore.Get(Constants.ClientScriptsStrategy)).Returns(() => strategy);
             var result = resource.Execute(contextMock.Object, configMock.Object);
 
             var htmlResourceResult = result as HtmlResourceResult;

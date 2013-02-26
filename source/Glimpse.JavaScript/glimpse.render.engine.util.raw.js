@@ -35,7 +35,7 @@
                 var trimmable = true, 
                     replace = function (d) { return util.htmlEncode(d); };
 
-                if (data == undefined || data == null)
+                if (data == null)
                     return '--';
                 if (typeof data != 'string')
                     data = data + '';  

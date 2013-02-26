@@ -5,15 +5,23 @@ using Glimpse.Core.Framework;
 
 namespace Glimpse.Core.SerializationConverter
 {
+    /// <summary>
+    /// The <see cref="ISerializationConverter"/> implementation responsible converting <see cref="GlimpseRequest"/> representation's into a format suitable for serialization.
+    /// </summary>
     public class GlimpseRequestConverter : SerializationConverter<GlimpseRequest>
     {
+        /// <summary>
+        /// Converts the specified request.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>An object suitable for serialization.</returns>
         public override object Convert(GlimpseRequest request)
         {
             return new Dictionary<string, object>
                        {
                            { "clientId", request.ClientId },
                            { "dateTime", request.DateTime },
-                           { "duration", Math.Round(request.Duration, 2) },
+                           { "duration", request.Duration },
                            { "parentRequestId", request.ParentRequestId },
                            { "requestId", request.RequestId },
                            { "isAjax", request.RequestIsAjax },
@@ -21,7 +29,7 @@ namespace Glimpse.Core.SerializationConverter
                            { "uri", request.RequestUri },
                            { "contentType", request.ResponseContentType },
                            { "statusCode", request.ResponseStatusCode },
-                           { "data", request.PluginData },
+                           { "data", request.TabData },
                            { "userAgent", request.UserAgent },
                        };
         }

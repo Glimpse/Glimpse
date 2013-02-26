@@ -10,7 +10,7 @@
                     if (metadata.engine && providers[metadata.engine])
                         result = providers[metadata.engine].build(data, level, forceFull, metadata, forceLimit);
                     else if (metadata.layout && isArray) 
-                        result = providers.layout.build(data, level, forceFull, metadata.layout, forceLimit);
+                        result = providers.layout.build(data, level, forceFull, metadata, forceLimit);
                     else if (metadata.keysHeadings && isObject)
                         result = providers.heading.build(data, level, forceFull, metadata, forceLimit);
                 }

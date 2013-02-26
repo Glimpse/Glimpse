@@ -43,7 +43,7 @@
             tryShow();
         };
 
-    pubsub.subscribe('trigger.system.ready', ready);
+    pubsub.subscribe('trigger.data.init', ready);
 
     return {
         result: result

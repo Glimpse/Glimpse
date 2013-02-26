@@ -1,12 +1,13 @@
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.AspNet
 {
     public class PreBodyTagFilter : Stream
     {
-        public PreBodyTagFilter(string htmlSnippet, Stream outputStream, Encoding contentEncoding)
+        public PreBodyTagFilter(string htmlSnippet, Stream outputStream, Encoding contentEncoding, ILogger logger)
         {
 #if NET35
             HtmlSnippet = Glimpse.AspNet.Net35.Backport.Net35Backport.IsNullOrWhiteSpace(htmlSnippet) ? string.Empty : htmlSnippet + "</body>";
@@ -17,6 +18,7 @@ namespace Glimpse.AspNet
             OutputStream = outputStream;
             ContentEncoding = contentEncoding;
             BodyEnd = new Regex("</body>", RegexOptions.Compiled | RegexOptions.Multiline);
+            Logger = logger;
         }
 
         public override bool CanRead
@@ -45,13 +47,20 @@ namespace Glimpse.AspNet
             set { OutputStream.Position = value; }
         }
 
+        private ILogger Logger { get; set; }
+
         private string HtmlSnippet { get; set; }
-        
+
         private Stream OutputStream { get; set; }
-        
+
         private Encoding ContentEncoding { get; set; }
-        
+
         private Regex BodyEnd { get; set; }
+
+        public override void Close()
+        {
+            OutputStream.Close();
+        }
 
         public override void Flush()
         {
@@ -87,6 +96,7 @@ namespace Glimpse.AspNet
             }
             else
             {
+                Logger.Warn("Unable to locate '</body>' with content encoding '{0}'. Response may be compressed.", ContentEncoding.EncodingName);
                 OutputStream.Write(buffer, offset, count);
             }
         }

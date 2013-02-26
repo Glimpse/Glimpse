@@ -57,7 +57,7 @@
                 pubsub.publish('action.timeline.template.processed', { templates: templates });
             };
 
-        pubsub.subscribe('trigger.timline.shell.init', setup);
+        pubsub.subscribe('trigger.timeline.shell.init', setup);
     })();
         
     // Render Dividers
@@ -118,9 +118,9 @@
                 elements.summaryRow.find('.glimpse-tl-summary-height').height(elements.summaryRow.height());
             };
             
-        pubsub.subscribe('trigger.timline.shell.subscriptions', wireListeners); 
-        pubsub.subscribe('trigger.timline.divider.render', render);
-        pubsub.subscribe('trigger.timline.filtered', adjustHeight);  
+        pubsub.subscribe('trigger.timeline.shell.subscriptions', wireListeners); 
+        pubsub.subscribe('trigger.timeline.divider.render', render);
+        pubsub.subscribe('trigger.timeline.filtered', adjustHeight);  
     })(timeline.elements);
 
     // Render Events
@@ -134,10 +134,10 @@
                          if ($(this).has('input:checked').length > 0) { $(this).find('input').stop(true, true).clearQueue().fadeOut(); }
                     })
                     .delegate('input', 'click', function() {  categoryEvents($(this)); });
-                //elements.summaryDescHolder.find('input').click(function() { /*filter.category();*/ pubsub.publish('trigger.timline.search.category'); });
+                //elements.summaryDescHolder.find('input').click(function() { /*filter.category();*/ pubsub.publish('trigger.timeline.search.category'); });
             },
             render = function() {
-                pubsub.publish('action.timline.event.rendering');
+                pubsub.publish('action.timeline.event.rendering');
 
                 processCategories();
                 processEvents();
@@ -145,7 +145,7 @@
                 processTableData(); 
                 
                 //view.start();
-                pubsub.publish('action.timline.event.rendered');
+                pubsub.publish('action.timeline.event.rendered');
             },
             processTableData = function() {
                 var dataResult = [ [ 'Title', 'Description', 'Category', 'Timing', 'Start Point', 'Duration', 'w/out Children' ] ],
@@ -186,7 +186,7 @@
                 var eventStack = [], lastEvent = { startPoint : 0, duration : 0, childlessDuration : 0, endPoint : 0 };
                 for (var i = 0; i < timeline.data.events.length; i += 1) {
                     var event = timeline.data.events[i],
-                        topEvent = eventStack.length > 0 ? eventStack[eventStack.length - 1] : undefined,
+                        topEvent = eventStack.length > 0 ? eventStack[eventStack.length - 1] : null,
                         category = timeline.data.category[event.category],
                         left = (event.startPoint / timeline.data.duration) * 100,
                         rLeft = Math.round(left),
@@ -207,9 +207,9 @@
                             eventStack.push(lastEvent); 
                             stackParsed = true;
                         }
-                        else if (topEvent != undefined && topEvent.endPoint < event.endPoint) {
+                        else if (topEvent != null && topEvent.endPoint < event.endPoint) {
                             eventStack.pop(); 
-                            topEvent = eventStack.length > 0 ? eventStack[eventStack.length - 1] : undefined; 
+                            topEvent = eventStack.length > 0 ? eventStack[eventStack.length - 1] : null; 
                             stackParsed = false;
                         }
                         else
@@ -293,16 +293,18 @@
             },
             colorRows = function(args) { 
                 var filter = args.applyAll ? '' : ':visible';
-                colorElement(elements.contentBandHolder.find('> div'), filter);
-                colorElement(elements.contentDescHolder.find('> div'), filter);
-                colorElement(elements.summaryBandHolder.find('> div'), filter);
-                colorElement(elements.summaryDescHolder.find('> div'), filter);
-                colorElement(elements.contentTableHolder.find('tbody'), filter); 
+                colorElement(elements.contentBandHolder.find('> div'), filter, 'glimpse-row-');
+                colorElement(elements.contentDescHolder.find('> div'), filter, 'glimpse-row-alt-');
+                colorElement(elements.summaryBandHolder.find('> div'), filter, 'glimpse-row-');
+                colorElement(elements.summaryDescHolder.find('> div'), filter, 'glimpse-row-alt-');
+                colorElement(elements.contentTableHolder.find('tbody'), filter, 'glimpse-row-'); 
             },
-            colorElement = function(scope, filter) {
-                scope.removeClass('odd').removeClass('even');
-                scope.filter(filter + ':even').addClass('even');
-                scope.filter(filter + ':odd').addClass('odd');
+            colorElement = function(scope, filter, baseClass) {
+                var odd = baseClass + 'odd',
+                    even = baseClass + 'even';
+                scope.removeClass(odd).removeClass(even);
+                scope.filter(filter + ':even').addClass(odd);
+                scope.filter(filter + ':odd').addClass(even);
             },
             categoryEvents = function(item) {
                 //Handel how the UI will look
@@ -312,13 +314,13 @@
 
                 //Trigger search
                 //filter.category();
-                pubsub.publish('trigger.timline.search.category'); 
+                pubsub.publish('trigger.timeline.search.category'); 
             };
                  
-        pubsub.subscribe('trigger.timline.shell.subscriptions', wireListeners); 
-        pubsub.subscribe('trigger.timline.event.render', render);
-        pubsub.subscribe('trigger.timline.filtered', colorRows); 
-        pubsub.subscribe('action.timline.shell.switched', colorRows); 
+        pubsub.subscribe('trigger.timeline.shell.subscriptions', wireListeners); 
+        pubsub.subscribe('trigger.timeline.event.render', render);
+        pubsub.subscribe('trigger.timeline.filtered', colorRows); 
+        pubsub.subscribe('action.timeline.shell.switched', colorRows); 
     })(timeline.elements),  
 
     // Zoom
@@ -335,7 +337,7 @@
 
                 //Force render
                 //dividerBuilder.render(true);
-                pubsub.publish('trigger.timline.divider.render', { force: true });
+                pubsub.publish('trigger.timeline.divider.render', { force: true });
 
                 //Zoom in on main line items 
                 zoomEvents(persentLeft, persentRight);
@@ -345,7 +347,7 @@
                  
                 //Hide events that aren't needed
                 //filter.zoom(persentLeft, persentRight); 
-                pubsub.publish('trigger.timline.search.zoom', { persentLeft: persentLeft, persentRight: persentRight });
+                pubsub.publish('trigger.timeline.search.zoom', { persentLeft: persentLeft, persentRight: persentRight });
             },
             positionRight = function() {
                 var persentRight = ((elements.zoomHolder.width() - 4 - elements.zoomRightHandle.position().left) / elements.zoomHolder.width()) * 100, 
@@ -359,14 +361,14 @@
                 
                 //Force render
                 //dividerBuilder.render(true);
-                pubsub.publish('trigger.timline.divider.render', { force: true });
+                pubsub.publish('trigger.timeline.divider.render', { force: true });
                 
                 //Zoom in on main line items 
                 zoomEvents(persentLeft, persentRight);
                     
                 //Hide events that aren't needed
                 //filter.zoom(persentLeft, persentRight);  
-                pubsub.publish('trigger.timline.search.zoom', { persentLeft: persentLeft, persentRight: persentRight });
+                pubsub.publish('trigger.timeline.search.zoom', { persentLeft: persentLeft, persentRight: persentRight });
             },
             zoomEvents = function(persentLeft, persentRight) {
                 var offset = (100 / (100 - persentLeft - persentRight)) * -1, 
@@ -406,7 +408,7 @@
                 }); 
             };
                  
-        pubsub.subscribe('trigger.timline.shell.subscriptions', wireListeners);  
+        pubsub.subscribe('trigger.timeline.shell.subscriptions', wireListeners);  
     })(timeline.elements);
         
     // Filter
@@ -414,17 +416,17 @@
         var criteria = { 
                 persentLeft : 0, 
                 persentRightFromLeft : 100, 
-                hiddenCategories : undefined
+                hiddenCategories : null
             },
             search = function(c) {
-                pubsub.publish('trigger.timline.filtering', { criteria: c });
+                pubsub.publish('trigger.timeline.filtering', { criteria: c });
 
                 //Go through each event doing executing search
                 for (var i = 0; i < timeline.data.events.length; i += 1) {
                     var event = timeline.data.events[i],
                         show = !(c.persentLeft > event.endPersent 
                                 || c.persentRightFromLeft < event.startPersent)
-                                && (c.hiddenCategories == undefined || c.hiddenCategories[event.category] == true);
+                                && (c.hiddenCategories == null || c.hiddenCategories[event.category] == true);
 
                     //Timeline elements
                     elements.contentBandHolder.find('.glimpse-tl-band').eq(i).toggle(show);
@@ -434,7 +436,7 @@
                     elements.contentTableHolder.find('tbody').eq(i).toggle(show); 
                 }
                 
-                pubsub.publish('trigger.timline.filtered', { criteria: c });  
+                pubsub.publish('trigger.timeline.filtered', { criteria: c });  
             },
             zoom = function(args) {
                 //Pull out current search
@@ -455,8 +457,8 @@
                 search(criteria);
             };
         
-        pubsub.subscribe('trigger.timline.search.zoom', zoom);
-        pubsub.subscribe('trigger.timline.search.category', category); 
+        pubsub.subscribe('trigger.timeline.search.zoom', zoom);
+        pubsub.subscribe('trigger.timeline.search.category', category); 
     })(timeline.elements);
 
     // Info
@@ -514,7 +516,7 @@
                 elements.eventInfo.stop(true, true).clearQueue().delay(500).fadeOut(); 
             };
                  
-        pubsub.subscribe('trigger.timline.shell.subscriptions', wireListeners); 
+        pubsub.subscribe('trigger.timeline.shell.subscriptions', wireListeners); 
     })(timeline.elements);
 
     // Resize
@@ -537,7 +539,7 @@
                 elements.scope.find('.glimpse-tl-col-main').css('left', position + 'px');
                     
                 //dividerBuilder.render(false);
-                pubsub.publish('trigger.timline.divider.render', {});
+                pubsub.publish('trigger.timeline.divider.render', {});
             },
             panelResize = function() { 
                 if (elements.scope) {
@@ -547,11 +549,11 @@
                     
                     //Render Divers
                     //dividerBuilder.render();
-                    pubsub.publish('trigger.timline.divider.render', {});
+                    pubsub.publish('trigger.timeline.divider.render', {});
                 }
             };
         
-        pubsub.subscribe('trigger.timline.shell.subscriptions', wireListeners); 
+        pubsub.subscribe('trigger.timeline.shell.subscriptions', wireListeners); 
         pubsub.subscribe('trigger.shell.resize', panelResize); 
         pubsub.subscribe('action.panel.showed.glimpse_timeline', function() { setTimeout(panelResize, 1); }); 
     })(timeline.elements);
@@ -564,10 +566,10 @@
                 });
             },
             apply = function(showTimeline, isFirst) {
-                if (showTimeline == undefined || showTimeline == null)
+                if (showTimeline == null)
                     showTimeline = false;
                 
-                pubsub.publish('action.timline.shell.switching', { applyAll: isFirst, showTimeline: showTimeline });
+                pubsub.publish('action.timeline.shell.switching', { applyAll: isFirst, showTimeline: showTimeline });
 
                 elements.contentTableHolder.parent().toggle(showTimeline); 
                 elements.contentRow.find('.glimpse-tl-content-scroll:first-child').toggle(!showTimeline);
@@ -576,11 +578,11 @@
                 
                 if (!showTimeline) {
                     //dividerBuilder.render();
-                    pubsub.publish('trigger.timline.divider.render', {});
+                    pubsub.publish('trigger.timeline.divider.render', {});
                 }
                 
                 //eventBuilder.colorRows(isFirst); 
-                pubsub.publish('action.timline.shell.switched', { applyAll: isFirst, showTimeline: showTimeline });
+                pubsub.publish('action.timeline.shell.switched', { applyAll: isFirst, showTimeline: showTimeline });
             },
             toggle = function() {
                 var showTimeline = !(settings.local('timelineView'));
@@ -596,21 +598,21 @@
                 apply(settings.local('timelineView'), true);
             };
              
-        pubsub.subscribe('trigger.timline.shell.subscriptions', wireListeners); 
-        pubsub.subscribe('trigger.timline.shell.toggle', toggle);
-        pubsub.subscribe('action.timline.event.rendered', start);
+        pubsub.subscribe('trigger.timeline.shell.subscriptions', wireListeners); 
+        pubsub.subscribe('trigger.timeline.shell.toggle', toggle);
+        pubsub.subscribe('action.timeline.event.rendered', start);
     })(timeline.elements);
 
-    // Timline
+    // Timeline
     (function() { 
         var init = function() { 
                 //Set defaults
                 timeline.data.startTime = 0;
                 timeline.data.endTime = timeline.data.duration;
                 
-                pubsub.publish('trigger.timline.shell.init');
-                pubsub.publish('trigger.timline.shell.subscriptions');
-                pubsub.publish('trigger.timline.event.render');
+                pubsub.publish('trigger.timeline.shell.init');
+                pubsub.publish('trigger.timeline.shell.subscriptions');
+                pubsub.publish('trigger.timeline.event.render');
             },
             modify = function(options) {
                 options.templates.css += '/*(import:glimpse.timeline.shell.css)*/';
@@ -621,16 +623,16 @@
             },
             postrender = function(args) { 
                 args.pluginData.data = args.pluginData._data;
-                args.pluginData._data = undefined;
+                args.pluginData._data = null;
                 
                 timeline.data = args.pluginData.data;
                 timeline.scope = args.panel;
                 
-                pubsub.publishAsync('trigger.timline.init');
+                pubsub.publishAsync('trigger.timeline.init');
             };
          
         pubsub.subscribe('action.template.processing', modify); 
-        pubsub.subscribe('trigger.timline.init', init); 
+        pubsub.subscribe('trigger.timeline.init', init); 
         pubsub.subscribe('action.panel.rendering.glimpse_timeline', prerender);
         pubsub.subscribe('action.panel.rendered.glimpse_timeline', postrender);
     })();

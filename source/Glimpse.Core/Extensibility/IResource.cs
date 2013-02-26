@@ -3,9 +3,12 @@
 namespace Glimpse.Core.Extensibility
 {
     /// <summary>
-    /// Definition of a resource that will be exposed by the system as a http endpoint.
-    /// These endpoints typically return content of varying types (i.e. html, images,
-    /// JavaScript, etc).
+    /// <para>
+    /// <c>IResource</c> provides Glimpse clients with data and assets for rendering to the end user.
+    /// </para>
+    /// <para>
+    /// When implemented, a resource will be discovered and added to the collection of resources. 
+    /// </para>
     /// </summary>
     public interface IResource
     {
@@ -13,10 +16,11 @@ namespace Glimpse.Core.Extensibility
         /// Gets the name of the resource.
         /// </summary>
         /// <value>The name.</value>
+        /// <remarks>Resource name's should be unique across a given web application. If multiple <see cref="IResource"/> implementations contain the same name, Glimpse may throw an exception resulting in an Http 500 Server Error.</remarks>
         string Name { get; }
 
         /// <summary>
-        /// Gets the parameters that the resource is expecting to work with.
+        /// Gets the required or optional parameters that a resource needs as processing input.
         /// </summary>
         /// <value>The parameters.</value>
         IEnumerable<ResourceParameterMetadata> Parameters { get; }
@@ -25,7 +29,7 @@ namespace Glimpse.Core.Extensibility
         /// Executes the specified resource with the specific context.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <returns>Resource that can be executed when the response is ready to be returned.</returns>
+        /// <returns><see cref="IResourceResult"/> that can be executed when the Http response is ready to be returned.</returns>
         IResourceResult Execute(IResourceContext context);
     }
 }

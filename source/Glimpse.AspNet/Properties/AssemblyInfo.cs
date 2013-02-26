@@ -16,7 +16,7 @@ using Glimpse.Core.Extensibility;
 // Keep these three attributes in sync
 [assembly: AssemblyVersion("1.0.0")]
 [assembly: AssemblyFileVersion("1.0.0")]
-[assembly: AssemblyInformationalVersion("1.0.0-rc1")] // Used to specify the NuGet version number at build time
+[assembly: AssemblyInformationalVersion("1.0.0")] // Used to specify the NuGet version number at build time
 
 [assembly: InternalsVisibleTo("Glimpse.Test.AspNet")]
 [assembly: NuGetPackage]

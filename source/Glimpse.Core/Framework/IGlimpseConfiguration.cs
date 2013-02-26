@@ -41,10 +41,10 @@ namespace Glimpse.Core.Framework
         IPersistenceStore PersistenceStore { get; }
 
         /// <summary>
-        /// Gets the pipeline inspectors.
+        /// Gets the inspectors.
         /// </summary>
-        /// <value>The pipeline inspectors.</value>
-        ICollection<IPipelineInspector> PipelineInspectors { get; }
+        /// <value>The inspectors.</value>
+        ICollection<IInspector> Inspectors { get; }
 
         /// <summary>
         /// Gets the resource endpoint.
@@ -117,13 +117,5 @@ namespace Glimpse.Core.Framework
         /// </summary>
         /// <value>The timer strategy.</value>
         Func<IExecutionTimer> TimerStrategy { get; set; }
-
-        /// <summary>
-        /// Generates the script tags.
-        /// </summary>
-        /// <param name="requestId">The request id.</param>
-        /// <param name="version">The version.</param>
-        /// <returns>Generated script tag.</returns>
-        string GenerateScriptTags(Guid requestId, string version);
     }
 }

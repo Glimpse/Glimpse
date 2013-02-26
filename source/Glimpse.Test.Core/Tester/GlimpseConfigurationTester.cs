@@ -16,7 +16,7 @@ namespace Glimpse.Test.Core.Tester
                                            Mock<ILogger> loggerMock,
                                            Mock<IHtmlEncoder> htmlEncoderMock,
                                            Mock<IPersistenceStore> persistenceStoreMock,
-                                           IDiscoverableCollection<IPipelineInspector> pipelineInspectorsStub,
+                                           IDiscoverableCollection<IInspector> inspectorsStub,
                                            IDiscoverableCollection<IResource> resourcesStub,
                                            Mock<ISerializer> serializerMock,
                                            IDiscoverableCollection<ITab> tabsStub,
@@ -35,7 +35,7 @@ namespace Glimpse.Test.Core.Tester
                 RuntimePolicy.On,
                 htmlEncoderMock.Object,
                 persistenceStoreMock.Object,
-                pipelineInspectorsStub,
+                inspectorsStub,
                 resourcesStub,
                 serializerMock.Object,
                 tabsStub,
@@ -69,7 +69,7 @@ namespace Glimpse.Test.Core.Tester
                                                   loggerMock,
                                                   new Mock<IHtmlEncoder>(),
                                                   new Mock<IPersistenceStore>(),
-                                                  new ReflectionDiscoverableCollection<IPipelineInspector>(
+                                                  new ReflectionDiscoverableCollection<IInspector>(
                                                       loggerMock.Object),
                                                   new ReflectionDiscoverableCollection<IResource>(loggerMock.Object),
                                                   new Mock<ISerializer>(),

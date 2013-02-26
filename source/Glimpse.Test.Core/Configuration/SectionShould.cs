@@ -103,11 +103,11 @@ namespace Glimpse.Test.Core.Configuration
         }
 
         [Fact]
-        public void ReturnDefaultPipelineInspectors()
+        public void ReturnDefaultInspectors()
         {
             var section = new Section();
 
-            var element = section.PipelineInspectors;
+            var element = section.Inspectors;
 
             Assert.NotNull(element);
             Assert.True(element.AutoDiscover);
@@ -116,15 +116,15 @@ namespace Glimpse.Test.Core.Configuration
         }
 
         [Fact]
-        public void GetSetPipelineInspectors()
+        public void GetSetInspectors()
         {
             var section = new Section();
 
             var element = new DiscoverableCollectionElement(){AutoDiscover = false};
 
-            section.PipelineInspectors = element;
+            section.Inspectors = element;
 
-            Assert.Equal(element, section.PipelineInspectors);
+            Assert.Equal(element, section.Inspectors);
         }
 
         [Fact]

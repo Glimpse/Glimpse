@@ -16,15 +16,15 @@ namespace Glimpse.Test.Core.Extensibility
             PluginStoreMock = new Mock<IDataStore>();
             LoggerMock = new Mock<ILogger>();
             MessageBroker = new Mock<IMessageBroker>();
-            PipelineInspectors = new ReflectionDiscoverableCollection<IPipelineInspector>(LoggerMock.Object)
+            Inspectors = new ReflectionDiscoverableCollection<IInspector>(LoggerMock.Object)
                                      {
-                                         new DummyPipelineInspector1()
+                                         new DummyInspector1()
                                      };
         }
 
 
 
-        private IDiscoverableCollection<IPipelineInspector> PipelineInspectors { get; set; }
+        private IDiscoverableCollection<IInspector> Inspectors { get; set; }
 
         private Mock<IDataStore> PluginStoreMock { get; set; }
 
@@ -83,7 +83,7 @@ namespace Glimpse.Test.Core.Extensibility
             RequestContext = null;
             PluginStoreMock = null;
             TabContext = null;
-            PipelineInspectors = null;
+            Inspectors = null;
             LoggerMock = null;
         }
     }

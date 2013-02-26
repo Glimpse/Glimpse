@@ -3,8 +3,8 @@ using Glimpse.Core.Framework;
 namespace Glimpse.Core.Extensibility
 {
     /// <summary>
-    /// Definition for the context that is used when a resource result
-    /// is executed.
+    /// <c>IResourceResultContext</c> provides implementations of <see cref="IResourceResult"/> access to the
+    /// <see cref="IFrameworkProvider"/>, <see cref="ISerializer"/> and <see cref="IHtmlEncoder"/>.
     /// </summary>
     public interface IResourceResultContext : IContext
     {

@@ -91,10 +91,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DictionaryDataStoreAdapterShould.cs" />
-    <Compile Include="Extensibility\AlternateImplementationGenerationHookShould.cs" />
-    <Compile Include="Extensibility\AlternateImplementationSelectorShould.cs" />
-    <Compile Include="Extensibility\AlternateImplementationToCastleInterceptorAdapterShould.cs" />
-    <Compile Include="Extensibility\CastleInvocationToAlternateImplementationContextAdapterShould.cs" />
+    <Compile Include="Extensibility\AlternateTypeGenerationHookShould.cs" />
+    <Compile Include="Extensibility\AlternateTypeSelectorShould.cs" />
+    <Compile Include="Extensibility\AlternateTypeToCastleInterceptorAdapterShould.cs" />
+    <Compile Include="Extensibility\CastleInvocationToAlternateMethodContextAdapterShould.cs" />
     <Compile Include="Extensibility\ExceptionResourceResultShould.cs" />
     <Compile Include="Extensibility\FileResourceResultShould.cs" />
     <Compile Include="Extensibility\JsonNetSerializationConverterShould.cs" />
@@ -115,12 +115,14 @@
     <Compile Include="Framework\GlimpseConfigurationShould.cs" />
     <Compile Include="Framework\GlimpseMetadataShould.cs" />
     <Compile Include="Framework\GlimpseRuntimeShould.cs" />
-    <Compile Include="Framework\PipelineInspectorContextShould.cs" />
+    <Compile Include="Framework\InspectorContextShould.cs" />
     <Compile Include="Framework\ReflectionDiscoverableCollectionShould.cs" />
     <Compile Include="Framework\ResourceParametersShould.cs" />
     <Compile Include="Framework\TimerShould.cs" />
     <Compile Include="GlimpseExceptionShould.cs" />
     <Compile Include="JsonNetSerializerShould.cs" />
+    <Compile Include="Message\ExecutionMessageShould.cs" />
+    <Compile Include="Message\TimedMessageShould.cs" />
     <Compile Include="Message\TimelineMessageShould.cs" />
     <Compile Include="Plugin\Assist\PluginShould.cs" />
     <Compile Include="Plugin\Assist\TabLayoutCellShould.cs" />
@@ -149,6 +151,7 @@
     <Compile Include="Resource\MetadataShould.cs" />
     <Compile Include="Resource\PopupResourceShould.cs" />
     <Compile Include="Resource\VersionCheckResourceShould.cs" />
+    <Compile Include="SerializationConverter\TimelineEventModelConverterShould.cs" />
     <Compile Include="SerializationConverter\TimeStampConverterShould.cs" />
     <Compile Include="SerializationConverter\DateTimeConverterShould.cs" />
     <Compile Include="SerializationConverter\GlimpseMetadataConverterShould.cs" />
@@ -156,13 +159,16 @@
     <Compile Include="SerializationConverter\PluginMetadataConverterShould.cs" />
     <Compile Include="SerializationConverter\TabResultConverterShould.cs" />
     <Compile Include="SerializationConverter\CSharpTypeConverterShould.cs" />
+    <Compile Include="SerializationConverter\ListOfTraceMessageConverterShould.cs" />
     <Compile Include="StatusCodeResourceResultShould.cs" />
+    <Compile Include="Tab\TimelineShould.cs" />
+    <Compile Include="Tab\TraceShould.cs" />
     <Compile Include="TestDoubles\DummyEnum.cs" />
     <Compile Include="TestDoubles\DummyMessage.cs" />
     <Compile Include="TestDoubles\DummyException.cs" />
-    <Compile Include="TestDoubles\DummyPipelineInspector1.cs" />
+    <Compile Include="TestDoubles\DummyInspector1.cs" />
     <Compile Include="TestDoubles\DummyObjectContext.cs" />
-    <Compile Include="TestDoubles\DummyPipelineInspector2.cs" />
+    <Compile Include="TestDoubles\DummyInspector2.cs" />
     <Compile Include="TestDoubles\DummySerializationConverter.cs" />
     <Compile Include="TestDoubles\DummySerializationConverterOfT.cs" />
     <Compile Include="TestDoubles\DummyServiceLocator.cs" />
@@ -179,6 +185,7 @@
     <Compile Include="Tester\ResourceParametersTester.cs" />
     <Compile Include="Tester\StatusCodePolicyTester.cs" />
     <Compile Include="Tester\UriPolicyTester.cs" />
+    <Compile Include="TraceListenerShould.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

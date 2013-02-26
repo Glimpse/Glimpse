@@ -1,14 +1,13 @@
 ﻿namespace Glimpse.Core.Extensibility
 {
     /// <summary>
-    /// Definition for a wrapper that can be used to access the target objects when 
-    /// alternatives/proxies are being used.
+    /// <c>IWrapper&lt;T&gt;</c> provides a common way to leverage the <see href="http://en.wikipedia.org/wiki/Decorator_pattern">decorator pattern</see>.
     /// </summary>
     /// <typeparam name="T">Type of target object.</typeparam>
     public interface IWrapper<T>
     {
         /// <summary>
-        /// Gets the target that object is wrapping.
+        /// Gets the wrapped target object.
         /// </summary>
         /// <returns>The underlying target object.</returns>
         T GetWrappedObject();

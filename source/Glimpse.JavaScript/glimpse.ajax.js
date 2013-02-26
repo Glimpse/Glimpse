@@ -1,5 +1,5 @@
 ﻿(function($, pubsub, util, elements, data, renderEngine) {
-    var context = { resultCount : 0, notice: undefined, isActive: false, contextRequestId: undefined },
+    var context = { resultCount : 0, notice: null, isActive: false, contextRequestId: null },
         generateAjaxAddress = function() {
             var currentMetadata = data.currentMetadata();
             return util.uriTemplate(currentMetadata.resources.glimpse_ajax, { 'parentRequestId': retrieveScopeId(), 'version': currentMetadata.version });
@@ -86,7 +86,7 @@
                 var detailData = [['Request URL', 'Method', 'Duration', 'Date/Time', 'View']],
                     detailMetadata = { layout: [ [ { data : 0, key : true, width : '40%' }, { data : 1 }, { data : 2, width : '10%', className : 'mono', align : 'right' },  { data : 3, width : '20%' },  { data : 4, width : '100px' } ] ] };
                 
-                panel.html(renderEngine.build(detailData, detailMetadata)).find('table').append('<tbody></tbody>');
+                panel.html(renderEngine.build(detailData, detailMetadata)).find('table').append('<tbody class="glimpse-row-holder"></tbody>');
                 panel.find('table').addClass('glimpse-ellipsis').find('thead').append('<tr class="glimpse-head-message" style="display:none"><td colspan="5"><a href="#">Reset context back to starting page</a></td></tr>');
             }
         },
@@ -97,7 +97,7 @@
             
             for (var x = context.resultCount; x < result.length; x++) {
                 var item = result[x];
-                html = '<tr data-requestId="' + item.requestId + '" class="' + (x % 2 == 0 ? 'even' : 'odd') + '"><td><div class="glimpse-ellipsis" title="' + item.uri + '">' + item.uri + '</div></td><td>' + item.method + '</td><td class="mono" style="text-align:right">' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.dateTime + '</td><td><a href="#" class="glimpse-ajax-link" data-requestId="' + item.requestId + '">Inspect</a></td></tr>' + html;
+                html = '<tr data-requestId="' + item.requestId + '" class="glimpse-row"><td><div class="glimpse-ellipsis" title="' + item.uri + '">' + item.uri + '</div></td><td>' + item.method + '</td><td class="mono" style="text-align:right">' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.dateTime + '</td><td><a href="#" class="glimpse-ajax-link" data-requestId="' + item.requestId + '">Inspect</a></td></tr>' + html;
             }
             detailBody.prepend(html);
             
@@ -155,7 +155,7 @@
             panel.find('.selected').removeClass('selected');
             row.addClass('selected');
             
-            context.contextRequestId = undefined;
+            context.contextRequestId = null;
         };
     
     var send = XMLHttpRequest.prototype.send;

@@ -1,18 +1,14 @@
 namespace Glimpse.Core.Extensibility
 {
     /// <summary>
-    /// Definition for the result that is returned once resource is executed.
+    /// <c>IResourceResult</c> provides Glimpse a <see href="http://en.wikipedia.org/wiki/Command_pattern">command object</see> for returning the results of an <see cref="IResource"/>.
     /// </summary>
     public interface IResourceResult
     {
         /// <summary>
-        /// Enables processing of the result of an result method by a custom type 
-        /// that inherits from the <see cref="IResource"/> interface.
+        /// Executes the resource result with the specified context.
         /// </summary>
-        /// <param name="context">
-        /// The context in which the result is executed. The context information 
-        /// includes the FrameworkProvider, Serializer & HtmlEncoder.
-        /// </param>
+        /// <param name="context">The context.</param>
         void Execute(IResourceResultContext context);
     }
 }

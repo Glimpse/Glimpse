@@ -43,7 +43,7 @@ namespace MvcMusicStore
                 "OtherDefaultBrowse", // Route name
                 "{controller}/{action}/{id}", // URL with parameters
                 new { controller = "Home", action = "Browse", id = UrlParameter.Optional }, // Parameter defaults
-                new { action = @"Index", controller = "Test" }
+                new { controller = "Home", action = @"Test" }
             );
 
             routes.MapRoute(

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Glimpse.Core.Framework
 {
     /// <summary>
-    /// Defines methods to self discover collection content
+    /// Defines methods to self discover collection content.
     /// </summary>
     /// <typeparam name="T">Collection item type</typeparam>
     public interface IDiscoverableCollection<T> : ICollection<T>
