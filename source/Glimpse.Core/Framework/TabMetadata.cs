@@ -22,6 +22,14 @@ namespace Glimpse.Core.Framework
         public object Layout { get; set; }
 
         /// <summary>
+        /// Gets or sets wheather root level objects should be pivoted when displayed. 
+        /// </summary>
+        /// <value>
+        /// Keys Headings.
+        /// </value>
+        public bool KeysHeadings { get; set; }
+
+        /// <summary>
         /// Gets a value indicating whether this instance has metadata.
         /// </summary>
         /// <value>
