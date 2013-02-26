@@ -6,25 +6,56 @@ using Glimpse.Core.ResourceResult;
 
 namespace Glimpse.Core.Resource
 {
+    /// <summary>
+    /// The <see cref="IResource"/> implementation responsible for providing the Glimpse configuration page, which is usually where a user turns Glimpse on and off.
+    /// </summary>
     public class ConfigurationResource : IResource, IKey
     {
         internal const string InternalName = "glimpse_config";
 
+        /// <summary>
+        /// Gets the name of the resource.
+        /// </summary>
+        /// <value>
+        /// The name.
+        /// </value>
+        /// <remarks>
+        /// Resource name's should be unique across a given web application. If multiple <see cref="IResource" /> implementations contain the same name, Glimpse may throw an exception resulting in an Http 500 Server Error.
+        /// </remarks>
         public string Name
         {
             get { return InternalName; }
         }
 
+        /// <summary>
+        /// Gets the required or optional parameters that a resource needs as processing input.
+        /// </summary>
+        /// <value>
+        /// The parameters.
+        /// </value>
         public IEnumerable<ResourceParameterMetadata> Parameters
         {
             get { return Enumerable.Empty<ResourceParameterMetadata>(); }
         }
 
+        /// <summary>
+        /// Gets the key.
+        /// </summary>
+        /// <value>
+        /// The key. Only valid JavaScript identifiers should be used for future compatibility.
+        /// </value>
         public string Key
         {
             get { return Name; }
         }
 
+        /// <summary>
+        /// Executes the specified resource with the specific context.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns>
+        ///   <see cref="IResourceResult" /> that can be executed when the Http response is ready to be returned.
+        /// </returns>
         public IResourceResult Execute(IResourceContext context)
         {
             var content = new StringBuilder();
@@ -34,7 +65,7 @@ namespace Glimpse.Core.Resource
             content.Append("<script>function toggleCookie(){var mode = document.getElementById('glimpseState'); if (mode.innerHTML==='On'){mode.innerHTML='Off';document.cookie='glimpsePolicy=Off; path=/;';}else{mode.innerHTML='On';document.cookie='glimpsePolicy=On; path=/;';}}</script>");
             content.Append("<head><body>");
             content.Append("<div class=\"content\"><div class=\"logo\"><blockquote>What Firebug is for the client, Glimpse does for the server... in other words, a client side Glimpse into what's going on in your server.</blockquote><h1>Glimpse</h1><div>A client side Glimpse to your server</div></div>");
-            content.Append("<table width=\"100%\"><tr align=\"center\"><td width=\"33%\"><a class=\"myButton\" href=\"javascript:(function(){document.cookie='glimpsePolicy=On; path=/; expires=Sat, 01 Jan 2050 12:00:00 GMT;'; window.location.reload();})();\">Turn Glimpse On</a></td><td width=\"34%\"><a class=\"myButton\" href=\"javascript:(function(){document.cookie='glimpsePolicy=; path=/; expires=Sat, 01 Jan 2050 12:00:00 GMT;'; window.location.reload();})();\">Turn Glimpse Off</a></td><td><a class=\"myButton\" href=\"javascript:(function(){document.cookie='glimpseClientName='+ prompt('Client Name?') +'; path=/; expires=Sat, 01 Jan 2050 12:00:00 GMT;'; window.location.reload();})();\">Set Glimpse Session Name</a></td></tr></table>");
+            content.Append("<table width=\"100%\"><tr align=\"center\"><td width=\"33%\"><a class=\"myButton\" href=\"javascript:(function(){document.cookie='glimpsePolicy=On; path=/; expires=Sat, 01 Jan 2050 12:00:00 GMT;'; window.location.reload();})();\">Turn Glimpse On</a></td><td width=\"34%\"><a class=\"myButton\" href=\"javascript:(function(){document.cookie='glimpsePolicy=; path=/; expires=Sat, 01 Jan 2050 12:00:00 GMT;'; window.location.reload();})();\">Turn Glimpse Off</a></td><td><a class=\"myButton\" href=\"javascript:(function(){document.cookie='glimpseId='+ prompt('Client Name?') +'; path=/; expires=Sat, 01 Jan 2050 12:00:00 GMT;'; window.location.reload();})();\">Set Glimpse Session Name</a></td></tr></table>");
             content.Append("<p style=\"text-align:center\">Drag the above button to your favorites bar for quick and easy access to Glimpse.</p>");
             content.Append("<h2>More Info:</h2>");
             content.Append("<div class=\"footer\"><span class=\"important\">For more info see <a href=\"http://getGlimpse.com\" />getGlimpse.com</a></span><br /><br /><img src=\"http://getglimpse.com/content/uservoice-icon.png\" width=\"16\" /> Have a <em>feature</em> request? <a href=\"http://getglimpse.uservoice.com\">Submit the idea</a>. &nbsp; &nbsp; <img src=\"http://getglimpse.com/content/github.gif\" /> Found an <em>error</em>? <a href=\"https://github.com/glimpse/glimpse/issues\">Help us improve</a>. &nbsp; &nbsp;<img src=\"http://getglimpse.com/content/twitter.png\" /> Have a <em>question</em>? <a href=\"http://twitter.com/#search?q=%23glimpse\">Tweet us using #glimpse</a>.</div>");

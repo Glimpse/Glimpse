@@ -27,7 +27,7 @@ namespace Glimpse.Test.Core.ResourceResult
         public void Construct(IResourceResult resourceResult)
         {
             var expectedDuration = 8;
-            var expectedSetting = CacheSetting.ProxyRevalidate;
+            var expectedSetting = CacheSetting.NoStore;
 
             var sut = new CacheControlDecorator(expectedDuration, expectedSetting, resourceResult);
 
@@ -47,7 +47,7 @@ namespace Glimpse.Test.Core.ResourceResult
         public void Execute(IResourceResult resourceResult, IResourceResultContext context)
         {
             var expectedDuration = 8;
-            var expectedSetting = CacheSetting.MustRevalidate;
+            var expectedSetting = CacheSetting.NoStore;
             var sut = new CacheControlDecorator(expectedDuration, expectedSetting, resourceResult);
 
             sut.Execute(context);

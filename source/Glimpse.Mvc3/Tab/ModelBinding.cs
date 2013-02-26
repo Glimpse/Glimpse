@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-using Glimpse.Mvc.AlternateImplementation;
+using Glimpse.Mvc.AlternateType;
+using Glimpse.Mvc.Model;
+
 #if MVC2
 using Glimpse.Mvc2.Backport;
 #endif
@@ -28,41 +27,17 @@ namespace Glimpse.Mvc.Tab
 
         public override object GetData(ITabContext context)
         {
-            var model = GetModel(context.TabStore);
+            var models = GetStack(context.TabStore).Where(i => i.IsBound).Reverse();
 
-            if (model.Properties.Count == 0)
+            if (!models.Any())
             {
                 return null;
             }
 
-            var table = new List<object[]> { new object[] { "Ordinal", "Model Binder", "Property/Parameter", "Type", "Attempted Value Providers", "Attempted Value", "Culture", "Raw Value" } };
-
-            var ordinal = 0;
-
-            foreach (var property in model.Properties)
-            {
-                var providers = new List<object[]> { new object[] { "Provider", "Successful" } };
-                providers.AddRange(property.NotFoundIn.Select(type => new object[] { type, false }));
-
-                if (property.FoundIn != null)
-                {
-                    providers.Add(new object[] { property.FoundIn, true, "selected" });
-                }
-
-                table.Add(
-                    new[] 
-                    {  
-                        ordinal++,
-                        property.ModelBinderType,
-                        string.IsNullOrEmpty(property.MemberOf) ? property.Name : property.MemberOf + "." + property.Name,
-                        property.Type, 
-                        providers, 
-                        property.AttemptedValue, 
-                        property.Culture != null ? property.Culture.DisplayName : null,
-                        property.RawValue,
-                        string.IsNullOrEmpty(property.MemberOf) ? string.Empty : "quiet"
-                });
-            }
+            // TODO: Move this display code over to leverage assist namespace and a serialization converter.
+            var table = new List<object[]> { new object[] { "Ordinal", "Parameter", "Type", "Value", "Culture", "Model Binder", "Value Providers" } };
+            
+            FormatTable(table, models, string.Empty, string.Empty);
 
             return table;
         }
@@ -77,120 +52,91 @@ namespace Glimpse.Mvc.Tab
             context.MessageBroker.Subscribe<ModelBinder.BindProperty.Message>(message => UpdateModelBinding(message, context));
         }
 
+        private void FormatTable(List<object[]> table, IEnumerable<ModelBindingModel> models, string ordinalPrefix, string namePrefix)
+        {
+            var innerOrdinal = 1;
+
+            foreach (var model in models)
+            {
+                var ordinalString = ordinalPrefix + innerOrdinal++;
+                table.Add(
+                    new[]
+                        {
+                            ordinalString,
+                            namePrefix + model.ParameterName,
+                            model.ParameterType,
+                            model.RawValue,
+                            model.Culture,
+                            model.ModelBinderType,
+                            model.ValueProviderActivity.Select(vp => vp.ValueProvider).ToArray()
+                        });
+                if (model.Properties.Count > 0)
+                {
+                    FormatTable(table, model.Properties, ordinalString + ".", model.ParameterName + ".");
+                }
+            }
+        }
+
         private void UpdateModelBinding<T>(ValueProvider<T>.ContainsPrefix.Message message, ITabSetupContext context) where T : class
         {
-            if (!message.IsMatch)
-            {
-                var model = GetModel(context.GetTabStore());
-                model.CurrentProperty.NotFoundIn.Add(message.ValueProviderType);
-            }
+            var model = GetModel(GetStack(context.GetTabStore()), message.Prefix);
+            model.Add(message);
         }
 
         private void UpdateModelBinding<T>(ValueProvider<T>.GetValue.Message message, ITabSetupContext context) where T : class
         {
-            if (message.IsFound)
-            {
-                var model = GetModel(context.GetTabStore());
-                var currentProperty = model.CurrentProperty;
-                currentProperty.FoundIn = message.ValueProviderType;
-                currentProperty.AttemptedValue = message.AttemptedValue;
-                currentProperty.Culture = message.Culture;
-            }
+            var model = GetModel(GetStack(context.GetTabStore()), message.Key);
+            model.Add(message);
         }
 
         private void UpdateModelBinding(ModelBinder.BindModel.Message message, ITabSetupContext context)
         {
-            var model = GetModel(context.GetTabStore());
-            var currentProperty = model.CurrentProperty;
-
-            currentProperty.ModelBinderType = message.ModelBinderType;
-            currentProperty.RawValue = message.RawValue;
-
-            if (!currentProperty.Name.Equals(message.ModelName))
-            {
-                model.MemberOf = string.Empty;
-                model.CurrentProperty = new ModelBindingPropertyModel { Name = message.ModelName, Type = message.ModelType };
-            }
+            var model = GetModel(GetStack(context.GetTabStore()), message.ModelName);
+            model.Bound(message);
         }
 
         private void UpdateModelBinding(ModelBinder.BindProperty.Message message, ITabSetupContext context)
         {
-            var model = GetModel(context.GetTabStore());
-            model.CurrentProperty = new ModelBindingPropertyModel { Name = message.Name, Type = message.Type, ModelBinderType = message.ModelBinderType };
+            var stack = GetStack(context.GetTabStore());
+
+            var property = stack.Pop();
+            var model = stack.Peek();
+
+            model.Properties.Add(property);
         }
 
-        private ModelBindingModel GetModel(IDataStore tabStore)
+        private ModelBindingModel GetModel(Stack<ModelBindingModel> stack, string parameter)
         {
             ModelBindingModel model;
-
-            if (tabStore.Contains<ModelBindingModel>())
+            if (stack.Any())
             {
-                model = tabStore.Get<ModelBindingModel>();
+                model = stack.Peek();
+                if (model.ParameterName.Equals(parameter))
+                {
+                    return model;
+                }
+            }
+
+            model = new ModelBindingModel(parameter);
+            stack.Push(model);
+            return model;
+        }
+
+        private Stack<ModelBindingModel> GetStack(IDataStore tabStore)
+        {
+            Stack<ModelBindingModel> stack;
+
+            if (tabStore.Contains<Stack<ModelBindingModel>>())
+            {
+                stack = tabStore.Get<Stack<ModelBindingModel>>();
             }
             else
             {
-                model = new ModelBindingModel();
-                tabStore.Set(model);
+                stack = new Stack<ModelBindingModel>();
+                tabStore.Set(stack);
             }
 
-            return model;
-        }
-    }
-
-    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "This type is still a work in progress. It will be moved soon.")]
-    public class ModelBindingPropertyModel
-    {
-        public ModelBindingPropertyModel()
-        {
-            NotFoundIn = new HashSet<Type>();
-        }
-
-        public Type ModelBinderType { get; set; }
-
-        public string Name { get; set; }
-        
-        public Type Type { get; set; }
-        
-        public HashSet<Type> NotFoundIn { get; set; }
-        
-        public Type FoundIn { get; set; }
-        
-        public string AttemptedValue { get; set; }
-        
-        public object RawValue { get; set; }
-        
-        public string MemberOf { get; set; }
-        
-        public CultureInfo Culture { get; set; }
-    }
-
-    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "This type is still a work in progress. It will be moved soon.")]
-    public class ModelBindingModel
-    {
-        private ModelBindingPropertyModel currentProperty;
-
-        public ModelBindingModel()
-        {
-            Properties = new List<ModelBindingPropertyModel>();
-        }
-        
-        public List<ModelBindingPropertyModel> Properties { get; set; }
-
-        public string MemberOf { get; set; }
-
-        public ModelBindingPropertyModel CurrentProperty
-        {
-            get
-            {
-                return currentProperty ?? (currentProperty = new ModelBindingPropertyModel { MemberOf = MemberOf, Name = string.Empty });
-            }
-
-            set
-            {
-                value.MemberOf = MemberOf;
-                currentProperty = value;
-                Properties.Add(value);
-            }
+            return stack;
         }
     }
 }

@@ -352,27 +352,27 @@ namespace Glimpse.Test.Core.Framework
         }
 
         [Fact]
-        public void InstantiatePipelineInspectorsWithReflectionDiscoverableCollection()
+        public void InstantiateInspectorsWithReflectionDiscoverableCollection()
         {
             var locatorMock = new Mock<IServiceLocator>();
             var factory = new Factory(locatorMock.Object);
-            ICollection<IPipelineInspector> inspectors = factory.InstantiatePipelineInspectors();
+            ICollection<IInspector> inspectors = factory.InstantiateInspectors();
 
             Assert.NotNull(inspectors);
-            Assert.NotNull(inspectors as ReflectionDiscoverableCollection<IPipelineInspector>);
+            Assert.NotNull(inspectors as ReflectionDiscoverableCollection<IInspector>);
         }
 
         [Fact]
-        public void LeverageServiceLocatorForPipelineInspectors()
+        public void LeverageServiceLocatorForInspectors()
         {
-            ICollection<IPipelineInspector> inspectors = new List<IPipelineInspector>();
+            ICollection<IInspector> inspectors = new List<IInspector>();
 
             var locatorMock = new Mock<IServiceLocator>();
-            locatorMock.Setup(l => l.GetAllInstances<IPipelineInspector>()).Returns(inspectors);
+            locatorMock.Setup(l => l.GetAllInstances<IInspector>()).Returns(inspectors);
 
             var factory = new Factory(locatorMock.Object);
 
-            var result = factory.InstantiatePipelineInspectors();
+            var result = factory.InstantiateInspectors();
 
             Assert.Equal(inspectors, result);
         }
@@ -586,7 +586,7 @@ namespace Glimpse.Test.Core.Framework
             locatorMock.Verify(l => l.GetInstance<IPersistenceStore>(), Times.Once());
             locatorMock.Verify(l => l.GetInstance<ISerializer>(), Times.Once());
             locatorMock.Verify(l => l.GetAllInstances<IClientScript>(), Times.Once());
-            locatorMock.Verify(l => l.GetAllInstances<IPipelineInspector>(), Times.Once());
+            locatorMock.Verify(l => l.GetAllInstances<IInspector>(), Times.Once());
             locatorMock.Verify(l => l.GetAllInstances<IResource>(), Times.Once());
             locatorMock.Verify(l => l.GetAllInstances<ITab>(), Times.Once());
             locatorMock.Verify(l => l.GetAllInstances<IRuntimePolicy>(), Times.Once());

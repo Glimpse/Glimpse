@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Web;
 using Glimpse.AspNet;
+using Glimpse.Core.Extensibility;
 using Moq;
 
 namespace Glimpse.Test.AspNet.Tester
@@ -13,7 +14,7 @@ namespace Glimpse.Test.AspNet.Tester
 
         public Mock<HttpResponseBase> HttpResponseMock { get; set; }
     
-        private AspNetFrameworkProviderTester()
+        private AspNetFrameworkProviderTester(ILogger logger) : base(logger)
         {
             HttpResponseMock = new Mock<HttpResponseBase>();
 
@@ -35,7 +36,7 @@ namespace Glimpse.Test.AspNet.Tester
 
         public static AspNetFrameworkProviderTester Create()
         {
-            return new AspNetFrameworkProviderTester();
+            return new AspNetFrameworkProviderTester(new Mock<ILogger>().Object);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Web;
+using Glimpse.AspNet.Extensions;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 
@@ -9,7 +10,14 @@ namespace Glimpse.AspNet
     public class HttpModule : IHttpModule  
     {
         private static readonly object LockObj = new object();
-        private readonly Factory factory = new Factory(new AspNetServiceLocator());
+        private static readonly Factory Factory;
+
+        static HttpModule()
+        {
+            var serviceLocator = new AspNetServiceLocator();
+            Factory = new Factory(serviceLocator);
+            serviceLocator.Logger = Factory.InstantiateLogger();
+        }
 
         public void Init(HttpApplication httpApplication)
         {
@@ -25,7 +33,7 @@ namespace Glimpse.AspNet
         {
             var runtime = GetRuntime(httpApplication.Application);
 
-            AppDomain.CurrentDomain.SetData(Constants.LoggerKey, factory.InstantiateLogger());
+            AppDomain.CurrentDomain.SetData(Constants.LoggerKey, Factory.InstantiateLogger());
 
             if (runtime.IsInitialized || runtime.Initialize())
             {
@@ -33,6 +41,7 @@ namespace Glimpse.AspNet
                 httpApplication.PostAcquireRequestState += (context, e) => BeginSessionAccess(WithTestable(context));
                 httpApplication.PostRequestHandlerExecute += (context, e) => EndSessionAccess(WithTestable(context));
                 httpApplication.PostReleaseRequestState += (context, e) => EndRequest(WithTestable(context));
+                httpApplication.PreSendRequestHeaders += (context, e) => SendHeaders(WithTestable(context));
                 AppDomain.CurrentDomain.DomainUnload += UnloadDomain;
             }
         }
@@ -73,7 +82,7 @@ namespace Glimpse.AspNet
 
                     if (runtime == null)
                     {
-                        runtime = factory.InstantiateRuntime();
+                        runtime = Factory.InstantiateRuntime();
 
                         applicationState.Add(Constants.RuntimeKey, runtime);
                     }
@@ -96,6 +105,11 @@ namespace Glimpse.AspNet
             var runtime = GetRuntime(httpContext.Application);
 
             runtime.EndRequest();
+        }
+
+        internal void SendHeaders(HttpContextBase httpContext)
+        {
+            httpContext.HeadersSent(true);
         }
 
         private static HttpContextBase WithTestable(object sender)

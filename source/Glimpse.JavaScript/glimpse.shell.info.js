@@ -6,7 +6,7 @@
             var info = data.currentMetadata().plugins[options.key],
                 url = info && info.documentationUri; 
             
-            elements.barHolder().find('.glimpse-meta-help').toggle(url != undefined).attr('href', url); 
+            elements.barHolder().find('.glimpse-meta-help').toggle(url != null).attr('href', url); 
         }, 
         buildInfo = function(args) { 
             var metadata = data.currentMetadata(); 

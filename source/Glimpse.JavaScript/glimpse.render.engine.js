@@ -1,5 +1,12 @@
-﻿glimpse.render.engine = (function(pubsub) {
+﻿glimpse.render.engine = (function($, pubsub) {
     var providers = {},
+        addition = function (scope, data, metadata, isAppend) {
+            var insertType = isAppend ? 'appendTo' : 'prependTo',
+                html = $('<div>' + build(data, metadata) + '</div>').find('.glimpse-row-holder:first')[0].innerHTML,
+                elements = $(html)[insertType](scope.find('.glimpse-row-holder:first'));
+            
+            pubsub.publish('trigger.panel.render.style', { scope: elements });
+        },
         retrieve = function(name) {
             return providers[name];
         },
@@ -12,6 +19,12 @@
         insert = function(scope, data, metadata) {
             scope.html(build(data, metadata)); 
             pubsub.publish('trigger.panel.render.style', { scope: scope });
+        },
+        append = function(scope, data, metadata) {
+            addition(scope, data, metadata, true);
+        },
+        prepend = function(scope, data, metadata) {
+            addition(scope, data, metadata, false);
         };
    
     return {
@@ -19,6 +32,8 @@
         retrieve: retrieve,
         register: register,
         build: build,
-        insert: insert
+        insert: insert,
+        append: append,
+        prepend: prepend
     };
-})(glimpse.pubsub);
+})(jQueryGlimpse, glimpse.pubsub);

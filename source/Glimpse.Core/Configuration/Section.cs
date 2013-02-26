@@ -80,30 +80,30 @@ namespace Glimpse.Core.Configuration
         }
 
         /// <summary>
-        /// Gets or sets the collection of <see cref="IPipelineInspector"/>s that used to gather information about a site during Http requests.
+        /// Gets or sets the collection of <see cref="IInspector"/>s that used to gather information about a site during Http requests.
         /// </summary>
         /// <remarks>
-        /// By default, pipeline inspectors are discovered at runtime but that behavior, plus the location of where they are found, and which ones should be ignored is configurable.
+        /// By default, inspectors are discovered at runtime but that behavior, plus the location of where they are found, and which ones should be ignored is configurable.
         /// </remarks>
         /// <example>
         /// <code>
         /// <![CDATA[
         /// <glimpse defaultRuntimePolicy="On" endpointBaseUri="~/Glimpse.axd">
-        ///     <pipelineInspectors autoDiscover="true" discoveryLocation="bin\debug">
+        ///     <inspectors autoDiscover="true" discoveryLocation="bin\debug">
         ///         <ignoredTypes>
         ///             <add type="{Namespace.Type, AssemblyName}"/>
         ///         </ignoredTypes>
-        ///     </pipelineInspectors>
+        ///     </inspectors>
         ///     <!-- Additional Glimpse configuration nodes -->
         /// </glimpse>
         /// ]]>
         /// </code>
         /// </example>
-        [ConfigurationProperty("pipelineInspectors")]
-        public DiscoverableCollectionElement PipelineInspectors
+        [ConfigurationProperty("inspectors")]
+        public DiscoverableCollectionElement Inspectors
         {
-            get { return (DiscoverableCollectionElement)base["pipelineInspectors"]; }
-            set { base["pipelineInspectors"] = value; }
+            get { return (DiscoverableCollectionElement)base["inspectors"]; }
+            set { base["inspectors"] = value; }
         }
 
         /// <summary>

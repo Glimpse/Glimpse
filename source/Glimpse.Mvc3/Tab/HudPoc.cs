@@ -4,12 +4,12 @@ using System.Diagnostics.CodeAnalysis;
 using System.Web;
 using Glimpse.Ado.Plugin;
 using Glimpse.Ado.Plumbing.Models;
-using Glimpse.AspNet.AlternateImplementation;
+using Glimpse.AspNet.AlternateType;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.AspNet.Extensions;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-using Glimpse.Mvc.AlternateImplementation;
+using Glimpse.Mvc.AlternateType;
 
 namespace Glimpse.Mvc.Tab
 {

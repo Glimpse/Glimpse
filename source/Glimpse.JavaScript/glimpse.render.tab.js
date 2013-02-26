@@ -12,7 +12,7 @@
         },
         generateHtmlItem = function(key, pluginData) {
             if (!pluginData.suppressTab) {
-                var disabled = (pluginData.data === undefined || pluginData.data === null) ? ' glimpse-disabled' : '',
+                var disabled = pluginData.data == null ? ' glimpse-disabled' : '',
                     permanent = pluginData.isPermanent ? ' glimpse-permanent' : '';
             
                 return '<li class="glimpse-tab glimpse-tabitem-' + key + disabled + permanent + '" data-glimpseKey="' + key + '">' + pluginData.name + '</li>';

@@ -33,8 +33,8 @@ if ([System.IO.File]::Exists($log))
 }
 
 if ($from -ne $null -and $from -ne $package.Version){
-    $DTE.ItemOperations.Navigate("http://getglimpse.com/?id=" + $package.Id + "&v=" + $package.Version + "&from=" + $from)
+    $DTE.ItemOperations.Navigate("http://getglimpse.com/Version/Install/?" + $package.Id + "=" + $from + ".." + $package.Version)
 }
 else{
-    $DTE.ItemOperations.Navigate("http://getglimpse.com/?id=" + $package.Id + "&v=" + $package.Version)
+    $DTE.ItemOperations.Navigate("http://getglimpse.com/Version/Install/?" + $package.Id + "=" + $package.Version)
 }

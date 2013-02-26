@@ -8,7 +8,7 @@ namespace Glimpse.Core.Configuration
     /// The Glimpse configuration node that configures the instance of <see cref="IDiscoverableCollection{T}"/> that Glimpse uses to automatically find and load types at runtime.
     /// </summary>
     /// <remarks>
-    /// <c>DiscoverableCollectionElement</c> is used to configure many types, including: <see cref="IClientScript"/>, <see cref="IPipelineInspector"/>, <see cref="ISerializationConverter"/> and <see cref="ITab"/>. <see cref="IRuntimePolicy"/>'s use a specialized version of <c>DiscoverableCollectionElement</c> called <see cref="PolicyDiscoverableCollectionElement"/>.
+    /// <c>DiscoverableCollectionElement</c> is used to configure many types, including: <see cref="IClientScript"/>, <see cref="IInspector"/>, <see cref="ISerializationConverter"/> and <see cref="ITab"/>. <see cref="IRuntimePolicy"/>'s use a specialized version of <c>DiscoverableCollectionElement</c> called <see cref="PolicyDiscoverableCollectionElement"/>.
     /// </remarks>
     public class DiscoverableCollectionElement : ConfigurationElement
     {

@@ -8,19 +8,27 @@ namespace Glimpse.Core.Extensibility
     public interface IExecutionTimer
     {
         /// <summary>
+        /// Gets the request start date and time.
+        /// </summary>
+        /// <value>
+        /// The request start.
+        /// </value>
+        DateTime RequestStart { get; }
+
+        /// <summary>
         /// Points this instance.
         /// </summary>
-        /// <returns>TimerResult.</returns>
+        /// <returns>A <see cref="TimerResult"/> which represents a single point in time.</returns>
         TimerResult Point();
 
         /// <summary>
-        /// Times the specified func. This will start and stop the timer either side 
-        /// of the func that is executed.
+        /// Times the specified function. This will start and stop the timer either side 
+        /// of the function that is executed.
         /// </summary>
         /// <typeparam name="T">Type of result that is expected</typeparam>
-        /// <param name="func">The func that should be executed.</param>
+        /// <param name="function">The function that should be executed.</param>
         /// <returns>Timing info that is collected as a result of the execution.</returns>
-        TimerResult<T> Time<T>(Func<T> func);
+        TimerResult<T> Time<T>(Func<T> function);
 
         /// <summary>
         /// Times the specified action. This will start and stop the timer either side 

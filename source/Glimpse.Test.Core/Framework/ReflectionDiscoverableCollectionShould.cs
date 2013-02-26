@@ -29,7 +29,7 @@ namespace Glimpse.Test.Core.Framework
     [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed. Class is okay because it is only needed for the tests below.")]
     public class ReflectionDiscoverableCollectionTesterRef : MarshalByRefObject
     {
-        private readonly ReflectionDiscoverableCollectionTester<IPipelineInspector> collection = ReflectionDiscoverableCollectionTester<IPipelineInspector>.Create();
+        private readonly ReflectionDiscoverableCollectionTester<IInspector> collection = ReflectionDiscoverableCollectionTester<IInspector>.Create();
 
         public string DiscoveryLocation
         {
@@ -50,11 +50,11 @@ namespace Glimpse.Test.Core.Framework
 
     public class ReflectionDiscoverableCollectionShould : IDisposable
     {
-        private ReflectionDiscoverableCollectionTester<IPipelineInspector> tester;
+        private ReflectionDiscoverableCollectionTester<IInspector> tester;
 
-        public ReflectionDiscoverableCollectionTester<IPipelineInspector> Collection
+        public ReflectionDiscoverableCollectionTester<IInspector> Collection
         {
-            get { return tester ?? (tester = ReflectionDiscoverableCollectionTester<IPipelineInspector>.Create()); }
+            get { return tester ?? (tester = ReflectionDiscoverableCollectionTester<IInspector>.Create()); }
             set { tester = value; }
         }
 
@@ -81,7 +81,7 @@ namespace Glimpse.Test.Core.Framework
         public void AddItems()
         {
             Assert.Empty(Collection);
-            Collection.Add(new DummyPipelineInspector1());
+            Collection.Add(new DummyInspector1());
             Assert.Equal(1, Collection.Count);
         }
 
@@ -95,7 +95,7 @@ namespace Glimpse.Test.Core.Framework
         public void Clear()
         {
             Assert.Equal(0, Collection.Count);
-            Collection.Add(new DummyPipelineInspector1());
+            Collection.Add(new DummyInspector1());
             Assert.Equal(1, Collection.Count);
             
             Collection.Clear();
@@ -105,7 +105,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void Contains()
         {
-            var item = new DummyPipelineInspector1();
+            var item = new DummyInspector1();
 
             Collection.Add(item);
 
@@ -115,7 +115,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void CopyTo()
         {
-            var items = new IPipelineInspector[] { new DummyPipelineInspector1(), new DummyPipelineInspector2() };
+            var items = new IInspector[] { new DummyInspector1(), new DummyInspector2() };
 
             Collection.CopyTo(items, 0);
 

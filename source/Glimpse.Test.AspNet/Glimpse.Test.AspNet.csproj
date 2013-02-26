@@ -60,13 +60,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlternateImplementation\RouteBaseGetRouteDataShould.cs" />
-    <Compile Include="AlternateImplementation\RouteBaseShould.cs" />
-    <Compile Include="AlternateImplementation\RouteConstraintMatchShould.cs" />
-    <Compile Include="AlternateImplementation\RouteConstraintRegexShould.cs" />
-    <Compile Include="AlternateImplementation\RouteConstraintShould.cs" />
-    <Compile Include="AlternateImplementation\RouteProcessConstraintShould.cs" />
-    <Compile Include="AlternateImplementation\RouteShould.cs" />
+    <Compile Include="AlternateType\RouteBaseGetRouteDataShould.cs" />
+    <Compile Include="AlternateType\RouteBaseShould.cs" />
+    <Compile Include="AlternateType\RouteConstraintMatchShould.cs" />
+    <Compile Include="AlternateType\RouteConstraintRegexShould.cs" />
+    <Compile Include="AlternateType\RouteConstraintShould.cs" />
+    <Compile Include="AlternateType\RouteProcessConstraintShould.cs" />
     <Compile Include="AspNetFrameworkProviderShould.cs" />
     <Compile Include="HttpApplicationStateBaseDataAdapterShould.cs" />
     <Compile Include="HttpHandlerShould.cs" />
@@ -74,24 +73,18 @@
     <Compile Include="IResourceEndpointConfiguration.cs" />
     <Compile Include="Model\RequestModelShould.cs" />
     <Compile Include="Model\RouteModelShould.cs" />
-    <Compile Include="PipelineInspector\RoutesConstraintsInspectorShould.cs" />
-    <Compile Include="PipelineInspector\RoutesInspectorShould.cs" />
-    <Compile Include="PipelineInspector\TraceInspectorShould.cs" />
+    <Compile Include="Inspector\RoutesInspectorShould.cs" />
     <Compile Include="Policy\LocalPolicyShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerializationConverter\ConfigurationModelConverterShould.cs" />
     <Compile Include="SerializationConverter\ConfigurationRoleManagerProviderSettingsModelConverterShould.cs" />
-    <Compile Include="SerializationConverter\TimelineEventModelConverterShould.cs" />
     <Compile Include="SerializationConverter\RequestModelConverterShould.cs" />
-    <Compile Include="SerializationConverter\TraceModelConverterShould.cs" />
     <Compile Include="Tab\ConfigurationShould.cs" />
-    <Compile Include="Tab\TimelineShould.cs" />
     <Compile Include="Tab\EnvironmentShould.cs" />
     <Compile Include="Tab\RequestShould.cs" />
     <Compile Include="Tab\RoutesShould.cs" />
     <Compile Include="Tab\ServerShould.cs" />
     <Compile Include="Tab\SessionShould.cs" />
-    <Compile Include="Tab\TraceShould.cs" />
     <Compile Include="Tester\AspNetFrameworkProviderTester.cs" />
     <Compile Include="Tester\HttpHandlerTester.cs" />
     <Compile Include="Tester\HttpModuleTester.cs" />

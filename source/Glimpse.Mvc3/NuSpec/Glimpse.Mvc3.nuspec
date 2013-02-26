@@ -10,12 +10,15 @@
         <licenseUrl>http://www.opensource.org/licenses/apache2.0</licenseUrl>
         <projectUrl>http://getglimpse.com</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <iconUrl>http://getglimpse.com/content/glimpse32.png</iconUrl>
+        <iconUrl>http://getglimpse.com/content/glimpse100.png</iconUrl>
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET MVC 3.0 application.</description>
         <summary>ASP.NET MVC 3.0 web debugging and diagnostics tool.</summary>
+        <releaseNotes>
+          Glimpse.Mvc3 now supports async actions, no longer serializes view models, and has several bug fixes and performance improvements.
+        </releaseNotes>
         <tags>ASP.NET Web MVC Glimpse</tags>
         <dependencies>
-          <dependency id="Glimpse.AspNet" version="1.0.0-rc1" />
+          <dependency id="Glimpse.AspNet" version="1.0.0" />
         </dependencies>
     </metadata>
     <files>

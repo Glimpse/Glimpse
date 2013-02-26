@@ -1,27 +1,27 @@
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using Glimpse.Core.Extensibility;
-
-namespace Glimpse.Core.Message
+﻿namespace Glimpse.Core.Message
 {
-    public class TimelineMessage : TimeMessage
+    /// <summary>
+    /// Options that can used for timeline events.
+    /// </summary>
+    public class TimelineMessage
     {
-        public TimelineMessage(TimerResult timerResult, Type executedType, MethodInfo executedMethod, string eventName = null, string eventCategory = null)
-            : base(timerResult, executedType, executedMethod)
+        private static TimelineCategory request = new TimelineCategory("Common", "#AF78DD", "#823BBE");
+        private static TimelineCategory other = new TimelineCategory("Other", "#EEEEEE", "#CCCCCC");
+
+        /// <summary>
+        /// Gets the timeline category for a request.
+        /// </summary>
+        public static TimelineCategory Request
         {
-            EventName = eventName;
-            EventCategory = eventCategory;
+            get { return request; }
         }
 
-        public string EventName { get; protected set; }
-
-        public string EventCategory { get; protected set; }
-
-        public string EventSubText { get; protected set; }
-        
-        public virtual void BuildDetails(IDictionary<string, object> details)
-        { 
+        /// <summary>
+        /// Gets the timeline category for a other events.
+        /// </summary>
+        public static TimelineCategory Other
+        {
+            get { return other; }
         }
     }
 }

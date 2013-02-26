@@ -7,17 +7,18 @@
             }
             return content;
         },
-        buildCell = function(data, metadataItem, level, cellType, rowIndex) {
+        buildCell = function(data, metadataItem, level, cellType, rowIndex, includeHeading) {
             var html = '', 
                 cellContent = '', 
                 cellClass = '', 
                 cellStyle = '', 
-                cellAttr = '';
+                cellAttr = '',
+                isHeadingRow = rowIndex == 0 && includeHeading;
                 
             //Cell Content
             if ($.isArray(metadataItem.data)) {
                 for (var i = 0; i < metadataItem.data.length; i++) 
-                    cellContent += buildCell(data, metadataItem.data[i], level, 'div', rowIndex);
+                    cellContent += buildCell(data, metadataItem.data[i], level, 'div', rowIndex, includeHeading);
             }
             else { 
                 if (!metadataItem.indexs && !$.isNumeric(metadataItem.data)) 
@@ -25,32 +26,32 @@
                 
                 cellContent = metadataItem.indexs ? buildFormatString(metadataItem.data, data, metadataItem.indexs) : data[metadataItem.data];
                 
-                if (metadataItem.engine && rowIndex != 0) {
-                    cellContent = providers.master.build(cellContent, level + 1, metadataItem.forceFull, metadataItem, rowIndex == 0 ? undefined : metadataItem.limit);
+                if (metadataItem.engine && !isHeadingRow) {
+                    cellContent = providers.master.build(cellContent, level + 1, metadataItem.forceFull, metadataItem, isHeadingRow ? undefined : metadataItem.limit);
                 }
                 else {
                     //Get metadata for the new data 
                     var newMetadataItem = metadataItem.layout;
                     if ($.isPlainObject(newMetadataItem)) 
                         newMetadataItem = newMetadataItem[rowIndex];
-                    if (newMetadataItem)
-                        newMetadataItem = { layout: newMetadataItem };
+                    if (newMetadataItem || metadataItem.suppressHeader)
+                        newMetadataItem = { layout: newMetadataItem, suppressHeader: metadataItem.suppressHeader };
 
                     //If minDisplay and we are in header or there is no data, we don't want to render anything 
-                    if (metadataItem.minDisplay && (rowIndex == 0 || cellContent == undefined || cellContent == null))
+                    if (metadataItem.minDisplay && (isHeadingRow || cellContent == null))
                         return ""; 
                      
-                    cellContent = providers.master.build(cellContent, level + 1, metadataItem.forceFull, newMetadataItem, rowIndex == 0 ? undefined : metadataItem.limit);
+                    cellContent = providers.master.build(cellContent, level + 1, metadataItem.forceFull, newMetadataItem, isHeadingRow ? undefined : metadataItem.limit);
 
                     //Content pre/post
-                    if (rowIndex != 0) {
+                    if (!isHeadingRow) {
                         if (metadataItem.pre) { cellContent = '<span class="glimpse-soft">' + metadataItem.pre + '</span>' + cellContent; }
                         if (metadataItem.post) { cellContent = cellContent + '<span class="glimpse-soft">' + metadataItem.post + '</span>'; }
                     }
                 }
             }
             
-            if (rowIndex != 0) {
+            if (!isHeadingRow) {
                 cellClass = 'glimpse-cell';
                 //Cell Class
                 if (metadataItem.key === true) { cellClass += ' glimpse-cell-key'; }
@@ -82,24 +83,27 @@
             return buildOnly(data, level, metadata);
         },
         buildOnly = function (data, level, metadata) {
-            var html = '<table>', 
-                rowClass = '';
+            var html = '<table class="glimpse-row-holder">', 
+                rowClass = '',
+                layout = metadata.layout,
+                includeHeading = engineUtil.includeHeading(metadata);
             for (var i = 0; i < data.length; i++) {
                 rowClass = data[i].length > data[0].length ? (' ' + data[i][data[i].length - 1]) : '';
-                html += (i == 0) ? '<thead class="glimpse-row-header glimpse-row-header-' + level + '">' : '<tbody class="' + (i % 2 ? 'odd' : 'even') + rowClass + '">';
-                for (var x = 0; x < metadata.length; x++) { 
+                html += (i == 0 && includeHeading) ? '<thead class="glimpse-row-header glimpse-row-header-' + level + '">' : '';
+                html += ((includeHeading && i == 1) || (!includeHeading && i == 0)) ? '<tbody class="glimpse-row-holder">' : '';
+                for (var x = 0; x < layout.length; x++) { 
                     var rowData = '';
                      
-                    for (var y = 0; y < metadata[x].length; y++) {
-                        var metadataItem = metadata[x][y], cellType = (i == 0 ? 'th' : 'td'); 
-                        rowData += buildCell(data[i], metadataItem, level, cellType, i);
+                    for (var y = 0; y < layout[x].length; y++) {
+                        var metadataItem = layout[x][y], cellType = (i == 0 && includeHeading ? 'th' : 'td'); 
+                        rowData += buildCell(data[i], metadataItem, level, cellType, i, includeHeading);
                     }
                      
-                    if (rowData != '') { html += '<tr>' + rowData + '</tr>'; };
+                    if (rowData != '') { html += '<tr class="glimpse-row ' + rowClass + '">' + rowData + '</tr>'; };
                 }
-                html += (i == 0) ? '</thead>' : '</tbody>';
+                html += (i == 0 && includeHeading) ? '</thead>' : '';
             }
-            html += '</table>'; 
+            html += '</tbody></table>'; 
 
             return html; 
         },

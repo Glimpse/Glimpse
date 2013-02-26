@@ -1,7 +1,7 @@
 ﻿(function($, util, engine, engineUtil) {
     var provider = {
             build: function (data, level, forceFull, forceLimit) { 
-                if (data == undefined || data == null)
+                if (data == null)
                     return '--';
                 if ($.isArray(data))
                     return '[ ... ]';

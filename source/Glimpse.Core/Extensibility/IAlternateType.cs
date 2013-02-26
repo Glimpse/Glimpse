@@ -3,6 +3,7 @@
     /// <summary>
     /// Definition for an alternate that should replace a given Type
     /// </summary>
+    /// <typeparam name="T">The type to retrieve and alternate for.</typeparam>
     public interface IAlternateType<T>
     {
         /// <summary>

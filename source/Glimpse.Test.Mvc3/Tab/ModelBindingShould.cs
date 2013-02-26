@@ -2,7 +2,7 @@
 using System.Web.Mvc;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.Core.Extensibility;
-using Glimpse.Mvc.AlternateImplementation;
+using Glimpse.Mvc.AlternateType;
 using Glimpse.Mvc.Tab;
 using Glimpse.Test.Common;
 using Moq;

@@ -10,12 +10,15 @@
         <licenseUrl>http://www.opensource.org/licenses/apache2.0</licenseUrl>
         <projectUrl>http://getglimpse.com</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <iconUrl>http://getglimpse.com/content/glimpse32.png</iconUrl>
+        <iconUrl>http://getglimpse.com/content/glimpse100.png</iconUrl>
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET 4.0 application. For ASP.NET MVC3 support, please NuGet Glimpse.MVC3.</description>
         <summary>ASP.NET 4.0 web debugging and diagnostics tool.</summary>
+        <releaseNotes>
+          Glimpse.AspNet now contains the Routes tab, enabling route debugging on WebForms applications! In addition, this release adds support for TraceSource based tracing and contains many bug fixes and performance improvements. This package also will automatically configure your web.config.
+        </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse</tags>
         <dependencies>
-          <dependency id="Glimpse" version="1.0.0-rc1" />
+          <dependency id="Glimpse" version="1.0.0" />
         </dependencies>
     </metadata>
     <files>

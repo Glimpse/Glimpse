@@ -11,9 +11,9 @@ namespace Glimpse.Test.Core.SerializationConverter
         [Fact]
         public void ConvertAPluginMetadataObject()
         {
-            var metadata = new PluginMetadata{DocumentationUri = "anything"};
+            var metadata = new TabMetadata{DocumentationUri = "anything"};
 
-            var converter = new PluginMetadataConverter();
+            var converter = new TabMetadataConverter();
 
             var obj = converter.Convert(metadata);
 
@@ -27,7 +27,7 @@ namespace Glimpse.Test.Core.SerializationConverter
         [Fact]
         public void ThrowExceptionWithInvalidInput()
         {
-            var converter = new PluginMetadataConverter();
+            var converter = new TabMetadataConverter();
 
             Assert.Throws<InvalidCastException>(()=> converter.Convert("bad input"));
         }

@@ -25,12 +25,12 @@
                 currentSelection.removeClass('glimpse-active');
 
                 var oldKey = currentSelection.attr('data-glimpseKey');
-                pubsub.publish('action.panel.hiding.' + oldKey, { key: oldKey });
+                pubsub.publish('action.panel.hiding.' + oldKey, { key: oldKey, newKey: options.key });
             }
 
             // Only run if we have data 
-            if (pluginData != null && pluginData != undefined) {
-                pubsub.publish('action.panel.showing.' + options.key, { key: options.key });
+            if (pluginData != null) {
+                pubsub.publish('action.panel.showing.' + options.key, { key: options.key, panel: panel, pluginData: pluginData, pluginMetadata: pluginMetadata, oldKey: oldKey });
 
                 // Only render the content when we need to
                 if (panel.length == 0) 
@@ -38,7 +38,7 @@
              
                 panel.addClass('glimpse-active'); 
             
-                pubsub.publish('action.panel.showed.' + options.key, { key: options.key });
+                pubsub.publish('action.panel.showed.' + options.key, { key: options.key, panel: panel, pluginData: pluginData, pluginMetadata: pluginMetadata, oldKey: oldKey });
             }
         },
         clear = function() {

@@ -4,9 +4,9 @@ using Glimpse.EF.Plumbing.Injectors;
 
 namespace Glimpse.EF.Service
 {
-    public class EF : IPipelineInspector
+    public class EF : IInspector
     {
-        public void Setup(IPipelineInspectorContext context)
+        public void Setup(IInspectorContext context)
         {
             var logger = context.Logger;
 
