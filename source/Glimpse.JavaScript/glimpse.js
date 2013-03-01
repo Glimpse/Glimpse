@@ -2135,7 +2135,7 @@ glimpse.tab = (function($, pubsub, data) {
         }, 
         setup = function(args) {  
             args.newData.data.ajax = { name: 'Ajax', data: 'No requests currently detected...', isPermanent: true };
-            args.newData.metadata.plugins.ajax = { documentationUri: 'http://getglimpse.com/Help/Plugin/Ajax' };
+            args.newData.metadata.plugins.ajax = { documentationUri: 'http://getglimpse.com/Help/Ajax-Tab' };
         },
         activate = function() {
             context.isActive = true;
@@ -2311,7 +2311,7 @@ glimpse.tab = (function($, pubsub, data) {
         },
         setup = function(args) { 
             args.newData.data.history = { name: 'History', data: 'No requests currently detected...', isPermanent: true };
-            args.newData.metadata.plugins.history = { documentationUri: 'http://getglimpse.com/Help/Plugin/History' };
+            args.newData.metadata.plugins.history = { documentationUri: 'http://getglimpse.com/Help/History-Tab' };
         }, 
         activate = function() {
             context.isActive = true;

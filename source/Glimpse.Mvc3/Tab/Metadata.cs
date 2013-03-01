@@ -34,7 +34,7 @@ namespace Glimpse.Mvc.Tab
 
         public string DocumentationUri
         {
-            get { return "http://getglimpse.com/Help/Plugin/Metadata"; }
+            get { return "http://getglimpse.com/Help/MetaData-Tab"; }
         }
 
         public void Setup(ITabSetupContext context)

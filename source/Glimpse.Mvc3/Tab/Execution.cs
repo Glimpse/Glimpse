@@ -35,7 +35,7 @@ namespace Glimpse.Mvc.Tab
 
         public string DocumentationUri
         {
-            get { return "http://getglimpse.com/Help/Plugin/Execution"; }
+            get { return "http://getglimpse.com/Help/Execution-Tab"; }
         }
 
         public object GetLayout()

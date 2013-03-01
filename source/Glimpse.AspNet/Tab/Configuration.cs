@@ -27,7 +27,7 @@ namespace Glimpse.AspNet.Tab
 
         public string DocumentationUri
         {
-            get { return "http://getglimpse.com/Help/Plugin/Config"; }
+            get { return "http://getglimpse.com/Help/Configuration-Tab"; }
         }
 
         public override object GetData(ITabContext context)

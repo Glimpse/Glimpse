@@ -19,7 +19,7 @@ namespace Glimpse.AspNet.Tab
 
         public string DocumentationUri
         {
-            get { return "http://getglimpse.com/Help/Plugin/Session"; }
+            get { return "http://getglimpse.com/Help/Session-Tab"; }
         }
 
         public override string Name

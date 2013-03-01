@@ -26,7 +26,7 @@ namespace Glimpse.Core.Tab
 
         public string DocumentationUri
         {
-            get { return "http://getglimpse.com/Help/Plugin/Trace"; }
+            get { return "http://getglimpse.com/Help/Trace-Tab"; }
         }
 
         public RuntimeEvent ExecuteOn

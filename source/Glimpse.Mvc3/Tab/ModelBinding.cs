@@ -13,7 +13,7 @@ using Glimpse.Mvc2.Backport;
 
 namespace Glimpse.Mvc.Tab
 {
-    public class ModelBinding : AspNetTab, ITabSetup, IKey
+    public class ModelBinding : AspNetTab, ITabSetup, IKey, IDocumentation
     {
         public override string Name
         {
@@ -23,6 +23,11 @@ namespace Glimpse.Mvc.Tab
         public string Key
         {
             get { return "glimpse_binding"; }
+        }
+
+        public string DocumentationUri
+        {
+            get { return "http://getGlimpse.com/Help/Model-Binding-Tab"; }
         }
 
         public override object GetData(ITabContext context)
