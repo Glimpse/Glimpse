@@ -38,6 +38,8 @@ namespace Glimpse.Test.Integration.Site
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
+
+            ModelBinderProviders.BinderProviders.Add(new CustomModelBinderProvider());
         }
     }
 }
