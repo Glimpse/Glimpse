@@ -14,7 +14,7 @@
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET 4.0 application. For ASP.NET MVC3 support, please NuGet Glimpse.MVC3.</description>
         <summary>ASP.NET 4.0 web debugging and diagnostics tool.</summary>
         <releaseNotes>
-          This Glimpse package no longer has a dependency on System.Web, as such it only contains features for users extending Glimpse. Please download Glimpse.Mvc3, Glimpse.Mvc2 or Glimpse.AspNet for tabs specific to those frameworks.
+          Fixed issues users were experiencing with TraceSource based tracing and client extensibility. Updated help link on all tabs.
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse</tags>
     </metadata>
