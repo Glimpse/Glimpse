@@ -65,7 +65,7 @@ namespace Glimpse.Test.Core.Framework
             Assert.True(result);
 
             result = sut.IsWrapInterfaceEligible<ITestProxy>(typeof(TestProxy));
-            Assert.False(result);
+            Assert.True(result);
         }
 
         [Theory, AutoMock]

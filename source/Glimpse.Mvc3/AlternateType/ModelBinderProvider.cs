@@ -34,16 +34,8 @@ namespace Glimpse.Mvc.AlternateType
 
             public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
             {
-                var originalModelBinder = context.ReturnValue as DefaultModelBinder;
-                
-                if (originalModelBinder == null)
-                {
-                    context.Logger.Warn(Resources.GetBinderNewImplementationCannotProxyWarning, context.ReturnValue.GetType());
-                    return;
-                }
-
                 IModelBinder newModelBinder;
-                if (AlternateModelBinder.TryCreate(originalModelBinder, out newModelBinder))
+                if (AlternateModelBinder.TryCreate(context.ReturnValue as IModelBinder, out newModelBinder))
                 {
                     context.ReturnValue = newModelBinder;
                 }

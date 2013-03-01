@@ -52,7 +52,7 @@ namespace Glimpse.Mvc.AlternateType
 
             if (ProxyFactory.IsWrapInterfaceEligible<IModelBinder>(originalType))
             {
-                newObj = ProxyFactory.WrapInterface(originalObj, AllMethods);
+                newObj = ProxyFactory.WrapInterface(originalObj, new[] { new BindModel(typeof(IModelBinder)) });
                 return true;
             }
 
@@ -115,6 +115,10 @@ namespace Glimpse.Mvc.AlternateType
         public class BindModel : AlternateMethod
         {
             public BindModel() : base(typeof(DefaultModelBinder), "BindModel")
+            {
+            }
+
+            public BindModel(Type type) : base(type, "BindModel")
             {
             }
 

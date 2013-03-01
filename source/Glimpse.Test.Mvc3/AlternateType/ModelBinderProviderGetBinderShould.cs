@@ -65,7 +65,6 @@ namespace Glimpse.Test.Mvc3.AlternateType
 
             context.TimerStrategy().Verify(t => t.Time(It.IsAny<Action>()));
             context.Verify(mb => mb.ReturnValue);
-            context.Logger.Verify(l => l.Warn(It.IsAny<string>(), context.ReturnValue.GetType()));
         }
     }
 }
