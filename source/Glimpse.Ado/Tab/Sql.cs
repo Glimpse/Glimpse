@@ -6,14 +6,30 @@ using Glimpse.Ado.Plumbing.Models;
 using Glimpse.Ado.Tab.Support;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
+using Glimpse.Core.Tab.Assist;
 
 namespace Glimpse.Ado.Tab
 {
-    public class SQL : TabBase, ITabSetup, IKey
+    public class SQL : TabBase, ITabSetup, IKey, ITabLayout
     {
         public override string Name
         {
             get { return "SQL"; }
+        }
+
+        public string Key
+        {
+            get { return "glimpse_sql"; }
+        }
+
+        public void Setup(ITabSetupContext context)
+        {
+            context.PersistMessages<AdoMessage>();
+        }
+
+        public object GetLayout()
+        {
+            return Layout;
         }
 
         public override object GetData(ITabContext context)
@@ -79,69 +95,35 @@ namespace Glimpse.Ado.Tab
             return connections.Count > 1 ? connections : null;
         }
 
-        public string Key
-        {
-            get { return "glimpse_sql"; }
-        }
-
-        public void Setup(ITabSetupContext context)
-        {
-            context.PersistMessages<AdoMessage>();
-        }
+        private static readonly object Layout = TabLayout.Create()
+               .Row(r =>
+               {
+                   r.Cell(0).DisablePreview().SetLayout(TabLayout.Create().Row(x =>
+                           x.Cell(0).SpanColumns(6).DisablePreview().AsMinimalDisplay().SetLayout(TabLayout.Create().Row(y =>
+                           {
+                               y.Cell(0).WidthInPixels(150).AsKey();
+                               y.Cell(1);
+                           }))).Row(x =>
+                           {
+                               x.Cell(1).WidthInPixels(55);
+                               x.Cell(2).AsCode(CodeType.Sql).DisablePreview();
+                               x.Cell(3).WidthInPercent(25).DisablePreview();
+                               x.Cell(4).WidthInPixels(60);
+                               x.Cell(5).WidthInPixels(100).Suffix(" ms").Class("mono");
+                               x.Cell(6).WidthInPixels(70).Prefix("T+ ").Suffix(" ms").Class("mono");
+                           }).Row(x =>
+                           x.Cell(8).SpanColumns(6).DisablePreview().AsMinimalDisplay().SetLayout(TabLayout.Create().Row(y =>
+                           {
+                               y.Cell(0).WidthInPercent(20);
+                               y.Cell(1).Class("mono").DisablePreview();
+                           }))).Row(x =>
+                           x.Cell(7).SpanColumns(6).DisablePreview().AsMinimalDisplay().SetLayout(TabLayout.Create().Row(y =>
+                           {
+                               y.Cell(0).WidthInPixels(150).AsKey();
+                               y.Cell(1);
+                           }))));
+                   r.Cell(1).WidthInPixels(75).Suffix(" ms").Class("mono");
+               }).Build();        
     }
 }
 
-
-
-//        private static readonly GlimpseStructuredLayout _structuredLayout = new GlimpseStructuredLayout { 
-//                new GlimpseStructuredLayoutSection {
-//                    new GlimpseStructuredLayoutCell { Data = 0, SuppressAutoPreview = true, 
-//                        Structure = new GlimpseStructuredLayout { 
-//                            new GlimpseStructuredLayoutSection {
-//                                new GlimpseStructuredLayoutCell { Data = 0, Span = 6, SuppressAutoPreview = true, MinimalDisplay = true,
-//                                    Structure = new GlimpseStructuredLayout { 
-//                                        new GlimpseStructuredLayoutSection {
-//                                            new GlimpseStructuredLayoutCell { Data = 0, Width = "150px", IsKey = true },
-//                                            new GlimpseStructuredLayoutCell { Data = 1 }
-//                                        }
-//                                    }
-//                                }
-//                            },
-//                            new GlimpseStructuredLayoutSection {
-//                                new GlimpseStructuredLayoutCell { Data = 1, Width = "55px" },
-//                                new GlimpseStructuredLayoutCell { Data = 2, IsCode = true, CodeType = "sql" },
-//                                new GlimpseStructuredLayoutCell { Data = 3, Width = "25%" },
-//                                new GlimpseStructuredLayoutCell { Data = 4, Width = "60px" },
-//                                new GlimpseStructuredLayoutCell { Data = 5, ClassName = "mono", Postfix = " ms", Width = "100px" },
-//                                new GlimpseStructuredLayoutCell { Data = 6, ClassName = "mono", Prefix = "T+ ", Postfix = " ms", Width = "70px" }
-//                            },
-//                            new GlimpseStructuredLayoutSection { 
-//                                new GlimpseStructuredLayoutCell { Data = 8, Span = 6, SuppressAutoPreview = true, MinimalDisplay = true,
-//                                    Structure = new GlimpseStructuredLayout { 
-//                                        new GlimpseStructuredLayoutSection {
-//                                            new GlimpseStructuredLayoutCell { Data = 0, Width = "20%" },
-//                                            new GlimpseStructuredLayoutCell { Data = 1, ClassName = "mono" }
-//                                        }
-//                                    }
-//                                }
-//                            },
-//                            new GlimpseStructuredLayoutSection {
-//                                new GlimpseStructuredLayoutCell { Data = 7, Span = 6, SuppressAutoPreview = true, MinimalDisplay = true,
-//                                    Structure = new GlimpseStructuredLayout { 
-//                                        new GlimpseStructuredLayoutSection {
-//                                            new GlimpseStructuredLayoutCell { Data = 0, Width = "150px", IsKey = true },
-//                                            new GlimpseStructuredLayoutCell { Data = 1 }
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    },
-//                    new GlimpseStructuredLayoutCell { Data = 1, ClassName = "mono", Postfix = " ms", Width = "75px" }
-//                }
-//            };
-
-//        public GlimpseStructuredLayout StructuredLayout
-//        {
-//            get { return _structuredLayout; }
-//        }
