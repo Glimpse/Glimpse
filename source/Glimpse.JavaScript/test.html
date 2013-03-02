@@ -822,10 +822,12 @@ glimpse.tab.register(args);
     var data26 = {
         'Movie': 'Star Wars',
         'Genera/Theme': [ 
+                ['Actor', 'Character'],
                 ['Carrie Fisher', 'Princess Leia Organa'], 
                 ['Alec Guinness', 'Ben Obi-Wan Kenobi']
             ], 
         'Actors/Cast': [ 
+                ['Actor', 'Character', 'Gender', 'Age'],
                 ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
                 ['James Earl Jones', 'Darth Vader', 'Male', '45']
             ],
@@ -851,6 +853,7 @@ glimpse.tab.register(args);
         ['Actor', 'Character', 'Gender', 'Age', 'Children' ],
         ['Mark Hamill', 'Luke Skywalker', 'Male', '21', null ],
         ['James Earl Jones', 'Darth Vader', 'Male', '45', [ 
+                ['Actor', 'Character', 'Gender', 'Age'],
                 ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
                 ['James Earl Jones', 'Darth Vader', 'Male', '45'],
                 ['Harrison Ford', 'Han Solo', 'Male', '25'],
@@ -861,6 +864,7 @@ glimpse.tab.register(args);
                 ['Kenny Baker', 'R2-D2', 'Droid', '150']
             ] ],
         ['Carrie Fisher', 'Princess Leia Organa', 'Female', '21', [ 
+                ['Actor', 'Character', 'Gender', 'Age'],
                 ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
                 ['James Earl Jones', 'Darth Vader', 'Male', '45']
             ]], 

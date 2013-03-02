@@ -18,7 +18,7 @@
                     html += '</tr></thead>';
                 }
                 html += '<tbody class="glimpse-row-holder">';
-                for (var i = includeHeading ? 1 : 0; i < data.length; i++) {
+                for (var i = 1; i < data.length; i++) {
                     html += '<tr class="glimpse-row ' + (data[i].length > data[0].length ? ' ' + data[i][data[i].length - 1] : '') + '">';
                     for (var x = 0; x < data[0].length; x++)
                         html += '<td>' + providers.master.build(data[i][x], level + 1) + '</td>';

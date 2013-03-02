@@ -1051,10 +1051,10 @@ glimpse.render.engine.util.raw = (function($, util) {
                 rowClass = '',
                 layout = metadata.layout,
                 includeHeading = engineUtil.includeHeading(metadata);
-            for (var i = 0; i < data.length; i++) {
+            for (var i = includeHeading ? 0 : 1; i < data.length; i++) {
                 rowClass = data[i].length > data[0].length ? (' ' + data[i][data[i].length - 1]) : '';
                 html += (i == 0 && includeHeading) ? '<thead class="glimpse-row-header glimpse-row-header-' + level + '">' : '';
-                html += ((includeHeading && i == 1) || (!includeHeading && i == 0)) ? '<tbody class="glimpse-row-holder">' : '';
+                html += (i == 1) ? '<tbody class="glimpse-row-holder">' : '';
                 for (var x = 0; x < layout.length; x++) { 
                     var rowData = '';
                      
@@ -1066,8 +1066,9 @@ glimpse.render.engine.util.raw = (function($, util) {
                     if (rowData != '') { html += '<tr class="glimpse-row ' + rowClass + '">' + rowData + '</tr>'; };
                 }
                 html += (i == 0 && includeHeading) ? '</thead>' : '';
+                html += (i == data.length - 1) ? '</tbody>' : '';
             }
-            html += '</tbody></table>'; 
+            html += '</table>';
 
             return html; 
         },
@@ -1108,7 +1109,7 @@ glimpse.render.engine.util.raw = (function($, util) {
                     html += '</tr></thead>';
                 }
                 html += '<tbody class="glimpse-row-holder">';
-                for (var i = includeHeading ? 1 : 0; i < data.length; i++) {
+                for (var i = 1; i < data.length; i++) {
                     html += '<tr class="glimpse-row ' + (data[i].length > data[0].length ? ' ' + data[i][data[i].length - 1] : '') + '">';
                     for (var x = 0; x < data[0].length; x++)
                         html += '<td>' + providers.master.build(data[i][x], level + 1) + '</td>';
