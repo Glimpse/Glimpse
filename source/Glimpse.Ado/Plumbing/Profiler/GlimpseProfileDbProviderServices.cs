@@ -9,7 +9,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
     { 
         public GlimpseProfileDbProviderServices(
             DbProviderServices innerProviderServices, 
-            IPipelineInspectorContext inspectorContext)
+            IInspectorContext inspectorContext)
         {
             InnerProviderServices = innerProviderServices;
             InspectorContext = inspectorContext;
@@ -17,7 +17,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
 
 
         private DbProviderServices InnerProviderServices { get; set; }
-        private IPipelineInspectorContext InspectorContext { get; set; }
+        private IInspectorContext InspectorContext { get; set; }
 
 
         public override DbCommandDefinition CreateCommandDefinition(DbCommand prototype)

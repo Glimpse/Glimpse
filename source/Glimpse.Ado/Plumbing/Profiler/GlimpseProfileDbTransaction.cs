@@ -8,7 +8,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
 {
     internal class GlimpseProfileDbTransaction : DbTransaction
     {
-        public GlimpseProfileDbTransaction(DbTransaction transaction, IPipelineInspectorContext inspectorContext, GlimpseProfileDbConnection connection)
+        public GlimpseProfileDbTransaction(DbTransaction transaction, IInspectorContext inspectorContext, GlimpseProfileDbConnection connection)
         {
             InnerTransaction = transaction;
             InspectorContext = inspectorContext;
@@ -20,7 +20,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
 
 
         private GlimpseProfileDbConnection InnerConnection { get; set; }
-        private IPipelineInspectorContext InspectorContext { get; set; }
+        private IInspectorContext InspectorContext { get; set; }
 
 
         protected override DbConnection DbConnection

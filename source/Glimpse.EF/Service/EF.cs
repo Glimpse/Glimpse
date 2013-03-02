@@ -1,12 +1,11 @@
-﻿using Glimpse.Ado.Messages;
-using Glimpse.Core.Extensibility;
+﻿using Glimpse.Core.Extensibility;
 using Glimpse.EF.Plumbing.Injectors;
 
 namespace Glimpse.EF.Service
 {
-    internal class EF : IPipelineInspector
+    internal class EF : IInspector
     {
-        public void Setup(IPipelineInspectorContext context)
+        public void Setup(IInspectorContext context)
         {           
             var logger = context.Logger;
             logger.Info("AdoPipelineInitiator for EF: Starting");

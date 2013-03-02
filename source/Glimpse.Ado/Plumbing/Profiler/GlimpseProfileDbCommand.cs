@@ -13,13 +13,13 @@ namespace Glimpse.Ado.Plumbing.Profiler
 {
     public class GlimpseProfileDbCommand : DbCommand
     {
-        public GlimpseProfileDbCommand(DbCommand innerCommand, IPipelineInspectorContext context)
+        public GlimpseProfileDbCommand(DbCommand innerCommand, IInspectorContext context)
         {
             InnerCommand = innerCommand;
             InspectorContext = context;
         }
 
-        public GlimpseProfileDbCommand(DbCommand innerCommand, IPipelineInspectorContext context, GlimpseProfileDbConnection connection):
+        public GlimpseProfileDbCommand(DbCommand innerCommand, IInspectorContext context, GlimpseProfileDbConnection connection):
             this(innerCommand, context)
         {
             InnerConnection = connection;
@@ -29,7 +29,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
 
         private DbCommand InnerCommand { get; set; }
         private GlimpseProfileDbConnection InnerConnection { get; set; } 
-        private IPipelineInspectorContext InspectorContext { get; set; }
+        private IInspectorContext InspectorContext { get; set; }
 
 
 

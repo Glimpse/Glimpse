@@ -11,9 +11,9 @@ namespace Glimpse.EF.Plumbing.Injectors
 {
     public class WrapDbProviderFactories
     {
-        private static IPipelineInspectorContext InspectorContext;
+        private static IInspectorContext InspectorContext;
 
-        public WrapDbProviderFactories(IPipelineInspectorContext inspectorContext)
+        public WrapDbProviderFactories(IInspectorContext inspectorContext)
         {
             InspectorContext = inspectorContext;
         }

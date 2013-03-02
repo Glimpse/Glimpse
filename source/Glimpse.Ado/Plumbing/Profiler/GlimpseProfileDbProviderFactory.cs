@@ -9,11 +9,11 @@ namespace Glimpse.Ado.Plumbing.Profiler
         where TProviderFactory : DbProviderFactory
     {        
         public static readonly GlimpseProfileDbProviderFactory<TProviderFactory> Instance;
-        private static IPipelineInspectorContext inspectorContext;
+        private static IInspectorContext inspectorContext;
         private readonly TProviderFactory inner;
         
         // TODO: this is a hack, but found no way to inject or locate as yet:
-        public static IPipelineInspectorContext InspectorContext
+        public static IInspectorContext InspectorContext
         {
             get
             {

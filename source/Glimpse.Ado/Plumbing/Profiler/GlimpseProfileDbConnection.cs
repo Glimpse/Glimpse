@@ -13,7 +13,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
         public GlimpseProfileDbConnection(
             DbConnection inner, 
             DbProviderFactory providerFactory, 
-            IPipelineInspectorContext inspectorContext, 
+            IInspectorContext inspectorContext, 
             Guid connectionId)
         {
             InnerConnection = inner;
@@ -24,7 +24,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
         }
 
         private DbProviderFactory InnerProviderFactory { get; set; } 
-        private IPipelineInspectorContext InspectorContext { get; set; }
+        private IInspectorContext InspectorContext { get; set; }
 
 
         public override string ConnectionString

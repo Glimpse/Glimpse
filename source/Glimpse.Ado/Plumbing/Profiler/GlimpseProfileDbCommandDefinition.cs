@@ -6,7 +6,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
     internal class GlimpseProfileDbCommandDefinition : DbCommandDefinition
     {
         public GlimpseProfileDbCommandDefinition(
-            DbCommandDefinition innerCommandDefinition, IPipelineInspectorContext context)
+            DbCommandDefinition innerCommandDefinition, IInspectorContext context)
         {
             InnerCommandDefinition = innerCommandDefinition;
             InspectorContext = context;
@@ -14,7 +14,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
 
 
         private DbCommandDefinition InnerCommandDefinition { get; set; }       
-        private IPipelineInspectorContext InspectorContext { get; set; }
+        private IInspectorContext InspectorContext { get; set; }
 
         public override DbCommand CreateCommand()
         {

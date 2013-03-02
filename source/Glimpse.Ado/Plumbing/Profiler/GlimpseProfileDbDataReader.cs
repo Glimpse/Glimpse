@@ -10,7 +10,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
 {
     internal class GlimpseProfileDbDataReader : DbDataReader
     {
-        public GlimpseProfileDbDataReader(DbDataReader dataReader, DbCommand command, Guid connectionId, Guid statementGuid, IPipelineInspectorContext inspectorContext)
+        public GlimpseProfileDbDataReader(DbDataReader dataReader, DbCommand command, Guid connectionId, Guid statementGuid, IInspectorContext inspectorContext)
         {
             InnerDataReader = dataReader;
             InnerCommand = command;        
@@ -24,7 +24,7 @@ namespace Glimpse.Ado.Plumbing.Profiler
         private DbCommand InnerCommand { get; set; }
         private Guid ConnectionId { get; set; }
         private Guid CommandId { get; set; }
-        private IPipelineInspectorContext InspectorContext { get; set; }
+        private IInspectorContext InspectorContext { get; set; }
         private bool Disposed { get; set; }
         private int RowCount { get; set; }
 
