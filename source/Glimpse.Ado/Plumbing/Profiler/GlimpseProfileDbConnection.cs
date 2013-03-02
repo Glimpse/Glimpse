@@ -26,7 +26,6 @@ namespace Glimpse.Ado.Plumbing.Profiler
         private DbProviderFactory InnerProviderFactory { get; set; } 
         private IInspectorContext InspectorContext { get; set; }
 
-
         public override string ConnectionString
         {
             get { return InnerConnection.ConnectionString; }

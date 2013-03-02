@@ -22,7 +22,6 @@ namespace Glimpse.Ado.Plumbing.Profiler
         private GlimpseProfileDbConnection InnerConnection { get; set; }
         private IInspectorContext InspectorContext { get; set; }
 
-
         protected override DbConnection DbConnection
         {
             get { return InnerConnection; }

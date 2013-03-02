@@ -31,8 +31,6 @@ namespace Glimpse.Ado.Plumbing.Profiler
         private GlimpseProfileDbConnection InnerConnection { get; set; } 
         private IInspectorContext InspectorContext { get; set; }
 
-
-
         public override string CommandText
         {
             get { return InnerCommand.CommandText; }

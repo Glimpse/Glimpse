@@ -15,10 +15,8 @@ namespace Glimpse.Ado.Plumbing.Profiler
             InspectorContext = inspectorContext;
         }
 
-
         private DbProviderServices InnerProviderServices { get; set; }
         private IInspectorContext InspectorContext { get; set; }
-
 
         public override DbCommandDefinition CreateCommandDefinition(DbCommand prototype)
         {

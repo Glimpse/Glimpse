@@ -1,4 +1,4 @@
-﻿using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensibility;
 using Glimpse.EF.Plumbing.Injectors;
 
 namespace Glimpse.EF.Service
