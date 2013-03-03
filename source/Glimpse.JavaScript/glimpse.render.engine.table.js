@@ -102,7 +102,7 @@
                     if (i > length || i > rowLimit)
                         break;
 
-                    html += '<span class="start">{</span>';
+                    html += '<span class="start">[</span>';
                     var spacer = '',
                         x = 0;
                     for (var key in data[i]) {
@@ -115,7 +115,7 @@
                     }
                     if (x < objectLength)
                         html += spacer + '<span>...</span>';
-                    html += '<span class="end">}</span>';
+                    html += '<span class="end">]</span>';
                 }
             }
             else { 
