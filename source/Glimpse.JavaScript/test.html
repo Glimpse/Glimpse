@@ -78,6 +78,8 @@
         <div class="glimpse"><div class="sample26 glimpse-panel"></div></div> 
         <h4>Scenario 27 (Pass)</h4>
         <div class="glimpse"><div class="sample27 glimpse-panel"></div></div> 
+        <h4>Scenario 28 (Pass)</h4>
+        <div class="glimpse"><div class="sample28 glimpse-panel"></div></div> 
     </div>
 
     <script src="./glimpse.js" type="text/javascript"></script>
@@ -880,6 +882,37 @@ glimpse.tab.register(args);
     ]}; 
     processHeading($('.sample27'), 'Simulate parent/child layout');
     process($('.sample27'), data27, metaData27);
+    
+
+    var data28 = [ 
+        { 'Actor': 'Mark Hamill', 'Character': 'Luke Skywalker', 'Gender': 'Male', 'Age': '21' },
+        { 'Actor': 'James Earl Jones', 'Character': 'Darth Vader', 'Gender': 'Male', 'Age': '45' },
+        { 'Actor': 'Harrison Ford', 'Character': {
+                'Mark Hamill': 'Luke Skywalker',
+                'James Earl Jones': 'Darth Vader',
+                'Harrison Ford': 'Han Solo'
+            }, 'Gender': 'Male', 'Age': '25' },
+        { 'Actor': 'Carrie Fisher', 'Character': 'Princess Leia Organa', 'Gender': 'Female', 'Age': '21' },
+        { 'Actor': 'Peter Cushing', 'Character': [ 
+                { 'Actor': 'Mark Hamill', 'Character': 'Luke Skywalker', 'Gender': 'Male', 'Age': '21' },
+                { 'Actor': 'James Earl Jones', 'Character': 'Darth Vader', 'Gender': 'Male', 'Age': '45' },
+                { 'Actor': 'Harrison Ford', 'Character': 'Han Solo', 'Gender': 'Male', 'Age': '25' },
+                { 'Actor': 'Carrie Fisher', 'Character': 'Princess Leia Organa', 'Gender': 'Female', 'Age': '21' },
+                { 'Actor': 'Peter Cushing', 'Character': 'Grand Moff Tarkin', 'Gender': 'Female', 'Age': '69' },
+                { 'Actor': 'Alec Guinness', 'Character': 'Ben Obi-Wan Kenobi', 'Gender': 'Female', 'Age': '70' },
+                { 'Actor': 'Anthony Daniels', 'Character': 'C-3PO', 'Gender': 'Droid', 'Age': '101' },
+                { 'Actor': 'Kenny Baker', 'Character': 'R2-D2', 'Gender': 'Droid', 'Age': '150' }
+            ], 'Gender': 'Female', 'Age': '69' },
+        { 'Actor': 'Alec Guinness', 'Character': 'Ben Obi-Wan Kenobi', 'Gender': 'Female', 'Age': '70' },
+        { 'Actor': 'Anthony Daniels', 'Character': 'C-3PO', 'Gender': 'Droid', 'Age': '101' },
+        { 'Actor': 'Kenny Baker', 'Character': [
+                ['Actor', 'Character', 'Gender', 'Age'],
+                ['Mark Hamill', 'Luke Skywalker - Luke Skywalker was a legendary war hero and Jedi who helped defeat the Galactic Empire in the Galactic Civil War and helped found the New Republic, as well as the New Jedi Order.', 'Male', '21'],
+                ['James Earl Jones', 'Darth Vader', 'Male', '45'],
+            ], 'Gender': 'Droid', 'Age': '150' }
+    ];
+    processHeading($('.sample28'), 'Process array with ', '');
+    process($('.sample28'), data28); 
 
 })(jQueryGlimpse);
     </script>

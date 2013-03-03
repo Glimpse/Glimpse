@@ -1,4 +1,4 @@
-﻿(function($, engine, engineUtil) {
+﻿(function($, util, engine, engineUtil) {
     var providers = engine._providers,
         build = function (data, level, forceFull, metadata, forceLimit) { 
             var limit = !$.isNumeric(forceLimit) ? 3 : forceLimit;
@@ -26,6 +26,22 @@
                 }
                 html += '</tbody></table>';
             }
+            else if (data[0] === Object(data[0])) {
+                if (includeHeading) {
+                    html += '<thead><tr class="glimpse-row-header glimpse-row-header-' + level + '">';
+                    for (var key in data[0]) 
+                        html += '<th>' + engineUtil.raw.process(key) + '</th>';
+                    html += '</tr></thead>'; 
+                }
+                html += '<tbody class="glimpse-row-holder">';
+                for (var i = 0; i < data.length; i++) {
+                    html += '<tr class="glimpse-row">';
+                    for (var key in data[i])
+                        html += '<td>' + providers.master.build(data[i][key], level + 1) + '</td>';
+                    html += '</tr>';
+                }
+                html += '</tbody></table>';
+            }
             else {
                 if (data.length > 1) {
                     if (includeHeading)
@@ -43,22 +59,23 @@
         buildPreview = function (data, level) {
             var isComplex = ($.isArray(data[0]) || $.isPlainObject(data[0]));
             
-            if (isComplex && data.length == 1)
+            if (isComplex && data.length == 1) //This exists to simplify visual layout if we only have one item 
                 return providers.master.build(data[0], level);
             if (isComplex || data.length > 1) 
                 return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + buildPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + buildOnly(data, level) + '</div></td></tr></table>';
             return providers.string.build(data[0], level + 1); 
         },
         buildPreviewOnly = function (data, level) { 
-            var isComplex = $.isArray(data[0]), 
-                length = (isComplex ? data.length - 1 : data.length), 
+            var isArray = $.isArray(data[0]), 
+                isObject = data[0] === Object(data[0]), 
+                length = (isArray || isObject ? data.length - 1 : data.length), 
                 rowMax = 2, 
                 columnMax = 3, 
                 columnLimit = 1, 
                 rowLimit = (rowMax < length ? rowMax : length), 
                 html = '<span class="start">[</span>';
 
-            if (isComplex) {
+            if (isArray) {
                 columnLimit = ((data[0].length > columnMax) ? columnMax : data[0].length);
                 for (var i = 1; i <= rowLimit + 1; i++) {
                     html += engineUtil.newItemSpacer(i, rowLimit, length);
@@ -74,6 +91,31 @@
                     if (x < data[0].length)
                         html += spacer + '<span>...</span>';
                     html += '<span class="end">]</span>';
+                }
+            }
+            else if (isObject) {
+                var objectLength = util.lengthJson(data[0]);
+                
+                columnLimit = ((objectLength > columnMax) ? columnMax : objectLength);
+                for (var i = 1; i <= rowLimit + 1; i++) {
+                    html += engineUtil.newItemSpacer(i, rowLimit, length);
+                    if (i > length || i > rowLimit)
+                        break;
+
+                    html += '<span class="start">{</span>';
+                    var spacer = '',
+                        x = 0;
+                    for (var key in data[i]) {
+                        if (x++ < columnLimit) {
+                            html += spacer + '<span>\'</span>' + providers.string.build(data[i][key], level + 1, false, 12) + '<span>\'</span>';
+                            spacer = '<span class="rspace">,</span>';
+                        }
+                        else 
+                            break;
+                    }
+                    if (x < objectLength)
+                        html += spacer + '<span>...</span>';
+                    html += '<span class="end">}</span>';
                 }
             }
             else { 
@@ -97,4 +139,4 @@
         }; 
 
     engine.register('table', provider);
-})(jQueryGlimpse, glimpse.render.engine, glimpse.render.engine.util);
+})(jQueryGlimpse, glimpse.util, glimpse.render.engine, glimpse.render.engine.util);
