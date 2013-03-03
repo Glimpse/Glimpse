@@ -840,8 +840,7 @@ glimpse.render.engine.util.raw = (function($, util) {
             return buildOnly(data, level, metadata);
         }, 
         buildOnly = function(data, level, metadata) {
-            var i = 1,
-                html = '<table>';
+            var html = '<table>';
             if (engineUtil.includeHeading(metadata))
                 html += '<thead><tr class="glimpse-row-header glimpse-row-header-' + level + '"><th class="glimpse-key">Key</th><th class="glimpse-cell-value">Value</th></tr></thead>';
             html += '<tbody class="glimpse-row-holder">';
