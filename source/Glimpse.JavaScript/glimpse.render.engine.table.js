@@ -27,17 +27,18 @@
                 html += '</tbody></table>';
             }
             else if (data[0] === Object(data[0])) {
+                var headers = extractHeaders(data[0]);
                 if (includeHeading) {
                     html += '<thead><tr class="glimpse-row-header glimpse-row-header-' + level + '">';
-                    for (var key in data[0]) 
-                        html += '<th>' + engineUtil.raw.process(key) + '</th>';
+                    for (var x = 0; x < headers.length; x++)
+                        html += '<th>' + engineUtil.raw.process(headers[x]) + '</th>'; 
                     html += '</tr></thead>'; 
                 }
                 html += '<tbody class="glimpse-row-holder">';
                 for (var i = 0; i < data.length; i++) {
                     html += '<tr class="glimpse-row">';
-                    for (var key in data[i])
-                        html += '<td>' + providers.master.build(data[i][key], level + 1) + '</td>';
+                    for (var x = 0; x < headers.length; x++)
+                        html += '<td>' + providers.master.build(data[i][headers[x]], level + 1) + '</td>';
                     html += '</tr>';
                 }
                 html += '</tbody></table>';
@@ -136,6 +137,15 @@
             buildOnly : buildOnly,
             buildPreview : buildPreview,
             buildPreviewOnly : buildPreviewOnly
+        },
+
+        extractHeaders = function (data) {
+            var result = [];
+            for (var key in data) {
+                if (key != "_metadata") 
+                    result.push(key);
+            } 
+            return result;
         }; 
 
     engine.register('table', provider);
