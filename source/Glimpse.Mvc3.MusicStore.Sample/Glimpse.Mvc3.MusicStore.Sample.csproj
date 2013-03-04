@@ -23,6 +23,10 @@
     <OldToolsVersion>4.0</OldToolsVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -189,9 +193,17 @@
     <Content Include="Views\Store\GenreMenu.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Glimpse.Ado\Glimpse.Ado.csproj">
+      <Project>{4c993b73-d03a-4080-b31e-c04f23372997}</Project>
+      <Name>Glimpse.Ado</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Glimpse.AspNet\Glimpse.AspNet.csproj">
       <Project>{FDDFC8A6-CDDF-4BC6-9F07-E76050E1EEE7}</Project>
       <Name>Glimpse.AspNet</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Glimpse.EF\Glimpse.EF.csproj">
+      <Project>{1aedc219-c2a4-422e-8dd8-a9abae1b4f3b}</Project>
+      <Name>Glimpse.EF</Name>
     </ProjectReference>
     <ProjectReference Include="..\Glimpse.Mvc3\Glimpse.Mvc3.csproj">
       <Project>{0A68B072-7918-45AC-BB78-F05789D0BF44}</Project>
