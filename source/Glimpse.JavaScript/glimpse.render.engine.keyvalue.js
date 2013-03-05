@@ -22,14 +22,15 @@
             return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + buildPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + build(data, level, true) + '</div></td></tr></table>';
         },
         buildPreviewOnly = function (data, level) {
-            var length = util.lengthJson(data), 
-                rowMax = 2, 
-                rowLimit = (rowMax < length ? rowMax : length), i = 1, 
+            var rowMax = 2, 
+                rowLength = util.lengthJson(data), 
+                rowLimit = (rowMax < rowLength ? rowMax : rowLength), 
+                i = 0, 
                 html = '<span class="start">{</span>';
 
             for (var key in data) {
-                html += engineUtil.newItemSpacer(i, rowLimit, length);
-                if (i > length || i++ > rowLimit)
+                html += engineUtil.newItemSpacer(0, i, rowLimit, rowLength);
+                if (i > rowLength || i++ > rowLimit)
                     break;
                 html += '<span>\'</span>' + providers.string.build(key, level + 1, false, 12) + '<span>\'</span><span class="mspace">:</span><span>\'</span>' + providers.string.build(data[key], level + 1, false, 12) + '<span>\'</span>';
             }
