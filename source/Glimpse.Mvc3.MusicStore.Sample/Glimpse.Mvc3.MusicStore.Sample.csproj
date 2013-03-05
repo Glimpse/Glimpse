@@ -205,9 +205,9 @@
       <Project>{1aedc219-c2a4-422e-8dd8-a9abae1b4f3b}</Project>
       <Name>Glimpse.EF</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Glimpse.Mvc3\Glimpse.Mvc3.csproj">
-      <Project>{0A68B072-7918-45AC-BB78-F05789D0BF44}</Project>
-      <Name>Glimpse.Mvc3</Name>
+    <ProjectReference Include="..\Glimpse.Mvc\Glimpse.Mvc.csproj">
+      <Project>{0a68b072-7918-45ac-bb78-f05789d0bf44}</Project>
+      <Name>Glimpse.Mvc</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

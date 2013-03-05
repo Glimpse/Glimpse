@@ -53,6 +53,10 @@ task clean {
     Delete-Directory "$source_dir\Glimpse.AspNet.Net35\bin"
     Delete-Directory "$source_dir\Glimpse.AspNet.Net35\obj"
 
+    "   Glimpse.Mvc"
+    Delete-Directory "$source_dir\Glimpse.Mvc\bin"
+    Delete-Directory "$source_dir\Glimpse.Mvc\obj"
+
     "   Glimpse.Mvc2"
     Delete-Directory "$source_dir\Glimpse.Mvc2\bin"
     Delete-Directory "$source_dir\Glimpse.Mvc2\obj"
