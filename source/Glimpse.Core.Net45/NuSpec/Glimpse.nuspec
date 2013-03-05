@@ -23,10 +23,11 @@
         <file src="docs\*.*" target="docs" />
         <file src="lib\net35\*.*" target="lib\net35" />
         <file src="lib\net40\*.*" target="lib\net40" />
+        <file src="lib\net45\*.*" target="lib\net45" />
         <file src="..\**\*.cs" target="src" />
-        <file src="..\bin\Release\glimpse.js" target="src" />
-        <file src="..\Resources.resx" target="src" />
-        <file src="..\Resources.Designer.cs" target="src\Glimpse.Core" />
+        <file src="..\..\Glimpse.Core\bin\Release\glimpse.js" target="src" />
+        <file src="..\..\Glimpse.Core\Resources.resx" target="src" />
+        <file src="..\..\Glimpse.Core\Resources.Designer.cs" target="src\Glimpse.Core" />
         <file src="..\..\Glimpse.Core.Net35\Backport\*.*" target="src\Backport" />
     </files>
 </package>

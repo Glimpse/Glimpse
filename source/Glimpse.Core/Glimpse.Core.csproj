@@ -259,11 +259,6 @@
     <Compile Include="TraceListener.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="NuSpec\Glimpse.nuspec">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="NuSpec\tools\install.ps1" />
-    <None Include="NuSpec\tools\uninstall.ps1" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -273,11 +268,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NuSpec\docs\" />
-    <Folder Include="NuSpec\lib\net35\" />
-    <Folder Include="NuSpec\lib\net40\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="logo.png" />
     <EmbeddedResource Include="sprite.png" />
