@@ -24,10 +24,11 @@
     <files>
         <file src="lib\net35\*.*" target="lib\net35" />
         <file src="lib\net40\*.*" target="lib\net40" />
+        <file src="lib\net45\*.*" target="lib\net45" />
         <file src="content\*.*" target="content" />
         <!--<file src="readme.txt" target="readme.txt" />-->
-        <file src="..\**\*.cs" target="src" />
-        <file src="..\Resources.resx" target="src" />
+        <file src="..\..\Glimpse.AspNet\**\*.cs" target="src" />
+        <file src="..\..\Glimpse.AspNet\Resources.resx" target="src" />
         <file src="..\..\Glimpse.AspNet.Net35\Backport\Net35Backport.cs" target="src" />
     </files>
 </package>

@@ -41,6 +41,14 @@ task clean {
     Delete-Directory "$source_dir\Glimpse.AspNet\bin"
     Delete-Directory "$source_dir\Glimpse.AspNet\obj"
 
+    "   Glimpse.AspNet.Net45"
+    Delete-Directory "$source_dir\Glimpse.AspNet.Net45\bin"
+    Delete-Directory "$source_dir\Glimpse.AspNet.Net45\obj"
+    
+    "   Glimpse.AspNet.Net40"
+    Delete-Directory "$source_dir\Glimpse.AspNet.Net40\bin"
+    Delete-Directory "$source_dir\Glimpse.AspNet.Net40\obj"
+
     "   Glimpse.AspNet.Net35"
     Delete-Directory "$source_dir\Glimpse.AspNet.Net35\bin"
     Delete-Directory "$source_dir\Glimpse.AspNet.Net35\obj"
@@ -100,11 +108,14 @@ task merge -depends test {
     "   Glimpse.Core.Net35"
     exec { & .\ilmerge.exe /log /out:"$source_dir\Glimpse.Core.Net45\nuspec\lib\net35\Glimpse.Core.dll" /internalize:$base_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core.Net35\bin\Release\Glimpse.Core.dll" "$source_dir\Glimpse.Core.Net35\bin\Release\Newtonsoft.Json.dll" "$source_dir\Glimpse.Core.Net35\bin\Release\Castle.Core.dll" "$source_dir\Glimpse.Core.Net35\bin\Release\NLog.dll" "$source_dir\Glimpse.Core.Net35\bin\Release\AntiXssLibrary.dll"  "$source_dir\Glimpse.Core.Net35\bin\Release\Tavis.UriTemplates.dll"}
     
-    "   Glimpse.AspNet"
-    copy $source_dir\Glimpse.AspNet\bin\Release\Glimpse.AspNet.* $source_dir\Glimpse.AspNet\nuspec\lib\net40\
+    "   Glimpse.AspNet.Net45"
+    copy $source_dir\Glimpse.AspNet.Net45\bin\Release\Glimpse.AspNet.* $source_dir\Glimpse.AspNet.Net45\nuspec\lib\net45\
+    
+    "   Glimpse.AspNet.Net40"
+    copy $source_dir\Glimpse.AspNet.Net40\bin\Release\Glimpse.AspNet.* $source_dir\Glimpse.AspNet.Net45\nuspec\lib\net40\   
     
     "   Glimpse.AspNet.Net35"
-    copy $source_dir\Glimpse.AspNet.Net35\bin\Release\Glimpse.AspNet.* $source_dir\Glimpse.AspNet\nuspec\lib\net35\
+    copy $source_dir\Glimpse.AspNet.Net35\bin\Release\Glimpse.AspNet.* $source_dir\Glimpse.AspNet.Net45\nuspec\lib\net35\
 
     "   Glimpse.Mvc2"
     copy $source_dir\Glimpse.Mvc2\bin\Release\Glimpse.Mvc2.* $source_dir\Glimpse.Mvc2\nuspec\lib\net35\
@@ -124,8 +135,8 @@ task pack -depends merge {
     exec { & .\nuget.exe pack $source_dir\Glimpse.Core.Net45\NuSpec\Glimpse.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
     
     "   Glimpse.AspNet.nuspec"
-    $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.AspNet\Properties\AssemblyInfo.cs | Update-AssemblyInformationalVersion
-    exec { & .\nuget.exe pack $source_dir\Glimpse.AspNet\NuSpec\Glimpse.AspNet.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
+    $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.AspNet.Net45\Properties\AssemblyInfo.cs | Update-AssemblyInformationalVersion
+    exec { & .\nuget.exe pack $source_dir\Glimpse.AspNet.Net45\NuSpec\Glimpse.AspNet.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
 
     "   Glimpse.Mvc2.nuspec"
     $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.Mvc2\Properties\AssemblyInfo.cs | Update-AssemblyInformationalVersion
@@ -139,6 +150,7 @@ task pack -depends merge {
     New-Item $build_dir\local\zip\Core\net45 -Type directory -Force > $null
     New-Item $build_dir\local\zip\Core\net40 -Type directory -Force > $null
     New-Item $build_dir\local\zip\Core\net35 -Type directory -Force > $null
+    New-Item $build_dir\local\zip\AspNet\net45 -Type directory -Force > $null
     New-Item $build_dir\local\zip\AspNet\net40 -Type directory -Force > $null
     New-Item $build_dir\local\zip\AspNet\net35 -Type directory -Force > $null
     New-Item $build_dir\local\zip\MVC2\net35 -Type directory -Force > $null
@@ -150,9 +162,10 @@ task pack -depends merge {
     copy $source_dir\Glimpse.Core.Net45\nuspec\lib\net40\Glimpse.Core.* $build_dir\local\zip\Core\net40
     copy $source_dir\Glimpse.Core.Net45\nuspec\lib\net35\Glimpse.Core.* $build_dir\local\zip\Core\net35
     
-    copy $source_dir\Glimpse.AspNet\nuspec\lib\net40\Glimpse.AspNet.* $build_dir\local\zip\AspNet\net40
-    copy $source_dir\Glimpse.AspNet\nuspec\lib\net35\Glimpse.AspNet.* $build_dir\local\zip\AspNet\net35
-    copy $source_dir\Glimpse.AspNet\nuspec\readme.txt $build_dir\local\zip\AspNet
+    copy $source_dir\Glimpse.AspNet.Net45\nuspec\lib\net45\Glimpse.AspNet.* $build_dir\local\zip\AspNet\net45
+    copy $source_dir\Glimpse.AspNet.Net45\nuspec\lib\net40\Glimpse.AspNet.* $build_dir\local\zip\AspNet\net40
+    copy $source_dir\Glimpse.AspNet.Net45\nuspec\lib\net35\Glimpse.AspNet.* $build_dir\local\zip\AspNet\net35
+    copy $source_dir\Glimpse.AspNet.Net45\nuspec\readme.txt $build_dir\local\zip\AspNet
     
     copy $source_dir\Glimpse.Mvc2\nuspec\lib\net35\Glimpse.Mvc2.* $build_dir\local\zip\Mvc2\net35
     copy $source_dir\Glimpse.Mvc3\nuspec\lib\net40\Glimpse.Mvc3.* $build_dir\local\zip\Mvc3\net40
