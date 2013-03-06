@@ -4,7 +4,7 @@ using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Reflection;
-using Glimpse.Ado.Plumbing.Profiler;
+using Glimpse.Ado.AlternateType;
 using Glimpse.Core.Extensibility;
 
 namespace Glimpse.EF.Plumbing.Injectors
@@ -82,7 +82,7 @@ namespace Glimpse.EF.Plumbing.Injectors
 
         private static Type GetProxyTypeForProvider(Type factoryType)
         {
-            var type = typeof(GlimpseProfileDbProviderFactory<>).MakeGenericType(factoryType);
+            var type = typeof(GlimpseDbProviderFactory<>).MakeGenericType(factoryType);
             var inspector = type.GetProperty("InspectorContext");
             inspector.SetValue(null, InspectorContext, null);
             return type;

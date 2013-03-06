@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using Glimpse.Ado.Plumbing.Profiler;
+using Glimpse.Ado.AlternateType;
 using Glimpse.Core.Extensibility;
 
 namespace Glimpse.EF.Plumbing.Injectors
@@ -109,7 +109,7 @@ namespace Glimpse.EF.Plumbing.Injectors
                     foreach (DictionaryEntry i in idictionary) 
                         keys.Add(i.Key); 
 
-                    var connectionTypeName = typeof(GlimpseProfileDbConnection).FullName;
+                    var connectionTypeName = typeof(GlimpseDbConnection).FullName;
                     foreach (var i in keys)
                     {
                         var connectionKey = (string)tupleType.GetProperty("Item2").GetValue(i, null);
@@ -166,7 +166,7 @@ namespace Glimpse.EF.Plumbing.Injectors
 
         private static Type GetProxyTypeForProvider(Type factoryType)
         {
-            return typeof(GlimpseProfileDbProviderFactory<>).MakeGenericType(factoryType);
+            return typeof(GlimpseDbProviderFactory<>).MakeGenericType(factoryType);
         }
     }
 }

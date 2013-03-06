@@ -3,8 +3,7 @@ using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Reflection;
-using Glimpse.Ado.Plumbing;
-using Glimpse.Ado.Plumbing.Profiler;
+using Glimpse.Ado.AlternateType;
 
 namespace Glimpse.EF.Plumbing.Profiler
 {

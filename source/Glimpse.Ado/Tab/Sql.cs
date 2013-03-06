@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Glimpse.Ado.Messages;
-using Glimpse.Ado.Plumbing.Models;
+using Glimpse.Ado.Message;
+using Glimpse.Ado.Model;
 using Glimpse.Ado.Tab.Support;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
@@ -36,7 +36,7 @@ namespace Glimpse.Ado.Tab
         {
             var sanitizer = new CommandSanitizer();            
             var messages = context.GetMessages<AdoMessage>().ToList();
-            var aggregator = new GlimpseDbQueryMessageAggregator(messages);
+            var aggregator = new MessageAggregator(messages);
             var queryMetadata = aggregator.Aggregate();
                
             if (queryMetadata == null)
