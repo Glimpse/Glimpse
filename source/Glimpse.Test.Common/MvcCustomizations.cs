@@ -21,6 +21,12 @@ namespace Glimpse.Test.Common
             IValueProvider(fixture);
             ModelBindingContext(fixture);
             ValueProviderResult(fixture);
+
+            fixture.Customize<ControllerContext>(cc => cc.Without(c => c.DisplayMode));
+            fixture.Customize<ExceptionContext>(ec => ec.Without(c => c.DisplayMode));
+            fixture.Customize<ResultExecutedContext>(rec => rec.Without(c => c.DisplayMode));
+            fixture.Customize<AuthorizationContext>(ac => ac.Without(c => c.DisplayMode));
+            fixture.Customize<ResultExecutingContext>(rec => rec.Without(c => c.DisplayMode));
         }
 
         private static void ValueProviderResult(IFixture fixture)
