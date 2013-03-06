@@ -28,11 +28,11 @@ namespace Glimpse.EF.Plumbing.Injectors
             {
            //     Logger.Info("AdoPipelineInitiator for EF: Starting to inject ConnectionFactory");
 
-                var code = GetEmbeddedResource(GetType().Assembly, "Glimpse.EF.Plumbing.Profiler.GlimpseProfileDbConnectionFactory.cs");
+                var code = GetEmbeddedResource(GetType().Assembly, "Glimpse.EF.Plumbing.AlternateType.GlimpseDbConnectionFactory.cs");
                 var assembliesToReference = new[] { type.Assembly, typeof(DbConnection).Assembly, typeof(TypeConverter).Assembly, typeof(IInspectorContext).Assembly };
 
                 var generatedAssembly = CreateAssembly(code, assembliesToReference);
-                var generatedType = generatedAssembly.GetType("Glimpse.EF.Plumbing.Profiler.GlimpseProfileDbConnectionFactory");
+                var generatedType = generatedAssembly.GetType("Glimpse.EF.AlternateType.GlimpseDbConnectionFactory");
                 generatedType.GetMethod("Initialize").Invoke(null, null);
 
                 //Logger.Info("AdoPipelineInitiator for EF: Finished to inject ConnectionFactory");

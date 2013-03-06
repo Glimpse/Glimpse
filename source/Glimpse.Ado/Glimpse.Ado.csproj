@@ -40,7 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensibility\IGlimpseCommandParameterParser.cs" />
+    <Compile Include="Extensibility\ICommandParameterParser.cs" />
     <Compile Include="Message\AdoCommandMessage.cs" />
     <Compile Include="Message\AdoMessage.cs" />
     <Compile Include="Message\AdoTransactionMessage.cs" />
@@ -78,7 +78,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tab\Sql.cs" />
     <Compile Include="Tab\Support\CommandSanitizer.cs" />
-    <Compile Include="Tab\Support\GlimpseCommandParameterParser.cs" />
+    <Compile Include="Tab\Support\CommandParameterParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">
