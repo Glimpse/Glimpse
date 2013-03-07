@@ -5,7 +5,7 @@ using System.Reflection;
 using Glimpse.Ado.AlternateType;
 using Glimpse.Core.Extensibility;
 
-namespace Glimpse.EF.Plumbing.Injectors
+namespace Glimpse.EF.Inspector.Support
 {
     public class WrapCachedMetadata
     {       

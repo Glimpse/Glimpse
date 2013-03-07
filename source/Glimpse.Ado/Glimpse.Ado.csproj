@@ -41,6 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensibility\ICommandParameterParser.cs" />
+    <Compile Include="Inspector\AdoInspector.cs" />
+    <Compile Include="Inspector\Support\WrapDbProviderFactories.cs" />
     <Compile Include="Message\AdoCommandMessage.cs" />
     <Compile Include="Message\AdoMessage.cs" />
     <Compile Include="Message\AdoTransactionMessage.cs" />

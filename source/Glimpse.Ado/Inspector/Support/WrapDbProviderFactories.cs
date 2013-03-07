@@ -7,7 +7,7 @@ using System.Reflection;
 using Glimpse.Ado.AlternateType;
 using Glimpse.Core.Extensibility;
 
-namespace Glimpse.EF.Plumbing.Injectors
+namespace Glimpse.Ado.Inspector.Support
 {
     public class WrapDbProviderFactories
     {

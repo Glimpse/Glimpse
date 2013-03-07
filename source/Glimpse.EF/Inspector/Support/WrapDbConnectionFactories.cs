@@ -9,7 +9,7 @@ using System.Reflection;
 using Glimpse.Core.Extensibility;
 using Microsoft.CSharp;
 
-namespace Glimpse.EF.Plumbing.Injectors
+namespace Glimpse.EF.Inspector.Support
 {
     public class WrapDbConnectionFactories
     {
@@ -28,11 +28,11 @@ namespace Glimpse.EF.Plumbing.Injectors
             {
            //     Logger.Info("AdoPipelineInitiator for EF: Starting to inject ConnectionFactory");
 
-                var code = GetEmbeddedResource(GetType().Assembly, "Glimpse.EF.Plumbing.AlternateType.GlimpseDbConnectionFactory.cs");
+                var code = GetEmbeddedResource(GetType().Assembly, "Glimpse.EF.AlternateType.Asset.GlimpseDbConnectionFactory.cs");
                 var assembliesToReference = new[] { type.Assembly, typeof(DbConnection).Assembly, typeof(TypeConverter).Assembly, typeof(IInspectorContext).Assembly };
 
                 var generatedAssembly = CreateAssembly(code, assembliesToReference);
-                var generatedType = generatedAssembly.GetType("Glimpse.EF.AlternateType.GlimpseDbConnectionFactory");
+                var generatedType = generatedAssembly.GetType("Glimpse.EF.AlternateType.Asset.GlimpseDbConnectionFactory");
                 generatedType.GetMethod("Initialize").Invoke(null, null);
 
                 //Logger.Info("AdoPipelineInitiator for EF: Finished to inject ConnectionFactory");

@@ -5,9 +5,9 @@ using System.Data.Entity.Infrastructure;
 using System.Reflection;
 using Glimpse.Ado.AlternateType;
 
-namespace Glimpse.EF.Plumbing.Profiler
+namespace Glimpse.EF.AlternateType.Asset
 {
-    internal class GlimpseProfileDbConnectionFactory : IDbConnectionFactory
+    internal class GlimpseDbConnectionFactory : IDbConnectionFactory
     { 
         private readonly IDbConnectionFactory inner;
         private readonly DbProviderFactory factory;

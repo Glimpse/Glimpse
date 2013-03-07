@@ -40,11 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Plumbing\Profiler\GlimpseProfileDbConnectionFactory.cs" />
-    <Compile Include="Service\EF.cs" />
-    <Compile Include="Plumbing\Injectors\WrapCachedMetadata.cs" />
-    <Compile Include="Plumbing\Injectors\WrapDbConnectionFactories.cs" />
-    <Compile Include="Plumbing\Injectors\WrapDbProviderFactories.cs" />
+    <EmbeddedResource Include="AlternateType\Asset\GlimpseDbConnectionFactory.cs" />
+    <Compile Include="Inspector\EntityFrameworkInspector.cs" />
+    <Compile Include="Inspector\Support\WrapCachedMetadata.cs" />
+    <Compile Include="Inspector\Support\WrapDbConnectionFactories.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
