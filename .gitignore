@@ -39,3 +39,11 @@ Help/
 /source/Glimpse.AspNet.Net45/NuSpec/lib/net45/Glimpse.AspNet.dll
 
 /source/Glimpse.AspNet.Net45/NuSpec/lib/net45/Glimpse.AspNet.pdb
+
+/source/Glimpse.Mvc4.MusicStore.Sample/App_Data/ASPNETDB.MDF
+
+/source/Glimpse.Mvc4.MusicStore.Sample/App_Data/ASPNETDB_log.ldf
+
+/source/Glimpse.Mvc4.MusicStore.Sample/App_Data/MvcMusicStore.mdf
+
+/source/Glimpse.Mvc4.MusicStore.Sample/App_Data/MvcMusicStore_log.ldf

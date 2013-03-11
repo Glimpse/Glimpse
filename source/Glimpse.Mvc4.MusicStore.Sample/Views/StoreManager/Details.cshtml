@@ -1,0 +1,50 @@
+﻿@model MvcMusicStore.Models.Album
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Album</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Genre.Name)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Genre.Name)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Artist.Name)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Artist.Name)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Title)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Title)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Price)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Price)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.AlbumArtUrl)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.AlbumArtUrl)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.AlbumId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
