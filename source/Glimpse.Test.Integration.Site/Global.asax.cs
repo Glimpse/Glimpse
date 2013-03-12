@@ -20,7 +20,7 @@ namespace Glimpse.Test.Integration.Site
 
             routes.MapRoute(
                 "NeverUsed", // Route name
-                "/NeverUsed/{controller}/{action}/{id}", // URL with parameters
+                "NeverUsed/{controller}/{action}/{id}", // URL with parameters
                 new { controller = 5, action = (string)null, id = UrlParameter.Optional } // Parameter defaults
             );
 
