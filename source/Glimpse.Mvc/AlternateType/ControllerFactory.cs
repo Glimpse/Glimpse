@@ -57,27 +57,24 @@ namespace Glimpse.Mvc.AlternateType
             [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "iController name is allowed in this usage.")]
             private void ProxyActionInvoker(IController iController)
             {
-                if (iController == null)
+                var controller = iController as AsyncController ?? iController as Controller;
+
+                if (controller == null)
                 {
                     return;
                 }
 
-                var asyncController = iController as AsyncController;
-                if (asyncController != null && asyncController.ActionInvoker is IAsyncActionInvoker)
+                if (controller.ActionInvoker is IAsyncActionInvoker)
                 {
-                    var originalActionInvoker = asyncController.ActionInvoker as IAsyncActionInvoker;
+                    var originalActionInvoker = controller.ActionInvoker as IAsyncActionInvoker;
                     IAsyncActionInvoker newActionInvoker;
 
                     if (AlternateAsyncControllerActionInvoker.TryCreate(originalActionInvoker, out newActionInvoker))
                     {
-                        asyncController.ActionInvoker = newActionInvoker;
+                        controller.ActionInvoker = newActionInvoker;
                     }
-
-                    return;
                 }
-
-                var controller = iController as Controller;
-                if (controller != null)
+                else
                 {
                     var originalActionInvoker = controller.ActionInvoker;
                     IActionInvoker newActionInvoker;

@@ -25,6 +25,9 @@ namespace Glimpse.Mvc.AlternateType
                     {
                         new BeginInvokeActionMethod(),
                         new EndInvokeActionMethod(),
+                        new ActionInvoker.InvokeActionResult<ControllerActionInvoker>(),
+                        new ActionInvoker.GetFilters<ControllerActionInvoker>(new ActionFilter(ProxyFactory), new ResultFilter(ProxyFactory), new AuthorizationFilter(ProxyFactory), new ExceptionFilter(ProxyFactory)),
+                        // HACK - Leveraging InvokerActionResult and GetFilters for Async & NonAsync allows for MVC 3 + MVC 4
                         new ActionInvoker.InvokeActionResult<AsyncControllerActionInvoker>(),
                         new ActionInvoker.GetFilters<AsyncControllerActionInvoker>(new ActionFilter(ProxyFactory), new ResultFilter(ProxyFactory), new AuthorizationFilter(ProxyFactory), new ExceptionFilter(ProxyFactory))
                     });
@@ -119,7 +122,7 @@ namespace Glimpse.Mvc.AlternateType
 
                 var message = new ActionInvoker.InvokeActionMethod.Message(context.ReturnValue.GetType())
                     .AsTimedMessage(timerResult)
-                    .AsSourceMessage(controllerDescriptor.ControllerType, controllerDescriptor.ControllerType.GetMethod(actionName + "Async", actionParams))
+                    .AsSourceMessage(controllerDescriptor.ControllerType, controllerDescriptor.ControllerType.GetMethod(actionName, actionParams) ?? controllerDescriptor.ControllerType.GetMethod(actionName + "Async", actionParams))
                     .AsChildActionMessage(state.Arguments.ControllerContext)
                     .AsActionMessage(state.Arguments.ControllerContext)
                     .AsMvcTimelineMessage(Glimpse.Mvc.Message.Timeline.Filter);
