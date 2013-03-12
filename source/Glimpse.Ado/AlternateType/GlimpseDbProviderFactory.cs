@@ -5,7 +5,11 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Ado.AlternateType
 {
-    public class GlimpseDbProviderFactory<TProviderFactory> : DbProviderFactory, IServiceProvider
+    public abstract class GlimpseDbProviderFactory : DbProviderFactory
+    {
+    }
+
+    public class GlimpseDbProviderFactory<TProviderFactory> : GlimpseDbProviderFactory, IServiceProvider
         where TProviderFactory : DbProviderFactory
     {        
         public static readonly GlimpseDbProviderFactory<TProviderFactory> Instance;

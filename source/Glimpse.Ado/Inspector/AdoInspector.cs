@@ -59,7 +59,14 @@ namespace Glimpse.Ado.Inspector
                     continue;
                 }
 
-                var proxyType = typeof(GlimpseDbProviderFactory<>).MakeGenericType(factory.GetType());
+                //Check that we haven't already wrapped things up 
+                if (factory is GlimpseDbProviderFactory)
+                {
+                    context.Logger.Error("AdoInspector: Factory is already wrapped - {0}", row["Name"]);
+                    continue;
+                }
+
+                var proxyType = typeof(GlimpseDbProviderFactory<>).MakeGenericType(factory.GetType()); 
 
                 // TODO: this is a hack, but found no way to inject or locate as yet:
                 var inspector = proxyType.GetProperty("InspectorContext");
@@ -73,6 +80,8 @@ namespace Glimpse.Ado.Inspector
 
                 table.Rows.Remove(row);
                 table.Rows.Add(newRow);
+
+                context.Logger.Error("AdoInspector: Successfully replaced - {0}", newRow["Name"]);
             }
 
             context.Logger.Info("AdoInspector: Finished replacing DbProviderFactory");  
