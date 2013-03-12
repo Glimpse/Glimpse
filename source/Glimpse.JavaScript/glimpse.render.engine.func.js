@@ -25,5 +25,5 @@
             buildPreviewOnly : buildPreviewOnly
         }; 
 
-    engine.register('function', provider);
+    engine.register('func', provider);
 })(jQueryGlimpse, glimpse.util, glimpse.render.engine, glimpse.render.engine.util);

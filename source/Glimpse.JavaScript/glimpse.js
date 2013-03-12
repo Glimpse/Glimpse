@@ -912,7 +912,7 @@ glimpse.render.engine.util.raw = (function($, util) {
                 
                 if (result === '') {
                     if (typeof data === 'function')
-                        result = providers.function.build(data, level, forceFull, metadata, forceLimit);
+                        result = providers.func.build(data, level, forceFull, metadata, forceLimit);
                     else if (isArray)
                         result = providers.table.build(data, level, forceFull, metadata, forceLimit);
                     else if (isObject)
@@ -1238,7 +1238,7 @@ glimpse.render.engine.util.raw = (function($, util) {
 
     engine.register('table', provider);
 })(jQueryGlimpse, glimpse.util, glimpse.render.engine, glimpse.render.engine.util);
-// glimpse.render.engine.function.js
+// glimpse.render.engine.func.js
 (function($, util, engine, engineUtil) {
     var build = function (data, level, forceFull, metadata, forceLimit) { 
             if (!forceFull)
@@ -1266,7 +1266,7 @@ glimpse.render.engine.util.raw = (function($, util) {
             buildPreviewOnly : buildPreviewOnly
         }; 
 
-    engine.register('function', provider);
+    engine.register('func', provider);
 })(jQueryGlimpse, glimpse.util, glimpse.render.engine, glimpse.render.engine.util);
 
 // glimpse.render.engine.heading.js
