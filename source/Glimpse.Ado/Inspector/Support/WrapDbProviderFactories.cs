@@ -27,79 +27,54 @@ namespace Glimpse.Ado.Inspector.Support
             }
             catch (ArgumentException ex)
             {
-           //     Logger.Info("AdoPipelineInitiator for EF: Expected DbProviderFactories exception due too the way the API works.", ex);
-            } 
+                //Logger.Info("AdoPipelineInitiator: Expected DbProviderFactories exception due too the way the API works.", ex);
+            }
 
-            var providers = GetRegisteredProviders();
-            var registrationKeys = GetProviderKeys(providers);
-              
-            foreach (var key in registrationKeys)
+            //Find the registered providers
+            var dbProviderFactories = typeof(DbProviderFactories); 
+
+            var providerField = dbProviderFactories.GetField("_configTable", BindingFlags.NonPublic | BindingFlags.Static) ?? dbProviderFactories.GetField("_providerTable", BindingFlags.NonPublic | BindingFlags.Static);
+            if (providerField == null)
+            {
+                throw new Exception("Can not get registered providers.");
+            }
+
+            var registrations = providerField.GetValue(null);
+
+            var table = registrations is DataSet ? ((DataSet)registrations).Tables["DbProviderFactories"] : (DataTable)registrations;  
+
+            //Run through and replace providers
+            foreach (var row in table.Rows.Cast<DataRow>().ToList())
             {
                 DbProviderFactory factory;
                 try
                 {
-                    factory = DbProviderFactories.GetFactory(key);
+                    factory = DbProviderFactories.GetFactory(row);
 
-                    //Logger.Info("AdoPipelineInitiator for EF: Triggered");
-
+                    //Logger.Info("AdoPipelineInitiator: Triggered"); 
                 }
                 catch (Exception)
                 {
                     continue;
                 }
+                 
+                var proxyType = typeof(GlimpseDbProviderFactory<>).MakeGenericType(factory.GetType());
 
-                var proxyType = GetProxyTypeForProvider(factory.GetType());
+                // TODO: this is a hack, but found no way to inject or locate as yet:
+                var inspector = proxyType.GetProperty("InspectorContext");
+                inspector.SetValue(null, InspectorContext, null);
 
-                SwapAssemblyName(providers, key, proxyType);
+                var newRow = table.NewRow();
+                newRow["Name"] = row["Name"];
+                newRow["Description"] = row["Description"];
+                newRow["InvariantName"] = row["InvariantName"];
+                newRow["AssemblyQualifiedName"] = proxyType.AssemblyQualifiedName;
+
+                table.Rows.Remove(row);
+                table.Rows.Add(newRow);
             }
 
-            //Logger.Info("AdoPipelineInitiator for EF: Finished injecting DbProviderFactory");
-        }
-
-        private static DataTable GetRegisteredProviders()
-        {
-            var dbProviderFactories = typeof(DbProviderFactories);
-
-            var configTable = dbProviderFactories.GetField("_configTable", BindingFlags.NonPublic | BindingFlags.Static);
-            var providerTable = dbProviderFactories.GetField("_providerTable", BindingFlags.NonPublic | BindingFlags.Static);
-            var table = (configTable ?? providerTable);
-
-            if (table == null)
-                throw new Exception("Can not get registered providers.");
-
-            var registrations = table.GetValue(null);
-
-            if (registrations is DataSet)
-                return ((DataSet)registrations).Tables["DbProviderFactories"];
-
-            return (DataTable)registrations;
-        }
-
-        private static IEnumerable<string> GetProviderKeys(DataTable providers)
-        {
-            return (from DataRow row in providers.Rows select (string)row["InvariantName"]).ToList();
-        }
-
-        private static Type GetProxyTypeForProvider(Type factoryType)
-        {
-            var type = typeof(GlimpseDbProviderFactory<>).MakeGenericType(factoryType);
-            var inspector = type.GetProperty("InspectorContext");
-            inspector.SetValue(null, InspectorContext, null);
-            return type;
-        }
-         
-        private static void SwapAssemblyName(DataTable fromProviders, string withKey, Type newType)
-        {
-            var oldRow = fromProviders.Rows.Cast<DataRow>().First(dt => (string)dt["InvariantName"] == withKey);
-
-            var newRow = fromProviders.NewRow();
-            newRow["Name"] = oldRow["Name"];
-            newRow["Description"] = oldRow["Description"];
-            newRow["InvariantName"] = oldRow["InvariantName"];
-            newRow["AssemblyQualifiedName"] = newType.AssemblyQualifiedName;
-
-            fromProviders.Rows.Remove(oldRow);
-            fromProviders.Rows.Add(newRow);
-        }
+            //Logger.Info("AdoPipelineInitiator: Finished injecting DbProviderFactory");
+        } 
     }
 }
