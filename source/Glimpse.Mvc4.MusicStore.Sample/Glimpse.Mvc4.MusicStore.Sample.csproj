@@ -272,6 +272,20 @@
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Glimpse.AspNet.Net45\Glimpse.AspNet.Net45.csproj">
+      <Project>{dd576747-cd93-43f0-8648-6cdc5cd9c548}</Project>
+      <Name>Glimpse.AspNet.Net45</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Glimpse.Core.Net45\Glimpse.Core.Net45.csproj">
+      <Project>{2cb2400f-bc66-4074-b6e4-177a6f78163e}</Project>
+      <Name>Glimpse.Core.Net45</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Glimpse.Mvc\Glimpse.Mvc.csproj">
+      <Project>{0a68b072-7918-45ac-bb78-f05789d0bf44}</Project>
+      <Name>Glimpse.Mvc</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

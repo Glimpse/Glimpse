@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using MvcMusicStore.Models;
@@ -12,10 +13,10 @@ namespace MvcMusicStore.Controllers
         //
         // GET: /Home/
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             // Get most popular albums
-            var albums = GetTopSellingAlbums(6);
+            var albums = await Task.Factory.StartNew(() => GetTopSellingAlbums(6));
 
             return View(albums);
         }
