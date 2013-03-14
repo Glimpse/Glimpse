@@ -7,9 +7,7 @@ namespace Glimpse.Ado.AlternateType
 {
     internal class GlimpseDbProviderServices : DbProviderServices
     { 
-        public GlimpseDbProviderServices(
-            DbProviderServices innerProviderServices, 
-            IInspectorContext inspectorContext)
+        public GlimpseDbProviderServices(DbProviderServices innerProviderServices, IInspectorContext inspectorContext)
         {
             InnerProviderServices = innerProviderServices;
             InspectorContext = inspectorContext;
