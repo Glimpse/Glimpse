@@ -1,8 +1,7 @@
 using System.Data.Common;
 using System.Data.Entity;
 using System.Reflection;
-using Glimpse.Core.Extensibility;
-using Glimpse.EF.Inspector.Support;
+using Glimpse.Core.Extensibility; 
 using Glimpse.EF.AlternateType;
 
 namespace Glimpse.EF.Inspector
@@ -11,10 +10,7 @@ namespace Glimpse.EF.Inspector
     {
         public void Setup(IInspectorContext context)
         {
-            InitDbConnectionFactories(context);
-
-            var wrapCachedMetadata = new WrapCachedMetadata();
-            wrapCachedMetadata.Inject();              
+            InitDbConnectionFactories(context);           
         }
 
         private void InitDbConnectionFactories(IInspectorContext context)

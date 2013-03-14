@@ -45,7 +45,6 @@
   <ItemGroup>
     <Compile Include="AlternateType\GlimpseDbConnectionFactory.cs" />
     <Compile Include="Inspector\EntityFrameworkInspector.cs" />
-    <Compile Include="Inspector\Support\WrapCachedMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
