@@ -23,7 +23,7 @@ namespace Glimpse.EF.AlternateType
             var connection = inner.CreateConnection(nameOrConnectionString); 
 
             //We need to pull out the factory from the connection 
-            var factory = connection.GetType().GetProperty("ProviderFactory", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(connection, null) as DbProviderFactory;
+            var factory = GetProviderFactory(connection);
             if (factory != null)
             {
                 if (!(factory is GlimpseDbProviderFactory))
@@ -34,6 +34,15 @@ namespace Glimpse.EF.AlternateType
             }
 
             return new GlimpseDbConnection(connection, factory, stats, Guid.NewGuid());
+        }
+
+        private DbProviderFactory GetProviderFactory(DbConnection connection)
+        {
+#if (NET45)
+            return DbProviderFactories.GetFactory(connection);
+#else
+            return connection.GetType().GetProperty("ProviderFactory", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(connection, null) as DbProviderFactory;
+#endif
         }
     }
 }
