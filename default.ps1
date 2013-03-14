@@ -64,6 +64,10 @@ task clean {
     "   Glimpse.Mvc3"
     Delete-Directory "$source_dir\Glimpse.Mvc3\bin"
     Delete-Directory "$source_dir\Glimpse.Mvc3\obj"
+
+    "   Glimpse.Mvc4"
+    Delete-Directory "$source_dir\Glimpse.Mvc4\bin"
+    Delete-Directory "$source_dir\Glimpse.Mvc4\obj"
        
     "   Glimpse.Mvc3.MusicStore.Sample"
     Delete-Directory "$source_dir\Glimpse.Mvc3.MusicStore.Sample\bin"
@@ -126,6 +130,9 @@ task merge -depends test {
     
     "   Glimpse.Mvc3"
     copy $source_dir\Glimpse.Mvc3\bin\Release\Glimpse.Mvc3.* $source_dir\Glimpse.Mvc3\nuspec\lib\net40\
+
+    "   Glimpse.Mvc4"
+    copy $source_dir\Glimpse.Mvc4\bin\Release\Glimpse.Mvc4.* $source_dir\Glimpse.Mvc4\nuspec\lib\net45\
     
 }
 
@@ -149,6 +156,10 @@ task pack -depends merge {
     "   Glimpse.Mvc3.nuspec"
     $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.Mvc3\Properties\AssemblyInfo.cs | Update-AssemblyInformationalVersion
     exec { & .\nuget.exe pack $source_dir\Glimpse.Mvc3\NuSpec\Glimpse.Mvc3.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
+
+    "   Glimpse.Mvc4.nuspec"
+    $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.Mvc4\Properties\AssemblyInfo.cs | Update-AssemblyInformationalVersion
+    exec { & .\nuget.exe pack $source_dir\Glimpse.Mvc4\NuSpec\Glimpse.Mvc4.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
     
     "   Glimpse.zip"
     New-Item $build_dir\local\zip\Core\net45 -Type directory -Force > $null
@@ -159,6 +170,7 @@ task pack -depends merge {
     New-Item $build_dir\local\zip\AspNet\net35 -Type directory -Force > $null
     New-Item $build_dir\local\zip\MVC2\net35 -Type directory -Force > $null
     New-Item $build_dir\local\zip\MVC3\net40 -Type directory -Force > $null
+    New-Item $build_dir\local\zip\MVC4\net45 -Type directory -Force > $null
 
     copy $base_dir\license.txt $build_dir\local\zip
     
@@ -173,6 +185,7 @@ task pack -depends merge {
     
     copy $source_dir\Glimpse.Mvc2\nuspec\lib\net35\Glimpse.Mvc2.* $build_dir\local\zip\Mvc2\net35
     copy $source_dir\Glimpse.Mvc3\nuspec\lib\net40\Glimpse.Mvc3.* $build_dir\local\zip\Mvc3\net40
+    copy $source_dir\Glimpse.Mvc4\nuspec\lib\net45\Glimpse.Mvc4.* $build_dir\local\zip\Mvc4\net45
         
     #TODO: Add help .CHM file
     
