@@ -124,7 +124,7 @@ namespace Glimpse.Ado.AlternateType
 
         protected override DbCommand CreateDbCommand()
         {
-            return new GlimpseDbCommand(InnerConnection.CreateCommand(), InspectorContext);
+            return new GlimpseDbCommand(InnerConnection.CreateCommand(), InspectorContext, this);
         }
 
         protected override object GetService(Type service)
