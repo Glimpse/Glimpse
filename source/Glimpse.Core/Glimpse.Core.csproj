@@ -102,6 +102,8 @@
     <Compile Include="Extensibility\RuntimePolicy.cs" />
     <Compile Include="Extensibility\Subscriber.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Setting\Initializer.cs" />
+    <Compile Include="System.cs" />
     <Compile Include="Message\ISourceMessage.cs" />
     <Compile Include="Message\ITraceMessage.cs" />
     <Compile Include="Message\TimelineCategory.cs" />
