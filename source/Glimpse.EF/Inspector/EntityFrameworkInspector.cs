@@ -24,7 +24,7 @@ namespace Glimpse.EF.Inspector
             {
                 context.Logger.Info("EntityFrameworkInspector: Detected that user is using a custom DefaultConnectionFactory");  
 
-                Database.DefaultConnectionFactory = new GlimpseDbConnectionFactory(Database.DefaultConnectionFactory, context);
+                Database.DefaultConnectionFactory = new GlimpseDbConnectionFactory(Database.DefaultConnectionFactory);
             }
 
             context.Logger.Info("EntityFrameworkInspector: Finished to replacing DefaultConnectionFactory");  
