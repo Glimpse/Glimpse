@@ -3,24 +3,38 @@ using System.Data;
 using System.Data.Common;
 using Glimpse.Ado.Message;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Framework;
 
 namespace Glimpse.Ado.AlternateType
 {
     internal class GlimpseDbTransaction : DbTransaction
     {
-        public GlimpseDbTransaction(DbTransaction transaction, IInspectorContext inspectorContext, GlimpseDbConnection connection)
+        private IMessageBroker messageBroker;
+
+        public GlimpseDbTransaction(DbTransaction transaction, GlimpseDbConnection connection)
         {
-            InnerTransaction = transaction;
-            InspectorContext = inspectorContext;
+            InnerTransaction = transaction; 
             InnerConnection = connection;
             TransactionId = Guid.NewGuid();
 
-            InspectorContext.MessageBroker.Publish(new TransactionBeganMessage(connection.ConnectionId, TransactionId, transaction.IsolationLevel));
+            if (MessageBroker != null)
+            {
+                MessageBroker.Publish(new TransactionBeganMessage(connection.ConnectionId, TransactionId, transaction.IsolationLevel));
+            }
         }
 
+        public GlimpseDbTransaction(DbTransaction transaction, GlimpseDbConnection connection, IMessageBroker messageBroker)
+        {
+            MessageBroker = messageBroker;
+        }
+         
+        private GlimpseDbConnection InnerConnection { get; set; } 
 
-        private GlimpseDbConnection InnerConnection { get; set; }
-        private IInspectorContext InspectorContext { get; set; }
+        private IMessageBroker MessageBroker
+        {
+            get { return messageBroker ?? (messageBroker = GlimpseConfiguration.GetConfiguredMessageBroker()); }
+            set { messageBroker = value; }
+        }
 
         protected override DbConnection DbConnection
         {
@@ -36,7 +50,10 @@ namespace Glimpse.Ado.AlternateType
         public override void Commit()
         {
             InnerTransaction.Commit();
-            InspectorContext.MessageBroker.Publish(new TransactionCommitMessage(InnerConnection.ConnectionId, TransactionId));
+            if (MessageBroker != null)
+            {
+                MessageBroker.Publish(new TransactionCommitMessage(InnerConnection.ConnectionId, TransactionId));
+            }
         }
 
         protected override void Dispose(bool disposing)
@@ -51,7 +68,11 @@ namespace Glimpse.Ado.AlternateType
         public override void Rollback()
         {
             InnerTransaction.Rollback();
-            InspectorContext.MessageBroker.Publish(new TransactionRollbackMessage(InnerConnection.ConnectionId, TransactionId));
+
+            if (MessageBroker != null)
+            {
+                MessageBroker.Publish(new TransactionRollbackMessage(InnerConnection.ConnectionId, TransactionId));
+            }
         }
 
 

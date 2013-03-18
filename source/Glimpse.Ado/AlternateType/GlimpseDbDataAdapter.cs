@@ -10,9 +10,7 @@ namespace Glimpse.Ado.AlternateType
             InnerDataAdapter = innerDataAdapter;
         }
 
-
         private DbDataAdapter InnerDataAdapter { get; set; }
-
 
         public override bool ReturnProviderSpecificTypes
         {
@@ -26,7 +24,6 @@ namespace Glimpse.Ado.AlternateType
             set { InnerDataAdapter.UpdateBatchSize = value; }
         }
 
-
         protected override void Dispose(bool disposing)
         {
             InnerDataAdapter.Dispose();
@@ -34,15 +31,21 @@ namespace Glimpse.Ado.AlternateType
 
         public override int Fill(DataSet dataSet)
         {
-            if (SelectCommand != null) 
-                InnerDataAdapter.SelectCommand = ((GlimpseDbCommand)SelectCommand).Inner; 
+            if (SelectCommand != null)
+            {
+                InnerDataAdapter.SelectCommand = ((GlimpseDbCommand)SelectCommand).Inner;
+            } 
+
             return InnerDataAdapter.Fill(dataSet);
         }
 
         public override DataTable[] FillSchema(DataSet dataSet, SchemaType schemaType)
         {
-            if (SelectCommand != null) 
-                InnerDataAdapter.SelectCommand = ((GlimpseDbCommand)SelectCommand).Inner; 
+            if (SelectCommand != null)
+            {
+                InnerDataAdapter.SelectCommand = ((GlimpseDbCommand)SelectCommand).Inner;
+            } 
+
             return InnerDataAdapter.FillSchema(dataSet, schemaType);
         }
 
@@ -68,12 +71,21 @@ namespace Glimpse.Ado.AlternateType
 
         public override int Update(DataSet dataSet)
         {
-            if (UpdateCommand != null) 
-                InnerDataAdapter.UpdateCommand = ((GlimpseDbCommand)UpdateCommand).Inner; 
-            if (InsertCommand != null) 
-                InnerDataAdapter.InsertCommand = ((GlimpseDbCommand)InsertCommand).Inner; 
-            if (DeleteCommand != null) 
-                InnerDataAdapter.DeleteCommand = ((GlimpseDbCommand)DeleteCommand).Inner; 
+            if (UpdateCommand != null)
+            {
+                InnerDataAdapter.UpdateCommand = ((GlimpseDbCommand)UpdateCommand).Inner;
+            } 
+
+            if (InsertCommand != null)
+            {
+                InnerDataAdapter.InsertCommand = ((GlimpseDbCommand)InsertCommand).Inner;
+            } 
+
+            if (DeleteCommand != null)
+            {
+                InnerDataAdapter.DeleteCommand = ((GlimpseDbCommand)DeleteCommand).Inner;
+            } 
+
             return InnerDataAdapter.Update(dataSet);
         }
     }

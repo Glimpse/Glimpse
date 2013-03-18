@@ -6,30 +6,46 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
+//#if NET45
+using System.Threading;
+using System.Threading.Tasks;
+//#endif
 using Glimpse.Ado.Message;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Framework;
 
 namespace Glimpse.Ado.AlternateType
 {
     public class GlimpseDbCommand : DbCommand
     {
-        public GlimpseDbCommand(DbCommand innerCommand, IInspectorContext context)
+        private IMessageBroker messageBroker;
+
+        public GlimpseDbCommand(DbCommand innerCommand)
         {
-            InnerCommand = innerCommand;
-            InspectorContext = context;
+            InnerCommand = innerCommand; 
         }
 
-        public GlimpseDbCommand(DbCommand innerCommand, IInspectorContext context, GlimpseDbConnection connection):
-            this(innerCommand, context)
+        public GlimpseDbCommand(DbCommand innerCommand, GlimpseDbConnection connection) :
+            this(innerCommand)
         {
             InnerConnection = connection;
-            InspectorContext = context;
+        }
+         
+        public GlimpseDbCommand(DbCommand innerCommand, GlimpseDbConnection connection, IMessageBroker messageBroker) :
+            this(innerCommand, connection)
+        {
+            MessageBroker = messageBroker;
         }
 
-
         private DbCommand InnerCommand { get; set; }
+
         private GlimpseDbConnection InnerConnection { get; set; } 
-        private IInspectorContext InspectorContext { get; set; }
+ 
+        private IMessageBroker MessageBroker
+        {
+            get { return messageBroker ?? (messageBroker = GlimpseConfiguration.GetConfiguredMessageBroker()); }
+            set { messageBroker = value; }
+        }
 
         public override string CommandText
         {
@@ -87,15 +103,20 @@ namespace Glimpse.Ado.AlternateType
             get
             {
                 var property = InnerCommand.GetType().GetProperty("BindByName");
-                if (property == null) 
+                if (property == null)
+                {
                     return false;
+                }
+
                 return (bool)property.GetValue(InnerCommand, null);
             }
             set
             {
                 var property = InnerCommand.GetType().GetProperty("BindByName");
                 if (property != null)
-                    property.SetValue(InnerCommand, value, null); 
+                {
+                    property.SetValue(InnerCommand, value, null);
+                } 
             }
         }
 
@@ -106,13 +127,13 @@ namespace Glimpse.Ado.AlternateType
             {
                 InnerConnection = value as GlimpseDbConnection;
                 if (InnerConnection != null)
-                    InnerCommand.Connection = InnerConnection.InnerConnection;
-                else
                 {
-                    // Create a new GlimpseDbConnection, this will happen when using a EntityConnection(and created with a SqlConnection for example) as a argument to ObjectContext constructor.
-                    var factory = (DbProviderFactory)typeof(GlimpseDbProviderFactory<>).MakeGenericType(DbProviderServices.GetProviderFactory(value).GetType()).GetField("Instance", BindingFlags.Static | BindingFlags.Public).GetValue(null);
-                    InnerConnection = new GlimpseDbConnection(value, factory, InspectorContext, Guid.NewGuid());
                     InnerCommand.Connection = InnerConnection.InnerConnection;
+                }
+                else
+                { 
+                    InnerConnection = new GlimpseDbConnection(value);
+                    InnerCommand.Connection = InnerConnection.InnerConnection; 
                 }
             }
         }
@@ -121,9 +142,7 @@ namespace Glimpse.Ado.AlternateType
         {
             get
             {
-                if (InnerCommand.Transaction == null)
-                    return null; 
-                return new GlimpseDbTransaction(InnerCommand.Transaction, InspectorContext, InnerConnection);
+                return InnerCommand.Transaction == null ? null : new GlimpseDbTransaction(InnerCommand.Transaction, InnerConnection);
             }
             set
             {
@@ -149,22 +168,20 @@ namespace Glimpse.Ado.AlternateType
 
             LogCommandStart(commandId); 
             var stopwatch = Stopwatch.StartNew();
-
-
-                try
-                {
-                    reader = InnerCommand.ExecuteReader(behavior);
-                }
-                catch (Exception exception)
-                {
-                    LogCommandError(commandId, exception);
-                    throw;
-                }
+            try
+            {
+                reader = InnerCommand.ExecuteReader(behavior);
+            }
+            catch (Exception exception)
+            {
+                LogCommandError(commandId, exception);
+                throw;
+            }
 
             stopwatch.Stop(); 
             LogCommandEnd(commandId, stopwatch.ElapsedMilliseconds, reader.RecordsAffected);
 
-            return new GlimpseDbDataReader(reader, InnerCommand, InnerConnection.ConnectionId, commandId, InspectorContext); 
+            return new GlimpseDbDataReader(reader, InnerCommand, InnerConnection.ConnectionId, commandId); 
         }
 
         public override int ExecuteNonQuery()
@@ -174,15 +191,15 @@ namespace Glimpse.Ado.AlternateType
 
             LogCommandStart(commandId); 
             var stopwatch = Stopwatch.StartNew();
-                try
-                {
-                    num = InnerCommand.ExecuteNonQuery();
-                }
-                catch (Exception exception)
-                {
-                    LogCommandError(commandId, exception);
-                    throw;
-                }
+            try
+            {
+                num = InnerCommand.ExecuteNonQuery();
+            }
+            catch (Exception exception)
+            {
+                LogCommandError(commandId, exception);
+                throw;
+            }
             stopwatch.Stop(); 
             LogCommandEnd(commandId, stopwatch.ElapsedMilliseconds, num);
 
@@ -196,20 +213,39 @@ namespace Glimpse.Ado.AlternateType
 
             LogCommandStart(commandId); 
             var stopwatch = Stopwatch.StartNew();
-                try
-                {
-                    result = InnerCommand.ExecuteScalar();
-                }
-                catch (Exception exception)
-                {
-                    LogCommandError(commandId, exception);
-                    throw;
-                }
+            try
+            {
+                result = InnerCommand.ExecuteScalar();
+            }
+            catch (Exception exception)
+            {
+                LogCommandError(commandId, exception);
+                throw;
+            }
             stopwatch.Stop(); 
             LogCommandEnd(commandId, stopwatch.ElapsedMilliseconds, null);
 
             return result;
         }
+
+//#if NET45
+        protected override Task<DbDataReader> ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+        {
+            return InnerCommand.ExecuteReaderAsync(behavior, cancellationToken);
+        }
+
+
+        public override Task<object> ExecuteScalarAsync(CancellationToken cancellationToken)
+        {
+            return InnerCommand.ExecuteScalarAsync(cancellationToken);
+        }
+
+
+        public override Task<int> ExecuteNonQueryAsync(CancellationToken cancellationToken)
+        {
+            return InnerCommand.ExecuteNonQueryAsync(cancellationToken);
+        }
+//#endif
 
         protected override void Dispose(bool disposing)
         {
@@ -217,23 +253,28 @@ namespace Glimpse.Ado.AlternateType
             {
                 InnerCommand.Dispose();
             }
+
             InnerCommand = null;
             InnerConnection = null;
             base.Dispose(disposing);
         }
-
-
+         
         #region Support Methods
         private static object GetParameterValue(IDataParameter parameter)
         {
-            if (parameter.Value == DBNull.Value) 
-                return "NULL"; 
+            if (parameter.Value == DBNull.Value)
+            {
+                return "NULL";
+            } 
 
             if (parameter.Value is byte[])
             {
                 var builder = new StringBuilder("0x");
-                foreach (byte num in (byte[])parameter.Value) 
-                    builder.Append(num.ToString("X2")); 
+                foreach (var num in (byte[])parameter.Value)
+                {
+                    builder.Append(num.ToString("X2"));
+                } 
+
                 return builder.ToString();
             }
             return parameter.Value;
@@ -241,31 +282,42 @@ namespace Glimpse.Ado.AlternateType
 
         private void LogCommandStart(Guid commandId)
         {
-            IList<Tuple<string, object, string, int>> parameters = null;
-            if (Parameters.Count > 0)
-            { 
-                parameters = new List<Tuple<string, object, string, int>>();
-                foreach (IDbDataParameter parameter in Parameters)
+            if (MessageBroker != null)
+            {
+                IList<Tuple<string, object, string, int>> parameters = null;
+                if (Parameters.Count > 0)
                 {
-                    var parameterName = parameter.ParameterName;
-                    if (!parameterName.StartsWith("@"))
-                        parameterName = "@" + parameterName; 
-                    parameters.Add( new Tuple<string, object, string, int>(parameterName, GetParameterValue(parameter), parameter.DbType.ToString(), parameter.Size));
-                }
-            }
+                    parameters = new List<Tuple<string, object, string, int>>();
+                    foreach (IDbDataParameter parameter in Parameters)
+                    {
+                        var parameterName = parameter.ParameterName;
+                        if (!parameterName.StartsWith("@"))
+                        {
+                            parameterName = "@" + parameterName;
+                        }
 
-            InspectorContext.MessageBroker.Publish(new CommandExecutedMessage(InnerConnection.ConnectionId, commandId, InnerCommand.CommandText, parameters));
+                        parameters.Add(new Tuple<string, object, string, int>(parameterName, GetParameterValue(parameter), parameter.DbType.ToString(), parameter.Size));
+                    }
+                }
+
+                MessageBroker.Publish(new CommandExecutedMessage(InnerConnection.ConnectionId, commandId, InnerCommand.CommandText, parameters));
+            }
         }
 
         private void LogCommandEnd(Guid commandId, long elapsedMilliseconds, int? recordsAffected)
-        { 
-            InspectorContext.MessageBroker.Publish(new CommandDurationAndRowCountMessage(InnerConnection.ConnectionId, commandId, elapsedMilliseconds, recordsAffected));
-
+        {
+            if (MessageBroker != null)
+            {
+                MessageBroker.Publish(new CommandDurationAndRowCountMessage(InnerConnection.ConnectionId, commandId, elapsedMilliseconds, recordsAffected));
+            } 
         }
 
         private void LogCommandError(Guid commandId, Exception exception)
         {
-            InspectorContext.MessageBroker.Publish(new CommandErrorMessage(InnerConnection.ConnectionId, commandId, exception));
+            if (MessageBroker != null)
+            {
+                MessageBroker.Publish(new CommandErrorMessage(InnerConnection.ConnectionId, commandId, exception));
+            }
         }
         #endregion
     }

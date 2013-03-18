@@ -5,30 +5,46 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using Glimpse.Ado.Message;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Framework;
 
 namespace Glimpse.Ado.AlternateType
 {
     internal class GlimpseDbDataReader : DbDataReader
     {
-        public GlimpseDbDataReader(DbDataReader dataReader, DbCommand command, Guid connectionId, Guid statementGuid, IInspectorContext inspectorContext)
+        private IMessageBroker messageBroker;
+
+        public GlimpseDbDataReader(DbDataReader dataReader, DbCommand command, Guid connectionId, Guid commandId)
         {
             InnerDataReader = dataReader;
             InnerCommand = command;        
             ConnectionId = connectionId;
-            CommandId = statementGuid;
-            InspectorContext = inspectorContext;
+            CommandId = commandId; 
         }
 
-
+        public GlimpseDbDataReader(DbDataReader dataReader, DbCommand command, Guid connectionId, Guid commandId, IMessageBroker messageBroker) 
+            : this(dataReader, command, connectionId, commandId)
+        {
+            MessageBroker = messageBroker;
+        }
+         
         private DbDataReader InnerDataReader { get; set; }
+
         private DbCommand InnerCommand { get; set; }
+
         private Guid ConnectionId { get; set; }
-        private Guid CommandId { get; set; }
-        private IInspectorContext InspectorContext { get; set; }
+
+        private Guid CommandId { get; set; } 
+
         private bool Disposed { get; set; }
+
         private int RowCount { get; set; }
 
-
+        private IMessageBroker MessageBroker
+        {
+            get { return messageBroker ?? (messageBroker = GlimpseConfiguration.GetConfiguredMessageBroker()); }
+            set { messageBroker = value; }
+        }
+         
         public override int Depth
         {
             get { return InnerDataReader.Depth; }
@@ -71,22 +87,29 @@ namespace Glimpse.Ado.AlternateType
 
         public override void Close()
         {
-            InspectorContext.MessageBroker.Publish(new CommandRowCountMessage(ConnectionId, CommandId, RowCount));
+            if (MessageBroker != null)
+            {
+                MessageBroker.Publish(new CommandRowCountMessage(ConnectionId, CommandId, RowCount));
+            }
 
-            var inner = this.InnerDataReader as SqlDataReader;
+            var inner = InnerDataReader as SqlDataReader;
             if (!Disposed && inner != null && InnerCommand.Transaction == null && inner.Read())
-                InnerCommand.Cancel(); 
+            {
+                InnerCommand.Cancel();
+            } 
 
             Disposed = true;
-            this.InnerDataReader.Close();
+            InnerDataReader.Close();
         }
 
         protected override void Dispose(bool disposing)
         {
             Disposed = true;
 
-            if (disposing) 
+            if (disposing)
+            {
                 InnerDataReader.Dispose();
+            }
 
             base.Dispose(disposing);
         }
@@ -229,8 +252,11 @@ namespace Glimpse.Ado.AlternateType
         public override bool Read()
         {
             var flag = InnerDataReader.Read();
-            if (flag) 
-                RowCount++; 
+            if (flag)
+            {
+                RowCount++;
+            } 
+
             return flag;
         }
     }

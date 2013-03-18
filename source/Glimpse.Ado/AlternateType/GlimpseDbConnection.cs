@@ -5,26 +5,62 @@ using System.Data.Common;
 using System.Transactions;
 using Glimpse.Ado.Message;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Framework;
 
 namespace Glimpse.Ado.AlternateType
 {
     public class GlimpseDbConnection : DbConnection
     {
-        public GlimpseDbConnection(
-            DbConnection inner, 
-            DbProviderFactory providerFactory, 
-            IInspectorContext inspectorContext, 
-            Guid connectionId)
+        private IMessageBroker messageBroker;
+
+        public GlimpseDbConnection(DbConnection connection)
         {
-            InnerConnection = inner;
+            var providerFactory = connection.TryGenerateProfileProviderFactory();
+
+            InnerConnection = connection;
             InnerProviderFactory = providerFactory;
-            ConnectionId = connectionId;
-            InspectorContext = inspectorContext;
-            InspectorContext.MessageBroker.Publish(new ConnectionStartedMessage(ConnectionId));
+            ConnectionId = Guid.NewGuid();
         }
 
-        private DbProviderFactory InnerProviderFactory { get; set; } 
-        private IInspectorContext InspectorContext { get; set; }
+        public GlimpseDbConnection(DbConnection connection, DbProviderFactory providerFactory)
+            : this(connection, providerFactory, Guid.NewGuid())
+        { 
+        }
+
+        public GlimpseDbConnection(DbConnection connection, DbProviderFactory providerFactory, Guid connectionId)
+        {
+            InnerConnection = connection;
+            InnerProviderFactory = providerFactory;
+            ConnectionId = connectionId;
+
+            if (MessageBroker != null)
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    MessageBroker.Publish(new ConnectionStartedMessage(ConnectionId));
+                }
+
+                connection.StateChange += StateChangeHaneler;               
+            }
+        }
+
+        public GlimpseDbConnection(DbConnection connection, DbProviderFactory providerFactory, Guid connectionId, IMessageBroker messageBroker)
+            : this(connection, providerFactory, connectionId)
+        {
+            MessageBroker = messageBroker;
+        }
+
+        private IMessageBroker MessageBroker
+        {
+            get { return messageBroker ?? (messageBroker = GlimpseConfiguration.GetConfiguredMessageBroker()); }
+            set { messageBroker = value; }
+        }
+
+        private DbProviderFactory InnerProviderFactory { get; set; }
+
+        public DbConnection InnerConnection { get; set; }
+
+        public Guid ConnectionId { get; set; }
 
         public override string ConnectionString
         {
@@ -81,13 +117,12 @@ namespace Glimpse.Ado.AlternateType
 
         public override void Close()
         {
-            InnerConnection.Close();
-            NotifyClosing();
+            InnerConnection.Close(); 
         }
 
         public override void Open()
         {
-            InnerConnection.Open();
+            InnerConnection.Open(); 
         }
 
         public override void EnlistTransaction(Transaction transaction)
@@ -95,8 +130,11 @@ namespace Glimpse.Ado.AlternateType
             InnerConnection.EnlistTransaction(transaction);
             if (transaction != null)
             {
-                transaction.TransactionCompleted += OnDtcTransactionCompleted; 
-                InspectorContext.MessageBroker.Publish(new DtcTransactionEnlistedMessage(ConnectionId, transaction.IsolationLevel));
+                transaction.TransactionCompleted += OnDtcTransactionCompleted;
+                if (MessageBroker != null)
+                {
+                    MessageBroker.Publish(new DtcTransactionEnlistedMessage(ConnectionId, transaction.IsolationLevel));
+                }
             }
         }
          
@@ -114,17 +152,15 @@ namespace Glimpse.Ado.AlternateType
         {
             return InnerConnection.GetSchema(collectionName, restrictionValues);
         }
-
-
-
+         
         protected override DbTransaction BeginDbTransaction(System.Data.IsolationLevel isolationLevel)
         {
-            return new GlimpseDbTransaction(InnerConnection.BeginTransaction(isolationLevel), InspectorContext, this);
+            return new GlimpseDbTransaction(InnerConnection.BeginTransaction(isolationLevel), this);
         }
 
         protected override DbCommand CreateDbCommand()
         {
-            return new GlimpseDbCommand(InnerConnection.CreateCommand(), InspectorContext, this);
+            return new GlimpseDbCommand(InnerConnection.CreateCommand(), this);
         }
 
         protected override object GetService(Type service)
@@ -135,25 +171,15 @@ namespace Glimpse.Ado.AlternateType
         protected override void Dispose(bool disposing)
         {
             if (disposing && InnerConnection != null)
-            { 
+            {
                 InnerConnection.Dispose();
+                InnerConnection.StateChange -= StateChangeHaneler;
             }
             InnerConnection = null;
             InnerProviderFactory = null;
             base.Dispose(disposing);
         }
-
-        private void NotifyClosing()
-        {
-            InspectorContext.MessageBroker.Publish(new ConnectionClosedMessage(ConnectionId));
-        }
-
-        public DbConnection InnerConnection { get; set; }
-
-        public Guid ConnectionId { get; set; }
-
-        
-
+         
         private void OnDtcTransactionCompleted(object sender, TransactionEventArgs args)
         {
             TransactionStatus aborted;
@@ -165,7 +191,23 @@ namespace Glimpse.Ado.AlternateType
             {
                 aborted = TransactionStatus.Aborted;
             }
-            InspectorContext.MessageBroker.Publish(new DtcTransactionCompletedMessage(ConnectionId, aborted));
+
+            if (MessageBroker != null)
+            {
+                MessageBroker.Publish(new DtcTransactionCompletedMessage(ConnectionId, aborted));
+            }
+        }
+
+        private void StateChangeHaneler(object sender, StateChangeEventArgs args)
+        { 
+            if (args.CurrentState == ConnectionState.Open)
+            {
+                MessageBroker.Publish(new ConnectionStartedMessage(ConnectionId));
+            }
+            else if (args.CurrentState == ConnectionState.Closed)
+            {
+                MessageBroker.Publish(new ConnectionClosedMessage(ConnectionId));
+            } 
         }
     }
 }

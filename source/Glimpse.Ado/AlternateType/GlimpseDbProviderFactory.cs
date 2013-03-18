@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data.Common;
-using System.Reflection;
-using Glimpse.Core.Extensibility;
+using System.Reflection; 
 
 namespace Glimpse.Ado.AlternateType
 {
@@ -11,95 +10,86 @@ namespace Glimpse.Ado.AlternateType
 
     public class GlimpseDbProviderFactory<TProviderFactory> : GlimpseDbProviderFactory, IServiceProvider
         where TProviderFactory : DbProviderFactory
-    {        
-        public static readonly GlimpseDbProviderFactory<TProviderFactory> Instance;
-        private static IInspectorContext inspectorContext;
-        private readonly TProviderFactory inner;
+    {   
+        public static readonly GlimpseDbProviderFactory<TProviderFactory> Instance = new GlimpseDbProviderFactory<TProviderFactory>();
         
-        // TODO: this is a hack, but found no way to inject or locate as yet:
-        public static IInspectorContext InspectorContext
-        {
-            get
-            {
-                if(inspectorContext == null)
-                {
-                    throw new InvalidOperationException("The Pipeline Inspector was not set!");
-                }
-                return inspectorContext;
-            }
-            set
-            {
-                if(value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-                inspectorContext = value;
-            }
-        }
-
-        static GlimpseDbProviderFactory()
-        {
-            //Needs to be a singleton - http://ljusberg.se/blogs/smorakning/archive/2005/11/28/Custom-Data-Provider-_2800_continued_2900_.aspx
-            Instance = new GlimpseDbProviderFactory<TProviderFactory>();
-        }
-
         public GlimpseDbProviderFactory()
         {            
             var field = typeof(TProviderFactory).GetField("Instance", BindingFlags.Public | BindingFlags.Static);
             if (field == null)
+            {
                 throw new NotSupportedException("Provider doesn't have Instance property.");
-            inner = (TProviderFactory)field.GetValue(null);           
-        } 
+            }
+
+            InnerFactory = (TProviderFactory)field.GetValue(null);           
+        }
+
+        private TProviderFactory InnerFactory { get; set; }
 
         public override bool CanCreateDataSourceEnumerator
         {
-            get { return inner.CanCreateDataSourceEnumerator; }
+            get { return InnerFactory.CanCreateDataSourceEnumerator; }
         }
 
         public override DbCommand CreateCommand()
         { 
-            return new GlimpseDbCommand(inner.CreateCommand(), InspectorContext);
+            return new GlimpseDbCommand(InnerFactory.CreateCommand());
         }
 
         public override DbCommandBuilder CreateCommandBuilder()
         {
-            return inner.CreateCommandBuilder();
+            return InnerFactory.CreateCommandBuilder();
         }
 
         public override DbConnection CreateConnection()
         { 
-            return new GlimpseDbConnection(inner.CreateConnection(), this, InspectorContext, Guid.NewGuid());
+            return new GlimpseDbConnection(InnerFactory.CreateConnection(), this);
         }
 
         public override DbConnectionStringBuilder CreateConnectionStringBuilder()
         {
-            return inner.CreateConnectionStringBuilder();
+            return InnerFactory.CreateConnectionStringBuilder();
         }
 
         public override DbDataAdapter CreateDataAdapter()
         {
-            return new GlimpseDbDataAdapter(inner.CreateDataAdapter()); 
+            return new GlimpseDbDataAdapter(InnerFactory.CreateDataAdapter()); 
         }
 
         public override DbDataSourceEnumerator CreateDataSourceEnumerator()
         {
-            return inner.CreateDataSourceEnumerator();
+            return InnerFactory.CreateDataSourceEnumerator();
         }
 
         public override DbParameter CreateParameter()
         {
-            return inner.CreateParameter();
+            return InnerFactory.CreateParameter();
         }
          
         public object GetService(Type serviceType)
         {
             if (serviceType == GetType()) 
-                return this.inner; 
+                return InnerFactory;
 
-            var service = ((IServiceProvider)this.inner).GetService(serviceType);
-            var inner = service as DbProviderServices;
-            if (inner != null)
-                return new GlimpseDbProviderServices(inner, InspectorContext); 
+            var service = ((IServiceProvider)InnerFactory).GetService(serviceType);
+
+            // HACK: To make things easier on ourselves we are going to try and see
+            // what we can do for people using EF. If they are using EF but don't have
+            // Glimpse.EF then we throw because the exception that will be caused down 
+            // the track by EF isn't obvious as to whats going on. When it gets to 
+            // requesting DbProviderServices, if we don't return the profiled version, 
+            // when GetDbProviderManifestToken is called, it passes in a GlimpseDbConnection rather than the inner connection. This is a problem because the GetDbProviderManifestToken trys to cast the connection to its concreat type
+            if (serviceType.FullName == "System.Data.Common.DbProviderServices")
+            {
+                var type = Type.GetType("Glimpse.EF.AlternateType.GlimpseDbProviderServices, Glimpse.EF", false);
+                if (type != null)
+                {
+                    return Activator.CreateInstance(type, service);
+                } 
+                
+                throw new NotSupportedException(Resources.GlimpseEFNotPresent);  
+            }
+
             return service;
         }
     }
