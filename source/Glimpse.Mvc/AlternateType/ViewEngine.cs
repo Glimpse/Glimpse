@@ -55,7 +55,19 @@ namespace Glimpse.Mvc.AlternateType
                 var output = context.ReturnValue as ViewEngineResult;
                 output = ProxyOutput(output, context, args.ViewName, IsPartial, id);
 
-                var message = new Message(id, args.ViewName, args.MasterName, args.UseCache, output.SearchedLocations, context.TargetType, IsPartial, output.View != null)
+                string displayModeId = null;
+                Type displayModeType = null;
+
+#if MVC4
+                var displayMode = args.ControllerContext.DisplayMode;
+                if (displayMode != null)
+                {
+                    displayModeId = displayMode.DisplayModeId;
+                    displayModeType = displayMode.GetType();
+                }
+#endif
+
+                var message = new Message(id, args.ViewName, args.MasterName, args.UseCache, output.SearchedLocations, context.TargetType, IsPartial, output.View != null, displayModeId, displayModeType)
                     .AsActionMessage(args.ControllerContext)
                     .AsChildActionMessage(args.ControllerContext)
                     .AsSourceMessage(context.InvocationTarget.GetType(), context.MethodInvocationTarget)
@@ -105,7 +117,7 @@ namespace Glimpse.Mvc.AlternateType
 
             public class Message : ISourceMessage, IChildActionMessage, ITimedMessage
             {
-                public Message(Guid id, string viewName, string masterName, bool useCache, IEnumerable<string> searchedLocations, Type baseType, bool isPartial, bool isFound)
+                public Message(Guid id, string viewName, string masterName, bool useCache, IEnumerable<string> searchedLocations, Type baseType, bool isPartial, bool isFound, string displayModeId, Type displayModeType)
                 {
                     Id = id;
                     ViewName = viewName;
@@ -115,6 +127,8 @@ namespace Glimpse.Mvc.AlternateType
                     BaseType = baseType;
                     IsPartial = isPartial;
                     IsFound = isFound;
+                    DisplayModeId = displayModeId;
+                    DisplayModeType = displayModeType;
                 }
 
                 public Guid Id { get; private set; }
@@ -132,6 +146,10 @@ namespace Glimpse.Mvc.AlternateType
                 public DateTime StartTime { get; set; }
                 
                 public string EventName { get; set; }
+
+                public string DisplayModeId { get; set; }
+
+                public Type DisplayModeType { get; set; }
                 
                 public TimelineCategory EventCategory { get; set; }
                 

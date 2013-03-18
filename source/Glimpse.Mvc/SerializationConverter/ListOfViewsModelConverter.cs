@@ -44,6 +44,10 @@ namespace Glimpse.Mvc.SerializationConverter
             var summary = model.ViewModelSummary;
 
             var section = new TabObject();
+            if (summary.HasDisplayMode)
+            {
+                section.AddRow().Key("Display Mode").Value(summary.DisplayModeName);                
+            }
             section.AddRow().Key("Model Type").Value(summary.ModelType);
             section.AddRow().Key("Model State Valid").Value(summary.IsValid);
             section.AddRow().Key("TempData Keys").Value(summary.TempDataKeys);

@@ -19,7 +19,7 @@ namespace Glimpse.Mvc.Model
             if (viewRender != null)
             {
                 SourceController = viewRender.ControllerName;
-                ViewModelSummary = new ViewModelSummary(viewRender.ViewData, viewRender.TempData, viewRender.ViewDataModelType, viewRender.ModelStateIsValid);
+                ViewModelSummary = new ViewModelSummary(viewRender.ViewData, viewRender.TempData, viewRender.ViewDataModelType, viewRender.ModelStateIsValid, viewEngineFindView.DisplayModeId, viewEngineFindView.DisplayModeType);
             }
         }
 
