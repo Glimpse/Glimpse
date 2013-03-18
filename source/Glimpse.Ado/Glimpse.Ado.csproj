@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlternateType\Support.cs" />
     <Compile Include="Extensibility\ICommandParameterParser.cs" />
     <Compile Include="Inspector\AdoInspector.cs" />
     <Compile Include="Message\AdoCommandMessage.cs" />
