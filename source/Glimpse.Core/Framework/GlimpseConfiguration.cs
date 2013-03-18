@@ -11,12 +11,12 @@ namespace Glimpse.Core.Framework
     {
         private static IMessageBroker messageBroker;
         private static Func<IExecutionTimer> timerStrategy;
+        private static ILogger logger;
         private ICollection<IClientScript> clientScripts;
         private IResource defaultResource;
         private string endpointBaseUri;
         private IFrameworkProvider frameworkProvider;
         private IHtmlEncoder htmlEncoder;
-        private ILogger logger;
         private IPersistenceStore persistenceStore;
         private ICollection<IInspector> inspectors;
         private IProxyFactory proxyFactory;
@@ -601,15 +601,21 @@ namespace Glimpse.Core.Framework
                 timerStrategy = value;
             }
         }
+         
+        [Obsolete("HACK: To support TraceListener with TraceSource via web.config")]
+        public static ILogger GetLogger()
+        {
+            return logger;
+        }
 
-        // HACK: To support TraceListener with TraceSource via web.config
-        internal static Func<IExecutionTimer> GetConfiguredTimerStrategy()
+        [Obsolete("HACK: To support TraceListener with TraceSource via web.config")]
+        public static Func<IExecutionTimer> GetConfiguredTimerStrategy()
         {
             return timerStrategy;
         }
 
-        // HACK: To support TraceListener with TraceSource via web.config
-        internal static IMessageBroker GetConfiguredMessageBroker()
+        [Obsolete("HACK: To support TraceListener with TraceSource via web.config")]
+        public static IMessageBroker GetConfiguredMessageBroker()
         {
             return messageBroker;
         }
