@@ -117,4 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="GlimpseEFNotPresent" xml:space="preserve">
+    <value>Unfortunately we don't support using Glimpse.Ado without using Glimpse.EF when you are using EntityFramework. This is due to the way in which EntityFramework handles particular cases.</value>
+  </data>
 </root>

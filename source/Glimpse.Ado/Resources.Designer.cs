@@ -59,5 +59,14 @@ namespace Glimpse.Ado {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unfortunately we don&apos;t support using Glimpse.Ado without using Glimpse.EF when you are using EntityFramework. This is due to the way in which EntityFramework handles particular cases..
+        /// </summary>
+        internal static string GlimpseEFNotPresent {
+            get {
+                return ResourceManager.GetString("GlimpseEFNotPresent", resourceCulture);
+            }
+        }
     }
 }
