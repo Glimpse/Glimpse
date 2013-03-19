@@ -4,21 +4,19 @@
     <metadata>
         <id>Glimpse.Ado</id>
         <version>0.0.0</version><!-- Replaced at build time by AssemblyInformationalVersion in AssemblyInfo.cs -->
-        <title>Glimpse for ASP.NET</title>
+        <title>Glimpse for ADO.NET</title>
         <authors>nmolnar, avanderhoorn</authors>
         <owners>nmolnar, avanderhoorn</owners>
         <licenseUrl>http://www.opensource.org/licenses/apache2.0</licenseUrl>
         <projectUrl>http://getglimpse.com</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <iconUrl>http://getglimpse.com/content/glimpse100.png</iconUrl>
-        <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET 4.0 application. For ASP.NET MVC3 support, please NuGet Glimpse.MVC3.</description>
-        <summary>ASP.NET 4.0 web debugging and diagnostics tool.</summary>
-        <releaseNotes>
-          Initial cut of ADO support
-        </releaseNotes>
-        <tags>ASP.NET Web WebForms Glimpse</tags>
+        <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET 3.5+ application. This package adds ADO profiling for those using DbProviderFactory.</description>
+        <summary>ASP.NET 3.5+ web debugging and diagnostics tool.</summary>
+        <releaseNotes>Initial cut of ADO support</releaseNotes>
+        <tags>ASP.NET Web WebForms Glimpse ADO ADO.NET</tags>
         <dependencies>
-          <dependency id="Glimpse" version="1.0.0" />
+          <dependency id="Glimpse" version="1.0.2" />
         </dependencies>
     </metadata>
     <files>
@@ -29,6 +27,5 @@
         <!--<file src="readme.txt" target="readme.txt" />-->
         <file src="..\..\Glimpse.Ado\**\*.cs" target="src" />
         <file src="..\..\Glimpse.Ado\Resources.resx" target="src" />
-        <file src="..\..\Glimpse.Ado.Net35\Backport\Net35Backport.cs" target="src" />
     </files>
 </package>
