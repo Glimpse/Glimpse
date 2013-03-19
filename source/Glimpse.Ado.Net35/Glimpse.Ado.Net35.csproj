@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4e0483e0-a87c-40c6-a82e-078d1df8c0ac}</ProjectGuid>
+    <ProjectGuid>{4E0483E0-A87C-40C6-A82E-078D1DF8C0AC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Glimpse.Ado.Net35</RootNamespace>
@@ -34,7 +34,9 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" /> 
+    <Reference Include="System.Data" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Glimpse.Ado\**\*.cs" Exclude="..\Glimpse.Ado\Properties\AssemblyInfo.cs">
