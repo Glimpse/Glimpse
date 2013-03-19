@@ -72,6 +72,22 @@ task clean {
     "   Glimpse.Mvc3.MusicStore.Sample"
     Delete-Directory "$source_dir\Glimpse.Mvc3.MusicStore.Sample\bin"
     Delete-Directory "$source_dir\Glimpse.Mvc3.MusicStore.Sample\obj"
+    
+    "   Glimpse.Ado"
+    Delete-Directory "$source_dir\Glimpse.Ado\bin"
+    Delete-Directory "$source_dir\Glimpse.Ado\obj"
+
+    "   Glimpse.Ado.Net45"
+    Delete-Directory "$source_dir\Glimpse.Ado.Net45\bin"
+    Delete-Directory "$source_dir\Glimpse.Ado.Net45\obj"
+    
+    "   Glimpse.Ado.Net40"
+    Delete-Directory "$source_dir\Glimpse.Ado.Net40\bin"
+    Delete-Directory "$source_dir\Glimpse.Ado.Net40\obj"
+
+    "   Glimpse.Ado.Net35"
+    Delete-Directory "$source_dir\Glimpse.Ado.Net35\bin"
+    Delete-Directory "$source_dir\Glimpse.Ado.Net35\obj"
         
     "   Glimpse.Test.*"
     Delete-Directory "$source_dir\Glimpse.Test.AspNet\bin"
@@ -124,6 +140,15 @@ task merge -depends test {
     
     "   Glimpse.AspNet.Net35"
     copy $source_dir\Glimpse.AspNet.Net35\bin\Release\Glimpse.AspNet.* $source_dir\Glimpse.AspNet.Net45\nuspec\lib\net35\
+    
+    "   Glimpse.Ado.Net45"
+    copy $source_dir\Glimpse.Ado.Net45\bin\Release\Glimpse.Ado.* $source_dir\Glimpse.Ado.Net45\nuspec\lib\net45\
+    
+    "   Glimpse.Ado.Net40"
+    copy $source_dir\Glimpse.Ado.Net40\bin\Release\Glimpse.Ado.* $source_dir\Glimpse.Ado.Net45\nuspec\lib\net40\   
+    
+    "   Glimpse.Ado.Net35"
+    copy $source_dir\Glimpse.Ado.Net35\bin\Release\Glimpse.Ado.* $source_dir\Glimpse.Ado.Net45\nuspec\lib\net35\
 
     "   Glimpse.Mvc2"
     copy $source_dir\Glimpse.Mvc2\bin\Release\Glimpse.Mvc2.* $source_dir\Glimpse.Mvc2\nuspec\lib\net35\
@@ -161,6 +186,11 @@ task pack -depends merge {
     $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.Mvc4\Properties\AssemblyInfo.cs | Update-AssemblyInformationalVersion
     exec { & .\nuget.exe pack $source_dir\Glimpse.Mvc4\NuSpec\Glimpse.Mvc4.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
     
+    "   Glimpse.Ado.nuspec"
+    $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.Ado.Net45\Properties\AssemblyInfo.cs | Update-AssemblyInformationalVersion
+    exec { & .\nuget.exe pack $source_dir\Glimpse.Ado.Net45\NuSpec\Glimpse.Ado.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
+    
+    
     "   Glimpse.zip"
     New-Item $build_dir\local\zip\Core\net45 -Type directory -Force > $null
     New-Item $build_dir\local\zip\Core\net40 -Type directory -Force > $null
@@ -171,6 +201,9 @@ task pack -depends merge {
     New-Item $build_dir\local\zip\MVC2\net35 -Type directory -Force > $null
     New-Item $build_dir\local\zip\MVC3\net40 -Type directory -Force > $null
     New-Item $build_dir\local\zip\MVC4\net45 -Type directory -Force > $null
+    New-Item $build_dir\local\zip\Ado\net45 -Type directory -Force > $null
+    New-Item $build_dir\local\zip\Ado\net40 -Type directory -Force > $null
+    New-Item $build_dir\local\zip\Ado\net35 -Type directory -Force > $null
 
     copy $base_dir\license.txt $build_dir\local\zip
     
@@ -187,6 +220,10 @@ task pack -depends merge {
     copy $source_dir\Glimpse.Mvc3\nuspec\lib\net40\Glimpse.Mvc3.* $build_dir\local\zip\Mvc3\net40
     copy $source_dir\Glimpse.Mvc4\nuspec\lib\net45\Glimpse.Mvc4.* $build_dir\local\zip\Mvc4\net45
         
+    copy $source_dir\Glimpse.Ado.Net45\nuspec\lib\net45\Glimpse.Ado.* $build_dir\local\zip\Ado\net45
+    copy $source_dir\Glimpse.Ado.Net45\nuspec\lib\net40\Glimpse.Ado.* $build_dir\local\zip\Ado\net40
+    copy $source_dir\Glimpse.Ado.Net45\nuspec\lib\net35\Glimpse.Ado.* $build_dir\local\zip\Ado\net35
+    
     #TODO: Add help .CHM file
     
     Create-Zip $build_dir\local\zip $build_dir\local\Glimpse.zip
