@@ -284,10 +284,10 @@ namespace Glimpse.Ado.AlternateType
         {
             if (MessageBroker != null)
             {
-                IList<Tuple<string, object, string, int>> parameters = null;
+                IList<CommandExecutedParamater> parameters = null;
                 if (Parameters.Count > 0)
                 {
-                    parameters = new List<Tuple<string, object, string, int>>();
+                    parameters = new List<CommandExecutedParamater>();
                     foreach (IDbDataParameter parameter in Parameters)
                     {
                         var parameterName = parameter.ParameterName;
@@ -296,7 +296,7 @@ namespace Glimpse.Ado.AlternateType
                             parameterName = "@" + parameterName;
                         }
 
-                        parameters.Add(new Tuple<string, object, string, int>(parameterName, GetParameterValue(parameter), parameter.DbType.ToString(), parameter.Size));
+                        parameters.Add(new CommandExecutedParamater { Name = parameterName, Value = GetParameterValue(parameter), Type = parameter.DbType.ToString(), Size = parameter.Size });
                     }
                 }
 

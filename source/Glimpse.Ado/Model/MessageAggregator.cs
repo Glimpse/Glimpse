@@ -53,10 +53,10 @@ namespace Glimpse.Ado.Model
                     {
                         var parameterMetadata = new CommandParameterMetadata
                         {
-                            Name = parameter.Item1,
-                            Value = parameter.Item2,
-                            Type = parameter.Item3,
-                            Size = parameter.Item4
+                            Name = parameter.Name,
+                            Value = parameter.Value,
+                            Type = parameter.Type,
+                            Size = parameter.Size
                         };
                         command.Parameters.Add(parameterMetadata);
                     }
