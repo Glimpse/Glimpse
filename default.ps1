@@ -135,7 +135,7 @@ task docs -depends compile {
     "   Glimpse.Core.Documentation.Api"
     
     exec { msbuild $source_dir\Glimpse.Core.Documentation.Api\Glimpse.Core.Documentation.Api.shfbproj /p:Configuration=$config /nologo /verbosity:minimal }
-    copy $source_dir\Glimpse.Core.Documentation.Api\Help\Glimpse.Core.Documentation.chm $source_dir\Glimpse.Core\nuspec\docs\Glimpse.Core.Documentation.chm
+    copy $source_dir\Glimpse.Core.Documentation.Api\Help\Glimpse.Core.Documentation.chm $source_dir\Glimpse.Core.Net45\nuspec\docs\Glimpse.Core.Documentation.chm
 }
 
 task merge -depends test {
