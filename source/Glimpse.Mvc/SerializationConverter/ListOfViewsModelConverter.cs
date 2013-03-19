@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using Glimpse.Core.Extensibility;
 using Glimpse.Mvc.Model;
 
@@ -41,13 +39,19 @@ namespace Glimpse.Mvc.SerializationConverter
                 return searchedLocations;
             }
 
+            var section = new TabObject();
             var summary = model.ViewModelSummary;
 
-            var section = new TabObject();
+            if (summary == null)
+            {
+                return section;
+            }
+
             if (summary.HasDisplayMode)
             {
                 section.AddRow().Key("Display Mode").Value(summary.DisplayModeName);                
             }
+
             section.AddRow().Key("Model Type").Value(summary.ModelType);
             section.AddRow().Key("Model State Valid").Value(summary.IsValid);
             section.AddRow().Key("TempData Keys").Value(summary.TempDataKeys);
