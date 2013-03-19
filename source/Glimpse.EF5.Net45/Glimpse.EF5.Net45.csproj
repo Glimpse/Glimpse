@@ -39,9 +39,15 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" /> 
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Glimpse.EF\**\*.cs" Exclude="..\Glimpse.EF\Properties\AssemblyInfo.cs">
@@ -63,6 +69,10 @@
     <Folder Include="NuSpec\lib\net45\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Glimpse.Ado.Net45\Glimpse.Ado.Net45.csproj">
+      <Project>{1594add8-62f8-417b-bd69-131afbbf51bc}</Project>
+      <Name>Glimpse.Ado.Net45</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Glimpse.Core.Net45\Glimpse.Core.Net45.csproj">
       <Project>{2cb2400f-bc66-4074-b6e4-177a6f78163e}</Project>
       <Name>Glimpse.Core.Net45</Name>

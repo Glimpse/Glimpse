@@ -36,9 +36,15 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" /> 
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Glimpse.EF\**\*.cs" Exclude="..\Glimpse.EF\Properties\AssemblyInfo.cs">
@@ -53,6 +59,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Glimpse.Ado.Net40\Glimpse.Ado.Net40.csproj">
+      <Project>{ee152a2e-e27f-4329-a40a-6951387d3629}</Project>
+      <Name>Glimpse.Ado.Net40</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Glimpse.Core.Net40\Glimpse.Core.Net40.csproj">
       <Project>{dd93b23c-e2d7-4283-9f3f-88f87271018b}</Project>
       <Name>Glimpse.Core.Net40</Name>
