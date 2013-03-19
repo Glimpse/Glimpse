@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Glimpse for ADO Assembly")]
 [assembly: AssemblyDescription("Main extensibility implementations for running Glimpse with ADO.")]
-[assembly: AssemblyProduct("Glimpse")]
+[assembly: AssemblyProduct("Glimpse.ADO")]
 [assembly: AssemblyCopyright("© 2012 Nik Molnar & Anthony van der Hoorn")]
 [assembly: AssemblyTrademark("Glimpse™")]
 
