@@ -6,10 +6,10 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
-//#if NET45
+#if NET45
 using System.Threading;
 using System.Threading.Tasks;
-//#endif
+#endif
 using Glimpse.Ado.Message;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
@@ -228,7 +228,7 @@ namespace Glimpse.Ado.AlternateType
             return result;
         }
 
-//#if NET45
+#if NET45
         protected override Task<DbDataReader> ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
         {
             return InnerCommand.ExecuteReaderAsync(behavior, cancellationToken);
@@ -245,7 +245,7 @@ namespace Glimpse.Ado.AlternateType
         {
             return InnerCommand.ExecuteNonQueryAsync(cancellationToken);
         }
-//#endif
+#endif
 
         protected override void Dispose(bool disposing)
         {
