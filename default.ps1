@@ -88,6 +88,26 @@ task clean {
     "   Glimpse.Ado.Net35"
     Delete-Directory "$source_dir\Glimpse.Ado.Net35\bin"
     Delete-Directory "$source_dir\Glimpse.Ado.Net35\obj"
+    
+    "   Glimpse.EF43.Net40"
+    Delete-Directory "$source_dir\Glimpse.EF43.Net40\bin"
+    Delete-Directory "$source_dir\Glimpse.EF43.Net40\obj"
+
+    "   Glimpse.EF5.Net45"
+    Delete-Directory "$source_dir\Glimpse.EF5.Net45\bin"
+    Delete-Directory "$source_dir\Glimpse.EF5.Net45\obj"
+    
+    "   Glimpse.EF5.Net40"
+    Delete-Directory "$source_dir\Glimpse.EF5.Net40\bin"
+    Delete-Directory "$source_dir\Glimpse.EF5.Net40\obj"
+
+    "   Glimpse.EF6.Net45"
+    Delete-Directory "$source_dir\Glimpse.EF6.Net45\bin"
+    Delete-Directory "$source_dir\Glimpse.EF6.Net45\obj"
+    
+    "   Glimpse.EF6.Net40"
+    Delete-Directory "$source_dir\Glimpse.EF6.Net40\bin"
+    Delete-Directory "$source_dir\Glimpse.EF6.Net40\obj"
         
     "   Glimpse.Test.*"
     Delete-Directory "$source_dir\Glimpse.Test.AspNet\bin"
@@ -159,6 +179,20 @@ task merge -depends test {
     "   Glimpse.Mvc4"
     copy $source_dir\Glimpse.Mvc4\bin\Release\Glimpse.Mvc4.* $source_dir\Glimpse.Mvc4\nuspec\lib\net45\
     
+    "   Glimpse.EF43.Net40"
+    copy $source_dir\Glimpse.EF43.Net40\bin\Release\Glimpse.EF43.* $source_dir\Glimpse.EF43.Net40\nuspec\lib\net40\   
+    
+    "   Glimpse.EF5.Net45"
+    copy $source_dir\Glimpse.EF5.Net45\bin\Release\Glimpse.EF5.* $source_dir\Glimpse.EF5.Net45\nuspec\lib\net45\
+    
+    "   Glimpse.EF5.Net40"
+    copy $source_dir\Glimpse.EF5.Net40\bin\Release\Glimpse.EF5.* $source_dir\Glimpse.EF5.Net45\nuspec\lib\net40\   
+
+    "   Glimpse.EF6.Net45"
+    copy $source_dir\Glimpse.EF6.Net45\bin\Release\Glimpse.EF6.* $source_dir\Glimpse.EF6.Net45\nuspec\lib\net45\
+    
+    "   Glimpse.EF6.Net40"
+    copy $source_dir\Glimpse.EF6.Net40\bin\Release\Glimpse.EF6.* $source_dir\Glimpse.EF6.Net45\nuspec\lib\net40\ 
 }
 
 task pack -depends merge {
@@ -190,6 +224,18 @@ task pack -depends merge {
     $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.Ado.Net45\Properties\AssemblyInfo.cs | Update-AssemblyInformationalVersion
     exec { & .\nuget.exe pack $source_dir\Glimpse.Ado.Net45\NuSpec\Glimpse.Ado.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
     
+    "   Glimpse.EF43.nuspec"
+    $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.EF43.Net40\Properties\AssemblyInfo.cs | Update-AssemblyInformationalVersion
+    exec { & .\nuget.exe pack $source_dir\Glimpse.EF43.Net40\NuSpec\Glimpse.EF43.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
+    
+    "   Glimpse.EF5.nuspec"
+    $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.EF5.Net45\Properties\AssemblyInfo.cs | Update-AssemblyInformationalVersion
+    exec { & .\nuget.exe pack $source_dir\Glimpse.EF5.Net45\NuSpec\Glimpse.EF5.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
+
+    "   Glimpse.EF6.nuspec"
+    $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.EF6.Net45\Properties\AssemblyInfo.cs | Update-AssemblyInformationalVersion
+    exec { & .\nuget.exe pack $source_dir\Glimpse.EF6.Net45\NuSpec\Glimpse.EF6.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
+    
     
     "   Glimpse.zip"
     New-Item $build_dir\local\zip\Core\net45 -Type directory -Force > $null
@@ -204,6 +250,11 @@ task pack -depends merge {
     New-Item $build_dir\local\zip\Ado\net45 -Type directory -Force > $null
     New-Item $build_dir\local\zip\Ado\net40 -Type directory -Force > $null
     New-Item $build_dir\local\zip\Ado\net35 -Type directory -Force > $null
+    New-Item $build_dir\local\zip\EF43\net40 -Type directory -Force > $null
+    New-Item $build_dir\local\zip\EF5\net45 -Type directory -Force > $null
+    New-Item $build_dir\local\zip\EF5\net40 -Type directory -Force > $null
+    New-Item $build_dir\local\zip\EF6\net45 -Type directory -Force > $null
+    New-Item $build_dir\local\zip\EF6\net40 -Type directory -Force > $null
 
     copy $base_dir\license.txt $build_dir\local\zip
     
@@ -223,6 +274,12 @@ task pack -depends merge {
     copy $source_dir\Glimpse.Ado.Net45\nuspec\lib\net45\Glimpse.Ado.* $build_dir\local\zip\Ado\net45
     copy $source_dir\Glimpse.Ado.Net45\nuspec\lib\net40\Glimpse.Ado.* $build_dir\local\zip\Ado\net40
     copy $source_dir\Glimpse.Ado.Net45\nuspec\lib\net35\Glimpse.Ado.* $build_dir\local\zip\Ado\net35
+    
+    copy $source_dir\Glimpse.EF43.Net40\nuspec\lib\Net40\Glimpse.EF43.* $build_dir\local\zip\EF43\Net40
+    copy $source_dir\Glimpse.EF5.Net45\nuspec\lib\net45\Glimpse.EF5.* $build_dir\local\zip\EF5\net45
+    copy $source_dir\Glimpse.EF5.Net45\nuspec\lib\net40\Glimpse.EF5.* $build_dir\local\zip\EF5\net40
+    copy $source_dir\Glimpse.EF6.Net45\nuspec\lib\net45\Glimpse.EF6.* $build_dir\local\zip\EF6\net45
+    copy $source_dir\Glimpse.EF6.Net45\nuspec\lib\net40\Glimpse.EF6.* $build_dir\local\zip\EF6\net40
     
     #TODO: Add help .CHM file
     
