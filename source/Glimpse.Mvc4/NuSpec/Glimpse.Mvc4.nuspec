@@ -19,10 +19,11 @@
         <tags>ASP.NET Web MVC Glimpse</tags>
         <dependencies>
           <dependency id="Glimpse.AspNet" version="1.0.1" />
+          <dependency id="Microsoft.AspNet.Mvc" version="4.0.20710.0" />
         </dependencies>
     </metadata>
     <files>
-        <file src="lib\net45\*.*" target="lib\net45" />
+        <file src="lib\net40\*.*" target="lib\net40" />
         <file src="..\..\Glimpse.Mvc\**\*.*" target="src" exclude="..\..\Glimpse.Mvc\bin\**;..\..\Glimpse.Mvc\obj\**;" />
     </files>
 </package>
