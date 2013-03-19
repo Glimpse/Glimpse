@@ -55,7 +55,7 @@
     <EmbeddedResource Include="..\Glimpse.EF\Resources.resx" />
   </ItemGroup> 
   <ItemGroup>
-    <None Include="NuSpec\Glimpse.EF.nuspec">
+    <None Include="NuSpec\Glimpse.EF43.nuspec">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
