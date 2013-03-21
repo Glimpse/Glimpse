@@ -7,6 +7,13 @@ namespace Glimpse.Ado.AlternateType
     {
         public static DbProviderFactory TryGetProviderFactory(this DbConnection connection)
         {
+            // If we can pull it out quickly and easily
+            var profiledConnection = connection as GlimpseDbConnection;
+            if (profiledConnection != null)
+            {
+                return profiledConnection.InnerProviderFactory;
+            }
+
 #if (NET45)
             return DbProviderFactories.GetFactory(connection);
 #else
