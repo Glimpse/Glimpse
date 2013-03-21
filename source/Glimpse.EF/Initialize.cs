@@ -6,7 +6,7 @@ namespace Glimpse.EF
     {
         public static void EF(this Glimpse.Core.Setting.Initializer initializer)
         {
-            var wrapper = new EntityFrameworkExectutionBlock();
+            var wrapper = new EntityFrameworkExecutionBlock();
             wrapper.Execute();
         }
     }

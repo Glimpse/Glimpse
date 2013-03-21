@@ -6,11 +6,12 @@ using System.Reflection;
 using Glimpse.Ado.AlternateType;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
+using Glimpse.Core.Framework.Support;
 using Glimpse.EF.AlternateType;
 
 namespace Glimpse.EF.Inspector.Core
 {
-    public class EntityFrameworkExectutionBlock
+    public class EntityFrameworkExecutionBlock : ExecutionBlockBase
     {
         private static object hasInitalizedLock = new object();
         private static bool hasInitalized = false;
