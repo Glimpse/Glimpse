@@ -84,77 +84,9 @@ namespace Glimpse.EF.Inspector.Core
             newRow["Name"] = "Entity Provider Factory";
             newRow["Description"] = "";
             newRow["InvariantName"] = typeof(System.Data.Entity.Core.EntityClient.EntityProviderFactory).FullName;
-            newRow["AssemblyQualifiedName"] = typeof(GlimpseDbProviderFactory<System.Data.Entity.Core.EntityClient.EntityProviderFactory>).FullName;
+            newRow["AssemblyQualifiedName"] = typeof(GlimpseDbProviderFactory<System.Data.Entity.Core.EntityClient.EntityProviderFactory>).AssemblyQualifiedName;
 
             table.Rows.Add(newRow);
-
-
-            ProviderRowFinder.Test();
-        }
-    }
-
-
-    internal class ProviderRowFinder
-    { 
-        public static void Test()
-        { 
-            var dataRows = Support.FindDbProviderFactoryTable().Rows.OfType<DataRow>();
-            var factory = typeof(GlimpseDbProviderFactory<System.Data.Entity.Core.EntityClient.EntityProviderFactory>);
-
-            var row = FindRow(
-                factory.GetType(),
-                r => DbProviderFactories.GetFactory(r).GetType() == factory.GetType(),
-                dataRows);
-
-            var test = 1;
-        }
-
-        public static DataRow FindRow(Type hintType, Func<DataRow, bool> selector, IEnumerable<DataRow> dataRows)
-        { 
-            const int assemblyQualifiedNameIndex = 3;
-
-            var assemblyHint = hintType == null ? null : new AssemblyName(hintType.Assembly.FullName);
-
-            foreach (var row in dataRows)
-            {
-                var assemblyQualifiedTypeName = (string)row[assemblyQualifiedNameIndex];
-
-                AssemblyName rowProviderFactoryAssemblyName = null;
-
-                // Parse the provider factory assembly qualified type name
-                Type.GetType(
-                    assemblyQualifiedTypeName,
-                    a =>
-                    {
-                        rowProviderFactoryAssemblyName = a;
-
-                        return null;
-                    },
-                    (_, __, ___) => null);
-
-                if (rowProviderFactoryAssemblyName != null
-                    && (hintType == null
-                        || string.Equals(
-                            assemblyHint.Name,
-                            rowProviderFactoryAssemblyName.Name,
-                            StringComparison.OrdinalIgnoreCase)))
-                {
-                    try
-                    {
-                        if (selector(row))
-                        {
-                            return row;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.Fail("GetFactory failed with: " + ex);
-                        // Ignore bad providers.
-                    }
-                }
-            }
-
-            return null;
         }
     }
 }
