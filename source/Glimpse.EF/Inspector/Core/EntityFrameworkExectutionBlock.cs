@@ -1,14 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
 using System.Data.Entity;
-using System.Data.Entity.Config;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data.Entity.Config; 
+using System.Reflection; 
 using Glimpse.Ado.AlternateType;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
@@ -16,7 +10,7 @@ using Glimpse.EF.AlternateType;
 
 namespace Glimpse.EF.Inspector.Core
 {
-    public class WrapDbConfigurationDbConnectionFactory
+    public class EntityFrameworkExectutionBlock
     {
         private static object hasInitalizedLock = new object();
         private static bool hasInitalized = false;
