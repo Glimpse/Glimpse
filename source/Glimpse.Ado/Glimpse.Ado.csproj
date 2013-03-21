@@ -47,6 +47,7 @@
     <Compile Include="Initialize.cs" />
     <Compile Include="Inspector\AdoInspector.cs" />
     <Compile Include="Inspector\Core\AdoExecutionBlock.cs" />
+    <Compile Include="Inspector\Core\DbProviderFactoriesExecutionTask.cs" />
     <Compile Include="Message\AdoCommandMessage.cs" />
     <Compile Include="Message\AdoMessage.cs" />
     <Compile Include="Message\AdoTransactionMessage.cs" />
