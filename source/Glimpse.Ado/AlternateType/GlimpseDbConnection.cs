@@ -56,7 +56,7 @@ namespace Glimpse.Ado.AlternateType
             set { messageBroker = value; }
         }
 
-        private DbProviderFactory InnerProviderFactory { get; set; }
+        public DbProviderFactory InnerProviderFactory { get; set; }
 
         public DbConnection InnerConnection { get; set; }
 
