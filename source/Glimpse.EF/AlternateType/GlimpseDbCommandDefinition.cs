@@ -1,9 +1,13 @@
-﻿using System.Data.Common;
+﻿#if EF43 || EF5
+    using System.Data.Common; 
+#else
+    using System.Data.Entity.Core.Common; 
+    using DbCommand = System.Data.Common.DbCommand; 
+#endif
 using Glimpse.Ado.AlternateType;
-using Glimpse.Core.Extensibility;
 
 namespace Glimpse.EF.AlternateType
-{
+{ 
     public class GlimpseDbCommandDefinition : DbCommandDefinition
     {
         public GlimpseDbCommandDefinition(DbCommandDefinition innerCommandDefinition)
@@ -17,5 +21,5 @@ namespace Glimpse.EF.AlternateType
         {
             return new GlimpseDbCommand(InnerCommandDefinition.CreateCommand());
         }
-    }
+    } 
 }
