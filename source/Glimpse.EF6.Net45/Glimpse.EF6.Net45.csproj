@@ -41,13 +41,14 @@
   <ItemGroup>
     <Reference Include="EntityFramework">
       <HintPath>..\..\packages\EntityFramework.6.0.0-alpha3\lib\net45\EntityFramework.dll</HintPath>
-    </Reference> 
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Glimpse.EF\**\*.cs" Exclude="..\Glimpse.EF\Properties\AssemblyInfo.cs">
@@ -63,7 +64,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-  </ItemGroup> 
+  </ItemGroup>
   <ItemGroup>
     <Folder Include="NuSpec\lib\net40\" />
     <Folder Include="NuSpec\lib\net45\" />

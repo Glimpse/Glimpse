@@ -277,9 +277,9 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Glimpse.Ado\Glimpse.Ado.csproj">
-      <Project>{4c993b73-d03a-4080-b31e-c04f23372997}</Project>
-      <Name>Glimpse.Ado</Name>
+    <ProjectReference Include="..\Glimpse.Ado.Net45\Glimpse.Ado.Net45.csproj">
+      <Project>{1594add8-62f8-417b-bd69-131afbbf51bc}</Project>
+      <Name>Glimpse.Ado.Net45</Name>
     </ProjectReference>
     <ProjectReference Include="..\Glimpse.AspNet.Net45\Glimpse.AspNet.Net45.csproj">
       <Project>{dd576747-cd93-43f0-8648-6cdc5cd9c548}</Project>
@@ -289,9 +289,9 @@
       <Project>{2cb2400f-bc66-4074-b6e4-177a6f78163e}</Project>
       <Name>Glimpse.Core.Net45</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Glimpse.EF\Glimpse.EF.csproj">
-      <Project>{1aedc219-c2a4-422e-8dd8-a9abae1b4f3b}</Project>
-      <Name>Glimpse.EF</Name>
+    <ProjectReference Include="..\Glimpse.EF6.Net45\Glimpse.EF6.Net45.csproj">
+      <Project>{90d8f914-7271-466e-8a87-218176c39719}</Project>
+      <Name>Glimpse.EF6.Net45</Name>
     </ProjectReference>
     <ProjectReference Include="..\Glimpse.Mvc\Glimpse.Mvc.csproj">
       <Project>{0a68b072-7918-45ac-bb78-f05789d0bf44}</Project>

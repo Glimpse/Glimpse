@@ -45,6 +45,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Glimpse.EF\**\*.cs" Exclude="..\Glimpse.EF\Properties\AssemblyInfo.cs">
