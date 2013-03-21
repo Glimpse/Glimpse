@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+﻿#if EF6Plus
 using System.Data.Entity.Config;
 
 namespace Glimpse.EF.AlternateType
@@ -11,3 +11,4 @@ namespace Glimpse.EF.AlternateType
         }
     }
 }
+#endif

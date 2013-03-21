@@ -1,4 +1,5 @@
-﻿using System.Data.Common;
+﻿#if EF6Plus
+using System.Data.Common;
 using System.Data.Entity.Infrastructure; 
 using Glimpse.Ado.AlternateType;
 
@@ -21,3 +22,4 @@ namespace Glimpse.EF.AlternateType
         }
     }
 }
+#endif
