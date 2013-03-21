@@ -61,6 +61,15 @@ namespace Glimpse.Ado {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Glimpse requires that we can find the underlying DbProviderFactory from within your connection. Your current connection of type &apos;{0}&apos; does not support this functionality. If you control the implementation, changing this so we can support you shouldn&apos;t be that difficult..
+        /// </summary>
+        internal static string DbFactoryNotFoundInDbConnection {
+            get {
+                return ResourceManager.GetString("DbFactoryNotFoundInDbConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unfortunately we don&apos;t support using Glimpse.Ado without using Glimpse.EF when you are using EntityFramework. This is due to the way in which EntityFramework handles particular cases..
         /// </summary>
         internal static string GlimpseEFNotPresent {

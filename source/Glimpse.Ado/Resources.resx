@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DbFactoryNotFoundInDbConnection" xml:space="preserve">
+    <value>Glimpse requires that we can find the underlying DbProviderFactory from within your connection. Your current connection of type '{0}' does not support this functionality. If you control the implementation, changing this so we can support you shouldn't be that difficult.</value>
+  </data>
   <data name="GlimpseEFNotPresent" xml:space="preserve">
     <value>Unfortunately we don't support using Glimpse.Ado without using Glimpse.EF when you are using EntityFramework. This is due to the way in which EntityFramework handles particular cases.</value>
   </data>
