@@ -1,4 +1,6 @@
-﻿using System.Data.Common; 
+﻿using System;
+using System.Data;
+using System.Data.Common; 
 using System.Reflection; 
 
 namespace Glimpse.Ado.AlternateType
@@ -24,13 +26,38 @@ namespace Glimpse.Ado.AlternateType
         public static DbProviderFactory TryGetProfiledProviderFactory(this DbConnection connection)
         {
             var factory = connection.TryGetProviderFactory();
-            if (factory != null && !(factory is GlimpseDbProviderFactory))
+            if (factory != null)
             { 
-                var factoryType = typeof(GlimpseDbProviderFactory<>).MakeGenericType(factory.GetType());
-                factory = (DbProviderFactory)factoryType.GetField("Instance").GetValue(null); 
+                if (!(factory is GlimpseDbProviderFactory))
+                {
+                    factory = factory.WrapProviderFactory(); 
+                }
+            }
+            else
+            {
+                throw new NotSupportedException(string.Format(Resources.DbFactoryNotFoundInDbConnection, connection.GetType().FullName));
             }
 
             return factory;
+        }
+
+        public static DbProviderFactory WrapProviderFactory(this DbProviderFactory factory)
+        {
+            if (!(factory is GlimpseDbProviderFactory))
+            { 
+                var factoryType = typeof(GlimpseDbProviderFactory<>).MakeGenericType(factory.GetType());
+                return (DbProviderFactory)factoryType.GetField("Instance").GetValue(null);    
+            }
+
+            return factory;
+        }
+
+        public static DataTable FindDbProviderFactoryTable()
+        {
+            var dbProviderFactories = typeof(DbProviderFactories);
+            var providerField = dbProviderFactories.GetField("_configTable", BindingFlags.NonPublic | BindingFlags.Static) ?? dbProviderFactories.GetField("_providerTable", BindingFlags.NonPublic | BindingFlags.Static);
+            var registrations = providerField.GetValue(null);
+            return registrations is DataSet ? ((DataSet)registrations).Tables["DbProviderFactories"] : (DataTable)registrations;
         }
     }
 }
