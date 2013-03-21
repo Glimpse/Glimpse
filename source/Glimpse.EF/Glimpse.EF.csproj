@@ -53,6 +53,7 @@
     <Compile Include="AlternateType\GlimpseDbCommandDefinition.cs" />
     <Compile Include="AlternateType\GlimpseDbConnectionFactory.cs" />
     <Compile Include="AlternateType\GlimpseDbProviderServices.cs" />
+    <Compile Include="Initialize.cs" />
     <Compile Include="Inspector\EntityFrameworkInspector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
