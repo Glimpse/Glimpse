@@ -81,7 +81,17 @@ namespace Glimpse.Ado.AlternateType
             // when GetDbProviderManifestToken is called, it passes in a GlimpseDbConnection rather than the inner connection. This is a problem because the GetDbProviderManifestToken trys to cast the connection to its concreat type
             if (serviceType.FullName == "System.Data.Common.DbProviderServices")
             {
-                var type = Type.GetType("Glimpse.EF.AlternateType.GlimpseDbProviderServices, Glimpse.EF", false);
+                var type = Type.GetType("Glimpse.EF.AlternateType.GlimpseDbProviderServices, Glimpse.EF43", false);
+                if (type == null)
+                {
+                    type = Type.GetType("Glimpse.EF.AlternateType.GlimpseDbProviderServices, Glimpse.EF5", false);
+                }
+
+                if (type == null)
+                {
+                    type = Type.GetType("Glimpse.EF.AlternateType.GlimpseDbProviderServices, Glimpse.EF6", false);
+                }
+
                 if (type != null)
                 {
                     return Activator.CreateInstance(type, service);
