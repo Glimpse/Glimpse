@@ -34,7 +34,14 @@ namespace Glimpse.EF.AlternateType
 
             if (type == typeof(DbProviderServices))
             {
-                var innerProviderServices = (DbProviderServices)rootResolver.GetService(type, key);
+                // Would love to be able to wrap this but the ProviderServices is sealed and an "internal virual" 
+                // method needs to be overriden to return the innter type rather than the inherited type.
+                if ((string)key == "System.Data.Entity.Core.EntityClient.EntityProviderFactory")
+                {
+                    return ((IServiceProvider)System.Data.Entity.Core.EntityClient.EntityProviderFactory.Instance).GetService(type);
+                }
+
+                var innerProviderServices = (DbProviderServices)rootResolver.GetService(type, key);  
                 if (!(innerProviderServices is GlimpseDbProviderServices))
                 {
                     return new GlimpseDbProviderServices(innerProviderServices);
