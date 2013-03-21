@@ -57,16 +57,7 @@ namespace Glimpse.Ado.Inspector.Core
             }
 
             //Find the registered providers
-            var dbProviderFactories = typeof(DbProviderFactories);
-            var providerField = dbProviderFactories.GetField("_configTable", BindingFlags.NonPublic | BindingFlags.Static) ?? dbProviderFactories.GetField("_providerTable", BindingFlags.NonPublic | BindingFlags.Static);
-            if (providerField == null)
-            {
-                Logger.Error("AdoInspector: DbProviderFactories doesn't have the required properties");
-                return;
-            }
-
-            var registrations = providerField.GetValue(null);
-            var table = registrations is DataSet ? ((DataSet)registrations).Tables["DbProviderFactories"] : (DataTable)registrations;
+            var table = Support.FindDbProviderFactoryTable();
 
             //Run through and replace providers
             foreach (var row in table.Rows.Cast<DataRow>().ToList())
