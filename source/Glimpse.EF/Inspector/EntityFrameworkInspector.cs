@@ -12,8 +12,7 @@ namespace Glimpse.EF.Inspector
     {
         public void Setup(IInspectorContext context)
         {
-            var wrapper = new EntityFrameworkExecutionBlock();
-            wrapper.Execute();
+            EntityFrameworkExecutionBlock.Instance.Execute();
         }
     }
 }

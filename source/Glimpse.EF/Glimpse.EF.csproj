@@ -21,7 +21,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NET45</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;NET45;EF6;EF6Plus</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -30,7 +30,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;NET45</DefineConstants>
+    <DefineConstants>TRACE;NET45;EF6;EF6Plus</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -57,6 +57,9 @@
     <Compile Include="AlternateType\GlimpseDbProviderFactoryService.cs" />
     <Compile Include="AlternateType\GlimpseDbProviderServices.cs" />
     <Compile Include="Initialize.cs" />
+    <Compile Include="Inspector\Core\DbConfigurationExecutionTask.cs" />
+    <Compile Include="Inspector\Core\DbConnectionFactoriesExecutionTask.cs" />
+    <Compile Include="Inspector\Core\EntityDbProviderFactoryExecutionTask.cs" />
     <Compile Include="Inspector\Core\EntityFrameworkExecutionBlock.cs" />
     <Compile Include="Inspector\EntityFrameworkInspector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
