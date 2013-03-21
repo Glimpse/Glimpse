@@ -9,7 +9,7 @@ using Glimpse.Core.Framework;
 
 namespace Glimpse.Ado.Inspector.Core
 {
-    public class WrapDbProviderFactories
+    public class AdoExecutionBlock
     {
         private static object hasInitalizedLock = new object();
         private static bool hasInitalized = false;

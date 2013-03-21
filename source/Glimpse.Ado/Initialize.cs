@@ -6,7 +6,7 @@ namespace Glimpse.Ado
     {
         public static void Ado(this Glimpse.Core.Setting.Initializer initializer)
         {
-            var wrapDbProviderFactories = new WrapDbProviderFactories();
+            var wrapDbProviderFactories = new AdoExecutionBlock();
             wrapDbProviderFactories.Execute();
         }
     }

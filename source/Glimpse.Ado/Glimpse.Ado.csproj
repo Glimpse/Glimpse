@@ -46,7 +46,7 @@
     <Compile Include="Extensibility\ICommandParameterParser.cs" />
     <Compile Include="Initialize.cs" />
     <Compile Include="Inspector\AdoInspector.cs" />
-    <Compile Include="Inspector\Core\WrapDbProviderFactories.cs" />
+    <Compile Include="Inspector\Core\AdoExecutionBlock.cs" />
     <Compile Include="Message\AdoCommandMessage.cs" />
     <Compile Include="Message\AdoMessage.cs" />
     <Compile Include="Message\AdoTransactionMessage.cs" />
