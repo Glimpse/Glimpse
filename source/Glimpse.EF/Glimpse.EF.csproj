@@ -51,7 +51,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlternateType\GlimpseDbCommandDefinition.cs" />
+    <Compile Include="AlternateType\GlimpseDbConfiguration.cs" />
     <Compile Include="AlternateType\GlimpseDbConnectionFactory.cs" />
+    <Compile Include="AlternateType\GlimpseDbDependencyResolver.cs" />
+    <Compile Include="AlternateType\GlimpseDbProviderFactoryService.cs" />
     <Compile Include="AlternateType\GlimpseDbProviderServices.cs" />
     <Compile Include="Initialize.cs" />
     <Compile Include="Inspector\Core\WrapDbConfigurationDbConnectionFactory.cs" />
