@@ -7,8 +7,7 @@ namespace Glimpse.Ado.Inspector
     {
         public void Setup(IInspectorContext context)
         {
-            var wrapDbProviderFactories = new AdoExecutionBlock();
-            wrapDbProviderFactories.Execute();
+            AdoExecutionBlock.Instance.Execute();
         } 
     }
 }
