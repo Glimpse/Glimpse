@@ -15,7 +15,7 @@ namespace Glimpse.Ado.AlternateType
 
         public GlimpseDbConnection(DbConnection connection)
         {
-            var providerFactory = connection.TryGenerateProfileProviderFactory();
+            var providerFactory = connection.TryGetProfiledProviderFactory();
 
             InnerConnection = connection;
             InnerProviderFactory = providerFactory;

@@ -21,7 +21,7 @@ namespace Glimpse.Ado.AlternateType
 #endif
         }
 
-        public static DbProviderFactory TryGenerateProfileProviderFactory(this DbConnection connection)
+        public static DbProviderFactory TryGetProfiledProviderFactory(this DbConnection connection)
         {
             var factory = connection.TryGetProviderFactory();
             if (factory != null && !(factory is GlimpseDbProviderFactory))
