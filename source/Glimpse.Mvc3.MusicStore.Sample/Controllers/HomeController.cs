@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
+using System.Transactions;
 using System.Web.Mvc;
 using MvcMusicStore.Models;
 
@@ -69,28 +70,82 @@ namespace MvcMusicStore.Controllers
         {
             var result1 = 0;
             var result2 = 0;
+            var result3 = 0;
 
-            var connectionString = ConfigurationManager.ConnectionStrings["MusicStoreEntities"];
-            var factory = DbProviderFactories.GetFactory(connectionString.ProviderName);
-            using (var connection = factory.CreateConnection())
-            {
-                connection.ConnectionString = connectionString.ConnectionString;
-                connection.Open();
-
-                using (var command = connection.CreateCommand())
+            //using (var scope = new TransactionScope(TransactionScopeOption.RequiresNew))
+            //{
+                var connectionString = ConfigurationManager.ConnectionStrings["MusicStoreEntities"];
+                var factory = DbProviderFactories.GetFactory(connectionString.ProviderName); 
+                using (var connection = factory.CreateConnection())
                 {
-                    command.CommandText = "SELECT COUNT(*) FROM Albums";
-                    command.CommandType = CommandType.Text;
-                    result1 = (int)command.ExecuteScalar();
+                    connection.ConnectionString = connectionString.ConnectionString;
+                    connection.Open();
+
+                    using (var command = connection.CreateCommand())
+                    { 
+                        command.CommandText = "SELECT COUNT(*) FROM Albums WHERE Title LIKE 'For%'";
+                        command.CommandType = CommandType.Text;
+                        result3 = (int)command.ExecuteScalar();
+                    }
+
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = "SELECT COUNT(*) FROM Albums WHERE Title LIKE 'Re%'";
+                        command.CommandType = CommandType.Text;
+                        result3 = (int)command.ExecuteScalar();
+                    }
+
+                    using (var transaction = connection.BeginTransaction())
+                    {
+                        using (var command = connection.CreateCommand())
+                        {
+                            command.Transaction = transaction;
+
+                            command.CommandText = "SELECT COUNT(*) FROM Albums";
+                            command.CommandType = CommandType.Text;
+                            result1 = (int)command.ExecuteScalar();
+                        }
+
+                        using (var command = connection.CreateCommand())
+                        {
+                            command.Transaction = transaction;
+
+                            command.CommandText = "SELECT COUNT(*) FROM Albums WHERE Title LIKE 'The%'";
+                            command.CommandType = CommandType.Text;
+                            result2 = (int)command.ExecuteScalar();
+                        }
+
+                        transaction.Commit();
+                    }
+
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = "SELECT COUNT(*) FROM Albums WHERE Title LIKE 'L%'";
+                        command.CommandType = CommandType.Text;
+                        result3 = (int)command.ExecuteScalar();
+                    }
+                    
+                    using (var transaction = connection.BeginTransaction())
+                    {
+                        using (var command = connection.CreateCommand())
+                        {
+                            command.CommandText = "SELECT COUNT(*) FROM Albums WHERE Title LIKE 'A%'";
+                            command.CommandType = CommandType.Text;
+                            result3 = (int)command.ExecuteScalar();
+                        } 
+                        transaction.Commit();
+                    }
+
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = "SELECT COUNT(*) FROM Albums WHERE Title LIKE 'B%'";
+                        command.CommandType = CommandType.Text;
+                        result3 = (int)command.ExecuteScalar();
+                    }
                 }
 
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandText = "SELECT COUNT(*) FROM Albums WHERE Title LIKE 'The%'";
-                    command.CommandType = CommandType.Text;
-                    result2 = (int)command.ExecuteScalar();
-                }
-            }
+            //    scope.Complete();
+            //}
 
             return new Tuple<int, int>(result1, result2);
         }
