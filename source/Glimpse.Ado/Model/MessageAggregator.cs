@@ -20,12 +20,12 @@ namespace Glimpse.Ado.Model
 
             AggregateConnectionStart();
             AggregateConnectionClosed();
-            AggregateTransactionBegan();
-            AggregateTransactionEnd();
             AggregateCommandErrors();
             AggregateCommandDurations();
             AggregateCommandExecuted();
             AggregateCommandRowCounts();
+            AggregateTransactionBegan();
+            AggregateTransactionEnd();
 
             return Metadata;
         }
@@ -47,6 +47,7 @@ namespace Glimpse.Ado.Model
             {
                 var command = GetOrCreateCommandFor(message);
                 command.Command = message.CommandText;
+                command.StartDateTime = message.TimeStamp;
                 if(message.Parameters != null)
                 {
                     foreach (var parameter in message.Parameters)
@@ -70,8 +71,9 @@ namespace Glimpse.Ado.Model
             foreach(var message in messages)
             {
                 var command = GetOrCreateCommandFor(message);
-                command.ElapsedMilliseconds = message.ElapsedMilliseconds;
+                command.Elapsed = message.Elapsed;
                 command.RecordsAffected = message.RecordsAffected;
+                command.EndDateTime = message.TimeStamp;
             }
         }
 
@@ -81,7 +83,9 @@ namespace Glimpse.Ado.Model
             foreach(var message in messages)
             {
                 var command = GetOrCreateCommandFor(message);
+                command.Elapsed = message.Elapsed;
                 command.Exception = message.Exception;
+                command.EndDateTime = message.TimeStamp;
             }
         }
 
@@ -90,18 +94,22 @@ namespace Glimpse.Ado.Model
             var commitMessages = Messages.OfType<TransactionCommitMessage>();
             foreach(var message in commitMessages)
             {
-                var connection = GetOrCreateConnectionFor(message);
                 var transaction = GetOrCreateTransactionFor(message);
                 transaction.Committed = true;
+                transaction.EndDateTime = message.TimeStamp;
+
+                var connection = GetOrCreateConnectionFor(message);
                 connection.RegiserTransactionEnd(transaction);
             }
 
             var rollbackMessages = Messages.OfType<TransactionRollbackMessage>();
             foreach(var message in rollbackMessages)
             {
-                var connection = GetOrCreateConnectionFor(message);
                 var transaction = GetOrCreateTransactionFor(message);
                 transaction.Committed = false;
+                transaction.EndDateTime = message.TimeStamp;
+
+                var connection = GetOrCreateConnectionFor(message);
                 connection.RegiserTransactionEnd(transaction);
             }
         }
@@ -112,6 +120,7 @@ namespace Glimpse.Ado.Model
             {
                 var transaction = GetOrCreateTransactionFor(transactionBeginMessage);
                 transaction.IsolationLevel = transactionBeginMessage.IsolationLevel.ToString();
+                transaction.StartDateTime = transactionBeginMessage.TimeStamp;
 
                 var connection = GetOrCreateConnectionFor(transactionBeginMessage);
                 connection.RegiserTransactionStart(transaction);

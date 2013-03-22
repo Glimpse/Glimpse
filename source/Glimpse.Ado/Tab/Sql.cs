@@ -42,25 +42,29 @@ namespace Glimpse.Ado.Tab
             if (queryMetadata == null)
                 return null;
 
-            var connections = new List<object[]> { new[] { "Commands per Connection", "Open Time" } }; 
+            var connections = new List<object[]> { new[] { "Commands per Connection", "Duration" } }; 
             foreach (var connection in queryMetadata.Connections.Values)
             {
                 if (connection.Commands.Count == 0 && connection.Transactions.Count == 0)
                     continue;
-                
-                var commands = new List<object[]> { new[] { "Transaction Start", "Ordinal", "Command", "Parameters", "Records", "Command Time", "From First", "Transaction End", "Errors" } };
+
+                var commands = new List<object[]> { new[] { "Transaction Start", "Ordinal", "Command", "Parameters", "Records", "Duration", "From First", "Transaction End", "Errors" } };
                 var commandCount = 1;
                 foreach (var command in connection.Commands.Values)
                 {
                     //Transaction Start
                     List<object[]> headTransaction = null;
                     if (command.HeadTransaction != null)
-                        headTransaction = new List<object[]> { new[] { "Name", "Isolation Level" }, new[] { "Transaction Started", command.HeadTransaction.IsolationLevel } };
+                    {
+                        headTransaction = new List<object[]> { new[] { "Transaction", "Isolation Level" }, new[] { "Started", command.HeadTransaction.IsolationLevel, !command.HeadTransaction.Committed.HasValue ? "error" : "" } };
+                    }
 
                     //Transaction Finish
                     List<object[]> tailTransaction = null;
                     if (command.TailTransaction != null)
-                        tailTransaction = new List<object[]> { new[] { "Name", "Committed" }, new[] { "Transaction Complete", command.TailTransaction.Committed ? "Committed" : "Rollbacked" } }; 
+                    {
+                        tailTransaction = new List<object[]> { new[] { "Transaction", "Committed", "Duration" }, new[] { "Complete", command.TailTransaction.Committed.GetValueOrDefault() ? "Committed" : "Rollbacked", (object)command.TailTransaction.EndDateTime.Subtract(command.TailTransaction.StartDateTime), !command.TailTransaction.Committed.GetValueOrDefault() ? "warn" : "" } };
+                    } 
                      
                     //Parameters
                     List<object[]> parameters = null;
@@ -68,7 +72,9 @@ namespace Glimpse.Ado.Tab
                     {
                         parameters = new List<object[]> { new[] { "Name", "Value", "Type", "Size" } };
                         foreach (var parameter in command.Parameters)
+                        {
                             parameters.Add(new[] { parameter.Name, parameter.Value, parameter.Type, parameter.Size });
+                        }
                     }
 
                     //Exception
@@ -83,12 +89,12 @@ namespace Glimpse.Ado.Tab
 
                     //Commands
                     var records = command.RecordsAffected == null || command.RecordsAffected < 0 ? command.TotalRecords : command.RecordsAffected;
-                    commands.Add(new object[] { headTransaction, commandCount++, sanitizer.Process(command.Command, command.Parameters), parameters, records, command.ElapsedMilliseconds, "0", tailTransaction, errors, errors != null ? "error" : "" });
+                    commands.Add(new object[] { headTransaction, commandCount++, sanitizer.Process(command.Command, command.Parameters), parameters, records, command.Elapsed, "0", tailTransaction, errors, errors != null ? "error" : "" });
                 }
-                var elapse = 0.0;
+                var elapse = TimeSpan.Zero;
                 //TODO: Can we use a stopwatch here?
                 if (connection.EndDateTime.HasValue && connection.StartDateTime.HasValue)
-                    elapse = Convert.ToInt32(connection.EndDateTime.Value.Subtract(connection.StartDateTime.Value).TotalMilliseconds);
+                    elapse = connection.EndDateTime.Value.Subtract(connection.StartDateTime.Value);
                 connections.Add(new object[] { commands, elapse });
             }
 
@@ -121,6 +127,7 @@ namespace Glimpse.Ado.Tab
                            {
                                y.Cell(0).WidthInPixels(150).AsKey();
                                y.Cell(1);
+                               y.Cell(2).WidthInPixels(100).Suffix(" ms").Class("mono");
                            }))));
                    r.Cell(1).WidthInPixels(75).Suffix(" ms").Class("mono");
                }).Build();        

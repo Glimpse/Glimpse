@@ -174,12 +174,13 @@ namespace Glimpse.Ado.AlternateType
             }
             catch (Exception exception)
             {
-                LogCommandError(commandId, exception);
+                stopwatch.Stop();
+                LogCommandError(commandId, stopwatch.Elapsed, exception);
                 throw;
             }
 
-            stopwatch.Stop(); 
-            LogCommandEnd(commandId, stopwatch.ElapsedMilliseconds, reader.RecordsAffected);
+            stopwatch.Stop();
+            LogCommandEnd(commandId, stopwatch.Elapsed, reader.RecordsAffected);
 
             return new GlimpseDbDataReader(reader, InnerCommand, InnerConnection.ConnectionId, commandId); 
         }
@@ -197,11 +198,12 @@ namespace Glimpse.Ado.AlternateType
             }
             catch (Exception exception)
             {
-                LogCommandError(commandId, exception);
+                stopwatch.Stop();
+                LogCommandError(commandId, stopwatch.Elapsed, exception);
                 throw;
             }
-            stopwatch.Stop(); 
-            LogCommandEnd(commandId, stopwatch.ElapsedMilliseconds, num);
+            stopwatch.Stop();
+            LogCommandEnd(commandId, stopwatch.Elapsed, num);
 
             return num;
         }
@@ -219,11 +221,11 @@ namespace Glimpse.Ado.AlternateType
             }
             catch (Exception exception)
             {
-                LogCommandError(commandId, exception);
+                stopwatch.Stop();
+                LogCommandError(commandId, stopwatch.Elapsed, exception);
                 throw;
             }
-            stopwatch.Stop(); 
-            LogCommandEnd(commandId, stopwatch.ElapsedMilliseconds, null);
+            LogCommandEnd(commandId, stopwatch.Elapsed, null);
 
             return result;
         }
@@ -304,19 +306,19 @@ namespace Glimpse.Ado.AlternateType
             }
         }
 
-        private void LogCommandEnd(Guid commandId, long elapsedMilliseconds, int? recordsAffected)
+        private void LogCommandEnd(Guid commandId, TimeSpan elapsed, int? recordsAffected)
         {
             if (MessageBroker != null)
             {
-                MessageBroker.Publish(new CommandDurationAndRowCountMessage(InnerConnection.ConnectionId, commandId, elapsedMilliseconds, recordsAffected));
+                MessageBroker.Publish(new CommandDurationAndRowCountMessage(InnerConnection.ConnectionId, commandId, elapsed, recordsAffected));
             } 
         }
 
-        private void LogCommandError(Guid commandId, Exception exception)
+        private void LogCommandError(Guid commandId, TimeSpan elapsed, Exception exception)
         {
             if (MessageBroker != null)
             {
-                MessageBroker.Publish(new CommandErrorMessage(InnerConnection.ConnectionId, commandId, exception));
+                MessageBroker.Publish(new CommandErrorMessage(InnerConnection.ConnectionId, commandId, elapsed, exception));
             }
         }
         #endregion

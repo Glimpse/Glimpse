@@ -5,10 +5,7 @@ using System.Linq;
 namespace Glimpse.Ado.Model
 {
     public class ConnectionMetadata
-    {
-        private static readonly KeyValuePair<string, CommandMetadata> DefaultCommandKey = default(KeyValuePair<string, CommandMetadata>);
-        private TransactionMetadata TempTransaction { get; set; }
-
+    { 
         public ConnectionMetadata(string id)
         {
             Id = id;
@@ -30,26 +27,21 @@ namespace Glimpse.Ado.Model
 
         public void RegiserCommand(CommandMetadata command)
         {
-            Commands.Add(command.Id, command);
-
-            if (TempTransaction != null)
-            {
-                command.HeadTransaction = TempTransaction;
-                TempTransaction = null;
-            }
+            Commands.Add(command.Id, command); 
         }
 
         public void RegiserTransactionStart(TransactionMetadata transaction)
-        {
-            TempTransaction = transaction; 
+        { 
+            Transactions.Add(transaction.Id, transaction);
+
+            var command = Commands.FirstOrDefault(x => x.Value.StartDateTime >= transaction.StartDateTime);
+            command.Value.HeadTransaction = transaction;
         }
 
         public void RegiserTransactionEnd(TransactionMetadata transaction)
         {
-            var last = Commands.LastOrDefault();
-            if (!last.Equals(DefaultCommandKey))
-                last.Value.TailTransaction = transaction;
-            TempTransaction = null;
+            var command = Commands.LastOrDefault(x => x.Value.EndDateTime <= transaction.EndDateTime);
+            command.Value.TailTransaction = transaction;
         }
 
         public string Id { get; private set; } 
