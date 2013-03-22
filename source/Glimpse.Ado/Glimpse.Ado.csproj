@@ -97,18 +97,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="NuSpec\content\App_Readme\glimpse.ado.readme.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="NuSpec\Glimpse.Ado.nuspec">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="NuSpec\tools\install.ps1" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NuSpec\lib\net40\" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

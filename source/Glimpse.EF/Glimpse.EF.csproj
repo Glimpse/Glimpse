@@ -80,16 +80,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="NuSpec\lib\net40\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="NuSpec\content\App_Readme\glimpse.ef.readme.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="NuSpec\Glimpse.Ef.nuspec">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="NuSpec\tools\install.ps1" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
