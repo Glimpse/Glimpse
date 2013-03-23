@@ -24,6 +24,7 @@ namespace Glimpse.Ado.AlternateType
         }
 
         public GlimpseDbTransaction(DbTransaction transaction, GlimpseDbConnection connection, IMessageBroker messageBroker)
+            : this(transaction, connection)
         {
             MessageBroker = messageBroker;
         }
