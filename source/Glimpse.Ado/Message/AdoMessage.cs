@@ -11,11 +11,11 @@ namespace Glimpse.Ado.Message
         {
             Id = Guid.NewGuid();
             ConnectionId = connectionId;
-            TimeStamp = DateTime.Now;            
+            StartTime = DateTime.Now;            
         }
 
         public Guid Id { get; private set; }
         public Guid ConnectionId { get; set; }    
-        public DateTime TimeStamp { get; set; }
+        public DateTime StartTime { get; set; }
     }
 }

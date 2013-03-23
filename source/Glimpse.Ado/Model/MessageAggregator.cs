@@ -47,7 +47,7 @@ namespace Glimpse.Ado.Model
             {
                 var command = GetOrCreateCommandFor(message);
                 command.Command = message.CommandText;
-                command.StartDateTime = message.TimeStamp;
+                command.StartDateTime = message.StartTime;
                 if(message.Parameters != null)
                 {
                     foreach (var parameter in message.Parameters)
@@ -73,7 +73,7 @@ namespace Glimpse.Ado.Model
                 var command = GetOrCreateCommandFor(message);
                 command.Elapsed = message.Elapsed;
                 command.RecordsAffected = message.RecordsAffected;
-                command.EndDateTime = message.TimeStamp;
+                command.EndDateTime = message.StartTime;
             }
         }
 
@@ -85,7 +85,7 @@ namespace Glimpse.Ado.Model
                 var command = GetOrCreateCommandFor(message);
                 command.Elapsed = message.Elapsed;
                 command.Exception = message.Exception;
-                command.EndDateTime = message.TimeStamp;
+                command.EndDateTime = message.StartTime;
             }
         }
 
@@ -96,7 +96,7 @@ namespace Glimpse.Ado.Model
             {
                 var transaction = GetOrCreateTransactionFor(message);
                 transaction.Committed = true;
-                transaction.EndDateTime = message.TimeStamp;
+                transaction.EndDateTime = message.StartTime;
 
                 var connection = GetOrCreateConnectionFor(message);
                 connection.RegiserTransactionEnd(transaction);
@@ -107,7 +107,7 @@ namespace Glimpse.Ado.Model
             {
                 var transaction = GetOrCreateTransactionFor(message);
                 transaction.Committed = false;
-                transaction.EndDateTime = message.TimeStamp;
+                transaction.EndDateTime = message.StartTime;
 
                 var connection = GetOrCreateConnectionFor(message);
                 connection.RegiserTransactionEnd(transaction);
@@ -120,7 +120,7 @@ namespace Glimpse.Ado.Model
             {
                 var transaction = GetOrCreateTransactionFor(transactionBeginMessage);
                 transaction.IsolationLevel = transactionBeginMessage.IsolationLevel.ToString();
-                transaction.StartDateTime = transactionBeginMessage.TimeStamp;
+                transaction.StartDateTime = transactionBeginMessage.StartTime;
 
                 var connection = GetOrCreateConnectionFor(transactionBeginMessage);
                 connection.RegiserTransactionStart(transaction);
@@ -132,7 +132,7 @@ namespace Glimpse.Ado.Model
             foreach (var connectionClosedMessage in Messages.OfType<ConnectionClosedMessage>())
             {
                 var connectionMetadata = GetOrCreateConnectionFor(connectionClosedMessage);
-                connectionMetadata.RegisterEnd(connectionClosedMessage.TimeStamp);
+                connectionMetadata.RegisterEnd(connectionClosedMessage.StartTime);
             }
         }
 
@@ -141,7 +141,7 @@ namespace Glimpse.Ado.Model
             foreach (var connectionStartedMessage in Messages.OfType<ConnectionStartedMessage>())
             {
                 var connectionMetadata = GetOrCreateConnectionFor(connectionStartedMessage);
-                connectionMetadata.RegisterStart(connectionStartedMessage.TimeStamp);
+                connectionMetadata.RegisterStart(connectionStartedMessage.StartTime);
             }
         }
 
