@@ -5,7 +5,7 @@ using Glimpse.Core.Message;
 
 namespace Glimpse.Ado.Message
 {
-    public abstract class AdoMessage : IMessage
+    public abstract class AdoMessage : ITimedMessage
     {
         protected AdoMessage(Guid connectionId)
         {
@@ -15,7 +15,13 @@ namespace Glimpse.Ado.Message
         }
 
         public Guid Id { get; private set; }
-        public Guid ConnectionId { get; set; }    
+
+        public Guid ConnectionId { get; set; }
+
+        public TimeSpan Offset { get; set; }
+
+        public TimeSpan Duration { get; set; }
+
         public DateTime StartTime { get; set; }
     }
 }
