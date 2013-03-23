@@ -6,20 +6,19 @@ using System.Transactions;
 using Glimpse.Ado.Message;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
+using Glimpse.Core.Message;
 
 namespace Glimpse.Ado.AlternateType
 {
     public class GlimpseDbConnection : DbConnection
     {
         private IMessageBroker messageBroker;
+        private IExecutionTimer timerStrategy; 
+        private TimeSpan timerTimeSpan;
 
         public GlimpseDbConnection(DbConnection connection)
-        {
-            var providerFactory = connection.TryGetProfiledProviderFactory();
-
-            InnerConnection = connection;
-            InnerProviderFactory = providerFactory;
-            ConnectionId = Guid.NewGuid();
+            : this(connection, connection.TryGetProfiledProviderFactory())
+        { 
         }
 
         public GlimpseDbConnection(DbConnection connection, DbProviderFactory providerFactory)
@@ -37,23 +36,18 @@ namespace Glimpse.Ado.AlternateType
             {
                 if (connection.State == ConnectionState.Open)
                 {
-                    MessageBroker.Publish(new ConnectionStartedMessage(ConnectionId));
+                    OpenConnection();
                 }
 
                 connection.StateChange += StateChangeHaneler;               
             }
         }
 
-        public GlimpseDbConnection(DbConnection connection, DbProviderFactory providerFactory, Guid connectionId, IMessageBroker messageBroker)
+        public GlimpseDbConnection(DbConnection connection, DbProviderFactory providerFactory, Guid connectionId, IMessageBroker messageBroker, IExecutionTimer timerStrategy)
             : this(connection, providerFactory, connectionId)
         {
             MessageBroker = messageBroker;
-        }
-
-        private IMessageBroker MessageBroker
-        {
-            get { return messageBroker ?? (messageBroker = GlimpseConfiguration.GetConfiguredMessageBroker()); }
-            set { messageBroker = value; }
+            TimerStrategy = timerStrategy;
         }
 
         public DbProviderFactory InnerProviderFactory { get; set; }
@@ -61,6 +55,18 @@ namespace Glimpse.Ado.AlternateType
         public DbConnection InnerConnection { get; set; }
 
         public Guid ConnectionId { get; set; }
+
+        private IMessageBroker MessageBroker
+        {
+            get { return messageBroker ?? (messageBroker = GlimpseConfiguration.GetConfiguredMessageBroker()); }
+            set { messageBroker = value; }
+        }
+
+        private IExecutionTimer TimerStrategy
+        {
+            get { return timerStrategy ?? (timerStrategy = GlimpseConfiguration.GetConfiguredTimerStrategy()()); }
+            set { timerStrategy = value; }
+        }
 
         public override string ConnectionString
         {
@@ -179,7 +185,7 @@ namespace Glimpse.Ado.AlternateType
             InnerProviderFactory = null;
             base.Dispose(disposing);
         }
-         
+        
         private void OnDtcTransactionCompleted(object sender, TransactionEventArgs args)
         {
             TransactionStatus aborted;
@@ -202,12 +208,28 @@ namespace Glimpse.Ado.AlternateType
         { 
             if (args.CurrentState == ConnectionState.Open)
             {
-                MessageBroker.Publish(new ConnectionStartedMessage(ConnectionId));
+                OpenConnection();
             }
             else if (args.CurrentState == ConnectionState.Closed)
             {
-                MessageBroker.Publish(new ConnectionClosedMessage(ConnectionId));
-            } 
+                ClosedConnection();
+            }
+        }
+
+        private void OpenConnection()
+        {
+            timerTimeSpan = TimerStrategy.Start();
+
+            MessageBroker.Publish(
+                new ConnectionStartedMessage(ConnectionId)
+                .AsTimedMessage(timerTimeSpan));
+        }
+
+        private void ClosedConnection()
+        {
+            MessageBroker.Publish(
+                new ConnectionClosedMessage(ConnectionId)
+                .AsTimedMessage(TimerStrategy.Stop(timerTimeSpan)));
         }
     }
 }

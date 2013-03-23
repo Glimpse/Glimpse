@@ -13,38 +13,47 @@ using System.Threading.Tasks;
 using Glimpse.Ado.Message;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
+using Glimpse.Core.Message;
 
 namespace Glimpse.Ado.AlternateType
 {
     public class GlimpseDbCommand : DbCommand
     {
         private IMessageBroker messageBroker;
+        private IExecutionTimer timerStrategy; 
 
         public GlimpseDbCommand(DbCommand innerCommand)
         {
             InnerCommand = innerCommand; 
         }
 
-        public GlimpseDbCommand(DbCommand innerCommand, GlimpseDbConnection connection) :
-            this(innerCommand)
+        public GlimpseDbCommand(DbCommand innerCommand, GlimpseDbConnection connection) 
+            : this(innerCommand)
         {
             InnerConnection = connection;
         }
-         
-        public GlimpseDbCommand(DbCommand innerCommand, GlimpseDbConnection connection, IMessageBroker messageBroker) :
-            this(innerCommand, connection)
+
+        public GlimpseDbCommand(DbCommand innerCommand, GlimpseDbConnection connection, IMessageBroker messageBroker, IExecutionTimer timerStrategy) 
+            : this(innerCommand, connection)
         {
             MessageBroker = messageBroker;
+            TimerStrategy = timerStrategy;
         }
 
-        private DbCommand InnerCommand { get; set; }
+        public DbCommand InnerCommand { get; set; }
 
-        private GlimpseDbConnection InnerConnection { get; set; } 
+        public GlimpseDbConnection InnerConnection { get; set; } 
  
         private IMessageBroker MessageBroker
         {
             get { return messageBroker ?? (messageBroker = GlimpseConfiguration.GetConfiguredMessageBroker()); }
             set { messageBroker = value; }
+        }
+
+        private IExecutionTimer TimerStrategy
+        {
+            get { return timerStrategy ?? (timerStrategy = GlimpseConfiguration.GetConfiguredTimerStrategy()()); }
+            set { timerStrategy = value; }
         }
 
         public override string CommandText
@@ -166,21 +175,19 @@ namespace Glimpse.Ado.AlternateType
             DbDataReader reader;
             var commandId = Guid.NewGuid();
 
-            LogCommandStart(commandId); 
-            var stopwatch = Stopwatch.StartNew();
+            var timer = TimerStrategy.Start();
+            LogCommandStart(commandId, timer);  
             try
             {
                 reader = InnerCommand.ExecuteReader(behavior);
             }
             catch (Exception exception)
             {
-                stopwatch.Stop();
-                LogCommandError(commandId, stopwatch.Elapsed, exception);
+                LogCommandError(commandId, TimerStrategy.Stop(timer), exception);
                 throw;
             }
 
-            stopwatch.Stop();
-            LogCommandEnd(commandId, stopwatch.Elapsed, reader.RecordsAffected);
+            LogCommandEnd(commandId, TimerStrategy.Stop(timer), reader.RecordsAffected);
 
             return new GlimpseDbDataReader(reader, InnerCommand, InnerConnection.ConnectionId, commandId); 
         }
@@ -190,20 +197,18 @@ namespace Glimpse.Ado.AlternateType
             int num;
             var commandId = Guid.NewGuid();
 
-            LogCommandStart(commandId); 
-            var stopwatch = Stopwatch.StartNew();
+            var timer = TimerStrategy.Start();
+            LogCommandStart(commandId, timer); 
             try
             {
                 num = InnerCommand.ExecuteNonQuery();
             }
             catch (Exception exception)
-            {
-                stopwatch.Stop();
-                LogCommandError(commandId, stopwatch.Elapsed, exception);
+            { 
+                LogCommandError(commandId, TimerStrategy.Stop(timer), exception);
                 throw;
-            }
-            stopwatch.Stop();
-            LogCommandEnd(commandId, stopwatch.Elapsed, num);
+            } 
+            LogCommandEnd(commandId, TimerStrategy.Stop(timer), num);
 
             return num;
         }
@@ -213,19 +218,18 @@ namespace Glimpse.Ado.AlternateType
             object result;
             var commandId = Guid.NewGuid();
 
-            LogCommandStart(commandId); 
-            var stopwatch = Stopwatch.StartNew();
+            var timer = TimerStrategy.Start();
+            LogCommandStart(commandId, timer);  
             try
             {
                 result = InnerCommand.ExecuteScalar();
             }
             catch (Exception exception)
-            {
-                stopwatch.Stop();
-                LogCommandError(commandId, stopwatch.Elapsed, exception);
+            { 
+                LogCommandError(commandId, TimerStrategy.Stop(timer), exception);
                 throw;
             }
-            LogCommandEnd(commandId, stopwatch.Elapsed, null);
+            LogCommandEnd(commandId, TimerStrategy.Stop(timer), null);
 
             return result;
         }
@@ -282,7 +286,7 @@ namespace Glimpse.Ado.AlternateType
             return parameter.Value;
         }
 
-        private void LogCommandStart(Guid commandId)
+        private void LogCommandStart(Guid commandId, TimeSpan timerTimeSpan)
         {
             if (MessageBroker != null)
             {
@@ -302,23 +306,29 @@ namespace Glimpse.Ado.AlternateType
                     }
                 }
 
-                MessageBroker.Publish(new CommandExecutedMessage(InnerConnection.ConnectionId, commandId, InnerCommand.CommandText, parameters));
+                MessageBroker.Publish(
+                    new CommandExecutedMessage(InnerConnection.ConnectionId, commandId, InnerCommand.CommandText, parameters)
+                    .AsTimedMessage(timerTimeSpan));
             }
         }
 
-        private void LogCommandEnd(Guid commandId, TimeSpan elapsed, int? recordsAffected)
+        private void LogCommandEnd(Guid commandId, TimerResult timerResult, int? recordsAffected)
         {
             if (MessageBroker != null)
             {
-                MessageBroker.Publish(new CommandDurationAndRowCountMessage(InnerConnection.ConnectionId, commandId, elapsed, recordsAffected));
+                MessageBroker.Publish(
+                    new CommandDurationAndRowCountMessage(InnerConnection.ConnectionId, commandId, recordsAffected)
+                    .AsTimedMessage(timerResult));
             } 
         }
 
-        private void LogCommandError(Guid commandId, TimeSpan elapsed, Exception exception)
+        private void LogCommandError(Guid commandId, TimerResult timerResult, Exception exception)
         {
             if (MessageBroker != null)
             {
-                MessageBroker.Publish(new CommandErrorMessage(InnerConnection.ConnectionId, commandId, elapsed, exception));
+                MessageBroker.Publish(
+                    new CommandErrorMessage(InnerConnection.ConnectionId, commandId, exception)
+                    .AsTimedMessage(timerResult));
             }
         }
         #endregion

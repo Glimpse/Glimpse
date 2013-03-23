@@ -48,7 +48,7 @@ namespace Glimpse.Ado.Tab
                 if (connection.Commands.Count == 0 && connection.Transactions.Count == 0)
                     continue;
 
-                var commands = new List<object[]> { new[] { "Transaction Start", "Ordinal", "Command", "Parameters", "Records", "Duration", "From First", "Transaction End", "Errors" } };
+                var commands = new List<object[]> { new[] { "Transaction Start", "Ordinal", "Command", "Parameters", "Records", "Duration", "Offset", "Transaction End", "Errors" } };
                 var commandCount = 1;
                 foreach (var command in connection.Commands.Values)
                 {
@@ -63,7 +63,7 @@ namespace Glimpse.Ado.Tab
                     List<object[]> tailTransaction = null;
                     if (command.TailTransaction != null)
                     {
-                        tailTransaction = new List<object[]> { new[] { "Transaction", "Committed", "Duration" }, new[] { "Complete", command.TailTransaction.Committed.GetValueOrDefault() ? "Committed" : "Rollbacked", (object)command.TailTransaction.EndDateTime.Subtract(command.TailTransaction.StartDateTime), !command.TailTransaction.Committed.GetValueOrDefault() ? "warn" : "" } };
+                        tailTransaction = new List<object[]> { new[] { "Transaction", "Committed", "Duration" }, new[] { "Complete", command.TailTransaction.Committed.GetValueOrDefault() ? "Committed" : "Rollbacked", command.TailTransaction.Duration.HasValue ? (object)command.TailTransaction.Duration.Value : null, !command.TailTransaction.Committed.GetValueOrDefault() ? "warn" : "" } };
                     } 
                      
                     //Parameters
@@ -89,13 +89,9 @@ namespace Glimpse.Ado.Tab
 
                     //Commands
                     var records = command.RecordsAffected == null || command.RecordsAffected < 0 ? command.TotalRecords : command.RecordsAffected;
-                    commands.Add(new object[] { headTransaction, commandCount++, sanitizer.Process(command.Command, command.Parameters), parameters, records, command.Elapsed, "0", tailTransaction, errors, errors != null ? "error" : "" });
-                }
-                var elapse = TimeSpan.Zero;
-                //TODO: Can we use a stopwatch here?
-                if (connection.EndDateTime.HasValue && connection.StartDateTime.HasValue)
-                    elapse = connection.EndDateTime.Value.Subtract(connection.StartDateTime.Value);
-                connections.Add(new object[] { commands, elapse });
+                    commands.Add(new object[] { headTransaction, commandCount++, sanitizer.Process(command.Command, command.Parameters), parameters, records, command.Duration, command.Offset, tailTransaction, errors, errors != null ? "error" : "" });
+                } 
+                connections.Add(new [] { commands, connection.Duration.HasValue ? (object)connection.Duration.Value : null });
             }
 
             return connections.Count > 1 ? connections : null;

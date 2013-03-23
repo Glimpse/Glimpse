@@ -17,5 +17,7 @@ namespace Glimpse.Ado.Model
         public bool? Committed { get; set; }
         public DateTime StartDateTime { get; set; }
         public DateTime EndDateTime { get; set; }
+        public TimeSpan? Duration { get; set; }
+        public TimeSpan? Offset { get; set; }
     }
 }

@@ -23,7 +23,8 @@ namespace Glimpse.Ado.Model
         public DateTime EndDateTime { get; set; }
         public long? RecordsAffected { get; set; }
         public long? TotalRecords { get; set; }
-        public TimeSpan Elapsed { get; set; }
+        public TimeSpan Duration { get; set; } 
+        public TimeSpan Offset { get; set; } 
         public IList<CommandParameterMetadata> Parameters { get; private set; }
         public int ExecutionIndex { get; set; }
          
@@ -40,7 +41,5 @@ namespace Glimpse.Ado.Model
         /// </summary>
         /// <value>The tail transaction.</value>
         public TransactionMetadata TailTransaction { get; set; }
-
-        //public TimeSpan Elapsed { get; set; }
     }
 }

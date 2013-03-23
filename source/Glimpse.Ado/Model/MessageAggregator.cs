@@ -48,6 +48,7 @@ namespace Glimpse.Ado.Model
                 var command = GetOrCreateCommandFor(message);
                 command.Command = message.CommandText;
                 command.StartDateTime = message.StartTime;
+                command.Offset = message.Offset;
                 if(message.Parameters != null)
                 {
                     foreach (var parameter in message.Parameters)
@@ -71,9 +72,11 @@ namespace Glimpse.Ado.Model
             foreach(var message in messages)
             {
                 var command = GetOrCreateCommandFor(message);
-                command.Elapsed = message.Elapsed;
+                command.Duration = message.Duration;
                 command.RecordsAffected = message.RecordsAffected;
-                command.EndDateTime = message.StartTime;
+                command.StartDateTime = message.StartTime; //Reason we set it again is we now have a better time than the start
+                command.EndDateTime = message.StartTime + message.Offset;
+                command.Offset = message.Offset;
             }
         }
 
@@ -83,9 +86,11 @@ namespace Glimpse.Ado.Model
             foreach(var message in messages)
             {
                 var command = GetOrCreateCommandFor(message);
-                command.Elapsed = message.Elapsed;
+                command.Duration = message.Duration;
                 command.Exception = message.Exception;
-                command.EndDateTime = message.StartTime;
+                command.StartDateTime = message.StartTime; //Reason we set it again is we now have a better time than the start
+                command.EndDateTime = message.StartTime + message.Offset;
+                command.Offset = message.Offset;
             }
         }
 
@@ -96,7 +101,10 @@ namespace Glimpse.Ado.Model
             {
                 var transaction = GetOrCreateTransactionFor(message);
                 transaction.Committed = true;
-                transaction.EndDateTime = message.StartTime;
+                transaction.StartDateTime = message.StartTime; //Reason we set it again is we now have a better time than the start
+                transaction.EndDateTime = message.StartTime + message.Offset;
+                transaction.Duration = message.Duration;
+                transaction.Offset = message.Offset;
 
                 var connection = GetOrCreateConnectionFor(message);
                 connection.RegiserTransactionEnd(transaction);
@@ -107,7 +115,10 @@ namespace Glimpse.Ado.Model
             {
                 var transaction = GetOrCreateTransactionFor(message);
                 transaction.Committed = false;
-                transaction.EndDateTime = message.StartTime;
+                transaction.StartDateTime = message.StartTime; //Reason we set it again is we now have a better time than the start
+                transaction.EndDateTime = message.StartTime + message.Offset;
+                transaction.Duration = message.Duration;
+                transaction.Offset = message.Offset;
 
                 var connection = GetOrCreateConnectionFor(message);
                 connection.RegiserTransactionEnd(transaction);
@@ -116,32 +127,41 @@ namespace Glimpse.Ado.Model
 
         private void AggregateTransactionBegan()
         {
-            foreach (var transactionBeginMessage in Messages.OfType<TransactionBeganMessage>())
+            foreach (var message in Messages.OfType<TransactionBeganMessage>())
             {
-                var transaction = GetOrCreateTransactionFor(transactionBeginMessage);
-                transaction.IsolationLevel = transactionBeginMessage.IsolationLevel.ToString();
-                transaction.StartDateTime = transactionBeginMessage.StartTime;
+                var transaction = GetOrCreateTransactionFor(message);
+                transaction.IsolationLevel = message.IsolationLevel.ToString();
+                transaction.StartDateTime = message.StartTime;
+                transaction.Offset = message.Offset;
 
-                var connection = GetOrCreateConnectionFor(transactionBeginMessage);
+                var connection = GetOrCreateConnectionFor(message);
                 connection.RegiserTransactionStart(transaction);
             }
         }
 
         private void AggregateConnectionClosed()
         {
-            foreach (var connectionClosedMessage in Messages.OfType<ConnectionClosedMessage>())
+            foreach (var message in Messages.OfType<ConnectionClosedMessage>())
             {
-                var connectionMetadata = GetOrCreateConnectionFor(connectionClosedMessage);
-                connectionMetadata.RegisterEnd(connectionClosedMessage.StartTime);
+                var connection = GetOrCreateConnectionFor(message);
+                connection.StartDateTime = message.StartTime; //Reason we set it again is we now have a better time than the start
+                connection.EndDateTime = message.StartTime + message.Offset;
+                connection.Duration = message.Duration;
+                connection.Offset = message.Offset;
+
+                connection.RegisterEnd();
             }
         }
 
         private void AggregateConnectionStart()
         {
-            foreach (var connectionStartedMessage in Messages.OfType<ConnectionStartedMessage>())
+            foreach (var message in Messages.OfType<ConnectionStartedMessage>())
             {
-                var connectionMetadata = GetOrCreateConnectionFor(connectionStartedMessage);
-                connectionMetadata.RegisterStart(connectionStartedMessage.StartTime);
+                var connection = GetOrCreateConnectionFor(message);
+                connection.StartDateTime = message.StartTime;
+                connection.Offset = message.Offset;
+
+                connection.RegisterStart();
             }
         }
 
