@@ -22,7 +22,7 @@ namespace Glimpse.Ado.AlternateType
 
             if (MessageBroker != null)
             {
-                timerTimeSpan = TimerStrategy.Start();
+                timerTimeSpan = TimerTrigger();
                 
                 MessageBroker.Publish(
                     new TransactionBeganMessage(connection.ConnectionId, TransactionId, transaction.IsolationLevel)
@@ -36,8 +36,12 @@ namespace Glimpse.Ado.AlternateType
             MessageBroker = messageBroker;
             TimerStrategy = timerStrategy;
         }
-         
+
         public GlimpseDbConnection InnerConnection { get; set; } 
+         
+        public DbTransaction InnerTransaction { get; set; }
+
+        public Guid TransactionId { get; set; }
 
         private IMessageBroker MessageBroker
         {
@@ -47,7 +51,7 @@ namespace Glimpse.Ado.AlternateType
 
         private IExecutionTimer TimerStrategy
         {
-            get { return timerStrategy ?? (timerStrategy = GlimpseConfiguration.GetConfiguredTimerStrategy()()); }
+            get { return timerStrategy ?? (timerStrategy = GlimpseConfiguration.GetExecutionTimer()); }
             set { timerStrategy = value; }
         }
 
@@ -68,7 +72,7 @@ namespace Glimpse.Ado.AlternateType
             { 
                 MessageBroker.Publish(
                     new TransactionCommitMessage(InnerConnection.ConnectionId, TransactionId)
-                    .AsTimedMessage(TimerStrategy.Stop(timerTimeSpan)));
+                    .AsTimedMessage(TimerStop(timerTimeSpan)));
             }
         }
 
@@ -89,13 +93,18 @@ namespace Glimpse.Ado.AlternateType
             {
                 MessageBroker.Publish(
                     new TransactionRollbackMessage(InnerConnection.ConnectionId, TransactionId)
-                    .AsTimedMessage(TimerStrategy.Stop(timerTimeSpan)));
+                    .AsTimedMessage(TimerStop(timerTimeSpan)));
             }
         }
 
+        private TimeSpan TimerTrigger()
+        {
+            return TimerStrategy != null ? TimerStrategy.Start() : TimeSpan.Zero;
+        }
 
-        public DbTransaction InnerTransaction { get; set; }        
-
-        public Guid TransactionId { get; set; }
+        private TimerResult TimerStop(TimeSpan timer)
+        {
+            return TimerStrategy != null ? TimerStrategy.Stop(timer) : null;
+        }
     }
 }

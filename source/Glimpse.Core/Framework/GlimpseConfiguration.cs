@@ -615,6 +615,13 @@ namespace Glimpse.Core.Framework
         }
 
         [Obsolete("HACK: To support TraceListener with TraceSource via web.config")]
+        public static IExecutionTimer GetExecutionTimer()
+        {
+            var result = GetConfiguredTimerStrategy();
+            return result != null ? result() : null;
+        }
+
+        [Obsolete("HACK: To support TraceListener with TraceSource via web.config")]
         public static IMessageBroker GetConfiguredMessageBroker()
         {
             return messageBroker;

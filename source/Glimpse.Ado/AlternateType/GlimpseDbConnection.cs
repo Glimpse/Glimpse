@@ -64,7 +64,7 @@ namespace Glimpse.Ado.AlternateType
 
         private IExecutionTimer TimerStrategy
         {
-            get { return timerStrategy ?? (timerStrategy = GlimpseConfiguration.GetConfiguredTimerStrategy()()); }
+            get { return timerStrategy ?? (timerStrategy = GlimpseConfiguration.GetExecutionTimer()); }
             set { timerStrategy = value; }
         }
 
@@ -218,7 +218,7 @@ namespace Glimpse.Ado.AlternateType
 
         private void OpenConnection()
         {
-            timerTimeSpan = TimerStrategy.Start();
+            timerTimeSpan = TimerTrigger();
 
             MessageBroker.Publish(
                 new ConnectionStartedMessage(ConnectionId)
@@ -229,7 +229,17 @@ namespace Glimpse.Ado.AlternateType
         {
             MessageBroker.Publish(
                 new ConnectionClosedMessage(ConnectionId)
-                .AsTimedMessage(TimerStrategy.Stop(timerTimeSpan)));
+                .AsTimedMessage(TimerStop(timerTimeSpan)));
+        }
+
+        private TimeSpan TimerTrigger()
+        {
+            return TimerStrategy != null ? TimerStrategy.Start() : TimeSpan.Zero;
+        }
+
+        private TimerResult TimerStop(TimeSpan timer)
+        {
+            return TimerStrategy != null ? TimerStrategy.Stop(timer) : null;
         }
     }
 }

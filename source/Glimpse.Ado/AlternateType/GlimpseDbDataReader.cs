@@ -12,8 +12,7 @@ namespace Glimpse.Ado.AlternateType
 {
     internal class GlimpseDbDataReader : DbDataReader
     {
-        private IMessageBroker messageBroker;
-        private IExecutionTimer timerStrategy; 
+        private IMessageBroker messageBroker; 
 
         public GlimpseDbDataReader(DbDataReader dataReader, DbCommand command, Guid connectionId, Guid commandId)
         {
@@ -23,11 +22,10 @@ namespace Glimpse.Ado.AlternateType
             CommandId = commandId; 
         }
 
-        public GlimpseDbDataReader(DbDataReader dataReader, DbCommand command, Guid connectionId, Guid commandId, IMessageBroker messageBroker, IExecutionTimer timerStrategy) 
+        public GlimpseDbDataReader(DbDataReader dataReader, DbCommand command, Guid connectionId, Guid commandId, IMessageBroker messageBroker) 
             : this(dataReader, command, connectionId, commandId)
         {
-            MessageBroker = messageBroker;
-            TimerStrategy = timerStrategy;
+            MessageBroker = messageBroker; 
         }
          
         private DbDataReader InnerDataReader { get; set; }
@@ -46,13 +44,7 @@ namespace Glimpse.Ado.AlternateType
         {
             get { return messageBroker ?? (messageBroker = GlimpseConfiguration.GetConfiguredMessageBroker()); }
             set { messageBroker = value; }
-        }
-
-        private IExecutionTimer TimerStrategy
-        {
-            get { return timerStrategy ?? (timerStrategy = GlimpseConfiguration.GetConfiguredTimerStrategy()()); }
-            set { timerStrategy = value; }
-        }
+        } 
          
         public override int Depth
         {

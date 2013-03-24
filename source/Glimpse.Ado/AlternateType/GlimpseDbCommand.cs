@@ -52,7 +52,7 @@ namespace Glimpse.Ado.AlternateType
 
         private IExecutionTimer TimerStrategy
         {
-            get { return timerStrategy ?? (timerStrategy = GlimpseConfiguration.GetConfiguredTimerStrategy()()); }
+            get { return timerStrategy ?? (timerStrategy = GlimpseConfiguration.GetExecutionTimer()); }
             set { timerStrategy = value; }
         }
 
@@ -175,7 +175,7 @@ namespace Glimpse.Ado.AlternateType
             DbDataReader reader;
             var commandId = Guid.NewGuid();
 
-            var timer = TimerStrategy.Start();
+            var timer = TimerTrigger();
             LogCommandStart(commandId, timer);  
             try
             {
@@ -183,11 +183,11 @@ namespace Glimpse.Ado.AlternateType
             }
             catch (Exception exception)
             {
-                LogCommandError(commandId, TimerStrategy.Stop(timer), exception);
+                LogCommandError(commandId, timer, exception);
                 throw;
             }
 
-            LogCommandEnd(commandId, TimerStrategy.Stop(timer), reader.RecordsAffected);
+            LogCommandEnd(commandId, timer, reader.RecordsAffected);
 
             return new GlimpseDbDataReader(reader, InnerCommand, InnerConnection.ConnectionId, commandId); 
         }
@@ -197,7 +197,7 @@ namespace Glimpse.Ado.AlternateType
             int num;
             var commandId = Guid.NewGuid();
 
-            var timer = TimerStrategy.Start();
+            var timer = TimerTrigger();
             LogCommandStart(commandId, timer); 
             try
             {
@@ -205,10 +205,10 @@ namespace Glimpse.Ado.AlternateType
             }
             catch (Exception exception)
             { 
-                LogCommandError(commandId, TimerStrategy.Stop(timer), exception);
+                LogCommandError(commandId, timer, exception);
                 throw;
             } 
-            LogCommandEnd(commandId, TimerStrategy.Stop(timer), num);
+            LogCommandEnd(commandId, timer, num);
 
             return num;
         }
@@ -218,7 +218,7 @@ namespace Glimpse.Ado.AlternateType
             object result;
             var commandId = Guid.NewGuid();
 
-            var timer = TimerStrategy.Start();
+            var timer = TimerTrigger();
             LogCommandStart(commandId, timer);  
             try
             {
@@ -226,10 +226,10 @@ namespace Glimpse.Ado.AlternateType
             }
             catch (Exception exception)
             { 
-                LogCommandError(commandId, TimerStrategy.Stop(timer), exception);
+                LogCommandError(commandId, timer, exception);
                 throw;
             }
-            LogCommandEnd(commandId, TimerStrategy.Stop(timer), null);
+            LogCommandEnd(commandId, timer, null);
 
             return result;
         }
@@ -312,24 +312,34 @@ namespace Glimpse.Ado.AlternateType
             }
         }
 
-        private void LogCommandEnd(Guid commandId, TimerResult timerResult, int? recordsAffected)
+        private void LogCommandEnd(Guid commandId, TimeSpan timer, int? recordsAffected)
         {
             if (MessageBroker != null)
             {
                 MessageBroker.Publish(
                     new CommandDurationAndRowCountMessage(InnerConnection.ConnectionId, commandId, recordsAffected)
-                    .AsTimedMessage(timerResult));
+                    .AsTimedMessage(TimerStop(timer)));
             } 
         }
 
-        private void LogCommandError(Guid commandId, TimerResult timerResult, Exception exception)
+        private void LogCommandError(Guid commandId, TimeSpan timer, Exception exception)
         {
             if (MessageBroker != null)
             {
                 MessageBroker.Publish(
                     new CommandErrorMessage(InnerConnection.ConnectionId, commandId, exception)
-                    .AsTimedMessage(timerResult));
+                    .AsTimedMessage(TimerStop(timer)));
             }
+        }
+
+        private TimeSpan TimerTrigger()
+        {
+            return TimerStrategy != null ? TimerStrategy.Start() : TimeSpan.Zero;
+        }
+
+        private TimerResult TimerStop(TimeSpan timer)
+        {
+            return TimerStrategy != null ? TimerStrategy.Stop(timer) : null;
         }
         #endregion
     }
