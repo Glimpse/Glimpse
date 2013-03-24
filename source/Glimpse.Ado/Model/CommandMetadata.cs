@@ -27,6 +27,7 @@ namespace Glimpse.Ado.Model
         public TimeSpan Offset { get; set; } 
         public IList<CommandParameterMetadata> Parameters { get; private set; }
         public int ExecutionIndex { get; set; }
+        public bool HasTransaction { get; set; }
          
         /// <summary>
         /// Gets or sets the head transaction. Set when the command 

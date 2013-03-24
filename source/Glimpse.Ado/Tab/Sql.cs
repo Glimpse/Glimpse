@@ -49,21 +49,25 @@ namespace Glimpse.Ado.Tab
                     continue;
 
                 var commands = new List<object[]> { new[] { "Transaction Start", "Ordinal", "Command", "Parameters", "Records", "Duration", "Offset", "Transaction End", "Errors" } };
-                var commandCount = 1;
+                var commandCount = 1; 
                 foreach (var command in connection.Commands.Values)
                 {
                     //Transaction Start
                     List<object[]> headTransaction = null;
                     if (command.HeadTransaction != null)
                     {
-                        headTransaction = new List<object[]> { new[] { "Transaction", "Isolation Level" }, new[] { "Started", command.HeadTransaction.IsolationLevel, !command.HeadTransaction.Committed.HasValue ? "error" : "" } };
+                        headTransaction = new List<object[]> { new[] { "\t▼ Transaction - Started", "Isolation Level - " + command.HeadTransaction.IsolationLevel } };
+                        if (!command.HeadTransaction.Committed.HasValue)
+                        {
+                            headTransaction.Add(new[] { "", "Transaction was never completed", "error" });
+                        } 
                     }
 
                     //Transaction Finish
                     List<object[]> tailTransaction = null;
                     if (command.TailTransaction != null)
                     {
-                        tailTransaction = new List<object[]> { new[] { "Transaction", "Committed", "Duration" }, new[] { "Complete", command.TailTransaction.Committed.GetValueOrDefault() ? "Committed" : "Rollbacked", command.TailTransaction.Duration.HasValue ? (object)command.TailTransaction.Duration.Value : null, !command.TailTransaction.Committed.GetValueOrDefault() ? "warn" : "" } };
+                        tailTransaction = new List<object[]> { new[] { "\t▲ Transaction - Finished", "Status - " + (command.TailTransaction.Committed.GetValueOrDefault() ? "Committed" : "Rollbacked") } };
                     } 
                      
                     //Parameters
@@ -89,7 +93,7 @@ namespace Glimpse.Ado.Tab
 
                     //Commands
                     var records = command.RecordsAffected == null || command.RecordsAffected < 0 ? command.TotalRecords : command.RecordsAffected;
-                    commands.Add(new object[] { headTransaction, commandCount++, sanitizer.Process(command.Command, command.Parameters), parameters, records, command.Duration, command.Offset, tailTransaction, errors, errors != null ? "error" : "" });
+                    commands.Add(new object[] { headTransaction, string.Format("{0}{1}", command.HasTransaction ? "\t\t\t" : "", commandCount++), sanitizer.Process(command.Command, command.Parameters), parameters, records, command.Duration, command.Offset, tailTransaction, errors, errors != null ? "error" : "" });
                 } 
                 connections.Add(new [] { commands, connection.Duration.HasValue ? (object)connection.Duration.Value : null });
             }
@@ -103,7 +107,7 @@ namespace Glimpse.Ado.Tab
                    r.Cell(0).DisablePreview().SetLayout(TabLayout.Create().Row(x =>
                            x.Cell(0).SpanColumns(6).DisablePreview().AsMinimalDisplay().SetLayout(TabLayout.Create().Row(y =>
                            {
-                               y.Cell(0).WidthInPixels(150).AsKey();
+                               y.Cell(0).WidthInPixels(150);
                                y.Cell(1);
                            }))).Row(x =>
                            {
@@ -112,7 +116,7 @@ namespace Glimpse.Ado.Tab
                                x.Cell(3).WidthInPercent(25).DisablePreview();
                                x.Cell(4).WidthInPixels(60);
                                x.Cell(5).WidthInPixels(100).Suffix(" ms").Class("mono");
-                               x.Cell(6).WidthInPixels(70).Prefix("T+ ").Suffix(" ms").Class("mono");
+                               x.Cell(6).WidthInPixels(100).Prefix("T+ ").Suffix(" ms").Class("mono");
                            }).Row(x =>
                            x.Cell(8).SpanColumns(6).DisablePreview().AsMinimalDisplay().SetLayout(TabLayout.Create().Row(y =>
                            {
@@ -121,9 +125,8 @@ namespace Glimpse.Ado.Tab
                            }))).Row(x =>
                            x.Cell(7).SpanColumns(6).DisablePreview().AsMinimalDisplay().SetLayout(TabLayout.Create().Row(y =>
                            {
-                               y.Cell(0).WidthInPixels(150).AsKey();
-                               y.Cell(1);
-                               y.Cell(2).WidthInPixels(100).Suffix(" ms").Class("mono");
+                               y.Cell(0).WidthInPixels(150);
+                               y.Cell(1); 
                            }))));
                    r.Cell(1).WidthInPixels(75).Suffix(" ms").Class("mono");
                }).Build();        

@@ -49,6 +49,7 @@ namespace Glimpse.Ado.Model
                 command.Command = message.CommandText;
                 command.StartDateTime = message.StartTime;
                 command.Offset = message.Offset;
+                command.HasTransaction = message.HasTransaction;
                 if(message.Parameters != null)
                 {
                     foreach (var parameter in message.Parameters)

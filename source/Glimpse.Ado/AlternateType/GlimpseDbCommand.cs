@@ -307,7 +307,7 @@ namespace Glimpse.Ado.AlternateType
                 }
 
                 MessageBroker.Publish(
-                    new CommandExecutedMessage(InnerConnection.ConnectionId, commandId, InnerCommand.CommandText, parameters)
+                    new CommandExecutedMessage(InnerConnection.ConnectionId, commandId, InnerCommand.CommandText, parameters, InnerCommand.Transaction != null)
                     .AsTimedMessage(timerTimeSpan));
             }
         }

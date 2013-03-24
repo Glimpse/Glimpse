@@ -7,13 +7,15 @@ namespace Glimpse.Ado.Message
     {      
         public string CommandText { get; protected set; }
         public IList<CommandExecutedParamater> Parameters { get; protected set; }
+        public bool HasTransaction { get; protected set; }
 
-        public CommandExecutedMessage(Guid connectionId, Guid commandId, string commandText, IList<CommandExecutedParamater> parameters) 
+        public CommandExecutedMessage(Guid connectionId, Guid commandId, string commandText, IList<CommandExecutedParamater> parameters, bool hasTransaction) 
             : base(connectionId, commandId)
         {
             CommandId = commandId;
             CommandText = commandText;
             Parameters = parameters;
+            HasTransaction = hasTransaction;
         }
     }
 

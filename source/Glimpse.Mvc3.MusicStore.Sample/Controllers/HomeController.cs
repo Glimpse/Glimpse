@@ -129,11 +129,13 @@ namespace MvcMusicStore.Controllers
                     {
                         using (var command = connection.CreateCommand())
                         {
+                            command.Transaction = transaction;
+
                             command.CommandText = "SELECT COUNT(*) FROM Albums WHERE Title LIKE 'A%'";
                             command.CommandType = CommandType.Text;
                             result3 = (int)command.ExecuteScalar();
                         } 
-                        transaction.Commit();
+                        //transaction.Commit();
                     }
 
                     using (var command = connection.CreateCommand())
