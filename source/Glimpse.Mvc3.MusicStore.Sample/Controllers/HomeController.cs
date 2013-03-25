@@ -183,6 +183,8 @@ namespace MvcMusicStore.Controllers
                 } 
             }
 
+            var test = storeDB.Database.ExecuteSqlCommand("SELECT count(*) FROM Albums WHERE Title LIKE 'The%'");
+
 
             return new Tuple<int, int>(result1, result2);
         }
