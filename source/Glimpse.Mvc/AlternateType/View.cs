@@ -42,7 +42,7 @@ namespace Glimpse.Mvc.AlternateType
                 var message = new Message(args.ViewContext.ViewData.Model.GetTypeOrNull(), args.ViewContext.ViewData.ModelState.IsValid, args.ViewContext.TempData, args.ViewContext.ViewData, args.ViewContext.ViewData.ModelMetadata, context.TargetType, mixin)
                     .AsActionMessage(args.ViewContext.Controller)
                     .AsTimedMessage(timing)
-                    .AsMvcTimelineMessage(Glimpse.Mvc.Message.Timeline.View);
+                    .AsMvcTimelineMessage(MvcTimelineCategory.View);
 
                 context.MessageBroker.Publish(message);
             }
@@ -85,7 +85,7 @@ namespace Glimpse.Mvc.AlternateType
                 
                 public string EventName { get; set; }
                 
-                public TimelineCategory EventCategory { get; set; }
+                public TimelineCategoryItem EventCategory { get; set; }
                 
                 public string EventSubText { get; set; }
                 

@@ -108,7 +108,7 @@
     <Compile Include="System.cs" />
     <Compile Include="Message\ISourceMessage.cs" />
     <Compile Include="Message\ITraceMessage.cs" />
-    <Compile Include="Message\TimelineCategory.cs" />
+    <Compile Include="Message\TimelineCategoryItem.cs" />
     <Compile Include="Message\MessageBase.cs" />
     <Compile Include="Extensibility\NuGetPackageAttribute.cs" />
     <Compile Include="Extensibility\ResourceParameterMetadata.cs" />
@@ -192,7 +192,7 @@
     <Compile Include="Message\IMessage.cs" />
     <Compile Include="Message\ITimedMessage.cs" />
     <Compile Include="Message\ITimelineMessage.cs" />
-    <Compile Include="Message\TimelineMessage.cs" />
+    <Compile Include="Message\TimelineCategory.cs" />
     <Compile Include="Message\TraceMessage.cs" />
     <Compile Include="Model\TimelineCategoryModel.cs" />
     <Compile Include="Model\TimelineEventModel.cs" />

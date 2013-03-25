@@ -151,7 +151,7 @@ namespace Glimpse.Mvc.AlternateType
 
                 public Type DisplayModeType { get; set; }
                 
-                public TimelineCategory EventCategory { get; set; }
+                public TimelineCategoryItem EventCategory { get; set; }
                 
                 public string EventSubText { get; set; }
                 

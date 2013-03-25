@@ -126,7 +126,7 @@ namespace Glimpse.Mvc.AlternateType
                     .AsSourceMessage(args.ActionResult.GetType(), executedMethod)
                     .AsChildActionMessage(args.ControllerContext)
                     .AsActionMessage(args.ControllerContext)
-                    .AsMvcTimelineMessage(Glimpse.Mvc.Message.Timeline.Controller);
+                    .AsMvcTimelineMessage(MvcTimelineCategory.Controller);
 
                 context.MessageBroker.Publish(message); 
             }
@@ -162,7 +162,7 @@ namespace Glimpse.Mvc.AlternateType
 
                 public string EventName { get; set; }
 
-                public TimelineCategory EventCategory { get; set; }
+                public TimelineCategoryItem EventCategory { get; set; }
 
                 public string EventSubText { get; set; }
 
@@ -189,7 +189,7 @@ namespace Glimpse.Mvc.AlternateType
                     .AsSourceMessage(controllerDescriptor.ControllerType, controllerDescriptor.ControllerType.GetMethod(actionName, actionParams))
                     .AsChildActionMessage(args.ControllerContext)
                     .AsActionMessage(args.ControllerContext)
-                    .AsMvcTimelineMessage(Glimpse.Mvc.Message.Timeline.Controller);
+                    .AsMvcTimelineMessage(MvcTimelineCategory.Controller);
 
                 context.MessageBroker.Publish(message);  
             }
@@ -246,7 +246,7 @@ namespace Glimpse.Mvc.AlternateType
 
                 public string EventName { get; set; }
 
-                public TimelineCategory EventCategory { get; set; }
+                public TimelineCategoryItem EventCategory { get; set; }
 
                 public string EventSubText { get; set; }
 

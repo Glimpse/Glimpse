@@ -97,7 +97,7 @@
     <Compile Include="Message\IFilterMessage.cs" />
     <Compile Include="Message\IInvokeActionResultMessage.cs" />
     <Compile Include="Message\MvcTimelineExtension.cs" />
-    <Compile Include="Message\Timeline.cs" />
+    <Compile Include="Message\MvcTimelineCategory.cs" />
     <Compile Include="Model\DefaultValueModel.cs" />
     <Compile Include="Model\ExecutionModel.cs" />
     <Compile Include="Model\MetadataContentModel.cs" />

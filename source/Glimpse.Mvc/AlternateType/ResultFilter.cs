@@ -46,7 +46,7 @@ namespace Glimpse.Mvc.AlternateType
                     .AsFilterMessage(FilterCategory.Result, resultContext.GetTypeOrNull())
                     .AsBoundedFilterMessage(FilterBounds.Executing)
                     .AsCanceledFilterMessage(resultContext.Cancel)
-                    .AsMvcTimelineMessage(Glimpse.Mvc.Message.Timeline.Filter);
+                    .AsMvcTimelineMessage(MvcTimelineCategory.Filter);
 
                 context.MessageBroker.Publish(message);
             }
@@ -79,7 +79,7 @@ namespace Glimpse.Mvc.AlternateType
                 
                 public string EventName { get; set; }
                 
-                public TimelineCategory EventCategory { get; set; }
+                public TimelineCategoryItem EventCategory { get; set; }
                 
                 public string EventSubText { get; set; }
             }
@@ -103,7 +103,7 @@ namespace Glimpse.Mvc.AlternateType
                     .AsBoundedFilterMessage(FilterBounds.Executed)
                     .AsCanceledFilterMessage(resultContext.Canceled)
                     .AsExceptionFilterMessage(resultContext.Exception.GetTypeOrNull(), resultContext.ExceptionHandled)
-                    .AsMvcTimelineMessage(Glimpse.Mvc.Message.Timeline.Filter);
+                    .AsMvcTimelineMessage(MvcTimelineCategory.Filter);
 
                 context.MessageBroker.Publish(message); 
             }
@@ -140,7 +140,7 @@ namespace Glimpse.Mvc.AlternateType
                 
                 public string EventName { get; set; }
                 
-                public TimelineCategory EventCategory { get; set; }
+                public TimelineCategoryItem EventCategory { get; set; }
                 
                 public string EventSubText { get; set; }
             } 

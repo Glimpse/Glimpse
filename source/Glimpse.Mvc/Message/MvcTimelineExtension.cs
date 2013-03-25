@@ -9,7 +9,7 @@ namespace Glimpse.Mvc.Message
 {
     public static class MvcTimelineExtension
     { 
-        public static T AsMvcTimelineMessage<T>(this T message, TimelineCategory eventCategory)
+        public static T AsMvcTimelineMessage<T>(this T message, TimelineCategoryItem eventCategory)
             where T : ITimelineMessage
         {
             message.EventCategory = eventCategory; 
