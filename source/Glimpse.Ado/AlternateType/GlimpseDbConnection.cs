@@ -229,7 +229,8 @@ namespace Glimpse.Ado.AlternateType
         {
             MessageBroker.Publish(
                 new ConnectionClosedMessage(ConnectionId)
-                .AsTimedMessage(TimerStop(timerTimeSpan)));
+                .AsTimedMessage(TimerStop(timerTimeSpan))
+                .AsTimelineMessage("Connection Opened", AdoTimelineCategory.Connection));
         }
 
         private TimeSpan TimerTrigger()

@@ -59,6 +59,7 @@
     <Compile Include="Message\ConnectionStartedMessage.cs" />
     <Compile Include="Message\DtcTransactionCompletedMessage.cs" />
     <Compile Include="Message\DtcTransactionEnlistedMessage.cs" />
+    <Compile Include="Message\MvcTimelineCategory.cs" />
     <Compile Include="Message\TransactionBeganMessage.cs" />
     <Compile Include="Message\TransactionCommitMessage.cs" />
     <Compile Include="Message\TransactionRollbackMessage.cs" />

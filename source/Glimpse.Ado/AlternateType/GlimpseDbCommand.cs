@@ -183,11 +183,11 @@ namespace Glimpse.Ado.AlternateType
             }
             catch (Exception exception)
             {
-                LogCommandError(commandId, timer, exception);
+                LogCommandError(commandId, timer, exception, "ExecuteDbDataReader");
                 throw;
             }
 
-            LogCommandEnd(commandId, timer, reader.RecordsAffected);
+            LogCommandEnd(commandId, timer, reader.RecordsAffected, "ExecuteDbDataReader");
 
             return new GlimpseDbDataReader(reader, InnerCommand, InnerConnection.ConnectionId, commandId); 
         }
@@ -204,11 +204,11 @@ namespace Glimpse.Ado.AlternateType
                 num = InnerCommand.ExecuteNonQuery();
             }
             catch (Exception exception)
-            { 
-                LogCommandError(commandId, timer, exception);
+            {
+                LogCommandError(commandId, timer, exception, "ExecuteNonQuery");
                 throw;
-            } 
-            LogCommandEnd(commandId, timer, num);
+            }
+            LogCommandEnd(commandId, timer, num, "ExecuteNonQuery");
 
             return num;
         }
@@ -225,11 +225,11 @@ namespace Glimpse.Ado.AlternateType
                 result = InnerCommand.ExecuteScalar();
             }
             catch (Exception exception)
-            { 
-                LogCommandError(commandId, timer, exception);
+            {
+                LogCommandError(commandId, timer, exception, "ExecuteScalar");
                 throw;
             }
-            LogCommandEnd(commandId, timer, null);
+            LogCommandEnd(commandId, timer, null, "ExecuteScalar");
 
             return result;
         }
@@ -312,23 +312,25 @@ namespace Glimpse.Ado.AlternateType
             }
         }
 
-        private void LogCommandEnd(Guid commandId, TimeSpan timer, int? recordsAffected)
+        private void LogCommandEnd(Guid commandId, TimeSpan timer, int? recordsAffected, string type)
         {
             if (MessageBroker != null)
             {
                 MessageBroker.Publish(
                     new CommandDurationAndRowCountMessage(InnerConnection.ConnectionId, commandId, recordsAffected)
-                    .AsTimedMessage(TimerStop(timer)));
+                    .AsTimedMessage(TimerStop(timer))
+                    .AsTimelineMessage("Command Executed", AdoTimelineCategory.Command, type));
             } 
         }
 
-        private void LogCommandError(Guid commandId, TimeSpan timer, Exception exception)
+        private void LogCommandError(Guid commandId, TimeSpan timer, Exception exception, string type)
         {
             if (MessageBroker != null)
             {
                 MessageBroker.Publish(
                     new CommandErrorMessage(InnerConnection.ConnectionId, commandId, exception)
-                    .AsTimedMessage(TimerStop(timer)));
+                    .AsTimedMessage(TimerStop(timer))
+                    .AsTimelineMessage("Command Error", AdoTimelineCategory.Command, type));
             }
         }
 

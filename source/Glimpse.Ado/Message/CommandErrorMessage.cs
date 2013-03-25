@@ -1,8 +1,9 @@
 ﻿using System;
+using Glimpse.Core.Message;
 
 namespace Glimpse.Ado.Message
 {
-    public class CommandErrorMessage : AdoCommandMessage
+    public class CommandErrorMessage : AdoCommandMessage, ITimelineMessage
     {
         public CommandErrorMessage(Guid connectionId, Guid commandId, Exception exception)
             : base(connectionId, commandId)
@@ -10,6 +11,12 @@ namespace Glimpse.Ado.Message
             Exception = exception; 
         }
 
-        public Exception Exception { get; protected set; } 
+        public Exception Exception { get; protected set; }
+
+        public string EventName { get; set; }
+
+        public TimelineCategoryItem EventCategory { get; set; }
+
+        public string EventSubText { get; set; }
     }
 }
