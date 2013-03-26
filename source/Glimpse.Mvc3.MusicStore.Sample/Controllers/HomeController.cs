@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Transactions;
 using System.Web.Mvc;
+using Dapper;
 using MvcMusicStore.Models;
 
 namespace MvcMusicStore.Controllers
@@ -175,12 +176,7 @@ namespace MvcMusicStore.Controllers
                     scope.Complete();
                 }
 
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandText = "SELECT COUNT(*) FROM Albums WHERE Title LIKE 'K%'";
-                    command.CommandType = CommandType.Text;
-                    result3 = (int)command.ExecuteScalar();
-                } 
+                var albums = connection.Query<Album>("SELECT * FROM Albums WHERE Title LIKE 'K%'");
             }
 
             var test = storeDB.Database.ExecuteSqlCommand("SELECT count(*) FROM Albums WHERE Title LIKE 'The%'");
