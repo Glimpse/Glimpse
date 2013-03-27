@@ -18,6 +18,8 @@ Minor release for core:
  - Fixed issue in timeline which affected sub 1 ms events.
  - Fixed trailing comma that causes problems with some browsers/browser modes.
  - Minor refactoring of MessageCategory classes. 
+ - Minor update to Nuget transform to show how to turn on logging.
+ - Minor update to config page to make sure you always get latest logo.
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse diagnostics performance profiling timing</tags>
     </metadata>
