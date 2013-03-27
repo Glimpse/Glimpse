@@ -20,9 +20,9 @@ namespace Glimpse.Ado.AlternateType
             InnerConnection = connection;
             TransactionId = Guid.NewGuid();
 
-            if (MessageBroker != null)
+            if (MessageBroker != null && TimerStrategy != null)
             {
-                timerTimeSpan = TimerTrigger();
+                timerTimeSpan = TimerStrategy.Start();
                 
                 MessageBroker.Publish(
                     new TransactionBeganMessage(connection.ConnectionId, TransactionId, transaction.IsolationLevel)
@@ -51,7 +51,7 @@ namespace Glimpse.Ado.AlternateType
 
         private IExecutionTimer TimerStrategy
         {
-            get { return timerStrategy ?? (timerStrategy = GlimpseConfiguration.GetExecutionTimer()); }
+            get { return timerStrategy ?? (timerStrategy = GlimpseConfiguration.GetConfiguredTimerStrategy()()); }
             set { timerStrategy = value; }
         }
 
@@ -68,11 +68,24 @@ namespace Glimpse.Ado.AlternateType
         public override void Commit()
         {
             InnerTransaction.Commit();
-            if (MessageBroker != null)
+
+            if (MessageBroker != null && TimerStrategy != null)
             { 
                 MessageBroker.Publish(
                     new TransactionCommitMessage(InnerConnection.ConnectionId, TransactionId)
-                    .AsTimedMessage(TimerStop(timerTimeSpan)));
+                    .AsTimedMessage(TimerStrategy.Stop(timerTimeSpan)));
+            }
+        }
+
+        public override void Rollback()
+        {
+            InnerTransaction.Rollback();
+
+            if (MessageBroker != null && TimerStrategy != null)
+            {
+                MessageBroker.Publish(
+                    new TransactionRollbackMessage(InnerConnection.ConnectionId, TransactionId)
+                    .AsTimedMessage(TimerStrategy.Stop(timerTimeSpan)));
             }
         }
 
@@ -80,31 +93,9 @@ namespace Glimpse.Ado.AlternateType
         {
             if (disposing)
             {
-                InnerTransaction.Dispose(); 
+                InnerTransaction.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        public override void Rollback()
-        {
-            InnerTransaction.Rollback();
-
-            if (MessageBroker != null)
-            {
-                MessageBroker.Publish(
-                    new TransactionRollbackMessage(InnerConnection.ConnectionId, TransactionId)
-                    .AsTimedMessage(TimerStop(timerTimeSpan)));
-            }
-        }
-
-        private TimeSpan TimerTrigger()
-        {
-            return TimerStrategy != null ? TimerStrategy.Start() : TimeSpan.Zero;
-        }
-
-        private TimerResult TimerStop(TimeSpan timer)
-        {
-            return TimerStrategy != null ? TimerStrategy.Stop(timer) : null;
         }
     }
 }

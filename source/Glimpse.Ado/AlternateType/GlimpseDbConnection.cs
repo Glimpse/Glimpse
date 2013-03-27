@@ -33,7 +33,7 @@ namespace Glimpse.Ado.AlternateType
             InnerProviderFactory = providerFactory;
             ConnectionId = connectionId;
 
-            if (MessageBroker != null)
+            if (MessageBroker != null && TimerStrategy != null)
             {
                 if (connection.State == ConnectionState.Open)
                 {
@@ -65,7 +65,7 @@ namespace Glimpse.Ado.AlternateType
 
         private IExecutionTimer TimerStrategy
         {
-            get { return timerStrategy ?? (timerStrategy = GlimpseConfiguration.GetExecutionTimer()); }
+            get { return timerStrategy ?? (timerStrategy = GlimpseConfiguration.GetConfiguredTimerStrategy()()); }
             set { timerStrategy = value; }
         }
 
@@ -138,6 +138,7 @@ namespace Glimpse.Ado.AlternateType
             if (transaction != null)
             {
                 transaction.TransactionCompleted += OnDtcTransactionCompleted;
+
                 if (MessageBroker != null)
                 {
                     MessageBroker.Publish(new DtcTransactionEnlistedMessage(ConnectionId, transaction.IsolationLevel));
@@ -182,6 +183,7 @@ namespace Glimpse.Ado.AlternateType
                 InnerConnection.Dispose();
                 InnerConnection.StateChange -= StateChangeHaneler;
             }
+
             InnerConnection = null;
             InnerProviderFactory = null;
             base.Dispose(disposing);
@@ -224,7 +226,7 @@ namespace Glimpse.Ado.AlternateType
                 ConnectionId = Guid.NewGuid();
             }
 
-            timerTimeSpan = TimerTrigger();
+            timerTimeSpan = TimerStrategy.Start();
 
             MessageBroker.Publish(
                 new ConnectionStartedMessage(ConnectionId)
@@ -237,18 +239,8 @@ namespace Glimpse.Ado.AlternateType
             
             MessageBroker.Publish(
                 new ConnectionClosedMessage(ConnectionId)
-                .AsTimedMessage(TimerStop(timerTimeSpan))
+                .AsTimedMessage(TimerStrategy.Stop(timerTimeSpan))
                 .AsTimelineMessage("Connection Opened", AdoTimelineCategory.Connection));
-        }
-
-        private TimeSpan TimerTrigger()
-        {
-            return TimerStrategy != null ? TimerStrategy.Start() : TimeSpan.Zero;
-        }
-
-        private TimerResult TimerStop(TimeSpan timer)
-        {
-            return TimerStrategy != null ? TimerStrategy.Stop(timer) : null;
-        }
+        } 
     }
 }
