@@ -19,7 +19,7 @@ Minor release for MVC:
         </releaseNotes>
         <tags>ASP.NET Web MVC Glimpse diagnostics performance profiling timing</tags>
         <dependencies>
-          <dependency id="Glimpse.AspNet" version="1.1.0" />
+          <dependency id="Glimpse.AspNet" version="1.2.0" />
         </dependencies>
     </metadata>
     <files>

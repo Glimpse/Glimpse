@@ -19,7 +19,7 @@ Initial cut of ADO support:
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse ADO ADO.NET SQL performance profiling timing diagnostics</tags>
         <dependencies>
-          <dependency id="Glimpse" version="1.2" />
+          <dependency id="Glimpse" version="1.2.0" />
         </dependencies>
     </metadata>
     <files>

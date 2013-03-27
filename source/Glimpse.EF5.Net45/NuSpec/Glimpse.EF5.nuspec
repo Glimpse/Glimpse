@@ -18,8 +18,8 @@ Initial cut of EF support:
  - Supports default configuration setup, as well as if you are connection DbConnectionFactory.
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse EF EntityFramework SQL performance profiling timing diagnostics</tags>
-        <dependencies>
-          <dependency id="Glimpse" version="1.2" />
+        <dependencies> 
+          <dependency id="Glimpse.Ado" version="1.2.0" />
         </dependencies>
     </metadata>
     <files> 
