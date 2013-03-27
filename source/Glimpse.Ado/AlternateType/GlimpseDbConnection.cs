@@ -15,6 +15,7 @@ namespace Glimpse.Ado.AlternateType
         private IMessageBroker messageBroker;
         private IExecutionTimer timerStrategy; 
         private TimeSpan timerTimeSpan;
+        private bool wasPreviouslyUsed;
 
         public GlimpseDbConnection(DbConnection connection)
             : this(connection, connection.TryGetProfiledProviderFactory())
@@ -218,6 +219,11 @@ namespace Glimpse.Ado.AlternateType
 
         private void OpenConnection()
         {
+            if (wasPreviouslyUsed)
+            {
+                ConnectionId = Guid.NewGuid();
+            }
+
             timerTimeSpan = TimerTrigger();
 
             MessageBroker.Publish(
@@ -227,6 +233,8 @@ namespace Glimpse.Ado.AlternateType
 
         private void ClosedConnection()
         {
+            wasPreviouslyUsed = true;
+            
             MessageBroker.Publish(
                 new ConnectionClosedMessage(ConnectionId)
                 .AsTimedMessage(TimerStop(timerTimeSpan))
