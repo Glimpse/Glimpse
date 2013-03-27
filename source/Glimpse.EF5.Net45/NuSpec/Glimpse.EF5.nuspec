@@ -4,19 +4,22 @@
     <metadata>
         <id>Glimpse.EF5</id>
         <version>0.0.0</version><!-- Replaced at build time by AssemblyInformationalVersion in AssemblyInfo.cs -->
-        <title>Glimpse for EF.NET</title>
+        <title>Glimpse EF5</title>
         <authors>nmolnar, avanderhoorn</authors>
         <owners>nmolnar, avanderhoorn</owners>
         <licenseUrl>http://www.opensource.org/licenses/apache2.0</licenseUrl>
         <projectUrl>http://getglimpse.com</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <iconUrl>http://getglimpse.com/content/glimpse100.png</iconUrl>
-        <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET 3.5+ application. This package adds EF profiling for those using DbProviderFactory.</description>
-        <summary>ASP.NET 3.5+ web debugging and diagnostics tool.</summary>
-        <releaseNotes>Initial cut of EF support</releaseNotes>
-        <tags>ASP.NET Web WebForms Glimpse EF EntityFramework</tags>
+        <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your web application. Provides Glimpse tabs for EF5.</description>
+        <summary>Glimpse tabs for Entity Framework 5.</summary>
+        <releaseNotes>
+Initial cut of EF support: 
+ - Supports default configuration setup, as well as if you are connection DbConnectionFactory.
+        </releaseNotes>
+        <tags>ASP.NET Web WebForms Glimpse EF EntityFramework SQL performance profiling timing diagnostics</tags>
         <dependencies>
-          <dependency id="Glimpse" version="1.0.2" />
+          <dependency id="Glimpse" version="1.2" />
         </dependencies>
     </metadata>
     <files> 

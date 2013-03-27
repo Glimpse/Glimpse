@@ -4,7 +4,7 @@
     <metadata>
         <id>Glimpse.AspNet</id>
         <version>0.0.0</version><!-- Replaced at build time by AssemblyInformationalVersion in AssemblyInfo.cs -->
-        <title>Glimpse for ASP.NET</title>
+        <title>Glimpse ASP.NET</title>
         <authors>nmolnar, avanderhoorn</authors>
         <owners>nmolnar, avanderhoorn</owners>
         <licenseUrl>http://www.opensource.org/licenses/apache2.0</licenseUrl>
@@ -14,7 +14,8 @@
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET 4.0 application. For ASP.NET MVC3 support, please NuGet Glimpse.MVC3.</description>
         <summary>ASP.NET 4.0 web debugging and diagnostics tool.</summary>
         <releaseNotes>
-          Added GetHttpContext() extention method to IRuntimePolicyContext.
+Minor release for ASP.NET: 
+ - Fixed issue where config tab would fail to show connection string for connction strings with no provider defined. 
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse</tags>
         <dependencies>

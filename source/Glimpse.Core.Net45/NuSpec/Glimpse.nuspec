@@ -14,9 +14,12 @@
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET 4.0 application. For ASP.NET MVC3 support, please NuGet Glimpse.MVC3.</description>
         <summary>ASP.NET 4.0 web debugging and diagnostics tool.</summary>
         <releaseNotes>
-          Added an infrastructure hook point for components that need to be initialized during application start as well as support for rendering arrays of objects. Fixed a JavaScript bug in IE8.
+Minor release for core:
+ - Fixed issue in timeline which affected sub 1 ms events.
+ - Fixed trailing comma that causes problems with some browsers/browser modes.
+ - Minor refactoring of MessageCategory classes. 
         </releaseNotes>
-        <tags>ASP.NET Web WebForms Glimpse</tags>
+        <tags>ASP.NET Web WebForms Glimpse diagnostics performance profiling timing</tags>
     </metadata>
     <files>
         <file src="tools\*.*" target="tools" />
