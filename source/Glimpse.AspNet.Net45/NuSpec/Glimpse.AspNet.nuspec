@@ -15,7 +15,7 @@
         <summary>ASP.NET 4.0 web debugging and diagnostics tool.</summary>
         <releaseNotes>
 Minor release for ASP.NET: 
- - Fixed issue where config tab would fail to show connection string for connction strings with no provider defined. 
+ - Fixed issue where config tab would fail to show connection string for connection strings with no provider defined. 
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse</tags>
         <dependencies>
