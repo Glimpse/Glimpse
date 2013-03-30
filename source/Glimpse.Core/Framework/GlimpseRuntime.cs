@@ -115,11 +115,8 @@ namespace Glimpse.Core.Framework
                 throw new GlimpseException(Resources.BeginRequestOutOfOrderRuntimeMethodCall);
             }
 
-            var policy = GetRuntimePolicy(RuntimeEvent.BeginRequest);
-            if (policy.HasFlag(RuntimePolicy.Off))
-            {
+            if (HasOffRuntimePolicy(RuntimeEvent.BeginRequest))
                 return;
-            }
 
             ExecuteTabs(RuntimeEvent.BeginRequest);
 
@@ -136,17 +133,24 @@ namespace Glimpse.Core.Framework
             Configuration.MessageBroker.Publish(new RuntimeMessage().AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest).AsTimelineMessage("Start Request", TimelineCategory.Request).AsTimedMessage(executionTimer.Point()));
         }
 
+        private bool HasOffRuntimePolicy(RuntimeEvent policyName)
+        {
+            var policy = GetRuntimePolicy(policyName);
+            if (policy.HasFlag(RuntimePolicy.Off))
+            {
+                return true;
+            }
+            return false;
+        }
+
         /// <summary>
         /// Ends Glimpse's processing a Http request.
         /// </summary>
         /// <exception cref="Glimpse.Core.Framework.GlimpseException">Throws an exception if <c>BeginRequest</c> has not yet been called on a given request.</exception>
         public void EndRequest() // TODO: Add PRG support
         {
-            var policy = GetRuntimePolicy(RuntimeEvent.EndRequest);
-            if (policy.HasFlag(RuntimePolicy.Off))
-            {
+            if (HasOffRuntimePolicy(RuntimeEvent.EndRequest))
                 return;
-            }
 
             var frameworkProvider = Configuration.FrameworkProvider;
             var requestStore = frameworkProvider.HttpRequestStore;
@@ -220,11 +224,9 @@ namespace Glimpse.Core.Framework
         /// </summary>
         public void BeginSessionAccess()
         {
-            var policy = GetRuntimePolicy(RuntimeEvent.BeginSessionAccess);
-            if (policy.HasFlag(RuntimePolicy.Off))
-            {
+            if (HasOffRuntimePolicy(RuntimeEvent.BeginSessionAccess))
                 return;
-            }
+           
 
             ExecuteTabs(RuntimeEvent.BeginSessionAccess);
         }
@@ -234,11 +236,8 @@ namespace Glimpse.Core.Framework
         /// </summary>
         public void EndSessionAccess()
         {
-            var policy = GetRuntimePolicy(RuntimeEvent.EndSessionAccess);
-            if (policy.HasFlag(RuntimePolicy.Off))
-            {
+            if (HasOffRuntimePolicy(RuntimeEvent.EndSessionAccess))
                 return;
-            }
 
             ExecuteTabs(RuntimeEvent.EndSessionAccess);
         }
