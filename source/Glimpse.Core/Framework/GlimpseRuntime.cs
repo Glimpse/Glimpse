@@ -177,6 +177,7 @@ namespace Glimpse.Core.Framework
             }
 
             var requestMetadata = frameworkProvider.RequestMetadata;
+            var policy = GetRuntimePolicy(RuntimeEvent.EndRequest);
             if (policy.HasFlag(RuntimePolicy.PersistResults))
             {
                 var persistenceStore = Configuration.PersistenceStore;
