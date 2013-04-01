@@ -24,7 +24,7 @@ namespace Glimpse.Mvc.Tab
         public string Key 
         {
             get { return "glimpse_hud"; }
-        }
+        } 
 
         public override object GetData(ITabContext context)
         {
@@ -57,6 +57,7 @@ namespace Glimpse.Mvc.Tab
         {
             var mb = context.MessageBroker;
 
+            context.PersistMessages<AdoMessage>();
             mb.Subscribe<ActionInvoker.InvokeActionMethod.Message>(m => UpdateAction(m, context));
             mb.Subscribe<ViewEngine.FindViews.Message>(m => UpdateView(m, context));
             mb.Subscribe<View.Render.Message>(m => UpdateRender(m, context));
