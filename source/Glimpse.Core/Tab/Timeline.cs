@@ -22,7 +22,7 @@ namespace Glimpse.Core.Tab
 
         public string DocumentationUri
         {
-            get { return "http://getglimpse.com/Help/Plugin/Timeline"; }
+            get { return "http://getglimpse.com/Help/Timeline-Tab"; }
         }
 
         public void Setup(ITabSetupContext context)

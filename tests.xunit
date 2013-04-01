@@ -13,8 +13,8 @@
         <assembly filename="source\Glimpse.Test.AspNet.Net35\bin\Release\Glimpse.Test.AspNet.Net35.dll" shadow-copy="true">
             <output type="xml" filename="builds\local\artifacts\test.aspnet.net35.xml" />
         </assembly>
-        <assembly filename="source\Glimpse.Test.Mvc3\bin\Release\Glimpse.Test.Mvc3.dll" shadow-copy="true">
-            <output type="xml" filename="builds\local\artifacts\test.mvc3.xml" />
+        <assembly filename="source\Glimpse.Test.Mvc\bin\Release\Glimpse.Test.Mvc.dll" shadow-copy="true">
+            <output type="xml" filename="builds\local\artifacts\test.mvc.xml" />
         </assembly>
     </assemblies>
 </xunit>

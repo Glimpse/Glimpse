@@ -413,7 +413,7 @@ div.glimpse-ellipsis {
     position: absolute;
     top: -5px;
 }
-.glimpse-preview-object {
+.glimpse-preview-object, .glimpse-preview-object * {
     color: #006400;
 }
 .glimpse-preview-string, .glimpse-preview-object .glimpse-preview-string {

@@ -98,7 +98,7 @@
                                 if (i == 0)
                                     render.engine.insert(args.panel, [['Title', 'Engine', 'Index', 'Time'],['Insert', 'value' + i, 'data', new Date().getTime()]]); 
                                 else if (i % 2 == 0) 
-                                    render.engine.append(args.panel, [['Append', 'value' + i, [
+                                    render.engine.append(args.panel, [['Title', 'Engine', 'Index', 'Time'],['Append', 'value' + i, [
                                             ['Actor', 'Character', 'Gender', 'Age'],
                                             ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
                                             ['James Earl Jones', 'Darth Vader', 'Male', '45'],
@@ -120,7 +120,7 @@
                                             ['James Earl Jones', 'Darth Vader', 'Male', '45']
                                         ], new Date().getTime() + ' - This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed. This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed. This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed.']], { suppressHeader: true });
                                 else
-                                    render.engine.prepend(args.panel, [['Prepend', 'value' + i, {
+                                    render.engine.prepend(args.panel, [['Title', 'Engine', 'Index', 'Time'],['Prepend', 'value' + i, {
                                             'Mark Hamill': 'Luke Skywalker',
                                             'James Earl Jones': 'Darth Vader',
                                             'Harrison Ford': 'Han Solo',
@@ -167,7 +167,7 @@
                                 if (i == 0)
                                     render.engine.insert(args.panel, [['Title', 'Engine', 'Index', 'Time'],['Insert', 'value' + i, 'data', new Date().getTime()]], { layout: layout }); 
                                 else if (i % 2 == 0)
-                                    render.engine.append(args.panel, [['Append', 'value' + i, [
+                                    render.engine.append(args.panel, [['Title', 'Engine', 'Index', 'Time'],['Append', 'value' + i, [
                                             ['Actor', 'Character', 'Gender', 'Age'],
                                             ['Mark Hamill', 'Luke Skywalker', 'Male', '21'],
                                             ['James Earl Jones', 'Darth Vader', 'Male', '45'],
@@ -189,7 +189,7 @@
                                             ['James Earl Jones', 'Darth Vader', 'Male', '45']
                                         ], new Date().getTime() + ' - This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed. This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed. This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed.']], { suppressHeader: true, layout: layout });
                                 else
-                                    render.engine.prepend(args.panel, [['Prepend', 'value' + i, {
+                                    render.engine.prepend(args.panel, [['Title', 'Engine', 'Index', 'Time'],['Prepend', 'value' + i, {
                                             'Mark Hamill': 'Luke Skywalker',
                                             'James Earl Jones': 'Darth Vader',
                                             'Harrison Ford': 'Han Solo',
@@ -268,9 +268,9 @@
                         setTimeout(function() {
                             if (i < 10) {
                                 if (i % 2 == 0)
-                                    render.engine.append(args.panel, [['Append', 'value' + i, new Date().getTime() + ' - This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed. This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed. This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed.']], { suppressHeader: true });
+                                    render.engine.append(args.panel, [['Title', 'Engine', 'Time'],['Append', 'value' + i, new Date().getTime() + ' - This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed. This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed. This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed.']], { suppressHeader: true });
                                 else
-                                    render.engine.prepend(args.panel, [['Prepend', 'value' + i, new Date().getTime() + ' - This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed. This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed. This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed.']], { suppressHeader: true });
+                                    render.engine.prepend(args.panel, [['Title', 'Engine', 'Time'],['Prepend', 'value' + i, new Date().getTime() + ' - This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed. This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed. This is a test of something that is long and has lots of chars. It is a very long string that should be trimmed.']], { suppressHeader: true });
                                 i++;
                                 callback();
                             }

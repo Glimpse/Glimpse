@@ -11,9 +11,9 @@
                 limit = forceLimit;
             return !forceFull && ((level == 1 && length > (limit + tolerance)) || (level > 1 && (!forceLimit || length > (limit + tolerance))));
         },
-        newItemSpacer: function(currentRow, rowLimit, dataLength) {
+        newItemSpacer: function(startingIndex, currentRow, rowLimit, dataLength) {
             var html = '';
-            if (currentRow > 1 && (currentRow <= rowLimit || dataLength > rowLimit))
+            if (currentRow > startingIndex && (currentRow <= rowLimit || dataLength > rowLimit))
                 html += '<span class="rspace">,</span>';
             if (currentRow > rowLimit && dataLength > rowLimit)
                 html += '<span class="small">length=' + dataLength + '</span>';

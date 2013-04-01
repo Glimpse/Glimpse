@@ -133,7 +133,7 @@ namespace Glimpse.Core.Framework
             
             var executionTimer = CreateAndStartGlobalExecutionTimer(requestStore);
 
-            Configuration.MessageBroker.Publish(new RuntimeMessage().AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest).AsTimelineMessage("Start Request", TimelineMessage.Request).AsTimedMessage(executionTimer.Point()));
+            Configuration.MessageBroker.Publish(new RuntimeMessage().AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest).AsTimelineMessage("Start Request", TimelineCategory.Request).AsTimedMessage(executionTimer.Point()));
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace Glimpse.Core.Framework
             var executionTimer = requestStore.Get<ExecutionTimer>(Constants.GlobalTimerKey);
             if (executionTimer != null)
             {
-                Configuration.MessageBroker.Publish(new RuntimeMessage().AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest).AsTimelineMessage("End Request", TimelineMessage.Request).AsTimedMessage(executionTimer.Point()));
+                Configuration.MessageBroker.Publish(new RuntimeMessage().AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest).AsTimelineMessage("End Request", TimelineCategory.Request).AsTimedMessage(executionTimer.Point()));
             }
 
             ExecuteTabs(RuntimeEvent.EndRequest);
@@ -740,7 +740,7 @@ namespace Glimpse.Core.Framework
             /// <value>
             /// The event category.
             /// </value>
-            public TimelineCategory EventCategory { get; set; }
+            public TimelineCategoryItem EventCategory { get; set; }
 
             /// <summary>
             /// Gets or sets the event sub text.

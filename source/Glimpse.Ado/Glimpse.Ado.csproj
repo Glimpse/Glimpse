@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4C993B73-D03A-4080-B31E-C04F23372997}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Glimpse.Ado</RootNamespace>
+    <AssemblyName>Glimpse.Ado</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NET45</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;NET45</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AlternateType\Support.cs" />
+    <Compile Include="Extensibility\ICommandParameterParser.cs" />
+    <Compile Include="Initialize.cs" />
+    <Compile Include="Inspector\AdoInspector.cs" />
+    <Compile Include="Inspector\Core\AdoExecutionBlock.cs" />
+    <Compile Include="Inspector\Core\DbProviderFactoriesExecutionTask.cs" />
+    <Compile Include="Message\AdoCommandMessage.cs" />
+    <Compile Include="Message\AdoMessage.cs" />
+    <Compile Include="Message\AdoTransactionMessage.cs" />
+    <Compile Include="Message\CommandDurationAndRowCountMessage.cs" />
+    <Compile Include="Message\CommandErrorMessage.cs" />
+    <Compile Include="Message\CommandExecutedMessage.cs" />
+    <Compile Include="Message\CommandRowCountMessage.cs" />
+    <Compile Include="Message\ConnectionClosedMessage.cs" />
+    <Compile Include="Message\ConnectionStartedMessage.cs" />
+    <Compile Include="Message\DtcTransactionCompletedMessage.cs" />
+    <Compile Include="Message\DtcTransactionEnlistedMessage.cs" />
+    <Compile Include="Message\MvcTimelineCategory.cs" />
+    <Compile Include="Message\TransactionBeganMessage.cs" />
+    <Compile Include="Message\TransactionCommitMessage.cs" />
+    <Compile Include="Message\TransactionRollbackMessage.cs" />
+    <Compile Include="Model\CommandMetadata.cs" />
+    <Compile Include="Model\CommandParameterMetadata.cs" />
+    <Compile Include="Model\ConnectionMetadata.cs" />
+    <Compile Include="Model\MessageAggregator.cs" />
+    <Compile Include="Model\QueryMetadata.cs" />
+    <Compile Include="Model\TransactionMetadata.cs" />
+    <Compile Include="AlternateType\GlimpseDbCommand.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AlternateType\GlimpseDbConnection.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AlternateType\GlimpseDbDataAdapter.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AlternateType\GlimpseDbDataReader.cs" />
+    <Compile Include="AlternateType\GlimpseDbProviderFactory.cs" />
+    <Compile Include="AlternateType\GlimpseDbTransaction.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <DependentUpon>Resources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Tab\Sql.cs" />
+    <Compile Include="Tab\Support\CommandSanitizer.cs" />
+    <Compile Include="Tab\Support\CommandParameterParser.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">
+      <Project>{21F99168-7D7B-49F2-A97C-5A983E0CA16F}</Project>
+      <Name>Glimpse.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

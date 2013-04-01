@@ -25,6 +25,16 @@
                 else 
                     body.animate({ height: settings.local('height') }, 'fast');
                 
+                if (args.fullScreen) {
+                    elements.pageSpacer().remove();
+                    
+                    var holder = elements.holder();
+                    holder.height('');
+                    $(window).resize(function() {
+                        holder.find('.glimpse-panel').height($(window).height() - 54);
+                    });
+                }
+                
                 pubsub.publish('action.shell.opened', { isInitial: args.isInitial });
             }
             else

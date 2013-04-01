@@ -15,13 +15,13 @@
     <RootNamespace>Documentation</RootNamespace>
     <Name>Documentation</Name>
     <!-- SHFB properties -->
-    <OutputPath>Help\</OutputPath>
+    <OutputPath>..\Glimpse.Core.Net45\NuSpec\docs\</OutputPath>
     <HtmlHelpName>Glimpse.Core.Documentation</HtmlHelpName>
     <Language>en-US</Language>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>HtmlHelp1</HelpFileFormat>
     <IndentHtml>False</IndentHtml>
-    <FrameworkVersion>.NET Framework 4.0</FrameworkVersion>
+    <FrameworkVersion>.NET Framework 4.5</FrameworkVersion>
     <KeepLogFile>False</KeepLogFile>
     <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
     <CppCommentsFixup>False</CppCommentsFixup>
@@ -35,25 +35,26 @@
     <HelpTitle>Glimpse API Documentation</HelpTitle>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\..\..\Glimpse\source\Glimpse.Core\bin\Release\Glimpse.Core.dll" xmlns="" />
-      <DocumentationSource sourceFile="..\..\..\Glimpse\source\Glimpse.Core\bin\Release\Glimpse.Core.xml" xmlns="" />
+      <DocumentationSource sourceFile="..\..\..\Glimpse\source\Glimpse.Core.Net45\bin\Release\Glimpse.Core.dll" xmlns="" />
+      <DocumentationSource sourceFile="..\..\..\Glimpse\source\Glimpse.Core.Net45\bin\Release\Glimpse.Core.xml" xmlns="" />
     </DocumentationSources>
     <WorkingPath>working\</WorkingPath>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="Glimpse.Core.Configuration" isDocumented="True">All types having to do with Glimpse configuration and the Glimpse specific XML nodes within &lt;c&gt;web.config&lt;/c&gt; are defined within this namespace.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Glimpse.Core.ClientScript" isDocumented="True">All types which result in Glimpse injecting &lt;c&gt;&amp;lt;script&amp;gt;&lt;/c&gt; tags  into a page response are defined within this namespace.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Glimpse.Core.Resource" isDocumented="True">All resources which provide data or assets to the Glimpse client are defined within this namespace.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Glimpse.Core.ResourceResult" isDocumented="True">All resource results which write &lt;see cref="IResource"/&gt; data to the framework provider are defined within this namespace.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Glimpse.Core.SerializationConverter" isDocumented="True">All implementations of &lt;see cref="ISerialiationConverter"/&gt;, which transform objects into more suitable representations for serialization, are defined within this namespace.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Glimpse.Core.Extensibility" isDocumented="True">Most interfaces and abstract types for extending Glimpse are defined within this namespace.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Glimpse.Core.Extensions" isDocumented="True">All Glimpse specific extention methonds are defined within this namespace.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Glimpse.Core.Framework" isDocumented="True">All types for integrating Glimpse with a .NET web development frameowrk are defined within this namespace.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Glimpse.Core.Inspector" isDocumented="True">All types for gathering runtime diagnostics information with Glimpse are defined within this namespace.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Glimpse.Core.Message" isDocumented="True">All messages for use with the Glimpse message broker are defined within this namespace.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Glimpse.Core.Model" isDocumented="True">All tab output types, commonly called a model, are defined within this namespace.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Glimpse.Core.Policy" isDocumented="True">All core implementations of runtime policies for Glimpse are defined within this namespace.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Glimpse.Core.Tab" isDocumented="False" />
-<NamespaceSummaryItem name="Glimpse.Core.Tab.Assist" isDocumented="False" /></NamespaceSummaries>
+      <NamespaceSummaryItem name="Glimpse.Core.ClientScript" isDocumented="True">All types which result in Glimpse injecting &lt;c&gt;&amp;lt;script&amp;gt;&lt;/c&gt; tags  into a page response are defined within this namespace.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Glimpse.Core.Resource" isDocumented="True">All resources which provide data or assets to the Glimpse client are defined within this namespace.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Glimpse.Core.ResourceResult" isDocumented="True">All resource results which write &lt;see cref="IResource"/&gt; data to the framework provider are defined within this namespace.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Glimpse.Core.SerializationConverter" isDocumented="True">All implementations of &lt;see cref="ISerialiationConverter"/&gt;, which transform objects into more suitable representations for serialization, are defined within this namespace.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Glimpse.Core.Extensibility" isDocumented="True">Most interfaces and abstract types for extending Glimpse are defined within this namespace.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Glimpse.Core.Extensions" isDocumented="True">All Glimpse specific extention methonds are defined within this namespace.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Glimpse.Core.Framework" isDocumented="True">All types for integrating Glimpse with a .NET web development frameowrk are defined within this namespace.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Glimpse.Core.Inspector" isDocumented="True">All types for gathering runtime diagnostics information with Glimpse are defined within this namespace.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Glimpse.Core.Message" isDocumented="True">All messages for use with the Glimpse message broker are defined within this namespace.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Glimpse.Core.Model" isDocumented="True">All tab output types, commonly called a model, are defined within this namespace.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Glimpse.Core.Policy" isDocumented="True">All core implementations of runtime policies for Glimpse are defined within this namespace.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Glimpse.Core.Tab" isDocumented="False" />
+      <NamespaceSummaryItem name="Glimpse.Core.Tab.Assist" isDocumented="False" />
+    </NamespaceSummaries>
     <FeedbackEMailLinkText>Glimpse Developers List</FeedbackEMailLinkText>
     <FeedbackEMailAddress>getglimpse-dev%40googlegroups.com</FeedbackEMailAddress>
     <FooterText>

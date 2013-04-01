@@ -23,6 +23,10 @@
     <OldToolsVersion>4.0</OldToolsVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -50,6 +54,7 @@
       <HintPath>..\..\packages\EntityFramework.4.3.0\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -80,6 +85,7 @@
     <Compile Include="Controllers\ShoppingCartController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Controllers\StoreManagerController.cs" />
+    <Compile Include="Framework\SqlMapper.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -189,12 +195,24 @@
     <Content Include="Views\Store\GenreMenu.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Glimpse.AspNet\Glimpse.AspNet.csproj">
-      <Project>{FDDFC8A6-CDDF-4BC6-9F07-E76050E1EEE7}</Project>
-      <Name>Glimpse.AspNet</Name>
+    <ProjectReference Include="..\Glimpse.Ado.Net40\Glimpse.Ado.Net40.csproj">
+      <Project>{ee152a2e-e27f-4329-a40a-6951387d3629}</Project>
+      <Name>Glimpse.Ado.Net40</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Glimpse.AspNet.Net40\Glimpse.AspNet.Net40.csproj">
+      <Project>{ded28e26-8a57-472a-a454-e45643f1dea0}</Project>
+      <Name>Glimpse.AspNet.Net40</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Glimpse.Core.Net40\Glimpse.Core.Net40.csproj">
+      <Project>{dd93b23c-e2d7-4283-9f3f-88f87271018b}</Project>
+      <Name>Glimpse.Core.Net40</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Glimpse.EF43.Net40\Glimpse.EF43.Net40.csproj">
+      <Project>{6f3f9d55-2be0-47e8-83d2-0f488504cf4a}</Project>
+      <Name>Glimpse.EF43.Net40</Name>
     </ProjectReference>
     <ProjectReference Include="..\Glimpse.Mvc3\Glimpse.Mvc3.csproj">
-      <Project>{0A68B072-7918-45AC-BB78-F05789D0BF44}</Project>
+      <Project>{585c1c27-8d37-4cb6-bd0f-464487845661}</Project>
       <Name>Glimpse.Mvc3</Name>
     </ProjectReference>
   </ItemGroup>

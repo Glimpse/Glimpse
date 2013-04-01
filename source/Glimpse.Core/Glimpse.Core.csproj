@@ -10,10 +10,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Glimpse.Core</RootNamespace>
     <AssemblyName>Glimpse.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -24,6 +25,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\Glimpse.Core.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,6 +35,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\Glimpse.Core.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -100,9 +103,13 @@
     <Compile Include="Extensibility\RuntimePolicy.cs" />
     <Compile Include="Extensibility\Subscriber.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Framework\Support\ExecutionBlockBase.cs" />
+    <Compile Include="Framework\Support\IExecutionTask.cs" />
+    <Compile Include="Setting\Initializer.cs" />
+    <Compile Include="System.cs" />
     <Compile Include="Message\ISourceMessage.cs" />
     <Compile Include="Message\ITraceMessage.cs" />
-    <Compile Include="Message\TimelineCategory.cs" />
+    <Compile Include="Message\TimelineCategoryItem.cs" />
     <Compile Include="Message\MessageBase.cs" />
     <Compile Include="Extensibility\NuGetPackageAttribute.cs" />
     <Compile Include="Extensibility\ResourceParameterMetadata.cs" />
@@ -186,7 +193,7 @@
     <Compile Include="Message\IMessage.cs" />
     <Compile Include="Message\ITimedMessage.cs" />
     <Compile Include="Message\ITimelineMessage.cs" />
-    <Compile Include="Message\TimelineMessage.cs" />
+    <Compile Include="Message\TimelineCategory.cs" />
     <Compile Include="Message\TraceMessage.cs" />
     <Compile Include="Model\TimelineCategoryModel.cs" />
     <Compile Include="Model\TimelineEventModel.cs" />
@@ -260,11 +267,6 @@
     <Compile Include="TraceListener.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="NuSpec\Glimpse.nuspec">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="NuSpec\tools\install.ps1" />
-    <None Include="NuSpec\tools\uninstall.ps1" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -274,11 +276,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NuSpec\docs\" />
-    <Folder Include="NuSpec\lib\net35\" />
-    <Folder Include="NuSpec\lib\net40\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="logo.png" />
     <EmbeddedResource Include="sprite.png" />

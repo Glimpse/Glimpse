@@ -18,7 +18,7 @@
         }, 
         setup = function(args) {  
             args.newData.data.ajax = { name: 'Ajax', data: 'No requests currently detected...', isPermanent: true };
-            args.newData.metadata.plugins.ajax = { documentationUri: 'http://getglimpse.com/Help/Plugin/Ajax' };
+            args.newData.metadata.plugins.ajax = { documentationUri: 'http://getglimpse.com/Help/Ajax-Tab' };
         },
         activate = function() {
             context.isActive = true;

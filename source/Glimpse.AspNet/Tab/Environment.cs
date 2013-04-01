@@ -29,7 +29,7 @@ namespace Glimpse.AspNet.Tab
 
         public string DocumentationUri
         {
-            get { return "http://getglimpse.com/Help/Plugin/Environment"; }
+            get { return "http://getglimpse.com/Help/Environment-Tab"; }
         }
 
         public override object GetData(ITabContext context)
