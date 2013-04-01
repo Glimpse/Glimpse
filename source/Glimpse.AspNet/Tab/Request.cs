@@ -19,7 +19,7 @@ namespace Glimpse.AspNet.Tab
 
         public string DocumentationUri
         {
-            get { return "http://getglimpse.com/Help/Plugin/Request"; }
+            get { return "http://getglimpse.com/Help/Request-Tab"; }
         }
 
         public override object GetData(ITabContext context)

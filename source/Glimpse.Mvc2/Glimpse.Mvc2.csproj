@@ -50,16 +50,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Glimpse.Mvc3\**\*.cs" Exclude="..\Glimpse.Mvc3\Properties\AssemblyInfo.cs;..\Glimpse.Mvc3\Inspector\DependencyInjectionInspector.cs;..\Glimpse.Mvc3\AlternateType\DependencyResolver.cs;..\Glimpse.Mvc3\AlternateType\ModelBinderProvider.cs;">
+    <Compile Include="..\Glimpse.Mvc\**\*.cs" Exclude="..\Glimpse.Mvc\Properties\AssemblyInfo.cs;..\Glimpse.Mvc\Inspector\DependencyInjectionInspector.cs;..\Glimpse.Mvc\AlternateType\DependencyResolver.cs;..\Glimpse.Mvc\AlternateType\ModelBinderProvider.cs;">
       <Link />
     </Compile>
     <Compile Include="Backport\IUnvalidatedValueProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\Glimpse.Mvc3\Resources.resx" />
+    <EmbeddedResource Include="..\Glimpse.Mvc\Resources.resx" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Glimpse.Ado.Net35\Glimpse.Ado.Net35.csproj">
+      <Project>{4e0483e0-a87c-40c6-a82e-078d1df8c0ac}</Project>
+      <Name>Glimpse.Ado.Net35</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Glimpse.AspNet.Net35\Glimpse.AspNet.Net35.csproj">
       <Project>{971143D1-B40E-4AF4-AD3D-D4FFAD3FE444}</Project>
       <Name>Glimpse.AspNet.Net35</Name>

@@ -107,7 +107,7 @@ namespace Glimpse.Core.Framework
                 return false;
             }
 
-            if (!type.IsAssignableFrom(typeof(TToWrap)))
+            if (!typeof(TToWrap).IsAssignableFrom(type))
             {
                 return false;
             }

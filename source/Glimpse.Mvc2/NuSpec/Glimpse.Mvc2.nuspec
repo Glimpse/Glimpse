@@ -14,16 +14,17 @@
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET MVC 2.0 application.</description>
         <summary>ASP.NET MVC 2.0 web debugging and diagnostics tool.</summary>
         <releaseNotes>
-          Glimpse now supports .NET 3.5 and ASP.NET MVC 2! Full feature parity with Glimpse.Mvc3.
+Minor release for MVC: 
+ - Minor refactoring of MessageCategory classes. 
         </releaseNotes>
-        <tags>ASP.NET Web MVC Glimpse</tags>
+        <tags>ASP.NET Web MVC Glimpse diagnostics performance profiling timing</tags>
         <dependencies>
-          <dependency id="Glimpse.AspNet" version="1.0.0" />
+          <dependency id="Glimpse.AspNet" version="1.2.0" />
         </dependencies>
     </metadata>
     <files>
         <file src="lib\net35\*.*" target="lib\net35" />
-        <file src="..\..\Glimpse.Mvc3\**\*.*" target="src" exclude="..\..\Glimpse.Mvc3\bin\**;..\..\Glimpse.Mvc3\obj\**;..\..\Glimpse.Mvc3\NuSpec\**" />
+        <file src="..\..\Glimpse.Mvc\**\*.*" target="src" exclude="..\..\Glimpse.Mvc\bin\**;..\..\Glimpse.Mvc\obj\**;" />
         <file src="..\Backport\*.cs" target="src" />
     </files>
 </package>

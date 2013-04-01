@@ -50,16 +50,22 @@ namespace Glimpse.Core.SerializationConverter
         private string GetName(Type type)
         {
             var typeName = new StringBuilder();
-            GetName(type, typeName);
+            GetName(type, typeName, new Queue<Type>(type.GetGenericArguments()));
             return typeName.ToString();
         }
 
-        private void GetName(Type type, StringBuilder output)
+        private void GetName(Type type, StringBuilder output, Queue<Type> genericArgsStack)
         {
+            if (type.IsNested)
+            {
+                GetName(type.DeclaringType, output, genericArgsStack);
+                output.Append(".");
+            }
+
             if (type.IsArray) 
             {
                 // Array
-                GetName(type.GetElementType(), output);
+                GetName(type.GetElementType(), output, genericArgsStack);
                 output.Append("[]");
             }
             else if (!type.IsGenericType)
@@ -70,30 +76,52 @@ namespace Glimpse.Core.SerializationConverter
             else if (type.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
                 // Null types
-                GetName(type.GetGenericArguments().First(), output);
+                GetName(type.GetGenericArguments().First(), output, genericArgsStack);
                 output.Append("?");
             }
-            else 
+            else
             {
                 // Generics
                 var genericBaseType = type.GetGenericTypeDefinition();
                 var genericName = genericBaseType.Name;
-                output.Append(genericName, 0, genericName.LastIndexOf('`'));
-                output.Append("<");
 
-                var genericArguments = type.GetGenericArguments();
-                for (int i = 0; i < genericArguments.Length; i++)
+                if (genericName.Contains("`"))
                 {
-                    if (i > 0)
+                    output.Append(genericName, 0, genericName.LastIndexOf('`'));
+
+                    output.Append("<");
+
+                    var typeArgsCount = GetGenericArgumentCount(type);
+                    var remainingArgsCount = genericArgsStack.Count;
+
+                    for (int i = 0; i < Math.Min(typeArgsCount, remainingArgsCount); i++)
                     {
-                        output.Append(", ");
+                        if (i > 0)
+                        {
+                            output.Append(", ");
+                        }
+
+                        var arg = genericArgsStack.Dequeue();
+                        GetName(arg, output, new Queue<Type>(arg.GetGenericArguments()));
                     }
 
-                    GetName(genericArguments[i], output);
+                    output.Append(">");
                 }
-
-                output.Append(">");
+                else
+                {
+                    output.Append(genericName);
+                }
             }
+        }
+
+        private int GetGenericArgumentCount(Type type)
+        {
+            if (type.DeclaringType == null)
+            {
+                return type.GetGenericArguments().Length;
+            }
+
+            return type.GetGenericArguments().Length - type.DeclaringType.GetGenericArguments().Length;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Web;
 using System.Web.Mvc;
 using Moq;
 using Ploeh.AutoFixture;
@@ -21,6 +22,20 @@ namespace Glimpse.Test.Common
             IValueProvider(fixture);
             ModelBindingContext(fixture);
             ValueProviderResult(fixture);
+
+            fixture.Customize<ControllerContext>(cc => cc.Without(c => c.DisplayMode));
+            fixture.Customize<ExceptionContext>(ec => ec.Without(c => c.DisplayMode));
+            fixture.Customize<ResultExecutedContext>(rec => rec.Without(c => c.DisplayMode));
+            fixture.Customize<AuthorizationContext>(ac => ac.Without(c => c.DisplayMode));
+            fixture.Customize<ResultExecutingContext>(rec => rec.Without(c => c.DisplayMode));
+
+            fixture.Register<HttpContextBase>(
+                () => 
+                {
+                    var mock = new Mock<HttpContextBase>();
+                    mock.Setup(m => m.Items).Returns(new Dictionary<string, object>());
+                    return mock.Object;
+                });
         }
 
         private static void ValueProviderResult(IFixture fixture)

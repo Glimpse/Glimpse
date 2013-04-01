@@ -191,7 +191,7 @@
                         left = (event.startPoint / timeline.data.duration) * 100,
                         rLeft = Math.round(left),
                         actualWidth = (event.duration / timeline.data.duration) * 100,
-                        width = actualWidth < 1 ? 0 : actualWidth,
+                        width = actualWidth == 0 ? 0 : actualWidth,
                         rWidth = Math.round(width),
                         widthStyle = (width > 0 ? 'width:' + width + '%' : ''),
                         maxStyle = (width <= 0 ? 'max-width:6px;' : ''),

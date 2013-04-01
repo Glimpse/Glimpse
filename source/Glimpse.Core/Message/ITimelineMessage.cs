@@ -6,14 +6,14 @@ namespace Glimpse.Core.Message
     {
         string EventName { get; set; }
 
-        TimelineCategory EventCategory { get; set; }
+        TimelineCategoryItem EventCategory { get; set; }
 
         string EventSubText { get; set; }
     }
      
     public static class TimelineMessageExtension
     {
-        public static T AsTimelineMessage<T>(this T message, string eventName, TimelineCategory eventCategory, string eventSubText = null)
+        public static T AsTimelineMessage<T>(this T message, string eventName, TimelineCategoryItem eventCategory, string eventSubText = null)
             where T : ITimelineMessage
         {
             message.EventName = eventName;
@@ -23,7 +23,7 @@ namespace Glimpse.Core.Message
             return message;
         }
 
-        public static T AsTimelineMessage<T>(this T message, TimelineCategory eventCategory, string eventSubText = null)
+        public static T AsTimelineMessage<T>(this T message, TimelineCategoryItem eventCategory, string eventSubText = null)
             where T : ITimelineMessage
         { 
             message.AsTimelineMessage(string.Empty, eventCategory, eventSubText);

@@ -18,6 +18,12 @@ namespace Glimpse.Test.Integration.Site
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.MapRoute(
+                "NeverUsed", // Route name
+                "NeverUsed/{controller}/{action}/{id}", // URL with parameters
+                new { controller = 5, action = (string)null, id = UrlParameter.Optional } // Parameter defaults
+            );
+
             routes.Add("DomainRoute", new DomainRoute(
                 "{subdomain}.localtest.me",     // Domain with parameters    
                 "{action}/{id}",    // URL with parameters
@@ -38,6 +44,8 @@ namespace Glimpse.Test.Integration.Site
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
+
+            ModelBinderProviders.BinderProviders.Add(new CustomModelBinderProvider());
         }
     }
 }

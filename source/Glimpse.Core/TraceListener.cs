@@ -30,18 +30,7 @@ namespace Glimpse.Core
         public TraceListener(IMessageBroker messageBroker, Func<IExecutionTimer> timerStrategy)
         {
             MessageBroker = messageBroker;
-            TimerStrategy = () =>
-                {
-                    try
-                    {
-                        return timerStrategy();
-                    }
-                    catch
-                    {
-                        // Avoid exception being thrown from threads without access to request store
-                        return null;
-                    }
-                };
+            TimerStrategy = timerStrategy;
         }
 
         internal IMessageBroker MessageBroker 

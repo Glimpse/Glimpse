@@ -1,33 +1,27 @@
 ﻿namespace Glimpse.Core.Message
 {
     /// <summary>
-    /// Definition for a timeline category.
+    /// Options that can used for timeline events.
     /// </summary>
     public class TimelineCategory
     {
-        public TimelineCategory(string name, string color, string colorHighlight)
+        private static TimelineCategoryItem request = new TimelineCategoryItem("Common", "#AF78DD", "#823BBE");
+        private static TimelineCategoryItem other = new TimelineCategoryItem("Other", "#EEEEEE", "#CCCCCC");
+
+        /// <summary>
+        /// Gets the timeline category for a request.
+        /// </summary>
+        public static TimelineCategoryItem Request
         {
-            Name = name;
-            Color = color;
-            ColorHighlight = colorHighlight;
+            get { return request; }
         }
 
         /// <summary>
-        /// Gets or sets the name that will be displayed in the UI.
+        /// Gets the timeline category for a other events.
         /// </summary>
-        /// <value>The name.</value>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the main bar color.
-        /// </summary>
-        /// <value>The color.</value>
-        public string Color { get; set; }
-
-        /// <summary>
-        /// Gets or sets the main bar border color.
-        /// </summary>
-        /// <value>The color highlight.</value>
-        public string ColorHighlight { get; set; }
+        public static TimelineCategoryItem Other
+        {
+            get { return other; }
+        }
     }
 }

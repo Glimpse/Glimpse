@@ -51,7 +51,7 @@ namespace Glimpse.AspNet.Tab
 
         public string DocumentationUri
         {
-            get { return "http://getGlimpse.com/Help/Plugin/Routes"; }
+            get { return "http://getGlimpse.com/Help/Routes-Tab"; }
         }
 
         public object GetLayout()

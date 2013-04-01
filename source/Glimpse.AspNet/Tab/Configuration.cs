@@ -27,7 +27,7 @@ namespace Glimpse.AspNet.Tab
 
         public string DocumentationUri
         {
-            get { return "http://getglimpse.com/Help/Plugin/Config"; }
+            get { return "http://getglimpse.com/Help/Configuration-Tab"; }
         }
 
         public bool KeysHeadings 
@@ -105,7 +105,8 @@ namespace Glimpse.AspNet.Tab
 
                 try
                 {
-                    var connectionFactory = DbProviderFactories.GetFactory(connectionString.ProviderName);
+                    var providerName = string.IsNullOrEmpty(connectionString.ProviderName) ? "System.Data.SqlClient" : connectionString.ProviderName;
+                    var connectionFactory = DbProviderFactories.GetFactory(providerName);
                     var connectionStringBuilder = connectionFactory.CreateConnectionStringBuilder();
                     if (connectionStringBuilder != null)
                     {

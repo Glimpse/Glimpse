@@ -17,7 +17,7 @@
                 
                 if (result === '') {
                     if (typeof data === 'function')
-                        result = providers.function.build(data, level, forceFull, metadata, forceLimit);
+                        result = providers.func.build(data, level, forceFull, metadata, forceLimit);
                     else if (isArray)
                         result = providers.table.build(data, level, forceFull, metadata, forceLimit);
                     else if (isObject)

@@ -14,7 +14,7 @@
         },
         setup = function(args) { 
             args.newData.data.history = { name: 'History', data: 'No requests currently detected...', isPermanent: true };
-            args.newData.metadata.plugins.history = { documentationUri: 'http://getglimpse.com/Help/Plugin/History' };
+            args.newData.metadata.plugins.history = { documentationUri: 'http://getglimpse.com/Help/History-Tab' };
         }, 
         activate = function() {
             context.isActive = true;
