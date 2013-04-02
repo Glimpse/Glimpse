@@ -55,5 +55,4 @@ namespace Glimpse.Core.Framework.Support
             }
         }
     }
-
 }
