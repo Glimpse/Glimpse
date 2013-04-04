@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Glimpse.Core.Extensibility;
@@ -10,7 +11,7 @@ namespace Glimpse.Core.Resource
     /// <summary>
     /// The <see cref="IResource"/> implementation responsible for providing the Glimpse configuration page, which is usually where a user turns Glimpse on and off.
     /// </summary>
-    public class ConfigurationResource : IResource, IKey
+    public class ConfigurationResource : IPrivilegedResource, IKey
     {
         internal const string InternalName = "glimpse_config";
 
@@ -57,7 +58,25 @@ namespace Glimpse.Core.Resource
         /// <returns>
         ///   <see cref="IResourceResult" /> that can be executed when the Http response is ready to be returned.
         /// </returns>
+        /// <exception cref="System.NotSupportedException">Throws a <see cref="NotSupportedException"/> since this is a <see cref="IPrivilegedResource"/>.</exception>
         public IResourceResult Execute(IResourceContext context)
+        {
+            throw new NotSupportedException(string.Format(Resources.RrivilegedResourceExecuteNotSupported, GetType().Name));
+        }
+
+        /// <summary>
+        /// Executes the specified context.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// A <see cref="IResourceResult" />.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException">Exception thrown if either <paramref name="context"/> or <paramref name="configuration"/> are <c>null</c>.</exception>
+        /// <remarks>
+        /// Use of <see cref="IPrivilegedResource" /> is reserved.
+        /// </remarks>
+        public IResourceResult Execute(IResourceContext context, IGlimpseConfiguration configuration)
         {
             var content = new StringBuilder();
             content.Append("<!DOCTYPE html><html><head><link rel=\"shortcut icon\" href=\"http://getglimpse.com/favicon.ico\" />");
@@ -68,11 +87,65 @@ namespace Glimpse.Core.Resource
             content.Append("<div class=\"content\"><div class=\"logo\"><blockquote>What Firebug is for the client, Glimpse does for the server... in other words, a client side Glimpse into what's going on in your server.</blockquote><h1>Glimpse</h1><div>A client side Glimpse to your server</div></div>");
             content.Append("<table width=\"100%\"><tr align=\"center\"><td width=\"33%\"><a class=\"myButton\" href=\"javascript:(function(){document.cookie='glimpsePolicy=On; path=/; expires=Sat, 01 Jan 2050 12:00:00 GMT;'; window.location.reload();})();\">Turn Glimpse On</a></td><td width=\"34%\"><a class=\"myButton\" href=\"javascript:(function(){document.cookie='glimpsePolicy=; path=/; expires=Sat, 01 Jan 2050 12:00:00 GMT;'; window.location.reload();})();\">Turn Glimpse Off</a></td><td><a class=\"myButton\" href=\"javascript:(function(){document.cookie='glimpseId='+ prompt('Client Name?') +'; path=/; expires=Sat, 01 Jan 2050 12:00:00 GMT;'; window.location.reload();})();\">Set Glimpse Session Name</a></td></tr></table>");
             content.Append("<p style=\"text-align:center\">Drag the above button to your favorites bar for quick and easy access to Glimpse.</p>");
+            content.Append("<h2>Configuration Details:</h2><p>This section details the Glimpse thinks its is configured.</p><ul><li><strong>Tabs</strong>:<ul>");
+
+            foreach (var tab in configuration.Tabs)
+            {
+                content.AppendFormat("<li><strong>{0}</strong> - {1} - {2}</li>", tab.Name, tab.GetType().FullName, tab.ExecuteOn);
+            }
+
+            content.Append("</ul></li></ul>");
+            content.Append("<a id=\"more_link\" href=\"javascript:document.getElementById('more_link').style.display = 'none'; document.getElementById('more').style.display = 'block'\">Mode details?</a><ul id=\"more\" style=\"display:none\"><li><strong>Inspectors</strong>: <ul>");
+
+            foreach (var inspector in configuration.Inspectors)
+            {
+                content.AppendFormat("<li>{0}</li>", inspector.GetType().FullName);
+            }
+
+            content.Append("</ul></li><li><strong>Runtime Policies</strong>: <ul>");
+
+            foreach (var policy in configuration.RuntimePolicies)
+            {
+                content.AppendFormat("<li>{0} - {1}</li>", policy.GetType().FullName, policy.ExecuteOn);
+            }
+
+            content.Append("</ul></li><li><strong>Resources</strong>: <ul>");
+
+            foreach (var resource in configuration.Resources)
+            {
+                var paramaters = string.Empty;
+                if (resource.Parameters != null)
+                {
+                    paramaters = string.Join(", ", resource.Parameters.Select(parameter => string.Format("{0} ({1})", parameter.Name, parameter.IsRequired)).ToArray());
+                }
+
+                content.AppendFormat("<li>{0} - {1} - {2}</li>", resource.GetType().FullName, resource.Name, paramaters);
+            }
+
+            content.Append("</ul></li><li><strong>Client Scripts</strong>: <ul>");
+
+            foreach (var scripts in configuration.ClientScripts)
+            {
+                content.AppendFormat("<li>{0} - {1}</li>", scripts.GetType().FullName, scripts.Order);
+            }
+
+            content.AppendFormat("</ul></li><li><strong>Framework Provider</strong>: {0}</li>", configuration.FrameworkProvider.GetType().FullName);
+            content.AppendFormat("<li><strong>Html Encoder</strong>: {0}</li>", configuration.HtmlEncoder.GetType().FullName);
+            content.AppendFormat("<li><strong>Logger</strong>: {0}</li>", configuration.Logger.GetType().FullName);
+            content.AppendFormat("<li><strong>Persistence Store</strong>: {0}</li>", configuration.PersistenceStore.GetType().FullName);
+            content.AppendFormat("<li><strong>Resource Endpoint</strong>: {0}</li>", configuration.ResourceEndpoint.GetType().FullName);
+            content.AppendFormat("<li><strong>Serializer</strong>: {0}</li>", configuration.Serializer.GetType().FullName);
+            content.AppendFormat("<li><strong>Default Resource</strong>: {0} - {1}</li>", configuration.DefaultResource.GetType().FullName, configuration.DefaultResource.Name);
+            content.AppendFormat("<li><strong>Default Runtime Policy</strong>: {0}</li>", configuration.DefaultRuntimePolicy.GetType().FullName);
+            content.AppendFormat("<li><strong>Proxy Factory</strong>: {0}</li>", configuration.ProxyFactory.GetType().FullName);
+            content.AppendFormat("<li><strong>Message Broker</strong>: {0}</li>", configuration.MessageBroker.GetType().FullName);
+            content.AppendFormat("<li><strong>Endpoint Base Uri</strong>: {0}</li></ul>", configuration.EndpointBaseUri); 
+
             content.Append("<h2>More Info:</h2>");
             content.Append("<div class=\"footer\"><span class=\"important\">For more info see <a href=\"http://getGlimpse.com\" />getGlimpse.com</a></span><br /><br /><img src=\"http://getglimpse.com/content/uservoice-icon.png\" width=\"16\" /> Have a <em>feature</em> request? <a href=\"http://getglimpse.uservoice.com\">Submit the idea</a>. &nbsp; &nbsp; <img src=\"http://getglimpse.com/content/github.gif\" /> Found an <em>error</em>? <a href=\"https://github.com/glimpse/glimpse/issues\">Help us improve</a>. &nbsp; &nbsp;<img src=\"http://getglimpse.com/content/twitter.png\" /> Have a <em>question</em>? <a href=\"http://twitter.com/#search?q=%23glimpse\">Tweet us using #glimpse</a>.</div>");
             content.Append("</body></html>");
              
             return new HtmlResourceResult(content.ToString());
-        }
+        } 
     }
 }
