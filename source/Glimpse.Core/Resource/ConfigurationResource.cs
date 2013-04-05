@@ -5,6 +5,7 @@ using System.Text;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 using Glimpse.Core.ResourceResult;
+using Glimpse.Core.Support;
 
 namespace Glimpse.Core.Resource
 {
@@ -81,13 +82,12 @@ namespace Glimpse.Core.Resource
             var content = new StringBuilder();
 
             content.Append("<!DOCTYPE html><html><head><title>Glimpse - Configuration Page</title><link rel=\"shortcut icon\" href=\"http://getglimpse.com/content/_v1/app-config-favicon.png?version=" + GlimpseRuntime.Version + "\" />");
-            content.Append("<style>*, *:before, *:after{-webkit-box-sizing: border-box;-moz-box-sizing: border-box;-ms-box-sizing: border-box;-o-box-sizing: border-box;box-sizing: border-box;}body{margin: 0;font-family: \"Segoe UI Web Regular\",\"Segoe UI\",\"Helvetica Neue\",Helvetica,Arial serif;font-size: 1em;line-height: 1.6em;}h1, h2, h3{font-weight: normal;}header{color: #fff;background-color: #323d42;height: 450px;}header table{width: 100%;}header .detail{text-align: center;width: 250px;}header h2{position: relative;}.inner{margin:0 auto;max-width: 1200px;width: 80%;min-width: 900px;vertical-align: top;padding-top: 1em;}.button{width: 250px;line-height: 1.2em;margin: 0.5em auto;text-align: center;font-size: 24px;padding: 10px 41px;text-decoration: none;display: block;color: white;border: 3px solid white;background-color: #434f54;}.button:hover{background-color: #3f4a4f;}.message{font-size: 0.5em;line-height: 1em;width: 125px;left: -150px;top: 20px;position: absolute;font-family: Comic Sans, Comic Sans MS, cursive;}img{border:0px;}.center{text-align: center;}.notification{background-color: #B5CDA4; border: thin solid #486E25; color: #486E25; padding: 6px; font-size: 1.2em; width: 100%; text-align: center; }.version span{font-size:0.8em;font-style:italic;}</style>");
+            content.Append("<style>*, *:before, *:after{-webkit-box-sizing: border-box;-moz-box-sizing: border-box;-ms-box-sizing: border-box;-o-box-sizing: border-box;box-sizing: border-box;}body{margin: 0;font-family: \"Segoe UI Web Regular\",\"Segoe UI\",\"Helvetica Neue\",Helvetica,Arial serif;font-size: 1em;line-height: 1.6em;}h1, h2, h3{font-weight: normal;}header{color: #fff;background-color: #323d42;height: 450px;}header table{width: 100%;}header .detail{text-align: center;width: 250px;}header h2{position: relative;}.inner{margin:0 auto;max-width: 1200px;width: 80%;min-width: 900px;vertical-align: top;padding-top: 1em;}.button{width: 250px;line-height: 1.2em;margin: 0.5em auto;text-align: center;font-size: 24px;padding: 10px 41px;text-decoration: none;display: block;color: white;border: 3px solid white;background-color: #434f54;}.button:hover{background-color: #3f4a4f;}.message{font-size: 0.5em;line-height: 1em;width: 125px;left: -150px;top: 20px;position: absolute;font-family: Comic Sans, Comic Sans MS, cursive;}img{border:0px;}.center{text-align: center;}.notification{margin-top:22px;background-color: #B5CDA4; border: thin solid #486E25; color: #486E25; padding: 20px; font-size: 1.2em; width: 250px; text-align: center; float:right; }.version span{font-size:0.8em;font-style:italic;}</style>");
             content.Append("</head><body>");
             content.Append("<header><div class=\"inner\"><table><tr><td class=\"logo\"><a href=\"http://getglimpse.com/\" title=\"Glimpse Home :D\"><img width=\"325\" src=\"http://getglimpse.com/content/_v1/app-config-logo.png?version=" + GlimpseRuntime.Version + "\" alt=\"Glimpse Home :D\"/></a></td><td class=\"detail\"><div class=\"version\">v" + GlimpseRuntime.Version + " <span>(core)</span></div><h2>Bookmarklets<div class=\"message\">“Drag us to your favorites bar for quick and easy access to Glimpse”</div></h2><a class=\"button\" href=\"javascript:(function(){document.cookie='glimpsePolicy=On;path=/;expires=Sat, 01 Jan 2050 12:00:00 GMT;';window.location.reload();})();\">Turn Glimpse On</a><a class=\"button\" href=\"javascript:(function(){document.cookie='glimpsePolicy=;path=/;expires=Sat, 01 Jan 2050 12:00:00 GMT;';window.location.reload();})();\">Turn Glimpse Off</a><a class=\"button\" href=\"javascript:(function(){document.cookie='glimpseId='+ prompt('Client Name?') +';path=/;expires=Sat, 01 Jan 2050 12:00:00 GMT;';window.location.reload();})();\">Set Glimpse Session Name</a></td></tr></table></div></header>");
             content.Append("<div class=\"inner\">");
-            content.Append("<script type=\"text/javascript\"> var getCookie = function(name) { var re = new RegExp(name + \"=([^;]+)\"); var value = re.exec(document.cookie); return (value != null) ? unescape(value[1]) : null; }; if (getCookie('glimpsePolicy') == 'On') { document.write(\"<div class='notification'><strong>Glimpse cookie is SET</strong> - When you go back to your site, depending on your policies, you should see Glimpse at the bottom right of the page.</div>\"); }</script>");
-            content.Append("<h2>Current Setup:</h2>");
-            content.Append("<p>This section details the Glimpse thinks its is configured.</p>");
+            content.Append("<script type=\"text/javascript\"> var getCookie = function(name) { var re = new RegExp(name + \"=([^;]+)\"); var value = re.exec(document.cookie); return (value != null) ? unescape(value[1]) : null; }; if (getCookie('glimpsePolicy') == 'On') { document.write(\"<div class='notification'><strong>Glimpse cookie is SET</strong> When you go back to your site, depending on your policies, you should see Glimpse at the bottom right of the page.</div>\"); }</script>");
+
             content.Append("<ul><li><strong>Tabs</strong>:<ul>");
 
             foreach (var tab in configuration.Tabs)
@@ -96,7 +96,8 @@ namespace Glimpse.Core.Resource
             }
 
             content.Append("</ul></li></ul>");
-            content.Append("<a id=\"more_link\" href=\"javascript:document.getElementById('more_link').style.display = 'none'; document.getElementById('more').style.display = 'block'\">Mode details?</a><ul id=\"more\" style=\"display:none\"><li><strong>Inspectors</strong>: <ul>");
+            content.Append("<a id=\"more_link\" href=\"javascript:document.getElementById('more_link').style.display = 'none'; document.getElementById('more').style.display = 'block'; return false;\">Mode details?</a><div id=\"more\" style=\"display:none\">");
+            content.Append("<h3>Detailed Settings:</h3><ul><li><strong>Inspectors</strong>: <ul>");
 
             foreach (var inspector in configuration.Inspectors)
             {
@@ -141,9 +142,21 @@ namespace Glimpse.Core.Resource
             content.AppendFormat("<li><strong>Proxy Factory</strong>: {0}</li>", configuration.ProxyFactory.GetType().FullName);
             content.AppendFormat("<li><strong>Message Broker</strong>: {0}</li>", configuration.MessageBroker.GetType().FullName);
             content.AppendFormat("<li><strong>Endpoint Base Uri</strong>: {0}</li></ul>", configuration.EndpointBaseUri);
+            
+            content.Append("<h3>Registered Packages:</h3>");
+            content.Append("<p>NOTE, doesn't represent all the glimpse dependent Nuget packages you have installed, just the ones that have registered as a Glimpse Nuget package</p>");
+            content.Append("<ul>");
 
+            var registeredPackages = NuGetPackage.GetRegisteredPackageVersions();
+            foreach (var registeredPackage in registeredPackages)
+            {  
+                content.AppendFormat("<li>{0} - {1}</li>", registeredPackage.Key, registeredPackage.Value);
+            }
+        
+            content.AppendFormat("</ul>");
             content.Append("</div>");
-            content.Append("<footer><div class=\"inner\"><h2>More information:</h2><p class=\"center\">For more info see <a href=\"http://getglimpse.com\">getGlimpse.com</a></p><div class=\"center\"><img src=\"http://getglimpse.com/content/github.gif\"> Found an <em>error</em>? <a href=\"https://github.com/glimpse/glimpse/issues\">Help us improve</a>.   <img src=\"http://getglimpse.com/content/twitter.png\"> Have a <em>question</em>? <a href=\"http://twitter.com/#search?q=%23glimpse\">Tweet us using #glimpse</a>.</div></div></div></footer>");
+            content.Append("</div>");
+            content.Append("<footer><div class=\"inner\"><p class=\"center\">For more info see <a href=\"http://getglimpse.com\">getGlimpse.com</a></p><div class=\"center\"><img src=\"http://getglimpse.com/content/github.gif\"> Found an <em>error</em>? <a href=\"https://github.com/glimpse/glimpse/issues\">Help us improve</a>.   <img src=\"http://getglimpse.com/content/twitter.png\"> Have a <em>question</em>? <a href=\"http://twitter.com/#search?q=%23glimpse\">Tweet us using #glimpse</a>.</div></div></div></footer>");
             content.Append("</body></html>");
              
             return new HtmlResourceResult(content.ToString());
