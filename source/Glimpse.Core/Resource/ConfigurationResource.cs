@@ -96,7 +96,7 @@ namespace Glimpse.Core.Resource
             }
 
             content.Append("</ul></li></ul>");
-            content.Append("<a id=\"more_link\" href=\"javascript:document.getElementById('more_link').style.display = 'none'; document.getElementById('more').style.display = 'block'; return false;\">Mode details?</a><div id=\"more\" style=\"display:none\">");
+            content.Append("<a id=\"more_link\" href=\"javascript:document.getElementById('more_link').style.display = 'none'; document.getElementById('more').style.display = 'block'; return false;\">More details?</a><div id=\"more\" style=\"display:none\">");
             content.Append("<h3>Detailed Settings:</h3><ul><li><strong>Inspectors</strong>: <ul>");
 
             foreach (var inspector in configuration.Inspectors)
