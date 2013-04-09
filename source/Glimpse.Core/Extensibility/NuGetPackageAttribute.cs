@@ -40,18 +40,28 @@ namespace Glimpse.Core.Extensibility
 
         private string Version { get; set; }
 
+        private string AssemblyName { get; set; }
+
+        /// <summary>
+        /// Setup Attribute with Assembly context
+        /// </summary>
+        /// <param name="assembly"></param>
+        public void Initialize(Assembly assembly)
+        {
+            var infoVersion = assembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false).Cast<AssemblyInformationalVersionAttribute>().SingleOrDefault();
+
+            Version = infoVersion != null ? infoVersion.InformationalVersion : assembly.GetName().Version.ToString();
+            AssemblyName = assembly.GetName().FullName;
+            Id = assembly.GetName().Name; 
+        }
+
         /// <summary>
         /// Gets the id.
         /// </summary>
         /// <returns>The NuGet package Id for the specified <paramref name="assembly"/>.</returns>
         public string GetId()
         {
-            if (!string.IsNullOrEmpty(Id))
-            {
-                return Id;
-            }
-
-            return Id = GetType().Assembly.GetName().Name;
+            return Id; 
         }
 
         /// <summary>
@@ -59,20 +69,8 @@ namespace Glimpse.Core.Extensibility
         /// </summary> 
         /// <returns>The NuGet package version for the specified <paramref name="assembly"/>.</returns>
         public string GetVersion()
-        {
-            if (!string.IsNullOrEmpty(Version))
-            {
-                return Version;
-            }
-
-            var assembly = GetType().Assembly;
-            var infoVersion = assembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false).Cast<AssemblyInformationalVersionAttribute>().SingleOrDefault();
-            if (infoVersion != null)
-            {
-                return Version = infoVersion.InformationalVersion;
-            }
-
-            return Version = assembly.GetName().Version.ToString();
+        { 
+            return Version;  
         }
 
         /// <summary>
@@ -81,7 +79,7 @@ namespace Glimpse.Core.Extensibility
         /// <returns>Full name value</returns>
         public string GetAssemblyName()
         {
-            return GetType().Assembly.GetName().FullName;
+            return AssemblyName;
         }
     }
 }

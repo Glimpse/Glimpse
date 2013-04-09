@@ -19,6 +19,8 @@ namespace Glimpse.Core.Support
                     continue;
                 }
 
+                nugetPackage.Initialize(assembly);
+
                 var version = nugetPackage.GetVersion();
                 var id = nugetPackage.GetId();
 
@@ -39,6 +41,8 @@ namespace Glimpse.Core.Support
                 {
                     continue;
                 }
+
+                nugetPackage.Initialize(assembly);
 
                 packages.Add(nugetPackage);
             }

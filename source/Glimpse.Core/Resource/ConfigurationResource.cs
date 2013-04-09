@@ -80,7 +80,7 @@ namespace Glimpse.Core.Resource
         public IResourceResult Execute(IResourceContext context, IGlimpseConfiguration configuration)
         {
             var content = new StringBuilder();
-            //var packages = FindPacakges();
+            var packages = FindPacakges();
 
             content.Append("<!DOCTYPE html><html><head><title>Glimpse - Configuration Page</title><link rel=\"shortcut icon\" href=\"http://getglimpse.com/content/_v1/app-config-favicon.png?version=" + GlimpseRuntime.Version + "\" />");
             content.Append("<style>*, *:before, *:after{-webkit-box-sizing: border-box;-moz-box-sizing: border-box;-ms-box-sizing: border-box;-o-box-sizing: border-box;box-sizing: border-box;}body{margin: 0;font-family: \"Segoe UI Web Regular\",\"Segoe UI\",\"Helvetica Neue\",Helvetica,Arial serif;font-size: 1em;line-height: 1.6em;}.code{font-size: 1.45em;font-family:monospace;}h1, h2, h3{font-weight: normal;}header{color: #fff;background-color: #323d42;height: 450px;}header table{width: 100%;}header .detail{text-align: center;width: 250px;}header h2{position: relative;}.inner{margin:0 auto;max-width: 1200px;width: 80%;min-width: 900px;vertical-align: top;padding-top: 1em;}.button{width: 250px;line-height: 1.2em;margin: 0.5em auto;text-align: center;font-size: 24px;padding: 10px 41px;text-decoration: none;display: block;color: white;border: 3px solid white;background-color: #434f54;}.button:hover{background-color: #3f4a4f;}.message{font-size: 0.5em;line-height: 1em;width: 125px;left: -150px;top: 20px;position: absolute; font-style:italic;}img{border:0px;}.center{text-align: center;}.notification{margin-top:22px; padding: 17px; font-size: 1.2em; width: 250px; text-align: center; float:right; }.notification-success{background-color: #B5CDA4; border: thin solid #486E25; color: #486E25;}.notification-fail{background-color: #E4BBB1; border: thin solid #DA6953; color: #DA6953;}.version span{font-size:0.8em;font-style:italic;}</style>");
@@ -91,47 +91,67 @@ namespace Glimpse.Core.Resource
             content.Append("<script type=\"text/javascript\"> var getCookie = function(name) { var re = new RegExp(name + \"=([^;]+)\"); var value = re.exec(document.cookie); return (value != null) ? unescape(value[1]) : null; }; if (getCookie('glimpsePolicy') == 'On') { document.write(\"<div class='notification notification-success'><strong>Glimpse cookie is SET</strong> When you go back to your site, depending on your policies, you should see Glimpse at the bottom right of the page.</div>\"); } else { document.write(\"<div class='notification notification-fail'><strong>Glimpse cookie NOT set</strong> By default for Glimpse to run on given requests, the `glimpsePolicy` cookie needs to be set. We have made this simple by providing the above buttons :D</div>\"); }</script>");
 
             content.Append("<ul><li><strong>Tabs</strong>:<ul>");
-
-            foreach (var tab in configuration.Tabs)
-            {
-                content.AppendFormat("<li><strong>{0}</strong> - <span class=\"code\">{1}</span><span style=\"display:none\" class=\"more-detail\"> - <em>{2}</em></span></li>", tab.Name, tab.GetType().FullName, tab.ExecuteOn);
-            }
+            GroupContent(content, (x, y) => x.AppendFormat("<li><strong>{0}</strong> - <span class=\"code\">{1}</span><span style=\"display:none\" class=\"more-detail\"> - <em>{2}</em></span></li>", y.Name, y.GetType().FullName, y.ExecuteOn), configuration.Tabs, packages);
+            //foreach (var tab in configuration.Tabs)
+            //{
+            //    content.AppendFormat("<li><strong>{0}</strong> - <span class=\"code\">{1}</span><span style=\"display:none\" class=\"more-detail\"> - <em>{2}</em></span></li>", tab.Name, tab.GetType().FullName, tab.ExecuteOn);
+            //}
 
             content.Append("</ul></li><li><strong>Runtime Policies</strong>: <ul>");
+            GroupContent(content, (x, y) =>
+                {
+                    var warning = "";
+                    if (y.GetType().FullName == "Glimpse.AspNet.Policy.LocalPolicy")
+                    {
+                        warning = "<strong class=\"warn\">*This policy means that Glimpse won't run remotely.*</strong>";
+                    }
 
-            foreach (var policy in configuration.RuntimePolicies)
-            {
-                content.AppendFormat("<li><span class=\"code\">{0}</span><span style=\"display:none\" class=\"more-detail\"> - <em>{1}</em></span></li>", policy.GetType().FullName, policy.ExecuteOn);
-            }
+                    x.AppendFormat("<li><span class=\"code\">{0}</span><span style=\"display:none\" class=\"more-detail\"> - <em>{1}</em></span> {2}</li>", y.GetType().FullName, y.ExecuteOn, warning);
+                }, configuration.RuntimePolicies, packages);
+            //foreach (var policy in configuration.RuntimePolicies)
+            //{
+            //    content.AppendFormat("<li><span class=\"code\">{0}</span><span style=\"display:none\" class=\"more-detail\"> - <em>{1}</em></span></li>", policy.GetType().FullName, policy.ExecuteOn);
+            //}
 
             content.Append("</ul></li></ul>");
             content.Append("<a class=\"more-detail\" href=\"javascript:return true;\" onclick=\"toggleClass('more-detail')\" style=\"display:block\">More details?</a><a class=\"more-detail\" href=\"javascript:return true;\" onclick=\"toggleClass('more-detail')\" style=\"display:none\">Less details?</a><div class=\"more-detail\" style=\"display:none\">");
+            
             content.Append("<h3>Detailed Settings:</h3><ul><li><strong>Inspectors</strong>: <ul>");
-
-            foreach (var inspector in configuration.Inspectors)
-            {
-                content.AppendFormat("<li><span class=\"code\">{0}</span></li>", inspector.GetType().FullName);
-            }
+            GroupContent(content, (x, y) => x.AppendFormat("<li><span class=\"code\">{0}</span></li>", y.GetType().FullName), configuration.RuntimePolicies, packages);
+            //foreach (var inspector in configuration.Inspectors)
+            //{
+            //    content.AppendFormat("<li><span class=\"code\">{0}</span></li>", inspector.GetType().FullName);
+            //}
 
             content.Append("</ul></li><li><strong>Resources</strong>: <ul>");
-
-            foreach (var resource in configuration.Resources)
-            {
-                var paramaters = string.Empty;
-                if (resource.Parameters != null)
+            GroupContent(content, (x, y) =>
                 {
-                    paramaters = string.Join(", ", resource.Parameters.Select(parameter => string.Format("{0} ({1})", parameter.Name, parameter.IsRequired)).ToArray());
-                }
+                    var paramaters = string.Empty;
+                    if (y.Parameters != null)
+                    {
+                        paramaters = string.Join(", ", y.Parameters.Select(parameter => string.Format("{0} ({1})", parameter.Name, parameter.IsRequired)).ToArray());
+                    }
 
-                content.AppendFormat("<li><strong>{0}</strong> - <span class=\"code\">{1}</span> - <em>{2}</em></li>", resource.Name, resource.GetType().FullName, paramaters);
-            }
+                    content.AppendFormat("<li><strong>{0}</strong> - <span class=\"code\">{1}</span> - <em>{2}</em></li>", y.Name, y.GetType().FullName, paramaters);
+                }, configuration.Resources, packages);
+
+            //foreach (var resource in configuration.Resources)
+            //{
+            //    var paramaters = string.Empty;
+            //    if (resource.Parameters != null)
+            //    {
+            //        paramaters = string.Join(", ", resource.Parameters.Select(parameter => string.Format("{0} ({1})", parameter.Name, parameter.IsRequired)).ToArray());
+            //    }
+
+            //    content.AppendFormat("<li><strong>{0}</strong> - <span class=\"code\">{1}</span> - <em>{2}</em></li>", resource.Name, resource.GetType().FullName, paramaters);
+            //}
 
             content.Append("</ul></li><li><strong>Client Scripts</strong>: <ul>");
-
-            foreach (var scripts in configuration.ClientScripts)
-            {
-                content.AppendFormat("<li><span class=\"code\">{0}</span> - {1}</li>", scripts.GetType().FullName, scripts.Order);
-            }
+            GroupContent(content, (x, y) => x.AppendFormat("<li><span class=\"code\">{0}</span> - {1}</li>", y.GetType().FullName, y.Order), configuration.ClientScripts, packages);
+            //foreach (var scripts in configuration.ClientScripts)
+            //{
+            //    content.AppendFormat("<li><span class=\"code\">{0}</span> - {1}</li>", scripts.GetType().FullName, scripts.Order);
+            //}
 
             content.AppendFormat("</ul></li><li><strong>Framework Provider</strong>: <span class=\"code\">{0}</span></li>", configuration.FrameworkProvider.GetType().FullName);
             content.AppendFormat("<li><strong>Html Encoder</strong>: <span class=\"code\">{0}</span></li>", configuration.HtmlEncoder.GetType().FullName);
@@ -164,37 +184,81 @@ namespace Glimpse.Core.Resource
             return new HtmlResourceResult(content.ToString());
         }
 
-        //private IDictionary<string, IList<T>> GroupItems<T>(ICollection<T> items, IDictionary<string, PackageDetail> packages)
-        //{
-        //    var result = new Dictionary<string, IList<T>>();
-
-        //    foreach (var item in items)
-        //    {
-        //        if (packages.ContainsKey(item.GetType().Assembly.FullName))
-        //        {
-                    
-        //        }
-        //    }
-        //}
-
-        private IDictionary<string, PackageDetail> FindPacakges()
+        private void GroupContent<T>(StringBuilder content, Action<StringBuilder, T> action, ICollection<T> items, IDictionary<string, PackageItemDetail> packages)
         {
-            var result = new Dictionary<string, PackageDetail>();
+            var tabs = GroupItems(items, packages);
+            foreach (var packageItem in tabs)
+            {
+                var package = packageItem.Value;
+                content.AppendFormat("<li><strong>{0}</strong> <span class=\"package-version\">({1})</span><ul>", package.Package.Name, package.Package.Version);
+                foreach (var item in package.Items)
+                {
+                    action(content, item);
+                    //content.AppendFormat("<li><strong>{0}</strong> - <span class=\"code\">{1}</span><span style=\"display:none\" class=\"more-detail\"> - <em>{2}</em></span></li>", item.Name, item.GetType().FullName, item.ExecuteOn);
+                }
+
+                content.Append("</ul></li>");
+            }
+        }
+
+        private IDictionary<string, PackageItem<T>> GroupItems<T>(ICollection<T> items, IDictionary<string, PackageItemDetail> packages)
+        {
+            var result = new Dictionary<string, PackageItem<T>>();
+            var otherPackage = new PackageItemDetail() { Name = "Other", Assembly = "" };
+
+            foreach (var item in items)
+            {  
+                var package = otherPackage;
+                if (packages.TryGetValue(item.GetType().Assembly.FullName, out package))  
+                { 
+                }
+
+                var entry = (PackageItem<T>)null;
+                if (!result.TryGetValue(package.Assembly, out entry))
+                {
+                    entry = result[package.Assembly] = new PackageItem<T>();
+                    entry.Package = package;
+                }
+
+                entry.Items.Add(item);
+            }
+
+            return result;
+        }
+
+        private IDictionary<string, PackageItemDetail> FindPacakges()
+        {
+            var result = new Dictionary<string, PackageItemDetail>();
             var packages = NuGetPackage.GetRegisteredPackages();
 
             foreach (var package in packages)
             {
-                result[package.GetAssemblyName()] = new PackageDetail { Name = package.GetId(), Version = package.GetVersion() };
+                var name = package.GetAssemblyName();
+                result[name] = new PackageItemDetail { Name = package.GetId(), Version = package.GetVersion(), Assembly = name };
             }
 
             return result;
         } 
 
-        private class PackageDetail
+        private class PackageItem<T>
+        {
+            public PackageItem()
+            { 
+                Items = new List<T>();
+            }
+
+            public PackageItemDetail Package { get; set; }
+
+            public IList<T> Items { get; private set; }
+        }
+
+        private class PackageItemDetail
         {
             public string Name { get; set; }
 
             public string Version { get; set; }
+
+            public string Assembly { get; set; }
         }
     }
 }
