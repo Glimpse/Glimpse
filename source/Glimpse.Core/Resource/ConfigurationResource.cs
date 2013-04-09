@@ -82,7 +82,8 @@ namespace Glimpse.Core.Resource
             var content = new StringBuilder();
 
             content.Append("<!DOCTYPE html><html><head><title>Glimpse - Configuration Page</title><link rel=\"shortcut icon\" href=\"http://getglimpse.com/content/_v1/app-config-favicon.png?version=" + GlimpseRuntime.Version + "\" />");
-            content.Append("<style>*, *:before, *:after{-webkit-box-sizing: border-box;-moz-box-sizing: border-box;-ms-box-sizing: border-box;-o-box-sizing: border-box;box-sizing: border-box;}body{margin: 0;font-family: \"Segoe UI Web Regular\",\"Segoe UI\",\"Helvetica Neue\",Helvetica,Arial serif;font-size: 1em;line-height: 1.6em;}h1, h2, h3{font-weight: normal;}header{color: #fff;background-color: #323d42;height: 450px;}header table{width: 100%;}header .detail{text-align: center;width: 250px;}header h2{position: relative;}.inner{margin:0 auto;max-width: 1200px;width: 80%;min-width: 900px;vertical-align: top;padding-top: 1em;}.button{width: 250px;line-height: 1.2em;margin: 0.5em auto;text-align: center;font-size: 24px;padding: 10px 41px;text-decoration: none;display: block;color: white;border: 3px solid white;background-color: #434f54;}.button:hover{background-color: #3f4a4f;}.message{font-size: 0.5em;line-height: 1em;width: 125px;left: -150px;top: 20px;position: absolute;font-family: Comic Sans, Comic Sans MS, cursive;}img{border:0px;}.center{text-align: center;}.notification{margin-top:22px; padding: 17px; font-size: 1.2em; width: 250px; text-align: center; float:right; }.notification-success{background-color: #B5CDA4; border: thin solid #486E25; color: #486E25;}.notification-fail{background-color: #E4BBB1; border: thin solid #DA6953; color: #DA6953;}.version span{font-size:0.8em;font-style:italic;}</style>");
+            content.Append("<style>*, *:before, *:after{-webkit-box-sizing: border-box;-moz-box-sizing: border-box;-ms-box-sizing: border-box;-o-box-sizing: border-box;box-sizing: border-box;}body{margin: 0;font-family: \"Segoe UI Web Regular\",\"Segoe UI\",\"Helvetica Neue\",Helvetica,Arial serif;font-size: 1em;line-height: 1.6em;}.code{font-size: 1.45em;font-family:monospace;}h1, h2, h3{font-weight: normal;}header{color: #fff;background-color: #323d42;height: 450px;}header table{width: 100%;}header .detail{text-align: center;width: 250px;}header h2{position: relative;}.inner{margin:0 auto;max-width: 1200px;width: 80%;min-width: 900px;vertical-align: top;padding-top: 1em;}.button{width: 250px;line-height: 1.2em;margin: 0.5em auto;text-align: center;font-size: 24px;padding: 10px 41px;text-decoration: none;display: block;color: white;border: 3px solid white;background-color: #434f54;}.button:hover{background-color: #3f4a4f;}.message{font-size: 0.5em;line-height: 1em;width: 125px;left: -150px;top: 20px;position: absolute; font-style:italic;}img{border:0px;}.center{text-align: center;}.notification{margin-top:22px; padding: 17px; font-size: 1.2em; width: 250px; text-align: center; float:right; }.notification-success{background-color: #B5CDA4; border: thin solid #486E25; color: #486E25;}.notification-fail{background-color: #E4BBB1; border: thin solid #DA6953; color: #DA6953;}.version span{font-size:0.8em;font-style:italic;}</style>");
+            content.Append("<script type=\"text/javascript\">var toggleClass = function(name) { toggleItems(document.getElementsByClassName(name)); }, toggleItems = function(e) { for(var i = 0; i < e.length; i++) { toggleItem(e[i]); } }, toggleItem = function(e) { if(e.style.display == 'none') { e.style.display = ''; } else { e.style.display = 'none'; } };</script>");
             content.Append("</head><body>");
             content.Append("<header><div class=\"inner\"><table><tr><td class=\"logo\"><a href=\"http://getglimpse.com/\" title=\"Glimpse Home :D\"><img width=\"325\" src=\"http://getglimpse.com/content/_v1/app-config-logo.png?version=" + GlimpseRuntime.Version + "\" alt=\"Glimpse Home :D\"/></a></td><td class=\"detail\"><div class=\"version\">v" + GlimpseRuntime.Version + " <span>(core)</span></div><h2>Bookmarklets<div class=\"message\">“Drag us to your favorites bar for quick and easy access to Glimpse”</div></h2><a class=\"button\" href=\"javascript:(function(){document.cookie='glimpsePolicy=On;path=/;expires=Sat, 01 Jan 2050 12:00:00 GMT;';window.location.reload();})();\">Turn Glimpse On</a><a class=\"button\" href=\"javascript:(function(){document.cookie='glimpsePolicy=;path=/;expires=Sat, 01 Jan 2050 12:00:00 GMT;';window.location.reload();})();\">Turn Glimpse Off</a><a class=\"button\" href=\"javascript:(function(){document.cookie='glimpseId='+ prompt('Client Name?') +';path=/;expires=Sat, 01 Jan 2050 12:00:00 GMT;';window.location.reload();})();\">Set Glimpse Session Name</a></td></tr></table></div></header>");
             content.Append("<div class=\"inner\">");
@@ -92,23 +93,23 @@ namespace Glimpse.Core.Resource
 
             foreach (var tab in configuration.Tabs)
             {
-                content.AppendFormat("<li><strong>{0}</strong> - {1} - <em>{2}</em></li>", tab.Name, tab.GetType().FullName, tab.ExecuteOn);
-            }
-
-            content.Append("</ul></li></ul>");
-            content.Append("<a id=\"more_link\" href=\"javascript:document.getElementById('more_link').style.display = 'none'; document.getElementById('more').style.display = 'block'; return false;\">More details?</a><div id=\"more\" style=\"display:none\">");
-            content.Append("<h3>Detailed Settings:</h3><ul><li><strong>Inspectors</strong>: <ul>");
-
-            foreach (var inspector in configuration.Inspectors)
-            {
-                content.AppendFormat("<li>{0}</li>", inspector.GetType().FullName);
+                content.AppendFormat("<li><strong>{0}</strong> - <span class=\"code\">{1}</span><span style=\"display:none\" class=\"more-detail\"> - <em>{2}</em></span></li>", tab.Name, tab.GetType().FullName, tab.ExecuteOn);
             }
 
             content.Append("</ul></li><li><strong>Runtime Policies</strong>: <ul>");
 
             foreach (var policy in configuration.RuntimePolicies)
             {
-                content.AppendFormat("<li>{0} - <em>{1}</em></li>", policy.GetType().FullName, policy.ExecuteOn);
+                content.AppendFormat("<li><span class=\"code\">{0}</span><span style=\"display:none\" class=\"more-detail\"> - <em>{1}</em></span></li>", policy.GetType().FullName, policy.ExecuteOn);
+            }
+
+            content.Append("</ul></li></ul>");
+            content.Append("<a class=\"more-detail\" href=\"javascript:return true;\" onclick=\"toggleClass('more-detail')\" style=\"display:block\">More details?</a><a class=\"more-detail\" href=\"javascript:return true;\" onclick=\"toggleClass('more-detail')\" style=\"display:none\">Less details?</a><div class=\"more-detail\" style=\"display:none\">");
+            content.Append("<h3>Detailed Settings:</h3><ul><li><strong>Inspectors</strong>: <ul>");
+
+            foreach (var inspector in configuration.Inspectors)
+            {
+                content.AppendFormat("<li><span class=\"code\">{0}</span></li>", inspector.GetType().FullName);
             }
 
             content.Append("</ul></li><li><strong>Resources</strong>: <ul>");
@@ -121,27 +122,27 @@ namespace Glimpse.Core.Resource
                     paramaters = string.Join(", ", resource.Parameters.Select(parameter => string.Format("{0} ({1})", parameter.Name, parameter.IsRequired)).ToArray());
                 }
 
-                content.AppendFormat("<li><strong>{0}</strong> - {1} - <em>{2}</em></li>", resource.Name, resource.GetType().FullName, paramaters);
+                content.AppendFormat("<li><strong>{0}</strong> - <span class=\"code\">{1}</span> - <em>{2}</em></li>", resource.Name, resource.GetType().FullName, paramaters);
             }
 
             content.Append("</ul></li><li><strong>Client Scripts</strong>: <ul>");
 
             foreach (var scripts in configuration.ClientScripts)
             {
-                content.AppendFormat("<li>{0} - {1}</li>", scripts.GetType().FullName, scripts.Order);
+                content.AppendFormat("<li><span class=\"code\">{0}</span> - {1}</li>", scripts.GetType().FullName, scripts.Order);
             }
 
-            content.AppendFormat("</ul></li><li><strong>Framework Provider</strong>: {0}</li>", configuration.FrameworkProvider.GetType().FullName);
-            content.AppendFormat("<li><strong>Html Encoder</strong>: {0}</li>", configuration.HtmlEncoder.GetType().FullName);
-            content.AppendFormat("<li><strong>Logger</strong>: {0}</li>", configuration.Logger.GetType().FullName);
-            content.AppendFormat("<li><strong>Persistence Store</strong>: {0}</li>", configuration.PersistenceStore.GetType().FullName);
-            content.AppendFormat("<li><strong>Resource Endpoint</strong>: {0}</li>", configuration.ResourceEndpoint.GetType().FullName);
-            content.AppendFormat("<li><strong>Serializer</strong>: {0}</li>", configuration.Serializer.GetType().FullName);
-            content.AppendFormat("<li><strong>Default Resource</strong>: {0} - <em>{1}</em></li>", configuration.DefaultResource.GetType().FullName, configuration.DefaultResource.Name);
-            content.AppendFormat("<li><strong>Default Runtime Policy</strong>: {0}</li>", configuration.DefaultRuntimePolicy.GetType().FullName);
-            content.AppendFormat("<li><strong>Proxy Factory</strong>: {0}</li>", configuration.ProxyFactory.GetType().FullName);
-            content.AppendFormat("<li><strong>Message Broker</strong>: {0}</li>", configuration.MessageBroker.GetType().FullName);
-            content.AppendFormat("<li><strong>Endpoint Base Uri</strong>: {0}</li></ul>", configuration.EndpointBaseUri);
+            content.AppendFormat("</ul></li><li><strong>Framework Provider</strong>: <span class=\"code\">{0}</span></li>", configuration.FrameworkProvider.GetType().FullName);
+            content.AppendFormat("<li><strong>Html Encoder</strong>: <span class=\"code\">{0}</span></li>", configuration.HtmlEncoder.GetType().FullName);
+            content.AppendFormat("<li><strong>Logger</strong>: <span class=\"code\">{0}</span></li>", configuration.Logger.GetType().FullName);
+            content.AppendFormat("<li><strong>Persistence Store</strong>: <span class=\"code\">{0}</span></li>", configuration.PersistenceStore.GetType().FullName);
+            content.AppendFormat("<li><strong>Resource Endpoint</strong>: <span class=\"code\">{0}</span></li>", configuration.ResourceEndpoint.GetType().FullName);
+            content.AppendFormat("<li><strong>Serializer</strong>: <span class=\"code\">{0}</span></li>", configuration.Serializer.GetType().FullName);
+            content.AppendFormat("<li><strong>Default Resource</strong>: <span class=\"code\">{0}</span> - <em>{1}</em></li>", configuration.DefaultResource.GetType().FullName, configuration.DefaultResource.Name);
+            content.AppendFormat("<li><strong>Default Runtime Policy</strong>: <span class=\"code\">{0}</span></li>", configuration.DefaultRuntimePolicy.GetType().FullName);
+            content.AppendFormat("<li><strong>Proxy Factory</strong>: <span class=\"code\">{0}</span></li>", configuration.ProxyFactory.GetType().FullName);
+            content.AppendFormat("<li><strong>Message Broker</strong>: <span class=\"code\">{0}</span></li>", configuration.MessageBroker.GetType().FullName);
+            content.AppendFormat("<li><strong>Endpoint Base Uri</strong>: <span class=\"code\">{0}</span></li></ul>", configuration.EndpointBaseUri);
             
             content.Append("<h3>Registered Packages:</h3>");
             content.Append("<p>NOTE, doesn't represent all the glimpse dependent Nuget packages you have installed, just the ones that have registered as a Glimpse Nuget package</p>");
