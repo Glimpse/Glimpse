@@ -80,6 +80,7 @@ namespace Glimpse.Core.Resource
         public IResourceResult Execute(IResourceContext context, IGlimpseConfiguration configuration)
         {
             var content = new StringBuilder();
+            //var packages = FindPacakges();
 
             content.Append("<!DOCTYPE html><html><head><title>Glimpse - Configuration Page</title><link rel=\"shortcut icon\" href=\"http://getglimpse.com/content/_v1/app-config-favicon.png?version=" + GlimpseRuntime.Version + "\" />");
             content.Append("<style>*, *:before, *:after{-webkit-box-sizing: border-box;-moz-box-sizing: border-box;-ms-box-sizing: border-box;-o-box-sizing: border-box;box-sizing: border-box;}body{margin: 0;font-family: \"Segoe UI Web Regular\",\"Segoe UI\",\"Helvetica Neue\",Helvetica,Arial serif;font-size: 1em;line-height: 1.6em;}.code{font-size: 1.45em;font-family:monospace;}h1, h2, h3{font-weight: normal;}header{color: #fff;background-color: #323d42;height: 450px;}header table{width: 100%;}header .detail{text-align: center;width: 250px;}header h2{position: relative;}.inner{margin:0 auto;max-width: 1200px;width: 80%;min-width: 900px;vertical-align: top;padding-top: 1em;}.button{width: 250px;line-height: 1.2em;margin: 0.5em auto;text-align: center;font-size: 24px;padding: 10px 41px;text-decoration: none;display: block;color: white;border: 3px solid white;background-color: #434f54;}.button:hover{background-color: #3f4a4f;}.message{font-size: 0.5em;line-height: 1em;width: 125px;left: -150px;top: 20px;position: absolute; font-style:italic;}img{border:0px;}.center{text-align: center;}.notification{margin-top:22px; padding: 17px; font-size: 1.2em; width: 250px; text-align: center; float:right; }.notification-success{background-color: #B5CDA4; border: thin solid #486E25; color: #486E25;}.notification-fail{background-color: #E4BBB1; border: thin solid #DA6953; color: #DA6953;}.version span{font-size:0.8em;font-style:italic;}</style>");
@@ -161,6 +162,39 @@ namespace Glimpse.Core.Resource
             content.Append("</body></html>");
              
             return new HtmlResourceResult(content.ToString());
+        }
+
+        //private IDictionary<string, IList<T>> GroupItems<T>(ICollection<T> items, IDictionary<string, PackageDetail> packages)
+        //{
+        //    var result = new Dictionary<string, IList<T>>();
+
+        //    foreach (var item in items)
+        //    {
+        //        if (packages.ContainsKey(item.GetType().Assembly.FullName))
+        //        {
+                    
+        //        }
+        //    }
+        //}
+
+        private IDictionary<string, PackageDetail> FindPacakges()
+        {
+            var result = new Dictionary<string, PackageDetail>();
+            var packages = NuGetPackage.GetRegisteredPackages();
+
+            foreach (var package in packages)
+            {
+                result[package.GetAssemblyName()] = new PackageDetail { Name = package.GetId(), Version = package.GetVersion() };
+            }
+
+            return result;
         } 
+
+        private class PackageDetail
+        {
+            public string Name { get; set; }
+
+            public string Version { get; set; }
+        }
     }
 }

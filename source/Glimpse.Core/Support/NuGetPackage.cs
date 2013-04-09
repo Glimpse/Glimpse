@@ -19,10 +19,28 @@ namespace Glimpse.Core.Support
                     continue;
                 }
 
-                var version = nugetPackage.GetVersion(assembly);
-                var id = nugetPackage.GetId(assembly);
+                var version = nugetPackage.GetVersion();
+                var id = nugetPackage.GetId();
 
                 packages[id] = version;
+            }
+
+            return packages;
+        }
+
+        public static IList<NuGetPackageAttribute> GetRegisteredPackages()
+        {
+            var packages = new List<NuGetPackageAttribute>();
+
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                var nugetPackage = assembly.GetCustomAttributes(typeof(NuGetPackageAttribute), false).Cast<NuGetPackageAttribute>().SingleOrDefault();
+                if (nugetPackage == null)
+                {
+                    continue;
+                }
+
+                packages.Add(nugetPackage);
             }
 
             return packages;

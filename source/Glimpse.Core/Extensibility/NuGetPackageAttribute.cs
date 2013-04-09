@@ -33,7 +33,7 @@ namespace Glimpse.Core.Extensibility
         public NuGetPackageAttribute(string id, string version)
         {
             Id = id;
-            Version = version;
+            Version = version; 
         }
 
         private string Id { get; set; }
@@ -43,30 +43,29 @@ namespace Glimpse.Core.Extensibility
         /// <summary>
         /// Gets the id.
         /// </summary>
-        /// <param name="assembly">The assembly.</param>
         /// <returns>The NuGet package Id for the specified <paramref name="assembly"/>.</returns>
-        public string GetId(Assembly assembly)
+        public string GetId()
         {
             if (!string.IsNullOrEmpty(Id))
             {
                 return Id;
             }
 
-            return Id = assembly.GetName().Name;
+            return Id = GetType().Assembly.GetName().Name;
         }
 
         /// <summary>
         /// Gets the version.
-        /// </summary>
-        /// <param name="assembly">The assembly.</param>
+        /// </summary> 
         /// <returns>The NuGet package version for the specified <paramref name="assembly"/>.</returns>
-        public string GetVersion(Assembly assembly)
+        public string GetVersion()
         {
             if (!string.IsNullOrEmpty(Version))
             {
                 return Version;
             }
 
+            var assembly = GetType().Assembly;
             var infoVersion = assembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false).Cast<AssemblyInformationalVersionAttribute>().SingleOrDefault();
             if (infoVersion != null)
             {
@@ -74,6 +73,15 @@ namespace Glimpse.Core.Extensibility
             }
 
             return Version = assembly.GetName().Version.ToString();
+        }
+
+        /// <summary>
+        /// Returns the full name of the assembly that the attribute is in.
+        /// </summary>
+        /// <returns>Full name value</returns>
+        public string GetAssemblyName()
+        {
+            return GetType().Assembly.GetName().FullName;
         }
     }
 }
