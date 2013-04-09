@@ -92,11 +92,7 @@ namespace Glimpse.Core.Resource
 
             content.Append("<ul><li><strong>Tabs</strong>:<ul>");
             GroupContent(content, (x, y) => x.AppendFormat("<li><strong>{0}</strong> - <span class=\"code\">{1}</span><span style=\"display:none\" class=\"more-detail\"> - <em>{2}</em></span></li>", y.Name, y.GetType().FullName, y.ExecuteOn), configuration.Tabs, packages);
-            //foreach (var tab in configuration.Tabs)
-            //{
-            //    content.AppendFormat("<li><strong>{0}</strong> - <span class=\"code\">{1}</span><span style=\"display:none\" class=\"more-detail\"> - <em>{2}</em></span></li>", tab.Name, tab.GetType().FullName, tab.ExecuteOn);
-            //}
-
+          
             content.Append("</ul></li><li><strong>Runtime Policies</strong>: <ul>");
             GroupContent(content, (x, y) =>
                 {
@@ -108,21 +104,13 @@ namespace Glimpse.Core.Resource
 
                     x.AppendFormat("<li><span class=\"code\">{0}</span><span style=\"display:none\" class=\"more-detail\"> - <em>{1}</em></span> {2}</li>", y.GetType().FullName, y.ExecuteOn, warning);
                 }, configuration.RuntimePolicies, packages);
-            //foreach (var policy in configuration.RuntimePolicies)
-            //{
-            //    content.AppendFormat("<li><span class=\"code\">{0}</span><span style=\"display:none\" class=\"more-detail\"> - <em>{1}</em></span></li>", policy.GetType().FullName, policy.ExecuteOn);
-            //}
-
+            
             content.Append("</ul></li></ul>");
             content.Append("<a class=\"more-detail\" href=\"javascript:return true;\" onclick=\"toggleClass('more-detail')\" style=\"display:block\">More details?</a><a class=\"more-detail\" href=\"javascript:return true;\" onclick=\"toggleClass('more-detail')\" style=\"display:none\">Less details?</a><div class=\"more-detail\" style=\"display:none\">");
             
             content.Append("<h3>Detailed Settings:</h3><ul><li><strong>Inspectors</strong>: <ul>");
             GroupContent(content, (x, y) => x.AppendFormat("<li><span class=\"code\">{0}</span></li>", y.GetType().FullName), configuration.RuntimePolicies, packages);
-            //foreach (var inspector in configuration.Inspectors)
-            //{
-            //    content.AppendFormat("<li><span class=\"code\">{0}</span></li>", inspector.GetType().FullName);
-            //}
-
+            
             content.Append("</ul></li><li><strong>Resources</strong>: <ul>");
             GroupContent(content, (x, y) =>
                 {
@@ -135,24 +123,9 @@ namespace Glimpse.Core.Resource
                     content.AppendFormat("<li><strong>{0}</strong> - <span class=\"code\">{1}</span> - <em>{2}</em></li>", y.Name, y.GetType().FullName, paramaters);
                 }, configuration.Resources, packages);
 
-            //foreach (var resource in configuration.Resources)
-            //{
-            //    var paramaters = string.Empty;
-            //    if (resource.Parameters != null)
-            //    {
-            //        paramaters = string.Join(", ", resource.Parameters.Select(parameter => string.Format("{0} ({1})", parameter.Name, parameter.IsRequired)).ToArray());
-            //    }
-
-            //    content.AppendFormat("<li><strong>{0}</strong> - <span class=\"code\">{1}</span> - <em>{2}</em></li>", resource.Name, resource.GetType().FullName, paramaters);
-            //}
-
             content.Append("</ul></li><li><strong>Client Scripts</strong>: <ul>");
             GroupContent(content, (x, y) => x.AppendFormat("<li><span class=\"code\">{0}</span> - {1}</li>", y.GetType().FullName, y.Order), configuration.ClientScripts, packages);
-            //foreach (var scripts in configuration.ClientScripts)
-            //{
-            //    content.AppendFormat("<li><span class=\"code\">{0}</span> - {1}</li>", scripts.GetType().FullName, scripts.Order);
-            //}
-
+            
             content.AppendFormat("</ul></li><li><strong>Framework Provider</strong>: <span class=\"code\">{0}</span></li>", configuration.FrameworkProvider.GetType().FullName);
             content.AppendFormat("<li><strong>Html Encoder</strong>: <span class=\"code\">{0}</span></li>", configuration.HtmlEncoder.GetType().FullName);
             content.AppendFormat("<li><strong>Logger</strong>: <span class=\"code\">{0}</span></li>", configuration.Logger.GetType().FullName);
