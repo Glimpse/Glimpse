@@ -1,6 +1,8 @@
 ﻿using System;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Framework;
 using Glimpse.Core.Resource;
+using Glimpse.Core.ResourceResult;
 using Moq;
 using Xunit;
 
@@ -27,13 +29,26 @@ namespace Glimpse.Test.Core.Resource
         }
 
         [Fact]
+        public void NotSupportNonPrivilegedExecution()
+        {
+            var resource = new PopupResource();
+            var contextMock = new Mock<IResourceContext>();
+
+            Assert.Throws<NotSupportedException>(() => resource.Execute(contextMock.Object));
+        }
+
+        [Fact(Skip = "Need to build out correct test here")]
         public void Execute()
         {
             var contextMock = new Mock<IResourceContext>();
+            var configMock = new Mock<IGlimpseConfiguration>();
 
             var resource = new ConfigurationResource();
-             
-            Assert.NotNull(resource.Execute(contextMock.Object));
+
+            var result = resource.Execute(contextMock.Object, configMock.Object);
+            var htmlResourceResult = result as HtmlResourceResult;
+
+            Assert.NotNull(result);
         }
     }
 }
