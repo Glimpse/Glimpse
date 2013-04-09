@@ -92,8 +92,8 @@ namespace Glimpse.Core.Resource
 
             content.Append("<ul><li><strong>Tabs</strong>:<ul>");
             GroupContent(content, (x, y) => x.AppendFormat("<li><strong>{0}</strong> - <span class=\"code\">{1}</span><span style=\"display:none\" class=\"more-detail\"> - <em>{2}</em></span></li>", y.Name, y.GetType().FullName, y.ExecuteOn), configuration.Tabs, packages);
-          
-            content.Append("</ul></li><li><strong>Runtime Policies</strong>: <ul>");
+
+            content.Append("</ul>Want to create your own Tabs - <a href=\"http://getglimpse.com/Help/Custom-Tabs\" target=\"new\">see here!</a></li><li><strong>Runtime Policies</strong>: <ul>");
             GroupContent(content, (x, y) =>
                 {
                     var warning = "";
@@ -104,8 +104,8 @@ namespace Glimpse.Core.Resource
 
                     x.AppendFormat("<li><span class=\"code\">{0}</span><span style=\"display:none\" class=\"more-detail\"> - <em>{1}</em></span> {2}</li>", y.GetType().FullName, y.ExecuteOn, warning);
                 }, configuration.RuntimePolicies, packages);
-            
-            content.Append("</ul></li></ul>");
+
+            content.Append("</ul>Learn how to create your own policies - <a href=\"http://getglimpse.com/Help/Custom-Runtime-Policy\" target=\"new\">see here!</a></li></ul>");
             content.Append("<a class=\"more-detail\" href=\"javascript:return true;\" onclick=\"toggleClass('more-detail')\" style=\"display:block\">More details?</a><a class=\"more-detail\" href=\"javascript:return true;\" onclick=\"toggleClass('more-detail')\" style=\"display:none\">Less details?</a><div class=\"more-detail\" style=\"display:none\">");
             
             content.Append("<h3>Detailed Settings:</h3><ul><li><strong>Inspectors</strong>: <ul>");
