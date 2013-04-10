@@ -83,7 +83,7 @@
             return buildOnly(data, level, metadata);
         },
         buildOnly = function (data, level, metadata) {
-            var html = '<table class="glimpse-row-holder glimpse-row-holder">', 
+            var html = '<table class="glimpse-row-holder">', 
                 rowClass = '',
                 layout = metadata.layout,
                 includeHeading = engineUtil.includeHeading(metadata);
