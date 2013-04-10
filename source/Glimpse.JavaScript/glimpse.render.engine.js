@@ -1,11 +1,11 @@
 ﻿glimpse.render.engine = (function($, pubsub) {
     var providers = {},
-        addition = function (scope, data, metadata, isAppend) {
-            var insertType = isAppend ? 'insertAfter' : 'insertBefore',
-                html = $('<div>' + build(data, metadata) + '</div>').find('.glimpse-row-holder:first > .glimpse-row'),
+        addition = function (scope, data, metadata, insertType, targetType) {
+            var html = $('<div>' + build(data, metadata) + '</div>').find('.glimpse-row-holder:first > .glimpse-row'),
                 rowHolder = scope.find('.glimpse-row-holder:first'),
-                scopeTarget = isAppend ? rowHolder.find('> .glimpse-row:last') : rowHolder.find('> .glimpse-row:first');
+                scopeTarget = rowHolder.find('> .glimpse-row:' + targetType);
             
+            // Catch the case when we don't have anything to action the insertType against
             if (scopeTarget.length == 0) {
                 scopeTarget = rowHolder;
                 insertType = 'appendTo';
@@ -29,10 +29,10 @@
             pubsub.publish('trigger.panel.render.style', { scope: scope });
         },
         append = function(scope, data, metadata) {
-            addition(scope, data, metadata, true);
+            addition(scope, data, metadata, 'insertAfter', 'last');
         },
         prepend = function(scope, data, metadata) {
-            addition(scope, data, metadata, false);
+            addition(scope, data, metadata, 'insertBefore', 'first');
         };
    
     return {
