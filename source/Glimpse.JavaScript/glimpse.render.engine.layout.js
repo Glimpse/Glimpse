@@ -83,14 +83,13 @@
             return buildOnly(data, level, metadata);
         },
         buildOnly = function (data, level, metadata) {
-            var html = '<table class="glimpse-row-holder">', 
+            var html = '<table class="glimpse-row-holder glimpse-row-holder">', 
                 rowClass = '',
                 layout = metadata.layout,
                 includeHeading = engineUtil.includeHeading(metadata);
             for (var i = includeHeading ? 0 : 1; i < data.length; i++) {
-                rowClass = data[i].length > data[0].length ? (' ' + data[i][data[i].length - 1]) : '';
-                html += (i == 0 && includeHeading) ? '<thead class="glimpse-row-header glimpse-row-header-' + level + '">' : '';
-                html += (i == 1) ? '<tbody class="glimpse-row-holder">' : '';
+                rowClass = data[i].length > data[0].length ? (' ' + data[i][data[i].length - 1]) : ''; 
+                html += (i == 0 && includeHeading) ? '<thead class="glimpse-row-header glimpse-row-header-' + level + '">' : '<tbody class="glimpse-row">'; 
                 for (var x = 0; x < layout.length; x++) { 
                     var rowData = '';
                      
@@ -99,10 +98,9 @@
                         rowData += buildCell(data[i], metadataItem, level, cellType, i, includeHeading);
                     }
                      
-                    if (rowData != '') { html += '<tr class="glimpse-row ' + rowClass + '">' + rowData + '</tr>'; };
+                    if (rowData != '') { html += '<tr class="' + rowClass + '">' + rowData + '</tr>'; };
                 }
-                html += (i == 0 && includeHeading) ? '</thead>' : '';
-                html += (i == data.length - 1) ? '</tbody>' : '';
+                html += (i == 0 && includeHeading) ? '</thead>' : '</tbody>'; 
             }
             html += '</table>';
 

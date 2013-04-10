@@ -1,9 +1,17 @@
 ﻿glimpse.render.engine = (function($, pubsub) {
     var providers = {},
         addition = function (scope, data, metadata, isAppend) {
-            var insertType = isAppend ? 'appendTo' : 'prependTo',
-                html = $('<div>' + build(data, metadata) + '</div>').find('.glimpse-row-holder:first')[0].innerHTML,
-                elements = $(html)[insertType](scope.find('.glimpse-row-holder:first'));
+            var insertType = isAppend ? 'insertAfter' : 'insertBefore',
+                html = $('<div>' + build(data, metadata) + '</div>').find('.glimpse-row-holder:first > .glimpse-row'),
+                rowHolder = scope.find('.glimpse-row-holder:first'),
+                scopeTarget = isAppend ? rowHolder.find('> .glimpse-row:last') : rowHolder.find('> .glimpse-row:first');
+            
+            if (scopeTarget.length == 0) {
+                scopeTarget = rowHolder;
+                insertType = 'appendTo';
+            }
+            
+            var elements = $(html)[insertType](scopeTarget);
             
             pubsub.publish('trigger.panel.render.style', { scope: elements });
         },
