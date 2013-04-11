@@ -182,8 +182,8 @@ namespace Glimpse.Core.Resource
 
         private IDictionary<string, PackageItem<T>> GroupItems<T>(IEnumerable<T> items, IDictionary<string, PackageItemDetail> packages)
         {
-            var result = new Dictionary<string, PackageItem<T>>();
-            var otherPackage = new PackageItemDetail() { Name = "Other", Assembly = "" };
+            var result = new SortedDictionary<string, PackageItem<T>>();
+            var otherPackage = new PackageItemDetail() { Name = "Other", Assembly = string.Empty };
 
             foreach (var item in items)
             {  
@@ -237,7 +237,22 @@ namespace Glimpse.Core.Resource
 
             public string Version { get; set; }
 
-            public string Assembly { get; set; }
+            public string Assembly { get; set; } 
+        } 
+
+        private class GroupItemsComparer : IComparer<string>
+        {
+            public int Compare(string x, string y)
+            {
+                if (x == string.Empty)
+                    return y == string.Empty ? 0 : 1;
+
+                if (y == string.Empty)
+                    return -1;
+
+                // Change this comparer if required.
+                return StringComparer.OrdinalIgnoreCase.Compare(x, y);
+            }
         }
-    }
+    } 
 }
