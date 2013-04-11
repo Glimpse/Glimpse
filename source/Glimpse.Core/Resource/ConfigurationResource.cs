@@ -184,21 +184,25 @@ namespace Glimpse.Core.Resource
             var result = new SortedDictionary<string, PackageItem<T>>();
             var otherPackage = new PackageItemDetail() { Name = "Other", Assembly = string.Empty };
 
-            foreach (var item in items)
-            {  
-                var package = otherPackage;
-                if (packages.TryGetValue(item.GetType().Assembly.FullName, out package))  
-                { 
-                }
-
-                var entry = (PackageItem<T>)null;
-                if (!result.TryGetValue(package.Assembly, out entry))
+            if (items != null)
+            {
+                foreach (var item in items)
                 {
-                    entry = result[package.Assembly] = new PackageItem<T>();
-                    entry.Package = package;
-                }
+                    var package = (PackageItemDetail)null;
+                    if (!packages.TryGetValue(item.GetType().Assembly.FullName, out package))
+                    {
+                        package = otherPackage;
+                    }
 
-                entry.Items.Add(item);
+                    var entry = (PackageItem<T>)null;
+                    if (!result.TryGetValue(package.Assembly, out entry))
+                    {
+                        entry = result[package.Assembly] = new PackageItem<T>();
+                        entry.Package = package;
+                    }
+
+                    entry.Items.Add(item);
+                }
             }
 
             return result;
