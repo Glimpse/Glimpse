@@ -165,15 +165,14 @@ namespace Glimpse.Core.Resource
 
         private void GroupContent<T>(StringBuilder content, Action<StringBuilder, T> action, IEnumerable<T> items, IDictionary<string, PackageItemDetail> packages)
         {
-            var tabs = GroupItems(items, packages);
-            foreach (var packageItem in tabs)
+            var groupedItems = GroupItems(items, packages);
+            foreach (var group in groupedItems)
             {
-                var package = packageItem.Value;
-                content.AppendFormat("<li><strong>{0}</strong> <span class=\"package-version\">({1})</span><ul>", package.Package.Name, package.Package.Version);
+                var package = group.Value;
+                content.AppendFormat("<li><strong>{0}</strong> <span class=\"package-version\">{1}</span><ul>", package.Package.Name, !string.IsNullOrEmpty(package.Package.Version) ? string.Format("({0})", package.Package.Version) : string.Empty);
                 foreach (var item in package.Items)
                 {
                     action(content, item);
-                    //content.AppendFormat("<li><strong>{0}</strong> - <span class=\"code\">{1}</span><span style=\"display:none\" class=\"more-detail\"> - <em>{2}</em></span></li>", item.Name, item.GetType().FullName, item.ExecuteOn);
                 }
 
                 content.Append("</ul></li>");
