@@ -95,7 +95,10 @@
             for (i = 0; i < temp.length; i++)
                 sorted[temp[i].id] = data[temp[i].id];
             return sorted;
-        }, 
+        },
+        containsTokens: function(formatString) {
+            return formatString != null && !$.isNumeric(formatString) && formatString.indexOf('{{') > -1;
+        },
         getTokens: function(formatString) { 
             var count = 0, working = '', result = [];
             for (var i = 0; i < formatString.length; i++) {
@@ -106,14 +109,8 @@
                         count++;
                     else if (x == '}' && count > 0)
                         count--;
-                    else if (count == 2) {
-                        if (!$.isNumeric(x)) {
-                            count = 0;
-                            working = '';
-                        }
-                        else 
-                            working += '' + x;
-                    }
+                    else if (count == 2) 
+                        working += '' + x; 
                     else {
                         count = 0;
                         working = '';

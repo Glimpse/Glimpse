@@ -319,7 +319,10 @@ glimpse.util = (function($) {
             for (i = 0; i < temp.length; i++)
                 sorted[temp[i].id] = data[temp[i].id];
             return sorted;
-        }, 
+        },
+        containsTokens: function(formatString) {
+            return formatString != null && !$.isNumeric(formatString) && formatString.indexOf('{{') > -1;
+        },
         getTokens: function(formatString) { 
             var count = 0, working = '', result = [];
             for (var i = 0; i < formatString.length; i++) {
@@ -330,14 +333,8 @@ glimpse.util = (function($) {
                         count++;
                     else if (x == '}' && count > 0)
                         count--;
-                    else if (count == 2) {
-                        if (!$.isNumeric(x)) {
-                            count = 0;
-                            working = '';
-                        }
-                        else 
-                            working += '' + x;
-                    }
+                    else if (count == 2) 
+                        working += '' + x; 
                     else {
                         count = 0;
                         working = '';
@@ -972,31 +969,85 @@ glimpse.render.engine.util.raw = (function($, util) {
 // glimpse.render.engine.layout.js
 (function($, util, engine, engineUtil) {
     var providers = engine._providers,
-        buildFormatString = function(content, data, indexs) {  
+
+        findFactory = function(data) {
+            var match = null;
+            for (var key in factories) {
+                if (factories[key].isHandled(data)) {
+                    match = factories[key];
+                    break;
+                }
+            }
+            return match;
+        },
+        factories = {
+            array: {
+                isHandled: function(data) {
+                    return $.isArray(data[0]);
+                },
+                getHeader: function(data) {
+                    return data[0];
+                },
+                getRowClass: function(data, rowIndex) {
+                    return data[rowIndex].length > data[0].length ? ' ' + data[rowIndex][data[rowIndex].length - 1] : '';
+                },
+                getRowValue: function(dataRow, fieldIndex, header) {
+                    return dataRow[fieldIndex];
+                }, 
+                startingIndex: function() {
+                    return 1;
+                }
+            },
+            object: {
+                isHandled: function(data) {
+                    return data[0] === Object(data[0]);
+                },
+                getHeader: function(data) { 
+                    var result = [];
+                    for (var key in data[0]) {
+                        if (key != "_metadata") 
+                            result.push(key);
+                    } 
+                    return result; 
+                },
+                getRowClass: function(data, rowIndex) {
+                    return data[rowIndex]._metadata && data[rowIndex]._metadata.style ? ' ' + data[rowIndex]._metadata.style : ''; 
+                },
+                getRowValue: function(dataRow, fieldIndex, header) {
+                    return dataRow[header[fieldIndex]];
+                }, 
+                startingIndex: function() {
+                    return 0;
+                }
+            } 
+        },
+
+        buildFormatString = function(content, data, indexs, isHeadingRow) {  
             for (var i = 0; i < indexs.length; i++) {
-                var pattern = "\\\{\\\{" + indexs[i] + "\\\}\\\}", regex = new RegExp(pattern, "g"); 
-                content = content.replace(regex, data[indexs[i]]);
+                var pattern = "\\\{\\\{" + indexs[i] + "\\\}\\\}", regex = new RegExp(pattern, "g"),
+                    value = isHeadingRow && !$.isNumeric(indexs[i]) ? indexs[i] : data[indexs[i]]; 
+                content = content.replace(regex, value);
             }
             return content;
         },
-        buildCell = function(data, metadataItem, level, cellType, rowIndex, includeHeading) {
+        
+        buildCell = function(data, metadataItem, level, cellType, rowIndex, isHeadingRow) {
             var html = '', 
                 cellContent = '', 
                 cellClass = '', 
                 cellStyle = '', 
-                cellAttr = '',
-                isHeadingRow = rowIndex == 0 && includeHeading;
+                cellAttr = '';
                 
             //Cell Content
             if ($.isArray(metadataItem.data)) {
                 for (var i = 0; i < metadataItem.data.length; i++) 
-                    cellContent += buildCell(data, metadataItem.data[i], level, 'div', rowIndex, includeHeading);
+                    cellContent += buildCell(data, metadataItem.data[i], level, 'div', rowIndex, isHeadingRow);
             }
             else { 
-                if (!metadataItem.indexs && !$.isNumeric(metadataItem.data)) 
+                if (!metadataItem.indexs && util.containsTokens(metadataItem.data)) 
                     metadataItem.indexs = util.getTokens(metadataItem.data, data); 
-                
-                cellContent = metadataItem.indexs ? buildFormatString(metadataItem.data, data, metadataItem.indexs) : data[metadataItem.data];
+                  
+                cellContent = metadataItem.indexs ? buildFormatString(metadataItem.data, data, metadataItem.indexs, isHeadingRow) : (isHeadingRow && !$.isNumeric(metadataItem.data) ? metadataItem.data : data[metadataItem.data]);
                 
                 if (metadataItem.engine && !isHeadingRow) {
                     cellContent = providers.master.build(cellContent, level + 1, metadataItem.forceFull, metadataItem, isHeadingRow ? undefined : metadataItem.limit);
@@ -1012,7 +1063,7 @@ glimpse.render.engine.util.raw = (function($, util) {
                     //If minDisplay and we are in header or there is no data, we don't want to render anything 
                     if (metadataItem.minDisplay && (isHeadingRow || cellContent == null))
                         return ""; 
-                     
+
                     cellContent = providers.master.build(cellContent, level + 1, metadataItem.forceFull, newMetadataItem, isHeadingRow ? undefined : metadataItem.limit);
 
                     //Content pre/post
@@ -1044,7 +1095,20 @@ glimpse.render.engine.util.raw = (function($, util) {
             
             return html;
         }, 
-
+        buildCellRow = function (data, layout, level, cellType, rowIndex, isHeadingRow) {
+            var html = '';
+            
+            for (var x = 0; x < layout.length; x++) { 
+                var rowHtml = ''; 
+                for (var y = 0; y < layout[x].length; y++) {
+                    var metadataItem = layout[x][y];  
+                    rowHtml += buildCell(data, metadataItem, level, cellType, rowIndex, isHeadingRow);
+                }
+                     
+                if (rowHtml != '') { html += '<tr>' + rowHtml + '</tr>'; };
+            }
+            return html;
+        },
 
 
         build = function (data, level, forceFull, metadata, forceLimit) { 
@@ -1054,6 +1118,26 @@ glimpse.render.engine.util.raw = (function($, util) {
                 return buildPreview(data, level, metadata);
             return buildOnly(data, level, metadata);
         },
+        buildOnly = function (data, level, metadata) {
+            var html = '<table class="glimpse-row-holder">', 
+                layout = metadata.layout,
+                factory = findFactory(data),
+                headers = factory.getHeader(data); 
+            
+            if (engineUtil.includeHeading(metadata)) {
+                html += '<thead class="glimpse-row-header glimpse-row-header-' + level + '">';
+                html += buildCellRow(headers, layout, level, 'th', 0, true);
+                html += '</thead>';
+            } 
+            for (var i = factory.startingIndex(); i < data.length; i++) {
+                html += '<tbody class="glimpse-row' + factory.getRowClass(data, i) + '">';
+                html += buildCellRow(data[i], layout, level, 'td', i, false);
+                html += '</tbody>';
+            }
+            html += '</table>';
+            return html;
+        },
+        /* 
         buildOnly = function (data, level, metadata) {
             var html = '<table class="glimpse-row-holder">', 
                 rowClass = '',
@@ -1078,6 +1162,7 @@ glimpse.render.engine.util.raw = (function($, util) {
 
             return html; 
         },
+        */
         buildPreview = function(data, level, metadata) { 
             return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + buildPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + buildOnly(data, level, metadata) + '</div></td></tr></table>';
         },

@@ -80,6 +80,8 @@
         <div class="glimpse"><div class="sample27 glimpse-panel"></div></div> 
         <h4>Scenario 28 (Pass)</h4>
         <div class="glimpse"><div class="sample28 glimpse-panel"></div></div> 
+        <h4>Scenario 29 (Pass)</h4>
+        <div class="glimpse"><div class="sample29 glimpse-panel"></div></div> 
     </div>
 
     <script src="./glimpse.js" type="text/javascript"></script>
@@ -874,7 +876,7 @@ glimpse.tab.register(args);
     ];
     var metaData27 = { layout: [
         [ 
-            { data : 0, width : '30%', key : true }, { data : 1, width : '30%' }, { data : 2, width : '20%' }, { data : 3, width : '20%' }
+            { data : 0, width : '30%', key : true, title: 'ACTOR' }, { data : 1, width : '30%' }, { data : 2, width : '20%' }, { data : 3, width : '20%' }
         ],
         [
             { data : 4, minDisplay : true, span : 4, suppressHeader : true, forceFull: true, layout : [ [ { data : 0, width : '30%', key : true }, { data : 1, width : '30%' }, { data : 2, width : '20%' }, { data : 3, width : '20%' } ] ] }
@@ -913,6 +915,19 @@ glimpse.tab.register(args);
     ];
     processHeading($('.sample28'), 'Process array with ', '');
     process($('.sample28'), data28); 
+    
+    //debugger; 
+    var data29 = [ 
+        { 'aaa': 'Mark Hamill', 'bbb': 'Luke Skywalker', 'ccc': 'Male', 'ddd': '21', 'eee': 'qwe', 'fff': 'Test' },
+        { 'bbb': 'Darth Vader', 'aaa': 'James Earl Jones', 'ccc': 'Male', 'ddd': '45', 'eee': 'asd', 'fff': 'Best' }
+    ];
+    var metaData29 = { layout: [
+        [ 
+            { data : 'aaa', width : '30%', key : true }, { data : 'bbb', title : 'Character', width : '30%' }, { data : '{{ccc}} _-_ {{ddd}}', title : 'Gender', width : '20%' }, { data : '{{eee}} _-_ {{fff}}', width : '20%' }
+        ]
+    ]}; 
+    processHeading($('.sample29'), 'Process array with ', '');
+    process($('.sample29'), data29, metaData29); 
 
 })(jQueryGlimpse);
     </script>
