@@ -1063,6 +1063,10 @@ glimpse.render.engine.util.raw = (function($, util) {
                     //If minDisplay and we are in header or there is no data, we don't want to render anything 
                     if (metadataItem.minDisplay && (isHeadingRow || cellContent == null))
                         return ""; 
+                    
+                    //Work out what title we want
+                    if (isHeadingRow && metadataItem.title) 
+                        cellContent = metadataItem.title;
 
                     cellContent = providers.master.build(cellContent, level + 1, metadataItem.forceFull, newMetadataItem, isHeadingRow ? undefined : metadataItem.limit);
 
