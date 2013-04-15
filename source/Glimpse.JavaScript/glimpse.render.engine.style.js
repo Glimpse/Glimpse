@@ -1,4 +1,4 @@
-﻿(function($, pubsub, elements) {
+﻿(function($, pubsub) {
     var codeProcess = function(items) {
             $.each(items, function() {
                 var item = $(this).addClass('prettyprint'),
@@ -28,4 +28,4 @@
         };
      
     pubsub.subscribe('trigger.panel.render.style', apply);
-})(jQueryGlimpse, glimpse.pubsub, glimpse.elements);
+})(jQueryGlimpse, glimpse.pubsub);

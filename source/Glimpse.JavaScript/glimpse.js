@@ -877,7 +877,7 @@ glimpse.render.engine.util.table = (function($) {
         };
 })(jQueryGlimpse);
 // glimpse.render.engine.style.js
-(function($, pubsub, elements) {
+(function($, pubsub) {
     var codeProcess = function(items) {
             $.each(items, function() {
                 var item = $(this).addClass('prettyprint'),
@@ -907,7 +907,7 @@ glimpse.render.engine.util.table = (function($) {
         };
      
     pubsub.subscribe('trigger.panel.render.style', apply);
-})(jQueryGlimpse, glimpse.pubsub, glimpse.elements);
+})(jQueryGlimpse, glimpse.pubsub);
 // glimpse.render.engine.keyvalue.js
 (function($, util, engine, engineUtil) {
     var providers = engine._providers,
