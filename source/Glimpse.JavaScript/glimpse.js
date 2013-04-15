@@ -895,8 +895,7 @@ glimpse.render.engine.util.table = (function($) {
             });
             
             // Alert state
-            options.scope.find('.info, .warn, .error, .fail, .loading, .ms')
-                //.find('> td:first-child:not(:has(div.glimpse-cell)), td:first-child > div.glimpse-cell:first-child')
+            options.scope.find('.info, .warn, .error, .fail, .loading, .ms') 
                 .find('> td:first-child, > tr:first-child .glimpse-cell:first-child')
                 .not(':has(.icon)').prepend('<div class="icon"></div>');
 ;
