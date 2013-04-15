@@ -13,10 +13,11 @@
                 cellContent = '', 
                 cellClass = '', 
                 cellStyle = '', 
-                cellAttr = '';
+                cellAttr = '',
+                containsNestedData = $.isArray(metadataItem.data);
                 
             //Cell Content
-            if ($.isArray(metadataItem.data)) {
+            if (containsNestedData) {
                 for (var i = 0; i < metadataItem.data.length; i++) 
                     cellContent += buildCell(data, metadataItem.data[i], level, 'div', rowIndex, isHeadingRow);
             }
@@ -56,11 +57,13 @@
             }
             
             if (!isHeadingRow) {
-                cellClass = 'glimpse-cell';
+                if (!containsNestedData) { cellClass = 'glimpse-cell'; }
+                
                 //Cell Class
                 if (metadataItem.key === true) { cellClass += ' glimpse-cell-key'; }
                 if (metadataItem.isCode === true) { cellClass += ' glimpse-code'; }
                 if (metadataItem.className) { cellClass += ' ' + metadataItem.className; }
+                
                 //Cell Code 
                 if (metadataItem.codeType) { cellAttr += ' data-codeType="' + metadataItem.codeType + '"'; };
             }

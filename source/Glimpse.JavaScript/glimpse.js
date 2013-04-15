@@ -896,7 +896,8 @@ glimpse.render.engine.util.table = (function($) {
             
             // Alert state
             options.scope.find('.info, .warn, .error, .fail, .loading, .ms')
-                .find('> td:first-child:not(:has(div.glimpse-cell)), td:first-child > div.glimpse-cell:first-child')
+                //.find('> td:first-child:not(:has(div.glimpse-cell)), td:first-child > div.glimpse-cell:first-child')
+                .find('> td:first-child, > tr:first-child .glimpse-cell:first-child')
                 .not(':has(.icon)').prepend('<div class="icon"></div>');
 ;
             // Code formatting
@@ -1056,10 +1057,11 @@ glimpse.render.engine.util.table = (function($) {
                 cellContent = '', 
                 cellClass = '', 
                 cellStyle = '', 
-                cellAttr = '';
+                cellAttr = '',
+                containsNestedData = $.isArray(metadataItem.data);
                 
             //Cell Content
-            if ($.isArray(metadataItem.data)) {
+            if (containsNestedData) {
                 for (var i = 0; i < metadataItem.data.length; i++) 
                     cellContent += buildCell(data, metadataItem.data[i], level, 'div', rowIndex, isHeadingRow);
             }
@@ -1099,11 +1101,13 @@ glimpse.render.engine.util.table = (function($) {
             }
             
             if (!isHeadingRow) {
-                cellClass = 'glimpse-cell';
+                if (!containsNestedData) { cellClass = 'glimpse-cell'; }
+                
                 //Cell Class
                 if (metadataItem.key === true) { cellClass += ' glimpse-cell-key'; }
                 if (metadataItem.isCode === true) { cellClass += ' glimpse-code'; }
                 if (metadataItem.className) { cellClass += ' ' + metadataItem.className; }
+                
                 //Cell Code 
                 if (metadataItem.codeType) { cellAttr += ' data-codeType="' + metadataItem.codeType + '"'; };
             }
