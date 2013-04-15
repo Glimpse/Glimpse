@@ -8,7 +8,7 @@ namespace Glimpse.Ado.Inspector.Core
 
         private AdoExecutionBlock()
         {
-            RegisterProvider(new DbProviderFactoriesExecutionTask()); 
+            RegisterProvider(new DbProviderFactoriesExecutionTask(Logger)); 
         }
     }
 }

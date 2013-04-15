@@ -10,7 +10,6 @@ namespace Glimpse.Core.Framework.Support
         /// <summary>
         /// Executes the specified logic.
         /// </summary>
-        /// <param name="logger">The logger.</param>
-        void Execute(ILogger logger);
+        void Execute();
     }
 }

@@ -1,13 +1,12 @@
 #if EF6Plus
 using Glimpse.Ado.AlternateType;
-using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework.Support;
 
 namespace Glimpse.EF.Inspector.Core
 {
     public class EntityDbProviderFactoryExecutionTask : IExecutionTask
     {
-        public void Execute(ILogger logger)
+        public void Execute()
         {
             //Find the registered providers 
             var table = Support.FindDbProviderFactoryTable();

@@ -14,7 +14,7 @@ namespace Glimpse.Core.Framework.Support
         private ILogger logger;
         private readonly IList<IExecutionTask> tasks = new List<IExecutionTask>();
 
-        private ILogger Logger
+        protected ILogger Logger
         {
             get
             {
@@ -45,7 +45,7 @@ namespace Glimpse.Core.Framework.Support
                     {
                         foreach (var task in tasks)
                         {
-                            task.Execute(Logger);
+                            task.Execute();
                         }
 
                         hasInitalized = true;
