@@ -19,7 +19,7 @@ namespace Glimpse.Ado.Inspector.Core
             {
                 DbProviderFactories.GetFactory("Anything"); 
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             { 
             }
 

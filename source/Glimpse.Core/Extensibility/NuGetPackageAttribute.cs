@@ -58,7 +58,7 @@ namespace Glimpse.Core.Extensibility
         /// <summary>
         /// Gets the id.
         /// </summary>
-        /// <returns>The NuGet package Id for the specified <paramref name="assembly"/>.</returns>
+        /// <returns>The NuGet package Id for the initialized assembly.</returns>
         public string GetId()
         {
             return Id; 
@@ -67,7 +67,7 @@ namespace Glimpse.Core.Extensibility
         /// <summary>
         /// Gets the version.
         /// </summary> 
-        /// <returns>The NuGet package version for the specified <paramref name="assembly"/>.</returns>
+        /// <returns>The NuGet package version for the initialized assembly.</returns>
         public string GetVersion()
         { 
             return Version;  

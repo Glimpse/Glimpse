@@ -100,9 +100,8 @@ namespace Glimpse.Core.Resource
             GroupContent(content, (x, y) => x.AppendFormat("<li><strong>{0}</strong> - <span class=\"code\">{1}</span><span style=\"display:none\" class=\"more-detail\"> - <em>{2}</em></span></li>", y.Name, y.GetType().FullName, y.ExecuteOn), configuration.Tabs.OrderBy(x => x.Name), packages);
 
             content.Append("</ul>Want to create your own Tabs - <a href=\"http://getglimpse.com/Help/Custom-Tabs\" target=\"new\">see here!</a></li><li><strong>Runtime Policies</strong>: <ul>");
-            GroupContent(content, (x, y) =>
-                {
-                    var warning = "";
+            GroupContent(content, (x, y) => {
+                    var warning = string.Empty;
                     if (y.GetType().FullName == "Glimpse.AspNet.Policy.LocalPolicy")
                     {
                         warning = "<strong class=\"warn\">*This policy means that Glimpse won't run remotely.*</strong>";
@@ -118,8 +117,7 @@ namespace Glimpse.Core.Resource
             GroupContent(content, (x, y) => x.AppendFormat("<li><span class=\"code\">{0}</span></li>", y.GetType().FullName), configuration.RuntimePolicies.OrderBy(x => x.GetType().FullName), packages);
             
             content.Append("</ul></li><li><strong>Resources</strong>: <ul>");
-            GroupContent(content, (x, y) =>
-                {
+            GroupContent(content, (x, y) => {
                     var paramaters = string.Empty;
                     if (y.Parameters != null)
                     {
@@ -127,7 +125,8 @@ namespace Glimpse.Core.Resource
                     }
 
                     content.AppendFormat("<li><strong>{0}</strong> - <span class=\"code\">{1}</span> - <em>{2}</em></li>", y.Name, y.GetType().FullName, paramaters);
-                }, configuration.Resources.OrderBy(x => x.Name), packages);
+                }, 
+                configuration.Resources.OrderBy(x => x.Name), packages);
 
             content.Append("</ul></li><li><strong>Client Scripts</strong>: <ul>");
             GroupContent(content, (x, y) => x.AppendFormat("<li><span class=\"code\">{0}</span> - {1}</li>", y.GetType().FullName, y.Order), configuration.ClientScripts.OrderBy(x => x.GetType().FullName), packages);
@@ -248,10 +247,14 @@ namespace Glimpse.Core.Resource
             public int Compare(string x, string y)
             {
                 if (x == string.Empty)
+                {
                     return y == string.Empty ? 0 : 1;
+                }
 
                 if (y == string.Empty)
+                {
                     return -1;
+                }
 
                 // Change this comparer if required.
                 return StringComparer.OrdinalIgnoreCase.Compare(x, y);

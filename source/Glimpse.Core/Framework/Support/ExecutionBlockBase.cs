@@ -3,23 +3,22 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Framework.Support
 {
+    /// <summary>
+    /// Base class which encapulates the logic to ensure that 
+    /// a given block of code is only executed once.
+    /// </summary>
     public abstract class ExecutionBlockBase
     {
         private readonly object hasInitalizedLock = new object();
         private bool hasInitalized;
         private ILogger logger;
-        private IList<IExecutionTask> tasks = new List<IExecutionTask>();
+        private readonly IList<IExecutionTask> tasks = new List<IExecutionTask>();
 
         private ILogger Logger
         {
             get
             {
-                if (logger == null)
-                {
-                    logger = GlimpseConfiguration.GetLogger() ?? new NullLogger();
-                }
-
-                return logger;
+                return this.logger ?? (this.logger = GlimpseConfiguration.GetLogger() ?? new NullLogger());
             }
         }
 

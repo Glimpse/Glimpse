@@ -10,26 +10,46 @@ using Glimpse.Core.Extensions;
 
 namespace Glimpse.AspNet.Tab
 {
+    /// <summary>
+    /// Configuration tab
+    /// </summary>
     public class Configuration : AspNetTab, IDocumentation, IKey
     {
         private const string PasswordHash = "########";
         private readonly IEnumerable<string> keysToAnnomalizePassword = new[] { "Password", "Pwd" };
 
+        /// <summary>
+        /// Gets the name that will show in the tab.
+        /// </summary>
+        /// <value>The name.</value>
         public override string Name
         {
             get { return "Configuration"; }
         }
 
+        /// <summary>
+        /// Gets the key.
+        /// </summary>
+        /// <value>The key. Only valid JavaScript identifiers should be used for future compatibility.</value>
         public string Key 
         {
             get { return "glimpse_configuration"; }
         }
 
+        /// <summary>
+        /// Gets the documentation URI.
+        /// </summary>
+        /// <value>The documentation URI.</value>
         public string DocumentationUri
         {
             get { return "http://getglimpse.com/Help/Configuration-Tab"; }
         }
 
+        /// <summary>
+        /// Gets the data that should be shown in the UI.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns>Object that will be shown.</returns>
         public override object GetData(ITabContext context)
         { 
             var result = new ConfigurationModel
