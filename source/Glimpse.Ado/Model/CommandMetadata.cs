@@ -28,6 +28,7 @@ namespace Glimpse.Ado.Model
         public IList<CommandParameterMetadata> Parameters { get; private set; }
         public int ExecutionIndex { get; set; }
         public bool HasTransaction { get; set; }
+        public bool IsDuplicate { get; set; }
          
         /// <summary>
         /// Gets or sets the head transaction. Set when the command 

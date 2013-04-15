@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -18,7 +21,30 @@ namespace MvcMusicStore.Controllers
         {
             var genres = storeDB.Genres.ToList();
 
+            TriggerDuplicateQuery();
+
             return View(genres);
+        }
+
+        private void TriggerDuplicateQuery()
+        {
+            var connectionString = ConfigurationManager.ConnectionStrings["MusicStoreEntities"];
+            var factory = DbProviderFactories.GetFactory(connectionString.ProviderName); 
+            using (var connection = factory.CreateConnection())
+            {
+                connection.ConnectionString = connectionString.ConnectionString;
+                connection.Open();
+
+                for (int i = 0; i < 10; i++)
+                { 
+                    using (var command = connection.CreateCommand())
+                    { 
+                        command.CommandText = "SELECT COUNT(*) FROM Albums WHERE Title LIKE 'A%'";
+                        command.CommandType = CommandType.Text;
+                        var result = (int)command.ExecuteScalar();
+                    }
+                }
+            }
         }
 
         //
