@@ -33,6 +33,8 @@
 /*(import:glimpse.render.engine.util.js)*/
 // glimpse.render.engine.util.raw.js
 /*(import:glimpse.render.engine.util.raw.js)*/
+// glimpse.render.engine.util.table.js
+/*(import:glimpse.render.engine.util.table.js)*/
 // glimpse.render.engine.style.js
 /*(import:glimpse.render.engine.style.js)*/
 // glimpse.render.engine.keyvalue.js

@@ -1,58 +1,5 @@
-﻿(function($, util, engine, engineUtil) {
-    var providers = engine._providers,
-
-        findFactory = function(data) {
-            var match = null;
-            for (var key in factories) {
-                if (factories[key].isHandled(data)) {
-                    match = factories[key];
-                    break;
-                }
-            }
-            return match;
-        },
-        factories = {
-            array: {
-                isHandled: function(data) {
-                    return $.isArray(data[0]);
-                },
-                getHeader: function(data) {
-                    return data[0];
-                },
-                getRowClass: function(data, rowIndex) {
-                    return data[rowIndex].length > data[0].length ? ' ' + data[rowIndex][data[rowIndex].length - 1] : '';
-                },
-                getRowValue: function(dataRow, fieldIndex, header) {
-                    return dataRow[fieldIndex];
-                }, 
-                startingIndex: function() {
-                    return 1;
-                }
-            },
-            object: {
-                isHandled: function(data) {
-                    return data[0] === Object(data[0]);
-                },
-                getHeader: function(data) { 
-                    var result = [];
-                    for (var key in data[0]) {
-                        if (key != "_metadata") 
-                            result.push(key);
-                    } 
-                    return result; 
-                },
-                getRowClass: function(data, rowIndex) {
-                    return data[rowIndex]._metadata && data[rowIndex]._metadata.style ? ' ' + data[rowIndex]._metadata.style : ''; 
-                },
-                getRowValue: function(dataRow, fieldIndex, header) {
-                    return dataRow[header[fieldIndex]];
-                }, 
-                startingIndex: function() {
-                    return 0;
-                }
-            } 
-        },
-
+﻿(function($, util, engine, engineUtil, engineUtilTable) {
+    var providers = engine._providers, 
         buildFormatString = function(content, data, indexs, isHeadingRow) {  
             for (var i = 0; i < indexs.length; i++) {
                 var pattern = "\\\{\\\{" + indexs[i] + "\\\}\\\}", regex = new RegExp(pattern, "g"),
@@ -60,8 +7,7 @@
                 content = content.replace(regex, value);
             }
             return content;
-        },
-        
+        }, 
         buildCell = function(data, metadataItem, level, cellType, rowIndex, isHeadingRow) {
             var html = '', 
                 cellContent = '', 
@@ -144,8 +90,7 @@
             }
             return html;
         },
-
-
+         
         build = function (data, level, forceFull, metadata, forceLimit) { 
             var limit = !$.isNumeric(forceLimit) ? 3 : forceLimit;
 
@@ -156,7 +101,7 @@
         buildOnly = function (data, level, metadata) {
             var html = '<table class="glimpse-row-holder">', 
                 layout = metadata.layout,
-                factory = findFactory(data),
+                factory = engineUtilTable.findFactory(data),
                 headers = factory.getHeader(data); 
             
             if (engineUtil.includeHeading(metadata)) {
@@ -171,33 +116,7 @@
             }
             html += '</table>';
             return html;
-        },
-        /* 
-        buildOnly = function (data, level, metadata) {
-            var html = '<table class="glimpse-row-holder">', 
-                rowClass = '',
-                layout = metadata.layout,
-                includeHeading = engineUtil.includeHeading(metadata);
-            for (var i = includeHeading ? 0 : 1; i < data.length; i++) {
-                rowClass = data[i].length > data[0].length ? (' ' + data[i][data[i].length - 1]) : ''; 
-                html += (i == 0 && includeHeading) ? '<thead class="glimpse-row-header glimpse-row-header-' + level + '">' : '<tbody class="glimpse-row">'; 
-                for (var x = 0; x < layout.length; x++) { 
-                    var rowData = '';
-                     
-                    for (var y = 0; y < layout[x].length; y++) {
-                        var metadataItem = layout[x][y], cellType = (i == 0 && includeHeading ? 'th' : 'td'); 
-                        rowData += buildCell(data[i], metadataItem, level, cellType, i, includeHeading);
-                    }
-                     
-                    if (rowData != '') { html += '<tr class="' + rowClass + '">' + rowData + '</tr>'; };
-                }
-                html += (i == 0 && includeHeading) ? '</thead>' : '</tbody>'; 
-            }
-            html += '</table>';
-
-            return html; 
-        },
-        */
+        }, 
         buildPreview = function(data, level, metadata) { 
             return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + buildPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + buildOnly(data, level, metadata) + '</div></td></tr></table>';
         },
@@ -212,4 +131,4 @@
         }; 
 
     engine.register('layout', provider);
-})(jQueryGlimpse, glimpse.util, glimpse.render.engine, glimpse.render.engine.util);
+})(jQueryGlimpse, glimpse.util, glimpse.render.engine, glimpse.render.engine.util, glimpse.render.engine.util.table);
