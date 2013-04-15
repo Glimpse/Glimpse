@@ -77,8 +77,10 @@ namespace Glimpse.Core.Resource
         /// <remarks>
         /// Use of <see cref="IPrivilegedResource" /> is reserved.
         /// </remarks>
+        /// 
         public IResourceResult Execute(IResourceContext context, IGlimpseConfiguration configuration)
         {
+
             var content = new StringBuilder();
             var packages = FindPacakges();
 
@@ -89,17 +91,31 @@ namespace Glimpse.Core.Resource
             content.Append("<header><div class=\"inner\"><table><tr><td class=\"logo\"><a href=\"http://getglimpse.com/\" title=\"Glimpse Home :D\"><img width=\"325\" src=\"http://getglimpse.com/content/_v1/app-config-logo.png?version=" + GlimpseRuntime.Version + "\" alt=\"Glimpse Home :D\"/></a></td><td class=\"detail\"><div class=\"version\">v" + GlimpseRuntime.Version + " <span>(core)</span></div><h2>Bookmarklets<div class=\"message\">“Drag us to your favorites bar for quick and easy access to Glimpse”</div></h2><a href=\"http://getglimpse.com/Help/First-Run#Glimpse-Bookmarklets\" class=\"find-more\" target=\"new\">find out more</a><a class=\"button\" href=\"javascript:(function(){document.cookie='glimpsePolicy=On;path=/;expires=Sat, 01 Jan 2050 12:00:00 GMT;';window.location.reload();})();\">Turn Glimpse On</a><a class=\"button\" href=\"javascript:(function(){document.cookie='glimpsePolicy=;path=/;expires=Sat, 01 Jan 2050 12:00:00 GMT;';window.location.reload();})();\">Turn Glimpse Off</a><a class=\"button\" href=\"javascript:(function(){document.cookie='glimpseId='+ prompt('Client Name?') +';path=/;expires=Sat, 01 Jan 2050 12:00:00 GMT;';window.location.reload();})();\">Set Glimpse Session Name</a></td></tr></table></div></header>");
             content.Append("<div class=\"inner\">");
 
+            //Duplicate resource 
+            var duplicateResources = this.DetectDuplicateResources(configuration.Resources);
+            if (duplicateResources.Any())
+            {
+                var instances = string.Join(", ", duplicateResources.Select(x => string.Format("<strong>{0}</strong>", x)).ToArray());
+                content.AppendFormat("<div class='notification notification-fail'><strong>Huston we have a problem :(</strong><br /> We have detected that the following resources have been duplicated - {0}. Typically when this happens, Glimpse will fail to operate correctly and lead to ambiguous references.</div>", instances);
+            }
+
+            //Update notification
             content.Append("<script type=\"text/javascript\">var getOptions = function() { var data = localStorage.getItem('glimpseOptions'); return data != null ? JSON.parse(data) : {}; }, options = getOptions(), hasNewer = options.hasNewerVersion, versionUri = options.versionViewUri; if (hasNewer) { document.write(\"<div class='out-dated'><h3>Really sorry to have to say this but you are out of date :(</h3>A new version of Glimpse is waiting for you... its very lonely without you. It will be worth your while updating. <br /><a href='\" + versionUri + \"' target='new'>See what you are missing out on</a></div>\"); }</script>");
 
             content.Append("<div class=\"side-bar\">");
+            //Cookie status on/off/other
             content.Append("<script type=\"text/javascript\"> var getCookie = function(name) { var re = new RegExp(name + \"=([^;]+)\"); var value = re.exec(document.cookie); return (value != null) ? unescape(value[1]) : null; }; var policy = getCookie('glimpsePolicy'); if (policy == 'On') { document.write(\"<div class='notification notification-success'><strong>Glimpse cookie set 'On'</strong> When you go back to your site, depending on your policies, you should see Glimpse at the bottom right of the page.</div>\"); } else if (policy == '' || policy == null) { document.write(\"<div class='notification notification-fail'><strong>Glimpse cookie set 'Off'</strong> By default for Glimpse to be visible, the `glimpsePolicy` cookie needs to be set 'On'. We have made this simple by providing the above buttons :D</div>\"); } else { document.write(\"<div class='notification notification-warn'><strong>Glimpse cookie set '\" + policy + \"'</strong> Looks like you are doing something custom. We don't have any specific buttons for your case, but if you ever want to just turn Glimpse On or Off simply use the above buttons.</div>\"); }</script>");
+            //Configuration help
             content.Append("<div class=\"more-help\"><h3>Configuration Help?</h3>Want to learn more about configuring Glimpse or how to disable Tabs or Policies, head over to our <a href=\"http://getglimpse.com/Help/Configuration\" target=\"new\">config help page</a></div>");
             content.Append("</div>");
 
+            //Registered  Tabs
             content.Append("<ul class=\"root\"><li><strong>Registered  Tabs</strong>:<ul>");
             GroupContent(content, (x, y) => x.AppendFormat("<li><strong>{0}</strong> - <span class=\"code\">{1}</span><span style=\"display:none\" class=\"more-detail\"> - <em>{2}</em></span></li>", y.Name, y.GetType().FullName, y.ExecuteOn), configuration.Tabs.OrderBy(x => x.Name), packages);
-
-            content.Append("</ul>Want to create your own Tabs - <a href=\"http://getglimpse.com/Help/Custom-Tabs\" target=\"new\">see here!</a></li><li><strong>Runtime Policies</strong>: <ul>");
+            content.Append("</ul>Want to create your own Tabs - <a href=\"http://getglimpse.com/Help/Custom-Tabs\" target=\"new\">see here!</a>");
+            
+            //Runtime Policies
+            content.Append("</li><li><strong>Runtime Policies</strong>: <ul>");
             GroupContent(content, (x, y) => {
                     var warning = string.Empty;
                     if (y.GetType().FullName == "Glimpse.AspNet.Policy.LocalPolicy")
@@ -109,13 +125,16 @@ namespace Glimpse.Core.Resource
 
                     x.AppendFormat("<li><span class=\"code\">{0}</span><span style=\"display:none\" class=\"more-detail\"> - <em>{1}</em></span> {2}</li>", y.GetType().FullName, y.ExecuteOn, warning);
                 }, configuration.RuntimePolicies.OrderBy(x => x.GetType().FullName), packages);
-
             content.Append("</ul>Learn how to create your own policies - <a href=\"http://getglimpse.com/Help/Custom-Runtime-Policy\" target=\"new\">see here!</a></li></ul>");
+
+            //Toggle details
             content.Append("<a class=\"more-detail\" href=\"javascript:return true;\" onclick=\"toggleClass('more-detail')\" style=\"display:block\">More details?</a><a class=\"more-detail\" href=\"javascript:return true;\" onclick=\"toggleClass('more-detail')\" style=\"display:none\">Less details?</a><div class=\"more-detail\" style=\"display:none\">");
 
+            //Detailed Settings
             content.Append("<h3>Detailed Settings:</h3><ul class=\"root\"><li><strong>Inspectors</strong>: <ul>");
             GroupContent(content, (x, y) => x.AppendFormat("<li><span class=\"code\">{0}</span></li>", y.GetType().FullName), configuration.RuntimePolicies.OrderBy(x => x.GetType().FullName), packages);
-            
+
+            //Resources
             content.Append("</ul></li><li><strong>Resources</strong>: <ul>");
             GroupContent(content, (x, y) => {
                     var paramaters = string.Empty;
@@ -124,13 +143,21 @@ namespace Glimpse.Core.Resource
                         paramaters = string.Join(", ", y.Parameters.Select(parameter => string.Format("{0} ({1})", parameter.Name, parameter.IsRequired)).ToArray());
                     }
 
-                    content.AppendFormat("<li><strong>{0}</strong> - <span class=\"code\">{1}</span> - <em>{2}</em></li>", y.Name, y.GetType().FullName, paramaters);
+                    var duplicate = string.Empty;
+                    if (duplicateResources.Contains(y.Name))
+                    {
+                        duplicate = " <strong class=\"warn\">*Duplicate*</strong>";
+                    }
+
+                    content.AppendFormat("<li><strong>{0}</strong> - <span class=\"code\">{1}</span> - <em>{2}</em> {3}</li>", y.Name, y.GetType().FullName, paramaters, duplicate);
                 }, 
                 configuration.Resources.OrderBy(x => x.Name), packages);
 
+            //Client Scripts
             content.Append("</ul></li><li><strong>Client Scripts</strong>: <ul>");
             GroupContent(content, (x, y) => x.AppendFormat("<li><span class=\"code\">{0}</span> - {1}</li>", y.GetType().FullName, y.Order), configuration.ClientScripts.OrderBy(x => x.GetType().FullName), packages);
             
+            //More Details 
             content.AppendFormat("</ul></li><li><strong>Framework Provider</strong>: <span class=\"code\">{0}</span></li>", configuration.FrameworkProvider.GetType().FullName);
             content.AppendFormat("<li><strong>Html Encoder</strong>: <span class=\"code\">{0}</span></li>", configuration.HtmlEncoder.GetType().FullName);
             content.AppendFormat("<li><strong>Logger</strong>: <span class=\"code\">{0}</span></li>", configuration.Logger.GetType().FullName);
@@ -142,11 +169,11 @@ namespace Glimpse.Core.Resource
             content.AppendFormat("<li><strong>Proxy Factory</strong>: <span class=\"code\">{0}</span></li>", configuration.ProxyFactory.GetType().FullName);
             content.AppendFormat("<li><strong>Message Broker</strong>: <span class=\"code\">{0}</span></li>", configuration.MessageBroker.GetType().FullName);
             content.AppendFormat("<li><strong>Endpoint Base Uri</strong>: <span class=\"code\">{0}</span></li></ul>", configuration.EndpointBaseUri);
-            
+
+            //Registered Packages
             content.Append("<h3>Registered Packages:</h3>");
             content.Append("<p>NOTE, doesn't represent all the glimpse dependent Nuget packages you have installed, just the ones that have registered as a Glimpse Nuget package</p>");
-            content.Append("<ul>");
-
+            content.Append("<ul>"); 
             var registeredPackages = NuGetPackage.GetRegisteredPackageVersions();
             foreach (var registeredPackage in registeredPackages)
             {  
@@ -220,6 +247,12 @@ namespace Glimpse.Core.Resource
 
             return result;
         } 
+
+        private IEnumerable<string> DetectDuplicateResources(IEnumerable<IResource> resources)
+        { 
+            //return resources.GroupBy(x => x.Name).Where(x => x.Count() > 1).Select(x => x.Key);
+            return new List<string> { "glimpse_ajax", "glimpse_history" };
+        }
 
         private class PackageItem<T>
         {
