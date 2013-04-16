@@ -250,8 +250,7 @@ namespace Glimpse.Core.Resource
 
         private IEnumerable<string> DetectDuplicateResources(IEnumerable<IResource> resources)
         { 
-            //return resources.GroupBy(x => x.Name).Where(x => x.Count() > 1).Select(x => x.Key);
-            return new List<string> { "glimpse_ajax", "glimpse_history" };
+            return resources.GroupBy(x => x.Name).Where(x => x.Count() > 1).Select(x => x.Key); 
         }
 
         private class PackageItem<T>
