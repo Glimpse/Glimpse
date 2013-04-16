@@ -57,6 +57,8 @@
   <ItemGroup>
     <None Include="NuSpec\content\web.config.transform" />
     <None Include="NuSpec\Glimpse.AspNet.nuspec" />
+    <None Include="NuSpec\tools\install.ps1" />
+    <None Include="NuSpec\tools\uninstall.ps1" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

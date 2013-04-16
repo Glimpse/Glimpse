@@ -37,7 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
-	  <HintPath>..\..\packages\EntityFramework.4.3.0\lib\net40\EntityFramework.dll</HintPath>
+      <HintPath>..\..\packages\EntityFramework.4.3.0\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -53,15 +53,17 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\Glimpse.EF\Resources.resx" />
-  </ItemGroup> 
+  </ItemGroup>
   <ItemGroup>
     <None Include="NuSpec\Glimpse.EF43.nuspec">
       <SubType>Designer</SubType>
     </None>
+    <None Include="NuSpec\tools\install.ps1" />
+    <None Include="NuSpec\tools\uninstall.ps1" />
     <None Include="packages.config" />
-  </ItemGroup> 
+  </ItemGroup>
   <ItemGroup>
-    <Folder Include="NuSpec\lib\net40\" /> 
+    <Folder Include="NuSpec\lib\net40\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Glimpse.Ado.Net40\Glimpse.Ado.Net40.csproj">
