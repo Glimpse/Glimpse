@@ -26,6 +26,7 @@ Welterweight release for core:
  - Minor fix to a bug in the CSharpTypeConverter which failed on Nested Generic Classes. 
  - Minor fix in client when the rendering engine would show correct row highlighting in some cases.
  - Minor refactoring of Execution Tasks signatures.
+ - Minor update for some typos in client.
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse diagnostics performance profiling timing</tags>
     </metadata>
