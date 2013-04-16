@@ -14,12 +14,18 @@
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET 4.0 application. For ASP.NET MVC3 support, please NuGet Glimpse.MVC3.</description>
         <summary>ASP.NET 4.0 web debugging and diagnostics tool.</summary>
         <releaseNotes>
-Minor release for core:
- - Fixed issue in timeline which affected sub 1 ms events.
- - Fixed trailing comma that causes problems with some browsers/browser modes.
- - Minor refactoring of MessageCategory classes. 
- - Minor update to Nuget transform to show how to turn on logging.
- - Minor update to config page to make sure you always get latest logo.
+Welterweight release for core:
+ - New Feature in client that supports rendering of arrays of objects instead of just array of arrays.
+ - New Feature in server which sees a total overhal of the Glimpse.axd
+    - Major redesign and facelift to be inline with the currnet website and logos.
+    - Minor update which notify users when duplicated resources are registered.
+    - Minor update which lets you know when Glimpse detects a newer version.
+    - Minor update which lets you know in big letters when the cookie is on/off.
+    - Minor update which lets you know which tabs/inspectors/resources/etc are registered.
+ - Major update to nuspec powershell script which allows plugin authors to tap into release notes.
+ - Minor fix to a bug in the CSharpTypeConverter which failed on Nested Generic Clases. 
+ - Minor fix in client when the rendering engine would show correct row highlighting in some cases.
+ - Minor refactoring of Execution Tasks signatures.
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse diagnostics performance profiling timing</tags>
     </metadata>
