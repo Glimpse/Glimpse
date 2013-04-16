@@ -23,6 +23,7 @@ Flyweight release for core:
         </dependencies>
     </metadata>
     <files>
+        <file src="tools\*.*" target="tools" />
         <file src="lib\net35\*.*" target="lib\net35" />
         <file src="..\..\Glimpse.Mvc\**\*.*" target="src" exclude="..\..\Glimpse.Mvc\bin\**;..\..\Glimpse.Mvc\obj\**;" />
         <file src="..\Backport\*.cs" target="src" />
