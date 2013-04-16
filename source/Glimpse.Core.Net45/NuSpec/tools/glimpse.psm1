@@ -32,7 +32,7 @@ function Register-GlimpseExtension($package, $dte) {
     $pkgs | Export-Clixml $dataFile
     
     $queryArgs = @()
-    foreach ($pkg in @($pkgs | where { $_.Action -eq "Install" }))
+    foreach ($pkg in @($pkgs | where { $_.Action -eq "Install" } | sort { $_.Timestamp } -des))
     {
         $version = Get-VersionValue $pkg $pkgs
         $queryArgs += "{0}={1}" -f $pkg.Id, $version
