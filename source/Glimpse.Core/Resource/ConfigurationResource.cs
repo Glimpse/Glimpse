@@ -96,7 +96,7 @@ namespace Glimpse.Core.Resource
             if (duplicateResources.Any())
             {
                 var instances = string.Join(", ", duplicateResources.Select(x => string.Format("<strong>{0}</strong>", x)).ToArray());
-                content.AppendFormat("<div class='notification notification-fail'><strong>Huston we have a problem :(</strong><br /> We have detected that the following resources have been duplicated - {0}. Typically when this happens, Glimpse will fail to operate correctly and lead to ambiguous references.</div>", instances);
+                content.AppendFormat("<div class='notification notification-fail'><strong>Houston we have a problem :(</strong><br /> We have detected that the following resources have been duplicated - {0}. Typically when this happens, Glimpse will fail to operate correctly and lead to ambiguous references.</div>", instances);
             }
 
             //Update notification
