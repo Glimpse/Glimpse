@@ -16,7 +16,7 @@
         <releaseNotes>
 Flyweight release for core: 
  - Minor update execution tasks to new interface.
- - Minor update to allow this package to take part in dynaimic release notes.
+ - Minor update to allow this package to take part in dynamic release notes.
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse EF EntityFramework SQL performance profiling timing diagnostics</tags>
         <dependencies> 

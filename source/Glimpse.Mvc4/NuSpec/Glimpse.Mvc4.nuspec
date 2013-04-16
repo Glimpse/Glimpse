@@ -15,7 +15,7 @@
         <summary>ASP.NET MVC 4.0 web debugging and diagnostics tool.</summary>
         <releaseNotes>
 Flyweight release for core:  
- - Minor update to allow this package to take part in dynaimic release notes.
+ - Minor update to allow this package to take part in dynamic release notes.
         </releaseNotes>
         <tags>ASP.NET Web MVC Glimpse diagnostics performance profiling timing</tags>
         <dependencies>
