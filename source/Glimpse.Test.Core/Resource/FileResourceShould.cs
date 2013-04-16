@@ -1,0 +1,53 @@
+﻿using System.Linq;
+using System.Text;
+using Glimpse.Core.Extensibility;
+using Glimpse.Core.Framework;
+using Glimpse.Core.Resource;
+using Glimpse.Core.ResourceResult;
+using Moq;
+using Xunit;
+
+namespace Glimpse.Test.Core.Resource
+{
+    public class FileResourceShould
+    {
+        private readonly Mock<IFrameworkProvider> mockFrameworkProvider;
+        private readonly Mock<IResourceContext> mockResourceContext;
+        private readonly Mock<IResourceResultContext> mockResourceResultContext;
+        private byte[] returnedContent;
+
+        public FileResourceShould() {
+            mockResourceContext = new Mock<IResourceContext>();
+            mockResourceResultContext = new Mock<IResourceResultContext>();
+            mockFrameworkProvider = new Mock<IFrameworkProvider>();
+
+            mockResourceResultContext.SetupGet(c => c.FrameworkProvider).Returns(mockFrameworkProvider.Object);
+
+            mockFrameworkProvider.Setup(p => p.WriteHttpResponse(It.IsAny<byte[]>())).Callback<byte[]>(content => returnedContent = content);
+        }
+
+        [Fact]
+        public void BeUsableFromSeperateAssembly() {
+            var tester = new FileResourceTester();
+
+            var result = tester.Execute(mockResourceContext.Object);
+            result.Execute(mockResourceResultContext.Object);
+
+            var temp = Encoding.UTF8.GetString(returnedContent.Skip(3).ToArray());
+            Assert.Equal("alert('FileResourceTester');", temp.TrimStart());
+        }
+
+        #region Nested type: FileResourceTester
+
+        private class FileResourceTester : FileResource
+        {
+            public FileResourceTester() {
+                ResourceName = "Glimpse.Test.Core.Resource.FileResourceTester.js";
+                ResourceType = @"application/x-javascript";
+                Name = "FileResourceTester_js";
+            }
+        }
+
+        #endregion
+    }
+}
