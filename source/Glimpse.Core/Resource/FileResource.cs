@@ -79,8 +79,11 @@ namespace Glimpse.Core.Resource
                 throw new ArgumentNullException("context");
             }
 
-            var assembly = Assembly.GetExecutingAssembly();
-             
+            var assembly = GetResourcesAssembly();
+            if (assembly == null) {
+                return new StatusCodeResourceResult(404, string.Format("Could not locate assembly for resource with ResourceName '{0}'.", ResourceName));
+            }
+ 
             using (var resourceStream = assembly.GetManifestResourceStream(ResourceName))
             {
                 if (resourceStream != null)
@@ -93,6 +96,14 @@ namespace Glimpse.Core.Resource
             }
 
             return new StatusCodeResourceResult(404, string.Format("Could not locate file with ResourceName '{0}'.", ResourceName));
-        } 
+        }
+        
+        /// <summary>
+        /// Gets the assembly in which the resource is embedded
+        /// </summary>
+        /// <returns>Assembly to get resource stream from</returns>
+        protected virtual Assembly GetResourcesAssembly() {
+            return GetType().Assembly;
+        }
     }
 }
