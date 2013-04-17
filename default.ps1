@@ -325,7 +325,7 @@ task push {
         { 
             N {
                "Pushing to NuGet...";
-               Push-Packages https://nuget.org/api/v2/
+               Push-Packages https://www.nuget.org
                break;
                } 
             M {
@@ -337,7 +337,7 @@ task push {
                "Pushing to MyGet...";
                Push-Packages http://www.myget.org/F/glimpsemilestone/
                "Pushing to NuGet...";
-               Push-Packages https://nuget.org/api/v2/
+               Push-Packages https://www.nuget.org
                break;
               } 
             default {
