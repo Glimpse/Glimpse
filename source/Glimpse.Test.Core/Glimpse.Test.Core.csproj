@@ -150,6 +150,7 @@
     <Compile Include="Resource\ClientShould.cs" />
     <Compile Include="Resource\ConfigurationShould.cs" />
     <Compile Include="Resource\DataShould.cs" />
+    <Compile Include="Resource\FileResourceShould.cs" />
     <Compile Include="Resource\HistoryResourceShould.cs" />
     <Compile Include="Resource\MetadataShould.cs" />
     <Compile Include="Resource\PopupResourceShould.cs" />
@@ -208,6 +209,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BadData\NotReallyA.dll" />
+    <EmbeddedResource Include="Resource\FileResourceTester.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

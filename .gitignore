@@ -12,6 +12,7 @@ _ReSharper.*
 *.rptproj.user
 *.db
 *.ncrunchsolution
+*.ncrunchproject
 *.user
 *.log
 /Glimpse.All.crunchsolution.local.xml
