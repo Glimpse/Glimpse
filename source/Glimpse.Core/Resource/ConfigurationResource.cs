@@ -100,7 +100,7 @@ namespace Glimpse.Core.Resource
             }
 
             //Update notification
-            content.Append("<script type=\"text/javascript\">var getOptions = function() { var data = localStorage.getItem('glimpseOptions'); return data != null ? JSON.parse(data) : {}; }, options = getOptions(), hasNewer = options.hasNewerVersion, versionUri = options.versionViewUri; if (hasNewer) { document.write(\"<div class='out-dated'><h3>Really sorry to have to say this but you are out of date :(</h3>A new version of Glimpse is waiting for you... its very lonely without you. It will be worth your while updating. <br /><a href='\" + versionUri + \"' target='new'>See what you are missing out on</a></div>\"); }</script>");
+            content.Append("<script type=\"text/javascript\">var getOptions = function() { var data = localStorage.getItem('glimpseOptions'); return data != null ? JSON.parse(data) : {}; }, options = getOptions(), glimpseServerVersion = '" + GlimpseRuntime.Version + "', versionUri = options.versionViewUri, hasNewer = options.hasNewerVersion, versionUri = options.versionViewUri; if (hasNewer && versionUri.indexOf('Glimpse.Core=' + glimpseServerVersion) == -1) { document.write(\"<div class='out-dated'><h3>Really sorry to have to say this but you are out of date :(</h3>A new version of Glimpse is waiting for you... its very lonely without you. It will be worth your while updating. <br /><a href='\" + versionUri + \"' target='new'>See what you are missing out on</a></div>\"); }</script>");
 
             content.Append("<div class=\"side-bar\">");
             //Cookie status on/off/other

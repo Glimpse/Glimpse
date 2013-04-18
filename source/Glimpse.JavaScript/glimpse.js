@@ -1921,7 +1921,7 @@ glimpse.versionCheck = (function($, pubsub, settings, elements, data, util) {
         },
         result = function(data) {
             settings.local('hasNewerVersion', data.hasNewer);
-            settings.local('versionViewUri', data.viewLink);
+            settings.local('versionViewUri', data.viewLink); 
             
             tryShow();
         };
