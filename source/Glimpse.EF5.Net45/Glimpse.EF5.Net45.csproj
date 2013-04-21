@@ -57,13 +57,15 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\Glimpse.EF\Resources.resx" />
-  </ItemGroup> 
+  </ItemGroup>
   <ItemGroup>
     <None Include="NuSpec\Glimpse.EF5.nuspec">
       <SubType>Designer</SubType>
     </None>
+    <None Include="NuSpec\tools\install.ps1" />
+    <None Include="NuSpec\tools\uninstall.ps1" />
     <None Include="packages.config" />
-  </ItemGroup> 
+  </ItemGroup>
   <ItemGroup>
     <Folder Include="NuSpec\lib\net40\" />
     <Folder Include="NuSpec\lib\net45\" />

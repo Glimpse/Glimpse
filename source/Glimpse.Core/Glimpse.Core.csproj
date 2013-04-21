@@ -106,6 +106,7 @@
     <Compile Include="Framework\Support\ExecutionBlockBase.cs" />
     <Compile Include="Framework\Support\IExecutionTask.cs" />
     <Compile Include="Setting\Initializer.cs" />
+    <Compile Include="Support\NuGetPackage.cs" />
     <Compile Include="System.cs" />
     <Compile Include="Message\ISourceMessage.cs" />
     <Compile Include="Message\ITraceMessage.cs" />

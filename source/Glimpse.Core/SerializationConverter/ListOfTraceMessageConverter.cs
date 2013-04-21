@@ -5,8 +5,16 @@ using Glimpse.Core.Tab.Assist;
 
 namespace Glimpse.Core.SerializationConverter
 {
+    /// <summary>
+    /// Converter for <see cref="ITraceMessage"/>
+    /// </summary>
     public class ListOfTraceMessageConverter : SerializationConverter<IEnumerable<ITraceMessage>>
     {
+        /// <summary>
+        /// Converts the specified object.
+        /// </summary>
+        /// <param name="obj">The object to transform.</param>
+        /// <returns>The new object representation.</returns>
         public override object Convert(IEnumerable<ITraceMessage> obj)
         {
             var root = new TabSection("Category", "Trace", "From Request Start", "From Last");

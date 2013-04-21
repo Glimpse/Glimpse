@@ -9,24 +9,39 @@ using Glimpse.Core.Tab.Assist;
 
 namespace Glimpse.Core
 {
+    /// <summary>
+    /// Listener that Glimpse can use to tap into triggered events.
+    /// </summary>
     public class TraceListener : System.Diagnostics.TraceListener
     {
         [ThreadStatic]
         private static Stopwatch fromLastWatch;
         private IMessageBroker messageBroker;
 
-        // ReSharper disable UnusedMember.Global
-        // These constructors used by .NET when TraceListener is set via web.config
-        public TraceListener() : this(GlimpseConfiguration.GetConfiguredMessageBroker(), GlimpseConfiguration.GetConfiguredTimerStrategy())
+        // ReSharper disable UnusedMember.Global 
+        /// <summary>
+        /// These constructors used by .NET when TraceListener is set via web.config
+        /// </summary>
+        public TraceListener() 
+            : this(GlimpseConfiguration.GetConfiguredMessageBroker(), GlimpseConfiguration.GetConfiguredTimerStrategy())
         {
-        }
+        } 
 
-        // This constructor is needed for users who configure web.config with <add name="myListener" type="Glimpse.AspNet.TraceListener" initializeData="XYZ"/>
-        public TraceListener(string initializeData) : this(GlimpseConfiguration.GetConfiguredMessageBroker(), GlimpseConfiguration.GetConfiguredTimerStrategy())
+        /// <summary>
+        /// This constructor is needed for users who configure web.config with <add name="myListener" type="Glimpse.AspNet.TraceListener" initializeData="XYZ"/>
+        /// </summary>
+        /// <param name="initializeData">Initialize data string</param>
+        public TraceListener(string initializeData) 
+            : this(GlimpseConfiguration.GetConfiguredMessageBroker(), GlimpseConfiguration.GetConfiguredTimerStrategy())
         {
         }
         //// ReSharper restore UnusedMember.Global
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TraceListener"/> class.
+        /// </summary>
+        /// <param name="messageBroker">The message broker.</param>
+        /// <param name="timerStrategy">The timer strategy.</param>
         public TraceListener(IMessageBroker messageBroker, Func<IExecutionTimer> timerStrategy)
         {
             MessageBroker = messageBroker;
@@ -41,6 +56,10 @@ namespace Glimpse.Core
 
         internal Func<IExecutionTimer> TimerStrategy { get; set; }
 
+        /// <summary>
+        /// Writes the value of the object's <see cref="M:System.Object.ToString" /> method to the listener you create when you implement the <see cref="T:System.Diagnostics.TraceListener" /> class.
+        /// </summary>
+        /// <param name="o">An <see cref="T:System.Object" /> whose fully qualified class name you want to write.</param>
         public override void Write(object o)
         { 
             if (o == null)
@@ -51,11 +70,20 @@ namespace Glimpse.Core
             Write(o.ToString());
         }
 
+        /// <summary>
+        /// When overridden in a derived class, writes the specified message to the listener you create in the derived class.
+        /// </summary>
+        /// <param name="message">A message to write.</param>
         public override void Write(string message)
         {
             WriteLine(message, null);
         }
 
+        /// <summary>
+        /// Writes a category name and the value of the object's <see cref="M:System.Object.ToString" /> method to the listener you create when you implement the <see cref="T:System.Diagnostics.TraceListener" /> class.
+        /// </summary>
+        /// <param name="o">An <see cref="T:System.Object" /> whose fully qualified class name you want to write.</param>
+        /// <param name="category">A category name used to organize the output.</param>
         public override void Write(object o, string category)
         {
             if (category == null)
@@ -68,6 +96,11 @@ namespace Glimpse.Core
             }
         }
 
+        /// <summary>
+        /// Writes a category name and a message to the listener you create when you implement the <see cref="T:System.Diagnostics.TraceListener" /> class.
+        /// </summary>
+        /// <param name="message">A message to write.</param>
+        /// <param name="category">A category name used to organize the output.</param>
         public override void Write(string message, string category)
         { 
             if (category == null)
@@ -80,21 +113,39 @@ namespace Glimpse.Core
             }
         }
 
+        /// <summary>
+        /// Writes the value of the object's <see cref="M:System.Object.ToString" /> method to the listener you create when you implement the <see cref="T:System.Diagnostics.TraceListener" /> class, followed by a line terminator.
+        /// </summary>
+        /// <param name="o">An <see cref="T:System.Object" /> whose fully qualified class name you want to write.</param>
         public override void WriteLine(object o)
         { 
             WriteLine(o == null ? string.Empty : o.ToString());
         }
 
+        /// <summary>
+        /// When overridden in a derived class, writes a message to the listener you create in the derived class, followed by a line terminator.
+        /// </summary>
+        /// <param name="message">A message to write.</param>
         public override void WriteLine(string message)
         {
             WriteLine(message, null);
         }
 
+        /// <summary>
+        /// Writes a category name and the value of the object's <see cref="M:System.Object.ToString" /> method to the listener you create when you implement the <see cref="T:System.Diagnostics.TraceListener" /> class, followed by a line terminator.
+        /// </summary>
+        /// <param name="o">An <see cref="T:System.Object" /> whose fully qualified class name you want to write.</param>
+        /// <param name="category">A category name used to organize the output.</param>
         public override void WriteLine(object o, string category)
         { 
             WriteLine(o == null ? string.Empty : o.ToString(), category);
         }
 
+        /// <summary>
+        /// Writes a category name and a message to the listener you create when you implement the <see cref="T:System.Diagnostics.TraceListener" /> class, followed by a line terminator.
+        /// </summary>
+        /// <param name="message">A message to write.</param>
+        /// <param name="category">A category name used to organize the output.</param>
         public override void WriteLine(string message, string category)
         {
             var derivedCategory = DeriveCategory(category) ?? category;
@@ -106,11 +157,20 @@ namespace Glimpse.Core
             InternalWrite(message, derivedCategory);
         }
 
+        /// <summary>
+        /// Emits an error message to the listener you create when you implement the <see cref="T:System.Diagnostics.TraceListener" /> class.
+        /// </summary>
+        /// <param name="message">A message to emit.</param>
         public override void Fail(string message)
         {
             Fail(message, string.Empty);
         }
 
+        /// <summary>
+        /// Emits an error message and a detailed error message to the listener you create when you implement the <see cref="T:System.Diagnostics.TraceListener" /> class.
+        /// </summary>
+        /// <param name="message">A message to emit.</param>
+        /// <param name="detailMessage">A detailed message to emit.</param>
         public override void Fail(string message, string detailMessage)
         {
             var failMessage = new StringBuilder(); 
@@ -124,6 +184,14 @@ namespace Glimpse.Core
             InternalWrite(failMessage.ToString(), FormattingKeywords.Fail);
         }
 
+        /// <summary>
+        /// Writes trace information, a data object and event information to the listener specific output.
+        /// </summary>
+        /// <param name="eventCache">A <see cref="T:System.Diagnostics.TraceEventCache" /> object that contains the current process ID, thread ID, and stack trace information.</param>
+        /// <param name="source">A name used to identify the output, typically the name of the application that generated the trace event.</param>
+        /// <param name="eventType">One of the <see cref="T:System.Diagnostics.TraceEventType" /> values specifying the type of event that has caused the trace.</param>
+        /// <param name="id">A numeric identifier for the event.</param>
+        /// <param name="data">The trace data to emit.</param> 
         public override void TraceData(TraceEventCache eventCache, string source, TraceEventType eventType, int id, object data)
         {
             var message = new StringBuilder();
@@ -139,6 +207,14 @@ namespace Glimpse.Core
             InternalWrite(message.ToString(), DeriveCategory(eventType));
         }
 
+        /// <summary>
+        /// Writes trace information, an array of data objects and event information to the listener specific output.
+        /// </summary>
+        /// <param name="eventCache">A <see cref="T:System.Diagnostics.TraceEventCache" /> object that contains the current process ID, thread ID, and stack trace information.</param>
+        /// <param name="source">A name used to identify the output, typically the name of the application that generated the trace event.</param>
+        /// <param name="eventType">One of the <see cref="T:System.Diagnostics.TraceEventType" /> values specifying the type of event that has caused the trace.</param>
+        /// <param name="id">A numeric identifier for the event.</param>
+        /// <param name="data">An array of objects to emit as data.</param> 
         public override void TraceData(TraceEventCache eventCache, string source, TraceEventType eventType, int id, params object[] data)
         {
             var message = new StringBuilder();
@@ -167,6 +243,14 @@ namespace Glimpse.Core
             InternalWrite(message.ToString(), DeriveCategory(eventType));
         }
 
+        /// <summary>
+        /// Traces the event.
+        /// </summary>
+        /// <param name="eventCache">The event cache.</param>
+        /// <param name="source">The source.</param>
+        /// <param name="eventType">Type of the event.</param>
+        /// <param name="id">The id.</param>
+        /// <param name="data">The data.</param>
         public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string data)
         {
             var message = new StringBuilder(); 
@@ -177,6 +261,15 @@ namespace Glimpse.Core
             InternalWrite(message.ToString(), DeriveCategory(eventType));
         }
 
+        /// <summary>
+        /// Writes trace information, a formatted array of objects and event information to the listener specific output.
+        /// </summary>
+        /// <param name="eventCache">A <see cref="T:System.Diagnostics.TraceEventCache" /> object that contains the current process ID, thread ID, and stack trace information.</param>
+        /// <param name="source">A name used to identify the output, typically the name of the application that generated the trace event.</param>
+        /// <param name="eventType">One of the <see cref="T:System.Diagnostics.TraceEventType" /> values specifying the type of event that has caused the trace.</param>
+        /// <param name="id">A numeric identifier for the event.</param>
+        /// <param name="format">A format string that contains zero or more format items, which correspond to objects in the <paramref name="args" /> array.</param>
+        /// <param name="args">An object array containing zero or more objects to format.</param> 
         public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string format, params object[] args)
         {
             var message = new StringBuilder();
@@ -186,7 +279,7 @@ namespace Glimpse.Core
 
             InternalWrite(message.ToString(), DeriveCategory(eventType));
         }
-
+         
         private TimeSpan CalculateFromLast(IExecutionTimer timer)
         {
             if (fromLastWatch == null)

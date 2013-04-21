@@ -27,6 +27,7 @@ namespace Glimpse.Mvc.AlternateType
                         new EndInvokeActionMethod(),
                         new ActionInvoker.InvokeActionResult<ControllerActionInvoker>(),
                         new ActionInvoker.GetFilters<ControllerActionInvoker>(new ActionFilter(ProxyFactory), new ResultFilter(ProxyFactory), new AuthorizationFilter(ProxyFactory), new ExceptionFilter(ProxyFactory)),
+                        
                         // HACK - Leveraging InvokerActionResult and GetFilters for Async & NonAsync allows for MVC 3 + MVC 4
                         new ActionInvoker.InvokeActionResult<AsyncControllerActionInvoker>(),
                         new ActionInvoker.GetFilters<AsyncControllerActionInvoker>(new ActionFilter(ProxyFactory), new ResultFilter(ProxyFactory), new AuthorizationFilter(ProxyFactory), new ExceptionFilter(ProxyFactory))

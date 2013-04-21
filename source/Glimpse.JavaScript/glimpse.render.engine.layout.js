@@ -1,30 +1,31 @@
-﻿(function($, util, engine, engineUtil) {
-    var providers = engine._providers,
-        buildFormatString = function(content, data, indexs) {  
+﻿(function($, util, engine, engineUtil, engineUtilTable) {
+    var providers = engine._providers, 
+        buildFormatString = function(content, data, indexs, isHeadingRow) {  
             for (var i = 0; i < indexs.length; i++) {
-                var pattern = "\\\{\\\{" + indexs[i] + "\\\}\\\}", regex = new RegExp(pattern, "g"); 
-                content = content.replace(regex, data[indexs[i]]);
+                var pattern = "\\\{\\\{" + indexs[i] + "\\\}\\\}", regex = new RegExp(pattern, "g"),
+                    value = isHeadingRow && !$.isNumeric(indexs[i]) ? indexs[i] : data[indexs[i]]; 
+                content = content.replace(regex, value);
             }
             return content;
-        },
-        buildCell = function(data, metadataItem, level, cellType, rowIndex, includeHeading) {
+        }, 
+        buildCell = function(data, metadataItem, level, cellType, rowIndex, isHeadingRow) {
             var html = '', 
                 cellContent = '', 
                 cellClass = '', 
                 cellStyle = '', 
                 cellAttr = '',
-                isHeadingRow = rowIndex == 0 && includeHeading;
+                containsNestedData = $.isArray(metadataItem.data);
                 
             //Cell Content
-            if ($.isArray(metadataItem.data)) {
+            if (containsNestedData) {
                 for (var i = 0; i < metadataItem.data.length; i++) 
-                    cellContent += buildCell(data, metadataItem.data[i], level, 'div', rowIndex, includeHeading);
+                    cellContent += buildCell(data, metadataItem.data[i], level, 'div', rowIndex, isHeadingRow);
             }
             else { 
-                if (!metadataItem.indexs && !$.isNumeric(metadataItem.data)) 
+                if (!metadataItem.indexs && util.containsTokens(metadataItem.data)) 
                     metadataItem.indexs = util.getTokens(metadataItem.data, data); 
-                
-                cellContent = metadataItem.indexs ? buildFormatString(metadataItem.data, data, metadataItem.indexs) : data[metadataItem.data];
+                  
+                cellContent = metadataItem.indexs ? buildFormatString(metadataItem.data, data, metadataItem.indexs, isHeadingRow) : (isHeadingRow && !$.isNumeric(metadataItem.data) ? metadataItem.data : data[metadataItem.data]);
                 
                 if (metadataItem.engine && !isHeadingRow) {
                     cellContent = providers.master.build(cellContent, level + 1, metadataItem.forceFull, metadataItem, isHeadingRow ? undefined : metadataItem.limit);
@@ -40,7 +41,11 @@
                     //If minDisplay and we are in header or there is no data, we don't want to render anything 
                     if (metadataItem.minDisplay && (isHeadingRow || cellContent == null))
                         return ""; 
-                     
+                    
+                    //Work out what title we want
+                    if (isHeadingRow && metadataItem.title) 
+                        cellContent = metadataItem.title;
+
                     cellContent = providers.master.build(cellContent, level + 1, metadataItem.forceFull, newMetadataItem, isHeadingRow ? undefined : metadataItem.limit);
 
                     //Content pre/post
@@ -52,11 +57,13 @@
             }
             
             if (!isHeadingRow) {
-                cellClass = 'glimpse-cell';
+                if (!containsNestedData) { cellClass = 'glimpse-cell'; }
+                
                 //Cell Class
                 if (metadataItem.key === true) { cellClass += ' glimpse-cell-key'; }
                 if (metadataItem.isCode === true) { cellClass += ' glimpse-code'; }
                 if (metadataItem.className) { cellClass += ' ' + metadataItem.className; }
+                
                 //Cell Code 
                 if (metadataItem.codeType) { cellAttr += ' data-codeType="' + metadataItem.codeType + '"'; };
             }
@@ -72,9 +79,21 @@
             
             return html;
         }, 
-
-
-
+        buildCellRow = function (data, layout, level, cellType, rowIndex, isHeadingRow) {
+            var html = '';
+            
+            for (var x = 0; x < layout.length; x++) { 
+                var rowHtml = ''; 
+                for (var y = 0; y < layout[x].length; y++) {
+                    var metadataItem = layout[x][y];  
+                    rowHtml += buildCell(data, metadataItem, level, cellType, rowIndex, isHeadingRow);
+                }
+                     
+                if (rowHtml != '') { html += '<tr>' + rowHtml + '</tr>'; };
+            }
+            return html;
+        },
+         
         build = function (data, level, forceFull, metadata, forceLimit) { 
             var limit = !$.isNumeric(forceLimit) ? 3 : forceLimit;
 
@@ -84,30 +103,23 @@
         },
         buildOnly = function (data, level, metadata) {
             var html = '<table class="glimpse-row-holder">', 
-                rowClass = '',
                 layout = metadata.layout,
-                includeHeading = engineUtil.includeHeading(metadata);
-            for (var i = includeHeading ? 0 : 1; i < data.length; i++) {
-                rowClass = data[i].length > data[0].length ? (' ' + data[i][data[i].length - 1]) : '';
-                html += (i == 0 && includeHeading) ? '<thead class="glimpse-row-header glimpse-row-header-' + level + '">' : '';
-                html += (i == 1) ? '<tbody class="glimpse-row-holder">' : '';
-                for (var x = 0; x < layout.length; x++) { 
-                    var rowData = '';
-                     
-                    for (var y = 0; y < layout[x].length; y++) {
-                        var metadataItem = layout[x][y], cellType = (i == 0 && includeHeading ? 'th' : 'td'); 
-                        rowData += buildCell(data[i], metadataItem, level, cellType, i, includeHeading);
-                    }
-                     
-                    if (rowData != '') { html += '<tr class="glimpse-row ' + rowClass + '">' + rowData + '</tr>'; };
-                }
-                html += (i == 0 && includeHeading) ? '</thead>' : '';
-                html += (i == data.length - 1) ? '</tbody>' : '';
+                factory = engineUtilTable.findFactory(data),
+                headers = factory.getHeader(data); 
+            
+            if (engineUtil.includeHeading(metadata)) {
+                html += '<thead class="glimpse-row-header glimpse-row-header-' + level + '">';
+                html += buildCellRow(headers, layout, level, 'th', 0, true);
+                html += '</thead>';
+            } 
+            for (var i = factory.startingIndex(); i < data.length; i++) {
+                html += '<tbody class="glimpse-row' + factory.getRowClass(data, i) + '">';
+                html += buildCellRow(data[i], layout, level, 'td', i, false);
+                html += '</tbody>';
             }
             html += '</table>';
-
-            return html; 
-        },
+            return html;
+        }, 
         buildPreview = function(data, level, metadata) { 
             return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + buildPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + buildOnly(data, level, metadata) + '</div></td></tr></table>';
         },
@@ -122,4 +134,4 @@
         }; 
 
     engine.register('layout', provider);
-})(jQueryGlimpse, glimpse.util, glimpse.render.engine, glimpse.render.engine.util);
+})(jQueryGlimpse, glimpse.util, glimpse.render.engine, glimpse.render.engine.util, glimpse.render.engine.util.table);

@@ -33,47 +33,53 @@ namespace Glimpse.Core.Extensibility
         public NuGetPackageAttribute(string id, string version)
         {
             Id = id;
-            Version = version;
+            Version = version; 
         }
 
         private string Id { get; set; }
 
         private string Version { get; set; }
 
+        private string AssemblyName { get; set; }
+
+        /// <summary>
+        /// Setup Attribute with Assembly context
+        /// </summary>
+        /// <param name="assembly"></param>
+        public void Initialize(Assembly assembly)
+        {
+            var infoVersion = assembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false).Cast<AssemblyInformationalVersionAttribute>().SingleOrDefault();
+
+            Version = infoVersion != null ? infoVersion.InformationalVersion : assembly.GetName().Version.ToString();
+            AssemblyName = assembly.GetName().FullName;
+            Id = assembly.GetName().Name; 
+        }
+
         /// <summary>
         /// Gets the id.
         /// </summary>
-        /// <param name="assembly">The assembly.</param>
-        /// <returns>The NuGet package Id for the specified <paramref name="assembly"/>.</returns>
-        public string GetId(Assembly assembly)
+        /// <returns>The NuGet package Id for the initialized assembly.</returns>
+        public string GetId()
         {
-            if (!string.IsNullOrEmpty(Id))
-            {
-                return Id;
-            }
-
-            return Id = assembly.GetName().Name;
+            return Id; 
         }
 
         /// <summary>
         /// Gets the version.
+        /// </summary> 
+        /// <returns>The NuGet package version for the initialized assembly.</returns>
+        public string GetVersion()
+        { 
+            return Version;  
+        }
+
+        /// <summary>
+        /// Returns the full name of the assembly that the attribute is in.
         /// </summary>
-        /// <param name="assembly">The assembly.</param>
-        /// <returns>The NuGet package version for the specified <paramref name="assembly"/>.</returns>
-        public string GetVersion(Assembly assembly)
+        /// <returns>Full name value</returns>
+        public string GetAssemblyName()
         {
-            if (!string.IsNullOrEmpty(Version))
-            {
-                return Version;
-            }
-
-            var infoVersion = assembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false).Cast<AssemblyInformationalVersionAttribute>().SingleOrDefault();
-            if (infoVersion != null)
-            {
-                return Version = infoVersion.InformationalVersion;
-            }
-
-            return Version = assembly.GetName().Version.ToString();
+            return AssemblyName;
         }
     }
 }

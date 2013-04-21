@@ -23,7 +23,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Glimpse.Core.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -71,7 +72,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Glimpse.Core\**\*.png" />
-    <EmbeddedResource Include="..\Glimpse.Core\Resources.resx"/>
+    <EmbeddedResource Include="..\Glimpse.Core\Resources.resx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

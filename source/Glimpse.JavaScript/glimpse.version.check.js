@@ -38,7 +38,7 @@
         },
         result = function(data) {
             settings.local('hasNewerVersion', data.hasNewer);
-            settings.local('versionViewUri', data.viewLink);
+            settings.local('versionViewUri', data.viewLink); 
             
             tryShow();
         };
