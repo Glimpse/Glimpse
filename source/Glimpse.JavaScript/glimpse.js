@@ -3221,7 +3221,7 @@ glimpse.tab = (function($, pubsub, data) {
 (function($, pubsub, data, elements, util) {
     var serverTime = 0,
         modify = function(options) {
-            options.templates.css += '.glimpse-open .glimpse-hud {padding: 0 5px;float: left;}.glimpse-open .glimpse-hud-section {float: left;padding: 0 20px 0 10px;}.glimpse-open .glimpse-hud-section:hover .glimpse-hud-title {color: #8BC441;}.glimpse-open .glimpse-hud-title {position: absolute;line-height: 100%;font-family: "Segoe UI Semibold";font-size: 10px;top: 2px;color: #71b1d1;text-transform: uppercase;-webkit-transition: color 0.3s ease;-moz-transition: color 0.3s ease;-o-transition: color 0.3s ease;transition: color 0.3s ease;}.glimpse-open .glimpse-hud-postfix {float: left;line-height: 100%;padding-left: 2px;color: #bcbcbc; }.glimpse-open .glimpse-hud-value {line-height: 90%;float: left;-webkit-transition: color 0.3s ease;-moz-transition: color 0.3s ease;-o-transition: color 0.3s ease;transition: color 0.3s ease;}.glimpse-open .glimpse-hud-value-update {color: #71b1d1;}.glimpse-open .glimpse-hud-value-alert {color: #e0695c;}.glimpse-open .glimpse-hud-detail {float: left;}.glimpse-open .glimpse-hud-main {float: left;}.glimpse-open .glimpse-hud-main .glimpse-hud-detail {float: left;padding: 3px 10px 0 0;}.glimpse-open .glimpse-hud-main .glimpse-hud-detail .glimpse-hud-detailtitle {font-size: 13px;}.glimpse-open .glimpse-hud-main .glimpse-hud-detail .glimpse-hud-detailsubtitle {font-size: 10px;text-align: right;}.glimpse-open .glimpse-hud-main .glimpse-hud-value {font-size: 30px;height: 30px;}.glimpse-open .glimpse-hud-main .glimpse-hud-postfix {padding-left: 3px; }.glimpse-open .glimpse-hud-content {float: left;position: relative;padding: 0 10px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail {padding-top: 14px; }.glimpse-open .glimpse-hud-content .glimpse-hud-detail.glimpse-hud-detail-small {padding-top: 17px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail .glimpse-hud-postfix {font-size: 10px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail-small .glimpse-hud-postfix {font-size: 6px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail .glimpse-hud-value {font-size: 14px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail-small .glimpse-hud-value {font-size: 10px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail-divider {padding: 14px 10px 0 10px;color: #bcbcbc;float: left;font-size: 10px;height: 30px;}.glimpse-open .glimpse-hud .alert {float: left;margin: 8px 0 0 15px;}.glimpse-open .glimpse-hud-graph {width: 45px;position: absolute;height: 8px;top: 4px;}.glimpse-open .glimpse-hud-graph-item {width: 2px;background-color: white;bottom: 1px;position: absolute;height: 100%;}.glimpse-open .glimpse-hud-graph-item.glimpse-hud-graph-item-alert {background-color: #e0695c; } ';
+            options.templates.css += '.glimpse-open .glimpse-hud {padding: 0 5px 0 0;float: left;}.glimpse-open .glimpse-hud-section {float: left;-webkit-transition: all 0.3s ease;-moz-transition: all 0.3s ease;-o-transition: all 0.3s ease;transition: all 0.3s ease;border-left: 11px solid #71b1d1;}.glimpse-open .glimpse-hud-section:hover {border-color: #8BC441;}.glimpse-open .glimpse-hud-section-inner {-webkit-transition: all 0.3s ease;-moz-transition: all 0.3s ease;-o-transition: all 0.3s ease;transition: all 0.3s ease;max-width: 999px;}.glimpse-open .glimpse-hud-section-inner:hover .glimpse-hud-graph, .glimpse-open .glimpse-hud-tooltips {display: none;} .glimpse-open .glimpse-hud-section-inner:hover .glimpse-hud-tooltips {display: block;}.glimpse-open .glimpse-hud-tooltips {color: #bcbcbc;font-size: 7px;position: absolute;}.glimpse-open .glimpse-hud-main .glimpse-hud-tooltips {top: 18px;}.glimpse-open .glimpse-hud-content .glimpse-hud-tooltips {top: 2px;}.glimpse-open .glimpse-hud-title {position: absolute;line-height: 100%;font-family: "Segoe UI Semibold";font-size: 9px;top: 2px;color: white;text-transform: uppercase;-webkit-transform-origin: 8px 18px;-moz-transform-origin: 8px 18px;-ms-transform-origin: 8px 18px;-o-transform-origin: 8px 18px;-webkit-transform: rotate(270deg);-moz-transform: rotate(270deg);-ms-transform: rotate(270deg);-o-transform: rotate(270deg);cursor: pointer;}.glimpse-open .glimpse-hud-section-input {display: none;}.glimpse-open .glimpse-hud-section-input:checked ~ .glimpse-hud-section-inner {max-width: 0px;overflow: hidden;} .glimpse-open .glimpse-hud-postfix {float: left;line-height: 100%;padding-left: 2px;color: #bcbcbc; }.glimpse-open .glimpse-hud-value {line-height: 90%;float: left;-webkit-transition: color 0.3s ease;-moz-transition: color 0.3s ease;-o-transition: color 0.3s ease;transition: color 0.3s ease;}.glimpse-open .glimpse-hud-value-update {color: #71b1d1;}.glimpse-open .glimpse-hud-value-alert {color: #e0695c;}.glimpse-open .glimpse-hud-detail {float: left;}.glimpse-open .glimpse-hud-main {float: left;position: relative;padding-left: 10px;min-width: 37px;}.glimpse-open .glimpse-hud-main .glimpse-hud-detail {float: left;padding: 3px 10px 0 0;}.glimpse-open .glimpse-hud-main .glimpse-hud-value {font-size: 23px;height: 30px;}.glimpse-open .glimpse-hud-main .glimpse-hud-postfix {padding-left: 3px; }.glimpse-open .glimpse-hud-content {float: left;position: relative;padding: 0 20px 0 10px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail {padding-top: 14px; }.glimpse-open .glimpse-hud-content .glimpse-hud-detail-top {padding-top: 1px; }.glimpse-open .glimpse-hud-content .glimpse-hud-detail.glimpse-hud-detail-small {padding-top: 17px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail .glimpse-hud-postfix {font-size: 10px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail-small .glimpse-hud-postfix {font-size: 6px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail .glimpse-hud-value {font-size: 14px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail-small .glimpse-hud-value {font-size: 10px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail-divider {padding: 14px 10px 0 10px;color: #bcbcbc;float: left;font-size: 10px;height: 30px;}.glimpse-open .glimpse-hud-detail .glimpse-hud-detailtitle {font-size: 13px;}.glimpse-open .glimpse-hud-detail .glimpse-hud-detailsubtitle {font-size: 10px;text-align: right;}.glimpse-open .glimpse-hud .alert {float: left;margin: 8px 0 0 15px;}.glimpse-open .glimpse-hud-graph {width: 45px;position: absolute;height: 8px;top: 20px;opacity: 0.2;}.glimpse-open .glimpse-hud-graph-item {width: 2px;background-color: white;bottom: 1px;position: absolute;height: 100%;}.glimpse-open .glimpse-hud-graph-item.glimpse-hud-graph-item-alert {background-color: #e0695c; } ';
         },
         loaded = function(args) {
             var html = '',
@@ -3252,20 +3252,22 @@ glimpse.tab = (function($, pubsub, data) {
                             timingSum += timing[key].duration;
                         }
                         tabData.request.requestTime = timingSum;
-                        
-                        html += '<div class="glimpse-hud-section glimpse-hud-section-request" data-maxValue="1000" data-warnValue="600" data-leftPosition="65">';
-                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" title="Total request time" data-maxValue="600">' + timingSum + '</div><div class="glimpse-hud-postfix">ms</div></div>';
+                        //<label class="glimpse-menu-root-item" for="glimpse-menu-root-radio-1">Data Access</label>
+                        html += '<div class="glimpse-hud-section glimpse-hud-section-request" data-maxValue="1000" data-warnValue="600">';
+                        html += '<label class="glimpse-hud-title" for="glimpse-hud-section-request-input">Page</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-request-input" />';
+                        html += '<div class="glimpse-hud-section-inner">'; 
+                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" data-maxValue="600">' + timingSum + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Total Request</div></div>';
                         html += '<div class="glimpse-hud-content">';
-                        html += '<div class="glimpse-hud-title">Request</div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Network timing" data-maxValue="15">' + timing.network.duration + '</div><div class="glimpse-hud-postfix">ms</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxValue="15">' + timing.network.duration + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Network</div></div>';
                         html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Server timing" data-maxValue="250">' + timing.server.duration + '</div><div class="glimpse-hud-postfix">ms</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxValue="250">' + timing.server.duration + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Server</div></div>';
                         html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Browser timing" data-maxValue="350">' + timing.browser.duration + '</div><div class="glimpse-hud-postfix">ms</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxValue="350">' + timing.browser.duration + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Client</div></div>';
+                        html += '</div>';
                         html += '</div>'; 
                         html += '</div>';
                         
-                        serverTime = timingSum;
+                        serverTime = timing.server.duration;
                     }
 
                     return html;
@@ -3298,19 +3300,22 @@ glimpse.tab = (function($, pubsub, data) {
 
                     if (mvcData) { 
                         var viewIsDifferent = mvcData.actionName != mvcData.viewName;
-                        html += '<div class="glimpse-hud-section glimpse-hud-section-mvc" data-maxValue="1500" data-warnValue="600" data-leftPosition="45">';
+                        html += '<div class="glimpse-hud-section glimpse-hud-section-mvc" data-maxValue="1500" data-warnValue="600">';
+                        html += '<label class="glimpse-hud-title" for="glimpse-hud-section-mvc-input">MVC</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-mvc-input" />';
+                        html += '<div class="glimpse-hud-section-inner">'; 
                         html += '<div class="glimpse-hud-main">';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-detailtitle"><span title="MVC Controller">' + mvcData.controllerName + '</span>.<span title="MVC Action' + (!viewIsDifferent ? ' & View' : '') + '">' + mvcData.actionName + '</span>(...)' + (viewIsDifferent ? ' - <span title="View Name">' + mvcData.viewName + '</span> ' : '') + '</div><div class="glimpse-hud-detailsubtitle">' + mvcData.matchedRouteName + '</div></div>';
-                        html += '<div class="glimpse-hud-value" title="Action execution time">' + mvcData.actionExecutionTime + '</div><div class="glimpse-hud-postfix">ms</div>';
+                        html += '<div class="glimpse-hud-value">' + Math.round(mvcData.actionExecutionTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Action</div>';
                         html += '</div>';
                         html += '<div class="glimpse-hud-content">';
-                        html += '<div class="glimpse-hud-title">MVC</div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="View rendering time">' + mvcData.viewRenderTime + '</div><div class="glimpse-hud-postfix">ms</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value">' + Math.round(mvcData.viewRenderTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">View</div></div>';
                         html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Number of child actions">' + mvcData.childActionCount + '</div></div>';
-                        html += '<div class="glimpse-hud-detail-divider">/</div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Number of child views">' + mvcData.childViewCount + '</div></div>';
-                        html += '</div>'; 
+                        html += '<div class="glimpse-hud-detail glimpse-hud-detail-top"><div class="glimpse-hud-detailtitle"><span title="MVC Controller">' + mvcData.controllerName + '</span>.<span title="MVC Action' + (!viewIsDifferent ? ' & View' : '') + '">' + mvcData.actionName + '</span>(...)' + (viewIsDifferent ? ' - <span title="View Name">' + mvcData.viewName + '</span> ' : '') + '</div><div class="glimpse-hud-detailsubtitle">' + mvcData.matchedRouteName + '</div></div>';
+                        //html += '<div class="glimpse-hud-detail-divider"></div>';
+                        //html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Number of child actions">' + mvcData.childActionCount + '</div></div>';
+                        //html += '<div class="glimpse-hud-detail-divider">/</div>';
+                        //html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Number of child views">' + mvcData.childViewCount + '</div></div>';
+                        html += '</div>';
+                        html += '</div>';  
                         html += '</div>'; 
                     }
 
@@ -3327,20 +3332,22 @@ glimpse.tab = (function($, pubsub, data) {
                         sqlData = tabData.sql;
 
                     if (sqlData) { 
-                        html += '<div class="glimpse-hud-section glimpse-hud-section-sql" data-maxValue="1200" data-warnValue="300" data-leftPosition="40">';
-                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value">' + limitValue(parseInt((sqlData.connectionOpenTime / serverTime) * 100)) + '</div><div class="glimpse-hud-postfix">%</div></div>';
-                        html += '<div class="glimpse-hud-content">';
-                        html += '<div class="glimpse-hud-title">SQL</div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Total connection open time" data-maxValue="300">' + sqlData.connectionOpenTime + '</div><div class="glimpse-hud-postfix">ms</div></div>';
-                        html += '<div class="glimpse-hud-detail-divider">/</div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Total query time" data-maxValue="20">' + sqlData.queryExecutionTime + '</div><div class="glimpse-hud-postfix">ms</div></div>';
+                        html += '<div class="glimpse-hud-section glimpse-hud-section-sql" data-maxValue="1200" data-warnValue="300">';
+                        html += '<label class="glimpse-hud-title" for="glimpse-hud-section-sql-input">SQL</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-sql-input" />';
+                        html += '<div class="glimpse-hud-section-inner">'; 
+                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" data-maxValue="20">' + Math.round(sqlData.queryExecutionTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Execution</div></div>';
+                        html += '<div class="glimpse-hud-content">';  
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value">' + limitValue(parseInt((sqlData.connectionOpenTime / serverTime) * 100)) + '</div><div class="glimpse-hud-postfix">%</div></div>';
                         html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Number of transactions">' + sqlData.transactionCount + '</div></div>';
-                        html += '<div class="glimpse-hud-detail-divider">/</div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Number of connections">' + sqlData.connectionCount + '</div></div>';
-                        html += '<div class="glimpse-hud-detail-divider">/</div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Number of queries" data-maxValue="4">' + sqlData.queryCount + '</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxValue="300">' + Math.round(sqlData.connectionOpenTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Open</div></div>';
+                        html += '<div class="glimpse-hud-detail-divider"></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value">' + sqlData.transactionCount + '</div><div class="glimpse-hud-tooltips">Trx</div></div>';
+                        html += '<div class="glimpse-hud-detail-divider"></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value">' + sqlData.connectionCount + '</div><div class="glimpse-hud-tooltips">Conn</div></div>';
+                        html += '<div class="glimpse-hud-detail-divider"></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxValue="4">' + sqlData.queryCount + '</div><div class="glimpse-hud-tooltips">Exec</div></div>';
                         html += '</div>'; 
+                        html += '</div>';
                         html += '</div>';
                     }
 
@@ -3358,10 +3365,12 @@ glimpse.tab = (function($, pubsub, data) {
             var send = XMLHttpRequest.prototype.send,
                 count = 0,
                 render = function() {
-                    var html = '<div class="glimpse-hud-section">';
+                    var html = '<div class="glimpse-hud-section glimpse-hud-section-ajax">';
+                        html += '<label class="glimpse-hud-title" for="glimpse-hud-section-for-input">Ajax</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-for-input" />';
+                        html += '<div class="glimpse-hud-section-inner">'; 
                         html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value glimpse-hug-ajax-count" title="Number of Ajax request">0</div></div>';
                         html += '<div class="glimpse-hud-content">';
-                        html += '<div class="glimpse-hud-title">Ajax</div>';
+                        html += '</div>'; 
                         html += '</div>'; 
                         html += '</div>';
 
@@ -3391,7 +3400,7 @@ glimpse.tab = (function($, pubsub, data) {
                 var item = $(this);
                 if (parseInt(item.text()) > parseInt(item.attr('data-maxValue'))) {
                     alert = true;
-                    item.addClass('glimpse-hud-value-alert').attr('title', item.attr('title') + ' - Max allowed time \'' + item.attr('data-maxValue') + '\'');
+                    item.addClass('glimpse-hud-value-alert').attr('title', 'Max allowed time \'' + item.attr('data-maxValue') + '\'');
                     alertDetails += item.attr('title') + '\n';
                 }
             });
@@ -3412,9 +3421,9 @@ glimpse.tab = (function($, pubsub, data) {
                     graphData.connectionOpenTime.push({ capped: selectValue(tabData.sql.connectionOpenTime, scope.find('.glimpse-hud-section-sql').attr('data-maxValue')), raw: tabData.sql.connectionOpenTime });
                     checkSize(graphData.connectionOpenTime);
                 
-                    scope.find('.glimpse-hud-section-request .glimpse-hud-content').prepend(build(graphData.requestTime, scope.find('.glimpse-hud-section-request')));
-                    scope.find('.glimpse-hud-section-mvc .glimpse-hud-content').prepend(build(graphData.actionExecutionTime, scope.find('.glimpse-hud-section-mvc')));
-                    scope.find('.glimpse-hud-section-sql .glimpse-hud-content').prepend(build(graphData.connectionOpenTime, scope.find('.glimpse-hud-section-sql')));
+                    scope.find('.glimpse-hud-section-request .glimpse-hud-main').prepend(build(graphData.requestTime, scope.find('.glimpse-hud-section-request')));
+                    scope.find('.glimpse-hud-section-mvc .glimpse-hud-main').prepend(build(graphData.actionExecutionTime, scope.find('.glimpse-hud-section-mvc')));
+                    scope.find('.glimpse-hud-section-sql .glimpse-hud-main').prepend(build(graphData.connectionOpenTime, scope.find('.glimpse-hud-section-sql')));
 
                     util.localStorage('glimpseHudGraph', graphData);
                 },
@@ -3422,7 +3431,7 @@ glimpse.tab = (function($, pubsub, data) {
                     var min = graphItem[0].capped,
                         max = graphItem[0].capped,
                         difference = 0,
-                        html = '<div class="glimpse-hud-graph" style="left:' + scope.attr('data-leftPosition') + 'px">';
+                        html = '<div class="glimpse-hud-graph">';
                     
                     for (var i = 0; i < graphItem.length; i++) { 
                         min = Math.min(min, graphItem[i].capped);

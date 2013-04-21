@@ -1,27 +1,67 @@
 ﻿.glimpse-open .glimpse-hud { 
-    padding: 0 5px;
+    padding: 0 5px 0 0;
     float: left;
 }
 .glimpse-open .glimpse-hud-section {
-    float: left;
-    padding: 0 20px 0 10px;
+    float: left; 
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    border-left: 11px solid #71b1d1;
 }
-.glimpse-open .glimpse-hud-section:hover .glimpse-hud-title {
-    color: #8BC441;
+.glimpse-open .glimpse-hud-section:hover {
+    border-color: #8BC441;
+}
+.glimpse-open .glimpse-hud-section-inner {  
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    max-width: 999px;
+}
+.glimpse-open .glimpse-hud-section-inner:hover .glimpse-hud-graph, .glimpse-open .glimpse-hud-tooltips {
+    display: none;
+} 
+.glimpse-open .glimpse-hud-section-inner:hover .glimpse-hud-tooltips { 
+    display: block;  
+}
+.glimpse-open .glimpse-hud-tooltips {
+    color: #bcbcbc;  
+    font-size: 7px;
+    position: absolute;
+}
+.glimpse-open .glimpse-hud-main .glimpse-hud-tooltips {
+    top: 18px;
+}
+.glimpse-open .glimpse-hud-content .glimpse-hud-tooltips {
+    top: 2px;
 }
 .glimpse-open .glimpse-hud-title { 
     position: absolute;
     line-height: 100%;
     font-family: "Segoe UI Semibold";
-    font-size: 10px;
+    font-size: 9px;
     top: 2px;
-    color: #71b1d1;
+    color: white;
     text-transform: uppercase; 
-    -webkit-transition: color 0.3s ease;
-    -moz-transition: color 0.3s ease;
-    -o-transition: color 0.3s ease;
-    transition: color 0.3s ease;
+    -webkit-transform-origin: 8px 18px;
+    -moz-transform-origin: 8px 18px;
+    -ms-transform-origin: 8px 18px;
+    -o-transform-origin: 8px 18px;
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    cursor: pointer;
 }
+.glimpse-open .glimpse-hud-section-input {
+    display: none;
+}
+.glimpse-open .glimpse-hud-section-input:checked ~ .glimpse-hud-section-inner {
+    max-width: 0px;
+    overflow: hidden;
+} 
 .glimpse-open .glimpse-hud-postfix {
     float: left;
     line-height: 100%;
@@ -47,20 +87,16 @@
 }
 .glimpse-open .glimpse-hud-main {
     float: left;
+    position: relative;
+    padding-left: 10px;
+    min-width: 37px;
 }
 .glimpse-open .glimpse-hud-main .glimpse-hud-detail {
     float: left;
     padding: 3px 10px 0 0;
 }
-.glimpse-open .glimpse-hud-main .glimpse-hud-detail .glimpse-hud-detailtitle {
-    font-size: 13px;
-}
-.glimpse-open .glimpse-hud-main .glimpse-hud-detail .glimpse-hud-detailsubtitle {
-    font-size: 10px;
-    text-align: right;
-}
 .glimpse-open .glimpse-hud-main .glimpse-hud-value {
-    font-size: 30px;
+    font-size: 23px;
     height: 30px;
 }
 .glimpse-open .glimpse-hud-main .glimpse-hud-postfix { 
@@ -69,10 +105,13 @@
 .glimpse-open .glimpse-hud-content {
     float: left;
     position: relative;
-    padding: 0 10px;
+    padding: 0 20px 0 10px;
 }
 .glimpse-open .glimpse-hud-content .glimpse-hud-detail {
     padding-top: 14px; 
+}
+.glimpse-open .glimpse-hud-content .glimpse-hud-detail-top {
+    padding-top: 1px; 
 }
 .glimpse-open .glimpse-hud-content .glimpse-hud-detail.glimpse-hud-detail-small {
     padding-top: 17px;
@@ -96,6 +135,13 @@
     font-size: 10px;
     height: 30px;
 }
+.glimpse-open .glimpse-hud-detail .glimpse-hud-detailtitle {
+    font-size: 13px;
+}
+.glimpse-open .glimpse-hud-detail .glimpse-hud-detailsubtitle {
+    font-size: 10px;
+    text-align: right;
+}
 .glimpse-open .glimpse-hud .alert {
     float: left;
     margin: 8px 0 0 15px;
@@ -104,7 +150,8 @@
     width: 45px; 
     position: absolute;
     height: 8px;
-    top: 4px;
+    top: 20px;
+    opacity: 0.2;
 }
 .glimpse-open .glimpse-hud-graph-item {
     width: 2px;
