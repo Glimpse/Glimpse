@@ -3235,7 +3235,7 @@ glimpse.tab = (function($, pubsub, data) {
             graph.inject(tabData.data, elements.opener().find('.glimpse-hud')); 
         },
         clientTimings = (function() {
-            var timingApi = window.performance.timing,
+            var timingApi = (window.performance || window.mozPerformance || window.msPerformance || window.webkitPerformance || {}).timing,
                 render = function(tabData) {
                     var html = '';
 
@@ -3268,12 +3268,10 @@ glimpse.tab = (function($, pubsub, data) {
                     return html;
                 },
                 populate = function() {
-                    var result = { },
-                        timingOrder = ['navigationStart', 'redirectStart', 'redirectStart', 'redirectEnd', 'fetchStart', 'domainLookupStart', 'domainLookupEnd', 'connectStart', 'secureConnectionStart', 'connectEnd', 'requestStart', 'responseStart', 'responseEnd', 'unloadEventStart', 'unloadEventEnd', 'domLoading', 'domInteractive', 'msFirstPaint', 'domContentLoadedEventStart', 'domContentLoadedEventEnd', 'domContentLoaded', 'domComplete', 'loadEventStart', 'loadEventEnd'],
-                        start = timingApi.navigationStart || 0,
-                        network = calculateTimings(start, 'navigationStart', 'requestStart'),
-                        server = calculateTimings(start, 'requestStart', 'domLoading'),
-                        browser = calculateTimings(start, 'domLoading', timingApi['loadEventEnd'] > 0 ? 'loadEventEnd' : 'domContentLoadedEventEnd'),
+                    var result = { }, 
+                        network = calculateTimings('navigationStart', 'requestStart'),
+                        server = calculateTimings('requestStart', 'requestEnd'),
+                        browser = calculateTimings('requestEnd', 'loadEventEnd'),
                         total = network + server + browser;
                       
                     result.network = { label: 'Network', categoryColor: '#FD4545', duration: network, percentage: (network / total) * 100 };
@@ -3282,8 +3280,8 @@ glimpse.tab = (function($, pubsub, data) {
 
                     return result;
                 },
-                calculateTimings = function(start, startIndex, finishIndex) { 
-                    return (timingApi[finishIndex] - start) - (timingApi[startIndex] - start);
+                calculateTimings = function(startIndex, finishIndex) { 
+                    return timingApi[finishIndex] - timingApi[startIndex];
                 };
 
             return {
@@ -3469,9 +3467,8 @@ glimpse.tab = (function($, pubsub, data) {
             return html;
         }
         */
-        ;
 
-    pubsub.subscribe('action.data.initial.changed', function(args) { setTimeout(function() { loaded(args); }, 10); }); 
+    pubsub.subscribe('action.data.initial.changed', function(args) { $(window).load(function() { setTimeout(function() { loaded(args); }, 0); }); }); 
 
 })(jQueryGlimpse, glimpse.pubsub, glimpse.data, glimpse.elements, glimpse.util);
 
