@@ -3337,8 +3337,8 @@ glimpse.tab = (function($, pubsub, data) {
                         html += '<div class="glimpse-hud-section-inner">'; 
                         html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" data-maxValue="20">' + Math.round(sqlData.queryExecutionTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Execution</div></div>';
                         html += '<div class="glimpse-hud-content">';  
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value">' + limitValue(parseInt((sqlData.connectionOpenTime / serverTime) * 100)) + '</div><div class="glimpse-hud-postfix">%</div></div>';
-                        html += '<div class="glimpse-hud-detail-divider"></div>';
+                        //html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value">' + limitValue(parseInt((sqlData.connectionOpenTime / serverTime) * 100)) + '</div><div class="glimpse-hud-postfix">%</div></div>';
+                        //html += '<div class="glimpse-hud-detail-divider"></div>';
                         html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxValue="300">' + Math.round(sqlData.connectionOpenTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Open</div></div>';
                         html += '<div class="glimpse-hud-detail-divider"></div>';
                         html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value">' + sqlData.transactionCount + '</div><div class="glimpse-hud-tooltips">Trx</div></div>';
