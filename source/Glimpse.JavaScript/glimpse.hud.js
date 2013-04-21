@@ -53,8 +53,8 @@
                 populate = function() {
                     var result = { }, 
                         network = calculateTimings('navigationStart', 'requestStart'),
-                        server = calculateTimings('requestStart', 'requestEnd'),
-                        browser = calculateTimings('requestEnd', 'loadEventEnd'),
+                        server = calculateTimings('requestStart', 'responseStart'),
+                        browser = calculateTimings('responseStart', 'loadEventEnd'),
                         total = network + server + browser;
                       
                     result.network = { label: 'Network', categoryColor: '#FD4545', duration: network, percentage: (network / total) * 100 };
