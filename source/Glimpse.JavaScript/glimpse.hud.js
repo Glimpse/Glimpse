@@ -1,5 +1,8 @@
 ﻿(function($, pubsub, data, elements, util) {
     var serverTime = 0,
+        modify = function(options) {
+            options.templates.css += '/*(import:glimpse.hud.css)*/';
+        },
         loaded = function(args) {
             var html = '',
                 tabData = args.newData.data.glimpse_hud;
@@ -248,6 +251,7 @@
         }
         */
 
+    pubsub.subscribe('action.template.processing', modify); 
     pubsub.subscribe('action.data.initial.changed', function(args) { $(window).load(function() { setTimeout(function() { loaded(args); }, 0); }); }); 
 
 })(jQueryGlimpse, glimpse.pubsub, glimpse.data, glimpse.elements, glimpse.util);
