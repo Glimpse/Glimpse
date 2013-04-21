@@ -6,6 +6,7 @@ using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Framework;
 using Glimpse.Core.ResourceResult;
+using Glimpse.Core.Support;
 
 namespace Glimpse.Core.Resource
 {
@@ -65,21 +66,7 @@ namespace Glimpse.Core.Resource
         /// </returns>
         public IResourceResult Execute(IResourceContext context)
         {
-            var packages = new Dictionary<string, string>();
-            
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                var nugetPackage = assembly.GetCustomAttributes(typeof(NuGetPackageAttribute), false).Cast<NuGetPackageAttribute>().SingleOrDefault();
-                if (nugetPackage == null)
-                {
-                    continue;
-                }
-
-                var version = nugetPackage.GetVersion(assembly);
-                var id = nugetPackage.GetId(assembly);
-
-                packages[id] = version;
-            }
+            var packages = NuGetPackage.GetRegisteredPackageVersions();
 
             var stamp = context.Parameters.GetValueOrDefault(ResourceParameter.Timestamp.Name);
             var callback = context.Parameters.GetValueOrDefault(ResourceParameter.Callback.Name);

@@ -14,9 +14,8 @@
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET MVC 4.0 application.</description>
         <summary>ASP.NET MVC 4.0 web debugging and diagnostics tool.</summary>
         <releaseNotes>
-Minor release for MVC: 
- - Major fix which adjusts the .NET version that Glimpse.MVC4 is running as (previously was .NET 4.5)
- - Minor refactoring of MessageCategory classes. 
+Flyweight release for core:  
+ - Minor update to allow this package to take part in dynamic release notes.
         </releaseNotes>
         <tags>ASP.NET Web MVC Glimpse diagnostics performance profiling timing</tags>
         <dependencies>
@@ -25,6 +24,7 @@ Minor release for MVC:
         </dependencies>
     </metadata>
     <files>
+        <file src="tools\*.*" target="tools" />
         <file src="lib\net40\*.*" target="lib\net40" />
         <file src="..\..\Glimpse.Mvc\**\*.*" target="src" exclude="..\..\Glimpse.Mvc\bin\**;..\..\Glimpse.Mvc\obj\**;" />
     </files>

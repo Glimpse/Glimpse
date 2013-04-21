@@ -5,6 +5,12 @@
     /// </summary>
     public class TimelineCategoryItem
     {
+        /// <summary>
+        /// Constructs the timeline category item.
+        /// </summary>
+        /// <param name="name">Name that will be displayed in the UI.</param>
+        /// <param name="color">The main bar color.</param>
+        /// <param name="colorHighlight">The main bar border color.</param>
         public TimelineCategoryItem(string name, string color, string colorHighlight)
         {
             Name = name;

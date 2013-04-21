@@ -47,10 +47,12 @@ namespace Glimpse.Core.Tab.Assist
         public int? Limit { get; private set; }
 
         public string Pre { get; private set; }
-        
+
         public string Post { get; private set; }
 
         public bool MinDisplay { get; private set; }
+
+        public string Title { get; private set; }
 
         public TabLayoutCell Format(string format)
         {
@@ -175,6 +177,17 @@ namespace Glimpse.Core.Tab.Assist
             }
 
             Post = suffix;
+            return this;
+        }
+
+        public TabLayoutCell WithTitle(string title)
+        {
+            if (string.IsNullOrEmpty(title))
+            {
+                throw new ArgumentException("Title must not be null or empty.", "title");
+            }
+
+            Title = title;
             return this;
         }
 

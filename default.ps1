@@ -73,6 +73,14 @@ task clean {
     Delete-Directory "$source_dir\Glimpse.Mvc3.MusicStore.Sample\bin"
     Delete-Directory "$source_dir\Glimpse.Mvc3.MusicStore.Sample\obj"
     
+    "   Glimpse.Mvc4.MusicStore.Sample"
+    Delete-Directory "$source_dir\Glimpse.Mvc4.MusicStore.Sample\bin"
+    Delete-Directory "$source_dir\Glimpse.Mvc4.MusicStore.Sample\obj"
+    
+    "   Glimpse.WebForms.WingTip.Sample"
+    Delete-Directory "$source_dir\Glimpse.WebForms.WingTip.Sample\bin"
+    Delete-Directory "$source_dir\Glimpse.WebForms.WingTip.Sample\obj"
+    
     "   Glimpse.Ado"
     Delete-Directory "$source_dir\Glimpse.Ado\bin"
     Delete-Directory "$source_dir\Glimpse.Ado\obj"
@@ -317,7 +325,7 @@ task push {
         { 
             N {
                "Pushing to NuGet...";
-               Push-Packages https://nuget.org/api/v2/
+               Push-Packages https://www.nuget.org
                break;
                } 
             M {
@@ -329,7 +337,7 @@ task push {
                "Pushing to MyGet...";
                Push-Packages http://www.myget.org/F/glimpsemilestone/
                "Pushing to NuGet...";
-               Push-Packages https://nuget.org/api/v2/
+               Push-Packages https://www.nuget.org
                break;
               } 
             default {

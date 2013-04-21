@@ -42,6 +42,8 @@ namespace Glimpse.Ado.Model
 
         private void AggregateCommandExecuted()
         {
+            var dupTracker = new Dictionary<string, int>();
+
             var messages = Messages.OfType<CommandExecutedMessage>();
             foreach(var message in messages)
             {
@@ -64,6 +66,11 @@ namespace Glimpse.Ado.Model
                         command.Parameters.Add(parameterMetadata);
                     }
                 }
+
+                //Duplicate tracking
+                var dupCount = 0;
+                command.IsDuplicate = dupTracker.TryGetValue(message.CommandText, out dupCount);
+                dupTracker[message.CommandText] = dupCount + 1; 
             }
         }
 

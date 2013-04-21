@@ -7,8 +7,8 @@ using Glimpse.EF.AlternateType;
 namespace Glimpse.EF.Inspector.Core
 {
     public class DbConfigurationExecutionTask : IExecutionTask
-    {
-        public void Execute(ILogger logger)
+    { 
+        public void Execute()
         {
             DbConfiguration.SetConfiguration(new GlimpseDbConfiguration());
         }

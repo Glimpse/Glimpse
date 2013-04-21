@@ -1,4 +1,4 @@
-﻿(function($, pubsub, elements) {
+﻿(function($, pubsub) {
     var codeProcess = function(items) {
             $.each(items, function() {
                 var item = $(this).addClass('prettyprint'),
@@ -16,8 +16,8 @@
             });
             
             // Alert state
-            options.scope.find('.info, .warn, .error, .fail, .loading, .ms')
-                .find('> td:first-child:not(:has(div.glimpse-cell)), td:first-child > div.glimpse-cell:first-child')
+            options.scope.find('.info, .warn, .error, .fail, .loading, .ms') 
+                .find('> td:first-child, > tr:first-child .glimpse-cell:first-child')
                 .not(':has(.icon)').prepend('<div class="icon"></div>');
 ;
             // Code formatting
@@ -28,4 +28,4 @@
         };
      
     pubsub.subscribe('trigger.panel.render.style', apply);
-})(jQueryGlimpse, glimpse.pubsub, glimpse.elements);
+})(jQueryGlimpse, glimpse.pubsub);

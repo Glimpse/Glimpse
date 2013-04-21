@@ -319,7 +319,10 @@ glimpse.util = (function($) {
             for (i = 0; i < temp.length; i++)
                 sorted[temp[i].id] = data[temp[i].id];
             return sorted;
-        }, 
+        },
+        containsTokens: function(formatString) {
+            return formatString != null && !$.isNumeric(formatString) && formatString.indexOf('{{') > -1;
+        },
         getTokens: function(formatString) { 
             var count = 0, working = '', result = [];
             for (var i = 0; i < formatString.length; i++) {
@@ -330,14 +333,8 @@ glimpse.util = (function($) {
                         count++;
                     else if (x == '}' && count > 0)
                         count--;
-                    else if (count == 2) {
-                        if (!$.isNumeric(x)) {
-                            count = 0;
-                            working = '';
-                        }
-                        else 
-                            working += '' + x;
-                    }
+                    else if (count == 2) 
+                        working += '' + x; 
                     else {
                         count = 0;
                         working = '';
@@ -615,7 +612,7 @@ glimpse.elements = (function($) {
 glimpse.render = (function($, pubsub, util, data, settings) {
     var templates = {
             css: '.glimpse, .glimpse *, .glimpse a, .glimpse td, .glimpse th, .glimpse table {font-family: "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;background-color: transparent;border: 0px;text-align: left;padding: 0;margin: 0;}.glimpse table {min-width: 0;border-collapse: collapse;border-spacing: 0;}.glimpse a, .glimpse a:hover, .glimpse a:visited, .glimpse-link {color: #2200C1;text-decoration: underline;font-weight: normal;cursor: pointer;-webkit-transition: color 0.3s ease;-moz-transition: color 0.3s ease;-o-transition: color 0.3s ease;transition: color 0.3s ease;}.glimpse a:active, .glimpse-link:active {color: #c11;text-decoration: underline;font-weight: normal;}.glimpse th {font-weight: bold;} .glimpse-open {z-index: 100010;position: fixed;right: 0;bottom: 0;height: 30px;min-width: 54px;background: #3c454f;color: #fff; }.glimpse-open td, .glimpse-open span, .glimpse-open div {color: #fff;font-size: 13px;line-height: 13px;}.glimpse-icon {cursor: pointer;background: url() no-repeat -127px -38px;height: 30px;width: 39px;margin: 0 8px;}.glimpse-holder {display: none;z-index: 100010 !important;height: 0;position: fixed;bottom: 0;left: 0;width: 100%;background-color: #fff;-moz-box-shadow: 0 0 5px #888;-webkit-box-shadow: 0 0 5px#888;box-shadow: 0 0 5px #888;}.glimpse-content {position: relative;font-size: 11px;line-height: 13px;}.glimpse-bar {background: #3c454f;color: #fff;height: 30px;position: relative;font-size: 13px;line-height: 15px;}.glimpse-bar .glimpse-icon {margin-left: 10px;float: left;}.glimpse-bar .glimpse-link, .glimpse-bar a, .glimpse-bar a:visited, .glimpse-bar a:hover {color: #fff;}.glimpse-bar .glimpse-link:active, .glimpse-bar a:active {color: #c11; } .glimpse-buttons {text-align: right;position: absolute;right: 0;top: 0;height: 17px;width: 250px;padding: 8px 12px 6px 6px;}.glimpse-hidden {display: none;}.glimpse-title {margin: 1px 0 0 15px;padding-top: 5px;font-weight: bold;display: inline-block;width: 75%;overflow: hidden;font-size: 13px;line-height: 15px;}.glimpse-title .glimpse-snapshot-name {display: inline-block;height: 20px;}.glimpse-title .glimpse-snapshot-path {font-weight:normal;} .glimpse-title .glimpse-enviro {padding-left: 10px;white-space: nowrap;height: 20px;}.glimpse-title .glimpse-correlation .glimpse-drop {padding-left: 10px;}.glimpse-title .glimpse-correlation .loading {margin: 5px 0 0;font-weight: normal;display: none;}.glimpse-title .glimpse-correlation .glimpse-drop-over {padding-left: 20px;padding-right: 20px;text-align: center;}.glimpse-title .glimpse-context-stack .glimpse-selectable {cursor:pointer;font-weight:bold;}.glimpse-drop {padding: 0 1px 0 8px;height: 16px;font-size: 12px;}.glimpse-drop, .glimpse-drop-over {font-weight: normal;background: #8bc441;margin: 0 5px 0 0;display: inline-block;}.glimpse-drop-over {position: absolute;display: none;top: 6px;padding: 1px 20px 10px 20px;z-index: 100; }.glimpse-drop-over div {text-align: center;font-weight: bold;margin: 5px 0;}.glimpse-drop-arrow-holder {margin: 3px 3px 3px 5px;padding-left: 3px;border-left: 1px solid #5f9a26;font-size: 9px;line-height: 11px;height: 9px;width: 10px;}.glimpse-drop-arrow {background: url() no-repeat -22px -18px;width: 7px;height: 4px;display: inline-block;}.glimpse .glimpse-button, .glimpse .glimpse-button:hover {cursor: pointer;background-image: url();background-repeat: no-repeat;height: 14px;width: 14px;margin-left: 10px;display: inline-block;}.glimpse .glimpse-meta-warning {background-position: -168px -1px;display: none;}.glimpse .glimpse-meta-warning:hover {background-position: -183px -1px;}.glimpse .glimpse-meta-help {background-position: -138px -1px;margin-right: 15px;}.glimpse .glimpse-meta-help:hover {background-position: -153px -1px;margin-right: 15px;}.glimpse .glimpse-meta-update {position: absolute;text-decoration: underline;top: 6px;left: 0;cursor: pointer;display: none;} .glimpse .glimpse-minimize {background-position: -1px -1px;}.glimpse .glimpse-minimize:hover {background-position: -17px -1px;}.glimpse .glimpse-close {background-position: -65px -1px;}.glimpse .glimpse-close:hover {background-position: -81px -1px;}.glimpse .glimpse-popout {background-position: -96px -1px;}.glimpse .glimpse-popout:hover {background-position: -111px -1px;}.glimpse-tabs-permanent {position: absolute;top: 0;right: 0;}.glimpse-tabs-permanent li {font-style: italic;}.glimpse-tabs {background: #71b1d1;height: 26px;color: #fff;}.glimpse-tabs ul {padding: 0px;}.glimpse-tabs li {display: inline-block;height: 21px;padding: 5px 15px 0;cursor: pointer;font-size: 13px;line-height: 13px;-webkit-transition: background-color 0.3s ease;-moz-transition: background-color 0.3s ease;-o-transition: background-color 0.3s ease;transition: background-color 0.3s ease;-moz-user-select: -moz-none;-khtml-user-select: none;-webkit-user-select: none;user-select: none;}.glimpse-tabs li.glimpse-hover {background: #519bbd; }.glimpse-tabs li.glimpse-active {background: #7c4b75;}.glimpse-tabs li.glimpse-disabled {color: #111;cursor: default;}.glimpse-panel-holder {}.glimpse-panel {display: none;overflow: auto;position: relative;color: #323232;font-size: 11px;line-height: 13px;}.glimpse-panel div, .glimpse-panel span, .glimpse-panel td, .glimpse-panel th {font-family: "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;}.glimpse-panel-message {text-align: center;padding-top: 40px;font-size: 1.1em;color: #AAA;}.glimpse-panel table {border-spacing: 0;width: 98%;margin: 1%;}.glimpse-panel tr {line-height: 14px;}.glimpse-panel th {font-size: 12px;line-height: 14px;font-weight: bold; }.glimpse-panel thead th {text-align: center;vertical-align: top;padding: 3px 3px 6px;}.glimpse-panel table td {text-align: left;vertical-align: top; }.glimpse-panel table td .glimpse-cell {vertical-align: top;}.glimpse-panel tbody .mono {font-family: Consolas, monospace, serif;font-size: 1.1em;}.glimpse-panel .glimpse-header {font-weight: bold;padding: 20px 0 0 1%;font-size: 140%;font-family: "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;}.glimpse-panel .glimpse-header-content {padding: 0 3px;}.glimpse-panel .glimpse-row-header-0 th {border-bottom: 3px solid #CCC;border-left: 1px solid #CCC;font-size: 14px;line-height: 12px;}.glimpse-panel .glimpse-row-header-0 th:first-child {border-left-width: 0;}.glimpse-panel .glimpse-soft {color: #999;}.glimpse-panel .glimpse-cell-key, .glimpse-panel .glimpse-key {font-weight: bold;}.glimpse-panel th.glimpse-key {width: 130px;}.glimpse-panel .glimpse-row-header-0 th.glimpse-key {width: 250px;}.glimpse-panel table table {margin: 0;width: 100%;}.glimpse-panel table table thead th {border-bottom: 2px solid #CCC;}.glimpse-panel table table thead tr th {border-left: 1px solid #CCC;line-height: 10px;}.glimpse-panel table table thead tr th:first-child {border-left-width: 0;}.glimpse-panel table table thead tr th:last-child {border-right: 0px;} .glimpse-row-holder > .glimpse-row:nth-of-type(odd), .glimpse-row-color:nth-of-type(odd), .glimpse-row-odd, .glimpse-row-odd > td { background-color: #FEFFFF; }.glimpse-row-holder > .glimpse-row:nth-of-type(even), .glimpse-row-color:nth-of-type(even), .glimpse-row-even, .glimpse-row-even > td { background-color: #F2F5F9; }.glimpse-row-holder.glimpse-row-holder-suppress > .glimpse-row { background-color: transparent; } .glimpse-panel table table tbody th {font-style: italic;font-weight: normal;}.glimpse-panel table table thead th {font-weight: bold;} .glimpse-panel .glimpse-col-side {border-right: 1px solid #404040;background-color: #F2F5F7;position: absolute;width: 200px;height: 100%;left: 0px;}.glimpse-panel .glimpse-col-main {position: absolute;left: 200px;right: 0px;top: 0px;}.glimpse-panel td, .glimpse-panel th {padding: 5px 7px;}table.glimpse-ellipsis {table-layout: fixed;}div.glimpse-ellipsis {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 100%;}.glimpse-col-side .glimpse-row-holder > .glimpse-row:nth-of-type(odd), .glimpse-row-alt-color:nth-of-type(odd), .glimpse-row-alt-odd, .glimpse-row-alt-odd > td { background-color: #E1E7F0; }.glimpse-col-side .glimpse-row-holder > .glimpse-row:nth-of-type(even), .glimpse-row-alt-color:nth-of-type(even), .glimpse-row-alt-even, .glimpse-row-alt-even > td { background-color: #F2F5F7; } .glimpse-panel-holder .glimpse-active {display: block;}.glimpse-resizer {height: 6px;cursor: n-resize;width: 100%;position: absolute;top: -5px;}.glimpse-preview-object, .glimpse-preview-object * {color: #006400;}.glimpse-preview-string, .glimpse-preview-object .glimpse-preview-string {color: #006400;font-weight: normal !important;}.glimpse-preview-string span {padding-left: 1px;}.glimpse-preview-object span {font-weight: bold;color: #444;}.glimpse-preview-object span.start {margin-right: 5px;}.glimpse-preview-object span.end {margin-left: 5px;}.glimpse-preview-object span.rspace {margin-right: 4px;}.glimpse-preview-object span.mspace {margin: 0 4px;}.glimpse-preview-object span.small {font-size: 0.95em;}.glimpse-panel .glimpse-preview-table {border: 0;}.glimpse-panel .glimpse-preview-table .glimpse-preview-cell {padding-left: 0;padding-right: 2px;width: 11px;}.glimpse-panel .glimpse-preview-table .glimpse-preview-cell, .glimpse-panel .glimpse-preview-table .glimpse-preview-cell + td {padding-top: 0;padding-bottom: 0;}.glimpse-expand {height: 11px;width: 11px;display: inline-block;float: left;margin: 1px 0 0 0;cursor: pointer;background-image: url();background-repeat: no-repeat;background-position: -126px 0;}.glimpse-collapse {background-position: -126px -11px;}.glimpse-preview-show {display: none;font-weight: normal !important;}.glimpse-panel .quiet *, .glimpse-panel .ms * {color: #AAA;}.glimpse-panel .suppress {text-decoration: line-through;}.glimpse-panel .suppress * {color: #AAA;}.glimpse-panel .selected, .glimpse-panel .selected > td, .glimpse-panel .selected > th, .glimpse-panel .selected > tr > td, .glimpse-panel .selected > tr > th, .selected > td > .glimpse-preview-table > tbody > tr > td, .selected > tr > td > .glimpse-preview-table > tbody > tr > td {background-color: #E6F5E6;}.glimpse-panel .selected * {color: #409B3B;}.glimpse .info .icon, .glimpse .warn .icon, .glimpse .loading .icon, .glimpse .error .icon, .glimpse .fail .icon, .glimpse .ms .icon, .glimpse .glimpse-connect .icon, .glimpse .glimpse-disconnect .icon, .glimpse .alert .icon {width: 14px;height: 14px;background-image: url();background-repeat: no-repeat;display: inline-block;margin-right: 5px;}.glimpse .glimpse-connect .icon, .glimpse .glimpse-disconnect .icon {width: 17px;height: 17px;}.glimpse .info .icon {background-position: -22px -22px;}.glimpse .warn .icon {background-position: -36px -22px;}.glimpse .loading .icon {background-position: -78px -22px;}.glimpse .error .icon {background-position: -50px -22px;}.glimpse .ms .icon {background-position: -181px -22px;}.glimpse .fail .icon {background-position: -64px -22px;}.glimpse .alert .icon {background-position: -135px -22px;}.glimpse .glimpse-connect .icon {background-position: -213px -20px; }.glimpse .glimpse-disconnect .icon {background-position: -195px -20px; }.glimpse .info * {color: #067CE5;}.glimpse .warn * {color: #FE850C;}.glimpse .error * {color: #B40000;}.glimpse .fail * {color: #B40000;font-weight: bold;}.glimpse-notice {position:absolute;right: 20px;bottom: 5px;color: #777;}.glimpse-clear {bottom: 30px;position: absolute;right: 20px;background-color: white;padding: 0.2em 1em 0.3em 1em;border: #CCC solid 1px;bottom: 25px;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;}.glimpse-panel table .glimpse-head-message td {text-align: center;background-color: #DDD;}.glimpse-panelitem-info div {text-align: center;}.glimpse-panelitem-info .glimpse-panel-message {padding-top: 5px;}.glimpse-panelitem-info strong {font-weight: bold;}.glimpse-panelitem-info .glimpse-info-more {font-size: 1.5em;margin: 1em 0;}.glimpse-panelitem-info .glimpse-info-quote {font-style: italic;margin: 0.75em 0 3em;}.glimpse-pager {background: #C6C6C6;padding: 3px 4px;font-weight: bold;text-align: center;vertical-align: top;}.glimpse-pager .glimpse-pager-message {margin-left: 5px;margin-right: 5px;}.glimpse-pager .glimpse-button {margin-top: 0px;}.glimpse-pager .glimpse-pager-link, .glimpse-pager .glimpse-pager-link:hover {font-weight: bold;text-decoration: underline;cursor: pointer;color: #2200C1;}.glimpse-pager .glimpse-pager-link-firstPage {background-position: -2px -38px;}.glimpse-pager .glimpse-pager-link-firstPage-disabled {background-position: -17px -38px;}.glimpse-pager .glimpse-pager-link-previousPage {background-position: -33px -38px;}.glimpse-pager .glimpse-pager-link-previousPage-disabled {background-position: -49px -38px;}.glimpse-pager .glimpse-pager-link-nextPage {background-position: -65px -38px;}.glimpse-pager .glimpse-pager-link-nextPage-disabled {background-position: -81px -38px;}.glimpse-pager .glimpse-pager-link-lastPage {background-position: -96px -38px;}.glimpse-pager .glimpse-pager-link-lastPage-disabled {background-position: -111px -38px;}.glimpse-panel table tr.glimpse-pager-separator td {border-bottom: 3px solid #C6C6C6;} .glimpse-panel .glimpse-sub-text {color: #AAA;font-size: 0.9em;margin-left: 5px;top:-1px;position:relative;}.glimpse-popup {color:#000;background:#FFF;margin:0;padding:0;} .glimpse-popup .glimpse-holder {position:relative !important;display: block !important; } .glimpse-popup .glimpse-popout, .glimpse-popup .glimpse-minimize, .glimpse-popup .glimpse-close, .glimpse-popup .glimpse-terminate, .glimpse-popup .glimpse-open {display:none !important; } .glimpse-popup .glimpse-panel {overflow:visible !important; }.glimpse-notification-holder {position: absolute;z-index: 200;width: 100%;top: 85px;}.glimpse-notification {padding: 5px 20px;border-radius: 5px;margin: 0 auto 10px auto;text-align: center;max-width: 500px;-moz-box-shadow: 0 0 5px #888;-webkit-box-shadow: 0 0 5px#888;box-shadow: 0 0 5px #888;width: 50%;}.glimpse-notification-error {background-color: #F97474;border: 1px solid red;}.glimpse-notification-info {background-color: #B7C5ED;border: 1px solid #3156C1;}.glimpse-lightbox {display: none;position:fixed;top:0;left:0;width:100%;height:100%;margin: auto;text-align: center;background-color: rgba(255,255,255,0.7);z-index: 100011 !important;}.glimpse-lightbox-inner {position: absolute;width:100%;height:100%;display: block;}.glimpse-lightbox-element {position: absolute;width: 80%;height: 80%;top: 10%;left: 10%;background-color: #fff;-webkit-box-shadow: 0px 0px 30px rgba(50, 50, 50, 1);-moz-box-shadow: 0px 0px 30px rgba(50, 50, 50, 1);box-shadow: 0px 0px 30px rgba(50, 50, 50, 1); }.glimpse-lightbox .close {position: absolute;right: 25px;top: 10px;cursor: pointer; }.glimpse-lightbox iframe {width: 100%;border: 0px;height: 100%;}.glimpse-open .glimpse-icon {float: left;}.glimpse ::-webkit-scrollbar-corner {vbackground: transparent;}.glimpse ::-webkit-scrollbar-corner {background-clip: padding-box;background-color: whiteSmoke;border: solid white;box-shadow: inset 1px 1px 0 rgba(0,0,0,.14);border-width: 3px 0 0 3px;}.glimpse ::-webkit-scrollbar-track-piece {background-clip: padding-box;background-color: whiteSmoke;border: solid white;box-shadow: inset 1px 0 0 rgba(0,0,0,.14),inset -1px 0 0 rgba(0,0,0,.07);border-width: 0 0 0 3px;}.glimpse ::-webkit-scrollbar-track {background-clip: padding-box;border: solid transparent;border-width: 0 0 0 7px;}.glimpse ::-webkit-scrollbar-button {height: 0;width: 0;}.glimpse ::-webkit-scrollbar-thumb {background-color: rgba(0, 0, 0, .2);background-clip: padding-box;border: solid transparent;min-height: 28px;padding: 100px 0 0;box-shadow: inset 1px 1px 0 rgba(0,0,0,.1),inset 0 -1px 0 rgba(0,0,0,.07);border-width: 0 0 0 7px; border-width: 1px 1px 1px 5px;}.glimpse ::-webkit-scrollbar {height: 16px;overflow: visible;width: 16px;}',
-            html: '<div class=" glimpse"><div class="glimpse-spacer"></div><div class="glimpse-open glimpse"><div class="glimpse-icon">&nbsp;</div></div><div class="glimpse-holder"><div class="glimpse-notification-holder"></div><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon" title="About Glimpse?">&nbsp;</div><div class="glimpse-title"><span class="glimpse-snapshot-name"></span><span class="glimpse-snapshot-path"></span><span><span class="glimpse-enviro"></span><span class="glimpse-context-stack"></span><span class="glimpse-uri"></span><span class="glimpse-correlation"></span></span></div><div class="glimpse-buttons"><span class="glimpse-meta-update" href="#" title="New Updates are available, take a look at what you are missing.">New update avaiable!</span><a class="glimpse-meta-warning glimpse-button" href="#" title="Glimpse has some warnings!"></a><a class="glimpse-meta-help glimpse-button" href="#" title="Need some help?" target="_blank"></a><a class="glimpse-minimize glimpse-button" href="#" title="Close/Minimize"></a><a class="glimpse-popout glimpse-button glimpse-hidden" href="#" title="Pop Out"></a><a class="glimpse-close glimpse-button" href="#" title="Shutdown/Terminate"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs glimpse-tabs-instance"><ul></ul></div><div class="glimpse-tabs glimpse-tabs-permanent"><ul></ul></div><div class="glimpse-panel-holder"><div class="glimpse-panel glimpse-active"><div class="glimpse-panel-message">No data has been found. This could be caused because:<br /><br />- the data is still loading by the client, or<br />- no data has been received from the server (check to see if the data &amp; metadata payloads are present), or<br />- no plugin has been loaded, or<br />- an error has been thrown in the client (please check your JavaScript console and let us know if anything is up).</div></div></div><div class="glimpse-options"></div></div></div><div class="glimpse-lightbox"><div class="glimpse-lightbox-inner"><div class="glimpse-lightbox-element"></div></div></div>'
+            html: '<div class=" glimpse"><div class="glimpse-spacer"></div><div class="glimpse-open glimpse"><div class="glimpse-icon">&nbsp;</div></div><div class="glimpse-holder"><div class="glimpse-notification-holder"></div><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon" title="About Glimpse?">&nbsp;</div><div class="glimpse-title"><span class="glimpse-snapshot-name"></span><span class="glimpse-snapshot-path"></span><span><span class="glimpse-enviro"></span><span class="glimpse-context-stack"></span><span class="glimpse-uri"></span><span class="glimpse-correlation"></span></span></div><div class="glimpse-buttons"><span class="glimpse-meta-update" href="#" title="New Updates are available, take a look at what you are missing.">New update available!</span><a class="glimpse-meta-warning glimpse-button" href="#" title="Glimpse has some warnings!"></a><a class="glimpse-meta-help glimpse-button" href="#" title="Need some help?" target="_blank"></a><a class="glimpse-minimize glimpse-button" href="#" title="Close/Minimize"></a><a class="glimpse-popout glimpse-button glimpse-hidden" href="#" title="Pop Out"></a><a class="glimpse-close glimpse-button" href="#" title="Shutdown/Terminate"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs glimpse-tabs-instance"><ul></ul></div><div class="glimpse-tabs glimpse-tabs-permanent"><ul></ul></div><div class="glimpse-panel-holder"><div class="glimpse-panel glimpse-active"><div class="glimpse-panel-message">No data has been found. This could be caused because:<br /><br />- the data is still loading by the client, or<br />- no data has been received from the server (check to see if the data &amp; metadata payloads are present), or<br />- no plugin has been loaded, or<br />- an error has been thrown in the client (please check your JavaScript console and let us know if anything is up).</div></div></div><div class="glimpse-options"></div></div></div><div class="glimpse-lightbox"><div class="glimpse-lightbox-inner"><div class="glimpse-lightbox-element"></div></div></div>'
         },
         generateSpriteAddress = function () {
             var uri = settings.local('sprite') || 'http://getglimpse.com/sprite.png?version={version}',
@@ -677,10 +674,18 @@ glimpse.render = (function($, pubsub, util, data, settings) {
 // glimpse.render.engine.js
 glimpse.render.engine = (function($, pubsub) {
     var providers = {},
-        addition = function (scope, data, metadata, isAppend) {
-            var insertType = isAppend ? 'appendTo' : 'prependTo',
-                html = $('<div>' + build(data, metadata) + '</div>').find('.glimpse-row-holder:first')[0].innerHTML,
-                elements = $(html)[insertType](scope.find('.glimpse-row-holder:first'));
+        addition = function (scope, data, metadata, insertType, targetType) {
+            var html = $('<div>' + build(data, metadata) + '</div>').find('.glimpse-row-holder:first > .glimpse-row'),
+                rowHolder = scope.find('.glimpse-row-holder:first'),
+                scopeTarget = rowHolder.find('> .glimpse-row:' + targetType);
+            
+            // Catch the case when we don't have anything to action the insertType against
+            if (scopeTarget.length == 0) {
+                scopeTarget = rowHolder;
+                insertType = 'appendTo';
+            }
+            
+            var elements = $(html)[insertType](scopeTarget);
             
             pubsub.publish('trigger.panel.render.style', { scope: elements });
         },
@@ -698,10 +703,10 @@ glimpse.render.engine = (function($, pubsub) {
             pubsub.publish('trigger.panel.render.style', { scope: scope });
         },
         append = function(scope, data, metadata) {
-            addition(scope, data, metadata, true);
+            addition(scope, data, metadata, 'insertAfter', 'last');
         },
         prepend = function(scope, data, metadata) {
-            addition(scope, data, metadata, false);
+            addition(scope, data, metadata, 'insertBefore', 'first');
         };
    
     return {
@@ -797,8 +802,82 @@ glimpse.render.engine.util.raw = (function($, util) {
             }
         };
 })(jQueryGlimpse, glimpse.util);
+// glimpse.render.engine.util.table.js
+glimpse.render.engine.util.table = (function($) {
+    var factories = {
+            array: {
+                isHandled: function(data) {
+                    return $.isArray(data[0]);
+                },
+                getHeader: function(data) {
+                    return data[0];
+                },
+                getRowClass: function(data, rowIndex) {
+                    return data[rowIndex].length > data[0].length ? ' ' + data[rowIndex][data[rowIndex].length - 1] : '';
+                },
+                getRowValue: function(dataRow, fieldIndex, header) {
+                    return dataRow[fieldIndex];
+                },
+                startingIndex: function() {
+                    return 1;
+                }
+            },
+            object: {
+                isHandled: function(data) {
+                    return data[0] === Object(data[0]);
+                },
+                getHeader: function(data) {
+                    var result = [];
+                    for (var key in data[0]) {
+                        if (key != "_metadata")
+                            result.push(key);
+                    }
+                    return result;
+                },
+                getRowClass: function(data, rowIndex) {
+                    return data[rowIndex]._metadata && data[rowIndex]._metadata.style ? ' ' + data[rowIndex]._metadata.style : '';
+                },
+                getRowValue: function(dataRow, fieldIndex, header) {
+                    return dataRow[header[fieldIndex]];
+                },
+                startingIndex: function() {
+                    return 0;
+                }
+            },
+            other: {
+                isHandled: function(data) {
+                    return true;
+                },
+                getHeader: function(data) {
+                    return ["Values"];
+                },
+                getRowClass: function(data, rowIndex) {
+                    return '';
+                },
+                getRowValue: function(dataRow, fieldIndex, header) {
+                    return dataRow;
+                },
+                startingIndex: function() {
+                    return 0;
+                }
+            }
+        };
+
+    return {
+        findFactory: function(data) {
+                var match = null;
+                for (var key in factories) {
+                    if (factories[key].isHandled(data)) {
+                        match = factories[key];
+                        break;
+                    }
+                }
+                return match;
+            }
+        };
+})(jQueryGlimpse);
 // glimpse.render.engine.style.js
-(function($, pubsub, elements) {
+(function($, pubsub) {
     var codeProcess = function(items) {
             $.each(items, function() {
                 var item = $(this).addClass('prettyprint'),
@@ -816,8 +895,8 @@ glimpse.render.engine.util.raw = (function($, util) {
             });
             
             // Alert state
-            options.scope.find('.info, .warn, .error, .fail, .loading, .ms')
-                .find('> td:first-child:not(:has(div.glimpse-cell)), td:first-child > div.glimpse-cell:first-child')
+            options.scope.find('.info, .warn, .error, .fail, .loading, .ms') 
+                .find('> td:first-child, > tr:first-child .glimpse-cell:first-child')
                 .not(':has(.icon)').prepend('<div class="icon"></div>');
 ;
             // Code formatting
@@ -828,7 +907,7 @@ glimpse.render.engine.util.raw = (function($, util) {
         };
      
     pubsub.subscribe('trigger.panel.render.style', apply);
-})(jQueryGlimpse, glimpse.pubsub, glimpse.elements);
+})(jQueryGlimpse, glimpse.pubsub);
 // glimpse.render.engine.keyvalue.js
 (function($, util, engine, engineUtil) {
     var providers = engine._providers,
@@ -962,33 +1041,34 @@ glimpse.render.engine.util.raw = (function($, util) {
 })(jQueryGlimpse, glimpse.util, glimpse.render.engine, glimpse.render.engine.util);
 
 // glimpse.render.engine.layout.js
-(function($, util, engine, engineUtil) {
-    var providers = engine._providers,
-        buildFormatString = function(content, data, indexs) {  
+(function($, util, engine, engineUtil, engineUtilTable) {
+    var providers = engine._providers, 
+        buildFormatString = function(content, data, indexs, isHeadingRow) {  
             for (var i = 0; i < indexs.length; i++) {
-                var pattern = "\\\{\\\{" + indexs[i] + "\\\}\\\}", regex = new RegExp(pattern, "g"); 
-                content = content.replace(regex, data[indexs[i]]);
+                var pattern = "\\\{\\\{" + indexs[i] + "\\\}\\\}", regex = new RegExp(pattern, "g"),
+                    value = isHeadingRow && !$.isNumeric(indexs[i]) ? indexs[i] : data[indexs[i]]; 
+                content = content.replace(regex, value);
             }
             return content;
-        },
-        buildCell = function(data, metadataItem, level, cellType, rowIndex, includeHeading) {
+        }, 
+        buildCell = function(data, metadataItem, level, cellType, rowIndex, isHeadingRow) {
             var html = '', 
                 cellContent = '', 
                 cellClass = '', 
                 cellStyle = '', 
                 cellAttr = '',
-                isHeadingRow = rowIndex == 0 && includeHeading;
+                containsNestedData = $.isArray(metadataItem.data);
                 
             //Cell Content
-            if ($.isArray(metadataItem.data)) {
+            if (containsNestedData) {
                 for (var i = 0; i < metadataItem.data.length; i++) 
-                    cellContent += buildCell(data, metadataItem.data[i], level, 'div', rowIndex, includeHeading);
+                    cellContent += buildCell(data, metadataItem.data[i], level, 'div', rowIndex, isHeadingRow);
             }
             else { 
-                if (!metadataItem.indexs && !$.isNumeric(metadataItem.data)) 
+                if (!metadataItem.indexs && util.containsTokens(metadataItem.data)) 
                     metadataItem.indexs = util.getTokens(metadataItem.data, data); 
-                
-                cellContent = metadataItem.indexs ? buildFormatString(metadataItem.data, data, metadataItem.indexs) : data[metadataItem.data];
+                  
+                cellContent = metadataItem.indexs ? buildFormatString(metadataItem.data, data, metadataItem.indexs, isHeadingRow) : (isHeadingRow && !$.isNumeric(metadataItem.data) ? metadataItem.data : data[metadataItem.data]);
                 
                 if (metadataItem.engine && !isHeadingRow) {
                     cellContent = providers.master.build(cellContent, level + 1, metadataItem.forceFull, metadataItem, isHeadingRow ? undefined : metadataItem.limit);
@@ -1004,7 +1084,11 @@ glimpse.render.engine.util.raw = (function($, util) {
                     //If minDisplay and we are in header or there is no data, we don't want to render anything 
                     if (metadataItem.minDisplay && (isHeadingRow || cellContent == null))
                         return ""; 
-                     
+                    
+                    //Work out what title we want
+                    if (isHeadingRow && metadataItem.title) 
+                        cellContent = metadataItem.title;
+
                     cellContent = providers.master.build(cellContent, level + 1, metadataItem.forceFull, newMetadataItem, isHeadingRow ? undefined : metadataItem.limit);
 
                     //Content pre/post
@@ -1016,11 +1100,13 @@ glimpse.render.engine.util.raw = (function($, util) {
             }
             
             if (!isHeadingRow) {
-                cellClass = 'glimpse-cell';
+                if (!containsNestedData) { cellClass = 'glimpse-cell'; }
+                
                 //Cell Class
                 if (metadataItem.key === true) { cellClass += ' glimpse-cell-key'; }
                 if (metadataItem.isCode === true) { cellClass += ' glimpse-code'; }
                 if (metadataItem.className) { cellClass += ' ' + metadataItem.className; }
+                
                 //Cell Code 
                 if (metadataItem.codeType) { cellAttr += ' data-codeType="' + metadataItem.codeType + '"'; };
             }
@@ -1036,9 +1122,21 @@ glimpse.render.engine.util.raw = (function($, util) {
             
             return html;
         }, 
-
-
-
+        buildCellRow = function (data, layout, level, cellType, rowIndex, isHeadingRow) {
+            var html = '';
+            
+            for (var x = 0; x < layout.length; x++) { 
+                var rowHtml = ''; 
+                for (var y = 0; y < layout[x].length; y++) {
+                    var metadataItem = layout[x][y];  
+                    rowHtml += buildCell(data, metadataItem, level, cellType, rowIndex, isHeadingRow);
+                }
+                     
+                if (rowHtml != '') { html += '<tr>' + rowHtml + '</tr>'; };
+            }
+            return html;
+        },
+         
         build = function (data, level, forceFull, metadata, forceLimit) { 
             var limit = !$.isNumeric(forceLimit) ? 3 : forceLimit;
 
@@ -1048,30 +1146,23 @@ glimpse.render.engine.util.raw = (function($, util) {
         },
         buildOnly = function (data, level, metadata) {
             var html = '<table class="glimpse-row-holder">', 
-                rowClass = '',
                 layout = metadata.layout,
-                includeHeading = engineUtil.includeHeading(metadata);
-            for (var i = includeHeading ? 0 : 1; i < data.length; i++) {
-                rowClass = data[i].length > data[0].length ? (' ' + data[i][data[i].length - 1]) : '';
-                html += (i == 0 && includeHeading) ? '<thead class="glimpse-row-header glimpse-row-header-' + level + '">' : '';
-                html += (i == 1) ? '<tbody class="glimpse-row-holder">' : '';
-                for (var x = 0; x < layout.length; x++) { 
-                    var rowData = '';
-                     
-                    for (var y = 0; y < layout[x].length; y++) {
-                        var metadataItem = layout[x][y], cellType = (i == 0 && includeHeading ? 'th' : 'td'); 
-                        rowData += buildCell(data[i], metadataItem, level, cellType, i, includeHeading);
-                    }
-                     
-                    if (rowData != '') { html += '<tr class="glimpse-row ' + rowClass + '">' + rowData + '</tr>'; };
-                }
-                html += (i == 0 && includeHeading) ? '</thead>' : '';
-                html += (i == data.length - 1) ? '</tbody>' : '';
+                factory = engineUtilTable.findFactory(data),
+                headers = factory.getHeader(data); 
+            
+            if (engineUtil.includeHeading(metadata)) {
+                html += '<thead class="glimpse-row-header glimpse-row-header-' + level + '">';
+                html += buildCellRow(headers, layout, level, 'th', 0, true);
+                html += '</thead>';
+            } 
+            for (var i = factory.startingIndex(); i < data.length; i++) {
+                html += '<tbody class="glimpse-row' + factory.getRowClass(data, i) + '">';
+                html += buildCellRow(data[i], layout, level, 'td', i, false);
+                html += '</tbody>';
             }
             html += '</table>';
-
-            return html; 
-        },
+            return html;
+        }, 
         buildPreview = function(data, level, metadata) { 
             return '<table class="glimpse-preview-table"><tr><td class="glimpse-preview-cell"><div class="glimpse-expand"></div></td><td><div class="glimpse-preview-object">' + buildPreviewOnly(data, level) + '</div><div class="glimpse-preview-show">' + buildOnly(data, level, metadata) + '</div></td></tr></table>';
         },
@@ -1086,79 +1177,11 @@ glimpse.render.engine.util.raw = (function($, util) {
         }; 
 
     engine.register('layout', provider);
-})(jQueryGlimpse, glimpse.util, glimpse.render.engine, glimpse.render.engine.util);
+})(jQueryGlimpse, glimpse.util, glimpse.render.engine, glimpse.render.engine.util, glimpse.render.engine.util.table);
 
 // glimpse.render.engine.table.js
-(function($, util, engine, engineUtil) {
+(function($, util, engine, engineUtil, engineUtilTable) {
     var providers = engine._providers,
-        findFactory = function(data) {
-            var match = null;
-            for (var key in factories) {
-                if (factories[key].isHandled(data)) {
-                    match = factories[key];
-                    break;
-                }
-            }
-            return match;
-        },
-        factories = {
-            array: {
-                isHandled: function(data) {
-                    return $.isArray(data[0]);
-                },
-                getHeader: function(data) {
-                    return data[0];
-                },
-                getRowClass: function(data, rowIndex) {
-                    return data[rowIndex].length > data[0].length ? ' ' + data[rowIndex][data[rowIndex].length - 1] : '';
-                },
-                getRowValue: function(dataRow, fieldIndex, header) {
-                    return dataRow[fieldIndex];
-                }, 
-                startingIndex: function() {
-                    return 1;
-                }
-            },
-            object: {
-                isHandled: function(data) {
-                    return data[0] === Object(data[0]);
-                },
-                getHeader: function(data) { 
-                    var result = [];
-                    for (var key in data[0]) {
-                        if (key != "_metadata") 
-                            result.push(key);
-                    } 
-                    return result; 
-                },
-                getRowClass: function(data, rowIndex) {
-                    return data[rowIndex]._metadata && data[rowIndex]._metadata.style ? ' ' + data[rowIndex]._metadata.style : ''; 
-                },
-                getRowValue: function(dataRow, fieldIndex, header) {
-                    return dataRow[header[fieldIndex]];
-                }, 
-                startingIndex: function() {
-                    return 0;
-                }
-            },
-            other: {
-                isHandled: function(data) {
-                    return true;
-                },
-                getHeader: function(data) {
-                    return [ "Values" ];
-                },
-                getRowClass: function(data, rowIndex) {
-                    return '';
-                },
-                getRowValue: function(dataRow, fieldIndex, header) {
-                    return dataRow;
-                }, 
-                startingIndex: function() {
-                    return 0;
-                }
-            }
-        },
         build = function (data, level, forceFull, metadata, forceLimit) { 
             var limit = !$.isNumeric(forceLimit) ? 3 : forceLimit;
 
@@ -1168,7 +1191,7 @@ glimpse.render.engine.util.raw = (function($, util) {
         },
         buildOnly = function (data, level, metadata) {
             var html = '<table>', 
-                factory = findFactory(data),
+                factory = engineUtilTable.findFactory(data),
                 headers = factory.getHeader(data); 
             
             if (engineUtil.includeHeading(metadata)) {
@@ -1198,7 +1221,7 @@ glimpse.render.engine.util.raw = (function($, util) {
         },
         buildPreviewOnly = function (data, level) { 
             var html = '<span class="start">[</span>', 
-                factory = findFactory(data),
+                factory = engineUtilTable.findFactory(data),
                 headers = factory.getHeader(data),
                 startingIndex = factory.startingIndex(),
                 columnMax = 3, 
@@ -1237,7 +1260,7 @@ glimpse.render.engine.util.raw = (function($, util) {
         }; 
 
     engine.register('table', provider);
-})(jQueryGlimpse, glimpse.util, glimpse.render.engine, glimpse.render.engine.util);
+})(jQueryGlimpse, glimpse.util, glimpse.render.engine, glimpse.render.engine.util, glimpse.render.engine.util.table);
 // glimpse.render.engine.func.js
 (function($, util, engine, engineUtil) {
     var build = function (data, level, forceFull, metadata, forceLimit) { 
@@ -1898,7 +1921,7 @@ glimpse.versionCheck = (function($, pubsub, settings, elements, data, util) {
         },
         result = function(data) {
             settings.local('hasNewerVersion', data.hasNewer);
-            settings.local('versionViewUri', data.viewLink);
+            settings.local('versionViewUri', data.viewLink); 
             
             tryShow();
         };

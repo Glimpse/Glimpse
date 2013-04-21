@@ -4,32 +4,19 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>
-    </ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{2C80D03B-32DC-4D52-9200-0B7598D9D1FF}</ProjectGuid>
-    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Glimpse.JavaScript</RootNamespace>
     <AssemblyName>Glimpse.JavaScript</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <OldToolsVersion>4.0</OldToolsVersion>
-    <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
-    <IISExpressUseClassicPipelineMode />
+    <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -37,138 +24,38 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Web.DynamicData" />
-    <Reference Include="System.Web.Entity" />
-    <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Web.Services" />
-    <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="*.js" />
+    <Content Include="*.css" />
+    <Content Include="*.html" />
+    <Content Include="FunctionalTests\logo.png" />
     <Content Include="FunctionalTests\Mock\glimpseTest.js" />
     <Content Include="FunctionalTests\Mock\test.glimpse.ajax.data.js" />
     <Content Include="FunctionalTests\Mock\test.glimpse.ajax.js" />
     <Content Include="FunctionalTests\Mock\test.glimpse.ajax.pager.js" />
     <Content Include="FunctionalTests\sprite.png" />
-    <Content Include="FunctionalTests\test_popup.html" />
+    <Content Include="FunctionalTests\test-popup.html" />
     <Content Include="FunctionalTests\test.html" />
     <Content Include="FunctionalTests\version.html" />
-    <Content Include="glimpse.ajax.js" />
-    <Content Include="glimpse.core.js" />
-    <Content Include="glimpse.data.js" />
-    <Content Include="glimpse.element.js" />
-    <Content Include="glimpse.history.js" />
-    <Content Include="glimpse.jquery.draggable.js" />
-    <Content Include="glimpse.jquery.dropdown.js" />
-    <Content Include="glimpse.js" />
-    <Content Include="glimpse.paging.engine.continuous.js" />
-    <Content Include="glimpse.paging.engine.js" />
-    <Content Include="glimpse.paging.engine.scrolling.js" />
-    <Content Include="glimpse.paging.engine.traditional.js" />
-    <Content Include="glimpse.paging.engine.util.js" />
-    <Content Include="glimpse.paging.js" />
-    <Content Include="glimpse.pubsub.js" />
-    <Content Include="glimpse.render.default.js" />
-    <Content Include="glimpse.render.engine.empty.js" />
-    <Content Include="glimpse.render.engine.func.js" />
-    <Content Include="glimpse.render.engine.heading.js" />
-    <Content Include="glimpse.render.engine.js" />
-    <Content Include="glimpse.render.engine.keyvalue.js" />
-    <Content Include="glimpse.render.engine.layout.js" />
-    <Content Include="glimpse.render.engine.master.js" />
-    <Content Include="glimpse.render.engine.string.js" />
-    <Content Include="glimpse.render.engine.style.js" />
-    <Content Include="glimpse.render.engine.table.js" />
-    <Content Include="glimpse.render.engine.util.js" />
-    <Content Include="glimpse.render.engine.util.raw.js" />
-    <Content Include="glimpse.render.js" />
-    <Content Include="glimpse.render.lazy.js" />
-    <Content Include="glimpse.render.panel.js" />
-    <Content Include="glimpse.render.shell.code.css" />
-    <Content Include="glimpse.render.shell.css" />
-    <Content Include="glimpse.render.shell.html" />
-    <Content Include="glimpse.render.shell.info.html" />
-    <Content Include="glimpse.render.tab.js" />
-    <Content Include="glimpse.settings.js" />
-    <Content Include="glimpse.shell.controls.js" />
-    <Content Include="glimpse.shell.correlation.js" />
-    <Content Include="glimpse.shell.environment.js" />
-    <Content Include="glimpse.shell.info.js" />
-    <Content Include="glimpse.shell.notification.js" />
-    <Content Include="glimpse.shell.path.js" />
-    <Content Include="glimpse.shell.popup.js" />
-    <Content Include="glimpse.shell.resize.js" />
-    <Content Include="glimpse.shell.title.js" />
-    <Content Include="glimpse.system.js" />
-    <Content Include="glimpse.tab.js" />
-    <Content Include="glimpse.timeline.js" />
-    <Content Include="glimpse.timeline.shell.css" />
-    <Content Include="glimpse.timeline.shell.html" />
-    <Content Include="glimpse.util.js" />
-    <Content Include="glimpse.version.check.js" />
-    <Content Include="glimpse.version.shell.js" />
-    <Content Include="google-code-prettify.js" />
-    <Content Include="jquery-1.8.0.min.js" />
-    <Content Include="logo.png" />
-    <Content Include="sprite.png" />
-    <Content Include="test_popup.html" />
-    <Content Include="test_client.html" />
-    <Content Include="test.html" />
-    <Content Include="test_drag.html" />
     <Content Include="UnitTests\index.html" />
     <Content Include="UnitTests\Lib\qunit.css" />
     <Content Include="UnitTests\Lib\qunit.js" />
     <Content Include="UnitTests\Unit\glimpse.core.process.js" />
     <Content Include="UnitTests\Unit\mock-glimpse.core.element.js" />
     <Content Include="UnitTests\Unit\mock-glimpse.core.pubsub.js" />
-    <Content Include="uritemplate.min.js" />
-    <Content Include="_build.js" />
   </ItemGroup>
-  <PropertyGroup>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-  </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
-  <ProjectExtensions>
-    <VisualStudio>
-      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
-        <WebProjectProperties>
-          <UseIIS>False</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>4858</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>
-          </IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
-        </WebProjectProperties>
-      </FlavorProperties>
-    </VisualStudio>
-  </ProjectExtensions>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

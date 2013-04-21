@@ -2,8 +2,14 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Framework.Support
 {
+    /// <summary>
+    /// Definition of an execution task.
+    /// </summary>
     public interface IExecutionTask
     {
-        void Execute(ILogger logger);
+        /// <summary>
+        /// Executes the specified logic.
+        /// </summary>
+        void Execute();
     }
 }

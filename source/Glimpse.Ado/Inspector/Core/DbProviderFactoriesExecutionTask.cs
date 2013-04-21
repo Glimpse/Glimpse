@@ -10,16 +10,23 @@ namespace Glimpse.Ado.Inspector.Core
 {
     public class DbProviderFactoriesExecutionTask : IExecutionTask
     {
-        public void Execute(ILogger logger)
+        public DbProviderFactoriesExecutionTask(ILogger logger)
+        {
+            Logger = logger;
+        }
+
+        private ILogger Logger { get; set; }
+
+        public void Execute()
         { 
-            logger.Info("AdoInspector: Starting to replace DbProviderFactory");
+            Logger.Info("AdoInspector: Starting to replace DbProviderFactory");
 
             //This forces the creation 
             try
             {
                 DbProviderFactories.GetFactory("Anything"); 
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             { 
             }
 
@@ -34,18 +41,18 @@ namespace Glimpse.Ado.Inspector.Core
                 {
                     factory = DbProviderFactories.GetFactory(row);
 
-                    logger.Info("AdoInspector: Successfully retrieved factory - {0}", row["Name"]);
+                    Logger.Info("AdoInspector: Successfully retrieved factory - {0}", row["Name"]);
                 }
                 catch (Exception)
                 {
-                    logger.Error("AdoInspector: Failed to retrieve factory - {0}", row["Name"]);
+                    Logger.Error("AdoInspector: Failed to retrieve factory - {0}", row["Name"]);
                     continue;
                 }
 
                 //Check that we haven't already wrapped things up 
                 if (factory is GlimpseDbProviderFactory)
                 {
-                    logger.Error("AdoInspector: Factory is already wrapped - {0}", row["Name"]);
+                    Logger.Error("AdoInspector: Factory is already wrapped - {0}", row["Name"]);
                     continue;
                 }
 
@@ -60,10 +67,10 @@ namespace Glimpse.Ado.Inspector.Core
                 table.Rows.Remove(row);
                 table.Rows.Add(newRow);
 
-                logger.Info("AdoInspector: Successfully replaced - {0}", newRow["Name"]);
+                Logger.Info("AdoInspector: Successfully replaced - {0}", newRow["Name"]);
             }
 
-            logger.Info("AdoInspector: Finished replacing DbProviderFactory");
+            Logger.Info("AdoInspector: Finished replacing DbProviderFactory");
         }
     }
 }

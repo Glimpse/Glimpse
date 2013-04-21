@@ -8,28 +8,52 @@ using Glimpse.Core.Model;
 
 namespace Glimpse.Core.Tab
 {
+    /// <summary>
+    /// Timeline tab
+    /// </summary>
     public class Timeline : TabBase, IDocumentation, ITabSetup, IKey
-    {  
+    {
+        /// <summary>
+        /// Gets the name that will show in the tab.
+        /// </summary>
+        /// <value>The name.</value>
         public override string Name
         {
             get { return "Timeline"; }
         }
 
+        /// <summary>
+        /// Gets the key.
+        /// </summary>
+        /// <value>The key. Only valid JavaScript identifiers should be used for future compatibility.</value>
         public string Key
         {
             get { return "glimpse_timeline"; }
         }
 
+        /// <summary>
+        /// Gets the documentation URI.
+        /// </summary>
+        /// <value>The documentation URI.</value>
         public string DocumentationUri
         {
             get { return "http://getglimpse.com/Help/Timeline-Tab"; }
         }
 
+        /// <summary>
+        /// Setups the targeted tab using the specified context.
+        /// </summary>
+        /// <param name="context">The context which should be used.</param>
         public void Setup(ITabSetupContext context)
         {
             context.PersistMessages<ITimelineMessage>();
         }
 
+        /// <summary>
+        /// Gets the data that should be shown in the UI.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns>Object that will be shown.</returns>
         public override object GetData(ITabContext context)
         {
             var viewRenderMessages = context.GetMessages<ITimelineMessage>(); 
