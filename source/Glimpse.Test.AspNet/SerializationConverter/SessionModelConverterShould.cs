@@ -25,7 +25,7 @@ namespace Glimpse.Test.AspNet.SerializationConverter
                 };
 
             object rows = new SessionModelConverter().Convert(sessionModels);
-            List<object> columns = ((List<object>)((IEnumerable<object>)rows).Skip(1).First());
+			List<object> columns = GetFirstValueRowFromConvertedSessionModel(rows);
 
             Assert.Equal(columns[0], "Key1");
             Assert.Equal(columns[1], "Test Value");
@@ -42,16 +42,16 @@ namespace Glimpse.Test.AspNet.SerializationConverter
                     new SessionModel
                         {
                             Key = "Key1",
-                            Value = testObject.TestProperty,
+                            Value = testObject,
                             Type = testObject.GetType()
                         }
                 };
 
             object rows = new SessionModelConverter().Convert(sessionModels);
-            List<object> columns = ((List<object>)((IEnumerable<object>)rows).Skip(1).First());
+			List<object> columns = GetFirstValueRowFromConvertedSessionModel(rows);
 
             Assert.Equal(columns[0], "Key1");
-            Assert.Equal(columns[1], testObject.TestProperty);
+            Assert.Equal(columns[1], testObject);
             Assert.Equal(columns[2], typeof(SerializableTestObject));
         }
 
@@ -65,13 +65,13 @@ namespace Glimpse.Test.AspNet.SerializationConverter
                     new SessionModel
                         {
                             Key = "Key1",
-                            Value = testObject.TestProperty,
+                            Value = testObject,
                             Type = testObject.GetType()
                         }
                 };
 
             object rows = new SessionModelConverter().Convert(sessionModels);
-            List<object> columns = ((List<object>)((IEnumerable<object>)rows).Skip(1).First());
+			List<object> columns = GetFirstValueRowFromConvertedSessionModel(rows);
 
             Assert.Equal(columns[0], "Key1");
             Assert.Equal(columns[1], testObject.TestProperty);
@@ -88,18 +88,23 @@ namespace Glimpse.Test.AspNet.SerializationConverter
                     new SessionModel
                         {
                             Key = "Key1",
-                            Value = testObject.TestProperty,
+                            Value = testObject,
                             Type = testObject.GetType()
                         }
                 };
 
             object rows = new SessionModelConverter().Convert(sessionModels);
-            List<object> columns = ((List<object>)((IEnumerable<object>)rows).Skip(1).First());
+			List<object> columns = GetFirstValueRowFromConvertedSessionModel(rows);
 
             Assert.Equal(columns[0], "Key1");
             Assert.Equal(columns[1], "\\Non serializable type :(\\");
             Assert.Equal(columns[2], typeof(NonSerializableTestObject));
         }
+
+	    private static List<object> GetFirstValueRowFromConvertedSessionModel(object rows)
+	    {
+		    return ((IEnumerable<object>)((IEnumerable<object>)rows).ToList().Skip(1).First()).ToList(); // skip first row since it only contains column names
+	    }
     }
 
     [Serializable]
