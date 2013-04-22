@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
+
 using Glimpse.AspNet.Extensions;
 using Glimpse.AspNet.Model;
 using Glimpse.Core.Extensibility;
@@ -15,9 +17,20 @@ namespace Glimpse.AspNet.SerializationConverter
             {
                 var row = root.AddRow().Column(item.Key);
 
-                if (item.Type != null && !item.Type.IsSerializable)
+                if (item.Type != null)
                 {
-                    row.Column("Non serializable type :(").Emphasis();
+                    if (item.Type.IsSerializable)
+                    {
+                        row.Column(item.Value);
+                    }
+                    else if (item.Type.GetMethod("ToString").DeclaringType == item.Type)
+                    {
+                        row.Column(item.Value.ToString());
+                    }
+                    else
+                    {
+                        row.Column("Non serializable type :(").Emphasis();
+                    }
                 }
                 else
                 {
