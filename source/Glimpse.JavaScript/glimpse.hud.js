@@ -143,6 +143,8 @@
         })(),
         ajaxRequests = (function() {
             var send = XMLHttpRequest.prototype.send,
+                open = XMLHttpRequest.prototype.open,
+                send = XMLHttpRequest.prototype.send,
                 count = 0,
                 render = function() {
                     var html = '<div class="glimpse-hud-section glimpse-hud-section-ajax">';
@@ -163,8 +165,12 @@
                     }, 2000);
                 };
              
+            //XMLHttpRequest.prototype.open = function() {
+            //}
             XMLHttpRequest.prototype.send = function() { 
-                update();
+                if (this.readyState === 4) {
+                    update();
+                }
                 send.apply(this, arguments);
             };
 
