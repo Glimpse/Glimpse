@@ -82,6 +82,7 @@
     <Compile Include="SerializationConverter\ConfigurationModelConverterShould.cs" />
     <Compile Include="SerializationConverter\ConfigurationRoleManagerProviderSettingsModelConverterShould.cs" />
     <Compile Include="SerializationConverter\RequestModelConverterShould.cs" />
+    <Compile Include="SerializationConverter\SessionModelConverterShould.cs" />
     <Compile Include="Tab\ConfigurationShould.cs" />
     <Compile Include="Tab\EnvironmentShould.cs" />
     <Compile Include="Tab\RequestShould.cs" />
