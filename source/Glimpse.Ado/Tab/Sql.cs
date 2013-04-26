@@ -10,7 +10,7 @@ using Glimpse.Core.Tab.Assist;
 
 namespace Glimpse.Ado.Tab
 {
-    public class SQL : TabBase, ITabSetup, IKey, ITabLayout
+    public class SQL : TabBase, ITabSetup, IKey, ITabLayout, IDocumentation
     {
         public override string Name
         {
@@ -20,6 +20,11 @@ namespace Glimpse.Ado.Tab
         public string Key
         {
             get { return "glimpse_sql"; }
+        }
+
+        public string DocumentationUri
+        {
+            get { return "http://getglimpse.com/Help/SQL-Tab"; }
         }
 
         public void Setup(ITabSetupContext context)
