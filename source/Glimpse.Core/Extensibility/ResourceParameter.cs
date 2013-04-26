@@ -21,8 +21,13 @@
         public static readonly ResourceParameterMetadata Callback = new ResourceParameterMetadata("callback", isRequired: false);
 
         /// <summary>
-        /// The required  'Stamp' parameter.
+        /// The required 'Stamp' parameter.
         /// </summary>
         public static readonly ResourceParameterMetadata Timestamp = new ResourceParameterMetadata("stamp");
+
+        /// <summary>
+        /// The optional 'Hash' parameter used for HTTP cache busting.
+        /// </summary>
+        public static readonly ResourceParameterMetadata Hash = new ResourceParameterMetadata("hash", isRequired: false);
     }
 }

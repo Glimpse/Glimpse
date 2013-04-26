@@ -47,7 +47,7 @@ namespace Glimpse.Core.Resource
         /// </value>
         public virtual IEnumerable<ResourceParameterMetadata> Parameters
         {
-            get { return new[] { ResourceParameter.VersionNumber }; }
+            get { return new[] { ResourceParameter.Hash }; }
         }
 
         /// <summary>

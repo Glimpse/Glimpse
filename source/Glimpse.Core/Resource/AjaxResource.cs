@@ -37,7 +37,7 @@ namespace Glimpse.Core.Resource
         /// </value>
         public IEnumerable<ResourceParameterMetadata> Parameters
         {
-            get { return new[] { new ResourceParameterMetadata(ParentRequestKey), ResourceParameter.VersionNumber, ResourceParameter.Callback }; }
+            get { return new[] { new ResourceParameterMetadata(ParentRequestKey), ResourceParameter.Hash, ResourceParameter.Callback }; }
         }
 
         /// <summary>

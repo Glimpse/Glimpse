@@ -26,6 +26,14 @@ namespace Glimpse.Core.Framework
         public string Version { get; set; }
 
         /// <summary>
+        /// Gets or sets the hash used for HTTP cache busting.
+        /// </summary>
+        /// <value>
+        /// The <seealso href="http://en.wikipedia.org/wiki/Cyclic_redundancy_check">CRC32</seealso> hash of Glimpse's configuration.
+        /// </value>
+        public string Hash { get; set; }
+
+        /// <summary>
         /// Gets or sets the collection of tab specific metadata.
         /// </summary>
         /// <value>

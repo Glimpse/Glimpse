@@ -26,15 +26,15 @@ namespace Glimpse.Test.Core.Resource
         {
             var resource = new PopupResource();
 
-            Assert.Contains("requestId", resource.Parameters.Where(p=>p.IsRequired).Select(p=>p.Name));
+            Assert.Contains("requestId", resource.Parameters.Where(p => p.IsRequired).Select(p => p.Name));
         }
 
         [Fact]
-        public void ContainRequiredVersionParameter()
+        public void ContainOptionalHashParameter()
         {
             var resource = new PopupResource();
 
-            Assert.Contains("version", resource.Parameters.Where(p => p.IsRequired).Select(p => p.Name));
+            Assert.Contains("hash", resource.Parameters.Select(p => p.Name));
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace Glimpse.Test.Core.Resource
             var resource = new PopupResource();
             var contextMock = new Mock<IResourceContext>();
 
-            Assert.Throws<NotSupportedException>(()=>resource.Execute(contextMock.Object));
+            Assert.Throws<NotSupportedException>(() => resource.Execute(contextMock.Object));
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace Glimpse.Test.Core.Resource
             var resource = new PopupResource();
             var configMock = new Mock<IGlimpseConfiguration>();
 
-            Assert.Throws<ArgumentNullException>(()=>resource.Execute(null, configMock.Object));
+            Assert.Throws<ArgumentNullException>(() => resource.Execute(null, configMock.Object));
         }
 
         [Fact]

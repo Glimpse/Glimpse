@@ -107,6 +107,12 @@ namespace Glimpse.Core.Framework
         string EndpointBaseUri { get; }
 
         /// <summary>
+        /// Gets the configuration hash.
+        /// </summary>
+        /// <value>The hash.</value>
+        string Hash { get; }
+
+        /// <summary>
         /// Gets or sets the runtime policy strategy.
         /// </summary>
         /// <value>The runtime policy strategy.</value>

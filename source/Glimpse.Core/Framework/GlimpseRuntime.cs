@@ -516,7 +516,7 @@ namespace Glimpse.Core.Framework
 
         private void PersistMetadata()
         {
-            var metadata = new GlimpseMetadata { Version = Version };
+            var metadata = new GlimpseMetadata { Version = Version, Hash = Configuration.Hash };
             var tabMetadata = metadata.Tabs;
 
             foreach (var tab in Configuration.Tabs)
@@ -644,6 +644,7 @@ namespace Glimpse.Core.Framework
                                          {
                                              { ResourceParameter.RequestId.Name, requestId.ToString() },
                                              { ResourceParameter.VersionNumber.Name, Version },
+                                             { ResourceParameter.Hash.Name, Configuration.Hash }
                                          };
 
                         var resourceName = dynamicScript.GetResourceName();
