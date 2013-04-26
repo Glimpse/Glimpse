@@ -48,11 +48,18 @@ namespace Glimpse.Core.Extensibility
         /// <param name="assembly"></param>
         public void Initialize(Assembly assembly)
         {
-            var infoVersion = assembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false).Cast<AssemblyInformationalVersionAttribute>().SingleOrDefault();
+            if (string.IsNullOrEmpty(Version))
+            {
+                var infoVersion = assembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false).Cast<AssemblyInformationalVersionAttribute>().SingleOrDefault();
+                Version = infoVersion != null ? infoVersion.InformationalVersion : assembly.GetName().Version.ToString();
+            }
 
-            Version = infoVersion != null ? infoVersion.InformationalVersion : assembly.GetName().Version.ToString();
+            if (string.IsNullOrEmpty(Id))
+            {
+                Id = assembly.GetName().Name;    
+            }
+
             AssemblyName = assembly.GetName().FullName;
-            Id = assembly.GetName().Name; 
         }
 
         /// <summary>
