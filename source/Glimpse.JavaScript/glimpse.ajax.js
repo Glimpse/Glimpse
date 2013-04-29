@@ -2,7 +2,7 @@
     var context = { resultCount : 0, notice: null, isActive: false, contextRequestId: null },
         generateAjaxAddress = function() {
             var currentMetadata = data.currentMetadata();
-            return util.uriTemplate(currentMetadata.resources.glimpse_ajax, { 'parentRequestId': retrieveScopeId(), 'version': currentMetadata.version });
+            return util.uriTemplate(currentMetadata.resources.glimpse_ajax, { 'parentRequestId': retrieveScopeId(), 'hash': currentMetadata.hash });
         },
         retrieveScopeId = function() { 
             var payload = data.currentData();

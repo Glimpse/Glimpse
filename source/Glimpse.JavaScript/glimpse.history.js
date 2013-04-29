@@ -2,7 +2,7 @@
     var context = { resultCount : 0, clientName : '', requestId : '', currentData: null, notice: null, isActive: false, contextRequestId: undefined }, 
         generateHistoryAddress = function() {
             var currentMetadata = data.currentMetadata();
-            return util.uriTemplate(currentMetadata.resources.glimpse_history, { 'version': currentMetadata.version });
+            return util.uriTemplate(currentMetadata.resources.glimpse_history, { 'hash': currentMetadata.hash });
         },
         wireListeners = function() {
             var panel = elements.panel('history');

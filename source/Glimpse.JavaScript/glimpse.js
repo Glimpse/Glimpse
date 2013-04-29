@@ -398,7 +398,7 @@ glimpse.data = (function($, pubsub, util) {
         innerCurrentData = innerBaseData,
         generateRequestAddress = function (requestId) {
             var current = currentMetadata();
-            return util.uriTemplate(current.resources.glimpse_request, { 'requestId': requestId, 'version': current.version });
+            return util.uriTemplate(current.resources.glimpse_request, { 'requestId': requestId, 'hash': current.hash });
         },
         validateMetadata = function () { 
             // Make sure that out data has metadata
@@ -616,17 +616,21 @@ glimpse.render = (function($, pubsub, util, data, settings) {
         },
         generateSpriteAddress = function () {
             var uri = settings.local('sprite') || 'http://getglimpse.com/sprite.png?version={version}',
-                version = settings.local('version') || '0.0';
+                version = settings.local('version') || '0.0',
+                hash = settings.local('hash') || '0.0';
             
             return util.uriTemplate(uri, { 'version': version });
         },
         updateSpriteAddress = function (args) {
             var uri = args.metadata.resources.glimpse_sprite,
-                version = args.metadata.version;
+                version = args.metadata.version,
+                hash = args.metadata.hash;
             if (uri)
                 settings.local('sprite', uri);
             if (version)
                 settings.local('version', version);
+            if (hash)
+                settings.local('hash', hash);
         },
         getCss = function() {
             var content = templates.css.replace(/url\(\)/gi, 'url(' + generateSpriteAddress() + ')');
@@ -1456,7 +1460,7 @@ glimpse.render.engine.util.table = (function($) {
 (function($, data, util, elements, pubsub, renderEngine) {
     var generateLazyAddress = function (key) {
             var currentMetadata = data.currentMetadata();
-            return util.uriTemplate(currentMetadata.resources.glimpse_tab, { 'requestId': data.currentData().requestId, 'pluginKey': key, 'version': currentMetadata.version });
+            return util.uriTemplate(currentMetadata.resources.glimpse_tab, { 'requestId': data.currentData().requestId, 'pluginKey': key, 'hash': currentMetadata.hash });
         },
         retrieveData = function(options) {
             var resources = data.currentMetadata().resources; 
@@ -1689,7 +1693,7 @@ glimpse.render.engine.util.table = (function($) {
         },
         generatePopupAddress = function() {
             var currentMetadata = data.currentMetadata();
-            return util.uriTemplate(currentMetadata.resources.glimpse_popup, { 'requestId': data.currentData().requestId, 'version': currentMetadata.version });
+            return util.uriTemplate(currentMetadata.resources.glimpse_popup, { 'requestId': data.currentData().requestId, 'hash': currentMetadata.hash });
         },
         isPopup = function() {
             return data.currentMetadata().resources.glimpse_popup ? window.location.href.indexOf('n=glimpse_popup') > -1 : false;
@@ -1889,7 +1893,7 @@ glimpse.versionCheck = (function($, pubsub, settings, elements, data, util) {
         },
         generateVersionCheckAddress = function() {
             var currentMetadata = data.currentMetadata();
-            return util.uriTemplate(currentMetadata.resources.glimpse_version_check, { stamp: retrieveStamp(), 'version': currentMetadata.version });
+            return util.uriTemplate(currentMetadata.resources.glimpse_version_check, { stamp: retrieveStamp(), 'hash': currentMetadata.hash });
         },
         tryShow = function () {
             var hasNewerVersion = settings.local('hasNewerVersion');
@@ -2191,7 +2195,7 @@ glimpse.tab = (function($, pubsub, data) {
     var context = { resultCount : 0, notice: null, isActive: false, contextRequestId: null },
         generateAjaxAddress = function() {
             var currentMetadata = data.currentMetadata();
-            return util.uriTemplate(currentMetadata.resources.glimpse_ajax, { 'parentRequestId': retrieveScopeId(), 'version': currentMetadata.version });
+            return util.uriTemplate(currentMetadata.resources.glimpse_ajax, { 'parentRequestId': retrieveScopeId(), 'hash': currentMetadata.hash });
         },
         retrieveScopeId = function() { 
             var payload = data.currentData();
@@ -2370,7 +2374,7 @@ glimpse.tab = (function($, pubsub, data) {
     var context = { resultCount : 0, clientName : '', requestId : '', currentData: null, notice: null, isActive: false, contextRequestId: undefined }, 
         generateHistoryAddress = function() {
             var currentMetadata = data.currentMetadata();
-            return util.uriTemplate(currentMetadata.resources.glimpse_history, { 'version': currentMetadata.version });
+            return util.uriTemplate(currentMetadata.resources.glimpse_history, { 'hash': currentMetadata.hash });
         },
         wireListeners = function() {
             var panel = elements.panel('history');

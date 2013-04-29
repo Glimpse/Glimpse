@@ -5,17 +5,21 @@
         },
         generateSpriteAddress = function () {
             var uri = settings.local('sprite') || 'http://getglimpse.com/sprite.png?version={version}',
-                version = settings.local('version') || '0.0';
+                version = settings.local('version') || '0.0',
+                hash = settings.local('hash') || '0.0';
             
             return util.uriTemplate(uri, { 'version': version });
         },
         updateSpriteAddress = function (args) {
             var uri = args.metadata.resources.glimpse_sprite,
-                version = args.metadata.version;
+                version = args.metadata.version,
+                hash = args.metadata.hash;
             if (uri)
                 settings.local('sprite', uri);
             if (version)
                 settings.local('version', version);
+            if (hash)
+                settings.local('hash', hash);
         },
         getCss = function() {
             var content = templates.css.replace(/url\(\)/gi, 'url(' + generateSpriteAddress() + ')');
