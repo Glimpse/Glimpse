@@ -48,7 +48,7 @@ namespace Glimpse.Test.Core.Resource
         }
 
         [Fact]
-        public void ReturnJsonResourceResult()
+        public void ReturnCacheResourceResult()
         {
             var contextMock = new Mock<IResourceContext>();
 
@@ -63,7 +63,7 @@ namespace Glimpse.Test.Core.Resource
 
             var result = resource.Execute(contextMock.Object);
 
-            Assert.NotNull(result as JsonResourceResult);
+            Assert.NotNull(result as CacheControlDecorator);
         }
     }
 }

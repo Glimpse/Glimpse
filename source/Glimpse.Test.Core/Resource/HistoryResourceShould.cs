@@ -78,7 +78,7 @@ namespace Glimpse.Test.Core.Resource
         }
 
         [Fact]
-        public void ReturnJsonResourceResultWithData()
+        public void ReturnCacheResourceResultWithData()
         {
             var resource = new HistoryResource();
 
@@ -90,10 +90,8 @@ namespace Glimpse.Test.Core.Resource
             contextMock.Setup(c => c.PersistenceStore).Returns(storeMock.Object);
 
             var result = resource.Execute(contextMock.Object);
-
-            var jsonResourceResult = result as JsonResourceResult;
-
-            Assert.NotNull(jsonResourceResult);
+             
+            Assert.NotNull(result as CacheControlDecorator);
         }
     }
 }

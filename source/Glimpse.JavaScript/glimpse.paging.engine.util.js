@@ -46,8 +46,7 @@
                         $.ajax({
                             url: generatePagingAddress(pagerKey, pageIndex),
                             type: 'GET', 
-                            contentType: 'application/json',
-                            cache: false, 
+                            contentType: 'application/json', 
                             success: function(result) { 
                                 requestSuccess(key, pagerKey, pageIndex, method, result);
                             },

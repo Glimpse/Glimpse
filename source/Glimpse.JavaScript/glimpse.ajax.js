@@ -53,8 +53,7 @@
             context.notice.prePoll(); 
             $.ajax({
                 url: generateAjaxAddress(),
-                type: 'GET',
-                cache: false,
+                type: 'GET', 
                 contentType: 'application/json',
                 complete : function(jqXHR, textStatus) {
                     if (!context.isActive) 

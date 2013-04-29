@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
+using Glimpse.Core.Framework;
 using Glimpse.Core.ResourceResult;
 
 namespace Glimpse.Core.Resource
@@ -88,7 +89,7 @@ namespace Glimpse.Core.Resource
                 return new StatusCodeResourceResult(404, string.Format("Could not find requests with ParentRequestKey '{0}'.", parentRequestKey));
             }
 
-            return new JsonResourceResult(data.Where(r => r.RequestIsAjax), context.Parameters.GetValueOrDefault(ResourceParameter.Callback.Name));
+            return new CacheControlDecorator(0, CacheSetting.NoCache, new JsonResourceResult(data.Where(r => r.RequestIsAjax), context.Parameters.GetValueOrDefault(ResourceParameter.Callback.Name)));
         }
     }
 }

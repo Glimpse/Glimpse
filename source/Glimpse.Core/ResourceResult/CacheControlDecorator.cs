@@ -62,9 +62,15 @@ namespace Glimpse.Core.ResourceResult
             if (CacheSetting.HasValue)
             {
                 frameworkProvider.SetHttpResponseHeader("Cache-Control", string.Format("{0}, max-age={1}", CacheSetting.Value.ToDescription(), CacheDuration));
+
+                if (CacheSetting.Value == Framework.CacheSetting.NoCache)
+                {
+                    frameworkProvider.SetHttpResponseHeader("Pragma", "no-cache");
+                }
             }
 #else
             frameworkProvider.SetHttpResponseHeader("Cache-Control", "no-cache");
+            frameworkProvider.SetHttpResponseHeader("Pragma", "no-cache");
 #endif
         }
     }

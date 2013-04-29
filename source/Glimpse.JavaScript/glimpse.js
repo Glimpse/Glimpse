@@ -2059,8 +2059,7 @@ glimpse.paging.engine.util = (function($, pubsub, data, elements, util, renderEn
                         $.ajax({
                             url: generatePagingAddress(pagerKey, pageIndex),
                             type: 'GET', 
-                            contentType: 'application/json',
-                            cache: false, 
+                            contentType: 'application/json', 
                             success: function(result) { 
                                 requestSuccess(key, pagerKey, pageIndex, method, result);
                             },
@@ -2243,8 +2242,7 @@ glimpse.tab = (function($, pubsub, data) {
             context.notice.prePoll(); 
             $.ajax({
                 url: generateAjaxAddress(),
-                type: 'GET',
-                cache: false,
+                type: 'GET', 
                 contentType: 'application/json',
                 complete : function(jqXHR, textStatus) {
                     if (!context.isActive) 
@@ -2409,7 +2407,6 @@ glimpse.tab = (function($, pubsub, data) {
             $.ajax({
                 url: generateHistoryAddress(), 
                 type: 'GET',
-                cache: false,
                 contentType: 'application/json',
                 complete : function(jqXHR, textStatus) {
                     if (!context.isActive) 
