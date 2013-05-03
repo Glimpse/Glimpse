@@ -16,6 +16,7 @@ body
 #container
 {
 	float: left;
+	width: 100%;
 }
 
 #header
