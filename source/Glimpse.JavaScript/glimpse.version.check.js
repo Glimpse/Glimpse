@@ -9,8 +9,10 @@
             return util.uriTemplate(currentMetadata.resources.glimpse_version_check, { stamp: retrieveStamp(), 'hash': currentMetadata.hash });
         },
         tryShow = function () {
-            var hasNewerVersion = settings.local('hasNewerVersion');
-            if (hasNewerVersion)
+            var hasNewerVersion = settings.local('hasNewerVersion'),
+                versionCheckUri = settings.local('versionCheckUri') || '',
+                currentHash = settings.local('hash');
+            if (hasNewerVersion && versionCheckUri.indexOf('hash=' + currentHash) > -1)
                 elements.holder().find('.glimpse-meta-update').show();
         },
         ready = function() {
