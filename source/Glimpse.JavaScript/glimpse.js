@@ -1564,7 +1564,7 @@ glimpse.render.engine.util.table = (function($) {
                     var holder = elements.holder();
                     holder.height('');
                     $(window).resize(function() {
-                        holder.find('.glimpse-panel').height($(window).height() - 54);
+                        elements.panels().height($(window).height() - 54);
                     });
                 }
                 
