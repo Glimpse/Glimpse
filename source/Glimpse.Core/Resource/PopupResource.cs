@@ -100,8 +100,7 @@ namespace Glimpse.Core.Resource
             }
 #endif
 
-            string version = context.Parameters.GetValueOrDefault(ResourceParameter.VersionNumber.Name);
-
+            var version = context.Parameters.GetValueOrDefault(ResourceParameter.VersionNumber.Name);
             if (string.IsNullOrEmpty(version))
             {
                 return new StatusCodeResourceResult(404, "Could not get version.");
