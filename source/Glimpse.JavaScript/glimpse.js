@@ -1910,9 +1910,9 @@ glimpse.versionCheck = (function($, pubsub, settings, elements, data, util) {
 
             // Only check if we need to
             if (nextChecked) {
-                var nextCheckedTickes = parseInt(nextChecked),
-                    currentTimeTickes = now.getTime();
-                if (nextCheckedTickes > currentTimeTickes)
+                var nextCheckedTicks = parseInt(nextChecked),
+                    currentTimeTicks = now.getTime();
+                if (nextCheckedTicks > currentTimeTicks)
                     return;
             }
 
