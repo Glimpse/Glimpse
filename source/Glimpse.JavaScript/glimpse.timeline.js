@@ -547,8 +547,7 @@
                     var contentHeight = settings.local('panelHeight') - (elements.summaryRow.height() + elements.scope.find('.glimpse-tl-row-spacer').height() + 2);  
                     elements.contentRow.height(contentHeight + 'px');
                     
-                    //Render Divers
-                    //dividerBuilder.render();
+                    //Render Divers 
                     pubsub.publish('trigger.timeline.divider.render', {});
                 }
             };
