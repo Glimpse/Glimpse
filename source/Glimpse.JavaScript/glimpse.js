@@ -619,7 +619,7 @@ glimpse.render = (function($, pubsub, util, data, settings) {
                 version = settings.local('version') || '0.0',
                 hash = settings.local('hash') || '0.0';
             
-            return util.uriTemplate(uri, { 'version': version });
+            return util.uriTemplate(uri, { 'version': version, 'hash': hash });
         },
         updateSpriteAddress = function (args) {
             var uri = args.metadata.resources.glimpse_sprite,
@@ -1906,6 +1906,7 @@ glimpse.versionCheck = (function($, pubsub, settings, elements, data, util) {
 
             tryShow();
 
+            // Only check if we need to
             if (nextChecked) {
                 var nextCheckedTickes = parseInt(nextChecked),
                     currentTimeTickes = now.getTime();
@@ -1913,8 +1914,12 @@ glimpse.versionCheck = (function($, pubsub, settings, elements, data, util) {
                     return;
             }
 
+            // Get the check uri and store checkUri for verification purposes
+            var versionCheckUri = generateVersionCheckAddress();
+            settings.local('versionCheckUri', versionCheckUri); 
+            
             $.ajax({
-                url: generateVersionCheckAddress(),
+                url: versionCheckUri,
                 type: 'GET',
                 dataType: 'jsonp',
                 crossDomain: true,

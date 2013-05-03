@@ -19,6 +19,7 @@
 
             tryShow();
 
+            // Only check if we need to
             if (nextChecked) {
                 var nextCheckedTickes = parseInt(nextChecked),
                     currentTimeTickes = now.getTime();
@@ -26,8 +27,12 @@
                     return;
             }
 
+            // Get the check uri and store checkUri for verification purposes
+            var versionCheckUri = generateVersionCheckAddress();
+            settings.local('versionCheckUri', versionCheckUri); 
+            
             $.ajax({
-                url: generateVersionCheckAddress(),
+                url: versionCheckUri,
                 type: 'GET',
                 dataType: 'jsonp',
                 crossDomain: true,

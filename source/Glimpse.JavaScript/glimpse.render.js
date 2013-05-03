@@ -8,7 +8,7 @@
                 version = settings.local('version') || '0.0',
                 hash = settings.local('hash') || '0.0';
             
-            return util.uriTemplate(uri, { 'version': version });
+            return util.uriTemplate(uri, { 'version': version, 'hash': hash });
         },
         updateSpriteAddress = function (args) {
             var uri = args.metadata.resources.glimpse_sprite,

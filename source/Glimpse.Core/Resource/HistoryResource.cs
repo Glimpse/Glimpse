@@ -49,7 +49,7 @@ namespace Glimpse.Core.Resource
         /// </value>
         public IEnumerable<ResourceParameterMetadata> Parameters 
         {
-            get { return new[] { new ResourceParameterMetadata(TopKey, isRequired: false) }; }
+            get { return new[] { new ResourceParameterMetadata(TopKey, isRequired: false), ResourceParameter.Hash }; }
         }
 
         /// <summary>
