@@ -143,8 +143,7 @@
         })(),
         ajaxRequests = (function() {
             var send = XMLHttpRequest.prototype.send,
-                open = XMLHttpRequest.prototype.open,
-                send = XMLHttpRequest.prototype.send,
+                open = XMLHttpRequest.prototype.open, 
                 count = 0,
                 render = function() {
                     var html = '<div class="glimpse-hud-section glimpse-hud-section-ajax">';
@@ -164,13 +163,18 @@
                         $('.glimpse-hug-ajax-count').removeClass('glimpse-hud-value-update');
                     }, 2000);
                 };
-             
-            //XMLHttpRequest.prototype.open = function() {
-            //}
+
+            XMLHttpRequest.prototype.open = function() {
+                console.log('open');
+                console.log(this);
+            };
             XMLHttpRequest.prototype.send = function() { 
-                if (this.readyState === 4) {
+                console.log('send');
+                console.log(this);
+                
+                //if (this.readyState === 4) {
                     update();
-                }
+                //}
                 send.apply(this, arguments);
             };
 
