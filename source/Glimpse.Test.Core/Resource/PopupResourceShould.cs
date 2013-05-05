@@ -81,28 +81,7 @@ namespace Glimpse.Test.Core.Resource
 
             Assert.NotNull(result);
             Assert.Equal(404, statusCodeResult.StatusCode);
-        }
-
-        [Theory]
-        [InlineData(null, true)]
-        [InlineData("any string", false)]
-        [InlineData("", true)]
-        public void RejectInvalidVersionParameters(string value, bool hasValue)
-        {
-            var resource = new PopupResource();
-            var contextMock = new Mock<IResourceContext>();
-            string guid = Guid.NewGuid().ToString();
-            contextMock.Setup(c => c.Parameters.TryGetValue("requestId", out guid)).Returns(true);
-            contextMock.Setup(c => c.Parameters.TryGetValue("version", out value)).Returns(hasValue);
-            var configMock = new Mock<IGlimpseConfiguration>();
-
-            var result = resource.Execute(contextMock.Object, configMock.Object);
-
-            var statusCodeResult = result as StatusCodeResourceResult;
-
-            Assert.NotNull(result);
-            Assert.Equal(404, statusCodeResult.StatusCode);
-        }
+        } 
 
         [Fact]
         public void ReturnHtmlResourceResult()
