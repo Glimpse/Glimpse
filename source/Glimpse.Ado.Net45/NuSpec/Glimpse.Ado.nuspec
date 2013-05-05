@@ -15,7 +15,7 @@
         <summary>Glimpse tabs for ADO.</summary>
         <releaseNotes>
 Pinweight release for Ado:
- - Added documentation link
+ - Minor update to added documentation link to SQL tab
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse ADO ADO.NET SQL performance profiling timing diagnostics</tags>
         <dependencies>

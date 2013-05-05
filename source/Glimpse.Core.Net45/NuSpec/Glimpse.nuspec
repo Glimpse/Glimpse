@@ -15,8 +15,8 @@
         <summary>ASP.NET 4.0 web debugging and diagnostics tool.</summary>
         <releaseNotes>
 Welterweight release for core:
- - Majorish fix that addresses the new Glimpse.axd page telling you that a new update is avaialable even though you just updated 
- - Majorish update which switches cache busting control from client with querystring to the server using the correct headers
+ - Majorish fix that addresses the new Glimpse.axd page telling you that a new update is available even though you just updated 
+ - Majorish update which switches cache busting control from client with query string to the server using the correct headers
  - Minor fix where popup window not resizing viewable area for timeline
  - Minor update to allow FileResource to be used outside of Glimpse.Core
  - Minor fix for NuGetAttribute which ignores constructor arguments

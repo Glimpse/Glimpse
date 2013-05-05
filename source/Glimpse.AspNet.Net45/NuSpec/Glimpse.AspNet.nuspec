@@ -15,7 +15,7 @@
         <summary>ASP.NET 4.0 web debugging and diagnostics tool.</summary>
         <releaseNotes>
 Flyweight release for AspNet:  
- - Update to Session Tab to support for objects which override the ToString method
+ - Minorish update to Session Tab to support for objects which override the ToString method
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse</tags>
         <dependencies>
