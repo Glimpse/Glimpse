@@ -19,7 +19,7 @@ Pinweight release for Ado:
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse ADO ADO.NET SQL performance profiling timing diagnostics</tags>
         <dependencies>
-          <dependency id="Glimpse" version="1.3.0" />
+          <dependency id="Glimpse" version="1.3.1" />
         </dependencies>
     </metadata>
     <files>

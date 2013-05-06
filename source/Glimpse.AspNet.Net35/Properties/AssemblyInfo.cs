@@ -12,8 +12,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("Glimpse™")]
 
 
-//Version is in major.minor.build format to support http://semver.org/
-//Keep these three attributes in sync
+// Version is in major.minor.build format to support http://semver.org/
+// Keep these three attributes in sync
 [assembly: AssemblyVersion("1.2.2")]
 [assembly: AssemblyFileVersion("1.2.2")]
-//[assembly: AssemblyInformationalVersion("1.0.0-rc")] Package version is driven off Glimpse.AspNet/Properties/AssemblyInfo.cs
+[assembly: AssemblyInformationalVersion("1.2.2")]

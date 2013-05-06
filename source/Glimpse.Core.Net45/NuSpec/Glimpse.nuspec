@@ -20,6 +20,8 @@ Welterweight release for core:
  - Minor fix where popup window not resizing viewable area for timeline
  - Minor update to allow FileResource to be used outside of Glimpse.Core
  - Minor fix for NuGetAttribute which ignores constructor arguments
+ - Minor fix for users getting duplicate resource error message
+ - Minor fix for multi-threaded tracing regression
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse diagnostics performance profiling timing</tags>
     </metadata>
