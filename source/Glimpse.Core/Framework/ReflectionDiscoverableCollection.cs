@@ -202,48 +202,35 @@ namespace Glimpse.Core.Framework
 
             var results = new List<T>();
 
-            foreach (var file in Directory.GetFiles(DiscoveryLocation, "*.dll", SearchOption.AllDirectories))
+            // This behavior only to support usage of glimpse[@discoverLocation] attribute. Remove "if" block in Glimpse 2.0 in favor of "else" if it is decided that discovery location is not required
+            if (!DiscoveryLocation.Equals(BaseDirectory))
             {
-                try 
+                foreach (var file in Directory.GetFiles(DiscoveryLocation, "*.dll", SearchOption.AllDirectories))
                 {
-                    Assembly assembly = Assembly.LoadFrom(file);
-                    Type[] allTypes;
-
-                    // GetTypes potentially throws and exception. Defensive coding as per http://haacked.com/archive/2012/07/23/get-all-types-in-an-assembly.aspx
                     try
                     {
-                        allTypes = assembly.GetTypes();
-                    }
-                    catch (ReflectionTypeLoadException ex)
-                    {
-                        allTypes = ex.Types.Where(t => t != null).ToArray();
+                        Assembly assembly = Assembly.LoadFrom(file);
 
-                        foreach (var exception in ex.LoaderExceptions)
-                        {
-                            Logger.Warn(Resources.DiscoverGetType, exception);
-                        }
+                        GetConcreteTypes(assembly, results);
                     }
-                    
-                    var concreteTypes = allTypes.Where(type => typeof(T).IsAssignableFrom(type) &&
-                                                                          !type.IsInterface &&
-                                                                          !type.IsAbstract &&
-                                                                          !IgnoredTypes.Contains(type));
-                    foreach (var type in concreteTypes)
+                    catch (Exception exception)
                     {
-                        try
-                        {
-                            var instance = (T)Activator.CreateInstance(type);
-                            results.Add(instance);
-                        }
-                        catch (Exception exception)
-                        {
-                            Logger.Error(Resources.DiscoverCreateInstance, exception, typeof(T), type);
-                        }
+                        Logger.Error(Resources.DiscoverLoadAssembly, exception, file);
                     }
                 }
-                catch (Exception exception)
+            }
+            else
+            {
+                foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) 
                 {
-                    Logger.Error(Resources.DiscoverLoadAssembly, exception, file);
+                    try
+                    {
+                        GetConcreteTypes(assembly, results);
+                    }
+                    catch (Exception exception)
+                    {
+                        Logger.Error(Resources.DiscoverLoadAssembly, exception, assembly.Location);
+                    }
                 }
             }
 
@@ -257,6 +244,43 @@ namespace Glimpse.Core.Framework
                 }
 
                 Items.AddRange(results);
+            }
+        }
+
+        private void GetConcreteTypes(Assembly assembly, List<T> results)
+        {
+            // GetTypes potentially throws and exception. Defensive coding as per http://haacked.com/archive/2012/07/23/get-all-types-in-an-assembly.aspx
+            Type[] allTypes;
+            
+            try
+            {
+                allTypes = assembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                allTypes = ex.Types.Where(t => t != null).ToArray();
+
+                foreach (var exception in ex.LoaderExceptions)
+                {
+                    Logger.Warn(Resources.DiscoverGetType, exception);
+                }
+            }
+
+            var concreteTypes = allTypes.Where(type => typeof(T).IsAssignableFrom(type) &&
+                                                       !type.IsInterface &&
+                                                       !type.IsAbstract &&
+                                                       !IgnoredTypes.Contains(type));
+            foreach (var type in concreteTypes)
+            {
+                try
+                {
+                    var instance = (T)Activator.CreateInstance(type);
+                    results.Add(instance);
+                }
+                catch (Exception exception)
+                {
+                    Logger.Error(Resources.DiscoverCreateInstance, exception, typeof(T), type);
+                }
             }
         }
     }
