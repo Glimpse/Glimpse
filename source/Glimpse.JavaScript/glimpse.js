@@ -3221,7 +3221,7 @@ glimpse.tab = (function($, pubsub, data) {
 (function($, pubsub, data, elements, util) {
     var serverTime = 0,
         modify = function(options) {
-            options.templates.css += '.glimpse-open .glimpse-hud {padding: 0 5px 0 0;float: left;}.glimpse-open .glimpse-hud-section {float: left;-webkit-transition: all 0.3s ease;-moz-transition: all 0.3s ease;-o-transition: all 0.3s ease;transition: all 0.3s ease;border-left: 11px solid #71b1d1;}.glimpse-open .glimpse-hud-section:hover {border-color: #8BC441;}.glimpse-open .glimpse-hud-section-inner {-webkit-transition: all 0.3s ease;-moz-transition: all 0.3s ease;-o-transition: all 0.3s ease;transition: all 0.3s ease;max-width: 999px;}.glimpse-open .glimpse-hud-section-inner:hover .glimpse-hud-graph, .glimpse-open .glimpse-hud-tooltips {display: none;} .glimpse-open .glimpse-hud-section-inner:hover .glimpse-hud-tooltips {display: block;}.glimpse-open .glimpse-hud-tooltips {color: #bcbcbc;font-size: 7px;position: absolute;}.glimpse-open .glimpse-hud-main .glimpse-hud-tooltips {top: 18px;}.glimpse-open .glimpse-hud-content .glimpse-hud-tooltips {top: 2px;}.glimpse-open .glimpse-hud-title {position: absolute;line-height: 100%;font-family: "Segoe UI Semibold";font-size: 9px;top: 2px;color: white;text-transform: uppercase;-webkit-transform-origin: 8px 18px;-moz-transform-origin: 8px 18px;-ms-transform-origin: 8px 18px;-o-transform-origin: 8px 18px;-webkit-transform: rotate(270deg);-moz-transform: rotate(270deg);-ms-transform: rotate(270deg);-o-transform: rotate(270deg);cursor: pointer;}.glimpse-open .glimpse-hud-section-input {display: none;}.glimpse-open .glimpse-hud-section-input:checked ~ .glimpse-hud-section-inner {max-width: 0px;overflow: hidden;} .glimpse-open .glimpse-hud-postfix {float: left;line-height: 100%;padding-left: 2px;color: #bcbcbc; }.glimpse-open .glimpse-hud-value {line-height: 90%;float: left;-webkit-transition: color 0.3s ease;-moz-transition: color 0.3s ease;-o-transition: color 0.3s ease;transition: color 0.3s ease;}.glimpse-open .glimpse-hud-value-update {color: #71b1d1;}.glimpse-open .glimpse-hud-value-alert {color: #e0695c;}.glimpse-open .glimpse-hud-detail {float: left;}.glimpse-open .glimpse-hud-main {float: left;position: relative;padding-left: 10px;min-width: 37px;}.glimpse-open .glimpse-hud-main .glimpse-hud-detail {float: left;padding: 3px 10px 0 0;}.glimpse-open .glimpse-hud-main .glimpse-hud-value {font-size: 23px;height: 30px;}.glimpse-open .glimpse-hud-main .glimpse-hud-postfix {padding-left: 3px; }.glimpse-open .glimpse-hud-content {float: left;position: relative;padding: 0 20px 0 10px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail {padding-top: 14px; }.glimpse-open .glimpse-hud-content .glimpse-hud-detail-top {padding-top: 1px; }.glimpse-open .glimpse-hud-content .glimpse-hud-detail.glimpse-hud-detail-small {padding-top: 17px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail .glimpse-hud-postfix {font-size: 10px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail-small .glimpse-hud-postfix {font-size: 6px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail .glimpse-hud-value {font-size: 14px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail-small .glimpse-hud-value {font-size: 10px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail-divider {padding: 14px 10px 0 10px;color: #bcbcbc;float: left;font-size: 10px;height: 30px;}.glimpse-open .glimpse-hud-detail .glimpse-hud-detailtitle {font-size: 13px;}.glimpse-open .glimpse-hud-detail .glimpse-hud-detailsubtitle {font-size: 10px;text-align: right;}.glimpse-open .glimpse-hud .alert {float: left;margin: 8px 0 0 15px;}.glimpse-open .glimpse-hud-graph {width: 45px;position: absolute;height: 8px;top: 20px;opacity: 0.2;}.glimpse-open .glimpse-hud-graph-item {width: 2px;background-color: white;bottom: 1px;position: absolute;height: 100%;}.glimpse-open .glimpse-hud-graph-item.glimpse-hud-graph-item-alert {background-color: #e0695c; } ';
+            options.templates.css += '.glimpse-open .glimpse-hud {padding: 0 5px 0 0;float: left;}.glimpse-open .glimpse-hud-section {float: left;-webkit-transition: all 0.3s ease;-moz-transition: all 0.3s ease;-o-transition: all 0.3s ease;transition: all 0.3s ease;border-left: 11px solid #71b1d1;}.glimpse-open .glimpse-hud-section:hover {border-color: #8BC441;}.glimpse-open .glimpse-hud-section-inner {-webkit-transition: all 0.3s ease;-moz-transition: all 0.3s ease;-o-transition: all 0.3s ease;transition: all 0.3s ease;max-width: 999px;}.glimpse-open .glimpse-hud-section-inner:hover .glimpse-hud-graph, .glimpse-open .glimpse-hud-tooltips {display: none;} .glimpse-open .glimpse-hud-section-inner:hover .glimpse-hud-tooltips {display: block;}.glimpse-open .glimpse-hud-tooltips {color: #bcbcbc;font-size: 7px;position: absolute;}.glimpse-open .glimpse-hud-main .glimpse-hud-tooltips {top: 18px;}.glimpse-open .glimpse-hud-content .glimpse-hud-tooltips {top: 2px;}.glimpse-open .glimpse-hud-title {position: absolute;line-height: 100%;font-family: "Segoe UI Semibold";font-size: 9px;top: 2px;color: white;text-transform: uppercase;-webkit-transform-origin: 8px 18px;-moz-transform-origin: 8px 18px;-ms-transform-origin: 8px 18px;-o-transform-origin: 8px 18px;-webkit-transform: rotate(270deg);-moz-transform: rotate(270deg);-ms-transform: rotate(270deg);-o-transform: rotate(270deg);cursor: pointer;}.glimpse-open .glimpse-hud-section-input {display: none;}.glimpse-open .glimpse-hud-section-input:checked ~ .glimpse-hud-section-inner {max-width: 0px;overflow: hidden;} .glimpse-open .glimpse-hud-postfix {float: left;line-height: 100%;padding-left: 2px;color: #bcbcbc; }.glimpse-open .glimpse-hud-value {line-height: 90%;float: left;-webkit-transition: color 0.3s ease;-moz-transition: color 0.3s ease;-o-transition: color 0.3s ease;transition: color 0.3s ease;}.glimpse-open .glimpse-hud-value-update {color: #71b1d1;}.glimpse-open .glimpse-hud-value-alert {color: #e0695c;}.glimpse-open .glimpse-hud-detail {float: left;}.glimpse-open .glimpse-hud-main {float: left;position: relative;padding-left: 10px;min-width: 20px;}.glimpse-open .glimpse-hud-main .glimpse-hud-detail {float: left;padding: 3px 10px 0 0;}.glimpse-open .glimpse-hud-main .glimpse-hud-value {font-size: 23px;height: 30px;}.glimpse-open .glimpse-hud-main .glimpse-hud-postfix {padding-left: 3px; }.glimpse-open .glimpse-hud-content {float: left;position: relative;padding: 0 20px 0 10px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail {padding-top: 14px; }.glimpse-open .glimpse-hud-content .glimpse-hud-detail-top {padding-top: 1px; }.glimpse-open .glimpse-hud-content .glimpse-hud-detail.glimpse-hud-detail-small {padding-top: 17px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail .glimpse-hud-postfix {font-size: 10px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail-small .glimpse-hud-postfix {font-size: 6px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail .glimpse-hud-value {font-size: 14px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail-small .glimpse-hud-value {font-size: 10px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail-divider {padding: 14px 10px 0 10px;color: #bcbcbc;}.glimpse-open .glimpse-hud-content div.glimpse-hud-detail-divider {float: left;}.glimpse-open .glimpse-hud-detail .glimpse-hud-detailtitle {font-size: 13px;}.glimpse-open .glimpse-hud-detail .glimpse-hud-detailsubtitle {font-size: 10px;text-align: right;}.glimpse-open .glimpse-hud .alert {float: left;margin: 8px 0 0 15px;display: none;}.glimpse-open .glimpse-hud .super {position: relative;top: -2px;line-height: 0.5em;font-size: 0.8em;margin-left: 2px;}.glimpse-open .glimpse-hud .quiet {color: #bcbcbc; }.glimpse-open .glimpse-hud-graph {width: 45px;position: absolute;height: 8px;top: 20px;opacity: 0.4;}.glimpse-open .glimpse-hud-graph-item {width: 2px;background-color: white;bottom: 1px;position: absolute;height: 100%;}.glimpse-open .glimpse-hud-graph-item.glimpse-hud-graph-item-alert {background-color: #e0695c; } .glimpse-hud-section-ajax .glimpse-hud-detail-top {position: relative;top: -20px;opacity: 0;-webkit-transition: all 0.6s ease;-moz-transition:all 0.6s ease;-o-transition:all 0.6s ease;}.glimpse-hud-section-ajax .glimpse-hud-detail-top.added {top: 0px;opacity: 1;}';
         },
         loaded = function(args) {
             var html = '',
@@ -3235,7 +3235,7 @@ glimpse.tab = (function($, pubsub, data) {
             elements.opener().prepend('<div class="glimpse-hud">' + html + '</div>');
 
             adjustForAlerts(elements.opener().find('.glimpse-hud'));
-            graph.inject(tabData.data, elements.opener().find('.glimpse-hud')); 
+            graph.setup(tabData.data, elements.opener().find('.glimpse-hud')); 
         },
         clientTimings = (function() {
             var timingApi = (window.performance || window.mozPerformance || window.msPerformance || window.webkitPerformance || {}).timing,
@@ -3362,9 +3362,17 @@ glimpse.tab = (function($, pubsub, data) {
             };
         })(),
         ajaxRequests = (function() {
-            var send = XMLHttpRequest.prototype.send,
-                open = XMLHttpRequest.prototype.open, 
-                count = 0,
+            var open = XMLHttpRequest.prototype.open, 
+                count = 0, 
+                graphRequestStack = [],
+                runningRequestStack = [],
+                timeSince = function(ms) {
+                    var seconds = ms / 1000,
+                        interval = Math.floor(seconds / 60);
+                    if (interval >= 1) return [ interval, "m" ];
+
+                    return [ Math.floor(seconds), "s" ];
+                },
                 render = function() {
                     var html = '<div class="glimpse-hud-section glimpse-hud-section-ajax">';
                         html += '<label class="glimpse-hud-title" for="glimpse-hud-section-for-input">Ajax</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-for-input" />';
@@ -3377,26 +3385,73 @@ glimpse.tab = (function($, pubsub, data) {
 
                     return html;
                 },
-                update = function() {
+                update = function(method, url, duration) {
+                    //Set the counter
                     $('.glimpse-hug-ajax-count').text(++count).addClass('glimpse-hud-value-update');
+                    
+                    //Deal with the record details
+                    track(method, url, duration);
+
+                    //Update graph
+                    graph.running(graphRequestStack, elements.opener().find('.glimpse-hud .glimpse-hud-section-ajax'), duration, 100);
+
+                    //Set the number to fade in/out
                     setTimeout(function() {
                         $('.glimpse-hug-ajax-count').removeClass('glimpse-hud-value-update');
                     }, 2000);
+                },
+                track = function(method, url, duration) {
+                    //Setup tracker timer
+                    var row = $('<div class="glimpse-hud-detail-top"><span class="quiet">' + method + '</span><span class="glimpse-hud-detail-divider"></span>' + url + '<span class="glimpse-hud-detail-divider"></span>' + duration + '<span class="super quiet">ms</span><span class="glimpse-hud-detail-divider"></span><span class="past"></span></div>').prependTo('.glimpse-hud-section-ajax .glimpse-hud-content'),
+                        past = row.find('.past'),
+                        record = { row: row, canceled: false },
+                        next = 0,
+                        total = 0, 
+                        timer = function() {
+                            setTimeout(function() {
+                                var since = timeSince(total);
+                                past.html(since[0] + '<span class="super quiet">' + since[1] + ' ago</span>');
+                                
+                                next = total < 10000 ? 1000 : total < 30000 ? 5000 : total < 60000 ? 10000 : 60000;
+                                total += next;
+                                 
+                                if (!record.canceled)
+                                    timer();
+                            }, next);
+                        };
+                    timer();
+                    
+                    row.addClass('added');
+                    
+                    //Track state of the details
+                    if (runningRequestStack.length >= 2) {
+                        var item = runningRequestStack.shift();
+                        item.canceled = true;
+                        item.row.remove();
+                    }
+                    runningRequestStack.push(record);
                 };
 
-            XMLHttpRequest.prototype.open = function() {
-                console.log('open');
-                console.log(this);
-            };
-            XMLHttpRequest.prototype.send = function() { 
-                console.log('send');
-                console.log(this);
+            XMLHttpRequest.prototype.open = function(method, url, async, user, pass) {
+                var startTime = new Date().getTime();
                 
-                //if (this.readyState === 4) {
-                    update();
-                //}
-                send.apply(this, arguments);
+                this.addEventListener("readystatechange", function() {
+                    if (this.readyState == 4)  { 
+                        update(method, url, new Date().getTime() - startTime);
+                    }
+                }, false);
+                
+                open.apply(this, arguments);
             };
+            //XMLHttpRequest.prototype.send = function() { 
+            //    console.log('send');
+            //    console.log(this);
+                
+            //    //if (this.readyState === 4) {
+            //        update();
+            //    //}
+            //    send.apply(this, arguments);
+            //};
 
             return {
                 render: render
@@ -3419,7 +3474,7 @@ glimpse.tab = (function($, pubsub, data) {
                 scope.append('<div class="alert" title="' + alertDetails + '"><div class="icon"></div></div>');
         },
         graph = (function() {
-            var inject = function(tabData, scope) {
+            var setup = function(tabData, scope) {
                     var graphData = util.localStorage('glimpseHudGraph') || { requestTime: [], connectionOpenTime: [], actionExecutionTime: [] };
                  
                     graphData.requestTime.push({ capped: selectValue(tabData.request.requestTime, scope.find('.glimpse-hud-section-request').attr('data-maxValue')), raw: tabData.request.requestTime });
@@ -3436,6 +3491,13 @@ glimpse.tab = (function($, pubsub, data) {
                     scope.find('.glimpse-hud-section-sql .glimpse-hud-main').prepend(build(graphData.connectionOpenTime, scope.find('.glimpse-hud-section-sql')));
 
                     util.localStorage('glimpseHudGraph', graphData);
+                },
+                running = function(graphItem, scope, value, maxValue) {
+                    graphItem.push({ capped: selectValue(value, maxValue), raw: value});
+                    checkSize(graphItem); 
+                    
+                    scope.find('.glimpse-hud-graph').remove();
+                    scope.find('.glimpse-hud-main').prepend(build(graphItem, scope));
                 },
                 build = function(graphItem, scope) {
                     var min = graphItem[0].capped,
@@ -3466,7 +3528,8 @@ glimpse.tab = (function($, pubsub, data) {
                 };
 
             return {
-                inject: inject
+                setup: setup,
+                running: running
             };
         })();
         

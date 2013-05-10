@@ -89,7 +89,7 @@
     float: left;
     position: relative;
     padding-left: 10px;
-    min-width: 37px;
+    min-width: 20px;
 }
 .glimpse-open .glimpse-hud-main .glimpse-hud-detail {
     float: left;
@@ -131,9 +131,9 @@
 .glimpse-open .glimpse-hud-content .glimpse-hud-detail-divider {
     padding: 14px 10px 0 10px;
     color: #bcbcbc;  
+}
+.glimpse-open .glimpse-hud-content div.glimpse-hud-detail-divider {
     float: left;
-    font-size: 10px;
-    height: 30px;
 }
 .glimpse-open .glimpse-hud-detail .glimpse-hud-detailtitle {
     font-size: 13px;
@@ -145,13 +145,24 @@
 .glimpse-open .glimpse-hud .alert {
     float: left;
     margin: 8px 0 0 15px;
+    display: none;
+}
+.glimpse-open .glimpse-hud .super {
+    position: relative;
+    top: -2px;
+    line-height: 0.5em;
+    font-size: 0.8em;
+    margin-left: 2px;
+}
+.glimpse-open .glimpse-hud .quiet { 
+    color: #bcbcbc; 
 }
 .glimpse-open .glimpse-hud-graph {
     width: 45px; 
     position: absolute;
     height: 8px;
     top: 20px;
-    opacity: 0.2;
+    opacity: 0.4;
 }
 .glimpse-open .glimpse-hud-graph-item {
     width: 2px;
@@ -163,3 +174,15 @@
 .glimpse-open .glimpse-hud-graph-item.glimpse-hud-graph-item-alert { 
     background-color: #e0695c; 
 } 
+.glimpse-hud-section-ajax .glimpse-hud-detail-top {
+    position: relative;
+    top: -20px;
+    opacity: 0;
+    -webkit-transition: all 0.6s ease;
+    -moz-transition:    all 0.6s ease;
+    -o-transition:      all 0.6s ease;
+}
+.glimpse-hud-section-ajax .glimpse-hud-detail-top.added {
+    top: 0px;
+    opacity: 1;
+}
