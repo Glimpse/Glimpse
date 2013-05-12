@@ -201,7 +201,10 @@
                         };
                     timer();
                     
-                    row.addClass('added');
+                    setTimeout(function() {
+                        row.addClass('added');    
+                    }, 1);
+                    
                     
                     //Track state of the details
                     if (runningRequestStack.length >= 2) {
