@@ -48,17 +48,16 @@
                             timingSum += timing[key].duration;
                         }
                         tabData.request.requestTime = timingSum;
-                        //<label class="glimpse-menu-root-item" for="glimpse-menu-root-radio-1">Data Access</label>
                         html += '<div class="glimpse-hud-section glimpse-hud-section-request" data-maxValue="1000" data-warnValue="600">';
                         html += '<label class="glimpse-hud-title" for="glimpse-hud-section-request-input">Page</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-request-input"' + (state ? ' checked="checked"' : '') + ' />';
                         html += '<div class="glimpse-hud-section-inner">'; 
-                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" data-maxValue="600">' + timingSum + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Total Request</div></div>';
+                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" data-maxValue="600" title="Total request time from click to dom ready">' + timingSum + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Total Request</div></div>';
                         html += '<div class="glimpse-hud-content">';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxValue="15">' + timing.network.duration + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Network</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxValue="15" title="Total time on the network">' + timing.network.duration + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Network</div></div>';
                         html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxValue="250">' + timing.server.duration + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Server</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxValue="250" title="Total time on the server">' + timing.server.duration + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Server</div></div>';
                         html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxValue="350">' + timing.browser.duration + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Client</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxValue="350" title="Total time once client kicks in">' + timing.browser.duration + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Client</div></div>';
                         html += '</div>';
                         html += '</div>'; 
                         html += '</div>';
@@ -100,12 +99,12 @@
                         html += '<label class="glimpse-hud-title" for="glimpse-hud-section-mvc-input">MVC</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-mvc-input"' + (state ? ' checked="checked"' : '') + ' />';
                         html += '<div class="glimpse-hud-section-inner">'; 
                         html += '<div class="glimpse-hud-main">';
-                        html += '<div class="glimpse-hud-value">' + Math.round(mvcData.actionExecutionTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Action</div>';
+                        html += '<div class="glimpse-hud-value" title="How long root action took to execute">' + Math.round(mvcData.actionExecutionTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Action</div>';
                         html += '</div>';
                         html += '<div class="glimpse-hud-content">';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value">' + Math.round(mvcData.viewRenderTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">View</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="How long root view took to render">' + Math.round(mvcData.viewRenderTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">View</div></div>';
                         html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail glimpse-hud-detail-top"><div class="glimpse-hud-detailtitle"><span title="MVC Controller">' + mvcData.controllerName + '</span>.<span title="MVC Action' + (!viewIsDifferent ? ' & View' : '') + '">' + mvcData.actionName + '</span>(...)' + (viewIsDifferent ? ' - <span title="View Name">' + mvcData.viewName + '</span> ' : '') + '</div><div class="glimpse-hud-detailsubtitle">' + mvcData.matchedRouteName + '</div></div>';
+                        html += '<div class="glimpse-hud-detail glimpse-hud-detail-top"><div class="glimpse-hud-detailtitle"><span title="Root Controller">' + mvcData.controllerName + '</span>.<span title="Root Action' + (!viewIsDifferent ? ' & View' : '') + '">' + mvcData.actionName + '</span>(...)' + (viewIsDifferent ? ' - <span title="Root View Name">' + mvcData.viewName + '</span> ' : '') + '</div><div class="glimpse-hud-detailsubtitle" title="Name of matched route">' + mvcData.matchedRouteName + '</div></div>';
                         //html += '<div class="glimpse-hud-detail-divider"></div>';
                         //html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Number of child actions">' + mvcData.childActionCount + '</div></div>';
                         //html += '<div class="glimpse-hud-detail-divider">/</div>';
@@ -131,17 +130,17 @@
                         html += '<div class="glimpse-hud-section glimpse-hud-section-sql" data-maxValue="1200" data-warnValue="300">';
                         html += '<label class="glimpse-hud-title" for="glimpse-hud-section-sql-input">SQL</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-sql-input"' + (state ? ' checked="checked"' : '') + ' />';
                         html += '<div class="glimpse-hud-section-inner">'; 
-                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" data-maxValue="20">' + Math.round(sqlData.queryExecutionTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Execution</div></div>';
+                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" data-maxValue="20" title="How long all your quires took to execute">' + Math.round(sqlData.queryExecutionTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Execution</div></div>';
                         html += '<div class="glimpse-hud-content">';  
                         //html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value">' + limitValue(parseInt((sqlData.connectionOpenTime / serverTime) * 100)) + '</div><div class="glimpse-hud-postfix">%</div></div>';
                         //html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxValue="300">' + Math.round(sqlData.connectionOpenTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Open</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxValue="300" title="How long all your connections where open for">' + Math.round(sqlData.connectionOpenTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Open</div></div>';
                         html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value">' + sqlData.transactionCount + '</div><div class="glimpse-hud-tooltips">Trx</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Total number of explicit transactions used">' + sqlData.transactionCount + '</div><div class="glimpse-hud-tooltips">Trx</div></div>';
                         html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value">' + sqlData.connectionCount + '</div><div class="glimpse-hud-tooltips">Conn</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Total number of connections used">' + sqlData.connectionCount + '</div><div class="glimpse-hud-tooltips">Conn</div></div>';
                         html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxValue="4">' + sqlData.queryCount + '</div><div class="glimpse-hud-tooltips">Exec</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Total number of queries found" data-maxValue="4">' + sqlData.queryCount + '</div><div class="glimpse-hud-tooltips">Exec</div></div>';
                         html += '</div>'; 
                         html += '</div>';
                         html += '</div>';
@@ -173,7 +172,7 @@
                     var html = '<div class="glimpse-hud-section glimpse-hud-section-ajax">';
                         html += '<label class="glimpse-hud-title" for="glimpse-hud-section-for-input">Ajax</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-for-input"' + (state ? ' checked="checked"' : '') + ' />';
                         html += '<div class="glimpse-hud-section-inner">'; 
-                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value glimpse-hug-ajax-count" title="Number of Ajax request">0</div></div>';
+                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value glimpse-hug-ajax-count" title="Total number of Ajax requests detected">0</div><div class="glimpse-hud-tooltips">Requests</div></div>';
                         html += '</div>'; 
                         html += '</div>';
 
@@ -188,7 +187,7 @@
                     
                     //Add it when needed
                     if (count == 1) {
-                        $('.glimpse-hud-section-ajax .glimpse-hud-section-inner').append('<div class="glimpse-hud-content"></div>') 
+                        $('.glimpse-hud-section-ajax .glimpse-hud-section-inner').append('<div class="glimpse-hud-content"></div>');
                     }
                     
                     //Deal with the record details
@@ -256,7 +255,7 @@
                 var item = $(this);
                 if (parseInt(item.text()) > parseInt(item.attr('data-maxValue'))) {
                     alert = true;
-                    item.addClass('glimpse-hud-value-alert').attr('title', 'Max allowed time \'' + item.attr('data-maxValue') + '\'');
+                    item.addClass('glimpse-hud-value-alert').attr('title', item.attr('title') + ' - Max allowed time \'' + item.attr('data-maxValue') + '\'');
                     alertDetails += item.attr('title') + '\n';
                     
                     item.closest('.glimpse-hud-section').addClass('glimpse-hud-section-alert');
