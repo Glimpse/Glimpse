@@ -174,8 +174,6 @@
                         html += '<label class="glimpse-hud-title" for="glimpse-hud-section-for-input">Ajax</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-for-input"' + (state ? ' checked="checked"' : '') + ' />';
                         html += '<div class="glimpse-hud-section-inner">'; 
                         html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value glimpse-hug-ajax-count" title="Number of Ajax request">0</div></div>';
-                        html += '<div class="glimpse-hud-content">';
-                        html += '</div>'; 
                         html += '</div>'; 
                         html += '</div>';
 
@@ -183,18 +181,21 @@
                 },
                 update = function(method, url, duration) {
                     //Set the counter
-                    $('.glimpse-hug-ajax-count').text(++count).addClass('glimpse-hud-value-update');
+                    $('.glimpse-hug-ajax-count').text(++count).addClass('glimpse-hud-value-update'); 
+                    setTimeout(function() {
+                        $('.glimpse-hug-ajax-count').removeClass('glimpse-hud-value-update');
+                    }, 2000);
+                    
+                    //Add it when needed
+                    if (count == 1) {
+                        $('.glimpse-hud-section-ajax .glimpse-hud-section-inner').append('<div class="glimpse-hud-content"></div>') 
+                    }
                     
                     //Deal with the record details
                     track(method, url, duration);
 
                     //Update graph
                     graph.generate(graphRequestStack, elements.opener().find('.glimpse-hud .glimpse-hud-section-ajax'), duration, 100);
-
-                    //Set the number to fade in/out
-                    setTimeout(function() {
-                        $('.glimpse-hug-ajax-count').removeClass('glimpse-hud-value-update');
-                    }, 2000);
                 },
                 track = function(method, url, duration) {
                     //Setup tracker timer
