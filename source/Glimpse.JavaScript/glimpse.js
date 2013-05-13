@@ -3225,21 +3225,37 @@ glimpse.tab = (function($, pubsub, data) {
         },
         loaded = function(args) {
             var html = '',
-                tabData = args.newData.data.glimpse_hud;
-
-            html += clientTimings.render(tabData.data);
-            html += mvcTimings.render(tabData.data);
-            html += sqlTimings.render(tabData.data);
-            html += ajaxRequests.render(tabData.data);
+                tabData = args.newData.data.glimpse_hud,
+                display = displayState.current();
+            
+            html += clientTimings.render(tabData.data, display[0]);
+            html += mvcTimings.render(tabData.data, display[1]);
+            html += sqlTimings.render(tabData.data, display[2]);
+            html += ajaxRequests.render(tabData.data, display[3]);
 
             elements.opener().prepend('<div class="glimpse-hud">' + html + '</div>');
 
             adjustForAlerts(elements.opener().find('.glimpse-hud'));
             graph.setup(tabData.data, elements.opener().find('.glimpse-hud')); 
+            displayState.setup();
         },
+        displayState = (function() {
+            return { 
+                setup: function () {
+                   var inputs = elements.opener().find('.glimpse-hud-section-input').change(function() {
+                       var state = [];
+                       inputs.each(function() { state.push(this.checked); });
+                       util.localStorage('glimpseHudDisplay', state);
+                   });
+                },
+                current: function () {
+                    return util.localStorage('glimpseHudDisplay') || [];
+                }
+            };
+        })(),
         clientTimings = (function() {
             var timingApi = (window.performance || window.mozPerformance || window.msPerformance || window.webkitPerformance || {}).timing,
-                render = function(tabData) {
+                render = function(tabData, state) {
                     var html = '';
 
                     tabData.request = {};
@@ -3254,7 +3270,7 @@ glimpse.tab = (function($, pubsub, data) {
                         tabData.request.requestTime = timingSum;
                         //<label class="glimpse-menu-root-item" for="glimpse-menu-root-radio-1">Data Access</label>
                         html += '<div class="glimpse-hud-section glimpse-hud-section-request" data-maxValue="1000" data-warnValue="600">';
-                        html += '<label class="glimpse-hud-title" for="glimpse-hud-section-request-input">Page</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-request-input" />';
+                        html += '<label class="glimpse-hud-title" for="glimpse-hud-section-request-input">Page</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-request-input"' + (state ? ' checked="checked"' : '') + ' />';
                         html += '<div class="glimpse-hud-section-inner">'; 
                         html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" data-maxValue="600">' + timingSum + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Total Request</div></div>';
                         html += '<div class="glimpse-hud-content">';
@@ -3294,14 +3310,14 @@ glimpse.tab = (function($, pubsub, data) {
             };
         })(),
         mvcTimings = (function() {
-            var render = function(tabData) {
+            var render = function(tabData, state) {
                     var html = '',
                         mvcData = tabData.mvc;
 
                     if (mvcData) { 
                         var viewIsDifferent = mvcData.actionName != mvcData.viewName;
                         html += '<div class="glimpse-hud-section glimpse-hud-section-mvc" data-maxValue="1500" data-warnValue="600">';
-                        html += '<label class="glimpse-hud-title" for="glimpse-hud-section-mvc-input">MVC</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-mvc-input" />';
+                        html += '<label class="glimpse-hud-title" for="glimpse-hud-section-mvc-input">MVC</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-mvc-input"' + (state ? ' checked="checked"' : '') + ' />';
                         html += '<div class="glimpse-hud-section-inner">'; 
                         html += '<div class="glimpse-hud-main">';
                         html += '<div class="glimpse-hud-value">' + Math.round(mvcData.actionExecutionTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Action</div>';
@@ -3327,13 +3343,13 @@ glimpse.tab = (function($, pubsub, data) {
             };
         })(),
         sqlTimings = (function() {
-            var render = function(tabData) {
+            var render = function(tabData, state) {
                     var html = '',
                         sqlData = tabData.sql;
 
                     if (sqlData) { 
                         html += '<div class="glimpse-hud-section glimpse-hud-section-sql" data-maxValue="1200" data-warnValue="300">';
-                        html += '<label class="glimpse-hud-title" for="glimpse-hud-section-sql-input">SQL</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-sql-input" />';
+                        html += '<label class="glimpse-hud-title" for="glimpse-hud-section-sql-input">SQL</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-sql-input"' + (state ? ' checked="checked"' : '') + ' />';
                         html += '<div class="glimpse-hud-section-inner">'; 
                         html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" data-maxValue="20">' + Math.round(sqlData.queryExecutionTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Execution</div></div>';
                         html += '<div class="glimpse-hud-content">';  
@@ -3373,9 +3389,9 @@ glimpse.tab = (function($, pubsub, data) {
 
                     return [ Math.floor(seconds), "s" ];
                 },
-                render = function() {
+                render = function(tabData, state) {
                     var html = '<div class="glimpse-hud-section glimpse-hud-section-ajax">';
-                        html += '<label class="glimpse-hud-title" for="glimpse-hud-section-for-input">Ajax</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-for-input" />';
+                        html += '<label class="glimpse-hud-title" for="glimpse-hud-section-for-input">Ajax</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-for-input"' + (state ? ' checked="checked"' : '') + ' />';
                         html += '<div class="glimpse-hud-section-inner">'; 
                         html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value glimpse-hug-ajax-count" title="Number of Ajax request">0</div></div>';
                         html += '<div class="glimpse-hud-content">';
@@ -3393,7 +3409,7 @@ glimpse.tab = (function($, pubsub, data) {
                     track(method, url, duration);
 
                     //Update graph
-                    graph.running(graphRequestStack, elements.opener().find('.glimpse-hud .glimpse-hud-section-ajax'), duration, 100);
+                    graph.generate(graphRequestStack, elements.opener().find('.glimpse-hud .glimpse-hud-section-ajax'), duration, 100);
 
                     //Set the number to fade in/out
                     setTimeout(function() {
@@ -3445,16 +3461,7 @@ glimpse.tab = (function($, pubsub, data) {
                 }, false);
                 
                 open.apply(this, arguments);
-            };
-            //XMLHttpRequest.prototype.send = function() { 
-            //    console.log('send');
-            //    console.log(this);
-                
-            //    //if (this.readyState === 4) {
-            //        update();
-            //    //}
-            //    send.apply(this, arguments);
-            //};
+            }; 
 
             return {
                 render: render
@@ -3495,7 +3502,7 @@ glimpse.tab = (function($, pubsub, data) {
 
                     util.localStorage('glimpseHudGraph', graphData);
                 },
-                running = function(graphItem, scope, value, maxValue) {
+                generate = function(graphItem, scope, value, maxValue) {
                     graphItem.push({ capped: selectValue(value, maxValue), raw: value});
                     checkSize(graphItem); 
                     
@@ -3532,7 +3539,7 @@ glimpse.tab = (function($, pubsub, data) {
 
             return {
                 setup: setup,
-                running: running
+                generate: generate
             };
         })();
         
