@@ -258,6 +258,8 @@
                     alert = true;
                     item.addClass('glimpse-hud-value-alert').attr('title', 'Max allowed time \'' + item.attr('data-maxValue') + '\'');
                     alertDetails += item.attr('title') + '\n';
+                    
+                    item.closest('.glimpse-hud-section').addClass('glimpse-hud-section-alert');
                 }
             });
             

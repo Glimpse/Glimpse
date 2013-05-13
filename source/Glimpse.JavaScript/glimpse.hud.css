@@ -11,6 +11,9 @@
     transition: all 0.3s ease;
     border-left: 11px solid #71b1d1;
 }
+.glimpse-open .glimpse-hud-section-alert {
+    border-color: #e0695c;
+}
 .glimpse-open .glimpse-hud-section:hover {
     border-color: #8BC441;
 }
