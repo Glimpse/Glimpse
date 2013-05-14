@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq; 
 
@@ -16,6 +17,21 @@ namespace Glimpse.Mvc.Tab
     // Proof of concept for heads up display (hud) bar
     public class HudPoc : AspNetTab, ITabSetup, IKey
     {
+        private IEnumerable<string> alertSettings = new List<string>
+            {
+                "hudPageRequestTime",
+                "hudPageNetworkTime",
+                "hudPageServerTime",
+                "hudPageClientTime",
+                "hudMvcActionTime",
+                "hudMvcViewTime",
+                "hudSqlTransactionCount",
+                "hudSqlConnectionCount",
+                "hudSqlQueryCount",
+                "hudSqlQueryTime",
+                "hudSqlConnectionTime"
+            };
+
         public override string Name
         {
             get { return "HUD"; }
@@ -37,6 +53,8 @@ namespace Glimpse.Mvc.Tab
             result.QueryCount = queryData.Commands.Count;
             result.ConnectionCount = queryData.Connections.Count;
             result.TransactionCount = queryData.Transactions.Count;
+
+            result.Alerts = ProcessAlerts();
 
             foreach (var command in queryData.Commands)
             {
@@ -115,6 +133,21 @@ namespace Glimpse.Mvc.Tab
             }
         }
 
+        private IDictionary<string, string> ProcessAlerts()
+        {
+            var result = new Dictionary<string, string>();
+            foreach (var alertSetting in alertSettings)
+            {
+                var value = ConfigurationManager.AppSettings[alertSetting];
+                if (!String.IsNullOrEmpty(value))
+                {
+                    result[alertSetting] = value;
+                }
+            }
+
+            return result;
+        }
+          
         private HudModel GetModel(IDataStore tabStore)
         {
             if (tabStore.Contains<HudModel>())
@@ -165,6 +198,8 @@ namespace Glimpse.Mvc.Tab
         public string MatchedRouteName { get; set; }
 
         public TimeSpan ConnectionOpenTime { get; set; }
+        
+        public IDictionary<string, string> Alerts { get; set; } 
     }
 
     public class HudModelConverter : SerializationConverter<HudModel>
@@ -195,7 +230,8 @@ namespace Glimpse.Mvc.Tab
                             { "transactionCount", obj.TransactionCount },
                             { "queryExecutionTime", obj.QueryExecutionTime },
                             { "connectionOpenTime", obj.ConnectionOpenTime },
-                        }
+                        },
+                    alert = obj.Alerts
                 };
         }
     }

@@ -3235,7 +3235,7 @@ glimpse.tab = (function($, pubsub, data) {
 
             elements.opener().prepend('<div class="glimpse-hud">' + html + '</div>');
 
-            adjustForAlerts(elements.opener().find('.glimpse-hud'));
+            adjustForAlerts(elements.opener().find('.glimpse-hud'), tabData.data);
             graph.setup(tabData.data, elements.opener().find('.glimpse-hud')); 
             displayState.setup();
         },
@@ -3271,13 +3271,13 @@ glimpse.tab = (function($, pubsub, data) {
                         html += '<div class="glimpse-hud-section glimpse-hud-section-request" data-maxValue="1000" data-warnValue="600">';
                         html += '<label class="glimpse-hud-title" for="glimpse-hud-section-request-input">Page</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-request-input"' + (state ? ' checked="checked"' : '') + ' />';
                         html += '<div class="glimpse-hud-section-inner">'; 
-                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" data-maxValue="600" title="Total request time from click to dom ready">' + timingSum + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Total Request</div></div>';
+                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" data-maxName="hudPageRequestTime" data-maxValue="600" title="Total request time from click to dom ready">' + timingSum + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Total Request</div></div>';
                         html += '<div class="glimpse-hud-content">';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxValue="15" title="Total time on the network">' + timing.network.duration + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Network</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxName="hudPageNetworkTime" data-maxValue="15" title="Total time on the network">' + timing.network.duration + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Network</div></div>';
                         html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxValue="250" title="Total time on the server">' + timing.server.duration + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Server</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxName="hudPageServerTime" data-maxValue="250" title="Total time on the server">' + timing.server.duration + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Server</div></div>';
                         html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxValue="350" title="Total time once client kicks in">' + timing.browser.duration + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Client</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxName="hudPageClientTime" data-maxValue="350" title="Total time once client kicks in">' + timing.browser.duration + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Client</div></div>';
                         html += '</div>';
                         html += '</div>'; 
                         html += '</div>';
@@ -3319,10 +3319,10 @@ glimpse.tab = (function($, pubsub, data) {
                         html += '<label class="glimpse-hud-title" for="glimpse-hud-section-mvc-input">MVC</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-mvc-input"' + (state ? ' checked="checked"' : '') + ' />';
                         html += '<div class="glimpse-hud-section-inner">'; 
                         html += '<div class="glimpse-hud-main">';
-                        html += '<div class="glimpse-hud-value" title="How long root action took to execute">' + Math.round(mvcData.actionExecutionTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Action</div>';
+                        html += '<div class="glimpse-hud-value" title="How long root Action took to execute" data-maxName="hudMvcActionTime">' + Math.round(mvcData.actionExecutionTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Action</div>';
                         html += '</div>';
                         html += '<div class="glimpse-hud-content">';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="How long root view took to render">' + Math.round(mvcData.viewRenderTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">View</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="How long root View took to render" data-maxName="hudMvcViewTime">' + Math.round(mvcData.viewRenderTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">View</div></div>';
                         html += '<div class="glimpse-hud-detail-divider"></div>';
                         html += '<div class="glimpse-hud-detail glimpse-hud-detail-top"><div class="glimpse-hud-detailtitle"><span title="Root Controller">' + mvcData.controllerName + '</span>.<span title="Root Action' + (!viewIsDifferent ? ' & View' : '') + '">' + mvcData.actionName + '</span>(...)' + (viewIsDifferent ? ' - <span title="Root View Name">' + mvcData.viewName + '</span> ' : '') + '</div><div class="glimpse-hud-detailsubtitle" title="Name of matched route">' + mvcData.matchedRouteName + '</div></div>';
                         //html += '<div class="glimpse-hud-detail-divider"></div>';
@@ -3350,17 +3350,17 @@ glimpse.tab = (function($, pubsub, data) {
                         html += '<div class="glimpse-hud-section glimpse-hud-section-sql" data-maxValue="1200" data-warnValue="300">';
                         html += '<label class="glimpse-hud-title" for="glimpse-hud-section-sql-input">SQL</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-sql-input"' + (state ? ' checked="checked"' : '') + ' />';
                         html += '<div class="glimpse-hud-section-inner">'; 
-                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" data-maxValue="20" title="How long all your quires took to execute">' + Math.round(sqlData.queryExecutionTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Execution</div></div>';
+                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" data-maxValue="20" data-maxName="hudSqlQueryTime" title="How long all your quires took to execute">' + Math.round(sqlData.queryExecutionTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Execution</div></div>';
                         html += '<div class="glimpse-hud-content">';  
                         //html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value">' + limitValue(parseInt((sqlData.connectionOpenTime / serverTime) * 100)) + '</div><div class="glimpse-hud-postfix">%</div></div>';
                         //html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxValue="300" title="How long all your connections where open for">' + Math.round(sqlData.connectionOpenTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Open</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxValue="300" data-maxName="hudSqlConnectionTime" title="How long all your connections where open for">' + Math.round(sqlData.connectionOpenTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Open</div></div>';
                         html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Total number of explicit transactions used">' + sqlData.transactionCount + '</div><div class="glimpse-hud-tooltips">Trx</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Total number of explicit transactions used" data-maxName="hudSqlTransactionCount">' + sqlData.transactionCount + '</div><div class="glimpse-hud-tooltips">Trx</div></div>';
                         html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Total number of connections used">' + sqlData.connectionCount + '</div><div class="glimpse-hud-tooltips">Conn</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Total number of connections used" data-maxName="hudSqlConnectionCount">' + sqlData.connectionCount + '</div><div class="glimpse-hud-tooltips">Conn</div></div>';
                         html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Total number of queries found" data-maxValue="4">' + sqlData.queryCount + '</div><div class="glimpse-hud-tooltips">Exec</div></div>';
+                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Total number of queries found" data-maxName="hudSqlQueryCount" data-maxValue="4">' + sqlData.queryCount + '</div><div class="glimpse-hud-tooltips">Exec</div></div>';
                         html += '</div>'; 
                         html += '</div>';
                         html += '</div>';
@@ -3467,23 +3467,16 @@ glimpse.tab = (function($, pubsub, data) {
                 render: render
             };
         })(),
-        adjustForAlerts = function(scope) {
-            var items = scope.find('[data-maxValue]'),
-                alert = false,
-                alertDetails = '';
-            items.each(function() {
-                var item = $(this);
-                if (parseInt(item.text()) > parseInt(item.attr('data-maxValue'))) {
-                    alert = true;
+        adjustForAlerts = function(scope, tabData) { 
+            for (var key in tabData.alert) {
+                var item = $(".glimpse-hud-value[data-maxName='" + key + "']");
+                
+                if (parseInt(item.text()) > parseInt(tabData.alert[key])) { 
                     item.addClass('glimpse-hud-value-alert').attr('title', item.attr('title') + ' - Max allowed time \'' + item.attr('data-maxValue') + '\'');
-                    alertDetails += item.attr('title') + '\n';
                     
                     item.closest('.glimpse-hud-section').addClass('glimpse-hud-section-alert');
                 }
-            });
-            
-            if (alert)
-                scope.append('<div class="alert" title="' + alertDetails + '"><div class="icon"></div></div>');
+            }
         },
         graph = (function() {
             var setup = function(tabData, scope) {
