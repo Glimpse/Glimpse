@@ -24,7 +24,7 @@
     transition: all 0.3s ease;
     max-width: 999px;
 }
-.glimpse-open .glimpse-hud-section-inner:hover .glimpse-hud-graph, .glimpse-open .glimpse-hud-tooltips {
+.glimpse-open .glimpse-hud-section-inner:hover .glimpse-hud-tooltips-non, .glimpse-open .glimpse-hud-tooltips {
     display: none;
 } 
 .glimpse-open .glimpse-hud-section-inner:hover .glimpse-hud-tooltips { 
@@ -177,6 +177,19 @@
 }
 .glimpse-open .glimpse-hud-graph-item.glimpse-hud-graph-item-alert { 
     background-color: #e0695c; 
+}
+.glimpse-open .glimpse-hud-bar {
+    height: 7px;
+    width:100%;
+    background-color:red;
+    margin-top: 5px;
+}
+.glimpse-open .glimpse-hud-bar > div {
+    position: relative;
+} 
+.glimpse-open .glimpse-hud-bar-item {
+    position: absolute;  
+    height: 7px;
 } 
 .glimpse-hud-section-ajax .glimpse-hud-detail-top {
     position: relative;

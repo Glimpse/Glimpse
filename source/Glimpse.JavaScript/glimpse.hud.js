@@ -48,6 +48,11 @@
                             timingSum += timing[key].duration;
                         }
                         tabData.request.requestTime = timingSum;
+                        
+                        var network = ((timing.network.duration / timingSum) * 100),
+                            server = ((timing.server.duration / timingSum) * 100),
+                            client = 100 - server - network;
+
                         html += '<div class="glimpse-hud-section glimpse-hud-section-request" data-maxValue="1000" data-warnValue="600">';
                         html += '<label class="glimpse-hud-title" for="glimpse-hud-section-request-input">Page</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-request-input"' + (state ? ' checked="checked"' : '') + ' />';
                         html += '<div class="glimpse-hud-section-inner">'; 
@@ -58,6 +63,7 @@
                         html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxName="hudPageServerTime" data-maxValue="250" title="Total time on the server">' + timing.server.duration + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Server</div></div>';
                         html += '<div class="glimpse-hud-detail-divider"></div>';
                         html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxName="hudPageClientTime" data-maxValue="350" title="Total time once client kicks in">' + timing.browser.duration + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Client</div></div>';
+                        html += '<div class="glimpse-hud-bar glimpse-hud-tooltips-non"><div><div class="glimpse-hud-bar-item" style="width: 100%;background-color: #71b1d1;"></div><div class="glimpse-hud-bar-item" style="width: ' + (network + server) + '%;background-color: #AF78DD;"></div><div class="glimpse-hud-bar-item" style="width: ' + network + '%;background-color: #FDBF45;"></div></div></div>';
                         html += '</div>';
                         html += '</div>'; 
                         html += '</div>';
@@ -126,7 +132,7 @@
                     var html = '',
                         sqlData = tabData.sql;
 
-                    if (sqlData) { 
+                    if (sqlData && sqlData.queryExecutionTime && sqlData.connectionOpenTime) { 
                         html += '<div class="glimpse-hud-section glimpse-hud-section-sql" data-maxValue="1200" data-warnValue="300">';
                         html += '<label class="glimpse-hud-title" for="glimpse-hud-section-sql-input">SQL</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-sql-input"' + (state ? ' checked="checked"' : '') + ' />';
                         html += '<div class="glimpse-hud-section-inner">'; 
@@ -289,7 +295,7 @@
                     var min = graphItem[0].capped,
                         max = graphItem[0].capped,
                         difference = 0,
-                        html = '<div class="glimpse-hud-graph">';
+                        html = '<div class="glimpse-hud-graph glimpse-hud-tooltips-non">';
                     
                     for (var i = 0; i < graphItem.length; i++) { 
                         min = Math.min(min, graphItem[i].capped);
