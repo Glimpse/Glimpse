@@ -3469,11 +3469,12 @@ glimpse.tab = (function($, pubsub, data) {
         })(),
         adjustForAlerts = function(scope, tabData) { 
             for (var key in tabData.alert) {
-                var item = $(".glimpse-hud-value[data-maxName='" + key + "']");
+                var item = $(".glimpse-hud-value[data-maxName='" + key + "']"),
+                    maxValue = tabData.alert[key];
                 
-                if (parseInt(item.text()) > parseInt(tabData.alert[key])) { 
-                    item.addClass('glimpse-hud-value-alert').attr('title', item.attr('title') + ' - Max allowed time \'' + item.attr('data-maxValue') + '\'');
-                    
+                if (parseInt(item.text()) > parseInt(maxValue)) { 
+                    item.addClass('glimpse-hud-value-alert').attr('title', item.attr('title') + ' - Max allowed time \'' + tabData.alert[key] + '\'').attr('data-maxValue', maxValue);
+
                     item.closest('.glimpse-hud-section').addClass('glimpse-hud-section-alert');
                 }
             }
@@ -3518,7 +3519,8 @@ glimpse.tab = (function($, pubsub, data) {
                     
                     for (i = 0; i < graphItem.length; i++) { 
                         var height = (((((graphItem[i].capped - min) / difference) * 100) / 5) * 4) + 20,
-                            warnClass = graphItem[i].raw > scope.attr('data-warnValue') ? ' glimpse-hud-graph-item-alert' : '';
+                            maxValue = scope.attr('data-maxValue'),
+                            warnClass = maxValue && graphItem[i].raw > maxValue ? ' glimpse-hud-graph-item-alert' : '';
                         html += '<div class="glimpse-hud-graph-item' + warnClass + '" style="left:' + (i * 3) + 'px;height:' + height + '%" title="' + graphItem[i].raw + ' ms"></div>';
                     }
 
@@ -3529,7 +3531,7 @@ glimpse.tab = (function($, pubsub, data) {
                         graphItem.shift();
                 },
                 selectValue = function(current, max) {
-                    return Math.min(current, max);
+                    return max ? Math.min(current, max) : current;
                 };
 
             return {
