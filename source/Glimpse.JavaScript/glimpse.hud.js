@@ -238,13 +238,17 @@
                 };
 
             XMLHttpRequest.prototype.open = function(method, url, async, user, pass) {
-                var startTime = new Date().getTime();
+                var startTime = new Date().getTime(),
+                    stateFunc = function() {
+                        if (this.readyState == 4)  { 
+                            update(method, url, new Date().getTime() - startTime);
+                        }
+                    };
                 
-                this.addEventListener("readystatechange", function() {
-                    if (this.readyState == 4)  { 
-                        update(method, url, new Date().getTime() - startTime);
-                    }
-                }, false);
+                if (document.addEventListener) 
+                    this.addEventListener("readystatechange", stateFunc, false);
+                else 
+                    this.attachEvent("onreadystatechange", stateFunc);
                 
                 open.apply(this, arguments);
             }; 
