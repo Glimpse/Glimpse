@@ -978,11 +978,18 @@ glimpse.render.engine.util.table = (function($) {
 // glimpse.render.engine.master.js
 (function($, engine) {
     var providers = engine._providers,
+        stack = [],
         provider = {
             build: function(data, level, forceFull, metadata, forceLimit) {
                 var result = '',
                     isArray = $.isArray(data),
                     isObject = data === Object(data);
+
+                if (isObject || isArray) {
+                    if (stack.indexOf(data) > -1)
+                        return '<em>--Circular Reference Detected--</em>';
+                    stack.push(data);
+                }
 
                 if (metadata) {
                     if (metadata.engine && providers[metadata.engine])
@@ -1005,6 +1012,9 @@ glimpse.render.engine.util.table = (function($) {
                     else 
                         result = providers.string.build(data, level, forceFull, forceLimit);
                 }
+                
+                if (isObject || isArray)
+                    stack.pop();
                 
                 return result;
             }

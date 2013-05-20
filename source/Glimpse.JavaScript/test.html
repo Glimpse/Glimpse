@@ -82,6 +82,8 @@
         <div class="glimpse"><div class="sample28 glimpse-panel"></div></div> 
         <h4>Scenario 29 (Pass)</h4>
         <div class="glimpse"><div class="sample29 glimpse-panel"></div></div> 
+        <h4>Scenario 30 (Pass)</h4>
+        <div class="glimpse"><div class="sample30 glimpse-panel"></div></div> 
     </div>
 
     <script src="./glimpse.js" type="text/javascript"></script>
@@ -268,9 +270,16 @@ glimpse.tab.register(args);
     };
 
 
+
     var process = function(scope, data, metadata) {
-        var dataPretty = formatJson(JSON.stringify(data)),
-            metadataPretty = metadata ? formatJson(JSON.stringify(metadata)) : '';
+        var dataPretty = '';
+        try {
+            dataPretty = formatJson(JSON.stringify(data));    
+        } catch(e) {
+            dataPretty = 'Sorry :( ' + e
+        } 
+        
+        var metadataPretty = metadata ? formatJson(JSON.stringify(metadata)) : '';
         
         scope.parent().before('<strong>Data</strong><pre>' + dataPretty + '</pre>' + (metadata ? '<strong>Metadata</strong><pre>' + metadataPretty + '</pre>' : ''));
 
@@ -928,7 +937,22 @@ glimpse.tab.register(args);
     ]}; 
     processHeading($('.sample29'), 'Process array with ', '');
     process($('.sample29'), data29, metaData29); 
+    
 
+    var data30Alt1 = { test: 'data1', hello: 'world1' };
+    var data30Alt2 = { test: 'data2', hello: 'world2' };
+    data30Alt2.circular = data30Alt2;
+    var data30 = {
+            'Movie': 'Star Wars',
+            'Genera/Theme': 'Science Fiction',
+            'GlimpseOn': 'True',
+            'Plot & Description': 'Luke Skywalker leaves his home planet; teams up with other rebels; and tries to save Princess Leia from the evil clutches of Darth Vader.',
+            'Other1': data30Alt1,
+            'Other2': data30Alt1,
+            'Other3': data30Alt2,
+        };
+    processHeading($('.sample30'), 'Circular reference detection');
+    process($('.sample30'), data30); 
 })(jQueryGlimpse);
     </script>
 </body>
