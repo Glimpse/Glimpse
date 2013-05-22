@@ -14,14 +14,9 @@
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET 4.0 application. For ASP.NET MVC3 support, please NuGet Glimpse.MVC3.</description>
         <summary>ASP.NET 4.0 web debugging and diagnostics tool.</summary>
         <releaseNotes>
-Welterweight release for core:
- - Majorish fix that addresses the new Glimpse.axd page telling you that a new update is available even though you just updated 
- - Majorish update which switches cache busting control from client with query string to the server using the correct headers
- - Minor fix where popup window not resizing viewable area for timeline
- - Minor update to allow FileResource to be used outside of Glimpse.Core
- - Minor fix for NuGetAttribute which ignores constructor arguments
- - Minor fix for users getting duplicate resource error message
- - Minor fix for multi-threaded tracing regression
+Flyweight release for client:
+ - Minor improvement to rendering engine to support rendering of recursive data structures 
+ - Minor update to address bug in IE8 with UriTemplates
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse diagnostics performance profiling timing</tags>
     </metadata>
