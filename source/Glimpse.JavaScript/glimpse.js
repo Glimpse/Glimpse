@@ -383,7 +383,8 @@ glimpse.settings = (function($, pubsub, util) {
 })(jQueryGlimpse, glimpse.pubsub, glimpse.util);
 // glimpse.data.js
 glimpse.data = (function($, pubsub, util) {
-    var innerBaseMetadata = { plugins : {}, resources : {} },
+    var defaultMetadata = { plugins : {}, resources : {} },
+        innerBaseMetadata = defaultMetadata,
         innerBaseData = { data : {}, metadata : innerBaseMetadata, uri : window.location.href },
         innerCurrentData = innerBaseData,
         generateRequestAddress = function (requestId) {
@@ -478,11 +479,12 @@ glimpse.data = (function($, pubsub, util) {
             }
         },
         initMetadata = function (input) {
-            pubsub.publish('action.data.metadata.changing', { metadata: input });
+            var metadata = $.extend({}, defaultMetadata, input);
+            pubsub.publish('action.data.metadata.changing', { metadata: metadata });
             
-            innerBaseMetadata = input;
+            innerBaseMetadata = metadata;
             
-            pubsub.publish('action.data.metadata.changed', { metadata: input });
+            pubsub.publish('action.data.metadata.changed', { metadata: metadata });
         },
         initData = function (input) { 
             pubsub.publish('action.data.initial.changing', { newData: input });
