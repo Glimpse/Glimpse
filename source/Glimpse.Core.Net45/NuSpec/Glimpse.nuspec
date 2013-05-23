@@ -15,8 +15,7 @@
         <summary>ASP.NET 4.0 web debugging and diagnostics tool.</summary>
         <releaseNotes>
 Flyweight release for client:
- - Minor improvement to rendering engine to support rendering of recursive data structures 
- - Minor update to address bug in IE8 with UriTemplates
+ - Minor fix to how UriTemplates handels Require
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse diagnostics performance profiling timing</tags>
     </metadata>
