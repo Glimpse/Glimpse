@@ -18,9 +18,6 @@ namespace MvcMusicStore
     {
         protected void Application_Start()
         {
-            Glimpse.Settings.Initialize.Ado();
-            Glimpse.Settings.Initialize.EF();
-
             AreaRegistration.RegisterAllAreas();
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);

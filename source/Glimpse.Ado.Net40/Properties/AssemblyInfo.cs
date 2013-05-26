@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Web;
+using Glimpse.Ado;
 using Glimpse.Core.Extensibility;
 
 [assembly: ComVisible(false)]
@@ -20,3 +22,4 @@ using Glimpse.Core.Extensibility;
 
 [assembly: InternalsVisibleTo("Glimpse.Test.Ado")]
 [assembly: NuGetPackage]
+[assembly: PreApplicationStartMethod(typeof(Initialize), "Start")]

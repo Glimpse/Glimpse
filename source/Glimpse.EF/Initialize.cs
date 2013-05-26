@@ -4,8 +4,8 @@ namespace Glimpse.EF
 {
     public static class Initialize
     {
-        public static void EF(this Glimpse.Core.Setting.Initializer initializer)
-        { 
+        public static void Start()
+        {
             EntityFrameworkExecutionBlock.Instance.Execute();
         }
     }

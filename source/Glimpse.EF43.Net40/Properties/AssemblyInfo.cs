@@ -1,7 +1,9 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Web;
 using Glimpse.Core.Extensibility;
+using Glimpse.EF;
 
 [assembly: ComVisible(false)]
 [assembly: Guid("2151cc9c-dec9-419b-851a-da5aaf694c95")]
@@ -20,3 +22,4 @@ using Glimpse.Core.Extensibility;
 
 [assembly: InternalsVisibleTo("Glimpse.Test.Ado")]
 [assembly: NuGetPackage]
+[assembly: PreApplicationStartMethod(typeof(Initialize), "Start")]
