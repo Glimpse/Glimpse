@@ -20,9 +20,11 @@ Pinweight release for Ado:
         <tags>ASP.NET Web WebForms Glimpse ADO ADO.NET SQL performance profiling timing diagnostics</tags>
         <dependencies>
           <dependency id="Glimpse" version="1.3.1" />
+          <dependency id="WebActivator" version="1.5" />
         </dependencies>
     </metadata>
     <files>
+        <file src="content\**\*" target="content" />
         <file src="tools\*.*" target="tools" />
         <file src="lib\net35\*.*" target="lib\net35" />
         <file src="lib\net40\*.*" target="lib\net40" />
