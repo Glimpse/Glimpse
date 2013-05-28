@@ -40,7 +40,7 @@ namespace Glimpse.Test.Core.Resource
             var guid = Guid.Parse("321caff1-f442-4dbb-8c5b-3ed528cde3fd");
             var metadataMock = new Mock<IRequestMetadata>();
             var persistenceStoreMock = new Mock<IReadOnlyPersistenceStore>();
-            persistenceStoreMock.Setup(ps => ps.GetByRequestId(guid)).Returns(new GlimpseRequest(guid, metadataMock.Object, new Dictionary<string, TabResult>(), TimeSpan.FromMilliseconds(0)));
+            persistenceStoreMock.Setup(ps => ps.GetByRequestId(guid)).Returns(new GlimpseRequest(guid, metadataMock.Object, new Dictionary<string, TabResult>(), new Dictionary<string, TabResult>(), TimeSpan.FromMilliseconds(0)));
             var contextMock = new Mock<IResourceContext>();
             contextMock.Setup(c => c.Parameters).Returns(new Dictionary<string, string> { { ResourceParameter.RequestId.Name, guid.ToString() }, { ResourceParameter.Callback.Name, "console.log" } });
             contextMock.Setup(c => c.PersistenceStore).Returns(persistenceStoreMock.Object);
@@ -58,7 +58,7 @@ namespace Glimpse.Test.Core.Resource
             var guid = Guid.Parse("321caff1-f442-4dbb-8c5b-3ed528cde3fd");
             var metadataMock = new Mock<IRequestMetadata>();
             var persistenceStoreMock = new Mock<IReadOnlyPersistenceStore>();
-            persistenceStoreMock.Setup(ps => ps.GetByRequestId(guid)).Returns(new GlimpseRequest(guid, metadataMock.Object, new Dictionary<string, TabResult>(), TimeSpan.FromMilliseconds(0)));
+            persistenceStoreMock.Setup(ps => ps.GetByRequestId(guid)).Returns(new GlimpseRequest(guid, metadataMock.Object, new Dictionary<string, TabResult>(), new Dictionary<string, TabResult>(), TimeSpan.FromMilliseconds(0)));
             var contextMock = new Mock<IResourceContext>();
             contextMock.Setup(c => c.Parameters).Returns(new Dictionary<string, string> { { ResourceParameter.RequestId.Name, "Not a real guid" } });
             contextMock.Setup(c => c.PersistenceStore).Returns(persistenceStoreMock.Object);

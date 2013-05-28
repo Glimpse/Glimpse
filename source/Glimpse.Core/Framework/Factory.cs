@@ -319,6 +319,17 @@ namespace Glimpse.Core.Framework
             return CreateDiscoverableCollection<ITab>(Configuration.Tabs);
         }
 
+        public ICollection<IDisplay> InstantiateDisplays()
+        {
+            ICollection<IDisplay> displays;
+            if (TryAllInstancesFromServiceLocators(out displays))
+            {
+                return displays;
+            }
+
+            return CreateDiscoverableCollection<IDisplay>(Configuration.Displays);
+        }
+
         /// <summary>
         /// Instantiates a collection of <see cref="IRuntimePolicy"/>s.
         /// </summary>
@@ -425,13 +436,14 @@ namespace Glimpse.Core.Framework
             var resources = InstantiateResources();
             var serializer = InstantiateSerializer();
             var tabs = InstantiateTabs();
+            var displays = InstantiateDisplays();
             var runtimePolicies = InstantiateRuntimePolicies();
             var defaultResource = InstantiateDefaultResource();
             var proxyFactory = InstantiateProxyFactory();
             var messageBroker = InstantiateMessageBroker();
             var endpointBaseUri = InstantiateBaseResourceUri();
 
-            return new GlimpseConfiguration(frameworkProvider, endpointConfiguration, clientScripts, logger, policy, htmlEncoder, persistenceStore, inspectors, resources, serializer, tabs, runtimePolicies, defaultResource, proxyFactory, messageBroker, endpointBaseUri, timerStrategy, runtimePolicyStrategy);
+            return new GlimpseConfiguration(frameworkProvider, endpointConfiguration, clientScripts, logger, policy, htmlEncoder, persistenceStore, inspectors, resources, serializer, tabs, displays, runtimePolicies, defaultResource, proxyFactory, messageBroker, endpointBaseUri, timerStrategy, runtimePolicyStrategy);
         }
 
         /// <summary>

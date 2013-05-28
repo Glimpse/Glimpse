@@ -15,10 +15,11 @@ namespace Glimpse.Core.Framework
         /// <param name="requestMetadata">The request metadata.</param>
         /// <param name="tabData">The plugin data.</param>
         /// <param name="duration">The duration.</param>
-        public GlimpseRequest(Guid requestId, IRequestMetadata requestMetadata, IDictionary<string, TabResult> tabData, TimeSpan duration)
+        public GlimpseRequest(Guid requestId, IRequestMetadata requestMetadata, IDictionary<string, TabResult> tabData, IDictionary<string, TabResult> displayData, TimeSpan duration)
         {
             RequestId = requestId;
             TabData = tabData;
+            DisplayData = displayData;
             Duration = duration;
 
             DateTime = DateTime.Now;
@@ -132,6 +133,8 @@ namespace Glimpse.Core.Framework
         /// The tab data.
         /// </value>
         public IDictionary<string, TabResult> TabData { get; set; }
+
+        public IDictionary<string, TabResult> DisplayData { get; set; }
 
         /// <summary>
         /// Gets or sets the user agent for the request.

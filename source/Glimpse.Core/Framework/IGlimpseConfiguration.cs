@@ -70,6 +70,9 @@ namespace Glimpse.Core.Framework
         /// <value>The tabs.</value>
         ICollection<ITab> Tabs { get; }
 
+        [Obsolete]
+        ICollection<IDisplay> Displays { get; }
+
         /// <summary>
         /// Gets the runtime policies.
         /// </summary>

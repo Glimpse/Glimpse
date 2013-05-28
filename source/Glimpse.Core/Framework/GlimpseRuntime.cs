@@ -104,6 +104,23 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        private IDictionary<string, TabResult> DisplayResultsStore
+        {
+            get
+            {
+                var requestStore = Configuration.FrameworkProvider.HttpRequestStore;
+                var result = requestStore.Get<IDictionary<string, TabResult>>(Constants.DisplayResultsDataStoreKey);
+
+                if (result == null)
+                {
+                    result = new Dictionary<string, TabResult>();
+                    requestStore.Set(Constants.DisplayResultsDataStoreKey, result);
+                }
+
+                return result;
+            }
+        }
+
         /// <summary>
         /// Begins Glimpse's processing of a Http request.
         /// </summary>
@@ -158,6 +175,7 @@ namespace Glimpse.Core.Framework
             }
 
             ExecuteTabs(RuntimeEvent.EndRequest);
+            ExecuteDisplays();
 
             Guid requestId;
             Stopwatch stopwatch;
@@ -177,7 +195,7 @@ namespace Glimpse.Core.Framework
             {
                 var persistenceStore = Configuration.PersistenceStore;
 
-                var metadata = new GlimpseRequest(requestId, requestMetadata, TabResultsStore, stopwatch.Elapsed);
+                var metadata = new GlimpseRequest(requestId, requestMetadata, TabResultsStore, DisplayResultsStore, stopwatch.Elapsed);
 
                 try
                 {
@@ -514,6 +532,41 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        private void ExecuteDisplays()
+        {
+            var runtimeContext = Configuration.FrameworkProvider.RuntimeContext;
+            var messageBroker = Configuration.MessageBroker;
+
+            var displayResultsStore = DisplayResultsStore;
+            var logger = Configuration.Logger;
+
+            foreach (var display in Configuration.Displays)
+            {
+                TabResult result; // TODO: Rename now that it is no longer *just* tab results
+                var key = CreateKey(display);
+                try
+                {
+                    var displayContext = new TabContext(runtimeContext, GetTabStore(key), logger, messageBroker); // TODO: Do we need a DisplayContext?
+                    var displayData = display.GetData(displayContext);
+
+                    result = new TabResult(display.Name, displayData);
+                }
+                catch (Exception exception)
+                {
+                    result = new TabResult(display.Name, exception.ToString());
+                    logger.Error(Resources.ExecuteTabError, exception, key);
+                }
+
+                if (displayResultsStore.ContainsKey(key))
+                {
+                    displayResultsStore[key] = result;
+                }
+                else
+                {
+                    displayResultsStore.Add(key, result);
+                }
+            }
+        }
         private void PersistMetadata()
         {
             var metadata = new GlimpseMetadata { Version = Version };

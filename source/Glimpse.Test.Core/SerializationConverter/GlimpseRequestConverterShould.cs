@@ -20,7 +20,7 @@ namespace Glimpse.Test.Core.SerializationConverter
             requestMock.Setup(r => r.ResponseContentType).Returns(@"text/html");
             requestMock.Setup(r => r.GetHttpHeader(Constants.UserAgentHeaderName)).Returns(@"FireFox");
 
-            var metadata = new GlimpseRequest(Guid.NewGuid(), requestMock.Object, new Dictionary<string, TabResult>(), TimeSpan.FromMilliseconds(55));
+            var metadata = new GlimpseRequest(Guid.NewGuid(), requestMock.Object, new Dictionary<string, TabResult>(), new Dictionary<string, TabResult>(), TimeSpan.FromMilliseconds(55));
             var converter = new GlimpseRequestConverter();
 
             var obj = converter.Convert(metadata);

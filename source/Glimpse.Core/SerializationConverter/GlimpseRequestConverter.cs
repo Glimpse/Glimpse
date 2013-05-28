@@ -30,6 +30,7 @@ namespace Glimpse.Core.SerializationConverter
                            { "contentType", request.ResponseContentType },
                            { "statusCode", request.ResponseStatusCode },
                            { "data", request.TabData },
+                           { "hud", request.DisplayData },
                            { "userAgent", request.UserAgent },
                        };
         }

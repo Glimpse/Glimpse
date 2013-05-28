@@ -160,6 +160,13 @@ namespace Glimpse.Core.Configuration
             set { base["tabs"] = value; }
         }
 
+        [ConfigurationProperty("displays")]
+        public DiscoverableCollectionElement Displays
+        {
+            get { return (DiscoverableCollectionElement)base["displays"]; }
+            set { base["displays"] = value; }
+        }
+
         /// <summary>
         /// Gets or sets the collection of <see cref="IRuntimePolicy"/>s that Glimpse will use to determine how it can manipulate any given Http response.
         /// </summary>

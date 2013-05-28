@@ -76,6 +76,8 @@ namespace Glimpse.Core
         /// </remarks>
         internal const string TabResultsDataStoreKey = "__GlimpseTabResults";
 
+        internal const string DisplayResultsDataStoreKey = "__GlimpseDisplayResults";
+
         /// <summary>
         /// The name of the Http request header which contains the client's user agent string as defined in <see href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.43">Section 14.43 of RFC 2616 - Hypertext Transfer Protocol (HTTP/1.1)</see>.
         /// </summary>

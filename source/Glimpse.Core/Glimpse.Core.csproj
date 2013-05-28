@@ -91,6 +91,7 @@
     <Compile Include="Extensibility\ExecutionTimer.cs" />
     <Compile Include="Extensibility\IAlternateType.cs" />
     <Compile Include="Extensibility\IConfigurable.cs" />
+    <Compile Include="Extensibility\IDisplay.cs" />
     <Compile Include="Extensibility\IExecutionTimer.cs" />
     <Compile Include="Extensibility\IKey.cs" />
     <Compile Include="Extensibility\ILayoutControl.cs" />

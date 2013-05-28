@@ -25,6 +25,7 @@ namespace Glimpse.Core.Framework
         private ICollection<IRuntimePolicy> runtimePolicies;
         private ISerializer serializer;
         private ICollection<ITab> tabs;
+        private ICollection<IDisplay> displays;
         private Func<RuntimePolicy> runtimePolicyStrategy;
 
         /// <summary>
@@ -61,6 +62,7 @@ namespace Glimpse.Core.Framework
             ICollection<IResource> resources,
             ISerializer serializer,
             ICollection<ITab> tabs,
+            ICollection<IDisplay> displays,
             ICollection<IRuntimePolicy> runtimePolicies,
             IResource defaultResource,
             IProxyFactory proxyFactory,
@@ -114,6 +116,11 @@ namespace Glimpse.Core.Framework
                 throw new ArgumentNullException("tabs");
             }
 
+            if (displays == null)
+            {
+                throw new ArgumentNullException("displays");
+            }
+
             if (runtimePolicies == null)
             {
                 throw new ArgumentNullException("runtimePolicies");
@@ -159,6 +166,7 @@ namespace Glimpse.Core.Framework
             Resources = resources;
             Serializer = serializer;
             Tabs = tabs;
+            Displays = displays;
             RuntimePolicies = runtimePolicies;
             DefaultRuntimePolicy = defaultRuntimePolicy;
             DefaultResource = defaultResource;
@@ -574,6 +582,24 @@ namespace Glimpse.Core.Framework
                 }
 
                 tabs = value;
+            }
+        }
+
+        public ICollection<IDisplay> Displays
+        {
+            get
+            {
+                return displays;
+            }
+
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException("value");
+                }
+
+                displays = value;
             }
         }
 
