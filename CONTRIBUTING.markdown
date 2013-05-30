@@ -11,10 +11,11 @@ When reporting a bug or issue, please include all pertinent information. This ty
 * If the problem is UI related include the browser and its version _(Example: IE9)_
 * Steps to reproduce the bug/example code
 
-It is also quite helpful to include the relevant portions of Glimpse’s log file. You can enable Glimpse logging by adding the `loggingEnabled` attribute in web.config.
+It is also quite helpful to include the relevant portions of Glimpse's log file. You can enable Glimpse logging by adding the `<logging>` tag in web.config. Additional information can be found in [the configuration page](https://github.com/Glimpse/Glimpse/wiki/Configuration#logging).
 
 ````
-	<glimpse enabled="true" loggingEnabled="true">
+	<glimpse enabled="true">
+		<logging level="Trace" />
 		<!-- ... -->
 	</glimpse>
 ````
