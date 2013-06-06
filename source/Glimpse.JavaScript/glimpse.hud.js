@@ -371,7 +371,6 @@
                                 }
                             }
                         },
-                        test = '',
                         processContentType = function(type) {
                             return type.substring(0, type.indexOf(';'));
                         },
@@ -393,9 +392,7 @@
                             setTimeout(function() {
                                 counter.removeClass('glimpse-hud-value-update');
                             }, 2000);
-
-                            test += 'a';
-
+                             
                             //Update data records
                             var rowClass = (status == 304 ? ' glimpse-hud-quite' : !(status >= 200 && status < 300) ? ' glimpse-hud-error' : '');
                             recordItem('<div class="glimpse-hud-listing-row glimpse-hud-value' + rowClass + '"><div class="glimpse-hud-data glimpse-hud-quite glimpse-data-ajax-method">' + method + '</div><div class="glimpse-hud-data glimpse-hud-listing-overflow glimpse-data-ajax-uri" title="' + uri + '">' + uri + test + '</div><div class="glimpse-data-ajax-duration"><span class="glimpse-hud-data">' + duration + '</span><span class="glimpse-hud-postfix">ms</span></div></div>', '.glimpse-hud-section-ajax .glimpse-data-ajax-summary', summaryStack, 2);
