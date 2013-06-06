@@ -26,15 +26,16 @@
 </ul>
 
 @section JavaScript{
-<script type="text/javascript">
-    $(document).ready(function () {
-        setInterval(function () {
-            $.get('/Home/News', function (result) {
-                $('#news').fadeOut(function () {
-                    $(this).html(result).fadeIn();
+    <script type="text/javascript">
+        var i = 0;
+        $(document).ready(function () {
+            setInterval(function () { 
+                $.get('/Home/News', function (result) {
+                    $('#news').fadeOut(function () {
+                        $(this).html(result).fadeIn();
+                    });
                 });
-            });
-        }, 10000);
-    });
-</script>
+            }, 10000);
+        });
+    </script>
 }

@@ -34,7 +34,7 @@
     position: fixed;
     right: 0;
     bottom: 0;
-    height: 30px;
+    height: 34px;
     min-width: 54px;
     background: #3c454f; 
     color: #fff; 
@@ -50,6 +50,9 @@
     height: 30px;
     width: 39px;
     margin: 0 8px;
+}
+.glimpse-open .glimpse-icon {
+    height: 34px;
 }
 .glimpse-holder {
     display: none;

@@ -1,7 +1,6 @@
 ﻿.glimpse-open .glimpse-hud { 
     padding: 0 5px 0 0;
-    float: left;
-    overflow-y: hidden;
+    float: left; 
 }
 .glimpse-open .glimpse-hud-section {
     float: left; 
@@ -10,36 +9,8 @@
     -o-transition: all 0.3s ease;
     transition: all 0.3s ease;
     border-left: 11px solid #71b1d1;
-}
-.glimpse-open .glimpse-hud-section-alert {
-    border-color: #e0695c;
-}
-.glimpse-open .glimpse-hud-section:hover {
-    border-color: #8BC441;
-}
-.glimpse-open .glimpse-hud-section-inner {  
-    -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
-    transition: all 0.3s ease;
-    max-width: 999px;
-}
-.glimpse-open .glimpse-hud-section-inner:hover .glimpse-hud-tooltips-non, .glimpse-open .glimpse-hud-tooltips {
-    display: none;
-} 
-.glimpse-open .glimpse-hud-section-inner:hover .glimpse-hud-tooltips { 
-    display: block;  
-}
-.glimpse-open .glimpse-hud-tooltips {
-    color: #bcbcbc;  
-    font-size: 7px;
-    position: absolute;
-}
-.glimpse-open .glimpse-hud-main .glimpse-hud-tooltips {
-    top: 18px;
-}
-.glimpse-open .glimpse-hud-content .glimpse-hud-tooltips {
-    top: 2px;
+    height: 34px;
+    position: relative;
 }
 .glimpse-open .glimpse-hud-title { 
     position: absolute;
@@ -49,32 +20,43 @@
     top: 2px;
     color: white;
     text-transform: uppercase; 
-    -webkit-transform-origin: 8px 18px;
-    -moz-transform-origin: 8px 18px;
-    -ms-transform-origin: 8px 18px;
-    -o-transform-origin: 8px 18px;
+    -webkit-transform-origin: 10px 20px;
+    -moz-transform-origin: 10px 20px;
+    -ms-transform-origin: 10px 20px;
+    -o-transform-origin: 10px 20px;
     -webkit-transform: rotate(270deg);
     -moz-transform: rotate(270deg);
     -ms-transform: rotate(270deg);
     -o-transform: rotate(270deg);
     cursor: pointer;
 }
+.glimpse-open .glimpse-hud-section-inner {  
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    max-width: 999px;
+    margin-top: -1px;
+}
 .glimpse-open .glimpse-hud-section-input {
     display: none;
+    font-size: 12px;
 }
 .glimpse-open .glimpse-hud-section-input:checked ~ .glimpse-hud-section-inner {
     max-width: 0px;
     overflow: hidden;
 } 
-.glimpse-open .glimpse-hud-postfix {
-    float: left;
-    line-height: 100%;
-    padding-left: 2px;
-    color: #bcbcbc; 
+.glimpse-open .glimpse-hud-detail {
+    display: inline-block;
+    padding: 0 10px;
 }
-.glimpse-open .glimpse-hud-value {
-    line-height: 90%;
-    float: left;
+.glimpse-open .glimpse-hud-section-inner .glimpse-hud-detail:first-child { 
+    padding-left: 15px;
+}
+.glimpse-open .glimpse-hud-section-inner .glimpse-hud-detail:last-child { 
+    padding-right: 20px;
+}
+.glimpse-open .glimpse-hud-data {
     -webkit-transition: color 0.3s ease;
     -moz-transition: color 0.3s ease;
     -o-transition: color 0.3s ease;
@@ -83,123 +65,221 @@
 .glimpse-open .glimpse-hud-value-update {
     color: #71b1d1;
 }
-.glimpse-open .glimpse-hud-value-alert {
-    color: #e0695c;
-}
-.glimpse-open .glimpse-hud-detail {
-    float: left;
-}
-.glimpse-open .glimpse-hud-main {
-    float: left;
-    position: relative;
-    padding-left: 10px;
-    min-width: 20px;
-}
-.glimpse-open .glimpse-hud-main .glimpse-hud-detail {
-    float: left;
-    padding: 3px 10px 0 0;
-}
-.glimpse-open .glimpse-hud-main .glimpse-hud-value {
-    font-size: 23px;
-    height: 30px;
-}
-.glimpse-open .glimpse-hud-main .glimpse-hud-postfix { 
-    padding-left: 3px; 
-}
-.glimpse-open .glimpse-hud-content {
-    float: left;
-    position: relative;
-    padding: 0 20px 0 10px;
-}
-.glimpse-open .glimpse-hud-content .glimpse-hud-detail {
-    padding-top: 14px; 
-}
-.glimpse-open .glimpse-hud-content .glimpse-hud-detail-top {
-    padding-top: 1px; 
-}
-.glimpse-open .glimpse-hud-content .glimpse-hud-detail.glimpse-hud-detail-small {
-    padding-top: 17px;
-}
-.glimpse-open .glimpse-hud-content .glimpse-hud-detail .glimpse-hud-postfix {
-    font-size: 10px;
-}
-.glimpse-open .glimpse-hud-content .glimpse-hud-detail-small .glimpse-hud-postfix {
-    font-size: 6px;
-}
-.glimpse-open .glimpse-hud-content .glimpse-hud-detail .glimpse-hud-value {
-    font-size: 14px;
-}
-.glimpse-open .glimpse-hud-content .glimpse-hud-detail-small .glimpse-hud-value {
-    font-size: 10px;
-}
-.glimpse-open .glimpse-hud-content .glimpse-hud-detail-divider {
-    padding: 14px 10px 0 10px;
-    color: #bcbcbc;  
-}
-.glimpse-open .glimpse-hud-content div.glimpse-hud-detail-divider {
-    float: left;
-}
-.glimpse-open .glimpse-hud-detail .glimpse-hud-detailtitle {
-    font-size: 13px;
-}
-.glimpse-open .glimpse-hud-detail .glimpse-hud-detailsubtitle {
-    font-size: 10px;
+.glimpse-open .glimpse-hud-detail-right .glimpse-hud-header {
     text-align: right;
 }
-.glimpse-open .glimpse-hud .alert {
-    float: left;
-    margin: 8px 0 0 15px;
-    display: none;
+.glimpse-open .glimpse-hud-detail-large .glimpse-hud-data {
+    font-weight: bold;
 }
-.glimpse-open .glimpse-hud .super {
-    position: relative;
-    top: -2px;
-    line-height: 0.5em;
-    font-size: 0.8em;
-    margin-left: 2px;
+.glimpse-open .glimpse-hud-detail-extra-large, .glimpse-hud-detail-extra-large span {
+    font-size: 2em;
+    line-height: 100%;
 }
-.glimpse-open .glimpse-hud .quiet { 
-    color: #bcbcbc; 
+.glimpse-open .glimpse-hud-detail-large, .glimpse-hud-detail-large span {
+    font-size: 1.45em;
+    line-height: 100%;
 }
-.glimpse-open .glimpse-hud-graph {
-    width: 45px; 
-    position: absolute;
-    height: 8px;
-    top: 20px;
+.glimpse-open .glimpse-hud-detail-normal, .glimpse-hud-detail-normal span, .glimpse-hud-detail-normal div {
+    font-size: 1.2em;
+    line-height: 100%;
+}
+.glimpse-open .glimpse-hud-detail-small, .glimpse-hud-detail-small span, .glimpse-hud-detail-small div {
+    font-size: 1.1em;
+} 
+.glimpse-open .glimpse-hud-value {
+    font-size: 1em;
+    line-height: 100%;
+    margin-top: -3px;
+}
+.glimpse-open .glimpse-hud-header { 
+    opacity: 0.6;
+    font-size: 0.7em;
+    line-height: 100%;
+}
+.glimpse-open .glimpse-hud-detail-extra-large .glimpse-hud-header {
+    font-size: 0.5em;
+}
+.glimpse-open .glimpse-hud-detail-large .glimpse-hud-header {
+    font-size: 0.6em;
+}
+.glimpse-open .glimpse-hud-prefix, .glimpse-open .glimpse-hud-postfix, .glimpse-open .glimpse-hud-spacer, .glimpse-open .glimpse-hud-plain { 
     opacity: 0.4;
+    font-size: 0.9em;
 }
-.glimpse-open .glimpse-hud-graph-item {
-    width: 2px;
-    background-color: white;
-    bottom: 1px;
+.glimpse-open .glimpse-hud-postfix {
+    padding-left: 2px;
+}
+.glimpse-open .glimpse-hud-prefix {
+    padding-right: 2px;
+}
+.glimpse-open .glimpse-hud-spacer {
+    padding: 0 10px;
+}
+.glimpse-open .glimpse-hud-quite, .glimpse-open .glimpse-hud-quite * {
+    opacity: 0.6;
+}
+.glimpse-open .glimpse-hud-error, .glimpse-open .glimpse-hud-error * {
+    color: #FF8C80;
+}
+.glimpse-open .glimpse-hud-section-inner:hover ~ .glimpse-hud-popup, .glimpse-open .glimpse-hud-popup:hover {
+    max-height: 999px;
+}
+.glimpse-open .glimpse-hud-popup {
+    background-color: #3c454f;
+    border-left: 11px solid #71b1d1;
     position: absolute;
-    height: 100%;
+    left: -11px;
+    right: 0;
+    z-index: 1;
+    bottom: 0px;
+    max-height: 0px;
+    -webkit-transition: max-height 0.3s ease 1s;
+    -moz-transition: max-height 0.3s ease 1s;
+    -o-transition: max-height 0.3s ease 1s;
+    transition: max-height 0.3s ease 1s;
 }
-.glimpse-open .glimpse-hud-graph-item.glimpse-hud-graph-item-alert { 
-    background-color: #e0695c; 
+.glimpse-open .glimpse-hud-popup-clear {
+    clear: both;
 }
-.glimpse-open .glimpse-hud-bar {
-    height: 7px;
-    width:100%;
-    background-color:red;
-    margin-top: 5px;
+.glimpse-open .glimpse-hud-popup-header {
+    margin-bottom: 5px;
+}
+.glimpse-open .glimpse-hud-popup .glimpse-hud-detail-extra-large {
+    margin-left: -2px;
+}
+.glimpse-open .glimpse-hud-popup-inner {
+    padding: 10px 15px;
+} 
+.glimpse-open .glimpse-hud-popup .glimpse-hud-detail {
+    padding: 0;
+}  
+ .glimpse-open .glimpse-hud-bar {
+    height: 12px;
+    width:100%; 
+    margin: 5px 0 10px;
 }
 .glimpse-open .glimpse-hud-bar > div {
     position: relative;
 } 
 .glimpse-open .glimpse-hud-bar-item {
     position: absolute;  
-    height: 7px;
+    height: 12px;
+    min-width: 1px;
 } 
-.glimpse-hud-section-ajax .glimpse-hud-detail-top {
+.glimpse-open .glimpse-hud-summary {
+    width: auto;
+} 
+.glimpse-open .glimpse-hud-summary-left {
+    float: left;
+} 
+.glimpse-open .glimpse-hud-summary-right {
+    float: right;
+} 
+.glimpse-open .glimpse-hud-summary tr {
+    vertical-align: bottom;
+}
+.glimpse-open .glimpse-hud-summary tr:first-child {
+    height: 65px;
+}
+.glimpse-open .glimpse-hud-summary tr:last-child {
+    height: 46px;
+}
+.glimpse-open .glimpse-hud-summary th {
+    font-weight: normal;
+}
+.glimpse-open .glimpse-hud-summary td .glimpse-hud-detail {
+    float: right;
+} 
+.glimpse-open .glimpse-hud-listing {
+    max-width: 100%;
+} 
+.glimpse-open .glimpse-hud-popup .glimpse-hud-listing { 
+    margin-top: 10px;
+} 
+.glimpse-open .glimpse-hud-listing td {
+    font-size: 1.025em;
+    line-height: 100%;
+    padding-top: 3px;
+} 
+.glimpse-open .glimpse-hud-listing-row {
+    padding: 2px 0;
+} 
+.glimpse-open .glimpse-hud-listing-row > div {
+    display: inline-block;
+} 
+.glimpse-open .glimpse-hud-listing tr:first-child td {
+    padding-top: 1px;
+}
+.glimpse-open .glimpse-hud-listing thead th {
+    white-space: nowrap;
+    opacity: 0.6;
+    font-weight: normal;
+    color: white;
+    line-height: 100%;
+    padding-bottom: 5px;
+} 
+.glimpse-open .glimpse-hud-listing-overflow {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+} 
+.glimpse-open td.glimpse-hud-listing-value {
+    text-align: right;
+    font-family: Consolas, monospace, serif;
+    opacity: 0.85;
+} 
+.glimpse-open th.glimpse-hud-listing-value {
+    text-align: right;
+} 
+.glimpse-open .glimpse-hud .glimpse-data-childless-duration, .glimpse-open .glimpse-hud .glimpse-data-duration, .glimpse-open .glimpse-hud .glimpse-data-content-type {
+    width:90px;
+}
+.glimpse-open .glimpse-hud .glimpse-data-size {
+    width:60px;
+}
+.glimpse-open .glimpse-hud .glimpse-data-content-method {
+    width:40px;
+}
+.glimpse-open .glimpse-hud .glimpse-data-content-type, .glimpse-open .glimpse-hud .glimpse-data-content-time {
+    text-align: right;
+}
+.glimpse-open .glimpse-hud .glimpse-data-childless-start-point {
+    width:100px;
+}
+.glimpse-open .glimpse-hud .glimpse-data-request-parts {
+    margin-top:15px;
+}
+.glimpse-open .glimpse-hud .glimpse-data-wire-part {
+    width:35%;
+}
+.glimpse-open .glimpse-hud .glimpse-data-server-part {
+    width:30%
+}
+.glimpse-open .glimpse-hud .glimpse-data-client-part {
+    text-align:right;
+    width:33%
+}
+.glimpse-open .glimpse-hud .glimpse-data-ajax-method {
+    width: 30px;
+    text-align: right;
+}
+.glimpse-open .glimpse-hud .glimpse-data-ajax-uri {
+    max-width: 130px;
+    padding: 0 25px;
+} 
+.glimpse-open .glimpse-hud .glimpse-hud-section-ajax .glimpse-hud-listing-row { 
     position: relative;
     top: -20px;
     opacity: 0;
     -webkit-transition: all 0.6s ease;
-    -moz-transition:    all 0.6s ease;
-    -o-transition:      all 0.6s ease;
+    -moz-transition: all 0.6s ease;
+    -o-transition: all 0.6s ease;
+    transition: all 0.6s ease;
 }
-.glimpse-hud-section-ajax .glimpse-hud-detail-top.added {
+.glimpse-open .glimpse-hud .glimpse-hud-section-ajax .glimpse-hud-listing-row.added {
     top: 0px;
     opacity: 1;
 }
+.glimpse-open .glimpse-hud .glimpse-data-ajax-detail tbody tr:first-child td {
+    padding-top: 10px; 
+} 

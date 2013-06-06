@@ -611,7 +611,7 @@ glimpse.elements = (function($) {
 // glimpse.render.js
 glimpse.render = (function($, pubsub, util, data, settings) {
     var templates = {
-            css: '.glimpse, .glimpse *, .glimpse a, .glimpse td, .glimpse th, .glimpse table {font-family: "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;background-color: transparent;border: 0px;text-align: left;padding: 0;margin: 0;}.glimpse table {min-width: 0;border-collapse: collapse;border-spacing: 0;}.glimpse a, .glimpse a:hover, .glimpse a:visited, .glimpse-link {color: #2200C1;text-decoration: underline;font-weight: normal;cursor: pointer;-webkit-transition: color 0.3s ease;-moz-transition: color 0.3s ease;-o-transition: color 0.3s ease;transition: color 0.3s ease;}.glimpse a:active, .glimpse-link:active {color: #c11;text-decoration: underline;font-weight: normal;}.glimpse th {font-weight: bold;} .glimpse-open {z-index: 100010;position: fixed;right: 0;bottom: 0;height: 30px;min-width: 54px;background: #3c454f;color: #fff; }.glimpse-open td, .glimpse-open span, .glimpse-open div {color: #fff;font-size: 13px;line-height: 13px;}.glimpse-icon {cursor: pointer;background: url() no-repeat -127px -38px;height: 30px;width: 39px;margin: 0 8px;}.glimpse-holder {display: none;z-index: 100010 !important;height: 0;position: fixed;bottom: 0;left: 0;width: 100%;background-color: #fff;-moz-box-shadow: 0 0 5px #888;-webkit-box-shadow: 0 0 5px#888;box-shadow: 0 0 5px #888;}.glimpse-content {position: relative;font-size: 11px;line-height: 13px;}.glimpse-bar {background: #3c454f;color: #fff;height: 30px;position: relative;font-size: 13px;line-height: 15px;}.glimpse-bar .glimpse-icon {margin-left: 10px;float: left;}.glimpse-bar .glimpse-link, .glimpse-bar a, .glimpse-bar a:visited, .glimpse-bar a:hover {color: #fff;}.glimpse-bar .glimpse-link:active, .glimpse-bar a:active {color: #c11; } .glimpse-buttons {text-align: right;position: absolute;right: 0;top: 0;height: 17px;width: 250px;padding: 8px 12px 6px 6px;}.glimpse-hidden {display: none;}.glimpse-title {margin: 1px 0 0 15px;padding-top: 5px;font-weight: bold;display: inline-block;width: 75%;overflow: hidden;font-size: 13px;line-height: 15px;}.glimpse-title .glimpse-snapshot-name {display: inline-block;height: 20px;}.glimpse-title .glimpse-snapshot-path {font-weight:normal;} .glimpse-title .glimpse-enviro {padding-left: 10px;white-space: nowrap;height: 20px;}.glimpse-title .glimpse-correlation .glimpse-drop {padding-left: 10px;}.glimpse-title .glimpse-correlation .loading {margin: 5px 0 0;font-weight: normal;display: none;}.glimpse-title .glimpse-correlation .glimpse-drop-over {padding-left: 20px;padding-right: 20px;text-align: center;}.glimpse-title .glimpse-context-stack .glimpse-selectable {cursor:pointer;font-weight:bold;}.glimpse-drop {padding: 0 1px 0 8px;height: 16px;font-size: 12px;}.glimpse-drop, .glimpse-drop-over {font-weight: normal;background: #8bc441;margin: 0 5px 0 0;display: inline-block;}.glimpse-drop-over {position: absolute;display: none;top: 6px;padding: 1px 20px 10px 20px;z-index: 100; }.glimpse-drop-over div {text-align: center;font-weight: bold;margin: 5px 0;}.glimpse-drop-arrow-holder {margin: 3px 3px 3px 5px;padding-left: 3px;border-left: 1px solid #5f9a26;font-size: 9px;line-height: 11px;height: 9px;width: 10px;}.glimpse-drop-arrow {background: url() no-repeat -22px -18px;width: 7px;height: 4px;display: inline-block;}.glimpse .glimpse-button, .glimpse .glimpse-button:hover {cursor: pointer;background-image: url();background-repeat: no-repeat;height: 14px;width: 14px;margin-left: 10px;display: inline-block;}.glimpse .glimpse-meta-warning {background-position: -168px -1px;display: none;}.glimpse .glimpse-meta-warning:hover {background-position: -183px -1px;}.glimpse .glimpse-meta-help {background-position: -138px -1px;margin-right: 15px;}.glimpse .glimpse-meta-help:hover {background-position: -153px -1px;margin-right: 15px;}.glimpse .glimpse-meta-update {position: absolute;text-decoration: underline;top: 6px;left: 0;cursor: pointer;display: none;} .glimpse .glimpse-minimize {background-position: -1px -1px;}.glimpse .glimpse-minimize:hover {background-position: -17px -1px;}.glimpse .glimpse-close {background-position: -65px -1px;}.glimpse .glimpse-close:hover {background-position: -81px -1px;}.glimpse .glimpse-popout {background-position: -96px -1px;}.glimpse .glimpse-popout:hover {background-position: -111px -1px;}.glimpse-tabs-permanent {position: absolute;top: 0;right: 0;}.glimpse-tabs-permanent li {font-style: italic;}.glimpse-tabs {background: #71b1d1;height: 26px;color: #fff;}.glimpse-tabs ul {padding: 0px;}.glimpse-tabs li {display: inline-block;height: 21px;padding: 5px 15px 0;cursor: pointer;font-size: 13px;line-height: 13px;-webkit-transition: background-color 0.3s ease;-moz-transition: background-color 0.3s ease;-o-transition: background-color 0.3s ease;transition: background-color 0.3s ease;-moz-user-select: -moz-none;-khtml-user-select: none;-webkit-user-select: none;user-select: none;}.glimpse-tabs li.glimpse-hover {background: #519bbd; }.glimpse-tabs li.glimpse-active {background: #7c4b75;}.glimpse-tabs li.glimpse-disabled {color: #111;cursor: default;}.glimpse-panel-holder {}.glimpse-panel {display: none;overflow: auto;position: relative;color: #323232;font-size: 11px;line-height: 13px;}.glimpse-panel div, .glimpse-panel span, .glimpse-panel td, .glimpse-panel th {font-family: "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;}.glimpse-panel-message {text-align: center;padding-top: 40px;font-size: 1.1em;color: #AAA;}.glimpse-panel table {border-spacing: 0;width: 98%;margin: 1%;}.glimpse-panel tr {line-height: 14px;}.glimpse-panel th {font-size: 12px;line-height: 14px;font-weight: bold; }.glimpse-panel thead th {text-align: center;vertical-align: top;padding: 3px 3px 6px;}.glimpse-panel table td {text-align: left;vertical-align: top; }.glimpse-panel table td .glimpse-cell {vertical-align: top;}.glimpse-panel tbody .mono {font-family: Consolas, monospace, serif;font-size: 1.1em;}.glimpse-panel .glimpse-header {font-weight: bold;padding: 20px 0 0 1%;font-size: 140%;font-family: "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;}.glimpse-panel .glimpse-header-content {padding: 0 3px;}.glimpse-panel .glimpse-row-header-0 th {border-bottom: 3px solid #CCC;border-left: 1px solid #CCC;font-size: 14px;line-height: 12px;}.glimpse-panel .glimpse-row-header-0 th:first-child {border-left-width: 0;}.glimpse-panel .glimpse-soft {color: #999;}.glimpse-panel .glimpse-cell-key, .glimpse-panel .glimpse-key {font-weight: bold;}.glimpse-panel th.glimpse-key {width: 130px;}.glimpse-panel .glimpse-row-header-0 th.glimpse-key {width: 250px;}.glimpse-panel table table {margin: 0;width: 100%;}.glimpse-panel table table thead th {border-bottom: 2px solid #CCC;}.glimpse-panel table table thead tr th {border-left: 1px solid #CCC;line-height: 10px;}.glimpse-panel table table thead tr th:first-child {border-left-width: 0;}.glimpse-panel table table thead tr th:last-child {border-right: 0px;} .glimpse-row-holder > .glimpse-row:nth-of-type(odd), .glimpse-row-color:nth-of-type(odd), .glimpse-row-odd, .glimpse-row-odd > td { background-color: #FEFFFF; }.glimpse-row-holder > .glimpse-row:nth-of-type(even), .glimpse-row-color:nth-of-type(even), .glimpse-row-even, .glimpse-row-even > td { background-color: #F2F5F9; }.glimpse-row-holder.glimpse-row-holder-suppress > .glimpse-row { background-color: transparent; } .glimpse-panel table table tbody th {font-style: italic;font-weight: normal;}.glimpse-panel table table thead th {font-weight: bold;} .glimpse-panel .glimpse-col-side {border-right: 1px solid #404040;background-color: #F2F5F7;position: absolute;width: 200px;height: 100%;left: 0px;}.glimpse-panel .glimpse-col-main {position: absolute;left: 200px;right: 0px;top: 0px;}.glimpse-panel td, .glimpse-panel th {padding: 5px 7px;}table.glimpse-ellipsis {table-layout: fixed;}div.glimpse-ellipsis {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 100%;}.glimpse-col-side .glimpse-row-holder > .glimpse-row:nth-of-type(odd), .glimpse-row-alt-color:nth-of-type(odd), .glimpse-row-alt-odd, .glimpse-row-alt-odd > td { background-color: #E1E7F0; }.glimpse-col-side .glimpse-row-holder > .glimpse-row:nth-of-type(even), .glimpse-row-alt-color:nth-of-type(even), .glimpse-row-alt-even, .glimpse-row-alt-even > td { background-color: #F2F5F7; } .glimpse-panel-holder .glimpse-active {display: block;}.glimpse-resizer {height: 6px;cursor: n-resize;width: 100%;position: absolute;top: -5px;}.glimpse-preview-object, .glimpse-preview-object * {color: #006400;}.glimpse-preview-string, .glimpse-preview-object .glimpse-preview-string {color: #006400;font-weight: normal !important;}.glimpse-preview-string span {padding-left: 1px;}.glimpse-preview-object span {font-weight: bold;color: #444;}.glimpse-preview-object span.start {margin-right: 5px;}.glimpse-preview-object span.end {margin-left: 5px;}.glimpse-preview-object span.rspace {margin-right: 4px;}.glimpse-preview-object span.mspace {margin: 0 4px;}.glimpse-preview-object span.small {font-size: 0.95em;}.glimpse-panel .glimpse-preview-table {border: 0;}.glimpse-panel .glimpse-preview-table .glimpse-preview-cell {padding-left: 0;padding-right: 2px;width: 11px;}.glimpse-panel .glimpse-preview-table .glimpse-preview-cell, .glimpse-panel .glimpse-preview-table .glimpse-preview-cell + td {padding-top: 0;padding-bottom: 0;}.glimpse-expand {height: 11px;width: 11px;display: inline-block;float: left;margin: 1px 0 0 0;cursor: pointer;background-image: url();background-repeat: no-repeat;background-position: -126px 0;}.glimpse-collapse {background-position: -126px -11px;}.glimpse-preview-show {display: none;font-weight: normal !important;}.glimpse-panel .quiet *, .glimpse-panel .ms * {color: #AAA;}.glimpse-panel .suppress {text-decoration: line-through;}.glimpse-panel .suppress * {color: #AAA;}.glimpse-panel .selected, .glimpse-panel .selected > td, .glimpse-panel .selected > th, .glimpse-panel .selected > tr > td, .glimpse-panel .selected > tr > th, .selected > td > .glimpse-preview-table > tbody > tr > td, .selected > tr > td > .glimpse-preview-table > tbody > tr > td {background-color: #E6F5E6;}.glimpse-panel .selected * {color: #409B3B;}.glimpse .info .icon, .glimpse .warn .icon, .glimpse .loading .icon, .glimpse .error .icon, .glimpse .fail .icon, .glimpse .ms .icon, .glimpse .glimpse-connect .icon, .glimpse .glimpse-disconnect .icon, .glimpse .alert .icon {width: 14px;height: 14px;background-image: url();background-repeat: no-repeat;display: inline-block;margin-right: 5px;}.glimpse .glimpse-connect .icon, .glimpse .glimpse-disconnect .icon {width: 17px;height: 17px;}.glimpse .info .icon {background-position: -22px -22px;}.glimpse .warn .icon {background-position: -36px -22px;}.glimpse .loading .icon {background-position: -78px -22px;}.glimpse .error .icon {background-position: -50px -22px;}.glimpse .ms .icon {background-position: -181px -22px;}.glimpse .fail .icon {background-position: -64px -22px;}.glimpse .alert .icon {background-position: -135px -22px;}.glimpse .glimpse-connect .icon {background-position: -213px -20px; }.glimpse .glimpse-disconnect .icon {background-position: -195px -20px; }.glimpse .info * {color: #067CE5;}.glimpse .warn * {color: #FE850C;}.glimpse .error * {color: #B40000;}.glimpse .fail * {color: #B40000;font-weight: bold;}.glimpse-notice {position:absolute;right: 20px;bottom: 5px;color: #777;}.glimpse-clear {bottom: 30px;position: absolute;right: 20px;background-color: white;padding: 0.2em 1em 0.3em 1em;border: #CCC solid 1px;bottom: 25px;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;}.glimpse-panel table .glimpse-head-message td {text-align: center;background-color: #DDD;}.glimpse-panelitem-info div {text-align: center;}.glimpse-panelitem-info .glimpse-panel-message {padding-top: 5px;}.glimpse-panelitem-info strong {font-weight: bold;}.glimpse-panelitem-info .glimpse-info-more {font-size: 1.5em;margin: 1em 0;}.glimpse-panelitem-info .glimpse-info-quote {font-style: italic;margin: 0.75em 0 3em;}.glimpse-pager {background: #C6C6C6;padding: 3px 4px;font-weight: bold;text-align: center;vertical-align: top;}.glimpse-pager .glimpse-pager-message {margin-left: 5px;margin-right: 5px;}.glimpse-pager .glimpse-button {margin-top: 0px;}.glimpse-pager .glimpse-pager-link, .glimpse-pager .glimpse-pager-link:hover {font-weight: bold;text-decoration: underline;cursor: pointer;color: #2200C1;}.glimpse-pager .glimpse-pager-link-firstPage {background-position: -2px -38px;}.glimpse-pager .glimpse-pager-link-firstPage-disabled {background-position: -17px -38px;}.glimpse-pager .glimpse-pager-link-previousPage {background-position: -33px -38px;}.glimpse-pager .glimpse-pager-link-previousPage-disabled {background-position: -49px -38px;}.glimpse-pager .glimpse-pager-link-nextPage {background-position: -65px -38px;}.glimpse-pager .glimpse-pager-link-nextPage-disabled {background-position: -81px -38px;}.glimpse-pager .glimpse-pager-link-lastPage {background-position: -96px -38px;}.glimpse-pager .glimpse-pager-link-lastPage-disabled {background-position: -111px -38px;}.glimpse-panel table tr.glimpse-pager-separator td {border-bottom: 3px solid #C6C6C6;} .glimpse-panel .glimpse-sub-text {color: #AAA;font-size: 0.9em;margin-left: 5px;top:-1px;position:relative;}.glimpse-popup {color:#000;background:#FFF;margin:0;padding:0;} .glimpse-popup .glimpse-holder {position:relative !important;display: block !important; } .glimpse-popup .glimpse-popout, .glimpse-popup .glimpse-minimize, .glimpse-popup .glimpse-close, .glimpse-popup .glimpse-terminate, .glimpse-popup .glimpse-open {display:none !important; } .glimpse-popup .glimpse-panel {overflow:visible !important; }.glimpse-notification-holder {position: absolute;z-index: 200;width: 100%;top: 85px;}.glimpse-notification {padding: 5px 20px;border-radius: 5px;margin: 0 auto 10px auto;text-align: center;max-width: 500px;-moz-box-shadow: 0 0 5px #888;-webkit-box-shadow: 0 0 5px#888;box-shadow: 0 0 5px #888;width: 50%;}.glimpse-notification-error {background-color: #F97474;border: 1px solid red;}.glimpse-notification-info {background-color: #B7C5ED;border: 1px solid #3156C1;}.glimpse-lightbox {display: none;position:fixed;top:0;left:0;width:100%;height:100%;margin: auto;text-align: center;background-color: rgba(255,255,255,0.7);z-index: 100011 !important;}.glimpse-lightbox-inner {position: absolute;width:100%;height:100%;display: block;}.glimpse-lightbox-element {position: absolute;width: 80%;height: 80%;top: 10%;left: 10%;background-color: #fff;-webkit-box-shadow: 0px 0px 30px rgba(50, 50, 50, 1);-moz-box-shadow: 0px 0px 30px rgba(50, 50, 50, 1);box-shadow: 0px 0px 30px rgba(50, 50, 50, 1); }.glimpse-lightbox .close {position: absolute;right: 25px;top: 10px;cursor: pointer; }.glimpse-lightbox iframe {width: 100%;border: 0px;height: 100%;}.glimpse-open .glimpse-icon {float: left;}.glimpse ::-webkit-scrollbar-corner {vbackground: transparent;}.glimpse ::-webkit-scrollbar-corner {background-clip: padding-box;background-color: whiteSmoke;border: solid white;box-shadow: inset 1px 1px 0 rgba(0,0,0,.14);border-width: 3px 0 0 3px;}.glimpse ::-webkit-scrollbar-track-piece {background-clip: padding-box;background-color: whiteSmoke;border: solid white;box-shadow: inset 1px 0 0 rgba(0,0,0,.14),inset -1px 0 0 rgba(0,0,0,.07);border-width: 0 0 0 3px;}.glimpse ::-webkit-scrollbar-track {background-clip: padding-box;border: solid transparent;border-width: 0 0 0 7px;}.glimpse ::-webkit-scrollbar-button {height: 0;width: 0;}.glimpse ::-webkit-scrollbar-thumb {background-color: rgba(0, 0, 0, .2);background-clip: padding-box;border: solid transparent;min-height: 28px;padding: 100px 0 0;box-shadow: inset 1px 1px 0 rgba(0,0,0,.1),inset 0 -1px 0 rgba(0,0,0,.07);border-width: 0 0 0 7px; border-width: 1px 1px 1px 5px;}.glimpse ::-webkit-scrollbar {height: 16px;overflow: visible;width: 16px;}',
+            css: '.glimpse, .glimpse *, .glimpse a, .glimpse td, .glimpse th, .glimpse table {font-family: "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;background-color: transparent;border: 0px;text-align: left;padding: 0;margin: 0;}.glimpse table {min-width: 0;border-collapse: collapse;border-spacing: 0;}.glimpse a, .glimpse a:hover, .glimpse a:visited, .glimpse-link {color: #2200C1;text-decoration: underline;font-weight: normal;cursor: pointer;-webkit-transition: color 0.3s ease;-moz-transition: color 0.3s ease;-o-transition: color 0.3s ease;transition: color 0.3s ease;}.glimpse a:active, .glimpse-link:active {color: #c11;text-decoration: underline;font-weight: normal;}.glimpse th {font-weight: bold;} .glimpse-open {z-index: 100010;position: fixed;right: 0;bottom: 0;height: 34px;min-width: 54px;background: #3c454f;color: #fff; }.glimpse-open td, .glimpse-open span, .glimpse-open div {color: #fff;font-size: 13px;line-height: 13px;}.glimpse-icon {cursor: pointer;background: url() no-repeat -127px -38px;height: 30px;width: 39px;margin: 0 8px;}.glimpse-open .glimpse-icon {height: 34px;}.glimpse-holder {display: none;z-index: 100010 !important;height: 0;position: fixed;bottom: 0;left: 0;width: 100%;background-color: #fff;-moz-box-shadow: 0 0 5px #888;-webkit-box-shadow: 0 0 5px#888;box-shadow: 0 0 5px #888;}.glimpse-content {position: relative;font-size: 11px;line-height: 13px;}.glimpse-bar {background: #3c454f;color: #fff;height: 30px;position: relative;font-size: 13px;line-height: 15px;}.glimpse-bar .glimpse-icon {margin-left: 10px;float: left;}.glimpse-bar .glimpse-link, .glimpse-bar a, .glimpse-bar a:visited, .glimpse-bar a:hover {color: #fff;}.glimpse-bar .glimpse-link:active, .glimpse-bar a:active {color: #c11; } .glimpse-buttons {text-align: right;position: absolute;right: 0;top: 0;height: 17px;width: 250px;padding: 8px 12px 6px 6px;}.glimpse-hidden {display: none;}.glimpse-title {margin: 1px 0 0 15px;padding-top: 5px;font-weight: bold;display: inline-block;width: 75%;overflow: hidden;font-size: 13px;line-height: 15px;}.glimpse-title .glimpse-snapshot-name {display: inline-block;height: 20px;}.glimpse-title .glimpse-snapshot-path {font-weight:normal;} .glimpse-title .glimpse-enviro {padding-left: 10px;white-space: nowrap;height: 20px;}.glimpse-title .glimpse-correlation .glimpse-drop {padding-left: 10px;}.glimpse-title .glimpse-correlation .loading {margin: 5px 0 0;font-weight: normal;display: none;}.glimpse-title .glimpse-correlation .glimpse-drop-over {padding-left: 20px;padding-right: 20px;text-align: center;}.glimpse-title .glimpse-context-stack .glimpse-selectable {cursor:pointer;font-weight:bold;}.glimpse-drop {padding: 0 1px 0 8px;height: 16px;font-size: 12px;}.glimpse-drop, .glimpse-drop-over {font-weight: normal;background: #8bc441;margin: 0 5px 0 0;display: inline-block;}.glimpse-drop-over {position: absolute;display: none;top: 6px;padding: 1px 20px 10px 20px;z-index: 100; }.glimpse-drop-over div {text-align: center;font-weight: bold;margin: 5px 0;}.glimpse-drop-arrow-holder {margin: 3px 3px 3px 5px;padding-left: 3px;border-left: 1px solid #5f9a26;font-size: 9px;line-height: 11px;height: 9px;width: 10px;}.glimpse-drop-arrow {background: url() no-repeat -22px -18px;width: 7px;height: 4px;display: inline-block;}.glimpse .glimpse-button, .glimpse .glimpse-button:hover {cursor: pointer;background-image: url();background-repeat: no-repeat;height: 14px;width: 14px;margin-left: 10px;display: inline-block;}.glimpse .glimpse-meta-warning {background-position: -168px -1px;display: none;}.glimpse .glimpse-meta-warning:hover {background-position: -183px -1px;}.glimpse .glimpse-meta-help {background-position: -138px -1px;margin-right: 15px;}.glimpse .glimpse-meta-help:hover {background-position: -153px -1px;margin-right: 15px;}.glimpse .glimpse-meta-update {position: absolute;text-decoration: underline;top: 6px;left: 0;cursor: pointer;display: none;} .glimpse .glimpse-minimize {background-position: -1px -1px;}.glimpse .glimpse-minimize:hover {background-position: -17px -1px;}.glimpse .glimpse-close {background-position: -65px -1px;}.glimpse .glimpse-close:hover {background-position: -81px -1px;}.glimpse .glimpse-popout {background-position: -96px -1px;}.glimpse .glimpse-popout:hover {background-position: -111px -1px;}.glimpse-tabs-permanent {position: absolute;top: 0;right: 0;}.glimpse-tabs-permanent li {font-style: italic;}.glimpse-tabs {background: #71b1d1;height: 26px;color: #fff;}.glimpse-tabs ul {padding: 0px;}.glimpse-tabs li {display: inline-block;height: 21px;padding: 5px 15px 0;cursor: pointer;font-size: 13px;line-height: 13px;-webkit-transition: background-color 0.3s ease;-moz-transition: background-color 0.3s ease;-o-transition: background-color 0.3s ease;transition: background-color 0.3s ease;-moz-user-select: -moz-none;-khtml-user-select: none;-webkit-user-select: none;user-select: none;}.glimpse-tabs li.glimpse-hover {background: #519bbd; }.glimpse-tabs li.glimpse-active {background: #7c4b75;}.glimpse-tabs li.glimpse-disabled {color: #111;cursor: default;}.glimpse-panel-holder {}.glimpse-panel {display: none;overflow: auto;position: relative;color: #323232;font-size: 11px;line-height: 13px;}.glimpse-panel div, .glimpse-panel span, .glimpse-panel td, .glimpse-panel th {font-family: "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;}.glimpse-panel-message {text-align: center;padding-top: 40px;font-size: 1.1em;color: #AAA;}.glimpse-panel table {border-spacing: 0;width: 98%;margin: 1%;}.glimpse-panel tr {line-height: 14px;}.glimpse-panel th {font-size: 12px;line-height: 14px;font-weight: bold; }.glimpse-panel thead th {text-align: center;vertical-align: top;padding: 3px 3px 6px;}.glimpse-panel table td {text-align: left;vertical-align: top; }.glimpse-panel table td .glimpse-cell {vertical-align: top;}.glimpse-panel tbody .mono {font-family: Consolas, monospace, serif;font-size: 1.1em;}.glimpse-panel .glimpse-header {font-weight: bold;padding: 20px 0 0 1%;font-size: 140%;font-family: "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;}.glimpse-panel .glimpse-header-content {padding: 0 3px;}.glimpse-panel .glimpse-row-header-0 th {border-bottom: 3px solid #CCC;border-left: 1px solid #CCC;font-size: 14px;line-height: 12px;}.glimpse-panel .glimpse-row-header-0 th:first-child {border-left-width: 0;}.glimpse-panel .glimpse-soft {color: #999;}.glimpse-panel .glimpse-cell-key, .glimpse-panel .glimpse-key {font-weight: bold;}.glimpse-panel th.glimpse-key {width: 130px;}.glimpse-panel .glimpse-row-header-0 th.glimpse-key {width: 250px;}.glimpse-panel table table {margin: 0;width: 100%;}.glimpse-panel table table thead th {border-bottom: 2px solid #CCC;}.glimpse-panel table table thead tr th {border-left: 1px solid #CCC;line-height: 10px;}.glimpse-panel table table thead tr th:first-child {border-left-width: 0;}.glimpse-panel table table thead tr th:last-child {border-right: 0px;} .glimpse-row-holder > .glimpse-row:nth-of-type(odd), .glimpse-row-color:nth-of-type(odd), .glimpse-row-odd, .glimpse-row-odd > td { background-color: #FEFFFF; }.glimpse-row-holder > .glimpse-row:nth-of-type(even), .glimpse-row-color:nth-of-type(even), .glimpse-row-even, .glimpse-row-even > td { background-color: #F2F5F9; }.glimpse-row-holder.glimpse-row-holder-suppress > .glimpse-row { background-color: transparent; } .glimpse-panel table table tbody th {font-style: italic;font-weight: normal;}.glimpse-panel table table thead th {font-weight: bold;} .glimpse-panel .glimpse-col-side {border-right: 1px solid #404040;background-color: #F2F5F7;position: absolute;width: 200px;height: 100%;left: 0px;}.glimpse-panel .glimpse-col-main {position: absolute;left: 200px;right: 0px;top: 0px;}.glimpse-panel td, .glimpse-panel th {padding: 5px 7px;}table.glimpse-ellipsis {table-layout: fixed;}div.glimpse-ellipsis {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 100%;}.glimpse-col-side .glimpse-row-holder > .glimpse-row:nth-of-type(odd), .glimpse-row-alt-color:nth-of-type(odd), .glimpse-row-alt-odd, .glimpse-row-alt-odd > td { background-color: #E1E7F0; }.glimpse-col-side .glimpse-row-holder > .glimpse-row:nth-of-type(even), .glimpse-row-alt-color:nth-of-type(even), .glimpse-row-alt-even, .glimpse-row-alt-even > td { background-color: #F2F5F7; } .glimpse-panel-holder .glimpse-active {display: block;}.glimpse-resizer {height: 6px;cursor: n-resize;width: 100%;position: absolute;top: -5px;}.glimpse-preview-object, .glimpse-preview-object * {color: #006400;}.glimpse-preview-string, .glimpse-preview-object .glimpse-preview-string {color: #006400;font-weight: normal !important;}.glimpse-preview-string span {padding-left: 1px;}.glimpse-preview-object span {font-weight: bold;color: #444;}.glimpse-preview-object span.start {margin-right: 5px;}.glimpse-preview-object span.end {margin-left: 5px;}.glimpse-preview-object span.rspace {margin-right: 4px;}.glimpse-preview-object span.mspace {margin: 0 4px;}.glimpse-preview-object span.small {font-size: 0.95em;}.glimpse-panel .glimpse-preview-table {border: 0;}.glimpse-panel .glimpse-preview-table .glimpse-preview-cell {padding-left: 0;padding-right: 2px;width: 11px;}.glimpse-panel .glimpse-preview-table .glimpse-preview-cell, .glimpse-panel .glimpse-preview-table .glimpse-preview-cell + td {padding-top: 0;padding-bottom: 0;}.glimpse-expand {height: 11px;width: 11px;display: inline-block;float: left;margin: 1px 0 0 0;cursor: pointer;background-image: url();background-repeat: no-repeat;background-position: -126px 0;}.glimpse-collapse {background-position: -126px -11px;}.glimpse-preview-show {display: none;font-weight: normal !important;}.glimpse-panel .quiet *, .glimpse-panel .ms * {color: #AAA;}.glimpse-panel .suppress {text-decoration: line-through;}.glimpse-panel .suppress * {color: #AAA;}.glimpse-panel .selected, .glimpse-panel .selected > td, .glimpse-panel .selected > th, .glimpse-panel .selected > tr > td, .glimpse-panel .selected > tr > th, .selected > td > .glimpse-preview-table > tbody > tr > td, .selected > tr > td > .glimpse-preview-table > tbody > tr > td {background-color: #E6F5E6;}.glimpse-panel .selected * {color: #409B3B;}.glimpse .info .icon, .glimpse .warn .icon, .glimpse .loading .icon, .glimpse .error .icon, .glimpse .fail .icon, .glimpse .ms .icon, .glimpse .glimpse-connect .icon, .glimpse .glimpse-disconnect .icon, .glimpse .alert .icon {width: 14px;height: 14px;background-image: url();background-repeat: no-repeat;display: inline-block;margin-right: 5px;}.glimpse .glimpse-connect .icon, .glimpse .glimpse-disconnect .icon {width: 17px;height: 17px;}.glimpse .info .icon {background-position: -22px -22px;}.glimpse .warn .icon {background-position: -36px -22px;}.glimpse .loading .icon {background-position: -78px -22px;}.glimpse .error .icon {background-position: -50px -22px;}.glimpse .ms .icon {background-position: -181px -22px;}.glimpse .fail .icon {background-position: -64px -22px;}.glimpse .alert .icon {background-position: -135px -22px;}.glimpse .glimpse-connect .icon {background-position: -213px -20px; }.glimpse .glimpse-disconnect .icon {background-position: -195px -20px; }.glimpse .info * {color: #067CE5;}.glimpse .warn * {color: #FE850C;}.glimpse .error * {color: #B40000;}.glimpse .fail * {color: #B40000;font-weight: bold;}.glimpse-notice {position:absolute;right: 20px;bottom: 5px;color: #777;}.glimpse-clear {bottom: 30px;position: absolute;right: 20px;background-color: white;padding: 0.2em 1em 0.3em 1em;border: #CCC solid 1px;bottom: 25px;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;}.glimpse-panel table .glimpse-head-message td {text-align: center;background-color: #DDD;}.glimpse-panelitem-info div {text-align: center;}.glimpse-panelitem-info .glimpse-panel-message {padding-top: 5px;}.glimpse-panelitem-info strong {font-weight: bold;}.glimpse-panelitem-info .glimpse-info-more {font-size: 1.5em;margin: 1em 0;}.glimpse-panelitem-info .glimpse-info-quote {font-style: italic;margin: 0.75em 0 3em;}.glimpse-pager {background: #C6C6C6;padding: 3px 4px;font-weight: bold;text-align: center;vertical-align: top;}.glimpse-pager .glimpse-pager-message {margin-left: 5px;margin-right: 5px;}.glimpse-pager .glimpse-button {margin-top: 0px;}.glimpse-pager .glimpse-pager-link, .glimpse-pager .glimpse-pager-link:hover {font-weight: bold;text-decoration: underline;cursor: pointer;color: #2200C1;}.glimpse-pager .glimpse-pager-link-firstPage {background-position: -2px -38px;}.glimpse-pager .glimpse-pager-link-firstPage-disabled {background-position: -17px -38px;}.glimpse-pager .glimpse-pager-link-previousPage {background-position: -33px -38px;}.glimpse-pager .glimpse-pager-link-previousPage-disabled {background-position: -49px -38px;}.glimpse-pager .glimpse-pager-link-nextPage {background-position: -65px -38px;}.glimpse-pager .glimpse-pager-link-nextPage-disabled {background-position: -81px -38px;}.glimpse-pager .glimpse-pager-link-lastPage {background-position: -96px -38px;}.glimpse-pager .glimpse-pager-link-lastPage-disabled {background-position: -111px -38px;}.glimpse-panel table tr.glimpse-pager-separator td {border-bottom: 3px solid #C6C6C6;} .glimpse-panel .glimpse-sub-text {color: #AAA;font-size: 0.9em;margin-left: 5px;top:-1px;position:relative;}.glimpse-popup {color:#000;background:#FFF;margin:0;padding:0;} .glimpse-popup .glimpse-holder {position:relative !important;display: block !important; } .glimpse-popup .glimpse-popout, .glimpse-popup .glimpse-minimize, .glimpse-popup .glimpse-close, .glimpse-popup .glimpse-terminate, .glimpse-popup .glimpse-open {display:none !important; } .glimpse-popup .glimpse-panel {overflow:visible !important; }.glimpse-notification-holder {position: absolute;z-index: 200;width: 100%;top: 85px;}.glimpse-notification {padding: 5px 20px;border-radius: 5px;margin: 0 auto 10px auto;text-align: center;max-width: 500px;-moz-box-shadow: 0 0 5px #888;-webkit-box-shadow: 0 0 5px#888;box-shadow: 0 0 5px #888;width: 50%;}.glimpse-notification-error {background-color: #F97474;border: 1px solid red;}.glimpse-notification-info {background-color: #B7C5ED;border: 1px solid #3156C1;}.glimpse-lightbox {display: none;position:fixed;top:0;left:0;width:100%;height:100%;margin: auto;text-align: center;background-color: rgba(255,255,255,0.7);z-index: 100011 !important;}.glimpse-lightbox-inner {position: absolute;width:100%;height:100%;display: block;}.glimpse-lightbox-element {position: absolute;width: 80%;height: 80%;top: 10%;left: 10%;background-color: #fff;-webkit-box-shadow: 0px 0px 30px rgba(50, 50, 50, 1);-moz-box-shadow: 0px 0px 30px rgba(50, 50, 50, 1);box-shadow: 0px 0px 30px rgba(50, 50, 50, 1); }.glimpse-lightbox .close {position: absolute;right: 25px;top: 10px;cursor: pointer; }.glimpse-lightbox iframe {width: 100%;border: 0px;height: 100%;}.glimpse-open .glimpse-icon {float: left;}.glimpse ::-webkit-scrollbar-corner {vbackground: transparent;}.glimpse ::-webkit-scrollbar-corner {background-clip: padding-box;background-color: whiteSmoke;border: solid white;box-shadow: inset 1px 1px 0 rgba(0,0,0,.14);border-width: 3px 0 0 3px;}.glimpse ::-webkit-scrollbar-track-piece {background-clip: padding-box;background-color: whiteSmoke;border: solid white;box-shadow: inset 1px 0 0 rgba(0,0,0,.14),inset -1px 0 0 rgba(0,0,0,.07);border-width: 0 0 0 3px;}.glimpse ::-webkit-scrollbar-track {background-clip: padding-box;border: solid transparent;border-width: 0 0 0 7px;}.glimpse ::-webkit-scrollbar-button {height: 0;width: 0;}.glimpse ::-webkit-scrollbar-thumb {background-color: rgba(0, 0, 0, .2);background-clip: padding-box;border: solid transparent;min-height: 28px;padding: 100px 0 0;box-shadow: inset 1px 1px 0 rgba(0,0,0,.1),inset 0 -1px 0 rgba(0,0,0,.07);border-width: 0 0 0 7px; border-width: 1px 1px 1px 5px;}.glimpse ::-webkit-scrollbar {height: 16px;overflow: visible;width: 16px;}',
             html: '<div class=" glimpse"><div class="glimpse-spacer"></div><div class="glimpse-open glimpse"><div class="glimpse-icon"></div></div><div class="glimpse-holder glimpse"><div class="glimpse-notification-holder"></div><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon" title="About Glimpse?"></div><div class="glimpse-title"><span class="glimpse-snapshot-name"></span><span class="glimpse-snapshot-path"></span><span><span class="glimpse-enviro"></span><span class="glimpse-context-stack"></span><span class="glimpse-uri"></span><span class="glimpse-correlation"></span></span></div><div class="glimpse-buttons"><span class="glimpse-meta-update" href="#" title="New Updates are available, take a look at what you are missing.">New update available!</span><a class="glimpse-meta-warning glimpse-button" href="#" title="Glimpse has some warnings!"></a><a class="glimpse-meta-help glimpse-button" href="#" title="Need some help?" target="_blank"></a><a class="glimpse-minimize glimpse-button" href="#" title="Close/Minimize"></a><a class="glimpse-popout glimpse-button glimpse-hidden" href="#" title="Pop Out"></a><a class="glimpse-close glimpse-button" href="#" title="Shutdown/Terminate"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs glimpse-tabs-instance"><ul></ul></div><div class="glimpse-tabs glimpse-tabs-permanent"><ul></ul></div><div class="glimpse-panel-holder"><div class="glimpse-panel glimpse-active"><div class="glimpse-panel-message">No data has been found. This could be caused because:<br /><br />- the data is still loading by the client, or<br />- no data has been received from the server (check to see if the data &amp; metadata payloads are present), or<br />- no plugin has been loaded, or<br />- an error has been thrown in the client (please check your JavaScript console and let us know if anything is up).</div></div></div><div class="glimpse-options"></div></div></div><div class="glimpse-lightbox"><div class="glimpse-lightbox-inner"><div class="glimpse-lightbox-element"></div></div></div>'
         },
         generateSpriteAddress = function () {
@@ -3221,25 +3221,21 @@ glimpse.tab = (function($, pubsub, data) {
 (function($, pubsub, data, elements, util) {
     var serverTime = 0,
         modify = function(options) {
-            options.templates.css += '.glimpse-open .glimpse-hud {padding: 0 5px 0 0;float: left;overflow-y: hidden;}.glimpse-open .glimpse-hud-section {float: left;-webkit-transition: all 0.3s ease;-moz-transition: all 0.3s ease;-o-transition: all 0.3s ease;transition: all 0.3s ease;border-left: 11px solid #71b1d1;}.glimpse-open .glimpse-hud-section-alert {border-color: #e0695c;}.glimpse-open .glimpse-hud-section:hover {border-color: #8BC441;}.glimpse-open .glimpse-hud-section-inner {-webkit-transition: all 0.3s ease;-moz-transition: all 0.3s ease;-o-transition: all 0.3s ease;transition: all 0.3s ease;max-width: 999px;}.glimpse-open .glimpse-hud-section-inner:hover .glimpse-hud-tooltips-non, .glimpse-open .glimpse-hud-tooltips {display: none;} .glimpse-open .glimpse-hud-section-inner:hover .glimpse-hud-tooltips {display: block;}.glimpse-open .glimpse-hud-tooltips {color: #bcbcbc;font-size: 7px;position: absolute;}.glimpse-open .glimpse-hud-main .glimpse-hud-tooltips {top: 18px;}.glimpse-open .glimpse-hud-content .glimpse-hud-tooltips {top: 2px;}.glimpse-open .glimpse-hud-title {position: absolute;line-height: 100%;font-family: "Segoe UI Semibold";font-size: 9px;top: 2px;color: white;text-transform: uppercase;-webkit-transform-origin: 8px 18px;-moz-transform-origin: 8px 18px;-ms-transform-origin: 8px 18px;-o-transform-origin: 8px 18px;-webkit-transform: rotate(270deg);-moz-transform: rotate(270deg);-ms-transform: rotate(270deg);-o-transform: rotate(270deg);cursor: pointer;}.glimpse-open .glimpse-hud-section-input {display: none;}.glimpse-open .glimpse-hud-section-input:checked ~ .glimpse-hud-section-inner {max-width: 0px;overflow: hidden;} .glimpse-open .glimpse-hud-postfix {float: left;line-height: 100%;padding-left: 2px;color: #bcbcbc; }.glimpse-open .glimpse-hud-value {line-height: 90%;float: left;-webkit-transition: color 0.3s ease;-moz-transition: color 0.3s ease;-o-transition: color 0.3s ease;transition: color 0.3s ease;}.glimpse-open .glimpse-hud-value-update {color: #71b1d1;}.glimpse-open .glimpse-hud-value-alert {color: #e0695c;}.glimpse-open .glimpse-hud-detail {float: left;}.glimpse-open .glimpse-hud-main {float: left;position: relative;padding-left: 10px;min-width: 20px;}.glimpse-open .glimpse-hud-main .glimpse-hud-detail {float: left;padding: 3px 10px 0 0;}.glimpse-open .glimpse-hud-main .glimpse-hud-value {font-size: 23px;height: 30px;}.glimpse-open .glimpse-hud-main .glimpse-hud-postfix {padding-left: 3px; }.glimpse-open .glimpse-hud-content {float: left;position: relative;padding: 0 20px 0 10px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail {padding-top: 14px; }.glimpse-open .glimpse-hud-content .glimpse-hud-detail-top {padding-top: 1px; }.glimpse-open .glimpse-hud-content .glimpse-hud-detail.glimpse-hud-detail-small {padding-top: 17px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail .glimpse-hud-postfix {font-size: 10px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail-small .glimpse-hud-postfix {font-size: 6px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail .glimpse-hud-value {font-size: 14px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail-small .glimpse-hud-value {font-size: 10px;}.glimpse-open .glimpse-hud-content .glimpse-hud-detail-divider {padding: 14px 10px 0 10px;color: #bcbcbc;}.glimpse-open .glimpse-hud-content div.glimpse-hud-detail-divider {float: left;}.glimpse-open .glimpse-hud-detail .glimpse-hud-detailtitle {font-size: 13px;}.glimpse-open .glimpse-hud-detail .glimpse-hud-detailsubtitle {font-size: 10px;text-align: right;}.glimpse-open .glimpse-hud .alert {float: left;margin: 8px 0 0 15px;display: none;}.glimpse-open .glimpse-hud .super {position: relative;top: -2px;line-height: 0.5em;font-size: 0.8em;margin-left: 2px;}.glimpse-open .glimpse-hud .quiet {color: #bcbcbc; }.glimpse-open .glimpse-hud-graph {width: 45px;position: absolute;height: 8px;top: 20px;opacity: 0.4;}.glimpse-open .glimpse-hud-graph-item {width: 2px;background-color: white;bottom: 1px;position: absolute;height: 100%;}.glimpse-open .glimpse-hud-graph-item.glimpse-hud-graph-item-alert {background-color: #e0695c; }.glimpse-open .glimpse-hud-bar {height: 7px;width:100%;background-color:red;margin-top: 5px;}.glimpse-open .glimpse-hud-bar > div {position: relative;} .glimpse-open .glimpse-hud-bar-item {position: absolute;height: 7px;} .glimpse-hud-section-ajax .glimpse-hud-detail-top {position: relative;top: -20px;opacity: 0;-webkit-transition: all 0.6s ease;-moz-transition:all 0.6s ease;-o-transition:all 0.6s ease;}.glimpse-hud-section-ajax .glimpse-hud-detail-top.added {top: 0px;opacity: 1;}';
+            options.templates.css += '.glimpse-open .glimpse-hud {padding: 0 5px 0 0;float: left; }.glimpse-open .glimpse-hud-section {float: left;-webkit-transition: all 0.3s ease;-moz-transition: all 0.3s ease;-o-transition: all 0.3s ease;transition: all 0.3s ease;border-left: 11px solid #71b1d1;height: 34px;position: relative;}.glimpse-open .glimpse-hud-title {position: absolute;line-height: 100%;font-family: "Segoe UI Semibold";font-size: 9px;top: 2px;color: white;text-transform: uppercase;-webkit-transform-origin: 10px 20px;-moz-transform-origin: 10px 20px;-ms-transform-origin: 10px 20px;-o-transform-origin: 10px 20px;-webkit-transform: rotate(270deg);-moz-transform: rotate(270deg);-ms-transform: rotate(270deg);-o-transform: rotate(270deg);cursor: pointer;}.glimpse-open .glimpse-hud-section-inner {-webkit-transition: all 0.3s ease;-moz-transition: all 0.3s ease;-o-transition: all 0.3s ease;transition: all 0.3s ease;max-width: 999px;margin-top: -1px;}.glimpse-open .glimpse-hud-section-input {display: none;font-size: 12px;}.glimpse-open .glimpse-hud-section-input:checked ~ .glimpse-hud-section-inner {max-width: 0px;overflow: hidden;} .glimpse-open .glimpse-hud-detail {display: inline-block;padding: 0 10px;}.glimpse-open .glimpse-hud-section-inner .glimpse-hud-detail:first-child {padding-left: 15px;}.glimpse-open .glimpse-hud-section-inner .glimpse-hud-detail:last-child {padding-right: 20px;}.glimpse-open .glimpse-hud-data {-webkit-transition: color 0.3s ease;-moz-transition: color 0.3s ease;-o-transition: color 0.3s ease;transition: color 0.3s ease;}.glimpse-open .glimpse-hud-value-update {color: #71b1d1;}.glimpse-open .glimpse-hud-detail-right .glimpse-hud-header {text-align: right;}.glimpse-open .glimpse-hud-detail-large .glimpse-hud-data {font-weight: bold;}.glimpse-open .glimpse-hud-detail-extra-large, .glimpse-hud-detail-extra-large span {font-size: 2em;line-height: 100%;}.glimpse-open .glimpse-hud-detail-large, .glimpse-hud-detail-large span {font-size: 1.45em;line-height: 100%;}.glimpse-open .glimpse-hud-detail-normal, .glimpse-hud-detail-normal span, .glimpse-hud-detail-normal div {font-size: 1.2em;line-height: 100%;}.glimpse-open .glimpse-hud-detail-small, .glimpse-hud-detail-small span, .glimpse-hud-detail-small div {font-size: 1.1em;} .glimpse-open .glimpse-hud-value {font-size: 1em;line-height: 100%;margin-top: -3px;}.glimpse-open .glimpse-hud-header {opacity: 0.6;font-size: 0.7em;line-height: 100%;}.glimpse-open .glimpse-hud-detail-extra-large .glimpse-hud-header {font-size: 0.5em;}.glimpse-open .glimpse-hud-detail-large .glimpse-hud-header {font-size: 0.6em;}.glimpse-open .glimpse-hud-prefix, .glimpse-open .glimpse-hud-postfix, .glimpse-open .glimpse-hud-spacer, .glimpse-open .glimpse-hud-plain {opacity: 0.4;font-size: 0.9em;}.glimpse-open .glimpse-hud-postfix {padding-left: 2px;}.glimpse-open .glimpse-hud-prefix {padding-right: 2px;}.glimpse-open .glimpse-hud-spacer {padding: 0 10px;}.glimpse-open .glimpse-hud-quite, .glimpse-open .glimpse-hud-quite * {opacity: 0.6;}.glimpse-open .glimpse-hud-error, .glimpse-open .glimpse-hud-error * {color: #FF8C80;}.glimpse-open .glimpse-hud-section-inner:hover ~ .glimpse-hud-popup, .glimpse-open .glimpse-hud-popup:hover {max-height: 999px;}.glimpse-open .glimpse-hud-popup {background-color: #3c454f;border-left: 11px solid #71b1d1;position: absolute;left: -11px;right: 0;z-index: 1;bottom: 0px;max-height: 0px;-webkit-transition: max-height 0.3s ease 1s;-moz-transition: max-height 0.3s ease 1s;-o-transition: max-height 0.3s ease 1s;transition: max-height 0.3s ease 1s;}.glimpse-open .glimpse-hud-popup-clear {clear: both;}.glimpse-open .glimpse-hud-popup-header {margin-bottom: 5px;}.glimpse-open .glimpse-hud-popup .glimpse-hud-detail-extra-large {margin-left: -2px;}.glimpse-open .glimpse-hud-popup-inner {padding: 10px 15px;} .glimpse-open .glimpse-hud-popup .glimpse-hud-detail {padding: 0;}.glimpse-open .glimpse-hud-bar {height: 12px;width:100%;margin: 5px 0 10px;}.glimpse-open .glimpse-hud-bar > div {position: relative;} .glimpse-open .glimpse-hud-bar-item {position: absolute;height: 12px;min-width: 1px;} .glimpse-open .glimpse-hud-summary {width: auto;} .glimpse-open .glimpse-hud-summary-left {float: left;} .glimpse-open .glimpse-hud-summary-right {float: right;} .glimpse-open .glimpse-hud-summary tr {vertical-align: bottom;}.glimpse-open .glimpse-hud-summary tr:first-child {height: 65px;}.glimpse-open .glimpse-hud-summary tr:last-child {height: 46px;}.glimpse-open .glimpse-hud-summary th {font-weight: normal;}.glimpse-open .glimpse-hud-summary td .glimpse-hud-detail {float: right;} .glimpse-open .glimpse-hud-listing {max-width: 100%;} .glimpse-open .glimpse-hud-popup .glimpse-hud-listing {margin-top: 10px;} .glimpse-open .glimpse-hud-listing td {font-size: 1.025em;line-height: 100%;padding-top: 3px;} .glimpse-open .glimpse-hud-listing-row {padding: 2px 0;} .glimpse-open .glimpse-hud-listing-row > div {display: inline-block;} .glimpse-open .glimpse-hud-listing tr:first-child td {padding-top: 1px;}.glimpse-open .glimpse-hud-listing thead th {white-space: nowrap;opacity: 0.6;font-weight: normal;color: white;line-height: 100%;padding-bottom: 5px;} .glimpse-open .glimpse-hud-listing-overflow {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;} .glimpse-open td.glimpse-hud-listing-value {text-align: right;font-family: Consolas, monospace, serif;opacity: 0.85;} .glimpse-open th.glimpse-hud-listing-value {text-align: right;} .glimpse-open .glimpse-hud .glimpse-data-childless-duration, .glimpse-open .glimpse-hud .glimpse-data-duration, .glimpse-open .glimpse-hud .glimpse-data-content-type {width:90px;}.glimpse-open .glimpse-hud .glimpse-data-size {width:60px;}.glimpse-open .glimpse-hud .glimpse-data-content-method {width:40px;}.glimpse-open .glimpse-hud .glimpse-data-content-type, .glimpse-open .glimpse-hud .glimpse-data-content-time {text-align: right;}.glimpse-open .glimpse-hud .glimpse-data-childless-start-point {width:100px;}.glimpse-open .glimpse-hud .glimpse-data-request-parts {margin-top:15px;}.glimpse-open .glimpse-hud .glimpse-data-wire-part {width:35%;}.glimpse-open .glimpse-hud .glimpse-data-server-part {width:30%}.glimpse-open .glimpse-hud .glimpse-data-client-part {text-align:right;width:33%}.glimpse-open .glimpse-hud .glimpse-data-ajax-method {width: 30px;text-align: right;}.glimpse-open .glimpse-hud .glimpse-data-ajax-uri {max-width: 130px;padding: 0 25px;} .glimpse-open .glimpse-hud .glimpse-hud-section-ajax .glimpse-hud-listing-row {position: relative;top: -20px;opacity: 0;-webkit-transition: all 0.6s ease;-moz-transition: all 0.6s ease;-o-transition: all 0.6s ease;transition: all 0.6s ease;}.glimpse-open .glimpse-hud .glimpse-hud-section-ajax .glimpse-hud-listing-row.added {top: 0px;opacity: 1;}.glimpse-open .glimpse-hud .glimpse-data-ajax-detail tbody tr:first-child td {padding-top: 10px; } ';
         },
         loaded = function(args) {
             var html = '',
                 tabData = args.newData.data.glimpse_hud,
-                display = displayState.current();
-            
-            html += clientTimings.render(tabData.data, display[0]);
-            html += mvcTimings.render(tabData.data, display[1]);
-            html += sqlTimings.render(tabData.data, display[2]);
-            html += ajaxRequests.render(tabData.data, display[3]);
+                opened = state.current();
+
+            html += display.http.render(tabData.data, opened[0]);
+            html += display.host.render(tabData.data, opened[1]);
+            html += display.ajax.render(tabData.data, opened[2]);
 
             elements.opener().prepend('<div class="glimpse-hud">' + html + '</div>');
-
-            adjustForAlerts(elements.opener().find('.glimpse-hud'), tabData.data);
-            graph.setup(tabData.data, elements.opener().find('.glimpse-hud')); 
-            displayState.setup();
-        },
-        displayState = (function() {
+            state.setup(); 
+        }, 
+        state = (function() {
             return { 
                 setup: function () {
                    var inputs = elements.opener().find('.glimpse-hud-section-input').change(function() {
@@ -3253,318 +3249,442 @@ glimpse.tab = (function($, pubsub, data) {
                 }
             };
         })(),
-        clientTimings = (function() {
-            var timingApi = (window.performance || window.mozPerformance || window.msPerformance || window.webkitPerformance || {}).timing,
-                render = function(tabData, state) {
-                    var html = '';
-
-                    tabData.request = {};
-                    
-                    if (timingApi) {
-                        var timingSum = 0,
-                            timing = populate();
-                        
-                        for (var key in timing) {
-                            timingSum += timing[key].duration;
-                        }
-                        tabData.request.requestTime = timingSum;
-                        
-                        var network = ((timing.network.duration / timingSum) * 100),
-                            server = ((timing.server.duration / timingSum) * 100),
-                            client = 100 - server - network;
-
-                        html += '<div class="glimpse-hud-section glimpse-hud-section-request" data-maxValue="1000" data-warnValue="600">';
-                        html += '<label class="glimpse-hud-title" for="glimpse-hud-section-request-input">Page</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-request-input"' + (state ? ' checked="checked"' : '') + ' />';
-                        html += '<div class="glimpse-hud-section-inner">'; 
-                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" data-maxName="hudPageRequestTime" data-maxValue="600" title="Total request time from click to dom ready">' + timingSum + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Total Request</div></div>';
-                        html += '<div class="glimpse-hud-content">';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxName="hudPageNetworkTime" data-maxValue="15" title="Total time on the network">' + timing.network.duration + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Network</div></div>';
-                        html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxName="hudPageServerTime" data-maxValue="250" title="Total time on the server">' + timing.server.duration + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Server</div></div>';
-                        html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxName="hudPageClientTime" data-maxValue="350" title="Total time once client kicks in">' + timing.browser.duration + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Client</div></div>';
-                        html += '<div class="glimpse-hud-bar glimpse-hud-tooltips-non"><div><div class="glimpse-hud-bar-item" style="width: 100%;background-color: #71b1d1;"></div><div class="glimpse-hud-bar-item" style="width: ' + (network + server) + '%;background-color: #AF78DD;"></div><div class="glimpse-hud-bar-item" style="width: ' + network + '%;background-color: #FDBF45;"></div></div></div>';
-                        html += '</div>';
-                        html += '</div>'; 
-                        html += '</div>';
-                        
-                        serverTime = timing.server.duration;
-                    }
-
-                    return html;
-                },
-                populate = function() {
-                    var result = { }, 
-                        network = calculateTimings('navigationStart', 'requestStart') + calculateTimings('responseStart', 'responseEnd'),
-                        server = calculateTimings('requestStart', 'responseStart'),
-                        browser = calculateTimings('responseEnd', 'loadEventEnd'),
-                        total = network + server + browser;
-                      
-                    result.network = { label: 'Network', categoryColor: '#FD4545', duration: network, percentage: (network / total) * 100 };
-                    result.server = { label: 'Server', categoryColor: '#823BBE', duration: server, percentage: (server / total) * 100 };
-                    result.browser = { label: 'Browser', categoryColor: '#5087CF', duration: browser, percentage: (browser / total) * 100 };
-
-                    return result;
-                },
-                calculateTimings = function(startIndex, finishIndex) { 
-                    return timingApi[finishIndex] - timingApi[startIndex];
-                };
-
-            return {
-                render: render
-            };
-        })(),
-        mvcTimings = (function() {
-            var render = function(tabData, state) {
-                    var html = '',
-                        mvcData = tabData.mvc;
-
-                    if (mvcData) { 
-                        var viewIsDifferent = mvcData.actionName != mvcData.viewName;
-                        html += '<div class="glimpse-hud-section glimpse-hud-section-mvc" data-maxValue="1500" data-warnValue="600">';
-                        html += '<label class="glimpse-hud-title" for="glimpse-hud-section-mvc-input">MVC</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-mvc-input"' + (state ? ' checked="checked"' : '') + ' />';
-                        html += '<div class="glimpse-hud-section-inner">'; 
-                        html += '<div class="glimpse-hud-main">';
-                        html += '<div class="glimpse-hud-value" title="How long root Action took to execute" data-maxName="hudMvcActionTime">' + Math.round(mvcData.actionExecutionTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Action</div>';
-                        html += '</div>';
-                        html += '<div class="glimpse-hud-content">';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="How long root View took to render" data-maxName="hudMvcViewTime">' + Math.round(mvcData.viewRenderTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">View</div></div>';
-                        html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail glimpse-hud-detail-top"><div class="glimpse-hud-detailtitle"><span title="Root Controller">' + mvcData.controllerName + '</span>.<span title="Root Action' + (!viewIsDifferent ? ' & View' : '') + '">' + mvcData.actionName + '</span>(...)' + (viewIsDifferent ? ' - <span title="Root View Name">' + mvcData.viewName + '</span> ' : '') + '</div><div class="glimpse-hud-detailsubtitle" title="Name of matched route">' + mvcData.matchedRouteName + '</div></div>';
-                        //html += '<div class="glimpse-hud-detail-divider"></div>';
-                        //html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Number of child actions">' + mvcData.childActionCount + '</div></div>';
-                        //html += '<div class="glimpse-hud-detail-divider">/</div>';
-                        //html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Number of child views">' + mvcData.childViewCount + '</div></div>';
-                        html += '</div>';
-                        html += '</div>';  
-                        html += '</div>'; 
-                    }
-
-                    return html;
-                };
-
-            return {
-                render: render
-            };
-        })(),
-        sqlTimings = (function() {
-            var render = function(tabData, state) {
-                    var html = '',
-                        sqlData = tabData.sql;
-
-                    if (sqlData && sqlData.queryExecutionTime && sqlData.connectionOpenTime) { 
-                        html += '<div class="glimpse-hud-section glimpse-hud-section-sql" data-maxValue="1200" data-warnValue="300">';
-                        html += '<label class="glimpse-hud-title" for="glimpse-hud-section-sql-input">SQL</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-sql-input"' + (state ? ' checked="checked"' : '') + ' />';
-                        html += '<div class="glimpse-hud-section-inner">'; 
-                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value" data-maxValue="20" data-maxName="hudSqlQueryTime" title="How long all your quires took to execute">' + Math.round(sqlData.queryExecutionTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Execution</div></div>';
-                        html += '<div class="glimpse-hud-content">';  
-                        //html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value">' + limitValue(parseInt((sqlData.connectionOpenTime / serverTime) * 100)) + '</div><div class="glimpse-hud-postfix">%</div></div>';
-                        //html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" data-maxValue="300" data-maxName="hudSqlConnectionTime" title="How long all your connections where open for">' + Math.round(sqlData.connectionOpenTime) + '</div><div class="glimpse-hud-postfix">ms</div><div class="glimpse-hud-tooltips">Open</div></div>';
-                        html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Total number of explicit transactions used" data-maxName="hudSqlTransactionCount">' + sqlData.transactionCount + '</div><div class="glimpse-hud-tooltips">Trx</div></div>';
-                        html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Total number of connections used" data-maxName="hudSqlConnectionCount">' + sqlData.connectionCount + '</div><div class="glimpse-hud-tooltips">Conn</div></div>';
-                        html += '<div class="glimpse-hud-detail-divider"></div>';
-                        html += '<div class="glimpse-hud-detail"><div class="glimpse-hud-value" title="Total number of queries found" data-maxName="hudSqlQueryCount" data-maxValue="4">' + sqlData.queryCount + '</div><div class="glimpse-hud-tooltips">Exec</div></div>';
-                        html += '</div>'; 
-                        html += '</div>';
-                        html += '</div>';
-                    }
-
-                    return html;
-                },
-                limitValue = function(value) {
-                    return value > 100 ? 23 : value;
-                }; 
-
-            return {
-                render: render
-            };
-        })(),
-        ajaxRequests = (function() {
-            var open = XMLHttpRequest.prototype.open, 
-                count = 0, 
-                graphRequestStack = [],
-                runningRequestStack = [],
-                timeSince = function(ms) {
-                    var seconds = ms / 1000,
-                        interval = Math.floor(seconds / 60);
-                    if (interval >= 1) return [ interval, "m" ];
-
-                    return [ Math.floor(seconds), "s" ];
-                },
-                render = function(tabData, state) {
-                    var html = '<div class="glimpse-hud-section glimpse-hud-section-ajax">';
-                        html += '<label class="glimpse-hud-title" for="glimpse-hud-section-for-input">Ajax</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-for-input"' + (state ? ' checked="checked"' : '') + ' />';
-                        html += '<div class="glimpse-hud-section-inner">'; 
-                        html += '<div class="glimpse-hud-main"><div class="glimpse-hud-value glimpse-hug-ajax-count" title="Total number of Ajax requests detected">0</div><div class="glimpse-hud-tooltips">Requests</div></div>';
-                        html += '</div>'; 
-                        html += '</div>';
-
-                    return html;
-                },
-                update = function(method, url, duration) {
-                    //Set the counter
-                    $('.glimpse-hug-ajax-count').text(++count).addClass('glimpse-hud-value-update'); 
-                    setTimeout(function() {
-                        $('.glimpse-hug-ajax-count').removeClass('glimpse-hud-value-update');
-                    }, 2000);
-                    
-                    //Add it when needed
-                    if (count == 1) {
-                        $('.glimpse-hud-section-ajax .glimpse-hud-section-inner').append('<div class="glimpse-hud-content"></div>');
-                    }
-                    
-                    //Deal with the record details
-                    track(method, url, duration);
-
-                    //Update graph
-                    graph.generate(graphRequestStack, elements.opener().find('.glimpse-hud .glimpse-hud-section-ajax'), duration, 100);
-                },
-                track = function(method, url, duration) {
-                    //Setup tracker timer
-                    var row = $('<div class="glimpse-hud-detail-top"><span class="quiet">' + method + '</span><span class="glimpse-hud-detail-divider"></span>' + url + '<span class="glimpse-hud-detail-divider"></span>' + duration + '<span class="super quiet">ms</span><span class="glimpse-hud-detail-divider"></span><span class="past"></span></div>').prependTo('.glimpse-hud-section-ajax .glimpse-hud-content'),
-                        past = row.find('.past'),
-                        record = { row: row, canceled: false },
-                        next = 0,
-                        total = 0, 
-                        timer = function() {
-                            setTimeout(function() {
-                                var since = timeSince(total);
-                                past.html(since[0] + '<span class="super quiet">' + since[1] + ' ago</span>');
+        display = function() {
+            var rendering = (function() {
+                    var sizes = [ 'extra-large', 'large', 'normal', 'small' ],
+                        position = [ 'top', 'bottom', 'left', 'right' ],
+                        align = [ 'left', 'right' ],
+                        shouldUse = function(isVisible, tabData) {
+                            if (isVisible !== undefined && isVisible) {
+                                var isFunction = $.isFunction(isVisible);
+                                return (isFunction && isVisible(tabData)) || (!isFunction && isVisible);
+                            }
+                            return true;
+                        }, 
+                        popup = function(structure, tabData) {
+                            return '<div class="glimpse-hud-popup" style="border-color:' + structure.color + ';"><div class="glimpse-hud-title">' + structure.title + '</div><div class="glimpse-hud-popup-inner">' + structure.popup.render(tabData) + '</div></div>';
+                        },
+                        section = function(structure, tabData, opened) {
+                            var html = '<div class="glimpse-hud-section glimpse-hud-section-' + structure.id + '" style="border-color:' + structure.color + '">';
+                            
+                            html += '<label class="glimpse-hud-title" for="glimpse-hud-section-input-' + structure.id + '">' + structure.title + '</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-input-' + structure.id + '"' + (opened ? ' checked="checked"' : '') + ' />';
+                            html += '<div class="glimpse-hud-section-inner">';  
+                            for (var key in structure.layout.mini) {
+                                html += item(structure.layout.mini[key], tabData);
+                            }
+                            html += '</div>';
+                            
+                            if (!structure.popup.suppress) { html += popup(structure, tabData); }
+                            
+                            return html + '</div>';
+                        },
+                        item = function(item, tabData) {
+                            var html = '';
+                            if (shouldUse(item.visible, tabData)) {
+                                var title = '<div class="glimpse-hud-header">' + item.title + '</div>',
+                                    postfix = item.postfix ? '<span class="glimpse-hud-postfix">' + item.postfix + '</span>' : '',
+                                    value = item.getLayoutData ? item.getLayoutData(tabData) : '<span class="glimpse-hud-data">' + item.getData(tabData) + '</span>' + postfix,
+                                    id = item.id ? ' ' + item.id : '';
                                 
-                                next = total < 10000 ? 1000 : total < 30000 ? 5000 : total < 60000 ? 10000 : 60000;
-                                total += next;
-                                 
-                                if (!record.canceled)
-                                    timer();
-                            }, next);
+                                html += item.getLayout ? item.getLayout(tabData) : '<div class="glimpse-hud-detail glimpse-hud-detail-' + sizes[item.size] + ' glimpse-hud-detail-' + position[item.position] + ' glimpse-hud-detail-' + align[item.align] + id + '" title="' + item.description + '">' + (!item.position ? title : '') + '<div class="glimpse-hud-value">' + value + '</div>' + (item.position ? title : '') + '</div>';
+                            }
+
+                            return html;
                         };
-                    timer();
-                    
-                    setTimeout(function() {
-                        row.addClass('added');    
-                    }, 1);
-                    
-                    
-                    //Track state of the details
-                    if (runningRequestStack.length >= 2) {
-                        var item = runningRequestStack.shift();
-                        item.canceled = true;
-                        item.row.remove();
-                    }
-                    runningRequestStack.push(record);
-                };
-
-            XMLHttpRequest.prototype.open = function(method, url, async, user, pass) {
-                var startTime = new Date().getTime();
                 
-                this.addEventListener("readystatechange", function() {
-                        if (this.readyState == 4)  { 
-                            update(method, url, new Date().getTime() - startTime);
+                    return {
+                        section: section,
+                        item: item,
+                        popup: popup
+                    };
+                })(),
+                process = (function() {
+                    var item = function(layout, defaults) {
+                        for (var key in layout) {
+                            layout[key] = $.extend(true, {}, defaults[key], layout[key]);
                         }
-                    }, false); 
+                    };
                 
-                open.apply(this, arguments);
-            }; 
+                    return {
+                        init: function(payload) {
+                            item(payload.layout.mini, payload.defaults);
+                            item(payload.layout.popup, payload.defaults);
+                        }
+                    };
+                })();
 
             return {
-                render: render
+                http: function() {
+                    var timingsRaw = (window.performance || window.mozPerformance || window.msPerformance || window.webkitPerformance || {}).timing,
+                        structure = {
+                            title: 'HTTP',
+                            id: 'http', 
+                            color: '#e2875e',
+                            popup: {
+                                render: function(tabData) {
+                                    var html = '<div class="glimpse-hud-popup-header">Browser Request</div>';
+                                    html += '<div>' + rendering.item(structure.layout.popup.request, tabData) + '</div>';
+                                    html += '<div class="glimpse-hud-popup-clear"></div>';
+                                    html += '<div class="glimpse-data-request-parts"><table><tr><td colspan="3"><div class="glimpse-hud-bar glimpse-hud-tooltips-non"><div><div class="glimpse-hud-bar-item" style="width: 100%;background-color: ' + tabData.timings.browser.categoryColor + '"></div><div class="glimpse-hud-bar-item" style="width: ' + tabData.timings.server.percentage + '%;background-color: ' + tabData.timings.server.categoryColor + ';"></div><div class="glimpse-hud-bar-item" style="width: ' + tabData.timings.network.percentage + '%;background-color: ' + tabData.timings.network.categoryColor + ';"></div></div></div></td></tr><tr><td class="glimpse-data-wire-part">' + rendering.item(structure.layout.popup.wire, tabData) + '</td><td class="glimpse-data-server-part">' + rendering.item(structure.layout.popup.server, tabData) + '</td><td class="glimpse-data-client-part">' + rendering.item(structure.layout.popup.client, tabData) + '</td></tr></table></div>'; 
+
+                                    return html;
+                                }
+                            },
+                            defaults: {
+                                request: { title: 'Request', description: 'Total request time from click to dom ready', visible: true, size: 1, position: 0, align: 0, postfix: 'ms', getData: function(tabData) { return tabData.timings.total.duration; } },
+                                wire: { title: 'Wire', description: 'Total time on the network', visible: true, size: 2, position: 0, align: 0, postfix: 'ms', getData: function(tabData) { return tabData.timings.network.duration; } },
+                                server: { title: 'Server', description: 'Total time on the server', visible: true, size: 2, position: 0, align: 0, postfix: 'ms', getData: function(tabData) { return tabData.timings.server.duration; } },
+                                client: { title: 'Client', description: 'Total time once client kicks in to dom ready', visible: true, size: 2, position: 0, align: 0, postfix: 'ms', getData: function(tabData) { return tabData.timings.browser.duration; } }
+                            },
+                            layout: {
+                                mini: {
+                                    request: {},
+                                    wire: {},
+                                    server: {},
+                                    client: {},
+                                },
+                                popup: {
+                                    request: { title: 'Total Request Time', size: 0, position: 1, align: 1 },
+                                    wire: { position: 1, align: 1 },
+                                    server: { position: 1, align: 1 },
+                                    client: { position: 1, align: 1 },
+                                }
+                            }
+                        }, 
+                        processTimings = function(tabData) {
+                            var result = { },
+                                networkPre = calculateTimings('navigationStart', 'requestStart'),
+                                networkPost = calculateTimings('responseStart', 'responseEnd'),
+                                network = networkPre + networkPost,
+                                server = calculateTimings('requestStart', 'responseStart'),
+                                browser = calculateTimings('responseEnd', 'loadEventEnd'),
+                                total = network + server + browser;
+                      
+                            result.networkSending = { categoryColor: '#FDBF45', duration: networkPre, percentage: (networkPre / total) * 100 };
+                            result.networkReceiving = { categoryColor: '#FDBF45', duration: networkPost, percentage: (networkPost / total) * 100 };
+                            result.network = { categoryColor: '#FDBF45', duration: network, percentage: (network / total) * 100 };
+                            result.server = { categoryColor: '#AF78DD', duration: server, percentage: (server / total) * 100 };
+                            result.browser = { categoryColor: '#72A3E4', duration: browser, percentage: (browser / total) * 100 };
+                            result.total = { categoryColor: '#10E309', duration: network + server + browser, percentage: 100 };
+                         
+                            tabData.timings = result;
+                        },
+                        calculateTimings = function(startIndex, finishIndex) { 
+                            return timingsRaw[finishIndex] - timingsRaw[startIndex];
+                        }, 
+                        render = function(tabData, opened) {
+                            var html = '';
+                            if (timingsRaw) {
+                                process.init(structure);
+                                processTimings(tabData); 
+                                html = rendering.section(structure, tabData, opened); 
+                            }
+
+                            return html;
+                        };
+                
+                    return {
+                            render: render
+                        };
+                }(),
+                host: function() {
+                    var structure = {
+                            title: 'Host',
+                            id: 'host', 
+                            color: '#6161e0',
+                            popup: {
+                                render: function(tabData) {
+                                    var html = '<div class="glimpse-hud-popup-header">Server Side</div>';
+                                    html += '<div><table class="glimpse-hud-summary glimpse-hud-summary-left"><tr><th>' + rendering.item(structure.layout.popup.server, tabData) + '</th></tr><tr><td>' + rendering.item(structure.layout.popup.controller, tabData) + '</td></tr></table>';
+                                    html += '<table class="glimpse-hud-summary glimpse-hud-summary-right"><tr><td width="1">' + rendering.item(structure.layout.popup.action, tabData) + '</td><td width="40"></td><td>' + rendering.item(structure.layout.popup.connections, tabData) + '</td></tr><tr><td>' + rendering.item(structure.layout.popup.view, tabData) + '</td><td></td><td>' + rendering.item(structure.layout.popup.queries, tabData) + '</td></tr></table></div>';
+                                    html += '<div class="glimpse-hud-popup-clear"></div>'; 
+                                    html += '<table class="glimpse-hud-listing" style="table-layout:fixed;"><thead><tr><th></th><th class="glimpse-hud-listing-value glimpse-data-childless-duration">duration (ms)</th><th class="glimpse-hud-listing-value glimpse-data-childless-start-point">from start (ms)</th></tr></thead>';  
+                                    for (var i = 0; i < tabData.server.events.length; i++) {
+                                        var item = tabData.server.events[i];
+                                        html += '<tr ' + (item.childlessDuration < 2 ? 'class="glimpse-hud-quite glimpse-data-trivial"' : '') + '><td class="glimpse-hud-listing-overflow" style="padding-left:' + (item.executionIndex * 15) + 'px;" title="' + item.description + '">' + item.description + '</td><td class="glimpse-hud-listing-value glimpse-data-childless-duration">' + item.childlessDuration + '</td><td class="glimpse-hud-listing-value glimpse-data-childless-start-point"><span class="glimpse-hud-prefix">+</span>' + item.startPoint + '</td></tr>';
+                                    }    
+                                    html += '</table>';
+
+                                    return html;
+                                }
+                            },
+                            defaults: {
+                                server: { title: 'Total Server Time', description: 'Total time on the server', visible: true, size: 0, position: 1, align: 1, postfix: 'ms', getData: function(tabData) { return tabData.timings.server.duration; } },
+                                action: { title: 'Action', description: 'How long root Action took to execute', visible: function(tabData) { return tabData.mvc; }, size: 1, position: 0, align: 0, postfix: 'ms', getData: function(tabData) { return parseInt(tabData.mvc.actionExecutionTime); } },
+                                view: { title: 'View', description: 'How long root View took to render', visible: function(tabData) { return tabData.mvc; }, size: 1, position: 0, align: 0, postfix: 'ms', getData: function(tabData) { return parseInt(tabData.mvc.viewRenderTime); } },
+                                controller: { title: 'Controller/Action', description: 'Name of the root Controller and Action', visible: function(tabData) { return tabData.mvc; }, size: 2, position: 0, align: 0, postfix: 'ms', getLayoutData: function(tabData) { return '<span class="glimpse-hud-data">' + tabData.mvc.controllerName + '</span><span class="glimpse-hud-plain">.</span><span class="glimpse-hud-data">' + tabData.mvc.actionName + '</span><span class="glimpse-hud-plain">(...)</span>'; } },
+                                queries: { title: 'Queries', description: 'Total query duration and number of all SQL queries', visible: function(tabData) { return tabData.sql; }, size: 1, position: 0, align: 0, getLayoutData: function(tabData) { return '<span class="glimpse-hud-data">' + parseInt(tabData.sql.queryExecutionTime) + '</span><span class="glimpse-hud-postfix">ms</span><span class="glimpse-hud-spacer">/</span><span class="glimpse-hud-data">'  + tabData.sql.queryCount + '</span>'; } },
+                                connections: { title: 'Connections', description: 'Total query duration and number of all SQL queries', visible: function(tabData) { return tabData.sql; }, size: 1, position: 1, align: 1, getLayoutData: function(tabData) { return '<span class="glimpse-hud-data">' + parseInt(tabData.sql.connectionOpenTime) + '</span><span class="glimpse-hud-postfix">ms</span><span class="glimpse-hud-spacer">/</span><span class="glimpse-hud-data">'  + tabData.sql.connectionCount + '</span>'; } }
+                            },
+                            layout: {
+                                mini: {
+                                    action: {},
+                                    view: {},
+                                    controller: {},
+                                    queries: {},
+                                },
+                                popup: {
+                                    server: {},
+                                    action: { position: 1, align: 1 },
+                                    view: { position: 1, align: 1 },
+                                    controller: { position: 1, align: 1 },
+                                    queries: { position: 1, align: 1 },
+                                    connections: {},
+                                }
+                            }
+                        },
+                        processData = function(tabData) {
+                            tabData.server = { 
+                                    events: [{
+                                        title: 'Store.Browse',
+                                        startTime: '06/03/2013 14:19:38',
+                                        duration: 4.12,
+                                        startPoint: 1.67,
+                                        category: 'Controller'
+                                    },
+                                    {
+                                        title: 'Browse',
+                                        startTime: '06/03/2013 14:19:38',
+                                        duration: 0.12,
+                                        startPoint: 1.98,
+                                        category: 'Find'
+                                    },
+                                    {
+                                        title: 'Browse',
+                                        startTime: '06/03/2013 14:19:42',
+                                        duration: 1.9,
+                                        startPoint: 4.98,
+                                        category: 'Render'
+                                    },
+                                    {
+                                        title: '_RSVPStatus',
+                                        startTime: '06/03/2013 14:19:43',
+                                        duration: 0.9,
+                                        startPoint: 5.01,
+                                        category: 'Find'
+                                    },
+                                    {
+                                        title: '_RSVPStatus',
+                                        startTime: '06/03/2013 14:19:44',
+                                        duration: 1.2,
+                                        startPoint: 6.21,
+                                        category: 'Render partial'
+                                    }]
+                                };  
+                        }, 
+                        processEvents = function(tabData) { 
+                            var eventStack = [], 
+                                lastEvent = { startPoint : 0, duration : 0, childlessDuration : 0, endPoint : 0 },
+                                executionIndex = 0,
+                                rootDuration = tabData.timings.server.duration,
+                                rootChildlessDuration = rootDuration;
+                            
+                            for (var i = 0; i < tabData.server.events.length; i += 1) {
+                                var event = tabData.server.events[i],
+                                    topEvent = eventStack.length > 0 ? eventStack[eventStack.length - 1] : null, 
+                                    left = (event.startPoint / rootDuration) * 100,  
+                                    width = (event.duration / rootDuration) * 100, 
+                                    stackParsed = false;
+
+                                event.endPoint = parseFloat((event.startPoint + event.duration).toFixed(2));
+
+                                //Derive event nesting  
+                                while (!stackParsed) {
+                                    if (event.startPoint > lastEvent.startPoint && event.endPoint <= lastEvent.endPoint) { 
+                                        eventStack.push(lastEvent); 
+                                        stackParsed = true;
+                                    }
+                                    else if (topEvent != null && topEvent.endPoint < event.endPoint) {
+                                        eventStack.pop(); 
+                                        topEvent = eventStack.length > 0 ? eventStack[eventStack.length - 1] : null; 
+                                        stackParsed = false;
+                                    }
+                                    else {
+                                        stackParsed = true;
+                                        executionIndex++;
+                                    }
+                                }
+                        
+                                //Work out childless timings 
+                                var temp = eventStack.length > 0 ? eventStack[eventStack.length - 1] : undefined; 
+                                if (temp) {
+                                    temp.childlessDuration = parseFloat((temp.childlessDuration - event.duration).toFixed(2));
+                                } 
+
+                                //Work out root childless timings 
+                                if (eventStack.length == 0)
+                                    rootChildlessDuration -= event.duration;
+
+                                //Save calculate data
+                                event.childlessDuration = event.duration;
+                                event.startPercent = left;
+                                event.endPercent = left + width;
+                                event.widthPercent = width;
+                                event.nesting = eventStack.length;
+                                event.executionIndex = executionIndex + eventStack.length;
+                                event.description = event.category + ': ' + event.title;
+                        
+                                lastEvent = event;
+                            }
+                             
+                            tabData.server.events.unshift({
+                                    description: 'Request: ' + (window.location.pathname + window.location.search),
+                                    title: (window.location.pathname + window.location.search),
+                                    startTime: 'NOT SURE',
+                                    duration: rootDuration,
+                                    startPoint: '0.0',
+                                    category: 'Request',
+                                    childlessDuration: Math.round(rootChildlessDuration * 10) / 10,
+                                    startPercent: 0,
+                                    endPercent: 100,
+                                    widthPercent: 100,
+                                    nesting: 0,
+                                    executionIndex: 0
+                                }); 
+                        }, 
+                        render = function(tabData, opened) {
+                            var html = '';
+                            if (tabData.mvc || tabData.sql) {
+                                process.init(structure);
+                                processData(tabData);
+                                processEvents(tabData);
+                                html = rendering.section(structure, tabData, opened); 
+                            }
+
+                            return html;
+                        };
+                    
+                    return {
+                            render: render
+                        };
+                }(),
+                ajax: function() {
+                    var open = XMLHttpRequest.prototype.open,
+                        count = 0,
+                        summaryStack = [],
+                        detailStack = [],
+                        structure = {
+                            title: 'Ajax',
+                            id: 'ajax',
+                            color: '#559fdf',
+                            popup: {
+                                suppress: true,
+                                render: function(tabData) {
+                                    var html = '<div class="glimpse-hud-popup-header">Ajax Requests</div>';
+                                    html += '<div>' + rendering.item(structure.layout.popup.requests, tabData) + '</div>';
+                                    html += '<div class="glimpse-hud-popup-clear"></div>';
+                                    html += '<table style="table-layout:fixed;" class="glimpse-hud-listing glimpse-data-ajax-detail"><thead><tr><th class="glimpse-data-content-method"></th><th></th><th class="glimpse-hud-listing-value glimpse-data-duration">duration (ms)</th><th class="glimpse-hud-listing-value glimpse-data-size">size (kb)</th></tr></thead>';
+                                    html += '</table>';
+
+                                    return html;
+                                }
+                            },
+                            defaults: {
+                                requests: { title: 'Count', id: 'glimpse-data-ajax-count', description: 'Total Ajax requests detected on this page', visible: true, size: 1, position: 0, align: 0, getData: function(tabData) { return 0; } }
+                            },
+                            layout: {
+                                mini: {
+                                    requests: { }
+                                },
+                                popup: {
+                                    requests: { title: 'Total Ajax Requests', size: 0, position: 1, align: 1 },
+                                }
+                            }
+                        },
+                        test = '',
+                        processContentType = function(type) {
+                            return type.substring(0, type.indexOf(';'));
+                        },
+                        render = function(tabData, opened) {
+                            process.init(structure);
+
+                            return rendering.section(structure, tabData, opened);
+                        },
+                        update = function(method, uri, duration, size, status, statusText, time, contentType) {
+                            //Add it when needed
+                            if (count == 0) {
+                                var section = $('.glimpse-hud-section-ajax');
+                                section.find('.glimpse-hud-section-inner').append('<div class="glimpse-hud-detail glimpse-hud-detail-small glimpse-hud-listing glimpse-data-ajax-summary"></div>');
+                                section.append(rendering.popup(structure, { }));
+                            }
+
+                            //Set the counter
+                            var counter = $('.glimpse-data-ajax-count .glimpse-hud-data').text(++count).addClass('glimpse-hud-value-update');
+                            setTimeout(function() {
+                                counter.removeClass('glimpse-hud-value-update');
+                            }, 2000);
+
+                            test += 'a';
+
+                            //Update data records
+                            var rowClass = (status == 304 ? ' glimpse-hud-quite' : !(status >= 200 && status < 300) ? ' glimpse-hud-error' : '');
+                            recordItem('<div class="glimpse-hud-listing-row glimpse-hud-value' + rowClass + '"><div class="glimpse-hud-data glimpse-hud-quite glimpse-data-ajax-method">' + method + '</div><div class="glimpse-hud-data glimpse-hud-listing-overflow glimpse-data-ajax-uri" title="' + uri + '">' + uri + test + '</div><div class="glimpse-data-ajax-duration"><span class="glimpse-hud-data">' + duration + '</span><span class="glimpse-hud-postfix">ms</span></div></div>', '.glimpse-hud-section-ajax .glimpse-data-ajax-summary', summaryStack, 2);
+                            recordItem('<tbody class="' + rowClass + '"><tr><td class="glimpse-hud-listing-overflow" title="' + uri + '" colspan="2">' + uri + test + '</td><td class="glimpse-hud-listing-value glimpse-data-duration">' + duration + '</td><td class="glimpse-hud-listing-value glimpse-data-size">' + (Math.round((size / 1024) * 10) / 10) + '</td></tr><tr><td class="glimpse-hud-quite glimpse-data-content-method">' + method + '</td><td class="glimpse-hud-quite glimpse-hud-listing-overflow">' + status + ' - ' + statusText + '</td><td class="glimpse-hud-quite glimpse-data-content-type glimpse-hud-listing-overflow" title="' + contentType + '">' + processContentType(contentType) + '</td><td class="glimpse-hud-quite glimpse-data-content-time">' + time.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1") + '</td></tr></tbody>', '.glimpse-hud-section-ajax .glimpse-data-ajax-detail', detailStack, 6);
+                        },
+                        recordItem = function(html, selector, stack, length) {
+                            //Set row
+                            var row = $(html).prependTo(selector);
+                            setTimeout(function() {
+                                row.addClass('added');
+                            }, 1);
+
+                            //Track state of the details
+                            if (stack.length >= length)
+                                stack.shift().remove();
+                            stack.push(row);
+                        };
+                        /*
+                        record = function(method, uri, duration) { 
+                            /*
+                            timeSince = function(ms) {
+                                var seconds = ms / 1000,
+                                    interval = Math.floor(seconds / 60);
+                                if (interval >= 1) return [ interval, "m" ];
+
+                                return [ Math.floor(seconds), "s" ];
+                            },
+                            var row = $('<div class="glimpse-hud-listing-row glimpse-hud-value"><div class="glimpse-hud-data glimpse-hud-quite glimpse-data-ajax-method">' + method + '</div><div class="glimpse-hud-data glimpse-hud-listing-overflow glimpse-data-ajax-uri" title="' + uri + '">' + uri + '</div><div class="glimpse-data-ajax-duration"><span class="glimpse-hud-data">' + duration + '</span><span class="glimpse-hud-postfix">ms</span></div><div class="glimpse-data-ajax-past"></div></div>').prependTo('.glimpse-hud-section-ajax .glimpse-hud-listing'),
+                                item = { row: row, canceled: false },
+                                past = row.find('.glimpse-data-ajax-past'),
+                                next = 0,
+                                total = 0;
+                            //Work out the timing count up
+                            var timer = function() {
+                                    setTimeout(function() {
+                                        var since = timeSince(total);
+                                        past.html('<span class="glimpse-hud-data">' + since[0] + '</span><span class="glimpse-hud-postfix">' + since[1] + ' ago</span>');
+                                
+                                        next = total < 10000 ? 1000 : total < 30000 ? 5000 : total < 60000 ? 10000 : 60000;
+                                        total += next;
+                                 
+                                        if (!item.canceled)
+                                            timer();
+                                    }, next);
+                                };
+                            timer(); 
+                        };
+                        */ 
+                     
+                    
+                    XMLHttpRequest.prototype.open = function(method, uri, async, user, pass) {
+                        var startTime = new Date().getTime();
+                
+                        this.addEventListener("readystatechange", function() {
+                                if (this.readyState == 4)  { 
+                                    update(method, uri, new Date().getTime() - startTime, this.getResponseHeader("Content-Length"), this.status, this.statusText, new Date(), this.getResponseHeader("Content-Type"));
+                                }
+                            }, false); 
+                
+                        open.apply(this, arguments);
+                    }; 
+
+                    return {
+                            render: render
+                        };
+                }()
             };
-        })(),
-        adjustForAlerts = function(scope, tabData) { 
-            for (var key in tabData.alert) {
-                var item = $(".glimpse-hud-value[data-maxName='" + key + "']"),
-                    maxValue = tabData.alert[key];
-                
-                if (parseInt(item.text()) > parseInt(maxValue)) { 
-                    item.addClass('glimpse-hud-value-alert').attr('title', item.attr('title') + ' - Max allowed time \'' + tabData.alert[key] + '\'').attr('data-maxValue', maxValue);
-
-                    item.closest('.glimpse-hud-section').addClass('glimpse-hud-section-alert');
-                }
-            }
-        },
-        graph = (function() {
-            var setup = function(tabData, scope) {
-                    var graphData = util.localStorage('glimpseHudGraph') || { requestTime: [], connectionOpenTime: [], actionExecutionTime: [] };
-                 
-                    graphData.requestTime.push({ capped: selectValue(tabData.request.requestTime, scope.find('.glimpse-hud-section-request').attr('data-maxValue')), raw: tabData.request.requestTime });
-                    checkSize(graphData.requestTime);
-                
-                    graphData.actionExecutionTime.push({ capped: selectValue(tabData.mvc.actionExecutionTime, scope.find('.glimpse-hud-section-mvc').attr('data-maxValue')), raw: tabData.mvc.actionExecutionTime });
-                    checkSize(graphData.actionExecutionTime); 
-                
-                    graphData.connectionOpenTime.push({ capped: selectValue(tabData.sql.connectionOpenTime, scope.find('.glimpse-hud-section-sql').attr('data-maxValue')), raw: tabData.sql.connectionOpenTime });
-                    checkSize(graphData.connectionOpenTime);
-                
-                    scope.find('.glimpse-hud-section-request .glimpse-hud-main').prepend(build(graphData.requestTime, scope.find('.glimpse-hud-section-request')));
-                    scope.find('.glimpse-hud-section-mvc .glimpse-hud-main').prepend(build(graphData.actionExecutionTime, scope.find('.glimpse-hud-section-mvc')));
-                    scope.find('.glimpse-hud-section-sql .glimpse-hud-main').prepend(build(graphData.connectionOpenTime, scope.find('.glimpse-hud-section-sql')));
-
-                    util.localStorage('glimpseHudGraph', graphData);
-                },
-                generate = function(graphItem, scope, value, maxValue) {
-                    graphItem.push({ capped: selectValue(value, maxValue), raw: value});
-                    checkSize(graphItem); 
-                    
-                    scope.find('.glimpse-hud-graph').remove();
-                    scope.find('.glimpse-hud-main').prepend(build(graphItem, scope));
-                },
-                build = function(graphItem, scope) {
-                    var min = graphItem[0].capped,
-                        max = graphItem[0].capped,
-                        difference = 0,
-                        html = '<div class="glimpse-hud-graph glimpse-hud-tooltips-non">';
-                    
-                    for (var i = 0; i < graphItem.length; i++) { 
-                        min = Math.min(min, graphItem[i].capped);
-                        max = Math.max(max, graphItem[i].capped); 
-                    }
-                    difference = max - min;
-                    
-                    for (i = 0; i < graphItem.length; i++) { 
-                        var height = (((((graphItem[i].capped - min) / difference) * 100) / 5) * 4) + 20,
-                            maxValue = scope.attr('data-maxValue'),
-                            warnClass = maxValue && graphItem[i].raw > maxValue ? ' glimpse-hud-graph-item-alert' : '';
-                        html += '<div class="glimpse-hud-graph-item' + warnClass + '" style="left:' + (i * 3) + 'px;height:' + height + '%" title="' + graphItem[i].raw + ' ms"></div>';
-                    }
-
-                    return html + '</div>';
-                },
-                checkSize = function(graphItem) {
-                    if (graphItem.length > 15)
-                        graphItem.shift();
-                },
-                selectValue = function(current, max) {
-                    return max ? Math.min(current, max) : current;
-                };
-
-            return {
-                setup: setup,
-                generate: generate
-            };
-        })();
-        
-        /*
-        //Resource Spike 
-        processResourceEntities = function() {
-            var html = '';
             
-            if (window.performance.getEntriesByType) { 
-                var resourceList = window.performance.getEntriesByType("resource");
-                for (var i = 0; i < resourceList.length; i++)
-                { 
-                    console.log("End to end resource fetch: " + resourceList[i].duration); 
-                    for (var key in resourceList[i]) {
-                        console.log('   ' + key + ' = ' + resourceList[i][key]);
-                    }
-                } 
-            }
-
-            return html;
-        }
-        */
+        }();
 
     pubsub.subscribe('action.template.processing', modify); 
     pubsub.subscribe('action.data.initial.changed', function(args) { $(window).load(function() { setTimeout(function() { loaded(args); }, 0); }); }); 
