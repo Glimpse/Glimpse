@@ -370,7 +370,24 @@ namespace Glimpse.Core.Framework
                     if (!IsInitialized)
                     {
                         var messageBroker = Configuration.MessageBroker;
-                        
+
+                        // TODO: Fix this to IDisplay no longer uses I*Tab*Setup
+                        var displaysThatRequireSetup = Configuration.Displays.Where(display => display is ITabSetup).Select(display => display);
+                        foreach (ITabSetup display in displaysThatRequireSetup)
+                        {
+                            var key = CreateKey(display);
+                            try
+                            {
+                                var setupContext = new TabSetupContext(logger, messageBroker, () => GetTabStore(key));
+                                display.Setup(setupContext);
+                            }
+                            catch (Exception exception)
+                            {
+                                logger.Error(Resources.InitializeTabError, exception, key);
+                            }
+                        }
+
+
                         var tabsThatRequireSetup = Configuration.Tabs.Where(tab => tab is ITabSetup).Select(tab => tab);
                         foreach (ITabSetup tab in tabsThatRequireSetup)
                         {
@@ -567,6 +584,7 @@ namespace Glimpse.Core.Framework
                 }
             }
         }
+        
         private void PersistMetadata()
         {
             var metadata = new GlimpseMetadata { Version = Version };

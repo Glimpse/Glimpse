@@ -55,6 +55,7 @@
     <Compile Include="AspNetServiceLocator.cs" />
     <Compile Include="Controls\Client.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Display\EnvironmentDisplay.cs" />
     <Compile Include="Extensibility\AspNetTab.cs" />
     <Compile Include="Extensions\HttpContextExtensions.cs" />
     <Compile Include="Extensions\RuntimePolicyContextExtensions.cs" />

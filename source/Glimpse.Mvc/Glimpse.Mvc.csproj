@@ -86,6 +86,7 @@
     <Compile Include="AlternateType\View.cs" />
     <Compile Include="AlternateType\ViewCorrelationMixin.cs" />
     <Compile Include="AlternateType\ViewEngine.cs" />
+    <Compile Include="Display\MvcDisplay.cs" />
     <Compile Include="Html\HtmlHelperExtension.cs" />
     <Compile Include="Message\FilterBounds.cs" />
     <Compile Include="Message\FilterCategory.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Model\MetadataItemModel.cs" />
     <Compile Include="Model\MetadataPropertyItemModel.cs" />
     <Compile Include="Model\ModelBindingModel.cs" />
+    <Compile Include="Model\MvcDisplayModel.cs" />
     <Compile Include="Model\ViewModelSummary.cs" />
     <Compile Include="Model\ViewsModel.cs" />
     <Compile Include="Inspector\DependencyInjectionInspector.cs" />
@@ -121,11 +123,11 @@
     <Compile Include="SerializationConverter\ListOfExecutionModelConverter.cs" />
     <Compile Include="SerializationConverter\ListOfMetadataItemModelConverter.cs" />
     <Compile Include="SerializationConverter\ListOfViewsModelConverter.cs" />
+    <Compile Include="SerializationConverter\MvcDisplayModelConverter.cs" />
     <Compile Include="SerializationConverter\UrlParameterConverter.cs" />
     <Compile Include="Tab\Execution.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Tab\HudPoc.cs" />
     <Compile Include="Tab\Metadata.cs" />
     <Compile Include="Tab\ModelBinding.cs" />
     <Compile Include="Tab\Views.cs" />

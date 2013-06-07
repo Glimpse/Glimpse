@@ -81,6 +81,7 @@
     <Compile Include="Configuration\TypeConverter.cs" />
     <Compile Include="Configuration\TypeElement.cs" />
     <Compile Include="Configuration\TypeElementCollection.cs" />
+    <Compile Include="Display\TimingsDisplay.cs" />
     <Compile Include="Extensibility\AlternateType.cs" />
     <Compile Include="Extensibility\AlternateTypeGenerationHook.cs" />
     <Compile Include="Extensibility\AlternateTypeSelector.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Framework\Support\ExecutionBlockBase.cs" />
     <Compile Include="Framework\Support\IExecutionTask.cs" />
+    <Compile Include="SerializationConverter\EnumerableOfITimelineMessageConverter.cs" />
     <Compile Include="Setting\Initializer.cs" />
     <Compile Include="Support\NuGetPackage.cs" />
     <Compile Include="System.cs" />
