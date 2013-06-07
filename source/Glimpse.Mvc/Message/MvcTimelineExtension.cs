@@ -26,41 +26,41 @@ namespace Glimpse.Mvc.Message
             var viewRenderMessage = message as View.Render.Message;
             if (viewRenderMessage != null)
             {
-                message.EventName = string.Format("Render:View - {0}:{1}", controllerName, actionName);
+                message.EventName = string.Format("Render: {0}.{1}", controllerName, actionName);
                 return message;
             }
 
             var activeInvokerInvokeActionResultMessage = message as IInvokeActionResultMessage;
             if (activeInvokerInvokeActionResultMessage != null)
             {
-                message.EventName = string.Format("InvokeActionResult - {0}:{1}", controllerName, actionName);
+                message.EventName = string.Format("Action Result: {0}.{1}", controllerName, actionName);
                 return message;
             }
 
             var activeInvokerInvokeActionMethodMessage = message as ActionInvoker.InvokeActionMethod.Message;
             if (activeInvokerInvokeActionMethodMessage != null)
             { 
-                message.EventName = string.Format("InvokeActionMethod - {0}:{1}", controllerName, actionName);
+                message.EventName = string.Format("Controller: {0}.{1}", controllerName, actionName);
                 return message;
             }
 
             var boundedFilterMessage = message as IBoundedFilterMessage;
             if (boundedFilterMessage != null)
             {
-                message.EventName = string.Format("{0}:{1} - {2}:{3}", boundedFilterMessage.Category.ToString(), boundedFilterMessage.Bounds.ToString(), controllerName, actionName);
+                message.EventName = string.Format("{0} {1}: {2}.{3}", boundedFilterMessage.Category.ToString(), boundedFilterMessage.Bounds.ToString(), controllerName, actionName);
                 return message;
             }
 
             var filterMessage = message as IFilterMessage;
             if (filterMessage != null)
             {
-                message.EventName = string.Format("{0} - {1}:{2}", filterMessage.Category.ToString(), controllerName, actionName);
+                message.EventName = string.Format("{0}: {1}.{2}", filterMessage.Category.ToString(), controllerName, actionName);
                 return message;
             }
 
             if (actionMessage != null)
             {
-                message.EventName = string.Format("{0}:{1}", controllerName, actionName);
+                message.EventName = string.Format("{0}.{1}", controllerName, actionName);
                 return message;
             }
 
