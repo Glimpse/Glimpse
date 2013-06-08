@@ -240,7 +240,7 @@ namespace Glimpse.Ado.AlternateType
             MessageBroker.Publish(
                 new ConnectionClosedMessage(ConnectionId)
                 .AsTimedMessage(TimerStrategy.Stop(timerTimeSpan))
-                .AsTimelineMessage("Connection Opened", AdoTimelineCategory.Connection));
+                .AsTimelineMessage("Connection: Opened", AdoTimelineCategory.Connection));
         } 
     }
 }

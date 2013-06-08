@@ -324,7 +324,7 @@ namespace Glimpse.Ado.AlternateType
                 MessageBroker.Publish(
                     new CommandDurationAndRowCountMessage(InnerConnection.ConnectionId, commandId, recordsAffected)
                     .AsTimedMessage(TimerStrategy.Stop(timer))
-                    .AsTimelineMessage("Command Executed", AdoTimelineCategory.Command, type));
+                    .AsTimelineMessage("Command: Executed", AdoTimelineCategory.Command, type));
             } 
         }
 
@@ -335,7 +335,7 @@ namespace Glimpse.Ado.AlternateType
                 MessageBroker.Publish(
                     new CommandErrorMessage(InnerConnection.ConnectionId, commandId, exception)
                     .AsTimedMessage(TimerStrategy.Stop(timer))
-                    .AsTimelineMessage("Command Error", AdoTimelineCategory.Command, type));
+                    .AsTimelineMessage("Command: Error", AdoTimelineCategory.Command, type));
             }
         }
         #endregion
