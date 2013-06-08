@@ -226,14 +226,13 @@
     overflow: hidden;
     text-overflow: ellipsis;
 } 
-.glimpse-open td.glimpse-hud-listing-value {
-    text-align: right;
+.glimpse-open td.glimpse-hud-listing-value, .glimpse-open th.glimpse-hud-listing-value {
+    text-align: right; 
+} 
+.glimpse-open td.glimpse-hud-listing-value, .glimpse-open span.glimpse-hud-listing-value { 
     font-family: Consolas, monospace, serif;
     opacity: 0.85;
-} 
-.glimpse-open th.glimpse-hud-listing-value {
-    text-align: right;
-} 
+}  
 .glimpse-open .glimpse-hud .glimpse-data-childless-duration, .glimpse-open .glimpse-hud .glimpse-data-duration, .glimpse-open .glimpse-hud .glimpse-data-content-type {
     width:90px;
 }
@@ -269,7 +268,7 @@
 .glimpse-open .glimpse-hud .glimpse-data-ajax-uri {
     max-width: 230px;
     padding: 0 25px;
-} 
+}  
 .glimpse-open .glimpse-hud .glimpse-hud-section-ajax .glimpse-hud-listing-row { 
     position: relative;
     top: -20px;

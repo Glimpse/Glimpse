@@ -185,10 +185,18 @@
                                     html += '<div class="glimpse-hud-popup-clear"></div>'; 
                                     html += '<table class="glimpse-hud-listing" style="table-layout:fixed;"><thead><tr><th></th><th class="glimpse-hud-listing-value glimpse-data-childless-duration">duration (ms)</th><th class="glimpse-hud-listing-value glimpse-data-childless-start-point">from start (ms)</th></tr></thead>';  
                                     for (var i = 0; i < details.timings.data.length; i++) {
-                                        var item = details.timings.data[i];
-                                        html += '<tr ' + (item.childlessDuration < 2 ? 'class="glimpse-hud-quite glimpse-data-trivial"' : '') + '><td class="glimpse-hud-listing-overflow" style="padding-left:' + (item.nesting * 15) + 'px;" title="' + item.description + '">' + item.description + '</td><td class="glimpse-hud-listing-value glimpse-data-childless-duration">' + item.childlessDuration + '</td><td class="glimpse-hud-listing-value glimpse-data-childless-start-point"><span class="glimpse-hud-prefix">+</span>' + item.startPoint + '</td></tr>';
+                                        var item = details.timings.data[i],
+                                            isTrivial = item.childlessDuration < 2;
                                         
-                                        if (item.childlessDuration < 2) { hasTrivial = true; }
+                                        if (!item.suppress) {
+                                            html += '<tbody' + (isTrivial ? ' class="glimpse-data-trivial"' : '') + '>';
+                                            html += '<tr' + (isTrivial ? ' class="glimpse-hud-quite"' : '') + '><td class="glimpse-hud-listing-overflow" style="padding-left:' + (item.nesting * 15) + 'px;" title="' + item.description + '">' + item.description + '</td><td class="glimpse-hud-listing-value glimpse-data-childless-duration">' + item.childlessDuration + '</td><td class="glimpse-hud-listing-value glimpse-data-childless-start-point"><span class="glimpse-hud-prefix">+</span>' + item.startPoint + '</td></tr>';
+                                            if (item.queries && item.queries.listing.length > 0) {
+                                                html += '<tr><td style="padding-left:' + ((item.nesting * 15) + 20) + 'px;"><span class="glimpse-hud-prefix">➥</span>' + item.queries.listing.length + '<span class="glimpse-hud-postfix">queries</span> <span class="glimpse-hud-listing-value">' + item.queries.durationSum.toFixed(2) + '</span><span class="glimpse-hud-postfix">ms</span></td><td></td><td></td></tr>';
+                                            }
+                                            html += '</tbody>'
+                                            if (isTrivial) { hasTrivial = true; }
+                                        }
                                     }    
                                     html += '</table>';
                                     if (hasTrivial) {
@@ -226,6 +234,7 @@
                         processEvents = function(details) { 
                             var eventStack = [], 
                                 lastEvent = { startPoint : 0, duration : 0, childlessDuration : 0, endPoint : 0 },
+                                lastControllerEvent = { },
                                 rootDuration = details.request.data.server.duration,
                                 rootChildlessDuration = rootDuration;
                             
@@ -237,6 +246,17 @@
                                     stackParsed = false;
 
                                 event.endPoint = parseFloat((event.startPoint + event.duration).toFixed(2));
+
+                                //Work out how queries are to be parsed
+                                if (event.category == "Controller") {
+                                    lastControllerEvent = event;
+                                    lastControllerEvent.queries = { durationSum: 0, listing: [] };
+                                }
+                                else if (event.category == "Command") {
+                                    lastControllerEvent.queries.listing.push(event);
+                                    lastControllerEvent.queries.durationSum += event.duration;
+                                    event.suppress = true;
+                                }
 
                                 //Derive event nesting  
                                 while (!stackParsed) {
