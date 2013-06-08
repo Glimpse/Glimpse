@@ -26,8 +26,8 @@ namespace Glimpse.Core.Display
             return context.GetMessages<ITimelineMessage>()
                 .Where(m => 
                     m.EventCategory.Name.Equals("Command") ||
-                    m.EventCategory.Name.Equals("Controller") ||
-                    m.EventCategory.Name.Equals("Render"));
+                    (m.EventCategory.Name.Equals("Controller") && m.EventName.StartsWith("Controller:")) ||
+                    m.EventCategory.Name.Equals("View")).OrderBy(m => m.Offset);
         }
 
         public void Setup(ITabSetupContext context)
