@@ -15,9 +15,9 @@
 .glimpse-open .glimpse-hud-title { 
     position: absolute;
     line-height: 100%;
-    font-family: "Segoe UI Semibold";
     font-size: 9px;
     top: 2px;
+    font-family: "Segoe UI Semibold", "Segoe UI", "Helvetica Neue", Helvetica, Arial;
     color: white;
     text-transform: uppercase; 
     -webkit-transform-origin: 10px 20px;
@@ -29,6 +29,7 @@
     -ms-transform: rotate(270deg);
     -o-transform: rotate(270deg);
     cursor: pointer;
+    font-weight: bold;
 }
 .glimpse-open .glimpse-hud-section-inner {  
     -webkit-transition: all 0.3s ease;
@@ -67,10 +68,7 @@
 }
 .glimpse-open .glimpse-hud-detail-right .glimpse-hud-header {
     text-align: right;
-}
-.glimpse-open .glimpse-hud-detail-large .glimpse-hud-data {
-    font-weight: bold;
-}
+} 
 .glimpse-open .glimpse-hud-detail-extra-large, .glimpse-hud-detail-extra-large span {
     font-size: 2em;
     line-height: 100%;
@@ -136,10 +134,10 @@
     z-index: 1;
     bottom: 0px;
     max-height: 0px;
-    -webkit-transition: max-height 0.3s ease 1s;
-    -moz-transition: max-height 0.3s ease 1s;
-    -o-transition: max-height 0.3s ease 1s;
-    transition: max-height 0.3s ease 1s;
+    -webkit-transition: max-height 0.3s ease 0.5s;
+    -moz-transition: max-height 0.3s ease 0.5s;
+    -o-transition: max-height 0.3s ease 0.5s;
+    transition: max-height 0.3s ease 0.5s;
 }
 .glimpse-open .glimpse-hud-popup-clear {
     clear: both;
