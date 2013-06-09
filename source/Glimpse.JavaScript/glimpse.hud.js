@@ -192,9 +192,9 @@
                                             html += '<tbody' + (isTrivial ? ' class="glimpse-data-trivial"' : '') + '>';
                                             html += '<tr' + (isTrivial ? ' class="glimpse-hud-quite"' : '') + '><td class="glimpse-hud-listing-overflow" style="padding-left:' + (item.nesting * 15) + 'px;" title="' + item.description + '">' + item.description + '</td><td class="glimpse-hud-listing-value glimpse-data-childless-duration">' + item.childlessDuration + '</td><td class="glimpse-hud-listing-value glimpse-data-childless-start-point"><span class="glimpse-hud-prefix">+</span>' + item.startPoint + '</td></tr>';
                                             if (item.queries && item.queries.listing.length > 0) {
-                                                html += '<tr><td style="padding-left:' + ((item.nesting * 15) + 20) + 'px;"><span class="glimpse-hud-prefix">➥</span>' + item.queries.listing.length + '<span class="glimpse-hud-postfix">queries</span> <span class="glimpse-hud-listing-value">' + item.queries.durationSum.toFixed(2) + '</span><span class="glimpse-hud-postfix">ms</span></td><td></td><td></td></tr>';
+                                                html += '<tr><td class="glimpse-data-query-summary" style="padding-left:' + ((item.nesting * 15) + 20) + 'px;"><span class="glimpse-hud-prefix">➥</span><span class="glimpse-hud-listing-value">' + item.queries.listing.length + '</span><span class="glimpse-hud-postfix">queries</span> <span class="glimpse-hud-listing-value">' + item.queries.durationSum.toFixed(2) + '</span><span class="glimpse-hud-postfix">ms</span></td><td></td><td></td></tr>';
                                             }
-                                            html += '</tbody>'
+                                            html += '</tbody>';
                                             if (isTrivial) { hasTrivial = true; }
                                         }
                                     }    
@@ -288,7 +288,7 @@
                                 event.startPercent = left;
                                 event.endPercent = left + width;
                                 event.widthPercent = width;
-                                event.nesting = eventStack.length; 
+                                event.nesting = eventStack.length + 1; 
                                 event.description = event.title; 
                         
                                 lastEvent = event;

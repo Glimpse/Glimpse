@@ -268,7 +268,10 @@
 .glimpse-open .glimpse-hud .glimpse-data-ajax-uri {
     max-width: 230px;
     padding: 0 25px;
-}  
+} 
+.glimpse-open .glimpse-hud .glimpse-data-query-summary .glimpse-hud-listing-value {
+    color: #e2875e;
+}
 .glimpse-open .glimpse-hud .glimpse-hud-section-ajax .glimpse-hud-listing-row { 
     position: relative;
     top: -20px;
