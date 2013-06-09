@@ -14,8 +14,9 @@
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET 4.0 application. For ASP.NET MVC3 support, please NuGet Glimpse.MVC3.</description>
         <summary>ASP.NET 4.0 web debugging and diagnostics tool.</summary>
         <releaseNotes>
-Flyweight release for client:
- - Minor fix to how UriTemplates handels Require
+Heavyweight release for client:
+ - Major release to the system which includes all components needed for HUD
+ - Major release to the client which includes a new style/theme
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse diagnostics performance profiling timing</tags>
     </metadata>
