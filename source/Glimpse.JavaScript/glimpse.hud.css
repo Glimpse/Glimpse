@@ -89,6 +89,10 @@
     line-height: 100%;
     margin-top: -3px;
 }
+@media screen\0 {   
+    .glimpse-open .glimpse-hud-value { margin-top: -4px; }
+    .glimpse-open .glimpse-hud-detail-normal .glimpse-hud-header { margin-bottom: 2px; }
+} 
 .glimpse-open .glimpse-hud-header { 
     opacity: 0.6;
     font-size: 0.7em;
