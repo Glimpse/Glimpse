@@ -107,7 +107,8 @@
                                 render: function(details) {
                                     var requestDetails = details.request.data,
                                         html = '<div class="glimpse-hud-popup-header">Browser Request</div>';
-                                    html += '<div>' + rendering.item(structure.layout.popup.request, details) + '</div>';
+                                    html += '<div><div class="glimpse-hud-summary-left">' + rendering.item(structure.layout.popup.request, details) + '</div>';
+                                    html += '<table class="glimpse-hud-summary glimpse-hud-summary-right"><tr><td width="1" class="glimpse-hud-listing-overflow">' + rendering.item(structure.layout.popup.host, details) + '</td></tr><tr><td class="glimpse-hud-listing-overflow">' + rendering.item(structure.layout.popup.principle, details)  + '</td></tr></table></div>';
                                     html += '<div class="glimpse-hud-popup-clear"></div>';
                                     html += '<div class="glimpse-data-request-parts"><table><tr><td colspan="3"><div class="glimpse-hud-bar glimpse-hud-tooltips-non"><div><div class="glimpse-hud-bar-item" style="width: 100%;background-color: ' + requestDetails.browser.categoryColor + '"></div><div class="glimpse-hud-bar-item" style="width: ' + requestDetails.server.percentage + '%;background-color: ' + requestDetails.server.categoryColor + ';"></div><div class="glimpse-hud-bar-item" style="width: ' + requestDetails.network.percentage + '%;background-color: ' + requestDetails.network.categoryColor + ';"></div></div></div></td></tr><tr><td class="glimpse-data-wire-part">' + rendering.item(structure.layout.popup.wire, details) + '</td><td class="glimpse-data-server-part">' + rendering.item(structure.layout.popup.server, details) + '</td><td class="glimpse-data-client-part">' + rendering.item(structure.layout.popup.client, details) + '</td></tr></table></div>'; 
 
@@ -118,7 +119,9 @@
                                 request: { title: 'Request', description: 'Total request time from click to dom ready', visible: true, size: 1, position: 0, align: 0, postfix: 'ms', getData: function(details) { return details.request.data.total.duration; } },
                                 wire: { title: 'Wire', description: 'Total time on the network', visible: true, size: 2, position: 0, align: 0, postfix: 'ms', getData: function(details) { return details.request.data.network.duration; } },
                                 server: { title: 'Server', description: 'Total time on the server', visible: true, size: 2, position: 0, align: 0, postfix: 'ms', getData: function(details) { return details.request.data.server.duration; } },
-                                client: { title: 'Client', description: 'Total time once client kicks in to dom ready', visible: true, size: 2, position: 0, align: 0, postfix: 'ms', getData: function(details) { return details.request.data.browser.duration; } }
+                                client: { title: 'Client', description: 'Total time once client kicks in to dom ready', visible: true, size: 2, position: 0, align: 0, postfix: 'ms', getData: function(details) { return details.request.data.browser.duration; } }, 
+                                host: { title: 'Host', description: 'Server that responded to the request', visible: true, size: 2, position: 1, align: 1, postfix: '', getLayoutData: function(details) { return '<div class="glimpse-hud-listing-overflow" style="max-width:120px;">' + details.environment.data.serverName + '</div>'; } }, 
+                                principle: { title: 'Principle', description: 'Principle that is currently logged in for this session', visible: function(details) { return details.environment.data.user + 'vdh_ant'; }, size: 2, position: 1, align: 1, postfix: '', getLayoutData: function(details) { return '<div class="glimpse-hud-listing-overflow" style="max-width:120px;">' + details.environment.data.user + 'vdh_ant</div>'; } }
                             },
                             layout: {
                                 mini: {
@@ -132,6 +135,8 @@
                                     wire: { position: 1, align: 1 },
                                     server: { position: 1, align: 1 },
                                     client: { position: 1, align: 1 },
+                                    host: { },
+                                    principle: { },
                                 }
                             }
                         }, 
@@ -180,8 +185,8 @@
                                 render: function(details) {
                                     var hasTrivial = false,
                                         html = '<div class="glimpse-hud-popup-header">Server Side</div>';
-                                    html += '<div><table class="glimpse-hud-summary glimpse-hud-summary-left"><tr><th>' + rendering.item(structure.layout.popup.server, details) + '</th></tr><tr><td>' + rendering.item(structure.layout.popup.controller, details) + '</td></tr></table>';
-                                    html += '<table class="glimpse-hud-summary glimpse-hud-summary-right"><tr><td width="1">' + rendering.item(structure.layout.popup.action, details) + '</td>' + (details.sql ? '<td width="40"></td><td>' + rendering.item(structure.layout.popup.connections, details) + '</td>' : '') + '</tr><tr><td>' + rendering.item(structure.layout.popup.view, details) + '</td>' + (details.sql ? '<td></td><td>' + rendering.item(structure.layout.popup.queries, details) + '</td>' : '') + '</tr></table></div>';
+                                    html += '<div><table class="glimpse-hud-summary glimpse-hud-summary-space glimpse-hud-summary-left"><tr><th>' + rendering.item(structure.layout.popup.server, details) + '</th></tr><tr><td>' + rendering.item(structure.layout.popup.controller, details) + '</td></tr></table>';
+                                    html += '<table class="glimpse-hud-summary glimpse-hud-summary-space glimpse-hud-summary-right"><tr><td width="1">' + rendering.item(structure.layout.popup.action, details) + '</td>' + (details.sql ? '<td width="40"></td><td>' + rendering.item(structure.layout.popup.connections, details) + '</td>' : '') + '</tr><tr><td>' + rendering.item(structure.layout.popup.view, details) + '</td>' + (details.sql ? '<td></td><td>' + rendering.item(structure.layout.popup.queries, details) + '</td>' : '') + '</tr></table></div>';
                                     html += '<div class="glimpse-hud-popup-clear"></div>'; 
                                     html += '<table class="glimpse-hud-listing" style="table-layout:fixed;"><thead><tr><th></th><th class="glimpse-hud-listing-value glimpse-data-childless-duration">duration (ms)</th><th class="glimpse-hud-listing-value glimpse-data-childless-start-point">from start (ms)</th></tr></thead>';  
                                     for (var i = 0; i < details.timings.data.length; i++) {
@@ -211,7 +216,7 @@
                                 action: { title: 'Action', description: 'How long root Action took to execute', visible: function(details) { return details.mvc; }, size: 1, position: 0, align: 0, postfix: 'ms', getData: function(details) { return parseInt(details.mvc.data.actionExecutionTime); } },
                                 view: { title: 'View', description: 'How long root View took to render', visible: function(details) { return details.mvc; }, size: 1, position: 0, align: 0, postfix: 'ms', getData: function(details) { return parseInt(details.mvc.data.viewRenderTime); } },
                                 controller: { title: 'Controller/Action', description: 'Name of the root Controller and Action', visible: function(details) { return details.mvc; }, size: 2, position: 0, align: 0, postfix: 'ms', getLayoutData: function(details) { return '<span class="glimpse-hud-data">' + details.mvc.data.controllerName + '</span><span class="glimpse-hud-plain">.</span><span class="glimpse-hud-data">' + details.mvc.data.actionName + '</span><span class="glimpse-hud-plain">(...)</span>'; } },
-                                queries: { title: 'Queries', description: 'Total query duration and number of all SQL queries', visible: function(details) { console.log(details.sql); return details.sql; }, size: 1, position: 0, align: 0, getLayoutData: function(details) { return '<span class="glimpse-hud-data">' + parseInt(details.sql.data.queryExecutionTime) + '</span><span class="glimpse-hud-postfix">ms</span><span class="glimpse-hud-spacer">/</span><span class="glimpse-hud-data">'  + details.sql.data.queryCount + '</span>'; } },
+                                queries: { title: 'Queries', description: 'Total query duration and number of all SQL queries', visible: function(details) { return details.sql; }, size: 1, position: 0, align: 0, getLayoutData: function(details) { return '<span class="glimpse-hud-data">' + parseInt(details.sql.data.queryExecutionTime) + '</span><span class="glimpse-hud-postfix">ms</span><span class="glimpse-hud-spacer">/</span><span class="glimpse-hud-data">'  + details.sql.data.queryCount + '</span>'; } },
                                 connections: { title: 'Connections', description: 'Total query duration and number of all SQL queries', visible: function(details) { return details.sql; }, size: 1, position: 1, align: 1, getLayoutData: function(details) { return '<span class="glimpse-hud-data">' + parseInt(details.sql.data.connectionOpenTime) + '</span><span class="glimpse-hud-postfix">ms</span><span class="glimpse-hud-spacer">/</span><span class="glimpse-hud-data">'  + details.sql.data.connectionCount + '</span>'; } }
                             },
                             layout: {

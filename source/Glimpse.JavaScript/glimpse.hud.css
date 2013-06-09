@@ -181,10 +181,13 @@
 .glimpse-open .glimpse-hud-summary tr {
     vertical-align: bottom;
 }
-.glimpse-open .glimpse-hud-summary tr:first-child {
+.glimpse-open .glimpse-hud-summary-space tr:first-child {
     height: 65px;
 }
 .glimpse-open .glimpse-hud-summary tr:last-child {
+    height: 35px;
+}
+.glimpse-open .glimpse-hud-summary-space tr:last-child {
     height: 46px;
 }
 .glimpse-open .glimpse-hud-summary th {
