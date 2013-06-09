@@ -31,7 +31,9 @@
                     var holder = elements.holder();
                     holder.height('');
                     $(window).resize(function() {
-                        holder.find('.glimpse-panel').height($(window).height() - 54);
+                        var panelHeight = $(window).height() - 54; 
+                        elements.panels().height(panelHeight); 
+                        pubsub.publish('trigger.shell.fullScreen.resize', { panelHeight: panelHeight });
                     });
                 }
                 

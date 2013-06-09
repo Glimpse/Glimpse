@@ -49,7 +49,7 @@ namespace Glimpse.Core.Resource
         /// </value>
         public IEnumerable<ResourceParameterMetadata> Parameters 
         {
-            get { return new[] { new ResourceParameterMetadata(TopKey, isRequired: false) }; }
+            get { return new[] { new ResourceParameterMetadata(TopKey, isRequired: false), ResourceParameter.Hash }; }
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace Glimpse.Core.Resource
             }
 
             var requests = data.GroupBy(d => d.ClientId).ToDictionary(group => group.Key, group => group.Select(g => new GlimpseRequestHeaders(g)));
-            return new JsonResourceResult(requests, context.Parameters.GetValueOrDefault(ResourceParameter.Callback.Name));
+            return new CacheControlDecorator(0, CacheSetting.NoCache, new JsonResourceResult(requests, context.Parameters.GetValueOrDefault(ResourceParameter.Callback.Name)));
         }
     }
 }

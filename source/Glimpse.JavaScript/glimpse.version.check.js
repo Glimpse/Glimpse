@@ -6,11 +6,13 @@
         },
         generateVersionCheckAddress = function() {
             var currentMetadata = data.currentMetadata();
-            return util.uriTemplate(currentMetadata.resources.glimpse_version_check, { stamp: retrieveStamp(), 'version': currentMetadata.version });
+            return util.uriTemplate(currentMetadata.resources.glimpse_version_check, { stamp: retrieveStamp(), 'hash': currentMetadata.hash });
         },
         tryShow = function () {
-            var hasNewerVersion = settings.local('hasNewerVersion');
-            if (hasNewerVersion)
+            var hasNewerVersion = settings.local('hasNewerVersion'),
+                versionCheckUri = settings.local('versionCheckUri') || '',
+                currentHash = settings.local('hash');
+            if (hasNewerVersion && versionCheckUri.indexOf('hash=' + currentHash) > -1)
                 elements.holder().find('.glimpse-meta-update').show();
         },
         ready = function() {
@@ -19,15 +21,20 @@
 
             tryShow();
 
+            // Only check if we need to
             if (nextChecked) {
-                var nextCheckedTickes = parseInt(nextChecked),
-                    currentTimeTickes = now.getTime();
-                if (nextCheckedTickes > currentTimeTickes)
+                var nextCheckedTicks = parseInt(nextChecked),
+                    currentTimeTicks = now.getTime();
+                if (nextCheckedTicks > currentTimeTicks)
                     return;
             }
 
+            // Get the check uri and store checkUri for verification purposes
+            var versionCheckUri = generateVersionCheckAddress();
+            settings.local('versionCheckUri', versionCheckUri); 
+            
             $.ajax({
-                url: generateVersionCheckAddress(),
+                url: versionCheckUri,
                 type: 'GET',
                 dataType: 'jsonp',
                 crossDomain: true,

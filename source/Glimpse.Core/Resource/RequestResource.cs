@@ -50,7 +50,7 @@ namespace Glimpse.Core.Resource
         {
             get
             {
-                return new[] { ResourceParameter.RequestId, ResourceParameter.VersionNumber, ResourceParameter.Callback };
+                return new[] { ResourceParameter.RequestId, ResourceParameter.Hash, ResourceParameter.Callback };
             }
         }
 

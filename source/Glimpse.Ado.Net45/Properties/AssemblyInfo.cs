@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Web;
+using Glimpse.Ado;
 using Glimpse.Core.Extensibility;
 
 [assembly: ComVisible(false)]
@@ -14,9 +16,10 @@ using Glimpse.Core.Extensibility;
 
 // Version is in major.minor.build format to support http://semver.org/
 // Keep these three attributes in sync
-[assembly: AssemblyVersion("1.3.0")]
-[assembly: AssemblyFileVersion("1.3.0")]
-[assembly: AssemblyInformationalVersion("1.3.0")] // Used to specify the NuGet version number at build time
+[assembly: AssemblyVersion("1.3.1")]
+[assembly: AssemblyFileVersion("1.3.1")]
+[assembly: AssemblyInformationalVersion("1.3.1")] // Used to specify the NuGet version number at build time
 
 [assembly: InternalsVisibleTo("Glimpse.Test.Ado")]
 [assembly: NuGetPackage]
+[assembly: PreApplicationStartMethod(typeof(Initialize), "Start")]

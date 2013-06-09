@@ -21,6 +21,7 @@ namespace Glimpse.Core.SerializationConverter
                            { "version", metadata.Version },
                            { "plugins", metadata.Tabs },
                            { "resources", metadata.Resources },
+                           { "hash", metadata.Hash },
                        };
         }
     }

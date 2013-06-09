@@ -1,7 +1,7 @@
 ﻿(function($, data, util, elements, pubsub, renderEngine) {
     var generateLazyAddress = function (key) {
             var currentMetadata = data.currentMetadata();
-            return util.uriTemplate(currentMetadata.resources.glimpse_tab, { 'requestId': data.currentData().requestId, 'pluginKey': key, 'version': currentMetadata.version });
+            return util.uriTemplate(currentMetadata.resources.glimpse_tab, { 'requestId': data.currentData().requestId, 'pluginKey': key, 'hash': currentMetadata.hash });
         },
         retrieveData = function(options) {
             var resources = data.currentMetadata().resources; 

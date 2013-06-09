@@ -1,5 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Framework
@@ -27,6 +31,7 @@ namespace Glimpse.Core.Framework
         private ICollection<ITab> tabs;
         private ICollection<IDisplay> displays;
         private Func<RuntimePolicy> runtimePolicyStrategy;
+        private string hash;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GlimpseConfiguration" /> class.
@@ -627,7 +632,49 @@ namespace Glimpse.Core.Framework
                 timerStrategy = value;
             }
         }
-         
+
+        public string Hash
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(hash))
+                {
+                    return hash;
+                }
+
+                var configuredTypes = new List<Type> { GetType() };
+                configuredTypes.AddRange(Tabs.Select(tab => tab.GetType()).OrderBy(type => type.Name));
+                configuredTypes.AddRange(Inspectors.Select(inspector => inspector.GetType()).OrderBy(type => type.Name));
+                configuredTypes.AddRange(Resources.Select(resource => resource.GetType()).OrderBy(type => type.Name));
+                configuredTypes.AddRange(ClientScripts.Select(clientScript => clientScript.GetType()).OrderBy(type => type.Name));
+                configuredTypes.AddRange(RuntimePolicies.Select(policy => policy.GetType()).OrderBy(type => type.Name));
+
+                var crc32 = new Crc32();
+                var sb = new StringBuilder();
+                using (var memoryStream = new MemoryStream())
+                {
+                    var binaryFormatter = new BinaryFormatter();
+                    binaryFormatter.Serialize(memoryStream, configuredTypes);
+                    memoryStream.Position = 0;
+
+                    var computeHash = crc32.ComputeHash(memoryStream);
+
+                    foreach (var b in computeHash)
+                    {
+                        sb.Append(b.ToString("x2"));
+                    }
+                }
+
+                hash = sb.ToString();
+                return hash;
+            }
+
+            set
+            {
+                hash = value;
+            }
+        }
+
         [Obsolete("HACK: To support TraceListener with TraceSource via web.config")]
         public static ILogger GetLogger()
         {
@@ -649,7 +696,7 @@ namespace Glimpse.Core.Framework
                     return null;
                 }
             }; 
-        } 
+        }
 
         [Obsolete("HACK: To support TraceListener with TraceSource via web.config")]
         public static IMessageBroker GetConfiguredMessageBroker()

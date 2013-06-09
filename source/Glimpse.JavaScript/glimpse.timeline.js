@@ -541,20 +541,21 @@
                 //dividerBuilder.render(false);
                 pubsub.publish('trigger.timeline.divider.render', {});
             },
-            panelResize = function() { 
+            panelResize = function(args) { 
                 if (elements.scope) {
-                    //Work out what heihgt we can work with
-                    var contentHeight = settings.local('panelHeight') - (elements.summaryRow.height() + elements.scope.find('.glimpse-tl-row-spacer').height() + 2);  
+                    //Work out what height we can work with
+                    var panelHeight = (args && args.panelHeight) || settings.local('panelHeight'),
+                        contentHeight = panelHeight - (elements.summaryRow.height() + elements.scope.find('.glimpse-tl-row-spacer').height() + 2);  
                     elements.contentRow.height(contentHeight + 'px');
                     
-                    //Render Divers
-                    //dividerBuilder.render();
+                    //Render Divers 
                     pubsub.publish('trigger.timeline.divider.render', {});
                 }
             };
         
         pubsub.subscribe('trigger.timeline.shell.subscriptions', wireListeners); 
         pubsub.subscribe('trigger.shell.resize', panelResize); 
+        pubsub.subscribe('trigger.shell.fullScreen.resize', panelResize); 
         pubsub.subscribe('action.panel.showed.glimpse_timeline', function() { setTimeout(panelResize, 1); }); 
     })(timeline.elements);
 

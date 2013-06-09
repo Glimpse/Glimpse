@@ -4,7 +4,7 @@
         innerCurrentData = innerBaseData,
         generateRequestAddress = function (requestId) {
             var current = currentMetadata();
-            return util.uriTemplate(current.resources.glimpse_request, { 'requestId': requestId, 'version': current.version });
+            return util.uriTemplate(current.resources.glimpse_request, { 'requestId': requestId, 'hash': current.hash });
         },
         validateMetadata = function () { 
             // Make sure that out data has metadata

@@ -15,11 +15,11 @@
             <li><a href="@Url.Content("~/StoreManager/")">Admin</a></li>
         </ul>        
     </div>
-
-    @{Html.RenderAction("GenreMenu", "Store");}
-
-    <div id="main">
-        @RenderBody()
+    <div id="container">
+        @{Html.RenderAction("GenreMenu", "Store");} 
+        <div id="main">
+            @RenderBody()
+        </div>
     </div>
 
     <div id="footer">

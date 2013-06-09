@@ -23,8 +23,9 @@ namespace Glimpse.Core
         /// These constructors used by .NET when TraceListener is set via web.config
         /// </summary>
         public TraceListener() 
-            : this(GlimpseConfiguration.GetConfiguredMessageBroker(), GlimpseConfiguration.GetConfiguredTimerStrategy())
         {
+            MessageBroker = GlimpseConfiguration.GetConfiguredMessageBroker();
+            TimerStrategy = GlimpseConfiguration.GetConfiguredTimerStrategy();
         } 
 
         /// <summary>
@@ -32,8 +33,9 @@ namespace Glimpse.Core
         /// </summary>
         /// <param name="initializeData">Initialize data string</param>
         public TraceListener(string initializeData) 
-            : this(GlimpseConfiguration.GetConfiguredMessageBroker(), GlimpseConfiguration.GetConfiguredTimerStrategy())
         {
+            MessageBroker = GlimpseConfiguration.GetConfiguredMessageBroker();
+            TimerStrategy = GlimpseConfiguration.GetConfiguredTimerStrategy();
         }
         //// ReSharper restore UnusedMember.Global
 
@@ -45,7 +47,18 @@ namespace Glimpse.Core
         public TraceListener(IMessageBroker messageBroker, Func<IExecutionTimer> timerStrategy)
         {
             MessageBroker = messageBroker;
-            TimerStrategy = timerStrategy;
+            TimerStrategy = () =>
+            {
+                try
+                {
+                    return timerStrategy();
+                }
+                catch
+                {
+                    // Avoid exception being thrown from threads without access to request store
+                    return null;
+                }
+            };
         }
 
         internal IMessageBroker MessageBroker 

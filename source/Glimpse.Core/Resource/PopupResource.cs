@@ -45,7 +45,7 @@ namespace Glimpse.Core.Resource
         /// </value>
         public IEnumerable<ResourceParameterMetadata> Parameters
         {
-            get { return new[] { ResourceParameter.RequestId, ResourceParameter.VersionNumber }; }
+            get { return new[] { ResourceParameter.RequestId, ResourceParameter.Hash }; }
         }
 
         /// <summary>
@@ -100,19 +100,11 @@ namespace Glimpse.Core.Resource
             }
 #endif
 
-            string version = context.Parameters.GetValueOrDefault(ResourceParameter.VersionNumber.Name);
-
-            if (string.IsNullOrEmpty(version))
-            {
-                return new StatusCodeResourceResult(404, "Could not get version.");
-            }
-
             var requestStore = configuration.FrameworkProvider.HttpRequestStore;
             var generateScriptTags = requestStore.Get<Func<Guid?, string>>(Constants.ClientScriptsStrategy);
 
-            string scriptTags = generateScriptTags(requestId);
-
-            string html = string.Format("<!DOCTYPE html><html><head><meta charset='utf-8'><title>Glimpse Popup</title></head><body class='glimpse-popup'>{0}</body></html>", scriptTags);
+            var scriptTags = generateScriptTags(requestId); 
+            var html = string.Format("<!DOCTYPE html><html><head><meta charset='utf-8'><title>Glimpse Popup</title></head><body class='glimpse-popup'>{0}</body></html>", scriptTags);
 
             return new HtmlResourceResult(html);
         }
