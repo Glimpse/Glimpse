@@ -4,7 +4,7 @@
             html: '/*(import:glimpse.render.shell.html)*/'
         },
         generateSpriteAddress = function () {
-            var uri = settings.local('sprite') || 'http://getglimpse.com/sprite.png?version={version}',
+            var uri = settings.local('sprite') || 'http://getglimpse.com/content/_v1/app-sprite-new.png?version={version}',
                 version = settings.local('version') || '0.0',
                 hash = settings.local('hash') || '0.0';
             
