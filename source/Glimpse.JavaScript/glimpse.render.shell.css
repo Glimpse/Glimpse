@@ -38,6 +38,7 @@
     min-width: 54px;
     background: #3c454f; 
     color: #fff; 
+    white-space: nowrap;
 }
 .glimpse-open td, .glimpse-open span, .glimpse-open div {
     color: #fff;
