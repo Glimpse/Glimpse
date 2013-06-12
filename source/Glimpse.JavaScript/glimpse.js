@@ -3640,13 +3640,14 @@ glimpse.tab = (function($, pubsub, data) {
                      
                     
                     XMLHttpRequest.prototype.open = function(method, uri, async, user, pass) {
-                        var startTime = new Date().getTime();
-                
-                        this.addEventListener("readystatechange", function() {
-                                if (this.readyState == 4)  { 
-                                    update(method, uri, new Date().getTime() - startTime, this.getResponseHeader("Content-Length"), this.status, this.statusText, new Date(), this.getResponseHeader("Content-Type"));
-                                }
-                            }, false); 
+                        if (uri.indexOf('Glimpse.axd') === -1) {
+                            var startTime = new Date().getTime(); 
+                            this.addEventListener("readystatechange", function() {
+                                    if (this.readyState == 4)  { 
+                                        update(method, uri, new Date().getTime() - startTime, this.getResponseHeader("Content-Length"), this.status, this.statusText, new Date(), this.getResponseHeader("Content-Type"));
+                                    }
+                                }, false); 
+                        }
                 
                         open.apply(this, arguments);
                     }; 
