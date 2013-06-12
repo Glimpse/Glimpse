@@ -255,11 +255,11 @@
                                 event.endPoint = parseFloat((event.startPoint + event.duration).toFixed(2));
 
                                 //Work out how queries are to be parsed
-                                if (event.category == "Controller") {
+                                if (event.category == "Controller" || event.category == "Request") {
                                     lastControllerEvent = event;
                                     lastControllerEvent.queries = { durationSum: 0, listing: [] };
                                 }
-                                else if (event.category == "Command") {
+                                else if (event.category == "Command" && lastControllerEvent.queries) { 
                                     lastControllerEvent.queries.listing.push(event);
                                     lastControllerEvent.queries.durationSum += event.duration;
                                     event.suppress = true;
