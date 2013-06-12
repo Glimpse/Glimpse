@@ -435,6 +435,8 @@ function Push-Packages($uri)
   
   cd $base_dir\.NuGet
   
+  exec { & .\nuget.exe SetApiKey a89ef199-fbfd-4758-8d6e-f217398c4350 }
+
   foreach($package in $packages){
     exec { & .\nuget.exe push $package -src $uri}
   }

@@ -126,7 +126,7 @@ namespace Glimpse.Mvc.AlternateType
                     .AsSourceMessage(controllerDescriptor.ControllerType, controllerDescriptor.ControllerType.GetMethod(actionName, actionParams) ?? controllerDescriptor.ControllerType.GetMethod(actionName + "Async", actionParams))
                     .AsChildActionMessage(state.Arguments.ControllerContext)
                     .AsActionMessage(state.Arguments.ControllerContext)
-                    .AsMvcTimelineMessage(MvcTimelineCategory.Filter);
+                    .AsMvcTimelineMessage(MvcTimelineCategory.Controller);
 
                 context.MessageBroker.Publish(message);
             }
