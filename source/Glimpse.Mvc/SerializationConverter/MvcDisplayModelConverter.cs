@@ -17,7 +17,7 @@ namespace Glimpse.Mvc.SerializationConverter
                     childActionCount = obj.ChildActionCount,
                     childViewCount = obj.ChildViewCount,
                     viewName = obj.ViewName,
-                    viewRenderTime = Math.Round(obj.ViewRenderTime.Value, 2),
+                    viewRenderTime = Math.Round(obj.ViewRenderTime.GetValueOrDefault(), 2),
                     matchedRouteName = obj.MatchedRouteName,
                 };
         }
