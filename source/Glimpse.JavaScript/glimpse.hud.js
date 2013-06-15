@@ -1,6 +1,5 @@
 ﻿(function($, pubsub, data, elements, util) {
-    var serverTime = 0,
-        modify = function(options) {
+    var modify = function(options) {
             options.templates.css += '/*(import:glimpse.hud.css)*/';
         },
         loaded = function(args) {
