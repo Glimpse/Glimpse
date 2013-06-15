@@ -17,6 +17,7 @@
             state.setup();
 
             display.host.postRender();
+            display.ajax.postRender();
         }, 
         state = (function() {
             return { 
@@ -335,8 +336,7 @@
                         };
                 }(),
                 ajax: function() {
-                    var open = XMLHttpRequest.prototype.open,
-                        count = 0,
+                    var count = 0,
                         summaryStack = [],
                         detailStack = [],
                         structure = {
@@ -405,24 +405,27 @@
                             if (stack.length >= length)
                                 stack.shift().remove();
                             stack.push(row);
-                        };
-                     
-                    
-                    XMLHttpRequest.prototype.open = function(method, uri, async, user, pass) {
-                        if (uri.indexOf('Glimpse.axd') === -1) {
-                            var startTime = new Date().getTime(); 
-                            this.addEventListener("readystatechange", function() {
-                                    if (this.readyState == 4)  { 
-                                        update(method, uri, new Date().getTime() - startTime, this.getResponseHeader("Content-Length"), this.status, this.statusText, new Date(), this.getResponseHeader("Content-Type"));
-                                    }
-                                }, false); 
-                        }
+                        },
+                        postRender = function() {
+                            var open = XMLHttpRequest.prototype.open;
+                        
+                            XMLHttpRequest.prototype.open = function(method, uri, async, user, pass) {
+                                if (uri.indexOf('Glimpse.axd') === -1) {
+                                    var startTime = new Date().getTime(); 
+                                    this.addEventListener("readystatechange", function() {
+                                            if (this.readyState == 4)  { 
+                                                update(method, uri, new Date().getTime() - startTime, this.getResponseHeader("Content-Length"), this.status, this.statusText, new Date(), this.getResponseHeader("Content-Type"));
+                                            }
+                                        }, false); 
+                                }
                 
-                        open.apply(this, arguments);
-                    }; 
-
+                                open.apply(this, arguments);
+                            };                             
+                        };
+                      
                     return {
-                            render: render
+                            render: render,
+                            postRender: postRender
                         };
                 }()
             };
