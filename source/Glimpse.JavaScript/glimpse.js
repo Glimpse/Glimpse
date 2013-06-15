@@ -2201,7 +2201,7 @@ glimpse.tab = (function($, pubsub, data) {
 
 // glimpse.ajax.js
 (function($, pubsub, util, elements, data, renderEngine) {
-    var context = { resultCount : 0, notice: null, isActive: false, contextRequestId: null },
+    var context = { resultCount : 0, notice: null, isActive: false, contextRequestId: null, isSelected: false },
         generateAjaxAddress = function() {
             var currentMetadata = data.currentMetadata();
             return util.uriTemplate(currentMetadata.resources.glimpse_ajax, { 'parentRequestId': retrieveScopeId(), 'hash': currentMetadata.hash });
@@ -2223,19 +2223,32 @@ glimpse.tab = (function($, pubsub, data) {
             args.newData.metadata.plugins.ajax = { documentationUri: 'http://getglimpse.com/Help/Ajax-Tab' };
         },
         activate = function() {
-            context.isActive = true;
-            
             var options = elements.optionsHolder().html('<div class="glimpse-clear"><a href="#" class="glimpse-clear-ajax">Clear</a></div><div class="glimpse-notice glimpse-disconnect"><div class="icon"></div><span>Disconnected...</span></div>');
             context.notice = util.connectionNotice(options.find('.glimpse-notice')); 
+             
+            context.isSelected = true;
             
-            fetch();
+            listenStart();
         }, 
         deactivate = function() {
-            context.isActive = false; 
-            
-            elements.optionsHolder().html(''); 
+            elements.optionsHolder().html('');  
             context.notice = null;
+
+            listenStop();
+             
+            context.isSelected = false;
+        }, 
+        listenStart = function() {
+            if (context.isSelected) { 
+                context.isActive = true;
+                fetch();
+            }
         },
+        listenStop = function() {
+            if (context.isSelected) {
+                context.isActive = false;
+            }
+        }, 
         contextSwitch = function(args) {
             var newPayload = args.newData,
                 oldPayload = args.oldData,
@@ -2377,10 +2390,13 @@ glimpse.tab = (function($, pubsub, data) {
     pubsub.subscribe('trigger.data.context.reset', selectClear);
     pubsub.subscribe('trigger.shell.panel.clear.ajax', layoutClear);
     pubsub.subscribe('trigger.data.context.switch', selectStart);
+    pubsub.subscribe('action.shell.opening', listenStart);
+    pubsub.subscribe('action.shell.closeing', listenStop); 
+    pubsub.subscribe('action.shell.minimizing', listenStop); 
 })(jQueryGlimpse, glimpse.pubsub, glimpse.util, glimpse.elements, glimpse.data, glimpse.render.engine);
 // glimpse.history.js
 (function($, pubsub, util, settings, elements, data, renderEngine) {
-    var context = { resultCount : 0, clientName : '', requestId : '', currentData: null, notice: null, isActive: false, contextRequestId: undefined }, 
+    var context = { resultCount : 0, clientName : '', requestId : '', currentData: null, notice: null, isActive: false, isSelected: false, contextRequestId: undefined }, 
         generateHistoryAddress = function() {
             var currentMetadata = data.currentMetadata();
             return util.uriTemplate(currentMetadata.resources.glimpse_history, { 'hash': currentMetadata.hash });
@@ -2397,19 +2413,32 @@ glimpse.tab = (function($, pubsub, data) {
             args.newData.data.history = { name: 'History', data: 'No requests currently detected...', isPermanent: true };
             args.newData.metadata.plugins.history = { documentationUri: 'http://getglimpse.com/Help/History-Tab' };
         }, 
-        activate = function() {
-            context.isActive = true;
-            
+        activate = function() { 
             var options = elements.optionsHolder().html('<div class="glimpse-clear"><a href="#" class="glimpse-clear-history">Clear</a></div><div class="glimpse-notice glimpse-disconnect"><div class="icon"></div><span>Disconnected...</span></div>');
             context.notice = util.connectionNotice(options.find('.glimpse-notice')); 
             
-            fetch();
-        },
-        deactivate = function() {
-            context.isActive = false; 
+            context.isSelected = true;
             
+            listenStart();
+        },
+        deactivate = function() { 
             elements.optionsHolder().html(''); 
             context.notice = null;
+
+            listenStop();
+             
+            context.isSelected = false;
+        }, 
+        listenStart = function() {
+            if (context.isSelected) { 
+                context.isActive = true;
+                fetch();
+            }
+        },
+        listenStop = function() {
+            if (context.isSelected) {
+                context.isActive = false;
+            }
         }, 
         fetch = function() { 
             if (!context.isActive) 
@@ -2586,6 +2615,9 @@ glimpse.tab = (function($, pubsub, data) {
     pubsub.subscribe('trigger.data.context.reset', selectClear);
     pubsub.subscribe('trigger.shell.panel.clear.history', layoutClear);
     pubsub.subscribe('trigger.data.context.switch', selectStart);
+    pubsub.subscribe('action.shell.opening', listenStart);
+    pubsub.subscribe('action.shell.closeing', listenStop); 
+    pubsub.subscribe('action.shell.minimizing', listenStop); 
 })(jQueryGlimpse, glimpse.pubsub, glimpse.util, glimpse.settings, glimpse.elements, glimpse.data, glimpse.render.engine);
 // glimpse.timeline.js
 (function($, pubsub, settings, util, renderEngine) { 

@@ -1,5 +1,5 @@
 ﻿(function($, pubsub, util, elements, data, renderEngine) {
-    var context = { resultCount : 0, notice: null, isActive: false, contextRequestId: null },
+    var context = { resultCount : 0, notice: null, isActive: false, contextRequestId: null, isSelected: false },
         generateAjaxAddress = function() {
             var currentMetadata = data.currentMetadata();
             return util.uriTemplate(currentMetadata.resources.glimpse_ajax, { 'parentRequestId': retrieveScopeId(), 'hash': currentMetadata.hash });
@@ -21,19 +21,32 @@
             args.newData.metadata.plugins.ajax = { documentationUri: 'http://getglimpse.com/Help/Ajax-Tab' };
         },
         activate = function() {
-            context.isActive = true;
-            
             var options = elements.optionsHolder().html('<div class="glimpse-clear"><a href="#" class="glimpse-clear-ajax">Clear</a></div><div class="glimpse-notice glimpse-disconnect"><div class="icon"></div><span>Disconnected...</span></div>');
             context.notice = util.connectionNotice(options.find('.glimpse-notice')); 
+             
+            context.isSelected = true;
             
-            fetch();
+            listenStart();
         }, 
         deactivate = function() {
-            context.isActive = false; 
-            
-            elements.optionsHolder().html(''); 
+            elements.optionsHolder().html('');  
             context.notice = null;
+
+            listenStop();
+             
+            context.isSelected = false;
+        }, 
+        listenStart = function() {
+            if (context.isSelected) { 
+                context.isActive = true;
+                fetch();
+            }
         },
+        listenStop = function() {
+            if (context.isSelected) {
+                context.isActive = false;
+            }
+        }, 
         contextSwitch = function(args) {
             var newPayload = args.newData,
                 oldPayload = args.oldData,
@@ -175,4 +188,7 @@
     pubsub.subscribe('trigger.data.context.reset', selectClear);
     pubsub.subscribe('trigger.shell.panel.clear.ajax', layoutClear);
     pubsub.subscribe('trigger.data.context.switch', selectStart);
+    pubsub.subscribe('action.shell.opening', listenStart);
+    pubsub.subscribe('action.shell.closeing', listenStop); 
+    pubsub.subscribe('action.shell.minimizing', listenStop); 
 })(jQueryGlimpse, glimpse.pubsub, glimpse.util, glimpse.elements, glimpse.data, glimpse.render.engine);
