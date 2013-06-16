@@ -13,13 +13,23 @@ namespace Glimpse.Mvc.SerializationConverter
                 {
                     controllerName = obj.ControllerName,
                     actionName = obj.ActionName,
-                    actionExecutionTime = Math.Round(obj.ActionExecutionTime.Value, 2),
+                    actionExecutionTime = GetRoundedValueIfExists(obj.ActionExecutionTime),
                     childActionCount = obj.ChildActionCount,
                     childViewCount = obj.ChildViewCount,
                     viewName = obj.ViewName,
-                    viewRenderTime = Math.Round(obj.ViewRenderTime.GetValueOrDefault(), 2),
+                    viewRenderTime = GetRoundedValueIfExists(obj.ViewRenderTime),
                     matchedRouteName = obj.MatchedRouteName,
                 };
+        }
+
+        private object GetRoundedValueIfExists(double? value)
+        {
+            if (value.HasValue)
+            {
+                return Math.Round(value.Value, 2);
+            }
+
+            return null;
         }
     }
 }
