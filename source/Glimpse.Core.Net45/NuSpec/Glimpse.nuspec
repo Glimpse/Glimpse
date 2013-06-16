@@ -18,6 +18,7 @@ Lightweight release for MVC:
  - Bug fix on the back end to prevent ajax results that return Json causing errors
  - Bug fix in the client which prevents a possible race condition from occurring between when HUD can detect Ajax requests and when it can display them
  - Minor fix to client to only render Action/View timings if that information is available
+ - Minor fix to client to prevent host event data from overflowing in some cases
  - Minor optimization improvement in the client to prevent it from calling out when either the ajax/history tab is selected and the client is closed
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse diagnostics performance profiling timing</tags>
