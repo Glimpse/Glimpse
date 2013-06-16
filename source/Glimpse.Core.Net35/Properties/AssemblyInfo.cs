@@ -14,6 +14,6 @@ using System.Runtime.InteropServices;
 
 // Version is in major.minor.build format to support http://semver.org/
 // Keep these three attributes in sync
-[assembly: AssemblyVersion("1.4.1")]
-[assembly: AssemblyFileVersion("1.4.1")]
-[assembly: AssemblyInformationalVersion("1.4.1")]
+[assembly: AssemblyVersion("1.4.2")]
+[assembly: AssemblyFileVersion("1.4.2")]
+[assembly: AssemblyInformationalVersion("1.4.2")]
