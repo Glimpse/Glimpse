@@ -201,6 +201,7 @@
 } 
 .glimpse-open .glimpse-hud-listing {
     max-width: 100%;
+    width: 100%;
 } 
 .glimpse-open .glimpse-hud-popup .glimpse-hud-listing { 
     margin-top: 10px;
