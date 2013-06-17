@@ -14,8 +14,8 @@
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET MVC 3.0 application.</description>
         <summary>ASP.NET MVC 3.0 web debugging and diagnostics tool.</summary>
         <releaseNotes>
-Flyweight release for MVC:
- - Minor fix for the fact that the async controller was interpreting the category for control action as filter (affected timing and HUD)
+Lightweight release for MVC:
+ - Minor fix to client to only render Action/View timings if that information is available
         </releaseNotes>
         <tags>ASP.NET Web MVC Glimpse diagnostics performance profiling timing</tags>
         <dependencies>
