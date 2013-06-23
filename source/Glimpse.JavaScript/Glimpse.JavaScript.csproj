@@ -63,7 +63,12 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup>    
+      <EmbeddedResource Include="glimpse.js">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>glimpse.tt</DependentUpon>
+    </EmbeddedResource>
     <Content Include="*.js" />
     <Content Include="*.css" />
     <Content Include="*.html" />
@@ -82,6 +87,17 @@
     <Content Include="UnitTests\Unit\glimpse.core.process.js" />
     <Content Include="UnitTests\Unit\mock-glimpse.core.element.js" />
     <Content Include="UnitTests\Unit\mock-glimpse.core.pubsub.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="glimpse.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>glimpse.js</LastGenOutput>
+      <Parameters>&lt;%3fxml version="1.0" encoding="utf-16"%3f&gt;
+&lt;ArrayOfParameterStorage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" /&gt;</Parameters>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
