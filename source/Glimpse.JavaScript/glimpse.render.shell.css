@@ -329,7 +329,7 @@
     font-family: "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;
 }
 .glimpse-panel .glimpse-header-content {
-    padding: 0 3px;
+    padding: 1% 1% 0;
 }
 .glimpse-panel .glimpse-row-header-0 th {
     border-bottom: 3px solid #CCC; 

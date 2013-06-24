@@ -8,7 +8,7 @@
                 if ($.isArray(value) || value === Object(value))
                     html += providers.master.build(value, 0, null, engineUtil.keyMetadata(key, metadata));
                 else 
-                    html += '<div class="glimpse-header-content">' + util.preserveWhitespace(value) + '</div>'; 
+                    html += '<div class="glimpse-header-content">' + (value != null ? util.preserveWhitespace(value) : '<em>null</em>') + '</div>'; 
                 html += '</div>';
             }
             html += '</div></div>';

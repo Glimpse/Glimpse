@@ -61,7 +61,7 @@
             return !(value == null) ? value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
         },
         preserveWhitespace: function (value) {
-            if (typeof value !== "string")
+            if (value != null && typeof value !== "string")
                 value = value.toString();
             if (!value)
                 return '';
