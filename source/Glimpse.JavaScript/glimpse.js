@@ -3477,7 +3477,7 @@ glimpse.tab = (function($, pubsub, data) {
                                 }
                             },
                             defaults: {
-                                server: { title: 'Total Server Time', description: 'Total time on the server', visible: true, size: 0, position: 1, align: 1, postfix: 'ms', getData: function(details) { return details.request.data.server.duration; } },
+                                server: { title: 'Total Server Time', description: 'Total time on the server', visible: function (details) { return details.request; }, size: 0, position: 1, align: 1, postfix: 'ms', getData: function (details) { return details.request.data.server.duration; } },
                                 action: { title: 'Action', description: 'How long root Action took to execute', visible: function(details) { return details.mvc && details.mvc.data.actionExecutionTime != null; }, size: 1, position: 0, align: 0, postfix: 'ms', getData: function(details) { return parseInt(details.mvc.data.actionExecutionTime); } },
                                 view: { title: 'View', description: 'How long root View took to render', visible: function(details) { return details.mvc && details.mvc.data.viewRenderTime != null; }, size: 1, position: 0, align: 0, postfix: 'ms', getData: function(details) { return parseInt(details.mvc.data.viewRenderTime); } },
                                 controller: { title: 'Controller/Action', description: 'Name of the root Controller and Action', visible: function(details) { return details.mvc; }, size: 2, position: 0, align: 0, postfix: 'ms', getLayoutData: function(details) { return '<span class="glimpse-hud-data">' + details.mvc.data.controllerName + '</span><span class="glimpse-hud-plain">.</span><span class="glimpse-hud-data">' + details.mvc.data.actionName + '</span><span class="glimpse-hud-plain">(...)</span>'; } },
@@ -3505,7 +3505,7 @@ glimpse.tab = (function($, pubsub, data) {
                             var eventStack = [], 
                                 lastEvent = { startPoint : 0, duration : 0, childlessDuration : 0, endPoint : 0 },
                                 lastControllerEvent = { },
-                                rootDuration = details.request.data.server.duration,
+                                rootDuration = details.request ? details.request.data.server.duration : 1,
                                 rootChildlessDuration = rootDuration;
                             
                             for (var i = 0; i < details.timings.data.length; i += 1) {
