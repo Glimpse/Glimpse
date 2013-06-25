@@ -5,6 +5,9 @@
     text-align: left;
     padding: 0;
     margin: 0;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
 }
 .glimpse table {
     min-width: 0;
