@@ -34,9 +34,7 @@ namespace Glimpse.Ado.AlternateType
 
         private Guid ConnectionId { get; set; }
 
-        private Guid CommandId { get; set; } 
-
-        private bool Disposed { get; set; }
+        private Guid CommandId { get; set; }  
 
         private int RowCount { get; set; }
 
@@ -94,21 +92,12 @@ namespace Glimpse.Ado.AlternateType
                     new CommandRowCountMessage(ConnectionId, CommandId, RowCount)
                     .AsTimedMessage(TimeSpan.Zero));
             }
-
-            var inner = InnerDataReader as SqlDataReader;
-            if (!Disposed && inner != null && InnerCommand.Transaction == null && inner.Read())
-            {
-                InnerCommand.Cancel();
-            } 
-
-            Disposed = true;
+              
             InnerDataReader.Close();
         }
 
         protected override void Dispose(bool disposing)
-        {
-            Disposed = true;
-
+        { 
             if (disposing)
             {
                 InnerDataReader.Dispose();
