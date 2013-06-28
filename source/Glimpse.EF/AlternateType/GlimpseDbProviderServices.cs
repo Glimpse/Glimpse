@@ -8,6 +8,8 @@
     using System.Data.Entity.Core.Metadata.Edm;
     using DbCommand = System.Data.Common.DbCommand;
     using DbConnection = System.Data.Common.DbConnection;
+    using System.Data.Entity.Spatial;
+    using System.Reflection;
 #endif
 using Glimpse.Ado.AlternateType;
 
@@ -61,5 +63,16 @@ namespace Glimpse.EF.AlternateType
         {
             return InnerProviderServices.GetProviderManifestToken(((GlimpseDbConnection)connection).InnerConnection);
         }
+
+#if EF6Plus
+        //HACK: GetSpatialDataReader should be virtual, shouldn't have to do this
+
+        private static MethodInfo GetDbSpatialDataReaderMethod = typeof(DbProviderServices).GetMethod("GetDbSpatialDataReader", BindingFlags.NonPublic | BindingFlags.Instance);
+
+        protected override DbSpatialDataReader GetDbSpatialDataReader(System.Data.Common.DbDataReader fromReader, string manifestToken)
+        {
+            return (DbSpatialDataReader)GetDbSpatialDataReaderMethod.Invoke(InnerProviderServices, new object[] { ((GlimpseDbDataReader)fromReader).InnerDataReader, manifestToken });
+        }
+#endif
     }
 }

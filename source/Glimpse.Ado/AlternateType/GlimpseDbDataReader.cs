@@ -10,7 +10,7 @@ using Glimpse.Core.Message;
 
 namespace Glimpse.Ado.AlternateType
 {
-    internal class GlimpseDbDataReader : DbDataReader
+    public class GlimpseDbDataReader : DbDataReader
     {
         private IMessageBroker messageBroker; 
 
@@ -28,9 +28,9 @@ namespace Glimpse.Ado.AlternateType
             MessageBroker = messageBroker; 
         }
          
-        private DbDataReader InnerDataReader { get; set; }
+        public DbDataReader InnerDataReader { get; set; }
 
-        private DbCommand InnerCommand { get; set; }
+        public DbCommand InnerCommand { get; set; }
 
         private Guid ConnectionId { get; set; }
 
