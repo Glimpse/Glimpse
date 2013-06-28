@@ -1,0 +1,127 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".js" #>
+<#
+#>
+
+// jquery-1.8.0.min.js
+<#@include file="jquery-1.8.0.min.js" #>
+// uritemplate.min.js
+<#@include file="uritemplate.min.js" #>
+
+// glimpse.jquery.draggable.js
+<#@include file="glimpse.jquery.draggable.js" #>
+// glimpse.jquery.draggable.js
+<#@include file="glimpse.jquery.dropdown.js" #>
+
+// glimpse.core.js
+<#@include file="glimpse.core.js" #>
+
+// glimpse.pubsub.js
+<#@include file="glimpse.pubsub.js" #>
+// glimpse.util.js
+<#@include file="glimpse.util.js" #>
+// glimpse.settings.js
+<#@include file="glimpse.settings.js" #>
+// glimpse.data.js
+<#@include file="glimpse.data.js" #>
+// glimpse.element.js
+<#@include file="glimpse.element.js" #>
+
+// glimpse.system.js
+<#@include file="glimpse.system.js" #>
+
+// glimpse.render.js
+<#@include file="glimpse.render.js" #>
+// glimpse.render.engine.js
+<#@include file="glimpse.render.engine.js" #>
+// glimpse.render.engine.util.js
+<#@include file="glimpse.render.engine.util.js" #>
+// glimpse.render.engine.util.raw.js
+<#@include file="glimpse.render.engine.util.raw.js" #>
+// glimpse.render.engine.util.table.js
+<#@include file="glimpse.render.engine.util.table.js" #>
+// glimpse.render.engine.style.js
+<#@include file="glimpse.render.engine.style.js" #>
+// glimpse.render.engine.keyvalue.js
+<#@include file="glimpse.render.engine.keyvalue.js" #>
+// glimpse.render.engine.empty.js
+<#@include file="glimpse.render.engine.empty.js" #>
+// glimpse.render.engine.master.js
+<#@include file="glimpse.render.engine.master.js" #>
+// glimpse.render.engine.string.js
+<#@include file="glimpse.render.engine.string.js" #>
+// glimpse.render.engine.layout.js
+<#@include file="glimpse.render.engine.layout.js" #>
+// glimpse.render.engine.table.js
+<#@include file="glimpse.render.engine.table.js" #>
+// glimpse.render.engine.func.js
+<#@include file="glimpse.render.engine.func.js" #>
+// glimpse.render.engine.heading.js
+<#@include file="glimpse.render.engine.heading.js" #>
+// glimpse.render.tab.js
+<#@include file="glimpse.render.tab.js" #>
+// glimpse.render.panel.js
+<#@include file="glimpse.render.panel.js" #>
+// glimpse.render.lazy.js
+<#@include file="glimpse.render.lazy.js" #>
+// glimpse.render.default.js
+<#@include file="glimpse.render.default.js" #>
+
+// glimpse.shell.controls.js
+<#@include file="glimpse.shell.controls.js" #>
+// glimpse.shell.info.js
+<#@include file="glimpse.shell.info.js" #>
+// glimpse.shell.resize.js
+<#@include file="glimpse.shell.resize.js" #>
+// glimpse.shell.popup.js
+<#@include file="glimpse.shell.popup.js" #>
+// glimpse.shell.title.js
+<#@include file="glimpse.shell.title.js" #>
+// glimpse.shell.correlation.js
+<#@include file="glimpse.shell.correlation.js" #>
+// glimpse.shell.environment.js
+<#@include file="glimpse.shell.environment.js" #>
+// glimpse.shell.path.js
+<#@include file="glimpse.shell.path.js" #>
+
+// glimpse.shell.notification.js
+<#@include file="glimpse.shell.notification.js" #>
+
+// glimpse.version.check.js
+<#@include file="glimpse.version.check.js" #>
+// glimpse.version.shell.js
+<#@include file="glimpse.version.shell.js" #>
+
+// glimpse.paging.js
+<#@include file="glimpse.paging.js" #>
+// glimpse.paging.engine.js
+<#@include file="glimpse.paging.engine.js" #>
+// glimpse.paging.engine.util.js
+<#@include file="glimpse.paging.engine.util.js" #>
+// glimpse.paging.engine.continuous.js
+<#@include file="glimpse.paging.engine.continuous.js" #>
+// glimpse.paging.engine.scrolling.js
+<#@include file="glimpse.paging.engine.scrolling.js" #>
+// glimpse.paging.engine.traditional.js
+<#@include file="glimpse.paging.engine.traditional.js" #>
+
+// glimpse.tab.js
+<#@include file="glimpse.tab.js" #>
+
+// glimpse.ajax.js
+<#@include file="glimpse.ajax.js" #>
+// glimpse.history.js
+<#@include file="glimpse.history.js" #>
+// glimpse.timeline.js
+<#@include file="glimpse.timeline.js" #>
+// glimpse.hud.js
+<#@include file="glimpse.hud.js" #>
+
+// google-code-prettify.js
+<#@include file="google-code-prettify.js" #>
+
+glimpse.pubsub.publish('trigger.system.start');
