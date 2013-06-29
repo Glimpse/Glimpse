@@ -18,6 +18,7 @@ namespace Glimpse.Core.Configuration
         {
             BaseAdd(new ContentTypeElement { ContentType = @"text/html" });
             BaseAdd(new ContentTypeElement { ContentType = @"application/json" });
+            BaseAdd(new ContentTypeElement { ContentType = @"text/plain" });
         }
 
         /// <summary>
