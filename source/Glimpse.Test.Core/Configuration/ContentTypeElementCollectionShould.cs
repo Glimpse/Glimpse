@@ -11,7 +11,7 @@ namespace Glimpse.Test.Core.Configuration
         {
             var collection = new ContentTypeElementCollection();
 
-            Assert.Equal(2, collection.Count);
+            Assert.Equal(3, collection.Count);
         }
 
         [Fact]
