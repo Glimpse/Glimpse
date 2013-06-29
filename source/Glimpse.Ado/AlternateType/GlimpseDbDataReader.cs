@@ -10,7 +10,7 @@ using Glimpse.Core.Message;
 
 namespace Glimpse.Ado.AlternateType
 {
-    internal class GlimpseDbDataReader : DbDataReader
+    public class GlimpseDbDataReader : DbDataReader
     {
         private IMessageBroker messageBroker; 
 
@@ -28,15 +28,13 @@ namespace Glimpse.Ado.AlternateType
             MessageBroker = messageBroker; 
         }
          
-        private DbDataReader InnerDataReader { get; set; }
+        public DbDataReader InnerDataReader { get; set; }
 
-        private DbCommand InnerCommand { get; set; }
+        public DbCommand InnerCommand { get; set; }
 
         private Guid ConnectionId { get; set; }
 
-        private Guid CommandId { get; set; } 
-
-        private bool Disposed { get; set; }
+        private Guid CommandId { get; set; }  
 
         private int RowCount { get; set; }
 
@@ -94,21 +92,12 @@ namespace Glimpse.Ado.AlternateType
                     new CommandRowCountMessage(ConnectionId, CommandId, RowCount)
                     .AsTimedMessage(TimeSpan.Zero));
             }
-
-            var inner = InnerDataReader as SqlDataReader;
-            if (!Disposed && inner != null && InnerCommand.Transaction == null && inner.Read())
-            {
-                InnerCommand.Cancel();
-            } 
-
-            Disposed = true;
+              
             InnerDataReader.Close();
         }
 
         protected override void Dispose(bool disposing)
-        {
-            Disposed = true;
-
+        { 
             if (disposing)
             {
                 InnerDataReader.Dispose();

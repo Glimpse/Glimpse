@@ -68,9 +68,18 @@ namespace Glimpse.AspNet.Tab
         private static EnvironmentWebServerModel BuildWebServerDetails(HttpContextBase context)
         {
             var serverSoftware = context.Request.ServerVariables["SERVER_SOFTWARE"];
-            var processName = Process.GetCurrentProcess().MainModule.ModuleName;
+            var serverType = "Unknown";
 
-            var serverType = !string.IsNullOrEmpty(serverSoftware) ? serverSoftware : processName.StartsWith("WebDev.WebServer", StringComparison.InvariantCultureIgnoreCase) ? "Visual Studio Web Development Server" : "Unknown";
+            try
+            {
+                var processName = Process.GetCurrentProcess().MainModule.ModuleName;
+                serverType = !string.IsNullOrEmpty(serverSoftware) ? serverSoftware : processName.StartsWith("WebDev.WebServer", StringComparison.InvariantCultureIgnoreCase) ? "Visual Studio Web Development Server" : "Unknown";
+            }
+            catch
+            {
+                // In event of exceptions, serverType will rename as unknown.
+            }
+
             var integratedPipeline = HttpRuntime.UsingIntegratedPipeline;
 
             return new EnvironmentWebServerModel { ServerType = serverType, IntegratedPipeline = integratedPipeline };

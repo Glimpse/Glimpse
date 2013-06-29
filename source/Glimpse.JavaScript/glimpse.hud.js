@@ -367,7 +367,7 @@
                             }
                         },
                         processContentType = function(type) {
-                            return type.substring(0, type.indexOf(';'));
+                            return type ? type.substring(0, type.indexOf(';')) : '';
                         },
                         render = function(details, opened) {
                             process.init(structure);
