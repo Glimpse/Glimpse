@@ -17,6 +17,11 @@
 
             display.host.postRender();
             display.ajax.postRender();
+
+            $('.glimpse-hud .glimpse-hud-popup-expander').each(function () {
+                var item = $(this);
+                item.css('min-width', item.width());
+            });
         }, 
         state = (function() {
             return { 
@@ -45,7 +50,7 @@
                             return true;
                         }, 
                         popup = function(structure, details) {
-                            return '<div class="glimpse-hud-popup" style="border-color:' + structure.color + ';"><div class="glimpse-hud-title">' + structure.title + '</div><div class="glimpse-hud-popup-inner">' + structure.popup.render(details) + '</div></div>';
+                            return '<div class="glimpse-hud-popup" style="border-color:' + structure.color + ';"><div class="glimpse-hud-title">' + structure.title + '</div><div class="glimpse-hud-popup-inner">' + structure.popup.render(details) + '</div></div><div class="glimpse-hud-popup-expander"></div>';
                         },
                         section = function(structure, details, opened) {
                             var html = '<div class="glimpse-hud-section glimpse-hud-section-' + structure.id + '" style="border-color:' + structure.color + '">';
@@ -184,6 +189,7 @@
                             popup: {
                                 render: function(details) {
                                     var hasTrivial = false,
+                                        maxEvent = { length: 0, content: '' },
                                         html = '<div class="glimpse-hud-popup-header">Server Side</div>';
                                     html += '<div><table class="glimpse-hud-summary glimpse-hud-summary-space glimpse-hud-summary-left"><tr><th>' + rendering.item(structure.layout.popup.server, details) + '</th></tr><tr><td>' + rendering.item(structure.layout.popup.controller, details) + '</td></tr></table>';
                                     html += '<table class="glimpse-hud-summary glimpse-hud-summary-space glimpse-hud-summary-right"><tr><td width="1">' + rendering.item(structure.layout.popup.action, details) + '</td>' + (details.sql ? '<td width="40"></td><td>' + rendering.item(structure.layout.popup.connections, details) + '</td>' : '') + '</tr><tr><td>' + rendering.item(structure.layout.popup.view, details) + '</td>' + (details.sql ? '<td></td><td>' + rendering.item(structure.layout.popup.queries, details) + '</td>' : '') + '</tr></table></div>';
@@ -194,7 +200,11 @@
                                             isTrivial = item.childlessDuration < 2;
                                         
                                         if (!item.suppress) {
-                                            var maxLength = (16 + (details.sql ? 10 : 0)) - item.nesting * 2;
+                                            var maxLength = (16 + (details.sql ? 10 : 0)) - item.nesting * 2,
+                                                length = item.description.lenth + item.nesting * 2;
+
+                                            if (Math.max(maxEvent.length, length))
+                                                maxEvent = { length: length, content: item.description };
                                             
                                             html += '<tbody' + (isTrivial ? ' class="glimpse-data-trivial"' : '') + '>';
                                             html += '<tr' + (isTrivial ? ' class="glimpse-hud-quite"' : '') + '><td class="glimpse-hud-listing-overflow" style="padding-left:' + (item.nesting * 15) + 'px;" ' + (item.description.length > maxLength ? 'title="' + item.description + '"' : '') +'>' + item.description + '</td><td class="glimpse-hud-listing-value glimpse-data-childless-duration">' + item.childlessDuration + '</td><td class="glimpse-hud-listing-value glimpse-data-childless-start-point"><span class="glimpse-hud-prefix">+</span>' + item.startPoint + '</td></tr>';
