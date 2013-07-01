@@ -1,7 +1,8 @@
-﻿#if EF43 || EF5
+﻿using System.Reflection;
+#if EF43 || EF5
     using System.Data.Common;
     using System.Data.Common.CommandTrees;
-    using System.Data.Metadata.Edm; 
+    using System.Data.Metadata.Edm;  
 #else
     using System.Data.Entity.Core.Common;
     using System.Data.Entity.Core.Common.CommandTrees;
@@ -9,20 +10,22 @@
     using DbCommand = System.Data.Common.DbCommand;
     using DbConnection = System.Data.Common.DbConnection;
     using System.Data.Entity.Spatial;
-    using System.Reflection;
+#endif
+#if EF5 && NET45
+    using System.Data.Spatial;
 #endif
 using Glimpse.Ado.AlternateType;
 
 namespace Glimpse.EF.AlternateType
-{ 
+{
     internal class GlimpseDbProviderServices : DbProviderServices
     {
         public GlimpseDbProviderServices(DbProviderServices innerProviderServices)
         {
-            InnerProviderServices = innerProviderServices; 
+            InnerProviderServices = innerProviderServices;
         }
 
-        private DbProviderServices InnerProviderServices { get; set; } 
+        private DbProviderServices InnerProviderServices { get; set; }
 
         public override DbCommandDefinition CreateCommandDefinition(DbCommand prototype)
         {
@@ -64,7 +67,7 @@ namespace Glimpse.EF.AlternateType
             return InnerProviderServices.GetProviderManifestToken(((GlimpseDbConnection)connection).InnerConnection);
         }
 
-#if EF6Plus
+#if (EF5 && NET45) || EF6Plus
         //HACK: GetSpatialDataReader should be virtual, shouldn't have to do this
 
         private static MethodInfo GetDbSpatialDataReaderMethod = typeof(DbProviderServices).GetMethod("GetDbSpatialDataReader", BindingFlags.NonPublic | BindingFlags.Instance);
