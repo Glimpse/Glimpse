@@ -305,3 +305,7 @@
     color: #71b1d1;
     cursor: pointer;
 }
+.glimpse-open .glimpse-data-ajax-detail a {
+    color:inherit; 
+    text-decoration:underline;
+}
