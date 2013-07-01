@@ -131,7 +131,7 @@ namespace Glimpse.Core.Resource
 
             //Detailed Settings
             content.Append("<h3>Detailed Settings:</h3><ul class=\"root\"><li><strong>Inspectors</strong>: <ul>");
-            GroupContent(content, (x, y) => x.AppendFormat("<li><span class=\"code\">{0}</span></li>", y.GetType().FullName), configuration.RuntimePolicies.OrderBy(x => x.GetType().FullName), packages);
+            GroupContent(content, (x, y) => x.AppendFormat("<li><span class=\"code\">{0}</span></li>", y.GetType().FullName), configuration.Inspectors.OrderBy(x => x.GetType().FullName), packages);
 
             //Resources
             content.Append("</ul></li><li><strong>Resources</strong>: <ul>");
