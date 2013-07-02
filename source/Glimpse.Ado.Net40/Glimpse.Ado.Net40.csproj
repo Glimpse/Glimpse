@@ -48,14 +48,17 @@
     <Compile Include="..\Glimpse.Ado\AlternateType\GlimpseDbCommand.cs">
       <Link>
       </Link>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="..\Glimpse.Ado\AlternateType\GlimpseDbConnection.cs">
       <Link>
       </Link>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="..\Glimpse.Ado\AlternateType\GlimpseDbDataAdapter.cs">
       <Link>
       </Link>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="..\Glimpse.Ado\AlternateType\GlimpseDbDataReader.cs">
       <Link>

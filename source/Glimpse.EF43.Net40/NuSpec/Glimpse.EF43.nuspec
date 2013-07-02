@@ -14,12 +14,12 @@
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your web application. Provides Glimpse tabs for EF4.3.</description>
         <summary>Glimpse tabs for Entity Framework 4.3.</summary>
         <releaseNotes>
-Middleweight release for core: 
- - Major update to allow EF to initialize itself before App_Start (.net 4.0+)
+Middleweight release for EF: 
+ - Majorish feature where we now support DbSpatialServices (EF5 .NET45 and EF6)
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse EF EntityFramework SQL performance profiling timing diagnostics</tags>
         <dependencies> 
-          <dependency id="Glimpse.Ado" version="1.4.0" />
+          <dependency id="Glimpse.Ado" version="1.4.1" />
         </dependencies>
     </metadata>
     <files>
