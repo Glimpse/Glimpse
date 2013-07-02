@@ -21,10 +21,14 @@
                 currentSelection = elements.panelHolder().find('.glimpse-active');
             
             // Raise an event that lets us know when we dont care about a panel any more
-            if (currentSelection.length > 0) {
-                currentSelection.removeClass('glimpse-active');
-
+            if (currentSelection.length > 0) { 
+                // If already have a panel and its selected, ditch out
                 var oldKey = currentSelection.attr('data-glimpseKey');
+                if (oldKey == options.key)
+                    return;
+
+                currentSelection.removeClass('glimpse-active');
+                
                 pubsub.publish('action.panel.hiding.' + oldKey, { key: oldKey, newKey: options.key });
             }
 
