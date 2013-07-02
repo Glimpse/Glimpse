@@ -19,7 +19,7 @@ namespace Glimpse.AspNet.Tab
                 {
                     r.Cell(0).WidthInPixels(100);
                     r.Cell(1).AsKey();
-                    r.Cell(2).Class("mono");
+                    r.Cell(2);
                     r.Cell(3).WidthInPercent(20).SetLayout(TabLayout.Create().Row(x => 
                         {
                             x.Cell("{{0}} ({{1}})").WidthInPercent(45); 
