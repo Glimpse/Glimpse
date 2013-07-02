@@ -15,22 +15,28 @@
 }
 .glimpse-open .glimpse-hud-title { 
     position: absolute;
-    line-height: 100%;
-    font-size: 9px;
-    top: 2px;
     font-family: "Segoe UI Semibold", "Segoe UI", "Helvetica Neue", Helvetica, Arial;
     color: white;
     text-transform: uppercase; 
-    -webkit-transform-origin: 10px 20px;
-    -moz-transform-origin: 10px 20px;
-    -ms-transform-origin: 10px 20px;
-    -o-transform-origin: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    height: 100%;
+    width: 12px;
+    left: -12px;
+}
+.glimpse-open .glimpse-hud-title span { 
+    position: absolute;
+    line-height: 100%;
+    font-size: 9px;
+    top: 2px;
+    -webkit-transform-origin: 16px 14px;
+    -moz-transform-origin: 16px 14px;
+    -ms-transform-origin: 16px 14px;
+    -o-transform-origin: 16px 14px;
     -webkit-transform: rotate(270deg);
     -moz-transform: rotate(270deg);
     -ms-transform: rotate(270deg);
     -o-transform: rotate(270deg);
-    cursor: pointer;
-    font-weight: bold;
 }
 .glimpse-open .glimpse-hud-section-inner {  
     -webkit-transition: all 0.3s ease;
@@ -40,6 +46,7 @@
     max-width: 999px;
     min-width: 0px;
     margin-top: -1px;
+    overflow: hidden;
 }
 .glimpse-open .glimpse-hud-section-input {
     display: none;

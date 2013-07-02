@@ -18,11 +18,15 @@
             display.host.postRender();
             display.ajax.postRender();
 
+            updateStyle();
+            $('.glimpse-hud .glimpse-hud-section-input').change(function() { setTimeout(updateStyle, 400); });
+        },
+        updateStyle = function () {
             $('.glimpse-hud .glimpse-hud-popup-expander').each(function () {
-                var item = $(this);
+                var item = $(this); 
                 item.css('min-width', item.width());
             });
-        }, 
+        },
         state = (function() {
             return { 
                 setup: function () {
@@ -50,12 +54,12 @@
                             return true;
                         }, 
                         popup = function(structure, details) {
-                            return '<div class="glimpse-hud-popup" style="border-color:' + structure.color + ';"><div class="glimpse-hud-title">' + structure.title + '</div><div class="glimpse-hud-popup-inner">' + structure.popup.render(details) + '</div></div><div class="glimpse-hud-popup-expander"></div>';
+                            return '<div class="glimpse-hud-popup" style="border-color:' + structure.color + ';"><label class="glimpse-hud-title" for="glimpse-hud-section-input-' + structure.id + '"><span>' + structure.title + '</span></label><div class="glimpse-hud-popup-inner">' + structure.popup.render(details) + '</div></div>';
                         },
                         section = function(structure, details, opened) {
                             var html = '<div class="glimpse-hud-section glimpse-hud-section-' + structure.id + '" style="border-color:' + structure.color + '">';
                             
-                            html += '<label class="glimpse-hud-title" for="glimpse-hud-section-input-' + structure.id + '">' + structure.title + '</label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-input-' + structure.id + '"' + (opened ? ' checked="checked"' : '') + ' />';
+                            html += '<label class="glimpse-hud-title" for="glimpse-hud-section-input-' + structure.id + '"><span>' + structure.title + '</span></label><input type="checkbox" class="glimpse-hud-section-input" id="glimpse-hud-section-input-' + structure.id + '"' + (opened ? ' checked="checked"' : '') + ' />';
                             html += '<div class="glimpse-hud-section-inner">';  
                             for (var key in structure.layout.mini) {
                                 html += item(structure.layout.mini[key], details);
