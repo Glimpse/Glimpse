@@ -37,13 +37,13 @@
             context.isSelected = false;
         }, 
         listenStart = function() {
-            if (context.isSelected) { 
+            if (context.isSelected && !context.isActive) {
                 context.isActive = true;
                 fetch();
             }
         },
         listenStop = function() {
-            if (context.isSelected) {
+            if (context.isSelected && context.isActive) {
                 context.isActive = false;
             }
         }, 
