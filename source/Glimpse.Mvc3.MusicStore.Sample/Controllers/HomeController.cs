@@ -6,6 +6,7 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
 using System.Transactions;
+using System.Web;
 using System.Web.Mvc;
 using Dapper;
 using MvcMusicStore.Models;
@@ -45,6 +46,7 @@ namespace MvcMusicStore.Controllers
             return View(albums);
         }
 
+        [NoCache]
         public virtual ActionResult News()
         {
             var views = new[] { "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight" };
@@ -183,6 +185,21 @@ namespace MvcMusicStore.Controllers
 
 
             return new Tuple<int, int>(result1, result2);
+        }
+
+        [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+        public sealed class NoCacheAttribute : ActionFilterAttribute
+        {
+            public override void OnResultExecuting(ResultExecutingContext filterContext)
+            {
+                filterContext.HttpContext.Response.Cache.SetExpires(DateTime.UtcNow.AddDays(-1));
+                filterContext.HttpContext.Response.Cache.SetValidUntilExpires(false);
+                filterContext.HttpContext.Response.Cache.SetRevalidation(HttpCacheRevalidation.AllCaches);
+                filterContext.HttpContext.Response.Cache.SetCacheability(HttpCacheability.NoCache);
+                filterContext.HttpContext.Response.Cache.SetNoStore();
+                 
+                base.OnResultExecuting(filterContext);
+            }
         }
     }
 }
