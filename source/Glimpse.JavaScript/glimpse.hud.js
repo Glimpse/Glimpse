@@ -54,7 +54,7 @@
                             return true;
                         }, 
                         popup = function(structure, details) {
-                            return '<div class="glimpse-hud-popup" style="border-color:' + structure.color + ';"><label class="glimpse-hud-title" for="glimpse-hud-section-input-' + structure.id + '"><span>' + structure.title + '</span></label><div class="glimpse-hud-popup-inner">' + structure.popup.render(details) + '</div></div>';
+                            return '<div class="glimpse-hud-popup" style="border-color:' + structure.color + ';"><label class="glimpse-hud-title" for="glimpse-hud-section-input-' + structure.id + '"><span>' + structure.title + '</span></label><div class="glimpse-hud-popup-inner">' + structure.popup.render(details) + '</div></div><div class="glimpse-hud-popup-expander"></div>';
                         },
                         section = function(structure, details, opened) {
                             var html = '<div class="glimpse-hud-section glimpse-hud-section-' + structure.id + '" style="border-color:' + structure.color + '">';
@@ -129,7 +129,7 @@
                                 wire: { title: 'Wire', description: 'Total time on the network', visible: true, size: 2, position: 0, align: 0, postfix: 'ms', getData: function(details) { return details.request.data.network.duration; } },
                                 server: { title: 'Server', description: 'Total time on the server', visible: true, size: 2, position: 0, align: 0, postfix: 'ms', getData: function(details) { return details.request.data.server.duration; } },
                                 client: { title: 'Client', description: 'Total time once client kicks in to dom ready', visible: true, size: 2, position: 0, align: 0, postfix: 'ms', getData: function(details) { return details.request.data.browser.duration; } }, 
-                                host: { title: 'Host', description: 'Server that responded to the request', visible: true, size: 2, position: 1, align: 1, postfix: '', getLayoutData: function(details) { return '<div class="glimpse-hud-listing-overflow" style="max-width:120px;">' + details.environment.data.serverName + '</div>'; } }, 
+                                host: { title: 'Host', description: 'Server that responded to the request', visible: true, size: 2, position: 1, align: 1, postfix: '', getLayoutData: function(details) { return '<div class="glimpse-hud-listing-overflow" style="max-width:170px;">' + details.environment.data.serverName + '</div>'; } }, 
                                 principle: { title: 'Principle', description: 'Principle that is currently logged in for this session', visible: function(details) { return details.environment.data.user; }, size: 2, position: 1, align: 1, postfix: '', getLayoutData: function(details) { return '<div class="glimpse-hud-listing-overflow" style="max-width:120px;">' + details.environment.data.user + '</div>'; } }
                             },
                             layout: {
@@ -193,10 +193,9 @@
                             popup: {
                                 render: function(details) {
                                     var hasTrivial = false,
-                                        maxEvent = { length: 0, content: '' },
                                         html = '<div class="glimpse-hud-popup-header">Server Side</div>';
                                     html += '<div><table class="glimpse-hud-summary glimpse-hud-summary-space glimpse-hud-summary-left"><tr><th>' + rendering.item(structure.layout.popup.server, details) + '</th></tr><tr><td>' + rendering.item(structure.layout.popup.controller, details) + '</td></tr></table>';
-                                    html += '<table class="glimpse-hud-summary glimpse-hud-summary-space glimpse-hud-summary-right"><tr><td width="1">' + rendering.item(structure.layout.popup.action, details) + '</td>' + (details.sql ? '<td width="40"></td><td>' + rendering.item(structure.layout.popup.connections, details) + '</td>' : '') + '</tr><tr><td>' + rendering.item(structure.layout.popup.view, details) + '</td>' + (details.sql ? '<td></td><td>' + rendering.item(structure.layout.popup.queries, details) + '</td>' : '') + '</tr></table></div>';
+                                    html += '<table class="glimpse-hud-summary glimpse-hud-summary-space glimpse-hud-summary-right"><tr><td width="1">' + rendering.item(structure.layout.popup.action, details) + '</td>' + (details.sql ? '<td width="60"></td><td>' + rendering.item(structure.layout.popup.connections, details) + '</td>' : '') + '</tr><tr><td>' + rendering.item(structure.layout.popup.view, details) + '</td>' + (details.sql ? '<td></td><td>' + rendering.item(structure.layout.popup.queries, details) + '</td>' : '') + '</tr></table></div>';
                                     html += '<div class="glimpse-hud-popup-clear"></div>'; 
                                     html += '<table class="glimpse-hud-listing" style="table-layout:fixed;"><thead><tr><th></th><th class="glimpse-hud-listing-value glimpse-data-childless-duration">duration (ms)</th><th class="glimpse-hud-listing-value glimpse-data-childless-start-point">from start (ms)</th></tr></thead>';  
                                     for (var i = 0; i < details.timings.data.length; i++) {
@@ -204,11 +203,7 @@
                                             isTrivial = item.childlessDuration < 2;
                                         
                                         if (!item.suppress) {
-                                            var maxLength = (16 + (details.sql ? 10 : 0)) - item.nesting * 2,
-                                                length = item.description.lenth + item.nesting * 2;
-
-                                            if (Math.max(maxEvent.length, length))
-                                                maxEvent = { length: length, content: item.description };
+                                            var maxLength = (16 + (details.sql ? 10 : 0)) - item.nesting * 2;
                                             
                                             html += '<tbody' + (isTrivial ? ' class="glimpse-data-trivial"' : '') + '>';
                                             html += '<tr' + (isTrivial ? ' class="glimpse-hud-quite"' : '') + '><td class="glimpse-hud-listing-overflow" style="padding-left:' + (item.nesting * 15) + 'px;" ' + (item.description.length > maxLength ? 'title="' + item.description + '"' : '') +'>' + item.description + '</td><td class="glimpse-hud-listing-value glimpse-data-childless-duration">' + item.childlessDuration + '</td><td class="glimpse-hud-listing-value glimpse-data-childless-start-point"><span class="glimpse-hud-prefix">+</span>' + item.startPoint + '</td></tr>';
@@ -406,6 +401,9 @@
                             var rowClass = (status == 304 ? ' glimpse-hud-quite' : !(status >= 200 && status < 300) ? ' glimpse-hud-error' : '');
                             recordItem('<div class="glimpse-hud-listing-row glimpse-hud-value' + rowClass + '"><div class="glimpse-hud-data glimpse-hud-quite glimpse-data-ajax-method">' + method + '</div><div class="glimpse-hud-data glimpse-hud-listing-overflow glimpse-data-ajax-uri" title="' + uri + '">' + uri + '</div><div class="glimpse-data-ajax-duration"><span class="glimpse-hud-data">' + duration + '</span><span class="glimpse-hud-postfix">ms</span></div></div>', '.glimpse-hud-section-ajax .glimpse-data-ajax-summary', summaryStack, 2);
                             recordItem('<tbody class="' + rowClass + '"><tr><td class="glimpse-hud-listing-overflow" title="' + uri + '" colspan="2">' + uri + '</td><td class="glimpse-hud-listing-value glimpse-data-duration">' + duration + '</td><td class="glimpse-hud-listing-value glimpse-data-size">' + (Math.round((size / 1024) * 10) / 10) + '</td></tr><tr><td class="glimpse-hud-quite glimpse-data-content-method">' + method + '</td><td class="glimpse-hud-quite glimpse-hud-listing-overflow">' + status + ' - ' + statusText + '</td><td class="glimpse-hud-quite glimpse-data-content-type glimpse-hud-listing-overflow" title="' + contentType + '">' + processContentType(contentType) + '</td><td class="glimpse-hud-quite glimpse-data-content-time">' + time.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1") + '</td></tr></tbody>', '.glimpse-hud-section-ajax .glimpse-data-ajax-detail', detailStack, 6);
+
+                            //Update styles
+                            //updateStyle();
                         },
                         recordItem = function(html, selector, stack, length) {
                             //Set row

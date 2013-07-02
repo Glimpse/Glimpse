@@ -52,10 +52,14 @@
     display: none;
     font-size: 12px;
 }
-.glimpse-open .glimpse-hud-section-input:checked ~ .glimpse-hud-section-inner {
+.glimpse-open .glimpse-hud-section-input:checked ~ .glimpse-hud-section-inner, .glimpse-open .glimpse-hud-section-input:checked ~ .glimpse-hud-popup-expander {
     max-width: 0px;
     overflow: hidden;
-} 
+}
+.glimpse-open .glimpse-hud-section-input:checked ~ .glimpse-hud-popup {
+    max-height: 0px;
+    overflow: hidden;
+}
 .glimpse-open .glimpse-hud-detail {
     display: inline-block;
     padding: 0 10px;
@@ -159,14 +163,30 @@
     -o-transition: min-width 0.1s ease 0.3s;
     transition: min-width 0.1s ease 0.3s;
 }
+.glimpse-open .glimpse-hud-popup .glimpse-hud-popup-inner {
+    opacity: 0;
+    -webkit-transition: opacity 0.1s ease 0.25s;
+    -moz-transition: opacity 0.1s ease 0.25s;
+    -o-transition: opacity 0.1s ease 0.25s;
+    transition: opacity 0.1s ease 0.25s;
+}
+.glimpse-open .glimpse-hud-popup:hover .glimpse-hud-popup-inner, .glimpse-open .glimpse-hud-section-inner:hover ~ .glimpse-hud-popup .glimpse-hud-popup-inner {
+    opacity: 1; 
+}
 .glimpse-open .glimpse-hud-section-inner:hover ~ .glimpse-hud-popup-expander, .glimpse-open .glimpse-hud-popup:hover ~ .glimpse-hud-popup-expander {
     -webkit-transition: min-width 0.1s ease 0.2s;
     -moz-transition: min-width 0.1s ease 0.2s;
     -o-transition: min-width 0.1s ease 0.2s;
     transition: min-width 0.1s ease 0.2s;
 } 
+.glimpse-open .glimpse-hud-section-http .glimpse-hud-section-inner:hover ~ .glimpse-hud-popup-expander, .glimpse-open .glimpse-hud-section-http .glimpse-hud-popup:hover ~ .glimpse-hud-popup-expander {
+    min-width: 400px !important;
+} 
 .glimpse-open .glimpse-hud-section-host .glimpse-hud-section-inner:hover ~ .glimpse-hud-popup-expander, .glimpse-open .glimpse-hud-section-host .glimpse-hud-popup:hover ~ .glimpse-hud-popup-expander {
     min-width: 600px !important;
+} 
+.glimpse-open .glimpse-hud-section-ajax .glimpse-hud-section-inner:hover ~ .glimpse-hud-popup-expander, .glimpse-open .glimpse-hud-section-ajax .glimpse-hud-popup:hover ~ .glimpse-hud-popup-expander {
+    min-width: 450px !important;
 } 
 .glimpse-open .glimpse-hud-popup-clear {
     clear: both;
