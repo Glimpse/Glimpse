@@ -68,13 +68,9 @@ namespace Glimpse.EF.AlternateType
         }
 
 #if (EF5 && NET45) || EF6Plus
-        //HACK: GetSpatialDataReader should be virtual, shouldn't have to do this
-
-        private static MethodInfo GetDbSpatialDataReaderMethod = typeof(DbProviderServices).GetMethod("GetDbSpatialDataReader", BindingFlags.NonPublic | BindingFlags.Instance);
-
         protected override DbSpatialDataReader GetDbSpatialDataReader(System.Data.Common.DbDataReader fromReader, string manifestToken)
         {
-            return (DbSpatialDataReader)GetDbSpatialDataReaderMethod.Invoke(InnerProviderServices, new object[] { ((GlimpseDbDataReader)fromReader).InnerDataReader, manifestToken });
+            return InnerProviderServices.GetSpatialDataReader(((GlimpseDbDataReader)fromReader).InnerDataReader, manifestToken); 
         }
 #endif
     }
