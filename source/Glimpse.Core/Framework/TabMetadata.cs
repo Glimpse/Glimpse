@@ -39,7 +39,7 @@ namespace Glimpse.Core.Framework
         { 
             get
             {
-                return !string.IsNullOrEmpty(DocumentationUri) || this.Layout != null;
+                return !string.IsNullOrEmpty(DocumentationUri) || Layout != null || KeysHeadings;
             } 
         }
     }
