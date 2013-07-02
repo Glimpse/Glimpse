@@ -220,6 +220,9 @@
 .glimpse-open .glimpse-hud-listing tr:first-child td {
     padding-top: 1px;
 }
+.glimpse-open .glimpse-hud-listing td {
+    padding-bottom: 1px;
+}
 .glimpse-open .glimpse-hud-listing thead th {
     white-space: nowrap;
     opacity: 0.6;
@@ -306,6 +309,5 @@
     cursor: pointer;
 }
 .glimpse-open .glimpse-data-ajax-detail a {
-    color:inherit; 
-    text-decoration:underline;
+    color:inherit;  
 }
