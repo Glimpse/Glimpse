@@ -8,8 +8,7 @@
                 opened = state.current();
 
             html += display.http.render(details, opened[0]);
-            if (details.mvc)
-                html += display.host.render(details, opened[1]);
+            html += display.host.render(details, opened[1]);
             html += display.ajax.render(details, opened[2]);
 
             elements.opener().prepend('<div class="glimpse-hud">' + html + '</div>');
@@ -223,12 +222,12 @@
                                 }
                             },
                             defaults: {
-                                server: { title: 'Total Server Time', description: 'Total time on the server', visible: function (details) { return details.request; }, size: 0, position: 1, align: 1, postfix: 'ms', getData: function (details) { return details.request.data.server.duration; } },
-                                action: { title: 'Action', description: 'How long root Action took to execute', visible: function(details) { return details.mvc && details.mvc.data.actionExecutionTime != null; }, size: 1, position: 0, align: 0, postfix: 'ms', getData: function(details) { return parseInt(details.mvc.data.actionExecutionTime); } },
-                                view: { title: 'View', description: 'How long root View took to render', visible: function(details) { return details.mvc && details.mvc.data.viewRenderTime != null; }, size: 1, position: 0, align: 0, postfix: 'ms', getData: function(details) { return parseInt(details.mvc.data.viewRenderTime); } },
-                                controller: { title: 'Controller/Action', description: 'Name of the root Controller and Action', visible: function(details) { return details.mvc; }, size: 2, position: 0, align: 0, postfix: 'ms', getLayoutData: function(details) { return '<span class="glimpse-hud-data">' + details.mvc.data.controllerName + '</span><span class="glimpse-hud-plain">.</span><span class="glimpse-hud-data">' + details.mvc.data.actionName + '</span><span class="glimpse-hud-plain">(...)</span>'; } },
-                                queries: { title: 'DB Queries', description: 'Total query duration and number of all SQL queries', visible: function(details) { return details.sql; }, size: 1, position: 0, align: 0, getLayoutData: function(details) { return '<span class="glimpse-hud-data">' + parseInt(details.sql.data.queryExecutionTime) + '</span><span class="glimpse-hud-postfix">ms</span><span class="glimpse-hud-spacer">/</span><span class="glimpse-hud-data">'  + details.sql.data.queryCount + '</span>'; } },
-                                connections: { title: 'DB Connections', description: 'Total query duration and number of all SQL queries', visible: function(details) { return details.sql; }, size: 1, position: 1, align: 1, getLayoutData: function(details) { return '<span class="glimpse-hud-data">' + parseInt(details.sql.data.connectionOpenTime) + '</span><span class="glimpse-hud-postfix">ms</span><span class="glimpse-hud-spacer">/</span><span class="glimpse-hud-data">'  + details.sql.data.connectionCount + '</span>'; } }
+                                server: { title: 'Total Server Time', description: 'Total time on the server', visible: function(details) { return details.request; }, size: 0, position: 1, align: 1, postfix: 'ms', getData: function (details) { return details.request.data.server.duration; } },
+                                action: { title: 'Action', description: 'How long root Action took to execute', visible: function(details) { return details.mvc && details.mvc.data && details.mvc.data.actionExecutionTime != null; }, size: 1, position: 0, align: 0, postfix: 'ms', getData: function(details) { return parseInt(details.mvc.data.actionExecutionTime); } },
+                                view: { title: 'View', description: 'How long root View took to render', visible: function(details) { return details.mvc && details.mvc.data && details.mvc.data.viewRenderTime != null; }, size: 1, position: 0, align: 0, postfix: 'ms', getData: function(details) { return parseInt(details.mvc.data.viewRenderTime); } },
+                                controller: { title: 'Controller/Action', description: 'Name of the root Controller and Action', visible: function(details) { return details.mvc && details.mvc.data; }, size: 2, position: 0, align: 0, postfix: 'ms', getLayoutData: function(details) { return '<span class="glimpse-hud-data">' + details.mvc.data.controllerName + '</span><span class="glimpse-hud-plain">.</span><span class="glimpse-hud-data">' + details.mvc.data.actionName + '</span><span class="glimpse-hud-plain">(...)</span>'; } },
+                                queries: { title: 'DB Queries', description: 'Total query duration and number of all SQL queries', visible: function(details) { return details.sql && details.sql.data; }, size: 1, position: 0, align: 0, getLayoutData: function(details) { return '<span class="glimpse-hud-data">' + parseInt(details.sql.data.queryExecutionTime) + '</span><span class="glimpse-hud-postfix">ms</span><span class="glimpse-hud-spacer">/</span><span class="glimpse-hud-data">'  + details.sql.data.queryCount + '</span>'; } },
+                                connections: { title: 'DB Connections', description: 'Total query duration and number of all SQL queries', visible: function(details) { return details.sql && details.sql.data; }, size: 1, position: 1, align: 1, getLayoutData: function(details) { return '<span class="glimpse-hud-data">' + parseInt(details.sql.data.connectionOpenTime) + '</span><span class="glimpse-hud-postfix">ms</span><span class="glimpse-hud-spacer">/</span><span class="glimpse-hud-data">'  + details.sql.data.connectionCount + '</span>'; } }
                             },
                             layout: {
                                 mini: {
@@ -326,7 +325,8 @@
                         }, 
                         render = function(details, opened) {
                             var html = '';
-                            if (details.mvc || details.sql) {
+                            //Only checking MVC as we can't show just SQL very well
+                            if (details.mvc && details.mvc.data) {
                                 process.init(structure); 
                                 processEvents(details);
                                 html = rendering.section(structure, details, opened); 
