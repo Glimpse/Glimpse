@@ -141,6 +141,10 @@
 }
 .glimpse-open .glimpse-hud-section-inner:hover ~ .glimpse-hud-popup, .glimpse-open .glimpse-hud-popup:hover {
     max-height: 999px;
+    -webkit-transition: max-height 0.3s ease 0.3s;
+    -moz-transition: max-height 0.3s ease 0.3s;
+    -o-transition: max-height 0.3s ease 0.3s;
+    transition: max-height 0.3s ease 0.3s;
 }
 .glimpse-open .glimpse-hud-popup {
     background-color: #3c454f;
@@ -155,24 +159,14 @@
     -moz-transition: max-height 0.3s ease 0.2s;
     -o-transition: max-height 0.3s ease 0.2s;
     transition: max-height 0.3s ease 0.2s;
-}
+} 
 .glimpse-open .glimpse-hud-popup-expander {
     height: 1px; 
-    -webkit-transition: min-width 0.1s ease 0.3s;
-    -moz-transition: min-width 0.1s ease 0.3s;
-    -o-transition: min-width 0.1s ease 0.3s;
-    transition: min-width 0.1s ease 0.3s;
-}
-.glimpse-open .glimpse-hud-popup .glimpse-hud-popup-inner {
-    opacity: 0;
-    -webkit-transition: opacity 0.1s ease 0.25s;
-    -moz-transition: opacity 0.1s ease 0.25s;
-    -o-transition: opacity 0.1s ease 0.25s;
-    transition: opacity 0.1s ease 0.25s;
-}
-.glimpse-open .glimpse-hud-popup:hover .glimpse-hud-popup-inner, .glimpse-open .glimpse-hud-section-inner:hover ~ .glimpse-hud-popup .glimpse-hud-popup-inner {
-    opacity: 1; 
-}
+    -webkit-transition: min-width 0.1s ease 0.5s;
+    -moz-transition: min-width 0.1s ease 0.5s;
+    -o-transition: min-width 0.1s ease 0.5s;
+    transition: min-width 0.1s ease 0.5s;
+} 
 .glimpse-open .glimpse-hud-section-inner:hover ~ .glimpse-hud-popup-expander, .glimpse-open .glimpse-hud-popup:hover ~ .glimpse-hud-popup-expander {
     -webkit-transition: min-width 0.1s ease 0.2s;
     -moz-transition: min-width 0.1s ease 0.2s;
