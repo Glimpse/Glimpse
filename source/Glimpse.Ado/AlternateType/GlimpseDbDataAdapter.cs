@@ -3,7 +3,7 @@ using System.Data.Common;
 
 namespace Glimpse.Ado.AlternateType
 {
-    internal class GlimpseDbDataAdapter : DbDataAdapter
+    public class GlimpseDbDataAdapter : DbDataAdapter
     {
         public GlimpseDbDataAdapter(DbDataAdapter innerDataAdapter)
         {
