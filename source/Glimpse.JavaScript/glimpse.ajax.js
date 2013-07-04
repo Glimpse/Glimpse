@@ -82,7 +82,17 @@
                     layoutRender(result);
                 }
             });
-        }, 
+        },
+        complete = function(args) {
+            if (args.textStatus != 'success') {
+                var panel = elements.panel('ajax');
+
+                panel.find('.glimpse-ajax-loading[data-requestId="' + args.requestId + '"]').html('<div class="error"><div class="icon"></div>Error :(</div>');
+                
+                context.contextRequestId = null;
+                context.hasTried = null;
+            }
+        },
         layoutRender = function(result) {
             if (context.resultCount == result.length)
                 return;
@@ -190,6 +200,7 @@
     pubsub.subscribe('action.data.fetched.ajax', selectFinish); 
     pubsub.subscribe('action.data.refresh.changed', contextSwitch); 
     pubsub.subscribe('action.data.initial.changed', setup);
+    pubsub.subscribe('action.data.retrieve.completed.ajax', complete);
     pubsub.subscribe('trigger.data.context.reset', selectClear);
     pubsub.subscribe('trigger.shell.panel.clear.ajax', layoutClear);
     pubsub.subscribe('trigger.data.context.switch', selectStart);
