@@ -3451,8 +3451,8 @@ glimpse.tab = (function($, pubsub, data) {
                                 render: function(details) {
                                     var hasTrivial = false,
                                         html = '<div class="glimpse-hud-popup-header">Server Side</div>';
-                                    html += '<div><table class="glimpse-hud-summary glimpse-hud-summary-space glimpse-hud-summary-left"><tr><th>' + rendering.item(structure.layout.popup.server, details) + '</th></tr><tr><td>' + rendering.item(structure.layout.popup.controller, details) + '</td></tr></table>';
-                                    html += '<table class="glimpse-hud-summary glimpse-hud-summary-space glimpse-hud-summary-right"><tr><td width="1">' + rendering.item(structure.layout.popup.action, details) + '</td>' + (details.sql ? '<td width="60"></td><td>' + rendering.item(structure.layout.popup.connections, details) + '</td>' : '') + '</tr><tr><td>' + rendering.item(structure.layout.popup.view, details) + '</td>' + (details.sql ? '<td></td><td>' + rendering.item(structure.layout.popup.queries, details) + '</td>' : '') + '</tr></table></div>';
+                                    html += '<div><table class="glimpse-hud-summary glimpse-hud-summary-space glimpse-hud-summary-left"><tr><th>' + rendering.item(structure.layout.popup.action, details) + '</th></tr><tr><td>' + rendering.item(structure.layout.popup.controller, details) + '</td></tr></table>';
+                                    html += '<table class="glimpse-hud-summary glimpse-hud-summary-space glimpse-hud-summary-right"><tr><td width="1">' + rendering.item(structure.layout.popup.view, details) + '</td>' + (details.sql ? '<td width="60"></td><td>' + rendering.item(structure.layout.popup.queries, details) + '</td>' : '') + '</tr><tr><td>' + rendering.item(structure.layout.popup.server, details) + '</td>' + (details.sql ? '<td></td><td>' + rendering.item(structure.layout.popup.connections, details) + '</td>' : '') + '</tr></table></div>';
                                     html += '<div class="glimpse-hud-popup-clear"></div>'; 
                                     html += '<table class="glimpse-hud-listing" style="table-layout:fixed;"><thead><tr><th></th><th class="glimpse-hud-listing-value glimpse-data-childless-duration">duration (ms)</th><th class="glimpse-hud-listing-value glimpse-data-childless-start-point">from start (ms)</th></tr></thead>';  
                                     for (var i = 0; i < details.timings.data.length; i++) {
@@ -3480,12 +3480,12 @@ glimpse.tab = (function($, pubsub, data) {
                                 }
                             },
                             defaults: {
-                                server: { title: 'Total Server Time', description: 'Total time on the server', visible: function(details) { return details.request; }, size: 0, position: 1, align: 1, postfix: 'ms', getData: function (details) { return details.request.data.server.duration; } },
+                                server: { title: 'Server Time', description: 'Total time on the server', visible: function(details) { return details.request; }, size: 1, position: 1, align: 1, postfix: 'ms', getData: function (details) { return details.request.data.server.duration; } },
                                 action: { title: 'Action', description: 'How long root Action took to execute', visible: function(details) { return details.mvc && details.mvc.data && details.mvc.data.actionExecutionTime != null; }, size: 1, position: 0, align: 0, postfix: 'ms', getData: function(details) { return parseInt(details.mvc.data.actionExecutionTime); } },
                                 view: { title: 'View', description: 'How long root View took to render', visible: function(details) { return details.mvc && details.mvc.data && details.mvc.data.viewRenderTime != null; }, size: 1, position: 0, align: 0, postfix: 'ms', getData: function(details) { return parseInt(details.mvc.data.viewRenderTime); } },
                                 controller: { title: 'Controller/Action', description: 'Name of the root Controller and Action', visible: function(details) { return details.mvc && details.mvc.data; }, size: 2, position: 0, align: 0, postfix: 'ms', getLayoutData: function(details) { return '<span class="glimpse-hud-data">' + details.mvc.data.controllerName + '</span><span class="glimpse-hud-plain">.</span><span class="glimpse-hud-data">' + details.mvc.data.actionName + '</span><span class="glimpse-hud-plain">(...)</span>'; } },
                                 queries: { title: 'DB Queries', description: 'Total query duration and number of all SQL queries', visible: function(details) { return details.sql && details.sql.data; }, size: 1, position: 0, align: 0, getLayoutData: function(details) { return '<span class="glimpse-hud-data">' + parseInt(details.sql.data.queryExecutionTime) + '</span><span class="glimpse-hud-postfix">ms</span><span class="glimpse-hud-spacer">/</span><span class="glimpse-hud-data">'  + details.sql.data.queryCount + '</span>'; } },
-                                connections: { title: 'DB Connections', description: 'Total query duration and number of all SQL queries', visible: function(details) { return details.sql && details.sql.data; }, size: 1, position: 1, align: 1, getLayoutData: function(details) { return '<span class="glimpse-hud-data">' + parseInt(details.sql.data.connectionOpenTime) + '</span><span class="glimpse-hud-postfix">ms</span><span class="glimpse-hud-spacer">/</span><span class="glimpse-hud-data">'  + details.sql.data.connectionCount + '</span>'; } }
+                                connections: { title: 'DB Connections', description: 'Total connection open time and number of all SQL connections used', visible: function(details) { return details.sql && details.sql.data; }, size: 1, position: 1, align: 1, getLayoutData: function(details) { return '<span class="glimpse-hud-data">' + parseInt(details.sql.data.connectionOpenTime) + '</span><span class="glimpse-hud-postfix">ms</span><span class="glimpse-hud-spacer">/</span><span class="glimpse-hud-data">'  + details.sql.data.connectionCount + '</span>'; } }
                             },
                             layout: {
                                 mini: {
@@ -3496,8 +3496,8 @@ glimpse.tab = (function($, pubsub, data) {
                                 },
                                 popup: {
                                     server: {},
-                                    action: { position: 1, align: 1 },
-                                    view: { position: 1, align: 1 },
+                                    action: { title: 'Total Action Time', position: 1, align: 1, size: 0 },
+                                    view: { title: 'Render View', position: 1, align: 1 },
                                     controller: { position: 1, align: 1 },
                                     queries: { position: 1, align: 1 },
                                     connections: {},
