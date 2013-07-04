@@ -16,6 +16,7 @@
         <releaseNotes>
 Flyweight release for Ado:
  - Fix error calling what could occur when binding DataReader's to controls
+ - Made GlimpseDbDataAdapter public to allow it to be accessed in different cases
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse ADO ADO.NET SQL performance profiling timing diagnostics</tags>
         <dependencies>
