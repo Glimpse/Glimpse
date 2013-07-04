@@ -135,17 +135,21 @@
             }
         },
         selectStart = function(args) {
-            var link = elements.panel('ajax').find('.glimpse-ajax-link[data-requestId="' + args.requestId + '"]');
+            var link = elements.panel('ajax').find('.glimpse-ajax-link[data-requestId="' + args.requestId + '"]'),
+                isDifferent = data.currentData().requestId != context.contextRequestId;
             
             context.contextRequestId = args.requestId;
             
             if (link.length > 0) { 
-                if (args.type == 'ajax') {
+                if (args.type == 'ajax' || (isDifferent && !context.hasTried)) {
+                    if (isDifferent)
+                        context.hasTried = args.requestId;
+                    
                     link.hide().parent().append('<div class="loading glimpse-ajax-loading" data-requestId="' + args.requestId + '"><div class="icon"></div>Loading...</div>');
             
                     data.retrieve(args.requestId, 'ajax');
                 }
-                else 
+                else if (!context.hasTried)
                     selectCore(args.requestId);
             }
             else 
@@ -168,6 +172,7 @@
             row.addClass('selected');
             
             context.contextRequestId = null;
+            context.hasTried = null;
         };
     
     var send = XMLHttpRequest.prototype.send;
