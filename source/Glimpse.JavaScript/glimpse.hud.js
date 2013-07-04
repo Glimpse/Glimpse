@@ -15,17 +15,8 @@
             state.setup();
 
             display.host.postRender();
-            display.ajax.postRender();
-
-            updateStyle();
-            $('.glimpse-hud .glimpse-hud-section-input').change(function() { setTimeout(updateStyle, 400); });
-        },
-        updateStyle = function () {
-            $('.glimpse-hud .glimpse-hud-popup-expander').each(function () {
-                var item = $(this); 
-                item.css('min-width', item.width());
-            });
-        },
+            display.ajax.postRender(); 
+        }, 
         state = (function() {
             return { 
                 setup: function () {
