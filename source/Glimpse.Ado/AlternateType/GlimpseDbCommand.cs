@@ -44,13 +44,13 @@ namespace Glimpse.Ado.AlternateType
 
         public GlimpseDbConnection InnerConnection { get; set; } 
  
-        private IMessageBroker MessageBroker
+        internal IMessageBroker MessageBroker
         {
             get { return messageBroker ?? (messageBroker = GlimpseConfiguration.GetConfiguredMessageBroker()); }
             set { messageBroker = value; }
         }
 
-        private IExecutionTimer TimerStrategy
+        internal IExecutionTimer TimerStrategy
         {
             get { return timerStrategy ?? (timerStrategy = GlimpseConfiguration.GetConfiguredTimerStrategy()()); }
             set { timerStrategy = value; }
@@ -175,19 +175,19 @@ namespace Glimpse.Ado.AlternateType
             DbDataReader reader;
             var commandId = Guid.NewGuid();
 
-            var timer = LogCommandSeed();
-            LogCommandStart(commandId, timer);  
+            var timer = this.LogCommandSeed();
+            this.LogCommandStart(commandId, timer);  
             try
             {
                 reader = InnerCommand.ExecuteReader(behavior);
             }
             catch (Exception exception)
             {
-                LogCommandError(commandId, timer, exception, "ExecuteDbDataReader");
+                this.LogCommandError(commandId, timer, exception, "ExecuteDbDataReader");
                 throw;
             }
 
-            LogCommandEnd(commandId, timer, reader.RecordsAffected, "ExecuteDbDataReader");
+            this.LogCommandEnd(commandId, timer, reader.RecordsAffected, "ExecuteDbDataReader");
 
             return new GlimpseDbDataReader(reader, InnerCommand, InnerConnection.ConnectionId, commandId); 
         }
@@ -197,18 +197,18 @@ namespace Glimpse.Ado.AlternateType
             int num;
             var commandId = Guid.NewGuid();
 
-            var timer = LogCommandSeed();
-            LogCommandStart(commandId, timer); 
+            var timer = this.LogCommandSeed();
+            this.LogCommandStart(commandId, timer); 
             try
             {
                 num = InnerCommand.ExecuteNonQuery();
             }
             catch (Exception exception)
             {
-                LogCommandError(commandId, timer, exception, "ExecuteNonQuery");
+                this.LogCommandError(commandId, timer, exception, "ExecuteNonQuery");
                 throw;
             }
-            LogCommandEnd(commandId, timer, num, "ExecuteNonQuery");
+            this.LogCommandEnd(commandId, timer, num, "ExecuteNonQuery");
 
             return num;
         }
@@ -218,18 +218,18 @@ namespace Glimpse.Ado.AlternateType
             object result;
             var commandId = Guid.NewGuid();
 
-            var timer = LogCommandSeed();
-            LogCommandStart(commandId, timer);  
+            var timer = this.LogCommandSeed();
+            this.LogCommandStart(commandId, timer);  
             try
             {
                 result = InnerCommand.ExecuteScalar();
             }
             catch (Exception exception)
             {
-                LogCommandError(commandId, timer, exception, "ExecuteScalar");
+                this.LogCommandError(commandId, timer, exception, "ExecuteScalar");
                 throw;
             }
-            LogCommandEnd(commandId, timer, null, "ExecuteScalar");
+            this.LogCommandEnd(commandId, timer, null, "ExecuteScalar");
 
             return result;
         }
@@ -264,80 +264,5 @@ namespace Glimpse.Ado.AlternateType
             InnerConnection = null;
             base.Dispose(disposing);
         }
-         
-        #region Support Methods
-        private static object GetParameterValue(IDataParameter parameter)
-        {
-            if (parameter.Value == DBNull.Value)
-            {
-                return "NULL";
-            } 
-
-            if (parameter.Value is byte[])
-            {
-                var builder = new StringBuilder("0x");
-                foreach (var num in (byte[])parameter.Value)
-                {
-                    builder.Append(num.ToString("X2"));
-                } 
-
-                return builder.ToString();
-            }
-            return parameter.Value;
-        }
-
-        private TimeSpan LogCommandSeed()
-        {
-            return TimerStrategy != null ? TimerStrategy.Start() : TimeSpan.Zero;
-        }
-
-        private void LogCommandStart(Guid commandId, TimeSpan timerTimeSpan)
-        {
-            if (MessageBroker != null)
-            {
-                IList<CommandExecutedParamater> parameters = null;
-                if (Parameters.Count > 0)
-                {
-                    parameters = new List<CommandExecutedParamater>();
-                    foreach (IDbDataParameter parameter in Parameters)
-                    {
-                        var parameterName = parameter.ParameterName;
-                        if (!parameterName.StartsWith("@"))
-                        {
-                            parameterName = "@" + parameterName;
-                        }
-
-                        parameters.Add(new CommandExecutedParamater { Name = parameterName, Value = GetParameterValue(parameter), Type = parameter.DbType.ToString(), Size = parameter.Size });
-                    }
-                }
-
-                MessageBroker.Publish(
-                    new CommandExecutedMessage(InnerConnection.ConnectionId, commandId, InnerCommand.CommandText, parameters, InnerCommand.Transaction != null)
-                    .AsTimedMessage(timerTimeSpan));
-            }
-        }
-
-        private void LogCommandEnd(Guid commandId, TimeSpan timer, int? recordsAffected, string type)
-        {
-            if (MessageBroker != null && TimerStrategy != null)
-            {
-                MessageBroker.Publish(
-                    new CommandDurationAndRowCountMessage(InnerConnection.ConnectionId, commandId, recordsAffected)
-                    .AsTimedMessage(TimerStrategy.Stop(timer))
-                    .AsTimelineMessage("Command: Executed", AdoTimelineCategory.Command, type));
-            } 
-        }
-
-        private void LogCommandError(Guid commandId, TimeSpan timer, Exception exception, string type)
-        {
-            if (MessageBroker != null && TimerStrategy != null)
-            {
-                MessageBroker.Publish(
-                    new CommandErrorMessage(InnerConnection.ConnectionId, commandId, exception)
-                    .AsTimedMessage(TimerStrategy.Stop(timer))
-                    .AsTimelineMessage("Command: Error", AdoTimelineCategory.Command, type));
-            }
-        }
-        #endregion
     }
 }

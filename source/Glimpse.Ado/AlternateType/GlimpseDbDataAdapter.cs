@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.Common;
 
 namespace Glimpse.Ado.AlternateType
@@ -33,8 +34,35 @@ namespace Glimpse.Ado.AlternateType
         {
             if (SelectCommand != null)
             {
-                InnerDataAdapter.SelectCommand = ((GlimpseDbCommand)SelectCommand).Inner;
-            } 
+                var typedCommand = SelectCommand as GlimpseDbCommand;
+                if (typedCommand != null)
+                {
+                    InnerDataAdapter.SelectCommand = typedCommand.Inner;
+
+                    var result = 0;
+                    var commandId = Guid.NewGuid();
+
+                    var timer = typedCommand.LogCommandSeed();
+                    typedCommand.LogCommandStart(commandId, timer);
+                    try
+                    {
+                        result = InnerDataAdapter.Fill(dataSet);
+                    }
+                    catch (Exception exception)
+                    {
+                        typedCommand.LogCommandError(commandId, timer, exception, "ExecuteDbDataReader");
+                        throw;
+                    }
+                    finally
+                    {
+                        typedCommand.LogCommandEnd(commandId, timer, result, "ExecuteDbDataReader");
+                    }
+
+                    return result;
+                }
+
+                InnerDataAdapter.SelectCommand = SelectCommand;
+            }
 
             return InnerDataAdapter.Fill(dataSet);
         }
@@ -43,8 +71,8 @@ namespace Glimpse.Ado.AlternateType
         {
             if (SelectCommand != null)
             {
-                InnerDataAdapter.SelectCommand = ((GlimpseDbCommand)SelectCommand).Inner;
-            } 
+                InnerDataAdapter.SelectCommand = RetrieveBaseType(SelectCommand);
+            }
 
             return InnerDataAdapter.FillSchema(dataSet, schemaType);
         }
@@ -73,20 +101,26 @@ namespace Glimpse.Ado.AlternateType
         {
             if (UpdateCommand != null)
             {
-                InnerDataAdapter.UpdateCommand = ((GlimpseDbCommand)UpdateCommand).Inner;
-            } 
+                InnerDataAdapter.UpdateCommand = RetrieveBaseType(UpdateCommand);
+            }
 
             if (InsertCommand != null)
             {
-                InnerDataAdapter.InsertCommand = ((GlimpseDbCommand)InsertCommand).Inner;
-            } 
+                InnerDataAdapter.InsertCommand = RetrieveBaseType(InsertCommand);
+            }
 
             if (DeleteCommand != null)
             {
-                InnerDataAdapter.DeleteCommand = ((GlimpseDbCommand)DeleteCommand).Inner;
-            } 
+                InnerDataAdapter.DeleteCommand = RetrieveBaseType(DeleteCommand);
+            }
 
             return InnerDataAdapter.Update(dataSet);
+        }
+
+        private DbCommand RetrieveBaseType(DbCommand command)
+        {
+            var typedCommand = command as GlimpseDbCommand;
+            return typedCommand ?? command;
         }
     }
 }

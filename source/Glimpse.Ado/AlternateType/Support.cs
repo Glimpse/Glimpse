@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Common; 
-using System.Reflection; 
+using System.Reflection;
+using System.Text;
+using Glimpse.Ado.Message;
+using Glimpse.Core.Message;
 
 namespace Glimpse.Ado.AlternateType
 {
@@ -58,6 +62,79 @@ namespace Glimpse.Ado.AlternateType
             var providerField = dbProviderFactories.GetField("_configTable", BindingFlags.NonPublic | BindingFlags.Static) ?? dbProviderFactories.GetField("_providerTable", BindingFlags.NonPublic | BindingFlags.Static);
             var registrations = providerField.GetValue(null);
             return registrations is DataSet ? ((DataSet)registrations).Tables["DbProviderFactories"] : (DataTable)registrations;
+        }
+
+        public static object GetParameterValue(IDataParameter parameter)
+        {
+            if (parameter.Value == DBNull.Value)
+            {
+                return "NULL";
+            }
+
+            if (parameter.Value is byte[])
+            {
+                var builder = new StringBuilder("0x");
+                foreach (var num in (byte[])parameter.Value)
+                {
+                    builder.Append(num.ToString("X2"));
+                }
+
+                return builder.ToString();
+            }
+            return parameter.Value;
+        }
+
+        public static TimeSpan LogCommandSeed(this GlimpseDbCommand command)
+        {
+            return command.TimerStrategy != null ? command.TimerStrategy.Start() : TimeSpan.Zero;
+        }
+
+        public static void LogCommandStart(this GlimpseDbCommand command, Guid commandId, TimeSpan timerTimeSpan)
+        {
+            if (command.MessageBroker != null)
+            {
+                IList<CommandExecutedParamater> parameters = null;
+                if (command.Parameters.Count > 0)
+                {
+                    parameters = new List<CommandExecutedParamater>();
+                    foreach (IDbDataParameter parameter in command.Parameters)
+                    {
+                        var parameterName = parameter.ParameterName;
+                        if (!parameterName.StartsWith("@"))
+                        {
+                            parameterName = "@" + parameterName;
+                        }
+
+                        parameters.Add(new CommandExecutedParamater { Name = parameterName, Value = GetParameterValue(parameter), Type = parameter.DbType.ToString(), Size = parameter.Size });
+                    }
+                }
+
+                command.MessageBroker.Publish(
+                    new CommandExecutedMessage(command.InnerConnection.ConnectionId, commandId, command.InnerCommand.CommandText, parameters, command.InnerCommand.Transaction != null)
+                    .AsTimedMessage(timerTimeSpan));
+            }
+        }
+
+        public static void LogCommandEnd(this GlimpseDbCommand command, Guid commandId, TimeSpan timer, int? recordsAffected, string type)
+        {
+            if (command.MessageBroker != null && command.TimerStrategy != null)
+            {
+                command.MessageBroker.Publish(
+                    new CommandDurationAndRowCountMessage(command.InnerConnection.ConnectionId, commandId, recordsAffected)
+                    .AsTimedMessage(command.TimerStrategy.Stop(timer))
+                    .AsTimelineMessage("Command: Executed", AdoTimelineCategory.Command, type));
+            }
+        }
+
+        public static void LogCommandError(this GlimpseDbCommand command, Guid commandId, TimeSpan timer, Exception exception, string type)
+        {
+            if (command.MessageBroker != null && command.TimerStrategy != null)
+            {
+                command.MessageBroker.Publish(
+                    new CommandErrorMessage(command.InnerConnection.ConnectionId, commandId, exception)
+                    .AsTimedMessage(command.TimerStrategy.Stop(timer))
+                    .AsTimelineMessage("Command: Error", AdoTimelineCategory.Command, type));
+            }
         }
     }
 }

@@ -43,6 +43,8 @@ namespace MvcMusicStore.Controllers
 
             ts.TraceEvent(TraceEventType.Warning, 0, string.Format("{0}: {1}", "trace", "source"));
 
+            GetAllAlbums();
+
             return View(albums);
         }
 
@@ -67,6 +69,36 @@ namespace MvcMusicStore.Controllers
                 .OrderByDescending(a => a.OrderDetails.Count())
                 .Take(count)
                 .ToList();
+        }
+
+        private int GetAllAlbums()
+        {  
+            var rowcount = 0; 
+            var ds = new DataSet();
+
+            var connectionString = ConfigurationManager.ConnectionStrings["MusicStoreEntities"];
+            var factory = DbProviderFactories.GetFactory(connectionString.ProviderName);  //factory: {Glimpse.Ado.AlternateType.GlimpseDbProviderFactory<System.Data.SqlClient.SqlClientFactory>}
+
+            using (DbCommand cmd = factory.CreateCommand()) //cmd: {Glimpse.Ado.AlternateType.GlimpseDbCommand} 
+            { 
+                //cmd.CommandType = CommandType.StoredProcedure; 
+                cmd.CommandText = "SELECT * FROM Albums";
+
+                using (DbConnection con = factory.CreateConnection()) //con: {Glimpse.Ado.AlternateType.GlimpseDbConnection} 
+                {
+                    con.ConnectionString = connectionString.ConnectionString; 
+                    cmd.Connection = con;
+
+                    IDbDataAdapter dbAdapter = factory.CreateDataAdapter(); //dbAdapter: {System.Data.SqlClient.SqlDataAdapter} not GlimpseDbDataAdapter 
+                    dbAdapter.SelectCommand = cmd;
+
+                    dbAdapter.Fill(ds); 
+                } 
+            }
+
+            rowcount = ds.Tables[0].Rows.Count;
+
+            return rowcount; 
         }
 
         private Tuple<int, int> GetTotalAlbumns()
