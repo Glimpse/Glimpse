@@ -99,7 +99,7 @@ namespace Glimpse.Core.Resource
             }
 
             //Update notification
-            content.Append("<script type=\"text/javascript\">var getOptions = function() { var data = localStorage.getItem('glimpseOptions'); return data != null ? JSON.parse(data) : {}; }, options = getOptions(), currentHash = options.hash, checkUri = options.versionCheckUri, viewUri = options.versionViewUri, hasNewer = options.hasNewerVersion; if (hasNewer && checkUri.indexOf('hash=' + currentHash) > -1) { document.write(\"<div class='out-dated'><h3>Really sorry to have to say this but you are out of date :(</h3>A new version of Glimpse is waiting for you... its very lonely without you. It will be worth your while updating. <br /><a href='\" + viewUri + \"' target='new'>See what you are missing out on</a></div>\"); }</script>");
+            content.Append("<script type=\"text/javascript\">var getOptions = function() { var data = localStorage.getItem('glimpseOptions'); return data != null ? JSON.parse(data) : {}; }, options = getOptions(), currentHash = options.hash, checkUri = options.versionCheckUri, viewUri = options.versionViewUri, hasNewer = options.hasNewerVersion; if (hasNewer && checkUri.indexOf('hash=' + currentHash) > -1) { document.write(\"<div class='out-dated'><h3>Really sorry to have to say this but you are out of date :(</h3>A new version of Glimpse is waiting for you... it's very lonely without you. It will be worth your while updating. <br /><a href='\" + viewUri + \"' target='new'>See what you are missing out on</a></div>\"); }</script>");
 
             //Configuration generator
             content.Append("<div class=\"configuration-holder\"><h3>Configuration Helper</h3>");
