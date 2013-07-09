@@ -120,7 +120,7 @@ namespace Glimpse.Ado.AlternateType
         private DbCommand RetrieveBaseType(DbCommand command)
         {
             var typedCommand = command as GlimpseDbCommand;
-            return typedCommand ?? command;
+            return typedCommand.Inner ?? command;
         }
     }
 }
