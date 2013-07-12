@@ -85,7 +85,9 @@
     <Compile Include="Controllers\ShoppingCartController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Controllers\StoreManagerController.cs" />
+    <Compile Include="Framework\Configuration.cs" />
     <Compile Include="Framework\SqlMapper.cs" />
+    <Compile Include="Framework\TabConfiguration.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

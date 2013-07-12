@@ -1,9 +1,13 @@
-﻿using System;
+﻿using MvcMusicStore.Framework;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.Common;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Dapper;
 
 namespace MvcMusicStore
 {
@@ -60,6 +64,19 @@ namespace MvcMusicStore
             ); 
         }
 
+        private void LoadConfiguration()
+        {
+            var connectionString = ConfigurationManager.ConnectionStrings["MusicStoreEntities"];
+            var factory = DbProviderFactories.GetFactory(connectionString.ProviderName);
+            using (var connection = factory.CreateConnection())
+            {
+                connection.ConnectionString = connectionString.ConnectionString;
+                connection.Open();
+
+                MvcMusicStore.Framework.Configuration.Current = connection.Query<ConfigurationModel>("SELECT * FROM Configuration").First(); 
+            }
+        }
+
         protected void Application_Start()
         {
             System.Data.Entity.Database.SetInitializer(new MvcMusicStore.Models.SampleData());
@@ -68,6 +85,7 @@ namespace MvcMusicStore
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
+            LoadConfiguration();
         }
     }
 }
