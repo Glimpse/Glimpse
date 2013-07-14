@@ -70,6 +70,7 @@
     <Compile Include="AlternateType\RouteConstraintShould.cs" />
     <Compile Include="AlternateType\RouteProcessConstraintShould.cs" />
     <Compile Include="AspNetFrameworkProviderShould.cs" />
+    <Compile Include="PreBodyTagFilterShould.cs" />
     <Compile Include="HttpApplicationStateBaseDataAdapterShould.cs" />
     <Compile Include="HttpHandlerShould.cs" />
     <Compile Include="HttpModuleShould.cs" />
