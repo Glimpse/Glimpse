@@ -1,6 +1,0 @@
-This file solely exists to be able to create a pull request for this branch so that discussions 
-about why/what/how/when can be held before the first line of code is written.
-
-If there are no changes to the branch, then a pull request can't be made.
-
-This file will be removed before taking in the pull request
