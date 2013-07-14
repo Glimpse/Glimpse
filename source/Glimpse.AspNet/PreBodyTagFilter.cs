@@ -7,17 +7,14 @@ namespace Glimpse.AspNet
 {
     public class PreBodyTagFilter : Stream
     {
+        private const string BodyClosingTag = "</body>";
+
         public PreBodyTagFilter(string htmlSnippet, Stream outputStream, Encoding contentEncoding, ILogger logger)
         {
-#if NET35
-            HtmlSnippet = Glimpse.AspNet.Net35.Backport.Net35Backport.IsNullOrWhiteSpace(htmlSnippet) ? string.Empty : htmlSnippet + "</body>";
-#else
-            HtmlSnippet = string.IsNullOrWhiteSpace(htmlSnippet) ? string.Empty : htmlSnippet + "</body>";
-#endif
-
+            HtmlSnippet = htmlSnippet + BodyClosingTag;
             OutputStream = outputStream;
             ContentEncoding = contentEncoding;
-            BodyEnd = new Regex("</body>", RegexOptions.Compiled | RegexOptions.Multiline);
+            BodyEnd = new Regex(BodyClosingTag, RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.IgnoreCase | RegexOptions.RightToLeft);
             Logger = logger;
         }
 
@@ -88,7 +85,7 @@ namespace Glimpse.AspNet
 
             if (BodyEnd.IsMatch(contentInBuffer))
             {
-                string bodyCloseWithScript = BodyEnd.Replace(contentInBuffer, HtmlSnippet);
+                string bodyCloseWithScript = BodyEnd.Replace(contentInBuffer, HtmlSnippet, 1);
 
                 byte[] outputBuffer = ContentEncoding.GetBytes(bodyCloseWithScript);
 
