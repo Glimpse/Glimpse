@@ -39,6 +39,5 @@ Middleweight release for Asp.Net:
         <!--<file src="readme.txt" target="readme.txt" />-->
         <file src="..\..\Glimpse.AspNet\**\*.cs" target="src" />
         <file src="..\..\Glimpse.AspNet\Resources.resx" target="src" />
-        <file src="..\..\Glimpse.AspNet.Net35\Backport\Net35Backport.cs" target="src" />
     </files>
 </package>
