@@ -43,7 +43,6 @@
     <Compile Include="..\Glimpse.AspNet\**\*.cs" Exclude="..\Glimpse.AspNet\Properties\AssemblyInfo.cs">
       <Link />
     </Compile>
-    <Compile Include="Backport\Net35Backport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
