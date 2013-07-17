@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.Common;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Dapper;
+using MvcMusicStore.Framework;
 
 namespace MvcMusicStore.Models
 {
@@ -101,6 +105,19 @@ cart => cart.CartId == ShoppingCartId
         public List<Cart> GetCartItems()
         {
             return storeDB.Carts.Where(cart => cart.CartId == ShoppingCartId).ToList();
+        }
+
+        public List<CartItem> GetCartDetials()
+        { 
+            var connectionString = ConfigurationManager.ConnectionStrings["MusicStoreEntities"];
+            var factory = DbProviderFactories.GetFactory(connectionString.ProviderName);
+            using (var connection = factory.CreateConnection())
+            {
+                connection.ConnectionString = connectionString.ConnectionString;
+                connection.Open();
+
+                return connection.Query<CartItem>(string.Format("SELECT C.RecordId, C.CartId, C.AlbumId, C.Count, C.DateCreated, A.Title AS AlbumTitle, A.Price AS AlbumPrice, AR.Name AS ArtistName, G.Name AS GenreName FROM Carts C LEFT JOIN Albums A ON C.AlbumId = A.AlbumId LEFT JOIN Artists AR ON A.ArtistId = AR.ArtistId LEFT JOIN Genres G ON A.GenreId = G.GenreId WHERE CartId = '{0}'", ShoppingCartId)).ToList();
+            }
         }
 
         public int GetCount()
