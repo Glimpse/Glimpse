@@ -7,7 +7,7 @@ using MvcMusicStore.Models;
 
 namespace MvcMusicStore.Framework
 {
-    public class TabCart : AspNetTab, ITabLayout
+    public class TabCart : AspNetTab, ITabLayout, ILayoutControl
     {
         private static readonly object Layout = TabLayout.Create()
                 .Cell("items", TabLayout.Create().Row(r =>
@@ -26,6 +26,11 @@ namespace MvcMusicStore.Framework
             get { return "Cart"; }
         }
 
+        public bool KeysHeadings
+        {
+            get { return true; }
+        }
+
         public override object GetData(ITabContext context)
         {
             var httpContext = context.GetHttpContext();
@@ -35,8 +40,10 @@ namespace MvcMusicStore.Framework
 
             var root = new
             {
-                CartId = ShoppingCart.GetCartId(httpContext), 
-                Total = items.Any() ? items.Sum(x => x.AlbumPrice).ToString() : "--", 
+                Details = new {
+                        CartId = ShoppingCart.GetCartId(httpContext), 
+                        Total = items.Any() ? items.Sum(x => x.AlbumPrice).ToString() : "--"
+                    },
                 Items = items
             };
 
