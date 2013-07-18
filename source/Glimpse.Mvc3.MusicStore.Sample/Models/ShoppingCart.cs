@@ -21,7 +21,7 @@ namespace MvcMusicStore.Models
         public static ShoppingCart GetCart(HttpContextBase context)
         {
             var cart = new ShoppingCart();
-            cart.ShoppingCartId = cart.GetCartId(context);
+            cart.ShoppingCartId = GetCartId(context);
             return cart;
         }
 
@@ -180,7 +180,7 @@ cart => cart.CartId == ShoppingCartId
         }
 
         // We're using HttpContextBase to allow access to cookies.
-        public string GetCartId(HttpContextBase context)
+        public static string GetCartId(HttpContextBase context)
         {
             if (context.Session[CartSessionKey] == null)
             {
