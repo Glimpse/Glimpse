@@ -7,6 +7,7 @@ namespace Glimpse.Core.Tab.Assist
     public class TabLayout : ITabBuild
     {
         private readonly List<TabLayoutRow> rows = new List<TabLayoutRow>();
+        private readonly Dictionary<string, TabLayout> cells = new Dictionary<string, TabLayout>();
 
         private TabLayout()
         {
@@ -37,8 +38,19 @@ namespace Glimpse.Core.Tab.Assist
             return this;
         }
 
+        public TabLayout Cell(string target, TabLayout layout)
+        {
+            cells.Add(target, layout);
+            return this;
+        }
+
         public object Build()
         {
+            if (cells.Count > 0)
+            {
+                return cells.ToDictionary(x => x.Key, x => new { Layout = x.Value.Build() });
+            }
+
             return rows.Select(r => r.Build());
         }
     }
