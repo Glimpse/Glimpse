@@ -87,6 +87,8 @@
     <Compile Include="Controllers\StoreManagerController.cs" />
     <Compile Include="Framework\AdminPolicy.cs" />
     <Compile Include="Framework\Configuration.cs" />
+    <Compile Include="Framework\InventoryClientScript.cs" />
+    <Compile Include="Framework\InventoryResource.cs" />
     <Compile Include="Framework\QueryClientScript.cs" />
     <Compile Include="Framework\QueryResource.cs" />
     <Compile Include="Framework\SqlMapper.cs" />
@@ -115,6 +117,7 @@
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\placeholder.gif" />
     <Content Include="favicon.ico" />
+    <Content Include="Framework\InventoryScript.js" />
     <Content Include="Framework\QueryScript.js" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />

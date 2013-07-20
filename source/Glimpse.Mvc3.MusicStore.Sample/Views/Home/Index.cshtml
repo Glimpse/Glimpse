@@ -16,7 +16,7 @@
 <ul id="album-list">
     @foreach (var album in Model)
     {
-        <li><a href="@Url.Action("Details", "Store",
+        <li data-albumId="@album.AlbumId"><a href="@Url.Action("Details", "Store",
                                  new { id = album.AlbumId })">
 
                 <img alt="@album.Title" src="@album.AlbumArtUrl" />

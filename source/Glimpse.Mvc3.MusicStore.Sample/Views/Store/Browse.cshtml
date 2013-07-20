@@ -10,7 +10,7 @@
     <ul id="album-list">
         @foreach (var album in Model.Albums)
         {
-            <li>
+            <li data-albumId="@album.AlbumId">
                 <a href="@Url.Action("Details", new { id = album.AlbumId })">
                     <img alt="@album.Title" src="@album.AlbumArtUrl" />
                     <span>@album.Title</span>
