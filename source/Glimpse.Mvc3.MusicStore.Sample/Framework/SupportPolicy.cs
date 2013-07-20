@@ -1,34 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Glimpse.AspNet.Extensions;
-using Glimpse.Core.Extensibility;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Web;
+//using Glimpse.AspNet.Extensions;
+//using Glimpse.Core.Extensibility;
 
-namespace MvcMusicStore.Framework
-{
-    public class SupportPolicy : IRuntimePolicy
-    {
-        public RuntimePolicy Execute(IRuntimePolicyContext policyContext)
-        {
-            var httpContext = policyContext.GetHttpContext();
-            if (!httpContext.User.IsInRole("Administrator"))
-            {
-                var cookie = policyContext.RequestMetadata.GetCookie("SupportCall");
-                if (!string.IsNullOrEmpty(cookie))
-                {
-                    return RuntimePolicy.PersistResults;
-                }
+//namespace MvcMusicStore.Framework
+//{
+//    public class SupportPolicy : IRuntimePolicy
+//    {
+//        public RuntimePolicy Execute(IRuntimePolicyContext policyContext)
+//        {
+//            var httpContext = policyContext.GetHttpContext();
+//            if (!httpContext.User.IsInRole("Administrator"))
+//            {
+//                var cookie = policyContext.RequestMetadata.GetCookie("SupportCall");
+//                if (!string.IsNullOrEmpty(cookie))
+//                {
+//                    return RuntimePolicy.PersistResults;
+//                }
 
-                return RuntimePolicy.Off;
-            }
+//                return RuntimePolicy.Off;
+//            }
 
-            return RuntimePolicy.On;
-        }
+//            return RuntimePolicy.On;
+//        }
 
-        public RuntimeEvent ExecuteOn
-        {
-            get { return RuntimeEvent.EndRequest; }
-        }
-    }
-}
+//        public RuntimeEvent ExecuteOn
+//        {
+//            get { return RuntimeEvent.EndRequest; }
+//        }
+//    }
+//}
