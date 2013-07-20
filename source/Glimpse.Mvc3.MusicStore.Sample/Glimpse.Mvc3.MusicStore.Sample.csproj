@@ -92,6 +92,7 @@
     <Compile Include="Framework\SqlMapper.cs" />
     <Compile Include="Framework\CartTab.cs" />
     <Compile Include="Framework\ConfigurationTab.cs" />
+    <Compile Include="Framework\SupportPolicy.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
