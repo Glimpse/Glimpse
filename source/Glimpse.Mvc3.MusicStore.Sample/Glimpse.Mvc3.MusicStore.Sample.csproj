@@ -86,6 +86,8 @@
     <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Controllers\StoreManagerController.cs" />
     <Compile Include="Framework\Configuration.cs" />
+    <Compile Include="Framework\QueryClientScript.cs" />
+    <Compile Include="Framework\QueryResource.cs" />
     <Compile Include="Framework\SqlMapper.cs" />
     <Compile Include="Framework\TabCart.cs" />
     <Compile Include="Framework\TabConfiguration.cs" />
@@ -111,6 +113,7 @@
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\placeholder.gif" />
     <Content Include="favicon.ico" />
+    <Content Include="Framework\QueryScript.js" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\jquery-1.7.1-vsdoc.js" />
