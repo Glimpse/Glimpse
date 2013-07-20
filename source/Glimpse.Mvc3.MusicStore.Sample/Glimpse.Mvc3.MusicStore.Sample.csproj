@@ -85,6 +85,7 @@
     <Compile Include="Controllers\ShoppingCartController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Controllers\StoreManagerController.cs" />
+    <Compile Include="Framework\AdminPolicy.cs" />
     <Compile Include="Framework\Configuration.cs" />
     <Compile Include="Framework\QueryClientScript.cs" />
     <Compile Include="Framework\QueryResource.cs" />
