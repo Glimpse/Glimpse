@@ -6,7 +6,7 @@
 
 //namespace MvcMusicStore.Framework
 //{
-//    public class TabConfiguration : AspNetTab 
+//    public class ConfigurationTab : AspNetTab 
 //    {
 //        public override string Name
 //        {

@@ -89,8 +89,8 @@
     <Compile Include="Framework\QueryClientScript.cs" />
     <Compile Include="Framework\QueryResource.cs" />
     <Compile Include="Framework\SqlMapper.cs" />
-    <Compile Include="Framework\TabCart.cs" />
-    <Compile Include="Framework\TabConfiguration.cs" />
+    <Compile Include="Framework\CartTab.cs" />
+    <Compile Include="Framework\ConfigurationTab.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
