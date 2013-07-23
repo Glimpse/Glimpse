@@ -46,8 +46,8 @@ namespace Glimpse.Test.Core
             string result = serializer.Serialize(badObject);
 
             Assert.Equal("{\"string\":\"A string\"}", result);
-            //This verify is not registered due to lambda. It has been verified to work
-            //loggerMock.Verify(l=>l.Error(It.IsAny<string>(), It.IsAny<NotSupportedException>()));
+            loggerMock.Verify(l => l.Error(It.IsAny<string>(),
+                                           It.Is<JsonException>(ex => ex.InnerException is NotSupportedException)));
         }
 
         [Fact]
