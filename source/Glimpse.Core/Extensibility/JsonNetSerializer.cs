@@ -25,6 +25,7 @@ namespace Glimpse.Core.Extensibility
                 {
                     new JsonNetConverterDictionaryKeysAreNotPropertyNames(),
                 },
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
             };
 
             Settings.Error += (obj, args) =>

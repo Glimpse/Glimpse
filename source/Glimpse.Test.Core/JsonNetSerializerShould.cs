@@ -64,6 +64,7 @@ namespace Glimpse.Test.Core
             string result = serializer.Serialize(loop);
 
             Assert.Equal("[]", result);
+            loggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<Exception>()), Times.Never());
         }
 
         [Fact]
@@ -78,6 +79,7 @@ namespace Glimpse.Test.Core
             string result = serializer.Serialize(loop);
 
             Assert.Equal("[]", result);
+            loggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<Exception>()), Times.Never());
         }
 
         [Fact]
