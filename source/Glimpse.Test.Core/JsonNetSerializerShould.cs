@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
 using System.Runtime.Serialization;
 using Glimpse.Core.Extensibility;
@@ -46,8 +47,39 @@ namespace Glimpse.Test.Core
             string result = serializer.Serialize(badObject);
 
             Assert.Equal("{\"string\":\"A string\"}", result);
-            //This verify is not registered due to lambda. It has been verified to work
-            //loggerMock.Verify(l=>l.Error(It.IsAny<string>(), It.IsAny<NotSupportedException>()));
+            loggerMock.Verify(l => l.Error(It.IsAny<string>(),
+                                           It.Is<JsonException>(ex => ex.InnerException is NotSupportedException)));
+        }
+
+        [Fact]
+        public void IgnoreListReferenceLoop()
+        {
+            var loggerMock = new Mock<ILogger>();
+
+            ISerializer serializer = new JsonNetSerializer(loggerMock.Object);
+
+            var loop = new TestObjectWithListReferenceLoop();
+            loop.Add(loop);
+
+            string result = serializer.Serialize(loop);
+
+            Assert.Equal("[]", result);
+            loggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<Exception>()), Times.Never());
+        }
+
+        [Fact]
+        public void IgnoreEnumerableReferenceLoop()
+        {
+            var loggerMock = new Mock<ILogger>();
+
+            ISerializer serializer = new JsonNetSerializer(loggerMock.Object);
+
+            var loop = new TestObjectWithEnumerableReferenceLoop();
+
+            string result = serializer.Serialize(loop);
+
+            Assert.Equal("[]", result);
+            loggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<Exception>()), Times.Never());
         }
 
         [Fact]
@@ -151,6 +183,18 @@ namespace Glimpse.Test.Core
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("otherKey", "otherValue");
+        }
+    }
+
+    public class TestObjectWithListReferenceLoop : ArrayList
+    {
+    }
+
+    public class TestObjectWithEnumerableReferenceLoop : IEnumerable
+    {
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            yield return this;
         }
     }
     #endregion Test Objects

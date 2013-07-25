@@ -18,9 +18,16 @@ namespace Glimpse.Core.Extensibility
         {
             Logger = logger;
 
-            Settings = new JsonSerializerSettings();
-            Settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            Settings.Converters.Add(new JsonNetConverterDictionaryKeysAreNotPropertyNames()); 
+            Settings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                Converters =
+                {
+                    new JsonNetConverterDictionaryKeysAreNotPropertyNames(),
+                },
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            };
+
             Settings.Error += (obj, args) =>
                                   {
                                       Logger.Error("Error serializing object.", args.ErrorContext.Error);
