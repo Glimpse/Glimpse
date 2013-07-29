@@ -9,7 +9,7 @@ namespace Glimpse.AspNet
     {
         private const string BodyClosingTag = "</body>";
 
-        private const string ToobleshootingDocsUri = "http://getglimpse.com/Help/Troubleshooting";
+        private const string TroubleshootingDocsUri = "http://getglimpse.com/Help/Troubleshooting";
 
         public PreBodyTagFilter(string htmlSnippet, Stream outputStream, Encoding contentEncoding, ILogger logger)
         {
@@ -95,7 +95,7 @@ namespace Glimpse.AspNet
             }
             else
             {
-                Logger.Warn("Unable to locate '</body>' with content encoding '{0}'. The response may be compressed. See {1} for information on troubleshooting this issue.", ContentEncoding.EncodingName, ToobleshootingDocsUri);
+                Logger.Warn("Unable to locate '</body>' with content encoding '{0}'. The response may be compressed. See {1} for information on troubleshooting this issue.", ContentEncoding.EncodingName, TroubleshootingDocsUri);
                 OutputStream.Write(buffer, offset, count);
             }
         }
