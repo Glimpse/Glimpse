@@ -9,7 +9,7 @@ namespace Glimpse.AspNet
     {
         private const string BodyClosingTag = "</body>";
 
-        private const string IisDynamicCompressionDocsUri = "http://www.iis.net/configreference/system.webserver/urlcompression";
+        private const string ToobleshootingDocsUri = "http://getglimpse.com/Help/Troubleshooting";
 
         public PreBodyTagFilter(string htmlSnippet, Stream outputStream, Encoding contentEncoding, ILogger logger)
         {
@@ -95,7 +95,7 @@ namespace Glimpse.AspNet
             }
             else
             {
-                Logger.Warn("Unable to locate '</body>' with content encoding '{0}'. Response may be compressed. IIS URL Compression may cause this: see {1} for more information.", ContentEncoding.EncodingName, IisDynamicCompressionDocsUri);
+                Logger.Warn("Unable to locate '</body>' with content encoding '{0}'. The response may be compressed. See {1} for information on troubleshooting this issue.", ContentEncoding.EncodingName, ToobleshootingDocsUri);
                 OutputStream.Write(buffer, offset, count);
             }
         }
