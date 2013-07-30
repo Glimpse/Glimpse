@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Web;
+using System.Web.Compilation;
 using Glimpse.AspNet.Extensions;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
@@ -17,6 +18,7 @@ namespace Glimpse.AspNet
             var serviceLocator = new AspNetServiceLocator();
             Factory = new Factory(serviceLocator);
             serviceLocator.Logger = Factory.InstantiateLogger();
+            BuildManager.GetReferencedAssemblies();
         }
 
         public void Init(HttpApplication httpApplication)
