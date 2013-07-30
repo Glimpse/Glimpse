@@ -15,13 +15,13 @@ namespace Glimpse.Core.Support
         /// <returns>Found entries.</returns>
         public static IDictionary<string, string> GetRegisteredPackageVersions()
         {
-            var glimpseNuGetPackageDiscoveryResult = GlimpseNuGetPackageDiscoverer.Discover();
+            var nuGetPackageDiscoveryResult = NuGetPackageDiscoverer.Discover();
             var packages = new Dictionary<string, string>();
 
-            foreach (var nugetPackage in glimpseNuGetPackageDiscoveryResult.DiscoveredGlimpseNuGetPackages)
+            foreach (var foundNuGetPackage in nuGetPackageDiscoveryResult.FoundNuGetPackages)
             {
-                var version = nugetPackage.GetVersion();
-                var id = nugetPackage.GetId();
+                var version = foundNuGetPackage.GetVersion();
+                var id = foundNuGetPackage.GetId();
 
                 packages[id] = version;
             }
@@ -35,7 +35,7 @@ namespace Glimpse.Core.Support
         /// <returns>Found entries.</returns>
         public static IList<NuGetPackageAttribute> GetRegisteredPackages()
         {
-            return GlimpseNuGetPackageDiscoverer.Discover().DiscoveredGlimpseNuGetPackages;
+            return NuGetPackageDiscoverer.Discover().FoundNuGetPackages;
         }
     }
 }

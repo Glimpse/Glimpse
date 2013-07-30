@@ -235,22 +235,22 @@ namespace Glimpse.Core.Resource
 
             //Registered Packages
             content.Append("<h3>Registered Packages:</h3>");
-            content.Append("<p>NOTE, doesn't represent all the Glimpse dependent NuGet packages you have installed, just the ones that have registered as a Glimpse NuGet package</p>");
-            content.Append("<ul>"); 
-            var glimpseNuGetPackageDiscoveryResult = GlimpseNuGetPackageDiscoverer.Discover();
-            foreach (var registeredPackage in glimpseNuGetPackageDiscoveryResult.DiscoveredGlimpseNuGetPackages)
-            {  
+            content.Append("<p>NOTE, doesn't represent all the Glimpse dependent NuGet packages you have installed, just the ones that have registered as a NuGet package</p>");
+            content.Append("<ul>");
+            var nuGetPackageDiscoveryResult = NuGetPackageDiscoverer.Discover();
+            foreach (var registeredPackage in nuGetPackageDiscoveryResult.FoundNuGetPackages)
+            {
                 content.AppendFormat("<li>{0} - {1}</li>", registeredPackage.GetId(), registeredPackage.GetVersion());
             }
             content.AppendFormat("</ul>");
 
-            if(glimpseNuGetPackageDiscoveryResult.NonDiscoverableAssemblies.Length != 0)
+            if (nuGetPackageDiscoveryResult.NonProcessableAssemblies.Length != 0)
             {
-                content.Append("<strong class=\"warn\">The following assemblies could not be processed during Glimpse NuGet package discovery. Check log for more details.</strong>");
-                content.Append("<ul>"); 
-                foreach(var nonDiscoverableAssembly in glimpseNuGetPackageDiscoveryResult.NonDiscoverableAssemblies)
+                content.Append("<strong class=\"warn\">The following assemblies could not be processed during NuGet package discovery. Check log for more details.</strong>");
+                content.Append("<ul>");
+                foreach (var nonProcessableAssembly in nuGetPackageDiscoveryResult.NonProcessableAssemblies)
                 {
-                    content.AppendFormat("<li>{0}</li>", nonDiscoverableAssembly.FullName);
+                    content.AppendFormat("<li>{0}</li>", nonProcessableAssembly.FullName);
                 }
                 content.AppendFormat("</ul>");
             }
