@@ -81,7 +81,7 @@ namespace Glimpse.Core.Resource
         public IResourceResult Execute(IResourceContext context, IGlimpseConfiguration configuration)
         {
             var content = new StringBuilder();
-            var packages = FindPacakges();
+            var packages = this.FindPackages();
 
             content.Append("<!DOCTYPE html><html><head><title>Glimpse - Configuration Page</title><link rel=\"shortcut icon\" href=\"http://getglimpse.com/content/_v1/app-config-favicon.png?version=" + GlimpseRuntime.Version + "\" />");
             content.Append("<style>*, *:before, *:after{-webkit-box-sizing: border-box;-moz-box-sizing: border-box;-ms-box-sizing: border-box;-o-box-sizing: border-box;box-sizing: border-box;}body{margin: 0;font-family: \"Segoe UI Web Regular\",\"Segoe UI\",\"Helvetica Neue\",Helvetica,Arial serif;font-size: 1em;line-height: 1.6em;}pre{margin:0}.code{font-size: 1.45em;font-family:monospace;}h1, h2, h3{font-weight: normal;}header{color: #fff;background-color: #323d42;height: 450px;}header table{width: 100%;}header .detail{text-align: center;width: 250px;}header h2{position: relative;margin-bottom:0;}header .find-more{color: white;font-size: 0.8em;margin-top: 0; }header .find-more:hover,header .find-more:active{color: white;}.inner{margin:0 auto;max-width: 1200px;width: 80%;min-width: 900px;vertical-align: top;padding-top: 1em;}.button{width: 250px;line-height: 1.2em;margin: 0.5em auto;text-align: center;font-size: 24px;padding: 10px 41px;text-decoration: none;display: block;color: white;border: 3px solid white;background-color: #434f54;}.button:hover{background-color: #3f4a4f;}.button-small{font-size: 0.95em;}.inner .button{border-color: #ccc;}.message{font-size: 0.5em;line-height: 1em;width: 125px;left: -150px;top: 20px;position: absolute; font-style:italic;}img{border:0px;}.center{text-align: center;}.notification{ padding: 17px; font-size: 1.2em; text-align: center; }.notification-success{background-color: #B5CDA4; color: #486E25;}.notification-fail{background-color: #E4BBB1; color: #DA6953;}.notification-warn{background-color: #E4D1A9; color: #DA9221;}.version span{font-size:0.8em;font-style:italic;}.warn{color:red; font-weight:bold;}.package-version{font-size:0.7em;}.root > li {margin-bottom:15px;}.more-help h3{margin: 40px 0 5px; text-align: center;}.side-bar{float:right;width:250px;margin-top:22px;}.out-dated{padding-bottom:1px 0 18px;text-align:center;background-color: #FFF9B0;color: goldenrod;}.code-holder{padding:10px; margin:10px 0; background-color: #eee;font-family: monospace;line-height: 1.3em;font-size: 1.3em;}.close-section {  position: absolute; right: -19px; border-radius: 20px; font-weight: bold; height: 40px; width: 40px; text-align: center; font-size: 140%; line-height: 120%; margin-top: -9px; cursor: pointer; padding:0}.code-comment{color:#52AA00;}.code-content{margin-bottom:10px}.configuration-holder{display:none;position: relative}.description{text-align:center;text-align: center;font-size: 1.2em;font-weight: normal;}.description strong{text-decoration: underline;font-size: 1.1em;}.configuration-options-item,.code-section-child{display:none;}</style>");
@@ -235,15 +235,26 @@ namespace Glimpse.Core.Resource
 
             //Registered Packages
             content.Append("<h3>Registered Packages:</h3>");
-            content.Append("<p>NOTE, doesn't represent all the glimpse dependent Nuget packages you have installed, just the ones that have registered as a Glimpse Nuget package</p>");
+            content.Append("<p>NOTE, doesn't represent all the Glimpse dependent NuGet packages you have installed, just the ones that have registered as a Glimpse NuGet package</p>");
             content.Append("<ul>"); 
-            var registeredPackages = NuGetPackage.GetRegisteredPackageVersions();
-            foreach (var registeredPackage in registeredPackages)
+            var glimpseNuGetPackageDiscoveryResult = GlimpseNuGetPackageDiscoverer.Discover();
+            foreach (var registeredPackage in glimpseNuGetPackageDiscoveryResult.DiscoveredGlimpseNuGetPackages)
             {  
-                content.AppendFormat("<li>{0} - {1}</li>", registeredPackage.Key, registeredPackage.Value);
+                content.AppendFormat("<li>{0} - {1}</li>", registeredPackage.GetId(), registeredPackage.GetVersion());
+            }
+            content.AppendFormat("</ul>");
+
+            if(glimpseNuGetPackageDiscoveryResult.NonDiscoverableAssemblies.Length != 0)
+            {
+                content.Append("<strong class=\"warn\">The following assemblies could not be processed during Glimpse NuGet package discovery. Check log for more details.</strong>");
+                content.Append("<ul>"); 
+                foreach(var nonDiscoverableAssembly in glimpseNuGetPackageDiscoveryResult.NonDiscoverableAssemblies)
+                {
+                    content.AppendFormat("<li>{0}</li>", nonDiscoverableAssembly.FullName);
+                }
+                content.AppendFormat("</ul>");
             }
         
-            content.AppendFormat("</ul>");
             content.Append("</div>");
             content.Append("</div>");
             content.Append("<footer><div class=\"inner\"><p class=\"center\">For more info see <a href=\"http://getglimpse.com\">getGlimpse.com</a></p><div class=\"center\"><img src=\"http://getglimpse.com/content/github.gif\"> Found an <em>error</em>? <a href=\"https://github.com/glimpse/glimpse/issues\">Help us improve</a>.   <img src=\"http://getglimpse.com/content/twitter.png\"> Have a <em>question</em>? <a href=\"http://twitter.com/#search?q=%23glimpse\">Tweet us using #glimpse</a>.</div></div></div></footer>");
@@ -299,7 +310,7 @@ namespace Glimpse.Core.Resource
             return result;
         }
 
-        private IDictionary<string, PackageItemDetail> FindPacakges()
+        private IDictionary<string, PackageItemDetail> FindPackages()
         {
             var result = new Dictionary<string, PackageItemDetail>();
             var packages = NuGetPackage.GetRegisteredPackages();
