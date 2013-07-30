@@ -124,13 +124,25 @@ namespace Glimpse.AspNet.Tab
 
         private EnvironmentProcessModel BuildProcessDetails()
         {
-            var process = Process.GetCurrentProcess();
+            try
+            {
+                var process = Process.GetCurrentProcess();
 
-            var processId = process.Id;
-            var processName = process.MainModule.ModuleName;
-            var startTime = process.StartTime;
+                var processId = process.Id;
+                var processName = process.MainModule.ModuleName;
+                var startTime = process.StartTime;
 
-            return new EnvironmentProcessModel { ProcessId = processId, WorkerProcess = processName, StartTime = startTime };
+                return new EnvironmentProcessModel
+                    {
+                        ProcessId = processId,
+                        WorkerProcess = processName,
+                        StartTime = startTime
+                    };
+            }
+            catch
+            {
+                return new EnvironmentProcessModel();
+            }
         }
 
         private void FindAssemblies(EnvironmentModel model)
