@@ -18,7 +18,16 @@ namespace Glimpse.AspNet
             var serviceLocator = new AspNetServiceLocator();
             Factory = new Factory(serviceLocator);
             serviceLocator.Logger = Factory.InstantiateLogger();
-            BuildManager.GetReferencedAssemblies();
+
+            try
+            {
+                BuildManager.GetReferencedAssemblies();
+                serviceLocator.Logger.Debug("Preloaded all referenced assemblies with System.Web.Compilation.BuildManager.GetReferencedAssemblies()");
+            }
+            catch (Exception exception)
+            {
+                serviceLocator.Logger.Error("Call to System.Web.Compilation.BuildManager.GetReferencedAssemblies() failed.", exception);
+            }
         }
 
         public void Init(HttpApplication httpApplication)
