@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
+using Glimpse.Core.Extensibility;
 
 [assembly: ComVisible(false)]
 [assembly: Guid("63826849-ecbe-4abd-afa1-16b6ce461795")]
@@ -17,3 +18,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.3.1")]
 [assembly: AssemblyFileVersion("1.3.1")]
 [assembly: AssemblyInformationalVersion("1.3.1")]
+
+[assembly: NuGetPackage]
