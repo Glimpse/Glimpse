@@ -288,9 +288,7 @@
     <EmbeddedResource Include="sprite.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="glimpse.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="glimpse.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
