@@ -111,6 +111,8 @@
     <Compile Include="Framework\Support\IExecutionTask.cs" />
     <Compile Include="SerializationConverter\EnumerableOfITimelineMessageConverter.cs" />
     <Compile Include="Setting\Initializer.cs" />
+    <Compile Include="Support\NuGetPackageDiscoverer.cs" />
+    <Compile Include="Support\NuGetPackageDiscoveryResult.cs" />
     <Compile Include="Support\NuGetPackage.cs" />
     <Compile Include="System.cs" />
     <Compile Include="Message\ISourceMessage.cs" />

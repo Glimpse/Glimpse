@@ -19,4 +19,4 @@ using Glimpse.Core.Extensibility;
 [assembly: AssemblyInformationalVersion("1.3.0")] // Used to specify the NuGet version number at build time
 
 [assembly: InternalsVisibleTo("Glimpse.Test.AspNet")]
-[assembly: NuGetPackage]
+[assembly: NuGetPackage("Glimpse.AspNet")]
