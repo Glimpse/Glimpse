@@ -45,8 +45,8 @@ namespace Glimpse.Test.AspNet
 
             this.loggerMock.Verify(
                 logger => logger.Warn(
-                            "Unable to locate '</body>' with content encoding '{0}'. Response may be compressed.",
-                            It.Is<object[]>(arguments => arguments.Length == 1 && object.Equals(arguments[0], Encoding.UTF8.EncodingName))),
+                            "Unable to locate '</body>' with content encoding '{0}'. The response may be compressed. See {1} for information on troubleshooting this issue.",
+                            It.Is<object[]>(arguments => arguments.Length == 2 && object.Equals(arguments[0], Encoding.UTF8.EncodingName) && object.Equals(arguments[1], "http://getglimpse.com/Help/Troubleshooting"))),
                 Times.Once());
 
             Assert.Equal(inputToProcess, result);
