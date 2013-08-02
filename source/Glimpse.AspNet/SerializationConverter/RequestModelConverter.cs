@@ -60,7 +60,7 @@ namespace Glimpse.AspNet.SerializationConverter
             var result = new TabObject();
             foreach (var parameter in parameters)
             {
-                result.AddRow().Key(parameter.Key).Value(parameter.Value);
+                result.AddRow().Key(parameter.Key ?? "null").Value(parameter.Value);
             }
 
             return result;
