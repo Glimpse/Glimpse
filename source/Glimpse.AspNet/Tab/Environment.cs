@@ -157,11 +157,12 @@ namespace Glimpse.AspNet.Tab
                 var assemblyName = assembly.GetName();
                 var name = assemblyName.Name;
                 var version = assemblyName.Version.ToString();
+                var versionInfo = GetVersionNumber(assembly);
                 var culture = string.IsNullOrEmpty(assemblyName.CultureInfo.Name) ? "neutral" : assemblyName.CultureInfo.Name; 
                 var fromGac = assembly.GlobalAssemblyCache;
                 var fullTrust = IsFullyTrusted(assembly); 
 
-                var result = new EnvironmentAssemblyModel { Name = name, Version = version, Culture = culture, FromGac = fromGac, FullTrust = fullTrust };
+                var result = new EnvironmentAssemblyModel { Name = name, Version = version, VersionInfo = versionInfo, Culture = culture, FromGac = fromGac, FullTrust = fullTrust };
 
                 var isSystem = systemNamspaces.Any(systemNamspace => assembly.FullName.StartsWith(systemNamspace)); 
                 if (isSystem)
@@ -221,6 +222,15 @@ namespace Glimpse.AspNet.Tab
 #else
             return assembly.IsFullyTrusted;
 #endif
+        }
+
+        private string GetVersionNumber(Assembly assembly)
+        { 
+            var infoVersion = assembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false)
+                                            .Cast<AssemblyInformationalVersionAttribute>()
+                                            .SingleOrDefault();
+
+            return infoVersion != null ? infoVersion.InformationalVersion : null;
         }
     }
 }

@@ -6,6 +6,8 @@ namespace Glimpse.AspNet.Model
 
         public string Version { get; set; }
 
+        public string VersionInfo { get; set; }
+
         public string Culture { get; set; }
 
         public bool FromGac { get; set; }

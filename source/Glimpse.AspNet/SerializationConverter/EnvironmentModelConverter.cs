@@ -72,10 +72,10 @@ namespace Glimpse.AspNet.SerializationConverter
 
         private TabSection BuildAssemblyDetails(IEnumerable<EnvironmentAssemblyModel> model)
         { 
-            var modelList = new TabSection("Name", "Version", "Culture", "From GAC", "Full Trust");
+            var modelList = new TabSection("Name", "Version", "Version Info", "Culture", "From GAC", "Full Trust");
             foreach (var assemblyModel in model)
             {
-                modelList.AddRow().Column(assemblyModel.Name).Column(assemblyModel.Version).Column(assemblyModel.Culture).Column(assemblyModel.FromGac).Column(assemblyModel.FullTrust);
+                modelList.AddRow().Column(assemblyModel.Name).Column(assemblyModel.Version).Column(assemblyModel.VersionInfo).Column(assemblyModel.Culture).Column(assemblyModel.FromGac).Column(assemblyModel.FullTrust);
             }
 
             return modelList;
