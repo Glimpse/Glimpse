@@ -1,8 +1,10 @@
 ﻿#if EF6Plus
-using System; 
-using System.Data.Entity.Config;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Core.Common;
 using System.Data.Entity.Infrastructure; 
+using System.Data.Entity.Infrastructure.DependencyResolution;
 using System.Reflection;
 
 namespace Glimpse.EF.AlternateType
@@ -21,13 +23,13 @@ namespace Glimpse.EF.AlternateType
         }
 
         public object GetService(Type type, object key)
-        { 
-            if (type == typeof(IDbProviderFactoryService))
+        {
+            if (type == typeof(IDbProviderFactoryResolver))
             {
-                var innerFactoryService = (IDbProviderFactoryService)rootResolver.GetService(type, key);
-                if (!(innerFactoryService is GlimpseDbProviderFactoryService))
+                var innerFactoryService = (IDbProviderFactoryResolver)rootResolver.GetService(type, key);
+                if (!(innerFactoryService is GlimpseDbProviderFactoryResolver))
                 {
-                    return new GlimpseDbProviderFactoryService(innerFactoryService);
+                    return new GlimpseDbProviderFactoryResolver(innerFactoryService);
                 }
 
                 return innerFactoryService;
@@ -56,7 +58,13 @@ namespace Glimpse.EF.AlternateType
                 
             }
 
-            return null;
+            return rootResolver.GetService(type, key);  
+        }
+
+
+        public IEnumerable<object> GetServices(Type type, object key)
+        {
+            return rootResolver.GetServices(type, key);  
         }
     }
 }

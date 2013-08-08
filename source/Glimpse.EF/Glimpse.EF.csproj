@@ -52,7 +52,7 @@
     <Compile Include="AlternateType\GlimpseDbConfiguration.cs" />
     <Compile Include="AlternateType\GlimpseDbConnectionFactory.cs" />
     <Compile Include="AlternateType\GlimpseDbDependencyResolver.cs" />
-    <Compile Include="AlternateType\GlimpseDbProviderFactoryService.cs" />
+    <Compile Include="AlternateType\GlimpseDbProviderFactoryResolver.cs" />
     <Compile Include="AlternateType\GlimpseDbProviderServices.cs" />
     <Compile Include="Initialize.cs" />
     <Compile Include="Inspector\Core\DbConfigurationExecutionTask.cs" />

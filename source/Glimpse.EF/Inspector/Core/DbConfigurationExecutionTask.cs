@@ -1,6 +1,5 @@
 #if EF6Plus
-using System.Data.Entity.Config; 
-using Glimpse.Core.Extensibility;
+using System.Data.Entity; 
 using Glimpse.Core.Framework.Support;
 using Glimpse.EF.AlternateType;
 
