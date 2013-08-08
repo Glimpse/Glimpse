@@ -1,5 +1,5 @@
 ﻿#if EF6Plus
-using System.Data.Entity;
+using System.Data.Entity.Config;
 
 namespace Glimpse.EF.AlternateType
 {
