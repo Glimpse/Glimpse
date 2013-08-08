@@ -13,7 +13,7 @@ namespace Glimpse.AspNet
         
         public string ApplicationPath
         {
-            get { return applicationPath ?? HttpContext.Current.Request.ApplicationPath; }
+            get { return applicationPath ?? HttpRuntime.AppDomainAppVirtualPath; } // HttpRuntime call based on http://mvolo.com/iis7-integrated-mode-request-is-not-available-in-this-context-exception-in-applicationstart/
             set { applicationPath = value; }
         }
 
