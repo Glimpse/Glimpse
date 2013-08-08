@@ -19,4 +19,4 @@ using Glimpse.Core.Extensibility;
 [assembly: AssemblyInformationalVersion("1.3.2")] // Used to specify the NuGet version number at build time
 
 [assembly: InternalsVisibleTo("Glimpse.Test.Mvc4")]
-[assembly: NuGetPackage]
+[assembly: NuGetPackage("Glimpse.Mvc4")]

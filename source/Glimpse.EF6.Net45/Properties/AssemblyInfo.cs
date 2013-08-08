@@ -21,5 +21,5 @@ using Glimpse.EF;
 [assembly: AssemblyInformationalVersion("1.3.1")] // Used to specify the NuGet version number at build time
 
 [assembly: InternalsVisibleTo("Glimpse.Test.EF")]
-[assembly: NuGetPackage]
+[assembly: NuGetPackage("Glimpse.EF6")]
 [assembly: PreApplicationStartMethod(typeof(Initialize), "Start")]

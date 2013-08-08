@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Glimpse.Core.Extensibility;
 
@@ -19,4 +20,5 @@ using Glimpse.Core.Extensibility;
 [assembly: AssemblyFileVersion("1.3.1")]
 [assembly: AssemblyInformationalVersion("1.3.1")]
 
-[assembly: NuGetPackage]
+[assembly: InternalsVisibleTo("Glimpse.Test.AspNet")]
+[assembly: NuGetPackage("Glimpse.AspNet")]
