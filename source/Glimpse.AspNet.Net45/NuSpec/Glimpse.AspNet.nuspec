@@ -27,7 +27,7 @@ Middleweight release for Asp.Net:
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse</tags>
         <dependencies>
-          <dependency id="Glimpse" version="1.4.2" />
+          <dependency id="Glimpse" version="1.6.0" />
         </dependencies>
     </metadata>
     <files>
