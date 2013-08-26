@@ -84,6 +84,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.WebForms.WingTip.Sa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Owin.Sample", "source\Glimpse.Owin.Sample\Glimpse.Owin.Sample.csproj", "{FFA64A97-2263-4F0C-9FD9-32520EA402F2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Owin", "source\Glimpse.Owin\Glimpse.Owin.csproj", "{6A99983E-130E-43B0-85F5-59CA4AA7E54E}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Mvc5", "source\Glimpse.Mvc5\Glimpse.Mvc5.csproj", "{BCDCF0D0-77CF-4589-BE46-C86FE11781E5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.WebForms", "source\Glimpse.WebForms\Glimpse.WebForms.csproj", "{3F948157-7469-45F1-A453-B0D9095EAE51}"
@@ -436,6 +438,16 @@ Global
 		{FFA64A97-2263-4F0C-9FD9-32520EA402F2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{FFA64A97-2263-4F0C-9FD9-32520EA402F2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{FFA64A97-2263-4F0C-9FD9-32520EA402F2}.Release|x86.ActiveCfg = Release|Any CPU
+		{6A99983E-130E-43B0-85F5-59CA4AA7E54E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A99983E-130E-43B0-85F5-59CA4AA7E54E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A99983E-130E-43B0-85F5-59CA4AA7E54E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6A99983E-130E-43B0-85F5-59CA4AA7E54E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6A99983E-130E-43B0-85F5-59CA4AA7E54E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6A99983E-130E-43B0-85F5-59CA4AA7E54E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A99983E-130E-43B0-85F5-59CA4AA7E54E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A99983E-130E-43B0-85F5-59CA4AA7E54E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6A99983E-130E-43B0-85F5-59CA4AA7E54E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6A99983E-130E-43B0-85F5-59CA4AA7E54E}.Release|x86.ActiveCfg = Release|Any CPU
 		{BCDCF0D0-77CF-4589-BE46-C86FE11781E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BCDCF0D0-77CF-4589-BE46-C86FE11781E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCDCF0D0-77CF-4589-BE46-C86FE11781E5}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU

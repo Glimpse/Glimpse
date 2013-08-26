@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Owin.Hosting;
-using Owin;
 
 namespace Glimpse.Owin.Sample
 {
@@ -14,14 +13,6 @@ namespace Glimpse.Owin.Sample
                 Console.ReadLine();
                 Console.WriteLine("Stopping");
             }
-        }
-    }
-
-    public class Startup
-    {
-        public void Configuration(IAppBuilder app)
-        {
-            app.UseWelcomePage();
         }
     }
 }
