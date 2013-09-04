@@ -53,15 +53,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlternateType\GlimpseDbCommandDefinition.cs" />
-    <Compile Include="AlternateType\GlimpseDbConfiguration.cs" />
     <Compile Include="AlternateType\GlimpseDbConnectionFactory.cs" />
-    <Compile Include="AlternateType\GlimpseDbDependencyResolver.cs" />
-    <Compile Include="AlternateType\GlimpseDbProviderFactoryResolver.cs" />
     <Compile Include="AlternateType\GlimpseDbProviderServices.cs" />
     <Compile Include="Initialize.cs" />
     <Compile Include="Inspector\Core\DbConfigurationExecutionTask.cs" />
     <Compile Include="Inspector\Core\DbConnectionFactoriesExecutionTask.cs" />
-    <Compile Include="Inspector\Core\EntityDbProviderFactoryExecutionTask.cs" />
     <Compile Include="Inspector\Core\EntityFrameworkExecutionBlock.cs" />
     <Compile Include="Inspector\EntityFrameworkInspector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

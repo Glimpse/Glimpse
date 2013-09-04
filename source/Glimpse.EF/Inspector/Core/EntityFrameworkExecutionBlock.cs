@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Glimpse.Core.Framework;
-using Glimpse.Core.Framework.Support;
+﻿using Glimpse.Core.Framework.Support;
 
 namespace Glimpse.EF.Inspector.Core
 {
@@ -15,7 +11,6 @@ namespace Glimpse.EF.Inspector.Core
             RegisterProvider(new DbConnectionFactoriesExecutionTask(Logger));
 #if EF6Plus
             RegisterProvider(new DbConfigurationExecutionTask());
-            RegisterProvider(new EntityDbProviderFactoryExecutionTask());
 #endif
         }
     }
