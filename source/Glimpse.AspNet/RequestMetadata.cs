@@ -63,11 +63,13 @@ namespace Glimpse.AspNet
         { 
             get
             {
-                string user = Context.User.Identity.Name;
-                
-                if (!string.IsNullOrEmpty(user))
+                if (Context.User != null)
                 {
-                    return user;
+                    var user = Context.User.Identity.Name;
+                    if (!string.IsNullOrEmpty(user))
+                    {
+                        return user;
+                    }
                 }
 
                 var browser = Context.Request.Browser;
