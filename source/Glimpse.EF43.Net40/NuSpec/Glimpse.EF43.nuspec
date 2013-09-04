@@ -15,7 +15,7 @@
         <summary>Glimpse tabs for Entity Framework 4.3.</summary>
         <releaseNotes>
 Middleweight release for EF: 
- - Majorish feature where we now support DbSpatialServices (EF5 .NET45 and EF6)
+ - Added groundwork support for EF6
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse EF EntityFramework SQL performance profiling timing diagnostics</tags>
         <dependencies> 
