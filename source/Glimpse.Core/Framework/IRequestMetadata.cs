@@ -30,12 +30,6 @@ namespace Glimpse.Core.Framework
         string ResponseContentType { get; }
 
         /// <summary>
-        /// Gets the IP address.
-        /// </summary>
-        /// <value>The IP address.</value>
-        string IpAddress { get; }
-
-        /// <summary>
         /// Gets a value indicating whether request is ajax.
         /// </summary>
         /// <value><c>true</c> if request is ajax; otherwise, <c>false</c>.</value>

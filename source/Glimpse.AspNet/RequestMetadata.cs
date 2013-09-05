@@ -31,14 +31,6 @@ namespace Glimpse.AspNet
             get { return Context.Response.ContentType; }
         }
 
-        public string IpAddress 
-        { 
-            get
-            {
-                throw new NotImplementedException("Need to implement this IP logic");
-            }
-        }
-
         public bool RequestIsAjax
         {
             get
