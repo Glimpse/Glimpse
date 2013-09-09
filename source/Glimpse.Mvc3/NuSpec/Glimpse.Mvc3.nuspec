@@ -19,7 +19,7 @@ Featherweight release for MVC:
         </releaseNotes>
         <tags>ASP.NET Web MVC Glimpse diagnostics performance profiling timing</tags>
         <dependencies>
-          <dependency id="Glimpse.AspNet" version="1.3.0" />
+          <dependency id="Glimpse.AspNet" version="1.4.0" />
         </dependencies>
     </metadata>
     <files>
