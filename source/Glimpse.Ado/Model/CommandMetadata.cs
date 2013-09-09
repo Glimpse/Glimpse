@@ -29,6 +29,7 @@ namespace Glimpse.Ado.Model
         public int ExecutionIndex { get; set; }
         public bool HasTransaction { get; set; }
         public bool IsDuplicate { get; set; }
+        public bool IsSimilar { get; set; }
          
         /// <summary>
         /// Gets or sets the head transaction. Set when the command 
@@ -43,5 +44,6 @@ namespace Glimpse.Ado.Model
         /// </summary>
         /// <value>The tail transaction.</value>
         public TransactionMetadata TailTransaction { get; set; }
+
     }
 }

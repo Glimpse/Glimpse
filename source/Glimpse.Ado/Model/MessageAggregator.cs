@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Glimpse.Ado.Message;
+using Glimpse.Ado.SimilarQueries;
 
 namespace Glimpse.Ado.Model
 {
@@ -42,7 +43,7 @@ namespace Glimpse.Ado.Model
 
         private void AggregateCommandExecuted()
         {
-            var dupTracker = new Dictionary<string, int>();
+            var similarQueryTracker = new SimilarQueryProvider();
 
             var messages = Messages.OfType<CommandExecutedMessage>();
             foreach(var message in messages)
@@ -67,10 +68,17 @@ namespace Glimpse.Ado.Model
                     }
                 }
 
-                //Duplicate tracking
-                var dupCount = 0;
-                command.IsDuplicate = dupTracker.TryGetValue(message.CommandText, out dupCount);
-                dupTracker[message.CommandText] = dupCount + 1; 
+                // Similarity tracking
+                var similarity = similarQueryTracker.AddPotentiallySimilarQuery(message.CommandText);
+                switch (similarity)
+                {
+                    case StringSimilarity.Identical:
+                        command.IsDuplicate = true;
+                        break;
+                    case StringSimilarity.Similar:
+                        command.IsSimilar = true;
+                        break;
+                }
             }
         }
 

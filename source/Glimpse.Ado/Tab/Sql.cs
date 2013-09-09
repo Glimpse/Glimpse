@@ -99,7 +99,7 @@ namespace Glimpse.Ado.Tab
                     //Commands
                     var records = command.RecordsAffected == null || command.RecordsAffected < 0 ? command.TotalRecords : command.RecordsAffected;
 
-                    var status = errors != null ? "error" : (command.IsDuplicate ? "warn" : string.Empty); 
+                    var status = errors != null ? "error" : (command.IsDuplicate || command.IsSimilar ? "warn" : string.Empty); 
                     commands.Add(new object[] { headTransaction, string.Format("{0}{1}", command.HasTransaction ? "\t\t\t" : "", commandCount++), sanitizer.Process(command.Command, command.Parameters), parameters, records, command.Duration, command.Offset, tailTransaction, errors, status });
                 } 
                 connections.Add(new [] { commands, connection.Duration.HasValue ? (object)connection.Duration.Value : null });
