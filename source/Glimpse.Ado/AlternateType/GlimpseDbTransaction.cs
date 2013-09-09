@@ -8,7 +8,7 @@ using Glimpse.Core.Message;
 
 namespace Glimpse.Ado.AlternateType
 {
-    internal class GlimpseDbTransaction : DbTransaction
+    public class GlimpseDbTransaction : DbTransaction
     {
         private IMessageBroker messageBroker; 
         private IExecutionTimer timerStrategy; 
