@@ -3437,7 +3437,7 @@ glimpse.tab = (function($, pubsub, data) {
                                     request: {},
                                     wire: {},
                                     server: {},
-                                    client: {},
+                                    client: {}
                                 },
                                 popup: {
                                     request: { title: 'Total Request Time', size: 0, position: 1, align: 1 },
@@ -3445,7 +3445,7 @@ glimpse.tab = (function($, pubsub, data) {
                                     server: { position: 1, align: 1 },
                                     client: { position: 1, align: 1 },
                                     host: { },
-                                    principal: { },
+                                    principal: { }
                                 }
                             }
                         }, 
@@ -3529,14 +3529,14 @@ glimpse.tab = (function($, pubsub, data) {
                                 controller: { title: 'Controller/Action', description: 'Name of the root Controller and Action', visible: function(details) { return details.mvc && details.mvc.data; }, size: 2, position: 0, align: 0, postfix: 'ms', getLayoutData: function(details) { return '<span class="glimpse-hud-data">' + details.mvc.data.controllerName + '</span><span class="glimpse-hud-plain">.</span><span class="glimpse-hud-data">' + details.mvc.data.actionName + '</span><span class="glimpse-hud-plain">(...)</span>'; } },
                                 queries: { title: 'DB Queries', description: 'Total query duration and number of all SQL queries', visible: function(details) { return details.sql && details.sql.data; }, size: 1, position: 0, align: 0, getLayoutData: function(details) { return '<span class="glimpse-hud-data">' + parseInt(details.sql.data.queryExecutionTime) + '</span><span class="glimpse-hud-postfix">ms</span><span class="glimpse-hud-spacer">/</span><span class="glimpse-hud-data">'  + details.sql.data.queryCount + '</span>'; } },
                                 connections: { title: 'DB Connections', description: 'Total connection open time and number of all SQL connections used', visible: function (details) { return details.sql && details.sql.data; }, size: 1, position: 1, align: 1, getLayoutData: function (details) { return '<span class="glimpse-hud-data">' + parseInt(details.sql.data.connectionOpenTime) + '</span><span class="glimpse-hud-postfix">ms</span><span class="glimpse-hud-spacer">/</span><span class="glimpse-hud-data">' + details.sql.data.connectionCount + '</span>'; } },
-                                time: { title: 'Server Time', description: 'Time on the server', visible: function (details) { return details.environment && details.environment.data; }, size: 4, position: 2, align: 1, getLayoutData: function (details) { var diff = parseInt((new Date(details.environment.data.serverTime + ' ' + details.environment.data.serverTimezoneOffset) - new Date()) / 1000 / 60 / 60); return '<span class="glimpse-hud-data">' + details.environment.data.serverTime + '</span> <span class="glimpse-hud-prefix">GMT</span><span class="glimpse-hud-data">' + details.environment.data.serverTimezoneOffset + '</span> ' + (details.environment.data.serverDaylightSavingTime ? ' <span class="glimpse-hud-plain">(</span><span class="glimpse-hud-data">w/DLS</span><span class="glimpse-hud-plain">)</span>' : '') + (diff ? '<span class="glimpse-hud-spacer"> </span><span title="Time difference between server and client"><span class="glimpse-hud-prefix">Δ</span><span class="glimpse-hud-data glimpse-hud-data-important">' + (diff > 0 ? '+' : '') + diff + '</span></span>' : ''); } },
+                                time: { title: 'Server Time', description: 'Time on the server', visible: function (details) { return details.environment && details.environment.data; }, size: 4, position: 2, align: 1, getLayoutData: function (details) { var diff = parseInt((new Date(details.environment.data.serverTime + ' ' + details.environment.data.serverTimezoneOffset) - new Date()) / 1000 / 60 / 60); return '<span class="glimpse-hud-data">' + details.environment.data.serverTime + '</span> <span class="glimpse-hud-prefix">GMT</span><span class="glimpse-hud-data">' + details.environment.data.serverTimezoneOffset + '</span> ' + (details.environment.data.serverDaylightSavingTime ? ' <span class="glimpse-hud-plain">(</span><span class="glimpse-hud-data">w/DLS</span><span class="glimpse-hud-plain">)</span>' : '') + (diff ? '<span class="glimpse-hud-spacer"> </span><span title="Time difference between server and client"><span class="glimpse-hud-prefix">Δ</span><span class="glimpse-hud-data glimpse-hud-data-important">' + (diff > 0 ? '+' : '') + diff + '</span></span>' : ''); } }
                             },
                             layout: {
                                 mini: {
                                     action: {},
                                     view: {},
                                     controller: {},
-                                    queries: {},
+                                    queries: {}
                                 },
                                 popup: {
                                     server: {},
@@ -3674,7 +3674,7 @@ glimpse.tab = (function($, pubsub, data) {
                                     requests: { }
                                 },
                                 popup: {
-                                    requests: { title: 'Total Ajax Requests', size: 0, position: 1, align: 1 },
+                                    requests: { title: 'Total Ajax Requests', size: 0, position: 1, align: 1 }
                                 }
                             }
                         },
