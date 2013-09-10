@@ -747,7 +747,7 @@ namespace Glimpse.Core.Framework
 
                         if (!string.IsNullOrEmpty(uri))
                         {
-                            stringBuilder.AppendFormat(@"<script type='text/javascript' src='{0}'></script>", uri);
+                            stringBuilder.AppendFormat(@"<script type=""text/javascript"" src=""{0}""></script>", uri);
                         }
 
                         continue;
@@ -767,7 +767,7 @@ namespace Glimpse.Core.Framework
 
                         if (!string.IsNullOrEmpty(uri))
                         {
-                            stringBuilder.AppendFormat(@"<script type='text/javascript' src='{0}'></script>", uri);
+                            stringBuilder.AppendFormat(@"<script type=""text/javascript"" src=""{0}""></script>", uri);
                         }
 
                         continue;
