@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-#if EF43 || EF5
+#if EF43 || EF5 || EF1
     using System.Data.Common;
     using System.Data.Common.CommandTrees;
     using System.Data.Metadata.Edm;  
@@ -27,16 +27,19 @@ namespace Glimpse.EF.AlternateType
 
         private DbProviderServices InnerProviderServices { get; set; }
 
+#if !EF1
         public override DbCommandDefinition CreateCommandDefinition(DbCommand prototype)
         {
             return new GlimpseDbCommandDefinition(InnerProviderServices.CreateCommandDefinition(prototype));
         }
+#endif
 
         protected override DbCommandDefinition CreateDbCommandDefinition(DbProviderManifest providerManifest, DbCommandTree commandTree)
         {
             return new GlimpseDbCommandDefinition(InnerProviderServices.CreateCommandDefinition(commandTree));
         }
 
+#if !EF1
         protected override void DbCreateDatabase(DbConnection connection, int? commandTimeout, StoreItemCollection storeItemCollection)
         {
             InnerProviderServices.CreateDatabase(((GlimpseDbConnection)connection).InnerConnection, commandTimeout, storeItemCollection);
@@ -56,6 +59,7 @@ namespace Glimpse.EF.AlternateType
         {
             InnerProviderServices.DeleteDatabase(((GlimpseDbConnection)connection).InnerConnection, commandTimeout, storeItemCollection);
         }
+#endif
 
         protected override DbProviderManifest GetDbProviderManifest(string manifestToken)
         {

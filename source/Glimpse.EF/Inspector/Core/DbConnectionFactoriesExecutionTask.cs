@@ -1,3 +1,4 @@
+#if !EF1
 using System.Data.Entity;
 using System.Reflection; 
 using Glimpse.Core.Extensibility;
@@ -33,3 +34,4 @@ namespace Glimpse.EF.Inspector.Core
         } 
     }
 }
+#endif

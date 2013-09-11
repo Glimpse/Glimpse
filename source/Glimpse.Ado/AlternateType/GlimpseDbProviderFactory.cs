@@ -92,11 +92,18 @@ namespace Glimpse.Ado.AlternateType
                     type = Type.GetType("Glimpse.EF.AlternateType.GlimpseDbProviderServices, Glimpse.EF6", false);
                 }
 
+#if NET35
+                if (type == null)
+                {
+                    type = Type.GetType("Glimpse.EF.AlternateType.GlimpseDbProviderServices, Glimpse.EF1", false);
+                }
+#endif
+
                 if (type != null)
                 {
                     return Activator.CreateInstance(type, service);
-                } 
-                
+                }
+
                 throw new NotSupportedException(Resources.GlimpseEFNotPresent);  
             }
 

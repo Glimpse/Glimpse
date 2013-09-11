@@ -8,7 +8,10 @@ namespace Glimpse.EF.Inspector.Core
 
         private EntityFrameworkExecutionBlock()
         {
+#if !EF1
             RegisterProvider(new DbConnectionFactoriesExecutionTask(Logger));
+#endif
+
 #if EF6Plus
             RegisterProvider(new DbConfigurationExecutionTask());
 #endif

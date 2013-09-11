@@ -1,8 +1,8 @@
-﻿#if EF43 || EF5
-    using System.Data.Common; 
+﻿#if EF43 || EF5 || EF1
+    using System.Data.Common;
 #else
-    using System.Data.Entity.Core.Common; 
-    using DbCommand = System.Data.Common.DbCommand; 
+    using System.Data.Entity.Core.Common;
+    using DbCommand = System.Data.Common.DbCommand;
 #endif
 using Glimpse.Ado.AlternateType;
 
