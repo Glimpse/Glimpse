@@ -14,12 +14,12 @@
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET 3.5+ application. This package adds ADO profiling for those using DbProviderFactory.</description>
         <summary>Glimpse tabs for ADO.</summary>
         <releaseNotes>
-Lightweight release for Ado:
- - Add support for profiling DbDataAdapter.Fill() correctly
+Flyweight release for Ado:
+ - Switched GlimpseDbTransaction over to be public
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse ADO ADO.NET SQL performance profiling timing diagnostics</tags>
         <dependencies>
-          <dependency id="Glimpse" version="1.4.0" />
+          <dependency id="Glimpse" version="1.6.1" />
         </dependencies>
     </metadata>
     <files>

@@ -15,13 +15,11 @@
         <summary>ASP.NET 4.0 web debugging and diagnostics tool.</summary>
         <releaseNotes>
 Welterweight release for Core:
- - Add server "clock" time to HUD (shows full server time, if DLS is in effect and difference between client and server time)
- - Update to client to pulse tabs to try and show that the state context has changed
- - Update to client to show a loading message (instead of an error message) to give the data a chance to load
- - Update to client for Principal vs. Principle
- - Update to client to support object values having layouts
- - Fix bug where JSON.NET could screw up self reference loops
- - Fix small typo in update notification on glimpse.axd
+ - Switch images on Glimpse.axd page to their DataUri representations to avoid mixed content requests
+ - Switch href over from using "#" to "javascript:void(0)"
+ - Remove trailing commas in client
+ - Switch logo on the About tab over to the new logo
+ - Removed IpAddress as its not used anywhere 
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse diagnostics performance profiling timing</tags>
     </metadata>

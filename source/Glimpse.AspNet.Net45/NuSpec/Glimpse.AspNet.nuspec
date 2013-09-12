@@ -14,20 +14,14 @@
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET 4.0 application. For ASP.NET MVC3 support, please NuGet Glimpse.MVC3.</description>
         <summary>ASP.NET 4.0 web debugging and diagnostics tool.</summary>
         <releaseNotes>
-Middleweight release for Asp.Net:
- - Add server "clock" time to HUD (shows full server time, if DLS is in effect and difference between client and server time)
- - Update Environment tab update to show more version Info
- - Fixed issue where tabs could randomly disappear in some cases
- - Fixed issue where calls to HttpContext.Request in IIS7 Integrated mode threw exceptions
- - Fixed issue where query string parameters with a null key would throw an exception
- - Fixed issue to make Glimpse NuGet package discovery more stable
- - Update to make the injection of the the script tags into the rendered pages more robust
- - Update Environment tab to make it more realilant to exceptions in different protection modes
- - Update to make it easier to get Glimpse working when using dynamic compression
+Lightweight release for Asp.Net:
+ - Removed IpAddress as its not used anywhere 
+ - Fixed possible null refernce exception when access clientId
+ - Removed unused AspNet.Net35 Net35Backport
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse</tags>
         <dependencies>
-          <dependency id="Glimpse" version="1.6.0" />
+          <dependency id="Glimpse" version="1.6.1" />
         </dependencies>
     </metadata>
     <files>

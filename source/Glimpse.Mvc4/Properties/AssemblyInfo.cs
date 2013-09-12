@@ -14,9 +14,9 @@ using Glimpse.Core.Extensibility;
 
 // Version is in major.minor.build format to support http://semver.org/
 // Keep these three attributes in sync
-[assembly: AssemblyVersion("1.3.4")]
-[assembly: AssemblyFileVersion("1.3.4")]
-[assembly: AssemblyInformationalVersion("1.3.4")] // Used to specify the NuGet version number at build time
+[assembly: AssemblyVersion("1.3.3")]
+[assembly: AssemblyFileVersion("1.3.3")]
+[assembly: AssemblyInformationalVersion("1.3.3")] // Used to specify the NuGet version number at build time
 
 [assembly: InternalsVisibleTo("Glimpse.Test.Mvc4")]
 [assembly: NuGetPackage("Glimpse.Mvc4")]
