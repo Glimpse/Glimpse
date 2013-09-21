@@ -62,7 +62,7 @@ namespace Glimpse.Core.Resource
         /// <exception cref="System.NotSupportedException">Throws a <see cref="NotSupportedException"/> since this is a <see cref="IPrivilegedResource"/>.</exception>
         public IResourceResult Execute(IResourceContext context)
         {
-            throw new NotSupportedException(string.Format(Resources.RrivilegedResourceExecuteNotSupported, GetType().Name));
+            throw new NotSupportedException(string.Format(Resources.PrivilegedResourceExecuteNotSupported, GetType().Name));
         }
 
         /// <summary>

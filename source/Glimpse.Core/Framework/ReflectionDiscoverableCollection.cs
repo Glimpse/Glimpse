@@ -249,7 +249,7 @@ namespace Glimpse.Core.Framework
 
         private void GetConcreteTypes(Assembly assembly, List<T> results)
         {
-            // GetTypes potentially throws and exception. Defensive coding as per http://haacked.com/archive/2012/07/23/get-all-types-in-an-assembly.aspx
+            // GetTypes potentially throws an exception. Defensive coding as per http://haacked.com/archive/2012/07/23/get-all-types-in-an-assembly.aspx
             Type[] allTypes;
             
             try
@@ -262,7 +262,7 @@ namespace Glimpse.Core.Framework
 
                 foreach (var exception in ex.LoaderExceptions)
                 {
-                    Logger.Warn(Resources.DiscoverGetType, exception);
+                    Logger.Warn(string.Format(Resources.DiscoverGetType, assembly.FullName), exception);
                 }
             }
 

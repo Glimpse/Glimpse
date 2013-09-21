@@ -202,49 +202,50 @@
     <value>Removed {0} of type '{1}' from collection.</value>
     <comment>{0} - typeof(T).Name of collection generic argument, {1} = GetType() of item removed from collection.</comment>
   </data>
-    <data name="DiscoverableCollectionDiscover">
-        <value xml:space="preserve">Discovered {0} of type '{1}' and added it to collection.</value>
-    </data>
-    <data name="ExecuteResourceInsufficientPolicy">
-        <value xml:space="preserve">Runtime policy does not allow execution of resource named '{0}'.</value>
-    </data>
-    <data name="GlimpseRuntimeInitializeSetupInspector">
-        <value xml:space="preserve">Setup IInspector of type '{0}'.</value>
-        <comment>{0} - GetType() of IInspector</comment>
-    </data>
-    <data name="AlternateTypeGenerationHookMethodsInspected">
-        <value xml:space="preserve">Methods inspected via proxy generation hook on type '{0}'.</value>
-        <comment>{0} - typeof(T)</comment>
-    </data>
-    <data name="AlternateTypeGenerationHookNonProxyableMemberNotification">
-        <value xml:space="preserve">{0} method of type '{1}' is not proxyable.</value>
-        <comment>{0} - .Name of MemberInfo, {1} - Proxy Type</comment>
-    </data>
-    <data name="MessageBrokerSubscribe">
-        <value xml:space="preserve">Method '{0}' on type '{1}' has been subscribed to all '{2}' messages.</value>
-        <comment>{0} - the method name, {1} = the method's declaring type, {2} = the message type</comment>
-    </data>
-    <data name="GlimpseRuntimeEndRequesPersistError">
-        <value xml:space="preserve">Could not persist metadata with IPersistenceStore of type '{0}'.</value>
-        <comment>{0} - GetType() of persistence store</comment>
-    </data>
-    <data name="GlimpseRuntimeExecuteResourceError">
-        <value xml:space="preserve">Error executing IResource '{0}'.</value>
-        <comment>{0} - name of IResource</comment>
-    </data>
-    <data name="GlimpseRuntimeExecuteResourceResultError">
-        <value xml:space="preserve">Error executing resource result of type '{0}'.</value>
-        <comment>{0} - GetType() of errant ResourceResult</comment>
-    </data>
-    <data name="GlimpseRuntimePersistMetadataMultipleResourceWarning">
-        <value xml:space="preserve">Multiple Resources with name of '{0}'. Resources should have unique names.</value>
-        <comment>{0} - The name of ambiguous resource.</comment>
-    </data>
-  <data name="DiscoverGetType">
-    <value xml:space="preserve">Unable to GetType.</value>
+  <data name="DiscoverableCollectionDiscover" xml:space="preserve">
+    <value>Discovered {0} of type '{1}' and added it to collection.</value>
   </data>
-  <data name="RrivilegedResourceExecuteNotSupported">
-    <value xml:space="preserve">Invalid privileged resource execution on '{0}'. Call overload Execute(IResourceContext, IGlimpseConfiguration) instead.</value>
+  <data name="ExecuteResourceInsufficientPolicy" xml:space="preserve">
+    <value>Runtime policy does not allow execution of resource named '{0}'.</value>
+  </data>
+  <data name="GlimpseRuntimeInitializeSetupInspector" xml:space="preserve">
+    <value>Setup IInspector of type '{0}'.</value>
+    <comment>{0} - GetType() of IInspector</comment>
+  </data>
+  <data name="AlternateTypeGenerationHookMethodsInspected" xml:space="preserve">
+    <value>Methods inspected via proxy generation hook on type '{0}'.</value>
+    <comment>{0} - typeof(T)</comment>
+  </data>
+  <data name="AlternateTypeGenerationHookNonProxyableMemberNotification" xml:space="preserve">
+    <value>{0} method of type '{1}' is not proxyable.</value>
+    <comment>{0} - .Name of MemberInfo, {1} - Proxy Type</comment>
+  </data>
+  <data name="MessageBrokerSubscribe" xml:space="preserve">
+    <value>Method '{0}' on type '{1}' has been subscribed to all '{2}' messages.</value>
+    <comment>{0} - the method name, {1} = the method's declaring type, {2} = the message type</comment>
+  </data>
+  <data name="GlimpseRuntimeEndRequesPersistError" xml:space="preserve">
+    <value>Could not persist metadata with IPersistenceStore of type '{0}'.</value>
+    <comment>{0} - GetType() of persistence store</comment>
+  </data>
+  <data name="GlimpseRuntimeExecuteResourceError" xml:space="preserve">
+    <value>Error executing IResource '{0}'.</value>
+    <comment>{0} - name of IResource</comment>
+  </data>
+  <data name="GlimpseRuntimeExecuteResourceResultError" xml:space="preserve">
+    <value>Error executing resource result of type '{0}'.</value>
+    <comment>{0} - GetType() of errant ResourceResult</comment>
+  </data>
+  <data name="GlimpseRuntimePersistMetadataMultipleResourceWarning" xml:space="preserve">
+    <value>Multiple Resources with name of '{0}'. Resources should have unique names.</value>
+    <comment>{0} - The name of ambiguous resource.</comment>
+  </data>
+  <data name="DiscoverGetType" xml:space="preserve">
+    <value>Failed to load type when getting types from assembly '{0}'</value>
+    <comment>{0} - Assembly.FullName</comment>
+  </data>
+  <data name="PrivilegedResourceExecuteNotSupported" xml:space="preserve">
+    <value>Invalid privileged resource execution on '{0}'. Call overload Execute(IResourceContext, IGlimpseConfiguration) instead.</value>
     <comment>{0} - GetType() of offending resource</comment>
   </data>
 </root>
