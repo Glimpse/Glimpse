@@ -191,6 +191,12 @@
       <Link>
       </Link>
     </Compile>
+    <Compile Include="..\Glimpse.Ado\SqlStatistics.cs">
+      <Link>SqlStatistics.cs</Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\SqlStatisticsCalculator.cs">
+      <Link>SqlStatisticsCalculator.cs</Link>
+    </Compile>
     <Compile Include="..\Glimpse.Ado\Tab\Sql.cs">
       <Link>
       </Link>

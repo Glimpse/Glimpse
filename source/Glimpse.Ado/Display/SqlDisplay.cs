@@ -12,7 +12,7 @@ namespace Glimpse.Ado.Display
     {
         private const string InternalName = "sql";
 
-        public string Name 
+        public string Name
         {
             get { return InternalName; }
         }
@@ -28,33 +28,16 @@ namespace Glimpse.Ado.Display
             var aggregator = new MessageAggregator(messages);
             var queryData = aggregator.Aggregate();
 
-            var queryCount = queryData.Commands.Count;
-            var connectionCount = queryData.Connections.Count;
-            var transactionCount = queryData.Transactions.Count;
-
-            var queryExecutionTime = new TimeSpan();
-            var connectionOpenTime = new TimeSpan();
-
-            foreach (var command in queryData.Commands)
-            {
-                var commandMetadata = command.Value;
-                queryExecutionTime += commandMetadata.Duration;
-            }
-
-            foreach (var connection in queryData.Connections)
-            {
-                var connectionMetadata = connection.Value;
-                connectionOpenTime += connectionMetadata.Duration.GetValueOrDefault(TimeSpan.Zero);
-            }
+            SqlStatistics sqlStatistics = SqlStatisticsCalculator.Caluculate(queryData);
 
             return new
-                {
-                    queryCount,
-                    connectionCount,
-                    transactionCount,
-                    queryExecutionTime,
-                    connectionOpenTime
-                };
+            {
+                queryCount = sqlStatistics.QueryCount,
+                connectionCount = sqlStatistics.ConnectionCount,
+                transactionCount = sqlStatistics.TransactionCount,
+                queryExecutionTime = sqlStatistics.QueryExecutionTime,
+                connectionOpenTime = sqlStatistics.ConnectionOpenTime
+            };
         }
 
         public void Setup(ITabSetupContext context)

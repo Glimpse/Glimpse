@@ -88,6 +88,8 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="SqlStatistics.cs" />
+    <Compile Include="SqlStatisticsCalculator.cs" />
     <Compile Include="Tab\Sql.cs" />
     <Compile Include="Tab\Support\CommandSanitizer.cs" />
     <Compile Include="Tab\Support\CommandParameterParser.cs" />
