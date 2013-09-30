@@ -1,10 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Resource;
+using NLog;
+using NLog.Config;
+using NLog.Targets;
+using NLog.Targets.Wrappers;
 
 namespace Glimpse.Core.Framework
 {
@@ -32,6 +39,28 @@ namespace Glimpse.Core.Framework
         private ICollection<IDisplay> displays;
         private Func<RuntimePolicy> runtimePolicyStrategy;
         private string hash;
+        private IServiceLocator userServiceLocator;
+        private Section xmlConfiguration;
+        private RuntimePolicy? defaultRuntimePolicy;
+        private ICollection<ISerializationConverter> serializationConverters;
+
+        public GlimpseConfiguration(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore)
+        {
+            if (endpointConfiguration == null)
+            {
+                throw new ArgumentNullException("endpointConfiguration");
+            }
+
+            if (persistenceStore == null)
+            {
+                throw new ArgumentNullException("persistenceStore");
+            }
+
+            XmlConfiguration = ConfigurationManager.GetSection("glimpse") as Section ?? new Section();
+            ResourceEndpoint = endpointConfiguration;
+            PersistenceStore = persistenceStore;
+            // TODO: Instantiate the user's IOC container (if they have one)
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GlimpseConfiguration" /> class.
@@ -182,6 +211,28 @@ namespace Glimpse.Core.Framework
             RuntimePolicyStrategy = runtimePolicyStrategy;
         }
 
+        public IServiceLocator UserServiceLocator 
+        {
+            get { return userServiceLocator; }
+            set { userServiceLocator = value; }
+        }
+
+        public Section XmlConfiguration {
+            get
+            {
+                return xmlConfiguration;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException("value");
+                }
+
+                xmlConfiguration = value;
+            }
+        }
+
         /// <summary>
         /// Gets or sets the client scripts collection.
         /// </summary>
@@ -193,6 +244,17 @@ namespace Glimpse.Core.Framework
         {
             get
             {
+                if (clientScripts != null)
+                {
+                    return clientScripts;
+                }
+
+                if (TryAllInstancesFromServiceLocators(out clientScripts))
+                {
+                    return clientScripts;
+                }
+
+                clientScripts = CreateDiscoverableCollection<IClientScript>(XmlConfiguration.ClientScripts);
                 return clientScripts;
             }
 
@@ -218,6 +280,17 @@ namespace Glimpse.Core.Framework
         {
             get
             {
+                if (defaultResource != null)
+                {
+                    return defaultResource;
+                }
+
+                if (TrySingleInstanceFromServiceLocators(out defaultResource))
+                {
+                    return defaultResource;
+                }
+
+                defaultResource = new ConfigurationResource();
                 return defaultResource;
             }
 
@@ -238,7 +311,24 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The default runtime policy.
         /// </value>
-        public RuntimePolicy DefaultRuntimePolicy { get; set; }
+        public RuntimePolicy DefaultRuntimePolicy 
+        {
+            get
+            {
+                if (defaultRuntimePolicy.HasValue)
+                {
+                    return defaultRuntimePolicy.Value;
+                }
+
+                defaultRuntimePolicy = XmlConfiguration.DefaultRuntimePolicy;
+                return defaultRuntimePolicy.Value;
+            }
+
+            set
+            {
+                defaultRuntimePolicy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the endpoint base URI.
@@ -251,20 +341,27 @@ namespace Glimpse.Core.Framework
         {
             get
             {
+                if (!string.IsNullOrEmpty(endpointBaseUri))
+                {
+                    return endpointBaseUri;
+                }
+
+                endpointBaseUri = XmlConfiguration.EndpointBaseUri;
                 return endpointBaseUri;
             }
 
             set
             {
-                if (value == null)
+                if (string.IsNullOrEmpty(value))
                 {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentException("EndpointBaseUri must be a non-null, non-empty string.", "value");
                 }
 
                 endpointBaseUri = value;
             }
         }
 
+        // TODO: Remove this property from this class
         /// <summary>
         /// Gets or sets the <see cref="IFrameworkProvider"/>.
         /// </summary>
@@ -301,6 +398,17 @@ namespace Glimpse.Core.Framework
         {
             get
             {
+                if (htmlEncoder != null)
+                {
+                    return htmlEncoder;
+                }
+
+                if (TrySingleInstanceFromServiceLocators(out htmlEncoder))
+                {
+                    return htmlEncoder;
+                }
+
+                htmlEncoder = new AntiXssEncoder();
                 return htmlEncoder;
             }
 
@@ -326,6 +434,51 @@ namespace Glimpse.Core.Framework
         {
             get
             {
+                if (logger != null)
+                {
+                    return logger;
+                }
+
+                if (TrySingleInstanceFromServiceLocators(out logger))
+                {
+                    return logger;
+                }
+
+                // use null logger if logging is off
+                var logLevel = XmlConfiguration.Logging.Level;
+                if (logLevel == LoggingLevel.Off)
+                {
+                    logger = new NullLogger();
+                    return logger;
+                }
+
+                var configuredPath = XmlConfiguration.Logging.LogLocation;
+
+                // Root the path if it isn't already
+                var logDirPath = Path.IsPathRooted(configuredPath)
+                                     ? configuredPath
+                                     : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, configuredPath);
+
+                // Add a filename if one isn't specified
+                var logFilePath = string.IsNullOrEmpty(Path.GetExtension(logDirPath))
+                                      ? Path.Combine(logDirPath, "Glimpse.log")
+                                      : logDirPath;
+
+                // use NLog logger otherwise
+                var fileTarget = new FileTarget
+                {
+                    FileName = logFilePath,
+                    Layout =
+                        "${longdate} | ${level:uppercase=true} | ${message} | ${exception:maxInnerExceptionLevel=5:format=type,message,stacktrace:separator=--:innerFormat=shortType,message,method:innerExceptionSeparator=>>}"
+                };
+
+                var asyncTarget = new AsyncTargetWrapper(fileTarget);
+
+                var loggingConfiguration = new LoggingConfiguration();
+                loggingConfiguration.AddTarget("file", asyncTarget);
+                loggingConfiguration.LoggingRules.Add(new LoggingRule("*", LogLevel.FromOrdinal((int)logLevel), asyncTarget));
+
+                logger = new NLogLogger(new LogFactory(loggingConfiguration).GetLogger("Glimpse"));
                 return logger;
             }
 
@@ -351,6 +504,17 @@ namespace Glimpse.Core.Framework
         {
             get
             {
+                if (messageBroker != null)
+                {
+                    return messageBroker;
+                }
+
+                if (TrySingleInstanceFromServiceLocators(out messageBroker))
+                {
+                    return messageBroker;
+                }
+
+                messageBroker = new MessageBroker(Logger);
                 return messageBroker;
             }
 
@@ -401,6 +565,17 @@ namespace Glimpse.Core.Framework
         {
             get
             {
+                if (inspectors != null)
+                {
+                    return inspectors;
+                }
+
+                if (TryAllInstancesFromServiceLocators(out inspectors))
+                {
+                    return inspectors;
+                }
+
+                inspectors = CreateDiscoverableCollection<IInspector>(XmlConfiguration.Inspectors);
                 return inspectors;
             }
 
@@ -426,6 +601,17 @@ namespace Glimpse.Core.Framework
         {
             get
             {
+                if (proxyFactory != null)
+                {
+                    return proxyFactory;
+                }
+
+                if (TrySingleInstanceFromServiceLocators(out proxyFactory))
+                {
+                    return proxyFactory;
+                }
+
+                proxyFactory = new CastleDynamicProxyFactory(Logger, MessageBroker, TimerStrategy, RuntimePolicyStrategy);
                 return proxyFactory;
             }
 
@@ -476,6 +662,17 @@ namespace Glimpse.Core.Framework
         {
             get
             {
+                if (resources != null)
+                {
+                    return resources;
+                }
+
+                if (TryAllInstancesFromServiceLocators(out resources))
+                {
+                    return resources;
+                }
+
+                resources = CreateDiscoverableCollection<IResource>(XmlConfiguration.Resources);
                 return resources;
             }
 
@@ -501,6 +698,24 @@ namespace Glimpse.Core.Framework
         {
             get
             {
+                if (runtimePolicies != null)
+                {
+                    return runtimePolicies;
+                }
+
+                if (TryAllInstancesFromServiceLocators(out runtimePolicies))
+                {
+                    return runtimePolicies;
+                }
+
+                var collection = CreateDiscoverableCollection<IRuntimePolicy>(XmlConfiguration.RuntimePolicies);
+
+                foreach (var config in collection.OfType<IConfigurable>())
+                {
+                    config.Configure(XmlConfiguration);
+                }
+
+                runtimePolicies = collection;
                 return runtimePolicies;
             }
 
@@ -526,7 +741,7 @@ namespace Glimpse.Core.Framework
         {
             get
             {
-                return runtimePolicyStrategy;
+                return runtimePolicyStrategy; // TODO: Reimplement
             }
 
             set
@@ -551,6 +766,20 @@ namespace Glimpse.Core.Framework
         {
             get
             {
+                if (serializer != null)
+                {
+                    return serializer;
+                }
+
+                if (TrySingleInstanceFromServiceLocators(out serializer))
+                {
+                    return serializer;
+                }
+
+                var temp = new JsonNetSerializer(Logger);
+                temp.RegisterSerializationConverters(SerializationConverters);
+
+                serializer = temp;
                 return serializer;
             }
 
@@ -565,6 +794,34 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        public ICollection<ISerializationConverter> SerializationConverters {
+            get
+            {
+                if (serializationConverters != null)
+                {
+                    return serializationConverters;
+                }
+
+                if (TryAllInstancesFromServiceLocators(out serializationConverters))
+                {
+                    return serializationConverters;
+                }
+
+                serializationConverters = CreateDiscoverableCollection<ISerializationConverter>(XmlConfiguration.SerializationConverters);
+                return serializationConverters;
+            }
+
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException("value");
+                }
+
+                serializationConverters = value;
+            }
+        }
+
         /// <summary>
         /// Gets or sets the collection of <see cref="ITab"/>.
         /// </summary>
@@ -576,6 +833,17 @@ namespace Glimpse.Core.Framework
         {
             get
             {
+                if (tabs != null)
+                {
+                    return tabs;
+                }
+
+                if (TryAllInstancesFromServiceLocators(out tabs))
+                {
+                    return tabs;
+                }
+
+                tabs = CreateDiscoverableCollection<ITab>(XmlConfiguration.Tabs);
                 return tabs;
             }
 
@@ -594,6 +862,17 @@ namespace Glimpse.Core.Framework
         {
             get
             {
+                if (displays != null)
+                {
+                    return displays;
+                }
+
+                if (TryAllInstancesFromServiceLocators(out displays))
+                {
+                    return displays;
+                }
+
+                displays = CreateDiscoverableCollection<IDisplay>(XmlConfiguration.Displays);
                 return displays;
             }
 
@@ -702,6 +981,73 @@ namespace Glimpse.Core.Framework
         public static IMessageBroker GetConfiguredMessageBroker()
         {
             return messageBroker;
+        }
+
+        private bool TrySingleInstanceFromServiceLocators<T>(out T instance) where T : class
+        {
+            if (UserServiceLocator != null)
+            {
+                instance = UserServiceLocator.GetInstance<T>();
+                if (instance != null)
+                {
+                    return true;
+                }
+            }
+
+            instance = null;
+            return false;
+        }
+
+
+        private bool TryAllInstancesFromServiceLocators<T>(out ICollection<T> instance) where T : class
+        {
+            if (UserServiceLocator != null)
+            {
+                IEnumerable<T> result = UserServiceLocator.GetAllInstances<T>();
+                if (result != null)
+                {
+                    instance = result as IList<T>;
+                    return true;
+                }
+            }
+
+            instance = null;
+            return false;
+        }
+
+        private IDiscoverableCollection<T> CreateDiscoverableCollection<T>(DiscoverableCollectionElement config)
+        {
+            var discoverableCollection = new ReflectionDiscoverableCollection<T>(Logger);
+
+            discoverableCollection.IgnoredTypes.AddRange(ToEnumerable(config.IgnoredTypes));
+
+            // config.DiscoveryLocation (collection specific) overrides Configuration.DiscoveryLocation (on main <glimpse> node)
+            var locationCascade = string.IsNullOrEmpty(config.DiscoveryLocation)
+                                       ? string.IsNullOrEmpty(XmlConfiguration.DiscoveryLocation)
+                                             ? null
+                                             : XmlConfiguration.DiscoveryLocation
+                                       : config.DiscoveryLocation;
+
+            if (locationCascade != null)
+            {
+                discoverableCollection.DiscoveryLocation = locationCascade;
+            }
+
+            discoverableCollection.AutoDiscover = config.AutoDiscover;
+            if (discoverableCollection.AutoDiscover)
+            {
+                discoverableCollection.Discover();
+            }
+
+            return discoverableCollection;
+        }
+
+        private static IEnumerable<Type> ToEnumerable(TypeElementCollection collection)
+        {
+            foreach (TypeElement typeElement in collection)
+            {
+                yield return typeElement.Type;
+            }
         }
     }
 }
