@@ -9,7 +9,7 @@ namespace Glimpse.Owin.Sample
         {
             using (WebApp.Start<Startup>("http://localhost:8080/"))
             {
-                Console.WriteLine("Started");
+                Console.WriteLine("Started at http://localhost:8080/");
                 Console.ReadLine();
                 Console.WriteLine("Stopping");
             }
