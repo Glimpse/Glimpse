@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Glimpse.Core.Extensibility;
+using Glimpse.Core.Framework;
 using Glimpse.Owin.Middleware;
 using Owin;
 
@@ -12,6 +14,8 @@ namespace Glimpse.Owin
         public AppBuilder(IAppBuilder app)
         {
             innerApp = app;
+            var config = new GlimpseConfiguration(new OwinResourceEndpointConfiguration(), new ApplicationPersistenceStore(new DictionaryDataStoreAdapter(app.Properties as Dictionary<string, object>)));
+            GlimpseRuntime.Initialize(config);
             innerApp.UseType<HeadMiddleware>(this); // This is the earliest we can add middleware
         }
 

@@ -27,10 +27,9 @@ namespace Glimpse.Test.Core.Tester
         public Mock<IDynamicClientScript> DynamicScriptMock { get; set; }
         public Mock<IHtmlEncoder> EncoderMock { get; set; }
 
-        private GlimpseRuntimeTester(GlimpseConfiguration configuration, Mock<IFrameworkProvider> frameworkProviderMock, Mock<ResourceEndpointConfiguration> endpointConfigMock) : base(configuration)
+        private GlimpseRuntimeTester(GlimpseConfiguration configuration, Mock<IFrameworkProvider> frameworkProviderMock) : base(configuration)
         {
             FrameworkProviderMock = frameworkProviderMock;
-            EndpointConfigMock = endpointConfigMock;
             HttpRequestStoreMock = new Mock<IDataStore>();
             TabMock = new Mock<ITab>().Setup();
             InspectorMock = new Mock<IInspector>();
@@ -74,26 +73,16 @@ namespace Glimpse.Test.Core.Tester
         public static GlimpseRuntimeTester Create()
         {
             var frameworkProviderMock = new Mock<IFrameworkProvider>().Setup();
-            var endpointConfigMock = new Mock<ResourceEndpointConfiguration>();
             var loggerMock = new Mock<ILogger>();
-            var clientScripts = new ReflectionDiscoverableCollection<IClientScript>(loggerMock.Object);
-            var htmlEncoderMock = new Mock<IHtmlEncoder>();
-            var persistenceStoreMock = new Mock<IPersistenceStore>();
-            var inspectors = new ReflectionDiscoverableCollection<IInspector>(loggerMock.Object);
             var resources = new ReflectionDiscoverableCollection<IResource>(loggerMock.Object);
-            var serializerMock = new Mock<ISerializer>();
             var tabs = new ReflectionDiscoverableCollection<ITab>(loggerMock.Object);
-            var displays = new ReflectionDiscoverableCollection<IDisplay>(loggerMock.Object);
             var policies = new ReflectionDiscoverableCollection<IRuntimePolicy>(loggerMock.Object);
-            var resourceMock = new Mock<IResource>();
-            var proxyFactoryMock = new Mock<IProxyFactory>();
-            var messageBrokerMock = new Mock<IMessageBroker>();
 
             var configuration =
-                new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfigMock.Object, clientScripts, loggerMock.Object, RuntimePolicy.On, htmlEncoderMock.Object, persistenceStoreMock.Object, inspectors, resources, serializerMock.Object, tabs, displays, policies, resourceMock.Object, proxyFactoryMock.Object, messageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
+                new GlimpseConfiguration(frameworkProviderMock.Object, loggerMock.Object, resources, tabs, policies);
 
 
-            return new GlimpseRuntimeTester(configuration, frameworkProviderMock, endpointConfigMock);
+            return new GlimpseRuntimeTester(configuration, frameworkProviderMock);
         }
     }
 }

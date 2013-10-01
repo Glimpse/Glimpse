@@ -18,7 +18,7 @@ namespace Glimpse.Core.Framework.Support
         {
             get
             {
-                return this.logger ?? (this.logger = GlimpseConfiguration.GetLogger() ?? new NullLogger());
+                return this.logger ?? (this.logger = GlimpseRuntime.Instance.Configuration.Logger ?? new NullLogger());
             }
         }
 

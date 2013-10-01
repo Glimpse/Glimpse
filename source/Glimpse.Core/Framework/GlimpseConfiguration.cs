@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -20,9 +21,9 @@ namespace Glimpse.Core.Framework
     /// </summary>
     public class GlimpseConfiguration : IGlimpseConfiguration
     {
-        private static IMessageBroker messageBroker;
+        private IMessageBroker messageBroker;
         private static Func<IExecutionTimer> timerStrategy;
-        private static ILogger logger;
+        private ILogger logger;
         private ICollection<IClientScript> clientScripts;
         private IResource defaultResource;
         private string endpointBaseUri;
@@ -56,7 +57,6 @@ namespace Glimpse.Core.Framework
                 throw new ArgumentNullException("persistenceStore");
             }
 
-            XmlConfiguration = ConfigurationManager.GetSection("glimpse") as Section ?? new Section();
             ResourceEndpoint = endpointConfiguration;
             PersistenceStore = persistenceStore;
             // TODO: Instantiate the user's IOC container (if they have one)
@@ -86,33 +86,14 @@ namespace Glimpse.Core.Framework
         /// <exception cref="System.ArgumentNullException">An exception is thrown if any parameter is <c>null</c>.</exception>
         public GlimpseConfiguration(
             IFrameworkProvider frameworkProvider, 
-            ResourceEndpointConfiguration endpointConfiguration,
-            ICollection<IClientScript> clientScripts,
             ILogger logger,
-            RuntimePolicy defaultRuntimePolicy,
-            IHtmlEncoder htmlEncoder,
-            IPersistenceStore persistenceStore,
-            ICollection<IInspector> inspectors,
             ICollection<IResource> resources,
-            ISerializer serializer,
             ICollection<ITab> tabs,
-            ICollection<IDisplay> displays,
-            ICollection<IRuntimePolicy> runtimePolicies,
-            IResource defaultResource,
-            IProxyFactory proxyFactory,
-            IMessageBroker messageBroker,
-            string endpointBaseUri,
-            Func<IExecutionTimer> timerStrategy,
-            Func<RuntimePolicy> runtimePolicyStrategy)
+            ICollection<IRuntimePolicy> runtimePolicies)
         {
             if (frameworkProvider == null)
             {
                 throw new ArgumentNullException("frameworkProvider");
-            }
-
-            if (endpointConfiguration == null)
-            {
-                throw new ArgumentNullException("endpointConfiguration");
             }
 
             if (logger == null)
@@ -120,29 +101,9 @@ namespace Glimpse.Core.Framework
                 throw new ArgumentNullException("logger");
             }
 
-            if (htmlEncoder == null)
-            {
-                throw new ArgumentNullException("htmlEncoder");
-            }
-
-            if (persistenceStore == null)
-            {
-                throw new ArgumentNullException("persistenceStore");
-            }
-
-            if (clientScripts == null)
-            {
-                throw new ArgumentNullException("clientScripts");
-            }
-
             if (resources == null)
             {
-                throw new ArgumentNullException("inspectors");
-            }
-
-            if (serializer == null)
-            {
-                throw new ArgumentNullException("serializer");
+                throw new ArgumentNullException("resources");
             }
 
             if (tabs == null)
@@ -150,65 +111,16 @@ namespace Glimpse.Core.Framework
                 throw new ArgumentNullException("tabs");
             }
 
-            if (displays == null)
-            {
-                throw new ArgumentNullException("displays");
-            }
-
             if (runtimePolicies == null)
             {
                 throw new ArgumentNullException("runtimePolicies");
             }
 
-            if (defaultResource == null)
-            {
-                throw new ArgumentNullException("defaultResource");
-            }
-
-            if (proxyFactory == null)
-            {
-                throw new ArgumentNullException("proxyFactory");
-            }
-
-            if (messageBroker == null)
-            {
-                throw new ArgumentNullException("messageBroker");
-            }
-
-            if (endpointBaseUri == null)
-            {
-                throw new ArgumentNullException("endpointBaseUri");
-            }
-
-            if (timerStrategy == null)
-            {
-                throw new ArgumentNullException("timerStrategy");
-            }
-
-            if (runtimePolicyStrategy == null)
-            {
-                throw new ArgumentNullException("runtimePolicyStrategy");
-            }
-
             Logger = logger;
-            ClientScripts = clientScripts;
             FrameworkProvider = frameworkProvider;
-            HtmlEncoder = htmlEncoder;
-            PersistenceStore = persistenceStore;
-            Inspectors = inspectors;
-            ResourceEndpoint = endpointConfiguration;
             Resources = resources;
-            Serializer = serializer;
             Tabs = tabs;
-            Displays = displays;
             RuntimePolicies = runtimePolicies;
-            DefaultRuntimePolicy = defaultRuntimePolicy;
-            DefaultResource = defaultResource;
-            ProxyFactory = proxyFactory;
-            MessageBroker = messageBroker;
-            EndpointBaseUri = endpointBaseUri;
-            TimerStrategy = timerStrategy;
-            RuntimePolicyStrategy = runtimePolicyStrategy;
         }
 
         public IServiceLocator UserServiceLocator 
@@ -220,6 +132,12 @@ namespace Glimpse.Core.Framework
         public Section XmlConfiguration {
             get
             {
+                if (xmlConfiguration != null)
+                {
+                    return xmlConfiguration;
+                }
+
+                xmlConfiguration = ConfigurationManager.GetSection("glimpse") as Section ?? new Section();
                 return xmlConfiguration;
             }
             set
@@ -239,6 +157,7 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The client scripts.
         /// </value>
+        /// <returns>A collection of <see cref="IClientScript"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="IClientScript"/>s discovered in the configured discovery location.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public ICollection<IClientScript> ClientScripts
         {
@@ -275,6 +194,7 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The default resource.
         /// </value>
+        /// <returns>A <see cref="IResource"/> instance resolved by the <see cref="IServiceLocator"/>s, otherwise <see cref="ConfigurationResource"/>.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public IResource DefaultResource
         {
@@ -311,6 +231,7 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The default runtime policy.
         /// </value>
+        /// <returns>A <see cref="RuntimePolicy"/> instance based on configuration settings.</returns>
         public RuntimePolicy DefaultRuntimePolicy 
         {
             get
@@ -388,12 +309,9 @@ namespace Glimpse.Core.Framework
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="IHtmlEncoder"/>.
+        /// Instantiates an instance of <see cref="IHtmlEncoder"/>.
         /// </summary>
-        /// <value>
-        /// The configured <see cref="IHtmlEncoder"/>.
-        /// </value>
-        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
+        /// <returns>A <see cref="IHtmlEncoder"/> instance resolved by the <see cref="IServiceLocator"/>s, otherwise <see cref="AntiXssEncoder"/> (leveraging the <see href="http://wpl.codeplex.com/">Microsoft Web Protection Library</see>).</returns>
         public IHtmlEncoder HtmlEncoder
         {
             get
@@ -429,6 +347,7 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configured <see cref="ILogger"/>.
         /// </value>
+        /// <returns>A <see cref="ILogger"/> instance resolved by the <see cref="IServiceLocator"/>s, otherwise a <see cref="NullLogger"/> or <see cref="NLogLogger"/> (leveraging the <see href="http://nlog-project.org/">NLog</see> project) based on configuration settings.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public ILogger Logger
         {
@@ -496,6 +415,7 @@ namespace Glimpse.Core.Framework
         /// <summary>
         /// Gets or sets the <see cref="IMessageBroker"/>.
         /// </summary>
+        /// <returns>A <see cref="IMessageBroker"/> instance resolved by one of the <see cref="IServiceLocator"/>s, otherwise <see cref="MessageBroker"/>.</returns>
         /// <value>
         /// The configured <see cref="IMessageBroker"/>.
         /// </value>
@@ -560,6 +480,7 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configured collection of <see cref="IInspector"/>.
         /// </value>
+        /// <returns>A collection of <see cref="IInspector"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="IInspector"/>s discovered in the configured discovery location.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public ICollection<IInspector> Inspectors
         {
@@ -596,6 +517,7 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configured <see cref="IProxyFactory"/>.
         /// </value>
+        /// <returns>A <see cref="IProxyFactory"/> instance resolved by the <see cref="IServiceLocator"/>s, otherwise <see cref="CastleDynamicProxyFactory"/> (leveraging <see href="http://www.castleproject.org/projects/dynamicproxy/">Castle DynamicProxy</see>.).</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public IProxyFactory ProxyFactory
         {
@@ -657,6 +579,7 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configured collection of <see cref="IResource"/>.
         /// </value>
+        /// <returns>A collection of <see cref="IResource"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="IResource"/>s discovered in the configured discovery location.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public ICollection<IResource> Resources
         {
@@ -693,6 +616,7 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configured collection of <see cref="IRuntimePolicy"/>.
         /// </value>
+        /// <returns>A collection of <see cref="IRuntimePolicy"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="IRuntimePolicy"/>s discovered in the configured discovery location.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public ICollection<IRuntimePolicy> RuntimePolicies
         {
@@ -736,12 +660,18 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configured <see cref="RuntimePolicy"/>.
         /// </value>
+        /// <returns>A <c>Func&lt;RuntimePolicy&gt;</c> to access the request specific <see cref="RuntimePolicy"/>.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public Func<RuntimePolicy> RuntimePolicyStrategy
         {
             get
             {
-                return runtimePolicyStrategy; // TODO: Reimplement
+                if (runtimePolicyStrategy != null)
+                {
+                    return runtimePolicyStrategy;
+                }
+
+                return () => RuntimePolicy.On; // TODO: Reimplement
             }
 
             set
@@ -761,6 +691,7 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configured <see cref="ISerializer"/>.
         /// </value>
+        /// <returns>A <see cref="ISerializer"/> instance resolved by the <see cref="IServiceLocator"/>s, otherwise <see cref="JsonNetSerializer"/> (leveraging <see href="http://json.codeplex.com/">Json.Net</see>).</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public ISerializer Serializer
         {
@@ -793,7 +724,11 @@ namespace Glimpse.Core.Framework
                 serializer = value;
             }
         }
-
+        
+        /// <summary>
+        /// Gets or sets a collection of <see cref="ISerializationConverter"/>s.
+        /// </summary>
+        /// <returns>A collection of <see cref="ISerializationConverter"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="ISerializationConverter"/>s discovered in the configured discovery location.</returns>
         public ICollection<ISerializationConverter> SerializationConverters {
             get
             {
@@ -828,6 +763,7 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configured <see cref="ITab"/>.
         /// </value>
+        /// <returns>A collection of <see cref="ITab"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="ITab"/>s discovered in the configured discovery location.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public ICollection<ITab> Tabs
         {
@@ -893,12 +829,18 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configured <see cref="IExecutionTimer"/> strategy.
         /// </value>
+        /// <returns>A <c>Func&lt;IExecutionTimer&gt;</c> to access the request specific <see cref="IExecutionTimer"/>.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public Func<IExecutionTimer> TimerStrategy 
         { 
             get
             {
-                return timerStrategy;
+                if (timerStrategy != null)
+                {
+                    return timerStrategy;
+                }
+
+                return() => new ExecutionTimer(Stopwatch.StartNew()) as IExecutionTimer; // TODO: reimplement this
             }
 
             set
@@ -955,12 +897,6 @@ namespace Glimpse.Core.Framework
         }
 
         [Obsolete("HACK: To support TraceListener with TraceSource via web.config")]
-        public static ILogger GetLogger()
-        {
-            return logger;
-        }
-
-        [Obsolete("HACK: To support TraceListener with TraceSource via web.config")]
         public static Func<IExecutionTimer> GetConfiguredTimerStrategy()
         {
             return () =>
@@ -975,12 +911,6 @@ namespace Glimpse.Core.Framework
                     return null;
                 }
             }; 
-        }
-
-        [Obsolete("HACK: To support TraceListener with TraceSource via web.config")]
-        public static IMessageBroker GetConfiguredMessageBroker()
-        {
-            return messageBroker;
         }
 
         private bool TrySingleInstanceFromServiceLocators<T>(out T instance) where T : class
@@ -1003,10 +933,10 @@ namespace Glimpse.Core.Framework
         {
             if (UserServiceLocator != null)
             {
-                IEnumerable<T> result = UserServiceLocator.GetAllInstances<T>();
+                var result = UserServiceLocator.GetAllInstances<T>();
                 if (result != null)
                 {
-                    instance = result as IList<T>;
+                    instance = result;
                     return true;
                 }
             }

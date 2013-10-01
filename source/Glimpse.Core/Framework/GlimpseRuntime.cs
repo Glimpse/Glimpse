@@ -26,6 +26,7 @@ namespace Glimpse.Core.Framework
         private static readonly MethodInfo MethodInfoBeginRequest = typeof(GlimpseRuntime).GetMethod("BeginRequest", BindingFlags.Public | BindingFlags.Instance);
         private static readonly MethodInfo MethodInfoEndRequest = typeof(GlimpseRuntime).GetMethod("EndRequest", BindingFlags.Public | BindingFlags.Instance);
         private static readonly object LockObj = new object();
+        private static GlimpseRuntime instance = null;
 
         /// <summary>
         /// Initializes static members of the <see cref="GlimpseRuntime" /> class.
@@ -48,11 +49,42 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        internal static void Reset()
+        {
+            instance = null; // HACK?
+        }
+
+        public static GlimpseRuntime Instance 
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    throw new GlimpseException("Call GlimpseRuntime.Initialize before accesing the singelton Instance.");
+                }
+
+                return instance;
+            }
+
+            private set { instance = value; }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="GlimpseRuntime" /> class.
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <exception cref="System.ArgumentNullException">Throws an exception if <paramref name="configuration"/> is <c>null</c>.</exception>
+        public static void Initialize(IGlimpseConfiguration configuration)
+        {
+            if (configuration == null)
+            {
+                throw new ArgumentNullException("configuration");
+            }
+
+
+            Instance = new GlimpseRuntime(configuration);
+        }
+
         public GlimpseRuntime(IGlimpseConfiguration configuration)
         {
             if (configuration == null)

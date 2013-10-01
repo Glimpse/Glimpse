@@ -116,7 +116,6 @@
     <Compile Include="Framework\CastleDynamicProxyFactoryShould.cs" />
     <Compile Include="Framework\ApplicationPersistenceStoreShould.cs" />
     <Compile Include="Framework\MessageBrokerShould.cs" />
-    <Compile Include="Framework\FactoryShould.cs" />
     <Compile Include="Framework\GlimpseConfigurationShould.cs" />
     <Compile Include="Framework\GlimpseMetadataShould.cs" />
     <Compile Include="Framework\GlimpseRuntimeShould.cs" />

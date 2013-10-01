@@ -34,7 +34,7 @@ namespace Glimpse.Core.Support
                 }
                 catch (Exception exception)
                 {
-                    GlimpseConfiguration.GetLogger().Error(string.Format("Failed requesting custom attributes of assembly '{0}'", assembly.FullName), exception);
+                    GlimpseRuntime.Instance.Configuration.Logger.Error(string.Format("Failed requesting custom attributes of assembly '{0}'", assembly.FullName), exception);
                     nonProcessableAssemblies.Add(assembly);
                 }
 

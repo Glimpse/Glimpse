@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 using Glimpse.Core;
+using Glimpse.Test.Common;
 using Glimpse.Test.Core.Tester;
 using Moq;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Glimpse.Test.Core.Framework
 {
@@ -41,43 +45,19 @@ namespace Glimpse.Test.Core.Framework
         public void Construct()
         {
             var providerMock = new Mock<IFrameworkProvider>();
-            var endpointConfogMock = new Mock<ResourceEndpointConfiguration>();
-            var clientScriptsStub = new List<IClientScript>();
             var loggerMock = new Mock<ILogger>();
-            var encoderMock = new Mock<IHtmlEncoder>();
-            var storeMock = new Mock<IPersistenceStore>();
-            var inspectorsStub = new LinkedList<IInspector>();
             var resourcesStub = new LinkedList<IResource>();
-            var serializerMock = new Mock<ISerializer>();
             var tabsStub = new List<ITab>();
-            var displaysStub = new List<IDisplay>();
             var policiesStub = new List<IRuntimePolicy>();
-            var defaultResourceMock = new Mock<IResource>();
-            var factoryMock = new Mock<IProxyFactory>();
-            var brokerMock = new Mock<IMessageBroker>();
-            Func<IExecutionTimer> timerStrategy = () => new ExecutionTimer(Stopwatch.StartNew());
-            Func<RuntimePolicy> runtimePolicyStrategy = () => RuntimePolicy.On;
 
-            var config = new GlimpseConfiguration(providerMock.Object, endpointConfogMock.Object, clientScriptsStub, loggerMock.Object, RuntimePolicy.On, encoderMock.Object, storeMock.Object, inspectorsStub, resourcesStub, serializerMock.Object, 
-                tabsStub, displaysStub, policiesStub, defaultResourceMock.Object, factoryMock.Object, brokerMock.Object, "~/Glimpse.axd", timerStrategy, runtimePolicyStrategy);
+            var config = new GlimpseConfiguration(providerMock.Object, loggerMock.Object, resourcesStub, 
+                tabsStub, policiesStub);
 
             Assert.Equal(providerMock.Object, config.FrameworkProvider);
-            Assert.Equal(endpointConfogMock.Object, config.ResourceEndpoint);
-            Assert.Equal(clientScriptsStub, config.ClientScripts);
             Assert.Equal(loggerMock.Object, config.Logger);
-            Assert.Equal(encoderMock.Object, config.HtmlEncoder);
-            Assert.Equal(storeMock.Object, config.PersistenceStore);
-            Assert.Equal(inspectorsStub, config.Inspectors);
             Assert.Equal(resourcesStub, config.Resources);
-            Assert.Equal(serializerMock.Object, config.Serializer);
             Assert.Equal(tabsStub, config.Tabs);
-            Assert.Equal(displaysStub, config.Displays);
             Assert.Equal(policiesStub, config.RuntimePolicies);
-            Assert.Equal(defaultResourceMock.Object, config.DefaultResource);
-            Assert.Equal(factoryMock.Object, config.ProxyFactory);
-            Assert.Equal(brokerMock.Object, config.MessageBroker);
-            Assert.Equal(timerStrategy, config.TimerStrategy);
-            Assert.Equal(runtimePolicyStrategy, config.RuntimePolicyStrategy);
             
         }
 
@@ -100,12 +80,6 @@ namespace Glimpse.Test.Core.Framework
         }
 
         [Fact]
-        public void CreateDefaultSerializer()
-        {
-            Assert.NotNull(Configuration.Serializer);
-        }
-
-        [Fact]
         public void CreateDefaultTabsCollection()
         {
             Assert.NotNull(Configuration.Tabs);
@@ -115,18 +89,6 @@ namespace Glimpse.Test.Core.Framework
         public void CreateDefaultValidatorsCollection()
         {
             Assert.NotNull(Configuration.RuntimePolicies);
-        }
-
-        [Fact]
-        public void CreateDefaultClientScripts()
-        {
-            Assert.NotNull(Configuration.ClientScriptsStub);
-        }
-
-        [Fact]
-        public void NotDiscoverInspectors()
-        {
-            Assert.Equal(0, Configuration.Inspectors.Count);
         }
 
         [Fact]
@@ -243,99 +205,375 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void ThrowExceptionWhenConstructedWithNullFrameworkProvider()
         {
-            Assert.Throws<ArgumentNullException>(()=>new GlimpseConfiguration(null, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IInspector>(), new List<IResource>(), Configuration
-                .SerializerMock.Object, new List<ITab>(), new List<IDisplay>(), new List<IRuntimePolicy>(), Configuration.DefaultResourceMock.Object, Configuration.ProxyFactoryMock.Object, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
-        }
-
-        [Fact]
-        public void ThrowExceptionWhenConstructedWithNullEndpointConfig()
-        {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, null, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IInspector>(), new List<IResource>(), Configuration
-                .SerializerMock.Object, new List<ITab>(), new List<IDisplay>(), new List<IRuntimePolicy>(), Configuration.DefaultResourceMock.Object, Configuration.ProxyFactoryMock.Object, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
-        }
-
-        [Fact]
-        public void ThrowExceptionWhenConstructedWithNullClientScripts()
-        {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, null, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IInspector>(), new List<IResource>(), Configuration
-                .SerializerMock.Object, new List<ITab>(), new List<IDisplay>(), new List<IRuntimePolicy>(), Configuration.DefaultResourceMock.Object, Configuration.ProxyFactoryMock.Object, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
+            Assert.Throws<ArgumentNullException>(()=>new GlimpseConfiguration(null, Configuration.LoggerMock.Object, new List<IResource>(), new List<ITab>(), new List<IRuntimePolicy>()));
         }
 
         [Fact]
         public void ThrowExceptionWhenConstructedWithNullLogger()
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, null, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IInspector>(), new List<IResource>(), Configuration
-                .SerializerMock.Object, new List<ITab>(), new List<IDisplay>(), new List<IRuntimePolicy>(), Configuration.DefaultResourceMock.Object, Configuration.ProxyFactoryMock.Object, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
-        }
-
-        [Fact]
-        public void ThrowExceptionWhenConstructedWithNullHtmlEncoder()
-        {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, null, Configuration.PersistenceStoreMock.Object, new List<IInspector>(), new List<IResource>(), Configuration
-                .SerializerMock.Object, new List<ITab>(), new List<IDisplay>(), new List<IRuntimePolicy>(), Configuration.DefaultResourceMock.Object, Configuration.ProxyFactoryMock.Object, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
-        }
-
-        [Fact]
-        public void ThrowExceptionWhenConstructedWithNullRersistanceStore()
-        {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, null, new List<IInspector>(), new List<IResource>(), Configuration
-                .SerializerMock.Object, new List<ITab>(), new List<IDisplay>(), new List<IRuntimePolicy>(), Configuration.DefaultResourceMock.Object, Configuration.ProxyFactoryMock.Object, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
-        }
-
-        [Fact]
-        public void ThrowExceptionWhenConstructedWithNullInspectors()
-        {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, null, new List<IResource>(), Configuration
-                .SerializerMock.Object, new List<ITab>(), new List<IDisplay>(), new List<IRuntimePolicy>(), Configuration.DefaultResourceMock.Object, Configuration.ProxyFactoryMock.Object, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
+            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, null, new List<IResource>(), new List<ITab>(), new List<IRuntimePolicy>()));
         }
 
         [Fact]
         public void ThrowExceptionWhenConstructedWithNullResource()
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IInspector>(), null, Configuration
-                .SerializerMock.Object, new List<ITab>(), new List<IDisplay>(), new List<IRuntimePolicy>(), Configuration.DefaultResourceMock.Object, Configuration.ProxyFactoryMock.Object, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
-        }
-
-        [Fact]
-        public void ThrowExceptionWhenConstructedWithNullSerializer()
-        {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IInspector>(), new List<IResource>(), null, new List<ITab>(), new List<IDisplay>(), new List<IRuntimePolicy>(), Configuration.DefaultResourceMock.Object, Configuration.ProxyFactoryMock.Object, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
+            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.LoggerMock.Object, null, new List<ITab>(), new List<IRuntimePolicy>()));
         }
 
         [Fact]
         public void ThrowExceptionWhenConstructedWithNullTabs()
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IInspector>(), new List<IResource>(), Configuration
-                .SerializerMock.Object, null, new List<IDisplay>(), new List<IRuntimePolicy>(), Configuration.DefaultResourceMock.Object, Configuration.ProxyFactoryMock.Object, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
+            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.LoggerMock.Object, new List<IResource>(), null, new List<IRuntimePolicy>()));
         }
 
         [Fact]
         public void ThrowExceptionWhenConstructedWithNullRuntimePolicies()
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IInspector>(), new List<IResource>(), Configuration
-                .SerializerMock.Object, new List<ITab>(), new List<IDisplay>(), null, Configuration.DefaultResourceMock.Object, Configuration.ProxyFactoryMock.Object, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
+            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.LoggerMock.Object, new List<IResource>(), new List<ITab>(), null));
         }
 
-        [Fact]
-        public void ThrowExceptionWhenConstructedWithNullDefaultResource()
+        [Theory, AutoMock]
+        public void GetDefaultHtmlEncoderWithoutServiceLocator(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore)
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IInspector>(), new List<IResource>(), Configuration
-                .SerializerMock.Object, new List<ITab>(), new List<IDisplay>(), new List<IRuntimePolicy>(), null, Configuration.ProxyFactoryMock.Object, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore);
+
+            var actual = sut.HtmlEncoder;
+
+            Assert.NotNull(actual);
         }
 
-        [Fact]
-        public void ThrowExceptionWhenConstructedWithNullProxyFactory()
+        [Theory, AutoMock]
+        public void GetHtmlEncoderFromServiceLocator(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, IServiceLocator serviceLocator, IHtmlEncoder expected)
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IInspector>(), new List<IResource>(), Configuration
-                .SerializerMock.Object, new List<ITab>(), new List<IDisplay>(), new List<IRuntimePolicy>(), Configuration.DefaultResourceMock.Object, null, Configuration.MessageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
+            serviceLocator.Setup(sl => sl.GetInstance<IHtmlEncoder>()).Returns(expected);
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore)
+            {
+                UserServiceLocator = serviceLocator
+            };
+
+            var actual = sut.HtmlEncoder;
+
+            Assert.Equal(expected, actual);
+            serviceLocator.Verify(l => l.GetInstance<IHtmlEncoder>(), Times.Once());
         }
 
-        [Fact]
-        public void ThrowExceptionWhenConstructedWithNullMessageBroker()
+        [Theory, AutoMock]
+        public void GetDefaultMessageBrokerWithoutServiceLocator(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore)
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(Configuration.FrameworkProviderMock.Object, Configuration.EndpointConfigMock.Object, Configuration.ClientScriptsStub, Configuration.LoggerMock.Object, RuntimePolicy.Off, Configuration.HtmlEncoderMock.Object, Configuration.PersistenceStoreMock.Object, new List<IInspector>(), new List<IResource>(), Configuration
-                .SerializerMock.Object, new List<ITab>(), new List<IDisplay>(), new List<IRuntimePolicy>(), Configuration.DefaultResourceMock.Object, Configuration.ProxyFactoryMock.Object, null, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On));
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore);
+
+            var actual = sut.MessageBroker;
+
+            Assert.NotNull(actual);
         }
-       
+
+        [Theory, AutoMock]
+        public void GetMessageBrokerFromServiceLocator(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, IServiceLocator serviceLocator, IMessageBroker expected)
+        {
+            serviceLocator.Setup(l => l.GetInstance<IMessageBroker>()).Returns(expected);
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore)
+            {
+                UserServiceLocator = serviceLocator
+            };
+
+            var actual = sut.MessageBroker;
+
+            Assert.Equal(expected, actual);
+            serviceLocator.Verify(l => l.GetInstance<IMessageBroker>(), Times.Once());
+        }
+
+        [Theory, AutoMock]
+        public void GetDefaultProxyFactoryWithoutServiceLocator(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore)
+        {
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore);
+
+            var actual = sut.ProxyFactory;
+
+            Assert.NotNull(actual);
+        }
+
+        [Theory, AutoMock]
+        public void GetProxyFactoryFromServiceLocator(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, IServiceLocator serviceLocator, IProxyFactory expected)
+        {
+            serviceLocator.Setup(l => l.GetInstance<IProxyFactory>()).Returns(expected);
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore)
+            {
+                UserServiceLocator = serviceLocator
+            };
+
+            var actual = sut.ProxyFactory;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory, AutoMock]
+        public void GetDefaultSerializerWithoutServiceLocator(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore)
+        {
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore);
+
+            var actual = sut.Serializer;
+
+            Assert.NotNull(actual);
+        }
+
+        [Theory, AutoMock]
+        public void GetSerializerFromServiceLocator(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, IServiceLocator serviceLocator, ISerializer expected)
+        {
+            serviceLocator.Setup(l => l.GetInstance<ISerializer>()).Returns(expected);
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore)
+            {
+                UserServiceLocator = serviceLocator
+            };
+
+            var actual = sut.Serializer;
+
+            Assert.Equal(expected, actual);
+            serviceLocator.Verify(l => l.GetInstance<ISerializer>(), Times.Once());
+        }
+
+        [Theory, AutoMock]
+        public void ThrowExceptionWhenResourceEndpointConfigSetWithNull(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore)
+        {
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore);
+
+            Assert.Throws<ArgumentNullException>(() => sut.ResourceEndpoint = null);
+        }
+
+        [Theory, AutoMock]
+        public void GetDefaultDefaultResourceWithoutServiceLocator(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore)
+        {
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore);
+
+            var actual = sut.DefaultResource;
+
+            Assert.NotNull(actual);
+        }
+
+        [Theory, AutoMock]
+        public void GetDefaultResourceFromServiceLocator(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, IServiceLocator serviceLocator, IResource expected)
+        {
+            serviceLocator.Setup(l => l.GetInstance<IResource>()).Returns(expected);
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore)
+            {
+                UserServiceLocator = serviceLocator
+            };
+
+            var actual = sut.DefaultResource;
+
+            Assert.Equal(expected, actual);
+            serviceLocator.Verify(l => l.GetInstance<IResource>(), Times.Once());
+        }
+
+        [Theory, AutoMock]
+        public void GetBasePolicyFromConfiguration(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore)
+        {
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore);
+
+            var actual = sut.DefaultRuntimePolicy;
+
+            Assert.Equal(RuntimePolicy.On, actual);
+        }
+
+        [Theory, AutoMock]
+        public void ThrowExceptionWhenPersistanceStoreSetWithNull(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore)
+        {
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore);
+
+            Assert.Throws<ArgumentNullException>(() => sut.PersistenceStore = null);
+        }
+
+        [Theory, AutoMock]
+        public void ThrowExceptionWhenConstructedWithNullResourceEndpointConfig(ResourceEndpointConfiguration endpointConfiguration)
+        {
+            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(endpointConfiguration, null));
+        }
+
+        [Theory, AutoMock]
+        public void GetDefaultClientScriptsWithoutServiceLocator(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore)
+        {
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore);
+
+            var actual = sut.ClientScripts;
+            Assert.NotEmpty(actual);
+        }
+
+        [Theory, AutoMock]
+        public void GetClientScriptsFromServiceLocator(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, IServiceLocator serviceLocator, ICollection<IClientScript> expected)
+        {
+            serviceLocator.Setup(ul => ul.GetAllInstances<IClientScript>()).Returns(expected);
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore)
+            {
+                UserServiceLocator = serviceLocator
+            };
+
+            var actual = sut.ClientScripts;
+
+            Assert.Equal(expected, actual);
+            serviceLocator.Verify(ul => ul.GetAllInstances<IClientScript>(), Times.Once());
+        }
+
+        [Theory, AutoMock]
+        public void GetDefaultInspectorsWithoutServiceLocator(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore)
+        {
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore);
+
+            var actual = sut.Inspectors;
+
+            Assert.NotEmpty(actual);
+        }
+
+        [Theory, AutoMock]
+        public void LeverageServiceLocatorForInspectors(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, IServiceLocator serviceLocator, ICollection<IInspector> expected)
+        {
+            serviceLocator.Setup(l => l.GetAllInstances<IInspector>()).Returns(expected);
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore)
+            {
+                UserServiceLocator = serviceLocator
+            };
+
+            var actual = sut.Inspectors;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory, AutoMock]
+        public void GetDefaultSerializationConvertersWithoutServiceLocator(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore)
+        {
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore);
+
+            var actual = sut.SerializationConverters;
+
+            Assert.NotEmpty(actual);
+        }
+
+        [Theory, AutoMock]
+        public void GetServiceLocatorFromServiceLocator(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, IServiceLocator serviceLocator, ICollection<ISerializationConverter> expected)
+        {
+            serviceLocator.Setup(l => l.GetAllInstances<ISerializationConverter>()).Returns(expected);
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore)
+            {
+                UserServiceLocator = serviceLocator
+            };
+
+            var actual = sut.SerializationConverters;
+
+            Assert.Equal(expected, actual);
+            serviceLocator.Verify(l => l.GetAllInstances<ISerializationConverter>(), Times.Once());
+        }
+
+        [Theory, AutoMock]
+        public void GetNullLoggerWithoutServiceLocator(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore)
+        {
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore)
+            {
+                XmlConfiguration = new Section()
+            };
+
+            var actual = sut.Logger;
+
+            Assert.NotNull(actual as NullLogger);
+        }
+
+        [Theory, AutoMock]
+        public void GetDefaultLoggerWithoutServiceLocator(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore)
+        {
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore)
+            {
+                XmlConfiguration = new Section { Logging = { Level = LoggingLevel.Warn } }
+            };
+
+            var actual = sut.Logger;
+
+            Assert.NotNull(actual);
+        }
+
+        [Theory, AutoMock]
+        public void GetLoggerFromServiceLocator(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, IServiceLocator serviceLocator, ILogger expected)
+        {
+            serviceLocator.Setup(ul => ul.GetInstance<ILogger>()).Returns(expected);
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore)
+            {
+                UserServiceLocator = serviceLocator
+            };
+
+            var actual = sut.Logger;
+
+            Assert.Equal(expected, actual);
+            serviceLocator.Verify(ul => ul.GetInstance<ILogger>(), Times.Once());
+        }
+
+        [Theory, AutoMock]
+        public void GetDefaultTabsWithoutServiceLocator(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore)
+        {
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore);
+
+            var actual = sut.Tabs;
+
+            Assert.NotNull(actual);
+        }
+
+        [Theory, AutoMock]
+        public void GetTabsFromServiceLocator(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, IServiceLocator serviceLocator, ICollection<ITab> expected)
+        {
+            serviceLocator.Setup(l => l.GetAllInstances<ITab>()).Returns(expected);
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore)
+            {
+                UserServiceLocator = serviceLocator
+            };
+
+            var actual = sut.Tabs;
+
+            Assert.Equal(expected, actual);
+            serviceLocator.Verify(l => l.GetAllInstances<ITab>(), Times.Once());
+        }
+
+        [Theory, AutoMock]
+        public void GetDefaultResourcesWithoutServiceLocator(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore)
+        {
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore);
+
+            var actual = sut.Resources;
+
+            Assert.NotEmpty(actual);
+        }
+
+        [Theory, AutoMock]
+        public void GetResourcesFromServiceLocator(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, IServiceLocator serviceLocator, ICollection<IResource> expected)
+        {
+            serviceLocator.Setup(l => l.GetAllInstances<IResource>()).Returns(expected);
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore)
+            {
+                UserServiceLocator = serviceLocator
+            };
+            
+            var actual = sut.Resources;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory, AutoMock]
+        public void GetDefaultRuntimePoliciesWithoutServiceLocator(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore)
+        {
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore);
+
+            var actual  = sut.RuntimePolicies;
+
+            Assert.NotEmpty(actual);
+        }
+
+        [Theory, AutoMock]
+        public void GetDefaultRuntimePoliciesFromServiceLocator(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, IServiceLocator serviceLocator, ICollection<IRuntimePolicy> expected)
+        {
+            serviceLocator.Setup(l => l.GetAllInstances<IRuntimePolicy>()).Returns(expected);
+            var sut = new GlimpseConfiguration(endpointConfiguration, persistenceStore)
+            {
+                UserServiceLocator = serviceLocator
+            };
+
+            var actual = sut.RuntimePolicies;
+
+            Assert.Equal(expected, actual);
+            serviceLocator.Verify(l => l.GetAllInstances<IRuntimePolicy>(), Times.Once());
+        }
     }
 }

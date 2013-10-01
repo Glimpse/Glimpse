@@ -180,7 +180,6 @@
     <Compile Include="Framework\CacheSetting.cs" />
     <Compile Include="Framework\CastleDynamicProxyFactory.cs" />
     <Compile Include="Framework\CastleDynamicProxyWrapper.cs" />
-    <Compile Include="Framework\Factory.cs" />
     <Compile Include="Framework\GlimpseException.cs" />
     <Compile Include="Framework\GlimpseMetadata.cs" />
     <Compile Include="Framework\GlimpseRequest.cs" />

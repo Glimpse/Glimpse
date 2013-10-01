@@ -11,27 +11,29 @@ namespace Glimpse.AspNet
     public class HttpModule : IHttpModule  
     {
         private static readonly object LockObj = new object();
-        private static readonly Factory Factory;
+        private static GlimpseConfiguration Configuration;
 
         static HttpModule()
         {
-            var serviceLocator = new AspNetServiceLocator();
-            Factory = new Factory(serviceLocator);
-            ILogger logger = Factory.InstantiateLogger();
-            serviceLocator.Logger = logger;
+            // V2Merge: need to find another way to access logger here
+            // ILogger logger = Factory.InstantiateLogger();
+            // serviceLocator.Logger = Factory.InstantiateLogger();
 
             try
             {
                 BuildManager.GetReferencedAssemblies();
-                serviceLocator.Logger.Debug("Preloaded all referenced assemblies with System.Web.Compilation.BuildManager.GetReferencedAssemblies()");
+                // TODO: Add these back in
+                // serviceLocator.Logger.Debug("Preloaded all referenced assemblies with System.Web.Compilation.BuildManager.GetReferencedAssemblies()");
             }
             catch (Exception exception)
             {
-                serviceLocator.Logger.Error("Call to System.Web.Compilation.BuildManager.GetReferencedAssemblies() failed.", exception);
+                // TODO: Add these back in
+                // serviceLocator.Logger.Error("Call to System.Web.Compilation.BuildManager.GetReferencedAssemblies() failed.", exception);
             }
 
-            AppDomain.CurrentDomain.SetData(Constants.LoggerKey, logger);
-            AppDomain.CurrentDomain.DomainUnload += (sender, e) => OnAppDomainUnload((AppDomain)sender);
+            // V2Merge: need to find another way to access logger here
+            // AppDomain.CurrentDomain.SetData(Constants.LoggerKey, logger);
+            // AppDomain.CurrentDomain.DomainUnload += (sender, e) => OnAppDomainUnload((AppDomain)sender);
         }
 
         private static void OnAppDomainUnload(AppDomain appDomain)
@@ -66,7 +68,13 @@ namespace Glimpse.AspNet
 
         internal void Init(HttpApplicationBase httpApplication)
         {
+            var state = new ApplicationPersistenceStore(new HttpApplicationStateBaseDataStoreAdapter(httpApplication.Application));
+            Configuration = new GlimpseConfiguration(new HttpHandlerEndpointConfiguration(), state);
+
             var runtime = GetRuntime(httpApplication.Application);
+
+            // V2Merge: is setting the logger here instead of in init okay?
+            AppDomain.CurrentDomain.SetData(Constants.LoggerKey, Configuration.Logger);
 
             if (runtime.IsInitialized || runtime.Initialize())
             {
@@ -90,7 +98,9 @@ namespace Glimpse.AspNet
 
                     if (runtime == null)
                     {
-                        runtime = Factory.InstantiateRuntime();
+                        GlimpseRuntime.Initialize(Configuration);
+
+                        runtime = GlimpseRuntime.Instance;
 
                         applicationState.Add(Constants.RuntimeKey, runtime);
                     }
