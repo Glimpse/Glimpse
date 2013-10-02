@@ -62,67 +62,6 @@ namespace Glimpse.Core.Framework
             // TODO: Instantiate the user's IOC container (if they have one)
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GlimpseConfiguration" /> class.
-        /// </summary>
-        /// <param name="frameworkProvider">The framework provider.</param>
-        /// <param name="endpointConfiguration">The resource endpoint configuration.</param>
-        /// <param name="clientScripts">The client scripts collection.</param>
-        /// <param name="logger">The logger.</param>
-        /// <param name="defaultRuntimePolicy">The default runtime policy.</param>
-        /// <param name="htmlEncoder">The Html encoder.</param>
-        /// <param name="persistenceStore">The persistence store.</param>
-        /// <param name="inspectors">The inspectors collection.</param>
-        /// <param name="resources">The resources collection.</param>
-        /// <param name="serializer">The serializer.</param>
-        /// <param name="tabs">The tabs collection.</param>
-        /// <param name="runtimePolicies">The runtime policies collection.</param>
-        /// <param name="defaultResource">The default resource.</param>
-        /// <param name="proxyFactory">The proxy factory.</param>
-        /// <param name="messageBroker">The message broker.</param>
-        /// <param name="endpointBaseUri">The endpoint base Uri.</param>
-        /// <param name="timerStrategy">The timer strategy.</param>
-        /// <param name="runtimePolicyStrategy">The runtime policy strategy.</param>
-        /// <exception cref="System.ArgumentNullException">An exception is thrown if any parameter is <c>null</c>.</exception>
-        public GlimpseConfiguration(
-            IFrameworkProvider frameworkProvider, 
-            ILogger logger,
-            ICollection<IResource> resources,
-            ICollection<ITab> tabs,
-            ICollection<IRuntimePolicy> runtimePolicies)
-        {
-            if (frameworkProvider == null)
-            {
-                throw new ArgumentNullException("frameworkProvider");
-            }
-
-            if (logger == null)
-            {
-                throw new ArgumentNullException("logger");
-            }
-
-            if (resources == null)
-            {
-                throw new ArgumentNullException("resources");
-            }
-
-            if (tabs == null)
-            {
-                throw new ArgumentNullException("tabs");
-            }
-
-            if (runtimePolicies == null)
-            {
-                throw new ArgumentNullException("runtimePolicies");
-            }
-
-            Logger = logger;
-            FrameworkProvider = frameworkProvider;
-            Resources = resources;
-            Tabs = tabs;
-            RuntimePolicies = runtimePolicies;
-        }
-
         public IServiceLocator UserServiceLocator 
         {
             get { return userServiceLocator; }

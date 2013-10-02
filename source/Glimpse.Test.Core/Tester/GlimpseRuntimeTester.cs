@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
@@ -78,9 +77,15 @@ namespace Glimpse.Test.Core.Tester
             var tabs = new ReflectionDiscoverableCollection<ITab>(loggerMock.Object);
             var policies = new ReflectionDiscoverableCollection<IRuntimePolicy>(loggerMock.Object);
 
-            var configuration =
-                new GlimpseConfiguration(frameworkProviderMock.Object, loggerMock.Object, resources, tabs, policies);
-
+            var configuration = new GlimpseConfiguration(new Mock<ResourceEndpointConfiguration>().Object,
+                new Mock<IPersistenceStore>().Object)
+            {
+                FrameworkProvider = frameworkProviderMock.Object,
+                Logger = loggerMock.Object,
+                Resources = resources,
+                Tabs = tabs,
+                RuntimePolicies = policies
+            };
 
             return new GlimpseRuntimeTester(configuration, frameworkProviderMock);
         }
