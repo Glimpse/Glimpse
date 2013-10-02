@@ -61,7 +61,7 @@ namespace Glimpse.Ado.AlternateType
 
         private IExecutionTimer TimerStrategy
         {
-            get { return timerStrategy ?? (timerStrategy = GlimpseConfiguration.GetConfiguredTimerStrategy()()); }
+            get { return timerStrategy ?? (timerStrategy = GlimpseRuntime.Instance.Configuration.TimerStrategy()); }
             set { timerStrategy = value; }
         }
 

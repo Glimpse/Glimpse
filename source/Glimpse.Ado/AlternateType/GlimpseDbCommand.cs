@@ -88,8 +88,13 @@ namespace Glimpse.Ado.AlternateType
 
         internal IExecutionTimer TimerStrategy
         {
-            get { return timerStrategy ?? (timerStrategy = GlimpseConfiguration.GetConfiguredTimerStrategy()()); }
+            get { return timerStrategy ?? (timerStrategy = GlimpseRuntime.Instance.Configuration.TimerStrategy()); }
             set { timerStrategy = value; }
+        }
+
+        protected override DbParameterCollection DbParameterCollection
+        {
+            get { return InnerCommand.Parameters; }
         }
 
         public bool BindByName
@@ -115,9 +120,14 @@ namespace Glimpse.Ado.AlternateType
             }
         }
 
-        protected override DbParameterCollection DbParameterCollection
+        public override void Cancel()
         {
-            get { return InnerCommand.Parameters; }
+            InnerCommand.Cancel();
+        }
+
+        public override void Prepare()
+        {
+            InnerCommand.Prepare();
         }
 
         protected override DbConnection DbConnection
@@ -140,16 +150,6 @@ namespace Glimpse.Ado.AlternateType
                     InnerCommand.Connection = InnerConnection.InnerConnection; 
                 }
             }
-        }
-
-        public override void Cancel()
-        {
-            InnerCommand.Cancel();
-        }
-
-        public override void Prepare()
-        {
-            InnerCommand.Prepare();
         }
 
         protected override DbTransaction DbTransaction
@@ -214,6 +214,18 @@ namespace Glimpse.Ado.AlternateType
         {
             return InnerCommand.CreateParameter();
         }
+
+protected override void Dispose(bool disposing)
+{
+    if (disposing && InnerCommand != null)
+    {
+        InnerCommand.Dispose();
+    }
+
+    InnerCommand = null;
+    InnerConnection = null;
+    base.Dispose(disposing);
+}
 
         #if NET45
                 public override async Task<object> ExecuteScalarAsync(CancellationToken cancellationToken)
@@ -323,17 +335,5 @@ namespace Glimpse.Ado.AlternateType
 
                     return new GlimpseDbDataReader(reader, InnerCommand, InnerConnection.ConnectionId, commandId);
                 }
-
-protected override void Dispose(bool disposing)
-{
-    if (disposing && InnerCommand != null)
-    {
-        InnerCommand.Dispose();
-    }
-
-    InnerCommand = null;
-    InnerConnection = null;
-    base.Dispose(disposing);
-}
     }
 }

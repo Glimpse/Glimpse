@@ -22,7 +22,7 @@ namespace Glimpse.Core.Framework
     public class GlimpseConfiguration : IGlimpseConfiguration
     {
         private IMessageBroker messageBroker;
-        private static Func<IExecutionTimer> timerStrategy;
+        private Func<IExecutionTimer> timerStrategy;
         private ILogger logger;
         private ICollection<IClientScript> clientScripts;
         private IResource defaultResource;
@@ -835,23 +835,6 @@ namespace Glimpse.Core.Framework
             }
         }
 
-        [Obsolete("HACK: To support TraceListener with TraceSource via web.config")]
-        public static Func<IExecutionTimer> GetConfiguredTimerStrategy()
-        {
-            return () =>
-            {
-                try
-                {
-                    return timerStrategy();
-                }
-                catch
-                {
-                    // Avoid exception being thrown from threads without access to request store
-                    return null;
-                }
-            }; 
-        }
-
         private bool TrySingleInstanceFromServiceLocators<T>(out T instance) where T : class
         {
             if (UserServiceLocator != null)
@@ -866,7 +849,6 @@ namespace Glimpse.Core.Framework
             instance = null;
             return false;
         }
-
 
         private bool TryAllInstancesFromServiceLocators<T>(out ICollection<T> instance) where T : class
         {

@@ -25,7 +25,7 @@ namespace Glimpse.Core
         public TraceListener() 
         {
             MessageBroker = GlimpseRuntime.Instance.Configuration.MessageBroker;
-            TimerStrategy = GlimpseConfiguration.GetConfiguredTimerStrategy();
+            TimerStrategy = GlimpseRuntime.Instance.Configuration.TimerStrategy;
         } 
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Glimpse.Core
         public TraceListener(string initializeData) 
         {
             MessageBroker = GlimpseRuntime.Instance.Configuration.MessageBroker;
-            TimerStrategy = GlimpseConfiguration.GetConfiguredTimerStrategy();
+            TimerStrategy = GlimpseRuntime.Instance.Configuration.TimerStrategy;
         }
         //// ReSharper restore UnusedMember.Global
 
