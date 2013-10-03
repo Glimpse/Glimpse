@@ -17,12 +17,6 @@ namespace Glimpse.Core.Framework
         ICollection<IClientScript> ClientScripts { get; }
 
         /// <summary>
-        /// Gets the framework provider.
-        /// </summary>
-        /// <value>The framework provider.</value>
-        IFrameworkProvider FrameworkProvider { get; }
-
-        /// <summary>
         /// Gets the HTML encoder.
         /// </summary>
         /// <value>The HTML encoder.</value>

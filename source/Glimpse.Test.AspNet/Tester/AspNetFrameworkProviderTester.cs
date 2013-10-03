@@ -14,7 +14,7 @@ namespace Glimpse.Test.AspNet.Tester
 
         public Mock<HttpResponseBase> HttpResponseMock { get; set; }
     
-        private AspNetFrameworkProviderTester(ILogger logger) : base(logger)
+        private AspNetFrameworkProviderTester(HttpContextBase context, ILogger logger) : base(context, logger)
         {
             HttpResponseMock = new Mock<HttpResponseBase>();
 
@@ -36,7 +36,7 @@ namespace Glimpse.Test.AspNet.Tester
 
         public static AspNetFrameworkProviderTester Create()
         {
-            return new AspNetFrameworkProviderTester(new Mock<ILogger>().Object);
+            return new AspNetFrameworkProviderTester(new Mock<HttpContextBase>().Object, new Mock<ILogger>().Object); // TODO: Fix Hack
         }
     }
 }

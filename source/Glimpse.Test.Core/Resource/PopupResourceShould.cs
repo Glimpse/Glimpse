@@ -5,6 +5,7 @@ using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 using Glimpse.Core.Resource;
 using Glimpse.Core.ResourceResult;
+using Glimpse.Test.Core.Extensions;
 using Moq;
 using Xunit;
 using Xunit.Extensions;
@@ -51,8 +52,9 @@ namespace Glimpse.Test.Core.Resource
         {
             var resource = new PopupResource();
             var configMock = new Mock<IGlimpseConfiguration>();
+            var providerMock = new Mock<IFrameworkProvider>().Setup();
 
-            Assert.Throws<ArgumentNullException>(() => resource.Execute(null, configMock.Object));
+            Assert.Throws<ArgumentNullException>(() => resource.Execute(null, configMock.Object, providerMock.Object));
         }
 
         [Fact]
@@ -60,8 +62,9 @@ namespace Glimpse.Test.Core.Resource
         {
             var resource = new PopupResource();
             var contextMock = new Mock<IResourceContext>();
+            var providerMock = new Mock<IFrameworkProvider>().Setup();
 
-            Assert.Throws<ArgumentNullException>(() => resource.Execute(contextMock.Object, null));
+            Assert.Throws<ArgumentNullException>(() => resource.Execute(contextMock.Object, null, providerMock.Object));
         }
 
         [Theory]
@@ -74,8 +77,9 @@ namespace Glimpse.Test.Core.Resource
             var contextMock = new Mock<IResourceContext>();
             contextMock.Setup(c => c.Parameters.TryGetValue("requestId", out value)).Returns(hasValue);
             var configMock = new Mock<IGlimpseConfiguration>();
+            var providerMock = new Mock<IFrameworkProvider>().Setup();
 
-            var result = resource.Execute(contextMock.Object, configMock.Object);
+            var result = resource.Execute(contextMock.Object, configMock.Object, providerMock.Object);
 
             var statusCodeResult = result as StatusCodeResourceResult;
 
@@ -96,9 +100,11 @@ namespace Glimpse.Test.Core.Resource
 
             Func<Guid?, string> strategy = (id) => requestId + version;
             var configMock = new Mock<IGlimpseConfiguration>();
+
+            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            providerMock.Setup(f => f.HttpRequestStore.Get(Constants.ClientScriptsStrategy)).Returns(() => strategy);
             
-            configMock.Setup(c => c.FrameworkProvider.HttpRequestStore.Get(Constants.ClientScriptsStrategy)).Returns(() => strategy);
-            var result = resource.Execute(contextMock.Object, configMock.Object);
+            var result = resource.Execute(contextMock.Object, configMock.Object, providerMock.Object);
 
             var htmlResourceResult = result as HtmlResourceResult;
 

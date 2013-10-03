@@ -9,7 +9,6 @@ namespace Glimpse.Test.Core.Tester
 {
     public class GlimpseRuntimeTester : GlimpseRuntime
     {
-        public Mock<IFrameworkProvider> FrameworkProviderMock { get; set; }
         public Mock<ResourceEndpointConfiguration> EndpointConfigMock { get; set; }
         public Mock<IDataStore> HttpRequestStoreMock { get; set; }
         public Mock<ITab> TabMock { get; set; }
@@ -26,9 +25,8 @@ namespace Glimpse.Test.Core.Tester
         public Mock<IDynamicClientScript> DynamicScriptMock { get; set; }
         public Mock<IHtmlEncoder> EncoderMock { get; set; }
 
-        private GlimpseRuntimeTester(GlimpseConfiguration configuration, Mock<IFrameworkProvider> frameworkProviderMock) : base(configuration)
+        private GlimpseRuntimeTester(GlimpseConfiguration configuration) : base(configuration)
         {
-            FrameworkProviderMock = frameworkProviderMock;
             HttpRequestStoreMock = new Mock<IDataStore>();
             TabMock = new Mock<ITab>().Setup();
             InspectorMock = new Mock<IInspector>();
@@ -57,9 +55,6 @@ namespace Glimpse.Test.Core.Tester
             DynamicScriptMock.Setup(ds => ds.GetResourceName()).Returns("aResource");
             EncoderMock = new Mock<IHtmlEncoder>();
 
-
-            FrameworkProviderMock.Setup(fp => fp.RequestMetadata).Returns(RequestMetadataMock.Object);
-
             configuration.Serializer = SerializerMock.Object;
             configuration.PersistenceStore = PersistenceStoreMock.Object;
             configuration.Logger = LoggerMock.Object;
@@ -71,7 +66,6 @@ namespace Glimpse.Test.Core.Tester
 
         public static GlimpseRuntimeTester Create()
         {
-            var frameworkProviderMock = new Mock<IFrameworkProvider>().Setup();
             var loggerMock = new Mock<ILogger>();
             var resources = new ReflectionDiscoverableCollection<IResource>(loggerMock.Object);
             var tabs = new ReflectionDiscoverableCollection<ITab>(loggerMock.Object);
@@ -80,14 +74,13 @@ namespace Glimpse.Test.Core.Tester
             var configuration = new GlimpseConfiguration(new Mock<ResourceEndpointConfiguration>().Object,
                 new Mock<IPersistenceStore>().Object)
             {
-                FrameworkProvider = frameworkProviderMock.Object,
                 Logger = loggerMock.Object,
                 Resources = resources,
                 Tabs = tabs,
                 RuntimePolicies = policies
             };
 
-            return new GlimpseRuntimeTester(configuration, frameworkProviderMock);
+            return new GlimpseRuntimeTester(configuration);
         }
     }
 }

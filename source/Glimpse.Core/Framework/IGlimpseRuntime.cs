@@ -20,7 +20,7 @@ namespace Glimpse.Core.Framework
         /// Called when ever the implementing framework registers a request start. Specifically, 
         /// with the ASP.NET provider, this is wired to the <c>BeginRequest</c> method.
         /// </remarks>
-        void BeginRequest();
+        void BeginRequest(IFrameworkProvider frameworkProvider);
 
         /// <summary>
         /// Ends the request.
@@ -29,7 +29,7 @@ namespace Glimpse.Core.Framework
         /// Called when ever the implementing framework registers a request end. Specifically, 
         /// with the ASP.NET provider, this is wired to the <c>PostReleaseRequestState</c> method.
         /// </remarks>
-        void EndRequest();
+        void EndRequest(IFrameworkProvider frameworkProvider);
 
         /// <summary>
         /// Executes the default resource.
@@ -40,7 +40,7 @@ namespace Glimpse.Core.Framework
         /// <seealso cref="Glimpse.Core.Extensibility.IResourceResult"/>
         /// <seealso cref="Glimpse.Core.Extensibility.IResource"/>
         /// </remarks>
-        void ExecuteDefaultResource();
+        void ExecuteDefaultResource(IFrameworkProvider frameworkProvider);
 
         /// <summary>
         /// Executes the resource.
@@ -53,7 +53,7 @@ namespace Glimpse.Core.Framework
         /// <seealso cref="Glimpse.Core.Extensibility.IResourceResult"/>
         /// <seealso cref="Glimpse.Core.Extensibility.IResource"/>
         /// </remarks>
-        void ExecuteResource(string resourceName, ResourceParameters parameters);
+        void ExecuteResource(IFrameworkProvider frameworkProvider, string resourceName, ResourceParameters parameters);
 
         /// <summary>
         /// Begins the session access.
@@ -63,7 +63,7 @@ namespace Glimpse.Core.Framework
         /// executed off this methods should have access to the session state store. Specifically, 
         /// with the ASP.NET provider, this is wired to the <c>PostAcquireRequestState</c> method.
         /// </remarks>
-        void BeginSessionAccess();
+        void BeginSessionAccess(IFrameworkProvider frameworkProvider);
 
         /// <summary>
         /// Ends the session access.
@@ -73,7 +73,7 @@ namespace Glimpse.Core.Framework
         /// executed off this methods should still have access to the session state store. Specifically, 
         /// with the ASP.NET provider, this is wired to the <c>PostRequestHandlerExecute</c> method.
         /// </remarks>
-        void EndSessionAccess();
+        void EndSessionAccess(IFrameworkProvider frameworkProvider);
 
         /// <summary>
         /// Initializes this instance.
@@ -86,5 +86,7 @@ namespace Glimpse.Core.Framework
         /// <c>Init</c> method.
         /// </remarks>
         bool Initialize();
+
+        IGlimpseConfiguration Configuration { get; }
     }
 }

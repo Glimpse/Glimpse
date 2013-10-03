@@ -11,6 +11,8 @@ namespace Glimpse.Test.AspNet.Tester
         public Mock<HttpContextBase> ContextMock { get; set; }
         public Mock<HttpApplicationStateBase> ApplicationStateMock { get; set; }
         public Mock<IGlimpseRuntime> RuntimeMock { get; set; }
+        public Mock<IGlimpseConfiguration> ConfigurationMock { get; set; }
+        public Mock<IFrameworkProvider> ProviderMock { get; set; }
         public NameValueCollection QueryString { get; set; }
         public string ResourceName { get; set; }
 
@@ -18,8 +20,12 @@ namespace Glimpse.Test.AspNet.Tester
         {
             ResourceName = "Test";
             QueryString = new NameValueCollection {{"n", ResourceName}, {"One", "1"}};
+             
+            ProviderMock = new Mock<IFrameworkProvider>();
+            ConfigurationMock = new Mock<IGlimpseConfiguration>();
 
             RuntimeMock = new Mock<IGlimpseRuntime>();
+            RuntimeMock.Setup(r => r.Configuration).Returns(ConfigurationMock.Object);
 
             ApplicationStateMock = new Mock<HttpApplicationStateBase>();
             ApplicationStateMock.Setup(a => a.Get(Constants.RuntimeKey)).Returns(RuntimeMock.Object);

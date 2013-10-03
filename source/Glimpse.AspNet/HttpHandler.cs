@@ -28,14 +28,15 @@ namespace Glimpse.AspNet
             var queryString = context.Request.QueryString;
 
             var resourceName = queryString["n"];
+            var frameworkProvider = new AspNetFrameworkProvider(context, runtime.Configuration.Logger);
 
             if (string.IsNullOrEmpty(resourceName))
             {
-                runtime.ExecuteDefaultResource();
+                runtime.ExecuteDefaultResource(frameworkProvider);
             }
             else
             {
-                runtime.ExecuteResource(resourceName, new ResourceParameters(queryString.AllKeys.Where(key => key != null).ToDictionary(key => key, key => queryString[key])));
+                runtime.ExecuteResource(frameworkProvider, resourceName, new ResourceParameters(queryString.AllKeys.Where(key => key != null).ToDictionary(key => key, key => queryString[key])));
             }
         }
     }

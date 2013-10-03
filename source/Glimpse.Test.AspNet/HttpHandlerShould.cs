@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using Glimpse.AspNet;
 using Glimpse.Core.Framework;
@@ -43,7 +41,7 @@ namespace Glimpse.Test.AspNet
         {
             Handler.ProcessRequest(Handler.ContextMock.Object);
 
-            Handler.RuntimeMock.Verify(r=>r.ExecuteResource(Handler.ResourceName, It.IsAny<ResourceParameters>()),Times.Once());
+            Handler.RuntimeMock.Verify(r => r.ExecuteResource(It.IsAny<IFrameworkProvider>(), Handler.ResourceName, It.IsAny<ResourceParameters>()), Times.Once());
         }
 
         [Fact]
@@ -53,7 +51,7 @@ namespace Glimpse.Test.AspNet
 
             Handler.ProcessRequest(Handler.ContextMock.Object);
 
-            Handler.RuntimeMock.Verify(r => r.ExecuteDefaultResource(), Times.Once());
+            Handler.RuntimeMock.Verify(r => r.ExecuteDefaultResource(It.IsAny<IFrameworkProvider>()), Times.Once());
         }
     }
 }

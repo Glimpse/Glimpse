@@ -27,7 +27,6 @@ namespace Glimpse.Core.Framework
         private ICollection<IClientScript> clientScripts;
         private IResource defaultResource;
         private string endpointBaseUri;
-        private IFrameworkProvider frameworkProvider;
         private IHtmlEncoder htmlEncoder;
         private IPersistenceStore persistenceStore;
         private ICollection<IInspector> inspectors;
@@ -218,32 +217,6 @@ namespace Glimpse.Core.Framework
                 }
 
                 endpointBaseUri = value;
-            }
-        }
-
-        // TODO: Remove this property from this class
-        /// <summary>
-        /// Gets or sets the <see cref="IFrameworkProvider"/>.
-        /// </summary>
-        /// <value>
-        /// The configured <see cref="IFrameworkProvider"/>.
-        /// </value>
-        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public IFrameworkProvider FrameworkProvider
-        {
-            get
-            {
-                return frameworkProvider;
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                frameworkProvider = value;
             }
         }
 

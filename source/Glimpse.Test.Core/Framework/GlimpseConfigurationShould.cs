@@ -69,12 +69,6 @@ namespace Glimpse.Test.Core.Framework
         }
 
         [Fact]
-        public void FrameworkProviderCannotBeNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => sut.FrameworkProvider = null);
-        }
-
-        [Fact]
         public void HtmlEncoderCannotBeNull()
         {
             Assert.Throws<ArgumentNullException>(() => sut.HtmlEncoder = null);

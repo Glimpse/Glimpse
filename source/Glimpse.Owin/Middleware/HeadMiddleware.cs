@@ -21,7 +21,7 @@ namespace Glimpse.Owin.Middleware
 
         public async Task Invoke(IDictionary<string, object> environment)
         {
-            GlimpseRuntime.Instance.BeginRequest();
+            GlimpseRuntime.Instance.BeginRequest(new OwinFrameworkProvider(environment, app));
 
             // this where to check to see if this should handle the request directly (ala glimpse.axd)
             // this is where to start a new request for processing

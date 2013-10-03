@@ -104,7 +104,7 @@ namespace Glimpse.Core.Resource
         /// Use of <see cref="IPrivilegedResource" /> is reserved.
         /// </remarks>
         /// 
-        public IResourceResult Execute(IResourceContext context, IGlimpseConfiguration configuration)
+        public IResourceResult Execute(IResourceContext context, IGlimpseConfiguration configuration, IFrameworkProvider frameworkProvider)
         {
             const string glimpseConfigurationResourceName = "Glimpse.Core.EmbeddedResources." + InternalName + ".html";
             Stream glimpseConfigurationResourceStream = this.GetType().Assembly.GetManifestResourceStream(glimpseConfigurationResourceName);
@@ -208,7 +208,7 @@ namespace Glimpse.Core.Resource
                     }).ToArray());
 
             // Details : More
-            glimpseConfigurationTemplate.Add("frameworkProviderType", configuration.FrameworkProvider.GetType().FullName);
+            glimpseConfigurationTemplate.Add("frameworkProviderType", frameworkProvider.GetType().FullName);
             glimpseConfigurationTemplate.Add("htmlEncoderType", configuration.HtmlEncoder.GetType().FullName);
             glimpseConfigurationTemplate.Add("loggerType", configuration.Logger.GetType().FullName);
             glimpseConfigurationTemplate.Add("persistenceStoreType", configuration.PersistenceStore.GetType().FullName);

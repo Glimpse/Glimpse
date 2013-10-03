@@ -11,17 +11,15 @@ namespace Glimpse.AspNet
 {
     public class AspNetFrameworkProvider : IFrameworkProvider
     {
-        /// <summary>
-        /// Wrapper around HttpContext.Current for testing purposes. Not for public use.
-        /// </summary>
         private HttpContextBase context;
 
-        private readonly static bool AsyncSupportDisabled = Convert.ToBoolean(ConfigurationManager.AppSettings["Glimpse:DisableAsyncSupport"]);
-
-        public AspNetFrameworkProvider(ILogger logger)
+        public AspNetFrameworkProvider(HttpContextBase context, ILogger logger)
         {
+            Context = context;
             Logger = logger;
         }
+
+        private readonly static bool AsyncSupportDisabled = Convert.ToBoolean(ConfigurationManager.AppSettings["Glimpse:DisableAsyncSupport"]);
 
         public IDataStore HttpRequestStore
         {
@@ -43,11 +41,14 @@ namespace Glimpse.AspNet
             get { return new RequestMetadata(Context); }
         }
 
+        // V2Merge: We may be able to get away with a simple property in the future
         internal HttpContextBase Context
         {
             get { return context ?? TryGetOrCaptureLogicalContext(); }
             set { context = value; }
         }
+
+        private ILogger Logger { get; set; }
 
         private static HttpContextBase TryGetOrCaptureLogicalContext()
         {
@@ -64,8 +65,6 @@ namespace Glimpse.AspNet
 
             return context;
         }
-
-        private ILogger Logger { get; set; }
 
         public void SetHttpResponseHeader(string name, string value)
         {

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
+using System.Web;
 
 namespace Glimpse.AspNet
 {
@@ -19,7 +20,7 @@ namespace Glimpse.AspNet
             var type = typeof(T);
             if (type == typeof(IFrameworkProvider))
             {
-                return new AspNetFrameworkProvider(Logger) as T;
+                return new AspNetFrameworkProvider(new HttpContextWrapper(HttpContext.Current), Logger) as T; // TODO: Fix this hack!
             }
 
             if (type == typeof(ResourceEndpointConfiguration))

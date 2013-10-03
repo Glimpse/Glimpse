@@ -73,7 +73,7 @@ namespace Glimpse.Core.Resource
         /// <remarks>
         /// Use of <see cref="IPrivilegedResource" /> is reserved.
         /// </remarks>
-        public IResourceResult Execute(IResourceContext context, IGlimpseConfiguration configuration)
+        public IResourceResult Execute(IResourceContext context, IGlimpseConfiguration configuration, IFrameworkProvider frameworkProvider)
         {
             if (context == null)
             {
@@ -100,7 +100,7 @@ namespace Glimpse.Core.Resource
             }
 #endif
 
-            var requestStore = configuration.FrameworkProvider.HttpRequestStore;
+            var requestStore = frameworkProvider.HttpRequestStore;
             var generateScriptTags = requestStore.Get<Func<Guid?, string>>(Constants.ClientScriptsStrategy);
 
             var scriptTags = generateScriptTags(requestId); 
