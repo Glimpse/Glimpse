@@ -51,9 +51,11 @@ namespace Glimpse.WebForms.Tab
             if (hasRun == null)
             {
                 context.TabStore.Set("hasRun", "true");
+
+                var previouslyEnabled = trace.IsEnabled;
                  
                 trace.IsEnabled = true;
-                trace.TraceFinished += (sender, args) => trace.IsEnabled = false; 
+                trace.TraceFinished += (sender, args) => trace.IsEnabled = previouslyEnabled; 
  
                 var traceContextVerifyStartMethod = typeof(System.Web.TraceContext).GetMethod("VerifyStart", BindingFlags.Instance | BindingFlags.NonPublic);
                 traceContextVerifyStartMethod.Invoke(trace, null);
