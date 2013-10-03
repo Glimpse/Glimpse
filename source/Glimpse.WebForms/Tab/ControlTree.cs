@@ -59,11 +59,14 @@ namespace Glimpse.WebForms.Tab
             }
 
             var requestDataField = typeof(System.Web.TraceContext).GetField("_requestData", BindingFlags.Instance | BindingFlags.NonPublic);
-            var requestData = requestDataField.GetValue(trace) as DataSet;
-            if (requestData != null)
-            {
-                var treeData = ProcessData(requestData.Tables["Trace_Control_Tree"]);
-                return treeData; 
+            if (requestDataField != null) 
+            { 
+                var requestData = requestDataField.GetValue(trace) as DataSet;
+                if (requestData != null)
+                {
+                    var treeData = ProcessData(requestData.Tables["Trace_Control_Tree"]);
+                    return treeData;
+                }
             }
              
             return null;
@@ -82,8 +85,8 @@ namespace Glimpse.WebForms.Tab
                     var item = new ControlTreeItem();
                     var current = enumerator.Current as DataRow;
 
-                    item.ParentControlId = (string)(current["Trace_Parent_Id"]);
-                    item.ControlId = (string)(current["Trace_Control_Id"]);
+                    item.ParentControlId = current["Trace_Parent_Id"].CastOrDefault<string>();
+                    item.ControlId = current["Trace_Control_Id"].CastOrDefault<string>();
 
                     var num = treeTracker.GetValueOrDefault(item.ParentControlId);
                     treeTracker[item.ControlId] = num + 1;
@@ -93,19 +96,10 @@ namespace Glimpse.WebForms.Tab
                         item.ControlId = "\t" + item.ControlId; 
 
                     item.Level = num; 
-                    item.Type = (string)current["Trace_Type"];
-
-                    var obj1 = current["Trace_Render_Size"];
-                    if (obj1 != null)
-                        item.RenderSize = (int)obj1;
-
-                    var obj2 = current["Trace_Viewstate_Size"];
-                    if (obj2 != null)
-                        item.ViewstateSize = (int)obj2;
-
-                    var obj3 = current["Trace_Controlstate_Size"];
-                    if (obj3 != null)
-                        item.ControlstateSize = (int)obj3; 
+                    item.Type = current["Trace_Type"].CastOrDefault<string>(); 
+                    item.RenderSize = current["Trace_Render_Size"].CastOrDefault<int>();
+                    item.ViewstateSize = current["Trace_Viewstate_Size"].CastOrDefault<int>(); 
+                    item.ControlstateSize = current["Trace_Controlstate_Size"].CastOrDefault<int>(); 
                     
                     result.Add(item);
                 }
@@ -114,6 +108,6 @@ namespace Glimpse.WebForms.Tab
             }
 
             return null;
-        }
+        } 
     }
 }

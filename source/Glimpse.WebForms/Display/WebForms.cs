@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+    
+using System;
 using System.Collections.Generic;
 using System.Linq; 
 using Glimpse.Core.Extensibility;
@@ -31,18 +33,22 @@ namespace Glimpse.WebForms.Display
         private object ProcessData(IEnumerable<ITraceMessage> traceMessages)
         {
             var webFormsMessages = traceMessages.Where(x => x.Category == "ms").ToList();
+            if (webFormsMessages.Any())
+            { 
+                var loadingList = webFormsMessages.Where(x => x.Message.Contains("Load")); 
+                var loadingFirst = loadingList.First();
+                var loadingLast = loadingList.Last();
+                var loadingTime = loadingLast.FromFirst - loadingFirst.FromFirst;
 
-            var loadingList = webFormsMessages.Where(x => x.Message.Contains("Load"));
-            var loadingFirst = loadingList.First();
-            var loadingLast = loadingList.Last();
-            var loadingTime = loadingLast.FromFirst - loadingFirst.FromFirst;
-
-            var renderingList = webFormsMessages.Where(x => x.Message.Contains("Render") || x.Message.Contains("State"));
-            var renderingFirst = renderingList.First();
-            var renderingLast = renderingList.Last();
-            var renderingTime = renderingLast.FromFirst - renderingFirst.FromFirst;
+                var renderingList = webFormsMessages.Where(x => x.Message.Contains("Render") || x.Message.Contains("State"));
+                var renderingFirst = renderingList.First();
+                var renderingLast = renderingList.Last();
+                var renderingTime = renderingLast.FromFirst - renderingFirst.FromFirst;
              
-            return new { loadingTime, renderingTime };
+                return new { loadingTime, renderingTime };
+            }
+
+            return null;
         }
 
         public void Setup(ITabSetupContext context)
