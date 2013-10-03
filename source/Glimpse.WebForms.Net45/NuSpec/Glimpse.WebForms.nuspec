@@ -14,10 +14,9 @@
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET 4.0 application.</description>
         <summary>ASP.NET 4.0 web debugging and diagnostics tool.</summary>
         <releaseNotes>
-Lightweight release for Asp.Net:
- - Removed IpAddress as its not used anywhere 
- - Fixed possible null refernce exception when access clientId
- - Removed unused AspNet.Net35 Net35Backport
+Heavyweight release for WebForms:
+ - Advent of the Control Tree and Execution tabs
+ - WebForms data now shows up in HUD (including ViewState size)
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse</tags>
         <dependencies>
