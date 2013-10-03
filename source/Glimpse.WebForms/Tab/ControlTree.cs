@@ -13,6 +13,9 @@ namespace Glimpse.WebForms.Tab
 {
     public class ControlTree : AspNetTab, ITabLayout, IKey
     {
+        private static readonly MethodInfo traceContextVerifyStartMethod = typeof(System.Web.TraceContext).GetMethod("VerifyStart", BindingFlags.Instance | BindingFlags.NonPublic);
+        private static readonly FieldInfo requestDataField = typeof(System.Web.TraceContext).GetField("_requestData", BindingFlags.Instance | BindingFlags.NonPublic);
+
         private static readonly object Layout = TabLayout.Create()
                 .Row(r =>
                 {
@@ -53,17 +56,19 @@ namespace Glimpse.WebForms.Tab
                 context.TabStore.Set("hasRun", "true");
 
                 var previouslyEnabled = trace.IsEnabled;
-                 
+                
+                //Turn tracing on at the begining of the request
                 trace.IsEnabled = true;
+
+                //When request is finished, lets put things back to the way they where 
                 trace.TraceFinished += (sender, args) => trace.IsEnabled = previouslyEnabled; 
  
-                var traceContextVerifyStartMethod = typeof(System.Web.TraceContext).GetMethod("VerifyStart", BindingFlags.Instance | BindingFlags.NonPublic);
+                //Make sure sate of trace is setup
                 traceContextVerifyStartMethod.Invoke(trace, null);
 
                 return null;
             }
 
-            var requestDataField = typeof(System.Web.TraceContext).GetField("_requestData", BindingFlags.Instance | BindingFlags.NonPublic);
             if (requestDataField != null) 
             { 
                 var requestData = requestDataField.GetValue(trace) as DataSet;
