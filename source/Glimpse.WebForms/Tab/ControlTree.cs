@@ -24,27 +24,12 @@ namespace Glimpse.WebForms.Tab
             {
                 r.Cell("controlId").AsKey().WithTitle("Control ID");
                 r.Cell("type").WithTitle("Type");
-                r.Cell("renderSize")
-                    .Class("mono")
-                    .AlignRight()
-                    .WidthInPixels(150)
-                    .WithTitle("Render (w/ children)")
-                    .Suffix(" Bytes");
-                r.Cell("viewstateSize")
-                    .Class("mono")
-                    .AlignRight()
-                    .WidthInPixels(125)
-                    .WithTitle("ViewState")
-                    .Suffix(" Bytes");
-                r.Cell("controlstateSize")
-                    .Class("mono")
-                    .AlignRight()
-                    .WidthInPixels(125)
-                    .WithTitle("ControlState")
-                    .Suffix(" Bytes");
+                r.Cell("renderSize").Class("mono").AlignRight().WidthInPixels(150).WithTitle("Render (w/ children)").Suffix(" Bytes");
+                r.Cell("viewstateSize").Class("mono").AlignRight().WidthInPixels(125).WithTitle("ViewState").Suffix(" Bytes");
+                r.Cell("controlstateSize").Class("mono").AlignRight().WidthInPixels(125).WithTitle("ControlState").Suffix(" Bytes");
             }).Row(r =>
             {
-                r.Cell("viewstate").WithTitle("ViewState").SpanColumns(5).AsMinimalDisplay();
+                r.Cell("viewstate").WithTitle("ViewState").SpanColumns(5).AsMinimalDisplay().PaddingLeftInPercent(25);
             }).Build();
 
         public override string Name
