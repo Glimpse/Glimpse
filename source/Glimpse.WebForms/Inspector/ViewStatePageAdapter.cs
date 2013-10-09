@@ -8,6 +8,6 @@ namespace Glimpse.WebForms.Inspector
         public override PageStatePersister GetStatePersister()
         {
             return new ViewStatePageStatePersister(Page);
-        }
+        } 
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Web;
 using System.Web.UI;
@@ -12,17 +13,19 @@ namespace Glimpse.WebForms.Support
         public void Process(ControlTreeItemTrackModel root)
         {
             var viewState = HttpContext.Current.Items["_GlimpseWebFormViewState"] as Pair;
+            var controlTypes = HttpContext.Current.Items["_GlimpseWebFormControlTreeType"] as Dictionary<string, Type>;
+
             if (viewState != null && root.Children.Count > 0)
             {
                 var innerViewstate = viewState.Second as Triplet;
                 if (innerViewstate != null)
                 {
-                    ProcessRecord(root.Children[0], innerViewstate.Third);
+                    ProcessRecord(root.Children[0], innerViewstate.Third, controlTypes);
                 }
             }
         }
 
-        private void ProcessRecord(ControlTreeItemTrackModel item, object viewstate)
+        private void ProcessRecord(ControlTreeItemTrackModel item, object viewstate, Dictionary<string, Type> controlTypes)
         {
             if (viewstate != null)
             {
@@ -30,15 +33,15 @@ namespace Glimpse.WebForms.Support
                 if (viewStateType == typeof(Pair))
                 {
                     var pair = (Pair)viewstate;
-                    item.Record.Viewstate = ProcessData(item.Record.Type, pair.First);
-                    ProcessRecord(item, pair.Second);
+                    item.Record.Viewstate = ProcessData(controlTypes[item.ControlId], item.Record.Type, pair.First);
+                    ProcessRecord(item, pair.Second, controlTypes);
                 }
                 else if (viewStateType == typeof(Triplet))
                 {
                     var triplet = (Triplet)viewstate;
-                    item.Record.Viewstate = ProcessData(item.Record.Type, triplet.First);
+                    item.Record.Viewstate = ProcessData(controlTypes[item.ControlId], item.Record.Type, triplet.First);
                         //NEED TO DO SOMETHING WITH SECOND ITEM?
-                    ProcessRecord(item, triplet.Third);
+                    ProcessRecord(item, triplet.Third, controlTypes);
                 }
                 else if (viewStateType == typeof(ArrayList))
                 {
@@ -46,13 +49,13 @@ namespace Glimpse.WebForms.Support
                     for (var i = 0; i < list.Count; i = i + 2)
                     {
                         var index = (int)list[i];
-                        ProcessRecord(item.Children[index], list[i + 1]);
+                        ProcessRecord(item.Children[index], list[i + 1], controlTypes);
                     }
                 }
             }
         }
 
-        private object ProcessData(string type, object data)
+        private object ProcessData(Type rootType, string type, object data)
         {
             var result = (object)null;
             if (data != null)
@@ -64,7 +67,7 @@ namespace Glimpse.WebForms.Support
                 else if (type == "System.Web.UI.WebControls.ListView")
                 {
                     var list = (System.Object[])data;
-                    result = ProcessData("System.Web.UI.WebControls.DataBoundControl", list[0]);
+                    result = ProcessData(rootType, "System.Web.UI.WebControls.DataBoundControl", list[0]);
                     if (list[1] != null)
                     {
                         var temp = new Dictionary<object, object>();
@@ -79,12 +82,12 @@ namespace Glimpse.WebForms.Support
                     var pair = data as Pair;
                     if (pair != null)
                     {
-                        result = ProcessData("System.Web.UI.WebControls.WebControl", pair.First);
+                        result = ProcessData(rootType, "System.Web.UI.WebControls.WebControl", pair.First);
                         if (pair.Second != null)
                         {
                             var temp = new Dictionary<string, object>();
                             temp.Add("Base State", result);
-                            temp.Add("Model Data Source State", ProcessData("System.Web.UI.WebControls.MethodParametersDictionary", pair.Second));
+                            temp.Add("Model Data Source State", ProcessData(rootType, "System.Web.UI.WebControls.MethodParametersDictionary", pair.Second));
                             result = temp;
                         }
                     } 
@@ -94,12 +97,12 @@ namespace Glimpse.WebForms.Support
                     var pair = data as Pair;
                     if (pair != null)
                     {
-                        result = ProcessData("System.Web.UI.WebControls.Control", pair.First);
+                        result = ProcessData(rootType, "System.Web.UI.WebControls.Control", pair.First);
                         if (pair.Second != null)
                         {
                             var temp = new Dictionary<string, object>();
                             temp.Add("Base State", result);
-                            temp.Add("Attribute State", ProcessData(type, pair.Second));
+                            temp.Add("Attribute State", ProcessData(rootType, type, pair.Second));
                             result = temp;
                         }
                     }
@@ -129,16 +132,16 @@ namespace Glimpse.WebForms.Support
                     if (list != null)
                     {
                         var temp = new Dictionary<string, object>();
-                        temp.Add("Base State", ProcessData("System.Web.UI.WebControls.DataBoundControl", list[0]));
-                        temp.Add("Pager Style", ProcessData("System.Web.UI.WebControls.FormView", list[1]));
-                        temp.Add("Header Style", ProcessData("System.Web.UI.WebControls.FormView", list[2]));
-                        temp.Add("Footer Style", ProcessData("System.Web.UI.WebControls.FormView", list[3]));
-                        temp.Add("Row Style", ProcessData("System.Web.UI.WebControls.FormView", list[4]));
-                        temp.Add("Edit Row Style", ProcessData("System.Web.UI.WebControls.FormView", list[5]));
-                        temp.Add("Insert Row Style", ProcessData("System.Web.UI.WebControls.FormView", list[6]));
-                        temp.Add("Bound Field Style", ProcessData("System.Web.UI.WebControls.FormView", list[7]));
-                        temp.Add("Pager Settings", ProcessData("System.Web.UI.WebControls.FormView", list[8]));
-                        temp.Add("Control Style Created", ProcessData("System.Web.UI.WebControls.FormView", list[9]));
+                        temp.Add("Base State", ProcessData(rootType, "System.Web.UI.WebControls.DataBoundControl", list[0]));
+                        temp.Add("Pager Style", ProcessData(rootType, "System.Web.UI.WebControls.FormView", list[1]));
+                        temp.Add("Header Style", ProcessData(rootType, "System.Web.UI.WebControls.FormView", list[2]));
+                        temp.Add("Footer Style", ProcessData(rootType, "System.Web.UI.WebControls.FormView", list[3]));
+                        temp.Add("Row Style", ProcessData(rootType, "System.Web.UI.WebControls.FormView", list[4]));
+                        temp.Add("Edit Row Style", ProcessData(rootType, "System.Web.UI.WebControls.FormView", list[5]));
+                        temp.Add("Insert Row Style", ProcessData(rootType, "System.Web.UI.WebControls.FormView", list[6]));
+                        temp.Add("Bound Field Style", ProcessData(rootType, "System.Web.UI.WebControls.FormView", list[7]));
+                        temp.Add("Pager Settings", ProcessData(rootType, "System.Web.UI.WebControls.FormView", list[8]));
+                        temp.Add("Control Style Created", ProcessData(rootType, "System.Web.UI.WebControls.FormView", list[9]));
 
                         result = temp;
                     }
@@ -152,26 +155,22 @@ namespace Glimpse.WebForms.Support
                     }
 
                     if (result == null)
-                    {
-                        var recordType = TypeManager.TryDeriveType(type);
-                        if (recordType != null)
+                    {  
+                        if (typeof(UserControl).IsAssignableFrom(rootType))
                         {
-                            if (typeof(UserControl).IsAssignableFrom(recordType))
+                            var pair = data as Pair;
+                            if (pair != null && (pair.First != null || pair.Second != null))
                             {
-                                var pair = data as Pair;
-                                if (pair != null && (pair.First != null || pair.Second != null))
+                                result = ProcessData(rootType, type + "_First", pair.First);
+                                if (pair.Second != null)
                                 {
-                                    result = ProcessData(type + "_First", pair.First);
-                                    if (pair.Second != null)
-                                    {
-                                        var temp = new Dictionary<string, object>();
-                                        temp.Add("Base State", result);
-                                        temp.Add("Attribute State", ProcessData(type + "_Second", pair.Second));
-                                        result = temp;
-                                    }
+                                    var temp = new Dictionary<string, object>();
+                                    temp.Add("Base State", result);
+                                    temp.Add("Attribute State", ProcessData(rootType, type + "_Second", pair.Second));
+                                    result = temp;
                                 }
                             }
-                        }
+                        } 
                     }
                 }
 
