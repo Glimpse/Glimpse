@@ -25,17 +25,69 @@ namespace Glimpse.Test.AspNet
         [Fact]
         public void GetGlimpseRuntimeFromAppState()
         {
-            var runtime = HttpModule.GetRuntime(HttpModule.AppStateMock.Object);
+            var runtime = HttpModule.GetGlimpseRuntimeWrapper(HttpModule.AppStateMock.Object);
 
-            Assert.Equal(HttpModule.RuntimeMock.Object, runtime);
+            Assert.Equal(HttpModule.GlimpseRuntimeWrapper, runtime);
         }
 
         [Fact]
         public void CallGlimpseRuntimeBeginRequestOnBeginRequest()
         {
-            HttpModule.BeginRequest(HttpModule.ContextMock.Object);
+            HttpModule.AppMock.Raise(m => m.BeginRequest += null, EventArgs.Empty);
+            HttpModule.RuntimeMock.Verify(r => r.BeginRequest(), Times.Once());
+        }
 
-            HttpModule.RuntimeMock.Verify(r=>r.BeginRequest(), Times.Once());
+        [Fact]
+        public void CallGlimpseRuntimeBeginRequestOnlyOnceEvenIfBeginRequestIsRaisedTwice()
+        {
+            HttpModule.AppMock.Raise(m => m.BeginRequest += null, EventArgs.Empty);
+            HttpModule.AppMock.Raise(m => m.BeginRequest += null, EventArgs.Empty);
+            HttpModule.RuntimeMock.Verify(r => r.BeginRequest(), Times.Once());
+        }
+
+        [Fact]
+        public void CallGlimpseRuntimeBeginSessionAccessOnPostAcquireRequestState()
+        {
+            HttpModule.AppMock.Raise(m => m.PostAcquireRequestState += null, EventArgs.Empty);
+            HttpModule.RuntimeMock.Verify(r => r.BeginSessionAccess(), Times.Once());
+        }
+
+        [Fact]
+        public void CallGlimpseRuntimeBeginSessionAccessOnlyOnceEvenIfPostAcquireRequestStateIsRaisedTwice()
+        {
+            HttpModule.AppMock.Raise(m => m.PostAcquireRequestState += null, EventArgs.Empty);
+            HttpModule.AppMock.Raise(m => m.PostAcquireRequestState += null, EventArgs.Empty);
+            HttpModule.RuntimeMock.Verify(r => r.BeginSessionAccess(), Times.Once());
+        }
+
+        [Fact]
+        public void CallGlimpseRuntimeEndSessionAccessOnPostRequestHandlerExecute()
+        {
+            HttpModule.AppMock.Raise(m => m.PostRequestHandlerExecute += null, EventArgs.Empty);
+            HttpModule.RuntimeMock.Verify(r => r.EndSessionAccess(), Times.Once());
+        }
+
+        [Fact]
+        public void CallGlimpseRuntimeEndSessionAccessOnlyOnceEvenIfPostRequestHandlerExecuteIsRaisedTwice()
+        {
+            HttpModule.AppMock.Raise(m => m.PostRequestHandlerExecute += null, EventArgs.Empty);
+            HttpModule.AppMock.Raise(m => m.PostRequestHandlerExecute += null, EventArgs.Empty);
+            HttpModule.RuntimeMock.Verify(r => r.EndSessionAccess(), Times.Once());
+        }
+
+        [Fact]
+        public void CallGlimpseRuntimeEndRequestOnPostReleaseRequestState()
+        {
+            HttpModule.AppMock.Raise(m => m.PostReleaseRequestState += null, EventArgs.Empty);
+            HttpModule.RuntimeMock.Verify(r => r.EndRequest(), Times.Once());
+        }
+
+        [Fact]
+        public void CallGlimpseRuntimeEndRequestOnlyOnceEvenIfPostReleaseRequestStateIsRaisedTwice()
+        {
+            HttpModule.AppMock.Raise(m => m.PostReleaseRequestState += null, EventArgs.Empty);
+            HttpModule.AppMock.Raise(m => m.PostReleaseRequestState += null, EventArgs.Empty);
+            HttpModule.RuntimeMock.Verify(r => r.EndRequest(), Times.Once());
         }
 
         [Fact]

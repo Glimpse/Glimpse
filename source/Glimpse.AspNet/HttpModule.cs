@@ -2,15 +2,14 @@
 using System.Threading;
 using System.Web;
 using System.Web.Compilation;
-using Glimpse.AspNet.Extensions;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 
 namespace Glimpse.AspNet
 {
-    public class HttpModule : IHttpModule  
+    public class HttpModule : IHttpModule
     {
-        private static readonly object LockObj = new object();
+        private static readonly object glimpseRuntimeWrapperInitializationLock = new object();
         private static readonly Factory Factory;
 
         static HttpModule()
@@ -36,12 +35,7 @@ namespace Glimpse.AspNet
 
         private static void OnAppDomainUnload(AppDomain appDomain)
         {
-            ILogger logger = appDomain.GetData(Constants.LoggerKey) as ILogger;
-
-            if (logger == null)
-            {
-                return;
-            }
+            ILogger logger = GetCurrentLogger();
 
             logger.Fatal(
                 "AppDomain with Id: '{0}' and BaseDirectory: '{1}' has been unloaded. Any in memory data stores have been lost. {2}",
@@ -56,7 +50,14 @@ namespace Glimpse.AspNet
 
         public void Init(HttpApplication httpApplication)
         {
-            Init(WithTestable(httpApplication));
+            GetCurrentLogger().Debug(
+                Resources.HttpModuleInitIsCalled,
+                this.GetType(),
+                this.GetHashCode(),
+                httpApplication.GetType(),
+                httpApplication.GetHashCode());
+
+            Init(new HttpApplicationWrapper(httpApplication));
         }
 
         public void Dispose()
@@ -66,84 +67,49 @@ namespace Glimpse.AspNet
 
         internal void Init(HttpApplicationBase httpApplication)
         {
-            var runtime = GetRuntime(httpApplication.Application);
-
-            if (runtime.IsInitialized || runtime.Initialize())
-            {
-                httpApplication.BeginRequest += (context, e) => BeginRequest(WithTestable(context));
-                httpApplication.PostAcquireRequestState += (context, e) => BeginSessionAccess(WithTestable(context));
-                httpApplication.PostRequestHandlerExecute += (context, e) => EndSessionAccess(WithTestable(context));
-                httpApplication.PostReleaseRequestState += (context, e) => EndRequest(WithTestable(context));
-                httpApplication.PreSendRequestHeaders += (context, e) => SendHeaders(WithTestable(context));
-            }
+            var glimpseRuntimeWrapper = this.GetGlimpseRuntimeWrapper(httpApplication.Application);
+            glimpseRuntimeWrapper.Initialize(httpApplication);
         }
 
-        internal IGlimpseRuntime GetRuntime(HttpApplicationStateBase applicationState)
+        internal GlimpseRuntimeWrapper GetGlimpseRuntimeWrapper(HttpApplicationStateBase applicationState)
         {
-            var runtime = applicationState[Constants.RuntimeKey] as IGlimpseRuntime;
+            Func<GlimpseRuntimeWrapper> getStoredGlimpseRuntimeWrapper = () => applicationState[Constants.RuntimeKey] as GlimpseRuntimeWrapper;
 
-            if (runtime == null)
+            var glimpseRuntimeWrapper = getStoredGlimpseRuntimeWrapper();
+
+            if (glimpseRuntimeWrapper == null)
             {
-                lock (LockObj)
+                lock (glimpseRuntimeWrapperInitializationLock)
                 {
-                    runtime = applicationState[Constants.RuntimeKey] as IGlimpseRuntime;
+                    glimpseRuntimeWrapper = getStoredGlimpseRuntimeWrapper();
 
-                    if (runtime == null)
+                    if (glimpseRuntimeWrapper == null)
                     {
-                        runtime = Factory.InstantiateRuntime();
+                        ILogger logger = GetCurrentLogger();
+                        glimpseRuntimeWrapper = new GlimpseRuntimeWrapper(Factory.InstantiateFrameworkProvider(), Factory.InstantiateRuntime(), logger);
+                        applicationState.Add(Constants.RuntimeKey, glimpseRuntimeWrapper);
 
-                        applicationState.Add(Constants.RuntimeKey, runtime);
+                        logger.Debug(
+                            Resources.HttpModuleInstantiatedGlimpseRuntimeWrapper,
+                            glimpseRuntimeWrapper.GetType(),
+                            applicationState.GetType(),
+                            applicationState.GetHashCode());
                     }
                 }
             }
 
-            return runtime;
+            return glimpseRuntimeWrapper;
         }
 
-        internal void BeginRequest(HttpContextBase httpContext)
+        private static ILogger GetCurrentLogger()
         {
-            // TODO: Add Logging to either methods here or in Runtime
-            var runtime = GetRuntime(httpContext.Application);
+            ILogger logger = AppDomain.CurrentDomain.GetData(Constants.LoggerKey) as ILogger;
+            if (logger == null)
+            {
+                throw new GlimpseException("There is no '" + typeof(ILogger).FullName + "' available in the current AppDomain's data, behind the key '" + Constants.LoggerKey + "'.");
+            }
 
-            runtime.BeginRequest();
-        }
-
-        internal void EndRequest(HttpContextBase httpContext)
-        {
-            var runtime = GetRuntime(httpContext.Application);
-
-            runtime.EndRequest();
-        }
-
-        internal void SendHeaders(HttpContextBase httpContext)
-        {
-            httpContext.HeadersSent(true);
-        }
-
-        private static HttpContextBase WithTestable(object sender)
-        {
-            var httpApplication = sender as HttpApplication;
-
-            return new HttpContextWrapper(httpApplication.Context);
-        }
-
-        private static HttpApplicationBase WithTestable(HttpApplication httpApplication)
-        {
-            return new HttpApplicationWrapper(httpApplication);
-        }
-
-        private void BeginSessionAccess(HttpContextBase httpContext)
-        {
-            var runtime = GetRuntime(httpContext.Application);
-
-            runtime.BeginSessionAccess();
-        }
-
-        private void EndSessionAccess(HttpContextBase httpContext)
-        {
-            var runtime = GetRuntime(httpContext.Application);
-
-            runtime.EndSessionAccess();
+            return logger;
         }
     }
 }

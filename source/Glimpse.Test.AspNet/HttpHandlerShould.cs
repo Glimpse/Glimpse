@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using Glimpse.AspNet;
 using Glimpse.Core.Framework;
@@ -33,7 +31,7 @@ namespace Glimpse.Test.AspNet
         [Fact]
         public void Return404WithoutGlimpseRuntime()
         {
-            Handler.ApplicationStateMock.Setup(a => a.Get(Constants.RuntimeKey)).Returns<IGlimpseRuntime>(null);
+            Handler.ApplicationStateMock.Setup(a => a.Get(Constants.RuntimeKey)).Returns<GlimpseRuntimeWrapper>(null);
 
             Assert.Throws<HttpException>(()=>Handler.ProcessRequest(Handler.ContextMock.Object));
         }

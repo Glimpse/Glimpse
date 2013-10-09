@@ -60,6 +60,7 @@
     <Compile Include="Extensions\HttpContextExtensions.cs" />
     <Compile Include="Extensions\RuntimePolicyContextExtensions.cs" />
     <Compile Include="Extensions\TabContextExtensions.cs" />
+    <Compile Include="GlimpseRuntimeWrapper.cs" />
     <Compile Include="HttpApplicationBase.cs" />
     <Compile Include="HttpApplicationStateBaseDataStoreAdapter.cs" />
     <Compile Include="HttpApplicationWrapper.cs" />
