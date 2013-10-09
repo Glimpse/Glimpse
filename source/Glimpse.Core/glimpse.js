@@ -835,7 +835,7 @@ glimpse.render.engine.util.table = (function($) {
                     return result;
                 },
                 getRowClass: function(data, rowIndex) {
-                    return data[rowIndex]._metadata && data[rowIndex]._metadata.style ? ' ' + data[rowIndex]._metadata.style : '';
+                    return data[rowIndex] && data[rowIndex]._metadata && data[rowIndex]._metadata.style ? ' ' + data[rowIndex]._metadata.style : '';
                 },
                 getRowValue: function(dataRow, fieldIndex, header) {
                     return dataRow[header[fieldIndex]];

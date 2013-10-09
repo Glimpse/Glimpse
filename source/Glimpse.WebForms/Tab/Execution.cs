@@ -63,14 +63,14 @@ namespace Glimpse.WebForms.Tab
             var webFormsMessages = traceMessages.Where(x => x.Category == "ms").ToList(); 
             if (webFormsMessages.Count > 0)
             {
-                var result = new List<TraceItem>();
+                var result = new List<ExecutionItemModel>();
                 var x = 0;
                 for (var i = 0; i < webFormsMessages.Count; i += 2)
                 {
                     var message1 = webFormsMessages[i];
                     var message2 = webFormsMessages[i + 1];
                      
-                    var item = new TraceItem();
+                    var item = new ExecutionItemModel();
                     item.Ordinal = x++;
                     item.Event = ProcessEventName(message1.Message);
                     item.FromFirst = message1.FromFirst;
