@@ -86,7 +86,7 @@ namespace Glimpse.AspNet
                     if (glimpseRuntimeWrapper == null)
                     {
                         ILogger logger = GetCurrentLogger();
-                        glimpseRuntimeWrapper = new GlimpseRuntimeWrapper(Factory.InstantiateFrameworkProvider(), Factory.InstantiateRuntime(), logger);
+                        glimpseRuntimeWrapper = new GlimpseRuntimeWrapper(Factory.InstantiateFrameworkProvider(), Factory.InstantiateRuntime(), logger, Factory.GetLoggingConfiguration().WriteRequestFlowHandlingLogs);
                         applicationState.Add(Constants.RuntimeKey, glimpseRuntimeWrapper);
 
                         logger.Debug(

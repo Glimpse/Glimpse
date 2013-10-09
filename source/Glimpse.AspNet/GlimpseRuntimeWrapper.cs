@@ -12,8 +12,9 @@ namespace Glimpse.AspNet
         private readonly IFrameworkProvider frameworkProvider;
         private readonly IGlimpseRuntime glimpseRuntime;
         private readonly ILogger logger;
+        private readonly bool writeRequestFlowHandlingLogs;
 
-        public GlimpseRuntimeWrapper(IFrameworkProvider frameworkProvider, IGlimpseRuntime glimpseRuntime, ILogger logger)
+        public GlimpseRuntimeWrapper(IFrameworkProvider frameworkProvider, IGlimpseRuntime glimpseRuntime, ILogger logger, bool writeRequestFlowHandlingLogs)
         {
             if (frameworkProvider == null)
             {
@@ -35,10 +36,16 @@ namespace Glimpse.AspNet
             }
 
             this.logger = logger;
+            this.writeRequestFlowHandlingLogs = writeRequestFlowHandlingLogs;
         }
 
         public void Initialize(HttpApplicationBase httpApplication)
         {
+            if (httpApplication == null)
+            {
+                throw new ArgumentNullException("httpApplication");
+            }
+
             if (this.glimpseRuntime.IsInitialized || this.glimpseRuntime.Initialize())
             {
                 // we explicitly unsubscribe first in case this method is called multiple times for the same httpApplication,
@@ -61,7 +68,11 @@ namespace Glimpse.AspNet
         /// </summary>
         public void ExecuteDefaultResource()
         {
-            this.logger.Debug(Resources.GlimpseRuntimeWrapperExecuteDefaultResource);
+            if (this.writeRequestFlowHandlingLogs)
+            {
+                this.logger.Debug(Resources.GlimpseRuntimeWrapperExecuteDefaultResource);
+            }
+
             this.glimpseRuntime.ExecuteDefaultResource();
         }
 
@@ -73,7 +84,11 @@ namespace Glimpse.AspNet
         /// <exception cref="System.ArgumentNullException">Throws an exception if either parameter is <c>null</c>.</exception>
         public void ExecuteResource(string resourceName, ResourceParameters parameters)
         {
-            this.logger.Debug(Resources.GlimpseRuntimeWrapperExecuteResource, resourceName);
+            if (this.writeRequestFlowHandlingLogs)
+            {
+                this.logger.Debug(Resources.GlimpseRuntimeWrapperExecuteResource, resourceName);
+            }
+
             this.glimpseRuntime.ExecuteResource(resourceName, parameters);
         }
 
@@ -87,12 +102,20 @@ namespace Glimpse.AspNet
 
             if (this.frameworkProvider.HttpRequestStore.Contains(eventHandlingKey))
             {
-                this.logger.Warn(Resources.GlimpseRuntimeWrapperAlreadyHandledEvent, eventName, sender.GetType(), sender.GetHashCode());
+                if (this.writeRequestFlowHandlingLogs)
+                {
+                    this.logger.Warn(Resources.GlimpseRuntimeWrapperAlreadyHandledEvent, eventName, sender.GetType(), sender.GetHashCode());
+                }
+
                 return;
             }
 
             this.frameworkProvider.HttpRequestStore.Set(eventHandlingKey, true);
-            this.logger.Debug(Resources.GlimpseRuntimeWrapperHandlingEvent, eventName, sender.GetType(), sender.GetHashCode());
+
+            if (this.writeRequestFlowHandlingLogs)
+            {
+                this.logger.Debug(Resources.GlimpseRuntimeWrapperHandlingEvent, eventName, sender.GetType(), sender.GetHashCode());
+            }
 
             eventHandler();
         }

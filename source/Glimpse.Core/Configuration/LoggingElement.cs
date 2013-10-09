@@ -47,5 +47,21 @@ namespace Glimpse.Core.Configuration
             get { return (string)base["logLocation"]; }
             set { base["logLocation"] = value; }
         }
+
+        /// <summary>
+        /// Gets or sets the value indicating whether request flow handling logs should be written or not.
+        /// </summary>
+        /// <remarks>
+        /// Even if the value is <c>true</c> then the log messages will only appear in the log if logging is enabled with at least a <c>LogLevel</c> of <c>Debug</c>
+        /// </remarks>
+        /// <value>
+        /// Value indicating whether request flow handling logs should be written or not.
+        /// </value>
+        [ConfigurationProperty("writeRequestFlowHandlingLogs", DefaultValue = false)]
+        public bool WriteRequestFlowHandlingLogs
+        {
+            get { return (bool)base["writeRequestFlowHandlingLogs"]; }
+            set { base["writeRequestFlowHandlingLogs"] = value; }
+        }
     }
 }

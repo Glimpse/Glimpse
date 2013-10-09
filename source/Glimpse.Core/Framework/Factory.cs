@@ -492,6 +492,15 @@ namespace Glimpse.Core.Framework
             return new CastleDynamicProxyFactory(InstantiateLogger(), InstantiateMessageBroker(), InstantiateTimerStrategy(), InstantiateRuntimePolicyStrategy());
         }
 
+        /// <summary>
+        /// Returns the current <see cref="LoggingElement"/>
+        /// </summary>
+        /// <returns>The current <see cref="LoggingElement"/></returns>
+        public LoggingElement GetLoggingConfiguration()
+        {
+            return this.Configuration.Logging;
+        }
+
         private static IEnumerable<Type> ToEnumerable(TypeElementCollection collection)
         {
             foreach (TypeElement typeElement in collection)
