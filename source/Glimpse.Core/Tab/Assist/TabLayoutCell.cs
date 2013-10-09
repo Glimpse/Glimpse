@@ -33,10 +33,14 @@ namespace Glimpse.Core.Tab.Assist
         public bool? IsCode { get; private set; }
         
         public string CodeType { get; private set; }
-        
+
         public string Align { get; private set; }
-        
+
         public string Width { get; private set; }
+
+        public string PaddingLeft { get; private set; }
+
+        public string PaddingRight { get; private set; }
         
         public int? Span { get; private set; }
         
@@ -119,6 +123,50 @@ namespace Glimpse.Core.Tab.Assist
             return this;
         }
 
+        public TabLayoutCell PaddingLeftInPixels(int pixels)
+        {
+            if (pixels < 0)
+            {
+                throw new ArgumentException("Pixels must not be a negative value.", "pixels");
+            }
+
+            PaddingLeft = pixels + "px";
+            return this;
+        }
+
+        public TabLayoutCell PaddingLeftInPercent(int percent)
+        {
+            if (percent < 0)
+            {
+                throw new ArgumentException("Percent must not be a negative value.", "percent");
+            }
+
+            PaddingLeft = percent + "%";
+            return this;
+        }
+
+        public TabLayoutCell PaddingRightInPixels(int pixels)
+        {
+            if (pixels < 0)
+            {
+                throw new ArgumentException("Pixels must not be a negative value.", "pixels");
+            }
+
+            PaddingRight = pixels + "px";
+            return this;
+        }
+
+        public TabLayoutCell PaddingRightInPercent(int percent)
+        {
+            if (percent < 0)
+            {
+                throw new ArgumentException("Percent must not be a negative value.", "percent");
+            }
+
+            PaddingRight = percent + "%";
+            return this;
+        }
+         
         public TabLayoutCell SpanColumns(int rows)
         {
             if (rows < 1)
