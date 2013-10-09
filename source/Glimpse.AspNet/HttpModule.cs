@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Reflection;
+using System.Threading;
 using System.Web;
 using System.Web.Compilation;
 using Glimpse.AspNet.Extensions;
@@ -17,7 +17,8 @@ namespace Glimpse.AspNet
         {
             var serviceLocator = new AspNetServiceLocator();
             Factory = new Factory(serviceLocator);
-            serviceLocator.Logger = Factory.InstantiateLogger();
+            ILogger logger = Factory.InstantiateLogger();
+            serviceLocator.Logger = logger;
 
             try
             {
@@ -28,6 +29,29 @@ namespace Glimpse.AspNet
             {
                 serviceLocator.Logger.Error("Call to System.Web.Compilation.BuildManager.GetReferencedAssemblies() failed.", exception);
             }
+
+            AppDomain.CurrentDomain.SetData(Constants.LoggerKey, logger);
+            AppDomain.CurrentDomain.DomainUnload += (sender, e) => OnAppDomainUnload((AppDomain)sender);
+        }
+
+        private static void OnAppDomainUnload(AppDomain appDomain)
+        {
+            ILogger logger = appDomain.GetData(Constants.LoggerKey) as ILogger;
+
+            if (logger == null)
+            {
+                return;
+            }
+
+            logger.Fatal(
+                "AppDomain with Id: '{0}' and BaseDirectory: '{1}' has been unloaded. Any in memory data stores have been lost. {2}",
+                appDomain.Id,
+                appDomain.BaseDirectory,
+                HttpRuntimeShutdownMessageResolver.ResolveShutdownMessage());
+
+            // NLog writes its logs asynchronously, which means that if we don't wait, chances are the log will not be written 
+            // before the appdomain is actually shut down, so we sleep for 100ms and hopefully that is enough for NLog to do its thing
+            Thread.Sleep(100);
         }
 
         public void Init(HttpApplication httpApplication)
@@ -44,8 +68,6 @@ namespace Glimpse.AspNet
         {
             var runtime = GetRuntime(httpApplication.Application);
 
-            AppDomain.CurrentDomain.SetData(Constants.LoggerKey, Factory.InstantiateLogger());
-
             if (runtime.IsInitialized || runtime.Initialize())
             {
                 httpApplication.BeginRequest += (context, e) => BeginRequest(WithTestable(context));
@@ -53,31 +75,6 @@ namespace Glimpse.AspNet
                 httpApplication.PostRequestHandlerExecute += (context, e) => EndSessionAccess(WithTestable(context));
                 httpApplication.PostReleaseRequestState += (context, e) => EndRequest(WithTestable(context));
                 httpApplication.PreSendRequestHeaders += (context, e) => SendHeaders(WithTestable(context));
-                AppDomain.CurrentDomain.DomainUnload += UnloadDomain;
-            }
-        }
-
-        internal void UnloadDomain(object sender, EventArgs e)
-        {
-            var appDomain = sender as AppDomain;
-            var logger = appDomain.GetData(Constants.LoggerKey) as ILogger;
-            string shutDownMessage = "Reason for shutdown: ";
-            var httpRuntimeType = typeof(HttpRuntime);
-
-            // Get shutdown message from HttpRuntime via ScottGu: http://weblogs.asp.net/scottgu/archive/2005/12/14/433194.aspx
-            var httpRuntime = httpRuntimeType.InvokeMember("_theRuntime", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.GetField, null, null, null) as HttpRuntime;
-            if (httpRuntime != null)
-            {
-                shutDownMessage += httpRuntimeType.InvokeMember("_shutDownMessage", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField, null, httpRuntime, null) as string;
-            }
-            else
-            {
-                shutDownMessage += "unknown.";
-            }
-
-            if (logger != null)
-            {
-                logger.Fatal("App domain with Id: '{0}' and BaseDirectory: '{1}' has been unloaded. Any in memory data stores have been lost.{2}", appDomain.Id, appDomain.BaseDirectory, shutDownMessage);
             }
         }
 
