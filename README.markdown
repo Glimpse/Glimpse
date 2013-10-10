@@ -24,7 +24,7 @@ On the Server:
 
 On the Client:
 
-5. Depending on whether it is a Ajax request or not, the picks up the JSON data and to the data set by executing a pipeline of client side data providers that can be dynamically controlled and added to under plugin architecture
+5. Depending on whether it is a Ajax request or not, it picks up the JSON data and runs through the data set by executing a pipeline of client side data providers that can be dynamically controlled and added to under plugin architecture
 6. The client side module then dynamically renders a client side UI (similar to Firebug Lite) that lets you view this data
 
 Glimpse can be turned on or off by a series of different mechanistic, but at its core if the Glimpse cookie is present the server will provide the "debug" data - as a security measure, the request for debug data is "authenticated". Via the plugin model, this authentication check can have any logic that is required by the site to ensure that unauthorized users don't have access to sensitive debug data.
@@ -39,7 +39,7 @@ Platforms currently supported:
 * ASP.Net Web Forms 
 * ASP.Net MVC 
 
-Platforms soon to be supported supported:
+Platforms soon to be supported:
 
 * PHP
 * Ruby on Rails 
