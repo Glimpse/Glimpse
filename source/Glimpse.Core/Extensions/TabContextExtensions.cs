@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Extensions
@@ -23,7 +22,9 @@ namespace Glimpse.Core.Extensions
 
             if (!tabStore.Contains<IList<T>>())
             {
-                return Enumerable.Empty<T>();
+                var messages = new List<T>();
+                tabStore.Set<IList<T>>(messages);
+                return messages;
             }
 
             return tabStore.Get<IList<T>>();
