@@ -24,7 +24,7 @@ namespace Glimpse.Test.AspNet.Tester
             QueryString = new NameValueCollection { { "n", ResourceName }, { "One", "1" } };
 
             RuntimeMock = new Mock<IGlimpseRuntime>();
-            GlimpseRuntimeWrapper = new GlimpseRuntimeWrapper(AspNetFrameworkProviderTester.Create(), RuntimeMock.Object, LoggerMock.Object);
+            GlimpseRuntimeWrapper = new GlimpseRuntimeWrapper(AspNetFrameworkProviderTester.Create(), RuntimeMock.Object, LoggerMock.Object, false);
 
             ApplicationStateMock = new Mock<HttpApplicationStateBase>();
             ApplicationStateMock.Setup(a => a.Get(Constants.RuntimeKey)).Returns(GlimpseRuntimeWrapper);

@@ -20,7 +20,7 @@ namespace Glimpse.Test.AspNet.Tester
 
             RuntimeMock = new Mock<IGlimpseRuntime>();
             RuntimeMock.Setup(runtime => runtime.IsInitialized).Returns(true);
-            GlimpseRuntimeWrapper = new GlimpseRuntimeWrapper(AspNetFrameworkProviderTester.Create(), RuntimeMock.Object, LoggerMock.Object);
+            GlimpseRuntimeWrapper = new GlimpseRuntimeWrapper(AspNetFrameworkProviderTester.Create(), RuntimeMock.Object, LoggerMock.Object, false);
 
             AppStateMock = new Mock<HttpApplicationStateBase>();
             AppStateMock.Setup(s => s[Constants.RuntimeKey]).Returns(GlimpseRuntimeWrapper);
