@@ -41,8 +41,8 @@ namespace Glimpse.Test.Core.Tab
          
         [Fact]
         public void ReturnData()
-        { 
-            var model = new ITraceMessage[0];
+        {
+            var model = new List<ITraceMessage>(0);
             var dataStoreMock = new Mock<IDataStore>();
             dataStoreMock.Setup(c => c.Get(typeof(IList<ITraceMessage>).AssemblyQualifiedName)).Returns(model);
             var contextMock = new Mock<ITabContext>();
@@ -53,6 +53,6 @@ namespace Glimpse.Test.Core.Tab
 
             Assert.NotNull(result);
             Assert.Equal(model, result);
-        } 
+        }
     }
 }
