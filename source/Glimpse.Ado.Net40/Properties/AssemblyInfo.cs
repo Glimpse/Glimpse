@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Web;
@@ -20,6 +21,7 @@ using Glimpse.Core.Extensibility;
 [assembly: AssemblyFileVersion("1.5.1")]
 [assembly: AssemblyInformationalVersion("1.5.1")] // Used to specify the NuGet version number at build time
 
+[assembly: CLSCompliant(true)]
 [assembly: InternalsVisibleTo("Glimpse.Test.Ado")]
 [assembly: NuGetPackage("Glimpse.Ado")]
 [assembly: PreApplicationStartMethod(typeof(Initialize), "Start")]

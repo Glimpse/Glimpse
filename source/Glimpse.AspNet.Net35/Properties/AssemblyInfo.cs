@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Glimpse.Core.Extensibility;
@@ -20,5 +21,6 @@ using Glimpse.Core.Extensibility;
 [assembly: AssemblyFileVersion("1.4.1")]
 [assembly: AssemblyInformationalVersion("1.4.1")]
 
+[assembly: CLSCompliant(true)]
 [assembly: InternalsVisibleTo("Glimpse.Test.AspNet")]
 [assembly: NuGetPackage("Glimpse.AspNet")]
