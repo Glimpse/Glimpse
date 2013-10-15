@@ -54,15 +54,21 @@ namespace Glimpse.WebForms.Tab
 
         public override object GetData(ITabContext context)
         {
-            var data = ProcessData(context.GetMessages<ITraceMessage>());
+            var data = ProcessData(context.GetMessages<ITraceMessage>(), context.Logger);
             return data;
         }
 
-        private object ProcessData(IEnumerable<ITraceMessage> traceMessages)
+        private object ProcessData(IEnumerable<ITraceMessage> traceMessages, ILogger logger)
         {
-            var webFormsMessages = traceMessages.Where(x => x.Category == "ms").ToList(); 
+            var enumerable = traceMessages.ToList();
+
+            logger.Debug("Start processing trace messages for WebFormsExecution - Count {0}", enumerable.Count);
+
+            var webFormsMessages = enumerable.Where(x => x.Category == "ms").ToList(); 
             if (webFormsMessages.Count > 0)
             {
+                logger.Debug("Found {0} specific messages", webFormsMessages.Count);
+
                 var result = new List<ExecutionItemModel>();
                 var x = 0;
                 for (var i = 0; i < webFormsMessages.Count; i += 2)
@@ -80,8 +86,12 @@ namespace Glimpse.WebForms.Tab
                     result.Add(item);
                 }
 
+                logger.Debug("Matched {0} events", result.Count);
+
                 return result;
             }
+
+            logger.Debug("Finish processing trace messages for WebFormsExecution");
              
             return "Error in processing messages";
         }

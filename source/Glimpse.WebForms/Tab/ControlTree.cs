@@ -59,31 +59,46 @@ namespace Glimpse.WebForms.Tab
             var hasRun = context.TabStore.Get("hasRun");
             if (hasRun == null)
             {
+                context.Logger.Debug("ControlTree Tab Initial Run - {0}", HttpContext.Current.Request.RawUrl);
+
                 context.TabStore.Set("hasRun", "true");
 
-                //Add adapter to the pipeline
+
+                //Add adapter to the pipeline as a ViewStatePageAdapter
+
+                context.Logger.Debug("Setting up view state page adapter");
+
                 AdapterManager.Register(typeof(Page), typeof(ViewStatePageAdapter));
 
+
+                //Remember the previous state, turn tracing on at the begining of the request,
+                //set things up so that when request is finished, lets put things back to the 
+                //way they where. Lastly, make sure sate of trace is setup
+
+                context.Logger.Debug("Setting logger infrastructure - previouslyEnabled = {0}", trace.IsEnabled);
+
                 var previouslyEnabled = trace.IsEnabled;
-
-                //Turn tracing on at the begining of the request
-                trace.IsEnabled = true;
-
-                //When request is finished, lets put things back to the way they where 
-                trace.TraceFinished += (sender, args) => trace.IsEnabled = previouslyEnabled;
-
-                //Make sure sate of trace is setup
+                trace.IsEnabled = true; 
+                trace.TraceFinished += (sender, args) =>
+                {
+                    context.Logger.Debug("Resetting logger infrastructure - previouslyEnabled = {0}", previouslyEnabled);
+                    trace.IsEnabled = previouslyEnabled;
+                }; 
                 traceContextVerifyStartMethod.Invoke(trace, null);
 
                 return null;
             }
+
+            context.Logger.Debug("ControlTree Tab Finial Run - {0}", HttpContext.Current.Request.RawUrl);
 
             if (requestDataField != null)
             {
                 var requestData = requestDataField.GetValue(trace) as DataSet;
                 if (requestData != null)
                 {
-                    var treeData = ProcessData(requestData.Tables["Trace_Control_Tree"]);
+                    context.Logger.Debug("Pulling out the `Trace_Control_Tree` from internal logging infrastructure");
+
+                    var treeData = ProcessData(requestData.Tables["Trace_Control_Tree"], context.Logger);
                     return treeData;
                 }
             }
@@ -91,15 +106,15 @@ namespace Glimpse.WebForms.Tab
             return null;
         }
 
-        private object ProcessData(DataTable dataTable)
+        private object ProcessData(DataTable dataTable, ILogger logger)
         {
             if (dataTable != null)
             {
-                var result = new List<ControlTreeItemModel>();
+                var controlList = new List<ControlTreeItemModel>(); 
+                var nodeGraph = new ControlTreeItemTrackModel {ControlId = "ROOT", Indent = -1}; 
+                var nodeList = new Dictionary<string, ControlTreeItemTrackModel> {{"ROOT", nodeGraph}};
 
-                var root = new ControlTreeItemTrackModel {ControlId = "ROOT", Indent = -1};
-                    // {id:0, parent_id: null, children: []};
-                var nodeList = new Dictionary<string, ControlTreeItemTrackModel> {{"ROOT", root}};
+                logger.Debug("Start processing `Trace_Control_Tree`");
 
                 var enumerator = dataTable.Rows.GetEnumerator();
                 while (enumerator.MoveNext())
@@ -130,12 +145,14 @@ namespace Glimpse.WebForms.Tab
                     item.ViewstateSize = current["Trace_Viewstate_Size"].CastOrDefault<int>();
                     item.ControlstateSize = current["Trace_Controlstate_Size"].CastOrDefault<int>();
 
-                    result.Add(item);
+                    controlList.Add(item);
                 }
 
-                viewStateFormatter.Process(root);
+                logger.Debug("Finish processing `Trace_Control_Tree` - Count {0}", nodeList.Count);
 
-                return result;
+                viewStateFormatter.Process(nodeGraph);
+
+                return controlList;
             }
 
             return null;

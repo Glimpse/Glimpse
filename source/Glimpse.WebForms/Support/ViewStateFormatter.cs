@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Web;
 using System.Web.UI;
+using Glimpse.Core.Extensibility;
+using Glimpse.Core.Framework;
 using Glimpse.WebForms.SerializationConverter;
 using Glimpse.WebForms.Tab;
 
@@ -10,8 +12,17 @@ namespace Glimpse.WebForms.Support
 {
     public class ViewStateFormatter
     {
+        private ILogger logger;
+
+        protected ILogger Logger
+        {
+            get { return logger ?? (logger = GlimpseConfiguration.GetLogger()); } 
+        }
+
         public void Process(ControlTreeItemTrackModel root)
         {
+            Logger.Debug("Start merginging in the viewState data to the ControlTree");
+
             var viewState = HttpContext.Current.Items["_GlimpseWebFormViewState"] as Pair;
             var controlTypes = HttpContext.Current.Items["_GlimpseWebFormControlTreeType"] as Dictionary<string, Type>;
 
@@ -20,9 +31,12 @@ namespace Glimpse.WebForms.Support
                 var innerViewstate = viewState.Second as Triplet;
                 if (innerViewstate != null)
                 {
+                    Logger.Debug("Process Rroot node for viewState data to the ControlTree mapping");
                     ProcessRecord(root.Children[0], innerViewstate.Third, controlTypes);
                 }
             }
+
+            Logger.Debug("Finish merginging in the viewState data to the ControlTree");
         }
 
         private void ProcessRecord(ControlTreeItemTrackModel item, object viewstate, Dictionary<string, Type> controlTypes)
