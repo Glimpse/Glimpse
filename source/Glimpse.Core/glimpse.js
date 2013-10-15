@@ -807,9 +807,9 @@ glimpse.render.engine.util.table = (function($) {
     var factories = {
             array: {
                 isHandled: function (data) {
-                    var valid = data[0] != null;
+                    var valid = true;
                     for (var i = 0; i < data.length; i++) {
-                        if (!(data[i] == null || $.isArray(data[i]))) {
+                        if (!$.isArray(data[i])) {
                             valid = false;
                             break;
                         }
@@ -831,9 +831,9 @@ glimpse.render.engine.util.table = (function($) {
             },
             object: {
                 isHandled: function (data) {
-                    var valid = data[0] != null;
+                    var valid = true;
                     for (var i = 0; i < data.length; i++) {
-                        if (!(data[i] == null || (!$.isArray(data[i]) && data[i] === Object(data[i])))) {
+                        if ($.isArray(data[i]) || data[i] !== Object(data[i])) {
                             valid = false;
                             break;
                         }
@@ -1232,13 +1232,9 @@ glimpse.render.engine.util.table = (function($) {
             }
             html += '<tbody class="glimpse-row-holder">';
             for (var i = factory.startingIndex(); i < data.length; i++) {
-                html += '<tr class="glimpse-row' + factory.getRowClass(data, i) + '">';
-                if (data[i] != null) {
-                    for (var x = 0; x < headers.length; x++)
-                        html += '<td>' + providers.master.build(factory.getRowValue(data[i], x, headers), level + 1) + '</td>';
-                }
-                else
-                    html += '<td colspan="' + headers.length + '">' + providers.master.build(null) + '</td>';
+                html += '<tr class="glimpse-row' + factory.getRowClass(data, i) + '">'; 
+                for (var x = 0; x < headers.length; x++)
+                    html += '<td>' + providers.master.build(factory.getRowValue(data[i], x, headers), level + 1) + '</td>'; 
                 html += '</tr>';
             }
             html += '</tbody></table>';
