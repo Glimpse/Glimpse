@@ -806,8 +806,15 @@ glimpse.render.engine.util.raw = (function($, util) {
 glimpse.render.engine.util.table = (function($) {
     var factories = {
             array: {
-                isHandled: function(data) {
-                    return $.isArray(data[0]);
+                isHandled: function (data) {
+                    var valid = true; 
+                    for (var i = 0; i < data.length; i++) {
+                        if (!$.isArray(data[i])) {
+                            valid = false;
+                            break;
+                        }
+                    }
+                    return valid;
                 },
                 getHeader: function(data) {
                     return data[0];
@@ -823,8 +830,15 @@ glimpse.render.engine.util.table = (function($) {
                 }
             },
             object: {
-                isHandled: function(data) {
-                    return data[0] === Object(data[0]);
+                isHandled: function (data) {
+                    var valid = true;
+                    for (var i = 0; i < data.length; i++) {
+                        if ($.isArray(data[i]) || !(data[i] === Object(data[i]))) {
+                            valid = false;
+                            break;
+                        }
+                    }
+                    return valid; 
                 },
                 getHeader: function(data) {
                     var result = [];
@@ -1218,9 +1232,9 @@ glimpse.render.engine.util.table = (function($) {
             }
             html += '<tbody class="glimpse-row-holder">';
             for (var i = factory.startingIndex(); i < data.length; i++) {
-                html += '<tr class="glimpse-row' + factory.getRowClass(data, i) + '">';
+                html += '<tr class="glimpse-row' + factory.getRowClass(data, i) + '">'; 
                 for (var x = 0; x < headers.length; x++)
-                    html += '<td>' + providers.master.build(factory.getRowValue(data[i], x, headers), level + 1) + '</td>';
+                    html += '<td>' + providers.master.build(factory.getRowValue(data[i], x, headers), level + 1) + '</td>'; 
                 html += '</tr>';
             }
             html += '</tbody></table>';
