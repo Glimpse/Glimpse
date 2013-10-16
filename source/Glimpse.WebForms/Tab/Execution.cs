@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic; 
 using System.Linq;
-using System.Reflection;  
+using System.Reflection;
+using System.Web;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
@@ -13,6 +14,8 @@ namespace Glimpse.WebForms.Tab
 {
     public class Execution : AspNetTab, ITabSetup, ITabLayout, IKey
     {
+        private static readonly FieldInfo writeToDiagnosticsTraceField = typeof(System.Web.TraceContext).GetField("_writeToDiagnosticsTrace", BindingFlags.Static | BindingFlags.NonPublic);
+
         private static readonly object Layout = TabLayout.Create()
                 .Row(r =>
                 {
@@ -35,7 +38,7 @@ namespace Glimpse.WebForms.Tab
 
         public override RuntimeEvent ExecuteOn
         {
-            get { return RuntimeEvent.EndRequest; }
+            get { return RuntimeEvent.BeginSessionAccess | RuntimeEvent.EndRequest; }
         }
 
         public object GetLayout()
@@ -44,16 +47,23 @@ namespace Glimpse.WebForms.Tab
         }
 
         public void Setup(ITabSetupContext context)
-        { 
-            //Make sure the traces are dumpted out to the normal trace stream
-            var writeToDiagnosticsTraceField = typeof(System.Web.TraceContext).GetField("_writeToDiagnosticsTrace", BindingFlags.Static | BindingFlags.NonPublic);
-            writeToDiagnosticsTraceField.SetValue(null, true);
-
+        {        
             context.PersistMessages<ITraceMessage>();
         }
 
         public override object GetData(ITabContext context)
         {
+            var hasRun = context.TabStore.Get("hasRun");
+            if (hasRun == null)
+            { 
+                context.TabStore.Set("hasRun", "true");
+                 
+                //Make sure the traces are dumpted out to the normal trace stream  
+                writeToDiagnosticsTraceField.SetValue(null, true);    
+
+                return null;
+            }
+
             var data = ProcessData(context.GetMessages<ITraceMessage>(), context.Logger);
             return data;
         }
