@@ -371,12 +371,12 @@ task push {
                } 
             M {
                "Pushing to MyGet...";
-               Push-Packages http://www.myget.org/F/glimpsemilestone/
+               Push-Packages https://www.myget.org/F/glimpsemilestone/
                break;
               } 
             B {
                "Pushing to MyGet...";
-               Push-Packages http://www.myget.org/F/glimpsemilestone/
+               Push-Packages https://www.myget.org/F/glimpsemilestone/
                "Pushing to NuGet...";
                Push-Packages https://www.nuget.org
                break;
@@ -478,8 +478,7 @@ function Push-Packages($uri)
    
   foreach($package in $packages){
     exec { & .\nuget.exe push $package -src $uri}
-  }
-    
+  } 
 }
 
 function Delete-Directory($path)
