@@ -25,6 +25,9 @@
         <p>        
             Use this area to provide additional information.
         </p>
+        <p>
+            Like a <a runat="server" href="~/Viewstateless.aspx">link to a viewstateless page for testing</a>
+        </p>
         <ul>
             <li><a runat="server" href="~/">Home</a></li>
             <li><a runat="server" href="~/About.aspx">About</a></li>
