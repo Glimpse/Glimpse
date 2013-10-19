@@ -306,6 +306,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="ShoppingCart.aspx" />
+    <Content Include="Viewstateless.aspx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
   </ItemGroup>
@@ -466,6 +467,13 @@
     </Compile>
     <Compile Include="Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Viewstateless.aspx.cs">
+      <DependentUpon>Viewstateless.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Viewstateless.aspx.designer.cs">
+      <DependentUpon>Viewstateless.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
