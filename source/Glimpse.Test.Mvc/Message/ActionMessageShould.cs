@@ -38,7 +38,9 @@ namespace Glimpse.Test.Mvc.Message
             public Guid Id { get; private set; }
             
             public string ControllerName { get; set; }
-            
+
+            public string ControllerFullName { get; set; }
+
             public string ActionName { get; set; }
         }
     }

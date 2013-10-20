@@ -52,7 +52,9 @@ namespace Glimpse.Mvc.AlternateType
             public class Message : MessageBase, IExceptionFilterMessage, IExecutionMessage
             {
                 public string ControllerName { get; set; }
-                
+
+                public string ControllerFullName { get; set; }
+
                 public string ActionName { get; set; }
                 
                 public FilterCategory Category { get; set; }

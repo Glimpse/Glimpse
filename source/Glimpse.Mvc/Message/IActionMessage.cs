@@ -11,6 +11,8 @@ namespace Glimpse.Mvc.Message
     {
         string ControllerName { get; set; }
 
+        string ControllerFullName { get; set; }
+        
         string ActionName { get; set; }
     }
 
@@ -21,7 +23,7 @@ namespace Glimpse.Mvc.Message
         {
             message.ControllerName = descriptor.ControllerDescriptor.ControllerName;
             message.ActionName = descriptor.ActionName;
-
+            
             return message;
         }
 
@@ -36,6 +38,7 @@ namespace Glimpse.Mvc.Message
         public static T AsActionMessage<T>(this T message, ControllerBase controller)
             where T : IActionMessage
         {
+            message.ControllerFullName = controller == null ? null : controller.ToString();
             message.ControllerName = GetValueProviderEntry(controller, "controller");
             message.ActionName = GetValueProviderEntry(controller, "action"); 
 

@@ -51,6 +51,8 @@ namespace Glimpse.Mvc.AlternateType
             public class Message : MessageBase, IFilterMessage, IExecutionMessage
             {
                 public string ControllerName { get; set; }
+
+                public string ControllerFullName { get; set; }
                 
                 public string ActionName { get; set; }
                 

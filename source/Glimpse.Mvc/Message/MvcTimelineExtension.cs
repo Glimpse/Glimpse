@@ -12,14 +12,16 @@ namespace Glimpse.Mvc.Message
         public static T AsMvcTimelineMessage<T>(this T message, TimelineCategoryItem eventCategory)
             where T : ITimelineMessage
         {
-            message.EventCategory = eventCategory; 
+            message.EventCategory = eventCategory;
 
             var controllerName = string.Empty;
+            var ControllerFullName = string.Empty;
             var actionName = string.Empty;
             var actionMessage = message as IActionMessage;
             if (actionMessage != null)
             {
                 controllerName = actionMessage.ControllerName;
+                ControllerFullName = actionMessage.ControllerFullName;
                 actionName = actionMessage.ActionName;
             }
 
@@ -27,6 +29,7 @@ namespace Glimpse.Mvc.Message
             if (viewRenderMessage != null)
             {
                 message.EventName = string.Format("Render: {0}.{1}", controllerName, actionName);
+                message.EventSubText = ControllerFullName;
                 return message;
             }
 
@@ -34,6 +37,7 @@ namespace Glimpse.Mvc.Message
             if (activeInvokerInvokeActionResultMessage != null)
             {
                 message.EventName = string.Format("Action Result: {0}.{1}", controllerName, actionName);
+                message.EventSubText = ControllerFullName;
                 return message;
             }
 
@@ -41,6 +45,7 @@ namespace Glimpse.Mvc.Message
             if (activeInvokerInvokeActionMethodMessage != null)
             { 
                 message.EventName = string.Format("Controller: {0}.{1}", controllerName, actionName);
+                message.EventSubText = ControllerFullName;
                 return message;
             }
 
@@ -48,6 +53,7 @@ namespace Glimpse.Mvc.Message
             if (boundedFilterMessage != null)
             {
                 message.EventName = string.Format("{0} {1}: {2}.{3}", boundedFilterMessage.Category.ToString(), boundedFilterMessage.Bounds.ToString(), controllerName, actionName);
+                message.EventSubText = ControllerFullName;
                 return message;
             }
 
@@ -55,12 +61,14 @@ namespace Glimpse.Mvc.Message
             if (filterMessage != null)
             {
                 message.EventName = string.Format("{0}: {1}.{2}", filterMessage.Category.ToString(), controllerName, actionName);
+                message.EventSubText = ControllerFullName;
                 return message;
             }
 
             if (actionMessage != null)
             {
                 message.EventName = string.Format("{0}.{1}", controllerName, actionName);
+                message.EventSubText = ControllerFullName;
                 return message;
             }
 

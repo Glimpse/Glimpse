@@ -54,6 +54,8 @@ namespace Glimpse.Mvc.AlternateType
             {
                 public string ControllerName { get; set; }
 
+                public string ControllerFullName { get; set; }
+
                 public string ActionName { get; set; }
 
                 public FilterCategory Category { get; set; }
@@ -108,6 +110,8 @@ namespace Glimpse.Mvc.AlternateType
             public class Message : MessageBase, IExceptionFilterMessage, IBoundedFilterMessage, ICanceledBasedFilterMessage, IExecutionMessage
             {
                 public string ControllerName { get; set; }
+
+                public string ControllerFullName { get; set; }
 
                 public string ActionName { get; set; }
 
