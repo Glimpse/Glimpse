@@ -18,7 +18,7 @@ using Glimpse.Core.Extensibility;
 // Keep these three attributes in sync
 [assembly: AssemblyVersion("1.0.0")]
 [assembly: AssemblyFileVersion("1.0.0")]
-[assembly: AssemblyInformationalVersion("1.0.0-RC1")]
+[assembly: AssemblyInformationalVersion("1.0.0-RC2")]
 
 [assembly: InternalsVisibleTo("Glimpse.Test.WebForms")]
 [assembly: NuGetPackage("Glimpse.WebForms")]
