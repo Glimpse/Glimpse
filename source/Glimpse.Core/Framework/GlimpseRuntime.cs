@@ -144,7 +144,7 @@ namespace Glimpse.Core.Framework
             requestStore.Set(Constants.RequestIdKey, requestId);
             Func<Guid?, string> generateClientScripts = (rId) => rId.HasValue ? GenerateScriptTags(rId.Value) : GenerateScriptTags(requestId);
             requestStore.Set(Constants.ClientScriptsStrategy, generateClientScripts);
-            
+
             var executionTimer = CreateAndStartGlobalExecutionTimer(requestStore);
 
             Configuration.MessageBroker.Publish(new RuntimeMessage().AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest).AsTimelineMessage("Start Request", TimelineCategory.Request).AsTimedMessage(executionTimer.Point()));
@@ -152,7 +152,7 @@ namespace Glimpse.Core.Framework
 
         private bool HasOffRuntimePolicy(RuntimeEvent policyName)
         {
-            var policy = GetRuntimePolicy(policyName);
+            var policy = this.DetermineAndStoreAccumulatedRuntimePolicy(policyName);
             if (policy.HasFlag(RuntimePolicy.Off))
             {
                 return true;
@@ -195,7 +195,7 @@ namespace Glimpse.Core.Framework
             }
 
             var requestMetadata = frameworkProvider.RequestMetadata;
-            var policy = GetRuntimePolicy(RuntimeEvent.EndRequest);
+            var policy = this.DetermineAndStoreAccumulatedRuntimePolicy(RuntimeEvent.EndRequest);
             if (policy.HasFlag(RuntimePolicy.PersistResults))
             {
                 var persistenceStore = Configuration.PersistenceStore;
@@ -245,7 +245,7 @@ namespace Glimpse.Core.Framework
         {
             if (HasOffRuntimePolicy(RuntimeEvent.BeginSessionAccess))
                 return;
-           
+
 
             ExecuteTabs(RuntimeEvent.BeginSessionAccess);
         }
@@ -282,14 +282,27 @@ namespace Glimpse.Core.Framework
             string message;
             var logger = Configuration.Logger;
             var context = new ResourceResultContext(logger, Configuration.FrameworkProvider, Configuration.Serializer, Configuration.HtmlEncoder);
-            IResourceResult result;
 
-            var policy = GetRuntimePolicy(RuntimeEvent.ExecuteResource);
-            if (policy == RuntimePolicy.Off && !resourceName.Equals(Configuration.DefaultResource.Name))
+            // First we determine the current policy as it has been processed so far
+            RuntimePolicy policy = this.DetermineAndStoreAccumulatedRuntimePolicy(RuntimeEvent.ExecuteResource);
+
+            // It is possible that the policy now says Off, but if the requested resource is the default resource, then we need to make sure 
+            // there is a good reason for not executing that resource, since the default resource is the one we most likely need to set 
+            // Glimpse On in the first place. 
+            if (resourceName.Equals(this.Configuration.DefaultResource.Name))
             {
-                message = string.Format(Resources.ExecuteResourceInsufficientPolicy, resourceName);
-                logger.Info(message);
-                new StatusCodeResourceResult(403, message).Execute(context);
+                // To be clear we only do this for the default resource, and we do this because it allows us to secure the default resource the same way 
+                // as any other resource, but for this we only rely on runtime policies that handle ExecuteResource runtime events and we ignore
+                // ignore previously executed runtime policies (most likely during BeginRequest).
+                // Either way, the default runtime policy is still our starting point and when it says Off, it remains Off
+                policy = this.DetermineRuntimePolicy(RuntimeEvent.ExecuteResource, this.Configuration.DefaultRuntimePolicy);
+            }
+
+            if (policy == RuntimePolicy.Off)
+            {
+                string errorMessage = string.Format(Resources.ExecuteResourceInsufficientPolicy, resourceName);
+                logger.Info(errorMessage);
+                new StatusCodeResourceResult(403, errorMessage).Execute(context);
                 return;
             }
 
@@ -297,6 +310,7 @@ namespace Glimpse.Core.Framework
                 Configuration.Resources.Where(
                     r => r.Name.Equals(resourceName, StringComparison.InvariantCultureIgnoreCase));
 
+            IResourceResult result;
             switch (resources.Count())
             {
                 case 1: // 200 - OK
@@ -353,14 +367,7 @@ namespace Glimpse.Core.Framework
         /// </returns>
         public bool Initialize()
         {
-            CreateAndStartGlobalExecutionTimer(Configuration.FrameworkProvider.HttpRequestStore);
-
-            var logger = Configuration.Logger;
-            var policy = GetRuntimePolicy(RuntimeEvent.Initialize);
-            if (policy == RuntimePolicy.Off)
-            {
-                return false;
-            }
+            var policy = RuntimePolicy.Off;
 
             // Double checked lock to ensure thread safety. http://en.wikipedia.org/wiki/Double_checked_locking_pattern
             if (!IsInitialized)
@@ -369,56 +376,62 @@ namespace Glimpse.Core.Framework
                 {
                     if (!IsInitialized)
                     {
-                        var messageBroker = Configuration.MessageBroker;
+                        var logger = Configuration.Logger;
+                        policy = this.DetermineAndStoreAccumulatedRuntimePolicy(RuntimeEvent.Initialize);
 
-                        // TODO: Fix this to IDisplay no longer uses I*Tab*Setup
-                        var displaysThatRequireSetup = Configuration.Displays.Where(display => display is ITabSetup).Select(display => display);
-                        foreach (ITabSetup display in displaysThatRequireSetup)
+                        if (policy != RuntimePolicy.Off)
                         {
-                            var key = CreateKey(display);
-                            try
+                            var messageBroker = Configuration.MessageBroker;
+
+                            // TODO: Fix this to IDisplay no longer uses I*Tab*Setup
+                            var displaysThatRequireSetup = Configuration.Displays.Where(display => display is ITabSetup).Select(display => display);
+                            foreach (ITabSetup display in displaysThatRequireSetup)
                             {
-                                var setupContext = new TabSetupContext(logger, messageBroker, () => GetTabStore(key));
-                                display.Setup(setupContext);
+                                var key = CreateKey(display);
+                                try
+                                {
+                                    var setupContext = new TabSetupContext(logger, messageBroker, () => GetTabStore(key));
+                                    display.Setup(setupContext);
+                                }
+                                catch (Exception exception)
+                                {
+                                    logger.Error(Resources.InitializeTabError, exception, key);
+                                }
                             }
-                            catch (Exception exception)
+
+
+                            var tabsThatRequireSetup = Configuration.Tabs.Where(tab => tab is ITabSetup).Select(tab => tab);
+                            foreach (ITabSetup tab in tabsThatRequireSetup)
                             {
-                                logger.Error(Resources.InitializeTabError, exception, key);
+                                var key = CreateKey(tab);
+                                try
+                                {
+                                    var setupContext = new TabSetupContext(logger, messageBroker, () => GetTabStore(key));
+                                    tab.Setup(setupContext);
+                                }
+                                catch (Exception exception)
+                                {
+                                    logger.Error(Resources.InitializeTabError, exception, key);
+                                }
                             }
+
+                            var inspectorContext = new InspectorContext(logger, Configuration.ProxyFactory, messageBroker, Configuration.TimerStrategy, Configuration.RuntimePolicyStrategy);
+
+                            foreach (var inspector in Configuration.Inspectors)
+                            {
+                                try
+                                {
+                                    inspector.Setup(inspectorContext);
+                                    logger.Debug(Resources.GlimpseRuntimeInitializeSetupInspector, inspector.GetType());
+                                }
+                                catch (Exception exception)
+                                {
+                                    logger.Error(Resources.InitializeInspectorError, exception, inspector.GetType());
+                                }
+                            }
+
+                            PersistMetadata();
                         }
-
-
-                        var tabsThatRequireSetup = Configuration.Tabs.Where(tab => tab is ITabSetup).Select(tab => tab);
-                        foreach (ITabSetup tab in tabsThatRequireSetup)
-                        {
-                            var key = CreateKey(tab);
-                            try
-                            {
-                                var setupContext = new TabSetupContext(logger, messageBroker, () => GetTabStore(key));
-                                tab.Setup(setupContext);
-                            }
-                            catch (Exception exception)
-                            {
-                                logger.Error(Resources.InitializeTabError, exception, key);
-                            }
-                        }
-
-                        var inspectorContext = new InspectorContext(logger, Configuration.ProxyFactory, messageBroker, Configuration.TimerStrategy, Configuration.RuntimePolicyStrategy);
-
-                        foreach (var inspector in Configuration.Inspectors)
-                        {
-                            try
-                            {
-                                inspector.Setup(inspectorContext);
-                                logger.Debug(Resources.GlimpseRuntimeInitializeSetupInspector, inspector.GetType());
-                            }
-                            catch (Exception exception)
-                            {
-                                logger.Error(Resources.InitializeInspectorError, exception, inspector.GetType());
-                            }
-                        }
-
-                        PersistMetadata();
 
                         IsInitialized = true;
                     }
@@ -584,7 +597,7 @@ namespace Glimpse.Core.Framework
                 }
             }
         }
-        
+
         private void PersistMetadata()
         {
             var metadata = new GlimpseMetadata { Version = Version, Hash = Configuration.Hash };
@@ -615,7 +628,7 @@ namespace Glimpse.Core.Framework
                 if (metadataInstance.HasMetadata)
                 {
                     tabMetadata[CreateKey(tab)] = metadataInstance;
-                } 
+                }
             }
 
             var resources = metadata.Resources;
@@ -636,54 +649,71 @@ namespace Glimpse.Core.Framework
             Configuration.PersistenceStore.Save(metadata);
         }
 
-        private RuntimePolicy GetRuntimePolicy(RuntimeEvent runtimeEvent)
+        private RuntimePolicy DetermineRuntimePolicy(RuntimeEvent runtimeEvent, RuntimePolicy maximumAllowedPolicy)
         {
-            var frameworkProvider = Configuration.FrameworkProvider;
-            var requestStore = frameworkProvider.HttpRequestStore;
-            
-            // Begin with the lowest policy for this request, or the lowest policy per config
-            var finalResult = requestStore.Contains(Constants.RuntimePolicyKey)
-                             ? requestStore.Get<RuntimePolicy>(Constants.RuntimePolicyKey)
-                             : Configuration.DefaultRuntimePolicy;
-
-            if (!finalResult.HasFlag(RuntimePolicy.Off))
+            if (maximumAllowedPolicy == RuntimePolicy.Off)
             {
-                var logger = Configuration.Logger;
-                
-                // only run policies for this runtimeEvent, or all runtime events
-                var policies =
-                    Configuration.RuntimePolicies.Where(
-                        policy => policy.ExecuteOn.HasFlag(runtimeEvent));
+                return maximumAllowedPolicy;
+            }
 
-                var policyContext = new RuntimePolicyContext(frameworkProvider.RequestMetadata, Configuration.Logger, frameworkProvider.RuntimeContext);
-                foreach (var policy in policies)
+            var frameworkProvider = Configuration.FrameworkProvider;
+            var logger = this.Configuration.Logger;
+
+            // only run policies for this runtimeEvent
+            var policies = 
+                this.Configuration.RuntimePolicies.Where(
+                    policy => policy.ExecuteOn.HasFlag(runtimeEvent));
+
+            var policyContext = new RuntimePolicyContext(frameworkProvider.RequestMetadata, this.Configuration.Logger, frameworkProvider.RuntimeContext);
+            foreach (var policy in policies)
+            {
+                var policyResult = RuntimePolicy.Off;
+                try
                 {
-                    var policyResult = RuntimePolicy.Off;
-                    try
-                    {
-                        policyResult = policy.Execute(policyContext);
+                    policyResult = policy.Execute(policyContext);
 
-                        if (policyResult != RuntimePolicy.On)
-                        {
-                            logger.Debug("RuntimePolicy set to '{0}' by IRuntimePolicy of type '{1}' during RuntimeEvent '{2}'.", policyResult, policy.GetType(), runtimeEvent);
-                        }
-                    }
-                    catch (Exception exception)
+                    if (policyResult != RuntimePolicy.On)
                     {
-                        logger.Warn("Exception when executing IRuntimePolicy of type '{0}'. RuntimePolicy is now set to 'Off'.", exception, policy.GetType());
+                        logger.Debug("RuntimePolicy set to '{0}' by IRuntimePolicy of type '{1}' during RuntimeEvent '{2}'.", policyResult, policy.GetType(), runtimeEvent);
                     }
+                }
+                catch (Exception exception)
+                {
+                    logger.Warn("Exception when executing IRuntimePolicy of type '{0}'. RuntimePolicy is now set to 'Off'.", exception, policy.GetType());
+                }
 
-                    // Only use the lowest policy allowed for the request
-                    if (policyResult < finalResult)
-                    {
-                        finalResult = policyResult;
-                    }
+                // Only use the lowest policy allowed for the request
+                if (policyResult < maximumAllowedPolicy)
+                {
+                    maximumAllowedPolicy = policyResult;
+                }
+
+                // If the policy indicates Glimpse is Off, then we stop processing any other runtime policy
+                if (maximumAllowedPolicy == RuntimePolicy.Off)
+                {
+                    break;
                 }
             }
 
+            return maximumAllowedPolicy;
+        }
+
+        private RuntimePolicy DetermineAndStoreAccumulatedRuntimePolicy(RuntimeEvent runtimeEvent)
+        {
+            var frameworkProvider = Configuration.FrameworkProvider;
+            var requestStore = frameworkProvider.HttpRequestStore;
+
+            // First determine the maximum allowed policy to start from. This is or the current stored runtime policy for this
+            // request, or if none can be found, the default runtime policy set in the configuration
+            var maximumAllowedPolicy = requestStore.Contains(Constants.RuntimePolicyKey)
+                                     ? requestStore.Get<RuntimePolicy>(Constants.RuntimePolicyKey)
+                                     : Configuration.DefaultRuntimePolicy;
+
+            maximumAllowedPolicy = this.DetermineRuntimePolicy(runtimeEvent, maximumAllowedPolicy);
+
             // store result for request
-            requestStore.Set(Constants.RuntimePolicyKey, finalResult);
-            return finalResult;
+            requestStore.Set(Constants.RuntimePolicyKey, maximumAllowedPolicy);
+            return maximumAllowedPolicy;
         }
 
         private string GenerateScriptTags(Guid requestId)

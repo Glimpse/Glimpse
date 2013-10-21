@@ -318,22 +318,6 @@ namespace Glimpse.Test.Core.Framework
             Runtime.FrameworkProviderMock.Verify(fp => fp.SetHttpResponseHeader(Constants.HttpResponseHeader, It.IsAny<string>()));
         }
 
-
-        [Fact]
-        public void ExecuteDefaultResource()
-        {
-            var name = "TestResource";
-            Runtime.ResourceMock.Setup(r => r.Name).Returns(name);
-            Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IResourceContext>())).Returns(Runtime.ResourceResultMock.Object);
-            Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
-            Runtime.Configuration.DefaultResource = Runtime.ResourceMock.Object;
-
-            Runtime.ExecuteDefaultResource();
-
-            Runtime.ResourceMock.Verify(r => r.Execute(It.IsAny<IResourceContext>()), Times.Once());
-            Runtime.ResourceResultMock.Verify(r => r.Execute(It.IsAny<IResourceResultContext>()));
-        }
-
         [Fact]
         public void ExecuteResourceWithOrderedParameters()
         {
@@ -528,7 +512,7 @@ namespace Glimpse.Test.Core.Framework
         }
 
         [Fact]
-        public void SkipInitializeIfGlipseModeIsOff()
+        public void SkipInitializeIfGlimpseModeIsOff()
         {
             Runtime.Configuration.DefaultRuntimePolicy = RuntimePolicy.Off;
 
@@ -538,7 +522,7 @@ namespace Glimpse.Test.Core.Framework
         }
 
         [Fact]
-        public void SkipExecutingResourceIfGlipseModeIsOff()
+        public void SkipExecutingResourceIfGlimpseModeIsOff()
         {
             Runtime.Configuration.DefaultRuntimePolicy = RuntimePolicy.Off;
 
@@ -832,5 +816,278 @@ namespace Glimpse.Test.Core.Framework
         {
             Assert.Throws<ArgumentNullException>(() => Runtime.ExecuteResource("any", null));
         }
+
+        /*
+         * The following tests are tests related to they way runtime policies are evaluated in case resources are being executed, but they also
+         * cover the way normal runtime policies will be evaluated. Below you'll find a table that describes the test cases below
+         * 
+         * -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+         * DefaultRuntimePolicy | BeginRequestPolicy1 | BeginRequestPolicy2	| ResourcePolicy1                                         | ResourcePolicy2                                         | Default Resource                 | Other Resource
+         * -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+         *                      | Returns | Executed? | Returns | Executed? | Returns             | Executed?                         | Returns             | Executed?                         | RuntimePolicy Result | Executed? | RuntimePolicy Result | Executed?
+         * -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+         * Off                  |         | false     |         | false     |                     | false                             |                     | false                             | Off                  | false     | Off                  | false
+         * On                   | On      | true      | On      | true      | ExecuteResourceOnly | true                              | ExecuteResourceOnly | true                              | ExecuteResourceOnly  | true      | ExecuteResourceOnly  | true
+         * On                   | On      | true      | On      | true      | ExecuteResourceOnly | true                              | Off                 | true                              | Off                  | false     | Off                  | false
+         * On                   | On      | true      | On      | true      | Off                 | true                              |                     | false                             | Off                  | false     | Off                  | false
+         * On                   | On      | true      | Off     | true      | ExecuteResourceOnly | true (only when default resource) | ExecuteResourceOnly | true (only when default resource) | Off                  | true      | Off                  | false
+         * On                   | Off     | true      |         | false     | ExecuteResourceOnly | true (only when default resource) | ExecuteResourceOnly | true (only when default resource) | Off                  | true      | Off                  | false
+         */
+        [Fact]
+        public void SkipExecutionOfDefaultResourceWhenDefaultRuntimePolicyIsOff()
+        {
+            this.ValidateResourceExecutionAndResultingRuntimePolicy(
+                new ResourceExecutionAndResultingRuntimePolicyTestCase
+                {
+                    CheckDefaultResourceAccess = true,
+                    DefaultRuntimePolicy = RuntimePolicy.Off,
+                    FirstRuntimePolicyOnBeginRequestMustBeExecuted = false,
+                    SecondRuntimePolicyOnBeginRequestMustBeExecuted = false,
+                    FirstRuntimePolicyOnExecuteResourceMustBeExecuted = false,
+                    SecondRuntimePolicyOnExecuteResourceMustBeExecuted = false,
+                    ResultingRuntimePolicyForResource = RuntimePolicy.Off,
+                    ResourceMustBeExecuted = false
+                });    
+        }
+
+        [Fact]
+        public void SkipExecutionOfNonDefaultResourcesWhenDefaultRuntimePolicyIsOff()
+        {
+            this.ValidateResourceExecutionAndResultingRuntimePolicy(
+                new ResourceExecutionAndResultingRuntimePolicyTestCase
+                {
+                    CheckDefaultResourceAccess = false,
+                    DefaultRuntimePolicy = RuntimePolicy.Off,
+                    FirstRuntimePolicyOnBeginRequestMustBeExecuted = false,
+                    SecondRuntimePolicyOnBeginRequestMustBeExecuted = false,
+                    FirstRuntimePolicyOnExecuteResourceMustBeExecuted = false,
+                    SecondRuntimePolicyOnExecuteResourceMustBeExecuted = false,
+                    ResultingRuntimePolicyForResource = RuntimePolicy.Off,
+                    ResourceMustBeExecuted = false
+                });
+        }
+
+        [Fact]
+        public void ExecuteDefaultResourceWhenDefaultRuntimePolicyIsOnAndNoOtherRuntimePolicySaidOff()
+        {
+            this.ValidateResourceExecutionAndResultingRuntimePolicy(
+                new ResourceExecutionAndResultingRuntimePolicyTestCase
+                {
+                    CheckDefaultResourceAccess = true
+                });
+        }
+
+        [Fact]
+        public void ExecuteNonDefaultResourcesWhenDefaultRuntimePolicyIsOnAndNoOtherRuntimePolicySaidOff()
+        {
+            this.ValidateResourceExecutionAndResultingRuntimePolicy(
+                new ResourceExecutionAndResultingRuntimePolicyTestCase());
+        }
+
+        [Fact]
+        public void SkipExecutingDefaultResourceWhenFirstRuntimePolicyOnExecuteResourceSaidOff()
+        {
+            this.ValidateResourceExecutionAndResultingRuntimePolicy(
+                new ResourceExecutionAndResultingRuntimePolicyTestCase
+                {
+                    CheckDefaultResourceAccess = true,
+                    RuntimePolicyReturnedByFirstRuntimePolicyOnExecuteResource = RuntimePolicy.Off,
+                    SecondRuntimePolicyOnExecuteResourceMustBeExecuted = false,
+                    ResultingRuntimePolicyForResource = RuntimePolicy.Off,
+                    ResourceMustBeExecuted = false
+                });
+        }
+
+        [Fact]
+        public void SkipExecutingDefaultResourceWhenSecondRuntimePolicyOnExecuteResourceSaidOff()
+        {
+            this.ValidateResourceExecutionAndResultingRuntimePolicy(
+                new ResourceExecutionAndResultingRuntimePolicyTestCase
+                {
+                    CheckDefaultResourceAccess = true,
+                    RuntimePolicyReturnedBySecondRuntimePolicyOnExecuteResource = RuntimePolicy.Off,
+                    ResultingRuntimePolicyForResource = RuntimePolicy.Off,
+                    ResourceMustBeExecuted = false
+                });
+        }
+
+        [Fact]
+        public void SkipExecutingNonDefaultResourcesWhenFirstRuntimePolicyOnExecuteResourceSaidOff()
+        {
+            this.ValidateResourceExecutionAndResultingRuntimePolicy(
+                new ResourceExecutionAndResultingRuntimePolicyTestCase
+                {
+                    RuntimePolicyReturnedByFirstRuntimePolicyOnExecuteResource = RuntimePolicy.Off,
+                    SecondRuntimePolicyOnExecuteResourceMustBeExecuted = false,
+                    ResultingRuntimePolicyForResource = RuntimePolicy.Off,
+                    ResourceMustBeExecuted = false
+                });
+        }
+
+        [Fact]
+        public void SkipExecutingNonDefaultResourcesWhenSecondRuntimePolicyOnExecuteResourceSaidOff()
+        {
+            this.ValidateResourceExecutionAndResultingRuntimePolicy(
+                new ResourceExecutionAndResultingRuntimePolicyTestCase
+                {
+                    RuntimePolicyReturnedBySecondRuntimePolicyOnExecuteResource = RuntimePolicy.Off,
+                    ResultingRuntimePolicyForResource = RuntimePolicy.Off,
+                    ResourceMustBeExecuted = false
+                });
+        }
+
+        [Fact]
+        public void ExecuteDefaultResourceEvenWhenSecondRuntimePolicyOnBeginRequestSaidOffAndNoRuntimePolicyOnExecuteResourceSaidOff()
+        {
+            this.ValidateResourceExecutionAndResultingRuntimePolicy(
+                new ResourceExecutionAndResultingRuntimePolicyTestCase
+                {
+                    CheckDefaultResourceAccess = true,
+                    RuntimePolicyReturnedBySecondRuntimePolicyOnBeginRequest = RuntimePolicy.Off,
+                    ResultingRuntimePolicyForResource = RuntimePolicy.Off
+                });
+        }
+
+        [Fact]
+        public void SkipExecutingNonDefaultResourcesWhenSecondRuntimePolicyOnBeginRequestSaidOff()
+        {
+            this.ValidateResourceExecutionAndResultingRuntimePolicy(
+                new ResourceExecutionAndResultingRuntimePolicyTestCase
+                {
+                    RuntimePolicyReturnedBySecondRuntimePolicyOnBeginRequest = RuntimePolicy.Off,
+                    FirstRuntimePolicyOnExecuteResourceMustBeExecuted = false,
+                    SecondRuntimePolicyOnExecuteResourceMustBeExecuted = false,
+                    ResultingRuntimePolicyForResource = RuntimePolicy.Off,
+                    ResourceMustBeExecuted = false
+                });
+        }
+
+        [Fact]
+        public void ExecuteDefaultResourceEvenWhenFirstRuntimePolicyOnBeginRequestSaidOffAndNoRuntimePolicyOnExecuteResourceSaidOff()
+        {
+            this.ValidateResourceExecutionAndResultingRuntimePolicy(
+                new ResourceExecutionAndResultingRuntimePolicyTestCase
+                {
+                    CheckDefaultResourceAccess = true,
+                    RuntimePolicyReturnedByFirstRuntimePolicyOnBeginRequest = RuntimePolicy.Off,
+                    SecondRuntimePolicyOnBeginRequestMustBeExecuted = false,
+                    FirstRuntimePolicyOnExecuteResourceMustBeExecuted = true,
+                    SecondRuntimePolicyOnExecuteResourceMustBeExecuted = true,
+                    ResultingRuntimePolicyForResource = RuntimePolicy.Off
+                });
+        }
+
+        [Fact]
+        public void SkipExecutingNonDefaultResourcesWhenFirstRuntimePolicyOnBeginRequestSaidOff()
+        {
+            this.ValidateResourceExecutionAndResultingRuntimePolicy(
+                new ResourceExecutionAndResultingRuntimePolicyTestCase
+                {
+                    RuntimePolicyReturnedByFirstRuntimePolicyOnBeginRequest = RuntimePolicy.Off,
+                    SecondRuntimePolicyOnBeginRequestMustBeExecuted = false,
+                    FirstRuntimePolicyOnExecuteResourceMustBeExecuted = false,
+                    SecondRuntimePolicyOnExecuteResourceMustBeExecuted = false,
+                    ResultingRuntimePolicyForResource = RuntimePolicy.Off,
+                    ResourceMustBeExecuted = false
+                });
+        }
+
+        private class ResourceExecutionAndResultingRuntimePolicyTestCase
+        {
+            public ResourceExecutionAndResultingRuntimePolicyTestCase()
+            {
+                this.DefaultRuntimePolicy = RuntimePolicy.On;
+                this.RuntimePolicyReturnedByFirstRuntimePolicyOnBeginRequest = RuntimePolicy.On;
+                this.FirstRuntimePolicyOnBeginRequestMustBeExecuted = true;
+                this.RuntimePolicyReturnedBySecondRuntimePolicyOnBeginRequest = RuntimePolicy.On;
+                this.SecondRuntimePolicyOnBeginRequestMustBeExecuted = true;
+                this.RuntimePolicyReturnedByFirstRuntimePolicyOnExecuteResource = RuntimePolicy.ExecuteResourceOnly;
+                this.FirstRuntimePolicyOnExecuteResourceMustBeExecuted = true;
+                this.RuntimePolicyReturnedBySecondRuntimePolicyOnExecuteResource = RuntimePolicy.ExecuteResourceOnly;
+                this.SecondRuntimePolicyOnExecuteResourceMustBeExecuted = true;
+
+                this.CheckDefaultResourceAccess = false;
+                this.ResultingRuntimePolicyForResource = RuntimePolicy.ExecuteResourceOnly;
+                this.ResourceMustBeExecuted = true;
+            }
+
+            public RuntimePolicy DefaultRuntimePolicy { get; set; }
+            public RuntimePolicy RuntimePolicyReturnedByFirstRuntimePolicyOnBeginRequest { get; set; }
+            public bool FirstRuntimePolicyOnBeginRequestMustBeExecuted { get; set; }
+            public RuntimePolicy RuntimePolicyReturnedBySecondRuntimePolicyOnBeginRequest { get; set; }
+            public bool SecondRuntimePolicyOnBeginRequestMustBeExecuted { get; set; }
+
+            public RuntimePolicy RuntimePolicyReturnedByFirstRuntimePolicyOnExecuteResource { get; set; }
+            public bool FirstRuntimePolicyOnExecuteResourceMustBeExecuted { get; set; }
+            public RuntimePolicy RuntimePolicyReturnedBySecondRuntimePolicyOnExecuteResource { get; set; }
+            public bool SecondRuntimePolicyOnExecuteResourceMustBeExecuted { get; set; }
+
+            public bool CheckDefaultResourceAccess { get; set; }
+            public RuntimePolicy ResultingRuntimePolicyForResource { get; set; }
+            public bool ResourceMustBeExecuted { get; set; }
+        }
+
+        private void ValidateResourceExecutionAndResultingRuntimePolicy(ResourceExecutionAndResultingRuntimePolicyTestCase testCase)
+        {
+            var firstRuntimePolicyOnBeginRequestMock = new Mock<IRuntimePolicy>();
+            firstRuntimePolicyOnBeginRequestMock.Setup(v => v.Execute(It.IsAny<IRuntimePolicyContext>())).Returns(testCase.RuntimePolicyReturnedByFirstRuntimePolicyOnBeginRequest);
+            firstRuntimePolicyOnBeginRequestMock.Setup(v => v.ExecuteOn).Returns(RuntimeEvent.BeginRequest);
+            Runtime.Configuration.RuntimePolicies.Add(firstRuntimePolicyOnBeginRequestMock.Object);
+
+            var secondRuntimePolicyOnBeginRequestMock = new Mock<IRuntimePolicy>();
+            secondRuntimePolicyOnBeginRequestMock.Setup(v => v.Execute(It.IsAny<IRuntimePolicyContext>())).Returns(testCase.RuntimePolicyReturnedBySecondRuntimePolicyOnBeginRequest);
+            secondRuntimePolicyOnBeginRequestMock.Setup(v => v.ExecuteOn).Returns(RuntimeEvent.BeginRequest);
+            Runtime.Configuration.RuntimePolicies.Add(secondRuntimePolicyOnBeginRequestMock.Object);
+
+            var firstRuntimePolicyOnExecuteResourceMock = new Mock<IRuntimePolicy>();
+            firstRuntimePolicyOnExecuteResourceMock.Setup(v => v.Execute(It.IsAny<IRuntimePolicyContext>())).Returns(testCase.RuntimePolicyReturnedByFirstRuntimePolicyOnExecuteResource);
+            firstRuntimePolicyOnExecuteResourceMock.Setup(v => v.ExecuteOn).Returns(RuntimeEvent.ExecuteResource);
+            Runtime.Configuration.RuntimePolicies.Add(firstRuntimePolicyOnExecuteResourceMock.Object);
+
+            var secondRuntimePolicyOnExecuteResourceMock = new Mock<IRuntimePolicy>();
+            secondRuntimePolicyOnExecuteResourceMock.Setup(v => v.Execute(It.IsAny<IRuntimePolicyContext>())).Returns(testCase.RuntimePolicyReturnedBySecondRuntimePolicyOnExecuteResource);
+            secondRuntimePolicyOnExecuteResourceMock.Setup(v => v.ExecuteOn).Returns(RuntimeEvent.ExecuteResource);
+            Runtime.Configuration.RuntimePolicies.Add(secondRuntimePolicyOnExecuteResourceMock.Object);
+
+            Runtime.Configuration.DefaultRuntimePolicy = testCase.DefaultRuntimePolicy;
+
+            var defaultResourceMock = new Mock<IResource>();
+            defaultResourceMock.Setup(r => r.Name).Returns("defaultResourceName");
+            var defaultResourceResultMock = new Mock<IResourceResult>();
+            defaultResourceMock.Setup(r => r.Execute(It.IsAny<IResourceContext>())).Returns(defaultResourceResultMock.Object);
+            Runtime.Configuration.Resources.Add(defaultResourceMock.Object);
+            Runtime.Configuration.DefaultResource = defaultResourceMock.Object;
+
+            var normalResourceMock = new Mock<IResource>();
+            normalResourceMock.Setup(r => r.Name).Returns("normalResourceName");
+            var normalResourceResultMock = new Mock<IResourceResult>();
+            normalResourceMock.Setup(r => r.Execute(It.IsAny<IResourceContext>())).Returns(normalResourceResultMock.Object);
+            Runtime.Configuration.Resources.Add(normalResourceMock.Object);
+
+            Runtime.Initialize();
+            Runtime.BeginRequest();
+            
+            if (testCase.CheckDefaultResourceAccess)
+            {
+                Runtime.ExecuteDefaultResource();
+                defaultResourceMock.Verify(r => r.Execute(It.IsAny<IResourceContext>()), testCase.ResourceMustBeExecuted ? Times.Once() : Times.Never());
+                defaultResourceResultMock.Verify(r => r.Execute(It.IsAny<IResourceResultContext>()), testCase.ResourceMustBeExecuted ? Times.Once() : Times.Never());
+            }
+            else
+            {
+                Runtime.ExecuteResource("normalResourceName", new ResourceParameters(new Dictionary<string, string>()));
+                normalResourceMock.Verify(r => r.Execute(It.IsAny<IResourceContext>()), testCase.ResourceMustBeExecuted ? Times.Once() : Times.Never());
+                normalResourceResultMock.Verify(r => r.Execute(It.IsAny<IResourceResultContext>()), testCase.ResourceMustBeExecuted ? Times.Once() : Times.Never());
+            }
+
+            firstRuntimePolicyOnBeginRequestMock.Verify(v => v.Execute(It.IsAny<IRuntimePolicyContext>()), testCase.FirstRuntimePolicyOnBeginRequestMustBeExecuted ? Times.AtLeastOnce() : Times.Never());
+            secondRuntimePolicyOnBeginRequestMock.Verify(v => v.Execute(It.IsAny<IRuntimePolicyContext>()), testCase.SecondRuntimePolicyOnBeginRequestMustBeExecuted ? Times.AtLeastOnce() : Times.Never());
+            firstRuntimePolicyOnExecuteResourceMock.Verify(v => v.Execute(It.IsAny<IRuntimePolicyContext>()), testCase.FirstRuntimePolicyOnExecuteResourceMustBeExecuted ? Times.AtLeastOnce() : Times.Never());
+            secondRuntimePolicyOnExecuteResourceMock.Verify(v => v.Execute(It.IsAny<IRuntimePolicyContext>()), testCase.SecondRuntimePolicyOnExecuteResourceMustBeExecuted ? Times.AtLeastOnce() : Times.Never());
+
+            Assert.Equal(testCase.ResultingRuntimePolicyForResource, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePolicyKey));
+        }
+
+        /* End of tests related to they way runtime policies are evaluated in case resources are being executed */
     }
 }
