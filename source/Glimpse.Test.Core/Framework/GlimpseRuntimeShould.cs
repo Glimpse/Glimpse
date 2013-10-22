@@ -15,11 +15,11 @@ namespace Glimpse.Test.Core.Framework
 {
     public class GlimpseRuntimeShould : IDisposable
     {
-        private GlimpseRuntimeTester tester;
-        public GlimpseRuntimeTester Runtime
+        private GlimpseRuntimeTester Runtime { get; set; }
+
+        public GlimpseRuntimeShould()
         {
-            get { return tester ?? (tester = GlimpseRuntimeTester.Create()); }
-            set { tester = value; }
+            Runtime = GlimpseRuntimeTester.Create();
         }
 
         public void Dispose()
@@ -67,7 +67,7 @@ namespace Glimpse.Test.Core.Framework
         public void ThrowsExceptionIfBeginRequestIsCalledBeforeInittialize()
         {
             //Runtime.Initialize();commented out on purpose for this test
-            
+
             Assert.Throws<GlimpseException>(() => Runtime.BeginRequest());
         }
 
@@ -114,7 +114,7 @@ namespace Glimpse.Test.Core.Framework
             var results = Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
             Assert.NotNull(results);
             Assert.Equal(1, results.Count);
-            Assert.Contains("castle_proxies_itabproxy", results.First().Key); 
+            Assert.Contains("castle_proxies_itabproxy", results.First().Key);
         }
 
         [Fact]
@@ -182,7 +182,7 @@ namespace Glimpse.Test.Core.Framework
             Assert.Equal(1, results.Count);
 
             Runtime.TabMock.Verify(p => p.GetData(It.IsAny<ITabContext>()), Times.Once());
-            
+
             // Make sure the excption type above is logged here.
             Runtime.LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<DummyException>()), Times.AtMost(Runtime.Configuration.Tabs.Count));
         }
@@ -295,7 +295,7 @@ namespace Glimpse.Test.Core.Framework
 
             Runtime.FrameworkProviderMock.Verify(fp => fp.InjectHttpResponseBody(It.IsAny<string>()));
         }
-        
+
         [Fact]
         public void PersistDataDuringEndRequest()
         {
@@ -326,7 +326,7 @@ namespace Glimpse.Test.Core.Framework
             Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IResourceContext>())).Returns(Runtime.ResourceResultMock.Object);
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
 
-            Runtime.ExecuteResource(name.ToLower(), new ResourceParameters(new[]{"One","Two"}));
+            Runtime.ExecuteResource(name.ToLower(), new ResourceParameters(new[] { "One", "Two" }));
 
             Runtime.ResourceMock.Verify(r => r.Execute(It.IsAny<IResourceContext>()), Times.Once());
             Runtime.ResourceResultMock.Verify(r => r.Execute(It.IsAny<IResourceResultContext>()));
@@ -340,7 +340,7 @@ namespace Glimpse.Test.Core.Framework
             Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IResourceContext>())).Returns(Runtime.ResourceResultMock.Object);
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
 
-            Runtime.ExecuteResource(name.ToLower(), new ResourceParameters(new Dictionary<string, string>{{"One", "1"}, {"Two","2"}}));
+            Runtime.ExecuteResource(name.ToLower(), new ResourceParameters(new Dictionary<string, string> { { "One", "1" }, { "Two", "2" } }));
 
             Runtime.ResourceMock.Verify(r => r.Execute(It.IsAny<IResourceContext>()), Times.Once());
             Runtime.ResourceResultMock.Verify(r => r.Execute(It.IsAny<IResourceResultContext>()));
@@ -351,7 +351,7 @@ namespace Glimpse.Test.Core.Framework
         {
             Runtime.Configuration.Resources.Clear();
 
-            Runtime.ExecuteResource("random name that doesn't exist", new ResourceParameters(new string[]{}));
+            Runtime.ExecuteResource("random name that doesn't exist", new ResourceParameters(new string[] { }));
 
             Runtime.FrameworkProviderMock.Verify(fp => fp.SetHttpResponseStatusCode(404), Times.Once());
         }
@@ -365,7 +365,7 @@ namespace Glimpse.Test.Core.Framework
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
 
-            Runtime.ExecuteResource(name, new ResourceParameters(new string[]{}));
+            Runtime.ExecuteResource(name, new ResourceParameters(new string[] { }));
 
             Runtime.FrameworkProviderMock.Verify(fp => fp.SetHttpResponseStatusCode(500), Times.Once());
         }
@@ -373,7 +373,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void ThrowExceptionWithEmptyResourceName()
         {
-            Assert.Throws<ArgumentNullException>(() => Runtime.ExecuteResource("", new ResourceParameters(new string[]{})));
+            Assert.Throws<ArgumentNullException>(() => Runtime.ExecuteResource("", new ResourceParameters(new string[] { })));
         }
 
         [Fact]
@@ -385,7 +385,7 @@ namespace Glimpse.Test.Core.Framework
 
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
 
-            Runtime.ExecuteResource(name, new ResourceParameters(new string[]{}));
+            Runtime.ExecuteResource(name, new ResourceParameters(new string[] { }));
 
             Runtime.FrameworkProviderMock.Verify(fp => fp.SetHttpResponseStatusCode(500), Times.Once());
         }
@@ -416,7 +416,7 @@ namespace Glimpse.Test.Core.Framework
 
             Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
 
-            Runtime.ExecuteResource(name, new ResourceParameters(new string[]{}));
+            Runtime.ExecuteResource(name, new ResourceParameters(new string[] { }));
 
             Runtime.LoggerMock.Verify(l => l.Fatal(It.IsAny<string>(), It.IsAny<Exception>(), It.IsAny<object[]>()), Times.Once());
         }
@@ -485,16 +485,16 @@ namespace Glimpse.Test.Core.Framework
             Runtime.Initialize();
             Runtime.BeginRequest();
 
-            Runtime.RuntimePolicyMock.Verify(v=>v.Execute(It.IsAny<IRuntimePolicyContext>()), Times.AtLeastOnce());
+            Runtime.RuntimePolicyMock.Verify(v => v.Execute(It.IsAny<IRuntimePolicyContext>()), Times.AtLeastOnce());
         }
 
         [Fact]
         public void SkipEecutingInitializeIfGlimpseModeIfOff()
         {
             Runtime.Configuration.DefaultRuntimePolicy = RuntimePolicy.Off;
-            
+
             Runtime.Initialize();
-            
+
             Assert.Equal(RuntimePolicy.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePolicyKey));
         }
 
@@ -526,7 +526,7 @@ namespace Glimpse.Test.Core.Framework
         {
             Runtime.Configuration.DefaultRuntimePolicy = RuntimePolicy.Off;
 
-            Runtime.ExecuteResource("doesn't matter", new ResourceParameters(new string[]{}));
+            Runtime.ExecuteResource("doesn't matter", new ResourceParameters(new string[] { }));
 
             Assert.Equal(RuntimePolicy.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePolicyKey));
         }
@@ -550,8 +550,8 @@ namespace Glimpse.Test.Core.Framework
 
             Runtime.Initialize();
 
-            Runtime.RuntimePolicyMock.Verify(v=>v.Execute(It.IsAny<IRuntimePolicyContext>()), Times.Once());
-            validatorMock2.Verify(v=>v.Execute(It.IsAny<IRuntimePolicyContext>()), Times.Never());
+            Runtime.RuntimePolicyMock.Verify(v => v.Execute(It.IsAny<IRuntimePolicyContext>()), Times.Once());
+            validatorMock2.Verify(v => v.Execute(It.IsAny<IRuntimePolicyContext>()), Times.Never());
         }
 
         [Fact]
@@ -562,135 +562,135 @@ namespace Glimpse.Test.Core.Framework
             Assert.True(Runtime.IsInitialized);
         }
 
-/*        [Fact]
-        public void GenerateNoScriptTagsWithoutClientScripts()
-        {
-            Assert.Equal("", Runtime.GenerateScriptTags(Guid.NewGuid()));
+        /*        [Fact]
+                public void GenerateNoScriptTagsWithoutClientScripts()
+                {
+                    Assert.Equal("", Runtime.GenerateScriptTags(Guid.NewGuid()));
             
-            Runtime.LoggerMock.Verify(l=>l.Warn(It.IsAny<string>()), Times.Never());
-        }
+                    Runtime.LoggerMock.Verify(l=>l.Warn(It.IsAny<string>()), Times.Never());
+                }
 
-        [Fact]
-        public void GenerateNoScriptTagsAndWarnWithOnlyIClientScriptImplementations()
-        {
-            var clientScriptMock = new Mock<IClientScript>();
-            clientScriptMock.Setup(cs => cs.Order).Returns(ScriptOrder.ClientInterfaceScript);
+                [Fact]
+                public void GenerateNoScriptTagsAndWarnWithOnlyIClientScriptImplementations()
+                {
+                    var clientScriptMock = new Mock<IClientScript>();
+                    clientScriptMock.Setup(cs => cs.Order).Returns(ScriptOrder.ClientInterfaceScript);
 
-            Runtime.Configuration.ClientScripts.Add(clientScriptMock.Object);
+                    Runtime.Configuration.ClientScripts.Add(clientScriptMock.Object);
 
-            Assert.Equal("", Runtime.GenerateScriptTags(Guid.NewGuid()));
+                    Assert.Equal("", Runtime.GenerateScriptTags(Guid.NewGuid()));
             
-            Runtime.LoggerMock.Verify(l => l.Warn(It.IsAny<string>(), It.IsAny<object[]>()), Times.Once());
-        }
+                    Runtime.LoggerMock.Verify(l => l.Warn(It.IsAny<string>(), It.IsAny<object[]>()), Times.Once());
+                }
 
-        [Fact]
-        public void GenerateScriptTagWithOneStaticResource()
-        {
-            var uri = "http://localhost/static";
-            Runtime.StaticScriptMock.Setup(ss => ss.GetUri(GlimpseRuntime.Version)).Returns(uri);
-            Runtime.EncoderMock.Setup(e => e.HtmlAttributeEncode(uri)).Returns(uri + "/encoded");
+                [Fact]
+                public void GenerateScriptTagWithOneStaticResource()
+                {
+                    var uri = "http://localhost/static";
+                    Runtime.StaticScriptMock.Setup(ss => ss.GetUri(GlimpseRuntime.Version)).Returns(uri);
+                    Runtime.EncoderMock.Setup(e => e.HtmlAttributeEncode(uri)).Returns(uri + "/encoded");
 
-            Runtime.Configuration.ClientScripts.Add(Runtime.StaticScriptMock.Object);
+                    Runtime.Configuration.ClientScripts.Add(Runtime.StaticScriptMock.Object);
 
-            var result = Runtime.GenerateScriptTags(Guid.NewGuid());
+                    var result = Runtime.GenerateScriptTags(Guid.NewGuid());
 
-            Assert.Contains(uri, result);
-        }
+                    Assert.Contains(uri, result);
+                }
 
-        [Fact]
-        public void GenerateScriptTagsInOrder()
-        {
-            var callCount = 0;
-            //Lightweight call sequence checking idea from http://dpwhelan.com/blog/software-development/moq-sequences/
-            Runtime.DynamicScriptMock.Setup(ds => ds.GetResourceName()).Returns("http://localhost/dynamic").Callback(()=>Assert.Equal(callCount++, 1));
-            Runtime.StaticScriptMock.Setup(ss => ss.GetUri(GlimpseRuntime.Version)).Returns("http://localhost/static").Callback(()=>Assert.Equal(callCount++, 0));
-            Runtime.EncoderMock.Setup(e => e.HtmlAttributeEncode("http://localhost/static")).Returns("http://localhost/static/encoded");
+                [Fact]
+                public void GenerateScriptTagsInOrder()
+                {
+                    var callCount = 0;
+                    //Lightweight call sequence checking idea from http://dpwhelan.com/blog/software-development/moq-sequences/
+                    Runtime.DynamicScriptMock.Setup(ds => ds.GetResourceName()).Returns("http://localhost/dynamic").Callback(()=>Assert.Equal(callCount++, 1));
+                    Runtime.StaticScriptMock.Setup(ss => ss.GetUri(GlimpseRuntime.Version)).Returns("http://localhost/static").Callback(()=>Assert.Equal(callCount++, 0));
+                    Runtime.EncoderMock.Setup(e => e.HtmlAttributeEncode("http://localhost/static")).Returns("http://localhost/static/encoded");
 
-            Runtime.Configuration.ClientScripts.Add(Runtime.StaticScriptMock.Object);
-            Runtime.Configuration.ClientScripts.Add(Runtime.DynamicScriptMock.Object);
+                    Runtime.Configuration.ClientScripts.Add(Runtime.StaticScriptMock.Object);
+                    Runtime.Configuration.ClientScripts.Add(Runtime.DynamicScriptMock.Object);
 
-            Assert.NotEmpty(Runtime.GenerateScriptTags(Guid.NewGuid()));
-        }
+                    Assert.NotEmpty(Runtime.GenerateScriptTags(Guid.NewGuid()));
+                }
 
-        [Fact]
-        public void GenerateScriptTagsWithParameterValueProvider()
-        {
-            var resourceName = "resourceName";
-            var uri = "http://somethingEncoded";
-            Runtime.ResourceMock.Setup(r => r.Name).Returns(resourceName);
-            Runtime.DynamicScriptMock.Setup(ds => ds.GetResourceName()).Returns(resourceName);
-            var parameterValueProviderMock = Runtime.DynamicScriptMock.As<IParameterValueProvider>();
-            Runtime.EndpointConfigMock.Protected().Setup<string>("GenerateUriTemplate", resourceName, "~/Glimpse.axd", ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(), ItExpr.IsAny<ILogger>()).Returns("http://something");
-            Runtime.EncoderMock.Setup(e => e.HtmlAttributeEncode("http://something")).Returns(uri);
+                [Fact]
+                public void GenerateScriptTagsWithParameterValueProvider()
+                {
+                    var resourceName = "resourceName";
+                    var uri = "http://somethingEncoded";
+                    Runtime.ResourceMock.Setup(r => r.Name).Returns(resourceName);
+                    Runtime.DynamicScriptMock.Setup(ds => ds.GetResourceName()).Returns(resourceName);
+                    var parameterValueProviderMock = Runtime.DynamicScriptMock.As<IParameterValueProvider>();
+                    Runtime.EndpointConfigMock.Protected().Setup<string>("GenerateUriTemplate", resourceName, "~/Glimpse.axd", ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(), ItExpr.IsAny<ILogger>()).Returns("http://something");
+                    Runtime.EncoderMock.Setup(e => e.HtmlAttributeEncode("http://something")).Returns(uri);
 
-            Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
-            Runtime.Configuration.ClientScripts.Add(Runtime.DynamicScriptMock.Object);
+                    Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
+                    Runtime.Configuration.ClientScripts.Add(Runtime.DynamicScriptMock.Object);
 
-            Assert.Contains(uri, Runtime.GenerateScriptTags(Guid.NewGuid()));
+                    Assert.Contains(uri, Runtime.GenerateScriptTags(Guid.NewGuid()));
 
-            parameterValueProviderMock.Verify(vp=>vp.OverrideParameterValues(It.IsAny<IDictionary<string,string>>()));
-        }
+                    parameterValueProviderMock.Verify(vp=>vp.OverrideParameterValues(It.IsAny<IDictionary<string,string>>()));
+                }
 
-        [Fact]
-        public void GenerateScriptTagsWithDynamicScriptAndMatchingResource()
-        {
-            var resourceName = "resourceName";
-            var uri = "http://somethingEncoded";
-            Runtime.ResourceMock.Setup(r => r.Name).Returns(resourceName);
-            Runtime.DynamicScriptMock.Setup(ds => ds.GetResourceName()).Returns(resourceName);
-            Runtime.EndpointConfigMock.Protected().Setup<string>("GenerateUriTemplate", resourceName, "~/Glimpse.axd", ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(), ItExpr.IsAny<ILogger>()).Returns("http://something");
-            Runtime.EncoderMock.Setup(e => e.HtmlAttributeEncode("http://something")).Returns(uri);
+                [Fact]
+                public void GenerateScriptTagsWithDynamicScriptAndMatchingResource()
+                {
+                    var resourceName = "resourceName";
+                    var uri = "http://somethingEncoded";
+                    Runtime.ResourceMock.Setup(r => r.Name).Returns(resourceName);
+                    Runtime.DynamicScriptMock.Setup(ds => ds.GetResourceName()).Returns(resourceName);
+                    Runtime.EndpointConfigMock.Protected().Setup<string>("GenerateUriTemplate", resourceName, "~/Glimpse.axd", ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(), ItExpr.IsAny<ILogger>()).Returns("http://something");
+                    Runtime.EncoderMock.Setup(e => e.HtmlAttributeEncode("http://something")).Returns(uri);
 
-            Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
-            Runtime.Configuration.ClientScripts.Add(Runtime.DynamicScriptMock.Object);
+                    Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
+                    Runtime.Configuration.ClientScripts.Add(Runtime.DynamicScriptMock.Object);
 
-            Assert.Contains(uri, Runtime.GenerateScriptTags(Guid.NewGuid()));
+                    Assert.Contains(uri, Runtime.GenerateScriptTags(Guid.NewGuid()));
 
-            Runtime.ResourceMock.Verify(rm=>rm.Name, Times.AtLeastOnce());
-            Runtime.EndpointConfigMock.Protected().Verify<string>("GenerateUriTemplate", Times.Once(), resourceName, "~/Glimpse.axd", ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(), ItExpr.IsAny<ILogger>());
-            Runtime.EncoderMock.Verify(e => e.HtmlAttributeEncode("http://something"), Times.Once());
-        }
+                    Runtime.ResourceMock.Verify(rm=>rm.Name, Times.AtLeastOnce());
+                    Runtime.EndpointConfigMock.Protected().Verify<string>("GenerateUriTemplate", Times.Once(), resourceName, "~/Glimpse.axd", ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(), ItExpr.IsAny<ILogger>());
+                    Runtime.EncoderMock.Verify(e => e.HtmlAttributeEncode("http://something"), Times.Once());
+                }
 
-        [Fact]
-        public void GenerateScriptTagsSkipsWhenEndpointConfigReturnsEmptyString()
-        {
-            var resourceName = "resourceName";
-            Runtime.ResourceMock.Setup(r => r.Name).Returns(resourceName);
-            Runtime.DynamicScriptMock.Setup(ds => ds.GetResourceName()).Returns(resourceName);
-            Runtime.EndpointConfigMock.Protected().Setup<string>("GenerateUriTemplate", resourceName, "~/Glimpse.axd", ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(), ItExpr.IsAny<ILogger>()).Returns("");
-            Runtime.EncoderMock.Setup(e => e.HtmlAttributeEncode("")).Returns("");
+                [Fact]
+                public void GenerateScriptTagsSkipsWhenEndpointConfigReturnsEmptyString()
+                {
+                    var resourceName = "resourceName";
+                    Runtime.ResourceMock.Setup(r => r.Name).Returns(resourceName);
+                    Runtime.DynamicScriptMock.Setup(ds => ds.GetResourceName()).Returns(resourceName);
+                    Runtime.EndpointConfigMock.Protected().Setup<string>("GenerateUriTemplate", resourceName, "~/Glimpse.axd", ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(), ItExpr.IsAny<ILogger>()).Returns("");
+                    Runtime.EncoderMock.Setup(e => e.HtmlAttributeEncode("")).Returns("");
 
-            Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
-            Runtime.Configuration.ClientScripts.Add(Runtime.DynamicScriptMock.Object);
+                    Runtime.Configuration.Resources.Add(Runtime.ResourceMock.Object);
+                    Runtime.Configuration.ClientScripts.Add(Runtime.DynamicScriptMock.Object);
 
-            Assert.Empty(Runtime.GenerateScriptTags(Guid.NewGuid()));
+                    Assert.Empty(Runtime.GenerateScriptTags(Guid.NewGuid()));
 
-            Runtime.ResourceMock.Verify(rm => rm.Name, Times.AtLeastOnce());
-            Runtime.EndpointConfigMock.Protected().Verify<string>("GenerateUriTemplate", Times.Once(), resourceName, "~/Glimpse.axd", ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(), ItExpr.IsAny<ILogger>());
-            Runtime.EncoderMock.Verify(e => e.HtmlAttributeEncode(""), Times.Once());
-        }
+                    Runtime.ResourceMock.Verify(rm => rm.Name, Times.AtLeastOnce());
+                    Runtime.EndpointConfigMock.Protected().Verify<string>("GenerateUriTemplate", Times.Once(), resourceName, "~/Glimpse.axd", ItExpr.IsAny<IEnumerable<ResourceParameterMetadata>>(), ItExpr.IsAny<ILogger>());
+                    Runtime.EncoderMock.Verify(e => e.HtmlAttributeEncode(""), Times.Once());
+                }
 
-        [Fact]
-        public void GenerateScriptTagsSkipsWhenMatchingResourceNotFound()
-        {
-            Runtime.DynamicScriptMock.Setup(ds => ds.GetResourceName()).Returns("resourceName");
+                [Fact]
+                public void GenerateScriptTagsSkipsWhenMatchingResourceNotFound()
+                {
+                    Runtime.DynamicScriptMock.Setup(ds => ds.GetResourceName()).Returns("resourceName");
 
-            Runtime.Configuration.ClientScripts.Add(Runtime.DynamicScriptMock.Object);
+                    Runtime.Configuration.ClientScripts.Add(Runtime.DynamicScriptMock.Object);
 
-            Assert.Empty(Runtime.GenerateScriptTags(Guid.NewGuid()));
+                    Assert.Empty(Runtime.GenerateScriptTags(Guid.NewGuid()));
 
-            Runtime.LoggerMock.Verify(l => l.Warn(It.IsAny<string>(), It.IsAny<object[]>()));
-        }
+                    Runtime.LoggerMock.Verify(l => l.Warn(It.IsAny<string>(), It.IsAny<object[]>()));
+                }
 
-        [Fact]
-        public void GenerateScriptTagsSkipsWhenStaticScriptReturnsEmptyString()
-        {
-            Runtime.StaticScriptMock.Setup(ss => ss.GetUri(GlimpseRuntime.Version)).Returns("");
+                [Fact]
+                public void GenerateScriptTagsSkipsWhenStaticScriptReturnsEmptyString()
+                {
+                    Runtime.StaticScriptMock.Setup(ss => ss.GetUri(GlimpseRuntime.Version)).Returns("");
 
-            Runtime.Configuration.ClientScripts.Add(Runtime.StaticScriptMock.Object);
+                    Runtime.Configuration.ClientScripts.Add(Runtime.StaticScriptMock.Object);
 
-            Assert.Empty(Runtime.GenerateScriptTags(Guid.NewGuid()));
-        }*/
+                    Assert.Empty(Runtime.GenerateScriptTags(Guid.NewGuid()));
+                }*/
 
         [Fact]
         public void LogErrorOnPersistenceStoreException()
@@ -758,7 +758,7 @@ namespace Glimpse.Test.Core.Framework
 
             Runtime.BeginRequest();
 
-            Runtime.HttpRequestStoreMock.Verify(fp=>fp.Set(Constants.RequestIdKey, It.IsAny<Guid>()), Times.Never());
+            Runtime.HttpRequestStoreMock.Verify(fp => fp.Set(Constants.RequestIdKey, It.IsAny<Guid>()), Times.Never());
         }
 
         [Fact]
@@ -771,7 +771,7 @@ namespace Glimpse.Test.Core.Framework
             Runtime.BeginRequest();
             Runtime.BeginSessionAccess();
 
-            Runtime.TabMock.Verify(t=>t.GetData(It.IsAny<ITabContext>()), Times.Once());
+            Runtime.TabMock.Verify(t => t.GetData(It.IsAny<ITabContext>()), Times.Once());
         }
 
         [Fact]
@@ -796,7 +796,7 @@ namespace Glimpse.Test.Core.Framework
 
             Runtime.BeginSessionAccess();
 
-            Runtime.TabMock.Verify(t=>t.GetData(It.IsAny<ITabContext>()), Times.Never());
+            Runtime.TabMock.Verify(t => t.GetData(It.IsAny<ITabContext>()), Times.Never());
         }
 
         [Fact]
@@ -836,7 +836,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void SkipExecutionOfDefaultResourceWhenDefaultRuntimePolicyIsOff()
         {
-            this.ValidateResourceExecutionAndResultingRuntimePolicy(
+            ValidateResourceExecutionAndResultingRuntimePolicy(
                 new ResourceExecutionAndResultingRuntimePolicyTestCase
                 {
                     CheckDefaultResourceAccess = true,
@@ -847,13 +847,13 @@ namespace Glimpse.Test.Core.Framework
                     SecondRuntimePolicyOnExecuteResourceMustBeExecuted = false,
                     ResultingRuntimePolicyForResource = RuntimePolicy.Off,
                     ResourceMustBeExecuted = false
-                });    
+                });
         }
 
         [Fact]
         public void SkipExecutionOfNonDefaultResourcesWhenDefaultRuntimePolicyIsOff()
         {
-            this.ValidateResourceExecutionAndResultingRuntimePolicy(
+            ValidateResourceExecutionAndResultingRuntimePolicy(
                 new ResourceExecutionAndResultingRuntimePolicyTestCase
                 {
                     CheckDefaultResourceAccess = false,
@@ -870,7 +870,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void ExecuteDefaultResourceWhenDefaultRuntimePolicyIsOnAndNoOtherRuntimePolicySaidOff()
         {
-            this.ValidateResourceExecutionAndResultingRuntimePolicy(
+            ValidateResourceExecutionAndResultingRuntimePolicy(
                 new ResourceExecutionAndResultingRuntimePolicyTestCase
                 {
                     CheckDefaultResourceAccess = true
@@ -880,14 +880,14 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void ExecuteNonDefaultResourcesWhenDefaultRuntimePolicyIsOnAndNoOtherRuntimePolicySaidOff()
         {
-            this.ValidateResourceExecutionAndResultingRuntimePolicy(
+            ValidateResourceExecutionAndResultingRuntimePolicy(
                 new ResourceExecutionAndResultingRuntimePolicyTestCase());
         }
 
         [Fact]
         public void SkipExecutingDefaultResourceWhenFirstRuntimePolicyOnExecuteResourceSaidOff()
         {
-            this.ValidateResourceExecutionAndResultingRuntimePolicy(
+            ValidateResourceExecutionAndResultingRuntimePolicy(
                 new ResourceExecutionAndResultingRuntimePolicyTestCase
                 {
                     CheckDefaultResourceAccess = true,
@@ -901,7 +901,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void SkipExecutingDefaultResourceWhenSecondRuntimePolicyOnExecuteResourceSaidOff()
         {
-            this.ValidateResourceExecutionAndResultingRuntimePolicy(
+            ValidateResourceExecutionAndResultingRuntimePolicy(
                 new ResourceExecutionAndResultingRuntimePolicyTestCase
                 {
                     CheckDefaultResourceAccess = true,
@@ -914,7 +914,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void SkipExecutingNonDefaultResourcesWhenFirstRuntimePolicyOnExecuteResourceSaidOff()
         {
-            this.ValidateResourceExecutionAndResultingRuntimePolicy(
+            ValidateResourceExecutionAndResultingRuntimePolicy(
                 new ResourceExecutionAndResultingRuntimePolicyTestCase
                 {
                     RuntimePolicyReturnedByFirstRuntimePolicyOnExecuteResource = RuntimePolicy.Off,
@@ -927,7 +927,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void SkipExecutingNonDefaultResourcesWhenSecondRuntimePolicyOnExecuteResourceSaidOff()
         {
-            this.ValidateResourceExecutionAndResultingRuntimePolicy(
+            ValidateResourceExecutionAndResultingRuntimePolicy(
                 new ResourceExecutionAndResultingRuntimePolicyTestCase
                 {
                     RuntimePolicyReturnedBySecondRuntimePolicyOnExecuteResource = RuntimePolicy.Off,
@@ -939,7 +939,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void ExecuteDefaultResourceEvenWhenSecondRuntimePolicyOnBeginRequestSaidOffAndNoRuntimePolicyOnExecuteResourceSaidOff()
         {
-            this.ValidateResourceExecutionAndResultingRuntimePolicy(
+            ValidateResourceExecutionAndResultingRuntimePolicy(
                 new ResourceExecutionAndResultingRuntimePolicyTestCase
                 {
                     CheckDefaultResourceAccess = true,
@@ -951,7 +951,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void SkipExecutingNonDefaultResourcesWhenSecondRuntimePolicyOnBeginRequestSaidOff()
         {
-            this.ValidateResourceExecutionAndResultingRuntimePolicy(
+            ValidateResourceExecutionAndResultingRuntimePolicy(
                 new ResourceExecutionAndResultingRuntimePolicyTestCase
                 {
                     RuntimePolicyReturnedBySecondRuntimePolicyOnBeginRequest = RuntimePolicy.Off,
@@ -965,7 +965,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void ExecuteDefaultResourceEvenWhenFirstRuntimePolicyOnBeginRequestSaidOffAndNoRuntimePolicyOnExecuteResourceSaidOff()
         {
-            this.ValidateResourceExecutionAndResultingRuntimePolicy(
+            ValidateResourceExecutionAndResultingRuntimePolicy(
                 new ResourceExecutionAndResultingRuntimePolicyTestCase
                 {
                     CheckDefaultResourceAccess = true,
@@ -980,7 +980,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void SkipExecutingNonDefaultResourcesWhenFirstRuntimePolicyOnBeginRequestSaidOff()
         {
-            this.ValidateResourceExecutionAndResultingRuntimePolicy(
+            ValidateResourceExecutionAndResultingRuntimePolicy(
                 new ResourceExecutionAndResultingRuntimePolicyTestCase
                 {
                     RuntimePolicyReturnedByFirstRuntimePolicyOnBeginRequest = RuntimePolicy.Off,
@@ -996,19 +996,19 @@ namespace Glimpse.Test.Core.Framework
         {
             public ResourceExecutionAndResultingRuntimePolicyTestCase()
             {
-                this.DefaultRuntimePolicy = RuntimePolicy.On;
-                this.RuntimePolicyReturnedByFirstRuntimePolicyOnBeginRequest = RuntimePolicy.On;
-                this.FirstRuntimePolicyOnBeginRequestMustBeExecuted = true;
-                this.RuntimePolicyReturnedBySecondRuntimePolicyOnBeginRequest = RuntimePolicy.On;
-                this.SecondRuntimePolicyOnBeginRequestMustBeExecuted = true;
-                this.RuntimePolicyReturnedByFirstRuntimePolicyOnExecuteResource = RuntimePolicy.ExecuteResourceOnly;
-                this.FirstRuntimePolicyOnExecuteResourceMustBeExecuted = true;
-                this.RuntimePolicyReturnedBySecondRuntimePolicyOnExecuteResource = RuntimePolicy.ExecuteResourceOnly;
-                this.SecondRuntimePolicyOnExecuteResourceMustBeExecuted = true;
+                DefaultRuntimePolicy = RuntimePolicy.On;
+                RuntimePolicyReturnedByFirstRuntimePolicyOnBeginRequest = RuntimePolicy.On;
+                FirstRuntimePolicyOnBeginRequestMustBeExecuted = true;
+                RuntimePolicyReturnedBySecondRuntimePolicyOnBeginRequest = RuntimePolicy.On;
+                SecondRuntimePolicyOnBeginRequestMustBeExecuted = true;
+                RuntimePolicyReturnedByFirstRuntimePolicyOnExecuteResource = RuntimePolicy.ExecuteResourceOnly;
+                FirstRuntimePolicyOnExecuteResourceMustBeExecuted = true;
+                RuntimePolicyReturnedBySecondRuntimePolicyOnExecuteResource = RuntimePolicy.ExecuteResourceOnly;
+                SecondRuntimePolicyOnExecuteResourceMustBeExecuted = true;
 
-                this.CheckDefaultResourceAccess = false;
-                this.ResultingRuntimePolicyForResource = RuntimePolicy.ExecuteResourceOnly;
-                this.ResourceMustBeExecuted = true;
+                CheckDefaultResourceAccess = false;
+                ResultingRuntimePolicyForResource = RuntimePolicy.ExecuteResourceOnly;
+                ResourceMustBeExecuted = true;
             }
 
             public RuntimePolicy DefaultRuntimePolicy { get; set; }
@@ -1066,7 +1066,7 @@ namespace Glimpse.Test.Core.Framework
 
             Runtime.Initialize();
             Runtime.BeginRequest();
-            
+
             if (testCase.CheckDefaultResourceAccess)
             {
                 Runtime.ExecuteDefaultResource();

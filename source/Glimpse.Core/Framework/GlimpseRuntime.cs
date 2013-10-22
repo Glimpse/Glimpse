@@ -152,7 +152,7 @@ namespace Glimpse.Core.Framework
 
         private bool HasOffRuntimePolicy(RuntimeEvent policyName)
         {
-            var policy = this.DetermineAndStoreAccumulatedRuntimePolicy(policyName);
+            var policy = DetermineAndStoreAccumulatedRuntimePolicy(policyName);
             if (policy.HasFlag(RuntimePolicy.Off))
             {
                 return true;
@@ -195,7 +195,7 @@ namespace Glimpse.Core.Framework
             }
 
             var requestMetadata = frameworkProvider.RequestMetadata;
-            var policy = this.DetermineAndStoreAccumulatedRuntimePolicy(RuntimeEvent.EndRequest);
+            var policy = DetermineAndStoreAccumulatedRuntimePolicy(RuntimeEvent.EndRequest);
             if (policy.HasFlag(RuntimePolicy.PersistResults))
             {
                 var persistenceStore = Configuration.PersistenceStore;
@@ -284,18 +284,18 @@ namespace Glimpse.Core.Framework
             var context = new ResourceResultContext(logger, Configuration.FrameworkProvider, Configuration.Serializer, Configuration.HtmlEncoder);
 
             // First we determine the current policy as it has been processed so far
-            RuntimePolicy policy = this.DetermineAndStoreAccumulatedRuntimePolicy(RuntimeEvent.ExecuteResource);
+            RuntimePolicy policy = DetermineAndStoreAccumulatedRuntimePolicy(RuntimeEvent.ExecuteResource);
 
             // It is possible that the policy now says Off, but if the requested resource is the default resource, then we need to make sure 
             // there is a good reason for not executing that resource, since the default resource is the one we most likely need to set 
             // Glimpse On in the first place. 
-            if (resourceName.Equals(this.Configuration.DefaultResource.Name))
+            if (resourceName.Equals(Configuration.DefaultResource.Name))
             {
                 // To be clear we only do this for the default resource, and we do this because it allows us to secure the default resource the same way 
                 // as any other resource, but for this we only rely on runtime policies that handle ExecuteResource runtime events and we ignore
                 // ignore previously executed runtime policies (most likely during BeginRequest).
                 // Either way, the default runtime policy is still our starting point and when it says Off, it remains Off
-                policy = this.DetermineRuntimePolicy(RuntimeEvent.ExecuteResource, this.Configuration.DefaultRuntimePolicy);
+                policy = DetermineRuntimePolicy(RuntimeEvent.ExecuteResource, Configuration.DefaultRuntimePolicy);
             }
 
             if (policy == RuntimePolicy.Off)
@@ -377,7 +377,7 @@ namespace Glimpse.Core.Framework
                     if (!IsInitialized)
                     {
                         var logger = Configuration.Logger;
-                        policy = this.DetermineAndStoreAccumulatedRuntimePolicy(RuntimeEvent.Initialize);
+                        policy = DetermineAndStoreAccumulatedRuntimePolicy(RuntimeEvent.Initialize);
 
                         if (policy != RuntimePolicy.Off)
                         {
@@ -657,14 +657,14 @@ namespace Glimpse.Core.Framework
             }
 
             var frameworkProvider = Configuration.FrameworkProvider;
-            var logger = this.Configuration.Logger;
+            var logger = Configuration.Logger;
 
             // only run policies for this runtimeEvent
             var policies = 
-                this.Configuration.RuntimePolicies.Where(
+                Configuration.RuntimePolicies.Where(
                     policy => policy.ExecuteOn.HasFlag(runtimeEvent));
 
-            var policyContext = new RuntimePolicyContext(frameworkProvider.RequestMetadata, this.Configuration.Logger, frameworkProvider.RuntimeContext);
+            var policyContext = new RuntimePolicyContext(frameworkProvider.RequestMetadata, Configuration.Logger, frameworkProvider.RuntimeContext);
             foreach (var policy in policies)
             {
                 var policyResult = RuntimePolicy.Off;
@@ -709,7 +709,7 @@ namespace Glimpse.Core.Framework
                                      ? requestStore.Get<RuntimePolicy>(Constants.RuntimePolicyKey)
                                      : Configuration.DefaultRuntimePolicy;
 
-            maximumAllowedPolicy = this.DetermineRuntimePolicy(runtimeEvent, maximumAllowedPolicy);
+            maximumAllowedPolicy = DetermineRuntimePolicy(runtimeEvent, maximumAllowedPolicy);
 
             // store result for request
             requestStore.Set(Constants.RuntimePolicyKey, maximumAllowedPolicy);
