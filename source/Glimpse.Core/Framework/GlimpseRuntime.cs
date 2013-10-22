@@ -381,6 +381,8 @@ namespace Glimpse.Core.Framework
 
                         if (policy != RuntimePolicy.Off)
                         {
+                            CreateAndStartGlobalExecutionTimer(Configuration.FrameworkProvider.HttpRequestStore);
+
                             var messageBroker = Configuration.MessageBroker;
 
                             // TODO: Fix this to IDisplay no longer uses I*Tab*Setup
