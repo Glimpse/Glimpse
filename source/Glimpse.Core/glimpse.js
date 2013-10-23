@@ -1143,7 +1143,7 @@ glimpse.render.engine.util.table = (function($) {
             if (metadataItem.width) { cellStyle += 'width:' + metadataItem.width + ';'; };
             if (metadataItem.align) { cellStyle += 'text-align:' + metadataItem.align + ';'; };
             if (metadataItem.paddingLeft) { cellStyle += 'padding-left:' + metadataItem.paddingLeft + ';'; };
-            if (metadataItem.paddingRight) { cellStyle += 'padding-right:' + metadataItem.paddingright + ';'; };
+            if (metadataItem.paddingRight) { cellStyle += 'padding-right:' + metadataItem.paddingRight + ';'; };
             if (cellStyle) { cellAttr += ' style="' + cellStyle + '"'; };
             //Cell Span
             if (metadataItem.span) { cellAttr += ' colspan="' + metadataItem.span + '"'; };
