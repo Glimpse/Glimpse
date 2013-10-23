@@ -9,16 +9,26 @@ namespace Glimpse.WebForms.Inspector
 {
     public class ViewStatePageStatePersister : HiddenFieldPageStatePersister
     {
-        public ViewStatePageStatePersister(Page page)
+        public ViewStatePageStatePersister(Page page, PageStatePersister pageStatePersister)
             : base(page)
         {
             Logger = GlimpseConfiguration.GetLogger();
+            PageStatePersister = pageStatePersister;
         }
 
         private ILogger Logger { get; set; }
 
+        private PageStatePersister PageStatePersister { get; set; }
+
         public override void Save()
         {
+            if (PageStatePersister != null)
+            {
+                Logger.Debug("Inner PageStatePersister.Save() being executed - {0}", PageStatePersister.GetType());
+
+                PageStatePersister.Save();
+            }
+
             Logger.Debug("PageStatePersister.Save() being executed - {0}", HttpContext.Current.Request.RawUrl);
 
             var controlTree = new Dictionary<string, Type>();

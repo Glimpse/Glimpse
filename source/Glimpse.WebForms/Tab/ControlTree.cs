@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data; 
 using System.Reflection; 
 using System.Web;
@@ -65,11 +66,29 @@ namespace Glimpse.WebForms.Tab
                 context.TabStore.Set("hasRun", "true");
 
 
-                //Add adapter to the pipeline as a ViewStatePageAdapter
+                //Add adapter to the pipeline as a ViewStatePageAdapter 
 
                 context.Logger.Debug("Setting up view state page adapter");
+                 
+                var keyType = typeof(Page);
+                var adapterType = typeof(ViewStatePageAdapter);
 
-                AdapterManager.Register(typeof(Page), typeof(ViewStatePageAdapter));
+                var adapters = HttpContext.Current.Request.Browser.Adapters;
+                if (!adapters.Contains(keyType.AssemblyQualifiedName))
+                {
+                    adapters.Add(keyType.AssemblyQualifiedName, adapterType.AssemblyQualifiedName);
+                }
+                else
+                {
+                    var existingTypeString = (string)adapters[keyType.AssemblyQualifiedName]; 
+                    var existingType = Type.GetType(existingTypeString); 
+                    if (existingType != typeof(ViewStatePageAdapter))
+                    {
+                        var newAdapterType = typeof(ViewStatePageAdapter<>).MakeGenericType(existingType);
+
+                        adapters.Add(keyType.AssemblyQualifiedName, newAdapterType.AssemblyQualifiedName);   
+                    }
+                }
 
 
                 //Remember the previous state, turn tracing on at the begining of the request,
