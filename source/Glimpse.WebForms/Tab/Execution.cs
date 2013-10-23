@@ -8,6 +8,7 @@ using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Message;
 using Glimpse.Core.Tab.Assist;
+using Glimpse.WebForms.Inspector;
 using Glimpse.WebForms.Model;
 
 namespace Glimpse.WebForms.Tab
@@ -47,8 +48,8 @@ namespace Glimpse.WebForms.Tab
         }
 
         public void Setup(ITabSetupContext context)
-        {        
-            context.PersistMessages<ITraceMessage>();
+        {
+            context.PersistMessages<PageLifeCycleMessage>();
         }
 
         public override object GetData(ITabContext context)
@@ -64,53 +65,27 @@ namespace Glimpse.WebForms.Tab
                 return null;
             }
 
-            var data = ProcessData(context.GetMessages<ITraceMessage>(), context.Logger);
+            var data = ProcessData(context.GetMessages<PageLifeCycleMessage>());
             return data;
         }
 
-        private object ProcessData(IEnumerable<ITraceMessage> traceMessages, ILogger logger)
+        private object ProcessData(IEnumerable<PageLifeCycleMessage> pageLifeCycleMessages)
         {
-            var enumerable = traceMessages.ToList();
-
-            logger.Debug("Start processing trace messages for WebFormsExecution - Count {0}", enumerable.Count);
-
-            var webFormsMessages = enumerable.Where(x => x.Category == "ms").ToList(); 
-            if (webFormsMessages.Count > 0)
+            var x = 0;
+            var result = new List<ExecutionItemModel>();
+            foreach (var pageLifeCycleMessage in pageLifeCycleMessages)
             {
-                logger.Debug("Found {0} specific messages", webFormsMessages.Count);
+                var item = new ExecutionItemModel();
+                item.Ordinal = x++;
+                item.Event = pageLifeCycleMessage.EventName;
+                item.FromFirst = pageLifeCycleMessage.Offset;
+                item.FromLast = pageLifeCycleMessage.FromLast;
+                item.Duration = pageLifeCycleMessage.Duration;
 
-                var result = new List<ExecutionItemModel>();
-                var x = 0;
-                for (var i = 0; i < webFormsMessages.Count; i += 2)
-                {
-                    var message1 = webFormsMessages[i];
-                    var message2 = webFormsMessages[i + 1];
-                     
-                    var item = new ExecutionItemModel();
-                    item.Ordinal = x++;
-                    item.Event = ProcessEventName(message1.Message);
-                    item.FromFirst = message1.FromFirst;
-                    item.FromLast = message1.FromLast;
-                    item.Duration = message2.FromFirst - message1.FromFirst;
-
-                    result.Add(item);
-                }
-
-                logger.Debug("Matched {0} events", result.Count);
-
-                return result;
+                result.Add(item);
             }
 
-            logger.Debug("Finish processing trace messages for WebFormsExecution");
-             
-            return "Error in processing messages";
+            return result;
         }
-
-        private string ProcessEventName(string title)
-        {
-            var lastIndex = title.LastIndexOf(' ');
-            return title.Substring(lastIndex, title.Length - lastIndex);
-        }
-
     }
 }

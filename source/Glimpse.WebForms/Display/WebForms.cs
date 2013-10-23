@@ -6,6 +6,7 @@ using System.Linq;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Message;
+using Glimpse.WebForms.Inspector;
 
 namespace Glimpse.WebForms.Display
 { 
@@ -24,36 +25,30 @@ namespace Glimpse.WebForms.Display
             get { return InternalName; }
         }
 
+        public void Setup(ITabSetupContext context)
+        {
+            context.PersistMessages<PageLifeCycleMessage>();
+        }
+
         public object GetData(ITabContext context)
-        { 
-            var data = ProcessData(context.GetMessages<ITraceMessage>());
+        {
+            var data = ProcessData(context.GetMessages<PageLifeCycleMessage>());
             return data;
         }
 
-        private object ProcessData(IEnumerable<ITraceMessage> traceMessages)
+        private object ProcessData(IEnumerable<PageLifeCycleMessage> webFormsMessages)
         {
-            var webFormsMessages = traceMessages.Where(x => x.Category == "ms").ToList();
-            if (webFormsMessages.Any())
-            { 
-                var loadingList = webFormsMessages.Where(x => x.Message.Contains("Load")); 
-                var loadingFirst = loadingList.First();
-                var loadingLast = loadingList.Last();
-                var loadingTime = loadingLast.FromFirst - loadingFirst.FromFirst;
+            var loadingList = webFormsMessages.Where(x => x.EventName.Contains("Load")); 
+            var loadingFirst = loadingList.First();
+            var loadingLast = loadingList.Last();
+            var loadingTime = loadingLast.Offset - loadingFirst.Offset;
 
-                var renderingList = webFormsMessages.Where(x => x.Message.Contains("Render") || x.Message.Contains("State"));
-                var renderingFirst = renderingList.First();
-                var renderingLast = renderingList.Last();
-                var renderingTime = renderingLast.FromFirst - renderingFirst.FromFirst;
+            var renderingList = webFormsMessages.Where(x => x.EventName.Contains("Render") || x.EventName.Contains("State"));
+            var renderingFirst = renderingList.First();
+            var renderingLast = renderingList.Last();
+            var renderingTime = renderingLast.Offset - renderingFirst.Offset;
              
-                return new { loadingTime, renderingTime };
-            }
-
-            return null;
-        }
-
-        public void Setup(ITabSetupContext context)
-        {
-            context.PersistMessages<ITraceMessage>();
+            return new { loadingTime, renderingTime };
         }
     }
 }
