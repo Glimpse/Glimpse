@@ -74,13 +74,14 @@ namespace Glimpse.WebForms.Support
             var result = (object)null;
             if (data != null)
             {
+                //My life is sad
                 if (type == "System.Web.UI.DataBoundLiteralControl")
                 {
                     result = data;
                 }
                 else if (type == "System.Web.UI.WebControls.ListView")
                 {
-                    var list = (System.Object[])data;
+                    var list = (Object[])data;
                     result = ProcessData(rootType, "System.Web.UI.WebControls.DataBoundControl", list[0]);
                     if (list[1] != null)
                     {
@@ -106,18 +107,18 @@ namespace Glimpse.WebForms.Support
                         }
                     } 
                 }
-                else if (type == "System.Web.UI.WebControls.WebControl")
-                {
+                else if (type == "System.Web.UI.WebControls.WebControl" || type == "System.Web.UI.UserControl")
+                { 
                     var pair = data as Pair;
-                    if (pair != null)
+                    if (pair != null && (pair.First != null || pair.Second != null))
                     {
-                        result = ProcessData(rootType, "System.Web.UI.WebControls.Control", pair.First);
+                        result = WrapProcessedData(pair.First);
                         if (pair.Second != null)
                         {
                             var temp = new Dictionary<string, object>();
                             temp.Add("Base State", result);
-                            temp.Add("Attribute State", ProcessData(rootType, type, pair.Second));
-                            result = temp;
+                            temp.Add("Attribute State", WrapProcessedData(pair.Second));
+                            result = temp; 
                         }
                     }
                 }
@@ -140,24 +141,300 @@ namespace Glimpse.WebForms.Support
                         }
                     }
                 }
-                else if (type == "System.Web.UI.WebControls.FormView")
+                else if (type == "System.Web.UI.WebControls.CheckBox")
                 {
-                    var list = data as IList;
-                    if (list != null)
+                    var triplet = data as Triplet;
+                    if (triplet != null)
                     {
                         var temp = new Dictionary<string, object>();
-                        temp.Add("Base State", ProcessData(rootType, "System.Web.UI.WebControls.DataBoundControl", list[0]));
-                        temp.Add("Pager Style", ProcessData(rootType, "System.Web.UI.WebControls.FormView", list[1]));
-                        temp.Add("Header Style", ProcessData(rootType, "System.Web.UI.WebControls.FormView", list[2]));
-                        temp.Add("Footer Style", ProcessData(rootType, "System.Web.UI.WebControls.FormView", list[3]));
-                        temp.Add("Row Style", ProcessData(rootType, "System.Web.UI.WebControls.FormView", list[4]));
-                        temp.Add("Edit Row Style", ProcessData(rootType, "System.Web.UI.WebControls.FormView", list[5]));
-                        temp.Add("Insert Row Style", ProcessData(rootType, "System.Web.UI.WebControls.FormView", list[6]));
-                        temp.Add("Bound Field Style", ProcessData(rootType, "System.Web.UI.WebControls.FormView", list[7]));
-                        temp.Add("Pager Settings", ProcessData(rootType, "System.Web.UI.WebControls.FormView", list[8]));
-                        temp.Add("Control Style Created", ProcessData(rootType, "System.Web.UI.WebControls.FormView", list[9]));
+                        temp.Add("Base State", ProcessData(rootType, "System.Web.UI.WebControls.WebControl", triplet.First));
+                        temp.Add("Input Attributes State", triplet.Second);
+                        temp.Add("Label Attributes State", triplet.Third); 
+                    }
+                }
+                else if (type == "System.Web.UI.WebControls.Repeater")
+                {
+                    var pair = data as Pair;
+                    if (pair != null)
+                    {
+                        var temp = new Dictionary<string, object>();
+                        temp.Add("Base State", pair.First);
+                        temp.Add("Model Data Source State", ProcessData(rootType, "System.Web.UI.WebControls.ModelDataSource", pair.Second)); 
+                        result = temp;
+                    }
+                }
+                else if (type == "System.Web.UI.WebControls.ModelDataSource")
+                {
+                    result = ProcessData(rootType, "System.Web.UI.WebControls.ModelDataSourceView", data);
+                }
+                else if (type == "System.Web.UI.WebControls.ModelDataSourceView")
+                {
+                    result = ProcessData(rootType, "System.Web.UI.WebControls.MethodParametersDictionary", data);
+                }
+                else if (type == "System.Web.UI.WebControls.ListControl")
+                {
+                    var triplet = data as Triplet;
+                    if (triplet != null)
+                    {
+                        var temp = new Dictionary<string, object>();
+                        temp.Add("Base State", ProcessData(rootType, "System.Web.UI.WebControls.DataBoundControl", triplet.First));
+                        temp.Add("Items State", ProcessData(rootType, "System.Web.UI.WebControls.ListItemCollection", triplet.Second));
+                        temp.Add("Selected Indices", triplet.Third);
+                    }
+                }
+                else if (type == "System.Web.UI.WebControls.ListItemCollection")
+                {
+                    var triplet = data as Triplet;
+                    if (triplet != null)
+                    {
+                        var temp = new List<object>();
+                        var textList = triplet.First as object[];
+                        var valueList = triplet.Second as object[];
+                        var flagList = triplet.Third as bool[];
+
+                        if (textList != null && valueList != null && flagList != null)
+                        {
+                            for (int i = 0; i < textList.Length; i++)
+                            {
+                                temp.Add(new { Text = textList[i], Value = valueList[i], Enabled = flagList[i] });
+                            }
+
+                            result = temp;
+                        }
+                        else
+                        {
+                            result = triplet;
+                        } 
+                    }
+                    else
+                    {
+                        var pair = data as Pair;
+                        if (pair != null)
+                        {
+                            var temp = new List<object>();
+                            var indexList = pair.First as ArrayList;
+                            var valueList = pair.Second as ArrayList;
+
+                            if (indexList != null && valueList != null)
+                            {
+                                for (int i = 0; i < indexList.Count; i++)
+                                {
+                                    temp.Add(ProcessData(rootType, "System.Web.UI.WebControls.ListItem", new TempListItem { Index = indexList[i], Data = valueList[i] }));
+                                }
+                            }
+                            else
+                            {
+                                result = pair;
+                            } 
+                        }
+                    }
+                }
+                else if (type == "System.Web.UI.WebControls.ListItem")
+                {
+                    var payload = data as TempListItem;
+                    if (payload != null)
+                    {
+                        var triplet = payload.Data as Triplet;
+                        if (triplet != null)
+                        {
+                            result = new { Index = payload.Index, Text = triplet.First, Value = triplet.Second, Enabled = triplet.Third };
+                        }
+                        else
+                        {
+                            var pair = payload.Data as Pair;
+                            result = pair != null ? new { Index = payload.Index, Text = pair.First, Value = pair.Second } : data;
+                        }
+                    }
+                }
+                else if (type == "System.Web.UI.WebControls.CompositeDataBoundControl" || type == "System.Web.UI.WebControls.AdRotator")
+                {
+                    result = ProcessData(rootType, "System.Web.UI.WebControls.DataBoundControl", data);
+                }
+                else if (type == "System.Web.UI.WebControls.FormView")
+                { 
+                    var list = data as IList;
+                    if (list != null && list.Count == 10)
+                    {
+                        var temp = new Dictionary<string, object>();
+                        temp.Add("Base State", ProcessData(rootType, "System.Web.UI.WebControls.CompositeDataBoundControl", list[0]));
+                        temp.Add("Pager Style", WrapProcessedData(list[1]));
+                        temp.Add("Header Style", WrapProcessedData(list[2]));
+                        temp.Add("Footer Style", WrapProcessedData(list[3]));
+                        temp.Add("Row Style", WrapProcessedData(list[4]));
+                        temp.Add("Edit Row Style", WrapProcessedData(list[5]));
+                        temp.Add("Insert Row Style", WrapProcessedData(list[6]));
+                        temp.Add("Bound Field Style", ProcessData(rootType, "System.Web.UI.OrderedDictionaryStateHelper", list[7]));
+                        temp.Add("Pager Settings", WrapProcessedData(list[8]));
+                        temp.Add("Control Style Created", WrapProcessedData(list[9]));
 
                         result = temp;
+                    }
+                }
+                else if (type == "System.Web.UI.WebControls.DetailsView") 
+                { 
+                    var list = data as object[]; 
+                    if (list != null && list.Length == 15)
+                    {
+                        var temp = new Dictionary<string, object>();
+                        temp.Add("Base State", ProcessData(rootType, "System.Web.UI.WebControls.CompositeDataBoundControl", list[0]));
+                        temp.Add("Pager Style", WrapProcessedData(list[1]));
+                        temp.Add("Header Style", WrapProcessedData(list[2]));
+                        temp.Add("Footer Style", WrapProcessedData(list[3]));
+                        temp.Add("Row Style", WrapProcessedData(list[4]));
+                        temp.Add("Alternating Row Style", WrapProcessedData(list[5]));
+                        temp.Add("Command Row Style", WrapProcessedData(list[6]));
+                        temp.Add("Edit Row Style", WrapProcessedData(list[7]));
+                        temp.Add("Insert Row Style", WrapProcessedData(list[8]));
+                        temp.Add("Field Header Style", WrapProcessedData(list[9]));
+                        temp.Add("Field Collection", list[10]);  //Could do more here 
+                        temp.Add("Bound Field Style", ProcessData(rootType, "System.Web.UI.OrderedDictionaryStateHelper", list[11])); 
+                        temp.Add("Pager Settings", WrapProcessedData(list[12]));
+                        temp.Add("Control Style", WrapProcessedData(list[13]));
+                        temp.Add("Rows Generator", list[14]); //Could do more here 
+
+                        result = temp;
+                    } 
+                }
+                else if (type == "System.Web.UI.WebControls.GridView")
+                { 
+                    var list = data as object[];
+                    if (list != null && list.Length == 16)
+                    {
+                        var temp = new Dictionary<string, object>();
+                        temp.Add("Base State", ProcessData(rootType, "System.Web.UI.WebControls.CompositeDataBoundControl", list[0]));
+                        temp.Add("Field Collection", list[1]); //Could do more here 
+                        temp.Add("Pager Style", WrapProcessedData(list[2]));
+                        temp.Add("Header Style", WrapProcessedData(list[3]));
+                        temp.Add("Footer Style", WrapProcessedData(list[4]));
+                        temp.Add("Row Style", WrapProcessedData(list[5]));
+                        temp.Add("Alternating Row Style", WrapProcessedData(list[6]));
+                        temp.Add("Select Row Style", WrapProcessedData(list[7]));
+                        temp.Add("Edit Row Style", WrapProcessedData(list[8]));
+                        temp.Add("Bound Field Values", ProcessData(rootType, "System.Web.UI.OrderedDictionaryStateHelper", list[9]));
+                        temp.Add("Pager Settings", WrapProcessedData(list[10]));
+                        temp.Add("Control Style Created", WrapProcessedData(list[11]));
+                        temp.Add("Columns Generator", list[12]); //Could do more here 
+                        temp.Add("Sorted Ascending Cell Style", WrapProcessedData(list[13]));
+                        temp.Add("Sorted Descending Cell Style", WrapProcessedData(list[14]));
+                        temp.Add("Sorted Ascending Header Style", WrapProcessedData(list[15]));
+                        temp.Add("Sorted Descending Header Style", WrapProcessedData(list[16]));
+
+                        result = temp;
+                    }
+                }
+                else if (type == "System.Web.UI.WebControls.RadioButtonList" || type == "System.Web.UI.WebControls.BulletedList" || type == "System.Web.UI.WebControls.CheckBoxList" || type == "System.Web.UI.WebControls.DropDownList" || type == "System.Web.UI.WebControls.ListBox")
+                {
+                    result = ProcessData(rootType, "System.Web.UI.WebControls.ListControl", data);
+                }
+                else if (type == "System.Web.UI.WebControls.Menu")
+                {
+                    var list = data as object[];
+                    if (list != null && list.Length == 13)
+                    {
+                        var temp = new Dictionary<string, object>();
+                        temp.Add("Base State", ProcessData(rootType, "System.Web.UI.WebControls.WebControls", list[0]));
+                        temp.Add("Static Item Style", WrapProcessedData(list[1]));
+                        temp.Add("Static Selected Style", WrapProcessedData(list[2]));
+                        temp.Add("Static Hover Style", WrapProcessedData(list[3]));
+                        temp.Add("Static Menu Style", WrapProcessedData(list[4]));
+                        temp.Add("Dynamic Item Style", WrapProcessedData(list[5]));
+                        temp.Add("Dynamic Selected Style", WrapProcessedData(list[6]));
+                        temp.Add("Dynamic Hover Style", WrapProcessedData(list[7]));
+                        temp.Add("Dynamic Menu Style", WrapProcessedData(list[8]));
+                        temp.Add("Level Menu Item Styles", WrapProcessedData(list[9]));
+                        temp.Add("Level Selected Styles", WrapProcessedData(list[10]));
+                        temp.Add("Level Styles", WrapProcessedData(list[11]));
+                        temp.Add("Items", list[12]); //Could do more here 
+
+                        result = temp;
+                    }
+                }
+                else if (type == "System.Web.UI.WebControls.TreeView")
+                {
+                    var list = data as object[];
+                    if (list != null && list.Length == 9)
+                    {
+                        var temp = new Dictionary<string, object>();
+                        temp.Add("Base State", ProcessData(rootType, "System.Web.UI.WebControls.WebControls", list[0]));
+                        temp.Add("Node Style", WrapProcessedData(list[1]));
+                        temp.Add("Root Node Style", WrapProcessedData(list[2]));
+                        temp.Add("Parent Node Style", WrapProcessedData(list[3]));
+                        temp.Add("Leaf Node Style", WrapProcessedData(list[4]));
+                        temp.Add("Selected Node Style", WrapProcessedData(list[5]));
+                        temp.Add("Hover Node Style", WrapProcessedData(list[6]));
+                        temp.Add("Level Style", WrapProcessedData(list[7]));
+                        temp.Add("Nodes", list[8]); //Could do more here 
+
+                        result = temp;
+                    }
+                }
+                else if (type == "System.Web.UI.WebControls.DataGrid")
+                { 
+                    var list = data as object[];
+                    if (list != null && list.Length == 11)
+                    {
+                        var temp = new Dictionary<string, object>();
+                        temp.Add("Base State", ProcessData(rootType, "System.Web.UI.WebControls.WebControls", list[0]));
+                        temp.Add("Columns", ProcessData(rootType, "DataGridColumnCollection", list[1]));
+                        temp.Add("Pager Style", WrapProcessedData(list[2]));
+                        temp.Add("Header Style", WrapProcessedData(list[3]));
+                        temp.Add("Footer Style", WrapProcessedData(list[4]));
+                        temp.Add("Item Style", WrapProcessedData(list[5]));
+                        temp.Add("Alternating Item Style", WrapProcessedData(list[6]));
+                        temp.Add("Selected Item Style", WrapProcessedData(list[7]));
+                        temp.Add("Edit Item Style", WrapProcessedData(list[8]));
+                        temp.Add("Control Style", WrapProcessedData(list[9]));
+                        temp.Add("Auto Generated Columns", list[10]); //Could do more here 
+
+                        result = temp;
+                    }
+                }
+                else if (type == "System.Web.UI.WebControls.DataGridColumnCollection")
+                {
+                    var list = data as object[];
+                    if (list != null)
+                    {
+                        var temp = new List<object>();
+                        for (int i = 0; i < list.Length; i++)
+                        {
+                            var item = list[i] as object[];
+
+                            temp.Add(new { Item = WrapProcessedData(item[0]), ItemStyle = WrapProcessedData(item[1]), HeaderStyle = WrapProcessedData(item[2]), FooterStyle = WrapProcessedData(item[3]) });
+                        }
+
+                        result = temp;
+                    }
+                }
+                else if (type == "System.Web.UI.WebControls.DataList")
+                { 
+                    var list = data as object[];
+                    if (list != null && list.Length == 9)
+                    {
+                        var temp = new Dictionary<string, object>();
+                        temp.Add("Base State", ProcessData(rootType, "System.Web.UI.WebControls.WebControls", list[0])); 
+                        temp.Add("Item Style", WrapProcessedData(list[1]));
+                        temp.Add("Selected Item Style", WrapProcessedData(list[2]));
+                        temp.Add("Alternating Item Style", WrapProcessedData(list[3]));
+                        temp.Add("Edit Item Style", WrapProcessedData(list[4]));
+                        temp.Add("Separator Style", WrapProcessedData(list[5]));
+                        temp.Add("Header Style", WrapProcessedData(list[6]));
+                        temp.Add("Footer Style", WrapProcessedData(list[7]));
+                        temp.Add("Control Style", WrapProcessedData(list[8])); 
+
+                        result = temp;
+                    } 
+                }
+                else if (type == "System.Web.UI.OrderedDictionaryStateHelper")
+                {
+                    var list = data as ArrayList;
+                    if (list != null)
+                    {
+                        var temp = new Dictionary<object, object>();
+                        foreach (var item in list)
+                        {
+                            var pair = item as Pair; 
+                            temp.Add(pair.First, pair.Second);  
+                        }
                     }
                 }
 
@@ -169,22 +446,15 @@ namespace Glimpse.WebForms.Support
                     }
 
                     if (result == null)
-                    {  
-                        if (typeof(UserControl).IsAssignableFrom(rootType))
+                    {
+                        if (typeof(System.Web.UI.UserControl).IsAssignableFrom(rootType))
                         {
-                            var pair = data as Pair;
-                            if (pair != null && (pair.First != null || pair.Second != null))
-                            {
-                                result = ProcessData(rootType, type + "_First", pair.First);
-                                if (pair.Second != null)
-                                {
-                                    var temp = new Dictionary<string, object>();
-                                    temp.Add("Base State", result);
-                                    temp.Add("Attribute State", ProcessData(rootType, type + "_Second", pair.Second));
-                                    result = temp;
-                                }
-                            }
-                        } 
+                            result = ProcessData(rootType, "System.Web.UI.UserControl", data);
+                        }
+                        else if (typeof(System.Web.UI.WebControls.WebControl).IsAssignableFrom(rootType) && rootType.FullName.Contains("System.Web.UI.WebControls."))
+                        {
+                            result = ProcessData(rootType, "System.Web.UI.WebControls.WebControl", data);
+                        }
                     }
                 }
 
@@ -195,6 +465,19 @@ namespace Glimpse.WebForms.Support
             }
 
             return result;
-        } 
+        }
+
+        private object WrapProcessedData(object data)
+        {
+            return data == null ? data : new IndexedStringListConverterTarget(data);
+        }
+
+
+        private class TempListItem
+        {
+            public object Index { get; set; }
+
+            public object Data { get; set; } 
+        }
     }
 }
