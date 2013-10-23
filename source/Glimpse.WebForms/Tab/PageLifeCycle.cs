@@ -13,7 +13,7 @@ using Glimpse.WebForms.Model;
 
 namespace Glimpse.WebForms.Tab
 {
-    public class Execution : AspNetTab, ITabSetup, ITabLayout, IKey
+    public class PageLifeCycle : AspNetTab, ITabSetup, ITabLayout, IKey
     {
         private static readonly FieldInfo writeToDiagnosticsTraceField = typeof(System.Web.TraceContext).GetField("_writeToDiagnosticsTrace", BindingFlags.Static | BindingFlags.NonPublic);
 
@@ -29,7 +29,7 @@ namespace Glimpse.WebForms.Tab
         
         public override string Name
         {
-            get { return "Execution"; }
+            get { return "Page Life Cycle"; }
         }
 
         public string Key

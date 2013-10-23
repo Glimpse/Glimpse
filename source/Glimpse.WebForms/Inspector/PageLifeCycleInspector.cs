@@ -10,7 +10,7 @@ using Glimpse.WebForms.Message;
 
 namespace Glimpse.WebForms.Inspector
 {
-    public class PageLifeCycleEventsInspector : IInspector
+    public class PageLifeCycleInspector : IInspector
     {
         public void Setup(IInspectorContext context)
         {

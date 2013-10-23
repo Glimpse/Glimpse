@@ -42,14 +42,14 @@
   <ItemGroup>
     <Compile Include="Display\WebForms.cs" />
     <Compile Include="Message\PageLifeCycleMessage.cs" />
-    <Compile Include="Inspector\PageLifeCycleEventsInspector.cs" />
+    <Compile Include="Inspector\PageLifeCycleInspector.cs" />
     <Compile Include="Message\WebFormsTimelineCategory.cs" />
     <Compile Include="Model\ExecutionItemModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerializationConverter\IndexedStringListConverter.cs" />
     <Compile Include="Tab\ControlTree.cs" />
     <Compile Include="Model\ControlTreeItemModel.cs" />
-    <Compile Include="Tab\Execution.cs" />
+    <Compile Include="Tab\PageLifeCycle.cs" />
     <Compile Include="Model\ControlTreeItemTrackModel.cs" />
     <Compile Include="Inspector\ViewStatePageAdapter.cs" />
     <Compile Include="Inspector\ViewStatePageStatePersister.cs" />
