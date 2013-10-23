@@ -29,7 +29,8 @@ namespace Glimpse.WebForms.Tab
                 r.Cell("controlstateSize").Class("mono").AlignRight().WidthInPixels(125).WithTitle("ControlState").Suffix(" Bytes");
             }).Row(r =>
             {
-                r.Cell("viewstate").WithTitle("ViewState").SpanColumns(5).AsMinimalDisplay().PaddingLeftInPercent(25);
+                r.Cell("viewstateTitle").WithTitle("Title").AsMinimalDisplay().AlignRight().AsKey().Class("glimpse-sub-heading").PaddingRightInPercent(2);
+                r.Cell("viewstate").WithTitle("ViewState").SpanColumns(4).AsMinimalDisplay();
             }).Build();
 
         public override string Name

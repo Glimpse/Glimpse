@@ -17,5 +17,10 @@
         public int Level { get; set; }
 
         public object Viewstate { get; set; }
+
+        public string ViewstateTitle
+        {
+            get { return Viewstate != null ? "Viewstate" : null; }
+        }
     }
 }
