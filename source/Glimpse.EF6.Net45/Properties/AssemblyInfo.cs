@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Web;
@@ -20,6 +21,7 @@ using Glimpse.EF;
 [assembly: AssemblyFileVersion("1.4.0")]
 [assembly: AssemblyInformationalVersion("1.4.0")] // Used to specify the NuGet version number at build time
 
+[assembly: CLSCompliant(true)]
 [assembly: InternalsVisibleTo("Glimpse.Test.EF")]
 [assembly: NuGetPackage("Glimpse.EF6")]
 [assembly: PreApplicationStartMethod(typeof(Initialize), "Start")]
