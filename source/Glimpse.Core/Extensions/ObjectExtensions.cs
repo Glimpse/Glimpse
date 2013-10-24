@@ -36,5 +36,20 @@ namespace Glimpse.Core.Extensions
 
             return value.GetType();
         }
+
+        /// <summary>
+        /// Casts the value to Type of T if it is not null.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The value of cast is not null.</returns>
+        public static T CastOrDefault<T>(this object value)
+        {
+            if (value == null)
+            {
+                return default(T);
+            }
+
+            return (T)value;
+        }
     }
 }

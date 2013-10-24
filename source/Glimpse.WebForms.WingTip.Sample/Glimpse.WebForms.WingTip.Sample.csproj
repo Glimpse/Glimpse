@@ -271,7 +271,7 @@
     <Content Include="Catalog\Images\Thumbs.db" />
     <Content Include="Catalog\Images\Thumbs\Thumbs.db" />
     <Content Include="Checkout\Web.config" />
-    <Content Include="Admin\Web.config" /> 
+    <Content Include="Admin\Web.config" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="ProductDetails.aspx" />
     <Content Include="ProductList.aspx" />
@@ -306,6 +306,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="ShoppingCart.aspx" />
+    <Content Include="Viewstateless.aspx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
   </ItemGroup>
@@ -467,6 +468,13 @@
     <Compile Include="Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
+    <Compile Include="Viewstateless.aspx.cs">
+      <DependentUpon>Viewstateless.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Viewstateless.aspx.designer.cs">
+      <DependentUpon>Viewstateless.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -484,13 +492,25 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Glimpse.AspNet\Glimpse.AspNet.csproj">
-      <Project>{fddfc8a6-cddf-4bc6-9f07-e76050e1eee7}</Project>
-      <Name>Glimpse.AspNet</Name>
+    <ProjectReference Include="..\Glimpse.Ado.Net45\Glimpse.Ado.Net45.csproj">
+      <Project>{1594add8-62f8-417b-bd69-131afbbf51bc}</Project>
+      <Name>Glimpse.Ado.Net45</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">
-      <Project>{c1289ce8-3259-41d9-893e-7a4e6f772d30}</Project>
-      <Name>Glimpse.Core</Name>
+    <ProjectReference Include="..\Glimpse.AspNet.Net45\Glimpse.AspNet.Net45.csproj">
+      <Project>{dd576747-cd93-43f0-8648-6cdc5cd9c548}</Project>
+      <Name>Glimpse.AspNet.Net45</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Glimpse.Core.Net45\Glimpse.Core.Net45.csproj">
+      <Project>{2cb2400f-bc66-4074-b6e4-177a6f78163e}</Project>
+      <Name>Glimpse.Core.Net45</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Glimpse.EF5.Net45\Glimpse.EF5.Net45.csproj">
+      <Project>{9a9ddfc7-b342-4e2e-99d6-2657ab8e3627}</Project>
+      <Name>Glimpse.EF5.Net45</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Glimpse.WebForms.Net45\Glimpse.WebForms.Net45.csproj">
+      <Project>{dd576747-cd93-43f0-8648-6cdc5cd9c555}</Project>
+      <Name>Glimpse.WebForms.Net45</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

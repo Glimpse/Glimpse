@@ -101,6 +101,10 @@ task clean {
     Delete-Directory "$source_dir\Glimpse.Ado.Net35\bin"
     Delete-Directory "$source_dir\Glimpse.Ado.Net35\obj"
     
+    "   Glimpse.EF"
+    Delete-Directory "$source_dir\Glimpse.EF\bin"
+    Delete-Directory "$source_dir\Glimpse.EF\obj"
+    
     "   Glimpse.EF43.Net40"
     Delete-Directory "$source_dir\Glimpse.EF43.Net40\bin"
     Delete-Directory "$source_dir\Glimpse.EF43.Net40\obj"
@@ -120,7 +124,23 @@ task clean {
     "   Glimpse.EF6.Net40"
     Delete-Directory "$source_dir\Glimpse.EF6.Net40\bin"
     Delete-Directory "$source_dir\Glimpse.EF6.Net40\obj"
-        
+
+    "   Glimpse.WebForms"
+    Delete-Directory "$source_dir\Glimpse.WebForms\bin"
+    Delete-Directory "$source_dir\Glimpse.WebForms\obj"
+
+    "   Glimpse.WebForms.Net45"
+    Delete-Directory "$source_dir\Glimpse.WebForms.Net45\bin"
+    Delete-Directory "$source_dir\Glimpse.WebForms.Net45\obj"
+    
+    "   Glimpse.WebForms.Net40"
+    Delete-Directory "$source_dir\Glimpse.WebForms.Net40\bin"
+    Delete-Directory "$source_dir\Glimpse.WebForms.Net40\obj"
+
+    "   Glimpse.WebForms.Net35"
+    Delete-Directory "$source_dir\Glimpse.WebForms.Net35\bin"
+    Delete-Directory "$source_dir\Glimpse.WebForms.Net35\obj"
+  
     "   Glimpse.Test.*"
     Delete-Directory "$source_dir\Glimpse.Test.AspNet\bin"
     Delete-Directory "$source_dir\Glimpse.Test.AspNet\obj"
@@ -208,6 +228,15 @@ task merge -depends test {
     
     "   Glimpse.EF6.Net40"
     copy $source_dir\Glimpse.EF6.Net40\bin\Release\Glimpse.EF6.* $source_dir\Glimpse.EF6.Net45\nuspec\lib\net40\ 
+	 
+    "   Glimpse.WebForms.Net45"
+    copy $source_dir\Glimpse.WebForms.Net45\bin\Release\Glimpse.WebForms.* $source_dir\Glimpse.WebForms.Net45\nuspec\lib\net45\
+    
+    "   Glimpse.WebForms.Net40"
+    copy $source_dir\Glimpse.WebForms.Net40\bin\Release\Glimpse.WebForms.* $source_dir\Glimpse.WebForms.Net45\nuspec\lib\net40\   
+    
+    "   Glimpse.WebForms.Net35"
+    copy $source_dir\Glimpse.WebForms.Net35\bin\Release\Glimpse.WebForms.* $source_dir\Glimpse.WebForms.Net45\nuspec\lib\net35\
 }
 
 task pack -depends merge {
@@ -255,6 +284,10 @@ task pack -depends merge {
     $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.EF6.Net45\Properties\AssemblyInfo.cs | Update-AssemblyInformationalVersion
     exec { & .\nuget.exe pack $source_dir\Glimpse.EF6.Net45\NuSpec\Glimpse.EF6.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
     
+    "   Glimpse.WebForms.nuspec"
+    $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.WebForms.Net45\Properties\AssemblyInfo.cs | Update-AssemblyInformationalVersion
+    exec { & .\nuget.exe pack $source_dir\Glimpse.WebForms.Net45\NuSpec\Glimpse.WebForms.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
+
     
     "   Glimpse.zip"
     New-Item $build_dir\local\zip\Core\net45 -Type directory -Force > $null
@@ -275,6 +308,9 @@ task pack -depends merge {
     New-Item $build_dir\local\zip\EF5\net40 -Type directory -Force > $null
     New-Item $build_dir\local\zip\EF6\net45 -Type directory -Force > $null
     New-Item $build_dir\local\zip\EF6\net40 -Type directory -Force > $null
+    New-Item $build_dir\local\zip\WebForms\net45 -Type directory -Force > $null
+    New-Item $build_dir\local\zip\WebForms\net40 -Type directory -Force > $null
+    New-Item $build_dir\local\zip\WebForms\net35 -Type directory -Force > $null
 
     copy $base_dir\license.txt $build_dir\local\zip
     
@@ -301,6 +337,11 @@ task pack -depends merge {
     copy $source_dir\Glimpse.EF5.Net45\nuspec\lib\net40\Glimpse.EF5.* $build_dir\local\zip\EF5\net40
     copy $source_dir\Glimpse.EF6.Net45\nuspec\lib\net45\Glimpse.EF6.* $build_dir\local\zip\EF6\net45
     copy $source_dir\Glimpse.EF6.Net45\nuspec\lib\net40\Glimpse.EF6.* $build_dir\local\zip\EF6\net40
+    
+    copy $source_dir\Glimpse.WebForms.Net45\nuspec\lib\net45\Glimpse.WebForms.* $build_dir\local\zip\WebForms\net45
+    copy $source_dir\Glimpse.WebForms.Net45\nuspec\lib\net40\Glimpse.WebForms.* $build_dir\local\zip\WebForms\net40
+    copy $source_dir\Glimpse.WebForms.Net45\nuspec\lib\net35\Glimpse.WebForms.* $build_dir\local\zip\WebForms\net35
+    copy $source_dir\Glimpse.WebForms.Net45\nuspec\readme.txt $build_dir\local\zip\WebForms
     
     #TODO: Add help .CHM file
     
@@ -380,8 +421,8 @@ task integrate {
     "`nGlimpse must be manually installed while waiting for http://nuget.codeplex.com/workitem/2730"
     #cd $base_dir\.NuGet
     
-    #nuget update -source "c:\glimpse\builds\local" -Id Glimpse.MVC3;Glimpse.AspNet;Glimpse -Verbose "c:\glimpse\source\Glimpse.Test.Integration.Site\packages.config"
-    #exec { & .\nuget.exe update -source $build_dir\local -id "Glimpse.MVC3;Glimpse.AspNet;Glimpse" -Verbose "$source_dir\Glimpse.Test.Integration.Site\packages.config" }
+    #nuget update -source "c:\glimpse\builds\local" -Id Glimpse.MVC3;Glimpse.AspNet;Glimpse.WebForms;Glimpse -Verbose "c:\glimpse\source\Glimpse.Test.Integration.Site\packages.config"
+    #exec { & .\nuget.exe update -source $build_dir\local -id "Glimpse.MVC3;Glimpse.AspNet;Glimpse.WebForms;Glimpse" -Verbose "$source_dir\Glimpse.Test.Integration.Site\packages.config" }
     
     "`nIIS must be set up with Administrative privledges. Run: "
     "C:\Windows\System32\inetsrv\appcmd.exe add site /name:""Glimpse Integration Test Site"" /bindings:""http/*:1155:"" /physicalPath:""C:\Glimpse\source\Glimpse.Test.Integration.Site"
