@@ -17,7 +17,7 @@ using Glimpse.Core.Extensibility;
 // Keep these three attributes in sync
 [assembly: AssemblyVersion("1.0.0")]
 [assembly: AssemblyFileVersion("1.0.0")]
-[assembly: AssemblyInformationalVersion("1.0.0")] // Used to specify the NuGet version number at build time
+[assembly: AssemblyInformationalVersion("1.0.0-RC3")] // Used to specify the NuGet version number at build time
 
 [assembly: CLSCompliant(true)]
 [assembly: InternalsVisibleTo("Glimpse.Test.WebForms")]

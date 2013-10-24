@@ -12,14 +12,19 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <iconUrl>http://getglimpse.com/content/glimpse100.png</iconUrl>
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET 4.0 application. For ASP.NET MVC3 support, please NuGet Glimpse.MVC3.</description>
-        <summary>ASP.NET 4.0 web debugging and diagnostics tool.</summary>
+        <summary>ASP.NET 4.5 web debugging and diagnostics tool.</summary>
         <releaseNotes>
 Welterweight release for Core:
- - Switch images on Glimpse.axd page to their DataUri representations to avoid mixed content requests
- - Switch href over from using "#" to "javascript:void(0)"
- - Remove trailing commas in client
- - Switch logo on the About tab over to the new logo
- - Removed IpAddress as its not used anywhere 
+ - Improvement which allows Glimpse.axd be protected by custom security policies
+ - Fix History tab causing issues up when invalid characters present in Session Name
+ - Ensure client shell is forced onto new rendering layer within browser
+ - Update Visual Studio solution to 2013
+ - Improvement to client which adds support for paddings when rendering structured layouts
+ - Improvement to client to make array rendering more resilient
+ - Improvement to client which ensures table headers have the correct default style applied
+ - Improvement to client which brings better error management in master rendering engine
+ - Switch assemlies to be marked as CLS-compliant
+ - Switch Glimpse.axd over to use templates for generating the configuration resource 
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse diagnostics performance profiling timing</tags>
     </metadata>
