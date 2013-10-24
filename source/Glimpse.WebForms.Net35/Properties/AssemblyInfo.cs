@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Glimpse.Core.Extensibility;
@@ -18,7 +19,8 @@ using Glimpse.Core.Extensibility;
 // Keep these three attributes in sync
 [assembly: AssemblyVersion("1.0.0")]
 [assembly: AssemblyFileVersion("1.0.0")]
-[assembly: AssemblyInformationalVersion("1.0.0-RC2")]
+[assembly: AssemblyInformationalVersion("1.0.0-RC")]
 
+[assembly: CLSCompliant(true)]
 [assembly: InternalsVisibleTo("Glimpse.Test.WebForms")]
 [assembly: NuGetPackage("Glimpse.WebForms")]
