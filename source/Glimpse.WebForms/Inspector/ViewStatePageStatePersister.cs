@@ -9,26 +9,19 @@ namespace Glimpse.WebForms.Inspector
 {
     public class ViewStatePageStatePersister : HiddenFieldPageStatePersister
     {
-        public ViewStatePageStatePersister(Page page, PageStatePersister pageStatePersister)
+        public ViewStatePageStatePersister(Page page, PageStatePersister innerPageStatePersister)
             : base(page)
         {
             Logger = GlimpseConfiguration.GetLogger();
-            PageStatePersister = pageStatePersister;
+            InnerPageStatePersister = innerPageStatePersister;
         }
 
         private ILogger Logger { get; set; }
 
-        private PageStatePersister PageStatePersister { get; set; }
+        private PageStatePersister InnerPageStatePersister { get; set; }
 
         public override void Save()
         {
-            if (PageStatePersister != null)
-            {
-                Logger.Debug("Inner PageStatePersister.Save() being executed - {0}", PageStatePersister.GetType());
-
-                PageStatePersister.Save();
-            }
-
             Logger.Debug("PageStatePersister.Save() being executed - {0}", HttpContext.Current.Request.RawUrl);
 
             var controlTree = new Dictionary<string, Type>();
@@ -39,19 +32,32 @@ namespace Glimpse.WebForms.Inspector
             HttpContext.Current.Items.Add("_GlimpseWebFormViewState", ViewState);
             HttpContext.Current.Items.Add("_GlimpseWebFormControlTreeType", controlTree);
 
-            base.Save();
+            if (InnerPageStatePersister != null)
+            {
+                Logger.Debug("Inner PageStatePersister.Save() being executed - {0}", InnerPageStatePersister.GetType());
+
+                InnerPageStatePersister.Save();
+            }
+            else
+            {
+                // Only want to run ours if we don't have an inner
+                base.Save();
+            }
         }
 
         public override void Load()
         {
-            if (PageStatePersister != null)
+            if (InnerPageStatePersister != null)
             {
-                Logger.Debug("Inner PageStatePersister.Load() being executed - {0}", PageStatePersister.GetType());
+                Logger.Debug("Inner PageStatePersister.Load() being executed - {0}", InnerPageStatePersister.GetType());
 
-                PageStatePersister.Load();
+                InnerPageStatePersister.Load();
             }
-
-            base.Load();
+            else
+            {
+                // Only want to run ours if we don't have an inner
+                base.Load();
+            } 
         }
 
         private void GetControlTree(Dictionary<string, Type> results, ControlCollection controls)
