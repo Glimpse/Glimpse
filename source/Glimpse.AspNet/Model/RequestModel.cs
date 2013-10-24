@@ -18,6 +18,7 @@ namespace Glimpse.AspNet.Model
             AppRelativeCurrentExecutionFilePath = request.AppRelativeCurrentExecutionFilePath;
             CurrentExecutionFilePath = request.CurrentExecutionFilePath;
             FilePath = request.FilePath;
+            FormVariables = GetFormVariables(request.Form);
             Path = request.Path;
             PathInfo = request.PathInfo;
             PhysicalApplicationPath = request.PhysicalApplicationPath;
@@ -33,7 +34,6 @@ namespace Glimpse.AspNet.Model
             QueryString = GetQueryString(request.QueryString);
         }
 
-        //// TODO: Add Form
         //// TODO: Add InputStream
 
         public CultureInfo CurrentUiCulture { get; private set; }
@@ -45,6 +45,8 @@ namespace Glimpse.AspNet.Model
         public string CurrentExecutionFilePath { get; private set; }
         
         public string FilePath { get; private set; }
+
+        public IEnumerable<FormVariable> FormVariables { get; private set; }
         
         public string Path { get; private set; }
         
@@ -69,6 +71,14 @@ namespace Glimpse.AspNet.Model
         public IEnumerable<Cookie> Cookies { get; private set; }
         
         public IEnumerable<QueryStringParameter> QueryString { get; private set; }
+
+        private IEnumerable<FormVariable> GetFormVariables(NameValueCollection form)
+        {
+            foreach (var key in form.AllKeys)
+            {
+                yield return new FormVariable { Key = key, Value = form[key] };
+            }
+        }
 
         private IEnumerable<Cookie> GetCookies(HttpCookieCollection cookies, HttpServerUtilityBase server)
         {
@@ -96,6 +106,12 @@ namespace Glimpse.AspNet.Model
             {
                 yield return new QueryStringParameter { Key = key, Value = queryString[key] };
             }
+        }
+
+        public class FormVariable
+        {
+            public string Key { get; set; }
+            public string Value { get; set; }
         }
 
         public class QueryStringParameter
