@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Glimpse.Core.Extensibility;
@@ -18,5 +19,6 @@ using Glimpse.Core.Extensibility;
 [assembly: AssemblyFileVersion("1.3.3")]
 [assembly: AssemblyInformationalVersion("1.3.3")] // Used to specify the NuGet version number at build time
 
+[assembly: CLSCompliant(true)]
 [assembly: InternalsVisibleTo("Glimpse.Test.Mvc4")]
 [assembly: NuGetPackage("Glimpse.Mvc4")]

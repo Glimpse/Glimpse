@@ -91,7 +91,7 @@ namespace Glimpse.AspNet
             try
             {
                 var response = Context.Response;
-                response.Filter = new PreBodyTagFilter(htmlSnippet, response.Filter, response.ContentEncoding, Logger);
+                response.Filter = new PreBodyTagFilter(htmlSnippet, response.Filter, response.ContentEncoding, Context.Request != null ? Context.Request.RawUrl : null, Logger);
             }
             catch (Exception exception)
             {

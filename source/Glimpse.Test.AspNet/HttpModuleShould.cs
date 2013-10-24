@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Glimpse.AspNet;
 using Glimpse.Test.AspNet.Tester;
 using Xunit;
@@ -44,21 +45,32 @@ namespace Glimpse.Test.AspNet
         }
 
         [Fact]
-        public void LogOnAppDomainUnload()
+        public void HaveLoggedAppDomainUnloadMessage()
         {
+            // to make sure the HttpModule's type constructor has been run, otherwise the previous logger will have a value of null, which will be 
+            // restored after the test, making other tests fail, because the HttpModule's type constructor will eventually be run by calling the 
+            // OnAppDomainUnload method, which will set the correct logger, but that will be undone by setting the null value back.
+            Assert.NotNull(this.HttpModule);
+
             var currentDomain = AppDomain.CurrentDomain;
-            currentDomain.SetData(Constants.LoggerKey, HttpModule.LoggerMock.Object);
 
-            HttpModule.UnloadDomain(currentDomain, null);
-
-            HttpModule.LoggerMock.Verify(l => l.Fatal(It.IsAny<string>(), It.IsAny<object[]>()));
+            object previousLoggerKeyValue = currentDomain.GetData(Constants.LoggerKey);
+            try
+            {
+                currentDomain.SetData(Constants.LoggerKey, HttpModule.LoggerMock.Object);
+                typeof(HttpModule).GetMethod("OnAppDomainUnload", BindingFlags.NonPublic | BindingFlags.Static).Invoke(HttpModule, new object[] { currentDomain });
+                HttpModule.LoggerMock.Verify(l => l.Fatal(It.IsAny<string>(), It.IsAny<object[]>()));
+            }
+            finally
+            {
+                currentDomain.SetData(Constants.LoggerKey, previousLoggerKeyValue);
+            }
         }
 
         [Fact]
-        public void SetAppDomainLoggerOnInit()
+        public void HaveStoredLoggerInAppDomainData()
         {
-            HttpModule.Init(HttpModule.AppMock.Object);
-
+            Assert.NotNull(this.HttpModule); // triggering the call of the HttpModule's type constructor (if not already called)
             Assert.NotNull(AppDomain.CurrentDomain.GetData(Constants.LoggerKey));
         }
     }

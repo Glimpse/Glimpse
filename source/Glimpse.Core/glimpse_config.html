@@ -1,0 +1,660 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Glimpse - Configuration Page</title>
+    <link rel="shortcut icon" href="http://getglimpse.com/content/_v1/app-config-favicon.png?version=$glimpseRuntimeVersion$" />
+    <style>
+        *, *:before, *:after
+        {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -ms-box-sizing: border-box;
+            -o-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        body
+        {
+            margin: 0;
+            font-family: "Segoe UI Web Regular","Segoe UI","Helvetica Neue",Helvetica,Arial serif;
+            font-size: 1em;
+            line-height: 1.6em;
+        }
+
+        pre
+        {
+            margin: 0;
+        }
+
+        .code
+        {
+            font-size: 1.45em;
+            font-family: monospace;
+        }
+
+        h1, h2, h3
+        {
+            font-weight: normal;
+        }
+
+        header
+        {
+            color: #fff;
+            background-color: #323d42;
+            height: 450px;
+        }
+
+            header table
+            {
+                width: 100%;
+            }
+
+            header .detail
+            {
+                text-align: center;
+                width: 250px;
+            }
+
+            header h2
+            {
+                position: relative;
+                margin-bottom: 0;
+            }
+
+            header .find-more
+            {
+                color: white;
+                font-size: 0.8em;
+                margin-top: 0;
+            }
+
+                header .find-more:hover, header .find-more:active
+                {
+                    color: white;
+                }
+
+        .inner
+        {
+            margin: 0 auto;
+            max-width: 1200px;
+            width: 80%;
+            min-width: 900px;
+            vertical-align: top;
+            padding-top: 1em;
+        }
+
+        .button
+        {
+            width: 250px;
+            line-height: 1.2em;
+            margin: 0.5em auto;
+            text-align: center;
+            font-size: 24px;
+            padding: 10px 41px;
+            text-decoration: none;
+            display: block;
+            color: white;
+            border: 3px solid white;
+            background-color: #434f54;
+        }
+
+            .button:hover
+            {
+                background-color: #3f4a4f;
+            }
+
+        .button-small
+        {
+            font-size: 0.95em;
+        }
+
+        .inner .button
+        {
+            border-color: #ccc;
+        }
+
+        .message
+        {
+            font-size: 0.5em;
+            line-height: 1em;
+            width: 125px;
+            left: -150px;
+            top: 20px;
+            position: absolute;
+            font-style: italic;
+        }
+
+        img
+        {
+            border: 0px;
+        }
+
+        .center
+        {
+            text-align: center;
+        }
+
+        .notification
+        {
+            padding: 17px;
+            font-size: 1.2em;
+            text-align: center;
+        }
+
+        .notification-success
+        {
+            background-color: #B5CDA4;
+            color: #486E25;
+        }
+
+        .notification-fail
+        {
+            background-color: #E4BBB1;
+            color: #DA6953;
+        }
+
+        .notification-warn
+        {
+            background-color: #E4D1A9;
+            color: #DA9221;
+        }
+
+        .version span
+        {
+            font-size: 0.8em;
+            font-style: italic;
+        }
+
+        .warn
+        {
+            color: red;
+            font-weight: bold;
+        }
+
+        .package-version
+        {
+            font-size: 0.7em;
+        }
+
+        .root > li
+        {
+            margin-bottom: 15px;
+        }
+
+        .more-help h3
+        {
+            margin: 40px 0 5px;
+            text-align: center;
+        }
+
+        .side-bar
+        {
+            float: right;
+            width: 250px;
+            margin-top: 22px;
+        }
+
+        .out-dated
+        {
+            padding-bottom: 1px 0 18px;
+            text-align: center;
+            background-color: #FFF9B0;
+            color: goldenrod;
+        }
+
+        .code-holder
+        {
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #eee;
+            font-family: monospace;
+            line-height: 1.3em;
+            font-size: 1.3em;
+        }
+
+        .close-section
+        {
+            position: absolute;
+            right: -19px;
+            border-radius: 20px;
+            font-weight: bold;
+            height: 40px;
+            width: 40px;
+            text-align: center;
+            font-size: 140%;
+            line-height: 120%;
+            margin-top: -9px;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .code-comment
+        {
+            color: #52AA00;
+        }
+
+        .code-content
+        {
+            margin-bottom: 10px;
+        }
+
+        .configuration-holder
+        {
+            display: none;
+            position: relative;
+        }
+
+        .description
+        {
+            text-align: center;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: normal;
+        }
+
+        .description strong
+        {
+            text-decoration: underline;
+            font-size: 1.1em;
+        }
+
+        .configuration-options-item, .code-section-child
+        {
+            display: none;
+        }
+    </style>
+    <script type="text/javascript">
+        var toggleClass = function (name) {
+            toggleItems(document.getElementsByClassName(name));
+        },
+
+            toggleItems = function (e) { for (var i = 0; i < e.length; i++) { toggleItem(e[i]); } },
+            toggleItem = function (e) { if (e.style.display == 'none') { e.style.display = ''; } else { e.style.display = 'none'; } };
+
+    </script>
+</head>
+    <body>
+        <header>
+            <div class="inner">
+                <table>
+                    <tr>
+                        <td class="logo">
+                            <a href="http://getglimpse.com/" title="Glimpse Home :D">
+                                <img width="325" src="$glimpseLogoDataUri$" alt="Glimpse Home :D" /></a>
+                        </td>
+                        <td class="detail">
+                            <div class="version">
+                                v$glimpseRuntimeVersion$ <span>(core)</span>
+                            </div>
+                            <h2>Bookmarklets
+                                <div class="message">“Drag us to your favorites bar for quick and easy access to Glimpse”</div>
+                            </h2>
+                            <a href="http://getglimpse.com/Help/First-Run#Glimpse-Bookmarklets" class="find-more" target="new">find out more</a>
+                            <a class="button" href="javascript:(function(){document.cookie='glimpsePolicy=On;path=/;expires=Sat, 01 Jan 2050 12:00:00 GMT;';window.location.reload();})();">Turn Glimpse On</a>
+                            <a class="button" href="javascript:(function(){document.cookie='glimpsePolicy=;path=/;expires=Sat, 01 Jan 2050 12:00:00 GMT;';window.location.reload();})();">Turn Glimpse Off</a>
+                            <a class="button" href="javascript:(function(){document.cookie='glimpseId='+ prompt('Client Name?') +';path=/;expires=Sat, 01 Jan 2050 12:00:00 GMT;';window.location.reload();})();">Set Glimpse Session Name</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </header>
+        <div class="inner">
+            $if(hasDuplicateResources)$
+            <div class='notification notification-fail'>
+                <strong>Houston we have a problem :(</strong>
+                <br />
+                We have detected that the following resources have been duplicated - 
+            
+                $duplicateResources: {duplicateResource|
+                $if(duplicateResource.IsNotFirstDuplicate)$
+                , 
+                $endif$    
+                <strong>$duplicateResource.Name$</strong>
+                }$
+            
+                . Typically when this happens, Glimpse will fail to operate correctly and lead to ambiguous references.
+            </div>
+            $endif$
+
+            <!--Update notification-->
+            <script type="text/javascript">
+                var getOptions = function() { 
+                    var data = localStorage.getItem('glimpseOptions'); 
+                    return data != null ? JSON.parse(data) : {}; 
+                },
+                    options = getOptions(), 
+                    currentHash = options.hash, 
+                    checkUri = options.versionCheckUri, 
+                    viewUri = options.versionViewUri, 
+                    hasNewer = options.hasNewerVersion; 
+                
+                if (hasNewer && checkUri.indexOf('hash=' + currentHash) > -1) { 
+                    document.write("<div class='out-dated'><h3>Really sorry to have to say this but you are out of date :(</h3>A new version of Glimpse is waiting for you... it's very lonely without you. It will be worth your while updating. <br /><a href='" + viewUri + "' target='new'>See what you are missing out on</a></div>");
+                }
+            </script>
+
+            <!--Configuration generator-->
+            <div class="configuration-holder"><h3>Configuration Helper</h3>
+                <div class="description warn">NOTE: The below is <strong>only designed</strong> to help generate the config which needs be copied over to your <strong>web.config</strong></div>
+                <div class="close-section button button-small">x</div>
+                <div class="code-holder">
+                    <pre class="code-content">&lt;glimpse defaultRuntimePolicy="On" endpointBaseUri="~/Glimpse.axd"&gt;</pre>
+
+                    <pre class="code-content code-logging configuration-options-item">    &lt;logging level="Trace" /&gt;</pre>
+                                                                                    
+                    <pre class="code-comment code-content code-section-tabs-off">
+    &lt;!-- Tab Management
+    &lt;tabs&gt;
+        &lt;ignoredTypes&gt;
+            &lt;add type="{Namespace.Type, AssemblyName}"/&gt;
+        &lt;/ignoredTypes&gt;
+    &lt;/tabs&gt;
+    --></pre>
+
+                    <div class="code-content code-section-tabs code-section-child" data-altState="code-section-tabs-off">
+                        <pre>    &lt;tabs&gt;</pre>
+                        <div class="code-tabs-ignoredTypes">
+                            <pre>        &lt;ignoredTypes&gt;</pre>
+                            <div class="code-ignoredTypes-options-tabs code-ignoredTypes-options"></div>
+                            <pre>        &lt;/ignoredTypes&gt;</pre>
+                        </div>
+                        <pre>    &lt;/tabs&gt;</pre>
+                    </div>
+
+                    <pre class="code-comment code-content code-section-runtimePolicies-off">
+    &lt;!-- Runtime Policy Management
+    &lt;runtimePolicies&gt;
+        &lt;ignoredTypes&gt;
+            &lt;add type="{Namespace.Type, AssemblyName}"/&gt;
+        &lt;/ignoredTypes&gt;
+    &lt;/runtimePolicies&gt;
+    --></pre>
+
+                    <div class="code-content code-section-runtimePolicies code-section-child" data-altState="code-section-runtimePolicies-off">
+                        <pre>    &lt;runtimePolicies&gt;</pre>
+                        <div class="code-runtimePolicies-ignoredTypes">
+                            <pre>        &lt;ignoredTypes&gt;</pre>
+                            <div class="code-ignoredTypes-options-runtimePolicies code-ignoredTypes-options"></div>
+                            <pre>        &lt;/ignoredTypes&gt;</pre>
+                        </div>
+                        <div class="code-runtimePolicies-blacklist configuration-options-item">
+                            <pre>       &lt;uris&gt;
+            &lt;add regex=".*/admin.*"/&gt;
+        &lt;/uris&gt;</pre>
+                        </div>
+                        <div class="code-runtimePolicies-statusCodes configuration-options-item">
+                            <pre>       &lt;statusCodes&gt;
+            &lt;add statusCode="404"/&gt;
+        &lt;/statusCodes&gt;</pre>
+                        </div>
+                        <div class="code-runtimePolicies-contentTypes configuration-options-item">
+                            <pre>       &lt;contentTypes&gt;
+            &lt;add contentType="application/xml"/&gt;
+        &lt;/contentTypes&gt;</pre>
+                        </div>
+                        <pre>    &lt;/runtimePolicies&gt;</pre>
+                    </div>
+                
+                    <div class="code-content code-section-inspectors code-section-child">
+                        <pre>    &lt;inspectors&gt;</pre>
+                        <div class="code-inspectors-ignoredTypes">
+                            <pre>        &lt;ignoredTypes&gt;</pre>
+                            <div class="code-ignoredTypes-options-inspectors code-ignoredTypes-options"></div>
+                            <pre>        &lt;/ignoredTypes&gt;</pre>
+                        </div>
+                        <pre>    &lt;/inspectors&gt;</pre>
+                    </div>
+
+                    <pre class="code-content">&lt;/glimpse&gt;</pre>
+
+                    <ul class="configuration-options">
+                        <li>Tab Management - Individual Tabs can be disabled by instructing Glimpse to ignore their types</li>
+                        <li>Runtime Policy Management - Individual Policies can be disabled by instructing Glimpse to ignore their types
+                        <ul>
+                            <li><input type="checkbox" data-show="code-runtimePolicies-contentTypes">Content Types - Filter what specific Content Types Glimpse will be enabled for</li>
+                            <li><input type="checkbox" data-show="code-runtimePolicies-blacklist">Blacklist URIs - Filter Glimpse to only work on URIs that match specifc regular expressions</li>
+                            <li><input type="checkbox" data-show="code-runtimePolicies-statusCodes">Status Codes - Filter what specific Status Codes Glimpse will be enabled for</li>
+                        </ul>
+                        <li><input type="checkbox" data-show="code-logging">Logging - An internal Glimpse diagnostics log can be enabled to help troubleshoot problems with Glimpse</li>
+                    </ul>
+                    <div style="text-align:center"><a href="http://getglimpse.com/Help/Configuration">find out more online</a></div>
+                </div>
+            </div>
+            <div class="side-bar">
+                <!--Cookie status on/off/other-->
+                <script type="text/javascript"> 
+                    var getCookie = function(name) { 
+                        var re = new RegExp(name + "=([^;]+)"); 
+                        var value = re.exec(document.cookie); 
+                        return (value != null) ? unescape(value[1]) : null; 
+                    }; 
+                    var policy = getCookie('glimpsePolicy'); 
+                    if (policy == 'On') { 
+                        document.write("<div class='notification notification-success'><strong>Glimpse cookie set 'On'</strong> When you go back to your site, depending on your policies, you should see Glimpse at the bottom right of the page.</div>"); 
+                    } else if (policy == '' || policy == null) { 
+                        document.write("<div class='notification notification-fail'><strong>Glimpse cookie set 'Off'</strong> By default for Glimpse to be visible, the `glimpsePolicy` cookie needs to be set 'On'. We have made this simple by providing the above buttons :D</div>"); 
+                    } else { 
+                        document.write("<div class='notification notification-warn'><strong>Glimpse cookie set '" + policy + "'</strong> Looks like you are doing something custom. We don't have any specific buttons for your case, but if you ever want to just turn Glimpse On or Off simply use the above buttons.</div>");
+                    }
+                </script>
+                <!--Configuration help-->
+                <div class="more-help">
+                    <h3>Configuration Help?</h3>
+                    Want to learn more about configuring Glimpse or how to disable Tabs or Policies?<br />
+                    <a href="javascript:return true;" class="config-open button button-small">Start Config Helper</a>
+                </div>  <!--head over to our <a href="http://getglimpse.com/Help/Configuration" target="new">config help page</a>-->
+                <!--Logging help-->
+                <div class="more-help">
+                    <h3>Glimpse Logging?</h3>
+                    Have an issue? help us figure it out by turning on logging.<br />
+                    <a href="javascript:return true;" class="logging-on button button-small">Find Out How</a>
+                </div>
+            </div>
+            <h3>Standard Settings</h3>
+            <ul class="root">
+                <li><strong>Tabs</strong>:
+                    <ul class="code-ignoredTypes-controller" data-link="code-ignoredTypes-options-tabs">
+                        $tabsByPackage: {tabsForPackage|
+                        <li>
+                            <strong>$tabsForPackage.PackageName$</strong> <span class="package-version">$tabsForPackage.PackageVersion$</span>
+                            <ul>
+                                $tabsForPackage.ContainedItems: {tab|
+                                <li>
+                                    <input type="checkbox" data-type="$tab.Type$, $tab.AssemblyName$" checked="checked" />
+                                    <strong>$tab.Name$</strong> - <span class="code">$tab.Type$</span>
+                                    <span style="display:none" class="more-detail"> - <em>$tab.ExecuteOn$</em></span>
+                                </li>
+                                }$
+                            </ul>
+                        </li>    
+                        }$
+                    </ul>
+                    <br/>Want to create your own Tabs - <a href="http://getglimpse.com/Help/Custom-Tabs" target="new">see here!</a>
+                </li>
+                <li><strong>Runtime Policies</strong>: 
+                    <ul class="code-ignoredTypes-controller" data-link="code-ignoredTypes-options-runtimePolicies">
+                        $runtimePoliciesByPackage: {runtimePoliciesForPackage|
+                        <li>
+                            <strong>$runtimePoliciesForPackage.PackageName$</strong> <span class="package-version">$runtimePoliciesForPackage.PackageVersion$</span>
+                            <ul>
+                                $runtimePoliciesForPackage.ContainedItems: {runtimePolicy|
+                                <li>
+                                    <input type="checkbox" data-type="$runtimePolicy.Type$, $runtimePolicy.AssemblyName$" checked="checked" />
+                                    <span class="code">$runtimePolicy.Type$</span>
+                                    <span style="display:none" class="more-detail"> - <em>$runtimePolicy.ExecuteOn$</em></span>
+                                    $if(runtimePolicy.HasWarningMessage)$
+                                    <span style="display:none" class="more-detail"><br/></span><strong class="warn">$runtimePolicy.WarningMessage$</strong>
+                                    $endif$
+                                </li>
+                                }$
+                            </ul>
+                        </li>    
+                        }$
+                    </ul>
+                    <br/>Learn how to create your own policies - <a href="http://getglimpse.com/Help/Custom-Runtime-Policy" target="new">see here!</a>
+                </li>
+            </ul>
+        
+            <!--Toggle details-->
+            <a class="more-detail" href="javascript:return true;" onclick="toggleClass('more-detail')" style="display:block">More details?</a>
+            <a class="more-detail" href="javascript:return true;" onclick="toggleClass('more-detail')" style="display:none">Less details?</a>
+            <div class="more-detail" style="display:none">
+                <h3>Detailed Settings:</h3>
+                <ul class="root">
+                    <li><strong>Inspectors</strong>: 
+                        <ul class="code-ignoredTypes-controller" data-link="code-ignoredTypes-options-inspectors">
+                            $inspectorsByPackage: {inspectorsForPackage|
+                            <li>
+                                <strong>$inspectorsForPackage.PackageName$</strong> <span class="package-version">$inspectorsForPackage.PackageVersion$</span>
+                                <ul>
+                                    $inspectorsForPackage.ContainedItems: {inspector|
+                                    <li>
+                                        <input type="checkbox" data-type="$inspector.Type$, $inspector.AssemblyName$" checked="checked" />
+                                        <span class="code">$inspector.Type$</span>
+                                    </li>
+                                    }$
+                                </ul>
+                            </li>    
+                            }$
+                        </ul>
+                    </li>
+                    <li><strong>Resources</strong>: 
+                        <ul>
+                            $resourcesByPackage: {resourcesForPackage|
+                            <li>
+                                <strong>$resourcesForPackage.PackageName$</strong> <span class="package-version">$resourcesForPackage.PackageVersion$</span>
+                                <ul>
+                                    $resourcesForPackage.ContainedItems: {resource|
+                                    <li>
+                                        <strong>$resource.Name$</strong> - <span class="code">$resource.Type$</span> - <em>$resource.Parameters$</em>
+                                        $if(resource.HasDuplicate)$
+                                        <strong class="warn">*Duplicate*</strong>
+                                        $endif$
+                                    </li>
+                                    }$
+                                </ul>
+                            </li>    
+                            }$
+                        </ul>
+                    </li>
+                    <li><strong>Client Scripts</strong>: 
+                        <ul>
+                            $clientScriptsByPackage: {clientScriptsForPackage|
+                            $clientScriptsForPackage.ContainedItems: {clientScript|
+                            <li>
+                                <span class="code">$clientScript.Type$</span> - $clientScript.Order$
+                            </li>
+                            }$
+                            }$
+                        </ul>
+                    </li>
+                    <li><strong>Framework Provider</strong>: <span class="code">$frameworkProviderType$</span></li>
+                    <li><strong>Html Encoder</strong>: <span class="code">$htmlEncoderType$</span></li>
+                    <li><strong>Logger</strong>: <span class="code">$loggerType$</span></li>
+                    <li><strong>Persistence Store</strong>: <span class="code">$persistenceStoreType$</span></li>
+                    <li><strong>Resource Endpoint</strong>: <span class="code">$resourceEndpointType$</span></li>
+                    <li><strong>Serializer</strong>: <span class="code">$serializerType$</span></li>
+                    <li><strong>Default Resource</strong>: <span class="code">$defaultResourceType$</span> - <em>$defaultResourceName$</em></li>
+                    <li><strong>Default Runtime Policy</strong>: <span class="code">$defaultRuntimePolicyType$</span></li>
+                    <li><strong>Proxy Factory</strong>: <span class="code">$proxyFactoryType$</span></li>
+                    <li><strong>Message Broker</strong>: <span class="code">$messageBrokerType$</span></li>
+                    <li><strong>Endpoint Base Uri</strong>: <span class="code">$endpointBaseUri$</span></li>
+                </ul>
+                <h3>Registered Packages:</h3>
+                <p>NOTE, doesn't represent all the Glimpse dependent NuGet packages you have installed, just the ones that have registered as a NuGet package</p>
+                <ul>
+                    $registeredNuGetPackages: {registeredNuGetPackage|
+                    <li>$registeredNuGetPackage.Id$ - $registeredNuGetPackage.Version$</li>
+                    }$
+                </ul>
+                $if(hasNonProcessableAssemblies)$
+                <strong class="warn">The following assemblies could not be processed during NuGet package discovery. Check log for more details.</strong>
+                <ul>
+                    $nonProcessableAssemblies: {nonProcessableAssembly|
+                    <li>$nonProcessableAssembly$</li>
+                    }$
+                </ul>
+                $endif$
+            </div>
+        </div>
+        <footer>
+            <div class="inner">
+                <p class="center">For more info see <a href="http://getglimpse.com">getGlimpse.com</a></p>
+                <div class="center">
+                    <img src="$githubDataUri$"> Found an <em>error</em>? <a href="https://github.com/glimpse/glimpse/issues">Help us improve</a>.   
+                    <img src="$twitterDataUri$"> Have a <em>question</em>? <a href="http://twitter.com/#search?q=%23glimpse">Tweet us using #glimpse</a>.
+                </div>
+            </div>
+        </footer>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+        <script>
+            var JQ = \$;
+            JQ(function() {
+                JQ('.logging-on').click(function() {
+                    JQ('.configuration-holder').show(); 
+                    JQ('[data-show=\"code-logging\"]').click();
+                }); 
+                
+                JQ('.configuration-holder .close-section').click(function() {
+                    JQ('.configuration-holder').hide();
+                }); 
+                
+                JQ('.config-open').click(function() {
+                    JQ('.configuration-holder').toggle();
+                }); 
+                
+                JQ('.configuration-options input').change(function() {
+                    JQ('.'+ JQ(this).attr('data-show')).toggle(); 
+                    adjustConfigState();
+                });  
+                
+                JQ('.code-ignoredTypes-controller input').change(function() { 
+                    JQ('.configuration-holder').show(); 
+                    var item=JQ(this),
+                        itemType=item.attr('data-type'),
+                        infoSection=item.closest('.code-ignoredTypes-controller'),
+                        configSection=JQ('.'+infoSection.attr('data-link')),
+                        ignoreItem = configSection.find("pre[data-type='" + itemType + "']");
+
+                    if (ignoreItem.length == 0) {
+                        configSection.append('<pre data-type="' + itemType + '">            &lt;add type="' + itemType + '" /></pre>');
+                    } else {
+                        ignoreItem.remove();
+                    }
+                    adjustConfigState();
+                });
+
+                var adjustConfigState = function () {
+                    JQ('.code-ignoredTypes-options').each(function () {
+                        var holder = JQ(this),
+                            parent = holder.parent();
+
+                        if (holder.find('pre').length == 0) {
+                            parent.hide();
+                        } else {
+                            parent.show();
+                        }
+                    });
+
+                    JQ('.code-section-child').each(function () {
+                        var holder = JQ(this),
+                            alt = holder.attr('data-altState');
+
+                        holder.show();
+                        if (holder.find('div:visible').length == 0) {
+                            holder.hide();
+                            if (alt) {
+                                JQ('.' + alt).show();
+                            }
+                        } else {
+                            holder.show();
+                            if (alt) {
+                                JQ('.' + alt).hide();
+                            }
+                        }
+                    });
+                };
+            });
+        </script>
+    </body>
+</html>
