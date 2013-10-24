@@ -45,10 +45,12 @@ namespace Glimpse.WebForms.Inspector
             return InnerAdapter.DeterminePostBackMode();
         }
 
+#if NET45Plus
         public override NameValueCollection DeterminePostBackModeUnvalidated()
         {
             return InnerAdapter.DeterminePostBackModeUnvalidated();
         }
+#endif
 
         public override ICollection GetRadioButtonsByGroup(string groupName)
         {
