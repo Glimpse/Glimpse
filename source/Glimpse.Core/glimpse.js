@@ -274,6 +274,9 @@ glimpse.util = (function($) {
         htmlEncode: function (value) {
             return !(value == null) ? value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
         },
+        jsEncode: function (value) {
+            return !(value == null) ? value.replace(/\\/g, '\\\\').replace(/"/g, '\"') : '';
+        },
         preserveWhitespace: function (value) {
             if (value != null && typeof value !== "string")
                 value = value.toString();
@@ -2362,7 +2365,7 @@ glimpse.tab = (function($, pubsub, data) {
             
             for (var x = context.resultCount; x < result.length; x++) {
                 var item = result[x];
-                html = '<tr data-requestId="' + item.requestId + '" class="glimpse-row"><td><div class="glimpse-ellipsis" title="' + item.uri + '">' + item.uri + '</div></td><td>' + item.method + '</td><td class="mono" style="text-align:right">' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.dateTime + '</td><td><a href="javascript:void(0)" class="glimpse-ajax-link" data-requestId="' + item.requestId + '">Inspect</a></td></tr>' + html;
+                html = '<tr data-requestId="' + item.requestId + '" class="glimpse-row"><td><div class="glimpse-ellipsis" title="' + item.uri + '">' + util.htmlEncode(item.uri) + '</div></td><td>' + item.method + '</td><td class="mono" style="text-align:right">' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.dateTime + '</td><td><a href="javascript:void(0)" class="glimpse-ajax-link" data-requestId="' + item.requestId + '">Inspect</a></td></tr>' + html;
             }
             detailBody.prepend(html);
             
@@ -2573,7 +2576,7 @@ glimpse.tab = (function($, pubsub, data) {
             
             for (var x = context.resultCount; x < clientData.length; x++) {
                 var item = clientData[x];
-                html = '<tr class="glimpse-row" data-requestId="' + item.requestId + '"><td><div class="glimpse-ellipsis" title="' + item.uri + '">' + item.uri + '</div></td><td>' + item.method + '</td><td class="mono" style="text-align:right">' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.dateTime + '</td><td>' + item.isAjax + '</td><td><a href="javascript:void(0)" class="glimpse-history-link" data-requestId="' + item.requestId + '">Inspect</a></td></tr>' + html;
+                html = '<tr class="glimpse-row" data-requestId="' + item.requestId + '"><td><div class="glimpse-ellipsis" title="' + item.uri + '">' + util.htmlEncode(item.uri) + '</div></td><td>' + item.method + '</td><td class="mono" style="text-align:right">' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.dateTime + '</td><td>' + item.isAjax + '</td><td><a href="javascript:void(0)" class="glimpse-history-link" data-requestId="' + item.requestId + '">Inspect</a></td></tr>' + html;
             }
             detailBody.prepend(html);
             
@@ -2589,12 +2592,12 @@ glimpse.tab = (function($, pubsub, data) {
                 panel = elements.panel('history'),
                 masterBody = panel.find('.glimpse-col-side tbody');
             
-            for (var recordName in result) {
-                var masterRow = masterBody.find('a[data-clientName="' + recordName + '"]').parents('tr:first'),
+            for (var recordName in result) { 
+                var masterRow = masterBody.find('a[data-clientName="' + util.jsEncode(recordName) + '"]').parents('tr:first'),
                     rowCount = masterBody.find('tr').length;
 
                 if (masterRow.length == 0)
-                    masterRow = $('<tr class="glimpse-row"><td>' + recordName + '</td><td class="glimpse-history-count">1</td><td><a href="javascript:void(0)" class="glimpse-Client-link" data-clientName="' + recordName + '">Inspect</a></td></tr>').prependTo(masterBody);
+                    masterRow = $('<tr class="glimpse-row"><td>' + util.htmlEncode(recordName) + '</td><td class="glimpse-history-count">1</td><td><a href="javascript:void(0)" class="glimpse-Client-link" data-clientName="' + recordName + '">Inspect</a></td></tr>').prependTo(masterBody);
                 
                 masterRow.find('.glimpse-history-count').text(result[recordName].length);
                 
@@ -2662,7 +2665,7 @@ glimpse.tab = (function($, pubsub, data) {
         selectSession = function(clientName) {
             var panel = elements.panel('history'),
                 masterPanel = panel.find('.glimpse-col-side'),
-                item = masterPanel.find('a[data-clientName="' + clientName + '"]'), 
+                item = masterPanel.find('a[data-clientName="' + util.jsEncode(clientName) + '"]'),
                 clientData = context.currentData[clientName];
             
             settings.local('historyClient', clientName),
