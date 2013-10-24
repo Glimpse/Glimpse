@@ -42,6 +42,18 @@ namespace Glimpse.WebForms.Inspector
             base.Save();
         }
 
+        public override void Load()
+        {
+            if (PageStatePersister != null)
+            {
+                Logger.Debug("Inner PageStatePersister.Load() being executed - {0}", PageStatePersister.GetType());
+
+                PageStatePersister.Load();
+            }
+
+            base.Load();
+        }
+
         private void GetControlTree(Dictionary<string, Type> results, ControlCollection controls)
         { 
             foreach (Control control in controls)
