@@ -22,7 +22,7 @@ namespace Glimpse.AspNet.SerializationConverter
             root.AddRow().Key("Current Execution File Path").Value(request.CurrentExecutionFilePath);
             root.AddRow().Key("Current UI Culture").Value(request.CurrentUiCulture);
             root.AddRow().Key("File Path").Value(request.FilePath);
-            root.AddRow().Key("Form Variables").Value(request.FormVariables);
+            root.AddRow().Key("Form Variables").Value(BuildFormVariables(request.FormVariables));
             root.AddRow().Key("Path").Value(request.Path);
             root.AddRow().Key("Path Info").Value(request.PathInfo);
             root.AddRow().Key("Physical Application Path").Value(request.PhysicalApplicationPath);
@@ -49,6 +49,15 @@ namespace Glimpse.AspNet.SerializationConverter
             }
 
             return result;
+        }
+
+        private object BuildFormVariables(IEnumerable<RequestModel.FormVariable> formVariables)
+        {
+            if (!formVariables.Any())
+            {
+                return null;
+            }
+            return formVariables;
         }
 
         public object BuildQueryString(IEnumerable<RequestModel.QueryStringParameter> parameters)
