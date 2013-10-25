@@ -110,6 +110,7 @@ namespace Glimpse.Core.Policy
         /// </example>
         public void Configure(Section section)
         {
+            UriBlackList.Add(new Regex("__browserLink/requestData")); 
             foreach (RegexElement item in section.RuntimePolicies.Uris)
             {
                 UriBlackList.Add(item.Regex);

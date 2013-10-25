@@ -25,6 +25,7 @@ Welterweight release for Core:
  - Improvement to client which brings better error management in master rendering engine
  - Switch assemlies to be marked as CLS-compliant
  - Switch Glimpse.axd over to use templates for generating the configuration resource 
+ - Ensure that Glimpse ignores BrowserLinks preflight requests
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse diagnostics performance profiling timing</tags>
     </metadata>
