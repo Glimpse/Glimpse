@@ -36,6 +36,8 @@ namespace Glimpse.WebForms.Inspector
             {
                 Logger.Debug("Inner PageStatePersister.Save() being executed - {0}", InnerPageStatePersister.GetType());
 
+                InnerPageStatePersister.ViewState = ViewState;
+                InnerPageStatePersister.ControlState = ControlState;
                 InnerPageStatePersister.Save();
             }
             else
@@ -52,6 +54,8 @@ namespace Glimpse.WebForms.Inspector
                 Logger.Debug("Inner PageStatePersister.Load() being executed - {0}", InnerPageStatePersister.GetType());
 
                 InnerPageStatePersister.Load();
+                ViewState = InnerPageStatePersister.ViewState;
+                ControlState = InnerPageStatePersister.ControlState;
             }
             else
             {

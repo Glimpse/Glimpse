@@ -28,8 +28,6 @@ namespace Glimpse.WebForms.Inspector
             InnerAdapter = Activator.CreateInstance<TPageAdapter>();
         }
 
-        private System.Web.UI.Adapters.PageAdapter InnerAdapter { get; set; }
-
         public override PageStatePersister GetStatePersister()
         {
             CopyAccessState();
@@ -53,6 +51,10 @@ namespace Glimpse.WebForms.Inspector
                 return InnerAdapter.CacheVaryByParams;
             }
         }
+
+        private System.Web.UI.Adapters.PageAdapter InnerAdapter { get; set; }
+
+        private bool PageAdapterStateCopied { get; set; }
 
         public override NameValueCollection DeterminePostBackMode()
         {
@@ -215,14 +217,12 @@ namespace Glimpse.WebForms.Inspector
 
         private void CopyAccessState()
         {
-            if (HttpContext.Current.Items.Contains("_GlimpseWebFormPageAdapterStateCopied"))
-            {
-                var browserValue = browserField.GetValue(this);
-                var controlValue = controlField.GetValue(this);
-                browserField.SetValue(InnerAdapter, browserValue);
-                controlField.SetValue(InnerAdapter, controlValue);
+            if (!PageAdapterStateCopied)
+            { 
+                browserField.SetValue(InnerAdapter, Browser);
+                controlField.SetValue(InnerAdapter, Control);
 
-                HttpContext.Current.Items["_GlimpseWebFormPageAdapterStateCopied"] = true;
+                PageAdapterStateCopied = true;
             }
         }
     }
