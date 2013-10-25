@@ -3784,7 +3784,7 @@ glimpse.tab = (function($, pubsub, data) {
                                 if (uri.indexOf('Glimpse.axd') === -1) {
                                     var startTime = new Date().getTime(); 
                                     this.addEventListener("readystatechange", function() {
-                                            if (this.readyState == 4)  { 
+                                            if (this.readyState == 4 && this.getResponseHeader("Glimpse-RequestID"))  { 
                                                 update(method, uri, new Date().getTime() - startTime, this.getResponseHeader("Content-Length"), this.status, this.statusText, new Date(), this.getResponseHeader("Content-Type"), this.getResponseHeader("Glimpse-RequestID"));
                                             }
                                         }, false); 
