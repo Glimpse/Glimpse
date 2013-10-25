@@ -4,11 +4,18 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.Threading;
 using System.Web;
+using System.Reflection;
 
 namespace Glimpse.AspNet.Model
 {
     public class RequestModel
     {
+        private static readonly FieldInfo httpRequestWrapperField = typeof(HttpRequestWrapper).GetField("_httpRequest",
+                                                                      BindingFlags.Instance | BindingFlags.NonPublic);
+
+        private static readonly FieldInfo nameValueCollectionField = typeof(HttpRequest).GetField("_form",
+                                                                      BindingFlags.Instance | BindingFlags.NonPublic);
+
         public RequestModel(HttpContextBase context)
         {
             var request = context.Request;
@@ -18,7 +25,7 @@ namespace Glimpse.AspNet.Model
             AppRelativeCurrentExecutionFilePath = request.AppRelativeCurrentExecutionFilePath;
             CurrentExecutionFilePath = request.CurrentExecutionFilePath;
             FilePath = request.FilePath;
-            FormVariables = GetFormVariables(request.Form);
+            FormVariables = GetFormVariables(request);
             Path = request.Path;
             PathInfo = request.PathInfo;
             PhysicalApplicationPath = request.PhysicalApplicationPath;
@@ -72,11 +79,21 @@ namespace Glimpse.AspNet.Model
         
         public IEnumerable<QueryStringParameter> QueryString { get; private set; }
 
-        private IEnumerable<FormVariable> GetFormVariables(NameValueCollection form)
+        private IEnumerable<FormVariable> GetFormVariables(HttpRequestBase request)
         {
-            foreach (var key in form.AllKeys)
+            var httpRequest = httpRequestWrapperField.GetValue(request) as HttpRequest;
+
+            if (httpRequest != null)
             {
-                yield return new FormVariable { Key = key, Value = form[key] };
+                var formVariables = nameValueCollectionField.GetValue(httpRequest) as NameValueCollection;
+
+                if (formVariables != null)
+                {
+                    foreach (var key in formVariables.AllKeys)
+                    {
+                        yield return new FormVariable {Key = key, Value = formVariables[key]};
+                    }
+                }
             }
         }
 
