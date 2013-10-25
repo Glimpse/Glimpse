@@ -18,7 +18,7 @@ Welterweight release for Core:
  - Improvement which allows Glimpse.axd be protected by custom security policies
  - Fix History tab causing issues up when invalid characters present in Session Name
  - Ensure client shell is forced onto new rendering layer within browser
- - Update Visual Studio solution to 2013
+ - Update Visual Studio solution to VS2013
  - Improvement to client which adds support for paddings when rendering structured layouts
  - Improvement to client to make array rendering more resilient
  - Improvement to client which ensures table headers have the correct default style applied
@@ -26,6 +26,7 @@ Welterweight release for Core:
  - Switch assemlies to be marked as CLS-compliant
  - Switch Glimpse.axd over to use templates for generating the configuration resource 
  - Ensure that Glimpse ignores BrowserLinks preflight requests
+ - Make sure HUD only displays Ajax requests that have a Glimpse Payload
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse diagnostics performance profiling timing</tags>
     </metadata>
