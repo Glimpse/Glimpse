@@ -10,6 +10,9 @@ namespace Glimpse.AspNet.Model
 {
     public class RequestModel
     {
+        private static readonly FieldInfo cookieField = typeof(HttpRequest).GetField("_cookies",
+                                                              BindingFlags.Instance | BindingFlags.NonPublic);
+
         private static readonly FieldInfo formField = typeof(HttpRequest).GetField("_form",
                                                               BindingFlags.Instance | BindingFlags.NonPublic);
 
@@ -42,70 +45,75 @@ namespace Glimpse.AspNet.Model
             UserHostAddress = request.UserHostAddress;
             UserHostName = request.UserHostName;
 
-            Cookies = GetCookies(request.Cookies, context.Server);
+            Cookies = GetCookies(httpRequest, context.Server);
             QueryString = GetQueryString(request.QueryString);
         }
 
         //// TODO: Add InputStream
 
         public CultureInfo CurrentUiCulture { get; private set; }
-        
+
         public string ApplicationPath { get; private set; }
-        
+
         public string AppRelativeCurrentExecutionFilePath { get; private set; }
-        
+
         public string CurrentExecutionFilePath { get; private set; }
-        
+
         public string FilePath { get; private set; }
 
         public IEnumerable<FormVariable> FormVariables { get; private set; }
 
         public IEnumerable<HeaderField> HeaderFields { get; private set; }
-        
+
         public string Path { get; private set; }
-        
+
         public string PathInfo { get; private set; }
-        
+
         public string PhysicalApplicationPath { get; private set; }
-        
+
         public string PhysicalPath { get; private set; }
-        
+
         public string RawUrl { get; private set; }
-        
+
         public Uri Url { get; private set; }
-        
+
         public Uri UrlReferrer { get; private set; }
-        
+
         public string UserAgent { get; private set; }
-        
+
         public string UserHostAddress { get; private set; }
-        
+
         public string UserHostName { get; private set; }
-        
+
         public IEnumerable<Cookie> Cookies { get; private set; }
-        
+
         public IEnumerable<QueryStringParameter> QueryString { get; private set; }
 
-        private IEnumerable<Cookie> GetCookies(HttpCookieCollection cookies, HttpServerUtilityBase server)
+
+        private IEnumerable<Cookie> GetCookies(HttpRequest httpRequest, HttpServerUtilityBase server)
         {
-            var result = new List<Cookie>();
-
-            foreach (var key in cookies.AllKeys)
+            if (httpRequest != null)
             {
-                var cookie = cookies[key];
+                var cookies = cookieField.GetValue(httpRequest) as HttpCookieCollection;
 
-                result.Add(new Cookie
+                if (cookies != null)
                 {
-                    Name = cookie.Name,
-                    Path = cookie.Path,
-                    IsSecure = cookie.Secure,
-                    Value = server.UrlDecode(cookie.Value)
-                });
+                    foreach (var key in cookies.AllKeys)
+                    {
+                        var cookie = cookies[key];
+
+                        yield return new Cookie
+                        {
+                            Name = cookie.Name,
+                            Path = cookie.Path,
+                            IsSecure = cookie.Secure,
+                            Value = server.UrlDecode(cookie.Value)
+                        };
+                    }
+                }
             }
-
-            return result;
         }
-
+       
         private IEnumerable<FormVariable> GetFormVariables(HttpRequest httpRequest)
         {
             if (httpRequest != null)
@@ -116,7 +124,7 @@ namespace Glimpse.AspNet.Model
                 {
                     foreach (var key in formVariables.AllKeys)
                     {
-                        yield return new FormVariable {Key = key, Value = formVariables[key]};
+                        yield return new FormVariable { Key = key, Value = formVariables[key] };
                     }
                 }
             }
@@ -161,18 +169,18 @@ namespace Glimpse.AspNet.Model
         public class QueryStringParameter
         {
             public string Key { get; set; }
-            
+
             public string Value { get; set; }
         }
 
         public class Cookie
         {
             public string Name { get; set; }
-            
+
             public string Path { get; set; }
-            
+
             public bool IsSecure { get; set; }
-            
+
             public string Value { get; set; }
         }
     }
