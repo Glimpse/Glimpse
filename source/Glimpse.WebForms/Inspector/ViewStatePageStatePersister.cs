@@ -25,11 +25,12 @@ namespace Glimpse.WebForms.Inspector
             Logger.Debug("PageStatePersister.Save() being executed - {0}", HttpContext.Current.Request.RawUrl);
 
             var controlTree = new Dictionary<string, Type>();
+            controlTree.Add(Page.UniqueID, Page.GetType());
             GetControlTree(controlTree, Page.Controls);
 
             Logger.Debug("ControlTree contains '{0}' controls.", controlTree.Count);
 
-            HttpContext.Current.Items.Add("_GlimpseWebFormViewState", ViewState);
+            HttpContext.Current.Items.Add("_GlimpseWebFormViewState", new Pair(null, ViewState));
             HttpContext.Current.Items.Add("_GlimpseWebFormControlTreeType", controlTree);
 
             if (InnerPageStatePersister != null)
@@ -65,7 +66,7 @@ namespace Glimpse.WebForms.Inspector
         }
 
         private void GetControlTree(Dictionary<string, Type> results, ControlCollection controls)
-        { 
+        {
             foreach (Control control in controls)
             { 
                 results.Add(control.UniqueID, control.GetType()); 

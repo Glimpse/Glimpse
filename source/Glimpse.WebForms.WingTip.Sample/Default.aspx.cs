@@ -12,6 +12,9 @@ namespace WingtipToys
         protected void Page_Load(object sender, EventArgs e)
         {
             HttpContext.Current.Trace.Write("Something that happened in Load");
+
+
+            this.ViewState["Test"] = "hello";
         }
 
         protected void Page_Init(object sender, EventArgs e)

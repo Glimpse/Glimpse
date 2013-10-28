@@ -27,13 +27,9 @@ namespace Glimpse.WebForms.Support
             var controlTypes = HttpContext.Current.Items["_GlimpseWebFormControlTreeType"] as Dictionary<string, Type>;
 
             if (viewState != null && root.Children.Count > 0)
-            {
-                var innerViewstate = viewState.Second as Triplet;
-                if (innerViewstate != null)
-                {
-                    Logger.Debug("Process Rroot node for viewState data to the ControlTree mapping");
-                    ProcessRecord(root.Children[0], innerViewstate.Third, controlTypes);
-                }
+            { 
+                Logger.Debug("Process Rroot node for viewState data to the ControlTree mapping");
+                ProcessRecord(root.Children[0], viewState, controlTypes); 
             }
 
             Logger.Debug("Finish merginging in the viewState data to the ControlTree");
