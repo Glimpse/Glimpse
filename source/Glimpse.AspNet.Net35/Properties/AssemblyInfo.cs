@@ -19,7 +19,7 @@ using Glimpse.Core.Extensibility;
 // Keep these three attributes in sync
 [assembly: AssemblyVersion("1.5.0")]
 [assembly: AssemblyFileVersion("1.5.0")]
-[assembly: AssemblyInformationalVersion("1.5.0-RC1")]
+[assembly: AssemblyInformationalVersion("1.5.0")]
 
 [assembly: CLSCompliant(true)]
 [assembly: InternalsVisibleTo("Glimpse.Test.AspNet")]

@@ -20,7 +20,7 @@ Welterweight release for Ado:
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse ADO ADO.NET SQL performance profiling timing diagnostics</tags>
         <dependencies>
-          <dependency id="Glimpse" version="1.7.0-RC1" />
+          <dependency id="Glimpse" version="1.7.0" />
         </dependencies>
     </metadata>
     <files>

@@ -19,7 +19,7 @@ Bantamweight release for EF:
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse EF EntityFramework SQL performance profiling timing diagnostics</tags>
         <dependencies> 
-          <dependency id="Glimpse.Ado" version="1.6.0-RC1" />
+          <dependency id="Glimpse.Ado" version="1.6.0" />
         </dependencies>
     </metadata>
     <files>

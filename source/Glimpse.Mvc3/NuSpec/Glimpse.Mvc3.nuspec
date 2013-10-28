@@ -20,7 +20,7 @@ Middleweight release for MVC:
         </releaseNotes>
         <tags>ASP.NET Web MVC Glimpse diagnostics performance profiling timing</tags>
         <dependencies>
-          <dependency id="Glimpse.AspNet" version="1.5.0-RC1" />
+          <dependency id="Glimpse.AspNet" version="1.5.0" />
         </dependencies>
     </metadata>
     <files>
