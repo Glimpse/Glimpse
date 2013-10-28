@@ -81,8 +81,8 @@ namespace Glimpse.WebForms.Tab
                 else
                 {
                     var existingTypeString = (string)adapters[keyType.AssemblyQualifiedName]; 
-                    var existingType = Type.GetType(existingTypeString); 
-                    if (existingType != typeof(ViewStatePageAdapter))
+                    var existingType = Type.GetType(existingTypeString);
+                    if ((!existingType.IsGenericType && existingType != typeof(ViewStatePageAdapter)) || (existingType.IsGenericType && existingType.GetGenericTypeDefinition() != typeof(ViewStatePageAdapter<>)))
                     {
                         var newAdapterType = typeof(ViewStatePageAdapter<>).MakeGenericType(existingType); 
                         adapters[keyType.AssemblyQualifiedName] = newAdapterType.AssemblyQualifiedName;   
