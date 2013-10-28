@@ -16,7 +16,7 @@
         <releaseNotes>
 Middleweight release for MVC: 
  - Implemented support for MVC5
- - Switch assemlies to be marked as CLS-compliant
+ - Switch assemblies to be marked as CLS-compliant
         </releaseNotes>
         <tags>ASP.NET Web MVC Glimpse diagnostics performance profiling timing</tags>
         <dependencies>

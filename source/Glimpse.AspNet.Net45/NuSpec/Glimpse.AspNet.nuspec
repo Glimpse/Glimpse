@@ -17,7 +17,7 @@
 Welterweight release for Asp.Net:
  - Fix bug which casued the written of log data during AppDomain unloading not to appear
  - Fix bug which meant that in some cases the end body tag couldn't be located
- - Switch assemlies to be marked as CLS-compliant
+ - Switch assemblies to be marked as CLS-compliant
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse</tags>
         <dependencies>

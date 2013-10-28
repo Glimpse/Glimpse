@@ -23,7 +23,7 @@ Welterweight release for Core:
  - Improvement to client to make array rendering more resilient
  - Improvement to client which ensures table headers have the correct default style applied
  - Improvement to client which brings better error management in master rendering engine
- - Switch assemlies to be marked as CLS-compliant
+ - Switch assemblies to be marked as CLS-compliant
  - Switch Glimpse.axd over to use templates for generating the configuration resource 
  - Ensure that Glimpse ignores BrowserLinks preflight requests
  - Make sure HUD only displays Ajax requests that have a Glimpse Payload

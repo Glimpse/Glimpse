@@ -16,7 +16,7 @@
         <releaseNotes>
 Welterweight release for Ado:
  - Improved SQL Tab layout so that the overall stats are displayed at the tab
- - Switch assemlies to be marked as CLS-compliant
+ - Switch assemblies to be marked as CLS-compliant
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse ADO ADO.NET SQL performance profiling timing diagnostics</tags>
         <dependencies>

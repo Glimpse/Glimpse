@@ -15,7 +15,7 @@
         <summary>Glimpse tabs for Entity Framework 4.3.</summary>
         <releaseNotes>
 Bantamweight release for EF: 
- - Switch assemlies to be marked as CLS-compliant
+ - Switch assemblies to be marked as CLS-compliant
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse EF EntityFramework SQL performance profiling timing diagnostics</tags>
         <dependencies> 
