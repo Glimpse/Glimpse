@@ -10,22 +10,27 @@ namespace Glimpse.AspNet.Model
 {
     public class RequestModel
     {
-        private static readonly FieldInfo httpRequestField = typeof(HttpRequestWrapper).GetField("_httpRequest",
-                                                                      BindingFlags.Instance | BindingFlags.NonPublic);
-
         private static readonly FieldInfo formField = typeof(HttpRequest).GetField("_form",
+                                                              BindingFlags.Instance | BindingFlags.NonPublic);
+
+        private static readonly FieldInfo httpHeadersField = typeof(HttpRequest).GetField("_headers",
+                                                              BindingFlags.Instance | BindingFlags.NonPublic);
+
+        private static readonly FieldInfo httpRequestField = typeof(HttpRequestWrapper).GetField("_httpRequest",
                                                                       BindingFlags.Instance | BindingFlags.NonPublic);
 
         public RequestModel(HttpContextBase context)
         {
             var request = context.Request;
+            var httpRequest = httpRequestField.GetValue(request) as HttpRequest;
 
             CurrentUiCulture = Thread.CurrentThread.CurrentUICulture;
             ApplicationPath = request.ApplicationPath;
             AppRelativeCurrentExecutionFilePath = request.AppRelativeCurrentExecutionFilePath;
             CurrentExecutionFilePath = request.CurrentExecutionFilePath;
             FilePath = request.FilePath;
-            FormVariables = GetFormVariables(request);
+            FormVariables = GetFormVariables(httpRequest);
+            HeaderFields = GetHeaderFields(httpRequest);
             Path = request.Path;
             PathInfo = request.PathInfo;
             PhysicalApplicationPath = request.PhysicalApplicationPath;
@@ -54,6 +59,8 @@ namespace Glimpse.AspNet.Model
         public string FilePath { get; private set; }
 
         public IEnumerable<FormVariable> FormVariables { get; private set; }
+
+        public IEnumerable<HeaderField> HeaderFields { get; private set; }
         
         public string Path { get; private set; }
         
@@ -79,10 +86,28 @@ namespace Glimpse.AspNet.Model
         
         public IEnumerable<QueryStringParameter> QueryString { get; private set; }
 
-        private IEnumerable<FormVariable> GetFormVariables(HttpRequestBase request)
+        private IEnumerable<Cookie> GetCookies(HttpCookieCollection cookies, HttpServerUtilityBase server)
         {
-            var httpRequest = httpRequestField.GetValue(request) as HttpRequest;
+            var result = new List<Cookie>();
 
+            foreach (var key in cookies.AllKeys)
+            {
+                var cookie = cookies[key];
+
+                result.Add(new Cookie
+                {
+                    Name = cookie.Name,
+                    Path = cookie.Path,
+                    IsSecure = cookie.Secure,
+                    Value = server.UrlDecode(cookie.Value)
+                });
+            }
+
+            return result;
+        }
+
+        private IEnumerable<FormVariable> GetFormVariables(HttpRequest httpRequest)
+        {
             if (httpRequest != null)
             {
                 var formVariables = formField.GetValue(httpRequest) as NameValueCollection;
@@ -97,24 +122,20 @@ namespace Glimpse.AspNet.Model
             }
         }
 
-        private IEnumerable<Cookie> GetCookies(HttpCookieCollection cookies, HttpServerUtilityBase server)
+        private IEnumerable<HeaderField> GetHeaderFields(HttpRequest httpRequest)
         {
-            var result = new List<Cookie>();
-
-            foreach (var key in cookies.AllKeys)
+            if (httpRequest != null)
             {
-                var cookie = cookies[key];
+                var headerFields = httpHeadersField.GetValue(httpRequest) as NameValueCollection;
 
-                result.Add(new Cookie
-                        {
-                            Name = cookie.Name,
-                            Path = cookie.Path,
-                            IsSecure = cookie.Secure,
-                            Value = server.UrlDecode(cookie.Value)
-                        });
+                if (headerFields != null)
+                {
+                    foreach (var key in headerFields.AllKeys)
+                    {
+                        yield return new HeaderField { Key = key, Value = headerFields[key] };
+                    }
+                }
             }
-
-            return result;
         }
 
         private IEnumerable<QueryStringParameter> GetQueryString(NameValueCollection queryString)
@@ -126,6 +147,12 @@ namespace Glimpse.AspNet.Model
         }
 
         public class FormVariable
+        {
+            public string Key { get; set; }
+            public string Value { get; set; }
+        }
+
+        public class HeaderField
         {
             public string Key { get; set; }
             public string Value { get; set; }

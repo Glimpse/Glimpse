@@ -23,6 +23,7 @@ namespace Glimpse.AspNet.SerializationConverter
             root.AddRow().Key("Current UI Culture").Value(request.CurrentUiCulture);
             root.AddRow().Key("File Path").Value(request.FilePath);
             root.AddRow().Key("Form Variables").Value(BuildFormVariables(request.FormVariables));
+            root.AddRow().Key("Header Fields").Value(BuildHeaderFields(request.HeaderFields));
             root.AddRow().Key("Path").Value(request.Path);
             root.AddRow().Key("Path Info").Value(request.PathInfo);
             root.AddRow().Key("Physical Application Path").Value(request.PhysicalApplicationPath);
@@ -58,6 +59,15 @@ namespace Glimpse.AspNet.SerializationConverter
                 return null;
             }
             return formVariables;
+        }
+
+        private object BuildHeaderFields(IEnumerable<RequestModel.HeaderField> headerFields)
+        {
+            if (!headerFields.Any())
+            {
+                return null;
+            }
+            return headerFields.Where(h => h.Key.ToLower() != "cookie");
         }
 
         public object BuildQueryString(IEnumerable<RequestModel.QueryStringParameter> parameters)
