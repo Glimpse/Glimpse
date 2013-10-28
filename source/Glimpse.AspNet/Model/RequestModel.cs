@@ -10,10 +10,10 @@ namespace Glimpse.AspNet.Model
 {
     public class RequestModel
     {
-        private static readonly FieldInfo httpRequestWrapperField = typeof(HttpRequestWrapper).GetField("_httpRequest",
+        private static readonly FieldInfo httpRequestField = typeof(HttpRequestWrapper).GetField("_httpRequest",
                                                                       BindingFlags.Instance | BindingFlags.NonPublic);
 
-        private static readonly FieldInfo nameValueCollectionField = typeof(HttpRequest).GetField("_form",
+        private static readonly FieldInfo formField = typeof(HttpRequest).GetField("_form",
                                                                       BindingFlags.Instance | BindingFlags.NonPublic);
 
         public RequestModel(HttpContextBase context)
@@ -81,11 +81,11 @@ namespace Glimpse.AspNet.Model
 
         private IEnumerable<FormVariable> GetFormVariables(HttpRequestBase request)
         {
-            var httpRequest = httpRequestWrapperField.GetValue(request) as HttpRequest;
+            var httpRequest = httpRequestField.GetValue(request) as HttpRequest;
 
             if (httpRequest != null)
             {
-                var formVariables = nameValueCollectionField.GetValue(httpRequest) as NameValueCollection;
+                var formVariables = formField.GetValue(httpRequest) as NameValueCollection;
 
                 if (formVariables != null)
                 {
