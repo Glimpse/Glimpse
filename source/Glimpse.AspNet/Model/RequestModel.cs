@@ -22,6 +22,9 @@ namespace Glimpse.AspNet.Model
         private static readonly FieldInfo httpRequestField = typeof(HttpRequestWrapper).GetField("_httpRequest",
                                                                       BindingFlags.Instance | BindingFlags.NonPublic);
 
+        private static readonly FieldInfo queryStringField = typeof(HttpRequest).GetField("_queryString",
+                                                                      BindingFlags.Instance | BindingFlags.NonPublic);
+
         public RequestModel(HttpContextBase context)
         {
             var request = context.Request;
@@ -46,7 +49,7 @@ namespace Glimpse.AspNet.Model
             UserHostName = request.UserHostName;
 
             Cookies = GetCookies(httpRequest, context.Server);
-            QueryString = GetQueryString(request.QueryString);
+            QueryString = GetQueryString(httpRequest);
         }
 
         //// TODO: Add InputStream
@@ -146,11 +149,19 @@ namespace Glimpse.AspNet.Model
             }
         }
 
-        private IEnumerable<QueryStringParameter> GetQueryString(NameValueCollection queryString)
+        private IEnumerable<QueryStringParameter> GetQueryString(HttpRequest httpRequest)
         {
-            foreach (var key in queryString.AllKeys)
+            if (httpRequest != null)
             {
-                yield return new QueryStringParameter { Key = key, Value = queryString[key] };
+                var queryString = queryStringField.GetValue(httpRequest) as NameValueCollection;
+
+                if (queryString != null)
+                {
+                    foreach (var key in queryString.AllKeys)
+                    {
+                        yield return new QueryStringParameter { Key = key, Value = queryString[key] };
+                    }
+                }
             }
         }
 
