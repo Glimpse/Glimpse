@@ -32,72 +32,67 @@ namespace Glimpse.AspNet.Model
         {
             var request = context.Request;
             var httpRequest = httpRequestField.GetValue(request) as HttpRequest;
+            
+            //client side
+            IEnumerable<Cookie> cookies = GetCookies(httpRequest, context.Server);
+            IEnumerable<HttpPostedFile> files = GetPostedFiles(httpRequest);
+            IEnumerable<FormVariable> formVariables = GetFormVariables(httpRequest);
+            IEnumerable<HeaderField> headerFields = GetHeaderFields(httpRequest);
+            IEnumerable<QueryStringParameter> queryString = GetQueryString(httpRequest);
+            string rawUrl = request.RawUrl;
+            Uri url = request.Url;
+            Uri urlReferrer = request.UrlReferrer;
+            string userAgent = request.UserAgent;
+            string userHostAddress = request.UserHostAddress;
+            string userHostName = request.UserHostName;
+            
+            ClientSide = new ClientSide
+            {
+                Cookies = cookies,
+                Files = files,
+                HeaderFields = headerFields,
+                FormVariables = formVariables,
+                QueryString = queryString,
+                RawUrl = rawUrl,
+                Url = url,
+                UrlReferrer = urlReferrer,
+                UserAgent = userAgent,
+                UserHostAddress = userHostAddress,
+                UserHostName = userHostName
+            };
 
-            CurrentUiCulture = Thread.CurrentThread.CurrentUICulture;
-            ApplicationPath = request.ApplicationPath;
-            AppRelativeCurrentExecutionFilePath = request.AppRelativeCurrentExecutionFilePath;
-            CurrentExecutionFilePath = request.CurrentExecutionFilePath;
-            FilePath = request.FilePath;
-            Files = GetPostedFiles(httpRequest);
-            FormVariables = GetFormVariables(httpRequest);
-            HeaderFields = GetHeaderFields(httpRequest);
-            Path = request.Path;
-            PathInfo = request.PathInfo;
-            PhysicalApplicationPath = request.PhysicalApplicationPath;
-            PhysicalPath = request.PhysicalPath;
-            RawUrl = request.RawUrl;
-            Url = request.Url;
-            UrlReferrer = request.UrlReferrer;
-            UserAgent = request.UserAgent;
-            UserHostAddress = request.UserHostAddress;
-            UserHostName = request.UserHostName;
+            //server side
+            string applicationPath = request.ApplicationPath;
+            CultureInfo currentUiCulture = Thread.CurrentThread.CurrentUICulture;
+            string appRelativeCurrentExecutionFilePath = request.AppRelativeCurrentExecutionFilePath;
+            string currentExecutionFilePath = request.CurrentExecutionFilePath;
+            string filePath = request.FilePath;
+            string path = request.Path;
+            string pathInfo = request.PathInfo;
+            string physicalApplicationPath = request.PhysicalApplicationPath;
+            string physicalPath = request.PhysicalPath;
 
-            Cookies = GetCookies(httpRequest, context.Server);
-            QueryString = GetQueryString(httpRequest);
+
+
+            ServerSide = new ServerSide
+                {
+                    ApplicationPath = applicationPath, 
+                    AppRelativeCurrentExecutionFilePath = appRelativeCurrentExecutionFilePath, 
+                    CurrentUiCulture = currentUiCulture,
+                    CurrentExecutionFilePath = currentExecutionFilePath,
+                    FilePath = filePath,
+                    Path = path,
+                    PathInfo = pathInfo,
+                    PhysicalApplicationPath = physicalApplicationPath,
+                    PhysicalPath = physicalPath
+                };
         }
 
         //// TODO: Add InputStream
 
-        public CultureInfo CurrentUiCulture { get; private set; }
+        public ServerSide ServerSide { get; private set; }
 
-        public string ApplicationPath { get; private set; }
-
-        public string AppRelativeCurrentExecutionFilePath { get; private set; }
-
-        public string CurrentExecutionFilePath { get; private set; }
-
-        public IEnumerable<HttpPostedFile> Files { get; private set; }
-
-        public string FilePath { get; private set; }
-
-        public IEnumerable<FormVariable> FormVariables { get; private set; }
-
-        public IEnumerable<HeaderField> HeaderFields { get; private set; }
-
-        public string Path { get; private set; }
-
-        public string PathInfo { get; private set; }
-
-        public string PhysicalApplicationPath { get; private set; }
-
-        public string PhysicalPath { get; private set; }
-
-        public string RawUrl { get; private set; }
-
-        public Uri Url { get; private set; }
-
-        public Uri UrlReferrer { get; private set; }
-
-        public string UserAgent { get; private set; }
-
-        public string UserHostAddress { get; private set; }
-
-        public string UserHostName { get; private set; }
-
-        public IEnumerable<Cookie> Cookies { get; private set; }
-
-        public IEnumerable<QueryStringParameter> QueryString { get; private set; }
-
+        public ClientSide ClientSide { get; private set; }
 
         private IEnumerable<Cookie> GetCookies(HttpRequest httpRequest, HttpServerUtilityBase server)
         {
@@ -209,12 +204,40 @@ namespace Glimpse.AspNet.Model
         public class Cookie
         {
             public string Name { get; set; }
-
-            public string Path { get; set; }
-
-            public bool IsSecure { get; set; }
-
             public string Value { get; set; }
+            public string Path { get; set; }
+            public bool IsSecure { get; set; }
         }
     }
+
+
+    public class ClientSide
+    {
+        public IEnumerable<RequestModel.Cookie> Cookies { get; set; }
+        public IEnumerable<HttpPostedFile> Files { get; set; }
+        public IEnumerable<RequestModel.FormVariable> FormVariables { get; set; }
+        public IEnumerable<RequestModel.HeaderField> HeaderFields { get; set; }
+        public IEnumerable<RequestModel.QueryStringParameter> QueryString { get; set; }
+        public string RawUrl { get; set; }
+        public Uri Url { get; set; }
+        public Uri UrlReferrer { get; set; }
+        public string UserAgent { get; set; }
+        public string UserHostAddress { get; set; }
+        public string UserHostName { get; set; }
+    }
+
+    public class ServerSide
+    {
+        public string ApplicationPath { get; set; }
+        public string AppRelativeCurrentExecutionFilePath { get; set; }
+        public CultureInfo CurrentUiCulture { get; set; }
+        public string CurrentExecutionFilePath { get; set; }
+        public string FilePath { get; set; }
+        public string Path { get; set; }
+       
+        public string PathInfo { get; set; }
+        public string PhysicalApplicationPath { get; set; }
+        public string PhysicalPath { get; set; }
+    }
+
 }

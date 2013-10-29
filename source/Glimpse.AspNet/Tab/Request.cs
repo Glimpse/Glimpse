@@ -5,7 +5,7 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.AspNet.Tab
 {
-    public class Request : AspNetTab, IDocumentation, IKey
+    public class Request : AspNetTab, IDocumentation, ILayoutControl, IKey
     {
         /// <summary>
         /// Gets the name that will show in the tab.
@@ -44,6 +44,11 @@ namespace Glimpse.AspNet.Tab
             var httpContext = context.GetHttpContext();
 
             return new RequestModel(httpContext);
+        }
+
+        public bool KeysHeadings 
+        { 
+            get { return true; } 
         }
     }
 }
