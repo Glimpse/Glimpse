@@ -13,6 +13,9 @@ namespace Glimpse.AspNet.Model
         private static readonly FieldInfo cookieField = typeof(HttpRequest).GetField("_cookies",
                                                               BindingFlags.Instance | BindingFlags.NonPublic);
 
+        private static readonly FieldInfo filesField = typeof(HttpRequest).GetField("_files",
+                                                      BindingFlags.Instance | BindingFlags.NonPublic);
+
         private static readonly FieldInfo formField = typeof(HttpRequest).GetField("_form",
                                                               BindingFlags.Instance | BindingFlags.NonPublic);
 
@@ -35,6 +38,7 @@ namespace Glimpse.AspNet.Model
             AppRelativeCurrentExecutionFilePath = request.AppRelativeCurrentExecutionFilePath;
             CurrentExecutionFilePath = request.CurrentExecutionFilePath;
             FilePath = request.FilePath;
+            Files = GetPostedFiles(httpRequest);
             FormVariables = GetFormVariables(httpRequest);
             HeaderFields = GetHeaderFields(httpRequest);
             Path = request.Path;
@@ -61,6 +65,8 @@ namespace Glimpse.AspNet.Model
         public string AppRelativeCurrentExecutionFilePath { get; private set; }
 
         public string CurrentExecutionFilePath { get; private set; }
+
+        public IEnumerable<HttpPostedFile> Files { get; private set; }
 
         public string FilePath { get; private set; }
 
@@ -116,7 +122,23 @@ namespace Glimpse.AspNet.Model
                 }
             }
         }
-       
+
+        private IEnumerable<HttpPostedFile> GetPostedFiles(HttpRequest httpRequest)
+        {
+            if (httpRequest != null)
+            {
+                var files = filesField.GetValue(httpRequest) as HttpFileCollection;
+
+                if (files != null)
+                {
+                    foreach (var key in files.AllKeys)
+                    {
+                        yield return files[key];
+                    }
+                }
+            }
+        }
+
         private IEnumerable<FormVariable> GetFormVariables(HttpRequest httpRequest)
         {
             if (httpRequest != null)

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using Glimpse.AspNet.Extensions;
 using Glimpse.AspNet.Model;
 using Glimpse.Core.Extensibility;
@@ -22,6 +23,7 @@ namespace Glimpse.AspNet.SerializationConverter
             root.AddRow().Key("Current Execution File Path").Value(request.CurrentExecutionFilePath);
             root.AddRow().Key("Current UI Culture").Value(request.CurrentUiCulture);
             root.AddRow().Key("File Path").Value(request.FilePath);
+            root.AddRow().Key("Files").Value(BuildFiles(request.Files));
             root.AddRow().Key("Form Variables").Value(BuildFormVariables(request.FormVariables));
             root.AddRow().Key("Header Fields").Value(BuildHeaderFields(request.HeaderFields));
             root.AddRow().Key("Path").Value(request.Path);
@@ -50,6 +52,15 @@ namespace Glimpse.AspNet.SerializationConverter
             }
 
             return result;
+        }
+
+        private object BuildFiles(IEnumerable<HttpPostedFile> files)
+        {
+            if (files == null || !files.Any())
+            {
+                return null;
+            }
+            return files;
         }
 
         private object BuildFormVariables(IEnumerable<RequestModel.FormVariable> formVariables)
