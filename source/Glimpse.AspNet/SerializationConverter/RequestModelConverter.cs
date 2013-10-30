@@ -30,6 +30,7 @@ namespace Glimpse.AspNet.SerializationConverter
 
         private void BuildClientSide(ClientSide clientSide, TabObject root)
         {
+            root.AddRow().Key("Browser").Value(clientSide.Browser);
             root.AddRow().Key("Cookies").Value(BuildCookies(clientSide.Cookies));
             root.AddRow().Key("Files").Value(BuildFiles(clientSide.Files));
             root.AddRow().Key("Form Variables").Value(BuildFormVariables(clientSide.FormVariables));

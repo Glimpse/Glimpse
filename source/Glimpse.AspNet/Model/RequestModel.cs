@@ -35,12 +35,14 @@ namespace Glimpse.AspNet.Model
             var httpRequest = httpRequestField.GetValue(request) as HttpRequest;
             
             //client side
+            HttpBrowserCapabilitiesBase browser = request.Browser;
             IEnumerable<Cookie> cookies = GetCookies(httpRequest, context.Server);
             IEnumerable<HttpPostedFile> files = GetPostedFiles(httpRequest);
             IEnumerable<FormVariable> formVariables = GetFormVariables(httpRequest);
             IEnumerable<HeaderField> headerFields = GetHeaderFields(httpRequest);
             IEnumerable<QueryStringParameter> queryString = GetQueryString(httpRequest);
             string rawUrl = request.RawUrl;
+            string requestType = request.RequestType;
             Uri url = request.Url;
             Uri urlReferrer = request.UrlReferrer;
             string userAgent = request.UserAgent;
@@ -49,12 +51,14 @@ namespace Glimpse.AspNet.Model
             
             ClientSide = new ClientSide
             {
+                Browser = browser,
                 Cookies = cookies,
                 Files = files,
                 HeaderFields = headerFields,
                 FormVariables = formVariables,
                 QueryString = queryString,
                 RawUrl = rawUrl,
+                RequestType = requestType,
                 Url = url,
                 UrlReferrer = urlReferrer,
                 UserAgent = userAgent,
@@ -72,8 +76,6 @@ namespace Glimpse.AspNet.Model
             string pathInfo = request.PathInfo;
             string physicalApplicationPath = request.PhysicalApplicationPath;
             string physicalPath = request.PhysicalPath;
-
-
 
             ServerSide = new ServerSide
                 {
@@ -214,12 +216,14 @@ namespace Glimpse.AspNet.Model
 
     public class ClientSide
     {
+        public HttpBrowserCapabilitiesBase Browser { get; set; }
         public IEnumerable<RequestModel.Cookie> Cookies { get; set; }
         public IEnumerable<HttpPostedFile> Files { get; set; }
         public IEnumerable<RequestModel.FormVariable> FormVariables { get; set; }
         public IEnumerable<RequestModel.HeaderField> HeaderFields { get; set; }
         public IEnumerable<RequestModel.QueryStringParameter> QueryString { get; set; }
         public string RawUrl { get; set; }
+        public string RequestType { get; set; }
         public Uri Url { get; set; }
         public Uri UrlReferrer { get; set; }
         public string UserAgent { get; set; }
@@ -235,7 +239,6 @@ namespace Glimpse.AspNet.Model
         public string CurrentExecutionFilePath { get; set; }
         public string FilePath { get; set; }
         public string Path { get; set; }
-       
         public string PathInfo { get; set; }
         public string PhysicalApplicationPath { get; set; }
         public string PhysicalPath { get; set; }
