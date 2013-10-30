@@ -9,6 +9,9 @@
         <p>        
             <a runat="server" href="~/ViewstateTests/EmptyControls.aspx">Test Empty Controls</a>
         </p>
+        <p>        
+            <a runat="server" href="~/ViewstateTests/PopulatedControls.aspx">Test Populated Controls</a>
+        </p>
         <p>
             <a runat="server" href="~/Viewstateless.aspx">Viewstateless Page</a>
         </p>

@@ -10,7 +10,7 @@
 namespace WingtipToys {
     
     
-    public partial class EmptyControls {
+    public partial class PopulatedControls {
         
         /// <summary>
         /// form1 control.

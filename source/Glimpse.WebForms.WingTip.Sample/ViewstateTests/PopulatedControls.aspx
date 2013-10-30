@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="EmptyControls.aspx.cs" Inherits="WingtipToys.EmptyControls" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="PopulatedControls.aspx.cs" Inherits="WingtipToys.PopulatedControls" %>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
@@ -8,7 +8,7 @@
 <body>
     <form id="form1" runat="server">
     <div>
-        <h1>This page has miscellaneous ASP.NET Web Forms Controls</h1>
+        <h1>This page has miscellaneous populated ASP.NET Web Forms Controls</h1>
         
         <h2>Standard Toolbox (WebControls)</h2>
 
