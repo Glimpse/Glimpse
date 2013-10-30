@@ -307,6 +307,7 @@
     <Content Include="Global.asax" />
     <Content Include="ShoppingCart.aspx" />
     <Content Include="Viewstateless.aspx" />
+    <Content Include="ViewstateTests\EmptyControls.aspx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
   </ItemGroup>
@@ -475,6 +476,13 @@
     <Compile Include="Viewstateless.aspx.designer.cs">
       <DependentUpon>Viewstateless.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ViewstateTests\EmptyControls.aspx.cs">
+      <DependentUpon>EmptyControls.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ViewstateTests\EmptyControls.aspx.designer.cs">
+      <DependentUpon>EmptyControls.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -520,11 +528,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>44444</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:53417/</IISUrl>
+          <IISUrl>http://localhost:44404/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
