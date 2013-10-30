@@ -70,7 +70,13 @@ namespace Glimpse.EF.AlternateType
 #if (EF5 && NET45) || EF6Plus
         protected override DbSpatialDataReader GetDbSpatialDataReader(System.Data.Common.DbDataReader fromReader, string manifestToken)
         {
-            return InnerProviderServices.GetSpatialDataReader(((GlimpseDbDataReader)fromReader).InnerDataReader, manifestToken); 
+            var typedReader = fromReader as GlimpseDbDataReader;
+            if (typedReader != null)
+            {
+                fromReader = typedReader.InnerDataReader;
+            }
+
+            return InnerProviderServices.GetSpatialDataReader(fromReader, manifestToken); 
         }
 #endif
     }
