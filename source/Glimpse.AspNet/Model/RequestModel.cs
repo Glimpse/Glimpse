@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -158,7 +159,7 @@ namespace Glimpse.AspNet.Model
 
                 if (headerFields != null)
                 {
-                    foreach (var key in headerFields.AllKeys)
+                    foreach (var key in headerFields.AllKeys.Where(k => k.ToLower() != "cookie"))
                     {
                         yield return new HeaderField { Key = key, Value = headerFields[key] };
                     }
