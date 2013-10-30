@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm("Create", "FileUpload", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+<fieldset>
+
+        <input type="file" name="file" id="file" />
+        <input type="submit" value="Create" />
+    
+    </fieldset>
+}
