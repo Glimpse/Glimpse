@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Glimpse.AspNet.Extensions;
 using Glimpse.AspNet.Model;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
@@ -15,21 +14,16 @@ namespace Glimpse.AspNet.SerializationConverter
         {
             var root = new TabObject();
             
-            //Option 1
-            root.AddRow().Key("Client Side").Value(request.ClientSide);
-            root.AddRow().Key("Server Side").Value(request.ServerSide);
-
-            //Option 2
-            //root.AddRow().Key("______________________________________________________________________________________________ Client Side ______________________________________________________________________________________________").Value("");
-            //BuildClientSide(request.ClientSide, root);
-            //root.AddRow().Key("______________________________________________________________________________________________ Server Side ______________________________________________________________________________________________").Value("");
-            //BuildServerSide(request.ServerSide, root);
+            root.AddRow().Key("Client Side").Value(BuildClientSide(request.ClientSide));
+            root.AddRow().Key("Server Side").Value(BuildServerSide(request.ServerSide));
 
             return root.Build();
         }
 
-        private void BuildClientSide(ClientSide clientSide, TabObject root)
+        private TabObject BuildClientSide(ClientSide clientSide)
         {
+            var root = new TabObject();
+
             root.AddRow().Key("Browser").Value(clientSide.Browser);
             root.AddRow().Key("Cookies").Value(BuildCookies(clientSide.Cookies));
             root.AddRow().Key("Files").Value(BuildFiles(clientSide.Files));
@@ -39,15 +33,20 @@ namespace Glimpse.AspNet.SerializationConverter
             root.AddRow().Key("Url").Value(clientSide.Url.ToString());
             root.AddRow().Key("Url Referrer").Value(clientSide.UrlReferrer.ToStringOrDefault());
             root.AddRow().Key("Raw Url").Value(clientSide.RawUrl);
+            root.AddRow().Key("Request Type").Value(clientSide.RequestType);
             root.AddRow().Key("Url").Value(clientSide.Url);
             root.AddRow().Key("Url Referrer").Value(clientSide.UrlReferrer);
             root.AddRow().Key("User Agent").Value(clientSide.UserAgent);
             root.AddRow().Key("User Host Address").Value(clientSide.UserHostAddress);
             root.AddRow().Key("User Host Name").Value(clientSide.UserHostName);
+
+            return root;
         }
 
-        private void BuildServerSide(ServerSide serverSide, TabObject root)
+        private TabObject BuildServerSide(ServerSide serverSide)
         {
+            var root = new TabObject();
+
             root.AddRow().Key("App Relative Current Execution File Path").Value(serverSide.AppRelativeCurrentExecutionFilePath);
             root.AddRow().Key("Application Path").Value(serverSide.ApplicationPath);
             root.AddRow().Key("Current Execution File Path").Value(serverSide.CurrentExecutionFilePath);
@@ -57,17 +56,21 @@ namespace Glimpse.AspNet.SerializationConverter
             root.AddRow().Key("Path Info").Value(serverSide.PathInfo);
             root.AddRow().Key("Physical Application Path").Value(serverSide.PhysicalApplicationPath);
             root.AddRow().Key("Physical Path").Value(serverSide.PhysicalPath);
+
+            return root;
         }
 
-        public object BuildCookies(IEnumerable<RequestModel.Cookie> cookies)
+        public TabSection BuildCookies(IEnumerable<RequestModel.Cookie> cookies)
         {
-            if (!cookies.Any())
+            var cookiesList = cookies as IList<RequestModel.Cookie> ?? cookies.ToList();
+
+            if (cookies == null || !cookiesList.Any())
             {
                 return null;
             }
 
             var result = new TabSection("Name", "Value", "Path", "Secure");
-            foreach (var cookie in cookies)
+            foreach (var cookie in cookiesList)
             {
                 result.AddRow().Column(cookie.Name).Column(cookie.Value).Column(cookie.Path).Column(cookie.IsSecure);
             }
@@ -95,22 +98,25 @@ namespace Glimpse.AspNet.SerializationConverter
 
         private object BuildHeaderFields(IEnumerable<RequestModel.HeaderField> headerFields)
         {
-            if (!headerFields.Any())
+            var headerFieldList = headerFields as IList<RequestModel.HeaderField> ?? headerFields.ToList();
+            if (headerFields == null || !headerFieldList.Any())
             {
                 return null;
             }
-            return headerFields.Where(h => h.Key.ToLower() != "cookie");
+            return headerFieldList.Where(h => h.Key.ToLower() != "cookie");
         }
 
-        public object BuildQueryString(IEnumerable<RequestModel.QueryStringParameter> parameters)
+        public TabObject BuildQueryString(IEnumerable<RequestModel.QueryStringParameter> parameters)
         {
-            if (!parameters.Any())
+            var queryStringParametersList = parameters as IList<RequestModel.QueryStringParameter> ?? parameters.ToList();
+
+            if (parameters == null || !queryStringParametersList.Any())
             {
                 return null;
             }
 
             var result = new TabObject();
-            foreach (var parameter in parameters)
+            foreach (var parameter in queryStringParametersList)
             {
                 result.AddRow().Key(parameter.Key ?? "null").Value(parameter.Value);
             }

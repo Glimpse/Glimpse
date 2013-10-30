@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -33,7 +34,7 @@ namespace Glimpse.AspNet.Model
         {
             var request = context.Request;
             var httpRequest = httpRequestField.GetValue(request) as HttpRequest;
-            
+
             //client side
             HttpBrowserCapabilitiesBase browser = request.Browser;
             IEnumerable<Cookie> cookies = GetCookies(httpRequest, context.Server);
@@ -161,7 +162,7 @@ namespace Glimpse.AspNet.Model
 
                 if (headerFields != null)
                 {
-                    foreach (var key in headerFields.AllKeys.Where(k => k.ToLower() != "cookie"))
+                    foreach (var key in headerFields.AllKeys)
                     {
                         yield return new HeaderField { Key = key, Value = headerFields[key] };
                     }
