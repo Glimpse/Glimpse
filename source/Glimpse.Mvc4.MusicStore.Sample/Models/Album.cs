@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Data.Entity.Spatial;
 
 namespace MvcMusicStore.Models 
 {
@@ -32,5 +33,6 @@ namespace MvcMusicStore.Models
         public virtual Genre Genre { get; set; }
         public virtual Artist Artist { get; set; }
         public virtual List<OrderDetail> OrderDetails { get; set; }
+        public DbGeography Location { get; set; }
     }
 }
