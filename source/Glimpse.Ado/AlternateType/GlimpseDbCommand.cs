@@ -235,21 +235,82 @@ namespace Glimpse.Ado.AlternateType
         }
 
 #if NET45
-        protected override Task<DbDataReader> ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+        protected override async Task<DbDataReader> ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
         {
-            return InnerCommand.ExecuteReaderAsync(behavior, cancellationToken);
+            EnsureConfiguration();
+
+            DbDataReader reader;
+            var commandId = Guid.NewGuid();
+
+            var timer = this.LogCommandSeed();
+            this.LogCommandStart(commandId, timer, true);
+            try
+            {
+                reader = await InnerCommand.ExecuteReaderAsync(behavior, cancellationToken);
+            }
+            catch (Exception exception)
+            {
+                this.LogCommandError(commandId, timer, exception, "ExecuteDbDataReaderAsync");
+                throw;
+            }
+
+            this.LogCommandEnd(commandId, timer, reader.RecordsAffected, "ExecuteDbDataReaderAsync");
+
+            return new GlimpseDbDataReader(reader, InnerCommand, InnerConnection.ConnectionId, commandId);
         }
 
-
-        public override Task<object> ExecuteScalarAsync(CancellationToken cancellationToken)
+        public override async Task<object> ExecuteScalarAsync(CancellationToken cancellationToken)
         {
-            return InnerCommand.ExecuteScalarAsync(cancellationToken);
+            EnsureConfiguration();
+
+            object result;
+            var commandId = Guid.NewGuid();
+
+            var timer = this.LogCommandSeed();
+            this.LogCommandStart(commandId, timer, true);
+            try
+            {
+                result = await InnerCommand.ExecuteScalarAsync(cancellationToken);
+            }
+            catch (Exception exception)
+            {
+                this.LogCommandError(commandId, timer, exception, "ExecuteScalarAsync", true);
+                throw;
+            }
+            this.LogCommandEnd(commandId, timer, null, "ExecuteScalarAsync", true);
+
+            return result;
         }
 
-
-        public override Task<int> ExecuteNonQueryAsync(CancellationToken cancellationToken)
+        public override async Task<int> ExecuteNonQueryAsync(CancellationToken cancellationToken)
         {
-            return InnerCommand.ExecuteNonQueryAsync(cancellationToken);
+            EnsureConfiguration();
+
+            int num;
+            var commandId = Guid.NewGuid();
+
+            var timer = this.LogCommandSeed();
+            this.LogCommandStart(commandId, timer, true);
+            try
+            {
+                num = await InnerCommand.ExecuteNonQueryAsync(cancellationToken);
+            }
+            catch (Exception exception)
+            {
+                this.LogCommandError(commandId, timer, exception, "ExecuteNonQueryAsync", true);
+                throw;
+            }
+            this.LogCommandEnd(commandId, timer, num, "ExecuteNonQueryAsync", true);
+
+            return num;
+        }
+
+        private void EnsureConfiguration()
+        {
+            if (MessageBroker == null)
+                Trace.WriteLine("GlimpseDbCommand.MessageBroker is null");
+            if (TimerStrategy == null)
+                Trace.WriteLine("GlimpseDbCommand.TimerStrategy is null");
         }
 #endif
 

@@ -91,6 +91,11 @@ namespace Glimpse.Ado.AlternateType
 
         public static void LogCommandStart(this GlimpseDbCommand command, Guid commandId, TimeSpan timerTimeSpan)
         {
+            command.LogCommandStart(commandId, timerTimeSpan, false);
+        }
+
+        public static void LogCommandStart(this GlimpseDbCommand command, Guid commandId, TimeSpan timerTimeSpan, bool isAsync)
+        {
             if (command.MessageBroker != null)
             {
                 IList<CommandExecutedParamater> parameters = null;
@@ -110,12 +115,17 @@ namespace Glimpse.Ado.AlternateType
                 }
 
                 command.MessageBroker.Publish(
-                    new CommandExecutedMessage(command.InnerConnection.ConnectionId, commandId, command.InnerCommand.CommandText, parameters, command.InnerCommand.Transaction != null)
+                    new CommandExecutedMessage(command.InnerConnection.ConnectionId, commandId, command.InnerCommand.CommandText, parameters, command.InnerCommand.Transaction != null, isAsync)
                     .AsTimedMessage(timerTimeSpan));
             }
         }
 
         public static void LogCommandEnd(this GlimpseDbCommand command, Guid commandId, TimeSpan timer, int? recordsAffected, string type)
+        {
+            command.LogCommandEnd(commandId, timer, recordsAffected, type, false);
+        }
+
+        public static void LogCommandEnd(this GlimpseDbCommand command, Guid commandId, TimeSpan timer, int? recordsAffected, string type, bool isAsync)
         {
             if (command.MessageBroker != null && command.TimerStrategy != null)
             {
@@ -127,6 +137,11 @@ namespace Glimpse.Ado.AlternateType
         }
 
         public static void LogCommandError(this GlimpseDbCommand command, Guid commandId, TimeSpan timer, Exception exception, string type)
+        {
+            command.LogCommandError(commandId, timer, exception, type, false);
+        }
+
+        public static void LogCommandError(this GlimpseDbCommand command, Guid commandId, TimeSpan timer, Exception exception, string type, bool isAsync)
         {
             if (command.MessageBroker != null && command.TimerStrategy != null)
             {

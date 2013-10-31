@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
+using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace MvcMusicStore.Controllers
         public async Task<ActionResult> Index()
         {
             // Get most popular albums
-            var albums = await Task.Factory.StartNew(() => GetTopSellingAlbums(6));
+            var albums = await GetTopSellingAlbums(6);
             //var albums = GetTopSellingAlbums(6);
 
             // Trigger some good old ADO code 
@@ -32,7 +33,7 @@ namespace MvcMusicStore.Controllers
         }
 
 
-        private List<Album> GetTopSellingAlbums(int count)
+        private Task<List<Album>> GetTopSellingAlbums(int count)
         {
             // Group the order details by album and return
             // the albums with the highest count
@@ -40,7 +41,7 @@ namespace MvcMusicStore.Controllers
             return storeDB.Albums
                 .OrderByDescending(a => a.OrderDetails.Count())
                 .Take(count)
-                .ToList();
+                .ToListAsync();
         }
 
         private Tuple<int, int> GetTotalAlbumns()

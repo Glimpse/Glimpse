@@ -29,6 +29,7 @@ namespace Glimpse.Ado.Model
         public int ExecutionIndex { get; set; }
         public bool HasTransaction { get; set; }
         public bool IsDuplicate { get; set; }
+        public bool IsAsync { get; set; }
          
         /// <summary>
         /// Gets or sets the head transaction. Set when the command 
