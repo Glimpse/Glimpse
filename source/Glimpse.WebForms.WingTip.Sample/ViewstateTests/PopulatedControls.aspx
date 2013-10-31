@@ -25,7 +25,8 @@
         <asp:Calendar ID="Calendar1" runat="server"></asp:Calendar>
         
         <h3>asp:Checkbox</h3>
-        <asp:CheckBox ID="CheckBox1" runat="server" />
+        <asp:CheckBox ID="CheckBox1Checked" runat="server" />
+        <asp:CheckBox ID="CheckBox2UnChecked" runat="server" />
         
         <h3>asp:CheckBoxList</h3>
         <asp:CheckBoxList ID="CheckBoxList1" runat="server"></asp:CheckBoxList>
