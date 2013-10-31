@@ -243,7 +243,7 @@ namespace Glimpse.Ado.AlternateType
             var commandId = Guid.NewGuid();
 
             var timer = this.LogCommandSeed();
-            this.LogCommandStart(commandId, timer);
+            this.LogCommandStart(commandId, timer, true);
             try
             {
                 reader = await InnerCommand.ExecuteReaderAsync(behavior, cancellationToken);
@@ -267,17 +267,17 @@ namespace Glimpse.Ado.AlternateType
             var commandId = Guid.NewGuid();
 
             var timer = this.LogCommandSeed();
-            this.LogCommandStart(commandId, timer);
+            this.LogCommandStart(commandId, timer, true);
             try
             {
                 result = await InnerCommand.ExecuteScalarAsync(cancellationToken);
             }
             catch (Exception exception)
             {
-                this.LogCommandError(commandId, timer, exception, "ExecuteScalarAsync");
+                this.LogCommandError(commandId, timer, exception, "ExecuteScalarAsync", true);
                 throw;
             }
-            this.LogCommandEnd(commandId, timer, null, "ExecuteScalarAsync");
+            this.LogCommandEnd(commandId, timer, null, "ExecuteScalarAsync", true);
 
             return result;
         }
@@ -290,17 +290,17 @@ namespace Glimpse.Ado.AlternateType
             var commandId = Guid.NewGuid();
 
             var timer = this.LogCommandSeed();
-            this.LogCommandStart(commandId, timer);
+            this.LogCommandStart(commandId, timer, true);
             try
             {
                 num = await InnerCommand.ExecuteNonQueryAsync(cancellationToken);
             }
             catch (Exception exception)
             {
-                this.LogCommandError(commandId, timer, exception, "ExecuteNonQueryAsync");
+                this.LogCommandError(commandId, timer, exception, "ExecuteNonQueryAsync", true);
                 throw;
             }
-            this.LogCommandEnd(commandId, timer, num, "ExecuteNonQueryAsync");
+            this.LogCommandEnd(commandId, timer, num, "ExecuteNonQueryAsync", true);
 
             return num;
         }

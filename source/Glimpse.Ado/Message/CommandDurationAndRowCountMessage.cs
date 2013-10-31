@@ -6,10 +6,15 @@ namespace Glimpse.Ado.Message
     public class CommandDurationAndRowCountMessage : AdoCommandMessage, ITimelineMessage
     {
         public CommandDurationAndRowCountMessage(Guid connectionId, Guid commandId, long? recordsAffected)
+            : this(connectionId, commandId, recordsAffected, false)
+        { }
+
+        public CommandDurationAndRowCountMessage(Guid connectionId, Guid commandId, long? recordsAffected, bool isAsync)
             : base(connectionId, commandId)
         {
-            CommandId = commandId; 
+            CommandId = commandId;
             RecordsAffected = recordsAffected;
+            IsAsync = isAsync;
         } 
 
         public long? RecordsAffected { get; protected set; }
@@ -19,5 +24,7 @@ namespace Glimpse.Ado.Message
         public TimelineCategoryItem EventCategory { get; set; }
 
         public string EventSubText { get; set; }
+
+        public bool IsAsync { get; set; }
     }
 }

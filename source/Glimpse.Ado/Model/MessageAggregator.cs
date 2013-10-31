@@ -52,6 +52,7 @@ namespace Glimpse.Ado.Model
                 command.StartDateTime = message.StartTime;
                 command.Offset = message.Offset;
                 command.HasTransaction = message.HasTransaction;
+                command.IsAsync = message.IsAsync;
                 if(message.Parameters != null)
                 {
                     foreach (var parameter in message.Parameters)
