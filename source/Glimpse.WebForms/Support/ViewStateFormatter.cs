@@ -145,8 +145,10 @@ namespace Glimpse.WebForms.Support
                         var temp = new Dictionary<string, object>();
                         temp.Add("Base State", ProcessData(rootType, "System.Web.UI.WebControls.WebControl", triplet.First));
                         temp.Add("Input Attributes State", triplet.Second);
-                        temp.Add("Label Attributes State", triplet.Third); 
+                        temp.Add("Label Attributes State", triplet.Third);
+                        result = temp;
                     }
+                    
                 }
                 else if (type == "System.Web.UI.WebControls.Repeater")
                 {
