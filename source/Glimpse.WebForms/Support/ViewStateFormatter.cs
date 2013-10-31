@@ -103,7 +103,7 @@ namespace Glimpse.WebForms.Support
                         }
                     } 
                 }
-                else if (type == "System.Web.UI.WebControls.WebControl" || type == "System.Web.UI.UserControl")
+                else if (data is Pair && (type == "System.Web.UI.WebControls.WebControl" || type == "System.Web.UI.UserControl"))
                 { 
                     var pair = data as Pair;
                     if (pair != null && (pair.First != null || pair.Second != null))
@@ -145,8 +145,10 @@ namespace Glimpse.WebForms.Support
                         var temp = new Dictionary<string, object>();
                         temp.Add("Base State", ProcessData(rootType, "System.Web.UI.WebControls.WebControl", triplet.First));
                         temp.Add("Input Attributes State", triplet.Second);
-                        temp.Add("Label Attributes State", triplet.Third); 
+                        temp.Add("Label Attributes State", triplet.Third);
+                        result = temp;
                     }
+                    
                 }
                 else if (type == "System.Web.UI.WebControls.Repeater")
                 {
@@ -167,7 +169,7 @@ namespace Glimpse.WebForms.Support
                 {
                     result = ProcessData(rootType, "System.Web.UI.WebControls.MethodParametersDictionary", data);
                 }
-                else if (type == "System.Web.UI.WebControls.ListControl")
+                else if (type == "System.Web.UI.WebControls.ListControl" || type == "System.Web.UI.WebControls.BulletedList")
                 {
                     var triplet = data as Triplet;
                     if (triplet != null)
@@ -176,6 +178,8 @@ namespace Glimpse.WebForms.Support
                         temp.Add("Base State", ProcessData(rootType, "System.Web.UI.WebControls.DataBoundControl", triplet.First));
                         temp.Add("Items State", ProcessData(rootType, "System.Web.UI.WebControls.ListItemCollection", triplet.Second));
                         temp.Add("Selected Indices", triplet.Third);
+                        result = temp;
+
                     }
                 }
                 else if (type == "System.Web.UI.WebControls.ListItemCollection")

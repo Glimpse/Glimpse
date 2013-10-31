@@ -307,6 +307,8 @@
     <Content Include="Global.asax" />
     <Content Include="ShoppingCart.aspx" />
     <Content Include="Viewstateless.aspx" />
+    <Content Include="ViewstateTests\PopulatedControls.aspx" />
+    <Content Include="ViewstateTests\EmptyControls.aspx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
   </ItemGroup>
@@ -474,6 +476,20 @@
     </Compile>
     <Compile Include="Viewstateless.aspx.designer.cs">
       <DependentUpon>Viewstateless.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ViewstateTests\PopulatedControls.aspx.cs">
+      <DependentUpon>PopulatedControls.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ViewstateTests\PopulatedControls.aspx.designer.cs">
+      <DependentUpon>PopulatedControls.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ViewstateTests\EmptyControls.aspx.cs">
+      <DependentUpon>EmptyControls.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ViewstateTests\EmptyControls.aspx.designer.cs">
+      <DependentUpon>EmptyControls.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
