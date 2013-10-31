@@ -145,7 +145,7 @@ namespace Glimpse.Ado.Tab
                     r.Cell(0).DisablePreview().SetLayout(TabLayout.Create().Row(x =>
                             x.Cell(0).SpanColumns(7).DisablePreview().AsMinimalDisplay().SetLayout(TabLayout.Create().Row(y =>
                             {
-                                y.Cell(0).WidthInPixels(150);
+                                y.Cell(0).WidthInPixels(165);
                                 y.Cell(1);
                             }))).Row(x =>
                             {
@@ -164,7 +164,7 @@ namespace Glimpse.Ado.Tab
                             }))).Row(x =>
                             x.Cell(8).SpanColumns(7).DisablePreview().AsMinimalDisplay().SetLayout(TabLayout.Create().Row(y =>
                             {
-                                y.Cell(0).WidthInPixels(150);
+                                y.Cell(0).WidthInPixels(165);
                                 y.Cell(1);
                             }))));
                     r.Cell(1).WidthInPixels(75).Suffix(" ms").Class("mono");
