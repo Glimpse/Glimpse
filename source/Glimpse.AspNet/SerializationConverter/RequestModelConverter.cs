@@ -13,49 +13,41 @@ namespace Glimpse.AspNet.SerializationConverter
         public override object Convert(RequestModel request)
         {
             var root = new TabObject();
-            
-            root.AddRow().Key("Client Side").Value(BuildClientSide(request.ClientSide));
-            root.AddRow().Key("Server Side").Value(BuildServerSide(request.ServerSide));
+
+            root.AddRow().Key("Browser").Value(request.Browser);
+            root.AddRow().Key("Cookies").Value(BuildCookies(request.Cookies));
+            root.AddRow().Key("Current UI Culture").Value(request.CurrentUiCulture);
+            root.AddRow().Key("Files").Value(BuildFiles(request.Files));
+            root.AddRow().Key("Form Variables").Value(BuildFormVariables(request.FormVariables));
+            root.AddRow().Key("Header Fields").Value(BuildHeaderFields(request.HeaderFields));
+            root.AddRow().Key("Query String").Value(BuildQueryString(request.QueryString));
+            root.AddRow().Key("Url").Value(request.Url.ToString());
+            root.AddRow().Key("Url Referrer").Value(request.UrlReferrer.ToStringOrDefault());
+            root.AddRow().Key("Raw Url").Value(request.RawUrl);
+            root.AddRow().Key("Request Type").Value(request.RequestType);
+            root.AddRow().Key("Url").Value(request.Url);
+            root.AddRow().Key("Url Referrer").Value(request.UrlReferrer);
+            root.AddRow().Key("User Agent").Value(request.UserAgent);
+            root.AddRow().Key("User Host Address").Value(request.UserHostAddress);
+            root.AddRow().Key("User Host Name").Value(request.UserHostName);
+
+            root.AddRow().Key("Path").Value(BuildPathFields(request));
 
             return root.Build();
         }
 
-        private TabObject BuildClientSide(ClientSide clientSide)
+        private TabObject BuildPathFields(RequestModel request)
         {
             var root = new TabObject();
 
-            root.AddRow().Key("Browser").Value(clientSide.Browser);
-            root.AddRow().Key("Cookies").Value(BuildCookies(clientSide.Cookies));
-            root.AddRow().Key("Files").Value(BuildFiles(clientSide.Files));
-            root.AddRow().Key("Form Variables").Value(BuildFormVariables(clientSide.FormVariables));
-            root.AddRow().Key("Header Fields").Value(BuildHeaderFields(clientSide.HeaderFields));
-            root.AddRow().Key("Query String").Value(BuildQueryString(clientSide.QueryString));
-            root.AddRow().Key("Url").Value(clientSide.Url.ToString());
-            root.AddRow().Key("Url Referrer").Value(clientSide.UrlReferrer.ToStringOrDefault());
-            root.AddRow().Key("Raw Url").Value(clientSide.RawUrl);
-            root.AddRow().Key("Request Type").Value(clientSide.RequestType);
-            root.AddRow().Key("Url").Value(clientSide.Url);
-            root.AddRow().Key("Url Referrer").Value(clientSide.UrlReferrer);
-            root.AddRow().Key("User Agent").Value(clientSide.UserAgent);
-            root.AddRow().Key("User Host Address").Value(clientSide.UserHostAddress);
-            root.AddRow().Key("User Host Name").Value(clientSide.UserHostName);
-
-            return root;
-        }
-
-        private TabObject BuildServerSide(ServerSide serverSide)
-        {
-            var root = new TabObject();
-
-            root.AddRow().Key("App Relative Current Execution File Path").Value(serverSide.AppRelativeCurrentExecutionFilePath);
-            root.AddRow().Key("Application Path").Value(serverSide.ApplicationPath);
-            root.AddRow().Key("Current Execution File Path").Value(serverSide.CurrentExecutionFilePath);
-            root.AddRow().Key("Current UI Culture").Value(serverSide.CurrentUiCulture);
-            root.AddRow().Key("File Path").Value(serverSide.FilePath);
-            root.AddRow().Key("Path").Value(serverSide.Path);
-            root.AddRow().Key("Path Info").Value(serverSide.PathInfo);
-            root.AddRow().Key("Physical Application Path").Value(serverSide.PhysicalApplicationPath);
-            root.AddRow().Key("Physical Path").Value(serverSide.PhysicalPath);
+            root.AddRow().Key("App Relative Current Execution File Path").Value(request.AppRelativeCurrentExecutionFilePath);
+            root.AddRow().Key("Application Path").Value(request.ApplicationPath);
+            root.AddRow().Key("Current Execution File Path").Value(request.CurrentExecutionFilePath);
+            root.AddRow().Key("File Path").Value(request.FilePath);
+            root.AddRow().Key("Path").Value(request.Path);
+            root.AddRow().Key("Path Info").Value(request.PathInfo);
+            root.AddRow().Key("Physical Application Path").Value(request.PhysicalApplicationPath);
+            root.AddRow().Key("Physical Path").Value(request.PhysicalPath);
 
             return root;
         }
