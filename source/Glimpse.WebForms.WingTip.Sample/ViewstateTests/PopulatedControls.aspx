@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="PopulatedControls.aspx.cs" Inherits="WingtipToys.PopulatedControls" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="PopulatedControls.aspx.cs" Inherits="WingtipToys.PopulatedControls" culture="auto" meta:resourcekey="PageResource1" uiculture="auto" %>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
@@ -65,10 +65,14 @@
         <asp:Literal ID="Literal1" runat="server"></asp:Literal>
 
         <h3>asp:Localize</h3>
-        <asp:Localize ID="Localize1" runat="server"></asp:Localize>
+        <asp:Localize ID="Localize1" runat="server" meta:resourcekey="Localize1Resource1"></asp:Localize>
 
         <h3>asp:MultiView</h3>
-        <asp:MultiView ID="MultiView1" runat="server"></asp:MultiView>
+        <asp:MultiView ID="MultiView1" runat="server" ActiveViewIndex="0">
+            <asp:View runat="server" ID="MultiView1View0"><asp:Label runat="server" Text="This is view 0."></asp:Label></asp:View>
+            <asp:View runat="server" ID="MultiView1View1"><asp:Label runat="server" Text="This is view 1."></asp:Label></asp:View>
+            <asp:View runat="server" ID="MultiView1View2"><asp:Label runat="server" Text="This is view 2."></asp:Label></asp:View>
+        </asp:MultiView>
 
         <h3>asp:Panel</h3>
         <asp:Panel ID="Panel1" runat="server"></asp:Panel>

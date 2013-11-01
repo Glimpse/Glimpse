@@ -15,7 +15,7 @@ namespace WingtipToys
             {
                 return;
             }
-            
+
             #region " AdRotator "
 
             AdRotator1.Height = 100;
@@ -68,8 +68,8 @@ namespace WingtipToys
             #region " CheckboxList "
 
             CheckBoxList1.Items.Add(new ListItem("Item Zero (default)", "A"));
-            CheckBoxList1.Items.Add(new ListItem("Item One (checked)", "B"));
-            CheckBoxList1.Items.Add(new ListItem("Item Two (selected)", "C"));
+            CheckBoxList1.Items.Add(new ListItem("Item One (selected)", "B"));
+            CheckBoxList1.Items.Add(new ListItem("Item Two (not selected)", "C"));
             CheckBoxList1.Items.Add(new ListItem("Item Three (disabled)", "D"));
             CheckBoxList1.Items[1].Selected = true;
             CheckBoxList1.Items[2].Selected = false;
@@ -80,8 +80,8 @@ namespace WingtipToys
             #region " DropDownList "
 
             DropDownList1.Items.Add(new ListItem("Item Zero (default)", "A"));
-            DropDownList1.Items.Add(new ListItem("Item One (checked)", "B"));
-            DropDownList1.Items.Add(new ListItem("Item Two (selected)", "C"));
+            DropDownList1.Items.Add(new ListItem("Item One (selected)", "B"));
+            DropDownList1.Items.Add(new ListItem("Item Two (not selected)", "C"));
             DropDownList1.Items.Add(new ListItem("Item Three (disabled)", "D"));
             DropDownList1.Items[1].Selected = true;
             DropDownList1.Items[2].Selected = false;
@@ -131,24 +131,76 @@ namespace WingtipToys
 
             #region " ImageMap "
 
+            ImageMap1.ImageUrl = "/Images/logo.jpg";
+            ImageMap1.HotSpotMode = HotSpotMode.PostBack;
+            RectangleHotSpot hotSpot1 = new RectangleHotSpot();
+            hotSpot1.PostBackValue = "hotSpot 1";
+            hotSpot1.Top = 0;
+            hotSpot1.Bottom = 101;
+            hotSpot1.Left = 0;
+            hotSpot1.Right = 181;
+            hotSpot1.NavigateUrl = "PopulatedControls.aspx";
+            ImageMap1.HotSpots.Add(hotSpot1);
+            RectangleHotSpot hotSpot2 = new RectangleHotSpot();
+            hotSpot2.PostBackValue = "hotSpot 2";
+            hotSpot2.Top = 0;
+            hotSpot2.Bottom = 101;
+            hotSpot2.Left = 182;
+            hotSpot2.Right = 362;
+            hotSpot2.NavigateUrl = "PopulatedControls.aspx";
+            ImageMap1.HotSpots.Add(hotSpot2);
+
             #endregion
 
-            #region "  "
+            #region " Label "
+
+            Label1.Text = "This is the best label.  Ever.";
+            Label1.ForeColor = System.Drawing.Color.Orange;
+            Label1.Font.Name = "Comic Sans MS";
+            Label1.Font.Size = 24;
+
             #endregion
 
-            #region "  "
+            #region " LinkButton "
+
+            LinkButton1.PostBackUrl = "PopulatedControls.aspx?LinkButton1Postback=1";
+            LinkButton1.Text = "This is a link button";
+            LinkButton1.Font.Italic = true;
+
             #endregion
 
-            #region "  "
+            #region " ListBox "
+
+            ListBox1.Items.Add(new ListItem("Item Zero (default)", "A"));
+            ListBox1.Items.Add(new ListItem("Item One (selected)", "B"));
+            ListBox1.Items.Add(new ListItem("Item Two (not selected)", "C"));
+            ListBox1.Items.Add(new ListItem("Item Three (disabled)", "D"));
+            ListBox1.Items[1].Selected = true;
+            ListBox1.Items[2].Selected = false;
+            ListBox1.Items[3].Enabled = false;
+            ListBox1.BorderColor = System.Drawing.Color.Blue;
+            ListBox1.BorderStyle = BorderStyle.Dashed;
+            ListBox1.BorderWidth = 3;
+
             #endregion
 
-            #region "  "
+            #region " Literal "
+
+            Literal1.Text = "<b>This is some literal content</b><pre>OH YEAH!!!" + Environment.NewLine + "This is on the next line.</pre>";
+
             #endregion
 
-            #region "  "
+            #region " Localize "
+
+            Localize1.Mode = LiteralMode.Encode;
+
             #endregion
 
-            #region "  "
+            #region " MultiView "
+
+            //todo: The MultiView and View controls don't seem to have any sort of visibility into their data.
+            MultiView1.ActiveViewIndex = 1; 
+            
             #endregion
 
             #region "  "
