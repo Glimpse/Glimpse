@@ -89,7 +89,147 @@ namespace WingtipToys
             
             #endregion
 
+            #region " FileUpload "
+
+            FileUpload1.AllowMultiple = true;
+            FileUpload1.Height = 80;
+            FileUpload1.Width = 300;
+            FileUpload1.ToolTip = "this is a file uploader";
+
+            #endregion
+
+            #region " HiddenField "
+
+            HiddenField1.Value = "this is a hidden field.";
+
+            #endregion
+
+            #region " Hyperlink "
+
+            HyperLink1.ForeColor = System.Drawing.Color.Gray;
+            HyperLink1.NavigateUrl = "https://github.com/Glimpse/Glimpse";
+            HyperLink1.Text = "Go to Glimpse project site!";
             
+            #endregion
+
+            #region " Image "
+
+            Image1.ImageUrl = "/Images/logo.jpg";
+            Image1.AlternateText = "This is a logo";
+            Image1.DescriptionUrl = "this is the description URL... whatever that is.";
+            
+            #endregion
+
+            #region " ImageButton "
+
+            ImageButton1.ImageUrl = "/Images/logo.jpg";
+            ImageButton1.AlternateText = "This is a logo (ImageButton)";
+            ImageButton1.DescriptionUrl = "this is the description URL... whatever that is.  (ImageButton)";
+            ImageButton1.PostBackUrl = "PopulatedControls.aspx?ImageButtonPostBack=1";
+
+            #endregion
+
+            #region " ImageMap "
+
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+            #region "  "
+            #endregion
+
+
 
         }
     }
