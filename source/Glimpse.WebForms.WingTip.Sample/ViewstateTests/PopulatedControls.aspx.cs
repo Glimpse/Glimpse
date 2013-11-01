@@ -16,11 +16,20 @@ namespace WingtipToys
                 return;
             }
             
-            //todo: Do AdRotator
+            #region " AdRotator "
+
+            AdRotator1.Height = 100;
+            AdRotator1.Width = 100;
+            AdRotator1.AdvertisementFile = "AdRotatorControlTestData.xml";
+            AdRotator1.BorderColor = System.Drawing.Color.Black;
+            AdRotator1.BorderStyle = BorderStyle.Solid;
+            AdRotator1.BorderWidth = 2;
+
+            #endregion 
 
             #region " BulletedList "
-            
-            //todo: for BulletedList, the third part of the triplet appears to be if the item is enabled.
+
+            //todo: for BulletedList, the third part of the triplet appears to be if the item is enabled.  Could improve Glimpse visualizer for this.
             BulletedList1.Items.Add(new ListItem("Item Zero", "A"));
             BulletedList1.Items.Add(new ListItem("Item One", "B"));
             BulletedList1.Items.Add(new ListItem("Item Two", "C"));

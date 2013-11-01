@@ -307,6 +307,7 @@
     <Content Include="Global.asax" />
     <Content Include="ShoppingCart.aspx" />
     <Content Include="Viewstateless.aspx" />
+    <Content Include="ViewstateTests\AdRotatorControlTestData.xml" />
     <Content Include="ViewstateTests\PopulatedControls.aspx" />
     <Content Include="ViewstateTests\EmptyControls.aspx" />
     <Content Include="Web.config" />
