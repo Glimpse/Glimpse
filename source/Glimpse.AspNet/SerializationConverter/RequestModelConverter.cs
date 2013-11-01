@@ -70,7 +70,7 @@ namespace Glimpse.AspNet.SerializationConverter
             return result;
         }
 
-        private object BuildFiles(IEnumerable<HttpPostedFile> files)
+        private object BuildFiles(IEnumerable<RequestModel.PostedFile> files)
         {
             if (files == null || !files.Any())
             {

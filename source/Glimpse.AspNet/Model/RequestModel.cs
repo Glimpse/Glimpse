@@ -63,7 +63,7 @@ namespace Glimpse.AspNet.Model
         public HttpBrowserCapabilitiesBase Browser { get; private set; }
         public IEnumerable<Cookie> Cookies { get; private set; }
         public CultureInfo CurrentUiCulture { get; private set; }
-        public IEnumerable<HttpPostedFile> Files { get; private set; }
+        public IEnumerable<PostedFile> Files { get; private set; }
         public IEnumerable<FormVariable> FormVariables { get; private set; }
         public IEnumerable<HeaderField> HeaderFields { get; private set; }
         public IEnumerable<QueryStringParameter> QueryString { get; private set; }
@@ -108,7 +108,7 @@ namespace Glimpse.AspNet.Model
             }
         }
 
-        private IEnumerable<HttpPostedFile> GetPostedFiles(HttpRequest httpRequest)
+        private IEnumerable<PostedFile> GetPostedFiles(HttpRequest httpRequest)
         {
             if (httpRequest != null)
             {
@@ -118,7 +118,13 @@ namespace Glimpse.AspNet.Model
                 {
                     foreach (var key in files.AllKeys)
                     {
-                        yield return files[key];
+                        yield return new PostedFile
+                        {
+                            FileName = files[key].FileName,
+                            ContentType = files[key].ContentType,
+                            ContentLength = files[key].ContentLength
+                        };
+
                     }
                 }
             }
@@ -172,6 +178,14 @@ namespace Glimpse.AspNet.Model
             }
         }
 
+        public class Cookie
+        {
+            public string Name { get; set; }
+            public string Value { get; set; }
+            public string Path { get; set; }
+            public bool IsSecure { get; set; }
+        }
+
         public class FormVariable
         {
             public string Key { get; set; }
@@ -184,19 +198,18 @@ namespace Glimpse.AspNet.Model
             public string Value { get; set; }
         }
 
+        public class PostedFile
+        {
+            public string FileName { get; set; }
+            public string ContentType { get; set; }
+            public int ContentLength { get; set; }
+        }
+
         public class QueryStringParameter
         {
             public string Key { get; set; }
 
             public string Value { get; set; }
-        }
-
-        public class Cookie
-        {
-            public string Name { get; set; }
-            public string Value { get; set; }
-            public string Path { get; set; }
-            public bool IsSecure { get; set; }
         }
     }
 }
