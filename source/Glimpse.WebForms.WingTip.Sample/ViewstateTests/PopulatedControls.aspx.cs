@@ -203,13 +203,40 @@ namespace WingtipToys
             
             #endregion
 
-            #region "  "
+            #region " Panel "
+
+            Panel1.Width = 400;
+            Panel1.Height = 200;
+            Panel1.BorderColor = System.Drawing.Color.Green;
+            Panel1.BorderWidth = 5;
+            Panel1.BorderStyle = BorderStyle.Inset;
+
+            var panel1TextBox1 = new TextBox();
+            panel1TextBox1.ID = "panel1TextBox1";
+            panel1TextBox1.Text = "This is the panel1TextBox1 text value.";
+            panel1TextBox1.Width = 300;
+            Panel1.Controls.Add(panel1TextBox1);
+
+            #endregion
+
+            #region " PlaceHolder "
+            
+            var placeHolder1TextBox1 = new TextBox();
+            placeHolder1TextBox1.ID = "placeHolder1TextBox1";
+            placeHolder1TextBox1.Text = "This is the placeHolder1TextBox1 text value.";
+            placeHolder1TextBox1.Width = 500;
+            PlaceHolder1.Controls.Add(placeHolder1TextBox1);
+
             #endregion
 
             #region "  "
-            #endregion
 
-            #region "  "
+            RadioButton1.Checked = true;
+            RadioButton2.Checked = false;
+            RadioButton1.Text = "This is RadioButton1!  The initial value is checked.";
+            RadioButton2.Text = "This is RadioButton2!  The initial value is not checked.";
+            RadioButton3.Text = "This is RadioButton3!  The initial value is not specified.";
+            
             #endregion
 
             #region "  "

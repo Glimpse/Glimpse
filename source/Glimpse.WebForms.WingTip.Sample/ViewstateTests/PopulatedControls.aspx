@@ -81,7 +81,9 @@
         <asp:PlaceHolder ID="PlaceHolder1" runat="server"></asp:PlaceHolder>
 
         <h3>asp:RadioButton</h3>
-        <asp:RadioButton ID="RadioButton1" runat="server" />
+        <asp:RadioButton ID="RadioButton1" runat="server" /><br />
+        <asp:RadioButton ID="RadioButton2" runat="server" /><br />
+        <asp:RadioButton ID="RadioButton3" runat="server" />
 
         <h3>asp:RadioButtonList</h3>
         <asp:RadioButtonList ID="RadioButtonList1" runat="server"></asp:RadioButtonList>
