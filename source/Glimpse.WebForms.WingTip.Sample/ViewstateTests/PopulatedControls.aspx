@@ -89,7 +89,7 @@
         <asp:RadioButtonList ID="RadioButtonList1" runat="server"></asp:RadioButtonList>
 
         <h3>asp:Substitution</h3>
-        <asp:Substitution ID="Substitution1" runat="server" />
+        <asp:Substitution ID="Substitution1" runat="server" methodname="GetCurrentDateTime" />
 
         <h3>asp:Table</h3>
         <asp:Table ID="Table1" runat="server"></asp:Table>
@@ -148,7 +148,7 @@
         </table>
 
         <h3>Image</h3>
-        <img id="HtmlImage1" alt="" src="" runat="server" />
+        <img id="HtmlImage1" alt="" src="." runat="server" />
 
         <h3>Select</h3>
         <select id="HtmlSelect1" runat="server" >

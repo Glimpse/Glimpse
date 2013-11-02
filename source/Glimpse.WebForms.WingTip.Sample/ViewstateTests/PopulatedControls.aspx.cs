@@ -229,7 +229,7 @@ namespace WingtipToys
 
             #endregion
 
-            #region "  "
+            #region " RadioButton "
 
             RadioButton1.Checked = true;
             RadioButton2.Checked = false;
@@ -239,13 +239,35 @@ namespace WingtipToys
             
             #endregion
 
-            #region "  "
+            #region " RadioButtonList "
+
+            RadioButtonList1.Items.Add(new ListItem("Item Zero (default)", "A"));
+            RadioButtonList1.Items.Add(new ListItem("Item One (selected)", "B"));
+            RadioButtonList1.Items.Add(new ListItem("Item Two (not selected)", "C"));
+            RadioButtonList1.Items.Add(new ListItem("Item Three (disabled)", "D"));
+
+            RadioButtonList1.Items[1].Selected = true;
+            RadioButtonList1.Items[2].Selected = false;
+            RadioButtonList1.Items[3].Enabled = false;
+            RadioButtonList1.BorderColor = System.Drawing.Color.Gray;
+            RadioButtonList1.BorderStyle = BorderStyle.Outset;
+            RadioButtonList1.BorderWidth = 2;
+
             #endregion
 
-            #region "  "
+            #region " Substitution "
+
+            Substitution1.Visible = true;
+
             #endregion
 
-            #region "  "
+            #region " Table "
+
+            Table1.Rows.Add(TableHeaderRowFromStringArray(new string[] { "Column 1 Header", "Column 2 Header", "Column 3 Header" }));
+            Table1.Rows.Add(TableRowFromStringArray(new string[] { "Field1 A", "Field2", "Field3" }));
+            Table1.Rows.Add(TableRowFromStringArray(new string[] { "Field1 B", "Field2", "Field3" }));
+            Table1.Rows.Add(TableRowFromStringArray(new string[] { "Field1 C", "Field2", "Field3" }));
+            
             #endregion
 
             #region "  "
@@ -311,5 +333,42 @@ namespace WingtipToys
 
 
         }
+
+
+        #region " helper functions "
+
+        public static string GetCurrentDateTime(HttpContext context)
+        {
+            return DateTime.Now.ToString();
+        }
+
+        public static TableRow TableRowFromStringArray(string[] cells)
+        {
+            var row = new TableRow();
+            foreach (var cellValue in cells)
+            {
+                var cell = new TableCell();
+                cell.Text = cellValue;
+                row.Cells.Add(cell);
+            }
+            return row;
+        }
+
+        public static TableHeaderRow TableHeaderRowFromStringArray(string[] cells)
+        {
+            var row = new TableHeaderRow();
+            foreach (var cellValue in cells)
+            {
+                var cell = new TableCell();
+                cell.Text = cellValue;
+                cell.Font.Bold = true;
+                row.Cells.Add(cell);
+            }
+            return row;
+        }
+
+
+        #endregion
+
     }
 }
