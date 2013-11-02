@@ -145,10 +145,11 @@
 
         <h3>Table</h3>
         <table id="HtmlTable" style="width: 100%;" runat="server" >
+            <tr runat="server"><th>Header 1</th><th>Header 2</th></tr>
         </table>
 
         <h3>Image</h3>
-        <img id="HtmlImage1" alt="" src="." runat="server" />
+        <img id="HtmlImage1" alt="" src="../Images/bullet.png" runat="server" />
 
         <h3>Select</h3>
         <select id="HtmlSelect1" runat="server" >

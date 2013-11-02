@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -21,7 +22,7 @@ namespace WingtipToys
             AdRotator1.Height = 100;
             AdRotator1.Width = 100;
             AdRotator1.AdvertisementFile = "AdRotatorControlTestData.xml";
-            AdRotator1.BorderColor = System.Drawing.Color.Black;
+            AdRotator1.BorderColor = Color.Black;
             AdRotator1.BorderStyle = BorderStyle.Solid;
             AdRotator1.BorderWidth = 2;
 
@@ -44,8 +45,8 @@ namespace WingtipToys
             Button1.ToolTip = "Button1 Tooltip is here.";
             Button1.Width = 300;
             Button1.Height = 80;
-            Button1.BackColor = System.Drawing.Color.Red;
-            Button1.ForeColor = System.Drawing.Color.Blue;
+            Button1.BackColor = Color.Red;
+            Button1.ForeColor = Color.Blue;
 
             #endregion 
 
@@ -106,7 +107,7 @@ namespace WingtipToys
 
             #region " Hyperlink "
 
-            HyperLink1.ForeColor = System.Drawing.Color.Gray;
+            HyperLink1.ForeColor = Color.Gray;
             HyperLink1.NavigateUrl = "https://github.com/Glimpse/Glimpse";
             HyperLink1.Text = "Go to Glimpse project site!";
             
@@ -155,7 +156,7 @@ namespace WingtipToys
             #region " Label "
 
             Label1.Text = "This is the best label.  Ever.";
-            Label1.ForeColor = System.Drawing.Color.Orange;
+            Label1.ForeColor = Color.Orange;
             Label1.Font.Name = "Comic Sans MS";
             Label1.Font.Size = 24;
 
@@ -178,7 +179,7 @@ namespace WingtipToys
             ListBox1.Items[1].Selected = true;
             ListBox1.Items[2].Selected = false;
             ListBox1.Items[3].Enabled = false;
-            ListBox1.BorderColor = System.Drawing.Color.Blue;
+            ListBox1.BorderColor = Color.Blue;
             ListBox1.BorderStyle = BorderStyle.Dashed;
             ListBox1.BorderWidth = 3;
 
@@ -207,7 +208,7 @@ namespace WingtipToys
 
             Panel1.Width = 400;
             Panel1.Height = 200;
-            Panel1.BorderColor = System.Drawing.Color.Green;
+            Panel1.BorderColor = Color.Green;
             Panel1.BorderWidth = 5;
             Panel1.BorderStyle = BorderStyle.Inset;
 
@@ -249,7 +250,7 @@ namespace WingtipToys
             RadioButtonList1.Items[1].Selected = true;
             RadioButtonList1.Items[2].Selected = false;
             RadioButtonList1.Items[3].Enabled = false;
-            RadioButtonList1.BorderColor = System.Drawing.Color.Gray;
+            RadioButtonList1.BorderColor = Color.Gray;
             RadioButtonList1.BorderStyle = BorderStyle.Outset;
             RadioButtonList1.BorderWidth = 2;
 
@@ -270,67 +271,160 @@ namespace WingtipToys
             
             #endregion
 
-            #region "  "
+            #region " Textbox "
+
+            TextBox1.Text = "This is a text box control.";
+            TextBox1.ReadOnly = true;
+
             #endregion
 
-            #region "  "
+            #region " View "
+
+            var View1Label = new Label();
+            View1Label.Text = "This is the label inside the view...  I am invisible because my parent View is supposed to be in a MultiView.";
+            View1Label.Width = 100;
+            View1.Controls.Add(View1Label);
+
             #endregion
 
-            #region "  "
+            #region " Wizard "
+
+            Wizard1.BackColor = Color.Honeydew;
+            WizardStep1.AllowReturn = true;
+            WizardStep2.AllowReturn = true;
+            var WizardStep1TextBox1 = new TextBox();
+            WizardStep1TextBox1.Text = "This is Wizard step 0 checkbox 1.";
+            WizardStep1.Controls.Add(WizardStep1TextBox1);
+            var WizardStep2TextBox1 = new TextBox();
+            WizardStep2TextBox1.Text = "This is Wizard step 1 checkbox 1.";
+            WizardStep2.Controls.Add(WizardStep2TextBox1);
+            Wizard1.ActiveStepIndex = 0;
+
             #endregion
 
-            #region "  "
+            #region " Xml "
+            //todo: need to create an XSLT or else this will crash BrowserLink in VS2013.
+            
+
             #endregion
 
-            #region "  "
+            #region " HtmlButton "
+            
+            HtmlButton1.Value = "I am Html Button1";
+
             #endregion
 
-            #region "  "
+            #region " HtmlReset "
+
+            HtmlReset1.Value = "I am Html Reset1";
+
             #endregion
 
-            #region "  "
+            #region " HtmlSubmit "
+
+            HtmlSubmit1.Value = "I am Html Submit1";
+
             #endregion
 
-            #region "  "
+            #region " HtmlText "
+
+            HtmlText1.Value = "I am Html Text1";
+            HtmlText1.Size = 100;
+
             #endregion
 
-            #region "  "
+            #region " Html Input File "
+
+            HtmlFile1.Accept = "text/xml";
+
             #endregion
 
-            #region "  "
+            #region " HtmlPassword "
+
+            HtmlPassword1.Size = 200;
+            HtmlPassword1.Value = "MyVoiceIsMyPassportVerifyMe";
+
             #endregion
 
-            #region "  "
+            #region " Html Input Checkbox "
+
+            HtmlCheckbox1.Checked = true;
+            HtmlCheckbox1.Name = "HtmlCheckbox1Name";
+
             #endregion
 
-            #region "  "
+            #region " Html Input Radio "
+
+            HtmlRadio1.Checked = true;
+            HtmlRadio1.Name = "HtmlRadio1Name";
+
             #endregion
 
-            #region "  "
+            #region " Html Input Hidden "
+
+            HtmlHidden1.Value = "This is so hidden right now...";
+            HtmlHidden1.Name = "HtmlHidden1Name";
+
             #endregion
 
-            #region "  "
+            #region " Html Textarea "
+
+            HtmlTextArea1.Value = "This is some multiline text.\nThis is line 2.";
+            HtmlTextArea1.Name = "HtmlTextArea1Name";
+
             #endregion
 
-            #region "  "
+            #region " Html Table "
+
+            var htmlTableRow1 = new System.Web.UI.HtmlControls.HtmlTableRow();
+            var htmlTableRow1Cell1 = new System.Web.UI.HtmlControls.HtmlTableCell();
+            htmlTableRow1Cell1.InnerText = "Cell1";
+            htmlTableRow1Cell1.BgColor = "green";
+            var htmlTableRow1Cell2 = new System.Web.UI.HtmlControls.HtmlTableCell();
+            htmlTableRow1Cell2.InnerText = "Cell2";
+            htmlTableRow1Cell2.BgColor = "pink";
+            htmlTableRow1.Cells.Add(htmlTableRow1Cell1);
+            htmlTableRow1.Cells.Add(htmlTableRow1Cell2);
+            HtmlTable.Rows.Add(htmlTableRow1);
+            HtmlTable.Border = 1;
+            HtmlTable.BorderColor = "gray";
+            
             #endregion
 
-            #region "  "
+            #region " Html Image "
+
+            HtmlImage1.Src = "~/Images/orderedList0.png";
+            HtmlImage1.Alt = "This is a zero picture.  Sweet!";
+
             #endregion
 
-            #region "  "
+            #region " Html Select "
+
+            HtmlSelect1.Items.Add(new ListItem("Item Zero (default)", "A"));
+            HtmlSelect1.Items.Add(new ListItem("Item One (selected)", "B"));
+            HtmlSelect1.Items.Add(new ListItem("Item Two (not selected)", "C"));
+            HtmlSelect1.Items.Add(new ListItem("Item Three (disabled)", "D"));
+            HtmlSelect1.Items[1].Selected = true;
+            HtmlSelect1.Items[2].Selected = false;
+            HtmlSelect1.Items[3].Enabled = false;
+
             #endregion
 
-            #region "  "
+            #region " Html Horizontal Rule "
+
+            horizontalRule1.InnerText = "Server side Horizontal Rules are the wave of the future.";
+            horizontalRule1.Style.Add(HtmlTextWriterStyle.Color, "red");
+            horizontalRule1.EnableViewState = true;
+
+
             #endregion
 
-            #region "  "
+            #region " Html Div "
+
+            HtmlDiv1.InnerText = "This is some text inside this server-side div.";
+            HtmlDiv1.EnableViewState = true;
+
             #endregion
-
-            #region "  "
-            #endregion
-
-
 
         }
 
