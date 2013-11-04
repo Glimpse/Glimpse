@@ -137,7 +137,7 @@ namespace Glimpse.WebForms.Support
                         }
                     }
                 }
-                else if (type == "System.Web.UI.WebControls.CheckBox")
+                else if (type == "System.Web.UI.WebControls.CheckBox" || type == "System.Web.UI.WebControls.RadioButton")
                 {
                     var triplet = data as Triplet;
                     if (triplet != null)

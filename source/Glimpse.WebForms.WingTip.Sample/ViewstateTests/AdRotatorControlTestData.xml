@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Advertisements>
+  <Ad>
+    <ImageUrl>/Images/orderedList0.png</ImageUrl>
+    <NavigateUrl>https://github.com/Glimpse/Glimpse</NavigateUrl>
+    <AlternateText>Glimpse Project Home</AlternateText>
+    <Impressions>40</Impressions>
+    <Keyword>ASP.NET</Keyword>
+  </Ad>
+  <Ad>
+    <ImageUrl>/Images/orderedList1.png</ImageUrl>
+    <NavigateUrl>https://github.com/Glimpse/Glimpse/issues</NavigateUrl>
+    <AlternateText>Glimpse Project Issues</AlternateText>
+    <Impressions>40</Impressions>
+    <Keyword>Issues</Keyword>
+  </Ad>
+  <Ad>
+    <ImageUrl>/Images/orderedList2.png</ImageUrl>
+    <NavigateUrl>https://github.com/Glimpse/Glimpse/wiki</NavigateUrl>
+    <AlternateText>Glimpse Project Wiki</AlternateText>
+    <Impressions>40</Impressions>
+    <Keyword>Wiki</Keyword>
+  </Ad>
+</Advertisements>
