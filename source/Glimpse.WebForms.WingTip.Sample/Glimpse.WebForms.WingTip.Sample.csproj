@@ -250,6 +250,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="WebMethodsAndPostRedirectGetTests.aspx" />
     <Content Include="ErrorPage.aspx" />
     <Content Include="Images\accent.png" />
     <Content Include="Images\bullet.png" />
@@ -413,6 +414,13 @@
     </Compile>
     <Compile Include="Contact.aspx.designer.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebMethodsAndPostRedirectGetTests.aspx.cs">
+      <DependentUpon>WebMethodsAndPostRedirectGetTests.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebMethodsAndPostRedirectGetTests.aspx.designer.cs">
+      <DependentUpon>WebMethodsAndPostRedirectGetTests.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>

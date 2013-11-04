@@ -70,11 +70,12 @@ namespace Glimpse.AspNet
 
             if (runtime.IsInitialized || runtime.Initialize())
             {
-                httpApplication.BeginRequest += (context, e) => BeginRequest(WithTestable(context));
-                httpApplication.PostAcquireRequestState += (context, e) => BeginSessionAccess(WithTestable(context));
-                httpApplication.PostRequestHandlerExecute += (context, e) => EndSessionAccess(WithTestable(context));
-                httpApplication.PostReleaseRequestState += (context, e) => EndRequest(WithTestable(context));
-                httpApplication.PreSendRequestHeaders += (context, e) => SendHeaders(WithTestable(context));
+                httpApplication.BeginRequest += (context, e) => OnBeginRequest(WithTestable(context));
+                httpApplication.PostAcquireRequestState += (context, e) => OnPostAcquireRequestState(WithTestable(context));
+                httpApplication.PostRequestHandlerExecute += (context, e) => OnPostRequestHandlerExecute(WithTestable(context));
+                httpApplication.PostReleaseRequestState += (context, e) => OnPostReleaseRequestState(WithTestable(context));
+                httpApplication.EndRequest += (context, e) => OnEndRequest(WithTestable(context));
+                httpApplication.PreSendRequestHeaders += (context, e) => OnPreSendRequestHeaders(WithTestable(context));
             }
         }
 
@@ -100,7 +101,7 @@ namespace Glimpse.AspNet
             return runtime;
         }
 
-        internal void BeginRequest(HttpContextBase httpContext)
+        internal void OnBeginRequest(HttpContextBase httpContext)
         {
             // TODO: Add Logging to either methods here or in Runtime
             var runtime = GetRuntime(httpContext.Application);
@@ -108,14 +109,24 @@ namespace Glimpse.AspNet
             runtime.BeginRequest();
         }
 
-        internal void EndRequest(HttpContextBase httpContext)
+        internal void OnEndRequest(HttpContextBase httpContext)
         {
+            if(!httpContext.Items.Contains("EndRequestCalled"))
+            {
+                this.OnPostReleaseRequestState(httpContext);
+            }
+        }
+
+        internal void OnPostReleaseRequestState(HttpContextBase httpContext)
+        {
+            httpContext.Items.Add("EndRequestCalled", true);
+            
             var runtime = GetRuntime(httpContext.Application);
 
             runtime.EndRequest();
         }
 
-        internal void SendHeaders(HttpContextBase httpContext)
+        internal void OnPreSendRequestHeaders(HttpContextBase httpContext)
         {
             httpContext.HeadersSent(true);
         }
@@ -132,14 +143,14 @@ namespace Glimpse.AspNet
             return new HttpApplicationWrapper(httpApplication);
         }
 
-        private void BeginSessionAccess(HttpContextBase httpContext)
+        private void OnPostAcquireRequestState(HttpContextBase httpContext)
         {
             var runtime = GetRuntime(httpContext.Application);
 
             runtime.BeginSessionAccess();
         }
 
-        private void EndSessionAccess(HttpContextBase httpContext)
+        private void OnPostRequestHandlerExecute(HttpContextBase httpContext)
         {
             var runtime = GetRuntime(httpContext.Application);
 
