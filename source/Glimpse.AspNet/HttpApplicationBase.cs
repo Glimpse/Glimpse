@@ -13,7 +13,11 @@ namespace Glimpse.AspNet
         
         public abstract event EventHandler PostReleaseRequestState;
 
-        public abstract event EventHandler EndRequest;
+        public virtual event EventHandler EndRequest
+        {
+            add { }
+            remove { }
+        }
 
         public abstract event EventHandler PreSendRequestHeaders;
 
