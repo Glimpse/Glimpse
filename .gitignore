@@ -19,6 +19,7 @@ _ReSharper.*
 /TestResult.xml
 /builds/local/
 *.dotCover
+/source/Glimpse.WebForms.WingTip.Sample/App_Data/ErrorLog.txt
 /source/Glimpse.Mvc3.MusicStore.Sample/App_Data/ASPNETDB.MDF
 /source/Glimpse.Mvc3.MusicStore.Sample/App_Data/ASPNETDB_log.ldf
 /source/Glimpse.Mvc3.MusicStore.Sample/App_Data/MvcMusicStore.sdf
@@ -49,3 +50,4 @@ Help/
 /source/Glimpse.Mvc4.MusicStore.Sample/App_Data/MvcMusicStore.mdf
 
 /source/Glimpse.Mvc4.MusicStore.Sample/App_Data/MvcMusicStore_log.ldf
+

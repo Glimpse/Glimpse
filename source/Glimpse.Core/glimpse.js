@@ -2351,11 +2351,11 @@ glimpse.tab = (function($, pubsub, data) {
                 detailPanel = panel.find('table'); 
             
             if (detailPanel.length == 0) {
-                var detailData = [['Request URL', 'Method', 'Duration', 'Date/Time', 'View']],
-                    detailMetadata = { layout: [ [ { data : 0, key : true, width : '40%' }, { data : 1 }, { data : 2, width : '10%', className : 'mono', align : 'right' },  { data : 3, width : '20%' },  { data : 4, width : '100px' } ] ] };
+                var detailData = [['Request URL', 'Method', 'Status Code', 'Duration', 'Date/Time', 'View']],
+                    detailMetadata = { layout: [ [ { data : 0, key : true, width : '40%' }, { data : 1 }, { data : 2 }, { data : 3, width : '10%', className : 'mono', align : 'right' },  { data : 4, width : '20%' },  { data : 5, width : '100px' } ] ] };
                 
                 panel.html(renderEngine.build(detailData, detailMetadata)).find('table').append('<tbody class="glimpse-row-holder"></tbody>');
-                panel.find('table').addClass('glimpse-ellipsis').find('thead').append('<tr class="glimpse-head-message" style="display:none"><td colspan="5"><a href="javascript:void(0)" class="glimpse-pulse glimpse-context">Reset context back to starting page</a></td></tr>');
+                panel.find('table').addClass('glimpse-ellipsis').find('thead').append('<tr class="glimpse-head-message" style="display:none"><td colspan="6"><a href="javascript:void(0)" class="glimpse-pulse glimpse-context">Reset context back to starting page</a></td></tr>');
             }
         },
         layoutBuildContent = function(result) {
@@ -2365,7 +2365,7 @@ glimpse.tab = (function($, pubsub, data) {
             
             for (var x = context.resultCount; x < result.length; x++) {
                 var item = result[x];
-                html = '<tr data-requestId="' + item.requestId + '" class="glimpse-row"><td><div class="glimpse-ellipsis" title="' + item.uri + '">' + util.htmlEncode(item.uri) + '</div></td><td>' + item.method + '</td><td class="mono" style="text-align:right">' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.dateTime + '</td><td><a href="javascript:void(0)" class="glimpse-ajax-link" data-requestId="' + item.requestId + '">Inspect</a></td></tr>' + html;
+                html = '<tr data-requestId="' + item.requestId + '" class="glimpse-row"><td><div class="glimpse-ellipsis" title="' + item.uri + '">' + util.htmlEncode(item.uri) + '</div></td><td>' + item.method + '</td><td>' + item.statusCode + '</td><td class="mono" style="text-align:right">' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.dateTime + '</td><td><a href="javascript:void(0)" class="glimpse-ajax-link" data-requestId="' + item.requestId + '">Inspect</a></td></tr>' + html;
             }
             detailBody.prepend(html);
             
@@ -2555,12 +2555,12 @@ glimpse.tab = (function($, pubsub, data) {
                 
                 var detailPanel = panel.find('.glimpse-col-main'),
                     masterData = [ [ 'Client', 'Count', 'View' ] ],
-                    detailData = [ [ 'Request URL', 'Method', 'Duration', 'Date/Time', 'Is Ajax', 'View' ] ],
-                    detailMetadata = { layout: [ [ { data : 0, key : true, width : '30%' }, { data : 1 }, { data : 2, width : '10%', className : 'mono', align : 'right' }, { data : 3, width : '20%' }, { data : 4, width : '10%' }, { data : 5, width : '100px' } ] ] };
+                    detailData = [ [ 'Request URL', 'Method', 'Status Code', 'Duration', 'Date/Time', 'Is Ajax', 'View' ] ],
+                    detailMetadata = { layout: [ [ { data : 0, key : true, width : '30%' }, { data : 1 }, { data : 2 }, { data : 3, width : '10%', className : 'mono', align : 'right' }, { data : 4, width : '20%' }, { data : 5, width : '10%' }, { data : 6, width : '100px' } ] ] };
                 
                 detailPanel.html(renderEngine.build(detailData, detailMetadata)).find('table').append('<tbody class="glimpse-row-holder"></tbody>');
-                detailPanel.find('table').addClass('glimpse-ellipsis').find('thead').append('<tr class="glimpse-head-message" style="display:none"><td colspan="6"><a href="javascript:void(0)" class="glimpse-pulse glimpse-context">Reset context back to starting page</a></td></tr>');
-                
+                detailPanel.find('table').addClass('glimpse-ellipsis').find('thead').append('<tr class="glimpse-head-message" style="display:none"><td colspan="7"><a href="javascript:void(0)" class="glimpse-pulse glimpse-context">Reset context back to starting page</a></td></tr>');
+
                 masterPanel.html(renderEngine.build(masterData)); 
             }
         }, 
@@ -2576,7 +2576,7 @@ glimpse.tab = (function($, pubsub, data) {
             
             for (var x = context.resultCount; x < clientData.length; x++) {
                 var item = clientData[x];
-                html = '<tr class="glimpse-row" data-requestId="' + item.requestId + '"><td><div class="glimpse-ellipsis" title="' + item.uri + '">' + util.htmlEncode(item.uri) + '</div></td><td>' + item.method + '</td><td class="mono" style="text-align:right">' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.dateTime + '</td><td>' + item.isAjax + '</td><td><a href="javascript:void(0)" class="glimpse-history-link" data-requestId="' + item.requestId + '">Inspect</a></td></tr>' + html;
+                html = '<tr class="glimpse-row" data-requestId="' + item.requestId + '"><td><div class="glimpse-ellipsis" title="' + item.uri + '">' + util.htmlEncode(item.uri) + '</div></td><td>' + item.method + '</td><td>' + item.statusCode + '</td><td class="mono" style="text-align:right">' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.dateTime + '</td><td>' + item.isAjax + '</td><td><a href="javascript:void(0)" class="glimpse-history-link" data-requestId="' + item.requestId + '">Inspect</a></td></tr>' + html;
             }
             detailBody.prepend(html);
             
