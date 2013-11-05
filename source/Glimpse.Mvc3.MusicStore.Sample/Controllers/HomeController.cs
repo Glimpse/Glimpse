@@ -48,6 +48,11 @@ namespace MvcMusicStore.Controllers
             return View(albums);
         }
 
+        public ActionResult ReturnStatusCode(int statusCode)
+        {
+            return new HttpStatusCodeResult(statusCode);
+        }
+
         public ActionResult PRGTest()
         {
             var albums = GetTopSellingAlbums(5);
