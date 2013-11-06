@@ -1,45 +1,24 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Globalization;
 using System.Threading;
 using System.Web;
-using System.Reflection;
 
 namespace Glimpse.AspNet.Model
 {
     public class RequestModel
     {
-        private static readonly FieldInfo cookieField = typeof(HttpRequest).GetField("_cookies",
-                                                              BindingFlags.Instance | BindingFlags.NonPublic);
-
-        private static readonly FieldInfo filesField = typeof(HttpRequest).GetField("_files",
-                                                      BindingFlags.Instance | BindingFlags.NonPublic);
-
-        private static readonly FieldInfo formField = typeof(HttpRequest).GetField("_form",
-                                                              BindingFlags.Instance | BindingFlags.NonPublic);
-
-        private static readonly FieldInfo httpHeadersField = typeof(HttpRequest).GetField("_headers",
-                                                              BindingFlags.Instance | BindingFlags.NonPublic);
-
-        private static readonly FieldInfo httpRequestField = typeof(HttpRequestWrapper).GetField("_httpRequest",
-                                                                      BindingFlags.Instance | BindingFlags.NonPublic);
-
-        private static readonly FieldInfo queryStringField = typeof(HttpRequest).GetField("_queryString",
-                                                                      BindingFlags.Instance | BindingFlags.NonPublic);
-
         public RequestModel(HttpContextBase context)
         {
             var request = context.Request;
-            var httpRequest = httpRequestField.GetValue(request) as HttpRequest;
 
             Browser = request.Browser;
-            Cookies = GetCookies(httpRequest, context.Server);
+            Cookies = GetCookies(request, context.Server);
             CurrentUiCulture = Thread.CurrentThread.CurrentUICulture;
-            Files = GetPostedFiles(httpRequest);
-            FormVariables = GetFormVariables(httpRequest);
-            HeaderFields = GetHeaderFields(httpRequest);
-            QueryString = GetQueryString(httpRequest);
+            Files = GetPostedFiles(request);
+            FormVariables = GetFormVariables(request);
+            HeaderFields = GetHeaderFields(request);
+            QueryString = GetQueryString(request);
             RawUrl = request.RawUrl;
             RequestType = request.RequestType;
             Url = request.Url;
@@ -84,11 +63,11 @@ namespace Glimpse.AspNet.Model
         public string PhysicalApplicationPath { get; private set; }
         public string PhysicalPath { get; private set; }
 
-        private IEnumerable<Cookie> GetCookies(HttpRequest httpRequest, HttpServerUtilityBase server)
+        private IEnumerable<Cookie> GetCookies(HttpRequestBase httpRequest, HttpServerUtilityBase server)
         {
             if (httpRequest != null)
             {
-                var cookies = cookieField.GetValue(httpRequest) as HttpCookieCollection;
+                var cookies = httpRequest.Cookies;
 
                 if (cookies != null)
                 {
@@ -96,61 +75,68 @@ namespace Glimpse.AspNet.Model
                     {
                         var cookie = cookies[key];
 
-                        yield return new Cookie
+                        if (cookie != null)
                         {
-                            Name = cookie.Name,
-                            Path = cookie.Path,
-                            IsSecure = cookie.Secure,
-                            Value = server.UrlDecode(cookie.Value)
-                        };
+                            yield return new Cookie
+                                {
+                                    Name = cookie.Name,
+                                    Path = cookie.Path,
+                                    IsSecure = cookie.Secure,
+                                    Value = server.UrlDecode(cookie.Value)
+                                };
+                        }
                     }
                 }
             }
         }
 
-        private IEnumerable<PostedFile> GetPostedFiles(HttpRequest httpRequest)
+        private IEnumerable<PostedFile> GetPostedFiles(HttpRequestBase httpRequest)
         {
             if (httpRequest != null)
             {
-                var files = filesField.GetValue(httpRequest) as HttpFileCollection;
+                var files = httpRequest.Files;
 
                 if (files != null)
                 {
                     foreach (var key in files.AllKeys)
                     {
-                        yield return new PostedFile
-                        {
-                            FileName = files[key].FileName,
-                            ContentType = files[key].ContentType,
-                            ContentLength = files[key].ContentLength
-                        };
+                        var httpPostedFileBase = files[key];
 
+                        if (httpPostedFileBase != null)
+                        {
+                            yield return new PostedFile
+                                {
+                                    FileName = httpPostedFileBase.FileName,
+                                    ContentType = httpPostedFileBase.ContentType,
+                                    ContentLength = httpPostedFileBase.ContentLength
+                                };
+                        }
                     }
                 }
             }
         }
 
-        private IEnumerable<FormVariable> GetFormVariables(HttpRequest httpRequest)
+        private IEnumerable<FormVariable> GetFormVariables(HttpRequestBase httpRequest)
         {
             if (httpRequest != null)
             {
-                var formVariables = formField.GetValue(httpRequest) as NameValueCollection;
+                var formVariables = httpRequest.Form;
 
                 if (formVariables != null)
                 {
                     foreach (var key in formVariables.AllKeys)
                     {
-                        yield return new FormVariable { Key = key, Value = formVariables[key] };
+                        yield return new FormVariable {Key = key, Value = formVariables[key]};
                     }
                 }
             }
         }
 
-        private IEnumerable<HeaderField> GetHeaderFields(HttpRequest httpRequest)
+        private IEnumerable<HeaderField> GetHeaderFields(HttpRequestBase httpRequest)
         {
             if (httpRequest != null)
             {
-                var headerFields = httpHeadersField.GetValue(httpRequest) as NameValueCollection;
+                var headerFields = httpRequest.Headers;
 
                 if (headerFields != null)
                 {
@@ -162,17 +148,17 @@ namespace Glimpse.AspNet.Model
             }
         }
 
-        private IEnumerable<QueryStringParameter> GetQueryString(HttpRequest httpRequest)
+        private IEnumerable<QueryStringParameter> GetQueryString(HttpRequestBase httpRequest)
         {
             if (httpRequest != null)
             {
-                var queryString = queryStringField.GetValue(httpRequest) as NameValueCollection;
+                var queryString = httpRequest.QueryString;
 
                 if (queryString != null)
                 {
                     foreach (var key in queryString.AllKeys)
                     {
-                        yield return new QueryStringParameter { Key = key, Value = queryString[key] };
+                        yield return new QueryStringParameter {Key = key, Value = queryString[key]};
                     }
                 }
             }
@@ -208,7 +194,6 @@ namespace Glimpse.AspNet.Model
         public class QueryStringParameter
         {
             public string Key { get; set; }
-
             public string Value { get; set; }
         }
     }
