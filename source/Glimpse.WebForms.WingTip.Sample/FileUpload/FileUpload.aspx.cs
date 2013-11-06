@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace WingtipToys.FileUpload
 {
@@ -18,7 +13,10 @@ namespace WingtipToys.FileUpload
         {
             if ((File1.PostedFile != null) && (File1.PostedFile.ContentLength > 0))
             {
-               UploadResult.Text = "The file has been uploaded.";
+                byte[] input = new byte[File1.PostedFile.ContentLength];
+                File1.PostedFile.InputStream.Read(input, 0, File1.PostedFile.ContentLength);
+
+                UploadResult.Text = "The file has been uploaded.";
             }
             else
             {
