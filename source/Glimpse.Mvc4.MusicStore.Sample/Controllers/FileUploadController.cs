@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Web;
 using System.Web.Mvc;
 
 namespace MvcMusicStore.Controllers
@@ -24,7 +21,8 @@ namespace MvcMusicStore.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
+                byte[] input = new byte[file.ContentLength];
+                file.InputStream.Read(input, 0, file.ContentLength);
 
                 return RedirectToAction("Index", new { fileName = file.FileName });
             }
