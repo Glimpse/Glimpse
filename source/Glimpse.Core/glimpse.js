@@ -1297,16 +1297,16 @@ glimpse.render.engine.util.table = (function($, util) {
             for (var i = startingIndex; i < rowLimit; i++) { 
                 html += engineUtil.newItemSpacer(startingIndex, i, rowLimit, rowLength);
                 if (headers.length > 1)
-                    html += '<span class="start">[</span>';
+                    html += '<span class="start">{</span>';
                 var spacer = '';
                 for (var x = 0; x < columnLimit; x++) {
-                    html += spacer + '<span>\'</span>' + providers.string.build(factory.getRowValue(data[i], x, headers), level + 1, false, 12) + '<span>\'</span>';
+                    html += spacer + '<span>\'</span>' + providers.string.build(factory.getHeaderValue(headers, x), level + 1, false, 12) + '<span>\'</span><span class="mspace">:</span><span>\'</span>' + providers.string.build(factory.getRowValue(data[i], x, headers), level + 1, false, 12) + '<span>\'</span>';
                     spacer = '<span class="rspace">,</span>';
                 }
                 if (headers.length > 1) {
                     if (x < headers.length)
                         html += spacer + '<span>...</span>';
-                    html += '<span class="end">]</span>';
+                    html += '<span class="end">}</span>';
                 }
             }
             html += engineUtil.newItemSpacer(startingIndex, ++i, rowLimit, rowLength);
