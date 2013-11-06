@@ -348,6 +348,27 @@ glimpse.util = (function($) {
             if (value < 1000)
                 return value.toFixed(1) + ' ms';
             return Math.round(value / 10) / 100 + ' s';
+        },
+        processCasing : function (data) {
+            var result = '',
+                previous = '';
+            if (data == null)
+                return data;
+            for (var i = 0; i < data.length; i++) {
+                var current = data[i],
+                    next = data[i + 1];
+                if (current == ' ')
+                    return data;
+
+                if (i == 0 || ((jQueryGlimpse.isNumeric(previous) && !jQueryGlimpse.isNumeric(current)) || (!jQueryGlimpse.isNumeric(previous) && jQueryGlimpse.isNumeric(current)) || (!jQueryGlimpse.isNumeric(current) && current.toUpperCase() == current && (previous.toUpperCase() != previous || (next && next.toUpperCase() != next)))))
+                    result = i == 0 ? current.toUpperCase() : result + ' ' + current.toUpperCase();
+                else
+                    result += current;
+
+                previous = current;
+            }
+
+            return result;
         }
     };
 })(jQueryGlimpse);
@@ -806,7 +827,7 @@ glimpse.render.engine.util.raw = (function($, util) {
         };
 })(jQueryGlimpse, glimpse.util);
 // glimpse.render.engine.util.table.js
-glimpse.render.engine.util.table = (function($) {
+glimpse.render.engine.util.table = (function($, util) {
     var factories = {
             array: {
                 isHandled: function (data) {
@@ -827,6 +848,9 @@ glimpse.render.engine.util.table = (function($) {
                 },
                 getRowValue: function(dataRow, fieldIndex, header) {
                     return dataRow[fieldIndex];
+                },
+                getHeaderValue: function(header, fieldIndex) {
+                    return header[fieldIndex];
                 },
                 startingIndex: function() {
                     return 1;
@@ -857,6 +881,9 @@ glimpse.render.engine.util.table = (function($) {
                 getRowValue: function(dataRow, fieldIndex, header) {
                     return dataRow[header[fieldIndex]];
                 },
+                getHeaderValue: function (header, fieldIndex) {
+                    return util.processCasing(header[fieldIndex]);
+                },
                 startingIndex: function() {
                     return 0;
                 }
@@ -873,6 +900,9 @@ glimpse.render.engine.util.table = (function($) {
                 },
                 getRowValue: function(dataRow, fieldIndex, header) {
                     return dataRow;
+                },
+                getHeaderValue: function (header, fieldIndex) {
+                    return header[fieldIndex];
                 },
                 startingIndex: function() {
                     return 0;
@@ -892,7 +922,7 @@ glimpse.render.engine.util.table = (function($) {
                 return match;
             }
         };
-})(jQueryGlimpse);
+})(jQueryGlimpse, glimpse.util);
 // glimpse.render.engine.style.js
 (function($, pubsub) {
     var codeProcess = function(items) {
@@ -941,7 +971,7 @@ glimpse.render.engine.util.table = (function($) {
                 html += '<thead><tr class="glimpse-row-header glimpse-row-header-' + level + '"><th class="glimpse-key">Key</th><th class="glimpse-cell-value">Value</th></tr></thead>';
             html += '<tbody class="glimpse-row-holder">';
             for (var key in data)
-                html += '<tr class="glimpse-row"><th class="glimpse-key">' + engineUtil.raw.process(key) + '</th><td> ' + providers.master.build(data[key], level + 1, null, engineUtil.keyMetadata(key, metadata)) + '</td></tr>';
+                html += '<tr class="glimpse-row"><th class="glimpse-key">' + engineUtil.raw.process(util.processCasing(key)) + '</th><td> ' + providers.master.build(data[key], level + 1, null, engineUtil.keyMetadata(key, metadata)) + '</td></tr>';
             html += '</tbody></table>';
 
             return html;
@@ -960,7 +990,7 @@ glimpse.render.engine.util.table = (function($) {
                 html += engineUtil.newItemSpacer(0, i, rowLimit, rowLength);
                 if (i > rowLength || i++ > rowLimit)
                     break;
-                html += '<span>\'</span>' + providers.string.build(key, level + 1, false, 12) + '<span>\'</span><span class="mspace">:</span><span>\'</span>' + providers.string.build(data[key], level + 1, false, 12) + '<span>\'</span>';
+                html += '<span>\'</span>' + providers.string.build(util.processCasing(key), level + 1, false, 12) + '<span>\'</span><span class="mspace">:</span><span>\'</span>' + providers.string.build(data[key], level + 1, false, 12) + '<span>\'</span>';
             }
             html += '<span class="end">}</span>';
 
@@ -1230,7 +1260,7 @@ glimpse.render.engine.util.table = (function($) {
             if (engineUtil.includeHeading(metadata)) {
                 html += '<thead><tr class="glimpse-row-header glimpse-row-header-' + level + '">';
                 for (var x = 0; x < headers.length; x++)
-                    html += '<th>' + engineUtil.raw.process(headers[x]) + '</th>';
+                    html += '<th>' + engineUtil.raw.process(factory.getHeaderValue(headers, x)) + '</th>';
                 html += '</tr></thead>';
             }
             html += '<tbody class="glimpse-row-holder">';
