@@ -51,7 +51,7 @@ namespace Glimpse.AspNet.SerializationConverter
             return root;
         }
 
-        public TabSection BuildCookies(IEnumerable<RequestModel.Cookie> cookies)
+        public IEnumerable<RequestModel.Cookie> BuildCookies(IEnumerable<RequestModel.Cookie> cookies)
         {
             var cookiesList = cookies as IList<RequestModel.Cookie> ?? cookies.ToList();
 
@@ -60,59 +60,51 @@ namespace Glimpse.AspNet.SerializationConverter
                 return null;
             }
 
-            var result = new TabSection("Name", "Value", "Path", "Secure");
-            foreach (var cookie in cookiesList)
-            {
-                result.AddRow().Column(cookie.Name).Column(cookie.Value).Column(cookie.Path).Column(cookie.IsSecure);
-            }
-
-            return result;
+             return cookiesList;
         }
 
-        private object BuildFiles(IEnumerable<RequestModel.PostedFile> files)
+        private IEnumerable<RequestModel.PostedFile> BuildFiles(IEnumerable<RequestModel.PostedFile> files)
         {
-            if (files == null || !files.Any())
+            var filesList = files as IList<RequestModel.PostedFile> ?? files.ToList();
+
+            if (files == null || !filesList.Any())
             {
                 return null;
             }
-            return files;
+            return filesList;
         }
 
-        private object BuildFormVariables(IEnumerable<RequestModel.FormVariable> formVariables)
+        private IEnumerable<RequestModel.FormVariable> BuildFormVariables(IEnumerable<RequestModel.FormVariable> formVariables)
         {
-            if (formVariables == null || !formVariables.Any())
+            var formVariablesList = formVariables as IList<RequestModel.FormVariable> ?? formVariables.ToList();
+            if (!formVariablesList.Any())
             {
                 return null;
             }
-            return formVariables;
+            return formVariablesList;
         }
 
-        private object BuildHeaderFields(IEnumerable<RequestModel.HeaderField> headerFields)
+        private IEnumerable<RequestModel.HeaderField> BuildHeaderFields(IEnumerable<RequestModel.HeaderField> headerFields)
         {
-            var headerFieldList = headerFields as IList<RequestModel.HeaderField> ?? headerFields.ToList();
-            if (headerFields == null || !headerFieldList.Any())
+            var headerFieldsList = headerFields as IList<RequestModel.HeaderField> ?? headerFields.ToList();
+
+            if (!headerFieldsList.Any())
             {
                 return null;
             }
-            return headerFieldList.Where(h => h.Key.ToLower() != "cookie");
+            return headerFieldsList.Where(h => h.Key.ToLower() != "cookie");
         }
 
-        public TabObject BuildQueryString(IEnumerable<RequestModel.QueryStringParameter> parameters)
+        private IEnumerable<RequestModel.QueryStringParameter> BuildQueryString(IEnumerable<RequestModel.QueryStringParameter> queryStringParameters)
         {
-            var queryStringParametersList = parameters as IList<RequestModel.QueryStringParameter> ?? parameters.ToList();
+            var queryStringParametersList = queryStringParameters as IList<RequestModel.QueryStringParameter> ?? queryStringParameters.Where(p => p.Key.ToLower() != "null").ToList();
 
-            if (parameters == null || !queryStringParametersList.Any())
+            if (!queryStringParametersList.Any())
             {
                 return null;
             }
 
-            var result = new TabObject();
-            foreach (var parameter in queryStringParametersList)
-            {
-                result.AddRow().Key(parameter.Key ?? "null").Value(parameter.Value);
-            }
-
-            return result;
+            return queryStringParametersList;
         }
     }
 }
