@@ -15,12 +15,13 @@
         <summary>Glimpse tabs for ADO.</summary>
         <releaseNotes>
 Welterweight release for Ado:
- - Improved SQL Tab layout so that the overall stats are displayed at the tab
- - Switch assemblies to be marked as CLS-compliant
+ - Support for Async queries
+ - Added async indicator column to the SQL tab
+ - Minor adjustment to the width of the transaction title column in SQL tab
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse ADO ADO.NET SQL performance profiling timing diagnostics</tags>
         <dependencies>
-          <dependency id="Glimpse" version="1.7.0" />
+          <dependency id="Glimpse" version="1.8.0" />
         </dependencies>
     </metadata>
     <files>

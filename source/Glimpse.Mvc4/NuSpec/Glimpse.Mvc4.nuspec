@@ -15,12 +15,12 @@
         <summary>ASP.NET MVC 4.0 web debugging and diagnostics tool.</summary>
         <releaseNotes>
 Middleweight release for MVC: 
- - Implemented support for MVC5
- - Switch assemblies to be marked as CLS-compliant
+ - Fix version number inconsistency between MVC packages
+ - Fix version information in MVC5
         </releaseNotes>
         <tags>ASP.NET Web MVC Glimpse diagnostics performance profiling timing</tags>
         <dependencies>
-          <dependency id="Glimpse.AspNet" version="1.5.0" />
+          <dependency id="Glimpse.AspNet" version="1.6.0" />
         </dependencies>
     </metadata>
     <files>

@@ -15,13 +15,12 @@
         <summary>ASP.NET 4.5 web debugging and diagnostics tool.</summary>
         <releaseNotes>
 Welterweight release for Asp.Net:
- - Fix bug which casued the written of log data during AppDomain unloading not to appear
- - Fix bug which meant that in some cases the end body tag couldn't be located
- - Switch assemblies to be marked as CLS-compliant
+ - Total rewrite of the Request tab to include additional request info
+ - Removed Server tab as it's now obsolete given the Request tab update
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse</tags>
         <dependencies>
-          <dependency id="Glimpse" version="1.7.0" />
+          <dependency id="Glimpse" version="1.8.0" />
         </dependencies>
     </metadata>
     <files>
