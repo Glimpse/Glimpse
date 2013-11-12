@@ -81,13 +81,8 @@ namespace Glimpse.AspNet.Model
                                 {
                                     Name = cookie.Name,
                                     Value = server.UrlDecode(cookie.Value),
-                                    Expires = cookie.Expires,
-                                    HttpOnly = cookie.HttpOnly,
                                     Path = cookie.Path,
                                     Secure = cookie.Secure
-#if NET45
-                                    ,Shareable = cookie.Shareable
-#endif
                                 };
                         }
                     }
@@ -173,11 +168,8 @@ namespace Glimpse.AspNet.Model
         {
             public string Name { get; set; }
             public string Value { get; set; }
-            public DateTime Expires { get; set; }
-            public bool HttpOnly { get; set; }
             public string Path { get; set; }
             public bool Secure { get; set; }
-            public bool? Shareable { get; set; }
         }
 
         public class FormVariable
