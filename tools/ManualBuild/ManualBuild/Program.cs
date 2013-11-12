@@ -12,7 +12,7 @@ namespace ManualBuild
         static void Main(string[] args)
         {
             var assets = new Assets(args[0]);
-            var assetsTest = new Assets(args[0] + "\\FunctionalTests\\Mock"); 
+            var assetsTest = new Assets(args[0] + "\\test\\mock"); 
 
             var coreContent = File.ReadAllText(assets.BuildPath("_build.js"));
             coreContent = ProcessFile(coreContent, assets);
