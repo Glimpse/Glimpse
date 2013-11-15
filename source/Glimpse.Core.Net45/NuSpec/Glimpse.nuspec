@@ -15,18 +15,11 @@
         <summary>ASP.NET 4.5 web debugging and diagnostics tool.</summary>
         <releaseNotes>
 Welterweight release for Core:
- - Improvement which allows Glimpse.axd be protected by custom security policies
- - Fix History tab causing issues up when invalid characters present in Session Name
- - Ensure client shell is forced onto new rendering layer within browser
- - Update Visual Studio solution to VS2013
- - Improvement to client which adds support for paddings when rendering structured layouts
- - Improvement to client to make array rendering more resilient
- - Improvement to client which ensures table headers have the correct default style applied
- - Improvement to client which brings better error management in master rendering engine
- - Switch assemblies to be marked as CLS-compliant
- - Switch Glimpse.axd over to use templates for generating the configuration resource 
- - Ensure that Glimpse ignores BrowserLinks preflight requests
- - Make sure HUD only displays Ajax requests that have a Glimpse Payload
+ - Support for capturing data on Async operations
+ - Added statuscode to ajax and history tabs
+ - Client now sensibly interprate friendly titles out of object keys
+ - Client updated to render array lists as array of objects rather than array of arrays
+ - Fixed bug where timeline couldn't cope with long strings as the event title
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse diagnostics performance profiling timing</tags>
     </metadata>

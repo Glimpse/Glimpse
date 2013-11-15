@@ -221,6 +221,8 @@ namespace Glimpse.WebForms.Support
                                 {
                                     temp.Add(ProcessData(rootType, "System.Web.UI.WebControls.ListItem", new TempListItem { Index = indexList[i], Data = valueList[i] }));
                                 }
+
+                                result = temp;
                             }
                             else
                             {

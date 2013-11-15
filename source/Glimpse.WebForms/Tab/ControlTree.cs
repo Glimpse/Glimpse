@@ -97,12 +97,20 @@ namespace Glimpse.WebForms.Tab
                 context.Logger.Debug("Setting logger infrastructure - previouslyEnabled = {0}", trace.IsEnabled);
 
                 var previouslyEnabled = trace.IsEnabled;
-                trace.IsEnabled = true; 
+                if (!previouslyEnabled)
+                {
+                    trace.IsEnabled = true;
+                }
+
                 trace.TraceFinished += (sender, args) =>
                 {
                     context.Logger.Debug("Resetting logger infrastructure - previouslyEnabled = {0}", previouslyEnabled);
-                    trace.IsEnabled = previouslyEnabled;
+                    if (!previouslyEnabled)
+                    {
+                        trace.IsEnabled = false;
+                    }
                 }; 
+
                 traceContextVerifyStartMethod.Invoke(trace, null);
 
                 return null;

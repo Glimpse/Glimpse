@@ -348,6 +348,27 @@ glimpse.util = (function($) {
             if (value < 1000)
                 return value.toFixed(1) + ' ms';
             return Math.round(value / 10) / 100 + ' s';
+        },
+        processCasing : function (data) {
+            var result = '',
+                previous = '';
+            if (data == null)
+                return data;
+            for (var i = 0; i < data.length; i++) {
+                var current = data[i],
+                    next = data[i + 1];
+                if (current == ' ')
+                    return data;
+
+                if (i == 0 || ((jQueryGlimpse.isNumeric(previous) && !jQueryGlimpse.isNumeric(current)) || (!jQueryGlimpse.isNumeric(previous) && jQueryGlimpse.isNumeric(current)) || (!jQueryGlimpse.isNumeric(current) && current.toUpperCase() == current && (previous.toUpperCase() != previous || (next && next.toUpperCase() != next)))))
+                    result = i == 0 ? current.toUpperCase() : result + ' ' + current.toUpperCase();
+                else
+                    result += current;
+
+                previous = current;
+            }
+
+            return result;
         }
     };
 })(jQueryGlimpse);
@@ -806,7 +827,7 @@ glimpse.render.engine.util.raw = (function($, util) {
         };
 })(jQueryGlimpse, glimpse.util);
 // glimpse.render.engine.util.table.js
-glimpse.render.engine.util.table = (function($) {
+glimpse.render.engine.util.table = (function($, util) {
     var factories = {
             array: {
                 isHandled: function (data) {
@@ -827,6 +848,9 @@ glimpse.render.engine.util.table = (function($) {
                 },
                 getRowValue: function(dataRow, fieldIndex, header) {
                     return dataRow[fieldIndex];
+                },
+                getHeaderValue: function(header, fieldIndex) {
+                    return header[fieldIndex];
                 },
                 startingIndex: function() {
                     return 1;
@@ -857,6 +881,9 @@ glimpse.render.engine.util.table = (function($) {
                 getRowValue: function(dataRow, fieldIndex, header) {
                     return dataRow[header[fieldIndex]];
                 },
+                getHeaderValue: function (header, fieldIndex) {
+                    return util.processCasing(header[fieldIndex]);
+                },
                 startingIndex: function() {
                     return 0;
                 }
@@ -873,6 +900,9 @@ glimpse.render.engine.util.table = (function($) {
                 },
                 getRowValue: function(dataRow, fieldIndex, header) {
                     return dataRow;
+                },
+                getHeaderValue: function (header, fieldIndex) {
+                    return header[fieldIndex];
                 },
                 startingIndex: function() {
                     return 0;
@@ -892,7 +922,7 @@ glimpse.render.engine.util.table = (function($) {
                 return match;
             }
         };
-})(jQueryGlimpse);
+})(jQueryGlimpse, glimpse.util);
 // glimpse.render.engine.style.js
 (function($, pubsub) {
     var codeProcess = function(items) {
@@ -941,7 +971,7 @@ glimpse.render.engine.util.table = (function($) {
                 html += '<thead><tr class="glimpse-row-header glimpse-row-header-' + level + '"><th class="glimpse-key">Key</th><th class="glimpse-cell-value">Value</th></tr></thead>';
             html += '<tbody class="glimpse-row-holder">';
             for (var key in data)
-                html += '<tr class="glimpse-row"><th class="glimpse-key">' + engineUtil.raw.process(key) + '</th><td> ' + providers.master.build(data[key], level + 1, null, engineUtil.keyMetadata(key, metadata)) + '</td></tr>';
+                html += '<tr class="glimpse-row"><th class="glimpse-key">' + engineUtil.raw.process(util.processCasing(key)) + '</th><td> ' + providers.master.build(data[key], level + 1, null, engineUtil.keyMetadata(key, metadata)) + '</td></tr>';
             html += '</tbody></table>';
 
             return html;
@@ -960,7 +990,7 @@ glimpse.render.engine.util.table = (function($) {
                 html += engineUtil.newItemSpacer(0, i, rowLimit, rowLength);
                 if (i > rowLength || i++ > rowLimit)
                     break;
-                html += '<span>\'</span>' + providers.string.build(key, level + 1, false, 12) + '<span>\'</span><span class="mspace">:</span><span>\'</span>' + providers.string.build(data[key], level + 1, false, 12) + '<span>\'</span>';
+                html += '<span>\'</span>' + providers.string.build(util.processCasing(key), level + 1, false, 12) + '<span>\'</span><span class="mspace">:</span><span>\'</span>' + providers.string.build(data[key], level + 1, false, 12) + '<span>\'</span>';
             }
             html += '<span class="end">}</span>';
 
@@ -1230,7 +1260,7 @@ glimpse.render.engine.util.table = (function($) {
             if (engineUtil.includeHeading(metadata)) {
                 html += '<thead><tr class="glimpse-row-header glimpse-row-header-' + level + '">';
                 for (var x = 0; x < headers.length; x++)
-                    html += '<th>' + engineUtil.raw.process(headers[x]) + '</th>';
+                    html += '<th>' + engineUtil.raw.process(factory.getHeaderValue(headers, x)) + '</th>';
                 html += '</tr></thead>';
             }
             html += '<tbody class="glimpse-row-holder">';
@@ -1267,16 +1297,16 @@ glimpse.render.engine.util.table = (function($) {
             for (var i = startingIndex; i < rowLimit; i++) { 
                 html += engineUtil.newItemSpacer(startingIndex, i, rowLimit, rowLength);
                 if (headers.length > 1)
-                    html += '<span class="start">[</span>';
+                    html += '<span class="start">{</span>';
                 var spacer = '';
                 for (var x = 0; x < columnLimit; x++) {
-                    html += spacer + '<span>\'</span>' + providers.string.build(factory.getRowValue(data[i], x, headers), level + 1, false, 12) + '<span>\'</span>';
+                    html += spacer + '<span>\'</span>' + providers.string.build(factory.getHeaderValue(headers, x), level + 1, false, 12) + '<span>\'</span><span class="mspace">:</span><span>\'</span>' + providers.string.build(factory.getRowValue(data[i], x, headers), level + 1, false, 12) + '<span>\'</span>';
                     spacer = '<span class="rspace">,</span>';
                 }
                 if (headers.length > 1) {
                     if (x < headers.length)
                         html += spacer + '<span>...</span>';
-                    html += '<span class="end">]</span>';
+                    html += '<span class="end">}</span>';
                 }
             }
             html += engineUtil.newItemSpacer(startingIndex, ++i, rowLimit, rowLength);
@@ -2351,11 +2381,11 @@ glimpse.tab = (function($, pubsub, data) {
                 detailPanel = panel.find('table'); 
             
             if (detailPanel.length == 0) {
-                var detailData = [['Request URL', 'Method', 'Duration', 'Date/Time', 'View']],
-                    detailMetadata = { layout: [ [ { data : 0, key : true, width : '40%' }, { data : 1 }, { data : 2, width : '10%', className : 'mono', align : 'right' },  { data : 3, width : '20%' },  { data : 4, width : '100px' } ] ] };
+                var detailData = [['Request URL', 'Method', 'Status Code', 'Duration', 'Date/Time', 'View']],
+                    detailMetadata = { layout: [ [ { data : 0, key : true, width : '40%' }, { data : 1 }, { data : 2 }, { data : 3, width : '10%', className : 'mono', align : 'right' },  { data : 4, width : '20%' },  { data : 5, width : '100px' } ] ] };
                 
                 panel.html(renderEngine.build(detailData, detailMetadata)).find('table').append('<tbody class="glimpse-row-holder"></tbody>');
-                panel.find('table').addClass('glimpse-ellipsis').find('thead').append('<tr class="glimpse-head-message" style="display:none"><td colspan="5"><a href="javascript:void(0)" class="glimpse-pulse glimpse-context">Reset context back to starting page</a></td></tr>');
+                panel.find('table').addClass('glimpse-ellipsis').find('thead').append('<tr class="glimpse-head-message" style="display:none"><td colspan="6"><a href="javascript:void(0)" class="glimpse-pulse glimpse-context">Reset context back to starting page</a></td></tr>');
             }
         },
         layoutBuildContent = function(result) {
@@ -2365,7 +2395,7 @@ glimpse.tab = (function($, pubsub, data) {
             
             for (var x = context.resultCount; x < result.length; x++) {
                 var item = result[x];
-                html = '<tr data-requestId="' + item.requestId + '" class="glimpse-row"><td><div class="glimpse-ellipsis" title="' + item.uri + '">' + util.htmlEncode(item.uri) + '</div></td><td>' + item.method + '</td><td class="mono" style="text-align:right">' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.dateTime + '</td><td><a href="javascript:void(0)" class="glimpse-ajax-link" data-requestId="' + item.requestId + '">Inspect</a></td></tr>' + html;
+                html = '<tr data-requestId="' + item.requestId + '" class="glimpse-row"><td><div class="glimpse-ellipsis" title="' + item.uri + '">' + util.htmlEncode(item.uri) + '</div></td><td>' + item.method + '</td><td>' + item.statusCode + '</td><td class="mono" style="text-align:right">' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.dateTime + '</td><td><a href="javascript:void(0)" class="glimpse-ajax-link" data-requestId="' + item.requestId + '">Inspect</a></td></tr>' + html;
             }
             detailBody.prepend(html);
             
@@ -2555,12 +2585,12 @@ glimpse.tab = (function($, pubsub, data) {
                 
                 var detailPanel = panel.find('.glimpse-col-main'),
                     masterData = [ [ 'Client', 'Count', 'View' ] ],
-                    detailData = [ [ 'Request URL', 'Method', 'Duration', 'Date/Time', 'Is Ajax', 'View' ] ],
-                    detailMetadata = { layout: [ [ { data : 0, key : true, width : '30%' }, { data : 1 }, { data : 2, width : '10%', className : 'mono', align : 'right' }, { data : 3, width : '20%' }, { data : 4, width : '10%' }, { data : 5, width : '100px' } ] ] };
+                    detailData = [ [ 'Request URL', 'Method', 'Status Code', 'Duration', 'Date/Time', 'Is Ajax', 'View' ] ],
+                    detailMetadata = { layout: [ [ { data : 0, key : true, width : '30%' }, { data : 1 }, { data : 2 }, { data : 3, width : '10%', className : 'mono', align : 'right' }, { data : 4, width : '20%' }, { data : 5, width : '10%' }, { data : 6, width : '100px' } ] ] };
                 
                 detailPanel.html(renderEngine.build(detailData, detailMetadata)).find('table').append('<tbody class="glimpse-row-holder"></tbody>');
-                detailPanel.find('table').addClass('glimpse-ellipsis').find('thead').append('<tr class="glimpse-head-message" style="display:none"><td colspan="6"><a href="javascript:void(0)" class="glimpse-pulse glimpse-context">Reset context back to starting page</a></td></tr>');
-                
+                detailPanel.find('table').addClass('glimpse-ellipsis').find('thead').append('<tr class="glimpse-head-message" style="display:none"><td colspan="7"><a href="javascript:void(0)" class="glimpse-pulse glimpse-context">Reset context back to starting page</a></td></tr>');
+
                 masterPanel.html(renderEngine.build(masterData)); 
             }
         }, 
@@ -2576,7 +2606,7 @@ glimpse.tab = (function($, pubsub, data) {
             
             for (var x = context.resultCount; x < clientData.length; x++) {
                 var item = clientData[x];
-                html = '<tr class="glimpse-row" data-requestId="' + item.requestId + '"><td><div class="glimpse-ellipsis" title="' + item.uri + '">' + util.htmlEncode(item.uri) + '</div></td><td>' + item.method + '</td><td class="mono" style="text-align:right">' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.dateTime + '</td><td>' + item.isAjax + '</td><td><a href="javascript:void(0)" class="glimpse-history-link" data-requestId="' + item.requestId + '">Inspect</a></td></tr>' + html;
+                html = '<tr class="glimpse-row" data-requestId="' + item.requestId + '"><td><div class="glimpse-ellipsis" title="' + item.uri + '">' + util.htmlEncode(item.uri) + '</div></td><td>' + item.method + '</td><td>' + item.statusCode + '</td><td class="mono" style="text-align:right">' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.dateTime + '</td><td>' + item.isAjax + '</td><td><a href="javascript:void(0)" class="glimpse-history-link" data-requestId="' + item.requestId + '">Inspect</a></td></tr>' + html;
             }
             detailBody.prepend(html);
             
@@ -2854,14 +2884,16 @@ glimpse.tab = (function($, pubsub, data) {
                 var result = renderEngine.build(dataResult, metadata); 
                 elements.contentTableHolder.append(result);
 
+                pubsub.publish('trigger.panel.render.style', { scope: elements.contentTableHolder });
+
                 //Update the output 
-                elements.contentTableHolder.find('tbody tr').each(function(i) {
+                elements.contentTableHolder.find('.glimpse-row > tr').each(function (i) {
                     var row = $(this),
                         event = timeline.data.events[i],  
                         category = timeline.data.category[event.category];
                              
-                    row.find('td:first-child').prepend($('<div class="glimpse-tl-event"></div>').css({ 'backgroundColor' : category.eventColor, marginLeft : (15 * event.nesting) + 'px' }));
-                    row.find('td:nth-child(3)').css('position', 'relative').prepend($('<div class="glimpse-tl-event"></div>').css({ 'backgroundColor' : category.eventColor, 'margin-left' : event.startPersent + '%', width : event.widthPersent + '%' })); 
+                    row.find('> td:first-child').prepend($('<div class="glimpse-tl-event"></div>').css({ 'backgroundColor' : category.eventColor, marginLeft : (15 * event.nesting) + 'px' }));
+                    row.find('> td:nth-child(3)').css('position', 'relative').prepend($('<div class="glimpse-tl-event"></div>').css({ 'backgroundColor' : category.eventColor, 'margin-left' : event.startPersent + '%', width : event.widthPersent + '%' })); 
                 }); 
             },
             processCategories = function() {
@@ -2989,7 +3021,7 @@ glimpse.tab = (function($, pubsub, data) {
                 colorElement(elements.contentDescHolder.find('> div'), filter, 'glimpse-row-alt-');
                 colorElement(elements.summaryBandHolder.find('> div'), filter, 'glimpse-row-');
                 colorElement(elements.summaryDescHolder.find('> div'), filter, 'glimpse-row-alt-');
-                colorElement(elements.contentTableHolder.find('tbody'), filter, 'glimpse-row-'); 
+                //colorElement(elements.contentTableHolder.find('tbody'), filter, 'glimpse-row-'); 
             },
             colorElement = function(scope, filter, baseClass) {
                 var odd = baseClass + 'odd',
