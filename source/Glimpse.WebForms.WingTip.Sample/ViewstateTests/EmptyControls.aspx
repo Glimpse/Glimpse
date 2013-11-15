@@ -1,5 +1,4 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="EmptyControls.aspx.cs" Inherits="WingtipToys.EmptyControls" %>
-
 <%@ Register Assembly="System.Web.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Namespace="System.Web.UI.DataVisualization.Charting" TagPrefix="asp" %>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -167,6 +166,75 @@
                 <asp:ChartArea Name="ChartArea1"></asp:ChartArea>
             </ChartAreas>
         </asp:Chart>
+
+        <h3>asp:DataList</h3>
+        <asp:DataList ID="DataList1" runat="server"></asp:DataList>
+
+        <h3>asp:DataPager</h3>
+        <asp:DataPager ID="DataPager1" runat="server" PagedControlID="ListViewForDataPager1"></asp:DataPager>
+        <asp:ListView ID="ListViewForDataPager1" runat="server"></asp:ListView>
+
+        <h3>asp:DetailsView</h3>
+        <asp:DetailsView ID="DetailsView1" runat="server" Height="50px" Width="125px"></asp:DetailsView>
+
+        <h3>asp:EntityDataSource</h3>
+        <asp:EntityDataSource ID="EntityDataSource1" runat="server"></asp:EntityDataSource>
+
+        <h3>asp:FormView</h3>
+        <asp:FormView ID="FormView1" runat="server"></asp:FormView>
+
+        <h3>asp:GridView</h3>
+        <asp:GridView ID="GridView1" runat="server"></asp:GridView>
+
+        <h3>asp:LinqDataSource</h3>
+        <asp:LinqDataSource ID="LinqDataSource1" runat="server"></asp:LinqDataSource>
+
+        <h3>asp:ListView</h3>
+        <asp:ListView ID="ListView1" runat="server"></asp:ListView>
+
+        <h3>asp:ObjectDataSource</h3>
+        <asp:ObjectDataSource ID="ObjectDataSource1" runat="server"></asp:ObjectDataSource>
+
+        <h3>asp:QueryExtender</h3>
+        <asp:QueryExtender ID="QueryExtender1" runat="server" TargetControlID="LinqDataSourceForQueryExtender1"></asp:QueryExtender>
+        <asp:LinqDataSource ID="LinqDataSourceForQueryExtender1" runat="server"></asp:LinqDataSource>
+
+        <h3>asp:Repeater</h3>
+        <asp:Repeater ID="Repeater1" runat="server"></asp:Repeater>
+
+        <h3>asp:SiteMapDataSource</h3>
+        <asp:SiteMapDataSource ID="SiteMapDataSource1" runat="server" />
+
+        <h3>asp:SqlDataSource</h3>
+        <asp:SqlDataSource ID="SqlDataSource1" runat="server"></asp:SqlDataSource>
+
+        <h3>asp:XmlDataSource</h3>
+        <asp:XmlDataSource ID="XmlDataSource1" runat="server"></asp:XmlDataSource>
+
+        <h2>Validation (WebControls)</h2>
+
+        <h3>asp:CompareValidator</h3>
+        <asp:CompareValidator ID="CompareValidator1" runat="server" ErrorMessage="CompareValidator" ControlToValidate="CompareValidator1TextBox1"></asp:CompareValidator>
+        <asp:TextBox ID="CompareValidator1TextBox1" runat="server"></asp:TextBox>
+
+        <h3>asp:CustomValidator</h3>
+        <asp:CustomValidator ID="CustomValidator1" runat="server" ErrorMessage="CustomValidator"></asp:CustomValidator>
+
+        <h3>asp:RangeValidator</h3>
+        <asp:RangeValidator ID="RangeValidator1" runat="server" ErrorMessage="RangeValidator" ControlToValidate="RangeValidator1TextBox1"></asp:RangeValidator>
+        <asp:TextBox ID="RangeValidator1TextBox1" runat="server"></asp:TextBox>
+
+        <h3>asp:RegularExpressionValidator</h3>
+        <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ErrorMessage="RegularExpressionValidator" ControlToValidate="RegularExpressionValidator1TextBox1"></asp:RegularExpressionValidator>
+        <asp:TextBox ID="RegularExpressionValidator1TextBox1" runat="server"></asp:TextBox>
+
+        <h3>asp:RequiredFieldValidator</h3>
+        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="RequiredFieldValidator" ControlToValidate="RequiredFieldValidator1TextBox1"></asp:RequiredFieldValidator>
+        <asp:TextBox ID="RequiredFieldValidator1TextBox1" runat="server"></asp:TextBox>
+
+        <h3>asp:ValidationSummary</h3>
+        <asp:ValidationSummary ID="ValidationSummary1" runat="server" />
+
     </div>
     </form>
 </body>
