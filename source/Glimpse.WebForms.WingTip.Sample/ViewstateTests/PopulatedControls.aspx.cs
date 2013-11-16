@@ -426,6 +426,16 @@ namespace WingtipToys
 
             #endregion
 
+
+            #region " Chart "
+
+            Chart1.Series["Series1"].Points.DataBindY(PopulatedControls.GetSmallSampleNumericData());
+            Chart1.BackColor = Color.BlanchedAlmond;
+            System.Diagnostics.Debug.Print(Chart1.ViewStateMode.ToString());
+
+            #endregion
+
+
         }
 
 
@@ -459,6 +469,15 @@ namespace WingtipToys
                 row.Cells.Add(cell);
             }
             return row;
+        }
+        
+        public static IEnumerable<Int32> GetSmallSampleNumericData()
+        {
+            var theEnumerable = new List<Int32>();
+            theEnumerable.Add(50);
+            theEnumerable.Add(100);
+            theEnumerable.Add(200);
+            return theEnumerable;
         }
 
 
