@@ -30,19 +30,7 @@ namespace Glimpse.Ado.AlternateType
          
         public DbDataReader InnerDataReader { get; set; }
 
-        public DbCommand InnerCommand { get; set; }
-
-        private Guid ConnectionId { get; set; }
-
-        private Guid CommandId { get; set; }  
-
-        private int RowCount { get; set; }
-
-        private IMessageBroker MessageBroker
-        {
-            get { return messageBroker ?? (messageBroker = GlimpseConfiguration.GetConfiguredMessageBroker()); }
-            set { messageBroker = value; }
-        } 
+        public DbCommand InnerCommand { get; set; } 
          
         public override int Depth
         {
@@ -64,16 +52,6 @@ namespace Glimpse.Ado.AlternateType
             get { return InnerDataReader.IsClosed; }
         }
 
-        public override object this[int ordinal]
-        {
-            get { return InnerDataReader[ordinal]; }
-        }
-
-        public override object this[string name]
-        {
-            get { return InnerDataReader[name]; }
-        }
-
         public override int RecordsAffected
         {
             get { return InnerDataReader.RecordsAffected; }
@@ -82,6 +60,28 @@ namespace Glimpse.Ado.AlternateType
         public override int VisibleFieldCount
         {
             get { return InnerDataReader.VisibleFieldCount; }
+        }
+
+        private Guid ConnectionId { get; set; }
+
+        private Guid CommandId { get; set; }
+
+        private int RowCount { get; set; }
+
+        private IMessageBroker MessageBroker
+        {
+            get { return messageBroker ?? (messageBroker = GlimpseConfiguration.GetConfiguredMessageBroker()); }
+            set { messageBroker = value; }
+        }
+
+        public override object this[int ordinal]
+        {
+            get { return InnerDataReader[ordinal]; }
+        }
+
+        public override object this[string name]
+        {
+            get { return InnerDataReader[name]; }
         }
 
         public override void Close()
@@ -94,16 +94,6 @@ namespace Glimpse.Ado.AlternateType
             }
               
             InnerDataReader.Close();
-        }
-
-        protected override void Dispose(bool disposing)
-        { 
-            if (disposing)
-            {
-                InnerDataReader.Dispose();
-            }
-
-            base.Dispose(disposing);
         }
 
         public override bool GetBoolean(int ordinal)
@@ -250,6 +240,16 @@ namespace Glimpse.Ado.AlternateType
             } 
 
             return flag;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                InnerDataReader.Dispose();
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

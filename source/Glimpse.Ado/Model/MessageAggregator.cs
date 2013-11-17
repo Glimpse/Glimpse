@@ -6,13 +6,14 @@ namespace Glimpse.Ado.Model
 {
     public class MessageAggregator
     {
-        private IList<AdoMessage> Messages { get; set; }
-        private QueryMetadata Metadata { get; set; }
-
         public MessageAggregator(IList<AdoMessage> messages)
         {
             Messages = messages;           
         }
+
+        private IList<AdoMessage> Messages { get; set; }
+
+        private QueryMetadata Metadata { get; set; }
 
         public QueryMetadata Aggregate()
         {
@@ -45,7 +46,7 @@ namespace Glimpse.Ado.Model
             var dupTracker = new Dictionary<string, int>();
 
             var messages = Messages.OfType<CommandExecutedMessage>();
-            foreach(var message in messages)
+            foreach (var message in messages)
             {
                 var command = GetOrCreateCommandFor(message);
                 command.Command = message.CommandText;
@@ -53,7 +54,8 @@ namespace Glimpse.Ado.Model
                 command.Offset = message.Offset;
                 command.HasTransaction = message.HasTransaction;
                 command.IsAsync = message.IsAsync;
-                if(message.Parameters != null)
+
+                if (message.Parameters != null)
                 {
                     foreach (var parameter in message.Parameters)
                     {
@@ -64,11 +66,12 @@ namespace Glimpse.Ado.Model
                             Type = parameter.Type,
                             Size = parameter.Size
                         };
+
                         command.Parameters.Add(parameterMetadata);
                     }
                 }
 
-                //Duplicate tracking
+                // Duplicate tracking
                 var dupCount = 0;
                 command.IsDuplicate = dupTracker.TryGetValue(message.CommandText, out dupCount);
                 dupTracker[message.CommandText] = dupCount + 1; 
@@ -78,12 +81,12 @@ namespace Glimpse.Ado.Model
         private void AggregateCommandDurations()
         {
             var messages = Messages.OfType<CommandDurationAndRowCountMessage>();
-            foreach(var message in messages)
+            foreach (var message in messages)
             {
                 var command = GetOrCreateCommandFor(message);
                 command.Duration = message.Duration;
                 command.RecordsAffected = message.RecordsAffected;
-                command.StartDateTime = message.StartTime; //Reason we set it again is we now have a better time than the start
+                command.StartDateTime = message.StartTime; // Reason we set it again is we now have a better time than the start
                 command.EndDateTime = message.StartTime + message.Offset;
                 command.Offset = message.Offset;
             }
@@ -92,12 +95,12 @@ namespace Glimpse.Ado.Model
         private void AggregateCommandErrors()
         {
             var messages = Messages.OfType<CommandErrorMessage>();
-            foreach(var message in messages)
+            foreach (var message in messages)
             {
                 var command = GetOrCreateCommandFor(message);
                 command.Duration = message.Duration;
                 command.Exception = message.Exception;
-                command.StartDateTime = message.StartTime; //Reason we set it again is we now have a better time than the start
+                command.StartDateTime = message.StartTime; // Reason we set it again is we now have a better time than the start
                 command.EndDateTime = message.StartTime + message.Offset;
                 command.Offset = message.Offset;
             }
@@ -106,11 +109,11 @@ namespace Glimpse.Ado.Model
         private void AggregateTransactionEnd()
         {
             var commitMessages = Messages.OfType<TransactionCommitMessage>();
-            foreach(var message in commitMessages)
+            foreach (var message in commitMessages)
             {
                 var transaction = GetOrCreateTransactionFor(message);
                 transaction.Committed = true;
-                transaction.StartDateTime = message.StartTime; //Reason we set it again is we now have a better time than the start
+                transaction.StartDateTime = message.StartTime; // Reason we set it again is we now have a better time than the start
                 transaction.EndDateTime = message.StartTime + message.Offset;
                 transaction.Duration = message.Duration;
                 transaction.Offset = message.Offset;
@@ -120,11 +123,11 @@ namespace Glimpse.Ado.Model
             }
 
             var rollbackMessages = Messages.OfType<TransactionRollbackMessage>();
-            foreach(var message in rollbackMessages)
+            foreach (var message in rollbackMessages)
             {
                 var transaction = GetOrCreateTransactionFor(message);
                 transaction.Committed = false;
-                transaction.StartDateTime = message.StartTime; //Reason we set it again is we now have a better time than the start
+                transaction.StartDateTime = message.StartTime; // Reason we set it again is we now have a better time than the start
                 transaction.EndDateTime = message.StartTime + message.Offset;
                 transaction.Duration = message.Duration;
                 transaction.Offset = message.Offset;
@@ -153,7 +156,7 @@ namespace Glimpse.Ado.Model
             foreach (var message in Messages.OfType<ConnectionClosedMessage>())
             {
                 var connection = GetOrCreateConnectionFor(message);
-                connection.StartDateTime = message.StartTime; //Reason we set it again is we now have a better time than the start
+                connection.StartDateTime = message.StartTime; // Reason we set it again is we now have a better time than the start
                 connection.EndDateTime = message.StartTime + message.Offset;
                 connection.Duration = message.Duration;
                 connection.Offset = message.Offset;
@@ -174,7 +177,7 @@ namespace Glimpse.Ado.Model
             }
         }
 
-        protected ConnectionMetadata GetOrCreateConnectionFor(AdoMessage message)
+        private ConnectionMetadata GetOrCreateConnectionFor(AdoMessage message)
         {            
             ConnectionMetadata connection;
             var connectionId = message.ConnectionId.ToString();
@@ -188,7 +191,7 @@ namespace Glimpse.Ado.Model
             return connection;
         }
 
-        protected CommandMetadata GetOrCreateCommandFor(AdoCommandMessage message)
+        private CommandMetadata GetOrCreateCommandFor(AdoCommandMessage message)
         {            
             CommandMetadata command;
             var connectionId = message.ConnectionId.ToString();
@@ -202,10 +205,11 @@ namespace Glimpse.Ado.Model
                 var connection = GetOrCreateConnectionFor(message);
                 connection.RegiserCommand(command);
             }
+
             return command;
         }
 
-        protected TransactionMetadata GetOrCreateTransactionFor(AdoTransactionMessage message)
+        private TransactionMetadata GetOrCreateTransactionFor(AdoTransactionMessage message)
         {
             TransactionMetadata transaction;
             var connectionId = message.ConnectionId.ToString();
@@ -216,6 +220,7 @@ namespace Glimpse.Ado.Model
                 transaction = new TransactionMetadata(transactionId, connectionId);
                 Metadata.Transactions.Add(transactionId, transaction);
             }
+
             return transaction;
         }
     }

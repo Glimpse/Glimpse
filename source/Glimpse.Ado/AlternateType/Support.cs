@@ -58,8 +58,8 @@ namespace Glimpse.Ado.AlternateType
 
         public static DataTable FindDbProviderFactoryTable()
         {
-            var dbProviderFactories = typeof(DbProviderFactories);
-            var providerField = dbProviderFactories.GetField("_configTable", BindingFlags.NonPublic | BindingFlags.Static) ?? dbProviderFactories.GetField("_providerTable", BindingFlags.NonPublic | BindingFlags.Static);
+            var providerFactories = typeof(DbProviderFactories);
+            var providerField = providerFactories.GetField("_configTable", BindingFlags.NonPublic | BindingFlags.Static) ?? providerFactories.GetField("_providerTable", BindingFlags.NonPublic | BindingFlags.Static);
             var registrations = providerField.GetValue(null);
             return registrations is DataSet ? ((DataSet)registrations).Tables["DbProviderFactories"] : (DataTable)registrations;
         }
@@ -81,6 +81,7 @@ namespace Glimpse.Ado.AlternateType
 
                 return builder.ToString();
             }
+
             return parameter.Value;
         }
 

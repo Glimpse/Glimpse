@@ -24,12 +24,12 @@ namespace Glimpse.Ado.AlternateType
             InnerFactory = (TProviderFactory)field.GetValue(null);           
         }
 
-        private TProviderFactory InnerFactory { get; set; }
-
         public override bool CanCreateDataSourceEnumerator
         {
             get { return InnerFactory.CanCreateDataSourceEnumerator; }
         }
+
+        private TProviderFactory InnerFactory { get; set; }
 
         public override DbCommand CreateCommand()
         { 
