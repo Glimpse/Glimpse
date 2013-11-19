@@ -41,7 +41,7 @@ namespace Glimpse.AspNet
 
         internal HttpContextBase Context
         {
-            get { return context ?? GetOrCaptureLogicalContext(); }
+            get { return context ?? new HttpContextWrapper(HttpContext.Current); }
             set { context = value; }
         }
 
