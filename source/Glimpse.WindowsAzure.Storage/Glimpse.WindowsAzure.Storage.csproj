@@ -75,7 +75,7 @@
     <Compile Include="Infrastructure\OperationContextFactory.cs" />
     <Compile Include="Infrastructure\OperationContextFactoryInitializer.cs" />
     <Compile Include="Infrastructure\TraceModel.cs" />
-    <Compile Include="Models\TimelineModel.cs" />
+    <Compile Include="Models\StorageModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>

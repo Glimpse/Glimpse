@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Glimpse.WindowsAzure.Caching.Infrastructure;
 using Glimpse.WindowsAzure.Storage.Infrastructure;
 using Microsoft.ApplicationServer.Caching;
 using Microsoft.WindowsAzure.Storage;
@@ -33,14 +34,8 @@ namespace Glimpse.WindowsAzure.WebRole.Sample
             var cacheFactory = new DataCacheFactory();
             var cache = cacheFactory.GetDefaultCache();
 
-            cacheFactory.GetDefaultCache().CacheOperationStarted += (o, args) =>
-            {
-                var x = 1;
-            };
-            cacheFactory.GetDefaultCache().CacheOperationCompleted += (o, args) =>
-            {
-                var x = 1;
-            };
+            // Wire in Glimpse
+            DataCacheEventSubscriberFactory.Current.Subscribe(cache);
 
             // Add some items
             for (int i = 0; i < 250; i++)
