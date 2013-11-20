@@ -785,5 +785,185 @@ namespace WingtipToys {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PasswordRecovery PasswordRecovery1;
+        
+        /// <summary>
+        /// WebPartManager1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WebParts.WebPartManager WebPartManager1;
+        
+        /// <summary>
+        /// AppearanceEditorPart1EditorZone control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WebParts.EditorZone AppearanceEditorPart1EditorZone;
+        
+        /// <summary>
+        /// AppearanceEditorPart1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WebParts.AppearanceEditorPart AppearanceEditorPart1;
+        
+        /// <summary>
+        /// BehaviorEditorPart1EditorZone control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WebParts.EditorZone BehaviorEditorPart1EditorZone;
+        
+        /// <summary>
+        /// BehaviorEditorPart1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WebParts.BehaviorEditorPart BehaviorEditorPart1;
+        
+        /// <summary>
+        /// CatalogZone1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WebParts.CatalogZone CatalogZone1;
+        
+        /// <summary>
+        /// ConnectionsZone1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WebParts.ConnectionsZone ConnectionsZone1;
+        
+        /// <summary>
+        /// DeclarativeCatalogPart1CatalogZone control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WebParts.CatalogZone DeclarativeCatalogPart1CatalogZone;
+        
+        /// <summary>
+        /// DeclarativeCatalogPart1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WebParts.DeclarativeCatalogPart DeclarativeCatalogPart1;
+        
+        /// <summary>
+        /// EditorZone1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WebParts.EditorZone EditorZone1;
+        
+        /// <summary>
+        /// ImportCatalogPart1CatalogZone control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WebParts.CatalogZone ImportCatalogPart1CatalogZone;
+        
+        /// <summary>
+        /// ImportCatalogPart1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WebParts.ImportCatalogPart ImportCatalogPart1;
+        
+        /// <summary>
+        /// LayoutEditorPart1EditorZone control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WebParts.EditorZone LayoutEditorPart1EditorZone;
+        
+        /// <summary>
+        /// LayoutEditorPart1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WebParts.LayoutEditorPart LayoutEditorPart1;
+        
+        /// <summary>
+        /// PageCatalogPart1CatalogZone control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WebParts.CatalogZone PageCatalogPart1CatalogZone;
+        
+        /// <summary>
+        /// PageCatalogPart1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WebParts.PageCatalogPart PageCatalogPart1;
+        
+        /// <summary>
+        /// PropertyGridEditorPart1EditorZone control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WebParts.EditorZone PropertyGridEditorPart1EditorZone;
+        
+        /// <summary>
+        /// PropertyGridEditorPart1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WebParts.PropertyGridEditorPart PropertyGridEditorPart1;
+        
+        /// <summary>
+        /// ProxyWebPartManager1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WebParts.ProxyWebPartManager ProxyWebPartManager1;
+        
+        /// <summary>
+        /// WebPartZone1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WebParts.WebPartZone WebPartZone1;
     }
 }
