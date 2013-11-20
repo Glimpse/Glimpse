@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <!-- Values in dollar $igns are automatically pulled from the AssemblyInfo.cs attributes by psake build script -->
+    <metadata>
+        <id>Glimpse.WindowsAzure</id>
+        <version>0.0.0</version><!-- Replaced at build time by AssemblyInformationalVersion in AssemblyInfo.cs -->
+        <title>Glimpse WindowsAzure</title>
+        <authors>nmolnar, avanderhoorn</authors>
+        <owners>nmolnar, avanderhoorn</owners>
+        <licenseUrl>http://www.opensource.org/licenses/apache2.0</licenseUrl>
+        <projectUrl>http://getglimpse.com</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <iconUrl>http://getglimpse.com/content/glimpse100.png</iconUrl>
+        <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET 4.0 application. For ASP.NET MVC3 support, please NuGet Glimpse.MVC3.</description>
+        <summary>ASP.NET 4.5 web debugging and diagnostics tool.</summary>
+        <releaseNotes>
+
+        </releaseNotes>
+        <tags>ASP.NET Web WebForms Glimpse diagnostics performance profiling timing</tags>
+        <dependencies>
+          <dependency id="Glimpse.Core" version="1.8.0" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="tools\*.*" target="tools" />
+        <file src="lib\net40\*.*" target="lib\net40" />
+        <file src="..\..\Glimpse.WindowsAzure\**\*.*" target="src" exclude="..\..\Glimpse.WindowsAzure\bin\**;..\..\Glimpse.WindowsAzure\obj\**;" />
+    </files>
+</package>

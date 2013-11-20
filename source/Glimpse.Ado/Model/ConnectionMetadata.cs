@@ -13,23 +13,41 @@ namespace Glimpse.Ado.Model
             Transactions = new Dictionary<string, TransactionMetadata>(); 
         }
 
+        public string Id { get; private set; } 
+
+        public DateTime? StartDateTime { get; set; }
+
+        public int StartCount { get; private set; }
+
+        public DateTime? EndDateTime { get; set; }
+
+        public int EndCount { get; private set; }
+
+        public IDictionary<string, CommandMetadata> Commands { get; private set; }
+
+        public IDictionary<string, TransactionMetadata> Transactions { get; private set; }
+
+        public TimeSpan? Duration { get; set; }
+
+        public TimeSpan? Offset { get; set; }
+
         public void RegisterStart()
         {
             StartCount++;
         }
 
         public void RegisterEnd()
-        { 
+        {
             EndCount++;
         }
 
         public void RegiserCommand(CommandMetadata command)
         {
-            Commands.Add(command.Id, command); 
+            Commands.Add(command.Id, command);
         }
 
         public void RegiserTransactionStart(TransactionMetadata transaction)
-        { 
+        {
             Transactions.Add(transaction.Id, transaction);
 
             var command = Commands.FirstOrDefault(x => x.Value.Offset >= transaction.Offset);
@@ -41,15 +59,5 @@ namespace Glimpse.Ado.Model
             var command = Commands.LastOrDefault(x => x.Value.Offset <= transaction.Offset + transaction.Duration);
             command.Value.TailTransaction = transaction;
         }
-
-        public string Id { get; private set; } 
-        public DateTime? StartDateTime { get; set; }
-        public int StartCount { get; private set; }
-        public DateTime? EndDateTime { get; set; }
-        public int EndCount { get; private set; }
-        public IDictionary<string, CommandMetadata> Commands { get; private set; }
-        public IDictionary<string, TransactionMetadata> Transactions { get; private set; }
-        public TimeSpan? Duration { get; set; }
-        public TimeSpan? Offset { get; set; }
     }
 }

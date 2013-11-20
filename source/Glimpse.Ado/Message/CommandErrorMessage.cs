@@ -7,7 +7,8 @@ namespace Glimpse.Ado.Message
     {
         public CommandErrorMessage(Guid connectionId, Guid commandId, Exception exception)
             : this(connectionId, commandId, exception, false)
-        { }
+        {
+        }
 
         public CommandErrorMessage(Guid connectionId, Guid commandId, Exception exception, bool isAsync)
             : base(connectionId, commandId)

@@ -17,7 +17,9 @@ namespace Glimpse.Ado.Tab.Support
         public string Parse(string command, string parameterName, object parameterValue, string parameterType, int parameterSize)
         {
             if (parameterValue == null || parameterValue.ToString().Length > 50)
+            {
                 return command;
+            }
 
             var fomatter = UseQuotes ? QuotedFormat : UnquotedFormat;
 
