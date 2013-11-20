@@ -235,6 +235,49 @@
         <h3>asp:ValidationSummary</h3>
         <asp:ValidationSummary ID="ValidationSummary1" runat="server" />
 
+        <h2>Navigation (WebControls)</h2>
+        
+        <h3>asp:Menu</h3>
+        <asp:Menu ID="Menu1" runat="server"></asp:Menu>
+
+        <h3>asp:SiteMapPath</h3>
+        <asp:SiteMapPath ID="SiteMapPath1" runat="server"></asp:SiteMapPath>
+
+        <h3>asp:TreeView</h3>
+        <asp:TreeView ID="TreeView1" runat="server"></asp:TreeView>
+
+        <h2>Login (WebControls)</h2>
+        
+        <h3>asp:ChangePassword</h3>
+        <asp:ChangePassword ID="ChangePassword1" runat="server"></asp:ChangePassword>
+
+        <h3>asp:CreateUserWizard</h3>
+        <asp:CreateUserWizard ID="CreateUserWizard1" runat="server">
+            <WizardSteps>
+                <asp:CreateUserWizardStep ID="CreateUserWizardStep1" runat="server">
+                </asp:CreateUserWizardStep>
+                <asp:CompleteWizardStep ID="CompleteWizardStep1" runat="server">
+                </asp:CompleteWizardStep>
+            </WizardSteps>
+        </asp:CreateUserWizard>
+
+        <h3>asp:Login</h3>
+        <asp:Login ID="Login1" runat="server"></asp:Login>
+       
+        <h3>asp:LoginName</h3>
+        <asp:LoginName ID="LoginName1" runat="server" />
+
+        <h3>asp:LoginStatus</h3>
+        <asp:LoginStatus ID="LoginStatus1" runat="server" />
+
+        <h3>asp:LoginView</h3>
+        <asp:LoginView ID="LoginView1" runat="server"></asp:LoginView>
+
+        <h3>asp:PasswordRecovery</h3>
+        <asp:PasswordRecovery ID="PasswordRecovery1" runat="server"></asp:PasswordRecovery>
+
+
+        
     </div>
     </form>
 </body>

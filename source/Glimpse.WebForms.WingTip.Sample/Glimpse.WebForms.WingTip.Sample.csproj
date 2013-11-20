@@ -316,6 +316,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Bundle.config" />
+    <Content Include="Web.sitemap" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddToCart.aspx.cs">
