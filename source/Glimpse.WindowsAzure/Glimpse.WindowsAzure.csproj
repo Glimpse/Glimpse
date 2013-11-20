@@ -46,14 +46,16 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Infrastructure\RoleEnvironmentWrapper.cs" />
+    <Compile Include="Infrastructure\IWindowsAzureEnvironment.cs" />
+    <Compile Include="Infrastructure\WindowsAzureCloudServicesEnvironment.cs" />
+    <Compile Include="Infrastructure\WindowsAzureWebsitesEnvironment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Tab\RoleEnvironment.cs" />
+    <Compile Include="Tab\WindowsAzure.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">

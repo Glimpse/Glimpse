@@ -4,12 +4,13 @@ using System.Reflection;
 
 namespace Glimpse.WindowsAzure.Infrastructure
 {
-    public class RoleEnvironmentWrapper
+    public class WindowsAzureCloudServicesEnvironment
+        : IWindowsAzureEnvironment
     {
         private static Assembly ServiceRuntimeAssembly { get; set; }
         private static Type RoleEnvironmentType { get; set; }
 
-        static RoleEnvironmentWrapper()
+        static WindowsAzureCloudServicesEnvironment()
         {
             ServiceRuntimeAssembly = TryLoadServiceRuntimeAssembly();
             TryLoadServiceRuntimeTypes();
