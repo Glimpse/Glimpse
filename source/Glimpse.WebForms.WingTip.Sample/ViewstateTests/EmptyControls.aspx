@@ -235,6 +235,115 @@
         <h3>asp:ValidationSummary</h3>
         <asp:ValidationSummary ID="ValidationSummary1" runat="server" />
 
+        <h2>Navigation (WebControls)</h2>
+        
+        <h3>asp:Menu</h3>
+        <asp:Menu ID="Menu1" runat="server"></asp:Menu>
+
+        <h3>asp:SiteMapPath</h3>
+        <asp:SiteMapPath ID="SiteMapPath1" runat="server"></asp:SiteMapPath>
+
+        <h3>asp:TreeView</h3>
+        <asp:TreeView ID="TreeView1" runat="server"></asp:TreeView>
+
+        <h2>Login (WebControls)</h2>
+        
+        <h3>asp:ChangePassword</h3>
+        <asp:ChangePassword ID="ChangePassword1" runat="server"></asp:ChangePassword>
+
+        <h3>asp:CreateUserWizard</h3>
+        <asp:CreateUserWizard ID="CreateUserWizard1" runat="server">
+            <WizardSteps>
+                <asp:CreateUserWizardStep ID="CreateUserWizardStep1" runat="server">
+                </asp:CreateUserWizardStep>
+                <asp:CompleteWizardStep ID="CompleteWizardStep1" runat="server">
+                </asp:CompleteWizardStep>
+            </WizardSteps>
+        </asp:CreateUserWizard>
+
+        <h3>asp:Login</h3>
+        <asp:Login ID="Login1" runat="server"></asp:Login>
+       
+        <h3>asp:LoginName</h3>
+        <asp:LoginName ID="LoginName1" runat="server" />
+
+        <h3>asp:LoginStatus</h3>
+        <asp:LoginStatus ID="LoginStatus1" runat="server" />
+
+        <h3>asp:LoginView</h3>
+        <asp:LoginView ID="LoginView1" runat="server"></asp:LoginView>
+
+        <h3>asp:PasswordRecovery</h3>
+        <asp:PasswordRecovery ID="PasswordRecovery1" runat="server"></asp:PasswordRecovery>
+
+        <h2>WebParts (WebControls)</h2>
+        <h3>asp:WebPartManager</h3>
+        <asp:WebPartManager ID="WebPartManager1" runat="server"></asp:WebPartManager>
+        
+        <h3>asp:AppearanceEditorPart</h3>
+        <asp:EditorZone ID="AppearanceEditorPart1EditorZone" runat="server">
+            <ZoneTemplate>
+                <asp:AppearanceEditorPart ID="AppearanceEditorPart1" runat="server" />
+            </ZoneTemplate>
+        </asp:EditorZone>
+
+        <h3>asp:BehaviorEditorPart</h3>
+        <asp:EditorZone ID="BehaviorEditorPart1EditorZone" runat="server">
+            <ZoneTemplate>
+                <asp:BehaviorEditorPart ID="BehaviorEditorPart1" runat="server" />
+            </ZoneTemplate>
+        </asp:EditorZone>
+
+        <h3>asp:CatalogZone</h3>
+        <asp:CatalogZone ID="CatalogZone1" runat="server"></asp:CatalogZone>
+
+        <h3>asp:ConnectionsZone</h3>
+        <asp:ConnectionsZone ID="ConnectionsZone1" runat="server"></asp:ConnectionsZone>
+
+        <h3>asp:DeclarativeCatalogPart</h3>
+        <asp:CatalogZone ID="DeclarativeCatalogPart1CatalogZone" runat="server">
+            <ZoneTemplate>
+                <asp:DeclarativeCatalogPart ID="DeclarativeCatalogPart1" runat="server"></asp:DeclarativeCatalogPart>
+            </ZoneTemplate>
+        </asp:CatalogZone>
+        
+        <h3>asp:EditorZone</h3>
+        <asp:EditorZone ID="EditorZone1" runat="server"></asp:EditorZone>
+
+        <h3>asp:ImportCatalogPart</h3>
+        <asp:CatalogZone ID="ImportCatalogPart1CatalogZone" runat="server">
+            <ZoneTemplate>
+                <asp:ImportCatalogPart ID="ImportCatalogPart1" runat="server" />
+            </ZoneTemplate>
+        </asp:CatalogZone>
+        
+        <h3>asp:LayoutEditorPart</h3>
+        <asp:EditorZone ID="LayoutEditorPart1EditorZone" runat="server">
+            <ZoneTemplate>
+                <asp:LayoutEditorPart ID="LayoutEditorPart1" runat="server" />
+            </ZoneTemplate>
+        </asp:EditorZone>
+
+        <h3>asp:PageCatalogPart</h3>
+        <asp:CatalogZone ID="PageCatalogPart1CatalogZone" runat="server">
+            <ZoneTemplate>
+                <asp:PageCatalogPart ID="PageCatalogPart1" runat="server" />
+            </ZoneTemplate>
+        </asp:CatalogZone>
+        
+        <h3>asp:PropertyGridEditorPart</h3>
+        <asp:EditorZone ID="PropertyGridEditorPart1EditorZone" runat="server">
+            <ZoneTemplate>
+                <asp:PropertyGridEditorPart ID="PropertyGridEditorPart1" runat="server" />
+            </ZoneTemplate>
+        </asp:EditorZone>
+
+        <h3>asp:ProxyWebPartManager</h3>
+        <asp:ProxyWebPartManager ID="ProxyWebPartManager1" runat="server"></asp:ProxyWebPartManager>
+
+        <h3>asp:WebPartZone</h3>
+        <asp:WebPartZone ID="WebPartZone1" runat="server"></asp:WebPartZone>
+        
     </div>
     </form>
 </body>
