@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "ModelBindng Tests";
+}
+
+<h2>By clicking on the button, an Ajax call will be made for an item and the returned item should be the same</h2>
+
+<input type="button" id="PostItem" name="PostItem" value="Post item" />
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $("#PostItem").click(function () {
+                
+                var item = JSON.stringify(  { "Stuff": { "1": "Value1", "2": "Value2" } });
+                
+                $.ajax({
+                    url: '@Url.Action("PostItem", "ModelBindingTests")',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: item,
+                    success: function (result) {
+                        alert('Item posted as :\n' + item + '\n\nItem received as :\n' + JSON.stringify(result.PostedItem));
+                    },
+                    error: function () {
+                        alert('Posting item failed');
+                    }
+                });
+            });
+        });
+    </script>
+}
