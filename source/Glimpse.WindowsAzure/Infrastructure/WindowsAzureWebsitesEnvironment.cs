@@ -40,12 +40,12 @@ namespace Glimpse.WindowsAzure.Infrastructure
             }
         }
 
-        public Uri RemoteConsole
+        public string RemoteConsole
         {
             get
             {   
                 VerifyAvailable();
-                return new Uri(string.Format("https://{0}.scm.azurewebsites.net/DebugConsole/", Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME")));
+                return string.Format("!<a href=\"https://{0}.scm.azurewebsites.net/DebugConsole/\">launch</a>!", Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME"));
             }
         }
 
