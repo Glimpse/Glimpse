@@ -9,6 +9,7 @@ using Glimpse.WindowsAzure.Storage.Infrastructure;
 using Microsoft.ApplicationServer.Caching;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage.Table;
 
 namespace Glimpse.WindowsAzure.WebRole.Sample
 {
@@ -29,6 +30,12 @@ namespace Glimpse.WindowsAzure.WebRole.Sample
             //container2.Metadata.Add("foo", "bar");
             container2.SetMetadata(operationContext: OperationContextFactory.Current.Create());
 
+            
+            var tableclient = account.CreateCloudTableClient();
+            var table1 = tableclient.GetTableReference("glimpse1");
+            table1.CreateIfNotExists(operationContext: OperationContextFactory.Current.Create());
+            table1.ExecuteQuery(query: new TableQuery(), operationContext: OperationContextFactory.Current.Create()).ToList();
+            table1.ExecuteQuery(query: new TableQuery().Where("Name eq 'Glimpse'"), operationContext: OperationContextFactory.Current.Create()).ToList();
 
             // Perform operations on Windows Azure Cache
             var cacheFactory = new DataCacheFactory();
@@ -38,13 +45,13 @@ namespace Glimpse.WindowsAzure.WebRole.Sample
             DataCacheEventSubscriberFactory.Current.Subscribe(cache);
 
             // Add some items
-            for (int i = 0; i < 250; i++)
+            for (int i = 0; i < 50; i++)
             {
-                cache.Add(i.ToString(), "value");
+                cache.Put(i.ToString(), "value");
             }
 
             // Read some items
-            for (int i = 0; i < 250; i++)
+            for (int i = 0; i < 50; i++)
             {
                 cache.Get(i.ToString());
             }

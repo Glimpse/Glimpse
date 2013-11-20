@@ -27,7 +27,8 @@ namespace Glimpse.WindowsAzure.Storage.Tab
 
         public override object GetData(ITabContext context)
         {
-            var timelineMessages = context.GetMessages<ITimelineMessage>().Where(m => m.EventName.StartsWith("WAZStorage:"));
+            var timelineMessages = context.GetMessages<ITimelineMessage>()
+                .Where(m => m.EventName.StartsWith("WAZStorage:")).Cast<WindowsAzureStorageTimelineMessage>();
 
             var model = new StorageModel();
 
@@ -37,9 +38,14 @@ namespace Glimpse.WindowsAzure.Storage.Tab
                 model.TotalBlobTx = timelineMessages.Count(m => m.EventName.StartsWith("WAZStorage:Blob"));
                 model.TotalTableTx = timelineMessages.Count(m => m.EventName.StartsWith("WAZStorage:Table"));
                 model.TotalQueueTx = timelineMessages.Count(m => m.EventName.StartsWith("WAZStorage:Queue"));
-                model.TotalTrafficToStorage = timelineMessages.Cast<GlimpseOperationContextFactory.Message>().Sum(m => m.RequestSize).ToBytesHuman();
-                model.TotalTrafficFromStorage = timelineMessages.Cast<GlimpseOperationContextFactory.Message>().Sum(m => m.ResponseSize).ToBytesHuman();
-                model.PricePerTenThousandPageViews = string.Format("${0}", (model.TotalStorageTx * 1000 * 0.0000001 + timelineMessages.Cast<GlimpseOperationContextFactory.Message>().Sum(m => m.ResponseSize) * 10000 * (0.12 / 1024 / 1024 / 1024)));
+                model.TotalTrafficToStorage = timelineMessages.Sum(m => m.RequestSize).ToBytesHuman();
+                model.TotalTrafficFromStorage = timelineMessages.Sum(m => m.ResponseSize).ToBytesHuman();
+                model.PricePerTenThousandPageViews = string.Format("${0}", (model.TotalStorageTx * 1000 * 0.0000001 + timelineMessages.Sum(m => m.ResponseSize) * 10000 * (0.12 / 1024 / 1024 / 1024)));
+                model.Warnings.AddRange(timelineMessages.Where(m => !string.IsNullOrEmpty(m.Warning)).Select(m => new
+                {
+                    RequestUrl = m.Url,
+                    Warning = m.Warning
+                }));
                 return model;
             }
 
