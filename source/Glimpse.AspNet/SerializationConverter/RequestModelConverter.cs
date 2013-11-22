@@ -97,7 +97,7 @@ namespace Glimpse.AspNet.SerializationConverter
 
         private IEnumerable<RequestModel.QueryStringParameter> BuildQueryString(IEnumerable<RequestModel.QueryStringParameter> queryStringParameters)
         {
-            var queryStringParametersList = queryStringParameters as IList<RequestModel.QueryStringParameter> ?? queryStringParameters.Where(p => p.Key.ToLower() != "null").ToList();
+            var queryStringParametersList = queryStringParameters as IList<RequestModel.QueryStringParameter> ?? queryStringParameters.Where(p => p.Key != null).ToList();
 
             if (!queryStringParametersList.Any())
             {
