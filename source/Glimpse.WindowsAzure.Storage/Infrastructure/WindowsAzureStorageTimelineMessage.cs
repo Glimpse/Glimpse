@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Web;
 using Glimpse.Core.Message;
+using Glimpse.WindowsAzure.Storage.Infrastructure.Inspections;
 using Microsoft.Data.Edm;
 using Microsoft.Data.Edm.Library;
 using Microsoft.Data.OData;
@@ -22,6 +23,8 @@ namespace Glimpse.WindowsAzure.Storage.Infrastructure
             EventName = string.Format("WAZStorage:{0} - {1} {2} {3}", serviceName, serviceOperation, resourceUri, responseCode);
             EventCategory = new TimelineCategoryItem("Windows Azure Storage", "#0094FF", "#0094FF");
 
+            ServiceName = serviceName;
+            ServiceOperation = serviceOperation;
             Url = resourceUri;
 
             StartTime = startTime;
@@ -40,70 +43,21 @@ namespace Glimpse.WindowsAzure.Storage.Infrastructure
             }
 
             EventSubText = string.Format("out: {0}/in: {1}", RequestSize.ToBytesHuman(), ResponseSize.ToBytesHuman());
-
-            // todo: refactor, this has been written on a tight schedule
-            if (serviceName == "Table" && Url.Contains("$filter="))
-            {
-                string filterString = HttpUtility.ParseQueryString(new Uri(Url).Query)["$filter"];
-
-                var model = new EdmModel();
-                var tableServiceEntity = new EdmEntityType("Glimpse.WindowsAzure.Storage", "TableServiceEntity");
-                tableServiceEntity.AddStructuralProperty("PartitionKey", EdmPrimitiveTypeKind.String);
-                tableServiceEntity.AddStructuralProperty("RowKey", EdmPrimitiveTypeKind.String);
-                tableServiceEntity.AddStructuralProperty("Timestamp", EdmPrimitiveTypeKind.DateTime);
-                model.AddElement(tableServiceEntity);
-
-                var container= new EdmEntityContainer("TestModel", "DefaultContainer");
-                container.AddEntitySet("Entities", tableServiceEntity); 
-                model.AddElement(container);
-
-                try
-                {
-                    ODataUriParser.ParseFilter(filterString, model, tableServiceEntity);
-                }
-                catch (ODataException ex)
-                {
-                    // this means we're using other properties...
-                    Warning = "This query may not perform as intended. Consider optimizing the entity structure so that a PartitionKey/RowQuery can be executed instead.";
-                }
-            }
         }
 
-        private class ODataSingleValuePropertyAccessNodeSearcher
-            : QueryNodeVisitor<SingleValuePropertyAccessNode>
-        {
-            private List<SingleValuePropertyAccessNode> nodes;
-
-            public ODataSingleValuePropertyAccessNodeSearcher()
-            {
-                nodes = new List<SingleValuePropertyAccessNode>();
-            }
-
-            public List<SingleValuePropertyAccessNode> Parse(SingleValueNode startingNode)
-            {
-                return nodes;
-            }
-
-            public override SingleValuePropertyAccessNode Visit(SingleValuePropertyAccessNode nodeIn)
-            {
-                nodes.Add(nodeIn);
-                return base.Visit(nodeIn);
-            }
-        }
 
         public Guid Id { get; private set; }
         public string Url { get; set; }
-        public Type ExecutedType { get; set; }
-        public MethodInfo ExecutedMethod { get; set; }
         public TimeSpan Offset { get; set; }
         public TimeSpan Duration { get; set; }
         public DateTime StartTime { get; set; }
         public string EventName { get; set; }
         public TimelineCategoryItem EventCategory { get; set; }
         public string EventSubText { get; set; }
+        public string ServiceOperation { get; set; }
+        public string ServiceName { get; set; }
 
         public long RequestSize { get; set; }
         public long ResponseSize { get; set; }
-        public string Warning { get; set; }
     }
 }

@@ -68,6 +68,10 @@
   <ItemGroup>
     <Compile Include="Infrastructure\DefaultOperationContextFactory.cs" />
     <Compile Include="Infrastructure\GlimpseOperationContextFactory.cs" />
+    <Compile Include="Infrastructure\Inspections\GeneralBestPracticesInspector.cs" />
+    <Compile Include="Infrastructure\Inspections\IWindowsAzureStorageInspector.cs" />
+    <Compile Include="Infrastructure\Inspections\TableStorageQueryIndexInspector.cs" />
+    <Compile Include="Infrastructure\Inspections\WindowsAzureStorageInspectorBase.cs" />
     <Compile Include="Infrastructure\IOperationContextFactory.cs" />
     <Compile Include="Infrastructure\LongExtensions.cs" />
     <Compile Include="Infrastructure\OperationContextFactory.cs" />
