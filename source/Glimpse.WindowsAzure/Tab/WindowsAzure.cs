@@ -20,7 +20,7 @@ namespace Glimpse.WindowsAzure.Tab
 
         public override string Name
         {
-            get { return "Windows Azure Environment"; }
+            get { return "Azure Environment"; }
         }
 
         public string Key 

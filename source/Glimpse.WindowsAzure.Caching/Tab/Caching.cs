@@ -12,7 +12,7 @@ namespace Glimpse.WindowsAzure.Caching.Tab
     {
         public override string Name
         {
-            get { return "Windows Azure Caching"; }
+            get { return "Azure Caching"; }
         }
 
         public string Key
