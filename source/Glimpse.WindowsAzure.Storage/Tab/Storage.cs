@@ -8,8 +8,7 @@ using Glimpse.WindowsAzure.Storage.Models;
 
 namespace Glimpse.WindowsAzure.Storage.Tab
 {
-    public class Storage
-        : TabBase, IKey, ITabSetup
+    public class Storage : TabBase, IKey, ITabSetup, ILayoutControl
     {
         public override string Name
         {
@@ -19,6 +18,11 @@ namespace Glimpse.WindowsAzure.Storage.Tab
         public string Key
         {
             get { return "glimpse_waz_storage"; }
+        }
+
+        public bool KeysHeadings
+        {
+            get { return true; }
         }
 
         public void Setup(ITabSetupContext context)
@@ -35,13 +39,13 @@ namespace Glimpse.WindowsAzure.Storage.Tab
 
             if (timelineMessages != null)
             {
-                model.TotalStorageTx = timelineMessages.Count();
-                model.TotalBlobTx = timelineMessages.Count(m => m.EventName.StartsWith("WAZStorage:Blob"));
-                model.TotalTableTx = timelineMessages.Count(m => m.EventName.StartsWith("WAZStorage:Table"));
-                model.TotalQueueTx = timelineMessages.Count(m => m.EventName.StartsWith("WAZStorage:Queue"));
-                model.TotalTrafficToStorage = timelineMessages.Sum(m => m.RequestSize).ToBytesHuman();
-                model.TotalTrafficFromStorage = timelineMessages.Sum(m => m.ResponseSize).ToBytesHuman();
-                model.PricePerTenThousandPageViews = string.Format("${0}", (model.TotalStorageTx * 1000 * 0.0000001 + timelineMessages.Sum(m => m.ResponseSize) * 10000 * (0.12 / 1024 / 1024 / 1024)));
+                model.Statistics.TotalStorageTx = timelineMessages.Count();
+                model.Statistics.TotalBlobTx = timelineMessages.Count(m => m.EventName.StartsWith("WAZStorage:Blob"));
+                model.Statistics.TotalTableTx = timelineMessages.Count(m => m.EventName.StartsWith("WAZStorage:Table"));
+                model.Statistics.TotalQueueTx = timelineMessages.Count(m => m.EventName.StartsWith("WAZStorage:Queue"));
+                model.Statistics.TotalTrafficToStorage = timelineMessages.Sum(m => m.RequestSize).ToBytesHuman();
+                model.Statistics.TotalTrafficFromStorage = timelineMessages.Sum(m => m.ResponseSize).ToBytesHuman();
+                model.Statistics.PricePerTenThousandPageViews = string.Format("${0}", (model.Statistics.TotalStorageTx * 1000 * 0.0000001 + timelineMessages.Sum(m => m.ResponseSize) * 10000 * (0.12 / 1024 / 1024 / 1024)));
 
                 //todo: inject inspections so they can be made extensible
                 var inspectors = new IWindowsAzureStorageInspector[]
