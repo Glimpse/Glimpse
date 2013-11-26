@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Web;
-using System.Web.Caching;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.AspNet.Support;
 using Glimpse.Core.Extensibility;
@@ -45,6 +44,7 @@ namespace Glimpse.AspNet.Tab
                 }
                 catch (NullReferenceException)
                 {
+                    //do nothing, we just want to skip past the removed cache item.
                 }
 
             }
