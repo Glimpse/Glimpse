@@ -12,7 +12,7 @@ namespace Glimpse.WindowsAzure.Storage.Tab
     {
         public override string Name
         {
-            get { return "Windows Azure Storage"; }
+            get { return "Azure Storage"; }
         }
 
         public string Key
