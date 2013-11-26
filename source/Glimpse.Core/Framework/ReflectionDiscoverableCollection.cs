@@ -62,7 +62,7 @@ namespace Glimpse.Core.Framework
                 return discoveryLocation ?? (discoveryLocation = BaseDirectory);
             }
 
-            set 
+            set
             {
                 // If this isn't an absolute path then root it with the AppDomain's base directory
                 var result = Path.IsPathRooted(value) ? value : Path.Combine(BaseDirectory, value);
@@ -71,7 +71,7 @@ namespace Glimpse.Core.Framework
                 {
                     throw new DirectoryNotFoundException(string.Format(Resources.SetDiscoveryLocationDirectoryNotFoundMessage, value, result));
                 }
-                
+
                 discoveryLocation = result;
             }
         }
@@ -95,9 +95,9 @@ namespace Glimpse.Core.Framework
         internal ILogger Logger { get; set; }
 
         // Get the directory of the application, if the AppDomain is shadow copied, use the shadow directory
-        private static string BaseDirectory 
+        private static string BaseDirectory
         {
-            get 
+            get
             {
                 var setupInfo = AppDomain.CurrentDomain.SetupInformation;
                 return string.Equals(setupInfo.ShadowCopyFiles, "true", StringComparison.OrdinalIgnoreCase)
@@ -221,7 +221,7 @@ namespace Glimpse.Core.Framework
             }
             else
             {
-                foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) 
+                foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
                 {
                     try
                     {
@@ -249,22 +249,12 @@ namespace Glimpse.Core.Framework
 
         private void GetConcreteTypes(Assembly assembly, List<T> results)
         {
-            // GetTypes potentially throws an exception. Defensive coding as per http://haacked.com/archive/2012/07/23/get-all-types-in-an-assembly.aspx
-            Type[] allTypes;
-            
-            try
+            if (ReflectionBlackList.IsBlackListed(assembly))
             {
-                allTypes = assembly.GetTypes();
+                return;
             }
-            catch (ReflectionTypeLoadException ex)
-            {
-                allTypes = ex.Types.Where(t => t != null).ToArray();
 
-                foreach (var exception in ex.LoaderExceptions)
-                {
-                    Logger.Warn(string.Format(Resources.DiscoverGetType, assembly.FullName), exception);
-                }
-            }
+            var allTypes = AssemblyTypesResolver.RetrieveTypes(assembly);
 
             var concreteTypes = allTypes.Where(type => typeof(T).IsAssignableFrom(type) &&
                                                        !type.IsInterface &&
