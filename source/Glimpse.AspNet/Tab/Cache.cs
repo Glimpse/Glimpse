@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Web;
+using System.Web.Caching;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.AspNet.Support;
 using Glimpse.Core.Extensibility;
@@ -31,13 +32,21 @@ namespace Glimpse.AspNet.Tab
                 // if more properties want to be displayed in the future, here's a list of properties available
                 //     Value - UtcCreated - State - UtcExpires - SlidingExpiration - ExpiresBucket - ExpiresEntryRef 
                 //     UsageBucket - UsageEntryRef - UtcLastUsageUpdate - Dependency - Key - IsOutputCache - IsPublic
-                items.Add(new { 
-                    Key = key,
-                    Value = Serialization.GetValueSafe(cacheEnumerator.Value),
-                    Created = GetCacheItemProperty(key, "UtcCreated"),
-                    Expiry = GetCacheItemProperty(key, "UtcExpires"),
-                    SlidingExpiration = GetCacheItemProperty(key, "SlidingExpiration")
-                });
+                try
+                {
+                    items.Add(new
+                    {
+                        Key = key,
+                        Value = Serialization.GetValueSafe(cacheEnumerator.Value),
+                        Created = GetCacheItemProperty(key, "UtcCreated"),
+                        Expiry = GetCacheItemProperty(key, "UtcExpires"),
+                        SlidingExpiration = GetCacheItemProperty(key, "SlidingExpiration")
+                    });
+                }
+                catch (NullReferenceException)
+                {
+                }
+
             }
 
             return new
