@@ -1,0 +1,34 @@
+﻿@model MvcMusicStore.Controllers.ModelBindingTestsController.ComplexType
+@{
+    ViewBag.Title = "ModelBindng Tests";
+}
+
+@using (Html.BeginForm("SimplePost", "ModelBindingTests", FormMethod.Post))
+{
+    <label for="FirstName">First name :</label><input type="text" id="FirstName" name="FirstName" value="Foo" /><br/>
+    <label for="LastName">Last name :</label><input type="text" id="LastName" name="LastName" value="Bar" />
+    <br/>
+    <input type="submit" value="Normal post"/>
+}
+
+<br/>
+<br/>
+@using(Html.BeginForm("ComplexPost","ModelBindingTests", FormMethod.Post))
+{
+    @Html.LabelFor(m=> m.Name, "Name :") 
+    @Html.TextBoxFor(m=> m.Name)
+    <br/>
+    @Html.LabelFor(m=> m.Name, "Another Name :") 
+    @Html.TextBoxFor(m=> m.Another.Name)
+    <br/>
+    @Html.LabelFor(m=> m.Name, "Another Value 1 :") 
+    @Html.TextBoxFor(m=> m.Another.Values.Value1) <br/>
+    @Html.LabelFor(m=> m.Name, "Another Value 2 :") 
+    @Html.TextBoxFor(m=> m.Another.Values.Value2)
+    <br/>
+    <label for="additionalSimpleValue">Additional simple value :</label>
+    <input type="text" id="additionalSimpleValue" name="additionalSimpleValue" value="the additional value"/>
+    <br/>
+    <br/>
+    <input type="submit" value="Normal post with complex type"/>
+}
