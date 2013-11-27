@@ -79,7 +79,9 @@
     <Compile Include="Infrastructure\TraceModel.cs" />
     <Compile Include="Infrastructure\WindowsAzureStorageTimelineMessage.cs" />
     <Compile Include="Models\StorageModel.cs" />
+    <Compile Include="Models\StorageRequestModel.cs" />
     <Compile Include="Models\StorageStatisticsModel.cs" />
+    <Compile Include="Models\StorageWarningModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>

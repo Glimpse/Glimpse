@@ -26,6 +26,7 @@ namespace Glimpse.WindowsAzure.Storage.Infrastructure
             ServiceName = serviceName;
             ServiceOperation = serviceOperation;
             Url = resourceUri;
+            ResponseCode = responseCode;
 
             StartTime = startTime;
             Duration = endTime - startTime;
@@ -48,6 +49,7 @@ namespace Glimpse.WindowsAzure.Storage.Infrastructure
 
         public Guid Id { get; private set; }
         public string Url { get; set; }
+        public int ResponseCode { get; set; }
         public TimeSpan Offset { get; set; }
         public TimeSpan Duration { get; set; }
         public DateTime StartTime { get; set; }
