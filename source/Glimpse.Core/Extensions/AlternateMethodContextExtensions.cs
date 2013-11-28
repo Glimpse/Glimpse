@@ -17,17 +17,19 @@ namespace Glimpse.Core.Extensions
         /// </returns>
         public static bool TryProceedWithTimer(this IAlternateMethodContext context, out TimerResult timerResult)
         {
-            if (context.RuntimePolicyStrategy() == RuntimePolicy.Off)
+            if (context.RuntimePolicyStrategy() != RuntimePolicy.Off)
             {
-                context.Proceed();
-                timerResult = null;
-                return false;
+                var timer = context.TimerStrategy();
+                if (timer != null)
+                {
+                    timerResult = timer.Time(context.Proceed);
+                    return true;
+                }
             }
-
-            var timer = context.TimerStrategy();
-
-            timerResult = timer.Time(context.Proceed);
-            return true;
+                
+            context.Proceed();
+            timerResult = null;
+            return false;
         }
     }
 }

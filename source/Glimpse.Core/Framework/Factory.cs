@@ -408,7 +408,12 @@ namespace Glimpse.Core.Framework
         public Func<RuntimePolicy> InstantiateRuntimePolicyStrategy()
         {
             var frameworkProvider = InstantiateFrameworkProvider();
-            return () => frameworkProvider.HttpRequestStore.Get<RuntimePolicy>(Constants.RuntimePolicyKey);
+            return () =>
+            {
+                return frameworkProvider.HttpRequestStore.Contains(Constants.RuntimePolicyKey)
+                                     ? frameworkProvider.HttpRequestStore.Get<RuntimePolicy>(Constants.RuntimePolicyKey)
+                                     : Configuration.DefaultRuntimePolicy;
+            };
         }
 
         /// <summary>
