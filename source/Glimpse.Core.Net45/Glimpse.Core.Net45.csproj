@@ -77,11 +77,30 @@
     <EmbeddedResource Include="..\Glimpse.Core\glimpse.js">
       <Link>glimpse.js</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Glimpse.Core\glimpse_config.html">
-      <Link>glimpse_config.html</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Glimpse.Core\**\*.png" />
     <EmbeddedResource Include="..\Glimpse.Core\Resources.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\github_logo.gif">
+      <Link>EmbeddedResources\github_logo.gif</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\glimpse_favicon.png">
+      <Link>EmbeddedResources\glimpse_favicon.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\glimpse_image_logo.png">
+      <Link>EmbeddedResources\glimpse_image_logo.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\glimpse_text_logo.png">
+      <Link>EmbeddedResources\glimpse_text_logo.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\twitter_logo.png">
+      <Link>EmbeddedResources\twitter_logo.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\sprite.png">
+      <Link>EmbeddedResources\sprite.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\glimpse_config.html">
+      <Link>EmbeddedResources\glimpse_config.html</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="NuSpec\Glimpse.nuspec">

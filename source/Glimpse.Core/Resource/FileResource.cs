@@ -8,26 +8,10 @@ using Glimpse.Core.ResourceResult;
 namespace Glimpse.Core.Resource
 {
     /// <summary>
-    /// The <see cref="IResource"/> abstraction which makes returning static resources embedded into a Dll easier.
+    /// The <see cref="IResource"/> abstraction which makes returning static resources embedded into an assembly easier.
     /// </summary>
     public abstract class FileResource : IResource
     {
-        /// <summary>
-        /// Gets or sets the name of the embedded Dll resource.
-        /// </summary>
-        /// <value>
-        /// The name of the embedded Dll resource.
-        /// </value>
-        public string ResourceName { get; set; }
-
-        /// <summary>
-        /// Gets or sets the content type of the embedded Dll resource.
-        /// </summary>
-        /// <value>
-        /// The content type of the embedded Dll resource.
-        /// </value>
-        public string ResourceType { get; set; }
-
         /// <summary>
         /// Gets or sets the name of the resource.
         /// </summary>
@@ -79,31 +63,89 @@ namespace Glimpse.Core.Resource
                 throw new ArgumentNullException("context");
             }
 
-            var assembly = GetResourcesAssembly();
-            if (assembly == null) {
-                return new StatusCodeResourceResult(404, string.Format("Could not locate assembly for resource with ResourceName '{0}'.", ResourceName));
+            var embeddedResourceInfo = this.GetEmbeddedResourceInfo(context);
+            if (embeddedResourceInfo == null)
+            {
+                return new StatusCodeResourceResult(404, string.Format("Could not get embedded resource information."));
             }
- 
-            using (var resourceStream = assembly.GetManifestResourceStream(ResourceName))
+
+            using (var resourceStream = embeddedResourceInfo.Assembly.GetManifestResourceStream(embeddedResourceInfo.Name))
             {
                 if (resourceStream != null)
                 {
                     var content = new byte[resourceStream.Length];
                     resourceStream.Read(content, 0, content.Length);
 
-                    return new CacheControlDecorator(CacheDuration, CacheSetting.Public, new FileResourceResult(content, ResourceType));
+                    return new CacheControlDecorator(CacheDuration, CacheSetting.Public, new FileResourceResult(content, embeddedResourceInfo.ContentType));
                 }
             }
 
-            return new StatusCodeResourceResult(404, string.Format("Could not locate file with ResourceName '{0}'.", ResourceName));
+            return new StatusCodeResourceResult(404, string.Format("Could not locate embedded resource with name '{0}' inside assembly '{1}'.", embeddedResourceInfo.Name, embeddedResourceInfo.Assembly.FullName));
         }
-        
+
         /// <summary>
-        /// Gets the assembly in which the resource is embedded
+        /// Returns, based on the resource context, the embedded resource that will be returned during the execution of the <see cref="FileResource"/>
         /// </summary>
-        /// <returns>Assembly to get resource stream from</returns>
-        protected virtual Assembly GetResourcesAssembly() {
-            return GetType().Assembly;
+        /// <param name="context">The resource context</param>
+        /// <returns>Information about the embedded resource</returns>
+        protected abstract EmbeddedResourceInfo GetEmbeddedResourceInfo(IResourceContext context);
+
+        /// <summary>
+        /// Contains the details of an embedded resource
+        /// </summary>
+        public class EmbeddedResourceInfo
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="EmbeddedResourceInfo"/> class
+            /// </summary>
+            /// <param name="resourceAssembly">The assembly containing the embedded resource</param>
+            /// <param name="resourceName">The name of the embedded resource</param>
+            /// <param name="contentType">The content type of the embedded resource</param>
+            public EmbeddedResourceInfo(Assembly resourceAssembly, string resourceName, string contentType)
+            {
+                if (resourceAssembly == null)
+                {
+                    throw new ArgumentNullException("resourceAssembly");
+                }
+
+                if (resourceName == null)
+                {
+                    throw new ArgumentNullException("resourceName");
+                }
+
+                if (contentType == null)
+                {
+                    throw new ArgumentNullException("contentType");
+                }
+
+                Assembly = resourceAssembly;
+                Name = resourceName;
+                ContentType = contentType;
+            }
+
+            /// <summary>
+            /// Gets the assembly containing the embedded resource.
+            /// </summary>
+            /// <value>
+            /// The assembly containing the embedded resource.
+            /// </value>
+            public Assembly Assembly { get; private set; }
+
+            /// <summary>
+            /// Gets the name of the embedded resource.
+            /// </summary>
+            /// <value>
+            /// The name of the embedded resource.
+            /// </value>
+            public string Name { get; private set; }
+
+            /// <summary>
+            /// Gets the content type of the embedded resource.
+            /// </summary>
+            /// <value>
+            /// The content type of the embedded resource.
+            /// </value>
+            public string ContentType { get; private set; }
         }
     }
 }

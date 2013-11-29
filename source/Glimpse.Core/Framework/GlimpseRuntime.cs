@@ -7,6 +7,7 @@ using System.Text;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Message;
+using Glimpse.Core.Resource;
 using Glimpse.Core.ResourceResult;
 using Glimpse.Core.Tab.Assist;
 using Tavis.UriTemplates;
@@ -289,7 +290,8 @@ namespace Glimpse.Core.Framework
             // It is possible that the policy now says Off, but if the requested resource is the default resource, then we need to make sure 
             // there is a good reason for not executing that resource, since the default resource is the one we most likely need to set 
             // Glimpse On in the first place. 
-            if (resourceName.Equals(Configuration.DefaultResource.Name))
+#warning need a better way to group overridable resources
+            if (resourceName.Equals(Configuration.DefaultResource.Name) || resourceName.Equals(LogosResource.InternalName))
             {
                 // To be clear we only do this for the default resource, and we do this because it allows us to secure the default resource the same way 
                 // as any other resource, but for this we only rely on runtime policies that handle ExecuteResource runtime events and we ignore

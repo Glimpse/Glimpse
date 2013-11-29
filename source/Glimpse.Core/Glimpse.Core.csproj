@@ -114,6 +114,7 @@
     <Compile Include="Framework\ReflectionBlackList.cs" />
     <Compile Include="Framework\Support\ExecutionBlockBase.cs" />
     <Compile Include="Framework\Support\IExecutionTask.cs" />
+    <Compile Include="Resource\LogosResource.cs" />
     <Compile Include="SerializationConverter\EnumerableOfITimelineMessageConverter.cs" />
     <Compile Include="Setting\Initializer.cs" />
     <Compile Include="Support\NuGetPackageDiscoverer.cs" />
@@ -290,15 +291,18 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="glimpse_config.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="logo.png" />
-    <EmbeddedResource Include="sprite.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="glimpse.js" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="EmbeddedResources\glimpse_favicon.png" />
+    <EmbeddedResource Include="EmbeddedResources\github_logo.gif" />
+    <EmbeddedResource Include="EmbeddedResources\glimpse_image_logo.png" />
+    <EmbeddedResource Include="EmbeddedResources\glimpse_text_logo.png" />
+    <EmbeddedResource Include="EmbeddedResources\twitter_logo.png" />
+    <EmbeddedResource Include="EmbeddedResources\sprite.png" />
+    <EmbeddedResource Include="EmbeddedResources\glimpse_config.html" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
