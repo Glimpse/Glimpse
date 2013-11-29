@@ -101,6 +101,12 @@
     <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\glimpse_config.html">
       <Link>EmbeddedResources\glimpse_config.html</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\glimpse_config.css">
+      <Link>EmbeddedResources\glimpse_config.css</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\glimpse_config.js">
+      <Link>EmbeddedResources\glimpse_config.js</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="NuSpec\Glimpse.nuspec">

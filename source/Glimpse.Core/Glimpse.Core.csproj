@@ -115,6 +115,12 @@
     <Compile Include="Framework\ReflectionBlackList.cs" />
     <Compile Include="Framework\Support\ExecutionBlockBase.cs" />
     <Compile Include="Framework\Support\IExecutionTask.cs" />
+    <Compile Include="Resource\ConfigurationScriptResource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resource\ConfigurationStyleResource.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Resource\LogosResource.cs" />
     <Compile Include="SerializationConverter\EnumerableOfITimelineMessageConverter.cs" />
     <Compile Include="Setting\Initializer.cs" />
@@ -285,6 +291,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="EmbeddedResources\glimpse_config.css" />
+    <EmbeddedResource Include="EmbeddedResources\glimpse_config.js" />
     <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

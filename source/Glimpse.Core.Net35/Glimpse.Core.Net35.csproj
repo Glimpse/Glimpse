@@ -99,6 +99,12 @@
     <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\glimpse_config.html">
       <Link>EmbeddedResources\glimpse_config.html</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\glimpse_config.css">
+      <Link>EmbeddedResources\glimpse_config.css</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\glimpse_config.js">
+      <Link>EmbeddedResources\glimpse_config.js</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
