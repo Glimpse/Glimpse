@@ -229,7 +229,17 @@ namespace Glimpse.Core.Framework
                     }
                     catch (Exception exception)
                     {
-                        Logger.Error(Resources.DiscoverLoadAssembly, exception, assembly.Location);
+                        string assemblyLocation;
+                        try
+                        {
+                            assemblyLocation = assembly.Location;
+                        }
+                        catch (NotSupportedException)
+                        {
+                            assemblyLocation = "in-memory";
+                        }
+                        
+                        Logger.Error(Resources.DiscoverLoadAssembly, exception, assemblyLocation);
                     }
                 }
             }
