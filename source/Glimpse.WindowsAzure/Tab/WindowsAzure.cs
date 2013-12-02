@@ -11,10 +11,10 @@ namespace Glimpse.WindowsAzure.Tab
 
         public WindowsAzure()
         {
-            windowsAzureEnvironment = new WindowsAzureCloudServicesEnvironment();
+            windowsAzureEnvironment = new WindowsAzureWebsitesEnvironment();
             if (!windowsAzureEnvironment.IsAvailable)
             {
-                windowsAzureEnvironment = new WindowsAzureWebsitesEnvironment();
+                windowsAzureEnvironment = new WindowsAzureCloudServicesEnvironment();
             }
         }
 
