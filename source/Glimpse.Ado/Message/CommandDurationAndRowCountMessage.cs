@@ -7,7 +7,8 @@ namespace Glimpse.Ado.Message
     {
         public CommandDurationAndRowCountMessage(Guid connectionId, Guid commandId, long? recordsAffected)
             : this(connectionId, commandId, recordsAffected, false)
-        { }
+        {
+        }
 
         public CommandDurationAndRowCountMessage(Guid connectionId, Guid commandId, long? recordsAffected, bool isAsync)
             : base(connectionId, commandId)

@@ -12,7 +12,6 @@ namespace Glimpse.AspNet.Model
         {
             var request = context.Request;
 
-            //Browser = request.Browser;
             Cookies = GetCookies(request, context.Server);
             CurrentUiCulture = Thread.CurrentThread.CurrentUICulture;
             Files = GetPostedFiles(request);
@@ -39,7 +38,6 @@ namespace Glimpse.AspNet.Model
 
         //// TODO: Add InputStream
 
-        //public HttpBrowserCapabilitiesBase Browser { get; private set; }
         public IEnumerable<Cookie> Cookies { get; private set; }
         public CultureInfo CurrentUiCulture { get; private set; }
         public IEnumerable<PostedFile> Files { get; private set; }

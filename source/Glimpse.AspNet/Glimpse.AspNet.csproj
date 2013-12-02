@@ -106,6 +106,8 @@
     <Compile Include="SerializationConverter\ListOfRouteModelConverter.cs" />
     <Compile Include="SerializationConverter\RequestModelConverter.cs" />
     <Compile Include="SerializationConverter\SessionModelConverter.cs" />
+    <Compile Include="Support\Serialization.cs" />
+    <Compile Include="Tab\Cache.cs" />
     <Compile Include="Tab\Configuration.cs" />
     <Compile Include="Tab\Environment.cs" />
     <Compile Include="Tab\Request.cs" />

@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
-using System.Reflection;
-using System.Text;
 #if NET45
 using System.Threading;
 using System.Threading.Tasks;
 #endif
-using Glimpse.Ado.Message;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
-using Glimpse.Core.Message;
 
 namespace Glimpse.Ado.AlternateType
 {
@@ -43,18 +38,6 @@ namespace Glimpse.Ado.AlternateType
         public DbCommand InnerCommand { get; set; }
 
         public GlimpseDbConnection InnerConnection { get; set; } 
- 
-        internal IMessageBroker MessageBroker
-        {
-            get { return messageBroker ?? (messageBroker = GlimpseConfiguration.GetConfiguredMessageBroker()); }
-            set { messageBroker = value; }
-        }
-
-        internal IExecutionTimer TimerStrategy
-        {
-            get { return timerStrategy ?? (timerStrategy = GlimpseConfiguration.GetConfiguredTimerStrategy()()); }
-            set { timerStrategy = value; }
-        }
 
         public override string CommandText
         {
@@ -72,11 +55,6 @@ namespace Glimpse.Ado.AlternateType
         {
             get { return InnerCommand.CommandType; }
             set { InnerCommand.CommandType = value; }
-        }
-
-        protected override DbParameterCollection DbParameterCollection
-        {
-            get { return InnerCommand.Parameters; }
         }
 
         public override bool DesignTimeVisible
@@ -97,16 +75,6 @@ namespace Glimpse.Ado.AlternateType
             set { InnerCommand.UpdatedRowSource = value; }
         }
 
-        public override void Cancel()
-        {
-            InnerCommand.Cancel();
-        }
-
-        public override void Prepare()
-        {
-            InnerCommand.Prepare();
-        }
-
         public bool BindByName
         {
             get
@@ -119,6 +87,7 @@ namespace Glimpse.Ado.AlternateType
 
                 return (bool)property.GetValue(InnerCommand, null);
             }
+
             set
             {
                 var property = InnerCommand.GetType().GetProperty("BindByName");
@@ -129,9 +98,35 @@ namespace Glimpse.Ado.AlternateType
             }
         }
 
+        public DbCommand Inner
+        {
+            get { return InnerCommand; }
+        } 
+
+        internal IMessageBroker MessageBroker
+        {
+            get { return messageBroker ?? (messageBroker = GlimpseConfiguration.GetConfiguredMessageBroker()); }
+            set { messageBroker = value; }
+        }
+
+        internal IExecutionTimer TimerStrategy
+        {
+            get { return timerStrategy ?? (timerStrategy = GlimpseConfiguration.GetConfiguredTimerStrategy()()); }
+            set { timerStrategy = value; }
+        }
+
+        protected override DbParameterCollection DbParameterCollection
+        {
+            get { return InnerCommand.Parameters; }
+        }
+
         protected override DbConnection DbConnection
         {
-            get { return InnerConnection; }
+            get
+            {
+                return InnerConnection;
+            }
+
             set
             {
                 InnerConnection = value as GlimpseDbConnection;
@@ -153,6 +148,7 @@ namespace Glimpse.Ado.AlternateType
             {
                 return InnerCommand.Transaction == null ? null : new GlimpseDbTransaction(InnerCommand.Transaction, InnerConnection);
             }
+
             set
             {
                 var transaction = value as GlimpseDbTransaction;
@@ -160,36 +156,14 @@ namespace Glimpse.Ado.AlternateType
             }
         }
 
-        protected override DbParameter CreateDbParameter()
+        public override void Cancel()
         {
-            return InnerCommand.CreateParameter();
+            InnerCommand.Cancel();
         }
-        
-        public DbCommand Inner
+
+        public override void Prepare()
         {
-            get { return InnerCommand; }
-        } 
-
-        protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior)
-        {
-            DbDataReader reader;
-            var commandId = Guid.NewGuid();
-
-            var timer = this.LogCommandSeed();
-            this.LogCommandStart(commandId, timer);  
-            try
-            {
-                reader = InnerCommand.ExecuteReader(behavior);
-            }
-            catch (Exception exception)
-            {
-                this.LogCommandError(commandId, timer, exception, "ExecuteDbDataReader");
-                throw;
-            }
-
-            this.LogCommandEnd(commandId, timer, reader.RecordsAffected, "ExecuteDbDataReader");
-
-            return new GlimpseDbDataReader(reader, InnerCommand, InnerConnection.ConnectionId, commandId); 
+            InnerCommand.Prepare();
         }
 
         public override int ExecuteNonQuery()
@@ -208,6 +182,7 @@ namespace Glimpse.Ado.AlternateType
                 this.LogCommandError(commandId, timer, exception, "ExecuteNonQuery");
                 throw;
             }
+
             this.LogCommandEnd(commandId, timer, num, "ExecuteNonQuery");
 
             return num;
@@ -229,12 +204,61 @@ namespace Glimpse.Ado.AlternateType
                 this.LogCommandError(commandId, timer, exception, "ExecuteScalar");
                 throw;
             }
+
             this.LogCommandEnd(commandId, timer, null, "ExecuteScalar");
 
             return result;
         }
 
 #if NET45
+        public override async Task<object> ExecuteScalarAsync(CancellationToken cancellationToken)
+        {
+            EnsureConfiguration();
+
+            object result;
+            var commandId = Guid.NewGuid();
+
+            var timer = this.LogCommandSeed();
+            this.LogCommandStart(commandId, timer, true);
+            try
+            {
+                result = await InnerCommand.ExecuteScalarAsync(cancellationToken);
+            }
+            catch (Exception exception)
+            {
+                this.LogCommandError(commandId, timer, exception, "ExecuteScalarAsync", true);
+                throw;
+            }
+
+            this.LogCommandEnd(commandId, timer, null, "ExecuteScalarAsync", true);
+
+            return result;
+        }
+
+        public override async Task<int> ExecuteNonQueryAsync(CancellationToken cancellationToken)
+        {
+            EnsureConfiguration();
+
+            int num;
+            var commandId = Guid.NewGuid();
+
+            var timer = this.LogCommandSeed();
+            this.LogCommandStart(commandId, timer, true);
+            try
+            {
+                num = await InnerCommand.ExecuteNonQueryAsync(cancellationToken);
+            }
+            catch (Exception exception)
+            {
+                this.LogCommandError(commandId, timer, exception, "ExecuteNonQueryAsync", true);
+                throw;
+            }
+
+            this.LogCommandEnd(commandId, timer, num, "ExecuteNonQueryAsync", true);
+
+            return num;
+        }
+
         protected override async Task<DbDataReader> ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
         {
             EnsureConfiguration();
@@ -259,60 +283,46 @@ namespace Glimpse.Ado.AlternateType
             return new GlimpseDbDataReader(reader, InnerCommand, InnerConnection.ConnectionId, commandId);
         }
 
-        public override async Task<object> ExecuteScalarAsync(CancellationToken cancellationToken)
-        {
-            EnsureConfiguration();
-
-            object result;
-            var commandId = Guid.NewGuid();
-
-            var timer = this.LogCommandSeed();
-            this.LogCommandStart(commandId, timer, true);
-            try
-            {
-                result = await InnerCommand.ExecuteScalarAsync(cancellationToken);
-            }
-            catch (Exception exception)
-            {
-                this.LogCommandError(commandId, timer, exception, "ExecuteScalarAsync", true);
-                throw;
-            }
-            this.LogCommandEnd(commandId, timer, null, "ExecuteScalarAsync", true);
-
-            return result;
-        }
-
-        public override async Task<int> ExecuteNonQueryAsync(CancellationToken cancellationToken)
-        {
-            EnsureConfiguration();
-
-            int num;
-            var commandId = Guid.NewGuid();
-
-            var timer = this.LogCommandSeed();
-            this.LogCommandStart(commandId, timer, true);
-            try
-            {
-                num = await InnerCommand.ExecuteNonQueryAsync(cancellationToken);
-            }
-            catch (Exception exception)
-            {
-                this.LogCommandError(commandId, timer, exception, "ExecuteNonQueryAsync", true);
-                throw;
-            }
-            this.LogCommandEnd(commandId, timer, num, "ExecuteNonQueryAsync", true);
-
-            return num;
-        }
-
-        private void EnsureConfiguration()
+        protected void EnsureConfiguration()
         {
             if (MessageBroker == null)
+            {
                 Trace.WriteLine("GlimpseDbCommand.MessageBroker is null");
+            }
+
             if (TimerStrategy == null)
+            {
                 Trace.WriteLine("GlimpseDbCommand.TimerStrategy is null");
+            }
         }
 #endif
+
+        protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior)
+        {
+            DbDataReader reader;
+            var commandId = Guid.NewGuid();
+
+            var timer = this.LogCommandSeed();
+            this.LogCommandStart(commandId, timer);
+            try
+            {
+                reader = InnerCommand.ExecuteReader(behavior);
+            }
+            catch (Exception exception)
+            {
+                this.LogCommandError(commandId, timer, exception, "ExecuteDbDataReader");
+                throw;
+            }
+
+            this.LogCommandEnd(commandId, timer, reader.RecordsAffected, "ExecuteDbDataReader");
+
+            return new GlimpseDbDataReader(reader, InnerCommand, InnerConnection.ConnectionId, commandId);
+        }
+
+        protected override DbParameter CreateDbParameter()
+        {
+            return InnerCommand.CreateParameter();
+        }
 
         protected override void Dispose(bool disposing)
         {

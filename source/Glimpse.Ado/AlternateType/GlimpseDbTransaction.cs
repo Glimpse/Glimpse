@@ -10,9 +10,9 @@ namespace Glimpse.Ado.AlternateType
 {
     public class GlimpseDbTransaction : DbTransaction
     {
+        private readonly TimeSpan timerTimeSpan;
         private IMessageBroker messageBroker; 
         private IExecutionTimer timerStrategy; 
-        private readonly TimeSpan timerTimeSpan;
 
         public GlimpseDbTransaction(DbTransaction transaction, GlimpseDbConnection connection)
         {
@@ -43,6 +43,16 @@ namespace Glimpse.Ado.AlternateType
 
         public Guid TransactionId { get; set; }
 
+        public override IsolationLevel IsolationLevel
+        {
+            get { return InnerTransaction.IsolationLevel; }
+        }
+
+        protected override DbConnection DbConnection
+        {
+            get { return InnerConnection; }
+        }
+
         private IMessageBroker MessageBroker
         {
             get { return messageBroker ?? (messageBroker = GlimpseConfiguration.GetConfiguredMessageBroker()); }
@@ -53,16 +63,6 @@ namespace Glimpse.Ado.AlternateType
         {
             get { return timerStrategy ?? (timerStrategy = GlimpseConfiguration.GetConfiguredTimerStrategy()()); }
             set { timerStrategy = value; }
-        }
-
-        protected override DbConnection DbConnection
-        {
-            get { return InnerConnection; }
-        }
-
-        public override IsolationLevel IsolationLevel
-        {
-            get { return InnerTransaction.IsolationLevel; }
         }
 
         public override void Commit()
@@ -95,6 +95,7 @@ namespace Glimpse.Ado.AlternateType
             {
                 InnerTransaction.Dispose();
             }
+
             base.Dispose(disposing);
         }
     }

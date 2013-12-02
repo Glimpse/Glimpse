@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+    <siteMapNode title="Glimpse Viewstate Tests">
+        <siteMapNode url="~\ViewstateTests\EmptyControls.aspx" title="Empty Controls"  description="Not much viewstate here." />
+        <siteMapNode url="~\ViewstateTests\PopulatedControls.aspx" title="Populated Controls"  description="Much more viewstate here."  />
+    </siteMapNode>
+</siteMap>

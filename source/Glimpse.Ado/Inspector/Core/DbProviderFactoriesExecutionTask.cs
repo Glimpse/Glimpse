@@ -21,7 +21,7 @@ namespace Glimpse.Ado.Inspector.Core
         { 
             Logger.Info("AdoInspector: Starting to replace DbProviderFactory");
 
-            //This forces the creation 
+            // This forces the creation 
             try
             {
                 DbProviderFactories.GetFactory("Anything"); 
@@ -30,10 +30,10 @@ namespace Glimpse.Ado.Inspector.Core
             { 
             }
 
-            //Find the registered providers
+            // Find the registered providers
             var table = Support.FindDbProviderFactoryTable();
 
-            //Run through and replace providers
+            // Run through and replace providers
             foreach (var row in table.Rows.Cast<DataRow>().ToList())
             {
                 DbProviderFactory factory;
@@ -49,7 +49,7 @@ namespace Glimpse.Ado.Inspector.Core
                     continue;
                 }
 
-                //Check that we haven't already wrapped things up 
+                // Check that we haven't already wrapped things up 
                 if (factory is GlimpseDbProviderFactory)
                 {
                     Logger.Error("AdoInspector: Factory is already wrapped - {0}", row["Name"]);

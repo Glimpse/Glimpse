@@ -13,7 +13,6 @@ namespace Glimpse.AspNet.SerializationConverter
         {
             var root = new TabObject();
 
-            //root.AddRow().Key("Browser").Value(request.Browser);
             root.AddRow().Key("Cookies").Value(BuildCookies(request.Cookies));
             root.AddRow().Key("Current UI Culture").Value(request.CurrentUiCulture);
             root.AddRow().Key("Files").Value(BuildFiles(request.Files));
@@ -97,7 +96,7 @@ namespace Glimpse.AspNet.SerializationConverter
 
         private IEnumerable<RequestModel.QueryStringParameter> BuildQueryString(IEnumerable<RequestModel.QueryStringParameter> queryStringParameters)
         {
-            var queryStringParametersList = queryStringParameters as IList<RequestModel.QueryStringParameter> ?? queryStringParameters.Where(p => p.Key.ToLower() != "null").ToList();
+            var queryStringParametersList = queryStringParameters as IList<RequestModel.QueryStringParameter> ?? queryStringParameters.Where(p => p.Key != null).ToList();
 
             if (!queryStringParametersList.Any())
             {

@@ -6,14 +6,15 @@ namespace Glimpse.Ado.Tab.Support
 {
     internal class CommandSanitizer
     {
-        private IDictionary<string, ICommandParameterParser> Parsers { get; set; }
-        private ICommandParameterParser DefaultParser { get; set; }
-
         public CommandSanitizer()
         {
             Parsers = new Dictionary<string, ICommandParameterParser>();
             PopuplateParsers();
         }
+
+        private IDictionary<string, ICommandParameterParser> Parsers { get; set; }
+
+        private ICommandParameterParser DefaultParser { get; set; }
 
         public string Process(string command, IList<CommandParameterMetadata> parameters)
         {
@@ -21,10 +22,13 @@ namespace Glimpse.Ado.Tab.Support
             {
                 ICommandParameterParser parser;
                 if (!Parsers.TryGetValue(parameter.Type, out parser))
+                {
                     parser = DefaultParser;
+                }
 
                 command = parser.Parse(command, parameter.Name, parameter.Value, parameter.Type, parameter.Size);
             }
+
             return command;
         }
 

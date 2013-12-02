@@ -11,8 +11,6 @@ namespace Glimpse.Ado.AlternateType
             InnerDataAdapter = innerDataAdapter;
         }
 
-        private DbDataAdapter InnerDataAdapter { get; set; }
-
         public override bool ReturnProviderSpecificTypes
         {
             get { return InnerDataAdapter.ReturnProviderSpecificTypes; }
@@ -25,10 +23,7 @@ namespace Glimpse.Ado.AlternateType
             set { InnerDataAdapter.UpdateBatchSize = value; }
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            InnerDataAdapter.Dispose();
-        }
+        private DbDataAdapter InnerDataAdapter { get; set; }
 
         public override int Fill(DataSet dataSet)
         {
@@ -115,6 +110,11 @@ namespace Glimpse.Ado.AlternateType
             }
 
             return InnerDataAdapter.Update(dataSet);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            InnerDataAdapter.Dispose();
         }
 
         private DbCommand RetrieveBaseType(DbCommand command)
