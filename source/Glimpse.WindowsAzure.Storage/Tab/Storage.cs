@@ -125,6 +125,24 @@ namespace Glimpse.WindowsAzure.Storage.Tab
                     r.Cell("totalTrafficFromStorage").WidthInPixels(150).WithTitle("Traffic from storage");
                     r.Cell("pricePerTenThousandPageViews").WidthInPixels(150).WithTitle("Price per 10.000 views");
                 }))
+
+                .Cell("Warnings", TabLayout.Create().Row(r =>
+                {
+                    r.Cell("requestUrl").WidthInPixels(150).WithTitle("Request Url");
+                    r.Cell("warning").WidthInPixels(150).WithTitle("Warning");
+                }))                
+                
+                .Cell("Requests", TabLayout.Create().Row(r =>
+                {
+                    r.Cell("service").WidthInPixels(150).WithTitle("Service");
+                    r.Cell("operation").WidthInPixels(150).WithTitle("Operation");
+                    r.Cell("responseCode").WidthInPixels(150).WithTitle("Response Code");
+                    r.Cell("responseSize").WidthInPixels(150).WithTitle("Response Size");
+                    r.Cell("url").WidthInPixels(150).WithTitle("Url");
+                    r.Cell("duration").WidthInPixels(150).WithTitle("Duration").Suffix(" ms").Class("mono");
+                    r.Cell("offset").WidthInPixels(150).WithTitle("Offset").Prefix("T+ ").Suffix(" ms").Class("mono");
+                }))
+
                 .Build();
     }
 }
