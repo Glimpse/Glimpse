@@ -229,7 +229,17 @@ namespace Glimpse.Core.Framework
                     }
                     catch (Exception exception)
                     {
-                        Logger.Error(Resources.DiscoverLoadAssembly, exception, assembly.Location);
+                        string assemblyLocation;
+                        try
+                        {
+                            assemblyLocation = assembly.Location;
+                        }
+                        catch (NotSupportedException)
+                        {
+                            assemblyLocation = "in-memory";
+                        }
+                        
+                        Logger.Error(Resources.DiscoverLoadAssembly, exception, assemblyLocation);
                     }
                 }
             }
@@ -254,7 +264,7 @@ namespace Glimpse.Core.Framework
                 return;
             }
 
-            var allTypes = AssemblyTypesResolver.RetrieveTypes(assembly);
+            var allTypes = AssemblyTypesResolver.ResolveTypes(assembly, Logger);
 
             var concreteTypes = allTypes.Where(type => typeof(T).IsAssignableFrom(type) &&
                                                        !type.IsInterface &&
