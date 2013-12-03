@@ -221,6 +221,7 @@ namespace Glimpse.Core.Framework
             }
             else
             {
+                string allExceptions = string.Empty;
                 foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
                 {
                     try
@@ -238,9 +239,15 @@ namespace Glimpse.Core.Framework
                         {
                             assemblyLocation = "in-memory";
                         }
-                        
+
+                        allExceptions += exception + " for assembly " + assembly.FullName + Environment.NewLine;
                         Logger.Error(Resources.DiscoverLoadAssembly, exception, assemblyLocation);
                     }
+                }
+
+                if(!string.IsNullOrEmpty(allExceptions))
+                {
+                    throw new Exception(allExceptions);
                 }
             }
 
