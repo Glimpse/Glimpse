@@ -15,7 +15,7 @@ namespace Glimpse.Core.Framework
     {
         private static IMessageBroker messageBroker;
         private static Func<IExecutionTimer> timerStrategy;
-        private static ILogger logger;
+        internal static ILogger logger;
         private ICollection<IClientScript> clientScripts;
         private IResource defaultResource;
         private string endpointBaseUri;

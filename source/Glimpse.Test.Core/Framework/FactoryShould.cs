@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
@@ -377,12 +378,243 @@ namespace Glimpse.Test.Core.Framework
             Assert.Equal(inspectors, result);
         }
 
+        public class MyLogger : ILogger
+        {
+            public IList<string> Warnings = new List<string>();
+
+            /// <summary>
+            /// Log message at Trace level.
+            /// </summary>
+            /// <param name="message">The message.</param>
+            public void Trace(string message)
+            {
+            }
+
+            /// <summary>
+            /// Log message at Debug level.
+            /// </summary>
+            /// <param name="message">The message.</param>
+            public void Debug(string message)
+            {
+            }
+
+            /// <summary>
+            /// Log message at Info level.
+            /// </summary>
+            /// <param name="message">The message.</param>
+            public void Info(string message)
+            {
+            }
+
+            /// <summary>
+            /// Log message at Warn level.
+            /// </summary>
+            /// <param name="message">The message.</param>
+            public void Warn(string message)
+            {
+            }
+
+            /// <summary>
+            /// Log message at Error level.
+            /// </summary>
+            /// <param name="message">The message.</param>
+            public void Error(string message)
+            {
+            }
+
+            /// <summary>
+            /// Log message at Fatal level.
+            /// </summary>
+            /// <param name="message">The message.</param>
+            public void Fatal(string message)
+            {
+            }
+
+            /// <summary>
+            /// Log message at Trace level.
+            /// </summary>
+            /// <param name="message">The message.</param>
+            /// <param name="exception">The exception.</param>
+            public void Trace(string message, Exception exception)
+            {
+            }
+
+            /// <summary>
+            /// Log message at Debug level.
+            /// </summary>
+            /// <param name="message">The message.</param>
+            /// <param name="exception">The exception.</param>
+            public void Debug(string message, Exception exception)
+            {
+            }
+
+            /// <summary>
+            /// Log message at Info level.
+            /// </summary>
+            /// <param name="message">The message.</param>
+            /// <param name="exception">The exception.</param>
+            public void Info(string message, Exception exception)
+            {
+            }
+
+            /// <summary>
+            /// Log message at Warn level.
+            /// </summary>
+            /// <param name="message">The message.</param>
+            /// <param name="exception">The exception.</param>
+            public void Warn(string message, Exception exception)
+            {
+                this.Warnings.Add(message + Environment.NewLine + exception + Environment.NewLine + Environment.NewLine);
+            }
+
+            /// <summary>
+            /// Log message at Error level.
+            /// </summary>
+            /// <param name="message">The message.</param>
+            /// <param name="exception">The exception.</param>
+            public void Error(string message, Exception exception)
+            {
+            }
+
+            /// <summary>
+            /// Log message at Fatal level.
+            /// </summary>
+            /// <param name="message">The message.</param>
+            /// <param name="exception">The exception.</param>
+            public void Fatal(string message, Exception exception)
+            {
+            }
+
+            /// <summary>
+            /// Log message at Trace level.
+            /// </summary>
+            /// <param name="messageFormat">The message format.</param>
+            /// <param name="args">The args.</param>
+            public void Trace(string messageFormat, params object[] args)
+            {
+            }
+
+            /// <summary>
+            /// Log message at Debug level.
+            /// </summary>
+            /// <param name="messageFormat">The message format.</param>
+            /// <param name="args">The args.</param>
+            public void Debug(string messageFormat, params object[] args)
+            {
+            }
+
+            /// <summary>
+            /// Log message at Info level.
+            /// </summary>
+            /// <param name="messageFormat">The message format.</param>
+            /// <param name="args">The args.</param>
+            public void Info(string messageFormat, params object[] args)
+            {
+            }
+
+            /// <summary>
+            /// Log message at Warn level.
+            /// </summary>
+            /// <param name="messageFormat">The message format.</param>
+            /// <param name="args">The args.</param>
+            public void Warn(string messageFormat, params object[] args)
+            {
+                this.Warnings.Add(string.Format(messageFormat, args) + Environment.NewLine + Environment.NewLine);
+            }
+
+            /// <summary>
+            /// Log message at Error level.
+            /// </summary>
+            /// <param name="messageFormat">The message format.</param>
+            /// <param name="args">The args.</param>
+            public void Error(string messageFormat, params object[] args)
+            {
+            }
+
+            /// <summary>
+            /// Log message at Fatal level.
+            /// </summary>
+            /// <param name="messageFormat">The message format.</param>
+            /// <param name="args">The args.</param>
+            public void Fatal(string messageFormat, params object[] args)
+            {
+            }
+
+            /// <summary>
+            /// Log message at Trace level.
+            /// </summary>
+            /// <param name="messageFormat">The message format.</param>
+            /// <param name="exception">The exception.</param>
+            /// <param name="args">The args.</param>
+            public void Trace(string messageFormat, Exception exception, params object[] args)
+            {
+            }
+
+            /// <summary>
+            /// Log message at Debug level.
+            /// </summary>
+            /// <param name="messageFormat">The message format.</param>
+            /// <param name="exception">The exception.</param>
+            /// <param name="args">The args.</param>
+            public void Debug(string messageFormat, Exception exception, params object[] args)
+            {
+            }
+
+            /// <summary>
+            /// Log message at Info level.
+            /// </summary>
+            /// <param name="messageFormat">The message format.</param>
+            /// <param name="exception">The exception.</param>
+            /// <param name="args">The args.</param>
+            public void Info(string messageFormat, Exception exception, params object[] args)
+            {
+            }
+
+            /// <summary>
+            /// Log message at Warn level.
+            /// </summary>
+            /// <param name="messageFormat">The message format.</param>
+            /// <param name="exception">The exception.</param>
+            /// <param name="args">The args.</param>
+            public void Warn(string messageFormat, Exception exception, params object[] args)
+            {
+                this.Warnings.Add(string.Format(messageFormat, args) + Environment.NewLine + exception + Environment.NewLine + Environment.NewLine);
+            }
+
+            /// <summary>
+            /// Log message at Error level.
+            /// </summary>
+            /// <param name="messageFormat">The message format.</param>
+            /// <param name="exception">The exception.</param>
+            /// <param name="args">The args.</param>
+            public void Error(string messageFormat, Exception exception, params object[] args)
+            {
+            }
+
+            /// <summary>
+            /// Log message at Fatal level.
+            /// </summary>
+            /// <param name="messageFormat">The message format.</param>
+            /// <param name="exception">The exception.</param>
+            /// <param name="args">The args.</param>
+            public void Fatal(string messageFormat, Exception exception, params object[] args)
+            {
+            }
+        }
+
         [Fact]
         public void InstantiateResourcesWithReflectionDiscoverableCollection()
         {
             var locatorMock = new Mock<IServiceLocator>();
             var factory = new Factory(locatorMock.Object);
+            MyLogger myLogger = new MyLogger();
+            GlimpseConfiguration.logger = myLogger;
             ICollection<IResource> resources = factory.InstantiateResources();
+
+            if (myLogger.Warnings.Count != 0)
+            {
+                throw new Exception(myLogger.Warnings.Aggregate(string.Empty, (s, s1) => s + s1 + Environment.NewLine));
+            }
 
             Assert.NotNull(resources);
             Assert.NotNull(resources as ReflectionDiscoverableCollection<IResource>);
