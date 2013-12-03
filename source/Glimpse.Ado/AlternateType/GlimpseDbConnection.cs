@@ -53,8 +53,17 @@ namespace Glimpse.Ado.AlternateType
 
         public override event StateChangeEventHandler StateChange
         {
-            add { InnerConnection.StateChange += value; }
-            remove { InnerConnection.StateChange -= value; }
+            add
+            {
+                InnerConnection.StateChange += value;
+            }
+            remove
+            {
+                if (InnerConnection != null)
+                {
+                    InnerConnection.StateChange -= value;
+                }
+            }
         }
 
         public DbProviderFactory InnerProviderFactory { get; set; }
