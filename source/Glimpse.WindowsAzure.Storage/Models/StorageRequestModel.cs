@@ -11,5 +11,6 @@ namespace Glimpse.WindowsAzure.Storage.Models
         public string Url { get; set; }
         public TimeSpan Duration { get; set; }
         public TimeSpan Offset { get; set; }
+        public object _metadata { get; set; }
     }
 }

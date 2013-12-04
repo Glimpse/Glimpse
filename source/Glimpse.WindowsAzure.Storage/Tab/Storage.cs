@@ -73,7 +73,8 @@ namespace Glimpse.WindowsAzure.Storage.Tab
                 ResponseCode = m.ResponseCode,
                 ResponseSize = m.ResponseSize,
                 Duration = m.Duration,
-                Offset = m.Offset
+                Offset = m.Offset,
+                _metadata = m.ResponseCode >= 400 && m.ResponseCode < 600 ? new { Style = "error" } : null
             }).ToList();
         }
 
