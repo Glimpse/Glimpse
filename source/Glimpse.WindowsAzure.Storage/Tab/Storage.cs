@@ -115,34 +115,16 @@ namespace Glimpse.WindowsAzure.Storage.Tab
 
         private static readonly object Layout =
             TabLayout.Create()
-                .Cell("Storage Statistics", TabLayout.Create().Row(r =>
+                .Cell("requests", TabLayout.Create().Row(r =>
                 {
-                    r.Cell("totalStorageTx").WidthInPixels(150).WithTitle("# Transactions (total)");
-                    r.Cell("totalBlobTx").WidthInPixels(150).WithTitle("# Transactions (blob)");
-                    r.Cell("totalTableTx").WidthInPixels(150).WithTitle("# Transactions (table)");
-                    r.Cell("totalQueueTx").WidthInPixels(150).WithTitle("# Transactions (queue)");
-                    r.Cell("totalTrafficToStorage").WidthInPixels(150).WithTitle("Traffic to storage");
-                    r.Cell("totalTrafficFromStorage").WidthInPixels(150).WithTitle("Traffic from storage");
-                    r.Cell("pricePerTenThousandPageViews").WidthInPixels(150).WithTitle("Price per 10.000 views");
-                }))
-
-                .Cell("Warnings", TabLayout.Create().Row(r =>
-                {
-                    r.Cell("requestUrl").WidthInPixels(150).WithTitle("Request Url");
-                    r.Cell("warning").WidthInPixels(150).WithTitle("Warning");
-                }))                
-                
-                .Cell("Requests", TabLayout.Create().Row(r =>
-                {
-                    r.Cell("service").WidthInPixels(150).WithTitle("Service");
-                    r.Cell("operation").WidthInPixels(150).WithTitle("Operation");
-                    r.Cell("responseCode").WidthInPixels(150).WithTitle("Response Code");
-                    r.Cell("responseSize").WidthInPixels(150).WithTitle("Response Size");
-                    r.Cell("url").WidthInPixels(150).WithTitle("Url");
-                    r.Cell("duration").WidthInPixels(150).WithTitle("Duration").Suffix(" ms").Class("mono");
-                    r.Cell("offset").WidthInPixels(150).WithTitle("Offset").Prefix("T+ ").Suffix(" ms").Class("mono");
-                }))
-
+                    r.Cell("service").WidthInPixels(100);
+                    r.Cell("operation").WidthInPixels(80);
+                    r.Cell("responseCode").WidthInPixels(120);
+                    r.Cell("responseSize").WidthInPixels(120);
+                    r.Cell("url");
+                    r.Cell("duration").WidthInPixels(150).Suffix(" ms").Class("mono").AlignRight();
+                    r.Cell("offset").WidthInPixels(150).Prefix("T+ ").Suffix(" ms").Class("mono").AlignRight();
+                })) 
                 .Build();
     }
 }
