@@ -24,6 +24,14 @@ namespace Glimpse.WindowsAzure.WebRole.Sample
             var container1 = blobclient.GetContainerReference("glimpse1");
             container1.CreateIfNotExists(operationContext: OperationContextFactory.Current.Create());
             container1.SetPermissions(new BlobContainerPermissions() { PublicAccess = BlobContainerPublicAccessType.Blob }, operationContext: OperationContextFactory.Current.Create());
+            try
+            {
+                container1.Create(operationContext: OperationContextFactory.Current.Create());
+            }
+            catch
+            {
+                // We wanted this to fail so we have some output in our Glimpse tab...
+            }
 
             var container2 = blobclient.GetContainerReference("glimpse2");
             container2.CreateIfNotExists(operationContext: OperationContextFactory.Current.Create());
