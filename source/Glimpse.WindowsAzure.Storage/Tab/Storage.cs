@@ -116,17 +116,37 @@ namespace Glimpse.WindowsAzure.Storage.Tab
         }
 
         private static readonly object Layout =
-            TabLayout.Create()
-                .Cell("requests", TabLayout.Create().Row(r =>
+            new
+            {
+                Statistics = new
                 {
-                    r.Cell("service").WidthInPixels(100);
-                    r.Cell("operation").WidthInPixels(80);
-                    r.Cell("responseCode").WidthInPixels(120);
-                    r.Cell("responseSize").WidthInPixels(120);
-                    r.Cell("url");
-                    r.Cell("duration").WidthInPixels(150).Suffix(" ms").Class("mono").AlignRight();
-                    r.Cell("offset").WidthInPixels(150).Prefix("T+ ").Suffix(" ms").Class("mono").AlignRight();
-                })) 
-                .Build();
+                    Layout = new
+                    {
+                        TotalStorageTx = new { Title = "# Transactions (Total)" },
+                        TotalBlobTx = new { Title = "\t# Transactions (Blob)" },
+                        TotalTableTx = new { Title = "\t# Transactions (Table)" },
+                        TotalQueueTx = new { Title = "\t# Transactions (Queue)" },
+                        TotalTrafficToStorage = new { Title = "Traffic to storage (Total)" },
+                        TotalTrafficFromStorage = new { Title = "Traffic from storage (Total)" },
+                        PricePerTenThousandPageViews = new { Title = "Price per 10,000 views" }
+                    },
+                },
+                Requests = new
+                {
+                    Layout = new[]
+                    {
+                        new object[]
+                        {
+                            new { Data = "service", Width = "100px" },
+                            new { Data = "operation", Width = "80px" },
+                            new { Data = "responseCode", Width = "120px" },
+                            new { Data = "responseSize", Width = "120px" },
+                            new { Data = "url" },
+                            new { Data = "duration", Width = "150px", Post = " ms", ClassName = "mono", Align = "right" },
+                            new { Data = "offset", Width = "150", Post = " ms", ClassName = "mono", Align = "right" }
+                        }
+                    }
+                }
+            }; 
     }
 }
