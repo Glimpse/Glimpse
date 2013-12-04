@@ -987,8 +987,11 @@ glimpse.render.engine.util.table = (function($, util) {
             if (engineUtil.includeHeading(metadata))
                 html += '<thead><tr class="glimpse-row-header glimpse-row-header-' + level + '"><th class="glimpse-key">Key</th><th class="glimpse-cell-value">Value</th></tr></thead>';
             html += '<tbody class="glimpse-row-holder">';
-            for (var key in data)
-                html += '<tr class="glimpse-row"><th class="glimpse-key">' + engineUtil.raw.process(util.processCasing(key)) + '</th><td>' + providers.master.build(data[key], level + 1, null, engineUtil.keyMetadata(key, metadata)) + '</td></tr>';
+            for (var key in data) {
+                var keyMetadata = engineUtil.keyMetadata(key, metadata),
+                    title = keyMetadata && keyMetadata.title ? util.preserveWhitespace(engineUtil.raw.process(util.processCasing(keyMetadata.title))) : engineUtil.raw.process(util.processCasing(key));
+                html += '<tr class="glimpse-row"><th class="glimpse-key">' + title + '</th><td>' + providers.master.build(data[key], level + 1, null, keyMetadata) + '</td></tr>';
+            }
             html += '</tbody></table>';
 
             return html;
