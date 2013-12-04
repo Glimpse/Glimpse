@@ -71,6 +71,7 @@
     <Compile Include="Infrastructure\Inspections\GeneralBestPracticesInspector.cs" />
     <Compile Include="Infrastructure\Inspections\IWindowsAzureStorageInspector.cs" />
     <Compile Include="Infrastructure\Inspections\TableStorageQueryIndexInspector.cs" />
+    <Compile Include="Infrastructure\Inspections\TableStorageEchoContentInspector.cs" />
     <Compile Include="Infrastructure\Inspections\WindowsAzureStorageInspectorBase.cs" />
     <Compile Include="Infrastructure\IOperationContextFactory.cs" />
     <Compile Include="Infrastructure\LongExtensions.cs" />

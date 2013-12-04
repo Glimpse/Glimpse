@@ -5,7 +5,6 @@ using Microsoft.Data.Edm;
 using Microsoft.Data.Edm.Library;
 using Microsoft.Data.OData;
 using Microsoft.Data.OData.Query;
-using Microsoft.WindowsAzure.Storage;
 
 namespace Glimpse.WindowsAzure.Storage.Infrastructure.Inspections
 {

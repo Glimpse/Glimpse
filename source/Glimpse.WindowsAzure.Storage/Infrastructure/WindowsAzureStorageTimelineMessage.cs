@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Web;
 using Glimpse.Core.Message;
@@ -43,9 +45,11 @@ namespace Glimpse.WindowsAzure.Storage.Infrastructure
                 ResponseSize += header.Length + 2 + string.Join(";", requestEventArgs.Response.Headers.GetValues(header)).Length;
             }
 
+            RequestHeaders = requestEventArgs.Request.Headers;
+            ResponseHeaders = requestEventArgs.Request.Headers;
+
             EventSubText = string.Format("out: {0}/in: {1}", RequestSize.ToBytesHuman(), ResponseSize.ToBytesHuman());
         }
-
 
         public Guid Id { get; private set; }
         public string Url { get; set; }
@@ -58,8 +62,9 @@ namespace Glimpse.WindowsAzure.Storage.Infrastructure
         public string EventSubText { get; set; }
         public string ServiceOperation { get; set; }
         public string ServiceName { get; set; }
-
         public long RequestSize { get; set; }
         public long ResponseSize { get; set; }
+        public WebHeaderCollection ResponseHeaders { get; set; }
+        public WebHeaderCollection RequestHeaders { get; set; }
     }
 }

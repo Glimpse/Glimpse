@@ -85,7 +85,8 @@ namespace Glimpse.WindowsAzure.Storage.Tab
             var inspectors = new IWindowsAzureStorageInspector[]
                 {
                     new GeneralBestPracticesInspector(),
-                    new TableStorageQueryIndexInspector()
+                    new TableStorageQueryIndexInspector(),
+                    new TableStorageEchoContentInspector()
                 };
             foreach (var inspector in inspectors)
             {
