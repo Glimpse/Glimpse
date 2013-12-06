@@ -264,7 +264,7 @@ namespace Glimpse.Core.Framework
                 return;
             }
 
-            var allTypes = AssemblyTypesResolver.RetrieveTypes(assembly);
+            var allTypes = AssemblyTypesResolver.ResolveTypes(assembly, Logger);
 
             var concreteTypes = allTypes.Where(type => typeof(T).IsAssignableFrom(type) &&
                                                        !type.IsInterface &&

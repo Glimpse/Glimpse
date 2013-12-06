@@ -987,8 +987,11 @@ glimpse.render.engine.util.table = (function($, util) {
             if (engineUtil.includeHeading(metadata))
                 html += '<thead><tr class="glimpse-row-header glimpse-row-header-' + level + '"><th class="glimpse-key">Key</th><th class="glimpse-cell-value">Value</th></tr></thead>';
             html += '<tbody class="glimpse-row-holder">';
-            for (var key in data)
-                html += '<tr class="glimpse-row"><th class="glimpse-key">' + engineUtil.raw.process(util.processCasing(key)) + '</th><td>' + providers.master.build(data[key], level + 1, null, engineUtil.keyMetadata(key, metadata)) + '</td></tr>';
+            for (var key in data) {
+                var keyMetadata = engineUtil.keyMetadata(key, metadata),
+                    title = keyMetadata && keyMetadata.title ? util.preserveWhitespace(engineUtil.raw.process(util.processCasing(keyMetadata.title))) : engineUtil.raw.process(util.processCasing(key));
+                html += '<tr class="glimpse-row"><th class="glimpse-key">' + title + '</th><td>' + providers.master.build(data[key], level + 1, null, keyMetadata) + '</td></tr>';
+            }
             html += '</tbody></table>';
 
             return html;
@@ -1127,7 +1130,7 @@ glimpse.render.engine.util.table = (function($, util) {
             for (var i = 0; i < indexs.length; i++) {
                 var pattern = "\\\{\\\{" + indexs[i] + "\\\}\\\}", regex = new RegExp(pattern, "g"),
                     value = isHeadingRow && !$.isNumeric(indexs[i]) ? indexs[i] : data[indexs[i]]; 
-                content = content.replace(regex, value);
+                content = content.replace(regex, isHeadingRow ? util.processCasing(value) : value);
             }
             return content;
         }, 
@@ -1146,9 +1149,15 @@ glimpse.render.engine.util.table = (function($, util) {
             }
             else { 
                 if (!metadataItem.indexs && util.containsTokens(metadataItem.data)) 
-                    metadataItem.indexs = util.getTokens(metadataItem.data, data); 
-                  
-                cellContent = metadataItem.indexs ? buildFormatString(metadataItem.data, data, metadataItem.indexs, isHeadingRow) : (isHeadingRow && !$.isNumeric(metadataItem.data) ? metadataItem.data : data[metadataItem.data]);
+                    metadataItem.indexs = util.getTokens(metadataItem.data, data);
+
+                if (metadataItem.indexs)
+                    cellContent = buildFormatString(metadataItem.data, data, metadataItem.indexs, isHeadingRow);
+                else {
+                    cellContent = isHeadingRow && !$.isNumeric(metadataItem.data) ? metadataItem.data : data[metadataItem.data];
+                    if (isHeadingRow)
+                        cellContent = util.processCasing(cellContent);
+                }
                 
                 if (metadataItem.engine && !isHeadingRow) {
                     cellContent = providers.master.build(cellContent, level + 1, metadataItem.forceFull, metadataItem, isHeadingRow ? undefined : metadataItem.limit);
@@ -1175,7 +1184,7 @@ glimpse.render.engine.util.table = (function($, util) {
                     if (!isHeadingRow) {
                         if (metadataItem.pre) { cellContent = '<span class="glimpse-soft">' + metadataItem.pre + '</span>' + cellContent; }
                         if (metadataItem.post) { cellContent = cellContent + '<span class="glimpse-soft">' + metadataItem.post + '</span>'; }
-                    }
+                    } 
                 }
             }
             
