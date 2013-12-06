@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using System.Web;
@@ -40,8 +39,8 @@ namespace Glimpse.AspNet.Tab
                 if (TryGetCacheItemModel(currentCacheEntry, out cacheItemModel))
                 {
                     cacheModel.CacheItems.Add(cacheItemModel);
-                    cacheModel.PhysicalMemoryLimit = HttpRuntime.Cache.EffectivePercentagePhysicalMemoryLimit;
-                    cacheModel.PrivateBytesLimit = HttpRuntime.Cache.EffectivePrivateBytesLimit;
+                    cacheModel.EffectivePercentagePhysicalMemoryLimit = HttpRuntime.Cache.EffectivePercentagePhysicalMemoryLimit;
+                    cacheModel.EffectivePrivateBytesLimit = HttpRuntime.Cache.EffectivePrivateBytesLimit;
                 }
             }
 
@@ -74,7 +73,6 @@ namespace Glimpse.AspNet.Tab
 
             return true;
         }
-
 
         private T GetCacheProperty<T>(string propertyName, object cacheEntry)
         {

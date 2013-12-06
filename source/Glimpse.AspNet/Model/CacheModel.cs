@@ -14,8 +14,8 @@ namespace Glimpse.AspNet.Model
             CacheItems = new List<CacheItemModel>(); 
         }
 
-        public long PhysicalMemoryLimit { get; set; }
-        public long PrivateBytesLimit { get; set; }
+        public long EffectivePercentagePhysicalMemoryLimit { get; set; }
+        public long EffectivePrivateBytesLimit { get; set; }
         public IList<CacheItemModel> CacheItems { get; set; }
 
     }
