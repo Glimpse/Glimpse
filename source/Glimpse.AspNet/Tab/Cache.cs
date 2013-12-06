@@ -89,28 +89,5 @@ namespace Glimpse.AspNet.Tab
                 return default(T);    
             }
         }
-
-        private TimeSpan? GetCacheTimeSpan(string propertyName, object cacheEntry)
-        {
-            PropertyInfo property = cacheEntry.GetType().GetProperty(propertyName, BindingFlags.NonPublic | BindingFlags.Instance);
-
-            TimeSpan slidingExpiration;
-            if (TimeSpan.TryParse(property.GetValue(cacheEntry, null).ToString(), out slidingExpiration))
-            {
-                return slidingExpiration;
-            }
-            return null;
-        }
-
-        private DateTime? GetCacheDateField(string propertyName, object cacheEntry)
-        {
-            PropertyInfo property = cacheEntry.GetType().GetProperty(propertyName, BindingFlags.NonPublic | BindingFlags.Instance);
-            DateTime tempDateTime;
-            if (DateTime.TryParse(property.GetValue(cacheEntry, null).ToString(), out tempDateTime))
-            {
-                return tempDateTime;
-            }
-            return null;
-        }
     }
 }
