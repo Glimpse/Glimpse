@@ -1,8 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
 using System.Reflection;
 using System.Web;
 using Glimpse.AspNet.Extensibility;
+using Glimpse.AspNet.Model;
 using Glimpse.AspNet.Support;
 using Glimpse.Core.Extensibility;
 
@@ -22,41 +24,68 @@ namespace Glimpse.AspNet.Tab
     
         public override object GetData(ITabContext context)
         {
-            var items = new List<object>();
-
+            var cacheModel = new CacheModel();
+            
             var cacheEnumerator = HttpRuntime.Cache.GetEnumerator();
+
             while (cacheEnumerator.MoveNext())
             {
-                var key = cacheEnumerator.Key.ToString();
+                DictionaryEntry currentCacheEntry = cacheEnumerator.Entry;
                 // if more properties want to be displayed in the future, here's a list of properties available
                 //     Value - UtcCreated - State - UtcExpires - SlidingExpiration - ExpiresBucket - ExpiresEntryRef 
                 //     UsageBucket - UsageEntryRef - UtcLastUsageUpdate - Dependency - Key - IsOutputCache - IsPublic
-                items.Add(new { 
-                    Key = key,
-                    Value = Serialization.GetValueSafe(cacheEnumerator.Value),
-                    Created = GetCacheItemProperty(key, "UtcCreated"),
-                    Expiry = GetCacheItemProperty(key, "UtcExpires"),
-                    SlidingExpiration = GetCacheItemProperty(key, "SlidingExpiration")
-                });
+
+                CacheItemModel cacheItemModel = null;
+                if (TryGetCacheItemModel(currentCacheEntry, out cacheItemModel))
+                {
+                    cacheModel.CacheItems.Add(cacheItemModel);
+                    cacheModel.EffectivePercentagePhysicalMemoryLimit = HttpRuntime.Cache.EffectivePercentagePhysicalMemoryLimit;
+                    cacheModel.EffectivePrivateBytesLimit = HttpRuntime.Cache.EffectivePrivateBytesLimit;
+                }
             }
 
-            return new
-            {
-                Settings = new {
-                    PhysicalMemoryLimit = HttpRuntime.Cache.EffectivePercentagePhysicalMemoryLimit,
-                    PrivateBytesLimit = HttpRuntime.Cache.EffectivePrivateBytesLimit,
-                },
-                Items = items
-            };
+            return cacheModel;
         }
-        
-        private object GetCacheItemProperty(string cacheKey, string propertyName)
-        {
-            object cacheEntry = HttpRuntime.Cache.GetType().GetMethod("Get", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(HttpRuntime.Cache, new object[] { cacheKey, 1 });
-            PropertyInfo property = cacheEntry.GetType().GetProperty(propertyName, BindingFlags.NonPublic | BindingFlags.Instance);
-            var propertyValue = property.GetValue(cacheEntry, null);
 
-            return propertyValue;
+        private bool TryGetCacheItemModel(DictionaryEntry currentCacheEntry, out CacheItemModel cacheItemModel)
+        {
+            cacheItemModel = new CacheItemModel();
+            object cacheEntry;
+            try
+            {
+                cacheEntry =
+                    HttpRuntime.Cache.GetType()
+                               .GetMethod("Get", BindingFlags.Instance | BindingFlags.NonPublic)
+                               .Invoke(HttpRuntime.Cache, new object[] {currentCacheEntry.Key, 1});
+            }
+            catch (NullReferenceException)
+            {
+                cacheItemModel = null;
+                return false;
+            }
+
+            cacheItemModel.Key = currentCacheEntry.Key.ToString();
+            cacheItemModel.Value = Serialization.GetValueSafe(currentCacheEntry.Value);
+
+            cacheItemModel.CreatedOn = GetCacheProperty<DateTime>("UtcCreated", cacheEntry);
+            cacheItemModel.ExpiresOn = GetCacheProperty<DateTime>("UtcExpires", cacheEntry);
+            cacheItemModel.SlidingExpiration = GetCacheProperty<TimeSpan>("SlidingExpiration", cacheEntry);
+
+            return true;
+        }
+
+        private T GetCacheProperty<T>(string propertyName, object cacheEntry)
+        {
+            PropertyInfo property = cacheEntry.GetType().GetProperty(propertyName, BindingFlags.NonPublic | BindingFlags.Instance);
+            var converter = TypeDescriptor.GetConverter(typeof(T));
+            try
+            {
+                return (T)converter.ConvertFromString(property.GetValue(cacheEntry, null).ToString());
+            }
+            catch (Exception)
+            {
+                return default(T);    
+            }
         }
     }
 }

@@ -68,6 +68,7 @@
     <Compile Include="HttpModule.cs" />
     <Compile Include="HttpRuntimeShutdownMessageResolver.cs" />
     <Compile Include="Message\ProcessConstraintMessage.cs" />
+    <Compile Include="Model\CacheModel.cs" />
     <Compile Include="Model\ConfigurationAuthenticationFormsCredentialsModel.cs" />
     <Compile Include="Model\ConfigurationAuthenticationFormsModel.cs" />
     <Compile Include="Model\ConfigurationAuthenticationModel.cs" />
