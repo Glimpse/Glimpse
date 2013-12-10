@@ -24,6 +24,19 @@ namespace Glimpse.AspNet.Tab
                     {"pwd", ObfuscatedValue},
                     {"accountkey", ObfuscatedValue}
                 };
+
+            var additionalKeysToObfuscate = ConfigurationManager.AppSettings["Glimpse:ConfigurationTab:ConnectionStrings;KeysToObfuscate"];
+            if (!string.IsNullOrEmpty(additionalKeysToObfuscate))
+            {
+                var additionalKeys = additionalKeysToObfuscate.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var additionalKey in additionalKeys)
+                {
+                    if (!ObfuscatedConnectionStringValues.ContainsKey(additionalKey))
+                    {
+                        ObfuscatedConnectionStringValues.Add(additionalKey, ObfuscatedValue);
+                    }
+                }
+            }
         }
 
         public static ConfigurationConnectionStringModel Create(ConnectionStringSettings connectionString)
