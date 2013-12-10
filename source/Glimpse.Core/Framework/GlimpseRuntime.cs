@@ -38,6 +38,7 @@ namespace Glimpse.Core.Framework
             // Version is in major.minor.build format to support http://semver.org/
             // TODO: Consider adding configuration hash to version
             Version = Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
+            IsInitialized = false;
 
             if (MethodInfoBeginRequest == null)
             {
@@ -94,6 +95,7 @@ namespace Glimpse.Core.Framework
             }
 
             Configuration = configuration;
+            this.Initialize();
         }
 
         /// <summary>
@@ -119,7 +121,7 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// <c>true</c> if this instance is initialized; otherwise, <c>false</c>.
         /// </value>
-        public bool IsInitialized { get; private set; }
+        public static bool IsInitialized { get; private set; }
 
         private IDictionary<string, TabResult> GetTabResultsStore(IFrameworkProvider frameworkProvider)
         {
@@ -159,6 +161,8 @@ namespace Glimpse.Core.Framework
             {
                 throw new GlimpseException(Resources.BeginRequestOutOfOrderRuntimeMethodCall);
             }
+
+            CallContext.LogicalSetData("fp", frameworkProvider);
 
             if (HasOffRuntimePolicy(RuntimeEvent.BeginRequest, frameworkProvider))
                 return;
@@ -393,7 +397,7 @@ namespace Glimpse.Core.Framework
         /// <returns>
         ///   <c>true</c> if system initialized successfully, <c>false</c> otherwise
         /// </returns>
-        public bool Initialize()
+        private bool Initialize()
         {
             var policy = RuntimePolicy.Off;
             // TODO: This needs to be handled in BeginRequest

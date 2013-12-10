@@ -18,7 +18,7 @@ namespace Glimpse.AspNet
 
         public void ProcessRequest(HttpContextBase context)
         {
-            var runtime = context.Application.Get(Constants.RuntimeKey) as IGlimpseRuntime;
+            var runtime = GlimpseRuntime.Instance;
 
             if (runtime == null)
             {

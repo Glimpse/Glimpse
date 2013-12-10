@@ -8,12 +8,6 @@ namespace Glimpse.Core.Framework
     public interface IGlimpseRuntime
     {
         /// <summary>
-        /// Gets a value indicating whether this instance is initialized.
-        /// </summary>
-        /// <value><c>true</c> if this instance is initialized; otherwise, <c>false</c>.</value>
-        bool IsInitialized { get; }
-
-        /// <summary>
         /// Begins the request.
         /// </summary>
         /// <remarks>
@@ -74,18 +68,6 @@ namespace Glimpse.Core.Framework
         /// with the ASP.NET provider, this is wired to the <c>PostRequestHandlerExecute</c> method.
         /// </remarks>
         void EndSessionAccess(IFrameworkProvider frameworkProvider);
-
-        /// <summary>
-        /// Initializes this instance.
-        /// </summary>
-        /// <returns><c>true</c> if system initialized successfully, <c>false</c> otherwise</returns>
-        /// <remarks>
-        /// Typically used to wire up framework events to the corresponding runtime methods. Depending
-        /// on framework implementation, this could be called multiple times per "application pool" 
-        /// recycle. Specifically, with the ASP.NET provider, this is wired to/implemented by the 
-        /// <c>Init</c> method.
-        /// </remarks>
-        bool Initialize();
 
         IGlimpseConfiguration Configuration { get; }
     }

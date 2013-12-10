@@ -68,61 +68,39 @@ namespace Glimpse.AspNet
 
         internal void Init(HttpApplicationBase httpApplication)
         {
-            var state = new ApplicationPersistenceStore(new HttpApplicationStateBaseDataStoreAdapter(httpApplication.Application));
-            Configuration = new GlimpseConfiguration(new HttpHandlerEndpointConfiguration(), state);
+            if (!GlimpseRuntime.IsInitialized)
+            {
+                Configuration = Configuration ?? 
+                    new GlimpseConfiguration(
+                        new HttpHandlerEndpointConfiguration(), 
+                        new ApplicationPersistenceStore(
+                            new HttpApplicationStateBaseDataStoreAdapter(httpApplication.Application)));
 
-            var runtime = GetRuntime(httpApplication.Application);
+                GlimpseRuntime.Initialize(Configuration);
+            }
 
             // V2Merge: is setting the logger here instead of in init okay?
-            AppDomain.CurrentDomain.SetData(Constants.LoggerKey, Configuration.Logger);
+            var currentDomain = AppDomain.CurrentDomain;
+            currentDomain.SetData(Constants.LoggerKey, Configuration.Logger);
+            currentDomain.DomainUnload += (sender, e) => OnAppDomainUnload((AppDomain)sender);
 
-            if (runtime.IsInitialized || runtime.Initialize())
-            {
-                httpApplication.BeginRequest += (context, e) => BeginRequest(WithTestable(context));
-                httpApplication.PostAcquireRequestState += (context, e) => BeginSessionAccess(WithTestable(context));
-                httpApplication.PostRequestHandlerExecute += (context, e) => EndSessionAccess(WithTestable(context));
-                httpApplication.PostReleaseRequestState += (context, e) => EndRequest(WithTestable(context));
-                httpApplication.PreSendRequestHeaders += (context, e) => SendHeaders(WithTestable(context));
-            }
-        }
-
-        internal IGlimpseRuntime GetRuntime(HttpApplicationStateBase applicationState)
-        {
-            var runtime = applicationState[Constants.RuntimeKey] as IGlimpseRuntime;
-
-            if (runtime == null)
-            {
-                lock (LockObj)
-                {
-                    runtime = applicationState[Constants.RuntimeKey] as IGlimpseRuntime;
-
-                    if (runtime == null)
-                    {
-                        GlimpseRuntime.Initialize(Configuration);
-
-                        runtime = GlimpseRuntime.Instance;
-
-                        applicationState.Add(Constants.RuntimeKey, runtime);
-                    }
-                }
-            }
-
-            return runtime;
+            httpApplication.BeginRequest += (context, e) => BeginRequest(WithTestable(context));
+            httpApplication.PostAcquireRequestState += (context, e) => BeginSessionAccess(WithTestable(context));
+            httpApplication.PostRequestHandlerExecute += (context, e) => EndSessionAccess(WithTestable(context));
+            httpApplication.PostReleaseRequestState += (context, e) => EndRequest(WithTestable(context));
+            httpApplication.PreSendRequestHeaders += (context, e) => SendHeaders(WithTestable(context));
         }
 
         internal void BeginRequest(HttpContextBase httpContext)
         {
             // TODO: Add Logging to either methods here or in Runtime
-            var runtime = GetRuntime(httpContext.Application);
 
-            runtime.BeginRequest(new AspNetFrameworkProvider(httpContext, runtime.Configuration.Logger));
+            GlimpseRuntime.Instance.BeginRequest(new AspNetFrameworkProvider(httpContext, Configuration.Logger));
         }
 
         internal void EndRequest(HttpContextBase httpContext)
         {
-            var runtime = GetRuntime(httpContext.Application);
-
-            runtime.EndRequest(new AspNetFrameworkProvider(httpContext, runtime.Configuration.Logger));
+            GlimpseRuntime.Instance.EndRequest(new AspNetFrameworkProvider(httpContext, Configuration.Logger));
         }
 
         internal void SendHeaders(HttpContextBase httpContext)
@@ -144,16 +122,12 @@ namespace Glimpse.AspNet
 
         private void BeginSessionAccess(HttpContextBase httpContext)
         {
-            var runtime = GetRuntime(httpContext.Application);
-
-            runtime.BeginSessionAccess(new AspNetFrameworkProvider(httpContext, runtime.Configuration.Logger));
+            GlimpseRuntime.Instance.BeginSessionAccess(new AspNetFrameworkProvider(httpContext, Configuration.Logger));
         }
 
         private void EndSessionAccess(HttpContextBase httpContext)
         {
-            var runtime = GetRuntime(httpContext.Application);
-
-            runtime.EndSessionAccess(new AspNetFrameworkProvider(httpContext, runtime.Configuration.Logger));
+            GlimpseRuntime.Instance.EndSessionAccess(new AspNetFrameworkProvider(httpContext, Configuration.Logger));
         }
     }
 }
