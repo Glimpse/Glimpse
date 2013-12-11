@@ -14,7 +14,24 @@ namespace Glimpse.Test.AspNet.Tab
         private const string CacheItemValue = "testItemValue";
 
         [Fact]
-        public void CacheSlidingExpiration()
+        public void ReturnData()
+        {
+            var contextMock = new Mock<ITabContext>();
+            var cache = new Glimpse.AspNet.Tab.Cache();
+            var slidingExpiration = new TimeSpan(2, 0, 0);
+
+            HttpRuntime.Cache.Add(CacheItemKey, CacheItemValue, null, Cache.NoAbsoluteExpiration, slidingExpiration,
+                      CacheItemPriority.AboveNormal, null);
+
+            var cacheModel = cache.GetData(contextMock.Object) as CacheModel;
+
+            Assert.NotNull(cacheModel);
+            Assert.Equal(cacheModel.CacheItems[0].Key, CacheItemKey);
+            Assert.Equal(cacheModel.CacheItems[0].Value, CacheItemValue);
+        }
+
+        [Fact]
+        public void HaveSlidingExpiration()
         {
             var contextMock = new Mock<ITabContext>();
             var cache = new Glimpse.AspNet.Tab.Cache();
@@ -32,7 +49,7 @@ namespace Glimpse.Test.AspNet.Tab
         }
 
         [Fact]
-        public void CacheAbsoluteExpiration()
+        public void HaveAbsoluteExpiration()
         {
             var contextMock = new Mock<ITabContext>();
             var cache = new Glimpse.AspNet.Tab.Cache();
@@ -50,13 +67,10 @@ namespace Glimpse.Test.AspNet.Tab
             var expiresOn = cacheModel.CacheItems[0].ExpiresOn;
             Assert.Equal(expiresOn, cacheExpiryDate);
         }
-
         
         public void Dispose()
         {
             HttpRuntime.Cache.Remove(CacheItemKey);
         }
     }
-
-
 }
