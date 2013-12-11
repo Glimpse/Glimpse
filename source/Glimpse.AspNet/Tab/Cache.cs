@@ -80,9 +80,14 @@ namespace Glimpse.AspNet.Tab
 
             cacheItemModel.Key = currentCacheEntry.Key.ToString();
             cacheItemModel.Value = Serialization.GetValueSafe(currentCacheEntry.Value);
-            cacheItemModel.CreatedOn = (DateTime)GetCacheProperty(ProcessInfoUtcCreated, cacheEntry);
-            cacheItemModel.ExpiresOn = (DateTime)GetCacheProperty(ProcessInfoUtcExpires, cacheEntry);
-            cacheItemModel.SlidingExpiration = (TimeSpan)GetCacheProperty(ProcessInfoSlidingExpiration, cacheEntry);
+            cacheItemModel.CreatedOn = GetCacheProperty(ProcessInfoUtcCreated, cacheEntry) as DateTime?;
+            cacheItemModel.ExpiresOn = GetCacheProperty(ProcessInfoUtcExpires, cacheEntry) as DateTime?;
+            if (cacheItemModel.ExpiresOn == DateTime.MaxValue)
+            {
+                cacheItemModel.ExpiresOn = null;
+            }
+
+            cacheItemModel.SlidingExpiration = GetCacheProperty(ProcessInfoSlidingExpiration, cacheEntry) as TimeSpan?;
 
             return true;
         }

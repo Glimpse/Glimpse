@@ -50,13 +50,10 @@ namespace Glimpse.Test.AspNet.Tab
             var expiresOn = cacheModel.CacheItems[0].ExpiresOn;
             Assert.Equal(expiresOn, cacheExpiryDate);
         }
-
         
         public void Dispose()
         {
             HttpRuntime.Cache.Remove(CacheItemKey);
         }
     }
-
-
 }
