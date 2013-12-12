@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
-using System.ComponentModel;
 using System.Reflection;
 using System.Web;
+using System.Web.Caching;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.AspNet.Model;
 using Glimpse.AspNet.Support;
@@ -12,12 +12,27 @@ namespace Glimpse.AspNet.Tab
 {
     public class Cache : AspNetTab, ILayoutControl
     {
+        private const string TestCacheKey = "testKey";
         private static readonly MethodInfo MethodInfoCacheGet = HttpRuntime.Cache.GetType().GetMethod("Get", BindingFlags.Instance | BindingFlags.NonPublic);
         private static Type TypeCacheEntity;
         private static PropertyInfo ProcessInfoUtcCreated;
         private static PropertyInfo ProcessInfoUtcExpires;
         private static PropertyInfo ProcessInfoSlidingExpiration;
 
+        static Cache() 
+        {
+            //need an item in the cache to call the MethodInfoCacheGet.Invoke below.
+            HttpRuntime.Cache.Add(TestCacheKey, "", null, DateTime.Now.AddHours(1), System.Web.Caching.Cache.NoSlidingExpiration,
+                CacheItemPriority.AboveNormal, null);
+
+            object cacheEntry = MethodInfoCacheGet.Invoke(HttpRuntime.Cache, new object[] { TestCacheKey, 1 });
+            HttpRuntime.Cache.Remove(TestCacheKey);
+
+            TypeCacheEntity = cacheEntry.GetType();
+            ProcessInfoUtcCreated = TypeCacheEntity.GetProperty("UtcCreated", BindingFlags.NonPublic | BindingFlags.Instance);
+            ProcessInfoUtcExpires = TypeCacheEntity.GetProperty("UtcExpires", BindingFlags.NonPublic | BindingFlags.Instance);
+            ProcessInfoSlidingExpiration = TypeCacheEntity.GetProperty("SlidingExpiration", BindingFlags.NonPublic | BindingFlags.Instance);
+        }
 
         public override string Name
         {
@@ -28,14 +43,14 @@ namespace Glimpse.AspNet.Tab
         {
             get { return true; }
         }
-    
+
         public override object GetData(ITabContext context)
         {
             var cacheModel = new CacheModel();
-            var cacheEnumerator = HttpRuntime.Cache.GetEnumerator(); 
+            var cacheEnumerator = HttpRuntime.Cache.GetEnumerator();
             while (cacheEnumerator.MoveNext())
             {
-                var currentCacheEntry = cacheEnumerator.Entry; 
+                var currentCacheEntry = cacheEnumerator.Entry;
 
                 CacheItemModel cacheItemModel = null;
                 if (TryGetCacheItemModel(currentCacheEntry, out cacheItemModel))
@@ -65,31 +80,27 @@ namespace Glimpse.AspNet.Tab
 
             cacheItemModel.Key = currentCacheEntry.Key.ToString();
             cacheItemModel.Value = Serialization.GetValueSafe(currentCacheEntry.Value);
-
-            if (TypeCacheEntity == null)
+            cacheItemModel.CreatedOn = GetCacheProperty(ProcessInfoUtcCreated, cacheEntry) as DateTime?;
+            cacheItemModel.ExpiresOn = GetCacheProperty(ProcessInfoUtcExpires, cacheEntry) as DateTime?;
+            if (cacheItemModel.ExpiresOn == DateTime.MaxValue)
             {
-                TypeCacheEntity = cacheEntry.GetType();
-                ProcessInfoUtcCreated = TypeCacheEntity.GetProperty("UtcCreated", BindingFlags.NonPublic | BindingFlags.Instance);
-                ProcessInfoUtcExpires = TypeCacheEntity.GetProperty("UtcExpires", BindingFlags.NonPublic | BindingFlags.Instance);
-                ProcessInfoSlidingExpiration = TypeCacheEntity.GetProperty("SlidingExpiration", BindingFlags.NonPublic | BindingFlags.Instance);
+                cacheItemModel.ExpiresOn = null;
             }
 
-            cacheItemModel.CreatedOn = GetCacheProperty(ProcessInfoUtcCreated, cacheEntry);
-            cacheItemModel.ExpiresOn = GetCacheProperty(ProcessInfoUtcExpires, cacheEntry);
-            cacheItemModel.SlidingExpiration = GetCacheProperty(ProcessInfoSlidingExpiration, cacheEntry);
+            cacheItemModel.SlidingExpiration = GetCacheProperty(ProcessInfoSlidingExpiration, cacheEntry) as TimeSpan?;
 
             return true;
         }
 
         private object GetCacheProperty(PropertyInfo property, object cacheEntry)
-        { 
+        {
             try
             {
                 return property.GetValue(cacheEntry, null);
             }
             catch (Exception)
             {
-                return null;    
+                return null;
             }
         }
     }
