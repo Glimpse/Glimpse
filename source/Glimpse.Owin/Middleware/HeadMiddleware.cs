@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
-using Owin;
 using Owin.Types;
 
 namespace Glimpse.Owin.Middleware
@@ -11,17 +10,17 @@ namespace Glimpse.Owin.Middleware
     public class HeadMiddleware
     {
         private readonly Func<IDictionary<string, object>, Task> innerNext;
-        private readonly IAppBuilder app;
+        private readonly IDictionary<string, object> serverStore;
 
-        public HeadMiddleware(Func<IDictionary<string, object>, Task> next, IAppBuilder app)
+        public HeadMiddleware(Func<IDictionary<string, object>, Task> next, IDictionary<string, object> serverStore)
         {
             innerNext = next;
-            this.app = app;
+            this.serverStore = serverStore;
         }
 
         public async Task Invoke(IDictionary<string, object> environment)
         {
-            GlimpseRuntime.Instance.BeginRequest(new OwinFrameworkProvider(environment, app));
+            GlimpseRuntime.Instance.BeginRequest(new OwinFrameworkProvider(environment, serverStore));
 
             // this where to check to see if this should handle the request directly (ala glimpse.axd)
             // this is where to start a new request for processing

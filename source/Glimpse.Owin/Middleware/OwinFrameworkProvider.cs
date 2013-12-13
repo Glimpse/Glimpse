@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
-using Owin;
 
 namespace Glimpse.Owin.Middleware
 {
     public class OwinFrameworkProvider : IFrameworkProvider
     {
         private IDictionary<string, object> environment;
-        private IAppBuilder app;
+        private IDictionary<string, object> serverStore;
 
-        public OwinFrameworkProvider(IDictionary<string, object> environment, IAppBuilder app)
+        public OwinFrameworkProvider(IDictionary<string, object> environment, IDictionary<string, object> serverStore)
         {
             this.environment = environment;
-            this.app = app;
+            this.serverStore = serverStore;
         }
 
         public IDataStore HttpRequestStore 
@@ -38,7 +37,7 @@ namespace Glimpse.Owin.Middleware
         {
             get
             {
-                return new DictionaryDataStoreAdapter((Dictionary<string, object>)app.Properties);
+                return new DictionaryDataStoreAdapter((Dictionary<string, object>)serverStore);
             }
         }
 
