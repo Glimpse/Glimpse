@@ -10,7 +10,7 @@ namespace Glimpse.Owin.Sample
         {
             // app = app.WithGlimpse();
 
-            app.UseType<TailMiddleware>(); // This doesn't seems like it should be here but rather later in the pipeline?
+            app.Use<TailMiddleware>(); // This doesn't seems like it should be here but rather later in the pipeline?
 
             app.Use(typeof(TimestampMiddleware));
 

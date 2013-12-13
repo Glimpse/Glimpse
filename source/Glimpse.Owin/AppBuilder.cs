@@ -16,7 +16,7 @@ namespace Glimpse.Owin
             innerApp = app;
             var config = new GlimpseConfiguration(new OwinResourceEndpointConfiguration(), new ApplicationPersistenceStore(new DictionaryDataStoreAdapter(app.Properties as Dictionary<string, object>)));
             GlimpseRuntime.Initialize(config);
-            innerApp.UseType<HeadMiddleware>(this); // This is the earliest we can add middleware
+            innerApp.Use<HeadMiddleware>(Properties); // This is the earliest we can add middleware
         }
 
         public IDictionary<string, object> Properties

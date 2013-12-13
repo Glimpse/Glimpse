@@ -32,14 +32,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Owin">
+      <HintPath>..\..\packages\Microsoft.Owin.2.1.0-rc1\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
     <Reference Include="Owin">
       <HintPath>..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
-    </Reference>
-    <Reference Include="Owin.Extensions">
-      <HintPath>..\..\packages\Owin.Extensions.0.8.5\lib\net40\Owin.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Owin.Types">
-      <HintPath>..\..\packages\Owin.Types.0.8.5\lib\net40\Owin.Types.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

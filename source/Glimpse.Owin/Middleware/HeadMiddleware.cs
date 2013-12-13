@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
-using Owin.Types;
+using Microsoft.Owin;
 
 namespace Glimpse.Owin.Middleware
 {
