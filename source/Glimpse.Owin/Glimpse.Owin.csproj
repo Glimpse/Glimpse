@@ -54,7 +54,6 @@
     <Compile Include="Extensions\IAppBuilderExtensions.cs" />
     <Compile Include="Middleware\HeadMiddleware.cs" />
     <Compile Include="Middleware\OwinFrameworkProvider.cs" />
-    <Compile Include="Middleware\OwinServiceLocator.cs" />
     <Compile Include="Middleware\TailMiddleware.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
