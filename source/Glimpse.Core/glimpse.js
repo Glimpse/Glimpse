@@ -2511,16 +2511,19 @@ glimpse.tab = (function($, pubsub, data) {
             context.contextRequestId = null;
             context.hasTried = null;
         };
-    
-    var send = XMLHttpRequest.prototype.send;
-    XMLHttpRequest.prototype.send = function() { 
-        this.setRequestHeader("Glimpse-Parent-RequestID", data.baseData().requestId);
-        
-        pubsub.publish('trigger.ajax.request.send');
-        
-        send.apply(this, arguments);
+     
+    var open = XMLHttpRequest.prototype.open;
+    XMLHttpRequest.prototype.open = function(method, uri) { 
+        open.apply(this, arguments);
+          
+        if (uri && (!(uri.indexOf('http://') == 0 || uri.indexOf('https://') == 0 || uri.indexOf('//') == 0) || (uri.substring(uri.indexOf('//') + 2, uri.length) + '/').indexOf(window.location.host + '/') == 0)) {
+            this.setRequestHeader("Glimpse-Parent-RequestID", data.baseData().requestId);
+
+            pubsub.publish('trigger.ajax.request.send');
+        }
     };
-    
+
+
     pubsub.subscribe('trigger.shell.subscriptions', wireListeners);
     pubsub.subscribe('action.panel.hiding.ajax', deactivate); 
     pubsub.subscribe('action.panel.showing.ajax', activate); 
