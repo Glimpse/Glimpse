@@ -5,7 +5,7 @@ using Glimpse.Core.Framework;
 using Glimpse.Owin.Middleware;
 using Owin;
 
-namespace Glimpse.Owin
+namespace Glimpse.Owin.Katana
 {
     public class AppBuilder : IAppBuilder
     {
@@ -14,8 +14,6 @@ namespace Glimpse.Owin
         public AppBuilder(IAppBuilder app)
         {
             innerApp = app;
-            var config = new GlimpseConfiguration(new OwinResourceEndpointConfiguration(), new ApplicationPersistenceStore(new DictionaryDataStoreAdapter(app.Properties as Dictionary<string, object>)));
-            GlimpseRuntime.Initialize(config);
             innerApp.Use<HeadMiddleware>(Properties); // This is the earliest we can add middleware
         }
 

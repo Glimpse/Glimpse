@@ -47,11 +47,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppBuilder.cs" />
-    <Compile Include="Extensions\IAppBuilderExtensions.cs" />
+    <Compile Include="Katana\AppBuilder.cs" />
+    <Compile Include="Katana\IAppBuilderExtensions.cs" />
     <Compile Include="Middleware\HeadMiddleware.cs" />
     <Compile Include="Middleware\OwinFrameworkProvider.cs" />
+    <Compile Include="Middleware\RequestMetadata.cs" />
     <Compile Include="Middleware\TailMiddleware.cs" />
+    <Compile Include="OwinResourceEndpointConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +64,9 @@
       <Project>{c1289ce8-3259-41d9-893e-7a4e6f772d30}</Project>
       <Name>Glimpse.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Extensions\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

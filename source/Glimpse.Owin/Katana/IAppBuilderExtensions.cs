@@ -1,6 +1,6 @@
 ﻿using Owin;
 
-namespace Glimpse.Owin.Extensions
+namespace Glimpse.Owin.Katana
 {
     public static class IAppBuilderExtensions
     {
