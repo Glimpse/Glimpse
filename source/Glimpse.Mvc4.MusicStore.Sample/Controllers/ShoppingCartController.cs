@@ -97,5 +97,11 @@ namespace MvcMusicStore.Controllers
 
             return PartialView("CartSummary");
         }
+        
+        protected override void Dispose(bool disposing)
+        {
+            storeDB.Dispose();
+            base.Dispose(disposing);
+        }
     }
 }

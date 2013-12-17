@@ -7,7 +7,6 @@ using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using MvcMusicStore.Models;
 
@@ -72,6 +71,12 @@ namespace MvcMusicStore.Controllers
             }
 
             return new Tuple<int, int>(result1, result2);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            storeDB.Dispose();
+            base.Dispose(disposing);
         }
     }
 }
