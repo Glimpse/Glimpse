@@ -54,6 +54,7 @@
     <Compile Include="..\Glimpse.Mvc\**\*.cs" Exclude="..\Glimpse.Mvc\Properties\AssemblyInfo.cs;..\Glimpse.Mvc\Inspector\DependencyInjectionInspector.cs;..\Glimpse.Mvc\AlternateType\DependencyResolver.cs;..\Glimpse.Mvc\AlternateType\ModelBinderProvider.cs;">
       <Link />
     </Compile>
+    <Compile Include="Backport\IEnumerableValueProvider.cs" />
     <Compile Include="Backport\IUnvalidatedValueProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

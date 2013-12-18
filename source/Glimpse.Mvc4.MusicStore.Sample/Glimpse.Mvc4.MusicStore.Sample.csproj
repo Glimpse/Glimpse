@@ -175,6 +175,7 @@
     <Compile Include="Controllers\HomeController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\ModelBindingTestsController.cs" />
     <Compile Include="Controllers\ShoppingCartController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Controllers\StoreManagerController.cs" />
@@ -273,6 +274,7 @@
     <Content Include="Views\StoreManager\Index.cshtml" />
     <Content Include="Views\FileUpload\Create.cshtml" />
     <Content Include="Views\FileUpload\Index.cshtml" />
+    <Content Include="Views\ModelBindingTests\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

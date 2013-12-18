@@ -31,9 +31,9 @@ namespace Glimpse.Test.Mvc.AlternateType
         }
 
         [Theory, AutoMock]
-        public void ImplementOneMethod(ValueProvider<T> sut)
+        public void ImplementThreeMethods(ValueProvider<T> sut)
         {
-            Assert.Equal(2, sut.AllMethods.Count());
+            Assert.Equal(3, sut.AllMethods.Count());
         }
     }
 }
