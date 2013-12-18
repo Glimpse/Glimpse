@@ -17,6 +17,8 @@ namespace Glimpse.Core.Framework
         private const string PersistenceStoreKey = "__GlimpsePersistenceKey";
 
         private const int BufferSize = 25;
+        
+        private readonly object queueLock = new object();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationPersistenceStore" /> class.
@@ -35,7 +37,7 @@ namespace Glimpse.Core.Framework
 
             GlimpseRequests = glimpseRequests;
         }
-        
+
         internal Queue<GlimpseRequest> GlimpseRequests { get; set; }
 
         private IDataStore DataStore { get; set; }
@@ -48,12 +50,15 @@ namespace Glimpse.Core.Framework
         /// <param name="request">The request.</param>
         public void Save(GlimpseRequest request)
         {
-            if (GlimpseRequests.Count >= BufferSize)
+            lock (queueLock)
             {
-                GlimpseRequests.Dequeue();
-            }
+                if (GlimpseRequests.Count >= BufferSize)
+                {
+                    GlimpseRequests.Dequeue();
+                }
 
-            GlimpseRequests.Enqueue(request);
+                GlimpseRequests.Enqueue(request);
+            }
         }
 
         /// <summary>
@@ -74,7 +79,10 @@ namespace Glimpse.Core.Framework
         /// </returns>
         public GlimpseRequest GetByRequestId(Guid requestId)
         {
-            return GlimpseRequests.FirstOrDefault(r => r.RequestId == requestId);
+            lock (queueLock)
+            {
+                return GlimpseRequests.FirstOrDefault(r => r.RequestId == requestId);
+            }
         }
 
         /// <summary>
@@ -92,8 +100,8 @@ namespace Glimpse.Core.Framework
             {
                 throw new ArgumentException("tabKey");
             }
-            
-            var request = GlimpseRequests.FirstOrDefault(r => r.RequestId == requestId);
+
+            var request = GetByRequestId(requestId);
 
             if (request == null || !request.TabData.ContainsKey(tabKey))
             {
@@ -112,7 +120,10 @@ namespace Glimpse.Core.Framework
         /// </returns>
         public IEnumerable<GlimpseRequest> GetByRequestParentId(Guid parentRequestId)
         {
-            return GlimpseRequests.Where(r => r.ParentRequestId == parentRequestId).ToList();
+            lock (queueLock)
+            {
+                return GlimpseRequests.Where(r => r.ParentRequestId == parentRequestId).ToList();
+            }
         }
 
         /// <summary>
@@ -124,7 +135,10 @@ namespace Glimpse.Core.Framework
         /// </returns>
         public IEnumerable<GlimpseRequest> GetTop(int count)
         {
-            return GlimpseRequests.Take(count).ToList();
+            lock (queueLock)
+            {
+                return GlimpseRequests.Take(count).ToList();
+            }
         }
 
         /// <summary>
