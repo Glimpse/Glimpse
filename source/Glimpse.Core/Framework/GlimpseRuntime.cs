@@ -7,6 +7,7 @@ using System.Text;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Message;
+using Glimpse.Core.Resource;
 using Glimpse.Core.ResourceResult;
 using Glimpse.Core.Tab.Assist;
 using Tavis.UriTemplates;
@@ -286,13 +287,14 @@ namespace Glimpse.Core.Framework
             // First we determine the current policy as it has been processed so far
             RuntimePolicy policy = DetermineAndStoreAccumulatedRuntimePolicy(RuntimeEvent.ExecuteResource);
 
-            // It is possible that the policy now says Off, but if the requested resource is the default resource, then we need to make sure 
-            // there is a good reason for not executing that resource, since the default resource is the one we most likely need to set 
-            // Glimpse On in the first place. 
-            if (resourceName.Equals(Configuration.DefaultResource.Name))
+            // It is possible that the policy now says Off, but if the requested resource is the default resource or one of it dependent resources, 
+            // then we need to make sure there is a good reason for not executing that resource, since the default resource (or one of it dependencies)
+            // is the one we most likely need to set Glimpse On with in the first place.
+            IDependOnResources defaultResourceDependsOnResources = Configuration.DefaultResource as IDependOnResources;
+            if (resourceName.Equals(Configuration.DefaultResource.Name) || (defaultResourceDependsOnResources != null && defaultResourceDependsOnResources.DependsOn(resourceName)))
             {
-                // To be clear we only do this for the default resource, and we do this because it allows us to secure the default resource the same way 
-                // as any other resource, but for this we only rely on runtime policies that handle ExecuteResource runtime events and we ignore
+                // To be clear we only do this for the default resource (or its dependencies), and we do this because it allows us to secure the default resource 
+                // the same way as any other resource, but for this we only rely on runtime policies that handle ExecuteResource runtime events and we ignore
                 // ignore previously executed runtime policies (most likely during BeginRequest).
                 // Either way, the default runtime policy is still our starting point and when it says Off, it remains Off
                 policy = DetermineRuntimePolicy(RuntimeEvent.ExecuteResource, Configuration.DefaultRuntimePolicy);

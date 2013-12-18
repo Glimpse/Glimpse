@@ -20,6 +20,11 @@ namespace MvcMusicStore.Controllers
 
         MusicStoreEntities storeDB = new MusicStoreEntities();
 
+        public ActionResult CSPTest()
+        {
+            return this.View();
+        }
+
         public ActionResult Index()
         {
             // Get most popular albums

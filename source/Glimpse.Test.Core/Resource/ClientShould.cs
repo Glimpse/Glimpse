@@ -37,11 +37,19 @@ namespace Glimpse.Test.Core.Resource
         {
             var contextMock = new Mock<IResourceContext>();
 
-            var resource = new ClientResource { ResourceName = "wrong" };
+            var resource = new ClientResourceWithBadResourceName();
 
             var result = resource.Execute(contextMock.Object);
 
             Assert.NotNull(result as StatusCodeResourceResult);
+        }
+
+        private class ClientResourceWithBadResourceName : ClientResource
+        {
+            protected override EmbeddedResourceInfo GetEmbeddedResourceInfo(IResourceContext context)
+            {
+                return new EmbeddedResourceInfo(this.GetType().Assembly, "wrong", "Doesn't Matter");
+            }
         }
 
         [Fact]

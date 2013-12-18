@@ -29,5 +29,10 @@
         /// The optional 'Hash' parameter used for HTTP cache busting.
         /// </summary>
         public static readonly ResourceParameterMetadata Hash = new ResourceParameterMetadata("hash", isRequired: false);
+
+        /// <summary>
+        /// The required 'logoname' parameter.
+        /// </summary>
+        public static readonly ResourceParameterMetadata LogoName = new ResourceParameterMetadata("logoname");
     }
 }
