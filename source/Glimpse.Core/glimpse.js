@@ -3849,7 +3849,10 @@ glimpse.tab = (function($, pubsub, data) {
                              
                             //Update data records
                             var rowClass = (status == 304 ? ' glimpse-hud-quite' : !(status >= 200 && status < 300) ? ' glimpse-hud-error' : '');
-                            
+
+                            //Build the rows that we are inserting
+                            uri = util.htmlEncode(uri);
+
                             var clickableUri = uri;
                             if(requestId) {
                                 clickableUri = '<a href="javascript:void(0)" class="glimpse-ajax-link" data-requestId="' + requestId + '">' + uri + '</a>';
