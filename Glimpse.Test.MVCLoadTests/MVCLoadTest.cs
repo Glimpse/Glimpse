@@ -13,7 +13,9 @@ namespace Glimpse.Test.MVCLoadTests
         public void LoadTest()
         {
             //Arrange
-            int totalCount = 5;
+            int totalCount = 20;
+            var intervalCount = 5;
+
             // Act
 
             Parallel.For(0, totalCount, i =>
@@ -21,7 +23,7 @@ namespace Glimpse.Test.MVCLoadTests
                 var driver = new FirefoxDriver();
                 driver.Url = GetAbsoluteUrl("/");
 
-                for (int j = 0; j < 100; j++)
+            for (int j = 0; j < intervalCount; j++)
                 {
                     driver.Url = GetAbsoluteUrl("/Store/Browse?Genre=Jazz");
                     driver.Url = GetAbsoluteUrl("/Store/Browse?Genre=Electronic");
