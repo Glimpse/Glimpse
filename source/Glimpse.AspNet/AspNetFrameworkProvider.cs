@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Runtime.Remoting.Messaging;
 using System.Web;
 using Glimpse.AspNet.Extensions;
@@ -13,6 +14,8 @@ namespace Glimpse.AspNet
         /// Wrapper around HttpContext.Current for testing purposes. Not for public use.
         /// </summary>
         private HttpContextBase context;
+
+        private readonly static bool AsyncSupportDisabled = Convert.ToBoolean(ConfigurationManager.AppSettings["Glimpse:DisableAsyncSupport"]);
 
         public AspNetFrameworkProvider(ILogger logger)
         {
@@ -41,17 +44,23 @@ namespace Glimpse.AspNet
 
         internal HttpContextBase Context
         {
-            get { return context ?? GetOrCaptureLogicalContext(); }
+            get { return context ?? TryGetOrCaptureLogicalContext(); }
             set { context = value; }
         }
 
-        private static HttpContextBase GetOrCaptureLogicalContext()
+        private static HttpContextBase TryGetOrCaptureLogicalContext()
         {
+            if (AsyncSupportDisabled)
+            {
+                return new HttpContextWrapper(HttpContext.Current);
+            }
+
             if (HttpContext.Current == null)
                 return CallContext.LogicalGetData("Glimpse.HttpContext") as HttpContextBase;
 
             var wrapper = new HttpContextWrapper(HttpContext.Current);
             CallContext.LogicalSetData("Glimpse.HttpContext", wrapper);
+
             return wrapper;
         }
 
