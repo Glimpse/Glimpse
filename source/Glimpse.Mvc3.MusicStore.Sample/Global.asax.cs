@@ -1,4 +1,5 @@
-﻿using MvcMusicStore.Framework;
+﻿using System;
+using MvcMusicStore.Framework;
 using System.Configuration;
 using System.Data.Common;
 using System.Linq;
@@ -84,6 +85,13 @@ namespace MvcMusicStore
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
             LoadConfiguration();
+
+
+            HttpRuntime.Cache.Add("test TimeSpan", "Very important", null, System.Web.Caching.Cache.NoAbsoluteExpiration, new TimeSpan(1, 1, 1, 1),
+                System.Web.Caching.CacheItemPriority.High, null);
+            HttpRuntime.Cache.Add("test DateTime", "Very important", null, DateTime.Now.AddDays(1), System.Web.Caching.Cache.NoSlidingExpiration,
+                System.Web.Caching.CacheItemPriority.High, null);
+            //HttpRuntime.Cache.Add("Info_" + id.ToString() + "_" + quantity.ToString(), info, null, System.Web.Caching.Cache.NoAbsoluteExpiration, System.Web.Caching.Cache.NoSlidingExpiration, System.Web.Caching.CacheItemPriority.High, null);
         }
 
         private void Application_BeginRequest()
