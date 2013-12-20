@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Runtime.Remoting.Messaging;
+using System.Runtime.Serialization;
 using System.Web;
 using Glimpse.AspNet.Extensions;
 using Glimpse.Core.Extensibility;
@@ -56,12 +57,12 @@ namespace Glimpse.AspNet
             }
 
             if (HttpContext.Current == null)
-                return CallContext.LogicalGetData("Glimpse.HttpContext") as HttpContextBase;
+                return AntiSerializationWrapper<HttpContextBase>.Unwrap(CallContext.LogicalGetData("Glimpse.HttpContext"));
 
-            var wrapper = new HttpContextWrapper(HttpContext.Current);
-            CallContext.LogicalSetData("Glimpse.HttpContext", wrapper);
+            var context = new HttpContextWrapper(HttpContext.Current);
+            CallContext.LogicalSetData("Glimpse.HttpContext", new AntiSerializationWrapper<HttpContextBase>(context));
 
-            return wrapper;
+            return context;
         }
 
         private ILogger Logger { get; set; }
@@ -140,6 +141,32 @@ namespace Glimpse.AspNet
             catch (Exception exception)
             {
                 Logger.Error("Exception writing Http response.", exception);
+            }
+        }
+
+        [Serializable]
+        private struct AntiSerializationWrapper<T> : ISerializable
+        {
+            private readonly T value;
+
+            public AntiSerializationWrapper(T value)
+            {
+                this.value = value;
+            }
+
+            public void GetObjectData(SerializationInfo info, StreamingContext context)
+            {
+                throw new NotSupportedException(
+                    "Some environments conflict with current Glimpse async support. " +
+                    "Please set Glimpse:DisableAsyncSupport = true in Web.config, or see https://github.com/Glimpse/Glimpse/issues/632 for more details.");
+            }
+
+            public static T Unwrap(object wrapper)
+            {
+                if (ReferenceEquals(wrapper, null))
+                    return default(T);
+
+                return ((AntiSerializationWrapper<T>)wrapper).value;
             }
         }
     }
