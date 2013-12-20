@@ -52,6 +52,7 @@
       <HintPath>..\..\packages\AutoFixture.2.13.3\lib\net35\Ploeh.SemanticComparison.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="xunit, Version=1.9.1.1600, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
@@ -87,6 +88,7 @@
     <Compile Include="Tab\CacheShould.cs" />
     <Compile Include="Tab\ConfigurationShould.cs" />
     <Compile Include="Tab\EnvironmentShould.cs" />
+    <Compile Include="Tab\ConfigurationConnectionStringModelFactoryShould.cs" />
     <Compile Include="Tab\RequestShould.cs" />
     <Compile Include="Tab\RoutesShould.cs" />
     <Compile Include="Tab\SessionShould.cs" />
