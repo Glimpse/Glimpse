@@ -14,25 +14,23 @@ namespace Glimpse.AspNet.Tab
     public class Cache : AspNetTab, ILayoutControl
     {
         private const string TestCacheKey = "testKey";
-        private static readonly MethodInfo MethodInfoCacheGet = HttpRuntime.Cache.GetType().GetMethod("Get", BindingFlags.Instance | BindingFlags.NonPublic);
-        private static Type TypeCacheEntity;
-        private static PropertyInfo ProcessInfoUtcCreated;
-        private static PropertyInfo ProcessInfoUtcExpires;
-        private static PropertyInfo ProcessInfoSlidingExpiration;
+        private static readonly MethodInfo MethodInfoCacheGet = HttpRuntime.Cache.GetType().GetMethod("Get", BindingFlags.Instance | BindingFlags.NonPublic); 
+        private static readonly PropertyInfo ProcessInfoUtcCreated;
+        private static readonly PropertyInfo ProcessInfoUtcExpires;
+        private static readonly PropertyInfo ProcessInfoSlidingExpiration;
 
         static Cache()
         {
-            //need an item in the cache to call the MethodInfoCacheGet.Invoke below.
-            HttpRuntime.Cache.Add(TestCacheKey, "", null, DateTime.Now.AddHours(1), System.Web.Caching.Cache.NoSlidingExpiration,
-                CacheItemPriority.AboveNormal, null);
+            // Need an item in the cache to call the MethodInfoCacheGet.Invoke below.
+            HttpRuntime.Cache.Add(TestCacheKey, "", null, DateTime.Now.AddHours(1), System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.AboveNormal, null);
+            
+            var cacheEntry = MethodInfoCacheGet.Invoke(HttpRuntime.Cache, new object[] { TestCacheKey, 1 }); 
+            var typeCacheEntity = cacheEntry.GetType();
+            ProcessInfoUtcCreated = typeCacheEntity.GetProperty("UtcCreated", BindingFlags.NonPublic | BindingFlags.Instance);
+            ProcessInfoUtcExpires = typeCacheEntity.GetProperty("UtcExpires", BindingFlags.NonPublic | BindingFlags.Instance);
+            ProcessInfoSlidingExpiration = typeCacheEntity.GetProperty("SlidingExpiration", BindingFlags.NonPublic | BindingFlags.Instance);
 
-            object cacheEntry = MethodInfoCacheGet.Invoke(HttpRuntime.Cache, new object[] { TestCacheKey, 1 });
             HttpRuntime.Cache.Remove(TestCacheKey);
-
-            TypeCacheEntity = cacheEntry.GetType();
-            ProcessInfoUtcCreated = TypeCacheEntity.GetProperty("UtcCreated", BindingFlags.NonPublic | BindingFlags.Instance);
-            ProcessInfoUtcExpires = TypeCacheEntity.GetProperty("UtcExpires", BindingFlags.NonPublic | BindingFlags.Instance);
-            ProcessInfoSlidingExpiration = TypeCacheEntity.GetProperty("SlidingExpiration", BindingFlags.NonPublic | BindingFlags.Instance);
         }
 
         public override string Name
