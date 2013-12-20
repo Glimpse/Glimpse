@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
-using OpenQA.Selenium.Firefox;
+﻿using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using OpenQA.Selenium.Chrome;
 using Xunit;
 
 namespace Glimpse.Test.MVCLoadTests
@@ -13,14 +15,15 @@ namespace Glimpse.Test.MVCLoadTests
         public void LoadTest()
         {
             //Arrange
-            int totalCount = 20;
-            var intervalCount = 5;
+            const int totalCount = 20;
+            const int intervalCount = 100;
+            var timer = DateTime.Now;
 
             // Act
 
             Parallel.For(0, totalCount, i =>
             {
-                var driver = new FirefoxDriver();
+                var driver = new ChromeDriver("C:\\");
                 driver.Url = GetAbsoluteUrl("/");
 
             for (int j = 0; j < intervalCount; j++)
@@ -42,8 +45,13 @@ namespace Glimpse.Test.MVCLoadTests
                 driver.Quit();
             });
 
-            //Assert
+            var timerFinish = DateTime.Now;
+            var delta = timerFinish - timer;
+            
+            Console.WriteLine("Test took {0} hours, {1} minutes to run", delta.Hours, delta.Minutes);
 
+            //Assert
+            // If this test reaches this we have successfully run.
             Assert.True(true);
         }
     }
