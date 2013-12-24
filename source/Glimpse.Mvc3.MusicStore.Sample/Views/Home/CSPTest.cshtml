@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "CSP Test";
+    Layout = null;
+}
+
+<html>
+    <body>
+        This page only contains the Glimpse Panel, so it should be CSP compliant! 
+        <br/>
+        Check with F12 tools to see if there are issues mentioned in the console.
+        
+        <br/>
+        <br/>
+        This page does not render properly with <b>Content-Security-Policy</b> header set to <b>default-src 'self'</b><br/>
+        but if you allow inline styles by the setting the header to <b>default-src 'self' style-src 'unsafe-inline'</b> then it will work fine
+    </body>
+</html>

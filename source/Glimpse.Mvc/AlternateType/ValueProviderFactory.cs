@@ -1,8 +1,12 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
+
 #if MVC2
 using Glimpse.Mvc2.Backport;
+#endif
+#if MVC3
+using Glimpse.Mvc3.Backport;
 #endif
 
 namespace Glimpse.Mvc.AlternateType
@@ -21,33 +25,47 @@ namespace Glimpse.Mvc.AlternateType
             {
                 return allMethods ?? (allMethods = new List<IAlternateMethod>
                     {
-                        new GetValueProvider(new ValueProvider<IValueProvider>(ProxyFactory), new ValueProvider<IUnvalidatedValueProvider>(ProxyFactory))
+                        new GetValueProvider(
+                            new ValueProvider<IValueProvider>(ProxyFactory), 
+                            new ValueProvider<IUnvalidatedValueProvider>(ProxyFactory),
+                            new ValueProvider<IEnumerableValueProvider>(ProxyFactory))
                     });
             }
         }
 
         public class GetValueProvider : AlternateMethod
         {
-            public GetValueProvider(ValueProvider<IValueProvider> alternateValidatedValueProvider, ValueProvider<IUnvalidatedValueProvider> alternateUnvalidatedValueProvider) : base(typeof(System.Web.Mvc.ValueProviderFactory), "GetValueProvider")
+            public GetValueProvider(
+                ValueProvider<IValueProvider> alternateValidatedValueProvider, 
+                ValueProvider<IUnvalidatedValueProvider> alternateUnvalidatedValueProvider,
+                ValueProvider<IEnumerableValueProvider> alternateValidatedEnumerableValueProvider) 
+                : base(typeof(System.Web.Mvc.ValueProviderFactory), "GetValueProvider")
             {
                 AlternateValidatedValueProvider = alternateValidatedValueProvider;
                 AlternateUnvalidatedValueProvider = alternateUnvalidatedValueProvider;
+                AlternateValidatedEnumerableValueProvider = alternateValidatedEnumerableValueProvider;
             }
 
             private ValueProvider<IUnvalidatedValueProvider> AlternateUnvalidatedValueProvider { get; set; }
 
             private ValueProvider<IValueProvider> AlternateValidatedValueProvider { get; set; }
 
+            private ValueProvider<IEnumerableValueProvider> AlternateValidatedEnumerableValueProvider { get; set; }
+
             public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
             {
-                var original = context.ReturnValue as IValueProvider;
-
-                if (original == null)
+                var originalEnumerableValueProvider = context.ReturnValue as IEnumerableValueProvider;
+                if (originalEnumerableValueProvider != null)
                 {
-                    return;
+                    IEnumerableValueProvider newEnumerableValueProvider;
+                    if (AlternateValidatedEnumerableValueProvider.TryCreate(originalEnumerableValueProvider, out newEnumerableValueProvider))
+                    {
+                        context.ReturnValue = newEnumerableValueProvider;
+                        return;
+                    }
                 }
 
-                var originalUnvalidatedValueProvider = original as IUnvalidatedValueProvider;
+                var originalUnvalidatedValueProvider = context.ReturnValue as IUnvalidatedValueProvider;
                 if (originalUnvalidatedValueProvider != null)
                 {
                     IUnvalidatedValueProvider newUnvalidatedValueProvider;
@@ -58,10 +76,14 @@ namespace Glimpse.Mvc.AlternateType
                     }
                 }
 
-                IValueProvider newValueProvider;
-                if (AlternateValidatedValueProvider.TryCreate(original, out newValueProvider))
+                var originalValueProvider = context.ReturnValue as IValueProvider;
+                if (originalValueProvider != null)
                 {
-                    context.ReturnValue = newValueProvider;
+                    IValueProvider newValueProvider;
+                    if (AlternateValidatedValueProvider.TryCreate(originalValueProvider, out newValueProvider))
+                    {
+                        context.ReturnValue = newValueProvider;
+                    }
                 }
             }
         }

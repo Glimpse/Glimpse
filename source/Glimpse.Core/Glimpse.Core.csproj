@@ -92,6 +92,7 @@
     <Compile Include="Extensibility\AlternateMethod.cs" />
     <Compile Include="Extensibility\AntiXssEncoder.cs" />
     <Compile Include="Extensibility\CastleInvocationToAlternateMethodContextAdapter.cs" />
+    <Compile Include="Extensibility\IDependOnResources.cs" />
     <Compile Include="Extensibility\DictionaryDataStoreAdapter.cs" />
     <Compile Include="Extensibility\ExecutionTimer.cs" />
     <Compile Include="Extensibility\IAlternateType.cs" />
@@ -114,6 +115,13 @@
     <Compile Include="Framework\ReflectionBlackList.cs" />
     <Compile Include="Framework\Support\ExecutionBlockBase.cs" />
     <Compile Include="Framework\Support\IExecutionTask.cs" />
+    <Compile Include="Resource\ConfigurationScriptResource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resource\ConfigurationStyleResource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resource\LogosResource.cs" />
     <Compile Include="SerializationConverter\EnumerableOfITimelineMessageConverter.cs" />
     <Compile Include="Setting\Initializer.cs" />
     <Compile Include="Support\NuGetPackageDiscoverer.cs" />
@@ -283,6 +291,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="EmbeddedResources\glimpse_config.css" />
+    <EmbeddedResource Include="EmbeddedResources\glimpse_config.js" />
     <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -290,14 +300,16 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="glimpse_config.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="logo.png" />
-    <EmbeddedResource Include="sprite.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="glimpse.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="EmbeddedResources\glimpse_favicon.png" />
+    <EmbeddedResource Include="EmbeddedResources\github_logo.gif" />
+    <EmbeddedResource Include="EmbeddedResources\glimpse_image_logo.png" />
+    <EmbeddedResource Include="EmbeddedResources\glimpse_text_logo.png" />
+    <EmbeddedResource Include="EmbeddedResources\twitter_logo.png" />
+    <EmbeddedResource Include="EmbeddedResources\sprite.png" />
+    <EmbeddedResource Include="EmbeddedResources\glimpse_config.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

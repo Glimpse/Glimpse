@@ -14,9 +14,8 @@
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET MVC 2.0 application.</description>
         <summary>ASP.NET MVC 2.0 web debugging and diagnostics tool.</summary>
         <releaseNotes>
-Middleweight release for MVC: 
- - Fix version number inconsistency between MVC packages
- - Fix version information in MVC5
+Middleweight release for MVC:
+ - Fixed complex models processing to work correctly in the model binding tab
         </releaseNotes>
         <tags>ASP.NET Web MVC Glimpse diagnostics performance profiling timing</tags>
         <dependencies>

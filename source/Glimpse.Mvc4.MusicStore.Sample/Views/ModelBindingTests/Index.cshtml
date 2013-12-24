@@ -1,0 +1,71 @@
+﻿@model MvcMusicStore.Controllers.ModelBindingTestsController.ComplexType
+@{
+    ViewBag.Title = "ModelBindng Tests";
+}
+
+<h2>By clicking on the button, an Ajax call will be made for an item and the returned item should be the same</h2>
+
+<input type="button" id="PostItem" name="PostItem" value="Post Ajax item" /><br /><br />
+@using (Html.BeginForm("SimplePost", "ModelBindingTests", FormMethod.Post))
+{
+    <label for="FirstName">First name :</label><input type="text" id="FirstName" name="FirstName" value="Foo" /><br/>
+    <label for="LastName">Last name :</label><input type="text" id="LastName" name="LastName" value="Bar" />
+    <input type="submit" value="Normal post"/>
+}
+
+@using(Html.BeginForm("ComplexPost","ModelBindingTests", FormMethod.Post))
+{
+    @Html.LabelFor(m=> m.Name, "Name :") 
+    @Html.TextBoxFor(m=> m.Name)
+    <br/>
+    @Html.LabelFor(m=> m.Name, "Another Name :") 
+    @Html.TextBoxFor(m=> m.Another.Name)
+    <br/>
+    @Html.LabelFor(m=> m.Name, "Another Value 1 :") 
+    @Html.TextBoxFor(m=> m.Another.Values.Value1) <br/>
+    @Html.LabelFor(m=> m.Name, "Another Value 2 :") 
+    @Html.TextBoxFor(m=> m.Another.Values.Value2)
+    <br/>
+    <label for="additionalSimpleValue">Additional simple value :</label>
+    <input type="text" id="additionalSimpleValue" name="additionalSimpleValue" value="the additional value"/>
+    <input type="submit" value="Normal post with complex type"/>
+}
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $("#PostItem").click(function () {
+                
+                var item = JSON.stringify(
+                    {
+                        MySimpleValue: "some simple value",
+                        MyStringDictionary: { "Key1": "Key1Value", "Key2": "Key2Value" },
+                        MyComplexObjectDictionary : {
+                            "FirstComplexObject" : { Name : "First complex object name", Value : "First complex object value" },
+                            "SecondComplexObject" : { Name : "Second complex object name", Value : "Second complex object value" }
+                        },
+                        MyComplexObject : {
+                            Name: "some name",
+                            Value: "some value"
+                        },
+                        MyStringArray : ["First","Second","Third"]
+                    });
+                
+                $.ajax({
+                    url: '@Url.Action("PostItem", "ModelBindingTests")',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: item,
+                    success: function (result) {
+                        alert('Item posted as :\n' + item + '\n\nItem received as :\n' + JSON.stringify(result.PostedItem));
+                    },
+                    error: function () {
+                        alert('Posting item failed');
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -15,8 +15,10 @@
         <summary>ASP.NET 4.5 web debugging and diagnostics tool.</summary>
         <releaseNotes>
 Welterweight release for Asp.Net:
- - Total rewrite of the Request tab to include additional request info
- - Removed Server tab as it's now obsolete given the Request tab update
+ - Added a new Caching Tab which will provide insights into the use of 'HttpRuntime.Cache'
+ - Fix where connection strings are not always properly parsed
+ - Removed the Cookie Path and Secure data points from the request tab as the values are incorrect
+ - Update resource result to not generate null reference exception when dealing with QueryString
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse</tags>
         <dependencies>

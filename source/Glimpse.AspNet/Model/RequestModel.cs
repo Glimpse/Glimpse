@@ -78,9 +78,7 @@ namespace Glimpse.AspNet.Model
                             yield return new Cookie
                                 {
                                     Name = cookie.Name,
-                                    Value = server.UrlDecode(cookie.Value),
-                                    Path = cookie.Path,
-                                    Secure = cookie.Secure
+                                    Value = server.UrlDecode(cookie.Value)
                                 };
                         }
                     }
@@ -166,8 +164,6 @@ namespace Glimpse.AspNet.Model
         {
             public string Name { get; set; }
             public string Value { get; set; }
-            public string Path { get; set; }
-            public bool Secure { get; set; }
         }
 
         public class FormVariable

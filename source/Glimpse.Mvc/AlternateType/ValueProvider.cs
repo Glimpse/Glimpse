@@ -6,13 +6,20 @@ using System.Web.Mvc;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Message;
 
+#if MVC2
+using Glimpse.Mvc2.Backport;
+#endif
+#if MVC3
+using Glimpse.Mvc3.Backport;
+#endif
+
 namespace Glimpse.Mvc.AlternateType
 {
     public class ValueProvider<T> : AlternateType<T> where T : class
     {
         private IEnumerable<IAlternateMethod> allMethods;
 
-        // This class manages alternate implementations of both IValueProvider and IUnvalidatedValueProvider
+        // This class manages alternate implementations of both IValueProvider, IUnvalidatedValueProvider and IEnumerableValueProvider
         public ValueProvider(IProxyFactory proxyFactory) : base(proxyFactory)
         {
         }
@@ -24,7 +31,8 @@ namespace Glimpse.Mvc.AlternateType
                 return allMethods ?? (allMethods = new List<IAlternateMethod>
                     {
                         new GetValue(), 
-                        new ContainsPrefix()
+                        new ContainsPrefix(),
+                        new GetKeysFromPrefix()
                     });
             }
         }
@@ -66,7 +74,7 @@ namespace Glimpse.Mvc.AlternateType
 
         public class GetValue : AlternateMethod
         {
-            public GetValue() : base(typeof(T), "GetValue")
+            public GetValue() : base(typeof(IValueProvider), "GetValue")
             {
             }
 
@@ -129,6 +137,18 @@ namespace Glimpse.Mvc.AlternateType
                 public Type ExecutedType { get; set; }
 
                 public MethodInfo ExecutedMethod { get; set; }
+            }
+        }
+
+        public class GetKeysFromPrefix : AlternateMethod
+        {
+            public GetKeysFromPrefix()
+                : base(typeof(IEnumerableValueProvider), "GetKeysFromPrefix")
+            {
+            }
+
+            public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
+            {
             }
         }
     }

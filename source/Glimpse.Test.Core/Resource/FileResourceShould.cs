@@ -3,7 +3,6 @@ using System.Text;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 using Glimpse.Core.Resource;
-using Glimpse.Core.ResourceResult;
 using Moq;
 using Xunit;
 
@@ -42,9 +41,15 @@ namespace Glimpse.Test.Core.Resource
         private class FileResourceTester : FileResource
         {
             public FileResourceTester() {
-                ResourceName = "Glimpse.Test.Core.Resource.FileResourceTester.js";
-                ResourceType = @"application/x-javascript";
                 Name = "FileResourceTester_js";
+            }
+
+            protected override EmbeddedResourceInfo GetEmbeddedResourceInfo(IResourceContext context)
+            {
+                return new EmbeddedResourceInfo(
+                    this.GetType().Assembly, 
+                    "Glimpse.Test.Core.Resource.FileResourceTester.js", 
+                    "application/x-javascript");
             }
         }
 
