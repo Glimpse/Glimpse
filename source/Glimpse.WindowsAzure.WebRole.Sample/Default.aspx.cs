@@ -45,24 +45,24 @@ namespace Glimpse.WindowsAzure.WebRole.Sample
             table1.ExecuteQuery(query: new TableQuery(), operationContext: OperationContextFactory.Current.Create()).ToList();
             table1.ExecuteQuery(query: new TableQuery().Where("Name eq 'Glimpse'"), operationContext: OperationContextFactory.Current.Create()).ToList();
 
-            // Perform operations on Windows Azure Cache
-            var cacheFactory = new DataCacheFactory();
-            var cache = cacheFactory.GetDefaultCache();
+            //// Perform operations on Windows Azure Cache
+            //var cacheFactory = new DataCacheFactory();
+            //var cache = cacheFactory.GetDefaultCache();
 
-            // Wire in Glimpse
-            DataCacheEventSubscriberFactory.Current.Subscribe(cache);
+            //// Wire in Glimpse
+            //DataCacheEventSubscriberFactory.Current.Subscribe(cache);
 
-            // Add some items
-            for (int i = 0; i < 50; i++)
-            {
-                cache.Put(i.ToString(), "value");
-            }
+            //// Add some items
+            //for (int i = 0; i < 50; i++)
+            //{
+            //    cache.Put(i.ToString(), "value");
+            //}
 
-            // Read some items
-            for (int i = 0; i < 50; i++)
-            {
-                cache.Get(i.ToString());
-            }
+            //// Read some items
+            //for (int i = 0; i < 50; i++)
+            //{
+            //    cache.Get(i.ToString());
+            //}
         }
     }
 }
