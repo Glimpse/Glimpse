@@ -5,8 +5,8 @@
         <id>Glimpse.WindowsAzure.Storage</id>
         <version>0.0.0</version><!-- Replaced at build time by AssemblyInformationalVersion in AssemblyInfo.cs -->
         <title>Glimpse WindowsAzure Storage</title>
-        <authors>nmolnar, avanderhoorn</authors>
-        <owners>nmolnar, avanderhoorn</owners>
+        <authors>nmolnar, avanderhoorn, maartenba</authors>
+        <owners>nmolnar, avanderhoorn, maartenba</owners>
         <licenseUrl>http://www.opensource.org/licenses/apache2.0</licenseUrl>
         <projectUrl>http://getglimpse.com</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -16,7 +16,7 @@
         <releaseNotes>
 
         </releaseNotes>
-        <tags>ASP.NET Web WebForms Glimpse diagnostics performance profiling timing</tags>
+        <tags>Windows Azure Storage blob table queue WebForms Glimpse diagnostics performance profiling timing</tags>
         <dependencies>
           <dependency id="Glimpse.WindowsAzure" version="1.0.0" />
         </dependencies>
