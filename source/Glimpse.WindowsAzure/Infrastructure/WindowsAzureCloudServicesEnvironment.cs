@@ -85,11 +85,27 @@ namespace Glimpse.WindowsAzure.Infrastructure
             try
             {
                 return (bool)RoleEnvironmentType.GetProperty("IsAvailable").GetValue(null, null);
+            }  
+            catch (TargetInvocationException ex)
+            {
+                Exception innerException1 = ex;
+                for (int i = 0; i < 3; i++)
+                {
+                    if (innerException1.InnerException != null)
+                    {
+                        innerException1 = innerException1.InnerException;
+                    }
+                }
+                if (innerException1 != null && innerException1.Message.Contains("C++ module failed to load"))
+                {
+                    return false;
+                }
+                throw;
             }
             catch (TypeInitializationException ex)
             {
-                var innerException = ex.InnerException;
-                if (innerException is FileNotFoundException && innerException.Message.Contains("msshrtmi"))
+                var innerException2 = ex.InnerException;
+                if (innerException2 != null && innerException2 is FileNotFoundException && innerException2.Message.Contains("msshrtmi"))
                 {
                     return false;
                 }
