@@ -70,7 +70,6 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Infrastructure\Core\WindowsAzureStoragePersistenceStore.cs" />
     <Compile Include="Infrastructure\DefaultOperationContextFactory.cs" />
     <Compile Include="Infrastructure\GlimpseOperationContextFactory.cs" />
     <Compile Include="Infrastructure\Inspections\GeneralBestPracticesInspector.cs" />
@@ -97,7 +96,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Tab\Storage.cs" />
-    <Compile Include="WrappedServiceLocator.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
