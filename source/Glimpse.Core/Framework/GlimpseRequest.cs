@@ -11,18 +11,26 @@ namespace Glimpse.Core.Framework
         /// <summary>
         /// Initializes a new instance of the <see cref="GlimpseRequest" /> class.
         /// </summary>
+        public GlimpseRequest()
+        {
+            DateTime = DateTime.Now;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GlimpseRequest" /> class.
+        /// </summary>
         /// <param name="requestId">The request id.</param>
         /// <param name="requestMetadata">The request metadata.</param>
         /// <param name="tabData">The plugin data.</param>
         /// <param name="duration">The duration.</param>
         public GlimpseRequest(Guid requestId, IRequestMetadata requestMetadata, IDictionary<string, TabResult> tabData, IDictionary<string, TabResult> displayData, TimeSpan duration)
+            : this()
         {
             RequestId = requestId;
             TabData = tabData;
             DisplayData = displayData;
             Duration = duration;
 
-            DateTime = DateTime.Now;
             RequestHttpMethod = requestMetadata.RequestHttpMethod;
             RequestIsAjax = requestMetadata.RequestIsAjax;
             RequestUri = requestMetadata.RequestUri;

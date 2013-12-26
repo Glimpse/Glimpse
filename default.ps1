@@ -140,6 +140,14 @@ task clean {
     "   Glimpse.WebForms.Net35"
     Delete-Directory "$source_dir\Glimpse.WebForms.Net35\bin"
     Delete-Directory "$source_dir\Glimpse.WebForms.Net35\obj"
+	
+    "   Glimpse.WindowsAzure.Net40"
+    Delete-Directory "$source_dir\Glimpse.WindowsAzure.Net40\bin"
+    Delete-Directory "$source_dir\Glimpse.WindowsAzure.Net40\obj"
+	
+    "   Glimpse.WindowsAzure.Storage.Net40"
+    Delete-Directory "$source_dir\Glimpse.WindowsAzure.Storage.Net40\bin"
+    Delete-Directory "$source_dir\Glimpse.WindowsAzure.Storage.Net40\obj"
   
     "   Glimpse.Test.*"
     Delete-Directory "$source_dir\Glimpse.Test.AspNet\bin"
@@ -237,6 +245,12 @@ task merge -depends test {
     
     "   Glimpse.WebForms.Net35"
     copy $source_dir\Glimpse.WebForms.Net35\bin\Release\Glimpse.WebForms.* $source_dir\Glimpse.WebForms.Net45\nuspec\lib\net35\
+	
+	"   Glimpse.WindowsAzure.Net40"
+    copy $source_dir\Glimpse.WindowsAzure.Net40\bin\Release\Glimpse.WindowsAzure.* $source_dir\Glimpse.WindowsAzure.Net40\nuspec\lib\net40\
+	
+	"   Glimpse.WindowsAzure.Storage.Net40"
+    copy $source_dir\Glimpse.WindowsAzure.Storage.Net40\bin\Release\Glimpse.WindowsAzure.Storage.* $source_dir\Glimpse.WindowsAzure.Storage.Net40\nuspec\lib\net40\
 }
 
 task pack -depends merge {
@@ -287,7 +301,14 @@ task pack -depends merge {
     "   Glimpse.WebForms.nuspec"
     $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.WebForms.Net45\Properties\AssemblyInfo.cs | Update-AssemblyInformationalVersion
     exec { & .\nuget.exe pack $source_dir\Glimpse.WebForms.Net45\NuSpec\Glimpse.WebForms.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
-
+	
+    "   Glimpse.WindowsAzure.nuspec"
+    $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.WindowsAzure.Net40\Properties\AssemblyInfo.cs | Update-AssemblyInformationalVersion
+    exec { & .\nuget.exe pack $source_dir\Glimpse.WindowsAzure.Net40\NuSpec\Glimpse.WindowsAzure.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
+   
+    "   Glimpse.WindowsAzure.nuspec"
+    $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.WindowsAzure.Storage.Net40\Properties\AssemblyInfo.cs | Update-AssemblyInformationalVersion
+    exec { & .\nuget.exe pack $source_dir\Glimpse.WindowsAzure.Storage.Net40\NuSpec\Glimpse.WindowsAzure.Storage.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
     
     "   Glimpse.zip"
     New-Item $build_dir\local\zip\Core\net45 -Type directory -Force > $null
@@ -311,6 +332,8 @@ task pack -depends merge {
     New-Item $build_dir\local\zip\WebForms\net45 -Type directory -Force > $null
     New-Item $build_dir\local\zip\WebForms\net40 -Type directory -Force > $null
     New-Item $build_dir\local\zip\WebForms\net35 -Type directory -Force > $null
+    New-Item $build_dir\local\zip\WindowsAzure\net40 -Type directory -Force > $null
+	New-Item $build_dir\local\zip\WindowsAzure.Storage\net40 -Type directory -Force > $null
 
     copy $base_dir\license.txt $build_dir\local\zip
     
@@ -342,6 +365,10 @@ task pack -depends merge {
     copy $source_dir\Glimpse.WebForms.Net45\nuspec\lib\net40\Glimpse.WebForms.* $build_dir\local\zip\WebForms\net40
     copy $source_dir\Glimpse.WebForms.Net45\nuspec\lib\net35\Glimpse.WebForms.* $build_dir\local\zip\WebForms\net35
     copy $source_dir\Glimpse.WebForms.Net45\nuspec\readme.txt $build_dir\local\zip\WebForms
+	
+    copy $source_dir\Glimpse.WindowsAzure.Net40\nuspec\lib\net40\Glimpse.WindowsAzure.* $build_dir\local\zip\WindowsAzure\net40
+	
+    copy $source_dir\Glimpse.WindowsAzure.Storage.Net40\nuspec\lib\net40\Glimpse.WindowsAzure.* $build_dir\local\zip\WindowsAzure.Storage\net40
     
     #TODO: Add help .CHM file
     
