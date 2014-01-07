@@ -12,7 +12,7 @@ namespace Glimpse.Core.Framework
     /// <remarks>
     /// An example of an application store is <c>HttpContext.Current.Application</c> in ASP.NET.
     /// </remarks>
-    public class ApplicationPersistenceStore : IPersistenceStore
+    public class ApplicationPersistenceStore : IPersistenceStore // TODO: Rename to InMemoryPersistenceStore
     {
         private const string PersistenceStoreKey = "__GlimpsePersistenceKey";
 

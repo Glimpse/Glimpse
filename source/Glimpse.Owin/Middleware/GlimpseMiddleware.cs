@@ -10,12 +10,12 @@ using Microsoft.Owin;
 
 namespace Glimpse.Owin.Middleware
 {
-    public class HeadMiddleware
+    public class GlimpseMiddleware
     {
         private readonly Func<IDictionary<string, object>, Task> innerNext;
         private readonly IDictionary<string, object> serverStore;
 
-        public HeadMiddleware(Func<IDictionary<string, object>, Task> next, IDictionary<string, object> serverStore)
+        public GlimpseMiddleware(Func<IDictionary<string, object>, Task> next, IDictionary<string, object> serverStore)
         {
             innerNext = next;
             this.serverStore = serverStore;
@@ -31,12 +31,11 @@ namespace Glimpse.Owin.Middleware
                 GlimpseRuntime.Initialize(config);
             }
 
-            // TODO: this where to check to see if this should handle the request directly (ala glimpse.axd)
-
             var request = new OwinRequest(environment);
             var response = new OwinResponse(environment);
             var frameworkProvider = new OwinFrameworkProvider(environment, serverStore);
 
+            // TODO: Remove hardcode to Glimpse.axd
             if (request.Uri.PathAndQuery.StartsWith("/Glimpse.axd", StringComparison.InvariantCultureIgnoreCase))
             {
                 await ExecuteResource(frameworkProvider, request.Query);
@@ -47,13 +46,11 @@ namespace Glimpse.Owin.Middleware
             // Hack's a million!
             var requestId = frameworkProvider.HttpRequestStore.Get<Guid>("__GlimpseRequestId");
             var htmlSnippet = GlimpseRuntime.Instance.GenerateScriptTags(requestId, frameworkProvider);
-            response.Body = new PreBodyTagFilter(htmlSnippet, response.Body, Encoding.UTF8, new NullLogger());
+            response.Body = new PreBodyTagFilter(htmlSnippet, response.Body, Encoding.UTF8, request.Uri.AbsoluteUri, new NullLogger());
 
-            await new OwinResponse(environment).WriteAsync("<!-- Glimpse Start @ " + DateTime.Now.ToLongTimeString() + "-->");
             await innerNext(environment);
 
             GlimpseRuntime.Instance.EndRequest(frameworkProvider);
-            await new OwinResponse(environment).WriteAsync("<!-- Glimpse End#2 @ " + DateTime.Now.ToLongTimeString() + "-->");
         }
 
         private async Task ExecuteResource(IFrameworkProvider frameworkProvider, IReadableStringCollection queryString)

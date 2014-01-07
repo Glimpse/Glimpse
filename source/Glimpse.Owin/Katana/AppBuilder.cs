@@ -14,7 +14,7 @@ namespace Glimpse.Owin.Katana
         public AppBuilder(IAppBuilder app)
         {
             innerApp = app;
-            innerApp.Use<HeadMiddleware>(Properties); // This is the earliest we can add middleware
+            innerApp.Use<GlimpseMiddleware>(Properties); // This is the earliest we can add middleware
         }
 
         public IDictionary<string, object> Properties
