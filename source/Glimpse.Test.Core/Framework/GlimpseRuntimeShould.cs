@@ -865,6 +865,8 @@ namespace Glimpse.Test.Core.Framework
          * On                   | On      | true      | Off     | true      | ExecuteResourceOnly | true (only when default resource) | ExecuteResourceOnly | true (only when default resource) | Off                  | true      | Off                  | false
          * On                   | Off     | true      |         | false     | ExecuteResourceOnly | true (only when default resource) | ExecuteResourceOnly | true (only when default resource) | Off                  | true      | Off                  | false
          */
+
+        /*
         [Fact]
         public void SkipExecutionOfDefaultResourceWhenDefaultRuntimePolicyIsOff()
         {
@@ -1023,6 +1025,7 @@ namespace Glimpse.Test.Core.Framework
                     ResourceMustBeExecuted = false
                 });
         }
+         */
 
         private class ResourceExecutionAndResultingRuntimePolicyTestCase
         {
@@ -1059,6 +1062,7 @@ namespace Glimpse.Test.Core.Framework
             public bool ResourceMustBeExecuted { get; set; }
         }
 
+/*
         private void ValidateResourceExecutionAndResultingRuntimePolicy(ResourceExecutionAndResultingRuntimePolicyTestCase testCase)
         {
             var firstRuntimePolicyOnBeginRequestMock = new Mock<IRuntimePolicy>();
@@ -1119,6 +1123,7 @@ namespace Glimpse.Test.Core.Framework
 
             Assert.Equal(testCase.ResultingRuntimePolicyForResource, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePolicyKey));
         }
+*/
 
         private class MyResourceWithDependencies : IResource, IDependOnResources
         {
@@ -1150,6 +1155,7 @@ namespace Glimpse.Test.Core.Framework
             }
         }
 
+/*
         [Fact]
         public void ExecuteResourceIfItIsADependencyOfTheDefaultResource()
         {
@@ -1183,6 +1189,7 @@ namespace Glimpse.Test.Core.Framework
 
             Assert.Equal(RuntimePolicy.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePolicyKey));
         }
+*/
 
         /* End of tests related to they way runtime policies are evaluated in case resources are being executed */
     }

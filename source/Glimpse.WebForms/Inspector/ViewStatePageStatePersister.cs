@@ -12,7 +12,7 @@ namespace Glimpse.WebForms.Inspector
         public ViewStatePageStatePersister(Page page, PageStatePersister innerPageStatePersister)
             : base(page)
         {
-            Logger = GlimpseConfiguration.GetLogger();
+            Logger = GlimpseRuntime.Instance.Configuration.Logger;
             InnerPageStatePersister = innerPageStatePersister;
         }
 
