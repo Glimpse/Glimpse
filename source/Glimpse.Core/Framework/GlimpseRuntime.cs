@@ -7,7 +7,6 @@ using System.Runtime.Remoting.Messaging;
 using System.Text;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-using Glimpse.Core.Resource;
 using Glimpse.Core.Message;
 using Glimpse.Core.ResourceResult;
 using Glimpse.Core.Tab.Assist;
@@ -83,11 +82,31 @@ namespace Glimpse.Core.Framework
                 throw new ArgumentNullException("configuration");
             }
 
+            if (configuration.DefaultRuntimePolicy == RuntimePolicy.Off)
+            {
+                return;
+            }
 
-            Instance = new GlimpseRuntime(configuration);
+            var hasInited = false; 
+            if (!IsInitialized) // Double checked lock to ensure thread safety. http://en.wikipedia.org/wiki/Double_checked_locking_pattern
+            {
+                lock (LockObj)
+                {
+                    if (!IsInitialized)
+                    {
+                        Instance = new GlimpseRuntime(configuration);
+                        hasInited = true;
+                    }
+                }
+            }
+
+            if (!hasInited && Instance.Configuration != configuration)
+            {
+                throw new NotSupportedException("Glimpse does not support being Initialize twice.");
+            }
         }
 
-        public GlimpseRuntime(IGlimpseConfiguration configuration)
+        internal GlimpseRuntime(IGlimpseConfiguration configuration) // V2Merge: This should be private but is internal to not break unit tests
         {
             if (configuration == null)
             {
@@ -399,88 +418,61 @@ namespace Glimpse.Core.Framework
         /// <returns>
         ///   <c>true</c> if system initialized successfully, <c>false</c> otherwise
         /// </returns>
-        private bool Initialize()
+        private void Initialize()
         {
-            var policy = RuntimePolicy.Off;
-            // TODO: This needs to be handled in BeginRequest
+            // V2Merge: framework provider isn't available during init. We'll need to do this at begin request
             // CreateAndStartGlobalExecutionTimer(Configuration.FrameworkProvider.HttpRequestStore);
 
-            // Double checked lock to ensure thread safety. http://en.wikipedia.org/wiki/Double_checked_locking_pattern
-            if (!IsInitialized)
+            var logger = Configuration.Logger;
+            var messageBroker = Configuration.MessageBroker;
+
+            // TODO: Fix this to IDisplay no longer uses I*Tab*Setup
+            var displaysThatRequireSetup = Configuration.Displays.Where(display => display is ITabSetup).Select(display => display);
+            foreach (ITabSetup display in displaysThatRequireSetup)
             {
-                lock (LockObj)
+                var key = CreateKey(display);
+                try
                 {
-                    if (!IsInitialized)
-                    {
-                        var logger = Configuration.Logger;
-                        // V2Merge: framework provider isn't available during init
-                        // policy = DetermineAndStoreAccumulatedRuntimePolicy(RuntimeEvent.Initialize);
-                        policy = Configuration.DefaultRuntimePolicy;
-
-
-                        if (policy != RuntimePolicy.Off)
-                        {
-                            // V2Merge: framework provider isn't available during init. We'll need to do this at begin request
-                            // CreateAndStartGlobalExecutionTimer(Configuration.FrameworkProvider.HttpRequestStore);
-
-                            var messageBroker = Configuration.MessageBroker;
-
-                            // TODO: Fix this to IDisplay no longer uses I*Tab*Setup
-                            var displaysThatRequireSetup = Configuration.Displays.Where(display => display is ITabSetup).Select(display => display);
-                            foreach (ITabSetup display in displaysThatRequireSetup)
-                            {
-                                var key = CreateKey(display);
-                                try
-                                {
-                                    var setupContext = new TabSetupContext(logger, messageBroker, () => GetTabStore(key, CallContext.LogicalGetData("fp") as IFrameworkProvider));
-                                    display.Setup(setupContext);
-                                }
-                                catch (Exception exception)
-                                {
-                                    logger.Error(Resources.InitializeTabError, exception, key);
-                                }
-                            }
-
-
-                            var tabsThatRequireSetup = Configuration.Tabs.Where(tab => tab is ITabSetup).Select(tab => tab);
-                            foreach (ITabSetup tab in tabsThatRequireSetup)
-                            {
-                                var key = CreateKey(tab);
-                                try
-                                {
-                                    var setupContext = new TabSetupContext(logger, messageBroker, () => GetTabStore(key, CallContext.LogicalGetData("fp") as IFrameworkProvider));
-                                    tab.Setup(setupContext);
-                                }
-                                catch (Exception exception)
-                                {
-                                    logger.Error(Resources.InitializeTabError, exception, key);
-                                }
-                            }
-
-                            var inspectorContext = new InspectorContext(logger, Configuration.ProxyFactory, messageBroker, Configuration.TimerStrategy, Configuration.RuntimePolicyStrategy);
-
-                            foreach (var inspector in Configuration.Inspectors)
-                            {
-                                try
-                                {
-                                    inspector.Setup(inspectorContext);
-                                    logger.Debug(Resources.GlimpseRuntimeInitializeSetupInspector, inspector.GetType());
-                                }
-                                catch (Exception exception)
-                                {
-                                    logger.Error(Resources.InitializeInspectorError, exception, inspector.GetType());
-                                }
-                            }
-
-                            PersistMetadata();
-                        }
-
-                        IsInitialized = true;
-                    }
+                    var setupContext = new TabSetupContext(logger, messageBroker, () => GetTabStore(key, CallContext.LogicalGetData("fp") as IFrameworkProvider));
+                    display.Setup(setupContext);
+                }
+                catch (Exception exception)
+                {
+                    logger.Error(Resources.InitializeTabError, exception, key);
                 }
             }
 
-            return policy != RuntimePolicy.Off;
+            var tabsThatRequireSetup = Configuration.Tabs.Where(tab => tab is ITabSetup).Select(tab => tab);
+            foreach (ITabSetup tab in tabsThatRequireSetup)
+            {
+                var key = CreateKey(tab);
+                try
+                {
+                    var setupContext = new TabSetupContext(logger, messageBroker, () => GetTabStore(key, CallContext.LogicalGetData("fp") as IFrameworkProvider));
+                    tab.Setup(setupContext);
+                }
+                catch (Exception exception)
+                {
+                    logger.Error(Resources.InitializeTabError, exception, key);
+                }
+            }
+
+            var inspectorContext = new InspectorContext(logger, Configuration.ProxyFactory, messageBroker, Configuration.TimerStrategy, Configuration.RuntimePolicyStrategy);
+            foreach (var inspector in Configuration.Inspectors)
+            {
+                try
+                {
+                    inspector.Setup(inspectorContext);
+                    logger.Debug(Resources.GlimpseRuntimeInitializeSetupInspector, inspector.GetType());
+                }
+                catch (Exception exception)
+                {
+                    logger.Error(Resources.InitializeInspectorError, exception, inspector.GetType());
+                }
+            }
+
+            PersistMetadata();
+            IsInitialized = true;
         }
 
         private static UriTemplate SetParameters(UriTemplate template, IEnumerable<KeyValuePair<string, string>> nameValues)

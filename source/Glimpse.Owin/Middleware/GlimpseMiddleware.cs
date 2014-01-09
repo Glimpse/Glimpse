@@ -14,43 +14,53 @@ namespace Glimpse.Owin.Middleware
     {
         private readonly Func<IDictionary<string, object>, Task> innerNext;
         private readonly IDictionary<string, object> serverStore;
+        private readonly IGlimpseConfiguration config;
 
         public GlimpseMiddleware(Func<IDictionary<string, object>, Task> next, IDictionary<string, object> serverStore)
         {
             innerNext = next;
             this.serverStore = serverStore;
+            config = new GlimpseConfiguration(
+                    new OwinResourceEndpointConfiguration(),
+                    // V2Merge: Fix up DictionaryDataStoreAdapter to remove this cast
+                    new ApplicationPersistenceStore(new DictionaryDataStoreAdapter(serverStore as Dictionary<string, object>))); 
         }
 
         public async Task Invoke(IDictionary<string, object> environment)
         {
             if (!GlimpseRuntime.IsInitialized)
             {
-                var config = new GlimpseConfiguration(
-                    new OwinResourceEndpointConfiguration(),
-                    new ApplicationPersistenceStore(new DictionaryDataStoreAdapter(serverStore as Dictionary<string, object>)));
                 GlimpseRuntime.Initialize(config);
             }
 
-            var request = new OwinRequest(environment);
-            var response = new OwinResponse(environment);
-            var frameworkProvider = new OwinFrameworkProvider(environment, serverStore);
-
-            // TODO: Remove hardcode to Glimpse.axd
-            if (request.Uri.PathAndQuery.StartsWith("/Glimpse.axd", StringComparison.InvariantCultureIgnoreCase))
+            if (GlimpseRuntime.IsInitialized)
             {
-                await ExecuteResource(frameworkProvider, request.Query);
-                return;
-            }
 
-            GlimpseRuntime.Instance.BeginRequest(frameworkProvider);
-            // Hack's a million!
-            var requestId = frameworkProvider.HttpRequestStore.Get<Guid>("__GlimpseRequestId");
-            var htmlSnippet = GlimpseRuntime.Instance.GenerateScriptTags(requestId, frameworkProvider);
-            response.Body = new PreBodyTagFilter(htmlSnippet, response.Body, Encoding.UTF8, request.Uri.AbsoluteUri, new NullLogger());
+                var request = new OwinRequest(environment);
+                var response = new OwinResponse(environment);
+                var frameworkProvider = new OwinFrameworkProvider(environment, serverStore);
+
+                // TODO: Remove hardcode to Glimpse.axd
+                if (request.Uri.PathAndQuery.StartsWith("/Glimpse.axd", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    await ExecuteResource(frameworkProvider, request.Query);
+                    return;
+                }
+
+                GlimpseRuntime.Instance.BeginRequest(frameworkProvider);
+                // V2Merge: Hack's a million!
+                var requestId = frameworkProvider.HttpRequestStore.Get<Guid>("__GlimpseRequestId");
+                var htmlSnippet = GlimpseRuntime.Instance.GenerateScriptTags(requestId, frameworkProvider);
+                response.Body = new PreBodyTagFilter(htmlSnippet, response.Body, Encoding.UTF8, request.Uri.AbsoluteUri,
+                    new NullLogger());
+            }
 
             await innerNext(environment);
 
-            GlimpseRuntime.Instance.EndRequest(frameworkProvider);
+            if (GlimpseRuntime.IsInitialized)
+            {
+                GlimpseRuntime.Instance.EndRequest(new OwinFrameworkProvider(environment, serverStore));
+            }
         }
 
         private async Task ExecuteResource(IFrameworkProvider frameworkProvider, IReadableStringCollection queryString)
