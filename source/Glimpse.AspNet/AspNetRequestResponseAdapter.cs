@@ -26,11 +26,6 @@ namespace Glimpse.AspNet
             get { return new DictionaryDataStoreAdapter(Context.Items); }
         }
 
-        public IDataStore HttpServerStore
-        {
-            get { return new HttpApplicationStateBaseDataStoreAdapter(Context.Application); }
-        }
-
         public object RuntimeContext
         {
             get { return Context; }

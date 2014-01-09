@@ -26,18 +26,6 @@ namespace Glimpse.Core.Framework
         IDataStore HttpRequestStore { get; }
 
         /// <summary>
-        /// Gets the Http server store.
-        /// </summary>
-        /// <value>The Http server store.</value>
-        /// <remarks>
-        /// A server store is a place for Glimpse to store data a persists across Http requests.
-        /// </remarks>
-        /// <example>
-        /// In ASP.NET, <c>HttpContext.Application</c> is a server store.
-        /// </example>
-        IDataStore HttpServerStore { get; }
-
-        /// <summary>
         /// Gets the runtime context.
         /// </summary>
         /// <value>The runtime context.</value>

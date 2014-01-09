@@ -14,14 +14,12 @@ namespace Glimpse.Owin.Middleware
         private IDictionary<string, object> environment;
         private OwinRequest request;
         private OwinResponse response;
-        private IDictionary<string, object> serverStore;
 
-        public OwinRequestResponseAdapter(IDictionary<string, object> environment, IDictionary<string, object> serverStore)
+        public OwinRequestResponseAdapter(IDictionary<string, object> environment)
         {
             this.environment = environment;
             this.request = new OwinRequest(environment); // Merge RequestMetadata and requestResponseAdapter together?
             this.response = new OwinResponse(environment);
-            this.serverStore = serverStore;
         }
 
         public IDataStore HttpRequestStore 
@@ -38,14 +36,6 @@ namespace Glimpse.Owin.Middleware
                 var result = new DictionaryDataStoreAdapter(new Dictionary<string, object>());
                 environment.Add(key, result);
                 return result;
-            }
-        }
-
-        public IDataStore HttpServerStore 
-        {
-            get
-            {
-                return new DictionaryDataStoreAdapter((Dictionary<string, object>)serverStore);
             }
         }
 

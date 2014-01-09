@@ -38,7 +38,7 @@ namespace Glimpse.Owin.Middleware
 
                 var request = new OwinRequest(environment);
                 var response = new OwinResponse(environment);
-                var requestResponseAdapter = new OwinRequestResponseAdapter(environment, serverStore);
+                var requestResponseAdapter = new OwinRequestResponseAdapter(environment);
 
                 // TODO: Remove hardcode to Glimpse.axd
                 if (request.Uri.PathAndQuery.StartsWith("/Glimpse.axd", StringComparison.InvariantCultureIgnoreCase))
@@ -58,7 +58,7 @@ namespace Glimpse.Owin.Middleware
 
             if (GlimpseRuntime.IsInitialized)
             {
-                GlimpseRuntime.Instance.EndRequest(new OwinRequestResponseAdapter(environment, serverStore));
+                GlimpseRuntime.Instance.EndRequest(new OwinRequestResponseAdapter(environment));
             }
         }
 

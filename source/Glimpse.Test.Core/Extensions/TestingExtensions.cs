@@ -13,7 +13,6 @@ namespace Glimpse.Test.Core.Extensions
             frameworkProvider.Setup(fp => fp.RuntimeContext).Returns(new DummyObjectContext());
             frameworkProvider.Setup(fp => fp.HttpRequestStore).Returns(
                 new DictionaryDataStoreAdapter(new Dictionary<string, object>()));
-            frameworkProvider.Setup(fp => fp.HttpServerStore).Returns(new DictionaryDataStoreAdapter(new Dictionary<string, object>()));
             frameworkProvider.Setup(fp => fp.RequestMetadata).Returns(new Mock<IRequestMetadata>().Object);
 
             return frameworkProvider;
