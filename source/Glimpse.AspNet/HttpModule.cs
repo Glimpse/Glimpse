@@ -73,7 +73,7 @@ namespace Glimpse.AspNet
                 Configuration = Configuration ?? 
                     new GlimpseConfiguration(
                         new HttpHandlerEndpointConfiguration(), 
-                        new ApplicationPersistenceStore(
+                        new InMemoryPersistenceStore(
                             new HttpApplicationStateBaseDataStoreAdapter(httpApplication.Application)));
 
                 GlimpseRuntime.Initialize(Configuration);

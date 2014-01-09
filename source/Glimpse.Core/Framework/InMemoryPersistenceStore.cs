@@ -12,7 +12,7 @@ namespace Glimpse.Core.Framework
     /// <remarks>
     /// An example of an application store is <c>HttpContext.Current.Application</c> in ASP.NET.
     /// </remarks>
-    public class ApplicationPersistenceStore : IPersistenceStore // TODO: Rename to InMemoryPersistenceStore
+    public class InMemoryPersistenceStore : IPersistenceStore
     {
         private const string PersistenceStoreKey = "__GlimpsePersistenceKey";
 
@@ -21,10 +21,10 @@ namespace Glimpse.Core.Framework
         private readonly object queueLock = new object();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ApplicationPersistenceStore" /> class.
+        /// Initializes a new instance of the <see cref="InMemoryPersistenceStore" /> class.
         /// </summary>
         /// <param name="dataStore">The data store.</param>
-        public ApplicationPersistenceStore(IDataStore dataStore)
+        public InMemoryPersistenceStore(IDataStore dataStore)
         {
             DataStore = dataStore;
 

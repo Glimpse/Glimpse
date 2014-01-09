@@ -10,7 +10,7 @@ namespace Glimpse.Owin
     {
         protected override string GenerateUriTemplate(string resourceName, string baseUri, IEnumerable<ResourceParameterMetadata> parameters, ILogger logger)
         {
-            var root = "/Glimpse.axd"; // TODO: Refactor so that HttpHandlerEndpointConfiguration and this class can share implementations. Call it UriTemplateResourceEndpoint?
+            var root = "/Glimpse.axd"; // V2Merge: Refactor so that HttpHandlerEndpointConfiguration and this class can share implementations. Call it UriTemplateResourceEndpoint?
 
             var stringBuilder = new StringBuilder(string.Format(@"{0}?n={1}", root, resourceName));
 

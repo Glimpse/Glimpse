@@ -182,7 +182,7 @@
     <Compile Include="TestDoubles\IDummyInterface.cs" />
     <Compile Include="TestDoubles\IDummyMixin.cs" />
     <Compile Include="Tester\AjaxPolicyTester.cs" />
-    <Compile Include="Tester\ApplicationPersistenceStoreTester.cs" />
+    <Compile Include="Tester\InMemoryPersistenceStoreTester.cs" />
     <Compile Include="Tester\ContentTypePolicyTester.cs" />
     <Compile Include="Tester\ControlCookiePolicyTester.cs" />
     <Compile Include="Tester\GlimpseRuntimeTester.cs" />

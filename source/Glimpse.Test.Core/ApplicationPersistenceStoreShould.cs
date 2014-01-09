@@ -9,10 +9,10 @@ namespace Glimpse.Test.Core
 {
     public class ApplicationPersistenceStoreShould:IDisposable
     {
-        private ApplicationPersistenceStoreTester tester;
-        public ApplicationPersistenceStoreTester Store
+        private InMemoryPersistenceStoreTester tester;
+        public InMemoryPersistenceStoreTester Store
         {
-            get { return tester ?? (tester = ApplicationPersistenceStoreTester.Create()); }
+            get { return tester ?? (tester = InMemoryPersistenceStoreTester.Create()); }
             set { tester = value; }
         }
 

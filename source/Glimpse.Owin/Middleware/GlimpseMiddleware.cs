@@ -23,7 +23,7 @@ namespace Glimpse.Owin.Middleware
             config = new GlimpseConfiguration(
                     new OwinResourceEndpointConfiguration(),
                     // V2Merge: Fix up DictionaryDataStoreAdapter to remove this cast
-                    new ApplicationPersistenceStore(new DictionaryDataStoreAdapter(serverStore as Dictionary<string, object>))); 
+                    new InMemoryPersistenceStore(new DictionaryDataStoreAdapter(serverStore as Dictionary<string, object>))); 
         }
 
         public async Task Invoke(IDictionary<string, object> environment)
