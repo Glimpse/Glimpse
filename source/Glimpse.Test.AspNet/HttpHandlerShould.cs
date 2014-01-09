@@ -33,7 +33,7 @@ namespace Glimpse.Test.AspNet
         {
             Handler.ProcessRequest(Handler.ContextMock.Object);
 
-            Handler.RuntimeMock.Verify(r => r.ExecuteResource(It.IsAny<IFrameworkProvider>(), Handler.ResourceName, It.IsAny<ResourceParameters>()), Times.Once());
+            Handler.RuntimeMock.Verify(r => r.ExecuteResource(It.IsAny<IRequestResponseAdapter>(), Handler.ResourceName, It.IsAny<ResourceParameters>()), Times.Once());
         }
 
         [Fact(Skip = "Fix to work with new init model.")]
@@ -43,7 +43,7 @@ namespace Glimpse.Test.AspNet
 
             Handler.ProcessRequest(Handler.ContextMock.Object);
 
-            Handler.RuntimeMock.Verify(r => r.ExecuteDefaultResource(It.IsAny<IFrameworkProvider>()), Times.Once());
+            Handler.RuntimeMock.Verify(r => r.ExecuteDefaultResource(It.IsAny<IRequestResponseAdapter>()), Times.Once());
         }
     }
 }

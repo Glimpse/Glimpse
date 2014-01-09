@@ -9,17 +9,17 @@ using Microsoft.Owin;
 
 namespace Glimpse.Owin.Middleware
 {
-    public class OwinFrameworkProvider : IFrameworkProvider
+    public class OwinRequestResponseAdapter : IRequestResponseAdapter
     {
         private IDictionary<string, object> environment;
         private OwinRequest request;
         private OwinResponse response;
         private IDictionary<string, object> serverStore;
 
-        public OwinFrameworkProvider(IDictionary<string, object> environment, IDictionary<string, object> serverStore)
+        public OwinRequestResponseAdapter(IDictionary<string, object> environment, IDictionary<string, object> serverStore)
         {
             this.environment = environment;
-            this.request = new OwinRequest(environment); // Merge RequestMetadata and FrameworkProvider together?
+            this.request = new OwinRequest(environment); // Merge RequestMetadata and requestResponseAdapter together?
             this.response = new OwinResponse(environment);
             this.serverStore = serverStore;
         }

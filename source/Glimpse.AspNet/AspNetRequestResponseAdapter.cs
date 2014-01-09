@@ -9,11 +9,11 @@ using Glimpse.Core.Framework;
 
 namespace Glimpse.AspNet
 {
-    public class AspNetFrameworkProvider : IFrameworkProvider
+    public class AspNetRequestResponseAdapter : IRequestResponseAdapter
     {
         private HttpContextBase context;
 
-        public AspNetFrameworkProvider(HttpContextBase context, ILogger logger)
+        public AspNetRequestResponseAdapter(HttpContextBase context, ILogger logger)
         {
             Context = context;
             Logger = logger;

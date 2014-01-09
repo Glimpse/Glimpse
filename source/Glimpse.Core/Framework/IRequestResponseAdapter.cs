@@ -4,14 +4,14 @@ namespace Glimpse.Core.Framework
 {
     /// <summary>
     /// Defines methods to required to implement a Glimpse framework provider. 
-    /// Framework providers allow Glimpse to work generically against any .NET based web development framework.
+    /// Request/Response adapters allow Glimpse to work generically against any .NET based web development framework.
     /// </summary>
     /// <remarks>
-    /// Required by any different Framework Provider - i.e. ASP.NET, Self Hosted WebAPI, 
+    /// Required by any different framework - i.e. ASP.NET, Self Hosted WebAPI, 
     /// NancyFX, etc. See Glimpse.AspNet.AspNetFrameworkProvider
     /// as reference implementation.
     /// </remarks>
-    public interface IFrameworkProvider
+    public interface IRequestResponseAdapter
     {
         /// <summary>
         /// Gets the Http request store.

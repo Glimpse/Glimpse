@@ -12,7 +12,7 @@ namespace Glimpse.Test.AspNet.Tester
         public Mock<HttpApplicationStateBase> ApplicationStateMock { get; set; }
         public Mock<IGlimpseRuntime> RuntimeMock { get; set; }
         public Mock<IGlimpseConfiguration> ConfigurationMock { get; set; }
-        public Mock<IFrameworkProvider> ProviderMock { get; set; }
+        public Mock<IRequestResponseAdapter> RequestResponseAdapterMock { get; set; }
         public NameValueCollection QueryString { get; set; }
         public string ResourceName { get; set; }
 
@@ -20,8 +20,8 @@ namespace Glimpse.Test.AspNet.Tester
         {
             ResourceName = "Test";
             QueryString = new NameValueCollection {{"n", ResourceName}, {"One", "1"}};
-             
-            ProviderMock = new Mock<IFrameworkProvider>();
+
+            RequestResponseAdapterMock = new Mock<IRequestResponseAdapter>();
             ConfigurationMock = new Mock<IGlimpseConfiguration>();
 
             RuntimeMock = new Mock<IGlimpseRuntime>();

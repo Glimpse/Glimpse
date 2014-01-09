@@ -6,7 +6,7 @@ using Moq;
 
 namespace Glimpse.Test.AspNet.Tester
 {
-    public class AspNetFrameworkProviderTester : AspNetFrameworkProvider
+    public class AspNetRequestResponseAdapterTester : AspNetRequestResponseAdapter
     {
         public Mock<HttpContextBase> HttpContextMock { get; set; }
 
@@ -14,7 +14,7 @@ namespace Glimpse.Test.AspNet.Tester
 
         public Mock<HttpResponseBase> HttpResponseMock { get; set; }
     
-        private AspNetFrameworkProviderTester(HttpContextBase context, ILogger logger) : base(context, logger)
+        private AspNetRequestResponseAdapterTester(HttpContextBase context, ILogger logger) : base(context, logger)
         {
             HttpResponseMock = new Mock<HttpResponseBase>();
 
@@ -34,9 +34,9 @@ namespace Glimpse.Test.AspNet.Tester
             Context = HttpContextMock.Object;
         }
 
-        public static AspNetFrameworkProviderTester Create()
+        public static AspNetRequestResponseAdapterTester Create()
         {
-            return new AspNetFrameworkProviderTester(new Mock<HttpContextBase>().Object, new Mock<ILogger>().Object); // TODO: Fix Hack
+            return new AspNetRequestResponseAdapterTester(new Mock<HttpContextBase>().Object, new Mock<ILogger>().Object); // TODO: Fix Hack
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Glimpse.Core.Extensibility
         /// Gets the framework provider.
         /// </summary>
         /// <value>The framework provider.</value>
-        IFrameworkProvider FrameworkProvider { get; }
+        IRequestResponseAdapter RequestResponseAdapter { get; }
 
         /// <summary>
         /// Gets the serializer.

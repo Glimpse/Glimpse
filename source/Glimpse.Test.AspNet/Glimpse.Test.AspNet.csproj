@@ -92,7 +92,7 @@
     <Compile Include="Tab\RequestShould.cs" />
     <Compile Include="Tab\RoutesShould.cs" />
     <Compile Include="Tab\SessionShould.cs" />
-    <Compile Include="Tester\AspNetFrameworkProviderTester.cs" />
+    <Compile Include="Tester\AspNetRequestResponseAdapterTester.cs" />
     <Compile Include="Tester\HttpHandlerTester.cs" />
     <Compile Include="Tester\HttpModuleTester.cs" />
   </ItemGroup>

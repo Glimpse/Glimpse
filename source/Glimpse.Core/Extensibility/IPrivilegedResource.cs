@@ -27,6 +27,6 @@ namespace Glimpse.Core.Extensibility
         /// <returns>
         /// A <see cref="IResourceResult"/>.
         /// </returns>
-        IResourceResult Execute(IResourceContext context, IGlimpseConfiguration configuration, IFrameworkProvider frameworkProvider); 
+        IResourceResult Execute(IResourceContext context, IGlimpseConfiguration configuration, IRequestResponseAdapter requestResponseAdapter); 
     }
 }

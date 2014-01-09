@@ -18,9 +18,9 @@ namespace Glimpse.AspNet
         public T GetInstance<T>() where T : class
         {
             var type = typeof(T);
-            if (type == typeof(IFrameworkProvider))
+            if (type == typeof(IRequestResponseAdapter))
             {
-                return new AspNetFrameworkProvider(new HttpContextWrapper(HttpContext.Current), Logger) as T; // TODO: Fix this hack!
+                return new AspNetRequestResponseAdapter(new HttpContextWrapper(HttpContext.Current), Logger) as T; // TODO: Fix this hack!
             }
 
             if (type == typeof(ResourceEndpointConfiguration))

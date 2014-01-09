@@ -43,7 +43,7 @@ namespace Glimpse.Core.ResourceResult
         /// <param name="context">The context.</param>
         public void Execute(IResourceResultContext context)
         {
-            var frameworkProvider = context.FrameworkProvider;
+            var frameworkProvider = context.RequestResponseAdapter;
 
             frameworkProvider.WriteHttpResponse(Message);
             frameworkProvider.SetHttpResponseStatusCode(StatusCode);

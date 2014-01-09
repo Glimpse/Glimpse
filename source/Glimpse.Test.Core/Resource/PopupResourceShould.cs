@@ -52,7 +52,7 @@ namespace Glimpse.Test.Core.Resource
         {
             var resource = new PopupResource();
             var configMock = new Mock<IGlimpseConfiguration>();
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
 
             Assert.Throws<ArgumentNullException>(() => resource.Execute(null, configMock.Object, providerMock.Object));
         }
@@ -62,7 +62,7 @@ namespace Glimpse.Test.Core.Resource
         {
             var resource = new PopupResource();
             var contextMock = new Mock<IResourceContext>();
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
 
             Assert.Throws<ArgumentNullException>(() => resource.Execute(contextMock.Object, null, providerMock.Object));
         }
@@ -77,7 +77,7 @@ namespace Glimpse.Test.Core.Resource
             var contextMock = new Mock<IResourceContext>();
             contextMock.Setup(c => c.Parameters.TryGetValue("requestId", out value)).Returns(hasValue);
             var configMock = new Mock<IGlimpseConfiguration>();
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
 
             var result = resource.Execute(contextMock.Object, configMock.Object, providerMock.Object);
 
@@ -101,7 +101,7 @@ namespace Glimpse.Test.Core.Resource
             Func<Guid?, string> strategy = (id) => requestId + version;
             var configMock = new Mock<IGlimpseConfiguration>();
 
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             providerMock.Setup(f => f.HttpRequestStore.Get(Constants.ClientScriptsStrategy)).Returns(() => strategy);
             
             var result = resource.Execute(contextMock.Object, configMock.Object, providerMock.Object);

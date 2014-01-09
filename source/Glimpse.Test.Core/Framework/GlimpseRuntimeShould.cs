@@ -34,7 +34,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void SetRequestIdOnBeginRequest()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             providerMock.Setup(fp => fp.HttpRequestStore).Returns(Runtime.HttpRequestStoreMock.Object);
 
             Runtime.BeginRequest(providerMock.Object);
@@ -45,7 +45,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void StartGlobalStopwatchOnBeginRequest()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             providerMock.Setup(fp => fp.HttpRequestStore).Returns(Runtime.HttpRequestStoreMock.Object);
             Runtime.BeginRequest(providerMock.Object);
 
@@ -61,7 +61,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ThrowsExceptionIfEndRequestIsCalledBeforeBeginRequest()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
 
             //runtime.BeginRequest(); commented out on purpose for this test
 
@@ -71,7 +71,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ThrowsExceptionIfBeginRequestIsCalledBeforeInittialize()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
 
             //Runtime.Initialize();commented out on purpose for this test
 
@@ -81,7 +81,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ExecutePluginsWithDefaultLifeCycle()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
 
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
 
@@ -98,7 +98,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ExecutePluginsWithLifeCycleMismatch()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
 
             Runtime.TabMock.Setup(m => m.ExecuteOn).Returns(RuntimeEvent.EndRequest);
 
@@ -115,7 +115,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ExecutePluginsMakeSureNamesAreJsonSafe()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
 
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
             Runtime.BeginRequest(providerMock.Object);
@@ -130,7 +130,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ExecutePluginsWithMatchingRuntimeContextType()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
             Runtime.BeginRequest(providerMock.Object);
             Runtime.EndRequest(providerMock.Object);
@@ -145,7 +145,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ExecutePluginsWithUnknownRuntimeContextType()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             Runtime.TabMock.Setup(m => m.RequestContextType).Returns<Type>(null);
 
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
@@ -162,7 +162,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ExecutePluginsWithDuplicateCollectionEntries()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             //Insert the same plugin multiple times
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
@@ -180,7 +180,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ExecutePluginThatFails()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             Runtime.TabMock.Setup(p => p.GetData(It.IsAny<ITabContext>())).Throws<DummyException>();
 
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
@@ -200,7 +200,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ExecutePluginsWithEmptyCollection()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             Runtime.Configuration.Tabs.Clear();
             Runtime.BeginRequest(providerMock.Object);
             Runtime.EndRequest(providerMock.Object);
@@ -291,7 +291,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void InjectHttpResponseBodyDuringEndRequest()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
 
             Runtime.BeginRequest(providerMock.Object);
             Runtime.EndRequest(providerMock.Object);
@@ -302,7 +302,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void PersistDataDuringEndRequest()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
             Runtime.BeginRequest(providerMock.Object);
             Runtime.EndRequest(providerMock.Object);
@@ -313,7 +313,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void SetResponseHeaderDuringEndRequest()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
             Runtime.BeginRequest(providerMock.Object);
             Runtime.EndRequest(providerMock.Object);
@@ -324,7 +324,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ExecuteResourceWithOrderedParameters()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             var name = "TestResource";
             Runtime.ResourceMock.Setup(r => r.Name).Returns(name);
             Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IResourceContext>())).Returns(Runtime.ResourceResultMock.Object);
@@ -339,7 +339,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ExecuteResourceWithNamedParameters()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             var name = "TestResource";
             Runtime.ResourceMock.Setup(r => r.Name).Returns(name);
             Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IResourceContext>())).Returns(Runtime.ResourceResultMock.Object);
@@ -354,7 +354,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void HandleUnknownResource()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             Runtime.Configuration.Resources.Clear();
 
             Runtime.ExecuteResource(providerMock.Object, "random name that doesn't exist", new ResourceParameters(new string[]{}));
@@ -365,7 +365,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void HandleDuplicateResources()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             var name = "Duplicate";
             Runtime.ResourceMock.Setup(r => r.Name).Returns(name);
 
@@ -380,14 +380,14 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ThrowExceptionWithEmptyResourceName()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             Assert.Throws<ArgumentNullException>(() => Runtime.ExecuteResource(providerMock.Object, "", new ResourceParameters(new string[] { })));
         }
 
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void HandleResourcesThatThrowExceptions()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             var name = "Anything";
             Runtime.ResourceMock.Setup(r => r.Name).Returns(name);
             Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IResourceContext>())).Throws<Exception>();
@@ -402,7 +402,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void EnsureNullIsNotPassedToResourceExecute()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             var name = "aName";
             Runtime.ResourceMock.Setup(r => r.Name).Returns(name);
             Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IResourceContext>())).Returns(
@@ -418,7 +418,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void HandleResourceResultsThatThrowExceptions()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             var name = "Anything";
             Runtime.ResourceMock.Setup(r => r.Name).Returns(name);
             Runtime.ResourceMock.Setup(r => r.Execute(It.IsAny<IResourceContext>())).Returns(Runtime.ResourceResultMock.Object);
@@ -453,7 +453,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void NotIncreaseModeOverLifetimeOfRequest()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             var glimpseMode = RuntimePolicy.ModifyResponseBody;
             Runtime.Configuration.DefaultRuntimePolicy = glimpseMode;
 
@@ -473,7 +473,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ValidateAtBeginRequest()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             Runtime.RuntimePolicyMock.Setup(rp => rp.ExecuteOn).Returns(RuntimeEvent.BeginRequest);
 
             Runtime.Configuration.RuntimePolicies.Add(Runtime.RuntimePolicyMock.Object);
@@ -486,7 +486,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void SkipEecutingInitializeIfGlimpseModeIfOff()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             Runtime.Configuration.DefaultRuntimePolicy = RuntimePolicy.Off;
             
             Runtime.Initialize();
@@ -499,7 +499,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact] //False result means GlimpseMode == Off
         public void WriteCurrentModeToRequestState()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             Runtime.RuntimePolicyMock.Setup(v => v.Execute(It.IsAny<IRuntimePolicyContext>())).Returns(RuntimePolicy.ModifyResponseBody);
             Runtime.Configuration.RuntimePolicies.Add(Runtime.RuntimePolicyMock.Object);
 
@@ -515,7 +515,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void SkipInitializeIfGlipseModeIsOff()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             Runtime.Configuration.DefaultRuntimePolicy = RuntimePolicy.Off;
 
             Runtime.Initialize();
@@ -527,7 +527,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void SkipExecutingResourceIfGlimpseModeIsOff()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             Runtime.Configuration.DefaultRuntimePolicy = RuntimePolicy.Off;
 
             Runtime.ExecuteResource(providerMock.Object, "doesn't matter", new ResourceParameters(new string[]{}));
@@ -538,7 +538,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ValidateAtEndRequest()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             Runtime.Configuration.DefaultRuntimePolicy = RuntimePolicy.Off;
 
             Runtime.EndRequest(providerMock.Object);
@@ -694,7 +694,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void LogErrorOnPersistenceStoreException()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             Runtime.PersistenceStoreMock.Setup(ps => ps.Save(It.IsAny<GlimpseRequest>())).Throws<DummyException>();
 
             Runtime.BeginRequest(providerMock.Object);
@@ -720,7 +720,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void LogErrorWhenDynamicScriptTagThrowsException()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             Runtime.DynamicScriptMock.Setup(ds => ds.GetResourceName()).Throws<DummyException>();
 
             Runtime.Configuration.ClientScripts.Add(Runtime.DynamicScriptMock.Object);
@@ -735,7 +735,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void LogErrorWhenStaticScriptTagThrowsException()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             Runtime.StaticScriptMock.Setup(ds => ds.GetUri(It.IsAny<string>())).Throws<DummyException>();
 
             Runtime.Configuration.ClientScripts.Add(Runtime.StaticScriptMock.Object);
@@ -749,7 +749,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void BeginRuntimeReturnsEarlyIfRuntimePolicyIsOff()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             providerMock.Setup(fp => fp.HttpRequestStore).Returns(Runtime.HttpRequestStoreMock.Object);
 
 
@@ -765,7 +765,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ExecuteTabsOnBeginSessionAccess()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             Runtime.TabMock.Setup(t => t.ExecuteOn).Returns(RuntimeEvent.BeginSessionAccess);
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
 
@@ -778,7 +778,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ExecuteTabsOnEndSessionAccess()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             Runtime.TabMock.Setup(t => t.ExecuteOn).Returns(RuntimeEvent.EndSessionAccess);
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
 
@@ -791,7 +791,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void StopBeginSessionAccessWithRuntimePolicyOff()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             Runtime.Configuration.DefaultRuntimePolicy = RuntimePolicy.Off;
             Runtime.TabMock.Setup(t => t.ExecuteOn).Returns(RuntimeEvent.BeginSessionAccess);
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
@@ -804,7 +804,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void StopEndSessionAccessWithRuntimePolicyOff()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             Runtime.Configuration.DefaultRuntimePolicy = RuntimePolicy.Off;
             Runtime.TabMock.Setup(t => t.ExecuteOn).Returns(RuntimeEvent.EndSessionAccess);
             Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
@@ -817,7 +817,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ThrowExceptionWhenExecutingResourceWithNullParameters()
         {
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
             Assert.Throws<ArgumentNullException>(() => Runtime.ExecuteResource(providerMock.Object, "any", null));
         }
 
@@ -1121,7 +1121,7 @@ namespace Glimpse.Test.Core.Framework
             firstRuntimePolicyOnExecuteResourceMock.Verify(v => v.Execute(It.IsAny<IRuntimePolicyContext>()), testCase.FirstRuntimePolicyOnExecuteResourceMustBeExecuted ? Times.AtLeastOnce() : Times.Never());
             secondRuntimePolicyOnExecuteResourceMock.Verify(v => v.Execute(It.IsAny<IRuntimePolicyContext>()), testCase.SecondRuntimePolicyOnExecuteResourceMustBeExecuted ? Times.AtLeastOnce() : Times.Never());
 
-            Assert.Equal(testCase.ResultingRuntimePolicyForResource, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePolicyKey));
+            Assert.Equal(testCase.ResultingRuntimePolicyForResource, Runtime.Configuration.requestResponseAdapter.HttpRequestStore.Get(Constants.RuntimePolicyKey));
         }
 */
 
@@ -1171,7 +1171,7 @@ namespace Glimpse.Test.Core.Framework
         private void ExecuteResourceDependencyTest(string resourceToExecute, string dependentResourceName, bool shouldHaveExecuted)
         {
             Runtime.Configuration.DefaultRuntimePolicy = RuntimePolicy.On;
-            Runtime.Configuration.FrameworkProvider.HttpRequestStore.Set(Constants.RuntimePolicyKey, RuntimePolicy.Off);
+            Runtime.Configuration.requestResponseAdapter.HttpRequestStore.Set(Constants.RuntimePolicyKey, RuntimePolicy.Off);
 
             var defaultResource = new MyResourceWithDependencies(dependentResourceName);
             Runtime.Configuration.DefaultResource = defaultResource;
@@ -1187,7 +1187,7 @@ namespace Glimpse.Test.Core.Framework
             dependentResourceMock.Verify(r => r.Execute(It.IsAny<IResourceContext>()), shouldHaveExecuted ? Times.Once() : Times.Never());
             dependentResourceResultMock.Verify(r => r.Execute(It.IsAny<IResourceResultContext>()), shouldHaveExecuted ? Times.Once() : Times.Never());
 
-            Assert.Equal(RuntimePolicy.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePolicyKey));
+            Assert.Equal(RuntimePolicy.Off, Runtime.Configuration.requestResponseAdapter.HttpRequestStore.Get(Constants.RuntimePolicyKey));
         }
 */
 

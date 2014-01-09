@@ -23,10 +23,10 @@ namespace Glimpse.Test.Core.Extensibility
         [Fact]
         public void Execute()
         {
-            var frameworkProviderMock = new Mock<IFrameworkProvider>();
+            var frameworkProviderMock = new Mock<IRequestResponseAdapter>();
             var serializerMock = new Mock<ISerializer>();
             var contextMock = new Mock<IResourceResultContext>();
-            contextMock.Setup(c => c.FrameworkProvider).Returns(frameworkProviderMock.Object);
+            contextMock.Setup(c => c.RequestResponseAdapter).Returns(frameworkProviderMock.Object);
             contextMock.Setup(c => c.Serializer).Returns(serializerMock.Object);
 
             var obj = new { Any = "thing" };
@@ -42,10 +42,10 @@ namespace Glimpse.Test.Core.Extensibility
         [Fact]
         public void UseCallbackForJsonpWhenProvided()
         {
-            var frameworkProviderMock = new Mock<IFrameworkProvider>();
+            var frameworkProviderMock = new Mock<IRequestResponseAdapter>();
             var serializerMock = new Mock<ISerializer>();
             var contextMock = new Mock<IResourceResultContext>();
-            contextMock.Setup(c => c.FrameworkProvider).Returns(frameworkProviderMock.Object);
+            contextMock.Setup(c => c.RequestResponseAdapter).Returns(frameworkProviderMock.Object);
             contextMock.Setup(c => c.Serializer).Returns(serializerMock.Object);
 
             var obj = new { Any = "Thing" };

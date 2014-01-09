@@ -36,9 +36,9 @@ namespace Glimpse.Test.Core.Extensibility
         [Fact]
         public void Execute()
         {
-            var frameworkProviderMock = new Mock<IFrameworkProvider>();
+            var frameworkProviderMock = new Mock<IRequestResponseAdapter>();
             var contextMock = new Mock<IResourceResultContext>();
-            contextMock.Setup(c => c.FrameworkProvider).Returns(frameworkProviderMock.Object);
+            contextMock.Setup(c => c.RequestResponseAdapter).Returns(frameworkProviderMock.Object);
 
             var array = new byte[1];
             var contentType = "content/type";

@@ -28,7 +28,7 @@ namespace Glimpse.AspNet
             var queryString = context.Request.QueryString;
 
             var resourceName = queryString["n"];
-            var frameworkProvider = new AspNetFrameworkProvider(context, runtime.Configuration.Logger);
+            var frameworkProvider = new AspNetRequestResponseAdapter(context, runtime.Configuration.Logger);
 
             if (string.IsNullOrEmpty(resourceName))
             {

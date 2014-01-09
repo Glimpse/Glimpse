@@ -207,7 +207,7 @@
     <Compile Include="Extensibility\IInspector.cs" />
     <Compile Include="Extensibility\ISerializer.cs" />
     <Compile Include="Extensibility\ITabContext.cs" />
-    <Compile Include="Framework\IFrameworkProvider.cs" />
+    <Compile Include="Framework\IRequestResponseAdapter.cs" />
     <Compile Include="Framework\GlimpseConfiguration.cs" />
     <Compile Include="Framework\GlimpseRuntime.cs" />
     <Compile Include="Message\IMessage.cs" />

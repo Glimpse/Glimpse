@@ -22,9 +22,9 @@ namespace Glimpse.Test.Core.Extensibility
         [Fact]
         public void Execute()
         {
-            var providerMock = new Mock<IFrameworkProvider>();
+            var providerMock = new Mock<IRequestResponseAdapter>();
             var contextMock = new Mock<IResourceResultContext>();
-            contextMock.Setup(c => c.FrameworkProvider).Returns(providerMock.Object);
+            contextMock.Setup(c => c.RequestResponseAdapter).Returns(providerMock.Object);
 
             var exception = new DummyException("This is a dummy");
 

@@ -28,7 +28,7 @@ namespace Glimpse.Test.AspNet
         {
             HttpModule.BeginRequest(HttpModule.ContextMock.Object);
 
-            HttpModule.RuntimeMock.Verify(r=>r.BeginRequest(It.IsAny<IFrameworkProvider>()), Times.Once());
+            HttpModule.RuntimeMock.Verify(r => r.BeginRequest(It.IsAny<IRequestResponseAdapter>()), Times.Once());
         }
 
         [Fact]

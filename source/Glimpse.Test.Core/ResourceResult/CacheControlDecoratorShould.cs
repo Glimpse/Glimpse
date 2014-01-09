@@ -53,9 +53,9 @@ namespace Glimpse.Test.Core.ResourceResult
             sut.Execute(context);
 #if !DEBUG
             var regex = string.Format(@"{0}.+{1}", expectedSetting.ToDescription(), expectedDuration);
-            context.FrameworkProvider.Verify(fp => fp.SetHttpResponseHeader("Cache-Control", It.IsRegex(regex)));
+            context.requestResponseAdapter.Verify(fp => fp.SetHttpResponseHeader("Cache-Control", It.IsRegex(regex)));
 #else
-            context.FrameworkProvider.Verify(fp => fp.SetHttpResponseHeader("Cache-Control", "no-cache"));
+            context.RequestResponseAdapter.Verify(fp => fp.SetHttpResponseHeader("Cache-Control", "no-cache"));
 #endif
         }
 

@@ -51,7 +51,7 @@
     <Compile Include="AlternateType\RouteConstraint.cs" />
     <Compile Include="AlternateType\RouteConstraintRegex.cs" />
     <Compile Include="AlternateType\RouteNameMixin.cs" />
-    <Compile Include="AspNetFrameworkProvider.cs" />
+    <Compile Include="AspNetRequestResponseAdapter.cs" />
     <Compile Include="AspNetServiceLocator.cs" />
     <Compile Include="Controls\Client.cs" />
     <Compile Include="Constants.cs" />

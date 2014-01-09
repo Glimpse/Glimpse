@@ -45,7 +45,7 @@ namespace Glimpse.Test.Core.Resource
             var configMock = new Mock<IGlimpseConfiguration>();
 
             var resource = new ConfigurationResource();
-            var providerMock = new Mock<IFrameworkProvider>().Setup();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
 
             var result = resource.Execute(contextMock.Object, configMock.Object, providerMock.Object);
             var htmlResourceResult = result as HtmlResourceResult;

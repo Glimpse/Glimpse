@@ -10,47 +10,47 @@ namespace Glimpse.Test.AspNet
 {
     public class AspNetFrameworkProviderShould : IDisposable
     {
-        private AspNetFrameworkProviderTester tester;
+        private AspNetRequestResponseAdapterTester tester;
 
-        public AspNetFrameworkProviderTester FrameworkProvider
+        public AspNetRequestResponseAdapterTester RequestResponseAdapter
         {
-            get { return tester ?? (tester = AspNetFrameworkProviderTester.Create()); }
+            get { return tester ?? (tester = AspNetRequestResponseAdapterTester.Create()); }
             set { tester = value; }
         }
 
         public void Dispose()
         {
-            FrameworkProvider = null;
+            RequestResponseAdapter = null;
         }
 
         [Fact]
         public void HaveARuntimeContextTypeOfHttpContextBase()
         {
-            Assert.True(FrameworkProvider.RuntimeContext.GetType().IsSubclassOf(typeof (HttpContextBase)));
+            Assert.True(RequestResponseAdapter.RuntimeContext.GetType().IsSubclassOf(typeof (HttpContextBase)));
         }
 
         [Fact]
         public void HaveARuntimeContext()
         {
-            Assert.NotNull(FrameworkProvider.RuntimeContext);
-            Assert.True(FrameworkProvider.RuntimeContext is HttpContextBase);
+            Assert.NotNull(RequestResponseAdapter.RuntimeContext);
+            Assert.True(RequestResponseAdapter.RuntimeContext is HttpContextBase);
         }
 
         [Fact]
         public void HaveHttpRequestStore()
         {
-            Assert.NotNull(FrameworkProvider.HttpRequestStore);
-            Assert.Equal(5, FrameworkProvider.HttpRequestStore.Get<int>());
-            Assert.Equal("TestString", FrameworkProvider.HttpRequestStore.Get<string>());
+            Assert.NotNull(RequestResponseAdapter.HttpRequestStore);
+            Assert.Equal(5, RequestResponseAdapter.HttpRequestStore.Get<int>());
+            Assert.Equal("TestString", RequestResponseAdapter.HttpRequestStore.Get<string>());
         }
 
         [Fact]
         public void HaveHttpServerStore()
         {
-            Assert.NotNull(FrameworkProvider.HttpServerStore);
-            Assert.Equal("testValue", FrameworkProvider.HttpServerStore.Get("testKey"));
+            Assert.NotNull(RequestResponseAdapter.HttpServerStore);
+            Assert.Equal("testValue", RequestResponseAdapter.HttpServerStore.Get("testKey"));
 
-            FrameworkProvider.HttpApplicationStateMock.Verify(st => st.Get("testKey"), Times.Once());
+            RequestResponseAdapter.HttpApplicationStateMock.Verify(st => st.Get("testKey"), Times.Once());
         }
 
  
@@ -60,9 +60,9 @@ namespace Glimpse.Test.AspNet
             var headerName = "testKey";
             var headerValue = "testValue";
 
-            FrameworkProvider.SetHttpResponseHeader(headerName, headerValue);
+            RequestResponseAdapter.SetHttpResponseHeader(headerName, headerValue);
 
-            FrameworkProvider.HttpResponseMock.Verify(r=>r.AppendHeader(headerName, headerValue));
+            RequestResponseAdapter.HttpResponseMock.Verify(r=>r.AppendHeader(headerName, headerValue));
         }
 
         [Fact]
@@ -70,21 +70,21 @@ namespace Glimpse.Test.AspNet
         {
             var outputString = "<script src=\"test.js\"></script>";
 
-            FrameworkProvider.InjectHttpResponseBody(outputString);
+            RequestResponseAdapter.InjectHttpResponseBody(outputString);
 
-            FrameworkProvider.HttpContextMock.VerifyGet(ctx => ctx.Response);
-            FrameworkProvider.HttpResponseMock.VerifyGet(r => r.Filter);
-            FrameworkProvider.HttpResponseMock.VerifySet(r => r.Filter = It.IsAny<Stream>());
+            RequestResponseAdapter.HttpContextMock.VerifyGet(ctx => ctx.Response);
+            RequestResponseAdapter.HttpResponseMock.VerifyGet(r => r.Filter);
+            RequestResponseAdapter.HttpResponseMock.VerifySet(r => r.Filter = It.IsAny<Stream>());
         }
 
         [Fact]
         public void SetHttpResponseStatusCode()
         {
             var statusCode = 200;
-            FrameworkProvider.SetHttpResponseStatusCode(statusCode);
+            RequestResponseAdapter.SetHttpResponseStatusCode(statusCode);
 
-            FrameworkProvider.HttpResponseMock.VerifySet(r => r.StatusCode = statusCode);
-            FrameworkProvider.HttpResponseMock.VerifySet(r => r.StatusDescription = null);
+            RequestResponseAdapter.HttpResponseMock.VerifySet(r => r.StatusCode = statusCode);
+            RequestResponseAdapter.HttpResponseMock.VerifySet(r => r.StatusDescription = null);
         }
     }
 }

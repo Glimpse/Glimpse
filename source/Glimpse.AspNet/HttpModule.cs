@@ -95,12 +95,12 @@ namespace Glimpse.AspNet
         {
             // TODO: Add Logging to either methods here or in Runtime
 
-            GlimpseRuntime.Instance.BeginRequest(new AspNetFrameworkProvider(httpContext, Configuration.Logger));
+            GlimpseRuntime.Instance.BeginRequest(new AspNetRequestResponseAdapter(httpContext, Configuration.Logger));
         }
 
         internal void EndRequest(HttpContextBase httpContext)
         {
-            GlimpseRuntime.Instance.EndRequest(new AspNetFrameworkProvider(httpContext, Configuration.Logger));
+            GlimpseRuntime.Instance.EndRequest(new AspNetRequestResponseAdapter(httpContext, Configuration.Logger));
         }
 
         internal void SendHeaders(HttpContextBase httpContext)
@@ -122,12 +122,12 @@ namespace Glimpse.AspNet
 
         private void BeginSessionAccess(HttpContextBase httpContext)
         {
-            GlimpseRuntime.Instance.BeginSessionAccess(new AspNetFrameworkProvider(httpContext, Configuration.Logger));
+            GlimpseRuntime.Instance.BeginSessionAccess(new AspNetRequestResponseAdapter(httpContext, Configuration.Logger));
         }
 
         private void EndSessionAccess(HttpContextBase httpContext)
         {
-            GlimpseRuntime.Instance.EndSessionAccess(new AspNetFrameworkProvider(httpContext, Configuration.Logger));
+            GlimpseRuntime.Instance.EndSessionAccess(new AspNetRequestResponseAdapter(httpContext, Configuration.Logger));
         }
     }
 }

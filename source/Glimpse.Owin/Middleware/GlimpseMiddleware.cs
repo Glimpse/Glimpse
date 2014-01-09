@@ -38,40 +38,39 @@ namespace Glimpse.Owin.Middleware
 
                 var request = new OwinRequest(environment);
                 var response = new OwinResponse(environment);
-                var frameworkProvider = new OwinFrameworkProvider(environment, serverStore);
+                var requestResponseAdapter = new OwinRequestResponseAdapter(environment, serverStore);
 
                 // TODO: Remove hardcode to Glimpse.axd
                 if (request.Uri.PathAndQuery.StartsWith("/Glimpse.axd", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    await ExecuteResource(frameworkProvider, request.Query);
+                    await ExecuteResource(requestResponseAdapter, request.Query);
                     return;
                 }
 
-                GlimpseRuntime.Instance.BeginRequest(frameworkProvider);
+                GlimpseRuntime.Instance.BeginRequest(requestResponseAdapter);
                 // V2Merge: Hack's a million!
-                var requestId = frameworkProvider.HttpRequestStore.Get<Guid>("__GlimpseRequestId");
-                var htmlSnippet = GlimpseRuntime.Instance.GenerateScriptTags(requestId, frameworkProvider);
-                response.Body = new PreBodyTagFilter(htmlSnippet, response.Body, Encoding.UTF8, request.Uri.AbsoluteUri,
-                    new NullLogger());
+                var requestId = requestResponseAdapter.HttpRequestStore.Get<Guid>("__GlimpseRequestId");
+                var htmlSnippet = GlimpseRuntime.Instance.GenerateScriptTags(requestId, requestResponseAdapter);
+                response.Body = new PreBodyTagFilter(htmlSnippet, response.Body, Encoding.UTF8, request.Uri.AbsoluteUri, new NullLogger());
             }
 
             await innerNext(environment);
 
             if (GlimpseRuntime.IsInitialized)
             {
-                GlimpseRuntime.Instance.EndRequest(new OwinFrameworkProvider(environment, serverStore));
+                GlimpseRuntime.Instance.EndRequest(new OwinRequestResponseAdapter(environment, serverStore));
             }
         }
 
-        private async Task ExecuteResource(IFrameworkProvider frameworkProvider, IReadableStringCollection queryString)
+        private async Task ExecuteResource(IRequestResponseAdapter requestResponseAdapter, IReadableStringCollection queryString)
         {
             if (string.IsNullOrEmpty(queryString["n"]))
             {
-                GlimpseRuntime.Instance.ExecuteDefaultResource(frameworkProvider);
+                GlimpseRuntime.Instance.ExecuteDefaultResource(requestResponseAdapter);
             }
             else
             {
-                GlimpseRuntime.Instance.ExecuteResource(frameworkProvider, queryString["n"], new ResourceParameters(queryString.ToDictionary(qs => qs.Key, qs => qs.Value.First())));
+                GlimpseRuntime.Instance.ExecuteResource(requestResponseAdapter, queryString["n"], new ResourceParameters(queryString.ToDictionary(qs => qs.Key, qs => qs.Value.First())));
             }
         }
     }

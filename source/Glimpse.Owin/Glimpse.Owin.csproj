@@ -50,7 +50,7 @@
     <Compile Include="Katana\AppBuilder.cs" />
     <Compile Include="Katana\IAppBuilderExtensions.cs" />
     <Compile Include="Middleware\GlimpseMiddleware.cs" />
-    <Compile Include="Middleware\OwinFrameworkProvider.cs" />
+    <Compile Include="Middleware\OwinRequestResponseAdapter.cs" />
     <Compile Include="Middleware\RequestMetadata.cs" />
     <Compile Include="Middleware\TailMiddleware.cs" />
     <Compile Include="OwinResourceEndpointConfiguration.cs" />

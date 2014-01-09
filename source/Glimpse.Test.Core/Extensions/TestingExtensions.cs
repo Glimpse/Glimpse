@@ -8,7 +8,7 @@ namespace Glimpse.Test.Core.Extensions
 {
     public static class TestingExtensions
     {
-        public static Mock<IFrameworkProvider> Setup(this Mock<IFrameworkProvider> frameworkProvider)
+        public static Mock<IRequestResponseAdapter> Setup(this Mock<IRequestResponseAdapter> frameworkProvider)
         {
             frameworkProvider.Setup(fp => fp.RuntimeContext).Returns(new DummyObjectContext());
             frameworkProvider.Setup(fp => fp.HttpRequestStore).Returns(

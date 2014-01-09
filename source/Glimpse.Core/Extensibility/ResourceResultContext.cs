@@ -11,13 +11,13 @@ namespace Glimpse.Core.Extensibility
         /// Initializes a new instance of the <see cref="ResourceResultContext" /> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
-        /// <param name="frameworkProvider">The framework provider.</param>
+        /// <param name="requestResponseAdapter">The framework provider.</param>
         /// <param name="serializer">The serializer.</param>
         /// <param name="htmlEncoder">The HTML encoder.</param>
-        public ResourceResultContext(ILogger logger, IFrameworkProvider frameworkProvider, ISerializer serializer, IHtmlEncoder htmlEncoder)
+        public ResourceResultContext(ILogger logger, IRequestResponseAdapter requestResponseAdapter, ISerializer serializer, IHtmlEncoder htmlEncoder)
         {
             Logger = logger;
-            FrameworkProvider = frameworkProvider;
+            RequestResponseAdapter = requestResponseAdapter;
             Serializer = serializer;
             HtmlEncoder = htmlEncoder;
         }
@@ -36,7 +36,7 @@ namespace Glimpse.Core.Extensibility
         /// <value>
         /// The framework provider.
         /// </value>
-        public IFrameworkProvider FrameworkProvider { get; set; }
+        public IRequestResponseAdapter RequestResponseAdapter { get; set; }
 
         /// <summary>
         /// Gets or sets the serializer.
