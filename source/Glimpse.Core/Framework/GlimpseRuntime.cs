@@ -181,7 +181,7 @@ namespace Glimpse.Core.Framework
                 throw new GlimpseException(Resources.BeginRequestOutOfOrderRuntimeMethodCall);
             }
 
-            CallContext.LogicalSetData("fp", requestResponseAdapter);
+            CallContext.LogicalSetData(Constants.RequestResponseAdapterStorageKey, requestResponseAdapter);
 
             if (HasOffRuntimePolicy(RuntimeEvent.BeginRequest, requestResponseAdapter))
                 return;
@@ -329,7 +329,7 @@ namespace Glimpse.Core.Framework
                 throw new ArgumentNullException("parameters");
             }
 
-            CallContext.LogicalSetData("fp", requestResponseAdapter);
+            CallContext.LogicalSetData(Constants.RequestResponseAdapterStorageKey, requestResponseAdapter);
 
             string message;
             var logger = Configuration.Logger;
@@ -433,7 +433,7 @@ namespace Glimpse.Core.Framework
                 var key = CreateKey(display);
                 try
                 {
-                    var setupContext = new TabSetupContext(logger, messageBroker, () => GetTabStore(key, CallContext.LogicalGetData("fp") as IRequestResponseAdapter));
+                    var setupContext = new TabSetupContext(logger, messageBroker, () => GetTabStore(key, CallContext.LogicalGetData(Constants.RequestResponseAdapterStorageKey) as IRequestResponseAdapter));
                     display.Setup(setupContext);
                 }
                 catch (Exception exception)
@@ -448,7 +448,7 @@ namespace Glimpse.Core.Framework
                 var key = CreateKey(tab);
                 try
                 {
-                    var setupContext = new TabSetupContext(logger, messageBroker, () => GetTabStore(key, CallContext.LogicalGetData("fp") as IRequestResponseAdapter));
+                    var setupContext = new TabSetupContext(logger, messageBroker, () => GetTabStore(key, CallContext.LogicalGetData(Constants.RequestResponseAdapterStorageKey) as IRequestResponseAdapter));
                     tab.Setup(setupContext);
                 }
                 catch (Exception exception)
