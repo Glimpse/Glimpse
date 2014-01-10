@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Framework;
@@ -47,7 +48,7 @@ namespace Glimpse.Owin.Middleware
                 // V2Merge: Hack's a million!
                 var requestId = requestResponseAdapter.HttpRequestStore.Get<Guid>("__GlimpseRequestId");
                 var htmlSnippet = GlimpseRuntime.Instance.GenerateScriptTags(requestId, requestResponseAdapter);
-                response.Body = new PreBodyTagFilter(htmlSnippet, response.Body, Encoding.UTF8, request.Uri.AbsoluteUri, new NullLogger());
+                response.Body = new PreBodyTagInjectionStream(htmlSnippet, response.Body, Encoding.UTF8, request.Uri.AbsoluteUri, new NullLogger());
             }
 
             await innerNext(environment);

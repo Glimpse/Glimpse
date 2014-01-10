@@ -4,6 +4,7 @@ using System.Runtime.Remoting.Messaging;
 using System.Runtime.Serialization;
 using System.Web;
 using Glimpse.AspNet.Extensions;
+using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 
@@ -106,7 +107,7 @@ namespace Glimpse.AspNet
             try
             {
                 var response = Context.Response;
-                response.Filter = new PreBodyTagFilter(htmlSnippet, response.Filter, response.ContentEncoding, Context.Request != null ? Context.Request.RawUrl : null, Logger);
+                response.Filter = new PreBodyTagInjectionStream(htmlSnippet, response.Filter, response.ContentEncoding, Context.Request != null ? Context.Request.RawUrl : null, Logger);
             }
             catch (Exception exception)
             {
