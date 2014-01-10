@@ -1,7 +1,5 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Glimpse.Core.Extensibility;
-using Glimpse.Core.Framework;
 using Glimpse.Owin.Middleware;
 using Owin;
 
@@ -30,7 +28,6 @@ namespace Glimpse.Owin.Katana
 
         public object Build(Type returnType)
         {
-            // innerApp.UseType<TailMiddleware>(); // This is the last middleware added
             return innerApp.Build(returnType);
         }
 

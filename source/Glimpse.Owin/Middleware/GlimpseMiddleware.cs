@@ -13,17 +13,14 @@ namespace Glimpse.Owin.Middleware
     public class GlimpseMiddleware
     {
         private readonly Func<IDictionary<string, object>, Task> innerNext;
-        private readonly IDictionary<string, object> serverStore;
         private readonly IGlimpseConfiguration config;
 
         public GlimpseMiddleware(Func<IDictionary<string, object>, Task> next, IDictionary<string, object> serverStore)
         {
             innerNext = next;
-            this.serverStore = serverStore;
             config = new GlimpseConfiguration(
                     new OwinResourceEndpointConfiguration(),
-                    // V2Merge: Fix up DictionaryDataStoreAdapter to remove this cast
-                    new InMemoryPersistenceStore(new DictionaryDataStoreAdapter(serverStore as Dictionary<string, object>))); 
+                    new InMemoryPersistenceStore(new DictionaryDataStoreAdapter((Dictionary<string, object>)serverStore))); 
         }
 
         public async Task Invoke(IDictionary<string, object> environment)
@@ -35,7 +32,6 @@ namespace Glimpse.Owin.Middleware
 
             if (GlimpseRuntime.IsInitialized)
             {
-
                 var request = new OwinRequest(environment);
                 var response = new OwinResponse(environment);
                 var requestResponseAdapter = new OwinRequestResponseAdapter(environment);
