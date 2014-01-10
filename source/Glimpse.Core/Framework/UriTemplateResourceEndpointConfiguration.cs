@@ -2,17 +2,27 @@
 using System.Linq;
 using System.Text;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Framework;
 
-namespace Glimpse.Owin
+namespace Glimpse.Core.Framework
 {
-    public class OwinResourceEndpointConfiguration : ResourceEndpointConfiguration
+    public class UriTemplateResourceEndpointConfiguration : ResourceEndpointConfiguration
     {
+        public const string DefaultResourceNameKey = "n";
+
+        public UriTemplateResourceEndpointConfiguration() : this(DefaultResourceNameKey)
+        {
+        }
+
+        public UriTemplateResourceEndpointConfiguration(string resourceNameKey)
+        {
+            ResourceNameKey = resourceNameKey;
+        }
+
+        public string ResourceNameKey { get; set; }
+
         protected override string GenerateUriTemplate(string resourceName, string baseUri, IEnumerable<ResourceParameterMetadata> parameters, ILogger logger)
         {
-            var root = "/Glimpse.axd"; // V2Merge: Refactor so that HttpHandlerEndpointConfiguration and this class can share implementations. Call it UriTemplateResourceEndpoint?
-
-            var stringBuilder = new StringBuilder(string.Format(@"{0}?n={1}", root, resourceName));
+            var stringBuilder = new StringBuilder(string.Format(@"{0}?{1}={2}", baseUri, ResourceNameKey, resourceName));
 
             var requiredParams = parameters.Where(p => p.IsRequired);
             foreach (var parameter in requiredParams)

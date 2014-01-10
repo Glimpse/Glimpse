@@ -20,7 +20,7 @@ namespace Glimpse.Owin.Middleware
         {
             innerNext = next;
             config = new GlimpseConfiguration(
-                    new OwinResourceEndpointConfiguration(),
+                    new UriTemplateResourceEndpointConfiguration(),
                     new InMemoryPersistenceStore(new DictionaryDataStoreAdapter((Dictionary<string, object>)serverStore))); 
         }
 
@@ -37,8 +37,7 @@ namespace Glimpse.Owin.Middleware
                 var response = new OwinResponse(environment);
                 var requestResponseAdapter = new OwinRequestResponseAdapter(environment);
 
-                // TODO: Remove hardcode to Glimpse.axd
-                if (request.Uri.PathAndQuery.StartsWith("/Glimpse.axd", StringComparison.InvariantCultureIgnoreCase))
+                if (request.Uri.PathAndQuery.StartsWith(config.EndpointBaseUri, StringComparison.InvariantCultureIgnoreCase))
                 {
                     await ExecuteResource(requestResponseAdapter, request.Query);
                     return;
@@ -61,13 +60,16 @@ namespace Glimpse.Owin.Middleware
 
         private async Task ExecuteResource(IRequestResponseAdapter requestResponseAdapter, IReadableStringCollection queryString)
         {
-            if (string.IsNullOrEmpty(queryString["n"]))
+            if (string.IsNullOrEmpty(queryString[UriTemplateResourceEndpointConfiguration.DefaultResourceNameKey]))
             {
                 GlimpseRuntime.Instance.ExecuteDefaultResource(requestResponseAdapter);
             }
             else
             {
-                GlimpseRuntime.Instance.ExecuteResource(requestResponseAdapter, queryString["n"], new ResourceParameters(queryString.ToDictionary(qs => qs.Key, qs => qs.Value.First())));
+                GlimpseRuntime.Instance.ExecuteResource(
+                    requestResponseAdapter, 
+                    queryString[UriTemplateResourceEndpointConfiguration.DefaultResourceNameKey], 
+                    new ResourceParameters(queryString.ToDictionary(qs => qs.Key, qs => qs.Value.First())));
             }
         }
     }
