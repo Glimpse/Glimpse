@@ -52,7 +52,6 @@
     <Compile Include="Middleware\GlimpseMiddleware.cs" />
     <Compile Include="Middleware\OwinRequestResponseAdapter.cs" />
     <Compile Include="Middleware\RequestMetadata.cs" />
-    <Compile Include="Middleware\TailMiddleware.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
