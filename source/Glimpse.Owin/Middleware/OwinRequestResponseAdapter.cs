@@ -22,7 +22,7 @@ namespace Glimpse.Owin.Middleware
         {
             get
             {
-                const string key = "glimpse.requestStore";
+                const string key = "glimpse.RequestStore"; // Named by following the Owin key naming conventions documented at http://owin.org/spec/CommonKeys.html
 
                 if (environment.ContainsKey(key))
                 {
