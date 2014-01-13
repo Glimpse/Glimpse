@@ -14,7 +14,7 @@ namespace Glimpse.Core.Framework
         /// Called when ever the implementing framework registers a request start. Specifically, 
         /// with the ASP.NET provider, this is wired to the <c>BeginRequest</c> method.
         /// </remarks>
-        void BeginRequest(IRequestResponseAdapter requestResponseAdapter);
+        Guid BeginRequest(IRequestResponseAdapter requestResponseAdapter);
 
         /// <summary>
         /// Ends the request.

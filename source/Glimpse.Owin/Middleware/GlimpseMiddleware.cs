@@ -42,10 +42,9 @@ namespace Glimpse.Owin.Middleware
                     await ExecuteResource(requestResponseAdapter, request.Query);
                     return;
                 }
-
-                GlimpseRuntime.Instance.BeginRequest(requestResponseAdapter);
+                
                 // V2Merge: Hack's a million!
-                var requestId = requestResponseAdapter.HttpRequestStore.Get<Guid>("__GlimpseRequestId");
+                var requestId = GlimpseRuntime.Instance.BeginRequest(requestResponseAdapter);
                 var htmlSnippet = GlimpseRuntime.Instance.GenerateScriptTags(requestId, requestResponseAdapter);
                 response.Body = new PreBodyTagInjectionStream(htmlSnippet, response.Body, Encoding.UTF8, request.Uri.AbsoluteUri, new NullLogger());
             }

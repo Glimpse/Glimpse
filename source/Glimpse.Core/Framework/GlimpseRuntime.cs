@@ -174,7 +174,7 @@ namespace Glimpse.Core.Framework
         /// Begins Glimpse's processing of a Http request.
         /// </summary>
         /// <exception cref="Glimpse.Core.Framework.GlimpseException">Throws an exception if <see cref="GlimpseRuntime"/> is not yet initialized.</exception>
-        public void BeginRequest(IRequestResponseAdapter requestResponseAdapter)
+        public Guid BeginRequest(IRequestResponseAdapter requestResponseAdapter)
         {
             if (!IsInitialized)
             {
@@ -184,7 +184,7 @@ namespace Glimpse.Core.Framework
             CallContext.LogicalSetData(Constants.RequestResponseAdapterStorageKey, requestResponseAdapter);
 
             if (HasOffRuntimePolicy(RuntimeEvent.BeginRequest, requestResponseAdapter))
-                return;
+                return Guid.Empty;
 
             ExecuteTabs(RuntimeEvent.BeginRequest, requestResponseAdapter);
 
@@ -199,6 +199,8 @@ namespace Glimpse.Core.Framework
             var executionTimer = CreateAndStartGlobalExecutionTimer(requestStore);
 
             Configuration.MessageBroker.Publish(new RuntimeMessage().AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest).AsTimelineMessage("Start Request", TimelineCategory.Request).AsTimedMessage(executionTimer.Point()));
+
+            return requestId;
         }
 
         private bool HasOffRuntimePolicy(RuntimeEvent policyName, IRequestResponseAdapter requestResponseAdapter)
