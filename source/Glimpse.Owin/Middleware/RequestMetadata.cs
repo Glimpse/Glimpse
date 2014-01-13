@@ -35,11 +35,6 @@ namespace Glimpse.Owin.Middleware
             get { return response.ContentType; }
         }
 
-        public string IpAddress 
-        {
-            get { throw new NotImplementedException("Need to implement this IP logic"); }
-        }
-
         public bool RequestIsAjax 
         {
             get
