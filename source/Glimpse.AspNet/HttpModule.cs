@@ -31,7 +31,6 @@ namespace Glimpse.AspNet
                 // serviceLocator.Logger.Error("Call to System.Web.Compilation.BuildManager.GetReferencedAssemblies() failed.", exception);
             }
 
-            // V2Merge: need to find another way to access logger here
             // AppDomain.CurrentDomain.SetData(Constants.LoggerKey, logger);
             // AppDomain.CurrentDomain.DomainUnload += (sender, e) => OnAppDomainUnload((AppDomain)sender);
         }
@@ -79,7 +78,6 @@ namespace Glimpse.AspNet
                 GlimpseRuntime.Initialize(Configuration);
             }
 
-            // V2Merge: is setting the logger here instead of in init okay?
             var currentDomain = AppDomain.CurrentDomain;
             currentDomain.SetData(Constants.LoggerKey, Configuration.Logger);
             currentDomain.DomainUnload += (sender, e) => OnAppDomainUnload((AppDomain)sender);

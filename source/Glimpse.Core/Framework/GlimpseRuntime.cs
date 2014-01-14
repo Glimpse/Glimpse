@@ -102,7 +102,7 @@ namespace Glimpse.Core.Framework
 
             if (!hasInited && Instance.Configuration != configuration)
             {
-                throw new NotSupportedException("Glimpse does not support being Initialize twice.");
+                throw new NotSupportedException("Glimpse does not support being Initialized twice.");
             }
         }
 
@@ -422,9 +422,6 @@ namespace Glimpse.Core.Framework
         /// </returns>
         private void Initialize()
         {
-            // V2Merge: framework provider isn't available during init. We'll need to do this at begin request
-            // CreateAndStartGlobalExecutionTimer(Configuration.requestResponseAdapter.HttpRequestStore);
-
             var logger = Configuration.Logger;
             var messageBroker = Configuration.MessageBroker;
 
