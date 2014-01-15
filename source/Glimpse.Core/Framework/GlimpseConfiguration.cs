@@ -45,6 +45,16 @@ namespace Glimpse.Core.Framework
         private ICollection<ISerializationConverter> serializationConverters;
 
         public GlimpseConfiguration(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore)
+            : this(endpointConfiguration, persistenceStore, "glimpse")
+        {
+        }
+
+        public GlimpseConfiguration(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, string xmlConfigurationName)
+            : this(endpointConfiguration, persistenceStore, ConfigurationManager.GetSection(xmlConfigurationName) as Section ?? new Section())
+        {
+        }
+
+        public GlimpseConfiguration(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, Section xmlConfiguration)
         {
             if (endpointConfiguration == null)
             {
@@ -58,6 +68,7 @@ namespace Glimpse.Core.Framework
 
             ResourceEndpoint = endpointConfiguration;
             PersistenceStore = persistenceStore;
+            XmlConfiguration = xmlConfiguration;
             // TODO: Instantiate the user's IOC container (if they have one)
         }
 
@@ -70,12 +81,6 @@ namespace Glimpse.Core.Framework
         public Section XmlConfiguration {
             get
             {
-                if (xmlConfiguration != null)
-                {
-                    return xmlConfiguration;
-                }
-
-                xmlConfiguration = ConfigurationManager.GetSection("glimpse") as Section ?? new Section();
                 return xmlConfiguration;
             }
             set
