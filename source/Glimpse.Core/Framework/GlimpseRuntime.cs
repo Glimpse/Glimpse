@@ -113,7 +113,9 @@ namespace Glimpse.Core.Framework
                 throw new ArgumentNullException("configuration");
             }
 
-            Configuration = configuration;
+            // run user customizations to configuration before storing
+            // Convert to readonly configuration
+            Configuration = Glimpse.Configuration(configuration);
             this.Initialize();
         }
 
