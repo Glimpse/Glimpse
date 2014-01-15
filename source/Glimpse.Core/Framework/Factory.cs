@@ -408,7 +408,34 @@ namespace Glimpse.Core.Framework
         public Func<RuntimePolicy> InstantiateRuntimePolicyStrategy()
         {
             var frameworkProvider = InstantiateFrameworkProvider();
-            return () => frameworkProvider.HttpRequestStore.Get<RuntimePolicy>(Constants.RuntimePolicyKey);
+            var logger = InstantiateLogger();
+
+            return () =>
+            {
+                // this code is indirectly called from 2 places :
+                // - From inside an AlternateMethod instance (or basically everything that is related to a Glimpse proxy) to decide whether 
+                //   or not Glimpse is enabled and data should be collected, and in case RuntimePolicy.Off is returned, the original method 
+                //   will be called, which has the same effect as if Glimpse is not there.
+                // - By any Inspector, since it is exposed on the InspectorContext
+
+                // Now the assumption that is made here, is that this code will only be called after that the GlimpseRuntime's BeginRequest method
+                // has run and properly initialized the 'GlimpseContext' for the current request, which means it has at least set the current runtime policy. 
+                // Unfortunately there are use-cases where users are creative and (ab)use specific concepts to achieve a specific goal, and those uses don't
+                // always align with Glimpse's assumptions. For example a new instance of an HttpContext is sometimes created and assigned to the HttpContext.Current
+                // property to have a new controller instance render a view to a string as if it was a request... This has the nasty side-effect that Glimpse is not
+                // given the opportunity to do a proper setup of that request, resulting in non-deterministic behavior.
+                
+                // Therefore if we notice that the current request has not properly been initialized by the GlimpseRuntime's BeginRequest method then we'll decide
+                // that Glimpse is disabled, which is the safest assumption we can make here, preventing any further Glimpse specific code from collection information for that new "request".
+                if (!frameworkProvider.HttpRequestStore.Contains(Constants.RuntimePolicyKey))
+                {
+                    logger.Debug("Apparently GlimpseRuntime has not yet initialized this request. This might happen in case you're doing something specific like mentioned in this issue: https://github.com/Glimpse/Glimpse/issues/703 . Either way, Glimpse will be disabled to prevent any further non-deterministic behavior during this request.");
+                    // we'll store a RuntimePolicy.Off in the HttpRequestStore for subsequent calls for this request.
+                    frameworkProvider.HttpRequestStore.Set(Constants.RuntimePolicyKey, RuntimePolicy.Off);
+                }
+
+                return frameworkProvider.HttpRequestStore.Get<RuntimePolicy>(Constants.RuntimePolicyKey);
+            };
         }
 
         /// <summary>
