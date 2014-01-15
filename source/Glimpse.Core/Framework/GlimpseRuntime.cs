@@ -114,8 +114,8 @@ namespace Glimpse.Core.Framework
             }
 
             // run user customizations to configuration before storing
-            // Convert to readonly configuration
-            Configuration = Glimpse.Configuration(configuration);
+            var userUpdatedConfig = Glimpse.Configuration(configuration);
+            Configuration = new ReadonlyConfigurationAdapter(userUpdatedConfig);
             this.Initialize();
         }
 
@@ -134,7 +134,7 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configuration.
         /// </value>
-        public IGlimpseConfiguration Configuration { get; set; }
+        public IReadonlyGlimpseConfiguration Configuration { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this instance has been initialized.

@@ -69,6 +69,6 @@ namespace Glimpse.Core.Framework
         /// </remarks>
         void EndSessionAccess(IRequestResponseAdapter requestResponseAdapter);
 
-        IGlimpseConfiguration Configuration { get; }
+        IReadonlyGlimpseConfiguration Configuration { get; }
     }
 }
