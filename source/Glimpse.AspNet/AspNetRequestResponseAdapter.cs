@@ -4,33 +4,27 @@ using System.Runtime.Remoting.Messaging;
 using System.Runtime.Serialization;
 using System.Web;
 using Glimpse.AspNet.Extensions;
+using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 
 namespace Glimpse.AspNet
 {
-    public class AspNetFrameworkProvider : IFrameworkProvider
+    public class AspNetRequestResponseAdapter : IRequestResponseAdapter
     {
-        /// <summary>
-        /// Wrapper around HttpContext.Current for testing purposes. Not for public use.
-        /// </summary>
         private HttpContextBase context;
 
-        private readonly static bool AsyncSupportDisabled = Convert.ToBoolean(ConfigurationManager.AppSettings["Glimpse:DisableAsyncSupport"]);
-
-        public AspNetFrameworkProvider(ILogger logger)
+        public AspNetRequestResponseAdapter(HttpContextBase context, ILogger logger)
         {
+            Context = context;
             Logger = logger;
         }
+
+        private readonly static bool AsyncSupportDisabled = Convert.ToBoolean(ConfigurationManager.AppSettings["Glimpse:DisableAsyncSupport"]);
 
         public IDataStore HttpRequestStore
         {
             get { return new DictionaryDataStoreAdapter(Context.Items); }
-        }
-
-        public IDataStore HttpServerStore
-        {
-            get { return new HttpApplicationStateBaseDataStoreAdapter(Context.Application); }
         }
 
         public object RuntimeContext
@@ -43,11 +37,14 @@ namespace Glimpse.AspNet
             get { return new RequestMetadata(Context); }
         }
 
+        // V2Merge: We may be able to get away with a simple property in the future
         internal HttpContextBase Context
         {
             get { return context ?? TryGetOrCaptureLogicalContext(); }
             set { context = value; }
         }
+
+        private ILogger Logger { get; set; }
 
         private static HttpContextBase TryGetOrCaptureLogicalContext()
         {
@@ -64,8 +61,6 @@ namespace Glimpse.AspNet
 
             return context;
         }
-
-        private ILogger Logger { get; set; }
 
         public void SetHttpResponseHeader(string name, string value)
         {
@@ -112,7 +107,7 @@ namespace Glimpse.AspNet
             try
             {
                 var response = Context.Response;
-                response.Filter = new PreBodyTagFilter(htmlSnippet, response.Filter, response.ContentEncoding, Context.Request != null ? Context.Request.RawUrl : null, Logger);
+                response.Filter = new PreBodyTagInjectionStream(htmlSnippet, response.Filter, response.ContentEncoding, Context.Request != null ? Context.Request.RawUrl : null, Logger);
             }
             catch (Exception exception)
             {

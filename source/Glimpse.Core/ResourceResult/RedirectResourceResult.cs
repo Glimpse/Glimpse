@@ -61,7 +61,7 @@ namespace Glimpse.Core.ResourceResult
                 }
             }
 
-            var frameworkProvider = context.FrameworkProvider;
+            var frameworkProvider = context.RequestResponseAdapter;
             frameworkProvider.SetHttpResponseStatusCode(301);
             frameworkProvider.SetHttpResponseHeader("Location", uriTemplate.Resolve());
         }

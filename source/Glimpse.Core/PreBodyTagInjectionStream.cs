@@ -3,14 +3,14 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Glimpse.Core.Extensibility;
 
-namespace Glimpse.AspNet
+namespace Glimpse.Core
 {
     /// <summary>
     /// This class will inject some html snippet (most likely the Glimpse Client script tags, but it can be anything) in the resulting HTML output.
     /// It will look for the last occurrence of the &lt;/body&gt; tag and inject the snippet right before that tag.
     /// An instance of this class should be assigned as a filter to the outgoing response so that the injection can be done once all the rendering is completed.
     /// </summary>
-    public class PreBodyTagFilter : Stream
+    public class PreBodyTagInjectionStream : Stream
     {
         private const string BodyClosingTag = "</body>";
         private const string TroubleshootingDocsUri = "http://getglimpse.com/Help/Troubleshooting";
@@ -23,7 +23,7 @@ namespace Glimpse.AspNet
         private string CurrentRequestRawUrl { get; set; }
         private string UnwrittenCharactersFromPreviousCall { get; set; }
 
-        public PreBodyTagFilter(string htmlSnippet, Stream outputStream, Encoding contentEncoding, string currentRequestRawUrl, ILogger logger)
+        public PreBodyTagInjectionStream(string htmlSnippet, Stream outputStream, Encoding contentEncoding, string currentRequestRawUrl, ILogger logger)
         {
             HtmlSnippet = htmlSnippet + BodyClosingTag;
             OutputStream = outputStream;

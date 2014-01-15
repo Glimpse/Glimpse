@@ -56,7 +56,7 @@ namespace Glimpse.Core.ResourceResult
         /// <param name="context">The context.</param>
         protected override void Decorate(IResourceResultContext context)
         {
-            var frameworkProvider = context.FrameworkProvider;
+            var frameworkProvider = context.RequestResponseAdapter;
 
 #if !DEBUG
             if (CacheSetting.HasValue)

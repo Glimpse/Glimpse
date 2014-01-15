@@ -47,22 +47,12 @@ namespace Glimpse.Ado.AlternateType
             get { return InnerDataReader.HasRows; }
         }
 
+        private Guid ConnectionId { get; set; }
+
         public override bool IsClosed
         {
             get { return InnerDataReader.IsClosed; }
         }
-
-        public override int RecordsAffected
-        {
-            get { return InnerDataReader.RecordsAffected; }
-        }
-
-        public override int VisibleFieldCount
-        {
-            get { return InnerDataReader.VisibleFieldCount; }
-        }
-
-        private Guid ConnectionId { get; set; }
 
         private Guid CommandId { get; set; }
 
@@ -70,13 +60,23 @@ namespace Glimpse.Ado.AlternateType
 
         private IMessageBroker MessageBroker
         {
-            get { return messageBroker ?? (messageBroker = GlimpseConfiguration.GetConfiguredMessageBroker()); }
+            get { return messageBroker ?? (messageBroker = GlimpseRuntime.Instance.Configuration.MessageBroker); }
             set { messageBroker = value; }
+        }
+
+        public override int RecordsAffected
+        {
+            get { return InnerDataReader.RecordsAffected; }
         }
 
         public override object this[int ordinal]
         {
             get { return InnerDataReader[ordinal]; }
+        }
+
+        public override int VisibleFieldCount
+        {
+            get { return InnerDataReader.VisibleFieldCount; }
         }
 
         public override object this[string name]

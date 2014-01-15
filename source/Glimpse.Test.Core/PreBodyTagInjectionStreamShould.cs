@@ -1,17 +1,17 @@
 ﻿using System.IO;
 using System.Text;
-using Glimpse.AspNet;
+using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Moq;
 using Xunit;
 
-namespace Glimpse.Test.AspNet
+namespace Glimpse.Test.Core
 {
-    public class PreBodyTagFilterShould
+    public class PreBodyTagInjectionStreamShould
     {
         private Mock<ILogger> LoggerMock { get; set; }
 
-        public PreBodyTagFilterShould()
+        public PreBodyTagInjectionStreamShould()
         {
             LoggerMock = new Mock<ILogger>();
         }
@@ -159,7 +159,7 @@ namespace Glimpse.Test.AspNet
         {
             using (var memoryStream = new MemoryStream())
             {
-                var preBodyTagFilter = new PreBodyTagFilter(htmlSnippet, memoryStream, Encoding.UTF8, requestUrl, LoggerMock.Object);
+                var preBodyTagFilter = new PreBodyTagInjectionStream(htmlSnippet, memoryStream, Encoding.UTF8, requestUrl, LoggerMock.Object);
 
                 string[] inputsToProcess = { inputToProcess };
                 if (chunkLastNumberOfCharacters.HasValue)

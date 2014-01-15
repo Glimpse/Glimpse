@@ -8,19 +8,13 @@ namespace Glimpse.Core.Framework
     public interface IGlimpseRuntime
     {
         /// <summary>
-        /// Gets a value indicating whether this instance is initialized.
-        /// </summary>
-        /// <value><c>true</c> if this instance is initialized; otherwise, <c>false</c>.</value>
-        bool IsInitialized { get; }
-
-        /// <summary>
         /// Begins the request.
         /// </summary>
         /// <remarks>
         /// Called when ever the implementing framework registers a request start. Specifically, 
         /// with the ASP.NET provider, this is wired to the <c>BeginRequest</c> method.
         /// </remarks>
-        void BeginRequest();
+        Guid BeginRequest(IRequestResponseAdapter requestResponseAdapter);
 
         /// <summary>
         /// Ends the request.
@@ -29,7 +23,7 @@ namespace Glimpse.Core.Framework
         /// Called when ever the implementing framework registers a request end. Specifically, 
         /// with the ASP.NET provider, this is wired to the <c>PostReleaseRequestState</c> method.
         /// </remarks>
-        void EndRequest();
+        void EndRequest(IRequestResponseAdapter requestResponseAdapter);
 
         /// <summary>
         /// Executes the default resource.
@@ -40,7 +34,7 @@ namespace Glimpse.Core.Framework
         /// <seealso cref="Glimpse.Core.Extensibility.IResourceResult"/>
         /// <seealso cref="Glimpse.Core.Extensibility.IResource"/>
         /// </remarks>
-        void ExecuteDefaultResource();
+        void ExecuteDefaultResource(IRequestResponseAdapter requestResponseAdapter);
 
         /// <summary>
         /// Executes the resource.
@@ -53,7 +47,7 @@ namespace Glimpse.Core.Framework
         /// <seealso cref="Glimpse.Core.Extensibility.IResourceResult"/>
         /// <seealso cref="Glimpse.Core.Extensibility.IResource"/>
         /// </remarks>
-        void ExecuteResource(string resourceName, ResourceParameters parameters);
+        void ExecuteResource(IRequestResponseAdapter requestResponseAdapter, string resourceName, ResourceParameters parameters);
 
         /// <summary>
         /// Begins the session access.
@@ -63,7 +57,7 @@ namespace Glimpse.Core.Framework
         /// executed off this methods should have access to the session state store. Specifically, 
         /// with the ASP.NET provider, this is wired to the <c>PostAcquireRequestState</c> method.
         /// </remarks>
-        void BeginSessionAccess();
+        void BeginSessionAccess(IRequestResponseAdapter requestResponseAdapter);
 
         /// <summary>
         /// Ends the session access.
@@ -73,18 +67,8 @@ namespace Glimpse.Core.Framework
         /// executed off this methods should still have access to the session state store. Specifically, 
         /// with the ASP.NET provider, this is wired to the <c>PostRequestHandlerExecute</c> method.
         /// </remarks>
-        void EndSessionAccess();
+        void EndSessionAccess(IRequestResponseAdapter requestResponseAdapter);
 
-        /// <summary>
-        /// Initializes this instance.
-        /// </summary>
-        /// <returns><c>true</c> if system initialized successfully, <c>false</c> otherwise</returns>
-        /// <remarks>
-        /// Typically used to wire up framework events to the corresponding runtime methods. Depending
-        /// on framework implementation, this could be called multiple times per "application pool" 
-        /// recycle. Specifically, with the ASP.NET provider, this is wired to/implemented by the 
-        /// <c>Init</c> method.
-        /// </remarks>
-        bool Initialize();
+        IGlimpseConfiguration Configuration { get; }
     }
 }
