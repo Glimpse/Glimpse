@@ -22,9 +22,9 @@ namespace Glimpse.Test.Core.ResourceResult
         {
             var result = new RedirectResourceResult("//localhost{?a}{&b}");
 
-            var providerMock = new Mock<IFrameworkProvider>();
+            var providerMock = new Mock<IRequestResponseAdapter>();
             var contextMock = new Mock<IResourceResultContext>();
-            contextMock.Setup(c => c.FrameworkProvider).Returns(providerMock.Object);
+            contextMock.Setup(c => c.RequestResponseAdapter).Returns(providerMock.Object);
 
             result.Execute(contextMock.Object);
 
@@ -39,9 +39,9 @@ namespace Glimpse.Test.Core.ResourceResult
 
             var result = new RedirectResourceResult("//localhost{?a}{&b}", data);
 
-            var providerMock = new Mock<IFrameworkProvider>();
+            var providerMock = new Mock<IRequestResponseAdapter>();
             var contextMock = new Mock<IResourceResultContext>();
-            contextMock.Setup(c => c.FrameworkProvider).Returns(providerMock.Object);
+            contextMock.Setup(c => c.RequestResponseAdapter).Returns(providerMock.Object);
 
             result.Execute(contextMock.Object);
 

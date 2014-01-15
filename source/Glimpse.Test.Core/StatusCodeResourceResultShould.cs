@@ -20,9 +20,9 @@ namespace Glimpse.Test.Core
         [Fact]
         public void Execute()
         {
-            var frameworkProviderMock = new Mock<IFrameworkProvider>();
+            var frameworkProviderMock = new Mock<IRequestResponseAdapter>();
             var contextMock = new Mock<IResourceResultContext>();
-            contextMock.Setup(c => c.FrameworkProvider).Returns(frameworkProviderMock.Object);
+            contextMock.Setup(c => c.RequestResponseAdapter).Returns(frameworkProviderMock.Object);
 
             var result = new StatusCodeResourceResult(101, "Message");
 

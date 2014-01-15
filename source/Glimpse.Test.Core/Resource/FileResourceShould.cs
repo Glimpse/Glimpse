@@ -10,7 +10,7 @@ namespace Glimpse.Test.Core.Resource
 {
     public class FileResourceShould
     {
-        private readonly Mock<IFrameworkProvider> mockFrameworkProvider;
+        private readonly Mock<IRequestResponseAdapter> mockRequestResponseAdapter;
         private readonly Mock<IResourceContext> mockResourceContext;
         private readonly Mock<IResourceResultContext> mockResourceResultContext;
         private byte[] returnedContent;
@@ -18,11 +18,11 @@ namespace Glimpse.Test.Core.Resource
         public FileResourceShould() {
             mockResourceContext = new Mock<IResourceContext>();
             mockResourceResultContext = new Mock<IResourceResultContext>();
-            mockFrameworkProvider = new Mock<IFrameworkProvider>();
+            mockRequestResponseAdapter = new Mock<IRequestResponseAdapter>();
 
-            mockResourceResultContext.SetupGet(c => c.FrameworkProvider).Returns(mockFrameworkProvider.Object);
+            mockResourceResultContext.SetupGet(c => c.RequestResponseAdapter).Returns(mockRequestResponseAdapter.Object);
 
-            mockFrameworkProvider.Setup(p => p.WriteHttpResponse(It.IsAny<byte[]>())).Callback<byte[]>(content => returnedContent = content);
+            mockRequestResponseAdapter.Setup(p => p.WriteHttpResponse(It.IsAny<byte[]>())).Callback<byte[]>(content => returnedContent = content);
         }
 
         [Fact]

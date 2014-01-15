@@ -11,27 +11,28 @@ namespace Glimpse.AspNet
     public class HttpModule : IHttpModule  
     {
         private static readonly object LockObj = new object();
-        private static readonly Factory Factory;
+        private static GlimpseConfiguration Configuration;
 
         static HttpModule()
         {
-            var serviceLocator = new AspNetServiceLocator();
-            Factory = new Factory(serviceLocator);
-            ILogger logger = Factory.InstantiateLogger();
-            serviceLocator.Logger = logger;
+            // V2Merge: need to find another way to access logger here
+            // ILogger logger = Factory.InstantiateLogger();
+            // serviceLocator.Logger = Factory.InstantiateLogger();
 
             try
             {
                 BuildManager.GetReferencedAssemblies();
-                serviceLocator.Logger.Debug("Preloaded all referenced assemblies with System.Web.Compilation.BuildManager.GetReferencedAssemblies()");
+                // TODO: Add these back in
+                // serviceLocator.Logger.Debug("Preloaded all referenced assemblies with System.Web.Compilation.BuildManager.GetReferencedAssemblies()");
             }
             catch (Exception exception)
             {
-                serviceLocator.Logger.Error("Call to System.Web.Compilation.BuildManager.GetReferencedAssemblies() failed.", exception);
+                // TODO: Add these back in
+                // serviceLocator.Logger.Error("Call to System.Web.Compilation.BuildManager.GetReferencedAssemblies() failed.", exception);
             }
 
-            AppDomain.CurrentDomain.SetData(Constants.LoggerKey, logger);
-            AppDomain.CurrentDomain.DomainUnload += (sender, e) => OnAppDomainUnload((AppDomain)sender);
+            // AppDomain.CurrentDomain.SetData(Constants.LoggerKey, logger);
+            // AppDomain.CurrentDomain.DomainUnload += (sender, e) => OnAppDomainUnload((AppDomain)sender);
         }
 
         private static void OnAppDomainUnload(AppDomain appDomain)
@@ -66,53 +67,38 @@ namespace Glimpse.AspNet
 
         internal void Init(HttpApplicationBase httpApplication)
         {
-            var runtime = GetRuntime(httpApplication.Application);
-
-            if (runtime.IsInitialized || runtime.Initialize())
+            if (!GlimpseRuntime.IsInitialized)
             {
-                httpApplication.BeginRequest += (context, e) => BeginRequest(WithTestable(context));
-                httpApplication.PostAcquireRequestState += (context, e) => BeginSessionAccess(WithTestable(context));
-                httpApplication.PostRequestHandlerExecute += (context, e) => EndSessionAccess(WithTestable(context));
-                httpApplication.PostReleaseRequestState += (context, e) => EndRequest(WithTestable(context));
-                httpApplication.PreSendRequestHeaders += (context, e) => SendHeaders(WithTestable(context));
-            }
-        }
+                Configuration = Configuration ?? 
+                    new GlimpseConfiguration(
+                        new HttpHandlerEndpointConfiguration(), 
+                        new InMemoryPersistenceStore(
+                            new HttpApplicationStateBaseDataStoreAdapter(httpApplication.Application)));
 
-        internal IGlimpseRuntime GetRuntime(HttpApplicationStateBase applicationState)
-        {
-            var runtime = applicationState[Constants.RuntimeKey] as IGlimpseRuntime;
-
-            if (runtime == null)
-            {
-                lock (LockObj)
-                {
-                    runtime = applicationState[Constants.RuntimeKey] as IGlimpseRuntime;
-
-                    if (runtime == null)
-                    {
-                        runtime = Factory.InstantiateRuntime();
-
-                        applicationState.Add(Constants.RuntimeKey, runtime);
-                    }
-                }
+                GlimpseRuntime.Initialize(Configuration);
             }
 
-            return runtime;
+            var currentDomain = AppDomain.CurrentDomain;
+            currentDomain.SetData(Constants.LoggerKey, Configuration.Logger);
+            currentDomain.DomainUnload += (sender, e) => OnAppDomainUnload((AppDomain)sender);
+
+            httpApplication.BeginRequest += (context, e) => BeginRequest(WithTestable(context));
+            httpApplication.PostAcquireRequestState += (context, e) => BeginSessionAccess(WithTestable(context));
+            httpApplication.PostRequestHandlerExecute += (context, e) => EndSessionAccess(WithTestable(context));
+            httpApplication.PostReleaseRequestState += (context, e) => EndRequest(WithTestable(context));
+            httpApplication.PreSendRequestHeaders += (context, e) => SendHeaders(WithTestable(context));
         }
 
         internal void BeginRequest(HttpContextBase httpContext)
         {
             // TODO: Add Logging to either methods here or in Runtime
-            var runtime = GetRuntime(httpContext.Application);
 
-            runtime.BeginRequest();
+            GlimpseRuntime.Instance.BeginRequest(new AspNetRequestResponseAdapter(httpContext, Configuration.Logger));
         }
 
         internal void EndRequest(HttpContextBase httpContext)
         {
-            var runtime = GetRuntime(httpContext.Application);
-
-            runtime.EndRequest();
+            GlimpseRuntime.Instance.EndRequest(new AspNetRequestResponseAdapter(httpContext, Configuration.Logger));
         }
 
         internal void SendHeaders(HttpContextBase httpContext)
@@ -134,16 +120,12 @@ namespace Glimpse.AspNet
 
         private void BeginSessionAccess(HttpContextBase httpContext)
         {
-            var runtime = GetRuntime(httpContext.Application);
-
-            runtime.BeginSessionAccess();
+            GlimpseRuntime.Instance.BeginSessionAccess(new AspNetRequestResponseAdapter(httpContext, Configuration.Logger));
         }
 
         private void EndSessionAccess(HttpContextBase httpContext)
         {
-            var runtime = GetRuntime(httpContext.Application);
-
-            runtime.EndSessionAccess();
+            GlimpseRuntime.Instance.EndSessionAccess(new AspNetRequestResponseAdapter(httpContext, Configuration.Logger));
         }
     }
 }

@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
@@ -10,7 +9,6 @@ namespace Glimpse.Test.Core.Tester
 {
     public class GlimpseRuntimeTester : GlimpseRuntime
     {
-        public Mock<IFrameworkProvider> FrameworkProviderMock { get; set; }
         public Mock<ResourceEndpointConfiguration> EndpointConfigMock { get; set; }
         public Mock<IDataStore> HttpRequestStoreMock { get; set; }
         public Mock<ITab> TabMock { get; set; }
@@ -27,10 +25,8 @@ namespace Glimpse.Test.Core.Tester
         public Mock<IDynamicClientScript> DynamicScriptMock { get; set; }
         public Mock<IHtmlEncoder> EncoderMock { get; set; }
 
-        private GlimpseRuntimeTester(GlimpseConfiguration configuration, Mock<IFrameworkProvider> frameworkProviderMock, Mock<ResourceEndpointConfiguration> endpointConfigMock) : base(configuration)
+        private GlimpseRuntimeTester(GlimpseConfiguration configuration) : base(configuration)
         {
-            FrameworkProviderMock = frameworkProviderMock;
-            EndpointConfigMock = endpointConfigMock;
             HttpRequestStoreMock = new Mock<IDataStore>();
             TabMock = new Mock<ITab>().Setup();
             InspectorMock = new Mock<IInspector>();
@@ -59,9 +55,6 @@ namespace Glimpse.Test.Core.Tester
             DynamicScriptMock.Setup(ds => ds.GetResourceName()).Returns("aResource");
             EncoderMock = new Mock<IHtmlEncoder>();
 
-
-            FrameworkProviderMock.Setup(fp => fp.RequestMetadata).Returns(RequestMetadataMock.Object);
-
             configuration.Serializer = SerializerMock.Object;
             configuration.PersistenceStore = PersistenceStoreMock.Object;
             configuration.Logger = LoggerMock.Object;
@@ -73,27 +66,21 @@ namespace Glimpse.Test.Core.Tester
 
         public static GlimpseRuntimeTester Create()
         {
-            var frameworkProviderMock = new Mock<IFrameworkProvider>().Setup();
-            var endpointConfigMock = new Mock<ResourceEndpointConfiguration>();
             var loggerMock = new Mock<ILogger>();
-            var clientScripts = new ReflectionDiscoverableCollection<IClientScript>(loggerMock.Object);
-            var htmlEncoderMock = new Mock<IHtmlEncoder>();
-            var persistenceStoreMock = new Mock<IPersistenceStore>();
-            var inspectors = new ReflectionDiscoverableCollection<IInspector>(loggerMock.Object);
             var resources = new ReflectionDiscoverableCollection<IResource>(loggerMock.Object);
-            var serializerMock = new Mock<ISerializer>();
             var tabs = new ReflectionDiscoverableCollection<ITab>(loggerMock.Object);
-            var displays = new ReflectionDiscoverableCollection<IDisplay>(loggerMock.Object);
             var policies = new ReflectionDiscoverableCollection<IRuntimePolicy>(loggerMock.Object);
-            var resourceMock = new Mock<IResource>();
-            var proxyFactoryMock = new Mock<IProxyFactory>();
-            var messageBrokerMock = new Mock<IMessageBroker>();
 
-            var configuration =
-                new GlimpseConfiguration(frameworkProviderMock.Object, endpointConfigMock.Object, clientScripts, loggerMock.Object, RuntimePolicy.On, htmlEncoderMock.Object, persistenceStoreMock.Object, inspectors, resources, serializerMock.Object, tabs, displays, policies, resourceMock.Object, proxyFactoryMock.Object, messageBrokerMock.Object, "~/Glimpse.axd", () => new ExecutionTimer(Stopwatch.StartNew()), () => RuntimePolicy.On);
+            var configuration = new GlimpseConfiguration(new Mock<ResourceEndpointConfiguration>().Object,
+                new Mock<IPersistenceStore>().Object)
+            {
+                Logger = loggerMock.Object,
+                Resources = resources,
+                Tabs = tabs,
+                RuntimePolicies = policies
+            };
 
-
-            return new GlimpseRuntimeTester(configuration, frameworkProviderMock, endpointConfigMock);
+            return new GlimpseRuntimeTester(configuration);
         }
     }
 }

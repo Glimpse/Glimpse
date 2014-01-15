@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
+using System.Web;
 
 namespace Glimpse.AspNet
 {
@@ -17,9 +18,9 @@ namespace Glimpse.AspNet
         public T GetInstance<T>() where T : class
         {
             var type = typeof(T);
-            if (type == typeof(IFrameworkProvider))
+            if (type == typeof(IRequestResponseAdapter))
             {
-                return new AspNetFrameworkProvider(Logger) as T;
+                return new AspNetRequestResponseAdapter(new HttpContextWrapper(HttpContext.Current), Logger) as T; // TODO: Fix this hack!
             }
 
             if (type == typeof(ResourceEndpointConfiguration))
