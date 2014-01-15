@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Web.ModelBinding;
 using System.Web.Mvc;
 
 namespace MvcMusicStore.Controllers
@@ -26,6 +27,12 @@ namespace MvcMusicStore.Controllers
         public JsonResult PostItem(AjaxPostedData item)
         {
             return new JsonResult { Data = new { PostedItem = item } };
+        }
+
+        [HttpPost]
+        public ActionResult HtmlContainedPost(HtmlInputAllowedType htmlInputAllowedType)
+        {
+            return View("Index", new ComplexType());
         }
 
         public class AjaxPostedData
@@ -77,6 +84,12 @@ namespace MvcMusicStore.Controllers
 
             public string Value1 { get; set; }
             public string Value2 { get; set; }
+        }
+
+        public class HtmlInputAllowedType
+        {
+            [AllowHtml]
+            public string HtmlContent { get; set; }
         }
     }
 }
