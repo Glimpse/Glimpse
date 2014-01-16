@@ -115,6 +115,10 @@
     <Compile Include="Extensions\TestingExtensions.cs" />
     <Compile Include="Framework\CastleDynamicProxyFactoryShould.cs" />
     <Compile Include="Framework\ApplicationPersistenceStoreShould.cs" />
+    <Compile Include="Framework\ActiveGlimpseRequestContextsShould.cs" />
+    <Compile Include="Framework\GlimpseRequestContextHandleShould.cs" />
+    <Compile Include="Framework\InactiveGlimpseRequestContextShould.cs" />
+    <Compile Include="Framework\GlimpseRequestContextShould.cs" />
     <Compile Include="Framework\MessageBrokerShould.cs" />
     <Compile Include="Framework\GlimpseConfigurationShould.cs" />
     <Compile Include="Framework\GlimpseMetadataShould.cs" />
