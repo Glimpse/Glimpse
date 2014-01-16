@@ -293,33 +293,7 @@ namespace Glimpse.Core.Framework
                     return logger;
                 }
 
-                var configuredPath = XmlConfiguration.Logging.LogLocation;
-
-                // Root the path if it isn't already
-                var logDirPath = Path.IsPathRooted(configuredPath)
-                                     ? configuredPath
-                                     : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, configuredPath);
-
-                // Add a filename if one isn't specified
-                var logFilePath = string.IsNullOrEmpty(Path.GetExtension(logDirPath))
-                                      ? Path.Combine(logDirPath, "Glimpse.log")
-                                      : logDirPath;
-
-                // use NLog logger otherwise
-                var fileTarget = new FileTarget
-                {
-                    FileName = logFilePath,
-                    Layout =
-                        "${longdate} | ${level:uppercase=true} | ${message} | ${exception:maxInnerExceptionLevel=5:format=type,message,stacktrace:separator=--:innerFormat=shortType,message,method:innerExceptionSeparator=>>}"
-                };
-
-                var asyncTarget = new AsyncTargetWrapper(fileTarget);
-
-                var loggingConfiguration = new LoggingConfiguration();
-                loggingConfiguration.AddTarget("file", asyncTarget);
-                loggingConfiguration.LoggingRules.Add(new LoggingRule("*", LogLevel.FromOrdinal((int)logLevel), asyncTarget));
-
-                logger = new NLogLogger(new LogFactory(loggingConfiguration).GetLogger("Glimpse"));
+                logger = CreateLogger();
                 return logger;
             }
 
@@ -823,6 +797,10 @@ namespace Glimpse.Core.Framework
             // This method can be updated to ensure that web.config settings "win" - but that is difficult to do for most of them
             DefaultRuntimePolicy = XmlConfiguration.DefaultRuntimePolicy;
             EndpointBaseUri = XmlConfiguration.EndpointBaseUri;
+            if (XmlConfiguration.Logging.Level != LoggingLevel.Off)
+            {
+                Logger = CreateLogger();
+            }
         }
 
         private bool TrySingleInstanceFromServiceLocators<T>(out T instance) where T : class
@@ -838,6 +816,37 @@ namespace Glimpse.Core.Framework
 
             instance = null;
             return false;
+        }
+
+        private ILogger CreateLogger()
+        {
+            var configuredPath = XmlConfiguration.Logging.LogLocation;
+
+            // Root the path if it isn't already
+            var logDirPath = Path.IsPathRooted(configuredPath)
+                                 ? configuredPath
+                                 : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, configuredPath);
+
+            // Add a filename if one isn't specified
+            var logFilePath = string.IsNullOrEmpty(Path.GetExtension(logDirPath))
+                                  ? Path.Combine(logDirPath, "Glimpse.log")
+                                  : logDirPath;
+
+            // use NLog logger otherwise
+            var fileTarget = new FileTarget
+            {
+                FileName = logFilePath,
+                Layout =
+                    "${longdate} | ${level:uppercase=true} | ${message} | ${exception:maxInnerExceptionLevel=5:format=type,message,stacktrace:separator=--:innerFormat=shortType,message,method:innerExceptionSeparator=>>}"
+            };
+
+            var asyncTarget = new AsyncTargetWrapper(fileTarget);
+
+            var loggingConfiguration = new LoggingConfiguration();
+            loggingConfiguration.AddTarget("file", asyncTarget);
+            loggingConfiguration.LoggingRules.Add(new LoggingRule("*", LogLevel.FromOrdinal((int)XmlConfiguration.Logging.Level), asyncTarget));
+
+            return new NLogLogger(new LogFactory(loggingConfiguration).GetLogger("Glimpse"));
         }
 
         private bool TryAllInstancesFromServiceLocators<T>(out ICollection<T> instance) where T : class
