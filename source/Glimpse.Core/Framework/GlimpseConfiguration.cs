@@ -49,12 +49,12 @@ namespace Glimpse.Core.Framework
         {
         }
 
-        public GlimpseConfiguration(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, string xmlConfigurationName)
-            : this(endpointConfiguration, persistenceStore, ConfigurationManager.GetSection(xmlConfigurationName) as Section ?? new Section())
+        public GlimpseConfiguration(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, string xmlConfigurationSectionName)
+            : this(endpointConfiguration, persistenceStore, ConfigurationManager.GetSection(xmlConfigurationSectionName) as Section)
         {
         }
 
-        public GlimpseConfiguration(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, Section xmlConfiguration)
+        public GlimpseConfiguration(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, Section xmlConfigurationSection)
         {
             if (endpointConfiguration == null)
             {
@@ -66,9 +66,14 @@ namespace Glimpse.Core.Framework
                 throw new ArgumentNullException("persistenceStore");
             }
 
+            if (xmlConfigurationSection == null)
+            {
+                throw new ArgumentNullException("xmlConfigurationSection");
+            }
+
             ResourceEndpoint = endpointConfiguration;
             PersistenceStore = persistenceStore;
-            XmlConfiguration = xmlConfiguration;
+            XmlConfiguration = xmlConfigurationSection;
             // TODO: Instantiate the user's IOC container (if they have one)
         }
 
@@ -811,6 +816,13 @@ namespace Glimpse.Core.Framework
             {
                 hash = value;
             }
+        }
+
+        public void ApplyOverrides()
+        {
+            // This method can be updated to ensure that web.config settings "win" - but that is difficult to do for most of them
+            DefaultRuntimePolicy = XmlConfiguration.DefaultRuntimePolicy;
+            EndpointBaseUri = XmlConfiguration.EndpointBaseUri;
         }
 
         private bool TrySingleInstanceFromServiceLocators<T>(out T instance) where T : class

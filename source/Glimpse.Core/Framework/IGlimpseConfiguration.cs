@@ -120,5 +120,7 @@ namespace Glimpse.Core.Framework
         /// </summary>
         /// <value>The timer strategy.</value>
         Func<IExecutionTimer> TimerStrategy { get; set; }
+
+        void ApplyOverrides();
     }
 }
