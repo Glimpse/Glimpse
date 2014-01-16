@@ -582,8 +582,8 @@ namespace Glimpse.Core.Framework
                 {
                     return runtimePolicyStrategy;
                 }
-
-                return () => RuntimePolicy.On; // TODO: Reimplement
+#warning CGIJBELS -> new implementation
+                return () => GlimpseRuntime.Instance.CurrentRequestContext.ActiveRuntimePolicy; // TODO: Reimplement
             }
 
             set

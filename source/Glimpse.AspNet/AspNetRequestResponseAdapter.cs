@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Configuration;
-using System.Runtime.Remoting.Messaging;
-using System.Runtime.Serialization;
 using System.Web;
 using Glimpse.AspNet.Extensions;
 using Glimpse.Core;
@@ -12,15 +9,11 @@ namespace Glimpse.AspNet
 {
     public class AspNetRequestResponseAdapter : IRequestResponseAdapter
     {
-        private HttpContextBase context;
-
         public AspNetRequestResponseAdapter(HttpContextBase context, ILogger logger)
         {
             Context = context;
             Logger = logger;
         }
-
-        private readonly static bool AsyncSupportDisabled = Convert.ToBoolean(ConfigurationManager.AppSettings["Glimpse:DisableAsyncSupport"]);
 
         public IDataStore HttpRequestStore
         {
@@ -37,30 +30,9 @@ namespace Glimpse.AspNet
             get { return new RequestMetadata(Context); }
         }
 
-        // V2Merge: We may be able to get away with a simple property in the future
-        internal HttpContextBase Context
-        {
-            get { return context ?? TryGetOrCaptureLogicalContext(); }
-            set { context = value; }
-        }
-
+        internal HttpContextBase Context{ get; set;}
+        
         private ILogger Logger { get; set; }
-
-        private static HttpContextBase TryGetOrCaptureLogicalContext()
-        {
-            if (AsyncSupportDisabled)
-            {
-                return new HttpContextWrapper(HttpContext.Current);
-            }
-
-            if (HttpContext.Current == null)
-                return AntiSerializationWrapper<HttpContextBase>.Unwrap(CallContext.LogicalGetData("Glimpse.HttpContext"));
-
-            var context = new HttpContextWrapper(HttpContext.Current);
-            CallContext.LogicalSetData("Glimpse.HttpContext", new AntiSerializationWrapper<HttpContextBase>(context));
-
-            return context;
-        }
 
         public void SetHttpResponseHeader(string name, string value)
         {
@@ -136,32 +108,6 @@ namespace Glimpse.AspNet
             catch (Exception exception)
             {
                 Logger.Error("Exception writing Http response.", exception);
-            }
-        }
-
-        [Serializable]
-        private struct AntiSerializationWrapper<T> : ISerializable
-        {
-            private readonly T value;
-
-            public AntiSerializationWrapper(T value)
-            {
-                this.value = value;
-            }
-
-            public void GetObjectData(SerializationInfo info, StreamingContext context)
-            {
-                throw new NotSupportedException(
-                    "Some environments conflict with current Glimpse async support. " +
-                    "Please set Glimpse:DisableAsyncSupport = true in Web.config, or see https://github.com/Glimpse/Glimpse/issues/632 for more details.");
-            }
-
-            public static T Unwrap(object wrapper)
-            {
-                if (ReferenceEquals(wrapper, null))
-                    return default(T);
-
-                return ((AntiSerializationWrapper<T>)wrapper).value;
             }
         }
     }

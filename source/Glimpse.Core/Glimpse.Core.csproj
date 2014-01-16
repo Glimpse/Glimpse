@@ -110,9 +110,12 @@
     <Compile Include="Extensibility\RuntimePolicy.cs" />
     <Compile Include="Extensibility\Subscriber.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Framework\ActiveGlimpseRequestContexts.cs" />
     <Compile Include="Framework\AssemblyTypesResolver.cs" />
     <Compile Include="Framework\Crc32.cs" />
     <Compile Include="Framework\GlimpseNotInitializedException.cs" />
+    <Compile Include="Framework\GlimpseRequestContext.cs" />
+    <Compile Include="Framework\InactiveGlimpseRequestContext.cs" />
     <Compile Include="Framework\ReflectionBlackList.cs" />
     <Compile Include="Framework\Support\ExecutionBlockBase.cs" />
     <Compile Include="Framework\Support\IExecutionTask.cs" />
