@@ -87,7 +87,6 @@ namespace Glimpse.Core.Framework
                 return;
             }
 
-            var hasInited = false; 
             if (!IsInitialized) // Double checked lock to ensure thread safety. http://en.wikipedia.org/wiki/Double_checked_locking_pattern
             {
                 lock (LockObj)
@@ -95,14 +94,8 @@ namespace Glimpse.Core.Framework
                     if (!IsInitialized)
                     {
                         Instance = new GlimpseRuntime(configuration);
-                        hasInited = true;
                     }
                 }
-            }
-
-            if (!hasInited && Instance.Configuration != configuration)
-            {
-                throw new NotSupportedException("Glimpse does not support being Initialized twice.");
             }
         }
 
