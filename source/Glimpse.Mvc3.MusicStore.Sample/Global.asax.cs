@@ -84,9 +84,7 @@ namespace MvcMusicStore
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
-            // V2Merge: How do we deal with app start data?
-            // LoadConfiguration();
-
+            LoadConfiguration();
 
             HttpRuntime.Cache.Add("test TimeSpan", "Very important", null, System.Web.Caching.Cache.NoAbsoluteExpiration, new TimeSpan(1, 1, 1, 1),
                 System.Web.Caching.CacheItemPriority.High, null);

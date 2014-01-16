@@ -5,6 +5,8 @@ using System.Data.Common;
 using System.Reflection;
 using System.Text;
 using Glimpse.Ado.Message;
+using Glimpse.Core.Extensibility;
+using Glimpse.Core.Framework;
 using Glimpse.Core.Message;
 
 namespace Glimpse.Ado.AlternateType
@@ -150,6 +152,30 @@ namespace Glimpse.Ado.AlternateType
                     new CommandErrorMessage(command.InnerConnection.ConnectionId, commandId, exception)
                     .AsTimedMessage(command.TimerStrategy.Stop(timer))
                     .AsTimelineMessage("Command: Error", AdoTimelineCategory.Command, type));
+            }
+        }
+
+        internal static IMessageBroker DetermineMessageBroker()
+        {
+            try
+            {
+                return GlimpseRuntime.Instance.Configuration.MessageBroker;
+            }
+            catch (GlimpseNotInitializedException)
+            {
+                return null;
+            }
+        }
+
+        internal static IExecutionTimer DetermineExecutionTimer()
+        {
+            try
+            {
+                return GlimpseRuntime.Instance.Configuration.TimerStrategy();
+            }
+            catch (GlimpseNotInitializedException)
+            {
+                return null;
             }
         }
     }

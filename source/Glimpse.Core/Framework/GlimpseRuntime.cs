@@ -61,7 +61,7 @@ namespace Glimpse.Core.Framework
             {
                 if (instance == null)
                 {
-                    throw new GlimpseException("Call GlimpseRuntime.Initialize before accessing the singleton Instance.");
+                    throw new GlimpseNotInitializedException();
                 }
 
                 return instance;
