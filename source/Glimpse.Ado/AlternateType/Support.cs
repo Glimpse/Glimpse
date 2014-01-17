@@ -157,26 +157,12 @@ namespace Glimpse.Ado.AlternateType
 
         internal static IMessageBroker DetermineMessageBroker()
         {
-            try
-            {
-                return GlimpseRuntime.Instance.Configuration.MessageBroker;
-            }
-            catch (GlimpseNotInitializedException)
-            {
-                return null;
-            }
+            return GlimpseRuntime.IsInitialized ? GlimpseRuntime.Instance.Configuration.MessageBroker : null;
         }
 
         internal static IExecutionTimer DetermineExecutionTimer()
         {
-            try
-            {
-                return GlimpseRuntime.Instance.Configuration.TimerStrategy();
-            }
-            catch (GlimpseNotInitializedException)
-            {
-                return null;
-            }
+            return GlimpseRuntime.IsInitialized ? GlimpseRuntime.Instance.Configuration.TimerStrategy() : null;
         }
     }
 }
