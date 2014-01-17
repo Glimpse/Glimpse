@@ -582,8 +582,8 @@ namespace Glimpse.Core.Framework
                 {
                     return runtimePolicyStrategy;
                 }
-#warning CGIJBELS -> new implementation
-                return () => GlimpseRuntime.Instance.CurrentRequestContext.ActiveRuntimePolicy; // TODO: Reimplement
+
+                return () => GlimpseRuntime.IsInitialized ? GlimpseRuntime.Instance.CurrentRequestContext.ActiveRuntimePolicy : RuntimePolicy.Off;
             }
 
             set
