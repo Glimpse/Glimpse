@@ -1,4 +1,5 @@
-﻿namespace Glimpse.WebForms.Model
+﻿using System.Collections.Generic;
+namespace Glimpse.WebForms.Model
 {
     public class ControlTreeItemModel
     {
@@ -21,6 +22,13 @@
         public string ViewstateTitle
         {
             get { return Viewstate != null ? "Viewstate" : null; }
+        }
+
+        public List<DataBindParameterModel> DataBindParameters { get; set; }
+
+        public string DataBindParametersTitle
+        {
+            get { return DataBindParameters != null ? "DataBind Parameters" : null; }
         }
     }
 }

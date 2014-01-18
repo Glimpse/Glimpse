@@ -41,12 +41,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Display\WebForms.cs" />
+    <Compile Include="Inspector\DataBoundControlAdapter.cs" />
     <Compile Include="Message\PageLifeCycleMessage.cs" />
     <Compile Include="Inspector\PageLifeCycleInspector.cs" />
     <Compile Include="Message\WebFormsTimelineCategory.cs" />
+    <Compile Include="Model\DataBindParameterModel.cs" />
     <Compile Include="Model\ExecutionItemModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerializationConverter\IndexedStringListConverter.cs" />
+    <Compile Include="Support\DataBindFormatter.cs" />
     <Compile Include="Tab\ControlTree.cs" />
     <Compile Include="Model\ControlTreeItemModel.cs" />
     <Compile Include="Tab\PageLifeCycle.cs" />
