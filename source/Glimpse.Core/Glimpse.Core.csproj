@@ -110,11 +110,13 @@
     <Compile Include="Extensibility\RuntimePolicy.cs" />
     <Compile Include="Extensibility\Subscriber.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Framework\ActiveGlimpseRequestContextEventArgs.cs" />
     <Compile Include="Framework\ActiveGlimpseRequestContexts.cs" />
     <Compile Include="Framework\AssemblyTypesResolver.cs" />
     <Compile Include="Framework\Crc32.cs" />
     <Compile Include="Framework\GlimpseNotInitializedException.cs" />
     <Compile Include="Framework\GlimpseRequestContext.cs" />
+    <Compile Include="Framework\GlimpseRequestContextHandle.cs" />
     <Compile Include="Framework\InactiveGlimpseRequestContext.cs" />
     <Compile Include="Framework\ReflectionBlackList.cs" />
     <Compile Include="Framework\Support\ExecutionBlockBase.cs" />
@@ -289,6 +291,7 @@
     <Compile Include="SerializationConverter\TabResultConverter.cs" />
     <Compile Include="SerializationConverter\CSharpTypeConverter.cs" />
     <Compile Include="Tab\Timeline.cs" />
+    <Compile Include="Tab\Glimpse.cs" />
     <Compile Include="Tab\Trace.cs" />
     <Compile Include="TraceListener.cs" />
   </ItemGroup>
