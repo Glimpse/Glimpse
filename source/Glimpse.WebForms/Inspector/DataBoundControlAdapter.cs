@@ -20,11 +20,11 @@ namespace Glimpse.WebForms.Inspector
             }
         }
 
-        private static Dictionary<string, List<List<DataBindParameterModel>>> DataBindInfo
+        private static Dictionary<string, List<DataBindParameterModel>> DataBindInfo
         {
             get
             {
-                return (Dictionary<string, List<List<DataBindParameterModel>>>)HttpContext.Current.Items["_GlimpseWebFormDataBindingInfo"];
+                return (Dictionary<string, List<DataBindParameterModel>>)HttpContext.Current.Items["_GlimpseWebFormDataBindingInfo"];
             }
         }
 
@@ -36,22 +36,22 @@ namespace Glimpse.WebForms.Inspector
 
         protected void DataBoundControl_DataBinding(object sender, EventArgs e)
         {
-            List<DataBindParameterModel> parameters = null;
+            DataBindParameterModel parameterModel = null;
             var dataSource = DataBoundControl.DataSourceObject as ObjectDataSource;
             if (dataSource != null)
             {
-                parameters = new List<DataBindParameterModel>();
+                parameterModel = new DataBindParameterModel(DateTime.Now);
                 var values = dataSource.SelectParameters.GetValues(HttpContext.Current, dataSource);
                 foreach (Parameter parameter in dataSource.SelectParameters)
                 {
-                    parameters.Add(new DataBindParameterModel(parameter.Name, parameter.GetType(), values[parameter.Name]));
+                    parameterModel.DataBindParameters.Add(new DataBindParameter(parameter.Name, parameter.GetType(), values[parameter.Name]));
                 }
             }
             if (!DataBindInfo.ContainsKey(DataBoundControl.UniqueID))
             {
-                DataBindInfo[DataBoundControl.UniqueID] = new List<List<DataBindParameterModel>>();
+                DataBindInfo[DataBoundControl.UniqueID] = new List<DataBindParameterModel>();
             }
-            DataBindInfo[DataBoundControl.UniqueID].Add(parameters);
+            DataBindInfo[DataBoundControl.UniqueID].Add(parameterModel);
         }
     }
 

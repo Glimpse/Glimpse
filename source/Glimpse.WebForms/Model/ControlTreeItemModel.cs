@@ -24,7 +24,7 @@ namespace Glimpse.WebForms.Model
             get { return Viewstate != null ? "Viewstate" : null; }
         }
 
-        public List<DataBindParameterModel> DataBindParameters { get; set; }
+        public Dictionary<string, List<DataBindParameter>> DataBindParameters { get; set; }
 
         public string DataBindParametersTitle
         {

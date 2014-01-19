@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Glimpse.WebForms.Model
 {
@@ -7,14 +8,12 @@ namespace Glimpse.WebForms.Model
     /// </summary>
     public class DataBindParameterModel
     {
-        public string name { get; set; }
-        public Type type { get; set; }
-        public object value { get; set; }
-        public DataBindParameterModel(string name, Type type, object value)
+        public DateTime Time { get; set; }
+        public List<DataBindParameter> DataBindParameters { get; private set; } 
+        public DataBindParameterModel(DateTime time)
         {
-            this.name = name;
-            this.type = type;
-            this.value = value;
+            Time = time;
+            DataBindParameters = new List<DataBindParameter>();
         }
     }
 }

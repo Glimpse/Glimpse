@@ -16,7 +16,7 @@ using System.Web.UI.WebControls;
 
 namespace Glimpse.WebForms.Tab
 {
-    public class ControlTree : AspNetTab, ITabLayout, IKey
+    public class ControlTree : AspNetTab, ITabSetup, ITabLayout, IKey
     {
         private static readonly MethodInfo traceContextVerifyStartMethod = typeof(System.Web.TraceContext).GetMethod("VerifyStart", BindingFlags.Instance | BindingFlags.NonPublic);
         private static readonly FieldInfo requestDataField = typeof(System.Web.TraceContext).GetField("_requestData", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -59,6 +59,11 @@ namespace Glimpse.WebForms.Tab
         public object GetLayout()
         {
             return Layout;
+        }
+
+        public void Setup(ITabSetupContext context)
+        {
+            context.PersistMessages<PageLifeCycleMessage>();
         }
 
         public override object GetData(ITabContext context)
@@ -121,7 +126,7 @@ namespace Glimpse.WebForms.Tab
                 var dataBoundControlAdapterType = typeof(DataBoundControlAdapter);
                 if (HttpContext.Current.Items["_GlimpseWebFormDataBindingInfo"] == null)
                 {
-                    HttpContext.Current.Items["_GlimpseWebFormDataBindingInfo"] = new Dictionary<string, List<List<DataBindParameterModel>>>();
+                    HttpContext.Current.Items["_GlimpseWebFormDataBindingInfo"] = new Dictionary<string, List<DataBindParameterModel>>();
                 }
                 foreach (DictionaryEntry adapter in adapters)
                 {
@@ -153,7 +158,7 @@ namespace Glimpse.WebForms.Tab
                 {
                     context.Logger.Debug("Pulling out the `Trace_Control_Tree` from internal logging infrastructure");
 
-                    var treeData = ProcessData(requestData.Tables["Trace_Control_Tree"], context.Logger);
+                    var treeData = ProcessData(requestData.Tables["Trace_Control_Tree"], context.Logger, context.GetMessages<PageLifeCycleMessage>());
                     return treeData;
                 }
             }
@@ -161,7 +166,7 @@ namespace Glimpse.WebForms.Tab
             return null;
         }
 
-        private object ProcessData(DataTable dataTable, ILogger logger)
+        private object ProcessData(DataTable dataTable, ILogger logger, IEnumerable<PageLifeCycleMessage> pageLifeCycleMessages)
         {
             if (dataTable != null)
             {
@@ -206,7 +211,7 @@ namespace Glimpse.WebForms.Tab
                 logger.Debug("Finish processing `Trace_Control_Tree` - Count {0}", nodeList.Count);
 
                 viewStateFormatter.Process(nodeGraph);
-                dataBindFormatter.Process(nodeGraph);
+                dataBindFormatter.Process(nodeGraph, pageLifeCycleMessages);
 
                 return controlList;
             }

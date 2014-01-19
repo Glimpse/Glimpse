@@ -25,5 +25,15 @@ namespace WingtipToys.DataBindingTests
             yield return new { Id = 1 };
             yield return new { Id = 2 };
         }
+
+        protected void Page_PreRender(object sender, EventArgs e)
+        {
+            ListView1.DataBind();
+        }
+
+        protected void Page_PreRenderComplete(object sender, EventArgs e)
+        {
+            ListView1.DataBind();
+        }
     }
 }
