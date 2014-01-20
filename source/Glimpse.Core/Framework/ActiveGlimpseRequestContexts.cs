@@ -74,6 +74,7 @@ namespace Glimpse.Core.Framework
         public static void Remove(Guid glimpseRequestId)
         {
             bool glimpseRequestContextRemoved = GlimpseRequestContexts.Remove(glimpseRequestId);
+            CallContext.LogicalSetData(Constants.RequestIdKey, null);
             CallContext.FreeNamedDataSlot(Constants.RequestIdKey);
 
             if (glimpseRequestContextRemoved)

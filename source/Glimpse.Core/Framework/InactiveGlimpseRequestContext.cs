@@ -10,7 +10,7 @@ namespace Glimpse.Core.Framework
     public class InactiveGlimpseRequestContext : GlimpseRequestContext
     {
         /// <summary>
-        /// Gets the singleton
+        /// Gets the singleton instance of the <see cref="InactiveGlimpseRequestContext"/> type.
         /// </summary>
         public static InactiveGlimpseRequestContext Instance { get; private set; }
 

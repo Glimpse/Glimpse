@@ -52,7 +52,7 @@ namespace Glimpse.Test.Core.Framework
             var secondGlimpseRequestContext = CreateGlimpseRequestContext();
             var thirdGlimpseRequestContext = CreateGlimpseRequestContext();
 
-            var handlesDictionary = new Dictionary<int, ActiveGlimpseRequestContexts.GlimpseRequestContextHandle>();
+            var handlesDictionary = new Dictionary<int, GlimpseRequestContextHandle>();
             handlesDictionary.Add(1, ActiveGlimpseRequestContexts.Add(firstGlimpseRequestContext));
             handlesDictionary.Add(2, ActiveGlimpseRequestContexts.Add(secondGlimpseRequestContext));
             handlesDictionary.Add(3, ActiveGlimpseRequestContexts.Add(thirdGlimpseRequestContext));

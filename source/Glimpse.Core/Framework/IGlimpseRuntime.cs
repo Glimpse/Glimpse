@@ -1,5 +1,3 @@
-using System;
-
 namespace Glimpse.Core.Framework
 {
     /// <summary>
@@ -14,7 +12,7 @@ namespace Glimpse.Core.Framework
         /// Called when ever the implementing framework registers a request start. Specifically, 
         /// with the ASP.NET provider, this is wired to the <c>BeginRequest</c> method.
         /// </remarks>
-        Guid BeginRequest(IRequestResponseAdapter requestResponseAdapter);
+        GlimpseRequestContextHandle BeginRequest(IRequestResponseAdapter requestResponseAdapter);
 
         /// <summary>
         /// Ends the request.

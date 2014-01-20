@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions;
 using Glimpse.Core.Framework;
 using Microsoft.Owin;
 
@@ -26,38 +25,59 @@ namespace Glimpse.Owin.Middleware
 
         public async Task Invoke(IDictionary<string, object> environment)
         {
-            if (!GlimpseRuntime.IsInitialized)
-            {
-                GlimpseRuntime.Initialize(config);
-            }
+            GlimpseRequestContextHandle glimpseRequestContextHandle = null;
 
-            if (GlimpseRuntime.IsInitialized)
+            try
             {
-                var request = new OwinRequest(environment);
-                var response = new OwinResponse(environment);
-                var requestResponseAdapter = new OwinRequestResponseAdapter(environment);
-
-                if (request.Uri.PathAndQuery.StartsWith(config.EndpointBaseUri, StringComparison.InvariantCultureIgnoreCase))
+                if (!GlimpseRuntime.IsInitialized)
                 {
-                    await ExecuteResource(requestResponseAdapter, request.Query);
-                    return;
+                    GlimpseRuntime.Initialize(config);
                 }
-                
-                // V2Merge: Hack's a million!
-                var requestId = GlimpseRuntime.Instance.BeginRequest(requestResponseAdapter);
-                var htmlSnippet = GlimpseRuntime.Instance.GenerateScriptTags(requestId, requestResponseAdapter);
-                response.Body = new PreBodyTagInjectionStream(htmlSnippet, response.Body, Encoding.UTF8, request.Uri.AbsoluteUri, new NullLogger());
+
+                if (GlimpseRuntime.IsInitialized)
+                {
+                    var request = new OwinRequest(environment);
+                    var response = new OwinResponse(environment);
+                    var requestResponseAdapter = new OwinRequestResponseAdapter(environment);
+
+#warning this check should be part of the GlimpseRuntime, because basically it should be done by the Glimpse.BeginRequest because now, in ASP.NET context it will do all the setup, but not for OWIN
+                    if (request.Uri.PathAndQuery.StartsWith(config.EndpointBaseUri, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        await ExecuteResource(requestResponseAdapter, request.Query);
+                        return;
+                    }
+
+                    // V2Merge: Hack's a million!
+#warning Even with this hack, it seems wrong, as the scripts will always be injected independent of the RuntimePolicy (only DisplayGlimpseClient should render it, and we only know that at the end)
+                    glimpseRequestContextHandle = GlimpseRuntime.Instance.BeginRequest(requestResponseAdapter);
+                    var htmlSnippet = GlimpseRuntime.Instance.GenerateScriptTags(glimpseRequestContextHandle.GlimpseRequestId, requestResponseAdapter);
+                    response.Body = new PreBodyTagInjectionStream(htmlSnippet, response.Body, Encoding.UTF8, request.Uri.AbsoluteUri, new NullLogger());
+                }
+
+                await innerNext(environment);
+
+                if (GlimpseRuntime.IsInitialized)
+                {
+                    GlimpseRuntime.Instance.EndRequest(new OwinRequestResponseAdapter(environment));
+                }
             }
-
-            await innerNext(environment);
-
-            if (GlimpseRuntime.IsInitialized)
+            finally
             {
-                GlimpseRuntime.Instance.EndRequest(new OwinRequestResponseAdapter(environment));
+                if (glimpseRequestContextHandle != null)
+                {
+                    try
+                    {
+                        glimpseRequestContextHandle.Dispose();
+                    }
+                    catch (Exception disposeException)
+                    {
+                        config.Logger.Error("Failed to dispose Glimpse request context handle", disposeException);
+                    }
+                }
             }
         }
 
-        private async Task ExecuteResource(IRequestResponseAdapter requestResponseAdapter, IReadableStringCollection queryString)
+        private static async Task ExecuteResource(IRequestResponseAdapter requestResponseAdapter, IReadableStringCollection queryString)
         {
             if (string.IsNullOrEmpty(queryString[UriTemplateResourceEndpointConfiguration.DefaultResourceNameKey]))
             {

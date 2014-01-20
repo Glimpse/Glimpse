@@ -1,7 +1,6 @@
-﻿using System.Web;
-using System.Web.UI;
+﻿using System.Web.UI;
 using System.Web.UI.WebControls;
-using Glimpse.AspNet.Extensions;
+using Glimpse.Core.Framework;
 
 namespace Glimpse.AspNet.Controls
 {
@@ -9,9 +8,14 @@ namespace Glimpse.AspNet.Controls
     {
         protected override void Render(HtmlTextWriter writer)
         {
-            var tags = new HttpContextWrapper(Context).GenerateGlimpseScriptTags();
-
-            writer.Write(tags);
+            if (GlimpseRuntime.IsInitialized)
+            {
+                var aspNetRequestResponseAdapter = GlimpseRuntime.Instance.CurrentRequestContext.RequestResponseAdapter as IAspNetRequestResponseAdapter;
+                if (aspNetRequestResponseAdapter != null)
+                {
+                    writer.Write(aspNetRequestResponseAdapter.GenerateGlimpseScriptTags());
+                }
+            }
         }
     }
 }

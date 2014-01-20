@@ -1,23 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web;
-using Glimpse.AspNet.Extensions;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 
 namespace Glimpse.AspNet
 {
-    public class AspNetRequestResponseAdapter : IRequestResponseAdapter
+    public class AspNetRequestResponseAdapter : IAspNetRequestResponseAdapter
     {
+        private const string PreventSettingHttpResponseHeadersKey = "__GlimpsePreventSettingHttpResponseHeaders";
+        private const string GlimpseClientScriptsStrategyKey = "__GlimpseClientScriptsStrategy";
+        
         public AspNetRequestResponseAdapter(HttpContextBase context, ILogger logger)
         {
             Context = context;
             Logger = logger;
+            HttpRequestStore = new DictionaryDataStoreAdapter(new Dictionary<string,object>());
         }
 
         public IDataStore HttpRequestStore
         {
-            get { return new DictionaryDataStoreAdapter(Context.Items); }
+            get; private set;
         }
 
         public object RuntimeContext
@@ -34,9 +38,35 @@ namespace Glimpse.AspNet
         
         private ILogger Logger { get; set; }
 
+        private bool SettingHttpResponseHeadersPrevented
+        {
+            get
+            {
+                if (HttpRequestStore.Contains(PreventSettingHttpResponseHeadersKey))
+                {
+                    var result = HttpRequestStore.Get(PreventSettingHttpResponseHeadersKey) as bool?;
+                    if (result.HasValue)
+                    {
+                        return result.Value;
+                    }
+                }
+
+                return false;
+            }
+
+            set
+            {
+                HttpRequestStore.Set(PreventSettingHttpResponseHeadersKey, value);
+            }
+        }
+        public void PreventSettingHttpResponseHeaders()
+        {
+            SettingHttpResponseHeadersPrevented = true;
+        }
+
         public void SetHttpResponseHeader(string name, string value)
         {
-            if (!Context.HeadersSent())
+            if (!SettingHttpResponseHeadersPrevented)
             {
                 try
                 {
@@ -46,6 +76,10 @@ namespace Glimpse.AspNet
                 {
                     Logger.Error("Exception setting Http response header '{0}' with value '{1}'.", exception, name, value);
                 }
+            }
+            else
+            {
+                Logger.Error("Setting Http response header '{0}' with value '{1}' is not allowed anymore, headers are already sent.", name, value);
             }
         }
 
@@ -109,6 +143,21 @@ namespace Glimpse.AspNet
             {
                 Logger.Error("Exception writing Http response.", exception);
             }
+        }
+
+        public string GenerateGlimpseScriptTags()
+        {
+            if (HttpRequestStore.Contains(GlimpseClientScriptsStrategyKey))
+            {
+                var generateScripts = HttpRequestStore.Get(GlimpseClientScriptsStrategyKey) as Func<Guid?, string>;
+
+                if (generateScripts != null)
+                {
+                    return generateScripts(null); // null means to use the current request id
+                }
+            }
+
+            return string.Empty;
         }
     }
 }

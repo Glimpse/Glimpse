@@ -92,10 +92,5 @@ namespace Glimpse.Core
         /// The key Glimpse server uses to store the client scripts strategy.
         /// </summary>
         internal const string ClientScriptsStrategy = "__GlimpseClientScriptsStrategy";
-
-        /// <summary>
-        /// The key Glimpse server uses to store the Glimpse request context handle.
-        /// </summary>
-        internal const string GlimpseRequestContextHandle = "__GlimpseRequestContextHandle";
     }
 }
