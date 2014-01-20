@@ -8,6 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
 using Glimpse.Core.Resource;
 using NLog;
 using NLog.Config;
@@ -752,7 +753,20 @@ namespace Glimpse.Core.Framework
                     return timerStrategy;
                 }
 
-                return() => new ExecutionTimer(Stopwatch.StartNew()) as IExecutionTimer; // TODO: reimplement this
+                return () =>
+                {
+                    if(GlimpseRuntime.IsInitialized)
+                    {
+                        var httpRequestStore = GlimpseRuntime.Instance.CurrentRequestContext.RequestResponseAdapter.HttpRequestStore;
+                        if(httpRequestStore.Contains(Constants.GlobalTimerKey))
+                        {
+                            return httpRequestStore.Get<IExecutionTimer>(Constants.GlobalTimerKey);
+                        }
+                    }
+
+#warning Check whether this is the correct implementation, should we maybe have an ExecutionTimer.None that does nothing?
+                    return new ExecutionTimer(Stopwatch.StartNew());
+                };
             }
 
             set
