@@ -29,8 +29,7 @@ namespace Glimpse.WebForms.Support
 					{
                         dataBindParameters.Add(parameter);
 					}
-                    var endTime = pageLifeCycleMessages.First(p => parameterModel.Time <= p.StartTime).StartTime;
-                    var lifeCycleEvent = pageLifeCycleMessages.First(p => p.StartTime <= parameterModel.Time && parameterModel.Time <= endTime);
+                    var lifeCycleEvent = pageLifeCycleMessages.First(p => p.StartTime <= parameterModel.Time);
                     if (item.Record.DataBindParameters.ContainsKey(lifeCycleEvent.EventName))
                     {
                         var multipleEventParameters = item.Record.DataBindParameters[lifeCycleEvent.EventName] as Dictionary<int, object>;
