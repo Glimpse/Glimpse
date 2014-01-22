@@ -3,8 +3,10 @@
         <section name="glimpse" type="Glimpse.Core.Configuration.Section, Glimpse.Core" />
     </configSections>
     <glimpse defaultRuntimePolicy="On" endpointBaseUri="~/Glimpse.axd">
-      <!-- If you are having issues with Glimpse, please include this. It will help us figure out whats going on. 
-      <logging level="Trace" />-->
+      <!-- 
+          For more information on how to configure Glimpse, please visit http://getglimpse.com/Help/Configuration
+          or access {your site}/Glimpse.axd for even more details and a Configuration Tool to support you. 
+      -->
       
       <!-- Want to use Glimpse on a remote server? Ignore the LocalPolicy by removing this comment.
       <runtimePolicies>
