@@ -47,11 +47,14 @@ namespace Glimpse.WebForms.Inspector
                     parameterModel.DataBindParameters.Add(new DataBindParameter(parameter.Name, parameter.GetType(), values[parameter.Name]));
                 }
             }
-            if (!DataBindInfo.ContainsKey(DataBoundControl.UniqueID))
+            if (parameterModel != null && parameterModel.DataBindParameters.Count > 0)
             {
-                DataBindInfo[DataBoundControl.UniqueID] = new List<DataBindParameterModel>();
+                if (!DataBindInfo.ContainsKey(DataBoundControl.UniqueID))
+                {
+                    DataBindInfo[DataBoundControl.UniqueID] = new List<DataBindParameterModel>();
+                }
+                DataBindInfo[DataBoundControl.UniqueID].Add(parameterModel);
             }
-            DataBindInfo[DataBoundControl.UniqueID].Add(parameterModel);
         }
     }
 
