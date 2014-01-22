@@ -2,6 +2,7 @@
 using Glimpse.WebForms.Model;
 using Glimpse.WebForms.Tab;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,17 +13,16 @@ namespace Glimpse.WebForms.Support
 	{
         public void Process(ControlTreeItemTrackModel root, IEnumerable<PageLifeCycleMessage> pageLifeCycleMessages)
 		{
-            ProcessRecord(root, (Dictionary<string, List<DataBindParameterModel>>)HttpContext.Current.Items["_GlimpseWebFormDataBindingInfo"], pageLifeCycleMessages);
+            var pageLifeCycleDescending = pageLifeCycleMessages.OrderByDescending(p => p.StartTime);
+            ProcessRecord(root, (Dictionary<string, List<DataBindParameterModel>>)HttpContext.Current.Items["_GlimpseWebFormDataBindingInfo"], pageLifeCycleDescending);
 		}
 
         private void ProcessRecord(ControlTreeItemTrackModel item, Dictionary<string, List<DataBindParameterModel>> dataBindInfo, IEnumerable<PageLifeCycleMessage> pageLifeCycleMessages)
 		{
 			if (dataBindInfo.ContainsKey(item.ControlId))
 			{
-                var i = 0;
-				item.Record.DataBindParameters = new Dictionary<string, List<DataBindParameter>>();
-                var previousEventName = string.Empty;
-				foreach(var parameterModel in dataBindInfo[item.ControlId])
+				item.Record.DataBindParameters = new Dictionary<string, object>();
+                foreach (var parameterModel in dataBindInfo[item.ControlId])
 				{
                     var dataBindParameters = new List<DataBindParameter>();
                     var time = DateTime.MinValue;
@@ -30,10 +30,23 @@ namespace Glimpse.WebForms.Support
 					{
                         dataBindParameters.Add(parameter);
 					}
-                    var lifeCycleEvent = pageLifeCycleMessages.First(p => p.StartTime <= parameterModel.Time && parameterModel.Time <= p.StartTime.Add(p.Duration));
-                    i = previousEventName == lifeCycleEvent.EventName ? i + 1 : 0;
-                    item.Record.DataBindParameters[i == 0 ? lifeCycleEvent.EventName : lifeCycleEvent.EventName + " " + i ] = dataBindParameters;
-                    previousEventName = lifeCycleEvent.EventName;
+                    var lifeCycleEvent = pageLifeCycleMessages.First(p => p.StartTime <= parameterModel.Time);
+                    if (item.Record.DataBindParameters.ContainsKey(lifeCycleEvent.EventName))
+                    {
+                        var multipleEventParameters = item.Record.DataBindParameters[lifeCycleEvent.EventName] as Dictionary<int, object>;
+                        if (multipleEventParameters == null)
+                        {
+                            var existingEventParameters = (List<DataBindParameter>)item.Record.DataBindParameters[lifeCycleEvent.EventName];
+                            multipleEventParameters = new Dictionary<int, object>();
+                            item.Record.DataBindParameters[lifeCycleEvent.EventName] = multipleEventParameters;
+                            multipleEventParameters[0] = existingEventParameters;
+                        }
+                        multipleEventParameters[multipleEventParameters.Count] = dataBindParameters;
+                    }
+                    else
+                    {
+                        item.Record.DataBindParameters[lifeCycleEvent.EventName] = dataBindParameters;
+                    }
 				}
 			}
 			foreach (var child in item.Children)

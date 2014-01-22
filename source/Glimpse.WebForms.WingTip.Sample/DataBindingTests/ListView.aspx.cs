@@ -11,6 +11,8 @@ namespace WingtipToys.DataBindingTests
             var text = TextBox1.Text;
             TextBox1.Text = "different text";
             ListView1.DataBind();
+            TextBox1.Text = "more different text";
+            ListView1.DataBind();
             TextBox1.Text = text;
             ListView1.DataBind();
 
