@@ -13,8 +13,7 @@ namespace Glimpse.WebForms.Support
 	{
         public void Process(ControlTreeItemTrackModel root, IEnumerable<PageLifeCycleMessage> pageLifeCycleMessages)
 		{
-            var pageLifeCycleDescending = pageLifeCycleMessages.OrderByDescending(p => p.StartTime);
-            ProcessRecord(root, (Dictionary<string, List<DataBindParameterModel>>)HttpContext.Current.Items["_GlimpseWebFormDataBindingInfo"], pageLifeCycleDescending);
+            ProcessRecord(root, (Dictionary<string, List<DataBindParameterModel>>)HttpContext.Current.Items["_GlimpseWebFormDataBindingInfo"], pageLifeCycleMessages.OrderByDescending(p => p.StartTime));
 		}
 
         private void ProcessRecord(ControlTreeItemTrackModel item, Dictionary<string, List<DataBindParameterModel>> dataBindInfo, IEnumerable<PageLifeCycleMessage> pageLifeCycleMessages)
@@ -30,7 +29,8 @@ namespace Glimpse.WebForms.Support
 					{
                         dataBindParameters.Add(parameter);
 					}
-                    var lifeCycleEvent = pageLifeCycleMessages.First(p => p.StartTime <= parameterModel.Time);
+                    var endTime = pageLifeCycleMessages.First(p => parameterModel.Time <= p.StartTime).StartTime;
+                    var lifeCycleEvent = pageLifeCycleMessages.First(p => p.StartTime <= parameterModel.Time && parameterModel.Time <= endTime);
                     if (item.Record.DataBindParameters.ContainsKey(lifeCycleEvent.EventName))
                     {
                         var multipleEventParameters = item.Record.DataBindParameters[lifeCycleEvent.EventName] as Dictionary<int, object>;
