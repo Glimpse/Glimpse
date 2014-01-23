@@ -8,9 +8,9 @@ namespace Glimpse.WebForms.Model
     /// </summary>
     public class DataBindParameterModel
     {
-        public DateTime Time { get; set; }
-        public List<DataBindParameter> DataBindParameters { get; private set; } 
-        public DataBindParameterModel(DateTime time)
+        public TimeSpan Time { get; set; }
+        public List<DataBindParameter> DataBindParameters { get; private set; }
+        public DataBindParameterModel(TimeSpan time)
         {
             Time = time;
             DataBindParameters = new List<DataBindParameter>();

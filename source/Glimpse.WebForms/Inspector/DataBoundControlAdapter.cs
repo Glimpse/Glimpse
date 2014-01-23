@@ -40,7 +40,7 @@ namespace Glimpse.WebForms.Inspector
             var dataSource = DataBoundControl.DataSourceObject as ObjectDataSource;
             if (dataSource != null)
             {
-                parameterModel = new DataBindParameterModel(DateTime.Now);
+                parameterModel = new DataBindParameterModel(Glimpse.Core.Framework.GlimpseConfiguration.GetConfiguredTimerStrategy()().Point().Offset);
                 var values = dataSource.SelectParameters.GetValues(HttpContext.Current, dataSource);
                 foreach (Parameter parameter in dataSource.SelectParameters)
                 {
