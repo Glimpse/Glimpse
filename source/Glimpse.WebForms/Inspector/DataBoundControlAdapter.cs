@@ -1,4 +1,5 @@
-﻿using Glimpse.WebForms.Model;
+﻿using Glimpse.Core.Framework;
+using Glimpse.WebForms.Model;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -40,7 +41,7 @@ namespace Glimpse.WebForms.Inspector
             var dataSource = DataBoundControl.DataSourceObject as ObjectDataSource;
             if (dataSource != null)
             {
-                parameterModel = new DataBindParameterModel(Glimpse.Core.Framework.GlimpseConfiguration.GetConfiguredTimerStrategy()().Point().Offset);
+                parameterModel = new DataBindParameterModel(GlimpseConfiguration.GetConfiguredTimerStrategy()().Point().Offset);
                 var values = dataSource.SelectParameters.GetValues(HttpContext.Current, dataSource);
                 foreach (Parameter parameter in dataSource.SelectParameters)
                 {
