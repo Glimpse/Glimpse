@@ -306,6 +306,10 @@ glimpse.util = (function($) {
                 uri = uri.split('://')[1];
             return uri.split('/')[0];
         },
+        isLocalUri: function(uri) {
+            return uri && (!(uri.indexOf('http://') == 0 || uri.indexOf('https://') == 0 || uri.indexOf('//') == 0) || 
+                    (uri.substring(uri.indexOf('//') + 2, uri.length) + '/').indexOf(window.location.host + '/') == 0);
+        },
         sortTabs: function (data) {
             var sorted = {},
                 i, temp = [];
@@ -2516,7 +2520,7 @@ glimpse.tab = (function($, pubsub, data) {
     XMLHttpRequest.prototype.open = function(method, uri) { 
         open.apply(this, arguments);
           
-        if (uri && (!(uri.indexOf('http://') == 0 || uri.indexOf('https://') == 0 || uri.indexOf('//') == 0) || (uri.substring(uri.indexOf('//') + 2, uri.length) + '/').indexOf(window.location.host + '/') == 0)) {
+        if (util.isLocalUri(uri)) {
             this.setRequestHeader("Glimpse-Parent-RequestID", data.baseData().requestId);
 
             pubsub.publish('trigger.ajax.request.send');
@@ -3874,10 +3878,9 @@ glimpse.tab = (function($, pubsub, data) {
                             stack.push(row);
                         },
                         postRender = function() {
-                            var open = XMLHttpRequest.prototype.open;
-                        
-                            XMLHttpRequest.prototype.open = function(method, uri, async, user, pass) {
-                                if (uri.indexOf('Glimpse.axd') === -1) {
+                            var open = XMLHttpRequest.prototype.open; 
+                            XMLHttpRequest.prototype.open = function(method, uri) {
+                                if (util.isLocalUri(uri) && uri.indexOf('Glimpse.axd') == -1) {
                                     var startTime = new Date().getTime(); 
                                     this.addEventListener("readystatechange", function() {
                                             if (this.readyState == 4 && this.getResponseHeader("Glimpse-RequestID"))  { 
