@@ -32,15 +32,15 @@ namespace Glimpse.WebForms.Support
                     var lifeCycleEvent = pageLifeCycleMessages.First(p => p.Offset <= parameterModel.Time);
                     if (item.Record.DataBindParameters.ContainsKey(lifeCycleEvent.EventName))
                     {
-                        var multipleEventParameters = item.Record.DataBindParameters[lifeCycleEvent.EventName] as Dictionary<int, object>;
+                        var multipleEventParameters = item.Record.DataBindParameters[lifeCycleEvent.EventName] as List<EventParameterModel>;
                         if (multipleEventParameters == null)
                         {
                             var existingEventParameters = (List<DataBindParameter>)item.Record.DataBindParameters[lifeCycleEvent.EventName];
-                            multipleEventParameters = new Dictionary<int, object>();
+                            multipleEventParameters = new List<EventParameterModel>();
                             item.Record.DataBindParameters[lifeCycleEvent.EventName] = multipleEventParameters;
-                            multipleEventParameters[0] = existingEventParameters;
+                            multipleEventParameters.Add(new EventParameterModel(0, existingEventParameters));
                         }
-                        multipleEventParameters[multipleEventParameters.Count] = dataBindParameters;
+                        multipleEventParameters.Add(new EventParameterModel(multipleEventParameters.Count, dataBindParameters));
                     }
                     else
                     {

@@ -47,6 +47,7 @@
     <Compile Include="Message\WebFormsTimelineCategory.cs" />
     <Compile Include="Model\DataBindParameter.cs" />
     <Compile Include="Model\DataBindParameterModel.cs" />
+    <Compile Include="Model\EventParameterModel.cs" />
     <Compile Include="Model\ExecutionItemModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerializationConverter\IndexedStringListConverter.cs" />
