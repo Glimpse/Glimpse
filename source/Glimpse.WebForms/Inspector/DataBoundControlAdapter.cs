@@ -10,7 +10,6 @@ using System.Web.UI.WebControls;
 
 namespace Glimpse.WebForms.Inspector
 {
-
     public class DataBoundControlAdapter : ControlAdapter
     {
         protected DataBoundControl DataBoundControl
