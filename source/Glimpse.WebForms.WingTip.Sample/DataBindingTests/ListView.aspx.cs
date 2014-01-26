@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Web.ModelBinding;
 using System.Web.UI;
 
 namespace WingtipToys.DataBindingTests
@@ -18,7 +19,7 @@ namespace WingtipToys.DataBindingTests
 
         }
 
-        public IEnumerable GetItems(string filter, string order)
+        public IEnumerable GetItems([Control("TextBox1")]  string filter, [QueryString("sort")] string order)
         {
             if (filter == "different text")
             {

@@ -54,6 +54,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\Glimpse.WebForms\Resources.resx" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="NuSpec\Glimpse.WebForms.nuspec" />
     <None Include="NuSpec\tools\install.ps1" />
     <None Include="NuSpec\tools\uninstall.ps1" />

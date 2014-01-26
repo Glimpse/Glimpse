@@ -46,6 +46,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\Glimpse.WebForms\Resources.resx" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Glimpse.AspNet.Net35\Glimpse.AspNet.Net35.csproj">
       <Project>{971143d1-b40e-4af4-ad3d-d4ffad3fe444}</Project>
       <Name>Glimpse.AspNet.Net35</Name>

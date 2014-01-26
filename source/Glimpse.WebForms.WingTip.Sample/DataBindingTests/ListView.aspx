@@ -28,6 +28,16 @@
                 <asp:QueryStringParameter QueryStringField="sort" Name="order" />
             </SelectParameters>
         </asp:ObjectDataSource>
+        <asp:ListView ID="ListView2" runat="server" SelectMethod="GetItems">
+            <LayoutTemplate>
+                <ul>
+                    <li runat="server" id="itemPlaceholder" />
+                </ul>
+            </LayoutTemplate>
+            <ItemTemplate>
+                <li><%# Eval("Id") %></li>
+            </ItemTemplate>
+        </asp:ListView>
     </div>
     </form>
 </body>
