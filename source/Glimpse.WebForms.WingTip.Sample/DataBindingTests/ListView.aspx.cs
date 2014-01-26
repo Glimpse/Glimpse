@@ -18,7 +18,7 @@ namespace WingtipToys.DataBindingTests
             ListView1.DataBind();
         }
 
-        public IEnumerable GetItems([Control("TextBox1")]  string filter, [QueryString("sort")] string order)
+        public IEnumerable GetItems([Control("TextBox1")]  string filter, [QueryString("sort")] string order, [Custom] string custom)
         {
             if (filter == "different text")
             {

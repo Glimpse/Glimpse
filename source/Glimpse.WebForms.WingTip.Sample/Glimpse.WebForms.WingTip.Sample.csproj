@@ -421,6 +421,9 @@
     <Compile Include="Contact.aspx.designer.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
+    <Compile Include="DataBindingTests\CustomParameter.cs" />
+    <Compile Include="DataBindingTests\CustomValueProvider.cs" />
+    <Compile Include="DataBindingTests\CustomAttribute.cs" />
     <Compile Include="DataBindingTests\ListView.aspx.cs">
       <DependentUpon>ListView.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

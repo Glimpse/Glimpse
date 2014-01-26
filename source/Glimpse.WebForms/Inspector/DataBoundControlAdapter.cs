@@ -66,7 +66,7 @@ namespace Glimpse.WebForms.Inspector
                 {
                     var defaultPropertyAttribute = Attribute.GetCustomAttributes(parameter.GetType()).First(a => a is DefaultPropertyAttribute) as DefaultPropertyAttribute;
                     string name = null;
-                    if (defaultPropertyAttribute != null)
+                    if (defaultPropertyAttribute != null && defaultPropertyAttribute.Name != "DefaultValue")
                     {
                         name = parameter.GetType().GetProperty(defaultPropertyAttribute.Name).GetValue(parameter, null) as string;
                     }

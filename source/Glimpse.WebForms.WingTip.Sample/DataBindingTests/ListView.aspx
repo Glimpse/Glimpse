@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ListView.aspx.cs" Inherits="WingtipToys.DataBindingTests.ListView" %>
-
+<%@ Register assembly="WingtipToys" namespace="WingtipToys.DataBindingTests" tagprefix="wtp" %>
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -26,6 +26,7 @@
             <SelectParameters>
                 <asp:ControlParameter ControlID="TextBox1" Name="filter" />
                 <asp:QueryStringParameter QueryStringField="sort" Name="order" />
+                <wtp:CustomParameter Name="custom" />
             </SelectParameters>
         </asp:ObjectDataSource>
         <asp:ListView ID="ListView2" runat="server" SelectMethod="GetItems">
