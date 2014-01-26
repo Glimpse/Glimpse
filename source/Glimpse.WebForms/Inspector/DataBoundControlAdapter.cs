@@ -71,7 +71,7 @@ namespace Glimpse.WebForms.Inspector
                         name = parameter.GetType().GetProperty(defaultPropertyAttribute.Name).GetValue(parameter, null) as string;
                     }
                     name = name ?? parameter.Name;
-                    parameterModel.DataBindParameters.Add(new DataBindParameter(name, parameter.GetType(), values[parameter.Name]));
+                    parameterModel.DataBindParameters.Add(new DataBindParameter(name, parameter.GetType().Name.Replace("Parameter", null), values[parameter.Name]));
                 }
             }
 #if NET45Plus
