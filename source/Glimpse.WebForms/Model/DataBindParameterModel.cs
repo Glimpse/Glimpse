@@ -8,11 +8,11 @@ namespace Glimpse.WebForms.Model
     /// </summary>
     public class DataBindParameterModel
     {
-        public TimeSpan Time { get; set; }
+        public TimeSpan Offset { get; set; }
         public List<DataBindParameter> DataBindParameters { get; private set; }
-        public DataBindParameterModel(TimeSpan time)
+        public DataBindParameterModel(TimeSpan offset)
         {
-            Time = time;
+            Offset = offset;
             DataBindParameters = new List<DataBindParameter>();
         }
     }

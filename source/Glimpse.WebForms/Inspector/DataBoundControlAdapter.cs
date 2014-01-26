@@ -25,15 +25,33 @@ namespace Glimpse.WebForms.Inspector
         {
             get
             {
-                return (Dictionary<string, List<DataBindParameterModel>>)HttpContext.Current.Items["_GlimpseWebFormDataBindingInfo"];
+                return (Dictionary<string, List<DataBindParameterModel>>)HttpContext.Current.Items["_GlimpseWebFormDataBinding"];
+            }
+        }
+
+        private TimeSpan Offset
+        {
+            get
+            {
+                return GlimpseConfiguration.GetConfiguredTimerStrategy()().Point().Offset;
             }
         }
 
         protected override void OnInit(EventArgs e)
         {
+#if NET45Plus
+            DataBoundControl.CallingDataMethods += DataBoundControl_CallingDataMethods;
+#endif
             DataBoundControl.DataBinding += DataBoundControl_DataBinding;
             base.OnInit(e);
         }
+
+#if NET45Plus
+        protected void DataBoundControl_CallingDataMethods(object sender, CallingDataMethodsEventArgs e)
+        {
+            HttpContext.Current.Items["_GlimpseWebFormModelBinding"] = new DataBindParameterModel(Offset);
+        }
+#endif
 
         protected void DataBoundControl_DataBinding(object sender, EventArgs e)
         {
@@ -41,13 +59,20 @@ namespace Glimpse.WebForms.Inspector
             var dataSource = DataBoundControl.DataSourceObject as ObjectDataSource;
             if (dataSource != null)
             {
-                parameterModel = new DataBindParameterModel(GlimpseConfiguration.GetConfiguredTimerStrategy()().Point().Offset);
+                parameterModel = new DataBindParameterModel(Offset);
                 var values = dataSource.SelectParameters.GetValues(HttpContext.Current, dataSource);
                 foreach (Parameter parameter in dataSource.SelectParameters)
                 {
                     parameterModel.DataBindParameters.Add(new DataBindParameter(parameter.Name, parameter.GetType(), values[parameter.Name]));
                 }
             }
+#if NET45Plus
+            else
+            {
+                parameterModel = (DataBindParameterModel)HttpContext.Current.Items["_GlimpseWebFormModelBinding"];
+                HttpContext.Current.Items.Remove("_GlimpseWebFormModelBinding");
+            }
+#endif
             if (parameterModel != null && parameterModel.DataBindParameters.Count > 0)
             {
                 if (!DataBindInfo.ContainsKey(DataBoundControl.UniqueID))
@@ -113,6 +138,9 @@ namespace Glimpse.WebForms.Inspector
         protected override void OnInit(EventArgs e)
         {
             CopyAccessState();
+#if NET45Plus
+            DataBoundControl.CallingDataMethods += DataBoundControl_CallingDataMethods;
+#endif
             DataBoundControl.DataBinding += DataBoundControl_DataBinding;
             OnInitInfo.Invoke(InnerAdapter, new object[] { e });
         }

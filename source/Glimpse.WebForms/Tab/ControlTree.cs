@@ -124,9 +124,9 @@ namespace Glimpse.WebForms.Tab
 
                 var dataBoundControlType = typeof(DataBoundControl);
                 var dataBoundControlAdapterType = typeof(DataBoundControlAdapter);
-                if (HttpContext.Current.Items["_GlimpseWebFormDataBindingInfo"] == null)
+                if (HttpContext.Current.Items["_GlimpseWebFormDataBinding"] == null)
                 {
-                    HttpContext.Current.Items["_GlimpseWebFormDataBindingInfo"] = new Dictionary<string, List<DataBindParameterModel>>();
+                    HttpContext.Current.Items["_GlimpseWebFormDataBinding"] = new Dictionary<string, List<DataBindParameterModel>>();
                 }
                 foreach (DictionaryEntry adapter in adapters)
                 {
