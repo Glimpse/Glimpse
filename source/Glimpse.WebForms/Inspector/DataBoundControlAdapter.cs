@@ -2,6 +2,8 @@
 using Glimpse.WebForms.Model;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.UI;
@@ -62,7 +64,14 @@ namespace Glimpse.WebForms.Inspector
                 var values = dataSource.SelectParameters.GetValues(HttpContext.Current, dataSource);
                 foreach (Parameter parameter in dataSource.SelectParameters)
                 {
-                    parameterModel.DataBindParameters.Add(new DataBindParameter(parameter.Name, parameter.GetType(), values[parameter.Name]));
+                    var defaultPropertyAttribute = Attribute.GetCustomAttributes(parameter.GetType()).First(a => a is DefaultPropertyAttribute) as DefaultPropertyAttribute;
+                    string name = null;
+                    if (defaultPropertyAttribute != null)
+                    {
+                        name = parameter.GetType().GetProperty(defaultPropertyAttribute.Name).GetValue(parameter, null) as string;
+                    }
+                    name = name ?? parameter.Name;
+                    parameterModel.DataBindParameters.Add(new DataBindParameter(name, parameter.GetType(), values[parameter.Name]));
                 }
             }
 #if NET45Plus
