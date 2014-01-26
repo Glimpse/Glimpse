@@ -1,7 +1,9 @@
 ﻿#if NET45Plus
 using Glimpse.Core.Extensibility;
+using Glimpse.WebForms.Model;
 using System;
 using System.Collections.Generic;
+using System.Web;
 using System.Web.ModelBinding;
 
 namespace Glimpse.WebForms.AlternateType
@@ -34,6 +36,13 @@ namespace Glimpse.WebForms.AlternateType
 
             public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
             {
+                var dataBindParameterModel = (DataBindParameterModel)HttpContext.Current.Items["_GlimpseWebFormModelBinding"];
+                if (dataBindParameterModel != null)
+                {
+                    var bindingContext = (ModelBindingContext)context.Arguments[1];
+                    var value = bindingContext.ModelState[bindingContext.ModelName] != null ? bindingContext.ModelState[bindingContext.ModelName].Value.AttemptedValue : null;
+                    dataBindParameterModel.DataBindParameters.Add(new DataBindParameter(bindingContext.ModelName, bindingContext.ValueProvider.GetType(), value));
+                }
             }
         }
     }
