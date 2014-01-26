@@ -68,6 +68,9 @@
     <Compile Include="HttpModule.cs" />
     <Compile Include="HttpRuntimeShutdownMessageResolver.cs" />
     <Compile Include="Message\ProcessConstraintMessage.cs" />
+    <Compile Include="Model\CacheConfigurationModel.cs" />
+    <Compile Include="Model\CacheItemModel.cs" />
+    <Compile Include="Model\CacheModel.cs" />
     <Compile Include="Model\ConfigurationAuthenticationFormsCredentialsModel.cs" />
     <Compile Include="Model\ConfigurationAuthenticationFormsModel.cs" />
     <Compile Include="Model\ConfigurationAuthenticationModel.cs" />
@@ -108,6 +111,7 @@
     <Compile Include="SerializationConverter\SessionModelConverter.cs" />
     <Compile Include="Support\Serialization.cs" />
     <Compile Include="Tab\Cache.cs" />
+    <Compile Include="Tab\ConfigurationConnectionStringModelFactory.cs" />
     <Compile Include="Tab\Configuration.cs" />
     <Compile Include="Tab\Environment.cs" />
     <Compile Include="Tab\Request.cs" />

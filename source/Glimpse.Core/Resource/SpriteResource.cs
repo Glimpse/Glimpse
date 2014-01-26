@@ -14,8 +14,6 @@ namespace Glimpse.Core.Resource
         /// </summary>
         public SpriteResource()
         {
-            ResourceName = "Glimpse.Core.sprite.png";
-            ResourceType = "image/png";
             Name = InternalName;
         }
 
@@ -28,6 +26,11 @@ namespace Glimpse.Core.Resource
         public string Key
         {
             get { return Name; }
+        }
+
+        protected override EmbeddedResourceInfo GetEmbeddedResourceInfo(IResourceContext context)
+        {
+            return new EmbeddedResourceInfo(this.GetType().Assembly, "Glimpse.Core.EmbeddedResources.sprite.png", "image/png");
         }
     }
 }

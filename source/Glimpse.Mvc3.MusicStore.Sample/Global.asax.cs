@@ -1,6 +1,5 @@
-﻿using MvcMusicStore.Framework;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using MvcMusicStore.Framework;
 using System.Configuration;
 using System.Data.Common;
 using System.Linq;
@@ -86,6 +85,26 @@ namespace MvcMusicStore
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
             LoadConfiguration();
+
+
+            HttpRuntime.Cache.Add("test TimeSpan", "Very important", null, System.Web.Caching.Cache.NoAbsoluteExpiration, new TimeSpan(1, 1, 1, 1),
+                System.Web.Caching.CacheItemPriority.High, null);
+            HttpRuntime.Cache.Add("test DateTime", "Very important", null, DateTime.Now.AddDays(1), System.Web.Caching.Cache.NoSlidingExpiration,
+                System.Web.Caching.CacheItemPriority.High, null);
+            //HttpRuntime.Cache.Add("Info_" + id.ToString() + "_" + quantity.ToString(), info, null, System.Web.Caching.Cache.NoAbsoluteExpiration, System.Web.Caching.Cache.NoSlidingExpiration, System.Web.Caching.CacheItemPriority.High, null);
+        }
+
+        private void Application_BeginRequest()
+        {
+            string rawUrlLowercased = Request.RawUrl.ToLower();
+            if (rawUrlLowercased.Contains("glimpse.axd") || rawUrlLowercased.Contains("/home/csptest"))
+            {
+                // this will work
+                // HttpContext.Current.Response.Headers.Add("Content-Security-Policy", "default-src 'self' style-src 'unsafe-inline'");
+
+                // this will fail for the test page
+                HttpContext.Current.Response.Headers.Add("Content-Security-Policy", "default-src 'self'");
+            }
         }
     }
 }

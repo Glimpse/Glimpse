@@ -1,8 +1,5 @@
 ﻿using MvcMusicStore.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace MvcMusicStore.Controllers
@@ -52,6 +49,12 @@ namespace MvcMusicStore.Controllers
                 .ToList();
 
             return PartialView(genres);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            storeDB.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

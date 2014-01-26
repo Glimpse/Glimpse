@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using MvcMusicStore.Models;
 
@@ -88,7 +84,7 @@ namespace MvcMusicStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(album).State = System.Data.Entity.EntityState.Modified;
+                db.Entry(album).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

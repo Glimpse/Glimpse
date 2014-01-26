@@ -14,6 +14,10 @@
         
         <!-- Download NuGet.exe if it does not already exist -->
         <DownloadNuGetExe Condition=" '$(DownloadNuGetExe)' == '' ">false</DownloadNuGetExe>
+
+        <!-- MSBuild Tasks assembly location -->
+      <MSBuildTasksAssembly Condition="Exists('$(MSBuildToolsPath)\Microsoft.Build.Tasks.v12.0.dll')">$(MSBuildToolsPath)\Microsoft.Build.Tasks.v12.0.dll</MSBuildTasksAssembly>
+      <MSBuildTasksAssembly Condition="Exists('$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll')">$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll</MSBuildTasksAssembly>
     </PropertyGroup>
     
     <ItemGroup Condition=" '$(PackageSources)' == '' ">
@@ -91,7 +95,7 @@
               Condition=" '$(OS)' == 'Windows_NT' " />
     </Target>
     
-    <UsingTask TaskName="DownloadNuGet" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <UsingTask TaskName="DownloadNuGet" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildTasksAssembly)">
         <ParameterGroup>
             <OutputFilename ParameterType="System.String" Required="true" />
         </ParameterGroup>
@@ -122,7 +126,7 @@
         </Task>
     </UsingTask>
     
-     <UsingTask TaskName="SetEnvironmentVariable" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+     <UsingTask TaskName="SetEnvironmentVariable" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildTasksAssembly)">
         <ParameterGroup>
             <EnvKey ParameterType="System.String" Required="true" />
             <EnvValue ParameterType="System.String" Required="true" />

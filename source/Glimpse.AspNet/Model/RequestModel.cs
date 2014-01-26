@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Threading;
 using System.Web;
@@ -78,9 +79,7 @@ namespace Glimpse.AspNet.Model
                             yield return new Cookie
                                 {
                                     Name = cookie.Name,
-                                    Value = server.UrlDecode(cookie.Value),
-                                    Path = cookie.Path,
-                                    Secure = cookie.Secure
+                                    Value = server.UrlDecode(cookie.Value)
                                 };
                         }
                     }
@@ -124,7 +123,7 @@ namespace Glimpse.AspNet.Model
                 {
                     foreach (var key in formVariables.AllKeys)
                     {
-                        yield return new FormVariable {Key = key, Value = formVariables[key]};
+                        yield return new FormVariable {Key = key, Value = SafeGetKeyValue(formVariables, key)};
                     }
                 }
             }
@@ -140,7 +139,7 @@ namespace Glimpse.AspNet.Model
                 {
                     foreach (var key in headerFields.AllKeys)
                     {
-                        yield return new HeaderField { Key = key, Value = headerFields[key] };
+                        yield return new HeaderField { Key = key, Value = SafeGetKeyValue(headerFields, key) };
                     }
                 }
             }
@@ -156,9 +155,21 @@ namespace Glimpse.AspNet.Model
                 {
                     foreach (var key in queryString.AllKeys)
                     {
-                        yield return new QueryStringParameter {Key = key, Value = queryString[key]};
+                        yield return new QueryStringParameter { Key = key, Value = SafeGetKeyValue(queryString, key) };
                     }
                 }
+            }
+        }
+
+        private static string SafeGetKeyValue(NameValueCollection collection, string key)
+        {
+            try
+            {
+                return collection[key];
+            }
+            catch (HttpRequestValidationException httpRequestValidationException)
+            {
+                return httpRequestValidationException.Message;
             }
         }
 
@@ -166,8 +177,6 @@ namespace Glimpse.AspNet.Model
         {
             public string Name { get; set; }
             public string Value { get; set; }
-            public string Path { get; set; }
-            public bool Secure { get; set; }
         }
 
         public class FormVariable

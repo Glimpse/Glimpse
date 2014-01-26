@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>2.2</ProductVersion>
+    <ProjectGuid>9872cf80-d354-4a19-a28b-b5fe62da3df5</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Glimpse.WindowsAzure.Sample</RootNamespace>
+    <AssemblyName>Glimpse.WindowsAzure.Sample</AssemblyName>
+    <StartDevelopmentStorage>True</StartDevelopmentStorage>
+    <Name>Glimpse.WindowsAzure.Sample</Name>
+    <UseWebProjectPorts>False</UseWebProjectPorts>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Glimpse.WindowsAzure.WebRole.Sample\Glimpse.WindowsAzure.WebRole.Sample.csproj">
+      <Name>Web</Name>
+      <Project>{FE76DB8B-5FE3-4F25-B816-4EF2E6F20FFB}</Project>
+      <Private>True</Private>
+      <RoleType>Web</RoleType>
+      <RoleName>Web</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+    </ProjectReference>
+  </ItemGroup>
+  <!-- Items for the project -->
+  <ItemGroup>
+    <ServiceDefinition Include="ServiceDefinition.csdef" />
+    <ServiceConfiguration Include="ServiceConfiguration.Local.cscfg" />
+    <ServiceConfiguration Include="ServiceConfiguration.Cloud.cscfg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="WebContent\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="WebContent\diagnostics.wadcfg">
+      <SubType>Content</SubType>
+    </Content>
+  </ItemGroup>
+  <!-- Import the target files for this project template -->
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+    <CloudExtensionsDir Condition=" '$(CloudExtensionsDir)' == '' ">$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Windows Azure Tools\2.2\</CloudExtensionsDir>
+  </PropertyGroup>
+  
+  <Import Project="$(CloudExtensionsDir)Microsoft.WindowsAzure.targets" Condition="Exists('$(CloudExtensionsDir)Microsoft.WindowsAzure.targets')" />
+
+  <Target Name="Build" Condition="!Exists('$(CloudExtensionsDir)Microsoft.WindowsAzure.targets')">
+    <Message Text="Path '$(CloudExtensionsDir)Microsoft.WindowsAzure.targets' does not exist so Glimpse.WindowsAzure.Sample has not been built" Importance="High"/>
+  </Target>
+
+  <Target Name="ReBuild" Condition="!Exists('$(CloudExtensionsDir)Microsoft.WindowsAzure.targets')">
+    <Message Text="Path '$(CloudExtensionsDir)Microsoft.WindowsAzure.targets' does not exist so Glimpse.WindowsAzure.Sample has not been built" Importance="High"/>
+  </Target>
+</Project>

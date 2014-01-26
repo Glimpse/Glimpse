@@ -1,7 +1,7 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data.Common;
+using System.Linq;
 using System.Web.Configuration;
 using Glimpse.AspNet.Extensibility;
 using Glimpse.AspNet.Model;
@@ -15,9 +15,6 @@ namespace Glimpse.AspNet.Tab
     /// </summary>
     public class Configuration : AspNetTab, IDocumentation, ILayoutControl, IKey
     {
-        private const string PasswordHash = "########";
-        private readonly IEnumerable<string> keysToAnnomalizePassword = new[] { "Password", "Pwd" };
-
         /// <summary>
         /// Gets the name that will show in the tab.
         /// </summary>
@@ -31,7 +28,7 @@ namespace Glimpse.AspNet.Tab
         /// Gets the key.
         /// </summary>
         /// <value>The key. Only valid JavaScript identifiers should be used for future compatibility.</value>
-        public string Key 
+        public string Key
         {
             get { return "glimpse_configuration"; }
         }
@@ -46,26 +43,26 @@ namespace Glimpse.AspNet.Tab
         }
 
         public bool KeysHeadings
-        { 
-            get { return true; } 
+        {
+            get { return true; }
         }
-        
+
         /// <summary>
         /// Gets the data that should be shown in the UI.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <returns>Object that will be shown.</returns>
         public override object GetData(ITabContext context)
-        { 
+        {
             var result = new ConfigurationModel();
             result.AppSettings = ConfigurationManager.AppSettings.ToDictionary();
             result.Authentication = ProcessAuthenticationSection(ConfigurationManager.GetSection("system.web/authentication") as AuthenticationSection);
-            result.ConnectionStrings = ProcessConnectionString(ConfigurationManager.ConnectionStrings);
+            result.ConnectionStrings = ProcessConnectionStrings(ConfigurationManager.ConnectionStrings);
             result.CustomErrors = ProcessCustomErrors(ConfigurationManager.GetSection("system.web/customErrors") as CustomErrorsSection);
             result.HttpModules = ProcessHttpModules(ConfigurationManager.GetSection("system.web/httpModules") as HttpModulesSection);
             result.HttpHandlers = ProcessHttpHandler(ConfigurationManager.GetSection("system.web/httpHandlers") as HttpHandlersSection);
             result.RoleManager = ProcessRoleManager(ConfigurationManager.GetSection("system.web/roleManager") as RoleManagerSection);
-             
+
             return result;
         }
 
@@ -107,73 +104,18 @@ namespace Glimpse.AspNet.Tab
             return result;
         }
 
-        private IEnumerable<ConfigurationConnectionStringModel> ProcessConnectionString(ConnectionStringSettingsCollection connectionStrings)
+        private static IEnumerable<ConfigurationConnectionStringModel> ProcessConnectionStrings(IEnumerable connectionStrings)
         {
             if (connectionStrings == null)
             {
                 return null;
             }
 
-            var result = new List<ConfigurationConnectionStringModel>();
-
-            foreach (ConnectionStringSettings connectionString in connectionStrings)
-            {
-                var resultItem = new ConfigurationConnectionStringModel();
-                resultItem.Key = connectionString.Name;
-                resultItem.Raw = connectionString.ConnectionString;
-                resultItem.ProviderName = connectionString.ProviderName;
-
-                try
-                {
-                    var providerName = string.IsNullOrEmpty(connectionString.ProviderName) ? "System.Data.SqlClient" : connectionString.ProviderName;
-                    var connectionFactory = DbProviderFactories.GetFactory(providerName);
-                    var connectionStringBuilder = connectionFactory.CreateConnectionStringBuilder();
-                    if (connectionStringBuilder != null)
-                    {
-                        connectionStringBuilder.ConnectionString = connectionString.ConnectionString;
-
-                        var connectionDetails = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
-                        var keys = connectionStringBuilder.Keys;
-                        if (keys != null)
-                        {
-                            foreach (string key in keys)
-                            {
-                                connectionDetails.Add(key, connectionStringBuilder[key]);
-                            }
-
-                            resultItem.Details = connectionDetails;
-
-                            AnnomalizeConnectionStringPassword(connectionDetails, resultItem);
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    resultItem.Details = new Dictionary<string, object> { { "Error", e.Message } };
-                }
-
-                result.Add(resultItem);
-            }
+            var result = (from ConnectionStringSettings connectionString in connectionStrings 
+                          where connectionString != null 
+                          select ConfigurationConnectionStringModelFactory.Create(connectionString)).ToList();
 
             return result.Count > 0 ? result : null;
-        } 
-
-        private void AnnomalizeConnectionStringPassword(IDictionary<string, object> connectionDetails, ConfigurationConnectionStringModel model)
-        {
-            foreach (var key in keysToAnnomalizePassword)
-            {
-                if (connectionDetails.ContainsKey(key))
-                {
-                    var password = connectionDetails[key].ToString();
-                    if (!string.IsNullOrEmpty(password))
-                    {
-                        connectionDetails[key] = PasswordHash; 
-                        model.Raw = model.Raw.Replace(password, PasswordHash);
-                    }
-
-                    return;
-                }
-            }
         }
 
         private ConfigurationCustomErrorsModel ProcessCustomErrors(CustomErrorsSection customErrorsSection)
@@ -186,8 +128,8 @@ namespace Glimpse.AspNet.Tab
             var result = new ConfigurationCustomErrorsModel();
             result.DefaultRedirect = customErrorsSection.DefaultRedirect;
             result.RedirectMode = customErrorsSection.RedirectMode.ToString();
-            result.Mode = customErrorsSection.Mode.ToString(); 
-            
+            result.Mode = customErrorsSection.Mode.ToString();
+
             var errorsSection = customErrorsSection.Errors;
             if (errorsSection != null)
             {

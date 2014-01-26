@@ -1088,6 +1088,70 @@ namespace Glimpse.Test.Core.Framework
             Assert.Equal(testCase.ResultingRuntimePolicyForResource, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePolicyKey));
         }
 
+        private class MyResourceWithDependencies : IResource, IDependOnResources
+        {
+            private string DependsOnResourceName { get; set; }
+
+            public MyResourceWithDependencies(string dependsOnResourceName)
+            {
+                DependsOnResourceName = dependsOnResourceName;
+            }
+
+            public bool DependsOn(string resourceName)
+            {
+                return resourceName == DependsOnResourceName;
+            }
+
+            public string Name
+            {
+                get { return "MyResourceWithDependencies"; }
+            }
+
+            public IEnumerable<ResourceParameterMetadata> Parameters
+            {
+                get { return new ResourceParameterMetadata[0]; }
+            }
+
+            public IResourceResult Execute(IResourceContext context)
+            {
+                return null; // should not be executed during tests
+            }
+        }
+
+        [Fact]
+        public void ExecuteResourceIfItIsADependencyOfTheDefaultResource()
+        {
+            ExecuteResourceDependencyTest("dependentResourceName", "dependentResourceName", true);
+        }
+
+        [Fact]
+        public void SkipExecutionOfResourceIfItIsNotDependencyOfTheDefaultResource()
+        {
+            ExecuteResourceDependencyTest("someOtherDependentResourceName", "dependentResourceName", false);
+        }
+
+        private void ExecuteResourceDependencyTest(string resourceToExecute, string dependentResourceName, bool shouldHaveExecuted)
+        {
+            Runtime.Configuration.DefaultRuntimePolicy = RuntimePolicy.On;
+            Runtime.Configuration.FrameworkProvider.HttpRequestStore.Set(Constants.RuntimePolicyKey, RuntimePolicy.Off);
+
+            var defaultResource = new MyResourceWithDependencies(dependentResourceName);
+            Runtime.Configuration.DefaultResource = defaultResource;
+            Runtime.Configuration.Resources.Add(defaultResource);
+
+            var dependentResourceMock = new Mock<IResource>();
+            dependentResourceMock.Setup(r => r.Name).Returns(dependentResourceName);
+            var dependentResourceResultMock = new Mock<IResourceResult>();
+            dependentResourceMock.Setup(r => r.Execute(It.IsAny<IResourceContext>())).Returns(dependentResourceResultMock.Object);
+            Runtime.Configuration.Resources.Add(dependentResourceMock.Object);
+
+            Runtime.ExecuteResource(resourceToExecute, new ResourceParameters(new Dictionary<string, string>()));
+            dependentResourceMock.Verify(r => r.Execute(It.IsAny<IResourceContext>()), shouldHaveExecuted ? Times.Once() : Times.Never());
+            dependentResourceResultMock.Verify(r => r.Execute(It.IsAny<IResourceResultContext>()), shouldHaveExecuted ? Times.Once() : Times.Never());
+
+            Assert.Equal(RuntimePolicy.Off, Runtime.Configuration.FrameworkProvider.HttpRequestStore.Get(Constants.RuntimePolicyKey));
+        }
+
         /* End of tests related to they way runtime policies are evaluated in case resources are being executed */
     }
 }
