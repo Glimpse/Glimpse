@@ -38,6 +38,7 @@ namespace WingtipToys.DataBindingTests
         protected void Page_PreRenderComplete(object sender, EventArgs e)
         {
             ListView1.DataBind();
+            ListView4.DataBind();
         }
     }
 }
