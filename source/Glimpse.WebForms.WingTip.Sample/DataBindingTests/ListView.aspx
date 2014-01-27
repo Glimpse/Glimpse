@@ -39,6 +39,21 @@
                 <li><%# Eval("Id") %></li>
             </ItemTemplate>
         </asp:ListView>
+        <asp:ListView ID="ListView3" runat="server" DataSourceID="SqlDataSource">
+            <LayoutTemplate>
+                <ul>
+                    <li runat="server" id="itemPlaceholder" />
+                </ul>
+            </LayoutTemplate>
+            <ItemTemplate>
+                <li><%# Eval("ProductName") %></li>
+            </ItemTemplate>
+        </asp:ListView>
+        <asp:SqlDataSource ID="SqlDataSource" runat="server" connectionstring="<%$ ConnectionStrings:WingtipToys%>" selectcommand="SELECT * FROM Products WHERE ProductName = @Name">
+            <SelectParameters>
+                <asp:QueryStringParameter name="Name" QueryStringField="Name" DefaultValue="paper boat"/>
+            </SelectParameters>
+        </asp:SqlDataSource>
     </div>
     </form>
 </body>

@@ -57,12 +57,12 @@ namespace Glimpse.WebForms.Inspector
         protected void DataBoundControl_DataBinding(object sender, EventArgs e)
         {
             DataBindParameterModel parameterModel = null;
-            var dataSource = DataBoundControl.DataSourceObject as ObjectDataSource;
-            if (dataSource != null)
+            var parameters = GetParameters();
+            if (parameters != null)
             {
                 parameterModel = new DataBindParameterModel(Offset);
-                var values = dataSource.SelectParameters.GetValues(HttpContext.Current, dataSource);
-                foreach (Parameter parameter in dataSource.SelectParameters)
+                var values = parameters.GetValues(HttpContext.Current, DataBoundControl);
+                foreach (Parameter parameter in parameters)
                 {
                     var defaultPropertyAttribute = Attribute.GetCustomAttributes(parameter.GetType()).First(a => a is DefaultPropertyAttribute) as DefaultPropertyAttribute;
                     string name = null;
@@ -90,8 +90,22 @@ namespace Glimpse.WebForms.Inspector
                 DataBindInfo[DataBoundControl.UniqueID].Add(parameterModel);
             }
         }
-    }
 
+        private ParameterCollection GetParameters()
+        {
+            var objectDataSource = DataBoundControl.DataSourceObject as ObjectDataSource;
+            if (objectDataSource != null)
+            {
+                return objectDataSource.SelectParameters;
+            }
+            var sqlDataSource = DataBoundControl.DataSourceObject as SqlDataSource;
+            if (sqlDataSource != null)
+            {
+                return sqlDataSource.SelectParameters;
+            }
+            return null;
+        }
+    }
 
     public class DataBoundControlAdapter<TControlAdapter> : DataBoundControlAdapter
         where TControlAdapter : ControlAdapter
