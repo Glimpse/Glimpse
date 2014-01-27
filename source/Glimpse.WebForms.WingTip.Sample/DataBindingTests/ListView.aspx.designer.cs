@@ -40,13 +40,13 @@ namespace WingtipToys.DataBindingTests {
         protected global::System.Web.UI.WebControls.Button Button1;
         
         /// <summary>
-        /// ListView1 control.
+        /// ObjectDataSourceListView control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ListView ListView1;
+        protected global::System.Web.UI.WebControls.ListView ObjectDataSourceListView;
         
         /// <summary>
         /// ObjectDataSource1 control.
@@ -58,22 +58,31 @@ namespace WingtipToys.DataBindingTests {
         protected global::System.Web.UI.WebControls.ObjectDataSource ObjectDataSource1;
         
         /// <summary>
-        /// ListView2 control.
+        /// ManualDataBindListView control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ListView ListView2;
+        protected global::System.Web.UI.WebControls.ListView ManualDataBindListView;
         
         /// <summary>
-        /// ListView3 control.
+        /// ModelBindingListView control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ListView ListView3;
+        protected global::System.Web.UI.WebControls.ListView ModelBindingListView;
+        
+        /// <summary>
+        /// SqlDataSourceListView control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ListView SqlDataSourceListView;
         
         /// <summary>
         /// SqlDataSource control.
@@ -85,13 +94,13 @@ namespace WingtipToys.DataBindingTests {
         protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource;
         
         /// <summary>
-        /// ListView4 control.
+        /// LinqDataSourceListView control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ListView ListView4;
+        protected global::System.Web.UI.WebControls.ListView LinqDataSourceListView;
         
         /// <summary>
         /// LinqDataSource control.

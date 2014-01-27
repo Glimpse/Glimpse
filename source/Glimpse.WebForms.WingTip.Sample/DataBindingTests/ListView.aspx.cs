@@ -11,11 +11,13 @@ namespace WingtipToys.DataBindingTests
         {
             var text = TextBox1.Text;
             TextBox1.Text = "different text";
-            ListView1.DataBind();
+            ObjectDataSourceListView.DataBind();
             TextBox1.Text = "more different text";
-            ListView1.DataBind();
+            ObjectDataSourceListView.DataBind();
             TextBox1.Text = text;
-            ListView1.DataBind();
+            ObjectDataSourceListView.DataBind();
+            ManualDataBindListView.DataSource = GetItems("hello", null, "world");
+            ManualDataBindListView.DataBind();
         }
 
         public IEnumerable GetItems([Control("TextBox1")]  string filter, [QueryString("sort")] string order, [Custom] string custom)
@@ -30,15 +32,15 @@ namespace WingtipToys.DataBindingTests
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            ListView1.DataBind();
-            ListView2.DataBind();
-            ListView2.DataBind();
+            ObjectDataSourceListView.DataBind();
+            ModelBindingListView.DataBind();
+            ModelBindingListView.DataBind();
         }
 
         protected void Page_PreRenderComplete(object sender, EventArgs e)
         {
-            ListView1.DataBind();
-            ListView4.DataBind();
+            ObjectDataSourceListView.DataBind();
+            LinqDataSourceListView.DataBind();
         }
     }
 }

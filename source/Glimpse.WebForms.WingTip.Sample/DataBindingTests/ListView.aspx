@@ -12,7 +12,7 @@
         <asp:TextBox ID="TextBox1" runat="server" Text="some text" />
         <asp:Button ID="Button1" runat="server" Text="Search" />
         <h2>DataSource Control</h2>
-        <asp:ListView ID="ListView1" runat="server" DataSourceID="ObjectDataSource1">
+        <asp:ListView ID="ObjectDataSourceListView" runat="server" DataSourceID="ObjectDataSource1">
             <LayoutTemplate>
                 <ul>
                     <li runat="server" id="itemPlaceholder" />
@@ -29,7 +29,7 @@
                 <wtp:CustomParameter Name="custom" />
             </SelectParameters>
         </asp:ObjectDataSource>
-        <asp:ListView ID="ListView2" runat="server" SelectMethod="GetItems">
+        <asp:ListView ID="ManualDataBindListView" runat="server">
             <LayoutTemplate>
                 <ul>
                     <li runat="server" id="itemPlaceholder" />
@@ -39,7 +39,17 @@
                 <li><%# Eval("Id") %></li>
             </ItemTemplate>
         </asp:ListView>
-        <asp:ListView ID="ListView3" runat="server" DataSourceID="SqlDataSource">
+        <asp:ListView ID="ModelBindingListView" runat="server" SelectMethod="GetItems">
+            <LayoutTemplate>
+                <ul>
+                    <li runat="server" id="itemPlaceholder" />
+                </ul>
+            </LayoutTemplate>
+            <ItemTemplate>
+                <li><%# Eval("Id") %></li>
+            </ItemTemplate>
+        </asp:ListView>
+        <asp:ListView ID="SqlDataSourceListView" runat="server" DataSourceID="SqlDataSource">
             <LayoutTemplate>
                 <ul>
                     <li runat="server" id="itemPlaceholder" />
@@ -57,7 +67,7 @@
                 <asp:QueryStringParameter Name="Filter" QueryStringField="Test"/>
             </FilterParameters>
         </asp:SqlDataSource>
-        <asp:ListView ID="ListView4" runat="server" DataSourceID="LinqDataSource">
+        <asp:ListView ID="LinqDataSourceListView" runat="server" DataSourceID="LinqDataSource">
             <LayoutTemplate>
                 <ul>
                     <li runat="server" id="itemPlaceholder" />
