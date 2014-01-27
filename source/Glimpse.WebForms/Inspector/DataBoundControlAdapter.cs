@@ -56,11 +56,9 @@ namespace Glimpse.WebForms.Inspector
 
         protected void DataBoundControl_DataBinding(object sender, EventArgs e)
         {
-            DataBindParameterModel parameterModel = null;
-            var parameters = GetParameters();
-            if (parameters != null)
+            var parameterModel = new DataBindParameterModel(Offset);
+            foreach (var parameters in GetParameters())
             {
-                parameterModel = new DataBindParameterModel(Offset);
                 var values = parameters.GetValues(HttpContext.Current, DataBoundControl);
                 foreach (Parameter parameter in parameters)
                 {
@@ -75,13 +73,13 @@ namespace Glimpse.WebForms.Inspector
                 }
             }
 #if NET45Plus
-            else
+            if (HttpContext.Current.Items.Contains("_GlimpseWebFormModelBinding"))
             {
                 parameterModel = (DataBindParameterModel)HttpContext.Current.Items["_GlimpseWebFormModelBinding"];
                 HttpContext.Current.Items.Remove("_GlimpseWebFormModelBinding");
             }
 #endif
-            if (parameterModel != null && parameterModel.DataBindParameters.Count > 0)
+            if (parameterModel.DataBindParameters.Count > 0)
             {
                 if (!DataBindInfo.ContainsKey(DataBoundControl.UniqueID))
                 {
@@ -91,19 +89,19 @@ namespace Glimpse.WebForms.Inspector
             }
         }
 
-        private ParameterCollection GetParameters()
+        private IEnumerable<ParameterCollection> GetParameters()
         {
             var objectDataSource = DataBoundControl.DataSourceObject as ObjectDataSource;
             if (objectDataSource != null)
             {
-                return objectDataSource.SelectParameters;
+                yield return objectDataSource.SelectParameters;
             }
             var sqlDataSource = DataBoundControl.DataSourceObject as SqlDataSource;
             if (sqlDataSource != null)
             {
-                return sqlDataSource.SelectParameters;
+                yield return sqlDataSource.SelectParameters;
+                yield return sqlDataSource.FilterParameters;
             }
-            return null;
         }
     }
 

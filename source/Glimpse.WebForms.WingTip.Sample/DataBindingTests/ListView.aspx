@@ -49,11 +49,32 @@
                 <li><%# Eval("ProductName") %></li>
             </ItemTemplate>
         </asp:ListView>
-        <asp:SqlDataSource ID="SqlDataSource" runat="server" connectionstring="<%$ ConnectionStrings:WingtipToys%>" selectcommand="SELECT * FROM Products WHERE ProductName = @Name">
+        <asp:SqlDataSource ID="SqlDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:WingtipToys%>" SelectCommand="SELECT * FROM Products WHERE ProductName = @Name">
             <SelectParameters>
-                <asp:QueryStringParameter name="Name" QueryStringField="Name" DefaultValue="paper boat"/>
+                <asp:SessionParameter Name="Name" SessionField="Name" DefaultValue="paper boat"/>
             </SelectParameters>
+            <FilterParameters>
+                <asp:QueryStringParameter Name="Test" QueryStringField="Test"/>
+            </FilterParameters>
         </asp:SqlDataSource>
+        <asp:ListView ID="ListView4" runat="server" DataSourceID="LinqDataSource">
+            <LayoutTemplate>
+                <ul>
+                    <li runat="server" id="itemPlaceholder" />
+                </ul>
+            </LayoutTemplate>
+            <ItemTemplate>
+                <li><%# Eval("ProductName") %></li>
+            </ItemTemplate>
+        </asp:ListView>
+        <asp:LinqDataSource ID="LinqDataSource" runat="server" ContextTypeName="WingtipToys.Models.ProductContext" TableName="Products" Where="ProductName = @Name">
+            <WhereParameters>
+                <asp:SessionParameter Name="Name" SessionField="Name" DefaultValue="paper boat"/>
+            </WhereParameters>
+            <OrderByParameters>
+                <asp:QueryStringParameter Name="Test" QueryStringField="Test" DefaultValue="ProductName"/>
+            </OrderByParameters>
+        </asp:LinqDataSource>
     </div>
     </form>
 </body>
