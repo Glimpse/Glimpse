@@ -15,6 +15,17 @@ namespace Glimpse.Core.Framework
         /// <param name="glimpseRequestId">The Id assigned to the request by Glimpse.</param>
         /// <param name="requestResponseAdapter">The <see cref="IRequestResponseAdapter "/> of this request.</param>
         public GlimpseRequestContext(Guid glimpseRequestId, IRequestResponseAdapter requestResponseAdapter)
+            : this(glimpseRequestId, requestResponseAdapter, GlimpseRuntime.Instance.Configuration.EndpointBaseUri)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GlimpseRequestContext" />
+        /// </summary>
+        /// <param name="glimpseRequestId">The Id assigned to the request by Glimpse.</param>
+        /// <param name="requestResponseAdapter">The <see cref="IRequestResponseAdapter "/> of this request.</param>
+        /// <param name="endpointBaseUri">The endpoint base URI.</param>
+        public GlimpseRequestContext(Guid glimpseRequestId, IRequestResponseAdapter requestResponseAdapter, string endpointBaseUri)
         {
             if (requestResponseAdapter == null)
             {
@@ -28,6 +39,10 @@ namespace Glimpse.Core.Framework
 
             GlimpseRequestId = glimpseRequestId;
             RequestResponseAdapter = requestResponseAdapter;
+            RequestHandlingMode = RequestResponseAdapter.RequestMetadata.AbsolutePath.StartsWith(endpointBaseUri, StringComparison.InvariantCultureIgnoreCase)
+                                    || ("~" + RequestResponseAdapter.RequestMetadata.AbsolutePath).StartsWith(endpointBaseUri, StringComparison.InvariantCultureIgnoreCase)
+                                    ? RequestHandlingMode.ResourceRequest
+                                    : RequestHandlingMode.RegularRequest;
         }
 
         /// <summary>
@@ -50,5 +65,10 @@ namespace Glimpse.Core.Framework
                 return RequestResponseAdapter.HttpRequestStore.Get<RuntimePolicy>(Constants.RuntimePolicyKey);
             }
         }
+
+        /// <summary>
+        /// Gets the <see cref="RequestHandlingMode"/> for this request
+        /// </summary>
+        public virtual RequestHandlingMode RequestHandlingMode { get; private set; }
     }
 }

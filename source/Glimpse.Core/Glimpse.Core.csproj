@@ -107,6 +107,7 @@
     <Compile Include="Extensibility\IWrapper.cs" />
     <Compile Include="Extensibility\JsonNetConverterDictionaryKeysAreNotPropertyNames.cs" />
     <Compile Include="Extensibility\InspectorContext.cs" />
+    <Compile Include="Extensibility\RequestHandlingMode.cs" />
     <Compile Include="Extensibility\RuntimePolicy.cs" />
     <Compile Include="Extensibility\Subscriber.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Framework\Crc32.cs" />
     <Compile Include="Framework\GlimpseNotInitializedException.cs" />
     <Compile Include="Framework\GlimpseRequestContext.cs" />
+    <Compile Include="Framework\UnavailableGlimpseRequestContextHandle.cs" />
     <Compile Include="Framework\GlimpseRequestContextHandle.cs" />
     <Compile Include="Framework\InactiveGlimpseRequestContext.cs" />
     <Compile Include="Framework\ReflectionBlackList.cs" />

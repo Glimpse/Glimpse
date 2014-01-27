@@ -1,4 +1,5 @@
 using System;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Framework
 {
@@ -14,9 +15,11 @@ namespace Glimpse.Core.Framework
         /// Initializes a new instance of the <see cref="GlimpseRequestContextHandle"/>
         /// </summary>
         /// <param name="glimpseRequestId">The Id assigned to the request by Glimpse.</param>
-        internal GlimpseRequestContextHandle(Guid glimpseRequestId)
+        /// <param name="requestHandlingMode">Mode representing the way Glimpse is handling the request.</param>
+        internal GlimpseRequestContextHandle(Guid glimpseRequestId, RequestHandlingMode requestHandlingMode)
         {
             GlimpseRequestId = glimpseRequestId;
+            RequestHandlingMode = requestHandlingMode;
         }
 
         /// <summary>
@@ -33,6 +36,11 @@ namespace Glimpse.Core.Framework
         public Guid GlimpseRequestId { get; private set; }
 
         /// <summary>
+        /// Gets the mode indicating how Glimpse is handling this request
+        /// </summary>
+        public RequestHandlingMode RequestHandlingMode { get; private set; }
+
+        /// <summary>
         /// Disposes the handle, which will make sure the corresponding <see cref="GlimpseRequestContext"/> is removed from the <see cref="ActiveGlimpseRequestContexts"/>
         /// </summary>
         public void Dispose()
@@ -41,7 +49,11 @@ namespace Glimpse.Core.Framework
             GC.SuppressFinalize(this);
         }
 
-        private void Dispose(bool disposing)
+        /// <summary>
+        /// Disposes the handle, which will make sure the corresponding <see cref="GlimpseRequestContext"/> is removed from the <see cref="ActiveGlimpseRequestContexts"/>
+        /// </summary>
+        /// <param name="disposing">Boolean indicating whether this method is called from the public <see cref="Dispose()"/> method or from within the finalizer</param>
+        protected virtual void Dispose(bool disposing)
         {
             if (!this.disposed)
             {
@@ -49,8 +61,17 @@ namespace Glimpse.Core.Framework
                 {
                 }
 
-                ActiveGlimpseRequestContexts.Remove(GlimpseRequestId);
-                this.disposed = true;
+                try
+                {
+                    ActiveGlimpseRequestContexts.Remove(GlimpseRequestId);
+                    this.disposed = true;
+                }
+                catch (Exception disposeException)
+                {
+                    GlimpseRuntime.Instance.Configuration.Logger.Error("Failed to dispose Glimpse request context handle", disposeException);
+#warning CGI : should we throw here? Of just log?
+                    throw;
+                }
             }
         }
     }

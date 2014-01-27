@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
-using Moq;
+using Glimpse.Test.Core.Tester;
 using Xunit;
 
 namespace Glimpse.Test.Core.Framework
@@ -52,11 +51,13 @@ namespace Glimpse.Test.Core.Framework
             var secondGlimpseRequestContext = CreateGlimpseRequestContext();
             var thirdGlimpseRequestContext = CreateGlimpseRequestContext();
 
-            var handlesDictionary = new Dictionary<int, GlimpseRequestContextHandle>();
-            handlesDictionary.Add(1, ActiveGlimpseRequestContexts.Add(firstGlimpseRequestContext));
-            handlesDictionary.Add(2, ActiveGlimpseRequestContexts.Add(secondGlimpseRequestContext));
-            handlesDictionary.Add(3, ActiveGlimpseRequestContexts.Add(thirdGlimpseRequestContext));
-            
+            var handlesDictionary = new Dictionary<int, GlimpseRequestContextHandle>
+            {
+                {1, ActiveGlimpseRequestContexts.Add(firstGlimpseRequestContext)},
+                {2, ActiveGlimpseRequestContexts.Add(secondGlimpseRequestContext)},
+                {3, ActiveGlimpseRequestContexts.Add(thirdGlimpseRequestContext)}
+            };
+
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
@@ -75,7 +76,7 @@ namespace Glimpse.Test.Core.Framework
             handlesDictionary.Remove(1);
             GC.Collect();
             GC.WaitForPendingFinalizers();
-            
+
             AssertNonExistenceOfGlimpseRequestContext(firstGlimpseRequestContext);
             AssertNonExistenceOfGlimpseRequestContext(secondGlimpseRequestContext);
             AssertExistenceOfGlimpseRequestContext(thirdGlimpseRequestContext);
@@ -83,7 +84,7 @@ namespace Glimpse.Test.Core.Framework
             handlesDictionary.Remove(3);
             GC.Collect();
             GC.WaitForPendingFinalizers();
-            
+
             AssertNonExistenceOfGlimpseRequestContext(firstGlimpseRequestContext);
             AssertNonExistenceOfGlimpseRequestContext(secondGlimpseRequestContext);
             AssertNonExistenceOfGlimpseRequestContext(thirdGlimpseRequestContext);
@@ -91,18 +92,10 @@ namespace Glimpse.Test.Core.Framework
 
         private static GlimpseRequestContext CreateGlimpseRequestContext()
         {
-            var requestStore = new DictionaryDataStoreAdapter(new Dictionary<string, object>
-            {
-                { Constants.RuntimePolicyKey, RuntimePolicy.On }
-            });
-
-            Guid requestId = Guid.NewGuid();
-
-            var requestResponseAdapterWithStoredRuntimePolicy = new Mock<IRequestResponseAdapter>();
-            requestResponseAdapterWithStoredRuntimePolicy
-                .Setup(adapter => adapter.HttpRequestStore).Returns(requestStore);
-
-            return new GlimpseRequestContext(requestId, requestResponseAdapterWithStoredRuntimePolicy.Object);
+            return new GlimpseRequestContext(
+                Guid.NewGuid(),
+                RequestResponseAdapterTester.Create(RuntimePolicy.On, "/").RequestResponseAdapterMock.Object,
+                "/glimpse.axd");
         }
 
         private static void AssertExistenceOfGlimpseRequestContext(GlimpseRequestContext expectedGlimpseRequestContext)

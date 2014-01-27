@@ -20,13 +20,24 @@ namespace Glimpse.Core.Framework
         }
 
         private InactiveGlimpseRequestContext()
-            : base(new Guid(), new RequestResponseAdapterStub())
+            : base(new Guid(), new RequestResponseAdapterStub(), string.Empty)
         {
         }
 
+        /// <summary>
+        /// Gets the active <see cref="RuntimePolicy"/> for this request
+        /// </summary>
         public override RuntimePolicy ActiveRuntimePolicy
         {
             get { return RuntimePolicy.Off; }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="RequestHandlingMode"/> for this request
+        /// </summary>
+        public override RequestHandlingMode RequestHandlingMode
+        {
+            get { return RequestHandlingMode.Unhandled; }
         }
 
         private class RequestResponseAdapterStub : IRequestResponseAdapter
@@ -73,6 +84,7 @@ namespace Glimpse.Core.Framework
             private class RequestMetadataStub : IRequestMetadata
             {
                 public string RequestUri { get { return string.Empty; } }
+                public string AbsolutePath { get { return string.Empty; } }
                 public string RequestHttpMethod { get { return string.Empty; } }
                 public int ResponseStatusCode { get { return 0; } }
                 public string ResponseContentType { get { return string.Empty; } }

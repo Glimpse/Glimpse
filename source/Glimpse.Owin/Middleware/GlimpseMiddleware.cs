@@ -20,74 +20,69 @@ namespace Glimpse.Owin.Middleware
             innerNext = next;
             config = new GlimpseConfiguration(
                     new UriTemplateResourceEndpointConfiguration(),
-                    new InMemoryPersistenceStore(new DictionaryDataStoreAdapter((Dictionary<string, object>)serverStore))); 
+                    new InMemoryPersistenceStore(new DictionaryDataStoreAdapter((Dictionary<string, object>)serverStore)));
         }
 
         public async Task Invoke(IDictionary<string, object> environment)
         {
-            GlimpseRequestContextHandle glimpseRequestContextHandle = null;
-
-            try
+            if (!GlimpseRuntime.IsInitialized)
             {
-                if (!GlimpseRuntime.IsInitialized)
-                {
-                    GlimpseRuntime.Initialize(config);
-                }
+                GlimpseRuntime.Initialize(config);
+            }
 
-                if (GlimpseRuntime.IsInitialized)
-                {
-                    var request = new OwinRequest(environment);
-                    var response = new OwinResponse(environment);
-                    var requestResponseAdapter = new OwinRequestResponseAdapter(environment);
+            if (GlimpseRuntime.IsInitialized)
+            {
+                var request = new OwinRequest(environment);
+                var response = new OwinResponse(environment);
+                var requestResponseAdapter = new OwinRequestResponseAdapter(environment);
 
-#warning this check should be part of the GlimpseRuntime, because basically it should be done by the Glimpse.BeginRequest because now, in ASP.NET context it will do all the setup, but not for OWIN
-                    if (request.Uri.PathAndQuery.StartsWith(config.EndpointBaseUri, StringComparison.InvariantCultureIgnoreCase))
+                using (var glimpseRequestContextHandle = GlimpseRuntime.Instance.BeginRequest(requestResponseAdapter))
+                {
+                    if (glimpseRequestContextHandle.RequestHandlingMode == RequestHandlingMode.Unhandled)
                     {
-                        await ExecuteResource(requestResponseAdapter, request.Query);
+                        await innerNext(environment);
                         return;
                     }
 
-                    // V2Merge: Hack's a million!
-#warning Even with this hack, it seems wrong, as the scripts will always be injected independent of the RuntimePolicy (only DisplayGlimpseClient should render it, and we only know that at the end)
-                    glimpseRequestContextHandle = GlimpseRuntime.Instance.BeginRequest(requestResponseAdapter);
-                    var htmlSnippet = GlimpseRuntime.Instance.GenerateScriptTags(glimpseRequestContextHandle.GlimpseRequestId, requestResponseAdapter);
-                    response.Body = new PreBodyTagInjectionStream(htmlSnippet, response.Body, Encoding.UTF8, request.Uri.AbsoluteUri, new NullLogger());
-                }
-
-                await innerNext(environment);
-
-                if (GlimpseRuntime.IsInitialized)
-                {
-                    GlimpseRuntime.Instance.EndRequest(new OwinRequestResponseAdapter(environment));
-                }
-            }
-            finally
-            {
-                if (glimpseRequestContextHandle != null)
-                {
                     try
                     {
-                        glimpseRequestContextHandle.Dispose();
+                        if (glimpseRequestContextHandle.RequestHandlingMode == RequestHandlingMode.ResourceRequest)
+                        {
+                            await ExecuteResource(glimpseRequestContextHandle, request.Query);
+                        }
+                        else
+                        {
+                            // V2Merge: Hack's a million!
+#warning Even with this hack, it seems wrong, as the scripts will always be injected independent of the RuntimePolicy (only DisplayGlimpseClient should render it, and we only know that at the end)
+                            var htmlSnippet = GlimpseRuntime.Instance.GenerateScriptTags(glimpseRequestContextHandle.GlimpseRequestId, requestResponseAdapter);
+                            response.Body = new PreBodyTagInjectionStream(htmlSnippet, response.Body, Encoding.UTF8, request.Uri.AbsoluteUri, new NullLogger());
+
+                            await innerNext(environment);
+                        }
                     }
-                    catch (Exception disposeException)
+                    finally
                     {
-                        config.Logger.Error("Failed to dispose Glimpse request context handle", disposeException);
+                        GlimpseRuntime.Instance.EndRequest(glimpseRequestContextHandle);
                     }
                 }
+            }
+            else
+            {
+                await innerNext(environment);
             }
         }
 
-        private static async Task ExecuteResource(IRequestResponseAdapter requestResponseAdapter, IReadableStringCollection queryString)
+        private static async Task ExecuteResource(GlimpseRequestContextHandle glimpseRequestContextHandle, IReadableStringCollection queryString)
         {
             if (string.IsNullOrEmpty(queryString[UriTemplateResourceEndpointConfiguration.DefaultResourceNameKey]))
             {
-                GlimpseRuntime.Instance.ExecuteDefaultResource(requestResponseAdapter);
+                GlimpseRuntime.Instance.ExecuteDefaultResource(glimpseRequestContextHandle);
             }
             else
             {
                 GlimpseRuntime.Instance.ExecuteResource(
-                    requestResponseAdapter, 
-                    queryString[UriTemplateResourceEndpointConfiguration.DefaultResourceNameKey], 
+                    glimpseRequestContextHandle,
+                    queryString[UriTemplateResourceEndpointConfiguration.DefaultResourceNameKey],
                     new ResourceParameters(queryString.ToDictionary(qs => qs.Key, qs => qs.Value.First())));
             }
         }

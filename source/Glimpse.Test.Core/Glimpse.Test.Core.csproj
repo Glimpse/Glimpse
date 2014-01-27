@@ -117,6 +117,7 @@
     <Compile Include="Framework\ApplicationPersistenceStoreShould.cs" />
     <Compile Include="Framework\ActiveGlimpseRequestContextsShould.cs" />
     <Compile Include="Framework\GlimpseRequestContextHandleShould.cs" />
+    <Compile Include="Framework\UnavailableGlimpseRequestContextHandleShould.cs" />
     <Compile Include="Framework\InactiveGlimpseRequestContextShould.cs" />
     <Compile Include="Framework\GlimpseRequestContextShould.cs" />
     <Compile Include="Framework\MessageBrokerShould.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="TestDoubles\DummyTab.cs" />
     <Compile Include="TestDoubles\IDummyInterface.cs" />
     <Compile Include="TestDoubles\IDummyMixin.cs" />
+    <Compile Include="Tester\RequestResponseAdapterTester.cs" />
     <Compile Include="Tester\AjaxPolicyTester.cs" />
     <Compile Include="Tester\InMemoryPersistenceStoreTester.cs" />
     <Compile Include="Tester\ContentTypePolicyTester.cs" />

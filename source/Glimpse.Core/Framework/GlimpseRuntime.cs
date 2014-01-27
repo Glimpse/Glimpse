@@ -25,7 +25,7 @@ namespace Glimpse.Core.Framework
         private static readonly MethodInfo MethodInfoBeginRequest = typeof(GlimpseRuntime).GetMethod("BeginRequest", BindingFlags.Public | BindingFlags.Instance);
         private static readonly MethodInfo MethodInfoEndRequest = typeof(GlimpseRuntime).GetMethod("EndRequest", BindingFlags.Public | BindingFlags.Instance);
         private static readonly object LockObj = new object();
-        private static GlimpseRuntime instance = null;
+        private static GlimpseRuntime instance;
 
         /// <summary>
         /// Initializes static members of the <see cref="GlimpseRuntime" /> class.
@@ -57,7 +57,7 @@ namespace Glimpse.Core.Framework
         /// <summary>
         /// Gets the singleton instance of the <see cref="GlimpseRuntime"/> type once it has been initialized
         /// </summary>
-        public static GlimpseRuntime Instance 
+        public static GlimpseRuntime Instance
         {
             get
             {
@@ -89,7 +89,7 @@ namespace Glimpse.Core.Framework
                 return;
             }
 
-            var hasInited = false; 
+            var hasInited = false;
             if (!IsInitialized) // Double checked lock to ensure thread safety. http://en.wikipedia.org/wiki/Double_checked_locking_pattern
             {
                 lock (LockObj)
@@ -144,6 +144,25 @@ namespace Glimpse.Core.Framework
         /// </value>
         public static bool IsInitialized { get; private set; }
 
+        /// <summary>
+        /// Returns the <see cref="GlimpseRequestContext"/> corresponding to the current request.
+        /// </summary>
+        public GlimpseRequestContext CurrentRequestContext
+        {
+            get { return ActiveGlimpseRequestContexts.Current; }
+        }
+
+        /// <summary>
+        /// Returns the corresponding <see cref="GlimpseRequestContext"/> for the given <paramref name="glimpseRequestId"/>
+        /// </summary>
+        /// <param name="glimpseRequestId">The Glimpse request Id</param>
+        /// <param name="glimpseRequestContext">The corresponding <see cref="GlimpseRequestContext"/></param>
+        /// <returns>Boolean indicating whether the corresponding <see cref="GlimpseRequestContext"/> was found.</returns>
+        public bool TryGetRequestContext(Guid glimpseRequestId, out GlimpseRequestContext glimpseRequestContext)
+        {
+            return ActiveGlimpseRequestContexts.TryGet(glimpseRequestId, out glimpseRequestContext);
+        }
+
         private IDictionary<string, TabResult> GetTabResultsStore(IRequestResponseAdapter requestResponseAdapter)
         {
             var requestStore = requestResponseAdapter.HttpRequestStore;
@@ -178,21 +197,26 @@ namespace Glimpse.Core.Framework
         /// <exception cref="Glimpse.Core.Framework.GlimpseException">Throws an exception if <see cref="GlimpseRuntime"/> is not yet initialized.</exception>
         public GlimpseRequestContextHandle BeginRequest(IRequestResponseAdapter requestResponseAdapter)
         {
-            if (!IsInitialized)
+            var runtimePolicy = DetermineAndStoreAccumulatedRuntimePolicy(RuntimeEvent.BeginRequest, requestResponseAdapter);
+            if (runtimePolicy == RuntimePolicy.Off)
             {
-                throw new GlimpseException(Resources.BeginRequestOutOfOrderRuntimeMethodCall);
+                return UnavailableGlimpseRequestContextHandle.Instance;
             }
 
-            if (HasOffRuntimePolicy(RuntimeEvent.BeginRequest, requestResponseAdapter))
-                return null;
-
             var glimpseRequestContextHandle = ActivateGlimpseRequestContext(requestResponseAdapter);
+
+            if (glimpseRequestContextHandle.RequestHandlingMode == RequestHandlingMode.ResourceRequest)
+            {
+                // When we are dealing with a resource request, there is no need to further continue setting up the request.
+                return glimpseRequestContextHandle;
+            }
 
             try
             {
                 ExecuteTabs(RuntimeEvent.BeginRequest, requestResponseAdapter);
 
-                Func<Guid?, string> generateClientScripts = (rId) => rId.HasValue ? GenerateScriptTags(rId.Value, requestResponseAdapter) : GenerateScriptTags(glimpseRequestContextHandle.GlimpseRequestId, requestResponseAdapter);
+                Guid glimpseRequestId = glimpseRequestContextHandle.GlimpseRequestId;
+                Func<Guid?, string> generateClientScripts = rId => rId.HasValue ? GenerateScriptTags(rId.Value, requestResponseAdapter) : GenerateScriptTags(glimpseRequestId, requestResponseAdapter);
                 var requestStore = requestResponseAdapter.HttpRequestStore;
                 requestStore.Set(Constants.ClientScriptsStrategy, generateClientScripts);
 
@@ -205,150 +229,148 @@ namespace Glimpse.Core.Framework
             catch
             {
                 // we need to deactivate here because the handle won't be returned to the caller
-                DeactivateGlimpseRequestContext(glimpseRequestContextHandle);
+                glimpseRequestContextHandle.Dispose();
                 throw;
             }
         }
 
-        private bool HasOffRuntimePolicy(RuntimeEvent policyName, IRequestResponseAdapter requestResponseAdapter)
-        {
-            var policy = DetermineAndStoreAccumulatedRuntimePolicy(policyName, requestResponseAdapter);
-            if (policy.HasFlag(RuntimePolicy.Off))
-            {
-                return true;
-            }
-            return false;
-        }
-
         /// <summary>
-        /// Ends Glimpse's processing a Http request.
+        /// Ends Glimpse's processing of the request referenced by the given <paramref name="glimpseRequestContextHandle"/>"/>
         /// </summary>
-        /// <exception cref="Glimpse.Core.Framework.GlimpseException">Throws an exception if <c>BeginRequest</c> has not yet been called on a given request.</exception>
-        public void EndRequest(IRequestResponseAdapter requestResponseAdapter) // TODO: Add PRG support
+        /// <param name="glimpseRequestContextHandle">The Glimpse handle of the corresponding request</param>
+        /// <exception cref="Glimpse.Core.Framework.GlimpseException">Throws an exception if <c>BeginRequest</c> has not yet been called for the given request.</exception>
+        public void EndRequest(GlimpseRequestContextHandle glimpseRequestContextHandle) // TODO: Add PRG support
         {
-            if (HasOffRuntimePolicy(RuntimeEvent.EndRequest, requestResponseAdapter))
-                return;
-
-            var requestStore = requestResponseAdapter.HttpRequestStore;
-
-            var executionTimer = requestStore.Get<ExecutionTimer>(Constants.GlobalTimerKey);
-            if (executionTimer != null)
+            if (glimpseRequestContextHandle == null)
             {
-                Configuration.MessageBroker.Publish(new RuntimeMessage().AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest).AsTimelineMessage("End Request", TimelineCategory.Request).AsTimedMessage(executionTimer.Point()));
+                throw new ArgumentNullException("glimpseRequestContextHandle");
             }
 
-            ExecuteTabs(RuntimeEvent.EndRequest, requestResponseAdapter);
-            ExecuteDisplays(requestResponseAdapter);
-
-            Guid requestId;
-            Stopwatch stopwatch;
             try
             {
-                requestId = requestStore.Get<Guid>(Constants.RequestIdKey);
-                stopwatch = requestStore.Get<Stopwatch>(Constants.GlobalStopwatchKey);
-                stopwatch.Stop();
-            }
-            catch (NullReferenceException ex)
-            {
-                throw new GlimpseException(Resources.EndRequestOutOfOrderRuntimeMethodCall, ex);
-            }
+                GlimpseRequestContext glimpseRequestContext;
+                if (!ContinueProcessingRequest(glimpseRequestContextHandle, RuntimeEvent.EndRequest, RequestHandlingMode.RegularRequest, out glimpseRequestContext))
+                {
+                    return;
+                }
 
-            var requestMetadata = requestResponseAdapter.RequestMetadata;
-            var policy = DetermineAndStoreAccumulatedRuntimePolicy(RuntimeEvent.EndRequest, requestResponseAdapter);
-            if (policy.HasFlag(RuntimePolicy.PersistResults))
-            {
-                var persistenceStore = Configuration.PersistenceStore;
+                var requestResponseAdapter = glimpseRequestContext.RequestResponseAdapter;
+                var requestStore = requestResponseAdapter.HttpRequestStore;
 
-                var metadata = new GlimpseRequest(requestId, requestMetadata, GetTabResultsStore(requestResponseAdapter), GetDisplayResultsStore(requestResponseAdapter), stopwatch.Elapsed);
+                var executionTimer = requestStore.Get<ExecutionTimer>(Constants.GlobalTimerKey);
+                if (executionTimer != null)
+                {
+                    Configuration.MessageBroker.Publish(new RuntimeMessage().AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest).AsTimelineMessage("End Request", TimelineCategory.Request).AsTimedMessage(executionTimer.Point()));
+                }
 
+                ExecuteTabs(RuntimeEvent.EndRequest, requestResponseAdapter);
+                ExecuteDisplays(requestResponseAdapter);
+
+                Guid requestId;
+                Stopwatch stopwatch;
                 try
                 {
-                    persistenceStore.Save(metadata);
+                    requestId = requestStore.Get<Guid>(Constants.RequestIdKey);
+                    stopwatch = requestStore.Get<Stopwatch>(Constants.GlobalStopwatchKey);
+                    stopwatch.Stop();
                 }
-                catch (Exception exception)
+                catch (NullReferenceException ex)
                 {
-                    Configuration.Logger.Error(Resources.GlimpseRuntimeEndRequesPersistError, exception, persistenceStore.GetType());
+#warning CGI : Is this particular catch still necessary? Since most checks are done above
+                    throw new GlimpseException(Resources.EndRequestOutOfOrderRuntimeMethodCall, ex);
                 }
-            }
 
-            if (policy.HasFlag(RuntimePolicy.ModifyResponseHeaders))
-            {
-                requestResponseAdapter.SetHttpResponseHeader(Constants.HttpResponseHeader, requestId.ToString());
+                var requestMetadata = requestResponseAdapter.RequestMetadata;
+                var runtimePolicy = glimpseRequestContext.ActiveRuntimePolicy;
 
-                if (requestMetadata.GetCookie(Constants.ClientIdCookieName) == null)
+                if (runtimePolicy.HasFlag(RuntimePolicy.PersistResults))
                 {
-                    requestResponseAdapter.SetCookie(Constants.ClientIdCookieName, requestMetadata.ClientId);
+                    var persistenceStore = Configuration.PersistenceStore;
+
+                    var metadata = new GlimpseRequest(requestId, requestMetadata, GetTabResultsStore(requestResponseAdapter), GetDisplayResultsStore(requestResponseAdapter), stopwatch.Elapsed);
+
+                    try
+                    {
+                        persistenceStore.Save(metadata);
+                    }
+                    catch (Exception exception)
+                    {
+                        Configuration.Logger.Error(Resources.GlimpseRuntimeEndRequesPersistError, exception, persistenceStore.GetType());
+                    }
+                }
+
+                if (runtimePolicy.HasFlag(RuntimePolicy.ModifyResponseHeaders))
+                {
+                    requestResponseAdapter.SetHttpResponseHeader(Constants.HttpResponseHeader, requestId.ToString());
+
+                    if (requestMetadata.GetCookie(Constants.ClientIdCookieName) == null)
+                    {
+                        requestResponseAdapter.SetCookie(Constants.ClientIdCookieName, requestMetadata.ClientId);
+                    }
+                }
+
+                if (runtimePolicy.HasFlag(RuntimePolicy.DisplayGlimpseClient))
+                {
+                    var html = GenerateScriptTags(requestId, requestResponseAdapter);
+
+                    requestResponseAdapter.InjectHttpResponseBody(html);
                 }
             }
-
-            if (policy.HasFlag(RuntimePolicy.DisplayGlimpseClient))
+            finally
             {
-                var html = GenerateScriptTags(requestId, requestResponseAdapter);
-
-                requestResponseAdapter.InjectHttpResponseBody(html);
+                glimpseRequestContextHandle.Dispose();
             }
-        }
-
-        /// <summary>
-        /// Returns the <see cref="GlimpseRequestContext"/> corresponding to the current request.
-        /// </summary>
-        public GlimpseRequestContext CurrentRequestContext
-        {
-            get {  return ActiveGlimpseRequestContexts.Current; }    
-        }
-
-        /// <summary>
-        /// Returns the corresponding <see cref="GlimpseRequestContext"/> for the given <paramref name="glimpseRequestId"/>
-        /// </summary>
-        /// <param name="glimpseRequestId">The Glimpse request Id</param>
-        /// <param name="glimpseRequestContext">The corresponding <see cref="GlimpseRequestContext"/></param>
-        /// <returns>Boolean indicating whether the corresponding <see cref="GlimpseRequestContext"/> was found.</returns>
-        public bool TryGetRequestContext(Guid glimpseRequestId, out GlimpseRequestContext glimpseRequestContext)
-        {
-            return ActiveGlimpseRequestContexts.TryGet(glimpseRequestId, out glimpseRequestContext);
-        }
-
-        /// <summary>
-        /// Executes the default resource.
-        /// </summary>
-        public void ExecuteDefaultResource(IRequestResponseAdapter requestResponseAdapter)
-        {
-            ExecuteResource(requestResponseAdapter, Configuration.DefaultResource.Name, ResourceParameters.None());
         }
 
         /// <summary>
         /// Begins access to session data.
         /// </summary>
-        public void BeginSessionAccess(IRequestResponseAdapter requestResponseAdapter)
+        public void BeginSessionAccess(GlimpseRequestContextHandle glimpseRequestContextHandle)
         {
-            if (HasOffRuntimePolicy(RuntimeEvent.BeginSessionAccess, requestResponseAdapter))
-                return;
-
-
-            ExecuteTabs(RuntimeEvent.BeginSessionAccess, requestResponseAdapter);
+            GlimpseRequestContext glimpseRequestContext;
+            if (ContinueProcessingRequest(glimpseRequestContextHandle, RuntimeEvent.BeginSessionAccess, RequestHandlingMode.RegularRequest, out glimpseRequestContext))
+            {
+#warning should we add a try catch around this? So that failures in Glimpse don't fail the normal flow?
+                ExecuteTabs(RuntimeEvent.BeginSessionAccess, glimpseRequestContext.RequestResponseAdapter);
+            }
         }
 
         /// <summary>
         /// Ends access to session data.
         /// </summary>
-        /// <param name="requestResponseAdapter">The request response adapter</param>
-        public void EndSessionAccess(IRequestResponseAdapter requestResponseAdapter)
+        public void EndSessionAccess(GlimpseRequestContextHandle glimpseRequestContextHandle)
         {
-            if (HasOffRuntimePolicy(RuntimeEvent.EndSessionAccess, requestResponseAdapter))
-                return;
+            GlimpseRequestContext glimpseRequestContext;
+            if (ContinueProcessingRequest(glimpseRequestContextHandle, RuntimeEvent.EndSessionAccess, RequestHandlingMode.RegularRequest, out glimpseRequestContext))
+            {
+#warning should we add a try catch around this? So that failures in Glimpse don't fail the normal flow?
+                ExecuteTabs(RuntimeEvent.EndSessionAccess, glimpseRequestContext.RequestResponseAdapter);
+            }
+        }
 
-            ExecuteTabs(RuntimeEvent.EndSessionAccess, requestResponseAdapter);
+#warning CGI: There is no need to keep both execute methods, just have one default to default resource when resourcename is null
+        /// <summary>
+        /// Executes the default resource.
+        /// </summary>
+        public void ExecuteDefaultResource(GlimpseRequestContextHandle glimpseRequestContextHandle)
+        {
+            ExecuteResource(glimpseRequestContextHandle, Configuration.DefaultResource.Name, ResourceParameters.None());
         }
 
         /// <summary>
-        /// Executes the resource.
+        /// Executes the given resource.
         /// </summary>
-        /// <param name="requestResponseAdapter">The request response adapter</param>
+        /// <param name="glimpseRequestContextHandle">The Glimpse handle of the corresponding request</param>
         /// <param name="resourceName">Name of the resource.</param>
         /// <param name="parameters">The parameters.</param>
         /// <exception cref="System.ArgumentNullException">Throws an exception if either parameter is <c>null</c>.</exception>
-        public void ExecuteResource(IRequestResponseAdapter requestResponseAdapter, string resourceName, ResourceParameters parameters)
+        public void ExecuteResource(GlimpseRequestContextHandle glimpseRequestContextHandle, string resourceName, ResourceParameters parameters)
         {
+            if (glimpseRequestContextHandle == null)
+            {
+                throw new ArgumentNullException("glimpseRequestContextHandle");
+            }
+
             if (string.IsNullOrEmpty(resourceName))
             {
                 throw new ArgumentNullException("resourceName");
@@ -359,8 +381,16 @@ namespace Glimpse.Core.Framework
                 throw new ArgumentNullException("parameters");
             }
 
-            // First we determine the current policy as it has been processed so far
-            RuntimePolicy policy = DetermineAndStoreAccumulatedRuntimePolicy(RuntimeEvent.ExecuteResource, requestResponseAdapter);
+            GlimpseRequestContext glimpseRequestContext;
+            if (!ContinueProcessingRequest(glimpseRequestContextHandle, RuntimeEvent.ExecuteResource, RequestHandlingMode.ResourceRequest, out glimpseRequestContext))
+            {
+                return;
+            }
+
+            var requestResponseAdapter = glimpseRequestContext.RequestResponseAdapter;
+
+            // First we get the current policy as it has been processed so far
+            RuntimePolicy policy = glimpseRequestContext.ActiveRuntimePolicy;
 
             // It is possible that the policy now says Off, but if the requested resource is the default resource or one of it dependent resources, 
             // then we need to make sure there is a good reason for not executing that resource, since the default resource (or one of it dependencies)
@@ -375,80 +405,93 @@ namespace Glimpse.Core.Framework
                 policy = DetermineRuntimePolicy(RuntimeEvent.ExecuteResource, Configuration.DefaultRuntimePolicy, requestResponseAdapter);
             }
 
-#warning this should not be needed because execution of a resource should also be surrounded with Begin and EndRequest calls
-            var glimpseRequestContextHandle = ActivateGlimpseRequestContext(requestResponseAdapter);
+            string message;
+            var logger = Configuration.Logger;
+            var context = new ResourceResultContext(logger, requestResponseAdapter, Configuration.Serializer, Configuration.HtmlEncoder);
+
+            if (policy == RuntimePolicy.Off)
+            {
+                string errorMessage = string.Format(Resources.ExecuteResourceInsufficientPolicy, resourceName);
+                logger.Info(errorMessage);
+                new StatusCodeResourceResult(403, errorMessage).Execute(context);
+                return;
+            }
+
+            var resources =
+                Configuration.Resources.Where(
+                    r => r.Name.Equals(resourceName, StringComparison.InvariantCultureIgnoreCase));
+
+            IResourceResult result;
+            switch (resources.Count())
+            {
+                case 1: // 200 - OK
+                    try
+                    {
+                        var resource = resources.First();
+                        var resourceContext = new ResourceContext(parameters.GetParametersFor(resource), Configuration.PersistenceStore, logger);
+
+                        var privilegedResource = resource as IPrivilegedResource;
+
+                        if (privilegedResource != null)
+                        {
+                            result = privilegedResource.Execute(resourceContext, Configuration, requestResponseAdapter);
+                        }
+                        else
+                        {
+                            result = resource.Execute(resourceContext);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error(Resources.GlimpseRuntimeExecuteResourceError, ex, resourceName);
+                        result = new ExceptionResourceResult(ex);
+                    }
+
+                    break;
+                case 0: // 404 - File Not Found
+                    message = string.Format(Resources.ExecuteResourceMissingError, resourceName);
+                    logger.Warn(message);
+                    result = new StatusCodeResourceResult(404, message);
+                    break;
+                default: // 500 - Server Error
+                    message = string.Format(Resources.ExecuteResourceDuplicateError, resourceName);
+                    logger.Warn(message);
+                    result = new StatusCodeResourceResult(500, message);
+                    break;
+            }
 
             try
             {
-                string message;
-                var logger = Configuration.Logger;
-                var context = new ResourceResultContext(logger, requestResponseAdapter, Configuration.Serializer, Configuration.HtmlEncoder);
-
-                if (policy == RuntimePolicy.Off)
-                {
-                    string errorMessage = string.Format(Resources.ExecuteResourceInsufficientPolicy, resourceName);
-                    logger.Info(errorMessage);
-                    new StatusCodeResourceResult(403, errorMessage).Execute(context);
-                    return;
-                }
-
-                var resources =
-                    Configuration.Resources.Where(
-                        r => r.Name.Equals(resourceName, StringComparison.InvariantCultureIgnoreCase));
-
-                IResourceResult result;
-                switch (resources.Count())
-                {
-                    case 1: // 200 - OK
-                        try
-                        {
-                            var resource = resources.First();
-                            var resourceContext = new ResourceContext(parameters.GetParametersFor(resource), Configuration.PersistenceStore, logger);
-
-                            var privilegedResource = resource as IPrivilegedResource;
-
-                            if (privilegedResource != null)
-                            {
-                                result = privilegedResource.Execute(resourceContext, Configuration, requestResponseAdapter);
-                            }
-                            else
-                            {
-                                result = resource.Execute(resourceContext);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            logger.Error(Resources.GlimpseRuntimeExecuteResourceError, ex, resourceName);
-                            result = new ExceptionResourceResult(ex);
-                        }
-
-                        break;
-                    case 0: // 404 - File Not Found
-                        message = string.Format(Resources.ExecuteResourceMissingError, resourceName);
-                        logger.Warn(message);
-                        result = new StatusCodeResourceResult(404, message);
-                        break;
-                    default: // 500 - Server Error
-                        message = string.Format(Resources.ExecuteResourceDuplicateError, resourceName);
-                        logger.Warn(message);
-                        result = new StatusCodeResourceResult(500, message);
-                        break;
-                }
-
-                try
-                {
-                    result.Execute(context);
-                }
-                catch (Exception exception)
-                {
-                    logger.Fatal(Resources.GlimpseRuntimeExecuteResourceResultError, exception, result.GetType());
-                }
+                result.Execute(context);
             }
-            finally
+            catch (Exception exception)
             {
-#warning we need to call deactivate ourselves since the handle is created here and not returned, if BeginRequest would be involved then this would not be necessary
-                DeactivateGlimpseRequestContext(glimpseRequestContextHandle);
+                logger.Fatal(Resources.GlimpseRuntimeExecuteResourceResultError, exception, result.GetType());
             }
+        }
+
+        private bool ContinueProcessingRequest(GlimpseRequestContextHandle glimpseRequestContextHandle, RuntimeEvent runtimeEvent, RequestHandlingMode allowedRequestHandlingMode, out GlimpseRequestContext glimpseRequestContext)
+        {
+            glimpseRequestContext = null;
+
+            if (glimpseRequestContextHandle == null)
+            {
+                throw new ArgumentNullException("glimpseRequestContextHandle");
+            }
+
+            if (glimpseRequestContextHandle.RequestHandlingMode != allowedRequestHandlingMode)
+            {
+                return false;
+            }
+
+            if (!TryGetRequestContext(glimpseRequestContextHandle.GlimpseRequestId, out glimpseRequestContext))
+            {
+#warning or maybe only a log and return false instead of throwing an exception? It is an isue though!
+                throw new GlimpseException("No corresponding GlimpseRequestContext found for GlimpseRequestId '" + glimpseRequestContextHandle.GlimpseRequestId + "'.");
+            }
+
+            var runtimePolicy = DetermineAndStoreAccumulatedRuntimePolicy(runtimeEvent, glimpseRequestContext.RequestResponseAdapter);
+            return runtimePolicy != RuntimePolicy.Off;
         }
 
         /// <summary>
@@ -729,7 +772,7 @@ namespace Glimpse.Core.Framework
             var logger = Configuration.Logger;
 
             // only run policies for this runtimeEvent
-            var policies = 
+            var policies =
                 Configuration.RuntimePolicies.Where(
                     policy => policy.ExecuteOn.HasFlag(runtimeEvent));
 
@@ -892,18 +935,6 @@ namespace Glimpse.Core.Framework
 
             var glimpseRequestContext = new GlimpseRequestContext(requestId, requestResponseAdapter);
             return ActiveGlimpseRequestContexts.Add(glimpseRequestContext);
-        }
-
-        private void DeactivateGlimpseRequestContext(GlimpseRequestContextHandle glimpseRequestContextHandle)
-        {
-            try
-            {
-                glimpseRequestContextHandle.Dispose();
-            }
-            catch (Exception deactivationException)
-            {
-                Configuration.Logger.Error("Failed to deactivate Glimpse request context", deactivationException);
-            }
         }
 
         /// <summary>

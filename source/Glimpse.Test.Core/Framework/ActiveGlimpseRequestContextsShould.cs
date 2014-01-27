@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.Remoting.Messaging;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
-using Moq;
+using Glimpse.Test.Core.Tester;
 using Xunit;
 
 namespace Glimpse.Test.Core.Framework
@@ -16,7 +15,7 @@ namespace Glimpse.Test.Core.Framework
         {
             CallContext.FreeNamedDataSlot(Constants.RequestIdKey);
             ActiveGlimpseRequestContexts.RemoveAll();
-         
+
             var glimpseRequestContext = CreateGlimpseRequestContext();
             Assert.Equal(null, CallContext.GetData(Constants.RequestIdKey));
 
@@ -75,18 +74,10 @@ namespace Glimpse.Test.Core.Framework
 
         private static GlimpseRequestContext CreateGlimpseRequestContext()
         {
-            var requestStore = new DictionaryDataStoreAdapter(new Dictionary<string, object>
-            {
-                { Constants.RuntimePolicyKey, RuntimePolicy.On }
-            });
-
-            Guid requestId = Guid.NewGuid();
-
-            var requestResponseAdapterWithStoredRuntimePolicy = new Mock<IRequestResponseAdapter>();
-            requestResponseAdapterWithStoredRuntimePolicy
-                .Setup(adapter => adapter.HttpRequestStore).Returns(requestStore);
-
-            return new GlimpseRequestContext(requestId, requestResponseAdapterWithStoredRuntimePolicy.Object);
+            return new GlimpseRequestContext(
+                Guid.NewGuid(),
+                RequestResponseAdapterTester.Create(RuntimePolicy.On, "/").RequestResponseAdapterMock.Object,
+                "/Glimpse.axd");
         }
     }
 }

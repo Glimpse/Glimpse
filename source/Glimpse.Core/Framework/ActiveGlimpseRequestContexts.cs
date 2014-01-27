@@ -7,7 +7,7 @@ namespace Glimpse.Core.Framework
     /// <summary>
     /// Tracks active <see cref="GlimpseRequestContext"/> instances
     /// </summary>
-    public static class ActiveGlimpseRequestContexts
+    internal static class ActiveGlimpseRequestContexts
     {
         private static IDictionary<Guid, GlimpseRequestContext> GlimpseRequestContexts { get; set; }
 
@@ -44,7 +44,7 @@ namespace Glimpse.Core.Framework
             // in case something goes wrong further on. That's is also why we create the handle first and then add the the glimpseRequestContext to the list
             // because if the creation of the handle would fail afterwards, then there is no way to remove the glimpseRequestContext from the list.
 
-            var handle = new GlimpseRequestContextHandle(glimpseRequestContext.GlimpseRequestId);
+            var handle = new GlimpseRequestContextHandle(glimpseRequestContext.GlimpseRequestId, glimpseRequestContext.RequestHandlingMode);
             GlimpseRequestContexts.Add(glimpseRequestContext.GlimpseRequestId, glimpseRequestContext);
 
             // we also store the GlimpseRequestId in the CallContext for later use. That is our only entry point to retrieve the glimpseRequestContext

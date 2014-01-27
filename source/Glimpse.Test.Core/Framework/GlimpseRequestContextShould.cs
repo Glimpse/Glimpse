@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
-using Moq;
+using Glimpse.Test.Core.Tester;
 using Xunit;
 
 namespace Glimpse.Test.Core.Framework
@@ -13,27 +13,19 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void OnlyAcceptRequestResponseAdapterWithStoredRuntimePolicy()
         {
-            var requestStore = new DictionaryDataStoreAdapter(new Dictionary<string, object>
-            {
-                { Constants.RuntimePolicyKey, RuntimePolicy.On }
-            });
-            
-            Guid requestId = Guid.NewGuid();
+            var requestResponseAdapterWithStoredRuntimePolicy =
+                RequestResponseAdapterTester.Create(RuntimePolicy.On, "/").RequestResponseAdapterMock.Object;
 
-            var requestResponseAdapterWithStoredRuntimePolicy = new Mock<IRequestResponseAdapter>();
-            requestResponseAdapterWithStoredRuntimePolicy
-                .Setup( adapter => adapter.HttpRequestStore).Returns(requestStore);
-            
-            var requestResponseAdapterWithoutStoredRuntimePolicy = new Mock<IRequestResponseAdapter>();
+            new GlimpseRequestContext(Guid.NewGuid(), requestResponseAdapterWithStoredRuntimePolicy, "/glimpse.axd");
+
+            var requestResponseAdapterWithoutStoredRuntimePolicy = RequestResponseAdapterTester.Create(RuntimePolicy.On, "/").RequestResponseAdapterMock;
             requestResponseAdapterWithoutStoredRuntimePolicy
-                .Setup( adapter => adapter.HttpRequestStore)
-                .Returns(new DictionaryDataStoreAdapter(new Dictionary<string,object>()));
-
-            new GlimpseRequestContext(requestId, requestResponseAdapterWithStoredRuntimePolicy.Object);
+                .Setup(requestResponseAdapter => requestResponseAdapter.HttpRequestStore)
+                .Returns(new DictionaryDataStoreAdapter(new Dictionary<string, object>()));
 
             try
             {
-                new GlimpseRequestContext(requestId,requestResponseAdapterWithoutStoredRuntimePolicy.Object);
+                new GlimpseRequestContext(Guid.NewGuid(), requestResponseAdapterWithoutStoredRuntimePolicy.Object, "/glimpse.axd");
                 Assert.True(false, "GlimpseRequestContext should not accept a requestResponseAdapter without a stored RuntimePolicy");
             }
             catch (ArgumentException argumentException)
@@ -47,19 +39,28 @@ namespace Glimpse.Test.Core.Framework
         public void ReturnTheActiveRuntimePolicy()
         {
             const RuntimePolicy expectedRuntimePolicy = RuntimePolicy.DisplayGlimpseClient;
-            var requestStore = new DictionaryDataStoreAdapter(new Dictionary<string, object>
-            {
-                { Constants.RuntimePolicyKey, expectedRuntimePolicy }
-            });
+            var requestResponseAdapter = RequestResponseAdapterTester.Create(expectedRuntimePolicy, "/").RequestResponseAdapterMock.Object;
 
-            Guid requestId = Guid.NewGuid();
-
-            var requestResponseAdapterWithStoredRuntimePolicy = new Mock<IRequestResponseAdapter>();
-            requestResponseAdapterWithStoredRuntimePolicy
-                .Setup(adapter => adapter.HttpRequestStore).Returns(requestStore);
-
-            var glimpseRequestContext = new GlimpseRequestContext(requestId, requestResponseAdapterWithStoredRuntimePolicy.Object);
+            var glimpseRequestContext = new GlimpseRequestContext(Guid.NewGuid(), requestResponseAdapter, "/glimpse.axd");
             Assert.Equal(expectedRuntimePolicy, glimpseRequestContext.ActiveRuntimePolicy);
+        }
+
+        [Fact]
+        public void SetTheRequestHandlingMode()
+        {
+            var glimpseRequestContext = new GlimpseRequestContext(
+                    Guid.NewGuid(),
+                    RequestResponseAdapterTester.Create(RuntimePolicy.On, "/test").RequestResponseAdapterMock.Object,
+                    "/glimpse.axd");
+
+            Assert.Equal(RequestHandlingMode.RegularRequest, glimpseRequestContext.RequestHandlingMode);
+
+            glimpseRequestContext = new GlimpseRequestContext(
+                    Guid.NewGuid(),
+                    RequestResponseAdapterTester.Create(RuntimePolicy.On, "/glimpse.axd?n=something").RequestResponseAdapterMock.Object,
+                    "/glimpse.axd");
+
+            Assert.Equal(RequestHandlingMode.ResourceRequest, glimpseRequestContext.RequestHandlingMode);
         }
     }
 }

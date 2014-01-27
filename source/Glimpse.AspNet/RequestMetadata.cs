@@ -80,6 +80,11 @@ namespace Glimpse.AspNet
             get { return Context.Request.Url.AbsoluteUri; }
         }
 
+        public string AbsolutePath
+        {
+            get { return Context.Request.Url.AbsolutePath; }
+        }
+
         private HttpContextBase Context { get; set; }
 
         public string GetCookie(string name)

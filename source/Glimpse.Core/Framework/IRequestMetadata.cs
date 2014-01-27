@@ -42,6 +42,11 @@ namespace Glimpse.Core.Framework
         string ClientId { get; }
 
         /// <summary>
+        /// Gets the Absolute path of the request
+        /// </summary>
+        string AbsolutePath { get; }
+
+        /// <summary>
         /// Gets the cookie.
         /// </summary>
         /// <param name="name">The name.</param>
