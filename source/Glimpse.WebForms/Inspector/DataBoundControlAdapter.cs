@@ -102,6 +102,15 @@ namespace Glimpse.WebForms.Inspector
                 yield return sqlDataSource.SelectParameters;
                 yield return sqlDataSource.FilterParameters;
             }
+            var linqDataSource = DataBoundControl.DataSourceObject as LinqDataSource;
+            if (linqDataSource != null)
+            {
+                yield return linqDataSource.SelectParameters;
+                yield return linqDataSource.WhereParameters;
+                yield return linqDataSource.OrderByParameters;
+                yield return linqDataSource.GroupByParameters;
+                yield return linqDataSource.OrderGroupsByParameters;
+            }
         }
     }
 
