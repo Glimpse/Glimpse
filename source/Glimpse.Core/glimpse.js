@@ -3996,4 +3996,8 @@ null],[PR.PR_LITERAL,/^[+-]?(?:0x[\da-f]+|(?:(?:\.\d+|\d+(?:\.\d*)?)(?:e[+\-]?\d
 }(jQueryGlimpse, glimpse.pubsub));
 
 
+if (glimpse.extensions) {
+    for (var i = 0; i < glimpse.extensions.length; i++)
+        glimpse.extensions[i]();
+}
 glimpse.pubsub.publish('trigger.system.start');
