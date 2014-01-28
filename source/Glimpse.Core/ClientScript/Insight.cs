@@ -6,7 +6,7 @@ namespace Glimpse.Core.ClientScript
     /// <summary>
     /// The <see cref="IDynamicClientScript"/> implementation responsible for adding the Glimpse JavaScript client <c>&lt;script&gt;</c> tag to a page response.
     /// </summary>
-    public sealed class ClientPre : IDynamicClientScript
+    public sealed class Insight : IDynamicClientScript
     {
         /// <summary>
         /// Gets the sorting order in which a <c>&lt;script&gt;</c> tag will be injected a page response, relative to other implementations of <see cref="IClientScript" />.
@@ -33,7 +33,7 @@ namespace Glimpse.Core.ClientScript
         /// </remarks>
         public string GetResourceName()
         {
-            return ClientPreResource.InternalName;
+            return InsightResource.InternalName;
         }
     }
 }

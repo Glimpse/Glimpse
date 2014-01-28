@@ -5,16 +5,16 @@ namespace Glimpse.Core.Resource
     /// <summary>
     /// The <see cref="IResource"/> implementation responsible for providing the Glimpse JavaScript client to the browser.
     /// </summary>
-    public class ClientPreResource : FileResource, IKey
+    public class InsightResource : FileResource, IKey
     {
-        internal const string InternalName = "glimpse_pre_client";
+        internal const string InternalName = "glimpse_insight";
 
         private EmbeddedResourceInfo ResourceInfo { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ClientResource" /> class.
         /// </summary>
-        public ClientPreResource()
+        public InsightResource()
         {
             Name = InternalName;
 
