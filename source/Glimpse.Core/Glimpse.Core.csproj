@@ -67,6 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientScript\ClientPre.cs" />
     <Compile Include="ClientScript\Client.cs" />
     <Compile Include="ClientScript\Data.cs" />
     <Compile Include="ClientScript\Metadata.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Framework\ReflectionBlackList.cs" />
     <Compile Include="Framework\Support\ExecutionBlockBase.cs" />
     <Compile Include="Framework\Support\IExecutionTask.cs" />
+    <Compile Include="Resource\ClientPreResource.cs" />
     <Compile Include="Resource\ConfigurationScriptResource.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -310,6 +312,9 @@
     <EmbeddedResource Include="EmbeddedResources\twitter_logo.png" />
     <EmbeddedResource Include="EmbeddedResources\sprite.png" />
     <EmbeddedResource Include="EmbeddedResources\glimpse_config.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="glimpsePre.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

@@ -72,6 +72,9 @@
     <EmbeddedResource Include="..\Glimpse.Core\glimpse.js">
       <Link>glimpse.js</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\Glimpse.Core\glimpsePre.js">
+      <Link>glimpsePre.js</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\Glimpse.Core\Resources.resx" />
   </ItemGroup>
   <ItemGroup>
