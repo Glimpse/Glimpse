@@ -90,9 +90,7 @@ if (!window.UriTemplate) {
 
 
 // glimpse.core.js
-glimpse = (function($) { 
-    return {};
-})(jQueryGlimpse);
+var glimpse = glimpse || {};
 
 
 // glimpse.pubsub.js
