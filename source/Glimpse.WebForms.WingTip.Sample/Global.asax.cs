@@ -68,6 +68,12 @@ namespace WingtipToys
                 "Product/{productName}",
                 "~/ProductDetails.aspx"
             );
+
+            routes.MapPageRoute(
+                "WebMethodsAndPostRedirectGetTestsRoute",
+                "WebMethodsAndPostRedirectGetTests",
+                "~/WebMethodsAndPostRedirectGetTests.aspx"
+            );
         }
 
         void Application_End(object sender, EventArgs e)

@@ -36,6 +36,12 @@ namespace Glimpse.AspNet
             remove { HttpApplication.PostReleaseRequestState -= value; }
         }
 
+        public override event EventHandler EndRequest
+        {
+            add { HttpApplication.EndRequest += value; }
+            remove { HttpApplication.EndRequest -= value; }
+        }
+
         public override event EventHandler PreSendRequestHeaders
         {
             add { HttpApplication.PreSendRequestHeaders += value; }

@@ -246,6 +246,7 @@
     <Content Include="Views\Home\Four.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Views\Home\PRGTestResult.cshtml" />
     <Content Include="Views\FileUpload\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>

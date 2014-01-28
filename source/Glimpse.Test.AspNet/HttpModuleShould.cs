@@ -33,7 +33,7 @@ namespace Glimpse.Test.AspNet
         [Fact]
         public void CallGlimpseRuntimeBeginRequestOnBeginRequest()
         {
-            HttpModule.BeginRequest(HttpModule.ContextMock.Object);
+            HttpModule.OnBeginRequest(HttpModule.ContextMock.Object);
 
             HttpModule.RuntimeMock.Verify(r=>r.BeginRequest(), Times.Once());
         }
