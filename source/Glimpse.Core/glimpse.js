@@ -374,13 +374,14 @@ glimpse.util = (function($) {
         },
         processCasing : function (data) {
             var result = '',
-                previous = '';
+                previous = '',
+                blacklist = [ ' ', '-', '/', '_' ];
             if (data == null)
                 return data;
             for (var i = 0; i < data.length; i++) {
                 var current = data[i],
                     next = data[i + 1];
-                if (current == ' ')
+                if (blacklist.indexOf(current) > -1)
                     return data;
 
                 if (i == 0 || ((jQueryGlimpse.isNumeric(previous) && !jQueryGlimpse.isNumeric(current)) || (!jQueryGlimpse.isNumeric(previous) && jQueryGlimpse.isNumeric(current)) || (!jQueryGlimpse.isNumeric(current) && current.toUpperCase() == current && (previous.toUpperCase() != previous || (next && next.toUpperCase() != next)))))
