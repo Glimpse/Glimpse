@@ -18,7 +18,7 @@ namespace Glimpse.Core.Resource
         {
             Name = InternalName;
 
-            ResourceInfo = new EmbeddedResourceInfo(GetType().Assembly, "Glimpse.Core.glimpsePre.js", "application/x-javascript");
+            ResourceInfo = new EmbeddedResourceInfo(GetType().Assembly, "Glimpse.Core.glimpseInsight.js", "application/x-javascript");
         }
 
         /// <summary>
