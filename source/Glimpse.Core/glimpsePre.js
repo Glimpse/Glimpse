@@ -311,8 +311,7 @@ var glimpse = glimpse || {};
                                 //We want to try and send off our data every 5min or so
                                 setTimeout(function() {
                                     report.batch();
-                                //}, 300000);
-                                }, 30000);
+                                }, 300000); 
                             }
                         }; 
                     })(); 
