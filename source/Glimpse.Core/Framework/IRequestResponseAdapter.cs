@@ -14,18 +14,6 @@ namespace Glimpse.Core.Framework
     public interface IRequestResponseAdapter
     {
         /// <summary>
-        /// Gets the Http request store.
-        /// </summary>
-        /// <value>The Http request store.</value>
-        /// <remarks>
-        /// A request store is a place for Glimpse to store data that lives and dies with an Http request.
-        /// </remarks>
-        /// <example>
-        /// In ASP.NET, <c>HttpContext.Items</c> is a request store.
-        /// </example>
-        IDataStore HttpRequestStore { get; }
-
-        /// <summary>
         /// Gets the runtime context.
         /// </summary>
         /// <value>The runtime context.</value>

@@ -757,7 +757,7 @@ namespace Glimpse.Core.Framework
                 {
                     if(GlimpseRuntime.IsInitialized)
                     {
-                        var httpRequestStore = GlimpseRuntime.Instance.CurrentRequestContext.RequestResponseAdapter.HttpRequestStore;
+                        var httpRequestStore = GlimpseRuntime.Instance.CurrentRequestContext.RequestStore;
                         if(httpRequestStore.Contains(Constants.GlobalTimerKey))
                         {
                             return httpRequestStore.Get<IExecutionTimer>(Constants.GlobalTimerKey);

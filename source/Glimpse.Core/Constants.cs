@@ -53,14 +53,6 @@ namespace Glimpse.Core
         internal const string HttpResponseHeader = "Glimpse-RequestID";
 
         /// <summary>
-        /// The key Glimpse server uses to store a <see cref="System.Guid"/> which represents the current request's unique identifier.
-        /// </summary>
-        /// <remarks>
-        /// Used as the key for the framework provider's local request storage mechanism (i.e. <c>HttpContext.Items</c>).
-        /// </remarks>
-        internal const string RequestIdKey = "__GlimpseRequestId";
-
-        /// <summary>
         /// The key Glimpse server uses to store a <see cref="RuntimePolicy"/> for tracking Glimpse permissions.
         /// </summary>
         /// <remarks>

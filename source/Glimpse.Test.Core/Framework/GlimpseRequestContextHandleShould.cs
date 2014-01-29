@@ -94,7 +94,8 @@ namespace Glimpse.Test.Core.Framework
         {
             return new GlimpseRequestContext(
                 Guid.NewGuid(),
-                RequestResponseAdapterTester.Create(RuntimePolicy.On, "/").RequestResponseAdapterMock.Object,
+                RequestResponseAdapterTester.Create("/").RequestResponseAdapterMock.Object,
+                RuntimePolicy.On,
                 "/glimpse.axd");
         }
 

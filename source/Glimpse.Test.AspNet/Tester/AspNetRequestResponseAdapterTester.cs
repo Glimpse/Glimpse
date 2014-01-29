@@ -25,8 +25,8 @@ namespace Glimpse.Test.AspNet.Tester
             HttpContextMock.Setup(ctx => ctx.Response).Returns(HttpResponseMock.Object);
             HttpContextMock.Setup(c => c.Application).Returns(HttpApplicationStateMock.Object);
 
-            this.HttpRequestStore.Set(typeof(int).AssemblyQualifiedName, 5);
-            this.HttpRequestStore.Set(typeof(string).AssemblyQualifiedName, "TestString");
+            //this.HttpRequestStore.Set(typeof(int).AssemblyQualifiedName, 5);
+            //this.HttpRequestStore.Set(typeof(string).AssemblyQualifiedName, "TestString");
 
             Context = HttpContextMock.Object;
         }

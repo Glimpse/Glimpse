@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Web;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
@@ -9,19 +8,10 @@ namespace Glimpse.AspNet
 {
     public class AspNetRequestResponseAdapter : IAspNetRequestResponseAdapter
     {
-        private const string PreventSettingHttpResponseHeadersKey = "__GlimpsePreventSettingHttpResponseHeaders";
-        private const string GlimpseClientScriptsStrategyKey = "__GlimpseClientScriptsStrategy";
-        
         public AspNetRequestResponseAdapter(HttpContextBase context, ILogger logger)
         {
             Context = context;
             Logger = logger;
-            HttpRequestStore = new DictionaryDataStoreAdapter(new Dictionary<string,object>());
-        }
-
-        public IDataStore HttpRequestStore
-        {
-            get; private set;
         }
 
         public object RuntimeContext
@@ -38,27 +28,8 @@ namespace Glimpse.AspNet
         
         private ILogger Logger { get; set; }
 
-        private bool SettingHttpResponseHeadersPrevented
-        {
-            get
-            {
-                if (HttpRequestStore.Contains(PreventSettingHttpResponseHeadersKey))
-                {
-                    var result = HttpRequestStore.Get(PreventSettingHttpResponseHeadersKey) as bool?;
-                    if (result.HasValue)
-                    {
-                        return result.Value;
-                    }
-                }
-
-                return false;
-            }
-
-            set
-            {
-                HttpRequestStore.Set(PreventSettingHttpResponseHeadersKey, value);
-            }
-        }
+        private bool SettingHttpResponseHeadersPrevented{ get; set; }
+        
         public void PreventSettingHttpResponseHeaders()
         {
             SettingHttpResponseHeadersPrevented = true;
@@ -143,21 +114,6 @@ namespace Glimpse.AspNet
             {
                 Logger.Error("Exception writing Http response.", exception);
             }
-        }
-
-        public string GenerateGlimpseScriptTags()
-        {
-            if (HttpRequestStore.Contains(GlimpseClientScriptsStrategyKey))
-            {
-                var generateScripts = HttpRequestStore.Get(GlimpseClientScriptsStrategyKey) as Func<Guid?, string>;
-
-                if (generateScripts != null)
-                {
-                    return generateScripts(null); // null means to use the current request id
-                }
-            }
-
-            return string.Empty;
         }
     }
 }

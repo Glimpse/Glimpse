@@ -117,6 +117,7 @@
     <Compile Include="Framework\Crc32.cs" />
     <Compile Include="Framework\GlimpseNotInitializedException.cs" />
     <Compile Include="Framework\GlimpseRequestContext.cs" />
+    <Compile Include="Framework\GlimpseScriptTagsGenerator.cs" />
     <Compile Include="Framework\UnavailableGlimpseRequestContextHandle.cs" />
     <Compile Include="Framework\GlimpseRequestContextHandle.cs" />
     <Compile Include="Framework\InactiveGlimpseRequestContext.cs" />

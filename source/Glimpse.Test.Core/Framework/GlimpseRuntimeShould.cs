@@ -41,22 +41,24 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void SetRequestIdOnBeginRequest()
         {
-            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
-            providerMock.Setup(fp => fp.HttpRequestStore).Returns(Runtime.HttpRequestStoreMock.Object);
+#warning test might become obsolete due to complete redesign of GlimpseRuntime
+            //var providerMock = new Mock<IRequestResponseAdapter>().Setup();
+            //providerMock.Setup(fp => fp.HttpRequestStore).Returns(Runtime.HttpRequestStoreMock.Object);
 
-            Runtime.BeginRequest(providerMock.Object);
+            //Runtime.BeginRequest(providerMock.Object);
 
-            Runtime.HttpRequestStoreMock.Verify(store => store.Set(Constants.RequestIdKey, It.IsAny<Guid>()));
+            //Runtime.HttpRequestStoreMock.Verify(store => store.Set(Constants.RequestIdKey, It.IsAny<Guid>()));
         }
 
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void StartGlobalStopwatchOnBeginRequest()
         {
-            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
-            providerMock.Setup(fp => fp.HttpRequestStore).Returns(Runtime.HttpRequestStoreMock.Object);
-            Runtime.BeginRequest(providerMock.Object);
+#warning test might become obsolete due to complete redesign of GlimpseRuntime
+            //var providerMock = new Mock<IRequestResponseAdapter>().Setup();
+            //providerMock.Setup(fp => fp.HttpRequestStore).Returns(Runtime.HttpRequestStoreMock.Object);
+            //Runtime.BeginRequest(providerMock.Object);
 
-            Runtime.HttpRequestStoreMock.Verify(store => store.Set(Constants.GlobalStopwatchKey, It.IsAny<Stopwatch>()));
+            //Runtime.HttpRequestStoreMock.Verify(store => store.Set(Constants.GlobalStopwatchKey, It.IsAny<Stopwatch>()));
         }
 
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
@@ -88,133 +90,141 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ExecutePluginsWithDefaultLifeCycle()
         {
-            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
+#warning test might become obsolete due to complete redesign of GlimpseRuntime
+            //var providerMock = new Mock<IRequestResponseAdapter>().Setup();
 
-            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
+            //Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
 
-            Runtime.BeginRequest(providerMock.Object);
-            Runtime.EndRequest(CreateGlimpseRequestContextHandle());
+            //Runtime.BeginRequest(providerMock.Object);
+            //Runtime.EndRequest(CreateGlimpseRequestContextHandle());
 
-            var results = providerMock.Object.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
-            Assert.NotNull(results);
-            Assert.Equal(1, results.Count);
+            //var results = providerMock.Object.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
+            //Assert.NotNull(results);
+            //Assert.Equal(1, results.Count);
 
-            Runtime.TabMock.Verify(p => p.GetData(It.IsAny<ITabContext>()), Times.Once());
+            //Runtime.TabMock.Verify(p => p.GetData(It.IsAny<ITabContext>()), Times.Once());
         }
 
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ExecutePluginsWithLifeCycleMismatch()
         {
-            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
+#warning test might become obsolete due to complete redesign of GlimpseRuntime
+            //var providerMock = new Mock<IRequestResponseAdapter>().Setup();
 
-            Runtime.TabMock.Setup(m => m.ExecuteOn).Returns(RuntimeEvent.EndRequest);
+            //Runtime.TabMock.Setup(m => m.ExecuteOn).Returns(RuntimeEvent.EndRequest);
 
-            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
-            Runtime.BeginRequest(providerMock.Object);
+            //Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
+            //Runtime.BeginRequest(providerMock.Object);
 
-            var results = providerMock.Object.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
-            Assert.NotNull(results);
-            Assert.Equal(0, results.Count);
+            //var results = providerMock.Object.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
+            //Assert.NotNull(results);
+            //Assert.Equal(0, results.Count);
 
-            Runtime.TabMock.Verify(p => p.GetData(It.IsAny<ITabContext>()), Times.Never());
+            //Runtime.TabMock.Verify(p => p.GetData(It.IsAny<ITabContext>()), Times.Never());
         }
 
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ExecutePluginsMakeSureNamesAreJsonSafe()
         {
-            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
+#warning test might become obsolete due to complete redesign of GlimpseRuntime
+            //var providerMock = new Mock<IRequestResponseAdapter>().Setup();
 
-            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
-            Runtime.BeginRequest(providerMock.Object);
-            Runtime.EndRequest(CreateGlimpseRequestContextHandle());
+            //Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
+            //Runtime.BeginRequest(providerMock.Object);
+            //Runtime.EndRequest(CreateGlimpseRequestContextHandle());
 
-            var results = providerMock.Object.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
-            Assert.NotNull(results);
-            Assert.Equal(1, results.Count);
-            Assert.Contains("castle_proxies_itabproxy", results.First().Key);
+            //var results = providerMock.Object.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
+            //Assert.NotNull(results);
+            //Assert.Equal(1, results.Count);
+            //Assert.Contains("castle_proxies_itabproxy", results.First().Key);
         }
 
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ExecutePluginsWithMatchingRuntimeContextType()
         {
-            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
-            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
-            Runtime.BeginRequest(providerMock.Object);
-            Runtime.EndRequest(CreateGlimpseRequestContextHandle());
+#warning test might become obsolete due to complete redesign of GlimpseRuntime
+            //var providerMock = new Mock<IRequestResponseAdapter>().Setup();
+            //Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
+            //Runtime.BeginRequest(providerMock.Object);
+            //Runtime.EndRequest(CreateGlimpseRequestContextHandle());
 
-            var results = providerMock.Object.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
-            Assert.NotNull(results);
-            Assert.Equal(1, results.Count);
+            //var results = providerMock.Object.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
+            //Assert.NotNull(results);
+            //Assert.Equal(1, results.Count);
 
-            Runtime.TabMock.Verify(p => p.GetData(It.IsAny<ITabContext>()), Times.Once());
+            //Runtime.TabMock.Verify(p => p.GetData(It.IsAny<ITabContext>()), Times.Once());
         }
 
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ExecutePluginsWithUnknownRuntimeContextType()
         {
-            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
-            Runtime.TabMock.Setup(m => m.RequestContextType).Returns<Type>(null);
+#warning test might become obsolete due to complete redesign of GlimpseRuntime
+            //var providerMock = new Mock<IRequestResponseAdapter>().Setup();
+            //Runtime.TabMock.Setup(m => m.RequestContextType).Returns<Type>(null);
 
-            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
-            Runtime.BeginRequest(providerMock.Object);
-            Runtime.EndRequest(CreateGlimpseRequestContextHandle());
+            //Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
+            //Runtime.BeginRequest(providerMock.Object);
+            //Runtime.EndRequest(CreateGlimpseRequestContextHandle());
 
-            var results = providerMock.Object.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
-            Assert.NotNull(results);
-            Assert.Equal(1, results.Count);
+            //var results = providerMock.Object.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
+            //Assert.NotNull(results);
+            //Assert.Equal(1, results.Count);
 
-            Runtime.TabMock.Verify(p => p.GetData(It.IsAny<ITabContext>()), Times.Once());
+            //Runtime.TabMock.Verify(p => p.GetData(It.IsAny<ITabContext>()), Times.Once());
         }
 
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ExecutePluginsWithDuplicateCollectionEntries()
         {
-            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
-            //Insert the same plugin multiple times
-            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
-            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
-            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
-            Runtime.BeginRequest(providerMock.Object);
-            Runtime.EndRequest(CreateGlimpseRequestContextHandle());
+#warning test might become obsolete due to complete redesign of GlimpseRuntime
+            //var providerMock = new Mock<IRequestResponseAdapter>().Setup();
+            ////Insert the same plugin multiple times
+            //Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
+            //Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
+            //Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
+            //Runtime.BeginRequest(providerMock.Object);
+            //Runtime.EndRequest(CreateGlimpseRequestContextHandle());
 
-            var results = providerMock.Object.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
-            Assert.NotNull(results);
-            Assert.Equal(1, results.Count);
+            //var results = providerMock.Object.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
+            //Assert.NotNull(results);
+            //Assert.Equal(1, results.Count);
 
-            Runtime.TabMock.Verify(p => p.GetData(It.IsAny<ITabContext>()), Times.AtLeastOnce());
+            //Runtime.TabMock.Verify(p => p.GetData(It.IsAny<ITabContext>()), Times.AtLeastOnce());
         }
 
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ExecutePluginThatFails()
         {
-            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
-            Runtime.TabMock.Setup(p => p.GetData(It.IsAny<ITabContext>())).Throws<DummyException>();
+#warning test might become obsolete due to complete redesign of GlimpseRuntime
+            //var providerMock = new Mock<IRequestResponseAdapter>().Setup();
+            //Runtime.TabMock.Setup(p => p.GetData(It.IsAny<ITabContext>())).Throws<DummyException>();
 
-            Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
-            Runtime.BeginRequest(providerMock.Object);
-            Runtime.EndRequest(CreateGlimpseRequestContextHandle());
+            //Runtime.Configuration.Tabs.Add(Runtime.TabMock.Object);
+            //Runtime.BeginRequest(providerMock.Object);
+            //Runtime.EndRequest(CreateGlimpseRequestContextHandle());
 
-            var results = providerMock.Object.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
-            Assert.NotNull(results);
-            Assert.Equal(1, results.Count);
+            //var results = providerMock.Object.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
+            //Assert.NotNull(results);
+            //Assert.Equal(1, results.Count);
 
-            Runtime.TabMock.Verify(p => p.GetData(It.IsAny<ITabContext>()), Times.Once());
+            //Runtime.TabMock.Verify(p => p.GetData(It.IsAny<ITabContext>()), Times.Once());
 
-            // Make sure the exception type above is logged here.
-            Runtime.LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<DummyException>()), Times.AtMost(Runtime.Configuration.Tabs.Count));
+            //// Make sure the exception type above is logged here.
+            //Runtime.LoggerMock.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<DummyException>()), Times.AtMost(Runtime.Configuration.Tabs.Count));
         }
 
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ExecutePluginsWithEmptyCollection()
         {
-            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
-            Runtime.Configuration.Tabs.Clear();
-            Runtime.BeginRequest(providerMock.Object);
-            Runtime.EndRequest(CreateGlimpseRequestContextHandle());
+#warning test might become obsolete due to complete redesign of GlimpseRuntime
+            //var providerMock = new Mock<IRequestResponseAdapter>().Setup();
+            //Runtime.Configuration.Tabs.Clear();
+            //Runtime.BeginRequest(providerMock.Object);
+            //Runtime.EndRequest(CreateGlimpseRequestContextHandle());
 
-            var results = providerMock.Object.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
-            Assert.NotNull(results);
-            Assert.Equal(0, results.Count);
+            //var results = providerMock.Object.HttpRequestStore.Get<IDictionary<string, TabResult>>(Constants.TabResultsDataStoreKey);
+            //Assert.NotNull(results);
+            //Assert.Equal(0, results.Count);
         }
 
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
@@ -534,23 +544,25 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void SkipExecutingResourceIfGlimpseModeIsOff()
         {
-            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
-            Runtime.Configuration.DefaultRuntimePolicy = RuntimePolicy.Off;
+#warning test might become obsolete due to complete redesign of GlimpseRuntime
+            //var providerMock = new Mock<IRequestResponseAdapter>().Setup();
+            //Runtime.Configuration.DefaultRuntimePolicy = RuntimePolicy.Off;
 
-            Runtime.ExecuteResource(CreateGlimpseRequestContextHandle(), "doesn't matter", new ResourceParameters(new string[] { }));
+            //Runtime.ExecuteResource(CreateGlimpseRequestContextHandle(), "doesn't matter", new ResourceParameters(new string[] { }));
 
-            Assert.Equal(RuntimePolicy.Off, providerMock.Object.HttpRequestStore.Get(Constants.RuntimePolicyKey));
+            //Assert.Equal(RuntimePolicy.Off, providerMock.Object.HttpRequestStore.Get(Constants.RuntimePolicyKey));
         }
 
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ValidateAtEndRequest()
         {
-            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
-            Runtime.Configuration.DefaultRuntimePolicy = RuntimePolicy.Off;
+#warning test might become obsolete due to complete redesign of GlimpseRuntime
+            //var providerMock = new Mock<IRequestResponseAdapter>().Setup();
+            //Runtime.Configuration.DefaultRuntimePolicy = RuntimePolicy.Off;
 
-            Runtime.EndRequest(CreateGlimpseRequestContextHandle());
+            //Runtime.EndRequest(CreateGlimpseRequestContextHandle());
 
-            Assert.Equal(RuntimePolicy.Off, providerMock.Object.HttpRequestStore.Get(Constants.RuntimePolicyKey));
+            //Assert.Equal(RuntimePolicy.Off, providerMock.Object.HttpRequestStore.Get(Constants.RuntimePolicyKey));
         }
 
         /*
@@ -756,17 +768,18 @@ namespace Glimpse.Test.Core.Framework
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void BeginRuntimeReturnsEarlyIfRuntimePolicyIsOff()
         {
-            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
-            providerMock.Setup(fp => fp.HttpRequestStore).Returns(Runtime.HttpRequestStoreMock.Object);
+#warning test might become obsolete due to complete redesign of GlimpseRuntime
+            //var providerMock = new Mock<IRequestResponseAdapter>().Setup();
+            //providerMock.Setup(fp => fp.HttpRequestStore).Returns(Runtime.HttpRequestStoreMock.Object);
 
 
-            Runtime.RuntimePolicyMock.Setup(p => p.Execute(It.IsAny<IRuntimePolicyContext>())).Returns(RuntimePolicy.Off);
-            Runtime.RuntimePolicyMock.Setup(p => p.ExecuteOn).Returns(RuntimeEvent.BeginRequest);
-            Runtime.Configuration.RuntimePolicies.Add(Runtime.RuntimePolicyMock.Object);
+            //Runtime.RuntimePolicyMock.Setup(p => p.Execute(It.IsAny<IRuntimePolicyContext>())).Returns(RuntimePolicy.Off);
+            //Runtime.RuntimePolicyMock.Setup(p => p.ExecuteOn).Returns(RuntimeEvent.BeginRequest);
+            //Runtime.Configuration.RuntimePolicies.Add(Runtime.RuntimePolicyMock.Object);
 
-            Runtime.BeginRequest(providerMock.Object);
+            //Runtime.BeginRequest(providerMock.Object);
 
-            Runtime.HttpRequestStoreMock.Verify(fp => fp.Set(Constants.RequestIdKey, It.IsAny<Guid>()), Times.Never());
+            //Runtime.HttpRequestStoreMock.Verify(fp => fp.Set(Constants.RequestIdKey, It.IsAny<Guid>()), Times.Never());
         }
 
         [Fact(Skip = "This test is hanging the test runner. Fix later")]

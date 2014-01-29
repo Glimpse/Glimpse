@@ -10,11 +10,7 @@ namespace Glimpse.AspNet.Controls
         {
             if (GlimpseRuntime.IsInitialized)
             {
-                var aspNetRequestResponseAdapter = GlimpseRuntime.Instance.CurrentRequestContext.RequestResponseAdapter as IAspNetRequestResponseAdapter;
-                if (aspNetRequestResponseAdapter != null)
-                {
-                    writer.Write(aspNetRequestResponseAdapter.GenerateGlimpseScriptTags());
-                }
+                writer.Write(GlimpseRuntime.Instance.GenerateScriptTags(GlimpseRuntime.Instance.CurrentRequestContext));
             }
         }
     }

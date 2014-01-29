@@ -9,6 +9,7 @@ namespace Glimpse.Core.Framework
     /// </summary>
     internal static class ActiveGlimpseRequestContexts
     {
+        internal const string RequestIdKey = "__GlimpseRequestId";
         private static IDictionary<Guid, GlimpseRequestContext> GlimpseRequestContexts { get; set; }
 
         /// <summary>
@@ -49,7 +50,7 @@ namespace Glimpse.Core.Framework
 
             // we also store the GlimpseRequestId in the CallContext for later use. That is our only entry point to retrieve the glimpseRequestContext
             // when we are not inside one of the GlimpseRuntime methods that is being provided with the requestResponseAdapter
-            CallContext.LogicalSetData(Constants.RequestIdKey, glimpseRequestContext.GlimpseRequestId);
+            CallContext.LogicalSetData(RequestIdKey, glimpseRequestContext.GlimpseRequestId);
 
             RaiseEvent(() => RequestContextAdded(null, new ActiveGlimpseRequestContextEventArgs(glimpseRequestContext.GlimpseRequestId)), "RequestContextAdded");
 
@@ -74,8 +75,8 @@ namespace Glimpse.Core.Framework
         public static void Remove(Guid glimpseRequestId)
         {
             bool glimpseRequestContextRemoved = GlimpseRequestContexts.Remove(glimpseRequestId);
-            CallContext.LogicalSetData(Constants.RequestIdKey, null);
-            CallContext.FreeNamedDataSlot(Constants.RequestIdKey);
+            CallContext.LogicalSetData(RequestIdKey, null);
+            CallContext.FreeNamedDataSlot(RequestIdKey);
 
             if (glimpseRequestContextRemoved)
             {
@@ -103,7 +104,7 @@ namespace Glimpse.Core.Framework
         {
             get
             {
-                var glimpseRequestId = CallContext.LogicalGetData(Constants.RequestIdKey) as Guid?;
+                var glimpseRequestId = CallContext.LogicalGetData(RequestIdKey) as Guid?;
                 if (!glimpseRequestId.HasValue)
                 {
                     // there is no context registered, which means Glimpse did not initialize itself for this request aka GlimpseRuntime.BeginRequest has not been

@@ -37,14 +37,6 @@ namespace Glimpse.Test.AspNet
         }
 
         [Fact]
-        public void HaveHttpRequestStore()
-        {
-            Assert.NotNull(RequestResponseAdapter.HttpRequestStore);
-            Assert.Equal(5, RequestResponseAdapter.HttpRequestStore.Get<int>());
-            Assert.Equal("TestString", RequestResponseAdapter.HttpRequestStore.Get<string>());
-        }
-
-        [Fact]
         public void SetHttpResponseHeader()
         {
             var headerName = "testKey";

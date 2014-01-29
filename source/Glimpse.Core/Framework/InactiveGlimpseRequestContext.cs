@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Framework
@@ -20,7 +19,7 @@ namespace Glimpse.Core.Framework
         }
 
         private InactiveGlimpseRequestContext()
-            : base(new Guid(), new RequestResponseAdapterStub(), string.Empty)
+            : base(new Guid(), new RequestResponseAdapterStub(), RuntimePolicy.Off, string.Empty)
         {
         }
 
@@ -44,16 +43,10 @@ namespace Glimpse.Core.Framework
         {
             public RequestResponseAdapterStub()
             {
-                HttpRequestStore = new DictionaryDataStoreAdapter(new Dictionary<string, object>
-                {
-                    { Constants.RuntimePolicyKey, RuntimePolicy.Off }
-                });
-
                 RuntimeContext = new object();
                 RequestMetadata = new RequestMetadataStub();
             }
 
-            public IDataStore HttpRequestStore { get; private set; }
             public object RuntimeContext { get; private set; }
             public IRequestMetadata RequestMetadata { get; private set; }
 
