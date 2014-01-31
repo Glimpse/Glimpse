@@ -2,9 +2,9 @@
 {
     public class ModelBindParameter
     {
-        public string Field { get; private set; }
-
         public string Source { get; private set; }
+
+        public string Field { get; private set; }
 
         public object Value { get; private set; }
 
