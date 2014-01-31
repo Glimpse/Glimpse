@@ -23,7 +23,7 @@ namespace Glimpse.WebForms.Support
                 item.Record.DataBindParameters = new Dictionary<string, object>();
                 foreach (var parameterModel in dataBindInfo[item.ControlId])
                 {
-                    var dataBindParameters = new List<DataBindParameter>();
+                    var dataBindParameters = new List<ModelBindParameter>();
                     var time = DateTime.MinValue;
                     foreach (var parameter in parameterModel.DataBindParameters)
                     {
@@ -35,7 +35,7 @@ namespace Glimpse.WebForms.Support
                         var multipleEventParameters = item.Record.DataBindParameters[lifeCycleEvent.EventName] as List<EventParameterModel>;
                         if (multipleEventParameters == null)
                         {
-                            var existingEventParameters = (List<DataBindParameter>)item.Record.DataBindParameters[lifeCycleEvent.EventName];
+                            var existingEventParameters = (List<ModelBindParameter>)item.Record.DataBindParameters[lifeCycleEvent.EventName];
                             multipleEventParameters = new List<EventParameterModel>();
                             item.Record.DataBindParameters[lifeCycleEvent.EventName] = multipleEventParameters;
                             multipleEventParameters.Add(new EventParameterModel(0, existingEventParameters));

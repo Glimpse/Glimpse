@@ -38,6 +38,35 @@ namespace Glimpse.WebForms.Inspector
             }
         }
 
+        private List<KeyValuePair<string, ParameterCollection>> Parameters
+        {
+            get
+            {
+                var parameters = new List<KeyValuePair<string, ParameterCollection>>();
+                var objectDataSource = DataBoundControl.DataSourceObject as ObjectDataSource;
+                if (objectDataSource != null)
+                {
+                    parameters.Add(new KeyValuePair<string, ParameterCollection>("Select", objectDataSource.SelectParameters));
+                }
+                var sqlDataSource = DataBoundControl.DataSourceObject as SqlDataSource;
+                if (sqlDataSource != null)
+                {
+                    parameters.Add(new KeyValuePair<string, ParameterCollection>("Select", sqlDataSource.SelectParameters));
+                    parameters.Add(new KeyValuePair<string, ParameterCollection>("Filter", sqlDataSource.FilterParameters));
+                }
+                var linqDataSource = DataBoundControl.DataSourceObject as LinqDataSource;
+                if (linqDataSource != null)
+                {
+                    parameters.Add(new KeyValuePair<string, ParameterCollection>("Select", linqDataSource.SelectParameters));
+                    parameters.Add(new KeyValuePair<string, ParameterCollection>("Where", linqDataSource.WhereParameters));
+                    parameters.Add(new KeyValuePair<string, ParameterCollection>("OrderBy", linqDataSource.OrderByParameters));
+                    parameters.Add(new KeyValuePair<string, ParameterCollection>("GroupBy", linqDataSource.GroupByParameters));
+                    parameters.Add(new KeyValuePair<string, ParameterCollection>("OrderGroupsBy", linqDataSource.OrderGroupsByParameters));
+                }
+                return parameters;
+            }
+        }
+
         protected override void OnInit(EventArgs e)
         {
 #if NET45Plus
@@ -57,10 +86,10 @@ namespace Glimpse.WebForms.Inspector
         protected void DataBoundControl_DataBinding(object sender, EventArgs e)
         {
             var parameterModel = new DataBindParameterModel(Offset);
-            foreach (var parameters in GetParameters())
+            foreach (var parameters in Parameters)
             {
-                var values = parameters.GetValues(HttpContext.Current, DataBoundControl);
-                foreach (Parameter parameter in parameters)
+                var values = parameters.Value.GetValues(HttpContext.Current, DataBoundControl);
+                foreach (Parameter parameter in parameters.Value)
                 {
                     var defaultPropertyAttribute = Attribute.GetCustomAttributes(parameter.GetType()).First(a => a is DefaultPropertyAttribute) as DefaultPropertyAttribute;
                     string name = null;
@@ -69,7 +98,7 @@ namespace Glimpse.WebForms.Inspector
                         name = parameter.GetType().GetProperty(defaultPropertyAttribute.Name).GetValue(parameter, null) as string;
                     }
                     name = name ?? parameter.Name;
-                    parameterModel.DataBindParameters.Add(new DataBindParameter(name, parameter.GetType().Name.Replace("Parameter", null), values[parameter.Name]));
+                    parameterModel.DataBindParameters.Add(new DataBindParameter(name, parameter.GetType().Name.Replace("Parameter", null), parameters.Key, values[parameter.Name]));
                 }
             }
 #if NET45Plus
@@ -86,30 +115,6 @@ namespace Glimpse.WebForms.Inspector
                     DataBindInfo[DataBoundControl.UniqueID] = new List<DataBindParameterModel>();
                 }
                 DataBindInfo[DataBoundControl.UniqueID].Add(parameterModel);
-            }
-        }
-
-        private IEnumerable<ParameterCollection> GetParameters()
-        {
-            var objectDataSource = DataBoundControl.DataSourceObject as ObjectDataSource;
-            if (objectDataSource != null)
-            {
-                yield return objectDataSource.SelectParameters;
-            }
-            var sqlDataSource = DataBoundControl.DataSourceObject as SqlDataSource;
-            if (sqlDataSource != null)
-            {
-                yield return sqlDataSource.SelectParameters;
-                yield return sqlDataSource.FilterParameters;
-            }
-            var linqDataSource = DataBoundControl.DataSourceObject as LinqDataSource;
-            if (linqDataSource != null)
-            {
-                yield return linqDataSource.SelectParameters;
-                yield return linqDataSource.WhereParameters;
-                yield return linqDataSource.OrderByParameters;
-                yield return linqDataSource.GroupByParameters;
-                yield return linqDataSource.OrderGroupsByParameters;
             }
         }
     }

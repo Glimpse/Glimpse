@@ -52,6 +52,7 @@
     <Compile Include="Model\DataBindParameterModel.cs" />
     <Compile Include="Model\EventParameterModel.cs" />
     <Compile Include="Model\ExecutionItemModel.cs" />
+    <Compile Include="Model\ModelBindParameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>

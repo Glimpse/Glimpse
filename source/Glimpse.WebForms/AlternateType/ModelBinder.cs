@@ -40,7 +40,7 @@ namespace Glimpse.WebForms.AlternateType
                 if (dataBindParameterModel != null)
                 {
                     var bindingContext = (ModelBindingContext)context.Arguments[1];
-                    dataBindParameterModel.DataBindParameters.Add(new DataBindParameter(bindingContext.ModelName, bindingContext.ValueProvider.GetType().Name.Replace("ValueProvider", null), bindingContext.Model));
+                    dataBindParameterModel.DataBindParameters.Add(new ModelBindParameter(bindingContext.ModelName, bindingContext.ValueProvider.GetType().Name.Replace("ValueProvider", null), bindingContext.Model));
                 }
             }
         }

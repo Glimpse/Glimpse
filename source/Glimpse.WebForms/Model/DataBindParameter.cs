@@ -1,20 +1,12 @@
-﻿using System;
-
-namespace Glimpse.WebForms.Model
+﻿namespace Glimpse.WebForms.Model
 {
-    public class DataBindParameter
+    public class DataBindParameter : ModelBindParameter
     {
-        public string Field { get; private set; }
+        public string Type { get; private set; }
 
-        public string Source { get; private set; }
-
-        public object Value { get; private set; }
-
-        public DataBindParameter(string field, string source, object value)
+        public DataBindParameter(string field, string source, string type, object value) : base(field, source, value)
         {
-            Field = field;
-            Source = source;
-            Value = value;
+            Type = type;
         }
     }
 }

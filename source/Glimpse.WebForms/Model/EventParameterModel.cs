@@ -6,9 +6,9 @@ namespace Glimpse.WebForms.Model
     {
         public int Key { get; set; }
 
-        public List<DataBindParameter> Value{ get; set; }
+        public List<ModelBindParameter> Value{ get; set; }
 
-        public EventParameterModel(int key, List<DataBindParameter> value)
+        public EventParameterModel(int key, List<ModelBindParameter> value)
         {
             Key = key;
             Value = value;
