@@ -28,7 +28,7 @@ namespace Glimpse.WebForms.Model
 
         public string DataBindParametersTitle
         {
-            get { return DataBindParameters != null ? "DataBind Parameters" : null; }
+            get { return DataBindParameters != null ? "DataBinding" : null; }
         }
     }
 }
