@@ -61,6 +61,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="SerializationConverter\IndexedStringListConverter.cs" />
+    <Compile Include="SerializationConverter\DataBindParameterConverter.cs" />
     <Compile Include="Support\DataBindFormatter.cs" />
     <Compile Include="Tab\ControlTree.cs" />
     <Compile Include="Model\ControlTreeItemModel.cs" />

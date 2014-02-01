@@ -88,10 +88,10 @@
                 <asp:QueryStringParameter Name="Order" QueryStringField="Test" DefaultValue="ProductName"/>
             </OrderByParameters>
             <GroupByParameters>
-                <asp:CookieParameter Name="Group" CookieName="SomeCookie"/>
+                <asp:CookieParameter Name="Group" CookieName="SomeCookie" DefaultValue="2010/12/25" Type="DateTime"/>
             </GroupByParameters>
             <OrderGroupsByParameters>
-                <asp:FormParameter Name="OrderGroups" FormField="SomeFormKey"/>
+                <asp:FormParameter Name="OrderGroups" FormField="SomeFormKey" Type="DBNull"/>
             </OrderGroupsByParameters>
         </asp:LinqDataSource>
     </div>

@@ -3,6 +3,7 @@ using Glimpse.WebForms.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Web;
@@ -91,14 +92,9 @@ namespace Glimpse.WebForms.Inspector
                 var values = parameters.Value.GetValues(HttpContext.Current, DataBoundControl);
                 foreach (Parameter parameter in parameters.Value)
                 {
-                    var defaultPropertyAttribute = Attribute.GetCustomAttributes(parameter.GetType()).First(a => a is DefaultPropertyAttribute) as DefaultPropertyAttribute;
-                    string name = null;
-                    if (defaultPropertyAttribute != null && defaultPropertyAttribute.Name != "DefaultValue")
-                    {
-                        name = parameter.GetType().GetProperty(defaultPropertyAttribute.Name).GetValue(parameter, null) as string;
-                    }
-                    name = name ?? parameter.Name;
-                    parameterModel.DataBindParameters.Add(new DataBindParameter(name, parameter.GetType().Name.Replace("Parameter", null), parameters.Key, values[parameter.Name]));
+                    var field = GetField(parameter);
+                    var defaultValue = GetDefaultValue(parameter);
+                    parameterModel.DataBindParameters.Add(new DataBindParameter(field, parameter.GetType().Name.Replace("Parameter", null), values[parameter.Name], parameters.Key, defaultValue));
                 }
             }
 #if NET45Plus
@@ -113,6 +109,30 @@ namespace Glimpse.WebForms.Inspector
                 DataBindInfo[DataBoundControl.UniqueID] = new List<DataBindParameterModel>();
             }
             DataBindInfo[DataBoundControl.UniqueID].Add(parameterModel);
+        }
+
+        private string GetField(Parameter parameter)
+        {
+            var defaultPropertyAttribute = Attribute.GetCustomAttributes(parameter.GetType()).First(a => a is DefaultPropertyAttribute) as DefaultPropertyAttribute;
+            string field = null;
+            if (defaultPropertyAttribute != null && defaultPropertyAttribute.Name != "DefaultValue")
+            {
+                field = parameter.GetType().GetProperty(defaultPropertyAttribute.Name).GetValue(parameter, null) as string;
+            }
+            return field ?? parameter.Name;
+        }
+
+        private object GetDefaultValue(Parameter parameter)
+        {
+            object defaultValue = parameter.DefaultValue;
+            if (!string.IsNullOrEmpty(parameter.DefaultValue))
+            {
+                if (parameter.Type != TypeCode.Empty && parameter.Type != TypeCode.Object && parameter.Type != TypeCode.DBNull)
+                {
+                    defaultValue = Convert.ChangeType(parameter.DefaultValue, parameter.Type, CultureInfo.CurrentCulture);
+                }
+            }
+            return defaultValue;
         }
     }
 
