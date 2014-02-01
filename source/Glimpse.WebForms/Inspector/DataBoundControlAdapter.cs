@@ -108,14 +108,11 @@ namespace Glimpse.WebForms.Inspector
                 HttpContext.Current.Items.Remove("_GlimpseWebFormModelBinding");
             }
 #endif
-            if (parameterModel.DataBindParameters.Count > 0)
+            if (!DataBindInfo.ContainsKey(DataBoundControl.UniqueID))
             {
-                if (!DataBindInfo.ContainsKey(DataBoundControl.UniqueID))
-                {
-                    DataBindInfo[DataBoundControl.UniqueID] = new List<DataBindParameterModel>();
-                }
-                DataBindInfo[DataBoundControl.UniqueID].Add(parameterModel);
+                DataBindInfo[DataBoundControl.UniqueID] = new List<DataBindParameterModel>();
             }
+            DataBindInfo[DataBoundControl.UniqueID].Add(parameterModel);
         }
     }
 

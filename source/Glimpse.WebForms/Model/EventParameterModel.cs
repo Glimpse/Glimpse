@@ -4,14 +4,14 @@ namespace Glimpse.WebForms.Model
 {
     public class EventParameterModel
     {
-        public int Key { get; set; }
+        public int Index { get; set; }
 
-        public List<ModelBindParameter> Value{ get; set; }
+        public List<ModelBindParameter> Values{ get; set; }
 
-        public EventParameterModel(int key, List<ModelBindParameter> value)
+        public EventParameterModel(int index, List<ModelBindParameter> values)
         {
-            Key = key;
-            Value = value;
+            Index = index;
+            Values = values;
         }
     }
 }

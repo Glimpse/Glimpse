@@ -48,6 +48,7 @@
     <Compile Include="Message\PageLifeCycleMessage.cs" />
     <Compile Include="Inspector\PageLifeCycleInspector.cs" />
     <Compile Include="Message\WebFormsTimelineCategory.cs" />
+    <Compile Include="Model\DataBindModel.cs" />
     <Compile Include="Model\DataBindParameter.cs" />
     <Compile Include="Model\DataBindParameterModel.cs" />
     <Compile Include="Model\EventParameterModel.cs" />

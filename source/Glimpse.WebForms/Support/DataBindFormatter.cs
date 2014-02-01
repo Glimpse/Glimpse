@@ -20,7 +20,8 @@ namespace Glimpse.WebForms.Support
         {
             if (dataBindInfo.ContainsKey(item.ControlId))
             {
-                item.Record.DataBindParameters = new Dictionary<string, object>();
+                item.Record.DataBindParameters = new List<DataBindModel>();
+                var dataBindModel = new DataBindModel(null, null);
                 foreach (var parameterModel in dataBindInfo[item.ControlId])
                 {
                     var dataBindParameters = new List<ModelBindParameter>();
@@ -30,21 +31,22 @@ namespace Glimpse.WebForms.Support
                         dataBindParameters.Add(parameter);
                     }
                     var lifeCycleEvent = pageLifeCycleMessages.First(p => p.Offset <= parameterModel.Offset);
-                    if (item.Record.DataBindParameters.ContainsKey(lifeCycleEvent.EventName))
+                    if (dataBindModel.Event == lifeCycleEvent.EventName)
                     {
-                        var multipleEventParameters = item.Record.DataBindParameters[lifeCycleEvent.EventName] as List<EventParameterModel>;
+                        var multipleEventParameters = dataBindModel.Parameters as List<EventParameterModel>;
                         if (multipleEventParameters == null)
                         {
-                            var existingEventParameters = (List<ModelBindParameter>)item.Record.DataBindParameters[lifeCycleEvent.EventName];
+                            var existingEventParameters = (List<ModelBindParameter>)dataBindModel.Parameters;
                             multipleEventParameters = new List<EventParameterModel>();
-                            item.Record.DataBindParameters[lifeCycleEvent.EventName] = multipleEventParameters;
+                            dataBindModel.Parameters = multipleEventParameters;
                             multipleEventParameters.Add(new EventParameterModel(0, existingEventParameters));
                         }
                         multipleEventParameters.Add(new EventParameterModel(multipleEventParameters.Count, dataBindParameters));
                     }
                     else
                     {
-                        item.Record.DataBindParameters[lifeCycleEvent.EventName] = dataBindParameters;
+                        dataBindModel = new DataBindModel(lifeCycleEvent.EventName, dataBindParameters);
+                        item.Record.DataBindParameters.Add(dataBindModel);
                     }
                 }
             }
