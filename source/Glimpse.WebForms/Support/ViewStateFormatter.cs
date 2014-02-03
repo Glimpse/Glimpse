@@ -439,6 +439,29 @@ namespace Glimpse.WebForms.Support
                         }
                     }
                 }
+                else if (type == "System.Web.UI.WebControls.ObjectDataSource" || type == "System.Web.UI.WebControls.LinqDataSource" || type == "System.Web.UI.WebControls.SqlDataSource")
+                {
+                    var pair = data as Pair;
+                    if (pair != null)
+                    {
+                        var temp = new Dictionary<string, object>();
+                        temp.Add("Base State", WrapProcessedData(pair.First));
+                        temp.Add("Object Data Source View", ProcessData(rootType, "System.Web.UI.WebControls.ObjectDataSourceView", pair.Second));
+                        result = temp;
+                    }
+                }
+                else if (type == "System.Web.UI.WebControls.ObjectDataSourceView" || type == "System.Web.UI.WebControls.LinqDataSourceView" || type == "System.Web.UI.WebControls.SqlDataSourceView")
+                {
+                    var pair = data as Pair;
+                    if (pair != null)
+                    {
+                        //TODO: Try and break down this object structure
+                        var temp = new Dictionary<string, object>();
+                        temp.Add("Select Parameters", pair.First);
+                        temp.Add("Filter Parameters", pair.Second);
+                        result = temp;
+                    }
+                } 
 
                 if (result == null)
                 {
