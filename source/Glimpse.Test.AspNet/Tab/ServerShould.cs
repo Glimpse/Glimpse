@@ -63,26 +63,22 @@ namespace Glimpse.Test.AspNet.Tab
 
             Assert.NotNull(result);
 
-            var otherVariables = result.OtherVariables;
-            Assert.NotNull(otherVariables);
-            Assert.Equal(otherVariables.Count(), 2);
-            Assert.Equal(otherVariables["Name"], "Value");
-            Assert.Equal(otherVariables["Name1"], "Value1");
+            var generalVariables = result.GeneralVariables;
+            Assert.NotNull(generalVariables);
+            Assert.Equal(generalVariables.Count(), 2);
+            Assert.Equal(generalVariables["Name"], "Value");
+            Assert.Equal(generalVariables["Name1"], "Value1");
 
             var httpVariables = result.HttpVariables;
             Assert.NotNull(httpVariables);
             Assert.Equal(httpVariables.Count(), 1);
             Assert.Equal(httpVariables["HTTP_TEST"], "http_test_value");
 
-            var httpsVariables = result.HttpsVariables;
-            Assert.NotNull(httpsVariables);
-            Assert.Equal(httpsVariables.Count(), 1);
-            Assert.Equal(httpsVariables["HTTPS_TEST"], "https_test_value");
-
-            var certVariables = result.CertVariables;
-            Assert.NotNull(certVariables);
-            Assert.Equal(certVariables.Count(), 1);
-            Assert.Equal(certVariables["CERT_TEST"], "cert_test_value");
+            var securityRelatedVariables = result.SecurityRelatedVariables;
+            Assert.NotNull(securityRelatedVariables);
+            Assert.Equal(securityRelatedVariables.Count(), 2);
+            Assert.Equal(securityRelatedVariables["HTTPS_TEST"], "https_test_value");
+            Assert.Equal(securityRelatedVariables["CERT_TEST"], "cert_test_value");
         }
     }
 }

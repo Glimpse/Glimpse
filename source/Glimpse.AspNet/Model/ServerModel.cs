@@ -9,10 +9,9 @@ namespace Glimpse.AspNet.Model
         public ServerModel(HttpContextBase httpContext)
         {
             HttpVariables = new Dictionary<string, string>();
-            OtherVariables = new Dictionary<string, string>();
-            CertVariables = new Dictionary<string, string>();
-            HttpsVariables = new Dictionary<string, string>();
-
+            GeneralVariables = new Dictionary<string, string>();
+            SecurityRelatedVariables = new Dictionary<string, string>();
+            
             foreach (var serverVariable in httpContext.Request.ServerVariables.ToDictionary())
             {
                 string lowerCasedKey = serverVariable.Key.ToLower();
@@ -21,24 +20,19 @@ namespace Glimpse.AspNet.Model
                 {
                     HttpVariables.Add(serverVariable.Key, serverVariable.Value);
                 }
-                else if (lowerCasedKey.StartsWith("cert_"))
+                else if (lowerCasedKey.StartsWith("cert_") || lowerCasedKey.StartsWith("https_"))
                 {
-                    CertVariables.Add(serverVariable.Key, serverVariable.Value);
-                }
-                else if (lowerCasedKey.StartsWith("https_"))
-                {
-                    HttpsVariables.Add(serverVariable.Key, serverVariable.Value);
+                    SecurityRelatedVariables.Add(serverVariable.Key, serverVariable.Value);
                 }
                 else
                 {
-                    OtherVariables.Add(serverVariable.Key, serverVariable.Value);
+                    GeneralVariables.Add(serverVariable.Key, serverVariable.Value);
                 }
             }
         }
 
         public IDictionary<string, string> HttpVariables { get; private set; }
-        public IDictionary<string, string> OtherVariables { get; private set; }
-        public IDictionary<string, string> CertVariables { get; private set; }
-        public IDictionary<string, string> HttpsVariables { get; private set; }
+        public IDictionary<string, string> GeneralVariables { get; private set; }
+        public IDictionary<string, string> SecurityRelatedVariables { get; private set; }
     }
 }
