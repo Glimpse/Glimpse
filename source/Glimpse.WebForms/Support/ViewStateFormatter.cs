@@ -446,11 +446,11 @@ namespace Glimpse.WebForms.Support
                     {
                         var temp = new Dictionary<string, object>();
                         temp.Add("Base State", WrapProcessedData(pair.First));
-                        temp.Add("Object Data Source View", ProcessData(rootType, "System.Web.UI.WebControls.ObjectDataSourceView", pair.Second));
+                        temp.Add("Object Data Source View", ProcessData(rootType, type + "View", pair.Second));
                         result = temp;
                     }
                 }
-                else if (type == "System.Web.UI.WebControls.ObjectDataSourceView" || type == "System.Web.UI.WebControls.LinqDataSourceView" || type == "System.Web.UI.WebControls.SqlDataSourceView")
+                else if (type == "System.Web.UI.WebControls.ObjectDataSourceView" || type == "System.Web.UI.WebControls.SqlDataSourceView")
                 {
                     var pair = data as Pair;
                     if (pair != null)
@@ -461,7 +461,23 @@ namespace Glimpse.WebForms.Support
                         temp.Add("Filter Parameters", pair.Second);
                         result = temp;
                     }
-                } 
+                }
+                else if (type == "System.Web.UI.WebControls.LinqDataSourceView")
+                {
+                    var array = data as object[];
+                    if (array != null)
+                    {
+                        var temp = new Dictionary<string, object>();
+                        temp.Add("Where Parameters", array[0]);
+                        temp.Add("OrderBy Parameters", array[1]);
+                        temp.Add("GroupBy Parameters", array[2]);
+                        temp.Add("Order GroupsBy Parameters", array[3]);
+                        temp.Add("SelectNew Parameters", array[4]);
+                        temp.Add("Original Values", array[5]);
+
+                        result = temp;
+                    }
+                }
 
                 if (result == null)
                 {
