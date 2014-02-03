@@ -455,10 +455,9 @@ namespace Glimpse.WebForms.Support
                     var pair = data as Pair;
                     if (pair != null)
                     {
-                        //TODO: Try and break down this object structure
                         var temp = new Dictionary<string, object>();
-                        temp.Add("Select Parameters", pair.First);
-                        temp.Add("Filter Parameters", pair.Second);
+                        temp.Add("Select Parameters", ProcessData(rootType, "System.Web.UI.StateManagedCollection", pair.First));
+                        temp.Add("Filter Parameters", ProcessData(rootType, "System.Web.UI.StateManagedCollection", pair.Second));
                         result = temp;
                     }
                 }
@@ -468,15 +467,20 @@ namespace Glimpse.WebForms.Support
                     if (array != null)
                     {
                         var temp = new Dictionary<string, object>();
-                        temp.Add("Where Parameters", array[0]);
-                        temp.Add("OrderBy Parameters", array[1]);
-                        temp.Add("GroupBy Parameters", array[2]);
-                        temp.Add("Order GroupsBy Parameters", array[3]);
-                        temp.Add("SelectNew Parameters", array[4]);
+                        temp.Add("Where Parameters", ProcessData(rootType, "System.Web.UI.StateManagedCollection", array[0]));
+                        temp.Add("OrderBy Parameters", ProcessData(rootType, "System.Web.UI.StateManagedCollection", array[1]));
+                        temp.Add("GroupBy Parameters", ProcessData(rootType, "System.Web.UI.StateManagedCollection", array[2]));
+                        temp.Add("Order GroupsBy Parameters", ProcessData(rootType, "System.Web.UI.StateManagedCollection", array[3]));
+                        temp.Add("SelectNew Parameters", ProcessData(rootType, "System.Web.UI.StateManagedCollection", array[4]));
                         temp.Add("Original Values", array[5]);
 
                         result = temp;
                     }
+                }
+                else if (type == "System.Web.UI.StateManagedCollection")
+                {
+                    //TODO: Process this structure, note that both the Pair and Triple case need to be dealt with.
+                    //      See both the SaveAllItemsToViewState() and this.SaveChangedItemsToViewState() cases.
                 }
 
                 if (result == null)
