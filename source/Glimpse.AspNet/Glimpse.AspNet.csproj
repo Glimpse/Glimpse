@@ -93,6 +93,7 @@
     <Compile Include="Model\RouteConstraintModel.cs" />
     <Compile Include="Model\RouteDataItemModel.cs" />
     <Compile Include="Model\RouteModel.cs" />
+    <Compile Include="Model\ServerModel.cs" />
     <Compile Include="Model\SessionModel.cs" />
     <Compile Include="Model\UriTokenInstance.cs" />
     <Compile Include="Inspector\RoutesInspector.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="PreBodyTagFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tab\Routes.cs" />
+    <Compile Include="Tab\Server.cs" />
     <Compile Include="Tab\Session.cs" />
   </ItemGroup>
   <ItemGroup>
