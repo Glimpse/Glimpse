@@ -23,9 +23,12 @@ namespace Glimpse.AspNet.Inspector
                 for (var i = 0; i < currentRoutes.Count; i++)
                 {
                     var originalObj = currentRoutes[i];
-                    if (!(typeof(System.Web.Routing.RouteBase)).IsAssignableFrom(originalObj.GetType())) continue;
-                    var newObj = (System.Web.Routing.RouteBase)null;
+                    if (!(typeof(System.Web.Routing.RouteBase)).IsAssignableFrom(originalObj.GetType()))
+                    {
+                        continue;
+                    }
 
+                    var newObj = (System.Web.Routing.RouteBase)null;
                     var mixins = new[] { RouteNameMixin.None() };
                     var routeName = string.Empty; 
                     if (mappedRoutes.ContainsValue(originalObj))
