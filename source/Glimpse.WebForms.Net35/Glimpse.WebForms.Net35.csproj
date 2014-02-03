@@ -37,6 +37,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
@@ -44,6 +45,9 @@
       <Link />
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\Glimpse.WebForms\Resources.resx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Glimpse.AspNet.Net35\Glimpse.AspNet.Net35.csproj">
