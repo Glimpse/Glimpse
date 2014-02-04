@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Runtime.Remoting.Messaging;
-using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
-using Glimpse.Test.Core.Tester;
+using Moq;
 using Xunit;
 
 namespace Glimpse.Test.Core.Framework
@@ -18,7 +17,7 @@ namespace Glimpse.Test.Core.Framework
             var glimpseRequestContext = CreateGlimpseRequestContext();
             Assert.Equal(null, CallContext.GetData(ActiveGlimpseRequestContexts.RequestIdKey));
 
-            GlimpseRequestContext actualGlimpseRequestContext;
+            IGlimpseRequestContext actualGlimpseRequestContext;
             Assert.False(ActiveGlimpseRequestContexts.TryGet(glimpseRequestContext.GlimpseRequestId, out actualGlimpseRequestContext));
 
             ActiveGlimpseRequestContexts.Add(glimpseRequestContext);
@@ -36,7 +35,7 @@ namespace Glimpse.Test.Core.Framework
         {
             CallContext.FreeNamedDataSlot(ActiveGlimpseRequestContexts.RequestIdKey);
             ActiveGlimpseRequestContexts.RemoveAll();
-            Assert.True(ActiveGlimpseRequestContexts.Current is InactiveGlimpseRequestContext);
+            Assert.True(ActiveGlimpseRequestContexts.Current is UnavailableGlimpseRequestContext);
         }
 
         [Fact]
@@ -55,7 +54,7 @@ namespace Glimpse.Test.Core.Framework
             }
             catch (GlimpseException glimpseException)
             {
-                Assert.Equal("No corresponding GlimpseRequestContext found for GlimpseRequestId '" + requestId + "'.", glimpseException.Message);
+                Assert.Equal("No corresponding Glimpse request context found for GlimpseRequestId '" + requestId + "'.", glimpseException.Message);
             }
         }
 
@@ -71,13 +70,12 @@ namespace Glimpse.Test.Core.Framework
             Assert.True(ActiveGlimpseRequestContexts.Current == glimpseRequestContext);
         }
 
-        private static GlimpseRequestContext CreateGlimpseRequestContext()
+        private static IGlimpseRequestContext CreateGlimpseRequestContext()
         {
-            return new GlimpseRequestContext(
-                Guid.NewGuid(),
-                RequestResponseAdapterTester.Create("/").RequestResponseAdapterMock.Object,
-                RuntimePolicy.On,
-                "/Glimpse.axd");
+            var glimpseRequestId = Guid.NewGuid();
+            var glimpseRequestContextMock = new Mock<IGlimpseRequestContext>();
+            glimpseRequestContextMock.Setup(context => context.GlimpseRequestId).Returns(glimpseRequestId);
+            return glimpseRequestContextMock.Object;
         }
     }
 }

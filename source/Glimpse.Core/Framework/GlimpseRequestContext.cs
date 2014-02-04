@@ -1,25 +1,15 @@
 using System;
 using System.Collections.Generic;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions;
 
 namespace Glimpse.Core.Framework
 {
     /// <summary>
     /// Represents the context of a specific request, which is used as an access point to the request's <see cref="IRequestResponseAdapter"/> handle
     /// </summary>
-    public class GlimpseRequestContext
+    internal sealed class GlimpseRequestContext : IGlimpseRequestContext
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GlimpseRequestContext" />
-        /// </summary>
-        /// <param name="glimpseRequestId">The Id assigned to the request by Glimpse.</param>
-        /// <param name="requestResponseAdapter">The <see cref="IRequestResponseAdapter "/> of this request.</param>
-        /// <param name="initialRuntimePolicy">The initial <see cref="RuntimePolicy "/> for this request.</param>
-        public GlimpseRequestContext(Guid glimpseRequestId, IRequestResponseAdapter requestResponseAdapter, RuntimePolicy initialRuntimePolicy)
-            : this(glimpseRequestId, requestResponseAdapter, initialRuntimePolicy, GlimpseRuntime.Instance.Configuration.EndpointBaseUri)
-        {
-        }
+        private RuntimePolicy currentRuntimePolicy;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GlimpseRequestContext" />
@@ -44,7 +34,7 @@ namespace Glimpse.Core.Framework
 
 
             RequestStore = new DictionaryDataStoreAdapter(new Dictionary<string, object>());
-            RequestStore.Set(Constants.RuntimePolicyKey, initialRuntimePolicy);
+            this.currentRuntimePolicy = initialRuntimePolicy;
         }
 
         /// <summary>
@@ -53,7 +43,7 @@ namespace Glimpse.Core.Framework
         public Guid GlimpseRequestId { get; private set; }
 
         /// <summary>
-        /// Gets the <see cref="IRequestResponseAdapter"/> for this request
+        /// Gets the <see cref="IRequestResponseAdapter"/> for the referenced request
         /// </summary>
         public IRequestResponseAdapter RequestResponseAdapter { get; private set; }
 
@@ -63,30 +53,29 @@ namespace Glimpse.Core.Framework
         public IDataStore RequestStore { get; private set; }
 
         /// <summary>
-        /// Gets or sets the active <see cref="RuntimePolicy"/> for this request
+        /// Gets or sets the active <see cref="RuntimePolicy"/> for the referenced request
         /// </summary>
-        public virtual RuntimePolicy ActiveRuntimePolicy
+        public RuntimePolicy CurrentRuntimePolicy
         {
-#warning CGI: Maybe just rename to CurrentRuntimePolicy?
             get
             {
-                return RequestStore.Get<RuntimePolicy>(Constants.RuntimePolicyKey);
+                return this.currentRuntimePolicy;
             }
 
             set
             {
-                if (value > ActiveRuntimePolicy)
+                if (value > this.currentRuntimePolicy)
                 {
-                    throw new GlimpseException("You're not allowed to increase the active runtime policy level from '"  + ActiveRuntimePolicy + "' to '" + value + "'.");
+                    throw new GlimpseException("You're not allowed to increase the active runtime policy level from '" + this.currentRuntimePolicy + "' to '" + value + "'.");
                 }
 
-                RequestStore.Set(Constants.RuntimePolicyKey, value);
+                this.currentRuntimePolicy = value;
             }
         }
 
         /// <summary>
-        /// Gets the <see cref="RequestHandlingMode"/> for this request
+        /// Gets the <see cref="RequestHandlingMode"/> for the referenced request
         /// </summary>
-        public virtual RequestHandlingMode RequestHandlingMode { get; private set; }
+        public RequestHandlingMode RequestHandlingMode { get; private set; }
     }
 }

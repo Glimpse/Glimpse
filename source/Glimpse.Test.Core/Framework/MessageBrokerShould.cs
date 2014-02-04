@@ -15,7 +15,7 @@ namespace Glimpse.Test.Core.Framework
         [Theory, AutoMock]
         public void Construct(ILogger logger)
         {
-            var sut = new MessageBroker(logger);
+            var sut = new MessageBroker(() => true, logger);
 
             Assert.NotNull(sut);
             Assert.Equal(logger, sut.Logger);
@@ -72,6 +72,19 @@ namespace Glimpse.Test.Core.Framework
         }
 
         [Theory, AutoMock]
+        public void NotPublishWhenIndicated()
+        {
+            var sut = new MessageBroker(() => false, new NullLogger());
+
+            var counter = 0;
+            sut.Subscribe<DummyMessage>(_ => counter++);
+
+            sut.Publish(new DummyMessage());
+
+            Assert.Equal(0, counter);
+        }
+
+        [Theory, AutoMock]
         public void LogSubscriptions(MessageBroker sut)
         {
             sut.Subscribe<DummyMessage>(Assert.NotNull);
@@ -82,7 +95,7 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void ThrowWithNullLogger()
         {
-            Assert.Throws<ArgumentNullException>(() => new MessageBroker(null));
+            Assert.Throws<ArgumentNullException>(() => new MessageBroker(() => true, null));
         }
 
         [Theory, AutoMock]

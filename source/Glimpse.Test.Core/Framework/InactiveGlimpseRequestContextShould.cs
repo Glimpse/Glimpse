@@ -10,13 +10,13 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void AlwaysReturnRuntimePolicyOff()
         {
-            Assert.Equal(RuntimePolicy.Off, InactiveGlimpseRequestContext.Instance.ActiveRuntimePolicy);
+            Assert.Equal(RuntimePolicy.Off, UnavailableGlimpseRequestContext.Instance.CurrentRuntimePolicy);
         }
 
         [Fact]
         public void HaveAnEmptyGlimpseRequestId()
         {
-            Assert.Equal(new Guid(), InactiveGlimpseRequestContext.Instance.GlimpseRequestId);
+            Assert.Equal(new Guid(), UnavailableGlimpseRequestContext.Instance.GlimpseRequestId);
         }
     }
 }

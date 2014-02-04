@@ -4,7 +4,7 @@ using Glimpse.Core.Extensibility;
 namespace Glimpse.Core.Framework
 {
     /// <summary>
-    /// This handle will make sure the corresponding <see cref="GlimpseRequestContext" /> will be removed from the <see cref="ActiveGlimpseRequestContexts"/>.
+    /// This handle will make sure the corresponding <see cref="IGlimpseRequestContext" /> will be removed from the <see cref="ActiveGlimpseRequestContexts"/>.
     /// This will be done when this handle is explicitly disposed or when the finalizer of this handle is run by the Garbage Collector.
     /// </summary>
     public class GlimpseRequestContextHandle : IDisposable
@@ -41,7 +41,7 @@ namespace Glimpse.Core.Framework
         public RequestHandlingMode RequestHandlingMode { get; private set; }
 
         /// <summary>
-        /// Disposes the handle, which will make sure the corresponding <see cref="GlimpseRequestContext"/> is removed from the <see cref="ActiveGlimpseRequestContexts"/>
+        /// Disposes the handle, which will make sure the corresponding <see cref="IGlimpseRequestContext"/> is removed from the <see cref="ActiveGlimpseRequestContexts"/>
         /// </summary>
         public void Dispose()
         {
@@ -50,7 +50,7 @@ namespace Glimpse.Core.Framework
         }
 
         /// <summary>
-        /// Disposes the handle, which will make sure the corresponding <see cref="GlimpseRequestContext"/> is removed from the <see cref="ActiveGlimpseRequestContexts"/>
+        /// Disposes the handle, which will make sure the corresponding <see cref="IGlimpseRequestContext"/> is removed from the <see cref="ActiveGlimpseRequestContexts"/>
         /// </summary>
         /// <param name="disposing">Boolean indicating whether this method is called from the public <see cref="Dispose()"/> method or from within the finalizer</param>
         protected virtual void Dispose(bool disposing)
@@ -69,8 +69,6 @@ namespace Glimpse.Core.Framework
                 catch (Exception disposeException)
                 {
                     GlimpseRuntime.Instance.Configuration.Logger.Error("Failed to dispose Glimpse request context handle", disposeException);
-#warning CGI : should we throw here? Of just log?
-                    throw;
                 }
             }
         }

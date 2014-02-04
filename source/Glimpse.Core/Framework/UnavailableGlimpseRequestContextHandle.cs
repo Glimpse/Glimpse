@@ -4,15 +4,19 @@ using Glimpse.Core.Extensibility;
 namespace Glimpse.Core.Framework
 {
     /// <summary>
-    /// This handle will make sure the corresponding <see cref="GlimpseRequestContext" /> will be removed from the <see cref="ActiveGlimpseRequestContexts"/>.
-    /// This will be done when this handle is explicitly disposed or when the finalizer of this handle is run by the Garbage Collector.
+    /// Represents a handle in case there is no <see cref="IGlimpseRequestContext"/> available.
     /// </summary>
     public sealed class UnavailableGlimpseRequestContextHandle : GlimpseRequestContextHandle
     {
         /// <summary>
-        /// Represents a <see cref="GlimpseRequestContextHandle"/> in case Glimpse is disabled.
+        /// Represents a <see cref="GlimpseRequestContextHandle"/> in case there is no <see cref="IGlimpseRequestContext"/> available.
         /// </summary>
-        public static readonly UnavailableGlimpseRequestContextHandle Instance = new UnavailableGlimpseRequestContextHandle();
+        public static UnavailableGlimpseRequestContextHandle Instance { get; private set; }
+
+        static UnavailableGlimpseRequestContextHandle()
+        {
+            Instance = new UnavailableGlimpseRequestContextHandle();
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UnavailableGlimpseRequestContextHandle"/>
@@ -23,7 +27,7 @@ namespace Glimpse.Core.Framework
         }
 
         /// <summary>
-        /// Disposes the handle, which in effect will do nothing as this handles does not track a <see cref="GlimpseRequestContext"/>.
+        /// Disposes the handle, which in effect will do nothing as this handle is only used in case there is no <see cref="IGlimpseRequestContext"/> available
         /// </summary>
         protected override void Dispose(bool disposing)
         {

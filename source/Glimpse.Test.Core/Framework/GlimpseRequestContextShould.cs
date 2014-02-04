@@ -15,7 +15,7 @@ namespace Glimpse.Test.Core.Framework
             var requestResponseAdapter = RequestResponseAdapterTester.Create("/").RequestResponseAdapterMock.Object;
 
             var glimpseRequestContext = new GlimpseRequestContext(Guid.NewGuid(), requestResponseAdapter, expectedRuntimePolicy, "/glimpse.axd");
-            Assert.Equal(expectedRuntimePolicy, glimpseRequestContext.ActiveRuntimePolicy);
+            Assert.Equal(expectedRuntimePolicy, glimpseRequestContext.CurrentRuntimePolicy);
         }
 
         [Fact]

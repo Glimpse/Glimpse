@@ -1,6 +1,4 @@
-﻿using Glimpse.Core.Extensibility;
-
-namespace Glimpse.Core
+﻿namespace Glimpse.Core
 {
     /// <summary>
     /// Common constant strings used throughout Glimpse.
@@ -51,14 +49,6 @@ namespace Glimpse.Core
         /// In the past <see cref="HttpResponseHeader"/> has used an "X-" prefix to denote a custom header, but that practice has been deprecated as of <see href="http://tools.ietf.org/html/rfc6648">RFC 6648</see>.
         /// </remarks>
         internal const string HttpResponseHeader = "Glimpse-RequestID";
-
-        /// <summary>
-        /// The key Glimpse server uses to store a <see cref="RuntimePolicy"/> for tracking Glimpse permissions.
-        /// </summary>
-        /// <remarks>
-        /// Used as the key for the framework provider's local request storage mechanism (i.e. <c>HttpContext.Items</c>).
-        /// </remarks>
-        internal const string RuntimePolicyKey = "__GlimpseRequestRuntimePermissions";
 
         /// <summary>
         /// The key Glimpse server uses to store an <c>IDictionary&lt;string, TabResult&gt;</c> which stores the result of calling <c>GetData()</c> on each <see cref="Glimpse.Core.Extensibility.ITab"/> implementation.

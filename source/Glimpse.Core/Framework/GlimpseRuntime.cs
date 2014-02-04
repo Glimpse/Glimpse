@@ -8,7 +8,6 @@ using Glimpse.Core.Extensions;
 using Glimpse.Core.Message;
 using Glimpse.Core.ResourceResult;
 using Glimpse.Core.Tab.Assist;
-
 #if NET35
 using Glimpse.Core.Backport;
 #endif
@@ -143,36 +142,36 @@ namespace Glimpse.Core.Framework
         public static bool IsInitialized { get; private set; }
 
         /// <summary>
-        /// Returns the <see cref="GlimpseRequestContext"/> corresponding to the current request.
+        /// Returns the <see cref="IGlimpseRequestContext"/> corresponding to the current request.
         /// </summary>
-        public GlimpseRequestContext CurrentRequestContext
+        public IGlimpseRequestContext CurrentRequestContext
         {
             get { return ActiveGlimpseRequestContexts.Current; }
         }
 
         /// <summary>
-        /// Returns the corresponding <see cref="GlimpseRequestContext"/> for the given <paramref name="glimpseRequestId"/>
+        /// Returns the corresponding <see cref="IGlimpseRequestContext"/> for the given <paramref name="glimpseRequestId"/>
         /// </summary>
         /// <param name="glimpseRequestId">The Glimpse request Id</param>
-        /// <param name="glimpseRequestContext">The corresponding <see cref="GlimpseRequestContext"/></param>
-        /// <returns>Boolean indicating whether the corresponding <see cref="GlimpseRequestContext"/> was found.</returns>
-        public bool TryGetRequestContext(Guid glimpseRequestId, out GlimpseRequestContext glimpseRequestContext)
+        /// <param name="glimpseRequestContext">The corresponding <see cref="IGlimpseRequestContext"/></param>
+        /// <returns>Boolean indicating whether the corresponding <see cref="IGlimpseRequestContext"/> was found.</returns>
+        public bool TryGetRequestContext(Guid glimpseRequestId, out IGlimpseRequestContext glimpseRequestContext)
         {
             return ActiveGlimpseRequestContexts.TryGet(glimpseRequestId, out glimpseRequestContext);
         }
 
-        private IDictionary<string, TabResult> GetTabResultsStore(GlimpseRequestContext glimpseRequestContext)
+        private IDictionary<string, TabResult> GetTabResultsStore(IGlimpseRequestContext glimpseRequestContext)
         {
             return GetResultsStore<Dictionary<string, TabResult>>(glimpseRequestContext, Constants.TabResultsDataStoreKey);
         }
 
-        private IDictionary<string, TabResult> GetDisplayResultsStore(GlimpseRequestContext glimpseRequestContext)
+        private IDictionary<string, TabResult> GetDisplayResultsStore(IGlimpseRequestContext glimpseRequestContext)
         {
             return GetResultsStore<Dictionary<string, TabResult>>(glimpseRequestContext, Constants.DisplayResultsDataStoreKey);
         }
 
-        private TResult GetResultsStore<TResult>(GlimpseRequestContext glimpseRequestContext, string resultStoreKey)
-            where TResult: class, new()
+        private TResult GetResultsStore<TResult>(IGlimpseRequestContext glimpseRequestContext, string resultStoreKey)
+            where TResult : class, new()
         {
             var requestStore = glimpseRequestContext.RequestStore;
             var resultStore = requestStore.Get<TResult>(resultStoreKey);
@@ -192,15 +191,15 @@ namespace Glimpse.Core.Framework
         /// <exception cref="Glimpse.Core.Framework.GlimpseException">Throws an exception if <see cref="GlimpseRuntime"/> is not yet initialized.</exception>
         public GlimpseRequestContextHandle BeginRequest(IRequestResponseAdapter requestResponseAdapter)
         {
-            var glimpseRequestContext = new GlimpseRequestContext(Guid.NewGuid(), requestResponseAdapter, Configuration.DefaultRuntimePolicy);
+            var glimpseRequestContext = new GlimpseRequestContext(Guid.NewGuid(), requestResponseAdapter, Configuration.DefaultRuntimePolicy, Configuration.EndpointBaseUri);
 
-            var runtimePolicy = DetermineRuntimePolicy(RuntimeEvent.BeginRequest, glimpseRequestContext.ActiveRuntimePolicy, glimpseRequestContext.RequestResponseAdapter);
+            var runtimePolicy = DetermineRuntimePolicy(RuntimeEvent.BeginRequest, glimpseRequestContext.CurrentRuntimePolicy, glimpseRequestContext.RequestResponseAdapter);
             if (runtimePolicy == RuntimePolicy.Off)
             {
                 return UnavailableGlimpseRequestContextHandle.Instance;
             }
 
-            glimpseRequestContext.ActiveRuntimePolicy = runtimePolicy;
+            glimpseRequestContext.CurrentRuntimePolicy = runtimePolicy;
             var glimpseRequestContextHandle = ActiveGlimpseRequestContexts.Add(glimpseRequestContext);
 
             if (glimpseRequestContextHandle.RequestHandlingMode == RequestHandlingMode.ResourceRequest)
@@ -242,7 +241,7 @@ namespace Glimpse.Core.Framework
 
             try
             {
-                GlimpseRequestContext glimpseRequestContext;
+                IGlimpseRequestContext glimpseRequestContext;
                 if (!ContinueProcessingRequest(glimpseRequestContextHandle, RuntimeEvent.EndRequest, RequestHandlingMode.RegularRequest, out glimpseRequestContext))
                 {
                     return;
@@ -273,17 +272,17 @@ namespace Glimpse.Core.Framework
                 }
 
                 var requestMetadata = requestResponseAdapter.RequestMetadata;
-                var runtimePolicy = glimpseRequestContext.ActiveRuntimePolicy;
+                var runtimePolicy = glimpseRequestContext.CurrentRuntimePolicy;
 
                 if (runtimePolicy.HasFlag(RuntimePolicy.PersistResults))
                 {
                     var persistenceStore = Configuration.PersistenceStore;
 
                     var metadata = new GlimpseRequest(
-                        glimpseRequestContext.GlimpseRequestId, 
+                        glimpseRequestContext.GlimpseRequestId,
                         requestMetadata,
                         GetTabResultsStore(glimpseRequestContext),
-                        GetDisplayResultsStore(glimpseRequestContext), 
+                        GetDisplayResultsStore(glimpseRequestContext),
                         stopwatch.Elapsed);
 
                     try
@@ -324,7 +323,7 @@ namespace Glimpse.Core.Framework
         /// </summary>
         public void BeginSessionAccess(GlimpseRequestContextHandle glimpseRequestContextHandle)
         {
-            GlimpseRequestContext glimpseRequestContext;
+            IGlimpseRequestContext glimpseRequestContext;
             if (ContinueProcessingRequest(glimpseRequestContextHandle, RuntimeEvent.BeginSessionAccess, RequestHandlingMode.RegularRequest, out glimpseRequestContext))
             {
 #warning should we add a try catch around this? So that failures in Glimpse don't fail the normal flow?
@@ -337,7 +336,7 @@ namespace Glimpse.Core.Framework
         /// </summary>
         public void EndSessionAccess(GlimpseRequestContextHandle glimpseRequestContextHandle)
         {
-            GlimpseRequestContext glimpseRequestContext;
+            IGlimpseRequestContext glimpseRequestContext;
             if (ContinueProcessingRequest(glimpseRequestContextHandle, RuntimeEvent.EndSessionAccess, RequestHandlingMode.RegularRequest, out glimpseRequestContext))
             {
 #warning should we add a try catch around this? So that failures in Glimpse don't fail the normal flow?
@@ -378,7 +377,7 @@ namespace Glimpse.Core.Framework
                 throw new ArgumentNullException("parameters");
             }
 
-            GlimpseRequestContext glimpseRequestContext;
+            IGlimpseRequestContext glimpseRequestContext;
             if (!ContinueProcessingRequest(glimpseRequestContextHandle, RuntimeEvent.ExecuteResource, RequestHandlingMode.ResourceRequest, out glimpseRequestContext))
             {
                 return;
@@ -387,7 +386,7 @@ namespace Glimpse.Core.Framework
             var requestResponseAdapter = glimpseRequestContext.RequestResponseAdapter;
 
             // First we get the current policy as it has been processed so far
-            RuntimePolicy policy = glimpseRequestContext.ActiveRuntimePolicy;
+            RuntimePolicy policy = glimpseRequestContext.CurrentRuntimePolicy;
 
             // It is possible that the policy now says Off, but if the requested resource is the default resource or one of it dependent resources, 
             // then we need to make sure there is a good reason for not executing that resource, since the default resource (or one of it dependencies)
@@ -467,7 +466,7 @@ namespace Glimpse.Core.Framework
             }
         }
 
-        private bool ContinueProcessingRequest(GlimpseRequestContextHandle glimpseRequestContextHandle, RuntimeEvent runtimeEvent, RequestHandlingMode allowedRequestHandlingMode, out GlimpseRequestContext glimpseRequestContext)
+        private bool ContinueProcessingRequest(GlimpseRequestContextHandle glimpseRequestContextHandle, RuntimeEvent runtimeEvent, RequestHandlingMode allowedRequestHandlingMode, out IGlimpseRequestContext glimpseRequestContext)
         {
             glimpseRequestContext = null;
 
@@ -487,10 +486,10 @@ namespace Glimpse.Core.Framework
                 throw new GlimpseException("No corresponding GlimpseRequestContext found for GlimpseRequestId '" + glimpseRequestContextHandle.GlimpseRequestId + "'.");
             }
 
-            glimpseRequestContext.ActiveRuntimePolicy =
-                DetermineRuntimePolicy(runtimeEvent, glimpseRequestContext.ActiveRuntimePolicy, glimpseRequestContext.RequestResponseAdapter);
+            glimpseRequestContext.CurrentRuntimePolicy =
+                DetermineRuntimePolicy(runtimeEvent, glimpseRequestContext.CurrentRuntimePolicy, glimpseRequestContext.RequestResponseAdapter);
 
-            return glimpseRequestContext.ActiveRuntimePolicy != RuntimePolicy.Off;
+            return glimpseRequestContext.CurrentRuntimePolicy != RuntimePolicy.Off;
         }
 
         /// <summary>
@@ -588,26 +587,40 @@ namespace Glimpse.Core.Framework
                 .ToLower();
         }
 
-        private IDataStore GetTabStore(string tabName, GlimpseRequestContext glimpseRequestContext)
+        private static IDataStore GetTabStore(string tabName, IGlimpseRequestContext glimpseRequestContext)
         {
-            var requestStore = glimpseRequestContext.RequestStore;
+            if (glimpseRequestContext.CurrentRuntimePolicy == RuntimePolicy.Off)
+            {
+                return null;
+            }
 
+            var requestStore = glimpseRequestContext.RequestStore;
+            IDictionary<string, IDataStore> tabStorage;
             if (!requestStore.Contains(Constants.TabStorageKey))
             {
-                requestStore.Set(Constants.TabStorageKey, new Dictionary<string, IDataStore>());
+                tabStorage = new Dictionary<string, IDataStore>();
+                requestStore.Set(Constants.TabStorageKey, tabStorage);
+            }
+            else
+            {
+                tabStorage = requestStore.Get<IDictionary<string, IDataStore>>(Constants.TabStorageKey);
             }
 
-            var tabStorage = requestStore.Get<IDictionary<string, IDataStore>>(Constants.TabStorageKey);
-
+            IDataStore tabStore;
             if (!tabStorage.ContainsKey(tabName))
             {
-                tabStorage.Add(tabName, new DictionaryDataStoreAdapter(new Dictionary<string, object>()));
+                tabStore = new DictionaryDataStoreAdapter(new Dictionary<string, object>());
+                tabStorage.Add(tabName, tabStore);
+            }
+            else
+            {
+                tabStore = tabStorage[tabName];
             }
 
-            return tabStorage[tabName];
+            return tabStore;
         }
 
-        private void ExecuteTabs(RuntimeEvent runtimeEvent, GlimpseRequestContext glimpseRequestContext)
+        private void ExecuteTabs(RuntimeEvent runtimeEvent, IGlimpseRequestContext glimpseRequestContext)
         {
             var runtimeContext = glimpseRequestContext.RequestResponseAdapter.RuntimeContext;
             var frameworkProviderRuntimeContextType = runtimeContext.GetType();
@@ -659,7 +672,7 @@ namespace Glimpse.Core.Framework
             }
         }
 
-        private void ExecuteDisplays(GlimpseRequestContext glimpseRequestContext)
+        private void ExecuteDisplays(IGlimpseRequestContext glimpseRequestContext)
         {
             var runtimeContext = glimpseRequestContext.RequestResponseAdapter.RuntimeContext;
             var messageBroker = Configuration.MessageBroker;
@@ -802,7 +815,12 @@ namespace Glimpse.Core.Framework
                 throw new ArgumentNullException("glimpseRequestContextHandle");
             }
 
-            GlimpseRequestContext glimpseRequestContext;
+            if (glimpseRequestContextHandle.RequestHandlingMode != RequestHandlingMode.RegularRequest)
+            {
+                return string.Empty;
+            }
+
+            IGlimpseRequestContext glimpseRequestContext;
             if (!TryGetRequestContext(glimpseRequestContextHandle.GlimpseRequestId, out glimpseRequestContext))
             {
                 throw new GlimpseException("No corresponding GlimpseRequestContext found for GlimpseRequestId '" + glimpseRequestContextHandle.GlimpseRequestId + "'.");
@@ -812,9 +830,13 @@ namespace Glimpse.Core.Framework
         }
 
 #warning this should not be public! but we need to have some way to get to generate script tags conditionally so that they are only generated once (like glimpse injects it before </body> and at the same time a user has added the GlimpseClient control)
-        public string GenerateScriptTags(GlimpseRequestContext glimpseRequestContext)
+        public string GenerateScriptTags(IGlimpseRequestContext glimpseRequestContext)
         {
-#warning why do we need this check? In what case is this call made multiple times?
+            if (glimpseRequestContext.CurrentRuntimePolicy == RuntimePolicy.Off)
+            {
+                return string.Empty;
+            }
+
             var requestStore = glimpseRequestContext.RequestStore;
             var hasRendered = false;
 

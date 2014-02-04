@@ -122,7 +122,7 @@ namespace Glimpse.AspNet
         {
             ProcessAspNetRuntimeEvent(httpContext, glimpseRequestContextHandle =>
             {
-                GlimpseRequestContext glimpseRequestContext;
+                IGlimpseRequestContext glimpseRequestContext;
                 if (GlimpseRuntime.Instance.TryGetRequestContext(glimpseRequestContextHandle.GlimpseRequestId, out glimpseRequestContext))
                 {
                     ((IAspNetRequestResponseAdapter)glimpseRequestContext.RequestResponseAdapter).PreventSettingHttpResponseHeaders();

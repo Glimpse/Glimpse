@@ -347,7 +347,10 @@ namespace Glimpse.Core.Framework
                     return messageBroker;
                 }
 
-                messageBroker = new MessageBroker(Logger);
+                messageBroker = new MessageBroker(
+                    () => GlimpseRuntime.IsInitialized && GlimpseRuntime.Instance.CurrentRequestContext.CurrentRuntimePolicy != RuntimePolicy.Off,
+                    Logger);
+
                 return messageBroker;
             }
 
@@ -584,7 +587,7 @@ namespace Glimpse.Core.Framework
                     return runtimePolicyStrategy;
                 }
 
-                return () => GlimpseRuntime.IsInitialized ? GlimpseRuntime.Instance.CurrentRequestContext.ActiveRuntimePolicy : RuntimePolicy.Off;
+                return () => GlimpseRuntime.IsInitialized ? GlimpseRuntime.Instance.CurrentRequestContext.CurrentRuntimePolicy : RuntimePolicy.Off;
             }
 
             set

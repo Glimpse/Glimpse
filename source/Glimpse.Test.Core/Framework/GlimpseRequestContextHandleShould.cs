@@ -101,14 +101,14 @@ namespace Glimpse.Test.Core.Framework
 
         private static void AssertExistenceOfGlimpseRequestContext(GlimpseRequestContext expectedGlimpseRequestContext)
         {
-            GlimpseRequestContext actualGlimpseRequestContext;
+            IGlimpseRequestContext actualGlimpseRequestContext;
             Assert.True(ActiveGlimpseRequestContexts.TryGet(expectedGlimpseRequestContext.GlimpseRequestId, out actualGlimpseRequestContext));
             Assert.Equal(expectedGlimpseRequestContext, actualGlimpseRequestContext);
         }
 
         private static void AssertNonExistenceOfGlimpseRequestContext(GlimpseRequestContext expectedGlimpseRequestContext)
         {
-            GlimpseRequestContext actualGlimpseRequestContext;
+            IGlimpseRequestContext actualGlimpseRequestContext;
             Assert.False(ActiveGlimpseRequestContexts.TryGet(expectedGlimpseRequestContext.GlimpseRequestId, out actualGlimpseRequestContext));
         }
     }
