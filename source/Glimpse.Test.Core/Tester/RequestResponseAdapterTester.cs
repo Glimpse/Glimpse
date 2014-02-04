@@ -1,3 +1,4 @@
+using System;
 using Glimpse.Core.Framework;
 using Glimpse.Core.Policy;
 using Moq;
@@ -8,18 +9,18 @@ namespace Glimpse.Test.Core.Tester
     {
         public Mock<IRequestResponseAdapter> RequestResponseAdapterMock { get; set; }
 
-        private RequestResponseAdapterTester(string requestAbsolutePath)
+        private RequestResponseAdapterTester(Uri requestUri)
         {
             var requestMetadata = new Mock<IRequestMetadata>();
-            requestMetadata.Setup(metadata => metadata.AbsolutePath).Returns(requestAbsolutePath);
+            requestMetadata.Setup(metadata => metadata.RequestUri).Returns(requestUri);
 
             RequestResponseAdapterMock = new Mock<IRequestResponseAdapter>();
             RequestResponseAdapterMock.Setup(adapter => adapter.RequestMetadata).Returns(requestMetadata.Object);
         }
 
-        public static RequestResponseAdapterTester Create(string requestAbsolutePath)
+        public static RequestResponseAdapterTester Create(Uri requestUri)
         {
-            return new RequestResponseAdapterTester(requestAbsolutePath);
+            return new RequestResponseAdapterTester(requestUri);
         }
     }
 }

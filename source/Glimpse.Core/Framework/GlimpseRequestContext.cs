@@ -31,8 +31,8 @@ namespace Glimpse.Core.Framework
 
             GlimpseRequestId = glimpseRequestId;
             RequestResponseAdapter = requestResponseAdapter;
-            RequestHandlingMode = RequestResponseAdapter.RequestMetadata.AbsolutePath.StartsWith(endpointBaseUri, StringComparison.InvariantCultureIgnoreCase)
-                                    || ("~" + RequestResponseAdapter.RequestMetadata.AbsolutePath).StartsWith(endpointBaseUri, StringComparison.InvariantCultureIgnoreCase)
+            RequestHandlingMode = RequestResponseAdapter.RequestMetadata.RequestUri.AbsolutePath.StartsWith(endpointBaseUri, StringComparison.InvariantCultureIgnoreCase)
+                                    || ("~" + RequestResponseAdapter.RequestMetadata.RequestUri.AbsolutePath).StartsWith(endpointBaseUri, StringComparison.InvariantCultureIgnoreCase)
                                     ? RequestHandlingMode.ResourceRequest
                                     : RequestHandlingMode.RegularRequest;
 

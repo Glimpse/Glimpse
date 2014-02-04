@@ -15,14 +15,9 @@ namespace Glimpse.Owin.Middleware
             this.response = response;
         }
 
-        public string RequestUri
+        public Uri RequestUri
         {
-            get { return request.Uri.AbsoluteUri; }
-        }
-
-        public string AbsolutePath
-        {
-            get { return request.Uri.AbsolutePath; }
+            get { return request.Uri; }
         }
 
         public string RequestHttpMethod

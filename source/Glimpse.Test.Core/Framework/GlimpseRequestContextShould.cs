@@ -12,7 +12,7 @@ namespace Glimpse.Test.Core.Framework
         public void ReturnTheActiveRuntimePolicy()
         {
             const RuntimePolicy expectedRuntimePolicy = RuntimePolicy.DisplayGlimpseClient;
-            var requestResponseAdapter = RequestResponseAdapterTester.Create("/").RequestResponseAdapterMock.Object;
+            var requestResponseAdapter = RequestResponseAdapterTester.Create(new Uri("http://localhost/")).RequestResponseAdapterMock.Object;
 
             var glimpseRequestContext = new GlimpseRequestContext(Guid.NewGuid(), requestResponseAdapter, expectedRuntimePolicy, "/glimpse.axd");
             Assert.Equal(expectedRuntimePolicy, glimpseRequestContext.CurrentRuntimePolicy);
@@ -23,7 +23,7 @@ namespace Glimpse.Test.Core.Framework
         {
             var glimpseRequestContext = new GlimpseRequestContext(
                     Guid.NewGuid(),
-                    RequestResponseAdapterTester.Create("/test").RequestResponseAdapterMock.Object,
+                    RequestResponseAdapterTester.Create(new Uri("http://localhost/test")).RequestResponseAdapterMock.Object,
                     RuntimePolicy.On,
                     "/glimpse.axd");
 
@@ -31,7 +31,7 @@ namespace Glimpse.Test.Core.Framework
 
             glimpseRequestContext = new GlimpseRequestContext(
                     Guid.NewGuid(),
-                    RequestResponseAdapterTester.Create("/glimpse.axd?n=something").RequestResponseAdapterMock.Object,
+                    RequestResponseAdapterTester.Create(new Uri("http://localhost/glimpse.axd?n=something")).RequestResponseAdapterMock.Object,
                     RuntimePolicy.On,
                     "/glimpse.axd");
 

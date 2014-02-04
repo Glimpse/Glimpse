@@ -58,7 +58,7 @@ namespace Glimpse.Test.Core.Policy
         [Fact]
         public void ReduceRuntimePolicyWithMatchingExpression()
         {
-            Policy.RequestMetadataMock.Setup(r => r.RequestUri).Returns("http://localhost/admin");
+            Policy.RequestMetadataMock.Setup(r => r.RequestUri).Returns(new Uri("http://localhost/admin"));
 
             Policy.UriBlackList.Add(new Regex(".+/admin"));
 
