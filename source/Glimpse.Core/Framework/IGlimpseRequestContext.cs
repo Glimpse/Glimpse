@@ -32,5 +32,21 @@ namespace Glimpse.Core.Framework
         /// Gets the <see cref="RequestHandlingMode"/> for the referenced request
         /// </summary>
         RequestHandlingMode RequestHandlingMode { get; }
+
+        /// <summary>
+        /// Starts timing the execution of the referenced request
+        /// </summary>
+        void StartTiming();
+
+        /// <summary>
+        /// Gets the <see cref="IExecutionTimer"/> for the referenced request
+        /// </summary>
+        IExecutionTimer CurrentExecutionTimer { get; }
+
+        /// <summary>
+        /// Stops timing the execution of the referenced request
+        /// </summary>
+        /// <returns>The elapsed time since the start of the timing</returns>
+        TimeSpan StopTiming();
     }
 }

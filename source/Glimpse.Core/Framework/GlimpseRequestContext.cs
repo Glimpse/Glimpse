@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Framework
@@ -10,6 +11,9 @@ namespace Glimpse.Core.Framework
     internal sealed class GlimpseRequestContext : IGlimpseRequestContext
     {
         private RuntimePolicy currentRuntimePolicy;
+        private IExecutionTimer activeExecutionTimer;
+
+        private Stopwatch GlobalStopwatch { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GlimpseRequestContext" />
@@ -77,5 +81,54 @@ namespace Glimpse.Core.Framework
         /// Gets the <see cref="RequestHandlingMode"/> for the referenced request
         /// </summary>
         public RequestHandlingMode RequestHandlingMode { get; private set; }
+
+        /// <summary>
+        /// Gets the <see cref="IExecutionTimer"/> for the referenced request
+        /// </summary>
+        public IExecutionTimer CurrentExecutionTimer
+        {
+            get
+            {
+                if (activeExecutionTimer == null)
+                {
+                    if (RequestHandlingMode == RequestHandlingMode.ResourceRequest)
+                    {
+                        activeExecutionTimer = new ExecutionTimer(Stopwatch.StartNew());
+                    }
+                    else
+                    {
+                        throw new GlimpseException("Execution timer is not available, did you start timing?");
+                    }
+                }
+
+                return activeExecutionTimer;
+            }
+
+            private set { activeExecutionTimer = value; }
+        }
+
+        /// <summary>
+        /// Starts timing the execution of the referenced request
+        /// </summary>
+        public void StartTiming()
+        {
+            if (GlobalStopwatch != null)
+            {
+                throw new GlimpseException("Timing already started");
+            }
+
+            GlobalStopwatch = Stopwatch.StartNew();
+            CurrentExecutionTimer = new ExecutionTimer(GlobalStopwatch);
+        }
+
+        /// <summary>
+        /// Stops timing the execution of the referenced request
+        /// </summary>
+        /// <returns>The elapsed time since the start of the timing</returns>
+        public TimeSpan StopTiming()
+        {
+            GlobalStopwatch.Stop();
+            return GlobalStopwatch.Elapsed;
+        }
     }
 }

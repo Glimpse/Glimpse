@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions;
 using Glimpse.Core.Resource;
 using NLog;
 using NLog.Config;
@@ -23,7 +21,6 @@ namespace Glimpse.Core.Framework
     public class GlimpseConfiguration : IGlimpseConfiguration
     {
         private IMessageBroker messageBroker;
-        private Func<IExecutionTimer> timerStrategy;
         private ILogger logger;
         private ICollection<IClientScript> clientScripts;
         private IResource defaultResource;
@@ -38,7 +35,6 @@ namespace Glimpse.Core.Framework
         private ISerializer serializer;
         private ICollection<ITab> tabs;
         private ICollection<IDisplay> displays;
-        private Func<RuntimePolicy> runtimePolicyStrategy;
         private string hash;
         private IServiceLocator userServiceLocator;
         private Section xmlConfiguration;
@@ -449,7 +445,12 @@ namespace Glimpse.Core.Framework
                     return proxyFactory;
                 }
 
-                proxyFactory = new CastleDynamicProxyFactory(Logger, MessageBroker, TimerStrategy, RuntimePolicyStrategy);
+                proxyFactory = new CastleDynamicProxyFactory(
+                    Logger, 
+                    MessageBroker, 
+                    () => ActiveGlimpseRequestContexts.Current.CurrentExecutionTimer,
+                    () => ActiveGlimpseRequestContexts.Current.CurrentRuntimePolicy);
+
                 return proxyFactory;
             }
 
@@ -567,37 +568,6 @@ namespace Glimpse.Core.Framework
                 }
 
                 runtimePolicies = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the <see cref="RuntimePolicy"/> strategy.
-        /// </summary>
-        /// <value>
-        /// The configured <see cref="RuntimePolicy"/>.
-        /// </value>
-        /// <returns>A <c>Func&lt;RuntimePolicy&gt;</c> to access the request specific <see cref="RuntimePolicy"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public Func<RuntimePolicy> RuntimePolicyStrategy
-        {
-            get
-            {
-                if (runtimePolicyStrategy != null)
-                {
-                    return runtimePolicyStrategy;
-                }
-
-                return () => GlimpseRuntime.IsInitialized ? GlimpseRuntime.Instance.CurrentRequestContext.CurrentRuntimePolicy : RuntimePolicy.Off;
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                runtimePolicyStrategy = value;
             }
         }
 
@@ -736,50 +706,6 @@ namespace Glimpse.Core.Framework
                 }
 
                 displays = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the <see cref="IExecutionTimer"/> strategy.
-        /// </summary>
-        /// <value>
-        /// The configured <see cref="IExecutionTimer"/> strategy.
-        /// </value>
-        /// <returns>A <c>Func&lt;IExecutionTimer&gt;</c> to access the request specific <see cref="IExecutionTimer"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public Func<IExecutionTimer> TimerStrategy 
-        { 
-            get
-            {
-                if (timerStrategy != null)
-                {
-                    return timerStrategy;
-                }
-
-                return () =>
-                {
-                    if(GlimpseRuntime.IsInitialized)
-                    {
-                        var httpRequestStore = GlimpseRuntime.Instance.CurrentRequestContext.RequestStore;
-                        if(httpRequestStore.Contains(Constants.GlobalTimerKey))
-                        {
-                            return httpRequestStore.Get<IExecutionTimer>(Constants.GlobalTimerKey);
-                        }
-                    }
-
-#warning Check whether this is the correct implementation, should we maybe have an ExecutionTimer.None that does nothing?
-                    return new ExecutionTimer(Stopwatch.StartNew());
-                };
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                timerStrategy = value;
             }
         }
 

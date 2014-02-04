@@ -17,25 +17,22 @@ namespace Glimpse.Core
         [ThreadStatic]
         private static Stopwatch fromLastWatch;
         private IMessageBroker messageBroker;
+        private Func<IExecutionTimer> timerStrategy;
 
         // ReSharper disable UnusedMember.Global 
         /// <summary>
         /// These constructors used by .NET when TraceListener is set via web.config
         /// </summary>
-        public TraceListener() 
+        public TraceListener()
         {
-            MessageBroker = GlimpseRuntime.Instance.Configuration.MessageBroker;
-            TimerStrategy = GlimpseRuntime.Instance.Configuration.TimerStrategy;
-        } 
+        }
 
         /// <summary>
-        /// This constructor is needed for users who configure web.config with <add name="myListener" type="Glimpse.AspNet.TraceListener" initializeData="XYZ"/>
+        /// This constructor is needed for users who configure web.config with <add name="myListener" type="Glimpse.AspNet.TraceListener" initializeData="something"/>
         /// </summary>
         /// <param name="initializeData">Initialize data string</param>
-        public TraceListener(string initializeData) 
+        public TraceListener(string initializeData)
         {
-            MessageBroker = GlimpseRuntime.Instance.Configuration.MessageBroker;
-            TimerStrategy = GlimpseRuntime.Instance.Configuration.TimerStrategy;
         }
         //// ReSharper restore UnusedMember.Global
 
@@ -47,38 +44,71 @@ namespace Glimpse.Core
         public TraceListener(IMessageBroker messageBroker, Func<IExecutionTimer> timerStrategy)
         {
             MessageBroker = messageBroker;
-            TimerStrategy = () =>
-            {
-                try
-                {
-                    return timerStrategy();
-                }
-                catch
-                {
-                    // Avoid exception being thrown from threads without access to request store
-                    return null;
-                }
-            };
+            TimerStrategy = timerStrategy;
         }
 
-        internal IMessageBroker MessageBroker 
+#warning CGI: this is kinda dirty to have internal access purely for testing purposes
+        internal IMessageBroker MessageBroker
         {
-            get { return messageBroker ?? (messageBroker = GlimpseRuntime.Instance.Configuration.MessageBroker); }
-            set { messageBroker = value; }
+            get
+            {
+                return messageBroker ?? (messageBroker = GlimpseRuntime.IsInitialized ? GlimpseRuntime.Instance.Configuration.MessageBroker : null);
+            }
+
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException("value");
+                }
+
+                messageBroker = value;
+            }
         }
 
-        internal Func<IExecutionTimer> TimerStrategy { get; set; }
+        private Func<IExecutionTimer> TimerStrategy
+        {
+            get
+            {
+                if (timerStrategy == null)
+                {
+                    if (GlimpseRuntime.IsInitialized)
+                    {
+                        timerStrategy = () =>
+                        {
+                            var currentRequestContext = GlimpseRuntime.Instance.CurrentRequestContext;
+
+                            return currentRequestContext.CurrentRuntimePolicy != RuntimePolicy.Off
+                                ? GlimpseRuntime.Instance.CurrentRequestContext.CurrentExecutionTimer
+                                : null;
+                        };
+                    }
+                }
+
+                return timerStrategy;
+            }
+
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException("value");
+                }
+
+                timerStrategy = value;
+            }
+        }
 
         /// <summary>
         /// Writes the value of the object's <see cref="M:System.Object.ToString" /> method to the listener you create when you implement the <see cref="T:System.Diagnostics.TraceListener" /> class.
         /// </summary>
         /// <param name="o">An <see cref="T:System.Object" /> whose fully qualified class name you want to write.</param>
         public override void Write(object o)
-        { 
+        {
             if (o == null)
             {
                 return;
-            } 
+            }
 
             Write(o.ToString());
         }
@@ -115,10 +145,10 @@ namespace Glimpse.Core
         /// <param name="message">A message to write.</param>
         /// <param name="category">A category name used to organize the output.</param>
         public override void Write(string message, string category)
-        { 
+        {
             if (category == null)
             {
-                Write(message); 
+                Write(message);
             }
             else
             {
@@ -131,7 +161,7 @@ namespace Glimpse.Core
         /// </summary>
         /// <param name="o">An <see cref="T:System.Object" /> whose fully qualified class name you want to write.</param>
         public override void WriteLine(object o)
-        { 
+        {
             WriteLine(o == null ? string.Empty : o.ToString());
         }
 
@@ -150,7 +180,7 @@ namespace Glimpse.Core
         /// <param name="o">An <see cref="T:System.Object" /> whose fully qualified class name you want to write.</param>
         /// <param name="category">A category name used to organize the output.</param>
         public override void WriteLine(object o, string category)
-        { 
+        {
             WriteLine(o == null ? string.Empty : o.ToString(), category);
         }
 
@@ -186,7 +216,7 @@ namespace Glimpse.Core
         /// <param name="detailMessage">A detailed message to emit.</param>
         public override void Fail(string message, string detailMessage)
         {
-            var failMessage = new StringBuilder(); 
+            var failMessage = new StringBuilder();
             failMessage.Append(message);
             if (!string.IsNullOrEmpty(detailMessage))
             {
@@ -209,12 +239,12 @@ namespace Glimpse.Core
         {
             var message = new StringBuilder();
             message.Append(WriteHeader(source, id));
-                
+
             if (data != null)
             {
                 message.AppendLine(data.ToString());
             }
-             
+
             message.Append(WriteFooter(eventCache));
 
             InternalWrite(message.ToString(), DeriveCategory(eventType));
@@ -266,7 +296,7 @@ namespace Glimpse.Core
         /// <param name="data">The data.</param>
         public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string data)
         {
-            var message = new StringBuilder(); 
+            var message = new StringBuilder();
             message.Append(WriteHeader(source, id));
             message.AppendLine(data);
             message.Append(WriteFooter(eventCache));
@@ -292,7 +322,7 @@ namespace Glimpse.Core
 
             InternalWrite(message.ToString(), DeriveCategory(eventType));
         }
-         
+
         private TimeSpan CalculateFromLast(IExecutionTimer timer)
         {
             if (fromLastWatch == null)
@@ -315,10 +345,14 @@ namespace Glimpse.Core
 
         private void InternalWrite(string message, string category)
         {
+            if (MessageBroker == null || TimerStrategy == null)
+            {
+                return;
+            }
+
             var timer = TimerStrategy();
 
-            // Execution in on thread without access to RequestStore
-            if (timer == null || MessageBroker == null) 
+            if (timer == null) // it can still be null in case the timer strategy decides to not return a timer (RuntimePolicy == Off for instance)
             {
                 return;
             }
@@ -430,7 +464,7 @@ namespace Glimpse.Core
                     case "system":
                     case "ms":
                         return FormattingKeywords.Ms;
-                } 
+                }
             }
 
             return null;
@@ -451,6 +485,6 @@ namespace Glimpse.Core
             }
 
             return null;
-        } 
+        }
     }
 }

@@ -1,5 +1,5 @@
 using System;
-using System.Runtime.Serialization;
+using System.Diagnostics;
 using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Framework
@@ -9,6 +9,10 @@ namespace Glimpse.Core.Framework
     /// </summary>
     public class UnavailableGlimpseRequestContext : IGlimpseRequestContext
     {
+        private Guid glimpseRequestId;
+        private IDataStore requestStore;
+        private IExecutionTimer currentExecutionTimer;
+
         /// <summary>
         /// Gets the singleton instance of the <see cref="UnavailableGlimpseRequestContext"/> type.
         /// </summary>
@@ -22,24 +26,35 @@ namespace Glimpse.Core.Framework
         private UnavailableGlimpseRequestContext()
         {
             GlimpseRequestId = new Guid();
-            RequestResponseAdapter = new RequestResponseAdapterStub();
             RequestStore = new DataStoreStub();
+            CurrentExecutionTimer = new ExecutionTimerStub();
         }
 
         /// <summary>
         /// Gets a default <see cref="Guid"/> representing the unavailable request
         /// </summary>
-        public Guid GlimpseRequestId { get; private set; }
+        public Guid GlimpseRequestId
+        {
+            get { return LogAccess("GlimpseRequestId", () => glimpseRequestId); }
+            private set { glimpseRequestId = value; }
+        }
 
         /// <summary>
         /// Gets the <see cref="IRequestResponseAdapter"/> of the unavailable request
         /// </summary>
-        public IRequestResponseAdapter RequestResponseAdapter { get; private set; }
+        public IRequestResponseAdapter RequestResponseAdapter
+        {
+            get { return LogAccess<IRequestResponseAdapter>("RequestResponseAdapter", () => null); }
+        }
 
         /// <summary>
         /// Gets the <see cref="IDataStore"/> for the unavailable request
         /// </summary>
-        public IDataStore RequestStore { get; private set; }
+        public IDataStore RequestStore
+        {
+            get { return LogAccess("RequestStore", () => requestStore); }
+            private set { requestStore = value; }
+        }
 
         /// <summary>
         /// Gets the active <see cref="RuntimePolicy"/> for the unavailable request
@@ -47,7 +62,14 @@ namespace Glimpse.Core.Framework
         public RuntimePolicy CurrentRuntimePolicy
         {
             get { return RuntimePolicy.Off; }
-            set { throw new GlimpseRequestContextUnavailableException(); }
+
+            set
+            {
+                if (value > RuntimePolicy.Off)
+                {
+                    throw new GlimpseException("You're not allowed to increase the active runtime policy level from 'RuntimePolicy.Off' to '" + value + "'.");
+                }
+            }
         }
 
         /// <summary>
@@ -59,105 +81,97 @@ namespace Glimpse.Core.Framework
         }
 
         /// <summary>
-        /// A custom exception thrown when 
+        /// Gets the <see cref="IExecutionTimer"/> for the referenced request
         /// </summary>
-        public class GlimpseRequestContextUnavailableException : Exception
+        public IExecutionTimer CurrentExecutionTimer
         {
-            /// <summary>
-            /// Initializes a new instance of the <see cref="GlimpseRequestContextUnavailableException" /> class.
-            /// </summary>
-            public GlimpseRequestContextUnavailableException()
-                : this("There is no Glimpse request context available. Make sure to check that the GlimpseRuntime.Instance.CurrentRequestContext.CurrentRuntimePolicy != RuntimePolicy.Off before accessing any further details.")
-            {
-            }
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="GlimpseRequestContextUnavailableException" /> class.
-            /// </summary>
-            /// <param name="message">The message.</param>
-            public GlimpseRequestContextUnavailableException(string message)
-                : base(message)
-            {
-            }
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="GlimpseRequestContextUnavailableException" /> class.
-            /// </summary>
-            /// <param name="message">The message.</param>
-            /// <param name="innerException">The inner exception.</param>
-            public GlimpseRequestContextUnavailableException(string message, Exception innerException)
-                : base(message, innerException)
-            {
-            }
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="GlimpseRequestContextUnavailableException" /> class.
-            /// </summary>
-            /// <param name="info">The info.</param>
-            /// <param name="context">The context.</param>
-            public GlimpseRequestContextUnavailableException(SerializationInfo info, StreamingContext context)
-                : base(info, context)
-            {
-            }
+            get { return LogAccess("CurrentExecutionTimer", () => currentExecutionTimer); }
+            private set { currentExecutionTimer = value; }
         }
 
-        private class RequestResponseAdapterStub : IRequestResponseAdapter
+        /// <summary>
+        /// Starts timing the execution of the referenced request
+        /// </summary>
+        public void StartTiming()
         {
-            public object RuntimeContext
+            LogAccess("StartTiming");
+        }
+
+        /// <summary>
+        /// Stops timing the execution of the referenced request
+        /// </summary>
+        /// <returns>The elapsed time since the start of the timing</returns>
+        public TimeSpan StopTiming()
+        {
+            return LogAccess("StopTiming", () => TimeSpan.Zero);
+        }
+
+        private static T LogAccess<T>(string propertyOrMethodName, Func<T> propertyValueProvider)
+        {
+            if (GlimpseRuntime.IsInitialized)
             {
-                get { throw new GlimpseRequestContextUnavailableException(); }
+                GlimpseRuntime.Instance.Configuration.Logger.Warn("Accessing 'UnavailableGlimpseRequestContext.Instance." + propertyOrMethodName + "' which is unexpected. Make sure to check the current runtime policy before accessing any further details. StackTrace = " + new StackTrace());
             }
 
-            public IRequestMetadata RequestMetadata
-            {
-                get { throw new GlimpseRequestContextUnavailableException(); }
-            }
+            return propertyValueProvider();
+        }
 
-            public void SetHttpResponseHeader(string name, string value)
-            {
-                throw new GlimpseRequestContextUnavailableException();
-            }
-
-            public void SetHttpResponseStatusCode(int statusCode)
-            {
-                throw new GlimpseRequestContextUnavailableException();
-            }
-
-            public void SetCookie(string name, string value)
-            {
-                throw new GlimpseRequestContextUnavailableException();
-            }
-
-            public void InjectHttpResponseBody(string htmlSnippet)
-            {
-                throw new GlimpseRequestContextUnavailableException();
-            }
-
-            public void WriteHttpResponse(byte[] content)
-            {
-                throw new GlimpseRequestContextUnavailableException();
-            }
-
-            public void WriteHttpResponse(string content)
-            {
-                throw new GlimpseRequestContextUnavailableException();
-            }
+        private static void LogAccess(string methodName)
+        {
+            LogAccess(methodName, () => true);
         }
 
         private class DataStoreStub : IDataStore
         {
             public object Get(string key)
             {
+                LogAccess("RequestStore.Get");
                 return null;
             }
 
             public void Set(string key, object value)
             {
+                LogAccess("RequestStore.Set");
             }
 
             public bool Contains(string key)
             {
+                LogAccess("RequestStore.Contains");
                 return false;
+            }
+        }
+
+        private class ExecutionTimerStub : IExecutionTimer
+        {
+            public DateTime RequestStart
+            {
+                get { return LogAccess("CurrentExecutionTimer.RequestStart", () => DateTime.MinValue); }
+            }
+
+            public TimerResult Point()
+            {
+                return LogAccess("CurrentExecutionTimer.Point", () => new TimerResult { Duration = TimeSpan.Zero, Offset = TimeSpan.Zero, StartTime = DateTime.MinValue });
+            }
+
+            public TimerResult<T> Time<T>(Func<T> function)
+            {
+                return LogAccess("CurrentExecutionTimer.Time<T>", () => new TimerResult<T> { Duration = TimeSpan.Zero, Offset = TimeSpan.Zero, StartTime = DateTime.MinValue, Result = function() });
+            }
+
+            public TimerResult Time(Action action)
+            {
+                action();
+                return LogAccess("CurrentExecutionTimer.Time", () => new TimerResult { Duration = TimeSpan.Zero, Offset = TimeSpan.Zero, StartTime = DateTime.MinValue });
+            }
+
+            public TimeSpan Start()
+            {
+                return LogAccess("CurrentExecutionTimer.Start", () => TimeSpan.Zero);
+            }
+
+            public TimerResult Stop(TimeSpan offset)
+            {
+                return LogAccess("CurrentExecutionTimer.Stop", () => new TimerResult { Duration = TimeSpan.Zero, Offset = TimeSpan.Zero, StartTime = DateTime.MinValue });
             }
         }
     }

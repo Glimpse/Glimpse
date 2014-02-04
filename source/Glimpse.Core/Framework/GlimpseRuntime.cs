@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Glimpse.Core.Extensibility;
@@ -210,12 +209,14 @@ namespace Glimpse.Core.Framework
 
             try
             {
+                glimpseRequestContext.StartTiming();
+
                 ExecuteTabs(RuntimeEvent.BeginRequest, glimpseRequestContext);
 
-#warning this create global execution timer should be part of the GlimpseRequestContext
-                var executionTimer = CreateAndStartGlobalExecutionTimer(glimpseRequestContext.RequestStore);
-
-                Configuration.MessageBroker.Publish(new RuntimeMessage().AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest).AsTimelineMessage("Start Request", TimelineCategory.Request).AsTimedMessage(executionTimer.Point()));
+                Configuration.MessageBroker.Publish( new RuntimeMessage()
+                    .AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest)
+                    .AsTimelineMessage("Start Request", TimelineCategory.Request)
+                    .AsTimedMessage(glimpseRequestContext.CurrentExecutionTimer.Point()));
 
                 return glimpseRequestContextHandle;
             }
@@ -247,30 +248,17 @@ namespace Glimpse.Core.Framework
                     return;
                 }
 
-                var requestResponseAdapter = glimpseRequestContext.RequestResponseAdapter;
-                var requestStore = glimpseRequestContext.RequestStore;
-
-                var executionTimer = requestStore.Get<ExecutionTimer>(Constants.GlobalTimerKey);
-                if (executionTimer != null)
-                {
-                    Configuration.MessageBroker.Publish(new RuntimeMessage().AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest).AsTimelineMessage("End Request", TimelineCategory.Request).AsTimedMessage(executionTimer.Point()));
-                }
+                Configuration.MessageBroker.Publish(new RuntimeMessage()
+                    .AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest)
+                    .AsTimelineMessage("End Request", TimelineCategory.Request)
+                    .AsTimedMessage(glimpseRequestContext.CurrentExecutionTimer.Point()));
 
                 ExecuteTabs(RuntimeEvent.EndRequest, glimpseRequestContext);
                 ExecuteDisplays(glimpseRequestContext);
 
-                Stopwatch stopwatch;
-                try
-                {
-                    stopwatch = requestStore.Get<Stopwatch>(Constants.GlobalStopwatchKey);
-                    stopwatch.Stop();
-                }
-                catch (NullReferenceException ex)
-                {
-#warning CGI : Is this particular catch still necessary? Since most checks are done above
-                    throw new GlimpseException(Resources.EndRequestOutOfOrderRuntimeMethodCall, ex);
-                }
+                TimeSpan timingDuration = glimpseRequestContext.StopTiming();
 
+                var requestResponseAdapter = glimpseRequestContext.RequestResponseAdapter;
                 var requestMetadata = requestResponseAdapter.RequestMetadata;
                 var runtimePolicy = glimpseRequestContext.CurrentRuntimePolicy;
 
@@ -283,7 +271,7 @@ namespace Glimpse.Core.Framework
                         requestMetadata,
                         GetTabResultsStore(glimpseRequestContext),
                         GetDisplayResultsStore(glimpseRequestContext),
-                        stopwatch.Elapsed);
+                        timingDuration);
 
                     try
                     {
@@ -534,7 +522,13 @@ namespace Glimpse.Core.Framework
                 }
             }
 
-            var inspectorContext = new InspectorContext(logger, Configuration.ProxyFactory, messageBroker, Configuration.TimerStrategy, Configuration.RuntimePolicyStrategy);
+            var inspectorContext = new InspectorContext(
+                logger, 
+                Configuration.ProxyFactory, 
+                messageBroker, 
+                () => ActiveGlimpseRequestContexts.Current.CurrentExecutionTimer,
+                () => ActiveGlimpseRequestContexts.Current.CurrentRuntimePolicy);
+
             foreach (var inspector in Configuration.Inspectors)
             {
                 try
@@ -550,21 +544,6 @@ namespace Glimpse.Core.Framework
 
             PersistMetadata();
             IsInitialized = true;
-        }
-
-        private static ExecutionTimer CreateAndStartGlobalExecutionTimer(IDataStore requestStore)
-        {
-            if (requestStore.Contains(Constants.GlobalStopwatchKey) && requestStore.Contains(Constants.GlobalTimerKey))
-            {
-                return requestStore.Get<ExecutionTimer>(Constants.GlobalTimerKey);
-            }
-
-            // Create and start global stopwatch
-            var stopwatch = Stopwatch.StartNew();
-            var executionTimer = new ExecutionTimer(stopwatch);
-            requestStore.Set(Constants.GlobalStopwatchKey, stopwatch);
-            requestStore.Set(Constants.GlobalTimerKey, executionTimer);
-            return executionTimer;
         }
 
         private static string CreateKey(object obj)

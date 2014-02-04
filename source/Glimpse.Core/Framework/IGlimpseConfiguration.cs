@@ -108,17 +108,5 @@ namespace Glimpse.Core.Framework
         /// </summary>
         /// <value>The hash.</value>
         string Hash { get; }
-
-        /// <summary>
-        /// Gets or sets the runtime policy strategy.
-        /// </summary>
-        /// <value>The runtime policy strategy.</value>
-        Func<RuntimePolicy> RuntimePolicyStrategy { get; set; }
-
-        /// <summary>
-        /// Gets or sets the timer strategy.
-        /// </summary>
-        /// <value>The timer strategy.</value>
-        Func<IExecutionTimer> TimerStrategy { get; set; }
     }
 }
