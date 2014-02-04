@@ -11,6 +11,7 @@ namespace Glimpse.Core.Framework
     internal static class ActiveGlimpseRequestContexts
     {
         internal const string RequestIdKey = "__GlimpseRequestId";
+        private static readonly object glimpseRequestContextsAccessLock = new object();
         private static IDictionary<Guid, IGlimpseRequestContext> GlimpseRequestContexts { get; set; }
 
         /// <summary>
@@ -47,7 +48,17 @@ namespace Glimpse.Core.Framework
             // because if the creation of the handle would fail afterwards, then there is no way to remove the glimpseRequestContext from the list.
 
             var handle = new GlimpseRequestContextHandle(glimpseRequestContext.GlimpseRequestId, glimpseRequestContext.RequestHandlingMode);
-            GlimpseRequestContexts.Add(glimpseRequestContext.GlimpseRequestId, glimpseRequestContext);
+            lock (glimpseRequestContextsAccessLock)
+            {
+                /* 
+                 * if we don't lock, then it is possible to get the following exception under heavy load:
+                 * [IndexOutOfRangeException: Index was outside the bounds of the array.]
+                 *    System.Collections.Generic.Dictionary`2.Resize(Int32 newSize, Boolean forceNewHashCodes)
+                 *    System.Collections.Generic.Dictionary`2.Insert(TKey key, TValue value, Boolean add)
+                 *    System.Collections.Generic.Dictionary`2.Add(TKey key, TValue value)
+                 */
+                GlimpseRequestContexts.Add(glimpseRequestContext.GlimpseRequestId, glimpseRequestContext);
+            }
 
             // we also store the GlimpseRequestId in the CallContext for later use. That is our only entry point to retrieve the glimpseRequestContext
             // when we are not inside one of the GlimpseRuntime methods that is being provided with the requestResponseAdapter
@@ -75,7 +86,12 @@ namespace Glimpse.Core.Framework
         /// <param name="glimpseRequestId">The Glimpse Id for which the corresponding <see cref="IGlimpseRequestContext"/> must be removed</param>
         public static void Remove(Guid glimpseRequestId)
         {
-            bool glimpseRequestContextRemoved = GlimpseRequestContexts.Remove(glimpseRequestId);
+            bool glimpseRequestContextRemoved;
+            lock (glimpseRequestContextsAccessLock)
+            {
+                glimpseRequestContextRemoved = GlimpseRequestContexts.Remove(glimpseRequestId);
+            }
+
             CallContext.LogicalSetData(RequestIdKey, null);
             CallContext.FreeNamedDataSlot(RequestIdKey);
 
@@ -108,6 +124,11 @@ namespace Glimpse.Core.Framework
                 var glimpseRequestId = CallContext.LogicalGetData(RequestIdKey) as Guid?;
                 if (!glimpseRequestId.HasValue)
                 {
+                    if (GlimpseRuntime.IsInitialized)
+                    {
+                        GlimpseRuntime.Instance.Configuration.Logger.Warn("Returning the UnavailableGlimpseRequestContext.Instance");
+                    }
+
                     // there is no context registered, which means Glimpse did not initialize itself for this request aka GlimpseRuntime.BeginRequest has not been
                     // called even when there is code that wants to check this. Either way, we return here an empty context which indicates that Glimpse is disabled
                     return UnavailableGlimpseRequestContext.Instance;
