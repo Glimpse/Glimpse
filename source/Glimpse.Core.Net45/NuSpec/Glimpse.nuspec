@@ -14,17 +14,14 @@
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET 4.0 application. For ASP.NET MVC3 support, please NuGet Glimpse.MVC3.</description>
         <summary>ASP.NET 4.5 web debugging and diagnostics tool.</summary>
         <releaseNotes>
-Welterweight release for Core:
- - Added missing style which forces Glimpse tables to be full width
- - Added missing new pubsub events around HUD init process
- - Fixed issue where URLs in the AJAX HUD ticker weren't being encoding 
- - Fixed cross site origin requests fail because of header modification in Ajax tab
- - Fix which updates HUD to not wrap badly on small screens
- - Fixed possible in-memory persistence store thread issue
- - Update which allows titles to be specified for objects via metadata
- - Update structured layouts so titles can have the new casing logic applied
- - Update Glimpse.axd to CSP compliant 
- - Allow users to disable use of Logical Call Context
+Featherweight release for Core:
+ - Update to disabled Glimpse when request init is bypassed
+ - Update client to only modify local ajax requests
+ - Add initial support for Glimpse.WindowsAzure and Glimpse.WindowsAzure.Storage
+ - Update to show friendly message if current async implementation is not supported
+ - Added initial Insights support to client'
+ - Update client to delayed tab rendering till glimpse open
+ - Update client to added more blacklist items for target chars that should be ignored by case processor
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse diagnostics performance profiling timing</tags>
     </metadata>
