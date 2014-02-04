@@ -78,9 +78,9 @@ namespace Glimpse.AspNet.Tab
                 {
                     if ((typeof(System.Web.Routing.RouteBase)).IsAssignableFrom(routeBase.GetType()))
                     {
-	                    var routeModel = GetRouteModelForRoute(context, routeBase, routeMessages, constraintMessages);
-
-	                    result.Add(routeModel);
+                        var routeModel = GetRouteModelForRoute(context, routeBase, routeMessages, constraintMessages);
+                        
+                        result.Add(routeModel);
                     }
                 }
             }
