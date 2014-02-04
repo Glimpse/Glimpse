@@ -20,7 +20,7 @@ Lightweight release for WebForms:
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse</tags>
         <dependencies>
-          <dependency id="Glimpse.AspNet" version="1.6.0" />
+          <dependency id="Glimpse.AspNet" version="1.8.0" />
         </dependencies>
     </metadata>
     <files>
