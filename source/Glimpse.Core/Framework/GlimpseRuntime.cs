@@ -148,6 +148,8 @@ namespace Glimpse.Core.Framework
             get { return ActiveGlimpseRequestContexts.Current; }
         }
 
+        private RuntimePolicyDeterminator RuntimePolicyDeterminator { get; set; }
+
         /// <summary>
         /// Returns the corresponding <see cref="IGlimpseRequestContext"/> for the given <paramref name="glimpseRequestId"/>
         /// </summary>
@@ -213,7 +215,7 @@ namespace Glimpse.Core.Framework
 
                 ExecuteTabs(RuntimeEvent.BeginRequest, glimpseRequestContext);
 
-                Configuration.MessageBroker.Publish( new RuntimeMessage()
+                Configuration.MessageBroker.Publish(new RuntimeMessage()
                     .AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest)
                     .AsTimelineMessage("Start Request", TimelineCategory.Request)
                     .AsTimedMessage(glimpseRequestContext.CurrentExecutionTimer.Point()));
@@ -488,6 +490,8 @@ namespace Glimpse.Core.Framework
         /// </returns>
         private void Initialize()
         {
+            RuntimePolicyDeterminator = new RuntimePolicyDeterminator(Configuration.RuntimePolicies.ToArray(), Configuration.Logger);
+
             var logger = Configuration.Logger;
             var messageBroker = Configuration.MessageBroker;
 
@@ -523,9 +527,9 @@ namespace Glimpse.Core.Framework
             }
 
             var inspectorContext = new InspectorContext(
-                logger, 
-                Configuration.ProxyFactory, 
-                messageBroker, 
+                logger,
+                Configuration.ProxyFactory,
+                messageBroker,
                 () => ActiveGlimpseRequestContexts.Current.CurrentExecutionTimer,
                 () => ActiveGlimpseRequestContexts.Current.CurrentRuntimePolicy);
 
@@ -738,54 +742,6 @@ namespace Glimpse.Core.Framework
             Configuration.PersistenceStore.Save(metadata);
         }
 
-        private RuntimePolicy DetermineRuntimePolicy(RuntimeEvent runtimeEvent, RuntimePolicy maximumAllowedPolicy, IRequestResponseAdapter requestResponseAdapter)
-        {
-            if (maximumAllowedPolicy == RuntimePolicy.Off)
-            {
-                return maximumAllowedPolicy;
-            }
-
-            var logger = Configuration.Logger;
-
-            // only run policies for this runtimeEvent
-            var policies =
-                Configuration.RuntimePolicies.Where(
-                    policy => policy.ExecuteOn.HasFlag(runtimeEvent));
-
-            var policyContext = new RuntimePolicyContext(requestResponseAdapter.RequestMetadata, Configuration.Logger, requestResponseAdapter.RuntimeContext);
-            foreach (var policy in policies)
-            {
-                var policyResult = RuntimePolicy.Off;
-                try
-                {
-                    policyResult = policy.Execute(policyContext);
-
-                    if (policyResult != RuntimePolicy.On)
-                    {
-                        logger.Debug("RuntimePolicy set to '{0}' by IRuntimePolicy of type '{1}' during RuntimeEvent '{2}'.", policyResult, policy.GetType(), runtimeEvent);
-                    }
-                }
-                catch (Exception exception)
-                {
-                    logger.Warn("Exception when executing IRuntimePolicy of type '{0}'. RuntimePolicy is now set to 'Off'.", exception, policy.GetType());
-                }
-
-                // Only use the lowest policy allowed for the request
-                if (policyResult < maximumAllowedPolicy)
-                {
-                    maximumAllowedPolicy = policyResult;
-                }
-
-                // If the policy indicates Glimpse is Off, then we stop processing any other runtime policy
-                if (maximumAllowedPolicy == RuntimePolicy.Off)
-                {
-                    break;
-                }
-            }
-
-            return maximumAllowedPolicy;
-        }
-
         // TODO this should not be public! This was changed to hack in OWIN support
         public string GenerateScriptTags(GlimpseRequestContextHandle glimpseRequestContextHandle)
         {
@@ -833,6 +789,31 @@ namespace Glimpse.Core.Framework
 
             requestStore.Set(Constants.ScriptsHaveRenderedKey, true);
             return glimpseScriptTags;
+        }
+
+        private RuntimePolicy DetermineRuntimePolicy(RuntimeEvent runtimeEvent, RuntimePolicy currentRuntimePolicy, IRequestResponseAdapter requestResponseAdapter)
+        {
+            var runtimePolicyResult = RuntimePolicyDeterminator.DetermineRuntimePolicy(runtimeEvent, currentRuntimePolicy, requestResponseAdapter);
+
+            if (runtimePolicyResult.Messages.Length != 0)
+            {
+                string allMessages = runtimePolicyResult.Messages[0].Message; 
+                if(runtimePolicyResult.Messages.Length > 1)
+                {
+                    allMessages = runtimePolicyResult.Messages.Aggregate("RuntimePolicy determination messages :", (concatenatedMessages, message) => concatenatedMessages += Environment.NewLine + "\t" + message.Message);
+                }
+
+                if (runtimePolicyResult.Messages.Any(message => message.IsWarning))
+                {
+                    Configuration.Logger.Warn(allMessages);
+                }
+                else
+                {
+                    Configuration.Logger.Debug(allMessages);
+                }
+            }
+
+            return runtimePolicyResult.RuntimePolicy;
         }
 
         /// <summary>

@@ -119,6 +119,7 @@
     <Compile Include="Framework\IGlimpseRequestContext.cs" />
     <Compile Include="Framework\GlimpseRequestContext.cs" />
     <Compile Include="Framework\GlimpseScriptTagsGenerator.cs" />
+    <Compile Include="Framework\RuntimePolicyDeterminator.cs" />
     <Compile Include="Framework\UnavailableGlimpseRequestContextHandle.cs" />
     <Compile Include="Framework\GlimpseRequestContextHandle.cs" />
     <Compile Include="Framework\UnavailableGlimpseRequestContext.cs" />
