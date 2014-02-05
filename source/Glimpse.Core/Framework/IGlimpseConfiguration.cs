@@ -44,7 +44,7 @@ namespace Glimpse.Core.Framework
         /// Gets the resource endpoint.
         /// </summary>
         /// <value>The resource endpoint.</value>
-        ResourceEndpointConfiguration ResourceEndpoint { get; }
+        IResourceEndpointConfiguration ResourceEndpoint { get; }
 
         /// <summary>
         /// Gets the resources.

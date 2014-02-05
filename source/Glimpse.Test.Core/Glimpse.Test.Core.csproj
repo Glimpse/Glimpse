@@ -187,6 +187,7 @@
     <Compile Include="TestDoubles\DummyTab.cs" />
     <Compile Include="TestDoubles\IDummyInterface.cs" />
     <Compile Include="TestDoubles\IDummyMixin.cs" />
+    <Compile Include="Tester\ResourceEndpointConfigurationTester.cs" />
     <Compile Include="Tester\RequestResponseAdapterTester.cs" />
     <Compile Include="Tester\AjaxPolicyTester.cs" />
     <Compile Include="Tester\InMemoryPersistenceStoreTester.cs" />

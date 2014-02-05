@@ -21,21 +21,30 @@ namespace Glimpse.Core.Framework
         /// <param name="glimpseRequestId">The Id assigned to the request by Glimpse.</param>
         /// <param name="requestResponseAdapter">The <see cref="IRequestResponseAdapter "/> of this request.</param>
         /// <param name="initialRuntimePolicy">The initial <see cref="RuntimePolicy "/> for this request.</param>
+        /// <param name="resourceEndpointConfiguration">The <see cref="IResourceEndpointConfiguration"/>.</param>
         /// <param name="endpointBaseUri">The endpoint base URI.</param>
-        public GlimpseRequestContext(Guid glimpseRequestId, IRequestResponseAdapter requestResponseAdapter, RuntimePolicy initialRuntimePolicy, string endpointBaseUri)
+        public GlimpseRequestContext(
+            Guid glimpseRequestId,
+            IRequestResponseAdapter requestResponseAdapter,
+            RuntimePolicy initialRuntimePolicy,
+            IResourceEndpointConfiguration resourceEndpointConfiguration,
+            string endpointBaseUri)
         {
             if (requestResponseAdapter == null)
             {
                 throw new ArgumentNullException("requestResponseAdapter");
             }
 
+            if (string.IsNullOrEmpty(endpointBaseUri))
+            {
+                throw new ArgumentException("endpointBaseUri is null or empty");
+            }
+
             GlimpseRequestId = glimpseRequestId;
             RequestResponseAdapter = requestResponseAdapter;
-            RequestHandlingMode = RequestResponseAdapter.RequestMetadata.RequestUri.AbsolutePath.StartsWith(endpointBaseUri, StringComparison.InvariantCultureIgnoreCase)
-                                    || ("~" + RequestResponseAdapter.RequestMetadata.RequestUri.AbsolutePath).StartsWith(endpointBaseUri, StringComparison.InvariantCultureIgnoreCase)
+            RequestHandlingMode = resourceEndpointConfiguration.IsResourceRequest(requestResponseAdapter.RequestMetadata.RequestUri, endpointBaseUri)
                                     ? RequestHandlingMode.ResourceRequest
                                     : RequestHandlingMode.RegularRequest;
-
 
             RequestStore = new DictionaryDataStoreAdapter(new Dictionary<string, object>());
             this.currentRuntimePolicy = initialRuntimePolicy;

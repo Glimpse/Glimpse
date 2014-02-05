@@ -92,10 +92,13 @@ namespace Glimpse.Test.Core.Framework
 
         private static GlimpseRequestContext CreateGlimpseRequestContext()
         {
+            var requestUri = new Uri("http://localhost/");
+
             return new GlimpseRequestContext(
                 Guid.NewGuid(),
-                RequestResponseAdapterTester.Create(new Uri("http://localhost/")).RequestResponseAdapterMock.Object,
+                RequestResponseAdapterTester.Create(requestUri).RequestResponseAdapterMock.Object,
                 RuntimePolicy.On,
+                ResourceEndpointConfigurationTester.Create(requestUri, false).ResourceEndpointConfigurationMock.Object,
                 "/glimpse.axd");
         }
 

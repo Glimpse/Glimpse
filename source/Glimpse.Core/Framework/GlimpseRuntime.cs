@@ -192,7 +192,7 @@ namespace Glimpse.Core.Framework
         /// <exception cref="Glimpse.Core.Framework.GlimpseException">Throws an exception if <see cref="GlimpseRuntime"/> is not yet initialized.</exception>
         public GlimpseRequestContextHandle BeginRequest(IRequestResponseAdapter requestResponseAdapter)
         {
-            var glimpseRequestContext = new GlimpseRequestContext(Guid.NewGuid(), requestResponseAdapter, Configuration.DefaultRuntimePolicy, Configuration.EndpointBaseUri);
+            var glimpseRequestContext = new GlimpseRequestContext(Guid.NewGuid(), requestResponseAdapter, Configuration.DefaultRuntimePolicy, Configuration.ResourceEndpoint, Configuration.EndpointBaseUri);
 
             var runtimePolicy = DetermineRuntimePolicy(RuntimeEvent.BeginRequest, glimpseRequestContext.CurrentRuntimePolicy, glimpseRequestContext.RequestResponseAdapter);
             if (runtimePolicy == RuntimePolicy.Off)

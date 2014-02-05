@@ -29,7 +29,7 @@ namespace Glimpse.Core.Framework
         private IPersistenceStore persistenceStore;
         private ICollection<IInspector> inspectors;
         private IProxyFactory proxyFactory;
-        private ResourceEndpointConfiguration resourceEndpoint;
+        private IResourceEndpointConfiguration resourceEndpoint;
         private ICollection<IResource> resources;
         private ICollection<IRuntimePolicy> runtimePolicies;
         private ISerializer serializer;
@@ -41,7 +41,7 @@ namespace Glimpse.Core.Framework
         private RuntimePolicy? defaultRuntimePolicy;
         private ICollection<ISerializationConverter> serializationConverters;
 
-        public GlimpseConfiguration(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore)
+        public GlimpseConfiguration(IResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore)
         {
             if (endpointConfiguration == null)
             {
@@ -466,13 +466,13 @@ namespace Glimpse.Core.Framework
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="ResourceEndpointConfiguration"/>.
+        /// Gets or sets the <see cref="IResourceEndpointConfiguration"/>.
         /// </summary>
         /// <value>
-        /// The configured <see cref="ResourceEndpointConfiguration"/>.
+        /// The configured <see cref="IResourceEndpointConfiguration"/>.
         /// </value>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public ResourceEndpointConfiguration ResourceEndpoint
+        public IResourceEndpointConfiguration ResourceEndpoint
         {
             get
             {
