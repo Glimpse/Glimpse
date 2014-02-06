@@ -162,9 +162,16 @@ namespace Glimpse.Ado.AlternateType
 
         internal static IExecutionTimer DetermineExecutionTimer()
         {
-            return GlimpseRuntime.IsInitialized && GlimpseRuntime.Instance.CurrentRequestContext.CurrentRuntimePolicy != RuntimePolicy.Off
-                ? GlimpseRuntime.Instance.CurrentRequestContext.CurrentExecutionTimer
-                : null;
+            if (GlimpseRuntime.IsInitialized)
+            {
+                var currentRequestContext = GlimpseRuntime.Instance.CurrentRequestContext;
+                if (currentRequestContext.CurrentRuntimePolicy != RuntimePolicy.Off)
+                {
+                    return currentRequestContext.CurrentExecutionTimer;
+                }
+            }
+
+            return null;
         }
     }
 }
