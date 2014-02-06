@@ -780,8 +780,8 @@ glimpse.render.engine.util = (function($) {
         keyMetadata: function (key, metadata) {
             return metadata && metadata.layout === Object(metadata.layout) ? metadata.layout[key] : null;
         },
-        includeHeading: function(metadata) {
-            return !(metadata && metadata.suppressHeader);
+        includeHeading: function(metadata) { 
+            return !metadata || metadata.suppressHeader != true;
         },
         shouldUsePreview: function(length, level, forceFull, limit, forceLimit, tolerance) {
             if ($.isNumeric(forceLimit))
@@ -864,7 +864,7 @@ glimpse.render.engine.util.table = (function($, util) {
     var factories = {
             array: {
                 isHandled: function (data) {
-                    var valid = true;
+                    var valid = data.length > 0;
                     for (var i = 0; i < data.length; i++) {
                         if (!$.isArray(data[i])) {
                             valid = false;
@@ -891,7 +891,7 @@ glimpse.render.engine.util.table = (function($, util) {
             },
             object: {
                 isHandled: function (data) {
-                    var valid = true;
+                    var valid = data.length > 0;
                     for (var i = 0; i < data.length; i++) {
                         if ($.isArray(data[i]) || data[i] !== Object(data[i])) {
                             valid = false;
