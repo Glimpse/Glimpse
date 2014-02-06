@@ -35,7 +35,7 @@ namespace Glimpse.Test.Core.Framework
         {
             return requestHandlingMode == RequestHandlingMode.Unhandled
                     ? UnavailableGlimpseRequestContextHandle.Instance
-                    : new GlimpseRequestContextHandle(Guid.NewGuid(), requestHandlingMode);
+                    : new GlimpseRequestContextHandle(Guid.NewGuid(), requestHandlingMode, () => { });
         }
 
         [Fact(Skip = "This test is hanging the test runner. Fix later")]

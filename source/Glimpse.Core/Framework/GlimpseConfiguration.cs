@@ -40,8 +40,12 @@ namespace Glimpse.Core.Framework
         private Section xmlConfiguration;
         private RuntimePolicy? defaultRuntimePolicy;
         private ICollection<ISerializationConverter> serializationConverters;
+        private ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker;
 
-        public GlimpseConfiguration(IResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore)
+        public GlimpseConfiguration(
+            IResourceEndpointConfiguration endpointConfiguration, 
+            IPersistenceStore persistenceStore,
+            ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
         {
             if (endpointConfiguration == null)
             {
@@ -55,8 +59,18 @@ namespace Glimpse.Core.Framework
 
             ResourceEndpoint = endpointConfiguration;
             PersistenceStore = persistenceStore;
+            CurrentGlimpseRequestIdTracker = currentGlimpseRequestIdTracker ?? new CallContextCurrentGlimpseRequestIdTracker();
+
             // TODO: Instantiate the user's IOC container (if they have one)
         }
+
+        /// <summary>
+        /// Gets the <see cref="ICurrentGlimpseRequestIdTracker"/>.
+        /// </summary>
+        /// <value>
+        /// The configured <see cref="ICurrentGlimpseRequestIdTracker"/>.
+        /// </value>
+        public ICurrentGlimpseRequestIdTracker CurrentGlimpseRequestIdTracker { get; private set; }
 
         public IServiceLocator UserServiceLocator 
         {
@@ -446,10 +460,10 @@ namespace Glimpse.Core.Framework
                 }
 
                 proxyFactory = new CastleDynamicProxyFactory(
-                    Logger, 
-                    MessageBroker, 
-                    () => ActiveGlimpseRequestContexts.Current.CurrentExecutionTimer,
-                    () => ActiveGlimpseRequestContexts.Current.CurrentRuntimePolicy);
+                    Logger,
+                    MessageBroker,
+                    () => GlimpseRuntime.IsInitialized ? GlimpseRuntime.Instance.CurrentRequestContext.CurrentExecutionTimer : UnavailableGlimpseRequestContext.Instance.CurrentExecutionTimer,
+                    () => GlimpseRuntime.IsInitialized ? GlimpseRuntime.Instance.CurrentRequestContext.CurrentRuntimePolicy : UnavailableGlimpseRequestContext.Instance.CurrentRuntimePolicy);
 
                 return proxyFactory;
             }

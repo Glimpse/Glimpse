@@ -12,40 +12,40 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void RemoveCorrespondingGlimpseRequestContextFromActiveGlimpseRequestContextsOnExplicitDisposal()
         {
-            ActiveGlimpseRequestContexts.RemoveAll();
+            var activeGlimpseRequestContexts = new ActiveGlimpseRequestContexts(new CurrentGlimpseRequestIdTrackerTester());
 
             var firstGlimpseRequestContext = CreateGlimpseRequestContext();
             var secondGlimpseRequestContext = CreateGlimpseRequestContext();
             var thirdGlimpseRequestContext = CreateGlimpseRequestContext();
 
-            var firstGlimpseRequestContextHandle = ActiveGlimpseRequestContexts.Add(firstGlimpseRequestContext);
-            var secondGlimpseRequestContextHandle = ActiveGlimpseRequestContexts.Add(secondGlimpseRequestContext);
-            var thirdGlimpseRequestContextHandle = ActiveGlimpseRequestContexts.Add(thirdGlimpseRequestContext);
+            var firstGlimpseRequestContextHandle = activeGlimpseRequestContexts.Add(firstGlimpseRequestContext);
+            var secondGlimpseRequestContextHandle = activeGlimpseRequestContexts.Add(secondGlimpseRequestContext);
+            var thirdGlimpseRequestContextHandle = activeGlimpseRequestContexts.Add(thirdGlimpseRequestContext);
 
-            AssertExistenceOfGlimpseRequestContext(firstGlimpseRequestContext);
-            AssertExistenceOfGlimpseRequestContext(secondGlimpseRequestContext);
-            AssertExistenceOfGlimpseRequestContext(thirdGlimpseRequestContext);
+            AssertExistenceOfGlimpseRequestContext(activeGlimpseRequestContexts, firstGlimpseRequestContext);
+            AssertExistenceOfGlimpseRequestContext(activeGlimpseRequestContexts, secondGlimpseRequestContext);
+            AssertExistenceOfGlimpseRequestContext(activeGlimpseRequestContexts, thirdGlimpseRequestContext);
 
             secondGlimpseRequestContextHandle.Dispose();
-            AssertExistenceOfGlimpseRequestContext(firstGlimpseRequestContext);
-            AssertNonExistenceOfGlimpseRequestContext(secondGlimpseRequestContext);
-            AssertExistenceOfGlimpseRequestContext(thirdGlimpseRequestContext);
+            AssertExistenceOfGlimpseRequestContext(activeGlimpseRequestContexts, firstGlimpseRequestContext);
+            AssertNonExistenceOfGlimpseRequestContext(activeGlimpseRequestContexts, secondGlimpseRequestContext);
+            AssertExistenceOfGlimpseRequestContext(activeGlimpseRequestContexts, thirdGlimpseRequestContext);
 
             firstGlimpseRequestContextHandle.Dispose();
-            AssertNonExistenceOfGlimpseRequestContext(firstGlimpseRequestContext);
-            AssertNonExistenceOfGlimpseRequestContext(secondGlimpseRequestContext);
-            AssertExistenceOfGlimpseRequestContext(thirdGlimpseRequestContext);
+            AssertNonExistenceOfGlimpseRequestContext(activeGlimpseRequestContexts, firstGlimpseRequestContext);
+            AssertNonExistenceOfGlimpseRequestContext(activeGlimpseRequestContexts, secondGlimpseRequestContext);
+            AssertExistenceOfGlimpseRequestContext(activeGlimpseRequestContexts, thirdGlimpseRequestContext);
 
             thirdGlimpseRequestContextHandle.Dispose();
-            AssertNonExistenceOfGlimpseRequestContext(firstGlimpseRequestContext);
-            AssertNonExistenceOfGlimpseRequestContext(secondGlimpseRequestContext);
-            AssertNonExistenceOfGlimpseRequestContext(thirdGlimpseRequestContext);
+            AssertNonExistenceOfGlimpseRequestContext(activeGlimpseRequestContexts, firstGlimpseRequestContext);
+            AssertNonExistenceOfGlimpseRequestContext(activeGlimpseRequestContexts, secondGlimpseRequestContext);
+            AssertNonExistenceOfGlimpseRequestContext(activeGlimpseRequestContexts, thirdGlimpseRequestContext);
         }
 
         [Fact]
         public void RemoveCorrespondingGlimpseRequestContextFromActiveGlimpseRequestContextsOnFinalization()
         {
-            ActiveGlimpseRequestContexts.RemoveAll();
+            var activeGlimpseRequestContexts = new ActiveGlimpseRequestContexts(new CurrentGlimpseRequestIdTrackerTester());
 
             var firstGlimpseRequestContext = CreateGlimpseRequestContext();
             var secondGlimpseRequestContext = CreateGlimpseRequestContext();
@@ -53,41 +53,41 @@ namespace Glimpse.Test.Core.Framework
 
             var handlesDictionary = new Dictionary<int, GlimpseRequestContextHandle>
             {
-                {1, ActiveGlimpseRequestContexts.Add(firstGlimpseRequestContext)},
-                {2, ActiveGlimpseRequestContexts.Add(secondGlimpseRequestContext)},
-                {3, ActiveGlimpseRequestContexts.Add(thirdGlimpseRequestContext)}
+                {1, activeGlimpseRequestContexts.Add(firstGlimpseRequestContext)},
+                {2, activeGlimpseRequestContexts.Add(secondGlimpseRequestContext)},
+                {3, activeGlimpseRequestContexts.Add(thirdGlimpseRequestContext)}
             };
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            AssertExistenceOfGlimpseRequestContext(firstGlimpseRequestContext);
-            AssertExistenceOfGlimpseRequestContext(secondGlimpseRequestContext);
-            AssertExistenceOfGlimpseRequestContext(thirdGlimpseRequestContext);
+            AssertExistenceOfGlimpseRequestContext(activeGlimpseRequestContexts, firstGlimpseRequestContext);
+            AssertExistenceOfGlimpseRequestContext(activeGlimpseRequestContexts, secondGlimpseRequestContext);
+            AssertExistenceOfGlimpseRequestContext(activeGlimpseRequestContexts, thirdGlimpseRequestContext);
 
             handlesDictionary.Remove(2);
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            AssertExistenceOfGlimpseRequestContext(firstGlimpseRequestContext);
-            AssertNonExistenceOfGlimpseRequestContext(secondGlimpseRequestContext);
-            AssertExistenceOfGlimpseRequestContext(thirdGlimpseRequestContext);
+            AssertExistenceOfGlimpseRequestContext(activeGlimpseRequestContexts, firstGlimpseRequestContext);
+            AssertNonExistenceOfGlimpseRequestContext(activeGlimpseRequestContexts, secondGlimpseRequestContext);
+            AssertExistenceOfGlimpseRequestContext(activeGlimpseRequestContexts, thirdGlimpseRequestContext);
 
             handlesDictionary.Remove(1);
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            AssertNonExistenceOfGlimpseRequestContext(firstGlimpseRequestContext);
-            AssertNonExistenceOfGlimpseRequestContext(secondGlimpseRequestContext);
-            AssertExistenceOfGlimpseRequestContext(thirdGlimpseRequestContext);
+            AssertNonExistenceOfGlimpseRequestContext(activeGlimpseRequestContexts, firstGlimpseRequestContext);
+            AssertNonExistenceOfGlimpseRequestContext(activeGlimpseRequestContexts, secondGlimpseRequestContext);
+            AssertExistenceOfGlimpseRequestContext(activeGlimpseRequestContexts, thirdGlimpseRequestContext);
 
             handlesDictionary.Remove(3);
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            AssertNonExistenceOfGlimpseRequestContext(firstGlimpseRequestContext);
-            AssertNonExistenceOfGlimpseRequestContext(secondGlimpseRequestContext);
-            AssertNonExistenceOfGlimpseRequestContext(thirdGlimpseRequestContext);
+            AssertNonExistenceOfGlimpseRequestContext(activeGlimpseRequestContexts, firstGlimpseRequestContext);
+            AssertNonExistenceOfGlimpseRequestContext(activeGlimpseRequestContexts, secondGlimpseRequestContext);
+            AssertNonExistenceOfGlimpseRequestContext(activeGlimpseRequestContexts, thirdGlimpseRequestContext);
         }
 
         private static GlimpseRequestContext CreateGlimpseRequestContext()
@@ -102,17 +102,17 @@ namespace Glimpse.Test.Core.Framework
                 "/glimpse.axd");
         }
 
-        private static void AssertExistenceOfGlimpseRequestContext(GlimpseRequestContext expectedGlimpseRequestContext)
+        private static void AssertExistenceOfGlimpseRequestContext(ActiveGlimpseRequestContexts activeGlimpseRequestContexts, IGlimpseRequestContext expectedGlimpseRequestContext)
         {
             IGlimpseRequestContext actualGlimpseRequestContext;
-            Assert.True(ActiveGlimpseRequestContexts.TryGet(expectedGlimpseRequestContext.GlimpseRequestId, out actualGlimpseRequestContext));
+            Assert.True(activeGlimpseRequestContexts.TryGet(expectedGlimpseRequestContext.GlimpseRequestId, out actualGlimpseRequestContext));
             Assert.Equal(expectedGlimpseRequestContext, actualGlimpseRequestContext);
         }
 
-        private static void AssertNonExistenceOfGlimpseRequestContext(GlimpseRequestContext expectedGlimpseRequestContext)
+        private static void AssertNonExistenceOfGlimpseRequestContext(ActiveGlimpseRequestContexts activeGlimpseRequestContexts, IGlimpseRequestContext expectedGlimpseRequestContext)
         {
             IGlimpseRequestContext actualGlimpseRequestContext;
-            Assert.False(ActiveGlimpseRequestContexts.TryGet(expectedGlimpseRequestContext.GlimpseRequestId, out actualGlimpseRequestContext));
+            Assert.False(activeGlimpseRequestContexts.TryGet(expectedGlimpseRequestContext.GlimpseRequestId, out actualGlimpseRequestContext));
         }
     }
 }

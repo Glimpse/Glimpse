@@ -4,22 +4,31 @@ using Glimpse.Core.Extensibility;
 namespace Glimpse.Core.Framework
 {
     /// <summary>
-    /// This handle will make sure the corresponding <see cref="IGlimpseRequestContext" /> will be removed from the <see cref="ActiveGlimpseRequestContexts"/>.
-    /// This will be done when this handle is explicitly disposed or when the finalizer of this handle is run by the Garbage Collector.
+    /// This is a handle that contains the necessary information to track a corresponding <see cref="IGlimpseRequestContext" /> and which will 
+    /// make sure the <see cref="ActiveGlimpseRequestContexts"/> instance, who created this handle, will be notified when it is being disposed, 
+    /// either explicitly or implicitly when the finalizer of this handle is run by the Garbage Collector.
     /// </summary>
     public class GlimpseRequestContextHandle : IDisposable
     {
-        private bool disposed;
+        private bool Disposed { get; set; }
+        private Action OnDisposeCallback { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GlimpseRequestContextHandle"/>
         /// </summary>
         /// <param name="glimpseRequestId">The Id assigned to the request by Glimpse.</param>
         /// <param name="requestHandlingMode">Mode representing the way Glimpse is handling the request.</param>
-        internal GlimpseRequestContextHandle(Guid glimpseRequestId, RequestHandlingMode requestHandlingMode)
+        /// <param name="onDisposeCallback">The callback to be executed when this instance is being disposed.</param>
+        internal GlimpseRequestContextHandle(Guid glimpseRequestId, RequestHandlingMode requestHandlingMode, Action onDisposeCallback)
         {
+            if (onDisposeCallback == null)
+            {
+                throw new ArgumentNullException("onDisposeCallback");
+            }
+
             GlimpseRequestId = glimpseRequestId;
             RequestHandlingMode = requestHandlingMode;
+            OnDisposeCallback = onDisposeCallback;
         }
 
         /// <summary>
@@ -27,7 +36,7 @@ namespace Glimpse.Core.Framework
         /// </summary>
         ~GlimpseRequestContextHandle()
         {
-            this.Dispose(false);
+            Dispose(false);
         }
 
         /// <summary>
@@ -41,21 +50,21 @@ namespace Glimpse.Core.Framework
         public RequestHandlingMode RequestHandlingMode { get; private set; }
 
         /// <summary>
-        /// Disposes the handle, which will make sure the corresponding <see cref="IGlimpseRequestContext"/> is removed from the <see cref="ActiveGlimpseRequestContexts"/>
+        /// Disposes the handle, which will make sure the <see cref="ActiveGlimpseRequestContexts"/> instance, who created this handle, will be notified.
         /// </summary>
         public void Dispose()
         {
-            this.Dispose(true);
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
 
         /// <summary>
-        /// Disposes the handle, which will make sure the corresponding <see cref="IGlimpseRequestContext"/> is removed from the <see cref="ActiveGlimpseRequestContexts"/>
+        /// Disposes the handle, which will make sure the <see cref="ActiveGlimpseRequestContexts"/> instance, who created this handle, will be notified.
         /// </summary>
         /// <param name="disposing">Boolean indicating whether this method is called from the public <see cref="Dispose()"/> method or from within the finalizer</param>
         protected virtual void Dispose(bool disposing)
         {
-            if (!this.disposed)
+            if (!Disposed)
             {
                 if (disposing)
                 {
@@ -63,8 +72,8 @@ namespace Glimpse.Core.Framework
 
                 try
                 {
-                    ActiveGlimpseRequestContexts.Remove(GlimpseRequestId);
-                    this.disposed = true;
+                    OnDisposeCallback();
+                    Disposed = true;
                 }
                 catch (Exception disposeException)
                 {

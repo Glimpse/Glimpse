@@ -150,6 +150,8 @@ namespace Glimpse.Core.Framework
 
         private RuntimePolicyDeterminator RuntimePolicyDeterminator { get; set; }
 
+        private ActiveGlimpseRequestContexts ActiveGlimpseRequestContexts { get; set; }
+
         /// <summary>
         /// Returns the corresponding <see cref="IGlimpseRequestContext"/> for the given <paramref name="glimpseRequestId"/>
         /// </summary>
@@ -490,6 +492,7 @@ namespace Glimpse.Core.Framework
         /// </returns>
         private void Initialize()
         {
+            ActiveGlimpseRequestContexts = new ActiveGlimpseRequestContexts(Configuration.CurrentGlimpseRequestIdTracker);
             RuntimePolicyDeterminator = new RuntimePolicyDeterminator(Configuration.RuntimePolicies.ToArray(), Configuration.Logger);
 
             var logger = Configuration.Logger;

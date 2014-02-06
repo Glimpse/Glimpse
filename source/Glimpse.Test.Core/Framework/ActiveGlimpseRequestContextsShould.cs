@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Runtime.Remoting.Messaging;
 using Glimpse.Core.Framework;
+using Glimpse.Test.Core.Tester;
 using Moq;
 using Xunit;
 
@@ -11,45 +11,48 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void ManageGlimpseRequestContextWhileKeepingTrackOfItInCallContext()
         {
-            CallContext.FreeNamedDataSlot(ActiveGlimpseRequestContexts.RequestIdKey);
-            ActiveGlimpseRequestContexts.RemoveAll();
+            var currentGlimpseRequestIdTrackerTester = new CurrentGlimpseRequestIdTrackerTester();
 
             var glimpseRequestContext = CreateGlimpseRequestContext();
-            Assert.Equal(null, CallContext.GetData(ActiveGlimpseRequestContexts.RequestIdKey));
+            Guid glimpseRequestId;
+            Assert.False(currentGlimpseRequestIdTrackerTester.TryGet(out glimpseRequestId));
+
+            var activeGlimpseRequestContexts = new ActiveGlimpseRequestContexts(currentGlimpseRequestIdTrackerTester);
 
             IGlimpseRequestContext actualGlimpseRequestContext;
-            Assert.False(ActiveGlimpseRequestContexts.TryGet(glimpseRequestContext.GlimpseRequestId, out actualGlimpseRequestContext));
+            Assert.False(activeGlimpseRequestContexts.TryGet(glimpseRequestContext.GlimpseRequestId, out actualGlimpseRequestContext));
 
-            ActiveGlimpseRequestContexts.Add(glimpseRequestContext);
-            Assert.Equal(glimpseRequestContext.GlimpseRequestId, CallContext.GetData(ActiveGlimpseRequestContexts.RequestIdKey));
-            Assert.True(ActiveGlimpseRequestContexts.TryGet(glimpseRequestContext.GlimpseRequestId, out actualGlimpseRequestContext));
+            var glimpseRequestContextHandle = activeGlimpseRequestContexts.Add(glimpseRequestContext);
+            Assert.True(currentGlimpseRequestIdTrackerTester.TryGet(out glimpseRequestId));
+            Assert.Equal(glimpseRequestContext.GlimpseRequestId, glimpseRequestId);
+
+            Assert.True(activeGlimpseRequestContexts.TryGet(glimpseRequestContext.GlimpseRequestId, out actualGlimpseRequestContext));
             Assert.Equal(glimpseRequestContext, actualGlimpseRequestContext);
 
-            ActiveGlimpseRequestContexts.Remove(glimpseRequestContext.GlimpseRequestId);
-            Assert.False(ActiveGlimpseRequestContexts.TryGet(glimpseRequestContext.GlimpseRequestId, out actualGlimpseRequestContext));
-            Assert.Equal(null, CallContext.GetData(ActiveGlimpseRequestContexts.RequestIdKey));
+            glimpseRequestContextHandle.Dispose();
+            Assert.False(activeGlimpseRequestContexts.TryGet(glimpseRequestContext.GlimpseRequestId, out actualGlimpseRequestContext));
+            Assert.False(currentGlimpseRequestIdTrackerTester.TryGet(out glimpseRequestId));
         }
 
         [Fact]
         public void ReturnInactiveGlimpseRequestContextWhenThereIsNoTrackingInformationAvailable()
         {
-            CallContext.FreeNamedDataSlot(ActiveGlimpseRequestContexts.RequestIdKey);
-            ActiveGlimpseRequestContexts.RemoveAll();
-            Assert.True(ActiveGlimpseRequestContexts.Current is UnavailableGlimpseRequestContext);
+            var activeGlimpseRequestContexts = new ActiveGlimpseRequestContexts(new CurrentGlimpseRequestIdTrackerTester());
+            Assert.True(activeGlimpseRequestContexts.Current is UnavailableGlimpseRequestContext);
         }
 
         [Fact]
         public void ThrowGlimpseExceptionWhenTrackingInformationIsAvailableButCorrespondingGlimpseRequestContextIsNot()
         {
-            CallContext.FreeNamedDataSlot(ActiveGlimpseRequestContexts.RequestIdKey);
-            ActiveGlimpseRequestContexts.RemoveAll();
-
+            var currentGlimpseRequestIdTrackerTester = new CurrentGlimpseRequestIdTrackerTester();
+            
             Guid requestId = Guid.NewGuid();
-            CallContext.LogicalSetData(ActiveGlimpseRequestContexts.RequestIdKey, requestId);
+            currentGlimpseRequestIdTrackerTester.StartTracking(requestId);
 
             try
             {
-                var currentGlimpseRequestContext = ActiveGlimpseRequestContexts.Current;
+                var activeGlimpseRequestContexts = new ActiveGlimpseRequestContexts(currentGlimpseRequestIdTrackerTester);
+                var currentGlimpseRequestContext = activeGlimpseRequestContexts.Current;
                 Assert.True(false, "A GlimpseException was expected");
             }
             catch (GlimpseException glimpseException)
@@ -61,13 +64,12 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void ReturnCorrespondingGlimpseRequestContextWhenThereIsTrackingInformationAvailable()
         {
-            CallContext.FreeNamedDataSlot(ActiveGlimpseRequestContexts.RequestIdKey);
-            ActiveGlimpseRequestContexts.RemoveAll();
+            var activeGlimpseRequestContexts = new ActiveGlimpseRequestContexts(new CurrentGlimpseRequestIdTrackerTester());
 
             var glimpseRequestContext = CreateGlimpseRequestContext();
-            ActiveGlimpseRequestContexts.Add(glimpseRequestContext);
+            activeGlimpseRequestContexts.Add(glimpseRequestContext);
 
-            Assert.True(ActiveGlimpseRequestContexts.Current == glimpseRequestContext);
+            Assert.True(activeGlimpseRequestContexts.Current == glimpseRequestContext);
         }
 
         private static IGlimpseRequestContext CreateGlimpseRequestContext()

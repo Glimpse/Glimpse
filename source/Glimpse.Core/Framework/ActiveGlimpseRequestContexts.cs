@@ -8,11 +8,11 @@ namespace Glimpse.Core.Framework
     /// <summary>
     /// Tracks active <see cref="IGlimpseRequestContext"/> instances
     /// </summary>
-    internal static class ActiveGlimpseRequestContexts
+    internal class ActiveGlimpseRequestContexts
     {
-        internal const string RequestIdKey = "__GlimpseRequestId";
         private static readonly object glimpseRequestContextsAccessLock = new object();
-        private static IDictionary<Guid, IGlimpseRequestContext> GlimpseRequestContexts { get; set; }
+        private IDictionary<Guid, IGlimpseRequestContext> GlimpseRequestContexts { get; set; }
+        private ICurrentGlimpseRequestIdTracker CurrentGlimpseRequestIdTracker { get; set; }
 
         /// <summary>
         /// Raised when a new <see cref="IGlimpseRequestContext"/> was added to the list of active Glimpse request contexts
@@ -26,9 +26,16 @@ namespace Glimpse.Core.Framework
 
         /// <summary>
         /// Initializes the type <see cref="ActiveGlimpseRequestContexts"/>
+        /// <param name="currentGlimpseRequestIdTracker">The <see cref="ICurrentGlimpseRequestIdTracker"/> to use</param>
         /// </summary>
-        static ActiveGlimpseRequestContexts()
+        public ActiveGlimpseRequestContexts(ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker)
         {
+            if (currentGlimpseRequestIdTracker == null)
+            {
+                throw new ArgumentNullException("currentGlimpseRequestIdTracker");
+            }
+
+            CurrentGlimpseRequestIdTracker = currentGlimpseRequestIdTracker;
             GlimpseRequestContexts = new Dictionary<Guid, IGlimpseRequestContext>();
         }
 
@@ -40,14 +47,15 @@ namespace Glimpse.Core.Framework
         /// A <see cref="GlimpseRequestContextHandle"/> that will make sure the given <see cref="IGlimpseRequestContext"/> is removed from
         /// the list of active Glimpse request contexts once it is disposed or finalized.
         /// </returns>
-        public static GlimpseRequestContextHandle Add(IGlimpseRequestContext glimpseRequestContext)
+        public GlimpseRequestContextHandle Add(IGlimpseRequestContext glimpseRequestContext)
         {
             // at this point, the glimpseRequestContext isn't stored anywhere, but before we put it in the list of active glimpse requests contexts
             // we'll create the handle. This handle will make sure the glimpseRequestContext is removed from the collection of active glimpse request contexts
             // in case something goes wrong further on. That's is also why we create the handle first and then add the the glimpseRequestContext to the list
             // because if the creation of the handle would fail afterwards, then there is no way to remove the glimpseRequestContext from the list.
 
-            var handle = new GlimpseRequestContextHandle(glimpseRequestContext.GlimpseRequestId, glimpseRequestContext.RequestHandlingMode);
+            var glimpseRequestId = glimpseRequestContext.GlimpseRequestId;
+            var handle = new GlimpseRequestContextHandle(glimpseRequestId, glimpseRequestContext.RequestHandlingMode, () => Remove(glimpseRequestId));
             lock (glimpseRequestContextsAccessLock)
             {
                 /* 
@@ -57,14 +65,12 @@ namespace Glimpse.Core.Framework
                  *    System.Collections.Generic.Dictionary`2.Insert(TKey key, TValue value, Boolean add)
                  *    System.Collections.Generic.Dictionary`2.Add(TKey key, TValue value)
                  */
-                GlimpseRequestContexts.Add(glimpseRequestContext.GlimpseRequestId, glimpseRequestContext);
+                GlimpseRequestContexts.Add(glimpseRequestId, glimpseRequestContext);
             }
 
-            // we also store the GlimpseRequestId in the CallContext for later use. That is our only entry point to retrieve the glimpseRequestContext
-            // when we are not inside one of the GlimpseRuntime methods that is being provided with the requestResponseAdapter
-            CallContext.LogicalSetData(RequestIdKey, glimpseRequestContext.GlimpseRequestId);
+            CurrentGlimpseRequestIdTracker.StartTracking(glimpseRequestId);
 
-            RaiseEvent(() => RequestContextAdded(null, new ActiveGlimpseRequestContextEventArgs(glimpseRequestContext.GlimpseRequestId)), "RequestContextAdded");
+            RaiseEvent(() => RequestContextAdded(this, new ActiveGlimpseRequestContextEventArgs(glimpseRequestId)), "RequestContextAdded");
 
             return handle;
         }
@@ -75,7 +81,7 @@ namespace Glimpse.Core.Framework
         /// <param name="glimpseRequestId">The Glimpse Id for which the corresponding <see cref="IGlimpseRequestContext"/> must be returned</param>
         /// <param name="glimpseRequestContext">The corresponding <see cref="IGlimpseRequestContext"/></param>
         /// <returns>Boolean indicating whether or not the corresponding <see cref="IGlimpseRequestContext"/> was found.</returns>
-        public static bool TryGet(Guid glimpseRequestId, out IGlimpseRequestContext glimpseRequestContext)
+        public bool TryGet(Guid glimpseRequestId, out IGlimpseRequestContext glimpseRequestContext)
         {
             return GlimpseRequestContexts.TryGetValue(glimpseRequestId, out glimpseRequestContext);
         }
@@ -84,7 +90,7 @@ namespace Glimpse.Core.Framework
         /// Removes the corresponding <see cref="IGlimpseRequestContext" /> from the list of active Glimpse request contexts.
         /// </summary>
         /// <param name="glimpseRequestId">The Glimpse Id for which the corresponding <see cref="IGlimpseRequestContext"/> must be removed</param>
-        public static void Remove(Guid glimpseRequestId)
+        private void Remove(Guid glimpseRequestId)
         {
             bool glimpseRequestContextRemoved;
             lock (glimpseRequestContextsAccessLock)
@@ -92,23 +98,12 @@ namespace Glimpse.Core.Framework
                 glimpseRequestContextRemoved = GlimpseRequestContexts.Remove(glimpseRequestId);
             }
 
-            CallContext.LogicalSetData(RequestIdKey, null);
-            CallContext.FreeNamedDataSlot(RequestIdKey);
+            CurrentGlimpseRequestIdTracker.StopTracking();
 
             if (glimpseRequestContextRemoved)
             {
-                RaiseEvent(() => RequestContextRemoved(null, new ActiveGlimpseRequestContextEventArgs(glimpseRequestId)), "RequestContextRemoved");
+                RaiseEvent(() => RequestContextRemoved(this, new ActiveGlimpseRequestContextEventArgs(glimpseRequestId)), "RequestContextRemoved");
             }
-        }
-
-        /// <summary>
-        /// Removes all the stored <see cref="IGlimpseRequestContext"/> from the list of active Glimpse request contexts. This should be called
-        /// with caution, because if there are still active requests being executed, removing it might or will give exceptions, since the CallContext
-        /// can't be cleared. So this exists merely for testing purposes.
-        /// </summary>
-        public static void RemoveAll()
-        {
-            GlimpseRequestContexts.Clear();
         }
 
         /// <summary>
@@ -117,16 +112,17 @@ namespace Glimpse.Core.Framework
         /// Glimpse request Id, but there is no corresponding <see cref="IGlimpseRequestContext"/> in the list of active Glimpse request contexts, then a
         /// <see cref="GlimpseException"/> is thrown.
         /// </summary>
-        public static IGlimpseRequestContext Current
+        public IGlimpseRequestContext Current
         {
             get
             {
-                var glimpseRequestId = CallContext.LogicalGetData(RequestIdKey) as Guid?;
-                if (!glimpseRequestId.HasValue)
+                Guid glimpseRequestId;
+                if (!CurrentGlimpseRequestIdTracker.TryGet(out glimpseRequestId))
                 {
                     if (GlimpseRuntime.IsInitialized)
                     {
-                        GlimpseRuntime.Instance.Configuration.Logger.Warn("Returning the UnavailableGlimpseRequestContext.Instance");
+                        GlimpseRuntime.Instance.Configuration.Logger.Warn("Returning UnavailableGlimpseRequestContext.Instance which is unexpected. If you set the log level to Trace, then you'll see the stack trace as well.");
+                        GlimpseRuntime.Instance.Configuration.Logger.Trace("Call for UnavailableGlimpseRequestContext.Instance made from" + Environment.NewLine + "\t" + new StackTrace());
                     }
 
                     // there is no context registered, which means Glimpse did not initialize itself for this request aka GlimpseRuntime.BeginRequest has not been
@@ -136,13 +132,13 @@ namespace Glimpse.Core.Framework
 
                 // we have a Glimpse Request Id, now we need to check whether we can find the corresponding Glimpse request context
                 IGlimpseRequestContext glimpseRequestContext;
-                if (TryGet(glimpseRequestId.Value, out glimpseRequestContext))
+                if (TryGet(glimpseRequestId, out glimpseRequestContext))
                 {
                     return glimpseRequestContext;
                 }
 
                 // for some reason the context corresponding to the glimpse request id is not found
-                throw new GlimpseException("No corresponding Glimpse request context found for GlimpseRequestId '" + glimpseRequestId.Value + "'.");
+                throw new GlimpseException("No corresponding Glimpse request context found for GlimpseRequestId '" + glimpseRequestId + "'.");
             }
         }
 

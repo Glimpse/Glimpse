@@ -108,5 +108,10 @@ namespace Glimpse.Core.Framework
         /// </summary>
         /// <value>The hash.</value>
         string Hash { get; }
+
+        /// <summary>
+        /// Gets the configured <see cref="ICurrentGlimpseRequestIdTracker"/>
+        /// </summary>
+        ICurrentGlimpseRequestIdTracker CurrentGlimpseRequestIdTracker { get; }
     }
 }

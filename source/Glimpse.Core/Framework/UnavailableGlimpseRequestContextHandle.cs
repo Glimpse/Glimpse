@@ -22,7 +22,7 @@ namespace Glimpse.Core.Framework
         /// Initializes a new instance of the <see cref="UnavailableGlimpseRequestContextHandle"/>
         /// </summary>
         private UnavailableGlimpseRequestContextHandle()
-            : base(new Guid(), RequestHandlingMode.Unhandled)
+            : base(new Guid(), RequestHandlingMode.Unhandled, () => { })
         {
         }
 

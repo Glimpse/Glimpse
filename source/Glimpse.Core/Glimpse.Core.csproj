@@ -114,8 +114,10 @@
     <Compile Include="Framework\ActiveGlimpseRequestContextEventArgs.cs" />
     <Compile Include="Framework\ActiveGlimpseRequestContexts.cs" />
     <Compile Include="Framework\AssemblyTypesResolver.cs" />
+    <Compile Include="Framework\CallContextCurrentGlimpseRequestIdTracker.cs" />
     <Compile Include="Framework\Crc32.cs" />
     <Compile Include="Framework\GlimpseNotInitializedException.cs" />
+    <Compile Include="Framework\ICurrentGlimpseRequestIdTracker.cs" />
     <Compile Include="Framework\IGlimpseRequestContext.cs" />
     <Compile Include="Framework\GlimpseRequestContext.cs" />
     <Compile Include="Framework\GlimpseScriptTagsGenerator.cs" />
