@@ -123,17 +123,26 @@
                         <pre>    &lt;/inspectors&gt;</pre>
                     </div>
 
+                    <pre class="code-content code-insight configuration-options-item">
+    &lt;clientScripts&gt;
+      &lt;ignoredTypes&gt;
+        &lt;add type="Glimpse.Core.ClientScript.Insight, Glimpse.Core"/&gt; 
+      &lt;/ignoredTypes&gt;
+    &lt;/clientScripts&gt;</pre>
+
                     <pre class="code-content">&lt;/glimpse&gt;</pre>
 
                     <ul class="configuration-options">
                         <li>Tab Management - Individual Tabs can be disabled by instructing Glimpse to ignore their types</li>
-                        <li>Runtime Policy Management - Individual Policies can be disabled by instructing Glimpse to ignore their types
-                        <ul>
-                            <li><input type="checkbox" data-show="code-runtimePolicies-contentTypes">Content Types - Filter what specific Content Types Glimpse will be enabled for</li>
-                            <li><input type="checkbox" data-show="code-runtimePolicies-blacklist">Blacklist URIs - Filter Glimpse to only work on URIs that match specifc regular expressions</li>
-                            <li><input type="checkbox" data-show="code-runtimePolicies-statusCodes">Status Codes - Filter what specific Status Codes Glimpse will be enabled for</li>
-                        </ul>
+                        <li>
+                            Runtime Policy Management - Individual Policies can be disabled by instructing Glimpse to ignore their types
+                            <ul>
+                                <li><input type="checkbox" data-show="code-runtimePolicies-contentTypes">Content Types - Filter what specific Content Types Glimpse will be enabled for</li>
+                                <li><input type="checkbox" data-show="code-runtimePolicies-blacklist">Blacklist URIs - Filter Glimpse to only work on URIs that match specifc regular expressions</li>
+                                <li><input type="checkbox" data-show="code-runtimePolicies-statusCodes">Status Codes - Filter what specific Status Codes Glimpse will be enabled for</li>
+                            </ul>
                         <li><input type="checkbox" data-show="code-logging">Logging - An internal Glimpse diagnostics log can be enabled to help troubleshoot problems with Glimpse</li>
+                        <li><input type="checkbox" data-show="code-insight">Insights - Toggle for if you need to disable insights</li>
                     </ul>
                     <div class="center"><a href="http://getglimpse.com/Help/Configuration">find out more online</a></div>
                 </div>
