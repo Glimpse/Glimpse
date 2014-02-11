@@ -24,7 +24,7 @@ namespace Glimpse.AspNet.Inspector
                 for (var i = 0; i < currentRoutes.Count; i++)
                 {
                     var originalObj = currentRoutes[i];
-                    if (IgnoredRouteType.Contains(originalObj.GetType().ToString()))
+                    if (IgnoredRouteTypes.Contains(originalObj.GetType().ToString()))
                     {
                         continue;
                     }
