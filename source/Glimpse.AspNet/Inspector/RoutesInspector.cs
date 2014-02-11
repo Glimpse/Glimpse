@@ -9,6 +9,7 @@ namespace Glimpse.AspNet.Inspector
     public class RoutesInspector : IInspector
     {
         private static readonly FieldInfo MappedRoutesField = typeof(System.Web.Routing.RouteCollection).GetField("_namedMap", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly List<string> IgnoredRouteTypes = new List<string> { "System.Web.Http.WebHost.Routing.HttpWebRoute" };
          
         public void Setup(IInspectorContext context)
         {
@@ -23,7 +24,7 @@ namespace Glimpse.AspNet.Inspector
                 for (var i = 0; i < currentRoutes.Count; i++)
                 {
                     var originalObj = currentRoutes[i];
-                    if (!(typeof(System.Web.Routing.RouteBase)).IsAssignableFrom(originalObj.GetType()))
+                    if (IgnoredRouteType.Contains(originalObj.GetType().ToString()))
                     {
                         continue;
                     }
