@@ -74,14 +74,14 @@ namespace Glimpse.AspNet.Tab
 
             using (System.Web.Routing.RouteTable.Routes.GetReadLock())
             {
-                foreach (var routeBase in System.Web.Routing.RouteTable.Routes)
+                var aspNetRoutes = System.Web.Routing.RouteTable.Routes
+                                        .Where(r => r.GetType().ToString() == "Castle.Proxies.RouteProxy");
+                                        
+                foreach (var routeBase in aspNetRoutes)
                 {
-                    if ((typeof(System.Web.Routing.RouteBase)).IsAssignableFrom(routeBase.GetType()))
-                    {
-                        var routeModel = GetRouteModelForRoute(context, routeBase, routeMessages, constraintMessages);
-                        
-                        result.Add(routeModel);
-                    }
+                    var routeModel = GetRouteModelForRoute(context, routeBase, routeMessages, constraintMessages);
+                    
+                    result.Add(routeModel);
                 }
             }
 
