@@ -14,6 +14,14 @@ namespace Glimpse.AspNet.Tab
 {
     public class Routes : AspNetTab, IDocumentation, ITabSetup, ITabLayout, IKey
     {
+        private static readonly List<string> AspNetProxiedRouteTypes = new List<string>
+        {
+            "Castle.Proxies.RouteProxy",
+            "Castle.Proxies.RouteProxy_1",
+            "Castle.Proxies.RouteBaseProxy",
+            "Castle.Proxies.RouteBaseProxy_1"
+        };
+        
         private static readonly object Layout = TabLayout.Create()
                 .Row(r =>
                 {
@@ -70,12 +78,11 @@ namespace Glimpse.AspNet.Tab
             var routeMessages = ProcessMessages(context.GetMessages<RouteBase.GetRouteData.Message>());
             var constraintMessages = ProcessMessages(context.GetMessages<RouteBase.ProcessConstraint.Message>());
 
-             var result = new List<RouteModel>();
-
+            var result = new List<RouteModel>();
+            
             using (System.Web.Routing.RouteTable.Routes.GetReadLock())
             {
-                var aspNetRoutes = System.Web.Routing.RouteTable.Routes
-                                        .Where(r => r.GetType().ToString() == "Castle.Proxies.RouteProxy");
+                var aspNetRoutes = System.Web.Routing.RouteTable.Routes.Where(r => AspNetProxiedRouteTypes.Contains(r.GetType().ToString()));
                                         
                 foreach (var routeBase in aspNetRoutes)
                 {
