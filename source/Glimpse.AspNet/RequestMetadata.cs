@@ -75,9 +75,9 @@ namespace Glimpse.AspNet
             }
         }
 
-        public string RequestUri
+        public Uri RequestUri
         {
-            get { return Context.Request.Url.AbsoluteUri; }
+            get { return Context.Request.Url; }
         }
 
         private HttpContextBase Context { get; set; }

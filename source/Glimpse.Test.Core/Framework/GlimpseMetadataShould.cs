@@ -13,6 +13,7 @@ namespace Glimpse.Test.Core.Framework
         {
             var guid = Guid.NewGuid();
             var metadataMock = new Mock<IRequestMetadata>();
+            metadataMock.Setup(requestMetadata => requestMetadata.RequestUri).Returns(new Uri("http://localhost"));
 
             var pluginData = new Dictionary<string, TabResult>();
             var expectedDuration = TimeSpan.FromMilliseconds(5);

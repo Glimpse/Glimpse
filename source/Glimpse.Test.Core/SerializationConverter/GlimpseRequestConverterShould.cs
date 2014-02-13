@@ -16,7 +16,7 @@ namespace Glimpse.Test.Core.SerializationConverter
             var requestMock = new Mock<IRequestMetadata>();
             requestMock.Setup(r => r.GetCookie(Constants.ClientIdCookieName)).Returns("Anything");
             requestMock.Setup(r => r.RequestHttpMethod).Returns("POST");
-            requestMock.Setup(r => r.RequestUri).Returns("http://localhost/");
+            requestMock.Setup(r => r.RequestUri).Returns(new Uri("http://localhost/"));
             requestMock.Setup(r => r.ResponseContentType).Returns(@"text/html");
             requestMock.Setup(r => r.GetHttpHeader(Constants.UserAgentHeaderName)).Returns(@"FireFox");
 

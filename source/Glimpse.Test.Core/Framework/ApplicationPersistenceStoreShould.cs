@@ -17,9 +17,12 @@ namespace Glimpse.Test.Core.Framework
 
             Action<InMemoryPersistenceStore> addingRequests = store =>
             {
+                var metadataMock = new Mock<IRequestMetadata>();
+                metadataMock.Setup(requestMetadata => requestMetadata.RequestUri).Returns(new Uri("http://localhost"));
+
                 var glimpseRequest = new GlimpseRequest(
                     Guid.NewGuid(),
-                    new Mock<IRequestMetadata>().Object,
+                    metadataMock.Object,
                     new Dictionary<string, TabResult>(),
                     new Dictionary<string, TabResult>(),
                     new TimeSpan(1000));

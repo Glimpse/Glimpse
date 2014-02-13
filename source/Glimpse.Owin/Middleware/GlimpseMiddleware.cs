@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions;
 using Glimpse.Core.Framework;
 using Microsoft.Owin;
 
@@ -21,7 +20,7 @@ namespace Glimpse.Owin.Middleware
             innerNext = next;
             config = new GlimpseConfiguration(
                     new UriTemplateResourceEndpointConfiguration(),
-                    new InMemoryPersistenceStore(new DictionaryDataStoreAdapter((Dictionary<string, object>)serverStore))); 
+                    new InMemoryPersistenceStore(new DictionaryDataStoreAdapter((Dictionary<string, object>)serverStore)));
         }
 
         public async Task Invoke(IDictionary<string, object> environment)
@@ -37,37 +36,53 @@ namespace Glimpse.Owin.Middleware
                 var response = new OwinResponse(environment);
                 var requestResponseAdapter = new OwinRequestResponseAdapter(environment);
 
-                if (request.Uri.PathAndQuery.StartsWith(config.EndpointBaseUri, StringComparison.InvariantCultureIgnoreCase))
+                using (var glimpseRequestContextHandle = GlimpseRuntime.Instance.BeginRequest(requestResponseAdapter))
                 {
-                    await ExecuteResource(requestResponseAdapter, request.Query);
-                    return;
+                    if (glimpseRequestContextHandle.RequestHandlingMode == RequestHandlingMode.Unhandled)
+                    {
+                        await innerNext(environment);
+                        return;
+                    }
+
+                    try
+                    {
+                        if (glimpseRequestContextHandle.RequestHandlingMode == RequestHandlingMode.ResourceRequest)
+                        {
+                            await ExecuteResource(glimpseRequestContextHandle, request.Query);
+                        }
+                        else
+                        {
+                            // V2Merge: Hack's a million!
+#warning Even with this hack, it seems wrong, as the scripts will always be injected independent of the RuntimePolicy (only DisplayGlimpseClient should render it, and we only know that at the end)
+                            var htmlSnippet = GlimpseRuntime.Instance.GenerateScriptTags(glimpseRequestContextHandle);
+                            response.Body = new PreBodyTagInjectionStream(htmlSnippet, response.Body, Encoding.UTF8, request.Uri.AbsoluteUri, new NullLogger());
+
+                            await innerNext(environment);
+                        }
+                    }
+                    finally
+                    {
+                        GlimpseRuntime.Instance.EndRequest(glimpseRequestContextHandle);
+                    }
                 }
-                
-                // V2Merge: Hack's a million!
-                var requestId = GlimpseRuntime.Instance.BeginRequest(requestResponseAdapter);
-                var htmlSnippet = GlimpseRuntime.Instance.GenerateScriptTags(requestId, requestResponseAdapter);
-                response.Body = new PreBodyTagInjectionStream(htmlSnippet, response.Body, Encoding.UTF8, request.Uri.AbsoluteUri, new NullLogger());
             }
-
-            await innerNext(environment);
-
-            if (GlimpseRuntime.IsInitialized)
+            else
             {
-                GlimpseRuntime.Instance.EndRequest(new OwinRequestResponseAdapter(environment));
+                await innerNext(environment);
             }
         }
 
-        private async Task ExecuteResource(IRequestResponseAdapter requestResponseAdapter, IReadableStringCollection queryString)
+        private static async Task ExecuteResource(GlimpseRequestContextHandle glimpseRequestContextHandle, IReadableStringCollection queryString)
         {
             if (string.IsNullOrEmpty(queryString[UriTemplateResourceEndpointConfiguration.DefaultResourceNameKey]))
             {
-                GlimpseRuntime.Instance.ExecuteDefaultResource(requestResponseAdapter);
+                GlimpseRuntime.Instance.ExecuteDefaultResource(glimpseRequestContextHandle);
             }
             else
             {
                 GlimpseRuntime.Instance.ExecuteResource(
-                    requestResponseAdapter, 
-                    queryString[UriTemplateResourceEndpointConfiguration.DefaultResourceNameKey], 
+                    glimpseRequestContextHandle,
+                    queryString[UriTemplateResourceEndpointConfiguration.DefaultResourceNameKey],
                     new ResourceParameters(queryString.ToDictionary(qs => qs.Key, qs => qs.Value.First())));
             }
         }

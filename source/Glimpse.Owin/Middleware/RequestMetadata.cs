@@ -15,27 +15,27 @@ namespace Glimpse.Owin.Middleware
             this.response = response;
         }
 
-        public string RequestUri 
+        public Uri RequestUri
         {
-            get { return request.Uri.AbsoluteUri; }
+            get { return request.Uri; }
         }
 
-        public string RequestHttpMethod 
+        public string RequestHttpMethod
         {
             get { return request.Method; }
         }
 
-        public int ResponseStatusCode 
+        public int ResponseStatusCode
         {
             get { return response.StatusCode; }
         }
 
-        public string ResponseContentType 
+        public string ResponseContentType
         {
             get { return response.ContentType; }
         }
 
-        public bool RequestIsAjax 
+        public bool RequestIsAjax
         {
             get
             {
@@ -48,7 +48,7 @@ namespace Glimpse.Owin.Middleware
             }
         }
 
-        public string ClientId 
+        public string ClientId
         {
             get
             {

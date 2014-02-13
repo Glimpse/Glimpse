@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Web;
-using Glimpse.AspNet;
 using Glimpse.Core.Framework;
 using Glimpse.Test.AspNet.Tester;
 using Moq;
@@ -33,7 +31,7 @@ namespace Glimpse.Test.AspNet
         {
             Handler.ProcessRequest(Handler.ContextMock.Object);
 
-            Handler.RuntimeMock.Verify(r => r.ExecuteResource(It.IsAny<IRequestResponseAdapter>(), Handler.ResourceName, It.IsAny<ResourceParameters>()), Times.Once());
+            Handler.RuntimeMock.Verify(r => r.ExecuteResource(It.IsAny<GlimpseRequestContextHandle>(), Handler.ResourceName, It.IsAny<ResourceParameters>()), Times.Once());
         }
 
         [Fact(Skip = "Fix to work with new init model.")]
@@ -43,7 +41,7 @@ namespace Glimpse.Test.AspNet
 
             Handler.ProcessRequest(Handler.ContextMock.Object);
 
-            Handler.RuntimeMock.Verify(r => r.ExecuteDefaultResource(It.IsAny<IRequestResponseAdapter>()), Times.Once());
+            Handler.RuntimeMock.Verify(r => r.ExecuteDefaultResource(It.IsAny<GlimpseRequestContextHandle>()), Times.Once());
         }
     }
 }

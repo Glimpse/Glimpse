@@ -1,6 +1,4 @@
-﻿using Glimpse.Core.Extensibility;
-
-namespace Glimpse.Core
+﻿namespace Glimpse.Core
 {
     /// <summary>
     /// Common constant strings used throughout Glimpse.
@@ -21,22 +19,6 @@ namespace Glimpse.Core
         internal const string ClientIdCookieName = "glimpseId";
 
         /// <summary>
-        /// The key Glimpse server uses to store a <see cref="System.Diagnostics.Stopwatch"/> for tracking execution duration.
-        /// </summary>
-        /// <remarks>
-        /// Used as the key for the framework provider's local request storage mechanism (i.e. <c>HttpContext.Items</c>).
-        /// </remarks>
-        internal const string GlobalStopwatchKey = "__GlimpseGlobalStopwatch";
-
-        /// <summary>
-        /// The key Glimpse server uses to store a <see cref="Glimpse.Core.Extensibility.IExecutionTimer"/> for tracking execution duration.
-        /// </summary>
-        /// <remarks>
-        /// Used as the key for the framework provider's local request storage mechanism (i.e. <c>HttpContext.Items</c>).
-        /// </remarks>
-        internal const string GlobalTimerKey = "__GlimpseTimer";
-
-        /// <summary>
         /// The name of the Http request header the Glimpse client will write the parent request ID to. 
         /// </summary>
         /// <remarks>
@@ -51,22 +33,6 @@ namespace Glimpse.Core
         /// In the past <see cref="HttpResponseHeader"/> has used an "X-" prefix to denote a custom header, but that practice has been deprecated as of <see href="http://tools.ietf.org/html/rfc6648">RFC 6648</see>.
         /// </remarks>
         internal const string HttpResponseHeader = "Glimpse-RequestID";
-
-        /// <summary>
-        /// The key Glimpse server uses to store a <see cref="System.Guid"/> which represents the current request's unique identifier.
-        /// </summary>
-        /// <remarks>
-        /// Used as the key for the framework provider's local request storage mechanism (i.e. <c>HttpContext.Items</c>).
-        /// </remarks>
-        internal const string RequestIdKey = "__GlimpseRequestId";
-
-        /// <summary>
-        /// The key Glimpse server uses to store a <see cref="RuntimePolicy"/> for tracking Glimpse permissions.
-        /// </summary>
-        /// <remarks>
-        /// Used as the key for the framework provider's local request storage mechanism (i.e. <c>HttpContext.Items</c>).
-        /// </remarks>
-        internal const string RuntimePolicyKey = "__GlimpseRequestRuntimePermissions";
 
         /// <summary>
         /// The key Glimpse server uses to store an <c>IDictionary&lt;string, TabResult&gt;</c> which stores the result of calling <c>GetData()</c> on each <see cref="Glimpse.Core.Extensibility.ITab"/> implementation.
@@ -92,7 +58,5 @@ namespace Glimpse.Core
         /// The key Glimpse server uses to store the client scripts strategy.
         /// </summary>
         internal const string ClientScriptsStrategy = "__GlimpseClientScriptsStrategy";
-
-        internal const string RequestResponseAdapterStorageKey = "__GlimpseRequestResponseAdapterStorage";
     }
 }

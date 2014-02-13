@@ -41,7 +41,7 @@ namespace Glimpse.Test.Core.Tester
             RequestMetadataMock = new Mock<IRequestMetadata>();
             RequestMetadataMock.Setup(r => r.RequestHttpMethod).Returns("GET");
             RequestMetadataMock.Setup(r => r.RequestIsAjax).Returns(true);
-            RequestMetadataMock.Setup(r => r.RequestUri).Returns("http://localhost");
+            RequestMetadataMock.Setup(r => r.RequestUri).Returns(new Uri("http://localhost"));
             RequestMetadataMock.Setup(r => r.ResponseStatusCode).Returns(200);
             RequestMetadataMock.Setup(r => r.ResponseContentType).Returns(@"text\html");
             RequestMetadataMock.Setup(r => r.GetCookie(Constants.ClientIdCookieName)).Returns(@"Some Client");

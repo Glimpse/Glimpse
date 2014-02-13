@@ -1,6 +1,6 @@
 ﻿using System.Web;
 using System.Web.Mvc;
-using Glimpse.AspNet.Extensions;
+using Glimpse.Core.Framework;
 
 namespace Glimpse.Mvc.Html
 {
@@ -9,16 +9,17 @@ namespace Glimpse.Mvc.Html
 #if MVC2
         public static string GlimpseClient(this HtmlHelper helper)
         {
-            var tags = helper.ViewContext.HttpContext.GenerateGlimpseScriptTags();
-
-            return tags;
+            return GlimpseRuntime.IsInitialized
+                ? GlimpseRuntime.Instance.GenerateScriptTags(GlimpseRuntime.Instance.CurrentRequestContext)
+                : string.Empty;
         }
 #else
         public static IHtmlString GlimpseClient(this HtmlHelper helper)
         {
-            var tags = helper.ViewContext.HttpContext.GenerateGlimpseScriptTags();
-
-            return helper.Raw(tags);
+            return helper.Raw( 
+                GlimpseRuntime.IsInitialized 
+                    ? GlimpseRuntime.Instance.GenerateScriptTags(GlimpseRuntime.Instance.CurrentRequestContext) 
+                    : string.Empty);
         }
 #endif
     }

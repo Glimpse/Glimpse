@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common; 
+using System.Data.Common;
 using System.Reflection;
 using System.Text;
 using Glimpse.Ado.Message;
@@ -33,10 +33,10 @@ namespace Glimpse.Ado.AlternateType
         {
             var factory = connection.TryGetProviderFactory();
             if (factory != null)
-            { 
+            {
                 if (!(factory is GlimpseDbProviderFactory))
                 {
-                    factory = factory.WrapProviderFactory(); 
+                    factory = factory.WrapProviderFactory();
                 }
             }
             else
@@ -50,9 +50,9 @@ namespace Glimpse.Ado.AlternateType
         public static DbProviderFactory WrapProviderFactory(this DbProviderFactory factory)
         {
             if (!(factory is GlimpseDbProviderFactory))
-            { 
+            {
                 var factoryType = typeof(GlimpseDbProviderFactory<>).MakeGenericType(factory.GetType());
-                return (DbProviderFactory)factoryType.GetField("Instance").GetValue(null);    
+                return (DbProviderFactory)factoryType.GetField("Instance").GetValue(null);
             }
 
             return factory;
@@ -162,7 +162,16 @@ namespace Glimpse.Ado.AlternateType
 
         internal static IExecutionTimer DetermineExecutionTimer()
         {
-            return GlimpseRuntime.IsInitialized ? GlimpseRuntime.Instance.Configuration.TimerStrategy() : null;
+            if (GlimpseRuntime.IsInitialized)
+            {
+                var currentRequestContext = GlimpseRuntime.Instance.CurrentRequestContext;
+                if (currentRequestContext.CurrentRuntimePolicy != RuntimePolicy.Off)
+                {
+                    return currentRequestContext.CurrentExecutionTimer;
+                }
+            }
+
+            return null;
         }
     }
 }

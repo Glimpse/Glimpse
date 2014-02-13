@@ -7,7 +7,7 @@ namespace Glimpse.Core.Framework
     /// <summary>
     /// Defines methods to implement a resource endpoint configuration.
     /// </summary>
-    public abstract class ResourceEndpointConfiguration
+    public abstract class ResourceEndpointConfiguration : IResourceEndpointConfiguration
     {
         /// <summary>
         /// Generates the URI template.
@@ -45,6 +45,17 @@ namespace Glimpse.Core.Framework
             }
 
             return string.Empty;
+        }
+
+        /// <summary>
+        /// Checks whether the given <paramref name="requestUri"/> is a request for a Glimpse <see cref="IResource"/> or not
+        /// </summary>
+        /// <param name="requestUri">The request URI to check</param>
+        /// <param name="endpointBaseUri">The endpoint base URI to check against</param>
+        /// <returns>Boolean indicating whether a Glimpse <see cref="IResource"/> request is made or not</returns>
+        public virtual bool IsResourceRequest(Uri requestUri, string endpointBaseUri)
+        {
+            return requestUri.AbsolutePath.StartsWith(endpointBaseUri, StringComparison.InvariantCultureIgnoreCase);
         }
 
         /// <summary>

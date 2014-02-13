@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -22,7 +21,6 @@ namespace Glimpse.Core.Framework
     public class GlimpseConfiguration : IGlimpseConfiguration
     {
         private IMessageBroker messageBroker;
-        private Func<IExecutionTimer> timerStrategy;
         private ILogger logger;
         private ICollection<IClientScript> clientScripts;
         private IResource defaultResource;
@@ -31,20 +29,23 @@ namespace Glimpse.Core.Framework
         private IPersistenceStore persistenceStore;
         private ICollection<IInspector> inspectors;
         private IProxyFactory proxyFactory;
-        private ResourceEndpointConfiguration resourceEndpoint;
+        private IResourceEndpointConfiguration resourceEndpoint;
         private ICollection<IResource> resources;
         private ICollection<IRuntimePolicy> runtimePolicies;
         private ISerializer serializer;
         private ICollection<ITab> tabs;
         private ICollection<IDisplay> displays;
-        private Func<RuntimePolicy> runtimePolicyStrategy;
         private string hash;
         private IServiceLocator userServiceLocator;
         private Section xmlConfiguration;
         private RuntimePolicy? defaultRuntimePolicy;
         private ICollection<ISerializationConverter> serializationConverters;
+        private ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker;
 
-        public GlimpseConfiguration(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore)
+        public GlimpseConfiguration(
+            IResourceEndpointConfiguration endpointConfiguration, 
+            IPersistenceStore persistenceStore,
+            ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
         {
             if (endpointConfiguration == null)
             {
@@ -58,8 +59,18 @@ namespace Glimpse.Core.Framework
 
             ResourceEndpoint = endpointConfiguration;
             PersistenceStore = persistenceStore;
+            CurrentGlimpseRequestIdTracker = currentGlimpseRequestIdTracker ?? new CallContextCurrentGlimpseRequestIdTracker();
+
             // TODO: Instantiate the user's IOC container (if they have one)
         }
+
+        /// <summary>
+        /// Gets the <see cref="ICurrentGlimpseRequestIdTracker"/>.
+        /// </summary>
+        /// <value>
+        /// The configured <see cref="ICurrentGlimpseRequestIdTracker"/>.
+        /// </value>
+        public ICurrentGlimpseRequestIdTracker CurrentGlimpseRequestIdTracker { get; private set; }
 
         public IServiceLocator UserServiceLocator 
         {
@@ -346,7 +357,10 @@ namespace Glimpse.Core.Framework
                     return messageBroker;
                 }
 
-                messageBroker = new MessageBroker(Logger);
+                messageBroker = new MessageBroker(
+                    () => GlimpseRuntime.IsInitialized && GlimpseRuntime.Instance.CurrentRequestContext.CurrentRuntimePolicy != RuntimePolicy.Off,
+                    Logger);
+
                 return messageBroker;
             }
 
@@ -445,7 +459,12 @@ namespace Glimpse.Core.Framework
                     return proxyFactory;
                 }
 
-                proxyFactory = new CastleDynamicProxyFactory(Logger, MessageBroker, TimerStrategy, RuntimePolicyStrategy);
+                proxyFactory = new CastleDynamicProxyFactory(
+                    Logger,
+                    MessageBroker,
+                    () => GlimpseRuntime.IsInitialized ? GlimpseRuntime.Instance.CurrentRequestContext.CurrentExecutionTimer : UnavailableGlimpseRequestContext.Instance.CurrentExecutionTimer,
+                    () => GlimpseRuntime.IsInitialized ? GlimpseRuntime.Instance.CurrentRequestContext.CurrentRuntimePolicy : UnavailableGlimpseRequestContext.Instance.CurrentRuntimePolicy);
+
                 return proxyFactory;
             }
 
@@ -461,13 +480,13 @@ namespace Glimpse.Core.Framework
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="ResourceEndpointConfiguration"/>.
+        /// Gets or sets the <see cref="IResourceEndpointConfiguration"/>.
         /// </summary>
         /// <value>
-        /// The configured <see cref="ResourceEndpointConfiguration"/>.
+        /// The configured <see cref="IResourceEndpointConfiguration"/>.
         /// </value>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public ResourceEndpointConfiguration ResourceEndpoint
+        public IResourceEndpointConfiguration ResourceEndpoint
         {
             get
             {
@@ -563,37 +582,6 @@ namespace Glimpse.Core.Framework
                 }
 
                 runtimePolicies = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the <see cref="RuntimePolicy"/> strategy.
-        /// </summary>
-        /// <value>
-        /// The configured <see cref="RuntimePolicy"/>.
-        /// </value>
-        /// <returns>A <c>Func&lt;RuntimePolicy&gt;</c> to access the request specific <see cref="RuntimePolicy"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public Func<RuntimePolicy> RuntimePolicyStrategy
-        {
-            get
-            {
-                if (runtimePolicyStrategy != null)
-                {
-                    return runtimePolicyStrategy;
-                }
-
-                return () => RuntimePolicy.On; // TODO: Reimplement
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                runtimePolicyStrategy = value;
             }
         }
 
@@ -732,37 +720,6 @@ namespace Glimpse.Core.Framework
                 }
 
                 displays = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the <see cref="IExecutionTimer"/> strategy.
-        /// </summary>
-        /// <value>
-        /// The configured <see cref="IExecutionTimer"/> strategy.
-        /// </value>
-        /// <returns>A <c>Func&lt;IExecutionTimer&gt;</c> to access the request specific <see cref="IExecutionTimer"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public Func<IExecutionTimer> TimerStrategy 
-        { 
-            get
-            {
-                if (timerStrategy != null)
-                {
-                    return timerStrategy;
-                }
-
-                return() => new ExecutionTimer(Stopwatch.StartNew()) as IExecutionTimer; // TODO: reimplement this
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                timerStrategy = value;
             }
         }
 

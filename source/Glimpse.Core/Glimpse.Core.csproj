@@ -107,12 +107,25 @@
     <Compile Include="Extensibility\IWrapper.cs" />
     <Compile Include="Extensibility\JsonNetConverterDictionaryKeysAreNotPropertyNames.cs" />
     <Compile Include="Extensibility\InspectorContext.cs" />
+    <Compile Include="Extensibility\RequestHandlingMode.cs" />
     <Compile Include="Extensibility\RuntimePolicy.cs" />
     <Compile Include="Extensibility\Subscriber.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Framework\ActiveGlimpseRequestContextEventArgs.cs" />
+    <Compile Include="Framework\ActiveGlimpseRequestContexts.cs" />
     <Compile Include="Framework\AssemblyTypesResolver.cs" />
+    <Compile Include="Framework\CallContextCurrentGlimpseRequestIdTracker.cs" />
     <Compile Include="Framework\Crc32.cs" />
     <Compile Include="Framework\GlimpseNotInitializedException.cs" />
+    <Compile Include="Framework\ICurrentGlimpseRequestIdTracker.cs" />
+    <Compile Include="Framework\IGlimpseRequestContext.cs" />
+    <Compile Include="Framework\GlimpseRequestContext.cs" />
+    <Compile Include="Framework\GlimpseScriptTagsGenerator.cs" />
+    <Compile Include="Framework\IResourceEndpointConfiguration.cs" />
+    <Compile Include="Framework\RuntimePolicyDeterminator.cs" />
+    <Compile Include="Framework\UnavailableGlimpseRequestContextHandle.cs" />
+    <Compile Include="Framework\GlimpseRequestContextHandle.cs" />
+    <Compile Include="Framework\UnavailableGlimpseRequestContext.cs" />
     <Compile Include="Framework\ReflectionBlackList.cs" />
     <Compile Include="Framework\Support\ExecutionBlockBase.cs" />
     <Compile Include="Framework\Support\IExecutionTask.cs" />
@@ -286,6 +299,7 @@
     <Compile Include="SerializationConverter\TabResultConverter.cs" />
     <Compile Include="SerializationConverter\CSharpTypeConverter.cs" />
     <Compile Include="Tab\Timeline.cs" />
+    <Compile Include="Tab\Glimpse.cs" />
     <Compile Include="Tab\Trace.cs" />
     <Compile Include="TraceListener.cs" />
   </ItemGroup>
