@@ -66,6 +66,7 @@
       <Link />
     </Compile>
     <Compile Include="Backport\Net35Backport.cs" />
+    <Compile Include="Backport\Tuple.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
