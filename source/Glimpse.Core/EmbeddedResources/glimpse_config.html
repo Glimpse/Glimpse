@@ -83,7 +83,9 @@
     &lt;!-- Runtime Policy Management
     &lt;runtimePolicies&gt;
         &lt;ignoredTypes&gt;
-            &lt;add type="{Namespace.Type, AssemblyName}"/&gt;
+            &lt;add type="{Namespace.Type, AssemblyName}"/&gt;                        
+            &lt;add contentType="image/png" runtimePolicy="ModifyResponseHeaders" /&gt;                                
+            &lt;add contentType="application/msword" runtimePolicy="PersistResults" /&gt;
         &lt;/ignoredTypes&gt;
     &lt;/runtimePolicies&gt;
     --></pre>
@@ -107,7 +109,9 @@
                         </div>
                         <div class="code-runtimePolicies-contentTypes configuration-options-item">
                             <pre>       &lt;contentTypes&gt;
-            &lt;add contentType="application/xml"/&gt;
+            &lt;add contentType="application/xml"/&gt;                                
+            &lt;add contentType="image/png" runtimePolicy="ModifyResponseHeaders" /&gt;                                
+            &lt;add contentType="application/msword" runtimePolicy="PersistResults" /&gt;
         &lt;/contentTypes&gt;</pre>
                         </div>
                         <pre>    &lt;/runtimePolicies&gt;</pre>

@@ -14,7 +14,8 @@ namespace Glimpse.Core.Policy
         /// <summary>
         /// Initializes a new instance of the <see cref="ContentTypePolicy" /> class with an empty white list.
         /// </summary>
-        public ContentTypePolicy() : this(new List<string>())
+        public ContentTypePolicy()
+            : this(new List<Tuple<string, RuntimePolicy>>())
         {
         }
 
@@ -23,7 +24,7 @@ namespace Glimpse.Core.Policy
         /// </summary>
         /// <param name="contentTypeWhiteList">The content type white list to validate against.</param>
         /// <exception cref="System.ArgumentNullException">Exception thrown if <paramref name="contentTypeWhiteList"/> is <c>null</c>.</exception>
-        public ContentTypePolicy(IList<string> contentTypeWhiteList)
+        public ContentTypePolicy(IList<Tuple<string, RuntimePolicy>> contentTypeWhiteList)
         {
             if (contentTypeWhiteList == null)
             {
@@ -39,7 +40,7 @@ namespace Glimpse.Core.Policy
         /// <value>
         /// The content type white list to validate against.
         /// </value>
-        public IList<string> ContentTypeWhiteList { get; set; }
+        public IList<Tuple<string, RuntimePolicy>> ContentTypeWhiteList { get; set; }
 
         /// <summary>
         /// Gets the point in an Http request lifecycle that a policy should execute.
@@ -67,7 +68,9 @@ namespace Glimpse.Core.Policy
                 var contentType = policyContext.RequestMetadata.ResponseContentType.ToLowerInvariant();
                 
                 // support for the following content type strings: "text/html" & "text/html; charset=utf-8"
-                return ContentTypeWhiteList.Any(ct => contentType.Contains(ct.ToLowerInvariant())) ? RuntimePolicy.On : RuntimePolicy.Off;
+                var match = ContentTypeWhiteList.FirstOrDefault(ct => contentType.Contains(ct.Item1.ToLowerInvariant()));
+
+                return match != null ? match.Item2 : RuntimePolicy.Off;
             }
             catch (Exception exception)
             {
@@ -92,7 +95,7 @@ namespace Glimpse.Core.Policy
         ///     <runtimePolicies>
         ///         <contentTypes>
         ///             <!-- <clear /> clear to reset defaults -->
-        ///             <add contentType="{media\type}" />
+        ///             <add contentType="{media\type}" runtimePolicy="on" />
         ///         </contentTypes>
         ///     </runtimePolicies>
         /// </glimpse>
@@ -103,7 +106,7 @@ namespace Glimpse.Core.Policy
         {
             foreach (ContentTypeElement item in section.RuntimePolicies.ContentTypes)
             {
-                ContentTypeWhiteList.Add(item.ContentType);
+                ContentTypeWhiteList.Add(new Tuple<string, RuntimePolicy>(item.ContentType, item.RuntimePolicy));
             }
         }
     }
