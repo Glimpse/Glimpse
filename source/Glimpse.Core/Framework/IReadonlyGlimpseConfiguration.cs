@@ -7,6 +7,12 @@ namespace Glimpse.Core.Framework
     public interface IReadonlyGlimpseConfiguration
     {
         /// <summary>
+        /// Gets the current requestId tracker.
+        /// </summary>
+        /// <value>The current requestId tracker.</value>
+        ICurrentGlimpseRequestIdTracker CurrentGlimpseRequestIdTracker { get; }
+
+        /// <summary>
         /// Gets the client scripts.
         /// </summary>
         /// <value>The client scripts.</value>
@@ -40,7 +46,7 @@ namespace Glimpse.Core.Framework
         /// Gets the resource endpoint.
         /// </summary>
         /// <value>The resource endpoint.</value>
-        ResourceEndpointConfiguration ResourceEndpoint { get; }
+        IResourceEndpointConfiguration ResourceEndpoint { get; }
 
         /// <summary>
         /// Gets the resources.
@@ -104,17 +110,5 @@ namespace Glimpse.Core.Framework
         /// </summary>
         /// <value>The hash.</value>
         string Hash { get; }
-
-        /// <summary>
-        /// Gets or sets the runtime policy strategy.
-        /// </summary>
-        /// <value>The runtime policy strategy.</value>
-        Func<RuntimePolicy> RuntimePolicyStrategy { get; }
-
-        /// <summary>
-        /// Gets or sets the timer strategy.
-        /// </summary>
-        /// <value>The timer strategy.</value>
-        Func<IExecutionTimer> TimerStrategy { get; }
     }
 }

@@ -19,7 +19,7 @@ namespace Glimpse.Core.Framework
         /// <param name="configuration">A <see cref="IGlimpseConfiguration"/></param>
         /// <param name="glimpseRuntimeVersion">The version of the glimpse runtime</param>
         /// <returns>The generated script tags</returns>
-        public static string Generate(Guid glimpseRequestId, IGlimpseConfiguration configuration, string glimpseRuntimeVersion)
+        public static string Generate(Guid glimpseRequestId, IReadonlyGlimpseConfiguration configuration, string glimpseRuntimeVersion)
         {
             var encoder = configuration.HtmlEncoder;
             var resourceEndpoint = configuration.ResourceEndpoint;

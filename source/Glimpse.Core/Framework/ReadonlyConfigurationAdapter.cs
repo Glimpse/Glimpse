@@ -13,6 +13,11 @@ namespace Glimpse.Core.Framework
             this.configuration = configuration;
         }
 
+        public ICurrentGlimpseRequestIdTracker CurrentGlimpseRequestIdTracker
+        {
+            get { return configuration.CurrentGlimpseRequestIdTracker; }
+        }
+
         public ICollection<IClientScript> ClientScripts 
         {
             get { return configuration.ClientScripts; }
@@ -38,7 +43,7 @@ namespace Glimpse.Core.Framework
             get { return configuration.Inspectors; }
         }
 
-        public ResourceEndpointConfiguration ResourceEndpoint 
+        public IResourceEndpointConfiguration ResourceEndpoint 
         {
             get { return configuration.ResourceEndpoint; }
         }
@@ -96,16 +101,6 @@ namespace Glimpse.Core.Framework
         public string Hash 
         {
             get { return configuration.Hash; }
-        }
-
-        public Func<RuntimePolicy> RuntimePolicyStrategy 
-        {
-            get { return configuration.RuntimePolicyStrategy; }
-        }
-
-        public Func<IExecutionTimer> TimerStrategy  
-        {
-            get { return configuration.TimerStrategy; }
         }
     }
 }
