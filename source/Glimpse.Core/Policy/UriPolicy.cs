@@ -70,7 +70,7 @@ namespace Glimpse.Core.Policy
                     return RuntimePolicy.On;
                 }
 
-                var uri = policyContext.RequestMetadata.RequestUri;
+                var uri = policyContext.RequestMetadata.RequestUri.AbsoluteUri;
 
                 if (UriBlackList.Any(regex => regex.IsMatch(uri)))
                 {

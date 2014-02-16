@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Glimpse.Core.Extensibility;
@@ -16,7 +17,7 @@ namespace Glimpse.Test.Core.Tester
         private UriPolicyTester():base(new List<Regex>{new Regex("blocked")})
         {
             RequestMetadataMock = new Mock<IRequestMetadata>();
-            RequestMetadataMock.Setup(r => r.RequestUri).Returns("shouldn't matter!");
+            RequestMetadataMock.Setup(r => r.RequestUri).Returns(new Uri("http://should.not.matter"));
 
             LoggerMock = new Mock<ILogger>();
 

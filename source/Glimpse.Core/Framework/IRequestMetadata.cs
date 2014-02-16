@@ -1,3 +1,5 @@
+using System;
+
 namespace Glimpse.Core.Framework
 {
     /// <summary>
@@ -9,7 +11,7 @@ namespace Glimpse.Core.Framework
         /// Gets the request URI.
         /// </summary>
         /// <value>The request URI.</value>
-        string RequestUri { get; }
+        Uri RequestUri { get; }
 
         /// <summary>
         /// Gets the request HTTP method.

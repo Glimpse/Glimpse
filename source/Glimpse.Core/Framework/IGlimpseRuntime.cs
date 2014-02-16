@@ -1,5 +1,3 @@
-using System;
-
 namespace Glimpse.Core.Framework
 {
     /// <summary>
@@ -8,47 +6,33 @@ namespace Glimpse.Core.Framework
     public interface IGlimpseRuntime
     {
         /// <summary>
-        /// Begins the request.
+        /// Calling this method will allow Glimpse to decide to hook into the given request or not
         /// </summary>
-        /// <remarks>
-        /// Called when ever the implementing framework registers a request start. Specifically, 
-        /// with the ASP.NET provider, this is wired to the <c>BeginRequest</c> method.
-        /// </remarks>
-        Guid BeginRequest(IRequestResponseAdapter requestResponseAdapter);
+        /// <param name="requestResponseAdapter">The <see cref="IRequestResponseAdapter"/></param>
+        /// <returns>A <see cref="GlimpseRequestContextHandle"/> for the given request which also indicates how Glimpse is actually handling that request.</returns>
+        GlimpseRequestContextHandle BeginRequest(IRequestResponseAdapter requestResponseAdapter);
 
         /// <summary>
-        /// Ends the request.
+        /// Calling this method indicates Glimpse to finalize processing the request referenced by the given <paramref name="glimpseRequestContextHandle"/>"/>
         /// </summary>
-        /// <remarks>
-        /// Called when ever the implementing framework registers a request end. Specifically, 
-        /// with the ASP.NET provider, this is wired to the <c>PostReleaseRequestState</c> method.
-        /// </remarks>
-        void EndRequest(IRequestResponseAdapter requestResponseAdapter);
+        /// <param name="glimpseRequestContextHandle">The Glimpse handle of the corresponding request</param>
+        void EndRequest(GlimpseRequestContextHandle glimpseRequestContextHandle);
 
         /// <summary>
         /// Executes the default resource.
         /// </summary>
-        /// <remarks>
-        /// Specifically, with the ASP.NET provider, this is wired to the 
-        /// <c>ProcessRequest</c> method.
-        /// <seealso cref="Glimpse.Core.Extensibility.IResourceResult"/>
-        /// <seealso cref="Glimpse.Core.Extensibility.IResource"/>
-        /// </remarks>
-        void ExecuteDefaultResource(IRequestResponseAdapter requestResponseAdapter);
+        /// <param name="glimpseRequestContextHandle">The Glimpse handle of the corresponding request</param>
+        void ExecuteDefaultResource(GlimpseRequestContextHandle glimpseRequestContextHandle);
 
         /// <summary>
-        /// Executes the resource.
+        /// Executes the given resource.
         /// </summary>
+        /// <param name="glimpseRequestContextHandle">The Glimpse handle of the corresponding request</param>
         /// <param name="resourceName">Name of the resource.</param>
         /// <param name="parameters">The parameters.</param>
-        /// <remarks>
-        /// Specifically, with the ASP.NET provider, this is wired to the 
-        /// <c>ProcessRequest</c> method.
-        /// <seealso cref="Glimpse.Core.Extensibility.IResourceResult"/>
-        /// <seealso cref="Glimpse.Core.Extensibility.IResource"/>
-        /// </remarks>
-        void ExecuteResource(IRequestResponseAdapter requestResponseAdapter, string resourceName, ResourceParameters parameters);
+        void ExecuteResource(GlimpseRequestContextHandle glimpseRequestContextHandle, string resourceName, ResourceParameters parameters);
 
+#warning CGI: These methods should be replaced with a CustomEvent method, passing in the custom event name as a string, so additional events can be added
         /// <summary>
         /// Begins the session access.
         /// </summary>
@@ -57,7 +41,7 @@ namespace Glimpse.Core.Framework
         /// executed off this methods should have access to the session state store. Specifically, 
         /// with the ASP.NET provider, this is wired to the <c>PostAcquireRequestState</c> method.
         /// </remarks>
-        void BeginSessionAccess(IRequestResponseAdapter requestResponseAdapter);
+        void BeginSessionAccess(GlimpseRequestContextHandle glimpseRequestContextHandle);
 
         /// <summary>
         /// Ends the session access.
@@ -67,8 +51,14 @@ namespace Glimpse.Core.Framework
         /// executed off this methods should still have access to the session state store. Specifically, 
         /// with the ASP.NET provider, this is wired to the <c>PostRequestHandlerExecute</c> method.
         /// </remarks>
-        void EndSessionAccess(IRequestResponseAdapter requestResponseAdapter);
+        void EndSessionAccess(GlimpseRequestContextHandle glimpseRequestContextHandle);
 
+        /// <summary>
+        /// Gets or sets the configuration.
+        /// </summary>
+        /// <value>
+        /// The configuration.
+        /// </value>
         IReadonlyGlimpseConfiguration Configuration { get; }
     }
 }

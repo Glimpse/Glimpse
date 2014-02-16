@@ -44,7 +44,7 @@ namespace Glimpse.Core.Framework
         /// Gets the resource endpoint.
         /// </summary>
         /// <value>The resource endpoint.</value>
-        ResourceEndpointConfiguration ResourceEndpoint { get; set; }
+        IResourceEndpointConfiguration ResourceEndpoint { get; set; }
 
         /// <summary>
         /// Gets the resources.
@@ -110,16 +110,9 @@ namespace Glimpse.Core.Framework
         string Hash { get; set; }
 
         /// <summary>
-        /// Gets or sets the runtime policy strategy.
+        /// Gets the configured <see cref="ICurrentGlimpseRequestIdTracker"/>
         /// </summary>
-        /// <value>The runtime policy strategy.</value>
-        Func<RuntimePolicy> RuntimePolicyStrategy { get; set; }
-
-        /// <summary>
-        /// Gets or sets the timer strategy.
-        /// </summary>
-        /// <value>The timer strategy.</value>
-        Func<IExecutionTimer> TimerStrategy { get; set; }
+        ICurrentGlimpseRequestIdTracker CurrentGlimpseRequestIdTracker { get; }
 
         void ApplyOverrides();
     }

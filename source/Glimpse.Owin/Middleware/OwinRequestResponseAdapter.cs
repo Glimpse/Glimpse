@@ -20,6 +20,7 @@ namespace Glimpse.Owin.Middleware
 
         public IDataStore HttpRequestStore 
         {
+#warning is it needed to store this? Since there will only be one instance of the OwinRequestResponseAdapter that will be created for each request
             get
             {
                 const string key = "glimpse.RequestStore"; // Named by following the Owin key naming conventions documented at http://owin.org/spec/CommonKeys.html

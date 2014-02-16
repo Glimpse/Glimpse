@@ -91,7 +91,7 @@ namespace Glimpse.Ado.AlternateType
 
         private IMessageBroker MessageBroker
         {
-            get { return messageBroker ?? (messageBroker = GlimpseRuntime.Instance.Configuration.MessageBroker); }
+            get { return messageBroker ?? (messageBroker = Support.DetermineMessageBroker()); }
             set { messageBroker = value; }
         }
 
@@ -113,7 +113,7 @@ namespace Glimpse.Ado.AlternateType
 
         private IExecutionTimer TimerStrategy
         {
-            get { return timerStrategy ?? (timerStrategy = GlimpseRuntime.Instance.Configuration.TimerStrategy()); }
+            get { return timerStrategy ?? (timerStrategy = Support.DetermineExecutionTimer()); }
             set { timerStrategy = value; }
         }
 

@@ -39,6 +39,7 @@ namespace Glimpse.Test.Core.Resource
         {
             var guid = Guid.Parse("321caff1-f442-4dbb-8c5b-3ed528cde3fd");
             var metadataMock = new Mock<IRequestMetadata>();
+            metadataMock.Setup(requestMetadata => requestMetadata.RequestUri).Returns(new Uri("http://localhost")); 
             var persistenceStoreMock = new Mock<IReadOnlyPersistenceStore>();
             persistenceStoreMock.Setup(ps => ps.GetByRequestId(guid)).Returns(new GlimpseRequest(guid, metadataMock.Object, new Dictionary<string, TabResult>(), new Dictionary<string, TabResult>(), TimeSpan.FromMilliseconds(0)));
             var contextMock = new Mock<IResourceContext>();
@@ -57,6 +58,7 @@ namespace Glimpse.Test.Core.Resource
         {
             var guid = Guid.Parse("321caff1-f442-4dbb-8c5b-3ed528cde3fd");
             var metadataMock = new Mock<IRequestMetadata>();
+            metadataMock.Setup(requestMetadata => requestMetadata.RequestUri).Returns(new Uri("http://localhost")); 
             var persistenceStoreMock = new Mock<IReadOnlyPersistenceStore>();
             persistenceStoreMock.Setup(ps => ps.GetByRequestId(guid)).Returns(new GlimpseRequest(guid, metadataMock.Object, new Dictionary<string, TabResult>(), new Dictionary<string, TabResult>(), TimeSpan.FromMilliseconds(0)));
             var contextMock = new Mock<IResourceContext>();
