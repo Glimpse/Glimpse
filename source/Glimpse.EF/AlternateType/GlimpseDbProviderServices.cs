@@ -27,8 +27,8 @@ namespace Glimpse.EF.AlternateType
         public GlimpseDbProviderServices(DbProviderServices innerProviderServices)
         {
             InnerProviderServices = innerProviderServices;
-            
-#if EF6
+
+#if (EF5 && NET45) || EF6
             setParameterValueMethod = InnerProviderServices.GetType().GetMethod("SetParameterValue", BindingFlags.NonPublic | BindingFlags.Instance);
 #endif
         }
@@ -88,7 +88,7 @@ namespace Glimpse.EF.AlternateType
         }
 #endif
 
-#if EF6
+#if (EF5 && NET45) || EF6
         //SetParameterValue is internal and am unable to call it on the InnerProviderServices from here. 
         //This breaks the provider wrapper when making spatial queries in EF 6.0.1
         //http://stackoverflow.com/questions/19966106/spatial-datareader-and-wrapping-providers-in-ef6  
