@@ -9,6 +9,7 @@ using System.Transactions;
 using System.Web;
 using System.Web.Mvc;
 using Dapper;
+using Glimpse.Core;
 using MvcMusicStore.Models;
 
 namespace MvcMusicStore.Controllers
@@ -29,18 +30,26 @@ namespace MvcMusicStore.Controllers
         {
             // Get most popular albums
             var albums = GetTopSellingAlbums(5);
-            var albumCount = GetTotalAlbumns();
 
-            Trace.Write(string.Format("Total number of Albums = {0} and Albums with 'The' = {1}", albumCount.Item1, albumCount.Item2));
-            Trace.Write("Got top 5 albums");
-            Trace.TraceWarning("Test TraceWarning;");
-            Trace.IndentLevel++;
-            Trace.TraceError("Test TraceError;");
-            Trace.Write("Another trace line");
-            Trace.IndentLevel++;
-            Trace.Write("Yet another trace line");
-            Trace.IndentLevel = 0;
-            Trace.TraceInformation("Test TraceInformation;");
+            var albumCount = new Tuple<int, int>(0, 0); 
+            using (GlimpseTimeline.Capture("Lots of SQL stuff"))
+            {
+                albumCount = GetTotalAlbumns();
+            }
+
+            using (GlimpseTimeline.Capture("Trace Statement"))
+            {
+                Trace.Write(string.Format("Total number of Albums = {0} and Albums with 'The' = {1}", albumCount.Item1, albumCount.Item2));
+                Trace.Write("Got top 5 albums");
+                Trace.TraceWarning("Test TraceWarning;");
+                Trace.IndentLevel++;
+                Trace.TraceError("Test TraceError;");
+                Trace.Write("Another trace line");
+                Trace.IndentLevel++;
+                Trace.Write("Yet another trace line");
+                Trace.IndentLevel = 0;
+                Trace.TraceInformation("Test TraceInformation;");
+            }
 
             HttpContext.Session["TestObject"] = new Artist { ArtistId = 123, Name = "Test Artist" };
 
