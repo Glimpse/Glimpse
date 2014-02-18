@@ -13,12 +13,12 @@ namespace Glimpse.Owin.Middleware
     public class GlimpseMiddleware
     {
         private readonly Func<IDictionary<string, object>, Task> innerNext;
-        private readonly IGlimpseConfiguration config;
+        private readonly IConfiguration config;
 
         public GlimpseMiddleware(Func<IDictionary<string, object>, Task> next, IDictionary<string, object> serverStore)
         {
             innerNext = next;
-            config = new GlimpseConfiguration(
+            config = new Configuration(
                     new UriTemplateResourceEndpointConfiguration(),
                     new InMemoryPersistenceStore(new DictionaryDataStoreAdapter((Dictionary<string, object>)serverStore)));
         }

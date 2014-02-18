@@ -4,11 +4,11 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Framework
 {
-    public class ReadonlyConfigurationAdapter : IReadonlyGlimpseConfiguration
+    public class ReadonlyConfigurationAdapter : IReadonlyConfiguration
     {
-        private readonly IGlimpseConfiguration configuration;
+        private readonly IConfiguration configuration;
 
-        public ReadonlyConfigurationAdapter(IGlimpseConfiguration configuration)
+        public ReadonlyConfigurationAdapter(IConfiguration configuration)
         {
             this.configuration = configuration;
         }

@@ -11,13 +11,13 @@ namespace Glimpse.Test.AspNet.Tester
         public Mock<HttpApplicationBase> AppMock { get; set; }
         public Mock<HttpApplicationStateBase> AppStateMock { get; set; }
         public Mock<IGlimpseRuntime> RuntimeMock { get; set; }
-        public Mock<IReadonlyGlimpseConfiguration> ConfigurationMock { get; set; }
+        public Mock<IReadonlyConfiguration> ConfigurationMock { get; set; }
         public Mock<HttpContextBase> ContextMock { get; set; }
         public Mock<ILogger> LoggerMock { get; set; }
 
         private HttpModuleTester() : base()
         {
-            ConfigurationMock = new Mock<IReadonlyGlimpseConfiguration>();
+            ConfigurationMock = new Mock<IReadonlyConfiguration>();
 
             RuntimeMock = new Mock<IGlimpseRuntime>();
             RuntimeMock.Setup(r => r.Configuration).Returns(ConfigurationMock.Object);

@@ -8,7 +8,7 @@ namespace Glimpse.Core.Framework
     /// Defines properties to provide access to system providers, stores, collections,
     /// factories, etc.
     /// </summary>
-    public interface IGlimpseConfiguration
+    public interface IConfiguration
     {
         /// <summary>
         /// Gets the client scripts.

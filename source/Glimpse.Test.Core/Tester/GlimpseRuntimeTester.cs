@@ -20,12 +20,12 @@ namespace Glimpse.Test.Core.Tester
         public Mock<IResource> ResourceMock { get; set; }
         public Mock<IResourceResult> ResourceResultMock { get; set; }
         public Mock<IRuntimePolicy> RuntimePolicyMock { get; set; }
-        public new GlimpseConfiguration Configuration { get; set; }
+        public new Glimpse.Core.Framework.Configuration Configuration { get; set; }
         public Mock<IStaticClientScript> StaticScriptMock { get; set; }
         public Mock<IDynamicClientScript> DynamicScriptMock { get; set; }
         public Mock<IHtmlEncoder> EncoderMock { get; set; }
 
-        private GlimpseRuntimeTester(GlimpseConfiguration configuration) : base(configuration)
+        private GlimpseRuntimeTester(Glimpse.Core.Framework.Configuration configuration) : base(configuration)
         {
             HttpRequestStoreMock = new Mock<IDataStore>();
             TabMock = new Mock<ITab>().Setup();
@@ -71,7 +71,7 @@ namespace Glimpse.Test.Core.Tester
             var tabs = new ReflectionDiscoverableCollection<ITab>(loggerMock.Object);
             var policies = new ReflectionDiscoverableCollection<IRuntimePolicy>(loggerMock.Object);
 
-            var configuration = new GlimpseConfiguration(new Mock<ResourceEndpointConfiguration>().Object,
+            var configuration = new Glimpse.Core.Framework.Configuration(new Mock<ResourceEndpointConfiguration>().Object,
                 new Mock<IPersistenceStore>().Object)
             {
                 Logger = loggerMock.Object,

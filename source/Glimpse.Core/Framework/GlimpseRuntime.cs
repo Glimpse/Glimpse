@@ -73,7 +73,7 @@ namespace Glimpse.Core.Framework
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <exception cref="System.ArgumentNullException">Throws an exception if <paramref name="configuration"/> is <c>null</c>.</exception>
-        public static void Initialize(IGlimpseConfiguration configuration)
+        public static void Initialize(IConfiguration configuration)
         {
             if (configuration == null)
             {
@@ -97,7 +97,7 @@ namespace Glimpse.Core.Framework
             }
         }
 
-        internal GlimpseRuntime(IGlimpseConfiguration configuration) // V2Merge: This should be private but is internal to not break unit tests
+        internal GlimpseRuntime(IConfiguration configuration) // V2Merge: This should be private but is internal to not break unit tests
         {
             if (configuration == null)
             {
@@ -105,7 +105,7 @@ namespace Glimpse.Core.Framework
             }
 
             // run user customizations to configuration before storing
-            var userUpdatedConfig = Glimpse.Configuration(configuration);
+            var userUpdatedConfig = GlimpseConfiguration.Configuration(configuration);
             userUpdatedConfig.ApplyOverrides(); // override (some) changes made by the user to make sure .config file driven settings win
             Configuration = new ReadonlyConfigurationAdapter(userUpdatedConfig);
             this.Initialize();
@@ -126,7 +126,7 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configuration.
         /// </value>
-        public IReadonlyGlimpseConfiguration Configuration { get; set; }
+        public IReadonlyConfiguration Configuration { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this instance has been initialized.

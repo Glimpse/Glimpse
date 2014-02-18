@@ -18,7 +18,7 @@ namespace Glimpse.Core.Framework
     /// <summary>
     /// Contains all configuration required by <see cref="IGlimpseRuntime"/> instances to execute.
     /// </summary>
-    public class GlimpseConfiguration : IGlimpseConfiguration
+    public class Configuration : IConfiguration
     {
         private IMessageBroker messageBroker;
         private ILogger logger;
@@ -42,17 +42,17 @@ namespace Glimpse.Core.Framework
         private ICollection<ISerializationConverter> serializationConverters;
         private ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker;
 
-        public GlimpseConfiguration(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
+        public Configuration(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
             : this(endpointConfiguration, persistenceStore, "glimpse", currentGlimpseRequestIdTracker)
         {
         }
 
-        public GlimpseConfiguration(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, string xmlConfigurationSectionName, ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
+        public Configuration(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, string xmlConfigurationSectionName, ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
             : this(endpointConfiguration, persistenceStore, ConfigurationManager.GetSection(xmlConfigurationSectionName) as Section, currentGlimpseRequestIdTracker)
         {
         }
 
-        public GlimpseConfiguration(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, Section xmlConfigurationSection, ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
+        public Configuration(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, Section xmlConfigurationSection, ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
         {
             if (endpointConfiguration == null)
             {
