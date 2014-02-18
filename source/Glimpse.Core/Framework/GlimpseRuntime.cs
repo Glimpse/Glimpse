@@ -105,7 +105,7 @@ namespace Glimpse.Core.Framework
             }
 
             // run user customizations to configuration before storing
-            var userUpdatedConfig = GlimpseConfiguration.Configuration(configuration);
+            var userUpdatedConfig = GlimpseConfiguration.Override(configuration);
             userUpdatedConfig.ApplyOverrides(); // override (some) changes made by the user to make sure .config file driven settings win
             Configuration = new ReadonlyConfigurationAdapter(userUpdatedConfig);
             this.Initialize();
