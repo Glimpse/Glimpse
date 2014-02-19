@@ -579,7 +579,7 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  
   <PropertyGroup>
     <PostBuildEvent>cd $(ProjectDir)App_Data\
 
