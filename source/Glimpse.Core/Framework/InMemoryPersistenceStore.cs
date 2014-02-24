@@ -42,7 +42,7 @@ namespace Glimpse.Core.Framework
 
         private IDataStore DataStore { get; set; }
 
-        private GlimpseMetadata Metadata { get; set; }
+        private IDictionary<string, object> Metadata { get; set; }
 
         /// <summary>
         /// Saves the specified request.
@@ -65,7 +65,7 @@ namespace Glimpse.Core.Framework
         /// Saves the specified system metadata.
         /// </summary>
         /// <param name="metadata">The metadata.</param>
-        public void Save(GlimpseMetadata metadata)
+        public void SaveMetadata(IDictionary<string, object> metadata)
         {
             Metadata = metadata;
         }
@@ -147,7 +147,7 @@ namespace Glimpse.Core.Framework
         /// <returns>
         /// Metadata that is currently applied.
         /// </returns>
-        public GlimpseMetadata GetMetadata()
+        public IDictionary<string, object> GetMetadata()
         {
             return Metadata;
         }

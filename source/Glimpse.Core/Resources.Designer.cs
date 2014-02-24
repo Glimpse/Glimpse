@@ -151,6 +151,15 @@ namespace Glimpse.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Extension of type &apos;{0}&apos; failed to execute..
+        /// </summary>
+        internal static string ExecuteMetadataExtensionsError {
+            get {
+                return ResourceManager.GetString("ExecuteMetadataExtensionsError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exception executing policy of type &apos;{0}&apos;..
         /// </summary>
         internal static string ExecutePolicyWarning {
@@ -196,7 +205,7 @@ namespace Glimpse.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Extension of type &apos;{0}&apos; failed to execute..
+        ///   Looks up a localized string similar to Extension tab of type &apos;{0}&apos; failed to execute..
         /// </summary>
         internal static string ExecuteTabMetadataExtensionsError {
             get {

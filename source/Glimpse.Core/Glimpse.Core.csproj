@@ -101,6 +101,7 @@
     <Compile Include="Extensibility\IExecutionTimer.cs" />
     <Compile Include="Extensibility\IKey.cs" />
     <Compile Include="Extensibility\ILayoutControl.cs" />
+    <Compile Include="Extensibility\IMetadataExtensions.cs" />
     <Compile Include="Extensibility\IParameterValueProvider.cs" />
     <Compile Include="Extensibility\IPrivilegedResource.cs" />
     <Compile Include="Extensibility\ITabLayout.cs" />
@@ -134,6 +135,8 @@
     <Compile Include="Metadata\DocumentationTabExtensions.cs" />
     <Compile Include="Metadata\KeysHeadingsTabExtensions.cs" />
     <Compile Include="Metadata\LayoutTabExtensions.cs" />
+    <Compile Include="Metadata\ResourceExtension.cs" />
+    <Compile Include="Metadata\TabExtension.cs" />
     <Compile Include="PreBodyTagInjectionStream.cs" />
     <Compile Include="Resource\ConfigurationScriptResource.cs">
       <SubType>Code</SubType>
@@ -201,7 +204,6 @@
     <Compile Include="Framework\CastleDynamicProxyFactory.cs" />
     <Compile Include="Framework\CastleDynamicProxyWrapper.cs" />
     <Compile Include="Framework\GlimpseException.cs" />
-    <Compile Include="Framework\GlimpseMetadata.cs" />
     <Compile Include="Framework\GlimpseRequest.cs" />
     <Compile Include="Framework\GlimpseRequestHeaders.cs" />
     <Compile Include="Framework\IDiscoverableCollection.cs" />
@@ -295,7 +297,6 @@
     </Compile>
     <Compile Include="SerializationConverter\DateTimeConverter.cs" />
     <Compile Include="SerializationConverter\GlimpseRequestHeadersConverter.cs" />
-    <Compile Include="SerializationConverter\GlimpseMetadataConverter.cs" />
     <Compile Include="SerializationConverter\GlimpseRequestConverter.cs" />
     <Compile Include="SerializationConverter\MethodInfoConverter.cs" />
     <Compile Include="SerializationConverter\TabResultConverter.cs" />
