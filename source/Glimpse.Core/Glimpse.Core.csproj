@@ -104,6 +104,7 @@
     <Compile Include="Extensibility\IParameterValueProvider.cs" />
     <Compile Include="Extensibility\IPrivilegedResource.cs" />
     <Compile Include="Extensibility\ITabLayout.cs" />
+    <Compile Include="Extensibility\ITabMetadataExtensions.cs" />
     <Compile Include="Extensibility\IWrapper.cs" />
     <Compile Include="Extensibility\JsonNetConverterDictionaryKeysAreNotPropertyNames.cs" />
     <Compile Include="Extensibility\InspectorContext.cs" />
@@ -130,6 +131,9 @@
     <Compile Include="Framework\Support\ExecutionBlockBase.cs" />
     <Compile Include="Framework\Support\IExecutionTask.cs" />
     <Compile Include="Framework\UriTemplateResourceEndpointConfiguration.cs" />
+    <Compile Include="Metadata\DocumentationTabExtensions.cs" />
+    <Compile Include="Metadata\KeysHeadingsTabExtensions.cs" />
+    <Compile Include="Metadata\LayoutTabExtensions.cs" />
     <Compile Include="PreBodyTagInjectionStream.cs" />
     <Compile Include="Resource\ConfigurationScriptResource.cs">
       <SubType>Code</SubType>
@@ -207,7 +211,6 @@
     <Compile Include="Framework\IPersistenceStore.cs" />
     <Compile Include="Framework\IReadOnlyPersistenceStore.cs" />
     <Compile Include="Framework\IServiceLocator.cs" />
-    <Compile Include="Framework\TabMetadata.cs" />
     <Compile Include="Framework\ReflectionDiscoverableCollection.cs" />
     <Compile Include="Framework\ResourceEndpointConfiguration.cs" />
     <Compile Include="Framework\ResourceParameters.cs" />
@@ -295,7 +298,6 @@
     <Compile Include="SerializationConverter\GlimpseMetadataConverter.cs" />
     <Compile Include="SerializationConverter\GlimpseRequestConverter.cs" />
     <Compile Include="SerializationConverter\MethodInfoConverter.cs" />
-    <Compile Include="SerializationConverter\TabMetadataConverter.cs" />
     <Compile Include="SerializationConverter\TabResultConverter.cs" />
     <Compile Include="SerializationConverter\CSharpTypeConverter.cs" />
     <Compile Include="Tab\Timeline.cs" />
@@ -327,6 +329,7 @@
     <EmbeddedResource Include="EmbeddedResources\sprite.png" />
     <EmbeddedResource Include="EmbeddedResources\glimpse_config.html" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

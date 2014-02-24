@@ -34,6 +34,7 @@ namespace Glimpse.Core.Framework
         private ICollection<IRuntimePolicy> runtimePolicies;
         private ISerializer serializer;
         private ICollection<ITab> tabs;
+        private ICollection<ITabMetadataExtensions> tabMetadataExtensions;
         private ICollection<IDisplay> displays;
         private string hash;
         private IServiceLocator userServiceLocator;
@@ -694,6 +695,43 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        /// <summary>
+        /// Gets or sets the collection of <see cref="ITabMetadataExtensions"/>.
+        /// </summary>
+        /// <value>
+        /// The configured <see cref="ITabMetadataExtensions"/>.
+        /// </value>
+        /// <returns>A collection of <see cref="ITabMetadataExtensions"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="ITab"/>s discovered in the configured discovery location.</returns>
+        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
+        public ICollection<ITabMetadataExtensions> TabMetadataExtensions
+        {
+            get
+            {
+                if (tabMetadataExtensions != null)
+                {
+                    return tabMetadataExtensions;
+                }
+
+                if (TryAllInstancesFromServiceLocators(out tabMetadataExtensions))
+                {
+                    return tabMetadataExtensions;
+                }
+
+                tabMetadataExtensions = CreateDiscoverableCollection<ITabMetadataExtensions>(XmlConfiguration.TabMetadataExtensions);
+                return tabMetadataExtensions;
+            }
+
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException("value");
+                }
+
+                tabMetadataExtensions = value;
+            }
+        }
+
         public ICollection<IDisplay> Displays
         {
             get
@@ -738,6 +776,7 @@ namespace Glimpse.Core.Framework
                 configuredTypes.AddRange(Resources.Select(resource => resource.GetType()).OrderBy(type => type.Name));
                 configuredTypes.AddRange(ClientScripts.Select(clientScript => clientScript.GetType()).OrderBy(type => type.Name));
                 configuredTypes.AddRange(RuntimePolicies.Select(policy => policy.GetType()).OrderBy(type => type.Name));
+                configuredTypes.AddRange(TabMetadataExtensions.Select(extensions => extensions.GetType()).OrderBy(type => type.Name));
 
                 var crc32 = new Crc32();
                 var sb = new StringBuilder();

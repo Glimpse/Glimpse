@@ -167,7 +167,6 @@
     <Compile Include="SerializationConverter\DateTimeConverterShould.cs" />
     <Compile Include="SerializationConverter\GlimpseMetadataConverterShould.cs" />
     <Compile Include="SerializationConverter\GlimpseRequestConverterShould.cs" />
-    <Compile Include="SerializationConverter\PluginMetadataConverterShould.cs" />
     <Compile Include="SerializationConverter\TabResultConverterShould.cs" />
     <Compile Include="SerializationConverter\CSharpTypeConverterShould.cs" />
     <Compile Include="SerializationConverter\ListOfTraceMessageConverterShould.cs" />

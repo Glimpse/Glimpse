@@ -12,8 +12,7 @@ namespace Glimpse.Core.Framework
         /// </summary>
         public GlimpseMetadata()
         {
-            Tabs = new Dictionary<string, TabMetadata>();
-
+            Tabs = new Dictionary<string, object>();
             Resources = new Dictionary<string, string>();
         }
 
@@ -39,7 +38,7 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The tab's metadata.
         /// </value>
-        public IDictionary<string, TabMetadata> Tabs { get; set; }
+        public IDictionary<string, object> Tabs { get; set; }
 
         /// <summary>
         /// Gets or sets the collection resources keys and their corresponding Uri templates.

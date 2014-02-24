@@ -160,6 +160,13 @@ namespace Glimpse.Core.Configuration
             set { base["tabs"] = value; }
         }
 
+        [ConfigurationProperty("tabMetadataExtensions")]
+        public DiscoverableCollectionElement TabMetadataExtensions
+        {
+            get { return (DiscoverableCollectionElement)base["tabMetadataExtensions"]; }
+            set { base["tabMetadataExtensions"] = value; }
+        }
+
         [ConfigurationProperty("displays")]
         public DiscoverableCollectionElement Displays
         {

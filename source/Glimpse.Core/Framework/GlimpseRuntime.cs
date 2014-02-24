@@ -696,32 +696,30 @@ namespace Glimpse.Core.Framework
 
         private void PersistMetadata()
         {
+            var logger = Configuration.Logger;
             var metadata = new GlimpseMetadata { Version = Version, Hash = Configuration.Hash };
             var tabMetadata = metadata.Tabs;
 
             foreach (var tab in Configuration.Tabs)
             {
-                var metadataInstance = new TabMetadata();
-
-                var documentationTab = tab as IDocumentation;
-                if (documentationTab != null)
-                {
-                    metadataInstance.DocumentationUri = documentationTab.DocumentationUri;
+                var metadataInstance = new Dictionary<string, object>();
+                foreach (var extension in Configuration.TabMetadataExtensions)
+                { 
+                    try
+                    {
+                        var result = extension.ProcessTab(tab);
+                        if (result != null)
+                        {
+                            metadataInstance[extension.Key] = result;
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        logger.Error(Resources.ExecuteTabMetadataExtensionsError, exception, extension.GetType());
+                    }
                 }
 
-                var layoutControlTab = tab as ILayoutControl;
-                if (layoutControlTab != null)
-                {
-                    metadataInstance.KeysHeadings = layoutControlTab.KeysHeadings;
-                }
-
-                var layoutTab = tab as ITabLayout;
-                if (layoutTab != null)
-                {
-                    metadataInstance.Layout = layoutTab.GetLayout();
-                }
-
-                if (metadataInstance.HasMetadata)
+                if (metadataInstance.Count > 0)
                 {
                     tabMetadata[CreateKey(tab)] = metadataInstance;
                 }
@@ -729,7 +727,6 @@ namespace Glimpse.Core.Framework
 
             var resources = metadata.Resources;
             var endpoint = Configuration.ResourceEndpoint;
-            var logger = Configuration.Logger;
 
             foreach (var resource in Configuration.Resources)
             {

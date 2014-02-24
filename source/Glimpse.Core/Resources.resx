@@ -245,4 +245,8 @@
     <value>Invalid privileged resource execution on '{0}'. Call overload Execute(IResourceContext, IGlimpseConfiguration) instead.</value>
     <comment>{0} - GetType() of offending resource</comment>
   </data>
+  <data name="ExecuteTabMetadataExtensionsError" xml:space="preserve">
+    <value>Extension of type '{0}' failed to execute.</value>
+    <comment>{0} - GetType() of offending tab</comment>
+  </data>
 </root>
