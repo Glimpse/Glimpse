@@ -57,6 +57,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.XML" />
     <Reference Include="Tavis.UriTemplates">
       <HintPath>..\..\packages\Tavis.UriTemplates.0.1.1\lib\NET35\Tavis.UriTemplates.dll</HintPath>
     </Reference>
@@ -111,7 +112,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

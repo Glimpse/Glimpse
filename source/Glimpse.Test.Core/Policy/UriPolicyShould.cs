@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Policy;
-using Glimpse.Core;
 using Glimpse.Test.Core.TestDoubles;
 using Glimpse.Test.Core.Tester;
 using Moq;
@@ -11,7 +8,7 @@ using Xunit;
 
 namespace Glimpse.Test.Core.Policy
 {
-    public class UriPolicyShould:IDisposable
+    public class UriPolicyShould : IDisposable
     {
         private UriPolicyTester tester;
         public UriPolicyTester Policy
@@ -23,22 +20,6 @@ namespace Glimpse.Test.Core.Policy
         public void Dispose()
         {
             Policy = null;
-        }
-
-        [Fact]
-        public void ConstructWithRegexList()
-        {
-            var blacklist = new List<Regex>();
-
-            var policy = new UriPolicy(blacklist);
-
-            Assert.Equal(blacklist, policy.UriBlackList);
-        }
-
-        [Fact]
-        public void ThrowExceptionWhenConstructedWithNullParameter()
-        {
-            Assert.Throws<ArgumentNullException>(()=>new UriPolicy(null));
         }
 
         [Fact]
@@ -60,10 +41,9 @@ namespace Glimpse.Test.Core.Policy
         {
             Policy.RequestMetadataMock.Setup(r => r.RequestUri).Returns(new Uri("http://localhost/admin"));
 
-            Policy.UriBlackList.Add(new Regex(".+/admin"));
+            Policy.Configurator.AddUriPatternToIgnore(".+/admin");
 
             Assert.Equal(RuntimePolicy.Off, Policy.Execute(Policy.ContextMock.Object));
-            
         }
 
         [Fact]
@@ -82,7 +62,6 @@ namespace Glimpse.Test.Core.Policy
         public void ExecuteOnBeginRequest()
         {
             Assert.Equal(RuntimeEvent.BeginRequest, Policy.ExecuteOn);
-            
         }
     }
 }

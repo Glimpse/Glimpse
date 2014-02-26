@@ -270,9 +270,9 @@ namespace Glimpse.Core.Configuration
         /// </code>
         /// </example>
         [ConfigurationProperty("runtimePolicies")]
-        public PolicyDiscoverableCollectionElement RuntimePolicies
+        public DiscoverableCollectionElement RuntimePolicies
         {
-            get { return (PolicyDiscoverableCollectionElement)base["runtimePolicies"]; }
+            get { return (DiscoverableCollectionElement)base["runtimePolicies"]; }
             set { base["runtimePolicies"] = value; }
         }
 

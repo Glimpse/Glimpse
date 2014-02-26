@@ -48,7 +48,7 @@ namespace Glimpse.Test.Core.Configuration
 
             Assert.True(section.ClientScripts.AutoDiscover);
             Assert.Equal("", section.ClientScripts.DiscoveryLocation);
-            Assert.True(section.ClientScripts.IgnoredTypes.Count == 1);
+            Assert.True(section.ClientScripts.IgnoredTypes.Length == 1);
         }
 
         [Fact]
@@ -195,10 +195,10 @@ namespace Glimpse.Test.Core.Configuration
         {
             var section = new Section();
 
-            var element = new PolicyDiscoverableCollectionElement {AutoDiscover = false};
+            var element = new DiscoverableCollectionElement {AutoDiscover = false};
 
             section.RuntimePolicies = element;
-
+#warning this seems obvious that it should work no?
             Assert.Equal(element, section.RuntimePolicies);
         }
 

@@ -81,16 +81,10 @@
     <Compile Include="ClientScript\ClientShould.cs" />
     <Compile Include="ClientScript\DataShould.cs" />
     <Compile Include="ClientScript\MetadataShould.cs" />
-    <Compile Include="Configuration\ContentTypeElementCollectionShould.cs" />
-    <Compile Include="Configuration\ContentTypeElementShould.cs" />
     <Compile Include="Configuration\DiscoverableCollectionElementShould.cs" />
     <Compile Include="Configuration\SectionShould.cs" />
     <Compile Include="Configuration\LoggingElementShould.cs" />
-    <Compile Include="Configuration\PolicyDiscoverableCollectionElementShould.cs" />
-    <Compile Include="Configuration\RegexConverterShould.cs" />
-    <Compile Include="Configuration\RegexElementShould.cs" />
     <Compile Include="Configuration\TypeConverterShould.cs" />
-    <Compile Include="Configuration\TypeElementShould.cs" />
     <Compile Include="CastleShould.cs">
       <SubType>Code</SubType>
     </Compile>

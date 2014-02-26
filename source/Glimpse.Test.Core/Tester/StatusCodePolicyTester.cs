@@ -12,8 +12,10 @@ namespace Glimpse.Test.Core.Tester
         public Mock<IRuntimePolicyContext> ContextMock { get; set; }
         public Mock<ILogger> LoggerMock { get; set; }
 
-        private StatusCodePolicyTester(IList<int> statusCodes):base(statusCodes)
+        private StatusCodePolicyTester(IList<int> statusCodes)
         {
+            ((StatusCodePolicyConfigurator)this.Configurator).AddSupportedStatusCodes(statusCodes);
+
             RequestMetadataMock = new Mock<IRequestMetadata>();
             RequestMetadataMock.Setup(r => r.ResponseStatusCode).Returns(500);
 
