@@ -32,7 +32,7 @@ Any medium or large contribution should begin by sending a message to the [Glimp
 
 The message should describe the contribution you are interested in making, and any initial thoughts on implementation. This will allow the community to discuss and become involved with you from the get go. If you receive positive feedback on the mailing list, go ahead and start implementation! You should also sign and return the [Contributor License agreement](https://www.dropbox.com/s/vxzcb7rtf1ligwh/Glimpse%20Project%20Individual%20Contributor%20License%20Agreement.pdf), which is required for the Glimpse team to accept your contribution.
 
-The Glimpse team maintains a [backlog of feature ideas on Trello](https://trello.com/board/glimpse/4fb1bbcc8166822f2218b6c8) which is good to look through if you want to get involved but aren't quite sure how.
+The Glimpse team uses [the issue tracking features of GitHub](https://github.com/Glimpse/Glimpse/issues) which is a good place to look through if you want to get involved but aren't quite sure how.
 
 ### Code Conventions
 
