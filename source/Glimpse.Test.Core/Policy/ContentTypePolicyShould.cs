@@ -47,6 +47,14 @@ namespace Glimpse.Test.Core.Policy
         }
 
         [Fact]
+        public void ReducePolicyWithCustomRuntimPolicy()
+        {
+            Policy.RequestMetadataMock.Setup(r => r.ResponseContentType).Returns("application/json");
+
+            Assert.Equal(RuntimePolicy.PersistResults, Policy.Execute(Policy.ContextMock.Object));
+        }
+
+        [Fact]
         public void ReducePolicyOnError()
         {
             var ex = new DummyException("I am a problem.");
@@ -71,7 +79,7 @@ namespace Glimpse.Test.Core.Policy
         [Fact]
         public void ConstructWithWhitelistArgument()
         {
-            var list = new List<string>{"anything"};
+            var list = new List<Tuple<string, RuntimePolicy>>{new Tuple<string, RuntimePolicy>("anything", RuntimePolicy.PersistResults)};
             var policy = new ContentTypePolicy(list);
 
             Assert.Equal(list, policy.ContentTypeWhiteList);

@@ -15,13 +15,7 @@
         <summary>ASP.NET 4.5 web debugging and diagnostics tool.</summary>
         <releaseNotes>
 Featherweight release for Core:
- - Update to disabled Glimpse when request init is bypassed
- - Update client to only modify local ajax requests
- - Add initial support for Glimpse.WindowsAzure and Glimpse.WindowsAzure.Storage
- - Update to show friendly message if current async implementation is not supported
- - Added initial Insights support to client'
- - Update client to delayed tab rendering till glimpse open
- - Update client to added more blacklist items for target chars that should be ignored by case processor
+ - Remove Insights for the time being
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse diagnostics performance profiling timing</tags>
     </metadata>
