@@ -58,6 +58,15 @@ namespace Glimpse.Core.Policy
         }
 
         /// <summary>
+        /// Removes the given uri pattern from the list of uri patterns that will be ignored
+        /// </summary>
+        /// <param name="uriPattern">The uri pattern</param>
+        public void RemoveUriPatternToIgnore(string uriPattern)
+        {
+            RemoveItem(new Regex(uriPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase));
+        }
+
+        /// <summary>
         /// Creates a <see cref="Regex"/> representing a uri pattern to ignore
         /// </summary>
         /// <param name="itemNode">The <see cref="XmlNode"/> from which a uri regex pattern is created</param>

@@ -61,6 +61,15 @@ namespace Glimpse.Core.Policy
         }
 
         /// <summary>
+        /// Removes the given content type from the list of supported content types
+        /// </summary>
+        /// <param name="contentType">The content type to remove</param>
+        public void RemoveSupportedContentType(string contentType)
+        {
+            RemoveItem(new SupportedContentType(contentType, RuntimePolicy.Off));
+        }
+
+        /// <summary>
         /// Creates an string representing a content type
         /// </summary>
         /// <param name="itemNode">The <see cref="XmlNode"/> from which a content type is created</param>

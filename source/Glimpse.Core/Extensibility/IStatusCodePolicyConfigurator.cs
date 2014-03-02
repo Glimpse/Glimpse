@@ -28,5 +28,11 @@ namespace Glimpse.Core.Policy
         /// </summary>
         /// <param name="statusCode">The status code</param>
         void AddSupportedStatusCode(int statusCode);
+
+        /// <summary>
+        /// Removes the given status code from the list of supported status codes
+        /// </summary>
+        /// <param name="statusCode">The status code to remove</param>
+        void RemoveSupportedStatusCode(int statusCode);
     }
 }

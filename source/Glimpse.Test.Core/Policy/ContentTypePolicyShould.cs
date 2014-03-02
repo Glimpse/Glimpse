@@ -1,5 +1,6 @@
 ﻿using System;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Policy;
 using Glimpse.Test.Core.TestDoubles;
 using Glimpse.Test.Core.Tester;
 using Moq;
@@ -38,6 +39,9 @@ namespace Glimpse.Test.Core.Policy
         [Fact]
         public void ReduceRuntimePolicyToConfiguredRuntimePolicyOnMatch()
         {
+            Policy.Configurator.RemoveSupportedContentType("application/json");
+            Policy.Configurator.AddSupportedContentType(new SupportedContentType("application/json", RuntimePolicy.PersistResults));
+
             Policy.RequestMetadataMock.Setup(r => r.ResponseContentType).Returns("application/json");
             Assert.Equal(RuntimePolicy.PersistResults, Policy.Execute(Policy.ContextMock.Object));
         }

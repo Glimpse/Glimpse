@@ -28,5 +28,11 @@ namespace Glimpse.Core.Policy
         /// </summary>
         /// <param name="supportedContentType">The content type to support</param>
         void AddSupportedContentType(SupportedContentType supportedContentType);
+
+        /// <summary>
+        /// Removes the given content type from the list of supported content types
+        /// </summary>
+        /// <param name="contentType">The content type to remove</param>
+        void RemoveSupportedContentType(string contentType);
     }
 }

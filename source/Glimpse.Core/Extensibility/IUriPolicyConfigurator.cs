@@ -29,5 +29,11 @@ namespace Glimpse.Core.Policy
         /// </summary>
         /// <param name="uriPattern">The uri pattern</param>
         void AddUriPatternToIgnore(string uriPattern);
+
+        /// <summary>
+        /// Removes the given uri pattern from the list of uri patterns that will be ignored
+        /// </summary>
+        /// <param name="uriPattern">The uri pattern</param>
+        void RemoveUriPatternToIgnore(string uriPattern);
     }
 }

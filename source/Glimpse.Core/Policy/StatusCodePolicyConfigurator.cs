@@ -59,6 +59,15 @@ namespace Glimpse.Core.Policy
         }
 
         /// <summary>
+        /// Removes the given status code from the list of supported status codes
+        /// </summary>
+        /// <param name="statusCode">The status code to remove</param>
+        public void RemoveSupportedStatusCode(int statusCode)
+        {
+            RemoveItem(statusCode);
+        }
+
+        /// <summary>
         /// Creates a int representing a status code
         /// </summary>
         /// <param name="itemNode">The <see cref="XmlNode"/> from which a status code is created</param>
