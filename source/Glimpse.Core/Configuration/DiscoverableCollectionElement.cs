@@ -18,6 +18,9 @@ namespace Glimpse.Core.Configuration
     {
         private List<CustomConfigurationElement> CustomConfigurationElements { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DiscoverableCollectionElement" />
+        /// </summary>
         public DiscoverableCollectionElement()
         {
             AutoDiscover = true;
@@ -26,10 +29,20 @@ namespace Glimpse.Core.Configuration
             CustomConfigurationElements = new List<CustomConfigurationElement>();
         }
 
+        /// <summary>
+        /// Custom deserializes the xml element by turning it into a collection of <see cref="CustomConfigurationElement"/>
+        /// </summary>
+        /// <param name="reader">The <see cref="XmlReader"/></param>
+        /// <param name="serializeCollectionKey">The serialize collection key</param>
         protected override void DeserializeElement(XmlReader reader, bool serializeCollectionKey)
         {
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(reader.ReadOuterXml());
+
+            if (doc.DocumentElement == null)
+            {
+                throw new GlimpseException("There is no document element available to deserialize");
+            }
 
             var autoDiscoverAttribute = doc.DocumentElement.Attributes["autoDiscover"];
             if (autoDiscoverAttribute != null)
@@ -45,6 +58,11 @@ namespace Glimpse.Core.Configuration
 
             foreach (XmlNode element in doc.DocumentElement.ChildNodes)
             {
+                if (element == null)
+                {
+                    continue;
+                }
+
                 if (element.Name.ToLower() == "ignoredtypes")
                 {
                     List<Type> ignoredTypes = new List<Type>();
@@ -52,13 +70,13 @@ namespace Glimpse.Core.Configuration
                     {
                         if (typeElement.Name.ToLower() == "add")
                         {
-                            var typeAttribute = typeElement.Attributes["type"];
+                            var typeAttribute = typeElement.Attributes != null ? typeElement.Attributes["type"] : null;
                             if (typeAttribute == null)
                             {
                                 throw new GlimpseException("type attribute missing on element that adds a type to ignore.");
                             }
 
-                            ignoredTypes.Add((Type)new TypeConverter().ConvertFrom(null, null, typeAttribute.Value));
+                            ignoredTypes.Add(Type.GetType(typeAttribute.Value, true, true));
                         }
                         else
                         {
@@ -70,13 +88,12 @@ namespace Glimpse.Core.Configuration
                 }
                 else
                 {
-                    var configurationElement = new CustomConfigurationElement();
-                    configurationElement.Key = element.Name;
+                    var configurationElement = new CustomConfigurationElement { Key = element.Name };
 
-                    XmlAttribute typeAttribute = element.Attributes["type"];
+                    XmlAttribute typeAttribute = element.Attributes != null ? element.Attributes["type"] : null;
                     if (typeAttribute != null)
                     {
-                        configurationElement.Type = (Type)new TypeConverter().ConvertFrom(null, null, typeAttribute.Value);
+                        configurationElement.Type = Type.GetType(typeAttribute.Value, true, true);
                     }
 
                     configurationElement.ConfigurationContent = element.OuterXml;
@@ -107,11 +124,22 @@ namespace Glimpse.Core.Configuration
         /// </summary>
         public Type[] IgnoredTypes { get; set; }
 
+        /// <summary>
+        /// Gets the custom configuration for the given configuration key
+        /// </summary>
+        /// <param name="configurationKey">The configuration key</param>
+        /// <returns>The corresponding custom configuration or <code>null</code> if none has been found</returns>
         public string GetCustomConfiguration(string configurationKey)
         {
             return GetCustomConfiguration(configurationKey, null);
         }
 
+        /// <summary>
+        /// Gets the custom configuration for the given configuration key and type
+        /// </summary>
+        /// <param name="configurationKey">The configuration key</param>
+        /// <param name="configurationFor">The type for which the configuration should apply</param>
+        /// <returns>The corresponding custom configuration or <code>null</code> if none has been found</returns>
         public string GetCustomConfiguration(string configurationKey, Type configurationFor)
         {
             var customConfigurationsElementsForKey = CustomConfigurationElements
