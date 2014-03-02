@@ -195,7 +195,7 @@ namespace Glimpse.Test.Core.Configuration
         {
             var section = new Section();
 
-            var element = new DiscoverableCollectionElement {AutoDiscover = false};
+            var element = new PolicyDiscoverableCollectionElement {AutoDiscover = false};
 
             section.RuntimePolicies = element;
 #warning this seems obvious that it should work no?

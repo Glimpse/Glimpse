@@ -6,6 +6,7 @@ using System.Linq;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
+using Glimpse.Core.Policy;
 using Glimpse.Core.Resource;
 using NLog;
 using NLog.Config;
@@ -308,7 +309,63 @@ namespace Glimpse.Core.Framework
         /// </returns>
         public ICollection<IRuntimePolicy> InstantiateRuntimePolicies()
         {
-            return InstantiateDiscoverableCollection<IRuntimePolicy>(Configuration.RuntimePolicies);
+            return InstantiateDiscoverableCollection<IRuntimePolicy>(Configuration.RuntimePolicies, runtimePolicies =>
+            {
+
+#warning begin of backward compatibility hack that should be removed in v2
+
+                Action<IContentTypePolicyConfigurator> contentTypePolicyBackwardHack = configurator =>
+                {
+                    if (configurator == null)
+                    {
+                        return;
+                    }
+
+                    foreach (var supportedContentType in configurator.SupportedContentTypes)
+                    {
+                        Configuration.RuntimePolicies.ContentTypes.Add(new ContentTypeElement { ContentType = supportedContentType.ContentType });
+                    }
+                };
+
+                Action<IStatusCodePolicyConfigurator> statusCodePolicyBackwardHack = configurator =>
+                {
+                    if (configurator == null)
+                    {
+                        return;
+                    }
+
+                    foreach (var supportedStatusCode in configurator.SupportedStatusCodes)
+                    {
+                        Configuration.RuntimePolicies.StatusCodes.Add(new StatusCodeElement { StatusCode = supportedStatusCode });
+                    }
+                };
+
+                Action<IUriPolicyConfigurator> uriPolicyBackwardHack = configurator =>
+                {
+                    if (configurator == null)
+                    {
+                        return;
+                    }
+
+                    foreach (var uriPatternsToIgnore in configurator.UriPatternsToIgnore)
+                    {
+                        Configuration.RuntimePolicies.Uris.Add(new RegexElement { Regex = uriPatternsToIgnore });
+                    }
+                };
+
+                foreach (var runtimePolicy in runtimePolicies)
+                {
+                    var runtimePolicyAsConfigurableExtended = runtimePolicy as IConfigurableExtended;
+                    if (runtimePolicyAsConfigurableExtended != null)
+                    {
+                        contentTypePolicyBackwardHack(runtimePolicyAsConfigurableExtended.Configurator as IContentTypePolicyConfigurator);
+                        statusCodePolicyBackwardHack(runtimePolicyAsConfigurableExtended.Configurator as IStatusCodePolicyConfigurator);
+                        uriPolicyBackwardHack(runtimePolicyAsConfigurableExtended.Configurator as IUriPolicyConfigurator);
+                    }
+                }
+
+#warning end of backward compatibility hack that should be removed in v2
+            });
         }
 
         /// <summary>
@@ -497,7 +554,7 @@ namespace Glimpse.Core.Framework
             return discoverableCollection;
         }
 
-        private ICollection<TElementType> InstantiateDiscoverableCollection<TElementType>(DiscoverableCollectionElement configuredDiscoverableCollection)
+        private ICollection<TElementType> InstantiateDiscoverableCollection<TElementType>(DiscoverableCollectionElement configuredDiscoverableCollection, Action<ICollection<TElementType>> onBeforeConfiguringElements = null)
             where TElementType : class
         {
             ICollection<TElementType> collection;
@@ -539,6 +596,11 @@ namespace Glimpse.Core.Framework
                         configurator.ProcessCustomConfiguration(customConfiguration);
                     }
                 }
+            }
+
+            if (onBeforeConfiguringElements != null)
+            {
+                onBeforeConfiguringElements(discoverableCollection);
             }
 
             foreach (var configurable in discoverableCollection.OfType<IConfigurable>())
