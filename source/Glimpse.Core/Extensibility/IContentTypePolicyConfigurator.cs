@@ -10,7 +10,7 @@ namespace Glimpse.Core.Policy
         /// <summary>
         /// Gets the supported content types
         /// </summary>
-        IEnumerable<string> SupportedContentTypes { get; }
+        IEnumerable<SupportedContentType> SupportedContentTypes { get; }
 
         /// <summary>
         /// Gets a boolean indicating whether there are supported content types
@@ -20,13 +20,13 @@ namespace Glimpse.Core.Policy
         /// <summary>
         /// Adds the given content types to the list of supported content types
         /// </summary>
-        /// <param name="contentTypes">The content types</param>
-        void AddSupportedContentTypes(IEnumerable<string> contentTypes);
+        /// <param name="supportedContentTypes">The content types to support</param>
+        void AddSupportedContentTypes(IEnumerable<SupportedContentType> supportedContentTypes);
 
         /// <summary>
         /// Adds the given content type to the list of supported content types
         /// </summary>
-        /// <param name="contentType">The content type</param>
-        void AddSupportedContentType(string contentType);
+        /// <param name="supportedContentType">The content type to support</param>
+        void AddSupportedContentType(SupportedContentType supportedContentType);
     }
 }

@@ -36,6 +36,13 @@ namespace Glimpse.Test.Core.Policy
         }
 
         [Fact]
+        public void ReduceRuntimePolicyToConfiguredRuntimePolicyOnMatch()
+        {
+            Policy.RequestMetadataMock.Setup(r => r.ResponseContentType).Returns("application/json");
+            Assert.Equal(RuntimePolicy.PersistResults, Policy.Execute(Policy.ContextMock.Object));
+        }
+
+        [Fact]
         public void ReducePolicyOnInvalidContentTypes()
         {
             Policy.RequestMetadataMock.Setup(r => r.ResponseContentType).Returns("Unsupported/Content+Type");

@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 
 namespace Glimpse.Core.Policy
@@ -8,23 +10,23 @@ namespace Glimpse.Core.Policy
     /// <summary>
     /// Implementation of an <see cref="IContentTypePolicyConfigurator" />
     /// </summary>
-    public class ContentTypePolicyConfigurator : AddRemoveClearItemsConfigurator<string>, IContentTypePolicyConfigurator
+    public class ContentTypePolicyConfigurator : AddRemoveClearItemsConfigurator<SupportedContentType>, IContentTypePolicyConfigurator
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ContentTypePolicyConfigurator" />
         /// </summary>
         public ContentTypePolicyConfigurator()
-            : base("contentTypes", new StringComparer())
+            : base("contentTypes", new SupportedContentTypeComparer())
         {
-            AddSupportedContentType("text/html");
-            AddSupportedContentType("application/json");
-            AddSupportedContentType("text/plain");
+            AddSupportedContentType(new SupportedContentType("text/html", RuntimePolicy.On));
+            AddSupportedContentType(new SupportedContentType("application/json", RuntimePolicy.On));
+            AddSupportedContentType(new SupportedContentType("text/plain", RuntimePolicy.On));
         }
 
         /// <summary>
         /// Gets the supported content types
         /// </summary>
-        public IEnumerable<string> SupportedContentTypes
+        public IEnumerable<SupportedContentType> SupportedContentTypes
         {
             get { return ConfiguredItems; }
         }
@@ -40,22 +42,22 @@ namespace Glimpse.Core.Policy
         /// <summary>
         /// Adds the given content types to the list of supported content types
         /// </summary>
-        /// <param name="contentTypes">The content types</param>
-        public void AddSupportedContentTypes(IEnumerable<string> contentTypes)
+        /// <param name="supportedContentTypes">The content types to support</param>
+        public void AddSupportedContentTypes(IEnumerable<SupportedContentType> supportedContentTypes)
         {
-            foreach (var contentType in contentTypes)
+            foreach (var supportedContentType in supportedContentTypes)
             {
-                AddSupportedContentType(contentType);
+                AddSupportedContentType(supportedContentType);
             }
         }
 
         /// <summary>
         /// Adds the given content type to the list of supported content types
         /// </summary>
-        /// <param name="contentType">The content type</param>
-        public void AddSupportedContentType(string contentType)
+        /// <param name="supportedContentType">The content type to support</param>
+        public void AddSupportedContentType(SupportedContentType supportedContentType)
         {
-            AddItem(contentType);
+            AddItem(supportedContentType);
         }
 
         /// <summary>
@@ -63,25 +65,42 @@ namespace Glimpse.Core.Policy
         /// </summary>
         /// <param name="itemNode">The <see cref="XmlNode"/> from which a content type is created</param>
         /// <returns>A content type</returns>
-        protected override string CreateItem(XmlNode itemNode)
+        protected override SupportedContentType CreateItem(XmlNode itemNode)
         {
             if (itemNode != null && itemNode.Attributes != null)
             {
                 XmlAttribute contentTypeAttribute = itemNode.Attributes["contentType"];
                 if (contentTypeAttribute != null)
                 {
-                    return contentTypeAttribute.Value;
+                    string contentType = contentTypeAttribute.Value;
+                    RuntimePolicy runtimePolicy = RuntimePolicy.On;
+
+                    XmlAttribute runtimePolicyAttribute = itemNode.Attributes["runtimePolicy"];
+                    if (runtimePolicyAttribute != null)
+                    {
+#if NET35
+                        if (!Glimpse.Core.Backport.Net35Backport.TryParseEnum(runtimePolicyAttribute.Value, true, out runtimePolicy))
+#else
+                        if (!Enum.TryParse(runtimePolicyAttribute.Value, out runtimePolicy))
+#endif
+                        {
+                            throw new GlimpseException("'" + runtimePolicyAttribute.Value + "' is not a valid RuntimePolicy value");
+                        }
+                    }
+
+                    return new SupportedContentType(contentType, runtimePolicy);
                 }
             }
+
 #warning CGI Add to resource file
             throw new GlimpseException("Could not find a 'contentType' attribute");
         }
 
-        private class StringComparer : IComparer<string>
+        private class SupportedContentTypeComparer : IComparer<SupportedContentType>
         {
-            public int Compare(string x, string y)
+            public int Compare(SupportedContentType x, SupportedContentType y)
             {
-                return string.Compare(x, y, System.StringComparison.Ordinal);
+                return string.Compare(x.ContentType, y.ContentType, System.StringComparison.Ordinal);
             }
         }
     }

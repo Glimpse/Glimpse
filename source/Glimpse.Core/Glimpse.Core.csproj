@@ -155,6 +155,7 @@
     <Compile Include="Extensibility\IContentTypePolicyConfigurator.cs" />
     <Compile Include="Extensibility\IStatusCodePolicyConfigurator.cs" />
     <Compile Include="Policy\StatusCodePolicyConfigurator.cs" />
+    <Compile Include="Policy\SupportedContentType.cs" />
     <Compile Include="Policy\UriPolicyConfigurator.cs" />
     <Compile Include="Resource\ConfigurationScriptResource.cs">
       <SubType>Code</SubType>

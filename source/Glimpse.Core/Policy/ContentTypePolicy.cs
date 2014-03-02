@@ -52,7 +52,8 @@ namespace Glimpse.Core.Policy
             try
             {
                 var contentType = policyContext.RequestMetadata.ResponseContentType.ToLowerInvariant();
-                return Configurator.SupportedContentTypes.Any(ct => contentType.Contains(ct.ToLowerInvariant())) ? RuntimePolicy.On : RuntimePolicy.Off;
+                var matchingSupportedContentType = Configurator.SupportedContentTypes.SingleOrDefault(ct => contentType.Contains(ct.ContentType.ToLowerInvariant()));
+                return matchingSupportedContentType != null ? matchingSupportedContentType.RuntimePolicyToApply : RuntimePolicy.Off;
             }
             catch (Exception exception)
             {
