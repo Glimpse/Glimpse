@@ -172,7 +172,7 @@ namespace Glimpse.Ado.AlternateType
             var commandId = Guid.NewGuid();
 
             var timer = this.LogCommandSeed();
-            this.LogCommandStart(commandId, timer); 
+            this.LogCommandStart(commandId, timer);
             try
             {
                 num = InnerCommand.ExecuteNonQuery();
@@ -181,6 +181,10 @@ namespace Glimpse.Ado.AlternateType
             {
                 this.LogCommandError(commandId, timer, exception, "ExecuteNonQuery");
                 throw;
+            }
+            finally
+            {
+                this.LogCommandStackTrace(commandId, timer, new StackTrace(false), "ExecuteNonQuery");
             }
 
             this.LogCommandEnd(commandId, timer, num, "ExecuteNonQuery");
@@ -203,6 +207,10 @@ namespace Glimpse.Ado.AlternateType
             {
                 this.LogCommandError(commandId, timer, exception, "ExecuteScalar");
                 throw;
+            }
+            finally
+            {
+                this.LogCommandStackTrace(commandId, timer, new StackTrace(false), "ExecuteScalar");
             }
 
             this.LogCommandEnd(commandId, timer, null, "ExecuteScalar");
@@ -229,6 +237,10 @@ namespace Glimpse.Ado.AlternateType
                 this.LogCommandError(commandId, timer, exception, "ExecuteScalarAsync", true);
                 throw;
             }
+            finally
+            {
+                this.LogCommandStackTrace(commandId, timer, new StackTrace(false), "ExecuteScalarAsync", true);
+            }
 
             this.LogCommandEnd(commandId, timer, null, "ExecuteScalarAsync", true);
 
@@ -253,6 +265,10 @@ namespace Glimpse.Ado.AlternateType
                 this.LogCommandError(commandId, timer, exception, "ExecuteNonQueryAsync", true);
                 throw;
             }
+            finally
+            {
+                this.LogCommandStackTrace(commandId, timer, new StackTrace(false), "ExecuteNonQueryAsync", true);
+            }
 
             this.LogCommandEnd(commandId, timer, num, "ExecuteNonQueryAsync", true);
 
@@ -274,8 +290,12 @@ namespace Glimpse.Ado.AlternateType
             }
             catch (Exception exception)
             {
-                this.LogCommandError(commandId, timer, exception, "ExecuteDbDataReaderAsync");
+                this.LogCommandError(commandId, timer, exception, "ExecuteDbDataReaderAsync", true);
                 throw;
+            }
+            finally
+            {
+                this.LogCommandStackTrace(commandId, timer, new StackTrace(false), "ExecuteDbDataReaderAsync", true);
             }
 
             this.LogCommandEnd(commandId, timer, reader.RecordsAffected, "ExecuteDbDataReaderAsync");
@@ -313,11 +333,17 @@ namespace Glimpse.Ado.AlternateType
                 this.LogCommandError(commandId, timer, exception, "ExecuteDbDataReader");
                 throw;
             }
+            finally
+            {
+                this.LogCommandStackTrace(commandId, timer, new StackTrace(false), "ExecuteDbDataReader");
+            }
 
             this.LogCommandEnd(commandId, timer, reader.RecordsAffected, "ExecuteDbDataReader");
 
             return new GlimpseDbDataReader(reader, InnerCommand, InnerConnection.ConnectionId, commandId);
         }
+
+    
 
         protected override DbParameter CreateDbParameter()
         {

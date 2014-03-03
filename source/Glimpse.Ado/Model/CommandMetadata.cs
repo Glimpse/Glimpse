@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Glimpse.Ado.Model
 {
@@ -38,6 +39,12 @@ namespace Glimpse.Ado.Model
         /// </summary>
         /// <value>The exception.</value>
         public Exception Exception { get; set; }
+
+        /// <summary>
+        /// Gets or sets the stacktrace related to the command.
+        /// </summary>
+        /// <value>The stacktrace.</value>
+        public string StackTraceText { get; set; }
 
         /// <summary>
         /// Gets or sets the time when the command started.

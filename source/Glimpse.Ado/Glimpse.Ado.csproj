@@ -52,6 +52,7 @@
     <Compile Include="Inspector\Core\AdoExecutionBlock.cs" />
     <Compile Include="Inspector\Core\DbProviderFactoriesExecutionTask.cs" />
     <Compile Include="Message\AdoCommandMessage.cs" />
+    <Compile Include="Message\AdoCommandPayloadMessage.cs" />
     <Compile Include="Message\AdoMessage.cs" />
     <Compile Include="Message\AdoTransactionMessage.cs" />
     <Compile Include="Message\CommandDurationAndRowCountMessage.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="Message\CommandExecutedMessage.cs" />
     <Compile Include="Message\CommandExecutedParamater.cs" />
     <Compile Include="Message\CommandRowCountMessage.cs" />
+    <Compile Include="Message\CommandStackTraceMessage.cs" />
     <Compile Include="Message\ConnectionClosedMessage.cs" />
     <Compile Include="Message\ConnectionStartedMessage.cs" />
     <Compile Include="Message\DtcTransactionCompletedMessage.cs" />

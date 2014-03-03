@@ -6,6 +6,11 @@ using Glimpse.Ado.Tab.Support;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Tab.Assist;
+using System.Diagnostics;
+using System.Reflection;
+using Glimpse.Core.Framework;
+using Glimpse.Core.Extensibility;
+using System;
 
 namespace Glimpse.Ado.Tab
 {
@@ -41,6 +46,10 @@ namespace Glimpse.Ado.Tab
                             {
                                 y.Cell(0).WidthInPercent(20);
                                 y.Cell(1).Class("mono").DisablePreview();
+                            }))).Row(x =>
+                            x.Cell(10).SpanColumns(7).DisablePreview().AsMinimalDisplay().SetLayout(TabLayout.Create().Row(y =>
+                            {
+                                y.Cell(0).Class("mono");
                             }))).Row(x =>
                             x.Cell(8).SpanColumns(7).DisablePreview().AsMinimalDisplay().SetLayout(TabLayout.Create().Row(y =>
                             {
@@ -102,7 +111,7 @@ namespace Glimpse.Ado.Tab
                     continue;
                 }
 
-                var commands = new List<object[]> { new object[] { "Transaction Start", "Ordinal", "Command", "Parameters", "Records", "Duration", "Offset", "Async", "Transaction End", "Errors" } };
+                var commands = new List<object[]> { new object[] { "Transaction Start", "Ordinal", "Command", "Parameters", "Records", "Duration", "Offset", "Async", "Transaction End", "Errors", "Stack" } };
                 var commandCount = 1;
                 foreach (var command in connection.Commands.Values)
                 {
@@ -145,11 +154,18 @@ namespace Glimpse.Ado.Tab
                         errors = new List<object[]> { new object[] { "Error", "Stack" }, new object[] { exceptionName, exception.StackTrace } };
                     }
 
+                    // Stacktrace
+                    List<object[]> stackTrace = null;
+                    if (command.Exception == null && !string.IsNullOrEmpty(command.StackTraceText))
+                    {
+                        stackTrace = new List<object[]> { new object[] { "Stack" }, new object[] { command.StackTraceText } };
+                    }
+
                     // Commands
                     var records = command.RecordsAffected == null || command.RecordsAffected < 0 ? command.TotalRecords : command.RecordsAffected;
 
                     var status = errors != null ? "error" : (command.IsDuplicate ? "warn" : string.Empty);
-                    commands.Add(new object[] { headTransaction, string.Format("{0}{1}", command.HasTransaction ? "\t\t\t" : string.Empty, commandCount++), sanitizer.Process(command.Command, command.Parameters), parameters, records, command.Duration, command.Offset, command.IsAsync, tailTransaction, errors, status });
+                    commands.Add(new object[] { headTransaction, string.Format("{0}{1}", command.HasTransaction ? "\t\t\t" : string.Empty, commandCount++), sanitizer.Process(command.Command, command.Parameters), parameters, records, command.Duration, command.Offset, command.IsAsync, tailTransaction, errors, stackTrace, status });
                 }
 
                 connections.Add(new[] { commands, connection.Duration.HasValue ? (object)connection.Duration.Value : null });

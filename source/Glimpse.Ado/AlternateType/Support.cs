@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common; 
+using System.Data.Common;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using Glimpse.Ado.Message;
 using Glimpse.Core.Message;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Ado.AlternateType
 {
@@ -148,9 +150,35 @@ namespace Glimpse.Ado.AlternateType
             {
                 command.MessageBroker.Publish(
                     new CommandErrorMessage(command.InnerConnection.ConnectionId, commandId, exception)
+                        .AsTimedMessage(command.TimerStrategy.Stop(timer)) 
+                        .AsTimelineMessage("Command: Error", AdoTimelineCategory.Command, type));
+            }
+        }
+
+        private static StackTraceFilter _filter;
+        private static StackTraceFilter StackFilter
+        {
+            get { return _filter == null ? (_filter = new ReflectionBlackListStackFrameFilter()) : _filter; }
+        }
+
+        public static void LogCommandStackTrace(this GlimpseDbCommand command, Guid commandId, TimeSpan timer, StackTrace stackTrace, string type)
+        {
+            command.LogCommandStackTrace(commandId, timer, stackTrace, type, false);
+        }
+
+        public static void LogCommandStackTrace(this GlimpseDbCommand command, Guid commandId, TimeSpan timer, StackTrace stackTrace, string type, bool isAsync)
+        {
+            if (command.MessageBroker != null && command.TimerStrategy != null)
+            {
+                string stackTraceText = StackFilter.GetFilteredStackTrace(stackTrace);
+
+                command.MessageBroker.Publish(
+                    new CommandStackTraceMessage(command.InnerConnection.ConnectionId, commandId, stackTraceText)
                     .AsTimedMessage(command.TimerStrategy.Stop(timer))
-                    .AsTimelineMessage("Command: Error", AdoTimelineCategory.Command, type));
+                    .AsTimelineMessage("Command: Stack", AdoTimelineCategory.Command, type));
             }
         }
     }
+
+  
 }
