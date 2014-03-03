@@ -462,8 +462,9 @@ namespace Glimpse.Core.Framework
             var timerStrategy = InstantiateTimerStrategy();
             var runtimePolicyStrategy = InstantiateRuntimePolicyStrategy();
             var endpointConfiguration = InstantiateResourceEndpointConfiguration();
-            var clientScripts = InstantiateClientScripts();
             var logger = InstantiateLogger();
+            var runtimePolicies = InstantiateRuntimePolicies();
+            var clientScripts = InstantiateClientScripts();
             var policy = InstantiateDefaultRuntimePolicy();
             var htmlEncoder = InstantiateHtmlEncoder();
             var persistenceStore = InstantiatePersistenceStore();
@@ -472,7 +473,6 @@ namespace Glimpse.Core.Framework
             var serializer = InstantiateSerializer();
             var tabs = InstantiateTabs();
             var displays = InstantiateDisplays();
-            var runtimePolicies = InstantiateRuntimePolicies();
             var defaultResource = InstantiateDefaultResource();
             var proxyFactory = InstantiateProxyFactory();
             var messageBroker = InstantiateMessageBroker();
