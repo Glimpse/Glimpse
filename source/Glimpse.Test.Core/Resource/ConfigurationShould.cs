@@ -42,7 +42,7 @@ namespace Glimpse.Test.Core.Resource
         public void Execute()
         {
             var contextMock = new Mock<IResourceContext>();
-            var configMock = new Mock<IGlimpseConfiguration>();
+            var configMock = new Mock<IReadonlyConfiguration>();
 
             var resource = new ConfigurationResource();
             var providerMock = new Mock<IRequestResponseAdapter>().Setup();

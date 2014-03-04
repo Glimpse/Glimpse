@@ -73,7 +73,7 @@ namespace Glimpse.Core.Resource
         /// <remarks>
         /// Use of <see cref="IPrivilegedResource" /> is reserved.
         /// </remarks>
-        public IResourceResult Execute(IResourceContext context, IGlimpseConfiguration configuration, IRequestResponseAdapter requestResponseAdapter)
+        public IResourceResult Execute(IResourceContext context, IReadonlyConfiguration configuration, IRequestResponseAdapter requestResponseAdapter)
         {
             if (context == null)
             {
@@ -89,7 +89,7 @@ namespace Glimpse.Core.Resource
             var request = context.Parameters.GetValueOrDefault(ResourceParameter.RequestId.Name);
 
 #if NET35
-            if (!Glimpse.Core.Backport.Net35Backport.TryParseGuid(request, out requestId))
+            if (!global::Glimpse.Core.Backport.Net35Backport.TryParseGuid(request, out requestId))
             {
                 return new StatusCodeResourceResult(404, string.Format("Could not parse RequestId of '{0}' as GUID.", request));
             }
@@ -100,7 +100,7 @@ namespace Glimpse.Core.Resource
             }
 #endif
 
-            var scriptTags = GlimpseScriptTagsGenerator.Generate(requestId, GlimpseRuntime.Instance.Configuration, GlimpseRuntime.Version); 
+            var scriptTags = GlimpseScriptTagsGenerator.Generate(requestId, configuration, GlimpseRuntime.Version); 
             var html = string.Format("<!DOCTYPE html><html><head><meta charset='utf-8'><title>Glimpse Popup</title></head><body class='glimpse-popup'>{0}</body></html>", scriptTags);
 
             return new HtmlResourceResult(html);

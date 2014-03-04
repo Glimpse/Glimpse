@@ -104,7 +104,7 @@ namespace Glimpse.Core.Resource
         /// Use of <see cref="IPrivilegedResource" /> is reserved.
         /// </remarks>
         /// 
-        public IResourceResult Execute(IResourceContext context, IGlimpseConfiguration configuration, IRequestResponseAdapter requestResponseAdapter)
+        public IResourceResult Execute(IResourceContext context, IReadonlyConfiguration configuration, IRequestResponseAdapter requestResponseAdapter)
         {
             const string glimpseConfigurationResourceName = "Glimpse.Core.EmbeddedResources." + InternalName + ".html";
             Stream glimpseConfigurationResourceStream = this.GetType().Assembly.GetManifestResourceStream(glimpseConfigurationResourceName);

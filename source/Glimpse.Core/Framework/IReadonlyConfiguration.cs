@@ -4,12 +4,14 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Framework
 {
-    /// <summary>
-    /// Defines properties to provide access to system providers, stores, collections,
-    /// factories, etc.
-    /// </summary>
-    public interface IGlimpseConfiguration
+    public interface IReadonlyConfiguration
     {
+        /// <summary>
+        /// Gets the current requestId tracker.
+        /// </summary>
+        /// <value>The current requestId tracker.</value>
+        ICurrentGlimpseRequestIdTracker CurrentGlimpseRequestIdTracker { get; }
+
         /// <summary>
         /// Gets the client scripts.
         /// </summary>
@@ -108,10 +110,5 @@ namespace Glimpse.Core.Framework
         /// </summary>
         /// <value>The hash.</value>
         string Hash { get; }
-
-        /// <summary>
-        /// Gets the configured <see cref="ICurrentGlimpseRequestIdTracker"/>
-        /// </summary>
-        ICurrentGlimpseRequestIdTracker CurrentGlimpseRequestIdTracker { get; }
     }
 }

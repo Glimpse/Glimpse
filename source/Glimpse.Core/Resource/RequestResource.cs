@@ -73,7 +73,7 @@ namespace Glimpse.Core.Resource
             var request = context.Parameters.GetValueOrDefault(ResourceParameter.RequestId.Name);
 
 #if NET35
-            if (!Glimpse.Core.Backport.Net35Backport.TryParseGuid(request, out requestId))
+            if (!global::Glimpse.Core.Backport.Net35Backport.TryParseGuid(request, out requestId))
             {
                 return new StatusCodeResourceResult(404, string.Format("Could not parse RequestId '{0} as GUID.'", request));
             }

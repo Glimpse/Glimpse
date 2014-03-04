@@ -116,6 +116,8 @@
     <Compile Include="Framework\AssemblyTypesResolver.cs" />
     <Compile Include="Framework\CallContextCurrentGlimpseRequestIdTracker.cs" />
     <Compile Include="Framework\Crc32.cs" />
+    <Compile Include="Framework\IReadonlyConfiguration.cs" />
+    <Compile Include="Framework\ReadonlyConfigurationAdapter.cs" />
     <Compile Include="Framework\GlimpseNotInitializedException.cs" />
     <Compile Include="Framework\ICurrentGlimpseRequestIdTracker.cs" />
     <Compile Include="Framework\IGlimpseRequestContext.cs" />
@@ -130,6 +132,7 @@
     <Compile Include="Framework\Support\ExecutionBlockBase.cs" />
     <Compile Include="Framework\Support\IExecutionTask.cs" />
     <Compile Include="Framework\UriTemplateResourceEndpointConfiguration.cs" />
+    <Compile Include="GlimpseConfiguration.cs" />
     <Compile Include="GlimpseTimeline.cs" />
     <Compile Include="Message\TimelineMessage.cs" />
     <Compile Include="PreBodyTagInjectionStream.cs" />
@@ -203,7 +206,7 @@
     <Compile Include="Framework\GlimpseRequest.cs" />
     <Compile Include="Framework\GlimpseRequestHeaders.cs" />
     <Compile Include="Framework\IDiscoverableCollection.cs" />
-    <Compile Include="Framework\IGlimpseConfiguration.cs" />
+    <Compile Include="Framework\IConfiguration.cs" />
     <Compile Include="Framework\IGlimpseRuntime.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Framework\IPersistenceStore.cs" />
@@ -226,7 +229,7 @@
     <Compile Include="Extensibility\ISerializer.cs" />
     <Compile Include="Extensibility\ITabContext.cs" />
     <Compile Include="Framework\IRequestResponseAdapter.cs" />
-    <Compile Include="Framework\GlimpseConfiguration.cs" />
+    <Compile Include="Framework\Configuration.cs" />
     <Compile Include="Framework\GlimpseRuntime.cs" />
     <Compile Include="Message\IMessage.cs" />
     <Compile Include="Message\ITimedMessage.cs" />

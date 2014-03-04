@@ -18,7 +18,7 @@ namespace Glimpse.Core.Framework
     /// <summary>
     /// Contains all configuration required by <see cref="IGlimpseRuntime"/> instances to execute.
     /// </summary>
-    public class GlimpseConfiguration : IGlimpseConfiguration
+    public class Configuration : IConfiguration
     {
         private IMessageBroker messageBroker;
         private ILogger logger;
@@ -42,10 +42,17 @@ namespace Glimpse.Core.Framework
         private ICollection<ISerializationConverter> serializationConverters;
         private ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker;
 
-        public GlimpseConfiguration(
-            IResourceEndpointConfiguration endpointConfiguration, 
-            IPersistenceStore persistenceStore,
-            ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
+        public Configuration(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
+            : this(endpointConfiguration, persistenceStore, "glimpse", currentGlimpseRequestIdTracker)
+        {
+        }
+
+        public Configuration(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, string xmlConfigurationSectionName, ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
+            : this(endpointConfiguration, persistenceStore, ConfigurationManager.GetSection(xmlConfigurationSectionName) as Section, currentGlimpseRequestIdTracker)
+        {
+        }
+
+        public Configuration(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, Section xmlConfigurationSection, ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
         {
             if (endpointConfiguration == null)
             {
@@ -57,8 +64,14 @@ namespace Glimpse.Core.Framework
                 throw new ArgumentNullException("persistenceStore");
             }
 
+            if (xmlConfigurationSection == null)
+            {
+                throw new ArgumentNullException("xmlConfigurationSection");
+            }
+
             ResourceEndpoint = endpointConfiguration;
             PersistenceStore = persistenceStore;
+            XmlConfiguration = xmlConfigurationSection;
             CurrentGlimpseRequestIdTracker = currentGlimpseRequestIdTracker ?? new CallContextCurrentGlimpseRequestIdTracker();
 
             // TODO: Instantiate the user's IOC container (if they have one)
@@ -81,12 +94,6 @@ namespace Glimpse.Core.Framework
         public Section XmlConfiguration {
             get
             {
-                if (xmlConfiguration != null)
-                {
-                    return xmlConfiguration;
-                }
-
-                xmlConfiguration = ConfigurationManager.GetSection("glimpse") as Section ?? new Section();
                 return xmlConfiguration;
             }
             set
@@ -294,33 +301,7 @@ namespace Glimpse.Core.Framework
                     return logger;
                 }
 
-                var configuredPath = XmlConfiguration.Logging.LogLocation;
-
-                // Root the path if it isn't already
-                var logDirPath = Path.IsPathRooted(configuredPath)
-                                     ? configuredPath
-                                     : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, configuredPath);
-
-                // Add a filename if one isn't specified
-                var logFilePath = string.IsNullOrEmpty(Path.GetExtension(logDirPath))
-                                      ? Path.Combine(logDirPath, "Glimpse.log")
-                                      : logDirPath;
-
-                // use NLog logger otherwise
-                var fileTarget = new FileTarget
-                {
-                    FileName = logFilePath,
-                    Layout =
-                        "${longdate} | ${level:uppercase=true} | ${message} | ${exception:maxInnerExceptionLevel=5:format=type,message,stacktrace:separator=--:innerFormat=shortType,message,method:innerExceptionSeparator=>>}"
-                };
-
-                var asyncTarget = new AsyncTargetWrapper(fileTarget);
-
-                var loggingConfiguration = new LoggingConfiguration();
-                loggingConfiguration.AddTarget("file", asyncTarget);
-                loggingConfiguration.LoggingRules.Add(new LoggingRule("*", LogLevel.FromOrdinal((int)logLevel), asyncTarget));
-
-                logger = new NLogLogger(new LogFactory(loggingConfiguration).GetLogger("Glimpse"));
+                logger = CreateLogger();
                 return logger;
             }
 
@@ -765,6 +746,17 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        public void ApplyOverrides()
+        {
+            // This method can be updated to ensure that web.config settings "win" - but that is difficult to do for most of them
+            DefaultRuntimePolicy = XmlConfiguration.DefaultRuntimePolicy;
+            EndpointBaseUri = XmlConfiguration.EndpointBaseUri;
+            if (XmlConfiguration.Logging.Level != LoggingLevel.Off)
+            {
+                Logger = CreateLogger();
+            }
+        }
+
         private bool TrySingleInstanceFromServiceLocators<T>(out T instance) where T : class
         {
             if (UserServiceLocator != null)
@@ -778,6 +770,37 @@ namespace Glimpse.Core.Framework
 
             instance = null;
             return false;
+        }
+
+        private ILogger CreateLogger()
+        {
+            var configuredPath = XmlConfiguration.Logging.LogLocation;
+
+            // Root the path if it isn't already
+            var logDirPath = Path.IsPathRooted(configuredPath)
+                                 ? configuredPath
+                                 : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, configuredPath);
+
+            // Add a filename if one isn't specified
+            var logFilePath = string.IsNullOrEmpty(Path.GetExtension(logDirPath))
+                                  ? Path.Combine(logDirPath, "Glimpse.log")
+                                  : logDirPath;
+
+            // use NLog logger otherwise
+            var fileTarget = new FileTarget
+            {
+                FileName = logFilePath,
+                Layout =
+                    "${longdate} | ${level:uppercase=true} | ${message} | ${exception:maxInnerExceptionLevel=5:format=type,message,stacktrace:separator=--:innerFormat=shortType,message,method:innerExceptionSeparator=>>}"
+            };
+
+            var asyncTarget = new AsyncTargetWrapper(fileTarget);
+
+            var loggingConfiguration = new LoggingConfiguration();
+            loggingConfiguration.AddTarget("file", asyncTarget);
+            loggingConfiguration.LoggingRules.Add(new LoggingRule("*", LogLevel.FromOrdinal((int)XmlConfiguration.Logging.Level), asyncTarget));
+
+            return new NLogLogger(new LogFactory(loggingConfiguration).GetLogger("Glimpse"));
         }
 
         private bool TryAllInstancesFromServiceLocators<T>(out ICollection<T> instance) where T : class
