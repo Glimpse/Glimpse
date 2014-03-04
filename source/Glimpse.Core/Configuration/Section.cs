@@ -160,18 +160,58 @@ namespace Glimpse.Core.Configuration
             set { base["tabs"] = value; }
         }
 
-        [ConfigurationProperty("metadataExtensions")]
-        public DiscoverableCollectionElement MetadataExtensions
+        /// <summary>
+        /// Gets or sets the collection of <see cref="IMetadata"/>s that Glimpse will use to build the metadata.
+        /// </summary>
+        /// <remarks>
+        /// By default, tabs are discovered at runtime but that behavior, plus the location of where they are found, and which ones should be ignored is configurable.
+        /// </remarks>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        /// <glimpse defaultRuntimePolicy="On" endpointBaseUri="~/Glimpse.axd">
+        ///     <tabs autoDiscover="true" discoveryLocation="bin\debug">
+        ///         <ignoredTypes>
+        ///             <add type="{Namespace.Type, AssemblyName}"/>
+        ///         </ignoredTypes>
+        ///     </tabs>
+        ///     <!-- Additional Glimpse configuration nodes -->
+        /// </glimpse>
+        /// ]]>
+        /// </code>
+        /// </example>
+        [ConfigurationProperty("metadata")]
+        public DiscoverableCollectionElement Metadata
         {
-            get { return (DiscoverableCollectionElement)base["metadataExtensions"]; }
-            set { base["metadataExtensions"] = value; }
+            get { return (DiscoverableCollectionElement)base["metadata"]; }
+            set { base["metadata"] = value; }
         }
 
-        [ConfigurationProperty("tabMetadataExtensions")]
-        public DiscoverableCollectionElement TabMetadataExtensions
+        /// <summary>
+        /// Gets or sets the collection of <see cref="ITabMetadata"/>s that Glimpse will use in the tab metadata.
+        /// </summary>
+        /// <remarks>
+        /// By default, tabs are discovered at runtime but that behavior, plus the location of where they are found, and which ones should be ignored is configurable.
+        /// </remarks>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        /// <glimpse defaultRuntimePolicy="On" endpointBaseUri="~/Glimpse.axd">
+        ///     <tabMetadata autoDiscover="true" discoveryLocation="bin\debug">
+        ///         <ignoredTypes>
+        ///             <add type="{Namespace.Type, AssemblyName}"/>
+        ///         </ignoredTypes>
+        ///     </tabMetadata>
+        ///     <!-- Additional Glimpse configuration nodes -->
+        /// </glimpse>
+        /// ]]>
+        /// </code>
+        /// </example>
+        [ConfigurationProperty("tabMetadata")]
+        public DiscoverableCollectionElement TabMetadata
         {
-            get { return (DiscoverableCollectionElement)base["tabMetadataExtensions"]; }
-            set { base["tabMetadataExtensions"] = value; }
+            get { return (DiscoverableCollectionElement)base["tabMetadata"]; }
+            set { base["tabMetadata"] = value; }
         }
 
         [ConfigurationProperty("displays")]
