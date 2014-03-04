@@ -42,7 +42,7 @@ namespace Glimpse.Core.Framework
             Guid parentRequestId;
 
 #if NET35
-            if (RequestIsAjax && Glimpse.Core.Backport.Net35Backport.TryParseGuid(requestMetadata.GetHttpHeader(Constants.HttpRequestHeader), out parentRequestId))
+            if (RequestIsAjax && global::Glimpse.Core.Backport.Net35Backport.TryParseGuid(requestMetadata.GetHttpHeader(Constants.HttpRequestHeader), out parentRequestId))
             {
                 ParentRequestId = parentRequestId;
             }

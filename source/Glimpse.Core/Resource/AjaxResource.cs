@@ -71,7 +71,7 @@ namespace Glimpse.Core.Resource
             var parentRequestKey = context.Parameters.GetValueOrDefault(ParentRequestKey);
 
 #if NET35
-            if (!Glimpse.Core.Backport.Net35Backport.TryParseGuid(parentRequestKey, out parentRequestId))
+            if (!global::Glimpse.Core.Backport.Net35Backport.TryParseGuid(parentRequestKey, out parentRequestId))
             {
                 return new StatusCodeResourceResult(404, string.Format("Could not parse ParentRequestKey '{0}' as GUID.", parentRequestKey));
             }

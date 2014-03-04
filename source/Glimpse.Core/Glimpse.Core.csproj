@@ -101,11 +101,11 @@
     <Compile Include="Extensibility\IExecutionTimer.cs" />
     <Compile Include="Extensibility\IKey.cs" />
     <Compile Include="Extensibility\ILayoutControl.cs" />
-    <Compile Include="Extensibility\IMetadataExtensions.cs" />
+    <Compile Include="Extensibility\IMetadata.cs" />
     <Compile Include="Extensibility\IParameterValueProvider.cs" />
     <Compile Include="Extensibility\IPrivilegedResource.cs" />
     <Compile Include="Extensibility\ITabLayout.cs" />
-    <Compile Include="Extensibility\ITabMetadataExtensions.cs" />
+    <Compile Include="Extensibility\ITabMetadata.cs" />
     <Compile Include="Extensibility\IWrapper.cs" />
     <Compile Include="Extensibility\JsonNetConverterDictionaryKeysAreNotPropertyNames.cs" />
     <Compile Include="Extensibility\InspectorContext.cs" />
@@ -118,6 +118,8 @@
     <Compile Include="Framework\AssemblyTypesResolver.cs" />
     <Compile Include="Framework\CallContextCurrentGlimpseRequestIdTracker.cs" />
     <Compile Include="Framework\Crc32.cs" />
+    <Compile Include="Framework\IReadonlyConfiguration.cs" />
+    <Compile Include="Framework\ReadonlyConfigurationAdapter.cs" />
     <Compile Include="Framework\GlimpseNotInitializedException.cs" />
     <Compile Include="Framework\ICurrentGlimpseRequestIdTracker.cs" />
     <Compile Include="Framework\IGlimpseRequestContext.cs" />
@@ -132,11 +134,14 @@
     <Compile Include="Framework\Support\ExecutionBlockBase.cs" />
     <Compile Include="Framework\Support\IExecutionTask.cs" />
     <Compile Include="Framework\UriTemplateResourceEndpointConfiguration.cs" />
-    <Compile Include="Metadata\DocumentationTabExtensions.cs" />
-    <Compile Include="Metadata\KeysHeadingsTabExtensions.cs" />
-    <Compile Include="Metadata\LayoutTabExtensions.cs" />
-    <Compile Include="Metadata\ResourceExtension.cs" />
-    <Compile Include="Metadata\TabExtension.cs" />
+    <Compile Include="Metadata\DocumentationTabMetadata.cs" />
+    <Compile Include="Metadata\KeysHeadingsTabMetadata.cs" />
+    <Compile Include="Metadata\LayoutTabMetadata.cs" />
+    <Compile Include="GlimpseConfiguration.cs" />
+    <Compile Include="GlimpseTimeline.cs" />
+    <Compile Include="Message\TimelineMessage.cs" />
+    <Compile Include="Metadata\ResourceMetadata.cs" />
+    <Compile Include="Metadata\TabMetadata.cs" />
     <Compile Include="PreBodyTagInjectionStream.cs" />
     <Compile Include="Resource\ConfigurationScriptResource.cs">
       <SubType>Code</SubType>
@@ -207,7 +212,7 @@
     <Compile Include="Framework\GlimpseRequest.cs" />
     <Compile Include="Framework\GlimpseRequestHeaders.cs" />
     <Compile Include="Framework\IDiscoverableCollection.cs" />
-    <Compile Include="Framework\IGlimpseConfiguration.cs" />
+    <Compile Include="Framework\IConfiguration.cs" />
     <Compile Include="Framework\IGlimpseRuntime.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Framework\IPersistenceStore.cs" />
@@ -229,7 +234,7 @@
     <Compile Include="Extensibility\ISerializer.cs" />
     <Compile Include="Extensibility\ITabContext.cs" />
     <Compile Include="Framework\IRequestResponseAdapter.cs" />
-    <Compile Include="Framework\GlimpseConfiguration.cs" />
+    <Compile Include="Framework\Configuration.cs" />
     <Compile Include="Framework\GlimpseRuntime.cs" />
     <Compile Include="Message\IMessage.cs" />
     <Compile Include="Message\ITimedMessage.cs" />

@@ -12,13 +12,13 @@ namespace Glimpse.Test.Core.Framework
 {
     public class GlimpseConfigurationShould : IDisposable
     {
-        private GlimpseConfiguration sut;
+        private Glimpse.Core.Framework.Configuration sut;
 
         public GlimpseConfigurationShould()
         {
             var endpointConfig = new Mock<ResourceEndpointConfiguration>().Object;
             var persistenceStore = new Mock<IPersistenceStore>().Object;
-            sut = new GlimpseConfiguration(endpointConfig, persistenceStore);
+            sut = new Glimpse.Core.Framework.Configuration(endpointConfig, persistenceStore);
         }
 
         public void Dispose()
@@ -157,13 +157,13 @@ namespace Glimpse.Test.Core.Framework
         [Theory, AutoMock]
         public void ThrowExceptionWhenConstructedWithNullResourceEndpointConfiguration(IPersistenceStore persistenceStore)
         {
-            Assert.Throws<ArgumentNullException>(()=>new GlimpseConfiguration(null, persistenceStore));
+            Assert.Throws<ArgumentNullException>(()=>new Glimpse.Core.Framework.Configuration(null, persistenceStore));
         }
 
         [Theory, AutoMock]
         public void ThrowExceptionWhenConstructedWithNullPersistenceStore(ResourceEndpointConfiguration endpoingConfiguration)
         {
-            Assert.Throws<ArgumentNullException>(() => new GlimpseConfiguration(endpoingConfiguration, null));
+            Assert.Throws<ArgumentNullException>(() => new Glimpse.Core.Framework.Configuration(endpoingConfiguration, null));
         }
 
         [Fact]

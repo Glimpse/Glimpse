@@ -848,19 +848,11 @@ namespace Glimpse.Test.Core.Framework
         }
 
         [Theory(Skip = "This test is hanging the test runner. Fix later"), AutoMock]
-        public void InitializeSetsInstanceWhenExecuted(IGlimpseConfiguration configuration)
+        public void InitializeSetsInstanceWhenExecuted(IConfiguration configuration)
         {
             GlimpseRuntime.Initialize(configuration);
 
             Assert.NotNull(GlimpseRuntime.Instance);
-        }
-
-        [Theory(Skip = "This test is hanging the test runner. Fix later"), AutoMock]
-        public void InitializeSetsConfigurationWhenExecuted(IGlimpseConfiguration configuration)
-        {
-            GlimpseRuntime.Initialize(configuration);
-
-            Assert.Equal(configuration, GlimpseRuntime.Instance.Configuration);
         }
 
         [Fact(Skip = "This test is hanging the test runner. Fix later")]

@@ -1,5 +1,4 @@
-﻿using System;
-using Glimpse.Core.Framework;
+﻿using Glimpse.Core.Framework;
 
 namespace Glimpse.Core.Extensibility
 {
@@ -7,7 +6,7 @@ namespace Glimpse.Core.Extensibility
     /// Provides the ability for metadata to be sliced into the metadata
     /// response for a given tab.
     /// </summary>
-    public interface ITabMetadataExtensions
+    public interface IMetadata
     {
         /// <summary>
         /// Gets the key that should be used in the serialized output
@@ -18,7 +17,7 @@ namespace Glimpse.Core.Extensibility
         /// Gets the metadata for a given tab
         /// </summary>
         /// <param name="tab">Tab that might have metadata generated for it.</param>
-        /// <returns></returns>
-        object ProcessTab(ITab tab);
+        /// <returns>The metadata to be used for the given key</returns>
+        object GetMetadata(IReadonlyConfiguration configuration);
     }
 }

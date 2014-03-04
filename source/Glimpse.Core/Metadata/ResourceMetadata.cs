@@ -5,14 +5,14 @@ using Glimpse.Core.Framework;
 
 namespace Glimpse.Core.Metadata
 {
-    public class ResourceExtension : IMetadataExtensions
+    public class ResourceMetadata : IMetadata
     {
         public string Key
         {
             get { return "resources"; }
         }
 
-        public object Process(IGlimpseConfiguration configuration)
+        public object GetMetadata(IReadonlyConfiguration configuration)
         {
             var logger = configuration.Logger;
             var resourceMetadata = new Dictionary<string, string>();

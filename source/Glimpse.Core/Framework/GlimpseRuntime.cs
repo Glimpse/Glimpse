@@ -73,7 +73,7 @@ namespace Glimpse.Core.Framework
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <exception cref="System.ArgumentNullException">Throws an exception if <paramref name="configuration"/> is <c>null</c>.</exception>
-        public static void Initialize(IGlimpseConfiguration configuration)
+        public static void Initialize(IConfiguration configuration)
         {
             if (configuration == null)
             {
@@ -85,7 +85,6 @@ namespace Glimpse.Core.Framework
                 return;
             }
 
-            var hasInited = false;
             if (!IsInitialized) // Double checked lock to ensure thread safety. http://en.wikipedia.org/wiki/Double_checked_locking_pattern
             {
                 lock (LockObj)
@@ -93,25 +92,22 @@ namespace Glimpse.Core.Framework
                     if (!IsInitialized)
                     {
                         Instance = new GlimpseRuntime(configuration);
-                        hasInited = true;
                     }
                 }
             }
-
-            if (!hasInited && Instance.Configuration != configuration)
-            {
-                throw new NotSupportedException("Glimpse does not support being Initialized twice.");
-            }
         }
 
-        internal GlimpseRuntime(IGlimpseConfiguration configuration) // V2Merge: This should be private but is internal to not break unit tests
+        internal GlimpseRuntime(IConfiguration configuration) // V2Merge: This should be private but is internal to not break unit tests
         {
             if (configuration == null)
             {
                 throw new ArgumentNullException("configuration");
             }
 
-            Configuration = configuration;
+            // run user customizations to configuration before storing
+            var userUpdatedConfig = GlimpseConfiguration.Override(configuration);
+            userUpdatedConfig.ApplyOverrides(); // override (some) changes made by the user to make sure .config file driven settings win
+            Configuration = new ReadonlyConfigurationAdapter(userUpdatedConfig);
             this.Initialize();
         }
 
@@ -130,7 +126,7 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configuration.
         /// </value>
-        public IGlimpseConfiguration Configuration { get; set; }
+        public IReadonlyConfiguration Configuration { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this instance has been initialized.
@@ -702,11 +698,11 @@ namespace Glimpse.Core.Framework
             metadata.Add("version", Version);
             metadata.Add("hash", Configuration.Hash);
 
-            foreach (var extension in Configuration.MetadataExtensions)
+            foreach (var extension in Configuration.Metadata)
             {
                 try
                 {
-                    var result = extension.Process(Configuration);
+                    var result = extension.GetMetadata(Configuration);
                     if (result != null)
                     {
                         metadata[extension.Key] = result;

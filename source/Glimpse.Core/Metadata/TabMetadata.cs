@@ -5,14 +5,14 @@ using Glimpse.Core.Framework;
 
 namespace Glimpse.Core.Metadata
 {
-    public class TabExtension : IMetadataExtensions
+    public class TabMetadata : IMetadata
     {
         public string Key
         {
             get { return "plugins"; }
         }
 
-        public object Process(IGlimpseConfiguration configuration)
+        public object GetMetadata(IReadonlyConfiguration configuration)
         {
             var logger = configuration.Logger;
             var tabMetadata = new Dictionary<string, object>();
@@ -20,11 +20,11 @@ namespace Glimpse.Core.Metadata
             foreach (var tab in configuration.Tabs)
             {
                 var metadataInstance = new Dictionary<string, object>();
-                foreach (var extension in configuration.TabMetadataExtensions)
+                foreach (var extension in configuration.TabMetadata)
                 {
                     try
                     {
-                        var result = extension.ProcessTab(tab);
+                        var result = extension.GetTabMetadata(tab);
                         if (result != null)
                         {
                             metadataInstance[extension.Key] = result;

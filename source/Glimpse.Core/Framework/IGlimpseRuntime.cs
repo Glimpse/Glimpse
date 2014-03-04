@@ -59,6 +59,6 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configuration.
         /// </value>
-        IGlimpseConfiguration Configuration { get; }
+        IReadonlyConfiguration Configuration { get; }
     }
 }
