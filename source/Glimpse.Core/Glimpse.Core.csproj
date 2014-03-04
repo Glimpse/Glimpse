@@ -133,6 +133,8 @@
     <Compile Include="Framework\Support\IExecutionTask.cs" />
     <Compile Include="Framework\UriTemplateResourceEndpointConfiguration.cs" />
     <Compile Include="GlimpseConfiguration.cs" />
+    <Compile Include="GlimpseTimeline.cs" />
+    <Compile Include="Message\TimelineMessage.cs" />
     <Compile Include="PreBodyTagInjectionStream.cs" />
     <Compile Include="Resource\ConfigurationScriptResource.cs">
       <SubType>Code</SubType>
