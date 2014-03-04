@@ -692,11 +692,8 @@ namespace Glimpse.Core.Framework
 
         private void PersistMetadata()
         {
-            var logger = Configuration.Logger;
-
-            var metadata = new Dictionary<string, object>();
-            metadata.Add("version", Version);
-            metadata.Add("hash", Configuration.Hash);
+            var logger = Configuration.Logger; 
+            var metadata = new Dictionary<string, object>(); 
 
             foreach (var extension in Configuration.Metadata)
             {

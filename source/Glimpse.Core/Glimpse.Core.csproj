@@ -135,6 +135,7 @@
     <Compile Include="Framework\Support\IExecutionTask.cs" />
     <Compile Include="Framework\UriTemplateResourceEndpointConfiguration.cs" />
     <Compile Include="Metadata\DocumentationTabMetadata.cs" />
+    <Compile Include="Metadata\HashMetadata.cs" />
     <Compile Include="Metadata\KeysHeadingsTabMetadata.cs" />
     <Compile Include="Metadata\LayoutTabMetadata.cs" />
     <Compile Include="GlimpseConfiguration.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="Message\TimelineMessage.cs" />
     <Compile Include="Metadata\ResourceMetadata.cs" />
     <Compile Include="Metadata\TabMetadata.cs" />
+    <Compile Include="Metadata\VersionMetadata.cs" />
     <Compile Include="PreBodyTagInjectionStream.cs" />
     <Compile Include="Resource\ConfigurationScriptResource.cs">
       <SubType>Code</SubType>
