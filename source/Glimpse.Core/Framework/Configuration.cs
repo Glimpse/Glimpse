@@ -701,7 +701,7 @@ namespace Glimpse.Core.Framework
                     return metadata;
                 }
 
-                metadata = CreateDiscoverableCollection<IMetadata>(XmlConfiguration.MetadataExtensions);
+                metadata = CreateDiscoverableCollection<IMetadata>(XmlConfiguration.Metadata);
                 return metadata;
             }
 
@@ -738,7 +738,7 @@ namespace Glimpse.Core.Framework
                     return tabMetadata;
                 }
 
-                tabMetadata = CreateDiscoverableCollection<ITabMetadata>(XmlConfiguration.TabMetadataExtensions);
+                tabMetadata = CreateDiscoverableCollection<ITabMetadata>(XmlConfiguration.TabMetadata);
                 return tabMetadata;
             }
 
