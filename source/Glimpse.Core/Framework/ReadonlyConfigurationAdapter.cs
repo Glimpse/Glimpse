@@ -63,6 +63,16 @@ namespace Glimpse.Core.Framework
             get { return configuration.Tabs; }
         }
 
+        public ICollection<IMetadata> Metadata
+        {
+            get { return configuration.Metadata; }
+        }
+
+        public ICollection<ITabMetadata> TabMetadata
+        {
+            get { return configuration.TabMetadata; }
+        }
+
         public ICollection<IDisplay> Displays 
         {
             get { return configuration.Displays; }

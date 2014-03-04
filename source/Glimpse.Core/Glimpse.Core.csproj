@@ -101,9 +101,11 @@
     <Compile Include="Extensibility\IExecutionTimer.cs" />
     <Compile Include="Extensibility\IKey.cs" />
     <Compile Include="Extensibility\ILayoutControl.cs" />
+    <Compile Include="Extensibility\IMetadata.cs" />
     <Compile Include="Extensibility\IParameterValueProvider.cs" />
     <Compile Include="Extensibility\IPrivilegedResource.cs" />
     <Compile Include="Extensibility\ITabLayout.cs" />
+    <Compile Include="Extensibility\ITabMetadata.cs" />
     <Compile Include="Extensibility\IWrapper.cs" />
     <Compile Include="Extensibility\JsonNetConverterDictionaryKeysAreNotPropertyNames.cs" />
     <Compile Include="Extensibility\InspectorContext.cs" />
@@ -132,9 +134,16 @@
     <Compile Include="Framework\Support\ExecutionBlockBase.cs" />
     <Compile Include="Framework\Support\IExecutionTask.cs" />
     <Compile Include="Framework\UriTemplateResourceEndpointConfiguration.cs" />
+    <Compile Include="Metadata\DocumentationTabMetadata.cs" />
+    <Compile Include="Metadata\HashMetadata.cs" />
+    <Compile Include="Metadata\KeysHeadingsTabMetadata.cs" />
+    <Compile Include="Metadata\LayoutTabMetadata.cs" />
     <Compile Include="GlimpseConfiguration.cs" />
     <Compile Include="GlimpseTimeline.cs" />
     <Compile Include="Message\TimelineMessage.cs" />
+    <Compile Include="Metadata\ResourceMetadata.cs" />
+    <Compile Include="Metadata\TabMetadata.cs" />
+    <Compile Include="Metadata\VersionMetadata.cs" />
     <Compile Include="PreBodyTagInjectionStream.cs" />
     <Compile Include="Resource\ConfigurationScriptResource.cs">
       <SubType>Code</SubType>
@@ -202,7 +211,6 @@
     <Compile Include="Framework\CastleDynamicProxyFactory.cs" />
     <Compile Include="Framework\CastleDynamicProxyWrapper.cs" />
     <Compile Include="Framework\GlimpseException.cs" />
-    <Compile Include="Framework\GlimpseMetadata.cs" />
     <Compile Include="Framework\GlimpseRequest.cs" />
     <Compile Include="Framework\GlimpseRequestHeaders.cs" />
     <Compile Include="Framework\IDiscoverableCollection.cs" />
@@ -212,7 +220,6 @@
     <Compile Include="Framework\IPersistenceStore.cs" />
     <Compile Include="Framework\IReadOnlyPersistenceStore.cs" />
     <Compile Include="Framework\IServiceLocator.cs" />
-    <Compile Include="Framework\TabMetadata.cs" />
     <Compile Include="Framework\ReflectionDiscoverableCollection.cs" />
     <Compile Include="Framework\ResourceEndpointConfiguration.cs" />
     <Compile Include="Framework\ResourceParameters.cs" />
@@ -297,10 +304,8 @@
     </Compile>
     <Compile Include="SerializationConverter\DateTimeConverter.cs" />
     <Compile Include="SerializationConverter\GlimpseRequestHeadersConverter.cs" />
-    <Compile Include="SerializationConverter\GlimpseMetadataConverter.cs" />
     <Compile Include="SerializationConverter\GlimpseRequestConverter.cs" />
     <Compile Include="SerializationConverter\MethodInfoConverter.cs" />
-    <Compile Include="SerializationConverter\TabMetadataConverter.cs" />
     <Compile Include="SerializationConverter\TabResultConverter.cs" />
     <Compile Include="SerializationConverter\CSharpTypeConverter.cs" />
     <Compile Include="Tab\Timeline.cs" />
@@ -332,6 +337,7 @@
     <EmbeddedResource Include="EmbeddedResources\sprite.png" />
     <EmbeddedResource Include="EmbeddedResources\glimpse_config.html" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

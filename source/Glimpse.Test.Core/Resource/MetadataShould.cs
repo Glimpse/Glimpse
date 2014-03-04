@@ -1,4 +1,5 @@
-﻿using Glimpse.Core.Extensibility;
+﻿using System.Collections.Generic;
+using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 using Glimpse.Core.Resource;
 using Glimpse.Core.ResourceResult;
@@ -34,7 +35,7 @@ namespace Glimpse.Test.Core.Resource
         [Fact]
         public void ReturnResourceResult()
         {
-            var metadata = new GlimpseMetadata();
+            var metadata = new Dictionary<string, object>();
 
             var storeMock = new Mock<IReadOnlyPersistenceStore>();
             storeMock.Setup(s => s.GetMetadata()).Returns(metadata);
@@ -54,7 +55,7 @@ namespace Glimpse.Test.Core.Resource
         public void Return404ResultIfDataIsMissing()
         {
             var storeMock = new Mock<IReadOnlyPersistenceStore>();
-            storeMock.Setup(s => s.GetMetadata()).Returns<GlimpseMetadata>(null);
+            storeMock.Setup(s => s.GetMetadata()).Returns<IDictionary<string, object>>(null);
 
             var contextMock = new Mock<IResourceContext>();
             contextMock.Setup(c => c.PersistenceStore).Returns(storeMock.Object);

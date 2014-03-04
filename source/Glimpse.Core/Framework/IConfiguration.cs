@@ -64,6 +64,18 @@ namespace Glimpse.Core.Framework
         /// <value>The tabs.</value>
         ICollection<ITab> Tabs { get; set; }
 
+        /// <summary>
+        /// Gets the metadata extensions.
+        /// </summary>
+        /// <value>The metadata extensions.</value>
+        ICollection<IMetadata> Metadata { get; set; }
+
+        /// <summary>
+        /// Gets the tab metadata extensions.
+        /// </summary>
+        /// <value>The tab metadata extensions.</value>
+        ICollection<ITabMetadata> TabMetadata { get; set; }
+
         [Obsolete]
         ICollection<IDisplay> Displays { get; set; }
 

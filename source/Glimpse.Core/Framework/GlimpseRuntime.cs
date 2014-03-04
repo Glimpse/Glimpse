@@ -549,7 +549,7 @@ namespace Glimpse.Core.Framework
             IsInitialized = true;
         }
 
-        private static string CreateKey(object obj)
+        internal static string CreateKey(object obj)
         {
             string result;
             var keyProvider = obj as IKey;
@@ -692,54 +692,79 @@ namespace Glimpse.Core.Framework
 
         private void PersistMetadata()
         {
-            var metadata = new GlimpseMetadata { Version = Version, Hash = Configuration.Hash };
-            var tabMetadata = metadata.Tabs;
+            var logger = Configuration.Logger; 
+            var metadata = new Dictionary<string, object>(); 
 
-            foreach (var tab in Configuration.Tabs)
+            foreach (var extension in Configuration.Metadata)
             {
-                var metadataInstance = new TabMetadata();
-
-                var documentationTab = tab as IDocumentation;
-                if (documentationTab != null)
+                try
                 {
-                    metadataInstance.DocumentationUri = documentationTab.DocumentationUri;
+                    var result = extension.GetMetadata(Configuration);
+                    if (result != null)
+                    {
+                        metadata[extension.Key] = result;
+                    }
                 }
-
-                var layoutControlTab = tab as ILayoutControl;
-                if (layoutControlTab != null)
+                catch (Exception exception)
                 {
-                    metadataInstance.KeysHeadings = layoutControlTab.KeysHeadings;
-                }
-
-                var layoutTab = tab as ITabLayout;
-                if (layoutTab != null)
-                {
-                    metadataInstance.Layout = layoutTab.GetLayout();
-                }
-
-                if (metadataInstance.HasMetadata)
-                {
-                    tabMetadata[CreateKey(tab)] = metadataInstance;
+                    logger.Error(Resources.ExecuteMetadataExtensionsError, exception, extension.GetType());
                 }
             }
-
-            var resources = metadata.Resources;
-            var endpoint = Configuration.ResourceEndpoint;
-            var logger = Configuration.Logger;
-
-            foreach (var resource in Configuration.Resources)
-            {
-                var resourceKey = CreateKey(resource);
-                if (resources.ContainsKey(resourceKey))
-                {
-                    logger.Warn(Resources.GlimpseRuntimePersistMetadataMultipleResourceWarning, resource.Name);
-                }
-
-                resources[resourceKey] = endpoint.GenerateUriTemplate(resource, Configuration.EndpointBaseUri, logger);
-            }
-
-            Configuration.PersistenceStore.Save(metadata);
+             
+            Configuration.PersistenceStore.SaveMetadata(metadata);
         }
+
+        /*
+
+                private void PersistMetadata()
+                {
+                    var logger = Configuration.Logger;
+                    var metadata = new GlimpseMetadata { Version = Version, Hash = Configuration.Hash };
+                    var tabMetadata = metadata.Tabs;
+
+                    foreach (var tab in Configuration.Tabs)
+                    {
+                        var metadataInstance = new Dictionary<string, object>();
+                        foreach (var extension in Configuration.TabMetadataExtensions)
+                        { 
+                            try
+                            {
+                                var result = extension.ProcessTab(tab);
+                                if (result != null)
+                                {
+                                    metadataInstance[extension.Key] = result;
+                                }
+                            }
+                            catch (Exception exception)
+                            {
+                                logger.Error(Resources.ExecuteTabMetadataExtensionsError, exception, extension.GetType());
+                            }
+                        }
+
+                        if (metadataInstance.Count > 0)
+                        {
+                            tabMetadata[CreateKey(tab)] = metadataInstance;
+                        }
+                    }
+
+                    var resources = metadata.Resources;
+                    var endpoint = Configuration.ResourceEndpoint;
+
+                    foreach (var resource in Configuration.Resources)
+                    {
+                        var resourceKey = CreateKey(resource);
+                        if (resources.ContainsKey(resourceKey))
+                        {
+                            logger.Warn(Resources.GlimpseRuntimePersistMetadataMultipleResourceWarning, resource.Name);
+                        }
+
+                        resources[resourceKey] = endpoint.GenerateUriTemplate(resource, Configuration.EndpointBaseUri, logger);
+                    }
+
+                    Configuration.PersistenceStore.Save(metadata);
+                }
+         */
+
 
         // TODO this should not be public! This was changed to hack in OWIN support
         public string GenerateScriptTags(GlimpseRequestContextHandle glimpseRequestContextHandle)

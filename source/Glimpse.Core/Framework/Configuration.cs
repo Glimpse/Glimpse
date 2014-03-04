@@ -34,6 +34,8 @@ namespace Glimpse.Core.Framework
         private ICollection<IRuntimePolicy> runtimePolicies;
         private ISerializer serializer;
         private ICollection<ITab> tabs;
+        private ICollection<IMetadata> metadata;
+        private ICollection<ITabMetadata> tabMetadata;
         private ICollection<IDisplay> displays;
         private string hash;
         private IServiceLocator userServiceLocator;
@@ -675,6 +677,82 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        //
+
+        /// <summary>
+        /// Gets or sets the collection of <see cref="IMetadata"/>.
+        /// </summary>
+        /// <value>
+        /// The configured <see cref="IMetadata"/>.
+        /// </value>
+        /// <returns>A collection of <see cref="IMetadata"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="ITab"/>s discovered in the configured discovery location.</returns>
+        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
+        public ICollection<IMetadata> Metadata
+        {
+            get
+            {
+                if (metadata != null)
+                {
+                    return metadata;
+                }
+
+                if (TryAllInstancesFromServiceLocators(out metadata))
+                {
+                    return metadata;
+                }
+
+                metadata = CreateDiscoverableCollection<IMetadata>(XmlConfiguration.Metadata);
+                return metadata;
+            }
+
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException("value");
+                }
+
+                metadata = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the collection of <see cref="ITabMetadata"/>.
+        /// </summary>
+        /// <value>
+        /// The configured <see cref="ITabMetadata"/>.
+        /// </value>
+        /// <returns>A collection of <see cref="ITabMetadata"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="ITab"/>s discovered in the configured discovery location.</returns>
+        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
+        public ICollection<ITabMetadata> TabMetadata
+        {
+            get
+            {
+                if (tabMetadata != null)
+                {
+                    return tabMetadata;
+                }
+
+                if (TryAllInstancesFromServiceLocators(out tabMetadata))
+                {
+                    return tabMetadata;
+                }
+
+                tabMetadata = CreateDiscoverableCollection<ITabMetadata>(XmlConfiguration.TabMetadata);
+                return tabMetadata;
+            }
+
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException("value");
+                }
+
+                tabMetadata = value;
+            }
+        }
+
         public ICollection<IDisplay> Displays
         {
             get
@@ -719,6 +797,8 @@ namespace Glimpse.Core.Framework
                 configuredTypes.AddRange(Resources.Select(resource => resource.GetType()).OrderBy(type => type.Name));
                 configuredTypes.AddRange(ClientScripts.Select(clientScript => clientScript.GetType()).OrderBy(type => type.Name));
                 configuredTypes.AddRange(RuntimePolicies.Select(policy => policy.GetType()).OrderBy(type => type.Name));
+                configuredTypes.AddRange(Metadata.Select(extensions => extensions.GetType()).OrderBy(type => type.Name));
+                configuredTypes.AddRange(TabMetadata.Select(extensions => extensions.GetType()).OrderBy(type => type.Name));
 
                 var crc32 = new Crc32();
                 var sb = new StringBuilder();
