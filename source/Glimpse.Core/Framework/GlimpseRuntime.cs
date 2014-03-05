@@ -154,11 +154,12 @@ namespace Glimpse.Core.Framework
             }
 
             glimpseRequestContext.CurrentRuntimePolicy = runtimePolicy;
-            var glimpseRequestContextHandle = ActiveGlimpseRequestContexts.Add(glimpseRequestContext);
 
+            var glimpseRequestContextHandle = ActiveGlimpseRequestContexts.Add(glimpseRequestContext); 
             if (glimpseRequestContextHandle.RequestHandlingMode == RequestHandlingMode.ResourceRequest)
             {
-                // When we are dealing with a resource request, there is no need to further continue setting up the request.
+                // When we are dealing with a resource request, there is no need to further 
+                // continue setting up the request.
                 return glimpseRequestContextHandle;
             }
 
@@ -177,7 +178,7 @@ namespace Glimpse.Core.Framework
             }
             catch
             {
-                // we need to deactivate here because the handle won't be returned to the caller
+                // We need to deactivate here because the handle won't be returned to the caller
                 glimpseRequestContextHandle.Dispose();
                 throw;
             }
@@ -211,7 +212,7 @@ namespace Glimpse.Core.Framework
                 ExecuteTabs(RuntimeEvent.EndRequest, glimpseRequestContext);
                 ExecuteDisplays(glimpseRequestContext);
 
-                TimeSpan timingDuration = glimpseRequestContext.StopTiming();
+                var timingDuration = glimpseRequestContext.StopTiming();
 
                 var requestResponseAdapter = glimpseRequestContext.RequestResponseAdapter;
                 var requestMetadata = requestResponseAdapter.RequestMetadata;
@@ -221,12 +222,7 @@ namespace Glimpse.Core.Framework
                 {
                     var persistenceStore = Configuration.PersistenceStore;
 
-                    var metadata = new GlimpseRequest(
-                        glimpseRequestContext.GlimpseRequestId,
-                        requestMetadata,
-                        GetTabResultsStore(glimpseRequestContext),
-                        GetDisplayResultsStore(glimpseRequestContext),
-                        timingDuration);
+                    var metadata = new GlimpseRequest(glimpseRequestContext.GlimpseRequestId, requestMetadata, GetTabResultsStore(glimpseRequestContext), GetDisplayResultsStore(glimpseRequestContext), timingDuration);
 
                     try
                     {
@@ -329,78 +325,81 @@ namespace Glimpse.Core.Framework
             var requestResponseAdapter = glimpseRequestContext.RequestResponseAdapter;
 
             // First we get the current policy as it has been processed so far
-            RuntimePolicy policy = glimpseRequestContext.CurrentRuntimePolicy;
+            var policy = glimpseRequestContext.CurrentRuntimePolicy;
 
-            // It is possible that the policy now says Off, but if the requested resource is the default resource or one of it dependent resources, 
-            // then we need to make sure there is a good reason for not executing that resource, since the default resource (or one of it dependencies)
-            // is the one we most likely need to set Glimpse On with in the first place.
-            IDependOnResources defaultResourceDependsOnResources = Configuration.DefaultResource as IDependOnResources;
+            // It is possible that the policy now says Off, but if the requested resource is the 
+            // default resource or one of it dependent resources, then we need to make sure there 
+            // is a good reason for not executing that resource, since the default resource (or 
+            // one of it dependencies) is the one we most likely need to set Glimpse On with in the 
+            // first place.
+            var defaultResourceDependsOnResources = Configuration.DefaultResource as IDependOnResources;
             if (resourceName.Equals(Configuration.DefaultResource.Name) || (defaultResourceDependsOnResources != null && defaultResourceDependsOnResources.DependsOn(resourceName)))
             {
-                // To be clear we only do this for the default resource (or its dependencies), and we do this because it allows us to secure the default resource 
-                // the same way as any other resource, but for this we only rely on runtime policies that handle ExecuteResource runtime events and we ignore
-                // ignore previously executed runtime policies (most likely during BeginRequest).
-                // Either way, the default runtime policy is still our starting point and when it says Off, it remains Off
+                // To be clear we only do this for the default resource (or its dependencies), and 
+                // we do this because it allows us to secure the default resource the same way as 
+                // any other resource, but for this we only rely on runtime policies that handle 
+                // ExecuteResource runtime events and we ignore ignore previously executed runtime 
+                // policies (most likely during BeginRequest). Either way, the default runtime policy 
+                // is still our starting point and when it says Off, it remains Off
                 policy = DetermineRuntimePolicy(RuntimeEvent.ExecuteResource, Configuration.DefaultRuntimePolicy, requestResponseAdapter);
             }
 
-            string message;
+            var result = (IResourceResult)null;
+            var message = (string)null;
             var logger = Configuration.Logger;
-            var context = new ResourceResultContext(logger, requestResponseAdapter, Configuration.Serializer, Configuration.HtmlEncoder);
 
             if (policy == RuntimePolicy.Off)
             {
-                string errorMessage = string.Format(Resources.ExecuteResourceInsufficientPolicy, resourceName);
-                logger.Info(errorMessage);
-                new StatusCodeResourceResult(403, errorMessage).Execute(context);
-                return;
+                message = string.Format(Resources.ExecuteResourceInsufficientPolicy, resourceName);
+                logger.Info(message);
+                result = new StatusCodeResourceResult(403, message);
             }
-
-            var resources =
-                Configuration.Resources.Where(
-                    r => r.Name.Equals(resourceName, StringComparison.InvariantCultureIgnoreCase));
-
-            IResourceResult result;
-            switch (resources.Count())
+            else
             {
-                case 1: // 200 - OK
-                    try
-                    {
-                        var resource = resources.First();
-                        var resourceContext = new ResourceContext(parameters.GetParametersFor(resource), Configuration.PersistenceStore, logger);
-
-                        var privilegedResource = resource as IPrivilegedResource;
-
-                        if (privilegedResource != null)
+                var resources = Configuration.Resources.Where(r => r.Name.Equals(resourceName, StringComparison.InvariantCultureIgnoreCase));
+                switch (resources.Count())
+                {
+                    case 1: // 200 - OK
+                        try
                         {
-                            result = privilegedResource.Execute(resourceContext, Configuration, requestResponseAdapter);
-                        }
-                        else
-                        {
-                            result = resource.Execute(resourceContext);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.Error(Resources.GlimpseRuntimeExecuteResourceError, ex, resourceName);
-                        result = new ExceptionResourceResult(ex);
-                    }
+                            var resource = resources.First();
+                            var resourceContext = new ResourceContext(parameters.GetParametersFor(resource), Configuration.PersistenceStore, logger);
 
-                    break;
-                case 0: // 404 - File Not Found
-                    message = string.Format(Resources.ExecuteResourceMissingError, resourceName);
-                    logger.Warn(message);
-                    result = new StatusCodeResourceResult(404, message);
-                    break;
-                default: // 500 - Server Error
-                    message = string.Format(Resources.ExecuteResourceDuplicateError, resourceName);
-                    logger.Warn(message);
-                    result = new StatusCodeResourceResult(500, message);
-                    break;
+                            var privilegedResource = resource as IPrivilegedResource;
+
+                            if (privilegedResource != null)
+                            {
+                                result = privilegedResource.Execute(resourceContext, Configuration, requestResponseAdapter);
+                            }
+                            else
+                            {
+                                result = resource.Execute(resourceContext);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.Error(Resources.GlimpseRuntimeExecuteResourceError, ex, resourceName);
+                            result = new ExceptionResourceResult(ex);
+                        }
+
+                        break;
+                    case 0: // 404 - File Not Found
+                        message = string.Format(Resources.ExecuteResourceMissingError, resourceName);
+                        logger.Warn(message);
+                        result = new StatusCodeResourceResult(404, message);
+                        break;
+                    default: // 500 - Server Error
+                        message = string.Format(Resources.ExecuteResourceDuplicateError, resourceName);
+                        logger.Warn(message);
+                        result = new StatusCodeResourceResult(500, message);
+                        break;
+                }
             }
 
             try
             {
+                var context = new ResourceResultContext(logger, requestResponseAdapter, Configuration.Serializer, Configuration.HtmlEncoder);
+
                 result.Execute(context);
             }
             catch (Exception exception)
@@ -440,8 +439,7 @@ namespace Glimpse.Core.Framework
                 throw new GlimpseException("No corresponding GlimpseRequestContext found for GlimpseRequestId '" + glimpseRequestContextHandle.GlimpseRequestId + "'.");
             }
 
-            glimpseRequestContext.CurrentRuntimePolicy =
-                DetermineRuntimePolicy(runtimeEvent, glimpseRequestContext.CurrentRuntimePolicy, glimpseRequestContext.RequestResponseAdapter);
+            glimpseRequestContext.CurrentRuntimePolicy = DetermineRuntimePolicy(runtimeEvent, glimpseRequestContext.CurrentRuntimePolicy, glimpseRequestContext.RequestResponseAdapter);
 
             return glimpseRequestContext.CurrentRuntimePolicy != RuntimePolicy.Off;
         }
@@ -491,12 +489,7 @@ namespace Glimpse.Core.Framework
                 }
             }
 
-            var inspectorContext = new InspectorContext(
-                logger,
-                Configuration.ProxyFactory,
-                messageBroker,
-                () => ActiveGlimpseRequestContexts.Current.CurrentExecutionTimer,
-                () => ActiveGlimpseRequestContexts.Current.CurrentRuntimePolicy);
+            var inspectorContext = new InspectorContext(logger, Configuration.ProxyFactory, messageBroker, () => ActiveGlimpseRequestContexts.Current.CurrentExecutionTimer, () => ActiveGlimpseRequestContexts.Current.CurrentRuntimePolicy);
 
             foreach (var inspector in Configuration.Inspectors)
             {
@@ -521,13 +514,9 @@ namespace Glimpse.Core.Framework
             var frameworkProviderRuntimeContextType = runtimeContext.GetType();
             var messageBroker = Configuration.MessageBroker;
 
-            // Only use tabs that either don't specify a specific context type, or have a context type that matches the current framework provider's.
-            var runtimeTabs =
-                Configuration.Tabs.Where(
-                    tab =>
-                    tab.RequestContextType == null ||
-                    frameworkProviderRuntimeContextType.IsSubclassOf(tab.RequestContextType) ||
-                    tab.RequestContextType == frameworkProviderRuntimeContextType);
+            // Only use tabs that either don't specify a specific context type, or have a context 
+            // type that matches the current framework provider's.
+            var runtimeTabs = Configuration.Tabs.Where(tab => tab.RequestContextType == null || frameworkProviderRuntimeContextType.IsSubclassOf(tab.RequestContextType) || tab.RequestContextType == frameworkProviderRuntimeContextType);
 
             var supportedRuntimeTabs = runtimeTabs.Where(p => p.ExecuteOn.HasFlag(runtimeEvent));
             var tabResultsStore = GetTabResultsStore(glimpseRequestContext);
