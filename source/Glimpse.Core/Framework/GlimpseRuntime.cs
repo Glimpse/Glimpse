@@ -702,59 +702,7 @@ namespace Glimpse.Core.Framework
              
             Configuration.PersistenceStore.SaveMetadata(metadata);
         }
-
-        /*
-
-                private void PersistMetadata()
-                {
-                    var logger = Configuration.Logger;
-                    var metadata = new GlimpseMetadata { Version = Version, Hash = Configuration.Hash };
-                    var tabMetadata = metadata.Tabs;
-
-                    foreach (var tab in Configuration.Tabs)
-                    {
-                        var metadataInstance = new Dictionary<string, object>();
-                        foreach (var extension in Configuration.TabMetadataExtensions)
-                        { 
-                            try
-                            {
-                                var result = extension.ProcessTab(tab);
-                                if (result != null)
-                                {
-                                    metadataInstance[extension.Key] = result;
-                                }
-                            }
-                            catch (Exception exception)
-                            {
-                                logger.Error(Resources.ExecuteTabMetadataExtensionsError, exception, extension.GetType());
-                            }
-                        }
-
-                        if (metadataInstance.Count > 0)
-                        {
-                            tabMetadata[CreateKey(tab)] = metadataInstance;
-                        }
-                    }
-
-                    var resources = metadata.Resources;
-                    var endpoint = Configuration.ResourceEndpoint;
-
-                    foreach (var resource in Configuration.Resources)
-                    {
-                        var resourceKey = CreateKey(resource);
-                        if (resources.ContainsKey(resourceKey))
-                        {
-                            logger.Warn(Resources.GlimpseRuntimePersistMetadataMultipleResourceWarning, resource.Name);
-                        }
-
-                        resources[resourceKey] = endpoint.GenerateUriTemplate(resource, Configuration.EndpointBaseUri, logger);
-                    }
-
-                    Configuration.PersistenceStore.Save(metadata);
-                }
-         */
-
-
+         
         // TODO this should not be public! This was changed to hack in OWIN support
         public string GenerateScriptTags(GlimpseRequestContextHandle glimpseRequestContextHandle)
         {
