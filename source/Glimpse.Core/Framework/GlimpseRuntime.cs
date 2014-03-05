@@ -169,10 +169,7 @@ namespace Glimpse.Core.Framework
 
                 ExecuteTabs(RuntimeEvent.BeginRequest, glimpseRequestContext);
 
-                Configuration.MessageBroker.Publish(new RuntimeMessage()
-                    .AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest)
-                    .AsTimelineMessage("Start Request", TimelineCategory.Request)
-                    .AsTimedMessage(glimpseRequestContext.CurrentExecutionTimer.Point()));
+                GlimpseTimeline.CaptureMoment("Start Request", TimelineCategory.Request, new RuntimeMessage().AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest));
 
                 return glimpseRequestContextHandle;
             }
@@ -204,10 +201,7 @@ namespace Glimpse.Core.Framework
                     return;
                 }
 
-                Configuration.MessageBroker.Publish(new RuntimeMessage()
-                    .AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest)
-                    .AsTimelineMessage("End Request", TimelineCategory.Request)
-                    .AsTimedMessage(glimpseRequestContext.CurrentExecutionTimer.Point()));
+                GlimpseTimeline.CaptureMoment("End Request", TimelineCategory.Request, new RuntimeMessage().AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest));
 
                 ExecuteTabs(RuntimeEvent.EndRequest, glimpseRequestContext);
                 ExecuteDisplays(glimpseRequestContext);

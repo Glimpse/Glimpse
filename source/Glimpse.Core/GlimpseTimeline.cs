@@ -9,10 +9,30 @@ namespace Glimpse.Core
     {
         public static OngoingCapture Capture(string eventName)
         {
-            return Capture(eventName, string.Empty);
+            return Capture(eventName, null, TimelineCategory.User, new TimelineMessage());
         }
 
         public static OngoingCapture Capture(string eventName, string eventSubText)
+        {
+            return Capture(eventName, eventSubText, TimelineCategory.User, new TimelineMessage());
+        }
+
+        internal static OngoingCapture Capture(string eventName, TimelineCategoryItem category)
+        {
+            return Capture(eventName, null, category, new TimelineMessage());
+        }
+
+        internal static OngoingCapture Capture(string eventName, TimelineCategoryItem category, ITimelineMessage message)
+        {
+            return Capture(eventName, null, category, message);
+        }
+
+        internal static OngoingCapture Capture(string eventName, ITimelineMessage message)
+        {
+            return Capture(eventName, null, TimelineCategory.User, message);
+        }
+
+        internal static OngoingCapture Capture(string eventName, string eventSubText, TimelineCategoryItem category, ITimelineMessage message)
         {
             if (string.IsNullOrEmpty(eventName))
             {
@@ -27,16 +47,38 @@ namespace Glimpse.Core
             var messageBroker = GlimpseRuntime.Instance.Configuration.MessageBroker;
             var executionTimer = GlimpseRuntime.Instance.CurrentRequestContext.CurrentExecutionTimer;
 
-            return new OngoingCapture(executionTimer, messageBroker, eventName, eventSubText);
+            return new OngoingCapture(executionTimer, messageBroker, eventName, eventSubText, category, message);
         }
+
 
         public static void CaptureMoment(string eventName)
         {
-            CaptureMoment(eventName, string.Empty);
+            CaptureMoment(eventName, null, TimelineCategory.User, new TimelineMessage());
         }
 
         public static void CaptureMoment(string eventName, string eventSubText)
         {
+            CaptureMoment(eventName, eventSubText, TimelineCategory.User, new TimelineMessage());
+        }
+
+        internal static void CaptureMoment(string eventName, TimelineCategoryItem category)
+        {
+            CaptureMoment(eventName, null, category, new TimelineMessage());
+        }
+
+        internal static void CaptureMoment(string eventName, TimelineCategoryItem category, ITimelineMessage message) 
+        {
+            CaptureMoment(eventName, null, category, message);
+        }
+
+        internal static void CaptureMoment(string eventName, ITimelineMessage message) 
+        {
+            CaptureMoment(eventName, null, TimelineCategory.User, message);
+        }
+
+        internal static void CaptureMoment(string eventName, string eventSubText, TimelineCategoryItem category, ITimelineMessage message) 
+        {
+
             if (string.IsNullOrEmpty(eventName))
             {
                 throw new ArgumentNullException("eventName");
@@ -50,8 +92,12 @@ namespace Glimpse.Core
             var messageBroker = GlimpseRuntime.Instance.Configuration.MessageBroker;
             var executionTimer = GlimpseRuntime.Instance.CurrentRequestContext.CurrentExecutionTimer;
 
-            messageBroker.Publish(new TimelineMessage(executionTimer.Point(), eventName, eventSubText));
-        }
+            message
+                .AsTimelineMessage(eventName, category, eventSubText)
+                .AsTimedMessage(executionTimer.Point());
+
+            messageBroker.Publish(message);
+        } 
 
         public class OngoingCapture : IDisposable
         {
@@ -64,18 +110,15 @@ namespace Glimpse.Core
             {
             }
 
-            public OngoingCapture(IExecutionTimer executionTimer, IMessageBroker messageBroker, string eventName, string eventSubText)
+            public OngoingCapture(IExecutionTimer executionTimer, IMessageBroker messageBroker, string eventName, string eventSubText, TimelineCategoryItem category, ITimelineMessage message)
             {
                 Offset = executionTimer.Start();
                 ExecutionTimer = executionTimer;
-                EventSubText = eventSubText;
-                MessageBroker = messageBroker;
-                EventName = eventName;
+                Message = message.AsTimelineMessage(eventName, category, eventSubText);  
+                MessageBroker = messageBroker;  
             }
 
-            private string EventSubText { get; set; }
-
-            private string EventName { get; set; }
+            private ITimelineMessage Message { get; set; } 
 
             private TimeSpan Offset { get; set; }
 
@@ -86,8 +129,8 @@ namespace Glimpse.Core
             public virtual void Stop()
             {
                 var timerResult = ExecutionTimer.Stop(Offset);
-                  
-                MessageBroker.Publish(new TimelineMessage(timerResult, EventName, EventSubText));
+
+                MessageBroker.Publish(Message.AsTimedMessage(timerResult));
             }
 
             public void Dispose()
