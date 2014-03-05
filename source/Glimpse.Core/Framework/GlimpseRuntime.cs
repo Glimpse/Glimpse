@@ -67,6 +67,14 @@ namespace Glimpse.Core.Framework
         }
 
         /// <summary>
+        /// Gets a value indicating whether this instance has been initialized.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is initialized; otherwise, <c>false</c>.
+        /// </value>
+        public static bool IsInitialized { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="GlimpseRuntime" /> class.
         /// </summary>
         /// <param name="configuration">The configuration.</param>
@@ -102,11 +110,13 @@ namespace Glimpse.Core.Framework
                 throw new ArgumentNullException("configuration");
             }
 
-            // run user customizations to configuration before storing
+            // Run user customizations to configuration before storing
             var userUpdatedConfig = GlimpseConfiguration.Override(configuration);
             userUpdatedConfig.ApplyOverrides(); // override (some) changes made by the user to make sure .config file driven settings win
+            
             Configuration = new ReadonlyConfigurationAdapter(userUpdatedConfig);
-            this.Initialize();
+            
+            Initialize();
         }
 
         /// <summary>
@@ -116,14 +126,6 @@ namespace Glimpse.Core.Framework
         /// The configuration.
         /// </value>
         public IReadonlyConfiguration Configuration { get; set; }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance has been initialized.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance is initialized; otherwise, <c>false</c>.
-        /// </value>
-        public static bool IsInitialized { get; private set; }
 
         /// <summary>
         /// Returns the <see cref="IGlimpseRequestContext"/> corresponding to the current request.
@@ -146,31 +148,6 @@ namespace Glimpse.Core.Framework
         public bool TryGetRequestContext(Guid glimpseRequestId, out IGlimpseRequestContext glimpseRequestContext)
         {
             return ActiveGlimpseRequestContexts.TryGet(glimpseRequestId, out glimpseRequestContext);
-        }
-
-        private IDictionary<string, TabResult> GetTabResultsStore(IGlimpseRequestContext glimpseRequestContext)
-        {
-            return GetResultsStore<Dictionary<string, TabResult>>(glimpseRequestContext, Constants.TabResultsDataStoreKey);
-        }
-
-        private IDictionary<string, TabResult> GetDisplayResultsStore(IGlimpseRequestContext glimpseRequestContext)
-        {
-            return GetResultsStore<Dictionary<string, TabResult>>(glimpseRequestContext, Constants.DisplayResultsDataStoreKey);
-        }
-
-        private TResult GetResultsStore<TResult>(IGlimpseRequestContext glimpseRequestContext, string resultStoreKey)
-            where TResult : class, new()
-        {
-            var requestStore = glimpseRequestContext.RequestStore;
-            var resultStore = requestStore.Get<TResult>(resultStoreKey);
-
-            if (resultStore == null)
-            {
-                resultStore = new TResult();
-                requestStore.Set(resultStoreKey, resultStore);
-            }
-
-            return resultStore;
         }
 
         /// <summary>
@@ -538,59 +515,6 @@ namespace Glimpse.Core.Framework
             IsInitialized = true;
         }
 
-        internal static string CreateKey(object obj)
-        {
-            string result;
-            var keyProvider = obj as IKey;
-
-            if (keyProvider != null)
-            {
-                result = keyProvider.Key;
-            }
-            else
-            {
-                result = obj.GetType().FullName;
-            }
-
-            return result
-                .Replace('.', '_')
-                .Replace(' ', '_')
-                .ToLower();
-        }
-
-        private static IDataStore GetTabStore(string tabName, IGlimpseRequestContext glimpseRequestContext)
-        {
-            if (glimpseRequestContext.CurrentRuntimePolicy == RuntimePolicy.Off)
-            {
-                return null;
-            }
-
-            var requestStore = glimpseRequestContext.RequestStore;
-            IDictionary<string, IDataStore> tabStorage;
-            if (!requestStore.Contains(Constants.TabStorageKey))
-            {
-                tabStorage = new Dictionary<string, IDataStore>();
-                requestStore.Set(Constants.TabStorageKey, tabStorage);
-            }
-            else
-            {
-                tabStorage = requestStore.Get<IDictionary<string, IDataStore>>(Constants.TabStorageKey);
-            }
-
-            IDataStore tabStore;
-            if (!tabStorage.ContainsKey(tabName))
-            {
-                tabStore = new DictionaryDataStoreAdapter(new Dictionary<string, object>());
-                tabStorage.Add(tabName, tabStore);
-            }
-            else
-            {
-                tabStore = tabStorage[tabName];
-            }
-
-            return tabStore;
-        }
-
         private void ExecuteTabs(RuntimeEvent runtimeEvent, IGlimpseRequestContext glimpseRequestContext)
         {
             var runtimeContext = glimpseRequestContext.RequestResponseAdapter.RuntimeContext;
@@ -681,8 +605,8 @@ namespace Glimpse.Core.Framework
 
         private void PersistMetadata()
         {
-            var logger = Configuration.Logger; 
-            var metadata = new Dictionary<string, object>(); 
+            var logger = Configuration.Logger;
+            var metadata = new Dictionary<string, object>();
 
             foreach (var extension in Configuration.Metadata)
             {
@@ -699,11 +623,116 @@ namespace Glimpse.Core.Framework
                     logger.Error(Resources.ExecuteMetadataExtensionsError, exception, extension.GetType());
                 }
             }
-             
+
             Configuration.PersistenceStore.SaveMetadata(metadata);
         }
-         
+
+        private RuntimePolicy DetermineRuntimePolicy(RuntimeEvent runtimeEvent, RuntimePolicy currentRuntimePolicy, IRequestResponseAdapter requestResponseAdapter)
+        {
+            var runtimePolicyResult = RuntimePolicyDeterminator.DetermineRuntimePolicy(runtimeEvent, currentRuntimePolicy, requestResponseAdapter);
+
+            if (runtimePolicyResult.Messages.Length != 0)
+            {
+                string allMessages = runtimePolicyResult.Messages[0].Message;
+                if (runtimePolicyResult.Messages.Length > 1)
+                {
+                    allMessages = runtimePolicyResult.Messages.Aggregate("RuntimePolicy determination messages :", (concatenatedMessages, message) => concatenatedMessages += Environment.NewLine + "\t" + message.Message);
+                }
+
+                if (runtimePolicyResult.Messages.Any(message => message.IsWarning))
+                {
+                    Configuration.Logger.Warn(allMessages);
+                }
+                else
+                {
+                    Configuration.Logger.Debug(allMessages);
+                }
+            }
+
+            return runtimePolicyResult.RuntimePolicy;
+        }
+
+        private IDictionary<string, TabResult> GetTabResultsStore(IGlimpseRequestContext glimpseRequestContext)
+        {
+            return GetResultsStore<Dictionary<string, TabResult>>(glimpseRequestContext, Constants.TabResultsDataStoreKey);
+        }
+
+        private IDictionary<string, TabResult> GetDisplayResultsStore(IGlimpseRequestContext glimpseRequestContext)
+        {
+            return GetResultsStore<Dictionary<string, TabResult>>(glimpseRequestContext, Constants.DisplayResultsDataStoreKey);
+        }
+
+        private TResult GetResultsStore<TResult>(IGlimpseRequestContext glimpseRequestContext, string resultStoreKey)
+            where TResult : class, new()
+        {
+            var requestStore = glimpseRequestContext.RequestStore;
+            var resultStore = requestStore.Get<TResult>(resultStoreKey);
+
+            if (resultStore == null)
+            {
+                resultStore = new TResult();
+                requestStore.Set(resultStoreKey, resultStore);
+            }
+
+            return resultStore;
+        }
+        
+        internal static string CreateKey(object obj)
+        {
+            string result;
+            var keyProvider = obj as IKey;
+
+            if (keyProvider != null)
+            {
+                result = keyProvider.Key;
+            }
+            else
+            {
+                result = obj.GetType().FullName;
+            }
+
+            return result
+                .Replace('.', '_')
+                .Replace(' ', '_')
+                .ToLower();
+        }
+
+        private static IDataStore GetTabStore(string tabName, IGlimpseRequestContext glimpseRequestContext)
+        {
+            if (glimpseRequestContext.CurrentRuntimePolicy == RuntimePolicy.Off)
+            {
+                return null;
+            }
+
+            var requestStore = glimpseRequestContext.RequestStore;
+            IDictionary<string, IDataStore> tabStorage;
+            if (!requestStore.Contains(Constants.TabStorageKey))
+            {
+                tabStorage = new Dictionary<string, IDataStore>();
+                requestStore.Set(Constants.TabStorageKey, tabStorage);
+            }
+            else
+            {
+                tabStorage = requestStore.Get<IDictionary<string, IDataStore>>(Constants.TabStorageKey);
+            }
+
+            IDataStore tabStore;
+            if (!tabStorage.ContainsKey(tabName))
+            {
+                tabStore = new DictionaryDataStoreAdapter(new Dictionary<string, object>());
+                tabStorage.Add(tabName, tabStore);
+            }
+            else
+            {
+                tabStore = tabStorage[tabName];
+            }
+
+            return tabStore;
+        }
+
         // TODO this should not be public! This was changed to hack in OWIN support
+        // TODO do we need both GenerateScriptTags methods
+#warning this should not be public! but we need to have some way to get to generate script tags conditionally so that they are only generated once (like glimpse injects it before </body> and at the same time a user has added the GlimpseClient control)
         public string GenerateScriptTags(GlimpseRequestContextHandle glimpseRequestContextHandle)
         {
             if (glimpseRequestContextHandle == null)
@@ -725,6 +754,7 @@ namespace Glimpse.Core.Framework
             return GenerateScriptTags(glimpseRequestContext);
         }
 
+        // TODO do we need both GenerateScriptTags methods
 #warning this should not be public! but we need to have some way to get to generate script tags conditionally so that they are only generated once (like glimpse injects it before </body> and at the same time a user has added the GlimpseClient control)
         public string GenerateScriptTags(IGlimpseRequestContext glimpseRequestContext)
         {
@@ -750,109 +780,6 @@ namespace Glimpse.Core.Framework
 
             requestStore.Set(Constants.ScriptsHaveRenderedKey, true);
             return glimpseScriptTags;
-        }
-
-        private RuntimePolicy DetermineRuntimePolicy(RuntimeEvent runtimeEvent, RuntimePolicy currentRuntimePolicy, IRequestResponseAdapter requestResponseAdapter)
-        {
-            var runtimePolicyResult = RuntimePolicyDeterminator.DetermineRuntimePolicy(runtimeEvent, currentRuntimePolicy, requestResponseAdapter);
-
-            if (runtimePolicyResult.Messages.Length != 0)
-            {
-                string allMessages = runtimePolicyResult.Messages[0].Message; 
-                if(runtimePolicyResult.Messages.Length > 1)
-                {
-                    allMessages = runtimePolicyResult.Messages.Aggregate("RuntimePolicy determination messages :", (concatenatedMessages, message) => concatenatedMessages += Environment.NewLine + "\t" + message.Message);
-                }
-
-                if (runtimePolicyResult.Messages.Any(message => message.IsWarning))
-                {
-                    Configuration.Logger.Warn(allMessages);
-                }
-                else
-                {
-                    Configuration.Logger.Debug(allMessages);
-                }
-            }
-
-            return runtimePolicyResult.RuntimePolicy;
-        }
-
-        /// <summary>
-        /// The message used to to track the beginning and end of Http requests.
-        /// </summary>
-        protected class RuntimeMessage : ITimelineMessage, ISourceMessage
-        {
-            /// <summary>
-            /// Gets the id of the request.
-            /// </summary>
-            /// <value>
-            /// The id.
-            /// </value>
-            public Guid Id { get; private set; }
-
-            /// <summary>
-            /// Gets or sets the name of the event.
-            /// </summary>
-            /// <value>
-            /// The name of the event.
-            /// </value>
-            public string EventName { get; set; }
-
-            /// <summary>
-            /// Gets or sets the event category.
-            /// </summary>
-            /// <value>
-            /// The event category.
-            /// </value>
-            public TimelineCategoryItem EventCategory { get; set; }
-
-            /// <summary>
-            /// Gets or sets the event sub text.
-            /// </summary>
-            /// <value>
-            /// The event sub text.
-            /// </value>
-            public string EventSubText { get; set; }
-
-            /// <summary>
-            /// Gets or sets the type of the executed.
-            /// </summary>
-            /// <value>
-            /// The type of the executed.
-            /// </value>
-            public Type ExecutedType { get; set; }
-
-            /// <summary>
-            /// Gets or sets the executed method.
-            /// </summary>
-            /// <value>
-            /// The executed method.
-            /// </value>
-            public MethodInfo ExecutedMethod { get; set; }
-
-            /// <summary>
-            /// Gets or sets the offset.
-            /// </summary>
-            /// <value>
-            /// The offset.
-            /// </value>
-            public TimeSpan Offset { get; set; }
-
-            /// <summary>
-            /// Gets or sets the duration.
-            /// </summary>
-            /// <value>
-            /// The duration.
-            /// </value>
-            public TimeSpan Duration { get; set; }
-
-            /// <summary>
-            /// Gets or sets the start time.
-            /// </summary>
-            /// <value>
-            /// The start time.
-            /// </value>
-            public DateTime StartTime { get; set; }
         }
     }
 }
