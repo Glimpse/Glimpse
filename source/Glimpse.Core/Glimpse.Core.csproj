@@ -145,6 +145,8 @@
     <Compile Include="Metadata\TabMetadata.cs" />
     <Compile Include="Metadata\VersionMetadata.cs" />
     <Compile Include="PreBodyTagInjectionStream.cs" />
+    <Compile Include="ResourceResult\StringResourceResult.cs" />
+    <Compile Include="Resource\ClientScriptResource.cs" />
     <Compile Include="Resource\ConfigurationScriptResource.cs">
       <SubType>Code</SubType>
     </Compile>
