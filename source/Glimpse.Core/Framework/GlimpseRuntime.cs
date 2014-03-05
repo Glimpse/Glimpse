@@ -140,17 +140,6 @@ namespace Glimpse.Core.Framework
         private ActiveGlimpseRequestContexts ActiveGlimpseRequestContexts { get; set; }
 
         /// <summary>
-        /// Returns the corresponding <see cref="IGlimpseRequestContext"/> for the given <paramref name="glimpseRequestId"/>
-        /// </summary>
-        /// <param name="glimpseRequestId">The Glimpse request Id</param>
-        /// <param name="glimpseRequestContext">The corresponding <see cref="IGlimpseRequestContext"/></param>
-        /// <returns>Boolean indicating whether the corresponding <see cref="IGlimpseRequestContext"/> was found.</returns>
-        public bool TryGetRequestContext(Guid glimpseRequestId, out IGlimpseRequestContext glimpseRequestContext)
-        {
-            return ActiveGlimpseRequestContexts.TryGet(glimpseRequestId, out glimpseRequestContext);
-        }
-
-        /// <summary>
         /// Begins Glimpse's processing of a Http request.
         /// </summary>
         /// <exception cref="Glimpse.Core.Framework.GlimpseException">Throws an exception if <see cref="GlimpseRuntime"/> is not yet initialized.</exception>
@@ -418,6 +407,17 @@ namespace Glimpse.Core.Framework
             {
                 logger.Fatal(Resources.GlimpseRuntimeExecuteResourceResultError, exception, result.GetType());
             }
+        }
+
+        /// <summary>
+        /// Returns the corresponding <see cref="IGlimpseRequestContext"/> for the given <paramref name="glimpseRequestId"/>
+        /// </summary>
+        /// <param name="glimpseRequestId">The Glimpse request Id</param>
+        /// <param name="glimpseRequestContext">The corresponding <see cref="IGlimpseRequestContext"/></param>
+        /// <returns>Boolean indicating whether the corresponding <see cref="IGlimpseRequestContext"/> was found.</returns>
+        public bool TryGetRequestContext(Guid glimpseRequestId, out IGlimpseRequestContext glimpseRequestContext)
+        {
+            return ActiveGlimpseRequestContexts.TryGet(glimpseRequestId, out glimpseRequestContext);
         }
 
         private bool ContinueProcessingRequest(GlimpseRequestContextHandle glimpseRequestContextHandle, RuntimeEvent runtimeEvent, RequestHandlingMode allowedRequestHandlingMode, out IGlimpseRequestContext glimpseRequestContext)
