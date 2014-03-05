@@ -62,12 +62,6 @@ namespace Glimpse.Test.Core.Framework
         }
 
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
-        public void Construct()
-        {
-            Assert.False(string.IsNullOrWhiteSpace(GlimpseRuntime.Version));
-        }
-
-        [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void ThrowsExceptionIfEndRequestIsCalledBeforeBeginRequest()
         {
             var providerMock = new Mock<IRequestResponseAdapter>().Setup();
@@ -247,18 +241,7 @@ namespace Glimpse.Test.Core.Framework
             Assert.False(support.HasFlag(RuntimeEvent.BeginRequest), "Begin NOT in End|SessionEnd");
             Assert.False(support.HasFlag(RuntimeEvent.BeginSessionAccess), "SessionBegin NOT in End|SessionEnd");
             Assert.False(support.HasFlag(RuntimeEvent.BeginRequest | RuntimeEvent.BeginSessionAccess), "Begin|SessionBegin NOT in End|SessionEnd");
-        }
-
-        [Fact(Skip = "This test is hanging the test runner. Fix later")]
-        public void HaveASemanticVersion()
-        {
-            Version version;
-            Assert.True(Version.TryParse(GlimpseRuntime.Version, out version));
-            Assert.NotNull(version.Major);
-            Assert.NotNull(version.Minor);
-            Assert.NotNull(version.Build);
-            Assert.Equal(-1, version.Revision);
-        }
+        } 
 
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void InitializeWithSetupTabs()

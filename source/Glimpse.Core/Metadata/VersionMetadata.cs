@@ -13,7 +13,7 @@ namespace Glimpse.Core.Metadata
 
         public object GetMetadata(IReadonlyConfiguration configuration)
         {
-            return GlimpseRuntime.Version;
+            return configuration.Version;
         }
     }
 }

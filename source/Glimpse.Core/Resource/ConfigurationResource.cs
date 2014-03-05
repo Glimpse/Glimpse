@@ -117,7 +117,7 @@ namespace Glimpse.Core.Resource
             string glimpseConfigurationTemplateContent = new StreamReader(glimpseConfigurationResourceStream).ReadToEnd();
             Template glimpseConfigurationTemplate = new Template(new TemplateGroup('$', '$'), glimpseConfigurationTemplateContent);
 
-            glimpseConfigurationTemplate.Add("glimpseRuntimeVersion", GlimpseRuntime.Version);
+            glimpseConfigurationTemplate.Add("glimpseRuntimeVersion", configuration.Version);
              
             var resources = configuration.PersistenceStore.GetMetadata().GetResources();
             var logosResource = resources[LogosResource.InternalName].Replace("{&" + ResourceParameter.Hash.Name + "}", string.Empty);

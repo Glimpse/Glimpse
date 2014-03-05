@@ -19,7 +19,7 @@ namespace Glimpse.Core.Framework
         /// <param name="configuration">A <see cref="IConfiguration"/></param>
         /// <param name="glimpseRuntimeVersion">The version of the glimpse runtime</param>
         /// <returns>The generated script tags</returns>
-        public static string Generate(Guid glimpseRequestId, IReadonlyConfiguration configuration, string glimpseRuntimeVersion)
+        public static string Generate(Guid glimpseRequestId, IReadonlyConfiguration configuration)
         {
             var encoder = configuration.HtmlEncoder;
             var resourceEndpoint = configuration.ResourceEndpoint;
@@ -39,7 +39,7 @@ namespace Glimpse.Core.Framework
                         var requestTokenValues = new Dictionary<string, string>
                                          {
                                              { ResourceParameter.RequestId.Name, glimpseRequestId.ToString() },
-                                             { ResourceParameter.VersionNumber.Name, glimpseRuntimeVersion },
+                                             { ResourceParameter.VersionNumber.Name, configuration.Version },
                                              { ResourceParameter.Hash.Name, configuration.Hash }
                                          };
 
@@ -82,7 +82,7 @@ namespace Glimpse.Core.Framework
                 {
                     try
                     {
-                        var uri = encoder.HtmlAttributeEncode(staticScript.GetUri(glimpseRuntimeVersion));
+                        var uri = encoder.HtmlAttributeEncode(staticScript.GetUri(configuration.Version));
 
                         if (!string.IsNullOrEmpty(uri))
                         {

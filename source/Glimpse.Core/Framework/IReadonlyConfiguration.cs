@@ -122,5 +122,11 @@ namespace Glimpse.Core.Framework
         /// </summary>
         /// <value>The hash.</value>
         string Hash { get; }
+
+        /// <summary>
+        /// Gets the version of Glimpse core.
+        /// </summary>
+        /// <value>The version.</value>
+        string Version { get; }
     }
 }

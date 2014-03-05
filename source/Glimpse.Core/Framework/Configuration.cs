@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using Glimpse.Core.Configuration;
@@ -38,6 +39,7 @@ namespace Glimpse.Core.Framework
         private ICollection<ITabMetadata> tabMetadata;
         private ICollection<IDisplay> displays;
         private string hash;
+        private string version;
         private IServiceLocator userServiceLocator;
         private Section xmlConfiguration;
         private RuntimePolicy? defaultRuntimePolicy;
@@ -825,6 +827,23 @@ namespace Glimpse.Core.Framework
                 hash = value;
             }
         }
+
+        public string Version
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(version))
+                {
+                    version = Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
+                }
+                 
+                return version;
+            } 
+            set
+            {
+                version = value;
+            }
+        } 
 
         public void ApplyOverrides()
         {

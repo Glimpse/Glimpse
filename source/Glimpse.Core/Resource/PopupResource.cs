@@ -100,7 +100,7 @@ namespace Glimpse.Core.Resource
             }
 #endif
 
-            var scriptTags = GlimpseScriptTagsGenerator.Generate(requestId, configuration, GlimpseRuntime.Version); 
+            var scriptTags = GlimpseScriptTagsGenerator.Generate(requestId, configuration); 
             var html = string.Format("<!DOCTYPE html><html><head><meta charset='utf-8'><title>Glimpse Popup</title></head><body class='glimpse-popup'>{0}</body></html>", scriptTags);
 
             return new HtmlResourceResult(html);

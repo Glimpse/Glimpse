@@ -49,7 +49,6 @@ namespace Glimpse.Test.Core.Tester
             RequestMetadataMock.Setup(r => r.GetHttpHeader(Constants.HttpRequestHeader)).Returns(Guid.NewGuid().ToString());
             StaticScriptMock = new Mock<IStaticClientScript>();
             StaticScriptMock.Setup(ss => ss.Order).Returns(ScriptOrder.ClientInterfaceScript);
-            StaticScriptMock.Setup(ss => ss.GetUri(Version)).Returns("http://localhost/static");
             DynamicScriptMock = new Mock<IDynamicClientScript>();
             DynamicScriptMock.Setup(ds => ds.Order).Returns(ScriptOrder.RequestDataScript);
             DynamicScriptMock.Setup(ds => ds.GetResourceName()).Returns("aResource");

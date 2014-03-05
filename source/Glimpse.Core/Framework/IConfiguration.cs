@@ -122,6 +122,12 @@ namespace Glimpse.Core.Framework
         string Hash { get; set; }
 
         /// <summary>
+        /// Gets the version of Glimpse core.
+        /// </summary>
+        /// <value>The version.</value>
+        string Version { get; set; }
+
+        /// <summary>
         /// Gets the configured <see cref="ICurrentGlimpseRequestIdTracker"/>
         /// </summary>
         ICurrentGlimpseRequestIdTracker CurrentGlimpseRequestIdTracker { get; }

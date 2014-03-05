@@ -29,9 +29,7 @@ namespace Glimpse.Core.Framework
         /// <exception cref="System.NullReferenceException">BeginRequest method not found</exception>
         static GlimpseRuntime()
         {
-            // Version is in major.minor.build format to support http://semver.org/
-            // TODO: Consider adding configuration hash to version
-            Version = Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
+            // Version is in major.minor.build format to support http://semver.org/ 
             IsInitialized = false;
 
             if (MethodInfoBeginRequest == null)
@@ -110,15 +108,6 @@ namespace Glimpse.Core.Framework
             Configuration = new ReadonlyConfigurationAdapter(userUpdatedConfig);
             this.Initialize();
         }
-
-        /// <summary>
-        /// Gets the executing version of Glimpse.
-        /// </summary>
-        /// <value>
-        /// The version of Glimpse.
-        /// </value>
-        /// <remarks>Glimpse versioning follows the rules of <see href="http://semver.org/">Semantic Versioning</see>.</remarks>
-        public static string Version { get; private set; }
 
         /// <summary>
         /// Gets or sets the configuration.
@@ -809,7 +798,7 @@ namespace Glimpse.Core.Framework
                 return string.Empty;
             }
 
-            var glimpseScriptTags = GlimpseScriptTagsGenerator.Generate(glimpseRequestContext.GlimpseRequestId, Configuration, Version);
+            var glimpseScriptTags = GlimpseScriptTagsGenerator.Generate(glimpseRequestContext.GlimpseRequestId, Configuration);
 
             requestStore.Set(Constants.ScriptsHaveRenderedKey, true);
             return glimpseScriptTags;

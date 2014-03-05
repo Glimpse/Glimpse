@@ -108,9 +108,14 @@ namespace Glimpse.Core.Framework
             get { return configuration.EndpointBaseUri; }
         }
 
-        public string Hash 
+        public string Hash
         {
             get { return configuration.Hash; }
+        }
+
+        public string Version
+        {
+            get { return configuration.Version; }
         }
     }
 }
