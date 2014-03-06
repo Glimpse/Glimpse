@@ -129,18 +129,17 @@ namespace Glimpse.AspNet
                 }
             }, availabilityOfGlimpseRequestContextHandleIsRequired: false);
 
-            // Under normal circumstances the SendHeaders event will be raised AFTER the EndRequest event, which means that in most cases the
-            // Glimpse request context handle will already be disposed as expected. It is only when there are premature flushes (before EndRequest) 
-            // that the Glimpse request context handle will be found. The PreSendRequestHeaders event is raised non deterministic by default, 
-            // see http://support.microsoft.com/kb/307985/en-us (although article dates from NET 1.1, tests confirmed it's still applicable),
-            // that is why we set the availabilityOfGlimpseRequestContextHandleIsRequired = false
+            // Under normal circumstances the SendHeaders event will be raised AFTER the EndRequest
+            // event, which means that in most cases the Glimpse request context handle will already
+            // be disposed as expected. It is only when there are premature flushes (before
+            // EndRequest) that the Glimpse request context handle will be found. The
+            // PreSendRequestHeaders event is raised non deterministic by default, see
+            // http://support.microsoft.com/kb/307985/en-us (although article dates from NET 1.1,
+            // tests confirmed it's still applicable), that is why we set the
+            // availabilityOfGlimpseRequestContextHandleIsRequired = false
         }
 
-        private static void ProcessAspNetRuntimeEvent(
-            HttpContextBase httpContext,
-            Action<GlimpseRequestContextHandle> action,
-            bool disposeHandle = false,
-            bool availabilityOfGlimpseRequestContextHandleIsRequired = true)
+        private static void ProcessAspNetRuntimeEvent(HttpContextBase httpContext, Action<GlimpseRequestContextHandle> action, bool disposeHandle = false, bool availabilityOfGlimpseRequestContextHandleIsRequired = true)
         {
             if (GlimpseRuntime.IsInitialized)
             {
