@@ -211,16 +211,15 @@ namespace Glimpse.Core.Framework
                 ExecuteDisplays(glimpseRequestContext);
 
                 var timingDuration = glimpseRequestContext.StopTiming();
-
                 var requestResponseAdapter = glimpseRequestContext.RequestResponseAdapter;
                 var requestMetadata = requestResponseAdapter.RequestMetadata;
                 var runtimePolicy = glimpseRequestContext.CurrentRuntimePolicy;
 
                 if (runtimePolicy.HasFlag(RuntimePolicy.PersistResults))
                 {
-                    var persistenceStore = Configuration.PersistenceStore;
-
+                    var persistenceStore = Configuration.PersistenceStore; 
                     var metadata = new GlimpseRequest(glimpseRequestContext.GlimpseRequestId, requestMetadata, GetTabResultsStore(glimpseRequestContext), GetDisplayResultsStore(glimpseRequestContext), timingDuration);
+
                     try
                     {
                         persistenceStore.Save(metadata);
