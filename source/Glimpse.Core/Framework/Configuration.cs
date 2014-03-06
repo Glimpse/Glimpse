@@ -873,28 +873,16 @@ namespace Glimpse.Core.Framework
 
         private ILogger CreateLogger()
         {
+            // Root the path if it isn't already and add a filename if one isn't specified
             var configuredPath = XmlConfiguration.Logging.LogLocation;
+            var logDirPath = Path.IsPathRooted(configuredPath) ? configuredPath : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, configuredPath);
+            var logFilePath = string.IsNullOrEmpty(Path.GetExtension(logDirPath)) ? Path.Combine(logDirPath, "Glimpse.log") : logDirPath;
+ 
+            var fileTarget = new FileTarget();
+            fileTarget.FileName = logFilePath;
+            fileTarget.Layout = "${longdate} | ${level:uppercase=true} | ${message} | ${exception:maxInnerExceptionLevel=5:format=type,message,stacktrace:separator=--:innerFormat=shortType,message,method:innerExceptionSeparator=>>}";
 
-            // Root the path if it isn't already
-            var logDirPath = Path.IsPathRooted(configuredPath)
-                                 ? configuredPath
-                                 : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, configuredPath);
-
-            // Add a filename if one isn't specified
-            var logFilePath = string.IsNullOrEmpty(Path.GetExtension(logDirPath))
-                                  ? Path.Combine(logDirPath, "Glimpse.log")
-                                  : logDirPath;
-
-            // use NLog logger otherwise
-            var fileTarget = new FileTarget
-            {
-                FileName = logFilePath,
-                Layout =
-                    "${longdate} | ${level:uppercase=true} | ${message} | ${exception:maxInnerExceptionLevel=5:format=type,message,stacktrace:separator=--:innerFormat=shortType,message,method:innerExceptionSeparator=>>}"
-            };
-
-            var asyncTarget = new AsyncTargetWrapper(fileTarget);
-
+            var asyncTarget = new AsyncTargetWrapper(fileTarget); 
             var loggingConfiguration = new LoggingConfiguration();
             loggingConfiguration.AddTarget("file", asyncTarget);
             loggingConfiguration.LoggingRules.Add(new LoggingRule("*", LogLevel.FromOrdinal((int)XmlConfiguration.Logging.Level), asyncTarget));
@@ -915,6 +903,7 @@ namespace Glimpse.Core.Framework
             }
 
             instance = null;
+
             return false;
         }
 
@@ -924,13 +913,9 @@ namespace Glimpse.Core.Framework
 
             discoverableCollection.IgnoredTypes.AddRange(ToEnumerable(config.IgnoredTypes));
 
-            // config.DiscoveryLocation (collection specific) overrides Configuration.DiscoveryLocation (on main <glimpse> node)
-            var locationCascade = string.IsNullOrEmpty(config.DiscoveryLocation)
-                                       ? string.IsNullOrEmpty(XmlConfiguration.DiscoveryLocation)
-                                             ? null
-                                             : XmlConfiguration.DiscoveryLocation
-                                       : config.DiscoveryLocation;
-
+            // Default to config.DiscoveryLocation (collection specific) otherwise overrides 
+            // Configuration.DiscoveryLocation (on main <glimpse> node)
+            var locationCascade = string.IsNullOrEmpty(config.DiscoveryLocation) ? (string.IsNullOrEmpty(XmlConfiguration.DiscoveryLocation) ? null : XmlConfiguration.DiscoveryLocation) : config.DiscoveryLocation;
             if (locationCascade != null)
             {
                 discoverableCollection.DiscoveryLocation = locationCascade;
