@@ -33,7 +33,7 @@ namespace Glimpse.AspNet
                     glimpseRequestContextHandleFound = true;
 
                     var queryString = context.Request.QueryString;
-                    var resourceName = queryString["n"];
+                    var resourceName = queryString[UriTemplateResourceEndpointConfiguration.DefaultResourceNameKey];
 
                     if (string.IsNullOrEmpty(resourceName))
                     {
