@@ -184,12 +184,13 @@ namespace Glimpse.Core.Framework
             }
         }
 
+        // TODO: Add PRG support
         /// <summary>
         /// Ends Glimpse's processing of the request referenced by the given <paramref name="glimpseRequestContextHandle"/>"/>
         /// </summary>
         /// <param name="glimpseRequestContextHandle">The Glimpse handle of the corresponding request</param>
         /// <exception cref="Glimpse.Core.Framework.GlimpseException">Throws an exception if <c>BeginRequest</c> has not yet been called for the given request.</exception>
-        public void EndRequest(GlimpseRequestContextHandle glimpseRequestContextHandle) // TODO: Add PRG support
+        public void EndRequest(GlimpseRequestContextHandle glimpseRequestContextHandle) 
         {
             if (glimpseRequestContextHandle == null)
             {
@@ -220,7 +221,6 @@ namespace Glimpse.Core.Framework
                     var persistenceStore = Configuration.PersistenceStore;
 
                     var metadata = new GlimpseRequest(glimpseRequestContext.GlimpseRequestId, requestMetadata, GetTabResultsStore(glimpseRequestContext), GetDisplayResultsStore(glimpseRequestContext), timingDuration);
-
                     try
                     {
                         persistenceStore.Save(metadata);

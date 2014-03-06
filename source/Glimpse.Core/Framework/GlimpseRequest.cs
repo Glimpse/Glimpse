@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Glimpse.Core.Support;
 
 namespace Glimpse.Core.Framework
 {
@@ -39,19 +40,11 @@ namespace Glimpse.Core.Framework
             ClientId = requestMetadata.GetCookie(Constants.ClientIdCookieName) ?? requestMetadata.ClientId;
             UserAgent = requestMetadata.GetHttpHeader(Constants.UserAgentHeaderName);
 
-            Guid parentRequestId;
-
-#if NET35
-            if (RequestIsAjax && global::Glimpse.Core.Backport.Net35Backport.TryParseGuid(requestMetadata.GetHttpHeader(Constants.HttpRequestHeader), out parentRequestId))
+            Guid parentRequestId; 
+            if (RequestIsAjax && Compatability.TryParseGuid(requestMetadata.GetHttpHeader(Constants.HttpRequestHeader), out parentRequestId))
             {
                 ParentRequestId = parentRequestId;
-            }
-#else
-            if (RequestIsAjax && Guid.TryParse(requestMetadata.GetHttpHeader(Constants.HttpRequestHeader), out parentRequestId))
-            {
-                ParentRequestId = parentRequestId;
-            }
-#endif
+            } 
         }
 
         /// <summary>
