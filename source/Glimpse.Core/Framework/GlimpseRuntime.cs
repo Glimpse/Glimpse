@@ -103,16 +103,18 @@ namespace Glimpse.Core.Framework
             }
         }
 
-        internal GlimpseRuntime(IConfiguration configuration) // V2Merge: This should be private but is internal to not break unit tests
+        // TODO: V2Merge This should be private but is internal to not break unit tests
+        internal GlimpseRuntime(IConfiguration configuration) 
         {
             if (configuration == null)
             {
                 throw new ArgumentNullException("configuration");
             }
 
-            // Run user customizations to configuration before storing
+            // Run user customizations to configuration before storing and then override 
+            // (some) changes made by the user to make sure .config file driven settings win
             var userUpdatedConfig = GlimpseConfiguration.Override(configuration);
-            userUpdatedConfig.ApplyOverrides(); // override (some) changes made by the user to make sure .config file driven settings win
+            userUpdatedConfig.ApplyOverrides(); 
             
             Configuration = new ReadonlyConfigurationAdapter(userUpdatedConfig);
             
@@ -155,11 +157,12 @@ namespace Glimpse.Core.Framework
 
             glimpseRequestContext.CurrentRuntimePolicy = runtimePolicy;
 
-            var glimpseRequestContextHandle = ActiveGlimpseRequestContexts.Add(glimpseRequestContext); 
+            var glimpseRequestContextHandle = ActiveGlimpseRequestContexts.Add(glimpseRequestContext);
+
+            // When we are dealing with a resource request, there is no need to further 
+            // continue setting up the request.
             if (glimpseRequestContextHandle.RequestHandlingMode == RequestHandlingMode.ResourceRequest)
             {
-                // When we are dealing with a resource request, there is no need to further 
-                // continue setting up the request.
                 return glimpseRequestContextHandle;
             }
 
