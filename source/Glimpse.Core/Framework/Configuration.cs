@@ -778,7 +778,7 @@ namespace Glimpse.Core.Framework
                     return instanceMetadata;
                 }
 
-                instanceMetadata = CreateDiscoverableCollection<IInstanceMetadata>(XmlConfiguration.InstnaceMetadata);
+                instanceMetadata = CreateDiscoverableCollection<IInstanceMetadata>(XmlConfiguration.InstanceMetadata);
                 return instanceMetadata;
             }
 

@@ -236,7 +236,7 @@ namespace Glimpse.Core.Configuration
         /// </code>
         /// </example>
         [ConfigurationProperty("instanceMetadata")]
-        public DiscoverableCollectionElement InstnaceMetadata
+        public DiscoverableCollectionElement InstanceMetadata
         {
             get { return (DiscoverableCollectionElement)base["instanceMetadata"]; }
             set { base["instanceMetadata"] = value; }
