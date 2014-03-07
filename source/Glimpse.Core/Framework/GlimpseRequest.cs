@@ -34,7 +34,7 @@ namespace Glimpse.Core.Framework
 
             RequestHttpMethod = requestMetadata.RequestHttpMethod;
             RequestIsAjax = requestMetadata.RequestIsAjax;
-            RequestUri = requestMetadata.RequestUri.AbsoluteUri;
+            RequestUri = requestMetadata.RequestUri.PathAndQuery;
             ResponseStatusCode = requestMetadata.ResponseStatusCode;
             ResponseContentType = requestMetadata.ResponseContentType;
             ClientId = requestMetadata.GetCookie(Constants.ClientIdCookieName) ?? requestMetadata.ClientId;

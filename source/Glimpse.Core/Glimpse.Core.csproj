@@ -114,6 +114,7 @@
     <Compile Include="Extensibility\RuntimePolicy.cs" />
     <Compile Include="Extensibility\Subscriber.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Framework\ActiveGlimpseRequestContextEventArgs.cs" />
     <Compile Include="Framework\ActiveGlimpseRequestContexts.cs" />
     <Compile Include="Framework\AssemblyTypesResolver.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="Framework\Support\IExecutionTask.cs" />
     <Compile Include="Framework\UriTemplateResourceEndpointConfiguration.cs" />
     <Compile Include="Message\RuntimeMessage.cs" />
+    <Compile Include="Metadata\CorrelationInstanceMetadata.cs" />
     <Compile Include="Metadata\DocumentationTabMetadata.cs" />
     <Compile Include="Metadata\HashMetadata.cs" />
     <Compile Include="Metadata\KeysHeadingsTabMetadata.cs" />
