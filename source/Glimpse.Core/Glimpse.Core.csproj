@@ -145,7 +145,7 @@
     <Compile Include="GlimpseConfiguration.cs" />
     <Compile Include="GlimpseTimeline.cs" />
     <Compile Include="Message\TimelineMessage.cs" />
-    <Compile Include="Metadata\MetadataProvider.cs" />
+    <Compile Include="Framework\MetadataProvider.cs" />
     <Compile Include="Metadata\ResourceMetadata.cs" />
     <Compile Include="Metadata\TabMetadata.cs" />
     <Compile Include="Metadata\VersionMetadata.cs" />

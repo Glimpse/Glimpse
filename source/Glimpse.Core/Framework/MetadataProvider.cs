@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using Glimpse.Core.Framework;
+using System.Collections.Generic; 
 
-namespace Glimpse.Core.Metadata
+namespace Glimpse.Core.Framework
 {
     public class MetadataProvider
     {

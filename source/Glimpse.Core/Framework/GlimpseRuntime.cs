@@ -4,8 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-using Glimpse.Core.Message;
-using Glimpse.Core.Metadata;
+using Glimpse.Core.Message; 
 using Glimpse.Core.ResourceResult;
 using Glimpse.Core.Tab.Assist;
 #if NET35
@@ -187,7 +186,6 @@ namespace Glimpse.Core.Framework
             }
         }
 
-        // TODO: Add PRG support
         /// <summary>
         /// Ends Glimpse's processing of the request referenced by the given <paramref name="glimpseRequestContextHandle"/>"/>
         /// </summary>
