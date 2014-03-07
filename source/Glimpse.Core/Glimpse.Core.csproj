@@ -118,8 +118,12 @@
     <Compile Include="Framework\ActiveGlimpseRequestContextEventArgs.cs" />
     <Compile Include="Framework\ActiveGlimpseRequestContexts.cs" />
     <Compile Include="Framework\AssemblyTypesResolver.cs" />
+    <Compile Include="Framework\BaseDataProvider.cs" />
+    <Compile Include="Framework\BaseProvider.cs" />
     <Compile Include="Framework\CallContextCurrentGlimpseRequestIdTracker.cs" />
     <Compile Include="Framework\Crc32.cs" />
+    <Compile Include="Framework\DisplayProvider.cs" />
+    <Compile Include="Framework\InspectorProvider.cs" />
     <Compile Include="Framework\IReadonlyConfiguration.cs" />
     <Compile Include="Framework\ReadonlyConfigurationAdapter.cs" />
     <Compile Include="Framework\GlimpseNotInitializedException.cs" />
@@ -129,6 +133,7 @@
     <Compile Include="Framework\GlimpseScriptTagsGenerator.cs" />
     <Compile Include="Framework\IResourceEndpointConfiguration.cs" />
     <Compile Include="Framework\RuntimePolicyDeterminator.cs" />
+    <Compile Include="Framework\TabProvider.cs" />
     <Compile Include="Framework\UnavailableGlimpseRequestContextHandle.cs" />
     <Compile Include="Framework\GlimpseRequestContextHandle.cs" />
     <Compile Include="Framework\UnavailableGlimpseRequestContext.cs" />

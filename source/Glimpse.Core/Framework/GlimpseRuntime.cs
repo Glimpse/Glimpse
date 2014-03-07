@@ -6,7 +6,6 @@ using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Message; 
 using Glimpse.Core.ResourceResult;
-using Glimpse.Core.Tab.Assist;
 #if NET35
 using Glimpse.Core.Backport;
 #endif
@@ -106,19 +105,10 @@ namespace Glimpse.Core.Framework
         // TODO: V2Merge This should be private but is internal to not break unit tests
         internal GlimpseRuntime(IConfiguration configuration) 
         {
-            if (configuration == null)
-            {
-                throw new ArgumentNullException("configuration");
-            }
-
-            // Run user customizations to configuration before storing and then override 
-            // (some) changes made by the user to make sure .config file driven settings win
-            var userUpdatedConfig = GlimpseConfiguration.Override(configuration);
-            userUpdatedConfig.ApplyOverrides(); 
-            
-            Configuration = new ReadonlyConfigurationAdapter(userUpdatedConfig);
-            
+            InitializeConfig(configuration);
             Initialize();
+
+            IsInitialized = true;
         }
 
         /// <summary>
@@ -142,6 +132,12 @@ namespace Glimpse.Core.Framework
         private ActiveGlimpseRequestContexts ActiveGlimpseRequestContexts { get; set; }
 
         private MetadataProvider MetadataProvider { get; set; }
+         
+        private DisplayProvider DisplayProvider { get; set; }
+
+        private TabProvider TabProvider { get; set; }
+
+        private InspectorProvider InspectorProvider { get; set; } 
 
         /// <summary>
         /// Begins Glimpse's processing of a Http request.
@@ -172,7 +168,7 @@ namespace Glimpse.Core.Framework
             {
                 glimpseRequestContext.StartTiming();
 
-                ExecuteTabs(RuntimeEvent.BeginRequest, glimpseRequestContext);
+                TabProvider.Execute(glimpseRequestContext, RuntimeEvent.BeginRequest);
 
                 GlimpseTimeline.CaptureMoment("Start Request", TimelineCategory.Request, new RuntimeMessage().AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest));
 
@@ -208,8 +204,8 @@ namespace Glimpse.Core.Framework
 
                 GlimpseTimeline.CaptureMoment("End Request", TimelineCategory.Request, new RuntimeMessage().AsSourceMessage(typeof(GlimpseRuntime), MethodInfoBeginRequest));
 
-                ExecuteTabs(RuntimeEvent.EndRequest, glimpseRequestContext);
-                ExecuteDisplays(glimpseRequestContext);
+                TabProvider.Execute(glimpseRequestContext, RuntimeEvent.EndRequest);
+                DisplayProvider.Execute(glimpseRequestContext);
 
                 var timingDuration = glimpseRequestContext.StopTiming();
                 var requestResponseAdapter = glimpseRequestContext.RequestResponseAdapter;
@@ -219,7 +215,7 @@ namespace Glimpse.Core.Framework
                 if (runtimePolicy.HasFlag(RuntimePolicy.PersistResults))
                 {
                     var persistenceStore = Configuration.PersistenceStore;
-                    var metadata = new GlimpseRequest(glimpseRequestContext.GlimpseRequestId, requestMetadata, GetTabResultsStore(glimpseRequestContext), GetDisplayResultsStore(glimpseRequestContext), timingDuration, MetadataProvider.GetRequestMetadata(glimpseRequestContext));
+                    var metadata = new GlimpseRequest(glimpseRequestContext.GlimpseRequestId, requestMetadata, TabProvider.GetResultsStore(glimpseRequestContext), DisplayProvider.GetResultsStore(glimpseRequestContext), timingDuration, MetadataProvider.GetRequestMetadata(glimpseRequestContext));
 
                     try
                     {
@@ -263,7 +259,7 @@ namespace Glimpse.Core.Framework
             if (ContinueProcessingRequest(glimpseRequestContextHandle, RuntimeEvent.BeginSessionAccess, RequestHandlingMode.RegularRequest, out glimpseRequestContext))
             {
 #warning should we add a try catch around this? So that failures in Glimpse don't fail the normal flow?
-                ExecuteTabs(RuntimeEvent.BeginSessionAccess, glimpseRequestContext);
+                TabProvider.Execute(glimpseRequestContext, RuntimeEvent.BeginSessionAccess);
             }
         }
 
@@ -276,7 +272,7 @@ namespace Glimpse.Core.Framework
             if (ContinueProcessingRequest(glimpseRequestContextHandle, RuntimeEvent.EndSessionAccess, RequestHandlingMode.RegularRequest, out glimpseRequestContext))
             {
 #warning should we add a try catch around this? So that failures in Glimpse don't fail the normal flow?
-                ExecuteTabs(RuntimeEvent.EndSessionAccess, glimpseRequestContext);
+                TabProvider.Execute(glimpseRequestContext, RuntimeEvent.EndSessionAccess);
             }
         }
 
@@ -439,158 +435,39 @@ namespace Glimpse.Core.Framework
             glimpseRequestContext.CurrentRuntimePolicy = DetermineRuntimePolicy(runtimeEvent, glimpseRequestContext.CurrentRuntimePolicy, glimpseRequestContext.RequestResponseAdapter);
 
             return glimpseRequestContext.CurrentRuntimePolicy != RuntimePolicy.Off;
+
         }
 
-        /// <summary>
-        /// Initializes this instance of the Glimpse runtime.
-        /// </summary>
-        /// <returns>
-        ///   <c>true</c> if system initialized successfully, <c>false</c> otherwise
-        /// </returns>
+        private void InitializeConfig(IConfiguration configuration)
+        {
+            // Run user customizations to configuration before storing and then override 
+            // (some) changes made by the user to make sure .config file driven settings win
+            var userUpdatedConfig = GlimpseConfiguration.Override(configuration);
+            userUpdatedConfig.ApplyOverrides();
+
+            Configuration = new ReadonlyConfigurationAdapter(userUpdatedConfig);
+        }
+
         private void Initialize()
         {
+            var logger = Configuration.Logger; 
+             
             ActiveGlimpseRequestContexts = new ActiveGlimpseRequestContexts(Configuration.CurrentGlimpseRequestIdTracker);
-            RuntimePolicyDeterminator = new RuntimePolicyDeterminator(Configuration.RuntimePolicies.ToArray(), Configuration.Logger);
+            RuntimePolicyDeterminator = new RuntimePolicyDeterminator(Configuration.RuntimePolicies.ToArray(), logger);
+
             MetadataProvider = new MetadataProvider(Configuration);
+            DisplayProvider = new DisplayProvider(Configuration, ActiveGlimpseRequestContexts);
+            TabProvider = new TabProvider(Configuration, ActiveGlimpseRequestContexts);
+            InspectorProvider = new InspectorProvider(Configuration, ActiveGlimpseRequestContexts);
 
-            var logger = Configuration.Logger;
-            var messageBroker = Configuration.MessageBroker;
+            DisplayProvider.Setup();
+            TabProvider.Setup();
+            InspectorProvider.Setup();
 
-            // TODO: Fix this to IDisplay no longer uses I*Tab*Setup
-            var displaysThatRequireSetup = Configuration.Displays.Where(display => display is ITabSetup).Select(display => display);
-            foreach (ITabSetup display in displaysThatRequireSetup)
-            {
-                var key = CreateKey(display);
-                try
-                {
-                    var setupContext = new TabSetupContext(logger, messageBroker, () => GetTabStore(key, CurrentRequestContext));
-                    display.Setup(setupContext);
-                }
-                catch (Exception exception)
-                {
-                    logger.Error(Resources.InitializeTabError, exception, key);
-                }
-            }
-
-            var tabsThatRequireSetup = Configuration.Tabs.Where(tab => tab is ITabSetup).Select(tab => tab);
-            foreach (ITabSetup tab in tabsThatRequireSetup)
-            {
-                var key = CreateKey(tab);
-                try
-                {
-                    var setupContext = new TabSetupContext(logger, messageBroker, () => GetTabStore(key, CurrentRequestContext));
-                    tab.Setup(setupContext);
-                }
-                catch (Exception exception)
-                {
-                    logger.Error(Resources.InitializeTabError, exception, key);
-                }
-            }
-
-            var inspectorContext = new InspectorContext(logger, Configuration.ProxyFactory, messageBroker, () => ActiveGlimpseRequestContexts.Current.CurrentExecutionTimer, () => ActiveGlimpseRequestContexts.Current.CurrentRuntimePolicy);
-
-            foreach (var inspector in Configuration.Inspectors)
-            {
-                try
-                {
-                    inspector.Setup(inspectorContext);
-                    logger.Debug(Resources.GlimpseRuntimeInitializeSetupInspector, inspector.GetType());
-                }
-                catch (Exception exception)
-                {
-                    logger.Error(Resources.InitializeInspectorError, exception, inspector.GetType());
-                }
-            }
-
+            // TODO: This seems weird here
             PersistMetadata();
-
-            IsInitialized = true;
         }
-
-        private void ExecuteTabs(RuntimeEvent runtimeEvent, IGlimpseRequestContext glimpseRequestContext)
-        {
-            var runtimeContext = glimpseRequestContext.RequestResponseAdapter.RuntimeContext;
-            var frameworkProviderRuntimeContextType = runtimeContext.GetType();
-            var messageBroker = Configuration.MessageBroker;
-
-            // Only use tabs that either don't specify a specific context type, or have a context 
-            // type that matches the current framework provider's.
-            var runtimeTabs = Configuration.Tabs.Where(tab => tab.RequestContextType == null || frameworkProviderRuntimeContextType.IsSubclassOf(tab.RequestContextType) || tab.RequestContextType == frameworkProviderRuntimeContextType);
-
-            var supportedRuntimeTabs = runtimeTabs.Where(p => p.ExecuteOn.HasFlag(runtimeEvent));
-            var tabResultsStore = GetTabResultsStore(glimpseRequestContext);
-            var logger = Configuration.Logger;
-
-            foreach (var tab in supportedRuntimeTabs)
-            {
-                TabResult result;
-                var key = CreateKey(tab);
-                try
-                {
-                    var tabContext = new TabContext(runtimeContext, GetTabStore(key, glimpseRequestContext), logger, messageBroker);
-                    var tabData = tab.GetData(tabContext);
-
-                    var tabSection = tabData as TabSection;
-                    if (tabSection != null)
-                    {
-                        tabData = tabSection.Build();
-                    }
-
-                    result = new TabResult(tab.Name, tabData);
-                }
-                catch (Exception exception)
-                {
-                    result = new TabResult(tab.Name, exception.ToString());
-                    logger.Error(Resources.ExecuteTabError, exception, key);
-                }
-
-                if (tabResultsStore.ContainsKey(key))
-                {
-                    tabResultsStore[key] = result;
-                }
-                else
-                {
-                    tabResultsStore.Add(key, result);
-                }
-            }
-        }
-
-        private void ExecuteDisplays(IGlimpseRequestContext glimpseRequestContext)
-        {
-            var runtimeContext = glimpseRequestContext.RequestResponseAdapter.RuntimeContext;
-            var messageBroker = Configuration.MessageBroker;
-
-            var displayResultsStore = GetDisplayResultsStore(glimpseRequestContext);
-            var logger = Configuration.Logger;
-
-            foreach (var display in Configuration.Displays)
-            {
-                TabResult result; // TODO: Rename now that it is no longer *just* tab results
-                var key = CreateKey(display);
-                try
-                {
-                    var displayContext = new TabContext(runtimeContext, GetTabStore(key, glimpseRequestContext), logger, messageBroker); // TODO: Do we need a DisplayContext?
-                    var displayData = display.GetData(displayContext);
-
-                    result = new TabResult(display.Name, displayData);
-                }
-                catch (Exception exception)
-                {
-                    result = new TabResult(display.Name, exception.ToString());
-                    logger.Error(Resources.ExecuteTabError, exception, key);
-                }
-
-                if (displayResultsStore.ContainsKey(key))
-                {
-                    displayResultsStore[key] = result;
-                }
-                else
-                {
-                    displayResultsStore.Add(key, result);
-                }
-            }
-        }
-
+        
         private void PersistMetadata()
         {
             var metadata = MetadataProvider.GetMetadata();
@@ -622,32 +499,7 @@ namespace Glimpse.Core.Framework
 
             return runtimePolicyResult.RuntimePolicy;
         }
-
-        private IDictionary<string, TabResult> GetTabResultsStore(IGlimpseRequestContext glimpseRequestContext)
-        {
-            return GetResultsStore<Dictionary<string, TabResult>>(glimpseRequestContext, Constants.TabResultsDataStoreKey);
-        }
-
-        private IDictionary<string, TabResult> GetDisplayResultsStore(IGlimpseRequestContext glimpseRequestContext)
-        {
-            return GetResultsStore<Dictionary<string, TabResult>>(glimpseRequestContext, Constants.DisplayResultsDataStoreKey);
-        }
-
-        private TResult GetResultsStore<TResult>(IGlimpseRequestContext glimpseRequestContext, string resultStoreKey)
-            where TResult : class, new()
-        {
-            var requestStore = glimpseRequestContext.RequestStore;
-            var resultStore = requestStore.Get<TResult>(resultStoreKey);
-
-            if (resultStore == null)
-            {
-                resultStore = new TResult();
-                requestStore.Set(resultStoreKey, resultStore);
-            }
-
-            return resultStore;
-        }
-        
+         
         internal static string CreateKey(object obj)
         {
             string result;
@@ -666,39 +518,6 @@ namespace Glimpse.Core.Framework
                 .Replace('.', '_')
                 .Replace(' ', '_')
                 .ToLower();
-        }
-
-        private static IDataStore GetTabStore(string tabName, IGlimpseRequestContext glimpseRequestContext)
-        {
-            if (glimpseRequestContext.CurrentRuntimePolicy == RuntimePolicy.Off)
-            {
-                return null;
-            }
-
-            var requestStore = glimpseRequestContext.RequestStore;
-            IDictionary<string, IDataStore> tabStorage;
-            if (!requestStore.Contains(Constants.TabStorageKey))
-            {
-                tabStorage = new Dictionary<string, IDataStore>();
-                requestStore.Set(Constants.TabStorageKey, tabStorage);
-            }
-            else
-            {
-                tabStorage = requestStore.Get<IDictionary<string, IDataStore>>(Constants.TabStorageKey);
-            }
-
-            IDataStore tabStore;
-            if (!tabStorage.ContainsKey(tabName))
-            {
-                tabStore = new DictionaryDataStoreAdapter(new Dictionary<string, object>());
-                tabStorage.Add(tabName, tabStore);
-            }
-            else
-            {
-                tabStore = tabStorage[tabName];
-            }
-
-            return tabStore;
         }
 
         // TODO this should not be public! This was changed to hack in OWIN support
