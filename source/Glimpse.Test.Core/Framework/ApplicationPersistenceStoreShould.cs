@@ -25,7 +25,8 @@ namespace Glimpse.Test.Core.Framework
                     metadataMock.Object,
                     new Dictionary<string, TabResult>(),
                     new Dictionary<string, TabResult>(),
-                    new TimeSpan(1000));
+                    new TimeSpan(1000),
+                    new Dictionary<string, object>());
 
                 for (int requestCounter = 0; requestCounter < 200; requestCounter++)
                 {

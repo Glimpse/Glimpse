@@ -41,7 +41,7 @@ namespace Glimpse.Test.Core.Resource
             var metadataMock = new Mock<IRequestMetadata>();
             metadataMock.Setup(requestMetadata => requestMetadata.RequestUri).Returns(new Uri("http://localhost")); 
             var persistenceStoreMock = new Mock<IReadOnlyPersistenceStore>();
-            persistenceStoreMock.Setup(ps => ps.GetByRequestId(guid)).Returns(new GlimpseRequest(guid, metadataMock.Object, new Dictionary<string, TabResult>(), new Dictionary<string, TabResult>(), TimeSpan.FromMilliseconds(0)));
+            persistenceStoreMock.Setup(ps => ps.GetByRequestId(guid)).Returns(new GlimpseRequest(guid, metadataMock.Object, new Dictionary<string, TabResult>(), new Dictionary<string, TabResult>(), TimeSpan.FromMilliseconds(0), new Dictionary<string, object>()));
             var contextMock = new Mock<IResourceContext>();
             contextMock.Setup(c => c.Parameters).Returns(new Dictionary<string, string> { { ResourceParameter.RequestId.Name, guid.ToString() }, { ResourceParameter.Callback.Name, "console.log" } });
             contextMock.Setup(c => c.PersistenceStore).Returns(persistenceStoreMock.Object);
@@ -60,7 +60,7 @@ namespace Glimpse.Test.Core.Resource
             var metadataMock = new Mock<IRequestMetadata>();
             metadataMock.Setup(requestMetadata => requestMetadata.RequestUri).Returns(new Uri("http://localhost")); 
             var persistenceStoreMock = new Mock<IReadOnlyPersistenceStore>();
-            persistenceStoreMock.Setup(ps => ps.GetByRequestId(guid)).Returns(new GlimpseRequest(guid, metadataMock.Object, new Dictionary<string, TabResult>(), new Dictionary<string, TabResult>(), TimeSpan.FromMilliseconds(0)));
+            persistenceStoreMock.Setup(ps => ps.GetByRequestId(guid)).Returns(new GlimpseRequest(guid, metadataMock.Object, new Dictionary<string, TabResult>(), new Dictionary<string, TabResult>(), TimeSpan.FromMilliseconds(0), new Dictionary<string, object>()));
             var contextMock = new Mock<IResourceContext>();
             contextMock.Setup(c => c.Parameters).Returns(new Dictionary<string, string> { { ResourceParameter.RequestId.Name, "Not a real guid" } });
             contextMock.Setup(c => c.PersistenceStore).Returns(persistenceStoreMock.Object);
