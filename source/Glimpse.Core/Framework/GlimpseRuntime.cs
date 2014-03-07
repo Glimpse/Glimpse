@@ -5,6 +5,7 @@ using System.Reflection;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Message;
+using Glimpse.Core.Metadata;
 using Glimpse.Core.ResourceResult;
 using Glimpse.Core.Tab.Assist;
 #if NET35
@@ -141,6 +142,8 @@ namespace Glimpse.Core.Framework
 
         private ActiveGlimpseRequestContexts ActiveGlimpseRequestContexts { get; set; }
 
+        private MetadataProvider MetadataProvider { get; set; }
+
         /// <summary>
         /// Begins Glimpse's processing of a Http request.
         /// </summary>
@@ -218,7 +221,7 @@ namespace Glimpse.Core.Framework
                 if (runtimePolicy.HasFlag(RuntimePolicy.PersistResults))
                 {
                     var persistenceStore = Configuration.PersistenceStore;
-                    var metadata = new GlimpseRequest(glimpseRequestContext.GlimpseRequestId, requestMetadata, GetTabResultsStore(glimpseRequestContext), GetDisplayResultsStore(glimpseRequestContext), timingDuration, GetRequestMetadata(glimpseRequestContext));
+                    var metadata = new GlimpseRequest(glimpseRequestContext.GlimpseRequestId, requestMetadata, GetTabResultsStore(glimpseRequestContext), GetDisplayResultsStore(glimpseRequestContext), timingDuration, MetadataProvider.GetRequestMetadata(glimpseRequestContext));
 
                     try
                     {
@@ -450,6 +453,7 @@ namespace Glimpse.Core.Framework
         {
             ActiveGlimpseRequestContexts = new ActiveGlimpseRequestContexts(Configuration.CurrentGlimpseRequestIdTracker);
             RuntimePolicyDeterminator = new RuntimePolicyDeterminator(Configuration.RuntimePolicies.ToArray(), Configuration.Logger);
+            MetadataProvider = new MetadataProvider(Configuration);
 
             var logger = Configuration.Logger;
             var messageBroker = Configuration.MessageBroker;
@@ -501,6 +505,7 @@ namespace Glimpse.Core.Framework
             }
 
             PersistMetadata();
+
             IsInitialized = true;
         }
 
@@ -590,52 +595,11 @@ namespace Glimpse.Core.Framework
 
         private void PersistMetadata()
         {
-            var logger = Configuration.Logger;
-            var metadata = new Dictionary<string, object>();
-
-            foreach (var extension in Configuration.Metadata)
-            {
-                try
-                {
-                    var result = extension.GetMetadata(Configuration);
-                    if (result != null)
-                    {
-                        metadata[extension.Key] = result;
-                    }
-                }
-                catch (Exception exception)
-                {
-                    logger.Error(Resources.ExecuteMetadataExtensionsError, exception, extension.GetType());
-                }
-            }
+            var metadata = MetadataProvider.GetMetadata();
 
             Configuration.PersistenceStore.SaveMetadata(metadata);
         }
-
-        private IDictionary<string, object> GetRequestMetadata(IGlimpseRequestContext requestContext)
-        {
-            var logger = Configuration.Logger;
-            var metadata = new Dictionary<string, object>();
-
-            foreach (var extension in Configuration.InstanceMetadata)
-            {
-                try
-                {
-                    var result = extension.GetInstanceMetadata(Configuration, requestContext);
-                    if (result != null)
-                    {
-                        metadata[extension.Key] = result;
-                    }
-                }
-                catch (Exception exception)
-                {
-                    logger.Error(Resources.ExecuteInstanceMetadataExtensionsError, exception, extension.GetType());
-                }
-            }
-
-            return metadata;
-        }
-
+          
         private RuntimePolicy DetermineRuntimePolicy(RuntimeEvent runtimeEvent, RuntimePolicy currentRuntimePolicy, IRequestResponseAdapter requestResponseAdapter)
         {
             var runtimePolicyResult = RuntimePolicyDeterminator.DetermineRuntimePolicy(runtimeEvent, currentRuntimePolicy, requestResponseAdapter);
