@@ -217,8 +217,8 @@ namespace Glimpse.Core.Framework
 
                 if (runtimePolicy.HasFlag(RuntimePolicy.PersistResults))
                 {
-                    var persistenceStore = Configuration.PersistenceStore; 
-                    var metadata = new GlimpseRequest(glimpseRequestContext.GlimpseRequestId, requestMetadata, GetTabResultsStore(glimpseRequestContext), GetDisplayResultsStore(glimpseRequestContext), timingDuration);
+                    var persistenceStore = Configuration.PersistenceStore;
+                    var metadata = new GlimpseRequest(glimpseRequestContext.GlimpseRequestId, requestMetadata, GetTabResultsStore(glimpseRequestContext), GetDisplayResultsStore(glimpseRequestContext), timingDuration, GetRequestMetadata(glimpseRequestContext));
 
                     try
                     {
@@ -610,6 +610,30 @@ namespace Glimpse.Core.Framework
             }
 
             Configuration.PersistenceStore.SaveMetadata(metadata);
+        }
+
+        private IDictionary<string, object> GetRequestMetadata(IGlimpseRequestContext requestContext)
+        {
+            var logger = Configuration.Logger;
+            var metadata = new Dictionary<string, object>();
+
+            foreach (var extension in Configuration.InstanceMetadata)
+            {
+                try
+                {
+                    var result = extension.GetInstanceMetadata(Configuration, requestContext);
+                    if (result != null)
+                    {
+                        metadata[extension.Key] = result;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    logger.Error(Resources.ExecuteInstanceMetadataExtensionsError, exception, extension.GetType());
+                }
+            }
+
+            return metadata;
         }
 
         private RuntimePolicy DetermineRuntimePolicy(RuntimeEvent runtimeEvent, RuntimePolicy currentRuntimePolicy, IRequestResponseAdapter requestResponseAdapter)

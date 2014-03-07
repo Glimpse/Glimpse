@@ -253,4 +253,8 @@
     <value>Extension of type '{0}' failed to execute.</value>
     <comment>{0} - GetType() of offending tab</comment>
   </data>
+  <data name="ExecuteInstanceMetadataExtensionsError" xml:space="preserve">
+    <value>Instance extension of type '{0}' failed to execute.</value>
+    <comment>{0} - GetType() of offending metadata</comment>
+  </data>
 </root>

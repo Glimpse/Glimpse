@@ -214,6 +214,34 @@ namespace Glimpse.Core.Configuration
             set { base["tabMetadata"] = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the collection of <see cref="IInstanceMetadata"/>s that Glimpse will use in the instance metadata.
+        /// </summary>
+        /// <remarks>
+        /// By default, instance metadata is discovered at runtime but that behavior, plus the location of where they 
+        /// are found, and which ones should be ignored is configurable.
+        /// </remarks>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        /// <glimpse defaultRuntimePolicy="On" endpointBaseUri="~/Glimpse.axd">
+        ///     <instanceMetadata autoDiscover="true" discoveryLocation="bin\debug">
+        ///         <ignoredTypes>
+        ///             <add type="{Namespace.Type, AssemblyName}"/>
+        ///         </ignoredTypes>
+        ///     </instanceMetadata>
+        ///     <!-- Additional Glimpse configuration nodes -->
+        /// </glimpse>
+        /// ]]>
+        /// </code>
+        /// </example>
+        [ConfigurationProperty("instanceMetadata")]
+        public DiscoverableCollectionElement InstnaceMetadata
+        {
+            get { return (DiscoverableCollectionElement)base["instanceMetadata"]; }
+            set { base["instanceMetadata"] = value; }
+        }
+
         [ConfigurationProperty("displays")]
         public DiscoverableCollectionElement Displays
         {

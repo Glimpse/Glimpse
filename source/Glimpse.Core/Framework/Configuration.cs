@@ -37,6 +37,7 @@ namespace Glimpse.Core.Framework
         private ICollection<ITab> tabs;
         private ICollection<IMetadata> metadata;
         private ICollection<ITabMetadata> tabMetadata;
+        private ICollection<IInstanceMetadata> instanceMetadata;
         private ICollection<IDisplay> displays;
         private string hash;
         private string version;
@@ -752,6 +753,43 @@ namespace Glimpse.Core.Framework
                 }
 
                 tabMetadata = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the collection of <see cref="IInstanceMetadata"/>.
+        /// </summary>
+        /// <value>
+        /// The configured <see cref="IInstanceMetadata"/>.
+        /// </value>
+        /// <returns>A collection of <see cref="IInstanceMetadata"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="ITab"/>s discovered in the configured discovery location.</returns>
+        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
+        public ICollection<IInstanceMetadata> InstanceMetadata
+        {
+            get
+            {
+                if (instanceMetadata != null)
+                {
+                    return instanceMetadata;
+                }
+
+                if (TryAllInstancesFromServiceLocators(out instanceMetadata))
+                {
+                    return instanceMetadata;
+                }
+
+                instanceMetadata = CreateDiscoverableCollection<IInstanceMetadata>(XmlConfiguration.InstnaceMetadata);
+                return instanceMetadata;
+            }
+
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException("value");
+                }
+
+                instanceMetadata = value;
             }
         }
 

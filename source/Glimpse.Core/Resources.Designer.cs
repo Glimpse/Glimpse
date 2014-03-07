@@ -151,6 +151,15 @@ namespace Glimpse.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Instance extension of type &apos;{0}&apos; failed to execute..
+        /// </summary>
+        internal static string ExecuteInstanceMetadataExtensionsError {
+            get {
+                return ResourceManager.GetString("ExecuteInstanceMetadataExtensionsError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Extension of type &apos;{0}&apos; failed to execute..
         /// </summary>
         internal static string ExecuteMetadataExtensionsError {
