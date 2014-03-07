@@ -80,10 +80,7 @@ namespace Glimpse.Owin.Middleware
             }
             else
             {
-                GlimpseRuntime.Instance.ExecuteResource(
-                    glimpseRequestContextHandle,
-                    queryString[UriTemplateResourceEndpointConfiguration.DefaultResourceNameKey],
-                    new ResourceParameters(queryString.ToDictionary(qs => qs.Key, qs => qs.Value.First())));
+                GlimpseRuntime.Instance.ExecuteResource(glimpseRequestContextHandle, queryString[UriTemplateResourceEndpointConfiguration.DefaultResourceNameKey], new ResourceParameters(queryString.ToDictionary(qs => qs.Key, qs => qs.Value.First())));
             }
         }
     }
