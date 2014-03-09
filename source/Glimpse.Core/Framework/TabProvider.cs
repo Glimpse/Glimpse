@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq; 
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Tab.Assist;
+#if NET35
+using Glimpse.Core.Backport;
+#endif
 
 namespace Glimpse.Core.Framework
 {
