@@ -14,15 +14,13 @@
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET 4.0 application.</description>
         <summary>ASP.NET 4.0 web debugging and diagnostics tool.</summary>
         <releaseNotes>
-Featherweight release for WebForms:
- - Greater support for many more control ViewState's 
- - Fixed circular reference bug that could be caused by some controls ViewState
- - Fixed bug which could cause trace output to be rended in the page
- 
+Lightweight release for WebForms:
+ - Added visualization for DataBinding in the ControlTree Tab
+ - Improve basic ViewState processing for SqlDataSource, LinqDataSource and ObjectDataSource
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse</tags>
         <dependencies>
-          <dependency id="Glimpse.AspNet" version="1.6.0" />
+          <dependency id="Glimpse.AspNet" version="1.8.0" />
         </dependencies>
     </metadata>
     <files>

@@ -70,14 +70,14 @@ namespace Glimpse.AspNet.Tab
             var routeMessages = ProcessMessages(context.GetMessages<RouteBase.GetRouteData.Message>());
             var constraintMessages = ProcessMessages(context.GetMessages<RouteBase.ProcessConstraint.Message>());
 
-             var result = new List<RouteModel>();
-
+            var result = new List<RouteModel>();
+            
             using (System.Web.Routing.RouteTable.Routes.GetReadLock())
             {
                 foreach (var routeBase in System.Web.Routing.RouteTable.Routes)
                 {
                     var routeModel = GetRouteModelForRoute(context, routeBase, routeMessages, constraintMessages);
-
+                    
                     result.Add(routeModel);
                 }
             }

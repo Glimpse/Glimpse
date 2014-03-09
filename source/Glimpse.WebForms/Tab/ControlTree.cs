@@ -1,24 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data; 
-using System.Reflection; 
-using System.Web;
-using System.Web.UI;
-using Glimpse.AspNet.Extensibility;
+﻿using Glimpse.AspNet.Extensibility;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Tab.Assist;
 using Glimpse.WebForms.Inspector;
 using Glimpse.WebForms.Model;
 using Glimpse.WebForms.Support;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Reflection;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace Glimpse.WebForms.Tab
 {
-    public class ControlTree : AspNetTab, ITabLayout, IKey
+    public class ControlTree : AspNetTab, ITabSetup, ITabLayout, IKey
     {
         private static readonly MethodInfo traceContextVerifyStartMethod = typeof(System.Web.TraceContext).GetMethod("VerifyStart", BindingFlags.Instance | BindingFlags.NonPublic);
         private static readonly FieldInfo requestDataField = typeof(System.Web.TraceContext).GetField("_requestData", BindingFlags.Instance | BindingFlags.NonPublic);
         private static readonly ViewStateFormatter viewStateFormatter = new ViewStateFormatter();
+        private static readonly DataBindFormatter dataBindFormatter = new DataBindFormatter();
 
         private static readonly object Layout = TabLayout.Create()
             .Row(r =>
@@ -32,6 +35,10 @@ namespace Glimpse.WebForms.Tab
             {
                 r.Cell("viewstateTitle").WithTitle("Title").AsMinimalDisplay().AlignRight().AsKey().Class("glimpse-sub-heading").PaddingRightInPercent(2);
                 r.Cell("viewstate").WithTitle("ViewState").SpanColumns(4).AsMinimalDisplay();
+            }).Row(r =>
+            {
+                r.Cell("dataBindParametersTitle").WithTitle("Title").AsMinimalDisplay().AlignRight().AsKey().Class("glimpse-sub-heading").PaddingRightInPercent(2);
+                r.Cell("dataBindParameters").WithTitle("DataBindParameters").SpanColumns(4).AsMinimalDisplay();
             }).Build();
 
         public override string Name
@@ -54,6 +61,11 @@ namespace Glimpse.WebForms.Tab
             return Layout;
         }
 
+        public void Setup(ITabSetupContext context)
+        {
+            context.PersistMessages<PageLifeCycleMessage>();
+        }
+
         public override object GetData(ITabContext context)
         {
             var trace = HttpContext.Current.Trace;
@@ -64,31 +76,6 @@ namespace Glimpse.WebForms.Tab
                 context.Logger.Debug("ControlTree Tab Initial Run - {0}", HttpContext.Current.Request.RawUrl);
 
                 context.TabStore.Set("hasRun", "true");
-
-
-                //Add adapter to the pipeline as a ViewStatePageAdapter 
-
-                context.Logger.Debug("Setting up view state page adapter");
-                 
-                var keyType = typeof(Page);
-                var adapterType = typeof(ViewStatePageAdapter);
-
-                var adapters = HttpContext.Current.Request.Browser.Adapters;
-                if (!adapters.Contains(keyType.AssemblyQualifiedName))
-                {
-                    adapters.Add(keyType.AssemblyQualifiedName, adapterType.AssemblyQualifiedName);
-                }
-                else
-                {
-                    var existingTypeString = (string)adapters[keyType.AssemblyQualifiedName]; 
-                    var existingType = Type.GetType(existingTypeString);
-                    if ((!existingType.IsGenericType && existingType != typeof(ViewStatePageAdapter)) || (existingType.IsGenericType && existingType.GetGenericTypeDefinition() != typeof(ViewStatePageAdapter<>)))
-                    {
-                        var newAdapterType = typeof(ViewStatePageAdapter<>).MakeGenericType(existingType); 
-                        adapters[keyType.AssemblyQualifiedName] = newAdapterType.AssemblyQualifiedName;   
-                    }
-                }
-
 
                 //Remember the previous state, turn tracing on at the begining of the request,
                 //set things up so that when request is finished, lets put things back to the 
@@ -109,14 +96,16 @@ namespace Glimpse.WebForms.Tab
                     {
                         trace.IsEnabled = false;
                     }
-                }; 
+                };
 
                 traceContextVerifyStartMethod.Invoke(trace, null);
+
+                RegisterAdapters(context);
 
                 return null;
             }
 
-            context.Logger.Debug("ControlTree Tab Finial Run - {0}", HttpContext.Current.Request.RawUrl);
+            context.Logger.Debug("ControlTree Tab Final Run - {0}", HttpContext.Current.Request.RawUrl);
 
             if (requestDataField != null)
             {
@@ -125,7 +114,7 @@ namespace Glimpse.WebForms.Tab
                 {
                     context.Logger.Debug("Pulling out the `Trace_Control_Tree` from internal logging infrastructure");
 
-                    var treeData = ProcessData(requestData.Tables["Trace_Control_Tree"], context.Logger);
+                    var treeData = ProcessData(requestData.Tables["Trace_Control_Tree"], context.Logger, context.GetMessages<PageLifeCycleMessage>());
                     return treeData;
                 }
             }
@@ -133,13 +122,63 @@ namespace Glimpse.WebForms.Tab
             return null;
         }
 
-        private object ProcessData(DataTable dataTable, ILogger logger)
+        private void RegisterAdapters(ITabContext context)
+        {
+            //Add adapter to the pipeline as a ViewStatePageAdapter 
+
+            context.Logger.Debug("Setting up view state page adapter");
+
+            var adapters = HttpContext.Current.Request.Browser.Adapters;
+            var keyType = typeof(Page);
+            var adapterType = typeof(ViewStatePageAdapter);
+            if (!adapters.Contains(keyType.AssemblyQualifiedName))
+            {
+                adapters.Add(keyType.AssemblyQualifiedName, adapterType.AssemblyQualifiedName);
+            }
+            else
+            {
+                var existingTypeString = (string)adapters[keyType.AssemblyQualifiedName];
+                var existingType = Type.GetType(existingTypeString);
+                if ((!existingType.IsGenericType && existingType != typeof(ViewStatePageAdapter)) || (existingType.IsGenericType && existingType.GetGenericTypeDefinition() != typeof(ViewStatePageAdapter<>)))
+                {
+                    var newAdapterType = typeof(ViewStatePageAdapter<>).MakeGenericType(existingType);
+                    adapters[keyType.AssemblyQualifiedName] = newAdapterType.AssemblyQualifiedName;
+                }
+            }
+
+            var dataBoundControlType = typeof(DataBoundControl);
+            var dataBoundControlAdapterType = typeof(DataBoundControlAdapter);
+            if (HttpContext.Current.Items["_GlimpseWebFormDataBinding"] == null)
+            {
+                HttpContext.Current.Items["_GlimpseWebFormDataBinding"] = new Dictionary<string, List<DataBindParameterModel>>();
+            }
+            foreach (DictionaryEntry adapter in adapters)
+            {
+                var controlType = Type.GetType((string)adapter.Key);
+                if (typeof(DataBoundControl).IsAssignableFrom(controlType))
+                {
+                    var existingType = Type.GetType((string)adapter.Value);
+                    if ((!existingType.IsGenericType && existingType != typeof(DataBoundControlAdapter)) || (existingType.IsGenericType && existingType.GetGenericTypeDefinition() != typeof(DataBoundControlAdapter<>)))
+                    {
+                        var newAdapterType = typeof(DataBoundControlAdapter<>).MakeGenericType(existingType);
+                        adapters[adapter.Key] = newAdapterType.AssemblyQualifiedName;
+                    }
+                }
+            }
+            if (!adapters.Contains(dataBoundControlType.AssemblyQualifiedName))
+            {
+                adapters.Add(dataBoundControlType.AssemblyQualifiedName, dataBoundControlAdapterType.AssemblyQualifiedName);
+            }
+
+        }
+
+        private object ProcessData(DataTable dataTable, ILogger logger, IEnumerable<PageLifeCycleMessage> pageLifeCycleMessages)
         {
             if (dataTable != null)
             {
-                var controlList = new List<ControlTreeItemModel>(); 
-                var nodeGraph = new ControlTreeItemTrackModel {ControlId = "ROOT", Indent = -1}; 
-                var nodeList = new Dictionary<string, ControlTreeItemTrackModel> {{"ROOT", nodeGraph}};
+                var controlList = new List<ControlTreeItemModel>();
+                var nodeGraph = new ControlTreeItemTrackModel { ControlId = "ROOT", Indent = -1 };
+                var nodeList = new Dictionary<string, ControlTreeItemTrackModel> { { "ROOT", nodeGraph } };
 
                 logger.Debug("Start processing `Trace_Control_Tree`");
 
@@ -178,6 +217,7 @@ namespace Glimpse.WebForms.Tab
                 logger.Debug("Finish processing `Trace_Control_Tree` - Count {0}", nodeList.Count);
 
                 viewStateFormatter.Process(nodeGraph);
+                dataBindFormatter.Process(nodeGraph, pageLifeCycleMessages);
 
                 return controlList;
             }

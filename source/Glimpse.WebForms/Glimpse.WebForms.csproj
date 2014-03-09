@@ -33,6 +33,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,13 +41,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlternateType\ModelBinder.cs" />
     <Compile Include="Display\WebForms.cs" />
+    <Compile Include="Inspector\DataBoundControlAdapter.cs" />
+    <Compile Include="Inspector\ModelBinderInspector.cs" />
     <Compile Include="Message\PageLifeCycleMessage.cs" />
     <Compile Include="Inspector\PageLifeCycleInspector.cs" />
     <Compile Include="Message\WebFormsTimelineCategory.cs" />
+    <Compile Include="Model\DataBindModel.cs" />
+    <Compile Include="Model\DataBindParameter.cs" />
+    <Compile Include="Model\DataBindParameterModel.cs" />
+    <Compile Include="Model\EventParameterModel.cs" />
     <Compile Include="Model\ExecutionItemModel.cs" />
+    <Compile Include="Model\ModelBindParameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SerializationConverter\IndexedStringListConverter.cs" />
+    <Compile Include="SerializationConverter\DataBindParameterConverter.cs" />
+    <Compile Include="Support\DataBindFormatter.cs" />
     <Compile Include="Tab\ControlTree.cs" />
     <Compile Include="Model\ControlTreeItemModel.cs" />
     <Compile Include="Tab\PageLifeCycle.cs" />
@@ -56,7 +72,12 @@
     <Compile Include="SerializationConverter\IndexedStringListConverterTarget.cs" />
     <Compile Include="Support\ViewStateFormatter.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Glimpse.AspNet\Glimpse.AspNet.csproj">
       <Project>{FDDFC8A6-CDDF-4BC6-9F07-E76050E1EEE7}</Project>

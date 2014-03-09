@@ -439,6 +439,49 @@ namespace Glimpse.WebForms.Support
                         }
                     }
                 }
+                else if (type == "System.Web.UI.WebControls.ObjectDataSource" || type == "System.Web.UI.WebControls.LinqDataSource" || type == "System.Web.UI.WebControls.SqlDataSource")
+                {
+                    var pair = data as Pair;
+                    if (pair != null)
+                    {
+                        var temp = new Dictionary<string, object>();
+                        temp.Add("Base State", WrapProcessedData(pair.First));
+                        temp.Add("Object Data Source View", ProcessData(rootType, type + "View", pair.Second));
+                        result = temp;
+                    }
+                }
+                else if (type == "System.Web.UI.WebControls.ObjectDataSourceView" || type == "System.Web.UI.WebControls.SqlDataSourceView")
+                {
+                    var pair = data as Pair;
+                    if (pair != null)
+                    {
+                        var temp = new Dictionary<string, object>();
+                        temp.Add("Select Parameters", ProcessData(rootType, "System.Web.UI.StateManagedCollection", pair.First));
+                        temp.Add("Filter Parameters", ProcessData(rootType, "System.Web.UI.StateManagedCollection", pair.Second));
+                        result = temp;
+                    }
+                }
+                else if (type == "System.Web.UI.WebControls.LinqDataSourceView")
+                {
+                    var array = data as object[];
+                    if (array != null)
+                    {
+                        var temp = new Dictionary<string, object>();
+                        temp.Add("Where Parameters", ProcessData(rootType, "System.Web.UI.StateManagedCollection", array[0]));
+                        temp.Add("OrderBy Parameters", ProcessData(rootType, "System.Web.UI.StateManagedCollection", array[1]));
+                        temp.Add("GroupBy Parameters", ProcessData(rootType, "System.Web.UI.StateManagedCollection", array[2]));
+                        temp.Add("Order GroupsBy Parameters", ProcessData(rootType, "System.Web.UI.StateManagedCollection", array[3]));
+                        temp.Add("SelectNew Parameters", ProcessData(rootType, "System.Web.UI.StateManagedCollection", array[4]));
+                        temp.Add("Original Values", array[5]);
+
+                        result = temp;
+                    }
+                }
+                else if (type == "System.Web.UI.StateManagedCollection")
+                {
+                    //TODO: Process this structure, note that both the Pair and Triple case need to be dealt with.
+                    //      See both the SaveAllItemsToViewState() and this.SaveChangedItemsToViewState() cases.
+                }
 
                 if (result == null)
                 {

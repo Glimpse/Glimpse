@@ -32,7 +32,12 @@ Any medium or large contribution should begin by sending a message to the [Glimp
 
 The message should describe the contribution you are interested in making, and any initial thoughts on implementation. This will allow the community to discuss and become involved with you from the get go. If you receive positive feedback on the mailing list, go ahead and start implementation! You should also sign and return the [Contributor License agreement](https://www.dropbox.com/s/vxzcb7rtf1ligwh/Glimpse%20Project%20Individual%20Contributor%20License%20Agreement.pdf), which is required for the Glimpse team to accept your contribution.
 
-The Glimpse team maintains a [backlog of feature ideas on Trello](https://trello.com/board/glimpse/4fb1bbcc8166822f2218b6c8) which is good to look through if you want to get involved but aren't quite sure how.
+The Glimpse team uses [the issue tracking features of GitHub](https://github.com/Glimpse/Glimpse/issues) which is a good place to look through if you want to get involved but aren't quite sure how.
+
+### Development Environment
+The current IDE of choice is Visual Studio 2013. You'll need to have the [XUnit test runner](http://visualstudiogallery.msdn.microsoft.com/463c5987-f82b-46c8-a97e-b1cde42b9099) installed to run the tests from within the solution. If you're trying to get to learn the code a little better, ReSharper is an excellent tool to help you navigate the various projects. 
+
+The main solution is `Glimpse.All.sln', where you'll find all required projects to build, test and execute the Glimpse bits.
 
 ### Code Conventions
 
@@ -42,6 +47,7 @@ Glimpse follows a loose set of coding conventions. Chiefly among them:
 * Cover additional code with passing unit tests
 * Try not to add any additional StyleCop warnings to the compilation process
 * Ensure your Git autocrlf setting is true to avoid "whole file" diffs.
+ * To do so, run the following command from a Git shell: `git config --global core.autocrlf true` 
 
 # Governance Model
 The Glimpse project follows the meritocratic governance model. The below text describing the model is based on [the template provided at OSS Watch](http://oss-watch.ac.uk/resources/meritocraticgovernancemodel).

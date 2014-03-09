@@ -251,6 +251,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="DataBindingTests\ListView.aspx" />
     <Content Include="ErrorPage.aspx" />
     <Content Include="FileUpload\FileUpload.aspx" />
     <Content Include="Images\accent.png" />
@@ -274,6 +275,7 @@
     <Content Include="Catalog\Images\Thumbs\Thumbs.db" />
     <Content Include="Checkout\Web.config" />
     <Content Include="Admin\Web.config" />
+    <Content Include="App_Browsers\Web.browser" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="ProductDetails.aspx" />
     <Content Include="ProductList.aspx" />
@@ -419,6 +421,17 @@
     <Compile Include="Contact.aspx.designer.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
+    <Compile Include="DataBindingTests\CustomParameter.cs" />
+    <Compile Include="DataBindingTests\CustomValueProvider.cs" />
+    <Compile Include="DataBindingTests\CustomAttribute.cs" />
+    <Compile Include="DataBindingTests\ListView.aspx.cs">
+      <DependentUpon>ListView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DataBindingTests\ListView.aspx.designer.cs">
+      <DependentUpon>ListView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DataBindingTests\ListViewAdapter.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -566,7 +579,7 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  
   <PropertyGroup>
     <PostBuildEvent>cd $(ProjectDir)App_Data\
 

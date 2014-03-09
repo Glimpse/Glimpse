@@ -72,7 +72,7 @@ if (!window.UriTemplate) {
     };
 })(jQueryGlimpse);
 
-// glimpse.jquery.draggable.js
+// glimpse.jquery.dropdown.js
 (function ($) { 
     $.fn.dropdown = function() {
         var scope = $(this);
@@ -90,14 +90,17 @@ if (!window.UriTemplate) {
 
 
 // glimpse.core.js
-glimpse = (function($) { 
-    return {};
-})(jQueryGlimpse);
+var glimpse = glimpse || {};
 
 
 // glimpse.pubsub.js
 glimpse.pubsub = (function() {
-    var messages = {},
+    var debug = {
+            level: 0,
+            logCaller: function(subscriber, message, data, level) { },
+            logPublish: function(message, data, level) { }
+        }, 
+        messages = {},
         lastUid = -1,
         throwException = function(ex) {
             return function() {
@@ -105,7 +108,8 @@ glimpse.pubsub = (function() {
             };
         },
         callSubscriber = function(subscriber, message, data) {
-            try { 
+            try {
+                debug.logCaller(subscriber, message, data, debug.level);
                 subscriber(data, message);
             } catch(ex) {
                 setTimeout(throwException(ex), 0);
@@ -125,6 +129,7 @@ glimpse.pubsub = (function() {
         },
         createDeliveryFunction = function(message, data) {
             return function() {
+                
                 var topic = String(message),
                     position = topic.lastIndexOf('.');
 
@@ -137,6 +142,8 @@ glimpse.pubsub = (function() {
                     position = topic.lastIndexOf('.');
                     deliverMessage(message, topic, data);
                 }
+                
+                debug.level--; 
             };
         },
         messageHasSubscribers = function(message) {
@@ -155,10 +162,14 @@ glimpse.pubsub = (function() {
         publish = function(message, data, sync) {
             var deliver = createDeliveryFunction(message, data),
                 hasSubscribers = messageHasSubscribers(message);
-
+             
+            debug.logPublish(message, data, debug.level);
+            
             if (!hasSubscribers) {
                 return false;
             }
+
+            debug.level++; 
 
             if (sync === true) {
                 deliver();
@@ -169,13 +180,14 @@ glimpse.pubsub = (function() {
         };
 
     return {
+        _debug: debug,
         publishAsync: function(message, data) {
             return publish(message, data, false);
         },
         publish: function(message, data) {
             return publish(message, data, true);
         },
-        subscribe: function(message, func) {
+        subscribe: function(message, func, _unshift) {
             // message is not registered yet
             if (!messages.hasOwnProperty(message)) {
                 messages[message] = [];
@@ -183,8 +195,9 @@ glimpse.pubsub = (function() {
 
             // forcing token as String, to allow for future expansions without breaking usage
             // and allow for easy use as key names for the 'messages' object
-            var token = String(++lastUid);
-            messages[message].push({ token: token, func: func });
+            var token = String(++lastUid),
+                method = _unshift ? 'unshift' : 'push'; 
+            messages[message][method]({ token: token, func: func });
 
             // return token for unsubscribing
             return token;
@@ -306,6 +319,10 @@ glimpse.util = (function($) {
                 uri = uri.split('://')[1];
             return uri.split('/')[0];
         },
+        isLocalUri: function(uri) {
+            return uri && (!(uri.indexOf('http://') == 0 || uri.indexOf('https://') == 0 || uri.indexOf('//') == 0) || 
+                    (uri.substring(uri.indexOf('//') + 2, uri.length) + '/').indexOf(window.location.host + '/') == 0);
+        },
         sortTabs: function (data) {
             var sorted = {},
                 i, temp = [];
@@ -357,13 +374,14 @@ glimpse.util = (function($) {
         },
         processCasing : function (data) {
             var result = '',
-                previous = '';
+                previous = '',
+                blacklist = [ ' ', '-', '/', '_' ];
             if (data == null)
                 return data;
             for (var i = 0; i < data.length; i++) {
                 var current = data[i],
                     next = data[i + 1];
-                if (current == ' ')
+                if (blacklist.indexOf(current) > -1)
                     return data;
 
                 if (i == 0 || ((jQueryGlimpse.isNumeric(previous) && !jQueryGlimpse.isNumeric(current)) || (!jQueryGlimpse.isNumeric(previous) && jQueryGlimpse.isNumeric(current)) || (!jQueryGlimpse.isNumeric(current) && current.toUpperCase() == current && (previous.toUpperCase() != previous || (next && next.toUpperCase() != next)))))
@@ -391,9 +409,9 @@ glimpse.settings = (function($, pubsub, util) {
                 if (e.originalEvent.key == 'glimpseOptions') 
                     localStorage = JSON.parse(e.originalEvent.newValue); 
             });
-        };
-
-    pubsub.subscribe('trigger.system.init', init);
+        }; 
+    
+    init();
 
     return {
         global: function (key, value) { 
@@ -546,44 +564,48 @@ glimpse.data = (function($, pubsub, util) {
 // glimpse.element.js
 glimpse.elements = (function($) {
     var scope = $(document),
-        holder, opener, pageSpacer, barHolder, panelHolder, tabHolder, tabInstanceHolder, tabPermanentHolder, titleHolder, notificationHolder, lightbox, optionsHolder;
+        rootFunc = function () {
+            return root || (root = scope.find('.glimpse'));;
+        }, 
+        root, holder, opener, pageSpacer, barHolder, panelHolder, tabHolder, tabInstanceHolder, tabPermanentHolder, titleHolder, notificationHolder, lightbox, optionsHolder;
     
     return {
         scope: function () {
             return scope;
         },
+        root: rootFunc,
         holder: function () {
-            return holder || (holder = scope.find('.glimpse-holder'));
+            return holder || (holder = rootFunc().find('.glimpse-holder'));
         },
         opener: function () {
-            return opener || (opener = scope.find('.glimpse-open'));
+            return opener || (opener = rootFunc().find('.glimpse-open'));
         },
         pageSpacer: function () {
-            return pageSpacer || (pageSpacer = scope.find('.glimpse-spacer'));
+            return pageSpacer || (pageSpacer = rootFunc().find('.glimpse-spacer'));
         },
         barHolder: function () {
-            return barHolder || (barHolder = scope.find('.glimpse-bar'));
+            return barHolder || (barHolder = rootFunc().find('.glimpse-bar'));
         },
         titleHolder: function () {
-            return titleHolder || (titleHolder = scope.find('.glimpse-title'));
+            return titleHolder || (titleHolder = rootFunc().find('.glimpse-title'));
         },
         tabHolder: function() {
-             return tabHolder || (tabHolder = scope.find('.glimpse-tabs ul'));
+             return tabHolder || (tabHolder = rootFunc().find('.glimpse-tabs ul'));
         },
         tabInstanceHolder: function() {
-             return tabInstanceHolder || (tabInstanceHolder = scope.find('.glimpse-tabs-instance ul'));
+             return tabInstanceHolder || (tabInstanceHolder = rootFunc().find('.glimpse-tabs-instance ul'));
         },
         tabPermanentHolder: function() {
-             return tabPermanentHolder || (tabPermanentHolder = scope.find('.glimpse-tabs-permanent ul'));
+             return tabPermanentHolder || (tabPermanentHolder = rootFunc().find('.glimpse-tabs-permanent ul'));
         },
         panelHolder: function() {
-             return panelHolder || (panelHolder = scope.find('.glimpse-panel-holder'));
+             return panelHolder || (panelHolder = rootFunc().find('.glimpse-panel-holder'));
         },
         notificationHolder: function() {
-            return notificationHolder || (notificationHolder = scope.find('.glimpse-notification-holder'));
+            return notificationHolder || (notificationHolder = rootFunc().find('.glimpse-notification-holder'));
         },
         lightbox: function() {
-            return lightbox || (lightbox = scope.find('.glimpse-lightbox'));
+            return lightbox || (lightbox = rootFunc().find('.glimpse-lightbox'));
         },
         panel: function(key) {
              return this.panelHolder().find('.glimpse-panel[data-glimpseKey="' + key + '"]');
@@ -595,7 +617,7 @@ glimpse.elements = (function($) {
              return this.panelHolder().find('.glimpse-panel');
         },
         optionsHolder: function() {
-            return optionsHolder || (optionsHolder = scope.find('.glimpse-options'));
+            return optionsHolder || (optionsHolder = rootFunc().find('.glimpse-options'));
         }
     };
 })(jQueryGlimpse);
@@ -636,8 +658,8 @@ glimpse.elements = (function($) {
 // glimpse.render.js
 glimpse.render = (function($, pubsub, util, data, settings) {
     var templates = {
-            css: '.glimpse, .glimpse *, .glimpse a, .glimpse td, .glimpse th, .glimpse table {font-family: "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;background-color: transparent;border: 0px;text-align: left;padding: 0;margin: 0;-moz-box-sizing: content-box;-webkit-box-sizing: content-box;box-sizing: content-box;}.glimpse table {min-width: 0;border-collapse: collapse;border-spacing: 0;width: 100%;}.glimpse a, .glimpse a:hover, .glimpse a:visited, .glimpse-link {color: #2200C1;text-decoration: underline;font-weight: normal;cursor: pointer;-webkit-transition: color 0.3s ease;-moz-transition: color 0.3s ease;-o-transition: color 0.3s ease;transition: color 0.3s ease;}.glimpse a:active, .glimpse-link:active {color: #c11;text-decoration: underline;font-weight: normal;}.glimpse input[type=\'textbox\'], .glimpse textarea {border: 1px solid #CCC;padding-left: 3px;padding-right: 3px;}.glimpse .glimpse-pulse {-webkit-transition: text-shadow 1s linear;-moz-transition: text-shadow 1s linear;-ms-transition: text-shadow 1s linear;-o-transition: text-shadow 1s linear;transition: text-shadow 1s linear;}.glimpse .glimpse-panel-holder .glimpse-pulse.glimpse-pulse-go {text-shadow: 0 0 10px #2200C1, 0 0 10px #2200C1, 0 0 10px #2200C1; }.glimpse .glimpse-tab.glimpse-pulse.glimpse-pulse-go, .glimpse .glimpse-title .glimpse-pulse.glimpse-pulse-go {text-shadow: 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff; }.glimpse textarea {width: 100%;height: 40px;}.glimpse input[type=\'button\'] {border: 1px solid #aaa;padding: 2px 10px 4px;background-color: #ccc;color: #3f4a4f;font-weight: bold;cursor: pointer;}.glimpse th {font-weight: bold;} .glimpse-open {z-index: 100010;position: relative;right: 0;bottom: 0;height: 34px;min-width: 54px;color: #fff;white-space: nowrap;-webkit-transform: translatez(0);-moz-transform: translatez(0);-ms-transform: translatez(0);-o-transform: translatez(0);transform: translatez(0);}.glimpse-open td, .glimpse-open span, .glimpse-open div, .glimpse-open th {color: #fff;font-size: 13px;line-height: 13px;}.glimpse-icon {cursor: pointer;background: url() no-repeat -127px -38px;height: 30px;width: 39px;margin: 0 8px;}.glimpse-open .glimpse-icon {height: 34px;}.glimpse-holder {display: none;z-index: 100010 !important;height: 0;position: fixed;bottom: 0;left: 0;width: 100%;background-color: #fff;-moz-box-shadow: 0 0 5px #888;-webkit-box-shadow: 0 0 5px#888;box-shadow: 0 0 5px #888;-webkit-transform: translatez(0);-moz-transform: translatez(0);-ms-transform: translatez(0);-o-transform: translatez(0);transform: translatez(0);}.glimpse-content {position: relative;font-size: 11px;line-height: 13px;}.glimpse-bar {background: #3c454f;color: #fff;height: 30px;position: relative;font-size: 13px;line-height: 15px;}.glimpse-bar .glimpse-icon {margin-left: 10px;float: left;}.glimpse-bar .glimpse-link, .glimpse-bar a, .glimpse-bar a:visited, .glimpse-bar a:hover {color: #fff;}.glimpse-bar .glimpse-link:active, .glimpse-bar a:active {color: #c11; } .glimpse-buttons {text-align: right;position: absolute;right: 0;top: 0;height: 17px;width: 250px;padding: 8px 12px 6px 6px;}.glimpse-hidden {display: none;}.glimpse-title {margin: 1px 0 0 15px;padding-top: 5px;font-weight: bold;display: inline-block;width: 75%;overflow: hidden;font-size: 13px;line-height: 15px;}.glimpse-title .glimpse-snapshot-name {display: inline-block;height: 20px;}.glimpse-title .glimpse-snapshot-path {font-weight:normal;} .glimpse-title .glimpse-enviro {padding-left: 10px;white-space: nowrap;height: 20px;}.glimpse-title .glimpse-correlation .glimpse-drop {padding-left: 10px;}.glimpse-title .glimpse-correlation .loading {margin: 5px 0 0;font-weight: normal;display: none;}.glimpse-title .glimpse-correlation .glimpse-drop-over {padding-left: 20px;padding-right: 20px;text-align: center;}.glimpse-title .glimpse-context-stack .glimpse-selectable {cursor:pointer;font-weight:bold;}.glimpse .glimpse-sub-heading {font-style: italic;font-size: 1.3em;opacity: 0.5;} .glimpse-drop {padding: 0 1px 0 8px;height: 16px;font-size: 12px;}.glimpse-drop, .glimpse-drop-over {font-weight: normal;background: #8bc441;margin: 0 5px 0 0;display: inline-block;}.glimpse-drop-over {position: absolute;display: none;top: 6px;padding: 1px 20px 10px 20px;z-index: 100; }.glimpse-drop-over div {text-align: center;font-weight: bold;margin: 5px 0;}.glimpse-drop-arrow-holder {margin: 3px 3px 3px 5px;padding-left: 3px;border-left: 1px solid #5f9a26;font-size: 9px;line-height: 11px;height: 9px;width: 10px;}.glimpse-drop-arrow {background: url() no-repeat -22px -18px;width: 7px;height: 4px;display: inline-block;}.glimpse .glimpse-button, .glimpse .glimpse-button:hover {cursor: pointer;background-image: url();background-repeat: no-repeat;height: 14px;width: 14px;margin-left: 10px;display: inline-block;}.glimpse .glimpse-meta-warning {background-position: -168px -1px;display: none;}.glimpse .glimpse-meta-warning:hover {background-position: -183px -1px;}.glimpse .glimpse-meta-help {background-position: -138px -1px;margin-right: 15px;}.glimpse .glimpse-meta-help:hover {background-position: -153px -1px;margin-right: 15px;}.glimpse .glimpse-meta-update {position: absolute;text-decoration: underline;top: 6px;left: 0;cursor: pointer;display: none;} .glimpse .glimpse-minimize {background-position: -1px -1px;}.glimpse .glimpse-minimize:hover {background-position: -17px -1px;}.glimpse .glimpse-close {background-position: -65px -1px;}.glimpse .glimpse-close:hover {background-position: -81px -1px;}.glimpse .glimpse-popout {background-position: -96px -1px;}.glimpse .glimpse-popout:hover {background-position: -111px -1px;}.glimpse-tabs-permanent {position: absolute;top: 0;right: 0;}.glimpse-tabs-permanent li {font-style: italic;}.glimpse-tabs {background: #71b1d1;height: 26px;color: #fff;}.glimpse-tabs ul {padding: 0px;}.glimpse-tabs li {display: inline-block;height: 21px;padding: 5px 15px 0;cursor: pointer;font-size: 13px;line-height: 13px;-webkit-transition: background-color 0.3s ease;-moz-transition: background-color 0.3s ease;-o-transition: background-color 0.3s ease;transition: background-color 0.3s ease;-moz-user-select: -moz-none;-khtml-user-select: none;-webkit-user-select: none;user-select: none;}.glimpse-tabs li.glimpse-hover {background: #519bbd; }.glimpse-tabs li.glimpse-active {background: #7c4b75;}.glimpse-tabs li.glimpse-disabled {color: #111;cursor: default;}.glimpse-panel-holder {}.glimpse-panel {display: none;overflow: auto;position: relative;color: #323232;font-size: 11px;line-height: 13px;}.glimpse-panel div, .glimpse-panel span, .glimpse-panel td, .glimpse-panel th {font-family: "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;}.glimpse-panel-message {text-align: center;padding-top: 40px;font-size: 1.1em;color: #AAA;}.glimpse-panel table {border-spacing: 0;width: 98%;margin: 1%;}.glimpse-panel tr {line-height: 14px;}.glimpse-panel th {font-size: 12px;line-height: 14px;font-weight: bold; }.glimpse-panel thead th {text-align: center;vertical-align: top;padding: 3px 3px 6px;}.glimpse-panel table td {text-align: left;vertical-align: top; }.glimpse-panel table td .glimpse-cell {vertical-align: top;}.glimpse-panel tbody .mono {font-family: Consolas, monospace, serif;font-size: 1.1em;}.glimpse-panel .glimpse-header {font-weight: bold;padding: 20px 0 0 1%;font-size: 140%;font-family: "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;}.glimpse-panel .glimpse-header-content {padding: 1% 1% 0;}.glimpse-panel .glimpse-row-header-0 th {border-bottom: 3px solid #CCC;border-left: 1px solid #CCC;font-size: 14px;line-height: 12px;}.glimpse-panel .glimpse-row-header-0 th:first-child {border-left-width: 0;}.glimpse-panel .glimpse-soft {color: #999;}.glimpse-panel .glimpse-cell-key, .glimpse-panel .glimpse-key {font-weight: bold;}.glimpse-panel th.glimpse-key {width: 130px;}.glimpse-panel .glimpse-row-header-0 th.glimpse-key {width: 250px;}.glimpse-panel table table {margin: 0;width: 100%;}.glimpse-panel table table thead th {border-bottom: 2px solid #CCC;}.glimpse-panel table table thead tr th {border-left: 1px solid #CCC;line-height: 10px;}.glimpse-panel table table thead tr th:first-child {border-left-width: 0;}.glimpse-panel table table thead tr th:last-child {border-right: 0px;} .glimpse-row-holder > .glimpse-row:nth-of-type(odd), .glimpse-row-color:nth-of-type(odd), .glimpse-row-odd, .glimpse-row-odd > td { background-color: #FEFFFF; }.glimpse-row-holder > .glimpse-row:nth-of-type(even), .glimpse-row-color:nth-of-type(even), .glimpse-row-even, .glimpse-row-even > td { background-color: #F2F5F9; }.glimpse-row-holder.glimpse-row-holder-suppress > .glimpse-row { background-color: transparent; } .glimpse-panel table table tbody th {font-style: italic;font-weight: normal;}.glimpse-panel table table thead th {font-weight: bold;} .glimpse-panel .glimpse-col-side {border-right: 1px solid #404040;background-color: #F2F5F7;position: absolute;width: 200px;height: 100%;left: 0px;}.glimpse-panel .glimpse-col-main {position: absolute;left: 200px;right: 0px;top: 0px;}.glimpse-panel td, .glimpse-panel th {padding: 5px 7px;}table.glimpse-ellipsis {table-layout: fixed;}div.glimpse-ellipsis {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 100%;}.glimpse-col-side .glimpse-row-holder > .glimpse-row:nth-of-type(odd), .glimpse-row-alt-color:nth-of-type(odd), .glimpse-row-alt-odd, .glimpse-row-alt-odd > td { background-color: #E1E7F0; }.glimpse-col-side .glimpse-row-holder > .glimpse-row:nth-of-type(even), .glimpse-row-alt-color:nth-of-type(even), .glimpse-row-alt-even, .glimpse-row-alt-even > td { background-color: #F2F5F7; } .glimpse-panel-holder .glimpse-active {display: block;}.glimpse-resizer {height: 6px;cursor: n-resize;width: 100%;position: absolute;top: -5px;}.glimpse-preview-object, .glimpse-preview-object * {color: #006400;}.glimpse-preview-string, .glimpse-preview-object .glimpse-preview-string {color: #006400;font-weight: normal !important;}.glimpse-preview-string span {padding-left: 1px;}.glimpse-preview-object span {font-weight: bold;color: #444;}.glimpse-preview-object span.start {margin-right: 5px;}.glimpse-preview-object span.end {margin-left: 5px;}.glimpse-preview-object span.rspace {margin-right: 4px;}.glimpse-preview-object span.mspace {margin: 0 4px;}.glimpse-preview-object span.small {font-size: 0.95em;}.glimpse-panel .glimpse-preview-table {border: 0;}.glimpse-panel .glimpse-preview-table .glimpse-preview-cell {padding-left: 0;padding-right: 2px;width: 11px;}.glimpse-panel .glimpse-preview-table .glimpse-preview-cell, .glimpse-panel .glimpse-preview-table .glimpse-preview-cell + td {padding-top: 0;padding-bottom: 0;}.glimpse-expand {height: 11px;width: 11px;display: inline-block;float: left;margin: 1px 0 0 0;cursor: pointer;background-image: url();background-repeat: no-repeat;background-position: -126px 0;}.glimpse-collapse {background-position: -126px -11px;}.glimpse-preview-show {display: none;font-weight: normal !important;}.glimpse-panel .quiet *, .glimpse-panel .ms * {color: #AAA;}.glimpse-panel .suppress {text-decoration: line-through;}.glimpse-panel .suppress * {color: #AAA;}.glimpse-panel .selected, .glimpse-panel .selected > td, .glimpse-panel .selected > th, .glimpse-panel .selected > tr > td, .glimpse-panel .selected > tr > th, .selected > td > .glimpse-preview-table > tbody > tr > td, .selected > tr > td > .glimpse-preview-table > tbody > tr > td {background-color: #E6F5E6;}.glimpse-panel .selected * {color: #409B3B;}.glimpse .info .icon, .glimpse .warn .icon, .glimpse .loading .icon, .glimpse .error .icon, .glimpse .fail .icon, .glimpse .ms .icon, .glimpse .glimpse-connect .icon, .glimpse .glimpse-disconnect .icon, .glimpse .alert .icon {width: 14px;height: 14px;background-image: url();background-repeat: no-repeat;display: inline-block;margin-right: 5px;}.glimpse .glimpse-connect .icon, .glimpse .glimpse-disconnect .icon {width: 17px;height: 17px;}.glimpse .info .icon {background-position: -22px -22px;}.glimpse .warn .icon {background-position: -36px -22px;}.glimpse .loading .icon {background-position: -78px -22px;}.glimpse .error .icon {background-position: -50px -22px;}.glimpse .ms .icon {background-position: -181px -22px;}.glimpse .fail .icon {background-position: -64px -22px;}.glimpse .alert .icon {background-position: -135px -22px;}.glimpse .glimpse-connect .icon {background-position: -213px -20px; }.glimpse .glimpse-disconnect .icon {background-position: -195px -20px; }.glimpse .info * {color: #067CE5;}.glimpse .warn * {color: #FE850C;}.glimpse .error * {color: #B40000;}.glimpse .fail *, .glimpse .fail {color: #B40000;font-weight: bold;}.glimpse-notice {position:absolute;right: 20px;bottom: 5px;color: #777;}.glimpse-clear {bottom: 30px;position: absolute;right: 20px;background-color: white;padding: 0.2em 1em 0.3em 1em;border: #CCC solid 1px;bottom: 25px;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;}.glimpse-panel table .glimpse-head-message td {text-align: center;background-color: #DDD;}.glimpse-panelitem-info div {text-align: center;}.glimpse-panelitem-info .glimpse-panel-message {padding-top: 5px;}.glimpse-panelitem-info strong {font-weight: bold;}.glimpse-panelitem-info .glimpse-info-more {font-size: 1.5em;margin: 1em 0;}.glimpse-panelitem-info .glimpse-info-quote {font-style: italic;margin: 0.75em 0 3em;}.glimpse-pager {background: #C6C6C6;padding: 3px 4px;font-weight: bold;text-align: center;vertical-align: top;}.glimpse-pager .glimpse-pager-message {margin-left: 5px;margin-right: 5px;}.glimpse-pager .glimpse-button {margin-top: 0px;}.glimpse-pager .glimpse-pager-link, .glimpse-pager .glimpse-pager-link:hover {font-weight: bold;text-decoration: underline;cursor: pointer;color: #2200C1;}.glimpse-pager .glimpse-pager-link-firstPage {background-position: -2px -38px;}.glimpse-pager .glimpse-pager-link-firstPage-disabled {background-position: -17px -38px;}.glimpse-pager .glimpse-pager-link-previousPage {background-position: -33px -38px;}.glimpse-pager .glimpse-pager-link-previousPage-disabled {background-position: -49px -38px;}.glimpse-pager .glimpse-pager-link-nextPage {background-position: -65px -38px;}.glimpse-pager .glimpse-pager-link-nextPage-disabled {background-position: -81px -38px;}.glimpse-pager .glimpse-pager-link-lastPage {background-position: -96px -38px;}.glimpse-pager .glimpse-pager-link-lastPage-disabled {background-position: -111px -38px;}.glimpse-panel table tr.glimpse-pager-separator td {border-bottom: 3px solid #C6C6C6;} .glimpse-panel .glimpse-sub-text {color: #AAA;font-size: 0.9em;margin-left: 5px;top:-1px;position:relative;}.glimpse-popup {color:#000;background:#FFF;margin:0;padding:0;} .glimpse-popup .glimpse-holder {position:relative !important;display: block !important; } .glimpse-popup .glimpse-popout, .glimpse-popup .glimpse-minimize, .glimpse-popup .glimpse-close, .glimpse-popup .glimpse-terminate, .glimpse-popup .glimpse-open {display:none !important; } .glimpse-popup .glimpse-panel {overflow:visible !important; }.glimpse-notification-holder {position: absolute;z-index: 200;width: 100%;top: 85px;}.glimpse-notification {padding: 5px 20px;border-radius: 5px;margin: 0 auto 10px auto;text-align: center;max-width: 500px;-moz-box-shadow: 0 0 5px #888;-webkit-box-shadow: 0 0 5px#888;box-shadow: 0 0 5px #888;width: 50%;}.glimpse-notification-error {background-color: #F97474;border: 1px solid red;}.glimpse-notification-info {background-color: #B7C5ED;border: 1px solid #3156C1;}.glimpse-lightbox {display: none;position:fixed;top:0;left:0;width:100%;height:100%;margin: auto;text-align: center;background-color: rgba(255,255,255,0.7);z-index: 100011 !important;}.glimpse-lightbox-inner {position: absolute;width:100%;height:100%;display: block;}.glimpse-lightbox-element {position: absolute;width: 80%;height: 80%;top: 10%;left: 10%;background-color: #fff;-webkit-box-shadow: 0px 0px 30px rgba(50, 50, 50, 1);-moz-box-shadow: 0px 0px 30px rgba(50, 50, 50, 1);box-shadow: 0px 0px 30px rgba(50, 50, 50, 1); }.glimpse-lightbox .close {position: absolute;right: 25px;top: 10px;cursor: pointer; }.glimpse-lightbox iframe {width: 100%;border: 0px;height: 100%;}.glimpse-open .glimpse-icon {float: right;}.glimpse ::-webkit-scrollbar-corner {vbackground: transparent;}.glimpse ::-webkit-scrollbar-corner {background-clip: padding-box;background-color: whiteSmoke;border: solid white;box-shadow: inset 1px 1px 0 rgba(0,0,0,.14);border-width: 3px 0 0 3px;}.glimpse ::-webkit-scrollbar-track-piece {background-clip: padding-box;background-color: whiteSmoke;border: solid white;box-shadow: inset 1px 0 0 rgba(0,0,0,.14),inset -1px 0 0 rgba(0,0,0,.07);border-width: 0 0 0 3px;}.glimpse ::-webkit-scrollbar-track {background-clip: padding-box;border: solid transparent;border-width: 0 0 0 7px;}.glimpse ::-webkit-scrollbar-button {height: 0;width: 0;}.glimpse ::-webkit-scrollbar-thumb {background-color: rgba(0, 0, 0, .2);background-clip: padding-box;border: solid transparent;min-height: 28px;padding: 100px 0 0;box-shadow: inset 1px 1px 0 rgba(0,0,0,.1),inset 0 -1px 0 rgba(0,0,0,.07);border-width: 0 0 0 7px; border-width: 1px 1px 1px 5px;}.glimpse ::-webkit-scrollbar {height: 16px;overflow: visible;width: 16px;}.glimpse-nowrap {right: 0;bottom: 0;float: right;position: fixed;-webkit-transform: translatez(0);min-width: 1370px;height: 34px;-moz-transform: translatez(0);-ms-transform: translatez(0);-o-transform: translatez(0);}.glimpse-nowrap .glimpse-icon {background-color: #3c454f;margin: 0;padding: 0 8px;}',
-            html: '<div class="glimpse"><div class="glimpse-spacer"></div><div class="glimpse-nowrap"><div class="glimpse-open glimpse"><div class="glimpse-icon"></div></div></div><div class="glimpse-holder"><div class="glimpse-notification-holder"></div><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon" title="About Glimpse?"></div><div class="glimpse-title"><span class="glimpse-snapshot-name"></span><span class="glimpse-snapshot-path"></span><span><span class="glimpse-enviro"></span><span class="glimpse-context-stack"></span><span class="glimpse-uri"></span><span class="glimpse-correlation"></span></span></div><div class="glimpse-buttons"><span class="glimpse-meta-update" href="javascript:void(0)" title="New Updates are available, take a look at what you are missing.">New update available!</span><a class="glimpse-meta-warning glimpse-button" href="javascript:void(0)" title="Glimpse has some warnings!"></a><a class="glimpse-meta-help glimpse-button" href="javascript:void(0)" title="Need some help?" target="_blank"></a><a class="glimpse-minimize glimpse-button" href="javascript:void(0)" title="Close/Minimize"></a><a class="glimpse-popout glimpse-button glimpse-hidden" href="javascript:void(0)" title="Pop Out"></a><a class="glimpse-close glimpse-button" href="javascript:void(0)" title="Shutdown/Terminate"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs glimpse-tabs-instance"><ul></ul></div><div class="glimpse-tabs glimpse-tabs-permanent"><ul></ul></div><div class="glimpse-panel-holder"><div class="glimpse-panel glimpse-active glimpse-panelitem-default"><div class="glimpse-panel-message">Loading...</div></div></div><div class="glimpse-options"></div></div></div><div class="glimpse-lightbox"><div class="glimpse-lightbox-inner"><div class="glimpse-lightbox-element"></div></div></div></div>'
+            css: '.glimpse, .glimpse *, .glimpse a, .glimpse td, .glimpse th, .glimpse table {font-family: "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;background-color: transparent;border: 0px;text-align: left;padding: 0;margin: 0;-moz-box-sizing: content-box;-webkit-box-sizing: content-box;box-sizing: content-box;}.glimpse.glimpse-heightset .glimpse-spacer, .glimpse.glimpse-heightset .glimpse-holder {-webkit-transition: height 0.2s;-moz-transition: height 0.2s;-o-transition: height 0.2s;transition: height 0.2s;}.glimpse.glimpse-minimized .glimpse-spacer, .glimpse.glimpse-minimized .glimpse-holder {height:0px !important;} .glimpse.glimpse-opened .glimpse-open {display: none;}.glimpse table {min-width: 0;border-collapse: collapse;border-spacing: 0;width: 100%;}.glimpse a, .glimpse a:hover, .glimpse a:visited, .glimpse-link {color: #2200C1;text-decoration: underline;font-weight: normal;cursor: pointer;-webkit-transition: color 0.3s ease;-moz-transition: color 0.3s ease;-o-transition: color 0.3s ease;transition: color 0.3s ease;}.glimpse a:active, .glimpse-link:active {color: #c11;text-decoration: underline;font-weight: normal;}.glimpse input[type=\'textbox\'], .glimpse textarea {border: 1px solid #CCC;padding-left: 3px;padding-right: 3px;}.glimpse .glimpse-pulse {-webkit-transition: text-shadow 1s linear;-moz-transition: text-shadow 1s linear;-ms-transition: text-shadow 1s linear;-o-transition: text-shadow 1s linear;transition: text-shadow 1s linear;}.glimpse .glimpse-panel-holder .glimpse-pulse.glimpse-pulse-go {text-shadow: 0 0 10px #2200C1, 0 0 10px #2200C1, 0 0 10px #2200C1; }.glimpse .glimpse-tab.glimpse-pulse.glimpse-pulse-go, .glimpse .glimpse-title .glimpse-pulse.glimpse-pulse-go {text-shadow: 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff; }.glimpse textarea {width: 100%;height: 40px;}.glimpse input[type=\'button\'] {border: 1px solid #aaa;padding: 2px 10px 4px;background-color: #ccc;color: #3f4a4f;font-weight: bold;cursor: pointer;}.glimpse th {font-weight: bold;} .glimpse-open {z-index: 100010;position: relative;right: 0;bottom: 0;height: 34px;min-width: 54px;color: #fff;white-space: nowrap;-webkit-transform: translatez(0);-moz-transform: translatez(0);-ms-transform: translatez(0);-o-transform: translatez(0);transform: translatez(0);}.glimpse-open td, .glimpse-open span, .glimpse-open div, .glimpse-open th {color: #fff;font-size: 13px;line-height: 13px;}.glimpse-icon {cursor: pointer;background: url() no-repeat -127px -38px;height: 30px;width: 39px;margin: 0 8px;}.glimpse-open .glimpse-icon {height: 34px;}.glimpse-holder {z-index: 100010 !important;height: 0;position: fixed;bottom: 0;left: 0;width: 100%;background-color: #fff;-moz-box-shadow: 0 0 5px #888;-webkit-box-shadow: 0 0 5px#888;box-shadow: 0 0 5px #888;-webkit-transform: translatez(0);-moz-transform: translatez(0);-ms-transform: translatez(0);-o-transform: translatez(0);transform: translatez(0);}.glimpse-content {position: relative;font-size: 11px;line-height: 13px;}.glimpse-bar {background: #3c454f;color: #fff;height: 30px;position: relative;font-size: 13px;line-height: 15px;}.glimpse-bar .glimpse-icon {margin-left: 10px;float: left;}.glimpse-bar .glimpse-link, .glimpse-bar a, .glimpse-bar a:visited, .glimpse-bar a:hover {color: #fff;}.glimpse-bar .glimpse-link:active, .glimpse-bar a:active {color: #c11; } .glimpse-buttons {text-align: right;position: absolute;right: 0;top: 0;height: 17px;width: 250px;padding: 8px 12px 6px 6px;}.glimpse-hidden {display: none;}.glimpse-title {margin: 1px 0 0 15px;padding-top: 5px;font-weight: bold;display: inline-block;width: 75%;overflow: hidden;font-size: 13px;line-height: 15px;}.glimpse-title .glimpse-snapshot-name {display: inline-block;height: 20px;}.glimpse-title .glimpse-snapshot-path {font-weight:normal;} .glimpse-title .glimpse-enviro {padding-left: 10px;white-space: nowrap;height: 20px;}.glimpse-title .glimpse-correlation .glimpse-drop {padding-left: 10px;}.glimpse-title .glimpse-correlation .loading {margin: 5px 0 0;font-weight: normal;display: none;}.glimpse-title .glimpse-correlation .glimpse-drop-over {padding-left: 20px;padding-right: 20px;text-align: center;}.glimpse-title .glimpse-context-stack .glimpse-selectable {cursor:pointer;font-weight:bold;}.glimpse .glimpse-sub-heading {font-style: italic;font-size: 1.3em;opacity: 0.5;} .glimpse-drop {padding: 0 1px 0 8px;height: 16px;font-size: 12px;}.glimpse-drop, .glimpse-drop-over {font-weight: normal;background: #8bc441;margin: 0 5px 0 0;display: inline-block;}.glimpse-drop-over {position: absolute;display: none;top: 6px;padding: 1px 20px 10px 20px;z-index: 100; }.glimpse-drop-over div {text-align: center;font-weight: bold;margin: 5px 0;}.glimpse-drop-arrow-holder {margin: 3px 3px 3px 5px;padding-left: 3px;border-left: 1px solid #5f9a26;font-size: 9px;line-height: 11px;height: 9px;width: 10px;}.glimpse-drop-arrow {background: url() no-repeat -22px -18px;width: 7px;height: 4px;display: inline-block;}.glimpse .glimpse-button, .glimpse .glimpse-button:hover {cursor: pointer;background-image: url();background-repeat: no-repeat;height: 14px;width: 14px;margin-left: 10px;display: inline-block;}.glimpse .glimpse-meta-warning {background-position: -168px -1px;display: none;}.glimpse .glimpse-meta-warning:hover {background-position: -183px -1px;}.glimpse .glimpse-meta-help {background-position: -138px -1px;margin-right: 15px;}.glimpse .glimpse-meta-help:hover {background-position: -153px -1px;margin-right: 15px;}.glimpse .glimpse-meta-update {position: absolute;text-decoration: underline;top: 6px;left: 0;cursor: pointer;display: none;} .glimpse .glimpse-minimize {background-position: -1px -1px;}.glimpse .glimpse-minimize:hover {background-position: -17px -1px;}.glimpse .glimpse-close {background-position: -65px -1px;}.glimpse .glimpse-close:hover {background-position: -81px -1px;}.glimpse .glimpse-popout {background-position: -96px -1px;}.glimpse .glimpse-popout:hover {background-position: -111px -1px;}.glimpse-tabs-permanent {position: absolute;top: 0;right: 0;}.glimpse-tabs-permanent li {font-style: italic;}.glimpse-tabs {background: #71b1d1;height: 26px;color: #fff;}.glimpse-tabs ul {padding: 0px;}.glimpse-tabs li {display: inline-block;height: 21px;padding: 5px 15px 0;cursor: pointer;font-size: 13px;line-height: 13px;-webkit-transition: background-color 0.3s ease;-moz-transition: background-color 0.3s ease;-o-transition: background-color 0.3s ease;transition: background-color 0.3s ease;-moz-user-select: -moz-none;-khtml-user-select: none;-webkit-user-select: none;user-select: none;}.glimpse-tabs li.glimpse-hover {background: #519bbd; }.glimpse-tabs li.glimpse-active {background: #7c4b75;}.glimpse-tabs li.glimpse-disabled {color: #111;cursor: default;}.glimpse-panel-holder {}.glimpse-panel {display: none;overflow: auto;position: relative;color: #323232;font-size: 11px;line-height: 13px;}.glimpse-panel div, .glimpse-panel span, .glimpse-panel td, .glimpse-panel th {font-family: "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;}.glimpse-panel-message {text-align: center;padding-top: 40px;font-size: 1.1em;color: #AAA;}.glimpse-panel table {border-spacing: 0;width: 98%;margin: 1%;}.glimpse-panel tr {line-height: 14px;}.glimpse-panel th {font-size: 12px;line-height: 14px;font-weight: bold; }.glimpse-panel thead th {text-align: center;vertical-align: top;padding: 3px 3px 6px;}.glimpse-panel table td {text-align: left;vertical-align: top; }.glimpse-panel table td .glimpse-cell {vertical-align: top;}.glimpse-panel tbody .mono {font-family: Consolas, monospace, serif;font-size: 1.1em;}.glimpse-panel .glimpse-header {font-weight: bold;padding: 20px 0 0 1%;font-size: 140%;font-family: "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;}.glimpse-panel .glimpse-header-content {padding: 1% 1% 0;}.glimpse-panel .glimpse-row-header-0 th {border-bottom: 3px solid #CCC;border-left: 1px solid #CCC;font-size: 14px;line-height: 12px;}.glimpse-panel .glimpse-row-header-0 th:first-child {border-left-width: 0;}.glimpse-panel .glimpse-soft {color: #999;}.glimpse-panel .glimpse-cell-key, .glimpse-panel .glimpse-key {font-weight: bold;}.glimpse-panel th.glimpse-key {width: 130px;}.glimpse-panel .glimpse-row-header-0 th.glimpse-key {width: 250px;}.glimpse-panel table table {margin: 0;width: 100%;}.glimpse-panel table table thead th {border-bottom: 2px solid #CCC;}.glimpse-panel table table thead tr th {border-left: 1px solid #CCC;line-height: 10px;}.glimpse-panel table table thead tr th:first-child {border-left-width: 0;}.glimpse-panel table table thead tr th:last-child {border-right: 0px;} .glimpse-row-holder > .glimpse-row:nth-of-type(odd), .glimpse-row-color:nth-of-type(odd), .glimpse-row-odd, .glimpse-row-odd > td { background-color: #FEFFFF; }.glimpse-row-holder > .glimpse-row:nth-of-type(even), .glimpse-row-color:nth-of-type(even), .glimpse-row-even, .glimpse-row-even > td { background-color: #F2F5F9; }.glimpse-row-holder.glimpse-row-holder-suppress > .glimpse-row { background-color: transparent; } .glimpse-panel table table tbody th {font-style: italic;font-weight: normal;}.glimpse-panel table table thead th {font-weight: bold;} .glimpse-panel .glimpse-col-side {border-right: 1px solid #404040;background-color: #F2F5F7;position: absolute;width: 200px;height: 100%;left: 0px;}.glimpse-panel .glimpse-col-main {position: absolute;left: 200px;right: 0px;top: 0px;}.glimpse-panel td, .glimpse-panel th {padding: 5px 7px;}table.glimpse-ellipsis {table-layout: fixed;}div.glimpse-ellipsis {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 100%;}.glimpse-col-side .glimpse-row-holder > .glimpse-row:nth-of-type(odd), .glimpse-row-alt-color:nth-of-type(odd), .glimpse-row-alt-odd, .glimpse-row-alt-odd > td { background-color: #E1E7F0; }.glimpse-col-side .glimpse-row-holder > .glimpse-row:nth-of-type(even), .glimpse-row-alt-color:nth-of-type(even), .glimpse-row-alt-even, .glimpse-row-alt-even > td { background-color: #F2F5F7; } .glimpse-panel-holder .glimpse-active {display: block;}.glimpse-resizer {height: 6px;cursor: n-resize;width: 100%;position: absolute;top: -5px;}.glimpse-preview-object, .glimpse-preview-object * {color: #006400;}.glimpse-preview-string, .glimpse-preview-object .glimpse-preview-string {color: #006400;font-weight: normal !important;}.glimpse-preview-string span {padding-left: 1px;}.glimpse-preview-object span {font-weight: bold;color: #444;}.glimpse-preview-object span.start {margin-right: 5px;}.glimpse-preview-object span.end {margin-left: 5px;}.glimpse-preview-object span.rspace {margin-right: 4px;}.glimpse-preview-object span.mspace {margin: 0 4px;}.glimpse-preview-object span.small {font-size: 0.95em;}.glimpse-panel .glimpse-preview-table {border: 0;}.glimpse-panel .glimpse-preview-table .glimpse-preview-cell {padding-left: 0;padding-right: 2px;width: 11px;}.glimpse-panel .glimpse-preview-table .glimpse-preview-cell, .glimpse-panel .glimpse-preview-table .glimpse-preview-cell + td {padding-top: 0;padding-bottom: 0;}.glimpse-expand {height: 11px;width: 11px;display: inline-block;float: left;margin: 1px 0 0 0;cursor: pointer;background-image: url();background-repeat: no-repeat;background-position: -126px 0;}.glimpse-collapse {background-position: -126px -11px;}.glimpse-preview-show {display: none;font-weight: normal !important;}.glimpse-panel .quiet *, .glimpse-panel .ms * {color: #AAA;}.glimpse-panel .suppress {text-decoration: line-through;}.glimpse-panel .suppress * {color: #AAA;}.glimpse-panel .selected, .glimpse-panel .selected > td, .glimpse-panel .selected > th, .glimpse-panel .selected > tr > td, .glimpse-panel .selected > tr > th, .selected > td > .glimpse-preview-table > tbody > tr > td, .selected > tr > td > .glimpse-preview-table > tbody > tr > td {background-color: #E6F5E6;}.glimpse-panel .selected * {color: #409B3B;}.glimpse .info .icon, .glimpse .warn .icon, .glimpse .loading .icon, .glimpse .error .icon, .glimpse .fail .icon, .glimpse .ms .icon, .glimpse .glimpse-connect .icon, .glimpse .glimpse-disconnect .icon, .glimpse .alert .icon {width: 14px;height: 14px;background-image: url();background-repeat: no-repeat;display: inline-block;margin-right: 5px;}.glimpse .glimpse-connect .icon, .glimpse .glimpse-disconnect .icon {width: 17px;height: 17px;}.glimpse .info .icon {background-position: -22px -22px;}.glimpse .warn .icon {background-position: -36px -22px;}.glimpse .loading .icon {background-position: -78px -22px;}.glimpse .error .icon {background-position: -50px -22px;}.glimpse .ms .icon {background-position: -181px -22px;}.glimpse .fail .icon {background-position: -64px -22px;}.glimpse .alert .icon {background-position: -135px -22px;}.glimpse .glimpse-connect .icon {background-position: -213px -20px; }.glimpse .glimpse-disconnect .icon {background-position: -195px -20px; }.glimpse .info * {color: #067CE5;}.glimpse .warn * {color: #FE850C;}.glimpse .error * {color: #B40000;}.glimpse .fail *, .glimpse .fail {color: #B40000;font-weight: bold;}.glimpse-notice {position:absolute;right: 20px;bottom: 5px;color: #777;}.glimpse-clear {bottom: 30px;position: absolute;right: 20px;background-color: white;padding: 0.2em 1em 0.3em 1em;border: #CCC solid 1px;bottom: 25px;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;}.glimpse-panel table .glimpse-head-message td {text-align: center;background-color: #DDD;}.glimpse-panelitem-info div {text-align: center;}.glimpse-panelitem-info .glimpse-panel-message {padding-top: 5px;}.glimpse-panelitem-info strong {font-weight: bold;}.glimpse-panelitem-info .glimpse-info-more {font-size: 1.5em;margin: 1em 0;}.glimpse-panelitem-info .glimpse-info-quote {font-style: italic;margin: 0.75em 0 3em;}.glimpse-pager {background: #C6C6C6;padding: 3px 4px;font-weight: bold;text-align: center;vertical-align: top;}.glimpse-pager .glimpse-pager-message {margin-left: 5px;margin-right: 5px;}.glimpse-pager .glimpse-button {margin-top: 0px;}.glimpse-pager .glimpse-pager-link, .glimpse-pager .glimpse-pager-link:hover {font-weight: bold;text-decoration: underline;cursor: pointer;color: #2200C1;}.glimpse-pager .glimpse-pager-link-firstPage {background-position: -2px -38px;}.glimpse-pager .glimpse-pager-link-firstPage-disabled {background-position: -17px -38px;}.glimpse-pager .glimpse-pager-link-previousPage {background-position: -33px -38px;}.glimpse-pager .glimpse-pager-link-previousPage-disabled {background-position: -49px -38px;}.glimpse-pager .glimpse-pager-link-nextPage {background-position: -65px -38px;}.glimpse-pager .glimpse-pager-link-nextPage-disabled {background-position: -81px -38px;}.glimpse-pager .glimpse-pager-link-lastPage {background-position: -96px -38px;}.glimpse-pager .glimpse-pager-link-lastPage-disabled {background-position: -111px -38px;}.glimpse-panel table tr.glimpse-pager-separator td {border-bottom: 3px solid #C6C6C6;} .glimpse-panel .glimpse-sub-text {color: #AAA;font-size: 0.9em;margin-left: 5px;top:-1px;position:relative;}.glimpse-popup {color:#000;background:#FFF;margin:0;padding:0;} .glimpse-popup .glimpse-holder {position:relative !important;display: block !important; } .glimpse-popup .glimpse-popout, .glimpse-popup .glimpse-minimize, .glimpse-popup .glimpse-close, .glimpse-popup .glimpse-terminate, .glimpse-popup .glimpse-open {display:none !important; } .glimpse-popup .glimpse-panel {overflow:visible !important; }.glimpse-notification-holder {position: absolute;z-index: 200;width: 100%;top: 85px;}.glimpse-notification {padding: 5px 20px;border-radius: 5px;margin: 0 auto 10px auto;text-align: center;max-width: 500px;-moz-box-shadow: 0 0 5px #888;-webkit-box-shadow: 0 0 5px#888;box-shadow: 0 0 5px #888;width: 50%;}.glimpse-notification-error {background-color: #F97474;border: 1px solid red;}.glimpse-notification-info {background-color: #B7C5ED;border: 1px solid #3156C1;}.glimpse-lightbox {display: none;position:fixed;top:0;left:0;width:100%;height:100%;margin: auto;text-align: center;background-color: rgba(255,255,255,0.7);z-index: 100011 !important;}.glimpse-lightbox-inner {position: absolute;width:100%;height:100%;display: block;}.glimpse-lightbox-element {position: absolute;width: 80%;height: 80%;top: 10%;left: 10%;background-color: #fff;-webkit-box-shadow: 0px 0px 30px rgba(50, 50, 50, 1);-moz-box-shadow: 0px 0px 30px rgba(50, 50, 50, 1);box-shadow: 0px 0px 30px rgba(50, 50, 50, 1); }.glimpse-lightbox .close {position: absolute;right: 25px;top: 10px;cursor: pointer; }.glimpse-lightbox iframe {width: 100%;border: 0px;height: 100%;}.glimpse-open .glimpse-icon {float: right;}.glimpse ::-webkit-scrollbar-corner {vbackground: transparent;}.glimpse ::-webkit-scrollbar-corner {background-clip: padding-box;background-color: whiteSmoke;border: solid white;box-shadow: inset 1px 1px 0 rgba(0,0,0,.14);border-width: 3px 0 0 3px;}.glimpse ::-webkit-scrollbar-track-piece {background-clip: padding-box;background-color: whiteSmoke;border: solid white;box-shadow: inset 1px 0 0 rgba(0,0,0,.14),inset -1px 0 0 rgba(0,0,0,.07);border-width: 0 0 0 3px;}.glimpse ::-webkit-scrollbar-track {background-clip: padding-box;border: solid transparent;border-width: 0 0 0 7px;}.glimpse ::-webkit-scrollbar-button {height: 0;width: 0;}.glimpse ::-webkit-scrollbar-thumb {background-color: rgba(0, 0, 0, .2);background-clip: padding-box;border: solid transparent;min-height: 28px;padding: 100px 0 0;box-shadow: inset 1px 1px 0 rgba(0,0,0,.1),inset 0 -1px 0 rgba(0,0,0,.07);border-width: 0 0 0 7px; border-width: 1px 1px 1px 5px;}.glimpse ::-webkit-scrollbar {height: 16px;overflow: visible;width: 16px;}.glimpse-nowrap {right: 0;bottom: 0;float: right;position: fixed;-webkit-transform: translatez(0);min-width: 1370px;height: 34px;-moz-transform: translatez(0);-ms-transform: translatez(0);-o-transform: translatez(0);}.glimpse-nowrap .glimpse-icon {background-color: #3c454f;margin: 0;padding: 0 8px;}',
+            html: '<div class="glimpse glimpse-minimized glimpse-inline"><div class="glimpse-spacer"></div><div class="glimpse-nowrap"><div class="glimpse-open"><div class="glimpse-icon"></div></div></div><div class="glimpse-holder"><div class="glimpse-notification-holder"></div><div class="glimpse-resizer"></div><div class="glimpse-bar"><div class="glimpse-icon" title="About Glimpse?"></div><div class="glimpse-title"><span class="glimpse-snapshot-name"></span><span class="glimpse-snapshot-path"></span><span><span class="glimpse-enviro"></span><span class="glimpse-context-stack"></span><span class="glimpse-uri"></span><span class="glimpse-correlation"></span></span></div><div class="glimpse-buttons"><span class="glimpse-meta-update" href="javascript:void(0)" title="New Updates are available, take a look at what you are missing.">New update available!</span><a class="glimpse-meta-warning glimpse-button" href="javascript:void(0)" title="Glimpse has some warnings!"></a><a class="glimpse-meta-help glimpse-button" href="javascript:void(0)" title="Need some help?" target="_blank"></a><a class="glimpse-minimize glimpse-button" href="javascript:void(0)" title="Close/Minimize"></a><a class="glimpse-popout glimpse-button glimpse-hidden" href="javascript:void(0)" title="Pop Out"></a><a class="glimpse-close glimpse-button" href="javascript:void(0)" title="Shutdown/Terminate"></a></div></div><div class="glimpse-content"><div class="glimpse-tabs glimpse-tabs-instance"><ul></ul></div><div class="glimpse-tabs glimpse-tabs-permanent"><ul></ul></div><div class="glimpse-panel-holder"><div class="glimpse-panel glimpse-active glimpse-panelitem-default" data-glimpsekey="glimpse_default"><div class="glimpse-panel-message">Loading...</div></div></div><div class="glimpse-options"></div></div></div><div class="glimpse-lightbox"><div class="glimpse-lightbox-inner"><div class="glimpse-lightbox-element"></div></div></div></div>'
         },
         generateSpriteAddress = function () {
             var uri = settings.local('sprite') || 'http://getglimpse.com/content/_v1/app-sprite-new.png?version={version}',
@@ -731,8 +753,8 @@ glimpse.render.engine = (function($, pubsub) {
         register = function(name, engine) {
             providers[name] = engine;
         },
-        build = function(data, metadata) {
-            return providers.master.build(data, 0, true, metadata, 1);
+        build = function(data, metadata, level, forceFull) {
+            return providers.master.build(data, level || 0, (forceFull == undefined ? true : forceFull), metadata, 1);
         },
         insert = function(scope, data, metadata) {
             scope.html(build(data, metadata)); 
@@ -762,8 +784,8 @@ glimpse.render.engine.util = (function($) {
         keyMetadata: function (key, metadata) {
             return metadata && metadata.layout === Object(metadata.layout) ? metadata.layout[key] : null;
         },
-        includeHeading: function(metadata) {
-            return !(metadata && metadata.suppressHeader);
+        includeHeading: function(metadata) { 
+            return !metadata || metadata.suppressHeader != true;
         },
         shouldUsePreview: function(length, level, forceFull, limit, forceLimit, tolerance) {
             if ($.isNumeric(forceLimit))
@@ -846,7 +868,7 @@ glimpse.render.engine.util.table = (function($, util) {
     var factories = {
             array: {
                 isHandled: function (data) {
-                    var valid = true;
+                    var valid = data.length > 0;
                     for (var i = 0; i < data.length; i++) {
                         if (!$.isArray(data[i])) {
                             valid = false;
@@ -873,7 +895,7 @@ glimpse.render.engine.util.table = (function($, util) {
             },
             object: {
                 isHandled: function (data) {
-                    var valid = true;
+                    var valid = data.length > 0;
                     for (var i = 0; i < data.length; i++) {
                         if ($.isArray(data[i]) || data[i] !== Object(data[i])) {
                             valid = false;
@@ -1603,32 +1625,58 @@ glimpse.render.engine.util.table = (function($, util) {
                 pubsub.publish('trigger.shell.open', { isInitial: true }); 
         },
         readySelect = function () {
-            var current = settings.local('view'),
-                tabElement = elements.tab(current),
-                forced = current != null;
+            var isOpen = settings.local('isOpen'); 
+            if (isOpen) {
+                var current = settings.local('view'),
+                    tabElement = elements.tab(current),
+                    forced = current != null;
             
-            if (!current || tabElement.length == 0) {
-                tabElement = elements.tabHolder().find('li:not(.glimpse-active, .glimpse-disabled):first'); 
-                current = tabElement.attr('data-glimpseKey');
+                if (!current || tabElement.length == 0) {
+                    tabElement = elements.tabHolder().find('li:not(.glimpse-active, .glimpse-disabled):first'); 
+                    current = tabElement.attr('data-glimpseKey');
+                }
+            
+                if (tabElement.length > 0 && !tabElement.hasClass('glimpse-active'))
+                    pubsub.publish('trigger.tab.select.' + current, { key: current, forced: forced });
             }
-             
-            if (tabElement.length > 0 && !tabElement.hasClass('glimpse-active'))
-                pubsub.publish('trigger.tab.select.' + current, { key: current, forced: forced });
         },
         selected = function (args) {
             if (!args.forced)
                 settings.local('view', args.key);
+        },
+        currentTab = '', 
+        focusStart = function(key, isOpening) {
+            if (key)
+                currentTab = key;
+            
+            if (currentTab) { 
+                pubsub.publish('action.tab.focus.start.' + currentTab, { isOpening: isOpening, key: currentTab });
+            }
+        },
+        focusStop = function(userTermination, switchingTab, pageRedirect) { 
+            if (currentTab) { 
+                pubsub.publish('action.tab.focus.stop.' + currentTab, { userTermination: userTermination, switchingTab: switchingTab, pageRedirect: pageRedirect, key: currentTab }); 
+                currentTab = '';
+            }
         };
 
     pubsub.subscribe('trigger.shell.ready', readyOpen);
+    pubsub.subscribe('action.shell.initial.opening', readySelect);
     pubsub.subscribe('action.tab.inserted', readySelect);
     pubsub.subscribe('trigger.tab.select', selected);
+    pubsub.subscribe('action.panel.showing', function(args) { focusStart(args.key, false); });
+    pubsub.subscribe('action.shell.opening', function() { focusStart(null, true); });
+    pubsub.subscribe('action.shell.closeing', function() { focusStop(true, false, false); }); 
+    pubsub.subscribe('action.shell.minimizing', function() { focusStop(true, false, false); }); 
+    pubsub.subscribe('action.panel.hiding', function() { focusStop(false, true, false); });
+    window.onbeforeunload = function() { focusStop(false, false, true); };
 })(glimpse.settings, glimpse.pubsub, glimpse.elements);
 
 
 // glimpse.shell.controls.js
 (function($, pubsub, elements, settings) {
-    var wireListeners = function () { 
+    var firstOpen = true,
+        wireListeners = function () { 
             elements.opener().find('.glimpse-icon').click(function () { pubsub.publish('trigger.shell.open', { isInitial: false }); });
             elements.barHolder().find('.glimpse-minimize').click(function () { pubsub.publish('trigger.shell.minimize'); });
             elements.barHolder().find('.glimpse-close').click(function () { pubsub.publish('trigger.shell.close'); });
@@ -1640,25 +1688,24 @@ glimpse.render.engine.util.table = (function($, util) {
             if (!settings.local('hidden') || args.force) {
                 settings.local('isOpen', true);
 
+                if (firstOpen)
+                    pubsub.publish('action.shell.initial.opening'); 
                 pubsub.publish('action.shell.opening', { isInitial: args.isInitial });
 
-                var height = settings.local('height') || 300,
-                    body = $.fn.add.call(elements.holder(), elements.pageSpacer()).show();
-                
+                var height = settings.local('height') || 300; 
                 settings.local('height', height);
                 settings.local('panelHeight', height - 52);
-
-                elements.opener().hide();
-                if (args.isInitial)
-                    body.height(height);
-                else 
-                    body.animate({ height: settings.local('height') }, 'fast');
                 
+                var heightTargets = $.fn.add.call(elements.holder(), elements.pageSpacer());
+                if (!args.fullScreen) 
+                    heightTargets.height(height);
+                elements.root().removeClass('glimpse-minimized').addClass('glimpse-opened');
+                if (args.isInitial)
+                    elements.root().addClass('glimpse-heightset');  
+                 
                 if (args.fullScreen) {
                     elements.pageSpacer().remove();
-                    
-                    var holder = elements.holder();
-                    holder.height('');
+                     
                     $(window).resize(function() {
                         var panelHeight = $(window).height() - 54; 
                         elements.panels().height(panelHeight); 
@@ -1667,25 +1714,20 @@ glimpse.render.engine.util.table = (function($, util) {
                 }
                 
                 pubsub.publish('action.shell.opened', { isInitial: args.isInitial });
+                if (firstOpen)
+                    pubsub.publish('action.shell.initial.opened');
+
+                firstOpen = false;
             }
             else
                 pubsub.publish('trigger.shell.suppressed.open');
         },
         minimize = function() {
             settings.local('isOpen', false);
-            
-            pubsub.publish('action.shell.minimizing');
-
-            var count = 0;
-            $.fn.add.call(elements.holder(), elements.pageSpacer())
-                .animate({ height : '0' }, 'fast', function() {
-                    $(this).hide();
-                
-                    if (count++ == 1) {
-                        elements.opener().show(); 
-                        pubsub.publish('action.shell.minimized'); 
-                    }
-                });
+             
+            pubsub.publish('action.shell.minimizing'); 
+            elements.root().removeClass('glimpse-opened').addClass('glimpse-minimized'); 
+            pubsub.publish('action.shell.minimized');  
             
         },
         hide = function () {
@@ -1749,17 +1791,23 @@ glimpse.render.engine.util.table = (function($, util) {
                 handelScope: elements.holder().find('.glimpse-resizer'),
                 opacityScope: elements.holder(),
                 resizeScope: elements.holder(),
-                dragged: shellResized
+                dragged: shellResized,
+                dragging: shellResizing
             }); 
         },
+        shellResizing = function() {
+            elements.root().removeClass('glimpse-heightset');  
+        },
         shellResized = function (args, height) {
-            var panelHeight = height - 52;
-            
+            var panelHeight = height - 52; 
+
             settings.local('height', height);
             settings.local('panelHeight', panelHeight);
 
             elements.pageSpacer().height(height);
             elements.panels().height(panelHeight);
+            
+            elements.root().addClass('glimpse-heightset'); 
             
             pubsub.publish('trigger.shell.resize', { height: height, panelHeight: panelHeight });
         },
@@ -1797,7 +1845,7 @@ glimpse.render.engine.util.table = (function($, util) {
             return util.uriTemplate(currentMetadata.resources.glimpse_popup, { 'requestId': data.currentData().requestId, 'hash': currentMetadata.hash });
         },
         isPopup = function() {
-            return data.currentMetadata().resources.glimpse_popup ? window.location.href.indexOf('n=glimpse_popup') > -1 : false;
+            return window.location.href.indexOf('n=glimpse_popup') > -1;
         },
         openPopup = function() { //WHEN USE CLICKS OPEN BUTTON 
             settings.local('popupOn', true);   //Indicates popup should be used
@@ -1828,10 +1876,15 @@ glimpse.render.engine.util.table = (function($, util) {
                 settings.local('popupOn', false);
                 settings.local('popupKeep', false);
             }
+        },
+        loaded = function() {
+            if (isPopup())
+                elements.root().removeClass('glimpse-inline').addClass('glimpse-fullscreen');  
         };
 
     pubsub.subscribe('trigger.shell.popup', openPopup);
     pubsub.subscribe('trigger.shell.subscriptions', wireListeners);
+    pubsub.subscribe('action.shell.loaded', loaded);
     pubsub.subscribe('action.shell.closed', terminate);
     pubsub.subscribe('action.shell.opening', terminate); 
     pubsub.subscribe('action.data.initial.changed', dataLoaded);
@@ -2516,7 +2569,7 @@ glimpse.tab = (function($, pubsub, data) {
     XMLHttpRequest.prototype.open = function(method, uri) { 
         open.apply(this, arguments);
           
-        if (uri && (!(uri.indexOf('http://') == 0 || uri.indexOf('https://') == 0 || uri.indexOf('//') == 0) || (uri.substring(uri.indexOf('//') + 2, uri.length) + '/').indexOf(window.location.host + '/') == 0)) {
+        if (util.isLocalUri(uri)) {
             this.setRequestHeader("Glimpse-Parent-RequestID", data.baseData().requestId);
 
             pubsub.publish('trigger.ajax.request.send');
@@ -3874,10 +3927,9 @@ glimpse.tab = (function($, pubsub, data) {
                             stack.push(row);
                         },
                         postRender = function() {
-                            var open = XMLHttpRequest.prototype.open;
-                        
-                            XMLHttpRequest.prototype.open = function(method, uri, async, user, pass) {
-                                if (uri.indexOf('Glimpse.axd') === -1) {
+                            var open = XMLHttpRequest.prototype.open; 
+                            XMLHttpRequest.prototype.open = function(method, uri) {
+                                if (util.isLocalUri(uri) && uri.indexOf('Glimpse.axd') == -1) {
                                     var startTime = new Date().getTime(); 
                                     this.addEventListener("readystatechange", function() {
                                             if (this.readyState == 4 && this.getResponseHeader("Glimpse-RequestID"))  { 
@@ -3947,4 +3999,8 @@ null],[PR.PR_LITERAL,/^[+-]?(?:0x[\da-f]+|(?:(?:\.\d+|\d+(?:\.\d*)?)(?:e[+\-]?\d
 }(jQueryGlimpse, glimpse.pubsub));
 
 
+if (glimpse.extensions) {
+    for (var i = 0; i < glimpse.extensions.length; i++)
+        glimpse.extensions[i]();
+}
 glimpse.pubsub.publish('trigger.system.start');

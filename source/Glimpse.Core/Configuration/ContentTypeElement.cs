@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Configuration
 {
@@ -20,6 +21,19 @@ namespace Glimpse.Core.Configuration
         {
             get { return (string)base["contentType"]; }
             set { base["contentType"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the which <see cref="RuntimePolicy"/> should be used for this content type.
+        /// </summary>
+        /// <value>
+        /// The enum representation of any valid <see cref="RuntimePolicy"/>.
+        /// </value>
+        [ConfigurationProperty("runtimePolicy", DefaultValue = RuntimePolicy.On)]
+        public RuntimePolicy RuntimePolicy
+        {
+            get { return (RuntimePolicy)base["runtimePolicy"]; }
+            set { base["runtimePolicy"] = value; }
         }
     }
 }

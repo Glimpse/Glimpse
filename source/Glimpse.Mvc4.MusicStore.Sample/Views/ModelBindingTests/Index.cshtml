@@ -5,15 +5,16 @@
 
 <h2>By clicking on the button, an Ajax call will be made for an item and the returned item should be the same</h2>
 
-<input type="button" id="PostItem" name="PostItem" value="Post Ajax item" /><br /><br />
+<input type="button" id="PostItem" name="PostItem" value="Post Ajax item" />
+<br /><hr/><br />
 @using (Html.BeginForm("SimplePost", "ModelBindingTests", FormMethod.Post))
 {
     <label for="FirstName">First name :</label><input type="text" id="FirstName" name="FirstName" value="Foo" /><br/>
     <label for="LastName">Last name :</label><input type="text" id="LastName" name="LastName" value="Bar" />
     <input type="submit" value="Normal post"/>
 }
-
-@using(Html.BeginForm("ComplexPost","ModelBindingTests", FormMethod.Post))
+<br /><hr /><br />
+@using (Html.BeginForm("ComplexPost", "ModelBindingTests", FormMethod.Post))
 {
     @Html.LabelFor(m=> m.Name, "Name :") 
     @Html.TextBoxFor(m=> m.Name)
@@ -30,11 +31,19 @@
     <input type="text" id="additionalSimpleValue" name="additionalSimpleValue" value="the additional value"/>
     <input type="submit" value="Normal post with complex type"/>
 }
+<br /><hr /><br />
+@using (Html.BeginForm("HtmlContainedPost", "ModelBindingTests", FormMethod.Post))
+{
+    <label for="HtmlContent">HTML content :</label><input type="text" id="HtmlContent" name="HtmlContent" />
+    <input type="submit" value="Post HTML value" />
+}
 
 @section scripts
 {
     <script type="text/javascript">
         $(function () {
+            $("#HtmlContent").val('<html><body>HTML content</body></html>');
+
             $("#PostItem").click(function () {
                 
                 var item = JSON.stringify(

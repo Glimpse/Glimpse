@@ -303,5 +303,5 @@ copy ASPNETDB_log_ReadOnly.ldf ASPNETDB_log.ldf
 attrib -r ASPNETDB_log.ldf
 )</PostBuildEvent>
   </PropertyGroup>
-  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  
 </Project>

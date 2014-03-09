@@ -90,6 +90,7 @@
     <Compile Include="Tab\ConfigurationConnectionStringModelFactoryShould.cs" />
     <Compile Include="Tab\RequestShould.cs" />
     <Compile Include="Tab\RoutesShould.cs" />
+    <Compile Include="Tab\ServerShould.cs" />
     <Compile Include="Tab\SessionShould.cs" />
     <Compile Include="Tester\AspNetRequestResponseAdapterTester.cs" />
     <Compile Include="Tester\HttpHandlerTester.cs" />
@@ -117,7 +118,7 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
