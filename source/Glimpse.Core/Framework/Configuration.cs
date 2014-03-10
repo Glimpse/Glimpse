@@ -8,7 +8,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Policy;
 using Glimpse.Core.Resource;
 using NLog;
 using NLog.Config;
@@ -529,64 +528,7 @@ namespace Glimpse.Core.Framework
                     return runtimePolicies;
                 }
 
-                runtimePolicies = InstantiateDiscoverableCollection<IRuntimePolicy>(XmlConfiguration.RuntimePolicies, runtimePoliciesElement =>
-                {
-
-#warning begin of backward compatibility hack that should be removed in v2
-
-                    Action<IContentTypePolicyConfigurator> contentTypePolicyBackwardHack = configurator =>
-                    {
-                        if (configurator == null)
-                        {
-                            return;
-                        }
-
-                        foreach (var supportedContentType in configurator.SupportedContentTypes)
-                        {
-                            XmlConfiguration.RuntimePolicies.ContentTypes.Add(new ContentTypeElement { ContentType = supportedContentType.ContentType });
-                        }
-                    };
-
-                    Action<IStatusCodePolicyConfigurator> statusCodePolicyBackwardHack = configurator =>
-                    {
-                        if (configurator == null)
-                        {
-                            return;
-                        }
-
-                        foreach (var supportedStatusCode in configurator.SupportedStatusCodes)
-                        {
-                            XmlConfiguration.RuntimePolicies.StatusCodes.Add(new StatusCodeElement { StatusCode = supportedStatusCode });
-                        }
-                    };
-
-                    Action<IUriPolicyConfigurator> uriPolicyBackwardHack = configurator =>
-                    {
-                        if (configurator == null)
-                        {
-                            return;
-                        }
-
-                        foreach (var uriPatternsToIgnore in configurator.UriPatternsToIgnore)
-                        {
-                            XmlConfiguration.RuntimePolicies.Uris.Add(new RegexElement { Regex = uriPatternsToIgnore });
-                        }
-                    };
-
-                    foreach (var runtimePolicy in runtimePoliciesElement)
-                    {
-                        var runtimePolicyAsConfigurableExtended = runtimePolicy as IConfigurableExtended;
-                        if (runtimePolicyAsConfigurableExtended != null)
-                        {
-                            contentTypePolicyBackwardHack(runtimePolicyAsConfigurableExtended.Configurator as IContentTypePolicyConfigurator);
-                            statusCodePolicyBackwardHack(runtimePolicyAsConfigurableExtended.Configurator as IStatusCodePolicyConfigurator);
-                            uriPolicyBackwardHack(runtimePolicyAsConfigurableExtended.Configurator as IUriPolicyConfigurator);
-                        }
-                    }
-
-#warning end of backward compatibility hack that should be removed in v2
-                });
-               
+                runtimePolicies = InstantiateDiscoverableCollection<IRuntimePolicy>(XmlConfiguration.RuntimePolicies);
                 return runtimePolicies;
             }
 
@@ -960,7 +902,7 @@ namespace Glimpse.Core.Framework
             return false;
         }
 
-        private IDiscoverableCollection<T>      CreateDiscoverableCollection<T>(DiscoverableCollectionElement config)
+        private IDiscoverableCollection<T> CreateDiscoverableCollection<T>(DiscoverableCollectionElement config)
         {
             var discoverableCollection = new ReflectionDiscoverableCollection<T>(Logger);
 
@@ -983,7 +925,7 @@ namespace Glimpse.Core.Framework
             return discoverableCollection;
         }
         
-        private ICollection<TElementType> InstantiateDiscoverableCollection<TElementType>(DiscoverableCollectionElement configuredDiscoverableCollection, Action<ICollection<TElementType>> onBeforeConfiguringElements = null)
+        private ICollection<TElementType> InstantiateDiscoverableCollection<TElementType>(DiscoverableCollectionElement configuredDiscoverableCollection)
             where TElementType : class
         {
             ICollection<TElementType> collection;
@@ -995,7 +937,7 @@ namespace Glimpse.Core.Framework
             var discoverableCollection = CreateDiscoverableCollection<TElementType>(configuredDiscoverableCollection);
 
             // get the list of configurators
-            var configurators = discoverableCollection.OfType<IConfigurableExtended>()
+            var configurators = discoverableCollection.OfType<IConfigurable>()
                 .Select(configurable => configurable.Configurator)
                 .GroupBy(configurator => configurator.CustomConfigurationKey);
 
@@ -1026,17 +968,6 @@ namespace Glimpse.Core.Framework
                     }
                 }
             }
-
-            if (onBeforeConfiguringElements != null)
-            {
-                onBeforeConfiguringElements(discoverableCollection);
-            }
-
-            //v2merge needs to be removed completely
-            //foreach (var configurable in discoverableCollection.OfType<IConfigurable>())
-            //{
-            //    configurable.Configure(Configuration);
-            //}
 
             return discoverableCollection;
         }

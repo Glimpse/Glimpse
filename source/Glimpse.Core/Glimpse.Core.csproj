@@ -71,19 +71,11 @@
     <Compile Include="ClientScript\Client.cs" />
     <Compile Include="ClientScript\Data.cs" />
     <Compile Include="ClientScript\Metadata.cs" />
-    <Compile Include="Configuration\ContentTypeElement.cs" />
-    <Compile Include="Configuration\ContentTypeElementCollection.cs" />
     <Compile Include="Configuration\CustomConfigurationElement.cs" />
     <Compile Include="Configuration\DiscoverableCollectionElement.cs" />
-    <Compile Include="Configuration\PolicyDiscoverableCollectionElement.cs" />
-    <Compile Include="Configuration\RegexConverter.cs" />
-    <Compile Include="Configuration\RegexElement.cs" />
-    <Compile Include="Configuration\RegexElementCollection.cs" />
     <Compile Include="Configuration\Section.cs" />
     <Compile Include="Configuration\LoggingElement.cs" />
     <Compile Include="Configuration\LoggingLevel.cs" />
-    <Compile Include="Configuration\StatusCodeElement.cs" />
-    <Compile Include="Configuration\StatusCodeElementCollection.cs" />
     <Compile Include="Configuration\TypeConverter.cs" />
     <Compile Include="Display\TimingsDisplay.cs" />
     <Compile Include="Extensibility\AlternateType.cs" />
@@ -92,7 +84,6 @@
     <Compile Include="Extensibility\AlternateMethod.cs" />
     <Compile Include="Extensibility\AntiXssEncoder.cs" />
     <Compile Include="Extensibility\CastleInvocationToAlternateMethodContextAdapter.cs" />
-    <Compile Include="Extensibility\IConfigurableExtended.cs" />
     <Compile Include="Extensibility\IConfigurator.cs" />
     <Compile Include="Extensibility\IDependOnResources.cs" />
     <Compile Include="Extensibility\DictionaryDataStoreAdapter.cs" />

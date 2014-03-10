@@ -8,7 +8,7 @@ namespace Glimpse.Core.Policy
     /// <summary>
     /// Policy which will set Glimpse's runtime policy to <c>Off</c> if a Http response's content type is not supported.
     /// </summary>
-    public class ContentTypePolicy : IRuntimePolicy, IConfigurableExtended
+    public class ContentTypePolicy : IRuntimePolicy, IConfigurable
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ContentTypePolicy" />
@@ -26,7 +26,7 @@ namespace Glimpse.Core.Policy
         /// <summary>
         /// Gets the configurator
         /// </summary>
-        IConfigurator IConfigurableExtended.Configurator { get { return Configurator; } }
+        IConfigurator IConfigurable.Configurator { get { return Configurator; } }
 
         /// <summary>
         /// Gets the point in an Http request lifecycle that a policy should execute.
