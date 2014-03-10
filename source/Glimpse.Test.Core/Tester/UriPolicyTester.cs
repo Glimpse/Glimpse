@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 using Glimpse.Core.Policy;
@@ -13,10 +16,12 @@ namespace Glimpse.Test.Core.Tester
         public Mock<IRuntimePolicyContext> ContextMock { get; set; }
         public Mock<ILogger> LoggerMock { get; set; }
 
-        private UriPolicyTester():base(new List<Regex>{new Regex("blocked")})
+        private UriPolicyTester()
         {
+            Configurator.AddUriPatternToIgnore("blocked");
+
             RequestMetadataMock = new Mock<IRequestMetadata>();
-            RequestMetadataMock.Setup(r => r.RequestUri).Returns("shouldn't matter!");
+            RequestMetadataMock.Setup(r => r.RequestUri).Returns(new Uri("http://should.not.matter"));
 
             LoggerMock = new Mock<ILogger>();
 

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
@@ -7,15 +6,16 @@ using Moq;
 
 namespace Glimpse.Test.Core.Tester
 {
-    public class ContentTypePolicyTester:ContentTypePolicy
+    public class ContentTypePolicyTester : ContentTypePolicy
     {
         public Mock<IRuntimePolicyContext> ContextMock { get; set; }
         public Mock<IRequestMetadata> RequestMetadataMock { get; set; }
         public Mock<ILogger> LoggerMock { get; set; }
 
-        private ContentTypePolicyTester(IList<Tuple<string, RuntimePolicy>> contentTypes)
-            : base(contentTypes)
+        private ContentTypePolicyTester(IEnumerable<SupportedContentType> supportedContentTypes)
         {
+            this.Configurator.AddSupportedContentTypes(supportedContentTypes);
+
             RequestMetadataMock = new Mock<IRequestMetadata>();
             RequestMetadataMock.Setup(r => r.ResponseContentType).Returns(@"text/html");
 
@@ -28,11 +28,12 @@ namespace Glimpse.Test.Core.Tester
 
         public static ContentTypePolicyTester Create()
         {
-            return new ContentTypePolicyTester(new List<Tuple<string, RuntimePolicy>>
-                                       {
-                                           new Tuple<string, RuntimePolicy>(@"text/html", RuntimePolicy.On),
-                                           new Tuple<string, RuntimePolicy>(@"application/json", RuntimePolicy.PersistResults)
-                                       });
+            return new ContentTypePolicyTester(
+                new List<SupportedContentType>
+                {
+                    new SupportedContentType("text/html", RuntimePolicy.On),
+                    new SupportedContentType("application/json", RuntimePolicy.PersistResults)
+                });
         }
     }
 }

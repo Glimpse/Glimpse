@@ -13,16 +13,20 @@ namespace Glimpse.Test.Core.Framework
         [Fact]
         public void BeThreadSafe()
         {
-            var sut = new ApplicationPersistenceStore(new DictionaryDataStoreAdapter(new Dictionary<string, object>()));
+            var sut = new InMemoryPersistenceStore(new DictionaryDataStoreAdapter(new Dictionary<string, object>()));
 
-            Action<ApplicationPersistenceStore> addingRequests = store =>
+            Action<InMemoryPersistenceStore> addingRequests = store =>
             {
+                var metadataMock = new Mock<IRequestMetadata>();
+                metadataMock.Setup(requestMetadata => requestMetadata.RequestUri).Returns(new Uri("http://localhost"));
+
                 var glimpseRequest = new GlimpseRequest(
                     Guid.NewGuid(),
-                    new Mock<IRequestMetadata>().Object,
+                    metadataMock.Object,
                     new Dictionary<string, TabResult>(),
                     new Dictionary<string, TabResult>(),
-                    new TimeSpan(1000));
+                    new TimeSpan(1000),
+                    new Dictionary<string, object>());
 
                 for (int requestCounter = 0; requestCounter < 200; requestCounter++)
                 {
@@ -32,7 +36,7 @@ namespace Glimpse.Test.Core.Framework
                 }
             };
 
-            Action<ApplicationPersistenceStore> gettingRequests = store =>
+            Action<InMemoryPersistenceStore> gettingRequests = store =>
             {
                 for (int requestCounter = 0; requestCounter < 200; requestCounter++)
                 {
@@ -49,14 +53,14 @@ namespace Glimpse.Test.Core.Framework
                 }
             };
 
-            var invokedDelegates = new List<Tuple<Action<ApplicationPersistenceStore>, IAsyncResult>>
+            var invokedDelegates = new List<Tuple<Action<InMemoryPersistenceStore>, IAsyncResult>>
             {
-                new Tuple<Action<ApplicationPersistenceStore>, IAsyncResult>(addingRequests, addingRequests.BeginInvoke(sut, null, null)),
-                new Tuple<Action<ApplicationPersistenceStore>, IAsyncResult>(gettingRequests, gettingRequests.BeginInvoke(sut, null, null)),
-                new Tuple<Action<ApplicationPersistenceStore>, IAsyncResult>(addingRequests, addingRequests.BeginInvoke(sut, null, null)),
-                new Tuple<Action<ApplicationPersistenceStore>, IAsyncResult>(gettingRequests, gettingRequests.BeginInvoke(sut, null, null)),
-                new Tuple<Action<ApplicationPersistenceStore>, IAsyncResult>(addingRequests, addingRequests.BeginInvoke(sut, null, null)),
-                new Tuple<Action<ApplicationPersistenceStore>, IAsyncResult>(gettingRequests, gettingRequests.BeginInvoke(sut, null, null))
+                new Tuple<Action<InMemoryPersistenceStore>, IAsyncResult>(addingRequests, addingRequests.BeginInvoke(sut, null, null)),
+                new Tuple<Action<InMemoryPersistenceStore>, IAsyncResult>(gettingRequests, gettingRequests.BeginInvoke(sut, null, null)),
+                new Tuple<Action<InMemoryPersistenceStore>, IAsyncResult>(addingRequests, addingRequests.BeginInvoke(sut, null, null)),
+                new Tuple<Action<InMemoryPersistenceStore>, IAsyncResult>(gettingRequests, gettingRequests.BeginInvoke(sut, null, null)),
+                new Tuple<Action<InMemoryPersistenceStore>, IAsyncResult>(addingRequests, addingRequests.BeginInvoke(sut, null, null)),
+                new Tuple<Action<InMemoryPersistenceStore>, IAsyncResult>(gettingRequests, gettingRequests.BeginInvoke(sut, null, null))
             };
 
             foreach (var invokedDelegate in invokedDelegates)

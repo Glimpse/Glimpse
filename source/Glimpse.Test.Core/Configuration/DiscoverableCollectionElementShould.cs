@@ -1,4 +1,5 @@
-﻿using Glimpse.Core.Configuration;
+﻿using System;
+using Glimpse.Core.Configuration;
 using Xunit;
 
 namespace Glimpse.Test.Core.Configuration
@@ -45,7 +46,7 @@ namespace Glimpse.Test.Core.Configuration
         [Fact]
         public void GetSetIgnoredTypes()
         {
-            var types = new TypeElementCollection();
+            var types = new Type[0];
 
             var element = new DiscoverableCollectionElement();
             element.IgnoredTypes = types;

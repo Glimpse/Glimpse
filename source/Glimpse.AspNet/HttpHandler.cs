@@ -18,24 +18,37 @@ namespace Glimpse.AspNet
 
         public void ProcessRequest(HttpContextBase context)
         {
-            var runtime = context.Application.Get(Constants.RuntimeKey) as IGlimpseRuntime;
-
-            if (runtime == null)
+            if (!GlimpseRuntime.IsInitialized)
             {
                 throw new HttpException(404, Resources.ProcessRequestMissingRuntime);
             }
 
-            var queryString = context.Request.QueryString;
+            bool glimpseRequestContextHandleFound = false;
 
-            var resourceName = queryString["n"];
-
-            if (string.IsNullOrEmpty(resourceName))
+            if (context.Items.Contains(Constants.GlimpseRequestContextHandle))
             {
-                runtime.ExecuteDefaultResource();
+                var glimpseRequestContextHandle = (GlimpseRequestContextHandle)context.Items[Constants.GlimpseRequestContextHandle];
+                if (glimpseRequestContextHandle != null)
+                {
+                    glimpseRequestContextHandleFound = true;
+
+                    var queryString = context.Request.QueryString;
+                    var resourceName = queryString[UriTemplateResourceEndpointConfiguration.DefaultResourceNameKey];
+
+                    if (string.IsNullOrEmpty(resourceName))
+                    {
+                        GlimpseRuntime.Instance.ExecuteDefaultResource(glimpseRequestContextHandle);
+                    }
+                    else
+                    {
+                        GlimpseRuntime.Instance.ExecuteResource(glimpseRequestContextHandle, resourceName, new ResourceParameters(queryString.AllKeys.Where(key => key != null).ToDictionary(key => key, key => queryString[key])));
+                    }
+                }
             }
-            else
+
+            if (!glimpseRequestContextHandleFound)
             {
-                runtime.ExecuteResource(resourceName, new ResourceParameters(queryString.AllKeys.Where(key => key != null).ToDictionary(key => key, key => queryString[key])));
+                GlimpseRuntime.Instance.Configuration.Logger.Info("There is no Glimpse request context handle stored inside the httpContext.Items collection.");
             }
         }
     }

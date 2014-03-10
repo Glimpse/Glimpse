@@ -86,7 +86,6 @@ namespace MvcMusicStore
             RegisterRoutes(RouteTable.Routes);
             LoadConfiguration();
 
-
             HttpRuntime.Cache.Add("test TimeSpan", "Very important", null, System.Web.Caching.Cache.NoAbsoluteExpiration, new TimeSpan(1, 1, 1, 1),
                 System.Web.Caching.CacheItemPriority.High, null);
             HttpRuntime.Cache.Add("test DateTime", "Very important", null, DateTime.Now.AddDays(1), System.Web.Caching.Cache.NoSlidingExpiration,

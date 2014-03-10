@@ -89,9 +89,20 @@ namespace Glimpse.Ado.AlternateType
             get { return InnerConnection.State; }
         }
 
+        private IMessageBroker MessageBroker
+        {
+            get { return messageBroker ?? (messageBroker = Support.DetermineMessageBroker()); }
+            set { messageBroker = value; }
+        }
+
         public override string ServerVersion
         {
             get { return InnerConnection.ServerVersion; }
+        }
+
+        protected override DbProviderFactory DbProviderFactory
+        {
+            get { return InnerProviderFactory; }
         }
 
         public override ISite Site
@@ -100,20 +111,9 @@ namespace Glimpse.Ado.AlternateType
             set { InnerConnection.Site = value; }
         }
 
-        protected override DbProviderFactory DbProviderFactory
-        {
-            get { return InnerProviderFactory; }
-        }
-
-        private IMessageBroker MessageBroker
-        {
-            get { return messageBroker ?? (messageBroker = GlimpseConfiguration.GetConfiguredMessageBroker()); }
-            set { messageBroker = value; }
-        }
-
         private IExecutionTimer TimerStrategy
         {
-            get { return timerStrategy ?? (timerStrategy = GlimpseConfiguration.GetConfiguredTimerStrategy()()); }
+            get { return timerStrategy ?? (timerStrategy = Support.DetermineExecutionTimer()); }
             set { timerStrategy = value; }
         }
 

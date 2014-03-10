@@ -6,6 +6,7 @@ using System.Reflection;
 using Antlr4.StringTemplate;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
+using Glimpse.Core.Metadata;
 using Glimpse.Core.ResourceResult;
 using Glimpse.Core.Support;
 
@@ -104,7 +105,7 @@ namespace Glimpse.Core.Resource
         /// Use of <see cref="IPrivilegedResource" /> is reserved.
         /// </remarks>
         /// 
-        public IResourceResult Execute(IResourceContext context, IGlimpseConfiguration configuration)
+        public IResourceResult Execute(IResourceContext context, IReadonlyConfiguration configuration, IRequestResponseAdapter requestResponseAdapter)
         {
             const string glimpseConfigurationResourceName = "Glimpse.Core.EmbeddedResources." + InternalName + ".html";
             Stream glimpseConfigurationResourceStream = this.GetType().Assembly.GetManifestResourceStream(glimpseConfigurationResourceName);
@@ -116,18 +117,18 @@ namespace Glimpse.Core.Resource
             string glimpseConfigurationTemplateContent = new StreamReader(glimpseConfigurationResourceStream).ReadToEnd();
             Template glimpseConfigurationTemplate = new Template(new TemplateGroup('$', '$'), glimpseConfigurationTemplateContent);
 
-            glimpseConfigurationTemplate.Add("glimpseRuntimeVersion", GlimpseRuntime.Version);
-
-            var glimpseMetadata = configuration.PersistenceStore.GetMetadata();
-            var logosResource = glimpseMetadata.Resources[LogosResource.InternalName].Replace("{&" + ResourceParameter.Hash.Name + "}", string.Empty);
+            glimpseConfigurationTemplate.Add("glimpseRuntimeVersion", configuration.Version);
+             
+            var resources = configuration.PersistenceStore.GetMetadata().GetResources();
+            var logosResource = resources[LogosResource.InternalName].Replace("{&" + ResourceParameter.Hash.Name + "}", string.Empty);
             var logoNamePlaceholder = "{" + ResourceParameter.LogoName.Name + "}";
             glimpseConfigurationTemplate.Add("glimpseFaviconUri", logosResource.Replace(logoNamePlaceholder, "glimpse_favicon"));
             glimpseConfigurationTemplate.Add("glimpseLogoUri", logosResource.Replace(logoNamePlaceholder, "glimpse_image_logo"));
             glimpseConfigurationTemplate.Add("githubLogoUri", logosResource.Replace(logoNamePlaceholder, "github_logo"));
             glimpseConfigurationTemplate.Add("twitterLogoUri", logosResource.Replace(logoNamePlaceholder, "twitter_logo"));
 
-            glimpseConfigurationTemplate.Add("configurationStyleUri", glimpseMetadata.Resources[ConfigurationStyleResource.InternalName].Replace("{&" + ResourceParameter.Hash.Name + "}", string.Empty));
-            glimpseConfigurationTemplate.Add("configurationScriptUri", glimpseMetadata.Resources[ConfigurationScriptResource.InternalName].Replace("{&" + ResourceParameter.Hash.Name + "}", string.Empty));
+            glimpseConfigurationTemplate.Add("configurationStyleUri", resources[ConfigurationStyleResource.InternalName].Replace("{&" + ResourceParameter.Hash.Name + "}", string.Empty));
+            glimpseConfigurationTemplate.Add("configurationScriptUri", resources[ConfigurationScriptResource.InternalName].Replace("{&" + ResourceParameter.Hash.Name + "}", string.Empty));
 
             //Duplicate resources
             var duplicateResources = DetectDuplicateResources(configuration.Resources).ToList();
@@ -208,7 +209,7 @@ namespace Glimpse.Core.Resource
                     }).ToArray());
 
             // Details : More
-            glimpseConfigurationTemplate.Add("frameworkProviderType", configuration.FrameworkProvider.GetType().FullName);
+            glimpseConfigurationTemplate.Add("frameworkProviderType", requestResponseAdapter.GetType().FullName);
             glimpseConfigurationTemplate.Add("htmlEncoderType", configuration.HtmlEncoder.GetType().FullName);
             glimpseConfigurationTemplate.Add("loggerType", configuration.Logger.GetType().FullName);
             glimpseConfigurationTemplate.Add("persistenceStoreType", configuration.PersistenceStore.GetType().FullName);

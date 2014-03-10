@@ -11,9 +11,10 @@ namespace Glimpse.Core.Extensibility
         /// <summary>
         /// Initializes a new instance of the <see cref="MessageBroker" /> class.
         /// </summary>
+        /// <param name="messagePublishingAllowed">Delegate indicating whether or not messages are allowed to be published</param>
         /// <param name="logger">The logger.</param>
         /// <exception cref="System.ArgumentNullException">Throws an exception if <paramref name="logger"/> is <c>null</c>.</exception>
-        public MessageBroker(ILogger logger)
+        public MessageBroker(Func<bool> messagePublishingAllowed, ILogger logger)
         {
             if (logger == null)
             {
@@ -22,8 +23,11 @@ namespace Glimpse.Core.Extensibility
 
             Subscriptions = new Dictionary<Type, List<Subscriber>>();
             Logger = logger;
+            MessagePublishingAllowed = messagePublishingAllowed;
         }
 
+        private Func<bool> MessagePublishingAllowed { get; set; }
+        
         /// <summary>
         /// Gets or sets the logger.
         /// </summary>
@@ -47,6 +51,11 @@ namespace Glimpse.Core.Extensibility
         /// <param name="message">The message.</param>
         public void Publish<T>(T message)
         {
+            if (!MessagePublishingAllowed())
+            {
+                return;
+            }
+
             foreach (var subscriptions in Subscriptions)
             {
                 if (subscriptions.Key.IsInstanceOfType(message))

@@ -3,6 +3,7 @@ using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 using Glimpse.Core.Resource;
 using Glimpse.Core.ResourceResult;
+using Glimpse.Test.Core.Extensions;
 using Moq;
 using Xunit;
 
@@ -41,11 +42,12 @@ namespace Glimpse.Test.Core.Resource
         public void Execute()
         {
             var contextMock = new Mock<IResourceContext>();
-            var configMock = new Mock<IGlimpseConfiguration>();
+            var configMock = new Mock<IReadonlyConfiguration>();
 
             var resource = new ConfigurationResource();
+            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
 
-            var result = resource.Execute(contextMock.Object, configMock.Object);
+            var result = resource.Execute(contextMock.Object, configMock.Object, providerMock.Object);
             var htmlResourceResult = result as HtmlResourceResult;
 
             Assert.NotNull(result);

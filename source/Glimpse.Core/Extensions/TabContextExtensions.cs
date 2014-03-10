@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Framework;
 
 namespace Glimpse.Core.Extensions
 {
@@ -43,6 +44,10 @@ namespace Glimpse.Core.Extensions
         private static void PersistMessage<T>(T message, ITabSetupContext context)
         {
             var tabStore = context.GetTabStore();
+            if (tabStore == null)
+            {
+                throw new GlimpseException("The Tabstore is unavailable, are you sure the GlimpseRuntime.Instance.CurrentRequestContext.CurrentRuntimePolicy != RuntimePolicy.Off"); 
+            }
 
             if (!tabStore.Contains<IList<T>>())
             {

@@ -4,6 +4,7 @@ using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Framework;
 using Glimpse.Core.ResourceResult;
+using Glimpse.Core.Support;
 
 namespace Glimpse.Core.Resource
 {
@@ -73,7 +74,7 @@ namespace Glimpse.Core.Resource
         /// <remarks>
         /// Use of <see cref="IPrivilegedResource" /> is reserved.
         /// </remarks>
-        public IResourceResult Execute(IResourceContext context, IGlimpseConfiguration configuration)
+        public IResourceResult Execute(IResourceContext context, IReadonlyConfiguration configuration, IRequestResponseAdapter requestResponseAdapter)
         {
             if (context == null)
             {
@@ -86,24 +87,13 @@ namespace Glimpse.Core.Resource
             }
 
             Guid requestId;
-            var request = context.Parameters.GetValueOrDefault(ResourceParameter.RequestId.Name);
-
-#if NET35
-            if (!Glimpse.Core.Backport.Net35Backport.TryParseGuid(request, out requestId))
+            var request = context.Parameters.GetValueOrDefault(ResourceParameter.RequestId.Name); 
+            if (!Compatability.TryParseGuid(request, out requestId))
             {
                 return new StatusCodeResourceResult(404, string.Format("Could not parse RequestId of '{0}' as GUID.", request));
-            }
-#else
-            if (!Guid.TryParse(request, out requestId))
-            {
-                return new StatusCodeResourceResult(404, string.Format("Could not parse RequestId of '{0}' as GUID.", request));
-            }
-#endif
+            } 
 
-            var requestStore = configuration.FrameworkProvider.HttpRequestStore;
-            var generateScriptTags = requestStore.Get<Func<Guid?, string>>(Constants.ClientScriptsStrategy);
-
-            var scriptTags = generateScriptTags(requestId); 
+            var scriptTags = GlimpseScriptTagsGenerator.Generate(requestId, configuration); 
             var html = string.Format("<!DOCTYPE html><html><head><meta charset='utf-8'><title>Glimpse Popup</title></head><body class='glimpse-popup'>{0}</body></html>", scriptTags);
 
             return new HtmlResourceResult(html);

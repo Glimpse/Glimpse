@@ -42,6 +42,6 @@ namespace Glimpse.Core.Framework
         /// Gets the metadata.
         /// </summary>
         /// <returns>Metadata that is currently applied.</returns>
-        GlimpseMetadata GetMetadata();
+        IDictionary<string, object> GetMetadata();
     }
 }

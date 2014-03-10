@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common; 
+using System.Data.Common;
 using System.Reflection;
 using System.Text;
 using Glimpse.Ado.Message;
+using Glimpse.Core.Extensibility;
+using Glimpse.Core.Framework;
 using Glimpse.Core.Message;
 
 namespace Glimpse.Ado.AlternateType
@@ -31,10 +33,10 @@ namespace Glimpse.Ado.AlternateType
         {
             var factory = connection.TryGetProviderFactory();
             if (factory != null)
-            { 
+            {
                 if (!(factory is GlimpseDbProviderFactory))
                 {
-                    factory = factory.WrapProviderFactory(); 
+                    factory = factory.WrapProviderFactory();
                 }
             }
             else
@@ -48,9 +50,9 @@ namespace Glimpse.Ado.AlternateType
         public static DbProviderFactory WrapProviderFactory(this DbProviderFactory factory)
         {
             if (!(factory is GlimpseDbProviderFactory))
-            { 
+            {
                 var factoryType = typeof(GlimpseDbProviderFactory<>).MakeGenericType(factory.GetType());
-                return (DbProviderFactory)factoryType.GetField("Instance").GetValue(null);    
+                return (DbProviderFactory)factoryType.GetField("Instance").GetValue(null);
             }
 
             return factory;
@@ -151,6 +153,25 @@ namespace Glimpse.Ado.AlternateType
                     .AsTimedMessage(command.TimerStrategy.Stop(timer))
                     .AsTimelineMessage("Command: Error", AdoTimelineCategory.Command, type));
             }
+        }
+
+        internal static IMessageBroker DetermineMessageBroker()
+        {
+            return GlimpseRuntime.IsInitialized ? GlimpseRuntime.Instance.Configuration.MessageBroker : null;
+        }
+
+        internal static IExecutionTimer DetermineExecutionTimer()
+        {
+            if (GlimpseRuntime.IsInitialized)
+            {
+                var currentRequestContext = GlimpseRuntime.Instance.CurrentRequestContext;
+                if (currentRequestContext.CurrentRuntimePolicy != RuntimePolicy.Off)
+                {
+                    return currentRequestContext.CurrentExecutionTimer;
+                }
+            }
+
+            return null;
         }
     }
 }

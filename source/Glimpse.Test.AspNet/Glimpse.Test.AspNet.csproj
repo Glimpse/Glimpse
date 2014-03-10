@@ -71,7 +71,6 @@
     <Compile Include="AlternateType\RouteConstraintShould.cs" />
     <Compile Include="AlternateType\RouteProcessConstraintShould.cs" />
     <Compile Include="AspNetFrameworkProviderShould.cs" />
-    <Compile Include="PreBodyTagFilterShould.cs" />
     <Compile Include="HttpApplicationStateBaseDataAdapterShould.cs" />
     <Compile Include="HttpHandlerShould.cs" />
     <Compile Include="HttpModuleShould.cs" />
@@ -93,7 +92,7 @@
     <Compile Include="Tab\RoutesShould.cs" />
     <Compile Include="Tab\ServerShould.cs" />
     <Compile Include="Tab\SessionShould.cs" />
-    <Compile Include="Tester\AspNetFrameworkProviderTester.cs" />
+    <Compile Include="Tester\AspNetRequestResponseAdapterTester.cs" />
     <Compile Include="Tester\HttpHandlerTester.cs" />
     <Compile Include="Tester\HttpModuleTester.cs" />
   </ItemGroup>

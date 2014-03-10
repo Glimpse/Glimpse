@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Glimpse.Core.Support;
 
 namespace Glimpse.Core.Framework
 {
@@ -23,7 +24,7 @@ namespace Glimpse.Core.Framework
         /// <param name="requestMetadata">The request metadata.</param>
         /// <param name="tabData">The plugin data.</param>
         /// <param name="duration">The duration.</param>
-        public GlimpseRequest(Guid requestId, IRequestMetadata requestMetadata, IDictionary<string, TabResult> tabData, IDictionary<string, TabResult> displayData, TimeSpan duration)
+        public GlimpseRequest(Guid requestId, IRequestMetadata requestMetadata, IDictionary<string, TabResult> tabData, IDictionary<string, TabResult> displayData, TimeSpan duration, IDictionary<string, object> instanceMetadata)
             : this()
         {
             RequestId = requestId;
@@ -33,25 +34,18 @@ namespace Glimpse.Core.Framework
 
             RequestHttpMethod = requestMetadata.RequestHttpMethod;
             RequestIsAjax = requestMetadata.RequestIsAjax;
-            RequestUri = requestMetadata.RequestUri;
+            RequestUri = requestMetadata.RequestUri.PathAndQuery;
             ResponseStatusCode = requestMetadata.ResponseStatusCode;
             ResponseContentType = requestMetadata.ResponseContentType;
             ClientId = requestMetadata.GetCookie(Constants.ClientIdCookieName) ?? requestMetadata.ClientId;
             UserAgent = requestMetadata.GetHttpHeader(Constants.UserAgentHeaderName);
+            Metadata = instanceMetadata;
 
-            Guid parentRequestId;
-
-#if NET35
-            if (RequestIsAjax && Glimpse.Core.Backport.Net35Backport.TryParseGuid(requestMetadata.GetHttpHeader(Constants.HttpRequestHeader), out parentRequestId))
+            Guid parentRequestId; 
+            if (RequestIsAjax && Compatability.TryParseGuid(requestMetadata.GetHttpHeader(Constants.HttpRequestHeader), out parentRequestId))
             {
                 ParentRequestId = parentRequestId;
-            }
-#else
-            if (RequestIsAjax && Guid.TryParse(requestMetadata.GetHttpHeader(Constants.HttpRequestHeader), out parentRequestId))
-            {
-                ParentRequestId = parentRequestId;
-            }
-#endif
+            } 
         }
 
         /// <summary>
@@ -143,6 +137,14 @@ namespace Glimpse.Core.Framework
         public IDictionary<string, TabResult> TabData { get; set; }
 
         public IDictionary<string, TabResult> DisplayData { get; set; }
+
+        /// <summary>
+        /// Gets or sets the metadata that targeted at this specific request.
+        /// </summary>
+        /// <value>
+        /// The metdata data.
+        /// </value>
+        public IDictionary<string, object> Metadata { get; set; }
 
         /// <summary>
         /// Gets or sets the user agent for the request.

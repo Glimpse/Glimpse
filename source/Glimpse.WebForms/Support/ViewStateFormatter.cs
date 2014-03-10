@@ -16,7 +16,7 @@ namespace Glimpse.WebForms.Support
 
         protected ILogger Logger
         {
-            get { return logger ?? (logger = GlimpseConfiguration.GetLogger()); } 
+            get { return logger ?? (logger = GlimpseRuntime.Instance.Configuration.Logger); } 
         }
 
         public void Process(ControlTreeItemTrackModel root)

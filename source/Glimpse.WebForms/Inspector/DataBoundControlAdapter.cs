@@ -35,7 +35,7 @@ namespace Glimpse.WebForms.Inspector
         {
             get
             {
-                return GlimpseConfiguration.GetConfiguredTimerStrategy()().Point().Offset;
+                return (GlimpseRuntime.IsInitialized ? GlimpseRuntime.Instance.CurrentRequestContext.CurrentExecutionTimer : UnavailableGlimpseRequestContext.Instance.CurrentExecutionTimer).Point().Offset;
             }
         }
 
