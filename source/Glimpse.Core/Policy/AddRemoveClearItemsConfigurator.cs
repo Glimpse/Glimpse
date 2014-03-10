@@ -40,7 +40,7 @@ namespace Glimpse.Core.Policy
         {
             try
             {
-                XmlDocument doc = new XmlDocument();
+                var doc = new XmlDocument();
                 doc.LoadXml(customConfiguration);
 
                 if (doc.DocumentElement != null)
@@ -65,7 +65,10 @@ namespace Glimpse.Core.Policy
             }
             catch (Exception exception)
             {
-                GlimpseConfiguration.GetLogger().Error("Failed to process custom configuration by '" + this.GetType().FullName + "'", exception);
+                if (GlimpseRuntime.IsInitialized)
+                {
+                    GlimpseRuntime.Instance.Configuration.Logger.Error("Failed to process custom configuration by '" + this.GetType().FullName + "'", exception);
+                }
             }
         }
 

@@ -8,6 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Policy;
 using Glimpse.Core.Resource;
 using NLog;
 using NLog.Config;
@@ -45,7 +46,6 @@ namespace Glimpse.Core.Framework
         private Section xmlConfiguration;
         private RuntimePolicy? defaultRuntimePolicy;
         private ICollection<ISerializationConverter> serializationConverters;
-        private ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker;
 
         public Configuration(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
             : this(endpointConfiguration, persistenceStore, "glimpse", currentGlimpseRequestIdTracker)
@@ -129,12 +129,7 @@ namespace Glimpse.Core.Framework
                     return clientScripts;
                 }
 
-                if (TryAllInstancesFromServiceLocators(out clientScripts))
-                {
-                    return clientScripts;
-                }
-
-                clientScripts = CreateDiscoverableCollection<IClientScript>(XmlConfiguration.ClientScripts);
+                clientScripts = InstantiateDiscoverableCollection<IClientScript>(XmlConfiguration.ClientScripts);
                 return clientScripts;
             }
 
@@ -403,12 +398,7 @@ namespace Glimpse.Core.Framework
                     return inspectors;
                 }
 
-                if (TryAllInstancesFromServiceLocators(out inspectors))
-                {
-                    return inspectors;
-                }
-
-                inspectors = CreateDiscoverableCollection<IInspector>(XmlConfiguration.Inspectors);
+                inspectors = InstantiateDiscoverableCollection<IInspector>(XmlConfiguration.Inspectors);
                 return inspectors;
             }
 
@@ -507,12 +497,7 @@ namespace Glimpse.Core.Framework
                     return resources;
                 }
 
-                if (TryAllInstancesFromServiceLocators(out resources))
-                {
-                    return resources;
-                }
-
-                resources = CreateDiscoverableCollection<IResource>(XmlConfiguration.Resources);
+                resources = InstantiateDiscoverableCollection<IResource>(XmlConfiguration.Resources);
                 return resources;
             }
 
@@ -544,19 +529,64 @@ namespace Glimpse.Core.Framework
                     return runtimePolicies;
                 }
 
-                if (TryAllInstancesFromServiceLocators(out runtimePolicies))
+                runtimePolicies = InstantiateDiscoverableCollection<IRuntimePolicy>(XmlConfiguration.RuntimePolicies, runtimePoliciesElement =>
                 {
-                    return runtimePolicies;
-                }
 
-                var collection = CreateDiscoverableCollection<IRuntimePolicy>(XmlConfiguration.RuntimePolicies);
+#warning begin of backward compatibility hack that should be removed in v2
 
-                foreach (var config in collection.OfType<IConfigurable>())
-                {
-                    config.Configure(XmlConfiguration);
-                }
+                    Action<IContentTypePolicyConfigurator> contentTypePolicyBackwardHack = configurator =>
+                    {
+                        if (configurator == null)
+                        {
+                            return;
+                        }
 
-                runtimePolicies = collection;
+                        foreach (var supportedContentType in configurator.SupportedContentTypes)
+                        {
+                            XmlConfiguration.RuntimePolicies.ContentTypes.Add(new ContentTypeElement { ContentType = supportedContentType.ContentType });
+                        }
+                    };
+
+                    Action<IStatusCodePolicyConfigurator> statusCodePolicyBackwardHack = configurator =>
+                    {
+                        if (configurator == null)
+                        {
+                            return;
+                        }
+
+                        foreach (var supportedStatusCode in configurator.SupportedStatusCodes)
+                        {
+                            XmlConfiguration.RuntimePolicies.StatusCodes.Add(new StatusCodeElement { StatusCode = supportedStatusCode });
+                        }
+                    };
+
+                    Action<IUriPolicyConfigurator> uriPolicyBackwardHack = configurator =>
+                    {
+                        if (configurator == null)
+                        {
+                            return;
+                        }
+
+                        foreach (var uriPatternsToIgnore in configurator.UriPatternsToIgnore)
+                        {
+                            XmlConfiguration.RuntimePolicies.Uris.Add(new RegexElement { Regex = uriPatternsToIgnore });
+                        }
+                    };
+
+                    foreach (var runtimePolicy in runtimePoliciesElement)
+                    {
+                        var runtimePolicyAsConfigurableExtended = runtimePolicy as IConfigurableExtended;
+                        if (runtimePolicyAsConfigurableExtended != null)
+                        {
+                            contentTypePolicyBackwardHack(runtimePolicyAsConfigurableExtended.Configurator as IContentTypePolicyConfigurator);
+                            statusCodePolicyBackwardHack(runtimePolicyAsConfigurableExtended.Configurator as IStatusCodePolicyConfigurator);
+                            uriPolicyBackwardHack(runtimePolicyAsConfigurableExtended.Configurator as IUriPolicyConfigurator);
+                        }
+                    }
+
+#warning end of backward compatibility hack that should be removed in v2
+                });
+               
                 return runtimePolicies;
             }
 
@@ -623,12 +653,7 @@ namespace Glimpse.Core.Framework
                     return serializationConverters;
                 }
 
-                if (TryAllInstancesFromServiceLocators(out serializationConverters))
-                {
-                    return serializationConverters;
-                }
-
-                serializationConverters = CreateDiscoverableCollection<ISerializationConverter>(XmlConfiguration.SerializationConverters);
+                serializationConverters = InstantiateDiscoverableCollection<ISerializationConverter>(XmlConfiguration.SerializationConverters);
                 return serializationConverters;
             }
 
@@ -660,12 +685,7 @@ namespace Glimpse.Core.Framework
                     return tabs;
                 }
 
-                if (TryAllInstancesFromServiceLocators(out tabs))
-                {
-                    return tabs;
-                }
-
-                tabs = CreateDiscoverableCollection<ITab>(XmlConfiguration.Tabs);
+                tabs = InstantiateDiscoverableCollection<ITab>(XmlConfiguration.Tabs);
                 return tabs;
             }
 
@@ -802,12 +822,7 @@ namespace Glimpse.Core.Framework
                     return displays;
                 }
 
-                if (TryAllInstancesFromServiceLocators(out displays))
-                {
-                    return displays;
-                }
-
-                displays = CreateDiscoverableCollection<IDisplay>(XmlConfiguration.Displays);
+                displays = InstantiateDiscoverableCollection<IDisplay>(XmlConfiguration.Displays);
                 return displays;
             }
 
@@ -945,11 +960,11 @@ namespace Glimpse.Core.Framework
             return false;
         }
 
-        private IDiscoverableCollection<T> CreateDiscoverableCollection<T>(DiscoverableCollectionElement config)
+        private IDiscoverableCollection<T>      CreateDiscoverableCollection<T>(DiscoverableCollectionElement config)
         {
             var discoverableCollection = new ReflectionDiscoverableCollection<T>(Logger);
 
-            discoverableCollection.IgnoredTypes.AddRange(ToEnumerable(config.IgnoredTypes));
+            discoverableCollection.IgnoredTypes.AddRange(config.IgnoredTypes);
 
             // Default to config.DiscoveryLocation (collection specific) otherwise overrides 
             // Configuration.DiscoveryLocation (on main <glimpse> node)
@@ -967,13 +982,63 @@ namespace Glimpse.Core.Framework
 
             return discoverableCollection;
         }
-
-        private static IEnumerable<Type> ToEnumerable(TypeElementCollection collection)
+        
+        private ICollection<TElementType> InstantiateDiscoverableCollection<TElementType>(DiscoverableCollectionElement configuredDiscoverableCollection, Action<ICollection<TElementType>> onBeforeConfiguringElements = null)
+            where TElementType : class
         {
-            foreach (TypeElement typeElement in collection)
+            ICollection<TElementType> collection;
+            if (TryAllInstancesFromServiceLocators(out collection))
             {
-                yield return typeElement.Type;
+                return collection;
             }
+
+            var discoverableCollection = CreateDiscoverableCollection<TElementType>(configuredDiscoverableCollection);
+
+            // get the list of configurators
+            var configurators = discoverableCollection.OfType<IConfigurableExtended>()
+                .Select(configurable => configurable.Configurator)
+                .GroupBy(configurator => configurator.CustomConfigurationKey);
+
+            // have each configurator, configure its "configurable"
+            foreach (var groupedConfigurators in configurators)
+            {
+                if (groupedConfigurators.Count() != 1)
+                {
+                    // there are multiple configurators using the same custom configuration key inside the same discoverable collection
+                    // this means that any existing custom configuration content must be resolved by using the custom configuration key
+                    // and the type for which the configurator is
+                    foreach (var configurator in groupedConfigurators)
+                    {
+                        string customConfiguration = configuredDiscoverableCollection.GetCustomConfiguration(configurator.CustomConfigurationKey, configurator.GetType());
+                        if (!string.IsNullOrEmpty(customConfiguration))
+                        {
+                            configurator.ProcessCustomConfiguration(customConfiguration);
+                        }
+                    }
+                }
+                else
+                {
+                    var configurator = groupedConfigurators.Single();
+                    string customConfiguration = configuredDiscoverableCollection.GetCustomConfiguration(configurator.CustomConfigurationKey);
+                    if (!string.IsNullOrEmpty(customConfiguration))
+                    {
+                        configurator.ProcessCustomConfiguration(customConfiguration);
+                    }
+                }
+            }
+
+            if (onBeforeConfiguringElements != null)
+            {
+                onBeforeConfiguringElements(discoverableCollection);
+            }
+
+            //v2merge needs to be removed completely
+            //foreach (var configurable in discoverableCollection.OfType<IConfigurable>())
+            //{
+            //    configurable.Configure(Configuration);
+            //}
+
+            return discoverableCollection;
         }
     }
 }
