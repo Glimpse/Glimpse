@@ -449,9 +449,7 @@ namespace Glimpse.Core.Framework
         }
 
         private void Initialize()
-        {
-            var logger = Configuration.Logger; 
-             
+        { 
             ActiveGlimpseRequestContexts = new ActiveGlimpseRequestContexts(Configuration.CurrentGlimpseRequestIdTracker);
 
             RuntimePolicyDeterminator = new RuntimePolicyDeterminator(Configuration); 
