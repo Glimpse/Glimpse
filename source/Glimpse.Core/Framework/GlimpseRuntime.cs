@@ -467,9 +467,9 @@ namespace Glimpse.Core.Framework
           
         internal static string CreateKey(object obj)
         {
-            string result;
-            var keyProvider = obj as IKey;
+            var result = (string)null;
 
+            var keyProvider = obj as IKey;
             if (keyProvider != null)
             {
                 result = keyProvider.Key;
@@ -479,10 +479,7 @@ namespace Glimpse.Core.Framework
                 result = obj.GetType().FullName;
             }
 
-            return result
-                .Replace('.', '_')
-                .Replace(' ', '_')
-                .ToLower();
+            return result.Replace('.', '_').Replace(' ', '_').ToLower();
         }
 
         // TODO this should not be public! This was changed to hack in OWIN support
