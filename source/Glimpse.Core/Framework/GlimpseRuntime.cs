@@ -461,16 +461,8 @@ namespace Glimpse.Core.Framework
             DisplayProvider.Setup();
             TabProvider.Setup();
             InspectorProvider.Setup();
-
-            // TODO: This seems weird here
-            PersistMetadata();
-        }
-        
-        private void PersistMetadata()
-        {
-            var metadata = MetadataProvider.GetMetadata();
-
-            Configuration.PersistenceStore.SaveMetadata(metadata);
+             
+            MetadataProvider.SaveMetadata();
         }
           
         internal static string CreateKey(object obj)

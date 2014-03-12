@@ -36,6 +36,11 @@ namespace Glimpse.Core.Framework
             return metadata;
         }
 
+        public void SaveMetadata()
+        { 
+            Configuration.PersistenceStore.SaveMetadata(GetMetadata());
+        }
+
         public IDictionary<string, object> GetRequestMetadata(IGlimpseRequestContext requestContext)
         {
             var logger = Configuration.Logger;
