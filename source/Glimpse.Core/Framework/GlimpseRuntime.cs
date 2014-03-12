@@ -127,9 +127,9 @@ namespace Glimpse.Core.Framework
             get { return ActiveGlimpseRequestContexts.Current; }
         }
 
-        private RuntimePolicyDeterminator RuntimePolicyDeterminator { get; set; }
-
         private ActiveGlimpseRequestContexts ActiveGlimpseRequestContexts { get; set; }
+
+        private RuntimePolicyDeterminator RuntimePolicyDeterminator { get; set; }
 
         private MetadataProvider MetadataProvider { get; set; }
          
@@ -147,7 +147,7 @@ namespace Glimpse.Core.Framework
         {
             var glimpseRequestContext = new GlimpseRequestContext(Guid.NewGuid(), requestResponseAdapter, Configuration.DefaultRuntimePolicy, Configuration.ResourceEndpoint, Configuration.EndpointBaseUri);
 
-            var runtimePolicy = DetermineRuntimePolicy(RuntimeEvent.BeginRequest, glimpseRequestContext.CurrentRuntimePolicy, glimpseRequestContext.RequestResponseAdapter);
+            var runtimePolicy = RuntimePolicyDeterminator.DetermineRuntimePolicy(RuntimeEvent.BeginRequest, glimpseRequestContext.CurrentRuntimePolicy, glimpseRequestContext.RequestResponseAdapter);
             if (runtimePolicy == RuntimePolicy.Off)
             {
                 return UnavailableGlimpseRequestContextHandle.Instance;
@@ -334,7 +334,7 @@ namespace Glimpse.Core.Framework
                 // ExecuteResource runtime events and we ignore ignore previously executed runtime 
                 // policies (most likely during BeginRequest). Either way, the default runtime policy 
                 // is still our starting point and when it says Off, it remains Off
-                policy = DetermineRuntimePolicy(RuntimeEvent.ExecuteResource, Configuration.DefaultRuntimePolicy, requestResponseAdapter);
+                policy = RuntimePolicyDeterminator.DetermineRuntimePolicy(RuntimeEvent.ExecuteResource, Configuration.DefaultRuntimePolicy, requestResponseAdapter);
             }
 
             var result = (IResourceResult)null;
@@ -432,7 +432,7 @@ namespace Glimpse.Core.Framework
                 throw new GlimpseException("No corresponding GlimpseRequestContext found for GlimpseRequestId '" + glimpseRequestContextHandle.GlimpseRequestId + "'.");
             }
 
-            glimpseRequestContext.CurrentRuntimePolicy = DetermineRuntimePolicy(runtimeEvent, glimpseRequestContext.CurrentRuntimePolicy, glimpseRequestContext.RequestResponseAdapter);
+            glimpseRequestContext.CurrentRuntimePolicy = RuntimePolicyDeterminator.DetermineRuntimePolicy(runtimeEvent, glimpseRequestContext.CurrentRuntimePolicy, glimpseRequestContext.RequestResponseAdapter);
 
             return glimpseRequestContext.CurrentRuntimePolicy != RuntimePolicy.Off;
 
@@ -453,8 +453,8 @@ namespace Glimpse.Core.Framework
             var logger = Configuration.Logger; 
              
             ActiveGlimpseRequestContexts = new ActiveGlimpseRequestContexts(Configuration.CurrentGlimpseRequestIdTracker);
-            RuntimePolicyDeterminator = new RuntimePolicyDeterminator(Configuration.RuntimePolicies.ToArray(), logger);
 
+            RuntimePolicyDeterminator = new RuntimePolicyDeterminator(Configuration); 
             MetadataProvider = new MetadataProvider(Configuration);
             DisplayProvider = new DisplayProvider(Configuration, ActiveGlimpseRequestContexts);
             TabProvider = new TabProvider(Configuration, ActiveGlimpseRequestContexts);
@@ -475,31 +475,6 @@ namespace Glimpse.Core.Framework
             Configuration.PersistenceStore.SaveMetadata(metadata);
         }
           
-        private RuntimePolicy DetermineRuntimePolicy(RuntimeEvent runtimeEvent, RuntimePolicy currentRuntimePolicy, IRequestResponseAdapter requestResponseAdapter)
-        {
-            var runtimePolicyResult = RuntimePolicyDeterminator.DetermineRuntimePolicy(runtimeEvent, currentRuntimePolicy, requestResponseAdapter);
-
-            if (runtimePolicyResult.Messages.Length != 0)
-            {
-                string allMessages = runtimePolicyResult.Messages[0].Message;
-                if (runtimePolicyResult.Messages.Length > 1)
-                {
-                    allMessages = runtimePolicyResult.Messages.Aggregate("RuntimePolicy determination messages :", (concatenatedMessages, message) => concatenatedMessages += Environment.NewLine + "\t" + message.Message);
-                }
-
-                if (runtimePolicyResult.Messages.Any(message => message.IsWarning))
-                {
-                    Configuration.Logger.Warn(allMessages);
-                }
-                else
-                {
-                    Configuration.Logger.Debug(allMessages);
-                }
-            }
-
-            return runtimePolicyResult.RuntimePolicy;
-        }
-         
         internal static string CreateKey(object obj)
         {
             string result;
