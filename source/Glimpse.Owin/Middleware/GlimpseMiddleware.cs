@@ -38,31 +38,17 @@ namespace Glimpse.Owin.Middleware
 
                 using (var glimpseRequestContextHandle = GlimpseRuntime.Instance.BeginRequest(requestResponseAdapter))
                 {
-                    if (glimpseRequestContextHandle.RequestHandlingMode == RequestHandlingMode.Unhandled)
+                    switch (glimpseRequestContextHandle.RequestHandlingMode)
                     {
-                        await innerNext(environment);
-                        return;
-                    }
-
-                    try
-                    {
-                        if (glimpseRequestContextHandle.RequestHandlingMode == RequestHandlingMode.ResourceRequest)
-                        {
-                            await ExecuteResource(glimpseRequestContextHandle, request.Query);
-                        }
-                        else
-                        {
-                            // V2Merge: Hack's a million!
-#warning Even with this hack, it seems wrong, as the scripts will always be injected independent of the RuntimePolicy (only DisplayGlimpseClient should render it, and we only know that at the end)
-                            var htmlSnippet = GlimpseRuntime.Instance.GenerateScriptTags(glimpseRequestContextHandle);
-                            response.Body = new PreBodyTagInjectionStream(htmlSnippet, response.Body, Encoding.UTF8, request.Uri.AbsoluteUri, GlimpseRuntime.Instance.Configuration.Logger);
-
+                        case RequestHandlingMode.RegularRequest:
+                            await ExecuteRegularRequest(glimpseRequestContextHandle, request, response, environment);
+                            break;
+                        case RequestHandlingMode.ResourceRequest:
+                            await ExecuteResourceRequest(glimpseRequestContextHandle, request.Query);
+                            break;
+                        default:
                             await innerNext(environment);
-                        }
-                    }
-                    finally
-                    {
-                        GlimpseRuntime.Instance.EndRequest(glimpseRequestContextHandle);
+                            break;
                     }
                 }
             }
@@ -72,7 +58,7 @@ namespace Glimpse.Owin.Middleware
             }
         }
 
-        private static async Task ExecuteResource(GlimpseRequestContextHandle glimpseRequestContextHandle, IReadableStringCollection queryString)
+        private static async Task ExecuteResourceRequest(GlimpseRequestContextHandle glimpseRequestContextHandle, IReadableStringCollection queryString)
         {
             if (string.IsNullOrEmpty(queryString[UriTemplateResourceEndpointConfiguration.DefaultResourceNameKey]))
             {
@@ -81,6 +67,23 @@ namespace Glimpse.Owin.Middleware
             else
             {
                 GlimpseRuntime.Instance.ExecuteResource(glimpseRequestContextHandle, queryString[UriTemplateResourceEndpointConfiguration.DefaultResourceNameKey], new ResourceParameters(queryString.ToDictionary(qs => qs.Key, qs => qs.Value.First())));
+            }
+        }
+
+        private async Task ExecuteRegularRequest(GlimpseRequestContextHandle glimpseRequestContextHandle, IOwinRequest request, IOwinResponse response, IDictionary<string, object> environment)
+        {
+            try
+            {
+                // V2Merge: Hack's a million!
+#warning Even with this hack, it seems wrong, as the scripts will always be injected independent of the RuntimePolicy (only DisplayGlimpseClient should render it, and we only know that at the end)
+                var htmlSnippet = GlimpseRuntime.Instance.GenerateScriptTags(glimpseRequestContextHandle);
+                response.Body = new PreBodyTagInjectionStream(htmlSnippet, response.Body, Encoding.UTF8, request.Uri.AbsoluteUri, GlimpseRuntime.Instance.Configuration.Logger);
+
+                await innerNext(environment);
+            }
+            finally
+            {
+                GlimpseRuntime.Instance.EndRequest(glimpseRequestContextHandle);
             }
         }
     }
